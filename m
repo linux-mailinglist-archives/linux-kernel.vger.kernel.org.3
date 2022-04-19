@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6A050669E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 286465066A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349821AbiDSIQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
+        id S1349797AbiDSIQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349780AbiDSIQD (ORCPT
+        with ESMTP id S1349752AbiDSIPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:16:03 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75B72BB2B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:13:13 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d15so14670171pll.10
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Weku3tK3QsQmvTCERbGIwfFGvzqht9p9BZS1XmEvotY=;
-        b=iRJI5ml7K6kAK/onoLxDchA/ArVyOYamxU90RxXYOx6Pzg5aap3PFpRYnG/cbfGJd6
-         /8vrlTiPABYe8GgWO2TOGciYVdjVpO0SLmFzLsJr3BBnNqQEkPxM1VOG9DPREEwn/MrS
-         O3LSWUbVGUtObFi/zzy3ca9FJZ+wGXv0Cvj08=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Weku3tK3QsQmvTCERbGIwfFGvzqht9p9BZS1XmEvotY=;
-        b=cBPxoCWZWFL5iwAjxT/aEZ+S2dCEmh/3rggi1joSyIjeo+w8xX9dCp7QZpJFeLeGfJ
-         Qg1GTp7kFYrp4nSqT2CFfYMHI2N2B3RslZ09x7YXPc9P/ZN5P8tGcSp+TEjVn7YagUP7
-         nUndiHaQm4WMD40q/h/3cLkSiDFMOWmVHGuultzE3kh0IUv4zOs4F/9Kkb/hXK63FW6z
-         6o06+NBeLa6AoAiyqHtXbRbC6jzc7J9F9lOUR3qE6zInaBVg1o85mARv/NTBWZQZFZVp
-         Daid0irTAm5kQqeU2Tbd//gdKAqLIoqhBCSyOG+5iYZ+I9IDMQVOJGkce5LRajOo1l9g
-         /O6w==
-X-Gm-Message-State: AOAM530rPhicO9DLOWQtaiQSkx8bc8i5TEJHCu3MVyWeS9Xj1ox9QZmQ
-        tbqDeWnejpl7iT2rb/fVWpGWiQ==
-X-Google-Smtp-Source: ABdhPJy2WKrXlaqCJkZtZm2wuCrjHhcU/3L6VkQg+6FopUOE3aGjPtuoWuBKFt+ExdfC73sGUt8/vg==
-X-Received: by 2002:a17:902:e74f:b0:158:e890:2ed4 with SMTP id p15-20020a170902e74f00b00158e8902ed4mr14598622plf.32.1650355993497;
-        Tue, 19 Apr 2022 01:13:13 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:33f6:f1e6:3e21:a253])
-        by smtp.gmail.com with ESMTPSA id n13-20020a654ccd000000b0039db6f73e9dsm15767448pgt.28.2022.04.19.01.13.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 01:13:13 -0700 (PDT)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Tue, 19 Apr 2022 04:15:49 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF7E2A70F;
+        Tue, 19 Apr 2022 01:13:02 -0700 (PDT)
+X-UUID: ebc1cbe8ff9447fb800dff5f48798fc0-20220419
+X-UUID: ebc1cbe8ff9447fb800dff5f48798fc0-20220419
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 571076404; Tue, 19 Apr 2022 16:12:56 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 19 Apr 2022 16:12:54 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 19 Apr 2022 16:12:54 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 6/7] clk: mediatek: mt8173: Fix usage of mtk_clk_register_ref2usb_tx()
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Miles Chen <miles.chen@mediatek.com>,
+        Bear Wang <bear.wang@mediatek.com>,
+        Pablo Sun <pablo.sun@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Macpaul Lin <macpaul@gmail.com>, <stable@vger.kernel.org>,
+        Tainping Fang <tianping.fang@mediatek.com>
+Subject: [PATCH] usb: mtu3: fix USB 3.0 dual-role-switch from device to host
 Date:   Tue, 19 Apr 2022 16:12:45 +0800
-Message-Id: <20220419081246.2546159-7-wenst@chromium.org>
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-In-Reply-To: <20220419081246.2546159-1-wenst@chromium.org>
-References: <20220419081246.2546159-1-wenst@chromium.org>
+Message-ID: <20220419081245.21015-1-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As part of the effort to improve the MediaTek clk drivers, the next step
-is to switch from the old 'struct clk' clk prodivder APIs to the new
-'struct clk_hw' ones.
+Issue description:
+  When an OTG port has been switched to device role and then switch back
+  to host role again, the USB 3.0 Host (XHCI) will not be able to detect
+  "plug in event of a connected USB 2.0/1.0 ((Highspeed and Fullspeed)
+  devices until system reboot.
 
-The apmixed clk library contains one special clk type that doesn't fit
-any of the generic clk types. This type is currently used only on the
-MT8173 SoC. The code for this clk type was converted by the coccinelle
-script from the previous patch, but the call site was not.
+Root cause and Solution:
+  There is a condition checking flag "ssusb->otg_switch.is_u3_drd" in
+  toggle_opstate(). At the end of role switch procedure, toggle_opstate()
+  will be called to set DC_SESSION and SOFT_CONN bit. If "is_u3_drd" was
+  set and switched the role to USB host 3.0, bit DC_SESSION and SOFT_CONN
+  will be skipped hence caused the port cannot detect connected USB 2.0
+  (Highspeed and Fullspeed) devices. Simply remove the condition check to
+  solve this issue.
 
-Fix the return variable type for mtk_clk_register_ref2usb_tx() in the
-MT8173 clk driver.
-
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Fixes: d0ed062a8b75 ("usb: mtu3: dual-role mode support")
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Signed-off-by: Tainping Fang <tianping.fang@mediatek.com>
+Tested-by: Fabien Parent <fparent@baylibre.com>
+Cc: stable@vger.kernel.org
 ---
- drivers/clk/mediatek/clk-mt8173.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/usb/mtu3/mtu3_dr.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt8173.c b/drivers/clk/mediatek/clk-mt8173.c
-index 511b4da9e727..68d3a9749316 100644
---- a/drivers/clk/mediatek/clk-mt8173.c
-+++ b/drivers/clk/mediatek/clk-mt8173.c
-@@ -993,6 +993,7 @@ static void __init mtk_apmixedsys_init(struct device_node *node)
+diff --git a/drivers/usb/mtu3/mtu3_dr.c b/drivers/usb/mtu3/mtu3_dr.c
+index ec6ec621838b..b820724c56e4 100644
+--- a/drivers/usb/mtu3/mtu3_dr.c
++++ b/drivers/usb/mtu3/mtu3_dr.c
+@@ -21,10 +21,8 @@ static inline struct ssusb_mtk *otg_sx_to_ssusb(struct otg_switch_mtk *otg_sx)
+ 
+ static void toggle_opstate(struct ssusb_mtk *ssusb)
  {
- 	struct clk_hw_onecell_data *clk_data;
- 	void __iomem *base;
-+	struct clk_hw *hw;
- 	struct clk *clk;
- 	int r, i;
+-	if (!ssusb->otg_switch.is_u3_drd) {
+-		mtu3_setbits(ssusb->mac_base, U3D_DEVICE_CONTROL, DC_SESSION);
+-		mtu3_setbits(ssusb->mac_base, U3D_POWER_MANAGEMENT, SOFT_CONN);
+-	}
++	mtu3_setbits(ssusb->mac_base, U3D_DEVICE_CONTROL, DC_SESSION);
++	mtu3_setbits(ssusb->mac_base, U3D_POWER_MANAGEMENT, SOFT_CONN);
+ }
  
-@@ -1013,16 +1014,13 @@ static void __init mtk_apmixedsys_init(struct device_node *node)
- 	for (i = 0; i < ARRAY_SIZE(apmixed_usb); i++) {
- 		const struct mtk_clk_usb *cku = &apmixed_usb[i];
- 
--		clk = mtk_clk_register_ref2usb_tx(cku->name, cku->parent,
--					base + cku->reg_ofs);
--
--		if (IS_ERR(clk)) {
--			pr_err("Failed to register clk %s: %ld\n", cku->name,
--					PTR_ERR(clk));
-+		hw = mtk_clk_register_ref2usb_tx(cku->name, cku->parent, base + cku->reg_ofs);
-+		if (IS_ERR(hw)) {
-+			pr_err("Failed to register clk %s: %ld\n", cku->name, PTR_ERR(hw));
- 			continue;
- 		}
- 
--		clk_data->hws[cku->id] = __clk_get_hw(clk);
-+		clk_data->hws[cku->id] = hw;
- 	}
- 
- 	clk = clk_register_divider(NULL, "hdmi_ref", "tvdpll_594m", 0,
+ /* only port0 supports dual-role mode */
 -- 
-2.36.0.rc0.470.gd361397f0d-goog
+2.18.0
 

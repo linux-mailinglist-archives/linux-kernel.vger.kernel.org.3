@@ -2,136 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54659507CA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7155507CA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358241AbiDSWlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 18:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
+        id S1358251AbiDSWnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 18:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353827AbiDSWk7 (ORCPT
+        with ESMTP id S1358030AbiDSWnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 18:40:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BB834673;
-        Tue, 19 Apr 2022 15:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650407895; x=1681943895;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zZ5x6lVQZ6TKJPa9jLNf41JFMLWlV3hpwDqGfPvblVU=;
-  b=EkfEh+B/ql3iF3tdJ7LXp58adkQCHNr6mAxczmlpxzX/NfphEpqCcG0H
-   z+mVN2iS4R11S/W0XlZJLwKlLbqXaG/+NINoE2u6xDS1zFP3ks/go9fSz
-   l6yjoRtvKknnIza5zUJOIqEexflsyFJJXeN1mQvcknxb0BO+64mzsqOVF
-   8L35YfjecZZddNSOVCSvoB2yWomowsrRt0N8ZP/sr6M/RPAc6bP22NI9m
-   TztxtHmdBvUqd3FGfaAmmtitvJzGFf7OsvZhRS0vK4Je8yOYIqefmxsv8
-   JgMRctzO7zz8pCcH7WYS5oQZD7pcSnfAnJuDOiMMkabkSWH9XbDIvJUpc
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="262746452"
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="262746452"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 15:38:15 -0700
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="727244733"
-Received: from asaini1-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.58.15])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 15:38:12 -0700
-Message-ID: <5371d2df8940226674f27a7ce950e9ae1468a951.camel@intel.com>
-Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
- attestation interface driver
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Tue, 19 Apr 2022 18:43:05 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED491582D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:40:21 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id n8so85584plh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jj65B/Q5u+6/PbNUYjs1QdIcGYmBVQVJnII5Wt+lIX4=;
+        b=I1nobehVf5LWIA7uopWD44Vv9PFicIlwJ83srfQrmZBtflj2atQJNxVv37gj4T4l6v
+         ScNi3IZVoLT5qpIizY9su9A+Gg9F3EImVTRjv9aQAAxS2kei4tEtl7sH9RRka1Mc+h0i
+         3J1w1FYAB9pXAlDmlVX9UJydCY8Hw6IJX2CqVhTFuZprTscj2mU2kcxYbydeeIrRNG+0
+         /hdiIk2glg2k2TPStCK1q71Rq2aAqP23tYdUpYm5CzdhY0DW9Ssn6m9sVY8WEQyaIIQA
+         ZlAaw8heoEOaMNA8nyRAyYDxmBrb15yBY5YrSLDiOl1MOET5f0HiV/cXzEtZGNQ6Jz+o
+         1c7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jj65B/Q5u+6/PbNUYjs1QdIcGYmBVQVJnII5Wt+lIX4=;
+        b=wDB8jEQ7x4qkyOBNnQCvqpgMMNFeXaxPsTQn73L4vfDsEygRurLERr3XkKTy6E4LYJ
+         2lADJfPAWXlVIc3kHSrHBomOiTsXt7MIRj1nZvijFSAQxtZIAXOVjJHYzAML8TiADG6M
+         2XdWXKT0yrylTrbExscpoGq6+1/MgwG6cqdTy5q5dOLbIB6cA258tGX2SpOMwbPDOyCC
+         ydtHzgp3cU6BJkRFwblan0GlhgDSAUckskdkdZRobT4EDipMQtWnP9PEfb/hyeEClhNX
+         QSc9Gz57OcWi1MQuXldxe46ySBXseiXFdWzsO7Y5QdIembS6fn9skOdEgPZmlmqUivuE
+         4KcQ==
+X-Gm-Message-State: AOAM530IAnPPFNw9uHNNQtjdFIm5DYAreVpvGO/WcQXvpvDjTcvRyQfX
+        CLtls/6ixVgs99tnKvh9ahacrTbo7VsM7Y1yfAaW7w==
+X-Google-Smtp-Source: ABdhPJww/F0+ShnRulehEAsze0oZV1m6PnQGb4q7nZZiU5Dg58u6Z1IHEBgnXvUTReeiVw8AeB78Z4kC+sTgEsLi9v4=
+X-Received: by 2002:a17:90b:4d86:b0:1d2:cd59:d275 with SMTP id
+ oj6-20020a17090b4d8600b001d2cd59d275mr888317pjb.119.1650408020788; Tue, 19
+ Apr 2022 15:40:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com> <20220310140911.50924-4-chao.p.peng@linux.intel.com>
+In-Reply-To: <20220310140911.50924-4-chao.p.peng@linux.intel.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Tue, 19 Apr 2022 15:40:09 -0700
+Message-ID: <CAGtprH9X-v-R+UiAvdvKgqAqoc4MBJAWTnoEtP+Y2nip_y8Heg@mail.gmail.com>
+Subject: Re: [PATCH v5 03/13] mm/shmem: Support memfile_notifier
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Date:   Wed, 20 Apr 2022 10:38:09 +1200
-In-Reply-To: <07ef65c4-708e-1bcf-9a7e-f804acefcc7c@linux.intel.com>
-References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <bd83067542a3519ee4c91f9d50e9bd4fac27e4bb.camel@intel.com>
-         <0d532b0ce1155bf7778366b14c5d1311c45fef01.camel@intel.com>
-         <07ef65c4-708e-1bcf-9a7e-f804acefcc7c@linux.intel.com>
+        Andy Lutomirski <luto@kernel.org>,
+        Jun Nakajima <jun.nakajima@intel.com>, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-19 at 07:00 -0700, Sathyanarayanan Kuppuswamy wrote:
-> 
-> On 4/19/22 1:16 AM, Kai Huang wrote:
-> > In fact after slightly thinking more, I think you can split TDREPORT TDCALL
-> > support with GetQuote/SetupEventNotifyInterrupt support.  The reason is as I
-> > said, GetQuote isn't mandatory to support attestation.  TD attestation agent can
-> > use i.e. vsock, tcp/ip, to communicate to QE directly.  Whether kernel needs to
-> > support GetQuote is actually arguable.
-> 
-> IMO, we should not use a usage model to categorize "GetQuote" support
-> as a mandatory or non-mandatory requirement.
-> 
-> For customers who use VSOCK, they can get away without GetQuote
-> TDVMCALL support. But for customers who do not want to use
-> VSOCK model, this is a required support. AFAIK, our current customer
-> requirement is to use TDVMCALL approach for attestation support.
-> 
-> If your suggestion is to split GetQuote support as separate
-> patch to make it easier for review, I am fine with such
-> suggestion.
-> 
+On Thu, Mar 10, 2022 at 6:10 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+>
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+>
+> It maintains a memfile_notifier list in shmem_inode_info structure and
+> implements memfile_pfn_ops callbacks defined by memfile_notifier. It
+> then exposes them to memfile_notifier via
+> shmem_get_memfile_notifier_info.
+>
+> We use SGP_NOALLOC in shmem_get_lock_pfn since the pages should be
+> allocated by userspace for private memory. If there is no pages
+> allocated at the offset then error should be returned so KVM knows that
+> the memory is not private memory.
+>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  include/linux/shmem_fs.h |  4 +++
+>  mm/shmem.c               | 76 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 80 insertions(+)
+>
+> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
+> index 2dde843f28ef..7bb16f2d2825 100644
+> --- a/include/linux/shmem_fs.h
+> +++ b/include/linux/shmem_fs.h
+> @@ -9,6 +9,7 @@
+>  #include <linux/percpu_counter.h>
+>  #include <linux/xattr.h>
+>  #include <linux/fs_parser.h>
+> +#include <linux/memfile_notifier.h>
+>
+>  /* inode in-kernel data */
+>
+> @@ -28,6 +29,9 @@ struct shmem_inode_info {
+>         struct simple_xattrs    xattrs;         /* list of xattrs */
+>         atomic_t                stop_eviction;  /* hold when working on inode */
+>         unsigned int            xflags;         /* shmem extended flags */
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +       struct memfile_notifier_list memfile_notifiers;
+> +#endif
+>         struct inode            vfs_inode;
+>  };
+>
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 9b31a7056009..7b43e274c9a2 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -903,6 +903,28 @@ static struct folio *shmem_get_partial_folio(struct inode *inode, pgoff_t index)
+>         return page ? page_folio(page) : NULL;
+>  }
+>
+> +static void notify_fallocate(struct inode *inode, pgoff_t start, pgoff_t end)
+> +{
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +       struct shmem_inode_info *info = SHMEM_I(inode);
+> +
+> +       memfile_notifier_fallocate(&info->memfile_notifiers, start, end);
+> +#endif
+> +}
+> +
+> +static void notify_invalidate_page(struct inode *inode, struct folio *folio,
+> +                                  pgoff_t start, pgoff_t end)
+> +{
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +       struct shmem_inode_info *info = SHMEM_I(inode);
+> +
+> +       start = max(start, folio->index);
+> +       end = min(end, folio->index + folio_nr_pages(folio));
+> +
+> +       memfile_notifier_invalidate(&info->memfile_notifiers, start, end);
+> +#endif
+> +}
+> +
+>  /*
+>   * Remove range of pages and swap entries from page cache, and free them.
+>   * If !unfalloc, truncate or punch hole; if unfalloc, undo failed fallocate.
+> @@ -946,6 +968,8 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, loff_t lend,
+>                         }
+>                         index += folio_nr_pages(folio) - 1;
+>
+> +                       notify_invalidate_page(inode, folio, start, end);
+> +
+>                         if (!unfalloc || !folio_test_uptodate(folio))
+>                                 truncate_inode_folio(mapping, folio);
+>                         folio_unlock(folio);
+> @@ -1019,6 +1043,9 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, loff_t lend,
+>                                         index--;
+>                                         break;
+>                                 }
+> +
+> +                               notify_invalidate_page(inode, folio, start, end);
+> +
 
-I am not saying we should get rid of GetQuote support.  If there's customer
-wants this with a good reason, we can certainly support it.  I understand that
-some customer wants to deploy QE in host and don't want additional communication
-channel (i.e. vsock) between guest and host, which may add additional attack
-window and/or customer's validation resource.
+Should this be done in batches or done once for all of range [start, end)?
 
-My point is regardless whether we need to support GetQuote, logically this
-driver can be split to two parts as I said: 1) basic TDREPORT support to
-userspace; 2) additional GetQuote support.  And I think there are many benefits
-if you do in this way as I commented below.
-
-
-> > 
-> > So IMHO you can split this attestation driver into two parts:
-> > 
-> > 1) A "basic" driver which supports reporting TDREPORT to userspace
-> > 2) Additional support of GetQuote/SetupEventNotifyInterrupt.
-> > 
-> > The 1) can even be in a single patch (I guess it won't be complicated).  It is
-> > easy to review (and i.e. can be merged separately), and with it, you will
-> > immediately have one way to support attestation.
-> > 
-> > 2) can be reviewed separately, perhaps with one additional Kconfig option (i.e.
-> > CONFIG_INTEL_TDX_ATTESTATION_GET_QUOTE).  I think this part has most of the
-> 
-> 
-> GetQuote IOCTL support is a very simple feature support, so, IMO, we
-> don't need to complicate it with additional config.
-> 
-> > 
-
-Additional Kconfig can reduce attack window by turning it off for people don't
-need it.  Anyway no strong opinion here.
-
--- 
-Thanks,
--Kai
-
-
+>                                 VM_BUG_ON_FOLIO(folio_test_writeback(folio),
+>                                                 folio);
+>                                 truncate_inode_folio(mapping, folio);
+> @@ -2279,6 +2306,9 @@ static struct inode *shmem_get_inode(struct super_block *sb, const struct inode
+>                 info->flags = flags & VM_NORESERVE;
+>                 INIT_LIST_HEAD(&info->shrinklist);
+>                 INIT_LIST_HEAD(&info->swaplist);
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +               memfile_notifier_list_init(&info->memfile_notifiers);
+> +#endif
+>                 simple_xattrs_init(&info->xattrs);
+>                 cache_no_acl(inode);
+>                 mapping_set_large_folios(inode->i_mapping);
+> @@ -2802,6 +2832,7 @@ static long shmem_fallocate(struct file *file, int mode, loff_t offset,
+>         if (!(mode & FALLOC_FL_KEEP_SIZE) && offset + len > inode->i_size)
+>                 i_size_write(inode, offset + len);
+>         inode->i_ctime = current_time(inode);
+> +       notify_fallocate(inode, start, end);
+>  undone:
+>         spin_lock(&inode->i_lock);
+>         inode->i_private = NULL;
+> @@ -3909,6 +3940,47 @@ static struct file_system_type shmem_fs_type = {
+>         .fs_flags       = FS_USERNS_MOUNT,
+>  };
+>
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +static long shmem_get_lock_pfn(struct inode *inode, pgoff_t offset, int *order)
+> +{
+> +       struct page *page;
+> +       int ret;
+> +
+> +       ret = shmem_getpage(inode, offset, &page, SGP_NOALLOC);
+> +       if (ret)
+> +               return ret;
+> +
+> +       *order = thp_order(compound_head(page));
+> +
+> +       return page_to_pfn(page);
+> +}
+> +
+> +static void shmem_put_unlock_pfn(unsigned long pfn)
+> +{
+> +       struct page *page = pfn_to_page(pfn);
+> +
+> +       VM_BUG_ON_PAGE(!PageLocked(page), page);
+> +
+> +       set_page_dirty(page);
+> +       unlock_page(page);
+> +       put_page(page);
+> +}
+> +
+> +static struct memfile_notifier_list* shmem_get_notifier_list(struct inode *inode)
+> +{
+> +       if (!shmem_mapping(inode->i_mapping))
+> +               return NULL;
+> +
+> +       return  &SHMEM_I(inode)->memfile_notifiers;
+> +}
+> +
+> +static struct memfile_backing_store shmem_backing_store = {
+> +       .pfn_ops.get_lock_pfn = shmem_get_lock_pfn,
+> +       .pfn_ops.put_unlock_pfn = shmem_put_unlock_pfn,
+> +       .get_notifier_list = shmem_get_notifier_list,
+> +};
+> +#endif /* CONFIG_MEMFILE_NOTIFIER */
+> +
+>  int __init shmem_init(void)
+>  {
+>         int error;
+> @@ -3934,6 +4006,10 @@ int __init shmem_init(void)
+>         else
+>                 shmem_huge = SHMEM_HUGE_NEVER; /* just in case it was patched */
+>  #endif
+> +
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +       memfile_register_backing_store(&shmem_backing_store);
+> +#endif
+>         return 0;
+>
+>  out1:
+> --
+> 2.17.1
+>

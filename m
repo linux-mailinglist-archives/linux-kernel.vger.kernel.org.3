@@ -2,81 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D40750669D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 384A65066B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349828AbiDSIQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S1349893AbiDSIS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349795AbiDSIQH (ORCPT
+        with ESMTP id S1349947AbiDSISN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:16:07 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B97D2DD5D;
-        Tue, 19 Apr 2022 01:13:18 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b58fe329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58fe:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 993661EC04CB;
-        Tue, 19 Apr 2022 10:13:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1650355992;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=L7ml29B3BUXUhHuCeZnUyamXkv/rACh7V/YQpMNzxsE=;
-        b=k7BysX9GugQ8GniA6TpTt+LaXb+tlXyX30N/bJky690Jz8wD84D+q4xIxqJsGAjEqjhDaf
-        sicA6EmPeN0fJkOMHdayrN4OoX0be67lqaHZ8n2J4/nLYrcFAidLZzfPTPgruCL+L8wJF8
-        PXvEPs9gzwr0jXbG9oeiWyVvO/6cQJs=
-Date:   Tue, 19 Apr 2022 10:13:12 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
- attestation interface driver
-Message-ID: <Yl5vGIfUFp4TfTWk@zn.tnic>
-References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
- <bd83067542a3519ee4c91f9d50e9bd4fac27e4bb.camel@intel.com>
+        Tue, 19 Apr 2022 04:18:13 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0169632C;
+        Tue, 19 Apr 2022 01:14:56 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id x24so3235388qtq.11;
+        Tue, 19 Apr 2022 01:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mj8GBm7fHLra8a9Wmaa9qaJw0tz/2aEtzPHOqJEgUyw=;
+        b=VZj+g5TEqFwrOt3e8foNXSoqon431CGXfIpFC2WjAx05e6oe8RlRGadnEsb0PWHPx8
+         MExUVIDkXpJueV34Xf1xPNG04WaULeWZOhIRE7V4+qlpGLxLdX5wMA+qx6vluFhlXlhL
+         2Od7e732KvQev7rInDsV6I5rw/cOFchzCqAGcfMmUlPPZDa1W/mimfN6Pe+8URTj25ws
+         sLZBDQoSx3AIYLtDamiAB5RolOjud+Gv7wDgw7DeozCnXMJKbSzpI+c861CIsxreMApc
+         gMb/CsOni2dy0F6OVYLTJpoex/nMDly2mseAFFpuJxj/Kftfr3l9HC3k6J2ShjMYDZyJ
+         Ov6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mj8GBm7fHLra8a9Wmaa9qaJw0tz/2aEtzPHOqJEgUyw=;
+        b=3Q/43VgmhOMzKl0baMqF2EB+x1HCveFKCHeOo8DoR0ilaIxS7lB3KCZMKGFVCuMg6k
+         aKcUCGqXl0YNNXiWJz+w8/+dlygUaNIi711KgNgYjYXkvL5BpY+cwD9O6ZVQeO0X36IX
+         5JCH74JEy8P8NA0qDiqVGgEPuqJ4fPFiDrWGIHM4bWsfu0Zn0dGpjmlhcXHKtldgoxRS
+         aOBJhWFeyM7vpLiisIno5MlMYuTN23juaqqc1RPO33+cwJFzYwu535WbxQjb6CwkI/0Q
+         IO56rvkmNVrUCiMAqaSb0R/Zn5H7sa6NFtuMOam9PIaqATPvSVpXaYKpALhILzP4XcGn
+         VUKA==
+X-Gm-Message-State: AOAM532tCQqxkcm8c7iCtwPSLhazwZjKn9J55umGIWJfOajc4HAn5dyc
+        5/zAmnmw9+jgHYXfmPY420M=
+X-Google-Smtp-Source: ABdhPJx+JlotR1kfZlhHiYV5w5lFiOs6ai3kGB9qZ/ssBH8h1S8SzII4+Qjcat7pYOKsIVSbMUO/Yw==
+X-Received: by 2002:ac8:7c46:0:b0:2e1:d6c2:2b15 with SMTP id o6-20020ac87c46000000b002e1d6c22b15mr9491744qtv.405.1650356095930;
+        Tue, 19 Apr 2022 01:14:55 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id p5-20020a378d05000000b0069beaffd5b3sm8061423qkd.4.2022.04.19.01.14.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 01:14:55 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     wg@grandegger.com
+Cc:     mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] can: flexcan: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Tue, 19 Apr 2022 08:14:49 +0000
+Message-Id: <20220419081449.2574026-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <bd83067542a3519ee4c91f9d50e9bd4fac27e4bb.camel@intel.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 07:47:33PM +1200, Kai Huang wrote:
-> From this perspective, I am not sure what's the value of having a dedicated
-> INTEL_TDX_ATTESTATION Kconfig.  The attestation support code should be turned on
-> unconditionally when CONFIG_INTEL_TDX_GUEST is on.  The code can also be just
-> under arch/x86/coco/tdx/ I guess?
-> 
-> But I'll leave this to maintainers.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Similar story with the unaccepted memory gunk. If it is not going to
-be used outside of encrypted guests, why are we polluting our already
-insanely humongous Kconfig space with more symbols?
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/net/can/flexcan/flexcan-core.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
+index 74d7fcbfd065..459e8aecabd5 100644
+--- a/drivers/net/can/flexcan/flexcan-core.c
++++ b/drivers/net/can/flexcan/flexcan-core.c
+@@ -723,11 +723,9 @@ static int flexcan_get_berr_counter(const struct net_device *dev,
+ 	const struct flexcan_priv *priv = netdev_priv(dev);
+ 	int err;
+ 
+-	err = pm_runtime_get_sync(priv->dev);
+-	if (err < 0) {
+-		pm_runtime_put_noidle(priv->dev);
++	err = pm_runtime_resume_and_get(priv->dev);
++	if (err < 0)
+ 		return err;
+-	}
+ 
+ 	err = __flexcan_get_berr_counter(dev, bec);
+ 
+@@ -1700,11 +1698,9 @@ static int flexcan_open(struct net_device *dev)
+ 		return -EINVAL;
+ 	}
+ 
+-	err = pm_runtime_get_sync(priv->dev);
+-	if (err < 0) {
+-		pm_runtime_put_noidle(priv->dev);
++	err = pm_runtime_resume_and_get(priv->dev);
++	if (err < 0)
+ 		return err;
+-	}
+ 
+ 	err = open_candev(dev);
+ 	if (err)
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

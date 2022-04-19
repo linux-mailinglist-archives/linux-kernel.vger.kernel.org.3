@@ -2,106 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19997507171
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453A5507169
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345122AbiDSPLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S1349950AbiDSPLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235986AbiDSPLD (ORCPT
+        with ESMTP id S1348100AbiDSPLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:11:03 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD653A721;
-        Tue, 19 Apr 2022 08:08:20 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id AC9801F4267B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650380899;
-        bh=wE87yBeheg5nImXJNHE8hDnX7SEP4mrWfxluB9Rr99Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iAOE9Sv0da11Nw5ZlOwrnD+04YO8d9pRVEOtAeTuuCzELSb0e7r/+3sVXylYRdLNQ
-         2YbLQXFNhKthcsABt5iOFOH1mk+ZXJZAwIjWnWJs41gl6KEW2zt11XwvpnCSeqSdb4
-         lz7nKBrFFdFl5zTztschsp8IA7iYk+v7jynLoRJYRdDxiDbMbXoK+u7MqAux3e4T1p
-         VpAEml7dKCrm4ljeWeXPvYHHZq/cE/Mqo3kxN5m4EXoFNbSmB8soa7F+L76TUbdpEW
-         6/PyKOYJq4yZVcSd4tK9Npksy0IzurV1FRNS0ibppcHt6wvZXZQ7eUOHQbv+fFAMka
-         lb1JTfaq6WZ4Q==
-Message-ID: <3591fcc1-d34a-b40a-4e78-edcf9d2ddf08@collabora.com>
-Date:   Tue, 19 Apr 2022 17:08:16 +0200
+        Tue, 19 Apr 2022 11:11:20 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C806F3A722;
+        Tue, 19 Apr 2022 08:08:37 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id l7so33613678ejn.2;
+        Tue, 19 Apr 2022 08:08:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vuZNI/cdrd7ALg+RLxl3FV30JyJrvpFFZT6HJ8etR/M=;
+        b=mHCGGA+HwKe5Avh4edsQcx1cukyJHQ9H3oa/kH0Me22SKnWbv7lqDHduCdlb63FPOz
+         Cvl0G3zaxZt8vbjP/7rGEhyoKnhguJm9KUZu0a0sCjINkdGL8gTO8gr7P7pgRTvvyZyI
+         x277s4RAu7nKEwaw05NRKH/NmAnduOmsQfhRi/21n+fydauYzVq+PdaJGEopTug3uXDj
+         HGEQKlHoWyVIHTTILTSxB+TGRmjzMquUEPI8c17Mc9nzFT3ieMsH5zEzuC3ndg2oCRD1
+         8C2ZCmi/9SnWS+N62ZKmH7QLUcmM3y6J4Egqs+XXSAUSTx24zdCiIFFEyOEeLVRJoWNy
+         23+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vuZNI/cdrd7ALg+RLxl3FV30JyJrvpFFZT6HJ8etR/M=;
+        b=WAKsrkZFaJnoqrp57OLdgRdITYFpj8fYORvPs7SaF/UAlg/rVZCuBG3EN03DgmACOq
+         4QgMefwGhyhO0NSH3+l16DeOn0GUddPw/6xQ3Y0jSgDzcOJcOgPjh1jQEm7UeZu45AW3
+         wlHxslCOKqjErJfjtgESt4yqdAMTJjOEPuwiYxma3ZgD8JqmTUzCuYDw+0MQFKxxIYY5
+         JwHPOXx1A33WGodEDLpfIFDmurfVSYgg4hpS0k6Lhej7J+oh4TfQBzULoepjSDp1s48E
+         vQPDC4rw+yLtEdrXrhVW385LliK+ynYpVKxAxa92/a5Fs7n/FQbEYio03UlB7MUEcWNG
+         s0KQ==
+X-Gm-Message-State: AOAM532/+rXTdh/hWHN+yzEV6HujeeN5ZOOdACl+gr0PaC25J6xfSH+I
+        8/lv0I+qjgWjbQWBQf/30XHBGqEzQjc=
+X-Google-Smtp-Source: ABdhPJx2/qBZoX9K8AvhlL70ZPhwxQgrhkQaPYSI7sH/d2bfaV2+Tgim0mEoH6k7qRke3gj0U7IGuQ==
+X-Received: by 2002:a17:906:5cb:b0:6cf:954:d84d with SMTP id t11-20020a17090605cb00b006cf0954d84dmr14390613ejt.560.1650380916414;
+        Tue, 19 Apr 2022 08:08:36 -0700 (PDT)
+Received: from demon-pc.localdomain ([188.24.22.234])
+        by smtp.gmail.com with ESMTPSA id m1-20020a170906234100b006ef83025804sm3548604eja.87.2022.04.19.08.08.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 08:08:35 -0700 (PDT)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: [PATCH v3 0/2] AD4130
+Date:   Tue, 19 Apr 2022 18:08:26 +0300
+Message-Id: <20220419150828.191933-1-cosmin.tanislav@analog.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH 0/7] clk: mediatek: Move to struct clk_hw provider
- APIs
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220419081246.2546159-1-wenst@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220419081246.2546159-1-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/04/22 10:12, Chen-Yu Tsai ha scritto:
-> Hi everyone,
-> 
-> This is part 2 of my proposed MediaTek clk driver cleanup work [1].
-> 
+AD4130-8 is an ultra-low power, high precision, measurement solution for
+low bandwidth battery operated applications.
 
-..snip..
+The fully integrated AFE (Analog Front-End) includes a multiplexer for up
+to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
+Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
+selectable filter options, smart sequencer, sensor biasing and excitation
+options, diagnostics, and a FIFO buffer.
 
-> 
-> The next phase of the cleanup/improvement shall be to introduce some
-> variant of `struct clk_parent_data` to describe clk relationships
-> efficiently.
-> 
-> Please have a look.
-> 
+V1 -> V2
+ * add kernel version to ABI file
+ * merge ABI patch into driver patch
+ * make copyright header similar to other drivers
+ * rearrange includes
+ * use units.h defines where possible and add unit sufix to
+   SOFT_RESET_SLEEP define
+ * remove ending comma to last members of enums / lists
+ * remove unused FILTER_MAX define
+ * use BIT macro for PIN_FN_*
+ * rearrange SETUP_SIZE definition
+ * group bools in ad4130_state and ad4130_chan_info
+ * put scale_tbls definition on one line
+ * remove newline before reg size == 0 check
+ * put mask used as value in a variable
+ * remove useless ret = 0 assignment
+ * make buffer attrs oneline
+ * use for_each_set_bit in update_scan_mode
+ * use if else for internal reference voltage error checking
+ * inline reference voltage check
+ * check number of vbias pins
+ * remove .has_int_pin = false
+ * remove avail_len for IIO_AVAIL_RANGE
+ * remove useless enabled_channels check in unlink_slot
+ * remove unused AD4130_RESET_CLK_COUNT define
+ * only call fwnode_handle_put for child in case of error
+ * default adi,reference-select to REFIN1
+ * default adi,int-ref-en to false
+ * of_irq_get_byname -> fwnode_irq_get_byname
+ * P1 -> P2 as interrupt pin options
+ * add missing comma in db3_freq_avail init
+ * cast values to u64 to make math using units.h work
+ * add datasheet reference to IRQ polarity
+ * add comment about disabling channels in predisable
+ * add part number prefix find_table_index
+ * return voltage from get_ref_voltage
+ * add datasheet reference for internal reference voltage selection
+ * add comment explaining AIN and GPIO pin sharing
+ * parse channel setup before parsing excitation pins
+ * only validate excitation pin if value is not off
+ * use FIELD_PREP for bipolar and int_ref_en
+ * put devm_regmap_init call on one line
+ * introduce a slot_info struct to contain setup_info for each slot
+ * enable internal reference automatically if needed
+ * decide mclk sel based on adi,ext-clk-freq and adi,int-clk-out
+ * dt-bindings: use internal reference explicitly
+ * dt-bindings: set type for adi,excitation-pin-0
+ * dt-bindings: set $ref for adi,vbias-pins
+ * dt-bindings: remove minItems from interrupts property
+ * dt-bindings: remove adi,int-ref-en default value
+ * dt-bindings: remove adi,bipolar default value
+ * dt-bindings: inline adi,int-ref-en description
+ * dt-bindings: default adi,reference-select to REFIN1
+ * dt-bindings: clean up description for diff-channels and
+   adi,reference-select
+ * dt-bindings: add more text to interrupt-names description
+ * dt-bindings: turn interrupt-names into a single string
+ * dt-bindings: add maxItems to adi,vbias-pins
 
-Hello Chen-Yu,
+V2 -> V3
+ * dt-bindings: add interrupt controller include to example
+ * dt-bindings: remove $ref in diff-channels
 
-I am grateful to see this series, as the MediaTek clock drivers are getting
-a bit old, despite new platforms being implemented practically as we speak.
+Cosmin Tanislav (2):
+  dt-bindings: iio: adc: add AD4130
+  iio: adc: ad4130: add AD4130 driver
 
-With this, you surely get that I completely agree with the proposed cleanup
-and modernization of the entire MediaTek clocks infrastructure, but I think
-that introducing a `struct clk_parent_data` for these drivers is, at this
-point, a must, that not only fully justifies these patches, but also "makes
-the point" - as the effect of that would be a performance improvement as we
-would *at least* avoid lots of clk_cpy_name() in case of parent_hws, or in
-case or parent_data where no .fw_name is provided (which would be the case
-for most of the clocks).
+ .../ABI/testing/sysfs-bus-iio-adc-ad4130      |   36 +
+ .../bindings/iio/adc/adi,ad4130.yaml          |  264 +++
+ MAINTAINERS                                   |    8 +
+ drivers/iio/adc/Kconfig                       |   13 +
+ drivers/iio/adc/Makefile                      |    1 +
+ drivers/iio/adc/ad4130.c                      | 2078 +++++++++++++++++
+ 6 files changed, 2400 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+ create mode 100644 drivers/iio/adc/ad4130.c
 
-That said, my advice would be to add that conversion to declaring clocks
-with .hw.init.parent_data and/or .hw.init.parent_hws to this series as to
-really make it complete.
+-- 
+2.35.3
 
-Of course, if you have concerns about old platforms that you cannot test,
-or for which this kind of conversion would require a huge amount of effort,
-then I would go for converting as many as possible as a first step and then
-leave the others for later.
-
-I would envision MT8183, 8186, 8192, 8195 to be a good amount of first
-candidates for this great effort.
-
-Cheers,
-Angelo

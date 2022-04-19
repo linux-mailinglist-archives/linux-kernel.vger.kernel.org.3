@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0725507251
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950B6507252
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354106AbiDSP6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S1354117AbiDSP65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354097AbiDSP6a (ORCPT
+        with ESMTP id S1351075AbiDSP6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:58:30 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0217A237CB
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:55:48 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2f16645872fso76357287b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:55:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=uKOipqp8mqIaL5GfzKTp59Nb61UdgrKVvXrHg8JSMHE=;
-        b=Q6ZysISQ3BdzNd1OPcAEkXyeZ0wZ1VCCmtTLtSja5m07DLmiSKBQK7fe4zea6mpWZ8
-         2pgyrgLOh8UudmOjO5xKeNbDCpV5MNJ1EZGPBqqs+MXTBAf5EKLsQijGC19IJ6tOe7R0
-         gZBz31PwmusByLQCwQQ5U4Bk9Ob1MoEM0/w0gZyRE+Shw1MrWdbD8wLfq6unO9jUEAs3
-         aKawDq8qoMfdQmpPZ1R9Lfp46F1dhlT8KmbAkCCwns0BmlM330YJcaYTsNHslwHyzXsy
-         gZTiMfXFjRS3+T+XMumJFDwATELDTEEmMEDp/oMeoOTrPA++0NFANjjjfe9omkF9F4Ac
-         5mJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=uKOipqp8mqIaL5GfzKTp59Nb61UdgrKVvXrHg8JSMHE=;
-        b=Sc1U0zBevB45jzzMZUXfeEqFycbPk/qVxFW/IjgSuvV0aREdLGyJJ2MSXMVJaYreIH
-         OiNwjQPsu4BS9uaEx2oiAIVAMS+d+KZqkUHBesNF8SYW+OIpQXYq9Zw9GHPfFEX9PRSx
-         wnwRog7GKnh7JyK2+uL3fZ/pmMvhw6bT092QQfSUFyH/Sp9UaGXlc1S4itN5l+6jAScj
-         qnX+0XteWAPZDIdIM5IfordJBIN35AyQQ/dfQejvER6FCNn9/v9AttbRHGZGULO64JTe
-         7eXZ8em/N4+X+m8/dsaYnMPbuVyKC/iZRawexZT3Uq4Adpfatr9soFm/uxzQUAvBwwm9
-         ZhiQ==
-X-Gm-Message-State: AOAM532Glzq8eYpH/4M2mnkEPAhyLDszhY2GFmCxTBiMUN1ke2jA2/Jz
-        /dQ6Weqcow/rFXq95oryO9deCfDIVFzriKGvaag=
-X-Google-Smtp-Source: ABdhPJxIvD8CRpDzTac4xUj+Z62HxcVBRiVHzUNkfTeO/CwbCHtM/Stk1Mx3RXv25hnZDmpVa1HzHPOU0rFpj8Iua84=
-X-Received: by 2002:a81:6c89:0:b0:2f1:c84a:55d with SMTP id
- h131-20020a816c89000000b002f1c84a055dmr4147124ywc.333.1650383747079; Tue, 19
- Apr 2022 08:55:47 -0700 (PDT)
+        Tue, 19 Apr 2022 11:58:53 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623AC237DF
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:56:10 -0700 (PDT)
+Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MfqCF-1o9Y7F2teT-00gEG6 for <linux-kernel@vger.kernel.org>; Tue, 19 Apr
+ 2022 17:56:08 +0200
+Received: by mail-wr1-f49.google.com with SMTP id t1so23068725wra.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:56:08 -0700 (PDT)
+X-Gm-Message-State: AOAM530J4iC5qoKmZl+bhVs7pO0E0QLHjjcIOqMPkonZ+WeQLeACc8B9
+        9ZnTF/Y7/ug3JFFxeIsKahvt5VKUnJWgOcJ9tjc=
+X-Google-Smtp-Source: ABdhPJxNIyESz/EVgCAypLtywVxRPvsQ8wXEzf0J1Ebj9gCD6DgIxC5lVZ/hv26NhvTTi3jOvV6qDowOWFJ9AsDuCuU=
+X-Received: by 2002:a5d:6983:0:b0:207:a226:df4b with SMTP id
+ g3-20020a5d6983000000b00207a226df4bmr12207718wru.192.1650383768397; Tue, 19
+ Apr 2022 08:56:08 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7000:d08e:0:0:0:0 with HTTP; Tue, 19 Apr 2022 08:55:46
- -0700 (PDT)
-Reply-To: michellegoodman035@gmail.com
-From:   Shayma <shaymamarwan08@gmail.com>
-Date:   Tue, 19 Apr 2022 15:55:46 +0000
-Message-ID: <CA+HOoT34kpcCKtwbk-1uBevhws3ihJ1qCHPm74YLRCsndh5tcg@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
+References: <20191018154052.1276506-1-arnd@arndb.de> <20191018154201.1276638-33-arnd@arndb.de>
+ <87d0egjzxk.fsf@belgarion.home>
+In-Reply-To: <87d0egjzxk.fsf@belgarion.home>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 19 Apr 2022 17:55:52 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1VfUqBZo_CMukwsLeb4pqg2C9i5mqG1KXaK8EpLAOc8g@mail.gmail.com>
+Message-ID: <CAK8P3a1VfUqBZo_CMukwsLeb4pqg2C9i5mqG1KXaK8EpLAOc8g@mail.gmail.com>
+Subject: Re: [PATCH 33/46] ARM: pxa: pcmcia: move smemc configuration back to arch
+To:     Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Provags-ID: V03:K1:6gUaDHSNhIuN3JqRKBOBlXuWEzqKDWyaas8K7x5kulOP8mEw4Js
+ VqoDD2m9zefZiOPb2Yitq56JJpuxM2muTOox9h4r8tc1kuMOTJuodzlHVfg6BHVEfBk2AZn
+ AMvPn+QWftWRDnrMHGn6Th0KFqKYVBcfUNZmTJQXxhfpkPAHmlE3PSlPZcyqygQRE8vY8vW
+ Q9rK2tjdPYpOHcSzkKlWA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Ui0cDskGqH8=:Bxt57pLUfNfeEuXvE1oysQ
+ xzbbGOx0O1gmONDnfdYXolFKIEqm8JPwpbtv86EHR/sWGZ4txWKp7VMnEDC9ckmGj7R0CyVVb
+ 46VWWoIQBLk6Z44RMFpGv7DaFpssppRiKKZleon96ap576X9Gm8DzYfYrBTpk7QFdJ3SyHYfG
+ pSvoXU43MmCxweQC2dowE5Mw/DVhfRJWB18maK34+TXnpIu4Qxo0Q77vUnUEzyO+en/3gtXM8
+ GbBM+c5aKeUG1Nyy+6wbDGcJJ+OGloi+deNtKLWCrdynpz+Raavau8WcTd+mlDmF3oY/9mUC/
+ i8Rzwgt3EZ9DFBVaUjIIOmdf1viYjfkIHBY347OFK/Gu0NjDzE8JOP5c5RU+r6cNrXwekZQky
+ dECeVnEwaXbz13mEUAAmRwExINAXu/wJjZJkM7IOcEnyMX+kgfdql2qT38HffpcbUmZlhtH0c
+ aTr/VM6IpnLSpX2rIs0BF7v/WZz09sVFUv3kEzW2M0fbhbwWHdiWUm+5qxduppGKIorsbwBfz
+ LAAn0WT7XW2l1coV2i/4WCKsG44mLDANBUd/nmznc0jUdcdcPOt9xSQ/Dpk/p07Zh6B+ZGuCX
+ kpDCzv+hC5tM/6G4H3bt6xtnTO4OWLj0wD8yGSBeOX0i0jGWsh9+XHV4/Ns6D4jCxoFs+6udo
+ uD1b2PP4N0w3/xK7sTBowZbGxX7G46XOlcGXvuiQkJF9zCk8fj5tVzduIrsXfuU67WpdDuGbZ
+ 9AQMHISh5RqQrM24lchiUwOBoWCJ71eFbhOQgXmHW1J2WpTQYbq/Uj/gsmLPUJN0KkCqJk+sP
+ otHaDoaqQEyNpTnnyGlR+FLamkBeEsHSXMru6mJu5/BvQhWCZw=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TWVyaGFiYSwgdW1hcsSxbSBtZXNhasSxbcSxIGFsbcSxxZ9zxLFuxLF6ZMSxci4NCkjEsXpsxLEg
-dGVwa2lsZXJlIGlodGl5YWPEsW0gdmFyDQpCaXLDp29rDQpUZcWfZWtrw7xybGVyLg0KTWljaGVs
-bGUNCg==
+On Mon, Oct 28, 2019 at 10:58 PM Robert Jarzmik <robert.jarzmik@free.fr> wrote:
+> > -static int pxa2xx_pcmcia_set_timing(struct soc_pcmcia_socket *skt)
+> > -{
+> > -     unsigned long clk = clk_get_rate(skt->clk);
+> > -     return pxa2xx_pcmcia_set_mcxx(skt, clk / 10000);
+> That curious, because you divide here by 10^4, while in the old
+> pxa2xx_pcmcia_set_mcxx() that was 10^3 ... is that a fix I don't see ?
+
+Revisiting an older patch here: I'm fairly sure the change was my typo,
+fixed it now, thanks!
+
+      Arnd

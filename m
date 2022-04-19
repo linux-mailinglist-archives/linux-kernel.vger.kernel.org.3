@@ -2,60 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DCA506D55
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F401506D5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348298AbiDSNVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        id S1348402AbiDSNWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238617AbiDSNVv (ORCPT
+        with ESMTP id S1351985AbiDSNWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:21:51 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80391344FC;
-        Tue, 19 Apr 2022 06:19:08 -0700 (PDT)
+        Tue, 19 Apr 2022 09:22:40 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D1A2C8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:19:56 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id y20so12721116eju.7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:19:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650374349; x=1681910349;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=FEwok1lzjt/HO93wIkHzSCWrGpT3TbisaBs2ZCCYLc0=;
-  b=x67D8AFHMemndeCBOdJuHzopTptr1WH+fOyvUfBDiIGp946j27+aQ6x5
-   IPlny3LTJoGREEhCXlz8IsxAeeH3pYeh9TAc1wIC9fs5m1GuZu8r19TaY
-   IaqXitwyP5AZ3Zc92X45pvAk9ZSTXjz82Vsd4vck9Hrrhy5HEfHBmyL1z
-   k=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 19 Apr 2022 06:19:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 06:19:07 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 19 Apr 2022 06:19:07 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 19 Apr 2022 06:19:01 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v2] ASoC: qcom: SC7280: Update machine driver startup, shutdown callbacks
-Date:   Tue, 19 Apr 2022 18:48:49 +0530
-Message-ID: <1650374329-7279-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cWoWgEcXIMYRuEsZLERLpvc6D4fQ6dZb3dEHGDCcqIs=;
+        b=fY6TQpn2KPv+1NlQy1Jow9T1OohAsjrB3oV9ppqNtHvd0r+4OW08v/avNwv1G8Odjm
+         D/2GsdfYMSvjtxG1P4B7SzmR2XTR5xS2bZ0XXxMVMHNciSyV6R5MO6AkQwLdeFk1lHfh
+         Cgt7v30oEPEsJbmsWTr9+ULhOcR1ribWin+0SWBgoc1mhBYRwOlMDx37E219LP/c8iur
+         e8Jl67Cq3yYNgZHQHPlunLvMK0ujRMh0wPaA5jNKhTst45qBNw6ujFZl8BZe81KmcSAw
+         S+BsJt8ItH1FzOurK6u7x4BM44CcrZpOkFaSvq0vaqehD0L+SUhwh2c75xAXXhRm0fg5
+         rMMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cWoWgEcXIMYRuEsZLERLpvc6D4fQ6dZb3dEHGDCcqIs=;
+        b=aNNiE/FORLQlhMkIDGZY4y/LTHsSblYVfC/3nShBSinZXKX81lYPH9XsMGp4HhZl74
+         UZ6VjNHK2kPRlnOaHHIyJw+Hf73SgLGMSoyOXJoZY4uE7ktKFf+VSfsMgNBFHIpWNs38
+         qSga/ReT6YvVvcLNou9U2ML3iVZVPNbGFcqlM+9ZEWAXF50eMWt7w84D13pYJG0TaXsy
+         +wKFeL28IobQhMYX+QKM3GycH11U8pBdsTBHtc9z6NbmJntvj4wXwGq/iouqpVEp2bVJ
+         qydm1Wbun3+hfpPlVYLASvuK1j3teMErk/f/+vJvhp2FrhiCKxE36ZR2viZydId2fLN4
+         wBbA==
+X-Gm-Message-State: AOAM533RilKWwmtPPSrlQDm32rFxP1nPLBvnZSeZnaS78Ad8HbDCKTxV
+        Do7T8gQmIL/k0PV4cKzUK0cclXYQBD51Pf4ZVrEr5Q==
+X-Google-Smtp-Source: ABdhPJwnqnEl1PogZpbrEzxXO0aXN+psYbjJRFm+NSGmxo/x2WJ/ZC6/8hzNHXDDrwtWHaCSyZ4gF5RFiYFl5n9G5cc=
+X-Received: by 2002:a17:907:1c8a:b0:6e9:2a0d:d7b7 with SMTP id
+ nb10-20020a1709071c8a00b006e92a0dd7b7mr13404246ejc.572.1650374394669; Tue, 19
+ Apr 2022 06:19:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+References: <20220418034444.520928-1-tongtiangen@huawei.com>
+ <20220418034444.520928-4-tongtiangen@huawei.com> <073cb6a6-3dbc-75d4-dbfe-a5299a6b0510@arm.com>
+In-Reply-To: <073cb6a6-3dbc-75d4-dbfe-a5299a6b0510@arm.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Tue, 19 Apr 2022 09:19:16 -0400
+Message-ID: <CA+CK2bCPrQ=F0jNRxcVZ9f18Rm-kAATO3xFE79TZDoWQ99GC4Q@mail.gmail.com>
+Subject: Re: [PATCH -next v4 3/4] arm64: mm: add support for page table check
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Tong Tiangen <tongtiangen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv@lists.infradead.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,58 +83,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update machine driver startup, shutdown callback functions to avoid
-sound card registration failure on other platforms.
-Without this change, platforms with WCD codec is failing to register
-sound card.
+On Tue, Apr 19, 2022 at 6:22 AM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+>
+>
+> On 4/18/22 09:14, Tong Tiangen wrote:
+> > +#ifdef CONFIG_PAGE_TABLE_CHECK
+> > +static inline bool pte_user_accessible_page(pte_t pte)
+> > +{
+> > +     return pte_present(pte) && (pte_user(pte) || pte_user_exec(pte));
+> > +}
+> > +
+> > +static inline bool pmd_user_accessible_page(pmd_t pmd)
+> > +{
+> > +     return pmd_present(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
+> > +}
+> > +
+> > +static inline bool pud_user_accessible_page(pud_t pud)
+> > +{
+> > +     return pud_present(pud) && pud_user(pud);
+> > +}
+> > +#endif
+> Wondering why check for these page table entry states when init_mm
+> has already being excluded ? Should not user page tables be checked
+> for in entirety for all updates ? what is the rationale for filtering
+> out only pxx_user_access_page entries ?
 
-Fixes: c5198db82d4c ("ASoC: qcom: Add driver support for ALC5682I-VS")
+The point is to prevent false sharing and memory corruption issues.
+The idea of PTC to be simple and relatively independent  from the MM
+state machine that catches invalid page sharing. I.e. if an R/W anon
+page is accessible by user land, that page can never be mapped into
+another process (internally shared anons are treated as named
+mappings).
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
----
-Changes Since V1:
-   -- Update swith case in startup, shutdown callbacks for handling all dai id's
-   -- Update commit message and add Fixes tag
+Therefore, we try not to rely on MM states, and ensure that when a
+page-table entry is accessible by user it meets the required
+assumptions: no false sharing, etc.
 
- sound/soc/qcom/sc7280.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+For example, one bug that was caught with PTC was where a driver on an
+unload would put memory on a freelist but memory is still mapped in
+user page table.
 
-diff --git a/sound/soc/qcom/sc7280.c b/sound/soc/qcom/sc7280.c
-index 4ef4034..834c081 100644
---- a/sound/soc/qcom/sc7280.c
-+++ b/sound/soc/qcom/sc7280.c
-@@ -291,13 +291,7 @@ static void sc7280_snd_shutdown(struct snd_pcm_substream *substream)
- 					       SNDRV_PCM_STREAM_PLAYBACK);
- 		}
- 		break;
--	case MI2S_SECONDARY:
--		break;
--	case LPASS_DP_RX:
--		break;
- 	default:
--		dev_err(rtd->dev, "%s: invalid dai id 0x%x\n", __func__,
--			cpu_dai->id);
- 		break;
- 	}
- }
-@@ -312,14 +306,8 @@ static int sc7280_snd_startup(struct snd_pcm_substream *substream)
- 	case MI2S_PRIMARY:
- 		ret = sc7280_rt5682_init(rtd);
- 		break;
--	case MI2S_SECONDARY:
--		break;
--	case LPASS_DP_RX:
--		break;
- 	default:
--		dev_err(rtd->dev, "%s: invalid dai id 0x%x\n", __func__,
--			cpu_dai->id);
--		return -EINVAL;
-+		break;
- 	}
- 	return ret;
- }
--- 
-2.7.4
-
+Pasha

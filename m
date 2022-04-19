@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE583507270
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1C9507271
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354263AbiDSQET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        id S1354289AbiDSQEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354239AbiDSQEH (ORCPT
+        with ESMTP id S1354250AbiDSQEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:04:07 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3061C2ED59;
-        Tue, 19 Apr 2022 09:01:23 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id w1so6821724lfa.4;
-        Tue, 19 Apr 2022 09:01:23 -0700 (PDT)
+        Tue, 19 Apr 2022 12:04:11 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA002E6B9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:01:28 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso2265755pju.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:01:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=L/y6S893+XO+0gZ9aLfl1F/TXOKs2SRk/NNOfS2VZWA=;
-        b=L6Xrcws7mv5iWGzTcwQt1oy4YLbU8Nz20TyX/ZAUlrbWOVriHNvSMp0U3uCsEWCgGI
-         oljWmVv5a7O2HWKzQO7sUAHre0yA4xsoZNPJqAn5kd3BwgRwF54EjQiW2DOR+hDxYrXu
-         S+rysK5UYrig2DcGdhxIvnAGmj6Kx2i1jsmInJgtgPWSZ1E6fv9oOICvcchUAnycwA5v
-         PS0zoFlzIgQdENDMcIxIzyxPLKovYRc9+UR6sdbV+8+uOAjoNoJdDAUPyVSgUBfbP50O
-         bvGpJPovzHSzqrcgS7XyX10rtmLD4TMO2HDBdT4RaOai6ICWsMgCzcdr0+3vLYutu7lW
-         n7Fw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yFkFjqpOiICUZKBBXqsv6xYMwtD9akgoqB/oPFVYH6s=;
+        b=XUI8d/MUyS+Z6t573L3e0zuWKytIV2vZPTKhN/jpInIJdtPnyFpa3mkD2THyk7ulh+
+         Kqkl8braNAE9j+cVqi7h+zsguIoHKpwdt1ulMzRFn9XAtlCXgEOceJ/X9P8kPhdyy6RS
+         OVkWATHLx+hgWUtYYauSZ6X5JObL8xWSV6fUicas6A0xH3fX0hdPhsb3TMwEmzIgh/Gy
+         I4vZggAjTylrVzA/eostCtJqoIKLdgQQ3CRHVlNXJeM70gzFnU/wRP+jUh75enA0xueE
+         183IFLFuwju1wx0+xzjYChKiiozVGiLMpIX+hd8ZM54/iy97hS3wlE0UGmPbHw99186R
+         82Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=L/y6S893+XO+0gZ9aLfl1F/TXOKs2SRk/NNOfS2VZWA=;
-        b=S7TVTHXN4rDAQfY2G8DkmOBOPZYzJcKev0bfLn5nuSw70HGh47hxx8/Xghk75yDrk9
-         z3ZtIe8HtwvyD/BDONeyDYR5wAYHwa7fl2reQeqBrQk72VOMwnbUKtQKhzbqnPThAU7G
-         XNtczKnHHK3B7Q5/oQZpDxHpPkcGn0UNEgCw5M6fFFoRYaDgT9U3aXcCV7nNkGytVojn
-         w1iCM9AlX3xJsOMcGGdXn7SS0VgHrYOtKdJxF0T0rnSCMVBs/EinSVcl66xnD44x3A0o
-         y6RmZp2M0ileTZSqW/otDJbJNwfakGTrZi2zEm8uvURDjANB11F15eCVsfrIx57QdsEz
-         HYmA==
-X-Gm-Message-State: AOAM530Nu4Zdy9sd2TDBgrAJbcZDipHe+i7zWc7ATpgE4rzsfzxmSEBV
-        OXe6u4aGf2j4lCOg11Zero1MWrN2+wQ=
-X-Google-Smtp-Source: ABdhPJzvpqny8HulxrTSWCGLhi86vsmekYQaRbaz9XUtUO4ADQsdDbofYZBGxVy6mZHzrqsH7+9TgQ==
-X-Received: by 2002:a05:6512:1290:b0:471:90ee:b265 with SMTP id u16-20020a056512129000b0047190eeb265mr7391662lfs.668.1650384081544;
-        Tue, 19 Apr 2022 09:01:21 -0700 (PDT)
-Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id m5-20020a194345000000b0046e951e34b3sm1506663lfj.24.2022.04.19.09.01.19
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yFkFjqpOiICUZKBBXqsv6xYMwtD9akgoqB/oPFVYH6s=;
+        b=Df4uqKHrDPmrbWhYwYN6sLeaelleWwnLpCck83Q8y3oQ5cIbhf9S/39X0CF4ChtwMR
+         /4z/Df8s/FKRkxudrPHF1VNtCyI4rg9aPk2t11cZJR87PO9W4DxsWQprAiy4KMb5W3LU
+         bmX7GfZnDkr2vmuhKe5Obb77yCMeHPMsYRXnYcSV2SUTtrdmo68qd5cjvpa8cVkOl8KV
+         MUniiIMx9fKYXH/7LllsYdzFHjMx0Gu5XeIwsx4/Ncs3XEzRw5WU9Fe/ySMsJTPjoGh6
+         f3pVWv86a0BFtBq2hmjuSzmrkc6oe2NpF0Rb/XdK4bpo8Ub4DLlw2MD2oAcaSjBb1XoW
+         xurA==
+X-Gm-Message-State: AOAM533uo39dCsV14eCVvu2bhMs9a49wXwEfF3hlSpC7Hz9KxVx2q4F4
+        Zwip/g4rR3f/h+++4Udr8WMLPg==
+X-Google-Smtp-Source: ABdhPJz7yUN7JdXLKZI7zWnZgfsDj/Q4UEhY0oOMe0d/DOdZqQMBqZRMVdNAYhpKxscDLCxPy8+FKA==
+X-Received: by 2002:a17:90a:2983:b0:1cb:8d6e:e10b with SMTP id h3-20020a17090a298300b001cb8d6ee10bmr19430845pjd.208.1650384087908;
+        Tue, 19 Apr 2022 09:01:27 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i6-20020a17090a718600b001d27a7d1715sm8704344pjk.21.2022.04.19.09.01.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 09:01:21 -0700 (PDT)
-From:   Markuss Broks <markuss.broks@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH v4 4/4] regulator: sm5703-regulator: Add regulators support for SM5703 MFD
-Date:   Tue, 19 Apr 2022 19:00:57 +0300
-Message-Id: <20220419160058.9998-5-markuss.broks@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220419160058.9998-1-markuss.broks@gmail.com>
-References: <20220419160058.9998-1-markuss.broks@gmail.com>
+        Tue, 19 Apr 2022 09:01:27 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 16:01:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
+        Peter Gonda <pgonda@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kvm tree
+Message-ID: <Yl7c06VX5Pf4ZKsa@google.com>
+References: <20220419153423.644c0fa1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419153423.644c0fa1@canb.auug.org.au>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,219 +73,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Regulators block of SM5703 controls several voltage regulators which
-are used to power various components. There are 3 LDO outputs ranging
-from 1.5 to 3.3V, a buck regulator ranging from 1V to 3V, two fixed
-voltage LDO regulators for powering the USB devices and one high-power
-fixed voltage LDO line (actually two lines) meant to power high-power
-USB devices.
+On Tue, Apr 19, 2022, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the kvm tree, today's linux-next build (arm64 defconfig)
+> failed like this:
+> 
+> arch/arm64/kvm/psci.c: In function 'kvm_prepare_system_event':
+> arch/arm64/kvm/psci.c:184:32: error: 'struct <anonymous>' has no member named 'flags'
+>   184 |         vcpu->run->system_event.flags = flags;
+>       |                                ^
+> 
+> Caused by commit
+> 
+>   c24a950ec7d6 ("KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES")
+> 
+> In this commit, the uapi structure changes do not match the documentation
+> changes :-(  Does it matter that the ABI may be changed by this commit
+> (depending on the alignment of the structure members)?
 
-Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
----
- drivers/regulator/Kconfig            |   7 ++
- drivers/regulator/Makefile           |   1 +
- drivers/regulator/sm5703-regulator.c | 162 +++++++++++++++++++++++++++
- 3 files changed, 170 insertions(+)
- create mode 100644 drivers/regulator/sm5703-regulator.c
+Yeah, it's a bit of mess.  I believe we have a way out, waiting on Paolo to weigh in.
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 5d0a360d7244..318bbdc27ae4 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1147,6 +1147,13 @@ config REGULATOR_SLG51000
- 	  The SLG51000 is seven compact and customizable low dropout
- 	  regulators.
- 
-+config REGULATOR_SM5703
-+	tristate "Silicon Mitus SM5703 regulators"
-+	depends on SM5703_MFD
-+	help
-+	  This driver provides support for voltage regulators of SM5703
-+	  multi-function device.
-+
- config REGULATOR_STM32_BOOSTER
- 	tristate "STMicroelectronics STM32 BOOSTER"
- 	depends on ARCH_STM32 || COMPILE_TEST
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index 4b8794a73e17..c491fe528ba4 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -137,6 +137,7 @@ obj-$(CONFIG_REGULATOR_S5M8767) += s5m8767.o
- obj-$(CONFIG_REGULATOR_SC2731) += sc2731-regulator.o
- obj-$(CONFIG_REGULATOR_SKY81452) += sky81452-regulator.o
- obj-$(CONFIG_REGULATOR_SLG51000) += slg51000-regulator.o
-+obj-$(CONFIG_REGULATOR_SM5703) += sm5703-regulator.o
- obj-$(CONFIG_REGULATOR_STM32_BOOSTER) += stm32-booster.o
- obj-$(CONFIG_REGULATOR_STM32_VREFBUF) += stm32-vrefbuf.o
- obj-$(CONFIG_REGULATOR_STM32_PWR) += stm32-pwr.o
-diff --git a/drivers/regulator/sm5703-regulator.c b/drivers/regulator/sm5703-regulator.c
-new file mode 100644
-index 000000000000..41004de69887
---- /dev/null
-+++ b/drivers/regulator/sm5703-regulator.c
-@@ -0,0 +1,162 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/mfd/sm5703.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/of_regulator.h>
-+
-+enum sm5703_regulators {
-+	SM5703_BUCK,
-+	SM5703_LDO1,
-+	SM5703_LDO2,
-+	SM5703_LDO3,
-+	SM5703_USBLDO1,
-+	SM5703_USBLDO2,
-+	SM5703_VBUS,
-+	SM5703_MAX_REGULATORS,
-+};
-+
-+static const int sm5703_ldo_voltagemap[] = {
-+	1500000, 1800000, 2600000, 2800000, 3000000, 3300000,
-+};
-+
-+static const int sm5703_buck_voltagemap[] = {
-+	1000000, 1000000, 1000000, 1000000,
-+	1000000, 1000000, 1000000, 1000000,
-+	1000000, 1000000, 1000000, 1100000,
-+	1200000, 1300000, 1400000, 1500000,
-+	1600000, 1700000, 1800000, 1900000,
-+	2000000, 2100000, 2200000, 2300000,
-+	2400000, 2500000, 2600000, 2700000,
-+	2800000, 2900000, 3000000, 3000000,
-+};
-+
-+#define SM5703USBLDO(_name, _id)					\
-+	[SM5703_USBLDO ## _id] = {					\
-+		.name = _name,						\
-+		.of_match = _name,					\
-+		.regulators_node = "regulators",			\
-+		.type = REGULATOR_VOLTAGE,				\
-+		.id = SM5703_USBLDO ## _id,				\
-+		.ops = &sm5703_regulator_ops,				\
-+		.fixed_uV = SM5703_USBLDO_MICROVOLT,			\
-+		.enable_reg = SM5703_REG_USBLDO12,			\
-+		.enable_mask = SM5703_REG_EN_USBLDO ##_id,		\
-+		.owner			= THIS_MODULE,			\
-+	}
-+
-+#define SM5703VBUS(_name)						\
-+	[SM5703_VBUS] = {						\
-+		.name = _name,						\
-+		.of_match = _name,					\
-+		.regulators_node = "regulators",			\
-+		.type = REGULATOR_VOLTAGE,				\
-+		.id = SM5703_VBUS,					\
-+		.ops = &sm5703_regulator_ops,				\
-+		.fixed_uV = SM5703_VBUS_MICROVOLT,			\
-+		.enable_reg = SM5703_REG_CNTL,				\
-+		.enable_mask = SM5703_OPERATION_MODE_MASK,		\
-+		.enable_val = SM5703_OPERATION_MODE_USB_OTG_MODE,	\
-+		.disable_val = SM5703_OPERATION_MODE_CHARGING_ON,	\
-+		.owner			= THIS_MODULE,			\
-+	}
-+
-+#define SM5703BUCK(_name)						\
-+	[SM5703_BUCK] = {						\
-+		.name = _name,						\
-+		.of_match = _name,					\
-+		.regulators_node = "regulators",			\
-+		.type = REGULATOR_VOLTAGE,				\
-+		.id = SM5703_BUCK,					\
-+		.ops = &sm5703_regulator_ops,				\
-+		.n_voltages = ARRAY_SIZE(sm5703_buck_voltagemap),	\
-+		.volt_table = sm5703_buck_voltagemap,			\
-+		.vsel_reg = SM5703_REG_BUCK,				\
-+		.vsel_mask = SM5703_BUCK_VOLT_MASK,			\
-+		.enable_reg = SM5703_REG_BUCK,				\
-+		.enable_mask = SM5703_REG_EN_BUCK,			\
-+		.owner			= THIS_MODULE,			\
-+	}
-+
-+#define SM5703LDO(_name, _id)						\
-+	[SM5703_LDO ## _id] = {						\
-+		.name = _name,						\
-+		.of_match = _name,					\
-+		.regulators_node = "regulators",			\
-+		.type = REGULATOR_VOLTAGE,				\
-+		.id = SM5703_LDO ## _id,				\
-+		.ops = &sm5703_regulator_ops,				\
-+		.n_voltages = ARRAY_SIZE(sm5703_ldo_voltagemap),	\
-+		.volt_table = sm5703_ldo_voltagemap,			\
-+		.vsel_reg = SM5703_REG_LDO ##_id,			\
-+		.vsel_mask = SM5703_LDO_VOLT_MASK,			\
-+		.enable_reg = SM5703_REG_LDO ##_id,			\
-+		.enable_mask = SM5703_LDO_EN,				\
-+		.owner			= THIS_MODULE,			\
-+	}
-+
-+static const struct regulator_ops sm5703_regulator_ops = {
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.list_voltage		= regulator_list_voltage_table,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+};
-+
-+static struct regulator_desc sm5703_regulators_desc[SM5703_MAX_REGULATORS] = {
-+	SM5703BUCK("buck"),
-+	SM5703LDO("ldo1", 1),
-+	SM5703LDO("ldo2", 2),
-+	SM5703LDO("ldo3", 3),
-+	SM5703USBLDO("usbldo1", 1),
-+	SM5703USBLDO("usbldo2", 2),
-+	SM5703VBUS("vbus"),
-+};
-+
-+static int sm5703_regulator_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct regulator_config config = { NULL, };
-+	struct regulator_dev *rdev;
-+	struct sm5703_dev *sm5703 = dev_get_drvdata(pdev->dev.parent);
-+	int i;
-+
-+	config.dev = dev;
-+	config.of_node = dev->of_node;
-+	config.regmap = sm5703->regmap;
-+
-+	for (i = 0; i < SM5703_MAX_REGULATORS; i++) {
-+		rdev = devm_regulator_register(dev,
-+					       &sm5703_regulators_desc[i],
-+					       &config);
-+		if (IS_ERR(rdev))
-+			return dev_err_probe(dev, PTR_ERR(rdev),
-+					     "Failed to register a regulator\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct platform_device_id sm5703_regulator_id[] = {
-+	{ "sm5703-regulator", 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(platform, sm5703_regulator_id);
-+
-+static struct platform_driver sm5703_regulator_driver = {
-+	.driver = {
-+		.name = "sm5703-regulator",
-+	},
-+	.probe	= sm5703_regulator_probe,
-+	.id_table	= sm5703_regulator_id,
-+};
-+
-+module_platform_driver(sm5703_regulator_driver);
-+
-+MODULE_DESCRIPTION("Silicon Mitus SM5703 LDO/Buck/USB regulator driver");
-+MODULE_AUTHOR("Markuss Broks <markuss.broks@gmail.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.35.1
-
+https://lore.kernel.org/all/YlisiF4BU6Uxe+iU@google.com

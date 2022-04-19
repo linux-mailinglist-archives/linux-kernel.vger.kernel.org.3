@@ -2,448 +2,718 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02EE950710C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8774350712D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353517AbiDSO4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
+        id S231576AbiDSO4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350454AbiDSO4D (ORCPT
+        with ESMTP id S1353545AbiDSO4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:56:03 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886ED3A71A;
-        Tue, 19 Apr 2022 07:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650380000; x=1681916000;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TGzzS9jnfO9iWgd3FRI47hO3WiL7sdDOpgVfA6M/8BM=;
-  b=gwJUMp+o8ZCCxl0+7XMreYq0nssW09na+eQ9kCB0oh3fbSMKfgvBiTuc
-   RedByVJq8HYeXo+jYOG0Os4JUCRn1X7SdwNqZghZtoe+Z90pRhVi6VyEd
-   s8O+j5Gu9wVSog6Uqvzsy0TAkPcV+XPESpHh39Nu1BpKazfPt09U6PiZ/
-   tdtjrufBADiy1gCTXG73xaV3XmuUTERkdJWNCXUNKnFLd2PU5XBdQkNOz
-   6MCaHiM57CDStqyFbXXhx+xLOf/+hWHOaMQgHbu/KImQKmgeDUONmv4bU
-   5+tBIJTLuWsuh66l9JwfipOEGM7oaTsu60PqsmqI/WmucoUsVjHSofMur
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="263956085"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="263956085"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 07:53:20 -0700
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="554757930"
-Received: from chferrer-mobl.amr.corp.intel.com (HELO [10.209.37.31]) ([10.209.37.31])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 07:53:19 -0700
-Message-ID: <bc078c41-89fd-0a24-7d8e-efcd5a697686@linux.intel.com>
-Date:   Tue, 19 Apr 2022 07:53:19 -0700
+        Tue, 19 Apr 2022 10:56:47 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C093B009
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:54:02 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-e2442907a1so17738870fac.8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:54:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9YpPy+HWGVcibHbsbNElcFjT6HwgDsvXUD52AoePxts=;
+        b=fXoOP7G1H0P/0qkMVORhP1n8wW6o2NES3/GY/aidIFAmSl2FSggOTtjcC8+AXLhs8T
+         QIX2gO6IlztRXtakdNjE0BjUt8bzuAKtlazIAVsn7IiMB7Nl3ueTT3ZfGmKUxufWVovz
+         30VC5yrjASSiRtA2/U/WnOSXMlqNUqOG3F09LbfK8EF/iTpNA0aN/7aDDzZFulVosGUw
+         LM43+0p8kZEaB0Nw2xeY4HKmwTMGGVXwnkB8s4eW4XXTO32tmAD+R5JgFwKnNDTr0AFj
+         h0r8UNNox923b+rqt2Btnl2pZSsW++Xp3+Rhd8ffcKYM89BGawUsoeJyPzQYP46Sx+n4
+         fvhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9YpPy+HWGVcibHbsbNElcFjT6HwgDsvXUD52AoePxts=;
+        b=TmItJBnMBvFjWSFGbocjnprvsVsbIUYBAvZg918/nS6ZMxGfHSDUS1Xt9Wn/WntpNV
+         keJxj1E2ifeH4/qFMabdBm/GUQQfmSMMTBXrGGZYK3jqNLeaPoXXTdL7yQoNgeCwjtbq
+         x811bPtl0bnijvXcWQAuPdpavpfIPVvKKr8LTjPo0xaU6oZ7lL0vCIulr8275ApY7kUq
+         VbZqUDUjzz91Ovr71riyM3AquPsH/tixh6eFKnJWLwmag7OD0j2YYhNpug1DrNwJ+LaD
+         q/dmpfM9s8bHJql4BZQMCsHffTIuDxhSKdblaDQh67TvTR8m3gW6WIN9UGFk+0jpnq+i
+         C/0A==
+X-Gm-Message-State: AOAM533+jkGLZOlCXh6zehj8CtSMtZXKu05IFy6g1XM+QrSmWR5wyqqL
+        MMiPMnP466iDn9QwCU7C4oIOFPmDSjisydENGLM=
+X-Google-Smtp-Source: ABdhPJyhwzbyAvXQ2qE0B99Of9qSmA0Kw5J6IFhhQDk2I2FBKaUpZF1Ya5J1aVUjd/CYpbBSrx8ktYsBxdRXyXLft6k=
+X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
+ v29-20020a056870311d00b000de9b6c362bmr8066706oaa.200.1650380042289; Tue, 19
+ Apr 2022 07:54:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v3 04/21] x86/virt/tdx: Add skeleton for detecting and
- initializing TDX on demand
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
-References: <cover.1649219184.git.kai.huang@intel.com>
- <32dcf4c7acc95244a391458d79cd6907125c5c29.1649219184.git.kai.huang@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <32dcf4c7acc95244a391458d79cd6907125c5c29.1649219184.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220416184736.2560013-1-trix@redhat.com>
+In-Reply-To: <20220416184736.2560013-1-trix@redhat.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 19 Apr 2022 10:53:50 -0400
+Message-ID: <CADnq5_Oap6UCryeD4eaCL49Fm=DXp-fyzSPFkBH+5giqspK1RA@mail.gmail.com>
+Subject: Re: [PATCH] drm/radeon/kms: change evergreen_default_state table from
+ global to static
+To:     Tom Rix <trix@redhat.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Applied.  Thanks!
 
-
-On 4/5/22 9:49 PM, Kai Huang wrote:
-> The TDX module is essentially a CPU-attested software module running
-> in the new Secure Arbitration Mode (SEAM) to protect VMs from malicious
-> host and certain physical attacks.  The TDX module implements the
-
-/s/host/hosts
-
-> functions to build, tear down and start execution of the protected VMs
-> called Trusted Domains (TD).  Before the TDX module can be used to
-
-/s/Trusted/Trust
-
-> create and run TD guests, it must be loaded into the SEAM Range Register
-> (SEAMRR) and properly initialized.  The TDX module is expected to be
-> loaded by BIOS before booting to the kernel, and the kernel is expected
-> to detect and initialize it, using the SEAMCALLs defined by TDX
-> architecture.
-> 
-> The TDX module can be initialized only once in its lifetime.  Instead
-> of always initializing it at boot time, this implementation chooses an
-> on-demand approach to initialize TDX until there is a real need (e.g
-> when requested by KVM).  This avoids consuming the memory that must be
-> allocated by kernel and given to the TDX module as metadata (~1/256th of
-
-allocated by the kernel
-
-> the TDX-usable memory), and also saves the time of initializing the TDX
-> module (and the metadata) when TDX is not used at all.  Initializing the
-> TDX module at runtime on-demand also is more flexible to support TDX
-> module runtime updating in the future (after updating the TDX module, it
-> needs to be initialized again).
-> 
-> Introduce two placeholders tdx_detect() and tdx_init() to detect and
-> initialize the TDX module on demand, with a state machine introduced to
-> orchestrate the entire process (in case of multiple callers).
-> 
-> To start with, tdx_detect() checks SEAMRR and TDX private KeyIDs.  The
-> TDX module is reported as not loaded if either SEAMRR is not enabled, or
-> there are no enough TDX private KeyIDs to create any TD guest.  The TDX
-> module itself requires one global TDX private KeyID to crypto protect
-> its metadata.
-> 
-> And tdx_init() is currently empty.  The TDX module will be initialized
-> in multi-steps defined by the TDX architecture:
-> 
->    1) Global initialization;
->    2) Logical-CPU scope initialization;
->    3) Enumerate the TDX module capabilities and platform configuration;
->    4) Configure the TDX module about usable memory ranges and global
->       KeyID information;
->    5) Package-scope configuration for the global KeyID;
->    6) Initialize usable memory ranges based on 4).
-> 
-> The TDX module can also be shut down at any time during its lifetime.
-> In case of any error during the initialization process, shut down the
-> module.  It's pointless to leave the module in any intermediate state
-> during the initialization.
-> 
-> SEAMCALL requires SEAMRR being enabled and CPU being already in VMX
-> operation (VMXON has been done), otherwise it generates #UD.  So far
-> only KVM handles VMXON/VMXOFF.  Choose to not handle VMXON/VMXOFF in
-> tdx_detect() and tdx_init() but depend on the caller to guarantee that,
-> since so far KVM is the only user of TDX.  In the long term, more kernel
-> components are likely to use VMXON/VMXOFF to support TDX (i.e. TDX
-> module runtime update), so a reference-based approach to do VMXON/VMXOFF
-> is likely needed.
-> 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
+On Sat, Apr 16, 2022 at 2:48 PM Tom Rix <trix@redhat.com> wrote:
+>
+> evergreen_default_state and evergreen_default_size are only
+> used in evergreen.c.  Single file symbols should be static.
+> So move their definitions to evergreen_blit_shaders.h
+> and change their storage-class-specifier to static.
+>
+> Remove unneeded evergreen_blit_shader.c
+>
+> evergreen_ps/vs definitions were removed with
+> commit 4f8629675800 ("drm/radeon/kms: remove r6xx+ blit copy routines")
+> So their declarations in evergreen_blit_shader.h
+> are not needed, so remove them.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->   arch/x86/include/asm/tdx.h  |   4 +
->   arch/x86/virt/vmx/tdx/tdx.c | 222 ++++++++++++++++++++++++++++++++++++
->   2 files changed, 226 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 1f29813b1646..c8af2ba6bb8a 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -92,8 +92,12 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
->   
->   #ifdef CONFIG_INTEL_TDX_HOST
->   void tdx_detect_cpu(struct cpuinfo_x86 *c);
-> +int tdx_detect(void);
-> +int tdx_init(void);
->   #else
->   static inline void tdx_detect_cpu(struct cpuinfo_x86 *c) { }
-> +static inline int tdx_detect(void) { return -ENODEV; }
-> +static inline int tdx_init(void) { return -ENODEV; }
->   #endif /* CONFIG_INTEL_TDX_HOST */
->   
->   #endif /* !__ASSEMBLY__ */
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index ba2210001ea8..53093d4ad458 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -9,6 +9,8 @@
->   
->   #include <linux/types.h>
->   #include <linux/cpumask.h>
-> +#include <linux/mutex.h>
-> +#include <linux/cpu.h>
->   #include <asm/msr-index.h>
->   #include <asm/msr.h>
->   #include <asm/cpufeature.h>
-> @@ -45,12 +47,33 @@
->   		((u32)(((_keyid_part) & 0xffffffffull) + 1))
->   #define TDX_KEYID_NUM(_keyid_part)	((u32)((_keyid_part) >> 32))
->   
+>  drivers/gpu/drm/radeon/Makefile               |   2 +-
+>  .../gpu/drm/radeon/evergreen_blit_shaders.c   | 303 ------------------
+>  .../gpu/drm/radeon/evergreen_blit_shaders.h   | 278 +++++++++++++++-
+>  3 files changed, 274 insertions(+), 309 deletions(-)
+>  delete mode 100644 drivers/gpu/drm/radeon/evergreen_blit_shaders.c
+>
+> diff --git a/drivers/gpu/drm/radeon/Makefile b/drivers/gpu/drm/radeon/Makefile
+> index 4deedaacd655..1045d2c46a76 100644
+> --- a/drivers/gpu/drm/radeon/Makefile
+> +++ b/drivers/gpu/drm/radeon/Makefile
+> @@ -41,7 +41,7 @@ radeon-y += radeon_device.o radeon_asic.o radeon_kms.o \
+>         rs400.o rs600.o rs690.o rv515.o r520.o r600.o rv770.o radeon_test.o \
+>         r200.o radeon_legacy_tv.o r600_cs.o \
+>         radeon_pm.o atombios_dp.o r600_hdmi.o dce3_1_afmt.o \
+> -       evergreen.o evergreen_cs.o evergreen_blit_shaders.o \
+> +       evergreen.o evergreen_cs.o \
+>         evergreen_hdmi.o radeon_trace_points.o ni.o \
+>         atombios_encoders.o radeon_semaphore.o radeon_sa.o atombios_i2c.o si.o \
+>         radeon_prime.o cik.o cik_blit_shaders.o \
+> diff --git a/drivers/gpu/drm/radeon/evergreen_blit_shaders.c b/drivers/gpu/drm/radeon/evergreen_blit_shaders.c
+> deleted file mode 100644
+> index 1a96ddb3e5ed..000000000000
+> --- a/drivers/gpu/drm/radeon/evergreen_blit_shaders.c
+> +++ /dev/null
+> @@ -1,303 +0,0 @@
+> -/*
+> - * Copyright 2010 Advanced Micro Devices, Inc.
+> - *
+> - * Permission is hereby granted, free of charge, to any person obtaining a
+> - * copy of this software and associated documentation files (the "Software"),
+> - * to deal in the Software without restriction, including without limitation
+> - * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+> - * and/or sell copies of the Software, and to permit persons to whom the
+> - * Software is furnished to do so, subject to the following conditions:
+> - *
+> - * The above copyright notice and this permission notice (including the next
+> - * paragraph) shall be included in all copies or substantial portions of the
+> - * Software.
+> - *
+> - * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> - * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> - * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+> - * THE COPYRIGHT HOLDER(S) AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+> - * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+> - * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> - * DEALINGS IN THE SOFTWARE.
+> - *
+> - * Authors:
+> - *     Alex Deucher <alexander.deucher@amd.com>
+> - */
+> -
+> -#include <linux/bug.h>
+> -#include <linux/types.h>
+> -#include <linux/kernel.h>
+> -
+> -/*
+> - * evergreen cards need to use the 3D engine to blit data which requires
+> - * quite a bit of hw state setup.  Rather than pull the whole 3D driver
+> - * (which normally generates the 3D state) into the DRM, we opt to use
+> - * statically generated state tables.  The register state and shaders
+> - * were hand generated to support blitting functionality.  See the 3D
+> - * driver or documentation for descriptions of the registers and
+> - * shader instructions.
+> - */
+> -
+> -const u32 evergreen_default_state[] =
+> -{
+> -       0xc0016900,
+> -       0x0000023b,
+> -       0x00000000, /* SQ_LDS_ALLOC_PS */
+> -
+> -       0xc0066900,
+> -       0x00000240,
+> -       0x00000000, /* SQ_ESGS_RING_ITEMSIZE */
+> -       0x00000000,
+> -       0x00000000,
+> -       0x00000000,
+> -       0x00000000,
+> -       0x00000000,
+> -
+> -       0xc0046900,
+> -       0x00000247,
+> -       0x00000000, /* SQ_GS_VERT_ITEMSIZE */
+> -       0x00000000,
+> -       0x00000000,
+> -       0x00000000,
+> -
+> -       0xc0026900,
+> -       0x00000010,
+> -       0x00000000, /* DB_Z_INFO */
+> -       0x00000000, /* DB_STENCIL_INFO */
+> -
+> -       0xc0016900,
+> -       0x00000200,
+> -       0x00000000, /* DB_DEPTH_CONTROL */
+> -
+> -       0xc0066900,
+> -       0x00000000,
+> -       0x00000060, /* DB_RENDER_CONTROL */
+> -       0x00000000, /* DB_COUNT_CONTROL */
+> -       0x00000000, /* DB_DEPTH_VIEW */
+> -       0x0000002a, /* DB_RENDER_OVERRIDE */
+> -       0x00000000, /* DB_RENDER_OVERRIDE2 */
+> -       0x00000000, /* DB_HTILE_DATA_BASE */
+> -
+> -       0xc0026900,
+> -       0x0000000a,
+> -       0x00000000, /* DB_STENCIL_CLEAR */
+> -       0x00000000, /* DB_DEPTH_CLEAR */
+> -
+> -       0xc0016900,
+> -       0x000002dc,
+> -       0x0000aa00, /* DB_ALPHA_TO_MASK */
+> -
+> -       0xc0016900,
+> -       0x00000080,
+> -       0x00000000, /* PA_SC_WINDOW_OFFSET */
+> -
+> -       0xc00d6900,
+> -       0x00000083,
+> -       0x0000ffff, /* PA_SC_CLIPRECT_RULE */
+> -       0x00000000, /* PA_SC_CLIPRECT_0_TL */
+> -       0x20002000, /* PA_SC_CLIPRECT_0_BR */
+> -       0x00000000,
+> -       0x20002000,
+> -       0x00000000,
+> -       0x20002000,
+> -       0x00000000,
+> -       0x20002000,
+> -       0xaaaaaaaa, /* PA_SC_EDGERULE */
+> -       0x00000000, /* PA_SU_HARDWARE_SCREEN_OFFSET */
+> -       0x0000000f, /* CB_TARGET_MASK */
+> -       0x0000000f, /* CB_SHADER_MASK */
+> -
+> -       0xc0226900,
+> -       0x00000094,
+> -       0x80000000, /* PA_SC_VPORT_SCISSOR_0_TL */
+> -       0x20002000, /* PA_SC_VPORT_SCISSOR_0_BR */
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x80000000,
+> -       0x20002000,
+> -       0x00000000, /* PA_SC_VPORT_ZMIN_0 */
+> -       0x3f800000, /* PA_SC_VPORT_ZMAX_0 */
+> -
+> -       0xc0016900,
+> -       0x000000d4,
+> -       0x00000000, /* SX_MISC */
+> -
+> -       0xc0026900,
+> -       0x00000292,
+> -       0x00000000, /* PA_SC_MODE_CNTL_0 */
+> -       0x00000000, /* PA_SC_MODE_CNTL_1 */
+> -
+> -       0xc0106900,
+> -       0x00000300,
+> -       0x00000000, /* PA_SC_LINE_CNTL */
+> -       0x00000000, /* PA_SC_AA_CONFIG */
+> -       0x00000005, /* PA_SU_VTX_CNTL */
+> -       0x3f800000, /* PA_CL_GB_VERT_CLIP_ADJ */
+> -       0x3f800000, /* PA_CL_GB_VERT_DISC_ADJ */
+> -       0x3f800000, /* PA_CL_GB_HORZ_CLIP_ADJ */
+> -       0x3f800000, /* PA_CL_GB_HORZ_DISC_ADJ */
+> -       0x00000000, /* PA_SC_AA_SAMPLE_LOCS_0 */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /* PA_SC_AA_SAMPLE_LOCS_7 */
+> -       0xffffffff, /* PA_SC_AA_MASK */
+> -
+> -       0xc00d6900,
+> -       0x00000202,
+> -       0x00cc0010, /* CB_COLOR_CONTROL */
+> -       0x00000210, /* DB_SHADER_CONTROL */
+> -       0x00010000, /* PA_CL_CLIP_CNTL */
+> -       0x00000004, /* PA_SU_SC_MODE_CNTL */
+> -       0x00000100, /* PA_CL_VTE_CNTL */
+> -       0x00000000, /* PA_CL_VS_OUT_CNTL */
+> -       0x00000000, /* PA_CL_NANINF_CNTL */
+> -       0x00000000, /* PA_SU_LINE_STIPPLE_CNTL */
+> -       0x00000000, /* PA_SU_LINE_STIPPLE_SCALE */
+> -       0x00000000, /* PA_SU_PRIM_FILTER_CNTL */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /* SQ_DYN_GPR_RESOURCE_LIMIT_1 */
+> -
+> -       0xc0066900,
+> -       0x000002de,
+> -       0x00000000, /* PA_SU_POLY_OFFSET_DB_FMT_CNTL */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -
+> -       0xc0016900,
+> -       0x00000229,
+> -       0x00000000, /* SQ_PGM_START_FS */
+> -
+> -       0xc0016900,
+> -       0x0000022a,
+> -       0x00000000, /* SQ_PGM_RESOURCES_FS */
+> -
+> -       0xc0096900,
+> -       0x00000100,
+> -       0x00ffffff, /* VGT_MAX_VTX_INDX */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /* SX_ALPHA_TEST_CONTROL */
+> -       0x00000000, /* CB_BLEND_RED */
+> -       0x00000000, /* CB_BLEND_GREEN */
+> -       0x00000000, /* CB_BLEND_BLUE */
+> -       0x00000000, /* CB_BLEND_ALPHA */
+> -
+> -       0xc0026900,
+> -       0x000002a8,
+> -       0x00000000, /* VGT_INSTANCE_STEP_RATE_0 */
+> -       0x00000000, /*  */
+> -
+> -       0xc0026900,
+> -       0x000002ad,
+> -       0x00000000, /* VGT_REUSE_OFF */
+> -       0x00000000, /*  */
+> -
+> -       0xc0116900,
+> -       0x00000280,
+> -       0x00000000, /* PA_SU_POINT_SIZE */
+> -       0x00000000, /* PA_SU_POINT_MINMAX */
+> -       0x00000008, /* PA_SU_LINE_CNTL */
+> -       0x00000000, /* PA_SC_LINE_STIPPLE */
+> -       0x00000000, /* VGT_OUTPUT_PATH_CNTL */
+> -       0x00000000, /* VGT_HOS_CNTL */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /* VGT_GS_MODE */
+> -
+> -       0xc0016900,
+> -       0x000002a1,
+> -       0x00000000, /* VGT_PRIMITIVEID_EN */
+> -
+> -       0xc0016900,
+> -       0x000002a5,
+> -       0x00000000, /* VGT_MULTI_PRIM_IB_RESET_EN */
+> -
+> -       0xc0016900,
+> -       0x000002d5,
+> -       0x00000000, /* VGT_SHADER_STAGES_EN */
+> -
+> -       0xc0026900,
+> -       0x000002e5,
+> -       0x00000000, /* VGT_STRMOUT_CONFIG */
+> -       0x00000000, /*  */
+> -
+> -       0xc0016900,
+> -       0x000001e0,
+> -       0x00000000, /* CB_BLEND0_CONTROL */
+> -
+> -       0xc0016900,
+> -       0x000001b1,
+> -       0x00000000, /* SPI_VS_OUT_CONFIG */
+> -
+> -       0xc0016900,
+> -       0x00000187,
+> -       0x00000000, /* SPI_VS_OUT_ID_0 */
+> -
+> -       0xc0016900,
+> -       0x00000191,
+> -       0x00000100, /* SPI_PS_INPUT_CNTL_0 */
+> -
+> -       0xc00b6900,
+> -       0x000001b3,
+> -       0x20000001, /* SPI_PS_IN_CONTROL_0 */
+> -       0x00000000, /* SPI_PS_IN_CONTROL_1 */
+> -       0x00000000, /* SPI_INTERP_CONTROL_0 */
+> -       0x00000000, /* SPI_INPUT_Z */
+> -       0x00000000, /* SPI_FOG_CNTL */
+> -       0x00100000, /* SPI_BARYC_CNTL */
+> -       0x00000000, /* SPI_PS_IN_CONTROL_2 */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -       0x00000000, /*  */
+> -
+> -       0xc0026900,
+> -       0x00000316,
+> -       0x0000000e, /* VGT_VERTEX_REUSE_BLOCK_CNTL */
+> -       0x00000010, /*  */
+> -};
+> -
+> -const u32 evergreen_default_size = ARRAY_SIZE(evergreen_default_state);
+> diff --git a/drivers/gpu/drm/radeon/evergreen_blit_shaders.h b/drivers/gpu/drm/radeon/evergreen_blit_shaders.h
+> index bb8d6c751595..4492524ee1df 100644
+> --- a/drivers/gpu/drm/radeon/evergreen_blit_shaders.h
+> +++ b/drivers/gpu/drm/radeon/evergreen_blit_shaders.h
+> @@ -20,16 +20,284 @@
+>   * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+>   * DEALINGS IN THE SOFTWARE.
+>   *
+> + * Authors:
+> + *     Alex Deucher <alexander.deucher@amd.com>
+>   */
+>
+>  #ifndef EVERGREEN_BLIT_SHADERS_H
+>  #define EVERGREEN_BLIT_SHADERS_H
+>
+> -extern const u32 evergreen_ps[];
+> -extern const u32 evergreen_vs[];
+> -extern const u32 evergreen_default_state[];
 > +/*
-> + * TDX module status during initialization
+> + * evergreen cards need to use the 3D engine to blit data which requires
+> + * quite a bit of hw state setup.  Rather than pull the whole 3D driver
+> + * (which normally generates the 3D state) into the DRM, we opt to use
+> + * statically generated state tables.  The register state and shaders
+> + * were hand generated to support blitting functionality.  See the 3D
+> + * driver or documentation for descriptions of the registers and
+> + * shader instructions.
 > + */
-> +enum tdx_module_status_t {
-> +	/* TDX module status is unknown */
-> +	TDX_MODULE_UNKNOWN,
-> +	/* TDX module is not loaded */
-> +	TDX_MODULE_NONE,
-> +	/* TDX module is loaded, but not initialized */
-> +	TDX_MODULE_LOADED,
-> +	/* TDX module is fully initialized */
-> +	TDX_MODULE_INITIALIZED,
-> +	/* TDX module is shutdown due to error during initialization */
-> +	TDX_MODULE_SHUTDOWN,
+> +
+> +static const u32 evergreen_default_state[] = {
+> +       0xc0016900,
+> +       0x0000023b,
+> +       0x00000000, /* SQ_LDS_ALLOC_PS */
+> +
+> +       0xc0066900,
+> +       0x00000240,
+> +       0x00000000, /* SQ_ESGS_RING_ITEMSIZE */
+> +       0x00000000,
+> +       0x00000000,
+> +       0x00000000,
+> +       0x00000000,
+> +       0x00000000,
+> +
+> +       0xc0046900,
+> +       0x00000247,
+> +       0x00000000, /* SQ_GS_VERT_ITEMSIZE */
+> +       0x00000000,
+> +       0x00000000,
+> +       0x00000000,
+> +
+> +       0xc0026900,
+> +       0x00000010,
+> +       0x00000000, /* DB_Z_INFO */
+> +       0x00000000, /* DB_STENCIL_INFO */
+> +
+> +       0xc0016900,
+> +       0x00000200,
+> +       0x00000000, /* DB_DEPTH_CONTROL */
+> +
+> +       0xc0066900,
+> +       0x00000000,
+> +       0x00000060, /* DB_RENDER_CONTROL */
+> +       0x00000000, /* DB_COUNT_CONTROL */
+> +       0x00000000, /* DB_DEPTH_VIEW */
+> +       0x0000002a, /* DB_RENDER_OVERRIDE */
+> +       0x00000000, /* DB_RENDER_OVERRIDE2 */
+> +       0x00000000, /* DB_HTILE_DATA_BASE */
+> +
+> +       0xc0026900,
+> +       0x0000000a,
+> +       0x00000000, /* DB_STENCIL_CLEAR */
+> +       0x00000000, /* DB_DEPTH_CLEAR */
+> +
+> +       0xc0016900,
+> +       0x000002dc,
+> +       0x0000aa00, /* DB_ALPHA_TO_MASK */
+> +
+> +       0xc0016900,
+> +       0x00000080,
+> +       0x00000000, /* PA_SC_WINDOW_OFFSET */
+> +
+> +       0xc00d6900,
+> +       0x00000083,
+> +       0x0000ffff, /* PA_SC_CLIPRECT_RULE */
+> +       0x00000000, /* PA_SC_CLIPRECT_0_TL */
+> +       0x20002000, /* PA_SC_CLIPRECT_0_BR */
+> +       0x00000000,
+> +       0x20002000,
+> +       0x00000000,
+> +       0x20002000,
+> +       0x00000000,
+> +       0x20002000,
+> +       0xaaaaaaaa, /* PA_SC_EDGERULE */
+> +       0x00000000, /* PA_SU_HARDWARE_SCREEN_OFFSET */
+> +       0x0000000f, /* CB_TARGET_MASK */
+> +       0x0000000f, /* CB_SHADER_MASK */
+> +
+> +       0xc0226900,
+> +       0x00000094,
+> +       0x80000000, /* PA_SC_VPORT_SCISSOR_0_TL */
+> +       0x20002000, /* PA_SC_VPORT_SCISSOR_0_BR */
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x80000000,
+> +       0x20002000,
+> +       0x00000000, /* PA_SC_VPORT_ZMIN_0 */
+> +       0x3f800000, /* PA_SC_VPORT_ZMAX_0 */
+> +
+> +       0xc0016900,
+> +       0x000000d4,
+> +       0x00000000, /* SX_MISC */
+> +
+> +       0xc0026900,
+> +       0x00000292,
+> +       0x00000000, /* PA_SC_MODE_CNTL_0 */
+> +       0x00000000, /* PA_SC_MODE_CNTL_1 */
+> +
+> +       0xc0106900,
+> +       0x00000300,
+> +       0x00000000, /* PA_SC_LINE_CNTL */
+> +       0x00000000, /* PA_SC_AA_CONFIG */
+> +       0x00000005, /* PA_SU_VTX_CNTL */
+> +       0x3f800000, /* PA_CL_GB_VERT_CLIP_ADJ */
+> +       0x3f800000, /* PA_CL_GB_VERT_DISC_ADJ */
+> +       0x3f800000, /* PA_CL_GB_HORZ_CLIP_ADJ */
+> +       0x3f800000, /* PA_CL_GB_HORZ_DISC_ADJ */
+> +       0x00000000, /* PA_SC_AA_SAMPLE_LOCS_0 */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /* PA_SC_AA_SAMPLE_LOCS_7 */
+> +       0xffffffff, /* PA_SC_AA_MASK */
+> +
+> +       0xc00d6900,
+> +       0x00000202,
+> +       0x00cc0010, /* CB_COLOR_CONTROL */
+> +       0x00000210, /* DB_SHADER_CONTROL */
+> +       0x00010000, /* PA_CL_CLIP_CNTL */
+> +       0x00000004, /* PA_SU_SC_MODE_CNTL */
+> +       0x00000100, /* PA_CL_VTE_CNTL */
+> +       0x00000000, /* PA_CL_VS_OUT_CNTL */
+> +       0x00000000, /* PA_CL_NANINF_CNTL */
+> +       0x00000000, /* PA_SU_LINE_STIPPLE_CNTL */
+> +       0x00000000, /* PA_SU_LINE_STIPPLE_SCALE */
+> +       0x00000000, /* PA_SU_PRIM_FILTER_CNTL */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /* SQ_DYN_GPR_RESOURCE_LIMIT_1 */
+> +
+> +       0xc0066900,
+> +       0x000002de,
+> +       0x00000000, /* PA_SU_POLY_OFFSET_DB_FMT_CNTL */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +
+> +       0xc0016900,
+> +       0x00000229,
+> +       0x00000000, /* SQ_PGM_START_FS */
+> +
+> +       0xc0016900,
+> +       0x0000022a,
+> +       0x00000000, /* SQ_PGM_RESOURCES_FS */
+> +
+> +       0xc0096900,
+> +       0x00000100,
+> +       0x00ffffff, /* VGT_MAX_VTX_INDX */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /* SX_ALPHA_TEST_CONTROL */
+> +       0x00000000, /* CB_BLEND_RED */
+> +       0x00000000, /* CB_BLEND_GREEN */
+> +       0x00000000, /* CB_BLEND_BLUE */
+> +       0x00000000, /* CB_BLEND_ALPHA */
+> +
+> +       0xc0026900,
+> +       0x000002a8,
+> +       0x00000000, /* VGT_INSTANCE_STEP_RATE_0 */
+> +       0x00000000, /*  */
+> +
+> +       0xc0026900,
+> +       0x000002ad,
+> +       0x00000000, /* VGT_REUSE_OFF */
+> +       0x00000000, /*  */
+> +
+> +       0xc0116900,
+> +       0x00000280,
+> +       0x00000000, /* PA_SU_POINT_SIZE */
+> +       0x00000000, /* PA_SU_POINT_MINMAX */
+> +       0x00000008, /* PA_SU_LINE_CNTL */
+> +       0x00000000, /* PA_SC_LINE_STIPPLE */
+> +       0x00000000, /* VGT_OUTPUT_PATH_CNTL */
+> +       0x00000000, /* VGT_HOS_CNTL */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /* VGT_GS_MODE */
+> +
+> +       0xc0016900,
+> +       0x000002a1,
+> +       0x00000000, /* VGT_PRIMITIVEID_EN */
+> +
+> +       0xc0016900,
+> +       0x000002a5,
+> +       0x00000000, /* VGT_MULTI_PRIM_IB_RESET_EN */
+> +
+> +       0xc0016900,
+> +       0x000002d5,
+> +       0x00000000, /* VGT_SHADER_STAGES_EN */
+> +
+> +       0xc0026900,
+> +       0x000002e5,
+> +       0x00000000, /* VGT_STRMOUT_CONFIG */
+> +       0x00000000, /*  */
+> +
+> +       0xc0016900,
+> +       0x000001e0,
+> +       0x00000000, /* CB_BLEND0_CONTROL */
+> +
+> +       0xc0016900,
+> +       0x000001b1,
+> +       0x00000000, /* SPI_VS_OUT_CONFIG */
+> +
+> +       0xc0016900,
+> +       0x00000187,
+> +       0x00000000, /* SPI_VS_OUT_ID_0 */
+> +
+> +       0xc0016900,
+> +       0x00000191,
+> +       0x00000100, /* SPI_PS_INPUT_CNTL_0 */
+> +
+> +       0xc00b6900,
+> +       0x000001b3,
+> +       0x20000001, /* SPI_PS_IN_CONTROL_0 */
+> +       0x00000000, /* SPI_PS_IN_CONTROL_1 */
+> +       0x00000000, /* SPI_INTERP_CONTROL_0 */
+> +       0x00000000, /* SPI_INPUT_Z */
+> +       0x00000000, /* SPI_FOG_CNTL */
+> +       0x00100000, /* SPI_BARYC_CNTL */
+> +       0x00000000, /* SPI_PS_IN_CONTROL_2 */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +       0x00000000, /*  */
+> +
+> +       0xc0026900,
+> +       0x00000316,
+> +       0x0000000e, /* VGT_VERTEX_REUSE_BLOCK_CNTL */
+> +       0x00000010, /*  */
 > +};
-> +
-
-May be adding these states when you really need will make
-more sense. Currently this patch only uses SHUTDOWN and
-NONE states. Other state usage is not very clear.
-
->   /* BIOS must configure SEAMRR registers for all cores consistently */
->   static u64 seamrr_base, seamrr_mask;
->   
->   static u32 tdx_keyid_start;
->   static u32 tdx_keyid_num;
->   
-> +static enum tdx_module_status_t tdx_module_status;
-> +
-> +/* Prevent concurrent attempts on TDX detection and initialization */
-> +static DEFINE_MUTEX(tdx_module_lock);
-
-Any possible concurrent usage models?
-
-> +
->   static bool __seamrr_enabled(void)
->   {
->   	return (seamrr_mask & SEAMRR_ENABLED_BITS) == SEAMRR_ENABLED_BITS;
-> @@ -172,3 +195,202 @@ void tdx_detect_cpu(struct cpuinfo_x86 *c)
->   	detect_seam(c);
->   	detect_tdx_keyids(c);
->   }
-> +
-> +static bool seamrr_enabled(void)
-> +{
-> +	/*
-> +	 * To detect any BIOS misconfiguration among cores, all logical
-> +	 * cpus must have been brought up at least once.  This is true
-> +	 * unless 'maxcpus' kernel command line is used to limit the
-> +	 * number of cpus to be brought up during boot time.  However
-> +	 * 'maxcpus' is basically an invalid operation mode due to the
-> +	 * MCE broadcast problem, and it should not be used on a TDX
-> +	 * capable machine.  Just do paranoid check here and do not
-
-a paranoid check
-
-> +	 * report SEAMRR as enabled in this case.
-> +	 */
-> +	if (!cpumask_equal(&cpus_booted_once_mask,
-> +					cpu_present_mask))
-> +		return false;
-> +
-> +	return __seamrr_enabled();
-> +}
-> +
-> +static bool tdx_keyid_sufficient(void)
-> +{
-> +	if (!cpumask_equal(&cpus_booted_once_mask,
-> +					cpu_present_mask))
-> +		return false;
-> +
-> +	/*
-> +	 * TDX requires at least two KeyIDs: one global KeyID to
-> +	 * protect the metadata of the TDX module and one or more
-> +	 * KeyIDs to run TD guests.
-> +	 */
-> +	return tdx_keyid_num >= 2;
-> +}
-> +
-> +static int __tdx_detect(void)
-> +{
-> +	/* The TDX module is not loaded if SEAMRR is disabled */
-> +	if (!seamrr_enabled()) {
-> +		pr_info("SEAMRR not enabled.\n");
-> +		goto no_tdx_module;
-> +	}
-> +
-> +	/*
-> +	 * Also do not report the TDX module as loaded if there's
-> +	 * no enough TDX private KeyIDs to run any TD guests.
-> +	 */
-
-You are not returning TDX_MODULE_LOADED under any current
-scenarios. So think above comment is not accurate.
-
-> +	if (!tdx_keyid_sufficient()) {
-> +		pr_info("Number of TDX private KeyIDs too small: %u.\n",
-> +				tdx_keyid_num);
-> +		goto no_tdx_module;
-> +	}
-> +
-> +	/* Return -ENODEV until the TDX module is detected */
-> +no_tdx_module:
-> +	tdx_module_status = TDX_MODULE_NONE;
-> +	return -ENODEV;
-> +}
-> +
-> +static int init_tdx_module(void)
-> +{
-> +	/*
-> +	 * Return -EFAULT until all steps of TDX module
-> +	 * initialization are done.
-> +	 */
-> +	return -EFAULT;
-> +}
-> +
-> +static void shutdown_tdx_module(void)
-> +{
-> +	/* TODO: Shut down the TDX module */
-> +	tdx_module_status = TDX_MODULE_SHUTDOWN;
-> +}
-> +
-> +static int __tdx_init(void)
-> +{
-> +	int ret;
-> +
-> +	/*
-> +	 * Logical-cpu scope initialization requires calling one SEAMCALL
-> +	 * on all logical cpus enabled by BIOS.  Shutting down the TDX
-> +	 * module also has such requirement.  Further more, configuring
-
-such a requirement
-
-> +	 * the key of the global KeyID requires calling one SEAMCALL for
-> +	 * each package.  For simplicity, disable CPU hotplug in the whole
-> +	 * initialization process.
-> +	 *
-> +	 * It's perhaps better to check whether all BIOS-enabled cpus are
-> +	 * online before starting initializing, and return early if not.
-> +	 * But none of 'possible', 'present' and 'online' CPU masks
-> +	 * represents BIOS-enabled cpus.  For example, 'possible' mask is
-> +	 * impacted by 'nr_cpus' or 'possible_cpus' kernel command line.
-> +	 * Just let the SEAMCALL to fail if not all BIOS-enabled cpus are
-> +	 * online.
-> +	 */
-> +	cpus_read_lock();
-> +
-> +	ret = init_tdx_module();
-> +
-> +	/*
-> +	 * Shut down the TDX module in case of any error during the
-> +	 * initialization process.  It's meaningless to leave the TDX
-> +	 * module in any middle state of the initialization process.
-> +	 */
-> +	if (ret)
-> +		shutdown_tdx_module();
-> +
-> +	cpus_read_unlock();
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * tdx_detect - Detect whether the TDX module has been loaded
-> + *
-> + * Detect whether the TDX module has been loaded and ready for
-> + * initialization.  Only call this function when all cpus are
-> + * already in VMX operation.
-> + *
-> + * This function can be called in parallel by multiple callers.
-> + *
-> + * Return:
-> + *
-> + * * -0:	The TDX module has been loaded and ready for
-> + *		initialization.
-> + * * -ENODEV:	The TDX module is not loaded.
-> + * * -EPERM:	CPU is not in VMX operation.
-> + * * -EFAULT:	Other internal fatal errors.
-> + */
-> +int tdx_detect(void)
-
-Will this function be used separately or always along with
-tdx_init()?
-
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&tdx_module_lock);
-> +
-> +	switch (tdx_module_status) {
-> +	case TDX_MODULE_UNKNOWN:
-> +		ret = __tdx_detect();
-> +		break;
-> +	case TDX_MODULE_NONE:
-> +		ret = -ENODEV;
-> +		break;
-> +	case TDX_MODULE_LOADED:
-> +	case TDX_MODULE_INITIALIZED:
-> +		ret = 0;
-> +		break;
-> +	case TDX_MODULE_SHUTDOWN:
-> +		ret = -EFAULT;
-> +		break;
-> +	default:
-> +		WARN_ON(1);
-> +		ret = -EFAULT;
-> +	}
-> +
-> +	mutex_unlock(&tdx_module_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_detect);
-> +
-> +/**
-> + * tdx_init - Initialize the TDX module
-
-If it for tdx module initialization, why not call it
-tdx_module_init()? If not, update the description
-appropriately.
-
-> + *
-> + * Initialize the TDX module to make it ready to run TD guests.  This
-> + * function should be called after tdx_detect() returns successful.
-> + * Only call this function when all cpus are online and are in VMX
-> + * operation.  CPU hotplug is temporarily disabled internally.
-> + *
-> + * This function can be called in parallel by multiple callers.
-> + *
-> + * Return:
-> + *
-> + * * -0:	The TDX module has been successfully initialized.
-> + * * -ENODEV:	The TDX module is not loaded.
-> + * * -EPERM:	The CPU which does SEAMCALL is not in VMX operation.
-> + * * -EFAULT:	Other internal fatal errors.
-> + */
-
-You return differnt error values just for debug prints or there are
-other uses for it?
-
-> +int tdx_init(void)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&tdx_module_lock);
-> +
-> +	switch (tdx_module_status) {
-> +	case TDX_MODULE_NONE:
-> +		ret = -ENODEV;
-> +		break;
-> +	case TDX_MODULE_LOADED:
-
-> +		ret = __tdx_init();
-> +		break;
-> +	case TDX_MODULE_INITIALIZED:
-> +		ret = 0;
-> +		break;
-> +	default:
-> +		ret = -EFAULT;
-> +		break;
-> +	}
-> +	mutex_unlock(&tdx_module_lock);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_init);
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+>
+> -extern const u32 evergreen_ps_size, evergreen_vs_size;
+> -extern const u32 evergreen_default_size;
+> +static const u32 evergreen_default_size = ARRAY_SIZE(evergreen_default_state);
+>
+>  #endif
+> --
+> 2.27.0
+>

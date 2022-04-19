@@ -2,117 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343515070A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E087B5070A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353332AbiDSObs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
+        id S1353681AbiDSOc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348414AbiDSObo (ORCPT
+        with ESMTP id S1353398AbiDSOcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:31:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234A2E0CF
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:29:01 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 14:28:59 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650378540;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JbcZVYeVy7oRTZRSXm6YwXfzAnGw8g2KvwGAxHBzEjc=;
-        b=j+AUehvokXqO62h87OGZVisDu2j/pJaXXL77kyXeIh+GMtDuHkTR3G3k6M4NvN6Qdd78li
-        Adg40eHmJ0oU2V7rQY3ZnJYx2QgARjmVvwnri4AbQkXI6QvEjjm8xjyksx67mQRgyIf0h2
-        7ZhGdH0WWlL7sXWvykZ+E48r2H23LGsnoAV6CMqquOT+cys9u0tNK5+Iy3T9iovfddGX/T
-        m9QcXdnnL2Bgje/Uj2UXTJfgnjZuTihHyJiGGcgNSW60rwGzbNFGXZ8X0SkTd7UswZHbOp
-        kpJGExyJnYtxdlpl8hLxZTq0GbosfCvmdHCQCc1DF2aRobuKh4fElqIPbQhZGQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650378540;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JbcZVYeVy7oRTZRSXm6YwXfzAnGw8g2KvwGAxHBzEjc=;
-        b=ukCSvCJ70I7pr4fL9aAANPkGd6QrGp9VMTzpyiHdPl8L6raPrp8b/BWW+VHiKAYzCvJaKy
-        J+abnBgy7O4+RGAQ==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] gpio: Update TODO to mention immutable
- irq_chip structures
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220419141846.598305-10-maz@kernel.org>
-References: <20220419141846.598305-10-maz@kernel.org>
+        Tue, 19 Apr 2022 10:32:01 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEE03969E
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:29:16 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id z99so21508519ede.5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=xWS9zh5KMUXIqFZALN21cYcGLfXB3BzUXuFD0a0fUOw=;
+        b=aLV9hLaJJ0NaAlRkO0aHQgwZPtV2CafANhXdezXlvGXflg0FXgSZKgiFBo5azgdpoe
+         iBsB2CHPZElvVUvAhCQ3YTfehyZNBGF/wZ8qHQY31N/Z50eaxl1riMkeh9PUq+zVURKW
+         tXd2/Ec5cDNI8Bfqi8RcV/4NeeTvpgkhiQ77dO0LlWLWI36dyTvhAelFG86MD/MncwRX
+         EN5nuCJ6EflxmGNk9yKMixNIqf4J5Ypj2faFSv2VXc6uNHhqhcNNEBiamuJTDaw1zsUx
+         u8BjjM1d/7Jm9SbC9x48/U0ZqLOxSwiu+NQ6eazi7QF2U/gsIx6Iw8lOKImpLy81KsZa
+         y2PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xWS9zh5KMUXIqFZALN21cYcGLfXB3BzUXuFD0a0fUOw=;
+        b=lXMWXHUYopxBHSp647WfIJxczLZVMpT40DEb8pyBu8WD/96vM1307HQxPiPcuFBDYU
+         CtEZRZa7IcRvjMaph3qRq0HTji2mlHOFxlO/dMc6Ix4rfPTdukzYOe4xLPuIqDeKnuFI
+         VYlNXI9hY9HQjnLprHJr41rU99XzF2v2kMWJaTW14SWT/QTy+ynv29cyjLq4GAMSO95k
+         MB/oZqR6O6H7I5DQNAn/DHc2FqTWBiR2BKSWa3a/CnEphx3JQzm8M3VPMMjBo+31h0wL
+         8ENkGNfJ9vsKiQZIkuMGTCPHPmksseL8M4OwOLvynem7fG2DIHRKmEGp8Pnap2cTi63n
+         bbRA==
+X-Gm-Message-State: AOAM5334sAHyq8YcmUjgozuhmv51q+if6KCOWastbOIfzextjeEeHg9V
+        QUgBGHgcb6KFBPwlbjyTmpcDlw==
+X-Google-Smtp-Source: ABdhPJzkzsncCIKBUOGljWWovNy5FkPnFo0osExDv5Sz3kp3CcXwRLh62x+x0uhbvqikml8HwNYnRw==
+X-Received: by 2002:a05:6402:1e8c:b0:424:1d6:1b71 with SMTP id f12-20020a0564021e8c00b0042401d61b71mr3019255edf.211.1650378554873;
+        Tue, 19 Apr 2022 07:29:14 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170906b10a00b006e1004406easm5761884ejy.93.2022.04.19.07.29.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 07:29:14 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Markus Mayer <mmayer@broadcom.com>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH 7/7] memory: renesas-rpc-if: simplify platform_get_resource_byname()
+Date:   Tue, 19 Apr 2022 16:28:59 +0200
+Message-Id: <20220419142859.380566-7-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220419142859.380566-1-krzysztof.kozlowski@linaro.org>
+References: <20220419142859.380566-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Message-ID: <165037853927.4207.17133482140796302494.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+Use devm_platform_ioremap_resource_byname() instead of
+platform_get_resource_byname() and devm_ioremap_resource().
 
-Commit-ID:     afefc3266272d40cdcd0fd713c7b42008fea19d5
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/afefc3266272d40cdcd0fd713c7b42008fea19d5
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Tue, 19 Apr 2022 15:18:45 +01:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Tue, 19 Apr 2022 15:22:26 +01:00
-
-gpio: Update TODO to mention immutable irq_chip structures
-
-5 drivers are converted, a few hundred to go. Definitely worth of
-a TODO entry, in the hope that someone will notice it and do
-a bulk update.
-
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220419141846.598305-10-maz@kernel.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/gpio/TODO | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/memory/renesas-rpc-if.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/gpio/TODO b/drivers/gpio/TODO
-index b8b1473..f87ff3f 100644
---- a/drivers/gpio/TODO
-+++ b/drivers/gpio/TODO
-@@ -178,3 +178,22 @@ discussed but the idea is to provide a low-level access point
- for debugging and hacking and to expose all lines without the
- need of any exporting. Also provide ample ammunition to shoot
- oneself in the foot, because this is debugfs after all.
-+
-+
-+Moving over to immutable irq_chip structures
-+
-+Most of the gpio chips implementing interrupt support rely on gpiolib
-+intercepting some of the irq_chip callbacks, preventing the structures
-+from being made read-only and forcing duplication of structures that
-+should otherwise be unique.
-+
-+The solution is to call into the gpiolib code when needed (resource
-+management, enable/disable or unmask/mask callbacks), and to let the
-+core code know about that by exposing a flag (IRQCHIP_IMMUTABLE) in
-+the irq_chip structure. The irq_chip structure can then be made unique
-+and const.
-+
-+A small number of drivers have been converted (pl061, tegra186, msm,
-+amd, apple), and can be used as examples of how to proceed with this
-+conversion. Note that drivers using the generic irqchip framework
-+cannot be converted yet, but watch this space!
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index ba9c526833c0..4316988d791a 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -259,8 +259,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+ 
+ 	rpc->dev = dev;
+ 
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "regs");
+-	rpc->base = devm_ioremap_resource(&pdev->dev, res);
++	rpc->base = devm_platform_ioremap_resource_byname(pdev, "regs");
+ 	if (IS_ERR(rpc->base))
+ 		return PTR_ERR(rpc->base);
+ 
+-- 
+2.32.0
+

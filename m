@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A938506721
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92196506727
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350117AbiDSIub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S1350142AbiDSIva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235794AbiDSIu2 (ORCPT
+        with ESMTP id S235794AbiDSIv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:50:28 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7781BDFED
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:47:45 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id t1so21454169wra.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3zfxgfhhkGrdZQPttYFIyDKGOpAjycnaX8YYYe3nvMs=;
-        b=QMuKTTF4XAeRFnDlBJHu27U50iu6XBNoG05MeKFeLU7LsVVjUcV3ejaRRo+hmzy4HE
-         8RGR84YLIk71QD5AQiyRP+u8oMQokSNGjOV2GeZzTXIeNHMYrl62RYagKfoW7/4BX+KF
-         C9hVR3VkHU0ESauWkgoubLwV7f0N8V8CxKFQOSGTKkkgEfNubRFW8kfT801AsfBDEl8X
-         broAjmmh0Unod0xRCJh7b138tc2H80Cnl9U7AdllLIwQddcei+hpFnZERUtovQtlRIg6
-         YAxxTykq5evBHh9fJaw2Sx8sp2Rao0lkkWMBCyOUCVh/qrBePzCPZAAaTK7uhf4Xw479
-         BJ9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3zfxgfhhkGrdZQPttYFIyDKGOpAjycnaX8YYYe3nvMs=;
-        b=EZLOL/Gzno0gNs0FVNQwldo42cInKWbBMmAAjxbyh3rUCfbHif896efAxnrwxb0ev4
-         Kk0ZpDc+0ndxOMo0CuyE89LsULiHzzOBxelPz+IrseO6i28QgNdSxADwk2QErjypkhsc
-         6mS746xvShzc/bL17vBzuW13nubwCF1wYNSocG51HxnR8ZbNDpML6S5sqJaPk4GG1wbS
-         KBONsYZl+Da+lT8gUvQsyfqrOKAnzjeRME7gv8580B2SW0bFB597sAXYDYqX62+1v1T1
-         jGrNfPF/r8TnPlLmbFH2T5RteBVglcx85kT/XlxG+THkakW7aLYxbNwYpzCz1VztjYVJ
-         GQ8g==
-X-Gm-Message-State: AOAM530UlwxB/pk03kVDXJafLeKlUMeQ21kKQ9nBKJJ+ItcXmRGszcCs
-        eEJBOky8rkkq4zmEdUt4dx/j/A==
-X-Google-Smtp-Source: ABdhPJyGYvopwBZKM+g01h8Kn+VxX+cUxfwLusUKA6MiYSG6VWvCuPXWxSd3hPj8JfuBmWdc2LElng==
-X-Received: by 2002:adf:dd8a:0:b0:207:9e5f:fd0a with SMTP id x10-20020adfdd8a000000b002079e5ffd0amr10553750wrl.94.1650358064065;
-        Tue, 19 Apr 2022 01:47:44 -0700 (PDT)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id g8-20020a5d4888000000b00207a49fa6a1sm14168011wrq.81.2022.04.19.01.47.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 01:47:43 -0700 (PDT)
-Message-ID: <e48a9b3a-4a9f-3fa7-2bd2-edac34328c37@linaro.org>
-Date:   Tue, 19 Apr 2022 09:47:42 +0100
+        Tue, 19 Apr 2022 04:51:27 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F419022B1A;
+        Tue, 19 Apr 2022 01:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650358125; x=1681894125;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kegNEX0ChIhmD7NdNa7wFO+eFscT2RC4rHC8Bs7PAC8=;
+  b=hOB8MDCnFNXImQDSO6NikhXT0U4ge+Qt7PZrmyRUt1ClpUqX2fGRE44g
+   pqoiGoKfBQm32ss8/0SyyjK/6+xEhykEPMZn0q7QlnOoLJRzl43fnkbPI
+   ERVI77zlsbFjPn++Sat6d7Ryjb+y5zlZ09X1gT2TD+2aaPiCFr3jh/Xs3
+   1soC2aZ44bRqAOeEtDVc6cb1NqVleZU9BjvfOO+z/S8O8pZZDztow99y7
+   AryE56l27yCwl2feC67D5KNveYlMirZU9MeYklat/0rhXKBrfYkd06aU+
+   pzvxuCDxOxdaPF2818SIOKKTtpJE2ri3rrfM5DXrVu7q/PmQkCSZlAvgS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="326613554"
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="326613554"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 01:48:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="530037373"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 19 Apr 2022 01:48:42 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngjXO-0005Z6-6W;
+        Tue, 19 Apr 2022 08:48:42 +0000
+Date:   Tue, 19 Apr 2022 16:48:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused
+ variable 'pxa_camera_of_match'
+Message-ID: <202204191631.zjUg442L-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next] slimbus: qcom: Remove unnecessary print function
- dev_err()
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, agross@kernel.org
-Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20220414014430.19051-1-yang.lee@linux.alibaba.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220414014430.19051-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,40 +63,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mauro,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b2d229d4ddb17db541098b83524d901257e93845
+commit: 95495f2aa9d8df1a7697bab24118544d3568f41d media: platform: place Intel drivers on a separate dir
+date:   5 weeks ago
+config: mips-randconfig-r025-20220419 (https://download.01.org/0day-ci/archive/20220419/202204191631.zjUg442L-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95495f2aa9d8df1a7697bab24118544d3568f41d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 95495f2aa9d8df1a7697bab24118544d3568f41d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/intel/ lib/lz4/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused variable 'pxa_camera_of_match' [-Wunused-const-variable]
+   static const struct of_device_id pxa_camera_of_match[] = {
+                                    ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SSB_EMBEDDED
+   Depends on SSB && SSB_DRIVER_MIPS && SSB_PCICORE_HOSTMODE
+   Selected by
+   - BCM47XX_SSB && BCM47XX
 
 
-On 14/04/2022 02:44, Yang Li wrote:
-> The print function dev_err() is redundant because
-> platform_get_irq_byname() already prints an error.
-> 
-> Eliminate the follow coccicheck warning:
-> ./drivers/slimbus/qcom-ctrl.c:514:2-9: line 514 is redundant because
-> platform_get_irq() already prints an error
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+vim +/pxa_camera_of_match +2449 drivers/media/platform/intel/pxa_camera.c
 
+7254026cedd42d drivers/media/video/pxa_camera.c               Guennadi Liakhovetski 2011-06-29  2448  
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29 @2449  static const struct of_device_id pxa_camera_of_match[] = {
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2450  	{ .compatible = "marvell,pxa270-qci", },
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2451  	{},
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2452  };
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2453  MODULE_DEVICE_TABLE(of, pxa_camera_of_match);
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2454  
 
-Applied thanks,
+:::::: The code at line 2449 was first introduced by commit
+:::::: e9a1d94fa85542d4f3046ac82d234a3c8349c948 [media] media: pxa_camera device-tree support
 
---srini
-> ---
->   drivers/slimbus/qcom-ctrl.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
-> index ec58091fc948..c0c4f895d76e 100644
-> --- a/drivers/slimbus/qcom-ctrl.c
-> +++ b/drivers/slimbus/qcom-ctrl.c
-> @@ -510,10 +510,8 @@ static int qcom_slim_probe(struct platform_device *pdev)
->   	}
->   
->   	ctrl->irq = platform_get_irq(pdev, 0);
-> -	if (ctrl->irq < 0) {
-> -		dev_err(&pdev->dev, "no slimbus IRQ\n");
-> +	if (ctrl->irq < 0)
->   		return ctrl->irq;
-> -	}
->   
->   	sctrl = &ctrl->ctrl;
->   	sctrl->dev = &pdev->dev;
+:::::: TO: Robert Jarzmik <robert.jarzmik@free.fr>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,135 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98FE5075A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B4B507585
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355464AbiDSQwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
+        id S1349826AbiDSQuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346034AbiDSQp5 (ORCPT
+        with ESMTP id S235504AbiDSQqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:45:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D19A3A5D6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650386592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V3ODNWfMW+rRhSokZu86v1GXhJjBricpy30YxedvS1g=;
-        b=GGC/aKc6epjyb8qz33WDzkz7vdHatLFmsDOSeJq77hCEJ6oyzCiZ0EFdOm52+mMK1ay6Ju
-        xXNCJDNzjRJ4OimnpdrBcIX9/M6OpCf18OiLh84LH/skKgzZQbYlJ55COX7O6F6g12hcBD
-        T3Tpah57XcNPKzT6ZXuaTyaIiH1NCsQ=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-329-kIl84JomN_KviTwwZ6PMeg-1; Tue, 19 Apr 2022 12:43:10 -0400
-X-MC-Unique: kIl84JomN_KviTwwZ6PMeg-1
-Received: by mail-wm1-f71.google.com with SMTP id 125-20020a1c0283000000b003928cd3853aso1121487wmc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:43:10 -0700 (PDT)
+        Tue, 19 Apr 2022 12:46:22 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B9939692;
+        Tue, 19 Apr 2022 09:43:39 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id x17so30408634lfa.10;
+        Tue, 19 Apr 2022 09:43:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gyw0DllU2NEgcTB/Sa92qGNKU8xdBjvfAuK5cohiajI=;
+        b=asRrscuJnEsdZ1tzYA0fN9xCDH2APZtdudLZmkQnLh6p0uiaAxipNglQMl57a4UMxy
+         78eqnW78ESl336vWjH8XLn8Zd43FNXLdVkToS0MiB6cvvCy2PmJYxYWrvV7lMB4CNhXR
+         6Y4WnxmZ0LRShtGTEkrW7DoErjKohz+R86lgBhFL1gi0q1bO0a/MR3mNtUq6EtaTE/i0
+         6ckG3UJ/dn5qBWqHdT98XxrjALJfahY+7izZrCdcWLEW9h2azZq5+m5LqeZqFzxfzu1/
+         F50tp++qazDDdaa4JJjgBBXRVfCClJcgaU6IZpyHKa6Maw20JmgOSW9AwydqsQ8I6qCz
+         gSNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=V3ODNWfMW+rRhSokZu86v1GXhJjBricpy30YxedvS1g=;
-        b=lf+rHETlobwr+SCZn02jVrqOKxF37gvaLMhqiNJi/VBEGGz1JtkJw28YMd+LYIY0w3
-         Te39ZEfxXfw+Pr+BrNhgUVuly+IGaD8MiPSrVFHPVcO88XUQhJlO/WynZSZIg+FPWzii
-         BzknNT8WkZtwCtKdWujAzqTqogaQWx0sRRBsFcAiMS0kYWiyBUcuDO5tExled623HTL1
-         02KNQcM2HNQDFgUM561P30NlTkhl3PnsfFOmJ/iV6tQjDRCsrg2ZHn2hft9vrBpEvBoU
-         UZi1Y6cWXJjYG8YkPumst5HHX5N/TUR0GYYUCXpEwX6vyjXSqztn2dV/RkxbOmk3BqG/
-         Xicw==
-X-Gm-Message-State: AOAM532PXSAWkvCRP38BP490lIkymU6czJsXvyg72tVDKkHY0dfgORn+
-        AiT4SaktqrsX2bVDxeydIuXOfh9LxdsOZ9lIBKrSQNNduPwYuyiBbOU+4KZuWqzCD8eV5KS/ROL
-        IyZViel9FZwNCdaLNET0MBrlB
-X-Received: by 2002:adf:f981:0:b0:205:c3e1:9eba with SMTP id f1-20020adff981000000b00205c3e19ebamr12387507wrr.244.1650386589520;
-        Tue, 19 Apr 2022 09:43:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz/sBvEGx6+IXc/dmS3LEsLdRrH83M0si6np7xgLC//YEu1El92MuYL5XEmIp9phspX0ZKpFQ==
-X-Received: by 2002:adf:f981:0:b0:205:c3e1:9eba with SMTP id f1-20020adff981000000b00205c3e19ebamr12387485wrr.244.1650386589266;
-        Tue, 19 Apr 2022 09:43:09 -0700 (PDT)
-Received: from redhat.com ([2.53.17.80])
-        by smtp.gmail.com with ESMTPSA id v14-20020a7bcb4e000000b0034492fa24c6sm16631515wmj.34.2022.04.19.09.43.05
+        bh=gyw0DllU2NEgcTB/Sa92qGNKU8xdBjvfAuK5cohiajI=;
+        b=F7pbVJLUWUKzEyXLfODi0AwsRXNm1gtoyCrQIwZqWzsgAY/m/YuF4LXNr+Xij8H0VU
+         1S4AEkDdrzk4paUxBQNXoP+ZHJVvQjZvj5GLaIOAncChDLP2iZRWbO5rc2faEjlpndJF
+         NQmjL+Frg3Fb5cu26x9AaN7E1q4reSluxyqEQgdaIKTX/kxguB5xeuh6iAeaC51c8g4I
+         pfVvsGuUwkh4jvufHRMKghuM9JNFNxxThe0g6jFCNvbbdHIIet2688FkBjLrJijg8uD5
+         J8qcpZfObT/497oHpRXPFi+AkCVOw50yADiSx0m82ioJ1h3sx7SVxNlkJ707MH9LLARk
+         9hyA==
+X-Gm-Message-State: AOAM533VByyqEwIdg+34BYm83sqw2puBSdBkiDnRp5X+c0xUIVcE2LfH
+        sL5dXX4LQ9NzpBZBWVUhY1o=
+X-Google-Smtp-Source: ABdhPJw79nRXKU8UnnOwpeWQ6iU3EAQKrdBBD+fWBtL4nWEsSBKj2o68Cnkizg4e+tkZK6f6yIYWwA==
+X-Received: by 2002:ac2:4c4b:0:b0:471:a8e2:198d with SMTP id o11-20020ac24c4b000000b00471a8e2198dmr2671909lfk.121.1650386617950;
+        Tue, 19 Apr 2022 09:43:37 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id s22-20020a197716000000b0046bc65188d6sm1562325lfc.80.2022.04.19.09.43.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 09:43:07 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 12:43:03 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Alexander Graf <graf@amazon.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        linux-hyperv@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        adrian@parity.io, Laszlo Ersek <lersek@redhat.com>,
-        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jann Horn <jannh@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: propagating vmgenid outward and upward
-Message-ID: <20220419124245-mutt-send-email-mst@kernel.org>
-References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
- <c5181fb5-38fb-f261-9de5-24655be1c749@amazon.com>
- <CAHmME9rTMDkE7UA3_wg87mrDVYps+YaHw+dZwF0EbM0zC4pQQw@mail.gmail.com>
- <47137806-9162-0f60-e830-1a3731595c8c@amazon.com>
- <CAHmME9pwfKfKp_qqbmAO5tEaQSZ5srCO5COThK3vWZR4avRF1g@mail.gmail.com>
+        Tue, 19 Apr 2022 09:43:37 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Tue, 19 Apr 2022 18:43:35 +0200
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        rushikesh.s.kadam@intel.com, vineethrp@gmail.com, urezki@gmail.com
+Subject: Re: [PATCH v4] rcu/nocb: Add an option to offload all CPUs on boot
+Message-ID: <Yl7mt2XkHo7obhpz@pc638.lan>
+References: <20220418175403.2553842-1-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHmME9pwfKfKp_qqbmAO5tEaQSZ5srCO5COThK3vWZR4avRF1g@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220418175403.2553842-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 05:12:36PM +0200, Jason A. Donenfeld wrote:
-> Hey Alex,
+On Mon, Apr 18, 2022 at 05:54:03PM +0000, Joel Fernandes (Google) wrote:
+> From: Joel Fernandes <joel@joelfernandes.org>
 > 
-> On Thu, Mar 10, 2022 at 12:18 PM Alexander Graf <graf@amazon.com> wrote:
-> > I agree on the slightly racy compromise and that it's a step into the
-> > right direction. Doing this is a no brainer IMHO and I like the proc
-> > based poll approach.
+> On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+> which ends up not offloading any CPU. This patch removes a dependency
+> from the bootloader having to know about RCU and about how to provide
+> the mask.
 > 
-> Alright. I'm going to email a more serious patch for that in the next
-> few hours and you can have a look. Let's do that for 5.19.
+> With the new option enabled, all CPUs will be offloaded on boot unless
+> rcu_nocbs= or rcu_nohz_full= kernel parameters provide a CPU list.
 > 
-> > I have an additional problem you might have an idea for with the poll
-> > based path. In addition to the clone notification, I'd need to know at
-> > which point everyone who was listening to a clone notification is
-> > finished acting up it. If I spawn a tiny VM to do "work", I want to know
-> > when it's safe to hand requests into it. How do I find out when that
-> > point in time is?
-> 
-> Seems tricky to solve. Even a count of current waiters and a
-> generation number won't be sufficient, since it wouldn't take into
-> account users who haven't _yet_ gotten to waiting. But maybe it's not
-> the right problem to solve? Or somehow not necessary? For example, if
-> the problem is a bit more constrained a solution becomes easier: you
-> have a fixed/known set of readers that you know about, and you
-> guarantee that they're all waiting before the fork. Then after the
-> fork, they all do something to alert you in their poll()er, and you
-> count up how many alerts you get until it matches the number of
-> expected waiters. Would that work? It seems like anything more general
-> than that is just butting heads with the racy compromise we're already
-> making.
-> 
-> Jason
+> Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
+> ---
+> v4: mostly style related fixes.
+> v3 is back to v1 but with a config option defaulting to 'n'.
+> v2 was forcing the option to override no_cbs=
+>
+Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-I have some ideas here ... but can you explain the use-case a bit more?
-
--- 
-MST
-
+--
+Uladzislau Rezki

@@ -2,98 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D617550682F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1287C506826
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348573AbiDSKCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 06:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S241988AbiDSKCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 06:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347788AbiDSKCa (ORCPT
+        with ESMTP id S241939AbiDSKCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:02:30 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DDB1097;
-        Tue, 19 Apr 2022 02:59:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650362388; x=1681898388;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CPWMk0HA7+zJxEJI8LP26KB7c4E/Ei9njL+XirDH73I=;
-  b=EwoKqU2DWkzdHTaWrQENxBIN4JM4YqRI6N8yxjK4kjx9V76EXIc2PDFU
-   e0kK2H0cpWNm7CSDm3JgsCf1oIi38Vlhocp1Nk88vOBJV4Se607xEOh1w
-   bBau1GAMiXf2LVLXRhAOdopqSqXYd2a6D7bOl9dy7WL9A+ltAuxWuTrup
-   vtjnZIZ96wlHu+/VEyxcnqC720/9Y884n5GIbBvy5sA30sqwCwMxqG9n4
-   gRbSJGYn2z5bv8UarrPVzltShLZ20BRd2+clib+LfE2oYUrV7HYF9a9II
-   0ghg5EjmUGDF9YiWigcJ2aH9t95uK6166Ev4CRnnmB/Nl38f65ZYgjQU3
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="261330030"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="261330030"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 02:59:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="592724335"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 19 Apr 2022 02:59:45 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngke9-0005cm-1M;
-        Tue, 19 Apr 2022 09:59:45 +0000
-Date:   Tue, 19 Apr 2022 17:59:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: ERROR: modpost: "snd_tea575x_hw_init"
- [drivers/media/pci/bt8xx/bttv.ko] undefined!
-Message-ID: <202204191711.IKJJFjgU-lkp@intel.com>
+        Tue, 19 Apr 2022 06:02:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E23E2253D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650362363;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZYCbCMusX5qnw2HYP1MeCveqjGocg9sXBdk9ZKPneIA=;
+        b=Thwk5o7GlihFoojS/x1bNX6b0IQX0L60zR6QZBD91tau2qL3K1ezwNe0FpVtpfC70nPAJO
+        j1ys3833bXC6U/gFkQcd/WJjEuidAlcp9dusaEb98zOo/JneFADp7AJh6GAMCf7HcIdwb0
+        1ZiWMAzfnqfgQM/EH/2qg25NoCgYRkw=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-113-wRAoStKBNJSYVhe0iNQwWw-1; Tue, 19 Apr 2022 05:59:20 -0400
+X-MC-Unique: wRAoStKBNJSYVhe0iNQwWw-1
+Received: by mail-ed1-f71.google.com with SMTP id cn27-20020a0564020cbb00b0041b5b91adb5so10672813edb.15
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:59:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZYCbCMusX5qnw2HYP1MeCveqjGocg9sXBdk9ZKPneIA=;
+        b=qeowRbpqIjH+lS63v6sk8NxcFv1Jw7gzGeFQLqO83LJAL/Jbjk00YV4vZhK/v7jQYa
+         ZvmrTu1vJkXg6nYxJtjGBqPcjTUh9IyhRwtTZXNY07vwvEsIoN8Ve2s4V4Ukdvig8qKW
+         dn+yySgxhS4Z3SK6VZ7RJ77Hz4otDNGgq8aHkNuhplha9HbFf5hK/URtx0EFPAdRfVSf
+         RjayckoTbMJU1W5qVOHfj24r5aN87DMslQDb8koyeqfVWVaa8deIhLbu7DYD+wiywVnL
+         DOLwffCSinWQ4QY8P5+y3E7bbbLFCuCii0AP178aMxK3c4IGNS1e2bmkwlCcVUvJJNSK
+         HOHw==
+X-Gm-Message-State: AOAM532OQNBkpVehdWwXPHfMB/PkxP5ykaYskt2XmRcZhND6I2H1Iir8
+        7eyTUQVmk4AN11NmGMgiR3tNvDshotXe2F9rq+p5oH80m4+4wRdtz8LMwwDzhnNRl9Hsy0MDdC+
+        jD4evU/jqqDFwnu3RS6S3e7hh
+X-Received: by 2002:a17:907:96a1:b0:6e8:9dce:c3bc with SMTP id hd33-20020a17090796a100b006e89dcec3bcmr12479265ejc.589.1650362359322;
+        Tue, 19 Apr 2022 02:59:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxPj/oCA2jmmG43YRFtvikiwgaJYI1/P+OfA2QaPriTfw/gSnUO1tnTCTWh6or2Q3Awqulg1A==
+X-Received: by 2002:a17:907:96a1:b0:6e8:9dce:c3bc with SMTP id hd33-20020a17090796a100b006e89dcec3bcmr12479257ejc.589.1650362359077;
+        Tue, 19 Apr 2022 02:59:19 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id vw17-20020a170907059100b006e8732d1944sm5460828ejb.5.2022.04.19.02.59.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 02:59:18 -0700 (PDT)
+Message-ID: <d75ede81-49da-855a-6679-c3315089e067@redhat.com>
+Date:   Tue, 19 Apr 2022 11:59:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 0/3] x86/PCI: Log E820 clipping
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20220414182252.758742-1-helgaas@kernel.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220414182252.758742-1-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b2d229d4ddb17db541098b83524d901257e93845
-commit: 9958d30f38b96fb763a10d44d18ddad39127d5f4 media: Kconfig: cleanup VIDEO_DEV dependencies
-date:   5 weeks ago
-config: xtensa-randconfig-r022-20220419 (https://download.01.org/0day-ci/archive/20220419/202204191711.IKJJFjgU-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9958d30f38b96fb763a10d44d18ddad39127d5f4
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9958d30f38b96fb763a10d44d18ddad39127d5f4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+Hi All,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 1/1/70 01:00, Bjorn Helgaas wrote:
+> This is still work-in-progress on the issue of PNP0A03 _CRS methods that
+> are buggy or not interpreted correctly by Linux.
+> 
+> The previous try at:
+>   https://lore.kernel.org/r/20220304035110.988712-1-helgaas@kernel.org
+> caused regressions on some Chromebooks:
+>   https://lore.kernel.org/r/Yjyv03JsetIsTJxN@sirena.org.uk
+> 
+> This v2 drops the commit that caused the Chromebook regression, so it also
+> doesn't fix the issue we were *trying* to fix on Lenovo Yoga and Clevo
+> Barebones.
+> 
+> The point of this v2 update is to split the logging patch into (1) a pure
+> logging addition and (2) the change to only clip PCI windows, which was
+> previously hidden inside the logging patch and not well documented.
+> 
+> Bjorn Helgaas (3):
+>   x86/PCI: Eliminate remove_e820_regions() common subexpressions
+>   x86: Log resource clipping for E820 regions
+>   x86/PCI: Clip only host bridge windows for E820 regions
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Thanks, the entire series looks good to me:
 
->> ERROR: modpost: "snd_tea575x_hw_init" [drivers/media/pci/bt8xx/bttv.ko] undefined!
->> ERROR: modpost: "snd_tea575x_set_freq" [drivers/media/pci/bt8xx/bttv.ko] undefined!
->> ERROR: modpost: "snd_tea575x_s_hw_freq_seek" [drivers/media/pci/bt8xx/bttv.ko] undefined!
->> ERROR: modpost: "snd_tea575x_enum_freq_bands" [drivers/media/pci/bt8xx/bttv.ko] undefined!
->> ERROR: modpost: "snd_tea575x_g_tuner" [drivers/media/pci/bt8xx/bttv.ko] undefined!
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+For the series.
+
+So what is the plan to actually fix the issue seen on some Lenovo models
+and Clevo Barebones ?   As I mentioned previously I think that since all
+our efforts have failed so far that we should maybe reconsider just
+using DMI quirks to ignore the E820 reservation windows for host bridges
+on affected models ?
+
+That or implement 3 of:
+
+> So I think the progression is:
+>
+>  1) Remove anything mentioned in E820 from _CRS (4dc2287c1805 [7]).
+>     This worked around some issues on Dell systems.
+>
+>  2) Remove things mentioned in E820 unless they cover the entire
+>     window (5949965ec934 [8])
+>
+>  3) Coalesce adjacent _CRS windows, *then* remove things mentioned in
+>     E820 unless they cover the entire (coalesced) window (current
+>     proposal)
+
+Regards,
+
+Hans
+

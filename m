@@ -2,120 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A8F50671F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A938506721
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350116AbiDSIuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
+        id S1350117AbiDSIub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346851AbiDSIt4 (ORCPT
+        with ESMTP id S235794AbiDSIu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:49:56 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462D11DA5F;
-        Tue, 19 Apr 2022 01:47:14 -0700 (PDT)
+        Tue, 19 Apr 2022 04:50:28 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7781BDFED
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:47:45 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id t1so21454169wra.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:47:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1650358034; x=1681894034;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jmtUmX9TsVdQnWmEZl+ibd5oWqIkKPblhcl2o3QfvF0=;
-  b=MHlLkr+KP0nfuBc3YHIlNBCnlK8plBYD0A9Ahvt/Wr4jHFQ7mbVTrhGo
-   TizCLDNlI7zh99nhOgZ8leQot2ya8jlDMB2qI8PqiXdUG7eBFM0EnnGM8
-   RXSIFXRHNBQGgivFA9nUCJ157/2xEi/jzwrE1ebDvDUFKf9oxoDHMknkY
-   lSYMyjCLU6H8cSCQtyK5dlRPXeqyU6F7/P8xqXvtIlVkUdi70WrUVvtkg
-   4LX60wSfndMYYakZcG9WkYGP8hVRCrOoBWZejZyqLzzx5jneG6RLA71pf
-   Tc4bxt9OhZ3kHMwwLXgc3b55IQbQwe9tNNbrLgxyeYpHJKy1PIk2v+2Z6
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,272,1643670000"; 
-   d="scan'208";a="23351063"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 19 Apr 2022 10:47:08 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 19 Apr 2022 10:47:09 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 19 Apr 2022 10:47:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1650358029; x=1681894029;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jmtUmX9TsVdQnWmEZl+ibd5oWqIkKPblhcl2o3QfvF0=;
-  b=PmJlmtyeml1T/3hMMy7BHykfYDtq+L1iy8xf1Nlj9j/kqfsDYfEMHEFA
-   s8n7Eh9bbwOsELAAdqUzfs+luCJBiJS/38ifLo2dmRQmmoGAl9aaVXzkV
-   GRjSBFE2Pp7fHzG9feDhueZMRI2wT0MN4I2eoWqYX/H6LRLNq5qFOmxKJ
-   kHWyKdVhAjzMw9EAxXCWrhCNYhJpW98NA4kYTDdeBXe78SRBLrRHZNMiV
-   BHnX30w3+dZXRXr+hLzse8VZtZUjeTyzdE/dwCaAyepxPe2F3TYCX//zs
-   JTCo78Ur7R1TWoVt7p3EyaxVygYDXJdyp2gA6ubETxEIN1vmp1QjdiiuS
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,272,1643670000"; 
-   d="scan'208";a="23351046"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 19 Apr 2022 10:47:02 +0200
-Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 013C8280075;
-        Tue, 19 Apr 2022 10:46:57 +0200 (CEST)
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Pratyush Yadav <p.yadav@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH 2/2] spi: cadence-quadspi: allow operations with cmd/addr buswidth >1
-Date:   Tue, 19 Apr 2022 10:46:40 +0200
-Message-Id: <20220419084640.191299-2-matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220419084640.191299-1-matthias.schiffer@ew.tq-group.com>
-References: <20220419084640.191299-1-matthias.schiffer@ew.tq-group.com>
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3zfxgfhhkGrdZQPttYFIyDKGOpAjycnaX8YYYe3nvMs=;
+        b=QMuKTTF4XAeRFnDlBJHu27U50iu6XBNoG05MeKFeLU7LsVVjUcV3ejaRRo+hmzy4HE
+         8RGR84YLIk71QD5AQiyRP+u8oMQokSNGjOV2GeZzTXIeNHMYrl62RYagKfoW7/4BX+KF
+         C9hVR3VkHU0ESauWkgoubLwV7f0N8V8CxKFQOSGTKkkgEfNubRFW8kfT801AsfBDEl8X
+         broAjmmh0Unod0xRCJh7b138tc2H80Cnl9U7AdllLIwQddcei+hpFnZERUtovQtlRIg6
+         YAxxTykq5evBHh9fJaw2Sx8sp2Rao0lkkWMBCyOUCVh/qrBePzCPZAAaTK7uhf4Xw479
+         BJ9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3zfxgfhhkGrdZQPttYFIyDKGOpAjycnaX8YYYe3nvMs=;
+        b=EZLOL/Gzno0gNs0FVNQwldo42cInKWbBMmAAjxbyh3rUCfbHif896efAxnrwxb0ev4
+         Kk0ZpDc+0ndxOMo0CuyE89LsULiHzzOBxelPz+IrseO6i28QgNdSxADwk2QErjypkhsc
+         6mS746xvShzc/bL17vBzuW13nubwCF1wYNSocG51HxnR8ZbNDpML6S5sqJaPk4GG1wbS
+         KBONsYZl+Da+lT8gUvQsyfqrOKAnzjeRME7gv8580B2SW0bFB597sAXYDYqX62+1v1T1
+         jGrNfPF/r8TnPlLmbFH2T5RteBVglcx85kT/XlxG+THkakW7aLYxbNwYpzCz1VztjYVJ
+         GQ8g==
+X-Gm-Message-State: AOAM530UlwxB/pk03kVDXJafLeKlUMeQ21kKQ9nBKJJ+ItcXmRGszcCs
+        eEJBOky8rkkq4zmEdUt4dx/j/A==
+X-Google-Smtp-Source: ABdhPJyGYvopwBZKM+g01h8Kn+VxX+cUxfwLusUKA6MiYSG6VWvCuPXWxSd3hPj8JfuBmWdc2LElng==
+X-Received: by 2002:adf:dd8a:0:b0:207:9e5f:fd0a with SMTP id x10-20020adfdd8a000000b002079e5ffd0amr10553750wrl.94.1650358064065;
+        Tue, 19 Apr 2022 01:47:44 -0700 (PDT)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id g8-20020a5d4888000000b00207a49fa6a1sm14168011wrq.81.2022.04.19.01.47.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 01:47:43 -0700 (PDT)
+Message-ID: <e48a9b3a-4a9f-3fa7-2bd2-edac34328c37@linaro.org>
+Date:   Tue, 19 Apr 2022 09:47:42 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next] slimbus: qcom: Remove unnecessary print function
+ dev_err()
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, agross@kernel.org
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220414014430.19051-1-yang.lee@linux.alibaba.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220414014430.19051-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the improved cqspi_set_protocol(), ops with cmd/addr
-buswidth >1 are now working correctly.
 
-Tested on a TI AM64x with a Macronix MX25U51245G QSPI flash using 1-4-4
-operations.
 
-DTR operations are currently untested, so we leave them disabled for now
-(except for the previosly allowed 8-8-8 ops).
+On 14/04/2022 02:44, Yang Li wrote:
+> The print function dev_err() is redundant because
+> platform_get_irq_byname() already prints an error.
+> 
+> Eliminate the follow coccicheck warning:
+> ./drivers/slimbus/qcom-ctrl.c:514:2-9: line 514 is redundant because
+> platform_get_irq() already prints an error
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
- drivers/spi/spi-cadence-quadspi.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 96d14f3847b5..08f39f52e32a 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1370,13 +1370,7 @@ static bool cqspi_supports_mem_op(struct spi_mem *mem,
- 			return false;
- 		if (op->data.nbytes && op->data.buswidth != 8)
- 			return false;
--	} else if (all_false) {
--		/* Only 1-1-X ops are supported without DTR */
--		if (op->cmd.nbytes && op->cmd.buswidth > 1)
--			return false;
--		if (op->addr.nbytes && op->addr.buswidth > 1)
--			return false;
--	} else {
-+	} else if (!all_false) {
- 		/* Mixed DTR modes are not supported. */
- 		return false;
- 	}
--- 
-2.25.1
+Applied thanks,
 
+--srini
+> ---
+>   drivers/slimbus/qcom-ctrl.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
+> index ec58091fc948..c0c4f895d76e 100644
+> --- a/drivers/slimbus/qcom-ctrl.c
+> +++ b/drivers/slimbus/qcom-ctrl.c
+> @@ -510,10 +510,8 @@ static int qcom_slim_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	ctrl->irq = platform_get_irq(pdev, 0);
+> -	if (ctrl->irq < 0) {
+> -		dev_err(&pdev->dev, "no slimbus IRQ\n");
+> +	if (ctrl->irq < 0)
+>   		return ctrl->irq;
+> -	}
+>   
+>   	sctrl = &ctrl->ctrl;
+>   	sctrl->dev = &pdev->dev;

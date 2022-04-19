@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BBD5062A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 05:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3992A5062BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 05:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346969AbiDSDfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 23:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
+        id S1348072AbiDSDgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 23:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346806AbiDSDfG (ORCPT
+        with ESMTP id S1347694AbiDSDfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 23:35:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAC82B266;
-        Mon, 18 Apr 2022 20:32:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C84B160FCA;
-        Tue, 19 Apr 2022 03:32:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC9EBC385A7;
-        Tue, 19 Apr 2022 03:32:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650339144;
-        bh=NUPu4YWlrvlHt/n0rKRmUg75CJPp5wRqgNcYElGbLxo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GtVMzzCP4TQ9o7chQQyqm2nRj7zyWGe1ngPSYR4tF2+k81uD8uWW9xwuwtYj8M0qq
-         5Jg1ytKk0XJevilQgynjZN0yG7B9+qAqcauyXI1IJDTZcM/N6ptPOSyspSG5B7aQzc
-         xm999DA8Af2V6LItS6IQPXgN/od/Jv9e3GIUAf9Q=
-Date:   Mon, 18 Apr 2022 20:32:23 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 2/2] userfaultfd: selftests: modify selftest to use
- /dev/userfaultfd
-Message-Id: <20220418203223.02d00391505b662e71e8c1db@linux-foundation.org>
-In-Reply-To: <CAJHvVcj=pL8y_b_urq8QvtDvRRMmjgGkquQM6xhxWwiajNrhKQ@mail.gmail.com>
-References: <20220412202942.386981-1-axelrasmussen@google.com>
-        <20220412202942.386981-2-axelrasmussen@google.com>
-        <20220412134159.f0a1d0d77f5b01638007bf4b@linux-foundation.org>
-        <CAJHvVcj=pL8y_b_urq8QvtDvRRMmjgGkquQM6xhxWwiajNrhKQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 18 Apr 2022 23:35:41 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D53B2BB16;
+        Mon, 18 Apr 2022 20:32:56 -0700 (PDT)
+X-UUID: e05cb8460210406d839584b0824c80e9-20220419
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:996a948d-5ab5-4ccb-9784-15cf42b933e3,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:246f51ef-06b0-4305-bfbf-554bfc9d151a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: e05cb8460210406d839584b0824c80e9-20220419
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 216706857; Tue, 19 Apr 2022 11:32:51 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 19 Apr 2022 11:32:39 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 19 Apr 2022 11:32:39 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>
+CC:     <airlied@linux.ie>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <jason-jh.lin@mediatek.com>, <nancy.lin@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH 0/5] MediaTek MT8195 display binding
+Date:   Tue, 19 Apr 2022 11:32:32 +0800
+Message-ID: <20220419033237.23405-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,26 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 15:16:02 -0700 Axel Rasmussen <axelrasmussen@google.com> wrote:
+Add this series to present MediaTek display binding for MT8195.
+The reason I send this series is Jason and Nancy's binding patches are
+never received by devicetree mail server.
+Therefore, I help them to resend binding patches.
 
-> Thanks for looking Andrew. And, fair criticism.
-> 
-> In keeping with the status quo, I'm thinking of just adding a new
-> command-line argument which toggles between the two modes.
+All of these patches are reviewed in other series:
+[1]: message id: 20220415083911.5186-1-jason-jh.lin@mediatek.com
+[2]: message id: 20220416020749.29010-1-nancy.lin@mediatek.com
 
-But I think you could tweak the test pretty simply to run itself twice.
-Once with the syscall then once with the /dev interface.
+This series depends on Yong's MT8195 IOMMU series:
+[3]: message id: 20220407075726.17771-2-yong.wu@mediatek.com
+Without this patch, some patches of this series will build failed.
 
-I suppose that adding the commandline argument is equivalent, as long
-as the upper level script/makefile invokes the test program twice.
+Nancy.Lin (3):
+  dt-bindings: mediatek: add vdosys1 RDMA definition for mt8195
+  dt-bindings: reset: mt8195: add vdosys1 reset control bit
+  dt-bindings: mediatek: add ethdr definition for mt8195
 
-> But, if I'm honest, it's starting to feel like the test has way too
-> many arguments... I'm tempted to refactor the test to use the
-> kselftest framework [1], get rid of all these command line arguments,
-> and just always test everything. But, this seems like a big and
-> perhaps controversial refactor, so I may take it up after this
-> series...
+jason-jh.lin (2):
+  dt-bindings: arm: mediatek: mmsys: add power and gce properties
+  dt-bindings: arm: mediatek: mmsys: add mt8195 SoC binding
 
-Yes, that's a separable activity.
+ .../bindings/arm/mediatek/mediatek,mmsys.yaml |  32 ++++
+ .../display/mediatek/mediatek,ethdr.yaml      | 158 ++++++++++++++++++
+ .../display/mediatek/mediatek,mdp-rdma.yaml   |  86 ++++++++++
+ include/dt-bindings/reset/mt8195-resets.h     |  12 ++
+ 4 files changed, 288 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
 
+-- 
+2.18.0
 

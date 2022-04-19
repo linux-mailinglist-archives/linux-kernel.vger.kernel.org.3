@@ -2,103 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B39D5065E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992135065E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349315AbiDSHb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S1349396AbiDSHcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236225AbiDSHby (ORCPT
+        with ESMTP id S236225AbiDSHcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:31:54 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA217DEA7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:29:12 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KjFlb2Tw4zfZ1q;
-        Tue, 19 Apr 2022 15:28:27 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Apr 2022 15:29:10 +0800
-Subject: Re: [PATCH v2] mm/swapfile: unuse_pte can map random data if swap
- read fails
-To:     Alistair Popple <apopple@nvidia.com>
-CC:     <akpm@linux-foundation.org>, <willy@infradead.org>,
-        <vbabka@suse.cz>, <dhowells@redhat.com>, <neilb@suse.de>,
-        <david@redhat.com>, <surenb@google.com>, <minchan@kernel.org>,
-        <peterx@redhat.com>, <sfr@canb.auug.org.au>,
-        <rcampbell@nvidia.com>, <naoya.horiguchi@nec.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220416030549.60559-1-linmiaohe@huawei.com>
- <87tuapk9n7.fsf@nvdebian.thelocal>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <5a78dd68-343d-ac57-a698-2cfead8ee366@huawei.com>
-Date:   Tue, 19 Apr 2022 15:29:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 19 Apr 2022 03:32:09 -0400
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7A332990;
+        Tue, 19 Apr 2022 00:29:27 -0700 (PDT)
+Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 19 Apr
+ 2022 15:29:20 +0800
+Message-ID: <d10e27ff-e674-87bd-2c98-63c7040baeb1@amlogic.com>
+Date:   Tue, 19 Apr 2022 15:29:19 +0800
 MIME-Version: 1.0
-In-Reply-To: <87tuapk9n7.fsf@nvdebian.thelocal>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V2 1/2] tty: serial: meson: Add a 12MHz internal clock
+ rate to calculate baud rate in order to meet the baud rate requirements of
+ special BT modules
 Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-amlogic <linux-amlogic@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220418053202.24528-1-yu.tu@amlogic.com>
+ <20220418053202.24528-2-yu.tu@amlogic.com>
+ <CAHp75VeW65dV9jJu8-yUWME+XKnaxZBu5Zv8iEJxP2dizA=HUg@mail.gmail.com>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <CAHp75VeW65dV9jJu8-yUWME+XKnaxZBu5Zv8iEJxP2dizA=HUg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.18.29.47]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/19 11:51, Alistair Popple wrote:
-> Miaohe Lin <linmiaohe@huawei.com> writes:
+Hi Andy,
+	Thank you for your advice.
+
+On 2022/4/18 20:09, Andy Shevchenko wrote:
+> [ EXTERNAL EMAIL ]
 > 
->> There is a bug in unuse_pte(): when swap page happens to be unreadable,
->> page filled with random data is mapped into user address space. In case
->> of error, a special swap entry indicating swap read fails is set to the
->> page table. So the swapcache page can be freed and the user won't end up
->> with a permanently mounted swap because a sector is bad. And if the page
->> is accessed later, the user process will be killed so that corrupted data
->> is never consumed. On the other hand, if the page is never accessed, the
->> user won't even notice it.
+> On Mon, Apr 18, 2022 at 8:50 AM Yu Tu <yu.tu@amlogic.com> wrote:
+>>
+>> A /2 divider over XTAL was introduced since G12A, and is preferred
+>> to be used over the still present /3 divider since it provides much
+>> closer frequencies vs the request baudrate.Especially the BT module
 > 
-> Hi Miaohe,
-> > It seems we're not actually using the pfn that gets stored in the special swap
-> entry here. Is my understanding correct? If so I think it would be better to use
-
-Yes, you're right. The pfn is not used now. What we need here is a special swap entry
-to do the right things. I think we can change to store some debugging information instead
-of pfn if needed in the future.
-
-> the new PTE markers Peter introduced[1] rather than adding another swap entry
-> type.
-
-IIUC, we should not reuse that swap entry here. From definition:
-
-PTE markers
-===========
-...
-PTE marker is a new type of swap entry that is ony applicable to file
-backed memories like shmem and hugetlbfs.  It's used to persist some
-pte-level information even if the original present ptes in pgtable are
-zapped.
-
-It's designed for file backed memories while swapin error entry is for anonymous
-memories. And there has some differences in processing. So it's not a good idea
-to reuse pte markers. Or am I miss something?
-
+> 'e. E' (mind the space)
+My statement is a whole. There should be no spaces.
 > 
-> [1] - <https://lore.kernel.org/linux-mm/20220405014833.14015-1-peterx@redhat.com/>
-
-Many thanks for your comment and suggestion! :)
-
+>> uses 3Mhz baud rate. 8Mhz calculations can lead to baud rate bias,
+>> causing some problems.
 > 
-...
-
+> ...
+> 
+>> +struct meson_uart_data {
+>> +       bool has_xtal_div2;
+> 
+> I would prefer to see this as an unsigned int and with a less
+> particular name, e.g. xtal_div would suffice.
+I don't have a problem with your suggestion.Let's see What Neil has to say.
+> 
+>> +};
+> 
+> ...
+> 
+>> +               unsigned int xtal_div = 3;
+> 
+>> +               if (private_data && private_data->has_xtal_div2) {
+>> +                       xtal_div = 2;
+> 
+> Better to define privata data always
+> 
+> 
+>> +                       val |= AML_UART_BAUD_XTAL_DIV2;
+>> +               }
+>> +               val |= DIV_ROUND_CLOSEST(port->uartclk / xtal_div, baud) - 1;
+> 
+> 

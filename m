@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F65507AC0
+	by mail.lfdr.de (Postfix) with ESMTP id 3A212507ABE
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357585AbiDSULr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
+        id S1357574AbiDSULh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356897AbiDSULV (ORCPT
+        with ESMTP id S1356926AbiDSULW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:11:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6020539172;
-        Tue, 19 Apr 2022 13:08:38 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 20:08:35 -0000
+        Tue, 19 Apr 2022 16:11:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605723B017;
+        Tue, 19 Apr 2022 13:08:39 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 20:08:36 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650398917;
+        s=2020; t=1650398918;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oUsQRUynxwE6aIVskGFZYHhGJAmT1WprsF9+cnYba2M=;
-        b=Aa4IOSb5QUUOiJm63N8W7YUdwcsDbVp9IFpXVT9QWP9B4GXR5BOKs1ubfBQgIisMwcJuVz
-        cWWfIz+yw7GSpaMq2eAnxF+i9e4C6wQiOPYTIpbckiiJJ1JYNXsUYyHbQJeR/NLBkxSCFL
-        e3cP13xBghv5JpvyH/aeDSRSfRP6eH2veykrjxZgrUkJoNTYrsZTLZs4edleVop9rHRpK2
-        IKwd1SBvRvNeuGLUS3TBvIYlchb/kzYUg6jJzyoahANg4GFiaZkXAnAAKc/8oLab/9Yprn
-        XwRyxwx+NVLhzFOO6IjmO6Z35gWNwNQXc43UTVOgLAOfSDvQtm2y8z8ftC2mXQ==
+        bh=KGixIIVK11UN71F9hsjipeVRAdDqQ6PbGBA5GynwXF0=;
+        b=QF7ONBLk6nCHTCgpcArUDjj+8G7kv3pN75z0+FQ0NDIUM0j3inQNAUCuqTqO0sd2R6RoOX
+        HMEiTbQ1WFggsSRvfSJpz0Krj4wd/QbEfy3705tpCKTFE2jnK+CNwT1nOcOsEDRVMmsPCI
+        L8Jy3kd+DW9C0yGr6DJVHTIp5zMZcGKypvY+NyiIpWPhTA5ZpMdBfobwQ0A2Q3xoBmJ8b7
+        XmGRsGQLAWBf0fkEdxoGxXb3NvTWCqq4eB6Di0N4pYP+JRc+5VvtKAJPOPQVbyHBTOPG31
+        FARM90Hj9KMtT3hgiF4wkye+BYxvcVIi3HmzQxEZdAJNoziMpYWajo1kei5KGw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650398917;
+        s=2020e; t=1650398918;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oUsQRUynxwE6aIVskGFZYHhGJAmT1WprsF9+cnYba2M=;
-        b=RP65PgRA4EMKNNsEtl01Z1ClvBbFGpbMM60mt8l8zl04YhsZFfvZOzQsizJPfP/j5t36oM
-        xhA9RMoNn8MZMPDw==
+        bh=KGixIIVK11UN71F9hsjipeVRAdDqQ6PbGBA5GynwXF0=;
+        b=qfxQ8/aeYhEAbJ+Q658fC3jy2i7Fv5p3oVZVy1gOMMXb7OSmPBwttadD6+Vkqda9/QtDNo
+        +TjBqT3vRBlnpKAA==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] objtool: Print data address for "!ENDBR" data warnings
+Subject: [tip: x86/urgent] x86/xen: Add ANNOTATE_NOENDBR to startup_xen()
 Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <762e88d51300e8eaf0f933a5b0feae20ac033bea.1650300597.git.jpoimboe@redhat.com>
-References: <762e88d51300e8eaf0f933a5b0feae20ac033bea.1650300597.git.jpoimboe@redhat.com>
+In-Reply-To: <a87bd48b06d11ec4b98122a429e71e489b4e48c3.1650300597.git.jpoimboe@redhat.com>
+References: <a87bd48b06d11ec4b98122a429e71e489b4e48c3.1650300597.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-Message-ID: <165039891592.4207.1506577697956201551.tip-bot2@tip-bot2>
+Message-ID: <165039891679.4207.9559148503286018502.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,49 +68,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     4baae989e638e9bf4b7d29bc5e36b581fddcca52
-Gitweb:        https://git.kernel.org/tip/4baae989e638e9bf4b7d29bc5e36b581fddcca52
+Commit-ID:     1ab80a0da4c4a4dd496fc14faabbc8bde61a605c
+Gitweb:        https://git.kernel.org/tip/1ab80a0da4c4a4dd496fc14faabbc8bde61a605c
 Author:        Josh Poimboeuf <jpoimboe@redhat.com>
-AuthorDate:    Mon, 18 Apr 2022 09:50:29 -07:00
+AuthorDate:    Mon, 18 Apr 2022 09:50:25 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 19 Apr 2022 21:58:50 +02:00
+CommitterDate: Tue, 19 Apr 2022 21:58:49 +02:00
 
-objtool: Print data address for "!ENDBR" data warnings
+x86/xen: Add ANNOTATE_NOENDBR to startup_xen()
 
-When a "!ENDBR" warning is reported for a data section, objtool just
-prints the text address of the relocation target twice, without giving
-any clues about the location of the original data reference:
+The startup_xen() kernel entry point is referenced by the ".note.Xen"
+section, and is the real entry point of the VM. Control transfer is
+through IRET, which *could* set NEED_ENDBR, however Xen currently does
+no such thing.
 
-  vmlinux.o: warning: objtool: dcbnl_netdevice_event()+0x0: .text+0xb64680: data relocation to !ENDBR: dcbnl_netdevice_event+0x0
+Add ANNOTATE_NOENDBR to silence future objtool warnings.
 
-Instead, print the address of the data reference, in addition to the
-address of the relocation target.
-
-  vmlinux.o: warning: objtool: dcbnl_nb+0x0: .data..read_mostly+0xe260: data relocation to !ENDBR: dcbnl_netdevice_event+0x0
-
-Fixes: 89bc853eae4a ("objtool: Find unused ENDBR instructions")
+Fixes: ed53a0d97192 ("x86/alternative: Use .ibt_endbr_seal to seal indirect calls")
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/762e88d51300e8eaf0f933a5b0feae20ac033bea.1650300597.git.jpoimboe@redhat.com
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Link: https://lkml.kernel.org/r/a87bd48b06d11ec4b98122a429e71e489b4e48c3.1650300597.git.jpoimboe@redhat.com
 ---
- tools/objtool/check.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ arch/x86/xen/xen-head.S | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index e3a675d..b822a6d 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -3817,11 +3817,8 @@ static int validate_ibt(struct objtool_file *file)
- 			struct instruction *dest;
+diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
+index ac17196..3a2cd93 100644
+--- a/arch/x86/xen/xen-head.S
++++ b/arch/x86/xen/xen-head.S
+@@ -45,6 +45,7 @@ SYM_CODE_END(hypercall_page)
+ 	__INIT
+ SYM_CODE_START(startup_xen)
+ 	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR
+ 	cld
  
- 			dest = validate_ibt_reloc(file, reloc);
--			if (is_data && dest && !dest->noendbr) {
--				warn_noendbr("data ", reloc->sym->sec,
--					     reloc->sym->offset + reloc->addend,
--					     dest);
--			}
-+			if (is_data && dest && !dest->noendbr)
-+				warn_noendbr("data ", sec, reloc->offset, dest);
- 		}
- 	}
- 
+ 	/* Clear .bss */

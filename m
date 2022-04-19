@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C44507945
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9CB507911
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357309AbiDSSfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 14:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        id S1357251AbiDSSfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 14:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357222AbiDSSeo (ORCPT
+        with ESMTP id S1357310AbiDSSfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 14:34:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EECB32F
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:25:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECA8D6143D
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 18:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035D2C385A7;
-        Tue, 19 Apr 2022 18:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650392750;
-        bh=XBqfyP6KAmo9qr7LY908MPyc4H5JRUEObbvlWE0N1lw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SExyzxBJW/aJrKEv8PfofSGkAceFkWaTn0TAvCJdsehvc3ELLrV8xQGZcTpDRubMP
-         1PAHZyeAERbvHGu7b5Cq8QRqcK0urD9SbbrI7nM5m+EsBESE3icZae6kmQv36JB5Y9
-         tBDEetP+qDzXvVUKdlmrWg5sPODpMx4hQh5mdXp4=
-Date:   Tue, 19 Apr 2022 11:25:49 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     linux-mm@kvack.org, Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH rfc 0/5] mm: introduce shrinker sysfs interface
-Message-Id: <20220419112549.a42f1d86b025112d3a3aaf8c@linux-foundation.org>
-In-Reply-To: <Yl727M1Dxm+vC/R1@carbon>
-References: <20220416002756.4087977-1-roman.gushchin@linux.dev>
-        <20220418212709.42f2ba15e00999bb57086b27@linux-foundation.org>
-        <Yl727M1Dxm+vC/R1@carbon>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 19 Apr 2022 14:35:05 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF6D4131C
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:26:38 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id r189so12876736ybr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:26:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1mruETChJ0+tCEUKHTvZNud81HPLW0aPJc6Xrf5tnGg=;
+        b=DsydkwpauFoZTteJsIEF/bGMn90fgQ9Nl47j1EELbxIjezLoZaBSF1/6UiUAJ0xmTZ
+         /rj1G5jk60dBo4UVM2DgPIR6Vvan/PqzmeB6xOVwQeeE8PYz2WtSq1McY6N65diPpefa
+         nAXHC1F8wbCTiYkwaIc8RZnhHY25UEX7C0bnrr/xJ95MNOXRvlc0YXBKz0duc1XPV+dW
+         44AkXitfLvlHw2fzAtfAmQe+hCRMaIfProSkZ1Ok1LmTPwUfIZwFjyenRj6afmw4QjFs
+         QE2OTQDnzWvTe1fb7XOp93EUJvVWXPYnf62b/6t+FzTu61oqhNT2ln41XNrxF0swOiHJ
+         bP1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1mruETChJ0+tCEUKHTvZNud81HPLW0aPJc6Xrf5tnGg=;
+        b=MarIjsZS7cdziRrRbr6ZbvP/KMfmSOGvJsCzVGj0q1Kb5QoQS5jJSmIsIlCAFANgkJ
+         qjh1jKNiP7roCrTmMCCpAaONkpNpZ52nnUunT2UV+64BF6gS8SWkgIJdIgVk5FjGPCQQ
+         6+p5+SPwNQcjRsiWYeeVBm7wnBnjt0suW+YrYbS05vHB05JQ8sEvuOIuVJEarCU9PVBA
+         mvNIpCcwgeL9CIvEDkeI9X43BW07MxyQ4kkV2nDz3giAERINcmyVoqXBTQ2YWksjKWC8
+         uKo9mAvZAcFeicvQQDXMD93+25xImuv0gxwv0QDFYZ0PdnwJqEiT2SIPV+U3rs9/FJCw
+         x9bw==
+X-Gm-Message-State: AOAM532NwrVIzlkoQC+OL/O+4Y5QB2q9YOaXkK0NcZ21um/dyZjzei4M
+        eq4nksw6qzx8aj5Hg2/SEZFR8iREYrtwXAdJcTDHTQ==
+X-Google-Smtp-Source: ABdhPJwIvBSWGeaTpciFQdI7H/y4cHsr0V/oV6NhWT9Ndt5EVDGgE7d9NetVo5AN6D6ckF93iOwY98PK6jBB0w1E5J0=
+X-Received: by 2002:a25:d08a:0:b0:641:daac:ff82 with SMTP id
+ h132-20020a25d08a000000b00641daacff82mr16009141ybg.643.1650392797011; Tue, 19
+ Apr 2022 11:26:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220419000408.3202635-1-swboyd@chromium.org> <Yl4Au/O/am/ZbX9J@chromium.org>
+ <CAE-0n507D9W5BFfG2vXqN1cqvnrQKLbLw7YejGb5_kH+7X62sw@mail.gmail.com> <CACeCKac83uiwdAf2RWqc9DxEft2+BSBn5Kp5PMR23UGKJyk5KQ@mail.gmail.com>
+In-Reply-To: <CACeCKac83uiwdAf2RWqc9DxEft2+BSBn5Kp5PMR23UGKJyk5KQ@mail.gmail.com>
+From:   Daisuke Nojiri <dnojiri@google.com>
+Date:   Tue, 19 Apr 2022 11:26:25 -0700
+Message-ID: <CAC0y+Ajf2GTG=ir=gu9T5Q1TXBHMC5qzzA_MEzWAvW5D71Yv8g@mail.gmail.com>
+Subject: Re: [PATCH v2] mfd: cros_ec_dev: Only register PCHG device if present
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        patches@lists.linux.dev, Tzung-Bi Shih <tzungbi@kernel.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Apr 2022 10:52:44 -0700 Roman Gushchin <roman.gushchin@linux.dev> wrote:
+The patch v2 looks good to me.
 
-> > Unclear.  At the end of what output?
-> 
-> This is how it looks like when the output is too long:
-> 
-> [root@eth50-1 sb-btrfs-24]# cat count_memcg
-> 1 226
-> 20 96
-> 53 811
-> 2429 2
-> 218 13
-> 581 29
-> 911 124
-> 1010 3
-> 1043 1
-> 1076 1
-> 1241 60
-> 1274 7
-> 1307 39
-> 1340 3
-> 1406 14
-> 1439 63
-> 1472 54
-> 1505 8
-> 1538 1
-> 1571 6
-> 1604 39
-> 1637 9
-> 1670 8
-> 1703 4
-> 1736 1094
-> 1802 2
-> 1868 2
-> 1901 52
-> 1934 592
-> 1967 32
-> 			< CUT >
-> 18797 1
-> 18830 1
 
-We do that in-kernel?  Why?  That just makes parsers harder to write?
-If someone has issues then direct them at /usr/bin/less?
+On Tue, Apr 19, 2022 at 7:59 AM Prashant Malani <pmalani@chromium.org> wrote:
+>
+> On Tue, Apr 19, 2022 at 7:55 AM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Quoting Prashant Malani (2022-04-18 17:22:19)
+> > > On Apr 18 17:04, Stephen Boyd wrote:
+> > > > +             retval = mfd_add_hotplug_devices(ec->dev,
+> > > > +                                     cros_ec_pchg_cells,
+> > > > +                                     ARRAY_SIZE(cros_ec_pchg_cells));
+> > > > +             if (retval)
+> > > > +                     dev_warn(ec->dev, "failed to add pchg: %d\n",
+> > > > +                              retval);
+> > > Tiny nit: Can this fit in 1 line (100 chars[1])?
+> > >
+> >
+> > I'm matching the style of other lines in this file (this is copy
+> > pasta). I'll let the maintainer decide what to do.
+>
+> Quite a bit of that code predates the char limit update, but OK.

@@ -2,205 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52D95061D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094D65061D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343881AbiDSBzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 21:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S1343918AbiDSBzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 21:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbiDSBzF (ORCPT
+        with ESMTP id S1344031AbiDSBzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 21:55:05 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1471EC62
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 18:52:25 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23IM1bdp011984;
-        Tue, 19 Apr 2022 01:52:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : mime-version;
- s=corp-2021-07-09; bh=BYgwo5DQfv9I7ZD5zUwoDNB/oGxQVKAiAQ3qP1HUxbk=;
- b=w7Ac/qWfmhXbHpJ11c4QoZdLUgWVeBGdrlv5gip9SSV2alH85bAt1KiwtyMn7VAvB+Yj
- hwLuhbkXoAJnBXnx1UWUz7X9CsCe1HIDac84xG4JJAHZpR/tzOmFZf542LZeEvZD5tKF
- LStqL2vvs1GCwXE51oXD/e8I/Pjfs2Vva3/C4lKm6sglmxQwudNw/V9xHlNae29dNPjK
- LMJdK7nigwBzc2gbITaBijSfx5Fen+H+waZGtBScyi8kGFPnn8YEHeyD02K5RNDvmlDJ
- 7cj1jVf30oAl0nJqvZyKeRo2ZWlr+NJwBWf7/TBqM3aQrHA93wiW+TgTz+422Ocfdgkw 3A== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ffpbv4quq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Apr 2022 01:52:00 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23J1obwS016168;
-        Tue, 19 Apr 2022 01:51:59 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3ffm81y5xe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Apr 2022 01:51:59 +0000
+        Mon, 18 Apr 2022 21:55:52 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2056.outbound.protection.outlook.com [40.107.92.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD8F27FE5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 18:53:11 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DgD5MlBQUxWw6jzJLVpYn9EEXPOTaTWOoL9pQQK3zwSDayhEGhKsLt1Wsxm+pwZivAYycPnsmNg8Z1uIZkElHWpdc/bTa0ONxV3KZvCtVKNxk5wM3DVzPMUs4KZUWb5MFXv/Lei0EZhuQUvXUnlYeP2NRLLiTpi4VlGCPZ3IojjnPFFyULyKO+M5V0qzq3Y/YjbiQgcFnnwyzOzzegIhF4Tq+SK6vV8qrt6FOOChG7Wz4JvSz9GpUbS9HyAxSWSDi1Ke1sxWokCkcmLqTMnFOYAybpFt45sO0k+QtQGJKFtBK6SNDSC0CN66lE6rUo0P3hZbdcggUFsWBZS64imaMw==
+ b=Rad9Jm5LO5cOsARu2USY4tT1jTCLnazFGfzHKgtrVSBDIlUGdtww1KtELuEffeAM0q4n5wg+2yF7qWZkRII88VW81ZXNNkY4PY2a3WSyqpuVdqq5BLP2r8vYuuHUYnneNxWed7AAHkqoN61tCIpQTLFmhpsOuIMZRI+JL/ljpd5hFRfUiUwGSbBYrfbjngbD6rb0eFNUpviLyQunXR/s2kZZBYIc1ROjJaxMJWokkncIDzPIpJiJhMcJ7N5aS3yRXDUmOoyYgNegNff6oFrFmr+r3844bIHxg5gQo5yiMG7fSNYOeCrKEZVOb6VB1miGkQdcV0GsWcCauVPwoSui/w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BYgwo5DQfv9I7ZD5zUwoDNB/oGxQVKAiAQ3qP1HUxbk=;
- b=DvX/9EGAeFoHVv88aRLJbBdHWcoCXc9PKgYUofa6hvZO1t69w4dmvOIr9GWClGLvEQved3MtmwhFKM7ix7hNCU/PSXTkpltlh8Qcj4uQuPWPWEGBmEBE0c3d06im7jlMlXBqMP4Fe+RT5NanE6eLDo8bEerhgzVU+oAELNenhItLPE0cukt2B3Nlu/hB4VXHQXjfkFPxjuSHLiEUb2haIrrSB8L39/UBgQbOPPIbhXMnk4UzcTNceC9YLyEa35zc0Rbm97KR6aLV4Zym80H8qASTPCVfhuRAXMlSXLql9bo81/GfK96TWryhhEFOMJdtQxWIPjSbJPlGjreJjC9qUw==
+ bh=0bPNNmaqv3X5JsYP1NY077LN2WePYETQL9o1TBGY1e0=;
+ b=eiVhIe2RlvKVkmwWUl+rV/jpYgBpEkhcfjYK8TEzEQCmp6US7PVBF6/g1X9j/QLv32mom+R9a/SwM0ZSZn+3cUkNqh3q/bEFOYgh9ZfHZbfWLopOpfYP59+E5YZjviVcMNvKdyqd1nHvcMq6IhRKF4pHs+eKlcEc9zNq9pIdNZ+INTRZd5Dfpg9rg5SdbXoyz/AtfEEwYuePCxqG8pYsAlzD+NEUUnoXQK3kXqmY9fOEWpzoIMSs00d3GkC8Sx2Q1yJeFPPG4PLSrObPFB4DFe/fFnZqL/7mPGp58m2DGS7shLJJ3btkbKICECIDJkUMwIMePkYuUU/VBjIDT6XNEQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BYgwo5DQfv9I7ZD5zUwoDNB/oGxQVKAiAQ3qP1HUxbk=;
- b=aZV7IF7Bpqx6Al2zP3OuIWT0PHgUTCx27v0Qsqa/t2QFipvogDboXDXmBvLb1ToZmgzVjbgDQ81mN/Eb6UW6TPbGY3+WgENfYS6zUKa69bybGhQiX1X5JjppgMt8RZE6taQZZSamMkI8hDcIq9mz5vZJyy0cJ7RAFlMJjbegymE=
-Received: from BYAPR10MB2629.namprd10.prod.outlook.com (2603:10b6:a02:b7::24)
- by DS7PR10MB5391.namprd10.prod.outlook.com (2603:10b6:5:3ac::8) with
+ bh=0bPNNmaqv3X5JsYP1NY077LN2WePYETQL9o1TBGY1e0=;
+ b=SGFiC+z3xv4rrZ0HzNDwe+34+6Fm9VJpiJiTvVceJlJRRM/48VgK0BxT2pqedAh2AKXa+AbJM9tioagk68If06Q0F7NjrRAckgWyhuYtpWCrK2TlGikm7bynF0VfjuGzUC2l6oJ/bikuMca/ab+g5xrnZjaMF3rdJvKEffAlV0d3Py62v8gQ8ztaS3ZRGy76WHqYqyIJNV8XwBMYqcjXHvmPseu/aAgCNPVr5P9UXOfufPCJ/p/5GgAsgJokYtG7Ondkv9jPvCYsma1R9ZEPVYdmJDb3rFZAyvKuUtIiGLd9drrCS6XWvOSh8QwymKDVY0LtGC1XD1YMGDGlxifFKg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by CY4PR12MB1349.namprd12.prod.outlook.com (2603:10b6:903:40::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
- 2022 01:51:58 +0000
-Received: from BYAPR10MB2629.namprd10.prod.outlook.com
- ([fe80::69a4:385a:1e8a:453]) by BYAPR10MB2629.namprd10.prod.outlook.com
- ([fe80::69a4:385a:1e8a:453%3]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
- 01:51:58 +0000
-From:   Prakash Sangappa <prakash.sangappa@oracle.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, tglx@linutronix.de,
-        peterz@infradead.org, prakash.sangappa@oracle.com
-Subject: [PATCH] ipc: Update semtimedop() to use hrtimer
-Date:   Mon, 18 Apr 2022 18:51:39 -0700
-Message-Id: <1650333099-27214-1-git-send-email-prakash.sangappa@oracle.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR17CA0040.namprd17.prod.outlook.com
- (2603:10b6:a03:167::17) To BYAPR10MB2629.namprd10.prod.outlook.com
- (2603:10b6:a02:b7::24)
+ 2022 01:53:08 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::2d17:b68a:e101:4c18]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::2d17:b68a:e101:4c18%6]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
+ 01:53:08 +0000
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, christian.koenig@amd.com,
+        jhubbard@nvidia.com, rcampbell@nvidia.com
+Subject: Re: [PATCH] mm/mmu_notifier.c: Fix race in
+ mmu_interval_notifier_remove()
+Date:   Tue, 19 Apr 2022 11:51:58 +1000
+References: <20220414031810.1787209-1-apopple@nvidia.com>
+ <20220414135005.GJ64706@ziepe.ca>
+User-agent: mu4e 1.6.9; emacs 27.1
+In-reply-to: <20220414135005.GJ64706@ziepe.ca>
+Message-ID: <87v8v5kfem.fsf@nvdebian.thelocal>
+Content-Type: multipart/mixed; boundary="=-=-="
+X-ClientProxiedBy: SJ0PR13CA0145.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c6::30) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c0276de6-4534-46e8-e6d6-08da21a73047
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5391:EE_
-X-Microsoft-Antispam-PRVS: <DS7PR10MB5391F01A706B8FD65B3C7DB4E4F29@DS7PR10MB5391.namprd10.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 45057af2-0e07-42cb-f881-08da21a75a3e
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1349:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB13493DC9AA8ABABB78978C7BDFF29@CY4PR12MB1349.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BUVSsjkDJfsS+md9R8oiRc6alNreEtwB5qZAKKSyKmyIMpOBRU2QWTpWZgiD+9fEEje1maVsT0G0eXtBkIfCZoo5Nn1Ti2V2TKMFdsWr6HD3x9Uk58iRVHfqe6GEW0dpXT/jF3xXFwPau9DizdGLUBn28nfvgWDNwcWDIyCAckqyQ0oiJa6sluE/bRHfPb0pkCYaVH55EfjUv8m/BswuGAJrAUJWKar2sx+zJ/HR6lIpGPynPePE1bOoTaK8OGcQbWnRsISBGADJ8wxeijRXxTtOOnF8P9fq6pEzzzTF8rqiydgxl7hHqyHXB1vPSYThzVOD+SBB0vH8W3jETWyt7iqDm8htBTXowH9dUnK7L79j9x2v+BGsqDGONBnnsymwkypCc4ZyfLYzET+Iks/FihWePBVxaRPxBF/hCbiBeDofsEBbxCTd62aY9a+4LaXxhNBa/Fbl9tHiqk01VeDqOwRqNjndV9C7yzaUnUfpHO9im3yj0Xjsulwcx6NQKrSRGEkQkeXf+qB+YFNl06b9jSvMrVa83GMalYhJQU+Qc2pUPhzIJpP1r9ptH9G/hZD50F93WN6SjYKAF3OheHTUcl1++KW+moVx2dcHClJgR9d7pBsmDZmazuEfMPt2U/rrqxlJzasFlDgM7wGU81c0JA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2629.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(5660300002)(83380400001)(2906002)(6506007)(6512007)(6666004)(86362001)(186003)(36756003)(52116002)(6486002)(66476007)(316002)(66556008)(66946007)(107886003)(38100700002)(2616005)(8676002)(4326008)(6916009)(44832011)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?V4eCiXoNGxndRtLWMvZm8VZz/CEydFyppjD9RiFWczqIz3NOsl4K3Y7rhSBm?=
- =?us-ascii?Q?U6OIL0XaW3dSTcX4cQ54QN4S1+gcFIvb1J6iPLEswGtiZOp0lcNG74X7oqvY?=
- =?us-ascii?Q?fnPiAtcQiBqtJz8cd4fjE7u5g5bIvRpf/6IGjHkOfKvFosiGReaoFux7jmX4?=
- =?us-ascii?Q?dizZs685SjwnPR9noygH31Xf048sCmZl333+FhQuZw6DG3CLsaDUYOMbX6bI?=
- =?us-ascii?Q?5/L0ZEd7nKwsSruqxnuWdZ5LZhdSRVS+jCBu57po+ZjhJDq4MyOX7M1PDUtt?=
- =?us-ascii?Q?MXmjrM/BE2rrccbNLV2T6cXp1p+m8SHXTLs5N9mMYgDOmyETCjIYsmsialir?=
- =?us-ascii?Q?TkJgmLID1wRdsg31DwxeBFg7uTN9qT6KbBG9BjO3gWZebRbYiBdwdU1Bn95+?=
- =?us-ascii?Q?kM6ZFQv6BqfhJC2xdjZm5UI0O6rE5L1Le85IoMjgeF4xz7hY+S5iIZ5qk4RL?=
- =?us-ascii?Q?CwGhGpiH1W6XEPV7pjTOsL9h+bZaYqlwVsS4Z7OLwaOc2L4nem01tFQfFVT5?=
- =?us-ascii?Q?zqD4yUelVTnD33tzeGLkEp8HqXnyxaB1Dr41x85YJLllaV7cHxSoQTQ0oA1s?=
- =?us-ascii?Q?XKQfJ4BWE40lPTdygkAjNvUy3HZ6vJShDW4s/E+c0uv/a8/C/4iMJVnvGWEd?=
- =?us-ascii?Q?bWQp5cSHfUMkNW+xWEGwbMDJxb7xC0iBxg0wi520OXNK2mqVx2s9pHkR/UZ8?=
- =?us-ascii?Q?YTck/HzGFo+4kafLd+0EIzetcUkYYTPM5ZtZ2B/yyBCx9EVI4sp0OGIzbu6u?=
- =?us-ascii?Q?PCEye9HTh26V7TjVzcBaXDw1aLaIBDeCJbj18lvsKpPCQCYpK60ZVVobVmHk?=
- =?us-ascii?Q?Lb+MqTrgMQ676Csm6BvygFZh6ibgfkMVG8rVsGAM3CqIb+//cfDVWxjgjd4/?=
- =?us-ascii?Q?OajUIArtqCyCqpDhla4BBys4vhBvmsnSfIUqCpxAr+3OEcUgZtRNhWt/sCTV?=
- =?us-ascii?Q?1mb68cJBI2qPvrk4sVkLn2ca1AmBfXDZnnJlcZUjkaECmcT4Lh0PH47llp77?=
- =?us-ascii?Q?SBNZXQKZQ0cQD6R20gZ0NvYejwn8lEoJzN6xDYVsMFZ+hVYXJMLqXhRST2l9?=
- =?us-ascii?Q?53w552133tEI6JunCgnl+FiVeObYnEP0F+PK+ty/GnfOFKZ8s/aEs0FhawMx?=
- =?us-ascii?Q?U8VTLToXET6TbPZXG3UzT4lwCnDNEhXgfTJnNwo+yOy1zYHa+y1yfcBbtiJL?=
- =?us-ascii?Q?5slmkHi2gPGce63LZEgHzraQxDnbMlzBpYXu6Lu3f0cJGp0ZaxbaP9ldYTCN?=
- =?us-ascii?Q?/rSIJyMO3urMcKgLqWbi+kjQCX8KoZPiYG+g3eKU5Mu/7o1vXfgJHyQSb2tQ?=
- =?us-ascii?Q?k+MeyQ3cCnlRlCmlsk8PwzPNUPw22YsUP9r0Bk8au3QUs9iK3w/CJACAa4Qh?=
- =?us-ascii?Q?EVFYXsLjCEGhQb55cfvRRxg2M6Bz4N41kohDdm7hvFLyMlVrH/OaM1YyhNQu?=
- =?us-ascii?Q?hzonoC45Wb7ghEhQ5TrJh2t0KwN7RoDYPWlKf25JHXbGLQjHjvgwLLG1WdwR?=
- =?us-ascii?Q?WbURut9WIPwVGgboRhYTS2pthY3mcZTXG5ANrdMX4OGDG838CQFse6Jb8AYv?=
- =?us-ascii?Q?rin+7Viqdamzp+cMH9OzHuag0TDJPq0fVhedUVAu4xW/YO5bSsjBo/Wo1Mto?=
- =?us-ascii?Q?YCI0pWv6MaC2BgkaJjz20zUd3lTGZ57uI6yCK4dUYE5Zpqd87VpueFzjs0L4?=
- =?us-ascii?Q?jGKVLTdwubKOPFL/uvZR2aVh52I7OpWMCTLyv2BKY86QRtWUp+kXMF097Sq+?=
- =?us-ascii?Q?YetwT5pRZQIwNkRwC7+FC7dDSei2VIeMcDb1b/qKKlfK5g5S1l4Fc2d6jFDo?=
-X-MS-Exchange-AntiSpam-MessageData-1: H3htNrWViGTSjw==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0276de6-4534-46e8-e6d6-08da21a73047
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2629.namprd10.prod.outlook.com
+X-Microsoft-Antispam-Message-Info: VcVXCGzsR/HF4OhZZ0Rz62zmWsLNMSb67tbFZhyBS21ElSXsgrDA9cgrwtUfJowY3klCrBzf4qh6iEOMi6HGNyk0MoU+lzbDBGDZ5jJ7xFrKvPj+t1w3QmeEXjLZ+67b0/4i7n4gSV0xZImuUy3PidT84Y88nxwvG2L1ppnTo6JgEpPGZoD5DXxVx6p8PHfIn2UUbhBogdC5dO0GgbgQL1U1BG+DUIqkPQy6Hm78IUw6g9SgEtC3tBqxUm9Y7HuxMG9WUk3jN8zshxvJ5rzAMMsHLVs6xY4bCE011Nm+JpAiBnxVxChrOL5mMgHKHg2tWf1HFbxgv5XkzsoebtmO3MyzJ9baRLdhmMufQTPeneSnC5yYjhFuQTmPIAAjYBG4LxtyiBDszLjASDKgeZLQ2srl413Rz0gpemZjklYcaOtGG9Pz9BdYcDEkoDsPueMZUxIkR8MJiiotkGbzTg7a5p2mkXxhg0wuCbkTId/yGGXry0ulXF0lRqkEa7FRS0exc4v3gV8SkD4zFj+xgtGSbHw+TY/b0QZSawOEHgKE1PfMTQ6aDNyoiyMhxQIiWBlnWnGJbupeJ/0fhIg30M8zGN41J0g/RiuzALSFSFgzLKCG3o1BCfBYl2yqzlk+4abkpAVNKmOktj8QHlY2H8H6GQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(38100700002)(8936002)(5660300002)(6506007)(4326008)(6666004)(508600001)(316002)(66946007)(66476007)(66556008)(8676002)(9686003)(26005)(6486002)(86362001)(6916009)(107886003)(44144004)(2906002)(83380400001)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NVyHCXH2eLy680pg1Xz73m0US2R8LGmCqndcMVEnq+E8dFnSH4OQolvEuuDC?=
+ =?us-ascii?Q?WnUkWUWMqUpvlHZvo8+ToFytdx/xKN5hOqDhHxJ4HwGYpzN3XV4gjwinAXNW?=
+ =?us-ascii?Q?HDaZSn1I8NE3QFrBKx5b7nmj7q/LMIvZZPkrlzYwRFdMEP+Sz85Bqn9OIV+I?=
+ =?us-ascii?Q?yOzras6PWz/cauhjrvGSIp0sFMYNvT6SQAAbKIPtFwVKekw0RGoYNpWxYkMD?=
+ =?us-ascii?Q?I3pa8undxS47hy428VluJhQRzvxkMPQKKACH5h9Qlxsz25Ok7EHFOioY68jZ?=
+ =?us-ascii?Q?LabulEz8HtEwhd6pcWIAMLnkqgiHqEcQlRbNw/h0ci99LdC6JUGPSKxg++s0?=
+ =?us-ascii?Q?OAnVosCyeD9cE/P/95s6Nn7AjacgSCZlZptd8mxZjg/7TA9gYzRcd/Orx0yv?=
+ =?us-ascii?Q?fOIqENU5s2sv7b/drwKA4NJ2NmejQsZzspPLaIDdW7cx9AGdnmp/AdZD0Uyq?=
+ =?us-ascii?Q?OHFQI4osMly3XjkW6S1iPI3sO9Nd+ywtqzyu4c/IrrC2gnQ9M/tlumj7E7Qv?=
+ =?us-ascii?Q?Z4oIlwb9GJtDvAcAisu2x0i6Jj++pobk3ssGHXATLIy6NnlLRKXb4OsANAIj?=
+ =?us-ascii?Q?6gnsi/hueWpwKaeCiZ9twjm7XMKEDnf0CPvN1xV1e9A7tHfYAd/a1bs6eWF6?=
+ =?us-ascii?Q?bkL3EK6LrIzeYhhz0vYAhVlnP4C1P0vIS3gZMW7e5mERRkoQx/LJjkPOVc2F?=
+ =?us-ascii?Q?LpOuSxhXQhNObCJ0XwZIVJ4uUg6iABFcosTC+8WZ2EZB81Uzp8y4QPZTk915?=
+ =?us-ascii?Q?QUtlMkmME9izoi4BMWeQulFKtWTUKhvzw8kDbRmsYXpInXjBLXZJnPVBQslc?=
+ =?us-ascii?Q?IzTtj/kyJGf3pt4+8MeNFHf/CIR/iGYAIwy0CoIxsTnjmvzFhXvNMgbaQty5?=
+ =?us-ascii?Q?9eb7qlcLLxM01ATpUz5J2+RIqTyITsSoOsqyNCl9yjFVxD0wlnih10xqwRq+?=
+ =?us-ascii?Q?Y2PW7EGJTOaJcoeasQGpVflZ+IzfxXE4yvgN0HV5Hlh+O2MuSQ9pm7/fV/Ie?=
+ =?us-ascii?Q?zcDyJ9DFAIfFjc5nujHufmPeXA909O0I0I3DrUdfOlEZkOFBpjx2K4COYTgQ?=
+ =?us-ascii?Q?SQAdZZAkbhb3ehTYRmDz8zDlAEjwF0A2OujjcWsjcwvBetN6065SixzBL3YS?=
+ =?us-ascii?Q?s2TRf4VQ+RykWTCf9ohQxVnNYmr8Q2JNvoS1PN7W+D4d1ejEo55VRQ/DKBnT?=
+ =?us-ascii?Q?Nlbj0yvmcQYhOzy+3H7R/va2LuLQJqtUJ/AgxbqZz/he4eG7iZuXL6Vo8ucv?=
+ =?us-ascii?Q?GuiGcYpiN7fygJ92+QhGalsVFSYdUwQoCx8sz+QojYx6xp0HNqumC1V88J7C?=
+ =?us-ascii?Q?wInD17APtkbrZ8ftZuhvdWtXkMfBxU/ae3B4zDlcA6o62NuR46hhKOtb8axQ?=
+ =?us-ascii?Q?ru5ki7/meqqt0aSn3s7byM/0zHoPXGShYm/gb56O458PkqA5PDM9sthZmwmN?=
+ =?us-ascii?Q?CGcjF4AcJKlb4RvFcrVHN+A4iQ0ZeiycODFY8hFSXM8snrVaqtsvH1qkN1xu?=
+ =?us-ascii?Q?uJt/X9aG7kaMcpZ6u8jK03/QzRTDH6KyjXhG8+ubFCWThoFalzTdkdikxNZV?=
+ =?us-ascii?Q?Xj/fnCImyPsTQDeU29iq5zUCeLkj9B2ZWOM5hhdtViff7l+6hx/5SVFzYTdq?=
+ =?us-ascii?Q?a30DsJDhy6ixLmGuC8pu0QFfpZ5ZOtY7yrf6feevelBcucMpworwlaIag6my?=
+ =?us-ascii?Q?84RyLiT2ZEgALniyOKux3DeNOIAz7rzi+IgDoiGPL5pavcnfWUicV2CnXG/U?=
+ =?us-ascii?Q?0r2DupV9qA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45057af2-0e07-42cb-f881-08da21a75a3e
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 01:51:58.0869
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 01:53:08.5865
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0gatkr/ld705ajPtnIMeLNPTwr7RuUpkexAyNejhZA09XV0EQMo/7dmEuwh7rF+aX2xql7UVspOW+1GcMME1wI8kWKmMCzMf8JhikxZ9PMg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5391
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-04-18_10:2022-04-15,2022-04-18 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 mlxlogscore=999 adultscore=0 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204190008
-X-Proofpoint-GUID: y0PdSaLa5B9dLoGWjxHpAv1uFy9cFngS
-X-Proofpoint-ORIG-GUID: y0PdSaLa5B9dLoGWjxHpAv1uFy9cFngS
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: bk79gXVw5H4XS9JLXI4/4iMDPGk/l7ciDLCzjKURCgihyQQnqiUJ6USCGktTvonRpGCVuxirWCJmprKxvPqofQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1349
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-semtimedop() should be converted to use hrtimer like it has been
-done for most of the system calls with timeouts. This system call
-already takes a struct timespec as an argument and can therefore
-provide finer granularity timed wait.
+--=-=-=
+Content-Type: text/plain
+Content-Disposition: inline
 
-Signed-off-by: Prakash Sangappa <prakash.sangappa@oracle.com>
----
- ipc/sem.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+Jason Gunthorpe <jgg@ziepe.ca> writes:
 
-diff --git a/ipc/sem.c b/ipc/sem.c
-index 0dbdb98..6cd1a1b8 100644
---- a/ipc/sem.c
-+++ b/ipc/sem.c
-@@ -1995,7 +1995,10 @@ long __do_semtimedop(int semid, struct sembuf *sops,
- 	int max, locknum;
- 	bool undos = false, alter = false, dupsop = false;
- 	struct sem_queue queue;
--	unsigned long dup = 0, jiffies_left = 0;
-+	unsigned long dup = 0;
-+	ktime_t expires;
-+	int timed_out = 0;
-+	struct timespec64 end_time;
- 
- 	if (nsops < 1 || semid < 0)
- 		return -EINVAL;
-@@ -2008,7 +2011,9 @@ long __do_semtimedop(int semid, struct sembuf *sops,
- 			error = -EINVAL;
- 			goto out;
- 		}
--		jiffies_left = timespec64_to_jiffies(timeout);
-+		ktime_get_ts64(&end_time);
-+		end_time = timespec64_add_safe(end_time, *timeout);
-+		expires = timespec64_to_ktime(end_time);
- 	}
- 
- 
-@@ -2167,7 +2172,9 @@ long __do_semtimedop(int semid, struct sembuf *sops,
- 		rcu_read_unlock();
- 
- 		if (timeout)
--			jiffies_left = schedule_timeout(jiffies_left);
-+			timed_out = !schedule_hrtimeout_range(&expires,
-+						current->timer_slack_ns,
-+						HRTIMER_MODE_ABS);
- 		else
- 			schedule();
- 
-@@ -2210,7 +2217,7 @@ long __do_semtimedop(int semid, struct sembuf *sops,
- 		/*
- 		 * If an interrupt occurred we have to clean up the queue.
- 		 */
--		if (timeout && jiffies_left == 0)
-+		if (timeout && timed_out)
- 			error = -EAGAIN;
- 	} while (error == -EINTR && !signal_pending(current)); /* spurious */
- 
--- 
-2.7.4
+> On Thu, Apr 14, 2022 at 01:18:10PM +1000, Alistair Popple wrote:
+>> In some cases it is possible for mmu_interval_notifier_remove() to race
+>> with mn_tree_inv_end() allowing it to return while the notifier data
+>> structure is still in use. Consider the following sequence:
+>>
+>> CPU0 - mn_tree_inv_end()            CPU1 - mmu_interval_notifier_remove()
+>>                                     spin_lock(subscriptions->lock);
+>>                                     seq = subscriptions->invalidate_seq;
+>> spin_lock(subscriptions->lock);     spin_unlock(subscriptions->lock);
+>> subscriptions->invalidate_seq++;
+>>                                     wait_event(invalidate_seq != seq);
+>>                                     return;
+>> interval_tree_remove(interval_sub); kfree(interval_sub);
+>> spin_unlock(subscriptions->lock);
+>> wake_up_all();
+>>
+>> As the wait_event() condition is true it will return immediately. This
+>> can lead to use-after-free type errors if the caller frees the data
+>> structure containing the interval notifier subscription while it is
+>> still on a deferred list. Fix this by changing invalidate_seq to an
+>> atomic type as it is read outside of the lock and moving the increment
+>> until after deferred lists have been updated.
+>
+> Oh, yes, that is a mistake.
+>
+> I would not solve it with more unlocked atomics though, this is just a
+> simple case of a missing lock - can you look at this and if you like
+> it post it as a patch please?
 
+Yep, that looks good and is easier to understand. For some reason I had assumed
+the lack of locking was intentional. Will post the below fix as v2.
+
+> diff --git a/mm/mmu_notifier.c b/mm/mmu_notifier.c
+> index 459d195d2ff64b..f45ff1b7626a62 100644
+> --- a/mm/mmu_notifier.c
+> +++ b/mm/mmu_notifier.c
+> @@ -1036,6 +1036,18 @@ int mmu_interval_notifier_insert_locked(
+>  }
+>  EXPORT_SYMBOL_GPL(mmu_interval_notifier_insert_locked);
+>
+> +static bool
+> +mmu_interval_seq_released(struct mmu_notifier_subscriptions *subscriptions,
+> +			  unsigned long seq)
+> +{
+> +	bool ret;
+> +
+> +	spin_lock(&subscriptions->lock);
+> +	ret = subscriptions->invalidate_seq != seq;
+> +	spin_unlock(&subscriptions->lock);
+> +	return ret;
+> +}
+> +
+>  /**
+>   * mmu_interval_notifier_remove - Remove a interval notifier
+>   * @interval_sub: Interval subscription to unregister
+> @@ -1083,7 +1095,7 @@ void mmu_interval_notifier_remove(struct mmu_interval_notifier *interval_sub)
+>  	lock_map_release(&__mmu_notifier_invalidate_range_start_map);
+>  	if (seq)
+>  		wait_event(subscriptions->wq,
+> -			   READ_ONCE(subscriptions->invalidate_seq) != seq);
+> +			   mmu_interval_seq_released(subscriptions, seq));
+>
+>  	/* pairs with mmgrab in mmu_interval_notifier_insert() */
+>  	mmdrop(mm);
+>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+
+--=-=-=--

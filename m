@@ -2,73 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3FF8506362
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2F8506376
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347870AbiDSEo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 00:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
+        id S1347771AbiDSEvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 00:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239095AbiDSEo4 (ORCPT
+        with ESMTP id S1348329AbiDSEv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:44:56 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC8B2CE0F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:42:15 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id k23so30455082ejd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=eqRg70934LOhEuzCeWKXpYN3LktkIf1z9etsTpdQxp4=;
-        b=NDSVam5jdGtdzGAJ7b660r3vHFIeAkRc0YWQi94C+mPGDahhxAdj/Zwlq9AJOowfPf
-         hzJOzI2qjvyumPNvSK8KXAz7gzkrhxw/3uscT/rqc6jk/5B3jQ87gZJuSRpAAuhxgAp8
-         O7vLSBaSYwrf511y96rSRYKDQsT3pvmOe/+VoPd7Q1iBq1LcI0xiC5SPxs6whK8ThApe
-         sanI8jlBcS2pe8wnGazgC6txfn/nJZJyRtm5sWftyv5ysOVc1OOl9NZZTXxYNnquxGt9
-         58nvCA/zc9GPjuy7JyQ8wTzAScrvdbXTGjoEdRLo02blQPHSjexDTa+LsmMmDiO1YCeh
-         L7FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=eqRg70934LOhEuzCeWKXpYN3LktkIf1z9etsTpdQxp4=;
-        b=3RyInx5avAfrJtvUJKrH2u5x1kTxGgRKgqeYvgNkQ8+GyycVYiB5hM3f9u3RSl/z8N
-         afPoDVrVZ9TzK3fHVbO1eR1e+toq+peDTxl1eUry9ebHIkIMqZhMAFUdCs4tG/eTDPXY
-         vn98b5A+zfQ1bEw6HytLRR4j/G+0o81x3yrx/V8FimpU+TfJlSCnA+o7C1QpQrUMYGdA
-         C5s2fjJG92jew2COLa9QOe2jiJqKmDiLN3/USPjlUETu6ushdJZVxy6FBsaipqCG/9xT
-         gSS7nLKmGWtcDB0YXgp67tm+0280cuFYyKGuq7jnljVhmjziCHoe4WimTuke6pEyFf4L
-         AwBw==
-X-Gm-Message-State: AOAM530IKVN+QUETt+HnrUxk1dmmXjhNKiJPukqpMRlWys3Hum/KTL5j
-        ked7mH369NZZH8jfF2EdMWvL4Oe7XhLeHnmHEGM=
-X-Google-Smtp-Source: ABdhPJwzOyvo6TxtqoX6tWfIsoLTm+2qOY8+3hMcxrdZx0FQOQydtMSBOxIMexPDvaARTCvIUGkNzT3WwlnLHlOFocM=
-X-Received: by 2002:a17:907:6297:b0:6da:6388:dc58 with SMTP id
- nd23-20020a170907629700b006da6388dc58mr12079893ejc.472.1650343333333; Mon, 18
- Apr 2022 21:42:13 -0700 (PDT)
+        Tue, 19 Apr 2022 00:51:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DBA2F3BB
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:48:47 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ngfmt-0002uP-FJ; Tue, 19 Apr 2022 06:48:27 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ngfmr-0047Pn-Da; Tue, 19 Apr 2022 06:48:25 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Robin van der Gracht <robin@protonic.nl>
+Subject: [PATCH v2 00/17] protonic fixes 
+Date:   Tue, 19 Apr 2022 06:48:07 +0200
+Message-Id: <20220419044824.981747-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Sender: elemiassieric@gmail.com
-Received: by 2002:a54:3406:0:0:0:0:0 with HTTP; Mon, 18 Apr 2022 21:42:12
- -0700 (PDT)
-From:   "Capt.Sherri" <sherrigallagher409@gmail.com>
-Date:   Tue, 19 Apr 2022 04:42:12 +0000
-X-Google-Sender-Auth: A3VImfc1zQF_lwftU3G3gVQaTlw
-Message-ID: <CAAf5by8eOxOy6FdY=RGQ+xZFWQnd9w211yzff8Zju45r3=36JQ@mail.gmail.com>
-Subject: =?UTF-8?B?5Zue5aSN77ya5L2g5aW95Lqy54ix55qE?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5L2g5aW977yMDQoNCuS9oOaUtuWIsOaIkeS5i+WJjeeahOa2iOaBr+S6huWQl++8nyDmiJHkuYvl
-iY3ogZTns7vov4fkvaDvvIzkvYbmtojmga/lpLHotKXkuobvvIzmiYDku6XmiJHlhrPlrprlho3l
-hpnkuIDmrKHjgIIg6K+356Gu6K6k5oKo5piv5ZCm5pS25Yiw5q2k5L+h5oGv77yM5Lul5L6/5oiR
-57un57ut77yMDQoNCuetieW+heS9oOeahOetlOWkjeOAgg0KDQrpl67lgJnvvIwNCumbquiOieS4
-iuWwiQ0K
+changes v2:
+- spell fixes
+- rename arm -> ARM
+
+This patch series provide two main part of changes:
+- Remove prototype specific deprecated code not used in production.
+- Unify vicut1 and victgo variants to reduce maintaining overhead.
+
+David Jander (16):
+  ARM: dts: imx6qdl-vicut1.dtsi: remove TiWi module
+  ARM: dts: imx6qdl-vicut1.dtsi: Put nON_SWITCH in own pinctrl grp
+  ARM: dts: imx6qdl-vicut1.dtsi: Remove PCIe
+  ARM: dts: imx6qdl-vicut1/victgo: Remove UART2
+  ARM: dts: imx6qdl-vicut1.dtsi: Fix LED names
+  ARM: dts: imx6qdl-vicut1.dtsi: Fix debug LED gpio pins
+  ARM: dts: imx6qdl-vicut1.dtsi: Update GPIO line names
+  ARM: dts: imx6qdl-vicut1.dtsi: Remove conflicting pinctrl entry
+  ARM: dts: imx6q-vicut1.dts: remove sata node
+  ARM: dts: imx6dl-victgo.dts: update gpio names
+  ARM: dts: imx6dl-victgo.dts: Factor out common parts to
+    imx6qdl-victgo.dtsi
+  ARM: dts: imx6qdl-vicut1.dtsi: Move some node out to DTS files
+  ARM: dts: Remove imx6qdl-victgo.dtsi
+  ARM: dts: imx6qdl-vicut1: Factor out common parts of 12inch board
+    variants
+  ARM: dts: imx6dl-victgo.dts: Remove touchscreen x axis inversion
+  ARM: dts: imx6qdl-vicut1.dtsi: Add missing ISB led node
+
+Oleksij Rempel (1):
+  ARM: dts: imx6qdl-vicut1.dtsi: add thermal zone and attach tmp103 to
+    it.
+
+ arch/arm/boot/dts/imx6dl-victgo.dts          | 682 +------------------
+ arch/arm/boot/dts/imx6dl-vicut1.dts          |   1 +
+ arch/arm/boot/dts/imx6q-vicut1.dts           |   5 +-
+ arch/arm/boot/dts/imx6qdl-vicut1-12inch.dtsi | 128 ++++
+ arch/arm/boot/dts/imx6qdl-vicut1.dtsi        | 222 +-----
+ arch/arm/boot/dts/imx6qp-vicutp.dts          |   1 +
+ 6 files changed, 178 insertions(+), 861 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6qdl-vicut1-12inch.dtsi
+
+-- 
+2.30.2
+

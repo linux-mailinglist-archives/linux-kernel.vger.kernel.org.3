@@ -2,126 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F401506D5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA4D506D71
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348402AbiDSNWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S243747AbiDSN2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351985AbiDSNWk (ORCPT
+        with ESMTP id S243934AbiDSN2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:22:40 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D1A2C8
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:19:56 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id y20so12721116eju.7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:19:56 -0700 (PDT)
+        Tue, 19 Apr 2022 09:28:03 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5728F21E19
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:25:20 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id t25so21250497edt.9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:25:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cWoWgEcXIMYRuEsZLERLpvc6D4fQ6dZb3dEHGDCcqIs=;
-        b=fY6TQpn2KPv+1NlQy1Jow9T1OohAsjrB3oV9ppqNtHvd0r+4OW08v/avNwv1G8Odjm
-         D/2GsdfYMSvjtxG1P4B7SzmR2XTR5xS2bZ0XXxMVMHNciSyV6R5MO6AkQwLdeFk1lHfh
-         Cgt7v30oEPEsJbmsWTr9+ULhOcR1ribWin+0SWBgoc1mhBYRwOlMDx37E219LP/c8iur
-         e8Jl67Cq3yYNgZHQHPlunLvMK0ujRMh0wPaA5jNKhTst45qBNw6ujFZl8BZe81KmcSAw
-         S+BsJt8ItH1FzOurK6u7x4BM44CcrZpOkFaSvq0vaqehD0L+SUhwh2c75xAXXhRm0fg5
-         rMMQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=NYGYZ+AaeH1UkoR29hN0ONV45IHPGeVO496rVaCsOeg=;
+        b=ZcP63KQbJe/fq2lztFobt+4aFZJsU7bmacoc7UrvUOEBPRCGkn8K2Uwgz1TudU1vVm
+         m/AG5apYjCzvfnZjgqvfy3ERIKR46quwZkbQs6eqYdyzvjhjwgawy2pmk6QIFggBSFoT
+         oOKSlIa+QZB5Z7Bi0bVwZYyRH3vmhvpt/+PYNbftMzYV9afjOcEAj3kVfmrGObuF8erl
+         S1u/FdJMXedCwFu88jEuVQme82CXHn/xWoapZfPCRfd5muPPBWXap3gonUSvM6oHhfj4
+         XeFBi/ldwlcGrKX5nmEVdrRi5ehZTc/DFaN3NTDOXvRCXPer+X26HBfyvbV7Q2q5oNP3
+         6/CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cWoWgEcXIMYRuEsZLERLpvc6D4fQ6dZb3dEHGDCcqIs=;
-        b=aNNiE/FORLQlhMkIDGZY4y/LTHsSblYVfC/3nShBSinZXKX81lYPH9XsMGp4HhZl74
-         UZ6VjNHK2kPRlnOaHHIyJw+Hf73SgLGMSoyOXJoZY4uE7ktKFf+VSfsMgNBFHIpWNs38
-         qSga/ReT6YvVvcLNou9U2ML3iVZVPNbGFcqlM+9ZEWAXF50eMWt7w84D13pYJG0TaXsy
-         +wKFeL28IobQhMYX+QKM3GycH11U8pBdsTBHtc9z6NbmJntvj4wXwGq/iouqpVEp2bVJ
-         qydm1Wbun3+hfpPlVYLASvuK1j3teMErk/f/+vJvhp2FrhiCKxE36ZR2viZydId2fLN4
-         wBbA==
-X-Gm-Message-State: AOAM533RilKWwmtPPSrlQDm32rFxP1nPLBvnZSeZnaS78Ad8HbDCKTxV
-        Do7T8gQmIL/k0PV4cKzUK0cclXYQBD51Pf4ZVrEr5Q==
-X-Google-Smtp-Source: ABdhPJwnqnEl1PogZpbrEzxXO0aXN+psYbjJRFm+NSGmxo/x2WJ/ZC6/8hzNHXDDrwtWHaCSyZ4gF5RFiYFl5n9G5cc=
-X-Received: by 2002:a17:907:1c8a:b0:6e9:2a0d:d7b7 with SMTP id
- nb10-20020a1709071c8a00b006e92a0dd7b7mr13404246ejc.572.1650374394669; Tue, 19
- Apr 2022 06:19:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220418034444.520928-1-tongtiangen@huawei.com>
- <20220418034444.520928-4-tongtiangen@huawei.com> <073cb6a6-3dbc-75d4-dbfe-a5299a6b0510@arm.com>
-In-Reply-To: <073cb6a6-3dbc-75d4-dbfe-a5299a6b0510@arm.com>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Tue, 19 Apr 2022 09:19:16 -0400
-Message-ID: <CA+CK2bCPrQ=F0jNRxcVZ9f18Rm-kAATO3xFE79TZDoWQ99GC4Q@mail.gmail.com>
-Subject: Re: [PATCH -next v4 3/4] arm64: mm: add support for page table check
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Tong Tiangen <tongtiangen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=NYGYZ+AaeH1UkoR29hN0ONV45IHPGeVO496rVaCsOeg=;
+        b=vlbTXdifRr5Mq+cepOxK4nOR0M5/JtqJkxxYYLaiPN8dTsseGJlp6y3afissitTMdR
+         6peGwYOMLpDLKD11BNSo9mU3mTVav1VObVJUxuQOL4crdZRqJu6Zjoy+3Nee+PwffIE9
+         gVMv6RnDQZ56sggNhypkZgOhdUZY+L7+2IjGs2uqsVErqTcmVBJRaUQXUozkvNXDkwIr
+         rQf+gPfN5vT1RgW5zU0QhpgCVVK5SjPb10X9PI01nPDwW8EbcEaTlFFGTtbvqGOeS6Wy
+         r3pbFStg3E/c2jCJ9ZiGoo+f1KVOxrTBtaUivpf0hkQnW5EIaiuJ7SoqzM3bnco+nbwH
+         13sw==
+X-Gm-Message-State: AOAM533a9bKUFD596CaB4wArO8NJbkV5GS0ExrbUN3LabxBczDnlUaw+
+        bzsFohenD+aMNgvR+ruvZTU=
+X-Google-Smtp-Source: ABdhPJyXcDMv8ru2Wi8pUK5GB8l76sJTEXGV6d+L1yqBCA/Bh8rnWTOm2dfGw8CclmZl5FbXqKjm4g==
+X-Received: by 2002:a05:6402:2318:b0:413:7645:fa51 with SMTP id l24-20020a056402231800b004137645fa51mr17623149eda.201.1650374718896;
+        Tue, 19 Apr 2022 06:25:18 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id fx3-20020a170906b74300b006daecedee44sm5661666ejb.220.2022.04.19.06.25.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 06:25:17 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv@lists.infradead.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH v2] mm/highmem: Fix kernel-doc warnings in highmem*.h
+Date:   Tue, 19 Apr 2022 15:25:16 +0200
+Message-ID: <4058661.1IzOArtZ34@leap>
+In-Reply-To: <Yl6unkluUEeRZBbB@casper.infradead.org>
+References: <20220418175638.30018-1-fmdefrancesco@gmail.com> <Yl6unkluUEeRZBbB@casper.infradead.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 6:22 AM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
->
->
-> On 4/18/22 09:14, Tong Tiangen wrote:
-> > +#ifdef CONFIG_PAGE_TABLE_CHECK
-> > +static inline bool pte_user_accessible_page(pte_t pte)
-> > +{
-> > +     return pte_present(pte) && (pte_user(pte) || pte_user_exec(pte));
-> > +}
-> > +
-> > +static inline bool pmd_user_accessible_page(pmd_t pmd)
-> > +{
-> > +     return pmd_present(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
-> > +}
-> > +
-> > +static inline bool pud_user_accessible_page(pud_t pud)
-> > +{
-> > +     return pud_present(pud) && pud_user(pud);
-> > +}
-> > +#endif
-> Wondering why check for these page table entry states when init_mm
-> has already being excluded ? Should not user page tables be checked
-> for in entirety for all updates ? what is the rationale for filtering
-> out only pxx_user_access_page entries ?
+On marted=C3=AC 19 aprile 2022 14:44:14 CEST Matthew Wilcox wrote:
+> On Mon, Apr 18, 2022 at 07:56:38PM +0200, Fabio M. De Francesco wrote:
+> > +/**
+> > + * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic()
+> > + * @__addr:       Virtual address to be unmapped
+> > + *
+> > + * Counterpart to kmap_atomic().
+>=20
+> I don't think this is a terribly useful paragraph?
 
-The point is to prevent false sharing and memory corruption issues.
-The idea of PTC to be simple and relatively independent  from the MM
-state machine that catches invalid page sharing. I.e. if an R/W anon
-page is accessible by user land, that page can never be mapped into
-another process (internally shared anons are treated as named
-mappings).
+I agree but let me remind you that this patch is _only_ about fixing=20
+kernel-doc warnings. This warning was simply fixed by moving kdoc comment=20
+from highmem.h to highmem-internal.h (which is the file where the=20
+definition of kunmap_atomic() resides) and merging the text with few lines=
+=20
+that already were in highmem-internal.h.
 
-Therefore, we try not to rely on MM states, and ensure that when a
-page-table entry is accessible by user it meets the required
-assumptions: no false sharing, etc.
+=46urthermore, I've already had an "Acked-by:" tag from Mike Rapoport. I=20
+suppose that if I changed the paragraph here I could not forward his ack to=
+=20
+the next version.
 
-For example, one bug that was caught with PTC was where a driver on an
-unload would put memory on a freelist but memory is still mapped in
-user page table.
+> > + * Effectively a wrapper around kunmap_local() which additionally=20
+undoes
+> > + * the side effects of kmap_atomic(), i.e. reenabling pagefaults and
+> > + * preemption. Prevent people trying to call kunmap_atomic() as if it
+> > + * were kunmap() because kunmap_atomic() should get the return value=20
+of
+> > + * kmap_atomic(), not its argument which is a pointer to struct page.
+>=20
+> I'd rather this were useful advice to the caller than documentation of
+> how it works.  How about:
+>=20
+>  * Unmap an address previously mapped by kmap_atomic().  Mappings
+>  * should be unmapped in the reverse order that they were mapped.
+>  * See kmap_local_page() for details.  @__addr can be any address within
+>  * the mapped page, so there is no need to subtract any offset that has
+>  * been added.  In contrast to kunmap(), this function takes the address
+>  * returned from kmap_atomic(), not the page passed to kmap_atomic().
+>  * The compiler will warn you if you pass the page.
 
-Pasha
+A change like this should go to a separate patch and indeed I'll send it=20
+ASAP. Probably, when I'll rework this text in a separate patch, I'll also=20
+copy-paste the paragraph you wrote as-is (too easy!).
+
+However, since the rework of the text in paragraph can only be applied on=20
+top of this patch, I'm not sure if I should either (1) make a series with=20
+two patches or (2) make a separate patch with a warning to Maintainers that=
+=20
+the changes in the new patch can only be applied on top of this patch.
+
+Actually, I don't yet know how the Community wants tasks like these to be=20
+carried out. Any suggestion?
+
+Thanks for your review and for suggesting a better suited text for the next=
+=20
+patch.
+
+=46abio M. De Francesco
+
+

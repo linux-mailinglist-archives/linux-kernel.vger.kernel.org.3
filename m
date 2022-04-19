@@ -2,218 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA969506226
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 04:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F00B506227
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 04:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344790AbiDSCcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 22:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S1345178AbiDSCco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 22:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244392AbiDSCcE (ORCPT
+        with ESMTP id S1345407AbiDSCc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 22:32:04 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846882E688;
-        Mon, 18 Apr 2022 19:29:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650335363; x=1681871363;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Y1jcWKfWahIx2WpR/x2hL9GOikQOTZYyBLB86DBI79I=;
-  b=LLrOx5fseTNurCu+rcCIIzdlQB/38EZpVH5yEhTvJWf7jIOVQtAthoUj
-   qhQiPqCF9YqTXhwo7npPU8N/hSCBZuzeqYtjdN2AIR0NeKVP8a9E/I6DB
-   HpAU0ommURdEuxF+7lllPI+YHhZaOvacFBd0LU4+PeocoSZddUtWjxTFt
-   7F5ISs1zfaEMbOrIXjiBU/0nfrCgICk0xummA3MdCyyTzCcl0CouUnTJa
-   gRZbRIrdpX226E8d+KVdVRjS9lX+gukEHbl+A9lwxcg05S6YnwK15ZPP9
-   DIl/dHsAEZMcvcxPK6pWitjlZDnNMpamKm/CzXcTM5AHBKX345IQqoM3w
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="326556869"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="326556869"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 19:29:23 -0700
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="657465581"
-Received: from jaspuehl-mobl2.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.31.185])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 19:29:19 -0700
-Message-ID: <eca68f9b522b6586c883ac9765d8a071e803ee3f.camel@intel.com>
-Subject: Re: [PATCH v3 1/4] x86/tdx: Add tdx_mcall_tdreport() API support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Date:   Tue, 19 Apr 2022 14:29:17 +1200
-In-Reply-To: <20220415220109.282834-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220415220109.282834-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 18 Apr 2022 22:32:28 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2105.outbound.protection.outlook.com [40.107.237.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AF8B14
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 19:29:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=no381V2+rvEvax4YNAyr/XVteTwHzYPErIod9nBRAJ6PNW4qs/q1MDuFXBdEaC/nPxo6KGw0Xocz2xd7uS2WL+YIy6jcdpYXQpqVMKtE6ElHHdnXij0rsvFQFs9rZWrglrTecwZ8i/yLIcAQxSYP3YDs6f9yez1Y5/MTj7Tey6DLjw9pHUsZ87an4Gj7u45UBs/JFe8oVcyzFWbfJB9jDccm/DGLfdHr1FKl79x7Td0y4sm6dX0oZ2ETpYi2D1mzs4MVRICALrHo1hraJWkRExpOIuneYXTKOwIsDdHwXIkqMsWN1dn+LI6Kq4Gv6mSO8S8kBwttA8fbPf/jmT2uXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Wc+Zj0l90rxrWHuWqUCpymP5ydXp2rJHMH2DYeU2WBA=;
+ b=IvFAIwOgS6DHpoM/03wxCAruNl1QObd6x4o1q1yws8xtKfhaUtzptGC/4WUuGtn2/pcyIKUa9S892kuoAsz0a8FMsIlDu5wV1aALYclHY2WAVWHe9WA+lTt8v9cK7Xc3yAa/38Bo+P5jfCYPsN6eqSbFU6h+VZ6mYbJyqwINXvnyBRxGq6szjqNDj9HnHNjvVj99HWU9k8TRcnO/3wFoDoKlXlMkpsryYROTbVRhUCWFJ9oNGhPF6r7VDJngorMT3Jr7pEF3L6pPswnzssvMAMWpywaNfJ0R823dLzbvNQIpk7vhIMwc0osug4FJWMGNf1ufBmP6Gon9olr/71DG4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Wc+Zj0l90rxrWHuWqUCpymP5ydXp2rJHMH2DYeU2WBA=;
+ b=sjSwf8bjaBrA6M7xFijIzqhTUWuHo653OPWgwFey2wjI/adM7hzjNJp2LQllBEJRpMsAYnuGKso7SJum4yiqLJlXcUb+r0d8lFz3O0NlGJJ5aIOyzZe1h87PTfZLBJofGm9r5QpinQOg4dZHnbIjw5L+RnPkVOTk2ecxuOr4vns=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by SN6PR04MB5198.namprd04.prod.outlook.com (2603:10b6:805:f7::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
+ 2022 02:29:41 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::e9ba:4c90:6e9c:39f]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::e9ba:4c90:6e9c:39f%3]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
+ 02:29:41 +0000
+Date:   Tue, 19 Apr 2022 10:29:32 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/bridge: anx7625: Fill in empty ELD when no connector
+Message-ID: <20220419022932.GA629745@anxtwsw-Precision-3640-Tower>
+References: <20220414090003.1806535-1-hsinyi@chromium.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414090003.1806535-1-hsinyi@chromium.org>
+X-ClientProxiedBy: HK2PR0401CA0022.apcprd04.prod.outlook.com
+ (2603:1096:202:2::32) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ce4e6d90-12f0-4818-ebc6-08da21ac752a
+X-MS-TrafficTypeDiagnostic: SN6PR04MB5198:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR04MB51982E411430006216CA5454C7F29@SN6PR04MB5198.namprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ggcwma0IiwM6Kp3kqtGjjorV63cd2OR6MIaNU6HAyTLgQtvvYU2EtfjBWXwE3vIaK6u9zHFiuigmNDSSKSWe4rLo900FNgNrHNz9STxJ2DwrVqSwqanjMNO2rQpZBrqsgVQXBYl7y9Qy3qmbG1LNtc58FuIb/i/obn1FyKdhnRf/3cvlERgNLkjTrjXfZJ2w/CpzdxsjLBvzxiz0vodxewcxXFo4RhqytV9qiSIGxKJJZO/1ti+1slu2hnqyTOldmh3oyeJQlKughcZJV318vd/u8xshSypsGZ9IjkuDxDkBNGe1C6kh7alO0pHIap8JG1jqvBLWxFJfr7GuWP3CTksjtHb52BB6LeNjcmPL07SQiOwgy1txV5zK/diPHFLF4F+WaX90905VYYfspWS+AEqo9VjcA56l3ycmGZ3S12vST9isCZKIpQFHKcFD6n+M/buKiSpvULlInJKgvtiicv21eNJ1CiM+PN3qVtXqnW6RLAwLePkm+9qBUCm8ru2hpf2ebyeE52Of0dEOA+lTLLXKca84DDTevGJOHinFFC0iekZuu40jWIgDwgOZZzm9GLXUiHoo77ZNA0VxabU2K1SDevC7mFnVmnjknhqJHiedmschbR7l9LvA0R1X756VXA02Mlzp2EHAvjJSMY7pHDRr41td1WT+KYlY1fB9j9QCuqWvwnAVRzjpqcWmuWXGPpUCrrKGaK3hAQ1lJdCcjw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(33716001)(8676002)(4326008)(5660300002)(52116002)(9686003)(2906002)(26005)(38350700002)(86362001)(38100700002)(6512007)(6506007)(6666004)(55236004)(66946007)(66556008)(66476007)(508600001)(33656002)(1076003)(6916009)(83380400001)(316002)(186003)(54906003)(6486002)(8936002)(7416002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?exvY9+BnNtSciqfN2o06tsEa9KxCThbGfbOzYesGpvuOOf40LZ6IWZHM1YXy?=
+ =?us-ascii?Q?Cv3MCIi6351F+mltHiyi92Kv83G9hHaj+xKgFSjNcdnZn1jKzcUWK8vMawzc?=
+ =?us-ascii?Q?cXIZr4tg162wib0FpXBMpUVLnayqDi5CBGVW/iGJ7+8swzP1hhuHJ4YqgQVa?=
+ =?us-ascii?Q?3HlrTe6teekGeUUssFPfZknRYbpasB+c3kQgVWbtZ8coqh5Nv8b0hPRbGccF?=
+ =?us-ascii?Q?CV3B1sRVI9RjPUztKWT35IS3nMKFTsjB+o9X5PS97D8TQ4GYPRDSHZMno5AM?=
+ =?us-ascii?Q?xT4DBCI3W/Lkj7SEM+zSJA/8Pvv80sUVdTfMPUzc1GkIMynMA5NqR0mQWFH5?=
+ =?us-ascii?Q?Mo69Y1yFU5jEQIn4UBXKRya7bJ7IK2QavnuDs09+hXZYcqH6Rrp54jQ1qkeu?=
+ =?us-ascii?Q?p0vN7mWphEGPF4qQqMuJ6FbxfLmWES2UQqpPSRaIFN0PgVAm3pTGMwYmVlvz?=
+ =?us-ascii?Q?O9DRW3c/RoZc8fKLwZbz+5Ix1YeCpnIMgnpZloCKngl8shPQa+NuRJJmGDT4?=
+ =?us-ascii?Q?41Hn2iy7lFD33qaXJXNjyNASQNNJMwuyBbnBmHQZl19JXcmaTYBy9Mdv4nXn?=
+ =?us-ascii?Q?Ib8zLDcv9T0I32YU+AY2H6Qo6iKnEYq4y7Ibl22rtml8DvcKLuogiQsPhv0C?=
+ =?us-ascii?Q?JyHexGo0+hua4Ma8A0PmODiBRuwyLsHNnOQNWdj0dKmK7PV1LJ1rkNYApQYL?=
+ =?us-ascii?Q?hKXLS4csbrwH1rvZfr19DR1em49rbBAcskipJUrFmNwMzSj+ZXn0exbFGMDy?=
+ =?us-ascii?Q?t7UQkkcRji/wZbY/FF40tJYd3AHn9QJyfq+p7JCP0zng1yqaJviNbFWxIndk?=
+ =?us-ascii?Q?qZ0/n2tT6v19pXz5p53wg3z67xr719aYG2HtMEU2eYgAxaKbVH6o5/DYYZII?=
+ =?us-ascii?Q?pUyaQ39mejHT3nEsBzL0nhlhrtDZqtL/mdO1d8rNDHYkQGuY9ABLbg1pEtt4?=
+ =?us-ascii?Q?8B4xbc8wf7CVX0KQUtnGzgxWV0Rm7gfZBMkH2JwwuBXg3gb/8kEDzk2IeIML?=
+ =?us-ascii?Q?idBwCG4Qlb1Kvcjb9iq4fem0XYXUlsOoUNmeRnTYQUlgpERT7gJUbyymKE0+?=
+ =?us-ascii?Q?zUmPOBJeCeSRH7vbs/c2OY5QfxDK/oMF5nPR9K+tVYvgCNKJhxaVHEte7qnj?=
+ =?us-ascii?Q?HwFpgzK2RUscAfbdKKyYNjBhiBbOMv9G2toAYm3qYIlwgMHT3rrYrUgrTrmO?=
+ =?us-ascii?Q?HUGZn45f891BW1X+fwHuDH/f18iAp4Fk+vfLPjQcLza0BVru8564lbAZpMiI?=
+ =?us-ascii?Q?dJ7A7v8zSASjHJaNpwFatx0pF10KB+0wROHfaTGWUv4e+H2oRJMPboHXb5bb?=
+ =?us-ascii?Q?ngcnKElMFLmX+b/MGIYfPsbkMAuvH5Lr6Wk2fP1S78UI90Wpdlp6ZS6Inw/E?=
+ =?us-ascii?Q?18VS9fb8HgwZhEf3Iqk60yxmjy9ecgqGRSf6otwH4ZX1UDGqzv8fE5HIOUu5?=
+ =?us-ascii?Q?mvEwGfMevaPobJA1EjdL+zOQa8tlcFl61iR7CLGyuBL+eOa9QfOc7pvmIbCi?=
+ =?us-ascii?Q?f7KHLAqQ0ZdTZT3YnMhq/eo0zHRrNRFQXE2jwnuc1oCIPMbwFeWpvT36mqEI?=
+ =?us-ascii?Q?Hoqil0uVJMRpqIMir1JE+cpVFZexr4BrrkSa+Guz0zmnOZ9NwsT+D5CQi96X?=
+ =?us-ascii?Q?3PAgbF3oisWx8EqCZqjBu80Ah9Yz+U1qyx6GHSR5MZKvJebi6KFTfEYPueKG?=
+ =?us-ascii?Q?TkRBaBn2BV+vv7NsSlSd8BmXiWK3ROxkZ2Pg0ygN2IVpsPWSFdDl/nJN0nyd?=
+ =?us-ascii?Q?AlEh3T3hYg=3D=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce4e6d90-12f0-4818-ebc6-08da21ac752a
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 02:29:41.3934
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 62Yzxnnfr+NW2/uiQR/ExsC8a1RBhYxmtaE/E0GL2qiRyrYu+3Jy2MAqeulIfOmfeJK/UJVDlZgqqYFN8mO1aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB5198
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-15 at 15:01 -0700, Kuppuswamy Sathyanarayanan wrote:
-> In TDX guest, attestation is mainly used to verify the trustworthiness
-> of a TD to the 3rd party key servers. 
+On Thu, Apr 14, 2022 at 05:00:04PM +0800, Hsin-Yi Wang wrote:
+> Speaker may share I2S with DP and .get_eld callback will be called when
+> speaker is playing. When HDMI wans't connected, the connector will be
+> null. Instead of return an error, fill in empty ELD.
 > 
-
-"key servers" is only a use case of using the attestation service. This sentence
-looks not accurate.
-
-> First step in attestation process
-> is to get the TDREPORT data and the generated data is further used in
-> subsequent steps of the attestation process. TDREPORT data contains
-> details like TDX module version information, measurement of the TD,
-> along with a TD-specified nonce
-> 
-> Add a wrapper function (tdx_mcall_tdreport()) to get the TDREPORT from
-> the TDX Module.
-> 
-> More details about the TDREPORT TDCALL can be found in TDX Guest-Host
-> Communication Interface (GHCI) for Intel TDX 1.5, section titled
-> "TDCALL [MR.REPORT]".
-
-Attestation is a must for TDX architecture, so The TDCALL[MR.REPORT] is
-available in TDX 1.0.  I don't think we should use TDX 1.5 here.  And this
-TDCALL is defined in the TDX module spec 1.0.  You can find it in the public TDX
-module 1.0 spec (22.3.3. TDG.MR.REPORT Leaf):
-
-https://www.intel.com/content/dam/develop/external/us/en/documents/tdx-module-1.0-public-spec-v0.931.pdf
-
-> 
-> Steps involved in attestation process can be found in TDX Guest-Host
-> Communication Interface (GHCI) for Intel TDX 1.5, section titled
-> "TD attestation"
-
-It's strange we need to use GHCI for TDX 1.5 to get some idea about the
-attestation process.  Looking at the GHCI 1.0 spec, it seems it already has one
-section to talk about attestation process (5.4 TD attestation).
-
-> 
-> This API will be mainly used by the attestation driver. Attestation
-> driver support will be added by upcoming patches.
-> 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Reviewed-by: Andi Kleen <ak@linux.intel.com>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 > ---
->  arch/x86/coco/tdx/tdx.c    | 46 ++++++++++++++++++++++++++++++++++++++
->  arch/x86/include/asm/tdx.h |  2 ++
->  2 files changed, 48 insertions(+)
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 03deb4d6920d..3e409b618d3f 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -11,10 +11,12 @@
->  #include <asm/insn.h>
->  #include <asm/insn-eval.h>
->  #include <asm/pgtable.h>
-> +#include <asm/io.h>
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index 6516f9570b86..f2bc30c98c77 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -1932,14 +1932,14 @@ static int anx7625_audio_get_eld(struct device *dev, void *data,
+>  	struct anx7625_data *ctx = dev_get_drvdata(dev);
 >  
->  /* TDX module Call Leaf IDs */
->  #define TDX_GET_INFO			1
->  #define TDX_GET_VEINFO			3
-> +#define TDX_GET_REPORT			4
->  #define TDX_ACCEPT_PAGE			6
+>  	if (!ctx->connector) {
+> -		dev_err(dev, "connector not initial\n");
+> -		return -EINVAL;
+> +		/* Pass en empty ELD if connector not available */
+> +		memset(buf, 0, len);
+> +	} else {
+> +		dev_dbg(dev, "audio copy eld\n");
+> +		memcpy(buf, ctx->connector->eld,
+> +		       min(sizeof(ctx->connector->eld), len));
+>  	}
 >  
->  /* TDX hypercall Leaf IDs */
-> @@ -34,6 +36,10 @@
->  #define VE_GET_PORT_NUM(e)	((e) >> 16)
->  #define VE_IS_IO_STRING(e)	((e) & BIT(4))
->  
-> +/* TDX Module call error codes */
-> +#define TDCALL_RETURN_CODE_MASK		0xffffffff00000000
-> +#define TDCALL_RETURN_CODE(a)		((a) & TDCALL_RETURN_CODE_MASK)
-> +
->  /*
->   * Wrapper for standard use of __tdx_hypercall with no output aside from
->   * return code.
-> @@ -98,6 +104,46 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
->  		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
+> -	dev_dbg(dev, "audio copy eld\n");
+> -	memcpy(buf, ctx->connector->eld,
+> -	       min(sizeof(ctx->connector->eld), len));
+> -
+>  	return 0;
+Hi Hsin-Yi, it's OK for me.
+Reviewed-by: Xin Ji <xji@analogixsemi.com>
+
+Thanks,
+Xin
 >  }
 >  
-> +/*
-> + * tdx_mcall_tdreport() - Generate TDREPORT_STRUCT using TDCALL.
-> + *
-> + * @data        : Address of 1024B aligned data to store
-> + *                TDREPORT_STRUCT.
-> + * @reportdata  : Address of 64B aligned report data
-> + *
-> + * return 0 on success or failure error number.
-> + */
-> +long tdx_mcall_tdreport(void *data, void *reportdata)
-> +{
-> +	u64 ret;
-> +
-> +	/*
-> +	 * Check for a valid TDX guest to ensure this API is only
-> +	 * used by TDX guest platform. Also make sure "data" and
-> +	 * "reportdata" pointers are valid.
-> +	 */
-> +	if (!data || !reportdata || !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-> +		return -EINVAL;
-
-Do we need to manually check the alignment since it is mentioned in the comment
-of this function?
-
-> +
-> +	/*
-> +	 * Pass the physical address of user generated reportdata
-> +	 * and the physical address of out pointer to store the
-> +	 * TDREPORT data to the TDX module to generate the
-> +	 * TD report. Generated data contains measurements/configuration
-> +	 * data of the TD guest. More info about ABI can be found in TDX
-> +	 * Guest-Host-Communication Interface (GHCI), sec titled
-> +	 * "TDG.MR.REPORT".
-
-If you agree with my above comments, then this comment should be updated too: 
-TDG.MR.REPORT is defined in TDX module 1.0 spec.
-
-> +	 */
-> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(data),
-> +				virt_to_phys(reportdata), 0, 0, NULL);
-> +
-> +	if (ret)
-> +		return TDCALL_RETURN_CODE(ret);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_mcall_tdreport);
-> +
->  static u64 get_cc_mask(void)
->  {
->  	struct tdx_module_output out;
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 020c81a7c729..a151f69dd6ef 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -67,6 +67,8 @@ void tdx_safe_halt(void);
->  
->  bool tdx_early_handle_ve(struct pt_regs *regs);
->  
-> +long tdx_mcall_tdreport(void *data, void *reportdata);
-> +
->  #else
->  
->  static inline void tdx_early_init(void) { };
-
+> -- 
+> 2.35.1.1178.g4f1659d476-goog

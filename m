@@ -2,123 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4508F5068DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8AA5068E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350476AbiDSKkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 06:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
+        id S1350688AbiDSKk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 06:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238239AbiDSKkB (ORCPT
+        with ESMTP id S238239AbiDSKk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:40:01 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91372B19F;
-        Tue, 19 Apr 2022 03:37:15 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23J9L0pq028174;
-        Tue, 19 Apr 2022 10:37:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=yC4FBruC+6vmK802CppACHaf5lBfmmagRdOytRhheOQ=;
- b=kX5fFS9LM6gl99AwAiFuCnczuIWq16fpxRKaOlSjfp+NI/mhhYZZ+ebFx5NwAxrnHBnn
- 5xwnj2E/iHCV8p5jmDYPqMjf2dZesBHRuc1IXe7bZynVAWjFvNbZzP1IV2QtA2dJmhDR
- qHpceCNU00/OO+R/tYjTdnZQYRh0SUyCKMTzWG1APo6vOxY06myW5xipjlewnCj+PNUU
- D/5hkoCDKDQjmREUO6Z5LwnRpAOBNf62ZcbxWBBi8EN4rUtJe7QljhJ1KHJfcDOEv8Ql
- ujf46z4vnLM81B5rugkyX6n5XQRztOWknBOUyXppsE7GJm1+U28kzw/nvWZ1sAp2hK53 SQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg79x3u1s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 10:37:05 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23JAb4FI026940;
-        Tue, 19 Apr 2022 10:37:04 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg79x3u13-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 10:37:04 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23JAb2Ei032472;
-        Tue, 19 Apr 2022 10:37:02 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ffne8m6g9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 10:37:02 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23JAb0tA33423738
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Apr 2022 10:37:00 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F10EDA4084;
-        Tue, 19 Apr 2022 10:36:59 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 80DC1A4085;
-        Tue, 19 Apr 2022 10:36:59 +0000 (GMT)
-Received: from [9.171.65.20] (unknown [9.171.65.20])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 19 Apr 2022 10:36:59 +0000 (GMT)
-Message-ID: <ed643c3d-6ad0-1b3c-1fe3-9157e7aa5859@linux.ibm.com>
-Date:   Tue, 19 Apr 2022 12:37:12 +0200
+        Tue, 19 Apr 2022 06:40:57 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1653F2B1AA
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 03:38:15 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id p8so8456223pfh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 03:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sslab.ics.keio.ac.jp; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v4bWODHAE/RCs4ytYs4rVZozOzTNQQhYomCKGYtkHnA=;
+        b=W8Wh+xVGh01Uc6uix5XTB5eMRgqUJ+4MkQcIETafwAEScVJukF0ttf7X4iq06hKoaf
+         cIPu+UaoGXFpd3kAAVt7vrZLTGo/1qMBHYSyyKQ6s6zXuUTVdPZ9+vrwmEaKjWJmwAmZ
+         XkR7r2pFM/dpnZ6mhMrqOs7cEAyVItIpifS5M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v4bWODHAE/RCs4ytYs4rVZozOzTNQQhYomCKGYtkHnA=;
+        b=j+HJO5yTc4PLWwAwZjKSfwy7m9VqfSAaMczdBcoRdTFhPsFl5dIjKQ1SF+6BMYV8uz
+         sGqWLE/Cme/oNgiTX4nVJ+dLbcILX2W9jYN/kP8eUNtPnDmz167+lqa/kz20UdBMcY5n
+         O/G6g/N6hA+ai83BLyJoL4s1GWs21edcixzmGBfg64hiKkd1jkTFKGZCcu30C7Q/latR
+         UB3RXJnc34kTQ1GtA7CjPKO8yUtBlsIQ+Rh3hbCUiKKlRa74l/qbholKN4Ckl7dbMEYM
+         ccVWF553D7cDnl11WsITG03Zx2B79sriRHvs91CQR7P6LJrvuD7pL3mIsXKH9hbuKoJA
+         b2DA==
+X-Gm-Message-State: AOAM530SQwWGRBGbN5YxlflXLIfjNBcLel4MBO/81i/jhEpVgLOlKfOh
+        InRbgv2xlkTmEPBKB5wq3HBFbA==
+X-Google-Smtp-Source: ABdhPJwByVB/GAZirrV7LzYHS9EcpAwq2tKDU98/ISXTP+74UwHctRW7VQ/dDonrNaJ1o+CdOq8ahA==
+X-Received: by 2002:a63:6a85:0:b0:398:9e2b:afd6 with SMTP id f127-20020a636a85000000b003989e2bafd6mr14279075pgc.582.1650364693955;
+        Tue, 19 Apr 2022 03:38:13 -0700 (PDT)
+Received: from saltlake.i.sslab.ics.keio.ac.jp (sslab-relay.ics.keio.ac.jp. [131.113.126.173])
+        by smtp.gmail.com with ESMTPSA id z15-20020a056a001d8f00b004fda37855ddsm15085869pfw.168.2022.04.19.03.38.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 03:38:13 -0700 (PDT)
+From:   Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+Cc:     keitasuzuki.park@sslab.ics.keio.ac.jp,
+        Evan Quan <evan.quan@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/pm: fix double free in si_parse_power_table()
+Date:   Tue, 19 Apr 2022 10:37:19 +0000
+Message-Id: <20220419103721.4080045-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] net/smc: sync err info when TCP connection is refused
-Content-Language: en-US
-To:     Tony Lu <tonylu@linux.alibaba.com>, yacanliu@163.com
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liuyacan <liuyacan@corp.netease.com>
-References: <20220417123307.1094747-1-yacanliu@163.com>
- <Yl6Nnvnrvqv3ofES@TonyMac-Alibaba>
-From:   Karsten Graul <kgraul@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <Yl6Nnvnrvqv3ofES@TonyMac-Alibaba>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9GZAdY8RLP3kRzLJHUpw4rQi3LJ89Rd-
-X-Proofpoint-ORIG-GUID: tTdBiRFx4PYqPSNgyd4cloEcdp8i9IBd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_04,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
- priorityscore=1501 bulkscore=0 mlxlogscore=999 spamscore=0 phishscore=0
- adultscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204190058
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2022 12:23, Tony Lu wrote:
-> On Sun, Apr 17, 2022 at 08:33:07PM +0800, yacanliu@163.com wrote:
->> From: liuyacan <liuyacan@corp.netease.com>
->>
->> In the current implementation, when TCP initiates a connection
->> to an unavailable [ip,port], ECONNREFUSED will be stored in the
->> TCP socket, but SMC will not. However, some apps (like curl) use
->> getsockopt(,,SO_ERROR,,) to get the error information, which makes
->> them miss the error message and behave strangely.
->>
->> Signed-off-by: liuyacan <liuyacan@corp.netease.com>
-> 
-> This fix works for me. I have tested it with curl for unavailable
-> address.
-> 
-> This patch missed net or net-next tag, I think net is preferred.
-> 
-> Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
-> 
-> Thank you,
-> Tony Lu
+In function si_parse_power_table(), array adev->pm.dpm.ps and its member
+is allocated. If the allocation of each member fails, the array itself
+is freed and returned with an error code. However, the array is later
+freed again in si_dpm_fini() function which is called when the function
+returns an error.
 
-Thank you both for the fix and the test!
+This leads to potential double free of the array adev->pm.dpm.ps, as
+well as leak of its array members, since the members are not freed in
+the allocation function and the array is not nulled when freed.
+In addition adev->pm.dpm.num_ps, which keeps track of the allocated
+array member, is not updated until the member allocation is
+successfully finished, this could also lead to either use after free,
+or uninitialized variable access in si_dpm_fini().
 
-Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+Fix this by postponing the free of the array until si_dpm_fini() and
+increment adev->pm.dpm.num_ps everytime the array member is allocated.
+
+Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+---
+ drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+index caae54487f9c..079888229485 100644
+--- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
++++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+@@ -7331,17 +7331,15 @@ static int si_parse_power_table(struct amdgpu_device *adev)
+ 	if (!adev->pm.dpm.ps)
+ 		return -ENOMEM;
+ 	power_state_offset = (u8 *)state_array->states;
+-	for (i = 0; i < state_array->ucNumEntries; i++) {
++	for (adev->pm.dpm.num_ps = 0, i = 0; i < state_array->ucNumEntries; i++) {
+ 		u8 *idx;
+ 		power_state = (union pplib_power_state *)power_state_offset;
+ 		non_clock_array_index = power_state->v2.nonClockInfoIndex;
+ 		non_clock_info = (struct _ATOM_PPLIB_NONCLOCK_INFO *)
+ 			&non_clock_info_array->nonClockInfo[non_clock_array_index];
+ 		ps = kzalloc(sizeof(struct  si_ps), GFP_KERNEL);
+-		if (ps == NULL) {
+-			kfree(adev->pm.dpm.ps);
++		if (ps == NULL)
+ 			return -ENOMEM;
+-		}
+ 		adev->pm.dpm.ps[i].ps_priv = ps;
+ 		si_parse_pplib_non_clock_info(adev, &adev->pm.dpm.ps[i],
+ 					      non_clock_info,
+@@ -7363,8 +7361,8 @@ static int si_parse_power_table(struct amdgpu_device *adev)
+ 			k++;
+ 		}
+ 		power_state_offset += 2 + power_state->v2.ucNumDPMLevels;
++		adev->pm.dpm.num_ps++;
+ 	}
+-	adev->pm.dpm.num_ps = state_array->ucNumEntries;
+ 
+ 	/* fill in the vce power states */
+ 	for (i = 0; i < adev->pm.dpm.num_of_vce_states; i++) {
+-- 
+2.25.1
+

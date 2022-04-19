@@ -2,141 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B975064B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD675064C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348949AbiDSGoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 02:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
+        id S1348963AbiDSGqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 02:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236930AbiDSGoo (ORCPT
+        with ESMTP id S1348997AbiDSGqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 02:44:44 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2619D2BB18
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:42:00 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id g20so19965538edw.6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:42:00 -0700 (PDT)
+        Tue, 19 Apr 2022 02:46:02 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB12131343;
+        Mon, 18 Apr 2022 23:43:20 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id s4so12844773qkh.0;
+        Mon, 18 Apr 2022 23:43:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=crADoU7TuQHIvNUCkN3bftpXZTQCbbgAEyPuKyFnosA=;
-        b=kAxwmtbFjL2vIdyOc0SJTzQ1jRxFAwAUqZgQ5ZkF1NnHm/Blxgwz0k4NqRpDIYYQ78
-         xhSPQgOzkY9gQf99yy3p41mmtlzDPDmiYI52EsDiF+zGA+55HjVgUpusGGDgep56zcNq
-         bUtdQi87v1F95EInqQD+8T4uTWUmj2yzlZu6IWdrpAQCptuo+9OTisBgR0v3WQy/VraS
-         RrxbA/RZxjNO1u8ZrFuYuENtRVtEjLz3ninsRhxtlVNMfTB7+tnBfzxAUWAJvTHO+k7a
-         QPNNa95lLWCrzTe18SxlB0kCZGLXQ4g87upZCMEyWRVcJr0ZmDYEoSVnsq9HjMb7VAZN
-         ZxpA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lCEwVctplujUVn3aWOAAg060aVQwyGc3JDb5YqPzLpg=;
+        b=Rzglu8dkVnAtjM3wsCn4uI2jtekslQMjTbEJx6z7NujF2SDSfpEQ3ciQusg6iNqU59
+         8zoSmSPXvCWtQJltyu6jFPICGvVHe9dAOQZQ81REw1ngzRrpLog+mysa/uQvNgztaZdb
+         aaNZwpRefsRzWzDV6afIn6EyiEhTl61d4iaJWVr17o3W/CRdTUUtFxkcAtiwJBvAjIn4
+         3ZRe5nFNhRmKXg3MEIfjHwj+ty0BcTf7mo81kH/xuO1hixP2RuCwGQgVihc+6utd/iOv
+         /smycl11fjB9zATTnVkEGUmduXr3pgBxuOgM52aSL6M8H8RcoTCn7i3OaVCkUE3dLAER
+         WM4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=crADoU7TuQHIvNUCkN3bftpXZTQCbbgAEyPuKyFnosA=;
-        b=xBA8aSUnkiGOY+Cu6Y5dk6SlcqyK/OvsknNRHPevP5Ot3aclcpwbb7e491omEgIvAz
-         u8uQHi+j2AuX7b/ER0sLlgnZ/02maRNgtJix6mvNiABhDdQ/37E/pWntUYNUuU+CDwVN
-         HYs+Qi5XCX66F61n/7VPS9DX4ZLPHk3LyK3NBM4YbCPDOjb1uOuOHVv1tg4e6sIJ8ZSY
-         neZlwUu0yfW//x9xZYA6NHjlW6MN/qMaLZ8i5J/TGHq6dvmw2VvukODlPqtzWODcXkci
-         +vNMNc+TpkYQLFgEzSCQ3lucctQStFJiU72BaNPKqTgoKCed6KEeabkjBbVO3jgNk4bF
-         3HCQ==
-X-Gm-Message-State: AOAM533qrFy3us8AkLPfOncCysenCiOMmxBfNPGw/606g5MR+5sIg+kK
-        GMchU/bIHkoys+VW7crD38010Q==
-X-Google-Smtp-Source: ABdhPJwzHBRz4mz5yTbCzi/y8+W/yiUPkQ8vl23P9aHgnApQ8eiW8ymYJ0xHpdkdGZF7fZE8OTCANQ==
-X-Received: by 2002:a05:6402:909:b0:415:cdbf:4748 with SMTP id g9-20020a056402090900b00415cdbf4748mr15663935edz.395.1650350518753;
-        Mon, 18 Apr 2022 23:41:58 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q14-20020a17090622ce00b006e898c912e5sm5303190eja.217.2022.04.18.23.41.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 23:41:58 -0700 (PDT)
-Message-ID: <1e9bf9d6-cd5a-6a47-f0d7-5a4bc6e6d2f0@linaro.org>
-Date:   Tue, 19 Apr 2022 08:41:56 +0200
+        bh=lCEwVctplujUVn3aWOAAg060aVQwyGc3JDb5YqPzLpg=;
+        b=YrQ0rL5jWSN6gBn1/rvKL1G8d+39vl8z0u+7ZDTUa8hNmk4WyzHiX6VHSPBiwz9f7s
+         E7fiLJovZOI7KpyxSUdRLvDRLL5PW/As98HLKeIxPgLBfGYVPAs2kIcaMY6jbkMexecC
+         Rh7kf9eTPZ3qaxRT+xzqoRnec36EUuoYoxkgS1r1nWSnVF7swnhj7sh5OXQ1A8jqk7EV
+         ODz044pQcWb+NqfQl9pQwmrfrSXwBubp5X8fmRicksH02i3WfS3GoGzhY8Eta5khlY0k
+         aywVcVQvH66j8uW/8TAsGl3orRYuJqrqPYSrPp3j0zUwN+f8RAuEtxHrsgmqNyA8/B5D
+         5U3Q==
+X-Gm-Message-State: AOAM532dBcXhj/x274AAUaFYSDe2ZDPd3AGDnbCgpnpq/e5Ieq//ctof
+        vVo+/SNwDol+76eLhVWaxo/Qavzwb0U=
+X-Google-Smtp-Source: ABdhPJyIqAjVWapfZuf+9IuFP0bQM4o+OeOppDY7/+9kKdQpTnNAiKVXqMjz6QBSKvLb9KBH0M5t3Q==
+X-Received: by 2002:a05:620a:2456:b0:69e:9fa0:6479 with SMTP id h22-20020a05620a245600b0069e9fa06479mr4744407qkn.414.1650350599703;
+        Mon, 18 Apr 2022 23:43:19 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 2-20020ac84e82000000b002f1f95ce5fbsm4559081qtp.3.2022.04.18.23.43.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 23:43:19 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] Input: Remove unneeded variable
+Date:   Tue, 19 Apr 2022 06:42:55 +0000
+Message-Id: <20220419064255.2563333-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/5] dt-bindings: rtc: Rework compatible strings and add
- #clock-cells
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     list@opendingux.net, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220418184933.13172-1-paul@crapouillou.net>
- <20220418184933.13172-2-paul@crapouillou.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220418184933.13172-2-paul@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2022 20:49, Paul Cercueil wrote:
-> The RTC in the JZ4770 is compatible with the JZ4760, but has an extra
-> register that permits to configure the behaviour of the CLK32K pin. The
-> same goes for the RTC in the JZ4780.
-> 
-> Therefore, the ingenic,jz4770-rtc and ingenic,jz4780-rtc strings do not
-> fall back anymore to ingenic,jz4760-rtc. The ingenic,jz4780-rtc string
-> now falls back to the ingenic,jz4770-rtc string.
-> 
-> Additionally, since the RTCs in the JZ4770 and JZ4780 support outputting
-> the input oscillator's clock to the CLK32K pin, the RTC node is now also
-> a clock provider on these SoCs, so a #clock-cells property is added.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> ---
->  Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> index b235b2441997..57393c3ac724 100644
-> --- a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> @@ -18,14 +18,14 @@ properties:
->        - enum:
->            - ingenic,jz4740-rtc
->            - ingenic,jz4760-rtc
-> +          - ingenic,jz4770-rtc
->        - items:
->            - const: ingenic,jz4725b-rtc
->            - const: ingenic,jz4740-rtc
->        - items:
->            - enum:
-> -              - ingenic,jz4770-rtc
->                - ingenic,jz4780-rtc
-> -          - const: ingenic,jz4760-rtc
-> +          - const: ingenic,jz4770-rtc
->  
->    reg:
->      maxItems: 1
-> @@ -39,6 +39,9 @@ properties:
->    clock-names:
->      const: rtc
->  
-> +  "#clock-cells":
-> +    const: 0
-> +
->    system-power-controller:
->      description: |
->        Indicates that the RTC is responsible for powering OFF
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Inside allOf:if:then:, please add a constraint which compatible cannot
-have clock-cells (or maybe better which can?).
+Remove unneeded variable used to store return value.
 
-Some modification of:
-https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/media/renesas,vsp1.yaml#L53
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ drivers/input/input.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/input/input.c b/drivers/input/input.c
+index e5a668ce884d..1365c9dfb5f2 100644
+--- a/drivers/input/input.c
++++ b/drivers/input/input.c
+@@ -1793,8 +1793,6 @@ EXPORT_SYMBOL(input_reset_device);
+ 
+ static int input_inhibit_device(struct input_dev *dev)
+ {
+-	int ret = 0;
+-
+ 	mutex_lock(&dev->mutex);
+ 
+ 	if (dev->inhibited)
+@@ -1816,7 +1814,7 @@ static int input_inhibit_device(struct input_dev *dev)
+ 
+ out:
+ 	mutex_unlock(&dev->mutex);
+-	return ret;
++	return 0;
+ }
+ 
+ static int input_uninhibit_device(struct input_dev *dev)
+-- 
+2.25.1
+

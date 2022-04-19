@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECF75071D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C667F5071D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353075AbiDSPcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
+        id S1353829AbiDSPch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350872AbiDSPc0 (ORCPT
+        with ESMTP id S1353834AbiDSPc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:32:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EAD13F91;
-        Tue, 19 Apr 2022 08:29:43 -0700 (PDT)
+        Tue, 19 Apr 2022 11:32:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEF513F6E
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:29:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64C09616C2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4964561656
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:29:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC0EC385AC;
         Tue, 19 Apr 2022 15:29:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91631C385A5;
-        Tue, 19 Apr 2022 15:29:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650382182;
-        bh=ko3RAF/kN6O+ylXY84hZCl0PJ8FXOQQ2/ef3C7UkP24=;
+        s=k20201202; t=1650382184;
+        bh=jeuAQBpU0IHUM+HhJwHhOHne7mMnnHWM5rRI0BeHijg=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=fIi23HToxUsC8+EqGrh1ntRjKbOsovdIeAVT320F/X8DbBivQExY7i5K/tQXsKRMG
-         lNA4Up3CP4VwyfdKrm7zudTxiQrOdz+Wi5s78Nk9FTsgfMj+jVJnz3WpyJeETZzrqZ
-         X8RklYMLoSxkWCw8/9j4SAVgVby/+hQOQmf+85KFeT3I64hSw8oysBhXYTdp5NosNA
-         hoUZQyDfUVV0ZCtpI7B0vcchn00mus8ifQH5jI9xiSeH+pfmjnhX1svIx6IbQB1Tx3
-         EBUzf9TglxFD+uNH5tGk+hXRt7eMi++LN1AFLyvrByRKNqHHPZd1HHbEP1qMYmg18l
-         wNmfpIsr8Fz4w==
+        b=cyR57D2ICWHJ/NMVxwPTme78WwAyiGmCp6E1vMcQLNezlDTTMo4Qi+NCx3ByGkdHm
+         8onsLupf7HSN5GlA9sxsO6ltkXc3CaxajXtN5b14mzhIw7DmFK6FTPrMagLY/8eRPX
+         OLxy69BEW/PNM3pwHW0wykCV/J3zdmLZiGFnKCXDtCcSvqVtc5e33UWHpQUGHywpL0
+         sw1B/5Th0+O9UtAkJJqIbAoKSRcFLmYVyls53zQ3RNrZC5yB7/Ix/XQ2ZvCwCkHk2Y
+         j1LcAD3HCj+Yhg01CgPadYViGxZXjNdqDXEpiAPh+zaIZAczcEGXd3n9Wx113zbBya
+         b0IbYQUGcu1ZA==
 From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, swboyd@chromium.org, tiwai@suse.com,
-        quic_srivasam@quicinc.com, agross@kernel.org,
-        srinivas.kandagatla@linaro.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, quic_rohkumar@quicinc.com,
-        linux-kernel@vger.kernel.org, judyhsiao@chromium.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        quic_plai@quicinc.com, devicetree@vger.kernel.org, perex@perex.cz
-Cc:     quic_potturu@quicinc.com
-In-Reply-To: <1649844596-5264-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1649844596-5264-1-git-send-email-quic_srivasam@quicinc.com>
-Subject: Re: [PATCH] ASoC: qcom: lpass-platform: Update memremap flag to MEMREMAP_WC
-Message-Id: <165038217929.995461.3857305274282871060.b4-ty@kernel.org>
-Date:   Tue, 19 Apr 2022 16:29:39 +0100
+To:     cgel.zte@gmail.com, lgirdwood@gmail.com
+Cc:     zealci@zte.com.cn, patches@opensource.cirrus.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        chi.minghao@zte.com.cn
+In-Reply-To: <20220418110259.2559144-1-chi.minghao@zte.com.cn>
+References: <20220418110259.2559144-1-chi.minghao@zte.com.cn>
+Subject: Re: [PATCH] ASoC: codecs: wm8962: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Message-Id: <165038218304.995461.12975238868778224251.b4-ty@kernel.org>
+Date:   Tue, 19 Apr 2022 16:29:43 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,9 +55,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 15:39:56 +0530, Srinivasa Rao Mandadapu wrote:
-> Update memremap flag from MEMREMAP_WT to MEMREMAP_WC for better
-> performance.
+On Mon, 18 Apr 2022 11:02:59 +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Using pm_runtime_resume_and_get is more appropriate
+> for simplifing code
 > 
 > 
 
@@ -71,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: qcom: lpass-platform: Update memremap flag to MEMREMAP_WC
-      commit: 0a8ff26dea6e9aeb11db3f1af9fc1848b7042661
+[1/1] ASoC: codecs: wm8962: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+      commit: e65f2fce08fc708e65b544131999bdd933d09164
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

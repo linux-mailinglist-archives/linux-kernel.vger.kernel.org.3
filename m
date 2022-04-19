@@ -2,149 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001E7506C5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83529506C7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352279AbiDSM0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
+        id S242716AbiDSMei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352324AbiDSM0f (ORCPT
+        with ESMTP id S231693AbiDSMeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:26:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 743E436B6F
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:23:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 222CB1063;
-        Tue, 19 Apr 2022 05:23:45 -0700 (PDT)
-Received: from [10.0.0.18] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9D1E3F766;
-        Tue, 19 Apr 2022 05:23:43 -0700 (PDT)
-Message-ID: <0d354ce1-9b43-feae-1065-5d8a78c56ccc@arm.com>
-Date:   Tue, 19 Apr 2022 13:23:27 +0100
+        Tue, 19 Apr 2022 08:34:37 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7008205C6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:31:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650371514; x=1681907514;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RSQprlSvtYQNGWJUSLaKGnQD7G/CUuysy1HG8q/aEjk=;
+  b=fbojuR9nLGTavbWqBS4zYZAFmhbmVv2M1JXS9MA87U/iLtAYrOHRJcSQ
+   VyCMxpZQjIS6ggUj+WNw9ntugDL0wPhOJH/J0dWg71xl8jn196AkgsW2/
+   StiVIUwXmbovEWQpc/DnVc8UbAfRJjUvxtLjfZ1s80zKslqvCFuC0EdkX
+   nZgUY7GrMTuo8R5KjphhUCHE8p72/uA55+s8HuD2YfDSATSVEwTV6/nBF
+   QADJPkHPajLF5hVw+GqCu71UGsRQGDe0jc4FvtpgjtshmPJcPqXFs9mEp
+   0hVQfw2OwFwdYn5Nmm6ZpgqWvhhgNHAL9jtDu//+YbuxKFeXjfO+TgbNh
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263513463"
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="263513463"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 05:31:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="510120830"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 19 Apr 2022 05:31:52 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngn1L-0005lO-JI;
+        Tue, 19 Apr 2022 12:31:51 +0000
+Date:   Tue, 19 Apr 2022 20:31:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chris Redpath <chris.redpath@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Patrick Bellasi <patrick.bellasi@arm.com>
+Subject: [jsarha:topic/cros-sof-v4.14-rebase 1455/9999]
+ kernel/sched/fair.c:6738:1: sparse: sparse: symbol '__pcpu_scope_eenv_cache'
+ was not declared. Should it be static?
+Message-ID: <202204192047.g1X4yydR-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH v4 2/7] sched/fair: Decay task PELT values during wakeup
- migration
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com, qperret@google.com
-References: <20220412134220.1588482-1-vincent.donnefort@arm.com>
- <20220412134220.1588482-3-vincent.donnefort@arm.com>
- <CAKfTPtAZMwgKK8m5vdEjsXRJ73YWrZePoCtCu5KKBELtQMp3DA@mail.gmail.com>
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-In-Reply-To: <CAKfTPtAZMwgKK8m5vdEjsXRJ73YWrZePoCtCu5KKBELtQMp3DA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/jsarha/linux topic/cros-sof-v4.14-rebase
+head:   18a233f3f676a98dde00947535d99ab1a54da340
+commit: 0d2a194c54348734338a8be17f0860be327eb00d [1455/9999] ANDROID: sched/fair: re-factor energy_diff to use a single (extensible) energy_env
+config: i386-randconfig-s002-20220418 (https://download.01.org/0day-ci/archive/20220419/202204192047.g1X4yydR-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/jsarha/linux/commit/0d2a194c54348734338a8be17f0860be327eb00d
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/cros-sof-v4.14-rebase
+        git checkout 0d2a194c54348734338a8be17f0860be327eb00d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash kernel/sched/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-On 19/04/2022 11:08, Vincent Guittot wrote:
-> On Tue, 12 Apr 2022 at 15:42, Vincent Donnefort
-> <vincent.donnefort@arm.com> wrote:
->>
->> Before being migrated to a new CPU, a task sees its PELT values
->> synchronized with rq last_update_time. Once done, that same task will also
->> have its sched_avg last_update_time reset. This means the time between
->> the migration and the last clock update (B) will not be accounted for in
->> util_avg and a discontinuity will appear. This issue is amplified by the
->> PELT clock scaling. If the clock hasn't been updated while the CPU is
->> idle, clock_pelt will not be aligned with clock_task and that time (A)
->> will be also lost.
->>
->>     ---------|----- A -----|-----------|------- B -----|>
->>          clock_pelt   clock_task     clock            now
->>
->> This is especially problematic for asymmetric CPU capacity systems which
->> need stable util_avg signals for task placement and energy estimation.
->>
->> Ideally, this problem would be solved by updating the runqueue clocks
->> before the migration. But that would require taking the runqueue lock
->> which is quite expensive [1]. Instead estimate the missing time and update
->> the task util_avg with that value:
->>
->>    A + B = clock_task - clock_pelt + sched_clock_cpu() - clock
->>
->> Neither clock_task, clock_pelt nor clock can be accessed without the
->> runqueue lock. The new cfs_rq last_update_lag is therefore created and
->> contains those three values when the last_update_time value for that very
->> same cfs_rq is updated.
->>
->>    last_update_lag = clock - clock_task + clock_pelt
->>
->> And we can then write the missing time as follow:
->>
->>    A + B = sched_clock_cpu() - last_update_lag
->>
->> The B. part of the missing time is however an estimation that doesn't take
->> into account IRQ and Paravirt time.
->>
->> Now we have an estimation for A + B, we can create an estimator for the
->> PELT value at the time of the migration. We need for this purpose to
->> inject last_update_time which is a combination of both clock_pelt and
->> lost_idle_time. The latter is a time value which is completely lost from a
->> PELT point of view and must be ignored. And finally, we can write:
->>
->>    now = last_update_time + A + B
->>        = last_update_time + sched_clock_cpu() - last_update_lag
->>
->> This estimation has a cost, mostly due to sched_clock_cpu(). Limit the
->> usage to the case where the source CPU is idle as we know this is when the
->> clock is having the biggest risk of being outdated.
->>
->> [1] https://lore.kernel.org/all/20190709115759.10451-1-chris.redpath@arm.com/
->>
->> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
->>
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index 5dd38c9df0cc..e234d015657f 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -3694,6 +3694,57 @@ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum
->>
->>   #endif /* CONFIG_FAIR_GROUP_SCHED */
->>
->> +#ifdef CONFIG_NO_HZ_COMMON
->> +static inline void update_cfs_rq_lag(struct cfs_rq *cfs_rq)
->> +{
->> +       struct rq *rq = rq_of(cfs_rq);
->> +
->> +       u64_u32_store(cfs_rq->last_update_lag,
->> +#ifdef CONFIG_CFS_BANDWIDTH
->> +                     /* Timer stopped by throttling */
->> +                     unlikely(cfs_rq->throttle_count) ? U64_MAX :
->> +#endif
->> +                     rq->clock - rq->clock_task + rq->clock_pelt);
-> 
-> I'm worried that we will call this for each and every
-> update_cfs_rq_load_avg() whereas the content will be used only when
-> idle and not throttled. Can't we use these conditions to save values
-> only when needed and limit the number of useless updates ?
+sparse warnings: (new ones prefixed by >>)
+   kernel/sched/fair.c: note: in included file:
+   kernel/sched/sched.h:1106:47: sparse: sparse: duplicate const
+   kernel/sched/fair.c:56:14: sparse: sparse: symbol 'normalized_sysctl_sched_latency' was not declared. Should it be static?
+   kernel/sched/fair.c:86:14: sparse: sparse: symbol 'normalized_sysctl_sched_min_granularity' was not declared. Should it be static?
+   kernel/sched/fair.c:109:14: sparse: sparse: symbol 'normalized_sysctl_sched_wakeup_granularity' was not declared. Should it be static?
+   kernel/sched/fair.c:143:14: sparse: sparse: symbol 'capacity_margin' was not declared. Should it be static?
+   kernel/sched/fair.c:3547:6: sparse: sparse: symbol 'sync_entity_load_avg' was not declared. Should it be static?
+   kernel/sched/fair.c:3560:6: sparse: sparse: symbol 'remove_entity_load_avg' was not declared. Should it be static?
+   kernel/sched/fair.c:9606:22: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:9606:22: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:9606:22: sparse:    struct sched_domain *
+   kernel/sched/fair.c:9618:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:9618:9: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:9618:9: sparse:    struct sched_domain *
+   kernel/sched/fair.c:5108:1: sparse: sparse: symbol '__pcpu_scope_load_balance_mask' was not declared. Should it be static?
+   kernel/sched/fair.c:5109:1: sparse: sparse: symbol '__pcpu_scope_select_idle_mask' was not declared. Should it be static?
+   kernel/sched/fair.c:5495:15: sparse: sparse: symbol 'capacity_curr_of' was not declared. Should it be static?
+   kernel/sched/fair.c:5812:22: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:5812:22: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:5812:22: sparse:    struct sched_domain *
+   kernel/sched/fair.c:5816:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:5816:17: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:5816:17: sparse:    struct sched_domain *
+   kernel/sched/fair.c:6133:1: sparse: sparse: symbol 'boosted_cpu_util' was not declared. Should it be static?
+   kernel/sched/fair.c:6531:19: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:6531:19: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:6531:19: sparse:    struct sched_domain *
+>> kernel/sched/fair.c:6738:1: sparse: sparse: symbol '__pcpu_scope_eenv_cache' was not declared. Should it be static?
+   kernel/sched/fair.c:6949:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:6949:9: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:6949:9: sparse:    struct sched_domain *
+   kernel/sched/fair.c:9728:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:9728:9: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:9728:9: sparse:    struct sched_domain *
+   kernel/sched/fair.c:9942:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:9942:9: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:9942:9: sparse:    struct sched_domain *
+   kernel/sched/fair.c:4833:35: sparse: sparse: marked inline, but without a definition
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/fair.c:4950:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:4950:14: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:4950:14: sparse:    struct sched_domain *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/fair.c:6409:15: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:6409:15: sparse:    struct sched_domain_shared [noderef] <asn:4> *
+   kernel/sched/fair.c:6409:15: sparse:    struct sched_domain_shared *
+   kernel/sched/fair.c:6400:15: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:6400:15: sparse:    struct sched_domain_shared [noderef] <asn:4> *
+   kernel/sched/fair.c:6400:15: sparse:    struct sched_domain_shared *
+   kernel/sched/fair.c:6409:15: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:6409:15: sparse:    struct sched_domain_shared [noderef] <asn:4> *
+   kernel/sched/fair.c:6409:15: sparse:    struct sched_domain_shared *
+   kernel/sched/fair.c:6400:15: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:6400:15: sparse:    struct sched_domain_shared [noderef] <asn:4> *
+   kernel/sched/fair.c:6400:15: sparse:    struct sched_domain_shared *
+   kernel/sched/fair.c:6589:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:6589:14: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:6589:14: sparse:    struct sched_domain *
+   kernel/sched/fair.c:6620:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:6620:14: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:6620:14: sparse:    struct sched_domain *
+   kernel/sched/fair.c:5880:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:5880:14: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:5880:14: sparse:    struct sched_domain *
+   kernel/sched/fair.c:6881:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:6881:14: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:6881:14: sparse:    struct sched_domain *
+   kernel/sched/fair.c:6381:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:6381:17: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:6381:17: sparse:    struct sched_domain *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/fair.c:9778:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:9778:16: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:9778:16: sparse:    struct sched_domain *
+   kernel/sched/fair.c:4950:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/fair.c:4950:14: sparse:    struct sched_domain [noderef] <asn:4> *
+   kernel/sched/fair.c:4950:14: sparse:    struct sched_domain *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
+   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
+   In file included from kernel/sched/fair.c:25:0:
+   include/linux/sched/topology.h:196:1: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+    const struct sched_group_energy * const(*sched_domain_energy_f)(int cpu);
+    ^~~~~
+   In file included from kernel/sched/fair.c:39:0:
+   kernel/sched/sched.h:1106:34: warning: duplicate 'const' declaration specifier [-Wduplicate-decl-specifier]
+     const struct sched_group_energy const *sge;
+                                     ^~~~~
 
-I don't think we can use idle here as a condition, once it is idle, it 
-is too late to get those clock values.
-> 
-> A quick test with hackbench on a 8 cpus system gives
-> around 60k call for a duration 550 msec run a root level
-> and 180k from a 3rd level cgroups
+Please review and possibly fold the followup patch.
 
-If you think this is too much to have this store on this path, we could 
-though either:
-
-a. restrict the feature to when we know it is the most important: EAS?
-
-b. store the updated value only when "decayed" is non 0.
-
-[...]
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

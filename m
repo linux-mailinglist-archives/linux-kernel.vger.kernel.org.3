@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5702D50656A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AC250657A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349210AbiDSHOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
+        id S240830AbiDSHRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240087AbiDSHOa (ORCPT
+        with ESMTP id S238473AbiDSHRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:14:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6102E9E6;
-        Tue, 19 Apr 2022 00:11:48 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 17C891F37D;
-        Tue, 19 Apr 2022 07:11:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650352307; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YWsoHdvGijiz2E0tFAMBnFdzxibxDqGsWjmzZn6KKaw=;
-        b=I/yPomsZUHDQhZ+rQ06Vk79LvPOUFUE0apEbHvAVaNSz4a50/eTry5j0nXFNeiWqJc89Vx
-        4rU5TneXRp8lsGmcXI3tlc54buASVsnKRLbZ5aiahBrstXaJCWj4rkN5BZDfTSm1YcESq2
-        GZhrvlLJd0SAxhz37NWsSQI9YpxeDjM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C2B1F132E7;
-        Tue, 19 Apr 2022 07:11:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OYPYLbJgXmKORQAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 19 Apr 2022 07:11:46 +0000
-Message-ID: <521cad0a-d6ef-77a8-9258-1cf9d3b6d63d@suse.com>
-Date:   Tue, 19 Apr 2022 09:11:46 +0200
+        Tue, 19 Apr 2022 03:17:25 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF8E31DC1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:14:42 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id s33so2030302ybi.12
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5lXtP2hEniXIrZJtGnzd97ErknwmMEGDGM7Fl/js75o=;
+        b=TCq6vbFSgI8tPzihxc8+LUVsk+aCPm/ZdzDb72b/DOyF7htS2ufqzcBtpqzUFVZSvO
+         Xv1hYt1VoLp9OPgaUJXDvlASlhAvto03ONuo++r6PwmxdGDG6fyumBpD9xjPQi+VLWYA
+         0Iwdjmj6SQmfE08CA+j3+C0wqX5VzPfvAfG/oAohdDnJxwunKR/swt8jbCaDjCmLeNL6
+         TRLlhbMFMFyOwp5MfEjVheMX+lHCyRRN2ZHNWhhRP+MCjJ53neXyDkLjdpFPIUC6L6gD
+         FGLEDiPovEfMUAFuPhibnCmnHeClISRlx+GJJcs7P/sT3gYPo55hsd3fU4kIKZeWFBRt
+         jX6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5lXtP2hEniXIrZJtGnzd97ErknwmMEGDGM7Fl/js75o=;
+        b=7d/g97PHZpXPJWs+uilV+pcQqX5M3/jSH/+kOUVd6EA92cZGQYt3qZ0QiU6ZlY66vi
+         mjLbnboZTD9/X4NrOEMfszrFFFB6FyktjysPT/pBfL49pKaNNJUncqFJPiaDgtkcivyw
+         SeUzOTLh8p+LPtl1f6OHc+1+QrhwLLxL7NSj8LytG7zB5mGvMssTszGlaI5lKjSm/gNS
+         FZ253pbU4wQ40lcxlVYNa4MLxb1F7WfjVCmb4y02W3C9FVSUDDH8A47YYrfw7XftAsJL
+         fiCs7dfH/7w03EMNO01nwUgsSk0WyDbBKV5if3vBt3CCbeDu74OE9rOi1hNOkLbMh9Qw
+         qjvg==
+X-Gm-Message-State: AOAM530/LhDTFP2JUgbQvbMnLiT/fJXQN5xNr6tlJspzu96viFZyBJn9
+        v54+0Ppdxv3uK5LLb6kyit44j0e6u60vDh/Trb5FUw==
+X-Google-Smtp-Source: ABdhPJy8XG4lqdfhHW3uTB3iGt2VcuA1zVZ/dBi6Dj196N+nW07eMWuJejrduw76fcEfcEdtXd+PPaVDui8kzs6ViiU=
+X-Received: by 2002:a25:da06:0:b0:645:380a:7ba3 with SMTP id
+ n6-20020a25da06000000b00645380a7ba3mr2000710ybf.300.1650352481211; Tue, 19
+ Apr 2022 00:14:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH rcu 04/11] kernel/smp: Provide boot-time timeout for CSD
- lock diagnostics
-Content-Language: en-US
-To:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-References: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
- <20220418225359.3945217-4-paulmck@kernel.org>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220418225359.3945217-4-paulmck@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------D0GS3lmZWKjnxqU11SmidYyo"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20220407051932.4071-1-xuewen.yan@unisoc.com> <02350916-aa36-ea53-2c98-91b97f49d27e@arm.com>
+ <CAB8ipk-KenZaVWQwWqVMksQXLP5r19BQ1OGAdmwHRbjwv3qFHg@mail.gmail.com>
+ <9bb00bcb-f984-1cf6-39aa-c11dcf7f07cb@arm.com> <f100bd49-7a1d-5265-29ce-1092195bb2dd@arm.com>
+ <CAB8ipk8v1-jyU0Q0k-EXCArsS6Sh=U+fW6NutW+6m+kQ=LKrJA@mail.gmail.com>
+In-Reply-To: <CAB8ipk8v1-jyU0Q0k-EXCArsS6Sh=U+fW6NutW+6m+kQ=LKrJA@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 19 Apr 2022 09:14:29 +0200
+Message-ID: <CAKfTPtDsNSW0JH4phAtZB7ackJFKuJfAGkhQ7JjWG_C2tzQYSw@mail.gmail.com>
+Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
+ rt fits capacity
+To:     Xuewen Yan <xuewen.yan94@gmail.com>
+Cc:     Lukasz Luba <Lukasz.Luba@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        di.shen@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,170 +74,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------D0GS3lmZWKjnxqU11SmidYyo
-Content-Type: multipart/mixed; boundary="------------5T25XL3x1VVjY75FyAnu0oZL";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, kernel-team@fb.com, rostedt@goodmis.org,
- Rik van Riel <riel@surriel.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Message-ID: <521cad0a-d6ef-77a8-9258-1cf9d3b6d63d@suse.com>
-Subject: Re: [PATCH rcu 04/11] kernel/smp: Provide boot-time timeout for CSD
- lock diagnostics
-References: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
- <20220418225359.3945217-4-paulmck@kernel.org>
-In-Reply-To: <20220418225359.3945217-4-paulmck@kernel.org>
+On Sat, 16 Apr 2022 at 04:47, Xuewen Yan <xuewen.yan94@gmail.com> wrote:
+>
+> Hi Luba  / Dietmar
+>
+> On Wed, Apr 13, 2022 at 9:26 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >
+> >
+> >
+> > On 4/11/22 15:07, Dietmar Eggemann wrote:
+> > > On 11/04/2022 10:52, Xuewen Yan wrote:
+> > >> HI Dietmar
+> > >>
+> > >> On Mon, Apr 11, 2022 at 4:21 PM Dietmar Eggemann
+> > >> <dietmar.eggemann@arm.com> wrote:
+> > >>>
+> > >>> On 07/04/2022 07:19, Xuewen Yan wrote:
+> > >>>> There are cases when the cpu max capacity might be reduced due to thermal.
+> > >>>> Take into the thermal pressure into account when judge whether the rt task
+> > >>>> fits the cpu. And when schedutil govnor get cpu util, the thermal pressure
+> > >>>> also should be considered.
+> > >>>>
+> > >>>> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+> > >>>> ---
+> > >>>>   kernel/sched/cpufreq_schedutil.c | 1 +
+> > >>>>   kernel/sched/rt.c                | 1 +
+> > >>>>   2 files changed, 2 insertions(+)
+> > >>>>
+> > >>>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > >>>> index 3dbf351d12d5..285ad51caf0f 100644
+> > >>>> --- a/kernel/sched/cpufreq_schedutil.c
+> > >>>> +++ b/kernel/sched/cpufreq_schedutil.c
+> > >>>> @@ -159,6 +159,7 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
+> > >>>>        struct rq *rq = cpu_rq(sg_cpu->cpu);
+> > >>>>        unsigned long max = arch_scale_cpu_capacity(sg_cpu->cpu);
+> > >>>>
+> > >>>> +     max -= arch_scale_thermal_pressure(sg_cpu->cpu);
+> > >>>
+> > >>> max' = arch_scale_cpu_capacity() - arch_scale_thermal_pressure()
+> > >>>
+> > >>> For the energy part (A) we use max' in compute_energy() to cap sum_util
+> > >>> and max_util at max' and to call em_cpu_energy(..., max_util, sum_util,
+> > >>> max'). This was done to match (B)'s `policy->max` capping.
+> > >>>
+> > >>> For the frequency part (B) we have freq_qos_update_request() in:
+> > >>>
+> > >>> power_actor_set_power()
+> > >>>    ...
+> > >>>    cdev->ops->set_cur_state()
+> > >>>
+> > >>>      cpufreq_set_cur_state()
+> > >>>        freq_qos_update_request()      <-- !
+> > >>>        arch_update_thermal_pressure()
+> > >>>
+> > >>> restricting `policy->max` which then clamps `target_freq` in:
+> > >>>
+> > >>>    cpufreq_update_util()
+> > >>>      ...
+> > >>>      get_next_freq()
+> > >>>        cpufreq_driver_resolve_freq()
+> > >>>          __resolve_freq()
+> > >>>
+> > >>
+> > >> Do you mean that the "max" here will not affect the frequency
+> > >> conversion, so there is no need to change it?
+> > >> But is it better to reflect the influence of thermal here?
+> > >
+> > > I guess your point is that even though max' has no effect on frequency
+> > > since QOS caps policy->max anyway, it is still easier to understand the
+> > > dependency between schedutil and EAS/EM when it comes to the use of
+> > > thermal pressure.
+> > >
+> > > I agree. The way how the "hidden" policy->max capping guarantees that
+> > > schedutil and EAS/EM are doing the same even when only the latter uses
+> > > max' is not obvious.
+> >
+> > +1 here, IMO we shouldn't rely on hidden stuff. There are two which set
+> > the thermal pressure, but one is not setting the freq_qos which causes
+> > the update of the 'policy->max'. So the schedutil will send that high
+> > frequency but that driver would just ignore and clamp internally. In the
+> > end we might argue it still works, but is it clean and visible from the
+> > code? Funny thing might start to happen then the driver, which might be
+> > the last safety net cannot capture this.
 
---------------5T25XL3x1VVjY75FyAnu0oZL
-Content-Type: multipart/mixed; boundary="------------ZxIQcku5g8vTMgLTNl3zdqql"
+schedutil reflects what scheduler wants not what HW can do. If you
+start to cap the freq with arch_scale_thermal_pressure() in schedutil,
+you will loose some opportunity to run at higher frequency because
+arch_scale_thermal_pressure() is transient and might change just after
+using it. This means that you will stay at lower freq after mitigation
+stops until a new cpufreq_update_util() happens. ANd I don't vene
+mentioned when thermal mitigation is managed by HW at a much higher
+frequency than what Linux can handle
 
---------------ZxIQcku5g8vTMgLTNl3zdqql
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+arch_scale_thermal_pressure() must not be used but thermal_load_avg()
+like scale_rt_capacity() what Dietmar suggested
 
-T24gMTkuMDQuMjIgMDA6NTMsIFBhdWwgRS4gTWNLZW5uZXkgd3JvdGU6DQo+IERlYnVnZ2lu
-ZyBvZiBwcm9ibGVtcyBpbnZvbHZpbmcgaW5zYW5lbHkgbG9uZy1ydW5uaW5nIFNNSSBoYW5k
-bGVycw0KPiBwcm9jZWVkcyBiZXR0ZXIgaWYgdGhlIENTRC1sb2NrIHRpbWVvdXQgY2FuIGJl
-IGFkanVzdGVkLiAgVGhpcyBjb21taXQNCj4gdGhlcmVmb3JlIHByb3ZpZGVzIGEgbmV3IHNt
-cC5jc2RfbG9ja190aW1lb3V0IGtlcm5lbCBib290IHBhcmFtZXRlcg0KPiB0aGF0IHNwZWNp
-ZmllcyB0aGUgdGltZW91dCBpbiBtaWxsaXNlY29uZHMuICBUaGUgZGVmYXVsdCByZW1haW5z
-IGF0IHRoZQ0KPiBwcmV2aW91c2x5IGhhcmQtY29kZWQgdmFsdWUgb2YgZml2ZSBzZWNvbmRz
-Lg0KPiANCj4gQ2M6IFJpayB2YW4gUmllbCA8cmllbEBzdXJyaWVsLmNvbT4NCj4gQ2M6IFBl
-dGVyIFppamxzdHJhIDxwZXRlcnpAaW5mcmFkZWFkLm9yZz4NCj4gQ2M6IEluZ28gTW9sbmFy
-IDxtaW5nb0BrZXJuZWwub3JnPg0KPiBDYzogVGhvbWFzIEdsZWl4bmVyIDx0Z2x4QGxpbnV0
-cm9uaXguZGU+DQo+IENjOiBTZWJhc3RpYW4gQW5kcnplaiBTaWV3aW9yIDxiaWdlYXN5QGxp
-bnV0cm9uaXguZGU+DQo+IENjOiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+
-IFNpZ25lZC1vZmYtYnk6IFBhdWwgRS4gTWNLZW5uZXkgPHBhdWxtY2tAa2VybmVsLm9yZz4N
-Cj4gLS0tDQo+ICAgRG9jdW1lbnRhdGlvbi9hZG1pbi1ndWlkZS9rZXJuZWwtcGFyYW1ldGVy
-cy50eHQgfCAxMSArKysrKysrKysrKw0KPiAgIGtlcm5lbC9zbXAuYyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIHwgIDcgKysrKystLQ0KPiAgIDIgZmlsZXMgY2hhbmdl
-ZCwgMTYgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQg
-YS9Eb2N1bWVudGF0aW9uL2FkbWluLWd1aWRlL2tlcm5lbC1wYXJhbWV0ZXJzLnR4dCBiL0Rv
-Y3VtZW50YXRpb24vYWRtaW4tZ3VpZGUva2VybmVsLXBhcmFtZXRlcnMudHh0DQo+IGluZGV4
-IDNmMWNjNWUzMTdlZC4uNjQ1YzRjMDAxYjE2IDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0
-aW9uL2FkbWluLWd1aWRlL2tlcm5lbC1wYXJhbWV0ZXJzLnR4dA0KPiArKysgYi9Eb2N1bWVu
-dGF0aW9uL2FkbWluLWd1aWRlL2tlcm5lbC1wYXJhbWV0ZXJzLnR4dA0KPiBAQCAtNTM3Nyw2
-ICs1Mzc3LDE3IEBADQo+ICAgCXNtYXJ0Mj0JCVtIV10NCj4gICAJCQlGb3JtYXQ6IDxpbzE+
-Wyw8aW8yPlssLi4uLDxpbzg+XV0NCj4gICANCj4gKwlzbXAuY3NkX2xvY2tfdGltZW91dD0g
-W0tOTF0NCj4gKwkJCVNwZWNpZnkgdGhlIHBlcmlvZCBvZiB0aW1lIGluIG1pbGxpc2Vjb25k
-cw0KPiArCQkJdGhhdCBzbXBfY2FsbF9mdW5jdGlvbigpIGFuZCBmcmllbmRzIHdpbGwgd2Fp
-dA0KPiArCQkJZm9yIGEgQ1BVIHRvIHJlbGVhc2UgdGhlIENTRCBsb2NrLiAgVGhpcyBpcw0K
-PiArCQkJdXNlZnVsIHdoZW4gZGlhZ25vc2luZyBidWdzIGludm9sdmluZyBDUFVzDQo+ICsJ
-CQlkaXNhYmxpbmcgaW50ZXJydXB0cyBmb3IgZXh0ZW5kZWQgcGVyaW9kcw0KPiArCQkJb2Yg
-dGltZS4gIERlZmF1bHRzIHRvIDUsMDAwIG1pbGxpc2Vjb25kcywgYW5kDQo+ICsJCQlzZXR0
-aW5nIGEgdmFsdWUgb2YgemVybyBkaXNhYmxlcyB0aGlzIGZlYXR1cmUuDQo+ICsJCQlUaGlz
-IGZlYXR1cmUgbWF5IGJlIG1vcmUgZWZmaWNpZW50bHkgZGlzYWJsZWQNCj4gKwkJCXVzaW5n
-IHRoZSBjc2Rsb2NrX2RlYnVnLSBrZXJuZWwgcGFyYW1ldGVyLg0KPiArDQo+ICAgCXNtc2Mt
-aXJjYzIubm9wbnAJW0hXXSBEb24ndCB1c2UgUE5QIHRvIGRpc2NvdmVyIFNNQyBkZXZpY2Vz
-DQo+ICAgCXNtc2MtaXJjYzIuaXJjY19jZmc9CVtIV10gRGV2aWNlIGNvbmZpZ3VyYXRpb24g
-SS9PIHBvcnQNCj4gICAJc21zYy1pcmNjMi5pcmNjX3Npcj0JW0hXXSBTSVIgYmFzZSBJL08g
-cG9ydA0KPiBkaWZmIC0tZ2l0IGEva2VybmVsL3NtcC5jIGIva2VybmVsL3NtcC5jDQo+IGlu
-ZGV4IDAxYTdjMTcwNmE1OC4uZDgyNDM5YmFjNDAxIDEwMDY0NA0KPiAtLS0gYS9rZXJuZWwv
-c21wLmMNCj4gKysrIGIva2VybmVsL3NtcC5jDQo+IEBAIC0xODMsNyArMTgzLDkgQEAgc3Rh
-dGljIERFRklORV9QRVJfQ1BVKHNtcF9jYWxsX2Z1bmNfdCwgY3VyX2NzZF9mdW5jKTsNCj4g
-ICBzdGF0aWMgREVGSU5FX1BFUl9DUFUodm9pZCAqLCBjdXJfY3NkX2luZm8pOw0KPiAgIHN0
-YXRpYyBERUZJTkVfUEVSX0NQVShzdHJ1Y3QgY2ZkX3NlcV9sb2NhbCwgY2ZkX3NlcV9sb2Nh
-bCk7DQo+ICAgDQo+IC0jZGVmaW5lIENTRF9MT0NLX1RJTUVPVVQgKDVVTEwgKiBOU0VDX1BF
-Ul9TRUMpDQo+ICtzdGF0aWMgdWxvbmcgY3NkX2xvY2tfdGltZW91dCA9IDUwMDA7ICAvKiBD
-U0QgbG9jayB0aW1lb3V0IGluIG1pbGxpc2Vjb25kcy4gKi8NCj4gK21vZHVsZV9wYXJhbShj
-c2RfbG9ja190aW1lb3V0LCB1bG9uZywgMDQ0NCk7DQo+ICsNCj4gICBzdGF0aWMgYXRvbWlj
-X3QgY3NkX2J1Z19jb3VudCA9IEFUT01JQ19JTklUKDApOw0KPiAgIHN0YXRpYyB1NjQgY2Zk
-X3NlcTsNCj4gICANCj4gQEAgLTMyOSw2ICszMzEsNyBAQCBzdGF0aWMgYm9vbCBjc2RfbG9j
-a193YWl0X3Rvb2xvbmcoc3RydWN0IF9fY2FsbF9zaW5nbGVfZGF0YSAqY3NkLCB1NjQgdHMw
-LCB1NjQgKg0KPiAgIAl1NjQgdHMyLCB0c19kZWx0YTsNCj4gICAJY2FsbF9zaW5nbGVfZGF0
-YV90ICpjcHVfY3VyX2NzZDsNCj4gICAJdW5zaWduZWQgaW50IGZsYWdzID0gUkVBRF9PTkNF
-KGNzZC0+bm9kZS51X2ZsYWdzKTsNCj4gKwl1bnNpZ25lZCBsb25nIGxvbmcgY3NkX2xvY2tf
-dGltZW91dF9ucyA9IGNzZF9sb2NrX3RpbWVvdXQgKiBOU0VDX1BFUl9NU0VDOw0KPiAgIA0K
-PiAgIAlpZiAoIShmbGFncyAmIENTRF9GTEFHX0xPQ0spKSB7DQo+ICAgCQlpZiAoIXVubGlr
-ZWx5KCpidWdfaWQpKQ0KPiBAQCAtMzQxLDcgKzM0NCw3IEBAIHN0YXRpYyBib29sIGNzZF9s
-b2NrX3dhaXRfdG9vbG9uZyhzdHJ1Y3QgX19jYWxsX3NpbmdsZV9kYXRhICpjc2QsIHU2NCB0
-czAsIHU2NCAqDQo+ICAgDQo+ICAgCXRzMiA9IHNjaGVkX2Nsb2NrKCk7DQo+ICAgCXRzX2Rl
-bHRhID0gdHMyIC0gKnRzMTsNCj4gLQlpZiAobGlrZWx5KHRzX2RlbHRhIDw9IENTRF9MT0NL
-X1RJTUVPVVQpKQ0KPiArCWlmIChsaWtlbHkodHNfZGVsdGEgPD0gY3NkX2xvY2tfdGltZW91
-dF9ucyB8fCBjc2RfbG9ja190aW1lb3V0X25zIDw9IDApKQ0KDQpjc2RfbG9ja190aW1lb3V0
-X25zIGlzIHVuc2lnbmVkLCBzbyAiY3NkX2xvY2tfdGltZW91dF9ucyA8PSAwIiBzaG91bGQg
-YmUgcmF0aGVyDQoiY3NkX2xvY2tfdGltZW91dF9ucyA9PSAwIi4NCg0KV2l0aCB0aGF0IGZp
-eGVkIHlvdSBjYW4gYWRkIG15DQoNClJldmlld2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jv
-c3NAc3VzZS5jb20+DQoNCg0KSnVlcmdlbg0K
---------------ZxIQcku5g8vTMgLTNl3zdqql
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------ZxIQcku5g8vTMgLTNl3zdqql--
-
---------------5T25XL3x1VVjY75FyAnu0oZL--
-
---------------D0GS3lmZWKjnxqU11SmidYyo
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJeYLIFAwAAAAAACgkQsN6d1ii/Ey9v
-igf+PeJUbQBi+Zc2gtKAel1emDs62CQiryXKyAYnTjQaEtYUtJDoda00ED7s4gOMdGvmclgmyiFV
-UkVwwoh1XQhCfpevJcBA4Ygjx05E1flbgfvAD4FvPAlJ0LkwZjY2dta/Y9Q9aRGJ88tBua8OAcN1
-yBHMAaPKwTIiV/YnoH4qG40qt74BHP7NBMjt/FvGXx192Sd9hb3OGxffvjnA18Z2yjKk8Vgc31ii
-/hp8U8pWyyotmKdLUx00vlTaYe2FqXdKO8qolCirXuj7GMN2KpbEW5VNYv02iiiYYyQD08CQtytG
-FB92iiNKp5NIGUjJWiV/zbq0N/o8Iec5NOq0h+NqcQ==
-=esuf
------END PGP SIGNATURE-----
-
---------------D0GS3lmZWKjnxqU11SmidYyo--
+> >
+> > We also should be OK with energy estimation and the CPU capacity vs.
+> > task utilization comparisons, since the thermal pressure is accounted
+> > there* (until the thermal is controlled in kernel not in FW, which is
+> > something where we are heading with scmi-cpufreq mentioned in this
+> > cover letter [1]).
+>
+> IMO, If so, we don't want to modify the original code, but also need to
+> consider the impact of thermal, maybe it is possible to add a new
+> macro definition
+> like this:
+>
+> #define arch_scale_cpu_capacity_except_thermal()
+> (arch_scale_cpu_capacity() - arch_scale_thermal_pressure())
+>
+> >
+> > >
+> > > I just wanted to mention the historical reason why the code looks like
+> > > it does today.
+> > >
+> > >>> [...]
+> > >>>
+> > >>>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> > >>>> index a32c46889af8..d9982ebd4821 100644
+> > >>>> --- a/kernel/sched/rt.c
+> > >>>> +++ b/kernel/sched/rt.c
+> > >>>> @@ -466,6 +466,7 @@ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
+> > >>>>        max_cap = uclamp_eff_value(p, UCLAMP_MAX);
+> > >>>>
+> > >>>>        cpu_cap = capacity_orig_of(cpu);
+> > >>>> +     cpu_cap -= arch_scale_thermal_pressure(cpu);
+> > >>>>
+> > >>>>        return cpu_cap >= min(min_cap, max_cap);
+> > >>>>   }
+> > >>>
+> > >>> IMHO, this should follow what we do with rq->cpu_capacity
+> > >>> (capacity_of(), the remaining capacity for CFS). E.g. we use
+> > >>> capacity_of() in find_energy_efficient_cpu() and select_idle_capacity()
+> > >>> to compare capacities. So we would need a function like
+> > >>> scale_rt_capacity() for RT (minus the rq->avg_rt.util_avg) but then also
+> > >>> one for DL (minus rq->avg_dl.util_avg and rq->avg_rt.util_avg).
+> > >>
+> > >> It's a really good idea. And do you already have the corresponding patch?
+> > >> If there is, can you tell me the corresponding link?
+> > >
+> > > No, I don't have any code for this. Should be trivial though. But the
+> > > issue is that the update would probably have to be decoupled from CFS
+> > > load_balance (update_group_capacity()) and the use cases in RT/DL are
+> > > only valid for asymmetric CPU capacity systems.
+> >
+> > Having in mind those I would vote for fixing it incrementally.
+> > Thus, IMHO this patch is good for taking it. Later we might think how
+> > to better estimate the real CPU capacity visible from RT and DL classes.
+> > In this shape it is good for many systems which only use RT,
+> > but not DL class. Those systems w/ RT and w/o DL might suffer on some
+> > asymmetric CPU platforms where medium cores have capacity e.g. 850 and
+> > thermal pressure reduced the big cores capacity by 250 making them 774.
+> >
+>
+> Your mean is that before there is better way to handle RT capacity, we
+> can take this patch temporarily?
+> If so, I can update the patch which will just fix the rt.c.
+>
+> In fact, in the mobile phone usage scenario where the cpu contains 3
+> clusters (small/middle/big),
+> the capacity of the big core's capacity will be smaller than that of
+> the middle core due to the thermal effect.
+> At this time, we do not want the big core CPU to be used as an RT
+> task's alternative cpu.
+>
+> > Regards,
+> > Lukasz
+> >
+> > [1]
+> > https://lore.kernel.org/linux-pm/20211007080729.8262-1-lukasz.luba@arm.com/
+>
+>
+> BR
+> xuewen.yan

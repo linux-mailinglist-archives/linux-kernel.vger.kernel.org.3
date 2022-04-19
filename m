@@ -2,45 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836865066C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9265066C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349832AbiDSITh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
+        id S1349926AbiDSITu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349918AbiDSITW (ORCPT
+        with ESMTP id S1349904AbiDSITb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:19:22 -0400
-Received: from mail.itouring.de (mail.itouring.de [85.10.202.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A53338B6;
-        Tue, 19 Apr 2022 01:16:18 -0700 (PDT)
-Received: from tux.applied-asynchrony.com (p5ddd7616.dip0.t-ipconnect.de [93.221.118.22])
-        by mail.itouring.de (Postfix) with ESMTPSA id 7AA14124EC0;
-        Tue, 19 Apr 2022 10:16:16 +0200 (CEST)
-Received: from [192.168.100.221] (hho.applied-asynchrony.com [192.168.100.221])
-        by tux.applied-asynchrony.com (Postfix) with ESMTP id 3AF82F01608;
-        Tue, 19 Apr 2022 10:16:16 +0200 (CEST)
-Subject: Re: [PATCH 5.15 000/189] 5.15.35-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220419073048.315594917@linuxfoundation.org>
-From:   =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>
-Organization: Applied Asynchrony, Inc.
-Message-ID: <d3ed3896-5cf4-ca4e-9615-a5af7d150ac5@applied-asynchrony.com>
-Date:   Tue, 19 Apr 2022 10:16:16 +0200
+        Tue, 19 Apr 2022 04:19:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79820344C2;
+        Tue, 19 Apr 2022 01:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=nxk6ARS1KhpZKavk3fbvq/OGlMyKz6/I9rTuwfuzZ9w=; b=BQoHDCeKF0vIXfC8DfzcWomYI5
+        LmiebAdA+mNAXukoCW0SNDlIfg6PTxKc998E2MCFIf31qPBDw2d+0fTnwICrgsky48UNQMfauxydp
+        Hhw2+Y0sFUDRQ6GbpSMnHtvRp30W0L61g88PnCHp6fcXgH2LaC0XmKMvjepM+t9uMrPS6LQyXWSBa
+        yXf4/mGZ7+u4DT3gCPpISQJH7Y0dJd0AsCqNRmm10WaGNi17SH6r2CyvKkJMHvpGnT5S0rVXB27RX
+        CpHL+gaWpeqvNouBrcx01/s1Q0v7uAev7F0V0FrppKogq5gSY83QHZTwVYWbp7Fp0+dgfTeHvqshQ
+        tIVyye+Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ngj29-002uqH-8O; Tue, 19 Apr 2022 08:16:25 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D369798618A; Tue, 19 Apr 2022 10:16:24 +0200 (CEST)
+Date:   Tue, 19 Apr 2022 10:16:24 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Zhihao Cheng <chengzhihao1@huawei.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        yukuai3@huawei.com
+Subject: Re: [PATCH v2] fs-writeback: =?utf-8?Q?wri?=
+ =?utf-8?Q?teback=5Fsb=5Finodes=EF=BC=9ARecalculat?= =?utf-8?Q?e?= 'wrote'
+ according skipped pages
+Message-ID: <20220419081624.GM2731@worktop.programming.kicks-ass.net>
+References: <20220418092824.3018714-1-chengzhihao1@huawei.com>
+ <CAHk-=wh7CqEu+34=jUsSaMcMHe4Uiz7JrgYjU+eE-SJ3MPS-Gg@mail.gmail.com>
+ <587c1849-f81b-13d6-fb1a-f22588d8cc2d@kernel.dk>
+ <CAHk-=wjmFw1EBOVAN8vffPDHKJH84zZOtwZrLpE=Tn2MD6kEgQ@mail.gmail.com>
+ <df4853fb-0e10-4d50-75cd-ee9b06da5ab1@kernel.dk>
+ <CAHk-=wg6s5gHCc-JngKFfOS7uZUrT9cqzNDKqUQZON6Txfa_rQ@mail.gmail.com>
+ <69f80fe3-5bec-f02e-474b-e49651f5818f@kernel.dk>
 MIME-Version: 1.0
-In-Reply-To: <20220419073048.315594917@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <69f80fe3-5bec-f02e-474b-e49651f5818f@kernel.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,13 +66,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-19 09:32, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.35 release.
-> There are 189 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Apr 18, 2022 at 06:30:16PM -0600, Jens Axboe wrote:
+> On 4/18/22 6:19 PM, Linus Torvalds wrote:
+> > On Mon, Apr 18, 2022 at 3:12 PM Jens Axboe <axboe@kernel.dk> wrote:
+> >>
+> >> Hmm yes. But doesn't preemption imply a full barrier? As long as we
+> >> assign the plug at the end, we should be fine. And just now looking that
+> >> up, there's even already a comment to that effect in blk_start_plug().
+> >> So barring any weirdness with that, maybe that's the solution.
+> > 
+> > My worry is more about the code that adds new cb_list entries to the
+> > plug, racing with then some random preemption event that flushes the
+> > plug.
+> > 
+> > preemption itself is perfectly fine wrt any per-thread data updates
+> > etc, but if preemption then also *changes* the data that is updated,
+> > that's not great.
+> > 
+> > So that worries me.
+> 
+> Yes, and the same is true for eg merge traversal. We'd then need to
+> disable preempt for that as well...
 
-With the added include for amdgpu this builds successfully and runs without
-problems. Thanks for the fix.
-
--h
+One is only supposed to disable preemption for short and bounded things,
+otherwise we'll get people complaining their latencies are going bad.

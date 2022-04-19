@@ -2,573 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F237A506B5E
+	by mail.lfdr.de (Postfix) with ESMTP id AA321506B5D
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351852AbiDSLsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        id S1351857AbiDSLtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351896AbiDSLsR (ORCPT
+        with ESMTP id S1351842AbiDSLtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:48:17 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E541B2B198
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:45:33 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 5505F2223A;
-        Tue, 19 Apr 2022 13:45:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1650368731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6SPcEUcZ+YawrMSu3hoigcoMiMVmg9Z0F3USI6yNgGY=;
-        b=uHsVX957RM6NxNVO7GGvp2lWbPzzK+2KNgU0Kjy650PlXcteHBX1Yx8Qe3pwWeXM5t54+U
-        5fr6dpTvWPFeZHNiHfZaQoPAt2bxlTEjPVsSQ2Hw6wNn2x4fBzR+pJd4ecWndmduSC8ezh
-        NrEXLZFmXepLrxg3vA7eYvydWRKOy88=
+        Tue, 19 Apr 2022 07:49:11 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FC52AE2E
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:46:29 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id bj24so12351385oib.11
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:46:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zr+VGX0mhBp9NZinaclK39Iaheyjh+GcxufQM98q2T4=;
+        b=TaPVENVs6UeX/0wd28BijzB9+2vH3hkykLfAx6Z+TianLJL/RErxbAX9zvCD+siM/Z
+         uLqmKaIs6I21/BZuoX5aH54xHpMduMGKHjQmyllRJaUuuBA2culEnlxqKuir7uxiFapV
+         3KrFAo/2ggciJwo9Etg/qeEu5hsSc4fTqlm8c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zr+VGX0mhBp9NZinaclK39Iaheyjh+GcxufQM98q2T4=;
+        b=U3Wpxd9CpUGKzZy9qWyos3h5yMgwVjEh7C5DWM3fIH1AXGkwrZahWlrEGm0tStdMoL
+         gnuNTK4hCjAmvsnJ4RAT/nCW3x1u5yDcL1Hyf6V9W4/z2ZrEjhzRT6hbc9+DWkm8MtdF
+         fvK/fICM2Jme8e9CjYugxt0tvBXQWtOCa6oW68UTZCLX/OAvustUUZXuv6C2mxf8V9t5
+         Rq2SA7k/EsSg0FQqgL+I52kaG4QusUTbrhoVFJ8BYX5Dv/4JrVHfAFnnovm3B/Z9ZKUg
+         Ixy8x7SLIVsyjAkubijYFcUa1aD7ghc8Qkm0ioYyDXBYeTFOoVJrcaAPKxrJD8nHRVks
+         PnIQ==
+X-Gm-Message-State: AOAM533drcuHUiw6VYvmKchcKQPxNdY+LtWlBloHo1d9nuFkn+8LEwLS
+        zz7IFYGFLi4WWW6oyn7aEgpZlWCRl/Nq3Q==
+X-Google-Smtp-Source: ABdhPJzYa/FMt4AwzPZvvGyCipFylBW05AyjcbZFE23Ot17k4K9hz6yCnN4iiS0BGFxKE4W/QdR6EA==
+X-Received: by 2002:a05:6808:1d7:b0:322:5866:9ee3 with SMTP id x23-20020a05680801d700b0032258669ee3mr6682848oic.171.1650368788691;
+        Tue, 19 Apr 2022 04:46:28 -0700 (PDT)
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com. [209.85.161.48])
+        by smtp.gmail.com with ESMTPSA id x2-20020a4a2a42000000b0033a3c4392c3sm2277798oox.26.2022.04.19.04.46.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 04:46:27 -0700 (PDT)
+Received: by mail-oo1-f48.google.com with SMTP id 65-20020a4a1a44000000b00333316787bbso2642786oof.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:46:26 -0700 (PDT)
+X-Received: by 2002:a4a:8081:0:b0:33a:52ed:3b3b with SMTP id
+ z1-20020a4a8081000000b0033a52ed3b3bmr1777631oof.26.1650368786395; Tue, 19 Apr
+ 2022 04:46:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 19 Apr 2022 13:45:31 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com
-Subject: Re: [PATCH v3 9/9] mtd: spi-nor: Introduce templates for SPI NOR
- operations
-In-Reply-To: <20220411091033.98754-10-tudor.ambarus@microchip.com>
-References: <20220411091033.98754-1-tudor.ambarus@microchip.com>
- <20220411091033.98754-10-tudor.ambarus@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <d912d9834a219162ef46efad7d332ef3@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220418090652.3156-1-Ping-lei.Lin@mediatek.com>
+In-Reply-To: <20220418090652.3156-1-Ping-lei.Lin@mediatek.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 19 Apr 2022 13:46:15 +0200
+X-Gmail-Original-Message-ID: <CANiDSCvLb785H7qyAzSfTSBRpO2eM-oJFF5SgVHXdL1O-GusLA@mail.gmail.com>
+Message-ID: <CANiDSCvLb785H7qyAzSfTSBRpO2eM-oJFF5SgVHXdL1O-GusLA@mail.gmail.com>
+Subject: Re: [PATCH v3] media: usb: uvc: Add UVC_GUID_FORMAT_H265
+To:     James_Lin <Ping-lei.Lin@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, sherlock.chang@mediatek.com,
+        lecopzer.chen@mediatek.com, max.yan@mediatek.com,
+        tm.wu@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-04-11 11:10, schrieb Tudor Ambarus:
-> Clean the op declaration and hide the details of each op. With this it
-> results a cleanner, easier to read code. No functional change expected.
-> 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Hi James
 
-I haven't gone through all of it.
+Thanks for your patch
 
-Acked-by: Michael Walle <michael@walle.cc>
+On Mon, 18 Apr 2022 at 11:07, James_Lin <Ping-lei.Lin@mediatek.com> wrote:
+>
+> This patch aims to add UVC_GUID_FORMAT_H265
+> High Efficiency Video Coding (HEVC), also known as H.265 and MPEG-H Part 2.
+> They describe the same video encoding method.
+> So for handling their behavior is the same.
+> However, when external camera device describes this encoding method,
+> some use hevc, some use h265.
+> There is no uniform specification to describe this encoding method.
+> So if an external camera device use h265 to describe this encoding method,
+> driver will not recognize it.
+> Therefore, this patch is to enable driver to read HEVC/H265
+> and convert it to V4L2_PIX_FMT_HEVC.
+>
+> Signed-off-by: James_Lin <Ping-lei.Lin@mediatek.com>
+
+Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
 
 > ---
-> v3: new patch taken from, no changes
-> https://lore.kernel.org/lkml/20220304093011.198173-1-tudor.ambarus@microchip.com/
-> 
->  drivers/mtd/spi-nor/core.c      | 101 ++++++-------------------------
->  drivers/mtd/spi-nor/core.h      | 102 ++++++++++++++++++++++++++++++++
->  drivers/mtd/spi-nor/micron-st.c |  24 ++++----
->  drivers/mtd/spi-nor/spansion.c  |  26 +++++---
->  drivers/mtd/spi-nor/xilinx.c    |  12 ++--
->  5 files changed, 158 insertions(+), 107 deletions(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 42794328d3b6..fe853532204c 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -359,11 +359,7 @@ int spi_nor_write_enable(struct spi_nor *nor)
->  	int ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WREN, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_NO_DATA);
-> +		struct spi_mem_op op = SPI_NOR_WREN_OP;
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -390,11 +386,7 @@ int spi_nor_write_disable(struct spi_nor *nor)
->  	int ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WRDI, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_NO_DATA);
-> +		struct spi_mem_op op = SPI_NOR_WRDI_OP;
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -454,11 +446,7 @@ int spi_nor_read_sr(struct spi_nor *nor, u8 *sr)
->  	int ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDSR, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_IN(1, sr, 0));
-> +		struct spi_mem_op op = SPI_NOR_RDSR_OP(sr);
-> 
->  		if (nor->reg_proto == SNOR_PROTO_8_8_8_DTR) {
->  			op.addr.nbytes = nor->params->rdsr_addr_nbytes;
-> @@ -498,11 +486,7 @@ int spi_nor_read_cr(struct spi_nor *nor, u8 *cr)
->  	int ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDCR, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_IN(1, cr, 0));
-> +		struct spi_mem_op op = SPI_NOR_RDCR_OP(cr);
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -531,14 +515,7 @@ int spi_nor_set_4byte_addr_mode(struct spi_nor
-> *nor, bool enable)
->  	int ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(enable ?
-> -						  SPINOR_OP_EN4B :
-> -						  SPINOR_OP_EX4B,
-> -						  0),
-> -				  SPI_MEM_OP_NO_ADDR,
-> -				  SPI_MEM_OP_NO_DUMMY,
-> -				  SPI_MEM_OP_NO_DATA);
-> +		struct spi_mem_op op = SPI_NOR_EN4B_EX4B_OP(enable);
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -572,11 +549,7 @@ static int spansion_set_4byte_addr_mode(struct
-> spi_nor *nor, bool enable)
->  	nor->bouncebuf[0] = enable << 7;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_BRWR, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_OUT(1, nor->bouncebuf, 0));
-> +		struct spi_mem_op op = SPI_NOR_BRWR_OP(nor->bouncebuf);
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -606,11 +579,7 @@ int spi_nor_write_ear(struct spi_nor *nor, u8 ear)
->  	nor->bouncebuf[0] = ear;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WREAR, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_OUT(1, nor->bouncebuf, 0));
-> +		struct spi_mem_op op = SPI_NOR_WREAR_OP(nor->bouncebuf);
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -721,11 +690,7 @@ int spi_nor_global_block_unlock(struct spi_nor 
-> *nor)
->  		return ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_GBULK, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_NO_DATA);
-> +		struct spi_mem_op op = SPI_NOR_GBULK_OP;
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -760,11 +725,7 @@ int spi_nor_write_sr(struct spi_nor *nor, const
-> u8 *sr, size_t len)
->  		return ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WRSR, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_OUT(len, sr, 0));
-> +		struct spi_mem_op op = SPI_NOR_WRSR_OP(sr, len);
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -964,11 +925,7 @@ static int spi_nor_write_sr2(struct spi_nor *nor,
-> const u8 *sr2)
->  		return ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WRSR2, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_OUT(1, sr2, 0));
-> +		struct spi_mem_op op = SPI_NOR_WRSR2_OP(sr2);
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -1000,11 +957,7 @@ static int spi_nor_read_sr2(struct spi_nor *nor, 
-> u8 *sr2)
->  	int ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDSR2, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_IN(1, sr2, 0));
-> +		struct spi_mem_op op = SPI_NOR_RDSR2_OP(sr2);
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -1033,11 +986,7 @@ static int spi_nor_erase_chip(struct spi_nor 
-> *nor)
->  	dev_dbg(nor->dev, " %lldKiB\n", (long long)(nor->mtd.size >> 10));
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_CHIP_ERASE, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_NO_DATA);
-> +		struct spi_mem_op op = SPI_NOR_CHIP_ERASE_OP;
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->write_proto);
-> 
-> @@ -1179,10 +1128,8 @@ int spi_nor_erase_sector(struct spi_nor *nor, 
-> u32 addr)
-> 
->  	if (nor->spimem) {
->  		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(nor->erase_opcode, 0),
-> -				   SPI_MEM_OP_ADDR(nor->addr_width, addr, 0),
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_NO_DATA);
-> +			SPI_NOR_SECTOR_ERASE_OP(nor->erase_opcode,
-> +						nor->addr_width, addr);
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->write_proto);
-> 
-> @@ -1978,10 +1925,7 @@ static int spi_nor_spimem_check_op(struct 
-> spi_nor *nor,
->  static int spi_nor_spimem_check_readop(struct spi_nor *nor,
->  				       const struct spi_nor_read_command *read)
->  {
-> -	struct spi_mem_op op = SPI_MEM_OP(SPI_MEM_OP_CMD(read->opcode, 0),
-> -					  SPI_MEM_OP_ADDR(3, 0, 0),
-> -					  SPI_MEM_OP_DUMMY(1, 0),
-> -					  SPI_MEM_OP_DATA_IN(2, NULL, 0));
-> +	struct spi_mem_op op = SPI_NOR_READ_OP(read->opcode);
-> 
->  	spi_nor_spimem_setup_op(nor, &op, read->proto);
-> 
-> @@ -2004,10 +1948,7 @@ static int spi_nor_spimem_check_readop(struct
-> spi_nor *nor,
->  static int spi_nor_spimem_check_pp(struct spi_nor *nor,
->  				   const struct spi_nor_pp_command *pp)
->  {
-> -	struct spi_mem_op op = SPI_MEM_OP(SPI_MEM_OP_CMD(pp->opcode, 0),
-> -					  SPI_MEM_OP_ADDR(3, 0, 0),
-> -					  SPI_MEM_OP_NO_DUMMY,
-> -					  SPI_MEM_OP_DATA_OUT(2, NULL, 0));
-> +	struct spi_mem_op op = SPI_NOR_PP_OP(pp->opcode);
-> 
->  	spi_nor_spimem_setup_op(nor, &op, pp->proto);
-> 
-> @@ -2831,10 +2772,7 @@ static void spi_nor_soft_reset(struct spi_nor 
-> *nor)
->  	struct spi_mem_op op;
->  	int ret;
-> 
-> -	op = (struct spi_mem_op)SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_SRSTEN, 
-> 0),
-> -			SPI_MEM_OP_NO_DUMMY,
-> -			SPI_MEM_OP_NO_ADDR,
-> -			SPI_MEM_OP_NO_DATA);
-> +	op = (struct spi_mem_op)SPINOR_SRSTEN_OP;
-> 
->  	spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> @@ -2844,10 +2782,7 @@ static void spi_nor_soft_reset(struct spi_nor 
-> *nor)
->  		return;
->  	}
-> 
-> -	op = (struct spi_mem_op)SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_SRST, 0),
-> -			SPI_MEM_OP_NO_DUMMY,
-> -			SPI_MEM_OP_NO_ADDR,
-> -			SPI_MEM_OP_NO_DATA);
-> +	op = (struct spi_mem_op)SPINOR_SRST_OP;
-> 
->  	spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> index 7c704475946d..8b7e597fd38c 100644
-> --- a/drivers/mtd/spi-nor/core.h
-> +++ b/drivers/mtd/spi-nor/core.h
-> @@ -18,6 +18,108 @@
->  		   SPI_MEM_OP_DUMMY(ndummy, 0),				\
->  		   SPI_MEM_OP_DATA_IN(len, buf, 0))
-> 
-> +#define SPI_NOR_WREN_OP							\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WREN, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_NO_DATA)
-> +
-> +#define SPI_NOR_WRDI_OP							\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WRDI, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_NO_DATA)
-> +
-> +#define SPI_NOR_RDSR_OP(buf)						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDSR, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_IN(1, buf, 0))
-> +
-> +#define SPI_NOR_WRSR_OP(buf, len)					\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WRSR, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_OUT(len, buf, 0))
-> +
-> +#define SPI_NOR_RDSR2_OP(buf)						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDSR2, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_OUT(1, buf, 0))
-> +
-> +#define SPI_NOR_WRSR2_OP(buf)						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WRSR2, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_OUT(1, buf, 0))
-> +
-> +#define SPI_NOR_RDCR_OP(buf)						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDCR, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_IN(1, buf, 0))
-> +
-> +#define SPI_NOR_EN4B_EX4B_OP(enable)					\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(enable ? SPINOR_OP_EN4B : SPINOR_OP_EX4B, 
-> 0),	\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_NO_DATA)
-> +
-> +#define SPI_NOR_BRWR_OP(buf)						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_BRWR, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_OUT(1, buf, 0))
-> +
-> +#define SPI_NOR_WREAR_OP(buf)						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WREAR, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_OUT(1, buf, 0))
-> +
-> +#define SPI_NOR_GBULK_OP						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_GBULK, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_NO_DATA)
-> +
-> +#define SPI_NOR_CHIP_ERASE_OP						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_CHIP_ERASE, 0),		\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_NO_DATA)
-> +
-> +#define SPI_NOR_SECTOR_ERASE_OP(opcode, addr_width, addr)		\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(opcode, 0),				\
-> +		   SPI_MEM_OP_ADDR(addr_width, addr, 0),		\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_NO_DATA)
-> +
-> +#define SPI_NOR_READ_OP(opcode)						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(opcode, 0),				\
-> +		   SPI_MEM_OP_ADDR(3, 0, 0),				\
-> +		   SPI_MEM_OP_DUMMY(1, 0),				\
-> +		   SPI_MEM_OP_DATA_IN(2, NULL, 0))
-> +
-> +#define SPI_NOR_PP_OP(opcode)						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(opcode, 0),				\
-> +		   SPI_MEM_OP_ADDR(3, 0, 0),				\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_OUT(2, NULL, 0))
-> +
-> +#define SPINOR_SRSTEN_OP						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_SRSTEN, 0),			\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DATA)
-> +
-> +#define SPINOR_SRST_OP							\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_SRST, 0),			\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DATA)
-> +
->  enum spi_nor_option_flags {
->  	SNOR_F_HAS_SR_TB	= BIT(0),
->  	SNOR_F_NO_OP_CHIP_ERASE	= BIT(1),
-> diff --git a/drivers/mtd/spi-nor/micron-st.c 
-> b/drivers/mtd/spi-nor/micron-st.c
-> index a447762c0d78..26b9a1c2309d 100644
-> --- a/drivers/mtd/spi-nor/micron-st.c
-> +++ b/drivers/mtd/spi-nor/micron-st.c
-> @@ -35,6 +35,18 @@
->  		   SPI_MEM_OP_NO_DUMMY,					\
->  		   SPI_MEM_OP_DATA_OUT(ndata, buf, 0))
-> 
-> +#define MICRON_ST_RDFSR_OP(buf)						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDFSR, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_IN(1, buf, 0))
-> +
-> +#define MICRON_ST_CLFSR_OP						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_CLFSR, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_NO_DATA)
-> +
->  static int micron_st_nor_octal_dtr_en(struct spi_nor *nor)
->  {
->  	struct spi_mem_op op;
-> @@ -324,11 +336,7 @@ static int micron_st_nor_read_fsr(struct spi_nor
-> *nor, u8 *fsr)
->  	int ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDFSR, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_IN(1, fsr, 0));
-> +		struct spi_mem_op op = MICRON_ST_RDFSR_OP(fsr);
-> 
->  		if (nor->reg_proto == SNOR_PROTO_8_8_8_DTR) {
->  			op.addr.nbytes = nor->params->rdsr_addr_nbytes;
-> @@ -363,11 +371,7 @@ static void micron_st_nor_clear_fsr(struct spi_nor 
-> *nor)
->  	int ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_CLFSR, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_NO_DATA);
-> +		struct spi_mem_op op = MICRON_ST_CLFSR_OP;
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> diff --git a/drivers/mtd/spi-nor/spansion.c 
-> b/drivers/mtd/spi-nor/spansion.c
-> index 35d8edb515a3..952db7af6932 100644
-> --- a/drivers/mtd/spi-nor/spansion.c
-> +++ b/drivers/mtd/spi-nor/spansion.c
-> @@ -30,6 +30,18 @@
->  		   SPI_MEM_OP_NO_DUMMY,					\
->  		   SPI_MEM_OP_DATA_OUT(ndata, buf, 0))
-> 
-> +#define CYPRESS_NOR_RD_ANY_REG_OP(naddr, addr, buf)			\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RD_ANY_REG, 0),		\
-> +		   SPI_MEM_OP_ADDR(naddr, addr, 0),			\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_IN(1, buf, 0))
-> +
-> +#define SPANSION_CLSR_OP						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_CLSR, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_NO_DATA)
-> +
->  static int cypress_nor_octal_dtr_en(struct spi_nor *nor)
->  {
->  	struct spi_mem_op op;
-> @@ -165,12 +177,12 @@ static int s28hs512t_post_bfpt_fixup(struct 
-> spi_nor *nor,
->  	 * CFR3V[4] and set the correct size.
->  	 */
->  	struct spi_mem_op op =
-> -		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RD_ANY_REG, 1),
-> -			   SPI_MEM_OP_ADDR(3, SPINOR_REG_CYPRESS_CFR3V, 1),
-> -			   SPI_MEM_OP_NO_DUMMY,
-> -			   SPI_MEM_OP_DATA_IN(1, nor->bouncebuf, 1));
-> +		CYPRESS_NOR_RD_ANY_REG_OP(3, SPINOR_REG_CYPRESS_CFR3V,
-> +					  nor->bouncebuf);
->  	int ret;
-> 
-> +	spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> +
->  	ret = spi_mem_exec_op(nor->spimem, &op);
->  	if (ret)
->  		return ret;
-> @@ -320,11 +332,7 @@ static void spansion_nor_clear_sr(struct spi_nor 
-> *nor)
->  	int ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_CLSR, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_NO_DATA);
-> +		struct spi_mem_op op = SPANSION_CLSR_OP;
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> 
-> diff --git a/drivers/mtd/spi-nor/xilinx.c 
-> b/drivers/mtd/spi-nor/xilinx.c
-> index 9459ac2609dc..1d2f5db047bd 100644
-> --- a/drivers/mtd/spi-nor/xilinx.c
-> +++ b/drivers/mtd/spi-nor/xilinx.c
-> @@ -15,6 +15,12 @@
->  #define XSR_PAGESIZE		BIT(0)	/* Page size in Po2 or Linear */
->  #define XSR_RDY			BIT(7)	/* Ready */
-> 
-> +#define XILINX_RDSR_OP(buf)						\
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(XILINX_OP_RDSR, 0),			\
-> +		   SPI_MEM_OP_NO_ADDR,					\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_IN(1, buf, 0))
-> +
->  #define S3AN_INFO(_jedec_id, _n_sectors, _page_size)			\
->  		.id = {							\
->  			((_jedec_id) >> 16) & 0xff,			\
-> @@ -72,11 +78,7 @@ static int xilinx_nor_read_sr(struct spi_nor *nor, 
-> u8 *sr)
->  	int ret;
-> 
->  	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(XILINX_OP_RDSR, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_IN(1, sr, 0));
-> +		struct spi_mem_op op = XILINX_RDSR_OP(sr);
-> 
->  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
+>  drivers/media/usb/uvc/uvc_driver.c | 5 +++++
+>  drivers/media/usb/uvc/uvcvideo.h   | 3 +++
+>  2 files changed, 8 insertions(+)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index dda0f0aa78b8..e437e9f95890 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -154,6 +154,11 @@ static struct uvc_format_desc uvc_fmts[] = {
+>                 .guid           = UVC_GUID_FORMAT_H264,
+>                 .fcc            = V4L2_PIX_FMT_H264,
+>         },
+
+Maybe I would add a comment here saying that some cameras represent
+hevc as h265.
+
+> +       {
+> +               .name           = "H.265",
+> +               .guid           = UVC_GUID_FORMAT_H265,
+> +               .fcc            = V4L2_PIX_FMT_HEVC,
+> +       },
+>         {
+>                 .name           = "Greyscale 8 L/R (Y8I)",
+>                 .guid           = UVC_GUID_FORMAT_Y8I,
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index 143230b3275b..41f4d8c33f2a 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -139,6 +139,9 @@
+>  #define UVC_GUID_FORMAT_H264 \
+>         { 'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00, \
+>          0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+> +#define UVC_GUID_FORMAT_H265 \
+> +       { 'H',  '2',  '6',  '5', 0x00, 0x00, 0x10, 0x00, \
+> +        0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+>  #define UVC_GUID_FORMAT_Y8I \
+>         { 'Y',  '8',  'I',  ' ', 0x00, 0x00, 0x10, 0x00, \
+>          0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+> --
+> 2.18.0
+>
+
 
 -- 
--michael
+Ricardo Ribalda

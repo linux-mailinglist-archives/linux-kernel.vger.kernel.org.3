@@ -2,180 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD2A5076C0
+	by mail.lfdr.de (Postfix) with ESMTP id 528695076BF
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356031AbiDSRsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S1356043AbiDSRsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242179AbiDSRr6 (ORCPT
+        with ESMTP id S1352507AbiDSRr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:47:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3D186446
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650390310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CIbd+9/ujIgy/587mPK12BUlw+gv3FwEVww95EhOZhc=;
-        b=FzfgusaTP3uupX5j2CrjekK6BKwYqzSr/UnvpSS+2595wbr8rXgH1SrUhrIludgdJKJra5
-        t3T6jN0+CiuYHExv7EEq0ziyHI5U2brNYbVgvjR3WnBcHmLziuNxOC1KpUZ7z6G51XggUa
-        /o9L9jinPWAZbBC49t24KgzGRWlE5Ho=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-uOAKslEBOYKmtkBKIjSexA-1; Tue, 19 Apr 2022 13:45:09 -0400
-X-MC-Unique: uOAKslEBOYKmtkBKIjSexA-1
-Received: by mail-wm1-f69.google.com with SMTP id l41-20020a05600c1d2900b0038ec007ac7fso1662572wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:45:09 -0700 (PDT)
+        Tue, 19 Apr 2022 13:47:59 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBC462E9;
+        Tue, 19 Apr 2022 10:45:13 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id y11so3912361ljh.5;
+        Tue, 19 Apr 2022 10:45:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SjD5CFslJQQYURAmfXvw+WxJZ7JPzN1dOfI/dFsBNzg=;
+        b=dUdFe12pHTI33mJnYfkh/TazjFWSWVb+om+MTj/GzhLgegWL9KGtC6MyUS1i4zTKxA
+         0CNH077RDCRwL15pPGcRpmIE8js/9QFKpPz0L4mG5KM3zbvFb7oONTpxAJO2+kKdGMsd
+         owWHsM+kj0A8W8DfI+x5A5+Bp6LL7HF36f/iZSNbFmoCskj3Dv07UrEDlUoBVcpthWFW
+         T6ybwCUHutfaZh3+oFxP1JweHzQ1wpF6CjFwHA8jH6GgadsPc3YtzUyuEARBfhTht95U
+         zWjc8MdnxpncRGG6FK1yGnbLaJDe5hihomQ3b78OVdDKLGx25xRAsLZa2COCAaiQTzaf
+         SH7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=CIbd+9/ujIgy/587mPK12BUlw+gv3FwEVww95EhOZhc=;
-        b=HQokeSOvUn89ukifdAT+y/ZAt9WusL+mP3trmn7SNkWzDls1YJ6xJA89zDPfudNYEn
-         +94UVGvZGA4tAd9B4FKMetBePftA8amj43yAytVNNOoPi0zqLshKrn9gmOth3A/h1mcI
-         6IzyK521QWG7HobVxwxq20TpNNfLTyAx5hj5UzFycXjOYfbaNZN13KwW0u+ojqojM480
-         PncxJ/fIY4/IpxhGYiOWlrrxOwH+1WiFSGh8rbfNulFY1s+AedovMr+kiMxFTczxclsP
-         w2WCbE6+Nmo22wHtlMrY1K+JJ6ncXLKN8rI36jR12njChUMtQeUetMidv+YYeC6JMLzX
-         SC8Q==
-X-Gm-Message-State: AOAM533XLn4lIFKNU2aU2zvmw8LzwAYfZHuRmAS0Z35NCPGwbIsgJG5B
-        kqxXIeDbV+L1s7zeuUrerCvROEn9BWr+Z/1tdlh45K5svogVQeqhqe/xykBvl4JK8KeWKaLrc7C
-        FMNew9+/Lllr+ZQGTA1zL2QmB
-X-Received: by 2002:a1c:a185:0:b0:392:206d:209d with SMTP id k127-20020a1ca185000000b00392206d209dmr16849534wme.168.1650390308383;
-        Tue, 19 Apr 2022 10:45:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz/q6xzI4l79WNqJp4QrxQovesx47Z6kxd94l2NB9OHznkozrBCR/2cZw/3pLy6rdL1bbtQkw==
-X-Received: by 2002:a1c:a185:0:b0:392:206d:209d with SMTP id k127-20020a1ca185000000b00392206d209dmr16849514wme.168.1650390308129;
-        Tue, 19 Apr 2022 10:45:08 -0700 (PDT)
-Received: from [192.168.8.102] (dynamic-046-114-170-162.46.114.pool.telefonica.de. [46.114.170.162])
-        by smtp.gmail.com with ESMTPSA id v188-20020a1cacc5000000b0038e9c60f0e7sm16397144wme.28.2022.04.19.10.45.06
+        bh=SjD5CFslJQQYURAmfXvw+WxJZ7JPzN1dOfI/dFsBNzg=;
+        b=AqxklEtcNNCeyTSph+PfM3A1uSbkiqvY6PgS8dtt8Jz+I0cQ9umaRYerRGI+Mfp6AU
+         Th7QqZ4eJ1WmqzGjYx2yFO1u6MpWVZuz0GC7Mt6hfWTyjKpP5hu/fTZTfYXgUnF+bqQ8
+         v+qWgsE4GgNHLD0lRsJWiHgIfUBepRJ15qHnvPFCC79c1jHd/zCt1U5uleN4uUKr9DxL
+         JScxk7cbnPQ76pPsxRK6BJuKCjYxq8B0FxM6JXfaJYL9T32PIw7vVNlaCPP5f4xiccRq
+         oJWNyvMT6h3lPyz/F57x9p1ZVJfJMkiTxAHZTZ3rRjYZgU6L7xBaNGspkOQG8RpkXEA/
+         I1Ug==
+X-Gm-Message-State: AOAM533bt5XT0hdEFYjleJVpbY/eJoiNjAz+YNwVtDIUvfGQPlKlRMWr
+        pxt5sZS2hlLr8ttZtK7kjmg=
+X-Google-Smtp-Source: ABdhPJx2o4TRNqJTcBSZ5qW8z5gPbd0SOEt8FZJeRrvnYgmsTK5aLgP3VQ+f02YC6tAp/Ax9YpzTyQ==
+X-Received: by 2002:a2e:7012:0:b0:24a:f9bf:ce70 with SMTP id l18-20020a2e7012000000b0024af9bfce70mr10512154ljc.329.1650390311309;
+        Tue, 19 Apr 2022 10:45:11 -0700 (PDT)
+Received: from [192.168.86.247] ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id r4-20020a2e5744000000b0024d9e106768sm1490874ljd.89.2022.04.19.10.45.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 10:45:07 -0700 (PDT)
-Message-ID: <c44de70a-60e3-65b6-14a7-3e4400f3084b@redhat.com>
-Date:   Tue, 19 Apr 2022 19:45:05 +0200
+        Tue, 19 Apr 2022 10:45:10 -0700 (PDT)
+Message-ID: <0599e7ac-bd06-8d56-b510-0f27f4cc6790@gmail.com>
+Date:   Tue, 19 Apr 2022 20:45:07 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 3/4] KVM: s390: selftests: Use TAP interface in the tprot
- test
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 1/4] dt-bindings: regulator: Add bindings for Silicon
+ Mitus SM5703 regulators
 Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220414105322.577439-1-thuth@redhat.com>
- <20220414105322.577439-4-thuth@redhat.com>
- <20220414135110.6b2baead@p-imbrenda>
- <03f62ec7-2f7f-1f90-3029-d93713ab5afc@redhat.com>
- <baa53445-b4de-7a05-24f5-46fa38e61666@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <baa53445-b4de-7a05-24f5-46fa38e61666@linux.ibm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>, devicetree@vger.kernel.org
+References: <20220419160058.9998-1-markuss.broks@gmail.com>
+ <20220419160058.9998-2-markuss.broks@gmail.com>
+ <Yl7pqgjza/ZfajyM@sirena.org.uk>
+From:   Markuss Broks <markuss.broks@gmail.com>
+In-Reply-To: <Yl7pqgjza/ZfajyM@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2022 14.33, Janis Schoetterl-Glausch wrote:
-> On 4/14/22 14:08, Thomas Huth wrote:
->> On 14/04/2022 13.51, Claudio Imbrenda wrote:
->>> On Thu, 14 Apr 2022 12:53:21 +0200
->>> Thomas Huth <thuth@redhat.com> wrote:
->>>
->>>> The tprot test currently does not have any output (unless one of
->>>> the TEST_ASSERT statement fails), so it's hard to say for a user
->>>> whether a certain new sub-test has been included in the binary or
->>>> not. Let's make this a little bit more user-friendly and include
->>>> some TAP output via the kselftests.h interface.
->>>>
->>>> Signed-off-by: Thomas Huth <thuth@redhat.com>
->>>> ---
->>>>    tools/testing/selftests/kvm/s390x/tprot.c | 12 +++++++++++-
->>>>    1 file changed, 11 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
->>>> index c097b9db495e..a714b4206e95 100644
->>>> --- a/tools/testing/selftests/kvm/s390x/tprot.c
->>>> +++ b/tools/testing/selftests/kvm/s390x/tprot.c
->>>> @@ -8,6 +8,7 @@
->>>>    #include <sys/mman.h>
->>>>    #include "test_util.h"
->>>>    #include "kvm_util.h"
->>>> +#include "kselftest.h"
->>>>      #define PAGE_SHIFT 12
->>>>    #define PAGE_SIZE (1 << PAGE_SHIFT)
->>>> @@ -69,6 +70,7 @@ enum stage {
->>>>        STAGE_INIT_FETCH_PROT_OVERRIDE,
->>>>        TEST_FETCH_PROT_OVERRIDE,
->>>>        TEST_STORAGE_PROT_OVERRIDE,
->>>> +    NUM_STAGES            /* this must be the last entry */
-> 
-> You could move STAGE_END down and use that instead.
-> 
->>>>    };
->>>>      struct test {
->>>> @@ -196,6 +198,7 @@ static void guest_code(void)
->>>>        }                                    \
->>>>        ASSERT_EQ(uc.cmd, UCALL_SYNC);                        \
->>>>        ASSERT_EQ(uc.args[1], __stage);                        \
->>>> +    ksft_test_result_pass("" #stage "\n");                    \
->>>>    })
->>>>      int main(int argc, char *argv[])
->>>> @@ -204,6 +207,9 @@ int main(int argc, char *argv[])
->>>>        struct kvm_run *run;
->>>>        vm_vaddr_t guest_0_page;
->>>>    +    ksft_print_header();
->>>> +    ksft_set_plan(NUM_STAGES - 1);    /* STAGE_END is not counted, thus - 1 */
->>>> +
->>>>        vm = vm_create_default(VCPU_ID, 0, guest_code);
->>>>        run = vcpu_state(vm, VCPU_ID);
->>>>    @@ -213,7 +219,7 @@ int main(int argc, char *argv[])
->>>>          guest_0_page = vm_vaddr_alloc(vm, PAGE_SIZE, 0);
->>>>        if (guest_0_page != 0)
->>>> -        print_skip("Did not allocate page at 0 for fetch protection override tests");
->>>> +        ksft_print_msg("Did not allocate page at 0 for fetch protection override tests\n");
->>>
->>> will this print a skip, though?
->>
->> No, it's now only a message.
->>
->>> or you don't want to print a skip because then the numbering in the
->>> planning doesn't match anymore?
->>
->> Right.
->>
->>> in which case, is there an easy way to fix it?
->>
->> Honestly, this part of the code is a little bit of a riddle to me - I wonder why this was using "print_skip()" at all, since the HOST_SYNC below is executed anyway... so this sounds rather like a warning message to me that says that the following test might not work as expected, instead of a real test-is-skipped message?
->>
->> Janis, could you please clarify the intention here?
-> 
-> Both the host and the guest check the same condition independently, the host just to print the message,
-> then the guest is run and skips those stages.
+Hi Mark,
 
-Ok.
+On 4/19/22 19:56, Mark Brown wrote:
+> On Tue, Apr 19, 2022 at 07:00:54PM +0300, Markuss Broks wrote:
+>
+>> +description: |
+>> +  SM5703 regulators node should be a sub node of the SM5703 MFD node. See SM5703 MFD
+>> +  bindings at Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+> Why is this a separate binding with a compatible rather than just being
+> part of the main MFD binding?  Alternatively, why aren't the regulators
+> described individually in the DT (ie, one node/compatible per regulator)?
 
-However, I'm not sure how to make this use ksft_test_result_skip() in a nice 
-way now, though, without makeing the macro way uglier ...
-I'll have a try, but if that does not work out I'd suggest to simply keep 
-the ksft_print_msg() here instead.
+I took an example from the rohm,bd71847-pmic.yaml MFD binding, they have 
+regulators at a separate regulators { } node, with a separate dt-binding 
+for it. I'm not sure what should I do, I'd be more than happy to follow 
+a better example if you can show me it.
 
-  Thomas
+- Markuss
 

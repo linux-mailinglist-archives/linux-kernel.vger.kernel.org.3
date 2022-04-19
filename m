@@ -2,57 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C548D506B50
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62354506B5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351867AbiDSLt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S244550AbiDSLtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349708AbiDSLt0 (ORCPT
+        with ESMTP id S1351870AbiDSLtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:49:26 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37EB2AE1F
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:46:43 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 199A12223A;
-        Tue, 19 Apr 2022 13:46:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1650368802;
+        Tue, 19 Apr 2022 07:49:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BF9033E2A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:47:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650368820;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hy9+f75H5O31PVsVZ9lqk9GbDwMyawdojGN879oqnow=;
-        b=C8gzNaZZKpq/oD1ZbB0WXz+EJf4ObMxe22BZcTCY+2emXyQokICab8hVjiNIa/kKNAxOgD
-        Ntoy4Ao17Ka8l1v7azvwmTknaTx1unzYi/a+K8Qosv/FIMyQdDKTOSsj6tyCjvE5OQWB5M
-        ivTUQ5edn+2kN0UZYHm8caj/TF/TvI8=
+        bh=SeAwfDT3x/Rkm2EZaznjRquYozKkI6xYPbRZ5Up9SYY=;
+        b=UMcrEASlevZRgOi3Oh4EI9BnV4DwvTEDosbq3tHvMS59DZLaGtBKcFlfEQyCEDKoeOR5Yg
+        tM2VhJPad4SZlwl4yImJcLY9WdKOXmiumPYp/pKd/AtujY8ytxSyJimkm/qaXDLmzb8QAe
+        WYbBc0sCVqgnHKC3z9FO3ZJxuq5atIc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-479-2j09k9h_PX2sYlr1S0kg9w-1; Tue, 19 Apr 2022 07:46:59 -0400
+X-MC-Unique: 2j09k9h_PX2sYlr1S0kg9w-1
+Received: by mail-wm1-f69.google.com with SMTP id c62-20020a1c3541000000b0038ec265155fso1205892wma.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:46:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=SeAwfDT3x/Rkm2EZaznjRquYozKkI6xYPbRZ5Up9SYY=;
+        b=HimJqEGuY3ZMRjory8DbczxhqRrYi8mNZVt1nbwQFUlSuM3lzdWbZrrLFZIYItrE9g
+         YkvVlf8ZypgpJkkR148ril1WGTrh3IRwSBL5Hryce9Z+VrYyVWKSskrG1++og9gB/o8P
+         znnKXqwyIoRU3iZNSW4tV+LYBSIn6KETRTg6teGY/UHJ+zrH0D5JUESWryUOG7yWB5LW
+         XWQL2X0SCMuHFuqrz/uXZk2vDjji6N5fz2OtCSKgZ23qUzI5midpvk/UTNRMFc2qaCmT
+         FyYOmEJiRnIC46a9Ha6DX9gd3sagqSquq6wIflgHWsJkAWPdLF80YqEp3ays1CysWPLw
+         1M+A==
+X-Gm-Message-State: AOAM532CRoMddcTSzqFHtsVAAnAwWYx/Q4W+A6pbza5UdRSORMNDEuzb
+        Wk8DCGO4tjr70MAjfAQ0TRfZXrjVoDSxFDCN69L1SWr11+DXmv0LyR17O0Tsqt0YUdVG7CIz84P
+        4ITLGC8oV9nqZa0mvqkumt8Ez
+X-Received: by 2002:a05:600c:4fd4:b0:392:91a7:acd3 with SMTP id o20-20020a05600c4fd400b0039291a7acd3mr11673227wmq.102.1650368818212;
+        Tue, 19 Apr 2022 04:46:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzDHXgAK0Ww+2rxrpDBFaWLh+Ig7M7331tmL3UVxIV72/e+ThWk1Oi28F4sEHs/+V1SMbpmHA==
+X-Received: by 2002:a05:600c:4fd4:b0:392:91a7:acd3 with SMTP id o20-20020a05600c4fd400b0039291a7acd3mr11673208wmq.102.1650368817960;
+        Tue, 19 Apr 2022 04:46:57 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:5d00:d8c2:fbf6:a608:957a? (p200300cbc7045d00d8c2fbf6a608957a.dip0.t-ipconnect.de. [2003:cb:c704:5d00:d8c2:fbf6:a608:957a])
+        by smtp.gmail.com with ESMTPSA id o8-20020a5d6488000000b002051f1028f6sm13814890wri.111.2022.04.19.04.46.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 04:46:57 -0700 (PDT)
+Message-ID: <c901938d-efcc-6a94-bbf4-93e7f4c2ea7d@redhat.com>
+Date:   Tue, 19 Apr 2022 13:46:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2] mm/swapfile: unuse_pte can map random data if swap
+ read fails
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
+        neilb@suse.de, apopple@nvidia.com, surenb@google.com,
+        minchan@kernel.org, peterx@redhat.com, sfr@canb.auug.org.au,
+        rcampbell@nvidia.com, naoya.horiguchi@nec.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220416030549.60559-1-linmiaohe@huawei.com>
+ <b57fea1e-5c9b-f47e-f565-16b54f1e8782@redhat.com>
+ <1b614ac3-02c0-ec66-b51a-e9b7e1a375ad@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <1b614ac3-02c0-ec66-b51a-e9b7e1a375ad@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 19 Apr 2022 13:46:42 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
-        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
-Subject: Re: [PATCH v3 6/9] mtd: spi-nor: core: Add helpers to read/write any
- register
-In-Reply-To: <0e4ec58c21490dcd9cf82ab89bd8c34c@walle.cc>
-References: <20220411091033.98754-1-tudor.ambarus@microchip.com>
- <20220411091033.98754-7-tudor.ambarus@microchip.com>
- <0e4ec58c21490dcd9cf82ab89bd8c34c@walle.cc>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <e21b0d76bf778f78f432ba27a673222d@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,87 +89,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-04-19 13:19, schrieb Michael Walle:
-> Am 2022-04-11 11:10, schrieb Tudor Ambarus:
->> There are manufacturers that use registers indexed by address. Some of
->> them support "read/write any register" opcodes. Provide core methods 
->> that
->> can be used by all manufacturers. SPI NOR controller ops are 
->> intentionally
->> not supported as we intend to move all the SPI NOR controller drivers
->> under the SPI subsystem.
->> 
->> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
->> Tested-by: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
->> Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+On 19.04.22 13:21, Miaohe Lin wrote:
+> On 2022/4/19 15:37, David Hildenbrand wrote:
+>> On 16.04.22 05:05, Miaohe Lin wrote:
+>>> There is a bug in unuse_pte(): when swap page happens to be unreadable,
+>>> page filled with random data is mapped into user address space. In case
+>>> of error, a special swap entry indicating swap read fails is set to the
+>>> page table. So the swapcache page can be freed and the user won't end up
+>>> with a permanently mounted swap because a sector is bad. And if the page
+>>> is accessed later, the user process will be killed so that corrupted data
+>>> is never consumed. On the other hand, if the page is never accessed, the
+>>> user won't even notice it.
+>>>
+>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>> ---
+>>> v2:
+>>>   use special swap entry to avoid permanently mounted swap
+>>>   free the bad page in swapcache
+>>> ---
+>>>  include/linux/swap.h    |  7 ++++++-
+>>>  include/linux/swapops.h | 10 ++++++++++
+>>>  mm/memory.c             |  5 ++++-
+>>>  mm/swapfile.c           | 11 +++++++++++
+>>>  4 files changed, 31 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/include/linux/swap.h b/include/linux/swap.h
+>>> index d112434f85df..03c576111737 100644
+>>> --- a/include/linux/swap.h
+>>> +++ b/include/linux/swap.h
+>>> @@ -55,6 +55,10 @@ static inline int current_is_kswapd(void)
+>>>   * actions on faults.
+>>>   */
+>>>  
+>>> +#define SWAP_READ_ERROR_NUM 1
+>>> +#define SWAP_READ_ERROR     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
+>>> +			     SWP_MIGRATION_NUM + SWP_DEVICE_NUM + \
+>>> +			     SWP_PTE_MARKER_NUM)
+>>
+>> Does anything speak against reusing the hwpoison marker? At least from a
+>> program POV it's similar "the previously well defined content at this
+>> user space address is no longer readable/writable".
 > 
-> I still don't like it because the function doesn't do
-> anything what the function name might suggest. The read
-> just executes an op, the write executes an op with a
-> write enable before. All the behavior is determined by the
-> 'op' argument.
+> Looks like a good idea. :)
 > 
-> Anyway,
-> Reviewed-by: Michael Walle <michael@walle.cc>
+>>
+>> I recall that we can just set the pfn to 0 for the hwpoison marker.
+>>
+>> There is e.g., check_hwpoisoned_entry() and it just stops if it finds
+>> "pfn=0".
 > 
->> ---
->> v3: no changes
->> 
->>  drivers/mtd/spi-nor/core.c | 41 
->> ++++++++++++++++++++++++++++++++++++++
->>  drivers/mtd/spi-nor/core.h |  4 ++++
->>  2 files changed, 45 insertions(+)
->> 
->> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
->> index 6165dc7bfd17..42794328d3b6 100644
->> --- a/drivers/mtd/spi-nor/core.c
->> +++ b/drivers/mtd/spi-nor/core.c
->> @@ -307,6 +307,47 @@ ssize_t spi_nor_write_data(struct spi_nor *nor,
->> loff_t to, size_t len,
->>  	return nor->controller_ops->write(nor, to, len, buf);
->>  }
->> 
->> +/**
->> + * spi_nor_read_reg() - read register to flash memory
->> + * @nor:        pointer to 'struct spi_nor'.
->> + * @op:		SPI memory operation. op->data.buf must be DMA-able.
->> + * @proto:	SPI protocol to use for the register operation.
->> + *
->> + * Return: zero on success, -errno otherwise
->> + */
->> +int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
->> +		     enum spi_nor_protocol proto)
->> +{
->> +	if (!nor->spimem)
->> +		return -EOPNOTSUPP;
->> +
->> +	spi_nor_spimem_setup_op(nor, op, proto);
->> +	return spi_nor_spimem_exec_op(nor, op);
->> +}
->> +
->> +/**
->> + * spi_nor_write_reg() - write register to flash memory
->> + * @nor:        pointer to 'struct spi_nor'
->> + * @op:		SPI memory operation. op->data.buf must be DMA-able.
->> + * @proto:	SPI protocol to use for the register operation.
->> + *
->> + * Return: zero on success, -errno otherwise
->> + */
->> +int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
->> +		      enum spi_nor_protocol proto)
->> +{
->> +	int ret;
->> +
->> +	if (!nor->spimem)
->> +		return -EOPNOTSUPP;
->> +
->> +	ret = spi_nor_write_enable(nor);
->> +	if (ret)
->> +		return ret;
->> +	spi_nor_spimem_setup_op(nor, op, proto);
->> +	return spi_nor_spimem_exec_op(nor, op);
+> Do you mean that we should set the pfn to 0 for the hwpoison marker so that we can
+> distinguish swapin error case from real hwpoison case?
 
-After seeing your next two patches. Shouldn't the
-spi_nor_wait_until_ready() call be here too?
+I am not sure if we really have to distinguish. However, "0" seems to
+make sense to indicate "this is not an actual problematic PFN, the
+information is simply no longer around due to a hardware issue.
 
--michael
+-- 
+Thanks,
+
+David / dhildenb
+

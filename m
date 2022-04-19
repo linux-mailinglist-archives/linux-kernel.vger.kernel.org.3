@@ -2,84 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C31E506B8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F1F506BA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242804AbiDSL7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S1351979AbiDSMFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236259AbiDSL67 (ORCPT
+        with ESMTP id S1351975AbiDSMD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:58:59 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EC21CB01
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:56:17 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KjMbW1YtLzCqwN;
-        Tue, 19 Apr 2022 19:51:51 +0800 (CST)
-Received: from container.huawei.com (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Apr 2022 19:56:15 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm: of: fix a potential double put bug
-Date:   Tue, 19 Apr 2022 20:14:08 +0800
-Message-ID: <20220419121408.1291270-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 19 Apr 2022 08:03:26 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20F528982;
+        Tue, 19 Apr 2022 04:59:14 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id s25so20467524edi.13;
+        Tue, 19 Apr 2022 04:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Nke0HHcm55q7ZWg7KNIaQeK9cBWmjw2n9HY63k1pdI0=;
+        b=qitSMZa/gzmYJvc0wtUSmri9mXcQvVE05LwgF+gp11f/Ll9YV/2FqbHdxbcYIaVItL
+         RA/+2mhOCK1v650zNp6x87vcyaZvx+3V8Hdz1SFcA11QspFDlNV/YhUfrxv73+64VEDe
+         FRpunRGX37zofmTMs+GYOWdhPPaKHz8R7ein1VDlbuEpGhVbFFGEIHYz6mKxLBxswJec
+         ogVxSBFtEN1L/LnI2zaLoD7jMEEfjCrak0RBKLnlHJ3QbtIiHIQygfUT2Gj+jgUn/fxG
+         p5Vu3PwP2YSw2UEAFXgd3SXrVGgC03ckSmBMvBPWbXkgS/VxqkC5BSCoYRbt55Sk43tv
+         7c8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Nke0HHcm55q7ZWg7KNIaQeK9cBWmjw2n9HY63k1pdI0=;
+        b=W9NqFuoe0WCWTWKKxo4Up1VFv+TzBnUJ+MmgnJ76TO2CVXTn5t1iw83dtJLhZL91bt
+         Dj1zVw/SUROg842mGErw8OasOhBcBAkW6HiG57EzLmDuLVmVMdlXIHUJMJe8g6wLcWV7
+         wdt3mOxPtzgeilFFELI4K3O8/1lbTFDCcm6huHWEAnpmBeAuvjhAZFrjqBmFhc/N1aJY
+         +r/wEEfWsBiYVS9ixpeGYv5hxY4b3Wrktczs79CQk15D544oT1sOTY6xpSYlKbSPuXuu
+         +E+sehRECxJYZfRgiDQ88/gGXV6TTOMXwv8o5fNW8GtU8efGfmkGqQHmSox3ctuJEXhh
+         xMZQ==
+X-Gm-Message-State: AOAM533wX+DWNtMIonTJAAUuIydMNHkNPLym8A1mRzLJA3IexRDFoKbb
+        +KlCesrzY8jKPKUK7CKLA0Y=
+X-Google-Smtp-Source: ABdhPJwC+kRxxlh7ja6yWcyvetpOISZ6zaYfBGlnmVoNx/vMlCHfW1uXDfa6mZ281Sq+VYUqHCwHYg==
+X-Received: by 2002:a05:6402:2689:b0:422:15c4:e17e with SMTP id w9-20020a056402268900b0042215c4e17emr17368136edd.33.1650369553437;
+        Tue, 19 Apr 2022 04:59:13 -0700 (PDT)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id n6-20020aa7c786000000b00410d2403ccfsm8395084eds.21.2022.04.19.04.59.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 04:59:13 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 12:59:11 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/32] 4.19.239-rc1 review
+Message-ID: <Yl6kD7jIYKaxAF3K@debian>
+References: <20220418121127.127656835@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418121127.127656835@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Execute the following coccinelle rule:
-$make coccicheck COCCI=scripts/coccinelle/iterators/device_node_continue.cocci
+Hi Greg,
 
-Get an error report as following:
-./drivers/gpu/drm/drm_of.c:292:2-13: ERROR: probable double put.
+On Mon, Apr 18, 2022 at 02:13:40PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.239 release.
+> There are 32 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
 
-Device node iterators put the previous value of the index variable,
-when find_panel_or_bridge() return non-zero, it will causes a double put.
+Build test:
+mips (gcc version 11.2.1 20220314): 63 configs -> no failure
+arm (gcc version 11.2.1 20220314): 116 configs -> no new failure
+arm64 (gcc version 11.2.1 20220314): 2 configs -> no failure
+x86_64 (gcc version 11.2.1 20220314): 4 configs -> no failure
 
-Fixes: 67bae5f28c89 ("drm: of: Properly try all possible cases for bridge/panel detection")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
- drivers/gpu/drm/drm_of.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
 
-diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
-index f4df344509a8..8c3c0bca1af1 100644
---- a/drivers/gpu/drm/drm_of.c
-+++ b/drivers/gpu/drm/drm_of.c
-@@ -289,11 +289,12 @@ int drm_of_find_panel_or_bridge(const struct device_node *np,
- 			continue;
- 
- 		ret = find_panel_or_bridge(node, panel, bridge);
--		of_node_put(node);
- 
- 		/* Stop at the first found occurrence. */
--		if (!ret)
-+		if (!ret) {
-+			of_node_put(node);
- 			return 0;
-+		}
- 	}
- 
- 	return -EPROBE_DEFER;
--- 
-2.25.1
+[1]. https://openqa.qa.codethink.co.uk/tests/1035
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
 

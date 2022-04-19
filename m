@@ -2,99 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0518E5066D0
+	by mail.lfdr.de (Postfix) with ESMTP id 94ECA5066D2
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349909AbiDSIXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S1349936AbiDSIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237934AbiDSIXN (ORCPT
+        with ESMTP id S237934AbiDSIXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:23:13 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3D32715B;
-        Tue, 19 Apr 2022 01:20:31 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id x1so840402pfj.2;
-        Tue, 19 Apr 2022 01:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FTopSLgJ2n3PXWtDskFTEfFV8BTHV9oM8z+ikuAV+ic=;
-        b=i3uBhJ2tVRdvok0bNuPj65kqsxeaM6leVUupmQNrGxSNJviBhNJVQAQ9rhS7yNvGUC
-         bfyI1tb+WUIRNhWtkxFCPR4muaRLaOOrNzHFxPpey5OZ6dVX94RdQeUoj2Gjh5GPxaiW
-         WO/PUiu05x4a52l+SrwTmxbHLghXjYsmf1YiFo7Xch6YuqOqpQ6jWlVPRBQs4kOtRCvp
-         koKZnnvS7kq6rqR8MeprwzA8h+rfJarKzmfDwMfGR68MqyRUxoOGo/21TNk2MiKEeXt/
-         HaDBNHPfVnQNsYSXlWaoKjud09ZRE6bAufLtkmQ1aT3DWqa3UztzUY+o/39pkRWghFBZ
-         cr9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FTopSLgJ2n3PXWtDskFTEfFV8BTHV9oM8z+ikuAV+ic=;
-        b=XkigLi6d5Ji4xW9vxiRWdFZ7crKDOuPRZkL3mZPnGIMQlKT0v1jQvXHJVQja7vbqwF
-         PI96OblUMPwWy1QRrMjFFqzt9ZR+2MxcTSspUNvm1npajA2S9svpn//SEG0HsKUsFFwL
-         h/AsMVVNvbMgoHva71mPnlMAjfJ3c9cNAHPiS2yl0O9x1VnkAOIwiu+8j31XuALSKI2H
-         arxjWMIgguHq3ImmkKatS87oGjupjaRqLtEVwm1OS51HXKNLwXnWKbHRQMHUhBAz58SG
-         vchgvTSTVWeyolW8PJiF0V0+aUTcZ+zDqJvlENZacGLJAmaz/hYOYkWGGwSXogWqHKs8
-         oc4g==
-X-Gm-Message-State: AOAM533+rySFs4D7jWVh6R2viqq5cFACBfvBz1O87P/afp+7mDf6ySLK
-        hfkx9hBN3tceWxk0UyrbTZQ=
-X-Google-Smtp-Source: ABdhPJzqc+PBDxZ1Tbj3AaMVcrSMOUebhmsMu9TDtibfYoxNGpgjoyrqrxZTuL9vBYotbKMQH4ND6Q==
-X-Received: by 2002:a05:6a00:1c5c:b0:505:7469:134a with SMTP id s28-20020a056a001c5c00b005057469134amr16520442pfw.16.1650356430520;
-        Tue, 19 Apr 2022 01:20:30 -0700 (PDT)
-Received: from localhost.localdomain ([240b:12:16e1:e200:929:c115:ea25:1e5c])
-        by smtp.gmail.com with ESMTPSA id rm5-20020a17090b3ec500b001c7559762e9sm18673797pjb.20.2022.04.19.01.20.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 01:20:29 -0700 (PDT)
-From:   Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-To:     akiyks@gmail.com
-Cc:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-doc@vger.kernel.org
-Subject: [PATCH] docs/ja_JP/index: update section title in Japanese
-Date:   Tue, 19 Apr 2022 17:18:13 +0900
-Message-Id: <20220419081813.6838-1-fujimotokosuke0@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 19 Apr 2022 04:23:21 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Apr 2022 01:20:39 PDT
+Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAAA2CC97
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:20:39 -0700 (PDT)
+Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 202204190819367227a901f5d77c1197
+        for <linux-kernel@vger.kernel.org>;
+        Tue, 19 Apr 2022 10:19:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=iq3DrAL7P13m16XZiQMLTG/b02/7hkWGyY4ZwOKkH7c=;
+ b=LrukbCnh+CYrJLVbjMgFK3T1i4WGo/1CwQEatFtqf3vGFB6akDmXX0/XUgqwZYCIKNwBCL
+ gl5fZj7cdfLAqXeWC4j16yzxOleaEI4qvGnwwibDO7W6pq09eRUuLOvG1NlmZONbL+vmevfP
+ fsLvDZVlqwPISmqti636BZCZtEGFU=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v2 18/20] tty: n_gsm: clean up implicit CR bit encoding in address field
+Date:   Tue, 19 Apr 2022 01:19:30 -0700
+Message-Id: <20220419081930.5886-1-daniel.starke@siemens.com>
+In-Reply-To: <YlkRvMhDfwgNZptV@kroah.com>
+References: <YlkRvMhDfwgNZptV@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update section title "Japanese Translation" in Japanese instead of English
+From: Daniel Starke <daniel.starke@siemens.com>
 
-Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Akira Yokosawa <akiyks@gmail.com>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: linux-doc@vger.kernel.org
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.2.1.2 describes the encoding of the
+address field within the frame header. It is made up of the DLCI address,
+command/response (CR) bit and EA bit.
+Use the predefined CR value instead of a plain 2 in alignment to the
+remaining code and to make the encoding obvious.
+
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- Documentation/translations/ja_JP/index.rst | 2 +-
+ drivers/tty/n_gsm.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/translations/ja_JP/index.rst b/Documentation/translations/ja_JP/index.rst
-index 20738c931d02..558a1f5642b0 100644
---- a/Documentation/translations/ja_JP/index.rst
-+++ b/Documentation/translations/ja_JP/index.rst
-@@ -5,7 +5,7 @@
- 	\kerneldocCJKon
- 	\kerneldocBeginJP{
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 9bf5aa508f0e..1beb4b28cd18 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -751,7 +751,7 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
  
--Japanese translations
-+日本語翻訳
- =====================
- 
- .. toctree::
+ 	*--dp = msg->ctrl;
+ 	if (gsm->initiator)
+-		*--dp = (msg->addr << 2) | 2 | EA;
++		*--dp = (msg->addr << 2) | CR | EA;
+ 	else
+ 		*--dp = (msg->addr << 2) | EA;
+ 	*fcs = gsm_fcs_add_block(INIT_FCS, dp , msg->data - dp);
 -- 
 2.25.1
 

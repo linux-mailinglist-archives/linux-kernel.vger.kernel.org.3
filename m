@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9A650696C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8480E50696E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350879AbiDSLJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
+        id S1350887AbiDSLKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346610AbiDSLJa (ORCPT
+        with ESMTP id S1346610AbiDSLKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:09:30 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D902613A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:06:48 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id hh4so4435448qtb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:06:48 -0700 (PDT)
+        Tue, 19 Apr 2022 07:10:08 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5796C2AC49
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:07:25 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id b68so8344960qkc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:07:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=bIvZjQJaLySDI3kb1qd8szSRM+su5jG098wLkG3YjNw=;
-        b=oyj3cJVHZEt9SADkIqYCINJZl9s4Boy7THU+iOTgUHqIoB1BDWXeombf/dlSs3dgGZ
-         TWNMKMeu2Mj/YDEFX6UD01QUm9WHn3tdqMVU9d3nARmo3Mw+z5kky6RMU1l6q2vyIg6K
-         2TxA5bs9McwrJEG8cUpCHbUytcJsK1Ek0SFxXnqBECAfVBYxaxsvWZnKYTpRA37izSE8
-         w+brg1xr67l7xrBgB/Y/4+LsOHTTZADLqDxliNvk2+5TVTRoBBhEEcYdjkzJ3yUv2rMT
-         kQN1iCixjyRmiOfp6nvU+qLnBtRJSVlQxQdY7+W2ckwDQV9lalo6j+jCbhcHEOUaj2oU
-         GQgg==
+        bh=kLm0olCcsH1PqiLNhih1I6coZ5sjLUN64Q3yF02wEzs=;
+        b=PSQBQufQk2Bz8JcA9FwJJnEAxb0jhkWZncWJxOvMU/8os0VWmKxPVpu7ekk2yCbmig
+         F8M0n76lyKXF4vaRwovvTsh9F7MT8ixs5vnBQEbvkFHBC6ih0QDhFvOXbk4w3IVjGrkW
+         f4GO2voFORmG59CzaPPIPg3+1oyaqulK6LXqRiPORAwkJ/XMJKh5VHnDkFQE+M6W7l2W
+         39BnRaXCpqrJbXHJRpjr8gmDCvFtqGlG3uth4+KSzOPCI5rGJr+OASWbaFRSWF/afkEk
+         cJhQqrhYYL/bF5g0pv7zEFmJvlLM/BflWFWj8Wjdiy9nSWBbCxi6RK7KjUCdVjfTdWAL
+         t8FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=bIvZjQJaLySDI3kb1qd8szSRM+su5jG098wLkG3YjNw=;
-        b=wY2SiGKNpZqFekublmcrQIm0F3d1k9W7A3aYY5tlgkkcOaT8aiWFk/yB8ce4nTgbwi
-         QYg7CSBUpd8EcGv3KC4HQKJJYva0po0Xz3h7mGgp559GSGQCHE0xdPKI/saPqjfeNW+a
-         NNz29Hy3Z/rRWdyz71on7KCIITr44wK2E9B7gNCCcpfT+BkNn1oMjwWfBHDm85YDg+Ql
-         VxYqZEIZSSXlTkZ1xyYkGdej4IwEB6Ss/grs8xUyLumdiVV2/Ywqyu989Nzak3p08/E3
-         wu/WNMTqsE8ZfyoTSUROR0n2I5TqgGDDn13l7eazYG4C+u6BaAXZ5ofp/ZBWhIXfFqa0
-         Pq1Q==
-X-Gm-Message-State: AOAM532KR92f5gci7nQPUd2LD1102Uqr1AZmbtERL2kNYtToul+mXUL3
-        IRG2JpMm2RlrLan8Qcv6M2Q=
-X-Google-Smtp-Source: ABdhPJy21MbNrUsUO7ej48H7XCvbDhoGMvLv9d1+jMAbBaWEXgqF56DG5F62ptskX8U2bBfkvE+nvw==
-X-Received: by 2002:ac8:5a90:0:b0:2f1:f1c0:e0db with SMTP id c16-20020ac85a90000000b002f1f1c0e0dbmr9811200qtc.620.1650366407749;
-        Tue, 19 Apr 2022 04:06:47 -0700 (PDT)
+        bh=kLm0olCcsH1PqiLNhih1I6coZ5sjLUN64Q3yF02wEzs=;
+        b=G/INWZ6wKq3VsyPTWvhGDgUg2w9fE8zYpHF78DmJRB/qU0LeirlL3K4tuXaiB/yvRQ
+         kbB40mBdrZprHQjDfpDZlWAq6shhaLdbcJC2URrSbu8pfu5dRKwS69teOrjzB2SZ1iRk
+         RVV3wEg/ix9Cfl+nHoXxaPZTLAjIvKPEB7yrFb85XrqfNbyeltTuNz8nSUGUfBhAeKts
+         0uW+ldromLacWRy57P3yjhtClSTL1xXGx65yd0ENROqRsxd8mDm7DY3YdADO1gHixdNX
+         7vJfbZcuxIWf+mNMuFuR/C/wFmwEXeCUe8z05oXwK72ISpSB670l0wzaFFiI3EPQOY61
+         wz7A==
+X-Gm-Message-State: AOAM532CtcbR2IN6ORTvqyX5HrrYmwJPKWuRS+Vkymbu2uhGh3s/oxAQ
+        GyUPahOX+MCQegGCi/kO/249SAGG1Dc=
+X-Google-Smtp-Source: ABdhPJxsgEYEL6TpaTURvRKsl8jgBFGSvrzsRlM0QgUA2u1c/3EhXptk4RALE0ivrn6GfVzU89SpZw==
+X-Received: by 2002:a05:620a:2681:b0:67e:933e:54b6 with SMTP id c1-20020a05620a268100b0067e933e54b6mr9348878qkp.428.1650366444421;
+        Tue, 19 Apr 2022 04:07:24 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 9-20020a05620a070900b0069e60da45aasm5783721qkc.60.2022.04.19.04.06.45
+        by smtp.gmail.com with ESMTPSA id b2-20020ac87fc2000000b002f11f6dd5cdsm9316456qtk.23.2022.04.19.04.07.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 04:06:47 -0700 (PDT)
+        Tue, 19 Apr 2022 04:07:24 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     johan@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+To:     lgirdwood@gmail.com
+Cc:     broonie@kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] gnss: Use pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Tue, 19 Apr 2022 11:06:42 +0000
-Message-Id: <20220419110642.2574612-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] ASoC: img-spdif-in: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Tue, 19 Apr 2022 11:07:18 +0000
+Message-Id: <20220419110718.2574674-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,27 +79,28 @@ actual functional changes.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/gnss/serial.c | 6 ++----
+ sound/soc/img/img-spdif-in.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gnss/serial.c b/drivers/gnss/serial.c
-index 5d8e9bfb24d0..afa7a08d718e 100644
---- a/drivers/gnss/serial.c
-+++ b/drivers/gnss/serial.c
-@@ -32,11 +32,9 @@ static int gnss_serial_open(struct gnss_device *gdev)
- 	serdev_device_set_baudrate(serdev, gserial->speed);
- 	serdev_device_set_flow_control(serdev, false);
- 
--	ret = pm_runtime_get_sync(&serdev->dev);
+diff --git a/sound/soc/img/img-spdif-in.c b/sound/soc/img/img-spdif-in.c
+index 95914d0612fe..a79d1ccaeec0 100644
+--- a/sound/soc/img/img-spdif-in.c
++++ b/sound/soc/img/img-spdif-in.c
+@@ -749,11 +749,9 @@ static int img_spdif_in_probe(struct platform_device *pdev)
+ 		if (ret)
+ 			goto err_pm_disable;
+ 	}
+-	ret = pm_runtime_get_sync(&pdev->dev);
 -	if (ret < 0) {
--		pm_runtime_put_noidle(&serdev->dev);
-+	ret = pm_runtime_resume_and_get(&serdev->dev);
+-		pm_runtime_put_noidle(&pdev->dev);
++	ret = pm_runtime_resume_and_get(&pdev->dev);
 +	if (ret < 0)
- 		goto err_close;
+ 		goto err_suspend;
 -	}
  
- 	return 0;
- 
+ 	rst = devm_reset_control_get_exclusive(&pdev->dev, "rst");
+ 	if (IS_ERR(rst)) {
 -- 
 2.25.1
+
 

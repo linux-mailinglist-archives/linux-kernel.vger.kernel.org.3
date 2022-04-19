@@ -2,157 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182D35077AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3435B50778F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344321AbiDSSOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 14:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
+        id S1356365AbiDSSPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 14:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356278AbiDSSOa (ORCPT
+        with ESMTP id S1356304AbiDSSO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 14:14:30 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0B33D4A9;
-        Tue, 19 Apr 2022 11:11:45 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-e5ca5c580fso8052935fac.3;
-        Tue, 19 Apr 2022 11:11:45 -0700 (PDT)
+        Tue, 19 Apr 2022 14:14:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79A1B3D4BB
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:11:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650391917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LwUaVyvkJpv+b43R2pNDTJa0Sg8BzHKo5UTqR77pruc=;
+        b=KLQmXZzNeaF6nFQu3m2ZDxficAZhX4lHb6SdCflzifkqBJgf2yjTWDDrqG0AksySUDftFr
+        8DQPKoP+MHKaNdEVETsY14dcDEca59sM1bc8+/k96bz7eNxzqLecuExkvhAf+3g34jAOiZ
+        Q19Xv3P8ntaOt20w/g/Hds6iIr6WSYo=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-624-EKDFvnEaMO6a4kza1yE__Q-1; Tue, 19 Apr 2022 14:11:55 -0400
+X-MC-Unique: EKDFvnEaMO6a4kza1yE__Q-1
+Received: by mail-qv1-f71.google.com with SMTP id 30-20020a0c80a1000000b00446218e1bcbso12551304qvb.23
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:11:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UGUi+rSbzOtxj4QXaJGlWpTyr6tFNLRS2yQX/fpYpkU=;
-        b=RcVOazEW8IRiK9ZXe+svXgWP2x3EXXZuJv/8U0FQlD7tVLOzw5OZF2H3TFTIt54n9C
-         OQEfxhgxYYBBRhEpg8vvKuOlr9dwzZOwPgI/OGRz3eVuonlWAWhbh1jfGtdgkaU5nmJ5
-         Dhk9gu4bqqezKOOoWpllA/CUBovb6xdiMvtcLZtaJWtcgpZXD3SZ/69OAqP72UFvdwH2
-         +8mj7iPt597sevKf9nj2fNPs3SadYWqSNQJFHK0K0jHVhuJYzqgD7ikLoheX9AnOZthK
-         Me66BLy+1tjyw988eitPD3urLja3vyuRBkbVFShc5I7ul4gl46aiMUEw0GcpAFzeX7Ll
-         SMtQ==
-X-Gm-Message-State: AOAM532nIGwyoegUwkYhditkHi2nUCVySHFrrMTu/OOE/HMRc2VZrxGm
-        x7kA9eP5vkRFG+Y4NOD0NlG2KQx0aw==
-X-Google-Smtp-Source: ABdhPJxp2DvXf0avkdpJT4byQ1E9gsEH/MA0HYo4nYnBAVTEThA5jdc/aNEtV5W5o7PCngdMqxoXsA==
-X-Received: by 2002:a05:6870:b288:b0:e2:b735:56bb with SMTP id c8-20020a056870b28800b000e2b73556bbmr7235582oao.27.1650391905192;
-        Tue, 19 Apr 2022 11:11:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id hc3-20020a056870788300b000e5dfc7d6b9sm2457874oab.14.2022.04.19.11.11.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 11:11:44 -0700 (PDT)
-Received: (nullmailer pid 3079240 invoked by uid 1000);
-        Tue, 19 Apr 2022 18:11:44 -0000
-Date:   Tue, 19 Apr 2022 13:11:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: gnss: Add Broacom BCM4751 family bindings
-Message-ID: <Yl77YPzpjT0hLNRN@robh.at.kernel.org>
-References: <20220414214337.311880-1-linus.walleij@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LwUaVyvkJpv+b43R2pNDTJa0Sg8BzHKo5UTqR77pruc=;
+        b=yu+TtPuBfnX1oTrnzXK0QWI0qh1mEuxTsQUkWzm/LcsyJ5y0ayDqCSN6Bjp87zIsFP
+         A+o2354rxPndXiO6TrT5fY+O+QoUZiXvXVa54phrFgmqFeq10B1n3fQOCtxLKf9+5kDR
+         F0emCnqLMQYU/S4+dK8adcXJlqSnGKeNVe6Lr/aITkipkwfepR9uPo6NykG4k6L5Ex1c
+         V2H9ipIyFVlAPl+H+8juQ3HWig+aSiCQ8htUSgKBJdDzeoPLdb6a/b/hCGVXVPQq7pcj
+         SgSknNyC9Md5i31nQoL96qtYyRQ228aPKPr137BF6JGMacizauZ2MYKYxy5g+L+Wj9Gb
+         pPBA==
+X-Gm-Message-State: AOAM533wEFogzrqEenkLJxu0o4yKkP3MvzVwKi1cM5CGbDOij5ZaHYWf
+        6U+kt/twETE2HbqER+zZ59vOhZV6p9NGQR9UYv77N3Vfr/SmDktIEh+bCgjpZ9M6OH3nNxMO32e
+        zX+p+fZldxkRjH/or6cUfWfjw
+X-Received: by 2002:ac8:57c3:0:b0:2f2:2a4:fd15 with SMTP id w3-20020ac857c3000000b002f202a4fd15mr5998025qta.339.1650391915367;
+        Tue, 19 Apr 2022 11:11:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyHzZnfiEoTE9rq8ROzmmv2/PC1BvV4lSL4t+0tPZRfEQwxsSBiOPjTXcSOMF6iNYRfANzpIw==
+X-Received: by 2002:ac8:57c3:0:b0:2f2:2a4:fd15 with SMTP id w3-20020ac857c3000000b002f202a4fd15mr5998008qta.339.1650391915104;
+        Tue, 19 Apr 2022 11:11:55 -0700 (PDT)
+Received: from [192.168.0.188] ([24.48.139.231])
+        by smtp.gmail.com with ESMTPSA id s18-20020a05622a1a9200b002f335693f4bsm390102qtc.38.2022.04.19.11.11.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 11:11:54 -0700 (PDT)
+Message-ID: <b5575449-08a2-2901-e7e1-a97150e4878c@redhat.com>
+Date:   Tue, 19 Apr 2022 14:11:53 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414214337.311880-1-linus.walleij@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3] vm_swappiness=0 should still try to avoid swapping
+ anon memory
+Content-Language: en-US
+To:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     hannes@cmpxchg.org, aquini@redhat.com, shakeelb@google.com,
+        llong@redhat.com, mhocko@suse.com, hakavlad@inbox.lv
+References: <20210809223740.59009-1-npache@redhat.com>
+From:   Nico Pache <npache@redhat.com>
+In-Reply-To: <20210809223740.59009-1-npache@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 11:43:37PM +0200, Linus Walleij wrote:
-> The Broadcom BCM4751 family of (A-)GPS chips have been around for
-> some years. The latest iteration BCM4753 is for example mounted
-> on the Huawei HiKey970.
+I think its is important to note the issue we are seeing has greatly improved
+since the initial posting. However we have noticed that the issue is still
+present (and significantly worse) when cgroupV1 is set.
+
+We were initially testing with CgroupV1 and later found that the issue was not
+as bad in CgroupV2 (but was still an noticeable issue). This is also resulting
+in the splitting of THPs in the host kernel.
+
+-- Nico
+
+On 8/9/21 18:37, Nico Pache wrote:
+> Since commit 170b04b7ae49 ("mm/workingset: prepare the workingset detection
+> infrastructure for anon LRU") and commit b91ac374346b ("mm: vmscan: enforce
+> inactive:active ratio at the reclaim root") swappiness can start prematurely
+> swapping anon memory. This is due to the assumption that refaulting anon should
+> always allow the shrinker to target anon memory. Add a check for swappiness
+> being >0 before indiscriminately targeting Anon. Before these commits
+> when a user had swappiness=0 anon memory would rarely get swapped; this
+> behavior has remained constant sense RHEL5. This commit keeps that behavior
+> intact and prevents the new workingset refaulting from challenging the anon
+> memory when swappiness=0.
 > 
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> Anon can still be swapped to prevent OOM. This does not completely disable
+> swapping, but rather tames the refaulting aspect of the code that allows for
+> the deactivating of anon memory.
+> 
+> We have two customer workloads that discovered this issue:
+> 1) A VM claiming 95% of the hosts memory followed by file reads (never dirty)
+>    which begins to challenge the anon. Refaulting the anon working set will then
+>    cause the indiscriminant swapping of the anon.
+> 
+> 2) A VM running a in-memory DB is being populated from file reads.
+>    Swappiness is set to 0 or 1 to defer write I/O as much as possible. Once
+>    the customer experienced low memory, swapping anon starts, with
+>    little-to-no PageCache being swapped.
+> 
+> Previously the file cache would account for almost all of the memory
+> reclaimed and reads would throttle. Although the two LRU changes mentioned
+> allow for less thrashing of file cache, customers would like to be able to keep
+> the swappiness=0 behavior that has been present in the kernel for a long
+> time.
+> 
+> A similar solution may be possible in get_scan_count(), which determines the
+> reclaim pressure for each LRU; however I believe that kind of solution may be
+> too aggressive, and will not allow other parts of the code (like direct reclaim)
+> from targeting the active_anon list. This way we stop the problem at the heart
+> of what is causing the issue, with the least amount of interference in other
+> code paths. Furthermore, shrink_lruvec can modify the reclaim pressure of each
+> LRU, which may make the get_scan_count solution even trickier.
+> 
+> Changelog:
+>  -V3:
+>     * Blame the right commit and be more descriptive in my log message.
+>     * inactive_is_low should remain independent from the new swappiness check.
+>     * Change how we get the swappiness value. Shrink_node can be called with a
+>       null target_mem_cgroup so we should depend on the target_lruvec to do the
+>       null check on memcg.
+> 
+>  -V2:
+>      * made this mem_cgroup specific so now it will work with v1, v2, and
+>        no cgroups.
+>      * I've also touched up my commit log.
+> 
+> Signed-off-by: Nico Pache <npache@redhat.com>
 > ---
->  .../bindings/gnss/brcm,bcm4751.yaml           | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gnss/brcm,bcm4751.yaml
+>  mm/vmscan.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/gnss/brcm,bcm4751.yaml b/Documentation/devicetree/bindings/gnss/brcm,bcm4751.yaml
-> new file mode 100644
-> index 000000000000..f06a4acf21cf
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gnss/brcm,bcm4751.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: GPL-2.0
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 4620df62f0ff..9f2420da4037 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2883,8 +2883,12 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+>  	struct lruvec *target_lruvec;
+>  	bool reclaimable = false;
+>  	unsigned long file;
+> +	struct mem_cgroup *memcg;
+> +	int swappiness;
+>  
+>  	target_lruvec = mem_cgroup_lruvec(sc->target_mem_cgroup, pgdat);
+> +	memcg = lruvec_memcg(target_lruvec);
+> +	swappiness = mem_cgroup_swappiness(memcg);
+>  
+>  again:
+>  	memset(&sc->nr, 0, sizeof(sc->nr));
+> @@ -2909,7 +2913,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+>  
+>  		refaults = lruvec_page_state(target_lruvec,
+>  				WORKINGSET_ACTIVATE_ANON);
+> -		if (refaults != target_lruvec->refaults[0] ||
+> +		if ((swappiness && refaults != target_lruvec->refaults[0]) ||
+>  			inactive_is_low(target_lruvec, LRU_INACTIVE_ANON))
+>  			sc->may_deactivate |= DEACTIVATE_ANON;
+>  		else
 
-Dual license.
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gnss/brcm,bcm4751.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom BCM4751 family GNSS Receiver Device Tree Bindings
-> +
-> +maintainers:
-> +  - Johan Hovold <johan@kernel.org>
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +description:
-> +  Broadcom GPS chips can be used over the UART or I2C bus. The UART
-> +  bus requires CTS/RTS support. The number of the capsule is more
-> +  elaborate than the compatibles BCM4751 may be printed
-> +  BCM4751IFBG for example.
-> +
-> +allOf:
-> +  - $ref: gnss-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - brcm,bcm4751
-> +      - brcm,bcm4752
-> +      - brcm,bcm4753
-> +
-> +  reg:
-> +    description:
-> +      The I2C Address, not required on UART buses.
-> +
-> +  vdd-auxin-supply:
-> +    description:
-> +      Main voltage supply, pin name VDD_AUXIN, typically connected
-> +      directly to a battery such as LiIon 3.8V battery or a 2.6V supply.
-> +
-> +  vddio-supply:
-> +    description:
-> +      IO voltage supply, pin name VDDIO, typically 1.8V
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description: An optional active low reset line, should be flagged with
-> +      GPIO_ACTIVE_LOW.
-> +
-> +  enable-gpios:
-> +    description: Enable GPIO line, connected to pins named REGPU or NSTANDBY.
-> +      If the line is active low such as NSTANDBY, it should be tagged
-> +      GPIO_ACTIVE_LOW.
-> +
-> +required:
-> +  - compatible
-> +  - enable-gpios
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    serial {
-> +        gnss {
-> +            compatible = "brcm,bcm4751";
-> +            vdd-auxin-supply = <&vbat>;
-> +            reset-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
-> +            enable-gpios = <&gpio0 16 GPIO_ACTIVE_HIGH>;
-> +            current-speed = <38400>;
-> +        };
-> +    };
-> -- 
-> 2.35.1
-> 
-> 

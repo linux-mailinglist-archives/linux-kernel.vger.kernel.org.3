@@ -2,241 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711C75063D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2813D5063DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348522AbiDSFSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 01:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
+        id S1348534AbiDSFWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 01:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbiDSFSu (ORCPT
+        with ESMTP id S1348563AbiDSFWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 01:18:50 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5C71C13F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 22:16:06 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id s33so1667363ybi.12
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 22:16:06 -0700 (PDT)
+        Tue, 19 Apr 2022 01:22:33 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAA46167;
+        Mon, 18 Apr 2022 22:19:49 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id k14so22891168pga.0;
+        Mon, 18 Apr 2022 22:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=aAJbJ4OLMH3hjwOtMx3/fgcKkzaU5VNRUU5MWWFvTHk=;
-        b=NtbOmLiodR4hcHgzZNX45+egsbYxk/64ZwnjkHy1BWUGyKQp4Uu3hIJR6wo6XTZHpI
-         XFIWUBEUDdBkFBSiBZYPfz/tMeWBtKK31q8ZwY1N5GEiYrFnZvoe0s2J8YEwF28ghL18
-         B4xQ4l7TdoNPn+u32LrrdTpHdMdo80ydjHs8jaLxR5rzP2WTovv4BZHO++1kiBNVT+YQ
-         XVZFvVWr605gGdH6MEzDJUKTgIo8qGoJPGEsYjb0DqtK1CqwYEQPhIM2bNmjFLbE7BBs
-         gAfibKwVbBnnOqUldp8NVo1ri9us4M3cr19l26VbCBuHan2jydWw6QflAhqq3jJ3AEzi
-         YFUA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=je3GAhnrsS3qmDoIuVcaSDn6nM7iLRjCpgJb3vVvrAc=;
+        b=A8a3td9wlfAiSIhFkg5saM13qY+3v4FW01xS8tmywfWv+aYfg1FQGkNcWC4Uv1QrHZ
+         yKMabMhWqEPo93hessEAL59glLZtvZVAsMUV+faVLPCX/yG9wO1y0kO3XR3zFx/BV4yc
+         u5cTZITXyaQJN1ZX2NyR+3+xwkUvX5KDPJ1p38D3qJdub1fXJfndKJv7kDWiLpNoYNLC
+         lUluKrxiRx34yY2knrldzdzePWBdiSl5H8SRjJyPoJgC8HzXt4Pco7333xU7kg2vRf1K
+         bu/64+uxtsguYjnDmbLB9iOFgs5zlQfWqkpR8TvrIi8r65x77ter9yFWogkfVNhfHDwZ
+         ElyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=aAJbJ4OLMH3hjwOtMx3/fgcKkzaU5VNRUU5MWWFvTHk=;
-        b=3hdMuYLbEX6CTlT1N0YYm/goUT7xbAyh2oK7RNKUNFGs3NSMVfPQa1dluB92APctRd
-         vS9v6rLrqASsTEtzBGm5kglx9iwxwMTX5lIzeB3+lR3pQsOqqzrhAUgkPMN5cHxWoaan
-         fsZPsq5iFD9jJ1r3eKfDc/ouJEwH2ZSyO0NReWs+mBngodm2W3QZil4XjVo2sVEWQeil
-         CcylzIwFc6sYeGjpvaL1m0zHvNBmdT6Uw+9VMD24NA6gzfSO4F60r8coP64t3MTLvtJ+
-         62xF6VMgUYf2vdC0JlbuyA1uDPwm24zIas5YBiM0w7z4zleTzbvxlpA5mvt9hBcP/3z9
-         1orw==
-X-Gm-Message-State: AOAM533PI1xWr1LfH/tYG6i11/yvXYl5yGjYlVzp9oJu3fO3s1IGxNZw
-        ddmAVMGf0ZPOcCqSFib4GSW1Jawp8k9ZLEpbdo1y1Q==
-X-Google-Smtp-Source: ABdhPJwduztLeiEZZGmMqTRwYgrt1rqAluZvqeWg5AfV8XZ0cmKSGAZnkJSiQafV5ROtKlGDzlmbRzBcCjkjtc7rJ/s=
-X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
- z9-20020a259909000000b00624057ed919mr13701562ybn.494.1650345365878; Mon, 18
- Apr 2022 22:16:05 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=je3GAhnrsS3qmDoIuVcaSDn6nM7iLRjCpgJb3vVvrAc=;
+        b=OwabXReaj3dYCiinBjSMRw4lCwt2ZcV07YvJVdVbfFxPicmbeQS+dzkGZVmVUzt6Vi
+         xdbN9A443MNFCKdw5qAfiE47XYQhJb1fouetawGT7/PEEkMVHXykT5WaiFyZ/hYN9tDi
+         p6mgWgZTtEqu2eAszJl7f9osSKp0gnaMz8ARQV/SIzxWdyLWyst9aq9YBAhJCzpLPXq2
+         wC5QjUdoSpqFAyld6zUbFzsWlZ9q+1Uu9kt86Qjea67zGAPRIGEGr0nY4HhOc25IUpME
+         ru4TP38k4hbnXPEODDDS3MPBAaEYEKd4CIChZKGIEYG94bCpln8FiBIL1Y3uD4yo+nqJ
+         i7RA==
+X-Gm-Message-State: AOAM530v7/m4ZmHW03P2sUjTYsjAxJw6r5tu/YWzZNi7XTiNW7ncTGsP
+        Sb/Lisy1JA3ga9mBLA+kIZQ=
+X-Google-Smtp-Source: ABdhPJzhM5IkrPTBazVFqfWlLXwWqrSQLkhlty36WeiwKvHzSvbQHp5tWd0+ALc1qK1qWDh+XUJuNg==
+X-Received: by 2002:a63:68c6:0:b0:380:3fbc:dfb6 with SMTP id d189-20020a6368c6000000b003803fbcdfb6mr13102086pgc.326.1650345589078;
+        Mon, 18 Apr 2022 22:19:49 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-72.three.co.id. [180.214.233.72])
+        by smtp.gmail.com with ESMTPSA id 124-20020a621982000000b0050a73577a37sm6583315pfz.45.2022.04.18.22.19.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 22:19:48 -0700 (PDT)
+Message-ID: <b5b42b49-9d0c-c745-f355-89900b53f6e1@gmail.com>
+Date:   Tue, 19 Apr 2022 12:19:44 +0700
 MIME-Version: 1.0
-References: <20220418121200.312988959@linuxfoundation.org>
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 19 Apr 2022 10:45:54 +0530
-Message-ID: <CA+G9fYvm8SxQJ+q12cOgB688DkeHAQyDGa2h+Oi07XRLRcOeqg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/189] 5.15.35-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] btrfs: zstd: remove extraneous asterix at the head of
+ zstd_reclaim_timer_fn() comment
+Content-Language: en-US
+To:     Josef Bacik <josef@toxicpanda.com>
+Cc:     linux-doc@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>, Schspa Shi <schspa@gmail.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220418125934.566647-1-bagasdotme@gmail.com>
+ <Yl2Dx+jefYs1Un+8@localhost.localdomain>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <Yl2Dx+jefYs1Un+8@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 at 17:56, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.35 release.
-> There are 189 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.35-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+On 4/18/22 22:29, Josef Bacik wrote:
+> Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+> 
+> Thanks,
+> 
+> Josef
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Thanks for the review. Should I send v2 with your Reviewed-by
+tag?
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.15.35-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 4a9761edfcec9b095619311472fac014067f802d
-* git describe: v5.15.34-190-g4a9761edfcec
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.34-190-g4a9761edfcec
-
-## Test Regressions (compared to v5.15.33-278-g1ad810a5a764)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.33-278-g1ad810a5a764)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.33-278-g1ad810a5a764)
-No metric fixes found.
-
-## Metric Fixes (compared to v5.15.33-278-g1ad810a5a764)
-No metric fixes found.
-
-## Test result summary
-total: 103748, pass: 88080, fail: 617, skip: 14029, xfail: 1022
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* i386: 39 total, 39 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* riscv: 27 total, 22 passed, 5 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-npt[
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-com[
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+An old man doll... just what I always wanted! - Clara

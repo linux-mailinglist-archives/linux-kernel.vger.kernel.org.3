@@ -2,88 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088BA506D07
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2A1506CDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350897AbiDSNFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        id S1344520AbiDSM7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350880AbiDSNFR (ORCPT
+        with ESMTP id S242767AbiDSM7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:05:17 -0400
-X-Greylist: delayed 386 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Apr 2022 06:02:32 PDT
-Received: from 2v5136.portmanej.com.pl (2v5136.portmanej.com.pl [94.152.196.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25F03703F
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:02:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=trybulski.radom.pl; h=
-        content-transfer-encoding:content-type:date:from:to:subject:
-        message-id; s=tlddkim; bh=6rqwT51Ke8/0WFlGBZTfz7WinM8=; b=KiMpTf
-        uFFqh6afDsvWfsX6P2M9n8SZ4u4CObY18A2B0n99SUWKSVfXBUjuY/kHqwGpTeLZ
-        S/TG0RMr6jtdg8XLcAQdcLuI9XuLkR844bjk+oOgg7CPKrwBGDVxYXaSh6WA8waj
-        wnsjyNSYsownnbUDd524k7T8bPexoTjebg13UgkexjWLSP93SjmS+RfainhvM4nw
-        5OOmsrZ+O9R2jpDlklyyb0oQXQYvfTFH43vYqJXWH8Zexjwq0VpS0VYNAmqoyoaJ
-        7IiotklGVUgpfVIcv1BiWO32Tsvzh8tg0KkYCeA0LR3ffoEYLfxRDspnd/sKKsOJ
-        PiSoNnMF1yH5POrQ==
-Received: (qmail 9245 invoked by uid 36007); 19 Apr 2022 12:55:51 -0000
-Received: from 178235179021.dynamic-4-waw-k-1-3-0.vectranet.pl (HELO DESKTOP-4H0A81O) (krzysztof@trybulski.radom.pl@178.235.179.21)
-  by 2v5136.portmanej.com.pl with ESMTPA; 19 Apr 2022 12:55:51 -0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Date:   Tue, 19 Apr 2022 14:55:52 +0200
-From:   "Krzysztof Trybulski" <krzysztof@trybulski.radom.pl>
-To:     linux-kernel@vger.kernel.org
-Subject: =?iso-8859-2?Q?Jeste=B6cie_Pa=F1stwo_najlepsi?=
-Organization: Krzysiek Misiek
-Message-ID: <4073f9209f4319522e08cfbb8ed819c0@trybulski.radom.pl>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 19 Apr 2022 08:59:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B1FA2B192
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650372981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w7CRMFwBAwSytoT7QhMHKmZ9oEqeZXJfZLO3BeitbNk=;
+        b=Ag9wQi3tkWp6uhEatutEtw/H5llf2MK+COvow8cRRrF6cFCg4V1OQeHpCp/G7Y8yFfIZyq
+        0Mclxts/XKnFGVVjigmYYBMBhHEn66sBwIRohbfpw7SchGSP7+rsXGWj/Ika6XrVU5OUaB
+        2m1R8Q1GRsAitiVxg9xwfigIwKRVH3Q=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-495-11jULcglOF2YZ-WQSWJQ4Q-1; Tue, 19 Apr 2022 08:56:20 -0400
+X-MC-Unique: 11jULcglOF2YZ-WQSWJQ4Q-1
+Received: by mail-wm1-f69.google.com with SMTP id y11-20020a7bc18b000000b0038eac019fc0so1183411wmi.9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:56:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=w7CRMFwBAwSytoT7QhMHKmZ9oEqeZXJfZLO3BeitbNk=;
+        b=qV5TMctCEORNJC/5XCVRkXgJKmVuZbTOWEXQvbzNGa9ZAPiVyp48nx5VJY6zgex1ya
+         TYp1tLf1/bdgGy5wKMxwX5elqdxeO4j8hmSd/dEO/SCX475aYRmcq+1g4AeZ4RRMwY3Q
+         vllvrkgoCbX4IvMo7UfBD9bTAm5JSTI/JFZlTZZWDKeNMeaZZV8a3Ftxmnfhz0cbEsYp
+         iUMO0+yHjgox2NYSfEios6uwXWZGwy8/E5JIcyzKvJgtt8IyuCri6k/jci0zFLET0cX0
+         iWQWdpYXK8Bdrs/hkJ90zb7+Iky4soBzPb6jM9JbH2FqUdoTH12PJjATL9TnlPUT7QSl
+         to0A==
+X-Gm-Message-State: AOAM533jizkz+VtmJhgJ2e0zJEkaKc4kwrPoJ42KnVAweGxj8+rZue7N
+        Z+kol0wRTJ6COnqEeA5MAPcKUJrHQ0ZK2/BUdOih2lLYNSxufR0lk1y5Tnf7UXpgkXXPGlOESbI
+        q+cVYfWQuHmfZcXmbL/Fc0DU+
+X-Received: by 2002:a5d:6e0d:0:b0:207:a4d9:7950 with SMTP id h13-20020a5d6e0d000000b00207a4d97950mr11552650wrz.477.1650372978817;
+        Tue, 19 Apr 2022 05:56:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxYKkTpNyM9dnV8PInAa0R3bc+otnnkjPQ1loj/u9sqAIWt80zuVCGbG64ifL6Knin9j3CtIA==
+X-Received: by 2002:a5d:6e0d:0:b0:207:a4d9:7950 with SMTP id h13-20020a5d6e0d000000b00207a4d97950mr11552629wrz.477.1650372978524;
+        Tue, 19 Apr 2022 05:56:18 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:5d00:d8c2:fbf6:a608:957a? (p200300cbc7045d00d8c2fbf6a608957a.dip0.t-ipconnect.de. [2003:cb:c704:5d00:d8c2:fbf6:a608:957a])
+        by smtp.gmail.com with ESMTPSA id g5-20020adfd1e5000000b0020a97e7ba9fsm5533899wrd.92.2022.04.19.05.56.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 05:56:17 -0700 (PDT)
+Message-ID: <59404249-de0c-c569-d04a-9da38ed14b0a@redhat.com>
+Date:   Tue, 19 Apr 2022 14:56:06 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] mm: do not call add_nr_deferred() with zero deferred
+Content-Language: en-US
+To:     Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Shi <shy828301@gmail.com>
+References: <20220416004104.4089743-1-roman.gushchin@linux.dev>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220416004104.4089743-1-roman.gushchin@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=F1 dobry Pa=F1stwu, witam serdecznie.
+On 16.04.22 02:41, Roman Gushchin wrote:
+> add_nr_deferred() is often called with next_deferred equal to 0.
+> For instance, it's happening under low memory pressure for any
+> shrinkers with a low number of cached objects. A corresponding trace
+> looks like:
+>   <...>-619914 [005] .... 467456.345160: mm_shrink_slab_end: \
+>   super_cache_scan+0x0/0x1a0 0000000087027f06: nid: 1	     \
+>   unused scan count 0 new scan count 0 total_scan 0	     \
+>   last shrinker return val 0
+> 
+>   <...>-619914 [005] .... 467456.345371: mm_shrink_slab_end: \
+>   super_cache_scan+0x0/0x1a0 0000000087027f06: nid: 1	     \
+>   unused scan count 0 new scan count 0 total_scan 0	     \
+>   last shrinker return val 0
+> 
+>   <...>-619914 [005] .... 467456.345380: mm_shrink_slab_end: \
+>   super_cache_scan+0x0/0x1a0 0000000087027f06: nid: 1 unused \
+>   scan count 0 new scan count 0 total_scan 0	             \
+>   last shrinker return val 0
+> 
+> This lead to unnecessary checks and atomic operations, which can be
+> avoided by checking next_deferred for not being zero before calling
+> add_nr_deferred(). In this case the mm_shrink_slab_end trace point
+> will get a potentially slightly outdated "new scan count" value, but
+> it's totally fine.
 
-Na imi=EA mam Krzysztof. Nazwisko Trybulski. Jestem kolekcjonerem.
-Jestem niepe=B3nosprawny.
+Sufficient improvement to justify added complexity for anybody reading
+that code?
 
-Przepraszam, =BFe o=B6mielam si=EA do Pa=F1stwa pisa=E6 aczkolwiek mi na ty=
-m zale=BFy.
+> 
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> ---
+>  mm/vmscan.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index d4a7d2bd276d..19d3d4fa1aad 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -808,7 +808,10 @@ static unsigned long do_shrink_slab(struct shrink_control *shrinkctl,
+>  	 * move the unused scan count back into the shrinker in a
+>  	 * manner that handles concurrent updates.
+>  	 */
+> -	new_nr = add_nr_deferred(next_deferred, shrinker, shrinkctl);
+> +	if (next_deferred)
+> +		new_nr = add_nr_deferred(next_deferred, shrinker, shrinkctl);
+> +	else
+> +		new_nr = nr;
+>  
+>  	trace_mm_shrink_slab_end(shrinker, shrinkctl->nid, freed, nr, new_nr, total_scan);
+>  	return freed;
 
-Bardzo podoba mi si=EA pa=F1stwa dzia=B3alno=B6=E6. Dlatego pisz=EA.
+And if we still want to do this optimization, why not put it into
+add_nr_deferred()?
 
-Ot=F3=BF jako kolekcjoner, kolekcjonuj=EA wszelkiego rodzaju gad=BFety
-reklamowe oraz promocyjne od najlepszych firm i instytucji w Polsce i
-na =B6wiecie: smycze, koszulki, d=B3ugopisy, przypinki oraz inne gad=BFety
-reklamowe i promocyjne a tak=BFe ciekawe materialy w formie papierowej.
+-- 
+Thanks,
 
-Kolekcjonuj=EA gad=BFety tylko od najlepszych. Dlatego by=B3bym niezmiernie
-wdzi=EAczny, szcz=EA=B6liwy, je=BFeli moje zbiory powi=EAkszy=B3y by si=EA =
-o
-materia=B3y od pa=F1stwa lub z pa=F1stwem zwi=B1zanymi.
-
-Kolekcjonuj=EA gad=BFety wszelkiego rodzaju. Bardzo mnie to wci=B1gn=EA=B3o=
-=2E
-
-B=EAd=EA mega wdzi=EAczny je=B6li postanowi=B1 mi pa=F1stwo co=B6 wys=B3a=
-=E6. Nie mam
-ulubionych gad=BFet=F3w. Wszystkie s=B1 fajne, je=B6li s=B1 od fajnych ludz=
-i,
-firm, instytucji.
-
-B=EAd=EA naprawd=EA wdzi=EAczny je=B6li co=B6 od Pa=F1stwa otrzymam.
-
-M=F3j adres do wysy=B3ki to:
-Krzysztof Trybulski
-ul. Jacka Malczewskiego 20/12
-26-609 Radom
-603-165-730
-
-Dzi=EAkuj=EA i wszystkiego dobrego dla Pa=F1stwa.
-
-Z pewno=B6ci=B1 je=B6li tylko nadarzy si=EA taka okazja, zapoznam si=EA z
-pa=F1stwem bli=BFej...
+David / dhildenb
 

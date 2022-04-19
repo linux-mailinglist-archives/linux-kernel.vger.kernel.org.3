@@ -2,81 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD38506B36
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C39506B34
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239568AbiDSLnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S1351784AbiDSLo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352325AbiDSLnM (ORCPT
+        with ESMTP id S1352041AbiDSLoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:43:12 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149271EEE5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:40:24 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id t11so32246580eju.13
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hcwhzmzfL26TAKtQRPD1wNariBwcxaFreylxMdtXb80=;
-        b=MwJ/XiGAyyPrcSbgJo3k5Qt6BHxqWTh4LApUB/2udnABbiFsrTItmlOpmxNseH09Cl
-         XEIoaRZ3y49NNb+TWkoxlJ7GuV+20JT+pL+P3yU/c0i/cnROK+4P4zhm7n1cg8negyHp
-         Ecc7487RWUynXX95NupT0Plw9izrrFIhFv0YES89lwEyaabL8OFlMMDCvgySp5pQNJx6
-         7MryYQIFMfSIo+XJ8rz/qDB8GNb+E1a0SISdkKqPte9xKldZyy9XMDN05AIq14B+OuCN
-         s+obkZssE2zV+x7mrnmnEnEgzJDz9O/KfDs1/3RYl4YrlPd3tt7I0W8C3QIN3aDAyDby
-         GCHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hcwhzmzfL26TAKtQRPD1wNariBwcxaFreylxMdtXb80=;
-        b=tMsNOdHWyunqvPk9rR7oPk/aod0PDzgykKe38YR2X9D+BtFdgrruB5zdgMMC8QR+Ib
-         tHfLLovGe8jmxw0Oepd0mN6Ys92mcwDepJpgLeIkDdU5oIXqZBYDnUwaNwg/tpeEPl7G
-         FxZRQqCh5+SjLKQN/1Im2sZLNdAsoMEcpapaUS5435kmUqEW6/f3jhqp45g6Bi8qLqxh
-         w3wbkE9WmdFcHPX9cmAtLE7bK+5/2+V+nWuE3rBXcYNooslvS97XZXf8GALoL+mC1+rC
-         V8V2HRQ9/JlNW3W7/TPOuCuHVjGzMxjP7TZ8C8LDW6zdhu013tg1axuRbqc9qmz+9Lq5
-         KJMg==
-X-Gm-Message-State: AOAM533nuRk/nJ/vcnaie8PEXeKiN/zoaDo3ag+SK6z3AQKhh+5XK7Jv
-        6ZLJ/PB2+mwx02HAAbY+XGrRXw==
-X-Google-Smtp-Source: ABdhPJz1P9B0z3QsIUrpZk+2ju/oxQxuz+zzvYNFL0xJnzmXCwLmLp18B+zu9L//zCVqfBZ1agRh0g==
-X-Received: by 2002:a17:907:a425:b0:6ef:8e2f:4215 with SMTP id sg37-20020a170907a42500b006ef8e2f4215mr10377380ejc.283.1650368422694;
-        Tue, 19 Apr 2022 04:40:22 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b20-20020a1709063f9400b006e12836e07fsm5600637ejj.154.2022.04.19.04.40.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 04:40:22 -0700 (PDT)
-Message-ID: <efb859ec-4ca4-ca2e-bc6c-c3e50e779dc6@linaro.org>
-Date:   Tue, 19 Apr 2022 13:40:21 +0200
+        Tue, 19 Apr 2022 07:44:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0FC034BA3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:41:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 222F71063;
+        Tue, 19 Apr 2022 04:41:15 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.75.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A120F3F73B;
+        Tue, 19 Apr 2022 04:41:12 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 12:41:05 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     rostedt@goodmis.org, mingo@redhat.com, catalin.marinas@arm.com,
+        will@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        broonie@kernel.org, ardb@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+Subject: Re: [PATCH v4 1/2] ftrace: cleanup ftrace_graph_caller enable and
+ disable
+Message-ID: <Yl6f0XKoRxNhgGPv@FVFF77S0Q05N>
+References: <20220409153554.14470-1-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v8 06/13] arm64: dts: freescale: Add i.MX8DXL evk board
- support
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@nxp.com>, Rob Herring <robh@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Jacky Bai <ping.bai@nxp.com>
-References: <20220419113516.1827863-1-abel.vesa@nxp.com>
- <20220419113516.1827863-7-abel.vesa@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220419113516.1827863-7-abel.vesa@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409153554.14470-1-zhouchengming@bytedance.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,64 +47,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2022 13:35, Abel Vesa wrote:
-> From: Jacky Bai <ping.bai@nxp.com>
+On Sat, Apr 09, 2022 at 11:35:53PM +0800, Chengming Zhou wrote:
+> The ftrace_[enable,disable]_ftrace_graph_caller() are used to do
+> special hooks for graph tracer, which are not needed on some ARCHs
+> that use graph_ops:func function to install return_hooker.
 > 
-> Add i.MX8DXL EVK board support.
+> So introduce the weak version in ftrace core code to cleanup
+> in x86.
 > 
-
-Thank you for your patch. There is something to discuss/improve.
-(...)
-
-> +		/* global autoconfigured region for contiguous allocations */
-> +		linux,cma {
-> +			compatible = "shared-dma-pool";
-> +			reusable;
-> +			size = <0 0x14000000>;
-> +			alloc-ranges = <0 0x98000000 0 0x14000000>;
-> +			linux,cma-default;
-> +		};
-> +	};
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> ---
+> v4:
+>  - put weak ftrace_enable,disable_ftrace_graph_caller() in
+>    fgraph.c instead of ftrace.c as suggested by Steve.
+> 
+> v3:
+>  - consolidate two #if into a single #if, suggested by Steve. Thanks.
+> ---
+>  arch/x86/kernel/ftrace.c | 17 ++---------------
+>  kernel/trace/fgraph.c    | 18 ++++++++++++++++++
+>  2 files changed, 20 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 1e31c7d21597..b09d73c2ba89 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -579,9 +579,7 @@ void arch_ftrace_trampoline_free(struct ftrace_ops *ops)
+>  
+>  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>  
+> -#ifdef CONFIG_DYNAMIC_FTRACE
+> -
+> -#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
+> +#if defined(CONFIG_DYNAMIC_FTRACE) && !defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS)
+>  extern void ftrace_graph_call(void);
+>  static const char *ftrace_jmp_replace(unsigned long ip, unsigned long addr)
+>  {
+> @@ -610,18 +608,7 @@ int ftrace_disable_ftrace_graph_caller(void)
+>  
+>  	return ftrace_mod_jmp(ip, &ftrace_stub);
+>  }
+> -#else /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+> -int ftrace_enable_ftrace_graph_caller(void)
+> -{
+> -	return 0;
+> -}
+> -
+> -int ftrace_disable_ftrace_graph_caller(void)
+> -{
+> -	return 0;
+> -}
+> -#endif /* CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+> -#endif /* !CONFIG_DYNAMIC_FTRACE */
+> +#endif /* CONFIG_DYNAMIC_FTRACE && !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+>  
+>  /*
+>   * Hook the return address and push it in the stack of return addrs
+> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+> index 8f4fb328133a..289311680c29 100644
+> --- a/kernel/trace/fgraph.c
+> +++ b/kernel/trace/fgraph.c
+> @@ -30,6 +30,24 @@ int ftrace_graph_active;
+>  /* Both enabled by default (can be cleared by function_graph tracer flags */
+>  static bool fgraph_sleep_time = true;
+>  
+> +/*
+> + * archs can override this function if they must do something
+> + * to enable hook for graph tracer.
+> + */
+> +int __weak ftrace_enable_ftrace_graph_caller(void)
+> +{
+> +	return 0;
+> +}
 > +
-> +	reg_usdhc2_vmmc: usdhc2-vmmc {
+> +/*
+> + * archs can override this function if they must do something
+> + * to disable hook for graph tracer.
+> + */
+> +int __weak ftrace_disable_ftrace_graph_caller(void)
+> +{
+> +	return 0;
+> +}
 
-usdhc2-vmmc-regulator or regulator-0
+IIUC an arch should either:
 
-(...)
+* Have ftrace_graph_call()
 
-> +&thermal_zones {
-> +	pmic-thermal0 {
+* Have both ftrace_enable_ftrace_graph_caller() and
+  ftrace_disable_ftrace_graph_caller()
 
-Are you sure this passes the dtbs_check?
+... and I can't think of a reason an arch would need both ftrace_graph_call()
+*and* the enable/disable functions.
 
-> +		polling-delay-passive = <250>;
-> +		polling-delay = <2000>;
-> +		thermal-sensors = <&tsens IMX_SC_R_PMIC_0>;
+Given that, could we drop the `__weak` and place these within ifdeffery, i.e.
+make the above:
+
+| #ifndef ftrace_graph_call
+| int ftrace_enable_ftrace_graph_caller(void) { return 0; }
+| int ftrace_disable_ftrace_graph_caller(void) { return 0; }
+| #endif /* ftrace_graph_call *. 
+
+That way we'd catch cases when:
+
+* An architecture meant to provide one of these functions, but forgot (e.g. the
+  name got typo'd)
+
+* An architecture provides an unnecessary implementation of either of these
+  functions.
+
+Regardless, this looks ok to me. Steve, are you happy with this? I suspect we'd
+need to take this via the arm64 tree with the next patch, so we'd need your Ack.
+
+Thanks,
+Mark.
+
 > +
-
-(...)
-
-> +	pinctrl_usdhc1: usdhc1grp {
-> +		fsl,pins = <
-> +			IMX8DXL_EMMC0_CLK_CONN_EMMC0_CLK	0x06000041
-> +			IMX8DXL_EMMC0_CMD_CONN_EMMC0_CMD	0x00000021
-> +			IMX8DXL_EMMC0_DATA0_CONN_EMMC0_DATA0	0x00000021
-> +			IMX8DXL_EMMC0_DATA1_CONN_EMMC0_DATA1	0x00000021
-> +			IMX8DXL_EMMC0_DATA2_CONN_EMMC0_DATA2	0x00000021
-> +			IMX8DXL_EMMC0_DATA3_CONN_EMMC0_DATA3	0x00000021
-> +			IMX8DXL_EMMC0_DATA4_CONN_EMMC0_DATA4	0x00000021
-> +			IMX8DXL_EMMC0_DATA5_CONN_EMMC0_DATA5	0x00000021
-> +			IMX8DXL_EMMC0_DATA6_CONN_EMMC0_DATA6	0x00000021
-> +			IMX8DXL_EMMC0_DATA7_CONN_EMMC0_DATA7	0x00000021
-> +			IMX8DXL_EMMC0_STROBE_CONN_EMMC0_STROBE	0x00000041
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
-
-and this as well... I don't remember if we have schema for this but even
-without it, it breaks the convention. See other files.
-
-
-Best regards,
-Krzysztof
+>  /**
+>   * ftrace_graph_stop - set to permanently disable function graph tracing
+>   *
+> -- 
+> 2.35.1
+> 

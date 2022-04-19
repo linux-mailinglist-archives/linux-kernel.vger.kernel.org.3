@@ -2,153 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D855061CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840C15061D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343656AbiDSBsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 21:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
+        id S1343766AbiDSBtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 21:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238998AbiDSBsU (ORCPT
+        with ESMTP id S233223AbiDSBtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 21:48:20 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E9227157;
-        Mon, 18 Apr 2022 18:45:40 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id s4so12546382qkh.0;
-        Mon, 18 Apr 2022 18:45:40 -0700 (PDT)
+        Mon, 18 Apr 2022 21:49:43 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717AC1B7B8;
+        Mon, 18 Apr 2022 18:47:02 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id m132so28552794ybm.4;
+        Mon, 18 Apr 2022 18:47:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GWJivJNTrI/QBY9yQIfFHcMB0AyV4j3D2XJyf0B7ai4=;
-        b=mdv1a5b5PbDlnJ2HcqHIOXJzFRMhQpMz5W+Dk498yUlyXwZ7v1tmTm1y2oWewJIw0y
-         TXkO/RPd+SQHpMGp1XkNqN68WSU0govwAIyUTWfP9pIbEDqtHnrzG6Abagpe3hJX8sWa
-         YGoiGUW5gUrqRAVa1yyuhygzzeu8LIY2ibDuZYV2/wmnrwOFFufWfefhaxbb1E/6Abt7
-         H3yzKlyeHUzVGh/j81234/NjIk5XEK6Y8a9J95Xiy83djKjdW6v9tDe16VjoDUALTfZQ
-         Xh8BCfat9JzApWXIN2L+kqW5jg6XsZ7Nz/POT1caezi4aQW8mebC2Ks1bkW434+4c6Xs
-         F8XQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lLQGg8TwxomVsyiOthnEB54HYudRJBTxrKHHeqKPgdw=;
+        b=R5P45tqBpzzZZGg7KhYR+2QQsVkmHUVg6rlmkdq5Q/3f+F7KOqqsLlcqij07+W+EYf
+         UkHarKPNSRl0a+lZ3Qc6eg/dAEuyEHTW644Huoh5ju0wukwSvL3hRKs0SDpmGx9mE92U
+         6I31tq6GAWsOWHdveXJFisHQ2UVga/Bo+OqUf7PviHF+VCwpcDKW+IGl8B9zlOWRAPY6
+         uY6FpLCrrK1uuADAAxSS35dusbllJowELnEvKnIpKFWoyffC7MDUSS2bRWvfpJDRJ3Kx
+         gViB+x+9RtW/jb0NYFonEjBDnYBKjCTDQYkShgaPfzrw0oHkLqXM3no51j5wn4yfIieT
+         A83Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GWJivJNTrI/QBY9yQIfFHcMB0AyV4j3D2XJyf0B7ai4=;
-        b=LrX0hPxkSu5lgvyD88qtebSbRsJH8p8lFmY5LbD0vFx7ukMo07uQ1f3kdDXg20MqN5
-         0JkEvsRkKuLj/GiOGeQZsxlHyi73bmcaH8oUB+S+acBk6Od6BIezhGgMvEAlNejWXEAy
-         gofWWzrptu/JFiqGIjCPCKjMMVDnu29viW12Q1uqNM9ImnSfAILCXNPdKrZZUwUT4m5N
-         xAbnIm6Ug8dK73q0N2Yzg4Mjnw0aUosjb0XmlspjNcri0wzwZefwwqjpJCF6xKxlQKAk
-         dhTkmXIb9H7cs8vMJdygGQZbTKoCH1aMKAhXifiQhdb6+cr4L/VV615SRazdRSuUCZvo
-         MhYA==
-X-Gm-Message-State: AOAM530VzwsYEmKISICUhfR8NMHURwyHIhyfa2mMOC2EBOMJ6/KDje1q
-        XJmUruD65RD6+Y6B9BNYXXfuYH+agic=
-X-Google-Smtp-Source: ABdhPJxq3Tg8XW4ePGb4pBEvqZw3CEYQLcz1DA4JnyDIuKKCbLriJjkm2vByc4XsEzVsNdZVPcYTdQ==
-X-Received: by 2002:a05:620a:1a0c:b0:69e:c6ee:f8da with SMTP id bk12-20020a05620a1a0c00b0069ec6eef8damr209783qkb.340.1650332739331;
-        Mon, 18 Apr 2022 18:45:39 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05622a1a0b00b002f1f3b66bd4sm5252453qtb.94.2022.04.18.18.45.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 18:45:38 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     james.smart@broadcom.com, dick.kennedy@broadcom.com
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] scsi: lpfc: fix error check return value of debugfs_create_file()
-Date:   Tue, 19 Apr 2022 01:45:26 +0000
-Message-Id: <20220419014526.2561899-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lLQGg8TwxomVsyiOthnEB54HYudRJBTxrKHHeqKPgdw=;
+        b=0ecVzvX4gy3FFfVumhDIuByse3LIJ3WkFJCK0xTfmUXxfIHD9j2jK5OOL9Tez0X14S
+         qESPlMiVtPUeOpnDMhUyLsENfIvy9OnWWDJsu8eTsMqfNj6176YqY2oQkZPkO6Shcixi
+         Hx0KNfy+aG+zSUwdyCisPLgjH0KJHKBlqNMGdUCnDU8RwUhcktGYd2kk9bq2t1Xr4I0J
+         ZbO+vNHGw6DKJGjIQJ/39exYWlElX2si7riqJig0na4qDD7Sv1IgHAc/yx/tAYQAYDs8
+         kz0FLwff8t4oydiSLVGlrbb7wdVBIllnCwZly13On6xYkFUWHFsW//194E61snJ8m5UE
+         o3Vw==
+X-Gm-Message-State: AOAM532uLWX+lSJ7EZsBR3mq8LY664mupFNQfYRXGc7uIey6SjY7U8zr
+        XZW6/+W+cwsqtwScwj3rC4Ggvd16AJXvKZxoQ+A=
+X-Google-Smtp-Source: ABdhPJzHjJGi2RdXoSc4Mqit2GgQZ7MM89Y05+RsKnrRtVobZQeUROUH/s7hVJZQEc55w0loqRJPs3spK5ZFG8n3ieA=
+X-Received: by 2002:a05:6902:1503:b0:644:c443:887f with SMTP id
+ q3-20020a056902150300b00644c443887fmr12047254ybu.104.1650332821630; Mon, 18
+ Apr 2022 18:47:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <202ba5f5-f842-f4ce-dd67-c5166d94cc67@gmail.com> <1650331438-4555-1-git-send-email-baihaowen@meizu.com>
+In-Reply-To: <1650331438-4555-1-git-send-email-baihaowen@meizu.com>
+From:   yanteng si <siyanteng01@gmail.com>
+Date:   Tue, 19 Apr 2022 09:46:50 +0800
+Message-ID: <CAEensMz1BWx2arYAqo_g5_0w1z+m-X3nRYATmSMvZ44rb05w4Q@mail.gmail.com>
+Subject: Re: [PATCH V4] docs/zh_CN: sync with original text Documentation/vm/page_owner.rst
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Alex Shi <seakeel@gmail.com>, Alex Shi <alexs@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Yanteng Si <siyanteng@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
-
-If an error occurs, debugfs_create_file() will return ERR_PTR(-ERROR),
-so use IS_ERR() to check it.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- drivers/scsi/lpfc/lpfc_debugfs.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
-index 7b24c932e812..c57f80191b34 100644
---- a/drivers/scsi/lpfc/lpfc_debugfs.c
-+++ b/drivers/scsi/lpfc/lpfc_debugfs.c
-@@ -6105,7 +6105,7 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 					    phba->hba_debugfs_root,
- 					    phba,
- 					    &lpfc_debugfs_op_multixripools);
--		if (!phba->debug_multixri_pools) {
-+		if (IS_ERR(phba->debug_multixri_pools)) {
- 			lpfc_printf_vlog(vport, KERN_ERR, LOG_INIT,
- 					 "0527 Cannot create debugfs multixripools\n");
- 			goto debug_failed;
-@@ -6117,7 +6117,7 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 			debugfs_create_file(name, S_IFREG | 0644,
- 					    phba->hba_debugfs_root,
- 					    phba, &lpfc_cgn_buffer_op);
--		if (!phba->debug_cgn_buffer) {
-+		if (IS_ERR(phba->debug_cgn_buffer)) {
- 			lpfc_printf_vlog(vport, KERN_ERR, LOG_INIT,
- 					 "6527 Cannot create debugfs "
- 					 "cgn_buffer\n");
-@@ -6130,7 +6130,7 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 			debugfs_create_file(name, S_IFREG | 0644,
- 					    phba->hba_debugfs_root,
- 					    phba, &lpfc_rx_monitor_op);
--		if (!phba->debug_rx_monitor) {
-+		if (IS_ERR(phba->debug_rx_monitor)) {
- 			lpfc_printf_vlog(vport, KERN_ERR, LOG_INIT,
- 					 "6528 Cannot create debugfs "
- 					 "rx_monitor\n");
-@@ -6143,7 +6143,7 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 			debugfs_create_file(name, 0644,
- 					    phba->hba_debugfs_root,
- 					    phba, &lpfc_debugfs_ras_log);
--		if (!phba->debug_ras_log) {
-+		if (IS_ERR(phba->debug_ras_log)) {
- 			lpfc_printf_vlog(vport, KERN_ERR, LOG_INIT,
- 					 "6148 Cannot create debugfs"
- 					 " ras_log\n");
-@@ -6164,7 +6164,7 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 			debugfs_create_file(name, S_IFREG | 0644,
- 					    phba->hba_debugfs_root,
- 					    phba, &lpfc_debugfs_op_lockstat);
--		if (!phba->debug_lockstat) {
-+		if (IS_ERR(phba->debug_lockstat)) {
- 			lpfc_printf_vlog(vport, KERN_ERR, LOG_INIT,
- 					 "4610 Can't create debugfs lockstat\n");
- 			goto debug_failed;
-@@ -6390,7 +6390,7 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 		debugfs_create_file(name, 0644,
- 				    vport->vport_debugfs_root,
- 				    vport, &lpfc_debugfs_op_scsistat);
--	if (!vport->debug_scsistat) {
-+	if (IS_ERR(vport->debug_scsistat)) {
- 		lpfc_printf_vlog(vport, KERN_ERR, LOG_INIT,
- 				 "4611 Cannot create debugfs scsistat\n");
- 		goto debug_failed;
-@@ -6401,7 +6401,7 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 		debugfs_create_file(name, 0644,
- 				    vport->vport_debugfs_root,
- 				    vport, &lpfc_debugfs_op_ioktime);
--	if (!vport->debug_ioktime) {
-+	if (IS_ERR(vport->debug_ioktime)) {
- 		lpfc_printf_vlog(vport, KERN_ERR, LOG_INIT,
- 				 "0815 Cannot create debugfs ioktime\n");
- 		goto debug_failed;
--- 
-2.25.1
-
-
+SGFvd2VuIEJhaSA8YmFpaGFvd2VuQG1laXp1LmNvbT4g5LqOMjAyMuW5tDTmnIgxOeaXpeWRqOS6
+jCAwOToyNOWGmemBk++8mg0KPg0KPiBBcyB0aGUgdG9vbHMvdm0vcGFnZV9vd25lcl9zb3J0IGFk
+ZGVkIHNvbWUgZmVhdHVyZSBhbmQgb3JpZ2luYWwgdGV4dA0KPiB1cGRhdGVkLCBzeW5jIHRoZSB0
+cmFuc2xhdGlvbiBvZiB6aF9DTi4NCldlIG5lZWQgYSBmaXggdGFnLCBhbmQgYWxsIHlvdSBuZWVk
+IHRvIGRvIGlzIGZpbmQgb3V0IHdoaWNoIHVwZGF0ZQ0KcGF0Y2ggY29ycmVzcG9uZHMgdG8gdGhl
+IG9yaWdpbmFsIGRvY3VtZW50LCBhbmQgdGhlbiBwdXQgaXQgaW4gYQ0KZm9ybWF0IHNpbWlsYXIg
+dG8gdGhlIGZvbGxvd2luZ++8mg0KDQogICAgICAgIENvbW1pdCBlMjFkMjE3MGYzNjYwMmFlMjcw
+OCAoInZpZGVvOiByZW1vdmUgdW5uZWNlc3NhcnkNCiAgICAgICAgcGxhdGZvcm1fc2V0X2RydmRh
+dGEoKSIpIHJlbW92ZWQgdGhlIHVubmVjZXNzYXJ5DQogICAgICAgIHBsYXRmb3JtX3NldF9kcnZk
+YXRhKCksIGJ1dCBsZWZ0IHRoZSB2YXJpYWJsZSAiZGV2IiB1bnVzZWQsDQogICAgICAgIGRlbGV0
+ZSBpdC4NCnJlZjo6IERvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL3Byb2Nlc3Mvc3Vi
+bWl0dGluZy1wYXRjaGVzLnJzdA0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBIYW93ZW4gQmFpIDxiYWlo
+YW93ZW5AbWVpenUuY29tPg0KPiAtLS0NCj4gVjEtPlYyOiBmaXggd2hpdGVzcGFjZSB3YXJuaW5n
+Lg0KPiBWMi0+VjM6IGZpeCBzb21lIHRhYiBBbGlnbm1lbnQgaXNzdWUuDQo+IFYzLT5WNDogZml4
+IHNwaGlueCB3YXJuaW5nDQpJZiBJIHJlbWVtYmVyIGNvcnJlY3RseSwgdGhpcyBzaG91bGQgYmUN
+Cg0KVjQtPlY1Onh4eHh4eHh4eA0KDQpHZW5lcmFsbHksIHdlIGRvIG5vdCByZXNlbmQuIDopDQoN
+ClRoYW5rcywNCllhbnRlbmcNCj4NCj4gIERvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NO
+L3ZtL3BhZ2Vfb3duZXIucnN0IHwgNjEgKysrKysrKysrKysrKysrKysrKysrLQ0KPiAgMSBmaWxl
+IGNoYW5nZWQsIDYwIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4NCj4gZGlmZiAtLWdp
+dCBhL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0IGIv
+RG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vdm0vcGFnZV9vd25lci5yc3QNCj4gaW5k
+ZXggOWU5NTFmYWJiYTlkLi40ZDcxOTU0N2NlNGYgMTAwNjQ0DQo+IC0tLSBhL0RvY3VtZW50YXRp
+b24vdHJhbnNsYXRpb25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0DQo+ICsrKyBiL0RvY3VtZW50
+YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0DQo+IEBAIC0xMDMsMTQg
+KzEwMyw3MyBAQCBwYWdlIG93bmVy5Zyo6buY6K6k5oOF5Ya15LiL5piv56aB55So55qE44CC5omA
+5Lul77yM5aaC5p6c5L2g5oOz5L2/55So5a6D77yM5L2gDQo+ICAgICAgICAgICAgICAgICAtbSAg
+ICAgICAgICAgICAg5oyJ5oC75YaF5a2Y5o6S5bqPDQo+ICAgICAgICAgICAgICAgICAtcCAgICAg
+ICAgICAgICAg5oyJcGlk5o6S5bqP44CCDQo+ICAgICAgICAgICAgICAgICAtUCAgICAgICAgICAg
+ICAg5oyJdGdpZOaOkuW6j+OAgg0KPiArICAgICAgICAgICAgICAgLW4gICAgICAgICAgICAgIOaM
+ieS7u+WKoeWQjeensOaOkuW6j+OAgg0KPiAgICAgICAgICAgICAgICAgLXIgICAgICAgICAgICAg
+IOaMieWGheWtmOmHiuaUvuaXtumXtOaOkuW6j+OAgg0KPiAgICAgICAgICAgICAgICAgLXMgICAg
+ICAgICAgICAgIOaMieWghuagiOi3n+i4quaOkuW6j+OAgg0KPiAgICAgICAgICAgICAgICAgLXQg
+ICAgICAgICAgICAgIOaMieaXtumXtOaOkuW6j++8iOm7mOiupO+8ieOAgg0KPiArICAgICAgICAg
+ICAgICAgLS1zb3J0IDxvcmRlcj4gIOaMh+WumuaOkuW6j+mhuuW6j+OAguaOkuW6j+ivreazleaY
+ryBbK3wtXWtleVssWyt8LV1rZXlbLC4uLl1dLiDku44NCj4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgKirmoIflh4bmoLzlvI/or7TmmI7nrKYqKiDpg6jl
+iIbpgInmi6nkuIDkuKrplK7jgIIiKyIg5piv5Y+v6YCJ55qE77yM5Zug5Li66buY6K6k5pa55ZCR
+5piv5aKe5Yqg5pWw5a2X5oiW5a2X5YW46aG65bqP44CCDQo+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIOWFgeiuuOa3t+WQiOS9v+eUqOe8qeWGmemUruWS
+jOWFqOensOmUruOAgg0KPiArDQo+ICsgICAgICAgICAgICAgICBFeGFtcGxlczoNCj4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAuL3BhZ2Vfb3duZXJfc29ydCA8aW5wdXQ+IDxvdXRw
+dXQ+IC0tc29ydD1uLCtwaWQsLXRnaWQNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAuL3BhZ2Vfb3duZXJfc29ydCA8aW5wdXQ+IDxvdXRwdXQ+IC0tc29ydD1hdA0KPg0KPiAgICAg
+5YW25a6D5Ye95pWwOg0KPg0KPiAgICAgICAgIEN1bGw6DQo+IC0gICAgICAgICAgICAgICAtYyAg
+ICAgICAgICAgICAg6YCa6L+H5q+U6L6D5aCG5qCI6Lef6Liq6ICM5LiN5piv5oC75Z2X5p2l6L+b
+6KGM5YmU6Zmk44CCDQo+ICsgICAgICAgICAgICAgICAtLWN1bGwgPHJ1bGVzPg0KPiArICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIOaMh+Wumuetm+mAieinhOWImeOAguetm+mAieivreaz
+leaYryBrZXlbLGtleVssLi4uXV3jgILlnKgqKuagh+WHhuagvOW8j+ivtOaYjuespioq6YOo5YiG
+6YCJ5oup5LiA5Liq5aSa5a2X5q+N6ZSuDQo+ICsNCj4gKyAgICAgICAgICAgICAgIDxydWxlcz4g
+5piv6YCX5Y+35YiG6ZqU5YiX6KGo5b2i5byP55qE5Y2V5Liq5Y+C5pWw77yM5a6D5o+Q5L6b5LqG
+5LiA56eN5oyH5a6a5Y2V5Liq562b6YCJ6KeE5YiZ55qE5pa55rOV44CC5LiL6Z2i55qEKirmoIfl
+h4bmoLzlvI/or7TmmI4NCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDnrKYqKumD
+qOWIhuaPj+i/sOS6huWPr+ivhuWIq+eahOWFs+mUruWtl+OAgjxydWxlcz4g5Y+v5Lul55Sx6ZSu
+IGsxLGsyLCAuLi4g6aG65bqP5oyH5a6a77yM5aaC5LiL6Z2i55qEDQo+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgU1RBTkRBUkQgU09SVCBLRVlTIOmDqOWIhuaJgOi/sOOAguWFgeiu
+uOa3t+WQiOS9v+eUqOe8qeWGmeW9ouW8j+WSjOWujOaVtOW9ouW8j+eahOmUruOAgg0KPg0KPiAr
+ICAgICAgICAgICAgICAgRXhhbXBsZXM6DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgLi9wYWdlX293bmVyX3NvcnQgPGlucHV0PiA8b3V0cHV0PiAtLWN1bGw9c3RhY2t0cmFjZQ0K
+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1
+dD4gPG91dHB1dD4gLS1jdWxsPXN0LHBpZCxuYW1lDQo+ICsgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgLi9wYWdlX293bmVyX3NvcnQgPGlucHV0PiA8b3V0cHV0PiAtLWN1bGw9bixmDQo+
+ICAgICAgICAgRmlsdGVyOg0KPiAgICAgICAgICAgICAgICAgLWYgICAgICAgICAgICAgIOi/h+a7
+pOaOieWGheWtmOW3suiiq+mHiuaUvueahOWdl+eahOS/oeaBr+OAgg0KPiArDQo+ICsgICAgICAg
+U2VsZWN0Og0KPiArICAgICAgICAgICAgICAgLS1waWQgPHBpZGxpc3Q+ICAgICAgICAg6YCa6L+H
+IHBpZCDov5vooYzpgInmi6njgILov5nlsIbpgInmi6nov5vnqIsgSUQg5Y+35Ye6546w5ZyoIDxw
+aWRsaXN0PiDkuK3nmoTlnZfjgIINCj4gKyAgICAgICAgICAgICAgIC0tdGdpZCA8dGdpZGxpc3Q+
+ICAgICAgIOmAmui/hyB0Z2lkIOi/m+ihjOmAieaLqeOAgui/meWwhumAieaLqee6v+eoi+e7hCBJ
+RCDlj7flh7rnjrDlnKggPHRnaWRsaXN0PiDkuK3nmoTlnZfjgIINCj4gKyAgICAgICAgICAgICAg
+IC0tbmFtZSA8Y21kbGlzdD4gICAgICAgIOaMieS7u+WKoeWQjeensOmAieaLqeOAgui/meWwhumA
+ieaLqeS7u+WKoeWQjeensOWHuueOsOWcqCA8Y21kbGlzdD4g5Lit55qE5Z2X44CCDQo+ICsNCj4g
+KyAgICAgICAgICAgICAgIDxwaWRsaXN0PuOAgTx0Z2lkbGlzdD7jgIE8Y21kbGlzdD7mmK/pgJfl
+j7fliIbpmpTliJfooajlvaLlvI/nmoTljZXlj4LmlbDvvIzlroPmj5DkvpvkuobkuIDnp43mjIfl
+rprljZXkuKrpgInmi6nop4TliJnnmoTmlrnms5XjgIINCj4gKw0KPiArDQo+ICsgICAgICAgICAg
+ICAgICBFeGFtcGxlczoNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAuL3BhZ2Vf
+b3duZXJfc29ydCA8aW5wdXQ+IDxvdXRwdXQ+IC0tcGlkPTENCj4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAuL3BhZ2Vfb3duZXJfc29ydCA8aW5wdXQ+IDxvdXRwdXQ+IC0tdGdpZD0x
+LDIsMw0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC4vcGFnZV9vd25lcl9zb3J0
+IDxpbnB1dD4gPG91dHB1dD4gLS1uYW1lIG5hbWUxLG5hbWUyDQo+ICsNCj4gK+agh+WHhuagvOW8
+j+ivtOaYjuespg0KPiArPT09PT09PT09PT09PT0NCj4gKw0KPiArLS1zb3J0IOmAiemhuToNCj4g
+Kw0KPiArICAgICAgICA9PT09PT0gICAgICAgICAgPT09PT09PT09PSAgICAgID09PT09PT09PT09
+PT09PT09PT0NCj4gKyAgICAgICAg57yp5YaZ6ZSuICAgICAgICAgIOWFqOensOmUriAgICAgICAg
+ICDmj4/ov7ANCj4gKyAgICAgICAgPT09PT09ICAgICAgICAgID09PT09PT09PT0gICAgICA9PT09
+PT09PT09PT09PT09PT09DQo+ICsgICAgICAgIHAgICAgICAgICAgICAgICBwaWQgICAgICAgICAg
+ICAg6L+b56iLIElEDQo+ICsgICAgICAgIHRnICAgICAgICAgICAgICB0Z2lkICAgICAgICAgICAg
+57q/56iL57uEIElEDQo+ICsgICAgICAgIG4gICAgICAgICAgICAgICBuYW1lICAgICAgICAgICAg
+5Lu75Yqh5ZCN56ewDQo+ICsgICAgICAgIHN0ICAgICAgICAgICAgICBzdGFja3RyYWNlICAgICAg
+6aG16Z2i5YiG6YWN55qE6LCD55So5qCIDQo+ICsgICAgICAgIFQgICAgICAgICAgICAgICB0eHQg
+ICAgICAgICAgICAg5Z2X55qE5YWo5paHDQo+ICsgICAgICAgIGZ0ICAgICAgICAgICAgICBmcmVl
+X3RzICAgICAgICAg6aG16Z2i6KKr6YeK5pS+55qE5pe26Ze05oizDQo+ICsgICAgICAgIGF0ICAg
+ICAgICAgICAgICBhbGxvY190cyAgICAgICAg6aG16Z2i5YiG6YWN55qE5pe26Ze05oizDQo+ICsg
+ICAgICAgID09PT09PSAgICAgICAgICA9PT09PT09PT09ICAgICAgPT09PT09PT09PT09PT09PT09
+PQ0KPiArDQo+ICstLWN1cmwg6YCJ6aG5Og0KPiArDQo+ICsgICAgICAgID09PT09PSAgICAgICAg
+ICA9PT09PT09PT09ICAgICAgPT09PT09PT09PT09PT09PT09DQo+ICsgICAgICAgIOe8qeWGmemU
+riAgICAgICAgICDlhajnp7DplK4gICAgICAgICAg5o+P6L+wDQo+ICsgICAgICAgID09PT09PSAg
+ICAgICAgICA9PT09PT09PT09ICAgICAgPT09PT09PT09PT09PT09PT09DQo+ICsgICAgICAgIHAg
+ICAgICAgICAgICAgICBwaWQgICAgICAgICAgICAg6L+b56iLIElEDQo+ICsgICAgICAgIHRnICAg
+ICAgICAgICAgICB0Z2lkICAgICAgICAgICAg57q/56iL57uEIElEDQo+ICsgICAgICAgIG4gICAg
+ICAgICAgICAgICBuYW1lICAgICAgICAgICAg5Lu75Yqh5ZCN56ewDQo+ICsgICAgICAgIGYgICAg
+ICAgICAgICAgICBmcmVlICAgICAgICAgICAg6K+l6aG16Z2i5piv5ZCm5bey6KKr6YeK5pS+DQo+
+ICsgICAgICAgIHN0ICAgICAgICAgICAgICBzdGFja3RyYWNlICAgICAg6aG16Z2i5YiG6YWN55qE
+6LCD55So5qCIDQo+ICsgICAgICAgID09PT09PSAgICAgICAgICA9PT09PT09PT09ICAgICAgPT09
+PT09PT09PT09PT09PT09DQo+IC0tDQo+IDIuNy40DQo+DQo=

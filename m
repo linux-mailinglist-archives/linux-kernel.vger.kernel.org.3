@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DBD50695C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4730A506960
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349044AbiDSLFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S1350830AbiDSLGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiDSLFN (ORCPT
+        with ESMTP id S229765AbiDSLGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:05:13 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D214140CB
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:02:31 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id h1so945281pfv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:02:31 -0700 (PDT)
+        Tue, 19 Apr 2022 07:06:49 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF001FCF7;
+        Tue, 19 Apr 2022 04:04:07 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id j9so5684076qkg.1;
+        Tue, 19 Apr 2022 04:04:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HPfHlnZW/J0QTwj9E3rSjp2CIkBFwM3rHUP6G621yX8=;
-        b=iNT0C27iILY9yMw5fp4m8wrEpS19RdildApUUoPCMPAggfUSWjI1IBVhyVlsj70CLT
-         L6utqZiifJMNTICWPPPHkUgizjX90tPr2zB5nu5K+9NmjVyYf1isJUD4lltfeoMMH0ni
-         w+2p5Mp7SlPaWD7g+dvinXp0qtpW1YfIqFjcf1yXGYxmiWV2pYuDgydI5EtEnxa/eTYn
-         q6nBgoXFRO5EdNI3PRrAv9w8euU/aAOiB0cCwokJBoAn1jwn2eqjQ/RDHEQQaV22zeGM
-         fcT4jHPZP0e7NSi2CDpJ9TgGVjAfzWAXYIanuvR8OIkbRlckhD5OhuGPXRrBV1fdNl1f
-         KrSA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vzYr1S8B3ykiafw9TGsT2lWFse4CJI9qXSIwB6EZ7fM=;
+        b=CuPGoJg0Tkqcmky31cjUtHFBSwFEegEal1WLsRDYQawtKTRu/DZyIeUoIhe5gksmDa
+         th1vIUgGzkyCxjwYX42xFL8TrkLzgWrVCT0eQWwwCCS0sPw2eh/8fRWANBjlKLMYxz3E
+         avoIGV31visQ1udkeKf4xwifsD8nLRtXtDXrcPPIdaT7XhV4CTYWHCSOZ0ZC0onJnyYy
+         /Pr8qXt7ecH5qCy6iYkeM4oMv3VY5fct300pk8lj7kGdwjjOptdsrw7M/Ejbs97KOshu
+         bB2zFIWZHinhQkwqgDlNgk4yHbWgt3WTrf6ZhVTSrl1y89JPW/fA8XqJY764jOkXQ6DX
+         juHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=HPfHlnZW/J0QTwj9E3rSjp2CIkBFwM3rHUP6G621yX8=;
-        b=VK8Wt2TQUBKe7re5IjwVe9xCuuMddQRn7cD71YnHNUTFrNVev+VpDpwQB6q8L59Bv5
-         rcsnIdeJPA+3lTJenS+dn9fWSLrCLNRkzKl+9ut+QMaG6b4GEdV3Oh4iVAJotJ1hcual
-         sx+7TLT2UVa2aHAre3vA0S9Y7pvdhbXbvdgcSnh2SrDjn/E30mOv677OpEVI4zLU+bJQ
-         jEdwg9nq+DFBWKXKP96HelA3810nYVZvLJ/v9Y61aYN1fmwmg4w7/r3rjfFKI6ReIfii
-         xl6oXbWbvsddgFyU98m29pIymkR6rc6uohN6aat1BMUCZfDo6d9sZtDSnh7erswK8JQe
-         ZI6Q==
-X-Gm-Message-State: AOAM531VIYYhUU3f9HOIWw5cs7HmzE8jJgEtTHO0Cpcrfs2FGzSdBldF
-        w57MJDDgJxESiBMbcgm3mVA=
-X-Google-Smtp-Source: ABdhPJw2iYD4KBeGw1t2OjioGfEiU3FCIpVJNOBj87m8tve6GdGwt06U40Bh5rLvaoS3a/5BfnkHrw==
-X-Received: by 2002:a63:1510:0:b0:39d:7212:8500 with SMTP id v16-20020a631510000000b0039d72128500mr13534063pgl.377.1650366150920;
-        Tue, 19 Apr 2022 04:02:30 -0700 (PDT)
-Received: from [192.168.50.247] ([103.84.139.165])
-        by smtp.gmail.com with ESMTPSA id ch10-20020a056a00288a00b0050a51a95e91sm10386370pfb.201.2022.04.19.04.02.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 04:02:30 -0700 (PDT)
-Message-ID: <0da7b5da-6fab-ab73-5748-ae270d77b4d0@gmail.com>
-Date:   Tue, 19 Apr 2022 19:02:24 +0800
+        bh=vzYr1S8B3ykiafw9TGsT2lWFse4CJI9qXSIwB6EZ7fM=;
+        b=U4HK+wD0r45BfxN7gBoXfP13KiqFXrEkyrmIUCoqKblafBw9HABwV6uULoa3G2q0hg
+         wGtkwRb/9wVkRgVNFBKTNW1TO1L0kzojrLear57eCVgXcC8mxu2TU0UPxaqmNThB4NCK
+         /TXPwiT7IP0s8LulUK6Ws/7gosUQygTQOHauCq3TyBtM0hfQBvTCycVSI4srO7w5Dq9K
+         bmIue2vK0VIlnINiLUGxnEZSEtjkIaMtxhDtVhTZ0ODtED+MHLdzvnS1XbU46d5OfQgN
+         V5g73P7dRYK06eU8mex0rybtlIZgAxvWsVaz38IIwLPL/gPmgRT1ALLt/nnvJ/Zi6eJt
+         kHqQ==
+X-Gm-Message-State: AOAM530rBS8wYLmvFkOb10b43H1HZTFnHMAin2s75kaWhthErs6qOIpO
+        gzAzwNw9I+fF+6NNd1k1T5g=
+X-Google-Smtp-Source: ABdhPJyK2oBv72c8synSiIcWW7zvziwwnPmNG9MJnBYXKU1NpZPi5aVBbVhWfblavqnS8yzRsy9LvQ==
+X-Received: by 2002:a05:620a:2544:b0:680:a53b:ec1a with SMTP id s4-20020a05620a254400b00680a53bec1amr9366341qko.544.1650366246398;
+        Tue, 19 Apr 2022 04:04:06 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id d71-20020a379b4a000000b0069e687cbe48sm5561616qke.89.2022.04.19.04.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 04:04:05 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     davem@davemloft.net
+Cc:     kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] net: ethernet: ti: am65-cpsw-ethtool: use pm_runtime_resume_and_get
+Date:   Tue, 19 Apr 2022 11:03:52 +0000
+Message-Id: <20220419110352.2574359-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] misc: ocxl: fix possible double free in
- ocxl_file_register_afu
-Content-Language: en-US
-To:     Frederic Barrat <fbarrat@linux.ibm.com>, ajd@linux.ibm.com,
-        arnd@arndb.de, gregkh@linuxfoundation.org, mpe@ellerman.id.au,
-        alastair@d-silva.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220418085758.38145-1-hbh25y@gmail.com>
- <e18a4b58-4551-aa68-ed52-baeeeaab56bb@linux.ibm.com>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <e18a4b58-4551-aa68-ed52-baeeeaab56bb@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,52 +70,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/19 17:09, Frederic Barrat wrote:
-> 
-> 
-> On 18/04/2022 10:57, Hangyu Hua wrote:
->> info_release() will be called in device_unregister() when info->dev's
->> reference count is 0. So there is no need to call ocxl_afu_put() and
->> kfree() again.
->>
->> Fix this by adding free_minor() and return to err_unregister error path.
->>
->> Fixes: 75ca758adbaf ("ocxl: Create a clear delineation between ocxl 
->> backend & frontend")
->> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->> ---
-> 
-> 
-> Thanks for fixing that error path!
-> I'm now thinking it would be cleaner to have the call to free_minor() in 
-> the info_release() callback but that would be another patch.
-> In any case:
-> Acked-by: Frederic Barrat <fbarrat@linux.ibm.com>
-> 
->    Fred
-> 
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-I think it is a good idea to use callbacks to handle all garbage 
-collections. And free_minor is used only in ocxl_file_register_afu() 
-andocxl_file_unregister_afu(). So this should only require minor changes.
+Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
+pm_runtime_put_noidle. This change is just to simplify the code, no
+actual functional changes.
 
-Thanks.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/net/ethernet/ti/am65-cpsw-ethtool.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-> 
->>   drivers/misc/ocxl/file.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/misc/ocxl/file.c b/drivers/misc/ocxl/file.c
->> index d881f5e40ad9..6777c419a8da 100644
->> --- a/drivers/misc/ocxl/file.c
->> +++ b/drivers/misc/ocxl/file.c
->> @@ -556,7 +556,9 @@ int ocxl_file_register_afu(struct ocxl_afu *afu)
->>   err_unregister:
->>       ocxl_sysfs_unregister_afu(info); // safe to call even if 
->> register failed
->> +    free_minor(info);
->>       device_unregister(&info->dev);
->> +    return rc;
->>   err_put:
->>       ocxl_afu_put(afu);
->>       free_minor(info);
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
+index 72acdf802258..abc1e4276cf0 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
+@@ -380,11 +380,9 @@ static int am65_cpsw_ethtool_op_begin(struct net_device *ndev)
+ 	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(common->dev);
+-	if (ret < 0) {
++	ret = pm_runtime_resume_and_get(common->dev);
++	if (ret < 0)
+ 		dev_err(common->dev, "ethtool begin failed %d\n", ret);
+-		pm_runtime_put_noidle(common->dev);
+-	}
+ 
+ 	return ret;
+ }
+-- 
+2.25.1
+

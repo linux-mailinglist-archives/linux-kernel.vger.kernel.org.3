@@ -2,57 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432115072B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD80A5072BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354420AbiDSQPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
+        id S1354473AbiDSQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233796AbiDSQPk (ORCPT
+        with ESMTP id S234864AbiDSQQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:15:40 -0400
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2DD2DAA5;
-        Tue, 19 Apr 2022 09:12:55 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id d19so3512974ybc.5;
-        Tue, 19 Apr 2022 09:12:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ahlkSQ1Q7IVODxbtVnwEVsgusd2F6nnMR0ro7snh+9w=;
-        b=XZsPiUVymbZ2iwtN5K18sEgRMkVRqN63e09Vg86iOSOBbAPmAy0m4CqcJXdGl77Oke
-         yrJZdz9IwiXpTl5waUUsjfBsVUA8Np9Q6G2GQ6NPLLrCYF6AyDxbk4dflD1KGgfMYHft
-         XIKfrmLsNZkzZ2uzUIguwInbdBOD20rMA3yWzjtE2P4ucZpUvqoxzeBYtadOYDi9XFqR
-         zGiuvfpERZHQdDSWWaYysOQsB73hDBCP++Q/f7Tp8tPnJidBOY06F3AZtF7JdLWVXRN/
-         ldsXrUrFpvApEqiq0S7O8FCwR20K1LovINccRgWASwM08H8W+drvnV9/rcP4cN2pyPbA
-         oofw==
-X-Gm-Message-State: AOAM531P4GYeevZTTl6bm1fmVO0spbMRKnEjBwqFXUQxnghsyZqDy8bl
-        krIol+mVENuDeAeMCEcbH2s7cV+u2cTvs6wQPww=
-X-Google-Smtp-Source: ABdhPJzP5BH+FIwAKiepui8YLYzPsx8vy5c+sQY4L5GEPtpE+Gj/EYneweZpgeL9h5VJ8dUGIGiC4WlU2luf2bSJI/M=
-X-Received: by 2002:a05:6902:352:b0:63e:94c:883c with SMTP id
- e18-20020a056902035200b0063e094c883cmr14987387ybs.365.1650384774742; Tue, 19
- Apr 2022 09:12:54 -0700 (PDT)
+        Tue, 19 Apr 2022 12:16:39 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2064.outbound.protection.outlook.com [40.107.220.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE9C344F3;
+        Tue, 19 Apr 2022 09:13:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WNnP0/dXnR2lhefABXWTzEEmA16OQNflKY0Ua8XsVveboinq8qiky4FDbB75HFGLfgZkJkCO8YwUtW48uoews6ayqMylOd06jluQ3d8I+/L4t/5eNPsksIwDF79FNA8BclEQya1MNN9Xm8RMcrbRJxTA7IrHnZfEow1WcbatiX5hCjcNyjM7U1VVAmAtzjKlo2AZ0UhFqJXO23xxm7ANfe5EVq+adfZzWFuatWhf/GeAyD1idbLTNkzUJjhabbaZ/gH/XMsIcqy4eDKGMbX1Ubc8GtdAdlfz7L2WFPmXrjZ/k7ruAC5kAk0nsGj5PCBuejHp8b+/UxtI9SdsVCH6zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wZfBMFic+30Nwj8jSk849yu3Y85XpOEZeum2wVZHt40=;
+ b=oMlw/96/M5UgCzFGjyRiyKaiaRvPr2u+QY4lTycLjS8DTj9P87bQtWhS7ikmxHY+Ol/TbPphSAzJfVeScQotS6NsCb3q0wvBRnkhANMrgZySCY8XCwd0uqUmx1HzVX5DC1nzstuQ/gjX1jWwVdjNUF/13cW0DtgD80bDT54F9s+93qNWaw+HW36BHJS3JBoju5179Rzh53n0OrKZ4KkIA9NkBoMt2BIy38ddpxtU7f4EbRZH0Q0vVXzSj2LJsYn+IWcJie0g8ktCBTRU3YvAjWdL7xgBXDu3ja7T4fVmgCXAZmHrlWIgf5ZBpTwYYLROfKuYSo6H+OZifBDD2UQI5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wZfBMFic+30Nwj8jSk849yu3Y85XpOEZeum2wVZHt40=;
+ b=X/Qmp0qXRJoJ8nLP91pplKknOZQBlr9BHhy26/I2CtO40vcDyfGpHJGrJ05iQfaqKcnzIzrTIHgh/61TtveuCIkLoi24PUeb6Kt9IwsqJ9gh+f+w3KKeCmHvHFnozqkEMIn7568YDC+ETeyGdSbGPb7rtARyXxJ8vN8fOzC5QbCD6nvNNSJXhG4EWW4seFdnTUydDzf8iNg0pm5nzwywl8NT6GH7aCebL3CM5Bfla01USrlGXKyXdFQgVpXKMlLLKXm338nWvNPBP9XZhGyJ6yBReOPQ28IMh/mJcZf2tDO+2UfG+ZAknv0jV/9VZP7HZsnkhwZfgdqfGUuAfroKdw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BY5PR12MB3906.namprd12.prod.outlook.com (2603:10b6:a03:1a9::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
+ 2022 16:13:53 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
+ 16:13:53 +0000
+Date:   Tue, 19 Apr 2022 13:13:51 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-kernel@vger.kernel.org, shiraz.saleem@intel.com,
+        mustafa.ismail@intel.com, leon@kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH V6] RDMA/irdma: Fix deadlock in irdma_cleanup_cm_core()
+Message-ID: <20220419161351.GA1245221@nvidia.com>
+References: <20220418153322.42524-1-duoming@zju.edu.cn>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418153322.42524-1-duoming@zju.edu.cn>
+X-ClientProxiedBy: BL1PR13CA0075.namprd13.prod.outlook.com
+ (2603:10b6:208:2b8::20) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <20220415133356.179706384@linutronix.de> <20220415161206.592465719@linutronix.de>
-In-Reply-To: <20220415161206.592465719@linutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Apr 2022 18:12:43 +0200
-Message-ID: <CAJZ5v0inX0ATmv8XAqVUwUa1qLCpE_mwbsFHbHqTbZFYq6FyUA@mail.gmail.com>
-Subject: Re: [patch 04/10] x86/aperfmperf: Untangle Intel and AMD frequency
- invariance init
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8ca06aae-ff38-40db-eed4-08da221f98ee
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3906:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB39069C4F22BFB074675CC1C4C2F29@BY5PR12MB3906.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2nxKc39tGHj0V3Gtw4BAOLWVVuiFjMU68+q8OvJSepvgmNk1jHTusO1DP51YcKoWkbNHB+WX02+aZbUhpYCdOlH60JDKokTA7CDgswZx3kV2fpefEJkPa2Li52x1vpAf2cynoNLRx+OE5I7Z2XnobTVYOWaRtLE9osTMKL2bKe6vdApf4SpEz6V5KudSCPgYdx9JMnYseddkpog5dPc2FJ/RghioLsNb/ZoqYNQbCh4Emc8dFYQKtoexB/pLoyAOWVmi04hYo5/PaIW0WlBJbg28MWk8msLq7V/dH6T+oJzqh3/3Blq4VYbIa9wF1GCLtVc42s/OAngFBxBQ6EhTRqDhlLZoprTeXZSTXIGPVEJIZ7XsEHPGAnsCWFCKwtrEqo9Bw88EmVlXzTmzZhXv9YgCJSKYPKu0V63vVAuktLZ+nTq29V51C8yWkAzKZq/lrPCMCjaOIsUbgC90O+pPJwlDT/y1u/II4StMLJ5A0NtWiSjiLqS3HAtFLwaLaqamwaf2MnJ2BMtP5xwSvKmVyR6dMx1BHVa5PMdRyxuyc1Hn/nZt5qqHSXhn4N3qrFeqsvHNCKhMYldzhGKTbn7KbCM5kFWat/A411G5WovMiRo/riB1Bzm/Hs99oflhi0srNtugCqNLW/7OqDn83rj7Ng==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(66556008)(6512007)(66946007)(66476007)(38100700002)(5660300002)(4326008)(8676002)(26005)(6506007)(2906002)(1076003)(2616005)(186003)(83380400001)(6486002)(316002)(508600001)(86362001)(33656002)(6916009)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?psxkiicw2NAxWvaWj6Vp508/NPehl+D5rINOseGKIHGIi31SDwGr3dCy1B/x?=
+ =?us-ascii?Q?R0KZ6vHCWZLzF2jmjptXceqN7QWyl1p099r0pvXhezkgKNjaUslvlp3RvUF1?=
+ =?us-ascii?Q?cmOn+MzogDs0mkOGstp+zFFk9dSuTju6RhxslqbDLARBJDWguJVPQa9W1rkj?=
+ =?us-ascii?Q?m+HO2VYFcF7260+6G1sTxOOZvEMadHewb8BHvhH3J7tzEA24Bf0JrZm77ChL?=
+ =?us-ascii?Q?ns4nDpNWHmsmb99/wxKSnU7bJs8aZ2OGXQblBawp1Vw3i6QjvoOVBkN9iMyc?=
+ =?us-ascii?Q?yMEq6lwaDVfDAZsXvLNxQfOMlmC0V78QAdnTt7ZR8vphATF+s/yH1Se7pX13?=
+ =?us-ascii?Q?aPOHDp6gXtDQJMdTdgnaS/ytpdrRQcwDwOxVK7AcOR95g9ujxxNX/Mbr1YE3?=
+ =?us-ascii?Q?IMpOX1dWKVQWm/FLJyhls4uj+Ahs+5B7QTSdhdEGFCJ5TRpsTT/Vcj2akFES?=
+ =?us-ascii?Q?qqRj/c41xvCYAgFehsOjqfVCkfJIsfgkCp0WWA6pHmYIG/8uXrPl0NeU3wr0?=
+ =?us-ascii?Q?C5+5XyODf1I78hU0evz2+01MZumsflWNf/eFD9TZMJSYKqz5oDGI2N5CEsui?=
+ =?us-ascii?Q?G5BcM+y17sa7rwZj4lW73uALm3Mc1EquqK+NC2FVxPHt44CgfT8tVasfZiN1?=
+ =?us-ascii?Q?Ls3/M/MU/6oN5tJclFgs+jvJLJG+MU4+SJEdNK7uApi7YnQG050MPs6JBf7a?=
+ =?us-ascii?Q?3+XCppXe1wCz23WSlbsHbaji970uYGCDMYFYwfeuxC/d2fMa3ZfM1/0WJGGe?=
+ =?us-ascii?Q?bz6R0XRV6l5KI7i8Wybb5qcrvBmGpY8yhdnia/6Tqx5cT49DYFOI3FW1r+7R?=
+ =?us-ascii?Q?o94edEcgP69z0MQiPkAs3v9jFbS/2CKtUsYKKjtuRWHOvslqf4GVnM4fZnMQ?=
+ =?us-ascii?Q?02TVu4NjiD+Ert8+Gx97IO54zy2QickxTAGKY50aQA4QxAD7BBtrpLA7t8rk?=
+ =?us-ascii?Q?4svE+y0r11IALmKi9j2J8wOW1tvN3s10YIztJpOrw2/omxCsIM5lMBT3BJ6m?=
+ =?us-ascii?Q?dBJcwOBMqyy+EitN3W8m7EJtfk3RXUUuVkEFwdDFZPb+BY7OumJ1EtiwigDG?=
+ =?us-ascii?Q?aELO0sT+Gh5ywsaP0z4GrZQ0GucCtsP9vAUPI5QJVYtBtkvTzBweAgebSKj8?=
+ =?us-ascii?Q?PlttwTdY+XoCuEPURufX48+GIyuYmA1QyusWkI9LuZ4p14g04SxVZM6h/WNp?=
+ =?us-ascii?Q?RXQwj6k/1TxIgK1MG21cAO6bAo4/OmRR7fGoikl4ldV9D9JHAMR/Q7MYAKWe?=
+ =?us-ascii?Q?i3l3X6Gx75jzsQGEatB9AmMyHfpi7ig1WqvbYctGPbd4StJZHA+pZFPfSeTD?=
+ =?us-ascii?Q?Bsna+gh8tTGXiNmODqM+03DdMnU32a4CycwiMlCNONg1iemIC+BoEVJyWkWw?=
+ =?us-ascii?Q?uXdfgjHyMhTWCJnDVcEqaeiD8MTPkw40M5OwH7UWzD8T6XWGqpq3wNj+EROT?=
+ =?us-ascii?Q?S+SFTPGqnG6IBOWwrYHH5yHj/fBg8b6+X46wCTPdmXgxjmBUAGdBsTCXP2DJ?=
+ =?us-ascii?Q?nBGdYQYB81sKnkFxK089IihyAI8MXQFAFV1yXqALjYc5AxzaYoPqEViBNfqr?=
+ =?us-ascii?Q?TFFhSoVJNflnTkQwYJgVRwTjdZlqkceaVGd+heQeaqRBBHh8naOorirpOY9i?=
+ =?us-ascii?Q?lnvx4cMNHlrT3581Rwc6gNqWItv55kaPYbg9Q+efnEIiU/txN4gWuWs/GxDY?=
+ =?us-ascii?Q?wokFgUjMYVhpZcq/xZemGjv+BGScD74esUYuY8kq2o6Ei1qpqInmOjYs/ml1?=
+ =?us-ascii?Q?I+VCJb9woA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ca06aae-ff38-40db-eed4-08da221f98ee
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 16:13:53.7553
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: O43KGgTL4BUNpV6t7m/5/BLV3uTGncGMnDtk4t+ycgdU13ywEsu4qJjpSGuiyh7U
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3906
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,284 +118,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 9:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> AMD boot CPU initialization happens late via ACPI/CPPC which prevents the
-> Intel parts from being marked __init.
->
-> Split out the common code and provide a dedicated interface for the AMD
-> initialization and mark the Intel specific code and data __init.
->
-> The remaining text size is almost cut in half:
->
->   text:         2614    ->      1350
->   init.text:       0    ->       786
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
-All good AFAICS:
-
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
+On Mon, Apr 18, 2022 at 11:33:22PM +0800, Duoming Zhou wrote:
+> There is a deadlock in irdma_cleanup_cm_core(), which is shown
+> below:
+> 
+>    (Thread 1)              |      (Thread 2)
+>                            | irdma_schedule_cm_timer()
+> irdma_cleanup_cm_core()    |  add_timer()
+>  spin_lock_irqsave() //(1) |  (wait a time)
+>  ...                       | irdma_cm_timer_tick()
+>  del_timer_sync()          |  spin_lock_irqsave() //(2)
+>  (wait timer to stop)      |  ...
+> 
+> We hold cm_core->ht_lock in position (1) of thread 1 and
+> use del_timer_sync() to wait timer to stop, but timer handler
+> also need cm_core->ht_lock in position (2) of thread 2.
+> As a result, irdma_cleanup_cm_core() will block forever.
+> 
+> This patch removes the check of timer_pending() in
+> irdma_cleanup_cm_core(), because the del_timer_sync()
+> function will just return directly if there isn't a
+> pending timer. As a result, the lock is redundant,
+> because there is no resource it could protect.
+> 
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 > ---
->  arch/x86/include/asm/topology.h  |   13 ++------
->  arch/x86/kernel/acpi/cppc.c      |   29 +++++++-----------
->  arch/x86/kernel/cpu/aperfmperf.c |   62 ++++++++++++++++++++-------------------
->  arch/x86/kernel/smpboot.c        |    2 -
->  4 files changed, 49 insertions(+), 57 deletions(-)
->
-> --- a/arch/x86/include/asm/topology.h
-> +++ b/arch/x86/include/asm/topology.h
-> @@ -216,24 +216,19 @@ extern void arch_scale_freq_tick(void);
->  #define arch_scale_freq_tick arch_scale_freq_tick
->
->  extern void arch_set_max_freq_ratio(bool turbo_disabled);
-> -extern void bp_init_freq_invariance(bool cppc_ready);
-> +extern void freq_invariance_set_perf_ratio(u64 ratio, bool turbo_disabled);
-> +extern void bp_init_freq_invariance(void);
->  extern void ap_init_freq_invariance(void);
->  #else
->  static inline void arch_set_max_freq_ratio(bool turbo_disabled) { }
-> -static inline void bp_init_freq_invariance(bool cppc_ready) { }
-> +static inline void freq_invariance_set_perf_ratio(u64 ratio, bool turbo_disabled) { }
-> +static inline void bp_init_freq_invariance(void) { }
->  static inline void ap_init_freq_invariance(void) { }
->  #endif
->
->  #ifdef CONFIG_ACPI_CPPC_LIB
->  void init_freq_invariance_cppc(void);
->  #define arch_init_invariance_cppc init_freq_invariance_cppc
-> -
-> -bool amd_set_max_freq_ratio(u64 *ratio);
-> -#else
-> -static inline bool amd_set_max_freq_ratio(u64 *ratio)
-> -{
-> -       return false;
-> -}
->  #endif
->
->  #endif /* _ASM_X86_TOPOLOGY_H */
-> --- a/arch/x86/kernel/acpi/cppc.c
-> +++ b/arch/x86/kernel/acpi/cppc.c
-> @@ -50,20 +50,17 @@ int cpc_write_ffh(int cpunum, struct cpc
->         return err;
->  }
->
-> -bool amd_set_max_freq_ratio(u64 *ratio)
-> +static void amd_set_max_freq_ratio(void)
->  {
->         struct cppc_perf_caps perf_caps;
->         u64 highest_perf, nominal_perf;
->         u64 perf_ratio;
->         int rc;
->
-> -       if (!ratio)
-> -               return false;
-> -
->         rc = cppc_get_perf_caps(0, &perf_caps);
->         if (rc) {
->                 pr_debug("Could not retrieve perf counters (%d)\n", rc);
-> -               return false;
-> +               return;
->         }
->
->         highest_perf = amd_get_highest_perf();
-> @@ -71,7 +68,7 @@ bool amd_set_max_freq_ratio(u64 *ratio)
->
->         if (!highest_perf || !nominal_perf) {
->                 pr_debug("Could not retrieve highest or nominal performance\n");
-> -               return false;
-> +               return;
->         }
->
->         perf_ratio = div_u64(highest_perf * SCHED_CAPACITY_SCALE, nominal_perf);
-> @@ -79,26 +76,24 @@ bool amd_set_max_freq_ratio(u64 *ratio)
->         perf_ratio = (perf_ratio + SCHED_CAPACITY_SCALE) >> 1;
->         if (!perf_ratio) {
->                 pr_debug("Non-zero highest/nominal perf values led to a 0 ratio\n");
-> -               return false;
-> +               return;
->         }
->
-> -       *ratio = perf_ratio;
-> -       arch_set_max_freq_ratio(false);
-> -
-> -       return true;
-> +       freq_invariance_set_perf_ratio(perf_ratio, false);
->  }
->
->  static DEFINE_MUTEX(freq_invariance_lock);
->
->  void init_freq_invariance_cppc(void)
->  {
-> -       static bool secondary;
-> +       static bool init_done;
->
-> -       mutex_lock(&freq_invariance_lock);
-> -
-> -       if (!secondary)
-> -               bp_init_freq_invariance(true);
-> -       secondary = true;
-> +       if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
-> +               return;
->
-> +       mutex_lock(&freq_invariance_lock);
-> +       if (!init_done)
-> +               amd_set_max_freq_ratio();
-> +       init_done = true;
->         mutex_unlock(&freq_invariance_lock);
->  }
-> --- a/arch/x86/kernel/cpu/aperfmperf.c
-> +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -206,7 +206,7 @@ void arch_set_max_freq_ratio(bool turbo_
->  }
->  EXPORT_SYMBOL_GPL(arch_set_max_freq_ratio);
->
-> -static bool turbo_disabled(void)
-> +static bool __init turbo_disabled(void)
->  {
->         u64 misc_en;
->         int err;
-> @@ -218,7 +218,7 @@ static bool turbo_disabled(void)
->         return (misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
->  }
->
-> -static bool slv_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
-> +static bool __init slv_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
->  {
->         int err;
->
-> @@ -240,26 +240,26 @@ static bool slv_set_max_freq_ratio(u64 *
->         X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6,            \
->                 INTEL_FAM6_##model, X86_FEATURE_APERFMPERF, NULL)
->
-> -static const struct x86_cpu_id has_knl_turbo_ratio_limits[] = {
-> +static const struct x86_cpu_id has_knl_turbo_ratio_limits[] __initconst = {
->         X86_MATCH(XEON_PHI_KNL),
->         X86_MATCH(XEON_PHI_KNM),
->         {}
->  };
->
-> -static const struct x86_cpu_id has_skx_turbo_ratio_limits[] = {
-> +static const struct x86_cpu_id has_skx_turbo_ratio_limits[] __initconst = {
->         X86_MATCH(SKYLAKE_X),
->         {}
->  };
->
-> -static const struct x86_cpu_id has_glm_turbo_ratio_limits[] = {
-> +static const struct x86_cpu_id has_glm_turbo_ratio_limits[] __initconst = {
->         X86_MATCH(ATOM_GOLDMONT),
->         X86_MATCH(ATOM_GOLDMONT_D),
->         X86_MATCH(ATOM_GOLDMONT_PLUS),
->         {}
->  };
->
-> -static bool knl_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq,
-> -                               int num_delta_fratio)
-> +static bool __init knl_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq,
-> +                                         int num_delta_fratio)
->  {
->         int fratio, delta_fratio, found;
->         int err, i;
-> @@ -297,7 +297,7 @@ static bool knl_set_max_freq_ratio(u64 *
->         return true;
->  }
->
-> -static bool skx_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq, int size)
-> +static bool __init skx_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq, int size)
->  {
->         u64 ratios, counts;
->         u32 group_size;
-> @@ -328,7 +328,7 @@ static bool skx_set_max_freq_ratio(u64 *
->         return false;
->  }
->
-> -static bool core_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
-> +static bool __init core_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
->  {
->         u64 msr;
->         int err;
-> @@ -351,7 +351,7 @@ static bool core_set_max_freq_ratio(u64
->         return true;
->  }
->
-> -static bool intel_set_max_freq_ratio(void)
-> +static bool __init intel_set_max_freq_ratio(void)
->  {
->         u64 base_freq, turbo_freq;
->         u64 turbo_ratio;
-> @@ -418,40 +418,42 @@ static struct syscore_ops freq_invarianc
->
->  static void register_freq_invariance_syscore_ops(void)
->  {
-> -       /* Bail out if registered already. */
-> -       if (freq_invariance_syscore_ops.node.prev)
-> -               return;
-> -
->         register_syscore_ops(&freq_invariance_syscore_ops);
->  }
->  #else
->  static inline void register_freq_invariance_syscore_ops(void) {}
->  #endif
->
-> -void bp_init_freq_invariance(bool cppc_ready)
-> +static void freq_invariance_enable(void)
-> +{
-> +       if (static_branch_unlikely(&arch_scale_freq_key)) {
-> +               WARN_ON_ONCE(1);
-> +               return;
-> +       }
-> +       static_branch_enable(&arch_scale_freq_key);
-> +       register_freq_invariance_syscore_ops();
-> +       pr_info("Estimated ratio of average max frequency by base frequency (times 1024): %llu\n", arch_max_freq_ratio);
-> +}
-> +
-> +void freq_invariance_set_perf_ratio(u64 ratio, bool turbo_disabled)
->  {
-> -       bool ret;
-> +       arch_turbo_freq_ratio = ratio;
-> +       arch_set_max_freq_ratio(turbo_disabled);
-> +       freq_invariance_enable();
-> +}
->
-> +void __init bp_init_freq_invariance(void)
-> +{
->         if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
->                 return;
->
->         init_counter_refs();
->
-> -       if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL)
-> -               ret = intel_set_max_freq_ratio();
-> -       else if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
-> -               if (!cppc_ready)
-> -                       return;
-> -               ret = amd_set_max_freq_ratio(&arch_turbo_freq_ratio);
-> -       }
-> +       if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
-> +               return;
->
-> -       if (ret) {
-> -               static_branch_enable(&arch_scale_freq_key);
-> -               register_freq_invariance_syscore_ops();
-> -               pr_info("Estimated ratio of average max frequency by base frequency (times 1024): %llu\n", arch_max_freq_ratio);
-> -       } else {
-> -               pr_debug("Couldn't determine max cpu frequency, necessary for scale-invariant accounting.\n");
-> -       }
-> +       if (intel_set_max_freq_ratio())
-> +               freq_invariance_enable();
->  }
->
->  void ap_init_freq_invariance(void)
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1396,7 +1396,7 @@ void __init native_smp_prepare_cpus(unsi
->  {
->         smp_prepare_cpus_common();
->
-> -       bp_init_freq_invariance(false);
-> +       bp_init_freq_invariance();
->         smp_sanity_check();
->
->         switch (apic_intr_mode) {
->
+> Changes in V6:
+>   - Change subject line prefixed with "RDMA/irdma: ".
+> 
+>  drivers/infiniband/hw/irdma/cm.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+
+I fixed the compile warning.
+
+Applied to for-rc, thanks
+
+Jason

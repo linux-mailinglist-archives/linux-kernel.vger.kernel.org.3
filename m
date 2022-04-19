@@ -2,91 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C667F5071D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F1B5071CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353829AbiDSPch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
+        id S1345901AbiDSPbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353834AbiDSPc2 (ORCPT
+        with ESMTP id S231714AbiDSPbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:32:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEF513F6E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:29:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4964561656
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:29:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC0EC385AC;
-        Tue, 19 Apr 2022 15:29:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650382184;
-        bh=jeuAQBpU0IHUM+HhJwHhOHne7mMnnHWM5rRI0BeHijg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=cyR57D2ICWHJ/NMVxwPTme78WwAyiGmCp6E1vMcQLNezlDTTMo4Qi+NCx3ByGkdHm
-         8onsLupf7HSN5GlA9sxsO6ltkXc3CaxajXtN5b14mzhIw7DmFK6FTPrMagLY/8eRPX
-         OLxy69BEW/PNM3pwHW0wykCV/J3zdmLZiGFnKCXDtCcSvqVtc5e33UWHpQUGHywpL0
-         sw1B/5Th0+O9UtAkJJqIbAoKSRcFLmYVyls53zQ3RNrZC5yB7/Ix/XQ2ZvCwCkHk2Y
-         j1LcAD3HCj+Yhg01CgPadYViGxZXjNdqDXEpiAPh+zaIZAczcEGXd3n9Wx113zbBya
-         b0IbYQUGcu1ZA==
-From:   Mark Brown <broonie@kernel.org>
-To:     cgel.zte@gmail.com, lgirdwood@gmail.com
-Cc:     zealci@zte.com.cn, patches@opensource.cirrus.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        chi.minghao@zte.com.cn
-In-Reply-To: <20220418110259.2559144-1-chi.minghao@zte.com.cn>
-References: <20220418110259.2559144-1-chi.minghao@zte.com.cn>
-Subject: Re: [PATCH] ASoC: codecs: wm8962: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Message-Id: <165038218304.995461.12975238868778224251.b4-ty@kernel.org>
-Date:   Tue, 19 Apr 2022 16:29:43 +0100
+        Tue, 19 Apr 2022 11:31:10 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737FD13DD0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:28:27 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id q22so2745020ljh.10
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IPYkjAqB00Xxjikyucyrlisswxv3Uu4wKk4/LnVwWm8=;
+        b=ET2dFk9aXbq+2du32xy0VJqQN1YDmZMLNM/xlOZkTY4XHyGVyzEkvOVxE5UmMLn+Wp
+         YExIWYqo2rtEyCEv7QIXQpM20AA/xQeiAysy34JEPURNAMpqA3JBsOu604Lh2hPw+5/c
+         E8hHPr0WCvb8dYnwnsNbVYuWCbGAv89QMKUDiEDqUFibiIWuzAAUPttZxNrbO1S9BV0s
+         pzFdWnmFKbNVmXjSAKIB3rCAgGPKQ4U8YVKtVEgIrKpuK3oVlT8ntMSJQx+py4vFhPCq
+         X8dRTTTGhxkUJqDhgSE8/4qnvNyK9Eg09cY3Oj7ufQ+uVc9YgodTclsGipgsgT1AZ5Nm
+         BdFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IPYkjAqB00Xxjikyucyrlisswxv3Uu4wKk4/LnVwWm8=;
+        b=XYQjyFiaWKykEREYvS++Mxj+FyITl2XN7cTbg0FCN7tmkT6khtPrwVOLvtL2KNQr3u
+         5I2Mrx4/cG+cPZn7698NetrVSzuTmj/2BW8qMKZL5ZVO4SVSG9p+AtyCHcsx8WrdY3Ju
+         e+3JPaidH05yXLGp18pttInfHPRloL5wtEF7XRczJpTE0N1iMzLqJjvYUC7S2/p1xyjY
+         DlLiAaUw9JpI1QmCj9TSb092ePY2tKZG+BZtcwKreQ11uA/UuJrXf5zDoodlNcD7dkPO
+         nUfxdeKUDnxHpymFxPlzZzWuzVSOj83XdWBl72RGKoO0x6l+FgmAVI23mFVNzovIffdX
+         mT/w==
+X-Gm-Message-State: AOAM532gzhhd3WgapakvQldNlPuHVyi0kYDZvVakQtpT+ZX8EZNEeKbF
+        p7YqPPOcxrOHjecDgMFwR+RrzQ==
+X-Google-Smtp-Source: ABdhPJxFgaQNwsrkGsQvpbSc49Nh0VBtkIBJACRSpLsWn2p7SstiY+esd57CVUrx8BbP8cSpEJr3cw==
+X-Received: by 2002:a2e:84cc:0:b0:247:e395:7948 with SMTP id q12-20020a2e84cc000000b00247e3957948mr10253293ljh.499.1650382105629;
+        Tue, 19 Apr 2022 08:28:25 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id e5-20020a196745000000b0046b8b922c1csm1543311lfj.158.2022.04.19.08.28.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 08:28:25 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 140FE103C63; Tue, 19 Apr 2022 18:30:02 +0300 (+03)
+Date:   Tue, 19 Apr 2022 18:30:02 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
+Message-ID: <20220419153002.ffh2ybdl7x2mm7zw@box.shutemov.name>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
+ <Ylnwmvygp796+qcA@zn.tnic>
+ <20220418155545.a567xnxa6elglapl@box.shutemov.name>
+ <Yl2UHOQ4iZJ29k0q@zn.tnic>
+ <20220418202431.whvql4w57c7l5vpw@box.shutemov.name>
+ <Yl3RmPhdZieSr8W2@zn.tnic>
+ <20220418235015.mnujtlmmlyin7y6m@box.shutemov.name>
+ <Yl5nSSC4HpSWqfY7@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yl5nSSC4HpSWqfY7@zn.tnic>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 11:02:59 +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Tue, Apr 19, 2022 at 09:39:53AM +0200, Borislav Petkov wrote:
+> On Tue, Apr 19, 2022 at 02:50:15AM +0300, Kirill A. Shutemov wrote:
+> > I find it strange that you go after <linux/bitmap.h> which has limited
+> > exposure while <linux/acpi.h> and <linux/efi.h> are there already.
 > 
-> Using pm_runtime_resume_and_get is more appropriate
-> for simplifing code
+> Funny you should mention that:
 > 
+> https://lore.kernel.org/r/YlCKWhMJEMUgJmjF@zn.tnic
 > 
+> I *have* been working towards that but it's a losing whack-a-mole game
+> when you and others keep adding new stuff.
+> 
+> So no, we won't take a pile of changes and let the maintainer clean it
+> up afterwards.
+> 
+> > What do you want me to do here?
+> 
+> I think the stuff coming from the linux/ namespace you can simply copy
+> into a header in compressed/, like I've done with efi.h.
 
-Applied to
+Hm. Dave was worried about having copies of _find_next_bit() and
+__bitmap_*() inside compressed/.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+How do we rectify code duplication and making decompresser self-contained?
+Do we care about multiple copies of the same code in the kernel?
+Do we care about keeping them in sync?
 
-Thanks!
+> > // <asm/bitops.h>
+> 
+> The asm/ stuff can be put into a shared/ namespace header like the io
+> stuff you did.
+> 
+> > As 1 bit represents 2M, not all chunks can be represented in the bitmap
+> > and they have to be accepted. But the *goal* is to record unaccepted
+> > memory into bitmap. Some accepting is a side effect.
+> > 
+> > The early_accept_memory() name is just wrong.
+> 
+> Ok, how about process_unaccepted_memory(). It should be generic enough.
 
-[1/1] ASoC: codecs: wm8962: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-      commit: e65f2fce08fc708e65b544131999bdd933d09164
+Sounds good.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+ Kirill A. Shutemov

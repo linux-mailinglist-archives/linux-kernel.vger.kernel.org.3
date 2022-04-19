@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384C8506D4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DCA506D55
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243699AbiDSNSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S1348298AbiDSNVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiDSNSR (ORCPT
+        with ESMTP id S238617AbiDSNVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:18:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0F633E0B;
-        Tue, 19 Apr 2022 06:15:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39B5561605;
-        Tue, 19 Apr 2022 13:15:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40465C385A5;
-        Tue, 19 Apr 2022 13:15:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650374134;
-        bh=XyLeUd/v63OA7SUTUm0rez8xElwKroMr+psf6pn932Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TLl0fxObFpL5KXlYroSc8qt8bgjljkyAsi/GCsHFxNwrkZiau7vl+4nRFWJ1V9jNl
-         sZp7pRHZ3yipIISK0qweCepkBfbxtXzz+efrwtlm1UDi1YZta2xS7995BnHX+Uz1JA
-         ALK5xe3MoaNr/rxVwtLYYPf4S5ZG9REGjKxTop/fCWXNA8wuMQ1oLMC67PXlyJOe2Q
-         35VNNfG6Vmdy4espTVVQIk9NMn9XcLDnXZg17jQ7AZ1yRUcrzKgPLOEZ1lAxOSrVG9
-         VkXrTg6ut13jj698dTAVFpVifH0KzNCBsiHk/WjqW9I7+7qNcPj0BAQBxMe/VZVGRB
-         uHeWdFUPHGF8Q==
-Date:   Tue, 19 Apr 2022 14:15:29 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        linux-spi@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.17 34/49] spi: cadence-quadspi: fix protocol
- setup for non-1-1-X operations
-Message-ID: <Yl618Qfbm3NpGjB5@sirena.org.uk>
-References: <20220412004411.349427-1-sashal@kernel.org>
- <20220412004411.349427-34-sashal@kernel.org>
- <d618fc184f162b1da8d75729b5939bed52308040.camel@ew.tq-group.com>
- <YlVrbR6Giy2OXe1R@sirena.org.uk>
- <YlyHqKVBC9u1F9xS@sashalap>
+        Tue, 19 Apr 2022 09:21:51 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80391344FC;
+        Tue, 19 Apr 2022 06:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650374349; x=1681910349;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=FEwok1lzjt/HO93wIkHzSCWrGpT3TbisaBs2ZCCYLc0=;
+  b=x67D8AFHMemndeCBOdJuHzopTptr1WH+fOyvUfBDiIGp946j27+aQ6x5
+   IPlny3LTJoGREEhCXlz8IsxAeeH3pYeh9TAc1wIC9fs5m1GuZu8r19TaY
+   IaqXitwyP5AZ3Zc92X45pvAk9ZSTXjz82Vsd4vck9Hrrhy5HEfHBmyL1z
+   k=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 19 Apr 2022 06:19:08 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 06:19:07 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 19 Apr 2022 06:19:07 -0700
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 19 Apr 2022 06:19:01 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
+Subject: [PATCH v2] ASoC: qcom: SC7280: Update machine driver startup, shutdown callbacks
+Date:   Tue, 19 Apr 2022 18:48:49 +0530
+Message-ID: <1650374329-7279-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="um3oZgsUst9dpcPu"
-Content-Disposition: inline
-In-Reply-To: <YlyHqKVBC9u1F9xS@sashalap>
-X-Cookie: That's what she said.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,38 +66,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Update machine driver startup, shutdown callback functions to avoid
+sound card registration failure on other platforms.
+Without this change, platforms with WCD codec is failing to register
+sound card.
 
---um3oZgsUst9dpcPu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fixes: c5198db82d4c ("ASoC: qcom: Add driver support for ALC5682I-VS")
 
-On Sun, Apr 17, 2022 at 05:33:28PM -0400, Sasha Levin wrote:
-> On Tue, Apr 12, 2022 at 01:07:09PM +0100, Mark Brown wrote:
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+---
+Changes Since V1:
+   -- Update swith case in startup, shutdown callbacks for handling all dai id's
+   -- Update commit message and add Fixes tag
 
-> > For the benefit of those playing at home that's "spi: cadence-quadspi:
-> > fix incorrect supports_op() return value".  It's much more the sort of
-> > thing I'd expect to see backported to stable so it seems good from that
-> > point of view.
+ sound/soc/qcom/sc7280.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-> I'm a bit confused as I don't see the other patch in Linus's tree?
+diff --git a/sound/soc/qcom/sc7280.c b/sound/soc/qcom/sc7280.c
+index 4ef4034..834c081 100644
+--- a/sound/soc/qcom/sc7280.c
++++ b/sound/soc/qcom/sc7280.c
+@@ -291,13 +291,7 @@ static void sc7280_snd_shutdown(struct snd_pcm_substream *substream)
+ 					       SNDRV_PCM_STREAM_PLAYBACK);
+ 		}
+ 		break;
+-	case MI2S_SECONDARY:
+-		break;
+-	case LPASS_DP_RX:
+-		break;
+ 	default:
+-		dev_err(rtd->dev, "%s: invalid dai id 0x%x\n", __func__,
+-			cpu_dai->id);
+ 		break;
+ 	}
+ }
+@@ -312,14 +306,8 @@ static int sc7280_snd_startup(struct snd_pcm_substream *substream)
+ 	case MI2S_PRIMARY:
+ 		ret = sc7280_rt5682_init(rtd);
+ 		break;
+-	case MI2S_SECONDARY:
+-		break;
+-	case LPASS_DP_RX:
+-		break;
+ 	default:
+-		dev_err(rtd->dev, "%s: invalid dai id 0x%x\n", __func__,
+-			cpu_dai->id);
+-		return -EINVAL;
++		break;
+ 	}
+ 	return ret;
+ }
+-- 
+2.7.4
 
-> I'll queue this one up then...
-
-I've only recently applied the above commit, it's not sent to Linus yet.
-
---um3oZgsUst9dpcPu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJetfEACgkQJNaLcl1U
-h9CDZQf/TY/cVb9af5Ei63uqOeKzzcs5loIODBJ04wcdky0mYlICzwT4NKRcWp+P
-t7T/O0b+AGrhzo0vXw1B16RAdm6hYcmZ7hPzw4zp1EoC/EwY/jUustgwOn0ZRMWT
-tBfVKS0IVu98ptUgeYu14xX57jqPkHx5QkoXk32Deuv/d781sApq3+wK9licaIZA
-+mZb5mEttMx1pVk5wCFEgVrylMu1yhwu7roTI2HLC4wlw1jhDXfE3e8MBmLvL3xe
-uUTYVak90sl5pJc6J69sfUdI5I6HG0C36BHArucu9/p7bGa/iMV7YqwaD4EpefqY
-HzxI+3UIgt0DXIvI5KuQG+vO8eVSdw==
-=9Ape
------END PGP SIGNATURE-----
-
---um3oZgsUst9dpcPu--

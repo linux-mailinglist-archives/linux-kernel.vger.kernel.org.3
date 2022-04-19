@@ -2,48 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3D050713A
+	by mail.lfdr.de (Postfix) with ESMTP id 2580A507139
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349999AbiDSPC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
+        id S1347464AbiDSPCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353571AbiDSPCo (ORCPT
+        with ESMTP id S1353566AbiDSPCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:02:44 -0400
-Received: from out28-49.mail.aliyun.com (out28-49.mail.aliyun.com [115.124.28.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591F9193E0;
-        Tue, 19 Apr 2022 08:00:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0822624|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0337172-0.000537099-0.965746;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=19;RT=19;SR=0;TI=SMTPD_---.NTqoddF_1650380382;
-Received: from 192.168.10.102(mailfrom:michael@allwinnertech.com fp:SMTPD_---.NTqoddF_1650380382)
-          by smtp.aliyun-inc.com(11.95.168.178);
-          Tue, 19 Apr 2022 22:59:55 +0800
-Message-ID: <5cfbdc20-fafa-18b5-71ef-0ce8b91566a7@allwinnertech.com>
-Date:   Tue, 19 Apr 2022 22:59:48 +0800
+        Tue, 19 Apr 2022 11:02:43 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57ABE13E2D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:59:58 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 21so21686943edv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=27PI2y+Kj3EM/yCTP+HU3QtzK4PZZymWrObhrHc1GL0=;
+        b=qoI5VlxuWNCsCYqVEXP5/gQ0LrfBfO7rOEsIooFDWLODD4GnBDfffYudWyd5em2sV4
+         RGOcQ3PRp1mLkPfppa+LeMq2r5jEBE2I+HrgOhhXoPD4p0KaxAIl4kBrerS3NS2tAPRv
+         B4KD+IGD0zdFhHdJh95SqxwOCSSnWJ9u4Zk/dT8LN03RYHf2PvBWX+OqW8+3TV0NVxOS
+         U8Y78CcmnkOT2towNQERWO5iESsH1kzy4EKTWhyRP5Fxpfh3Ucdqu9h+Nmgky/kJG7xY
+         FirIXEL6v5+SvxEGfSdXhAxqshqgv9d7fTWScWM6bag+CivT5QRHEZlk0zUSqLFxo/eC
+         TAeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=27PI2y+Kj3EM/yCTP+HU3QtzK4PZZymWrObhrHc1GL0=;
+        b=7A40PZIwS5c2kkrJUu+YESno7PzfdaAhUe0tZ8Y8RXTbeoQ9jw08P0FmZlBOEhL4OB
+         I5mcH0pJcvkRf5Nq/SNZ43qw8ELb1drs/fx79cmcZ+J6/ubkjjnitF4fZ0+h+KrRkGcN
+         b8ngNzVtIvfukDyWsYA3v7JdWJQ9iPOFxzCCImkjU2fS0eFCgM5PTG/3z1desJfycK5q
+         bqhgq15D/1pMmG4RY0KHIA/MOL8cObJ88s8VdAdggwkYKh0/5AmyhL+qgp9peESyX3LP
+         /k/8G4uV2TrlkQhUlNfZMG1zR7cLjTm3V3Uf/qfky/L+ErY11QFFD8H1EiihTtDgd8ln
+         pckQ==
+X-Gm-Message-State: AOAM532HtrrWz8jPeGj/R5jR24cH71O4gKOOWES8+D6HpeWcSnBWne5S
+        5h/tk84VmFzYD0zqqlL+mNg+sg==
+X-Google-Smtp-Source: ABdhPJwrEf6P7FM34tikCNG4Q2fnKhvwphZhOQYKin6JoY4dJSGVtYihUf+fBIUiNrr0QniJT6dFFg==
+X-Received: by 2002:a05:6402:330a:b0:41d:9477:4ee4 with SMTP id e10-20020a056402330a00b0041d94774ee4mr17967626eda.41.1650380396948;
+        Tue, 19 Apr 2022 07:59:56 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm5751685ejb.194.2022.04.19.07.59.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 07:59:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     cgel.zte@gmail.com
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] memory: Make use of the helper function devm_platform_ioremap_resource()
+Date:   Tue, 19 Apr 2022 16:59:53 +0200
+Message-Id: <165038039034.384424.3835385598984569848.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220418020147.2556925-1-lv.ruyi@zte.com.cn>
+References: <20220418020147.2556925-1-lv.ruyi@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] mmc: block: enable cache-flushing when mmc cache is on
-Content-Language: en-GB
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     axboe@kernel.dk, adrian.hunter@intel.com, avri.altman@wdc.com,
-        kch@nvidia.com, beanhuo@micron.com, swboyd@chromium.org,
-        digetx@gmail.com, bigeasy@linutronix.de, CLoehle@hyperstone.com,
-        cjb@laptop.org, arnd@arndb.de, andreiw@motorola.com,
-        tgih.jun@samsung.com, jh80.chung@samsung.com,
-        linus.walleij@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com
-References: <20220331073223.106415-1-michael@allwinnertech.com>
- <CAPDyKFq4yowT_t_y_fg9vqgyr=qVykWeOux8H6CGZDyn0M5JhQ@mail.gmail.com>
-From:   Michael Wu <michael@allwinnertech.com>
-In-Reply-To: <CAPDyKFq4yowT_t_y_fg9vqgyr=qVykWeOux8H6CGZDyn0M5JhQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,96 +72,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2022 19:52, Ulf Hansson wrote:
-> On Thu, 31 Mar 2022 at 09:32, Michael Wu <michael@allwinnertech.com> wrote:
->>
->> The mmc core enables cache by default. But it only enables
->> cache-flushing when host supports cmd23 and eMMC supports
->> reliable-write.
->> For hosts which do not support cmd23 or eMMCs which do not support
->> reliable-write, the cache can not be flushed by `sync` command.
->> This may leads to cache data lost.
->> This patch enables cache-flushing as long as cache is enabled,
->> no matter host supports cmd23 and/or eMMC supports reliable write
->> or not.
->> For SD cards, backwards compatibility is guaranteed. Newer components
->> like SD5.0 which have cache are also supported in advance, which means
->> this patch will also be applicable if SD5.0 cache is added to the mmc
->> core in the future.
+On Mon, 18 Apr 2022 02:01:47 +0000, cgel.zte@gmail.com wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
 > 
-> SD 5.0 cache support was added in the commit 130206a615a9 below. No
-> need to resend, I will take care of updating the commit message.
-> >>
->> Fixes: f4c5522b0a88 ("mmc: Reliable write support.")
->> Fixes: 881d1c25f765 ("mmc: core: Add cache control for eMMC4.5 device")
->> Fixes: 130206a615a9 ("mmc: core: Add support for cache ctrl for SD cards")
->> Fixes: d0c97cfb81eb ("mmc: core: Use CMD23 for multiblock transfers when we can.")
->> Fixes: e9d5c746246c ("mmc/block: switch to using blk_queue_write_cache()")
+> Use the devm_platform_ioremap_resource() helper instead of calling
+> platform_get_resource() and devm_ioremap_resource() separately.Make the
+> code simpler without functional changes.
 > 
-> I will have a look at the above to see what makes sense to add - and
-> then I will add a stable tag too.
 > 
-Dear Ulf,
-Thank you for your effort. I saw this patch which was taken care by you 
-on the mainline [commit 08ebf903af57], and also the commits in 
-stable-queque by Greg-KH. I guess this means this patch is accepted/closed.
-I'm so happy and want to say thank you for all the help. Next time I'm 
-sure I'll do it better :)
+> [...]
 
+Applied, thanks!
+
+[1/1] memory: Make use of the helper function devm_platform_ioremap_resource()
+      commit: d37b07897e5024088b2170b8e6e1c68d567b9be6
+
+Best regards,
 -- 
-Best Regards,
-Michael Wu
-
->>
->> Reviewed-by: Avri Altman <Avri.Altman@wdc.com>
->> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
->>
->> Signed-off-by: Michael Wu <michael@allwinnertech.com>
-> 
-> Thanks, applied for fixes!
-> 
-> Kind regards
-> Uffe
-> 
-> 
->> ---
->>   drivers/mmc/core/block.c | 12 +++++++++---
->>   1 file changed, 9 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
->> index 4e67c1403cc9..ec76ed82abb9 100644
->> --- a/drivers/mmc/core/block.c
->> +++ b/drivers/mmc/core/block.c
->> @@ -2350,6 +2350,8 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
->>          struct mmc_blk_data *md;
->>          int devidx, ret;
->>          char cap_str[10];
->> +       bool cache_enabled = false;
->> +       bool fua_enabled = false;
->>
->>          devidx = ida_simple_get(&mmc_blk_ida, 0, max_devices, GFP_KERNEL);
->>          if (devidx < 0) {
->> @@ -2429,13 +2431,17 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
->>                          md->flags |= MMC_BLK_CMD23;
->>          }
->>
->> -       if (mmc_card_mmc(card) &&
->> -           md->flags & MMC_BLK_CMD23 &&
->> +       if (md->flags & MMC_BLK_CMD23 &&
->>              ((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN) ||
->>               card->ext_csd.rel_sectors)) {
->>                  md->flags |= MMC_BLK_REL_WR;
->> -               blk_queue_write_cache(md->queue.queue, true, true);
->> +               fua_enabled = true;
->> +               cache_enabled = true;
->>          }
->> +       if (mmc_cache_enabled(card->host))
->> +               cache_enabled  = true;
->> +
->> +       blk_queue_write_cache(md->queue.queue, cache_enabled, fua_enabled);
->>
->>          string_get_size((u64)size, 512, STRING_UNITS_2,
->>                          cap_str, sizeof(cap_str));
->> --
->> 2.29.0
->>
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

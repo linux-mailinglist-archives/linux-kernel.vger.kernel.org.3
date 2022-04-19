@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07381507C25
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1564B507C28
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344112AbiDSVxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 17:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S1354221AbiDSVyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 17:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbiDSVxL (ORCPT
+        with ESMTP id S1350809AbiDSVyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 17:53:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B5639BA2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:50:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0B11B81A3D
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 21:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8842EC385B2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 21:50:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650405024;
-        bh=19+C6lovXblzkzesiQNBstoa94kewx17o/4B7AAGQ3A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=N9vV7hIQyo8lzzHx/Up7J4SUised1IeJyLkHOyV+Qm0MrG8AvMoVkUj0cA5zMjfK6
-         5BbHpuyfX08WzvIYkX0cnMGoHWYgzfL2bFhqS19iwGcx9y6WzcK54/pt/UZfJvmrNo
-         yqcDZvmOMa3iAwF0gQd6k4Qn0FrGGIWfRLnh/s7mMQKWLBEW3t7o9jN7M7h8uMf4K3
-         GE1qgyfLzEvUyXIjkrTo6I96DOwYkgMvtpkUOcv4XZAWaojEYZ4XIDqgGd2hdBo/av
-         HgK6aOF79uGNkHIInXG8T6/02VzO3dfwfrzmtAEwbp6GpAYry5o0fAECdPJ9XUELz5
-         LwdToN9o/t8Yg==
-Received: by mail-oo1-f48.google.com with SMTP id f13-20020a4aa68d000000b0033a2c53d0baso1616797oom.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:50:24 -0700 (PDT)
-X-Gm-Message-State: AOAM532GdJheomF3XfRgrJK1LCSGy6Zl/MtczIpOhHtJKukF0JyI1/AK
-        jwpYrKau2i9IZf1+Zjj5h60FxfFYnIbhb51fgnk=
-X-Google-Smtp-Source: ABdhPJzRWwRTImhUHZlzz8/ohm/laqoDuDdJO2L+tATCho4Qe7V4mzxG7+EOW6PAztE6kFuaceKhdkUboY8OfCdbILk=
-X-Received: by 2002:a05:6820:16c:b0:33a:3348:bdbe with SMTP id
- k12-20020a056820016c00b0033a3348bdbemr4949595ood.98.1650405023571; Tue, 19
- Apr 2022 14:50:23 -0700 (PDT)
+        Tue, 19 Apr 2022 17:54:14 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58803B3FD
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:51:29 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ebf4b91212so187593907b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:51:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8LhDtsOPaDlH3w6gyeu3mci7iJleTkKy6Uui9MQ6Hds=;
+        b=TmJ0eiZYxAZdUE5sh6L1cK/xtUM2pWMJ2d6VLd7GncE5o2BPF8IhN74KoYLmbqhlqJ
+         751S7YfxUmlLYCB/tgrlgHFmP1pOaZYQvNOegYyL7AEw/AvmbnEgaGsD6reGB657DSW5
+         SLtQWdiI4av5zn9s6lCHbNTOxDNFgFbjdU2/ySPN/iks+s7ygV4PF2EChzm99R1Sj6fd
+         uHkOK44JlKGAdcPmAK92pVDG8HfBkBMdNY8y7hgaIzSXq+dYT0pMiMXVOwmYskbMLIwP
+         RdLXDObtdw0G6sxyzlQRmVRWV0d9Lzy0dn9bQ+kQB910wQWErhsL9r8ObnCdXEon9VKY
+         xtWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8LhDtsOPaDlH3w6gyeu3mci7iJleTkKy6Uui9MQ6Hds=;
+        b=AsTqCgrxPk2DFxpQZhLjJvpFx0Sq6ppsApvf+HSZFLLfZG9TLp1YZdKqYo9ck57/RI
+         +aogxjHvH0rO1RATDLGMWKq14bftUF+lyhBJcL9pQPF8BYWY+XSk+cLb4+KXLp1U7sOd
+         Qx0PdNYGYMHJKltewYOCYNRnzEdrULBiUO3SOF5A7IulVu6nF3jgWE2qOAqu8Lg7GlMi
+         MXQti180OgJn2g1N+gasvxhFMCW27sor9zCUWwkBM8uY+g10HRrnNIVU9YR9+OmLTSbu
+         YfWsU1Ncc1TRwvU8CtSqEfucDXKh+IKwSlEb04LJKMbfsTT5PwB1sJMM1FSxB+CVYX/2
+         LXdg==
+X-Gm-Message-State: AOAM530Nawki4p7QRI1lIhDzuBp9WHo2pmZqYP9qLCc3DzORqVBWuNum
+        I4McEUIj3WD2P2kYGtFYANzdRxv7ozPZ2/jJdMrd0g==
+X-Google-Smtp-Source: ABdhPJycEnrH7NVifO4MaU0HhRu9JHmy3mauXkWvCyOyFGBRyszpFOK/1t0vV+rQEn1AzyuIAhpReNnCvDyBl6IzkMs=
+X-Received: by 2002:a0d:e813:0:b0:2ec:1e83:e5f0 with SMTP id
+ r19-20020a0de813000000b002ec1e83e5f0mr18570099ywe.151.1650405089150; Tue, 19
+ Apr 2022 14:51:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAMj1kXFjLbtpJLFh-C_k3Ydcg4M7NqrCfOXnBY2iSxusWtBLbA@mail.gmail.com>
- <YllM24eca/uxf9y7@gondor.apana.org.au> <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
- <YlvK9iefUECy361O@gondor.apana.org.au> <YlvQTci7RP5evtTy@arm.com>
- <YlvRbvWSWMTtBJiN@gondor.apana.org.au> <YlvU6ou14okbAbgW@arm.com>
- <YlvWtc/dJ6luXzZf@gondor.apana.org.au> <YlxAo5BAy+ARlvqj@arm.com>
- <Yl0jPdfdUkaStDN5@gondor.apana.org.au> <Yl2Vda/8S7qAvMjC@arm.com>
-In-Reply-To: <Yl2Vda/8S7qAvMjC@arm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 19 Apr 2022 23:50:11 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEGdPageO3tb2=eLnGAR9-nZtmTGXcGf5CiTQFC4JiXOg@mail.gmail.com>
-Message-ID: <CAMj1kXEGdPageO3tb2=eLnGAR9-nZtmTGXcGf5CiTQFC4JiXOg@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
+References: <20220414190242.22178-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220414190242.22178-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 19 Apr 2022 23:51:17 +0200
+Message-ID: <CACRpkdanmmwfMHHQsK+d_CXq92YkFj4Pw0EhsJStukL6C7Qa0A@mail.gmail.com>
+Subject: Re: [PATCH v5 0/6] gpiolib: more helpers and fwnode conversion
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,115 +75,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 at 18:44, Catalin Marinas <catalin.marinas@arm.com> wrote:
+On Thu, Apr 14, 2022 at 9:02 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+
+> This is a spin-off (*) of the previous work of switching GPIO library
+> to use fwnode instead of of_node. Here we introduce a couple of
+> a new macro helpers, which allows to switch some of the drivers
+> to use fwnode and partially fwnode APIs. As a result of this cleanup
+> a few drivers switched to use GPIO fwnode instead of of_node.
 >
-> On Mon, Apr 18, 2022 at 04:37:17PM +0800, Herbert Xu wrote:
-> > On Sun, Apr 17, 2022 at 05:30:27PM +0100, Catalin Marinas wrote:
-> > > Do you mean as per Ard's proposal here:
-> > >
-> > > https://lore.kernel.org/r/CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com
-> > >
-> > > struct crypto_request {
-> > >     union {
-> > >             struct {
-> > >                     ... fields ...
-> > >             };
-> > >             u8 __padding[ARCH_DMA_MINALIGN];
-> > >     };
-> > >     void __ctx[]  __aligned(CRYPTO_MINALIGN);
-> > > };
-> > >
-> > > If CRYPTO_MINALIGN is lowered to, say, 8 (to be the same as lowest
-> > > ARCH_KMALLOC_MINALIGN), the __alignof__(req->__ctx) would be 8.
-> > > Functions like crypto_tfm_ctx_alignment() will return 8 when what you
-> > > need is 128. We can change those functions to return ARCH_DMA_MINALIGN
-> > > instead or always bump cra_alignmask to ARCH_DMA_MINALIGN-1.
-> >
-> > OK, at this point I think we need to let the code do the talking :)
-> >
-> > I've seen Ard's patches already and I think I understand what your
-> > needs are.  So let me whip up some code to show you guys what I
-> > think needs to be done.
+> *) it's subset of it with a new (patch 1) helper.
 >
-> BTW before you have a go at this, there's also Linus' idea that does not
-> change the crypto code (at least not functionally). Of course, you and
-> Ard can still try to figure out how to reduce the padding but if we go
-> with Linus' idea of a new GFP_NODMA flag, there won't be any changes to
-> the crypto code as long as it doesn't pass such flag. So, the options:
+> Marek, Martin, can you give this a try?
+> This requires at least two patches for GPIO library to be applied.
 >
-> 1. Change ARCH_KMALLOC_MINALIGN to 8 (or ARCH_SLAB_MINALIGN if higher)
->    while keeping ARCH_DMA_MINALIGN to 128. By default kmalloc() will
->    honour the 128-byte alignment, unless GDP_NODMA is passed. This still
->    requires changing CRYPTO_MINALIGN to ARCH_DMA_MINALIGN but there is
->    no functional change, kmalloc() without the new flag will return
->    CRYPTO_MINALIGN-aligned pointers.
->
-> 2. Leave ARCH_KMALLOC_MINALIGN as ARCH_DMA_MINALIGN (128) and introduce
->    a new GFP_PACKED (I think it fits better than 'NODMA') flag that
->    reduces the minimum kmalloc() below ARCH_KMALLOC_MINALIGN (and
->    probably at least ARCH_SLAB_MINALIGN). It's equivalent to (1) but
->    does not touch the crypto code at all.
->
-> (1) and (2) are the same, just minor naming difference. Happy to go with
-> any of them. They still have the downside that we need to add the new
-> GFP_ flag to those hotspots that allocate small objects (Arnd provided
-> an idea on how to find them with ftrace) but at least we know it won't
-> inadvertently break anything.
->
+> Bart, Linus, I can take it thru my tree with an immutable branch if
+> it's the way you prefer, otherwise please suggest on how to proceed.
 
-I'm not sure GFP_NODMA adds much here.
+Hmmm that sounds best, patch 1 does not apply to the pinctrl
+tree so I suppose there are already dependencies in the GPIO
+tree?
 
-The way I see it, the issue in the crypto code is that we are relying
-on a ARCH_KMALLOC_ALIGN aligned zero length __ctx[] array for three
-different things:
-- ensuring/informing the compiler that top-level request/TFM
-structures are aligned to ARCH_KMALLOC_ALIGN,
-- adding padding to ensure that driver context structures that are
-embedded in those top-level request/TFM structures are sufficiently
-aligned so that any member C types appear at the expected alignment
-(but those structures are not usually defined as being aligned to
-ARCH_KMALLOC_ALIGN)
-- adding padding to ensure that these driver context structures do not
-share cache lines with the preceding top-level struct.
+FWIW, the series:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-One thing to note here is that the padding is only necessary when the
-driver context size > 0, and has nothing to do with the alignment of
-the top-level struct.
+I'm of course a fan of this nice refactoring series.
 
-Using a single aligned ctx member was a nice way to accomplish all of
-these when it was introduced, but I think it might be better to get
-rid of it, and move the padding logic to the static inline helpers
-instead.
-
-So something like
-
-struct skcipher_request {
-  ...
-} CRYPTO_MINALIGN_ATTR;
-
-which states/ensures the alignment of the struct, and
-
-void *skcipher_request_ctx(struct skcipher_request *req) {
-  return (void *)PTR_ALIGN(req + 1, ARCH_DMA_MINALIGN);
-}
-
-to get at the context struct, instead of using a struct field.
-
-Then, we could update skcipher_request_alloc() to only round up
-sizeof(struct skipher_request) to ARCH_DMA_MINALIGN if the reqsize is
->0 to begin with, and if it is, to also round reqsize up to
-ARCH_DMA_MINALIGN when accessed. That way, we spell out the DMA
-padding requirements with relying on aligned struct members.
-
-If we do it this way, we have a clear distinction between expectations
-about what kmalloc returns in terms of alignment, and adding padding
-to influence the placement of the context struct. It also makes it
-easier to either apply the changes I proposed in the series I sent out
-a couple of weeks ago, or get rid of DMA alignment for request/TFM
-structures altogether, if we manage to identify and fix the drivers
-that are relying on this. In any case, it decouples these two things
-in a way that allows Catalin to make his kmalloc changes without
-having to redefine CRYPTO_MINALIGN to ARCH_DMA_MINALIGN.
-
--- 
-Ard.
+Yours,
+Linus Walleij

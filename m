@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB6B507D48
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7B4507D47
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 01:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358067AbiDSXqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 19:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
+        id S1358064AbiDSXr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 19:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236755AbiDSXqR (ORCPT
+        with ESMTP id S236755AbiDSXr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 19:46:17 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C1020BE6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:43:33 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id e21so24435784wrc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:43:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HKQLOdPaQ3Mw3cBSPXtTxWv22p46uaNKqi/2UnH+TaU=;
-        b=W+DL2plQDmeF6M+8AnbzgopnqINjz5xpZNqMbikOKgoHFPRR+2r5EWaHfQkEeeyh8Y
-         4x3B0Cqy4qQjSieeCV93kllUXHcH1UEDOyJ4H3wi3nGkncyyG69gMCxdhJrYyUgoMASs
-         byoRivqsbbPGEE5WgsXzZwjw4W9tp8cTrS2PGq8BAEhXE767YJOJn1HZSX0oG6fO7+gi
-         xLn3V8FkF2M8NwqWPNExwEjR/LxGIsYI7oaOyzgmVo32APXgz+OmYl1Y48HnpBXCupPQ
-         yXxgbu5sru6YT/MpEjkix0vIoBcBKYwhlN6gKA5aSrgKRu9UJZxn3uW2VAIeWPPrevdr
-         3hHg==
+        Tue, 19 Apr 2022 19:47:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 338D621813
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650411881;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oYGafAneoUZHzEpI/8/bT8Grd+Q/phBRFprX8SG/5bY=;
+        b=c0D0avCHttmjOQNEviiqVk94T5WrAKjCgPYQAHsP+OKcR6C/7b+65srCG6Df7BNbAegR5/
+        8+P2cp7wDXZgj5pDixjXsJgzDbNrVzcyYrmnb+BeH9s3JEaI0UFvPrX5zdUBd8a349d9p8
+        t6ZibFxNbypaveWkIf1LaiK0zhF3gu4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-132-A3-U_55VPByrISC6o1Aezw-1; Tue, 19 Apr 2022 19:44:40 -0400
+X-MC-Unique: A3-U_55VPByrISC6o1Aezw-1
+Received: by mail-wm1-f71.google.com with SMTP id m125-20020a1c2683000000b00391893a2febso76450wmm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:44:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=HKQLOdPaQ3Mw3cBSPXtTxWv22p46uaNKqi/2UnH+TaU=;
-        b=WE+niIfcCtNJ4bZwkN66RckQuPzLvdFcbOg6sXGuCsWNTtyju8ZDJTbbrMaHypf+Pw
-         ktw4b0UtkmIGjISMTykqOMcUa1KauN2eWPuwjXCQd7OrOfKbZ8rOzbzH4brlSkzRdU4k
-         zOSlj7rBAbuSggH00Byloq1HbA62QX7T5BAfW63NuJ53LcTnreTGMNm7yfLreh/L8A+v
-         9bmTSYIgKRC0PLzQlM1xbjeP7a2+pk3+vCu5WMRWpDa5scVSCYzGVmXi7LMnhNj54NKt
-         NXql3M4LPV2EgHBC0MTdfmDwN8iHZUDTvMrJ4IekvexNNFzXs6aXRH7zgmKedlwptIyM
-         7HNA==
-X-Gm-Message-State: AOAM531gmH9AZDsbXo2MsTRvatLH/sHiNK+2htuMMNZ0jA8C7xNVJi7z
-        l0rgFd5axXWYR6+xsU1v6CWh/th+lLaoiw==
-X-Google-Smtp-Source: ABdhPJwAIcFXMCqod1EDSxcxDLBq3kQdWuUNKRazc7JRrvo6vjc1W5NvWFPzXoUkm5DwO/gOBUTKUg==
-X-Received: by 2002:a5d:45ce:0:b0:207:9e7e:9a4b with SMTP id b14-20020a5d45ce000000b002079e7e9a4bmr13248177wrs.559.1650411811661;
-        Tue, 19 Apr 2022 16:43:31 -0700 (PDT)
-Received: from alaa-emad ([102.41.109.205])
-        by smtp.gmail.com with ESMTPSA id x4-20020adfdd84000000b00207b60ed68esm13255849wrl.100.2022.04.19.16.43.31
+        bh=oYGafAneoUZHzEpI/8/bT8Grd+Q/phBRFprX8SG/5bY=;
+        b=Ji9sStWBP6qDkE2Z15hnl/0bDUK4EmFRlukmHVztBaYgMCW1UAsZsSKstRtGmn1Xk7
+         /pGwDlZ0SmSLZq3V7/vWb11/29bNCDMBkLztLkjGUY8RsTC/gpyrGLmVRKCPP8rytvwL
+         AVLLQFTblsFmDpnGnH53XxhS4QA23f6IiAVLjynMmga6mGMQVjcfGJxPF4tDW3Sd5nks
+         rMzAAjYyM2AQoj+gk+lvu7omuCvr1nh+LyFYkBO7gu+84VCBJeXqNDmCZy5y9zp+9SLv
+         2X/XRdyK1dpHrZFi4HdUxKhJw7U5kDyBjx0af7wxNqbEX6UmzcOtFmVH3XIWz05D51Wy
+         tZsw==
+X-Gm-Message-State: AOAM531U5myaegn+TCCFcKieSbmE+tTJIQkogK9Zy0WF7i24Ig4C79UG
+        iTez2q2VdtXOwfgZCGMpusEKGDawqSf7TfZGfKvnytut4i+ER28bIFasg1Km6YLKYearTmVVei4
+        xTkEafQzUQtw9A+R8TAN006lddxzfczbq6g/lxsumDrxQq3eHed2oLzpC8cVBVwpO7WxkH9eoYJ
+        k=
+X-Received: by 2002:adf:e301:0:b0:205:db69:6dba with SMTP id b1-20020adfe301000000b00205db696dbamr13903205wrj.605.1650411878555;
+        Tue, 19 Apr 2022 16:44:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyd21waJxZOqKa793oN0FwdeBAnzWxA1Koh+HqrwD58qJEbPViWBCVhaKh7RSE4dFJnB0AKtQ==
+X-Received: by 2002:adf:e301:0:b0:205:db69:6dba with SMTP id b1-20020adfe301000000b00205db696dbamr13903193wrj.605.1650411878317;
+        Tue, 19 Apr 2022 16:44:38 -0700 (PDT)
+Received: from kherbst.pingu.com (ip1f10bb48.dynamic.kabel-deutschland.de. [31.16.187.72])
+        by smtp.gmail.com with ESMTPSA id z3-20020a1cf403000000b0037d1f4a2201sm16560045wma.21.2022.04.19.16.44.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 16:43:31 -0700 (PDT)
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     boris.ostrovsky@oracle.com, jgross@suse.com,
-        sstabellini@kernel.org, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, ira.weiny@intel.com,
-        eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH v2] xen:  Convert kmap() to kmap_local_page()
-Date:   Wed, 20 Apr 2022 01:43:28 +0200
-Message-Id: <20220419234328.10346-1-eng.alaamohamedsoliman.am@gmail.com>
-X-Mailer: git-send-email 2.35.2
+        Tue, 19 Apr 2022 16:44:37 -0700 (PDT)
+From:   Karol Herbst <kherbst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Karol Herbst <kherbst@redhat.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH] drm/i915: Fix race in __i915_vma_remove_closed
+Date:   Wed, 20 Apr 2022 01:44:36 +0200
+Message-Id: <20220419234436.2638649-1-kherbst@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() is being deprecated and these usages are all local to the thread
-so there is no reason kmap_local_page() can't be used.
+i915_vma_reopen checked if the vma is closed before without taking the
+lock. So multiple threads could attempt removing the vma.
 
-Replace kmap() calls with kmap_local_page().
+Instead the lock needs to be taken before actually checking.
 
-Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+Cc: Chris Wilson <chris@chris-wilson.co.uk>
+Cc: intel-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/5732
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
 ---
-changes in V2:
-	-edit commit subject
-	-edit commit message
----
- drivers/xen/gntalloc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/i915_vma.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/xen/gntalloc.c b/drivers/xen/gntalloc.c
-index 4849f94372a4..55acb32842a3 100644
---- a/drivers/xen/gntalloc.c
-+++ b/drivers/xen/gntalloc.c
-@@ -178,9 +178,9 @@ static void __del_gref(struct gntalloc_gref *gref)
- 	unsigned long addr;
+diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
+index 162e8d83691b..bb3b6e4bee8b 100644
+--- a/drivers/gpu/drm/i915/i915_vma.c
++++ b/drivers/gpu/drm/i915/i915_vma.c
+@@ -1615,17 +1615,17 @@ void i915_vma_close(struct i915_vma *vma)
  
- 	if (gref->notify.flags & UNMAP_NOTIFY_CLEAR_BYTE) {
--		uint8_t *tmp = kmap(gref->page);
-+		uint8_t *tmp = kmap_local_page(gref->page);
- 		tmp[gref->notify.pgoff] = 0;
--		kunmap(gref->page);
-+		kunmap_local(tmp);
- 	}
- 	if (gref->notify.flags & UNMAP_NOTIFY_SEND_EVENT) {
- 		notify_remote_via_evtchn(gref->notify.event);
+ static void __i915_vma_remove_closed(struct i915_vma *vma)
+ {
+-	struct intel_gt *gt = vma->vm->gt;
+-
+-	spin_lock_irq(&gt->closed_lock);
+ 	list_del_init(&vma->closed_link);
+-	spin_unlock_irq(&gt->closed_lock);
+ }
+ 
+ void i915_vma_reopen(struct i915_vma *vma)
+ {
++	struct intel_gt *gt = vma->vm->gt;
++
++	spin_lock_irq(&gt->closed_lock);
+ 	if (i915_vma_is_closed(vma))
+ 		__i915_vma_remove_closed(vma);
++	spin_unlock_irq(&gt->closed_lock);
+ }
+ 
+ static void force_unbind(struct i915_vma *vma)
+@@ -1651,7 +1651,11 @@ static void release_references(struct i915_vma *vma, bool vm_ddestroy)
+ 
+ 	spin_unlock(&obj->vma.lock);
+ 
++	struct intel_gt *gt = vma->vm->gt;
++
++	spin_lock_irq(&gt->closed_lock);
+ 	__i915_vma_remove_closed(vma);
++	spin_unlock_irq(&gt->closed_lock);
+ 
+ 	if (vm_ddestroy)
+ 		i915_vm_resv_put(vma->vm);
 -- 
-2.35.2
+2.35.1
 

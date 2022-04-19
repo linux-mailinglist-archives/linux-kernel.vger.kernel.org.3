@@ -2,172 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4595E506915
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7BF506919
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350798AbiDSKve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 06:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
+        id S1350811AbiDSKvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 06:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350795AbiDSKvb (ORCPT
+        with ESMTP id S1350826AbiDSKvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:51:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514711CFE3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 03:48:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pia42eYWUXDGfQPlliFB9bh+93t0WxAscUmkE30teBA=; b=qkF+3PEDemB83mZFp0Dv4DMWZf
-        rjIhQF9OXE+HWSlTGsU7kCZBVpwoTLzPxmoLL/NKRBjXE15xdhKbL/LyXC4GPAVso9Q7ae0xXTqkY
-        C06Cg+5A9F5nhY1l6g8ULTnvp9WsZe+lHIlB370m9ru8Y98Jgml/cwxnhzNfi+ppcBV8+8Q6WnrdL
-        +EOTmBGvtmSlskDMhNhnZsI/IdNsgJGJbKNjb/5W4d18BTQLGyQU6rORQKQzF5nVzvpQGQvRnYZqG
-        BypdD92WtdSg0AhKgjMgnUvvn9+bks9qoXqQjka8PcI9lcA5QSIHgj2Jjd0K1MjhbZy6DxyNYv9SW
-        pR0SXaqQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nglPK-0030oU-5P; Tue, 19 Apr 2022 10:48:30 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 32144986195; Tue, 19 Apr 2022 12:48:28 +0200 (CEST)
-Date:   Tue, 19 Apr 2022 12:48:28 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Hao Jia <jiahao.os@bytedance.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/core: Avoid obvious double update_rq_clock warning
-Message-ID: <20220419104828.GQ2731@worktop.programming.kicks-ass.net>
-References: <20220418090929.54005-1-jiahao.os@bytedance.com>
+        Tue, 19 Apr 2022 06:51:45 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58DD82A251;
+        Tue, 19 Apr 2022 03:49:03 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 8BA9F1C8111A;
+        Tue, 19 Apr 2022 18:49:02 +0800 (CST)
+Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Tue, 19 Apr
+ 2022 18:49:02 +0800
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCML01B.nuvoton.com
+ (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Tue, 19 Apr
+ 2022 18:49:02 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Tue, 19 Apr 2022 18:49:01 +0800
+Message-ID: <c59686fe-a9dd-9835-2ccb-e574ea01d7a2@nuvoton.com>
+Date:   Tue, 19 Apr 2022 18:49:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418090929.54005-1-jiahao.os@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 2/5] dt-bindings: clock: Document MA35D1 clock
+ controller bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <ychuang570808@gmail.com>
+CC:     <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
+        <arnd@arndb.de>, <olof@lixom.net>, <will@kernel.org>,
+        <soc@kernel.org>, <cfli0@nuvoton.com>
+References: <20220418082738.11301-1-ychuang3@nuvoton.com>
+ <20220418082738.11301-3-ychuang3@nuvoton.com>
+ <2f8d2f6a-32dc-15cc-321c-f75721edf8a2@linaro.org>
+ <29b00c24-681a-7f6f-f27d-b7525c5b8485@nuvoton.com>
+ <b2e32685-73a6-98be-50be-5121c67431ed@linaro.org>
+From:   Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <b2e32685-73a6-98be-50be-5121c67431ed@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 05:09:29PM +0800, Hao Jia wrote:
-> When we use raw_spin_rq_lock to acquire the rq lock and have to
-> update the rq clock while holding the lock, the kernel may issue
-> a WARN_DOUBLE_CLOCK warning.
-> 
-> Since we directly use raw_spin_rq_lock to acquire rq lock instead of
-> rq_lock, there is no corresponding change to rq->clock_update_flags.
-> In particular, we have obtained the rq lock of other cores,
-> the core rq->clock_update_flags may be RQCF_UPDATED at this time, and
-> then calling update_rq_clock will trigger the WARN_DOUBLE_CLOCK warning.
-
-> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-> ---
->  kernel/sched/deadline.c | 18 +++++++++++-------
->  kernel/sched/rt.c       | 20 ++++++++++++++++++--
-
-Very good for keeping them in sync.
-
->  2 files changed, 29 insertions(+), 9 deletions(-)
-> 
-> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> index fb4255ae0b2c..9207b978cc43 100644
-> --- a/kernel/sched/deadline.c
-> +++ b/kernel/sched/deadline.c
-
-> @@ -2317,16 +2318,14 @@ static int push_dl_task(struct rq *rq)
->  		goto retry;
->  	}
->  
-> +	rq_pin_lock(rq, &srf);
-> +	rq_pin_lock(later_rq, &drf);
->  	deactivate_task(rq, next_task, 0);
->  	set_task_cpu(next_task, later_rq->cpu);
-> -
-> -	/*
-> -	 * Update the later_rq clock here, because the clock is used
-> -	 * by the cpufreq_update_util() inside __add_running_bw().
-> -	 */
-> -	update_rq_clock(later_rq);
-> -	activate_task(later_rq, next_task, ENQUEUE_NOCLOCK);
-> +	activate_task(later_rq, next_task, 0);
->  	ret = 1;
-> +	rq_unpin_lock(rq, &srf);
-> +	rq_unpin_lock(later_rq, &drf);
->  
->  	resched_curr(later_rq);
->  
-
-> @@ -2413,11 +2413,15 @@ static void pull_dl_task(struct rq *this_rq)
->  			if (is_migration_disabled(p)) {
->  				push_task = get_push_task(src_rq);
->  			} else {
-> +				rq_pin_lock(this_rq, &this_rf);
-> +				rq_pin_lock(src_rq, &src_rf);
->  				deactivate_task(src_rq, p, 0);
->  				set_task_cpu(p, this_cpu);
->  				activate_task(this_rq, p, 0);
->  				dmin = p->dl.deadline;
->  				resched = true;
-> +				rq_unpin_lock(this_rq, &this_rf);
-> +				rq_unpin_lock(src_rq, &src_rf);
->  			}
->  
->  			/* Is there any other task even earlier? */
-
-I'm really not sure about this part though. This is a bit of a mess. The
-balancer doesn't really need the pinning stuff. I realize you did that
-because we got the clock annotation mixed up with that, but urgh.
-
-Basically we want double_rq_lock() / double_lock_balance() to clear
-RQCF_UPDATED, right? Perhaps do that directly?
-
-(maybe with an inline helper and a wee comment?)
-
-The only immediate problem with this would appear to be that
-_double_rq_lock() behaves differently when it returns 0. Not sure that
-matters.
-
-Hmm?
 
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index f259621f4c93..be4baec84430 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -610,10 +610,13 @@ void double_rq_lock(struct rq *rq1, struct rq *rq2)
- 		swap(rq1, rq2);
- 
- 	raw_spin_rq_lock(rq1);
--	if (__rq_lockp(rq1) == __rq_lockp(rq2))
--		return;
-+	if (__rq_lockp(rq1) != __rq_lockp(rq2))
-+		raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
- 
--	raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
-+#ifdef CONFIG_SCHED_DEBUG
-+	rq1->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-+	rq2->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-+#endif
- }
- #endif
- 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 8dccb34eb190..3ca8dd5ca17c 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2644,6 +2644,10 @@ static inline void double_rq_lock(struct rq *rq1, struct rq *rq2)
- 	BUG_ON(rq1 != rq2);
- 	raw_spin_rq_lock(rq1);
- 	__acquire(rq2->lock);	/* Fake it out ;) */
-+#ifdef CONFIG_SCHED_DEBUG
-+	rq1->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-+	rq2->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-+#endif
- }
- 
- /*
+On 2022/4/19 下午 06:39, Krzysztof Kozlowski wrote:
+> On 19/04/2022 12:12, Jacky Huang wrote:
+>>>> +
+>>>> +  assigned-clock-rates:
+>>>> +    minItems: 5
+>>>> +    maxItems: 5
+>>>> +
+>>>> +  nuvoton,clk-pll-mode:
+>>>> +    A list of PLL operation mode corresponding to DDRPLL, APLL, EPLL,
+>>>> +    and VPLL in sequential.
+>>> This does not look like a binding which was tested. Read
+>>> "writing-schema" and test your bindings.
+>> "nuvoton,clk-pll-mode" is a nonstandard property used to describe the
+>> operation mode of
+>> corresponding PLLs.
+>>
+>> (According to Device tree Specification section "2.2.4 Properties"
+>> Nonstandard property names should specify a unique string prefix, such
+>> as a stock ticker symbol, identifying the name of
+>> the company or organization that defined the property. Examples:
+> I am not saying about property name. I replied under some description
+> below which fails to build.
+>
+> Instead please test your bindings.
+>
+> Best regards,
+> Krzysztof
+
+OK, I got it. I found the error by dt_binding_check.
+I will fix them in the next version.
+
+Thank you very much.
+
+Jacky Huang
+
+
+

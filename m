@@ -2,274 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D355070CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2DF5070CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350792AbiDSOn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S1351666AbiDSOoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbiDSOnz (ORCPT
+        with ESMTP id S1351508AbiDSOoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:43:55 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE6721828;
-        Tue, 19 Apr 2022 07:41:10 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8137D24000E;
-        Tue, 19 Apr 2022 14:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650379268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9u41AmvPYzaP5UxEoTmolh4l0tPcqavKOqVOLJJD3S4=;
-        b=ifnn0HaliB65Zi+kAJRPXi5a+jTdBu3WK28oWc6C177sY+9wmTGu2+9paSFyuEFrjwqb2I
-        EWmhc7RgywHsmIZBb9pI0Ued52Cd7GVuNZsmVt63Tc26FASbndA/TAKJYDc96j5pQyNOdu
-        fcYp1bnmDUwby5nsy3gnxN8NLoUnopiyswW2W7ktfnfeSQIXr4ulP7eyL+VtjVqYUL8PMj
-        f7zQx6OMXad5pt3DJZpF8QdOa5WCux7Pu4/l4/lIq2tIi3X+a0BoN0+vRum89II7OH1qCS
-        nbZrSCLzmE1NsrQeo7w8Btcm2ARDea8dHqdlyVBFfqroKGJjfWQumv3Lab1qbQ==
-Date:   Tue, 19 Apr 2022 16:41:05 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v2 2/8] dt-bindings: PCI: renesas-pci-usb: Convert
- bindings to json-schema
-Message-ID: <20220419164105.14bf82cf@bootlin.com>
-In-Reply-To: <CAMuHMdUhr7emtsxoxGP5EH2EzNK=PM_7+-32cesecjQjoW1ryQ@mail.gmail.com>
-References: <20220414074011.500533-1-herve.codina@bootlin.com>
- <20220414074011.500533-3-herve.codina@bootlin.com>
- <CAMuHMdUhr7emtsxoxGP5EH2EzNK=PM_7+-32cesecjQjoW1ryQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Tue, 19 Apr 2022 10:44:05 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3DB7D24BCA
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:41:22 -0700 (PDT)
+Received: (qmail 594199 invoked by uid 1000); 19 Apr 2022 10:41:21 -0400
+Date:   Tue, 19 Apr 2022 10:41:21 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Razvan Heghedus <heghedus.razvan@gmail.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] USB: core: Disable remote wakeup for
+ freeze/quiesce
+Message-ID: <Yl7KEX++hJac8T6I@rowland.harvard.edu>
+References: <20220418210046.2060937-1-evgreen@chromium.org>
+ <20220418135819.v2.1.I2c636c4decc358f5e6c27b810748904cc69beada@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418135819.v2.1.I2c636c4decc358f5e6c27b810748904cc69beada@changeid>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Mon, Apr 18, 2022 at 02:00:45PM -0700, Evan Green wrote:
+> The PM_EVENT_FREEZE and PM_EVENT_QUIESCE messages should cause the
+> device to stop generating interrupts. USB core was previously allowing
+> devices that were already runtime suspended to keep remote wakeup
+> enabled if they had gone down that way. This violates the contract with
+> pm, and can potentially cause MSI interrupts to be lost.
+> 
+> Change that so that if a device is runtime suspended with remote wakeups
+> enabled, it will be resumed to ensure remote wakeup is always disabled
+> across a freeze.
+> 
+> Signed-off-by: Evan Green <evgreen@chromium.org>
+> ---
+> 
+> (no changes since v1)
+> 
+>  drivers/usb/core/driver.c | 20 +++++++++-----------
+>  1 file changed, 9 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> index 355ed33a21792b..93c8cf66adccec 100644
+> --- a/drivers/usb/core/driver.c
+> +++ b/drivers/usb/core/driver.c
+> @@ -1533,20 +1533,18 @@ static void choose_wakeup(struct usb_device *udev, pm_message_t msg)
+>  {
+>  	int	w;
+>  
+> -	/* Remote wakeup is needed only when we actually go to sleep.
+> -	 * For things like FREEZE and QUIESCE, if the device is already
+> -	 * autosuspended then its current wakeup setting is okay.
+> +	/* For FREEZE/QUIESCE, disable remote wakeups so no interrupts get generated
+> +	 * by the device.
 
-On Thu, 14 Apr 2022 10:28:47 +0200
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+You mean "by the host controller".  USB devices don't generate 
+interrupts; they generate wakeup requests (which can cause a host 
+controller to generate an interrupt).
 
-> Hi Herv=C3=A9,
->=20
-> On Thu, Apr 14, 2022 at 9:40 AM Herve Codina <herve.codina@bootlin.com> w=
-rote:
-> > Convert Renesas PCI bridge bindings documentation to json-schema.
-> > Also name it 'renesas,pci-usb' as it is specifically used to
-> > connect the PCI USB controllers to AHB bus.
-> >
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
->=20
-> Thanks a lot for tackling this DT binding file!
->=20
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/pci/renesas,pci-usb.yaml
-> > @@ -0,0 +1,134 @@
-> > +# SPDX-License-Identifier: GPL-2.0 =20
->=20
-> scripts/checkpatch.pl says:
-> WARNING: DT binding documents should be licensed (GPL-2.0-only OR BSD-2-C=
-lause)
+>  	 */
+>  	if (msg.event == PM_EVENT_FREEZE || msg.event == PM_EVENT_QUIESCE) {
+> -		if (udev->state != USB_STATE_SUSPENDED)
+> -			udev->do_remote_wakeup = 0;
+> -		return;
+> -	}
+> +		w = 0;
+>  
+> -	/* Enable remote wakeup if it is allowed, even if no interface drivers
+> -	 * actually want it.
+> -	 */
+> -	w = device_may_wakeup(&udev->dev);
+> +	} else {
+> +		/* Enable remote wakeup if it is allowed, even if no interface drivers
+> +		 * actually want it.
+> +		 */
+> +		w = device_may_wakeup(&udev->dev);
+> +	}
+>  
+>  	/* If the device is autosuspended with the wrong wakeup setting,
+>  	 * autoresume now so the setting can be changed.
+> -- 
 
-Right, changed to "GPL-2.0-only OR BSD-2-Clause"
+I would prefer it if you reformatted the comments to agree with the 
+current style:
 
->=20
-> > +  reg:
-> > +    description: |
-> > +      A list of physical regions to access the device. The first is
-> > +      the operational registers for the OHCI/EHCI controllers and the
-> > +      second is for the bridge configuration and control registers.
-> > +    minItems: 2
-> > +    maxItems: 2 =20
->=20
-> reg:
->   items:
->     - description: Operational registers for the OHCI/EHCI controllers.
->     - description: Bridge configuration and control registers.
+	/*
+	 * Blah blah blah
+	 */
 
-Ok, changed.
+and to avoid line wrap beyond 80 columns.  Apart from that:
 
->=20
-> > +
-> > +  interrupts:
-> > +    description: Interrupt for the device. =20
->=20
-> maxItems: 1
->=20
-> The description is not needed.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Ok, changed.
-
->=20
-> > +
-> > +  interrupt-map:
-> > +    description: |
-> > +      Standard property used to define the mapping of the PCI interrup=
-ts
-> > +      to the GIC interrupts.
-> > +
-> > +  interrupt-map-mask:
-> > +    description:
-> > +      Standard property that helps to define the interrupt mapping.
-> > +
-> > +  clocks:
-> > +    description: The reference to the device clock. =20
->=20
-> maxItems: 1
->=20
-> The description is not needed.
-
-Ok, changed
-
->=20
-> Missing "resets" and "power-domains" properties.
->=20
-> Missing description of the child nodes.
-
-"resets", "power-domains" dans child nodes added
-
->=20
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - interrupt-map
-> > +  - interrupt-map-mask
-> > +  - clocks =20
->=20
-> Missing "resets" and "power-domains".
-
-Added
-
->=20
-> > +  - bus-range
-> > +  - "#address-cells"
-> > +  - "#size-cells"
-> > +  - "#interrupt-cells"
-> > +
-> > +unevaluatedProperties: false =20
->=20
-> Why doesn't "make dtbs_check" complain about the presence of
-> e.g. "resets" in the actual DTS files?
->=20
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/clock/r8a7790-cpg-mssr.h>
-> > +
-> > +    bus {
-> > +        #address-cells =3D <2>;
-> > +        #size-cells =3D <2>; =20
->=20
-> I think you should drop this (and the corresponding high addresses
-> below).
->=20
-
-Ok
-
-> > +
-> > +        pci0: pci@ee090000  {
-> > +            compatible =3D "renesas,pci-r8a7790", "renesas,pci-rcar-ge=
-n2";
-> > +            device_type =3D "pci";
-> > +            clocks =3D <&cpg CPG_MOD 703>;
-> > +            reg =3D <0 0xee090000 0 0xc00>,
-> > +                  <0 0xee080000 0 0x1100>;
-> > +            interrupts =3D <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>; =20
->=20
->                         power-domains =3D <&sysc R8A7790_PD_ALWAYS_ON>;
->                         resets =3D <&cpg 703>;
-
-Ok
-
->=20
-> > +            status =3D "disabled";
-> > +
-> > +            bus-range =3D <0 0>;
-> > +            #address-cells =3D <3>;
-> > +            #size-cells =3D <2>;
-> > +            #interrupt-cells =3D <1>;
-> > +            ranges =3D <0x02000000 0 0xee080000 0 0xee080000 0 0x00010=
-000>;
-> > +            dma-ranges =3D <0x42000000 0 0x40000000 0 0x40000000 0 0x4=
-0000000>;
-> > +            interrupt-map-mask =3D <0xf800 0 0 0x7>;
-> > +            interrupt-map =3D <0x0000 0 0 1 &gic GIC_SPI 108 IRQ_TYPE_=
-LEVEL_HIGH>,
-> > +                            <0x0800 0 0 1 &gic GIC_SPI 108 IRQ_TYPE_LE=
-VEL_HIGH>,
-> > +                            <0x1000 0 0 2 &gic GIC_SPI 108 IRQ_TYPE_LE=
-VEL_HIGH>;
-> > +
-> > +            usb@1,0 {
-> > +                reg =3D <0x800 0 0 0 0>;
-> > +                phys =3D <&usb0 0>;
-> > +                phy-names =3D "usb";
-> > +            };
-> > + =20
->=20
-> ERROR: trailing whitespace
-> #249: FILE: Documentation/devicetree/bindings/pci/renesas,pci-usb.yaml:12=
-7:
-> +            $
-
-Ok
-
->=20
-> > +            usb@2,0 {
-> > +                reg =3D <0x1000 0 0 0 0>;
-> > +                phys =3D <&usb0 0>;
-> > +                phy-names =3D "usb";
-> > +            };
-> > +        };
-> > +    }; =20
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
->=20
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                 -- Linus Torvalds
-
-Thanks for the review,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Alan Stern

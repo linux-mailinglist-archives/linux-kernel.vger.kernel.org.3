@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3477850632C
+	by mail.lfdr.de (Postfix) with ESMTP id C508450632E
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348180AbiDSEMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 00:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
+        id S1348187AbiDSEP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 00:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348185AbiDSEMe (ORCPT
+        with ESMTP id S230042AbiDSEPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:12:34 -0400
+        Tue, 19 Apr 2022 00:15:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627732DF1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:09:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F1225C62;
+        Mon, 18 Apr 2022 21:13:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E72B761183
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:09:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFCD0C385A7;
-        Tue, 19 Apr 2022 04:09:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6973260FCA;
+        Tue, 19 Apr 2022 04:13:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A726C385A7;
+        Tue, 19 Apr 2022 04:13:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650341392;
-        bh=pMG4gBqrjUuaVREf5Do0t2y3IdtKoqfe6hpp7ubRJWQ=;
+        s=korg; t=1650341592;
+        bh=uRb5B3VU5sevqwJjYnq8xWKLwj3O2yeeXaH+LNyJY4A=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=zXGb7uOHZhmcOCQpI+rMPu2asgr1XvhwF+5kGkjBB9d2riSOtt5vxSmlTb+Iw2CD3
-         p5ZpiVp1gSg1az5NTQwch04E1VEF5dPXdHnve00QJ8PyW9pGABo20K1oCVUkZlDu8z
-         xLziZtxICmzhR/k3eaoIOb3qDkn7gMhNLuyhtl2A=
-Date:   Mon, 18 Apr 2022 21:09:51 -0700
+        b=EEQxtoNV0x39OVlDG/JexZ2Xntf7VRvDH3ZDv2+cEM9LwBIXwynyIYL7zasns7mMi
+         RvJHc315wVIjdVkS2ntMZznDwEK4iXRRRqzafoyS1FenQI5gw4diIaSIP9v0WA0j0R
+         tHy9ojyQMlKUUH2GxZBQH3WjJ7rZzI5AZbrs/u5Q=
+Date:   Mon, 18 Apr 2022 21:13:11 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <minchan@kernel.org>, <hannes@cmpxchg.org>, <mhocko@suse.com>,
-        <hughd@google.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm/madvise: fix potential pte_unmap_unlock pte error
-Message-Id: <20220418210951.b87743ae8b7c01f883e571ea@linux-foundation.org>
-In-Reply-To: <20220416081416.23304-1-linmiaohe@huawei.com>
-References: <20220416081416.23304-1-linmiaohe@huawei.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Steve Capper <steve.capper@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v10] mm, hugetlbfs: Allow for "high" userspace addresses
+Message-Id: <20220418211311.1521c61e57367dfb1614287d@linux-foundation.org>
+In-Reply-To: <f9d7a5ef-640f-8982-894e-46d823e32b4a@csgroup.eu>
+References: <ab847b6edb197bffdfe189e70fb4ac76bfe79e0d.1650033747.git.christophe.leroy@csgroup.eu>
+        <20220415151244.c29ad0c9c481dab0ade1022b@linux-foundation.org>
+        <f9d7a5ef-640f-8982-894e-46d823e32b4a@csgroup.eu>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,12 +58,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 16 Apr 2022 16:14:16 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+On Sat, 16 Apr 2022 06:29:04 +0000 Christophe Leroy <christophe.leroy@csgro=
+up.eu> wrote:
 
-> We can't assume pte_offset_map_lock will return same orig_pte value. So
-> it's necessary to reacquire the orig_pte or pte_unmap_unlock will unmap
-> the stale pte.
+>=20
+>=20
+> Le 16/04/2022 =E0 00:12, Andrew Morton a =E9crit=A0:
+> > On Fri, 15 Apr 2022 16:45:13 +0200 Christophe Leroy <christophe.leroy@c=
+sgroup.eu> wrote:
+> >=20
+> >> This is a fix for commit f6795053dac8 ("mm: mmap: Allow for "high"
+> >> userspace addresses") for hugetlb.
+> >=20
+> > So the "hugetlbfs" in the Subject: is a tpyo?
+>=20
+> This patch modifies fs/hugetlbfs/inode.c , hence the "hugetlbfs" in the=20
+> Subject.
 
-hm, where did you learn this info about pte_offset_map_lock()?
+Sorry, obviously I was too sober at the time.
 
-I assume this is from code inspection only?  No observed runtime failures?

@@ -2,102 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E087B5070A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F535070A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353681AbiDSOc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S1353358AbiDSObw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353398AbiDSOcB (ORCPT
+        with ESMTP id S1353322AbiDSObp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:32:01 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEE03969E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:29:16 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id z99so21508519ede.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:29:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=xWS9zh5KMUXIqFZALN21cYcGLfXB3BzUXuFD0a0fUOw=;
-        b=aLV9hLaJJ0NaAlRkO0aHQgwZPtV2CafANhXdezXlvGXflg0FXgSZKgiFBo5azgdpoe
-         iBsB2CHPZElvVUvAhCQ3YTfehyZNBGF/wZ8qHQY31N/Z50eaxl1riMkeh9PUq+zVURKW
-         tXd2/Ec5cDNI8Bfqi8RcV/4NeeTvpgkhiQ77dO0LlWLWI36dyTvhAelFG86MD/MncwRX
-         EN5nuCJ6EflxmGNk9yKMixNIqf4J5Ypj2faFSv2VXc6uNHhqhcNNEBiamuJTDaw1zsUx
-         u8BjjM1d/7Jm9SbC9x48/U0ZqLOxSwiu+NQ6eazi7QF2U/gsIx6Iw8lOKImpLy81KsZa
-         y2PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xWS9zh5KMUXIqFZALN21cYcGLfXB3BzUXuFD0a0fUOw=;
-        b=lXMWXHUYopxBHSp647WfIJxczLZVMpT40DEb8pyBu8WD/96vM1307HQxPiPcuFBDYU
-         CtEZRZa7IcRvjMaph3qRq0HTji2mlHOFxlO/dMc6Ix4rfPTdukzYOe4xLPuIqDeKnuFI
-         VYlNXI9hY9HQjnLprHJr41rU99XzF2v2kMWJaTW14SWT/QTy+ynv29cyjLq4GAMSO95k
-         MB/oZqR6O6H7I5DQNAn/DHc2FqTWBiR2BKSWa3a/CnEphx3JQzm8M3VPMMjBo+31h0wL
-         8ENkGNfJ9vsKiQZIkuMGTCPHPmksseL8M4OwOLvynem7fG2DIHRKmEGp8Pnap2cTi63n
-         bbRA==
-X-Gm-Message-State: AOAM5334sAHyq8YcmUjgozuhmv51q+if6KCOWastbOIfzextjeEeHg9V
-        QUgBGHgcb6KFBPwlbjyTmpcDlw==
-X-Google-Smtp-Source: ABdhPJzkzsncCIKBUOGljWWovNy5FkPnFo0osExDv5Sz3kp3CcXwRLh62x+x0uhbvqikml8HwNYnRw==
-X-Received: by 2002:a05:6402:1e8c:b0:424:1d6:1b71 with SMTP id f12-20020a0564021e8c00b0042401d61b71mr3019255edf.211.1650378554873;
-        Tue, 19 Apr 2022 07:29:14 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170906b10a00b006e1004406easm5761884ejy.93.2022.04.19.07.29.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 07:29:14 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Markus Mayer <mmayer@broadcom.com>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH 7/7] memory: renesas-rpc-if: simplify platform_get_resource_byname()
-Date:   Tue, 19 Apr 2022 16:28:59 +0200
-Message-Id: <20220419142859.380566-7-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220419142859.380566-1-krzysztof.kozlowski@linaro.org>
-References: <20220419142859.380566-1-krzysztof.kozlowski@linaro.org>
+        Tue, 19 Apr 2022 10:31:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF258329BE
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:29:02 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 14:29:00 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650378541;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jlViW5fBVreJz2N2SEJ9Xl6za33WMKbA0WBc+NQbD/k=;
+        b=Y6mHUkhJ94XwzEevLr2JdGqUkTI2YyyGitV+3SbeJPnTCWWBfKmlbNVKu8Sxxp1ES38Y35
+        Ympn+4HZOSg6OH1Q6TS7+gGGvAEgjXmBKZTQOL5LWlqNYZroRdefnGy+NsbwYoUaahtZCp
+        Ih0LvVMpGaYkFDsjxs6BDH91Zqyt3da1eCn5BNwNB6oS3dSRebANq48Ovf19XOAzMeoRUK
+        TkBt71cNbgjy8JjAXTJ9lteRCuv7PUHXgcM+41m2gIhqWnwWnkKPAJsQ3OZFzg7qQ+CVJa
+        MEWOQMTDeb5rlF0FsZLMBNOakFbaXrUpoU796NhZU7n8hmdMuluyM6MijhdkAQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650378541;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jlViW5fBVreJz2N2SEJ9Xl6za33WMKbA0WBc+NQbD/k=;
+        b=PPdL4jhnZEa5MZ0zl8gLPItDKPKvxiPnPcM1n3wAUf0Kq+1mvirb5eyq/WRfBBMcYodfKf
+        Y7qMZIwe2s0w0YBw==
+From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] pinctrl: amd: Make the irqchip immutable
+Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220419141846.598305-9-maz@kernel.org>
+References: <20220419141846.598305-9-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <165037854017.4207.13810392986433536494.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_platform_ioremap_resource_byname() instead of
-platform_get_resource_byname() and devm_ioremap_resource().
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Commit-ID:     6173e56f76c712aac9d45208ccec7a065382911f
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/6173e56f76c712aac9d45208ccec7a065382911f
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Tue, 19 Apr 2022 15:18:44 +01:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Tue, 19 Apr 2022 15:22:26 +01:00
+
+pinctrl: amd: Make the irqchip immutable
+
+Prevent gpiolib from messing with the irqchip by advertising
+the irq_chip structure as immutable, making it const, and adding
+the various calls that gpiolib relies upon.
+
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220419141846.598305-9-maz@kernel.org
 ---
- drivers/memory/renesas-rpc-if.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/pinctrl/pinctrl-amd.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
-index ba9c526833c0..4316988d791a 100644
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -259,8 +259,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
+index 1a7d686..0645c2c 100644
+--- a/drivers/pinctrl/pinctrl-amd.c
++++ b/drivers/pinctrl/pinctrl-amd.c
+@@ -387,6 +387,8 @@ static void amd_gpio_irq_enable(struct irq_data *d)
+ 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+ 	struct amd_gpio *gpio_dev = gpiochip_get_data(gc);
  
- 	rpc->dev = dev;
++	gpiochip_enable_irq(gc, d->hwirq);
++
+ 	raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+ 	pin_reg = readl(gpio_dev->base + (d->hwirq)*4);
+ 	pin_reg |= BIT(INTERRUPT_ENABLE_OFF);
+@@ -408,6 +410,8 @@ static void amd_gpio_irq_disable(struct irq_data *d)
+ 	pin_reg &= ~BIT(INTERRUPT_MASK_OFF);
+ 	writel(pin_reg, gpio_dev->base + (d->hwirq)*4);
+ 	raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
++
++	gpiochip_disable_irq(gc, d->hwirq);
+ }
  
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "regs");
--	rpc->base = devm_ioremap_resource(&pdev->dev, res);
-+	rpc->base = devm_platform_ioremap_resource_byname(pdev, "regs");
- 	if (IS_ERR(rpc->base))
- 		return PTR_ERR(rpc->base);
+ static void amd_gpio_irq_mask(struct irq_data *d)
+@@ -577,7 +581,7 @@ static void amd_irq_ack(struct irq_data *d)
+ 	*/
+ }
  
--- 
-2.32.0
-
+-static struct irq_chip amd_gpio_irqchip = {
++static const struct irq_chip amd_gpio_irqchip = {
+ 	.name         = "amd_gpio",
+ 	.irq_ack      = amd_irq_ack,
+ 	.irq_enable   = amd_gpio_irq_enable,
+@@ -593,7 +597,8 @@ static struct irq_chip amd_gpio_irqchip = {
+ 	 * the wake event. Otherwise the wake event will never clear and
+ 	 * prevent the system from suspending.
+ 	 */
+-	.flags        = IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND,
++	.flags        = IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND | IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+ 
+ #define PIN_IRQ_PENDING	(BIT(INTERRUPT_STS_OFF) | BIT(WAKE_STS_OFF))
+@@ -1026,7 +1031,7 @@ static int amd_gpio_probe(struct platform_device *pdev)
+ 	amd_gpio_irq_init(gpio_dev);
+ 
+ 	girq = &gpio_dev->gc.irq;
+-	girq->chip = &amd_gpio_irqchip;
++	gpio_irq_chip_set_chip(girq, &amd_gpio_irqchip);
+ 	/* This will let us handle the parent IRQ in the driver */
+ 	girq->parent_handler = NULL;
+ 	girq->num_parents = 0;

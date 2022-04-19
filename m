@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D02507AAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518DD507AAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356907AbiDSULV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        id S1357017AbiDSULX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356679AbiDSULQ (ORCPT
+        with ESMTP id S1356718AbiDSULR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:11:16 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58600387AE;
-        Tue, 19 Apr 2022 13:08:33 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 20:08:30 -0000
+        Tue, 19 Apr 2022 16:11:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B1338798;
+        Tue, 19 Apr 2022 13:08:34 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 20:08:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1650398912;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qtOky4L7e/WCxICYIDFlZBxh8q1/lNGsavbBhYAasb8=;
-        b=t78sSDRpxWaacSKZFhAOlVSpQARZ0dtSyhYz1Lyo21Gyw+BcQ7W0NzQluJRSbUdm7qfLvP
-        oE4/hOF151HHbI4ibknkj8MYf02GNfQdOfVOLYU+DaTNgrmtt7jyVi/QNLuuOlKBKLIYUv
-        XfL97aBTjMTjSkzn47xWJQKAbsmtjrwtXnhCzk1k8ClGD6jgdjS7laPYhMA/BK64c0lod0
-        5vSHwbgumIPG7GboqJKftZ4QEOTUifAgjjDOedMUb88GRbRnMt5fp0Iexh4nBZ+1IliUKM
-        KIKwWu3nSiEtBKotenHn47G+MWm7AtkV7ztsWxkH3nUWs0C0MYjZZEg3A2dSkQ==
+        bh=jS39wpLI1AVOcECw+O89J4y1kZyGZ+Z2JK9khIdZGG4=;
+        b=klLcSLaiaLtnV9h1m6Drjma27lzvsZ8MLgPYEna05Kzq9dMT95QT0cNPN5VaUFrh+mdX55
+        Xx+9FV/Xjj83bqdeTiHtEKUEhhfSWYkgHJ+GONRypqwt5hplO4X/5opkb0zZVAi8SMAIfZ
+        RTHBuPcrzsaDkQk2KIfODIczazeGULvtM4l1s2yBV48dd5HKs5gmD9HziSr6OnE4guS/p9
+        bY8gWViDmpSvK8PB7Qimo3Htd6sVoGp+Eq7fCBeZfJzgZPR1/e8PGRWtVZOKvUcG9ekfUa
+        yLV1rFTFC0WOP3GcMZCBI/RHmC7VLluVAapSkL1sRxCnmUFhJqAOrWUEtNXglg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1650398912;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qtOky4L7e/WCxICYIDFlZBxh8q1/lNGsavbBhYAasb8=;
-        b=PUDNJCXx+pxqmZ/Pszenzm/KoJijehf2CPtry6BIG+LKRayI6VnWxHxFFJxlcw7QlnA9Tb
-        RZqEWwy++ELDN2Dw==
+        bh=jS39wpLI1AVOcECw+O89J4y1kZyGZ+Z2JK9khIdZGG4=;
+        b=lU2oFFZwHkMPSth7H7DvL2FlsXZJr3R/vskt8RGF4i+Wh19BusU7qr62CRHSTM3/wW9r2p
+        VKfKKS7KCnFVA9CQ==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/urgent] objtool: Fix function fallthrough detection for vmlinux
+Subject: [tip: objtool/urgent] objtool: Fix sibling call detection in alternatives
 Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <b434cff98eca3a60dcc64c620d7d5d405a0f441c.1649718562.git.jpoimboe@redhat.com>
-References: <b434cff98eca3a60dcc64c620d7d5d405a0f441c.1649718562.git.jpoimboe@redhat.com>
+In-Reply-To: <c02e0a0a2a4286b5f848d17c77fdcb7e0caf709c.1649718562.git.jpoimboe@redhat.com>
+References: <c02e0a0a2a4286b5f848d17c77fdcb7e0caf709c.1649718562.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-Message-ID: <165039891044.4207.14725257477811071935.tip-bot2@tip-bot2>
+Message-ID: <165039891155.4207.6965870240273186525.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,68 +67,104 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/urgent branch of tip:
 
-Commit-ID:     08feafe8d1958febf3a9733a3d1564d8fc23340e
-Gitweb:        https://git.kernel.org/tip/08feafe8d1958febf3a9733a3d1564d8fc23340e
+Commit-ID:     34c861e806478ac2ea4032721defbf1d6967df08
+Gitweb:        https://git.kernel.org/tip/34c861e806478ac2ea4032721defbf1d6967df08
 Author:        Josh Poimboeuf <jpoimboe@redhat.com>
-AuthorDate:    Mon, 11 Apr 2022 16:10:32 -07:00
+AuthorDate:    Mon, 11 Apr 2022 16:10:31 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 19 Apr 2022 21:58:53 +02:00
 
-objtool: Fix function fallthrough detection for vmlinux
+objtool: Fix sibling call detection in alternatives
 
-Objtool's function fallthrough detection only works on C objects.
-The distinction between C and assembly objects no longer makes sense
-with objtool running on vmlinux.o.
+In add_jump_destinations(), sibling call detection requires 'insn->func'
+to be valid.  But alternative instructions get their 'func' set in
+handle_group_alt(), which runs *after* add_jump_destinations().  So
+sibling calls in alternatives code don't get properly detected.
 
-Now that copy_user_64.S has been fixed up, and an objtool sibling call
-detection bug has been fixed, the asm code is in "compliance" and this
-hack is no longer needed.  Remove it.
+Fix that by changing the initialization order: call
+add_special_section_alts() *before* add_jump_destinations().
 
-Fixes: ed53a0d97192 ("x86/alternative: Use .ibt_endbr_seal to seal indirect calls")
+This also means the special case for a missing 'jump_dest' in
+add_jump_destinations() can be removed, as it has already been dealt
+with.
+
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/b434cff98eca3a60dcc64c620d7d5d405a0f441c.1649718562.git.jpoimboe@redhat.com
+Link: https://lkml.kernel.org/r/c02e0a0a2a4286b5f848d17c77fdcb7e0caf709c.1649718562.git.jpoimboe@redhat.com
 ---
- tools/objtool/check.c                   | 2 +-
- tools/objtool/include/objtool/objtool.h | 2 +-
- tools/objtool/objtool.c                 | 1 -
- 3 files changed, 2 insertions(+), 3 deletions(-)
+ tools/objtool/check.c | 36 +++++++++++++++++-------------------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
 
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 0f5d3de..5f10653 100644
+index 6f49278..0f5d3de 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -3310,7 +3310,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 	while (1) {
- 		next_insn = next_insn_to_validate(file, insn);
+@@ -1277,6 +1277,13 @@ static int add_jump_destinations(struct objtool_file *file)
+ 	unsigned long dest_off;
  
--		if (file->c_file && func && insn->func && func != insn->func->pfunc) {
-+		if (func && insn->func && func != insn->func->pfunc) {
- 			WARN("%s() falls through to next function %s()",
- 			     func->name, insn->func->name);
- 			return 1;
-diff --git a/tools/objtool/include/objtool/objtool.h b/tools/objtool/include/objtool/objtool.h
-index 7a5c13a..a6e72d9 100644
---- a/tools/objtool/include/objtool/objtool.h
-+++ b/tools/objtool/include/objtool/objtool.h
-@@ -27,7 +27,7 @@ struct objtool_file {
- 	struct list_head static_call_list;
- 	struct list_head mcount_loc_list;
- 	struct list_head endbr_list;
--	bool ignore_unreachables, c_file, hints, rodata;
-+	bool ignore_unreachables, hints, rodata;
+ 	for_each_insn(file, insn) {
++		if (insn->jump_dest) {
++			/*
++			 * handle_group_alt() may have previously set
++			 * 'jump_dest' for some alternatives.
++			 */
++			continue;
++		}
+ 		if (!is_static_jump(insn))
+ 			continue;
  
- 	unsigned int nr_endbr;
- 	unsigned int nr_endbr_int;
-diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
-index b09946f..843ff3c 100644
---- a/tools/objtool/objtool.c
-+++ b/tools/objtool/objtool.c
-@@ -129,7 +129,6 @@ struct objtool_file *objtool_open_read(const char *_objname)
- 	INIT_LIST_HEAD(&file.static_call_list);
- 	INIT_LIST_HEAD(&file.mcount_loc_list);
- 	INIT_LIST_HEAD(&file.endbr_list);
--	file.c_file = !vmlinux && find_section_by_name(file.elf, ".comment");
- 	file.ignore_unreachables = no_unreachable;
- 	file.hints = false;
+@@ -1308,15 +1315,6 @@ static int add_jump_destinations(struct objtool_file *file)
+ 
+ 		jump_dest = find_insn(file, dest_sec, dest_off);
+ 		if (!jump_dest) {
+-
+-			/*
+-			 * This is a special case where an alt instruction
+-			 * jumps past the end of the section.  These are
+-			 * handled later in handle_group_alt().
+-			 */
+-			if (!strcmp(insn->sec->name, ".altinstr_replacement"))
+-				continue;
+-
+ 			WARN_FUNC("can't find jump dest instruction at %s+0x%lx",
+ 				  insn->sec, insn->offset, dest_sec->name,
+ 				  dest_off);
+@@ -1549,13 +1547,13 @@ static int handle_group_alt(struct objtool_file *file,
+ 			continue;
+ 
+ 		dest_off = arch_jump_destination(insn);
+-		if (dest_off == special_alt->new_off + special_alt->new_len)
++		if (dest_off == special_alt->new_off + special_alt->new_len) {
+ 			insn->jump_dest = next_insn_same_sec(file, last_orig_insn);
+-
+-		if (!insn->jump_dest) {
+-			WARN_FUNC("can't find alternative jump destination",
+-				  insn->sec, insn->offset);
+-			return -1;
++			if (!insn->jump_dest) {
++				WARN_FUNC("can't find alternative jump destination",
++					  insn->sec, insn->offset);
++				return -1;
++			}
+ 		}
+ 	}
+ 
+@@ -2254,14 +2252,14 @@ static int decode_sections(struct objtool_file *file)
+ 		return ret;
+ 
+ 	/*
+-	 * Must be before add_special_section_alts() as that depends on
+-	 * jump_dest being set.
++	 * Must be before add_jump_destinations(), which depends on 'func'
++	 * being set for alternatives, to enable proper sibling call detection.
+ 	 */
+-	ret = add_jump_destinations(file);
++	ret = add_special_section_alts(file);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = add_special_section_alts(file);
++	ret = add_jump_destinations(file);
+ 	if (ret)
+ 		return ret;
  

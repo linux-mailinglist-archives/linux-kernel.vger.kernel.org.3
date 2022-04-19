@@ -2,60 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4469D506978
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09E4506977
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349235AbiDSLNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
+        id S241502AbiDSLNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiDSLNd (ORCPT
+        with ESMTP id S230010AbiDSLNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:13:33 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1B61BE91
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:10:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650366650; x=1681902650;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vlvdaEWQAl4BFvicfdsZ1WDAlfxZS6A0kwnaPOolCgY=;
-  b=FF72Emo1B5Kg1w0X3dyufLfuHZtccuvJ7z7T4nfgejYccpddq2sLfR/v
-   7j2V4xhtOgZAMlUSWNmSLLFcPorYSJdc+G949796scPOzy0vCA3yuOiVl
-   xMJ4nmh47bDV89aPd7U/h7JOeKnXZR3bpsUEGsFjtvNl10Sxe67Pz6luB
-   /JEO+2SY2vbQaUQttcWdwJpCT72kG9qWyt8VW2SjCmKF1UNYPG03C/+p0
-   Ts0QuiEl9dX3m0mcy9shu+ruHcvrOVFD4f3A4NZfSD2rXgDeHtMMCw7Wk
-   1/JS6SkZ6TudqCjUrYY0o9RNsM9C2i5pfV45XA5jBhXUg5RZcSBZ1nFl4
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="288836119"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="288836119"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 04:10:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="625623813"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Apr 2022 04:10:49 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nglku-0005hQ-PW;
-        Tue, 19 Apr 2022 11:10:48 +0000
-Date:   Tue, 19 Apr 2022 19:09:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse:
- incorrect type in argument 1 (different address spaces)
-Message-ID: <202204191912.n9Krwsln-lkp@intel.com>
+        Tue, 19 Apr 2022 07:13:16 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4C713FA5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:10:34 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 435A42223A;
+        Tue, 19 Apr 2022 13:10:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1650366632;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cfPpEjaOUS/pYpwo8vqM6KxbOl5fAswZopmIejMpqYs=;
+        b=a/lFR+XiRuP4D0KZT0I2wV3hArcQFZqoZCAtmrboMp3RAw4thlnSZT8iQ0a19N3v9CyF0E
+        16OhbLs4QxnAi5jiBnAfzxRuANxRs2j6NGTN8P+Sy55OkwK/vc3FbY6pAzRUKHzeZ0x49y
+        QVhfhsDkw4azrXYgL3xoY0I8SAbiUB8=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 19 Apr 2022 13:10:32 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com
+Subject: Re: [PATCH v3 4/9] mtd: spi-nor: core: Introduce method for RDID op
+In-Reply-To: <20220411091033.98754-5-tudor.ambarus@microchip.com>
+References: <20220411091033.98754-1-tudor.ambarus@microchip.com>
+ <20220411091033.98754-5-tudor.ambarus@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <1812e033c1fd0c779b34166ebe796d32@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,125 +57,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b2d229d4ddb17db541098b83524d901257e93845
-commit: 28e77cc1c0686621a4d416f599cee5ab369daa0a fortify: Detect struct member overflows in memset() at compile-time
-date:   9 weeks ago
-config: arm64-randconfig-s031-20220419 (https://download.01.org/0day-ci/archive/20220419/202204191912.n9Krwsln-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28e77cc1c0686621a4d416f599cee5ab369daa0a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 28e77cc1c0686621a4d416f599cee5ab369daa0a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ drivers/remoteproc/
+Am 2022-04-11 11:10, schrieb Tudor Ambarus:
+> RDID is used in the core to auto detect the flash, but also by some
+> manufacturer drivers that contain flashes that support Octal DTR mode,
+> so that they can read the flash ID after the switch to Octal DTR was 
+> made
+> to test if the switch was successful. Introduce a core method for RDID 
+> op
+> to avoid code duplication.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> ---
+> v3: s/reg_proto/proto
+> 
+>  drivers/mtd/spi-nor/core.c | 50 ++++++++++++++++++++++++++------------
+>  drivers/mtd/spi-nor/core.h |  9 +++++++
+>  2 files changed, 44 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index b55d922d46dd..6165dc7bfd17 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -369,6 +369,37 @@ int spi_nor_write_disable(struct spi_nor *nor)
+>  	return ret;
+>  }
+> 
+> +/**
+> + * spi_nor_read_id() - Read the JEDEC ID.
+> + * @nor:	pointer to 'struct spi_nor'.
+> + * @naddr:	number of address bytes to send. Can be zero if the 
+> operation
+> + *		does not need to send an address.
+> + * @ndummy:	number of dummy bytes to send after an opcode or address. 
+> Can
+> + *		be zero if the operation does not require dummy bytes.
+> + * @id:		pointer to a DMA-able buffer where the value of the JEDEC ID
+> + *		will be written.
+> + * @proto:	the SPI protocol for register operation.
+> + *
+> + * Return: 0 on success, -errno otherwise.
+> + */
+> +int spi_nor_read_id(struct spi_nor *nor, u8 naddr, u8 ndummy, u8 *id,
+> +		    enum spi_nor_protocol proto)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I'm unsure on the last parameter, no other call have it.
+The usual pattern is
 
+old_proto = nor->reg_proto;
+spi_nor_read_id();
+nor->reg_proto = old_proto;
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
->> drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
+But I don't care too much.
 
-vim +437 drivers/remoteproc/ti_k3_r5_remoteproc.c
+Reviewed-by: Michael Walle <michael@walle.cc>
 
-6dedbd1d544389 Suman Anna 2020-10-02  378  
-6dedbd1d544389 Suman Anna 2020-10-02  379  /*
-6dedbd1d544389 Suman Anna 2020-10-02  380   * The R5F cores have controls for both a reset and a halt/run. The code
-6dedbd1d544389 Suman Anna 2020-10-02  381   * execution from DDR requires the initial boot-strapping code to be run
-6dedbd1d544389 Suman Anna 2020-10-02  382   * from the internal TCMs. This function is used to release the resets on
-6dedbd1d544389 Suman Anna 2020-10-02  383   * applicable cores to allow loading into the TCMs. The .prepare() ops is
-6dedbd1d544389 Suman Anna 2020-10-02  384   * invoked by remoteproc core before any firmware loading, and is followed
-6dedbd1d544389 Suman Anna 2020-10-02  385   * by the .start() ops after loading to actually let the R5 cores run.
-ee99ee7c929c3e Suman Anna 2021-03-27  386   *
-ee99ee7c929c3e Suman Anna 2021-03-27  387   * The Single-CPU mode on applicable SoCs (eg: AM64x) only uses Core0 to
-ee99ee7c929c3e Suman Anna 2021-03-27  388   * execute code, but combines the TCMs from both cores. The resets for both
-ee99ee7c929c3e Suman Anna 2021-03-27  389   * cores need to be released to make this possible, as the TCMs are in general
-ee99ee7c929c3e Suman Anna 2021-03-27  390   * private to each core. Only Core0 needs to be unhalted for running the
-ee99ee7c929c3e Suman Anna 2021-03-27  391   * cluster in this mode. The function uses the same reset logic as LockStep
-ee99ee7c929c3e Suman Anna 2021-03-27  392   * mode for this (though the behavior is agnostic of the reset release order).
-6dedbd1d544389 Suman Anna 2020-10-02  393   */
-6dedbd1d544389 Suman Anna 2020-10-02  394  static int k3_r5_rproc_prepare(struct rproc *rproc)
-6dedbd1d544389 Suman Anna 2020-10-02  395  {
-6dedbd1d544389 Suman Anna 2020-10-02  396  	struct k3_r5_rproc *kproc = rproc->priv;
-6dedbd1d544389 Suman Anna 2020-10-02  397  	struct k3_r5_cluster *cluster = kproc->cluster;
-6dedbd1d544389 Suman Anna 2020-10-02  398  	struct k3_r5_core *core = kproc->core;
-6dedbd1d544389 Suman Anna 2020-10-02  399  	struct device *dev = kproc->dev;
-7508ea19b20da8 Suman Anna 2020-11-18  400  	u32 ctrl = 0, cfg = 0, stat = 0;
-7508ea19b20da8 Suman Anna 2020-11-18  401  	u64 boot_vec = 0;
-7508ea19b20da8 Suman Anna 2020-11-18  402  	bool mem_init_dis;
-6dedbd1d544389 Suman Anna 2020-10-02  403  	int ret;
-6dedbd1d544389 Suman Anna 2020-10-02  404  
-7508ea19b20da8 Suman Anna 2020-11-18  405  	ret = ti_sci_proc_get_status(core->tsp, &boot_vec, &cfg, &ctrl, &stat);
-7508ea19b20da8 Suman Anna 2020-11-18  406  	if (ret < 0)
-7508ea19b20da8 Suman Anna 2020-11-18  407  		return ret;
-7508ea19b20da8 Suman Anna 2020-11-18  408  	mem_init_dis = !!(cfg & PROC_BOOT_CFG_FLAG_R5_MEM_INIT_DIS);
-7508ea19b20da8 Suman Anna 2020-11-18  409  
-ee99ee7c929c3e Suman Anna 2021-03-27  410  	/* Re-use LockStep-mode reset logic for Single-CPU mode */
-ee99ee7c929c3e Suman Anna 2021-03-27  411  	ret = (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
-ee99ee7c929c3e Suman Anna 2021-03-27  412  	       cluster->mode == CLUSTER_MODE_SINGLECPU) ?
-6dedbd1d544389 Suman Anna 2020-10-02  413  		k3_r5_lockstep_release(cluster) : k3_r5_split_release(core);
-34f2653686fecc Suman Anna 2020-10-02  414  	if (ret) {
-6dedbd1d544389 Suman Anna 2020-10-02  415  		dev_err(dev, "unable to enable cores for TCM loading, ret = %d\n",
-6dedbd1d544389 Suman Anna 2020-10-02  416  			ret);
-6dedbd1d544389 Suman Anna 2020-10-02  417  		return ret;
-6dedbd1d544389 Suman Anna 2020-10-02  418  	}
-6dedbd1d544389 Suman Anna 2020-10-02  419  
-7508ea19b20da8 Suman Anna 2020-11-18  420  	/*
-7508ea19b20da8 Suman Anna 2020-11-18  421  	 * Newer IP revisions like on J7200 SoCs support h/w auto-initialization
-7508ea19b20da8 Suman Anna 2020-11-18  422  	 * of TCMs, so there is no need to perform the s/w memzero. This bit is
-7508ea19b20da8 Suman Anna 2020-11-18  423  	 * configurable through System Firmware, the default value does perform
-7508ea19b20da8 Suman Anna 2020-11-18  424  	 * auto-init, but account for it in case it is disabled
-7508ea19b20da8 Suman Anna 2020-11-18  425  	 */
-7508ea19b20da8 Suman Anna 2020-11-18  426  	if (cluster->soc_data->tcm_ecc_autoinit && !mem_init_dis) {
-7508ea19b20da8 Suman Anna 2020-11-18  427  		dev_dbg(dev, "leveraging h/w init for TCM memories\n");
-7508ea19b20da8 Suman Anna 2020-11-18  428  		return 0;
-7508ea19b20da8 Suman Anna 2020-11-18  429  	}
-7508ea19b20da8 Suman Anna 2020-11-18  430  
-34f2653686fecc Suman Anna 2020-10-02  431  	/*
-34f2653686fecc Suman Anna 2020-10-02  432  	 * Zero out both TCMs unconditionally (access from v8 Arm core is not
-34f2653686fecc Suman Anna 2020-10-02  433  	 * affected by ATCM & BTCM enable configuration values) so that ECC
-34f2653686fecc Suman Anna 2020-10-02  434  	 * can be effective on all TCM addresses.
-34f2653686fecc Suman Anna 2020-10-02  435  	 */
-34f2653686fecc Suman Anna 2020-10-02  436  	dev_dbg(dev, "zeroing out ATCM memory\n");
-34f2653686fecc Suman Anna 2020-10-02 @437  	memset(core->mem[0].cpu_addr, 0x00, core->mem[0].size);
-34f2653686fecc Suman Anna 2020-10-02  438  
-34f2653686fecc Suman Anna 2020-10-02  439  	dev_dbg(dev, "zeroing out BTCM memory\n");
-34f2653686fecc Suman Anna 2020-10-02  440  	memset(core->mem[1].cpu_addr, 0x00, core->mem[1].size);
-34f2653686fecc Suman Anna 2020-10-02  441  
-34f2653686fecc Suman Anna 2020-10-02  442  	return 0;
-34f2653686fecc Suman Anna 2020-10-02  443  }
-34f2653686fecc Suman Anna 2020-10-02  444  
-
-:::::: The code at line 437 was first introduced by commit
-:::::: 34f2653686fecc9bd5a4ee16724768c72953fb57 remoteproc: k3-r5: Initialize TCM memories for ECC
-
-:::::: TO: Suman Anna <s-anna@ti.com>
-:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
+> +{
+> +	int ret;
+> +
+> +	if (nor->spimem) {
+> +		struct spi_mem_op op =
+> +			SPI_NOR_READID_OP(naddr, ndummy, id, SPI_NOR_MAX_ID_LEN);
+> +
+> +		spi_nor_spimem_setup_op(nor, &op, proto);
+> +		ret = spi_mem_exec_op(nor->spimem, &op);
+> +	} else {
+> +		ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDID, id,
+> +						    SPI_NOR_MAX_ID_LEN);
+> +	}
+> +	return ret;
+> +}
+> +
+>  /**
+>   * spi_nor_read_sr() - Read the Status Register.
+>   * @nor:	pointer to 'struct spi_nor'.
+> @@ -1649,24 +1680,13 @@ static const struct flash_info
+> *spi_nor_match_id(struct spi_nor *nor,
+>  	return NULL;
+>  }
+> 
+> -static const struct flash_info *spi_nor_read_id(struct spi_nor *nor)
+> +static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
+>  {
+>  	const struct flash_info *info;
+>  	u8 *id = nor->bouncebuf;
+>  	int ret;
+> 
+> -	if (nor->spimem) {
+> -		struct spi_mem_op op =
+> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 1),
+> -				   SPI_MEM_OP_NO_ADDR,
+> -				   SPI_MEM_OP_NO_DUMMY,
+> -				   SPI_MEM_OP_DATA_IN(SPI_NOR_MAX_ID_LEN, id, 1));
+> -
+> -		ret = spi_mem_exec_op(nor->spimem, &op);
+> -	} else {
+> -		ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDID, id,
+> -						    SPI_NOR_MAX_ID_LEN);
+> -	}
+> +	ret = spi_nor_read_id(nor, 0, 0, id, nor->reg_proto);
+>  	if (ret) {
+>  		dev_dbg(nor->dev, "error %d reading JEDEC ID\n", ret);
+>  		return ERR_PTR(ret);
+> @@ -2903,7 +2923,7 @@ static const struct flash_info
+> *spi_nor_get_flash_info(struct spi_nor *nor,
+>  	}
+>  	/* Try to auto-detect if chip name wasn't specified or not found */
+>  	if (!info)
+> -		return spi_nor_read_id(nor);
+> +		return spi_nor_detect(nor);
+> 
+>  	/*
+>  	 * If caller has specified name of flash model that can normally be
+> @@ -2912,7 +2932,7 @@ static const struct flash_info
+> *spi_nor_get_flash_info(struct spi_nor *nor,
+>  	if (name && info->id_len) {
+>  		const struct flash_info *jinfo;
+> 
+> -		jinfo = spi_nor_read_id(nor);
+> +		jinfo = spi_nor_detect(nor);
+>  		if (IS_ERR(jinfo)) {
+>  			return jinfo;
+>  		} else if (jinfo != info) {
+> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+> index b7fd760e3b47..f952061d5c24 100644
+> --- a/drivers/mtd/spi-nor/core.h
+> +++ b/drivers/mtd/spi-nor/core.h
+> @@ -11,6 +11,13 @@
+> 
+>  #define SPI_NOR_MAX_ID_LEN	6
+> 
+> +/* Standard SPI NOR flash operations. */
+> +#define SPI_NOR_READID_OP(naddr, ndummy, buf, len)			\
+> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 0),			\
+> +		   SPI_MEM_OP_ADDR(naddr, 0, 0),			\
+> +		   SPI_MEM_OP_DUMMY(ndummy, 0),				\
+> +		   SPI_MEM_OP_DATA_IN(len, buf, 0))
+> +
+>  enum spi_nor_option_flags {
+>  	SNOR_F_HAS_SR_TB	= BIT(0),
+>  	SNOR_F_NO_OP_CHIP_ERASE	= BIT(1),
+> @@ -534,6 +541,8 @@ void spi_nor_unlock_and_unprep(struct spi_nor 
+> *nor);
+>  int spi_nor_sr1_bit6_quad_enable(struct spi_nor *nor);
+>  int spi_nor_sr2_bit1_quad_enable(struct spi_nor *nor);
+>  int spi_nor_sr2_bit7_quad_enable(struct spi_nor *nor);
+> +int spi_nor_read_id(struct spi_nor *nor, u8 naddr, u8 ndummy, u8 *id,
+> +		    enum spi_nor_protocol reg_proto);
+>  int spi_nor_read_sr(struct spi_nor *nor, u8 *sr);
+>  int spi_nor_sr_ready(struct spi_nor *nor);
+>  int spi_nor_read_cr(struct spi_nor *nor, u8 *cr);
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-michael

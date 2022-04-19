@@ -2,133 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2822750680B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5358F50680E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350422AbiDSJwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 05:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
+        id S1350418AbiDSJxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 05:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350438AbiDSJwn (ORCPT
+        with ESMTP id S236607AbiDSJxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 05:52:43 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA5E11C08;
-        Tue, 19 Apr 2022 02:49:59 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 703691F38D;
-        Tue, 19 Apr 2022 09:49:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650361798; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J1deqUxc9C8D6lInkd2DloHcFrHOp4GMQ6s/PLFQPqA=;
-        b=19W+p5kE2JN+9TJwKovFQQHYDzGXCipmtRiqv16MxNu2WAphcZeAaEeeZd13G8/XMcOXYR
-        QlLrHgV7LR3mKgXduFGrmGMKuwYsa7v/2nxukCq3s90vAPazeKwbGFGzDnTt2CCiz7Vif9
-        ydCaXqQAhEqqlAsgAHKloKj1BX52vno=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650361798;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J1deqUxc9C8D6lInkd2DloHcFrHOp4GMQ6s/PLFQPqA=;
-        b=iO8ylqwF5TMzf4SeDvp3qCGb8/Ge2WiU2xauMHrhCLNPzzESfu1Pgcwn+dfkQ/J32faC+T
-        ALuphv9JSEHACgBw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5F1552C141;
-        Tue, 19 Apr 2022 09:49:58 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 9AC27A0620; Tue, 19 Apr 2022 11:49:55 +0200 (CEST)
-Date:   Tue, 19 Apr 2022 11:49:55 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, tj@kernel.org, axboe@kernel.dk,
-        paolo.valente@linaro.org, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next 10/11] block, bfq: decrease
- 'num_groups_with_pending_reqs' earlier
-Message-ID: <20220419094955.ucjxadnhdyonfjdo@quack3.lan>
-References: <20220305091205.4188398-1-yukuai3@huawei.com>
- <20220305091205.4188398-11-yukuai3@huawei.com>
- <20220413112816.fwobg4cp6ttpnpk6@quack3.lan>
- <f3ed507a-7c85-cd69-3ad5-3e9c0e75c372@huawei.com>
- <ef7bad8c-b8dd-f625-330c-9a22e303844b@huawei.com>
+        Tue, 19 Apr 2022 05:53:39 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3B91B798
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:50:56 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2edbd522c21so165708087b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:50:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dl90oSwpu1I2JqHuv4Jr4MICWXPdF5LiEbJFOyplxM0=;
+        b=k4zQPDwLKtPzuXs/AROjg5x/L2123QZrb73Fbk6KUxgSStgu/Fr08Ovg6Qen+tpU1a
+         2C30/x7h1HgTSgoeWChYyokW4EvkTXMc+8ThGLR4jOoXx2s7c0w5SpivViJHziN7tZcT
+         EVTY1Kwa+s3yCi/j4F5UZpYH9Jll6wPz5NFN/HeVFZpVgXNNk2T4/cMbqEO/zKD0+MCG
+         3AWU0cHXWRlVnkbNFyjAaofHSTntuPzwewZMuq3vU2c4ZWKXesuLmVGwD3CwPXDXLHrO
+         JdpHBn+aYuRuKZ1Um29RuP8Djerek3RVOC9tfbfhVeuNZyDGIUvz/bPlQOrO1FLTA++r
+         NysA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dl90oSwpu1I2JqHuv4Jr4MICWXPdF5LiEbJFOyplxM0=;
+        b=e5WQjPjcZEhRVT8/HzqwyzsjmuXfEjvKjX6TmaAuYz5KgiCC0kEce0GyaltotCQ5OM
+         FA4IfRPqYUJYTBYQqznrVVJXdTceVEC1nMTvO3RCnkZcbbIezJGgAlEnpuxYP4/36mRc
+         JRrIMyROWKRSOaVz9nY2iY2RjzKZshg2TcnPHIRY6sqzMlxuozXr9o0lEUWSz5HEY6BU
+         01Typ2tCocj+yd0YWhWGVFjHRojuVu5Eu5K20EtayVjdsRrkp4MSWpUn/OrSViV2xuYN
+         3OuRkkKETCQi/ub1RzImgRXwn2wYXaFAlOTiN378J+HySomAzVGla+ZNpmwuGFl8MzGd
+         7KTQ==
+X-Gm-Message-State: AOAM533a8175NCcb5S/jvW/cACpBpC+/hAi7lksiwS2lX5Szln5khtc8
+        /ZpkBFBtyVFui7XpoFAzWo4QJCVc0wJZXnoJ33t3Cg==
+X-Google-Smtp-Source: ABdhPJxVfpiNqlMqKBIiQd4TDt5ub6ivMN/JZ1VjIGroBGjZh+44/kjqnkcU9sdUQb6WZiNy1apeWuKUqtoD9ykas3U=
+X-Received: by 2002:a81:bf51:0:b0:2ef:414a:f03b with SMTP id
+ s17-20020a81bf51000000b002ef414af03bmr14639495ywk.199.1650361855670; Tue, 19
+ Apr 2022 02:50:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ef7bad8c-b8dd-f625-330c-9a22e303844b@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 19 Apr 2022 15:20:44 +0530
+Message-ID: <CA+G9fYst4DK2ekv3AQXbxCj5P7Z-tCpryW26AXO6nJLQBsykrQ@mail.gmail.com>
+Subject: Re: [PATCH 4.14 000/284] 4.14.276-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 15-04-22 09:10:06, yukuai (C) wrote:
-> 在 2022/04/13 19:40, yukuai (C) 写道:
-> > 在 2022/04/13 19:28, Jan Kara 写道:
-> > > On Sat 05-03-22 17:12:04, Yu Kuai wrote:
-> > > > Currently 'num_groups_with_pending_reqs' won't be decreased when
-> > > > the group doesn't have any pending requests, while some child group
-> > > > still have pending requests. The decrement is delayed to when all the
-> > > > child groups doesn't have any pending requests.
-> > > > 
-> > > > For example:
-> > > > 1) t1 issue sync io on root group, t2 and t3 issue sync io on the same
-> > > > child group. num_groups_with_pending_reqs is 2 now.
-> > > > 2) t1 stopped, num_groups_with_pending_reqs is still 2. io from t2 and
-> > > > t3 still can't be handled concurrently.
-> > > > 
-> > > > Fix the problem by decreasing 'num_groups_with_pending_reqs'
-> > > > immediately upon the weights_tree removal of last bfqq of the group.
-> > > > 
-> > > > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> > > 
-> > > So I'd find the logic easier to follow if you completely removed
-> > > entity->in_groups_with_pending_reqs and did updates of
-> > > bfqd->num_groups_with_pending_reqs like:
-> > > 
-> > >     if (!bfqg->num_entities_with_pending_reqs++)
-> > >         bfqd->num_groups_with_pending_reqs++;
-> > > 
-> > Hi,
-> > 
-> > Indeed, this is an excellent idle, and much better than the way I did.
-> > 
-> > Thanks,
-> > Kuai
-> > 
-> > > and similarly on the remove side. And there would we literally two places
-> > > (addition & removal from weight tree) that would need to touch these
-> > > counters. Pretty obvious and all can be done in patch 9.
-> 
-> I think with this change, we can count root_group while activating bfqqs
-> that are under root_group, thus there is no need to modify
-> for_each_entity(or fake bfq_sched_data) any more.
+On Mon, 18 Apr 2022 at 18:19, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.276 release.
+> There are 284 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.276-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Sure, if you can make this work, it would be easier :)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> The special case is that weight racing bfqqs are not inserted into
-> weights tree, and I think this can be handled by adding a fake
-> bfq_weight_counter for such bfqqs.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Do you mean "weight raised bfqqs"? Yes, you are right they would need
-special treatment - maybe bfq_weights_tree_add() is not the best function
-to use for this and we should rather use insertion / removal from the
-service tree for maintaining num_entities_with_pending_reqs counter?
-I can even see we already have bfqg->active_entities so maybe we could just
-somehow tweak that accounting and use it for our purposes?
+## Build
+* kernel: 4.14.276-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: e419aef383a11eecb0ea07a61430afa74c724e9b
+* git describe: v4.14.275-285-ge419aef383a1
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.275-285-ge419aef383a1
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+## Test Regressions (compared to v4.14.275-264-g7bdda4a2902a)
+No test regressions found.
+
+## Metric Regressions (compared to v4.14.275-264-g7bdda4a2902a)
+No metric regressions found.
+
+## Test Fixes (compared to v4.14.275-264-g7bdda4a2902a)
+No test fixes found.
+
+## Metric Fixes (compared to v4.14.275-264-g7bdda4a2902a)
+No metric fixes found.
+
+## Test result summary
+total: 80663, pass: 64544, fail: 876, skip: 12943, xfail: 2300
+
+## Build Summary
+* arm: 280 total, 270 passed, 10 failed
+* arm64: 35 total, 35 passed, 0 failed
+* i386: 18 total, 18 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* powerpc: 60 total, 16 passed, 44 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

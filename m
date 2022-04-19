@@ -2,64 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19F0506BFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A176C506C92
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243011AbiDSMOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S1350102AbiDSMii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiDSMOM (ORCPT
+        with ESMTP id S231152AbiDSMig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:14:12 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E0833C;
-        Tue, 19 Apr 2022 05:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=AVVgfhe2WqFqFGz2SLYTDi0cBb+WfI1xgQSW8Ne/OwE=; b=hPJe6yE7VorouF495183w8yIkV
-        jqidu3GwW2TImUtxkVhVzc5epsrs0zft4ojn9tkI8OhpmMP6KlFe9wqcVJq+4i6tS1ir1Iy18BQmj
-        OJtjJXD5pFWrff0/YY2EMi8XxOF/lkQ312y9O87uLYxyREMCgIBIeyHc+RvCxoY8qAJg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ngmhU-00GUfC-GY; Tue, 19 Apr 2022 14:11:20 +0200
-Date:   Tue, 19 Apr 2022 14:11:20 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        adrian.hunter@intel.com, nico@fluxnic.net,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 4/4] dt-bindings: mmc: convert sdhci-dove to JSON
- schema
-Message-ID: <Yl6m6LSnkBzuUBq6@lunn.ch>
-References: <20220419024611.1327525-1-chris.packham@alliedtelesis.co.nz>
- <20220419024611.1327525-5-chris.packham@alliedtelesis.co.nz>
+        Tue, 19 Apr 2022 08:38:36 -0400
+X-Greylist: delayed 1387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Apr 2022 05:35:51 PDT
+Received: from ppsw-41.csi.cam.ac.uk (ppsw-41.csi.cam.ac.uk [131.111.8.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC4E1573B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:35:51 -0700 (PDT)
+X-Cam-AntiVirus: no malware found
+X-Cam-ScannerInfo: https://help.uis.cam.ac.uk/email-scanner-virus
+Received: from hades.srcf.societies.cam.ac.uk ([131.111.179.67]:56344)
+        by ppsw-41.csi.cam.ac.uk (ppsw.cam.ac.uk [131.111.8.139]:25)
+        with esmtps (TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        id 1ngmiN-000usy-QF (Exim 4.95)
+        (return-path <amc96@srcf.net>);
+        Tue, 19 Apr 2022 13:12:15 +0100
+Received: from [192.168.1.10] (host-92-26-109-251.as13285.net [92.26.109.251])
+        (Authenticated sender: amc96)
+        by hades.srcf.societies.cam.ac.uk (Postfix) with ESMTPSA id 7565F1FAD5;
+        Tue, 19 Apr 2022 13:12:14 +0100 (BST)
+Message-ID: <8fbbd4ca-54b1-8c1c-19bc-3d0e6044ff5d@srcf.net>
+Date:   Tue, 19 Apr 2022 13:12:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419024611.1327525-5-chris.packham@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 06/25] x86/xen: Add ANNOTATE_ENDBR to startup_xen()
+Content-Language: en-GB
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
+References: <cover.1650300597.git.jpoimboe@redhat.com>
+ <a87bd48b06d11ec4b98122a429e71e489b4e48c3.1650300597.git.jpoimboe@redhat.com>
+ <b94cbac6-0a4d-8e4a-ec58-bbd46e385d45@citrix.com>
+ <20220419115737.GU2731@worktop.programming.kicks-ass.net>
+From:   Andrew Cooper <amc96@srcf.net>
+In-Reply-To: <20220419115737.GU2731@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 02:46:11PM +1200, Chris Packham wrote:
-> Convert the sdhci-dove binding to JSON schema. The optional clocks
-> property was not in the original binding document but has been in the
-> dove.dtsi since commit 5b03df9ace68 ("ARM: dove: switch to DT clock
-> providers").
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+On 19/04/2022 12:57, Peter Zijlstra wrote:
+> On Tue, Apr 19, 2022 at 11:42:12AM +0000, Andrew Cooper wrote:
+>> On 18/04/2022 17:50, Josh Poimboeuf wrote:
+>>> The startup_xen() kernel entry point is referenced by the ".note.Xen"
+>>> section, but is presumably not indirect-branched to.
+>> It's the real entrypoint of the VM.  It's "got to" by setting %rip
+>> during vcpu setup.
+>>
+>> We could in principle support starting a PV VM with CET active, but that
+>> sounds like an enormous quantity of effort for very little gain.  CET
+>> for Xen PV requires paravirt anyway (because the kernel runs in CPL!=0)
+>> so decisions like this can wait until someone feels like doing the work.
+>>
+>>>   Add ANNOTATE_ENDBR
+>>> to silence future objtool warnings.
+>>>
+>>> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+>>> Cc: Juergen Gross <jgross@suse.com>
+>>> Cc: Stefano Stabellini <sstabellini@kernel.org>
+>>> Cc: xen-devel@lists.xenproject.org
+>>> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+>> FWIW, Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>, preferably
+>> with the commit message tweaked to remove the uncertainty.
+> Something like so then?
+>
+> ---
+> Subject: x86/xen: Add ANNOTATE_ENDBR to startup_xen()
+> From: Josh Poimboeuf <jpoimboe@redhat.com>
+> Date: Mon, 18 Apr 2022 09:50:25 -0700
+>
+> From: Josh Poimboeuf <jpoimboe@redhat.com>
+>
+> The startup_xen() kernel entry point is referenced by the ".note.Xen"
+> section, and is the real entry point of the VM. It *will* be
+> indirectly branched to, *however* currently Xen doesn't support PV VM
+> with CET active.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Technically it's always IRET'd to, but the point is that it's never
+"branched to" by the execution context of the VM.
 
-    Andrew
+So it would be better to say that it's never indirectly branched to. 
+That's what the IBT checks care about.
+
+>
+> Add ANNOTATE_ENDBR to silence future objtool warnings.
+
+Only just spotted.  All text in the subject and commit message needs
+s/ENDBR/NOENDBR/
+
+~Andrew

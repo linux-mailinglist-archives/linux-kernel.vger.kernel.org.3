@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E537B506664
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EB3506627
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349707AbiDSH5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S1349534AbiDSHqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349653AbiDSH5W (ORCPT
+        with ESMTP id S242669AbiDSHqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:57:22 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10041.outbound.protection.outlook.com [40.107.1.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC2232ED2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:54:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ntaR8ScBCpBcMDuZGbmBB8urFkotXlBoV2jvdSDONO0prtwBR/kJqgpIK9smUnFcNS620unUE0Yyn+ucoGmSilNHw9syEN0Kcon31XvI1LxtYl5ZW3ejaZHjxI42BPWYd4wp7nMoeS0+7+d/tCA3z2Ts/pWbX+I1IVQyL3Ob9AHLZKUgInRgu24q+aStAcvZQH8IOKMgN49E61tcYwBH272dx+3j9HfNiag/vxqnZXzZsMo/6aI0kXrn9oSRjN3weUL+hI3aceyfYyTj1QVqGP8vB40AbdCiHu8RxziZqD6vghcUa5TAesnRKcDRiiClK/KXGERk1cWx6STgYm83BQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=46tFRZVyPSFnaNNBt79jpaTI59gUs9AOZn1Bm1ji2F0=;
- b=H5lRN7/2cl38uiDakNNYn8BuhYaMTBorX79VBWmVtYqvq4sf0kD0ERP+V1vRbceNI2fRJ6MDimqXWrDY/1wRt1zQLy7OsdP/GvoAe6T9S/7L8/P6ZyN/7cyaiZM/pLIkOVmDZh/WctX8fqy8/uRjMWIWN9O6WrpsJgGotQBgdx8Q/eTh3eTR42DnzHWliN2viHcHVTMShAyYMisAMGxEZXblG1q6ZPN3rTnY0MNsj2MnXpO4OibQsWus2OQXe1LopsHzl9f0/gO8EMcHMxMtLGNvMujYRQBZSuOMdkGyVcU8UxB8q1as0UDr23XKqsGcGjy4frh024xe4k4l4BVITw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=46tFRZVyPSFnaNNBt79jpaTI59gUs9AOZn1Bm1ji2F0=;
- b=HeYUzLZcz/LkRoBw0ky+l/NQEaLnxNgWEY/tFzLNdtWTfTWYjjSYrU2TOb5v5dm3Hueuj6DitJOLZifEx0FwgJbb/DqUehVI+dgqrMn+3zpOSVMeA/IIjp7W4HQTcjwxqxTqU3VBXG97AjiaPpM+6f8J6XCJvR0gL+Rz7uW4C/A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (2603:10a6:803:49::27)
- by VI1PR04MB5952.eurprd04.prod.outlook.com (2603:10a6:803:cb::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
- 2022 07:54:37 +0000
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::d1b0:5a64:86d7:8a42]) by VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::d1b0:5a64:86d7:8a42%4]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
- 07:54:37 +0000
-From:   Li Jun <jun.li@nxp.com>
-To:     myungjoo.ham@samsung.com, cw00.choi@samsung.com, krzk@kernel.org
-Cc:     linux-kernel@vger.kernel.org, frank.li@nxp.com, xu.yang_2@nxp.com
-Subject: [PATCH v2 2/2] extcon: ptn5150: Add usb role class support
-Date:   Tue, 19 Apr 2022 15:43:22 +0800
-Message-Id: <1650354202-10445-2-git-send-email-jun.li@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1650354202-10445-1-git-send-email-jun.li@nxp.com>
-References: <1650354202-10445-1-git-send-email-jun.li@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR06CA0015.apcprd06.prod.outlook.com
- (2603:1096:4:186::7) To VI1PR04MB4333.eurprd04.prod.outlook.com
- (2603:10a6:803:49::27)
+        Tue, 19 Apr 2022 03:46:51 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AFA23BF6;
+        Tue, 19 Apr 2022 00:44:08 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id x18so13375920wrc.0;
+        Tue, 19 Apr 2022 00:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Td4Hy43R6SEG1pSO6X3vGzswl7vCz1dgDqCHGi0vEko=;
+        b=amXfhlUYJ0+KM8IxEq4FT8n4km/zvVadqRbfTjwrztbRO8AjAy9ooKFJu1tnjVihT5
+         bNW2u/auAZA6P2JiXMtrqZsk9sN73gFbu6/60Ls4TV0dm1xmqSEy6ouZ2Q75O8byGRQW
+         6caopDBH0jU7rXoaf/3OXByzjLbC/UmnEJUkGl+3qFDw7clw2haCYusMnkmFH8tnyBcc
+         tcQ4Bus1Nk2FSeEUUGyx/V9lHEJSKO9IYx1hgRshvUZ0bspAaH/FdX6EfmH7Wt5yqTpu
+         Nq8i9BdrOq01JnXs1TQK6oCGq0KED0opFguEMn0wJ0/1ByIF9DuIhlN/g+DoRBlVWPu7
+         xRrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Td4Hy43R6SEG1pSO6X3vGzswl7vCz1dgDqCHGi0vEko=;
+        b=peAx1Vs6OFcmmRnSY/TiyGdTvSX7GJZrY8m+pdFUmiV+mm1fuue0ahubIIbg6zWV3X
+         SUJr2bQvWwXpM90hFEtyunButRMHoM6zewAC6ffhhBSjSqeFJCHwXq1AFQo4f76XWejN
+         EyaMYhIIHK/QQQMHWnqjzyFrUyLUXIJMV0VgffBRqC8NleQphjmeHXaPV2tcFSE3AVTA
+         6SyT1q3QuezPcCdUeSqJHArMsyFqub76vD3JtkW/KoGljCC41XecagUUPCHQDcZrbcpW
+         ktYDOP/FBHSccywbC8wFOrxwxSNSYDy414jRcfMxBJxjOGLWK+K4LlL2y56vtPiwTtUY
+         CcIw==
+X-Gm-Message-State: AOAM533HXNCRE0CviQ7+y+ZobDUnEUv1t+xsJyha/jAIjWEFVQ4u+G9S
+        hbOCxnD15/XyQk6yzsA4Jo8=
+X-Google-Smtp-Source: ABdhPJyPmfPsbf+yNodLgTbvOFCNxRsuD75a/3auxzXxSukB3FUe2LejoxHw+cdrH2+O79tXHPG8Ow==
+X-Received: by 2002:a5d:6650:0:b0:207:ac24:a825 with SMTP id f16-20020a5d6650000000b00207ac24a825mr10545728wrw.97.1650354246817;
+        Tue, 19 Apr 2022 00:44:06 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id l8-20020a5d5608000000b00207ab405d15sm11882256wrv.42.2022.04.19.00.44.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 00:44:06 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 09:44:04 +0200
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei Fu <wefu@redhat.com>, Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Christoph Muellner <cmuellner@linux.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH 0/2] riscv: implement Zicbom-based CMO instructions + the
+ t-head variant
+Message-ID: <Yl5oRPuNC3w+UI0q@Red>
+References: <YllWTN+15CoskNBt@Red>
+ <70da24dd-2d03-fc49-151d-daabb315a5f6@sholland.org>
+ <YlpxsYREWv/LQ+HY@Red>
+ <849a3728-7e84-4f26-0c73-4d68eae9ae01@sholland.org>
+ <YlsZxVjgt3ZNQ7Ub@Red>
+ <CAJF2gTSNzLfon7yH3zvOJfYwQnVRvNWW7KygShLqcagRfbyAkg@mail.gmail.com>
+ <YlvTkfIO9Oz3ib5i@Red>
+ <CAJF2gTQ5rYATTHj2UtwxKw0dpvdHBUAih1RJf0XuGM8b6euZwQ@mail.gmail.com>
+ <YlxP26dklDj2y+cP@Red>
+ <CAJF2gTQNBVBGqbtHckwtB59wjrPoN-Li32BcUJpLahaYDnU3WQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3cc0a2d8-bfc8-40a7-4ca5-08da21d9da12
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5952:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR04MB59523A45831A8243515C72A689F29@VI1PR04MB5952.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D0k9Tle3R+9926QF8Qj2S4nRsHP3tOm/pboCiiTRSWMTzoENhz6CITUC24AulUvtK1i99A4BMXJ72If3J6zB2t86X4RV16CYMMzTF6jwkmidNAdQWdV4Lk37NqDPKSOy0KugzV4eIBOYcm3IuM2USxvR6Qp4XvstWY5cJ3gZKZy9B201bNAxXL0encEnCT2BZ75gt+6pvz6QA2BLX+C79RaqJ7PDinTd5/vzpl/3+iVWi+6eXlkEujds9nawo2WpsbE9pLEXLLeSWaKApGvnlYLljSRnOqASynKrc667HukXwCa8QzdIakfnJ+wCbBg9VElWuulcksba6KbJWX8wHoHFYt/HY7f3Q4qdF39dsry9nxq54l6fasFmwwJOgpAJ1j3Zm8R3XKHr68Y4MS8Bp7qASh6hpRK0Vw9MCsdGrsvN4rLOlm8ragrjdmxjixtav+2aQoD/Jsiw1owWBim5U+wn4VFPbR7PWBNEtaS3dUqqkRtgnUQqZSR6CwsnHpdq0SWQGUWAK6K2rKy2ol5aVqu/Q9QUs9BoO+v43UEj5B0lPnpXyiy5eeykwIMl3Tj6e7V8Pfh1RSIvf26OzjmgTSZOLsFVVykyi76njshG5KD7cbccDY8TE9B5b3ItudwOWV3lRHWTmbft1DKB0Vu0stV1yiVLFwQjTlcawe51RiJ5bmLPcBwAd+EFS777OBbNIlkJirKq6nyhzwKOeeYLzQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4333.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(38350700002)(5660300002)(4326008)(83380400001)(2906002)(6512007)(6486002)(6666004)(52116002)(36756003)(508600001)(26005)(8676002)(186003)(38100700002)(66556008)(316002)(66476007)(86362001)(66946007)(2616005)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ULLiHCB6ILgv2m0mgime3buxrVcDndnscHBwRi5Qhjle8OrzZhlGXb5vzHAg?=
- =?us-ascii?Q?cUclMmdNMjy02Sf2AA1jnyQUue+RQdO1+yi+PT6HRZnujwVEgJFyGdmR+C3s?=
- =?us-ascii?Q?DDjYXh1DbLpChrSemf/3Y0u+gjjl09uY2utac+Vkboghq/p0ZV6h4A0Gr/YV?=
- =?us-ascii?Q?cAq9JxxlXb7vDngsGXUWkN3NyFc57mb+Sd5xweQ2bmsd6DwUGv9fCalhtCFP?=
- =?us-ascii?Q?RM/pnmNZL+rELVPkiXYPscPuLTmkB4bQ1U+CyUpVUVdQdS8IkQjFIDDRpzAZ?=
- =?us-ascii?Q?dVe3OBAPqroNJmHxp6OAydSKIADLs4hZCk3SlJycCouMLrytdOQV5z+Pz8Yu?=
- =?us-ascii?Q?UpicSZShbyhaORz+pw5HQJCsVHhCLHi8PGb3r5m4Qu7RJmSUDK4yqtEuChfg?=
- =?us-ascii?Q?TL5QBXheDrb9lXMiN4CgoUbWk+NnpYIdC5exrVXomo9FNzx+ipA4JyJd6M/8?=
- =?us-ascii?Q?wgslWRp22eT+5WqIxo8VcOpO38OAFIgLVgP/ycvE/ti9l8ahiUVd3/svJ27t?=
- =?us-ascii?Q?nnRLrUG8+pzfDLkXC4A6wzAKNBgJU3PYZSZ0T9Saf9raPqGzFX7hd+QBP4hv?=
- =?us-ascii?Q?87uebhpk7zZxFxEnbW4aTNKlvvKLEO2SMROQaRzRUBv/A7QNZY4pnV+koMNR?=
- =?us-ascii?Q?uF34hM4AHYaHcoyN2MtO22MvZllblSmy2zGdTb8vBozWpXpVZZz48pRQPJFP?=
- =?us-ascii?Q?5Em8654Sfw2pYho6Rmy3nVxM4lpidZEx6Ew5qcIP8zJmNFB+v5Yz68IePYC1?=
- =?us-ascii?Q?egYpY8AZNii4I39TJGEnqsEZj/x2SlegHzsJvj6iIrgOtJNfZmJ/Y5aZbBJD?=
- =?us-ascii?Q?o/NxbqpvuQWn2wcUpfSSf83JD4BFL3cTqB3+N6GifRn2YgmWyoHhsesH3ebf?=
- =?us-ascii?Q?b3ZItPtzmttv0V6+LEapfsU5VIXcT/A2OzjyhPo/bdFzhJ7XaGFZmHk1hela?=
- =?us-ascii?Q?TycMncO5LgOPpYDHgrwuyQ23xT88AhsNKbHxkERFOz2sA02WlRcVYVa+NRje?=
- =?us-ascii?Q?KE1e6xIvh50cmtKd+v3goP+4zYg0NSBARAy9o++vTRIYUlX52t7sJuDaZOUK?=
- =?us-ascii?Q?5uX0sBP1Ywn0OX/omGLxNpjnHYhE7tqN+3v8ZTLIyP/1N9IcmoJ2j5Jr1tXe?=
- =?us-ascii?Q?79ZrrrbKoTXTOkW4qJojG+vNl4fVprNpkEgHed3muwwsD7LtF/1gOMGKp5W5?=
- =?us-ascii?Q?BuOXfEvH0fyI0O4x7gtGk9T+DrTZ/SrA0sotrWkNkGnh64C5gF4e4p3pN6sE?=
- =?us-ascii?Q?iOT8ciLSCsubIIDSRtMwCdkWWvg2nyhSLCgyjVnlMCmDW7gmO9G5jeajvWem?=
- =?us-ascii?Q?9KfB11FGBkupsL7+B+X25aUwucSFgA8mgzyG2ASIa+7+blKfIF7swKwGWz05?=
- =?us-ascii?Q?Lx2xBOehql7e6IkvQQdO/Q16S5TkCXD+yBk8DQtyzuHXZbN/mD9BKl2xOwPk?=
- =?us-ascii?Q?TMdUXn/NrnyUm4ndFZIke49QOEtPltY4Y+XkNJ9zVsobTEgDDPIueqer7XB+?=
- =?us-ascii?Q?wJO7gtgLZzHfcoym5+RPEs6k8Vo33+GdL0BvWS+3uADlrL+gtH/9b3X1Y7NL?=
- =?us-ascii?Q?3Q0y5NjWo6Dk0TTgviazGmpV7RiV7yaW75I1oXIcYQR1fg7oxg9HX3yNHUdP?=
- =?us-ascii?Q?cXFUHO2LuACEJgTOAy7MMrGH05IZCdNdfAuXNbMffxEcB7hjj9SPMZBWB7qN?=
- =?us-ascii?Q?Eh5sOrWvNiUgY1PSomGJM2xfMD9Z3GPlFriejur8Z+LBpRl+1ikGLR4paZWo?=
- =?us-ascii?Q?uYC0ecNC/A=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cc0a2d8-bfc8-40a7-4ca5-08da21d9da12
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4333.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 07:54:37.8473
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gy61AYqvv+jW+xI0NDt55NEFfMSSXwqgYvBqCXr3lGRC27U+0mCbPwh98j8dfp8o
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5952
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJF2gTQNBVBGqbtHckwtB59wjrPoN-Li32BcUJpLahaYDnU3WQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,125 +93,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some usb controller drivers may not support extcon but use
-usb role class as it's the preferred approach, so to support
-usb dual role switch with usb role class, add usb role class
-consumer support.
+Le Mon, Apr 18, 2022 at 06:50:57AM +0800, Guo Ren a écrit :
+> On Mon, Apr 18, 2022 at 1:35 AM Corentin Labbe
+> <clabbe.montjoie@gmail.com> wrote:
+> >
+> > Le Sun, Apr 17, 2022 at 04:49:34PM +0800, Guo Ren a écrit :
+> > > On Sun, Apr 17, 2022 at 4:45 PM Corentin Labbe
+> > > <clabbe.montjoie@gmail.com> wrote:
+> > > >
+> > > > Le Sun, Apr 17, 2022 at 10:17:34AM +0800, Guo Ren a écrit :
+> > > > > On Sun, Apr 17, 2022 at 3:32 AM Corentin Labbe
+> > > > > <clabbe.montjoie@gmail.com> wrote:
+> > > > > >
+> > > > > > Le Sat, Apr 16, 2022 at 12:47:29PM -0500, Samuel Holland a écrit :
+> > > > > > > On 4/16/22 2:35 AM, Corentin Labbe wrote:
+> > > > > > > > Le Fri, Apr 15, 2022 at 09:19:23PM -0500, Samuel Holland a écrit :
+> > > > > > > >> On 4/15/22 6:26 AM, Corentin Labbe wrote:
+> > > > > > > >>> Le Mon, Mar 07, 2022 at 11:46:18PM +0100, Heiko Stuebner a écrit :
+> > > > > > > >>>> This series is based on the alternatives changes done in my svpbmt series
+> > > > > > > >>>> and thus also depends on Atish's isa-extension parsing series.
+> > > > > > > >>>>
+> > > > > > > >>>> It implements using the cache-management instructions from the  Zicbom-
+> > > > > > > >>>> extension to handle cache flush, etc actions on platforms needing them.
+> > > > > > > >>>>
+> > > > > > > >>>> SoCs using cpu cores from T-Head like the Allwinne D1 implement a
+> > > > > > > >>>> different set of cache instructions. But while they are different,
+> > > > > > > >>>> instructions they provide the same functionality, so a variant can
+> > > > > > > >>>> easly hook into the existing alternatives mechanism on those.
+> > > > > > > >>>>
+> > > > > > > >>>>
+> > > > > > > >>>
+> > > > > > > >>> Hello
+> > > > > > > >>>
+> > > > > > > >>> I am testing https://github.com/smaeul/linux.git branch:origin/riscv/d1-wip which contain this serie.
+> > > > > > > >>>
+> > > > > > > >>> I am hitting a buffer corruption problem with DMA.
+> > > > > > > >>> The sun8i-ce crypto driver fail self tests due to "device overran destination buffer".
+> > > > > > > >>> In fact the buffer is not overran by device but by dma_map_single() operation.
+> > > > > > > >>>
+> > > > > > > >>> The following small code show the problem:
+> > > > > > > >>>
+> > > > > > > >>> dma_addr_t dma;
+> > > > > > > >>> u8 *buf;
+> > > > > > > >>> #define BSIZE 2048
+> > > > > > > >>> #define DMASIZE 16
+> > > > > > > >>>
+> > > > > > > >>> buf = kmalloc(BSIZE, GFP_KERNEL | GFP_DMA);
+> > > > > > > >>> for (i = 0; i < BSIZE; i++)
+> > > > > > > >>>     buf[i] = 0xFE;
+> > > > > > > >>> print_hex_dump(KERN_INFO, "DMATEST1:", DUMP_PREFIX_NONE, 16, 4, buf, 256, false);
+> > > > > > > >>> dma = dma_map_single(ce->dev, buf, DMASIZE, DMA_FROM_DEVICE);
+> > > > > > > >>
+> > > > > > > >> This function (through dma_direct_map_page()) ends up calling
+> > > > > > > >> arch_sync_dma_for_device(..., ..., DMA_FROM_DEVICE), which invalidates the CPU's
+> > > > > > > >> cache. This is the same thing other architectures do (at least arm, arm64,
+> > > > > > > >> openrisc, and powerpc). So this appears to be working as intended.
+> > > > > > > >
+> > > > > > > > This behavour is not present at least on ARM and ARM64.
+> > > > > > > > The sample code I provided does not corrupt the buffer on them.
+> > > > > > >
+> > > > > > > That can be explained by the 0xFE bytes having been flushed to DRAM already in
+> > > > > > > your ARM/ARM64 tests, whereas in your riscv64 case, the 0xFE bytes were still in
+> > > > > > > a dirty cache line. The cache topology and implementation is totally different
+> > > > > > > across the SoCs, so this is not too surprising.
+> > > > > > >
+> > > > > > > Semantically, dma_map_single(..., DMA_FROM_DEVICE) means you are doing a
+> > > > > > > unidirectional DMA transfer from the device into that buffer. So the contents of
+> > > > > > > the buffer are "undefined" until the DMA transfer completes. If you are also
+> > > > > > > writing data into the buffer from the CPU side, then you need DMA_BIDIRECTIONAL.
+> > > > > > >
+> > > > > > > Regards,
+> > > > > > > Samuel
+> > > > > >
+> > > > > > +CC crypto mailing list + maintainer
+> > > > > >
+> > > > > > My problem is that crypto selftest, for each buffer where I need to do a cipher operation,
+> > > > > > concat a poison buffer to check that device does write beyond buffer.
+> > > > > >
+> > > > > > But the dma_map_sg(FROM_DEVICE) corrupts this poison buffer and crypto selftests fails thinking my device did a buffer overrun.
+> > > > > >
+> > > > > > So you mean that on SoC D1, this crypto API check strategy is impossible ?
+> > > > >
+> > > > > I think you could try to replace all CLEAN & INVAL ops with FLUSH ops
+> > > > > for the testing. (All cache block-aligned data from the device for the
+> > > > > CPU should be invalided.)
+> > > > >
+> > > >
+> > > > With:
+> > > > diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
+> > > > index 2c124bcc1932..608483522e05 100644
+> > > > --- a/arch/riscv/mm/dma-noncoherent.c
+> > > > +++ b/arch/riscv/mm/dma-noncoherent.c
+> > > > @@ -21,7 +21,7 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size, enum dma_data_dire
+> > > >                 ALT_CMO_OP(CLEAN, (unsigned long)phys_to_virt(paddr), size);
+> > > >                 break;
+> > > >         case DMA_FROM_DEVICE:
+> > > > -               ALT_CMO_OP(INVAL, (unsigned long)phys_to_virt(paddr), size);
+> > > > +               ALT_CMO_OP(FLUSH, (unsigned long)phys_to_virt(paddr), size);
+> > > >                 break;
+> > > >         case DMA_BIDIRECTIONAL:
+> > > >                 ALT_CMO_OP(FLUSH, (unsigned long)phys_to_virt(paddr), size);
+> > > >
+> > > >
+> > > > The crypto self test works and I got no more buffer corruption.
+> > > No, No ... it's not a solution. That means your driver has a problem.
+> > > From device, we only need INVAL enough.
+> > >
+> >
+> > For me, my driver works fine, the problem came from dma_map_sg(), probably I didnt explain right, I restart.
+> >
+> > Example:
+> > crypto self test send to my driver an AES cipher operation of 16 bytes inside a SG, but the original buffer is greater (said 32 for the example).
+> > So the first 16 bytes are used by the SG and the last 16 bytes are a poisoned buffer (with value 0xFE) to check driver do not write beyong the normal operation of 16 bytes (and beyond the SG length).
+> >
+> > Doing the dma_map_sg(FROM_DEVICE) on the SG corrupt the whole buffer.
+> > My driver write normally via DMA the first 16 bytes.
+> > Crypto API check the last bytes, no more 0xFE, so it fail believing my driver wrote beyond the first 16 bytes.
+> >
+> > But even If I disable my hardware operation, the buffer is still corrupted. (See my sample code which just do dma_map/dma_unmap)
+> >
+> > So the problem is the dma_map(FROM_DEVICE) which change buffer content.
+> >
+> > So if this behavour is normal on D1 SoC, how to fix the crypto self tests ?
+> Actually, FLUSH is safe for all, but more expensive. Can you tell me
+> which arm SOC are you using? And which version of linux is running on
+> your arm SOC?
+> 
 
-Signed-off-by: Li Jun <jun.li@nxp.com>
----
-change for v2:
-- Add one patch to sync queue work before driver remove.
-- improve git commit log
-- use a variable of usb_role to set target role in
-  ptn5150_check_state() to simplify code.
-- use dev_err_probe for usb_role_switch_get() return value.
-
- drivers/extcon/Kconfig          |  1 +
- drivers/extcon/extcon-ptn5150.c | 25 +++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
-
-diff --git a/drivers/extcon/Kconfig b/drivers/extcon/Kconfig
-index c69d40ae5619..f3352a81ee7c 100644
---- a/drivers/extcon/Kconfig
-+++ b/drivers/extcon/Kconfig
-@@ -130,6 +130,7 @@ config EXTCON_PTN5150
- 	tristate "NXP PTN5150 CC LOGIC USB EXTCON support"
- 	depends on I2C && (GPIOLIB || COMPILE_TEST)
- 	select REGMAP_I2C
-+	select USB_ROLE_SWITCH
- 	help
- 	  Say Y here to enable support for USB peripheral and USB host
- 	  detection by NXP PTN5150 CC (Configuration Channel) logic chip.
-diff --git a/drivers/extcon/extcon-ptn5150.c b/drivers/extcon/extcon-ptn5150.c
-index 2a7874108df8..017a07197f38 100644
---- a/drivers/extcon/extcon-ptn5150.c
-+++ b/drivers/extcon/extcon-ptn5150.c
-@@ -17,6 +17,7 @@
- #include <linux/slab.h>
- #include <linux/extcon-provider.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/usb/role.h>
- 
- /* PTN5150 registers */
- #define PTN5150_REG_DEVICE_ID			0x01
-@@ -52,6 +53,7 @@ struct ptn5150_info {
- 	int irq;
- 	struct work_struct irq_work;
- 	struct mutex mutex;
-+	struct usb_role_switch *role_sw;
- };
- 
- /* List of detectable cables */
-@@ -70,6 +72,7 @@ static const struct regmap_config ptn5150_regmap_config = {
- static void ptn5150_check_state(struct ptn5150_info *info)
- {
- 	unsigned int port_status, reg_data, vbus;
-+	enum usb_role usb_role = USB_ROLE_NONE;
- 	int ret;
- 
- 	ret = regmap_read(info->regmap, PTN5150_REG_CC_STATUS, &reg_data);
-@@ -85,6 +88,7 @@ static void ptn5150_check_state(struct ptn5150_info *info)
- 		extcon_set_state_sync(info->edev, EXTCON_USB_HOST, false);
- 		gpiod_set_value_cansleep(info->vbus_gpiod, 0);
- 		extcon_set_state_sync(info->edev, EXTCON_USB, true);
-+		usb_role = USB_ROLE_DEVICE;
- 		break;
- 	case PTN5150_UFP_ATTACHED:
- 		extcon_set_state_sync(info->edev, EXTCON_USB, false);
-@@ -95,10 +99,18 @@ static void ptn5150_check_state(struct ptn5150_info *info)
- 			gpiod_set_value_cansleep(info->vbus_gpiod, 1);
- 
- 		extcon_set_state_sync(info->edev, EXTCON_USB_HOST, true);
-+		usb_role = USB_ROLE_HOST;
- 		break;
- 	default:
- 		break;
- 	}
-+
-+	if (usb_role) {
-+		ret = usb_role_switch_set_role(info->role_sw, usb_role);
-+		if (ret)
-+			dev_err(info->dev, "failed to set %s role: %d\n",
-+				usb_role_string(usb_role), ret);
-+	}
- }
- 
- static void ptn5150_irq_work(struct work_struct *work)
-@@ -133,6 +145,13 @@ static void ptn5150_irq_work(struct work_struct *work)
- 			extcon_set_state_sync(info->edev,
- 					EXTCON_USB, false);
- 			gpiod_set_value_cansleep(info->vbus_gpiod, 0);
-+
-+			ret = usb_role_switch_set_role(info->role_sw,
-+						       USB_ROLE_NONE);
-+			if (ret)
-+				dev_err(info->dev,
-+					"failed to set none role: %d\n",
-+					ret);
- 		}
- 	}
- 
-@@ -199,6 +218,7 @@ static void ptn5150_work_sync_and_put(void *data)
- 	struct ptn5150_info *info = data;
- 
- 	cancel_work_sync(&info->irq_work);
-+	usb_role_switch_put(info->role_sw);
- }
- 
- static int ptn5150_i2c_probe(struct i2c_client *i2c)
-@@ -291,6 +311,11 @@ static int ptn5150_i2c_probe(struct i2c_client *i2c)
- 	if (ret)
- 		return -EINVAL;
- 
-+	info->role_sw = usb_role_switch_get(info->dev);
-+	if (IS_ERR(info->role_sw))
-+		return dev_err_probe(info->dev, PTR_ERR(info->role_sw),
-+				     "failed to get role switch\n");
-+
- 	ret = devm_add_action_or_reset(dev, ptn5150_work_sync_and_put, info);
- 	if (ret)
- 		return ret;
--- 
-2.25.1
+The SOC is Allwinner D1 (RiscV).
+I am testing linux from https://github.com/smaeul/linux.git branch:origin/riscv/d1-wip
 

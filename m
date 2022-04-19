@@ -2,160 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E30C506C1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B195506C26
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350010AbiDSMUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
+        id S1352196AbiDSMUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346541AbiDSMUL (ORCPT
+        with ESMTP id S1352175AbiDSMU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:20:11 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C66925E90
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:17:28 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id x17so29033305lfa.10
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=c4jLu+nEjW6ZyZXVzGI5SDD7yHtnUvhBe/fmRqUVNIQ=;
-        b=XHTyOUDABQ14gZmVv1k6ZT33I2aAbve42wB0HyHQxv7GIG6L7ZAKcuW2rGSxXu/ygr
-         JnWzRmFHo9x1ZE21q1MdOXNxgM0G6U0dzM3232itmYKA3MVrjrU/MLuccHMgIGDrN3hH
-         D3+yMStuFAvLXza9j2W/bcrz9OIx2WmpcXkiVEVsqxbasDR23Ydv/wFqPV9IL4cz2XuP
-         +09gFQTuxn7+b56CTrbPi8/Pq6zYk0zHk6sQvCLKjT9J2p/G9SV4KjVtjs3cOMisAS2O
-         mivwFNQc84cRhVQafMN71BdlBSk1jKUOclNnS4aoAd2n+l9UOg0Iyj5GA7Yfjtxo1el9
-         KIRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=c4jLu+nEjW6ZyZXVzGI5SDD7yHtnUvhBe/fmRqUVNIQ=;
-        b=QxPfNAzNmRCAYugtqKdjd7c4Snza5l59BOviDKVKDvES1+EfJHGCGy3aMw6H9kAKkZ
-         07Sirv0TGcRahV/6evrotQLsFDHj43RGCWCcoS4LuLIglvXMEr8904tYiDIP2WaZz5Rn
-         0rgMZ6lWIFkyFPlZW45LgG3Z8hizeVCFGN+6sdwAKUEYxxsuWr6pczO575U1l2LkiI61
-         Elwt5NFAqrc7g/P6rzfZWI5e6NDdl01aJhsml4/UyKHY6D5OENXLpyWJ6Jdjmr7EWz8w
-         XuDl+AW8qcOEKmi6NXdstO1jSnf//Eg/Xh5fnXYPQ2+cZXkthJQp6W/oHOeFUHv9FTVU
-         xong==
-X-Gm-Message-State: AOAM531XOdE/k97Gn+9irNxeSUTZQiQX25icXZvuDti3YWR95zfdQ+la
-        WvxqkBREb+sIx/h0yw7R69o=
-X-Google-Smtp-Source: ABdhPJwkKAkPv72l8VLD2wXgvdqXMSxh5RJKyI64dvC+KXpqtAP43wJmw6LIPT1nv21iuUsXGSy77w==
-X-Received: by 2002:a05:6512:c28:b0:471:9a7d:de9e with SMTP id z40-20020a0565120c2800b004719a7dde9emr5320943lfu.440.1650370646660;
-        Tue, 19 Apr 2022 05:17:26 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id e15-20020a19500f000000b0046bb76678bcsm1497380lfb.131.2022.04.19.05.17.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 05:17:26 -0700 (PDT)
-Subject: Re: [RFC PATCH 6/6] arm/xen: Assign xen-virtio DMA ops for virtio
- devices in Xen guests
-To:     Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Julien Grall <julien@xen.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-References: <1649963973-22879-1-git-send-email-olekstysh@gmail.com>
- <1649963973-22879-7-git-send-email-olekstysh@gmail.com>
- <alpine.DEB.2.22.394.2204151305050.915916@ubuntu-linux-20-04-desktop>
- <YlpdBHKT1bYzZe2e@infradead.org>
- <f879622e-5656-deb1-1930-f0cd180a4ab1@gmail.com>
- <alpine.DEB.2.22.394.2204181202080.915916@ubuntu-linux-20-04-desktop>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <6a04cc34-fbb3-44d8-c1a4-03bda5b3deb1@gmail.com>
-Date:   Tue, 19 Apr 2022 15:17:25 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 19 Apr 2022 08:20:26 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5735325E90;
+        Tue, 19 Apr 2022 05:17:44 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-11-253-nat.elisa-mobile.fi [85.76.11.253])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BA2F025B;
+        Tue, 19 Apr 2022 14:17:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1650370662;
+        bh=P4gIXFtrwQDyN+C6uar+ovwXk6cY3/kQnY32ADsmRFs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nblueKlxS7o0DUw7O83Z6nlkNHVGWJx3nEW/tkbsh8zQS7Optx6iFbxnCGdlW17/s
+         FaISR5gqVn8baPQaPnAoBPQ3WcRoMx6u2U6QKG1VqtJSi97c+TGFqnBBlR1+3b7Sey
+         Ym2OK+uF5V3EpFy5szf/7evp7dUwZLrCVOh8zYB4=
+Date:   Tue, 19 Apr 2022 15:17:38 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     James_Lin <Ping-lei.Lin@mediatek.com>,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, sherlock.chang@mediatek.com,
+        lecopzer.chen@mediatek.com, max.yan@mediatek.com,
+        tm.wu@mediatek.com
+Subject: Re: [PATCH v3] media: usb: uvc: Add UVC_GUID_FORMAT_H265
+Message-ID: <Yl6oYlv+t63+5dVP@pendragon.ideasonboard.com>
+References: <20220418090652.3156-1-Ping-lei.Lin@mediatek.com>
+ <CANiDSCvLb785H7qyAzSfTSBRpO2eM-oJFF5SgVHXdL1O-GusLA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.22.394.2204181202080.915916@ubuntu-linux-20-04-desktop>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CANiDSCvLb785H7qyAzSfTSBRpO2eM-oJFF5SgVHXdL1O-GusLA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-Hello Stefano, Juergen
+On Tue, Apr 19, 2022 at 01:46:15PM +0200, Ricardo Ribalda wrote:
+> On Mon, 18 Apr 2022 at 11:07, James_Lin <Ping-lei.Lin@mediatek.com> wrote:
+> >
+> > This patch aims to add UVC_GUID_FORMAT_H265
+> > High Efficiency Video Coding (HEVC), also known as H.265 and MPEG-H Part 2.
+> > They describe the same video encoding method.
+> > So for handling their behavior is the same.
+> > However, when external camera device describes this encoding method,
+> > some use hevc, some use h265.
+> > There is no uniform specification to describe this encoding method.
+> > So if an external camera device use h265 to describe this encoding method,
+> > driver will not recognize it.
+> > Therefore, this patch is to enable driver to read HEVC/H265
+> > and convert it to V4L2_PIX_FMT_HEVC.
+> >
+> > Signed-off-by: James_Lin <Ping-lei.Lin@mediatek.com>
+> 
+> Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+> >  drivers/media/usb/uvc/uvc_driver.c | 5 +++++
+> >  drivers/media/usb/uvc/uvcvideo.h   | 3 +++
+> >  2 files changed, 8 insertions(+)
+> >
+> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > index dda0f0aa78b8..e437e9f95890 100644
+> > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -154,6 +154,11 @@ static struct uvc_format_desc uvc_fmts[] = {
+> >                 .guid           = UVC_GUID_FORMAT_H264,
+> >                 .fcc            = V4L2_PIX_FMT_H264,
+> >         },
+> 
+> Maybe I would add a comment here saying that some cameras represent
+> hevc as h265.
 
+I wish there would be a 4CC and GUID standard with a centralized
+registry...
 
-On 18.04.22 22:11, Stefano Stabellini wrote:
-> On Mon, 18 Apr 2022, Oleksandr wrote:
->> On 16.04.22 09:07, Christoph Hellwig wrote:
->>
->> Hello Christoph
->>
->>> On Fri, Apr 15, 2022 at 03:02:45PM -0700, Stefano Stabellini wrote:
->>>> This makes sense overall. Considering that the swiotlb-xen case and the
->>>> virtio case are mutually exclusive, I would write it like this:
->>> Curious question:  Why can't the same grant scheme also be used for
->>> non-virtio devices?  I really hate having virtio hooks in the arch
->>> dma code.  Why can't Xen just say in DT/ACPI that grants can be used
->>> for a given device?
-> [...]
->
->> This patch series tries to make things work with "virtio" devices in Xen
->> system without introducing any modifications to code under drivers/virtio.
->
-> Actually, I think Christoph has a point.
->
-> There is nothing inherently virtio specific in this patch series or in
-> the "xen,dev-domid" device tree binding.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-
-Although the main intention of this series was to enable using virtio 
-devices in Xen guests, I agree that nothing in new DMA ops layer 
-(xen-virtio.c) is virtio specific (at least at the moment). Regarding 
-the whole patch series I am not quite sure, as it uses 
-arch_has_restricted_virtio_memory_access().
-
-
->   Assuming a given device is
-> emulated by a Xen backend, it could be used with grants as well.
->
-> For instance, we could provide an emulated e1000 NIC with a
-> "xen,dev-domid" property in device tree. Linux could use grants with it
-> and the backend could map the grants. It would work the same way as
-> virtio-net/block/etc. Passthrough devices wouldn't have the
-> "xen,dev-domid" property, so no problems.
->
-> So I think we could easily generalize this work and expand it to any
-> device. We just need to hook on the "xen,dev-domid" device tree
-> property.
->
-> I think it is just a matter of:
-> - remove the "virtio,mmio" check from xen_is_virtio_device
-> - rename xen_is_virtio_device to something more generic, like
->    xen_is_grants_device
-> - rename xen_virtio_setup_dma_ops to something more generic, like
->    xen_grants_setup_dma_ops
->
-> And that's pretty much it.
-
-+ likely renaming everything in that patch series not to mention virtio 
-(mostly related to xen-virtio.c internals).
-
-
-Stefano, thank you for clarifying Christoph's point.
-
-Well, I am not against going this direction. Could we please make a 
-decision on this? @Juergen, what is your opinion?
-
-
+> > +       {
+> > +               .name           = "H.265",
+> > +               .guid           = UVC_GUID_FORMAT_H265,
+> > +               .fcc            = V4L2_PIX_FMT_HEVC,
+> > +       },
+> >         {
+> >                 .name           = "Greyscale 8 L/R (Y8I)",
+> >                 .guid           = UVC_GUID_FORMAT_Y8I,
+> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > index 143230b3275b..41f4d8c33f2a 100644
+> > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > @@ -139,6 +139,9 @@
+> >  #define UVC_GUID_FORMAT_H264 \
+> >         { 'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00, \
+> >          0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+> > +#define UVC_GUID_FORMAT_H265 \
+> > +       { 'H',  '2',  '6',  '5', 0x00, 0x00, 0x10, 0x00, \
+> > +        0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+> >  #define UVC_GUID_FORMAT_Y8I \
+> >         { 'Y',  '8',  'I',  ' ', 0x00, 0x00, 0x10, 0x00, \
+> >          0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
 
 -- 
 Regards,
 
-Oleksandr Tyshchenko
-
+Laurent Pinchart

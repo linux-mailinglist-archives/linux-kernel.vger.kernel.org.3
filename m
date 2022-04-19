@@ -2,66 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B745068A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243CF5068AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350644AbiDSK0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 06:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        id S1350661AbiDSK1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 06:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234333AbiDSK0O (ORCPT
+        with ESMTP id S234333AbiDSK1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:26:14 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF968237FE;
-        Tue, 19 Apr 2022 03:23:30 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tonylu@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VAUn-3l_1650363806;
-Received: from localhost(mailfrom:tonylu@linux.alibaba.com fp:SMTPD_---0VAUn-3l_1650363806)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 19 Apr 2022 18:23:27 +0800
-Date:   Tue, 19 Apr 2022 18:23:26 +0800
-From:   Tony Lu <tonylu@linux.alibaba.com>
-To:     yacanliu@163.com
-Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liuyacan <liuyacan@corp.netease.com>
-Subject: Re: [PATCH] net/smc: sync err info when TCP connection is refused
-Message-ID: <Yl6Nnvnrvqv3ofES@TonyMac-Alibaba>
-Reply-To: Tony Lu <tonylu@linux.alibaba.com>
-References: <20220417123307.1094747-1-yacanliu@163.com>
+        Tue, 19 Apr 2022 06:27:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885282715C;
+        Tue, 19 Apr 2022 03:24:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DE437CE16E1;
+        Tue, 19 Apr 2022 10:24:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD56C385A9;
+        Tue, 19 Apr 2022 10:24:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650363860;
+        bh=WogFCl5YvXCp9/83pBhpYQ642Sy3Wgxac13aDcP1R+Y=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=qVrvq19J5yB33n1k0dQhgakp1jbxdY4hHZa5WDrDXd4PB0BLWI4xOLJ44bi6frEzO
+         WhaHyjl+SUf3kSytHTsIvt3NSaygtaHp8M+wa7i+yP4NeWjbomf7bDFWi3QujSP+Tk
+         0Frt+sIfx3ZKAWNq3peH0IaetjkZYWrpSGXHGse1TE3YB3YkRdTzqqLDdwtgmfns6G
+         rFxgUdCMUsDzvf5QZLa5FMZ54cF9Q9cG7/7NH8gcIL8pO6SiSQQbJQc0TU+G/LkZCY
+         MaCFf8z/2VK2vhI4QDfKE3peMQv38L01O8Z3s5hktaxXAtKtWSCtCjiBeOcEAJIgBF
+         ZuIjWHqtgDQuw==
+Message-ID: <0effd60f4f6add28b837aa75e62a5f6e0fe30f88.camel@kernel.org>
+Subject: Re: [PATCH] ceph: fix compilation error when building kernel
+ without FS_ENCRYPT
+From:   Jeff Layton <jlayton@kernel.org>
+To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Date:   Tue, 19 Apr 2022 06:24:18 -0400
+In-Reply-To: <20220419084937.3199-1-lhenriques@suse.de>
+References: <20220419084937.3199-1-lhenriques@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220417123307.1094747-1-yacanliu@163.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 17, 2022 at 08:33:07PM +0800, yacanliu@163.com wrote:
-> From: liuyacan <liuyacan@corp.netease.com>
+On Tue, 2022-04-19 at 09:49 +0100, Luís Henriques wrote:
+> When compiling without FS_ENCRYPTION config, the kernel will fail to build
+> with:
 > 
-> In the current implementation, when TCP initiates a connection
-> to an unavailable [ip,port], ECONNREFUSED will be stored in the
-> TCP socket, but SMC will not. However, some apps (like curl) use
-> getsockopt(,,SO_ERROR,,) to get the error information, which makes
-> them miss the error message and behave strangely.
+> fs/ceph/inode.c:196:7: error: no member named 'fscrypt_auth' in 'struct ceph_inode_info'
 > 
-> Signed-off-by: liuyacan <liuyacan@corp.netease.com>
+> Enclose the code within an #ifdef CONFIG_FS_ENCRYPTION to fix it.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>  fs/ceph/inode.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> Jeff, feel free to squash this patch into one of the previous patches from
+> the snapshot names encryption series.
+> 
+> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> index 636e4e0a9dc6..5de7bb9048b7 100644
+> --- a/fs/ceph/inode.c
+> +++ b/fs/ceph/inode.c
+> @@ -189,6 +189,7 @@ struct inode *ceph_get_snapdir(struct inode *parent)
+>  	ci->i_rbytes = 0;
+>  	ci->i_btime = ceph_inode(parent)->i_btime;
+>  
+> +#ifdef CONFIG_FS_ENCRYPTION
+>  	/* if encrypted, just borrow fscrypt_auth from parent */
+>  	if (IS_ENCRYPTED(parent)) {
+>  		struct ceph_inode_info *pci = ceph_inode(parent);
+> @@ -205,6 +206,7 @@ struct inode *ceph_get_snapdir(struct inode *parent)
+>  			goto err;
+>  		}
+>  	}
+> +#endif
+>  	if (inode->i_state & I_NEW) {
+>  		inode->i_op = &ceph_snapdir_iops;
+>  		inode->i_fop = &ceph_snapdir_fops;
 
-This fix works for me. I have tested it with curl for unavailable
-address.
+Thanks, I folded this one into this patch:
 
-This patch missed net or net-next tag, I think net is preferred.
+    ceph: add support for encrypted snapshot names
 
-Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
-
-Thank you,
-Tony Lu
+Cheers,
+-- 
+Jeff Layton <jlayton@kernel.org>

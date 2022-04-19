@@ -2,101 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7665076F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C29BB5076E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356147AbiDSSBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 14:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
+        id S1344216AbiDSSB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 14:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356173AbiDSSBB (ORCPT
+        with ESMTP id S1356158AbiDSSBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 14:01:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5600A1D314;
-        Tue, 19 Apr 2022 10:58:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 111A4B819AD;
-        Tue, 19 Apr 2022 17:58:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E7BBC385A7;
-        Tue, 19 Apr 2022 17:58:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650391092;
-        bh=PyCi/R7D11Eq63jFFcn8CrOSrYW4Icv3Cc8hVK/o9Nw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mkouKYH10qpYpR37xgoj92ARtNZD204xnwd2vl2YgbfFPPI2rRPHy3U8U6TdS7wFW
-         zKavvgXs//b6usNiMjzM7jfz9e8R8Gnx5YK7VDFzV66bdph6zE01KZ0EBhBFoPYBuR
-         7KolZj5YnEHqDRmP1UG1keyJ/ZO3JKbs8/Cw7k+I=
-Date:   Tue, 19 Apr 2022 19:58:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, corbet@lwn.net,
-        andriy.shevchenko@linux.intel.com, jithu.joseph@intel.com,
-        ashok.raj@intel.com, rostedt@goodmis.org, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com
-Subject: Re: [PATCH v3 09/11] platform/x86/intel/ifs: Add IFS sysfs interface
-Message-ID: <Yl74MYW1+NgH4tOX@kroah.com>
-References: <20220407191347.9681-1-jithu.joseph@intel.com>
- <20220419163859.2228874-1-tony.luck@intel.com>
- <20220419163859.2228874-10-tony.luck@intel.com>
- <Yl7vdpJgKYRL1jeW@kroah.com>
- <Yl7y1YDaNVxyDnKI@agluck-desk3.sc.intel.com>
+        Tue, 19 Apr 2022 14:01:23 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8610613D61
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:58:40 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 10:58:33 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1650391118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LwMEsoXiVBDMMlTnWr1tF9A5/2DsUEfBfNSdTUYTpLQ=;
+        b=GSeP4KlZhPpf+uMxHvjav5FPXp0dJ579TdtR8KLfaXlePkdpBE1fC+WWHOtb/f2Y2ujT0C
+        wGB6njWc6l5pB8jXYw9Nrrp5C0Rgiq2pRexIanJAIBeZm7haDbH/jW8fuz7j7gtkze/8yP
+        JULqwDoS/c8b/+WlglVpvr6YOWVyYJU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [PATCH rfc 0/5] mm: introduce shrinker sysfs interface
+Message-ID: <Yl74SeTY68zs8ziL@carbon>
+References: <20220416002756.4087977-1-roman.gushchin@linux.dev>
+ <Yl0vCDE44VeU8qxC@kernel.org>
+ <Yl2fhgcW5pL66nPK@carbon>
+ <Yl5XzCjqKbKYdvrC@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yl7y1YDaNVxyDnKI@agluck-desk3.sc.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yl5XzCjqKbKYdvrC@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 10:35:17AM -0700, Luck, Tony wrote:
-> On Tue, Apr 19, 2022 at 07:20:54PM +0200, Greg KH wrote:
-> > > +/*
-> > > + * Note there is no need for a ->remove() call back. There isn't an
-> > > + * "unload" operation to remove the scan binary from the BIOS reserved
-> > > + * area. Also ".dev_groups" removal order will guarantee that any in
-> > > + * flight tests have completed.
-> > > + */
+On Tue, Apr 19, 2022 at 09:33:48AM +0300, Mike Rapoport wrote:
+> On Mon, Apr 18, 2022 at 10:27:34AM -0700, Roman Gushchin wrote:
+> > On Mon, Apr 18, 2022 at 12:27:36PM +0300, Mike Rapoport wrote:
+> > > On Fri, Apr 15, 2022 at 05:27:51PM -0700, Roman Gushchin wrote:
+> > > > There are 50+ different shrinkers in the kernel, many with their own bells and
+> > > > whistles. Under the memory pressure the kernel applies some pressure on each of
+> > > > them in the order of which they were created/registered in the system. Some
+> > > > of them can contain only few objects, some can be quite large. Some can be
+> > > > effective at reclaiming memory, some not.
+> > > > 
+> > > > The only existing debugging mechanism is a couple of tracepoints in
+> > > > do_shrink_slab(): mm_shrink_slab_start and mm_shrink_slab_end. They aren't
+> > > > covering everything though: shrinkers which report 0 objects will never show up,
+> > > > there is no support for memcg-aware shrinkers. Shrinkers are identified by their
+> > > > scan function, which is not always enough (e.g. hard to guess which super
+> > > > block's shrinker it is having only "super_cache_scan"). They are a passive
+> > > > mechanism: there is no way to call into counting and scanning of an individual
+> > > > shrinker and profile it.
+> > > > 
+> > > > To provide a better visibility and debug options for memory shrinkers
+> > > > this patchset introduces a /sys/kernel/shrinker interface, to some extent
+> > > > similar to /sys/kernel/slab.
+> > > 
+> > > Wouldn't debugfs better fit the purpose of shrinker debugging?
 > > 
-> > So you are ok with the warning the kernel gives you when you unload the
-> > driver?  That feels wrong :(
+> > I think sysfs fits better, but not a very strong opinion.
+> > 
+> > Even though the interface is likely not very useful for the general
+> > public, big cloud instances might wanna enable it to gather statistics
+> > (and it's certainly what we gonna do at Facebook) and to provide
+> > additional data when something is off.  They might not have debugfs
+> > mounted. And it's really similar to /sys/kernel/slab.
 > 
-> What warning?
+> And there is also similar /proc/vmallocinfo so why not /proc/shrinker? ;-)
 > 
-> # dmesg | tail -5
-> [   38.084165] virbr0: port 1(virbr0-nic) entered listening state
-> [   38.149621] virbr0: port 1(virbr0-nic) entered disabled state
-> [   38.582054] broken atomic modeset userspace detected, disabling atomic
-> [   43.703321] igc 0000:01:00.0 enp1s0: NIC Link is Up 2500 Mbps Full Duplex, Flow Control: RX
-> [   43.703470] IPv6: ADDRCONF(NETDEV_CHANGE): enp1s0: link becomes ready
-> # modprobe intel_ifs
-> # ls /sys/devices/platform/intel_ifs.0/
-> details  driver_override  modalias  reload    status     uevent
-> driver   image_version    power     run_test  subsystem
-> # rmmod intel_ifs
-> # dmesg | tail -5
-> [   38.084165] virbr0: port 1(virbr0-nic) entered listening state
-> [   38.149621] virbr0: port 1(virbr0-nic) entered disabled state
-> [   38.582054] broken atomic modeset userspace detected, disabling atomic
-> [   43.703321] igc 0000:01:00.0 enp1s0: NIC Link is Up 2500 Mbps Full Duplex, Flow Control: RX
-> [   43.703470] IPv6: ADDRCONF(NETDEV_CHANGE): enp1s0: link becomes ready
-> #
+> I suspect slab ended up in sysfs because nobody suggested to use debugfs
+> back then. I've been able to track the transition from /proc/slabinfo to
+> /proc/slubinfo to /sys/kernel/slab, but could not find why Christoph chose
+> sysfs in the end.
+>
+> > Are there any reasons why debugfs is preferable?
+> 
+> debugfs is more flexible because it's not stable kernel ABI so if there
+> will be need/desire to change the layout and content of the files with
+> debugfs it can be done more easily.
+> 
+> Is this a real problem for Facebook to mount debugfs? ;-)
 
-If there's no warning when the device goes away, why the crazy comment
-trying to justify the lack of a remove callback?
+Fair enough, switching to debugfs in the next version.
 
-confused,
-
-greg k-h
+Thanks!

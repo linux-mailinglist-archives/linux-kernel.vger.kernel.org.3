@@ -2,166 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF01C506CB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5692506CB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352392AbiDSMsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
+        id S1352406AbiDSMs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350314AbiDSMst (ORCPT
+        with ESMTP id S1350314AbiDSMsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:48:49 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFAD35DC3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:46:04 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 556242223A;
-        Tue, 19 Apr 2022 14:46:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1650372362;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zdmczezhx/tpLA3z8mH/wGkfcsWv93c1p3+6YiunEDo=;
-        b=TJN8RIQZoIAzq2TksZMMhDozCaRhbLdSsvng6TjQ+ZMl6yXee+/HEXZEYG1qWAyCRX0EO+
-        +DP0ozooPtqaiyK13MoHI6+y8robdkYgAW4BIR4iFHZFK0/eJuzK/KwdMNWF0lmhSKaFr1
-        6jlGF22HPFONPL8767smkef5jH4kQng=
+        Tue, 19 Apr 2022 08:48:55 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AC736328;
+        Tue, 19 Apr 2022 05:46:11 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-11-253-nat.elisa-mobile.fi [85.76.11.253])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0EC4A25B;
+        Tue, 19 Apr 2022 14:46:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1650372369;
+        bh=O+gH+rTCR/vvHYsgAZ5AlKxyNWOnO0lDWJVxpTLeLQ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OBZ77c4rUjk70vfBC5jVk7sWJnpcXHOBzlSOp07F+yaM9+gKNo4PI/TNnGOAPXRO9
+         6KY/E2ufhUe6u+rSOAkGAEboHosSqwECgNS1pUwyZ7JUjRk63L7KiRv1nWSPoQwLGC
+         yqLwdgRv3/kLkb65l5+2lrEE+Dn1WF/bZM+U0mA0=
+Date:   Tue, 19 Apr 2022 15:46:07 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v8 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+Message-ID: <Yl6vD1tu1U24AuFB@pendragon.ideasonboard.com>
+References: <20220419124025.1733230-1-patrick.rudolph@9elements.com>
+ <20220419124025.1733230-2-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Tue, 19 Apr 2022 14:46:02 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Tudor.Ambarus@microchip.com, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Nicolas.Ferre@microchip.com,
-        Takahiro.Kuwano@infineon.com
-Subject: Re: [PATCH v3 6/9] mtd: spi-nor: core: Add helpers to read/write any
- register
-In-Reply-To: <20220419123245.zu4hypebz77ckygn@ti.com>
-References: <20220411091033.98754-1-tudor.ambarus@microchip.com>
- <20220411091033.98754-7-tudor.ambarus@microchip.com>
- <0e4ec58c21490dcd9cf82ab89bd8c34c@walle.cc>
- <e21b0d76bf778f78f432ba27a673222d@walle.cc>
- <f318dbd9-d4bf-301a-b5c9-556d04d5bfe6@microchip.com>
- <20220419123245.zu4hypebz77ckygn@ti.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <996f36b1303d191e472f56393aa6398e@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220419124025.1733230-2-patrick.rudolph@9elements.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-04-19 14:32, schrieb Pratyush Yadav:
-> On 19/04/22 12:08PM, Tudor.Ambarus@microchip.com wrote:
->> On 4/19/22 14:46, Michael Walle wrote:
->> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->> >
->> > Am 2022-04-19 13:19, schrieb Michael Walle:
->> >> Am 2022-04-11 11:10, schrieb Tudor Ambarus:
->> >>> There are manufacturers that use registers indexed by address. Some of
->> >>> them support "read/write any register" opcodes. Provide core methods
->> >>> that
->> >>> can be used by all manufacturers. SPI NOR controller ops are
->> >>> intentionally
->> >>> not supported as we intend to move all the SPI NOR controller drivers
->> >>> under the SPI subsystem.
->> >>>
->> >>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
->> >>> Tested-by: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
->> >>> Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
->> >>
->> >> I still don't like it because the function doesn't do
->> >> anything what the function name might suggest. The read
->> >> just executes an op, the write executes an op with a
->> >> write enable before. All the behavior is determined by the
->> >> 'op' argument.
->> >>
->> >> Anyway,
->> >> Reviewed-by: Michael Walle <michael@walle.cc>
->> >>
->> >>> ---
->> >>> v3: no changes
->> >>>
->> >>>  drivers/mtd/spi-nor/core.c | 41
->> >>> ++++++++++++++++++++++++++++++++++++++
->> >>>  drivers/mtd/spi-nor/core.h |  4 ++++
->> >>>  2 files changed, 45 insertions(+)
->> >>>
->> >>> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
->> >>> index 6165dc7bfd17..42794328d3b6 100644
->> >>> --- a/drivers/mtd/spi-nor/core.c
->> >>> +++ b/drivers/mtd/spi-nor/core.c
->> >>> @@ -307,6 +307,47 @@ ssize_t spi_nor_write_data(struct spi_nor *nor,
->> >>> loff_t to, size_t len,
->> >>>      return nor->controller_ops->write(nor, to, len, buf);
->> >>>  }
->> >>>
->> >>> +/**
->> >>> + * spi_nor_read_reg() - read register to flash memory
->> >>> + * @nor:        pointer to 'struct spi_nor'.
->> >>> + * @op:             SPI memory operation. op->data.buf must be DMA-able.
->> >>> + * @proto:  SPI protocol to use for the register operation.
->> >>> + *
->> >>> + * Return: zero on success, -errno otherwise
->> >>> + */
->> >>> +int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
->> >>> +                 enum spi_nor_protocol proto)
->> >>> +{
->> >>> +    if (!nor->spimem)
->> >>> +            return -EOPNOTSUPP;
->> >>> +
->> >>> +    spi_nor_spimem_setup_op(nor, op, proto);
->> >>> +    return spi_nor_spimem_exec_op(nor, op);
->> >>> +}
->> >>> +
->> >>> +/**
->> >>> + * spi_nor_write_reg() - write register to flash memory
->> >>> + * @nor:        pointer to 'struct spi_nor'
->> >>> + * @op:             SPI memory operation. op->data.buf must be DMA-able.
->> >>> + * @proto:  SPI protocol to use for the register operation.
->> >>> + *
->> >>> + * Return: zero on success, -errno otherwise
->> >>> + */
->> >>> +int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
->> >>> +                  enum spi_nor_protocol proto)
->> >>> +{
->> >>> +    int ret;
->> >>> +
->> >>> +    if (!nor->spimem)
->> >>> +            return -EOPNOTSUPP;
->> >>> +
->> >>> +    ret = spi_nor_write_enable(nor);
->> >>> +    if (ret)
->> >>> +            return ret;
->> >>> +    spi_nor_spimem_setup_op(nor, op, proto);
->> >>> +    return spi_nor_spimem_exec_op(nor, op);
->> >
->> > After seeing your next two patches. Shouldn't the
->> > spi_nor_wait_until_ready() call be here too?
->> >
->> 
->> I thought of this too, but seems that for a reason that I don't
->> remember, we don't call for spi_nor_wait_until_ready after we
->> write the octal DTR bit. Pratyush, do you remember why?
+Hi Patrick,
+
+Thank you for the patch.
+
+On Tue, Apr 19, 2022 at 02:40:22PM +0200, Patrick Rudolph wrote:
+> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
+> chips. The functionality will be provided by the exisintg pca954x driver.
 > 
-> We are not sure the protocol changed correctly so we can't rely on
-> spi_nor_wait_until_ready(). We read the ID instead to be sure.
+> While on it make the interrupts support conditionally as not all of the
+> existing chips have interrupts.
+> 
+> For chips that are powered off by default add an optional regulator
+> called vdd-supply.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-So besides the fact that the write_reg only works with the 'correct'
-op parameter, it is also tailored to the special use case. For real
-write_reg(), the user would actually has to poll the status bit
-afterwards? :(
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
--michael
+> ---
+>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 39 ++++++++++++++++---
+>  1 file changed, 34 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> index 9f1726d0356b..21ab286c74f2 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> @@ -4,21 +4,25 @@
+>  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: NXP PCA954x I2C bus switch
+> +title: NXP PCA954x I2C and compatible bus switches
+>  
+>  maintainers:
+>    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>  
+>  description:
+> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
+> -
+> -allOf:
+> -  - $ref: /schemas/i2c/i2c-mux.yaml#
+> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
+> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
+>  
+>  properties:
+>    compatible:
+>      oneOf:
+>        - enum:
+> +          - maxim,max7356
+> +          - maxim,max7357
+> +          - maxim,max7358
+> +          - maxim,max7367
+> +          - maxim,max7368
+> +          - maxim,max7369
+>            - nxp,pca9540
+>            - nxp,pca9542
+>            - nxp,pca9543
+> @@ -59,10 +63,33 @@ properties:
+>      description: if present, overrides i2c-mux-idle-disconnect
+>      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
+>  
+> +  vdd-supply:
+> +    description: A voltage regulator supplying power to the chip.
+> +
+>  required:
+>    - compatible
+>    - reg
+>  
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-mux.yaml#
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              enum:
+> +                - maxim,max7367
+> +                - maxim,max7369
+> +                - nxp,pca9542
+> +                - nxp,pca9543
+> +                - nxp,pca9544
+> +                - nxp,pca9545
+> +      then:
+> +        properties:
+> +          interrupts: false
+> +          "#interrupt-cells": false
+> +          interrupt-controller: false
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> @@ -79,6 +106,8 @@ examples:
+>              #size-cells = <0>;
+>              reg = <0x74>;
+>  
+> +            vdd-supply = <&p3v3>;
+> +
+>              interrupt-parent = <&ipic>;
+>              interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
+>              interrupt-controller;
+
+-- 
+Regards,
+
+Laurent Pinchart

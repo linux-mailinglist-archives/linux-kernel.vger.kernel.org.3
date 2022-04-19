@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172B150606D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2266F506070
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236619AbiDSADY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        id S236648AbiDSADa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236105AbiDSAC7 (ORCPT
+        with ESMTP id S236181AbiDSAC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 20:02:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCA713D2C;
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31DC13D54;
         Mon, 18 Apr 2022 17:00:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71E3FB81135;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F686B81136;
         Tue, 19 Apr 2022 00:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30AC7C385A9;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1D6C385AB;
         Tue, 19 Apr 2022 00:00:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650326416;
-        bh=5RvY22qrA5+M1MxIQaC3zBsZAloMmunOEBx8nCIFweI=;
+        bh=nsc9VJDf4f5ASTnU9OeOCzg1hO7iWgQlVPIuzBYroJw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MzqPKgqdxdkO0t+B3BkeVP9Ie/wGz4j1e26YZJQVOnVOKWEqliHkqd/ffgpIbPmfE
-         EXAnNnN8CRzvryxThjfMqy6fInMwUs6ikD8ZC37BUUv56dLRM79CUgplirDakvkON0
-         80boKDfCaJz/pTLjIChEpdTMSR10NElvwslgPPAoPHex+LxGhaNs0hQRNEZTqD/tJR
-         971UOCCs6JxZYHOnpdLr/WCmJSXsNhTr9cvO3aa25qaYUsk4F+OnBR/P2QaAcw2O0E
-         3/T0UPPCGMwh0nlzBa5M3AmVytdnaqiivCxkFxzeHTGWJ5fRPtvbACVNXTk3Z8NSMs
-         82VEroYcpbozw==
+        b=BZmWSSGFrRg4/kZ/0YNd1hYx4XjeAnFMLHBAdEknFyG/ehMZuMvfSThB4Mpdce4k4
+         8RU424Da2WIzitATEkKdisC3WVsi5cnuGHwLbRnshBsavj+ZojxfnqRawnrOKLD2X7
+         yiPuXXwC4nydQ60sXFDMTVYYymKUMwEYtJ9XBeA4GTGtu/zKV/WGP2VMh1BxzmkzZX
+         rP0UCgMVjCv6i7GiKE5c7yTWJZP6cfZYI5LbfYq2cC1snGSSqS+NL+Aw5ht0QlVZta
+         hMN9HPOnMZK0nIQNvEf1T09V/YrohPMqZV/I5GFT7+4+4+rsLVdqqFL6Tc9ABkdUiY
+         6p/jYwVz9MTlw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DD4E85C0A0D; Mon, 18 Apr 2022 17:00:15 -0700 (PDT)
+        id DF4045C0A23; Mon, 18 Apr 2022 17:00:15 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        rostedt@goodmis.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Martin KaFai Lau <kafai@fb.com>,
-        Neil Spring <ntspring@fb.com>
-Subject: [PATCH rcu 4/9] rcu-tasks: Make Tasks RCU account for userspace execution
-Date:   Mon, 18 Apr 2022 17:00:09 -0700
-Message-Id: <20220419000014.3948512-4-paulmck@kernel.org>
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 5/9] rcu-tasks: Use schedule_hrtimeout_range() to wait for grace periods
+Date:   Mon, 18 Apr 2022 17:00:10 -0700
+Message-Id: <20220419000014.3948512-5-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220419000007.GA3945818@paulmck-ThinkPad-P17-Gen-1>
 References: <20220419000007.GA3945818@paulmck-ThinkPad-P17-Gen-1>
@@ -58,51 +60,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The main Tasks RCU quiescent state is voluntary context switch.  However,
-userspace execution is also a valid quiescent state, and is a valuable one
-for userspace applications that spin repeatedly executing light-weight
-non-sleeping system calls.  Currently, such an application can delay a
-Tasks RCU grace period for many tens of seconds.
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-This commit therefore enlists the aid of the scheduler-clock interrupt to
-provide a Tasks RCU quiescent state when it interrupted a task executing
-in userspace.
+The synchronous RCU-tasks grace-period-wait primitives invoke
+schedule_timeout_idle() to give readers a chance to exit their
+read-side critical sections.  Unfortunately, this fails during early
+boot on PREEMPT_RT because PREEMPT_RT relies solely on ksoftirqd to run
+timer handlers.  Because ksoftirqd cannot operate until its kthreads
+are spawned, there is a brief period of time following scheduler
+initialization where PREEMPT_RT cannot run the timer handlers that
+schedule_timeout_idle() relies on, resulting in a hang.
 
-[ paulmck: Apply feedback from kernel test robot. ]
+To avoid this boot-time hang, this commit replaces schedule_timeout_idle()
+with schedule_hrtimeout(), so that the timer expires in hardirq context.
+This is ensures that the timer fires even on PREEMPT_RT throughout the
+irqs-enabled portions of boot as well as during runtime.
+
+The timer is set to expire between fract and fract + HZ / 2 jiffies in
+order to align with any other timers that might expire during that time,
+thus reducing the number of wakeups.
+
+Note that RCU-tasks grace periods are infrequent, so the use of hrtimer
+should be fine.  In contrast, in common-case code, user of hrtimer
+could result in performance issues.
 
 Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Neil Spring <ntspring@fb.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- include/linux/rcupdate.h | 1 +
- kernel/rcu/tree.c        | 2 ++
- 2 files changed, 3 insertions(+)
+ kernel/rcu/tasks.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index e7c39c200e2b..1a32036c918c 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -196,6 +196,7 @@ void synchronize_rcu_tasks_rude(void);
- void exit_tasks_rcu_start(void);
- void exit_tasks_rcu_finish(void);
- #else /* #ifdef CONFIG_TASKS_RCU_GENERIC */
-+#define rcu_tasks_classic_qs(t, preempt) do { } while (0)
- #define rcu_tasks_qs(t, preempt) do { } while (0)
- #define rcu_note_voluntary_context_switch(t) do { } while (0)
- #define call_rcu_tasks call_rcu
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index a4b8189455d5..8dbfb63f0391 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -2624,6 +2624,8 @@ void rcu_sched_clock_irq(int user)
- 	rcu_flavor_sched_clock_irq(user);
- 	if (rcu_pending(user))
- 		invoke_rcu_core();
-+	if (user)
-+		rcu_tasks_classic_qs(current, false);
- 	lockdep_assert_irqs_disabled();
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index 4b91cb214ca7..71fe340ab82a 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -647,13 +647,16 @@ static void rcu_tasks_wait_gp(struct rcu_tasks *rtp)
+ 	fract = rtp->init_fract;
  
- 	trace_rcu_utilization(TPS("End scheduler-tick"));
+ 	while (!list_empty(&holdouts)) {
++		ktime_t exp;
+ 		bool firstreport;
+ 		bool needreport;
+ 		int rtst;
+ 
+ 		// Slowly back off waiting for holdouts
+ 		set_tasks_gp_state(rtp, RTGS_WAIT_SCAN_HOLDOUTS);
+-		schedule_timeout_idle(fract);
++		exp = jiffies_to_nsecs(fract);
++		__set_current_state(TASK_IDLE);
++		schedule_hrtimeout_range(&exp, jiffies_to_nsecs(HZ / 2), HRTIMER_MODE_REL_HARD);
+ 
+ 		if (fract < HZ)
+ 			fract++;
 -- 
 2.31.1.189.g2e36527f23
 

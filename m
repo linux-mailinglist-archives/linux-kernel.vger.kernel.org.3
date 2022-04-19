@@ -2,93 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89084507C6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BA4507C6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358198AbiDSWMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 18:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        id S240049AbiDSWNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 18:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358186AbiDSWMs (ORCPT
+        with ESMTP id S243215AbiDSWNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 18:12:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7E211C39;
-        Tue, 19 Apr 2022 15:10:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26888617C8;
-        Tue, 19 Apr 2022 22:10:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57787C385A5;
-        Tue, 19 Apr 2022 22:10:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650406203;
-        bh=nu7JAz/iZL5xTvK4t662LoC6NJwxk64ejQbKntayjS0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nqzbBSjii0XE3/O32BfwfZmA7x1Vj61tfhxaX5LFu6xKYotqzzco1/yprAaUIy8bA
-         lo3POwW9Vk+ZWi+vUCL48fEo9dK9WkaVXsebg5a/3updlLqYimxU1QkSR5W/Lp9Bky
-         FDkt+/000BDTQKAZitfcbHcA1AYCLx8bieS9stzwdVCv3UvTJ+jgJ8ZSW42YkbG7u3
-         Yy+jxF/qmQLbUJeh9oj1XnxiS+Gq8XIFjraDOtpNnSSFLt8vUynrJz7EQZir4/juG7
-         T+aw0XK0Qi2T8mNkHox128A0GUaRAJXOMYfOL1FKyN01kmN1VDUwx+7ALJJ1/gkZdt
-         ZDaRsc1Wjp8uQ==
-Received: by pali.im (Postfix)
-        id 070FB692; Wed, 20 Apr 2022 00:09:59 +0200 (CEST)
-Date:   Wed, 20 Apr 2022 00:09:59 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     "Sicelo A. Mhlongo" <absicsz@gmail.com>
-Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
+        Tue, 19 Apr 2022 18:13:34 -0400
+X-Greylist: delayed 4658 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Apr 2022 15:10:49 PDT
+Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D784A1CB2F
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:10:49 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 22:10:46 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
+        s=protonmail2; t=1650406248;
+        bh=D1aJP9MiYSLnkVbAGTpQnSXWUEjVCXnYrp90gUHgSl0=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=x174y0oXB4dpO2diKXlWaxRTtpGTlCrClG+l+k3WVk2PiO2tfVk6O5JfaIMh5yTXI
+         mmX4/wml8lhXuRb2v4aGogTxacDHj3iEEvzXkhyaODRRC+t0aT8wLmLpXQ/FJLcxd2
+         ftom4Tjf/uOLcRGzVPdwITbhesXpv9vy3XOO6NfRC4GNUnTmDWNMZP7qO+25KzHVZB
+         wh1NX5KSnunrFyPtAcB3kfU2h06nlEoHomIu3q6HyBAEa9qobdnZUSQt8i468BepZv
+         djTPbIVFSH8M3zend5KIhXYt1d4G4f28m8whES3m8Srbusg0tsLgPgUUeLf9WNzDhJ
+         QCdl5wz8WgHmw==
+To:     Guenter Roeck <linux@roeck-us.net>
+From:   wujek dev <dev_public@wujek.eu>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/1] power: supply: bq27xxx: expose battery data when CI=1
-Message-ID: <20220419220959.jnyhycaarxtucymo@pali>
-References: <20220419213647.1186284-1-absicsz@gmail.com>
+Reply-To: wujek dev <dev_public@wujek.eu>
+Subject: Re: [PATCH] hwmod: (pmbus) disable PEC if not enabled
+Message-ID: <zNXN2w4xqB6a_14RhNubTjTdcUmzypjeVY-5FXeXlPHsYDuSdQ0qlDjO0CNFnYOrUUAnIlBBIdvMjKURyH4nuthmNQ29ifpaNywsWiU99oQ=@wujek.eu>
+In-Reply-To: <734e748b-941c-5ae1-5140-22cc845bdfc1@roeck-us.net>
+References: <20220419205228.303952-1-dev_public@wujek.eu> <734e748b-941c-5ae1-5140-22cc845bdfc1@roeck-us.net>
+Feedback-ID: 23425257:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419213647.1186284-1-absicsz@gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 19 April 2022 23:36:46 Sicelo A. Mhlongo wrote:
-> We currently discard capacity information provided by the chip when the
-> Capacity Inaccurate flag is set. However, in many cases, having this
-> stale data is better than no information at all.
-> 
-> Even if the chip has been fully reset, the datasheet shows that capacity 
-> values (NAC specifically) can be seeded by using the WRTNAC facility of 
-> the Control and Mode registers. After seeding, CI remains set, but the
-> capacity values are as accurate as the NAC value provided to WRTNAC is.
+------- Original Message -------
+On Wednesday, April 20th, 2022 at 00:00, Guenter Roeck <linux@roeck-us.net>=
+ wrote:
+>
+>
+> On 4/19/22 13:53, Adam Wujek wrote:
+>
+> > Explicitly disable PEC when the client does not support it.
+> > Without the explicit disable, when the device with the PEC support is r=
+emoved
+> > later when a device without PEC support is inserted into the same addre=
+ss,
+> > the driver uses the old value of client->flags which contains the I2C_C=
+LIENT_PEC
+> > flag. As a consequence the PEC is used when it should not.
+>
+>
+> How can that happen ? I would assume the I2C device gets deleted and re-c=
+reated
+> in that case, which should clear the PEC flag.
+>
+> Guenter
+In my case it was when I unloaded the driver for the I2C slave, changed the=
+ advertised PEC value in PMBUS_CAPABILITY register on slave. Then loaded th=
+e driver. When the switch was from disable->enable it worked as expected (t=
+his case was already covered), but when the PEC was set in the slave from e=
+nabled->disabled it was still using PEC to communicate.
 
-NAC (Nominal Available Capacity) is exported via CHARGE_NOW property.
-
-So what about implementing CHARGE_NOW property also writable and write
-operation would do this WRTNAC seeding? So userspace would be able to do
-'echo new_value > charge_now' and for Nokia N900 case just directly
-'cat .../rx51_battery/charge_full_design > .../bq27200/charge_now'
-
-> On the Nokia N900, such seed value can be obtained from rx51_battery, 
-> which reads battery data directly from the battery's BSI pin. This can
-> be done in userspace via i2c access to the registers. With this patch,
-> once seeded, capacity values are available through the driver.
-> 
-> The patch was successfully tested on bq27200 on the Nokia N900.
-> 
-> Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
-> 
-> Sicelo A. Mhlongo (1):
->   power: supply: bq27xxx: expose battery data when CI=1
-> 
->  drivers/power/supply/bq27xxx_battery.c | 58 +++++++++++++-------------
->  1 file changed, 28 insertions(+), 30 deletions(-)
-> 
-> -- 
-> 2.35.2
-> 
+Adam
+>
+> > Signed-off-by: Adam Wujek dev_public@wujek.eu
+> > ---
+> > drivers/hwmon/pmbus/pmbus_core.c | 2 ++
+> > 1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmb=
+us_core.c
+> > index 82c3754e21e3..f8ca36759b0a 100644
+> > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > @@ -2014,6 +2014,8 @@ static int pmbus_init_common(struct i2c_client *c=
+lient, struct pmbus_data *data,
+> > ret =3D i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+> > if (ret >=3D 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
+> > client->flags |=3D I2C_CLIENT_PEC;
+> > + else
+> > + client->flags &=3D ~I2C_CLIENT_PEC;
+> >
+> > pmbus_clear_faults(client);
+> >
+> > --
+> > 2.17.1

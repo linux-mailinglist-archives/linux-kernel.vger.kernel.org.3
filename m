@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CD1507431
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B714C507565
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242749AbiDSQsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
+        id S1355446AbiDSQt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355092AbiDSQob (ORCPT
+        with ESMTP id S1347148AbiDSQot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:44:31 -0400
-X-Greylist: delayed 2119 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Apr 2022 09:41:47 PDT
-Received: from nibbler.cm4all.net (nibbler.cm4all.net [IPv6:2001:8d8:970:e500:82:165:145:151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD822A249
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:41:47 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by nibbler.cm4all.net (Postfix) with ESMTP id 3F259C00E1
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 18:41:46 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at nibbler.cm4all.net
-Received: from nibbler.cm4all.net ([127.0.0.1])
-        by localhost (nibbler.cm4all.net [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id URCB-aDoYIYF for <linux-kernel@vger.kernel.org>;
-        Tue, 19 Apr 2022 18:41:39 +0200 (CEST)
-Received: from zero.intern.cm-ag (zero.intern.cm-ag [172.30.16.10])
-        by nibbler.cm4all.net (Postfix) with SMTP id 1679EC00D5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 18:41:39 +0200 (CEST)
-Received: (qmail 29906 invoked from network); 19 Apr 2022 22:31:40 +0200
-Received: from unknown (HELO rabbit.intern.cm-ag) (172.30.3.1)
-  by zero.intern.cm-ag with SMTP; 19 Apr 2022 22:31:40 +0200
-Received: by rabbit.intern.cm-ag (Postfix, from userid 1023)
-        id D8786460EFB; Tue, 19 Apr 2022 18:41:38 +0200 (CEST)
-Date:   Tue, 19 Apr 2022 18:41:38 +0200
-From:   Max Kellermann <mk@cm4all.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Max Kellermann <mk@cm4all.com>, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: fscache corruption in Linux 5.17?
-Message-ID: <Yl7mQr05hPg4vELb@rabbit.intern.cm-ag>
-References: <Yl7EyMLnqqDv63yW@rabbit.intern.cm-ag>
- <YlWWbpW5Foynjllo@rabbit.intern.cm-ag>
- <454834.1650373340@warthog.procyon.org.uk>
- <508603.1650385022@warthog.procyon.org.uk>
+        Tue, 19 Apr 2022 12:44:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7863388C;
+        Tue, 19 Apr 2022 09:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Gmwp6hCpDpkNeao1lmSCrEoofE1rLIQS3F3WG/Ay4d0=; b=W5IKh7p5XPGVml/PRLwu/wftZa
+        bQxNObOao0RyxRjUMJWj4TdES7GvlOXKERMZUsJdQAxSqB3glodi02FdkLrowD13CzSh8wtgp+cGe
+        tb1cH97dlQ36uYREZHwE2GuJGsppO0tjARYSR24bT4ZcGnHgrrIZzXrtXZdhVOLmvYcmdWmOn3MGD
+        vDsQNB+fg5YYkJDyLHZv4JM3164RkpvwiLIAUjM33gjmIcr2+TC5BaUL76kJ7x9nKJcn8izBrLpo6
+        BvUFxjVQfh6mSTAWHEIipjPYfJEoacEWZ/l/UfeIo1OBKJLveLn3eNbtBSFGrSxFu+KXH3XrLTj1g
+        TCNk8ktA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ngqvP-003Gz9-Lt; Tue, 19 Apr 2022 16:41:59 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9E760986195; Tue, 19 Apr 2022 18:41:57 +0200 (CEST)
+Date:   Tue, 19 Apr 2022 18:41:57 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [patch 00/10] x86/cpu: Consolidate APERF/MPERF code
+Message-ID: <20220419164157.GW2731@worktop.programming.kicks-ass.net>
+References: <20220415133356.179706384@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <508603.1650385022@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220415133356.179706384@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,54 +54,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/04/19 18:17, David Howells <dhowells@redhat.com> wrote:
-> 	find /var/cache/fscache -inum $((0xiiii))
-> 
-> and see if you can see the corruption in there.  Note that there may be blocks
-> of zeroes corresponding to unfetched file blocks.
+On Fri, Apr 15, 2022 at 09:19:48PM +0200, Thomas Gleixner wrote:
+> ---
+>  arch/x86/include/asm/cpu.h       |    2 
+>  arch/x86/include/asm/topology.h  |   17 -
+>  arch/x86/kernel/acpi/cppc.c      |   28 --
+>  arch/x86/kernel/cpu/aperfmperf.c |  474 +++++++++++++++++++++++++++++++--------
+>  arch/x86/kernel/cpu/proc.c       |    2 
+>  arch/x86/kernel/smpboot.c        |  358 -----------------------------
+>  fs/proc/cpuinfo.c                |    6 
+>  include/linux/cpufreq.h          |    1 
+>  8 files changed, 405 insertions(+), 483 deletions(-)
 
-I checked several known-corrupt files, but unfortunately, all
-corruption have disappeared :-(
 
-The /var/cache/fscache/ files have a time stamp half an hour ago
-(17:53 CET = 15:53 GMT).  I don't know what happened at that time -
-too bad this disappeared after a week, just when we started
-investigating it.
-
-All those new files are all-zero.  No data is stored in any of them.
-
-Note that I had to enable
-/sys/kernel/debug/tracing/events/cachefiles/enable; the trace events
-you named (read/write/trunc/io_error/vfs_error) do not emit anything.
-This is what I see:
-
-  kworker/u98:11-1446185 [016] ..... 1813913.318370: cachefiles_ref: c=00014bd5 o=12080f1c u=1 NEW obj
-  kworker/u98:11-1446185 [016] ..... 1813913.318379: cachefiles_lookup: o=12080f1c dB=3e01ee B=3e5580 e=0
-  kworker/u98:11-1446185 [016] ..... 1813913.318380: cachefiles_mark_active: o=12080f1c B=3e5580
-  kworker/u98:11-1446185 [016] ..... 1813913.318401: cachefiles_coherency: o=12080f1c OK       B=3e5580 c=0
-  kworker/u98:11-1446185 [016] ..... 1813913.318402: cachefiles_ref: c=00014bd5 o=12080f1c u=1 SEE lookup_cookie
-
-> Also, what filesystem is backing your cachefiles cache?  It could be useful to
-> dump the extent list of the file.  You should be able to do this with
-> "filefrag -e".
-
-It's ext4.
-
- Filesystem type is: ef53
- File size of /var/cache/fscache/cache/Infs,3.0,2,,a4214ac,c0000208,,,3002c0,10000,10000,12c,1770,bb8,1770,1/@58/T,c0000208,,1cf4167,184558d9,c0000208,,40,36bab37,40, is 188416 (46 blocks of 4096 bytes)
- /var/cache/fscache/cache/Infs,3.0,2,,a4214ac,c0000208,,,3002c0,10000,10000,12c,1770,bb8,1770,1/@58/T,c0000208,,1cf4167,184558d9,c0000208,,40,36bab37,40,: 0 extents found
- File size of /var/cache/fscache/cache/Infs,3.0,2,,a4214ac,c0000208,,,3002c0,10000,10000,12c,1770,bb8,1770,1/@ea/T,c0000208,,10cc976,1208c7f6,c0000208,,40,36bab37,40, is 114688 (28 blocks of 4096 bytes)
- /var/cache/fscache/cache/Infs,3.0,2,,a4214ac,c0000208,,,3002c0,10000,10000,12c,1770,bb8,1770,1/@ea/T,c0000208,,10cc976,1208c7f6,c0000208,,40,36bab37,40,: 0 extents found
-
-> As to why this happens, a write that's misaligned by 31 bytes should cause DIO
-> to a disk to fail - so it shouldn't be possible to write that.  However, I'm
-> doing fallocate and truncate on the file to shape it so that DIO will work on
-> it, so it's possible that there's a bug there.  The cachefiles_trunc trace
-> lines may help catch that.
-
-I don't think any write is misaligned.  This was triggered by a
-WordPress update, so I think the WordPress updater truncated and
-rewrote all files.  Random guess: some pages got transferred to the
-NFS server, but the local copy in fscache did not get updated.
-
-Max
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>

@@ -2,211 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0B450730C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B3E507310
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354674AbiDSQig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
+        id S1354687AbiDSQil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345034AbiDSQid (ORCPT
+        with ESMTP id S1345034AbiDSQih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:38:33 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5989113DF3;
-        Tue, 19 Apr 2022 09:35:49 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2ec04a2ebadso178342667b3.12;
-        Tue, 19 Apr 2022 09:35:49 -0700 (PDT)
+        Tue, 19 Apr 2022 12:38:37 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E785E13DED;
+        Tue, 19 Apr 2022 09:35:54 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id s16so6708526oie.0;
+        Tue, 19 Apr 2022 09:35:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qqDfnR/pNAXrnStMMgvKfK9Y55MNdDB4d+D1vHAYIyA=;
-        b=2XruMW5wrSIfYcPoq5ggevIKVPu/mBfg0Wnp1509B7EXZ+UjuvH1YBT9mPM6yE0WZp
-         P4JfiHx81Thw9H9OUbYUHuK8UIcrzOZclXHIzRxucgpzG2BxWBLvcrfZxAeqriQbx91k
-         a3mPt91vpM28tZzpLv9ytty8ZV1+97JTwYa5FyUERKpXW1blYOPj9JVqgtONz8YGI8Io
-         z2zlcdfoqTdyxSH5/xFDV5e3xLo2RcirjqETJzr86gy1+GTpP2cF5shDoRr9eKLfHmna
-         Z8AJvqzKW3p5PH0pGVRPCpQ/qnmZeOTAdzSSY149BZFFf0oZPFZXUUNbcIxTc/DWsHyR
-         ydkw==
-X-Gm-Message-State: AOAM532ECNeHC/XiwwkWYsXX5sGVv/W3Xjla8Vsw3N53fyp8sIsnBtDj
-        e1ZX/+If6xKM2MzxugTgn/AUVWuyfOXo62Mg7bQ=
-X-Google-Smtp-Source: ABdhPJx4cWugEiiEec2p2iEDm1GKjX/IBflN9UpYPYEO5F3KboW/VLONE0phoyTe/h/Dps2Ogy7H4mbth+2oA19tzqE=
-X-Received: by 2002:a81:4b8e:0:b0:2ef:5240:69fc with SMTP id
- y136-20020a814b8e000000b002ef524069fcmr16726449ywa.19.1650386148582; Tue, 19
- Apr 2022 09:35:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bx1ulSC01YemGk9c9Yc6xd4QH5nY3xNI+NoHQ3XOQDo=;
+        b=k2SFyvpc26cVoYu2zlY6sYy2NjMECZSENBZsF/pStlybYzVsF0kbzX1BnStNLdYrdg
+         VNW+cb+SM3xUTspz5QXZvDXrrCfLY0ppxyKblG25kIZpYBKGbwIWe5Ki1TBIQIxNFF4L
+         a5sWZN591ggPm+T1BUjKNMcNOn/gRSW5iPXHYPqj+JirR751o4dJ/cpTxW+PSWQUzrsz
+         GutmOo4UjFyTzzN1RA3//aY7l8xW8r2QCVgyNxaPk7buGFm/rG2vLwuBj01AziUUdwAh
+         auyHFsYEupMfJVt6rdZzerV8uJ2fjPPRyIrDscK2JohudisTpMMH+7rNkQu2TK4HYm5z
+         DVJQ==
+X-Gm-Message-State: AOAM530GUft+eTbd83mDaMcKTcr+WgNasCvX9t9smnwIOf0yfDrGXNQZ
+        GsL0+WI0vbiD8OpgKVAtuw==
+X-Google-Smtp-Source: ABdhPJwQdh1hh7JOKO7KmqcuZGROx++PGmjp51LbjNQBETXKkVYndi+PqMxf9cWoVYHtEITyqY6sfw==
+X-Received: by 2002:a05:6808:2223:b0:2d9:ca75:8ee8 with SMTP id bd35-20020a056808222300b002d9ca758ee8mr8252625oib.110.1650386154230;
+        Tue, 19 Apr 2022 09:35:54 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ay5-20020a056820150500b00320f8a179d0sm5784194oob.30.2022.04.19.09.35.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 09:35:53 -0700 (PDT)
+Received: (nullmailer pid 2918588 invoked by uid 1000);
+        Tue, 19 Apr 2022 16:35:52 -0000
+Date:   Tue, 19 Apr 2022 11:35:52 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        linux-pci@vger.kernel.org, Jingoo Han <jingoohan1@gmail.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: PCI: uniphier-ep: Clean up reg,
+ clocks, resets, and their names using compatible string
+Message-ID: <Yl7k6Jb/q2wuJw0Y@robh.at.kernel.org>
+References: <1650241100-3606-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1650241100-3606-3-git-send-email-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
-References: <20220415133356.179706384@linutronix.de> <20220415161206.875029458@linutronix.de>
-In-Reply-To: <20220415161206.875029458@linutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Apr 2022 18:35:37 +0200
-Message-ID: <CAJZ5v0jcS8p1aKfW=W05-+Zo=MytwyxOCCO+Fq-WfNhkW7804w@mail.gmail.com>
-Subject: Re: [patch 09/10] x86/aperfmperf: Replace aperfmperf_get_khz()
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650241100-3606-3-git-send-email-hayashi.kunihiko@socionext.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 9:20 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> The frequency invariance infrastructure provides the APERF/MPERF samples
-> already. Utilize them for the cpu frequency display in /proc/cpuinfo.
->
-> The sample is considered valid for 20ms. So for idle or isolated NOHZ full
-> CPUs the function returns 0, which is matching the previous behaviour.
->
-> This gets rid of the mass IPIs and a delay of 20ms for stabilizing observed
-> by Eric when reading /proc/cpuinfo.
->
-> Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
-All fine IMV, one minor nit below.
-
-
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
+On Mon, 18 Apr 2022 09:18:20 +0900, Kunihiko Hayashi wrote:
+> Instead of "oneOf:" choices, use "allOf:" and "if:" to define reg, clocks,
+> resets, and their names that can be taken by the compatible string.
+> 
+> The order of their names doesn't change here.
+> 
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 > ---
->  arch/x86/kernel/cpu/aperfmperf.c |   77 +++++++++++++++++----------------------
->  fs/proc/cpuinfo.c                |    6 ---
->  include/linux/cpufreq.h          |    1
->  3 files changed, 35 insertions(+), 49 deletions(-)
->
-> --- a/arch/x86/kernel/cpu/aperfmperf.c
-> +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -100,49 +100,6 @@ static bool aperfmperf_snapshot_cpu(int
->         return time_delta <= APERFMPERF_STALE_THRESHOLD_MS;
->  }
->
-> -unsigned int aperfmperf_get_khz(int cpu)
-> -{
-> -       if (!cpu_khz)
-> -               return 0;
-> -
-> -       if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
-> -               return 0;
-> -
-> -       if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
-> -               return 0;
-> -
-> -       if (rcu_is_idle_cpu(cpu))
-> -               return 0; /* Idle CPUs are completely uninteresting. */
-> -
-> -       aperfmperf_snapshot_cpu(cpu, ktime_get(), true);
-> -       return per_cpu(samples.khz, cpu);
-> -}
-> -
-> -void arch_freq_prepare_all(void)
-> -{
-> -       ktime_t now = ktime_get();
-> -       bool wait = false;
-> -       int cpu;
-> -
-> -       if (!cpu_khz)
-> -               return;
-> -
-> -       if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
-> -               return;
-> -
-> -       for_each_online_cpu(cpu) {
-> -               if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
-> -                       continue;
-> -               if (rcu_is_idle_cpu(cpu))
-> -                       continue; /* Idle CPUs are completely uninteresting. */
-> -               if (!aperfmperf_snapshot_cpu(cpu, now, false))
-> -                       wait = true;
-> -       }
-> -
-> -       if (wait)
-> -               msleep(APERFMPERF_REFRESH_DELAY_MS);
-> -}
-> -
->  unsigned int arch_freq_get_on_cpu(int cpu)
->  {
->         struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
-> @@ -529,6 +486,40 @@ void arch_scale_freq_tick(void)
->         scale_freq_tick(acnt, mcnt);
->  }
->
-> +/*
-> + * Discard samples older than the define maximum sample age of 20ms. There
-> + * is no point in sending IPIs in such a case. If the scheduler tick was
-> + * not running then the CPU is either idle or isolated.
-> + */
-> +#define MAX_SAMPLE_AGE ((unsigned long)HZ / 50)
-> +
-> +unsigned int aperfmperf_get_khz(int cpu)
-> +{
-> +       struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
-> +       unsigned long last;
-> +       unsigned int seq;
-> +       u64 acnt, mcnt;
-> +
-> +       if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
-> +               return 0;
-> +
-> +       do {
-> +               seq = raw_read_seqcount_begin(&s->seq);
-> +               last = s->last_update;
-> +               acnt = s->acnt;
-> +               mcnt = s->mcnt;
-> +       } while (read_seqcount_retry(&s->seq, seq));
-> +
-> +       /*
-> +        * Bail on invalid count and when the last update was too long ago,
-> +        * which covers idle and NOHZ full CPUs.
-> +        */
-> +       if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
+>  .../pci/socionext,uniphier-pcie-ep.yaml       | 76 ++++++++++++-------
+>  1 file changed, 49 insertions(+), 27 deletions(-)
+> 
 
-The inner parens are not needed here.
-
-> +               return 0;
-> +
-> +       return div64_u64((cpu_khz * acnt), mcnt);
-> +}
-> +
->  static int __init bp_init_aperfmperf(void)
->  {
->         if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
-> --- a/fs/proc/cpuinfo.c
-> +++ b/fs/proc/cpuinfo.c
-> @@ -5,14 +5,10 @@
->  #include <linux/proc_fs.h>
->  #include <linux/seq_file.h>
->
-> -__weak void arch_freq_prepare_all(void)
-> -{
-> -}
-> -
->  extern const struct seq_operations cpuinfo_op;
-> +
->  static int cpuinfo_open(struct inode *inode, struct file *file)
->  {
-> -       arch_freq_prepare_all();
->         return seq_open(file, &cpuinfo_op);
->  }
->
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -1199,7 +1199,6 @@ static inline void sched_cpufreq_governo
->                         struct cpufreq_governor *old_gov) { }
->  #endif
->
-> -extern void arch_freq_prepare_all(void);
->  extern unsigned int arch_freq_get_on_cpu(int cpu);
->
->  #ifndef arch_set_freq_scale
->
+Reviewed-by: Rob Herring <robh@kernel.org>

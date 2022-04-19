@@ -2,74 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA588506619
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3031B50661A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349494AbiDSHnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S1349507AbiDSHnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349532AbiDSHmp (ORCPT
+        with ESMTP id S238657AbiDSHnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:42:45 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A4CBF48;
-        Tue, 19 Apr 2022 00:40:02 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b58fe329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58fe:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3E3211EC0535;
-        Tue, 19 Apr 2022 09:39:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1650353997;
+        Tue, 19 Apr 2022 03:43:40 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3669BF50
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:40:56 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 134AD1BF204;
+        Tue, 19 Apr 2022 07:40:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650354055;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=rQXek4tqcEArLSkS/IUTo6V5mstAiO1dFqlCDSGiQXE=;
-        b=hB2N9XJz7rFgUpYjr8iew/p5X3tqixuyQXbHsnUa7Ps/tIFU+cYFV9gIQwab/D4QwHZf/H
-        8wt/r8C0yCABkfagI8tZ95iuLpwBKqQTAgt1CUoaRbu9O2ZuQTlPgCIT7BKHSVLbgNHjjm
-        qi4O8T8hd6Z6VoLibUC771NQsvZrT2w=
-Date:   Tue, 19 Apr 2022 09:39:53 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
-Message-ID: <Yl5nSSC4HpSWqfY7@zn.tnic>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
- <Ylnwmvygp796+qcA@zn.tnic>
- <20220418155545.a567xnxa6elglapl@box.shutemov.name>
- <Yl2UHOQ4iZJ29k0q@zn.tnic>
- <20220418202431.whvql4w57c7l5vpw@box.shutemov.name>
- <Yl3RmPhdZieSr8W2@zn.tnic>
- <20220418235015.mnujtlmmlyin7y6m@box.shutemov.name>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=of4YeTK1eJ00pFq6VieUlJBzisMH3rSgJqKoj0W85NI=;
+        b=bcg8861t63+6BVYpGB0OsDpwva35+7JugamEk6l6VaV5mri9LyzSPrQ0CiBezR+t/k11MH
+        oTtut1S2VfFHBoWP0kO1PCHWoVoDxthloH7LlxNdY20bLlw4AEhmyeoJkEeLwwFnDdChRJ
+        O9cg9W0Jxf+cgz174Q5FGLgmbCGUSt+PcF+0hE5iz+whRvP5+3iuafrzCvL1U9KClt69SO
+        uJMueiumos16vYue3bBk7ER8tN1ibEDHxj0qPvaMgm6WysfW/5GqjJ8z0tPwvNcXVu7LaV
+        qzFnG3oOz0MEraSI2qV+MlPoPjjBswx4rT+LKdo2h0WYpbfG4lh2DoyhU6D/kw==
+Date:   Tue, 19 Apr 2022 09:40:51 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     cgel.zte@gmail.com
+Cc:     han.xu@nxp.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] mtd: nand: gpmi-nand: using pm_runtime_resume_and_get
+ instead of pm_runtime_get_sync
+Message-ID: <20220419094051.3bb9fe45@xps13>
+In-Reply-To: <20220418105549.2558765-1-chi.minghao@zte.com.cn>
+References: <20220418105549.2558765-1-chi.minghao@zte.com.cn>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220418235015.mnujtlmmlyin7y6m@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -79,47 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 02:50:15AM +0300, Kirill A. Shutemov wrote:
-> I find it strange that you go after <linux/bitmap.h> which has limited
-> exposure while <linux/acpi.h> and <linux/efi.h> are there already.
+Hello,
 
-Funny you should mention that:
+cgel.zte@gmail.com wrote on Mon, 18 Apr 2022 10:55:49 +0000:
 
-https://lore.kernel.org/r/YlCKWhMJEMUgJmjF@zn.tnic
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+>=20
+> Using pm_runtime_resume_and_get is more appropriate
+> for simplifing code
 
-I *have* been working towards that but it's a losing whack-a-mole game
-when you and others keep adding new stuff.
+Would you mind reducing a little bit the title of the commit? Othewise
+fine by me.
 
-So no, we won't take a pile of changes and let the maintainer clean it
-up afterwards.
+>=20
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 18 ++++++------------
+>  1 file changed, 6 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nan=
+d/raw/gpmi-nand/gpmi-nand.c
+> index 44b14c9dc9a7..6e7477aef8a7 100644
+> --- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+> +++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+> @@ -148,11 +148,9 @@ static int gpmi_init(struct gpmi_nand_data *this)
+>  	struct resources *r =3D &this->resources;
+>  	int ret;
+> =20
+> -	ret =3D pm_runtime_get_sync(this->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(this->dev);
+> +	ret =3D pm_runtime_resume_and_get(this->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+> =20
+>  	ret =3D gpmi_reset_block(r->gpmi_regs, false);
+>  	if (ret)
+> @@ -544,11 +542,9 @@ static int bch_set_geometry(struct gpmi_nand_data *t=
+his)
+>  	if (ret)
+>  		return ret;
+> =20
+> -	ret =3D pm_runtime_get_sync(this->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_autosuspend(this->dev);
+> +	ret =3D pm_runtime_resume_and_get(this->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+> =20
+>  	/*
+>  	* Due to erratum #2847 of the MX23, the BCH cannot be soft reset on this
+> @@ -2286,11 +2282,9 @@ static int gpmi_nfc_exec_op(struct nand_chip *chip,
+>  	for (i =3D 0; i < GPMI_MAX_TRANSFERS; i++)
+>  		this->transfers[i].direction =3D DMA_NONE;
+> =20
+> -	ret =3D pm_runtime_get_sync(this->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(this->dev);
+> +	ret =3D pm_runtime_resume_and_get(this->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+> =20
+>  	/*
+>  	 * This driver currently supports only one NAND chip. Plus, dies share
 
-> What do you want me to do here?
 
-I think the stuff coming from the linux/ namespace you can simply copy
-into a header in compressed/, like I've done with efi.h.
-
-> // <asm/bitops.h>
-
-The asm/ stuff can be put into a shared/ namespace header like the io
-stuff you did.
-
-> As 1 bit represents 2M, not all chunks can be represented in the bitmap
-> and they have to be accepted. But the *goal* is to record unaccepted
-> memory into bitmap. Some accepting is a side effect.
-> 
-> The early_accept_memory() name is just wrong.
-
-Ok, how about process_unaccepted_memory(). It should be generic enough.
-
-> Okay, I will do as you want, but I really hate it.
-
-I find it really weird that you feel so strongly about it. If I would
-have been asked to do it, I would've done it without even considering
-it. But ok, since you feel so strongly about it, I've asked what the
-other maintainers think.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Miqu=C3=A8l

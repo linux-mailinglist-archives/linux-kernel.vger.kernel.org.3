@@ -2,199 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49710506632
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD058506638
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349548AbiDSHsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S1349559AbiDSHuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243210AbiDSHsB (ORCPT
+        with ESMTP id S1349553AbiDSHuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:48:01 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8262D25E9A;
-        Tue, 19 Apr 2022 00:45:18 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id b19so21202605wrh.11;
-        Tue, 19 Apr 2022 00:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LIDXo/Uity2xr0NOefpQVn0crCBfVXuQDDJyi/aflIk=;
-        b=P1T979CbMsI2SUmYhQenmVVAIhGym62LpiPwyhu9mqZxFcDQfYblpBVJSI318EvEkU
-         8qraQoEDiW07OJeqNLpO1y4LicWptHus+FDeTQ+ri0fKDi0Gd3qjTzchzJWw1eV3J2P/
-         ur+/YV9SpThD14a+M4Xmx2nBHefr2HCF9i0g9r/v0YFck8Sp1dDQHrhoCRX/D8LLD+nv
-         hSbMh/wtA7UytVfbYUIxc8Vd3UCJhC0dZWi5dnl6xtPjbpaBDhqNaROJjuoWcG/xdpM/
-         cfT1g6fLQGRIHJeLkDOGbTqf4WV/fdLr/5gECYLOYf83BQnlZ2tdaiA8le5fVPy13rCW
-         ro6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=LIDXo/Uity2xr0NOefpQVn0crCBfVXuQDDJyi/aflIk=;
-        b=sH63uNP/BKEVHY0KYgRsdMm7i+ZGXehZEyFlLQvTalOM5d/aVVKjAtHF4klj7Z+YJJ
-         +Sj+xCvzQkOaPeLP68RvnUnXIFjhFriP0yTO27SZkMayje4zXFtEy7wmQPZOO3GvYKyi
-         alSOLcY3q4KF18z7psZUAl0T/jjFU90ALhiNTF519MOxycAFLlJoyPT3XbiSjI1ZfmJR
-         /KgbSH7ifFg8RidH90WpniRvKkByoN0F+rBFmbFswB8cMTps7YrBvdzZdfvagFsHnf/1
-         f8nse9JmxsMb7sWuaUvYIYMndZ1j0ex2otu+bJJJCw9yNpcrYXXiS8xsUFmo+o9cq01S
-         xT7w==
-X-Gm-Message-State: AOAM533eE2rhI49jObnixFUOsvTGzDpcQZU9EACFEPlZ/FyLtGGkL658
-        HIqeEjPo983LGa6iF6xVvGE=
-X-Google-Smtp-Source: ABdhPJzezuCr1A2N5D3o9C3Ys+bbuuIe1wYYoQKgg7RlsTX7w5PNcndV/T40ockclreuq/ypyy6ZLw==
-X-Received: by 2002:adf:e2cc:0:b0:203:e8ba:c709 with SMTP id d12-20020adfe2cc000000b00203e8bac709mr10556484wrj.713.1650354316985;
-        Tue, 19 Apr 2022 00:45:16 -0700 (PDT)
-Received: from gmail.com ([81.168.73.77])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05600c414a00b0038ebb6884d8sm22941157wmm.0.2022.04.19.00.45.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 19 Apr 2022 00:45:16 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 08:45:13 +0100
-From:   Martin Habets <habetsm.xilinx@gmail.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Colin Ian King <colin.king@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Xu Wang <vulab@iscas.ac.cn>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH net-next v4 14/18] sfc: Remove usage of list iterator for
- list_add() after the loop body
-Message-ID: <20220419074513.bgqmi3c5ydogpytj@gmail.com>
-Mail-Followup-To: Jakob Koschel <jakobkoschel@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, Jiri Pirko <jiri@resnulli.us>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Colin Ian King <colin.king@intel.com>,
-        Eric Dumazet <edumazet@google.com>, Xu Wang <vulab@iscas.ac.cn>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        bpf@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-References: <20220415122947.2754662-1-jakobkoschel@gmail.com>
- <20220415122947.2754662-15-jakobkoschel@gmail.com>
+        Tue, 19 Apr 2022 03:50:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68F12E0A6;
+        Tue, 19 Apr 2022 00:47:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650354461; x=1681890461;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=LCuWwp4T8c+i/pzUc3TOqamLAZWFR89Br+QbZJimevc=;
+  b=NY5fRDZUyb0IcqmtsIl9vT4aGP2rj6KmF2P+YvMYW+/c122c4Pbn0gEi
+   6SDZuAvgHAuihRmBxxa/4oHkv6hqwgWBC4rHDLa38QfDyd1b0j5u/Ss3y
+   JBd+kPk98AB3a20+J/d8W67j0J5ggSZ9pfcVwscVo18flLz+0NhEdFPI6
+   iAA1H7dLiOSYsS7rklDgfJQTCz7a4QYXyvv9vPfbBb8DSU8nDHH3m9aQY
+   y7zrbc3YrnGHoHCpjqn13JE1UXO8txDeMmTw/hpOuEHnRTtvkeRMwiqz7
+   wk3jgp0ulqA4EnzKtG6tq5vzL+5Wl+8zU3daSpwtGE8GLN3rxvZ1CbssB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="262563170"
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="262563170"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 00:47:40 -0700
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="554614019"
+Received: from csambran-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.58.20])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 00:47:36 -0700
+Message-ID: <bd83067542a3519ee4c91f9d50e9bd4fac27e4bb.camel@intel.com>
+Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Date:   Tue, 19 Apr 2022 19:47:33 +1200
+In-Reply-To: <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415122947.2754662-15-jakobkoschel@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 02:29:43PM +0200, Jakob Koschel wrote:
-> In preparation to limit the scope of a list iterator to the list
-> traversal loop, use a dedicated pointer pointing to the location
-> where the element should be inserted [1].
-> 
-> Before, the code implicitly used the head when no element was found
-> when using &new->list. The new 'pos' variable is set to the list head
-> by default and overwritten if the list exits early, marking the
-> insertion point for list_add().
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  drivers/net/ethernet/sfc/rx_common.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
-> index 1b22c7be0088..716847ba7038 100644
-> --- a/drivers/net/ethernet/sfc/rx_common.c
-> +++ b/drivers/net/ethernet/sfc/rx_common.c
-> @@ -556,6 +556,7 @@ efx_rx_packet_gro(struct efx_channel *channel, struct efx_rx_buffer *rx_buf,
->  struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
->  {
->  	struct list_head *head = &efx->rss_context.list;
-> +	struct list_head *pos = head;
+On Fri, 2022-04-15 at 15:01 -0700, Kuppuswamy Sathyanarayanan wrote:
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel/tdx/Kconfig
+> @@ -0,0 +1,13 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# X86 TDX Platform Specific Drivers
+> +#
+> +
+> +config INTEL_TDX_ATTESTATION
+> +	tristate "Intel TDX attestation driver"
+> +	depends on INTEL_TDX_GUEST
+> +	help
+> +	  The TDX attestation driver provides IOCTL interfaces to the user to
+> +	  request TDREPORT from the TDX module or request quote from the VMM
+> +	  or to get quote buffer size. It is mainly used to get secure disk
+> +	  decryption keys from the key server.
+> diff --git a/drivers/platform/x86/intel/tdx/Makefile b/drivers/platform/x86/intel/tdx/Makefile
+> new file mode 100644
+> index 000000000000..94eea6108fbd
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel/tdx/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +obj-$(CONFIG_INTEL_TDX_ATTESTATION)	+= intel_tdx_attest.o
+> diff --git a/drivers/platform/x86/intel/tdx/intel_tdx_attest.c b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
+> new file mode 100644
+> index 000000000000..9124db800d4f
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
 
-This violates the reverse Xmas list policy. This definition should be
-1 line further down.
 
-Martin
+From security's perspective, attestation is an essential part of TDX.  That
+being said, w/o attestation support in TD guest, I guess nobody will seriously
+use TD guest.
 
->  	struct efx_rss_context *ctx, *new;
->  	u32 id = 1; /* Don't use zero, that refers to the master RSS context */
->  
-> @@ -563,8 +564,10 @@ struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
->  
->  	/* Search for first gap in the numbering */
->  	list_for_each_entry(ctx, head, list) {
-> -		if (ctx->user_id != id)
-> +		if (ctx->user_id != id) {
-> +			pos = &ctx->list;
->  			break;
-> +		}
->  		id++;
->  		/* Check for wrap.  If this happens, we have nearly 2^32
->  		 * allocated RSS contexts, which seems unlikely.
-> @@ -582,7 +585,7 @@ struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
->  
->  	/* Insert the new entry into the gap */
->  	new->user_id = id;
-> -	list_add_tail(&new->list, &ctx->list);
-> +	list_add_tail(&new->list, pos);
->  	return new;
->  }
->  
-> -- 
-> 2.25.1
+From this perspective, I am not sure what's the value of having a dedicated
+INTEL_TDX_ATTESTATION Kconfig.  The attestation support code should be turned on
+unconditionally when CONFIG_INTEL_TDX_GUEST is on.  The code can also be just
+under arch/x86/coco/tdx/ I guess?
+
+But I'll leave this to maintainers.

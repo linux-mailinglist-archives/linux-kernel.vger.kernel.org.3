@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A1F50606B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AAC50606F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236561AbiDSADR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S236590AbiDSADV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236152AbiDSAC6 (ORCPT
+        with ESMTP id S236126AbiDSAC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 20:02:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172F913CDC;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1701013CC8;
         Mon, 18 Apr 2022 17:00:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 758FC612A0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72B3B61297;
         Tue, 19 Apr 2022 00:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EAE3C385B4;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DFF2C385B6;
         Tue, 19 Apr 2022 00:00:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650326416;
-        bh=d8BookNJh/O4qU39WT4SVwBgry0u2pt1lr7SQzvjnkA=;
+        bh=xBCTSb1Zw5agh9IQQuLKEyNN49GdD9FsTkuxc17sgcg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NTmmCdR/7pN5hzrQK2g+6jsxLyKLU+7QwtwM+OzzNSX3KNYpZPdA3BqGL/NEypEhZ
-         wI18v5qZESaM1SFEBTKsgIPmDOfkmjSoR5I1qFpbOO4BsNglKmgPo37SfTWbxjGiwi
-         alMc4vTUdNB0mKBxmrPt2ygaONntkH9q2v5jsGP/ojmu51XbTR/tWEYGNPrAZN6S6b
-         3lhGhOKz/OtDxBOxAu5vwy8bj7huAGyZ4tsW7U87iTY2Wy8MK8LNYBRgKrYvlI5xxw
-         sLfcSZGbyNRwL9UqboiohZOSN3O3JjVc/E+fxc14EP3tIXC9gENeQ21jfvFsN1Rh68
-         iPAx3FGXDSCvQ==
+        b=kmxi/26iXVhEk9jWuQSEXWR1R26p63ZIJDTLiIMzRxUilfYLXMeLtDEOyCe0wIxFh
+         JHU3Fp4DEodko8v5TqKbv4SKkR80D3f0JlLU+WCw9YOXZM/jijzmYyPYtDB4O401BG
+         4o2iLuXPKIQfu72gSxGJC+XJXTAvE7swIcDRf/FX3Nz9dz5fjzvBhUhGUGn04HRSqe
+         Dy3Ivh4hWvpFaHmleMfRvFQ2P1rE6dvAwq1y1t/+2Q73jkZ/+weVjW2PBHk+C24ucH
+         OP+JYjfuWLADk+EnUsZYqY32fgg9eCUVAGFp2+2VG2/XWpaGf3fkqSdL652ayQBJFg
+         CBKrZFaOeQ65g==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E12025C0B86; Mon, 18 Apr 2022 17:00:15 -0700 (PDT)
+        id E2F6F5C0DFD; Mon, 18 Apr 2022 17:00:15 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 6/9] rcu-tasks: Restore use of timers for non-RT kernels
-Date:   Mon, 18 Apr 2022 17:00:11 -0700
-Message-Id: <20220419000014.3948512-6-paulmck@kernel.org>
+Subject: [PATCH rcu 7/9] rcu-tasks: Make show_rcu_tasks_generic_gp_kthread() check all CPUs
+Date:   Mon, 18 Apr 2022 17:00:12 -0700
+Message-Id: <20220419000014.3948512-7-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220419000007.GA3945818@paulmck-ThinkPad-P17-Gen-1>
 References: <20220419000007.GA3945818@paulmck-ThinkPad-P17-Gen-1>
@@ -56,37 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of hrtimers for RCU-tasks grace-period delays works well in
-general, but can result in excessive grace-period delays for some
-corner-case workloads.  This commit therefore reverts to the use of
-timers for non-RT kernels to mitigate those grace-period delays.
+Currently, the show_rcu_tasks_generic_gp_kthread() function only looks
+at CPU 0's callback lists.  Although this is not fatal, it can confuse
+debugging efforts in cases where any of the Tasks RCU flavors are in
+per-CPU queueing mode.  This commit therefore causes this function to
+scan all CPUs' callback queues.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tasks.h | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ kernel/rcu/tasks.h | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 71fe340ab82a..405614039515 100644
+index 405614039515..3aad0dfbfaf4 100644
 --- a/kernel/rcu/tasks.h
 +++ b/kernel/rcu/tasks.h
-@@ -654,9 +654,13 @@ static void rcu_tasks_wait_gp(struct rcu_tasks *rtp)
- 
- 		// Slowly back off waiting for holdouts
- 		set_tasks_gp_state(rtp, RTGS_WAIT_SCAN_HOLDOUTS);
--		exp = jiffies_to_nsecs(fract);
--		__set_current_state(TASK_IDLE);
--		schedule_hrtimeout_range(&exp, jiffies_to_nsecs(HZ / 2), HRTIMER_MODE_REL_HARD);
-+		if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
-+			schedule_timeout_idle(fract);
-+		} else {
-+			exp = jiffies_to_nsecs(fract);
-+			__set_current_state(TASK_IDLE);
-+			schedule_hrtimeout_range(&exp, jiffies_to_nsecs(HZ / 2), HRTIMER_MODE_REL_HARD);
+@@ -582,7 +582,17 @@ static void __init rcu_tasks_bootup_oddness(void)
+ /* Dump out rcutorture-relevant state common to all RCU-tasks flavors. */
+ static void show_rcu_tasks_generic_gp_kthread(struct rcu_tasks *rtp, char *s)
+ {
+-	struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rtp->rtpcpu, 0); // for_each...
++	int cpu;
++	bool havecbs = false;
++
++	for_each_possible_cpu(cpu) {
++		struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rtp->rtpcpu, cpu);
++
++		if (!data_race(rcu_segcblist_empty(&rtpcp->cblist))) {
++			havecbs = true;
++			break;
 +		}
- 
- 		if (fract < HZ)
- 			fract++;
++	}
+ 	pr_info("%s: %s(%d) since %lu g:%lu i:%lu/%lu %c%c %s\n",
+ 		rtp->kname,
+ 		tasks_gp_state_getname(rtp), data_race(rtp->gp_state),
+@@ -590,7 +600,7 @@ static void show_rcu_tasks_generic_gp_kthread(struct rcu_tasks *rtp, char *s)
+ 		data_race(rcu_seq_current(&rtp->tasks_gp_seq)),
+ 		data_race(rtp->n_ipis_fails), data_race(rtp->n_ipis),
+ 		".k"[!!data_race(rtp->kthread_ptr)],
+-		".C"[!data_race(rcu_segcblist_empty(&rtpcp->cblist))],
++		".C"[havecbs],
+ 		s);
+ }
+ #endif // #ifndef CONFIG_TINY_RCU
 -- 
 2.31.1.189.g2e36527f23
 

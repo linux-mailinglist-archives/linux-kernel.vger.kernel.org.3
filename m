@@ -2,68 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E695D506320
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3477850632C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348168AbiDSELK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 00:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
+        id S1348180AbiDSEMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 00:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiDSELG (ORCPT
+        with ESMTP id S1348185AbiDSEMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:11:06 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BB025E80
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:08:22 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2ebf3746f87so159458617b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RxUGvhohRZMIeX9k2FsUNWTiAWQS4Lj8VHpVf2o74vc=;
-        b=rK6n5jnhB7DrghnuvgvGSPpe3RiXShW0iDaNCCAbDamjvJ/0QkzMqhhWDSd2QTM5zN
-         EFiOAUPZ+v1cLMdvTJV95twIzof8Xk+HmS1LboIzSlYA3IxQPJyFuhoCFtTQEbhxeoxa
-         nLh+9A7M5CjIWYMINNhG8E2ov24+viameJm70+UdsiPFSKmSRPm5GgKU2+Yz2+1RuVUB
-         z2vT70qwVhQT3bFkpMixZ7ZqK3bzNXffTIm8e9NjV6TFm0F5FIpJlLjD7AagKSwBt9FU
-         su8d6ZFqLqg4N4wsDPjrMyprLK3g9ji2siBlIZJFRR7ILDNteTm+8u+3mVa4meGW51C1
-         1jHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RxUGvhohRZMIeX9k2FsUNWTiAWQS4Lj8VHpVf2o74vc=;
-        b=x0M8l7hZ4uzxe6vpBLpIviQ1IjAq2H1pfNcB8hvLV99Ovw7F8hhDfljQ7tvT/fjQ0T
-         54OqPQV60zRj/nQjQdlxgxWA3sm6PamWIvI7khw76lzuVQn2CJyAU3cBV12DJSkGL0ME
-         PnFcWzYMQTZSRCE3ra4R4cbbQBl6949tPd/7H3wsL0Sth0nC7E5fGgSxmXw4I9s6CrJ7
-         C2JsCPMmE1bGH89TzPISNey/6nvvfuDP0mjUn6vD60Wwxr6s4BQjYKbU3vk9o5I8odSS
-         6DxbFrBu9Vi0JiIeECe18pxJmYTSKiZ8mCRpV2Sq0mw/7kiCy2JVeMy3mLNERsUfXXBx
-         wvhQ==
-X-Gm-Message-State: AOAM532ohK/41lTb0Az6iRd3JdLXSuk8UXhAji5dgSrQNj1K5JRyLl02
-        8k2OQmVwAtCtyWryr5cfDe6MmoDAw9FfhS4x8d1TkQ==
-X-Google-Smtp-Source: ABdhPJzPeb0inENKSoaL9o+dm6OQC6zVJQXzkSSrIk/VVrICYu6dtVAnu0nLbyctSyP31xlz1JVwD/g8QECquLJzS1U=
-X-Received: by 2002:a0d:f587:0:b0:2f1:b1ca:287e with SMTP id
- e129-20020a0df587000000b002f1b1ca287emr4936406ywf.60.1650341301128; Mon, 18
- Apr 2022 21:08:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220418121203.462784814@linuxfoundation.org>
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 19 Apr 2022 09:38:09 +0530
-Message-ID: <CA+G9fYt-DHhCDjnGfXi1=qn3JdQ-w=UnOXr81bZX1pvECPtD9g@mail.gmail.com>
-Subject: Re: [PATCH 5.17 000/219] 5.17.4-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Tue, 19 Apr 2022 00:12:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627732DF1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:09:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E72B761183
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:09:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFCD0C385A7;
+        Tue, 19 Apr 2022 04:09:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1650341392;
+        bh=pMG4gBqrjUuaVREf5Do0t2y3IdtKoqfe6hpp7ubRJWQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=zXGb7uOHZhmcOCQpI+rMPu2asgr1XvhwF+5kGkjBB9d2riSOtt5vxSmlTb+Iw2CD3
+         p5ZpiVp1gSg1az5NTQwch04E1VEF5dPXdHnve00QJ8PyW9pGABo20K1oCVUkZlDu8z
+         xLziZtxICmzhR/k3eaoIOb3qDkn7gMhNLuyhtl2A=
+Date:   Mon, 18 Apr 2022 21:09:51 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     <minchan@kernel.org>, <hannes@cmpxchg.org>, <mhocko@suse.com>,
+        <hughd@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm/madvise: fix potential pte_unmap_unlock pte error
+Message-Id: <20220418210951.b87743ae8b7c01f883e571ea@linux-foundation.org>
+In-Reply-To: <20220416081416.23304-1-linmiaohe@huawei.com>
+References: <20220416081416.23304-1-linmiaohe@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,115 +53,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 at 17:45, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.17.4 release.
-> There are 219 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.17.4-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Sat, 16 Apr 2022 16:14:16 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> We can't assume pte_offset_map_lock will return same orig_pte value. So
+> it's necessary to reacquire the orig_pte or pte_unmap_unlock will unmap
+> the stale pte.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+hm, where did you learn this info about pte_offset_map_lock()?
 
-## Build
-* kernel: 5.17.4-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.17.y
-* git commit: 12e5bd3d067695aa29a9780ccff9fa9d1e761337
-* git describe: v5.17.3-223-g12e5bd3d0676
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17=
-.3-223-g12e5bd3d0676
-
-## Test Regressions (compared to v5.17.3-8-g8a239d5c59a8)
-No test regressions found.
-
-## Metric Regressions (compared to v5.17.3-8-g8a239d5c59a8)
-No metric regressions found.
-
-## Test Fixes (compared to v5.17.3-8-g8a239d5c59a8)
-No metric fixes found.
-
-## Metric Fixes (compared to v5.17.3-8-g8a239d5c59a8)
-No metric fixes found.
-
-## Test result summary
-total: 90780, pass: 78715, fail: 220, skip: 11125, xfail: 720
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 296 total, 293 passed, 3 failed
-* arm64: 47 total, 47 passed, 0 failed
-* i386: 44 total, 40 passed, 4 failed
-* mips: 41 total, 38 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 56 passed, 9 failed
-* riscv: 32 total, 27 passed, 5 failed
-* s390: 26 total, 23 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 47 total, 47 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-te[
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+I assume this is from code inspection only?  No observed runtime failures?

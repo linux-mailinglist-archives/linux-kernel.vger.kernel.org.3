@@ -2,88 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6FA50676E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3A650676F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350290AbiDSJI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 05:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
+        id S1350312AbiDSJJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 05:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240463AbiDSJIw (ORCPT
+        with ESMTP id S1346248AbiDSJJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 05:08:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0913C6586
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:06:10 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23J8k1C9020338;
-        Tue, 19 Apr 2022 09:05:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=kny/t6DILsyi2qAi0gRWd149xIh/tOmS7sHh2J3UarQ=;
- b=abOur7MgvkR7eq4RnfIu+xbDFwcoJk/XUGB+Jm08GYWTrS9IbLKHB8VwjuOrPjlS5fHK
- qH/53u1u4WMHwPY9f5cbTLJp+XwmcNeZhedw+D2nMH7B7nh3cObXvaJ444idua2TRj1W
- pbaeXhetYPskK78u9hSemgul0phSBq+XGAB+pWDEfRrUogsKMZBucWc+1VO8APP72QUF
- Is6Bvegxoq//9i0d/N/y+/tyaq/YEB84NidR/5bKOLA3OL884p8jb2LL6VLN6IdpK3Nn
- CBB12Nwcsd4uGShIQPWq7S8IkZcF6v5c1E6Aqkk9IizYcdwyjuchwzu6NNbme7ruE01a Dg== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7bt2kcj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:05:57 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23J931D7006461;
-        Tue, 19 Apr 2022 09:05:54 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 3fgu6u1pyk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:05:54 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23J95pjX49611214
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Apr 2022 09:05:51 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A3204204B;
-        Tue, 19 Apr 2022 09:05:51 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 044594204D;
-        Tue, 19 Apr 2022 09:05:51 +0000 (GMT)
-Received: from [9.171.6.77] (unknown [9.171.6.77])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 19 Apr 2022 09:05:50 +0000 (GMT)
-Message-ID: <a9c07e21-7df4-3008-d07e-d946f7f16540@linux.ibm.com>
-Date:   Tue, 19 Apr 2022 11:05:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: arch/s390/kvm/gaccess.c:1064 access_guest_with_key() error:
- uninitialized symbol 'prot'.
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org
-Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        Tue, 19 Apr 2022 05:09:52 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5A31D314
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:07:09 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id y21so8719124wmi.2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Jr5LYCuMTHuyWW7oXOYwjilKqaTnYeuD/6HBySF0F0U=;
+        b=Pin0EB9RaTqccFoimDF5PAlGqr085qaRnpu8sNDfYAO6bBHAiLkxTeJZf0dr6P9RLE
+         nAezPq9gxcigkH3ZbHjU8WrCDPGKR0mv/sjYIDVMFxjVIzdkureBjwNGhEnZR2gsKKpQ
+         3hhJqASxLyoLbxlttOLOmwfF/1aASTvjMqEnULnSQXqI6ssCrVA7ZiVmNWpdQZVerv7s
+         Gv1KSPn0rAe7Fj2TsB7KvzmmV3E9Deu2fO6dQwDB7j5Ii+ICOYz7w/FYWPsK9FnFU6Rz
+         3/q5Jy5WTY7Ul+262QLXE0Fjwe6wzAiH3pF/uiPwm6+9+wB3jfQF1zzHMov1j7S8Ti5Z
+         6KnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Jr5LYCuMTHuyWW7oXOYwjilKqaTnYeuD/6HBySF0F0U=;
+        b=ssSHv8T7ZEI1wLNjC75jftsDBO4tbUpGSnj7yi/ys2abM606XTsjQUH5gTa3/z4uKY
+         IIOi0+DjAMjURRywI55jua+R2oNV2UPj7CYMIeUkFX3tLTieyYf8lur/U9N63Vuq4RzB
+         fM1SnPPJXMOa0E6/DCLstJuPkWPLxquz0mY8AvQ/6E9Ov6sYNjz8hoLYNUDFvO+j8M+n
+         RgS36U6YOkgJt+f8bRMwTyyrn7pxVRDPzPgeNbXZF0pW9+R5oaNQHslcD4OTpVTD6JZF
+         OG0aGn0xT/V4mPJYWi7WLPD0XBFlb2iXhcGf0m7QgRtokHQvPY5DjgvYdJQw4CE/a3A7
+         gPvw==
+X-Gm-Message-State: AOAM531ajl9/ieUqE4W1+ypwWy1FIOfvL1zNE5fQullQhzX/lems0MFv
+        87npE9gXMGI24xntIJKolknzjA==
+X-Google-Smtp-Source: ABdhPJwBeAsqVSn0EbEcuelkqnVFkuLfCjPXedQC6/2nIBnoFdzLk3DCvxIZ/UD1Y3LYrMhEBPB6pQ==
+X-Received: by 2002:a1c:218b:0:b0:38e:aa07:62a8 with SMTP id h133-20020a1c218b000000b0038eaa0762a8mr14938277wmh.172.1650359227815;
+        Tue, 19 Apr 2022 02:07:07 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id 9-20020a056000154900b0020a849e1c41sm8803463wry.13.2022.04.19.02.07.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 02:07:07 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 10:07:04 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-References: <202204151626.pDKgwv97-lkp@intel.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <202204151626.pDKgwv97-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3yiDAWRN2S_H8otHwWhPrzTR7Y2PFoXA
-X-Proofpoint-GUID: 3yiDAWRN2S_H8otHwWhPrzTR7Y2PFoXA
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Angela Czubak <acz@semihalf.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        katie.morris@in-advantage.com
+Subject: Re: [RFC v7 net-next 10/13] mfd: ocelot: add support for the vsc7512
+ chip via spi
+Message-ID: <Yl57uP+rsl/bsI4i@google.com>
+References: <20220307021208.2406741-1-colin.foster@in-advantage.com>
+ <20220307021208.2406741-11-colin.foster@in-advantage.com>
+ <YlaKlhiQEWMxJxhU@google.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_03,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 adultscore=0 malwarescore=0 bulkscore=0 impostorscore=0
- spamscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204190051
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YlaKlhiQEWMxJxhU@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,116 +96,543 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/15/22 11:30, Dan Carpenter wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   028192fea1de083f4f12bfb1eb7c4d7beb5c8ecd
-> commit: e613d83454d7da1c37d78edb278db9c20afb21a2 KVM: s390: Honor storage keys when accessing guest memory
-> config: s390-randconfig-m031-20220414 (https://download.01.org/0day-ci/archive/20220415/202204151626.pDKgwv97-lkp@intel.com/config)
-> compiler: s390-linux-gcc (GCC) 11.2.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
-> New smatch warnings:
-> arch/s390/kvm/gaccess.c:1064 access_guest_with_key() error: uninitialized symbol 'prot'.
-> 
-> Old smatch warnings:
-> arch/s390/kvm/gaccess.c:935 guest_range_to_gpas() error: uninitialized symbol 'prot'.
-> 
-> vim +/prot +1064 arch/s390/kvm/gaccess.c
-> 
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11   997  int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11   998  			  void *data, unsigned long len, enum gacc_mode mode,
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11   999  			  u8 access_key)
-> 2293897805c2fe Heiko Carstens           2014-01-01  1000  {
-> 2293897805c2fe Heiko Carstens           2014-01-01  1001  	psw_t *psw = &vcpu->arch.sie_block->gpsw;
-> 7faa543df19bf6 Janis Schoetterl-Glausch 2021-11-26  1002  	unsigned long nr_pages, idx;
-> 7faa543df19bf6 Janis Schoetterl-Glausch 2021-11-26  1003  	unsigned long gpa_array[2];
-> 416e7f0c9d613b Janis Schoetterl-Glausch 2021-11-26  1004  	unsigned int fragment_len;
-> 7faa543df19bf6 Janis Schoetterl-Glausch 2021-11-26  1005  	unsigned long *gpas;
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1006  	enum prot_type prot;
-> 
-> Maybe set "prot" to a default value?> 
-> 8a242234b4bfed Heiko Carstens           2014-01-10  1007  	int need_ipte_lock;
-> 8a242234b4bfed Heiko Carstens           2014-01-10  1008  	union asce asce;
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1009  	bool try_storage_prot_override;
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1010  	bool try_fetch_prot_override;
-> 2293897805c2fe Heiko Carstens           2014-01-01  1011  	int rc;
-> 2293897805c2fe Heiko Carstens           2014-01-01  1012  
-> 2293897805c2fe Heiko Carstens           2014-01-01  1013  	if (!len)
-> 2293897805c2fe Heiko Carstens           2014-01-01  1014  		return 0;
-> 6167375b558196 David Hildenbrand        2016-05-31  1015  	ga = kvm_s390_logical_to_effective(vcpu, ga);
-> 6167375b558196 David Hildenbrand        2016-05-31  1016  	rc = get_vcpu_asce(vcpu, &asce, ga, ar, mode);
-> 664b4973537068 Alexander Yarygin        2015-03-09  1017  	if (rc)
-> 664b4973537068 Alexander Yarygin        2015-03-09  1018  		return rc;
-> 2293897805c2fe Heiko Carstens           2014-01-01  1019  	nr_pages = (((ga & ~PAGE_MASK) + len - 1) >> PAGE_SHIFT) + 1;
-> 7faa543df19bf6 Janis Schoetterl-Glausch 2021-11-26  1020  	gpas = gpa_array;
-> 7faa543df19bf6 Janis Schoetterl-Glausch 2021-11-26  1021  	if (nr_pages > ARRAY_SIZE(gpa_array))
-> 7faa543df19bf6 Janis Schoetterl-Glausch 2021-11-26  1022  		gpas = vmalloc(array_size(nr_pages, sizeof(unsigned long)));
-> 7faa543df19bf6 Janis Schoetterl-Glausch 2021-11-26  1023  	if (!gpas)
-> 2293897805c2fe Heiko Carstens           2014-01-01  1024  		return -ENOMEM;
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1025  	try_fetch_prot_override = fetch_prot_override_applicable(vcpu, mode, asce);
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1026  	try_storage_prot_override = storage_prot_override_applicable(vcpu);
-> a752598254016d Heiko Carstens           2017-06-03  1027  	need_ipte_lock = psw_bits(*psw).dat && !asce.r;
-> 8a242234b4bfed Heiko Carstens           2014-01-10  1028  	if (need_ipte_lock)
-> 8a242234b4bfed Heiko Carstens           2014-01-10  1029  		ipte_lock(vcpu);
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1030  	/*
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1031  	 * Since we do the access further down ultimately via a move instruction
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1032  	 * that does key checking and returns an error in case of a protection
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1033  	 * violation, we don't need to do the check during address translation.
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1034  	 * Skip it by passing access key 0, which matches any storage key,
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1035  	 * obviating the need for any further checks. As a result the check is
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1036  	 * handled entirely in hardware on access, we only need to take care to
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1037  	 * forego key protection checking if fetch protection override applies or
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1038  	 * retry with the special key 9 in case of storage protection override.
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1039  	 */
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1040  	rc = guest_range_to_gpas(vcpu, ga, ar, gpas, len, asce, mode, 0);
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1041  	if (rc)
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1042  		goto out_unlock;
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1043  	for (idx = 0; idx < nr_pages; idx++) {
-> 7faa543df19bf6 Janis Schoetterl-Glausch 2021-11-26  1044  		fragment_len = min(PAGE_SIZE - offset_in_page(gpas[idx]), len);
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1045  		if (try_fetch_prot_override && fetch_prot_override_applies(ga, fragment_len)) {
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1046  			rc = access_guest_page(vcpu->kvm, mode, gpas[idx],
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1047  					       data, fragment_len);
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1048  		} else {
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1049  			rc = access_guest_page_with_key(vcpu->kvm, mode, gpas[idx],
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1050  							data, fragment_len, access_key);
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1051  		}
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1052  		if (rc == PGM_PROTECTION && try_storage_prot_override)
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1053  			rc = access_guest_page_with_key(vcpu->kvm, mode, gpas[idx],
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1054  							data, fragment_len, PAGE_SPO_ACC);
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1055  		if (rc == PGM_PROTECTION)
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1056  			prot = PROT_TYPE_KEYC;
-> 
-> Is PGM_PROTECTION the only positive value that "rc" can be?
+[Adding everyone/lists back on Cc]
 
-No, PGM_ADDRESSING is also possible.
-> 
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1057  		if (rc)
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1058  			break;
-> 416e7f0c9d613b Janis Schoetterl-Glausch 2021-11-26  1059  		len -= fragment_len;
-> 416e7f0c9d613b Janis Schoetterl-Glausch 2021-11-26  1060  		data += fragment_len;
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1061  		ga = kvm_s390_logical_to_effective(vcpu, ga + fragment_len);
-> 2293897805c2fe Heiko Carstens           2014-01-01  1062  	}
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1063  	if (rc > 0)
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11 @1064  		rc = trans_exc(vcpu, rc, ga, ar, mode, prot);
-> 
-> Smatch is not using the cross function DB here so it assumes other
-> positive values are possible.  Also "prot" might not be used in the
-> trans_exc() but smatch will still complain instead of checking for
-> that.
+On Thu, 14 Apr 2022, Colin Foster wrote:
 
-Indeed, prot is only access by trans_exc in case of PGM_PROTECTION.
-That also makes a default value questionable/confusing.
+> Hi Lee,
 > 
-> 
-> e613d83454d7da Janis Schoetterl-Glausch 2022-02-11  1065  out_unlock:
-> 8a242234b4bfed Heiko Carstens           2014-01-10  1066  	if (need_ipte_lock)
-> 8a242234b4bfed Heiko Carstens           2014-01-10  1067  		ipte_unlock(vcpu);
-> 7faa543df19bf6 Janis Schoetterl-Glausch 2021-11-26  1068  	if (nr_pages > ARRAY_SIZE(gpa_array))
-> 7faa543df19bf6 Janis Schoetterl-Glausch 2021-11-26  1069  		vfree(gpas);
-> 2293897805c2fe Heiko Carstens           2014-01-01  1070  	return rc;
-> 2293897805c2fe Heiko Carstens           2014-01-01  1071  }
-> 
+> Thanks for the feedback. I agree with (and have made) your suggestions.
+> Additional comments below.
 
+I'm swamped right now, so I cannot do a full re-review, but please see
+in-line for a couple of (most likely flippant i.e. not fully
+thought out comments).
+
+Please submit the changes you end up making off the back of this
+review and I'll conduct another on the next version you send.
+
+> On Wed, Apr 13, 2022 at 09:32:22AM +0100, Lee Jones wrote:
+> > On Sun, 06 Mar 2022, Colin Foster wrote:
+> > 
+> [...]
+> > > +
+> > > +int ocelot_core_init(struct ocelot_core *core)
+> > > +{
+> > > +	struct device *dev = core->dev;
+> > > +	int ret;
+> > > +
+> > > +	dev_set_drvdata(dev, core);
+> > > +
+> > > +	core->gcb_regmap = ocelot_devm_regmap_init(core, dev,
+> > > +						   &vsc7512_gcb_resource);
+> > 
+> > This just ends up calling ocelot_spi_devm_get_regmap() right?
+> > 
+> > Why not call that from inside ocelot-spi.c where 'core' was allocated?
+> 
+> core->gcb_regmap doesn't handle anything more than chip reset. This will
+> have to happen regardless of the interface.
+> 
+> The "spi" part uses the core->cpuorg_regmap, which is needed for
+> configuring the SPI bus. In the case of I2C, this cpu_org regmap
+> (likely?) wouldn't be necessary, but the gcb_regmap absolutely would.
+> That's why gcb is allocated in core and cpuorg is allocated in SPI.
+> 
+> The previous RFC had cpuorg_regmap hidden inside a private struct to
+> emphasize this separation. As you pointed out, there was a lot of
+> bouncing between "core" structs and "spi" structs that got ugly.
+> 
+> (Looking at this more now... the value of cpuorg_regmap should have been
+> in the CONFIG_MFD_OCELOT_SPI ifdef, which might have made this
+> distinction more clear)
+
+The TL;DR of my review point would be to make this as simple as
+possible.  If you can call a single function, instead of needlessly
+sending the thread of execution through three, please do.
+
+> > > +	if (IS_ERR(core->gcb_regmap))
+> > > +		return -ENOMEM;
+> > > +
+> > > +	ret = ocelot_reset(core);
+> > > +	if (ret) {
+> > > +		dev_err(dev, "Failed to reset device: %d\n", ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	/*
+> > > +	 * A chip reset will clear the SPI configuration, so it needs to be done
+> > > +	 * again before we can access any registers
+> > > +	 */
+> > > +	ret = ocelot_spi_initialize(core);
+> > 
+> > Not a fan of calling back into the file which called us.
+> > 
+> > And what happens if SPI isn't controlling us?
+> > 
+> > Doesn't the documentation above say this device can also be
+> > communicated with via I2C and PCIe?
+> 
+> During the last RFC this was done through a callback. You had requested
+> I not use callbacks.
+> 
+> From that exchange:
+> """"
+> > > > +	ret = core->config->init_bus(core->config);
+> > >
+> > > You're not writing a bus.  I doubt you need ops call-backs.
+> >
+> > In the case of SPI, the chip needs to be configured both before and
+> > after reset. It sets up the bus for endianness, padding bytes, etc. This
+> > is currently achieved by running "ocelot_spi_init_bus" once during SPI
+> > probe, and once immediately after chip reset.
+> >
+> > For other control mediums I doubt this is necessary. Perhaps "init_bus"
+> > is a misnomer in this scenario...
+> 
+> Please find a clearer way to do this without function pointers.
+> """"
+
+Yes, I remember.
+
+This is an improvement on that, but it doesn't mean it's ideal.
+
+> The idea is that we set up the SPI bus so we can read registers. The
+> protocol changes based on bus speed, so this is necessary.
+> 
+> This initial setup is done in ocelot-spi.c, before ocelot_core_init is
+> called.
+> 
+> We then reset the chip by writing some registers. This chip reset also
+> clears the SPI configuration, so we need to reconfigure the SPI bus
+> before we can read any additional registers.
+> 
+> Short of using function pointers, I imagine this will have to be
+> something akin to:
+> 
+> if (core->is_spi) {
+>     ocelot_spi_initalize();
+> }
+
+What about if, instead of calling from SPI into Core, which calls back
+into SPI again, you do this from SPI instead:
+
+[flippant - I haven't fully assessed the viability of this suggestion]
+
+foo_type spi_probe(bar_type baz)
+{
+  setup_spi();
+
+  core_init();
+
+  more_spi_stuff();
+}
+
+> I feel if the additional buses are added, they'll have to implement this
+> type of change. But as I don't (and don't plan to) have hardware to
+> build those interfaces out, right now ocelot_core assumes the bus is
+> SPI.
+
+What are the chances of someone else coming along and implementing the
+other interfaces?  You might very well be over-complicating this
+implementation for support that may never be required.
+
+> > > +	if (ret) {
+> > > +		dev_err(dev, "Failed to initialize SPI interface: %d\n", ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, vsc7512_devs,
+> > > +				   ARRAY_SIZE(vsc7512_devs), NULL, 0, NULL);
+> > > +	if (ret) {
+> > > +		dev_err(dev, "Failed to add sub-devices: %d\n", ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +EXPORT_SYMBOL(ocelot_core_init);
+> > > +
+> > > +MODULE_DESCRIPTION("Externally Controlled Ocelot Chip Driver");
+> > > +MODULE_AUTHOR("Colin Foster <colin.foster@in-advantage.com>");
+> > > +MODULE_LICENSE("GPL v2");
+> > > diff --git a/drivers/mfd/ocelot-spi.c b/drivers/mfd/ocelot-spi.c
+> > > new file mode 100644
+> > > index 000000000000..c788e239c9a7
+> > > --- /dev/null
+> > > +++ b/drivers/mfd/ocelot-spi.c
+> > > @@ -0,0 +1,313 @@
+> > > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> > > +/*
+> > > + * SPI core driver for the Ocelot chip family.
+> > > + *
+> > > + * This driver will handle everything necessary to allow for communication over
+> > > + * SPI to the VSC7511, VSC7512, VSC7513 and VSC7514 chips. The main functions
+> > > + * are to prepare the chip's SPI interface for a specific bus speed, and a host
+> > > + * processor's endianness. This will create and distribute regmaps for any MFD
+> > 
+> > As above, please drop references to MFD.
+> > 
+> > > + * children.
+> > > + *
+> > > + * Copyright 2021 Innovative Advantage Inc.
+> > > + *
+> > > + * Author: Colin Foster <colin.foster@in-advantage.com>
+> > > + */
+> > > +
+> > > +#include <linux/iopoll.h>
+> > > +#include <linux/kconfig.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/of.h>
+> > > +#include <linux/regmap.h>
+> > > +#include <linux/spi/spi.h>
+> > > +
+> > > +#include <asm/byteorder.h>
+> > > +
+> > > +#include "ocelot.h"
+> > > +
+> > > +#define DEV_CPUORG_IF_CTRL	0x0000
+> > > +#define DEV_CPUORG_IF_CFGSTAT	0x0004
+> > > +
+> > > +#define CFGSTAT_IF_NUM_VCORE	(0 << 24)
+> > > +#define CFGSTAT_IF_NUM_VRAP	(1 << 24)
+> > > +#define CFGSTAT_IF_NUM_SI	(2 << 24)
+> > > +#define CFGSTAT_IF_NUM_MIIM	(3 << 24)
+> > > +
+> > > +
+> > > +static const struct resource vsc7512_dev_cpuorg_resource = {
+> > > +	.start	= 0x71000000,
+> > > +	.end	= 0x710002ff,
+> > 
+> > No magic numbers.  Please define these addresses.
+> 
+> I missed these. Thanks.
+> 
+> > 
+> > > +	.name	= "devcpu_org",
+> > > +};
+> > > +
+> > > +#define VSC7512_BYTE_ORDER_LE 0x00000000
+> > > +#define VSC7512_BYTE_ORDER_BE 0x81818181
+> > > +#define VSC7512_BIT_ORDER_MSB 0x00000000
+> > > +#define VSC7512_BIT_ORDER_LSB 0x42424242
+> > > +
+> > > +int ocelot_spi_initialize(struct ocelot_core *core)
+> > > +{
+> > > +	u32 val, check;
+> > > +	int err;
+> > > +
+> > > +#ifdef __LITTLE_ENDIAN
+> > > +	val = VSC7512_BYTE_ORDER_LE;
+> > > +#else
+> > > +	val = VSC7512_BYTE_ORDER_BE;
+> > > +#endif
+> > 
+> > Not a fan of ifdefery in the middle of C files.
+> > 
+> > Please create a macro or define somewhere.
+> 
+> I'll clear this up in comments and move things around. This macro
+> specifically tends to lend itself to this type of ifdef dropping:
+> 
+> https://elixir.bootlin.com/linux/v5.18-rc2/C/ident/__LITTLE_ENDIAN
+
+I see that the majority of implementations exist in header files as I
+would expect.  With respect to the others, past acceptance and what is
+acceptable in other subsystems has little bearing on what will be
+accepted here and now.
+
+> The comment I'm adding is:
+>         /*
+>          * The SPI address must be big-endian, but we want the payload to match
+>          * our CPU. These are two bits (0 and 1) but they're repeated such that
+>          * the write from any configuration will be valid. The four
+>          * configurations are:
+>          *
+>          * 0b00: little-endian, MSB first
+>          * |            111111   | 22221111 | 33222222 |
+>          * | 76543210 | 54321098 | 32109876 | 10987654 |
+>          *
+>          * 0b01: big-endian, MSB first
+>          * | 33222222 | 22221111 | 111111   |          |
+>          * | 10987654 | 32109876 | 54321098 | 76543210 |
+>          *
+>          * 0b10: little-endian, LSB first
+>          * |              111111 | 11112222 | 22222233 |
+>          * | 01234567 | 89012345 | 67890123 | 45678901 |
+>          *
+>          * 0b11: big-endian, LSB first
+>          * | 22222233 | 11112222 |   111111 |          |
+>          * | 45678901 | 67890123 | 89012345 | 01234567 |
+>          */
+> 
+> With this info, would you recommend:
+> 1. A file-scope static const at the top of this file
+> 2. A macro assigned to one of those sequences
+> 3. A function to "detect" which architecture we're running
+
+I do not have a strong opinion.
+
+Just tuck the #iferry away somewhere in a header file.
+
+> > > +	err = regmap_write(core->cpuorg_regmap, DEV_CPUORG_IF_CTRL, val);
+> > > +	if (err)
+> > > +		return err;
+> > 
+> > Comment.
+> > 
+> > > +	val = core->spi_padding_bytes;
+> > > +	err = regmap_write(core->cpuorg_regmap, DEV_CPUORG_IF_CFGSTAT, val);
+> > > +	if (err)
+> > > +		return err;
+> > 
+> > Comment.
+> 
+> Adding:
+> 
+> /*
+>  * Apply the number of padding bytes between a read request and the data
+>  * payload. Some registers have access times of up to 1us, so if the
+>  * first payload bit is shifted out too quickly, the read will fail.
+>  */
+> 
+> > 
+> > > +	/*
+> > > +	 * After we write the interface configuration, read it back here. This
+> > > +	 * will verify several different things. The first is that the number of
+> > > +	 * padding bytes actually got written correctly. These are found in bits
+> > > +	 * 0:3.
+> > > +	 *
+> > > +	 * The second is that bit 16 is cleared. Bit 16 is IF_CFGSTAT:IF_STAT,
+> > > +	 * and will be set if the register access is too fast. This would be in
+> > > +	 * the condition that the number of padding bytes is insufficient for
+> > > +	 * the SPI bus frequency.
+> > > +	 *
+> > > +	 * The last check is for bits 31:24, which define the interface by which
+> > > +	 * the registers are being accessed. Since we're accessing them via the
+> > > +	 * serial interface, it must return IF_NUM_SI.
+> > > +	 */
+> > > +	check = val | CFGSTAT_IF_NUM_SI;
+> > > +
+> > > +	err = regmap_read(core->cpuorg_regmap, DEV_CPUORG_IF_CFGSTAT, &val);
+> > > +	if (err)
+> > > +		return err;
+> > > +
+> > > +	if (check != val)
+> > > +		return -ENODEV;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +EXPORT_SYMBOL(ocelot_spi_initialize);
+> > > +
+> > > +/*
+> > > + * The SPI protocol for interfacing with the ocelot chips uses 24 bits, while
+> > > + * the register locations are defined as 32-bit. The least significant two bits
+> > > + * get shifted out, as register accesses must always be word-aligned, leaving
+> > > + * bits 21:0 as the 22-bit address. It must always be big-endian, whereas the
+> > > + * payload can be optimized for bit / byte order to match whatever architecture
+> > > + * the controlling CPU has.
+> > > + */
+> > > +static unsigned int ocelot_spi_translate_address(unsigned int reg)
+> > > +{
+> > > +	return cpu_to_be32((reg & 0xffffff) >> 2);
+> > > +}
+> > > +
+> > > +struct ocelot_spi_regmap_context {
+> > > +	u32 base;
+> > > +	struct ocelot_core *core;
+> > > +};
+> > > +
+> > > +static int ocelot_spi_reg_read(void *context, unsigned int reg,
+> > > +			       unsigned int *val)
+> > > +{
+> > > +	struct ocelot_spi_regmap_context *regmap_context = context;
+> > > +	struct ocelot_core *core = regmap_context->core;
+> > > +	struct spi_transfer tx, padding, rx;
+> > > +	struct spi_message msg;
+> > 
+> > How big are all of these?
+> > 
+> > We will receive warnings if they occupy too much stack space.
+> 
+> Looking at the structs they're on the order of 10s of bytes. Maybe 70
+> bytes per instance (back of napkin calculation)
+> 
+> But it seems very common to stack-allocate spi_transfers:
+> 
+> https://elixir.bootlin.com/linux/v5.18-rc2/source/drivers/spi/spi.c#L4097
+> https://elixir.bootlin.com/linux/v5.18-rc2/source/include/linux/spi/spi.h#L1244
+> 
+> Do you have a feel for at what point that becomes a concern?
+
+That's fine.  I just want you to bear this in mind.
+
+I wish to prevent adding yet more W=1 level warnings into the kernel.
+
+> > > +	struct spi_device *spi;
+> > > +	unsigned int addr;
+> > > +	u8 *tx_buf;
+> > > +
+> > > +	spi = core->spi;
+> > > +
+> > > +	addr = ocelot_spi_translate_address(reg + regmap_context->base);
+> > > +	tx_buf = (u8 *)&addr;
+> > > +
+> > > +	spi_message_init(&msg);
+> > > +
+> > > +	memset(&tx, 0, sizeof(tx));
+> > > +
+> > > +	/* Ignore the first byte for the 24-bit address */
+> > > +	tx.tx_buf = &tx_buf[1];
+> > > +	tx.len = 3;
+> > > +
+> > > +	spi_message_add_tail(&tx, &msg);
+> > > +
+> > > +	if (core->spi_padding_bytes > 0) {
+> > > +		u8 dummy_buf[16] = {0};
+> > > +
+> > > +		memset(&padding, 0, sizeof(padding));
+> > > +
+> > > +		/* Just toggle the clock for padding bytes */
+> > > +		padding.len = core->spi_padding_bytes;
+> > > +		padding.tx_buf = dummy_buf;
+> > > +		padding.dummy_data = 1;
+> > > +
+> > > +		spi_message_add_tail(&padding, &msg);
+> > > +	}
+> > > +
+> > > +	memset(&rx, 0, sizeof(rx));
+> > > +	rx.rx_buf = val;
+> > > +	rx.len = 4;
+> > > +
+> > > +	spi_message_add_tail(&rx, &msg);
+> > > +
+> > > +	return spi_sync(spi, &msg);
+> > > +}
+> > > +
+> > > +static int ocelot_spi_reg_write(void *context, unsigned int reg,
+> > > +				unsigned int val)
+> > > +{
+> > > +	struct ocelot_spi_regmap_context *regmap_context = context;
+> > > +	struct ocelot_core *core = regmap_context->core;
+> > > +	struct spi_transfer tx[2] = {0};
+> > > +	struct spi_message msg;
+> > > +	struct spi_device *spi;
+> > > +	unsigned int addr;
+> > > +	u8 *tx_buf;
+> > > +
+> > > +	spi = core->spi;
+> > > +
+> > > +	addr = ocelot_spi_translate_address(reg + regmap_context->base);
+> > > +	tx_buf = (u8 *)&addr;
+> > > +
+> > > +	spi_message_init(&msg);
+> > > +
+> > > +	/* Ignore the first byte for the 24-bit address and set the write bit */
+> > > +	tx_buf[1] |= BIT(7);
+> > > +	tx[0].tx_buf = &tx_buf[1];
+> > > +	tx[0].len = 3;
+> > > +
+> > > +	spi_message_add_tail(&tx[0], &msg);
+> > > +
+> > > +	memset(&tx[1], 0, sizeof(struct spi_transfer));
+> > > +	tx[1].tx_buf = &val;
+> > > +	tx[1].len = 4;
+> > > +
+> > > +	spi_message_add_tail(&tx[1], &msg);
+> > > +
+> > > +	return spi_sync(spi, &msg);
+> > > +}
+> > > +
+> > > +static const struct regmap_config ocelot_spi_regmap_config = {
+> > > +	.reg_bits = 24,
+> > > +	.reg_stride = 4,
+> > > +	.val_bits = 32,
+> > > +
+> > > +	.reg_read = ocelot_spi_reg_read,
+> > > +	.reg_write = ocelot_spi_reg_write,
+> > > +
+> > > +	.max_register = 0xffffffff,
+> > > +	.use_single_write = true,
+> > > +	.use_single_read = true,
+> > > +	.can_multi_write = false,
+> > > +
+> > > +	.reg_format_endian = REGMAP_ENDIAN_BIG,
+> > > +	.val_format_endian = REGMAP_ENDIAN_NATIVE,
+> > > +};
+> > > +
+> > > +struct regmap *
+> > > +ocelot_spi_devm_get_regmap(struct ocelot_core *core, struct device *child,
+> > > +			   const struct resource *res)
+> > 
+> > This seems to always initialise a new Regmap.
+> > 
+> > To me 'get' implies that it could fetch an already existing one.
+> > 
+> > ... and *perhaps* init a new one if none exists..
+> 
+> That's exactly what my intention was when I started.
+> 
+> But it seems like *if* that is something that is required, it should be
+> done through a syscon / device tree implementation and not be snuck into
+> this regmap getter. I was trying to do too much.
+> 
+> I'm renaming to "init"
+> 
+> > 
+> > > +{
+> > > +	struct ocelot_spi_regmap_context *context;
+> > > +	struct regmap_config regmap_config;
+> > > +
+> > > +	context = devm_kzalloc(child, sizeof(*context), GFP_KERNEL);
+> > > +	if (IS_ERR(context))
+> > > +		return ERR_CAST(context);
+> > > +
+> > > +	context->base = res->start;
+> > > +	context->core = core;
+> > > +
+> > > +	memcpy(&regmap_config, &ocelot_spi_regmap_config,
+> > > +	       sizeof(ocelot_spi_regmap_config));
+> > > +
+> > > +	regmap_config.name = res->name;
+> > > +	regmap_config.max_register = res->end - res->start;
+> > > +
+> > > +	return devm_regmap_init(child, NULL, context, &regmap_config);
+> > > +}
+> > > +
+> > > +static int ocelot_spi_probe(struct spi_device *spi)
+> > > +{
+> > > +	struct device *dev = &spi->dev;
+> > > +	struct ocelot_core *core;
+> > 
+> > This would be more in keeping with current drivers if you dropped the
+> > '_core' part of the struct name and called the variable ddata.
+> 
+> There's already a "struct ocelot" defined in include/soc/mscc/ocelot.h.
+> I suppose it could be renamed to align with what it actually is: the
+> "switch" component of the ocelot chip.
+> 
+> Vladimir, Alexandre, Horaitu, others:
+> Any opinions about this becoming "struct ocelot" and the current struct
+> being "struct ocelot_switch"?
+> 
+> Or maybe a technical / philosophical question: is "ocelot" the switch
+> core that can be implemented in other hardware? Or is it the chip family
+> entirely, (pinctrl, sgpio, etc.) who's switch core was brought into
+> other products?
+> 
+> The existing struct change would hit about 30 files.
+> https://elixir.bootlin.com/linux/v5.18-rc2/C/ident/ocelot
+
+That's not ideal.
+
+Please consider using 'ocelot_ddata' for now and consider a larger
+overhaul at a later date, if it makes sense to do so.
+
+[...]
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

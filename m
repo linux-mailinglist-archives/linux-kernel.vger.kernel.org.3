@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C084150611C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39227506118
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242623AbiDSAqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
+        id S242658AbiDSAsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241150AbiDSApO (ORCPT
+        with ESMTP id S241142AbiDSApO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 20:45:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993A82AC56
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC582AC51
         for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:42:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21EF4613C5
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 181366138B
         for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:42:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27212C385D5;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20174C385D1;
         Tue, 19 Apr 2022 00:42:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650328948;
-        bh=r3jA59cd78DZiQe3/m4vv1s+CMiCUg02JEu8FamNgzk=;
+        bh=TXGXxxDUWM3g7RndkKdMyxMfgFKYo/NmOYDBPkR2PO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vHJ7Twj57EBxawQeOg+4XnTL0PtQ6KkJ6Q3ptAZSsLqO9nFLx6NAxxr+/Z0w0WMZY
-         Gkdb9d/fm6YthBy6egiX0s9A2MA9ByQlppcXbpL2q8YRyVmq2PJJA2iBi52sWrEEt/
-         qSkqZLmo1mAG25QS4B/vVqz6vHwCWjgCfj2ZjyhD0rg+OejIyRGgF4YrNwW/RDfavL
-         JjaQfOlSfkYGRI1KdBLoK9zV7LN2MFF1G6DVe2rCRz7EgZqRHpt5nuEsJDRGfnJgGC
-         QeVGdqBGo3CDL/Anjv3ozaJ5+O5R853Cdg9q4lH4VGzdAUKKa6LRjHeATMXRs1dh+U
-         IAkp3cx3YW02g==
+        b=npTj/QxtzwbLb44f/6Dil+BCDyCFtLyMhclIALEZZ3iHbeHaDhPMougDmfixqWGeU
+         HDezrEwx+FWpGfAjDhr13Y1AWTdLTCMHxXOx6fILFEN3bB8BIpBXgvehoFmjgtBiZp
+         XhnAUlkiIeA2YFtr0IIndBc8oYYCwMUR2usKBu6RT5zfuGdGYdFEl+lLr5GgDW1Kx2
+         QdVbkzjz51L2LBUXyj9UpzkiFpSNBTNLMACvEVDsb4YO4zKH3+RQrhrtQqpTXLbd+m
+         o6OwuzTtimWCeVTnIUQr4D8sz31/W1pWihYKV4G6oBOA2uR0/jXRt/cNsaWVluNCf0
+         uG1/Z0HpTZ6Rw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 331B85C30F7; Mon, 18 Apr 2022 17:42:27 -0700 (PDT)
+        id 351C65C30FB; Mon, 18 Apr 2022 17:42:27 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@fb.com, w@lwt.eu,
         Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH nolibc 24/61] tools/nolibc/sys: make open() take a vararg on the 3rd argument
-Date:   Mon, 18 Apr 2022 17:41:48 -0700
-Message-Id: <20220419004225.3952530-24-paulmck@kernel.org>
+Subject: [PATCH nolibc 25/61] tools/nolibc/stdlib: avoid a 64-bit shift in u64toh_r()
+Date:   Mon, 18 Apr 2022 17:41:49 -0700
+Message-Id: <20220419004225.3952530-25-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220419004219.GA3952301@paulmck-ThinkPad-P17-Gen-1>
 References: <20220419004219.GA3952301@paulmck-ThinkPad-P17-Gen-1>
@@ -59,63 +59,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Willy Tarreau <w@1wt.eu>
 
-Let's pass a vararg to open() so that it remains compatible with existing
-code. The arg is only dereferenced when flags contain O_CREAT. The function
-is generally not inlined anymore, causing an extra call (total 16 extra
-bytes) but it's still optimized for constant propagation, limiting the
-excess to no more than 16 bytes in practice when open() is called without
-O_CREAT, and ~40 with O_CREAT, which remains reasonable.
+The build of printf() on mips requires libgcc for functions __ashldi3 and
+__lshrdi3 due to 64-bit shifts when scanning the input number. These are
+not really needed in fact since we scan the number 4 bits at a time. Let's
+arrange the loop to perform two 32-bit shifts instead on 32-bit platforms.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/include/nolibc/sys.h | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ tools/include/nolibc/stdlib.h | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 98689f668ed3..539af457a91b 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -7,6 +7,7 @@
- #ifndef _NOLIBC_SYS_H
- #define _NOLIBC_SYS_H
+diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+index 82a4cf606d3c..db47362a750f 100644
+--- a/tools/include/nolibc/stdlib.h
++++ b/tools/include/nolibc/stdlib.h
+@@ -200,14 +200,18 @@ int u64toh_r(uint64_t in, char *buffer)
+ 	int dig;
  
-+#include <stdarg.h>
- #include "std.h"
+ 	do {
+-		dig = in >> pos;
+-		in -= (uint64_t)dig << pos;
++		if (sizeof(long) >= 8) {
++			dig = (in >> pos) & 0xF;
++		} else {
++			/* 32-bit platforms: avoid a 64-bit shift */
++			uint32_t d = (pos >= 32) ? (in >> 32) : in;
++			dig = (d >> (pos & 31)) & 0xF;
++		}
++		if (dig > 9)
++			dig += 'a' - '0' - 10;
+ 		pos -= 4;
+-		if (dig || digits || pos < 0) {
+-			if (dig > 9)
+-				dig += 'a' - '0' - 10;
++		if (dig || digits || pos < 0)
+ 			buffer[digits++] = '0' + dig;
+-		}
+ 	} while (pos >= 0);
  
- /* system includes */
-@@ -719,7 +720,7 @@ int mount(const char *src, const char *tgt,
- 
- 
- /*
-- * int open(const char *path, int flags, mode_t mode);
-+ * int open(const char *path, int flags[, mode_t mode]);
-  */
- 
- static __attribute__((unused))
-@@ -735,9 +736,20 @@ int sys_open(const char *path, int flags, mode_t mode)
- }
- 
- static __attribute__((unused))
--int open(const char *path, int flags, mode_t mode)
-+int open(const char *path, int flags, ...)
- {
--	int ret = sys_open(path, flags, mode);
-+	mode_t mode = 0;
-+	int ret;
-+
-+	if (flags & O_CREAT) {
-+		va_list args;
-+
-+		va_start(args, flags);
-+		mode = va_arg(args, mode_t);
-+		va_end(args);
-+	}
-+
-+	ret = sys_open(path, flags, mode);
- 
- 	if (ret < 0) {
- 		SET_ERRNO(-ret);
+ 	buffer[digits] = 0;
 -- 
 2.31.1.189.g2e36527f23
 

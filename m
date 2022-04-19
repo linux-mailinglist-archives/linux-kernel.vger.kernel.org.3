@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697B65067A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CDB95067AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350374AbiDSJ1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 05:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        id S241622AbiDSJ20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 05:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350398AbiDSJ1u (ORCPT
+        with ESMTP id S241574AbiDSJ2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 05:27:50 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2A3BC9B;
-        Tue, 19 Apr 2022 02:25:08 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id EC0CB1F42013
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650360307;
-        bh=a6llNOMgG5c9GRiJFktr/S/R/Vwl5cl+XkvWKZME0hA=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=CqizTF9Ce2vQ2D/wegQIAIsidWCzd0dYTleYYRWjS5bJGSCyK7p222QRMRo70VD4a
-         MqFb6L1xkC6A0CeUdU6t6a2ee3GUnKYUNm87HmitUbpN6YboUImDr3mheXL+ds/DTO
-         kLE0FfxERhsuopC8fn06c0brC4LSL5dvTUGCcnti/ghH7PayrqGgyFdX5ER4naAOm9
-         nlTGYlAkbbFdBeERWZArDhMysZdxBeSKDC8bpL9DwGjdVvYrx2MgSVsYaFUkFWnw9r
-         fsjFuF6SY+ZywUlUhnuN2A4b6z9+3y71gneiSkJV1BxbEjDWY42aPJbY0ZB3SB7thT
-         vBujHncmIFAXw==
-Message-ID: <a6d6484d-583b-c5f3-bc3e-3a87037b9716@collabora.com>
-Date:   Tue, 19 Apr 2022 14:24:55 +0500
+        Tue, 19 Apr 2022 05:28:24 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4400E27FD3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:25:42 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id g18so21537351wrb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:25:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bVmGu64HyeyAZzKuzIehzK+dbcp+uasGY7c7tKrsK6Q=;
+        b=loDeX0yVrkg3GluWrjP7aZ7M3FT9n22j6L1qrs9YsQTltHHvJJCc3y56KmhBl3sqe8
+         1LKe5YEzPqftEuYMRf4RiH/f53uwFsmqW82h8kbkRJUnBsQX6m6cZ1VnrzK7kt/eogUe
+         HQi+s1ZlhtyPtqgNaJFM4vdbicAEfgW1CBJb7vR9+DQm3mlP+FQ+cjMhfK+gWEyE0f65
+         SD1Cc52YV8G/wx5ssRH4+cI6fVudIpSubBFVKZ7cxin/BYx2afWDUi6/irEjS0sgfAT+
+         oxMBua1lMOBRSQ1hK/38tE4EKKZGX746oo/4dza5QRfaFbXu0uzjiKIw5xYnbcnHvOt4
+         kpDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bVmGu64HyeyAZzKuzIehzK+dbcp+uasGY7c7tKrsK6Q=;
+        b=L3kIMqzvkvT4cb8E4EAo2QWur4k0I6Zyg/CAnLzH63anBpc6AYIsXlJVPFfAHsHoxD
+         e4mBmIskBVH1aWwBkUGBw80RzyS+35Ex87ED3swCw1qyCHM4Agey1237s/WfRP0X98fU
+         /OfEnCDfWjugiwpEYF33ta507yFj9KRkfDhMd+cDM6yQsWDCmLNcvAAbOwDUTKDMMVmS
+         fDXIq9BUZB3kYx7UEasg3eCz7wnTuFYuEBgkfjpAVoP6MRZu9Reem6odogkf4JsDkl0Q
+         GneE9EAgrZuVEIdtYmvbr7UdrAopyelA3bOweopeVSsF6QxfplNL4bS7ajSo3/d42eyb
+         K3bQ==
+X-Gm-Message-State: AOAM530wWIE4pNkg57OKyoBM5O8vlb0+63YnvAelLiczDcUZTZvaVoQX
+        vn4MxIZIrEAprj4II/FO/U7SrpXoKOm8vWPVcf5l5g==
+X-Google-Smtp-Source: ABdhPJy4LMvCOsIcHOlbW8mjefXgM4G+1U2IhqdZHfwseqUoR7C9D/OvU5jpEERqI1ZhVeYS+IGjUmTZu2Dq7hPIn8g=
+X-Received: by 2002:adf:e108:0:b0:1ef:97ad:5372 with SMTP id
+ t8-20020adfe108000000b001ef97ad5372mr10746333wrz.658.1650360340796; Tue, 19
+ Apr 2022 02:25:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     usama.anjum@collabora.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        groeck@chromium.org, bleung@chromium.org, dtor@chromium.org,
-        gwendal@chromium.org, vbendeb@chromium.org, andy@infradead.org,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?UTF-8?Q?Bla=c5=be_Hrastnik?= <blaz@mxxn.io>,
-        Darren Hart <dvhart@infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+References: <20220412125035.40312-1-quic_jinlmao@quicinc.com> <20220412125035.40312-7-quic_jinlmao@quicinc.com>
+In-Reply-To: <20220412125035.40312-7-quic_jinlmao@quicinc.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Tue, 19 Apr 2022 10:25:39 +0100
+Message-ID: <CAJ9a7VjL_EPLGubKVjCyng=yhHOfa4TToMtCk3JN6fNJTnsK_g@mail.gmail.com>
+Subject: Re: [PATCH v5 06/10] docs: sysfs: coresight: Add sysfs ABI
+ documentation for TPDM
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeremy Soller <jeremy@system76.com>,
-        Mattias Jacobsson <2pi@mok.nu>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v8] platform: x86: Add ChromeOS ACPI device driver
-Content-Language: en-US
-To:     =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>
-References: <Ylmmf03fewXEjRr0@debian-BULLSEYE-live-builder-AMD64>
- <eygNMwL4gadqjJuOq-syanavJ5sAb5_dHTcQ0V9TU5kM5uh5TZUQXdYsNFTtnSm1ZI5WKhw7BgzG8lXEwJKEZz4agWq5_HkFDGWiFuuo7fE=@protonmail.com>
- <78e3e1e9-e21f-052a-ecff-1d13714b4303@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <78e3e1e9-e21f-052a-ecff-1d13714b4303@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,32 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/22 10:31 PM, Muhammad Usama Anjum wrote:
-> Hi,
-> 
-> Thanks for reviewing.
-> 
->>> +	switch (element->type) {
->>> +	case ACPI_TYPE_BUFFER:
->>> +		length = element->buffer.length;
->>> +		info->data = kmemdup(element->buffer.pointer,
->>> +				     length, GFP_KERNEL);
->>> +		break;
->>> +	case ACPI_TYPE_INTEGER:
->>> +		length = snprintf(buffer, sizeof(buffer), "%d",
->>> +				  (int)element->integer.value);
->>> +		info->data = kmemdup(buffer, length, GFP_KERNEL);
->>
->> You can use `kasprintf()` here, no?
->>
-Yeah, I can use sasprintf() in place of snprintf() and kmemdup(). Thanks.
+Hi
 
-> Choosing kmemdup vs k*printf depends on what is being achieved. Usage of
-> kmemdup indicates that only the memory is being duplicated here. While
-> in case of k*printf, some transformation is done. Thus in normal memory
-> duplication cases like this, the usage of kmemdup makes code more
-> readable and seems preferable to me.
-> 
+On Tue, 12 Apr 2022 at 13:51, Mao Jinlong <quic_jinlmao@quicinc.com> wrote:
+>
+> Add API usage document for sysfs API in TPDM driver.
+>
+> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> ---
+>  .../ABI/testing/sysfs-bus-coresight-devices-tpdm    | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> new file mode 100644
+> index 000000000000..d70ba429f38d
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> @@ -0,0 +1,13 @@
+> +What:          /sys/bus/coresight/devices/<tpdm-name>/integration_test
+> +Date:          April 2022
+> +KernelVersion  5.18
+> +Contact:       Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
+> +Description:
+> +               (Write) Run integration test for tpdm. Integration test
+> +               will generate test data for tpdm. It can help to make
+> +               sure that the trace path is enabled and the link configurations
+> +               are fine.
+> +
+> +               value to this sysfs node:
+> +               1 : Genreate 64 bits data
+s/Genreate/Generate
+
+> +               2 : Generate 32 bits data
+> --
+> 2.17.1
+>
+
+Reviewed by: Mike Leach <mike.leach@linaro.org>
+
 
 -- 
-Muhammad Usama Anjum
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

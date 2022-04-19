@@ -2,110 +2,828 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F4E507207
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436B9507202
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353980AbiDSPo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
+        id S1353967AbiDSPn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354298AbiDSPnW (ORCPT
+        with ESMTP id S1344187AbiDSPn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:43:22 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B43BA9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:40:39 -0700 (PDT)
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MkEdF-1oMoU03lnd-00kiSf for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022
- 17:40:37 +0200
-Received: by mail-wr1-f54.google.com with SMTP id w4so22970378wrg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:40:37 -0700 (PDT)
-X-Gm-Message-State: AOAM5323waBhnuy+fNFd9m111wyEUkyiJqah1LbswKqla13g5bpfQnqK
-        TB6THLQpVxevAfnfkMAzHM//cG6tFycoxsX6z/U=
-X-Google-Smtp-Source: ABdhPJx2j14opnoXVu+zRZ4O7R0W4B6Te+BYkmuTotpIld2KFF5dVZxiMPz0Ry5HHgFRVQndxUG068ioQAMMaGHobtE=
-X-Received: by 2002:a5d:6983:0:b0:207:a226:df4b with SMTP id
- g3-20020a5d6983000000b00207a226df4bmr12156987wru.192.1650382837528; Tue, 19
- Apr 2022 08:40:37 -0700 (PDT)
+        Tue, 19 Apr 2022 11:43:26 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2937C2650;
+        Tue, 19 Apr 2022 08:40:43 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2ec42eae76bso176694687b3.10;
+        Tue, 19 Apr 2022 08:40:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xHXxhy+upNQpqkNAFzDFPpY6p3DKTPEkF54eq/c7qaE=;
+        b=vFE1KHy4TE/A5UFstSeGBCTJHBzjVJsztWazx6doDCj05BfwYNF+u/E5k/Nu39NTOV
+         hePyIzeG8ydLP6i1GERW/KWWjaK4p4a7IxpbV5/sjABMO7s1jpGfcf6IEyqYqVrsywle
+         YWWOlvHNKONPKlxPIHtCd3+pJLgNpmjN+PUH36SBx3+O9O36o7l5V+K8Bn/0hbdelDOT
+         0AuyoZc7UYVvbHGE3S4ZEWJolK/OSk9XvBHjhLFSeQV8J3c+5R+4K4sugN12ZyW6qvm1
+         6glfgH3Pp5oBGmCn9mPqUU4WhIdflqhgV0RORktTI2CMXyDh01Vc5MTJzjLaIA3/qpCX
+         sqJg==
+X-Gm-Message-State: AOAM533sms3/ryEF5vCu1lAlqLq8SUE6V58W/0V1077nzqOd4TMWJZ/F
+        4L+aFpFrChDzrJ1HhXGZ3MedpCFmEca706UnFVM=
+X-Google-Smtp-Source: ABdhPJzxDXGnKMrr9mJ9+potcDuYIfuU2wlOZY2NcEXIpNuWTtgz8YKwbZyhUodbbFighRXKYSfvAE6a94KIhQnjIWA=
+X-Received: by 2002:a81:4b8e:0:b0:2ef:5240:69fc with SMTP id
+ y136-20020a814b8e000000b002ef524069fcmr16440574ywa.19.1650382842272; Tue, 19
+ Apr 2022 08:40:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191018154052.1276506-1-arnd@arndb.de> <20191018154201.1276638-21-arnd@arndb.de>
- <87o8y0lgs1.fsf@belgarion.home>
-In-Reply-To: <87o8y0lgs1.fsf@belgarion.home>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 19 Apr 2022 17:40:21 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0Rwh-+483nxgWhmst8VdEByb8HCE8H-mEhb=Laq9qc4w@mail.gmail.com>
-Message-ID: <CAK8P3a0Rwh-+483nxgWhmst8VdEByb8HCE8H-mEhb=Laq9qc4w@mail.gmail.com>
-Subject: Re: [PATCH 21/46] ARM: pxa: spitz: use gpio descriptors for audio
-To:     Robert Jarzmik <robert.jarzmik@free.fr>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220415133356.179706384@linutronix.de> <20220415161206.478362457@linutronix.de>
+In-Reply-To: <20220415161206.478362457@linutronix.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 19 Apr 2022 17:40:31 +0200
+Message-ID: <CAJZ5v0h_Zed_0ESv2A3XJ+F3e5qAdqu6gR9xiiBnCF59cN4KCQ@mail.gmail.com>
+Subject: Re: [patch 02/10] x86/smp: Move APERF/MPERF code where it belongs
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:B4KkuJO4O6p7OV9tY+r5w5ZQaXiO8EgcHvCXb7uRux5s14U8in4
- EyOQyl0VWSOPyzI5Jwfg0HNTTEFV7nYnmdWrhOTIbMCOfF8mdMm8msY/pf43tS+bPioZcnZ
- a9eELn/8HgNN1BWmsOPRirYZjhMKL8hTOeNiVPfw2VExNRVPi2ZWzz0BIxoVaMzgcXPJ4gN
- NRnVG4uuBVlswLaDwRNbg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oMNwgFhYYLA=:dz/tndUjM0DwM7UljviixW
- dmzrfmFJnpCHlkO5+7Ht2VTlf4w2ce9MOdZ3c/GzFAEp0ULPah8wK7y0clV4CbGsg7bp63Qfw
- 8dyLF2D9vDjqSMcjvPe8VgG4ghfg+35hJMw2G73dyX/lIkfxMnEKjmBAAfOjvBfGDQl06D91g
- 18OfHw0SCDxM6UrnkhBwaYPvPo6yCmeLAnj4YIFqE5Q7HiOoY/4UK4ZsgOrcftwu2U/o5qgtP
- f2tu1ui76WU9/55cEmXlt3gjzorO8ACMWvC1NgUG6nhq9FE3kFyjip2jwXQMVbWdAINj2nMzm
- Ez9zNkjhfugtrXw3cWocHK/5ZBI3CXlWwHGzs5u7DLPyHBCmLlDQgt+ZC4RBWmCVwdXXGfXXq
- tp8df2nDpX3S2l0TdOVBkFZVp+w72eUxofzha46S+X0WgDYl9ig139s41T6Od0T8ebHkApMVm
- nM9GdqkrdZ/swEP8VXPDBDLh3g6agw3GXwq8isZkF0gCfLx19pS8N00q6ewksWYNISntikqkE
- f42cCX2x2a1ST16E6ZEqO+KjiAUeOUXhpfZZVGTB3fwxgVIs/h2kgr8+n3Lzysik5r+Q53ub/
- xggqm0TAaxL/H9gJSdGF264bhcdBSM3fhS1yg+sHy6YSxwKCGSmKGX66ZllA57Fmq0qSKgFiv
- goS88iKxB4vxheWcQHUY8lEx17M7j6Q5NUbMgX/IJJokVLwHetX1IlgCWRNIQ+Hf1B2A=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 28, 2019 at 10:08 PM Robert Jarzmik <robert.jarzmik@free.fr> wrote:
+On Fri, Apr 15, 2022 at 9:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> as this can share code with the preexisting APERF/MPERF code.
+>
+> No functional change.
+>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-> > +static struct gpiod_lookup_table akita_audio_gpio_table = {
-> > +     .dev_id = "spitz-audio",
-> > +     .table = {
-> > +             GPIO_LOOKUP("sharp-scoop.0", SPITZ_GPIO_MUTE_L - SPITZ_SCP_GPIO_BASE,
-> > +                         "mute-l", GPIO_ACTIVE_HIGH),
-> > +             GPIO_LOOKUP("sharp-scoop.0", SPITZ_GPIO_MUTE_R - SPITZ_SCP_GPIO_BASE,
-> > +                         "mute-r", GPIO_ACTIVE_HIGH),
-> > +             GPIO_LOOKUP("gpio-pxa", AKITA_GPIO_MIC_BIAS - AKITA_IOEXP_GPIO_BASE,
-> > +                         "mic", GPIO_ACTIVE_HIGH),
-> This last one looks a bit dubious, as it looks like a gpio on a gpio expander,
-> could you cross-check that "gpio-pxa" shouldn't be an I2C expander gpio please ?
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I'm revisiting this older patch series now, this was clearly a mistake
-in my original
-version, changed it now to
-
-@@ -982,7 +982,7 @@ static struct gpiod_lookup_table akita_audio_gpio_table = {
-                            "mute-l", GPIO_ACTIVE_HIGH),
-                GPIO_LOOKUP("sharp-scoop.0", SPITZ_GPIO_MUTE_R -
-SPITZ_SCP_GPIO_BASE,
-                            "mute-r", GPIO_ACTIVE_HIGH),
--               GPIO_LOOKUP("gpio-pxa", AKITA_GPIO_MIC_BIAS -
-AKITA_IOEXP_GPIO_BASE,
-+               GPIO_LOOKUP("i2c-max7310", AKITA_GPIO_MIC_BIAS -
-AKITA_IOEXP_GPIO_BASE,
-                            "mic", GPIO_ACTIVE_HIGH),
-                { },
-        },
-
-I'm not 100% sure this is the correct name, as I don't fully
-understand how i2c device
-names are constructed. I see that Linus added a device name in commit
-32d1544880aa ("ARM: pxa: Add gpio descriptor lookup tables for MMC CD/WP"),
-and I guess I could do the same here, but I think that was only needed
-to disambiguate
-two instances of the same device in zylonite, which is not needed for spitz.
-
-       Arnd
+> ---
+>  arch/x86/kernel/cpu/aperfmperf.c |  366 ++++++++++++++++++++++++++++++++++++++-
+>  arch/x86/kernel/smpboot.c        |  355 -------------------------------------
+>  2 files changed, 362 insertions(+), 359 deletions(-)
+>
+> --- a/arch/x86/kernel/cpu/aperfmperf.c
+> +++ b/arch/x86/kernel/cpu/aperfmperf.c
+> @@ -6,15 +6,19 @@
+>   * Copyright (C) 2017 Intel Corp.
+>   * Author: Len Brown <len.brown@intel.com>
+>   */
+> -
+> +#include <linux/cpufreq.h>
+>  #include <linux/delay.h>
+>  #include <linux/ktime.h>
+>  #include <linux/math64.h>
+>  #include <linux/percpu.h>
+> -#include <linux/cpufreq.h>
+> -#include <linux/smp.h>
+> -#include <linux/sched/isolation.h>
+>  #include <linux/rcupdate.h>
+> +#include <linux/sched/isolation.h>
+> +#include <linux/sched/topology.h>
+> +#include <linux/smp.h>
+> +#include <linux/syscore_ops.h>
+> +
+> +#include <asm/cpu_device_id.h>
+> +#include <asm/intel-family.h>
+>
+>  #include "cpu.h"
+>
+> @@ -152,3 +156,357 @@ unsigned int arch_freq_get_on_cpu(int cp
+>
+>         return per_cpu(samples.khz, cpu);
+>  }
+> +
+> +#if defined(CONFIG_X86_64) && defined(CONFIG_SMP)
+> +/*
+> + * APERF/MPERF frequency ratio computation.
+> + *
+> + * The scheduler wants to do frequency invariant accounting and needs a <1
+> + * ratio to account for the 'current' frequency, corresponding to
+> + * freq_curr / freq_max.
+> + *
+> + * Since the frequency freq_curr on x86 is controlled by micro-controller and
+> + * our P-state setting is little more than a request/hint, we need to observe
+> + * the effective frequency 'BusyMHz', i.e. the average frequency over a time
+> + * interval after discarding idle time. This is given by:
+> + *
+> + *   BusyMHz = delta_APERF / delta_MPERF * freq_base
+> + *
+> + * where freq_base is the max non-turbo P-state.
+> + *
+> + * The freq_max term has to be set to a somewhat arbitrary value, because we
+> + * can't know which turbo states will be available at a given point in time:
+> + * it all depends on the thermal headroom of the entire package. We set it to
+> + * the turbo level with 4 cores active.
+> + *
+> + * Benchmarks show that's a good compromise between the 1C turbo ratio
+> + * (freq_curr/freq_max would rarely reach 1) and something close to freq_base,
+> + * which would ignore the entire turbo range (a conspicuous part, making
+> + * freq_curr/freq_max always maxed out).
+> + *
+> + * An exception to the heuristic above is the Atom uarch, where we choose the
+> + * highest turbo level for freq_max since Atom's are generally oriented towards
+> + * power efficiency.
+> + *
+> + * Setting freq_max to anything less than the 1C turbo ratio makes the ratio
+> + * freq_curr / freq_max to eventually grow >1, in which case we clip it to 1.
+> + */
+> +
+> +DEFINE_STATIC_KEY_FALSE(arch_scale_freq_key);
+> +
+> +static DEFINE_PER_CPU(u64, arch_prev_aperf);
+> +static DEFINE_PER_CPU(u64, arch_prev_mperf);
+> +static u64 arch_turbo_freq_ratio = SCHED_CAPACITY_SCALE;
+> +static u64 arch_max_freq_ratio = SCHED_CAPACITY_SCALE;
+> +
+> +void arch_set_max_freq_ratio(bool turbo_disabled)
+> +{
+> +       arch_max_freq_ratio = turbo_disabled ? SCHED_CAPACITY_SCALE :
+> +                                       arch_turbo_freq_ratio;
+> +}
+> +EXPORT_SYMBOL_GPL(arch_set_max_freq_ratio);
+> +
+> +static bool turbo_disabled(void)
+> +{
+> +       u64 misc_en;
+> +       int err;
+> +
+> +       err = rdmsrl_safe(MSR_IA32_MISC_ENABLE, &misc_en);
+> +       if (err)
+> +               return false;
+> +
+> +       return (misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
+> +}
+> +
+> +static bool slv_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
+> +{
+> +       int err;
+> +
+> +       err = rdmsrl_safe(MSR_ATOM_CORE_RATIOS, base_freq);
+> +       if (err)
+> +               return false;
+> +
+> +       err = rdmsrl_safe(MSR_ATOM_CORE_TURBO_RATIOS, turbo_freq);
+> +       if (err)
+> +               return false;
+> +
+> +       *base_freq = (*base_freq >> 16) & 0x3F;     /* max P state */
+> +       *turbo_freq = *turbo_freq & 0x3F;           /* 1C turbo    */
+> +
+> +       return true;
+> +}
+> +
+> +#define X86_MATCH(model)                                       \
+> +       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6,            \
+> +               INTEL_FAM6_##model, X86_FEATURE_APERFMPERF, NULL)
+> +
+> +static const struct x86_cpu_id has_knl_turbo_ratio_limits[] = {
+> +       X86_MATCH(XEON_PHI_KNL),
+> +       X86_MATCH(XEON_PHI_KNM),
+> +       {}
+> +};
+> +
+> +static const struct x86_cpu_id has_skx_turbo_ratio_limits[] = {
+> +       X86_MATCH(SKYLAKE_X),
+> +       {}
+> +};
+> +
+> +static const struct x86_cpu_id has_glm_turbo_ratio_limits[] = {
+> +       X86_MATCH(ATOM_GOLDMONT),
+> +       X86_MATCH(ATOM_GOLDMONT_D),
+> +       X86_MATCH(ATOM_GOLDMONT_PLUS),
+> +       {}
+> +};
+> +
+> +static bool knl_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq,
+> +                               int num_delta_fratio)
+> +{
+> +       int fratio, delta_fratio, found;
+> +       int err, i;
+> +       u64 msr;
+> +
+> +       err = rdmsrl_safe(MSR_PLATFORM_INFO, base_freq);
+> +       if (err)
+> +               return false;
+> +
+> +       *base_freq = (*base_freq >> 8) & 0xFF;      /* max P state */
+> +
+> +       err = rdmsrl_safe(MSR_TURBO_RATIO_LIMIT, &msr);
+> +       if (err)
+> +               return false;
+> +
+> +       fratio = (msr >> 8) & 0xFF;
+> +       i = 16;
+> +       found = 0;
+> +       do {
+> +               if (found >= num_delta_fratio) {
+> +                       *turbo_freq = fratio;
+> +                       return true;
+> +               }
+> +
+> +               delta_fratio = (msr >> (i + 5)) & 0x7;
+> +
+> +               if (delta_fratio) {
+> +                       found += 1;
+> +                       fratio -= delta_fratio;
+> +               }
+> +
+> +               i += 8;
+> +       } while (i < 64);
+> +
+> +       return true;
+> +}
+> +
+> +static bool skx_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq, int size)
+> +{
+> +       u64 ratios, counts;
+> +       u32 group_size;
+> +       int err, i;
+> +
+> +       err = rdmsrl_safe(MSR_PLATFORM_INFO, base_freq);
+> +       if (err)
+> +               return false;
+> +
+> +       *base_freq = (*base_freq >> 8) & 0xFF;      /* max P state */
+> +
+> +       err = rdmsrl_safe(MSR_TURBO_RATIO_LIMIT, &ratios);
+> +       if (err)
+> +               return false;
+> +
+> +       err = rdmsrl_safe(MSR_TURBO_RATIO_LIMIT1, &counts);
+> +       if (err)
+> +               return false;
+> +
+> +       for (i = 0; i < 64; i += 8) {
+> +               group_size = (counts >> i) & 0xFF;
+> +               if (group_size >= size) {
+> +                       *turbo_freq = (ratios >> i) & 0xFF;
+> +                       return true;
+> +               }
+> +       }
+> +
+> +       return false;
+> +}
+> +
+> +static bool core_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
+> +{
+> +       u64 msr;
+> +       int err;
+> +
+> +       err = rdmsrl_safe(MSR_PLATFORM_INFO, base_freq);
+> +       if (err)
+> +               return false;
+> +
+> +       err = rdmsrl_safe(MSR_TURBO_RATIO_LIMIT, &msr);
+> +       if (err)
+> +               return false;
+> +
+> +       *base_freq = (*base_freq >> 8) & 0xFF;    /* max P state */
+> +       *turbo_freq = (msr >> 24) & 0xFF;         /* 4C turbo    */
+> +
+> +       /* The CPU may have less than 4 cores */
+> +       if (!*turbo_freq)
+> +               *turbo_freq = msr & 0xFF;         /* 1C turbo    */
+> +
+> +       return true;
+> +}
+> +
+> +static bool intel_set_max_freq_ratio(void)
+> +{
+> +       u64 base_freq, turbo_freq;
+> +       u64 turbo_ratio;
+> +
+> +       if (slv_set_max_freq_ratio(&base_freq, &turbo_freq))
+> +               goto out;
+> +
+> +       if (x86_match_cpu(has_glm_turbo_ratio_limits) &&
+> +           skx_set_max_freq_ratio(&base_freq, &turbo_freq, 1))
+> +               goto out;
+> +
+> +       if (x86_match_cpu(has_knl_turbo_ratio_limits) &&
+> +           knl_set_max_freq_ratio(&base_freq, &turbo_freq, 1))
+> +               goto out;
+> +
+> +       if (x86_match_cpu(has_skx_turbo_ratio_limits) &&
+> +           skx_set_max_freq_ratio(&base_freq, &turbo_freq, 4))
+> +               goto out;
+> +
+> +       if (core_set_max_freq_ratio(&base_freq, &turbo_freq))
+> +               goto out;
+> +
+> +       return false;
+> +
+> +out:
+> +       /*
+> +        * Some hypervisors advertise X86_FEATURE_APERFMPERF
+> +        * but then fill all MSR's with zeroes.
+> +        * Some CPUs have turbo boost but don't declare any turbo ratio
+> +        * in MSR_TURBO_RATIO_LIMIT.
+> +        */
+> +       if (!base_freq || !turbo_freq) {
+> +               pr_debug("Couldn't determine cpu base or turbo frequency, necessary for scale-invariant accounting.\n");
+> +               return false;
+> +       }
+> +
+> +       turbo_ratio = div_u64(turbo_freq * SCHED_CAPACITY_SCALE, base_freq);
+> +       if (!turbo_ratio) {
+> +               pr_debug("Non-zero turbo and base frequencies led to a 0 ratio.\n");
+> +               return false;
+> +       }
+> +
+> +       arch_turbo_freq_ratio = turbo_ratio;
+> +       arch_set_max_freq_ratio(turbo_disabled());
+> +
+> +       return true;
+> +}
+> +
+> +static void init_counter_refs(void)
+> +{
+> +       u64 aperf, mperf;
+> +
+> +       rdmsrl(MSR_IA32_APERF, aperf);
+> +       rdmsrl(MSR_IA32_MPERF, mperf);
+> +
+> +       this_cpu_write(arch_prev_aperf, aperf);
+> +       this_cpu_write(arch_prev_mperf, mperf);
+> +}
+> +
+> +#ifdef CONFIG_PM_SLEEP
+> +static struct syscore_ops freq_invariance_syscore_ops = {
+> +       .resume = init_counter_refs,
+> +};
+> +
+> +static void register_freq_invariance_syscore_ops(void)
+> +{
+> +       /* Bail out if registered already. */
+> +       if (freq_invariance_syscore_ops.node.prev)
+> +               return;
+> +
+> +       register_syscore_ops(&freq_invariance_syscore_ops);
+> +}
+> +#else
+> +static inline void register_freq_invariance_syscore_ops(void) {}
+> +#endif
+> +
+> +void init_freq_invariance(bool secondary, bool cppc_ready)
+> +{
+> +       bool ret = false;
+> +
+> +       if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
+> +               return;
+> +
+> +       if (secondary) {
+> +               if (static_branch_likely(&arch_scale_freq_key)) {
+> +                       init_counter_refs();
+> +               }
+> +               return;
+> +       }
+> +
+> +       if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL)
+> +               ret = intel_set_max_freq_ratio();
+> +       else if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
+> +               if (!cppc_ready) {
+> +                       return;
+> +               }
+> +               ret = amd_set_max_freq_ratio(&arch_turbo_freq_ratio);
+> +       }
+> +
+> +       if (ret) {
+> +               init_counter_refs();
+> +               static_branch_enable(&arch_scale_freq_key);
+> +               register_freq_invariance_syscore_ops();
+> +               pr_info("Estimated ratio of average max frequency by base frequency (times 1024): %llu\n", arch_max_freq_ratio);
+> +       } else {
+> +               pr_debug("Couldn't determine max cpu frequency, necessary for scale-invariant accounting.\n");
+> +       }
+> +}
+> +
+> +static void disable_freq_invariance_workfn(struct work_struct *work)
+> +{
+> +       static_branch_disable(&arch_scale_freq_key);
+> +}
+> +
+> +static DECLARE_WORK(disable_freq_invariance_work,
+> +                   disable_freq_invariance_workfn);
+> +
+> +DEFINE_PER_CPU(unsigned long, arch_freq_scale) = SCHED_CAPACITY_SCALE;
+> +
+> +void arch_scale_freq_tick(void)
+> +{
+> +       u64 freq_scale;
+> +       u64 aperf, mperf;
+> +       u64 acnt, mcnt;
+> +
+> +       if (!arch_scale_freq_invariant())
+> +               return;
+> +
+> +       rdmsrl(MSR_IA32_APERF, aperf);
+> +       rdmsrl(MSR_IA32_MPERF, mperf);
+> +
+> +       acnt = aperf - this_cpu_read(arch_prev_aperf);
+> +       mcnt = mperf - this_cpu_read(arch_prev_mperf);
+> +
+> +       this_cpu_write(arch_prev_aperf, aperf);
+> +       this_cpu_write(arch_prev_mperf, mperf);
+> +
+> +       if (check_shl_overflow(acnt, 2*SCHED_CAPACITY_SHIFT, &acnt))
+> +               goto error;
+> +
+> +       if (check_mul_overflow(mcnt, arch_max_freq_ratio, &mcnt) || !mcnt)
+> +               goto error;
+> +
+> +       freq_scale = div64_u64(acnt, mcnt);
+> +       if (!freq_scale)
+> +               goto error;
+> +
+> +       if (freq_scale > SCHED_CAPACITY_SCALE)
+> +               freq_scale = SCHED_CAPACITY_SCALE;
+> +
+> +       this_cpu_write(arch_freq_scale, freq_scale);
+> +       return;
+> +
+> +error:
+> +       pr_warn("Scheduler frequency invariance went wobbly, disabling!\n");
+> +       schedule_work(&disable_freq_invariance_work);
+> +}
+> +#endif /* CONFIG_X86_64 && CONFIG_SMP */
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -56,7 +56,6 @@
+>  #include <linux/numa.h>
+>  #include <linux/pgtable.h>
+>  #include <linux/overflow.h>
+> -#include <linux/syscore_ops.h>
+>
+>  #include <asm/acpi.h>
+>  #include <asm/desc.h>
+> @@ -1847,357 +1846,3 @@ void native_play_dead(void)
+>  }
+>
+>  #endif
+> -
+> -#ifdef CONFIG_X86_64
+> -/*
+> - * APERF/MPERF frequency ratio computation.
+> - *
+> - * The scheduler wants to do frequency invariant accounting and needs a <1
+> - * ratio to account for the 'current' frequency, corresponding to
+> - * freq_curr / freq_max.
+> - *
+> - * Since the frequency freq_curr on x86 is controlled by micro-controller and
+> - * our P-state setting is little more than a request/hint, we need to observe
+> - * the effective frequency 'BusyMHz', i.e. the average frequency over a time
+> - * interval after discarding idle time. This is given by:
+> - *
+> - *   BusyMHz = delta_APERF / delta_MPERF * freq_base
+> - *
+> - * where freq_base is the max non-turbo P-state.
+> - *
+> - * The freq_max term has to be set to a somewhat arbitrary value, because we
+> - * can't know which turbo states will be available at a given point in time:
+> - * it all depends on the thermal headroom of the entire package. We set it to
+> - * the turbo level with 4 cores active.
+> - *
+> - * Benchmarks show that's a good compromise between the 1C turbo ratio
+> - * (freq_curr/freq_max would rarely reach 1) and something close to freq_base,
+> - * which would ignore the entire turbo range (a conspicuous part, making
+> - * freq_curr/freq_max always maxed out).
+> - *
+> - * An exception to the heuristic above is the Atom uarch, where we choose the
+> - * highest turbo level for freq_max since Atom's are generally oriented towards
+> - * power efficiency.
+> - *
+> - * Setting freq_max to anything less than the 1C turbo ratio makes the ratio
+> - * freq_curr / freq_max to eventually grow >1, in which case we clip it to 1.
+> - */
+> -
+> -DEFINE_STATIC_KEY_FALSE(arch_scale_freq_key);
+> -
+> -static DEFINE_PER_CPU(u64, arch_prev_aperf);
+> -static DEFINE_PER_CPU(u64, arch_prev_mperf);
+> -static u64 arch_turbo_freq_ratio = SCHED_CAPACITY_SCALE;
+> -static u64 arch_max_freq_ratio = SCHED_CAPACITY_SCALE;
+> -
+> -void arch_set_max_freq_ratio(bool turbo_disabled)
+> -{
+> -       arch_max_freq_ratio = turbo_disabled ? SCHED_CAPACITY_SCALE :
+> -                                       arch_turbo_freq_ratio;
+> -}
+> -EXPORT_SYMBOL_GPL(arch_set_max_freq_ratio);
+> -
+> -static bool turbo_disabled(void)
+> -{
+> -       u64 misc_en;
+> -       int err;
+> -
+> -       err = rdmsrl_safe(MSR_IA32_MISC_ENABLE, &misc_en);
+> -       if (err)
+> -               return false;
+> -
+> -       return (misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
+> -}
+> -
+> -static bool slv_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
+> -{
+> -       int err;
+> -
+> -       err = rdmsrl_safe(MSR_ATOM_CORE_RATIOS, base_freq);
+> -       if (err)
+> -               return false;
+> -
+> -       err = rdmsrl_safe(MSR_ATOM_CORE_TURBO_RATIOS, turbo_freq);
+> -       if (err)
+> -               return false;
+> -
+> -       *base_freq = (*base_freq >> 16) & 0x3F;     /* max P state */
+> -       *turbo_freq = *turbo_freq & 0x3F;           /* 1C turbo    */
+> -
+> -       return true;
+> -}
+> -
+> -#define X86_MATCH(model)                                       \
+> -       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6,            \
+> -               INTEL_FAM6_##model, X86_FEATURE_APERFMPERF, NULL)
+> -
+> -static const struct x86_cpu_id has_knl_turbo_ratio_limits[] = {
+> -       X86_MATCH(XEON_PHI_KNL),
+> -       X86_MATCH(XEON_PHI_KNM),
+> -       {}
+> -};
+> -
+> -static const struct x86_cpu_id has_skx_turbo_ratio_limits[] = {
+> -       X86_MATCH(SKYLAKE_X),
+> -       {}
+> -};
+> -
+> -static const struct x86_cpu_id has_glm_turbo_ratio_limits[] = {
+> -       X86_MATCH(ATOM_GOLDMONT),
+> -       X86_MATCH(ATOM_GOLDMONT_D),
+> -       X86_MATCH(ATOM_GOLDMONT_PLUS),
+> -       {}
+> -};
+> -
+> -static bool knl_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq,
+> -                               int num_delta_fratio)
+> -{
+> -       int fratio, delta_fratio, found;
+> -       int err, i;
+> -       u64 msr;
+> -
+> -       err = rdmsrl_safe(MSR_PLATFORM_INFO, base_freq);
+> -       if (err)
+> -               return false;
+> -
+> -       *base_freq = (*base_freq >> 8) & 0xFF;      /* max P state */
+> -
+> -       err = rdmsrl_safe(MSR_TURBO_RATIO_LIMIT, &msr);
+> -       if (err)
+> -               return false;
+> -
+> -       fratio = (msr >> 8) & 0xFF;
+> -       i = 16;
+> -       found = 0;
+> -       do {
+> -               if (found >= num_delta_fratio) {
+> -                       *turbo_freq = fratio;
+> -                       return true;
+> -               }
+> -
+> -               delta_fratio = (msr >> (i + 5)) & 0x7;
+> -
+> -               if (delta_fratio) {
+> -                       found += 1;
+> -                       fratio -= delta_fratio;
+> -               }
+> -
+> -               i += 8;
+> -       } while (i < 64);
+> -
+> -       return true;
+> -}
+> -
+> -static bool skx_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq, int size)
+> -{
+> -       u64 ratios, counts;
+> -       u32 group_size;
+> -       int err, i;
+> -
+> -       err = rdmsrl_safe(MSR_PLATFORM_INFO, base_freq);
+> -       if (err)
+> -               return false;
+> -
+> -       *base_freq = (*base_freq >> 8) & 0xFF;      /* max P state */
+> -
+> -       err = rdmsrl_safe(MSR_TURBO_RATIO_LIMIT, &ratios);
+> -       if (err)
+> -               return false;
+> -
+> -       err = rdmsrl_safe(MSR_TURBO_RATIO_LIMIT1, &counts);
+> -       if (err)
+> -               return false;
+> -
+> -       for (i = 0; i < 64; i += 8) {
+> -               group_size = (counts >> i) & 0xFF;
+> -               if (group_size >= size) {
+> -                       *turbo_freq = (ratios >> i) & 0xFF;
+> -                       return true;
+> -               }
+> -       }
+> -
+> -       return false;
+> -}
+> -
+> -static bool core_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
+> -{
+> -       u64 msr;
+> -       int err;
+> -
+> -       err = rdmsrl_safe(MSR_PLATFORM_INFO, base_freq);
+> -       if (err)
+> -               return false;
+> -
+> -       err = rdmsrl_safe(MSR_TURBO_RATIO_LIMIT, &msr);
+> -       if (err)
+> -               return false;
+> -
+> -       *base_freq = (*base_freq >> 8) & 0xFF;    /* max P state */
+> -       *turbo_freq = (msr >> 24) & 0xFF;         /* 4C turbo    */
+> -
+> -       /* The CPU may have less than 4 cores */
+> -       if (!*turbo_freq)
+> -               *turbo_freq = msr & 0xFF;         /* 1C turbo    */
+> -
+> -       return true;
+> -}
+> -
+> -static bool intel_set_max_freq_ratio(void)
+> -{
+> -       u64 base_freq, turbo_freq;
+> -       u64 turbo_ratio;
+> -
+> -       if (slv_set_max_freq_ratio(&base_freq, &turbo_freq))
+> -               goto out;
+> -
+> -       if (x86_match_cpu(has_glm_turbo_ratio_limits) &&
+> -           skx_set_max_freq_ratio(&base_freq, &turbo_freq, 1))
+> -               goto out;
+> -
+> -       if (x86_match_cpu(has_knl_turbo_ratio_limits) &&
+> -           knl_set_max_freq_ratio(&base_freq, &turbo_freq, 1))
+> -               goto out;
+> -
+> -       if (x86_match_cpu(has_skx_turbo_ratio_limits) &&
+> -           skx_set_max_freq_ratio(&base_freq, &turbo_freq, 4))
+> -               goto out;
+> -
+> -       if (core_set_max_freq_ratio(&base_freq, &turbo_freq))
+> -               goto out;
+> -
+> -       return false;
+> -
+> -out:
+> -       /*
+> -        * Some hypervisors advertise X86_FEATURE_APERFMPERF
+> -        * but then fill all MSR's with zeroes.
+> -        * Some CPUs have turbo boost but don't declare any turbo ratio
+> -        * in MSR_TURBO_RATIO_LIMIT.
+> -        */
+> -       if (!base_freq || !turbo_freq) {
+> -               pr_debug("Couldn't determine cpu base or turbo frequency, necessary for scale-invariant accounting.\n");
+> -               return false;
+> -       }
+> -
+> -       turbo_ratio = div_u64(turbo_freq * SCHED_CAPACITY_SCALE, base_freq);
+> -       if (!turbo_ratio) {
+> -               pr_debug("Non-zero turbo and base frequencies led to a 0 ratio.\n");
+> -               return false;
+> -       }
+> -
+> -       arch_turbo_freq_ratio = turbo_ratio;
+> -       arch_set_max_freq_ratio(turbo_disabled());
+> -
+> -       return true;
+> -}
+> -
+> -static void init_counter_refs(void)
+> -{
+> -       u64 aperf, mperf;
+> -
+> -       rdmsrl(MSR_IA32_APERF, aperf);
+> -       rdmsrl(MSR_IA32_MPERF, mperf);
+> -
+> -       this_cpu_write(arch_prev_aperf, aperf);
+> -       this_cpu_write(arch_prev_mperf, mperf);
+> -}
+> -
+> -#ifdef CONFIG_PM_SLEEP
+> -static struct syscore_ops freq_invariance_syscore_ops = {
+> -       .resume = init_counter_refs,
+> -};
+> -
+> -static void register_freq_invariance_syscore_ops(void)
+> -{
+> -       /* Bail out if registered already. */
+> -       if (freq_invariance_syscore_ops.node.prev)
+> -               return;
+> -
+> -       register_syscore_ops(&freq_invariance_syscore_ops);
+> -}
+> -#else
+> -static inline void register_freq_invariance_syscore_ops(void) {}
+> -#endif
+> -
+> -void init_freq_invariance(bool secondary, bool cppc_ready)
+> -{
+> -       bool ret = false;
+> -
+> -       if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
+> -               return;
+> -
+> -       if (secondary) {
+> -               if (static_branch_likely(&arch_scale_freq_key)) {
+> -                       init_counter_refs();
+> -               }
+> -               return;
+> -       }
+> -
+> -       if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL)
+> -               ret = intel_set_max_freq_ratio();
+> -       else if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
+> -               if (!cppc_ready) {
+> -                       return;
+> -               }
+> -               ret = amd_set_max_freq_ratio(&arch_turbo_freq_ratio);
+> -       }
+> -
+> -       if (ret) {
+> -               init_counter_refs();
+> -               static_branch_enable(&arch_scale_freq_key);
+> -               register_freq_invariance_syscore_ops();
+> -               pr_info("Estimated ratio of average max frequency by base frequency (times 1024): %llu\n", arch_max_freq_ratio);
+> -       } else {
+> -               pr_debug("Couldn't determine max cpu frequency, necessary for scale-invariant accounting.\n");
+> -       }
+> -}
+> -
+> -static void disable_freq_invariance_workfn(struct work_struct *work)
+> -{
+> -       static_branch_disable(&arch_scale_freq_key);
+> -}
+> -
+> -static DECLARE_WORK(disable_freq_invariance_work,
+> -                   disable_freq_invariance_workfn);
+> -
+> -DEFINE_PER_CPU(unsigned long, arch_freq_scale) = SCHED_CAPACITY_SCALE;
+> -
+> -void arch_scale_freq_tick(void)
+> -{
+> -       u64 freq_scale;
+> -       u64 aperf, mperf;
+> -       u64 acnt, mcnt;
+> -
+> -       if (!arch_scale_freq_invariant())
+> -               return;
+> -
+> -       rdmsrl(MSR_IA32_APERF, aperf);
+> -       rdmsrl(MSR_IA32_MPERF, mperf);
+> -
+> -       acnt = aperf - this_cpu_read(arch_prev_aperf);
+> -       mcnt = mperf - this_cpu_read(arch_prev_mperf);
+> -
+> -       this_cpu_write(arch_prev_aperf, aperf);
+> -       this_cpu_write(arch_prev_mperf, mperf);
+> -
+> -       if (check_shl_overflow(acnt, 2*SCHED_CAPACITY_SHIFT, &acnt))
+> -               goto error;
+> -
+> -       if (check_mul_overflow(mcnt, arch_max_freq_ratio, &mcnt) || !mcnt)
+> -               goto error;
+> -
+> -       freq_scale = div64_u64(acnt, mcnt);
+> -       if (!freq_scale)
+> -               goto error;
+> -
+> -       if (freq_scale > SCHED_CAPACITY_SCALE)
+> -               freq_scale = SCHED_CAPACITY_SCALE;
+> -
+> -       this_cpu_write(arch_freq_scale, freq_scale);
+> -       return;
+> -
+> -error:
+> -       pr_warn("Scheduler frequency invariance went wobbly, disabling!\n");
+> -       schedule_work(&disable_freq_invariance_work);
+> -}
+> -#endif /* CONFIG_X86_64 */
+>

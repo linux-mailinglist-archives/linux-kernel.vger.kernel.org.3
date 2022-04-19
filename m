@@ -2,84 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE8C506CD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF25506CDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242835AbiDSM6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
+        id S1348774AbiDSM6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiDSM6G (ORCPT
+        with ESMTP id S242350AbiDSM6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:58:06 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA362B180;
+        Tue, 19 Apr 2022 08:58:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 899122B180
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:55:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4DB62106F;
+        Tue, 19 Apr 2022 05:55:26 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.75.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6A513F766;
         Tue, 19 Apr 2022 05:55:23 -0700 (PDT)
-X-UUID: af1877add5b14b25831dd53443f79ab6-20220419
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:159939a9-28dc-47ce-a547-4fa6e99c11a2,OB:0,LO
-        B:10,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:53
-X-CID-INFO: VERSION:1.1.4,REQID:159939a9-28dc-47ce-a547-4fa6e99c11a2,OB:0,LOB:
-        10,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:53
-X-CID-META: VersionHash:faefae9,CLOUDID:15c838f0-da02-41b4-b6df-58f4ccd36682,C
-        OID:e35b78a6d1fe,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: af1877add5b14b25831dd53443f79ab6-20220419
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1003386585; Tue, 19 Apr 2022 20:55:17 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 19 Apr 2022 20:55:16 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 19 Apr
- 2022 20:55:16 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 19 Apr 2022 20:55:16 +0800
-Message-ID: <fe9f427ec28414b545ccdb2009ae16ad735628be.camel@mediatek.com>
-Subject: Re: [PATCH 5/5] dt-bindings: mediatek: add ethdr definition for
- mt8195
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Nancy Lin =?UTF-8?Q?=28=E6=9E=97=E6=AC=A3=E8=9E=A2=29?= 
-        <Nancy.Lin@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Jason-JH Lin =?UTF-8?Q?=28=E6=9E=97=E7=9D=BF=E7=A5=A5=29?= 
-        <Jason-JH.Lin@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-Date:   Tue, 19 Apr 2022 20:55:15 +0800
-In-Reply-To: <1650370363.563060.1977867.nullmailer@robh.at.kernel.org>
-References: <20220419033237.23405-1-rex-bc.chen@mediatek.com>
-         <20220419033237.23405-6-rex-bc.chen@mediatek.com>
-         <1650370363.563060.1977867.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Date:   Tue, 19 Apr 2022 13:55:19 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     rostedt@goodmis.org, mingo@redhat.com, catalin.marinas@arm.com,
+        will@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        broonie@kernel.org, ardb@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+Subject: Re: [PATCH v4 2/2] arm64/ftrace: Make function graph use ftrace
+ directly
+Message-ID: <Yl6xN2qf7k5YeEdl@FVFF77S0Q05N>
+References: <20220409153554.14470-1-zhouchengming@bytedance.com>
+ <20220409153554.14470-2-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409153554.14470-2-zhouchengming@bytedance.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,72 +48,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-19 at 20:12 +0800, Rob Herring wrote:
-> On Tue, 19 Apr 2022 11:32:37 +0800, Rex-BC Chen wrote:
-> > From: "Nancy.Lin" <nancy.lin@mediatek.com>
-> > 
-> > Add vdosys1 ETHDR definition.
-> > 
-> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  .../display/mediatek/mediatek,ethdr.yaml      | 158
-> > ++++++++++++++++++
-> >  1 file changed, 158 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.y
-> > aml
-> > 
+On Sat, Apr 09, 2022 at 11:35:54PM +0800, Chengming Zhou wrote:
+> As we do in commit 0c0593b45c9b ("x86/ftrace: Make function graph
+> use ftrace directly"), we don't need special hook for graph tracer,
+> but instead we use graph_ops:func function to install return_hooker.
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m
-> dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> Since commit 3b23e4991fb6 ("arm64: implement ftrace with regs") add
+> implementation for FTRACE_WITH_REGS on arm64, we can easily adopt
+> the same cleanup on arm64.
 > 
-> yamllint warnings/errors:
+> And this cleanup only changes the FTRACE_WITH_REGS implementation,
+> so the mcount-based implementation is unaffected.
+
+Could you please say *why* we only do this for FTRACE_WITH_REGS? IIUC that's
+possible, but would require more invasive refactoring of the core code; have I
+understood correctly?
+
+If so, could we please make this:
+
+| While in theory it would be possible to make a similar cleanup for
+| !FTRACE_WITH_REGS, this will require rework of the core code, and so for now
+| we only change the FTRACE_WITH_REGS implementation.
+
+It'd be quite nice if we could clean up the !FTRACE_WITH_REGS case similarly,
+but as it appeass that would require far more invasive changes, I'm happy to
+leave that for future work.
+
+>
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> ---
+> v3:
+>  - Add comments in ftrace_graph_func() as suggested by Steve. Thanks.
 > 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.exa
-> mple.dts:26:18: fatal error: dt-bindings/memory/mt8195-memory-port.h: 
-> No such file or directory
->    26 |         #include <dt-bindings/memory/mt8195-memory-port.h>
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[1]: *** [scripts/Makefile.lib:364:
-> Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.exa
-> mple.dtb] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1401: dt_binding_check] Error 2
+> v2:
+>  - Remove FTRACE_WITH_REGS ftrace_graph_caller asm, thanks Mark.
+> ---
+>  arch/arm64/include/asm/ftrace.h  |  7 +++++++
+>  arch/arm64/kernel/entry-ftrace.S | 17 -----------------
+>  arch/arm64/kernel/ftrace.c       | 17 +++++++++++++++++
+>  3 files changed, 24 insertions(+), 17 deletions(-)
 > 
-> doc reference errors (make refcheckdocs):
-> 
-> See 
-> https://urldefense.com/v3/__https://patchwork.ozlabs.org/patch/__;!!CTRNKA9wMg0ARbw!0_37wgtYvnR9SOpuvHJTNoD49ZH-H-8wVYtuCNFWbusuETEVY3vuSBeQz424H8e4_VNF3DOx4RmpXtN3gVegfPw1Hw$
+> diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+> index 1494cfa8639b..dbc45a4157fa 100644
+> --- a/arch/arm64/include/asm/ftrace.h
+> +++ b/arch/arm64/include/asm/ftrace.h
+> @@ -80,8 +80,15 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
 >  
-> 
-> This check can fail if there are any dependencies. The base for a
-> patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up
-> to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
+>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>  struct dyn_ftrace;
+> +struct ftrace_ops;
+> +struct ftrace_regs;
+> +
+>  int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
+>  #define ftrace_init_nop ftrace_init_nop
+> +
+> +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+> +		       struct ftrace_ops *op, struct ftrace_regs *fregs);
+> +#define ftrace_graph_func ftrace_graph_func
+>  #endif
+>  
+>  #define ftrace_return_address(n) return_address(n)
+> diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
+> index e535480a4069..d42a205ef625 100644
+> --- a/arch/arm64/kernel/entry-ftrace.S
+> +++ b/arch/arm64/kernel/entry-ftrace.S
+> @@ -97,12 +97,6 @@ SYM_CODE_START(ftrace_common)
+>  SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
+>  	bl	ftrace_stub
+>  
+> -#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+> -SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL) // ftrace_graph_caller();
+> -	nop				// If enabled, this will be replaced
+> -					// "b ftrace_graph_caller"
+> -#endif
+> -
+>  /*
+>   * At the callsite x0-x8 and x19-x30 were live. Any C code will have preserved
+>   * x19-x29 per the AAPCS, and we created frame records upon entry, so we need
+> @@ -127,17 +121,6 @@ ftrace_common_return:
+>  	ret	x9
+>  SYM_CODE_END(ftrace_common)
+>  
+> -#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+> -SYM_CODE_START(ftrace_graph_caller)
+> -	ldr	x0, [sp, #S_PC]
+> -	sub	x0, x0, #AARCH64_INSN_SIZE	// ip (callsite's BL insn)
+> -	add	x1, sp, #S_LR			// parent_ip (callsite's LR)
+> -	ldr	x2, [sp, #PT_REGS_SIZE]	   	// parent fp (callsite's FP)
+> -	bl	prepare_ftrace_return
+> -	b	ftrace_common_return
+> -SYM_CODE_END(ftrace_graph_caller)
+> -#endif
+> -
+>  #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+>  
+>  /*
+> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+> index 4506c4a90ac1..35eb7c9b5e53 100644
+> --- a/arch/arm64/kernel/ftrace.c
+> +++ b/arch/arm64/kernel/ftrace.c
+> @@ -268,6 +268,22 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
+>  }
+>  
+>  #ifdef CONFIG_DYNAMIC_FTRACE
+> +
+> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+> +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+> +		       struct ftrace_ops *op, struct ftrace_regs *fregs)
+> +{
+> +	/*
+> +	 * Athough graph_ops doesn't have FTRACE_OPS_FL_SAVE_REGS set in flags,
+> +	 * regs can't be NULL in DYNAMIC_FTRACE_WITH_REGS. By design, it should
+> +	 * be fixed when DYNAMIC_FTRACE_WITH_ARGS is implemented.
+> +	 */
 
-Hello Rob,
+This is a bit confusing, since it makes it sound like there's an bug in the
+current implementation, rather than something that would need to change if
+support for DYNAMIC_FTRACE_WITH_ARGS is added.
 
-As mentioned in [3/5], this patch is also basd on Yong's patch:
-message id: 20220407075726.17771-2-yong.wu@mediatek.com
-Without this patch, some patches of this series will build failed.
+Could we please make this:
 
-Thanks!
+	/*
+	 * When DYNAMIC_FTRACE_WITH_REGS is selected, `fregs` can never be NULL
+	 * and arch_ftrace_get_regs(fregs) will always give a non-NULL pt_regs
+	 * in which we can safely modify the LR.
+	 */
 
-BRs,
-Rex
+Other than that, this looks good to me. I gave it a spin under QEMU atop
+v5.18-rc3. The CONFIG_FTRACE_STARTUP_TEST tests all pass, and I played with the
+graph tracer with:
 
+| # echo do_el0_svc > /sys/kernel/tracing/set_graph_function 
+| # echo function_graph > /sys/kernel/tracing/current_tracer
+
+... for which the resutls looks sane.
+
+To make sure this didn't adversely affect the return address rewriting, I also
+concurrently ran perf with:
+
+| # perf record -g -e raw_syscalls:sys_enter:k /bin/true
+| # perf report
+
+... for which the results also looked fine.
+
+I also tested the !DYNAMIC_FTRACE_WITH_REGS modes by building with an older
+compiler and also building with !DYNAMIC_FTRACE, which all looked good.
+
+So FWIW:
+
+Tested-by: Mark Rutland <mark.rutland@arm.com>
+
+... and if you make the changes I requested above:
+
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+
+If you could spin a v5 with that folded in, that would be great.
+
+Thanks,
+Mark.

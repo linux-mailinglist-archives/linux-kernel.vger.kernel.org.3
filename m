@@ -2,184 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751E1506992
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68445069CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350990AbiDSLUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
+        id S1351180AbiDSLXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350952AbiDSLUK (ORCPT
+        with ESMTP id S1351054AbiDSLWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:20:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6986915813;
-        Tue, 19 Apr 2022 04:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650367048; x=1681903048;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qXUC0JW6X2U4JInupot3/lviCS3TrbWUtQI18BZne9k=;
-  b=eZgSSppmO3JL3B+aw1vf9rI8M8KwzKqrjSftgUkYk4CSR8c0PUXTIzuo
-   e/1gL5Agm9a35+KEjvhbwcKr6FiYVSX1gmtNHpgy+I6xUMKw0uxc93lOv
-   qihKX2vox+IV2/3DzVM2QIgWJuEE1NAWZRjpSXh0CZ2+Q0zhmGa+jQYWD
-   KwveiJKMffKNv3PLhWPptZGMpWAc+zsVZLBliaDTp84eoqiG5bx2L19y+
-   3ygfC9kWqsXhpkQZQuB982hQFYBQqGkI9uwBJ8tRzu5zIjWxBu3mLsEFV
-   iEeYYpScAqsvbV1oVmWjYYS/LdfZr/w6n4YUwv8IX4ipkQu1A357uV9p0
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="350189765"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="350189765"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 04:17:20 -0700
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="554683759"
-Received: from csambran-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.58.20])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 04:17:18 -0700
-From:   Kai Huang <kai.huang@intel.com>
-To:     kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        seanjc@google.com, vkuznets@redhat.com, jmattson@google.com,
-        joro@8bytes.org, wanpengli@tencent.com
-Subject: [PATCH 3/3] KVM: VMX: Include MKTME KeyID bits to shadow_zero_check
-Date:   Tue, 19 Apr 2022 23:17:04 +1200
-Message-Id: <27bc10e97a3c0b58a4105ff9107448c190328239.1650363789.git.kai.huang@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1650363789.git.kai.huang@intel.com>
-References: <cover.1650363789.git.kai.huang@intel.com>
+        Tue, 19 Apr 2022 07:22:55 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0660B344D3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:19:43 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 0B4972223A;
+        Tue, 19 Apr 2022 13:19:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1650367182;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zlmjPkUMYoXM1brnmw5UZyknS4jpSubyz4QQX5Xc3BM=;
+        b=H7ALRsy44i6Sq0O2AwH2yQr/24FOFje6dM/9XAvhEvwc7s5bwLty0+RTm+Hfo8GtBuL5YO
+        fbDgvfTWsYG7586d3RXnYN6z+7OVZXOGnb5cD/j3nV+Z9CRkF2p5ljUkVxAzV+1rax0WNd
+        J92Oz9sBaS9mKRrixDoQUL923IG7Exc=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 19 Apr 2022 13:19:41 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
+        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
+Subject: Re: [PATCH v3 6/9] mtd: spi-nor: core: Add helpers to read/write any
+ register
+In-Reply-To: <20220411091033.98754-7-tudor.ambarus@microchip.com>
+References: <20220411091033.98754-1-tudor.ambarus@microchip.com>
+ <20220411091033.98754-7-tudor.ambarus@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <0e4ec58c21490dcd9cf82ab89bd8c34c@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intel MKTME KeyID bits (including Intel TDX private KeyID bits) should
-never be set to SPTE.  Set shadow_me_value to 0 and shadow_me_mask to
-include all MKTME KeyID bits to include them to shadow_zero_check.
+Am 2022-04-11 11:10, schrieb Tudor Ambarus:
+> There are manufacturers that use registers indexed by address. Some of
+> them support "read/write any register" opcodes. Provide core methods 
+> that
+> can be used by all manufacturers. SPI NOR controller ops are 
+> intentionally
+> not supported as we intend to move all the SPI NOR controller drivers
+> under the SPI subsystem.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Tested-by: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
+> Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 
-Signed-off-by: Kai Huang <kai.huang@intel.com>
----
- arch/x86/kvm/mmu.h      | 19 +++++++++++++++++++
- arch/x86/kvm/mmu/spte.c | 19 -------------------
- arch/x86/kvm/vmx/vmx.c  | 31 +++++++++++++++++++++++++++++++
- 3 files changed, 50 insertions(+), 19 deletions(-)
+I still don't like it because the function doesn't do
+anything what the function name might suggest. The read
+just executes an op, the write executes an op with a
+write enable before. All the behavior is determined by the
+'op' argument.
 
-diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-index 60c669494c4c..ce953885362b 100644
---- a/arch/x86/kvm/mmu.h
-+++ b/arch/x86/kvm/mmu.h
-@@ -65,6 +65,25 @@ static __always_inline u64 rsvd_bits(int s, int e)
- 	return ((2ULL << (e - s)) - 1) << s;
- }
- 
-+static inline u8 kvm_get_shadow_phys_bits(void)
-+{
-+	/*
-+	 * boot_cpu_data.x86_phys_bits is reduced when MKTME or SME are detected
-+	 * in CPU detection code, but the processor treats those reduced bits as
-+	 * 'keyID' thus they are not reserved bits. Therefore KVM needs to look at
-+	 * the physical address bits reported by CPUID.
-+	 */
-+	if (likely(boot_cpu_data.extended_cpuid_level >= 0x80000008))
-+		return cpuid_eax(0x80000008) & 0xff;
-+
-+	/*
-+	 * Quite weird to have VMX or SVM but not MAXPHYADDR; probably a VM with
-+	 * custom CPUID.  Proceed with whatever the kernel found since these features
-+	 * aren't virtualizable (SME/SEV also require CPUIDs higher than 0x80000008).
-+	 */
-+	return boot_cpu_data.x86_phys_bits;
-+}
-+
- void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask);
- void kvm_mmu_set_me_spte_mask(u64 me_value, u64 me_mask);
- void kvm_mmu_set_ept_masks(bool has_ad_bits, bool has_exec_only);
-diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index a6da94f441c4..c2b785f08cf7 100644
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -283,25 +283,6 @@ u64 kvm_mmu_changed_pte_notifier_make_spte(u64 old_spte, kvm_pfn_t new_pfn)
- 	return new_spte;
- }
- 
--static u8 kvm_get_shadow_phys_bits(void)
--{
--	/*
--	 * boot_cpu_data.x86_phys_bits is reduced when MKTME or SME are detected
--	 * in CPU detection code, but the processor treats those reduced bits as
--	 * 'keyID' thus they are not reserved bits. Therefore KVM needs to look at
--	 * the physical address bits reported by CPUID.
--	 */
--	if (likely(boot_cpu_data.extended_cpuid_level >= 0x80000008))
--		return cpuid_eax(0x80000008) & 0xff;
--
--	/*
--	 * Quite weird to have VMX or SVM but not MAXPHYADDR; probably a VM with
--	 * custom CPUID.  Proceed with whatever the kernel found since these features
--	 * aren't virtualizable (SME/SEV also require CPUIDs higher than 0x80000008).
--	 */
--	return boot_cpu_data.x86_phys_bits;
--}
--
- u64 mark_spte_for_access_track(u64 spte)
- {
- 	if (spte_ad_enabled(spte))
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index cf8581978bce..65494caf75f0 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7883,6 +7883,31 @@ static __init void vmx_setup_user_return_msrs(void)
- 		kvm_add_user_return_msr(vmx_uret_msrs_list[i]);
- }
- 
-+static void __init vmx_setup_me_spte_mask(void)
-+{
-+	u64 me_mask = 0;
-+
-+	/*
-+	 * kvm_get_shadow_phys_bits() returns shadow_phys_bits.  Use
-+	 * the former to avoid exposing shadow_phys_bits.
-+	 *
-+	 * On pre-MKTME system, boot_cpu_data.x86_phys_bits equals to
-+	 * shadow_phys_bits.  On MKTME and/or TDX capable systems,
-+	 * boot_cpu_data.x86_phys_bits holds the actual physical address
-+	 * w/o the KeyID bits, and shadow_phys_bits equals to MAXPHYADDR
-+	 * reported by CPUID.  Those bits between are KeyID bits.
-+	 */
-+	if (boot_cpu_data.x86_phys_bits != kvm_get_shadow_phys_bits())
-+		me_mask = rsvd_bits(boot_cpu_data.x86_phys_bits,
-+			kvm_get_shadow_phys_bits() - 1);
-+	/*
-+	 * Unlike to SME, host kernel doesn't support setting up any
-+	 * MKTME KeyID to any mapping for Intel platforms.  No memory
-+	 * encryption bits should be included into the SPTE.
-+	 */
-+	kvm_mmu_set_me_spte_mask(0, me_mask);
-+}
-+
- static struct kvm_x86_init_ops vmx_init_ops __initdata;
- 
- static __init int hardware_setup(void)
-@@ -7985,6 +8010,12 @@ static __init int hardware_setup(void)
- 		kvm_mmu_set_ept_masks(enable_ept_ad_bits,
- 				      cpu_has_vmx_ept_execute_only());
- 
-+	/*
-+	 * Setup shadow_me_value/shadow_me_mask to include MKTME KeyID
-+	 * bits to shadow_zero_check.
-+	 */
-+	vmx_setup_me_spte_mask();
-+
- 	kvm_configure_mmu(enable_ept, 0, vmx_get_max_tdp_level(),
- 			  ept_caps_to_lpage_level(vmx_capability.ept));
- 
+Anyway,
+Reviewed-by: Michael Walle <michael@walle.cc>
+
+> ---
+> v3: no changes
+> 
+>  drivers/mtd/spi-nor/core.c | 41 ++++++++++++++++++++++++++++++++++++++
+>  drivers/mtd/spi-nor/core.h |  4 ++++
+>  2 files changed, 45 insertions(+)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 6165dc7bfd17..42794328d3b6 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -307,6 +307,47 @@ ssize_t spi_nor_write_data(struct spi_nor *nor,
+> loff_t to, size_t len,
+>  	return nor->controller_ops->write(nor, to, len, buf);
+>  }
+> 
+> +/**
+> + * spi_nor_read_reg() - read register to flash memory
+> + * @nor:        pointer to 'struct spi_nor'.
+> + * @op:		SPI memory operation. op->data.buf must be DMA-able.
+> + * @proto:	SPI protocol to use for the register operation.
+> + *
+> + * Return: zero on success, -errno otherwise
+> + */
+> +int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
+> +		     enum spi_nor_protocol proto)
+> +{
+> +	if (!nor->spimem)
+> +		return -EOPNOTSUPP;
+> +
+> +	spi_nor_spimem_setup_op(nor, op, proto);
+> +	return spi_nor_spimem_exec_op(nor, op);
+> +}
+> +
+> +/**
+> + * spi_nor_write_reg() - write register to flash memory
+> + * @nor:        pointer to 'struct spi_nor'
+> + * @op:		SPI memory operation. op->data.buf must be DMA-able.
+> + * @proto:	SPI protocol to use for the register operation.
+> + *
+> + * Return: zero on success, -errno otherwise
+> + */
+> +int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
+> +		      enum spi_nor_protocol proto)
+> +{
+> +	int ret;
+> +
+> +	if (!nor->spimem)
+> +		return -EOPNOTSUPP;
+> +
+> +	ret = spi_nor_write_enable(nor);
+> +	if (ret)
+> +		return ret;
+> +	spi_nor_spimem_setup_op(nor, op, proto);
+> +	return spi_nor_spimem_exec_op(nor, op);
+> +}
+> +
+>  /**
+>   * spi_nor_write_enable() - Set write enable latch with Write Enable 
+> command.
+>   * @nor:	pointer to 'struct spi_nor'.
+> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+> index f952061d5c24..7c704475946d 100644
+> --- a/drivers/mtd/spi-nor/core.h
+> +++ b/drivers/mtd/spi-nor/core.h
+> @@ -554,6 +554,10 @@ ssize_t spi_nor_read_data(struct spi_nor *nor,
+> loff_t from, size_t len,
+>  			  u8 *buf);
+>  ssize_t spi_nor_write_data(struct spi_nor *nor, loff_t to, size_t len,
+>  			   const u8 *buf);
+> +int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
+> +		     enum spi_nor_protocol proto);
+> +int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
+> +		      enum spi_nor_protocol proto);
+>  int spi_nor_erase_sector(struct spi_nor *nor, u32 addr);
+> 
+>  int spi_nor_otp_read_secr(struct spi_nor *nor, loff_t addr, size_t
+> len, u8 *buf);
+
 -- 
-2.35.1
-
+-michael

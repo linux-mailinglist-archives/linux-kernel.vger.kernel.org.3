@@ -2,149 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D22D506142
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFE1506163
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244096AbiDSAuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
+        id S243119AbiDSAy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243271AbiDSAsR (ORCPT
+        with ESMTP id S235099AbiDSAyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:48:17 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A231133A1A;
-        Mon, 18 Apr 2022 17:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=F6kyX/KE6uI93AUNHdOTXTCcOPf0qyiNPQDSWpMU/TM=; b=b/bYxKGFNiV6xLz4PGlyGIoYHS
-        63aXslrz0QFZ4xmrI51U5vg4KVFT92tUKixltibZDPwatSplMZ8nOhGPZ6dCawdXLyaf3M1hHSWYH
-        b4c88WaO2DMTFRIE6Qc2uWN82agDaSzosxdofYDGLYv3evPVEaJdxSaJxi2ps6qkPEluujhkF8WtJ
-        LWKGHMfwsqrt2yg4OFjz7msONW5apIdH71KGo++oeiCU9lwo4Cf9Y+s+xiIKPvMg/Eb2lIGPAyNfE
-        4R6I67g/gARRMJQe7pDv41rMP4tfZiJgt61rGdKi/t66ax6DNbW/+Bl0TksuFS66K+jfJptrHHQJz
-        bYtuvahg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ngbyd-000xTZ-WE; Tue, 19 Apr 2022 00:44:20 +0000
-Date:   Mon, 18 Apr 2022 17:44:19 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Borislav Petkov <bp@alien8.de>, Petr Mladek <pmladek@suse.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Daniel Borkmann <dborkman@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Message-ID: <Yl4F4w5NY3v0icfx@bombadil.infradead.org>
-References: <20220415164413.2727220-1-song@kernel.org>
- <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
- <YlpPW9SdCbZnLVog@infradead.org>
- <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
- <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
- <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com>
- <Yl04LO/PfB3GocvU@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl04LO/PfB3GocvU@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 18 Apr 2022 20:54:22 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD0312A82;
+        Mon, 18 Apr 2022 17:51:42 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 182C63201805;
+        Mon, 18 Apr 2022 20:51:38 -0400 (EDT)
+Received: from imap49 ([10.202.2.99])
+  by compute3.internal (MEProxy); Mon, 18 Apr 2022 20:51:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1650329497; x=1650415897; bh=YTGif1yY4d
+        anJ4Q3Gd9k/F0/kwwvgJN1GNs1zSfH8R8=; b=VpVfcbEDFSmB+t6AoUjHi8OKvN
+        bNhUU/dOaprPoSE6NMhU1uD5j/dkMfWUDWMXp8OkmqAuy/F6aY5xnQUmGylj7o5b
+        jpUeTV5oiqSobPRN6XhlxI03dDpzhMZf8RJmKoEEYPEHNkye0dMs0vFZ4pBZhUXJ
+        mQuVNLklH2yNglFQveQ43g6WEpKowPeJZhkzfcS7T6GmqaB8kQnREPe+8AJdbrCk
+        EalrFKT8Wzkl5Gzi94gH8muOt8A+S+BEGQ7BzEIRrPA+oxYmBOkdM+0t5gMoGWQS
+        zX4F90o4xgn4W0vPArVEAMVE2Qo2Fvr8Xap2UC29eGYtTCYf0BOH1xq1HaQQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1650329497; x=
+        1650415897; bh=YTGif1yY4danJ4Q3Gd9k/F0/kwwvgJN1GNs1zSfH8R8=; b=B
+        jiYQvdcMtJv2qtGGnxv05bWLoKmqM61S7z2lUvBcjss/vHhOtSJD/5zuxb9hemWk
+        AeXbSu6pGgWy9lBVen1I8nxRi//b7T+K6OBo2M7IRy4Fek3bUpq1Nyfb9HInSJYW
+        oqCX3h1mptBPBg4GA2Du7Ez1UGfNfYmvxFNtu8eaX1cuGBMltqtbidO/odpFscSB
+        bXBMl09aIoltT3zsy8ux3t/cJkOd1TT3Uf//ZsRBh3E8JNUPuL2Mc08wr0Sw4axN
+        bugaNjd0wciJHT0yRT9fioie0BXPvySS/8IxbRb4mCgKwipfB4McMkXfCwWTKV5l
+        X7Sd9riFsgadOSYvxrSYg==
+X-ME-Sender: <xms:mAdeYuMIvrVmTGDzbJMp3YzbyRZJNMzDLVKVw0-VhK7BNO_wQNNO8g>
+    <xme:mAdeYs_WH3Gd0jLPFBFzN0oVIRU3BzHp-oRC5DNXrQdHUfmKPrQ6wZU-qsJynDlqo
+    QBsl28NvE1oYE3QWA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvddtvddggedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
+    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
+    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnughrvgifsegrjhdrihgurdgruh
+X-ME-Proxy: <xmx:mAdeYlTIwEXjdfj0U_cQUKb1pijIKwU6Km1lDvF_R3J6gBbe39w1JA>
+    <xmx:mAdeYusvZLEnJ2VACloteuhlqW0qbkUjrypjKD9EadfZBdLqh6-mFg>
+    <xmx:mAdeYmdNnb1QaJeSKH675c-m6cERHjKXDdlXsx-LsvbHvqsGGPHLGg>
+    <xmx:mQdeYi8tUGvmPrK9LY73NzLIzVfLPiibEefluSwp96gXaN0D-B1I3A>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5B51215A0069; Mon, 18 Apr 2022 20:51:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-387-g7ea99c4045-fm-20220413.002-g7ea99c40
+Mime-Version: 1.0
+Message-Id: <c4d4d135-7d52-455a-9623-4c7badb46f9d@www.fastmail.com>
+In-Reply-To: <20220418014059.3054-2-dylan_hung@aspeedtech.com>
+References: <20220418014059.3054-1-dylan_hung@aspeedtech.com>
+ <20220418014059.3054-2-dylan_hung@aspeedtech.com>
+Date:   Tue, 19 Apr 2022 10:21:15 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Dylan Hung" <dylan_hung@aspeedtech.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Joel Stanley" <joel@jms.id.au>, "Andrew Lunn" <andrew@lunn.ch>,
+        "Heiner Kallweit" <hkallweit1@gmail.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "David Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>, pabeni@redhat.com,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        "Krzysztof Kozlowski" <krzk+dt@kernel.org>
+Cc:     BMC-SW@aspeedtech.com, "Krzysztof Kozlowski" <krzk@kernel.org>
+Subject: Re: [PATCH net-next RESEND v5 1/3] dt-bindings: net: add reset property for
+ aspeed, ast2600-mdio binding
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 01:06:36PM +0300, Mike Rapoport wrote:
-> Hi,
-> 
-> On Sat, Apr 16, 2022 at 10:26:08PM +0000, Song Liu wrote:
-> > > On Apr 16, 2022, at 1:30 PM, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> > > 
-> > > Maybe I am missing something, but I really don't think this is ready
-> > > for prime-time. We should effectively disable it all, and have people
-> > > think through it a lot more.
-> > 
-> > This has been discussed on lwn.net: https://lwn.net/Articles/883454/. 
-> > AFAICT, the biggest concern is whether reserving minimal 2MB for BPF
-> > programs is a good trade-off for memory usage. This is again my fault
-> > not to state the motivation clearly: the primary gain comes from less 
-> > page table fragmentation and thus better iTLB efficiency. 
-> 
-> Reserving 2MB pages for BPF programs will indeed reduce the fragmentation,
-> but OTOH it will reduce memory utilization. If for large systems this may
-> not be an issue, on smaller machines trading off memory for iTLB
-> performance may be not that obvious.
 
-So the current optimization at best should be a kconfig option?
 
-> > Other folks (in recent thread on this topic and offline in other 
-> > discussions) also showed strong interests in using similar technical 
-> > for text of kernel modules. So I would really like to learn your 
-> > opinion on this. There are many details we can optimize, but I guess 
-> > the general mechanism has to be something like:
-> >  - allocate a huge page, make it safe, and set it as executable;
-> >  - as users (BPF, kernel module, etc.) request memory for text, give
-> >    a chunk of the huge page to the user. 
-> >  - use some mechanism to update the chunk of memory safely. 
-> 
-> There are use-cases that require 4K pages with non-default permissions in
-> the direct map and the pages not necessarily should be executable. There
-> were several suggestions to implement caches of 4K pages backed by 2M
-> pages.
+On Mon, 18 Apr 2022, at 11:10, Dylan Hung wrote:
+> The AST2600 MDIO bus controller has a reset control bit and must be
+> deasserted before manipulating the MDIO controller. By default, the
+> hardware asserts the reset so the driver only need to deassert it.
+>
+> Regarding to the old DT blobs which don't have reset property in them,
+> the reset deassertion is usually done by the bootloader so the reset
+> property is optional to work with them.
+>
+> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Even if we just focus on the executable side of the story... there may
-be users who can share this too.
-
-I've gone down memory lane now at least down to year 2005 in kprobes
-to see why the heck module_alloc() was used. At first glance there are
-some old comments about being within the 2 GiB text kernel range... But
-some old tribal knowledge is still lost. The real hints come from kprobe work
-since commit 9ec4b1f356b3 ("[PATCH] kprobes: fix single-step out of line
-- take2"), so that the "For the %rip-relative displacement fixups to be
-doable"... but this got me wondering, would other users who *do* want
-similar funcionality benefit from a cache. If the space is limited then
-using a cache makes sense. Specially if architectures tend to require
-hacks for some of this to all work.
-
-Then, since it seems since the vmalloc area was not initialized,
-wouldn't that break the old JIT spray fixes, refer to commit
-314beb9bcabfd ("x86: bpf_jit_comp: secure bpf jit against spraying
-attacks")?
-
-Is that sort of work not needed anymore? If in doubt I at least made the
-old proof of concept JIT spray stuff compile on recent kernels [0], but
-I haven't tried out your patches yet. If this is not needed anymore,
-why not?
-
-The collection of tribal knowedge around these sorts of things would be
-good to not loose and if we can share, even better.
-
-> I believe that "allocate huge page and split it to basic pages to hand out
-> to users" concept should be implemented at page allocator level and I
-> posted and RFC for this a while ago:
-> 
-> https://lore.kernel.org/all/20220127085608.306306-1-rppt@kernel.org/
-
-Neat, so although eBPF is a big user, are there some use cases outside
-that immediately benefit?
-
-[0] https://github.com/mcgrof/jit-spray-poc-for-ksp
-
-  LUis
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>

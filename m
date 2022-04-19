@@ -2,103 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3352E5060B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCB95060BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238936AbiDSANf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S235945AbiDSAOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239119AbiDSAM4 (ORCPT
+        with ESMTP id S238737AbiDSAOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:12:56 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969D15F55
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:10:16 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id e194so11521512iof.11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=56KN/I5pWur3ZvlLwEA2HDSysSU3jSyQBVJpYPIOJi0=;
-        b=bHuCxmQKcrxrh1bDgnDjvY2800IrAchNkbyuDl7VhJMCy50hv7R8foVp7bAM9wb5Su
-         wDlpy6gloFhdKbqblBaMqWIQohnPvSmdQOvKwwdUXPpAmTJV/E33TfRgAEX+tLxXPGfd
-         9iX6J+MKlFajtbYbYsbsZ2kmXpvUTehW978nU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=56KN/I5pWur3ZvlLwEA2HDSysSU3jSyQBVJpYPIOJi0=;
-        b=ReqCOHOcj7hto0bWUVGtbCQ5I4RRhrNmAqDot7ZQmSo7q9eBseOAF1OXMWDkdKC4My
-         K79yD84BhBIDqeT2Uy0o6z1VhoPEWzsUie+xDh5cigFdHCMXal5TPh8z7+6dJO/yNCS0
-         NHVVU9Udvei3GXyhMW0Al3vvCpZ28HU5dzTojCQ2PcRGCkZpWrwTheqY20mPFwSdCvND
-         LCTyjdRULJHnFIX5RKXsVcdI7WvZ/GP0uML8PWZb4USxefuIKndzhdwJz/XMfLZOK5J+
-         Llc+C/NgKxwIHrahNKUseHgHh7s/Os01k60VhuggA8oojDvwemtiHQlWJjij9GIWA2Vi
-         bfgg==
-X-Gm-Message-State: AOAM530m4UU8blkWaEucEwtKMg+pk6BFrXBCLV63x7znmL54WME8tPHg
-        P8pVss0K2J3wQTmgCGtdmua00A==
-X-Google-Smtp-Source: ABdhPJykD2R6cVuH1dM84VNrTlFUHNqATRFQM5k6ua/7Wvk0pwmCsjc6KI11BaPLG4oXK1Gy0s/JKw==
-X-Received: by 2002:a05:6638:1408:b0:328:6a0d:b98f with SMTP id k8-20020a056638140800b003286a0db98fmr5499971jad.119.1650327015763;
-        Mon, 18 Apr 2022 17:10:15 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id q7-20020a92d407000000b002cabbe6e295sm8032241ilm.4.2022.04.18.17.10.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 17:10:15 -0700 (PDT)
-Subject: Re: [PATCH 4.9 000/218] 4.9.311-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220418121158.636999985@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2b2db111-baae-db78-5c11-0d93092ac906@linuxfoundation.org>
-Date:   Mon, 18 Apr 2022 18:10:14 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 18 Apr 2022 20:14:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D49462C8;
+        Mon, 18 Apr 2022 17:11:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10A75B81123;
+        Tue, 19 Apr 2022 00:11:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7FBCC385A1;
+        Tue, 19 Apr 2022 00:11:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650327083;
+        bh=WXnK2gx8qkOLFox4IBN91tTQyMNyq2flQAXHiUplfPo=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=Lcf84TWwSBe1Mdj7xG+ct6q0aFknKeBNUc/Yvp7TED4b2oTmeg5yyLtjTQ1Z8tQJ+
+         UR0MwBgix9URiyTLA2aytwKNl+L1YiYg+vZ2cwgR+6Cae2Le/DYY6HH6D/o+F+Rr3C
+         zqoNCED0p0vfp6ngXB24fsxBw9pZEkTFL+nrR6tkdTFq+7a2rEh6Yw0ewrK2beXddK
+         trbHCMXCNO1AHw+xReG1D2TDrL7iPzViYn1uvYyU7MmRL0jydCnPlCdD1oTTOpTxev
+         EwYZNRaapcz9hh6EFXcK6/kw829n0yYK3vY38B4ku3fcFDyFjxjo07v2aUxoaSZ6F6
+         kY8fNkveQN2jQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 44C535C04BD; Mon, 18 Apr 2022 17:11:23 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 17:11:23 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org
+Subject: [PATCH rcu 0/12] RCU-tasks torture-test updates
+Message-ID: <20220419001123.GA3949851@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/22 6:11 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.311 release.
-> There are 218 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.311-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Hello!
 
-Compiled and booted on my test system. No dmesg regressions.
+This series contains torture-tests updates for the RCU tasks flavors,
+most notably ensuring that building rcutorture and friends does not
+change the RCU-tasks-related Kconfig options.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+1.	Make TASKS_RUDE_RCU select IRQ_WORK.
 
-thanks,
--- Shuah
+2.	Make the TASKS_RCU Kconfig option be selected.
+
+3.	Allow rcutorture without RCU Tasks Trace.
+
+4.	Allow rcutorture without RCU Tasks.
+
+5.	Allow rcutorture without RCU Tasks Rude.
+
+6.	Add CONFIG_PREEMPT_DYNAMIC=n to TASKS02 scenario.
+
+7.	Allow specifying per-scenario stat_interval.
+
+8.	Allow refscale without RCU Tasks.
+
+9.	Allow refscale without RCU Tasks Rude/Trace.
+
+10.	Allow rcuscale without RCU Tasks.
+
+11.	Allow rcuscale without RCU Tasks Rude/Trace.
+
+12.	Adjust for TASKS_RCU Kconfig option being selected.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ b/arch/Kconfig                                                    |    1 
+ b/kernel/bpf/Kconfig                                              |    1 
+ b/kernel/rcu/Kconfig                                              |    1 
+ b/kernel/rcu/Kconfig.debug                                        |    1 
+ b/kernel/rcu/rcuscale.c                                           |   12 +
+ b/kernel/rcu/rcutorture.c                                         |  101 +++++-----
+ b/kernel/rcu/refscale.c                                           |   12 +
+ b/kernel/trace/Kconfig                                            |    1 
+ b/tools/testing/selftests/rcutorture/configs/rcu/RUDE01           |    2 
+ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N           |    2 
+ b/tools/testing/selftests/rcutorture/configs/rcu/TASKS01          |    1 
+ b/tools/testing/selftests/rcutorture/configs/rcu/TASKS02          |    3 
+ b/tools/testing/selftests/rcutorture/configs/rcu/TASKS02.boot     |    1 
+ b/tools/testing/selftests/rcutorture/configs/rcu/TASKS03          |    2 
+ b/tools/testing/selftests/rcutorture/configs/rcu/TRACE01          |    2 
+ b/tools/testing/selftests/rcutorture/configs/rcu/TRACE02          |    2 
+ b/tools/testing/selftests/rcutorture/configs/rcu/TREE09           |    2 
+ b/tools/testing/selftests/rcutorture/configs/rcu/ver_functions.sh |   16 +
+ b/tools/testing/selftests/rcutorture/configs/rcuscale/CFcommon    |    4 
+ b/tools/testing/selftests/rcutorture/configs/rcuscale/TREE        |    2 
+ b/tools/testing/selftests/rcutorture/configs/refscale/CFcommon    |    2 
+ b/tools/testing/selftests/rcutorture/configs/refscale/NOPREEMPT   |    2 
+ b/tools/testing/selftests/rcutorture/configs/scf/NOPREEMPT        |    2 
+ b/tools/testing/selftests/rcutorture/configs/scf/PREEMPT          |    1 
+ kernel/rcu/Kconfig                                                |   64 ++++--
+ kernel/rcu/Kconfig.debug                                          |    8 
+ kernel/rcu/rcuscale.c                                             |   12 +
+ kernel/rcu/rcutorture.c                                           |   26 ++
+ kernel/rcu/refscale.c                                             |   12 +
+ tools/testing/selftests/rcutorture/configs/rcu/TASKS02            |    1 
+ tools/testing/selftests/rcutorture/configs/rcuscale/CFcommon      |    3 
+ tools/testing/selftests/rcutorture/configs/refscale/CFcommon      |    2 
+ 32 files changed, 219 insertions(+), 85 deletions(-)

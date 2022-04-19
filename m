@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2A4507C4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD498507C4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358137AbiDSWCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 18:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
+        id S1358148AbiDSWCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 18:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbiDSWCX (ORCPT
+        with ESMTP id S232898AbiDSWCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 18:02:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7256C40E5A;
-        Tue, 19 Apr 2022 14:59:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EC4C617B1;
-        Tue, 19 Apr 2022 21:59:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA1CC385A5;
-        Tue, 19 Apr 2022 21:59:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650405578;
-        bh=7wDXC7Po6MR8ODEJF4YIi3tHq7GK9Lc2S38RNkP9/us=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bAjdWxbfSluxfCDNcc8t4jiTxI1s5IcE8z+SCBqWGnijue0MVoqr3NiXina1cgi76
-         R2LWxiPoh4XE87ZVdkkR4YDx7RF8ZwjtBeKad3RAdqm7ObPhObhpoyxwTGCApE5nMk
-         ED5QWvhmWCBAYvQ7jlRNYidePWvPf8khuxSnBNBmsrXIQhy8v0wJlnlUI1OmTxSYkb
-         wxLyxrOF7d1znDsvGDCpfn0JVZvw8mTg986PLBGo8lQ54ispqcsCOkOwPAOJpO5mY9
-         eJZAW7Y/jmcXtu8czTyEN7ysEKGdbezKnvCaUILysjIYk8tDxAbg2yaiggfjsHKLUq
-         ZkCWuPAHz6q1g==
-Received: by pali.im (Postfix)
-        id 3145D692; Tue, 19 Apr 2022 23:59:35 +0200 (CEST)
-Date:   Tue, 19 Apr 2022 23:59:35 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     "Sicelo A. Mhlongo" <absicsz@gmail.com>
-Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] power: supply: bq27xxx: expose battery data when CI=1
-Message-ID: <20220419215935.jtbcutnpi6345gqj@pali>
-References: <20220419213647.1186284-1-absicsz@gmail.com>
- <20220419213647.1186284-2-absicsz@gmail.com>
+        Tue, 19 Apr 2022 18:02:49 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CEB22B0C
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:00:04 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id m132so33556250ybm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:00:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WaRzQ4klN9ADXoVL2/N/GdSyXHSUMyLkroRcRJGiyVo=;
+        b=dsrvHvVw5CVTuYDjOZ4qvSA0xlGQ9a7GqFzdPXMtEddMQ65wpQPzZqOX/JbXwhprLR
+         hPqkmxoXvBpkzvae2A5VxtWBiv9VY9kRWmXJ+gNgfr/J936VxV0clghSDI22NmxKt6B1
+         HK7/ftdE06eNgpBj5leo1XsK8IIFCdSEa9VpY+wehnw1M5Hh1AqCZmlTGeEQwdiqRty+
+         cW2dboQNQeR+KAybRGfQl22NikK/qMzaLhJ2IIcrKITmvBaledZvlBC39xLZDPSZ9+KJ
+         JjPkH3I8poggbgEpZNVssMvzVQGwXLljvU6Em9lqaRW44S5WXiNBK0t6/gH/HIxRaWbv
+         LmJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WaRzQ4klN9ADXoVL2/N/GdSyXHSUMyLkroRcRJGiyVo=;
+        b=2DozSxqnYGlQhSoRTiGy7cWBTJlO3JG/IyQ4dIMO4cspR3N8cPBKFY9YDTRSqg/0eQ
+         kyQecxci5S5ZPKF1UCYAq+gMxsYeCW6cmaZyBkl2kHijW3Re8DXEM/7/aTCNu33UvlDQ
+         hAURfs4hmMEZqYGockYbMIpjjeu1Q0Ora5dsBfKPJiaVC/WFF2yMvY8XTase0wiVz7VO
+         nOd/Y2Q1k1LdHfB4RZYCI7aNRfCMxy6H6mY5gfDSKBRxVdpPlwvx18O7gLtgHNzF8NKl
+         a73IDt9LyL+VgB9YZ+mucPpzcc50a0khpE85icBWnemR6KVUX1d0EZDEDYV24rBlPLam
+         863Q==
+X-Gm-Message-State: AOAM531GRsoTxCHIgXj7d3SAqT1zy6kw+XvC825giaxo9kZGoZx8czVC
+        ei1yIXO0F9iE0K5Ix/07dvo9YU86tHs8yMfOkWbq7Q==
+X-Google-Smtp-Source: ABdhPJyCOTK/Tp48a1k8AcfN/cTDyqQzbuqieOsXlmrpfSjjG6eK1W8C3AEqhU8MKnqaFQHcd0hbJwfVrHu5J84iAjY=
+X-Received: by 2002:a25:a12a:0:b0:644:e94e:5844 with SMTP id
+ z39-20020a25a12a000000b00644e94e5844mr12511065ybh.492.1650405602771; Tue, 19
+ Apr 2022 15:00:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220419213647.1186284-2-absicsz@gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220414025705.598-1-mario.limonciello@amd.com>
+In-Reply-To: <20220414025705.598-1-mario.limonciello@amd.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 19 Apr 2022 23:59:51 +0200
+Message-ID: <CACRpkdZsv1u7Df=PLC8E_ZS5GAdW3PfEYjctfSJJuAev8mu9=w@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Request interrupts after IRQ is initialized
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Basavaraj.Natikar@amd.com, Richard.Gong@amd.com,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,118 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 19 April 2022 23:36:47 Sicelo A. Mhlongo wrote:
-> When the Capacity Inaccurate flag is set, the chip still provides data
-> about the battery, albeit inaccurate. Instead of discarding capacity
-> values for CI=1, expose the stale data and use the
-> POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED property to indicate that the
-> values should be used with care.
+On Thu, Apr 14, 2022 at 4:57 AM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 
-Looks good! I did not know that there is CALIBRATION_REQUIRED property.
+> commit 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before
+> initialization") attempted to fix a race condition that lead to a NULL
+> pointer, but in the process caused a regression for _AEI/_EVT declared
+> GPIOs. This manifests in messages showing deferred probing while trying
+> to allocate IRQs like so:
+>
+> [    0.688318] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0000 to IRQ, err -517
+> [    0.688337] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x002C to IRQ, err -517
+> [    0.688348] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
+> [    0.688359] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003E to IRQ, err -517
+> [    0.688369] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003A to IRQ, err -517
+> [    0.688379] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003B to IRQ, err -517
+> [    0.688389] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0002 to IRQ, err -517
+> [    0.688399] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0011 to IRQ, err -517
+> [    0.688410] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0012 to IRQ, err -517
+> [    0.688420] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0007 to IRQ, err -517
+>
+> The code for walking _AEI doesn't handle deferred probing and so this leads
+> to non-functional GPIO interrupts.
+>
+> Fix this issue by moving the call to `acpi_gpiochip_request_interrupts` to
+> occur after gc->irc.initialized is set.
+>
+> Cc: Shreeya Patel <shreeya.patel@collabora.com>
+> Cc: stable@vger.kernel.org
+> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before initialization")
+> Reported-by: Mario Limonciello <mario.limonciello@amd.com>
+> Link: https://lore.kernel.org/linux-gpio/BL1PR12MB51577A77F000A008AA694675E2EF9@BL1PR12MB5157.namprd12.prod.outlook.com/T/#u
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-> Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
-> ---
->  drivers/power/supply/bq27xxx_battery.c | 58 +++++++++++++-------------
->  1 file changed, 28 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-> index 72e727cd31e8..a524237b758e 100644
-> --- a/drivers/power/supply/bq27xxx_battery.c
-> +++ b/drivers/power/supply/bq27xxx_battery.c
-> @@ -1572,14 +1572,6 @@ static int bq27xxx_battery_read_charge(struct bq27xxx_device_info *di, u8 reg)
->   */
->  static inline int bq27xxx_battery_read_nac(struct bq27xxx_device_info *di)
->  {
-> -	int flags;
-> -
-> -	if (di->opts & BQ27XXX_O_ZERO) {
-> -		flags = bq27xxx_read(di, BQ27XXX_REG_FLAGS, true);
-> -		if (flags >= 0 && (flags & BQ27000_FLAG_CI))
-> -			return -ENODATA;
-> -	}
-> -
->  	return bq27xxx_battery_read_charge(di, BQ27XXX_REG_NAC);
->  }
->  
-> @@ -1742,6 +1734,18 @@ static bool bq27xxx_battery_dead(struct bq27xxx_device_info *di, u16 flags)
->  		return flags & (BQ27XXX_FLAG_SOC1 | BQ27XXX_FLAG_SOCF);
->  }
->  
-> +/*
-> + * Returns true if reported battery capacity is inaccurate
-> + */
-> +static bool bq27xxx_battery_capacity_inaccurate(struct bq27xxx_device_info *di,
-> +						 u16 flags)
-> +{
-> +	if (di->opts & BQ27XXX_O_HAS_CI)
-> +		return (flags & BQ27000_FLAG_CI);
-> +	else
-> +		return false;
-> +}
-> +
->  static int bq27xxx_battery_read_health(struct bq27xxx_device_info *di)
->  {
->  	/* Unlikely but important to return first */
-> @@ -1751,6 +1755,8 @@ static int bq27xxx_battery_read_health(struct bq27xxx_device_info *di)
->  		return POWER_SUPPLY_HEALTH_COLD;
->  	if (unlikely(bq27xxx_battery_dead(di, di->cache.flags)))
->  		return POWER_SUPPLY_HEALTH_DEAD;
-> +	if (unlikely(bq27xxx_battery_capacity_inaccurate(di, di->cache.flags)))
-> +		return POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED;
->  
->  	return POWER_SUPPLY_HEALTH_GOOD;
->  }
-> @@ -1767,29 +1773,21 @@ void bq27xxx_battery_update(struct bq27xxx_device_info *di)
->  	if (cache.flags >= 0) {
->  		cache.temperature = bq27xxx_battery_read_temperature(di);
->  		if (has_ci_flag && (cache.flags & BQ27000_FLAG_CI)) {
-> -			dev_info_once(di->dev, "battery is not calibrated! ignoring capacity values\n");
-> -			cache.capacity = -ENODATA;
-> -			cache.energy = -ENODATA;
-> -			cache.time_to_empty = -ENODATA;
-> -			cache.time_to_empty_avg = -ENODATA;
-> -			cache.time_to_full = -ENODATA;
-> -			cache.charge_full = -ENODATA;
-> -			cache.health = -ENODATA;
-> -		} else {
-> -			if (di->regs[BQ27XXX_REG_TTE] != INVALID_REG_ADDR)
-> -				cache.time_to_empty = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTE);
-> -			if (di->regs[BQ27XXX_REG_TTECP] != INVALID_REG_ADDR)
-> -				cache.time_to_empty_avg = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTECP);
-> -			if (di->regs[BQ27XXX_REG_TTF] != INVALID_REG_ADDR)
-> -				cache.time_to_full = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF);
-> -
-> -			cache.charge_full = bq27xxx_battery_read_fcc(di);
-> -			cache.capacity = bq27xxx_battery_read_soc(di);
-> -			if (di->regs[BQ27XXX_REG_AE] != INVALID_REG_ADDR)
-> -				cache.energy = bq27xxx_battery_read_energy(di);
-> -			di->cache.flags = cache.flags;
-> -			cache.health = bq27xxx_battery_read_health(di);
-> +			dev_info_once(di->dev, "battery is not calibrated! capacity values are inaccurate\n");
-
-Just one note: Do we still need this info message in dmesg? Now when
-this information is going to be reported via sysfs API, I'm not sure if
-it still has some value...
-
->  		}
-> +		if (di->regs[BQ27XXX_REG_TTE] != INVALID_REG_ADDR)
-> +			cache.time_to_empty = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTE);
-> +		if (di->regs[BQ27XXX_REG_TTECP] != INVALID_REG_ADDR)
-> +			cache.time_to_empty_avg = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTECP);
-> +		if (di->regs[BQ27XXX_REG_TTF] != INVALID_REG_ADDR)
-> +			cache.time_to_full = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF);
-> +
-> +		cache.charge_full = bq27xxx_battery_read_fcc(di);
-> +		cache.capacity = bq27xxx_battery_read_soc(di);
-> +		if (di->regs[BQ27XXX_REG_AE] != INVALID_REG_ADDR)
-> +			cache.energy = bq27xxx_battery_read_energy(di);
-> +		di->cache.flags = cache.flags;
-> +		cache.health = bq27xxx_battery_read_health(di);
->  		if (di->regs[BQ27XXX_REG_CYCT] != INVALID_REG_ADDR)
->  			cache.cycle_count = bq27xxx_battery_read_cyct(di);
->  
-> -- 
-> 2.35.2
-> 
+Yours,
+Linus Walleij

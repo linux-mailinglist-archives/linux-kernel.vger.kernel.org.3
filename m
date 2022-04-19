@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F315075CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 976935075EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355132AbiDSQ7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
+        id S1355077AbiDSRIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355606AbiDSQ6K (ORCPT
+        with ESMTP id S1355889AbiDSRCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:58:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD743DDEC
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:49:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DACF9B81BDF
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:49:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88096C385A9;
-        Tue, 19 Apr 2022 16:49:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650386948;
-        bh=COxvLNpbK323jqgWp91NgzZvOEoA6dxCIIi+cjvamIw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=FSVQ82FX8P3wZ7Y+CIYI45t3YAjOkFGFiMiHfrX6TS1ZbPlb6hxSi3DRTJf1W9e3L
-         EyvLcV79VHyZV+mQLNHelW8qQL0h+RKZ50/BCLv1WeFbkaxjun3Co6tBxzbIithlKk
-         liTM0tdHAd09tIkt8dEzpcnwnMshKy+kp3LhQt/tNThnSyolvALE1jZCI91Oux8l5A
-         o1l2a1deYEvWM7oXApNVUoFekAPa1MlKEOQzhzDnuK4wzEoptECnjZQTawV5+jStJr
-         bBqdT0GsYbSdOwkVpQI+u3/NVhVTyAJm8ydEr/biXUo2agHHupAXWS84OtbiKMcTBD
-         uw6SFoF+pxAPw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3521D5C031F; Tue, 19 Apr 2022 09:49:08 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 09:49:08 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Hillf Danton <hdanton@sina.com>, linux-kernel@vger.kernel.org,
-        syzkaller <syzkaller@googlegroups.com>
-Subject: Re: [PATCH rcu 04/11] kernel/smp: Provide boot-time timeout for CSD
- lock diagnostics
-Message-ID: <20220419164908.GM4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
- <20220419085607.2014-1-hdanton@sina.com>
- <20220419134616.GE4285@paulmck-ThinkPad-P17-Gen-1>
- <CACT4Y+Y8Az3_gi-UX-KCfQ1dxARJtL1NhB1AGLv9o_5gNtkWOg@mail.gmail.com>
+        Tue, 19 Apr 2022 13:02:45 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64983CFDC;
+        Tue, 19 Apr 2022 09:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650387164; x=1681923164;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0eiWzT86/lbXfzWNlN+Vul7m6CHrSxIYiXYV0a9Dip4=;
+  b=CvVVUfwUl3MrDVahrwzdFLGK+39EgLOQVkc18XSQjYWFeOOuFhN7LsE1
+   13Mqv13PRzNAOoVSpGWs+LxfiikLWrxl5PSeN72Clh0ad5wTH6Afd7D5g
+   aTkKcIAAruMfDZzrWGfd9UfcXSxb2KxdSL8kEenyZWQyiIR+GH85Br2S3
+   RYRxDBN9t3gJXF4fW669oTq7ORgzWp4kdLHIn/4Y8+P6G1ywB0O7MPdLb
+   9V0RdeLpKrUJYM2mV3xrqNVR7oyN0mzB2uPu5DePV0T8m/zgxXM40nvVi
+   Ky69P8vgl8CkHWbIkLHsuXZFmnM/IdJsq2wQIdtFo8guKzdxNfKdiluN7
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="326714903"
+X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
+   d="scan'208";a="326714903"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 09:52:44 -0700
+X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
+   d="scan'208";a="657708530"
+Received: from jcrode-mobl.amr.corp.intel.com (HELO guptapa-desk) ([10.252.132.175])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 09:52:43 -0700
+Date:   Tue, 19 Apr 2022 09:52:41 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Pelton, Kyle D" <kyle.d.pelton@intel.com>
+Subject: [PATCH] x86/cpu: Load microcode during restore_processor_state()
+Message-ID: <4350dfbf785cd482d3fafa72b2b49c83102df3ce.1650386317.git.pawan.kumar.gupta@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+Y8Az3_gi-UX-KCfQ1dxARJtL1NhB1AGLv9o_5gNtkWOg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,108 +63,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 04:11:36PM +0200, Dmitry Vyukov wrote:
-> On Tue, 19 Apr 2022 at 15:46, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Tue, Apr 19, 2022 at 04:56:07PM +0800, Hillf Danton wrote:
-> > > On Mon, 18 Apr 2022 15:53:52 -0700 Paul E. McKenney wrote:
-> > > > Debugging of problems involving insanely long-running SMI handlers
-> > > > proceeds better if the CSD-lock timeout can be adjusted.  This commit
-> > > > therefore provides a new smp.csd_lock_timeout kernel boot parameter
-> > > > that specifies the timeout in milliseconds.  The default remains at the
-> > > > previously hard-coded value of five seconds.
-> > > >
-> > > > Cc: Rik van Riel <riel@surriel.com>
-> > > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > > Cc: Ingo Molnar <mingo@kernel.org>
-> > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > > > Cc: Juergen Gross <jgross@suse.com>
-> > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > ---
-> > > >  Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
-> > > >  kernel/smp.c                                    |  7 +++++--
-> > > >  2 files changed, 16 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > > index 3f1cc5e317ed..645c4c001b16 100644
-> > > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > > @@ -5377,6 +5377,17 @@
-> > > >     smart2=         [HW]
-> > > >                     Format: <io1>[,<io2>[,...,<io8>]]
-> > > >
-> > > > +   smp.csd_lock_timeout= [KNL]
-> > > > +                   Specify the period of time in milliseconds
-> > > > +                   that smp_call_function() and friends will wait
-> > > > +                   for a CPU to release the CSD lock.  This is
-> > > > +                   useful when diagnosing bugs involving CPUs
-> > > > +                   disabling interrupts for extended periods
-> > > > +                   of time.  Defaults to 5,000 milliseconds, and
-> > > > +                   setting a value of zero disables this feature.
-> > > > +                   This feature may be more efficiently disabled
-> > > > +                   using the csdlock_debug- kernel parameter.
-> > > > +
-> > >
-> > > Can non-responsive CSD lock detected trigger syzbot (warning) report?
-> >
-> > If they enable it by building with CONFIG_CSD_LOCK_WAIT_DEBUG=y, yes.
-> 
-> +syzkaller mailing list
-> 
-> Currently we don't enable CONFIG_CSD_LOCK_WAIT_DEBUG in syzbot configs.
-> Is it a generally useful debugging feature recommended to be enabled
-> in kernel testing systems?
+From: Borislav Petkov <bp@suse.de>
 
-With the default value for smp.csd_lock_timeout, it detects CPUs that have
-had interrupts disabled for more than five seconds, which can be useful
-for detecting what would otherwise be silent response-time failures.
+When resuming from system sleep state, restore_processor_state()
+restores the boot CPU MSRs. These MSRs could be emulated by the
+microcode. If microcode is not loaded yet, writing to emulated MSRs
+leads to unchecked MSR access error:
 
-> If we enabled it, we also need to figure out where it fits into the
-> timeout hierarchy and adjust smp.csd_lock_timeout:
-> https://github.com/google/syzkaller/blob/master/dashboard/config/linux/bits/x86_64.yml#L15-L40
+  [   28.702947] PM: Calling lapic_suspend+0x0/0x210
+  [   28.703345] unchecked MSR access error: WRMSR to 0x10f (tried to write 0=x0000000000000000) at rIP: 0xffffffff9b2819e4 (native_write_msr+0x4/0x20)
+  [   28.703357] Call Trace:
+  [   28.703359]  <TASK>
+  [   28.703361]  ? restore_processor_state+0x255/0x2d0
+  [   28.703369]  x86_acpi_suspend_lowlevel+0x11f/0x170
+  [   28.703374]  acpi_suspend_enter+0x4f/0x1f0
+  [   28.703379]  suspend_devices_and_enter+0x6e0/0x7d0
+  [   28.703384]  pm_suspend.cold+0x35c/0x3a7
+  [   28.703388]  state_store+0x81/0xe0
+  [   28.703392]  kobj_attr_store+0x12/0x20
+  [   28.703396]  sysfs_kf_write+0x3f/0x50
+  [   28.703399]  kernfs_fop_write_iter+0x13b/0x1d0
+  [   28.703403]  new_sync_write+0x101/0x180
+  [   28.703408]  vfs_write+0x217/0x2a0
+  [   28.703413]  ksys_write+0x67/0xe0
+  [   28.703417]  __x64_sys_write+0x1a/0x20
+  [   28.703421]  do_syscall_64+0x3b/0x90
+  [   28.703426]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+  [   28.703429] RIP: 0033:0x7fda13c260a7
+  [   28.703434] Code: 64 89 02 48 c7 c0 ff ff ff ff eb bb 0f 1f 80 00 00 00 =
+  00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48=
+  > 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
+  [   28.703437] RSP: 002b:00007fffa4060268 EFLAGS: 00000246 ORIG_RAX: 000000=0000000001
+  [   28.703441] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007fda13c=260a7
+  [   28.703443] RDX: 0000000000000004 RSI: 000055a41f65a570 RDI: 00000000000=00004
+  [   28.703444] RBP: 000055a41f65a570 R08: 0000000000000000 R09: 00000000000=00004
+  [   28.703446] R10: 000055a41f0cc2a6 R11: 0000000000000246 R12: 00000000000=00004
+  [   28.703447] R13: 000055a41f657510 R14: 00007fda13d014a0 R15: 00007fda13d=008a0
 
-On this, I must defer to you guys.  I can say that the larger the value
-that you choose for smp.csd_lock_timeout, the nearer the beginnning of
-that group it should go, but you guys knew that already.  ;-)
+To ensure microcode emulated MSRs are available for restoration, load
+the microcode for boot CPU before restoring these MSRs.
 
-                                                        Thanx, Paul
+Reported-by: Kyle D. Pelton <kyle.d.pelton@intel.com>
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215841
+Fixes: e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume")
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Tested-by: Kyle D. Pelton <kyle.d.pelton@intel.com>
+Cc: stable@vger.kernel.org
+---
+ arch/x86/include/asm/microcode.h     |  2 ++
+ arch/x86/kernel/cpu/microcode/core.c |  6 +++---
+ arch/x86/power/cpu.c                 | 10 +++++++++-
+ 3 files changed, 14 insertions(+), 4 deletions(-)
 
-> > > Hillf
-> > > >     smsc-ircc2.nopnp        [HW] Don't use PNP to discover SMC devices
-> > > >     smsc-ircc2.ircc_cfg=    [HW] Device configuration I/O port
-> > > >     smsc-ircc2.ircc_sir=    [HW] SIR base I/O port
-> > > > diff --git a/kernel/smp.c b/kernel/smp.c
-> > > > index 01a7c1706a58..d82439bac401 100644
-> > > > --- a/kernel/smp.c
-> > > > +++ b/kernel/smp.c
-> > > > @@ -183,7 +183,9 @@ static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
-> > > >  static DEFINE_PER_CPU(void *, cur_csd_info);
-> > > >  static DEFINE_PER_CPU(struct cfd_seq_local, cfd_seq_local);
-> > > >
-> > > > -#define CSD_LOCK_TIMEOUT (5ULL * NSEC_PER_SEC)
-> > > > +static ulong csd_lock_timeout = 5000;  /* CSD lock timeout in milliseconds. */
-> > > > +module_param(csd_lock_timeout, ulong, 0444);
-> > > > +
-> > > >  static atomic_t csd_bug_count = ATOMIC_INIT(0);
-> > > >  static u64 cfd_seq;
-> > > >
-> > > > @@ -329,6 +331,7 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
-> > > >     u64 ts2, ts_delta;
-> > > >     call_single_data_t *cpu_cur_csd;
-> > > >     unsigned int flags = READ_ONCE(csd->node.u_flags);
-> > > > +   unsigned long long csd_lock_timeout_ns = csd_lock_timeout * NSEC_PER_MSEC;
-> > > >
-> > > >     if (!(flags & CSD_FLAG_LOCK)) {
-> > > >             if (!unlikely(*bug_id))
-> > > > @@ -341,7 +344,7 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
-> > > >
-> > > >     ts2 = sched_clock();
-> > > >     ts_delta = ts2 - *ts1;
-> > > > -   if (likely(ts_delta <= CSD_LOCK_TIMEOUT))
-> > > > +   if (likely(ts_delta <= csd_lock_timeout_ns || csd_lock_timeout_ns <= 0))
-> > > >             return false;
-> > > >
-> > > >     firsttime = !*bug_id;
-> > > > --
-> > > > 2.31.1.189.g2e36527f23
+diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
+index d6bfdfb0f0af..0c3d3440fe27 100644
+--- a/arch/x86/include/asm/microcode.h
++++ b/arch/x86/include/asm/microcode.h
+@@ -131,10 +131,12 @@ extern void __init load_ucode_bsp(void);
+ extern void load_ucode_ap(void);
+ void reload_early_microcode(void);
+ extern bool initrd_gone;
++void microcode_bsp_resume(void);
+ #else
+ static inline void __init load_ucode_bsp(void)			{ }
+ static inline void load_ucode_ap(void)				{ }
+ static inline void reload_early_microcode(void)			{ }
++static inline void microcode_bsp_resume(void)			{ }
+ #endif
+ 
+ #endif /* _ASM_X86_MICROCODE_H */
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index f955d25076ba..239ff5fcec6a 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -758,9 +758,9 @@ static struct subsys_interface mc_cpu_interface = {
+ };
+ 
+ /**
+- * mc_bp_resume - Update boot CPU microcode during resume.
++ * microcode_bsp_resume - Update boot CPU microcode during resume.
+  */
+-static void mc_bp_resume(void)
++void microcode_bsp_resume(void)
+ {
+ 	int cpu = smp_processor_id();
+ 	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+@@ -772,7 +772,7 @@ static void mc_bp_resume(void)
+ }
+ 
+ static struct syscore_ops mc_syscore_ops = {
+-	.resume			= mc_bp_resume,
++	.resume			= microcode_bsp_resume,
+ };
+ 
+ static int mc_cpu_starting(unsigned int cpu)
+diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
+index 3822666fb73d..bb176c72891c 100644
+--- a/arch/x86/power/cpu.c
++++ b/arch/x86/power/cpu.c
+@@ -25,6 +25,7 @@
+ #include <asm/cpu.h>
+ #include <asm/mmu_context.h>
+ #include <asm/cpu_device_id.h>
++#include <asm/microcode.h>
+ 
+ #ifdef CONFIG_X86_32
+ __visible unsigned long saved_context_ebx;
+@@ -262,11 +263,18 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
+ 	x86_platform.restore_sched_clock_state();
+ 	mtrr_bp_restore();
+ 	perf_restore_debug_store();
+-	msr_restore_context(ctxt);
+ 
+ 	c = &cpu_data(smp_processor_id());
+ 	if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
+ 		init_ia32_feat_ctl(c);
++
++	microcode_bsp_resume();
++
++	/*
++	 * This needs to happen after the microcode has been updated upon resume
++	 * because some of the MSRs are "emulated" in microcode.
++	 */
++	msr_restore_context(ctxt);
+ }
+ 
+ /* Needed by apm.c */
+-- 
+2.35.1
+

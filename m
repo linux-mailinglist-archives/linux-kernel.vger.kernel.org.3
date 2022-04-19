@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518DD507AAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA82E507AAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357017AbiDSULX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
+        id S1357090AbiDSULZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356718AbiDSULR (ORCPT
+        with ESMTP id S1356787AbiDSULS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:11:17 -0400
+        Tue, 19 Apr 2022 16:11:18 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B1338798;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD20C387AE;
         Tue, 19 Apr 2022 13:08:34 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 20:08:31 -0000
+Date:   Tue, 19 Apr 2022 20:08:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650398912;
+        s=2020; t=1650398913;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jS39wpLI1AVOcECw+O89J4y1kZyGZ+Z2JK9khIdZGG4=;
-        b=klLcSLaiaLtnV9h1m6Drjma27lzvsZ8MLgPYEna05Kzq9dMT95QT0cNPN5VaUFrh+mdX55
-        Xx+9FV/Xjj83bqdeTiHtEKUEhhfSWYkgHJ+GONRypqwt5hplO4X/5opkb0zZVAi8SMAIfZ
-        RTHBuPcrzsaDkQk2KIfODIczazeGULvtM4l1s2yBV48dd5HKs5gmD9HziSr6OnE4guS/p9
-        bY8gWViDmpSvK8PB7Qimo3Htd6sVoGp+Eq7fCBeZfJzgZPR1/e8PGRWtVZOKvUcG9ekfUa
-        yLV1rFTFC0WOP3GcMZCBI/RHmC7VLluVAapSkL1sRxCnmUFhJqAOrWUEtNXglg==
+        bh=l4f2mUU5Nhzbx4YIfuwYom0MZjYdlhh0Zzh5PnA/Vb0=;
+        b=V7arBujfG8YfPX60WEBJjcPobbADilEb0dAsRPno2UoEF1/bR0GfopfrTuqgP1IksqM/SL
+        4Dgfv+Xhxg3Fpeld7us+nCRai/Vrt2czRb3tOY0PWz/a52pQBmDSuYG+GrwaRfUTvu4rF0
+        Lr8d8TE+lKo56vAf2rnQOO0qO9L6fESqyf6lCZVcgz4Hpw9owzlGXKTIMpxOmMbnyU7KO7
+        MASUupqIOtvRWZ0F0arxYDWUgKkI4Xs/Jld2tYbvhjwaYBeuF9qJ4ehvdDRrZcRZi5zhcC
+        Mmv7JZSI8SCfueAyVD48u8+z6O5QWVCWZ3JRyp5/BkgPFlASPWijf1985u0u5g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650398912;
+        s=2020e; t=1650398913;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jS39wpLI1AVOcECw+O89J4y1kZyGZ+Z2JK9khIdZGG4=;
-        b=lU2oFFZwHkMPSth7H7DvL2FlsXZJr3R/vskt8RGF4i+Wh19BusU7qr62CRHSTM3/wW9r2p
-        VKfKKS7KCnFVA9CQ==
+        bh=l4f2mUU5Nhzbx4YIfuwYom0MZjYdlhh0Zzh5PnA/Vb0=;
+        b=S4k9HzfvvMocYREhLLDmtL9urbl2byIqjCv8/OeMhUE+9Fj5LJagBY8Zzh0858hZ/qWnzi
+        ikpyNV1V4rZe3oCg==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/urgent] objtool: Fix sibling call detection in alternatives
+Subject: [tip: objtool/urgent] objtool: Don't set 'jump_dest' for sibling calls
 Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <c02e0a0a2a4286b5f848d17c77fdcb7e0caf709c.1649718562.git.jpoimboe@redhat.com>
-References: <c02e0a0a2a4286b5f848d17c77fdcb7e0caf709c.1649718562.git.jpoimboe@redhat.com>
+In-Reply-To: <8737d6b9d1691831aed73375f444f0f42da3e2c9.1649718562.git.jpoimboe@redhat.com>
+References: <8737d6b9d1691831aed73375f444f0f42da3e2c9.1649718562.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-Message-ID: <165039891155.4207.6965870240273186525.tip-bot2@tip-bot2>
+Message-ID: <165039891242.4207.17901506310697157021.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,104 +67,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/urgent branch of tip:
 
-Commit-ID:     34c861e806478ac2ea4032721defbf1d6967df08
-Gitweb:        https://git.kernel.org/tip/34c861e806478ac2ea4032721defbf1d6967df08
+Commit-ID:     26ff604102c98df79c3fe2614d1b9bb068d4c28c
+Gitweb:        https://git.kernel.org/tip/26ff604102c98df79c3fe2614d1b9bb068d4c28c
 Author:        Josh Poimboeuf <jpoimboe@redhat.com>
-AuthorDate:    Mon, 11 Apr 2022 16:10:31 -07:00
+AuthorDate:    Mon, 11 Apr 2022 16:10:30 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 19 Apr 2022 21:58:53 +02:00
 
-objtool: Fix sibling call detection in alternatives
+objtool: Don't set 'jump_dest' for sibling calls
 
-In add_jump_destinations(), sibling call detection requires 'insn->func'
-to be valid.  But alternative instructions get their 'func' set in
-handle_group_alt(), which runs *after* add_jump_destinations().  So
-sibling calls in alternatives code don't get properly detected.
-
-Fix that by changing the initialization order: call
-add_special_section_alts() *before* add_jump_destinations().
-
-This also means the special case for a missing 'jump_dest' in
-add_jump_destinations() can be removed, as it has already been dealt
-with.
+For most sibling calls, 'jump_dest' is NULL because objtool treats the
+jump like a call and sets 'call_dest'.  But there are a few edge cases
+where that's not true.  Make it consistent to avoid unexpected behavior.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/c02e0a0a2a4286b5f848d17c77fdcb7e0caf709c.1649718562.git.jpoimboe@redhat.com
+Link: https://lkml.kernel.org/r/8737d6b9d1691831aed73375f444f0f42da3e2c9.1649718562.git.jpoimboe@redhat.com
 ---
- tools/objtool/check.c | 36 +++++++++++++++++-------------------
- 1 file changed, 17 insertions(+), 19 deletions(-)
+ tools/objtool/check.c | 35 ++++++++++++++++++++++-------------
+ 1 file changed, 22 insertions(+), 13 deletions(-)
 
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 6f49278..0f5d3de 100644
+index bd0c2c8..6f49278 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -1277,6 +1277,13 @@ static int add_jump_destinations(struct objtool_file *file)
+@@ -1271,7 +1271,7 @@ static bool is_first_func_insn(struct objtool_file *file, struct instruction *in
+  */
+ static int add_jump_destinations(struct objtool_file *file)
+ {
+-	struct instruction *insn;
++	struct instruction *insn, *jump_dest;
+ 	struct reloc *reloc;
+ 	struct section *dest_sec;
  	unsigned long dest_off;
- 
- 	for_each_insn(file, insn) {
-+		if (insn->jump_dest) {
+@@ -1291,7 +1291,10 @@ static int add_jump_destinations(struct objtool_file *file)
+ 			add_retpoline_call(file, insn);
+ 			continue;
+ 		} else if (insn->func) {
+-			/* internal or external sibling call (with reloc) */
 +			/*
-+			 * handle_group_alt() may have previously set
-+			 * 'jump_dest' for some alternatives.
++			 * External sibling call or internal sibling call with
++			 * STT_FUNC reloc.
 +			 */
-+			continue;
-+		}
- 		if (!is_static_jump(insn))
+ 			add_call_dest(file, insn, reloc->sym, true);
  			continue;
- 
-@@ -1308,15 +1315,6 @@ static int add_jump_destinations(struct objtool_file *file)
- 
- 		jump_dest = find_insn(file, dest_sec, dest_off);
- 		if (!jump_dest) {
--
--			/*
--			 * This is a special case where an alt instruction
--			 * jumps past the end of the section.  These are
--			 * handled later in handle_group_alt().
--			 */
--			if (!strcmp(insn->sec->name, ".altinstr_replacement"))
--				continue;
--
- 			WARN_FUNC("can't find jump dest instruction at %s+0x%lx",
- 				  insn->sec, insn->offset, dest_sec->name,
- 				  dest_off);
-@@ -1549,13 +1547,13 @@ static int handle_group_alt(struct objtool_file *file,
+ 		} else if (reloc->sym->sec->idx) {
+@@ -1303,8 +1306,8 @@ static int add_jump_destinations(struct objtool_file *file)
  			continue;
- 
- 		dest_off = arch_jump_destination(insn);
--		if (dest_off == special_alt->new_off + special_alt->new_len)
-+		if (dest_off == special_alt->new_off + special_alt->new_len) {
- 			insn->jump_dest = next_insn_same_sec(file, last_orig_insn);
--
--		if (!insn->jump_dest) {
--			WARN_FUNC("can't find alternative jump destination",
--				  insn->sec, insn->offset);
--			return -1;
-+			if (!insn->jump_dest) {
-+				WARN_FUNC("can't find alternative jump destination",
-+					  insn->sec, insn->offset);
-+				return -1;
-+			}
  		}
+ 
+-		insn->jump_dest = find_insn(file, dest_sec, dest_off);
+-		if (!insn->jump_dest) {
++		jump_dest = find_insn(file, dest_sec, dest_off);
++		if (!jump_dest) {
+ 
+ 			/*
+ 			 * This is a special case where an alt instruction
+@@ -1323,8 +1326,8 @@ static int add_jump_destinations(struct objtool_file *file)
+ 		/*
+ 		 * Cross-function jump.
+ 		 */
+-		if (insn->func && insn->jump_dest->func &&
+-		    insn->func != insn->jump_dest->func) {
++		if (insn->func && jump_dest->func &&
++		    insn->func != jump_dest->func) {
+ 
+ 			/*
+ 			 * For GCC 8+, create parent/child links for any cold
+@@ -1342,16 +1345,22 @@ static int add_jump_destinations(struct objtool_file *file)
+ 			 * subfunction is through a jump table.
+ 			 */
+ 			if (!strstr(insn->func->name, ".cold") &&
+-			    strstr(insn->jump_dest->func->name, ".cold")) {
+-				insn->func->cfunc = insn->jump_dest->func;
+-				insn->jump_dest->func->pfunc = insn->func;
++			    strstr(jump_dest->func->name, ".cold")) {
++				insn->func->cfunc = jump_dest->func;
++				jump_dest->func->pfunc = insn->func;
+ 
+-			} else if (!same_function(insn, insn->jump_dest) &&
+-				   is_first_func_insn(file, insn->jump_dest)) {
+-				/* internal sibling call (without reloc) */
+-				add_call_dest(file, insn, insn->jump_dest->func, true);
++			} else if (!same_function(insn, jump_dest) &&
++				   is_first_func_insn(file, jump_dest)) {
++				/*
++				 * Internal sibling call without reloc or with
++				 * STT_SECTION reloc.
++				 */
++				add_call_dest(file, insn, jump_dest->func, true);
++				continue;
+ 			}
+ 		}
++
++		insn->jump_dest = jump_dest;
  	}
  
-@@ -2254,14 +2252,14 @@ static int decode_sections(struct objtool_file *file)
- 		return ret;
- 
- 	/*
--	 * Must be before add_special_section_alts() as that depends on
--	 * jump_dest being set.
-+	 * Must be before add_jump_destinations(), which depends on 'func'
-+	 * being set for alternatives, to enable proper sibling call detection.
- 	 */
--	ret = add_jump_destinations(file);
-+	ret = add_special_section_alts(file);
- 	if (ret)
- 		return ret;
- 
--	ret = add_special_section_alts(file);
-+	ret = add_jump_destinations(file);
- 	if (ret)
- 		return ret;
- 
+ 	return 0;

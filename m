@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3555D507A55
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 21:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A469507A59
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 21:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234894AbiDSThr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 15:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
+        id S1354642AbiDSThu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 15:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353383AbiDSThb (ORCPT
+        with ESMTP id S1354562AbiDSThc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 15:37:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BE1D92;
-        Tue, 19 Apr 2022 12:34:47 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 19:34:43 -0000
+        Tue, 19 Apr 2022 15:37:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7042BE47;
+        Tue, 19 Apr 2022 12:34:48 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 19:34:44 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650396885;
+        s=2020; t=1650396886;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KRQQCuR5psNuEiEnoSIeznGIw1weg0S41N/l1rYRi6Y=;
-        b=gdDI/V/cL+VUL8d+Y7IDSxEJ4tzTGXdZ0SSl1TgG4p39R7Jr+nzapBvdxhTYOMU2wEGZmq
-        lxJBDtVlPsHqHpW9dEiGzNJi3tDmMe6m16i9BwgPdksBagFFooieaTasf3V/Ieul1CEefa
-        9OMLgIyldo7GsTgXZ2dNSoDbgIHTSsNJAfUxNjsdnabwSVn2TE3lYi3sckjO3K1tiwGBik
-        k21LepVYdoFkSxw34VrSN1fUrIpjr59QgmUIqxITuhDDmaSNaNxcEBHvFUnAwDXgDaKQYI
-        NtghqVISvvQ71lwFfdLT2YY3IVZbYBUubTKDTPehU8Uax/jqKs21hVEcVYYnDg==
+        bh=4By39Zx+Sp4N6rN9AxawR4v/Be2Kj3yLRJ69iBAZCYg=;
+        b=OB6acdsfvUcuBKKsuojRPfuofwc3eMOqCsbvhEnc/ba1UqGFRMhsS7DNKtXHoY5n2ys8Si
+        GbOw0Jf1KujAtwntxI7pZ99AhungFHcbRcsr5uBNQTCtmGbt82qwW71C/vtG4nagDCFtjk
+        +ifJc29Ti74VbsaZ1VoecSAJv8LTK+pnInfemzx0cr/+frMG2rVv5y6GH7Xsnu82rYxoW0
+        Rb1feqnYF8nL1lbTmIHIgCwHQ+ybutGg5MxvGzQgVXdsRjsrq4SMX6kSyeYyvCjN0nLlD4
+        Z8gAJrZ+LX0U+XYnyqT6dTZ8hG6yAvPg04oJbBH8EWpsGSRhkPOrDkx1TJSMLA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650396885;
+        s=2020e; t=1650396886;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KRQQCuR5psNuEiEnoSIeznGIw1weg0S41N/l1rYRi6Y=;
-        b=0LRK1oFt4ul1dOERvtskPv9xPYSsxHx1kAkm5O1oBjKp8ya5QyCYuBLihzIQ4X8zMnQpqe
-        sW0WGQk5vB3bhTDQ==
-From:   "tip-bot2 for Zhang Rui" <tip-bot2@linutronix.de>
+        bh=4By39Zx+Sp4N6rN9AxawR4v/Be2Kj3yLRJ69iBAZCYg=;
+        b=oI+zT5pCDBRYf9vsmz9NPEXcA01wTSwl3FPZdkpmJAATPu8pGFV+bPzoDseyaBu8raUkMV
+        aBDV/pPbrkJUsNAg==
+From:   "tip-bot2 for Zhipeng Xie" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] perf/x86/cstate: Add SAPPHIRERAPIDS_X CPU support
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Kan Liang <kan.liang@linux.intel.com>, x86@kernel.org,
+Subject: [tip: perf/urgent] perf/core: Fix perf_mmap fail when
+ CONFIG_PERF_USE_VMALLOC enabled
+Cc:     Zhipeng Xie <xiezhipeng1@huawei.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220415104520.2737004-1-rui.zhang@intel.com>
-References: <20220415104520.2737004-1-rui.zhang@intel.com>
+In-Reply-To: <20220209145417.6495-1-xiezhipeng1@huawei.com>
+References: <20220209145417.6495-1-xiezhipeng1@huawei.com>
 MIME-Version: 1.0
-Message-ID: <165039688387.4207.9627719799836247757.tip-bot2@tip-bot2>
+Message-ID: <165039688484.4207.14509998247013429471.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,64 +68,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/urgent branch of tip:
 
-Commit-ID:     528c9f1daf20da14d3e7348dc4b1d7c55743ee64
-Gitweb:        https://git.kernel.org/tip/528c9f1daf20da14d3e7348dc4b1d7c55743ee64
-Author:        Zhang Rui <rui.zhang@intel.com>
-AuthorDate:    Fri, 15 Apr 2022 18:45:20 +08:00
+Commit-ID:     60490e7966659b26d74bf1fa4aa8693d9a94ca88
+Gitweb:        https://git.kernel.org/tip/60490e7966659b26d74bf1fa4aa8693d9a94ca88
+Author:        Zhipeng Xie <xiezhipeng1@huawei.com>
+AuthorDate:    Wed, 09 Feb 2022 09:54:17 -05:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 19 Apr 2022 21:15:42 +02:00
 
-perf/x86/cstate: Add SAPPHIRERAPIDS_X CPU support
+perf/core: Fix perf_mmap fail when CONFIG_PERF_USE_VMALLOC enabled
 
->From the perspective of Intel cstate residency counters,
-SAPPHIRERAPIDS_X is the same as ICELAKE_X.
+This problem can be reproduced with CONFIG_PERF_USE_VMALLOC enabled on
+both x86_64 and aarch64 arch when using sysdig -B(using ebpf)[1].
+sysdig -B works fine after rebuilding the kernel with
+CONFIG_PERF_USE_VMALLOC disabled.
 
-Share the code with it. And update the comments for SAPPHIRERAPIDS_X.
+I tracked it down to the if condition event->rb->nr_pages != nr_pages
+in perf_mmap is true when CONFIG_PERF_USE_VMALLOC is enabled where
+event->rb->nr_pages = 1 and nr_pages = 2048 resulting perf_mmap to
+return -EINVAL. This is because when CONFIG_PERF_USE_VMALLOC is
+enabled, rb->nr_pages is always equal to 1.
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Arch with CONFIG_PERF_USE_VMALLOC enabled by default:
+	arc/arm/csky/mips/sh/sparc/xtensa
+
+Arch with CONFIG_PERF_USE_VMALLOC disabled by default:
+	x86_64/aarch64/...
+
+Fix this problem by using data_page_nr()
+
+[1] https://github.com/draios/sysdig
+
+Fixes: 906010b2134e ("perf_event: Provide vmalloc() based mmap() backing")
+Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-Link: https://lkml.kernel.org/r/20220415104520.2737004-1-rui.zhang@intel.com
+Link: https://lkml.kernel.org/r/20220209145417.6495-1-xiezhipeng1@huawei.com
 ---
- arch/x86/events/intel/cstate.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ kernel/events/core.c        | 2 +-
+ kernel/events/internal.h    | 5 +++++
+ kernel/events/ring_buffer.c | 5 -----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/events/intel/cstate.c b/arch/x86/events/intel/cstate.c
-index 5d77622..48e5db2 100644
---- a/arch/x86/events/intel/cstate.c
-+++ b/arch/x86/events/intel/cstate.c
-@@ -51,7 +51,7 @@
-  *			       perf code: 0x02
-  *			       Available model: SLM,AMT,NHM,WSM,SNB,IVB,HSW,BDW,
-  *						SKL,KNL,GLM,CNL,KBL,CML,ICL,ICX,
-- *						TGL,TNT,RKL,ADL,RPL
-+ *						TGL,TNT,RKL,ADL,RPL,SPR
-  *			       Scope: Core
-  *	MSR_CORE_C7_RESIDENCY: CORE C7 Residency Counter
-  *			       perf code: 0x03
-@@ -62,7 +62,7 @@
-  *			       perf code: 0x00
-  *			       Available model: SNB,IVB,HSW,BDW,SKL,KNL,GLM,CNL,
-  *						KBL,CML,ICL,ICX,TGL,TNT,RKL,ADL,
-- *						RPL
-+ *						RPL,SPR
-  *			       Scope: Package (physical package)
-  *	MSR_PKG_C3_RESIDENCY:  Package C3 Residency Counter.
-  *			       perf code: 0x01
-@@ -74,7 +74,7 @@
-  *			       perf code: 0x02
-  *			       Available model: SLM,AMT,NHM,WSM,SNB,IVB,HSW,BDW,
-  *						SKL,KNL,GLM,CNL,KBL,CML,ICL,ICX,
-- *						TGL,TNT,RKL,ADL,RPL
-+ *						TGL,TNT,RKL,ADL,RPL,SPR
-  *			       Scope: Package (physical package)
-  *	MSR_PKG_C7_RESIDENCY:  Package C7 Residency Counter.
-  *			       perf code: 0x03
-@@ -675,6 +675,7 @@ static const struct x86_cpu_id intel_cstates_match[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE,		&icl_cstates),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&icx_cstates),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&icx_cstates),
-+	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&icx_cstates),
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 23bb197..7858baf 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -6247,7 +6247,7 @@ static int perf_mmap(struct file *file, struct vm_area_struct *vma)
+ again:
+ 	mutex_lock(&event->mmap_mutex);
+ 	if (event->rb) {
+-		if (event->rb->nr_pages != nr_pages) {
++		if (data_page_nr(event->rb) != nr_pages) {
+ 			ret = -EINVAL;
+ 			goto unlock;
+ 		}
+diff --git a/kernel/events/internal.h b/kernel/events/internal.h
+index 0828327..5150d5f 100644
+--- a/kernel/events/internal.h
++++ b/kernel/events/internal.h
+@@ -116,6 +116,11 @@ static inline int page_order(struct perf_buffer *rb)
+ }
+ #endif
  
- 	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L,		&icl_cstates),
- 	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE,		&icl_cstates),
++static inline int data_page_nr(struct perf_buffer *rb)
++{
++	return rb->nr_pages << page_order(rb);
++}
++
+ static inline unsigned long perf_data_size(struct perf_buffer *rb)
+ {
+ 	return rb->nr_pages << (PAGE_SHIFT + page_order(rb));
+diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+index 5286871..fb35b92 100644
+--- a/kernel/events/ring_buffer.c
++++ b/kernel/events/ring_buffer.c
+@@ -859,11 +859,6 @@ void rb_free(struct perf_buffer *rb)
+ }
+ 
+ #else
+-static int data_page_nr(struct perf_buffer *rb)
+-{
+-	return rb->nr_pages << page_order(rb);
+-}
+-
+ static struct page *
+ __perf_mmap_to_page(struct perf_buffer *rb, unsigned long pgoff)
+ {

@@ -2,264 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5534A506FEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04275506FE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346673AbiDSORr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S1345975AbiDSOQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350405AbiDSORm (ORCPT
+        with ESMTP id S232268AbiDSOQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:17:42 -0400
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF9E21BD;
-        Tue, 19 Apr 2022 07:14:56 -0700 (PDT)
-Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23JCvp4o013188;
-        Tue, 19 Apr 2022 14:13:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=message-id : date
- : subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=PPS06212021;
- bh=TKCYh77Qld6+GzXGSXRxQdTaAvPHUBYmFX7EUyrF6HA=;
- b=GIdlnUs8wqYuzJkjzxoQ6rjb3RINz0R1Ki3lV879lhZuSDdseh3f0VDrGc+IEUsuov0K
- r2HAzuoAsroPOmKayj9TP/UhJxAi9CyuOVuq9EEAmhmCq1xTNAxpWTtmE9V6jOlezNY4
- T6GMV+JBXgm1k/9t7K/ZnCEJ1i75A6fxHB63rclMfavJykXFjzCTEP3rrJl3j/yQYQYa
- VqfZ6es2m+amlX1o8o+rh2E3nlGJEEdiEjKrRVLDpE1CfzxleFyM8tDsEoenP2A96Rre
- hwqyr/HovA3VRKMOnnhAqgplfEStwCZo9poXfsPtNFggJLU+NLaC26/nX6E+OXBPXZkf eA== 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3ffpj2t5ur-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 14:13:58 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YNz0QZqt6/mXfjT5qcGf0/1bVLsKqsVt9BwCTKMLcm3lpGdOS/XKe4VvrNRCrEX6IsXYATeO7LYKDJiSGQCbUYpyOjMldIrQm7OwE7wnQjE9i9Q1CIeHJkq3OJ3KfGpbqhafmE7uAQYV365mDVeZh6t8mv9H3zpGaQROO5HbhBpznZEocuf8XKyIzeD7kTdYUU5mcmCWrbBuSQOFHbazJQ+t+UJBP93+cSPWi4NzmNQSHr6hLiFXSw7FlXeEtTWnmgwYU9pESIRCnButN76coqKyEeBKTbv9VVv3GppF2mdVmAs6HceNXVQhH603zPvuTJDCj6w+RHKJQi1MjZsIXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TKCYh77Qld6+GzXGSXRxQdTaAvPHUBYmFX7EUyrF6HA=;
- b=JTNHdQ+oh0aImJPwmixxScOlDZ1pRv7Xq5Q5k3jTl80zouJeJuNsw3tQMpWC1//PKJDmLxnznwztM25gb6JIWajPJ9fzY0ctWRQj1vDd8s6WaGJUg2LRQKKFYxpLCY6exuherefOFdh5eKPhI+QY7Sfsgg6/6ZLaj0HZxpH73DT9VQHU9Pu9qffLy6Gmr9RsMFp+hFDktWjVrTXj0Nz8shMqE7ea7ksD6Zb9DxpTN1U+2g7Tu+9k/Qc8C0vPQV4U4WhXeA6WKqGbI03T+4AgaDL6EGs3NRJHm4o6C6EqgODrHbtnd4Tb+WeQ0R9F1knY6UDVPTFBgbUjgwg928+kJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from MWHPR11MB1358.namprd11.prod.outlook.com (2603:10b6:300:23::8)
- by BN7PR11MB2865.namprd11.prod.outlook.com (2603:10b6:406:ac::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
- 2022 14:13:54 +0000
-Received: from MWHPR11MB1358.namprd11.prod.outlook.com
- ([fe80::1cd4:125:344:9fc]) by MWHPR11MB1358.namprd11.prod.outlook.com
- ([fe80::1cd4:125:344:9fc%7]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
- 14:13:54 +0000
-Message-ID: <286b9800-1b17-5274-889e-5a1a361eb410@windriver.com>
-Date:   Tue, 19 Apr 2022 22:13:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH RFC 1/8] stacktrace: Change callback prototype to pass
- more information
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, keescook@chromium.org,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, benh@kernel.crashing.org, paulus@samba.org,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220418132217.1573072-1-zhe.he@windriver.com>
- <20220418132217.1573072-2-zhe.he@windriver.com>
- <Yl60euwfis+u92cA@FVFF77S0Q05N>
-From:   He Zhe <zhe.he@windriver.com>
-In-Reply-To: <Yl60euwfis+u92cA@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
+        Tue, 19 Apr 2022 10:16:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF1439802;
+        Tue, 19 Apr 2022 07:14:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9DAEB811B9;
+        Tue, 19 Apr 2022 14:14:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 521F5C385A7;
+        Tue, 19 Apr 2022 14:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650377643;
+        bh=WECWMHh+I23LXcZzkz4DAIl7OQBINw7ymf0B3/Pj3z4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BPHVqMf0U5PD45GpHJnmm3ExaaZ8Sal2p0G/rPP32sTa7pcEY3+0b+AAXj66/qP73
+         927GV+QSQQxYYSSyQLGmHwWDxBYW11JSWRlRCjQxdFVBuLYpUrxz+/7HIpLJ5b/x0T
+         zAYCl7gdftcFC9HSNf3ExwIHLoa/Pcz7QUqVztAZsgzmre0v3kF/D2YiYAAU9SrWWn
+         NTvHWdSusC878m7aaQ5OgInAkRKUEwRwJRB0wyCx+6noSF+m70Wuvj15gsek5b2z7B
+         +GfeT9fr5PiRzk77bav9mEOytQhxAc2D+tuEYN/VtXCFhmjU7ZhNWxuzqIYogDrLom
+         jfeJcO6z8HDnQ==
+Date:   Tue, 19 Apr 2022 23:13:58 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH rcu 02/12] rcu: Make the TASKS_RCU Kconfig option be
+ selected
+Message-Id: <20220419231358.2a0517ee265296a25b4305be@kernel.org>
+In-Reply-To: <20220419001233.3950188-2-paulmck@kernel.org>
+References: <20220419001123.GA3949851@paulmck-ThinkPad-P17-Gen-1>
+        <20220419001233.3950188-2-paulmck@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HK2PR02CA0217.apcprd02.prod.outlook.com
- (2603:1096:201:20::29) To MWHPR11MB1358.namprd11.prod.outlook.com
- (2603:10b6:300:23::8)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0e9eee27-c4a0-40a4-3b53-08da220ed633
-X-MS-TrafficTypeDiagnostic: BN7PR11MB2865:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR11MB2865A80BF5BFA48AA437DFF78FF29@BN7PR11MB2865.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nc6YLA1KzFGK92zRLDu1qTfrUUysz7J2LMrk13a0mSaZoGjxzs1owMSfJDWj5Dtt8eGSdBzEbRyCdv7wEk/h9UAV8nxhjplnwIhMTRJjT/GUceI9QyhuTfEFNSdPpqqkOKqKE0gkhp5LkDJDUwy4c2IVMEmirs9CK1VDIoo3dq4c32ikrT0929Qhdg5kPJDCJcofU9n4m/QTPGGkmlyQE/RDMFXedE23OENL0AHieEzeqvS3ujaVNZvqKHngx0NJxTpa33HLI+9p80ogduoYgTQ5TgYi7DmJm4+kkp4K4JtYbmzbPDVsAAroUikWRXK1ZBdfhrNVftdYDwUxpWUCdGv7jvCMYuBetqUGsdtjA0X+of52uW1XekyQjMH2ggD7rYtFO+2DAkCE++44TGo4x/ZhUZtNgTmQ9LjYzBzzteuoEFzOIocWOU24KsOj85IKTwkyCl/ITQTWRi+YQjh0bbR0Q46NCRYeVeCrF7Q/D3/qC/hm8ya/xKORbEgOrTAfmlrRCklMmWt8KFMgaYIbn1vl9xpkvMYEgsyI36rrdxjijABzaRqH4s68b8El5VprI88pbO3/Adqcs71yU4emRNh+VQ9LiIejtvH9+L7qtU+VmRXWjeZIOQtj5DXicnepTNlLcVJMUCKBVfyXBtDUM2Bt3qJYQoWT04Xv643Fr6/XD/V1e5rbuLxBBIvKCSQ1SsXTn6hgPWqsGxsQKNPnKX1MaWiHJqhj/DksL+OscRdW4MBv1tvnXddkGqyYgLPivYJFOLd7UyGoDMFISYACxA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1358.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(53546011)(38100700002)(38350700002)(6506007)(6512007)(52116002)(6666004)(316002)(26005)(6486002)(186003)(7416002)(6916009)(508600001)(2616005)(5660300002)(2906002)(8936002)(4326008)(8676002)(66476007)(66946007)(66556008)(36756003)(31686004)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VFFSdDNCWkR6bHppWERZcmJrRGU2NjFKMTdPVFJjZExYbWYrc29zdEdwbW1n?=
- =?utf-8?B?WGNOZzFJaEwvRERhK3QvMkY0Q3NVL2VVWWI5UHlkWVh4U1I5R0xUK3JWeG44?=
- =?utf-8?B?WDVIUlBhL0hrL3hXM0FHUlVMdFlNcUJraGVjOUI1Ym93WS8rbE5sRHRCTjhF?=
- =?utf-8?B?UndZZ3NxVWVZVW5KTDV2VTgwMGJ0Y1BxMFZtemJKbjdwcHpzNTl5L3N1dkFV?=
- =?utf-8?B?UFJLaHpWQXRtRXUvY29kZGh1U3VSU0VqbHFlSlUwa0lvZGZreE04K2RFYnNQ?=
- =?utf-8?B?Y2x4TmFsQ0Y0TStBSk44TWl2OUQ1SXVJZ0pvVWM3bnAzQ0pVMXVHMUhIZ1FD?=
- =?utf-8?B?eUozQ1kxMXFtaGhWSWx5ckNFalVzQ2ZPbnFGNDlQT2VMa1dOajBTb3ZabC9Q?=
- =?utf-8?B?b2R5Qm5GOVZZajNUNk5NL2FCL1FVUGJVaGJNdmd4YXhxeWdkdHBFa1hMcU5C?=
- =?utf-8?B?bjdrZFUyaFRkaWozcFV0bXlJa01mZFNrZE9HTHVZa2Q4aG9saFNPbzJCRW5D?=
- =?utf-8?B?UXJlOW9oYmk3Sk1kc01QdlJpaHU2ZnNCZHlPZlFTMlRkY2VqZHRNaXRFaWtL?=
- =?utf-8?B?c0xSRFJlc2JGVVEvY0M0dVJuZjlBZHQvd0JjcFJGUUNnRWJMNXhBMmtHVzNR?=
- =?utf-8?B?MER1ZXluTGN3NXowOE0vUjdSaFZLY0xGYWt3ald1aVBtSWhBSlp5czkvYk5q?=
- =?utf-8?B?cUZJMGZ5Ky9OS3RnRzBYS2xHNXlFTmVSaTY3WU1vSXdOOWVuVmFZeEZQM3Rp?=
- =?utf-8?B?OXM3UWpINFRKL2pDbm1DamFQd3JpZGpYN2NnSE5OaWlTb1hlRFcvL2RsZUwy?=
- =?utf-8?B?L2h5LzNVMDVhRWVRTUZjNUtYUWw2VTg0YmpYaFNadTBmNXVMdnpkYVRKVzNM?=
- =?utf-8?B?bVFQK056T09sUy8xanZVT05HdnBZb2daS2pDajVXbUV5MUxjMWp2TVhHZGh6?=
- =?utf-8?B?ekl4ZzRWTm5WM0FFV2p6ZWZBUEN5RXVTeDlHam41RHVNZXA2YXBjUVJkNnlL?=
- =?utf-8?B?QkdsZUF6dDRtMTVveS9BVHduMFk2b1NVRk9lVlBMWWEyRi9UQU1OSDFQdDNF?=
- =?utf-8?B?d095MkJXK0xxZ09kWnFScGZFT0F5akJQK3VhZUVQTzVObTV3dzNtZzRMWHI0?=
- =?utf-8?B?dW55WkNoU254THZNMXN3T3p4Y09tcWp4MUtYQzdVd1VGR3VWaVVXUkRzRUcr?=
- =?utf-8?B?MzJkcHhkMXExQmVjSXp1MmlRVmVhZHJuaHBvRjdEOTF4NURvb0pwWUFRMkN6?=
- =?utf-8?B?bUIxNUNJSlZPamJFQklkczFLblY0eEFiOEQvaTlraVpvTkdJcFBYSzBrajRX?=
- =?utf-8?B?WVJlWXVmUGVhcTdDeUhtUmlUa291UzB5ZkRsRm5kL0dCQVBSa1NRL2V5SThX?=
- =?utf-8?B?TEFzT1JZM1hUY2tRcytHeTBjb2xhRW9heGEzdGczT2V5Ym1NVSs4OXhMMTRs?=
- =?utf-8?B?T1dhYnVLa0tIblRkWGRmYjlUMi9xNEg5dnRKWHRpaWVNM29aa3ZWbzdYY0Rh?=
- =?utf-8?B?VzZmRFBJSVNyV3c3VUJDMnRISFpiRFpzOWUvcEFJWC8zTVBmS0ZmQ1g4SU9l?=
- =?utf-8?B?QUFGd2h0NDdvQWNGejIwdFpoYWJTQjIvS2Nja3hUQWRxak1RUFd4QXJOcUox?=
- =?utf-8?B?cTEySCtaQlVLV3cxM1BZY0pkZEJGM2NDeGU4WnpIS2p3eUxOYjNJdTQrWUtp?=
- =?utf-8?B?bVVTTGRQZ1Fmb0ZxODFMM0NNaXBzZ3dNbjZvc2ZycEZoSVp0MjM5WTN0dFFS?=
- =?utf-8?B?K3dmWTF6b25QdlhuWm94S0htNGZPZGJvMkQ4YWxOajI2ek9IWkdxbS9Zd21m?=
- =?utf-8?B?em50QjBlUHNLaU5aelBReUtCQndGOTFVNzV6UEFKMVpGWUxFQk1OUk1aMG9M?=
- =?utf-8?B?Rjk1eVVEQzJzcWk5Y3VhazZmRWNEK3dlc0s1NzczbkFLTS9OSlhYSG5JQ2hi?=
- =?utf-8?B?RzZWWTZtR2dKNHJ6MWdwSnBta2FTMmN5MVlPaGtMcWNTUm0zNWlMRDZzYm8z?=
- =?utf-8?B?a1ZVQy8wWUNtbU9aaG9PSjd5Nzl4VTR6WTF3OVMrNHM4ZUVadzBobGVNZFJt?=
- =?utf-8?B?K0dnamNTbFE2U3dxS0Vrc2xzQkNGZjlUNUFEOHYwOFhQS1Y4TjNyMjF6U2Rw?=
- =?utf-8?B?SXZHcjRMZXVxR0RjNkhCSm52MkxzeTRXNHFTdm10Nk00Y3V5TEFSNXBOVDU1?=
- =?utf-8?B?UWl5Y0dXbUlsRXZjdHB1bGx3Nk85NnQwREhQYis5Z2tPbjBuVnpXRnNpRDFL?=
- =?utf-8?B?SEk1azdwZmRldzlzbmU1NW95YTFCRFBGRFFNNUNGMkZyRUx4RGRYNG91SUd3?=
- =?utf-8?B?RVM0YVR5TUc3andOd0J2d0VPOEpMYUh5dFlsdWNaY2V4dzZySDE1Zz09?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e9eee27-c4a0-40a4-3b53-08da220ed633
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1358.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 14:13:54.7258
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: isCXzZ7pGvj3pDLEd2PIG1ji7CY6ausECPkaWsN3P06cBpuvVOyB03aonil4uPKE6EWAc7V8/59nsK7TPHoD9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR11MB2865
-X-Proofpoint-ORIG-GUID: HLj-IMppU42ZbC1cHJZplarHQDTl5cW-
-X-Proofpoint-GUID: HLj-IMppU42ZbC1cHJZplarHQDTl5cW-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_05,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 spamscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 clxscore=1015 phishscore=0 impostorscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204190081
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 18 Apr 2022 17:12:23 -0700
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
+
+> Currently, any kernel built with CONFIG_PREEMPTION=y also gets
+> CONFIG_TASKS_RCU=y, which is not helpful to people trying to build
+> preemptible kernels of minimal size.
+> 
+> Because CONFIG_TASKS_RCU=y is needed only in kernels doing tracing of
+> one form or another, this commit moves from TASKS_RCU deciding when it
+> should be enabled to the tracing Kconfig options explicitly selecting it.
+> This allows building preemptible kernels without TASKS_RCU, if desired.
+> 
+> This commit also updates the SRCU-N and TREE09 rcutorture scenarios
+> in order to avoid Kconfig errors that would otherwise result from
+> CONFIG_TASKS_RCU being selected without its CONFIG_RCU_EXPERT dependency
+> being met.
+
+Thanks for fixing this dependency.
+
+This looks good to me (for kprobe part)
+
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thank you,
+
+> 
+> [ paulmck: Apply BPF_SYSCALL feedback from Andrii Nakryiko. ]
+> 
+> Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> --- Update SRCU-N and TREE09 to avoid Kconfig errors.
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>  arch/Kconfig                                          | 1 +
+>  kernel/bpf/Kconfig                                    | 1 +
+>  kernel/rcu/Kconfig                                    | 3 ++-
+>  kernel/trace/Kconfig                                  | 1 +
+>  tools/testing/selftests/rcutorture/configs/rcu/SRCU-N | 2 ++
+>  tools/testing/selftests/rcutorture/configs/rcu/TREE09 | 2 ++
+>  6 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 29b0167c088b..1bf29ce754af 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -35,6 +35,7 @@ config KPROBES
+>  	depends on MODULES
+>  	depends on HAVE_KPROBES
+>  	select KALLSYMS
+> +	select TASKS_RCU if PREEMPTION
+>  	help
+>  	  Kprobes allows you to trap at almost any kernel address and
+>  	  execute a callback function.  register_kprobe() establishes
+> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+> index d56ee177d5f8..2dfe1079f772 100644
+> --- a/kernel/bpf/Kconfig
+> +++ b/kernel/bpf/Kconfig
+> @@ -27,6 +27,7 @@ config BPF_SYSCALL
+>  	bool "Enable bpf() system call"
+>  	select BPF
+>  	select IRQ_WORK
+> +	select TASKS_RCU if PREEMPTION
+>  	select TASKS_TRACE_RCU
+>  	select BINARY_PRINTF
+>  	select NET_SOCK_MSG if NET
+> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> index f559870fbf8b..4f665ae0cf55 100644
+> --- a/kernel/rcu/Kconfig
+> +++ b/kernel/rcu/Kconfig
+> @@ -78,7 +78,8 @@ config TASKS_RCU_GENERIC
+>  	  task-based RCU implementations.  Not for manual selection.
+>  
+>  config TASKS_RCU
+> -	def_bool PREEMPTION
+> +	def_bool 0
+> +	select IRQ_WORK
+>  	help
+>  	  This option enables a task-based RCU implementation that uses
+>  	  only voluntary context switch (not preemption!), idle, and
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 2c43e327a619..bf5da6c4e999 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -144,6 +144,7 @@ config TRACING
+>  	select BINARY_PRINTF
+>  	select EVENT_TRACING
+>  	select TRACE_CLOCK
+> +	select TASKS_RCU if PREEMPTION
+>  
+>  config GENERIC_TRACER
+>  	bool
+> diff --git a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N
+> index 2da8b49589a0..07f5e0a70ae7 100644
+> --- a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N
+> +++ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N
+> @@ -6,3 +6,5 @@ CONFIG_PREEMPT_NONE=y
+>  CONFIG_PREEMPT_VOLUNTARY=n
+>  CONFIG_PREEMPT=n
+>  #CHECK#CONFIG_RCU_EXPERT=n
+> +CONFIG_KPROBES=n
+> +CONFIG_FTRACE=n
+> diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE09 b/tools/testing/selftests/rcutorture/configs/rcu/TREE09
+> index 8523a7515cbf..fc45645bb5f4 100644
+> --- a/tools/testing/selftests/rcutorture/configs/rcu/TREE09
+> +++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE09
+> @@ -13,3 +13,5 @@ CONFIG_DEBUG_LOCK_ALLOC=n
+>  CONFIG_RCU_BOOST=n
+>  CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+>  #CHECK#CONFIG_RCU_EXPERT=n
+> +CONFIG_KPROBES=n
+> +CONFIG_FTRACE=n
+> -- 
+> 2.31.1.189.g2e36527f23
+> 
 
 
-On 4/19/22 21:09, Mark Rutland wrote:
-> On Mon, Apr 18, 2022 at 09:22:10PM +0800, He Zhe wrote:
->> Currently stack_trace_consume_fn can only have pc of each frame of the
->> stack. Copying-beyond-the-frame-detection also needs fp of current and
->> previous frame. Other detection algorithm in the future may need more
->> information of the frame.
->>
->> We define a frame_info to include them all.
->>
->>
->> Signed-off-by: He Zhe <zhe.he@windriver.com>
->> ---
->>  include/linux/stacktrace.h |  9 ++++++++-
->>  kernel/stacktrace.c        | 10 +++++-----
->>  2 files changed, 13 insertions(+), 6 deletions(-)
->>
->> diff --git a/include/linux/stacktrace.h b/include/linux/stacktrace.h
->> index 97455880ac41..5a61bfafe6f0 100644
->> --- a/include/linux/stacktrace.h
->> +++ b/include/linux/stacktrace.h
->> @@ -10,15 +10,22 @@ struct pt_regs;
->>  
->>  #ifdef CONFIG_ARCH_STACKWALK
->>  
->> +struct frame_info {
->> +	unsigned long pc;
->> +	unsigned long fp;
->> +	unsigned long prev_fp;
->> +};
-> I don't think this should be exposed through a generic interface; the `fp` and
-> `prev_fp` values are only meaningful with arch-specific knowledge, and they're
-> *very* easy to misuse (e.g. when transitioning from one stack to another).
-> There's also a bunch of other information one may or may not want, depending on
-> what you're trying to achieve.
->
-> I am happy to have an arch-specific internal unwinder where we can access this
-> information, and *maybe* it makes sense to have a generic API that passes some
-> opaque token, but I don't think we should make the structure generic.
-
-Thanks for thoughts. I saw unwind_frame and etc was made private earlier and
-took that as a hint that all further stack walk things should be based on those
-functions and came up with this. But OK, good to know that arch-specific unwind
-would be fine, I'll redo this series in that way.
-
-Thanks,
-Zhe
-
->
-> Thanks,
-> Mark.
->
->> +
->>  /**
->>   * stack_trace_consume_fn - Callback for arch_stack_walk()
->>   * @cookie:	Caller supplied pointer handed back by arch_stack_walk()
->>   * @addr:	The stack entry address to consume
->> + * @fi:	The frame information to consume
->>   *
->>   * Return:	True, if the entry was consumed or skipped
->>   *		False, if there is no space left to store
->>   */
->> -typedef bool (*stack_trace_consume_fn)(void *cookie, unsigned long addr);
->> +typedef bool (*stack_trace_consume_fn)(void *cookie, struct frame_info *fi);
->>  /**
->>   * arch_stack_walk - Architecture specific function to walk the stack
->>   * @consume_entry:	Callback which is invoked by the architecture code for
->> diff --git a/kernel/stacktrace.c b/kernel/stacktrace.c
->> index 9ed5ce989415..2d0a2812e92b 100644
->> --- a/kernel/stacktrace.c
->> +++ b/kernel/stacktrace.c
->> @@ -79,7 +79,7 @@ struct stacktrace_cookie {
->>  	unsigned int	len;
->>  };
->>  
->> -static bool stack_trace_consume_entry(void *cookie, unsigned long addr)
->> +static bool stack_trace_consume_entry(void *cookie, struct frame_info *fi)
->>  {
->>  	struct stacktrace_cookie *c = cookie;
->>  
->> @@ -90,15 +90,15 @@ static bool stack_trace_consume_entry(void *cookie, unsigned long addr)
->>  		c->skip--;
->>  		return true;
->>  	}
->> -	c->store[c->len++] = addr;
->> +	c->store[c->len++] = fi->pc;
->>  	return c->len < c->size;
->>  }
->>  
->> -static bool stack_trace_consume_entry_nosched(void *cookie, unsigned long addr)
->> +static bool stack_trace_consume_entry_nosched(void *cookie, struct frame_info *fi)
->>  {
->> -	if (in_sched_functions(addr))
->> +	if (in_sched_functions(fi->pc))
->>  		return true;
->> -	return stack_trace_consume_entry(cookie, addr);
->> +	return stack_trace_consume_entry(cookie, fi);
->>  }
->>  
->>  /**
->> -- 
->> 2.25.1
->>
-
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,99 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A6E5061A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9DD5061A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234432AbiDSBSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 21:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S239671AbiDSBYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 21:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245188AbiDSBS2 (ORCPT
+        with ESMTP id S230466AbiDSBYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 21:18:28 -0400
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E2B2FFE2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 18:15:47 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 01:15:36 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.ch;
-        s=protonmail2; t=1650330945;
-        bh=vGPe9oyRu6z4m0OTxHe6LWHmTuENY6PMjtLMb1ZCtVw=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=iy2tFF5ff1tGp9AWAravB8fvnSbPUavEzLcdhPxmkQO/9XqmbbGbQsm3JxgP1DSsl
-         WVnfbamtD07T8ZiMB/nBGA/qkv1GejKTg4KJyj2fSsRoGpgQyn7uJDli4z+l75IaST
-         4LMW+BDl3xq2eufBO9NSeAMi4BoIURyVjVO0bBxkbpZVY3eMwCZkrAMJPruClqeZv0
-         ZN2tBoBFVXx5iCY61lzrHJsMQroMaUeCLQQLehbgAnaS9RYL9/k6u+cC2sTigYQ5cJ
-         8/azlLvpIWOZqO0/KumJDor3T9Y2V5xQZZvKK3nUxPCT+Enx1CcCi9Pkui3sWWilbi
-         p52mVJi0yCLAg==
-To:     linux-wireless@vger.kernel.org
-From:   Solomon Tan <solomonbstoner@protonmail.ch>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        rdunlap@infradead.org, gregkh@linuxfoundation.org,
-        miriam.rachel.korenblit@intel.com, johannes.berg@intel.com,
-        pabeni@redhat.com, kuba@kernel.org, davem@davemloft.net,
-        kvalo@kernel.org, luciano.coelho@intel.com,
-        Solomon Tan <solomonbstoner@protonmail.ch>
-Reply-To: Solomon Tan <solomonbstoner@protonmail.ch>
-Subject: [PATCH 3/3] iwlwifi: Replace space with tabs as code indent
-Message-ID: <20220419011340.14954-4-solomonbstoner@protonmail.ch>
+        Mon, 18 Apr 2022 21:24:02 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E8F286ED
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 18:21:21 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id y10so12479309ejw.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 18:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zxbQ6TRPNn9gexb0jaIoX0c5WCAB0YeHHh5XcVddlu4=;
+        b=kUEg6N6xcZzu6vy23WArx+eRurR58Zws4VxetIoj7RYKnV/b97rc954MFQJvofcy6z
+         /v+kBQ2M2XVZHnrzej9b3KWSchdiXfLUXlRoebxpJR4Ud+JqzAMNPlZlIvloTDX9SvSs
+         goD3bIlVMMK0TecPMWAG/pVf/CGPh+Red09LmHLo8InfAzqkb51v3+VMcQp1Xlyp6QJO
+         E8goocgcYGWCi/0tPcoXu+fnBijeXF0P3mvWLRi/8yvo9bmrEdRhVRZdYHnqFOtSwkey
+         JQk6WdllD/yOUCd+6GRXnaGxLmws+bcUp96IOdozXA/N/BvSPmB+RqJHHMsqFn2X/9Ah
+         WEQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zxbQ6TRPNn9gexb0jaIoX0c5WCAB0YeHHh5XcVddlu4=;
+        b=ZQjf1fdxACw1SwZ1rrdoxHzuA8e41xUpaZzwMxYhrO5uqLog/4lrJEI2mX5LRppmah
+         LrzFdStBGbECUd0BLpwI+Dw85DoV0mpy87LTvmWEr7BoCpsx+aap62qygbu80RSsHndk
+         ieSPgCl1QZeIk5tSilb6xORw5/C5of8YK19EHCoVQosIy74hlc2ktdzvVYSmxtSudp4K
+         4IglDz6toE/yr+J1b0cuOGuS+DEt4Qj7UkfeHXAx5qSBmLM6ZvwFl4yuE6DYsmrLQ7Hs
+         8BShtFseNE6bY8pLOFOwVTKL0wBaUhE+Ednm8TxxQDTEQGjTotjUz5JFF7j/tq6eOfh5
+         9rIA==
+X-Gm-Message-State: AOAM533EhvjUurcW+aSJJUE3pgtU8FUjMFRSHrRcdEOKLFKn+TbpglyU
+        iBc4WRi8rnuSUxy3ntbAy/+5JEFAT38z9oE9GtxpHw==
+X-Google-Smtp-Source: ABdhPJziwyj2afz/fzBMlMpMXsEiyH76Q2F7T1jddYljRwBxHA9iyxPKtGshpN6XD5v9WsIB64K6zw==
+X-Received: by 2002:a17:907:7f88:b0:6ef:e068:f5aa with SMTP id qk8-20020a1709077f8800b006efe068f5aamr390588ejc.238.1650331279998;
+        Mon, 18 Apr 2022 18:21:19 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.96.34])
+        by smtp.gmail.com with ESMTPSA id b25-20020a056402139900b0041904036ab1sm7838317edv.5.2022.04.18.18.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 18:21:19 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 09:21:14 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE
+ event
+Message-ID: <20220419012114.GF166256@leoy-ThinkPad-X240s>
+References: <20220414123201.842754-1-leo.yan@linaro.org>
+ <Yl3eisj26sHBjokV@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yl3eisj26sHBjokV@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch addresses the checkpatch.pl warning that code indent should
-use tabs.
+On Mon, Apr 18, 2022 at 06:56:26PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Thu, Apr 14, 2022 at 08:32:01PM +0800, Leo Yan escreveu:
+> > Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
+> > is not available") "perf mem report" and "perf report --mem-mode"
+> > don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
+> > type.
+> > 
+> > The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
+> > partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
+> > event, this allows the perf data file generated by kernel v5.18-rc1 or
+> > later version can be reported properly.
+> > 
+> > On the other hand, perf tool still fails to be backward compatibility
+> > for a data file recorded by an older version's perf which contains Arm
+> > SPE trace data.  This patch is a workaround in reporting phase, when
+> > detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
+> > force to set the bit in the sample type and give a warning info.
+> 
+> Thanks, applied.
 
-Signed-off-by: Solomon Tan <solomonbstoner@protonmail.ch>
----
- drivers/net/wireless/intel/iwlwifi/mvm/mvm.h        | 2 +-
- drivers/net/wireless/intel/iwlwifi/mvm/vendor-cmd.c | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Thank you, Arnaldo!
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h b/drivers/net/wir=
-eless/intel/iwlwifi/mvm/mvm.h
-index c6bc85d4600a..0e5ba208e606 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
-@@ -1305,7 +1305,7 @@ static inline bool iwl_mvm_is_csum_supported(struct i=
-wl_mvm *mvm)
- {
- =09return fw_has_capa(&mvm->fw->ucode_capa,
- =09=09=09   IWL_UCODE_TLV_CAPA_CSUM_SUPPORT) &&
--               !IWL_MVM_HW_CSUM_DISABLE;
-+=09=09!IWL_MVM_HW_CSUM_DISABLE;
- }
-
- static inline bool iwl_mvm_is_mplut_supported(struct iwl_mvm *mvm)
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/vendor-cmd.c b/drivers/=
-net/wireless/intel/iwlwifi/mvm/vendor-cmd.c
-index 080a1587caa5..0f7fa6032c66 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/vendor-cmd.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/vendor-cmd.c
-@@ -104,9 +104,9 @@ static const struct wiphy_vendor_command iwl_mvm_vendor=
-_commands[] =3D {
- };
-
- enum iwl_mvm_vendor_events_idx {
--        /* 0x0 - 0x3 are deprecated */
--        IWL_MVM_VENDOR_EVENT_IDX_ROAMING_FORBIDDEN =3D 4,
--        NUM_IWL_MVM_VENDOR_EVENT_IDX
-+=09/* 0x0 - 0x3 are deprecated */
-+=09IWL_MVM_VENDOR_EVENT_IDX_ROAMING_FORBIDDEN =3D 4,
-+=09NUM_IWL_MVM_VENDOR_EVENT_IDX
- };
-
- static const struct nl80211_vendor_cmd_info
---
-2.35.3
-
-
+Leo

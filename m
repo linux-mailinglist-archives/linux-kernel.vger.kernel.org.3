@@ -2,217 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83529506C7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF882506C80
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242716AbiDSMei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
+        id S243080AbiDSMfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbiDSMeh (ORCPT
+        with ESMTP id S231693AbiDSMfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:34:37 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7008205C6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:31:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650371514; x=1681907514;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RSQprlSvtYQNGWJUSLaKGnQD7G/CUuysy1HG8q/aEjk=;
-  b=fbojuR9nLGTavbWqBS4zYZAFmhbmVv2M1JXS9MA87U/iLtAYrOHRJcSQ
-   VyCMxpZQjIS6ggUj+WNw9ntugDL0wPhOJH/J0dWg71xl8jn196AkgsW2/
-   StiVIUwXmbovEWQpc/DnVc8UbAfRJjUvxtLjfZ1s80zKslqvCFuC0EdkX
-   nZgUY7GrMTuo8R5KjphhUCHE8p72/uA55+s8HuD2YfDSATSVEwTV6/nBF
-   QADJPkHPajLF5hVw+GqCu71UGsRQGDe0jc4FvtpgjtshmPJcPqXFs9mEp
-   0hVQfw2OwFwdYn5Nmm6ZpgqWvhhgNHAL9jtDu//+YbuxKFeXjfO+TgbNh
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263513463"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="263513463"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 05:31:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="510120830"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Apr 2022 05:31:52 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngn1L-0005lO-JI;
-        Tue, 19 Apr 2022 12:31:51 +0000
-Date:   Tue, 19 Apr 2022 20:31:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chris Redpath <chris.redpath@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Patrick Bellasi <patrick.bellasi@arm.com>
-Subject: [jsarha:topic/cros-sof-v4.14-rebase 1455/9999]
- kernel/sched/fair.c:6738:1: sparse: sparse: symbol '__pcpu_scope_eenv_cache'
- was not declared. Should it be static?
-Message-ID: <202204192047.g1X4yydR-lkp@intel.com>
+        Tue, 19 Apr 2022 08:35:11 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA97422500;
+        Tue, 19 Apr 2022 05:32:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=LXAU4p3dgxIGDfB6x6wqmrNe9zcGvWYFDnEwJiHYyd0=; b=4ZGphubJ8lGK9Yz+FHjsdHZJu3
+        ic2duJUn9kZMe2bZnZsOINjHfsFetkjM+QPb3pJ/hlUpw9X6fSSrKfdnDrA1y41EBu7FpnSa/okR5
+        Y13/z1RZnS1DfFJSBb7X8dnuKRMawXp7GHtiX7/LM85Dnq26R1Z9XANVpyphQ8kG2Dnw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ngn1u-00GUp4-9t; Tue, 19 Apr 2022 14:32:26 +0200
+Date:   Tue, 19 Apr 2022 14:32:26 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, UNGLinuxDriver@microchip.com,
+        richardcochran@gmail.com
+Subject: Re: [RFC PATCH net-next 1/2] net: phy: Add phy latency adjustment
+ support in phy framework.
+Message-ID: <Yl6r2mOlszx1I+fv@lunn.ch>
+References: <20220419083704.48573-1-horatiu.vultur@microchip.com>
+ <20220419083704.48573-2-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220419083704.48573-2-horatiu.vultur@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.14-rebase
-head:   18a233f3f676a98dde00947535d99ab1a54da340
-commit: 0d2a194c54348734338a8be17f0860be327eb00d [1455/9999] ANDROID: sched/fair: re-factor energy_diff to use a single (extensible) energy_env
-config: i386-randconfig-s002-20220418 (https://download.01.org/0day-ci/archive/20220419/202204192047.g1X4yydR-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/jsarha/linux/commit/0d2a194c54348734338a8be17f0860be327eb00d
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.14-rebase
-        git checkout 0d2a194c54348734338a8be17f0860be327eb00d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash kernel/sched/
+On Tue, Apr 19, 2022 at 10:37:03AM +0200, Horatiu Vultur wrote:
+> Add adjustment support for latency for the phy using sysfs.
+> This is used to adjust the latency of the phy based on link mode
+> and direction.
+> 
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  .../ABI/testing/sysfs-class-net-phydev        | 10 ++++
+>  drivers/net/phy/phy_device.c                  | 58 +++++++++++++++++++
+>  include/linux/phy.h                           |  9 +++
+>  3 files changed, 77 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-net-phydev b/Documentation/ABI/testing/sysfs-class-net-phydev
+> index ac722dd5e694..a99bbfeddb6f 100644
+> --- a/Documentation/ABI/testing/sysfs-class-net-phydev
+> +++ b/Documentation/ABI/testing/sysfs-class-net-phydev
+> @@ -63,3 +63,13 @@ Description:
+>  		only used internally by the kernel and their placement are
+>  		not meant to be stable across kernel versions. This is intended
+>  		for facilitating the debugging of PHY drivers.
+> +
+> +What:		/sys/class/mdio_bus/<bus>/<device>/adjust_latency
+> +Date:		April 2022
+> +KernelVersion:	5.19
+> +Contact:	netdev@vger.kernel.org
+> +Description:
+> +		This file adjusts the latency in the PHY. To set value,
+> +		write three integers into the file: interface mode, RX latency,
+> +		TX latency. When the file is read, it returns the supported
+> +		interface modes and the latency values.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+https://lwn.net/Articles/378884/
 
+	The key design goal relating to attribute files is the
+	stipulation - almost a mantra - of "one file, one value" or
+	sometimes "one item per file". The idea here is that each
+	attribute file should contain precisely one value. If multiple
+	values are needed, then multiple files should be used.
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/sched/fair.c: note: in included file:
-   kernel/sched/sched.h:1106:47: sparse: sparse: duplicate const
-   kernel/sched/fair.c:56:14: sparse: sparse: symbol 'normalized_sysctl_sched_latency' was not declared. Should it be static?
-   kernel/sched/fair.c:86:14: sparse: sparse: symbol 'normalized_sysctl_sched_min_granularity' was not declared. Should it be static?
-   kernel/sched/fair.c:109:14: sparse: sparse: symbol 'normalized_sysctl_sched_wakeup_granularity' was not declared. Should it be static?
-   kernel/sched/fair.c:143:14: sparse: sparse: symbol 'capacity_margin' was not declared. Should it be static?
-   kernel/sched/fair.c:3547:6: sparse: sparse: symbol 'sync_entity_load_avg' was not declared. Should it be static?
-   kernel/sched/fair.c:3560:6: sparse: sparse: symbol 'remove_entity_load_avg' was not declared. Should it be static?
-   kernel/sched/fair.c:9606:22: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:9606:22: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:9606:22: sparse:    struct sched_domain *
-   kernel/sched/fair.c:9618:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:9618:9: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:9618:9: sparse:    struct sched_domain *
-   kernel/sched/fair.c:5108:1: sparse: sparse: symbol '__pcpu_scope_load_balance_mask' was not declared. Should it be static?
-   kernel/sched/fair.c:5109:1: sparse: sparse: symbol '__pcpu_scope_select_idle_mask' was not declared. Should it be static?
-   kernel/sched/fair.c:5495:15: sparse: sparse: symbol 'capacity_curr_of' was not declared. Should it be static?
-   kernel/sched/fair.c:5812:22: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:5812:22: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:5812:22: sparse:    struct sched_domain *
-   kernel/sched/fair.c:5816:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:5816:17: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:5816:17: sparse:    struct sched_domain *
-   kernel/sched/fair.c:6133:1: sparse: sparse: symbol 'boosted_cpu_util' was not declared. Should it be static?
-   kernel/sched/fair.c:6531:19: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:6531:19: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:6531:19: sparse:    struct sched_domain *
->> kernel/sched/fair.c:6738:1: sparse: sparse: symbol '__pcpu_scope_eenv_cache' was not declared. Should it be static?
-   kernel/sched/fair.c:6949:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:6949:9: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:6949:9: sparse:    struct sched_domain *
-   kernel/sched/fair.c:9728:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:9728:9: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:9728:9: sparse:    struct sched_domain *
-   kernel/sched/fair.c:9942:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:9942:9: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:9942:9: sparse:    struct sched_domain *
-   kernel/sched/fair.c:4833:35: sparse: sparse: marked inline, but without a definition
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/fair.c:4950:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:4950:14: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:4950:14: sparse:    struct sched_domain *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/fair.c:6409:15: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:6409:15: sparse:    struct sched_domain_shared [noderef] <asn:4> *
-   kernel/sched/fair.c:6409:15: sparse:    struct sched_domain_shared *
-   kernel/sched/fair.c:6400:15: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:6400:15: sparse:    struct sched_domain_shared [noderef] <asn:4> *
-   kernel/sched/fair.c:6400:15: sparse:    struct sched_domain_shared *
-   kernel/sched/fair.c:6409:15: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:6409:15: sparse:    struct sched_domain_shared [noderef] <asn:4> *
-   kernel/sched/fair.c:6409:15: sparse:    struct sched_domain_shared *
-   kernel/sched/fair.c:6400:15: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:6400:15: sparse:    struct sched_domain_shared [noderef] <asn:4> *
-   kernel/sched/fair.c:6400:15: sparse:    struct sched_domain_shared *
-   kernel/sched/fair.c:6589:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:6589:14: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:6589:14: sparse:    struct sched_domain *
-   kernel/sched/fair.c:6620:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:6620:14: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:6620:14: sparse:    struct sched_domain *
-   kernel/sched/fair.c:5880:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:5880:14: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:5880:14: sparse:    struct sched_domain *
-   kernel/sched/fair.c:6881:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:6881:14: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:6881:14: sparse:    struct sched_domain *
-   kernel/sched/fair.c:6381:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:6381:17: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:6381:17: sparse:    struct sched_domain *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/fair.c:9778:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:9778:16: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:9778:16: sparse:    struct sched_domain *
-   kernel/sched/fair.c:4950:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:4950:14: sparse:    struct sched_domain [noderef] <asn:4> *
-   kernel/sched/fair.c:4950:14: sparse:    struct sched_domain *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   kernel/sched/sched.h:2127:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data [noderef] <asn:4> *
-   kernel/sched/sched.h:2127:16: sparse:    struct update_util_data *
-   In file included from kernel/sched/fair.c:25:0:
-   include/linux/sched/topology.h:196:1: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
-    const struct sched_group_energy * const(*sched_domain_energy_f)(int cpu);
-    ^~~~~
-   In file included from kernel/sched/fair.c:39:0:
-   kernel/sched/sched.h:1106:34: warning: duplicate 'const' declaration specifier [-Wduplicate-decl-specifier]
-     const struct sched_group_energy const *sge;
-                                     ^~~~~
+You also need to specify units in the documentation.
 
-Please review and possibly fold the followup patch.
+> diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+> index 8406ac739def..80bf04ca0e02 100644
+> --- a/drivers/net/phy/phy_device.c
+> +++ b/drivers/net/phy/phy_device.c
+> @@ -529,6 +529,48 @@ static ssize_t phy_dev_flags_show(struct device *dev,
+>  }
+>  static DEVICE_ATTR_RO(phy_dev_flags);
+>  
+> +static ssize_t adjust_latency_show(struct device *dev,
+> +				   struct device_attribute *attr, char *buf)
+> +{
+> +	struct phy_device *phydev = to_phy_device(dev);
+> +	ssize_t count = 0;
+> +	int err, i;
+> +	s32 rx, tx;
+> +
+> +	for (i = 0; i < __ETHTOOL_LINK_MODE_MASK_NBITS; ++i) {
+> +		err = phydev->drv->get_adj_latency(phydev, i, &rx, &tx);
+> +		if (err == -EINVAL)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-EOPNOTSUPP seems more likley than EINVAL.
+
+> +			continue;
+> +
+> +		count += sprintf(&buf[count], "%d rx: %d, tx: %d\n", i, rx, tx);
+
+Link modes as a number? Can you tell me off the top of you head what
+link mode 42 is?
+
+Also, if phydev->drv->get_adj_latency() returns any other error, it is
+likely rx and tx contain rubbish, yet you still add them to the
+output.
+
+> @@ -932,6 +932,15 @@ struct phy_driver {
+>  	int (*get_sqi)(struct phy_device *dev);
+>  	/** @get_sqi_max: Get the maximum signal quality indication */
+>  	int (*get_sqi_max)(struct phy_device *dev);
+> +	/** @set_adj_latency: Set the latency values of the PHY */
+> +	int (*set_adj_latency)(struct phy_device *dev,
+> +			       enum ethtool_link_mode_bit_indices link_mode,
+> +			       s32 rx, s32 tx);
+> +	/** @get_latency: Get the latency values of the PHY */
+> +	int (*get_adj_latency)(struct phy_device *dev,
+> +			       enum ethtool_link_mode_bit_indices link_mode,
+> +			       s32 *rx, s32 *tx);
+
+You need to clearly document the return value here, that -EINVAL (or
+maybe -EOPNOTUSPP) has special meaning. I would also document the
+units, and what is supposed to happen if the stamper already has a
+hard coded offset.
+
+     Andrew

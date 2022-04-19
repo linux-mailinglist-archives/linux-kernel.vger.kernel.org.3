@@ -2,116 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83659506BDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB5C506BE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352166AbiDSMKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
+        id S1350377AbiDSMKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349915AbiDSMIR (ORCPT
+        with ESMTP id S1352085AbiDSMIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:08:17 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58943632E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:03:27 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KjMrm66CHzhXXG;
-        Tue, 19 Apr 2022 20:03:20 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 19 Apr
- 2022 20:03:25 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <cl@linux.com>, <penberg@kernel.org>, <rientjes@google.com>,
-        <iamjoonsoo.kim@lge.com>, <akpm@linux-foundation.org>,
-        <vbabka@suse.cz>
-CC:     <roman.gushchin@linux.dev>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH] mm/slub: remove unneeded return value of slab_pad_check
-Date:   Tue, 19 Apr 2022 20:03:52 +0800
-Message-ID: <20220419120352.37825-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
+        Tue, 19 Apr 2022 08:08:18 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C92CBCAB;
+        Tue, 19 Apr 2022 05:04:36 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id g13so4692806ejb.4;
+        Tue, 19 Apr 2022 05:04:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9FV7klbf+RsSn0x8QE5iq8Fvm7yQ6Ge2whXajnkbVjQ=;
+        b=DXWNxKfkgL2BWIgyumZpPk/BVgi2KlI+8JwSYINiWZw1/nI1vzQNm0j1EmIftp1NcE
+         Xww5Kx3LZ1F4SCbmDLCt0NbKuFB9NTnR4rrCbBZrJfuxQrvzu3HzcCgbpZTgQjklk2zq
+         xHKINJ71u/OGh/Ib9tht6V4SYsvpm654aWoh18yoJ8q1yasC6VoRDFKPnxAZ456a5/+0
+         wjeYILWSXvqs46HzbKVTQX5/ERZnxhB7udi2irDq9yyjftlxQJ1nF9qNlGZGuc/50Hrn
+         QcYhZS8xb8JmmSTC8ss6XADpMyvPVKcwDCofF9dZzyWBXPd6Ib9MueV3NbUiZUxVAy8K
+         pybg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9FV7klbf+RsSn0x8QE5iq8Fvm7yQ6Ge2whXajnkbVjQ=;
+        b=B4WbzzCBOsfO4tmkGtr+ijR/DgTz4J/4ydIl4EQejvzoU4/awdi/LOBw81k9G4RNmR
+         kEz94qLEpqJui6VpIW8hfwJWWCJe0tMcRjWJnhVaghvHB+30nJbImrZesV4jYpfe+fWl
+         my6Qau3wzyOG5kv927197qjgF86vks+5vbLobQBmXZTbFIi4u4+cYZvwgilYg/tXyy8M
+         AE+jQ9zByaEbsE9x+nd0/uBjpX9B1d3RLfXXlc6LasDwFqbnKPoV/x7aLV64gpStDsrE
+         3gEIo6sfF7W7Kh2DIzQOjVhnWcUyxOwWaBRSwvK6KT1j9ZFPu272oE6LTktEb2OUy1BP
+         rmTg==
+X-Gm-Message-State: AOAM531fs+7/5d73anqEQx4sdy930JwWbM5gfQ4ZY6DZtFmkMBJihp2l
+        dwF0ntHlAFZqxjsYuccMRoI=
+X-Google-Smtp-Source: ABdhPJx06spmK7i6+GtlDsE9rl2JG1fx4/hTNYuMXa/AmQvk8c0yTFjmI19cWzmF6JolaO/cvjrT4g==
+X-Received: by 2002:a17:906:f0e:b0:6ef:ee4c:b558 with SMTP id z14-20020a1709060f0e00b006efee4cb558mr972626eji.104.1650369875127;
+        Tue, 19 Apr 2022 05:04:35 -0700 (PDT)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id gy10-20020a170906f24a00b006e894144707sm5651563ejb.53.2022.04.19.05.04.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 05:04:34 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 13:04:32 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/105] 5.10.112-rc1 review
+Message-ID: <Yl6lUF8pnO/piCFB@debian>
+References: <20220418121145.140991388@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of slab_pad_check is never used. So we can make it return
-void now.
+Hi Greg,
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- mm/slub.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+On Mon, Apr 18, 2022 at 02:12:02PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.112 release.
+> There are 105 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
 
-diff --git a/mm/slub.c b/mm/slub.c
-index 6dc703488d30..1f699ddfff7f 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -1017,7 +1017,7 @@ static int check_pad_bytes(struct kmem_cache *s, struct slab *slab, u8 *p)
- }
- 
- /* Check the pad bytes at the end of a slab page */
--static int slab_pad_check(struct kmem_cache *s, struct slab *slab)
-+static void slab_pad_check(struct kmem_cache *s, struct slab *slab)
- {
- 	u8 *start;
- 	u8 *fault;
-@@ -1027,21 +1027,21 @@ static int slab_pad_check(struct kmem_cache *s, struct slab *slab)
- 	int remainder;
- 
- 	if (!(s->flags & SLAB_POISON))
--		return 1;
-+		return;
- 
- 	start = slab_address(slab);
- 	length = slab_size(slab);
- 	end = start + length;
- 	remainder = length % s->size;
- 	if (!remainder)
--		return 1;
-+		return;
- 
- 	pad = end - remainder;
- 	metadata_access_enable();
- 	fault = memchr_inv(kasan_reset_tag(pad), POISON_INUSE, remainder);
- 	metadata_access_disable();
- 	if (!fault)
--		return 1;
-+		return;
- 	while (end > fault && end[-1] == POISON_INUSE)
- 		end--;
- 
-@@ -1050,7 +1050,6 @@ static int slab_pad_check(struct kmem_cache *s, struct slab *slab)
- 	print_section(KERN_ERR, "Padding ", pad, remainder);
- 
- 	restore_bytes(s, "slab padding", POISON_INUSE, fault, end);
--	return 0;
- }
- 
- static int check_object(struct kmem_cache *s, struct slab *slab,
-@@ -1642,8 +1641,7 @@ static inline int free_debug_processing(
- 	void *head, void *tail, int bulk_cnt,
- 	unsigned long addr) { return 0; }
- 
--static inline int slab_pad_check(struct kmem_cache *s, struct slab *slab)
--			{ return 1; }
-+static inline void slab_pad_check(struct kmem_cache *s, struct slab *slab) {}
- static inline int check_object(struct kmem_cache *s, struct slab *slab,
- 			void *object, u8 val) { return 1; }
- static inline void add_full(struct kmem_cache *s, struct kmem_cache_node *n,
--- 
-2.23.0
+Build test:
+mips (gcc version 11.2.1 20220314): 63 configs -> no failure
+arm (gcc version 11.2.1 20220314): 105 configs -> no new failure
+arm64 (gcc version 11.2.1 20220314): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220314): 4 configs -> no failure
 
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1036
+[2]. https://openqa.qa.codethink.co.uk/tests/1037
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

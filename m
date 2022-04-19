@@ -2,115 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC9B507BEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F256507BF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357998AbiDSVbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 17:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
+        id S1358001AbiDSVfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 17:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346877AbiDSVbW (ORCPT
+        with ESMTP id S1346877AbiDSVfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 17:31:22 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9689C39827
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650403718; x=1681939718;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fSbBlg7Cy7c0Bm1hYCtAjichucsThj27NrOn/LHBa7M=;
-  b=Zgv06ufac9B4uqXYNuoRiVzOlcx/6yPVdsULNwqwKWh/77i+vyVff7dC
-   8orGLgWti20ljQZakjbXydg8GfeRPeRyGpiE+vXNeF9yTQH7FctpCQge6
-   8bRS4/LeeDpcanCleOTFWSQGRj48JrkIOvp9S3V2GzczazwNSJ5zd6D7Q
-   qAzm2jw9n31TLK770OFz454+oJWc9mGZlvuBMHE6buuh+iiQEqRNu2yvR
-   DwwKjudv8VELPZRxZRsaPw0Y4kpNz6l8yfcvCNx/twaR+Z8tIdzs/vGVO
-   32ai7QzVDJxF1kN4FXJHkPvn4k4tEA3nhCxngXMLBG2Nq3NfXXSwPum7G
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="243808962"
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="243808962"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 14:28:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="667025442"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 19 Apr 2022 14:28:36 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngvOm-0006CA-5I;
-        Tue, 19 Apr 2022 21:28:36 +0000
-Date:   Wed, 20 Apr 2022 05:28:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 108/2579] init/main.c:887:13: warning: no
- previous prototype for function 'init_per_task_early'
-Message-ID: <202204200512.Po4Qok6p-lkp@intel.com>
+        Tue, 19 Apr 2022 17:35:32 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646D318B1E;
+        Tue, 19 Apr 2022 14:32:48 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id o18so13259054qtk.7;
+        Tue, 19 Apr 2022 14:32:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O8nllmOR/z4RsmpSer/nM9ycbgtkYEb8BRUHXDiWoG4=;
+        b=i5cgZIpp01q/bUqkS7fZHShGa7tmpBKYplIKc2Ss8Fr2Ma6YHxbCVAEu2gsIWRhves
+         JE1Dq1AkDI0V5QW0Rbkp+3eLLW+/JVDiuFbtKAQVaqX0aC4Zw3IKj7ROb1jFrKT4nMWW
+         79tSkKKadaAXGz5YMhhFWbScQRFy6EedaE2vmRrGIsON6fsac0BKQK/B1/BIOJNHpmxZ
+         QcgYJSU4Qx022NFVuU45zFyy2XRCn4eOKjMw3bUJ02QXBXbrXRbJyipnPu0eSO+PLDnY
+         Y2ykk9cPe7zAWo4Oo3cPtOL5X0TKBhJ5NQjd+xmJ8TahKPEzXsfgU1HkVbWgOxT0O1Fq
+         RBbQ==
+X-Gm-Message-State: AOAM530chz2rWs9Y2cLEWHvYXJFsMBN8r+0UGOIubPCrYhK6GTUeOrOC
+        gv/pgiTZcOaMtNm4f/zfGh0=
+X-Google-Smtp-Source: ABdhPJwXdjiRvjmj8zQul1ZjG8apEjePAeHKN+zOG66LC8UD7HZCTvPHtfZcEEN9JfPtc7raC0XgDg==
+X-Received: by 2002:ac8:5c4e:0:b0:2f3:3ab8:d788 with SMTP id j14-20020ac85c4e000000b002f33ab8d788mr2745333qtj.390.1650403967455;
+        Tue, 19 Apr 2022 14:32:47 -0700 (PDT)
+Received: from localhost (fwdproxy-ash-019.fbsv.net. [2a03:2880:20ff:13::face:b00c])
+        by smtp.gmail.com with ESMTPSA id b22-20020a05620a0f9600b0069e8ab5034dsm557769qkn.1.2022.04.19.14.32.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 14:32:46 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel-team@fb.com
+Subject: [PATCH 0/4] cgroup: Introduce cpu controller test suite
+Date:   Tue, 19 Apr 2022 14:32:40 -0700
+Message-Id: <20220419213244.2104972-1-void@manifault.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: f1d7f3a4c6b375645905a0b0b71dd202c29af929 [108/2579] headers/deps: cpusets: Move task_struct::mems_allowed_seq to per_task()
-config: i386-randconfig-a013-20220418 (https://download.01.org/0day-ci/archive/20220420/202204200512.Po4Qok6p-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=f1d7f3a4c6b375645905a0b0b71dd202c29af929
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout f1d7f3a4c6b375645905a0b0b71dd202c29af929
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+This patchset introduces a new test_cpu.c test suite as part of
+tools/testing/selftests/cgroup. test_cpu.c will contain testcases that
+validate the cgroup v2 cpu controller.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This patchset only contains testcases that validate cpu.stat and
+cpu.weight, but I'm expecting to send further patchsets after this that
+also include testcases that validate other knobs such as cpu.max.
 
-All warnings (new ones prefixed by >>):
+Note that checkpatch complains about a missing MAINTAINERS file entry for
+[PATCH 1/4], but Roman Gushchin added that entry in a separate patchset:
+https://lore.kernel.org/all/20220415000133.3955987-4-roman.gushchin@linux.dev/.
 
-   init/main.c:783:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
-   void __init __weak mem_encrypt_init(void) { }
-                      ^
-   init/main.c:783:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak mem_encrypt_init(void) { }
-   ^
-   static 
->> init/main.c:887:13: warning: no previous prototype for function 'init_per_task_early' [-Wmissing-prototypes]
-   void __init init_per_task_early(void)
-               ^
-   init/main.c:887:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init init_per_task_early(void)
-   ^
-   static 
-   2 warnings generated.
+David Vernet (4):
+  cgroup: Add new test_cpu.c test suite in cgroup selftests
+  cgroup: Add test_cgcpu_stats() testcase to cgroup cpu selftests
+  cgroup: Add test_cgcpu_weight_overprovisioned() testcase
+  cgroup: Add new test_cgcpu_weight_underprovisioned() testcase
 
-
-vim +/init_per_task_early +887 init/main.c
-
-   886	
- > 887	void __init init_per_task_early(void)
-   888	{
-   889	#ifdef CONFIG_POSIX_TIMERS
-   890		per_task(&init_task, posix_cputimers) = (struct posix_cputimers) __INIT_CPU_TIMERS(init_task);
-   891	#endif
-   892	
+ tools/testing/selftests/cgroup/.gitignore    |   1 +
+ tools/testing/selftests/cgroup/Makefile      |   2 +
+ tools/testing/selftests/cgroup/cgroup_util.c |  12 +
+ tools/testing/selftests/cgroup/cgroup_util.h |   4 +
+ tools/testing/selftests/cgroup/test_cpu.c    | 416 +++++++++++++++++++
+ 5 files changed, 435 insertions(+)
+ create mode 100644 tools/testing/selftests/cgroup/test_cpu.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

@@ -2,203 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244F3507CB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CB5507CBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358286AbiDSWq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 18:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S1358291AbiDSWsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 18:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358277AbiDSWqx (ORCPT
+        with ESMTP id S1358283AbiDSWsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 18:46:53 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6973831502
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:44:08 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id h1so134146pfv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:44:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VLhwP2K5wAQdNCL/I+laKlmhhmXTIYpsE+P3ZBVdEQY=;
-        b=r6feRZnKvLFz70LElt69P5H+fCR2FPIhGGDf/HEN3FRecAYZ9XCe48UHMGy+CySLim
-         Nf5DSsTsuheV1j+T6ia1xrZDpsTF3FTPXu+PVf45W3eRaPm0iYir4XnaqNkn/g+rZCO2
-         +mve4Z0JSADruCniouTjwzcvVDbH3e2O3juiT4JkLMIr7ZXwKFqeJlsDlQ8PoQ143YKV
-         4mXbdBPsHAvnmaRpFABAN6Fu2TxYwMuj7lx3m1l+FUNKtOImv1EuD09eyGgiiWGIIwwL
-         LNoj8AvJNwOZZPiT6ZBr88Y7Sec+d18PBB4ep9ryJg1nLwP6Jf9EVG8Bvth2Y321pPhZ
-         R+rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VLhwP2K5wAQdNCL/I+laKlmhhmXTIYpsE+P3ZBVdEQY=;
-        b=nFx6tJl9C0+/XsLcj3+TVvop6i9QISsBcSwRuoHwf0P/5rTU7Z23boKF/nXN6j5mOo
-         MgGcrDAJcQszm0VoC9S4Ibercetnt+Be7KhkCpXAoQZxO/AqG2rxFHrujTPYPtIhnaa1
-         Cg0mIXyNnn35Pn65WqOQapQqwAezR2N2i0u7IcxWmtf5DWxuLJH5iSJ68K5jSLCF/N2A
-         qWYhOE/pRxvXQTtev8GRn+e2+r/YeliusSx84EgZw217kxl+o4KC9hKWClO67vRl5GNF
-         1lOP22An7ZJyc+wPctTNp3Gxr71DgHINvENQu6VI5P/JMYIWk63v774QJrLyweF5XD02
-         9uXg==
-X-Gm-Message-State: AOAM53138SB5tOCIy0qh9XuuM2eF3g5D5sL2SR0IKlH5htaIIPo1+7Cq
-        OXbKVMbe5zZKPI4f2/f5nttumsb67+ITgOZF0E2liQ==
-X-Google-Smtp-Source: ABdhPJy1nh6THruK7UwMlM2wpxzbJNt+bc4+NMZX+nwIAjwmQ/JmNyUx85odCJYd4rFIN0fRrs6lthI6/1JylF8mddI=
-X-Received: by 2002:a65:56cb:0:b0:378:82ed:d74 with SMTP id
- w11-20020a6556cb000000b0037882ed0d74mr16683302pgs.491.1650408247642; Tue, 19
- Apr 2022 15:44:07 -0700 (PDT)
+        Tue, 19 Apr 2022 18:48:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8FE22B3B;
+        Tue, 19 Apr 2022 15:45:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42086B81BE6;
+        Tue, 19 Apr 2022 22:45:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC753C385A7;
+        Tue, 19 Apr 2022 22:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650408335;
+        bh=vTGOoGH3WL4t+K5hjT3fOIsQUCqwOhxMdLX4FUnejkw=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=VPQOfbnq24XMytlvijUyiPqSC93HPPnYa/2Uu3LE7/cH6MevQDjz8sz3xWJLmnj51
+         3QfFx5OW0GMbl4nofkLBy4uFe0xVErMTEw/8p0NfXVu96YihyBn1sgfsKnQiUGpe+l
+         VO/pwKzrP5Qu53iO9O7VVaB/8ChyGDFR40evdZBX2MSIE0dyeRFp+AYjg1LIwAA+pr
+         qdUne4fHBrFEP2GmESTq9OCwwW37l3gt5VyHaS9Px9596r9r3sUgJK+SHTdMrEO7VO
+         A0U1SQyoOYCt6E/KNKC54LkYcQaL7U567/AcgIFoMxxHhMRPCAB6JzGwmOdJ2ZqRix
+         9bVJwapQarrFA==
+From:   Mark Brown <broonie@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     zealci@zte.com.cn, chi.minghao@zte.com.cn,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20220408080931.2494356-1-chi.minghao@zte.com.cn>
+References: <20220408080931.2494356-1-chi.minghao@zte.com.cn>
+Subject: Re: [PATCH] spi: spi-ti-qspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Message-Id: <165040833446.1910395.11471746578040440326.b4-ty@kernel.org>
+Date:   Tue, 19 Apr 2022 23:45:34 +0100
 MIME-Version: 1.0
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com> <20220310140911.50924-12-chao.p.peng@linux.intel.com>
-In-Reply-To: <20220310140911.50924-12-chao.p.peng@linux.intel.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Tue, 19 Apr 2022 15:43:56 -0700
-Message-ID: <CAGtprH-qTB2sehidF7xkSvR3X4D5cUOLpMBXf4mhTEh0BUR-mQ@mail.gmail.com>
-Subject: Re: [PATCH v5 11/13] KVM: Zap existing KVM mappings when pages
- changed in the private fd
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 6:11 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
->
-> KVM gets notified when memory pages changed in the memory backing store.
-> When userspace allocates the memory with fallocate() or frees memory
-> with fallocate(FALLOC_FL_PUNCH_HOLE), memory backing store calls into
-> KVM fallocate/invalidate callbacks respectively. To ensure KVM never
-> maps both the private and shared variants of a GPA into the guest, in
-> the fallocate callback, we should zap the existing shared mapping and
-> in the invalidate callback we should zap the existing private mapping.
->
-> In the callbacks, KVM firstly converts the offset range into the
-> gfn_range and then calls existing kvm_unmap_gfn_range() which will zap
-> the shared or private mapping. Both callbacks pass in a memslot
-> reference but we need 'kvm' so add a reference in memslot structure.
->
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
->  include/linux/kvm_host.h |  3 ++-
->  virt/kvm/kvm_main.c      | 36 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 38 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 9b175aeca63f..186b9b981a65 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -236,7 +236,7 @@ bool kvm_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
->  #endif
->
-> -#ifdef KVM_ARCH_WANT_MMU_NOTIFIER
-> +#if defined(KVM_ARCH_WANT_MMU_NOTIFIER) || defined(CONFIG_MEMFILE_NOTIFIER)
->  struct kvm_gfn_range {
->         struct kvm_memory_slot *slot;
->         gfn_t start;
-> @@ -568,6 +568,7 @@ struct kvm_memory_slot {
->         loff_t private_offset;
->         struct memfile_pfn_ops *pfn_ops;
->         struct memfile_notifier notifier;
-> +       struct kvm *kvm;
->  };
->
->  static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 67349421eae3..52319f49d58a 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -841,8 +841,43 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
->  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
->
->  #ifdef CONFIG_MEMFILE_NOTIFIER
-> +static void kvm_memfile_notifier_handler(struct memfile_notifier *notifier,
-> +                                        pgoff_t start, pgoff_t end)
-> +{
-> +       int idx;
-> +       struct kvm_memory_slot *slot = container_of(notifier,
-> +                                                   struct kvm_memory_slot,
-> +                                                   notifier);
-> +       struct kvm_gfn_range gfn_range = {
-> +               .slot           = slot,
-> +               .start          = start - (slot->private_offset >> PAGE_SHIFT),
-> +               .end            = end - (slot->private_offset >> PAGE_SHIFT),
-> +               .may_block      = true,
-> +       };
-> +       struct kvm *kvm = slot->kvm;
-> +
-> +       gfn_range.start = max(gfn_range.start, slot->base_gfn);
+On Fri, 8 Apr 2022 08:09:31 +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Using pm_runtime_resume_and_get is more appropriate
+> for simplifing code
+> 
+> 
 
-gfn_range.start seems to be page offset within the file. Should this rather be:
-gfn_range.start = slot->base_gfn + min(gfn_range.start, slot->npages);
+Applied to
 
-> +       gfn_range.end = min(gfn_range.end, slot->base_gfn + slot->npages);
-> +
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Similar to previous comment, should this rather be:
-gfn_range.end = slot->base_gfn + min(gfn_range.end, slot->npages);
+Thanks!
 
-> +       if (gfn_range.start >= gfn_range.end)
-> +               return;
-> +
-> +       idx = srcu_read_lock(&kvm->srcu);
-> +       KVM_MMU_LOCK(kvm);
-> +       kvm_unmap_gfn_range(kvm, &gfn_range);
-> +       kvm_flush_remote_tlbs(kvm);
-> +       KVM_MMU_UNLOCK(kvm);
-> +       srcu_read_unlock(&kvm->srcu, idx);
-> +}
-> +
-> +static struct memfile_notifier_ops kvm_memfile_notifier_ops = {
-> +       .invalidate = kvm_memfile_notifier_handler,
-> +       .fallocate = kvm_memfile_notifier_handler,
-> +};
-> +
->  static inline int kvm_memfile_register(struct kvm_memory_slot *slot)
->  {
-> +       slot->notifier.ops = &kvm_memfile_notifier_ops;
->         return memfile_register_notifier(file_inode(slot->private_file),
->                                          &slot->notifier,
->                                          &slot->pfn_ops);
-> @@ -1963,6 +1998,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
->         new->private_file = file;
->         new->private_offset = mem->flags & KVM_MEM_PRIVATE ?
->                               region_ext->private_offset : 0;
-> +       new->kvm = kvm;
->
->         r = kvm_set_memslot(kvm, old, new, change);
->         if (!r)
-> --
-> 2.17.1
->
+[1/1] spi: spi-ti-qspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+      commit: c03ae4876fd54822a22375aa4fc49736a8c3a5d4
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

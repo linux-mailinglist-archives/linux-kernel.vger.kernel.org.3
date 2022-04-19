@@ -2,132 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C023A50633B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588AA506337
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348241AbiDSEcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 00:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
+        id S1348266AbiDSEdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 00:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234140AbiDSEcO (ORCPT
+        with ESMTP id S1348244AbiDSEdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:32:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EA12612A;
-        Mon, 18 Apr 2022 21:29:32 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kj9n45PDlz4xXS;
-        Tue, 19 Apr 2022 14:29:28 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650342568;
-        bh=ITI+nY4YiSnD87tRCkgMBczmbC3NDUN1L1tJAuE4NhY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=E6ggjHuRqXV88aEJBZXacPQdcqG95uPyVh4xBwet8V5ES1OrynWyKpitEUnZTXH7V
-         EW4mikpFYz2Cv89R9ZDTp248H04AQTNQJVA19OLJsREREaGJghlaxhbYW2AitpjmPR
-         cgvHHgoZBQlOzao+o+M3g+vsRJE2WJfUApp9w5lNRQacUBMsa00dH4zP1goD3pSajz
-         jcsDbmyjsV3dl3I4Oj5qI87e0Qud9UQ4SqRvztBN9s4RHX2RgRAs47rAkI2QjuozF9
-         bOGHAArf8uXvWBczeujAnFwEC18fNOpsz1YOOoSyCFE5En7oT3e9CenOtpu2/HTrR1
-         2Avi1u/Sr1xwQ==
-Date:   Tue, 19 Apr 2022 14:29:27 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the bitmap tree
-Message-ID: <20220419142927.4c99ba50@canb.auug.org.au>
+        Tue, 19 Apr 2022 00:33:08 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF703220CE;
+        Mon, 18 Apr 2022 21:30:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650342627; x=1681878627;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=52jRYIsgk/Pqgtn5x/D1TRnNFy5xBM8vIsx91EWTXOg=;
+  b=Q4AN0uBLrjOcsHKhcNoL1iZwSF2Ivevu0ezP6PnZBrTKPubCFqUjx9Of
+   9G5NOuhyCa3o0pC2U6R40x9g5KlFTTBCC6Ce/WFBLzYdkeb2ve2ElXbWx
+   jbCUkFbxK7g/7nggVC9gFDLYbVGvSTDk+SVT1dwM+PhojrPv53YC/uxFV
+   yehJDz8koJQAforSKYdHXJ38OOcLTrbBHuGnVtA8SmxLM/GcoxnkOXYPE
+   +EiQ/a2XdTMk55+DAj6ogBihKvdpjJ32jX0q0Ri5zn7szqP6TReaF+jKL
+   dJxPRYT/+ByW3kSNKE0L3DEQltqaZXkQX1qZCOKMvnPqEfvYmT1McKPrt
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="243604053"
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="243604053"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:30:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="561574119"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 18 Apr 2022 21:30:24 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngfVP-0005LD-Os;
+        Tue, 19 Apr 2022 04:30:23 +0000
+Date:   Tue, 19 Apr 2022 12:30:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     kbuild-all@lists.01.org, list@opendingux.net,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 4/5] rtc: jz4740: Register clock provider for the CLK32K
+ pin
+Message-ID: <202204191107.MvgmbaHZ-lkp@intel.com>
+References: <20220418184933.13172-5-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QjmMTZHC8xiUbBR3cciggFS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418184933.13172-5-paul@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/QjmMTZHC8xiUbBR3cciggFS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Paul,
 
-Hi all,
+I love your patch! Yet something to improve:
 
-After merging the bitmap tree, today's linux-next build (native powerpcle
-perf) failed like this:
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on v5.18-rc3 next-20220414]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-../lib/bitmap.c:21:5: error: conflicting types for '__bitmap_weight_cmp'; h=
-ave 'int(const long unsigned int *, unsigned int,  int)'
-   21 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int b=
-its, int num)
-      |     ^~~~~~~~~~~~~~~~~~~
-In file included from ../lib/bitmap.c:6:
-tools/include/linux/bitmap.h:15:5: note: previous declaration of '__bitmap_=
-weight_cmp' with type 'int(const long unsigned int *, unsigned int,  unsign=
-ed int)'
-   15 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int b=
-its,
-      |     ^~~~~~~~~~~~~~~~~~~
-../lib/bitmap.c: In function '__bitmap_weight_cmp':
-../lib/bitmap.c:26:50: error: comparison of integer expressions of differen=
-t signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
-   26 |                 if (w + bits - k * BITS_PER_LONG < num)
-      |                                                  ^
-../lib/bitmap.c:31:23: error: comparison of integer expressions of differen=
-t signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
-   31 |                 if (w > num)
-      |                       ^
-cc1: all warnings being treated as errors
-tools/perf/../lib/bitmap.c:21:5: error: conflicting types for '__bitmap_wei=
-ght_cmp'; have 'int(const long unsigned int *, unsigned int,  int)'
-   21 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int b=
-its, int num)
-      |     ^~~~~~~~~~~~~~~~~~~
-In file included from tools/perf/../lib/bitmap.c:6:
-tools/include/linux/bitmap.h:15:5: note: previous declaration of '__bitmap_=
-weight_cmp' with type 'int(const long unsigned int *, unsigned int,  unsign=
-ed int)'
-   15 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int b=
-its,
-      |     ^~~~~~~~~~~~~~~~~~~
-tools/perf/../lib/bitmap.c: In function '__bitmap_weight_cmp':
-tools/perf/../lib/bitmap.c:26:50: error: comparison of integer expressions =
-of different signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
-   26 |                 if (w + bits - k * BITS_PER_LONG < num)
-      |                                                  ^
-tools/perf/../lib/bitmap.c:31:23: error: comparison of integer expressions =
-of different signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
-   31 |                 if (w > num)
-      |                       ^
-cc1: all warnings being treated as errors
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/rtc-ingenic-various-updates/20220419-025341
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+config: parisc-randconfig-r022-20220419 (https://download.01.org/0day-ci/archive/20220419/202204191107.MvgmbaHZ-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a8eada718214bc34ea29f8ff353228abacc0bfb9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Paul-Cercueil/rtc-ingenic-various-updates/20220419-025341
+        git checkout a8eada718214bc34ea29f8ff353228abacc0bfb9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
 
-Caused by commit
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  bf04367e90b2 ("tools: bitmap: sync bitmap_weight")
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-I have dropped the bitmap tree for today.
+>> ERROR: modpost: "of_clk_add_hw_provider" [drivers/rtc/rtc-jz4740.ko] undefined!
+>> ERROR: modpost: "devm_clk_hw_register" [drivers/rtc/rtc-jz4740.ko] undefined!
+>> ERROR: modpost: "of_clk_hw_simple_get" [drivers/rtc/rtc-jz4740.ko] undefined!
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QjmMTZHC8xiUbBR3cciggFS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJeOqcACgkQAVBC80lX
-0GwipQgAnkmoONSEQgPi4CTpqgf0d/2929Zhc8Kbp5y9vDqbbqr+gVutUFyTVOcg
-C2HJ/aoASmYIJV1Wvygf367p5MKH+APGxBlKpBHyaDBZLvPycnWgjZUoVm/ek1zL
-fA0+32p31+xlw0WxYCGo5iEJM53iXjkZlhm0brun6lAZK/g8fURB/z39MNCHJ+55
-xdLY7ENQSq6Rl3Kl5OrAqQspEoKFYShMqwcSYLYCJ8DREFz3WWBnasLS8Up/rCu9
-ZnPzy37YxQqwCPAsREk6p39k13JC4zNIevH35PMXQ5yG5Jkji9HQhSqoS2Li8HCC
-38dxSqsMqTBc7RDF9s8dV7xyuWS0sA==
-=ktts
------END PGP SIGNATURE-----
-
---Sig_/QjmMTZHC8xiUbBR3cciggFS--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

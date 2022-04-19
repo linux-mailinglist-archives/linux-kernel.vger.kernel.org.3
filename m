@@ -2,156 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C635507AF3
+	by mail.lfdr.de (Postfix) with ESMTP id 3C746507AF4
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346239AbiDSUat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
+        id S1357638AbiDSUbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241331AbiDSUaq (ORCPT
+        with ESMTP id S1353340AbiDSUbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:30:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F239B3AA4D;
-        Tue, 19 Apr 2022 13:28:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5F0E106F;
-        Tue, 19 Apr 2022 13:28:02 -0700 (PDT)
-Received: from [10.57.41.251] (unknown [10.57.41.251])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 495383F73B;
-        Tue, 19 Apr 2022 13:28:00 -0700 (PDT)
-Message-ID: <52df6c79-3ee7-35e2-b72a-44ee9cb48c34@arm.com>
-Date:   Tue, 19 Apr 2022 21:27:54 +0100
+        Tue, 19 Apr 2022 16:31:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D33473B027
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650400100;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OsA60fvdNpmPxi8j6BvsLbDUOJhRAOwM2lIshZoL7PY=;
+        b=MdtfFPZAhYKsrbwqjHZNAua1lMAPQvKCZTxb1j+o4rvYDHzctgfx6S3GgIAcMV7jJWEw6u
+        axuJmd18bNFlqJbW3p59f+rov63NbhcwYIIRx5/ZNVcFcLRgCKH0//x9KrhjhotldbEJGF
+        1KOryL/Fvsvr7JizoKr0YEyCDVoWPXw=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-235-7a4A49XvN3OjPSbd7VEJsg-1; Tue, 19 Apr 2022 16:28:19 -0400
+X-MC-Unique: 7a4A49XvN3OjPSbd7VEJsg-1
+Received: by mail-io1-f71.google.com with SMTP id x8-20020a056602160800b00654b3a46b66so2753536iow.19
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:28:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OsA60fvdNpmPxi8j6BvsLbDUOJhRAOwM2lIshZoL7PY=;
+        b=ma8Ggw4VdQkVKaNnvIAyFxAiG2MSQfglmnKHoujb1ypE9f0Sn5bA6ln21q2yC1nsYc
+         /jM/5OhPsfXGJhYOvFfraiarL+9EigiwEzhLuNjZ5f6OrHp3uOgn8DJdP3MrGDTpQqjP
+         Cw8K61jH5iG3U4fejySF7jAwlOWU3mVM9v8uj2kOi6k67AXQHu1OfEnzQB0RwXKlCHwp
+         1KN+xLDFq63PPOe7gHlahBcN8aGfK7Tnv9eyx6pHIq3DbVQ6Wxp+ZX8IAijaZgegLHFB
+         cgOIqaql/pHNU1v6tESfMqIYGMNCVQLvwAv1ata2Sen/3AZrAJHS60E9hK898+HindpX
+         37rA==
+X-Gm-Message-State: AOAM532MVDIl3Xpem+A87uewMN0jEIJZLmacw86gvJCBIzte+e5p0nCT
+        vk9BgdK0TIhpaqy8MoMywdRpaccQMg9rEDiXM1GZEnKw7VxKn5qpcpYOKUNLoKhngjzb4t4Q4h+
+        Ro3o534xo7+rg0aJHMdaaX30P
+X-Received: by 2002:a92:d791:0:b0:2ca:bcb8:9a5a with SMTP id d17-20020a92d791000000b002cabcb89a5amr7687684iln.145.1650400099045;
+        Tue, 19 Apr 2022 13:28:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxsVN1a1qwuygonrXe33gOwAiggnDaz58sE6mHuxz4OZx70JBuF6/SjP2EtWHNEQouPdP2hKw==
+X-Received: by 2002:a92:d791:0:b0:2ca:bcb8:9a5a with SMTP id d17-20020a92d791000000b002cabcb89a5amr7687675iln.145.1650400098677;
+        Tue, 19 Apr 2022 13:28:18 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id a3-20020a5ec303000000b006496b4dd21csm10180422iok.5.2022.04.19.13.28.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 13:28:18 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 16:28:16 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Alistair Popple <apopple@nvidia.com>
+Subject: Re: [PATCH v8 22/23] mm: Enable PTE markers by default
+Message-ID: <Yl8bYKOJGW2py7Q0@xz-m1.local>
+References: <20220405014646.13522-1-peterx@redhat.com>
+ <20220405014929.15158-1-peterx@redhat.com>
+ <Yl7RrKV5mXtNAAzi@cmpxchg.org>
+ <Yl8UmWQodLX+JkZ7@xz-m1.local>
+ <Yl8YE+w+OWz5RNOL@cmpxchg.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [Patch v1] iommu: arm-smmu: disable large page mappings for
- Nvidia arm-smmu
-Content-Language: en-GB
-To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
-        vdumpa@nvidia.com, will@kernel.org, joro@8bytes.org,
-        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Cc:     nicolinc@nvidia.com, Snikam@nvidia.com,
-        Pritesh Raithatha <praithatha@nvidia.com>
-References: <20220417090432.21110-1-amhetre@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220417090432.21110-1-amhetre@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yl8YE+w+OWz5RNOL@cmpxchg.org>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-17 10:04, Ashish Mhetre wrote:
-> Tegra194 and Tegra234 SoCs have the erratum that causes walk cache
-> entries to not be invalidated correctly. The problem is that the walk
-> cache index generated for IOVA is not same across translation and
-> invalidation requests. This is leading to page faults when PMD entry is
-> released during unmap and populated with new PTE table during subsequent
-> map request. Disabling large page mappings avoids the release of PMD
-> entry and avoid translations seeing stale PMD entry in walk cache.
-> Fix this by limiting the page mappings to PAGE_SIZE for Tegra194 and
-> Tegra234 devices. This is recommended fix from Tegra hardware design
-> team.
-
-Is this related to any of the several known MMU-500 invalidation errata, 
-or is it definitely specific to something NVIDIA have done with their 
-integration?
-
-> Co-developed-by: Pritesh Raithatha <praithatha@nvidia.com>
-> Signed-off-by: Pritesh Raithatha <praithatha@nvidia.com>
-> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
-> ---
->   drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c | 23 ++++++++++++++++++++
->   drivers/iommu/arm/arm-smmu/arm-smmu.c        |  3 +++
->   drivers/iommu/arm/arm-smmu/arm-smmu.h        |  1 +
->   3 files changed, 27 insertions(+)
+On Tue, Apr 19, 2022 at 04:14:11PM -0400, Johannes Weiner wrote:
+> Hi Peter,
 > 
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
-> index 01e9b50b10a1..b7a3d06da2f4 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
-> @@ -258,6 +258,27 @@ static void nvidia_smmu_probe_finalize(struct arm_smmu_device *smmu, struct devi
->   			dev_name(dev), err);
->   }
->   
-> +static void nvidia_smmu_cfg_pgsize_bitmap(struct arm_smmu_device *smmu)
-> +{
-> +	const struct device_node *np = smmu->dev->of_node;
-> +
-> +	/*
-> +	 * Tegra194 and Tegra234 SoCs have the erratum that causes walk cache
-> +	 * entries to not be invalidated correctly. The problem is that the walk
-> +	 * cache index generated for IOVA is not same across translation and
-> +	 * invalidation requests. This is leading to page faults when PMD entry
-> +	 * is released during unmap and populated with new PTE table during
-> +	 * subsequent map request. Disabling large page mappings avoids the
-> +	 * release of PMD entry and avoid translations seeing stale PMD entry in
-> +	 * walk cache.
-> +	 * Fix this by limiting the page mappings to PAGE_SIZE on Tegra194 and
-> +	 * Tegra234.
-> +	 */
-> +	if (of_device_is_compatible(np, "nvidia,tegra234-smmu") ||
-> +	    of_device_is_compatible(np, "nvidia,tegra194-smmu"))
-> +		smmu->pgsize_bitmap = PAGE_SIZE;
-> +}
-> +
->   static const struct arm_smmu_impl nvidia_smmu_impl = {
->   	.read_reg = nvidia_smmu_read_reg,
->   	.write_reg = nvidia_smmu_write_reg,
-> @@ -268,10 +289,12 @@ static const struct arm_smmu_impl nvidia_smmu_impl = {
->   	.global_fault = nvidia_smmu_global_fault,
->   	.context_fault = nvidia_smmu_context_fault,
->   	.probe_finalize = nvidia_smmu_probe_finalize,
-> +	.cfg_pgsize_bitmap = nvidia_smmu_cfg_pgsize_bitmap,
->   };
->   
->   static const struct arm_smmu_impl nvidia_smmu_single_impl = {
->   	.probe_finalize = nvidia_smmu_probe_finalize,
-> +	.cfg_pgsize_bitmap = nvidia_smmu_cfg_pgsize_bitmap,
->   };
->   
->   struct arm_smmu_device *nvidia_smmu_impl_init(struct arm_smmu_device *smmu)
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> index 568cce590ccc..3692a19a588a 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-> @@ -1872,6 +1872,9 @@ static int arm_smmu_device_cfg_probe(struct arm_smmu_device *smmu)
->   	if (smmu->features & ARM_SMMU_FEAT_FMT_AARCH64_64K)
->   		smmu->pgsize_bitmap |= SZ_64K | SZ_512M;
->   
-> +	if (smmu->impl && smmu->impl->cfg_pgsize_bitmap)
-> +		smmu->impl->cfg_pgsize_bitmap(smmu);
+> On Tue, Apr 19, 2022 at 03:59:21PM -0400, Peter Xu wrote:
+> > @@ -910,16 +910,16 @@ config ANON_VMA_NAME
+> >  	  difference in their name.
+> >  
+> >  config PTE_MARKER
+> > -	bool "Marker PTEs support"
+> > -	default y
+> > +	bool
+> >  
+> >  	help
+> >  	  Allows to create marker PTEs for file-backed memory.
+> >
+> >  config PTE_MARKER_UFFD_WP
+> > -	bool "Marker PTEs support for userfaultfd write protection"
+> > +	bool "Userfaultfd write protection support for shmem/hugetlbfs"
+> >  	default y
+> > -	depends on PTE_MARKER && HAVE_ARCH_USERFAULTFD_WP
+> > +	depends on HAVE_ARCH_USERFAULTFD_WP
+> > +	select PTE_MARKER
+> 
+> This is much easier to understand, thanks!
 
-I'm not the biggest fan of adding a super-specific hook for this, when 
-it seems like it could just as easily be handled in the init_context 
-hook, which is where it is precisely for the purpose of mangling the 
-pgtable_cfg to influence io-pgtable's behaviour.
+Cool!  Sent as a formal patch just now.
 
-Thanks,
-Robin.
+> 
+> Btw, this doesn't do much without userfaultfd being enabled in
+> general, right?
 
-> +
->   	if (arm_smmu_ops.pgsize_bitmap == -1UL)
->   		arm_smmu_ops.pgsize_bitmap = smmu->pgsize_bitmap;
->   	else
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.h b/drivers/iommu/arm/arm-smmu/arm-smmu.h
-> index 2b9b42fb6f30..5d9b03024969 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.h
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.h
-> @@ -442,6 +442,7 @@ struct arm_smmu_impl {
->   	void (*write_s2cr)(struct arm_smmu_device *smmu, int idx);
->   	void (*write_sctlr)(struct arm_smmu_device *smmu, int idx, u32 reg);
->   	void (*probe_finalize)(struct arm_smmu_device *smmu, struct device *dev);
-> +	void (*cfg_pgsize_bitmap)(struct arm_smmu_device *smmu);
->   };
->   
->   #define INVALID_SMENDX			-1
+So far yes, but I'm thinking there can be potential other users of
+PTE_MARKERS from mm world.  The most close discussion is on the swap read
+failures and this patch proposed by Miaohe:
+
+https://lore.kernel.org/lkml/20220416030549.60559-1-linmiaohe@huawei.com/
+
+So I hope we can still keep them around here under mm/ if possible, and
+from the gut feeling it really should..
+
+> Would it make sense to have it next to 'config USERFAULTFD' as a
+> sub-option?
+
+Yes another good question. :)
+
+IIUC CONFIG_USERFAULTFD resides in init/Kconfig because it introduces a new
+syscall.  Same to the rest of the bits for uffd since then, namely:
+
+  - USERFAULTFD_WP
+  - USERFAULTFD_MINOR
+
+What I am thinking now is the other way round of your suggestion: whether
+we should move most of them out, at least the _WP and _MINOR configs into
+mm/?  Because IMHO they are really pure mm ideas and they're irrelevant to
+syscalls and init.
+
+Any thoughts?
+
+-- 
+Peter Xu
+

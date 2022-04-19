@@ -2,154 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193D2507B92
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61DD507B9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357882AbiDSVBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 17:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
+        id S1357890AbiDSVEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 17:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355145AbiDSVBu (ORCPT
+        with ESMTP id S1357740AbiDSVEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 17:01:50 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4AB4132B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:59:06 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so3016182pjn.3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:59:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0ETDPx0UexpMdL4JaVIwnmwwSk5TOGi0t/0oH1NiIks=;
-        b=Ou72ds/PMkguxSaaJuyaAXO8qfYGBAYEYhCOCdACo3QLflSWruXiHjOAkIaao9zrsk
-         dARfC65+kt2tPxLzjE/Gj5e7Lgp8atpyoQpNmsmH2fPep0VttZ17xq5vzeLb61l/7LUP
-         50J5HMFLSO52Dsyw4lcVLLpbBFyC5gSRh5bdDyFzDI/g51tchX7BCvi4qk/zKi6Y5bOD
-         kFaIGQRyYSePyCrdUTbYiXmfu7IOx8+hc0WDB00U2dXMpmyANPsPnoTGQrtIbi9kzdfh
-         NMo109iMrH4Av/PBJdb2ju0JRz7plh+VoWT4L1IxA52bueKTZQdQeGDpng325Zz1Y+AP
-         WjVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0ETDPx0UexpMdL4JaVIwnmwwSk5TOGi0t/0oH1NiIks=;
-        b=LNvcb8ej2ImkYDbvp8r4+ah6OkuIqb2fW4hxB7lTGwByZi8+HFREipR5kjhxApR+Jc
-         JFIh7K6wQqGqos6i2Poep6sYHxpeSWRJB8JnWuAhYlMIUfZU9GFo/ITZ7RShxsptYBWt
-         veYxdl7dn1TKuu9NMSZ0to7pLOqOFt21IewZTDvDxXcGFd/qQbWmzIXMZgOrWY0Lja0O
-         pZdEvMmUTjZrOTJ1nqI5mnD6oTK6dq8oMoxUa+WHj3oisHATOVMgGjO3gNlnL1xhCn5u
-         pJJq/APAsZDKTRgV+jdPhbX70hOAFsg9tC909sYxrp8XfBDaIN5GnIdXlhQbjoCJ3c8u
-         IFYg==
-X-Gm-Message-State: AOAM5320Ex6tHZbS7iHc/unqcLXmQGi79DiGCilBdoIxDHHv48iIrQ8s
-        QLubVRH5sQ9ANWCfJyPBBN/e6w==
-X-Google-Smtp-Source: ABdhPJxjpKJo7gVFsLStPnTDzbXVPLwFGFvz90IgUgstbZsBWFBckrDw6TwgH8hIkp7aUjaR3SsXaA==
-X-Received: by 2002:a17:90a:db16:b0:1cb:9ba8:5707 with SMTP id g22-20020a17090adb1600b001cb9ba85707mr551671pjv.32.1650401945806;
-        Tue, 19 Apr 2022 13:59:05 -0700 (PDT)
-Received: from localhost.localdomain ([223.233.64.97])
-        by smtp.gmail.com with ESMTPSA id u25-20020a62ed19000000b004f140515d56sm17215938pfh.46.2022.04.19.13.59.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 13:59:05 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: [PATCH v2 1/1] arm64: dts: qcom: sm8350-sagami: usb qmp phy node - add 'vdda-pll-supply' & 'vdda-phy-supply'
-Date:   Wed, 20 Apr 2022 02:28:54 +0530
-Message-Id: <20220419205854.1269922-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 19 Apr 2022 17:04:47 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2044.outbound.protection.outlook.com [40.107.92.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB2E31912;
+        Tue, 19 Apr 2022 14:02:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dyA23AaC6StVRi/5W6auNvCuKiiB6s13wHp8BDQuNaQ7jt41fIbsx2I0PUoXMEqsLiTaxgFjA6Gn7X4IwHTxLmNQWmMGszIwVmeTiXnWUKSSf2LLHuAt8M2HQGAOHYu6miVBhgM7yD9rRIednVpukvGDCI3wUScbBfMGYxwhGB6FUv3tgstHMERZU34rk4lXfXAskcNhZXinkBMQU9CSTRGHTPT6JJQkYP2ASql2tqFGdWx8v0ASDuYunf0624iwc9DBbrTPAJeMHgMaE5Is3p0tuTddIO/73ncAkf4rMC/qBdt040tzdYzpB0Aj6d/5SVHauTo5OuL7MdnB/kgkaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fs4MrWJWy3dy4g0QhSGSOCy6H+hqFDc2/g74NufnRlA=;
+ b=Y0cSxcMH2o1Bhya+Fp9M1LmZRnF7JSOVc3Y4r+a5Y8fSlEi9KwNYSE404SFAsbp0+qPxJa8zx1SPOhIOKecUmTRgMPvlOTuCzUpab/OJPJR8+ogYjoKU9Q+TP4yH+bKvtBoBt+ZTqWKmm+HBtGWFXn9b2xmQeWR+gxfjYR7Gz7N8C1o4e6RJcPj3bLAGfL8HsFuGBfuDq61oHH5Nl3hmE2LphBkCvpmLaPVOjhKLStaGixgGOqsuWw/1PnQHeUxep9XhQvcuT3Xwv0Y410eQWzavBmfxSEIihwaGPR+1VET5mmjs4PgXWZ1TPBD7BrAzNp7uqdVBE3z9e0Z4y+NAKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fs4MrWJWy3dy4g0QhSGSOCy6H+hqFDc2/g74NufnRlA=;
+ b=LWMGjd8sjGww32jzEB/n0bUTGYZH+EKlpkAElhd4bapfUHkxrLlerWmFBcATs64kpLxEWiyO5ecbXkPLF01gZUiy2+aQgo4yLqCzAmJiRTCL3kxCqb7Qys5iwEvB4jNtbqHI1FQ0poXTRFfWSH4vt9w+CMhBlKPn9BrKc40tSpOBvjb02OIVaI4d8+HbLR8oQO2usnm8uEvwd97srMV28aSelQlJR854fZOjvJabTDMqFkAgaLj2PKaOx9AsCOzUcmnIgcmlNAOxb6sZmS/XHLl4i6IWfRbAzMgzty/m9nKM7hVljIIdvo/st9CIpv6IPzNdTVxENnEDZBMzJDecPw==
+Received: from BN9PR03CA0609.namprd03.prod.outlook.com (2603:10b6:408:106::14)
+ by DM6PR12MB3178.namprd12.prod.outlook.com (2603:10b6:5:18d::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
+ 2022 21:02:02 +0000
+Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:106:cafe::24) by BN9PR03CA0609.outlook.office365.com
+ (2603:10b6:408:106::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13 via Frontend
+ Transport; Tue, 19 Apr 2022 21:02:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5164.19 via Frontend Transport; Tue, 19 Apr 2022 21:02:02 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 19 Apr
+ 2022 21:02:01 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 19 Apr
+ 2022 14:02:00 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Tue, 19 Apr 2022 14:02:00 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     <jgg@ziepe.ca>, <will@kernel.org>, <robin.murphy@arm.com>,
+        <joro@8bytes.org>, <jean-philippe@linaro.org>
+CC:     <jacob.jun.pan@linux.intel.com>, <baolu.lu@linux.intel.com>,
+        <fenghua.yu@intel.com>, <rikard.falkeborn@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] iommu/arm-smmu-v3: Fix size calculation in arm_smmu_mm_invalidate_range()
+Date:   Tue, 19 Apr 2022 14:01:58 -0700
+Message-ID: <20220419210158.21320-1-nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b47da6ab-d5c4-4eb4-73c4-08da2247da1f
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3178:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB3178590E1C44EF9A0BE76CDEABF29@DM6PR12MB3178.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Y2Rje5Gkj0JRq7fSsXy+oAop8ghaTHXKhXpSOlnUumNLhg1Li6WfZr9HkQoyPrdwLHhsvgw09s5JruDsoxZTG3n8efBiBDEmIF96kdBreOeeXRn+m3NgjZ1LKZXuI2wix3pXuNGNDAifnYdjrlaUCTjGHMIZyfIV7z6/gvYNQHOw7XK31HZDR1/9Xm/5Qek2ZjHcvPWbuVMW9Duu41VlSGYW3cW5wB9RxxrXPXWaZ/+hx32yspjgykSTz3dlI4uF4XjLlhDNof69gmAJEklGNCQLWQK3vWPjI6Nmk0Iez5BPN7dQQGj61ygkb7a+GC2n/r/Tr3TeR/nyJklBgWD0Oi/d8Vib8dYo3D3pLY5t+oeMEwS8WNXs00Rmr73bkmBK7BjphiIGGRS9nJOpm80eM+gIr61H37lAhkLsY8FSVsoy5zoI+hcjJB+EDlRfHzbfmhGzo35RlHLF5qPkVsiCq31aVJYwbsyyHakeBGTNpomvKjjmFAWy28Yhc4KC8r0myzPVOzm34VmGZrvv3nyK7jnJ22mqT+BnbEdpczytUpNbovlByQ2z/HnSXx1/u3Oz4Yb0tyE//H8hjy5OipFoX5fzkaXLcseqlR0X+saVr1Ol+uCT/JlucH+MwLcG3KYMEWtTzXJFYLs79tHFNqfBZqroks0G7rlEDgMLEJ70I0ffEcefDJnvwgmTR7yONxgeF1RBB3dtsnrExhzHTjS6X/ETHdCMCKaewwG3bCXp3Rk=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(1076003)(70586007)(47076005)(186003)(86362001)(26005)(8676002)(426003)(2906002)(70206006)(81166007)(83380400001)(36860700001)(4326008)(82310400005)(8936002)(36756003)(2616005)(336012)(5660300002)(7416002)(508600001)(356005)(7696005)(54906003)(110136005)(316002)(40460700003)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 21:02:02.1988
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b47da6ab-d5c4-4eb4-73c4-08da2247da1f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3178
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As suggested by Bjorn during review of [1], the 'vdda-pll-supply' &
-'vdda-phy-supply' supplies denote the power for the bus and the
-clock of the usb qmp phy and are used by the qcom qmp phy driver.
+The arm_smmu_mm_invalidate_range function is designed to be called
+by mm core for Shared Virtual Addressing purpose between IOMMU and
+CPU MMU. However, the ways of two subsystems defining their "end"
+addresses are slightly different. IOMMU defines its "end" address
+using the last address of an address range, while mm core defines
+that using the following address of an address range:
 
-So, its safe to assume that the two regulators are the same as on
-the MTP. So let's wire them up in the same way as the MTP.
+	include/linux/mm_types.h:
+		unsigned long vm_end;
+		/* The first byte after our end address ...
 
-In absence of the same 'make dtbs_check' leads to following warnings:
+This mismatch resulted in an incorrect calculation for size so it
+failed to be page-size aligned. Further, it caused a dead loop at
+"while (iova < end)" check in __arm_smmu_tlb_inv_range function.
 
-arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
- phy-wrapper@88e9000: 'vdda-phy-supply' is a required property
+This patch fixes the issue by doing the calculation correctly.
 
-arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
- phy-wrapper@88e9000: 'vdda-pll-supply' is a required property
-
-[1]. https://lore.kernel.org/lkml/20220228123019.382037-9-bhupesh.sharma@linaro.org/
-
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: konrad.dybcio@somainline.org
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Fixes: 2f7e8c553e98d ("iommu/arm-smmu-v3: Hook up ATC invalidation to mm ops")
+Cc: stable@vger.kernel.org
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 ---
-Changes since v1:
------------------
-- v1 can be found here: https://www.spinics.net/lists/linux-arm-msm/msg108467.html
-- Fixed the commit message to read usb qmp phy instead of ufs phy (which
-  was introduced erroraneously in the commit log).
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
- .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-index 90b13cbe2fa6..238ac9380ca2 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-@@ -3,6 +3,7 @@
-  * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
-  */
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+index 22ddd05bbdcd..c623dae1e115 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+@@ -183,7 +183,14 @@ static void arm_smmu_mm_invalidate_range(struct mmu_notifier *mn,
+ {
+ 	struct arm_smmu_mmu_notifier *smmu_mn = mn_to_smmu(mn);
+ 	struct arm_smmu_domain *smmu_domain = smmu_mn->domain;
+-	size_t size = end - start + 1;
++	size_t size;
++
++	/*
++	 * The mm_types defines vm_end as the first byte after the end address,
++	 * different from IOMMU subsystem using the last address of an address
++	 * range. So do a simple translation here by calculating size correctly.
++	 */
++	size = end - start;
  
-+#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- #include "sm8350.dtsi"
- #include "pm8350.dtsi"
- #include "pm8350b.dtsi"
-@@ -75,6 +76,27 @@ ramoops@ffc00000 {
- 	};
- };
- 
-+&apps_rsc {
-+	pm8350-rpmh-regulators {
-+		compatible = "qcom,pm8350-rpmh-regulators";
-+		qcom,pmic-id = "b";
-+
-+		vreg_l1b_0p88: ldo1 {
-+			regulator-name = "vreg_l1b_0p88";
-+			regulator-min-microvolt = <912000>;
-+			regulator-max-microvolt = <920000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l6b_1p2: ldo6 {
-+			regulator-name = "vreg_l6b_1p2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1208000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+	};
-+};
-+
- &adsp {
- 	status = "okay";
- 	firmware-name = "qcom/adsp.mbn";
-@@ -256,4 +278,7 @@ &usb_1_hsphy {
- 
- &usb_1_qmpphy {
- 	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l6b_1p2>;
-+	vdda-pll-supply = <&vreg_l1b_0p88>;
- };
+ 	if (!(smmu_domain->smmu->features & ARM_SMMU_FEAT_BTM))
+ 		arm_smmu_tlb_inv_range_asid(start, size, smmu_mn->cd->asid,
 -- 
-2.35.1
+2.17.1
 

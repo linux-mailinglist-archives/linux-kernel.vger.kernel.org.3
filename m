@@ -2,188 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047BE507145
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DD4507156
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350218AbiDSPFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
+        id S1351433AbiDSPG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347789AbiDSPE5 (ORCPT
+        with ESMTP id S234589AbiDSPGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:04:57 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9399B2D1DB;
-        Tue, 19 Apr 2022 08:02:13 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CF4D7240012;
-        Tue, 19 Apr 2022 15:02:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650380530;
+        Tue, 19 Apr 2022 11:06:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC29A387BA
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650380619;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GsDF21Scwpzk12ag+GO/8lcdNxhDhaAggJYyHxq2BDk=;
-        b=gKhcg6VhM7omoOFct2rFBg35LWARoAzxbEfp5VezTqIKwH69hQPhqjnfXMIKwFLcP2wxGs
-        XG3HTl8ibshJEny/FEYMVglygvSnDOSyam9n5HSPH9oU875QUZvmTuGFPCtSrNrniTezCj
-        Ety2BHZhaOT+jX0kSfyJavQ34UXRQlYjH7aaStaWbbzS3SnXkaveh+shKiVuSmwatAkNL1
-        ceDJFSuH7sLCEW2+iBuykcrqyf9mjpp8jUHEKcQX5KHc+uNmj+nleg0bcxa81kI/76GEuK
-        aSq+B/Qm9l8RwlbjMV/jMOFiL9iY5yysb4YkHMksQ4KgZ35tiF/PQ8zgu6tEAw==
-Date:   Tue, 19 Apr 2022 17:00:44 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 03/12] dt-bindings: net: pcs: add bindings for
- Renesas RZ/N1 MII converter
-Message-ID: <20220419170044.450050ca@fixe.home>
-In-Reply-To: <Yl68k22fUw7uBgV9@robh.at.kernel.org>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
-        <20220414122250.158113-4-clement.leger@bootlin.com>
-        <Yl68k22fUw7uBgV9@robh.at.kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wdgc8+Jlkud2HKsKZGyCgaHz11AGlGgnG09+kOT/gAQ=;
+        b=KFlYm1gUwSVzTfj7nbxR1e0N0laQXkFDo7cF8HhS3lrLE5AKGseliaTsZcFPUPDpeUlrJf
+        u7CMOOKcW7vfSoJJuu6YaeBdjleQ8crw2rAltjZ/vOqxWwpK1p7Clxz8rP6upjkTgykh7Z
+        RWDPISRs5nyv7J21+7VEYXQz0/o3m/U=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-148-o6Jjt4BhOk210mS78vhrmw-1; Tue, 19 Apr 2022 11:03:38 -0400
+X-MC-Unique: o6Jjt4BhOk210mS78vhrmw-1
+Received: by mail-wr1-f72.google.com with SMTP id v9-20020adfc409000000b002079e379921so1985927wrf.5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:03:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wdgc8+Jlkud2HKsKZGyCgaHz11AGlGgnG09+kOT/gAQ=;
+        b=NiVIA1G5k0LMYQO/l6KrbqFtuC4T53gq833k3MD31x82m/eEMHPhgDKq7sZErc7IOd
+         aexm79bId4fTYjF0a1zOSN/pL8ZqwveADM1GRQWXbYJQRH1Na5XhD4W5+hSvm6eN/kxn
+         ArjG3eL8Jon0UtPPkCghSKIAxYu2NZ4ie7jSPNNs2TeE4sA4RbyNGKF5OLq4nbz6229j
+         x2PD/FaopbmWKQOCRi5Q45dkyccEKgluqnxUHN5Lb8XzWNEx3tmIu9x/dIaEb0lLPSY+
+         Yr5xShmWjwMFmz85yVESBaBItzdx1k3lPLpSO5IaOiQbb1rY5x7T9XDCCVxGJfQqpwtL
+         pn9Q==
+X-Gm-Message-State: AOAM532FOPl5cVM1aMDefjvRHjmytWDGyIqTeJ+BmdVSBfR7ONn13rcB
+        p6BuRwRpRufXsW3jObRcYNOadBLjm6p8acdkTp+MSEZb5FrXpmne0VI+1YbT2ZjNK1oLN6k3ki5
+        6igAfXBBzUUQ4aHeoNHanQYs=
+X-Received: by 2002:a05:600c:1509:b0:38e:d707:90cb with SMTP id b9-20020a05600c150900b0038ed70790cbmr20523224wmg.120.1650380617408;
+        Tue, 19 Apr 2022 08:03:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx2ziGx3Lw6HBDHRjm2DJbZkMnC5LWN/djK8YHVTkTUf2U4LXgEFhnvzk761V3e1ivfpgFJgg==
+X-Received: by 2002:a05:600c:1509:b0:38e:d707:90cb with SMTP id b9-20020a05600c150900b0038ed70790cbmr20523192wmg.120.1650380617153;
+        Tue, 19 Apr 2022 08:03:37 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id 7-20020a05600c024700b0038ec0c4a2e7sm19052973wmj.11.2022.04.19.08.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 08:03:35 -0700 (PDT)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        christophe.leroy@csgroup.eu, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com
+Subject: [RFC PATCH v2 0/2] module: Introduce module unload taint tracking
+Date:   Tue, 19 Apr 2022 16:03:32 +0100
+Message-Id: <20220419150334.3395019-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, 19 Apr 2022 08:43:47 -0500,
-Rob Herring <robh@kernel.org> a =C3=A9crit :
+Hi Luis,
 
-> > +  clocks:
-> > +    items:
-> > +      - description: MII reference clock
-> > +      - description: RGMII reference clock
-> > +      - description: RMII reference clock
-> > +      - description: AHB clock used for the MII converter register int=
-erface
-> > +
-> > +  renesas,miic-cfg-mode:
-> > +    description: MII mux configuration mode. This value should use one=
- of the
-> > +                 value defined in dt-bindings/net/pcs-rzn1-miic.h. =20
->=20
-> Describe possible values here as constraints. At present, I don't see=20
-> the point of this property if there is only 1 possible value and it is=20
-> required.
+This is based on the latest mcgrof/modules-next branch.  I have decided
+still to use RCU even though no entry is ever removed from the unloaded
+tainted modules list. That being said, if I understand correctly, it is not
+safe in some instances to use 'module_mutex' in print_modules(). So instead
+we disable preemption to ensure list traversal with concurrent list
+manipulation e.g. list_add_rcu(), is safe too.
 
-The ethernet subsystem contains a number of internal muxes that allows
-to configure ethernet routing. This configuration option allows to set
-the register that configure these muxes.
+Please let me know your thoughts.
 
-After talking with Andrew, I considered moving to something like this:
+Aaron Tomlin (2):
+  module: Make module_flags_taint() accept a module's taints bitmap
+    directly
+  module: Introduce module unload taint tracking
 
-eth-miic@44030000 {
-  compatible =3D "renesas,rzn1-miic";
+ init/Kconfig         | 11 +++++++
+ kernel/module/main.c | 76 +++++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 83 insertions(+), 4 deletions(-)
 
-  mii_conv1: mii-conv-1 {
-    renesas,miic-input =3D <MIIC_GMAC1_PORT>;
-    port =3D <1>;
-  };
-  mii_conv2: mii-conv-2 {
-    renesas,miic-input =3D <MIIC_SWITCHD_PORT>;
-    port =3D <2>;
-  };
-   ...
-};
 
-Which would allow embedding the configuration inside the port
-sub-nodes. Moreover, it allows a better validation of the values using
-the schema validation directly since only a limited number of values
-are allowed for each port.
+base-commit: eeaec7801c421e17edda6e45a32d4a5596b633da
+-- 
+2.34.1
 
->=20
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > + =20
-> > +patternProperties:
-> > +  "^mii-conv@[0-4]$":
-> > +    type: object =20
->=20
->        additionalProperties: false
->=20
-> > +    description: MII converter port
-> > +
-> > +    properties:
-> > +      reg:
-> > +        maxItems: 1 =20
->=20
-> Why do you need sub-nodes? They don't have any properties. A simple mask=
-=20
-> property could tell you which ports are present/active/enabled if that's=
-=20
-> what you are tracking. Or the SoC specific compatibles you need to add=20
-> can imply the ports if they are SoC specific.
-
-The MACs are using phandles to these sub-nodes to query a specific MII
-converter port PCS:
-
-switch@44050000 {
-    compatible =3D "renesas,rzn1-a5psw";
-
-    ports {
-        port@0 {
-            reg =3D <0>;
-            label =3D "lan0";
-            phy-handle =3D <&switch0phy3>;
-            pcs-handle =3D <&mii_conv4>;
-        };
-    };
-};
-
-According to Andrew, this is not a good idea to represent the PCS as a
-bus since it is indeed not a bus. I could also switch to something like
-pcs-handle =3D <&eth_mii 4> but i'm not sure what you'd prefer. We could
-also remove this from the device-tree and consider each driver to
-request the MII ouput to be configured using something like this for
-instance:
-
- miic_request_pcs(pcs_np, miic_port_nr, MIIC_SWITCHD_PORT);
-
-But I'm not really fan of this because it requires the drivers to
-assume some specificities of the MII converter (port number are not in
-the same order of the switch for instance) and thus I would prefer this
-to be in the device-tree.
-
-Let me know if you can think of something that would suit you
-better but  keep in mind that I need to correctly match a switch/MAC
-port with a PCS port and that I also need to configure MII internal
-muxes.=20
-
-For more information, you can look at section 8 of the manual at [1].
-
-Thanks,
-
-[1]
-https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1l-gr=
-oup-users-manual-system-introduction-multiplexing-electrical-and
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com

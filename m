@@ -2,130 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5825075E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD425075E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355642AbiDSRGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
+        id S1355082AbiDSRGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355714AbiDSRFS (ORCPT
+        with ESMTP id S1355601AbiDSRGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:05:18 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06604667D;
-        Tue, 19 Apr 2022 09:56:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1650387354; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UgJ9M4e77rm4vWgeDfc7h63C2dpPAutbcuRpKjGD9n4=;
-        b=MmVauPxwx0Nc5F0BBmh8Ky18fFoRb3dvEkVCAGHNSiRWRImQwFNHbMGqb4r9bdw39GxCJ1
-        fnzknse0G3i983UeNAOSfGnI5Vxp+M/C2ZeTJsExp2iufMyfMXnM+LK1eKsmsWJuKVlAyf
-        desO9uA4S62Zkl7y1Bet11f2kYDyn/k=
-Date:   Tue, 19 Apr 2022 17:55:44 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/5] dt-bindings: rtc: Rework compatible strings and add
- #clock-cells
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        list@opendingux.net, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Message-Id: <W0JLAR.RV6VQW59K8X3@crapouillou.net>
-In-Reply-To: <1e9bf9d6-cd5a-6a47-f0d7-5a4bc6e6d2f0@linaro.org>
-References: <20220418184933.13172-1-paul@crapouillou.net>
-        <20220418184933.13172-2-paul@crapouillou.net>
-        <1e9bf9d6-cd5a-6a47-f0d7-5a4bc6e6d2f0@linaro.org>
+        Tue, 19 Apr 2022 13:06:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11BD4739C;
+        Tue, 19 Apr 2022 09:56:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A92DB6186B;
+        Tue, 19 Apr 2022 16:56:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1822FC385A9;
+        Tue, 19 Apr 2022 16:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650387376;
+        bh=3NRP654HFnFZGmWHY3+1xWkxGDvnG9rzmMDHyklXIoI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pzPpQ6cXLw1jVQDrxl2oIoAiuJfMXBWfRJh22XIi8S9Wh0fOnGqqkFD8/xKtn+q2z
+         40Z957Dcl2GqnnlB1Z66sZuCZEdVTvarzUBoKJMQ6SJ/pMHfKptk4g0AlCgkuMxkXp
+         tso7BnIG0KF9c3HE4hlvYmUZnM0CaTFFoH+ODfy1lrOpjjqmDUmD/D3SO3kq7/pz5R
+         p7cPtbPrbDNiqJHwvZyhcCEusp1AZ32Q3RqbOD4A5C0BWXDy5NKKm1GL1uhNpb7TLa
+         3tdnjRM5rIuWdYdCrEkDTjcv8GPuX/wSOov4GDPCX9Eb94Cw+K6gACzgHM1I3+xbSm
+         rbPhvVvJwTKYQ==
+Date:   Tue, 19 Apr 2022 17:56:10 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Markuss Broks <markuss.broks@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] dt-bindings: regulator: Add bindings for Silicon
+ Mitus SM5703 regulators
+Message-ID: <Yl7pqgjza/ZfajyM@sirena.org.uk>
+References: <20220419160058.9998-1-markuss.broks@gmail.com>
+ <20220419160058.9998-2-markuss.broks@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CdUwKxME8103iGOY"
+Content-Disposition: inline
+In-Reply-To: <20220419160058.9998-2-markuss.broks@gmail.com>
+X-Cookie: That's what she said.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
 
-Le mar., avril 19 2022 at 08:41:56 +0200, Krzysztof Kozlowski=20
-<krzysztof.kozlowski@linaro.org> a =E9crit :
-> On 18/04/2022 20:49, Paul Cercueil wrote:
->>  The RTC in the JZ4770 is compatible with the JZ4760, but has an=20
->> extra
->>  register that permits to configure the behaviour of the CLK32K pin.=20
->> The
->>  same goes for the RTC in the JZ4780.
->>=20
->>  Therefore, the ingenic,jz4770-rtc and ingenic,jz4780-rtc strings do=20
->> not
->>  fall back anymore to ingenic,jz4760-rtc. The ingenic,jz4780-rtc=20
->> string
->>  now falls back to the ingenic,jz4770-rtc string.
->>=20
->>  Additionally, since the RTCs in the JZ4770 and JZ4780 support=20
->> outputting
->>  the input oscillator's clock to the CLK32K pin, the RTC node is now=20
->> also
->>  a clock provider on these SoCs, so a #clock-cells property is added.
->>=20
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  Cc: Rob Herring <robh+dt@kernel.org>
->>  Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
->>  ---
->>   Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml | 7 +++++--
->>   1 file changed, 5 insertions(+), 2 deletions(-)
->>=20
->>  diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml=20
->> b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
->>  index b235b2441997..57393c3ac724 100644
->>  --- a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
->>  +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
->>  @@ -18,14 +18,14 @@ properties:
->>         - enum:
->>             - ingenic,jz4740-rtc
->>             - ingenic,jz4760-rtc
->>  +          - ingenic,jz4770-rtc
->>         - items:
->>             - const: ingenic,jz4725b-rtc
->>             - const: ingenic,jz4740-rtc
->>         - items:
->>             - enum:
->>  -              - ingenic,jz4770-rtc
->>                 - ingenic,jz4780-rtc
->>  -          - const: ingenic,jz4760-rtc
->>  +          - const: ingenic,jz4770-rtc
->>=20
->>     reg:
->>       maxItems: 1
->>  @@ -39,6 +39,9 @@ properties:
->>     clock-names:
->>       const: rtc
->>=20
->>  +  "#clock-cells":
->>  +    const: 0
->>  +
->>     system-power-controller:
->>       description: |
->>         Indicates that the RTC is responsible for powering OFF
->=20
-> Inside allOf:if:then:, please add a constraint which compatible cannot
-> have clock-cells (or maybe better which can?).
->=20
-> Some modification of:
-> https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetre=
-e/bindings/media/renesas,vsp1.yaml#L53
+--CdUwKxME8103iGOY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Sure.
+On Tue, Apr 19, 2022 at 07:00:54PM +0300, Markuss Broks wrote:
 
-Cheers,
--Paul
+> +description: |
+> +  SM5703 regulators node should be a sub node of the SM5703 MFD node. See SM5703 MFD
+> +  bindings at Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
 
+Why is this a separate binding with a compatible rather than just being
+part of the main MFD binding?  Alternatively, why aren't the regulators
+described individually in the DT (ie, one node/compatible per regulator)?
 
+--CdUwKxME8103iGOY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJe6akACgkQJNaLcl1U
+h9CvOAgAg0Aii8vFN3u8uYhCarcCb6/ZvrcswwERKJJbU0v4bNjMrMcvHJsm84dG
+sPqqVG+E9AJbLEMFF01/Dz3xQsipdTrPY61uLn+DT702YkZ0laY8ryv8tOjxgoBL
+LHDSNnHK9kNgHHl1tRgMLoXmCg+amAj2Q8uSoJz73+VnSaV+Qtr4clJa4UuvIu6U
+L5wUqVBRy74mG/LbO7G5um1aWcn9lgMR6w8sSf2s/BOVuLSbjUGr2yoZ+6I0WgDv
+HVZvK/WX11DhFSKWI+LJQExY0NmsbIjsnAtER8OY2QXMkGw20TjMpCFs8wwhvFlI
+8PNDne6WTwmQRkAn6CFQer/37PTz9A==
+=g3pw
+-----END PGP SIGNATURE-----
+
+--CdUwKxME8103iGOY--

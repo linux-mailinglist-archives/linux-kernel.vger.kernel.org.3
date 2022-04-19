@@ -2,118 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7955061BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E355061C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245649AbiDSBlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 21:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
+        id S233437AbiDSBmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 21:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243639AbiDSBk6 (ORCPT
+        with ESMTP id S245693AbiDSBmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 21:40:58 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A44C2317D;
-        Mon, 18 Apr 2022 18:38:17 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id c1so12463401qkf.13;
-        Mon, 18 Apr 2022 18:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K+wycLbtOGXfx3rrJ8YJAcjSMtOkWcA7L4SAeEXTlpk=;
-        b=KuHwDA8ZkRKEWblQ0FoA9kY8ZMJKY/Tyfsk1CHA3Y5cMY7z0WM64lb+55tASiqvSDc
-         C2M8Z31xHCidij1WbgEo3ClbIPCkkPj8waHFaS1EdCU78mL/C8Xg1hfBOazNdCJF5eKQ
-         qNQxqR0pLOUbxtuw3z7LtkOzG0vrmX6PLvuLp6rkBYNuWuYs/bgJAfsHXGwCrgEUbNgV
-         TRPt8on0LUafnwEQ7YN7UT/5mcrTw/rdkxQI8wwWXvy/N9d4aKo4h3Ja+vEDQ8Lsd78u
-         9tVU7tkXberW0tv9bL99VSW6wlsbCmMc0beg9gth7dkmT7560rKThghxpBdm0EbQTsL6
-         rGWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K+wycLbtOGXfx3rrJ8YJAcjSMtOkWcA7L4SAeEXTlpk=;
-        b=GczMJlWh30hNJFjzotQYaat2vvXXd3dQxoCC+yRz5q11hoiBGMwEOybLv2YWlVYBJP
-         TB4e15GlMRwDeQuHQjBnK2pYWhuQLRhZmUhcFaN/sWyyh0Kk/yqGtP8VVgrO6y+vS7Q4
-         t92ijovEiA3Wx8Ih+6j6Q3Xm3vVAG3e/myncOQzlGh/YDWQ1S1UElGzYWD1Mq7V+jtQF
-         cXoEC2W71r3MW5Z+iRIGn48WdGfjekTrEeHQ8nwl6IL8RdS2lOZkO0M39/CL17hje66M
-         p5bgArs42oT5KWcpn8Lxqvu2hLbrZZL7WZhJ+q4MaxnhTWpirna0De/hYI+/CtA8NwQE
-         GJow==
-X-Gm-Message-State: AOAM532WspcBHTo0irZsJQRAwJ6UlEy23H0i2snjMG3NnEsyAZcu6e8G
-        oPC5DvaX0aJgarJNBdDX8IA=
-X-Google-Smtp-Source: ABdhPJx1J+AjddBh73DZ2JT0UHDYN70XKTlC1pvcUhbKxwhfHiatwNYFN8O2a9prNZDLiqVhR+wMBQ==
-X-Received: by 2002:a37:aad5:0:b0:69e:a0ba:ffa3 with SMTP id t204-20020a37aad5000000b0069ea0baffa3mr4295285qke.317.1650332296428;
-        Mon, 18 Apr 2022 18:38:16 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 12-20020a37080c000000b0069ea5b5e1d2sm1904157qki.83.2022.04.18.18.38.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 18:38:16 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] media: amphion: fix error check return value of debugfs_create_file()
-Date:   Tue, 19 Apr 2022 01:38:09 +0000
-Message-Id: <20220419013809.2561635-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 18 Apr 2022 21:42:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391FADE83
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 18:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650332394; x=1681868394;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YTBlms3ZwknmerbjXMqn2HeZ2pfS/wcFLcEoslzwJhg=;
+  b=iElDNwVgpvY/hlo+GOrIKy/uuYjPyoTeWqAAJw30+MB5GHx0lDffhO0S
+   hTtyqkUx6JqYHUcatP1wtpkUMi1vzHSiXWay5ZBncBiD2xdfPN0GwFtxs
+   V4YnxSoq62G9tr7nanK6hO4JG+O4ds3Ve4ewg6rBg4oMTSifvOLsw2xzH
+   aPaFeAvPjLKNtmGGDsgBt8J/Xk2ucjgQxGUe/K1xPdnv8gNbDD4/9SMIj
+   sLbSE9n6wpQpVadEiQ7PwXxrhXIYeREPw5McSEWpqMzjT1H3wDdFIR6Et
+   vQugUqWvs0muJF9q3AvDh1K6Lmajg6ldJbogaCQf7VrTObdOcXNJGk6yw
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="326549824"
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="326549824"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 18:39:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="657451325"
+Received: from ubuntu.bj.intel.com ([10.238.155.108])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Apr 2022 18:39:52 -0700
+From:   Jun Miao <jun.miao@intel.com>
+To:     rostedt@goodmis.org, mingo@redhat.com
+Cc:     linux-kernel@vger.kernel.org, jun.miao@intel.com
+Subject: [PATCH] tracing: fix sleeping function called from invalid context on RT kernel
+Date:   Tue, 19 Apr 2022 09:39:10 +0800
+Message-Id: <20220419013910.894370-1-jun.miao@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+When setting bootparams="trace_event=initcall:initcall_start tp_printk=1" in the
+cmdline, the output_printk() was called, and the spin_lock_irqsave() was called in the
+atomic and irq disable interrupt context suitation. On the PREEMPT_RT kernel,
+these locks are replaced with sleepable rt-spinlock, so the stack calltrace will
+be triggered.
+Fix it by raw_spin_lock_irqsave when PREEMPT_RT and "trace_event=initcall:initcall_start
+tp_printk=1" enabled.
 
-If an error occurs, debugfs_create_file() will return ERR_PTR(-ERROR),
-so use IS_ERR() to check it.
+ BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+ in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
+ preempt_count: 2, expected: 0
+ RCU nest depth: 0, expected: 0
+ Preemption disabled at:
+ [<ffffffff8992303e>] try_to_wake_up+0x7e/0xba0
+ CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.1-rt17+ #19 34c5812404187a875f32bee7977f7367f9679ea7
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x60/0x8c
+  dump_stack+0x10/0x12
+  __might_resched.cold+0x11d/0x155
+  rt_spin_lock+0x40/0x70
+  trace_event_buffer_commit+0x2fa/0x4c0
+  ? map_vsyscall+0x93/0x93
+  trace_event_raw_event_initcall_start+0xbe/0x110
+  ? perf_trace_initcall_finish+0x210/0x210
+  ? probe_sched_wakeup+0x34/0x40
+  ? ttwu_do_wakeup+0xda/0x310
+  ? trace_hardirqs_on+0x35/0x170
+  ? map_vsyscall+0x93/0x93
+  do_one_initcall+0x217/0x3c0
+  ? trace_event_raw_event_initcall_level+0x170/0x170
+  ? push_cpu_stop+0x400/0x400
+  ? cblist_init_generic+0x241/0x290
+  kernel_init_freeable+0x1ac/0x347
+  ? _raw_spin_unlock_irq+0x65/0x80
+  ? rest_init+0xf0/0xf0
+  kernel_init+0x1e/0x150
+  ret_from_fork+0x22/0x30
+  </TASK>
 
-Fixes: 9f599f351e86 ("media: amphion: add vpu core driver")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: Jun Miao <jun.miao@intel.com>
 ---
- drivers/media/platform/amphion/vpu_dbg.c | 6 +++---
+ kernel/trace/trace.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
-index 376196bea178..5cef1fd41a74 100644
---- a/drivers/media/platform/amphion/vpu_dbg.c
-+++ b/drivers/media/platform/amphion/vpu_dbg.c
-@@ -413,7 +413,7 @@ int vpu_inst_create_dbgfs_file(struct vpu_inst *inst)
- 					    vpu->debugfs,
- 					    inst,
- 					    &vpu_dbg_inst_fops);
--	if (!inst->debugfs) {
-+	if (IS_ERR(inst->debugfs)) {
- 		dev_err(inst->dev, "vpu create debugfs %s fail\n", name);
- 		return -EINVAL;
- 	}
-@@ -451,7 +451,7 @@ int vpu_core_create_dbgfs_file(struct vpu_core *core)
- 						    vpu->debugfs,
- 						    core,
- 						    &vpu_dbg_core_fops);
--		if (!core->debugfs) {
-+		if (IS_ERR(core->debugfs)) {
- 			dev_err(core->dev, "vpu create debugfs %s fail\n", name);
- 			return -EINVAL;
- 		}
-@@ -463,7 +463,7 @@ int vpu_core_create_dbgfs_file(struct vpu_core *core)
- 							  vpu->debugfs,
- 							  core,
- 							  &vpu_dbg_fwlog_fops);
--		if (!core->debugfs_fwlog) {
-+		if (IS_ERR(core->debugfs_fwlog)) {
- 			dev_err(core->dev, "vpu create debugfs %s fail\n", name);
- 			return -EINVAL;
- 		}
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 416496fefd56..26f945ac6c1a 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -2833,7 +2833,7 @@ trace_event_buffer_lock_reserve(struct trace_buffer **current_rb,
+ }
+ EXPORT_SYMBOL_GPL(trace_event_buffer_lock_reserve);
+ 
+-static DEFINE_SPINLOCK(tracepoint_iter_lock);
++static DEFINE_RAW_SPINLOCK(tracepoint_iter_lock);
+ static DEFINE_MUTEX(tracepoint_printk_mutex);
+ 
+ static void output_printk(struct trace_event_buffer *fbuffer)
+@@ -2861,14 +2861,14 @@ static void output_printk(struct trace_event_buffer *fbuffer)
+ 
+ 	event = &fbuffer->trace_file->event_call->event;
+ 
+-	spin_lock_irqsave(&tracepoint_iter_lock, flags);
++	raw_spin_lock_irqsave(&tracepoint_iter_lock, flags);
+ 	trace_seq_init(&iter->seq);
+ 	iter->ent = fbuffer->entry;
+ 	event_call->event.funcs->trace(iter, 0, event);
+ 	trace_seq_putc(&iter->seq, 0);
+ 	printk("%s", iter->seq.buffer);
+ 
+-	spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
++	raw_spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
+ }
+ 
+ int tracepoint_printk_sysctl(struct ctl_table *table, int write,
 -- 
-2.25.1
-
+2.32.0
 

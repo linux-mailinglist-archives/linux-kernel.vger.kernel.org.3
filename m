@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A720D50711C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D44507126
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344185AbiDSO6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S1346453AbiDSO7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353577AbiDSO5r (ORCPT
+        with ESMTP id S1353722AbiDSO6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:57:47 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EFDFD3E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:55:03 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e2fa360f6dso17771489fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=XfHepYw+eFDu4Y2GjQzYxqYQe3l3yCNETgfJfWtfEn8=;
-        b=mixj2xeVA11NAQnkbsI+dJXBIaa6QQ5iSC6MLy+w2fOxHiEmQgDhlLwEJWHyD9l8J6
-         /5E5PxLKpuoi1fB2GFy9Z9ilBSpoWgmZ4TMP6a08rkD++ADh9xVdoQcC8y1RGWp/rlPv
-         hzPr+aTqT6BfqZog1Eth/LCpls7qr1CbZFc38=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=XfHepYw+eFDu4Y2GjQzYxqYQe3l3yCNETgfJfWtfEn8=;
-        b=2hUc+3a01+uX1tZ0ZgHS+F+bCqV4Qg8ePUbTn8ErJcEemmKnfaXe9CaTfcohtByYyb
-         sQbmfU6UA4cEDzYFLO/XFlpvl6z2+zoDpQvonWap/73BFBo4vpPOCAdbDCfWlV8DyrpM
-         QL0/fh1GGjSikeZIrV2NhHEs6XB63QD6ogAkV5pgQVFMVmn/pCF1rKHCFcNeAJIlusyP
-         K6Z76vnW9Z0qPfCKwjnFSDAO00AVzGHVclDCTWatqyTfdNNDOn9HjgqF/2RqaIutLY3p
-         zH187EvGrPtV/z9IJYEcyKxgreyGjusHXe52h6K44pfAi/SzUsWmGUS7niof7Pyt4d8u
-         rCkQ==
-X-Gm-Message-State: AOAM531V8+06h8r/uG7a/5qea19DI5mdbhLchypOjCL5Pz6PsWg9XjBe
-        Nap6dVt5rfA+5wKn6rEMD9aJBPc6Rk1sDDhyre2VKQ==
-X-Google-Smtp-Source: ABdhPJzq4NiF1OxjHN/pxYl61Pc4EGrB6vaPpfW7dATfuy1l83k2YshuDNFMFnJZrwGySdplgTF1XUnOYvYGELVjq3I=
-X-Received: by 2002:a05:6870:558e:b0:e1:db7c:26aa with SMTP id
- n14-20020a056870558e00b000e1db7c26aamr6827263oao.63.1650380103245; Tue, 19
- Apr 2022 07:55:03 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 19 Apr 2022 07:55:02 -0700
+        Tue, 19 Apr 2022 10:58:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D438C3525C;
+        Tue, 19 Apr 2022 07:55:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FBF461584;
+        Tue, 19 Apr 2022 14:55:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40B45C385A7;
+        Tue, 19 Apr 2022 14:55:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650380149;
+        bh=AqW7BlXqIXXJk7SV1e1EapO0IjeR/BAOYBLYxGwHlUg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=swGQhkQ0wN/dmJsNY1g4Jf3PZEV8p5G2bWNyWXp6aQE9XQBqNU8uJJJ4cm4ZiZ2uE
+         +iesXBhteb1hOx5+BXb+rpFJAPPVgMzPkx+3Nb4MajajaAZ4Sh24k44vPd2+GBbEIX
+         P6Yeuegm0teTGSsfOBGzAtAZei/QA6dMA5NATeezm6e33TsHoOy/R8OWc3wst0G+sr
+         MAfdofSzdHSfmmN5kyVx5gHSqXsFsjjLMAIxP5PGc/j5ws6nBRTFj54YyLkLXUw9O2
+         N/60E42patg34BmLvC66PB1zBWM5H3vMHy9/Ubb2OEP+rGK3YshXsWXEDyJ9yvk/aT
+         c6rynYHqwRD1Q==
+Date:   Tue, 19 Apr 2022 15:55:43 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
+Subject: Re: [PATCH V10 7/9] regulator: Add a regulator driver for the PM8008
+ PMIC
+Message-ID: <Yl7Nb0mNjt7kV3uV@sirena.org.uk>
+References: <1649939418-19861-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1649939418-19861-8-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n533obTi995x_rJG_ihUUquF3MQLJt6VMf7=oxyzMUL5DQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Yl4Au/O/am/ZbX9J@chromium.org>
-References: <20220419000408.3202635-1-swboyd@chromium.org> <Yl4Au/O/am/ZbX9J@chromium.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 19 Apr 2022 07:55:02 -0700
-Message-ID: <CAE-0n507D9W5BFfG2vXqN1cqvnrQKLbLw7YejGb5_kH+7X62sw@mail.gmail.com>
-Subject: Re: [PATCH v2] mfd: cros_ec_dev: Only register PCHG device if present
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Tzung-Bi Shih <tzungbi@kernel.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xgIXoV2XBfJmzGtV"
+Content-Disposition: inline
+In-Reply-To: <CAE-0n533obTi995x_rJG_ihUUquF3MQLJt6VMf7=oxyzMUL5DQ@mail.gmail.com>
+X-Cookie: That's what she said.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,16 +65,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Prashant Malani (2022-04-18 17:22:19)
-> On Apr 18 17:04, Stephen Boyd wrote:
-> > +             retval = mfd_add_hotplug_devices(ec->dev,
-> > +                                     cros_ec_pchg_cells,
-> > +                                     ARRAY_SIZE(cros_ec_pchg_cells));
-> > +             if (retval)
-> > +                     dev_warn(ec->dev, "failed to add pchg: %d\n",
-> > +                              retval);
-> Tiny nit: Can this fit in 1 line (100 chars[1])?
->
 
-I'm matching the style of other lines in this file (this is copy
-pasta). I'll let the maintainer decide what to do.
+--xgIXoV2XBfJmzGtV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Thu, Apr 14, 2022 at 05:25:49PM -0700, Stephen Boyd wrote:
+> Quoting Satya Priya (2022-04-14 05:30:16)
+
+> > +static struct platform_driver pm8008_regulator_driver = {
+> > +       .driver = {
+> > +               .name           = "qcom-pm8008-regulator",
+
+> I'd prefer to use an of_device_id table here. That would let us populate
+> a "qcom,pm8008-regulators" node that had the ldo nodes as children and
+> avoid mfd cells.
+
+That's encoding the current Linux way of splitting up drivers into the
+DT rather than describing the hardware.
+
+--xgIXoV2XBfJmzGtV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJezW8ACgkQJNaLcl1U
+h9CHlQf/SfDYm+bgiFNO/+eLj38zgXokwbbiT9deWgN2aYkZy60/A2Ps2Noi2dtT
+bZ7untJiUelfBeNawv1WOu1iI1Gr4eRYBMK1r3stWu6gwLlQZKrou5B6Qfi7hEcI
+/4P5co/b0g6XbKUYGfcTwmMDiCzcycwwmhK9CFL7wOuHaPseV9Zqy+AhzZL/A85W
+TRqLznvoEfS3IMFxP0lnsEZkCpzKcOC8UK0qkFdUI7uPtRA73dEbQU8R5k8BAgXt
+kvjcDWbUkVWNwr/tswF2oehY+OKlSTMlx2rlVJB/FCQpm/XvfCE1gHH/0nwa6qqb
+OT/OxrogzuEuEtz7rmkyhzCF5lNIFw==
+=lzLV
+-----END PGP SIGNATURE-----
+
+--xgIXoV2XBfJmzGtV--

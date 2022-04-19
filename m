@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10614506560
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACD1506565
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349166AbiDSHNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
+        id S1349198AbiDSHOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237402AbiDSHNs (ORCPT
+        with ESMTP id S1349195AbiDSHOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:13:48 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1283056F;
-        Tue, 19 Apr 2022 00:11:07 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id z139so9287803vsz.0;
-        Tue, 19 Apr 2022 00:11:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=fJRznz45+6b8f9tgPBJNZwr3gSIqLHvLJH94gCmXiWs=;
-        b=Hru924K0BBg56zYFePikkE2q8hrW26jqhVb5NGTx4S5VXYH+9FR37XeQTl7w8hka/I
-         NqwpWRJ54uoxIjTo2HOQt2Ys2oaqvcpgb0dbQVXkRBZ+GiQuWVV3ZTjUWc5d1oqJnYn7
-         /6KOI7Q/i6FR3G0zGkvQHKdUkvVU3Wg+1ZeskVutSF+Ea5d9O3RCFUCcH2Kc4tFgIuA8
-         ClF64wcN07XSD8NemlElU6P4Bx3MNZPh+qjy+O5jPv4CfFZjJVUULkbEhC1bj1sCPvB6
-         i9Vx8KSR5HTfGcZUkTa+AtvAQgTPG++P5xWs/KQ/VcKk2sN/7Dn9L3konkxTuTyjQud3
-         m8fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=fJRznz45+6b8f9tgPBJNZwr3gSIqLHvLJH94gCmXiWs=;
-        b=kLKilO/qTpIz1q/wUtrsbeoGxZJB+SJrXlM1s76QCzNgvIMucPT6bS3ZVQWR8Z9dP2
-         TFUyWHJg9yyyF6b/awM0+dGZDdLKxgw22TZ/YpeVq5pAI2BYlUpGEPoaCYLHCY/2Vltm
-         sNWD/c+xTyUnvzdg8B9/uCblQFMQuf/ynSwM/oVaOifhfeicqyDFBb7zH1gjYGLJKSr0
-         74cnzGtZsw31UZzdMwLDzA9XelpvBBhmwIa3aHymOG3x+AOo4V0/5mhS+bLPorjOfeu0
-         /iebRFIiJs9RhlXtMK4aCkNa6FzC25v08D2kKL/zsXgiPr8+AAiBBh2AI1EGaXhZ4oQw
-         fx8w==
-X-Gm-Message-State: AOAM530UW2aFHnvAHLGMY7DG79p0Ta9UyIZ/Dkc+xcxnApglYiddQEij
-        swYtdNUhhmM9eIY1WbV5fGhAfDTIItqWH/l5LSw=
-X-Google-Smtp-Source: ABdhPJxwItw29QxufrFTI6tPUY/l1+fgfbzWDqzwcGFMB2auBxs9/K/icUT5zkTEnFEQPzZ5icyN4geQyINLrfYbwhk=
-X-Received: by 2002:a05:6102:199:b0:32a:5d51:1770 with SMTP id
- r25-20020a056102019900b0032a5d511770mr1913464vsq.27.1650352266169; Tue, 19
- Apr 2022 00:11:06 -0700 (PDT)
+        Tue, 19 Apr 2022 03:14:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3390531520;
+        Tue, 19 Apr 2022 00:11:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1B81B8119F;
+        Tue, 19 Apr 2022 07:11:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 934FBC385B4;
+        Tue, 19 Apr 2022 07:11:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650352277;
+        bh=cRWiba3oQT1Wyx6PHg08VUtrSYo63vCoz8IqvjSghl8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TDKa+4Z1WMzdK5u/xQ+Vnl31+oUi/2esWVXHnj9mJYhfpZUf3tPdGm2vG7vlCU4Rp
+         NMCo5TgfXfIUhOU+LkrywC9d8CCgxc0+E448rG7x8CYyUF6pFEl2XIhUEwF+I2f+oY
+         pKzn51uXGuHrTWRnM1ZOBU9yW42hDuV7oXhx4JV5uu/rx/fmBY2iicETFi0vrWpcGE
+         /oX+6HjoPOlNiJqmZHEX/53RNnsB6w7V+hu6uy3r5pdbEjgnqv8CAq2ZM82edMowy/
+         jW5heVh7FFxyhYzYt0cv1tWhJzRfKdlI6LvUBMKddQKBA758CV6Ny++9496xkjDBNc
+         cT8HYCqZIC5YA==
+Message-ID: <62bbc2a6-92fb-ff2b-a43f-ecb402e8f90c@kernel.org>
+Date:   Tue, 19 Apr 2022 09:11:09 +0200
 MIME-Version: 1.0
-References: <20220415130005.85879-1-andrea.merello@gmail.com>
- <20220415130005.85879-9-andrea.merello@gmail.com> <20220415184305.03805452@jic23-huawei>
-In-Reply-To: <20220415184305.03805452@jic23-huawei>
-Reply-To: andrea.merello@gmail.com
-From:   Andrea Merello <andrea.merello@gmail.com>
-Date:   Tue, 19 Apr 2022 09:10:54 +0200
-Message-ID: <CAN8YU5Mz--8R2oE=bgok_JdM6NNW8m2h5_V8LZSocFnaa-PADA@mail.gmail.com>
-Subject: Re: [v4 08/14] iio: imu: add Bosch Sensortec BNO055 core driver
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/5] PCI: axis: Add ARTPEC-8 PCIe controller driver
+Content-Language: en-US
+To:     wangseok.lee@samsung.com, robh+dt <robh+dt@kernel.org>,
+        krzk+dt <krzk+dt@kernel.org>, kishon <kishon@ti.com>,
+        vkoul <vkoul@kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson" <jesper.nilsson@axis.com>,
+        "lars.persson" <lars.persson@axis.com>
+Cc:     bhelgaas <bhelgaas@google.com>,
+        linux-phy <linux-phy@lists.infradead.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
         devicetree <devicetree@vger.kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Andrea Merello <andrea.merello@iit.it>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        "lorenzo.pieralisi" <lorenzo.pieralisi@arm.com>, kw <kw@linux.com>,
+        linux-arm-kernel <linux-arm-kernel@axis.com>,
+        kernel <kernel@axis.com>, Moon-Ki Jun <moonki.jun@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>
+References: <CGME20220419000730epcms2p77c94d5e55db13ebf2f88b25d16b6ef7a@epcms2p7>
+ <20220419000730epcms2p77c94d5e55db13ebf2f88b25d16b6ef7a@epcms2p7>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220419000730epcms2p77c94d5e55db13ebf2f88b25d16b6ef7a@epcms2p7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,92 +69,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il giorno ven 15 apr 2022 alle ore 19:35 Jonathan Cameron
-<jic23@kernel.org> ha scritto:
->
-> On Fri, 15 Apr 2022 14:59:59 +0200
-> Andrea Merello <andrea.merello@gmail.com> wrote:
->
-> > From: Andrea Merello <andrea.merello@iit.it>
-> >
-> > This patch adds a core driver for the BNO055 IMU from Bosch. This IMU
-> > can be connected via both serial and I2C busses; separate patches will
-> > add support for them.
-> >
-> > The driver supports "AMG" (Accelerometer, Magnetometer, Gyroscope) mode,
-> > that provides raw data from the said internal sensors, and a couple of
-> > "fusion" modes (i.e. the IMU also do calculations in order to provide
-> > euler angles, quaternions, linear acceleration and gravity measurements).
-> >
-> > In fusion modes the AMG data is still available (with some calibration
-> > refinements done by the IMU), but certain settings such as low pass
-> > filters cut-off frequency and sensors ranges are fixed, while in AMG mode
-> > they can be customized; this is why AMG mode can still be interesting.
-> >
-> > Signed-off-by: Andrea Merello <andrea.merello@iit.it>
-> Hi Andrea,
->
-> A few trivial things from me on this read through.
->
-> I haven't commented on a lot of the patches because I was happy with them.
->
-> Other than the small changes requested from me, we mostly need to get
-> device tree review of the binding and allow time for others to take
-> another look.
->
-> Thanks,
->
-> Jonathan
+On 19/04/2022 02:07, Wangseok Lee wrote:
+>> On 28/03/2022 04:14, 이왕석 wrote:
+>>>  Add support Axis, ARTPEC-8 SoC.
+>>>  ARTPEC-8 is the SoC platform of Axis Communications.
+>>>  This is based on arm64 and support GEN4 & 2lane.
+>>>  This PCIe controller is based on DesignWare Hardware core
+>>>  and uses DesignWare core functions to implement the driver.
+>>>  This is based on driver/pci/controller/dwc/pci-exynos.c
+>>>  
+>>>  Signed-off-by: Wangseok Lee 
+>>> ---
+>>>  drivers/pci/controller/dwc/Kconfig        |  31 +
+>>>  drivers/pci/controller/dwc/Makefile       |   1 +
+>>>  drivers/pci/controller/dwc/pcie-artpec8.c | 912 ++++++++++++++++++++++++++++++
+>>>  3 files changed, 944 insertions(+)
+>>>  create mode 100644 drivers/pci/controller/dwc/pcie-artpec8.c
+>>>
+>>
+>> I took a look at the your driver and at existing PCIe Exynos driver.
+>> Unfortunately PCIe Exynos driver is in poor shape, really poor. This
+>> would explain that maybe it's better to have new driver instead of
+>> merging them, especially that hardware is different. Although I am still
+>> waiting for some description of these differences...
+>>
+>> I said that Exynos PCIe looks poor... but what is worse, it looks like
+>> you based on it so you copied or some bad patterns it had.
+>>
+>> Except this the driver has several coding style issues, so please be
+>> sure to run checkpatch, sparse and smatch before sending it.
+>>
+>> Please work on this driver to make it close to Linux coding style, so
+>> there will be no need for us, reviewers, focus on basic stuff.
+>>
+>> Optionally, send all this to staging. :)
+>>
+>> Best regards,
+>> Krzysztof
+> Hi,
+> 
+> Thank you for your kindness review.
+> I will re-work again close to the linux coding style.
+> Addiltionaly, If you tell me what "bad patterns" you mentioned,
+> it will be very helpful for the work.
+> Could you please tell me that?
 
-Ok, good! As usual, just a few inline comments, ok for the rest.
+Except the tools I mentioned before, the patterns are:
+1. debug messages for probe or other functions (we have ftrace and other
+tools for that).
+2. Inconsistent coding style (e.g. different indentation in structure
+members).
+3. Inconsistent code (e.g. artpec8_pcie_get_subsystem_resources() gets
+device from pdev and from pci so you have two same pointers; or
+artpec8_pcie_get_ep_mem_resources() stores dev as local variable but
+uses instead pdev->dev).
+4. Not using devm_platform_ioremap_resource().
+5. Wrappers over writel() and readl() which do nothing else than wrap
+one function.
+6. Printing messages in interrupt handlers.
+7. Several local/static structures or array are not const. Plus they are
+defined all through the code, instead of beginning of a file.
 
-> > +int bno055_probe(struct device *dev, struct regmap *regmap,
-> > +              int xfer_burst_break_thr, bool sw_reset)
-> > +{
-> > +     const struct firmware *caldata;
-> See comment below. I think you need to set this to NULL here
+Also - you have four clocks, so use clk bulk API.
 
-Hum. I'm confused here: I think I did set it to NULL (is some later
-LOC) in V2, but you argued against it, because hopefully
-request_firmware() does it by itself.
-https://www.spinics.net/lists/linux-iio/msg64896.html
 
-What has changed or what I've missed? Was your original point just to
-move the NULL assignment back at declaration time?
-
->
-> > +
-> > +     ret = regmap_read(priv->regmap, BNO055_CHIP_ID_REG, &val);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     if (val != BNO055_CHIP_ID_MAGIC) {
->
-> We've run into this a few times recently.  Traditionally IIO has been very
-> restrictive on allowing drivers to probe if the Who Am I type values
-> don't match.  That causes problems for backwards compatibility in
-> device tree - e.g. (with made up compatible part number 055b :)
-> compatible = "bosch,bno055b", "bosch,bno055"
->
-> The viewpoint of the dt maintainers is that we should assume the
-> dt is correct and at most warn about missmatched IDs before trying
-> to carry on.  So to avoid hitting that again please relax this to a
-> warning and cross your fingers after this point if it doesn't match.
-> I'm fine on the firmware question because we know we are dealing
-> with buggy firmware.  Ideally we'll get some working firmware
-> additions at somepoint then we can just label the bad firmwares
-> and assume one less bug in the ones that don't match :)
-
-To be honest my point wasn't about the correctness of the DT at all..
-
-I've hit this several times when I was switching my test board from
-serial to i2c and vice-versa, because I made wrong connections or I
-forgot to switch FPGA image (which contains the serial IP here). I got
-my test script failing because the IIO device didn't pop up at all,
-which is better than getting e.g. random data. In the real world
-people may have less chance to have to worry about this, but they may
-when e.g. they have an RPi and a hand-wired IMU.
-
-.. IOW I'm seeing this as a hardware self-test rather than a SW
-check.. But if the DT thing makes this a no-go, then I can live with
-the warning, and e.g. by making my script to check the kernel log..
+Best regards,
+Krzysztof

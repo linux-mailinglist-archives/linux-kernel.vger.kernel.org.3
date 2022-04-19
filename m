@@ -2,108 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF154506F92
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1BD506F91
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344653AbiDSN70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S1343692AbiDSN7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344626AbiDSN7P (ORCPT
+        with ESMTP id S240005AbiDSN7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:59:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72ABA38BEA
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650376591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=y7hLPCx+q8pxXoxgpMGPpDODmiVdYzBrDyMDcRztRug=;
-        b=Ryb5pplSP7KNp+2HQ3DXOTgEqjend0WmocfSQQi0SMRr50cxuuNMZ1XA7mEWBFYbc8c/F5
-        sIYy8K6vk5p07GGlgglG7w/0mAfvR5hGHebTGyH0zw5duinsAj12rzB/M+VmyCnjCerUy0
-        rK2atywuEFgUIl/Ut466POpjOs0kEFg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-O6FRTvRaM66q_8MJxIYw0g-1; Tue, 19 Apr 2022 09:56:25 -0400
-X-MC-Unique: O6FRTvRaM66q_8MJxIYw0g-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C0E11C01700;
-        Tue, 19 Apr 2022 13:56:25 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F1741C54184;
-        Tue, 19 Apr 2022 13:56:24 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 23JDuOuf020642;
-        Tue, 19 Apr 2022 09:56:24 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 23JDuNCK020638;
-        Tue, 19 Apr 2022 09:56:23 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Tue, 19 Apr 2022 09:56:23 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] x86: __memcpy_flushcache: fix wrong alignment if size >
- 2^32
-Message-ID: <alpine.LRH.2.02.2204190948080.18399@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Tue, 19 Apr 2022 09:59:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 414AF38BEA;
+        Tue, 19 Apr 2022 06:56:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 047E31063;
+        Tue, 19 Apr 2022 06:56:30 -0700 (PDT)
+Received: from [10.32.36.25] (e121896.Emea.Arm.com [10.32.36.25])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC7023F766;
+        Tue, 19 Apr 2022 06:56:26 -0700 (PDT)
+Message-ID: <d73b0dbf-9878-2c1f-5246-79de08da97d4@arm.com>
+Date:   Tue, 19 Apr 2022 14:56:25 +0100
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V5 2/8] perf: Extend branch type classification
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        peterz@infradead.org, acme@kernel.org
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220404045046.634522-1-anshuman.khandual@arm.com>
+ <20220404045046.634522-3-anshuman.khandual@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220404045046.634522-3-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The first "if" condition in __memcpy_flushcache is supposed to align the
-"dest" variable to 8 bytes and copy data up to this alignment. However,
-this condition may misbehave if "size" is greater than 4GiB.
 
-The statement min_t(unsigned, size, ALIGN(dest, 8) - dest); casts both
-arguments to unsigned int and selects the smaller one. However, the cast
-truncates high bits in "size" and it results in misbehavior.
 
-For example:
-	suppose that size == 0x100000001, dest == 0x200000002
-	min_t(unsigned, size, ALIGN(dest, 8) - dest) == min_t(0x1, 0xe) == 0x1;
-	...
-	dest += 0x1;
-so we copy just one byte "and" dest remains unaligned.
+On 04/04/2022 05:50, Anshuman Khandual wrote:
+> branch_entry.type now has ran out of space to accommodate more branch types
+> classification. This will prevent perf branch stack implementation on arm64
+> (via BRBE) to capture all available branch types. Extending this bit field
+> i.e branch_entry.type [4 bits] is not an option as it will break user space
+> ABI both for little and big endian perf tools.
+> 
+> Extend branch classification with a new field branch_entry.new_type via a
+> new branch type PERF_BR_EXTEND_ABI in branch_entry.type. Perf tools which
+> could decode PERF_BR_EXTEND_ABI, will then parse branch_entry.new_type as
+> well.
+> 
+> branch_entry.new_type is a 4 bit field which can hold upto 16 branch types.
+> The first three branch types will hold various generic page faults followed
+> by five architecture specific branch types, which can be overridden by the
+> platform for specific use cases. These architecture specific branch types
+> gets overridden on arm64 platform for BRBE implementation.
+> 
+> New generic branch types
+> 
+> - PERF_BR_NEW_FAULT_ALGN
+> - PERF_BR_NEW_FAULT_DATA
+> - PERF_BR_NEW_FAULT_INST
+> 
+> New arch specific branch types
+> 
+> - PERF_BR_NEW_ARCH_1
+> - PERF_BR_NEW_ARCH_2
+> - PERF_BR_NEW_ARCH_3
+> - PERF_BR_NEW_ARCH_4
+> - PERF_BR_NEW_ARCH_5
+> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Jiri Olsa <jolsa@redhat.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-perf-users@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-This patch fixes the bug by replacing unsigned with size_t.
+Reviewed-by: James Clark <james.clark@arm.com>
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-
----
- arch/x86/lib/usercopy_64.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Index: linux-2.6/arch/x86/lib/usercopy_64.c
-===================================================================
---- linux-2.6.orig/arch/x86/lib/usercopy_64.c
-+++ linux-2.6/arch/x86/lib/usercopy_64.c
-@@ -119,7 +119,7 @@ void __memcpy_flushcache(void *_dst, con
- 
- 	/* cache copy and flush to align dest */
- 	if (!IS_ALIGNED(dest, 8)) {
--		unsigned len = min_t(unsigned, size, ALIGN(dest, 8) - dest);
-+		size_t len = min_t(size_t, size, ALIGN(dest, 8) - dest);
- 
- 		memcpy((void *) dest, (void *) source, len);
- 		clean_cache_range((void *) dest, len);
-
+> ---
+>  include/uapi/linux/perf_event.h | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+> index 26d8f0b5ac0d..d29280adc3c4 100644
+> --- a/include/uapi/linux/perf_event.h
+> +++ b/include/uapi/linux/perf_event.h
+> @@ -255,9 +255,22 @@ enum {
+>  	PERF_BR_IRQ		= 12,	/* irq */
+>  	PERF_BR_SERROR		= 13,	/* system error */
+>  	PERF_BR_NO_TX		= 14,	/* not in transaction */
+> +	PERF_BR_EXTEND_ABI	= 15,	/* extend ABI */
+>  	PERF_BR_MAX,
+>  };
+>  
+> +enum {
+> +	PERF_BR_NEW_FAULT_ALGN		= 0,    /* Alignment fault */
+> +	PERF_BR_NEW_FAULT_DATA		= 1,    /* Data fault */
+> +	PERF_BR_NEW_FAULT_INST		= 2,    /* Inst fault */
+> +	PERF_BR_NEW_ARCH_1		= 3,    /* Architecture specific */
+> +	PERF_BR_NEW_ARCH_2		= 4,    /* Architecture specific */
+> +	PERF_BR_NEW_ARCH_3		= 5,    /* Architecture specific */
+> +	PERF_BR_NEW_ARCH_4		= 6,    /* Architecture specific */
+> +	PERF_BR_NEW_ARCH_5		= 7,    /* Architecture specific */
+> +	PERF_BR_NEW_MAX,
+> +};
+> +
+>  #define PERF_SAMPLE_BRANCH_PLM_ALL \
+>  	(PERF_SAMPLE_BRANCH_USER|\
+>  	 PERF_SAMPLE_BRANCH_KERNEL|\
+> @@ -1372,7 +1385,8 @@ struct perf_branch_entry {
+>  		abort:1,    /* transaction abort */
+>  		cycles:16,  /* cycle count to last branch */
+>  		type:4,     /* branch type */
+> -		reserved:40;
+> +		new_type:4, /* additional branch type */
+> +		reserved:36;
+>  };
+>  
+>  union perf_sample_weight {

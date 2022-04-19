@@ -2,55 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8181F506F56
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E7C506F4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352909AbiDSNv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S1352912AbiDSNyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353082AbiDSNvh (ORCPT
+        with ESMTP id S1353332AbiDSNxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:51:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDB73878B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:46:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B570DB818F3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:46:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80157C385A7;
-        Tue, 19 Apr 2022 13:46:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650375976;
-        bh=n4QxtwOA/cXEd5B2gGq6+Qs298APnqFpU22eTso9ROY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=FxxcI7X+P5MGtM+LPByf0f4iuVopd+VZrBg2cOlK5hA3L34x2LoyEUOOasP7Dzn1A
-         VbiSDwlptk1aqDc7/XSJvIz8N16ppOIE/Tze5guWpCMk/euo2MB+bqWrorVpGLvEQY
-         +dtHQ5G6zMLoTZznjCnXi0kd2zSlNex94ZesGllLknfVounKjoUVUM7OwWDKpv9mey
-         qTtpr7OHQrIaYAoi17EsUHqFVPyLK/NfFW3GtRZBrzK5L6dnDZpmeHMZjjho31zFvB
-         mkfYvXLn0MPtVpkjs2weTFLLbw0Fti6PVZigcJYoKxLmlhaj3yZOvV88ebYHnqa7PR
-         kdTUzwya7+aog==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2E0055C0387; Tue, 19 Apr 2022 06:46:16 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 06:46:16 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH rcu 04/11] kernel/smp: Provide boot-time timeout for CSD
- lock diagnostics
-Message-ID: <20220419134616.GE4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
- <20220419085607.2014-1-hdanton@sina.com>
+        Tue, 19 Apr 2022 09:53:14 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D85F38D8B;
+        Tue, 19 Apr 2022 06:48:31 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id e4so18159364oif.2;
+        Tue, 19 Apr 2022 06:48:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nsUApVIo+2QUrjaVycUT3ee7pF9FJXtnBR7YLOJOzQ0=;
+        b=LwApJLYYpQhNMlEK6yg/73gcHTRBV9fiwpRdFGwUKf/4TAahyHsxekrWZ3Xe9wHnSC
+         Q8mpz3qxy+My1S3v+UANJg7nLZe7KJccHI9UBkfUfPYou/KB+L38VW7tx5jwbp3IILUT
+         g9+0LwbLafG31wUunXa8fJVUtHIDyr3I7PiJS+Acr+CkmmiDdLgoHj9JPgiJtWKE5HEH
+         i4ND+xRqDhPcHGhMBmxOrGajYyM18u/nmAyr+tgplfn/dAmfbwIMg86GUNKFM+wgcqVk
+         HjZ6JprfRS9SGwRRePZhveN/hIk0wj8GOv5AphEsufDg9W9G8xt87hNpLbo/ptR14hwV
+         ZPsA==
+X-Gm-Message-State: AOAM530qFwi1IglHc8myny0rVtHH2ahWV+0F9Fmi0taHrDUKKc4+W+aV
+        CdP46kKyPlTCFmE7ugMIpfE2NAEqOw==
+X-Google-Smtp-Source: ABdhPJwAGdbwdONC730t1SrxFQ9322c21cU+FAlo9bI1B0TpQpxVtg6Tt3SHk1LjWJNA3b+E3DTVOQ==
+X-Received: by 2002:a05:6808:9ae:b0:2d9:a01a:4bf4 with SMTP id e14-20020a05680809ae00b002d9a01a4bf4mr7418713oig.283.1650376110729;
+        Tue, 19 Apr 2022 06:48:30 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q1-20020a056820028100b00335f00b5b9bsm5315376ood.15.2022.04.19.06.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 06:48:30 -0700 (PDT)
+Received: (nullmailer pid 2438759 invoked by uid 1000);
+        Tue, 19 Apr 2022 13:48:29 -0000
+Date:   Tue, 19 Apr 2022 08:48:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Samuel Holland <samuel@sholland.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: media: Add Allwinner A31 ISP
+ bindings documentation
+Message-ID: <Yl69rY2/Fwfhc520@robh.at.kernel.org>
+References: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
+ <20220415153708.637804-2-paul.kocialkowski@bootlin.com>
+ <19aa74b7-0096-87c5-ef2c-9a135ad5505a@sholland.org>
+ <Yl6Ezm6D7KKbE1Oa@aptenodytes>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419085607.2014-1-hdanton@sina.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Yl6Ezm6D7KKbE1Oa@aptenodytes>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,87 +77,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 04:56:07PM +0800, Hillf Danton wrote:
-> On Mon, 18 Apr 2022 15:53:52 -0700 Paul E. McKenney wrote:
-> > Debugging of problems involving insanely long-running SMI handlers
-> > proceeds better if the CSD-lock timeout can be adjusted.  This commit
-> > therefore provides a new smp.csd_lock_timeout kernel boot parameter
-> > that specifies the timeout in milliseconds.  The default remains at the
-> > previously hard-coded value of five seconds.
-> > 
-> > Cc: Rik van Riel <riel@surriel.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Ingo Molnar <mingo@kernel.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > Cc: Juergen Gross <jgross@suse.com>
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > ---
-> >  Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
-> >  kernel/smp.c                                    |  7 +++++--
-> >  2 files changed, 16 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > index 3f1cc5e317ed..645c4c001b16 100644
-> > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > @@ -5377,6 +5377,17 @@
-> >  	smart2=		[HW]
-> >  			Format: <io1>[,<io2>[,...,<io8>]]
-> >  
-> > +	smp.csd_lock_timeout= [KNL]
-> > +			Specify the period of time in milliseconds
-> > +			that smp_call_function() and friends will wait
-> > +			for a CPU to release the CSD lock.  This is
-> > +			useful when diagnosing bugs involving CPUs
-> > +			disabling interrupts for extended periods
-> > +			of time.  Defaults to 5,000 milliseconds, and
-> > +			setting a value of zero disables this feature.
-> > +			This feature may be more efficiently disabled
-> > +			using the csdlock_debug- kernel parameter.
-> > +
+On Tue, Apr 19, 2022 at 11:45:50AM +0200, Paul Kocialkowski wrote:
+> Hi Samuel,
 > 
-> Can non-responsive CSD lock detected trigger syzbot (warning) report?
+> On Fri 15 Apr 22, 20:59, Samuel Holland wrote:
+> > On 4/15/22 10:37 AM, Paul Kocialkowski wrote:
+> > > This introduces YAML bindings documentation for the Allwinner A31 Image
+> > > Signal Processor (ISP).
+> > > 
+> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > ---
+> > >  .../media/allwinner,sun6i-a31-isp.yaml        | 117 ++++++++++++++++++
+> > >  1 file changed, 117 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > new file mode 100644
+> > > index 000000000000..ffca216b841f
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > @@ -0,0 +1,117 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
+> > > +
+> > > +maintainers:
+> > > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - allwinner,sun6i-a31-isp
+> > > +      - allwinner,sun8i-v3s-isp
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: Bus Clock
+> > > +      - description: Module Clock
+> > > +      - description: DRAM Clock
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: bus
+> > > +      - const: mod
+> > > +      - const: ram
+> > > +
+> > > +  resets:
+> > > +    maxItems: 1
+> > > +
+> > > +  ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +
+> > > +    properties:
+> > > +      port@0:
+> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > > +        description: CSI0 input port
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            const: 0
+> > > +
+> > > +          endpoint:
+> > > +            $ref: /schemas/graph.yaml#/$defs/endpoint-base
+> > > +            unevaluatedProperties: false
+> > > +
+> > > +        additionalProperties: false
+> > > +
+> > > +      port@1:
+> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > > +        description: CSI1 input port
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            const: 0
+> > 
+> > Should be "const: 1".
+> > 
+> > Otherwise,
+> > Reviewed-by: Samuel Holland <samuel@sholland.org>
+> 
+> Good catch and thanks for the review!
 
-If they enable it by building with CONFIG_CSD_LOCK_WAIT_DEBUG=y, yes.  
+Yes, but you should use '/schemas/graph.yaml#/properties/port' ref 
+instead and drop 'properties'.
 
-							Thanx, Paul
-
-> Hillf
-> >  	smsc-ircc2.nopnp	[HW] Don't use PNP to discover SMC devices
-> >  	smsc-ircc2.ircc_cfg=	[HW] Device configuration I/O port
-> >  	smsc-ircc2.ircc_sir=	[HW] SIR base I/O port
-> > diff --git a/kernel/smp.c b/kernel/smp.c
-> > index 01a7c1706a58..d82439bac401 100644
-> > --- a/kernel/smp.c
-> > +++ b/kernel/smp.c
-> > @@ -183,7 +183,9 @@ static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
-> >  static DEFINE_PER_CPU(void *, cur_csd_info);
-> >  static DEFINE_PER_CPU(struct cfd_seq_local, cfd_seq_local);
-> >  
-> > -#define CSD_LOCK_TIMEOUT (5ULL * NSEC_PER_SEC)
-> > +static ulong csd_lock_timeout = 5000;  /* CSD lock timeout in milliseconds. */
-> > +module_param(csd_lock_timeout, ulong, 0444);
-> > +
-> >  static atomic_t csd_bug_count = ATOMIC_INIT(0);
-> >  static u64 cfd_seq;
-> >  
-> > @@ -329,6 +331,7 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
-> >  	u64 ts2, ts_delta;
-> >  	call_single_data_t *cpu_cur_csd;
-> >  	unsigned int flags = READ_ONCE(csd->node.u_flags);
-> > +	unsigned long long csd_lock_timeout_ns = csd_lock_timeout * NSEC_PER_MSEC;
-> >  
-> >  	if (!(flags & CSD_FLAG_LOCK)) {
-> >  		if (!unlikely(*bug_id))
-> > @@ -341,7 +344,7 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
-> >  
-> >  	ts2 = sched_clock();
-> >  	ts_delta = ts2 - *ts1;
-> > -	if (likely(ts_delta <= CSD_LOCK_TIMEOUT))
-> > +	if (likely(ts_delta <= csd_lock_timeout_ns || csd_lock_timeout_ns <= 0))
-> >  		return false;
-> >  
-> >  	firsttime = !*bug_id;
-> > -- 
-> > 2.31.1.189.g2e36527f23
+Rob

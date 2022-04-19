@@ -2,148 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6A55066E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6F75066EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349997AbiDSI3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
+        id S245543AbiDSIco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240524AbiDSI3R (ORCPT
+        with ESMTP id S1350070AbiDSIcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:29:17 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BD92DD46;
-        Tue, 19 Apr 2022 01:26:34 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5B566FF804;
-        Tue, 19 Apr 2022 08:26:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650356793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VXBlhum4y6XFxuELbe8JGMivZRApx0IpgXnue2l+2tA=;
-        b=En4XckKRy2XUHcPmxdD3HS/8imGMUX23JA+DVW2whyGf+0TkYT1GxTJToeKg7JxW6sp5YD
-        5T0JqZyLmOcpT1Iscp4JTrMcF69FqaC2psvhgVarurkbtDHCd+TQMp1LDZQTn6fSMVP84V
-        m2EAoe4FtF7XBLmH+M/XIhq17fudmWBlAwS/Wj97MBQcbsMXbn0E16axGlemoqdzPpyoya
-        fAisPIPcnZTYKVRtov653V9gvO5sDfdIPJe/GZr/3QyP8Ea81PUSS5b6v3GY9CSZBnVm0t
-        RyH6QoClKUE+YOkWoXhtMnMlpeNu/C5hwRwH4GI3lUOr9PNnM21z0cRB9bfj7Q==
-Date:   Tue, 19 Apr 2022 10:26:29 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Liang Yang <liang.yang@amlogic.com>
-Cc:     <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4 1/2] mtd: rawnand: meson: discard the common MMC sub
- clock framework
-Message-ID: <20220419102629.1c77aa2a@xps13>
-In-Reply-To: <d5a33645-fac1-9c69-afe6-654bfe93ca48@amlogic.com>
-References: <20220402074921.13316-1-liang.yang@amlogic.com>
-        <20220402074921.13316-2-liang.yang@amlogic.com>
-        <20220404103034.48ec16b1@xps13>
-        <50105d6b-8ced-1b72-30cb-a709c4a4dd26@amlogic.com>
-        <d5a33645-fac1-9c69-afe6-654bfe93ca48@amlogic.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 19 Apr 2022 04:32:42 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69881147
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:30:00 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id g20so20268705edw.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:30:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XQftwS5jTO7nQbaexhc4a2se6cgFVs3k/WKfwFEA5wk=;
+        b=ErwjlGI+eExpbE4D+E0aCP+vxoDr2H740QnFUtgyakgPgBYH8RLPccoi+CS2ht/QRk
+         BivHxAOcoNMNbDaZ76qUA9FJk3TaE2EfgIV16fIgM7BbreTFYDqqslK6bb2ifVtgLqht
+         Erpw9b+UNUiuDoyxzwzSlRh2zlf46R2ZxmQXpo/T/X4GfvPdOHF0iIihTeEuAKZDMhrr
+         XuinRGvlWEymzlo171sqJjMmyiEcgPRxCmy1f9OtTdBHkqOb4beJVZyUJAS17xkFzuX1
+         LTc7NTkMRLQeQWI1iyWcfFWr7PcWmsNJK97ZoI/b+Y0qeVOI+I4cDAwRyMFkx+eT4Z+n
+         dyLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XQftwS5jTO7nQbaexhc4a2se6cgFVs3k/WKfwFEA5wk=;
+        b=WDU/uYqaB6HJkigLbD99x4QDujRnshV+VXIjm9QM0nwQZQ5qGPJPpDv2QsFxL2DfPY
+         /bbmQAg6oKSQP0ZwCOnv57RsoEfiUGliz4J5VrLNP2tx/vPoWNhQ134TR29OezMiXjtX
+         meCAnc35nTfadP4VRD2JnqCzCgEwz1WPNOsgjv6iIrChjPpma0YScXVXQ1fs0J4xXZlA
+         rxSp/Pljk2A4R3gx5SnYEIg1Ew6tqLR27VkRUMU30RNUtLip/eXPywRo4qSvKPR7iHWb
+         oiaEItMQsCfpI7dSHAWzemnMIZEHw4yBGfDgEhAEVGNsrUEtyyOkAYlFukDwD91mE7sS
+         OtjQ==
+X-Gm-Message-State: AOAM531MuC5tz0x15gOCnc3Kgrpn9huziOafpuCseAzBzd2iK85bD10r
+        +ZY9wIrMNkfGiNr4uwwpCY0qYiCp4U/jQw==
+X-Google-Smtp-Source: ABdhPJyD0kkJKwAgGN2/vfoLZWAVTTfrv/Pj/IJP0GiuDnQzJxM+jmT0cvu27OCtotk/E08L4rKikA==
+X-Received: by 2002:a05:6402:350d:b0:41d:675f:ea96 with SMTP id b13-20020a056402350d00b0041d675fea96mr16199110edd.297.1650356999353;
+        Tue, 19 Apr 2022 01:29:59 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id c2-20020a170906170200b006efe7be5f10sm215737eje.185.2022.04.19.01.29.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 01:29:58 -0700 (PDT)
+Message-ID: <3dafc432-849b-0a78-f3dd-954d88c74a61@linaro.org>
+Date:   Tue, 19 Apr 2022 10:29:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] extcon: ptn5150: add usb role class support
+Content-Language: en-US
+To:     Jun Li <jun.li@nxp.com>
+Cc:     "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
+        "cw00.choi@samsung.com" <cw00.choi@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Frank Li <frank.li@nxp.com>, Xu Yang <xu.yang_2@nxp.com>
+References: <1649238142-27564-1-git-send-email-jun.li@nxp.com>
+ <4ad9e733-7d8b-a73b-c59e-d9b6d5e58498@linaro.org>
+ <VI1PR04MB4333FE5742667FBE8AAACD2789E79@VI1PR04MB4333.eurprd04.prod.outlook.com>
+ <VI1PR04MB4333585DED292C3AC920B21E89F29@VI1PR04MB4333.eurprd04.prod.outlook.com>
+ <CAGE=qro_cWtZe1xVz0MrKXaKnhN_RU+kVPwtLdVj1wsjpSDMjA@mail.gmail.com>
+ <VI1PR04MB43330369E23F47E26248853989F29@VI1PR04MB4333.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <VI1PR04MB43330369E23F47E26248853989F29@VI1PR04MB4333.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 19/04/2022 10:23, Jun Li wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Tuesday, April 19, 2022 3:57 PM
+>> To: Jun Li <jun.li@nxp.com>
+>> Cc: myungjoo.ham@samsung.com; cw00.choi@samsung.com;
+>> linux-kernel@vger.kernel.org; Frank Li <frank.li@nxp.com>; Xu Yang
+>> <xu.yang_2@nxp.com>
+>> Subject: Re: [PATCH] extcon: ptn5150: add usb role class support
+>>
+>> On Tue, 19 Apr 2022 at 09:53, Jun Li <jun.li@nxp.com> wrote:
+>>>>>> @@ -132,6 +132,7 @@ config EXTCON_PTN5150
+>>>>>>   tristate "NXP PTN5150 CC LOGIC USB EXTCON support"
+>>>>>>   depends on I2C && (GPIOLIB || COMPILE_TEST)
+>>>>>>   select REGMAP_I2C
+>>>>>> + select USB_ROLE_SWITCH
+>>>>>
+>>>>> You do not need to select it. Driver will work without role
+>>>>> switch, won't it? If it works, then probably it should be just imply.
+>>>>
+>>>> Okay, usb role class provider should enable this for me, will drop it.
+>>>
+>>> A second check on this and I think I still need this, there maybe some
+>>> usb controller driver without usb role switch
+>>> + ptn5150 via extcon, so no need USB_ROLE_SWITCH, I need
+>>> select it to avoid build break.
+>>
+>> What build problem exactly? Aren't there stubs for !USB_ROLE_SWITCH case?
+> 
+> Mostly cases USB_ROLE_SWITCH is enabled, but I cannot 100% ensure
+> that, at least I can via make menuconfig change by removing some
+> controllers drivers to create a config to generate a build break:
+> 
+> /opt/fsl-imx-internal-xwayland/5.15-honister/sysroots/x86_64-pokysdk-linux/usr/bin/aarch64-poky-linux/aarch64-poky-linux-ld: drivers/extcon/extcon-ptn5150.o: in function `ptn5150_work_sync_and_put':
+> extcon-ptn5150.c:(.text+0x20): undefined reference to `usb_role_switch_put'
 
-liang.yang@amlogic.com wrote on Mon, 18 Apr 2022 11:40:10 +0800:
+This is some old kernel - v5.15. Please test your changes on mainline. I
+don't see such issue can happen on a recent kernel - there is an EXPORT
+and a stub. Maybe your driver misses proper headers?
 
-> Hi Miquel,
->=20
-> i have some confusion when i prepare the patches. for DT compatibility, i=
-t falls back to the old DT when failed to get resource by the new DT, but t=
-here is some points:
-> a. old DT depends on MMC sub clock driver, but it never be merged, so it =
-can't work.
-
-I don't get what you mean here, sorry. I believe there is a new way to
-describe this clock but grabbing the one from the MMC still works, does
-not it?
-
-> b. if it falls back to the old DT, beside the regmap lookup below, it see=
-ms that we have to preserve the code of the old clock setting in nfc_clk_in=
-it().
-
-Yes, probably.
-
-> do we still need to avoid break DT compatibility?
-
-We should try our best to avoid breaking the DT, yes.
-
->=20
-> Thanks.
->=20
-> On 2022/4/11 10:40, Liang Yang wrote:
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 nfc->dev =3D dev;
-> >>> -=C2=A0=C2=A0=C2=A0 res =3D platform_get_resource(pdev, IORESOURCE_ME=
-M, 0);
-> >>> -=C2=A0=C2=A0=C2=A0 nfc->reg_base =3D devm_ioremap_resource(dev, res);
-> >>> +=C2=A0=C2=A0=C2=A0 nfc->reg_base =3D devm_platform_ioremap_resource_=
-byname(pdev, "nfc"); =20
-> >>
-> >> This change seems unrelated. =20
-> >=20
-> > To be consistent with the following > devm_platform_ioremap_resource_by=
-name(pdev, "emmc"). do you mean that we > don't need it?> =20
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(nfc->reg_base))
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return PTR_ERR=
-(nfc->reg_base);
-> >>> -=C2=A0=C2=A0=C2=A0 nfc->reg_clk =3D
-> >>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 syscon_regmap_lookup_by_p=
-handle(dev->of_node,
-> >>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "a=
-mlogic,mmc-syscon");
-> >>> -=C2=A0=C2=A0=C2=A0 if (IS_ERR(nfc->reg_clk)) {
-> >>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_err(dev, "Failed to l=
-ookup clock base\n");
-> >>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return PTR_ERR(nfc->reg_c=
-lk);
-> >>> -=C2=A0=C2=A0=C2=A0 }
-> >>> +=C2=A0=C2=A0=C2=A0 nfc->sd_emmc_clock =3D devm_platform_ioremap_reso=
-urce_byname(pdev, >>> "emmc");
-> >>> +=C2=A0=C2=A0=C2=A0 if (IS_ERR(nfc->sd_emmc_clock))
-> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return PTR_ERR(nfc->sd_em=
-mc_clock); =20
-> >>
-> >> While I agree this is much better than the previous solution, we cannot
-> >> break DT compatibility, so you need to try getting the emmc clock, but
-> >> if it fails you should fallback to the regmap lookup. =20
-> >=20
-> > ok, i will fix it next version. thanks.
-> >  =20
-> >> =20
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 irq =3D platform_get_irq(pdev, 0); =20
-
-
-Thanks,
-Miqu=C3=A8l
+Best regards,
+Krzysztof

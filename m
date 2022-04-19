@@ -2,121 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A17506800
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2822750680B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350412AbiDSJuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 05:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S1350422AbiDSJwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 05:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241742AbiDSJuP (ORCPT
+        with ESMTP id S1350438AbiDSJwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 05:50:15 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E93EBC34;
-        Tue, 19 Apr 2022 02:47:33 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 003B75C018F;
-        Tue, 19 Apr 2022 05:47:30 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Tue, 19 Apr 2022 05:47:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1650361650; x=1650448050; bh=7F
-        H/cZqwHqkstNxttHiwShTx35esBf5x9xB4oSROZV8=; b=RSNMLGBgDgANeCVu2V
-        Q5XHDMelTAniUUIJTvqtY/gqFdq49d3ifi6JBihik0CL1OUDgw05mqp0Lpz0zCdB
-        S+er/mNixteyESDqYCQ39ReAQ8A+leQO9puqemXGoN2Zi0w1z35IqpUzooo2VO8U
-        Woo2Xq/3XBQny8D4RyTA6WFNi17+4VnuLzxnmdZds97G3+cQWHOx8NUYtrndOzeF
-        GoR4xruJ1l6FB7qFpFnPRzpAYPsl9j46NGsXquuJQSrTEknQz0PlHZbJHaepc475
-        L8fIRYlGbsVULD6+vn4TuZNe0jCW2zsA3CvsmhM/fUwyNykatY0tE9E/vl1Bf5se
-        5m/g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1650361650; x=
-        1650448050; bh=7FH/cZqwHqkstNxttHiwShTx35esBf5x9xB4oSROZV8=; b=i
-        9+RnVzSBgugZuECfHOZAm1xZajUYSMp4J50UH1XscbROtWy7CZbImt4vsnCWwnUm
-        VlpB5SZxTQfcXSdNDN01myghMsKbdvumzkPaNt/mMSJgUPTPtNICGu5evM15G8wz
-        ASnEMn33h7dmqy7/iYaPMzQHOkBZAU0sls9fnwcgU5/ka7bYzFFvPKzNidqSkuSe
-        k3np/lZLQXva9Qqn3e6Lc/WWas0UTmjBXImqcD65lkkwamWNuoHgvRdsyPWiEPbk
-        nZ+fu0dR/+Z+3X5BYwNTYAyrdiUIrAy4Frs7tc4a2HVhf2KPn9znXrxIogiB/E/O
-        TgCJXAYa/R34WoNYaalQg==
-X-ME-Sender: <xms:MoVeYrRJuEmQp9OW8ELRO8bnthEO0E1WFsyNa2BPvqBWi-lWsaeqVg>
-    <xme:MoVeYsw1lUdMLnjHiptY3r0o2-ITx7IsrpiOlcxAF8w1eGVx4B7VY_qciHDvKX6y9
-    dyyTrIRU_cgvRV5zsg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvddtfedgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
-    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:MoVeYg2ITQBfhRV73oNcpoGHcpcUqG9Ou_BT8Fz5l8XLObV8cV1S2w>
-    <xmx:MoVeYrAHHsDC-cCyRFihVJpCApcmXoa4_gMeOJUiuJN4EunHGOnB_A>
-    <xmx:MoVeYkgqNbqu-9hFaBiAWD3eemd_RJdaMh7oMIr6KozBdnIeNLrmUQ>
-    <xmx:MoVeYlbifUtunMt4WlgOCSCylCF2Wp3l0iTAgDoVhfa8tEuOghHmLw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 500B22740692; Tue, 19 Apr 2022 05:47:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-387-g7ea99c4045-fm-20220413.002-g7ea99c40
-Mime-Version: 1.0
-Message-Id: <866f79b1-6c02-4248-ac98-594829fed204@www.fastmail.com>
-In-Reply-To: <20220419053157.GA31530@lst.de>
-References: <20220415142055.30873-1-sven@svenpeter.dev>
- <20220415142055.30873-7-sven@svenpeter.dev> <20220419053157.GA31530@lst.de>
-Date:   Tue, 19 Apr 2022 11:47:09 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "hch@lst.de" <hch@lst.de>
-Cc:     "Keith Busch" <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-        "Arnd Bergmann" <arnd@arndb.de>, "Marc Zyngier" <maz@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-spdx@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] nvme-apple: Add initial Apple SoC NVMe driver
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 19 Apr 2022 05:52:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA5E11C08;
+        Tue, 19 Apr 2022 02:49:59 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 703691F38D;
+        Tue, 19 Apr 2022 09:49:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650361798; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J1deqUxc9C8D6lInkd2DloHcFrHOp4GMQ6s/PLFQPqA=;
+        b=19W+p5kE2JN+9TJwKovFQQHYDzGXCipmtRiqv16MxNu2WAphcZeAaEeeZd13G8/XMcOXYR
+        QlLrHgV7LR3mKgXduFGrmGMKuwYsa7v/2nxukCq3s90vAPazeKwbGFGzDnTt2CCiz7Vif9
+        ydCaXqQAhEqqlAsgAHKloKj1BX52vno=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650361798;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J1deqUxc9C8D6lInkd2DloHcFrHOp4GMQ6s/PLFQPqA=;
+        b=iO8ylqwF5TMzf4SeDvp3qCGb8/Ge2WiU2xauMHrhCLNPzzESfu1Pgcwn+dfkQ/J32faC+T
+        ALuphv9JSEHACgBw==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5F1552C141;
+        Tue, 19 Apr 2022 09:49:58 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 9AC27A0620; Tue, 19 Apr 2022 11:49:55 +0200 (CEST)
+Date:   Tue, 19 Apr 2022 11:49:55 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, tj@kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next 10/11] block, bfq: decrease
+ 'num_groups_with_pending_reqs' earlier
+Message-ID: <20220419094955.ucjxadnhdyonfjdo@quack3.lan>
+References: <20220305091205.4188398-1-yukuai3@huawei.com>
+ <20220305091205.4188398-11-yukuai3@huawei.com>
+ <20220413112816.fwobg4cp6ttpnpk6@quack3.lan>
+ <f3ed507a-7c85-cd69-3ad5-3e9c0e75c372@huawei.com>
+ <ef7bad8c-b8dd-f625-330c-9a22e303844b@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ef7bad8c-b8dd-f625-330c-9a22e303844b@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022, at 07:31, Christoph Hellwig wrote:
-> On Fri, Apr 15, 2022 at 04:20:55PM +0200, Sven Peter wrote:
->> +++ b/drivers/nvme/host/apple.c
->> @@ -0,0 +1,1597 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Apple ANS NVM Express device driver
->> + * Copyright The Asahi Linux Contributors
->
-> Is that actually a valid legal entity?
->
->> +#include <linux/io-64-nonatomic-lo-hi.h>
->
-> Does this controller still not support 64-bit MMIO accesses like
-> the old Apple PCIe controllers or is this just a leftover?
+On Fri 15-04-22 09:10:06, yukuai (C) wrote:
+> 在 2022/04/13 19:40, yukuai (C) 写道:
+> > 在 2022/04/13 19:28, Jan Kara 写道:
+> > > On Sat 05-03-22 17:12:04, Yu Kuai wrote:
+> > > > Currently 'num_groups_with_pending_reqs' won't be decreased when
+> > > > the group doesn't have any pending requests, while some child group
+> > > > still have pending requests. The decrement is delayed to when all the
+> > > > child groups doesn't have any pending requests.
+> > > > 
+> > > > For example:
+> > > > 1) t1 issue sync io on root group, t2 and t3 issue sync io on the same
+> > > > child group. num_groups_with_pending_reqs is 2 now.
+> > > > 2) t1 stopped, num_groups_with_pending_reqs is still 2. io from t2 and
+> > > > t3 still can't be handled concurrently.
+> > > > 
+> > > > Fix the problem by decreasing 'num_groups_with_pending_reqs'
+> > > > immediately upon the weights_tree removal of last bfqq of the group.
+> > > > 
+> > > > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> > > 
+> > > So I'd find the logic easier to follow if you completely removed
+> > > entity->in_groups_with_pending_reqs and did updates of
+> > > bfqd->num_groups_with_pending_reqs like:
+> > > 
+> > >     if (!bfqg->num_entities_with_pending_reqs++)
+> > >         bfqd->num_groups_with_pending_reqs++;
+> > > 
+> > Hi,
+> > 
+> > Indeed, this is an excellent idle, and much better than the way I did.
+> > 
+> > Thanks,
+> > Kuai
+> > 
+> > > and similarly on the remove side. And there would we literally two places
+> > > (addition & removal from weight tree) that would need to touch these
+> > > counters. Pretty obvious and all can be done in patch 9.
+> 
+> I think with this change, we can count root_group while activating bfqqs
+> that are under root_group, thus there is no need to modify
+> for_each_entity(or fake bfq_sched_data) any more.
 
-I just checked again and 64-bit accesses seem to work fine.
-I'll remove the lo_hi_* calls and this include.
+Sure, if you can make this work, it would be easier :)
 
->
-> The rest of the code looks fine to me:
->
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> The special case is that weight racing bfqqs are not inserted into
+> weights tree, and I think this can be handled by adding a fake
+> bfq_weight_counter for such bfqqs.
 
-Thanks!
+Do you mean "weight raised bfqqs"? Yes, you are right they would need
+special treatment - maybe bfq_weights_tree_add() is not the best function
+to use for this and we should rather use insertion / removal from the
+service tree for maintaining num_entities_with_pending_reqs counter?
+I can even see we already have bfqg->active_entities so maybe we could just
+somehow tweak that accounting and use it for our purposes?
 
-
-Sven
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

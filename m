@@ -2,63 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7715076DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149C65076E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353719AbiDSR6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        id S245499AbiDSR7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243323AbiDSR6c (ORCPT
+        with ESMTP id S238280AbiDSR7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:58:32 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E80AE40;
-        Tue, 19 Apr 2022 10:55:49 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id e4so18959504oif.2;
-        Tue, 19 Apr 2022 10:55:49 -0700 (PDT)
+        Tue, 19 Apr 2022 13:59:02 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AF9BF55;
+        Tue, 19 Apr 2022 10:56:19 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-e5ca5c580fso8006055fac.3;
+        Tue, 19 Apr 2022 10:56:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=G53IGdSl4eKD/pKBUNFtH8S3ZJw3xBhGFrzG2Kwc3lo=;
-        b=0tZlbuT/p3sJcbqRkmQHmMr5OqijfQXcII8oALu7NTFpt2dQKPqUY06QpcArfZWzqN
-         c4S2xXiNWr8i/iPceQVkLPI2y+QvmFeC9Fg137WhaccyIpMyIbJgKBR0fCuGcQCt/cZ9
-         vpdR0VJpdUZf8Dr1nIu7vxOHBH+PlNDHU3mWrFe7HZ1DdO/Edn2lU/CZmmwqMRWcBOj4
-         nkiz5TXrcdf7vj5FuyNkYm8MBsLH+xsqOgje0iESjz6iFv4a4R3+wRYQo/m/m6xxUTJ0
-         jU5+k95JkXN9vtQxUOaE8gRUDoTaTOQAEYpAmPdtf4GiWmCRMIqbxyI8STjxWI1I/z4T
-         OTDg==
-X-Gm-Message-State: AOAM530UVCJCT9tg04DC01S6csSc61XAAnLgoX54L1vjcFIPyUQm0/G+
-        zQOFaLnd1/BsVuKPtqJKpw==
-X-Google-Smtp-Source: ABdhPJxndRV5nmSseK/j2Lgy/q7El5d7cQm60BIp4GkP1mhx/Cvfniq4V1aBmaIujM+XiM8WMJ/UsA==
-X-Received: by 2002:a05:6808:bd1:b0:322:3523:f30c with SMTP id o17-20020a0568080bd100b003223523f30cmr7819510oik.234.1650390948421;
-        Tue, 19 Apr 2022 10:55:48 -0700 (PDT)
+        bh=UTQU/4ZS7iunfcTFw90SndC6lGxGaDR1zY8YP8er/Ns=;
+        b=gf0qKRD15bZlxX/GlYEV6s/uxqK0tptyvuaBR1XsYxX+7xNBeoaTjJE9C9Y/+QEY4u
+         qV5Hb8KmPtqnnzIR/z1mTsA4hPByp21gLD7l2WXH7sYf5YdoRL7iuNHQZFrbpGKzhOQg
+         zjsDk32ghSJ1amFc3JnBFxV2uZ1ch8q0+Qf7PD1Hy89MEqa/SfalsVqMi2uF7DHTSZjK
+         c5/BBzwbbfjWQG5B0BnTRL2w231I/UiclgS59JtLOcW7DEtzf2+X4OuishBzAqNoIF4N
+         LtPgCnyJ5DS71yUuCUs5I/y+pcy9T4PIUJqGBjOx64dITDb++XlfE82eV7ViamvaGQzk
+         ml2A==
+X-Gm-Message-State: AOAM532/92ofiBI3wfxDfqIsU3bl0mzrvf3SortW9giADfI7cBq5gtoF
+        ps2o1Bd/DJwzF6K0CqSVdA==
+X-Google-Smtp-Source: ABdhPJyy+fAMCc5zeulhydURCk1KC3Y9jD3mJV2iGlVkFXt4BU5pTOhUpjDNton94OJPJLMPCFyGtA==
+X-Received: by 2002:a05:6870:2190:b0:e6:26d2:abe0 with SMTP id l16-20020a056870219000b000e626d2abe0mr1113589oae.15.1650390979219;
+        Tue, 19 Apr 2022 10:56:19 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m5-20020a056808024500b003222ff73171sm5274286oie.17.2022.04.19.10.55.47
+        by smtp.gmail.com with ESMTPSA id o13-20020a4ae58d000000b00324dfcc5bcfsm5741589oov.12.2022.04.19.10.56.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 10:55:47 -0700 (PDT)
-Received: (nullmailer pid 3052225 invoked by uid 1000);
-        Tue, 19 Apr 2022 17:55:46 -0000
-Date:   Tue, 19 Apr 2022 12:55:46 -0500
+        Tue, 19 Apr 2022 10:56:18 -0700 (PDT)
+Received: (nullmailer pid 3053283 invoked by uid 1000);
+        Tue, 19 Apr 2022 17:56:18 -0000
+Date:   Tue, 19 Apr 2022 12:56:18 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add documentation for AM62 USB
- Wrapper module
-Message-ID: <Yl73orZuOaPG7KgV@robh.at.kernel.org>
-References: <20220414103211.16202-1-a-govindraju@ti.com>
- <20220414103211.16202-2-a-govindraju@ti.com>
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Cc:     devicetree@vger.kernel.org, krzk+dt@kernel.org,
+        dmaengine@vger.kernel.org, michal.simek@xilinx.com,
+        vkoul@kernel.org, robh+dt@kernel.org, git@xilinx.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: dmaengine: xilinx_dma: Add MCMDA channel ID
+ index description
+Message-ID: <Yl73wg/N0f2xGvLY@robh.at.kernel.org>
+References: <1649939061-6675-1-git-send-email-radhey.shyam.pandey@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220414103211.16202-2-a-govindraju@ti.com>
+In-Reply-To: <1649939061-6675-1-git-send-email-radhey.shyam.pandey@xilinx.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -70,22 +65,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 16:02:08 +0530, Aswath Govindraju wrote:
-> Add bindings for the TI's AM62 wrapper module for the Synopsys USBSS-DRD
-> controller.
+On Thu, 14 Apr 2022 17:54:21 +0530, Radhey Shyam Pandey wrote:
+> MCDMA IP provides up to 16 multiple channels of data movement each on
+> MM2S and S2MM paths. Inline with implementation, in the binding add
+> description for the channel ID start index and mention that it's fixed
+> irrespective of the MCDMA IP configuration(number of read/write channels).
 > 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 > ---
-> 
-> Changes since v3:
-> - As VBUS_VALID interrupt is not being used, removed the interrupts
->   property from the bindings. As there is change in the properties
->   I did not pick the reviewed-by tags from the earlier version of
->   the series.
-> 
->  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 103 ++++++++++++++++++
->  1 file changed, 103 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>  Documentation/devicetree/bindings/dma/xilinx/xilinx_dma.txt | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>

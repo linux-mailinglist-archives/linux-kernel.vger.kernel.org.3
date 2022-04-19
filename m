@@ -2,61 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FF85076D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36385076D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356079AbiDSRzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
+        id S1356114AbiDSRzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354570AbiDSRzK (ORCPT
+        with ESMTP id S1347104AbiDSRzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:55:10 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3FD14000;
-        Tue, 19 Apr 2022 10:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650390746; x=1681926746;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=91tvtGEX/zzxIKkabBBW1fLD4fdIYKpdH7IMCAC8IaA=;
-  b=R9PPUbOyojW/x6w/W58lHCeCqr1iGynlfVXLDoQhsvahXDAejYCAzzZF
-   qUYYIAzbQNG1fdANzNR8PZEru74SA8BwltJ/47q7WwbOwxpiOP6b2kURp
-   5VwO4SwFXhoAl+hNaO/QIJcPEw+aFXNlBPgoFdV2REZd1WHelWaYDSkKq
-   jqylicFhsFcg60uKIWu3eZaibS6qcjbwTNl3rX2Jw3eZFonYBZFIz2f11
-   Dco8DInRZdNVHylcqla1tklzUQIpEX8wFuxY+XusGyttiTDo7INJUVYzw
-   VCt4fev25ocvOt6JMOxl1ZBi3332pLtNWOFs0e1SpS+/UQa16JWcCyQ79
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="326731293"
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="326731293"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:52:25 -0700
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="554831107"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:52:25 -0700
-Date:   Tue, 19 Apr 2022 10:52:05 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>
-cc:     "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] uio: dfl: add HSSI feature id
-In-Reply-To: <BN9PR11MB548330FAA7EF6B9DAC2F0E76E3F29@BN9PR11MB5483.namprd11.prod.outlook.com>
-Message-ID: <alpine.DEB.2.22.394.2204191048300.5866@rhweight-WRK1>
-References: <20220412062353.53984-1-tianfei.zhang@intel.com> <DM6PR11MB38190E6EEF6DE3EB900290C585F39@DM6PR11MB3819.namprd11.prod.outlook.com> <BN9PR11MB548330FAA7EF6B9DAC2F0E76E3F29@BN9PR11MB5483.namprd11.prod.outlook.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 19 Apr 2022 13:55:40 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EBE14001
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:52:53 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 10:52:44 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1650390771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SfBMtVC6cxlmXGMToYn3RMPEkBD2wA2UrUn7gz2EpD4=;
+        b=MKGt11/w2TI36Xksr0+rW60dJ5ACZhCfEYRS0MEOv2Y17zLsKbl2o8akhrix6EDF4trW2+
+        2hyCgIf469yGs1B4SeoQd7ucfmG98He0OLUv6h1exKc/SWavAVevtkpz5MlDuI14Xv5MK5
+        nuiLn4iJXEo/yZ91QpW16ZsI3bukD90=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [PATCH rfc 0/5] mm: introduce shrinker sysfs interface
+Message-ID: <Yl727M1Dxm+vC/R1@carbon>
+References: <20220416002756.4087977-1-roman.gushchin@linux.dev>
+ <20220418212709.42f2ba15e00999bb57086b27@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418212709.42f2ba15e00999bb57086b27@linux-foundation.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,91 +53,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 18, 2022 at 09:27:09PM -0700, Andrew Morton wrote:
+> On Fri, 15 Apr 2022 17:27:51 -0700 Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> 
+> > There are 50+ different shrinkers in the kernel, many with their own bells and
+> > whistles. Under the memory pressure the kernel applies some pressure on each of
+> > them in the order of which they were created/registered in the system. Some
+> > of them can contain only few objects, some can be quite large. Some can be
+> > effective at reclaiming memory, some not.
+> > 
+> > The only existing debugging mechanism is a couple of tracepoints in
+> > do_shrink_slab(): mm_shrink_slab_start and mm_shrink_slab_end. They aren't
+> > covering everything though: shrinkers which report 0 objects will never show up,
+> > there is no support for memcg-aware shrinkers. Shrinkers are identified by their
+> > scan function, which is not always enough (e.g. hard to guess which super
+> > block's shrinker it is having only "super_cache_scan"). They are a passive
+> > mechanism: there is no way to call into counting and scanning of an individual
+> > shrinker and profile it.
+> > 
+> > To provide a better visibility and debug options for memory shrinkers
+> > this patchset introduces a /sys/kernel/shrinker interface, to some extent
+> > similar to /sys/kernel/slab.
+> > 
+> > For each shrinker registered in the system a folder is created.
+> 
+> Please, "directory".
 
+Of course, sorry :)
 
-On Tue, 19 Apr 2022, Zhang, Tianfei wrote:
+> 
+> > The folder
+> > contains "count" and "scan" files, which allow to trigger count_objects()
+> > and scan_objects() callbacks. For memcg-aware and numa-aware shrinkers
+> > count_memcg, scan_memcg, count_node, scan_node, count_memcg_node
+> > and scan_memcg_node are additionally provided. They allow to get per-memcg
+> > and/or per-node object count and shrink only a specific memcg/node.
+> > 
+> > To make debugging more pleasant, the patchset also names all shrinkers,
+> > so that sysfs entries can have more meaningful names.
+> 
+> I also was wondering "why not debugfs".
 
->
->
->>> -----Original Message-----
->>> From: Zhang, Tianfei <tianfei.zhang@intel.com>
->>> Sent: Tuesday, April 12, 2022 2:24 PM
->>> To: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org; Xu,
->>> Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org;
->>> gregkh@linuxfoundation.org
->>> Cc: linux-kernel@vger.kernel.org; Matthew Gerlach
->>> <matthew.gerlach@linux.intel.com>; Zhang, Tianfei
->>> <tianfei.zhang@intel.com>
->>> Subject: [PATCH v2] uio: dfl: add HSSI feature id
->>>
->>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>
->>> Add the feature id of the OFS HSSI (High Speed Serial Interface)
->>
->> We still don't see any description on what OFS is here, or will OFS be added to
->> title as well? we don't expect another submission with the same title but for XXX
->> HSSI again.
->
-> This name of HSSI module in dfl feature id table is : OFS HSSI subsystem.
->
-> How about this tile:
-> uio: dfl: add OFS HSSI device id
->
-> Add OFS HSSI (Open FPGA Stack High Speed Serial Interface) device ID in uio_dfl driver for Intel PAC N6000 Card.
+Fair enough, moving to debugfs in v1.
 
-Hi Tianfei,
+> 
+> > Usage examples:
+> > 
+> > ...
+> >
+> > If the output doesn't fit into a single page, "...\n" is printed at the end of
+> > output.
+> 
+> Unclear.  At the end of what output?
 
-In the Platform Designer tool, this IP block is referred to as the HSSI 
-Subsystem.  I think we should use the same name here.  Additionally, this 
-subsystem is already in use in multiple cards; so I suggest dropping
-any reference to a particular card.
+This is how it looks like when the output is too long:
 
-Matthew
+[root@eth50-1 sb-btrfs-24]# cat count_memcg
+1 226
+20 96
+53 811
+2429 2
+218 13
+581 29
+911 124
+1010 3
+1043 1
+1076 1
+1241 60
+1274 7
+1307 39
+1340 3
+1406 14
+1439 63
+1472 54
+1505 8
+1538 1
+1571 6
+1604 39
+1637 9
+1670 8
+1703 4
+1736 1094
+1802 2
+1868 2
+1901 52
+1934 592
+1967 32
+			< CUT >
+18797 1
+18830 1
+18863 1
+18896 1
+18929 1
+18962 1
+18995 1
+19028 1
+19061 1
+19094 1
+19127 1
+19160 1
+19193 1
+...
 
->
->>
->>> subsystem to table of ids supported by the uio_dfl driver. HSSI
->>> subsystem consists of harden/soft Ethernet MAC to support various
->>> ethernet usages and PCS/FEC/PMA direct modes for non-ethernet usages.
->>>
->>> We leverage the uio_dfl driver to access the HSSI subsystem on user
->>> space, because the HSSI subsystem was designed for specific purposes
->>> and does not fit into the standard MAC and net kernel subsystems.
->>>
->>> The Feature ID table of DFL can be found:
->>> https://github.com/OPAE/dfl-feature-id
->>
->> Why you put it here? even this link there is no more descriptions to understand
->> what it is. Or can be removed here.
->
-> Yes, I agree, I will remove it.
->>
->>>
->>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
->>> ---
->>> v2: add HSSI introduction and the git repo of Feature ID table.
->>> ---
->>>  drivers/uio/uio_dfl.c | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c index
->>> 89c0fc7b0cbc..660e1d0bf6b9 100644
->>> --- a/drivers/uio/uio_dfl.c
->>> +++ b/drivers/uio/uio_dfl.c
->>> @@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
->>> }
->>>
->>>  #define FME_FEATURE_ID_ETH_GROUP	0x10
->>> +#define FME_FEATURE_ID_OFS_HSSI		0x15
->>>
->>>  static const struct dfl_device_id uio_dfl_ids[] = {
->>>  	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
->>> +	{ FME_ID, FME_FEATURE_ID_OFS_HSSI },
->>>  	{ }
->>>  };
->>>  MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
->>> --
->>> 2.26.2
->
->
+I'll try to make it more obvious from the description.
+
+> 
+> > 
+> > Roman Gushchin (5):
+> >   mm: introduce sysfs interface for debugging kernel shrinker
+> >   mm: memcontrol: introduce mem_cgroup_ino() and
+> >     mem_cgroup_get_from_ino()
+> >   mm: introduce memcg interfaces for shrinker sysfs
+> >   mm: introduce numa interfaces for shrinker sysfs
+> >   mm: provide shrinkers with names
+> > 
+> >  arch/x86/kvm/mmu/mmu.c                        |   2 +-
+> >  ...
+> >
+> 
+> Nothing under Documentation/!
+
+I planned to add it after the rfc version. Will do.
+
+Thank you for taking a look!

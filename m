@@ -2,100 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A015070F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A385070EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238004AbiDSOqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        id S1351088AbiDSOqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353558AbiDSOpp (ORCPT
+        with ESMTP id S1351904AbiDSOqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:45:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0E93AA75;
-        Tue, 19 Apr 2022 07:42:47 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 14:42:40 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650379361;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/LOo3jv59hXRUdOgz5Y1oBDekLS9RYevTVhGRpxqdpg=;
-        b=ICUZ9rWqBUFJJ9SUeIPiiohgSCQsgcMQD2boh6TCFoZsCBQlHcjGG3azO40H1WYr5axUb8
-        3Zu7edbInaDBNmCWtgwAtn/EmxvBeXeSeRKxys4lmHSv++jb5/jnC17RXGgKDePFNXsYvG
-        dq/sN31vfY8OuNwqgW4K7Ggvm1KI5KW5AaTWxRqsNakEnajQrKVLk7BjAL8lhbF+caXEt+
-        N4Hmjq7/QmJrbEKbBIdWHtySx0ORmnS9crZhinN8h7cyVFxjHPYQWxWkZvM1imPnoRPDH3
-        Y1+wVTkZ0avw8ZHpKU28hL5SI8yh9Rru1Tm8eD82zAlnX10auJa+b8atRddnaA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650379361;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/LOo3jv59hXRUdOgz5Y1oBDekLS9RYevTVhGRpxqdpg=;
-        b=2N6+ZLUiDpFr30K6YkZ8Ir6+Oh1efqNVp7g19FfQ5Zw4F7RPYKBaJFxrBA0uvXQKECILo6
-        UeSBk0OC1RoaPBAA==
-From:   "tip-bot2 for Masahiro Yamada" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] x86/build: remove unused OBJECT_FILES_NON_STANDARD_test_nx.o
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220416174710.269226-1-masahiroy@kernel.org>
-References: <20220416174710.269226-1-masahiroy@kernel.org>
+        Tue, 19 Apr 2022 10:46:25 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B4F883A71A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:43:18 -0700 (PDT)
+Received: (qmail 594300 invoked by uid 1000); 19 Apr 2022 10:43:02 -0400
+Date:   Tue, 19 Apr 2022 10:43:02 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] USB: hcd-pci: Fully suspend across freeze/thaw
+ cycle
+Message-ID: <Yl7KdjrrUrqMkzq8@rowland.harvard.edu>
+References: <20220418210046.2060937-1-evgreen@chromium.org>
+ <20220418135819.v2.2.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
 MIME-Version: 1.0
-Message-ID: <165037936030.4207.3583631675331739342.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418135819.v2.2.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/tdx branch of tip:
+On Mon, Apr 18, 2022 at 02:00:46PM -0700, Evan Green wrote:
+> The documentation for the freeze() method says that it "should quiesce
+> the device so that it doesn't generate IRQs or DMA". The unspoken
+> consequence of not doing this is that MSIs aimed at non-boot CPUs may
+> get fully lost if they're sent during the period where the target CPU is
+> offline.
+> 
+> The current callbacks for USB HCD do not fully quiesce interrupts,
+> specifically on XHCI. Change to use the full suspend/resume flow for
+> freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
+> where USB devices fail to thaw during hibernation because XHCI misses
+> its interrupt and cannot recover.
+> 
+> Signed-off-by: Evan Green <evgreen@chromium.org>
+> 
+> ---
 
-Commit-ID:     51e8253cf5444299db09e1027160bf503ef49ec9
-Gitweb:        https://git.kernel.org/tip/51e8253cf5444299db09e1027160bf503ef49ec9
-Author:        Masahiro Yamada <masahiroy@kernel.org>
-AuthorDate:    Sun, 17 Apr 2022 02:47:10 +09:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 19 Apr 2022 07:17:16 -07:00
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-x86/build: remove unused OBJECT_FILES_NON_STANDARD_test_nx.o
+> Changes in v2:
+>  - Added the patch modifying the remote wakeup state
 
-Commit 3ad38ceb2769 ("x86/mm: Remove CONFIG_DEBUG_NX_TEST")
-removed arch/x86/kernel/test_nx.c
+That wasn't a change to this patch.  No matter.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20220416174710.269226-1-masahiroy@kernel.org
----
- arch/x86/kernel/Makefile | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index c41ef42..d8b2a81 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -34,8 +34,6 @@ KASAN_SANITIZE_sev.o					:= n
- # by several compilation units. To be safe, disable all instrumentation.
- KCSAN_SANITIZE := n
- 
--OBJECT_FILES_NON_STANDARD_test_nx.o			:= y
--
- ifdef CONFIG_FRAME_POINTER
- OBJECT_FILES_NON_STANDARD_ftrace_$(BITS).o		:= y
- endif
+>  - Removed the change to freeze_noirq/thaw_noirq
+> 
+>  drivers/usb/core/hcd-pci.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+> index 8176bc81a635d6..ae5e6d572376be 100644
+> --- a/drivers/usb/core/hcd-pci.c
+> +++ b/drivers/usb/core/hcd-pci.c
+> @@ -616,10 +616,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+>  	.suspend_noirq	= hcd_pci_suspend_noirq,
+>  	.resume_noirq	= hcd_pci_resume_noirq,
+>  	.resume		= hcd_pci_resume,
+> -	.freeze		= check_root_hub_suspended,
+> +	.freeze		= hcd_pci_suspend,
+>  	.freeze_noirq	= check_root_hub_suspended,
+>  	.thaw_noirq	= NULL,
+> -	.thaw		= NULL,
+> +	.thaw		= hcd_pci_resume,
+>  	.poweroff	= hcd_pci_suspend,
+>  	.poweroff_noirq	= hcd_pci_suspend_noirq,
+>  	.restore_noirq	= hcd_pci_resume_noirq,

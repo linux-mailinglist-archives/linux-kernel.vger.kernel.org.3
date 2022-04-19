@@ -2,110 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E50B506C08
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B5C506BF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352044AbiDSMOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S1349847AbiDSMOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352387AbiDSMNJ (ORCPT
+        with ESMTP id S1352435AbiDSMNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:13:09 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B03329A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:08:33 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 21so21020024edv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:08:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gJBICKQLh4SmRmRXg7WcqpSsoivPECC+yHqWJcRnyBw=;
-        b=Sn37T4kc1gy6ZYukal91cqyroyiiW0YOKutyzzxL28XA021ppNbIRoT1O3N+vhXW3N
-         +RyZY0Hy6LmczFbwuQG8t6BhAgN472/45bvNHNpmrlRfJY32fI7Or2xZy+Fhpmq3PgcD
-         q5e8W4q44jtq1Q3ZvOd/MnlnC8Zi4KmpTtep9lJBACmNVsSazRv+QjwGwozjxlVq1nzg
-         EUizVvuL/kBaF9D+ynoknZyRiZreXODj1OvFLz+Qk5jZ556+k35E1pjtj7X7xVgJnlBv
-         BTyjfM9+ClMhojyOf1tfD6VAub9L3iLUEDfu5d7Mrq/Cfeecla3rYxMFRXU5Oed9Dplf
-         NLtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gJBICKQLh4SmRmRXg7WcqpSsoivPECC+yHqWJcRnyBw=;
-        b=BZHqKxjoiERzp4gf7LWE84FLZG175obf4oRFs9Q5YAkN8ib8pOEUwyPIWn7UaH+LXK
-         cBOsTB3jFyuEH2N26KWIuJf7K4MDvxYfERavDsZ7jc/NwS3dULwXtyK2O1MZWLHV3hvh
-         EGW9qo30YI0eRWuF1Y5iaFZ7pZvBS61lm5/J3dxiTqULTNQ7VOdAl4d4BgDYoake+6FB
-         Q77D9BkRE3u06tpPQdiEmObRJiyUWH++sapDJNPI0yPyIJhVx0SBDqPjiPNrE26XLt+q
-         4VSjBKrzYUSRv65wqIcqoQhiFjNUe9qa4FEDyv+ay0Fh6FM+UkyrJ/zx5RbIxpq76udJ
-         2Pug==
-X-Gm-Message-State: AOAM531u693UbT4ARdlwHmbH5ZpNxucL+ta2GpSg4VsOKHRmFt87d2Jt
-        dXAgjYRUUfFRPV0k4RlosHojIA==
-X-Google-Smtp-Source: ABdhPJwfSsZ+0H3n/XuujAWcXTuBSL/NU/on/b6lZHEaFDgqno2IZJZAD1kRcItiaW2nIfGLCX/8ug==
-X-Received: by 2002:a05:6402:50cb:b0:423:d7a8:719e with SMTP id h11-20020a05640250cb00b00423d7a8719emr14101396edb.37.1650370112033;
-        Tue, 19 Apr 2022 05:08:32 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id cb25-20020a170906a45900b006e87e5f9c4asm5677200ejb.140.2022.04.19.05.08.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 05:08:31 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH RESEND usb] dt-bindings: usb: samsung,exynos-usb2: add missing required reg
-Date:   Tue, 19 Apr 2022 14:08:27 +0200
-Message-Id: <20220419120827.249627-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 19 Apr 2022 08:13:11 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050401025;
+        Tue, 19 Apr 2022 05:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=p1qe2cc9fGQ4Cq/TIt8sYh6UO6XH4bt91ZJ+fYPid2I=; b=xTFxj9ItrBXoR9UauJlfU24V50
+        sC/t7rVLFKj05mTK2Pz+TlpuOMffirrHAnl2wWTtGcg6mOd11bt+33zEmM7xdJHA2AQbTl0he3CJx
+        dz6H3kZYOzYhBNykq4jwoUn5v6K6fc0bVYiVYLEURCZcBc5ZklD1CZPlMW1fSVrNsaB0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ngmfC-00GUbO-54; Tue, 19 Apr 2022 14:08:58 +0200
+Date:   Tue, 19 Apr 2022 14:08:58 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
+        adrian.hunter@intel.com, nico@fluxnic.net,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/4] ARM: dts: mvebu: Update mvsdio node names to
+ match schema
+Message-ID: <Yl6mWsiGJVYh6m4l@lunn.ch>
+References: <20220419024611.1327525-1-chris.packham@alliedtelesis.co.nz>
+ <20220419024611.1327525-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419024611.1327525-2-chris.packham@alliedtelesis.co.nz>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+On Tue, Apr 19, 2022 at 02:46:08PM +1200, Chris Packham wrote:
+> Update the node names of the mvsdio@ interfaces to be mmc@ to match the
+> node name enforced by the mmc-controller.yaml schema.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-"reg" property is required on Samsung S5PV210/Exynos EHCI/OHCI
-controllers.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Fixes: 4bf2283cb208 ("dt-bindings: usb: samsung,exynos-usb2: convert to dtschema")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Acked-by: Rob Herring <robh@kernel.org>
-
----
-
-Fix for commit in v5.18-rc1.
-
-Hi Greg, could you pick it up for fixes via USB?
-
----
- Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
-index 340dff8d19c3..9c92defbba01 100644
---- a/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
-+++ b/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
-@@ -62,6 +62,7 @@ required:
-   - interrupts
-   - phys
-   - phy-names
-+  - reg
- 
- allOf:
-   - if:
--- 
-2.32.0
-
+    Andrew

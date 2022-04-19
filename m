@@ -2,143 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50436506C5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE330506C68
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352315AbiDSM04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S1352299AbiDSM01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244603AbiDSM0h (ORCPT
+        with ESMTP id S1352278AbiDSM0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:26:37 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9B636333;
-        Tue, 19 Apr 2022 05:23:55 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id t11so32485395eju.13;
-        Tue, 19 Apr 2022 05:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=njoqsjCkwXkJtdNecMo/g2MUiVV2iM+3H9WZkjrom64=;
-        b=T+BJ0CoPzwTVz0sJC7p3ea6aiM3LNaQJG681SWvIk7KbBiMEOpk6LTy6OgUfJiIsGk
-         SJ2LrcJ2aGDX9wiDURXhAUlW3SV/A9LjBuTwPn9kKaXMdsy/aEH30FAFi2P7ORSnhbNr
-         4V8cjeUGHCNbJiQhgOPzqhWnMkNt2g5e+TSiISQnHdR3AkOO6VYw5QJAblWQpatU4vyy
-         p5D3ZNImcjcwqs7ScP+X+goiFXDtQkKAyOUya1gKhKgSS6RAQ5kqHr75lGr4o/WBjqk5
-         xK72APTXGbPMEyGZgGJRboF9WGw98XtINBp4FiWierkyld0pEk4Yh3QMKJaCEyie/Z4z
-         s6hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=njoqsjCkwXkJtdNecMo/g2MUiVV2iM+3H9WZkjrom64=;
-        b=OqMa3M+8xkY0kzegiGGunJ69KcgzATWshRq7QhqoblpC+9VCbCckPvS45ANzxe8ME5
-         gJctd9Z/MwXMDCoSzmE5vOkBsuECEw9URPUjI9TI8HP73SBF6R6KAMDl6n8lyo/KDs+p
-         CB+yHNj6qROo7eTv9S/sbjv3r8V/zg9HOfay2S4A6VPgx1psxZXeFZaSIBOR4biLVhUp
-         444Po0DnLkJhprB7C/PgtLr8QnsowYPKFOjTBkrG7MaYReizeaoVXxORjhFxKp7foaMT
-         s8JThZevJWGj22E8JVsuqKxScDSvUPikQ21anNludLwkR9Zu7NRebkxVGAchVuR17Fmm
-         12lA==
-X-Gm-Message-State: AOAM5317E9OaCxqNvLr/CkHjvWUgiU6JaoSENoWb6i4dzXEyXTgUIvXl
-        Ufm7VU/oZp4Yp1bnEel8nxU=
-X-Google-Smtp-Source: ABdhPJxEcmNyjH29mq3GbIquHL3s/bZTQcAzcZjXsFf+i9EmpdzE/eWAI3rFHj0Rhx3nZaW7SeP8qQ==
-X-Received: by 2002:a17:907:3f0f:b0:6ef:e43f:f3e7 with SMTP id hq15-20020a1709073f0f00b006efe43ff3e7mr2054068ejc.758.1650371034030;
-        Tue, 19 Apr 2022 05:23:54 -0700 (PDT)
-Received: from anparri.mshome.net (host-82-53-3-95.retail.telecomitalia.it. [82.53.3.95])
-        by smtp.gmail.com with ESMTPSA id z21-20020a170906435500b006e8669fae36sm5644685ejm.189.2022.04.19.05.23.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 05:23:53 -0700 (PDT)
-From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-To:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Hu <weh@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-Subject: [PATCH v2 1/6] Drivers: hv: vmbus: Fix handling of messages with transaction ID of zero
+        Tue, 19 Apr 2022 08:26:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7E53617A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:23:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90E846149B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 12:23:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40DB0C385A5;
+        Tue, 19 Apr 2022 12:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650371015;
+        bh=Pbn8y8UibwqYIdOkM1GCt1gTd+ojcDKirE+bzLDzcsI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AfK3K5V4OTkKlGm7WBTtwQGVwntDHbN9bYvbnGHqXdPRM5+b8P6ovtC8GEVwW/LdI
+         rIGsoVgeJyG89eue3+QiQ2nf8LAklyGxezJHj5pvRA5Tha2QoD0VbkiDp4+GbMpjeK
+         FH2Kn/6je3dn8wAG0qHRU0Kzm/H4+B77h5BasbPECP2nvMVZXH0WHP1XEGJOs/HpqP
+         r6GZC8wEvuwMp3U8TkTPangx+vK+DCy1TpBWUkgQXxzyCdkzy/BFMWyPGxUZiqFE46
+         4Z1HYOMC0gAxq0D/euQuenOIFGWqlj7x9RCKhZ9DbnhLnwOEnjkh5AxyPCeNpOWBOF
+         6bFQu1wn5y+ZQ==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zqiang <qiang1.zhang@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: [PATCH 3/3] rcu/nocb: Fix NOCB kthreads spawn failure with rcu_nocb_rdp_deoffload() direct call
 Date:   Tue, 19 Apr 2022 14:23:20 +0200
-Message-Id: <20220419122325.10078-2-parri.andrea@gmail.com>
+Message-Id: <20220419122320.2060902-4-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220419122325.10078-1-parri.andrea@gmail.com>
-References: <20220419122325.10078-1-parri.andrea@gmail.com>
+In-Reply-To: <20220419122320.2060902-1-frederic@kernel.org>
+References: <20220419122320.2060902-1-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vmbus_request_addr() returns 0 (zero) if the transaction ID passed
-to as argument is 0.  This is unfortunate for two reasons: first,
-netvsc_send_completion() does not check for a NULL cmd_rqst (before
-dereferencing the corresponding NVSP message); second, 0 is a *valid*
-value of cmd_rqst in netvsc_send_tx_complete(), cf. the call of
-vmbus_sendpacket() in netvsc_send_pkt().
+From: Zqiang <qiang1.zhang@intel.com>
 
-vmbus_request_addr() has included the code in question since its
-introduction with commit e8b7db38449ac ("Drivers: hv: vmbus: Add
-vmbus_requestor data structure for VMBus hardening"); such code was
-motivated by the early use of vmbus_requestor by hv_storvsc.  Since
-hv_storvsc moved to a tag-based mechanism to generate and retrieve
-transaction IDs with commit bf5fd8cae3c8f ("scsi: storvsc: Use
-blk_mq_unique_tag() to generate requestIDs"), vmbus_request_addr()
-can be modified to return VMBUS_RQST_ERROR if the ID is 0.  This
-change solves the issues in hv_netvsc (and makes the handling of
-messages with transaction ID of 0 consistent with the semantics
-"the ID is not contained in the requestor/invalid ID").
+If the rcuog/o[p] kthreads spawn failed, the offloaded rdp needs to
+be explicitly deoffloaded, otherwise the target rdp is still considered
+offloaded even though nothing actually handles the callbacks.
 
-vmbus_next_request_id(), vmbus_request_addr() should still reserve
-the ID of 0 for Hyper-V, because Hyper-V will "ignore" (not respond
-to) VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED packets/requests with
-transaction ID of 0 from the guest.
-
-Fixes: bf5fd8cae3c8f ("scsi: storvsc: Use blk_mq_unique_tag() to generate requestIDs")
-Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
-The above hv_netvsc issues precede bf5fd8cae3c8f; however, these
-changes should not be backported to earlier commits since such a
-back-port would 'break' hv_storvsc.
+ kernel/rcu/tree_nocb.h | 80 +++++++++++++++++++++++++++++++++---------
+ 1 file changed, 64 insertions(+), 16 deletions(-)
 
- drivers/hv/channel.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hv/channel.c b/drivers/hv/channel.c
-index dc5c35210c16a..20fc8d50a0398 100644
---- a/drivers/hv/channel.c
-+++ b/drivers/hv/channel.c
-@@ -1245,7 +1245,9 @@ u64 vmbus_next_request_id(struct vmbus_channel *channel, u64 rqst_addr)
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index f2f2cab6285a..4cf9a29bba79 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -986,10 +986,7 @@ static int rdp_offload_toggle(struct rcu_data *rdp,
+ 	}
+ 	raw_spin_unlock_irqrestore(&rdp_gp->nocb_gp_lock, flags);
+ 
+-	if (wake_gp)
+-		wake_up_process(rdp_gp->nocb_gp_kthread);
+-
+-	return 0;
++	return wake_gp;
+ }
+ 
+ static long rcu_nocb_rdp_deoffload(void *arg)
+@@ -997,9 +994,15 @@ static long rcu_nocb_rdp_deoffload(void *arg)
+ 	struct rcu_data *rdp = arg;
+ 	struct rcu_segcblist *cblist = &rdp->cblist;
+ 	unsigned long flags;
+-	int ret;
++	int wake_gp;
++	struct rcu_data *rdp_gp = rdp->nocb_gp_rdp;
+ 
+-	WARN_ON_ONCE(rdp->cpu != raw_smp_processor_id());
++	/*
++	 * rcu_nocb_rdp_deoffload() may be called directly if
++	 * rcuog/o[p] spawn failed, because at this time the rdp->cpu
++	 * is not online yet.
++	 */
++	WARN_ON_ONCE((rdp->cpu != raw_smp_processor_id()) && cpu_online(rdp->cpu));
+ 
+ 	pr_info("De-offloading %d\n", rdp->cpu);
+ 
+@@ -1023,10 +1026,41 @@ static long rcu_nocb_rdp_deoffload(void *arg)
+ 	 */
+ 	rcu_segcblist_set_flags(cblist, SEGCBLIST_RCU_CORE);
+ 	invoke_rcu_core();
+-	ret = rdp_offload_toggle(rdp, false, flags);
+-	swait_event_exclusive(rdp->nocb_state_wq,
+-			      !rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB |
+-							SEGCBLIST_KTHREAD_GP));
++	wake_gp = rdp_offload_toggle(rdp, false, flags);
++
++	mutex_lock(&rdp_gp->nocb_gp_kthread_mutex);
++	if (rdp_gp->nocb_gp_kthread) {
++		if (wake_gp)
++			wake_up_process(rdp_gp->nocb_gp_kthread);
++
++		/*
++		 * If rcuo[p] kthread spawn failed, directly remove SEGCBLIST_KTHREAD_CB.
++		 * Just wait SEGCBLIST_KTHREAD_GP to be cleared by rcuog.
++		 */
++		if (!rdp->nocb_cb_kthread) {
++			rcu_nocb_lock_irqsave(rdp, flags);
++			rcu_segcblist_clear_flags(&rdp->cblist, SEGCBLIST_KTHREAD_CB);
++			rcu_nocb_unlock_irqrestore(rdp, flags);
++		}
++
++		swait_event_exclusive(rdp->nocb_state_wq,
++					!rcu_segcblist_test_flags(cblist,
++					  SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP));
++	} else {
++		/*
++		 * No kthread to clear the flags for us or remove the rdp from the nocb list
++		 * to iterate. Do it here instead. Locking doesn't look stricly necessary
++		 * but we stick to paranoia in this rare path.
++		 */
++		rcu_nocb_lock_irqsave(rdp, flags);
++		rcu_segcblist_clear_flags(&rdp->cblist,
++				SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP);
++		rcu_nocb_unlock_irqrestore(rdp, flags);
++
++		list_del(&rdp->nocb_entry_rdp);
++	}
++	mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
++
+ 	/*
+ 	 * Lock one last time to acquire latest callback updates from kthreads
+ 	 * so we can later handle callbacks locally without locking.
+@@ -1047,7 +1081,7 @@ static long rcu_nocb_rdp_deoffload(void *arg)
+ 	WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
+ 
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ int rcu_nocb_cpu_deoffload(int cpu)
+@@ -1079,7 +1113,8 @@ static long rcu_nocb_rdp_offload(void *arg)
+ 	struct rcu_data *rdp = arg;
+ 	struct rcu_segcblist *cblist = &rdp->cblist;
+ 	unsigned long flags;
+-	int ret;
++	int wake_gp;
++	struct rcu_data *rdp_gp = rdp->nocb_gp_rdp;
+ 
+ 	WARN_ON_ONCE(rdp->cpu != raw_smp_processor_id());
+ 	/*
+@@ -1089,6 +1124,9 @@ static long rcu_nocb_rdp_offload(void *arg)
+ 	if (!rdp->nocb_gp_rdp)
+ 		return -EINVAL;
+ 
++	if (WARN_ON_ONCE(!rdp_gp->nocb_gp_kthread))
++		return -EINVAL;
++
+ 	pr_info("Offloading %d\n", rdp->cpu);
  
  	/*
- 	 * Cannot return an ID of 0, which is reserved for an unsolicited
--	 * message from Hyper-V.
-+	 * message from Hyper-V; Hyper-V does not acknowledge (respond to)
-+	 * VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED requests with ID of
-+	 * 0 sent by the guest.
+@@ -1113,7 +1151,9 @@ static long rcu_nocb_rdp_offload(void *arg)
+ 	 *      WRITE flags               READ callbacks
+ 	 *      rcu_nocb_unlock()         rcu_nocb_unlock()
  	 */
- 	return current_id + 1;
+-	ret = rdp_offload_toggle(rdp, true, flags);
++	wake_gp = rdp_offload_toggle(rdp, true, flags);
++	if (wake_gp)
++		wake_up_process(rdp_gp->nocb_gp_kthread);
+ 	swait_event_exclusive(rdp->nocb_state_wq,
+ 			      rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB) &&
+ 			      rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP));
+@@ -1126,7 +1166,7 @@ static long rcu_nocb_rdp_offload(void *arg)
+ 	rcu_segcblist_clear_flags(cblist, SEGCBLIST_RCU_CORE);
+ 	rcu_nocb_unlock_irqrestore(rdp, flags);
+ 
+-	return ret;
++	return 0;
  }
-@@ -1270,7 +1272,7 @@ u64 vmbus_request_addr(struct vmbus_channel *channel, u64 trans_id)
  
- 	/* Hyper-V can send an unsolicited message with ID of 0 */
- 	if (!trans_id)
--		return trans_id;
-+		return VMBUS_RQST_ERROR;
+ int rcu_nocb_cpu_offload(int cpu)
+@@ -1248,7 +1288,7 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+ 				"rcuog/%d", rdp_gp->cpu);
+ 		if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo GP kthread, OOM is now expected behavior\n", __func__)) {
+ 			mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
+-			return;
++			goto end;
+ 		}
+ 		WRITE_ONCE(rdp_gp->nocb_gp_kthread, t);
+ 		if (kthread_prio)
+@@ -1260,12 +1300,20 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+ 	t = kthread_run(rcu_nocb_cb_kthread, rdp,
+ 			"rcuo%c/%d", rcu_state.abbr, cpu);
+ 	if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo CB kthread, OOM is now expected behavior\n", __func__))
+-		return;
++		goto end;
  
- 	spin_lock_irqsave(&rqstor->req_lock, flags);
+ 	if (kthread_prio)
+ 		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
+ 	WRITE_ONCE(rdp->nocb_cb_kthread, t);
+ 	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
++	return;
++end:
++	mutex_lock(&rcu_state.barrier_mutex);
++	if (rcu_rdp_is_offloaded(rdp)) {
++		rcu_nocb_rdp_deoffload(rdp);
++		cpumask_clear_cpu(cpu, rcu_nocb_mask);
++	}
++	mutex_unlock(&rcu_state.barrier_mutex);
+ }
  
+ /* How many CB CPU IDs per GP kthread?  Default of -1 for sqrt(nr_cpu_ids). */
 -- 
 2.25.1
 

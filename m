@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D933950777B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFB350779A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355536AbiDSSQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 14:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S1356505AbiDSSRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 14:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356422AbiDSSQB (ORCPT
+        with ESMTP id S1356484AbiDSSQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 14:16:01 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117993EA88;
-        Tue, 19 Apr 2022 11:12:30 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id u18so22350174eda.3;
-        Tue, 19 Apr 2022 11:12:29 -0700 (PDT)
+        Tue, 19 Apr 2022 14:16:09 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC643E0D3;
+        Tue, 19 Apr 2022 11:12:36 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id r13so34610666ejd.5;
+        Tue, 19 Apr 2022 11:12:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=nV/V/sSiQrpacLvnsxKcMtnuzTjfpOGiqmnW9+zsuXw=;
-        b=C8+SnHSvi/3OxwkFOy+xJfV8PXdzA+KCAXh+TU+xF+OVvSe3RpJiOEznblvsAwOcDu
-         zzMbQsNlM3oAsUgSoLBVDvUmfoNp1dyyisooBTR2VXMNLVgHfdyTg91VS5cNCwo7WI+N
-         0TkETmBVk6LR4CKxNMGdlM6LhvbljypPM6xMlDXHkTN2WdA9cUKI0XG61aMFYB0KM7IG
-         rhLmAVDM97ba+odgtNnPTTVsfpF0jN7qrSFmIYo+YI+Y1P5PbTwZtXjXz8XrEH3E7sfL
-         lJx5kx102RHf8tb1oES2lAjcxOJufDCWHl3I0gtSLc6AQFxsP99brDfEq9tjmMzvMFi3
-         KCag==
+        bh=ZhelTs57qB8l8snfqOh3tsOfdXgjXxOg3YxbLx/o20g=;
+        b=KMjlgvdZbFgtrDUD5sGre35l5IsjYq/4lFCHGa5O4f6vUnz8Z879bU2B9iknQi29hc
+         zQoZsHYeuBBHKqoc0JXikAHQUVjXoTHRHeVaeqoBXFcZMJAYgs2bVl6SqIDbvA/K0/jq
+         hH9V1AOPG1FXqLhQV4VslfQmc7Igc0rhuOa+x7u1cBI5T1BHiZe54e2IONJ3pIa0U1dt
+         2c9JQyviwNIY6SI01uSrEtgXVupQjNTqWVT3n0bMuCzwS5KkZ2aReqSxwypKY9j+fKRN
+         RI/4N0IOUFf3SGn592yRrR16+grUd+49M2m2y962EHNY+sC8RxQjiK1qw2nli57m02FE
+         q+qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nV/V/sSiQrpacLvnsxKcMtnuzTjfpOGiqmnW9+zsuXw=;
-        b=07GRT2KkzSjduQLdUrNerQHWyrkBNIohtj2RqCrcLCKTdJsRq+P1OQiCZ9rsRzDpi/
-         Bntuxx4P3ut2+6sp/nf5p6+zOxuhFkoqtHHl8xEHW/YZFJswN7FV+PiZdZNeSVC4BoNP
-         XEoCWAkwE7yB2F4cpiPY3hawZ2gRxB1f1wWHlgYfKuPk+fodLrqCfO+p4Z0V5rIUdFkS
-         rcM5MvgX2ijgUq4b/N8YJUFrO+qtPdIMKZ6SsKfQcDE09moqO0qPebuvq3pr9eMlyt8B
-         UKsl1kHl0L8ZpTvZeqI9J/hmY+N3XZ6m5H/QggnAKjv+w9RQ0Uy7+80GA29+w/cwpnHh
-         uJBQ==
-X-Gm-Message-State: AOAM5328RXdGBKWD0yVyB68H5OUUbu8TRKmwEC6sDg4gcO1OKoK+RX96
-        e+KmEqYGytgC7d5AxGn+VkY=
-X-Google-Smtp-Source: ABdhPJw5Qs3spIyZaNmqd45dxxwH/JvTxPVzOd6tS7esXoye+O3Ju9Qtxs1013fkuta7ZoX7sN1YbQ==
-X-Received: by 2002:a05:6402:5cf:b0:41d:7aa7:152a with SMTP id n15-20020a05640205cf00b0041d7aa7152amr19365895edx.68.1650391948620;
-        Tue, 19 Apr 2022 11:12:28 -0700 (PDT)
+        bh=ZhelTs57qB8l8snfqOh3tsOfdXgjXxOg3YxbLx/o20g=;
+        b=LpwWRpAQwSgGVSCvAIiuWcosSmCjK/wJRmUUh+3qprW+ujiiNMNmsSsdXlIUlr/Up2
+         +rJRn5AM37ZGJ9DUpHcR7Cr/3R1piFlNXkNHp+T9l0GaqPFs4TP+TlcZPlUbTGEODt0L
+         cRzplWfoIRrCsU53qnsYYlrFyFOpOBs8Mxb63NBiDycGmCMpHV4knty3s+IZfZkEQGPT
+         7hKwBEdVKr6WSqzwIJww5LcSYzggu20F/ajWG8tU1Go50omZUR2f3WIOMMrodGoVMrR2
+         lskUMRn4LY5uH1Hd7anKSRVS7wv+ZamcHYt9JKR6y7hoJ8U2jphQOTwugZ951bCc7Icv
+         3Nig==
+X-Gm-Message-State: AOAM531QdRfgsIpi9/cG4if9xp1tVTvU7fEYyfE0CWLBKajw0e3Ooonz
+        M6Ch/kEf2sbUw8YuydZdKzI=
+X-Google-Smtp-Source: ABdhPJyeIZRBjgA3MKX+mlJppPwTSIKZXJss/g8U03EN6uX9wqh5+ibHjB3tWGPq+OFnSu3HfGR4tA==
+X-Received: by 2002:a17:907:2d08:b0:6e8:8e58:f70e with SMTP id gs8-20020a1709072d0800b006e88e58f70emr15434200ejc.301.1650391955354;
+        Tue, 19 Apr 2022 11:12:35 -0700 (PDT)
 Received: from localhost.localdomain ([212.102.35.230])
-        by smtp.gmail.com with ESMTPSA id b20-20020a1709063f9400b006e12836e07fsm5930614ejj.154.2022.04.19.11.12.26
+        by smtp.gmail.com with ESMTPSA id b20-20020a1709063f9400b006e12836e07fsm5930614ejj.154.2022.04.19.11.12.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 11:12:28 -0700 (PDT)
+        Tue, 19 Apr 2022 11:12:35 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -58,9 +58,9 @@ Cc:     Sam Shih <sam.shih@mediatek.com>, Stephen Boyd <sboyd@kernel.org>,
         Yassine Oudjana <y.oudjana@protonmail.com>,
         devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: arm: mediatek: topckgen: Convert to DT schema
-Date:   Tue, 19 Apr 2022 22:09:37 +0400
-Message-Id: <20220419180938.19397-2-y.oudjana@protonmail.com>
+Subject: [PATCH 2/3] dt-bindings: arm: mediatek: apmixedsys: Convert to DT schema
+Date:   Tue, 19 Apr 2022 22:09:38 +0400
+Message-Id: <20220419180938.19397-3-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220419180938.19397-1-y.oudjana@protonmail.com>
 References: <20220419180938.19397-1-y.oudjana@protonmail.com>
@@ -78,107 +78,107 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Convert topckgen bindings to DT schema format. MT2701, MT7623 and
+Convert apmixedsys bindings to DT schema format. MT2701, MT7623 and
 MT7629 device trees currently have the syscon compatible without
 it being mentioned in the old DT bindings file which introduces
 dtbs_check errors when converting to DT schema as-is, so
-mediatek,mt2701-topckgen and mediatek,mt7629-topckgen are placed
+mediatek,mt2701-apmixedsys and mediatek,mt7629-apmixedsys are placed
 in the last items list with the syscon compatible, and syscon is
-added to the mediatek,mt7623-topckgen list.
+added to the mediatek,mt7623-apmixedsys list.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- .../arm/mediatek/mediatek,topckgen.txt        | 35 -----------
- .../arm/mediatek/mediatek,topckgen.yaml       | 60 +++++++++++++++++++
+ .../arm/mediatek/mediatek,apmixedsys.txt      | 35 -----------
+ .../arm/mediatek/mediatek,apmixedsys.yaml     | 60 +++++++++++++++++++
  2 files changed, 60 insertions(+), 35 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.txt
- create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.yaml
+ delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.yaml
 
-diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.txt
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.txt
 deleted file mode 100644
-index b82422bb717f..000000000000
---- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.txt
+index 3fa755866528..000000000000
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.txt
 +++ /dev/null
 @@ -1,35 +0,0 @@
--Mediatek topckgen controller
--============================
+-Mediatek apmixedsys controller
+-==============================
 -
--The Mediatek topckgen controller provides various clocks to the system.
+-The Mediatek apmixedsys controller provides the PLLs to the system.
 -
 -Required Properties:
 -
 -- compatible: Should be one of:
--	- "mediatek,mt2701-topckgen"
--	- "mediatek,mt2712-topckgen", "syscon"
--	- "mediatek,mt6765-topckgen", "syscon"
--	- "mediatek,mt6779-topckgen", "syscon"
--	- "mediatek,mt6797-topckgen"
--	- "mediatek,mt7622-topckgen"
--	- "mediatek,mt7623-topckgen", "mediatek,mt2701-topckgen"
--	- "mediatek,mt7629-topckgen"
--	- "mediatek,mt7986-topckgen", "syscon"
--	- "mediatek,mt8135-topckgen"
--	- "mediatek,mt8167-topckgen", "syscon"
--	- "mediatek,mt8173-topckgen"
--	- "mediatek,mt8183-topckgen", "syscon"
--	- "mediatek,mt8516-topckgen"
+-	- "mediatek,mt2701-apmixedsys"
+-	- "mediatek,mt2712-apmixedsys", "syscon"
+-	- "mediatek,mt6765-apmixedsys", "syscon"
+-	- "mediatek,mt6779-apmixedsys", "syscon"
+-	- "mediatek,mt6797-apmixedsys"
+-	- "mediatek,mt7622-apmixedsys"
+-	- "mediatek,mt7623-apmixedsys", "mediatek,mt2701-apmixedsys"
+-	- "mediatek,mt7629-apmixedsys"
+-	- "mediatek,mt7986-apmixedsys"
+-	- "mediatek,mt8135-apmixedsys"
+-	- "mediatek,mt8167-apmixedsys", "syscon"
+-	- "mediatek,mt8173-apmixedsys"
+-	- "mediatek,mt8183-apmixedsys", "syscon"
+-	- "mediatek,mt8516-apmixedsys"
 -- #clock-cells: Must be 1
 -
--The topckgen controller uses the common clk binding from
+-The apmixedsys controller uses the common clk binding from
 -Documentation/devicetree/bindings/clock/clock-bindings.txt
 -The available clocks are defined in dt-bindings/clock/mt*-clk.h.
 -
 -Example:
 -
--topckgen: power-controller@10000000 {
--	compatible = "mediatek,mt8173-topckgen";
--	reg = <0 0x10000000 0 0x1000>;
+-apmixedsys: clock-controller@10209000 {
+-	compatible = "mediatek,mt8173-apmixedsys";
+-	reg = <0 0x10209000 0 0x1000>;
 -	#clock-cells = <1>;
 -};
-diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.yaml
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.yaml
 new file mode 100644
-index 000000000000..9ce9cf673cbc
+index 000000000000..fc967fdc8aec
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.yaml
 @@ -0,0 +1,60 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,topckgen.yaml#"
++$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,apmixedsys.yaml#"
 +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+title: MediaTek Top Clock Generator Controller
++title: MediaTek AP Mixedsys Controller
 +
 +maintainers:
 +  - Matthias Brugger <matthias.bgg@gmail.com>
 +
 +description:
-+  The Mediatek topckgen controller provides various clocks to the system.
++  The Mediatek apmixedsys controller provides PLLs to the system.
 +
 +properties:
 +  compatible:
 +    oneOf:
 +      - items:
 +          - enum:
-+              - mediatek,mt6797-topckgen
-+              - mediatek,mt7622-topckgen
-+              - mediatek,mt8135-topckgen
-+              - mediatek,mt8173-topckgen
-+              - mediatek,mt8516-topckgen
++              - mediatek,mt6797-apmixedsys
++              - mediatek,mt7622-apmixedsys
++              - mediatek,mt7986-apmixedsys
++              - mediatek,mt8135-apmixedsys
++              - mediatek,mt8173-apmixedsys
++              - mediatek,mt8516-apmixedsys
 +      - items:
-+          - const: mediatek,mt7623-topckgen
-+          - const: mediatek,mt2701-topckgen
++          - const: mediatek,mt7623-apmixedsys
++          - const: mediatek,mt2701-apmixedsys
 +          - const: syscon
 +      - items:
 +          - enum:
-+              - mediatek,mt2701-topckgen
-+              - mediatek,mt2712-topckgen
-+              - mediatek,mt6765-topckgen
-+              - mediatek,mt6779-topckgen
-+              - mediatek,mt7629-topckgen
-+              - mediatek,mt7986-topckgen
-+              - mediatek,mt8167-topckgen
-+              - mediatek,mt8183-topckgen
++              - mediatek,mt2701-apmixedsys
++              - mediatek,mt2712-apmixedsys
++              - mediatek,mt6765-apmixedsys
++              - mediatek,mt6779-apmixedsys
++              - mediatek,mt7629-apmixedsys
++              - mediatek,mt8167-apmixedsys
++              - mediatek,mt8183-apmixedsys
 +          - const: syscon
 +
 +  reg:
@@ -196,9 +196,9 @@ index 000000000000..9ce9cf673cbc
 +
 +examples:
 +  - |
-+    topckgen: clock-controller@10000000 {
-+        compatible = "mediatek,mt8173-topckgen";
-+        reg = <0x10000000 0x1000>;
++    apmixedsys: clock-controller@10209000 {
++        compatible = "mediatek,mt8173-apmixedsys";
++        reg = <0x10209000 0x1000>;
 +        #clock-cells = <1>;
 +    };
 -- 

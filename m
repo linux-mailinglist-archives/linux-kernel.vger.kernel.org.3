@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35D8506968
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9A650696C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350869AbiDSLIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
+        id S1350879AbiDSLJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346610AbiDSLIo (ORCPT
+        with ESMTP id S1346610AbiDSLJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:08:44 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D5326112;
-        Tue, 19 Apr 2022 04:06:01 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id x24so3436434qtq.11;
-        Tue, 19 Apr 2022 04:06:01 -0700 (PDT)
+        Tue, 19 Apr 2022 07:09:30 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D902613A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:06:48 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id hh4so4435448qtb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=eHLaG6wzlg3DS+2jvTJoEHffFZEl1r2h8qVh3D0y4MQ=;
-        b=mouJCdDLuf3Ivi+HYlCfFAto6/lHYZ0nbBuS3xrYq8FUHkeHqcdG8mhfyQJ30IFrEK
-         AYRC4Fm7Wb3lg1/kOvK+cwvyWAsfglUWwCAgh1LCYsw4nnvDSk7Jka6CC0qFW1OiBdl7
-         8kA22PqvKCTeuSOki3gaZwx8NgbVwTBpTE2AXfWl80MfloHKQMKfhpAzdgQjbIdkAPYC
-         pnYjCxNXGF59tXvzG3+ec6X2SSb1ymzcbSqzNDMgoyiffpvLCdHTHjYu6+MNcC9r3hBv
-         1teZ1+Tv+FUAkv/xMBZKrv7+I0bIlVt+W9/VzUsut1HdfjFjl77zo9syM7gCAcJVbzO1
-         72TQ==
+        bh=bIvZjQJaLySDI3kb1qd8szSRM+su5jG098wLkG3YjNw=;
+        b=oyj3cJVHZEt9SADkIqYCINJZl9s4Boy7THU+iOTgUHqIoB1BDWXeombf/dlSs3dgGZ
+         TWNMKMeu2Mj/YDEFX6UD01QUm9WHn3tdqMVU9d3nARmo3Mw+z5kky6RMU1l6q2vyIg6K
+         2TxA5bs9McwrJEG8cUpCHbUytcJsK1Ek0SFxXnqBECAfVBYxaxsvWZnKYTpRA37izSE8
+         w+brg1xr67l7xrBgB/Y/4+LsOHTTZADLqDxliNvk2+5TVTRoBBhEEcYdjkzJ3yUv2rMT
+         kQN1iCixjyRmiOfp6nvU+qLnBtRJSVlQxQdY7+W2ckwDQV9lalo6j+jCbhcHEOUaj2oU
+         GQgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=eHLaG6wzlg3DS+2jvTJoEHffFZEl1r2h8qVh3D0y4MQ=;
-        b=1+H9zvwCtUcxEcf+RK2mxQm/zFbWgs54QPGOTC7C1ba1W96NHC1IG5ZtpQkZxh3bxs
-         H1y+E8Is0XDYTd9o6a2x1UjaVCRg09lFXk5oKNB7x79r/wjoW55kn/hk0TndhJ18THcY
-         zSCzZCdBFaczWk5SP4dMVMJW0US58o0xZtfx+iTX+xnlD38OkfoWtnM2b+3y4iN3NIDH
-         Tm1S76FhzTTwxQ6rHCoUEnsZAww1wSjSCvdzg8JpWK+7wP9ZfjNyPM2oz85dXSLM2WLO
-         Y/vRO7hcDcOlDkiET7o1D1W6ZtA7Bd9VoP8alRTEMkO9SUkDWoLE2Xkx5VL5hsmz/Ebc
-         uexA==
-X-Gm-Message-State: AOAM532c3q0ojJlGuo4kZUMwRIXIrNkLij6LhJoFlwblgPN6rugUYq6D
-        1EikW2uGswnvRdNCX9+hsP8=
-X-Google-Smtp-Source: ABdhPJxiwokIB9jE5P6wQF8qmYX/o7CWvc+ZXkIiw2BVXhf4krm0mE6yrl4jSEBsuKLO93BIWdoQdw==
-X-Received: by 2002:ac8:5f54:0:b0:2f3:353d:76c7 with SMTP id y20-20020ac85f54000000b002f3353d76c7mr2042916qta.366.1650366360447;
-        Tue, 19 Apr 2022 04:06:00 -0700 (PDT)
+        bh=bIvZjQJaLySDI3kb1qd8szSRM+su5jG098wLkG3YjNw=;
+        b=wY2SiGKNpZqFekublmcrQIm0F3d1k9W7A3aYY5tlgkkcOaT8aiWFk/yB8ce4nTgbwi
+         QYg7CSBUpd8EcGv3KC4HQKJJYva0po0Xz3h7mGgp559GSGQCHE0xdPKI/saPqjfeNW+a
+         NNz29Hy3Z/rRWdyz71on7KCIITr44wK2E9B7gNCCcpfT+BkNn1oMjwWfBHDm85YDg+Ql
+         VxYqZEIZSSXlTkZ1xyYkGdej4IwEB6Ss/grs8xUyLumdiVV2/Ywqyu989Nzak3p08/E3
+         wu/WNMTqsE8ZfyoTSUROR0n2I5TqgGDDn13l7eazYG4C+u6BaAXZ5ofp/ZBWhIXfFqa0
+         Pq1Q==
+X-Gm-Message-State: AOAM532KR92f5gci7nQPUd2LD1102Uqr1AZmbtERL2kNYtToul+mXUL3
+        IRG2JpMm2RlrLan8Qcv6M2Q=
+X-Google-Smtp-Source: ABdhPJy21MbNrUsUO7ej48H7XCvbDhoGMvLv9d1+jMAbBaWEXgqF56DG5F62ptskX8U2bBfkvE+nvw==
+X-Received: by 2002:ac8:5a90:0:b0:2f1:f1c0:e0db with SMTP id c16-20020ac85a90000000b002f1f1c0e0dbmr9811200qtc.620.1650366407749;
+        Tue, 19 Apr 2022 04:06:47 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b0067d47fb5aa4sm7906519qko.63.2022.04.19.04.05.58
+        by smtp.gmail.com with ESMTPSA id 9-20020a05620a070900b0069e60da45aasm5783721qkc.60.2022.04.19.04.06.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 04:06:00 -0700 (PDT)
+        Tue, 19 Apr 2022 04:06:47 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     hadess@hadess.net
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+To:     johan@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] USB: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Tue, 19 Apr 2022 11:05:53 +0000
-Message-Id: <20220419110553.2574548-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] gnss: Use pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Tue, 19 Apr 2022 11:06:42 +0000
+Message-Id: <20220419110642.2574612-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -79,27 +78,27 @@ actual functional changes.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/usb/misc/apple-mfi-fastcharge.c | 6 ++----
+ drivers/gnss/serial.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c b/drivers/usb/misc/apple-mfi-fastcharge.c
-index ac8695195c13..fba102245d8f 100644
---- a/drivers/usb/misc/apple-mfi-fastcharge.c
-+++ b/drivers/usb/misc/apple-mfi-fastcharge.c
-@@ -119,11 +119,9 @@ static int apple_mfi_fc_set_property(struct power_supply *psy,
+diff --git a/drivers/gnss/serial.c b/drivers/gnss/serial.c
+index 5d8e9bfb24d0..afa7a08d718e 100644
+--- a/drivers/gnss/serial.c
++++ b/drivers/gnss/serial.c
+@@ -32,11 +32,9 @@ static int gnss_serial_open(struct gnss_device *gdev)
+ 	serdev_device_set_baudrate(serdev, gserial->speed);
+ 	serdev_device_set_flow_control(serdev, false);
  
- 	dev_dbg(&mfi->udev->dev, "prop: %d\n", psp);
- 
--	ret = pm_runtime_get_sync(&mfi->udev->dev);
+-	ret = pm_runtime_get_sync(&serdev->dev);
 -	if (ret < 0) {
--		pm_runtime_put_noidle(&mfi->udev->dev);
-+	ret = pm_runtime_resume_and_get(&mfi->udev->dev);
+-		pm_runtime_put_noidle(&serdev->dev);
++	ret = pm_runtime_resume_and_get(&serdev->dev);
 +	if (ret < 0)
- 		return ret;
+ 		goto err_close;
 -	}
  
- 	switch (psp) {
- 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+ 	return 0;
+ 
 -- 
 2.25.1
 

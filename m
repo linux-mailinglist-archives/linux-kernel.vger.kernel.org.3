@@ -2,110 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FCE506C18
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB018506C19
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352047AbiDSMQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
+        id S1352049AbiDSMRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241971AbiDSMP4 (ORCPT
+        with ESMTP id S241035AbiDSMRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:15:56 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2656220BCC;
-        Tue, 19 Apr 2022 05:12:48 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id r14-20020a9d750e000000b00605446d683eso5544432otk.10;
-        Tue, 19 Apr 2022 05:12:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=lbM+6TXr7OH0hoMGKTtqkVWI32EFUbBVKJzBhHmX6V4=;
-        b=BGZoEx1Om+auEVYWvL2c+vBeGYCzNsfwGdCVPCH6AjFaU8o5u/rmXfQ5IhNpEkxn3S
-         0zgLlYxZf+8AFJ9l8ekjASOeuplN0ikj77eKFam4EYrFsxjXcqD+XmK0U4XZI+yBk2pi
-         JO6IeHBenxn3E+ZzYioWjjAllwyys1xUkcjF04r1ZFIPk6ExRp+vrsN1p0eheJuik3m6
-         Dba2E0ZW0tpQar7uE39cxwb0SYlJ5LHJo6Mba3nZJ8wYEvM2qlgcNGmqy0O3JfSkym9d
-         k+VR2mvsGIoL4zSlntwfDSPI5DpifNlnInhSF6w34FcEl/6nL/OWIk48+XVW13mtp3ka
-         Kymg==
-X-Gm-Message-State: AOAM531ZLHoXKEfMnCD+lrYOs94NahmIpQI64BNBnnPi2rpRYL52+tde
-        bSl0UpFBV7cmTgdzShCpuQ==
-X-Google-Smtp-Source: ABdhPJyjKDFF8xz6BuFfOGVDFYuw4bwRD11RnRt3Q2XGouMWxrrzMKZfe3UV4QNteW5WL5S5+lphdg==
-X-Received: by 2002:a9d:765a:0:b0:605:4910:afb8 with SMTP id o26-20020a9d765a000000b006054910afb8mr4193620otl.1.1650370367445;
-        Tue, 19 Apr 2022 05:12:47 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o17-20020a9d5c11000000b005b2611a13edsm5239752otk.61.2022.04.19.05.12.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 05:12:47 -0700 (PDT)
-Received: (nullmailer pid 1977868 invoked by uid 1000);
-        Tue, 19 Apr 2022 12:12:43 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     chunkuang.hu@kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        angelogioacchino.delregno@collabora.com, nancy.lin@mediatek.com,
-        dri-devel@lists.freedesktop.org, robh+dt@kernel.org,
-        airlied@linux.ie, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jason-jh.lin@mediatek.com,
+        Tue, 19 Apr 2022 08:17:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8D21FA5D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:15:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B13A614E9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 12:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51361C385A7;
+        Tue, 19 Apr 2022 12:15:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650370503;
+        bh=egk3NV7ZTPANDM1QUGV3BN2ZMc0MwzdTAMdoUxfarx0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fpm43+mezkvM6YP/nwkJWU6CBtHl+xZ4KAgQrH6K1vUjE/GyQA70B0fhT9keBk58y
+         NvLd6s7NIbwO0Ofi0TRXxQDRzLeO91x26/8dYnfLweVVkCcHSN7Gzkrj7LqdhaWmrU
+         m7zRgCASPhbodzPxWwKB8N864xdfxNoxC9RyzLrM=
+Date:   Tue, 19 Apr 2022 14:14:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     nsaenz@kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        stefan.wahren@i2se.com, gascoar@gmail.com, ojaswin98@gmail.com,
+        linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, matthias.bgg@gmail.com
-In-Reply-To: <20220419033237.23405-6-rex-bc.chen@mediatek.com>
-References: <20220419033237.23405-1-rex-bc.chen@mediatek.com> <20220419033237.23405-6-rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH 5/5] dt-bindings: mediatek: add ethdr definition for mt8195
-Date:   Tue, 19 Apr 2022 07:12:43 -0500
-Message-Id: <1650370363.563060.1977867.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: vchiq_arm: change vchiq_platform_init from
+ global to static
+Message-ID: <Yl6nw6jbfVsVXG0c@kroah.com>
+References: <20220418164356.3532969-1-trix@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418164356.3532969-1-trix@redhat.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Apr 2022 11:32:37 +0800, Rex-BC Chen wrote:
-> From: "Nancy.Lin" <nancy.lin@mediatek.com>
+On Mon, Apr 18, 2022 at 12:43:56PM -0400, Tom Rix wrote:
+> Smatch reports this issue
+> vchiq_arm.c:466:5: warning: symbol 'vchiq_platform_init'
+>   was not declared. Should it be static?
+
+Error messages can all go on one line.
+
+> vchiq_platform_init is only used in vchiq_arm.c.  Single
+> file variables should not be global so change
+> vchiq_platform_init's storage-class specifier to static.
+
+You have a full 72 columns, please use them.
+
 > 
-> Add vdosys1 ETHDR definition.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->  .../display/mediatek/mediatek,ethdr.yaml      | 158 ++++++++++++++++++
->  1 file changed, 158 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+>  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> index 0596ac61e286..7de98655e8ec 100644
+> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> @@ -463,7 +463,7 @@ free_pagelist(struct vchiq_pagelist_info *pagelistinfo,
+>  	cleanup_pagelistinfo(pagelistinfo);
+>  }
+>  
+> -int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *state)
+> +static int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *state)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct vchiq_drvdata *drvdata = platform_get_drvdata(pdev);
+> -- 
+> 2.27.0
+> 
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Always test build your patches.  To not do so is a bit rude, don't you
+think?
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.example.dts:26:18: fatal error: dt-bindings/memory/mt8195-memory-port.h: No such file or directory
-   26 |         #include <dt-bindings/memory/mt8195-memory-port.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+{sigh}

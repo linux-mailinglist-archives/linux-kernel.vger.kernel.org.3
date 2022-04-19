@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2861550631E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8425C506327
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348200AbiDSEU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 00:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S1348203AbiDSEVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 00:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiDSEU1 (ORCPT
+        with ESMTP id S238655AbiDSEVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:20:27 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E492BB0D
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:17:46 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id t4so22673559pgc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:17:46 -0700 (PDT)
+        Tue, 19 Apr 2022 00:21:52 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623FE2BB20
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:19:11 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id k29so22646798pgm.12
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ua3DWHoWYRZ0Hj18kv0a4L5TFGQ8YVkye6cMbl2VF6s=;
-        b=YyIlytPr7dhGhZh1n4740x8jTXToacvwiuTjRhl7OryQkWqeaG4t9xBbEXMJhWhGiC
-         m1Cq5gcWdtSctAcUnt83MwRhiXBJ+a94dBQ6qGS4tuqqY9RyN8+RbAn8Tl+U55POKAuB
-         D9wVkDFJdg8rIbtS5hisU04sNYtpwd+4rgebs=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uMLCd1jUQmqd+kJmG30f48mw7LnIWfBX+V3Zn86PmXM=;
+        b=ApI55McaYqWh8Bk8YPuzmhrlx3JF8GuYaCqr1JzFraTOnY7Oqpyq+djrXZmHPoD6cp
+         YQZTi8GwjFlp9cukp7VIMiQf6RStcUcrBv/gDjCL/ChcqYwONw8wxqhd76EBTG/fMbs+
+         yiv6AckYO+kW04b3zy+Dp6WMbYVlU2qkSlNI0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ua3DWHoWYRZ0Hj18kv0a4L5TFGQ8YVkye6cMbl2VF6s=;
-        b=ZXpdGwygS8Jz3OsGTjA7rTlpicmE3taD4q/WN+I3rVfIrW19SlOR2817cSeg2KDBK4
-         hVcZ6bHI5nm+GWYZ8RMR2GRvF0+8p1InCqmlW0V596fM6L7syLcvlXp4JHFnz4LC/Yzo
-         iW+R8siZADV1422haG9yVcPEQfFgzsLQVG+qjZqeEqQelxEzVTP5O6LAHvtmdIWFgKh9
-         DyaCCr1ziXehhl3+Hr36WFKpmpDa0pBN6HGgtvxz3eoGJFnsrxEexdQwjUcUjgQFcBWj
-         1TxCk+xhPvR225uMV6aN/fhmYs/NoFKz5/Dr/8kLxoFZ4HBC+DumzrIpPyGUgqryAacK
-         MO7A==
-X-Gm-Message-State: AOAM533SX4QVxoqMCIzbsqU9vzetb1Gy8cw4sUb/KGrII5ZnmsgyTcRG
-        T5ljtS+55aI7CcOqctsYW7jsXA==
-X-Google-Smtp-Source: ABdhPJwQw3NsHIw/XF+SqI6c8xAkwRGZeUj6+GKduWwmPu+iYojpSIIWD9kahjFqaEKb/F+KzBSWsw==
-X-Received: by 2002:a63:fd53:0:b0:386:66d:b40c with SMTP id m19-20020a63fd53000000b00386066db40cmr12741689pgj.266.1650341866296;
-        Mon, 18 Apr 2022 21:17:46 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uMLCd1jUQmqd+kJmG30f48mw7LnIWfBX+V3Zn86PmXM=;
+        b=JY4yTtE7CeV1nuJEAoNjb60AEtONqOfK9ZAN+OYwAR7Fss1Mf1cGJzv6EHa+z5VNbW
+         V3yR3FHJBbPEb419Wn4109Jhogd/IPeY5WWsURMmqlDtvDL+MJFINuaGJYEa96komqSn
+         8Rg02L34UPwRLiWyiW/ueOTDrdL1uaZMNW5nSokKnfS/xef8tVHAEYyjdT9JdVtfIWB8
+         HX4nC4FFsvHxknxBg/PVZkulHSdxTT/UpTNlGnEMj4n5lVynlxWikZsG6OCc7c3ij1NI
+         mcA3NREWuBO3Qt5d4PfgywSdameSt7XanZGc0aIhhml9ubDFsuUuyh0Nvs/yPo7gW2In
+         efIA==
+X-Gm-Message-State: AOAM530OSl50U5+4Nlxiw3kVjwxZAkXeUZj31fsmUu1Pu6p/bjObHHVJ
+        3YjOpnOq+DaBewkGeUmA7dzExw==
+X-Google-Smtp-Source: ABdhPJyb9p96E3RKLUof+L5VGikkhWjJ0FIhHbLLM4ktrmhCQvG0dS2+GCiXjFFAV+/fQjSjErkYzg==
+X-Received: by 2002:a05:6a00:c8f:b0:50a:77a3:e7b with SMTP id a15-20020a056a000c8f00b0050a77a30e7bmr7825616pfv.41.1650341950925;
+        Mon, 18 Apr 2022 21:19:10 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k5-20020a17090ac50500b001cd5ffcca96sm16726552pjt.27.2022.04.18.21.17.45
+        by smtp.gmail.com with ESMTPSA id z13-20020a17090a468d00b001c7db8e6ac7sm14621432pjf.40.2022.04.18.21.19.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 21:17:45 -0700 (PDT)
+        Mon, 18 Apr 2022 21:19:10 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 21:19:09 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        kernel test robot <lkp@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] USB: serial: Fix heap overflow in WHITEHEAT_GET_DTR_RTS
-Date:   Mon, 18 Apr 2022 21:17:42 -0700
-Message-Id: <20220419041742.4117026-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: include/linux/fortify-string.h:267:25: warning: call to
+ '__write_overflow_field' declared with attribute warning: detected write
+ beyond size of field (1st parameter); maybe use struct_group()?
+Message-ID: <202204182118.5EB742C6@keescook>
+References: <202204142318.vDqjjSFn-lkp@intel.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2631; h=from:subject; bh=gIgxtgBXPkDpXaGP7aAQI8PBhl9DxARQALU32sCb0HQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiXjfmXFgU+SMJsQUdOjA7WslYjSoG7qjHLuLjYkEv G8abkvKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYl435gAKCRCJcvTf3G3AJp63D/ 4u5P63EDXyGqn9YU26NnZ4oNbGN5YfchlZolAZ5r7qKja5KmvCpyan3HLHJQzoovP5H6CWwbwM4QTY XjQ/LVQaTjZRVaCncCJssE5JSCjhPD90lGAE2pmRQOSfFmcE7v9ehLPv19DYz8Ie1aCTB2DNzkhjlB QmThEiUSrtoskck4SemCz6ln0JlndvsjvGiP7VKxkfb2HWvSo5ay0G1PH90uIcsQcKMRjM2b/Iurk5 4UTUTTzZ32raGPjjCsk5FM9t9av+wz0+NgIX3UGlRKDCy0dusVFy+S9sMziYi7mcBrtpCYK5rD/tuz NeKbQLIcojtNN0dCK7KqqR3HNovH2IflWaQHcwkMCsU32I77BFPLuVUX/jIKdCovAxxYBZZGU2XSyq FEqxXjkXhrAOmTzwuSbBrACNI+l/5VvYdPtVEVqxByueJB0CGu9wPwMR7LGbcnrAVFNQG1oxUcUKCr RQF9gxiXS4zAAatKoYWtc3GZbs1bVuj4GmAEioGA+suoeWzzqFtxjqi8utTGTyME41Qap3JHar7H60 gCxE+RDQqwhIpf5GJmbKhtjIhv/rH0zv+Uq/sjQa9ALXM2I0nc2CRCTNpu54amWZOksJmqEqLiPdC5 cqrFa981hQyEKx3L91aZUiGHEmA5huIG90V2xEdEG0CteJipVqv3KQ9tJSgw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204142318.vDqjjSFn-lkp@intel.com>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,58 +68,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This looks like it's harmless, as both the source and the destinations are
-currently the same allocation size (4 bytes) and don't use their padding,
-but if anything were to ever be added after the "mcr" member in "struct
-whiteheat_private", it would be overwritten. The structs both have a
-single u8 "mcr" member, but are 4 bytes in padded size. The memcpy()
-destination was explicitly targeting the u8 member (size 1) with the
-length of the whole structure (size 4), triggering the memcpy buffer
-overflow warning:
+On Thu, Apr 14, 2022 at 11:54:03PM +0800, kernel test robot wrote:
+>    In function 'fortify_memcpy_chk',
+>        inlined from 'firm_send_command' at drivers/usb/serial/whiteheat.c:587:4:
+> >> include/linux/fortify-string.h:267:25: warning: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+>      267 |                         __write_overflow_field(p_size_field, size);
+>          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In file included from include/linux/string.h:253,
-                 from include/linux/bitmap.h:11,
-                 from include/linux/cpumask.h:12,
-                 from include/linux/smp.h:13,
-                 from include/linux/lockdep.h:14,
-                 from include/linux/spinlock.h:62,
-                 from include/linux/mmzone.h:8,
-                 from include/linux/gfp.h:6,
-                 from include/linux/slab.h:15,
-                 from drivers/usb/serial/whiteheat.c:17:
-In function 'fortify_memcpy_chk',
-    inlined from 'firm_send_command' at drivers/usb/serial/whiteheat.c:587:4:
-include/linux/fortify-string.h:328:25: warning: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
-  328 |                         __write_overflow_field(p_size_field, size);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Thanks! Proposed patch:
+https://lore.kernel.org/linux-hardening/20220419041742.4117026-1-keescook@chromium.org/
 
-Expand the memcpy() to the entire structure, though perhaps the correct
-solution is to mark all the USB command structures as "__packed".
-
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202204142318.vDqjjSFn-lkp@intel.com
-Cc: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/usb/serial/whiteheat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/serial/whiteheat.c b/drivers/usb/serial/whiteheat.c
-index da65d14c9ed5..6e00498843fb 100644
---- a/drivers/usb/serial/whiteheat.c
-+++ b/drivers/usb/serial/whiteheat.c
-@@ -584,7 +584,7 @@ static int firm_send_command(struct usb_serial_port *port, __u8 command,
- 		switch (command) {
- 		case WHITEHEAT_GET_DTR_RTS:
- 			info = usb_get_serial_port_data(port);
--			memcpy(&info->mcr, command_info->result_buffer,
-+			memcpy(info, command_info->result_buffer,
- 					sizeof(struct whiteheat_dr_info));
- 				break;
- 		}
 -- 
-2.32.0
-
+Kees Cook

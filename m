@@ -2,143 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF35507006
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983CE50701D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245492AbiDSOXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
+        id S1353218AbiDSOXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353181AbiDSOWR (ORCPT
+        with ESMTP id S1353224AbiDSOW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:22:17 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8140013CDB;
-        Tue, 19 Apr 2022 07:19:33 -0700 (PDT)
-Received: from [192.168.0.7] (ip5f5ae90d.dynamic.kabel-deutschland.de [95.90.233.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7D81461CCD785;
-        Tue, 19 Apr 2022 16:19:30 +0200 (CEST)
-Message-ID: <b9804c40-3402-1dac-a9c0-db37a5360015@molgen.mpg.de>
-Date:   Tue, 19 Apr 2022 16:19:29 +0200
+        Tue, 19 Apr 2022 10:22:26 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D981A05E;
+        Tue, 19 Apr 2022 07:19:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650377982; x=1681913982;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lubtMG0hVM3ZxlYnPXyxs8uWuEZI28b2FYE4ZGmmLF4=;
+  b=aSZbqBNfNdb6/ymp0+m+X+36cI+/744u9etI2f63ih4Iz+NAHf0QTTwm
+   wbMLCTuZpLCbG7Ggoe2tGzY+qW6Y2U7vJbvzPtltoXInCYSn4Ma0gXfHf
+   BiA5VwEQapUzrKvxCGXqqsQoqWAmjSTJ0GPXVJ6mjko4w4j8EvN+Obsoj
+   f/frxc2MmKkJOWH08pMG2D19sOlYWpJyCryRX7/qodqGZHXrx2Bz3yZu9
+   YxbYYhAsGmHRi5I9sHg1CHaoI01dmM121KTloK2B45iXtDuvCPII7WThz
+   buxmtSrYW4/+OX4PCHz0v7BQvApQ7B5nc/2GzKqD0TCroLWQmowIzhbil
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="245666876"
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="245666876"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 07:19:42 -0700
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="554747335"
+Received: from chferrer-mobl.amr.corp.intel.com (HELO [10.209.37.31]) ([10.209.37.31])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 07:19:41 -0700
+Message-ID: <4875ea9c-593a-e669-889a-1e809a50a570@linux.intel.com>
+Date:   Tue, 19 Apr 2022 07:19:41 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [Intel-wired-lan] [PATCH 2/2] Trigger proper interrupts in
- igc_xsk_wakeup
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
 Content-Language: en-US
-To:     Jeff Evanson <jeff.evanson@gmail.com>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jeff.evanson@qsc.com
-References: <20220415210546.11294-1-jeff.evanson@qsc.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220415210546.11294-1-jeff.evanson@qsc.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <bd83067542a3519ee4c91f9d50e9bd4fac27e4bb.camel@intel.com>
+ <975b5050-2108-9ace-cc71-46f17db0a731@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <975b5050-2108-9ace-cc71-46f17db0a731@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Jeff,
 
 
-Thank you for your patch.
+On 4/19/22 7:13 AM, Dave Hansen wrote:
+>> >From this perspective, I am not sure what's the value of having a dedicated
+>> INTEL_TDX_ATTESTATION Kconfig.  The attestation support code should be turned on
+>> unconditionally when CONFIG_INTEL_TDX_GUEST is on.  The code can also be just
+>> under arch/x86/coco/tdx/ I guess?
+> How much code are we talking about?  What's the difference in the size
+> of the binaries with this compiled in?
 
+Current driver size is ~300 lines. It adds ~500 bytes to the kernel
+binary if it is built-in.
 
-Am 15.04.22 um 23:05 schrieb Jeff Evanson:
-
-1.  Add a From tag(?), so your company instead of gmail.com email is used?
-2.  Please add a prefix to the commit message summary. See `git log 
---oneline drivers/net/ethernet/igc` for examples.
-
-> in igc_xsk_wakeup, trigger the proper interrupt based on whether flags
-> contains XDP_WAKEUP_RX and/or XDP_WAKEUP_TX
-
-Nit. Please add a dot/period to the end of sentences.
-
-Can you please add a paragraph on what system you experienced the 
-problem, and how to verify your fix?
-
-> Signed-off-by: Jeff Evanson <jeff.evanson@qsc.com>
-> ---
->   drivers/net/ethernet/intel/igc/igc_main.c | 36 +++++++++++++++++------
->   1 file changed, 27 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-> index a36a18c84aeb..d706de95dc06 100644
-> --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> @@ -6073,7 +6073,7 @@ static void igc_trigger_rxtxq_interrupt(struct igc_adapter *adapter,
->   int igc_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
->   {
->   	struct igc_adapter *adapter = netdev_priv(dev);
-> -	struct igc_q_vector *q_vector;
-> +	struct igc_q_vector *txq_vector = 0, *rxq_vector = 0;
-
-Should you use NULL instead of 0?
-
-
-Kind regards,
-
-Paul
-
-
->   	struct igc_ring *ring;
->   
->   	if (test_bit(__IGC_DOWN, &adapter->state))
-> @@ -6082,17 +6082,35 @@ int igc_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
->   	if (!igc_xdp_is_enabled(adapter))
->   		return -ENXIO;
->   
-> -	if (queue_id >= adapter->num_rx_queues)
-> -		return -EINVAL;
-> +	if (flags & XDP_WAKEUP_RX) {
-> +		if (queue_id >= adapter->num_rx_queues)
-> +			return -EINVAL;
->   
-> -	ring = adapter->rx_ring[queue_id];
-> +		ring = adapter->rx_ring[queue_id];
-> +		if (!ring->xsk_pool)
-> +			return -ENXIO;
->   
-> -	if (!ring->xsk_pool)
-> -		return -ENXIO;
-> +		rxq_vector = ring->q_vector;
-> +	}
-> +
-> +	if (flags & XDP_WAKEUP_TX) {
-> +		if (queue_id >= adapter->num_tx_queues)
-> +			return -EINVAL;
-> +
-> +		ring = adapter->tx_ring[queue_id];
-> +		if (!ring->xsk_pool)
-> +			return -ENXIO;
-> +
-> +		txq_vector = ring->q_vector;
-> +	}
-> +
-> +	if (rxq_vector &&
-> +	    !napi_if_scheduled_mark_missed(&rxq_vector->napi))
-> +		igc_trigger_rxtxq_interrupt(adapter, rxq_vector);
->   
-> -	q_vector = adapter->q_vector[queue_id];
-> -	if (!napi_if_scheduled_mark_missed(&q_vector->napi))
-> -		igc_trigger_rxtxq_interrupt(adapter, q_vector);
-> +	if (txq_vector && txq_vector != rxq_vector &&
-> +	    !napi_if_scheduled_mark_missed(&txq_vector->napi))
-> +		igc_trigger_rxtxq_interrupt(adapter, txq_vector);
->   
->   	return 0;
->   }
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

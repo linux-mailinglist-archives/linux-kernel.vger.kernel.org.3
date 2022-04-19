@@ -2,107 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFF95070B4
+	by mail.lfdr.de (Postfix) with ESMTP id D549D5070B5
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235779AbiDSOiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
+        id S1353389AbiDSOiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353417AbiDSOhh (ORCPT
+        with ESMTP id S1353508AbiDSOhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:37:37 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371FD1158
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:34:54 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id v4so21522551edl.7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:34:54 -0700 (PDT)
+        Tue, 19 Apr 2022 10:37:53 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A2EB859
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:35:10 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e5e8523fcbso6142071fac.10
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:35:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=hYhWpkA0GOl3mzzjcNkkxBFtmx6tG2/CLP4HzjXsxi0=;
-        b=gDYmERjvy8NgZ4/EJ2aP6RqYgTmUNylM5SgiVH/2eNAi8INO2ld3IEptSWM9PAWAk+
-         Bx26xGaHvAUml6pJJueSotMR2y17ZQWYPv2o8zfreJmGqxfdcZg0tJOhJAbcLYRjHwlq
-         +sjEWMhRgFtvwsUMN46ss5URCREuQkrYLw331Lu+Ma8/Rga5h6r4pMZGNiSR3W8K464Q
-         DV09vqOGXHhoZrWCPRivl2kCGixrGwQGk8Ehr8eSrxBPiz6NDdfFPOpOvMTq9GEvu6f4
-         LLGOA9z62W13/R6Kr368SuDhKoU9Vt/a/Ahf8+SfUMeJcSzDNUA51YuawokAJsllTXlC
-         cQog==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0Y1kTXqtM0V/qhN0BJh+ustQ16GMNyceftqiFoXkOJo=;
+        b=LKsrOa3nuP9NAcR8rarfjiNYcdHWNAGtZnJnexbhZXdC2BWsvnu2TlCnxPKl6u5Vj9
+         Ve+GfJftnqI6Dw/kI2fvUr1sq+wn+NVcjYTWTM+3PQsmGlonuaOWJW2zsaPsusolhRyb
+         Qtx1ps6ipjUss6V5UAEwmrcem2Y7xetfKYPQyGmy71RxKN1MpsWo6SXtKNe1529sbOtK
+         VzXmYI9RR/zER2Vb6p1pOjC6VlZH1PGlD1sfA7OqzhCfOYhKosTy3+kJLZgvRsJ8FrvK
+         IrBfsnJ05Se7Ng1T6bHk1yWeizt/Yr6RvX8UHUhNi+lD81yGxFSSftfMtsdrDV7w0fNc
+         NNYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hYhWpkA0GOl3mzzjcNkkxBFtmx6tG2/CLP4HzjXsxi0=;
-        b=mzYxfvbb7MXCz8soAqcqq/AsCCjNyiiO6QeEhMtTQMox8zceFiL6MhKLeo9wPoeRU9
-         YUtAIv4AR7LC6ZMmt1xyznc9EP3wsTGrkoNVn6o7/Rys0U7UmUkMZhlL9sBg2DKS3qLh
-         pz+ZlKRyCEF6KUYYSYZxvbnu+Xug1vmLPGJu3BqwH3Ulx+e416O8ozPbLEPjsL0wNwIW
-         GQDo4NPYUwYFHN/zvWGnRtS894ScBls1ppZT+nP+2oqgdd7JnzzY409t2vzbQLjLovaQ
-         df+6N8OucQgvDYTo43xB591JQFTMKXGiplDJfk4YoGBaAd0WEOcSaZf5Bw2LwYhJ1etW
-         pZTQ==
-X-Gm-Message-State: AOAM531FYxSawEgedhiIvY3GBIFPG0NSzKqn+dgCR3Aam3X145UtJ6Rx
-        veDaD0kiinYAxUX3CIJsbRpkGA==
-X-Google-Smtp-Source: ABdhPJwMtbhOhCW5Bk7zHhutByyPSIKIwImCItxB2gjTzWPQrENBnkq6YnlbZzC4034cf1T3PHE+ig==
-X-Received: by 2002:a50:ba8a:0:b0:423:bdf5:41d6 with SMTP id x10-20020a50ba8a000000b00423bdf541d6mr16366082ede.204.1650378892871;
-        Tue, 19 Apr 2022 07:34:52 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id mp8-20020a1709071b0800b006efc915e1ccsm1513203ejc.118.2022.04.19.07.34.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 07:34:52 -0700 (PDT)
-Message-ID: <83037bd9-d4f0-7116-0b7f-26f64170a5ad@linaro.org>
-Date:   Tue, 19 Apr 2022 16:34:51 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0Y1kTXqtM0V/qhN0BJh+ustQ16GMNyceftqiFoXkOJo=;
+        b=ZBS5u+/Lte7ZqtAlH7sj/LeoJ8usbNwrQL9bLFtNvwG/BdGi7NhGUEK7AiQwkdNqBy
+         vdXnstNHgmclnDNjZ5NCRWRQIUgnE0qUGo0wlQUfg+/qmKtHSwr/NGobkxoXfSbU8vAP
+         eakUfAF99G9uBNZaX59sgs+m+boReDUlyranZRBs83Oe/8OLAbNP4gQMCzixmyYid+wR
+         +KpIKfSL+RRpTybUsKaeUK8AzYzM43RtuhmDiZgmKLfQuXNEZDY+LXEVc0uOF06WS9EH
+         cFXZ0NOBr/WeSy+41FG2WI5zzjOR5+FZLIb8lSp9zXFjGD5lP8WM2dPCSO4koJsYxPtn
+         eILA==
+X-Gm-Message-State: AOAM530Ta+g1L3TQqudbAsx8d2+s+9IUbedCWxxzgOAbRX+MRdilDiwJ
+        ryMErGuyRVWWBQseJQtrCDp3iEXeKzhoscAvSHw=
+X-Google-Smtp-Source: ABdhPJylz4Pe9jC88ome39PtLEkLwVqavuFbKl5Z+pnkPi4nxGJ15u5Pjxe998bBVBnUSyvu2UCMWVsYF5ENcONVNUg=
+X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
+ v29-20020a056870311d00b000de9b6c362bmr8023506oaa.200.1650378909464; Tue, 19
+ Apr 2022 07:35:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] arm64: dts: mediatek: align operating-points table
- name with dtschema
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org
-References: <20210820081616.83674-1-krzysztof.kozlowski@canonical.com>
- <165036314214.180327.9860190048104061653.b4-ty@linaro.org>
- <448093df-288f-3c49-270e-5d830a986b27@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <448093df-288f-3c49-270e-5d830a986b27@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220415182014.278652-1-tales.aparecida@gmail.com>
+In-Reply-To: <20220415182014.278652-1-tales.aparecida@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 19 Apr 2022 10:34:58 -0400
+Message-ID: <CADnq5_NmOxp08Xf_P1Ljq94O2RYa_Ld4cVRtF=fmRqV_DAgDqg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: make hubp1_wait_pipe_read_start() static
+To:     Tales Lelo da Aparecida <tales.aparecida@gmail.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>, andrealmeid@riseup.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2022 16:31, Matthias Brugger wrote:
-> On 19/04/2022 12:12, Krzysztof Kozlowski wrote:
->> On Fri, 20 Aug 2021 10:16:15 +0200, Krzysztof Kozlowski wrote:
->>> Align the name of operating-points node to dtschema to fix warnings like:
->>>
->>>    arch/arm64/boot/dts/mediatek/mt8173-elm.dt.yaml:
->>>      opp_table0: $nodename:0: 'opp_table0' does not match '^opp-table(-[a-z0-9]+)?$'
->>>
->>>
->>
->> Applied, thanks!
-> 
-> Could you please provide a stable branch for this patches? So that I can pull 
-> that into my branch. This will help to reduce merge conflicts later on.
+Applied with minor change to drop the prototype in dcn10_hubp.h.  Thanks!
 
-Then maybe better take them directly? These patches were waiting on
-lists for long time, I resent them and pinged. I took them only because
-there seems to be little interest but we want to fix all dtbs_check
-warnings.
+Alex
 
-There are three for Mediatek:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=for-v5.19/arm-dts64-cleanups
-
-Best regards,
-Krzysztof
+On Fri, Apr 15, 2022 at 2:21 PM Tales Lelo da Aparecida
+<tales.aparecida@gmail.com> wrote:
+>
+> It's a local function, let's make it static.
+>
+> Signed-off-by: Tales Lelo da Aparecida <tales.aparecida@gmail.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hubp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hubp.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hubp.c
+> index fbff6beb78be..3a7f76e2c598 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hubp.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hubp.c
+> @@ -1316,7 +1316,7 @@ void hubp1_set_flip_int(struct hubp *hubp)
+>   *
+>   * @hubp: hubp struct reference.
+>   */
+> -void hubp1_wait_pipe_read_start(struct hubp *hubp)
+> +static void hubp1_wait_pipe_read_start(struct hubp *hubp)
+>  {
+>         struct dcn10_hubp *hubp1 = TO_DCN10_HUBP(hubp);
+>
+> --
+> 2.35.1
+>

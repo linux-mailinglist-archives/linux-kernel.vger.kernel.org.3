@@ -2,231 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F582506657
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCAF506665
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349649AbiDSHze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
+        id S1349675AbiDSH6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349656AbiDSHza (ORCPT
+        with ESMTP id S243286AbiDSH6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:55:30 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7324733355;
-        Tue, 19 Apr 2022 00:52:37 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23J65ULh020922;
-        Tue, 19 Apr 2022 07:52:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=3NJX3fxwHy42fijIDZ0EQ+IlMYgeMtaKWgmaLwA0axI=;
- b=tZ64Q0+fau85GWrQDsEuGK09jp3nEU/VCjFTi0p9dfjfDZMVbDiDdwej2ORakI6jX8q4
- AbD9iAY39fbFL2178M96vWnh00NOhGtvc08xrEZdEO90l3U6RyB4wkKZc77cffv0mUUP
- Z2KLeR9lU0Ak1g5Y43NOxQQ/djdXHZwSdWqxOs8MlmhiZ7Z1RBXleO6dyU4eq57cDZeQ
- QKGk+iZKJMfUWqyYitpmOQWPh0Rk2d6Y/33FEZzXSrJckZ+rcd+FMRZy+S9LNwdg6CvY
- tsLmVI6CHCEcpRcl7TujqDVuBFYF5XFFHJIYOjXps9Vvrw5md0WEvN8Ace/wromG9moM xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7ekrx6a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 07:52:35 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23J7b8mc006108;
-        Tue, 19 Apr 2022 07:52:35 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7ekrx5k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 07:52:35 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23J7l6cH026712;
-        Tue, 19 Apr 2022 07:52:33 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ffne8kvxc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 07:52:33 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23J7djvv46399842
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Apr 2022 07:39:45 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CC4042045;
-        Tue, 19 Apr 2022 07:52:30 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 626004203F;
-        Tue, 19 Apr 2022 07:52:28 +0000 (GMT)
-Received: from [9.171.88.57] (unknown [9.171.88.57])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 19 Apr 2022 07:52:28 +0000 (GMT)
-Message-ID: <4cf23453-e00a-c2e2-aeb1-4030e16d6d17@linux.ibm.com>
-Date:   Tue, 19 Apr 2022 09:55:45 +0200
+        Tue, 19 Apr 2022 03:58:42 -0400
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3D913DC2;
+        Tue, 19 Apr 2022 00:56:00 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id s25so19713638edi.13;
+        Tue, 19 Apr 2022 00:56:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fJ/lP8fDTD2M4Ye8YmxDUmYzoCedu92mR6gpKzyiQqU=;
+        b=XoizcegNEhkxYOKBWzQHT68UcbjHJzvvbsRSx8iI4n+QlzvWZ3zgtK2mBgJZ8bD1iG
+         y7wLRPpI+lXYdSHUaLPo/V1AYFE442Iva+a11NT2SXBzn69g0puBgjueWHW36nPoAjbs
+         uczgIrfdUrRKM0EBTMOwk0FDwViLeFzJ3eiCjoZYEvvv9YGqus79ZltozZq0z00utSrY
+         ZDGfxQ56m3DJLCQ49kKpSlIhWF7tmekmr2z/vN/mir0obsqCuQ+D/STY42NceeAJeg6y
+         LLYqVPILQG7xBFGBVlF8IgpzgH71JAf73DwXtlF6GWzERc3tP12F8cOZwng2eSeRv3fq
+         PUvQ==
+X-Gm-Message-State: AOAM531WoEzV/8If0CVPHmr4raU/5QGOafqCjjgtArTr7kaaoVL5fyU6
+        lpIhFrsw/nBq7YVAtzjK+U4=
+X-Google-Smtp-Source: ABdhPJwvgKc8DptlJU037frUeAg97O7xPjl0BMERQxypZbGb/1cdaq5Yws045/wQDZAbEdnBW8Ye5g==
+X-Received: by 2002:a05:6402:2714:b0:422:aeff:34ae with SMTP id y20-20020a056402271400b00422aeff34aemr16012414edd.92.1650354958806;
+        Tue, 19 Apr 2022 00:55:58 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id o2-20020a170906768200b006e89514a449sm5344136ejm.96.2022.04.19.00.55.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 00:55:58 -0700 (PDT)
+Message-ID: <0c6c2a70-2692-2f5e-edbb-8735a0a80637@kernel.org>
+Date:   Tue, 19 Apr 2022 09:55:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v5 10/21] KVM: s390: pci: add basic kvm_zdev structure
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] tty: serial: fsl_lpuart: remove the count initialization
+ as it is not needed
 Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220404174349.58530-1-mjrosato@linux.ibm.com>
- <20220404174349.58530-11-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220404174349.58530-11-mjrosato@linux.ibm.com>
+To:     Sherry Sun <sherry.sun@nxp.com>, gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+References: <20220418021844.29591-1-sherry.sun@nxp.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220418021844.29591-1-sherry.sun@nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: whuwc8zQR5Os_OIlNrUKEKV8ErpHGwFN
-X-Proofpoint-GUID: JiyIKgXHGrZfYeHA4c9qY2cwhm3ds2dH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_02,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxscore=0 bulkscore=0 adultscore=0 spamscore=0
- mlxlogscore=999 impostorscore=0 phishscore=0 suspectscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204190040
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 18. 04. 22, 4:18, Sherry Sun wrote:
+> No need to initialize the count variable in lpuart_copy_rx_to_tty(),
+> so let's remove it here.
 
+Right,
 
-On 4/4/22 19:43, Matthew Rosato wrote:
-> This structure will be used to carry kvm passthrough information related to
-> zPCI devices.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
-
-Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
-
+> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
 > ---
->   arch/s390/include/asm/pci.h |  3 +++
->   arch/s390/kvm/Makefile      |  1 +
->   arch/s390/kvm/pci.c         | 38 +++++++++++++++++++++++++++++++++++++
->   arch/s390/kvm/pci.h         | 21 ++++++++++++++++++++
->   4 files changed, 63 insertions(+)
->   create mode 100644 arch/s390/kvm/pci.c
->   create mode 100644 arch/s390/kvm/pci.h
+>   drivers/tty/serial/fsl_lpuart.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
-> index 4c5b8fbc2079..9eb20cebaa18 100644
-> --- a/arch/s390/include/asm/pci.h
-> +++ b/arch/s390/include/asm/pci.h
-> @@ -97,6 +97,7 @@ struct zpci_bar_struct {
->   };
+> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+> index 87789872f400..452a015825ba 100644
+> --- a/drivers/tty/serial/fsl_lpuart.c
+> +++ b/drivers/tty/serial/fsl_lpuart.c
+> @@ -1118,7 +1118,7 @@ static void lpuart_copy_rx_to_tty(struct lpuart_port *sport)
+>   	struct dma_chan *chan = sport->dma_rx_chan;
+>   	struct circ_buf *ring = &sport->rx_ring;
+>   	unsigned long flags;
+> -	int count = 0, copied;
+> +	int count, copied;
 >   
->   struct s390_domain;
-> +struct kvm_zdev;
->   
->   #define ZPCI_FUNCTIONS_PER_BUS 256
->   struct zpci_bus {
-> @@ -190,6 +191,8 @@ struct zpci_dev {
->   	struct dentry	*debugfs_dev;
->   
->   	struct s390_domain *s390_domain; /* s390 IOMMU domain data */
-> +
-> +	struct kvm_zdev *kzdev; /* passthrough data */
->   };
->   
->   static inline bool zdev_enabled(struct zpci_dev *zdev)
-> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
-> index 26f4a74e5ce4..00cf6853d93f 100644
-> --- a/arch/s390/kvm/Makefile
-> +++ b/arch/s390/kvm/Makefile
-> @@ -10,4 +10,5 @@ ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
->   kvm-y += kvm-s390.o intercept.o interrupt.o priv.o sigp.o
->   kvm-y += diag.o gaccess.o guestdbg.o vsie.o pv.o
->   
-> +kvm-$(CONFIG_PCI) += pci.o
->   obj-$(CONFIG_KVM) += kvm.o
-> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
-> new file mode 100644
-> index 000000000000..213be236c05a
-> --- /dev/null
-> +++ b/arch/s390/kvm/pci.c
-> @@ -0,0 +1,38 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * s390 kvm PCI passthrough support
-> + *
-> + * Copyright IBM Corp. 2022
-> + *
-> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
-> + */
-> +
-> +#include <linux/kvm_host.h>
-> +#include <linux/pci.h>
-> +#include "pci.h"
-> +
-> +int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
-> +{
-> +	struct kvm_zdev *kzdev;
-> +
-> +	kzdev = kzalloc(sizeof(struct kvm_zdev), GFP_KERNEL);
-> +	if (!kzdev)
-> +		return -ENOMEM;
-> +
-> +	kzdev->zdev = zdev;
-> +	zdev->kzdev = kzdev;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_open);
-> +
-> +void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
-> +{
-> +	struct kvm_zdev *kzdev;
-> +
-> +	kzdev = zdev->kzdev;
-> +	WARN_ON(kzdev->zdev != zdev);
-> +	zdev->kzdev = 0;
-> +	kfree(kzdev);
-> +}
-> +EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_release);
-> diff --git a/arch/s390/kvm/pci.h b/arch/s390/kvm/pci.h
-> new file mode 100644
-> index 000000000000..ce93978e8913
-> --- /dev/null
-> +++ b/arch/s390/kvm/pci.h
-> @@ -0,0 +1,21 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * s390 kvm PCI passthrough support
-> + *
-> + * Copyright IBM Corp. 2022
-> + *
-> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
-> + */
-> +
-> +#ifndef __KVM_S390_PCI_H
-> +#define __KVM_S390_PCI_H
-> +
-> +#include <linux/kvm_host.h>
-> +#include <linux/pci.h>
-> +
-> +struct kvm_zdev {
-> +	struct zpci_dev *zdev;
-> +	struct kvm *kvm;
-> +};
-> +
-> +#endif /* __KVM_S390_PCI_H */
-> 
+>   	if (lpuart_is_32(sport)) {
+>   		unsigned long sr = lpuart32_read(&sport->port, UARTSTAT);
+
 
 -- 
-Pierre Morel
-IBM Lab Boeblingen
+js
+suse labs

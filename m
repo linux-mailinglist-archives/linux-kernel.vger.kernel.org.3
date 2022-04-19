@@ -2,82 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270FC507B17
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBB3507B20
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357694AbiDSUlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
+        id S1357717AbiDSUni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239482AbiDSUlv (ORCPT
+        with ESMTP id S1346344AbiDSUnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:41:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D744240919;
-        Tue, 19 Apr 2022 13:39:07 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650400746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=ACSVUlvGnqDZI2n71F28I0TraOl9Yjs3dUvYrfjMAHE=;
-        b=gjZOttOHsTC2IeAYYI8gJJsDMLeapuokRo9d3LngjStAjVCEpz9yeP4wMh3MubEibH/RYo
-        FJB46Yqw3rcAtbObntvaq/MiFTU4L3MnMQvowMGoUtfpzHbGiZMN5wH0Y99pzRScO/wvdz
-        1e0t6uHj79BlIpFfQEnOeks4CjO0uZDTfAa82mQp+/gmrM+tMhYXBDqqW9DqIe3vtyIAc3
-        kxBrJCVHLH6V7tKyiqwni2sCDJ9LMnwPxh7EYhQUD8/zvD7HjNh1W/McYT57dqKUBWvyt1
-        A0EX1iYIIxHKF/SImeyvfd3nTPrT2B05ZnTN+SFKbOk9tmY5gC9Mv143XDabLQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650400746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=ACSVUlvGnqDZI2n71F28I0TraOl9Yjs3dUvYrfjMAHE=;
-        b=YwiIFsSMYgXWCova882NKcGbknygqHXvKBp+PcwZxRwR9rm7PQWhBxswoKQ2Z9KyXYmNAH
-        5gpJlQe6VDxHOWDg==
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [patch 00/10] x86/cpu: Consolidate APERF/MPERF code
-In-Reply-To: <CANn89iL+CHRi1HJ6Mp4u=ECnfAXV2qxXZj_BsQuv+uwheAfDDw@mail.gmail.com>
-Date:   Tue, 19 Apr 2022 22:39:05 +0200
-Message-ID: <87ee1svmdy.ffs@tglx>
+        Tue, 19 Apr 2022 16:43:31 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CD74132F
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:40:47 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id D242A1F41C51
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650400846;
+        bh=Rc2i+BQoYrwpgocGYrZDfDAk0Kijzh0pLg1e7NKVmVI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HWIJdBjow/SXHOolXdJUHNUdWrSbBTMZWYg6juNNYdzqVAcRpPeW6uZXhUnT3Mt1y
+         6ivYvweLm03x4RUZEL4dUbYr38Rc9fuf5ROtKN8C5AytTyG0djV+xh+5bybD86qAfs
+         8WtiX5MN4GFpniCX4l0VtMNjAhb7GE3MU+5y8weSRuBFxMYZfA5GId02ipX1byUNNT
+         u+1UTLtgE6m+DospAWqBX0dvEPAbU3kLRPYH2tG+EcnYAaAM6KSr1RjIHwcgVQ9Rh/
+         Kc0UK9vLx5LdPCYJEk1jfgWUJwaY5oerNA/m1NwIDOYcZai8xYxTpEZGkNeGON/VZb
+         LmdQINCw9St5Q==
+Message-ID: <7f497f99-f4c1-33d6-46cf-95bd90188fe3@collabora.com>
+Date:   Tue, 19 Apr 2022 23:40:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 11/15] drm/shmem-helper: Add generic memory shrinker
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
+ <20220417223707.157113-12-dmitry.osipenko@collabora.com>
+ <ebe3dfdb-04ac-9ab1-64ff-9d54f96afe57@suse.de>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <ebe3dfdb-04ac-9ab1-64ff-9d54f96afe57@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric,
-
-On Tue, Apr 19 2022 at 08:51, Eric Dumazet wrote:
-> On Fri, Apr 15, 2022 at 12:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->> It could be argued that not all APERF/MPERF capable systems have the
->> required BIOS information to enable frequency invariance support, but in
->> practice most of them do. So the APERF/MPERF sampling can be made
->> unconditional and just the frequency scale calculation for the scheduler
->> excluded.
+On 4/19/22 10:22, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 18.04.22 um 00:37 schrieb Dmitry Osipenko:
+>> Introduce a common DRM SHMEM shrinker. It allows to reduce code
+>> duplication among DRM drivers that implement theirs own shrinkers.
+>> This is initial version of the shrinker that covers basic needs of
+>> GPU drivers, both purging and eviction of shmem objects are supported.
 >>
->> The following series consolidates that.
+>> This patch is based on a couple ideas borrowed from Rob's Clark MSM
+>> shrinker and Thomas' Zimmermann variant of SHMEM shrinker.
 >>
->
-> Thanks a lot for working on that Thomas.
->
-> I am not sure I will be able to backport this to a Google prodkernel,
-> as I guess there will be many merge conflicts.
+>> In order to start using DRM SHMEM shrinker drivers should:
+>>
+>> 1. Implement new purge(), evict() + swap_in() GEM callbacks.
+>> 2. Register shrinker using drm_gem_shmem_shrinker_register(drm_device).
+>> 3. Use drm_gem_shmem_set_purgeable_and_evictable(shmem) and alike API
+>>     functions to activate shrinking of GEMs.
+>>
+>> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
+>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>> ---
+>>   drivers/gpu/drm/drm_gem_shmem_helper.c | 765 ++++++++++++++++++++++++-
+>>   include/drm/drm_device.h               |   4 +
+>>   include/drm/drm_gem.h                  |  35 ++
+>>   include/drm/drm_gem_shmem_helper.h     | 105 +++-
+>>   4 files changed, 877 insertions(+), 32 deletions(-)
+...
+>> @@ -172,6 +172,41 @@ struct drm_gem_object_funcs {
+>>        * This is optional but necessary for mmap support.
+>>        */
+>>       const struct vm_operations_struct *vm_ops;
+>> +
+>> +    /**
+>> +     * @purge:
+>> +     *
+>> +     * Releases the GEM object's allocated backing storage to the
+>> system.
+>> +     *
+>> +     * Returns the number of pages that have been freed by purging
+>> the GEM object.
+>> +     *
+>> +     * This callback is used by the GEM shrinker.
+>> +     */
+>> +    unsigned long (*purge)(struct drm_gem_object *obj);
+>> +
+>> +    /**
+>> +     * @evict:
+>> +     *
+>> +     * Unpins the GEM object's allocated backing storage, allowing
+>> shmem pages
+>> +     * to be swapped out.
+> 
+> What's the difference to the existing unpin() callback?
 
-:)
+Drivers need to do more than just unpinning pages when GEMs are evicted.
+Unpinning is only a part of the eviction process. I'll improve the
+doc-comment in v5.
 
-> Do you have by any chance this work available in a git branch ?
+For example, for VirtIO-GPU driver we need to to detach host from the
+guest's memory before pages are evicted [1].
 
- git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/amperf
+[1]
+https://gitlab.collabora.com/dmitry.osipenko/linux-kernel-rd/-/blob/932eb03198bce3a21353b09ab71e95f1c19b84c2/drivers/gpu/drm/virtio/virtgpu_object.c#L145
 
-Thanks,
+In case of Panfrost driver, we will need to remove mappings before pages
+are evicted.
 
-        tglx
+>> +     *
+>> +     * Returns the number of pages that have been unpinned.
+>> +     *
+>> +     * This callback is used by the GEM shrinker.
+>> +     */
+>> +    unsigned long (*evict)(struct drm_gem_object *obj);
+>> +
+>> +    /**
+>> +     * @swap_in:
+>> +     *
+>> +     * Pins GEM object's allocated backing storage if it was
+>> previously evicted,
+>> +     * moving swapped out pages back to memory.
+>> +     *
+>> +     * Returns 0 on success, or -errno on error.
+>> +     *
+>> +     * This callback is used by the GEM shrinker.
+>> +     */
+>> +    int (*swap_in)(struct drm_gem_object *obj);
+> 
+> Why do you need swap_in()? This can be done on-demand as part of a pin
+> or vmap operation.
+
+Similarly to the unpinning, the pining of pages is only a part of what
+needs to be done for GPU drivers. Besides of returning pages back to
+memory, we also need to make them accessible to GPU and this is a
+driver-specific process. This why we need the additional callbacks.
+
+>>   };
+>>     /**
+>> diff --git a/include/drm/drm_gem_shmem_helper.h
+>> b/include/drm/drm_gem_shmem_helper.h
+>> index 70889533962a..a65557b446e6 100644
+>> --- a/include/drm/drm_gem_shmem_helper.h
+>> +++ b/include/drm/drm_gem_shmem_helper.h
+>> @@ -6,6 +6,7 @@
+>>   #include <linux/fs.h>
+>>   #include <linux/mm.h>
+>>   #include <linux/mutex.h>
+>> +#include <linux/shrinker.h>
+>>     #include <drm/drm_file.h>
+>>   #include <drm/drm_gem.h>
+>> @@ -15,8 +16,18 @@
+>>   struct dma_buf_attachment;
+>>   struct drm_mode_create_dumb;
+>>   struct drm_printer;
+>> +struct drm_device;
+>>   struct sg_table;
+>>   +enum drm_gem_shmem_pages_state {
+>> +    DRM_GEM_SHMEM_PAGES_STATE_PURGED = -2,
+>> +    DRM_GEM_SHMEM_PAGES_STATE_EVICTED = -1,
+>> +    DRM_GEM_SHMEM_PAGES_STATE_UNPINNED = 0,
+>> +    DRM_GEM_SHMEM_PAGES_STATE_PINNED = 1,
+>> +    DRM_GEM_SHMEM_PAGES_STATE_EVICTABLE = 2,
+>> +    DRM_GEM_SHMEM_PAGES_STATE_PURGEABLE = 3,
+>> +};
+> 
+> These states can be detected by looking at the vmap and pin refcounts.
+> No need to store them explicitly.
+
+I'll try to revisit this, but I was finding that it's much more
+difficult to follow and debug code without the explicit states.
+
+> In your patch, they also come with a
+> big zoo of trivial helpers. None of that seems necessary AFAICT.
+
+There are couple functions which could be squashed, although this may
+hurt readability of the code a tad. I'll try to take another look at
+this for v5.
+
+> What's the difference between purge and evict BTW?
+
+The evicted pages are moved out from memory to a SWAP partition or file.
+
+The purged pages are destroyed permanently.
+
+>> +
+>>   /**
+>>    * struct drm_gem_shmem_object - GEM object backed by shmem
+>>    */
+>> @@ -43,8 +54,8 @@ struct drm_gem_shmem_object {
+>>        * @madv: State for madvise
+>>        *
+>>        * 0 is active/inuse.
+>> +     * 1 is not-needed/can-be-purged
+>>        * A negative value is the object is purged.
+>> -     * Positive values are driver specific and not used by the helpers.
+>>        */
+>>       int madv;
+>>   @@ -91,6 +102,40 @@ struct drm_gem_shmem_object {
+>>        * @map_wc: map object write-combined (instead of using shmem
+>> defaults).
+>>        */
+>>       bool map_wc;
+>> +
+>> +    /**
+>> +     * @eviction_disable_count:
+>> +     *
+>> +     * The shmem pages are disallowed to be evicted by the memory
+>> shrinker
+>> +     * while count is non-zero. Used internally by memory shrinker.
+>> +     */
+>> +    unsigned int eviction_disable_count;
+>> +
+>> +    /**
+>> +     * @purging_disable_count:
+>> +     *
+>> +     * The shmem pages are disallowed to be purged by the memory
+>> shrinker
+>> +     * while count is non-zero. Used internally by memory shrinker.
+>> +     */
+>> +    unsigned int purging_disable_count;
+>> +
+>> +    /**
+>> +     * @pages_state: Current state of shmem pages. Used internally by
+>> +     * memory shrinker.
+>> +     */
+>> +    enum drm_gem_shmem_pages_state pages_state;
+>> +
+>> +    /**
+>> +     * @evicted: True if shmem pages were evicted by the memory
+>> shrinker.
+>> +     * Used internally by memory shrinker.
+>> +     */
+>> +    bool evicted;
+>> +
+>> +    /**
+>> +     * @pages_shrinkable: True if shmem pages can be evicted or purged
+>> +     * by the memory shrinker. Used internally by memory shrinker.
+>> +     */
+>> +    bool pages_shrinkable;
+> 
+> As commented before, this state can be foundby looking at existing
+> fields. No need to store it separately.
+
+When we're transitioning from "evictable" to a "purgeable" state, we
+must not add pages twice to the "shrinkable_count" variable. Hence this
+is not a state, but a variable which prevents the double accounting of
+the pages. Please see drm_gem_shmem_add_pages_to_shrinker() in this patch.
+
+Perhaps something like "pages_accounted_by_shrinker" could be a better
+name for the variable. I'll revisit this for v5.

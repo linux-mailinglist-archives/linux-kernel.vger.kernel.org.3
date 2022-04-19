@@ -2,109 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602EF5075A4
+	by mail.lfdr.de (Postfix) with ESMTP id A98FE5075A5
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355459AbiDSQwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        id S1355464AbiDSQwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245327AbiDSQpm (ORCPT
+        with ESMTP id S1346034AbiDSQp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:45:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5765339692
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:42:59 -0700 (PDT)
+        Tue, 19 Apr 2022 12:45:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D19A3A5D6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:43:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650386578;
+        s=mimecast20190719; t=1650386592;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=u4Y3eOaR2D2oLy5UgU4g9qvJhnkbfGO00HLFWR/cxQI=;
-        b=AJfPcBaXHq79NscCaFoQMMluQvHVQbW6FKHD7d1YORzczWjFCcdGIXXLEyVgWM5LwP4Cmo
-        7QNc7fduEt6ilf5OixTKQJ9HkcklVOU5DT/dKk1GPa/e7DJG7aBVdNJPdFvGJoFYcoCiLk
-        QXxPveEG+m+Ko5hrWx4iyZ69f7s/MDE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=V3ODNWfMW+rRhSokZu86v1GXhJjBricpy30YxedvS1g=;
+        b=GGC/aKc6epjyb8qz33WDzkz7vdHatLFmsDOSeJq77hCEJ6oyzCiZ0EFdOm52+mMK1ay6Ju
+        xXNCJDNzjRJ4OimnpdrBcIX9/M6OpCf18OiLh84LH/skKgzZQbYlJ55COX7O6F6g12hcBD
+        T3Tpah57XcNPKzT6ZXuaTyaIiH1NCsQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-428-najQBgyjPK2iJtuUqeAHRQ-1; Tue, 19 Apr 2022 12:42:57 -0400
-X-MC-Unique: najQBgyjPK2iJtuUqeAHRQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0ED983C11C6D;
-        Tue, 19 Apr 2022 16:42:53 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B8FB0C5353B;
-        Tue, 19 Apr 2022 16:42:50 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Yl7d++G25sNXIR+p@rabbit.intern.cm-ag>
-References: <Yl7d++G25sNXIR+p@rabbit.intern.cm-ag> <YlWWbpW5Foynjllo@rabbit.intern.cm-ag> <507518.1650383808@warthog.procyon.org.uk>
-To:     Max Kellermann <mk@cm4all.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: fscache corruption in Linux 5.17?
+ us-mta-329-kIl84JomN_KviTwwZ6PMeg-1; Tue, 19 Apr 2022 12:43:10 -0400
+X-MC-Unique: kIl84JomN_KviTwwZ6PMeg-1
+Received: by mail-wm1-f71.google.com with SMTP id 125-20020a1c0283000000b003928cd3853aso1121487wmc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:43:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=V3ODNWfMW+rRhSokZu86v1GXhJjBricpy30YxedvS1g=;
+        b=lf+rHETlobwr+SCZn02jVrqOKxF37gvaLMhqiNJi/VBEGGz1JtkJw28YMd+LYIY0w3
+         Te39ZEfxXfw+Pr+BrNhgUVuly+IGaD8MiPSrVFHPVcO88XUQhJlO/WynZSZIg+FPWzii
+         BzknNT8WkZtwCtKdWujAzqTqogaQWx0sRRBsFcAiMS0kYWiyBUcuDO5tExled623HTL1
+         02KNQcM2HNQDFgUM561P30NlTkhl3PnsfFOmJ/iV6tQjDRCsrg2ZHn2hft9vrBpEvBoU
+         UZi1Y6cWXJjYG8YkPumst5HHX5N/TUR0GYYUCXpEwX6vyjXSqztn2dV/RkxbOmk3BqG/
+         Xicw==
+X-Gm-Message-State: AOAM532PXSAWkvCRP38BP490lIkymU6czJsXvyg72tVDKkHY0dfgORn+
+        AiT4SaktqrsX2bVDxeydIuXOfh9LxdsOZ9lIBKrSQNNduPwYuyiBbOU+4KZuWqzCD8eV5KS/ROL
+        IyZViel9FZwNCdaLNET0MBrlB
+X-Received: by 2002:adf:f981:0:b0:205:c3e1:9eba with SMTP id f1-20020adff981000000b00205c3e19ebamr12387507wrr.244.1650386589520;
+        Tue, 19 Apr 2022 09:43:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz/sBvEGx6+IXc/dmS3LEsLdRrH83M0si6np7xgLC//YEu1El92MuYL5XEmIp9phspX0ZKpFQ==
+X-Received: by 2002:adf:f981:0:b0:205:c3e1:9eba with SMTP id f1-20020adff981000000b00205c3e19ebamr12387485wrr.244.1650386589266;
+        Tue, 19 Apr 2022 09:43:09 -0700 (PDT)
+Received: from redhat.com ([2.53.17.80])
+        by smtp.gmail.com with ESMTPSA id v14-20020a7bcb4e000000b0034492fa24c6sm16631515wmj.34.2022.04.19.09.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 09:43:07 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 12:43:03 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Alexander Graf <graf@amazon.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io, Laszlo Ersek <lersek@redhat.com>,
+        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <20220419124245-mutt-send-email-mst@kernel.org>
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+ <c5181fb5-38fb-f261-9de5-24655be1c749@amazon.com>
+ <CAHmME9rTMDkE7UA3_wg87mrDVYps+YaHw+dZwF0EbM0zC4pQQw@mail.gmail.com>
+ <47137806-9162-0f60-e830-1a3731595c8c@amazon.com>
+ <CAHmME9pwfKfKp_qqbmAO5tEaQSZ5srCO5COThK3vWZR4avRF1g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <509960.1650386569.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 19 Apr 2022 17:42:49 +0100
-Message-ID: <509961.1650386569@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9pwfKfKp_qqbmAO5tEaQSZ5srCO5COThK3vWZR4avRF1g@mail.gmail.com>
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Max Kellermann <mk@cm4all.com> wrote:
+On Tue, Apr 19, 2022 at 05:12:36PM +0200, Jason A. Donenfeld wrote:
+> Hey Alex,
+> 
+> On Thu, Mar 10, 2022 at 12:18 PM Alexander Graf <graf@amazon.com> wrote:
+> > I agree on the slightly racy compromise and that it's a step into the
+> > right direction. Doing this is a no brainer IMHO and I like the proc
+> > based poll approach.
+> 
+> Alright. I'm going to email a more serious patch for that in the next
+> few hours and you can have a look. Let's do that for 5.19.
+> 
+> > I have an additional problem you might have an idea for with the poll
+> > based path. In addition to the clone notification, I'd need to know at
+> > which point everyone who was listening to a clone notification is
+> > finished acting up it. If I spawn a tiny VM to do "work", I want to know
+> > when it's safe to hand requests into it. How do I find out when that
+> > point in time is?
+> 
+> Seems tricky to solve. Even a count of current waiters and a
+> generation number won't be sufficient, since it wouldn't take into
+> account users who haven't _yet_ gotten to waiting. But maybe it's not
+> the right problem to solve? Or somehow not necessary? For example, if
+> the problem is a bit more constrained a solution becomes easier: you
+> have a fixed/known set of readers that you know about, and you
+> guarantee that they're all waiting before the fork. Then after the
+> fork, they all do something to alert you in their poll()er, and you
+> count up how many alerts you get until it matches the number of
+> expected waiters. Would that work? It seems like anything more general
+> than that is just butting heads with the racy compromise we're already
+> making.
+> 
+> Jason
 
-> Did you read this part of my email?:
+I have some ideas here ... but can you explain the use-case a bit more?
 
-Sorry, I'm trying to deal with several things at once.
-
-> My theory was that fscache shows a mix of old and new pages after the
-> file was modified.  Does this make sense?
-
-Okay - that makes a bit more sense.
-
-Could the file have been modified by a third party?  If you're using NFS3
-there's a problem if two clients can modify a file at the same time.  The
-second write can mask the first write and the client has no way to detect =
-it.
-The problem is inherent to the protocol design.  The NFS2 and NFS3 protoco=
-ls
-don't support anything better than {ctime,mtime,filesize} - the change
-attribute only becomes available with NFS4.
-
-If an NFS file is opened for writing locally, the cache for it supposed to=
- be
-invalidated and remain unused until there are no open file descriptors lef=
-t
-referring to it.  This is intended for handling DIO writes, but it should
-serve for this also.
-
-The following might be of use in checking if the invalidation happens loca=
-lly:
-
-echo 1 >/sys/kernel/debug/tracing/events/fscache/fscache_invalidate/enable
-
-And then this can be used to check if it correctly identifies that it has =
-an
-obsolete version of the file in the cache when it binds to it:
-
-echo 1 >/sys/kernel/debug/tracing/events/cachefiles/cachefiles_coherency/e=
-nable
-
-
-David
+-- 
+MST
 

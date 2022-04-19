@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1120A506F4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8181F506F56
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347187AbiDSNvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
+        id S1352909AbiDSNv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352977AbiDSNvN (ORCPT
+        with ESMTP id S1353082AbiDSNvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:51:13 -0400
+        Tue, 19 Apr 2022 09:51:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A41E3CFDF;
-        Tue, 19 Apr 2022 06:44:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDB73878B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:46:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02193B8198A;
-        Tue, 19 Apr 2022 13:44:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7769C385A5;
-        Tue, 19 Apr 2022 13:44:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B570DB818F3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:46:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80157C385A7;
+        Tue, 19 Apr 2022 13:46:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650375856;
-        bh=IEvf1VadfccjTgyuZD9eFHxT3pNqruiC9nzVFI5CI6M=;
+        s=k20201202; t=1650375976;
+        bh=n4QxtwOA/cXEd5B2gGq6+Qs298APnqFpU22eTso9ROY=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=quAd3JUEJ3SjxeMFe61q1dJObQpSNjhpPWicWxr++OuHjdVpjb8bY64SeV8mf5pnF
-         z307sYWBRu9w1cDAb4ks/4geT6NANLgf+gTqGi3j6S+v/mUNU3/b6jIGSLU9XV0C4K
-         emXeOmviONadN21B1D0Vc/iBWTC504ffUykLvDvtyxc3q5XQRwTJCS52ytgiypBgbx
-         GQvphiKOC+QZXsuPtRpDmfph+y3LqhM4vqqC7QkZOGafv0ZrVRYNSUPt4lGatgeFDo
-         bryo/pI+Pkyd4tE6qjuvteZcM33ORvZOWAFyiI2HGfsPmWfFddLyEV4yQtFLz1ilFc
-         81y3J5WwY5nFw==
+        b=FxxcI7X+P5MGtM+LPByf0f4iuVopd+VZrBg2cOlK5hA3L34x2LoyEUOOasP7Dzn1A
+         VbiSDwlptk1aqDc7/XSJvIz8N16ppOIE/Tze5guWpCMk/euo2MB+bqWrorVpGLvEQY
+         +dtHQ5G6zMLoTZznjCnXi0kd2zSlNex94ZesGllLknfVounKjoUVUM7OwWDKpv9mey
+         qTtpr7OHQrIaYAoi17EsUHqFVPyLK/NfFW3GtRZBrzK5L6dnDZpmeHMZjjho31zFvB
+         mkfYvXLn0MPtVpkjs2weTFLLbw0Fti6PVZigcJYoKxLmlhaj3yZOvV88ebYHnqa7PR
+         kdTUzwya7+aog==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 549EA5C0387; Tue, 19 Apr 2022 06:44:16 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 06:44:16 -0700
+        id 2E0055C0387; Tue, 19 Apr 2022 06:46:16 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 06:46:16 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Benedikt Spranger <b.spranger@linutronix.de>
-Subject: Re: [PATCH] rcu/torture: Change order of warning and trace dump
-Message-ID: <20220419134416.GD4285@paulmck-ThinkPad-P17-Gen-1>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH rcu 04/11] kernel/smp: Provide boot-time timeout for CSD
+ lock diagnostics
+Message-ID: <20220419134616.GE4285@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
-References: <20220411151903.28167-1-anna-maria@linutronix.de>
- <20220411180915.GY4285@paulmck-ThinkPad-P17-Gen-1>
- <20220412152501.GA2557395@paulmck-ThinkPad-P17-Gen-1>
- <alpine.DEB.2.21.2204190829070.1508@somnus>
+References: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
+ <20220419085607.2014-1-hdanton@sina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2204190829070.1508@somnus>
+In-Reply-To: <20220419085607.2014-1-hdanton@sina.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,44 +58,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 08:53:38AM +0200, Anna-Maria Behnsen wrote:
-> On Tue, 12 Apr 2022, Paul E. McKenney wrote:
-> 
-> > On Mon, Apr 11, 2022 at 11:09:15AM -0700, Paul E. McKenney wrote:
-> > > On Mon, Apr 11, 2022 at 05:19:03PM +0200, Anna-Maria Behnsen wrote:
-> > > > Dumping a big ftrace buffer could lead to a RCU stall. So there is the
-> > > > ftrace buffer and the stall information which needs to be printed. When
-> > > > there is additionaly a WARN_ON() which describes the reason for the ftrace
-> > > > buffer dump and the WARN_ON() is executed _after_ ftrace buffer dump, the
-> > > > information get lost in the middle of the RCU stall information.
-> > > > 
-> > > > Therefore print WARN_ON() message before dumping the ftrace buffer in
-> > > > rcu_torture_writer().
-> > > > 
-> > > > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > > > Reviewed-by: Benedikt Spranger <b.spranger@linutronix.de>
-> > > 
-> > > Hello, Anna-Maria!
-> > > 
-> > > Good point, but we get caught out either way.  Either we take the chance
-> > > of losing the WARN() message as you say, or we take the chance of the
-> > > activity in the WARN() message overwriting needed information in the
-> > > trace buffer.
-> > > 
-> > > Would it work to shut off tracing, do the WARN(), and only then do the
-> > > rcu_ftrace_dump()?
+On Tue, Apr 19, 2022 at 04:56:07PM +0800, Hillf Danton wrote:
+> On Mon, 18 Apr 2022 15:53:52 -0700 Paul E. McKenney wrote:
+> > Debugging of problems involving insanely long-running SMI handlers
+> > proceeds better if the CSD-lock timeout can be adjusted.  This commit
+> > therefore provides a new smp.csd_lock_timeout kernel boot parameter
+> > that specifies the timeout in milliseconds.  The default remains at the
+> > previously hard-coded value of five seconds.
 > > 
-> > And presumably you are looking at this because your testing is
-> > triggering it.  This WARN() assumes that the system running rcutorture
-> > is otherwise idle.  If you are (say) running kernel builds while also
-> > running rcutorture, then this WARN() is expected behavior.  So if you need
-> > this sort of testing, we need do something like adding another rcutorture
-> > module parameter (background_load?) that suppresses this warning.
+> > Cc: Rik van Riel <riel@surriel.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Ingo Molnar <mingo@kernel.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> > Cc: Juergen Gross <jgross@suse.com>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > ---
+> >  Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
+> >  kernel/smp.c                                    |  7 +++++--
+> >  2 files changed, 16 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > index 3f1cc5e317ed..645c4c001b16 100644
+> > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > @@ -5377,6 +5377,17 @@
+> >  	smart2=		[HW]
+> >  			Format: <io1>[,<io2>[,...,<io8>]]
+> >  
+> > +	smp.csd_lock_timeout= [KNL]
+> > +			Specify the period of time in milliseconds
+> > +			that smp_call_function() and friends will wait
+> > +			for a CPU to release the CSD lock.  This is
+> > +			useful when diagnosing bugs involving CPUs
+> > +			disabling interrupts for extended periods
+> > +			of time.  Defaults to 5,000 milliseconds, and
+> > +			setting a value of zero disables this feature.
+> > +			This feature may be more efficiently disabled
+> > +			using the csdlock_debug- kernel parameter.
+> > +
 > 
-> I ran into this while testing with rcutorture kvm script. And I was the
-> only one working on the machine. So I do not need a parameter right
-> now. I'll come back to you when my testing requirements will change :)
+> Can non-responsive CSD lock detected trigger syzbot (warning) report?
 
-Sounds good, and thank you for the info!
+If they enable it by building with CONFIG_CSD_LOCK_WAIT_DEBUG=y, yes.  
 
 							Thanx, Paul
+
+> Hillf
+> >  	smsc-ircc2.nopnp	[HW] Don't use PNP to discover SMC devices
+> >  	smsc-ircc2.ircc_cfg=	[HW] Device configuration I/O port
+> >  	smsc-ircc2.ircc_sir=	[HW] SIR base I/O port
+> > diff --git a/kernel/smp.c b/kernel/smp.c
+> > index 01a7c1706a58..d82439bac401 100644
+> > --- a/kernel/smp.c
+> > +++ b/kernel/smp.c
+> > @@ -183,7 +183,9 @@ static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
+> >  static DEFINE_PER_CPU(void *, cur_csd_info);
+> >  static DEFINE_PER_CPU(struct cfd_seq_local, cfd_seq_local);
+> >  
+> > -#define CSD_LOCK_TIMEOUT (5ULL * NSEC_PER_SEC)
+> > +static ulong csd_lock_timeout = 5000;  /* CSD lock timeout in milliseconds. */
+> > +module_param(csd_lock_timeout, ulong, 0444);
+> > +
+> >  static atomic_t csd_bug_count = ATOMIC_INIT(0);
+> >  static u64 cfd_seq;
+> >  
+> > @@ -329,6 +331,7 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
+> >  	u64 ts2, ts_delta;
+> >  	call_single_data_t *cpu_cur_csd;
+> >  	unsigned int flags = READ_ONCE(csd->node.u_flags);
+> > +	unsigned long long csd_lock_timeout_ns = csd_lock_timeout * NSEC_PER_MSEC;
+> >  
+> >  	if (!(flags & CSD_FLAG_LOCK)) {
+> >  		if (!unlikely(*bug_id))
+> > @@ -341,7 +344,7 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
+> >  
+> >  	ts2 = sched_clock();
+> >  	ts_delta = ts2 - *ts1;
+> > -	if (likely(ts_delta <= CSD_LOCK_TIMEOUT))
+> > +	if (likely(ts_delta <= csd_lock_timeout_ns || csd_lock_timeout_ns <= 0))
+> >  		return false;
+> >  
+> >  	firsttime = !*bug_id;
+> > -- 
+> > 2.31.1.189.g2e36527f23

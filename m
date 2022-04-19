@@ -2,93 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD325072B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AF65072CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354460AbiDSQNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S1354573AbiDSQTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354485AbiDSQMm (ORCPT
+        with ESMTP id S1354562AbiDSQTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:12:42 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE474240BC;
-        Tue, 19 Apr 2022 09:09:58 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id i20so23086492wrb.13;
-        Tue, 19 Apr 2022 09:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Riv/wb0nWsjQNLZH9GYpKN0qAwQCp6Wcud3WrpG9KQM=;
-        b=Avoiha5pzt5iXaV/qAwaZBlRbNzRg+oBgewVIskQueMBOYb/i02kFHy6FZnuD7c0dG
-         D8Uth0VK6C5HjExR+lE/jDSvhAcpo5N7+4FMsZktsHSgK8SMry0aL/NQcW2SovhmVsjx
-         HlXsvGQM2G7LpW+vh9q9a21F9NelezHdmhuIJhpuV3tdNZpoiYc+m0CYm87sGfPWcPnw
-         YjgKvnm4WItW+mLcoEYYVt7F0QpdZQV9j3FRhhHkPO7acZEpDUPN1BJMl09rHuQlW/Hi
-         MVW9wGMXQITcqUf36mnOU9k4t/8yN9H40B7IBMk3ZtjAKiqXtHmC3fNb51tqfHtaFJK7
-         PZjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Riv/wb0nWsjQNLZH9GYpKN0qAwQCp6Wcud3WrpG9KQM=;
-        b=YvePLD+LZkS4xF57CTYjKVaaCm3FHGw+OqAOrJ9IgUbVyX98qeRcP1W/IOj6SBwpB/
-         xtDzGxbVlqaKBoDkNtA7HU4THv/+4uwsp1QSIQy6EMnxZa0/dWs8m6N00CEWCXy0KAvl
-         0/suxZr4YDB9zchfvlM4Z0BhQq0kIz/QJKmAy48Tk9ZeoAhC2AGzY58sbhbCO3WgD/7i
-         lcQ5JckBA/11ra28w1Vizx6eMn0UvMrAYPcFzeRhAZNrRrL/aW9FkoWydTAAg7uUAm0I
-         WkNCN15CTRVcD8QuN8wc+4rJMQOJrXVXyBiMUHw9C424Hk18j8fIboW66FMRqWVq83o6
-         LNyQ==
-X-Gm-Message-State: AOAM532vvCqFwuhJP9p1te1SyWoGcS7VoLbq6ppZCglllLFxESwYlLoy
-        MYtdpV/aMYGqOSqrpyQkF5FJrZiO2cXiDQ==
-X-Google-Smtp-Source: ABdhPJzlbsAj3brTwnY7x/GJOsGXKnLbdLi7eA5aNKGCWTj8wtYbbK9bMFTK6V9BsGqo+pb/Y9Ps/A==
-X-Received: by 2002:adf:9bd5:0:b0:207:a2a6:636a with SMTP id e21-20020adf9bd5000000b00207a2a6636amr11957576wrc.480.1650384597296;
-        Tue, 19 Apr 2022 09:09:57 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id 185-20020a1c19c2000000b0038a1d06e862sm20539187wmz.14.2022.04.19.09.09.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 09:09:56 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <c222d971-b82e-ef54-5683-d5fd65829b21@redhat.com>
-Date:   Tue, 19 Apr 2022 18:09:54 +0200
+        Tue, 19 Apr 2022 12:19:42 -0400
+X-Greylist: delayed 314 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Apr 2022 09:16:59 PDT
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F69139BA5;
+        Tue, 19 Apr 2022 09:16:58 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.94]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MOiLv-1nHAaj40lT-00Q8zV; Tue, 19 Apr 2022 18:11:23 +0200
+Message-ID: <c57d6490-7439-d49f-369c-5356b6c4eeee@i2se.com>
+Date:   Tue, 19 Apr 2022 18:11:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: linux-next: build failure after merge of the kvm tree
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] clk: bcm2835: Round UART input clock up
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     KVM <kvm@vger.kernel.org>, Peter Gonda <pgonda@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220419153423.644c0fa1@canb.auug.org.au>
- <Yl7c06VX5Pf4ZKsa@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yl7c06VX5Pf4ZKsa@google.com>
+To:     "Ivan T. Ivanov" <iivanov@suse.de>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Phil Elwell <phil@raspberrypi.org>,
+        kernel test robot <lkp@intel.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220404125113.80239-1-iivanov@suse.de>
+ <20220414105656.qt52zmr5vjmjdcxc@suse>
+ <0b3356c0-b4c8-91ed-dfde-9f50483ec36f@i2se.com>
+ <20220418110516.s7jxsfa3jl7aagrf@suse>
+ <2a46bd1c-600b-5bd9-1c19-20c809f63945@i2se.com>
+ <20220418113801.uree7rvkzxpiwyni@suse>
+ <6adc9c1c-ec75-b52c-9c44-00296eaa00f6@i2se.com>
+ <20220419150555.igh6tdxgjb7meygx@suse>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20220419150555.igh6tdxgjb7meygx@suse>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:k3v/NjHx03Qa/XH+nWoErQY7BDb3NBOyLbmyf1V5wOpAQtoDudw
+ 4VXzBC+qhQ0H4BHTZqM4sxz+ESp0lpXES+WXAWbdyOtA7U28+GJeGna9MWoPxztgPny06Tg
+ hS8Qau/S4iZikBn0umzGHi96HxBgKi+hSanLuFGIlLIGhH1JFD4oquk4WgoWfL+5rtteZtc
+ WfE3saZE5EtoY+4A5Blrg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:T4Jiz90U13c=:whMxW1OBO7TIa3bDIsB8CF
+ gl6HKv3l2vVNP/ZfATukcL5xLZh1HEMF5zmBJ19j2VGF2dN6ccMwBElJDU+D0fILlIEnyf6ZS
+ ClkXjDby6EFZiehBxT2DCc7M5tg/2/cgqY4obd8VfDBNSQ6Yed4SA9LnhtGu0d3Z374xx67pK
+ spIwa7Wcg/h+JJVrZbgCVnyaBwNVuZLSBbUB6XK2b8k9lM3bFlodcZFrhRi6tp9L66kCp7+Qe
+ DzCM+AhRsceFR7u7Cj6XMRFsKTdyHhZWkriMGJs7LRobDjr3N+UWUZa8AXkrcvGYHzFBRTA2I
+ ff2li5NmRGdYUNIN9i/c8gBQ2l4X1OBS2OUrqUEV1Vb0Mc/OcLkZwIpt16Pv/sF/bkMwSKfYT
+ 44RLj9c8kW0BDokS6rkHhL83/2WfrZocB7stPZw3pL0EIkzQ+E3mJ/C4sjk/ZZRBKLZp2bM4k
+ 36tZnATf4ALTSVrg9SVowq+cwsRPLPtVpFNLbtAnJCLwrDAlnfENRvtgBjau0F4kSvfueRODe
+ xhVcfjihnOJuAtXnPbqfd79Rd/Q30gRI9VsAJnoXq3q3yQ2KEgIdI3ZsNiMbYb3b8Vch9prV9
+ RuGK9Ie47vvBeyrJdAIAc3lLFgGLf8tyAuzS+gEZaL/L+5V7AcTGLLwT+33twGQdZRmHf4ESp
+ e5CgLIW4BkCgF+bkn6O36UsRZXUisUFEPd0XedmBwdSK9tTQx79Qwh21zfWUQWqDl1VHlUkzS
+ CflDzaTsmNVv/Yru
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/22 18:01, Sean Christopherson wrote:
->> In this commit, the uapi structure changes do not match the documentation
->> changes:-(   Does it matter that the ABI may be changed by this commit
->> (depending on the alignment of the structure members)?
-> Yeah, it's a bit of mess.  I believe we have a way out, waiting on Paolo to weigh in.
-> 
-> https://lore.kernel.org/all/YlisiF4BU6Uxe+iU@google.com
-> 
+Hi Ivan,
 
-I'll get to it tomorrow morning.
+Am 19.04.22 um 17:05 schrieb Ivan T. Ivanov:
+> On 04-18 18:01, Stefan Wahren wrote:
+>>>> Do you use the mainline DTS or the vendor DTS to see this issue?
+>>>>
+>>> For (open)SUSE we use downstream DTS.
+>> This is popular and bad at the same time. We as the mainline kernel
+>> developer cannot guarantee that this works as expected. A lot of issues are
+>> caused by mixing vendor DTS with mainline kernel, so in general (not for
+>> this specific issue) you are on your own with this approach.
+>>
+> Yep, I am aware of that. I am still trying to recover after recent
+> gpio-ranges fiasco, also still working on fixing non-exported firmware
+> clocks, which break HDMI output on some of the devices.
+I guess, these firmware clock issues are only reproducible with vendor DTS?
+>
+>> I know this is a little bit off topic but except from overlay support, can
+>> you provide a list of most missing features of the mainline kernel / DTS?
+> Well, 260+ overlays for free is not insignificant benefit. Beside few
+> breakages from time to time using downstream device tree works fine.
 
-Paolo
+I think the better approach is to add the missing steps for overlay 
+support in mainline.
+
+Best regards
+
+>
+> Regards,
+> Ivan
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

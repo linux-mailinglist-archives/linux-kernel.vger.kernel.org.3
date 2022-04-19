@@ -2,121 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D9250712F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B9950713E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345937AbiDSPAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
+        id S1346996AbiDSPBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244673AbiDSPAi (ORCPT
+        with ESMTP id S241532AbiDSPBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:00:38 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224343B026;
-        Tue, 19 Apr 2022 07:57:54 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so1675626wmn.1;
-        Tue, 19 Apr 2022 07:57:54 -0700 (PDT)
+        Tue, 19 Apr 2022 11:01:40 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3F43B012
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:58:57 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id j2so31595149ybu.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:58:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VSfNNxCMPbot3TUeMFQDYDmYhnDExeycdgTmMkPBSiw=;
-        b=K89+PXfaCFu09OY7bsgh+7qQX9SHhTwwKvG8GnMvsy4nm507xqyK3sHZ67MuOBouWK
-         4rkUK91/51WwE/E/BbtbqNlYpk2W+/m+3Chgf1DgQ/4ZxSP0s1wqpSXNl7+UdgoWj+Xs
-         DJy4bCzYn6/vlOL+ZNY9yNQOs/kv50OdjLzRncPuI5wSrw+ftTvwxvHd1FHSO3Lksu+l
-         gBhsZjxwGFJya6sN2Lt1XOMX7olBrNleXGG5RLgiKeUMjp6130k6KNYzjV95UMRI84s7
-         H+NLnzuto2Whpp86h7jTvQ96wMZQqVnrQDa2fWzSRA2L9LVCV6/K5Tlwf7tuM/Cl+x+g
-         jazw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XG8kQ+XIcj/kxQkqKlX6Of1DGaCLk+DsEI9aRIpWeLs=;
+        b=Oy9TvaCS/0qIZZ8t1TL2LJxxehNvhY1VAoqRcmRrlCdVK69gizdMFSGDeZiX0xLCOf
+         2KcC7dEOo6dIqoY7Z3aCU/K+5ky2qwleELsn/kkkKEgDhWUXVGKy6Nq3RKuutKo2UkCM
+         vP4RFdEK7kzA6azj/1KzhyiPNPwQ1YXsTxuq0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VSfNNxCMPbot3TUeMFQDYDmYhnDExeycdgTmMkPBSiw=;
-        b=PYHIOx0iUuZUYCAZGjcjEN1S97gv7502HEsoozFCy41M+raaeUg1aMFGV5UXUW58WJ
-         TsmiBIHM2hSODmaUSt7quLt+qQZ/7mcxp9SDvX0vUbz+IMS/kckEO4HUJEathddwEBK+
-         ZNNkNORH4N9E1GCmHKwsbMDLbZgAF7Mkdy1cSBpqom/I2lXkiar3CwVdfUbaTa16XdRX
-         3JccoShIuUt+PgblZyleWaTgvWhp+2MZ3sQOUv1cPyC+U5X2mNgvhlEj8xGIcyDuRnGN
-         7qxpwEDwykf+tT15GOyU+HNi2D4r3LpY5pyTrWYWyfOKeFlHRSryB4SCcd56eaTxP11O
-         /t8A==
-X-Gm-Message-State: AOAM530LYwcQ6FHPFJz9V3gzT1QkKt44YJ88OqoB72iiW5exWO1ql0Uo
-        emedofRjXZzqm86VWTu4KlsKaYg6gDo=
-X-Google-Smtp-Source: ABdhPJwGtnkzLvabPxjsO/IdFw1I83x6czWqIQw5VNsuYzxUmENRbL2f1OWVQ5C8fTTybXwA29UdQg==
-X-Received: by 2002:a05:600c:2197:b0:38e:b80c:526a with SMTP id e23-20020a05600c219700b0038eb80c526amr19889290wme.76.1650380272642;
-        Tue, 19 Apr 2022 07:57:52 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id o10-20020a5d47ca000000b0020a992ce36esm4933973wrc.1.2022.04.19.07.57.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 07:57:51 -0700 (PDT)
-Message-ID: <db521557-09ea-2c34-24e5-3bf71961b4fe@gmail.com>
-Date:   Tue, 19 Apr 2022 16:57:50 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XG8kQ+XIcj/kxQkqKlX6Of1DGaCLk+DsEI9aRIpWeLs=;
+        b=jhKby4VvrMHBPf5j5eCdIkNmvSINV+y3JKMXUIelWs44j3nKL/yWD+fZQxuQyZL6bb
+         1j7Tic5hIrJGUFybtFgy2xwlGMVq8L44VtnD/CSMR7XNHgI3Hv7+/VeVAxghvIYOGoI9
+         4ViYD01lzdCYmcxfcOaiPrPPVVkNGcqGSOlGUwiV06h+uO13c/u1kp4699RyzORPz2g/
+         yb26ZXUe2NvfEA0/jj/tGWBqqt2z7OXCjmWL7LD/QGZpqdu5+9j+lNU6GxffKzNyGAVX
+         KlfD/Oi5tTUNAj3l5ED3eKQozdnD/ZpDGjAAzRB9vXzz0Ix4epEeJk9gbyHV8fCUnKDj
+         qJZA==
+X-Gm-Message-State: AOAM5319hwxol9Qke55cVIBy4fzISA4RHlpMJDWBtCb7HdMKhGJAQMGp
+        JlJq9xWyjh+zvdQQSn7oi9c6ShEyzAlTZZXZAybXYA==
+X-Google-Smtp-Source: ABdhPJyvxzwabX5yi+4hLlFDW7j672aGNtFoJ1IdyVEymCiqxg7DCHw1Bd0ZglILn50oMoTJO2soBbS5WmSx/OFgbVs=
+X-Received: by 2002:a25:3258:0:b0:641:d47c:8321 with SMTP id
+ y85-20020a253258000000b00641d47c8321mr15399843yby.294.1650380337072; Tue, 19
+ Apr 2022 07:58:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/5] dt-bindings: arm: mediatek: mmsys: add mt8195 SoC
- binding
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de
-Cc:     airlied@linux.ie, angelogioacchino.delregno@collabora.com,
-        jason-jh.lin@mediatek.com, nancy.lin@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220419033237.23405-1-rex-bc.chen@mediatek.com>
- <20220419033237.23405-3-rex-bc.chen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220419033237.23405-3-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220419000408.3202635-1-swboyd@chromium.org> <Yl4Au/O/am/ZbX9J@chromium.org>
+ <CAE-0n507D9W5BFfG2vXqN1cqvnrQKLbLw7YejGb5_kH+7X62sw@mail.gmail.com>
+In-Reply-To: <CAE-0n507D9W5BFfG2vXqN1cqvnrQKLbLw7YejGb5_kH+7X62sw@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 19 Apr 2022 07:58:46 -0700
+Message-ID: <CACeCKac83uiwdAf2RWqc9DxEft2+BSBn5Kp5PMR23UGKJyk5KQ@mail.gmail.com>
+Subject: Re: [PATCH v2] mfd: cros_ec_dev: Only register PCHG device if present
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Tzung-Bi Shih <tzungbi@kernel.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 19, 2022 at 7:55 AM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Prashant Malani (2022-04-18 17:22:19)
+> > On Apr 18 17:04, Stephen Boyd wrote:
+> > > +             retval = mfd_add_hotplug_devices(ec->dev,
+> > > +                                     cros_ec_pchg_cells,
+> > > +                                     ARRAY_SIZE(cros_ec_pchg_cells));
+> > > +             if (retval)
+> > > +                     dev_warn(ec->dev, "failed to add pchg: %d\n",
+> > > +                              retval);
+> > Tiny nit: Can this fit in 1 line (100 chars[1])?
+> >
+>
+> I'm matching the style of other lines in this file (this is copy
+> pasta). I'll let the maintainer decide what to do.
 
-
-On 19/04/2022 05:32, Rex-BC Chen wrote:
-> From: "jason-jh.lin" <jason-jh.lin@mediatek.com>
-> 
-> In the SoC before, such as mt8173, it has 2 pipelines binding to one
-> mmsys with the same clock driver and the same power domain.
-> 
-> In mt8195, there are 4 pipelines binding to 4 different mmsys, such as
-> vdosys0, vdosys1, vppsys0 and vppsys1.
-> Each mmsys uses different clock drivers and different power domain.
-> 
-> Since each mmsys has its own mmio base address, they could be identified
-> by their different address during probe time.
-> 
-> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
-> Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Applied, thanks
-
-> ---
->   .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml         | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> index 6c2c3edcd443..6ad023eec193 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> @@ -31,6 +31,7 @@ properties:
->                 - mediatek,mt8183-mmsys
->                 - mediatek,mt8186-mmsys
->                 - mediatek,mt8192-mmsys
-> +              - mediatek,mt8195-mmsys
->                 - mediatek,mt8365-mmsys
->             - const: syscon
->         - items:
+Quite a bit of that code predates the char limit update, but OK.

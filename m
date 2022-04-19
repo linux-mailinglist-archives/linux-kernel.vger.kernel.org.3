@@ -2,135 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF62506628
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49710506632
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349539AbiDSHro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S1349548AbiDSHsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240475AbiDSHrk (ORCPT
+        with ESMTP id S243210AbiDSHsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:47:40 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C907240A2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:44:58 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id ks6so31162124ejb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:44:58 -0700 (PDT)
+        Tue, 19 Apr 2022 03:48:01 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8262D25E9A;
+        Tue, 19 Apr 2022 00:45:18 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id b19so21202605wrh.11;
+        Tue, 19 Apr 2022 00:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LIDXo/Uity2xr0NOefpQVn0crCBfVXuQDDJyi/aflIk=;
+        b=P1T979CbMsI2SUmYhQenmVVAIhGym62LpiPwyhu9mqZxFcDQfYblpBVJSI318EvEkU
+         8qraQoEDiW07OJeqNLpO1y4LicWptHus+FDeTQ+ri0fKDi0Gd3qjTzchzJWw1eV3J2P/
+         ur+/YV9SpThD14a+M4Xmx2nBHefr2HCF9i0g9r/v0YFck8Sp1dDQHrhoCRX/D8LLD+nv
+         hSbMh/wtA7UytVfbYUIxc8Vd3UCJhC0dZWi5dnl6xtPjbpaBDhqNaROJjuoWcG/xdpM/
+         cfT1g6fLQGRIHJeLkDOGbTqf4WV/fdLr/5gECYLOYf83BQnlZ2tdaiA8le5fVPy13rCW
+         ro6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+JSsT707sCv2QcWZYnglmbWyVpq/ugMdBKjViokwxWs=;
-        b=X7MJF3e3O/9TZJaLqyu99oY47hm3JvDgc+DpsArE4X/d8YmnD8NhNv2z5dZQk9/dGo
-         ZpPsEKRHJYsaOOFqJ1D7h4/2kN5Q3PIj3/ozBfQENI9Ze0mTczIVHceMKEunPaVXPipM
-         pzTrTEF2zwWnRxpUQUwwMnU7UYJGeD4YJ3bOdtR0fP5xRZ/RMcrYfon+cuc7pXNenf3U
-         XMn9Yg5WVl+d4R9J0SYC/AFxxIz9oB1CwQEbJ5kf01bVfSc4B3uDQRk2Q+Uipw+U2Jpd
-         Tu1e4EUDCSlXsrF6DE92MuNy2Gl7RJl9azNb0ljVqTuwMo6ibv6GD+N/KZv/Pwzx0Jbr
-         SBxg==
-X-Gm-Message-State: AOAM533/QhuvyzYLXEsLg90grlWB6s7tQqwpt5ycpqfS23O9Vjynt5R4
-        kSJU69jRZBJtoSlcpuQ8VB+V4HdW8YM=
-X-Google-Smtp-Source: ABdhPJxxD5OJ/ccuoyLvC6PmJXvvwKQ0oTUSJzh6k1maDcFqFLQClafNjIZIPZzRqDy+BFhOzN1ZoQ==
-X-Received: by 2002:a17:907:60d3:b0:6db:8b59:1564 with SMTP id hv19-20020a17090760d300b006db8b591564mr12243772ejc.228.1650354297244;
-        Tue, 19 Apr 2022 00:44:57 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id b11-20020a17090630cb00b006e83fb1e6b1sm5408655ejb.100.2022.04.19.00.44.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 00:44:56 -0700 (PDT)
-Message-ID: <b126db72-42f9-f767-a870-1e8d47d92674@kernel.org>
-Date:   Tue, 19 Apr 2022 09:44:55 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=LIDXo/Uity2xr0NOefpQVn0crCBfVXuQDDJyi/aflIk=;
+        b=sH63uNP/BKEVHY0KYgRsdMm7i+ZGXehZEyFlLQvTalOM5d/aVVKjAtHF4klj7Z+YJJ
+         +Sj+xCvzQkOaPeLP68RvnUnXIFjhFriP0yTO27SZkMayje4zXFtEy7wmQPZOO3GvYKyi
+         alSOLcY3q4KF18z7psZUAl0T/jjFU90ALhiNTF519MOxycAFLlJoyPT3XbiSjI1ZfmJR
+         /KgbSH7ifFg8RidH90WpniRvKkByoN0F+rBFmbFswB8cMTps7YrBvdzZdfvagFsHnf/1
+         f8nse9JmxsMb7sWuaUvYIYMndZ1j0ex2otu+bJJJCw9yNpcrYXXiS8xsUFmo+o9cq01S
+         xT7w==
+X-Gm-Message-State: AOAM533eE2rhI49jObnixFUOsvTGzDpcQZU9EACFEPlZ/FyLtGGkL658
+        HIqeEjPo983LGa6iF6xVvGE=
+X-Google-Smtp-Source: ABdhPJzezuCr1A2N5D3o9C3Ys+bbuuIe1wYYoQKgg7RlsTX7w5PNcndV/T40ockclreuq/ypyy6ZLw==
+X-Received: by 2002:adf:e2cc:0:b0:203:e8ba:c709 with SMTP id d12-20020adfe2cc000000b00203e8bac709mr10556484wrj.713.1650354316985;
+        Tue, 19 Apr 2022 00:45:16 -0700 (PDT)
+Received: from gmail.com ([81.168.73.77])
+        by smtp.gmail.com with ESMTPSA id h10-20020a05600c414a00b0038ebb6884d8sm22941157wmm.0.2022.04.19.00.45.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 19 Apr 2022 00:45:16 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 08:45:13 +0100
+From:   Martin Habets <habetsm.xilinx@gmail.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Colin Ian King <colin.king@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Xu Wang <vulab@iscas.ac.cn>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH net-next v4 14/18] sfc: Remove usage of list iterator for
+ list_add() after the loop body
+Message-ID: <20220419074513.bgqmi3c5ydogpytj@gmail.com>
+Mail-Followup-To: Jakob Koschel <jakobkoschel@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, Jiri Pirko <jiri@resnulli.us>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Colin Ian King <colin.king@intel.com>,
+        Eric Dumazet <edumazet@google.com>, Xu Wang <vulab@iscas.ac.cn>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        bpf@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+References: <20220415122947.2754662-1-jakobkoschel@gmail.com>
+ <20220415122947.2754662-15-jakobkoschel@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] tty/sysrq: change the definition of sysrq_key_table's
- element to make it more readable
-Content-Language: en-US
-To:     Junwen Wu <wudaemon@163.com>, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Junwen Wu <wudaemon@gmail.com>
-References: <20220418153703.97705-1-wudaemon@163.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220418153703.97705-1-wudaemon@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220415122947.2754662-15-jakobkoschel@gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18. 04. 22, 17:37, Junwen Wu wrote:
-> From: Junwen Wu <wudaemon@gmail.com>
+On Fri, Apr 15, 2022 at 02:29:43PM +0200, Jakob Koschel wrote:
+> In preparation to limit the scope of a list iterator to the list
+> traversal loop, use a dedicated pointer pointing to the location
+> where the element should be inserted [1].
 > 
-> The definition of sysrq_key_table's elements, like sysrq_thaw_op and
-> sysrq_showallcpus_op are not consistent with sysrq_ftrace_dump_op,
-> Consistency makes code more readable.
-
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-
-> Signed-off-by: Junwen Wu <wudaemon@gmail.com>
+> Before, the code implicitly used the head when no element was found
+> when using &new->list. The new 'pos' variable is set to the list head
+> by default and overwritten if the list exits early, marking the
+> insertion point for list_add().
+> 
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 > ---
-> V1 -> V2: Fix some commit message's error
+>  drivers/net/ethernet/sfc/rx_common.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
->   drivers/tty/sysrq.c | 14 ++++++--------
->   1 file changed, 6 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-> index bbfd004449b5..9485156bf48b 100644
-> --- a/drivers/tty/sysrq.c
-> +++ b/drivers/tty/sysrq.c
-> @@ -274,6 +274,8 @@ static const struct sysrq_key_op sysrq_showallcpus_op = {
->   	.action_msg	= "Show backtrace of all active CPUs",
->   	.enable_mask	= SYSRQ_ENABLE_DUMP,
->   };
-> +#else
-> +#define sysrq_showallcpus_op (*(const struct sysrq_key_op *)NULL)
->   #endif
->   
->   static void sysrq_handle_showregs(int key)
-> @@ -405,6 +407,7 @@ static const struct sysrq_key_op sysrq_moom_op = {
->   	.enable_mask	= SYSRQ_ENABLE_SIGNAL,
->   };
->   
-> +#ifdef CONFIG_BLOCK
->   static void sysrq_handle_thaw(int key)
->   {
->   	emergency_thaw_all();
-> @@ -415,6 +418,9 @@ static const struct sysrq_key_op sysrq_thaw_op = {
->   	.action_msg	= "Emergency Thaw of all frozen filesystems",
->   	.enable_mask	= SYSRQ_ENABLE_SIGNAL,
->   };
-> +#else
-> +#define sysrq_thaw_op (*(const struct sysrq_key_op *)NULL)
-> +#endif
->   
->   static void sysrq_handle_kill(int key)
->   {
-> @@ -468,17 +474,9 @@ static const struct sysrq_key_op *sysrq_key_table[62] = {
->   	NULL,				/* g */
->   	NULL,				/* h - reserved for help */
->   	&sysrq_kill_op,			/* i */
-> -#ifdef CONFIG_BLOCK
->   	&sysrq_thaw_op,			/* j */
-> -#else
-> -	NULL,				/* j */
-> -#endif
->   	&sysrq_SAK_op,			/* k */
-> -#ifdef CONFIG_SMP
->   	&sysrq_showallcpus_op,		/* l */
-> -#else
-> -	NULL,				/* l */
-> -#endif
->   	&sysrq_showmem_op,		/* m */
->   	&sysrq_unrt_op,			/* n */
->   	/* o: This will often be registered as 'Off' at init time */
+> diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
+> index 1b22c7be0088..716847ba7038 100644
+> --- a/drivers/net/ethernet/sfc/rx_common.c
+> +++ b/drivers/net/ethernet/sfc/rx_common.c
+> @@ -556,6 +556,7 @@ efx_rx_packet_gro(struct efx_channel *channel, struct efx_rx_buffer *rx_buf,
+>  struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
+>  {
+>  	struct list_head *head = &efx->rss_context.list;
+> +	struct list_head *pos = head;
 
+This violates the reverse Xmas list policy. This definition should be
+1 line further down.
 
--- 
-js
-suse labs
+Martin
+
+>  	struct efx_rss_context *ctx, *new;
+>  	u32 id = 1; /* Don't use zero, that refers to the master RSS context */
+>  
+> @@ -563,8 +564,10 @@ struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
+>  
+>  	/* Search for first gap in the numbering */
+>  	list_for_each_entry(ctx, head, list) {
+> -		if (ctx->user_id != id)
+> +		if (ctx->user_id != id) {
+> +			pos = &ctx->list;
+>  			break;
+> +		}
+>  		id++;
+>  		/* Check for wrap.  If this happens, we have nearly 2^32
+>  		 * allocated RSS contexts, which seems unlikely.
+> @@ -582,7 +585,7 @@ struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
+>  
+>  	/* Insert the new entry into the gap */
+>  	new->user_id = id;
+> -	list_add_tail(&new->list, &ctx->list);
+> +	list_add_tail(&new->list, pos);
+>  	return new;
+>  }
+>  
+> -- 
+> 2.25.1

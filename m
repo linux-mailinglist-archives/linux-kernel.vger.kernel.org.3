@@ -2,108 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FED0506199
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CEF50619B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245093AbiDSBP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 21:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S245110AbiDSBRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 21:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241673AbiDSBP1 (ORCPT
+        with ESMTP id S244953AbiDSBRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 21:15:27 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F592D1EB;
-        Mon, 18 Apr 2022 18:12:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2CABBCE1122;
-        Tue, 19 Apr 2022 01:12:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8AEAC385A7;
-        Tue, 19 Apr 2022 01:12:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650330761;
-        bh=dYIITBV7LIZq0x4mnEZZKy+m3/EegS8p0ZFgHqtlhiQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TZUzIhN7iTFjXSim5uzsBAzmPXRuJ0dbTY3KOmEdKHRAZNxn1LK/sYNC215FmBM/G
-         cemKSbtBPlwhTF1fXnOTUZeDc4bfLtkLA6bt2l5zQmD541qn9Ql8S68RRANiRSgwM6
-         qSxAYzpMzvgJa6QnAkoenJxmhuTRJD1Z0QXOwIGWHJfIL7H+z8oUaRypojftUYwEgc
-         JuKRDv0ZSvby18JmfJ1IMpMiNGgRC+BJ1BC66DnA4qNPmzNifU52g3UVnvXRzbVPf6
-         0ZvBD0wcL6jY4S4AdmH9UuXuccw/dMZBU4iRY8aucg7PWRKDs4p+vz6ssaSwFdScUt
-         KiKx+89hIlV7g==
-Date:   Tue, 19 Apr 2022 10:12:38 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ze Zhang <zhangze@loongson.cn>, Ingo Molnar <mingo@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 2/2] selftests/ftrace: add mips support for kprobe args
- syntax tests
-Message-Id: <20220419101238.affc234023ed6821d8857cfc@kernel.org>
-In-Reply-To: <20220418133045.3ddb0032@gandalf.local.home>
-References: <20220416114848.25288-1-zhangze@loongson.cn>
-        <20220416114848.25288-2-zhangze@loongson.cn>
-        <20220418133045.3ddb0032@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 18 Apr 2022 21:17:13 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C921D2FE5E
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 18:14:32 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 01:14:20 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.ch;
+        s=protonmail2; t=1650330868;
+        bh=9M5szPGT7SceYEUfth8beJqIX9oNjhtVwa7dIqIdi9E=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=YSQXp0kUaTaeJN5KLZqsZB8o99aXiy3DHtxRyV6dhFbpnxp3WQHhOzTCsmIisK06B
+         CAloTr9zJVIgX/57XPf1d1Gpoyt5IJvDyXb3rnxcSfuxRUbfKOVGQjOYQdA4/RaW1P
+         ta+QcFJhtA7Xy4jls7ipPK5J8BhnN71mFtIKQ5Pq9AUUgr4kUzG1vlMOrGmqaFTge5
+         ZvHTJK4afdTWiL9/9BLE2+8M0nACMjsjqFllnLy0RdV5bkxvd1G8bf0lSG4CFKaxoC
+         dQXQ1hKGVzUYEl4KUgeRa998qahqvlt1VlK5QTrjj3X5jhhBFLrs4Z7s3X+KVwwOCm
+         72X5kQgdlmNkw==
+To:     linux-wireless@vger.kernel.org
+From:   Solomon Tan <solomonbstoner@protonmail.ch>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        rdunlap@infradead.org, gregkh@linuxfoundation.org,
+        miriam.rachel.korenblit@intel.com, johannes.berg@intel.com,
+        pabeni@redhat.com, kuba@kernel.org, davem@davemloft.net,
+        kvalo@kernel.org, luciano.coelho@intel.com,
+        Solomon Tan <solomonbstoner@protonmail.ch>
+Reply-To: Solomon Tan <solomonbstoner@protonmail.ch>
+Subject: [PATCH 0/3] iwlwifi: Address whitespace coding style errors
+Message-ID: <20220419011340.14954-1-solomonbstoner@protonmail.ch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 13:30:45 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+This series of three patches addresses the whitespace coding style
+errors marked by checkpatch.pl as an "ERROR". In order of sequence,
+the following edits are made:
+1. Removal of prohibited spaces
+2. Addition of required space
+3. Replacement of space with tabs as code indent.
 
-> On Sat, 16 Apr 2022 19:48:48 +0800
-> Ze Zhang <zhangze@loongson.cn> wrote:
-> 
-> > This is the mips variant of commit <3990b5baf225> ("selftests/ftrace:
-> > Add s390 support for kprobe args tests").
+Signed-off-by: Solomon Tan <solomonbstoner@protonmail.ch>
 
-Great! 
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thanks!
-
-> > 
-> > Signed-off-by: Ze Zhang <zhangze@loongson.cn>
-> > ---
-> >  .../selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc      | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-> > index 47d84b5cb6ca..d4662c8cf407 100644
-> > --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-> > @@ -36,6 +36,10 @@ s390*)
-> >    GOODREG=%r2
-> >    BADREG=%s2
-> >  ;;
-> > +mips*)
-> > +  GOODREG=%r4
-> > +  BADREG=%r12
-> > +;;
-> >  *)
-> >    echo "Please implement other architecture here"
-> >    exit_untested
-> 
-> This needs an Ack from Masami as well.
-> 
-> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> 
-> -- Steve
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

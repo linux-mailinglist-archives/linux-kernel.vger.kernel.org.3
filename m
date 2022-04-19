@@ -2,122 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3CF507985
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C980507990
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 21:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350736AbiDSTAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 15:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        id S1355355AbiDSTBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 15:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349562AbiDSTAw (ORCPT
+        with ESMTP id S232860AbiDSTB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 15:00:52 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4CF3EF08
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:58:07 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 11:58:00 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1650394686;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aHP1fr3pFCglhUt6wslEJqCTPQEvCI12BCqK6uc3qpE=;
-        b=gnhLIOha4Zr8ErfXIK162pTJfscSXT9fDJM6MJH7Df5HlbvUDZ2PwsBxD8idBgSHTR6Yi+
-        PuheUtLEu2Xge91pGBxcIz4PW4NnBj8sDVUFnKGYlJ0Sml0iP33rIdgScf0G5KNVQICfuD
-        ckx16d5O1MfYiOOoQPTCVk5QCrZD5dg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH rfc 0/5] mm: introduce shrinker sysfs interface
-Message-ID: <Yl8GOJd/iUHkTEL3@carbon>
-References: <20220416002756.4087977-1-roman.gushchin@linux.dev>
- <20220419182030.idqqmtim4slhbked@moria.home.lan>
+        Tue, 19 Apr 2022 15:01:28 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD26B3EF1F
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:58:45 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d15so16649610pll.10
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5fyf1PTx0yUxmy8QJj6XRdY4JzR19H+LadWdH1OjqpQ=;
+        b=cfhuFASrLgcbhKuiKOEPbDHW+TBXmFYUW7h6Z14sl8+sHax5rf7tppGQp3YtjPADun
+         NJdUU1JZCYebpl/uroO2XURjKcaMlRFsYCnZ3g8BppGbKnucsuU67+bXYVOjXMAwouJE
+         XezHq2FUdU3RrJgCSxieSyIbOwwOTIRwxyBtf4cnt7fDRtXEw2eGQpaNTQX1y8y9Lfkf
+         DgLIh8/3fUcGCkIoz5r4JIQJz4Hkm3v3tp+dRwFrimXx/s98Wguu2HQV7cDve8t7yE5t
+         wR+5LNF0fF5r4qJkUQeqeafVblsSgV2q2cIGLJKuOPhJiCBeLPbt7W/O9weuW7Vww7FI
+         UZJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5fyf1PTx0yUxmy8QJj6XRdY4JzR19H+LadWdH1OjqpQ=;
+        b=lgFpCzBoe+qrlO4HLL9QSal016J1VuS75AOZrvOue139ULW3kEScd1Go0lax+bykpl
+         Y51WS+Sk85B8i87V60DdZx7KHAHOw7FWNWoL1GzK+yxFumpxZfHyr7ba1RdRcc8z7gVE
+         lVPRWu9aoheVagrz6NebCiKeRHyVEqbyWbJqCvwIL/iBIkTOe7cgOR5bOmLf8YQ1Agcl
+         eTWQqJv0Z1R50MjWxFjhzMAuxuEZkvG3Aq7MjKHS5t4vz+H23c7Lp5XgYYEPmz0GHIZN
+         R3+EfKjU9ngaxObp/nQzpELlNa9NRQ57yfnOz7Lg+fXYgQwyvubGAQa0gzgdP0yh9H84
+         11Bw==
+X-Gm-Message-State: AOAM533B/5+TyLivXfOyq5LzfnSfMwmyW4vSyw3Yd5CigP4R8e5QJehv
+        h5kJqbFCXzPziTEh9skJRV4=
+X-Google-Smtp-Source: ABdhPJw46gOyITqEvZVwPP6qrX4qd7JMNWZ9feMKsa0GHPYEScXqVFoswx4aqSD53b7bV+jW0e7EbQ==
+X-Received: by 2002:a17:90b:1b03:b0:1d2:a338:c568 with SMTP id nu3-20020a17090b1b0300b001d2a338c568mr16154pjb.129.1650394725235;
+        Tue, 19 Apr 2022 11:58:45 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y21-20020a631815000000b0039fcedd7bedsm17873525pgl.41.2022.04.19.11.58.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 11:58:44 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Ivan T . Ivanov" <iivanov@suse.de>, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] MAINTAINERS: add raspberrypi to BCM2835 architecture
+Date:   Tue, 19 Apr 2022 11:58:42 -0700
+Message-Id: <20220419185843.248477-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220409184017.114804-1-stefan.wahren@i2se.com>
+References: <20220409184017.114804-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419182030.idqqmtim4slhbked@moria.home.lan>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 02:20:30PM -0400, Kent Overstreet wrote:
-> On Fri, Apr 15, 2022 at 05:27:51PM -0700, Roman Gushchin wrote:
-> > There are 50+ different shrinkers in the kernel, many with their own bells and
-> > whistles. Under the memory pressure the kernel applies some pressure on each of
-> > them in the order of which they were created/registered in the system. Some
-> > of them can contain only few objects, some can be quite large. Some can be
-> > effective at reclaiming memory, some not.
-> > 
-> > The only existing debugging mechanism is a couple of tracepoints in
-> > do_shrink_slab(): mm_shrink_slab_start and mm_shrink_slab_end. They aren't
-> > covering everything though: shrinkers which report 0 objects will never show up,
-> > there is no support for memcg-aware shrinkers. Shrinkers are identified by their
-> > scan function, which is not always enough (e.g. hard to guess which super
-> > block's shrinker it is having only "super_cache_scan"). They are a passive
-> > mechanism: there is no way to call into counting and scanning of an individual
-> > shrinker and profile it.
-> > 
-> > To provide a better visibility and debug options for memory shrinkers
-> > this patchset introduces a /sys/kernel/shrinker interface, to some extent
-> > similar to /sys/kernel/slab.
-> > 
-> > For each shrinker registered in the system a folder is created. The folder
-> > contains "count" and "scan" files, which allow to trigger count_objects()
-> > and scan_objects() callbacks. For memcg-aware and numa-aware shrinkers
-> > count_memcg, scan_memcg, count_node, scan_node, count_memcg_node
-> > and scan_memcg_node are additionally provided. They allow to get per-memcg
-> > and/or per-node object count and shrink only a specific memcg/node.
+On Sat,  9 Apr 2022 20:40:17 +0200, Stefan Wahren <stefan.wahren@i2se.com> wrote:
+> Recent changes to the firmware clock driver have not be send
+> to the architecture maintainers. So fix this by adding the
+> matching pattern.
 > 
-> Cool!
-> 
-> I've been starting to sketch out some shrinker improvements of my own, perhaps
-> we could combine efforts.
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> ---
 
-Thanks! Absolutely!
-
-> The issue I've been targeting is that when we hit an
-> OOM, we currently don't get a lot of useful information - shrinkers ought to be
-> included, and we really want information on shrinker's internal state (e.g.
-> object dirtyness) if we're to have a chance at understanding why memory isn't
-> getting reclaimed.
-> 
-> https://evilpiepirate.org/git/bcachefs.git/log/?h=shrinker_to_text
-> 
-> This adds a .to_text() method - a pretty-printer - that shrinkers can
-> implement, and then on OOM we report on the top 10 shrinkers by memory usage, in
-> sorted order.
-
-We must be really careful with describing what's allowed and not allowed
-by these callbacks. In-kernel OOM is the last-resort mechanism and it should
-be able to make forward progress in really nasty circumstances. So there are
-significant (and not very well described) limitations on what can be done
-from the oom context.
-
-> 
-> Another thing I'd like to do is have shrinkers report usage not just in object
-> counts but in bytes; I think it should be obvious why that's desirable.
-
-I totally agree, it's actually on my short-term todo list.
-
-> 
-> Maybe we could have a memory-reporting-and-shrinker-improvements session at LSF?
-> I'd love to do some collective brainstorming and get some real momementum going
-> in this area.
-
-Would be really nice! I'm planning to work on improving shrinkers and gather ideas
-and problems, so having a discussion would be really great.
-
-Thanks!
+Applied to https://github.com/Broadcom/stblinux/commits/maintainers/next, thanks!
+--
+Florian

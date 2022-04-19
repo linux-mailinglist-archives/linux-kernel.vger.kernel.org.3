@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B2E507D41
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 01:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB6B507D48
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 01:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357856AbiDSXqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 19:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
+        id S1358067AbiDSXqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 19:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355340AbiDSXqB (ORCPT
+        with ESMTP id S236755AbiDSXqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 19:46:01 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB989205D0;
-        Tue, 19 Apr 2022 16:43:17 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id x18so31142wrc.0;
-        Tue, 19 Apr 2022 16:43:17 -0700 (PDT)
+        Tue, 19 Apr 2022 19:46:17 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C1020BE6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:43:33 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id e21so24435784wrc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:43:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=jpkNlHRMQuG+lJdQ+TUaFjLfxZlD8sn5DIiknsBbDyg=;
-        b=FHAUUHCg0T3/vQIQ/bRF+okFzhmCwTsm49QMr/HtsZY8D9NoBitjzbzAPlvKWo66mA
-         yUnvDeEbuMhjeA807IQhUI8Ctj3s439/+etFMhsfgrAA4Smy1dcxpn/EJH6TyW6FEAXR
-         0qJYEt8SkyFHjGdFjWy9fFJFKT0wFvbTjlg+365GEgIVkIXwPnyr3W3h9VMyJMureiGc
-         fIHdnE6wXYFzj2+u0dkSRs8aoLp39jBwBr3S6YvvhjCJvDa/XZxCiBjH6txwEF+AhdOm
-         fLy55B3TJrSbtkusmN4BB31KPN4I8UbQ8lMsuSCLDa2Kr87s9Q4E3TeaX1denTp6psgF
-         mEsA==
+        bh=HKQLOdPaQ3Mw3cBSPXtTxWv22p46uaNKqi/2UnH+TaU=;
+        b=W+DL2plQDmeF6M+8AnbzgopnqINjz5xpZNqMbikOKgoHFPRR+2r5EWaHfQkEeeyh8Y
+         4x3B0Cqy4qQjSieeCV93kllUXHcH1UEDOyJ4H3wi3nGkncyyG69gMCxdhJrYyUgoMASs
+         byoRivqsbbPGEE5WgsXzZwjw4W9tp8cTrS2PGq8BAEhXE767YJOJn1HZSX0oG6fO7+gi
+         xLn3V8FkF2M8NwqWPNExwEjR/LxGIsYI7oaOyzgmVo32APXgz+OmYl1Y48HnpBXCupPQ
+         yXxgbu5sru6YT/MpEjkix0vIoBcBKYwhlN6gKA5aSrgKRu9UJZxn3uW2VAIeWPPrevdr
+         3hHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=jpkNlHRMQuG+lJdQ+TUaFjLfxZlD8sn5DIiknsBbDyg=;
-        b=VTUGno1gY7OVHiaHSogwAQUX0zZr6IkrFFbfDVtPXRVP3F7VIOk1VY0DZqHAcVMUDY
-         6M5jlEnh+Fq0zDAAMYZkFHZ9cZ0+sp7YukeDIVkas2FBFhGZBqT0OGflNytcAjsOu5PP
-         OL49EboBI/iaVxBme6c4On47fmRvMZABsbUIMGxFTT9zI1HvCHaLj2R04iK7Ty1A4tzW
-         fK9KF9ydVQ8AVnI8jHY/O0Ha9YNDwfQbEEw9IWZAwzHlfoPG7xAIHqxL8nVoulzZTyse
-         EQH/7p6cGCOUyYWIpQ9Uis6N71dlxQqiEsKzLz+rCpSDS5JXy1mA1178G42RvZ7NVqUb
-         yvBg==
-X-Gm-Message-State: AOAM530M0+EIE54uQAvS/2SgQVq4CqQm7v2+WQ1UCLUqxG6OOaxfuS/6
-        KMHFjUf2lMtoVK+5SJug4Hg=
-X-Google-Smtp-Source: ABdhPJz1SgnnztC1b+XjTbtAXZve8DQ0RYcKvnNS+M9/iIN1yJ4iCUjDKX3GZOoZrrU6LsOZfnM1eQ==
-X-Received: by 2002:adf:de90:0:b0:20a:8e73:aff1 with SMTP id w16-20020adfde90000000b0020a8e73aff1mr11180895wrl.151.1650411796437;
-        Tue, 19 Apr 2022 16:43:16 -0700 (PDT)
+        bh=HKQLOdPaQ3Mw3cBSPXtTxWv22p46uaNKqi/2UnH+TaU=;
+        b=WE+niIfcCtNJ4bZwkN66RckQuPzLvdFcbOg6sXGuCsWNTtyju8ZDJTbbrMaHypf+Pw
+         ktw4b0UtkmIGjISMTykqOMcUa1KauN2eWPuwjXCQd7OrOfKbZ8rOzbzH4brlSkzRdU4k
+         zOSlj7rBAbuSggH00Byloq1HbA62QX7T5BAfW63NuJ53LcTnreTGMNm7yfLreh/L8A+v
+         9bmTSYIgKRC0PLzQlM1xbjeP7a2+pk3+vCu5WMRWpDa5scVSCYzGVmXi7LMnhNj54NKt
+         NXql3M4LPV2EgHBC0MTdfmDwN8iHZUDTvMrJ4IekvexNNFzXs6aXRH7zgmKedlwptIyM
+         7HNA==
+X-Gm-Message-State: AOAM531gmH9AZDsbXo2MsTRvatLH/sHiNK+2htuMMNZ0jA8C7xNVJi7z
+        l0rgFd5axXWYR6+xsU1v6CWh/th+lLaoiw==
+X-Google-Smtp-Source: ABdhPJwAIcFXMCqod1EDSxcxDLBq3kQdWuUNKRazc7JRrvo6vjc1W5NvWFPzXoUkm5DwO/gOBUTKUg==
+X-Received: by 2002:a5d:45ce:0:b0:207:9e7e:9a4b with SMTP id b14-20020a5d45ce000000b002079e7e9a4bmr13248177wrs.559.1650411811661;
+        Tue, 19 Apr 2022 16:43:31 -0700 (PDT)
 Received: from alaa-emad ([102.41.109.205])
-        by smtp.gmail.com with ESMTPSA id z17-20020adfec91000000b0020a98f5f8a7sm5623982wrn.6.2022.04.19.16.43.15
+        by smtp.gmail.com with ESMTPSA id x4-20020adfdd84000000b00207b60ed68esm13255849wrl.100.2022.04.19.16.43.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 16:43:16 -0700 (PDT)
+        Tue, 19 Apr 2022 16:43:31 -0700 (PDT)
 From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
 To:     outreachy@lists.linux.dev
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+Cc:     boris.ostrovsky@oracle.com, jgross@suse.com,
+        sstabellini@kernel.org, xen-devel@lists.xenproject.org,
         linux-kernel@vger.kernel.org, ira.weiny@intel.com,
         eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH v5] igb: Convert kmap() to kmap_local_page()
-Date:   Wed, 20 Apr 2022 01:43:13 +0200
-Message-Id: <20220419234313.10324-1-eng.alaamohamedsoliman.am@gmail.com>
+Subject: [PATCH v2] xen:  Convert kmap() to kmap_local_page()
+Date:   Wed, 20 Apr 2022 01:43:28 +0200
+Message-Id: <20220419234328.10346-1-eng.alaamohamedsoliman.am@gmail.com>
 X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -79,42 +78,28 @@ Replace kmap() calls with kmap_local_page().
 Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
 ---
 changes in V2:
-	fix kunmap_local path value to take address of the mapped page.
----
-changes in V3:
-	edit commit message to be clearer
----
-changes in V4:
-	edit the commit message
----
-changes in V5:
 	-edit commit subject
 	-edit commit message
 ---
- drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
+ drivers/xen/gntalloc.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-index 2a5782063f4c..c14fc871dd41 100644
---- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
-+++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-@@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
+diff --git a/drivers/xen/gntalloc.c b/drivers/xen/gntalloc.c
+index 4849f94372a4..55acb32842a3 100644
+--- a/drivers/xen/gntalloc.c
++++ b/drivers/xen/gntalloc.c
+@@ -178,9 +178,9 @@ static void __del_gref(struct gntalloc_gref *gref)
+ 	unsigned long addr;
  
- 	frame_size >>= 1;
- 
--	data = kmap(rx_buffer->page);
-+	data = kmap_local_page(rx_buffer->page);
- 
- 	if (data[3] != 0xFF ||
- 	    data[frame_size + 10] != 0xBE ||
- 	    data[frame_size + 12] != 0xAF)
- 		match = false;
- 
--	kunmap(rx_buffer->page);
-+	kunmap_local(data);
- 
- 	return match;
- }
+ 	if (gref->notify.flags & UNMAP_NOTIFY_CLEAR_BYTE) {
+-		uint8_t *tmp = kmap(gref->page);
++		uint8_t *tmp = kmap_local_page(gref->page);
+ 		tmp[gref->notify.pgoff] = 0;
+-		kunmap(gref->page);
++		kunmap_local(tmp);
+ 	}
+ 	if (gref->notify.flags & UNMAP_NOTIFY_SEND_EVENT) {
+ 		notify_remote_via_evtchn(gref->notify.event);
 -- 
 2.35.2
 

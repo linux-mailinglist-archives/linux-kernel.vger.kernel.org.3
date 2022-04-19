@@ -2,95 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12707507BDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3B7507BE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357984AbiDSVZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 17:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
+        id S1356070AbiDSV1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 17:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241346AbiDSVZf (ORCPT
+        with ESMTP id S239279AbiDSV1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 17:25:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9230641FA6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:22:51 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650403370;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eocecnDpptAC/EGkvzqxs0DwJFFc0p4YBknIOB3vi64=;
-        b=I1NjPxxkkP36M3WKMWrL/IbeVkJTu6D1maHJ+VKQvBTxrbPzy3klZIdP3E6SNDKak+lLE/
-        /YF5q4ELDCfdx1u1FGoZC5JaxF44/GvTqluec9GOh7z8zeA5pvRQMvx3S3nj5foHBMEclq
-        oFNC7WmRtSl95sSQ2UVTUUkJrSv43+NJ/zQPoHp2OpE4cHu+8GHPQEhwhBiwAMEib1cW/M
-        ZLgcZzbP2/825WaKXrs205LcNwmG/zkaIFmgpSzYdilJBb6WkmbEzMTyYXSamFDMxDTn2l
-        FX/8fKepuaCnrxLyydnZBDDihcfGZj781XOAxFBHpOCcw200+YZKqiwA2T+7eg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650403370;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eocecnDpptAC/EGkvzqxs0DwJFFc0p4YBknIOB3vi64=;
-        b=XjOXQo2w9NEOuqXXM80zQ2FdrnvXkCiAksTBHT634qb7gURY89A5+7Ywb6UMdbme33hUbz
-        StsVoOh99VkZ8iCw==
-To:     Dave Hansen <dave.hansen@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [patch 3/3] x86/fpu/xsave: Optimize XSAVEC/S when XGETBV1 is
- supported
-In-Reply-To: <87ee1t9oka.ffs@tglx>
-References: <20220404103741.809025935@linutronix.de>
- <20220404104820.713066297@linutronix.de>
- <a93e6d3f-e8b9-2fab-1139-a8ba3dc4820b@intel.com> <87ee1t9oka.ffs@tglx>
-Date:   Tue, 19 Apr 2022 23:22:49 +0200
-Message-ID: <878rs0vkd2.ffs@tglx>
+        Tue, 19 Apr 2022 17:27:15 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9F041FB0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:24:30 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id y129so6602251qkb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:24:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ibsdoBgiJuDiIdRsXH0t+hdnEs4Yi8O9Fhx00crlPtE=;
+        b=3SelgyL75xPSUHO5atKbLBSCLfMUldyCMHajJey2fc9NSopOB2JqQ/z15Ya578w5dZ
+         rreFLzcs+BffPfZIulsSaSZBk1tcjf6gzmym+2B7jhQLMCEJUNBudFbkv7eRYLPbW9ml
+         rHOKzxpXci8P7wjlWiDbWWQHsUzEq/2TIRCxR6/PRfVABWQoGlV1MZMkEDNzcL/ooXrO
+         rfKaHTwM39bv/EHp01tJe57y+0K/2F+rpyld7ZJZI49jqTcMwmvX649k0EopQVVbJsZH
+         s+xA2t/7XeB+6VwMGgtv1uLKVMha2wuCKoqzBH6977fOf23aduQ0e9XRNWsFjwJ4CQhw
+         c6bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ibsdoBgiJuDiIdRsXH0t+hdnEs4Yi8O9Fhx00crlPtE=;
+        b=kHhuoPmYspjn9HBG3ZkU8+rEKtdFzOXx/f4o4OK0XMSU7IbeCVt2HNF2+UozIGU+uF
+         ln3jaC4kqJoAsdM7s+z7YCIfqJG6NkdOeNSJwX3K6llKBySjuwbLWF6jnRY4/SVJecOe
+         y04J2sNAQxA3OK4CTKT3ILKHbl1fb3Ta5D5kojMTgCg/Ajb9UYzbo1tnNI7mhFeHMACb
+         MiVmgQySsHEOw/fU+gzeApJs1qDVK4SKq6A2QUgac8ZRZIy15JeJk1nZCWvaeRyC56s3
+         dO8kca0QXbGasG9ncw9pODEaBCaLSbRZf6x+vPHq+G89WbDBOKGsAP06YUduOd7WPKaY
+         WmEg==
+X-Gm-Message-State: AOAM532vfWudEtyJgOGRJra0iv/ae/a/h+Y28r9sDtyS9GpTXocrEfq9
+        Gk7t8KKCT3A+1fJo8GoJYQg3xg==
+X-Google-Smtp-Source: ABdhPJz2oh1C+IuJOt5EhDLsX8SfnMQz7pOi3Y6SmEfuithJotmjkv6ukh/Drox0ndy27gyjiC3lwA==
+X-Received: by 2002:a05:620a:1344:b0:69e:6485:646f with SMTP id c4-20020a05620a134400b0069e6485646fmr10944276qkl.264.1650403469848;
+        Tue, 19 Apr 2022 14:24:29 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id p3-20020a05620a15e300b0069e5b556f75sm533642qkm.5.2022.04.19.14.24.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 14:24:29 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 17:24:28 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Alistair Popple <apopple@nvidia.com>
+Subject: Re: [PATCH v8 22/23] mm: Enable PTE markers by default
+Message-ID: <Yl8ojDwxsD/wqWM4@cmpxchg.org>
+References: <20220405014646.13522-1-peterx@redhat.com>
+ <20220405014929.15158-1-peterx@redhat.com>
+ <Yl7RrKV5mXtNAAzi@cmpxchg.org>
+ <Yl8UmWQodLX+JkZ7@xz-m1.local>
+ <Yl8YE+w+OWz5RNOL@cmpxchg.org>
+ <Yl8bYKOJGW2py7Q0@xz-m1.local>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yl8bYKOJGW2py7Q0@xz-m1.local>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19 2022 at 15:43, Thomas Gleixner wrote:
-> On Thu, Apr 14 2022 at 10:24, Dave Hansen wrote:
->> On 4/4/22 05:11, Thomas Gleixner wrote:
->>> which is suboptimal. Prefetch works better when the access is linear. But
->>> what's worse is that PKRU can be located in a different page which
->>> obviously affects dTLB.
->>
->> The numbers don't lie, but I'm still surprised by this.  Was this in a
->> VM that isn't backed with large pages?  task_struct.thread.fpu is
->> kmem_cache_alloc()'d and is in the direct map, which should be 2M/1G
->> pages almost all the time.
+On Tue, Apr 19, 2022 at 04:28:16PM -0400, Peter Xu wrote:
+> On Tue, Apr 19, 2022 at 04:14:11PM -0400, Johannes Weiner wrote:
+> > On Tue, Apr 19, 2022 at 03:59:21PM -0400, Peter Xu wrote:
+> > > @@ -910,16 +910,16 @@ config ANON_VMA_NAME
+> > Btw, this doesn't do much without userfaultfd being enabled in
+> > general, right?
+> 
+> So far yes, but I'm thinking there can be potential other users of
+> PTE_MARKERS from mm world.  The most close discussion is on the swap read
+> failures and this patch proposed by Miaohe:
+> 
+> https://lore.kernel.org/lkml/20220416030549.60559-1-linmiaohe@huawei.com/
 >
-> Hmm. Indeed, that's weird.
->
-> That was bare metal and I just checked that this was a production config
-> and not some weird debug muck which breaks large pages. I'll look deeper
-> into that.
+> So I hope we can still keep them around here under mm/ if possible, and
+> from the gut feeling it really should..
 
-I can't find any reasonable explanation. The pages are definitely large
-pages, so yes the dTLB miss count does not make sense, but it's
-consistently faster and it's always the dTLB miss count which makes the
-big difference according to perf.
+Agreed, mm/ seems a good fit for PTE_MARKER.
 
-For enhanced fun, I ran the lot on a AMD Zen3 machine and with the same
-test case (hackbench -l 10000) repeated 10 times by perf stat this is
-consistently slower than the non optimized variant. There is at least an
-explanation for that. A tight loop of 1 Mio xgetbv(1) invocations takes
-9 Mio cycles on a SKL-X and 50 Mio cycles on a AMD Zen3.
+If it's invisible and gets selected as needed, it's less of a concern,
+IMO. I'm somewhat worried about when and how the user-visible options
+show up right now, though...
 
-XSAVE is wonderful, isn't it?
+> > Would it make sense to have it next to 'config USERFAULTFD' as a
+> > sub-option?
+> 
+> Yes another good question. :)
+> 
+> IIUC CONFIG_USERFAULTFD resides in init/Kconfig because it introduces a new
+> syscall.  Same to the rest of the bits for uffd since then, namely:
+> 
+>   - USERFAULTFD_WP
+>   - USERFAULTFD_MINOR
+> 
+> What I am thinking now is the other way round of your suggestion: whether
+> we should move most of them out, at least the _WP and _MINOR configs into
+> mm/?  Because IMHO they are really pure mm ideas and they're irrelevant to
+> syscalls and init.
 
-Thanks,
+I'm thinking the MM submenu would probably be a better fit for all
+user-visible userfaultfd options, including the syscall. Like you say,
+it's an MM concept.
 
-        tglx
+But if moving the syscall knob out from init isn't popular, IMO it
+would be better to add the new WP option to init as well. This ensures
+that when somebody selects userfaultfd, they also see the relevant
+suboptions and don't have to chase them down across multiple submenus.
+
+Conversely, they should also have the necessary depend clauses so that
+suboptions aren't visible without the main feature. E.g. it asked me
+for userfaultd options even though I have CONFIG_USERFAULTFD=n.
+
+What do you think?

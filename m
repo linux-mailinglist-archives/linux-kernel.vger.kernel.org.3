@@ -2,233 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE735067B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A64E5067C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245349AbiDSJaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 05:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
+        id S1350355AbiDSJio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 05:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241574AbiDSJaP (ORCPT
+        with ESMTP id S1347348AbiDSJih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 05:30:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AC2289A6;
-        Tue, 19 Apr 2022 02:27:33 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23J8iJTP023210;
-        Tue, 19 Apr 2022 09:27:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=0tKn3hDvFvxg183TNhXn/GmxoRV+KWkNdRcOGgR6kIQ=;
- b=b2nr/Ls9ksvTUAepv5nfvGzNfCFi+trbAcuMeIwRZNYsNWrvuXwfdtxaF4wv1daP14AU
- +l9GwyAIIL28uEu2grDXrGaZqk9iIhoocDCoQGoqztzAST/XpnfP6pkxnz61+OUs79sA
- 4HWeNuX90mJCMjVm2hoGTGiLfXG0du434XFS1QExTHnzHUahQbNKGX92MbZ0HPQ13Kbb
- h8gq7LZ4tz4wdSj0H8iUOf6rN2b/2cC/076zoJ52NNBOFxEs4/sYPjSMFL1aJqF0IrY3
- eVtYw+ClkUYBV0iaUriFY2ylCiMYw+7ni3/qgOXWeg7aBL/O4OLqjBEztMAlxRQNMZVn yA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7btjeqh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:27:33 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23J9R0Fr013444;
-        Tue, 19 Apr 2022 09:27:32 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7btjeph-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:27:32 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23J9D2LX016256;
-        Tue, 19 Apr 2022 09:27:29 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ffne8m310-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:27:28 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23J9RPsX41091488
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Apr 2022 09:27:25 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B830442041;
-        Tue, 19 Apr 2022 09:27:25 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 755894203F;
-        Tue, 19 Apr 2022 09:27:24 +0000 (GMT)
-Received: from [9.171.88.57] (unknown [9.171.88.57])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 19 Apr 2022 09:27:24 +0000 (GMT)
-Message-ID: <6f229041-4ee4-664a-26ac-6e36cddecef4@linux.ibm.com>
-Date:   Tue, 19 Apr 2022 11:30:41 +0200
+        Tue, 19 Apr 2022 05:38:37 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BFE1C131;
+        Tue, 19 Apr 2022 02:35:53 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id u15so31625375ejf.11;
+        Tue, 19 Apr 2022 02:35:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QuBxnJ189gQM2GpBkOVOWvPE4dRFJdO733PMpDnzugY=;
+        b=nXxmuvIW6ZxgfQv+rXPIMRnalWMl3L3e86JG8+k3vRoxeA4vceDGKJn+BCN4lZ38Ou
+         lnEtQ/tQJEajT0afMjqxQbnjOca7x/LS+6ySLrS8MfSNPZTy6g7NyPqKqVOCyBVVJrGH
+         1pXt8/eDJdMlnji5WPbxWpytdng/W6I8Q+4CekHmdS9uFIQ0LMtiz3KBKSWyjLaftcqN
+         pxLpd4gAK7bcxPWcqIkdDlcmypA6s60ZiCOBYw1K3gZyHDjKEYYwruEP/9w51ev08xHN
+         HjCOgYRaVFdErs0m2cY3NdVIg9D6xzNoH62lGKZyOl8Sook+STJ5HszY7LsEhlpL9wC/
+         eAWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QuBxnJ189gQM2GpBkOVOWvPE4dRFJdO733PMpDnzugY=;
+        b=UiEFJ8j5T5CuB+l6lTRV66NcyFTirozYqySR4LaxMXNGWum5mcfssy2VPJy+8kBXza
+         E86i1W/p+xNyeNQChgvp9pSszPIEWzGie6FwiNJ6ohWOajDnkqdHI5jz5mTasKrwxLQg
+         eVmbv3wjpMJUJVV9mn9sXD1wUDU48p82hFTctTTLwtFEy38VgXswKrNfx/GLYdPgF2fh
+         lUUEeRId6W1hqgfWS0J/avzwJZOlYAJ8a06rt4Z4YUIxSkOuy7AO2wMcQvsoI8dE+uT+
+         JzXTKDxkrLNfTmCfB9gbdQzLGhkCMnJvnyMJKiCwjG1Bmj2zilEi18BHeKuusSQ6Pzbh
+         Y1lA==
+X-Gm-Message-State: AOAM530c31OWrHViB87EVYk27X12CcKJh3SlNnWQZ6CQLWGlnOEQq1Bx
+        3p+no5vatDjIMcdeDR9zeg5Z5cr6qJc=
+X-Google-Smtp-Source: ABdhPJy7WWXMrhON/4PDw44TT/n9U2Y4ulwTCX1Frl4nN88YjHFJgfbziOmg2l3Ye1N1I1iPuN6M7Q==
+X-Received: by 2002:a17:907:2d20:b0:6e8:56eb:531f with SMTP id gs32-20020a1709072d2000b006e856eb531fmr12191164ejc.380.1650360951926;
+        Tue, 19 Apr 2022 02:35:51 -0700 (PDT)
+Received: from demon-pc.localdomain ([188.24.22.234])
+        by smtp.gmail.com with ESMTPSA id u25-20020a170906b11900b006e08588afedsm5467198ejy.132.2022.04.19.02.35.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 02:35:51 -0700 (PDT)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: [PATCH v2 0/2] AD4130
+Date:   Tue, 19 Apr 2022 12:35:04 +0300
+Message-Id: <20220419093506.135553-1-cosmin.tanislav@analog.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v5 13/21] KVM: s390: mechanism to enable guest zPCI
- Interpretation
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220404174349.58530-1-mjrosato@linux.ibm.com>
- <20220404174349.58530-14-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220404174349.58530-14-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Y5NkNbTdg9bp5oW7wfQOMKzv8k8bRyn8
-X-Proofpoint-ORIG-GUID: ds5rU1w4g_HazOPf83KeoGglUcWedkWE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_03,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 suspectscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
- clxscore=1015 spamscore=0 adultscore=0 mlxscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204190051
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+V1 -> V2
+ * add kernel version to ABI file
+ * merge ABI patch into driver patch
+ * make copyright header similar to other drivers
+ * rearrange includes
+ * use units.h defines where possible and add unit sufix to
+   SOFT_RESET_SLEEP define
+ * remove ending comma to last members of enums / lists
+ * remove unused FILTER_MAX define
+ * use BIT macro for PIN_FN_*
+ * rearrange SETUP_SIZE definition
+ * group bools in ad4130_state and ad4130_chan_info
+ * put scale_tbls definition on one line
+ * remove newline before reg size == 0 check
+ * put mask used as value in a variable
+ * remove useless ret = 0 assignment
+ * make buffer attrs oneline
+ * use for_each_set_bit in update_scan_mode
+ * use if else for internal reference voltage error checking
+ * inline reference voltage check
+ * check number of vbias pins
+ * remove .has_int_pin = false
+ * remove avail_len for IIO_AVAIL_RANGE
+ * remove useless enabled_channels check in unlink_slot
+ * remove unused AD4130_RESET_CLK_COUNT define
+ * only call fwnode_handle_put for child in case of error
+ * default adi,reference-select to REFIN1
+ * default adi,int-ref-en to false
+ * of_irq_get_byname -> fwnode_irq_get_byname
+ * P1 -> P2 as interrupt pin options
+ * add missing comma in db3_freq_avail init
+ * cast values to u64 to make math using units.h work
+ * add datasheet reference to IRQ polarity
+ * add comment about disabling channels in predisable
+ * add part number prefix find_table_index
+ * return voltage from get_ref_voltage
+ * add datasheet reference for internal reference voltage selection
+ * add comment explaining AIN and GPIO pin sharing
+ * parse channel setup before parsing excitation pins
+ * only validate excitation pin if value is not off
+ * use FIELD_PREP for bipolar and int_ref_en
+ * put devm_regmap_init call on one line
+ * introduce a slot_info struct to contain setup_info for each slot
+ * enable internal reference automatically if needed
+ * decide mclk sel based on adi,ext-clk-freq and adi,int-clk-out
+ * dt-bindings: use internal reference explicitly
+ * dt-bindings: set type for adi,excitation-pin-0
+ * dt-bindings: set $ref for adi,vbias-pins
+ * dt-bindings: remove minItems from interrupts property
+ * dt-bindings: remove adi,int-ref-en default value
+ * dt-bindings: remove adi,bipolar default value
+ * dt-bindings: inline adi,int-ref-en description
+ * dt-bindings: default adi,reference-select to REFIN1
+ * dt-bindings: clean up description for diff-channels and
+   adi,reference-select
+ * dt-bindings: add more text to interrupt-names description
+ * dt-bindings: turn interrupt-names into a single string
+ * dt-bindings: add maxItems to adi,vbias-pins
 
+Cosmin Tanislav (2):
+  dt-bindings: iio: adc: add AD4130
+  iio: adc: ad4130: add AD4130 driver
 
-On 4/4/22 19:43, Matthew Rosato wrote:
-> The guest must have access to certain facilities in order to allow
-> interpretive execution of zPCI instructions and adapter event
-> notifications.  However, there are some cases where a guest might
-> disable interpretation -- provide a mechanism via which we can defer
-> enabling the associated zPCI interpretation facilities until the guest
-> indicates it wishes to use them.
-> 
-> Acked-by: Pierre Morel <pmorel@linux.ibm.com>
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-
-You can change the ACK with a RB (I think it already was a RB)
-
-Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
-
-
-> ---
->   arch/s390/include/asm/kvm_host.h |  4 ++++
->   arch/s390/kvm/kvm-s390.c         | 37 ++++++++++++++++++++++++++++++++
->   arch/s390/kvm/kvm-s390.h         | 10 +++++++++
->   3 files changed, 51 insertions(+)
-> 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index c1518a505060..8e381603b6a7 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -254,7 +254,10 @@ struct kvm_s390_sie_block {
->   #define ECB2_IEP	0x20
->   #define ECB2_PFMFI	0x08
->   #define ECB2_ESCA	0x04
-> +#define ECB2_ZPCI_LSI	0x02
->   	__u8    ecb2;                   /* 0x0062 */
-> +#define ECB3_AISI	0x20
-> +#define ECB3_AISII	0x10
->   #define ECB3_DEA 0x08
->   #define ECB3_AES 0x04
->   #define ECB3_RI  0x01
-> @@ -940,6 +943,7 @@ struct kvm_arch{
->   	int use_cmma;
->   	int use_pfmfi;
->   	int use_skf;
-> +	int use_zpci_interp;
->   	int user_cpu_state_ctrl;
->   	int user_sigp;
->   	int user_stsi;
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index a9eb8b75af93..327649ddddce 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -1029,6 +1029,41 @@ static int kvm_s390_vm_set_crypto(struct kvm *kvm, struct kvm_device_attr *attr)
->   	return 0;
->   }
->   
-> +static void kvm_s390_vcpu_pci_setup(struct kvm_vcpu *vcpu)
-> +{
-> +	/* Only set the ECB bits after guest requests zPCI interpretation */
-> +	if (!vcpu->kvm->arch.use_zpci_interp)
-> +		return;
-> +
-> +	vcpu->arch.sie_block->ecb2 |= ECB2_ZPCI_LSI;
-> +	vcpu->arch.sie_block->ecb3 |= ECB3_AISII + ECB3_AISI;
-> +}
-> +
-> +/* Must be called with kvm->lock held */
-> +void kvm_s390_vcpu_pci_enable_interp(struct kvm *kvm)
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +	unsigned long i;
-> +
-> +	/*
-> +	 * If host is configured for PCI and the necessary facilities are
-> +	 * available, turn on interpretation for the life of this guest
-> +	 */
-> +	if (!kvm_s390_pci_interp_allowed())
-> +		return;
-> +
-> +	kvm->arch.use_zpci_interp = 1;
-> +
-> +	kvm_s390_vcpu_block_all(kvm);
-> +
-> +	kvm_for_each_vcpu(i, vcpu, kvm) {
-> +		kvm_s390_vcpu_pci_setup(vcpu);
-> +		kvm_s390_sync_request(KVM_REQ_VSIE_RESTART, vcpu);
-> +	}
-> +
-> +	kvm_s390_vcpu_unblock_all(kvm);
-> +}
-> +
->   static void kvm_s390_sync_request_broadcast(struct kvm *kvm, int req)
->   {
->   	unsigned long cx;
-> @@ -3329,6 +3364,8 @@ static int kvm_s390_vcpu_setup(struct kvm_vcpu *vcpu)
->   
->   	kvm_s390_vcpu_crypto_setup(vcpu);
->   
-> +	kvm_s390_vcpu_pci_setup(vcpu);
-> +
->   	mutex_lock(&vcpu->kvm->lock);
->   	if (kvm_s390_pv_is_protected(vcpu->kvm)) {
->   		rc = kvm_s390_pv_create_cpu(vcpu, &uvrc, &uvrrc);
-> diff --git a/arch/s390/kvm/kvm-s390.h b/arch/s390/kvm/kvm-s390.h
-> index 497d52a83c78..975cffaf13de 100644
-> --- a/arch/s390/kvm/kvm-s390.h
-> +++ b/arch/s390/kvm/kvm-s390.h
-> @@ -507,6 +507,16 @@ void kvm_s390_reinject_machine_check(struct kvm_vcpu *vcpu,
->    */
->   void kvm_s390_vcpu_crypto_reset_all(struct kvm *kvm);
->   
-> +/**
-> + * kvm_s390_vcpu_pci_enable_interp
-> + *
-> + * Set the associated PCI attributes for each vcpu to allow for zPCI Load/Store
-> + * interpretation as well as adapter interruption forwarding.
-> + *
-> + * @kvm: the KVM guest
-> + */
-> +void kvm_s390_vcpu_pci_enable_interp(struct kvm *kvm);
-> +
->   /**
->    * diag9c_forwarding_hz
->    *
-> 
+ .../ABI/testing/sysfs-bus-iio-adc-ad4130      |   36 +
+ .../bindings/iio/adc/adi,ad4130.yaml          |  263 +++
+ MAINTAINERS                                   |    8 +
+ drivers/iio/adc/Kconfig                       |   13 +
+ drivers/iio/adc/Makefile                      |    1 +
+ drivers/iio/adc/ad4130.c                      | 2078 +++++++++++++++++
+ 6 files changed, 2399 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+ create mode 100644 drivers/iio/adc/ad4130.c
 
 -- 
-Pierre Morel
-IBM Lab Boeblingen
+2.35.3
+

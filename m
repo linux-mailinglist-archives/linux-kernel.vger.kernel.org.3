@@ -2,92 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D6F5070AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698BA5070C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353491AbiDSOiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S1353507AbiDSOlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353466AbiDSOin (ORCPT
+        with ESMTP id S235233AbiDSOln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:38:43 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A658020190
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:36:00 -0700 (PDT)
-Received: (qmail 594028 invoked by uid 1000); 19 Apr 2022 10:35:59 -0400
-Date:   Tue, 19 Apr 2022 10:35:59 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rajat Jain <rajatja@chromium.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Razvan Heghedus <heghedus.razvan@gmail.com>,
-        Wei Ming Chen <jj251510319013@gmail.com>,
-        Youngjin Jang <yj84.jang@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] USB: Quiesce interrupts across pm freeze
-Message-ID: <Yl7Iz/lGk3fITzMK@rowland.harvard.edu>
-References: <20220418210046.2060937-1-evgreen@chromium.org>
- <9f2752b5-8717-8ea3-1462-69bcfe42bb0e@suse.com>
+        Tue, 19 Apr 2022 10:41:43 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083F021273
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:39:01 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e5ca5c580fso7377708fac.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:39:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1s42UKgWJ4Pw4SvGNmkzwP7DSmoxOCXsEkE3mMBdmkk=;
+        b=bryyFja6G/AfZjaCCp3S0G0ceVcHhyW1VQrZVSljNUEwwov2BVcqUpiqzWWuUzKqiW
+         9rJzlHdS162QkPuOqWZq7UQ2VwiHR0xor0h0WIoSFyLZhJlv2+zectxrETiTHrAjY79E
+         zvaLn+f9Sm9B8dmjE0Or93kQWpSpKq8AoM3n7JxTsgPapjJO/8m3TQ/iaLFyz1DG2xIq
+         RiP7Bb6DpCXBOYWqJ6Jt2a/BXMLG9VaCGTBE7IW3ABkGUkYwH5Uo8gsuMe03xupp43CJ
+         d8Hsw0jY3vd60CmLcfC6WgcMi3fzGpjUKBX5/aT2leGku3O/VYO4boI+1k75w43bNywb
+         4uvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1s42UKgWJ4Pw4SvGNmkzwP7DSmoxOCXsEkE3mMBdmkk=;
+        b=G0rAqGpbWCWoEVWrVrNtt28cWwuJDnGi3iJaMAoAVkOgEMW+Us71LXKnU9B2o4kDRF
+         NH8PxeXCp+KAWYBgTm8JU5mBy1iOLuvN7ZW7l0TDT/Kl6C/acUX7RV8N6HoDvC93d9BR
+         fkfixqOe1WY5kSdknXcQttvRHe/eCO4ibW/+7HhbAaWKP+q07UX1v6MQTa5QsXeS6tPq
+         MrhkrUhmQyoMPHMvyYSN3CkxTGYOYD0LNiw1i5wTPB6nFzDVEuKBwj5Wzqj85to8++s4
+         LgxWBOvm9Tc2UakcIOI17MG9DWmIzzSI9IXZk1unIQNnptHLhjH4j2KsPRQb7N4gy+dv
+         iMNA==
+X-Gm-Message-State: AOAM533JXB4aZmvkYKVZg3ATzhdYFYscCzQddq/rT6InAFNr2fK+h+SM
+        br3Pzrz8i6su7EtS+8FpKhMs8JbemgKUw4ThQrk=
+X-Google-Smtp-Source: ABdhPJxYRk2m9Utt9pJajmRXaqGutiUzLUudX5XJtfTMosQAR+UFtPG9su2APCdSuDKfZxLYGcxAh0AbE+xOcVMMHxQ=
+X-Received: by 2002:a05:6870:d683:b0:de:eaa2:3550 with SMTP id
+ z3-20020a056870d68300b000deeaa23550mr6741761oap.253.1650379140409; Tue, 19
+ Apr 2022 07:39:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f2752b5-8717-8ea3-1462-69bcfe42bb0e@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220419103721.4080045-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
+In-Reply-To: <20220419103721.4080045-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 19 Apr 2022 10:38:49 -0400
+Message-ID: <CADnq5_MfjrZvegj-4r4DhRR5FDe6casvfcy54G0tM8PZqbsHeg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/pm: fix double free in si_parse_power_table()
+To:     Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+Cc:     Lijo Lazar <lijo.lazar@amd.com>, David Airlie <airlied@linux.ie>,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 09:05:53AM +0200, Oliver Neukum wrote:
-> 
-> 
-> On 18.04.22 23:00, Evan Green wrote:
-> > The documentation for the freeze() method says that it "should quiesce
-> > the device so that it doesn't generate IRQs or DMA". The unspoken
-> > consequence of not doing this is that MSIs aimed at non-boot CPUs may
-> > get fully lost if they're sent during the period where the target CPU is
-> > offline.
-> >
-> > The current behavior of the USB subsystem still allows interrupts to
-> > come in after freeze, both in terms of remote wakeups and HC events
-> > related to things like root plug port activity. This can get controllers
-> > like XHCI, which is very sensitive to lost interrupts, in a wedged
-> > state. This series attempts to fully quiesce interrupts coming from USB
-> > across in a freeze or quiescent state.
-> >
-> > These patches are grouped together because they serve a united purpose,
-> > but are actually independent. They could be merged or reverted
-> > individually.
-> Hi,
-> 
-> sorry for being a bit late in this discussion. There was something that
-> I didn't remember immediately.
-> 
-> We have a set of quirky devices that need HID_QUIRK_ALWAYS_POLL.
-> They have the nasty firmware bug that, if you suspend them without
-> remote wakeup, they will crash or reset themselves.
-> I am afraid that has an obvious relevance to your cool patches.
-> I am not completely sure how to deal with this. It seems to me that the
-> quirk will need to be shifted from HID to core USB and thaw() needs to
-> be translated into usb_device_reset() + reset_resume() for them,
-> but I am not really sure about the optimal mechanism.
+Applied.  Thanks!
 
-We may not need to do anything.  This patch specifically addresses 
-hibernation, not system suspend or runtime suspend.  A device crashing 
-or resetting during hibernation is not at all unusual; we should be able 
-to handle such cases properly.
-
-The THAW part of suspend-to-hibernation is used only for writing the 
-memory image to permanent storage.  I doubt that a malfunctioning HID 
-device would interfere with this process.
-
-Alan Stern
+On Tue, Apr 19, 2022 at 8:49 AM Keita Suzuki
+<keitasuzuki.park@sslab.ics.keio.ac.jp> wrote:
+>
+> In function si_parse_power_table(), array adev->pm.dpm.ps and its member
+> is allocated. If the allocation of each member fails, the array itself
+> is freed and returned with an error code. However, the array is later
+> freed again in si_dpm_fini() function which is called when the function
+> returns an error.
+>
+> This leads to potential double free of the array adev->pm.dpm.ps, as
+> well as leak of its array members, since the members are not freed in
+> the allocation function and the array is not nulled when freed.
+> In addition adev->pm.dpm.num_ps, which keeps track of the allocated
+> array member, is not updated until the member allocation is
+> successfully finished, this could also lead to either use after free,
+> or uninitialized variable access in si_dpm_fini().
+>
+> Fix this by postponing the free of the array until si_dpm_fini() and
+> increment adev->pm.dpm.num_ps everytime the array member is allocated.
+>
+> Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+> ---
+>  drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> index caae54487f9c..079888229485 100644
+> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> @@ -7331,17 +7331,15 @@ static int si_parse_power_table(struct amdgpu_device *adev)
+>         if (!adev->pm.dpm.ps)
+>                 return -ENOMEM;
+>         power_state_offset = (u8 *)state_array->states;
+> -       for (i = 0; i < state_array->ucNumEntries; i++) {
+> +       for (adev->pm.dpm.num_ps = 0, i = 0; i < state_array->ucNumEntries; i++) {
+>                 u8 *idx;
+>                 power_state = (union pplib_power_state *)power_state_offset;
+>                 non_clock_array_index = power_state->v2.nonClockInfoIndex;
+>                 non_clock_info = (struct _ATOM_PPLIB_NONCLOCK_INFO *)
+>                         &non_clock_info_array->nonClockInfo[non_clock_array_index];
+>                 ps = kzalloc(sizeof(struct  si_ps), GFP_KERNEL);
+> -               if (ps == NULL) {
+> -                       kfree(adev->pm.dpm.ps);
+> +               if (ps == NULL)
+>                         return -ENOMEM;
+> -               }
+>                 adev->pm.dpm.ps[i].ps_priv = ps;
+>                 si_parse_pplib_non_clock_info(adev, &adev->pm.dpm.ps[i],
+>                                               non_clock_info,
+> @@ -7363,8 +7361,8 @@ static int si_parse_power_table(struct amdgpu_device *adev)
+>                         k++;
+>                 }
+>                 power_state_offset += 2 + power_state->v2.ucNumDPMLevels;
+> +               adev->pm.dpm.num_ps++;
+>         }
+> -       adev->pm.dpm.num_ps = state_array->ucNumEntries;
+>
+>         /* fill in the vce power states */
+>         for (i = 0; i < adev->pm.dpm.num_of_vce_states; i++) {
+> --
+> 2.25.1
+>

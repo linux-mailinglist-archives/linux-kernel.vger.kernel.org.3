@@ -2,224 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EFB8507707
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F042A50770B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356162AbiDSSHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 14:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
+        id S1356179AbiDSSI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 14:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235918AbiDSSH3 (ORCPT
+        with ESMTP id S235918AbiDSSIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 14:07:29 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47563B57A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:04:45 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id fu34so4147379qtb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=a/JL7/pjikA+XyKdI/ESojFkMMvIJUPcrl8vIy/eNz8=;
-        b=hWDyUOTZs07b7hLjIDA0sMUBTpmOkYjS4SXw3s/8ZD8SNF+AhU+MKys9j2oZ/9KwIL
-         UZE+VQEbY62NjBxRjIgpuI1rF+Gxw2NWpW4kWnEJPS3OgNtCZ++QD20JJHRxK5zqp3qI
-         4TpqkFYammH2W+KMw2Pn6l5Y8xu18BmFh8OHhb3UDv/RdcNcINF57sFv+9cqxhVP3GVB
-         TYNwugDTz8qJM5xvabRHaRbt5BurNU89JJn+1A8aFRbwj2+/0e+E+CDh47TdCeok6BUD
-         xIe/bS2SGtGIYXpkwVWVYjrSPGXJtYCmwt1yzvk/MYhYPYW8jZZs+bYujBbRo0CVKVs+
-         5KvQ==
+        Tue, 19 Apr 2022 14:08:23 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B235F3C4BB;
+        Tue, 19 Apr 2022 11:05:40 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id e4so18990291oif.2;
+        Tue, 19 Apr 2022 11:05:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=a/JL7/pjikA+XyKdI/ESojFkMMvIJUPcrl8vIy/eNz8=;
-        b=VUqVIkhF3iC9AANgO8GETO1HeMeJCF5zZyz8b1KQR7a+ZTCic3M/I8ALGiz6N+5oEC
-         G/DU29XUZCLdRtp72d2ybrOuN9GUZguuengJt9GcQfPXySFCU9wJzsTWvrA9I3LlykMT
-         8b40zruF5qdcgSiUQllZdR63ZYQ2z1VE0S2JcqBydTA3gAMg1WukKnPj/8Tmzf8/DTbn
-         EgBjwofwMjm8PMPli61wgZ6CLX6nJopEthxqPVqYVCrGLrfugIbt8RJR0ebeRb3pClNM
-         HCeVVHGO5OMG0X5naZqi3hKRJgUSzFaJr9ftNreEZHpq9XIPtWBO6UZh6o76ng+1nH/x
-         W8zA==
-X-Gm-Message-State: AOAM532wLTuzINzY5E4jqAO0E9jtrcmd7TAQJiPgGTgXt5WRzUSQ6DTU
-        auwu/Y4xvDmxSBVFzBQkUJ3OWMgwf2VyEsOeIvU9CA==
-X-Google-Smtp-Source: ABdhPJwZu/d0HJoxwLRVkwLcus8VLtTp4n+usBSoFaOPwpM/jNzw4GXWEQ6UtytsxuN82+RWG9dzDOn4poGVK6C97iw=
-X-Received: by 2002:a05:622a:181:b0:2e1:e70a:ec2a with SMTP id
- s1-20020a05622a018100b002e1e70aec2amr11290673qtw.42.1650391484606; Tue, 19
- Apr 2022 11:04:44 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1O+KyyhxbKVGh/D16i1ET31wxfeZw0J9Z5ULpq64bTk=;
+        b=awXoQMNj7gfpFS3wKKx5DRvuwrABKjqFC0djqVwyobaehNoVYzkV/V1Za8S8FHxc08
+         oVsNriNZSzcNktXkz6M3qQMU3m1/AKTg0/DRvNNQIWe6MPaa+DDaQellm14WiRzPNXL0
+         xLIg2CeZtVV24Hde0lu8vz3ISXu8Bx9e6/J7U/PZj2F5UIwvtvkhyTITRT2UdvEgr4jD
+         mG16D8+600qqzl+jvPXt31nxUoXBeWqulyAyj/+qk6WeUbkXqn6aStBxui8HeY+1kJJT
+         abt3oMtieaWrSZynVyhb337kv4JOXpoTNqJ/+kQRuTih+5xjArN9pg/DOepqksRkC1pP
+         M1wg==
+X-Gm-Message-State: AOAM530HyVWA+dHURDjwQJJhHs65geCQPQf5yjHzO6KHfo7AUtRX3B2d
+        TqQ+OC7nA3tjJbLIncBEFw==
+X-Google-Smtp-Source: ABdhPJzFDWZidT+kxj6ha1sr2oIoRXGgkoEbccfVw9/gVPmUJO5HKTGUHtPk1/R9599eDC8/tUF0eg==
+X-Received: by 2002:a05:6808:2ce:b0:2f7:2327:5205 with SMTP id a14-20020a05680802ce00b002f723275205mr10426857oid.289.1650391540040;
+        Tue, 19 Apr 2022 11:05:40 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j5-20020a4a7505000000b0033a47bb6a74sm948330ooc.47.2022.04.19.11.05.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 11:05:39 -0700 (PDT)
+Received: (nullmailer pid 3069490 invoked by uid 1000);
+        Tue, 19 Apr 2022 18:05:38 -0000
+Date:   Tue, 19 Apr 2022 13:05:38 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Joe Perches <joe@perches.com>, erkin.bozoglu@xeront.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 13/14] dt-bindings: pinctrl: add binding for Ralink
+ RT305X pinctrl
+Message-ID: <Yl758u9iIMnhYPz2@robh.at.kernel.org>
+References: <20220414173916.5552-1-arinc.unal@arinc9.com>
+ <20220414173916.5552-14-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-References: <Ylk5o3EC/hyX5UQ0@google.com> <8eeb08ec-4836-cf7d-2285-8ed74ccfc1cb@linux.intel.com>
- <8986a1c6-b546-7a66-a778-048487624c95@linux.intel.com> <e31ff7c4-7cdc-fdaf-b12c-fc1e51798a1b@linux.intel.com>
-In-Reply-To: <e31ff7c4-7cdc-fdaf-b12c-fc1e51798a1b@linux.intel.com>
-From:   Curtis Malainey <cujomalainey@google.com>
-Date:   Tue, 19 Apr 2022 11:04:33 -0700
-Message-ID: <CAOReqxgRXbO3s4BgmZjoXmfKyr2MRWLE7jaTEwqh1ovgs_dUMA@mail.gmail.com>
-Subject: Re: [Sound-open-firmware] out-of-bounds access in sound/soc/sof/topology.c
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaska Uimonen <jaska.uimonen@linux.intel.com>,
-        ALSA development <alsa-devel@alsa-project.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Sound Open Firmware <sound-open-firmware@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220414173916.5552-14-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 10:55 AM Pierre-Louis Bossart
-<pierre-louis.bossart@linux.intel.com> wrote:
->
->
->
-> On 4/19/22 06:50, P=C3=A9ter Ujfalusi wrote:
-> > Hi Sergey, Pierre,
-> >
-> > On 15/04/2022 19:00, Pierre-Louis Bossart wrote:
-> >> Thanks Sergey for this email.
-> >>
-> >> On 4/15/22 04:23, Sergey Senozhatsky wrote:
-> >>> Hi,
-> >>>
-> >>> I'm running 5.10.111 LTS, so if this has been fixed already then we d=
-efinitely
-> >>> want to cherry pick the fix for -stable.
-> >
-> > I'm afraid, that this is still valid as of today, but in real life I
-> > don't think it can happen.
-> >
-> >>> Anonymous union in this struct is of zero size
-> >>>
-> >>> /* generic control data */
-> >>> struct sof_ipc_ctrl_data {
-> >>>         struct sof_ipc_reply rhdr;
-> >>>         uint32_t comp_id;
-> >>>
-> >>>         /* control access and data type */
-> >>>         uint32_t type;          /**< enum sof_ipc_ctrl_type */
-> >>>         uint32_t cmd;           /**< enum sof_ipc_ctrl_cmd */
-> >>>         uint32_t index;         /**< control index for comps > 1 cont=
-rol */
-> >>>
-> >>>         /* control data - can either be appended or DMAed from host *=
-/
-> >>>         struct sof_ipc_host_buffer buffer;
-> >>>         uint32_t num_elems;     /**< in array elems or bytes for data=
- type */
-> >>>         uint32_t elems_remaining;       /**< elems remaining if sent =
-in parts */
-> >>>
-> >>>         uint32_t msg_index;     /**< for large messages sent in parts=
- */
-> >>>
-> >>>         /* reserved for future use */
-> >>>         uint32_t reserved[6];
-> >>>
-> >>>         /* control data - add new types if needed */
-> >>>         union {
-> >>>                 /* channel values can be used by volume type controls=
- */
-> >>>                 struct sof_ipc_ctrl_value_chan chanv[0];
-> >>>                 /* component values used by routing controls like mux=
-, mixer */
-> >>>                 struct sof_ipc_ctrl_value_comp compv[0];
-> >>>                 /* data can be used by binary controls */
-> >>>                 struct sof_abi_hdr data[0];
-> >>>         };
-> >>> } __packed;
-> >>>
-> >>> sof_ipc_ctrl_value_chan and sof_ipc_ctrl_value_comp are of the same
-> >>> size - 8 bytes, while sof_abi_hdr is much larger - _at least_ 32 byte=
-s
-> >>> (`__u32 data[0]` in sof_abi_hdr suggest that there should be more
-> >>> payload after header). But they all contribute 0 to sizeof(sof_ipc_ct=
-rl_data).
-> >>>
-> >>> Now control data allocations looks as follows
-> >>>
-> >>>     scontrol->size =3D struct_size(scontrol->control_data, chanv,
-> >>>                                  le32_to_cpu(mc->num_channels));
-> >>>     scontrol->control_data =3D kzalloc(scontrol->size, GFP_KERNEL);
-> >>>
-> >>> Which is sizeof(sof_ipc_ctrl_data) + mc->num_channels * sizeof(sof_ip=
-c_ctrl_value_chan)
-> >>>
-> >>> For some reason it uses sizeof(sof_ipc_ctrl_value_chan), which is not
-> >>> the largest member of the union.
-> >>>
-> >>> And this is where the problem is: in order to make control->data.FOO =
-loads
-> >>> and stores legal we need mc->num_channels to be of at least 4. So tha=
-t
-> >>>
-> >>>    sizeof(sof_ipc_ctrl_data) + mc->num_channels * sizeof(sof_ipc_ctrl=
-_value_chan)
-> >>>
-> >>>                 92           +        4         *            8
-> >>>
-> >>> will be the same as
-> >>>
-> >>>    sizeof(sof_ipc_ctrl_data) + sizeof(sof_abi_hdr).
-> >>>
-> >>>                 92           +           32
-> >>>
-> >>> Otherwise scontrol->control_data->data.FOO will access nearby/foreign
-> >>> slab object.
-> >>>
-> >>> And there is at least one such memory access. In sof_get_control_data=
-().
-> >>>
-> >>>     wdata[i].pdata =3D wdata[i].control->control_data->data;
-> >>>     *size +=3D wdata[i].pdata->size;
-> >>>
-> >>>
-> >>> pdata->size is at offset 8, but if, say, mc->num_channels =3D=3D 1 th=
-en
-> >>> we allocate only 8 bytes for pdata, so pdata->size is 4 bytes outside
-> >>> of allocated slab object.
-> >>>
-> >>> Thoughts?
-> >
-> > Your analyzes are spot on, unfortunately. But...
-> >
-> > As of today, the sof_get_control_data() is in the call path of
-> > (ipc3-topology.c):
-> >
-> > sof_widget_update_ipc_comp_process() -> sof_process_load() ->
-> > sof_get_control_data()
-> >
-> > sof_widget_update_ipc_comp_process() is the ipc_setup callback for
-> > snd_soc_dapm_effect. If I'm not mistaken these only carries bin payload
-> > and never MIXER/ENUM/SWITCH/VOLUME.
-> > This means that the sof_get_control_data() is only called with
-> > SND_SOC_TPLG_TYPE_BYTES and for that the allocated data area is correct=
-.
-> >
-> > This can explain why we have not seen any issues so far. This does not
-> > renders the code right, as how it is written atm is wrong.
->
->
-> Sergey's results with KASAN show that there's a real-life problem though.=
- I also don't understand how that might happen.
->
-> Could it be that these results are with a specific topology where our ass=
-umptions are incorrect?
->
+On Thu, Apr 14, 2022 at 08:39:15PM +0300, Arınç ÜNAL wrote:
+> Add binding for the Ralink RT305X pin controller for RT3050, RT3052,
+> RT3350, RT3352 and RT5350 SoCs.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../pinctrl/ralink,rt305x-pinctrl.yaml        | 92 +++++++++++++++++++
+>  1 file changed, 92 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..425401c54269
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
+> @@ -0,0 +1,92 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/ralink,rt305x-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ralink RT305X Pin Controller
+> +
+> +maintainers:
+> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
+> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> +
+> +description:
+> +  Ralink RT305X pin controller for RT3050, RT3052, RT3350, RT3352 and RT5350
+> +  SoCs.
+> +  The pin controller can only set the muxing of pin groups. Muxing individual
+> +  pins is not supported. There is no pinconf support.
+> +
+> +properties:
+> +  compatible:
+> +    const: ralink,rt305x-pinctrl
 
-That would align with our testing as we are seeing the failing on
-exactly once device with a custom topology with a bytes payload. See
-sof-jsl-rt5682.m4 with -DWAVES configured for
-sof-jsl-rt5682-rt1015.tplg
+You should have a compatible for each SoC unless these are all just 
+fused or package varients of the same chip.
+
+> +
+> +patternProperties:
+> +  '-pins$':
+> +    type: object
+> +    patternProperties:
+> +      '^(.*-)?pinmux$':
+> +        type: object
+> +        description: node for pinctrl.
+> +        $ref: pinmux-node.yaml#
+> +
+> +        properties:
+> +          groups:
+> +            description: The pin group to select.
+> +            enum: [
+> +              # For RT3050, RT3052 and RT3350 SoCs
+> +              i2c, jtag, mdio, rgmii, sdram, spi, uartf, uartlite,
+> +
+> +              # For RT3352 SoC
+> +              i2c, jtag, led, lna, mdio, pa, rgmii, spi, spi_cs1, uartf,
+> +              uartlite,
+> +
+> +              # For RT5350 SoC
+> +              i2c, jtag, led, spi, spi_cs1, uartf, uartlite,
+> +            ]
+> +
+> +          function:
+> +            description: The mux function to select.
+> +            enum: [
+> +              # For RT3050, RT3052 and RT3350 SoCs
+> +              gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, mdio, pcm gpio,
+> +              pcm i2s, pcm uartf, rgmii, sdram, spi, uartf, uartlite,
+> +
+> +              # For RT3352 SoC
+> +              gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led, lna, mdio,
+> +              pa, pcm gpio, pcm i2s, pcm uartf, rgmii, spi, spi_cs1, uartf,
+> +              uartlite, wdg_cs1,
+> +
+> +              # For RT5350 SoC
+> +              gpio, gpio i2s, gpio uartf, i2c, i2s uartf, jtag, led, pcm gpio,
+> +              pcm i2s, pcm uartf, spi, spi_cs1, uartf, uartlite, wdg_cs1,
+> +            ]
+> +
+> +        required:
+> +          - groups
+> +          - function
+> +
+> +        additionalProperties: false
+> +
+> +    additionalProperties: false
+> +
+> +allOf:
+> +  - $ref: "pinctrl.yaml#"
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # Pinmux controller node
+> +  - |
+> +    pinctrl {
+> +      compatible = "ralink,rt305x-pinctrl";
+> +
+> +      i2c_pins: i2c0-pins {
+> +        pinmux {
+> +          groups = "i2c";
+> +          function = "i2c";
+> +        };
+> +      };
+> +    };
+> -- 
+> 2.25.1
+> 
+> 

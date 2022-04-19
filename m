@@ -2,153 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2BF50708B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC46950709B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353431AbiDSOcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
+        id S1343601AbiDSOeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353347AbiDSObv (ORCPT
+        with ESMTP id S232971AbiDSOeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:31:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E6C35A86
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:29:08 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 14:29:06 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650378547;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pmdYZG57UDB3nKmKGQneikiRzLQywHmdFzppNpNTQLM=;
-        b=afZaWc3ZCCuzTZrKEr1aVWbY2FBIq0H/gYfOUd2cdq2uBVB3rKTvYL69+wicoOJY/5ihLr
-        O1fMzQjrEEZfQWr/bWrtGDc+UtCq0w1sMOBoZxUxFcGw33r8lbh8alQUCFpMALw3F+jcvP
-        p/ImS4QS2oHw2Ym7kF1Yi+iRbZvy1Hl/5uqSt2gK7veZfTSpeo2Gky1esJef02iC5miwqr
-        So7aqUdS/oqy7ncB7sXYMc/Cc0D8Pi8tEo3Hhcoq+C7A4k16XdT1cz48bR0IPnOEpqpfG7
-        52m8bHUzPmlVUl10Y3UenAVuFiAyJK9TdAosNGDUhBup9Tdd4H5ol6oPsclYSw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650378547;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pmdYZG57UDB3nKmKGQneikiRzLQywHmdFzppNpNTQLM=;
-        b=38ipGL4B3CCkqcmeBktKFlq2VAqmpLS2y02aEUhgJ9R7dwQCLIpqa6RHFlafzS8k/g0Lci
-        LyrcweihDnZ6MGCQ==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] gpio: Don't fiddle with irqchips marked
- as immutable
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220419141846.598305-2-maz@kernel.org>
-References: <20220419141846.598305-2-maz@kernel.org>
+        Tue, 19 Apr 2022 10:34:46 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5F211140;
+        Tue, 19 Apr 2022 07:32:03 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id o127so12490565iof.12;
+        Tue, 19 Apr 2022 07:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=iPD1iR5qd5xmFxqoNP+9ShsEquOYqKS33gFTSRsPZro=;
+        b=Z7LxYAUbZnVFiFy71HCGAnsd0qRNreWPi93Lf3JHld6XjimOV92Fr8+6ProAPK2UtX
+         NEWGht0ORsquv+fNRKONaJYbpqKKBW8d22vmuMjdiSZxC0gM7rvMBeaGzboazwzAxXGA
+         mDvxXALWBzew3j1hguficgc8qmUB/vYIsCquZFmJFBFN92Q41mrqxax8L4Q7VHS9BI3v
+         sxaERl9GP3TP7D696rUbdqBfFfB3KegF1lkwklp6Wj4tWxdqH1r3RNRx+ipoHoEDpmde
+         O+AMs+j7ocD2qKdCVl024eKgvYt8P1F6AGr7MqzcUZmG1JiwUJxfmbZqC/T+KKrBmD8O
+         HYmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=iPD1iR5qd5xmFxqoNP+9ShsEquOYqKS33gFTSRsPZro=;
+        b=X4Nqdyl34VdhfjjwpW9g50DRf5dszr+229W54JW0vVOOsrE9hIEsKgG3D0RY6rmTRZ
+         hluRRH/V56TAac+tyeYxSD4MpHrWciDNBSOI3A8ftJH60AYzYSckJoR5kYpuL93nHA8V
+         iz2o7sf8Pnji01kB2HFf98dpmCT+DNxglgnbFE4Lc91YpslLh2OX+f+NCs8JHhb8dSBr
+         5QD6NJa2snBWwiXl5699RmJWbChxecmujXz82QT7MnUEW/L37j5WDddnm85cU963/Dc0
+         XLt0Li7bCudwp+Z8v/fio8La8HmdCbaEDPJjIkrIl+f1P9lNvsuEfoVJpJ+i7/sqSxC3
+         4Zkg==
+X-Gm-Message-State: AOAM532NLobyzk2VtEoJflxZ5T9kb52A5qWINMfFMMy5EELM8UyOHpiC
+        jg8qM7TE8BGM6nSwrzdDsYw=
+X-Google-Smtp-Source: ABdhPJzL2cpCI4DDYEF14wIz+iVDK+70GBOSOBRKi+gYopggEMfFhTfSw6J23ZbocFRaz59bj9/WaQ==
+X-Received: by 2002:a6b:ce01:0:b0:64c:ad0b:9a65 with SMTP id p1-20020a6bce01000000b0064cad0b9a65mr6527353iob.147.1650378722931;
+        Tue, 19 Apr 2022 07:32:02 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id r14-20020a92ac0e000000b002ca8eb05174sm8934717ilh.57.2022.04.19.07.32.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 07:32:02 -0700 (PDT)
+Message-ID: <448093df-288f-3c49-270e-5d830a986b27@gmail.com>
+Date:   Tue, 19 Apr 2022 16:31:59 +0200
 MIME-Version: 1.0
-Message-ID: <165037854631.4207.10307653212413379012.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org
+References: <20210820081616.83674-1-krzysztof.kozlowski@canonical.com>
+ <165036314214.180327.9860190048104061653.b4-ty@linaro.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH 1/2] arm64: dts: mediatek: align operating-points table
+ name with dtschema
+In-Reply-To: <165036314214.180327.9860190048104061653.b4-ty@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     6c846d026d490b2383d395bc8e7b06336219667b
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/6c846d026d490b2383d395bc8e7b06336219667b
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Tue, 19 Apr 2022 15:18:37 +01:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Tue, 19 Apr 2022 15:22:25 +01:00
 
-gpio: Don't fiddle with irqchips marked as immutable
+On 19/04/2022 12:12, Krzysztof Kozlowski wrote:
+> On Fri, 20 Aug 2021 10:16:15 +0200, Krzysztof Kozlowski wrote:
+>> Align the name of operating-points node to dtschema to fix warnings like:
+>>
+>>    arch/arm64/boot/dts/mediatek/mt8173-elm.dt.yaml:
+>>      opp_table0: $nodename:0: 'opp_table0' does not match '^opp-table(-[a-z0-9]+)?$'
+>>
+>>
+> 
+> Applied, thanks!
 
-In order to move away from gpiolib messing with the internals of
-unsuspecting irqchips, add a flag by which irqchips advertise
-that they are not to be messed with, and do solemnly swear that
-they correctly call into the gpiolib helpers when required.
+Could you please provide a stable branch for this patches? So that I can pull 
+that into my branch. This will help to reduce merge conflicts later on.
 
-Also nudge the users into converting their drivers to the
-new model.
+Thanks,
+Matthias
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220419141846.598305-2-maz@kernel.org
----
- drivers/gpio/gpiolib.c | 7 ++++++-
- include/linux/irq.h    | 2 ++
- kernel/irq/debugfs.c   | 1 +
- 3 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index e59884c..48191e6 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -1475,6 +1475,11 @@ static void gpiochip_set_irq_hooks(struct gpio_chip *gc)
- {
- 	struct irq_chip *irqchip = gc->irq.chip;
- 
-+	if (irqchip->flags & IRQCHIP_IMMUTABLE)
-+		return;
-+
-+	chip_warn(gc, "not an immutable chip, please consider fixing it!\n");
-+
- 	if (!irqchip->irq_request_resources &&
- 	    !irqchip->irq_release_resources) {
- 		irqchip->irq_request_resources = gpiochip_irq_reqres;
-@@ -1633,7 +1638,7 @@ static void gpiochip_irqchip_remove(struct gpio_chip *gc)
- 		irq_domain_remove(gc->irq.domain);
- 	}
- 
--	if (irqchip) {
-+	if (irqchip && !(irqchip->flags & IRQCHIP_IMMUTABLE)) {
- 		if (irqchip->irq_request_resources == gpiochip_irq_reqres) {
- 			irqchip->irq_request_resources = NULL;
- 			irqchip->irq_release_resources = NULL;
-diff --git a/include/linux/irq.h b/include/linux/irq.h
-index f92788c..5053082 100644
---- a/include/linux/irq.h
-+++ b/include/linux/irq.h
-@@ -569,6 +569,7 @@ struct irq_chip {
-  * IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND:  Invokes __enable_irq()/__disable_irq() for wake irqs
-  *                                    in the suspend path if they are in disabled state
-  * IRQCHIP_AFFINITY_PRE_STARTUP:      Default affinity update before startup
-+ * IRQCHIP_IMMUTABLE:		      Don't ever change anything in this chip
-  */
- enum {
- 	IRQCHIP_SET_TYPE_MASKED			= (1 <<  0),
-@@ -582,6 +583,7 @@ enum {
- 	IRQCHIP_SUPPORTS_NMI			= (1 <<  8),
- 	IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND	= (1 <<  9),
- 	IRQCHIP_AFFINITY_PRE_STARTUP		= (1 << 10),
-+	IRQCHIP_IMMUTABLE			= (1 << 11),
- };
- 
- #include <linux/irqdesc.h>
-diff --git a/kernel/irq/debugfs.c b/kernel/irq/debugfs.c
-index 2b43f5f..bc8e40c 100644
---- a/kernel/irq/debugfs.c
-+++ b/kernel/irq/debugfs.c
-@@ -58,6 +58,7 @@ static const struct irq_bit_descr irqchip_flags[] = {
- 	BIT_MASK_DESCR(IRQCHIP_SUPPORTS_LEVEL_MSI),
- 	BIT_MASK_DESCR(IRQCHIP_SUPPORTS_NMI),
- 	BIT_MASK_DESCR(IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND),
-+	BIT_MASK_DESCR(IRQCHIP_IMMUTABLE),
- };
- 
- static void
+> 
+> [1/2] arm64: dts: mediatek: align operating-points table name with dtschema
+>        commit: c743bb394d35b782ae9d9ab815d6053500914533
+> [2/2] arm64: dts: mediatek: align thermal zone node names with dtschema
+>        commit: 54ff423f837db59db0626a00d091e45dcc46787e
+> 
+> Best regards,

@@ -2,404 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6214507B1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B96507B10
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357749AbiDSUms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S1357336AbiDSUkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357710AbiDSUm0 (ORCPT
+        with ESMTP id S239482AbiDSUkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:42:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5D641982
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=oONCg7CiQRxtcbN7yeFz4EGC5Qai2mc1zp188Ft5EfQ=; b=iPtOy6u6+Qw6EWhCBLgnfaNnLf
-        OoDfVmU/N2/R2ELPW0CQmkqV7GB3CoeivOpSA6Bu9e8gtfIitW1FFuFirqAefXXbB+AxiMdJvZ86l
-        a5qtsAUxHYDTL/DQl3GR3KOHrayRvDtPvYzi4mC+vjsedKmXjJEPqh+XpuW0/7W/Gd3JJ3WVYVeYl
-        kq7f+rlRvI2k4LPI7naU3Lh+Nu8RN0VllStUbecz11hUwf/58j97eTBolrMUaU4Hys95vZTz6/acb
-        vGS9l3gdJDe0VEYTAeIhQ4R/NQVf1gvOwfwXQH7GFbrLv/0lpz42wUN3hOrURpQ22djrFFH3yQaf4
-        UTm7lDPA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ngudM-003UC3-O7; Tue, 19 Apr 2022 20:39:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AD37430040C;
-        Tue, 19 Apr 2022 22:39:34 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 789A82B526F04; Tue, 19 Apr 2022 22:39:34 +0200 (CEST)
-Message-ID: <20220419203807.655552918@infradead.org>
-User-Agent: quilt/0.66
-Date:   Tue, 19 Apr 2022 22:32:56 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org, jpoimboe@redhat.com
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, mbenes@suse.cz
-Subject: [PATCH 2/2] objtool: Fix code relocs vs weak symbols
-References: <20220419203254.034493341@infradead.org>
+        Tue, 19 Apr 2022 16:40:13 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0AF40910;
+        Tue, 19 Apr 2022 13:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1650400612;
+        bh=nM0QsTSHImhNtVCVh89StLB1opnXuQrH2wxHbxs6XBA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=jlyq4cgfBSJ4vunKDweFSvyh6F+sz/1pWDI8nWlS2T5qoPZ/gQtIC6+Ye+o/sScRf
+         g//fgUsnJiPBhtDydIvFTqhFGWbXFR/+aDIGbMMXSTHIqidt2gtI9xPgWN6SsxzpCN
+         cZD9et57ilv4zaI0FBOMIok+7FiBnQ0Uya/fT9LY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.157.75] ([217.61.157.75]) by web-mail.gmx.net
+ (3c-app-gmx-bap70.server.lan [172.19.172.170]) (via HTTP); Tue, 19 Apr 2022
+ 22:36:52 +0200
 MIME-Version: 1.0
+Message-ID: <trinity-a5ae4007-e6e3-4869-80ad-3783109b6d4c-1650400612809@3c-app-gmx-bap70>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Aw: Re:  Re: [RFC/RFT 1/6] dt-bindings: phy: rockchip: add pcie3
+ phy
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Tue, 19 Apr 2022 22:36:52 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <fce0337a-0c71-a040-0a01-f20b55eb568b@linaro.org>
+References: <20220416135458.104048-1-linux@fw-web.de>
+ <20220416135458.104048-2-linux@fw-web.de>
+ <38e60bb2-123b-09cf-d6ef-3a07c6984108@linaro.org>
+ <trinity-597cf8a3-2ad4-41e6-b3c9-b949f8610533-1650390552136@3c-app-gmx-bap70>
+ <fce0337a-0c71-a040-0a01-f20b55eb568b@linaro.org>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:d+JalmBOvkG+YH4MOQOkbx3eTQ2qApoH5tRGPenjf/+CeM71isw7OUzKyPe4EElMEu30I
+ n1hHGWuB1hCWR+uDaSdbMODVWktm3iz2jGAJGr5mn7zJLMz0mzQvMXCHDgzU4xFk4dZ9ylxWzU20
+ DyKz0CEbS9RbL/l9Yb43oH4oXZAZL9hdoeUOAyffh/soksKY64KrMqXpmQEy0934hkbo//AEb62N
+ Jd62VcWdi4rt5KCeZ36p4THT6foA93C8Ir6FnjdcK+ZWFUHuqUngydOhL8Q90mGPkpgDI4/2gleH
+ S4=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZubA9Isagu8=:g1UKhN7ZZOPpy3NgvxOKYG
+ TaIs/BuV7xBn/Uwcas94HfhBFosJo964g2O8GgtMrlTfVs+q+/FCqMzuVkEtcMIkonaHl0R6T
+ FPnbM6RFIVNG3MQHhTt8KWC5xCU0nTCVIhnLqQuQXpJ9Y6vx/PleEFxPjyQm1DOeKS0tARhFW
+ zZDMzrLH1MyJ3a2B3dNdfUZ/B5vaTH5z7hSjw+GwQcjy5Ss1sijCmcsGHkSC0UDj5Ps218d44
+ G3IOU6Zmj75XY9Nwixg0v+LuFU8Yxj6jYmv5KxDtvrwfAhkOJxZnx8SmrUIPPSOXjB1XtZ2MR
+ IlgVmjUqmrahKIDqGVVwY8BmsFckQ5mHcZIu0peU25XccWCha45KFCE6lwaDQNec/rft3iQzH
+ R1S99JaVjnlzXHpGCIobf8h9omxA/dFP3BaNEwT4BDol7bXSguDsmyn1P53PmpO6Ag+zXio/7
+ VCj/LpaPCMPln/uLr57TJ6PzlLsbf4u1mQAQoDYV55jFYQXou/UwE/Y9gTsQf8Yvc0VAn7yJh
+ YjOEJZPD2m1jWz8Sx0HXJeds0urOmP7tNlEgDBk9vzmEwP1xJygu1YP5QV3hutrZ5MZiQ/P02
+ xuZZsBMp7JaPhWZbuBdlMMRaF+1IJOzUg4rXnYGhM+p03SDaUPkNbhU81bGmyjXN7J3wy9JgK
+ orhyw61hDebw77Jn0D6E+yJBstjbXs1hHOubfGdT+4AnqJPfJjtymlpWCmon0CQXE4WcGRjUd
+ UFanqQGFulfOyG+e2GZPj2COnvRICnVGcRlmuSaXpH0CZF9G6jpscQcn/iQ8U8cTxqUHwikOp
+ IMbQN0W
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Occasionally objtool driven code patching (think .static_call_sites
-.retpoline_sites etc..) goes sideways and it tries to patch an
-instruction that doesn't match.
+> Gesendet: Dienstag, 19=2E April 2022 um 21:43 Uhr
+> Von: "Krzysztof Kozlowski" <krzysztof=2Ekozlowski@linaro=2Eorg>
+> An: "Frank Wunderlich" <frank-w@public-files=2Ede>
+> Cc: "Frank Wunderlich" <linux@fw-web=2Ede>, linux-rockchip@lists=2Einfra=
+dead=2Eorg, "Kishon Vijay Abraham I" <kishon@ti=2Ecom>, "Vinod Koul" <vkoul=
+@kernel=2Eorg>, "Rob Herring" <robh+dt@kernel=2Eorg>, "Krzysztof Kozlowski"=
+ <krzk+dt@kernel=2Eorg>, "Heiko Stuebner" <heiko@sntech=2Ede>, "Lorenzo Pie=
+ralisi" <lorenzo=2Epieralisi@arm=2Ecom>, "Krzysztof Wilczy=C5=84ski" <kw@li=
+nux=2Ecom>, "Bjorn Helgaas" <bhelgaas@google=2Ecom>, "Philipp Zabel" <p=2Ez=
+abel@pengutronix=2Ede>, "Johan Jonker" <jbx6244@gmail=2Ecom>, "Peter Geis" =
+<pgwipeout@gmail=2Ecom>, "Michael Riesch" <michael=2Eriesch@wolfvision=2Ene=
+t>, linux-phy@lists=2Einfradead=2Eorg, devicetree@vger=2Ekernel=2Eorg, linu=
+x-arm-kernel@lists=2Einfradead=2Eorg, linux-kernel@vger=2Ekernel=2Eorg, lin=
+ux-pci@vger=2Ekernel=2Eorg
+> Betreff: Re: Aw: Re: [RFC/RFT 1/6] dt-bindings: phy: rockchip: add pcie3=
+ phy
+>
+> On 19/04/2022 19:49, Frank Wunderlich wrote:
+> >> The list should be strictly ordered (defined), so:
+> >>   items:
+> >>     - const: =2E=2E=2E
+> >>     - const: =2E=2E=2E
+> >>     - const: =2E=2E=2E
+> >>   minItems: 1
+> >>
+> >> However the question is - why the clocks have different amount? Is it
+> >> per different SoC implementation?
+> >=20
+> > i only know the rk3568, which needs the clocks defined here, don't kno=
+w about rk3588 yet=2E
+> > in rk3568 TPM i have the pcie-part seems missing (at least the specifi=
+c register definition), so i had used the driver as i got it from the downs=
+tream kernel=2E
+> >=20
+> > not yet looked if i find a rk3588 TPM and if this part is there as i c=
+annot test it (one of the reasons this is a rfc/rft)=2E
+>=20
+> You can skip RK3588 compatible or define it this strictly also for that
+> chip=2E
 
-Much head-scatching and cursing later the problem is as outlined below
-and affects every section that objtool generates for us, very much
-including the ORC data. The below uses .static_call_sites because it's
-convenient for demonstration purposes, but as mentioned the ORC
-sections, .retpoline_sites and __mount_loc are all similarly affected.
+currently driver does clk_bulk initialization so i would define it like yo=
+u suggested (without any SoC specific switch):
 
-Consider:
+  clocks:
+    minItems: 1
+    maxItems: 3
 
-foo-weak.c:
+  clock-names:
+    items:
+      - const: "refclk_m"
+      - const: "refclk_n"
+      - const: "pclk"
 
-  extern void __SCT__foo(void);
+    minItems: 1
 
-  __attribute__((weak)) void foo(void)
-  {
-	  return __SCT__foo();
-  }
+> >>> +
+> >>> +  "#phy-cells":
+> >>> +    const: 0
+> >>> +
+> >>> +  resets:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  reset-names:
+> >>> +    const: phy
+> >>> +
+> >>> +  rockchip,phy-grf:
+> >>> +    $ref: /schemas/types=2Eyaml#/definitions/phandle
+> >>> +    description: phandle to the syscon managing the phy "general re=
+gister files"
+> >>> +
+> >>> +  rockchip,pipe-grf:
+> >>> +    $ref: /schemas/types=2Eyaml#/definitions/phandle
+> >>> +    description: phandle to the syscon managing the pipe "general r=
+egister files"
+> >>> +
+> >>> +  rockchip,pcie30-phymode:
+> >>> +    $ref: '/schemas/types=2Eyaml#/definitions/uint32'
+> >>> +    description: |
+> >>> +      use PHY_MODE_PCIE_AGGREGATION if not defined
+> >>
+> >> I don't understand the description=2E Do you mean here a case when th=
+e
+> >> variable is missing?
+> >=20
+> > yes, if the property is not set, then value is PHY_MODE_PCIE_AGGREGATI=
+ON =3D 4
+>=20
+> Then just use "default: 4"
+>=20
+> >=20
+> >>> +    minimum: 0x0
+> >>> +    maximum: 0x4
+> >>
+> >> Please explain these values=2E Register values should not be part of
+> >> bindings, but instead some logical behavior of hardware or its logic=
+=2E
+> >=20
+> > it's a bitmask, so maybe
+> >=20
+> >     description: |
+> >       bit0: bifurcation for port 0
+> >       bit1: bifurcation for port 1
+> >       bit2: aggregation
+>=20
+> That's good=2E I got impression you have a header with these values=2E I=
+f
+> yes - mention it here=2E
+>=20
+> >       use PHY_MODE_PCIE_AGGREGATION (4) as default
+>=20
+> Just use default as I wrote above=2E
 
-foo.c:
+so like this?
 
-  extern void __SCT__foo(void);
-  extern void my_foo(void);
+  rockchip,pcie30-phymode:
+    $ref: '/schemas/types=2Eyaml#/definitions/uint32'
+    description: |
+      set the phy-mode for enabling bifurcation
+      bit0: bifurcation for port 0
+      bit1: bifurcation for port 1
+      bit2: aggregation
+      constants are defined in the dt-bindings/phy/phy-rockchip-pcie3=2Eh
+    minimum: 0x0
+    maximum: 0x4
+    default: 0x4
 
-  void foo(void)
-  {
-	  my_foo();
-	  return __SCT__foo();
-  }
-
-These generate the obvious code
-(gcc -O2 -fcf-protection=none -fno-asynchronous-unwind-tables -c foo*.c):
-
-foo-weak.o:
-0000000000000000 <foo>:
-   0:   e9 00 00 00 00          jmpq   5 <foo+0x5>      1: R_X86_64_PLT32       __SCT__foo-0x4
-
-foo.o:
-0000000000000000 <foo>:
-   0:   48 83 ec 08             sub    $0x8,%rsp
-   4:   e8 00 00 00 00          callq  9 <foo+0x9>      5: R_X86_64_PLT32       my_foo-0x4
-   9:   48 83 c4 08             add    $0x8,%rsp
-   d:   e9 00 00 00 00          jmpq   12 <foo+0x12>    e: R_X86_64_PLT32       __SCT__foo-0x4
-
-Now, when we link these two files together, you get something like
-(ld -r -o foos.o foo-weak.o foo.o):
-
-foos.o:
-0000000000000000 <foo-0x10>:
-   0:   e9 00 00 00 00          jmpq   5 <foo-0xb>      1: R_X86_64_PLT32       __SCT__foo-0x4
-   5:   66 2e 0f 1f 84 00 00 00 00 00   nopw   %cs:0x0(%rax,%rax,1)
-   f:   90                      nop
-
-0000000000000010 <foo>:
-  10:   48 83 ec 08             sub    $0x8,%rsp
-  14:   e8 00 00 00 00          callq  19 <foo+0x9>     15: R_X86_64_PLT32      my_foo-0x4
-  19:   48 83 c4 08             add    $0x8,%rsp
-  1d:   e9 00 00 00 00          jmpq   22 <foo+0x12>    1e: R_X86_64_PLT32      __SCT__foo-0x4
-
-Noting that ld preserves the weak function text, but strips the symbol
-off of it (hence objdump doing that funny negative offset thing). This
-does lead to 'interesting' unused code issues with objtool when ran on
-linked objects, but that seems to be working (fingers crossed).
-
-So far so good.. Now lets consider the objtool static_call output
-section (readelf output, old binutils):
-
-foo-weak.o:
-
-Relocation section '.rela.static_call_sites' at offset 0x2c8 contains 1 entry:
-    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-0000000000000000  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 0
-0000000000000004  0000000d00000002 R_X86_64_PC32          0000000000000000 __SCT__foo + 1
-
-foo.o:
-
-Relocation section '.rela.static_call_sites' at offset 0x310 contains 2 entries:
-    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-0000000000000000  0000000200000002 R_X86_64_PC32          0000000000000000 .text + d
-0000000000000004  0000000d00000002 R_X86_64_PC32          0000000000000000 __SCT__foo + 1
-
-foos.o:
-
-Relocation section '.rela.static_call_sites' at offset 0x430 contains 4 entries:
-    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-0000000000000000  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0
-0000000000000004  0000000d00000002 R_X86_64_PC32          0000000000000000 __SCT__foo + 1
-0000000000000008  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 1d
-000000000000000c  0000000d00000002 R_X86_64_PC32          0000000000000000 __SCT__foo + 1
-
-So we have two patch sites, one in the dead code of the weak foo and one
-in the real foo. All is well.
-
-*HOWEVER*, when the toolchain strips unused section symbols it
-generates things like this (using new enough binutils):
-
-foo-weak.o:
-
-Relocation section '.rela.static_call_sites' at offset 0x2c8 contains 1 entry:
-    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-0000000000000000  0000000200000002 R_X86_64_PC32          0000000000000000 foo + 0
-0000000000000004  0000000d00000002 R_X86_64_PC32          0000000000000000 __SCT__foo + 1
-
-foo.o:
-
-Relocation section '.rela.static_call_sites' at offset 0x310 contains 2 entries:
-    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-0000000000000000  0000000200000002 R_X86_64_PC32          0000000000000000 foo + d
-0000000000000004  0000000d00000002 R_X86_64_PC32          0000000000000000 __SCT__foo + 1
-
-foos.o:
-
-Relocation section '.rela.static_call_sites' at offset 0x430 contains 4 entries:
-    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-0000000000000000  0000000100000002 R_X86_64_PC32          0000000000000000 foo + 0
-0000000000000004  0000000d00000002 R_X86_64_PC32          0000000000000000 __SCT__foo + 1
-0000000000000008  0000000100000002 R_X86_64_PC32          0000000000000000 foo + d
-000000000000000c  0000000d00000002 R_X86_64_PC32          0000000000000000 __SCT__foo + 1
-
-And now we can see how that foos.o .static_call_sites goes side-ways, we
-now have _two_ patch sites in foo. One for the weak symbol at foo+0
-(which is no longer a static_call site!) and one at foo+d which is in
-fact the right location.
-
-This seems to happen when objtool cannot find a section symbol, in which
-case it falls back to any other symbol to key off of, however in this
-case that goes terribly wrong!
-
-As such, teach objtool to create a section symbol when there isn't
-one.
-
-Fixes: 44f6a7c0755d ("objtool: Fix seg fault with Clang non-section symbols")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- tools/objtool/elf.c |  188 +++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 166 insertions(+), 22 deletions(-)
-
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -575,37 +575,181 @@ int elf_add_reloc(struct elf *elf, struc
- 	return 0;
- }
- 
--int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
--			  unsigned long offset, unsigned int type,
--			  struct section *insn_sec, unsigned long insn_off)
-+/*
-+ * Ensure that any reloc section containing references to @sym is marked
-+ * changed such that it will get re-generated in elf_rebuild_reloc_sections()
-+ * with the new symbol index.
-+ */
-+static void elf_dirty_reloc_sym(struct elf *elf, struct symbol *sym)
-+{
-+	struct section *sec;
-+
-+	list_for_each_entry(sec, &elf->sections, list) {
-+		struct reloc *reloc;
-+
-+		if (sec->changed)
-+			continue;
-+
-+		list_for_each_entry(reloc, &sec->reloc_list, list) {
-+			if (reloc->sym == sym) {
-+				sec->changed = true;
-+				break;
-+			}
-+		}
-+	}
-+}
-+
-+/*
-+ * Move the first global symbol, as per sh_info, into a new, higher symbol
-+ * index. This fees up the shndx for a new local symbol.
-+ */
-+static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
-+				  struct section *symtab_shndx)
- {
-+	Elf_Data *data, *shndx_data = NULL;
-+	Elf32_Word first_non_local;
- 	struct symbol *sym;
--	int addend;
-+	Elf_Scn *s;
- 
--	if (insn_sec->sym) {
--		sym = insn_sec->sym;
--		addend = insn_off;
-+	first_non_local = symtab->sh.sh_info;
- 
--	} else {
--		/*
--		 * The Clang assembler strips section symbols, so we have to
--		 * reference the function symbol instead:
--		 */
--		sym = find_symbol_containing(insn_sec, insn_off);
--		if (!sym) {
--			/*
--			 * Hack alert.  This happens when we need to reference
--			 * the NOP pad insn immediately after the function.
--			 */
--			sym = find_symbol_containing(insn_sec, insn_off - 1);
-+	sym = find_symbol_by_index(elf, first_non_local);
-+	if (!sym) {
-+		WARN("no non-local symbols !?");
-+		return first_non_local;
-+	}
-+
-+	s = elf_getscn(elf->elf, symtab->idx);
-+	if (!s) {
-+		WARN_ELF("elf_getscn");
-+		return -1;
-+	}
-+
-+	data = elf_newdata(s);
-+	if (!data) {
-+		WARN_ELF("elf_newdata");
-+		return -1;
-+	}
-+
-+	data->d_buf = &sym->sym;
-+	data->d_size = sizeof(sym->sym);
-+	data->d_align = 1;
-+	data->d_type = ELF_T_SYM;
-+
-+	sym->idx = symtab->sh.sh_size / sizeof(sym->sym);
-+	elf_dirty_reloc_sym(elf, sym);
-+
-+	symtab->sh.sh_info += 1;
-+	symtab->sh.sh_size += data->d_size;
-+	symtab->changed = true;
-+
-+	/* XXX create ? */
-+	if (symtab_shndx) {
-+		s = elf_getscn(elf->elf, symtab_shndx->idx);
-+		if (!s) {
-+			WARN_ELF("elf_getscn");
-+			return -1;
- 		}
- 
--		if (!sym) {
--			WARN("can't find symbol containing %s+0x%lx", insn_sec->name, insn_off);
-+		shndx_data = elf_newdata(s);
-+		if (!shndx_data) {
-+			WARN_ELF("elf_newshndx_data");
- 			return -1;
- 		}
- 
--		addend = insn_off - sym->offset;
-+		shndx_data->d_buf = &sym->sec->idx;
-+		shndx_data->d_size = sizeof(Elf32_Word);
-+		shndx_data->d_align = 4;
-+		shndx_data->d_type = ELF_T_WORD;
-+
-+		symtab_shndx->sh.sh_size += 4;
-+		symtab_shndx->changed = true;
-+	}
-+
-+	return first_non_local;
-+}
-+
-+static struct symbol *
-+elf_create_section_symbol(struct elf *elf, struct section *sec)
-+{
-+	struct section *symtab, *symtab_shndx;
-+	Elf_Data *shndx_data = NULL;
-+	struct symbol *sym;
-+	Elf32_Word shndx;
-+
-+	symtab = find_section_by_name(elf, ".symtab");
-+	if (symtab) {
-+		symtab_shndx = find_section_by_name(elf, ".symtab_shndx");
-+		if (symtab_shndx)
-+			shndx_data = symtab_shndx->data;
-+	} else {
-+		WARN("no .symtab");
-+		return NULL;
-+	}
-+
-+	sym = malloc(sizeof(*sym));
-+	if (!sym) {
-+		perror("malloc");
-+		return NULL;
-+	}
-+	memset(sym, 0, sizeof(*sym));
-+
-+	sym->idx = elf_move_global_symbol(elf, symtab, symtab_shndx);
-+	if (sym->idx < 0) {
-+		WARN("elf_move_global_symbol");
-+		return NULL;
-+	}
-+
-+	sym->name = sec->name;
-+	sym->sec = sec;
-+
-+	// st_name 0
-+	sym->sym.st_info = GELF_ST_INFO(STB_LOCAL, STT_SECTION);
-+	// st_other 0
-+	// st_value 0
-+	// st_size 0
-+	shndx = sec->idx;
-+	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
-+		sym->sym.st_shndx = shndx;
-+		if (!shndx_data)
-+			shndx = 0;
-+	} else {
-+		sym->sym.st_shndx = SHN_XINDEX;
-+		if (!shndx_data) {
-+			WARN("no .symtab_shndx");
-+			return NULL;
-+		}
-+	}
-+
-+	if (!gelf_update_symshndx(symtab->data, shndx_data, sym->idx, &sym->sym, shndx)) {
-+		WARN_ELF("gelf_update_symshndx");
-+		return NULL;
-+	}
-+
-+	elf_add_symbol(elf, sym);
-+
-+	return sym;
-+}
-+
-+int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
-+			  unsigned long offset, unsigned int type,
-+			  struct section *insn_sec, unsigned long insn_off)
-+{
-+	struct symbol *sym = insn_sec->sym;
-+	int addend = insn_off;
-+
-+	if (!sym) {
-+		/*
-+		 * Due to how weak functions work, we must use section based
-+		 * relocations. Symbol based relocations would result in the
-+		 * weak and non-weak function annotations being overlaid on the
-+		 * non-weak function after linking.
-+		 */
-+		sym = elf_create_section_symbol(elf, insn_sec);
-+		if (!sym)
-+			return -1;
-+
-+		insn_sec->sym = sym;
- 	}
- 
- 	return elf_add_reloc(elf, sec, offset, type, sym, addend);
-
-
+regards Frank

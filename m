@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380BF506D8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06023506D97
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352001AbiDSNi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
+        id S245181AbiDSNit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244605AbiDSNip (ORCPT
+        with ESMTP id S244693AbiDSNiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:38:45 -0400
+        Tue, 19 Apr 2022 09:38:46 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2697437A03;
-        Tue, 19 Apr 2022 06:35:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B260C37A1A;
+        Tue, 19 Apr 2022 06:36:01 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 04A051F4189B
+        with ESMTPSA id 49A6C1F418A1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650375358;
-        bh=CLJk3c9oJ2tisq5+0Tred5vvArQwwllO49JGhi/m3Sc=;
+        s=mail; t=1650375360;
+        bh=ocUjKBQRtS1wz0vGDv2AACyasED2cCrcmqG1Y3gxn9Q=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=e3vTQeFNEXXBsciJkPie7VuCezMNfw/AJ+iFMyOV2osU2gRMKb3YXHi7YV0XqzV1+
-         nVf7ocCj96E0VysaDA/xQVg6h4415Ut8uiKevzlPhGlYzjjQnmRl6ZJcWgkffPzXI6
-         BY/2hJReqN4qT6sAp8SflPrGAB3a7h4mEdTjeSokqshfKRqCEA9iUb76/mwLbe2coF
-         e8nq0w4siVmhC0MiHWU6RpkRDft9bpKKoCRp6YmSaZbmzt+seUpio3HNu2kWEuVsek
-         RfImnL28rFCk7szFsk21Fr3CREhjSdNG0SHlUoVMfVGiGgg+/Civ1BrFttyPovrns2
-         8CLBxs0gyF3Lw==
-Message-ID: <d821a326-7586-62eb-aba3-1df4d0ad20a5@collabora.com>
-Date:   Tue, 19 Apr 2022 15:35:54 +0200
+        b=ovZBUC+TjhSYlr3SJZPhoeAJGHEPCMNOCfvTxnh7nkSaZ0lFdYd92Xe9Hk/5R2737
+         ketAtfvETvX1Tpbx6Ht9EynGNgbe5JSmbZtfPDexpX+IduqggrhOlIJFqjYLqltUCV
+         Yz2air4Wr/Yr7fjhVhVU/IQnFUJiAqHM3QD4S1PdWiW41aBELzgap5Blu7Oo5oLVTq
+         +V537Qup6qp2XXNQsvnbo8P41LINm8cZFQpfJIxDH92sg2Aje1uBpRBNxOEAgUDmck
+         cUfqM/naWGJ/2G+h4+0+S8PQl5yjVVxk+HnWNsI5/J6TgMVVpjYNdhW2eNxd9fQg2F
+         o8O5rASOxoGlQ==
+Message-ID: <4743441e-b89d-966d-ef9a-d1c306416587@collabora.com>
+Date:   Tue, 19 Apr 2022 15:35:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v16 5/6] dts: arm64: mt8183: add GCE client property for
- Mediatek MUTEX
+Subject: Re: [PATCH v16 3/6] dt-bindings: soc: mediatek: move out common
+ module from display folder
 Content-Language: en-US
 To:     Moudy Ho <moudy.ho@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -58,10 +58,10 @@ Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         srv_heupstream@mediatek.com,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220418083018.1907-1-moudy.ho@mediatek.com>
- <20220418083018.1907-6-moudy.ho@mediatek.com>
+ <20220418083018.1907-4-moudy.ho@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220418083018.1907-6-moudy.ho@mediatek.com>
+In-Reply-To: <20220418083018.1907-4-moudy.ho@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,10 +75,12 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 18/04/22 10:30, Moudy Ho ha scritto:
-> In order to allow modules with latency requirements such as MDP3
-> to set registers through CMDQ, add the relevant dts property.
+> In order to share the same hardware information with MDP3,
+> change the MUTEX dt-binding to the path "soc/mediatek".
 > 
 > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Acked-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

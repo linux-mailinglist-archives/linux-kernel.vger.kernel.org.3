@@ -2,118 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7FD5064BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A179150654D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348974AbiDSGpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 02:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S1349167AbiDSHGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348966AbiDSGpw (ORCPT
+        with ESMTP id S237092AbiDSHGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 02:45:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC1E30F7F;
-        Mon, 18 Apr 2022 23:43:10 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KjDlB2KG7zhXb2;
-        Tue, 19 Apr 2022 14:43:02 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Apr 2022 14:43:08 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Apr 2022 14:43:07 +0800
-From:   Wupeng Ma <mawupeng1@huawei.com>
-To:     <akpm@linux-foundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <corbet@lwn.net>
-CC:     <ardb@kernel.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <dvhart@infradead.org>, <andy@infradead.org>, <rppt@kernel.org>,
-        <paulmck@kernel.org>, <peterz@infradead.org>, <jroedel@suse.de>,
-        <songmuchun@bytedance.com>, <macro@orcam.me.uk>,
-        <frederic@kernel.org>, <W_Armin@gmx.de>, <john.garry@huawei.com>,
-        <seanjc@google.com>, <tsbogend@alpha.franken.de>,
-        <anshuman.khandual@arm.com>, <chenhuacai@kernel.org>,
-        <david@redhat.com>, <gpiccoli@igalia.com>, <mark.rutland@arm.com>,
-        <wangkefeng.wang@huawei.com>, <mawupeng1@huawei.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-efi@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>, <linux-mm@kvack.org>
-Subject: [PATCH 2/2] arm64/boot: Add support to relocate kernel image to mirrored region without kaslr
-Date:   Tue, 19 Apr 2022 15:01:50 +0800
-Message-ID: <20220419070150.254377-3-mawupeng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220419070150.254377-1-mawupeng1@huawei.com>
-References: <CAMj1kXGSStDgj9ABmUaTLnBmpQFksh3wx4tx=mJohum4GQe3Gg@mail.gmail.com>
- <20220419070150.254377-1-mawupeng1@huawei.com>
+        Tue, 19 Apr 2022 03:06:46 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29E62AC6C;
+        Tue, 19 Apr 2022 00:04:04 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23J73fM2025664;
+        Tue, 19 Apr 2022 02:03:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650351821;
+        bh=GE9Plw/ZKj9bf211DOprV0mgq6L7hEDBT4cWIq5E0yo=;
+        h=From:To:CC:Subject:Date;
+        b=InXJW5fgW56RZTOTSJOaNefKs8N4t9eaDYTxjKpyQDRbZDmUJY+5qFprIY8HGzJy2
+         a9SI59m3xiw4ImJBwTMXF77AR9088y+WS+aGceTSJPcN8zb1NYanEMZE8La3s1hY41
+         XJIU5CRPOxgHvELgIssaOuh50ThCEXbIXxcuFLHg=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23J73fcX120926
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 19 Apr 2022 02:03:41 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 19
+ Apr 2022 02:03:40 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 19 Apr 2022 02:03:40 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23J73euZ005625;
+        Tue, 19 Apr 2022 02:03:40 -0500
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+To:     Jyri Sarha <jyri.sarha@iki.fi>, Tomi Valkeinen <tomba@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>
+CC:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Devicetree <devicetree@vger.kernel.org>,
+        Linux ARM Kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Aradhya Bhatia <a-bhatia1@ti.com>
+Subject: [PATCH 0/2] Update register & interrupt info in am65x DSS
+Date:   Tue, 19 Apr 2022 12:33:00 +0530
+Message-ID: <20220419070302.16502-1-a-bhatia1@ti.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ma Wupeng <mawupeng1@huawei.com>
+The Display SubSystem IP on the ti's am65x soc has an additional 
+register space "common1" and services a maximum of 2 interrupts.
 
-Add support to relocate kernel image to mirrord regions if KASLR doesn't
-work.
+The first patch in the series adds the required updates to the yaml
+file. The second patch then reflects the yaml updates in the DSS DT
+node of am65x soc.
 
-If a suiable mirrored slot if found, call efi_random_alloc() with
-random_seed be zero to relocate kernel code and data to the first slot
-available.
+Aradhya Bhatia (2):
+  dt-bindings: display: ti,am65x-dss: Add missing register & interrupt
+  arm64: dts: ti: k3-am65: Add missing register & interrupt in DSS node
 
-Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
----
- drivers/firmware/efi/libstub/arm64-stub.c  | 10 ++++++++++
- drivers/firmware/efi/libstub/randomalloc.c |  1 +
- 2 files changed, 11 insertions(+)
+ .../devicetree/bindings/display/ti/ti,am65x-dss.yaml   | 10 +++++++---
+ arch/arm64/boot/dts/ti/k3-am65-main.dtsi               |  6 ++++--
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/firmware/efi/libstub/arm64-stub.c b/drivers/firmware/efi/libstub/arm64-stub.c
-index 39b774853b93..851a8948cafb 100644
---- a/drivers/firmware/efi/libstub/arm64-stub.c
-+++ b/drivers/firmware/efi/libstub/arm64-stub.c
-@@ -190,6 +190,16 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
- 	}
- 
- 	if (status != EFI_SUCCESS) {
-+		if (efi_mirror_found) {
-+			status = efi_random_alloc(*reserve_size, min_kimg_align,
-+					  reserve_addr, 0,
-+					  efi_mirror_found);
-+			if (status == EFI_SUCCESS)
-+				goto out;
-+
-+			efi_err("Failed to relocate kernel to mirrored region\n");
-+		}
-+
- 		if (!check_image_region((u64)_text, kernel_memsize)) {
- 			efi_err("FIRMWARE BUG: Image BSS overlaps adjacent EFI memory region\n");
- 		} else if (IS_ALIGNED((u64)_text, min_kimg_align)) {
-diff --git a/drivers/firmware/efi/libstub/randomalloc.c b/drivers/firmware/efi/libstub/randomalloc.c
-index dd81d6c3c406..d5f4249943a7 100644
---- a/drivers/firmware/efi/libstub/randomalloc.c
-+++ b/drivers/firmware/efi/libstub/randomalloc.c
-@@ -50,6 +50,7 @@ unsigned long get_entry_num_slots(efi_memory_desc_t *md,
-  */
- #define MD_NUM_SLOTS(md)	((md)->virt_addr)
- 
-+/* random_seed == 0 means alloc mem from the first suitable slot */
- efi_status_t efi_random_alloc(unsigned long size,
- 			      unsigned long align,
- 			      unsigned long *addr,
 -- 
-2.25.1
+2.35.3
 

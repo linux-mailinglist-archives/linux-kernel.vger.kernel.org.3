@@ -2,76 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15BE5065CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E867350659A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349348AbiDSH2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        id S1348971AbiDSHXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232480AbiDSH2m (ORCPT
+        with ESMTP id S240468AbiDSHXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:28:42 -0400
-Received: from mo-csw.securemx.jp (mo-csw1514.securemx.jp [210.130.202.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8811FDEA7;
-        Tue, 19 Apr 2022 00:25:59 -0700 (PDT)
-Received: by mo-csw.securemx.jp (mx-mo-csw1514) id 23J7PetR020667; Tue, 19 Apr 2022 16:25:40 +0900
-X-Iguazu-Qid: 34truvr3U0nGBrJEnS
-X-Iguazu-QSIG: v=2; s=0; t=1650353139; q=34truvr3U0nGBrJEnS; m=VHOr+lIfuTPxHuWwftgQJu1GkFNqW53efyQxgRb/t9I=
-Received: from imx12-a.toshiba.co.jp (imx12-a.toshiba.co.jp [61.202.160.135])
-        by relay.securemx.jp (mx-mr1511) id 23J7PcLh011506
-        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 19 Apr 2022 16:25:38 +0900
-X-SA-MID: 2667864
-From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, yuji2.ishikawa@toshiba.co.jp
-Subject: [PATCH 4/4] MAINTAINERS: Add entries for Toshiba Visconti AFFINE image processing accelerator
-Date:   Tue, 19 Apr 2022 16:20:18 +0900
-X-TSB-HOP2: ON
-Message-Id: <20220419072018.30057-5-yuji2.ishikawa@toshiba.co.jp>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220419072018.30057-1-yuji2.ishikawa@toshiba.co.jp>
-References: <20220419072018.30057-1-yuji2.ishikawa@toshiba.co.jp>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 19 Apr 2022 03:23:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5B372CCB2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:20:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 759641042;
+        Tue, 19 Apr 2022 00:20:30 -0700 (PDT)
+Received: from [10.57.41.251] (unknown [10.57.41.251])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5AE363F766;
+        Tue, 19 Apr 2022 00:20:27 -0700 (PDT)
+Message-ID: <7f693a3a-bbab-237a-af9a-4395e501a5b2@arm.com>
+Date:   Tue, 19 Apr 2022 08:20:22 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 02/13] iommu: Move bus setup to IOMMU device registration
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>, joro@8bytes.org,
+        will@kernel.org
+Cc:     iommu@lists.linux-foundation.org, sven@svenpeter.dev,
+        robdclark@gmail.com, m.szyprowski@samsung.com,
+        yong.wu@mediatek.com, mjrosato@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, zhang.lyra@gmail.com,
+        thierry.reding@gmail.com, vdumpa@nvidia.com,
+        jean-philippe@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1649935679.git.robin.murphy@arm.com>
+ <e607a32be8e84c56d65160902f4bd3fb434ee9d3.1649935679.git.robin.murphy@arm.com>
+ <d838c7f8-2d31-2327-9b4d-c05b06a516bb@linux.intel.com>
+ <1d9a2146-9e48-ba97-d049-5d2332ebbd3a@arm.com>
+ <d928d256-b1bc-2d45-a9c3-382edfe67b80@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <d928d256-b1bc-2d45-a9c3-382edfe67b80@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+On 2022-04-19 00:37, Lu Baolu wrote:
+> On 2022/4/19 6:09, Robin Murphy wrote:
+>> On 2022-04-16 01:04, Lu Baolu wrote:
+>>> On 2022/4/14 20:42, Robin Murphy wrote:
+>>>> @@ -1883,27 +1900,12 @@ static int iommu_bus_init(struct bus_type *bus)
+>>>>    */
+>>>>   int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops)
+>>>>   {
+>>>> -    int err;
+>>>> -
+>>>> -    if (ops == NULL) {
+>>>> -        bus->iommu_ops = NULL;
+>>>> -        return 0;
+>>>> -    }
+>>>> -
+>>>> -    if (bus->iommu_ops != NULL)
+>>>> +    if (bus->iommu_ops && ops && bus->iommu_ops != ops)
+>>>>           return -EBUSY;
+>>>>       bus->iommu_ops = ops;
+>>>
+>>> Do we still need to keep above lines in bus_set_iommu()?
+>>
+>> It preserves the existing behaviour until each callsite and its 
+>> associated error handling are removed later on, which seems like as 
+>> good a thing to do as any. Since I'm already relaxing 
+>> iommu_device_register() to a warn-but-continue behaviour while it 
+>> keeps the bus ops on life-support internally, I figured not changing 
+>> too much at once would make it easier to bisect any potential issues 
+>> arising from this first step.
+> 
+> Fair enough. Thank you for the explanation.
+> 
+> Do you have a public tree that I could pull these patches and try them
+> on an Intel hardware? Or perhaps you have done this? I like the whole
+> idea of this series, but it's better to try it with a real hardware.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dd36acc87..231b2c6f9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2796,12 +2796,14 @@ F:	Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
- F:	Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
- F:	Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml
-+F:  Documentation/devicetree/bindings/soc/visconti/
- F:	Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
- F:	arch/arm64/boot/dts/toshiba/
- F:	drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
- F:	drivers/gpio/gpio-visconti.c
- F:	drivers/pci/controller/dwc/pcie-visconti.c
- F:	drivers/pinctrl/visconti/
-+F:	drivers/soc/visconti/
- F:	drivers/watchdog/visconti_wdt.c
- N:	visconti
- 
--- 
-2.17.1
+I haven't bothered with separate branches since there's so many 
+different pieces in-flight, but my complete (unstable) development 
+branch can be found here:
 
+https://gitlab.arm.com/linux-arm/linux-rm/-/commits/iommu/bus
 
+For now I'd recommend winding the head back to "iommu: Clean up 
+bus_set_iommu()" for testing - some of the patches above that have 
+already been posted and picked up by their respective subsystems, but 
+others are incomplete and barely compile-tested. I'll probably rearrange 
+it later this week to better reflect what's happened so far.
+
+Cheers,
+Robin.

@@ -2,239 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE330506C68
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2E8506C51
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352299AbiDSM01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
+        id S1352361AbiDSM1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352278AbiDSM0S (ORCPT
+        with ESMTP id S1352284AbiDSM0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:26:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7E53617A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:23:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90E846149B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 12:23:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40DB0C385A5;
-        Tue, 19 Apr 2022 12:23:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650371015;
-        bh=Pbn8y8UibwqYIdOkM1GCt1gTd+ojcDKirE+bzLDzcsI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AfK3K5V4OTkKlGm7WBTtwQGVwntDHbN9bYvbnGHqXdPRM5+b8P6ovtC8GEVwW/LdI
-         rIGsoVgeJyG89eue3+QiQ2nf8LAklyGxezJHj5pvRA5Tha2QoD0VbkiDp4+GbMpjeK
-         FH2Kn/6je3dn8wAG0qHRU0Kzm/H4+B77h5BasbPECP2nvMVZXH0WHP1XEGJOs/HpqP
-         r6GZC8wEvuwMp3U8TkTPangx+vK+DCy1TpBWUkgQXxzyCdkzy/BFMWyPGxUZiqFE46
-         4Z1HYOMC0gAxq0D/euQuenOIFGWqlj7x9RCKhZ9DbnhLnwOEnjkh5AxyPCeNpOWBOF
-         6bFQu1wn5y+ZQ==
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Zqiang <qiang1.zhang@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH 3/3] rcu/nocb: Fix NOCB kthreads spawn failure with rcu_nocb_rdp_deoffload() direct call
-Date:   Tue, 19 Apr 2022 14:23:20 +0200
-Message-Id: <20220419122320.2060902-4-frederic@kernel.org>
+        Tue, 19 Apr 2022 08:26:40 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C738F366A0;
+        Tue, 19 Apr 2022 05:23:57 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z12so21033472edl.2;
+        Tue, 19 Apr 2022 05:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=e+5KAN+1gGGEcZk/bVdKuKM/QW/CVm3QE/hSUlqBVr4=;
+        b=CZlCg/CgiiTQDkg8mMqM/P6wU7s3WyA7gIYybU8X6zVlegvcHncMgsSxdba+wM59jV
+         /AHce/xuR1rKlb3u7z3vminRhYFYCI+ViA0YLwpoYBsoGes73SNsCH1HtiUy2+thx/qP
+         0B/6ntzyNRibw+H8B4uQ5JHKtyopCZanmWtXygmN5pzg4+VMzDpzQt60eGnbUHqtmCJU
+         Acmj5FwuZOumZOcwAlKcTpehkhA0GYnY7TJaA9qeVvScPMiwzI9CCEI9gyVaaQNo7VUT
+         zNzLC0JHAubOgeHwMU3s8Sm9+zKsFY8kkgtpOg9jga1EqqwzBN/VH8MmzoRoY5HrAwzz
+         vi0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=e+5KAN+1gGGEcZk/bVdKuKM/QW/CVm3QE/hSUlqBVr4=;
+        b=NpzlmnGnl7JYLXRTbcg7GARofU6+i+b8HK7xThKYYcjzPPGnvkTLsj6gmFuaqG2tm6
+         qx8lOAWsLEk+P5hbchLO60d/O5jVYzrXUjD5c+0jyb257twfVOA4aRpkcujZ74aemoFV
+         8jLymX4Ot+5nGuB/c6sDvSMlVRjblnzN3p7mTpEJbts6ksM/Klb6/8/BaADnrpn8gD21
+         g8kit0R9dplbZ0ChFDSXHspCU04m7cociQZ3WMey1JNuDk1aoZAwrgs3mO479Zwjyad1
+         16O11FRb3GgmURdli1jnV0dC3DFlffIKxqzd5miYTIykgYIX/vkfrZhwZDF8WalreOwO
+         HTbA==
+X-Gm-Message-State: AOAM53362PTRlHPHdTMW51IhZkVtFr7XYWXNctcg1uRHs+tVqmdKfG7q
+        oE44tzeEosVOBR3c0ST0/DU=
+X-Google-Smtp-Source: ABdhPJzqVbeIg4CkpgbBc1vVsN/rrixxtmiOUwQVI5pA9uDsyD6QFhizkUR41/HIEDocsebckxD0jw==
+X-Received: by 2002:a05:6402:2741:b0:41f:69dc:9bcd with SMTP id z1-20020a056402274100b0041f69dc9bcdmr17102553edd.239.1650371036322;
+        Tue, 19 Apr 2022 05:23:56 -0700 (PDT)
+Received: from anparri.mshome.net (host-82-53-3-95.retail.telecomitalia.it. [82.53.3.95])
+        by smtp.gmail.com with ESMTPSA id z21-20020a170906435500b006e8669fae36sm5644685ejm.189.2022.04.19.05.23.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 05:23:55 -0700 (PDT)
+From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+To:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Hu <weh@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Subject: [PATCH v2 2/6] PCI: hv: Use vmbus_requestor to generate transaction IDs for VMbus hardening
+Date:   Tue, 19 Apr 2022 14:23:21 +0200
+Message-Id: <20220419122325.10078-3-parri.andrea@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220419122320.2060902-1-frederic@kernel.org>
-References: <20220419122320.2060902-1-frederic@kernel.org>
+In-Reply-To: <20220419122325.10078-1-parri.andrea@gmail.com>
+References: <20220419122325.10078-1-parri.andrea@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zqiang <qiang1.zhang@intel.com>
+Currently, pointers to guest memory are passed to Hyper-V as transaction
+IDs in hv_pci.  In the face of errors or malicious behavior in Hyper-V,
+hv_pci should not expose or trust the transaction IDs returned by
+Hyper-V to be valid guest memory addresses.  Instead, use small integers
+generated by vmbus_requestor as request (transaction) IDs.
 
-If the rcuog/o[p] kthreads spawn failed, the offloaded rdp needs to
-be explicitly deoffloaded, otherwise the target rdp is still considered
-offloaded even though nothing actually handles the callbacks.
-
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Suggested-by: Michael Kelley <mikelley@microsoft.com>
+Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
 ---
- kernel/rcu/tree_nocb.h | 80 +++++++++++++++++++++++++++++++++---------
- 1 file changed, 64 insertions(+), 16 deletions(-)
+ drivers/pci/controller/pci-hyperv.c | 39 +++++++++++++++++++++--------
+ 1 file changed, 29 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index f2f2cab6285a..4cf9a29bba79 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -986,10 +986,7 @@ static int rdp_offload_toggle(struct rcu_data *rdp,
+diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+index 88b3b56d05228..0252b4bbc8d15 100644
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -91,6 +91,13 @@ static enum pci_protocol_version_t pci_protocol_versions[] = {
+ /* space for 32bit serial number as string */
+ #define SLOT_NAME_SIZE 11
+ 
++/*
++ * Size of requestor for VMbus; the value is based on the observation
++ * that having more than one request outstanding is 'rare', and so 64
++ * should be generous in ensuring that we don't ever run out.
++ */
++#define HV_PCI_RQSTOR_SIZE 64
++
+ /*
+  * Message Types
+  */
+@@ -1407,7 +1414,7 @@ static void hv_int_desc_free(struct hv_pci_dev *hpdev,
+ 	int_pkt->wslot.slot = hpdev->desc.win_slot.slot;
+ 	int_pkt->int_desc = *int_desc;
+ 	vmbus_sendpacket(hpdev->hbus->hdev->channel, int_pkt, sizeof(*int_pkt),
+-			 (unsigned long)&ctxt.pkt, VM_PKT_DATA_INBAND, 0);
++			 0, VM_PKT_DATA_INBAND, 0);
+ 	kfree(int_desc);
+ }
+ 
+@@ -2649,7 +2656,7 @@ static void hv_eject_device_work(struct work_struct *work)
+ 	ejct_pkt->message_type.type = PCI_EJECTION_COMPLETE;
+ 	ejct_pkt->wslot.slot = hpdev->desc.win_slot.slot;
+ 	vmbus_sendpacket(hbus->hdev->channel, ejct_pkt,
+-			 sizeof(*ejct_pkt), (unsigned long)&ctxt.pkt,
++			 sizeof(*ejct_pkt), 0,
+ 			 VM_PKT_DATA_INBAND, 0);
+ 
+ 	/* For the get_pcichild() in hv_pci_eject_device() */
+@@ -2696,8 +2703,9 @@ static void hv_pci_onchannelcallback(void *context)
+ 	const int packet_size = 0x100;
+ 	int ret;
+ 	struct hv_pcibus_device *hbus = context;
++	struct vmbus_channel *chan = hbus->hdev->channel;
+ 	u32 bytes_recvd;
+-	u64 req_id;
++	u64 req_id, req_addr;
+ 	struct vmpacket_descriptor *desc;
+ 	unsigned char *buffer;
+ 	int bufferlen = packet_size;
+@@ -2715,8 +2723,8 @@ static void hv_pci_onchannelcallback(void *context)
+ 		return;
+ 
+ 	while (1) {
+-		ret = vmbus_recvpacket_raw(hbus->hdev->channel, buffer,
+-					   bufferlen, &bytes_recvd, &req_id);
++		ret = vmbus_recvpacket_raw(chan, buffer, bufferlen,
++					   &bytes_recvd, &req_id);
+ 
+ 		if (ret == -ENOBUFS) {
+ 			kfree(buffer);
+@@ -2743,11 +2751,14 @@ static void hv_pci_onchannelcallback(void *context)
+ 		switch (desc->type) {
+ 		case VM_PKT_COMP:
+ 
+-			/*
+-			 * The host is trusted, and thus it's safe to interpret
+-			 * this transaction ID as a pointer.
+-			 */
+-			comp_packet = (struct pci_packet *)req_id;
++			req_addr = chan->request_addr_callback(chan, req_id);
++			if (req_addr == VMBUS_RQST_ERROR) {
++				dev_err(&hbus->hdev->device,
++					"Invalid transaction ID %llx\n",
++					req_id);
++				break;
++			}
++			comp_packet = (struct pci_packet *)req_addr;
+ 			response = (struct pci_response *)buffer;
+ 			comp_packet->completion_func(comp_packet->compl_ctxt,
+ 						     response,
+@@ -3428,6 +3439,10 @@ static int hv_pci_probe(struct hv_device *hdev,
+ 		goto free_dom;
  	}
- 	raw_spin_unlock_irqrestore(&rdp_gp->nocb_gp_lock, flags);
  
--	if (wake_gp)
--		wake_up_process(rdp_gp->nocb_gp_kthread);
--
--	return 0;
-+	return wake_gp;
- }
- 
- static long rcu_nocb_rdp_deoffload(void *arg)
-@@ -997,9 +994,15 @@ static long rcu_nocb_rdp_deoffload(void *arg)
- 	struct rcu_data *rdp = arg;
- 	struct rcu_segcblist *cblist = &rdp->cblist;
- 	unsigned long flags;
--	int ret;
-+	int wake_gp;
-+	struct rcu_data *rdp_gp = rdp->nocb_gp_rdp;
- 
--	WARN_ON_ONCE(rdp->cpu != raw_smp_processor_id());
-+	/*
-+	 * rcu_nocb_rdp_deoffload() may be called directly if
-+	 * rcuog/o[p] spawn failed, because at this time the rdp->cpu
-+	 * is not online yet.
-+	 */
-+	WARN_ON_ONCE((rdp->cpu != raw_smp_processor_id()) && cpu_online(rdp->cpu));
- 
- 	pr_info("De-offloading %d\n", rdp->cpu);
- 
-@@ -1023,10 +1026,41 @@ static long rcu_nocb_rdp_deoffload(void *arg)
- 	 */
- 	rcu_segcblist_set_flags(cblist, SEGCBLIST_RCU_CORE);
- 	invoke_rcu_core();
--	ret = rdp_offload_toggle(rdp, false, flags);
--	swait_event_exclusive(rdp->nocb_state_wq,
--			      !rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB |
--							SEGCBLIST_KTHREAD_GP));
-+	wake_gp = rdp_offload_toggle(rdp, false, flags);
++	hdev->channel->next_request_id_callback = vmbus_next_request_id;
++	hdev->channel->request_addr_callback = vmbus_request_addr;
++	hdev->channel->rqstor_size = HV_PCI_RQSTOR_SIZE;
 +
-+	mutex_lock(&rdp_gp->nocb_gp_kthread_mutex);
-+	if (rdp_gp->nocb_gp_kthread) {
-+		if (wake_gp)
-+			wake_up_process(rdp_gp->nocb_gp_kthread);
+ 	ret = vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL, 0,
+ 			 hv_pci_onchannelcallback, hbus);
+ 	if (ret)
+@@ -3758,6 +3773,10 @@ static int hv_pci_resume(struct hv_device *hdev)
+ 
+ 	hbus->state = hv_pcibus_init;
+ 
++	hdev->channel->next_request_id_callback = vmbus_next_request_id;
++	hdev->channel->request_addr_callback = vmbus_request_addr;
++	hdev->channel->rqstor_size = HV_PCI_RQSTOR_SIZE;
 +
-+		/*
-+		 * If rcuo[p] kthread spawn failed, directly remove SEGCBLIST_KTHREAD_CB.
-+		 * Just wait SEGCBLIST_KTHREAD_GP to be cleared by rcuog.
-+		 */
-+		if (!rdp->nocb_cb_kthread) {
-+			rcu_nocb_lock_irqsave(rdp, flags);
-+			rcu_segcblist_clear_flags(&rdp->cblist, SEGCBLIST_KTHREAD_CB);
-+			rcu_nocb_unlock_irqrestore(rdp, flags);
-+		}
-+
-+		swait_event_exclusive(rdp->nocb_state_wq,
-+					!rcu_segcblist_test_flags(cblist,
-+					  SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP));
-+	} else {
-+		/*
-+		 * No kthread to clear the flags for us or remove the rdp from the nocb list
-+		 * to iterate. Do it here instead. Locking doesn't look stricly necessary
-+		 * but we stick to paranoia in this rare path.
-+		 */
-+		rcu_nocb_lock_irqsave(rdp, flags);
-+		rcu_segcblist_clear_flags(&rdp->cblist,
-+				SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP);
-+		rcu_nocb_unlock_irqrestore(rdp, flags);
-+
-+		list_del(&rdp->nocb_entry_rdp);
-+	}
-+	mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
-+
- 	/*
- 	 * Lock one last time to acquire latest callback updates from kthreads
- 	 * so we can later handle callbacks locally without locking.
-@@ -1047,7 +1081,7 @@ static long rcu_nocb_rdp_deoffload(void *arg)
- 	WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
- 
- 
--	return ret;
-+	return 0;
- }
- 
- int rcu_nocb_cpu_deoffload(int cpu)
-@@ -1079,7 +1113,8 @@ static long rcu_nocb_rdp_offload(void *arg)
- 	struct rcu_data *rdp = arg;
- 	struct rcu_segcblist *cblist = &rdp->cblist;
- 	unsigned long flags;
--	int ret;
-+	int wake_gp;
-+	struct rcu_data *rdp_gp = rdp->nocb_gp_rdp;
- 
- 	WARN_ON_ONCE(rdp->cpu != raw_smp_processor_id());
- 	/*
-@@ -1089,6 +1124,9 @@ static long rcu_nocb_rdp_offload(void *arg)
- 	if (!rdp->nocb_gp_rdp)
- 		return -EINVAL;
- 
-+	if (WARN_ON_ONCE(!rdp_gp->nocb_gp_kthread))
-+		return -EINVAL;
-+
- 	pr_info("Offloading %d\n", rdp->cpu);
- 
- 	/*
-@@ -1113,7 +1151,9 @@ static long rcu_nocb_rdp_offload(void *arg)
- 	 *      WRITE flags               READ callbacks
- 	 *      rcu_nocb_unlock()         rcu_nocb_unlock()
- 	 */
--	ret = rdp_offload_toggle(rdp, true, flags);
-+	wake_gp = rdp_offload_toggle(rdp, true, flags);
-+	if (wake_gp)
-+		wake_up_process(rdp_gp->nocb_gp_kthread);
- 	swait_event_exclusive(rdp->nocb_state_wq,
- 			      rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB) &&
- 			      rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP));
-@@ -1126,7 +1166,7 @@ static long rcu_nocb_rdp_offload(void *arg)
- 	rcu_segcblist_clear_flags(cblist, SEGCBLIST_RCU_CORE);
- 	rcu_nocb_unlock_irqrestore(rdp, flags);
- 
--	return ret;
-+	return 0;
- }
- 
- int rcu_nocb_cpu_offload(int cpu)
-@@ -1248,7 +1288,7 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
- 				"rcuog/%d", rdp_gp->cpu);
- 		if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo GP kthread, OOM is now expected behavior\n", __func__)) {
- 			mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
--			return;
-+			goto end;
- 		}
- 		WRITE_ONCE(rdp_gp->nocb_gp_kthread, t);
- 		if (kthread_prio)
-@@ -1260,12 +1300,20 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
- 	t = kthread_run(rcu_nocb_cb_kthread, rdp,
- 			"rcuo%c/%d", rcu_state.abbr, cpu);
- 	if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo CB kthread, OOM is now expected behavior\n", __func__))
--		return;
-+		goto end;
- 
- 	if (kthread_prio)
- 		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
- 	WRITE_ONCE(rdp->nocb_cb_kthread, t);
- 	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
-+	return;
-+end:
-+	mutex_lock(&rcu_state.barrier_mutex);
-+	if (rcu_rdp_is_offloaded(rdp)) {
-+		rcu_nocb_rdp_deoffload(rdp);
-+		cpumask_clear_cpu(cpu, rcu_nocb_mask);
-+	}
-+	mutex_unlock(&rcu_state.barrier_mutex);
- }
- 
- /* How many CB CPU IDs per GP kthread?  Default of -1 for sqrt(nr_cpu_ids). */
+ 	ret = vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL, 0,
+ 			 hv_pci_onchannelcallback, hbus);
+ 	if (ret)
 -- 
 2.25.1
 

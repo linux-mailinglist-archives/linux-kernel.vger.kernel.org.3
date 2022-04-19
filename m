@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167FE50610A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02DA50614B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242530AbiDSAsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S243717AbiDSAtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241314AbiDSApQ (ORCPT
+        with ESMTP id S241387AbiDSApR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:45:16 -0400
+        Mon, 18 Apr 2022 20:45:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57792CE30
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:42:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CAB2DABA
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:42:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A240A61426
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 888846141C
         for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:42:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 744C7C3411C;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74504C3411E;
         Tue, 19 Apr 2022 00:42:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650328948;
-        bh=QdhjjxhJ7SHpqY5mdpkVbTMHi36forprWYIZSJUVTUg=;
+        bh=si1vYmdDplEcyL6k32D1ObE5ErslbKVkX7iAvHlDeXQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IXlVRfSzb+anc4S3lOIYVHiLxrzgRwgawPoevA95ykPOFgD/8jWpEfPXfORtnab36
-         bt4alEe+xSuKwMXdxmsCOuxdC1h9A98vHdw3QS2dikLJC5GnKCbGFeiLvgxl6bO2PX
-         XJ8bHMLtVLgWfFwop6OqXbiGV3Sjry4Mkva0VJu1/UXZRJAiRg3/WUuArNSwLtJef0
-         jNgxcJvnw++TCGFoN3bKnLfxrH+atK8Jl0AfZR0HX4k3P4aIr8nQ2Bcm7uVtJB7pV9
-         KEL+4d+kUC7wBeWmCbJFz32wYevUthVSoIWhLgbMVvypfLzbsz2wIyMd2tT0d1SsY5
-         bDTDrCUetCp6g==
+        b=VwRsmKheDYD0lhT4aoMGiA0XGvcBBZwcoZfFAffPdnEa0ByxP11ftTYh/KsWnMydx
+         9xCNYk30yHuy8tG3DG7TN8nnaaScC6T2HhBBaCU4shdZNEEsabtNs2rg0s2qTfpJj6
+         gfImkFv36hUd46b8/4vC9LP/pwisWCuYN6f62QCdf9Hve2hO3j64gFZ9256IMzxQrC
+         R3lzwtcvEdUoA5DqSxUi57/wONaFP7v1zKkFUHHitXUJvsp90ME/4yYUqsjLfpI1Kt
+         +MG1EfEKf1g0Iqa5zKjGcggCT2PqD9jD5VMp8qOzspljpGvNba+gRCpwd0+u86Bs5V
+         0fww0hYZMT1Og==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 554FC5C3230; Mon, 18 Apr 2022 17:42:27 -0700 (PDT)
+        id 575835C3232; Mon, 18 Apr 2022 17:42:27 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@fb.com, w@lwt.eu,
         Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH nolibc 43/61] tools/nolibc/stdio: make printf(%s) accept NULL
-Date:   Mon, 18 Apr 2022 17:42:07 -0700
-Message-Id: <20220419004225.3952530-43-paulmck@kernel.org>
+Subject: [PATCH nolibc 44/61] tools/nolibc/stdlib: add a simple getenv() implementation
+Date:   Mon, 18 Apr 2022 17:42:08 -0700
+Message-Id: <20220419004225.3952530-44-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220419004219.GA3952301@paulmck-ThinkPad-P17-Gen-1>
 References: <20220419004219.GA3952301@paulmck-ThinkPad-P17-Gen-1>
@@ -59,30 +59,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Willy Tarreau <w@1wt.eu>
 
-It's often convenient to support this, especially in test programs where
-a NULL may correspond to an allocation error or a non-existing value.
-Let's make printf("%s") support being passed a NULL. In this case it
-prints "(null)" like glibc's printf().
+This implementation relies on an extern definition of the environ
+variable, that the caller must declare and initialize from envp.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/include/nolibc/stdio.h | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/include/nolibc/stdlib.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-index cb4d3ab3a565..559ebe052a75 100644
---- a/tools/include/nolibc/stdio.h
-+++ b/tools/include/nolibc/stdio.h
-@@ -220,6 +220,8 @@ int vfprintf(FILE *stream, const char *fmt, va_list args)
- 			}
- 			else if (c == 's') {
- 				outstr = va_arg(args, char *);
-+				if (!outstr)
-+					outstr="(null)";
- 			}
- 			else if (c == '%') {
- 				/* queue it verbatim */
+diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+index 733105c574ee..aca8616335e3 100644
+--- a/tools/include/nolibc/stdlib.h
++++ b/tools/include/nolibc/stdlib.h
+@@ -60,6 +60,29 @@ int atoi(const char *s)
+ 	return atol(s);
+ }
+ 
++/* Tries to find the environment variable named <name> in the environment array
++ * pointed to by global variable "environ" which must be declared as a char **,
++ * and must be terminated by a NULL (it is recommended to set this variable to
++ * the "envp" argument of main()). If the requested environment variable exists
++ * its value is returned otherwise NULL is returned.
++ */
++static __attribute__((unused))
++char *getenv(const char *name)
++{
++	extern char **environ;
++	int idx, i;
++
++	if (environ) {
++		for (idx = 0; environ[idx]; idx++) {
++			for (i = 0; name[i] && name[i] == environ[idx][i];)
++				i++;
++			if (!name[i] && environ[idx][i] == '=')
++				return &environ[idx][i+1];
++		}
++	}
++	return NULL;
++}
++
+ /* Converts the unsigned long integer <in> to its hex representation into
+  * buffer <buffer>, which must be long enough to store the number and the
+  * trailing zero (17 bytes for "ffffffffffffffff" or 9 for "ffffffff"). The
 -- 
 2.31.1.189.g2e36527f23
 

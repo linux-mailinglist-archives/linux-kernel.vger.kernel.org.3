@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC8B507965
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1107A507966
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354045AbiDSSvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 14:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
+        id S1354412AbiDSSvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 14:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbiDSSvM (ORCPT
+        with ESMTP id S1354195AbiDSSvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 14:51:12 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45167369E9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:48:28 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id x17so30988520lfa.10
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:48:28 -0700 (PDT)
+        Tue, 19 Apr 2022 14:51:20 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89167369E9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:48:36 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id bn33so21650349ljb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:48:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fQbAaRe8NJnlCt5Bb8Ku9ZbJ6FQr9jKFCTgPm8QEEpw=;
-        b=p2SDYUiDCVg+YHTaDRHg6yt0L0mH9Q4Ew+t/CctKSjkIirUgbOSGrblEoF9SX3UKxQ
-         cjtgprX6J4Gmn80P8eLC9I5FMRf/ZT+hTDr6hnBNarjqeS40gVqv1ephG77XgJ1VJAcc
-         xmZWBglThm/m4eQHKWzC8kltvM1LkMTHhMoZnaTDo83QKWfWSX4THjPmXAsLm95M9+MZ
-         TDcwwhh7D4oR6J3wtmvDO+l+lxV+HiMYBdFJj4mnDC+LmAqaNsZ/9vYglybAYfVgxtqo
-         b/Tq9BjRhXIHwzwMMXmLOkvQ+JPurGQ2Rdo4IczlOzfg+5XqlL+p3qEvoMSH4n7dIiXb
-         SbYA==
+        bh=fR5j6tNvEd20kRXox0BKES1z9CqGLwQFicb24kMNTsY=;
+        b=FQSv3Yqg2ec2ArhRNMIWp2J/VcYnUCn8aecvRif9GTF5hcXIN64LvAuUW/lv7d3jBH
+         REwSulEtLFK6mA1AE8qBorknMGZzd0wv8NLMoSFSkMyRn46Zk6/Dsv19NpnhOrvLXJ7f
+         Ojj9YxIw/UIAo6fG5n87SNwgOZXH1lsYlm+HKw+rQXi2PDXDE7UX3Cshw5W6rqqNVH8K
+         YL5AsQm5W7aoA2vKxxSQgTK4FDE0FoXFQt4P+Mc/aL3dFAejcc7/dkrFLz89jAUHJK1q
+         yWQddgOdJVe6L6snpZ8FrfG8v58YGStFJJj5nj0Ba1JEMIvoSNBMbxwXXATb3C5ZwsOR
+         E64g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fQbAaRe8NJnlCt5Bb8Ku9ZbJ6FQr9jKFCTgPm8QEEpw=;
-        b=nQ7MiM2bDKaaPn9Totiwql9+Z1FwceDFwO13sUt7qhsUslY9fXU8Tz4WQsom/MaY6K
-         tSmLCiFy2dcNSh8bbaFTGeb80Ds0A1GUC6Z9hcVEV3CoG6KLUSPBiqUBv+IzsgVewmfi
-         kfY5w30sQUIKINVPPxKliJUG4Rd8RZ9+9cv6CGluyjGr4w4vBjJXv3KZZ8QNN4kSbG2l
-         7ss74y7IPxjZH7M4RfViXej4gq4E8IbnStn1h8gde4z5L0m34zIx4l6z5lS9IjRKgmsD
-         bv5REom6Ocut0d3y7AmfG/dxKNspqBFvp1tlc2Jp9dBLUyihcoa/ZQl4JwBNqjzM2kyR
-         BPBg==
-X-Gm-Message-State: AOAM531uTow1gdiReivXoYx7rcEazxjPcdgSF/hWK3n8ZyFo7eyyGGhK
-        924xdRNElWEiZy3hRVND4UmzVJXLI8DIIddiDdyitw==
-X-Google-Smtp-Source: ABdhPJyF7GVftAwAoV0/oyTXzOlyzS+DhBBQm8So3RspaaiyMXXfm4uz1CXENxB7rGah6vzrAtGd46+qbT848qJ9eTE=
-X-Received: by 2002:a05:6512:3fa1:b0:44a:f351:5a00 with SMTP id
- x33-20020a0565123fa100b0044af3515a00mr11632046lfa.19.1650394106356; Tue, 19
- Apr 2022 11:48:26 -0700 (PDT)
+        bh=fR5j6tNvEd20kRXox0BKES1z9CqGLwQFicb24kMNTsY=;
+        b=JM+uY2jCi8MDvoA+tNxeUOXBKWiCoRHxtA7+zTUlRtqIi/ZGvtcv08rX8uigBJzfwV
+         lpPNwhdh6ZCkMG5XwS/ySdIoy1jHMdU23kttT+/Y7wgu1CZEzUOzhr+DCuv0/4Rog4fY
+         AU/r05/SZ6AMW+zbjN2lF7ObQWEq6omv0PtTxnrgrsCoK3OGEY7xW68a4RI2k2JMGfj1
+         /X+sHX/kHj/lRsLYluOoDSqpbjbdTegbQGNXbXqV95arWmSCNbcYCXYJ/FhvWbTBn/xx
+         MjRm8k3M33KatI08nlEhKR0oV39mYSb4HyoYtbRGjt1FuCHsYSaY4XZ7VN23de/wfyzf
+         8XnQ==
+X-Gm-Message-State: AOAM532twzVk9Ls7Fflc+Tojfop9I9o9wnSF/numU9b4E2OOvCNDxyzd
+        VyPvO76PjI7OeQjNO0oNxuZyvfhk+mnRO2BAN6UNYA==
+X-Google-Smtp-Source: ABdhPJwKcESeIVfeFEF/wr+oaM4XU6kMdFkNNQ3rEwKpETLS/xXYe70CXxuDSgs0TV5DQBoKnXLqfVewjgC73AJsvHA=
+X-Received: by 2002:a2e:bc28:0:b0:24d:d4b3:ed14 with SMTP id
+ b40-20020a2ebc28000000b0024dd4b3ed14mr742509ljf.238.1650394114674; Tue, 19
+ Apr 2022 11:48:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220415120015.52684-1-ales.astone@gmail.com>
-In-Reply-To: <20220415120015.52684-1-ales.astone@gmail.com>
+References: <20220415120015.52684-1-ales.astone@gmail.com> <20220415120015.52684-2-ales.astone@gmail.com>
+In-Reply-To: <20220415120015.52684-2-ales.astone@gmail.com>
 From:   Todd Kjos <tkjos@google.com>
-Date:   Tue, 19 Apr 2022 11:48:14 -0700
-Message-ID: <CAHRSSEyK+-FFCOSNvohuTVyWo4fncsPMoC5xtthpr2ooY45MpQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] binder: Gracefully handle BINDER_TYPE_FDA objects
- with num_fds=0
+Date:   Tue, 19 Apr 2022 11:48:23 -0700
+Message-ID: <CAHRSSEwZZMRkytqAMQOL7Ms6dCNZ7VaEf+ykLz82uAVW58Lxdw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] binder: Address corner cases in deferred copy and fixup
 To:     Alessandro Astone <ales.astone@gmail.com>
 Cc:     tkjos@android.com, gregkh@linuxfoundation.org, brauner@kernel.org,
         arve@android.com, linux-kernel@vger.kernel.org, maco@android.com,
@@ -73,46 +72,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, Apr 15, 2022 at 5:00 AM Alessandro Astone <ales.astone@gmail.com> wrote:
 >
-> Some android userspace is sending BINDER_TYPE_FDA objects with
-> num_fds=0. Like the previous patch, this is reproducible when
-> playing a video.
+> When handling BINDER_TYPE_FDA object we are pushing a parent fixup
+> with a certain skip_size but no scatter-gather copy object, since
+> the copy is handled standalone.
+> If BINDER_TYPE_FDA is the last children the scatter-gather copy
+> loop will never stop to skip it, thus we are left with an item in
+> the parent fixup list. This will trigger the BUG_ON().
 >
-> Before commit 09184ae9b575 BINDER_TYPE_FDA objects with num_fds=0
-> were 'correctly handled', as in no fixup was performed.
->
-> After commit 09184ae9b575 we aggregate fixup and skip regions in
-> binder_ptr_fixup structs and distinguish between the two by using
-> the skip_size field: if it's 0, then it's a fixup, otherwise skip.
-> When processing BINDER_TYPE_FDA objects with num_fds=0 we add a
-> skip region of skip_size=0, and this causes issues because now
-> binder_do_deferred_txn_copies will think this was a fixup region.
->
-> To address that, return early from binder_translate_fd_array to
-> avoid adding an empty skip region.
+> This is reproducible in android when playing a video.
+> We receive a transaction that looks like this:
+>     obj[0] BINDER_TYPE_PTR, parent
+>     obj[1] BINDER_TYPE_PTR, child
+>     obj[2] BINDER_TYPE_PTR, child
+>     obj[3] BINDER_TYPE_FDA, child
 >
 > Fixes: 09184ae9b575 ("binder: defer copies of pre-patched txn data")
 > Signed-off-by: Alessandro Astone <ales.astone@gmail.com>
 
 Acked-by: Todd Kjos <tkjos@google.com>
 
+
 > ---
->  drivers/android/binder.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/android/binder.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 >
 > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index 31176edb1069..f3b639e89dd8 100644
+> index 8351c5638880..31176edb1069 100644
 > --- a/drivers/android/binder.c
 > +++ b/drivers/android/binder.c
-> @@ -2491,6 +2491,9 @@ static int binder_translate_fd_array(struct list_head *pf_head,
->         struct binder_proc *proc = thread->proc;
->         int ret;
+> @@ -2295,6 +2295,7 @@ static int binder_do_deferred_txn_copies(struct binder_alloc *alloc,
+>  {
+>         int ret = 0;
+>         struct binder_sg_copy *sgc, *tmpsgc;
+> +       struct binder_ptr_fixup *tmppf;
+>         struct binder_ptr_fixup *pf =
+>                 list_first_entry_or_null(pf_head, struct binder_ptr_fixup,
+>                                          node);
+> @@ -2349,7 +2350,11 @@ static int binder_do_deferred_txn_copies(struct binder_alloc *alloc,
+>                 list_del(&sgc->node);
+>                 kfree(sgc);
+>         }
+> -       BUG_ON(!list_empty(pf_head));
+> +       list_for_each_entry_safe(pf, tmppf, pf_head, node) {
+> +               BUG_ON(pf->skip_size == 0);
+> +               list_del(&pf->node);
+> +               kfree(pf);
+> +       }
+>         BUG_ON(!list_empty(sgc_head));
 >
-> +       if (fda->num_fds == 0)
-> +               return 0;
-> +
->         fd_buf_size = sizeof(u32) * fda->num_fds;
->         if (fda->num_fds >= SIZE_MAX / sizeof(u32)) {
->                 binder_user_error("%d:%d got transaction with invalid number of fds (%lld)\n",
+>         return ret > 0 ? -EINVAL : ret;
 > --
 > 2.35.1
 >

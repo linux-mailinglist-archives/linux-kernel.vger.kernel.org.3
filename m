@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D97450667F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF66506683
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238628AbiDSIKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
+        id S1349728AbiDSIKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233480AbiDSIKU (ORCPT
+        with ESMTP id S244107AbiDSIKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:10:20 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D988F1CB3E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:07:38 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ec42eae76bso163487977b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:07:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I/yGTP55Q3zKCVvsyO3pqJukwATC0ZlhhZ8VlgwH+4k=;
-        b=EbTRqHc1mXW90UbzM8S7dYlhr+0BJPriQ+S21B43cirXEp/VJSmlbSXCOXZKx3Dzcr
-         j6d9U8wdry+aNeouRvOjrhmUUg3pFjONHC6FKMSYuvEtu4BXu/GbJXBGObsh7cGxbUil
-         ETv0TamHTr+5q36Et0DOeEcKa60j//TcTrvGGA449/Uux3f+kZSFyOLaVKnJJUYSiFsA
-         AIRGlJHkj4QKJVBEhQ48qtYATWdV/J4txXbnGLCYN0g6MifNXRlf64kOQaqDN+P3b55m
-         Psjys5DhYpS9DbA8KrdB0kCNV3tZlQkx2ojHJWzESgShiPPQwjrP/mAANcoTex6npkPH
-         Yhlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I/yGTP55Q3zKCVvsyO3pqJukwATC0ZlhhZ8VlgwH+4k=;
-        b=6TG1/cMWZkDbDu/pzgyy3upx5bz2SiJxfbeV6nQpI2Dku9TTxpf7XiGC+wqOeJoGjS
-         haKNrqX18Fxy9xaweWjoyUbwBhJ5V4C3YIIfJhBJ1fizLcks3BbTC2gIda0VMdGbqxaH
-         A98z2ty1WY6F1pPgCQ7ThPE5CZgKDkSQi1djTut3XiVxpusMR8kU1WteDseAAgfsJG6t
-         MjQqlPRQ1Oq/KfaZDYO74sBfUza57yNCty1kCHvn25uqbGUFykC+SRQMNWe0YLDTGhrB
-         RwH3P653G7cm6fmqmHgiEpX3kIoYqap4aMQDHASh8AhgSbJb+vO/FeZojtAzyKfHqs7h
-         pT9Q==
-X-Gm-Message-State: AOAM530SxGmwDYxi3JcEEu8wVpiabqtXvdeKF9ucA6CYNmNEjqcMMvWA
-        Xie1Jmg1jYmtRBMS3BFE1R7Mah8JuK0O7BSg8ImkQg==
-X-Google-Smtp-Source: ABdhPJwEllwA44WDjgjPJKdDmac4B8OtWyYwezegrfIbwxZq2N35xvB3EfXfA7s5o+0sSU6+DmdsJi36Wel7eiNLDoI=
-X-Received: by 2002:a81:6189:0:b0:2eb:deb5:9f63 with SMTP id
- v131-20020a816189000000b002ebdeb59f63mr13358223ywb.319.1650355658062; Tue, 19
- Apr 2022 01:07:38 -0700 (PDT)
+        Tue, 19 Apr 2022 04:10:38 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB0FE2717B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:07:54 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-127-e4KWbpF-O9CJiTd9liyVDw-1; Tue, 19 Apr 2022 09:07:51 +0100
+X-MC-Unique: e4KWbpF-O9CJiTd9liyVDw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Tue, 19 Apr 2022 09:07:50 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Tue, 19 Apr 2022 09:07:50 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Alexander Lobakin' <alobakin@pm.me>, Song Liu <song@kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        "Jonathan Lemon" <jonathan.lemon@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        "Chenbo Feng" <fengc@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [PATCH bpf-next 07/11] samples: bpf: fix uin64_t format literals
+Thread-Topic: [PATCH bpf-next 07/11] samples: bpf: fix uin64_t format literals
+Thread-Index: AQHYUbspso42ifnDw02kovtD5V7S26z25T3g
+Date:   Tue, 19 Apr 2022 08:07:50 +0000
+Message-ID: <9465da05497746b3b70d7c841a585d5b@AcuMS.aculab.com>
+References: <20220414223704.341028-1-alobakin@pm.me>
+ <20220414223704.341028-8-alobakin@pm.me>
+ <CAPhsuW7FuAKX0fJ1XPfFWWwRS+wTW0qA49V-iQVzxv4jOb47MA@mail.gmail.com>
+ <20220416174816.198651-1-alobakin@pm.me>
+In-Reply-To: <20220416174816.198651-1-alobakin@pm.me>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <1649566716-24687-1-git-send-email-zgpeng@tencent.com>
-In-Reply-To: <1649566716-24687-1-git-send-email-zgpeng@tencent.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 19 Apr 2022 10:07:26 +0200
-Message-ID: <CAKfTPtDXhAr7tweb6pjUAaSfKaHH3q=CYiGXgEbSoQzewg_dfw@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Fix the scene where group's imbalance is set incorrectly
-To:     zgpeng <zgpeng.linux@gmail.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 10 Apr 2022 at 06:58, zgpeng <zgpeng.linux@gmail.com> wrote:
->
-> In the load_balance function, if the balance fails due to
-> affinity,then parent group's imbalance will be set to 1.
-> However, there will be a scene where balance is achieved,
-> but the imbalance flag is still set to 1, which needs to
-> be fixed.
->
-> The specific trigger scenarios are as follows. In the
-> load_balance function, the first loop picks out the busiest
-> cpu. During the process of pulling the process from the
-> busiest cpu, it is found that all tasks cannot be run on the
-> DST cpu. At this time, both LBF_SOME_PINNED andLBF_ALL_PINNED
-> of env.flags are set. Because balance fails and LBF_SOME_PINNED
+RnJvbTogQWxleGFuZGVyIExvYmFraW4NCj4gU2VudDogMTYgQXByaWwgMjAyMiAxODo1NQ0KPiBU
+bzogU29uZyBMaXUgPHNvbmdAa2VybmVsLm9yZz4NCj4gDQo+IEZyb206IFNvbmcgTGl1IDxzb25n
+QGtlcm5lbC5vcmc+DQo+IERhdGU6IEZyaSwgMTUgQXByIDIwMjIgMTY6NTI6MTMgLTA3MDANCj4g
+DQo+ID4gT24gVGh1LCBBcHIgMTQsIDIwMjIgYXQgMzo0NiBQTSBBbGV4YW5kZXIgTG9iYWtpbiA8
+YWxvYmFraW5AcG0ubWU+IHdyb3RlOg0KPiA+ID4NCj4gPiA+IFRoZXJlJ3MgYSBjb3VwbGUgcGxh
+Y2VzIHdoZXJlIHVpbjY0X3QgaXMgYmVpbmcgcGFzc2VkIGFzIGFuICVsZA0KPiA+ID4gZm9ybWF0
+IGFyZ3VtZW50LCB3aGljaCBpcyBpbmNvcnJlY3QgKHNob3VsZCBiZSAlbGxkKS4gRml4IHRoZW0u
+DQo+ID4NCj4gPiBUaGlzIHdpbGwgY2F1c2Ugc29tZSB3YXJuaW5nIG9uIHNvbWUgNjQtYml0IGNv
+bXBpbGVyLCBubz8NCj4gDQo+IE9oIHdhaXQsIEkgYWNjaWRlbnRpYWxseSBtZW50aW9uZWQgJWxk
+IGFuZCAlbGxkIGFsdGhvdWdoIGluIGZhY3QgSQ0KPiBjaGFuZ2VkICVsdSB0byAlbGx1LiBTbyB0
+aGVyZSB3b24ndCBiZSBhbnkgY29tcGlsZXIgd2FybmluZ3MuIEknbGwNCj4gZml4IHRoZSBjb21t
+aXQgbWVzc2FnZSBpbiB2Mi4NCg0KVGhhdCB3b24ndCBtYWtlIGFueSBkaWZmZXJlbmNlLg0KVGhl
+IGNvcnJlY3Qgd2F5IHRvIHByaW50IHVpbnQ2NF90IGlzIHVzaW5nIFBSSXU2NC4NCg0KCURhdmlk
+DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
+YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
+IChXYWxlcykNCg==
 
-shouldn't LBF_DST_PINNED and dst_cpu have been set ?
-and goto more_balance should clear env.imbalance before we set group's
-imbalance ?
-
-> is set, the parent group's mbalance flag will be set to 1. At
-> the same time, because LBF_ALL_PINNED is set, it will re-enter
-> the second cycle to select another busiest cpu to pull the process.
-> Because the busiest CPU has changed, the process can be pulled to
-> DST cpu, so it is possible to reach a balance state.
-
-The new load_balance will be done without the previous busiest cpu
-
->
-> But at this time, the parent group's imbalance flag is not set
-> correctly again. As a result, the load balance is successfully
-> achieved, but the parent group's imbalance flag is incorrectly
-> set to 1. In this case, the upper-layer load balance will
-> erroneously select this domain as the busiest group, thereby
-> breaking the balance.
->
-> Signed-off-by: zgpeng <zgpeng@tencent.com>
-> ---
->  kernel/sched/fair.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index d4bd299..e137917 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -10019,13 +10019,13 @@ static int load_balance(int this_cpu, struct rq *this_rq,
->                 }
->
->                 /*
-> -                * We failed to reach balance because of affinity.
-> +                * According to balance status, set group_imbalance correctly.
->                  */
->                 if (sd_parent) {
->                         int *group_imbalance = &sd_parent->groups->sgc->imbalance;
->
-> -                       if ((env.flags & LBF_SOME_PINNED) && env.imbalance > 0)
-> -                               *group_imbalance = 1;
-> +                       if (env.flags & LBF_SOME_PINNED)
-> +                               *group_imbalance = env.imbalance > 0 ? 1 : 0;
->                 }
->
->                 /* All tasks on this runqueue were pinned by CPU affinity */
-> --
-> 2.9.5
->

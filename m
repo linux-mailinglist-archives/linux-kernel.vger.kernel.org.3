@@ -2,122 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C642507230
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D804350722F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354069AbiDSPyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
+        id S1354082AbiDSPy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354062AbiDSPyt (ORCPT
+        with ESMTP id S1354062AbiDSPyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:54:49 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA771E3CE
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:52:06 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id s33so4390907ybi.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=svoxI3P1MTFKEFyUdpPrcgYOwcptyW2jfm7B97EDACE=;
-        b=hqY0Brlnj/vptEt82cDudZbgfl/3pzyr/UiAK/HR09LT2qyTDendN2hCQPDULF4qRw
-         DMD2WZXHCb7MJ6aZApQPmIIYGkgKyW069+FnJ/ZD6dZVthsZUDW9dcmzZ492aVLwGFEJ
-         6l2c0JYNOrFB8mg2mlynr3gwmUfaXR24R65wX0B4FRGrmXixvPYrki9bKMc/kqhY/9H3
-         QgRcRDULdmTq/hsEt1UZDfjxOwX/1ydc8yeOfCJRu6Mkx5iP4BBjSFIrY++zZ1nJ9dS2
-         MossmJ9Bg137dn4v5St1p4jFCv/YC9o/Y71hNCY1vP+aiUG5nm1GIzZxytpjf2PIvl0g
-         8ztA==
+        Tue, 19 Apr 2022 11:54:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BAC21E3D0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650383531;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=A2aAIhjhDINQUeDXC2PLVamoVkPYEpaikfODfduHQkQ=;
+        b=NQszpD7QrilswiisMD2MwDnMLCT6rdN2qIqMUP0UK6m+hjHGDEC8CneOznSr+5J6/LApoD
+        M22Kub8VvoJApJthie96A9WD8Fo2x6EBRw1kQT+CZIBCXG0sdtOs5Ldt+MRQTorihyOjRv
+        RmLfNuO06zkcX6bKJI1RRzF8HlDtHZs=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-184-Q5-p1PP7Mtaa81PPTZygoA-1; Tue, 19 Apr 2022 11:52:07 -0400
+X-MC-Unique: Q5-p1PP7Mtaa81PPTZygoA-1
+Received: by mail-qt1-f199.google.com with SMTP id ay26-20020a05622a229a00b002f20573a0faso2913640qtb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:52:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=svoxI3P1MTFKEFyUdpPrcgYOwcptyW2jfm7B97EDACE=;
-        b=OPDpU+pYmHkvUtCu00nR6BcbUD/9W1TBrNNW+2syJAdlalQ9jse12q6fDGFi2My/c8
-         hMEbv9p/BjHBDtESePM5D+G/IupPmbl3uEObdu5hB71dBBErF7z6boYn2tacesGjY66F
-         1BjEYWvqcfOK0p5oQyY9SwXxA7E5UxZDuv+4KudsLT2g23OTkRunvYRAioyySrOgcHi4
-         pMLeqOVB9SWIiWtcPc3n8aI4Mum5REWpH+4KJL94tqsqJDr9fx2Q0m7Hy46qhb68hzs/
-         gVcRA9uBdDr/xsDoWMHsasMuAIqKWIOcBVO4oSSqUdZvTH+4KaHj7XpP4nMw9RAn1+FQ
-         Lj8w==
-X-Gm-Message-State: AOAM532G2FEJyRi9eh1hDjaqDCI0aKDR4vJu1xnBVJ8xrK+8f0NCNSGl
-        6hscjeep9u2WUOFf1ppSZr2GrVSbwr/t+bTkgCY7Dg==
-X-Google-Smtp-Source: ABdhPJwN4AvAD8+aKlKRmatVjthj6YnAmVf6tJQjltNxIYx9SRXrW98T2rAdS6RIq8B0rMsZFiegW5J8TJY2hfW4B0I=
-X-Received: by 2002:a25:ea48:0:b0:644:e2e5:309 with SMTP id
- o8-20020a25ea48000000b00644e2e50309mr11576663ybe.407.1650383525468; Tue, 19
- Apr 2022 08:52:05 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A2aAIhjhDINQUeDXC2PLVamoVkPYEpaikfODfduHQkQ=;
+        b=XLCo/VDTStBPhxFwXRFAL1PAmjCRbCK3RMADSqaznm6I4fc7ktJtBYkgbK3jzNRGI5
+         V3JPzjX8sMXKlkQ0bOTMgBRSdsKhtbg7lUoUti9+Y7eH5CJkRbEFT0Z8DaWU23Z3oH2U
+         EP1B+dSmTSuP99ro5L2TjUV7RBzs3oZlf9jCOv3ZYbU70prlN8duFu8oPdmEXt9s8tL2
+         7sEj5MIVoiZhejlPxEYOdt2aZ4uqyTC1dPWvRwJPZDUIAf+HcfCj2/Cet2XDi9uDFrFC
+         d0jtWsmfvF5co1k2FYnPryBx+1zxuqUrHJ5mgkP6tBTb+T46lCIwbzh1FHO8iXFH8VTy
+         6I8Q==
+X-Gm-Message-State: AOAM531jGH58SVELcZja4rB2pvSXhXIIZiw0c3nn1lAVdA7e7NV8uSSQ
+        qID52zOpvPpm90l5khOZjJBiIOBfh/a1slIjsLLg3InIg4xMDtx8pOmOu/z+FaHis/BolEOlzFz
+        xK6QoIUMaivyb2DOBxMU+64s7
+X-Received: by 2002:a05:620a:4687:b0:69c:5016:9ea4 with SMTP id bq7-20020a05620a468700b0069c50169ea4mr9910666qkb.624.1650383527426;
+        Tue, 19 Apr 2022 08:52:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwYtIr2Qt0uy3XqbQvayaX2ydS0/i/P8tJV1N5aJImgh3yxZ8vccF7r0hjvmZePaeKO+nwvhA==
+X-Received: by 2002:a05:620a:4687:b0:69c:5016:9ea4 with SMTP id bq7-20020a05620a468700b0069c50169ea4mr9910654qkb.624.1650383527161;
+        Tue, 19 Apr 2022 08:52:07 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id c4-20020a37b304000000b0069ec13803adsm196602qkf.7.2022.04.19.08.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 08:52:06 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 08:52:04 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     x86@kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] objtool: Fix function fallthrough detection for
+ vmlinux
+Message-ID: <20220419155204.dpinfcxm5xburyig@treble>
+References: <cover.1649718562.git.jpoimboe@redhat.com>
+ <b434cff98eca3a60dcc64c620d7d5d405a0f441c.1649718562.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-References: <20220415133356.179706384@linutronix.de>
-In-Reply-To: <20220415133356.179706384@linutronix.de>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 19 Apr 2022 08:51:54 -0700
-Message-ID: <CANn89iL+CHRi1HJ6Mp4u=ECnfAXV2qxXZj_BsQuv+uwheAfDDw@mail.gmail.com>
-Subject: Re: [patch 00/10] x86/cpu: Consolidate APERF/MPERF code
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b434cff98eca3a60dcc64c620d7d5d405a0f441c.1649718562.git.jpoimboe@redhat.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 12:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> APERF/MPERF is utilized in two ways:
->
->   1) Ad hoc readout of CPU frequency which requires IPIs
->
->   2) Frequency scale calculation for frequency invariant scheduling which
->      reads APERF/MPERF on every tick.
->
-> These are completely independent code parts. Eric observed long latencies
-> when reading /proc/cpuinfo which reads out CPU frequency via #1 and
-> proposed to replace the per CPU single IPI with a broadcast IPI.
->
-> While this makes the latency smaller, it is not necessary at all because #2
-> samples APERF/MPERF periodically, except on idle or isolated NOHZ full CPUs
-> which are excluded from IPI already.
->
-> It could be argued that not all APERF/MPERF capable systems have the
-> required BIOS information to enable frequency invariance support, but in
-> practice most of them do. So the APERF/MPERF sampling can be made
-> unconditional and just the frequency scale calculation for the scheduler
-> excluded.
->
-> The following series consolidates that.
->
+On Mon, Apr 11, 2022 at 04:10:32PM -0700, Josh Poimboeuf wrote:
+> Objtool's function fallthrough detection only works on C objects.
+> The distinction between C and assembly objects no longer makes sense
+> with objtool running on vmlinux.o.
+> 
+> Now that copy_user_64.S has been fixed up, and an objtool sibling call
+> detection bug has been fixed, the asm code is in "compliance" and this
+> hack is no longer needed.  Remove it.
+> 
+> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 
-Thanks a lot for working on that Thomas.
+Fixes: ed53a0d97192 ("x86/alternative: Use .ibt_endbr_seal to seal indirect calls")
 
-I am not sure I will be able to backport this to a Google prodkernel,
-as I guess there will be many merge conflicts.
+-- 
+Josh
 
-Do you have by any chance this work available in a git branch ?
-
-Thanks.
-
-
-
-> Thanks,
->
->         tglx
-> ---
->  arch/x86/include/asm/cpu.h       |    2
->  arch/x86/include/asm/topology.h  |   17 -
->  arch/x86/kernel/acpi/cppc.c      |   28 --
->  arch/x86/kernel/cpu/aperfmperf.c |  474 +++++++++++++++++++++++++++++++--------
->  arch/x86/kernel/cpu/proc.c       |    2
->  arch/x86/kernel/smpboot.c        |  358 -----------------------------
->  fs/proc/cpuinfo.c                |    6
->  include/linux/cpufreq.h          |    1
->  8 files changed, 405 insertions(+), 483 deletions(-)
->
->

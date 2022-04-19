@@ -2,129 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CA850714A
+	by mail.lfdr.de (Postfix) with ESMTP id F24A150714D
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353569AbiDSPGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
+        id S1353559AbiDSPIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352313AbiDSPGa (ORCPT
+        with ESMTP id S236347AbiDSPIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:06:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7273393E3;
-        Tue, 19 Apr 2022 08:03:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 19 Apr 2022 11:08:39 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440CB3968B;
+        Tue, 19 Apr 2022 08:05:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EEBD615A3;
-        Tue, 19 Apr 2022 15:03:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D38C385BB;
-        Tue, 19 Apr 2022 15:03:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650380626;
-        bh=2QAhuc2XWcc3cQISqAxXYVsD0D9u3Zzv0U665e9wblg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=sH1xvpevcqmRCg1FQs9IreiBFSyKwR9KorOvczKSfsvKZO7JGQBU8RSWYJxInjJUu
-         aJf/p8r9ijLvNlXeoY517zB6xvdx5upsf50wP3LqXQC4anvduDfEH6789kmOrmHtyV
-         T5ArVtogHhSLnz2Pwmm/nvIyf6YoALuaWLHJAwl2wepbhlk9T6H0v/GUYRK/A5UPri
-         Xu37ZyCt2GzgaltOoY8YxFRaUWCtyebFlC12zaLez0zG2Bf66Md7rVha4m7YXd16kw
-         kkLB1wf308TXgd5ocdZjKf43CtD7hM/3yiQUvLhym6/eIWI8yIUtm/pR9OgssQ7gwu
-         A7+M2sRQwXkng==
-Date:   Tue, 19 Apr 2022 10:03:44 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 0/3] x86/PCI: Log E820 clipping
-Message-ID: <20220419150344.GA1198281@bhelgaas>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E46C12129B;
+        Tue, 19 Apr 2022 15:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650380755; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RIeKtDiX0nw/kN8tZFnbYwbUF0osRimfD25Cqjw9rO0=;
+        b=p0AkssQvCUGX2FIMw2M6305MzO023ILQ5u5IfEsBVHXyJHDV+Ebng9/Or4tm5v9ZLS2kLq
+        hoWrwtxaDSJOTaOA3LVtFIwda/AweGfgvh+HYRp+GubmdbcetanPTiaxtoKJsw/GevrmpQ
+        1tb0zNKv/NJqEwQgpoFNU25svmJC4qE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650380755;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RIeKtDiX0nw/kN8tZFnbYwbUF0osRimfD25Cqjw9rO0=;
+        b=VIM4uKnDgGnQYW+y/rVChWFXlTtd7njqOyGqs9fi4c7mcZ9x9bowKajd514kd6PgEoABL8
+        YF5T9AcBpjedztCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C9CE2139BE;
+        Tue, 19 Apr 2022 15:05:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kgk+MdPPXmLlMAAAMHmgww
+        (envelope-from <iivanov@suse.de>); Tue, 19 Apr 2022 15:05:55 +0000
+Date:   Tue, 19 Apr 2022 18:05:55 +0300
+From:   "Ivan T. Ivanov" <iivanov@suse.de>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Phil Elwell <phil@raspberrypi.org>,
+        kernel test robot <lkp@intel.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] clk: bcm2835: Round UART input clock up
+Message-ID: <20220419150555.igh6tdxgjb7meygx@suse>
+References: <20220404125113.80239-1-iivanov@suse.de>
+ <20220414105656.qt52zmr5vjmjdcxc@suse>
+ <0b3356c0-b4c8-91ed-dfde-9f50483ec36f@i2se.com>
+ <20220418110516.s7jxsfa3jl7aagrf@suse>
+ <2a46bd1c-600b-5bd9-1c19-20c809f63945@i2se.com>
+ <20220418113801.uree7rvkzxpiwyni@suse>
+ <6adc9c1c-ec75-b52c-9c44-00296eaa00f6@i2se.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d75ede81-49da-855a-6679-c3315089e067@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6adc9c1c-ec75-b52c-9c44-00296eaa00f6@i2se.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 11:59:17AM +0200, Hans de Goede wrote:
-> On 1/1/70 01:00, Bjorn Helgaas wrote:
-> > This is still work-in-progress on the issue of PNP0A03 _CRS methods that
-> > are buggy or not interpreted correctly by Linux.
-> > 
-> > The previous try at:
-> >   https://lore.kernel.org/r/20220304035110.988712-1-helgaas@kernel.org
-> > caused regressions on some Chromebooks:
-> >   https://lore.kernel.org/r/Yjyv03JsetIsTJxN@sirena.org.uk
-> > 
-> > This v2 drops the commit that caused the Chromebook regression, so it also
-> > doesn't fix the issue we were *trying* to fix on Lenovo Yoga and Clevo
-> > Barebones.
-> > 
-> > The point of this v2 update is to split the logging patch into (1) a pure
-> > logging addition and (2) the change to only clip PCI windows, which was
-> > previously hidden inside the logging patch and not well documented.
-> > 
-> > Bjorn Helgaas (3):
-> >   x86/PCI: Eliminate remove_e820_regions() common subexpressions
-> >   x86: Log resource clipping for E820 regions
-> >   x86/PCI: Clip only host bridge windows for E820 regions
+On 04-18 18:01, Stefan Wahren wrote:
+> > > 
+> > > Do you use the mainline DTS or the vendor DTS to see this issue?
+> > > 
+> > For (open)SUSE we use downstream DTS.
 > 
-> Thanks, the entire series looks good to me:
+> This is popular and bad at the same time. We as the mainline kernel
+> developer cannot guarantee that this works as expected. A lot of issues are
+> caused by mixing vendor DTS with mainline kernel, so in general (not for
+> this specific issue) you are on your own with this approach.
 > 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-Thank you!
+Yep, I am aware of that. I am still trying to recover after recent
+gpio-ranges fiasco, also still working on fixing non-exported firmware
+clocks, which break HDMI output on some of the devices.
 
-> So what is the plan to actually fix the issue seen on some Lenovo models
-> and Clevo Barebones ?   As I mentioned previously I think that since all
-> our efforts have failed so far that we should maybe reconsider just
-> using DMI quirks to ignore the E820 reservation windows for host bridges
-> on affected models ?
+> I know this is a little bit off topic but except from overlay support, can
+> you provide a list of most missing features of the mainline kernel / DTS?
 
-I have been resisting DMI quirks but I'm afraid there's no other way.
-I think the web we've gotten into, where vendors have used E820 to
-interact with _CRS in incompatible and undocumented ways, is not
-sustainable.
+Well, 260+ overlays for free is not insignificant benefit. Beside few
+breakages from time to time using downstream device tree works fine.
 
-I'm not aware of any spec that says the OS should use E820 to clip
-things out of _CRS, so I think the long term plan should be to
-decouple them by default.
+Regards,
+Ivan
 
-Straw man:
-
-  - Disable E820 clipping by default.
-
-  - Add a quirk to enable E820 clipping for machines older than X,
-    e.g., 2023, to avoid breaking machines that currently work.
-
-  - Add quirks to disable E820 clipping for individual machines like
-    the Lenovo and Clevos that predate X, but E820 clipping breaks
-    them.
-
-  - Add quirks to enable E820 clipping for individual machines like
-    the Chromebooks (and probably machines we don't know about yet)
-    that have devices that consume part of _CRS but are not
-    enumerable.
-
-  - Communicate this to OEMs to try to prevent future machines that
-    need quirks.
-
-Bjorn

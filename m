@@ -2,76 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1F8506074
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799F2506071
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236628AbiDSADo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S236184AbiDSADe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236325AbiDSADE (ORCPT
+        with ESMTP id S236277AbiDSADA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:03:04 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A82DFF8;
-        Mon, 18 Apr 2022 17:00:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650326423; x=1681862423;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LNgypJWu04+VBr0jxucBPW5eHtAN+yGVhhFKj1YoysA=;
-  b=noxzZEujwGp/kZoHFYbhcCe/uXFA4VsfH8+dECwQvFzR2HHCtc/fwvfd
-   H2GnTJzho1+Xcx1KY9QZNsBU8i2JI4hYr4kQczL85NvpwHTm6CJVAZGFj
-   3Pyg0iCBN/VZdJqv/LEvQD5T70aIbR4OTe/TjDCYlpwaeGDs1Pxld8Iq7
-   iPTpZyeFsA2NapJmWM0J1JhjZxWpDe6BFPRf7OVhlIGV4T6Sw3F91I/zS
-   1ytW/SI4FoUGzHK8gmcSRWfL9MnOmHAZdhF9Y4oYKr9Gb7lyiCo29bRIQ
-   e+NUPEwMlE/kghBK9Z31KIyviDcl4XuAFb9J/etBKK1Dk9S0uDvWfWhfP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="261239454"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="261239454"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 17:00:23 -0700
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="554454749"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 17:00:18 -0700
-Date:   Tue, 19 Apr 2022 08:00:13 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>
-Subject: Re: [PATCH v8 9/9] KVM: VMX: enable IPI virtualization
-Message-ID: <20220419000007.GA15366@gao-cwp>
-References: <20220411090447.5928-1-guang.zeng@intel.com>
- <20220411090447.5928-10-guang.zeng@intel.com>
- <YlmOUtXgIdQcUTO1@google.com>
- <20220418092500.GA14409@gao-cwp>
- <Yl2AaxXFh7UfvpFx@google.com>
+        Mon, 18 Apr 2022 20:03:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A9F11C34;
+        Mon, 18 Apr 2022 17:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A4A1B81106;
+        Tue, 19 Apr 2022 00:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF45C385B5;
+        Tue, 19 Apr 2022 00:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650326416;
+        bh=hro1DWmXh+gkHoQfRvRaQ76L7LJUd/OIij5/KjJOEbM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PONY76fFMgRSlbxeEpKhCEEWAgNfZrIZ0EiH98otJUgWntQxnrYMQWTUkErEDysSG
+         NEGHtpJb8SCpy4tV/w6ZvF+RTDM/CxPqHKvug4L1dukt+nlRd8vC/cycVx20dA2tlQ
+         HEL6MTbcwlXR+Ps2nRGWnnheMkr32MizHM0GpbaHrsWIKYycO+s7deXzHev9ara/VH
+         lsiO4QlFEo8bzYcTE4IzolzYmfZkkfTsNmp4NU+poAP/HpPNePHZFTAI6YOyKbuoOP
+         bdras8rBNjtZWMkOUghhWYpGQMbcoCRGC6B4ih/dRIFghjzePRxNTTRRokQm2UywoU
+         xO6SysXc8UyEg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E4DDD5C121E; Mon, 18 Apr 2022 17:00:15 -0700 (PDT)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, Eric Dumazet <edumazet@google.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 8/9] rcu-tasks: Handle sparse cpu_possible_mask
+Date:   Mon, 18 Apr 2022 17:00:13 -0700
+Message-Id: <20220419000014.3948512-8-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20220419000007.GA3945818@paulmck-ThinkPad-P17-Gen-1>
+References: <20220419000007.GA3945818@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl2AaxXFh7UfvpFx@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,67 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 03:14:51PM +0000, Sean Christopherson wrote:
->On Mon, Apr 18, 2022, Chao Gao wrote:
->> On Fri, Apr 15, 2022 at 03:25:06PM +0000, Sean Christopherson wrote:
->> >On Mon, Apr 11, 2022, Zeng Guang wrote:
->> >> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> >> index d1a39285deab..23fbf52f7bea 100644
->> >> --- a/arch/x86/kvm/x86.c
->> >> +++ b/arch/x86/kvm/x86.c
->> >> @@ -11180,11 +11180,15 @@ static int sync_regs(struct kvm_vcpu *vcpu)
->> >>  
->> >>  int kvm_arch_vcpu_precreate(struct kvm *kvm, unsigned int id)
->> >>  {
->> >> +	int ret = 0;
->> >> +
->> >>  	if (kvm_check_tsc_unstable() && atomic_read(&kvm->online_vcpus) != 0)
->> >>  		pr_warn_once("kvm: SMP vm created on host with unstable TSC; "
->> >>  			     "guest TSC will not be reliable\n");
->> >>  
->> >> -	return 0;
->> >> +	if (kvm_x86_ops.alloc_ipiv_pid_table)
->> >> +		ret = static_call(kvm_x86_alloc_ipiv_pid_table)(kvm);
->> >
->> >Add a generic kvm_x86_ops.vcpu_precreate, no reason to make this so specific.
->> >And use KVM_X86_OP_RET0 instead of KVM_X86_OP_OPTIONAL, then this can simply be
->> >
->> >	return static_call(kvm_x86_vcpu_precreate);
->> >
->> >That said, there's a flaw in my genius plan.
->> >
->> >  1. KVM_CREATE_VM
->> >  2. KVM_CAP_MAX_VCPU_ID, set max_vcpu_ids=1
->> >  3. KVM_CREATE_VCPU, create IPIv table but ultimately fails
->> >  4. KVM decrements created_vcpus back to '0'
->> >  5. KVM_CAP_MAX_VCPU_ID, set max_vcpu_ids=4096
->> >  6. KVM_CREATE_VCPU w/ ID out of range
->> >
->> >In other words, malicious userspace could trigger buffer overflow.
->> 
->> can we simply return an error (e.g., -EEXIST) on step 5 (i.e.,
->> max_vcpu_ids cannot be changed after being set once)?
->> 
->> or
->> 
->> can we detect the change of max_vcpu_ids in step 6 and re-allocate PID
->> table?
->
->Returning an error is viable, but would be a rather odd ABI.  Re-allocating isn't
->a good option because the PID table could be in active use by other vCPUs, e.g.
->KVM would need to send a request and kick all vCPUs to have all vCPUs update their
->VMCS.
->
->And with both of those alternatives, I still don't like that every feature that
->acts on max_vcpu_ids would need to handle this same edge case.
->
->An alternative to another new ioctl() would be to to make KVM_CAP_MAX_VCPU_ID
->write-once, i.e. reject attempts to change the max once set (though we could allow
->re-writing the same value).  I think I like that idea better than adding an ioctl().
->
->It can even be done without an extra flag by zero-initializing the field and instead
->waiting until vCPU pre-create to lock in the value.  That would also help detect
->bad usage of max_vcpu_ids, especially if we added a wrapper to get the value, e.g.
->the wrapper could WARN_ON(!kvm->arch.max_vcpu_ids).
+From: Eric Dumazet <edumazet@google.com>
 
-Yes, it looks simpler than adding an ioctl(). We will use this approach.
+If the rcupdate.rcu_task_enqueue_lim kernel boot parameter is set to
+something greater than 1 and less than nr_cpu_ids, the code attempts to
+use a subset of the CPU's RCU Tasks callback lists.  This works, but only
+if the cpu_possible_mask is contiguous.  If there are "holes" in this
+mask, the callback-enqueue code might attempt to access a non-existent
+per-CPU ->rtcpu variable for a non-existent CPU.  For example, if only
+CPUs 0, 4, 8, 12, 16 and so on are in cpu_possible_mask, specifying
+rcupdate.rcu_task_enqueue_lim=4 would cause the code to attempt to
+use callback queues for non-existent CPUs 1, 2, and 3.  Because such
+systems have existed in the past and might still exist, the code needs
+to gracefully handle this situation.
+
+This commit therefore checks to see whether the desired CPU is present
+in cpu_possible_mask, and, if not, searches for the next CPU.  This means
+that the systems administrator of a system with a sparse cpu_possible_mask
+will need to account for this sparsity when specifying the value of
+the rcupdate.rcu_task_enqueue_lim kernel boot parameter.  For example,
+setting this parameter to the value 4 will use only CPUs 0 and 4, which
+CPU 4 getting three times the callback load of CPU 0.
+
+This commit assumes that bit (nr_cpu_ids - 1) is always set in
+cpu_possible_mask.
+
+Link: https://lore.kernel.org/lkml/CANn89iKaNEwyNZ=L_PQnkH0LP_XjLYrr_dpyRKNNoDJaWKdrmg@mail.gmail.com/
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ kernel/rcu/tasks.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index 3aad0dfbfaf4..fd70d86eb7cd 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -273,7 +273,9 @@ static void call_rcu_tasks_iw_wakeup(struct irq_work *iwp)
+ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
+ 				   struct rcu_tasks *rtp)
+ {
++	int chosen_cpu;
+ 	unsigned long flags;
++	int ideal_cpu;
+ 	unsigned long j;
+ 	bool needadjust = false;
+ 	bool needwake;
+@@ -283,8 +285,9 @@ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
+ 	rhp->func = func;
+ 	local_irq_save(flags);
+ 	rcu_read_lock();
+-	rtpcp = per_cpu_ptr(rtp->rtpcpu,
+-			    smp_processor_id() >> READ_ONCE(rtp->percpu_enqueue_shift));
++	ideal_cpu = smp_processor_id() >> READ_ONCE(rtp->percpu_enqueue_shift);
++	chosen_cpu = cpumask_next(ideal_cpu - 1, cpu_possible_mask);
++	rtpcp = per_cpu_ptr(rtp->rtpcpu, chosen_cpu);
+ 	if (!raw_spin_trylock_rcu_node(rtpcp)) { // irqs already disabled.
+ 		raw_spin_lock_rcu_node(rtpcp); // irqs already disabled.
+ 		j = jiffies;
+-- 
+2.31.1.189.g2e36527f23
+

@@ -2,109 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80825076DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7715076DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343631AbiDSR60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        id S1353719AbiDSR6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243323AbiDSR6Z (ORCPT
+        with ESMTP id S243323AbiDSR6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:58:25 -0400
-Received: from mail-40132.protonmail.ch (mail-40132.protonmail.ch [185.70.40.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132BEAE4B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:55:40 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 17:55:33 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1650390938;
-        bh=PPJ08Z7LC0SXHf4H31iWdRBqP0exCCppE446+ZFQcHE=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=tQ4pSJmcBk/k3762L94PTahcCu6Kr6yb0gzV8BvTnAQqIjaUp2oDDUWF0IGC0/qt1
-         CnHBmxfVAYIB3r7mb0/EZRmiKCyPXGgJj3xsk0CaPXKJewDwXaBHWZCQZ2SrHgVN0F
-         iJqhAzLvjcEizBsRrfKqqOmrGAXm90+7gJ+JZUQFAeI1xPSBk7Tt2hR14go7Bd/fZ6
-         J7AUn5sObYWYOI0VwAugi0smzqYSRSqqUBJoXlSeH60tuQ476/ELo9fU7Hsb/mhvfz
-         WTuAL1b1TjK81qjBLEe3WfR+FLnAQYevaLh67xiI6UfLl/TiEquNzvo9us2Kn+nrhw
-         O3Md95y+s0loA==
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Tue, 19 Apr 2022 13:58:32 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E80AE40;
+        Tue, 19 Apr 2022 10:55:49 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id e4so18959504oif.2;
+        Tue, 19 Apr 2022 10:55:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G53IGdSl4eKD/pKBUNFtH8S3ZJw3xBhGFrzG2Kwc3lo=;
+        b=0tZlbuT/p3sJcbqRkmQHmMr5OqijfQXcII8oALu7NTFpt2dQKPqUY06QpcArfZWzqN
+         c4S2xXiNWr8i/iPceQVkLPI2y+QvmFeC9Fg137WhaccyIpMyIbJgKBR0fCuGcQCt/cZ9
+         vpdR0VJpdUZf8Dr1nIu7vxOHBH+PlNDHU3mWrFe7HZ1DdO/Edn2lU/CZmmwqMRWcBOj4
+         nkiz5TXrcdf7vj5FuyNkYm8MBsLH+xsqOgje0iESjz6iFv4a4R3+wRYQo/m/m6xxUTJ0
+         jU5+k95JkXN9vtQxUOaE8gRUDoTaTOQAEYpAmPdtf4GiWmCRMIqbxyI8STjxWI1I/z4T
+         OTDg==
+X-Gm-Message-State: AOAM530UVCJCT9tg04DC01S6csSc61XAAnLgoX54L1vjcFIPyUQm0/G+
+        zQOFaLnd1/BsVuKPtqJKpw==
+X-Google-Smtp-Source: ABdhPJxndRV5nmSseK/j2Lgy/q7El5d7cQm60BIp4GkP1mhx/Cvfniq4V1aBmaIujM+XiM8WMJ/UsA==
+X-Received: by 2002:a05:6808:bd1:b0:322:3523:f30c with SMTP id o17-20020a0568080bd100b003223523f30cmr7819510oik.234.1650390948421;
+        Tue, 19 Apr 2022 10:55:48 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m5-20020a056808024500b003222ff73171sm5274286oie.17.2022.04.19.10.55.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 10:55:47 -0700 (PDT)
+Received: (nullmailer pid 3052225 invoked by uid 1000);
+        Tue, 19 Apr 2022 17:55:46 -0000
+Date:   Tue, 19 Apr 2022 12:55:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: Re: [PATCH v2 3/9] clk: qcom: msm8996-cpu: Add MSM8996 Pro CBF support
-Message-ID: <sld5QpXz-AMurBB0RoYLgMHsEcUsgubB_V3YQO8HP8vFxjd7RwALrHFYBJSiv09SMsXuy4nnWDy2ZQ8IRlEnTl1zXb4EXqPT19y_n-GMd9Q=@protonmail.com>
-In-Reply-To: <Yl72EFQbntGUi2tm@builder.lan>
-References: <kXrAkKv7RZct22X0wivLWqOAiLKpFuDCAY1KY_KSx649kn7BNmJ2IFFMrsYPAyDlcxIjbQCQ1PHb5KaNFawm9IGIXUbch-DI9OI_l73BAaM=@protonmail.com> <Yl72EFQbntGUi2tm@builder.lan>
-Feedback-ID: 6882736:user:proton
+        Roger Quadros <rogerq@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add documentation for AM62 USB
+ Wrapper module
+Message-ID: <Yl73orZuOaPG7KgV@robh.at.kernel.org>
+References: <20220414103211.16202-1-a-govindraju@ti.com>
+ <20220414103211.16202-2-a-govindraju@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414103211.16202-2-a-govindraju@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, April 19th, 2022 at 9:49 PM, Bjorn Andersson <bjorn.andersson@l=
-inaro.org> wrote:
-> On Fri 08 Apr 23:16 CDT 2022, Yassine Oudjana wrote:
->
-> > MSM8996 Pro (MSM8996SG) has a /4 divisor on the CBF clock
-> > instead of /2. This allows it to reach a lower minimum frequency
-> > of 192000000Hz compared to 307200000Hz on regular MSM8996.
-> > Add support for setting the CBF clock divisor to /4 for MSM8996 Pro.
-> >
-> > Signed-off-by: Yassine Oudjana y.oudjana@protonmail.com
-> > Reviewed-by: Konrad Dybcio konrad.dybcio@somainline.org
-> > ---
-> > drivers/clk/qcom/clk-cpu-8996.c | 61 +++++++++++++++++++++------------
-> > 1 file changed, 40 insertions(+), 21 deletions(-)
-> >
-> > diff --git a/drivers/clk/qcom/clk-cpu-8996.c b/drivers/clk/qcom/clk-cpu=
--8996.c
-> > index 8afc271f92d0..231d8224fa16 100644
-> > --- a/drivers/clk/qcom/clk-cpu-8996.c
-> > +++ b/drivers/clk/qcom/clk-cpu-8996.c
-> > @@ -70,11 +70,11 @@ enum _pmux_input {
-> >
-> > enum {
-> > CBF_PLL_INDEX =3D 1,
-> > - CBF_DIV_2_INDEX,
-> > + CBF_DIV_INDEX,
-> > CBF_SAFE_INDEX
-> > };
->
->
-> I don't have this enum in my tree. Could you please double check that
-> this works on linux-next?
+On Thu, 14 Apr 2022 16:02:08 +0530, Aswath Govindraju wrote:
+> Add bindings for the TI's AM62 wrapper module for the Synopsys USBSS-DRD
+> controller.
+> 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+> 
+> Changes since v3:
+> - As VBUS_VALID interrupt is not being used, removed the interrupts
+>   property from the bindings. As there is change in the properties
+>   I did not pick the reviewed-by tags from the earlier version of
+>   the series.
+> 
+>  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 103 ++++++++++++++++++
+>  1 file changed, 103 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+> 
 
-It's added in a patch[1] that isn't applied yet. The patch is mentioned
-in the cover letter, which you had trouble finding unfortunately.
-
-> And can you please send the next revision using git send-email with a
-> cover-letter, so that the patches are related in my inbox.
-
-Sorry about that. I've already resent the series properly. You should
-find [PATCH RESEND v2 */9] in your inbox, otherwise here[2] is a link.
-
-[1] https://lore.kernel.org/linux-arm-msm/20210528192541.1120703-1-konrad.d=
-ybcio@somainline.org/
-[2] https://lore.kernel.org/linux-arm-msm/20220416025637.83484-1-y.oudjana@=
-protonmail.com/T/#t
+Reviewed-by: Rob Herring <robh@kernel.org>

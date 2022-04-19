@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEE550761C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A40850762C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350281AbiDSRK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
+        id S1356161AbiDSRNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355588AbiDSRJr (ORCPT
+        with ESMTP id S1355641AbiDSRJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:09:47 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC6F38A6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:07:01 -0700 (PDT)
+        Tue, 19 Apr 2022 13:09:56 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3F6B1F4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:07:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650388021; x=1681924021;
+  t=1650388029; x=1681924029;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=GEA3SMd1Hyd9mgC2yPlyiFisBoFISvY6li4UoRH0Ugk=;
-  b=NaNWmAoQMJFIZN2rjybq7L2kKbA5r6jVpdTLSazqP6nYdu0G8IGPWvHU
-   ylc0j5tQM9aBPs+5xPrL+HMR7EpC2d3UBY0P7NnLTdTp+l5rcGqnznbCu
-   Cok/OvoLAFJtYwWhrlSm69McMAy6LmLYyqMpqxmDa7sMYY/u6RxszoR/g
-   /RSo7U9IRtXILiHbitqudpL9WZm+HU82ukGN1rjXG2WrNYZD+jGnGUqzg
-   1Y6QjYJLWHHVujt5VrrkrrAkbQDI+KyTQrE+DfJOai28s11znndm0uIp6
-   NO39/ddNax0Xw2GjwUcoqkm0MpF5ziDepQsPVcXdQzm2J4EqBDzO9v2pP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="263280365"
+  bh=RA7/CbrBlg0DZuKNvFbLv2IQL4yMBEmR7JWu0KLcJzo=;
+  b=UfSiJkZ64IjGUuG6vxwdTG9OJqiU8x/tNmOqJd0fZLnK0Bbl2johUYcB
+   lXvwK8mkcTrtJnCspcE5vwqH6nNSxyHAhXr2Zc1zq/uS2wCKZttaGUC52
+   JszlbGGNf+D4iHPLG7GyeTa5a1NYO91SbZNX+0Wh6+qg5/i41uByXYG6w
+   qetDkzOK/HTRxzTdK7LC57OrNyDvoc8IcX2vAzT4CGhhC9X2B21FOiQee
+   D7xrFLSgREy5/L2tdkGeYK1zplic3woI23Kyuq8WgTTMjnu3dST8INnt3
+   8EdEoRmffAL5AiwKlZx4wDFaOtkWL/NnZ7rbSOby2LwugMko+oz03jF1f
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="261420760"
 X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="263280365"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:06:56 -0700
+   d="scan'208";a="261420760"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:06:57 -0700
 X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="614074980"
+   d="scan'208";a="657714516"
 Received: from ajacosta-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.11.4])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:06:56 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:06:56 -0700
 From:   ira.weiny@intel.com
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -45,18 +45,18 @@ Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V10 07/44] x86/fault: Adjust WARN_ON for pkey fault
-Date:   Tue, 19 Apr 2022 10:06:12 -0700
-Message-Id: <20220419170649.1022246-8-ira.weiny@intel.com>
+Subject: [PATCH V10 08/44] Documentation/pkeys: Add initial PKS documentation
+Date:   Tue, 19 Apr 2022 10:06:13 -0700
+Message-Id: <20220419170649.1022246-9-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220419170649.1022246-1-ira.weiny@intel.com>
 References: <20220419170649.1022246-1-ira.weiny@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,47 +65,90 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-Previously if a protection key fault occurred on a kernel address it
-indicated something wrong because user page mappings are not supposed to
-be in the kernel address space.
+Add initial overview and configuration information about PKS.
 
-With the addition of PKS, pkey faults may now happen on kernel mappings.
-
-If PKS is enabled, avoid the warning in the fault path.  Simplify the
-comment.
-
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: "Moger, Babu" <Babu.Moger@amd.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
 Changes for V9
-	From Dave Hansen
-		Clarify the comment and commit message
+	Feedback from Dave Hansen
+		Remove overview and move relevant text to the main pkey
+		overview which covers both user ans kernel keys.
+		Add an example of using Kconfig
+		Move MSR details to later patches
 ---
- arch/x86/mm/fault.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ Documentation/core-api/protection-keys.rst | 43 ++++++++++++++++++++--
+ 1 file changed, 39 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index d0074c6ed31a..5599109d1124 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1148,11 +1148,11 @@ do_kern_addr_fault(struct pt_regs *regs, unsigned long hw_error_code,
- 		   unsigned long address)
- {
- 	/*
--	 * Protection keys exceptions only happen on user pages.  We
--	 * have no user pages in the kernel portion of the address
--	 * space, so do not expect them here.
-+	 * PF_PF faults should only occur on kernel
-+	 * addresses when supervisor pkeys are enabled.
- 	 */
--	WARN_ON_ONCE(hw_error_code & X86_PF_PK);
-+	WARN_ON_ONCE(!cpu_feature_enabled(X86_FEATURE_PKS) &&
-+		     (hw_error_code & X86_PF_PK));
+diff --git a/Documentation/core-api/protection-keys.rst b/Documentation/core-api/protection-keys.rst
+index bf28ac0401f3..13eedb0119e1 100644
+--- a/Documentation/core-api/protection-keys.rst
++++ b/Documentation/core-api/protection-keys.rst
+@@ -13,6 +13,11 @@ Pkeys Userspace (PKU) is a feature which can be found on:
+         * Intel client CPUs, Tiger Lake (11th Gen Core) and later
+         * Future AMD CPUs
  
- #ifdef CONFIG_X86_32
- 	/*
++Protection Keys Supervisor (PKS) is a feature which can be found on:
++        * Sapphire Rapids (and later) "Scalable Processor" Server CPUs
++        * Future non-server Intel parts.
++        * qemu: https://www.qemu.org/2021/04/30/qemu-6-0-0/
++
+ Pkeys work by dedicating 4 previously Reserved bits in each page table entry to
+ a "protection key", giving 16 possible keys.
+ 
+@@ -23,13 +28,20 @@ and Write Disable) for each of 16 keys.
+ Being a CPU register, PKRU is inherently thread-local, potentially giving each
+ thread a different set of protections from every other thread.
+ 
+-There are two instructions (RDPKRU/WRPKRU) for reading and writing to the
+-register.  The feature is only available in 64-bit mode, even though there is
++For Userspace (PKU), there are two instructions (RDPKRU/WRPKRU) for reading and
++writing to the register.
++
++For Supervisor (PKS), the register (MSR_IA32_PKRS) is accessible only to the
++kernel through rdmsr and wrmsr.
++
++The feature is only available in 64-bit mode, even though there is
+ theoretically space in the PAE PTEs.  These permissions are enforced on data
+ access only and have no effect on instruction fetches.
+ 
+-Syscalls
+-========
++
++
++Syscalls for user space keys
++============================
+ 
+ There are 3 system calls which directly interact with pkeys::
+ 
+@@ -96,3 +108,26 @@ with a read()::
+ The kernel will send a SIGSEGV in both cases, but si_code will be set
+ to SEGV_PKERR when violating protection keys versus SEGV_ACCERR when
+ the plain mprotect() permissions are violated.
++
++
++Kernel API for PKS support
++==========================
++
++Kconfig
++-------
++
++Kernel users intending to use PKS support should depend on
++ARCH_HAS_SUPERVISOR_PKEYS, and select ARCH_ENABLE_SUPERVISOR_PKEYS to turn on
++this support within the core.  For example:
++
++.. code-block:: c
++
++        config MY_NEW_FEATURE
++                depends on ARCH_HAS_SUPERVISOR_PKEYS
++                select ARCH_ENABLE_SUPERVISOR_PKEYS
++
++This will make "MY_NEW_FEATURE" unavailable unless the architecture sets
++ARCH_HAS_SUPERVISOR_PKEYS.  It also makes it possible for multiple independent
++features to "select ARCH_ENABLE_SUPERVISOR_PKEYS".  If no features enable PKS
++by selecting ARCH_ENABLE_SUPERVISOR_PKEYS, PKS support will not be compiled
++into the kernel.
 -- 
 2.35.1
 

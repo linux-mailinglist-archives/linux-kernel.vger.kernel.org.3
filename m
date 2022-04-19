@@ -2,164 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EC35073F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2334C507324
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352472AbiDSQmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S1354740AbiDSQlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354743AbiDSQly (ORCPT
+        with ESMTP id S234063AbiDSQlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:41:54 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E7F15A3C;
-        Tue, 19 Apr 2022 09:39:08 -0700 (PDT)
+        Tue, 19 Apr 2022 12:41:39 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF471409E;
+        Tue, 19 Apr 2022 09:38:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650386348; x=1681922348;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=v4WGCF2s5f5KuKam370PTpkZM1RS4K0r/UhQwRsUGzE=;
-  b=E1tcpFe6vw2bIexL/9lB51PyBWvWcYilfcf9T6MDHEh3ElmHon1spcFC
-   0S6sNINV0qRzee/2pQm7pv5oMc7W6pD3IPnKgKXgOwfV7KWMGAepqn9Ay
-   C2fzU9htqfKc3k4FREqnl+7F1LvqJQ1W2qAydycwsB1cDgRYYyAz78Hk0
-   iluawMprjKoJqSv5xASQxL8EA+AI/OG/oV8JHcZPjCTuxsKkch38AIZ3H
-   W2lzLJpVuK9FowkGQhDD8EoQGpD6svXpIw6WZJ2xocA37QoPpq3SXhdz/
-   CVgQfm8X6wKgrfjKWys5tfa6sZ+ZMvg/ihEE4GHkat8Z4v4aMJeoNd/Lu
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="245702528"
+  t=1650386336; x=1681922336;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to;
+  bh=/sjp7gFP/WNMm0rhzedY8jJRt5eNgyrw8SaiEPlBRkw=;
+  b=U4sD6VP4rs6MsMNXzjHQVOX+f0q4g/MO2CpF/Cj4rfoxHbJukqZnbcru
+   5Yjfl4MeMDm/gbHdBPc5ubHrJjuNpmcIwVkJfLTD1uR5XtBCW+XtRratq
+   eexSLLv8JGySwOZgPU/Go1ynJID+Dplr31v5PaUqSN2zKm9sg2R9+55za
+   IAmmFZlUp+jPvV35CUXBvDfvCaEfS4cUiTDHmhZjkUrsP/18yYgbzOH2K
+   /6vsMte6k2bunQTPkYLrzxAsO+gN37t4/e0IW2fpOjV0xIZUhOE74lA8n
+   1v/SAdN8LMteElfLY8x0OZZ20Y7xHYS6Hy16CMgAwHLDqr6/R71s5FUhg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="324253344"
 X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="245702528"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 09:39:07 -0700
+   d="scan'208";a="324253344"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 09:38:56 -0700
 X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="554802139"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 09:39:07 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        corbet@lwn.net, gregkh@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, jithu.joseph@intel.com,
-        ashok.raj@intel.com, tony.luck@intel.com, rostedt@goodmis.org,
-        dan.j.williams@intel.com, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com
-Subject: [PATCH v3 04/11] platform/x86/intel/ifs: Add stub driver for In-Field Scan
-Date:   Tue, 19 Apr 2022 09:38:52 -0700
-Message-Id: <20220419163859.2228874-5-tony.luck@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220419163859.2228874-1-tony.luck@intel.com>
-References: <20220407191347.9681-1-jithu.joseph@intel.com>
- <20220419163859.2228874-1-tony.luck@intel.com>
+   d="scan'208";a="530465027"
+Received: from sazizi-mobl2.amr.corp.intel.com (HELO [10.212.98.167]) ([10.212.98.167])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 09:38:54 -0700
+Content-Type: multipart/mixed; boundary="------------eWVLiKb8hW4mlc5kPUXDDJhx"
+Message-ID: <79df6889-aa74-2a86-7565-be882623ddad@intel.com>
+Date:   Tue, 19 Apr 2022 09:38:53 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
+ <Ylnwmvygp796+qcA@zn.tnic>
+ <20220418155545.a567xnxa6elglapl@box.shutemov.name>
+ <Yl2UHOQ4iZJ29k0q@zn.tnic>
+ <20220418202431.whvql4w57c7l5vpw@box.shutemov.name>
+ <Yl3RmPhdZieSr8W2@zn.tnic>
+ <20220418235015.mnujtlmmlyin7y6m@box.shutemov.name>
+ <Yl5nSSC4HpSWqfY7@zn.tnic>
+ <20220419153002.ffh2ybdl7x2mm7zw@box.shutemov.name>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
+In-Reply-To: <20220419153002.ffh2ybdl7x2mm7zw@box.shutemov.name>
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cloud Service Providers that operate fleets of servers have reported
-[1] occasions where they can detect that a CPU has gone bad due to
-effects like electromigration, or isolated manufacturing defects.
-However, that detection method is A/B testing seemingly random
-application failures looking for a pattern. In-Field Scan (IFS) is
-a driver for a platform capability to load a crafted 'scan image'
-to run targeted low level diagnostics outside of the CPU's architectural
-error detection capabilities.
+This is a multi-part message in MIME format.
+--------------eWVLiKb8hW4mlc5kPUXDDJhx
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-[1]: https://www.youtube.com/watch?v=QMF3rqhjYuM
+On 4/19/22 08:30, Kirill A. Shutemov wrote:
+>> I think the stuff coming from the linux/ namespace you can simply copy
+>> into a header in compressed/, like I've done with efi.h.
+> Hm. Dave was worried about having copies of _find_next_bit() and
+> __bitmap_*() inside compressed/.
+> 
+> How do we rectify code duplication and making decompresser self-contained?
+> Do we care about multiple copies of the same code in the kernel?
+> Do we care about keeping them in sync?
 
-Kconfig for this driver selects CONFIG_INTEL_IFS_DEVICE so the base
-kernel will be built with code to create the device to which this driver
-will attach.
+Would it be feasible to have the common code defined as a 'static
+inline' in a header that both the main kernel and the decompressor could
+include?  Something like the attached patch.
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
+I'd much rather duplicate something like this:
 
----
-Not using module_platform_driver() for this simple stub because
-later patches need to add init()/exit() functions.
----
- drivers/platform/x86/intel/ifs/Kconfig  | 14 ++++++++++++
- drivers/platform/x86/intel/ifs/Makefile |  4 ++++
- drivers/platform/x86/intel/ifs/core.c   | 29 +++++++++++++++++++++++++
- 3 files changed, 47 insertions(+)
- create mode 100644 drivers/platform/x86/intel/ifs/core.c
+int strncasecmp(const char *s1, const char *s2, size_t len)
+{
+        return __lib_strncasecmp(s1, s1, len);
+}
 
-diff --git a/drivers/platform/x86/intel/ifs/Kconfig b/drivers/platform/x86/intel/ifs/Kconfig
-index 51325b699563..0aa5ecc5ef42 100644
---- a/drivers/platform/x86/intel/ifs/Kconfig
-+++ b/drivers/platform/x86/intel/ifs/Kconfig
-@@ -1,2 +1,16 @@
- config INTEL_IFS_DEVICE
- 	bool
-+
-+config INTEL_IFS
-+	tristate "Intel In Field Scan"
-+	depends on X86 && 64BIT && SMP
-+	select INTEL_IFS_DEVICE
-+	help
-+	  Enable support for the In Field Scan capability in select
-+	  CPUs. The capability allows for running low level tests via
-+	  a scan image distributed by Intel via Github to validate CPU
-+	  operation beyond baseline RAS capabilities. To compile this
-+	  driver as a module, choose M here. The module will be called
-+	  intel_ifs.
-+
-+	  If unsure, say N.
-diff --git a/drivers/platform/x86/intel/ifs/Makefile b/drivers/platform/x86/intel/ifs/Makefile
-index 12c2f5ce9925..bf8adc57892c 100644
---- a/drivers/platform/x86/intel/ifs/Makefile
-+++ b/drivers/platform/x86/intel/ifs/Makefile
-@@ -1 +1,5 @@
- obj-$(CONFIG_INTEL_IFS_DEVICE)	+= intel_ifs_device.o
-+
-+obj-$(CONFIG_INTEL_IFS)		+= intel_ifs.o
-+
-+intel_ifs-objs			:= core.o
-diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
-new file mode 100644
-index 000000000000..eb34b877dac0
---- /dev/null
-+++ b/drivers/platform/x86/intel/ifs/core.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright(c) 2022 Intel Corporation. */
-+
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+static struct platform_driver intel_ifs_driver = {
-+	.driver = {
-+		.name = "intel_ifs",
-+	},
-+};
-+
-+static int __init ifs_init(void)
-+{
-+	return platform_driver_register(&intel_ifs_driver);
-+}
-+
-+static void __exit ifs_exit(void)
-+{
-+	platform_driver_unregister(&intel_ifs_driver);
-+}
-+
-+module_init(ifs_init);
-+module_exit(ifs_exit);
-+
-+MODULE_ALIAS("platform:intel_ifs*");
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Intel In Field Scan (IFS) driver");
--- 
-2.35.1
+in the decompressor versus a real full implementation.
+--------------eWVLiKb8hW4mlc5kPUXDDJhx
+Content-Type: text/x-patch; charset=UTF-8; name="lib-header.patch"
+Content-Disposition: attachment; filename="lib-header.patch"
+Content-Transfer-Encoding: base64
 
+Y29tbWl0IGQ5NGZhNjg0MmIyNTgwOTk1ODkwM2ZkZDMzZDQ5OGJiNjIyNjk1YTUKQXV0aG9y
+OiBEYXZlIEhhbnNlbiA8ZGF2ZS5oYW5zZW5AbGludXguaW50ZWwuY29tPgpEYXRlOiAgIFR1
+ZSBBcHIgMTkgMDk6MzE6MDcgMjAyMiAtMDcwMAoKICAgIGZvbwogICAgCiAgICBiYXIxCgpk
+aWZmIC0tZ2l0IGEvbGliL3N0cmluZy1pbnRlcm5hbC5oIGIvbGliL3N0cmluZy1pbnRlcm5h
+bC5oCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAwMC4uMjMwYzIyODY0
+Yjc1Ci0tLSAvZGV2L251bGwKKysrIGIvbGliL3N0cmluZy1pbnRlcm5hbC5oCkBAIC0wLDAg
+KzEsMzEgQEAKKyNpbmNsdWRlIDxsaW51eC9jdHlwZS5oPgorCisvKioKKyAqIHN0cm5jYXNl
+Y21wIC0gQ2FzZSBpbnNlbnNpdGl2ZSwgbGVuZ3RoLWxpbWl0ZWQgc3RyaW5nIGNvbXBhcmlz
+b24KKyAqIEBzMTogT25lIHN0cmluZworICogQHMyOiBUaGUgb3RoZXIgc3RyaW5nCisgKiBA
+bGVuOiB0aGUgbWF4aW11bSBudW1iZXIgb2YgY2hhcmFjdGVycyB0byBjb21wYXJlCisgKi8K
+K3N0YXRpYyBpbmxpbmUgaW50IF9fbGliX3N0cm5jYXNlY21wKGNvbnN0IGNoYXIgKnMxLCBj
+b25zdCBjaGFyICpzMiwgc2l6ZV90IGxlbikKK3sKKwkvKiBZZXMsIFZpcmdpbmlhLCBpdCBo
+YWQgYmV0dGVyIGJlIHVuc2lnbmVkICovCisJdW5zaWduZWQgY2hhciBjMSwgYzI7CisKKwlp
+ZiAoIWxlbikKKwkJcmV0dXJuIDA7CisKKwlkbyB7CisJCWMxID0gKnMxKys7CisJCWMyID0g
+KnMyKys7CisJCWlmICghYzEgfHwgIWMyKQorCQkJYnJlYWs7CisJCWlmIChjMSA9PSBjMikK
+KwkJCWNvbnRpbnVlOworCQljMSA9IHRvbG93ZXIoYzEpOworCQljMiA9IHRvbG93ZXIoYzIp
+OworCQlpZiAoYzEgIT0gYzIpCisJCQlicmVhazsKKwl9IHdoaWxlICgtLWxlbik7CisJcmV0
+dXJuIChpbnQpYzEgLSAoaW50KWMyOworfQorI2VuZGlmCmRpZmYgLS1naXQgYS9saWIvc3Ry
+aW5nLmMgYi9saWIvc3RyaW5nLmMKaW5kZXggNDg1Nzc3YzlkYTgzLi43MDViNzk5ZTNiNWMg
+MTAwNjQ0Ci0tLSBhL2xpYi9zdHJpbmcuYworKysgYi9saWIvc3RyaW5nLmMKQEAgLTI5LDYg
+KzI5LDcgQEAKICNpbmNsdWRlIDxhc20vd29yZC1hdC1hLXRpbWUuaD4KICNpbmNsdWRlIDxh
+c20vcGFnZS5oPgogCisjaW5jbHVkZSAic3RyaW5nLWludGVybmFsLmgiCiAjaWZuZGVmIF9f
+SEFWRV9BUkNIX1NUUk5DQVNFQ01QCiAvKioKICAqIHN0cm5jYXNlY21wIC0gQ2FzZSBpbnNl
+bnNpdGl2ZSwgbGVuZ3RoLWxpbWl0ZWQgc3RyaW5nIGNvbXBhcmlzb24KQEAgLTM4LDI1ICsz
+OSw3IEBACiAgKi8KIGludCBzdHJuY2FzZWNtcChjb25zdCBjaGFyICpzMSwgY29uc3QgY2hh
+ciAqczIsIHNpemVfdCBsZW4pCiB7Ci0JLyogWWVzLCBWaXJnaW5pYSwgaXQgaGFkIGJldHRl
+ciBiZSB1bnNpZ25lZCAqLwotCXVuc2lnbmVkIGNoYXIgYzEsIGMyOwotCi0JaWYgKCFsZW4p
+Ci0JCXJldHVybiAwOwotCi0JZG8gewotCQljMSA9ICpzMSsrOwotCQljMiA9ICpzMisrOwot
+CQlpZiAoIWMxIHx8ICFjMikKLQkJCWJyZWFrOwotCQlpZiAoYzEgPT0gYzIpCi0JCQljb250
+aW51ZTsKLQkJYzEgPSB0b2xvd2VyKGMxKTsKLQkJYzIgPSB0b2xvd2VyKGMyKTsKLQkJaWYg
+KGMxICE9IGMyKQotCQkJYnJlYWs7Ci0JfSB3aGlsZSAoLS1sZW4pOwotCXJldHVybiAoaW50
+KWMxIC0gKGludCljMjsKKwlyZXR1cm4gX19saWJfc3RybmNhc2VjbXAoczEsIHMxLCBsZW4p
+OwogfQogRVhQT1JUX1NZTUJPTChzdHJuY2FzZWNtcCk7CiAjZW5kaWYK
+
+--------------eWVLiKb8hW4mlc5kPUXDDJhx--

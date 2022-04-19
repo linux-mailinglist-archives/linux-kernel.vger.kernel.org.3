@@ -2,84 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49105060FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D1150610C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240839AbiDSAk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        id S240901AbiDSAnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240756AbiDSAkx (ORCPT
+        with ESMTP id S235718AbiDSAnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:40:53 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1051B27162
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:38:13 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id x24so2789065qtq.11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject
-         :content-language:to:disposition-notification-to
-         :content-transfer-encoding;
-        bh=lFL4HqTDYSqVDYG3taiQXJ8IaYIwL8oENCGIfaheEGw=;
-        b=Nn2fzfo4bJBsygDsTEHg0RzOUeQAnO3GIs27r+IfFPydMO6zLEiiPz+H7DuhQAfWW7
-         zH5xwfcEayhWl3MplVI6gD16aKiJwX9Qq/3en/v29hNwBcVASGF9Fq+4Al2SegNJsw0k
-         LuR8FtbWCbxv0PVT5QG8xBTsksmQprGmCu7u3D6f8K8WnOpPsz+FIl2ljv37mJVAle1W
-         WzZpcXAYqWIWfgzdxl+Vylw6cVDR2B7xL1ydvHLHO6XmqaTtPqGryjEzXqfTk7MMXzu3
-         ysQP6J122RjvbPZvPLY4HXN8lJwgFxGyL4ao2bJq8AGR+Hcss8hn2du8iSDg1iEwwEsO
-         U4Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:disposition-notification-to
-         :content-transfer-encoding;
-        bh=lFL4HqTDYSqVDYG3taiQXJ8IaYIwL8oENCGIfaheEGw=;
-        b=Cj4lbORtCHN0SJ1WqEbxbv7Df6C/ofiQzdMeV9LmJpTnHGuzpdphhwcMK0Wlcz0XPf
-         4PZJHMCcZyflMT/KbBdVjweKAaH4vcC3RVg5zzJfRqTV+Q2YhsFxsC+iqVliOxuk66Dn
-         dCSOXjLnGvDHMNeEBmLW5+4JpTQ4eRbRVrLEuc2lCQz8wBACTcIdkXYbUOjumbK52r07
-         wzFMIH84B/ZpUFDxYCIY1asvguwIt12xUXLVaFNFLStmk9rOdUKJdF1FdQ6EGEoPsMeD
-         dBizKU5stgEOPGtHWTYreE50iLdjqQ7H5pUnMr8uNtbUwBISkNY3lElXoFuYcAtEyUl7
-         UN0A==
-X-Gm-Message-State: AOAM533ulviQrBzuKYm9btK3XhGvYsEUagDbiKIMfzGQu5bL5StOcd6r
-        Q2MKUUZFvDQOxGJTS6ADfi9GjTQ1e0E=
-X-Google-Smtp-Source: ABdhPJwurX/O3cGN+tb+0dbTcNaHgguJyUPvrq3JQCXQaDShnp/qgOFqP98ikwlZrzU82ILx93iMpg==
-X-Received: by 2002:a05:622a:1210:b0:2f2:2620:8562 with SMTP id y16-20020a05622a121000b002f226208562mr2412924qtx.118.1650328692012;
-        Mon, 18 Apr 2022 17:38:12 -0700 (PDT)
-Received: from [10.1.1.117] (pool-71-121-149-202.bltmmd.fios.verizon.net. [71.121.149.202])
-        by smtp.gmail.com with ESMTPSA id c79-20020ae9ed52000000b0069e9bfecd6esm2410895qkg.98.2022.04.18.17.38.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 17:38:11 -0700 (PDT)
-Message-ID: <e59bebc7-ecfb-cd43-4914-a772acc35ca7@gmail.com>
-Date:   Mon, 18 Apr 2022 20:37:56 -0400
+        Mon, 18 Apr 2022 20:43:52 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB13E0D5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650328871; x=1681864871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HOYO7JlUYf5H14URgos3ZrjOtwiy2yVhHwcj7ha5tsM=;
+  b=aME0RFkFCPoV98/inWqFhps/rHFGsE76WB/3dD509lzgnm984MfMcTjt
+   y04YA6B4GR71ovYJMfrcPsoPIn4WoKS1Zb7tl2qhNDvmM9eJCzTKhj11f
+   OJB+R2HQqQTG29u/7Lq3EHY6RHmSNJNPdinS7y41a4pKLqJ9rkANV1/9Y
+   rhnMCr9ubgP+Y6IxnmKDCzwoKCasVe1eAIYgh77DylQhopSmHjLZw+SAG
+   uDuOXuH8foP80pnyaKYrO8v0QcuRfirQIImz1nQxnotyjFSJEM8kiNIj1
+   ovGXvJGsUlFzM6dylynE9tDIBHvgUb885VWTg78aEaGjwRH7oQjXgYiep
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="324083887"
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="324083887"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 17:41:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="529822632"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 18 Apr 2022 17:41:08 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngbvX-000584-S1;
+        Tue, 19 Apr 2022 00:41:07 +0000
+Date:   Tue, 19 Apr 2022 08:41:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>, mcgrof@kernel.org,
+        rafael@kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, trix@redhat.com, lgoncalv@redhat.com,
+        yilun.xu@intel.com, hao.wu@intel.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: Re: [PATCH v3 3/8] firmware_loader: Split sysfs support from fallback
+Message-ID: <202204190831.KrZOnvww-lkp@intel.com>
+References: <20220418223753.639058-4-russell.h.weight@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101
- Thunderbird/100.0
-From:   hanasaki-gmail <hanasaki@gmail.com>
-Subject: Kernel audio : Realtek ALC1220-VB : support
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        GB_FREEMAIL_DISPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418223753.639058-4-russell.h.weight@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel audio : Realtek ALC1220-VB  : support
+Hi Russ,
 
-Looking at the below motherboard.
-what .config option and kernel module supports
-this ethernet sound chip?
+Thank you for the patch! Yet something to improve:
 
-What is the first kernel version having support?
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on shuah-kselftest/next mcgrof/sysctl-next linus/master v5.18-rc3 next-20220414]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-ref:
-X570SI AORUS PRO AX (rev. 1.1)
-https://www.gigabyte.com/us/Motherboard/X570SI-AORUS-PRO-AX-rev-11
+url:    https://github.com/intel-lab-lkp/linux/commits/Russ-Weight/Extend-FW-framework-for-user-FW-uploads/20220419-064126
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 3123109284176b1532874591f7c81f3837bbdc17
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220419/202204190831.KrZOnvww-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/7fb618c8a43c6350d4f11246daf3a62cd2c2843d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Russ-Weight/Extend-FW-framework-for-user-FW-uploads/20220419-064126
+        git checkout 7fb618c8a43c6350d4f11246daf3a62cd2c2843d
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/base/firmware_loader/fallback.h:9,
+                    from drivers/base/firmware_loader/main.c:44:
+   drivers/base/firmware_loader/sysfs.h: In function '__firmware_loading_timeout':
+>> drivers/base/firmware_loader/sysfs.h:74:34: error: invalid use of undefined type 'struct firmware_fallback_config'
+      74 |         return fw_fallback_config.loading_timeout;
+         |                                  ^
+   drivers/base/firmware_loader/sysfs.h: In function '__fw_fallback_set_timeout':
+   drivers/base/firmware_loader/sysfs.h:80:27: error: invalid use of undefined type 'struct firmware_fallback_config'
+      80 |         fw_fallback_config.loading_timeout = timeout;
+         |                           ^
+
+
+vim +74 drivers/base/firmware_loader/sysfs.h
+
+    70	
+    71	/* These getters are vetted to use int properly */
+    72	static inline int __firmware_loading_timeout(void)
+    73	{
+  > 74		return fw_fallback_config.loading_timeout;
+    75	}
+    76	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,135 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3822506349
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97D150634C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348342AbiDSEgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 00:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
+        id S1347748AbiDSEgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 00:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348293AbiDSEgR (ORCPT
+        with ESMTP id S1348298AbiDSEgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:36:17 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC3F27CD9
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650342816; x=1681878816;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O0McZ/ikjxVmcmblckwMmw9PFxKOUrV//NGzehRM8aE=;
-  b=aOYuHWPVwp+qRzMyxFgIYs433ouV4ECL46v7KzejPFKM3gR8rORE39/O
-   0K9aQko48/k008/Zcaua7cUFndBO3fEQRtYgDL2JyPbLjbObHk9ZaolM2
-   7Hjf+8CXrVo2CkNrbDkNL47qP2l4m0iSb/vX26Chi6M2snN+XWer80myB
-   0pGJPjiQhW74UmJhMJipEjA/bV3qKnzGm5fvdBd5k8SB4X9V7Jg7k4tRf
-   n3d6kC05hJDnRY5Z820PhYKUkSYn4EdwwPgjC9ANuDOJp0JHPcwNiY7ma
-   WUkRX2R0ZhaWGrcHRS7Nl49a/jC9YLNTJfbrvnZRSjAjaL91Ty5JauKyI
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263847029"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="263847029"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:33:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="554549289"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 18 Apr 2022 21:33:24 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngfYK-0005Ln-2U;
-        Tue, 19 Apr 2022 04:33:24 +0000
-Date:   Tue, 19 Apr 2022 12:32:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2012/2356]
- arch/s390/include/asm/smp.h:19:30: error: expected ';' after top level
- declarator
-Message-ID: <202204191258.clDxeh51-lkp@intel.com>
+        Tue, 19 Apr 2022 00:36:19 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C73725E80;
+        Mon, 18 Apr 2022 21:33:38 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id e194so11925683iof.11;
+        Mon, 18 Apr 2022 21:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FRol2Ixdapg4j6Uubg8h/Lz+s9FI9j4eiU5OeuRx7x0=;
+        b=LY5NLAdXfjvJQN/FK13ITsFNln7oksLs2VxwloLzdDODmDRlP8fTtetuJDBdGN2Z8+
+         CXgjP7UARDBVnBEcsXut3Ghhco5bQkMNyDPSVpGDJwFt1wbqZvlDPL7BjrhUzbFL4eFd
+         q0DfaFL9w7IrL2S3KV706XOrc14/JRVnFnWwLJASIB2N/45Hg+6uGrLFT+bOD23lzA2e
+         vqj+7PcGJ5yougE3T2dyVzS55k3mXqW6rCHfWzUN8+iJmNR/vNC31CGSDvf4cWeoHcaR
+         jEYk4BXCs/EVAc6x2Po5iKbucwjZJ7dIsmuVcPopQpr0T2xJ2LZmS/KULXLBWSkn7ogp
+         igsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FRol2Ixdapg4j6Uubg8h/Lz+s9FI9j4eiU5OeuRx7x0=;
+        b=YzrZlycOM7fxIJvh30MsJIu+7tXNq4xj3fbnSfD49/1gEnRTWOn3xTselKAkigfO+u
+         EvLFMKURWYTApxUUkjV8arcmrG6IzlRTb0LUGUmQlBUwQ0wzlU05xJF04m/qRa2awQsC
+         YNmoFT1zJHp6p8249TDs9pOoS+OqepkcjVokBp1yG2ImIv2TUrK+yLko0E8os3dRfuFk
+         pr+JJK9VhJA6fJNCUyIUoGgxVbLbTaiTigrIx3KMATGpJkEv/ktDit0sSjJcuqPDC04/
+         fuksohxlgq7HQBmfWa7AliWBx8+nZrmWyYh+3lrOziNOFa0Uxg0xy8LaMLwd3s7xbusG
+         6Esg==
+X-Gm-Message-State: AOAM532/jEVOCXBnwL+ZOSBcO0EYtVJ+ViIBPnh6hvDBP+4A5sNvix84
+        8h+eCr58tDmolI9jVhQZWMHZOakRf0w+Oq4+P/s=
+X-Google-Smtp-Source: ABdhPJw/8+UIm4hFbM+iPSMSY1l5WCy3bScYyt9/mmw1xH4rZvSRp4COfQKVYT2qMXltFgOWDhdYu06slG9UMKl+wXs=
+X-Received: by 2002:a05:6638:338e:b0:328:807a:e187 with SMTP id
+ h14-20020a056638338e00b00328807ae187mr4322086jav.93.1650342817565; Mon, 18
+ Apr 2022 21:33:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220418042222.2464199-1-pulehui@huawei.com>
+In-Reply-To: <20220418042222.2464199-1-pulehui@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 18 Apr 2022 21:33:26 -0700
+Message-ID: <CAEf4BzbavSC=JN=sowFY3t4yOUfe8QtVXhdG+y7a-T1YtfRqXQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: Support riscv USDT argument parsing logic
+To:     Pu Lehui <pulehui@huawei.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-riscv@lists.infradead.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 73e8295a34e49141903dc467f10daf2d31e2a411 [2012/2356] headers/deps: locking/lockdep: Split <linux/lockep.h> into <linux/lockep_types.h> and <linux/lockep_api.h>
-config: s390-buildonly-randconfig-r005-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191258.clDxeh51-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=73e8295a34e49141903dc467f10daf2d31e2a411
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 73e8295a34e49141903dc467f10daf2d31e2a411
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+On Sun, Apr 17, 2022 at 8:53 PM Pu Lehui <pulehui@huawei.com> wrote:
+>
+> Add riscv-specific USDT argument specification parsing logic.
+> riscv USDT argument format is shown below:
+> - Memory dereference case:
+>   "size@off(reg)", e.g. "-8@-88(s0)"
+> - Constant value case:
+>   "size@val", e.g. "4@5"
+> - Register read case:
+>   "size@reg", e.g. "-8@a1"
+>
+> s8 will be marked as poison while it's a reg of riscv, we need
+> to alias it in advance.
+>
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> ---
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Can you please mention briefly the testing you performed as I'm not
+able to test this locally.
 
-All errors (new ones prefixed by >>):
+>  tools/lib/bpf/usdt.c | 107 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 107 insertions(+)
+>
+> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+> index 934c25301ac1..b8af409cc763 100644
+> --- a/tools/lib/bpf/usdt.c
+> +++ b/tools/lib/bpf/usdt.c
+> @@ -10,6 +10,11 @@
+>  #include <linux/ptrace.h>
+>  #include <linux/kernel.h>
+>
+> +/* s8 will be marked as poison while it's a reg of riscv */
+> +#if defined(__riscv)
+> +#define rv_s8 s8
+> +#endif
+> +
+>  #include "bpf.h"
+>  #include "libbpf.h"
+>  #include "libbpf_common.h"
+> @@ -1400,6 +1405,108 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
+>         return len;
+>  }
+>
+> +#elif defined(__riscv)
+> +
+> +static int calc_pt_regs_off(const char *reg_name)
+> +{
+> +       static struct {
+> +               const char *name;
+> +               size_t pt_regs_off;
+> +       } reg_map[] = {
+> +               { "ra", offsetof(struct user_regs_struct, ra) },
+> +               { "sp", offsetof(struct user_regs_struct, sp) },
+> +               { "gp", offsetof(struct user_regs_struct, gp) },
+> +               { "tp", offsetof(struct user_regs_struct, tp) },
+> +               { "t0", offsetof(struct user_regs_struct, t0) },
+> +               { "t1", offsetof(struct user_regs_struct, t1) },
+> +               { "t2", offsetof(struct user_regs_struct, t2) },
+> +               { "s0", offsetof(struct user_regs_struct, s0) },
+> +               { "s1", offsetof(struct user_regs_struct, s1) },
+> +               { "a0", offsetof(struct user_regs_struct, a0) },
+> +               { "a1", offsetof(struct user_regs_struct, a1) },
+> +               { "a2", offsetof(struct user_regs_struct, a2) },
+> +               { "a3", offsetof(struct user_regs_struct, a3) },
+> +               { "a4", offsetof(struct user_regs_struct, a4) },
+> +               { "a5", offsetof(struct user_regs_struct, a5) },
+> +               { "a6", offsetof(struct user_regs_struct, a6) },
+> +               { "a7", offsetof(struct user_regs_struct, a7) },
+> +               { "s2", offsetof(struct user_regs_struct, s2) },
+> +               { "s3", offsetof(struct user_regs_struct, s3) },
+> +               { "s4", offsetof(struct user_regs_struct, s4) },
+> +               { "s5", offsetof(struct user_regs_struct, s5) },
+> +               { "s6", offsetof(struct user_regs_struct, s6) },
+> +               { "s7", offsetof(struct user_regs_struct, s7) },
+> +               { "s8", offsetof(struct user_regs_struct, rv_s8) },
+> +               { "s9", offsetof(struct user_regs_struct, s9) },
+> +               { "s10", offsetof(struct user_regs_struct, s10) },
+> +               { "s11", offsetof(struct user_regs_struct, s11) },
+> +               { "t3", offsetof(struct user_regs_struct, t3) },
+> +               { "t4", offsetof(struct user_regs_struct, t4) },
+> +               { "t5", offsetof(struct user_regs_struct, t5) },
+> +               { "t6", offsetof(struct user_regs_struct, t6) },
 
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hashtable_api.h:16:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:23:
-   In file included from include/linux/lockdep_api.h:27:
-   In file included from include/linux/smp_api.h:15:
->> arch/s390/include/asm/smp.h:19:30: error: expected ';' after top level declarator
-   extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
-                                ^
-                                ;
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hashtable_api.h:16:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:35:
-   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
-   # include <generated/asm-offsets.h>
-             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-   make[2]: *** [scripts/Makefile.build:120: arch/s390/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+would it make sense to order registers a bit more "logically"? Like
+s0-s11, t0-t6, etc. Right now it looks very random and it's hard to
+see if all the registers from some range of registers are defined.
 
+> +       };
+> +       int i;
+> +
 
-vim +19 arch/s390/include/asm/smp.h
-
-^1da177e4c3f41 include/asm-s390/smp.h      Linus Torvalds     2005-04-16  15  
-dbd70fb499952d include/asm-s390/smp.h      Heiko Carstens     2008-04-17  16  extern struct mutex smp_cpu_state_mutex;
-10ad34bc76dfbc arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  17  extern unsigned int smp_cpu_mt_shift;
-10ad34bc76dfbc arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  18  extern unsigned int smp_cpu_mtid;
-1a36a39e225d35 arch/s390/include/asm/smp.h Martin Schwidefsky 2015-10-29 @19  extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
-a052096bdd6809 arch/s390/include/asm/smp.h Sven Schnelle      2021-08-27  20  extern cpumask_t cpu_setup_mask;
-8b646bd759086f arch/s390/include/asm/smp.h Martin Schwidefsky 2012-03-11  21  
-
-:::::: The code at line 19 was first introduced by commit
-:::::: 1a36a39e225d3558fb3776a3d3d7736cf1ec9f60 s390/dump: rework CPU register dump code
-
-:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
-:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[...]

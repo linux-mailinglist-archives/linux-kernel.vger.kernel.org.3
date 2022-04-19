@@ -2,83 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBDD5068A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B745068A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350629AbiDSKY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 06:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S1350644AbiDSK0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 06:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240084AbiDSKY4 (ORCPT
+        with ESMTP id S234333AbiDSK0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:24:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61163237FE
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 03:22:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1555D23A;
-        Tue, 19 Apr 2022 03:22:14 -0700 (PDT)
-Received: from [10.163.40.223] (unknown [10.163.40.223])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B4DDA3F73B;
-        Tue, 19 Apr 2022 03:22:05 -0700 (PDT)
-Message-ID: <073cb6a6-3dbc-75d4-dbfe-a5299a6b0510@arm.com>
-Date:   Tue, 19 Apr 2022 15:52:49 +0530
+        Tue, 19 Apr 2022 06:26:14 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF968237FE;
+        Tue, 19 Apr 2022 03:23:30 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tonylu@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VAUn-3l_1650363806;
+Received: from localhost(mailfrom:tonylu@linux.alibaba.com fp:SMTPD_---0VAUn-3l_1650363806)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 19 Apr 2022 18:23:27 +0800
+Date:   Tue, 19 Apr 2022 18:23:26 +0800
+From:   Tony Lu <tonylu@linux.alibaba.com>
+To:     yacanliu@163.com
+Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liuyacan <liuyacan@corp.netease.com>
+Subject: Re: [PATCH] net/smc: sync err info when TCP connection is refused
+Message-ID: <Yl6Nnvnrvqv3ofES@TonyMac-Alibaba>
+Reply-To: Tony Lu <tonylu@linux.alibaba.com>
+References: <20220417123307.1094747-1-yacanliu@163.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next v4 3/4] arm64: mm: add support for page table check
-Content-Language: en-US
-To:     Tong Tiangen <tongtiangen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220418034444.520928-1-tongtiangen@huawei.com>
- <20220418034444.520928-4-tongtiangen@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220418034444.520928-4-tongtiangen@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220417123307.1094747-1-yacanliu@163.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Apr 17, 2022 at 08:33:07PM +0800, yacanliu@163.com wrote:
+> From: liuyacan <liuyacan@corp.netease.com>
+> 
+> In the current implementation, when TCP initiates a connection
+> to an unavailable [ip,port], ECONNREFUSED will be stored in the
+> TCP socket, but SMC will not. However, some apps (like curl) use
+> getsockopt(,,SO_ERROR,,) to get the error information, which makes
+> them miss the error message and behave strangely.
+> 
+> Signed-off-by: liuyacan <liuyacan@corp.netease.com>
 
-On 4/18/22 09:14, Tong Tiangen wrote:
-> +#ifdef CONFIG_PAGE_TABLE_CHECK
-> +static inline bool pte_user_accessible_page(pte_t pte)
-> +{
-> +	return pte_present(pte) && (pte_user(pte) || pte_user_exec(pte));
-> +}
-> +
-> +static inline bool pmd_user_accessible_page(pmd_t pmd)
-> +{
-> +	return pmd_present(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
-> +}
-> +
-> +static inline bool pud_user_accessible_page(pud_t pud)
-> +{
-> +	return pud_present(pud) && pud_user(pud);
-> +}
-> +#endif
-Wondering why check for these page table entry states when init_mm
-has already being excluded ? Should not user page tables be checked
-for in entirety for all updates ? what is the rationale for filtering
-out only pxx_user_access_page entries ?
+This fix works for me. I have tested it with curl for unavailable
+address.
+
+This patch missed net or net-next tag, I think net is preferred.
+
+Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+
+Thank you,
+Tony Lu

@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B4150716F
+	by mail.lfdr.de (Postfix) with ESMTP id 1063A50716E
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353636AbiDSPLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S1353684AbiDSPMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353594AbiDSPLu (ORCPT
+        with ESMTP id S1353594AbiDSPMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:11:50 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6E33A722
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:09:08 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 21so21727676edv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+Sw3xaIXVD9K4dmPddjbpkY8Pi6fTtwE00qd0a/j+D0=;
-        b=CzHxjtaaWAFaLWoVi3b04VYyYmpovTWRCaHDe6W52KYKDqqL+Rj1gAzF4Ebfel0jeF
-         V2l6RGwn7SFkFeeB2mbGO8+y8kRMRaYH/W9OGE+oUcCIH2fzVtmFdN/wDL3dmY8ZPB2O
-         FF2F6dn/b707Yobl0zaJLZ0jcpgR2p9+1DqIJxxqMS5ZhXqbjPIbY0KjGcn8ic4Ps2RC
-         ZZLG68goBSwO4yTUNmEGgsVJKXSzJojVVf9zHzstuwVaZ9LHg5wuQUbcYowdpAKZEkeK
-         ph9w6QHEpbVVz34z8VnGrfQk13BTAv0JmRm7E7ugYMfoAwHsrXqJR/KdI5V9Z9dQjw7Q
-         ox+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+Sw3xaIXVD9K4dmPddjbpkY8Pi6fTtwE00qd0a/j+D0=;
-        b=7xG9hG/uFvzpUpShcK6aBy9HJFC33Sy6Ue+sVRdtT/ozN//bCXrYEjTM9scmlCqwkI
-         4wd3Mqwp3UGeMyf51LLrpngrUKPTChd246k0Ncv2pNat826QqvQavoOT3zHyvsu60Xn4
-         PdtixM/GucZ/AqbuwC1JqQgFojP5aOcrHySv3Y/KGxi76Jtfh39toxMK4LWrc5xzyKWV
-         OvX6lM+zNHcd635pXygoXkV27PUMdQuX9S1SQe+quOILTdZflw7MYfPsb8KuDXCbRLig
-         1KaYFUZzz5qjSLKaT/0Aax5C8Mwkbh0nOpczcMAdhmW64gLEhWInbuVCDcMvorhc/2RJ
-         M0vg==
-X-Gm-Message-State: AOAM5336ywqghhwmvzQBCBz4qdkcLgiefBZQF4KA7aAa6pJoKDG40nfK
-        1rVugZb4ltY8LADPffItvoA=
-X-Google-Smtp-Source: ABdhPJxlocry7ehXB6chhIw0Ntoy5MXjSbBbl8uD0jlOHJ39N7FW2jt65XGYn8jbHUb6OIiz3zfNdg==
-X-Received: by 2002:a50:c316:0:b0:41d:6fdb:f3db with SMTP id a22-20020a50c316000000b0041d6fdbf3dbmr18263003edb.315.1650380946445;
-        Tue, 19 Apr 2022 08:09:06 -0700 (PDT)
-Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id g24-20020a1709063b1800b006e8cf786ee8sm5574032ejf.21.2022.04.19.08.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 08:09:05 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH v2] mm/highmem: Fix kernel-doc warnings in highmem*.h
-Date:   Tue, 19 Apr 2022 17:09:04 +0200
-Message-ID: <6767543.18pcnM708K@leap>
-In-Reply-To: <Yl7MpmsXtzOfztHu@iweiny-desk3>
-References: <20220418175638.30018-1-fmdefrancesco@gmail.com> <4058661.1IzOArtZ34@leap> <Yl7MpmsXtzOfztHu@iweiny-desk3>
+        Tue, 19 Apr 2022 11:12:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1217F3B289;
+        Tue, 19 Apr 2022 08:09:35 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 15:09:27 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650380973;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=84SvmrYb0d8HI4VLeBxcmCnfHKheHm5ovGXtzvp9Ecw=;
+        b=JfP+RGq5b0StN+OQXrQKqaFyhL2P7TVTBh6qqeqrlcyeCtpPnnkbo1x2ZWmmjXH758xyaK
+        3Egafpg0AJXxBByBehQhBHGz2capGAVhg6yNN9RmTBfanF4G9sKav0yKsNyVbiuyBvxqa6
+        V3NbnqcTjSonPCUAf6AyJ3tRyiFMCCsUZRGtnG7TZM+6vpaCdyAylN5Xt+o6AyUzUZQHvL
+        57v8asmErJuAnkcN7L/zpuO0a8hLAaWxsauzVuG7LWSwMg2uiobB9zKfPtnF+1POX66+qc
+        4k0rEk7zW3sy1DzyKhVX/JgkrtT4OiEBsKk7QsF3SzSIyFr8ETgG0ahMny2YhQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650380973;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=84SvmrYb0d8HI4VLeBxcmCnfHKheHm5ovGXtzvp9Ecw=;
+        b=B5Go3lGitpt/ja7YVYopr5hPEapZK2gOKCqFypM7+4paiEYEX+5jCSJVBf11czAVfOn21Z
+        BHhnKASTcRlk3HAw==
+From:   "tip-bot2 for Tom Lendacky" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/tdx] x86/mm: Fix spacing within memory encryption features message
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: =?utf-8?q?=3C02401f3024b18e90bc2508147e22e729436cb6d9=2E16502?=
+ =?utf-8?q?98573=2Egit=2Ethomas=2Elendacky=40amd=2Ecom=3E?=
+References: =?utf-8?q?=3C02401f3024b18e90bc2508147e22e729436cb6d9=2E165029?=
+ =?utf-8?q?8573=2Egit=2Ethomas=2Elendacky=40amd=2Ecom=3E?=
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Message-ID: <165038096740.4207.11945503087935656353.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,32 +68,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=C3=AC 19 aprile 2022 16:52:22 CEST Ira Weiny wrote:
-> On Tue, Apr 19, 2022 at 03:25:16PM +0200, Fabio M. De Francesco wrote:
->
-> [snip]
->=20
-> I think you should gather all these patches together into a series and=20
-submit.
-> If I am following correctly there are at least 4 patches now?  But I'm=20
-unsure
-> of which ones are stand alone.
->=20
-> It would be easier to see what changes are being made along the way as=20
-well as
-> the final result of the fixes.
->=20
-> Ira
+The following commit has been merged into the x86/tdx branch of tip:
 
-Yes, this is perfectly reasonable. There are only three patches (this patch=
-=20
-plus two more in a series). Since they are all related in some way, it is=20
-best to bring them together into one series which I will rework taking into=
-=20
-account both yours and Matthew's suggestions.
+Commit-ID:     51964015565d302fda63ce84ef151e1c9a5939cc
+Gitweb:        https://git.kernel.org/tip/51964015565d302fda63ce84ef151e1c9a5939cc
+Author:        Tom Lendacky <thomas.lendacky@amd.com>
+AuthorDate:    Mon, 18 Apr 2022 11:16:13 -05:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Tue, 19 Apr 2022 08:04:17 -07:00
 
-Thanks,
+x86/mm: Fix spacing within memory encryption features message
 
-=46abio
+The spacing is off in the memory encryption features message on AMD
+platforms that support memory encryption, e.g.:
 
+  "Memory Encryption Features active:AMD  SEV SEV-ES"
 
+There is no space before "AMD" and two spaces after it. Fix this so that
+the message is spaced properly:
+
+  "Memory Encryption Features active: AMD SEV SEV-ES"
+
+Fixes: 968b493173ac ("x86/mm: Make DMA memory shared for TD guest")
+Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Link: https://lkml.kernel.org/r/02401f3024b18e90bc2508147e22e729436cb6d9.1650298573.git.thomas.lendacky@amd.com
+---
+ arch/x86/mm/mem_encrypt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
+index 10ee40b..1562f5e 100644
+--- a/arch/x86/mm/mem_encrypt.c
++++ b/arch/x86/mm/mem_encrypt.c
+@@ -49,7 +49,7 @@ static void print_mem_encrypt_feature_info(void)
+ 		return;
+ 	}
+ 
+-	pr_cont("AMD ");
++	pr_cont(" AMD");
+ 
+ 	/* Secure Memory Encryption */
+ 	if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT)) {

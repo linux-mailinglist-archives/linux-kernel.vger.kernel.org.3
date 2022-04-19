@@ -2,169 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9E6506678
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1075C50667E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243817AbiDSIFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S1349705AbiDSIIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbiDSIFT (ORCPT
+        with ESMTP id S236973AbiDSIIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:05:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A60323BEF
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650355357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jLbux2EHSPeAoMYJRPZNPjs6jbsNJeFhQg/FtKIUcjk=;
-        b=chFAMNdA7nrHsRz+jWr9Hmi+/fS7gGbPA70OHTWybAPBdjQmtUvW9Qp7jwRb/LvscWpM5P
-        YAWqNzFILp9fVxNymDZPf86mDz+cA4hyx0iibrtDdZHK8iD2Y4w0eq9vuWUD7N34k8nHMn
-        vYaIAlAQzZnHGwZdHASED13ixNBpZU4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-CVHAmFVVNxm2zUW_cz1Oiw-1; Tue, 19 Apr 2022 04:02:36 -0400
-X-MC-Unique: CVHAmFVVNxm2zUW_cz1Oiw-1
-Received: by mail-wr1-f71.google.com with SMTP id q4-20020adfc504000000b002079c9cc1bfso1723700wrf.11
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:02:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jLbux2EHSPeAoMYJRPZNPjs6jbsNJeFhQg/FtKIUcjk=;
-        b=srXFP0qJaW1P+Sv7b+cWBd242e1RPMfXEH3dCrGWCJq8wGRvQBQfG+0S84COTcz7lf
-         MCICGFbLD0yAkJdp8O5a2fXu/OALs+T5Hs1/Hept6zGVwqpUxK41SrcwHCmxsj0kpCTU
-         JRSe8hJPw009yPTUkyaI2iQbZZBgWZNFB+geLQ2pZnzKnz4ruj+RokX2M6fZgMMUIgQZ
-         VFoEqgMcJ5iRhKFXZV3DWEzw0PTkG2QVBLeAmgsHgBSq3szg6uzQPqcwND55pYREYdgA
-         CiTwyhHB4E4cbC3VNOQM/taL3yhIxN7EZ1m3RSpImzvDO7jRnVUFeX2Cx4+Bn5cLsi9A
-         viZQ==
-X-Gm-Message-State: AOAM532a6SgkuPB/pet5HEfyJJSaVby49TX+hiNcoyCNkO8vbZj7QQIB
-        5hESvsGUOLzBC4m97czf2KybEUq4hr3vabEEDdAQdfws4DJlo211OTj2h5k/sUOEASGzS9mROIH
-        lMM+wI0lZ1CvgS/h4dX5Nbrbd
-X-Received: by 2002:a05:600c:3ca7:b0:38e:50d2:27fe with SMTP id bg39-20020a05600c3ca700b0038e50d227femr18789744wmb.159.1650355354958;
-        Tue, 19 Apr 2022 01:02:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyoYFbDlizyT41mBRw7KoxJ7TK8LkCRHtUbAAn98T1/ev5GAkMLzD2inzodoQ48+/YZbjyOCg==
-X-Received: by 2002:a05:600c:3ca7:b0:38e:50d2:27fe with SMTP id bg39-20020a05600c3ca700b0038e50d227femr18789726wmb.159.1650355354671;
-        Tue, 19 Apr 2022 01:02:34 -0700 (PDT)
-Received: from [192.168.1.129] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b0038e6c62f527sm17599649wmp.14.2022.04.19.01.02.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 01:02:34 -0700 (PDT)
-Message-ID: <ef51a171-790e-1c13-fc9a-a4c9a2ab5863@redhat.com>
-Date:   Tue, 19 Apr 2022 10:02:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 5/5] drm/solomon: Add SSD130x OLED displays SPI support
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Chen-Yu Tsai <wens@kernel.org>, Rob Herring <robh@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <maxime@cerno.tech>,
-        YueHaibing <yuehaibing@huawei.com>
-References: <20220413162359.325021-1-javierm@redhat.com>
- <20220413162359.325021-6-javierm@redhat.com>
- <CAMuHMdX_myNcA1eG=-qOHhtCEMnnV_eMjQF3dWakd7O6JbXskQ@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAMuHMdX_myNcA1eG=-qOHhtCEMnnV_eMjQF3dWakd7O6JbXskQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 19 Apr 2022 04:08:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544921CB05;
+        Tue, 19 Apr 2022 01:05:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DDA6B810FD;
+        Tue, 19 Apr 2022 08:05:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9292C385A7;
+        Tue, 19 Apr 2022 08:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650355552;
+        bh=uy5PsnK0LjX3h5KU565Xiqn4RBI19MrcfxohTC+2imw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JExSwVWVtC4u5B6tkqsibiY9RDlqofZAjhrIPunP/eWBnWS3b8Q/jaPiYM3g4hJfr
+         1jnIu19DwciEUjfLJp/Q1QinwHCmU4zca8916I1MHH7eErP2VjBy661vUksnvb47fg
+         xEzDXauhRLXeDcb35Apt7Kpldr39XqlXsj7LFo3qA10Ud+AbdamomNDW1PO8Hioh0D
+         vmL/VF1xTo9V9+AiOO+y9pkKIa4wolGhIgEDG99TkPTA3ZuEYyyzYie4MmcOkxxlwb
+         9uepJ9omG+5rG8cotmcu2FJGwqYLVpRKzk719U3lUuULflMw0OolN01CmwAHyKeC6U
+         PYjv9L0XopJQA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ngiru-005GGn-B0; Tue, 19 Apr 2022 09:05:50 +0100
+Date:   Tue, 19 Apr 2022 09:05:50 +0100
+Message-ID: <87r15ta469.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 2/4] PCI: dwc: rockchip: add legacy interrupt support
+In-Reply-To: <CAMdYzYqfitnPYSUEeeUB=x9=L9xzAu6o0SBmEdF8WKeb-+b6uQ@mail.gmail.com>
+References: <20220416110507.642398-1-pgwipeout@gmail.com>
+        <20220416110507.642398-3-pgwipeout@gmail.com>
+        <308e9c47197d4f7ae5a31cfcb5a10886@kernel.org>
+        <CAMdYzYo+YeAgT92baMOoWpra230wro_WynRcajL-__9RNkeE9Q@mail.gmail.com>
+        <87zgkk9gtc.wl-maz@kernel.org>
+        <CAMdYzYo_+7rakc=GCTueEZvH_F4Co6+=eKAUztJaafiDXSKKXQ@mail.gmail.com>
+        <87sfqaa7uv.wl-maz@kernel.org>
+        <CAMdYzYouLoYX89EWjQTRAjd-1bvJEJtfYQa2KrtFH22Kp-4Efw@mail.gmail.com>
+        <878rs2c8ay.wl-maz@kernel.org>
+        <CAMdYzYqfitnPYSUEeeUB=x9=L9xzAu6o0SBmEdF8WKeb-+b6uQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pgwipeout@gmail.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, heiko@sntech.de, linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Geert,
-
-Thanks a lot for your feedback.
-
-On 4/19/22 09:52, Geert Uytterhoeven wrote:
-
-[snip]
-
->> +static int ssd130x_spi_write(void *context, const void *data, size_t count)
->> +{
->> +       struct ssd130x_spi_transport *t = context;
->> +       struct spi_device *spi = t->spi;
->> +       const u8 *reg = data;
->> +
->> +       if (*reg == SSD130X_COMMAND)
->> +               gpiod_set_value_cansleep(t->dc, 0);
->> +
->> +       if (*reg == SSD130X_DATA)
->> +               gpiod_set_value_cansleep(t->dc, 1);
->> +
->> +       /* Remove the control byte since is not used by the 4-wire SPI */
->> +       return spi_write(spi, ((u8 *)data) + 1, count - 1);
+On Tue, 19 Apr 2022 01:23:23 +0100,
+Peter Geis <pgwipeout@gmail.com> wrote:
 > 
-> As I don't like casts, perhaps
+> > My only ask is that you properly initialise the HW. This will save
+> > countless amount of head-scratching once you have a decent firmware or
+> > kexec.
 > 
->     spi_write(spi, reg + 1, count - 1);
-> 
-> ? But this is up to you.
->
+> The only way to ensure that in a sane way is to trigger the resets at
+> driver probe.
 
-It's true that is easier to read. I just wanted to make it clear that we
-were removing one byte from the data but I believe the comment is enough.
+If that can be done, that'd be great.
 
-Andy also pointed out an unnecessary blank line in patch 4/5, so I think
-these two changes + your R-b warrants a v5. I will post one later today.
- 
-[snip]
+> Can that be safely done without causing other issues with an already
+> configured card or should I power cycle it as well?
 
->> +static const struct spi_device_id ssd130x_spi_table[] = {
->> +       { "sh1106",  SH1106_ID },
->> +       { "ssd1305", SSD1305_ID },
->> +       { "ssd1306", SSD1306_ID },
->> +       { "ssd1307", SSD1307_ID },
->> +       { "ssd1309", SSD1309_ID },
->> +       { /* sentinel */ }
->> +};
->> +MODULE_DEVICE_TABLE(spi, ssd130x_spi_table);
-> 
-> I'm not sure about the need for this part, but as Mark provided his
-> Ac-ed--by, I assume it's correct.
->
+Well, you are already renegotiating the link anyway, so that's a very
+moot point.
 
-Right, I'm quite sure about this. See for example [0] vs [1]. The latter
-does of_device_uevent_modalias(dev, env) while the former always does
-add_uevent_var(env, "MODALIAS=%s%s", SPI_MODULE_PREFIX, spi->modalias)
-even for devices registered through OF.
+> This is starting to feature creep from the original intention of this
+> series, since a pre-configured controller would affect more than just
+> interrupts.
 
-Also, commits 3ce6c9e2617e ("spi: add of_device_uevent_modalias support")
-and 96c8395e2166 ("spi: Revert modalias changes") have some more context.
+Configuring the HW is not exactly a feature creep. If your intention
+is to keep everything as it was left, then you don't have much of a
+driver, but instead a time bomb. And we can do without another one in
+the tree.
 
-[0]: https://elixir.bootlin.com/linux/latest/source/drivers/spi/spi.c#L360
-[1]: https://elixir.bootlin.com/linux/latest/source/drivers/i2c/i2c-core-base.c#L139
- 
-> The rest LGTM, so
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
+> If you wish, as a compromise I can ensure all INTx interrupts are
+> masked at probe (which would hilariously be the opposite of
+> downstream).
 
-Thanks!
+As far as I'm concerned, downstream doesn't exist. If someone wants
+the downstream code, they can use it directly and we don't need to
+merge this code.
+
+If, on the other hand, you want this driver to be useful and to be
+maintained upstream, initialising the interrupt mask is the absolute
+bare minimum.
+
+	M.
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Without deviation from the norm, progress is not possible.

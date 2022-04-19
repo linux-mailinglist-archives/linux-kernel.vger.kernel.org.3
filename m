@@ -2,90 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEEC506491
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF3B506493
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348877AbiDSGgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 02:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
+        id S1348867AbiDSGgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 02:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237377AbiDSGgD (ORCPT
+        with ESMTP id S235053AbiDSGgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 02:36:03 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A51B2AE06;
-        Mon, 18 Apr 2022 23:33:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 19 Apr 2022 02:36:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA042C64A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:33:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KjDWz2Qmvz4xXS;
-        Tue, 19 Apr 2022 16:33:19 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650349999;
-        bh=4FwEif2YPiKAZKoA68FV0y4+Spendma+CKRcCjHFzu0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LlyUlVr11bwWnIUUE2dTsynX+zMYJYIDY8KYcmOWOwt60N01UtxeYyvZkuZR16MWm
-         oAbIbW4mVwdqzyaW95XJ/yDrbLyttniZPgSkvjCjIf0qqyjxPuniVH782A0LYqRIoO
-         7OXlkenWaxRXbdxDdEmvZKNgCTstb5zw3KxhoILy+NJGr9HtbfAy6R+apTy5ZHr/j2
-         lhG3dTN2Ux4MdTk+EghUM6dpSo45MfgPu8k+U6zVE2K7KDNd5jaN5OHd7Y1Jnqc3v1
-         JO1prsFjYA7yKv2YFsC3QQ1nUFmBD5ATUMwijYWx0MGz49m+fsdHNqdNMQ/zx0ykCA
-         Favkdih34/aMg==
-Date:   Tue, 19 Apr 2022 16:33:18 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, Jiri Slaby <jslaby@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the tty tree
-Message-ID: <20220419163318.0682ffb8@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4AD6B81186
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:33:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB14C385A5;
+        Tue, 19 Apr 2022 06:33:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650350036;
+        bh=4/35g5b4ZPqhbhpRVje281c0PbxC2UdS5Qu7e3PjXDg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UuI5vRWx9SIIgxgR49VZO41fWcEu/6+vg7zcF43WXML0/Dfp4hhvIrCoUtscu7j4c
+         6vdOBRuKqH6RQ+16CdG5HWRuX4obTn1x5iNxxNBzVtH97c/RrYd5GNKKGQZ4AHStku
+         hj+0G4NmXx5vzTIBu+Q8hGyALhuPv8RSHBK0tAqnZs+rwL/JZckpBjXHG6XSMu+BBF
+         D29OEOurKDKtGwLHiLKPEaZDl4yhRnhFBOXNBsOsRMZ8SHxbNVWQ/aXIFrJLzamo8k
+         omevuMhJxmq8P2YDqePLhx0fWFVmLXSPhW6l4DeMK3Dwocyg3f3JxOEZsoUHWY5SK6
+         V17w6KG6EJ0pQ==
+Date:   Tue, 19 Apr 2022 09:33:48 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [PATCH rfc 0/5] mm: introduce shrinker sysfs interface
+Message-ID: <Yl5XzCjqKbKYdvrC@kernel.org>
+References: <20220416002756.4087977-1-roman.gushchin@linux.dev>
+ <Yl0vCDE44VeU8qxC@kernel.org>
+ <Yl2fhgcW5pL66nPK@carbon>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9YjLyh_6G07rkaRMZSCgp3D";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yl2fhgcW5pL66nPK@carbon>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/9YjLyh_6G07rkaRMZSCgp3D
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Apr 18, 2022 at 10:27:34AM -0700, Roman Gushchin wrote:
+> On Mon, Apr 18, 2022 at 12:27:36PM +0300, Mike Rapoport wrote:
+> > On Fri, Apr 15, 2022 at 05:27:51PM -0700, Roman Gushchin wrote:
+> > > There are 50+ different shrinkers in the kernel, many with their own bells and
+> > > whistles. Under the memory pressure the kernel applies some pressure on each of
+> > > them in the order of which they were created/registered in the system. Some
+> > > of them can contain only few objects, some can be quite large. Some can be
+> > > effective at reclaiming memory, some not.
+> > > 
+> > > The only existing debugging mechanism is a couple of tracepoints in
+> > > do_shrink_slab(): mm_shrink_slab_start and mm_shrink_slab_end. They aren't
+> > > covering everything though: shrinkers which report 0 objects will never show up,
+> > > there is no support for memcg-aware shrinkers. Shrinkers are identified by their
+> > > scan function, which is not always enough (e.g. hard to guess which super
+> > > block's shrinker it is having only "super_cache_scan"). They are a passive
+> > > mechanism: there is no way to call into counting and scanning of an individual
+> > > shrinker and profile it.
+> > > 
+> > > To provide a better visibility and debug options for memory shrinkers
+> > > this patchset introduces a /sys/kernel/shrinker interface, to some extent
+> > > similar to /sys/kernel/slab.
+> > 
+> > Wouldn't debugfs better fit the purpose of shrinker debugging?
+> 
+> I think sysfs fits better, but not a very strong opinion.
+> 
+> Even though the interface is likely not very useful for the general
+> public, big cloud instances might wanna enable it to gather statistics
+> (and it's certainly what we gonna do at Facebook) and to provide
+> additional data when something is off.  They might not have debugfs
+> mounted. And it's really similar to /sys/kernel/slab.
 
-Hi all,
+And there is also similar /proc/vmallocinfo so why not /proc/shrinker? ;-)
 
-After merging the tty tree, today's linux-next build (htmldocs) produced
-this warning:
+I suspect slab ended up in sysfs because nobody suggested to use debugfs
+back then. I've been able to track the transition from /proc/slabinfo to
+/proc/slubinfo to /sys/kernel/slab, but could not find why Christoph chose
+sysfs in the end.
 
-Documentation/driver-api/index.rst:14: WARNING: toctree contains reference =
-to nonexisting document 'driver-api/tty'
+> Are there any reasons why debugfs is preferable?
 
-Introduced by commit
+debugfs is more flexible because it's not stable kernel ABI so if there
+will be need/desire to change the layout and content of the files with
+debugfs it can be done more easily.
 
-  b96cd8b05ead ("Documentation: move tty to driver-api")
+Is this a real problem for Facebook to mount debugfs? ;-)
+ 
+> Thanks!
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/9YjLyh_6G07rkaRMZSCgp3D
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJeV64ACgkQAVBC80lX
-0GyfFQf9FzecDnFNZL4rho4NTT0Yp+c0p5rhx1V8MAa6pFebBJA0KkFwN1v985Nu
-T/92V9Qq3xavn4lQJ1XSqfq+kI8AnKHFaW2I5Lzu2dkHBtCHpTiom9RbmKYOLhfu
-0EmgBw417JECbp1UOorNYbLPVDL+jvguFt9V5K4BvfBdM4PPUtWq5UWCeM0jP7vA
-ISmqxGj9gqkRBWgk8wFtMyDMaDWllLKo8EctbjM25dnywZySpWcaHUmhiDJ31Fe6
-gMsyz4QwNcGNfQdyIoyBJqbk+PgYwh2CBqtOgnXTlkMOHTkx6VxiTPXeUhAl2SpM
-IV7oQ3TjoX6cH0c4ehoYYdABao/nxg==
-=R+DT
------END PGP SIGNATURE-----
-
---Sig_/9YjLyh_6G07rkaRMZSCgp3D--
+-- 
+Sincerely yours,
+Mike.

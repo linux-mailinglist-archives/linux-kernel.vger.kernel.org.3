@@ -2,149 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAFC506351
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7673D50634E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348334AbiDSEg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 00:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
+        id S1348269AbiDSEgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 00:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348270AbiDSEgK (ORCPT
+        with ESMTP id S1347682AbiDSEgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:36:10 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC2C2BB2B
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:33:29 -0700 (PDT)
+        Tue, 19 Apr 2022 00:36:09 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4017A2AC52;
+        Mon, 18 Apr 2022 21:33:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650342809; x=1681878809;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3WQ96fk4qp35tKfaZUm43O+5DsFp25/ZxLI7z4orMHY=;
-  b=YteyVKCMF1X81LkPdY+AtL037qyiZmtVv6QdI8q7ssUJAwuB98OwWPCQ
-   gnwa2YrweHQLD4vb6vyvvjM3WA4y/d7lRFvKh7ak+MBVsGd/3lVLIgJRK
-   Nj9I/KY3/W5LkjYYiFPI9GSh6vRyfgpA2Hb7aGmLO3T3DXjd8wuUv2dcV
-   2k8aP2s2mGNsFPT5Pk403JQYMCezmwt0zOdE38MFuc8zwR5BeX3/abGGV
-   tFWoXPr7aaz8lukNbUUIsyZ0QmCUegSytdu9nPPbDy94c0TyHyw1OHDmS
-   s57DGmb9kNoS0AefTzBz1uddvF9XqFVWkFXLo8yxQ7yRddI9COv3vCVhZ
+  t=1650342808; x=1681878808;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CmAcx2mBYxodDrmyuE8qbdUsmHTXfHUYcAr60iRLHG0=;
+  b=djvAzRv81GYtm7LH4vcn9x5eLD0SX/250MKV48SLdrwVCU7XmB/cxWR3
+   1NMMbVB47N8Ev8qDxeGiG7/t6/or1I/iHVuwsF1mwsBaggfjOHpxzpdJl
+   3lN+0cSjBTCsJuYMPTnAYphQUgGE9DOHoR/Htij7IJYzzSRRI1ipSMW6i
+   YGzMUX1k22XQyUkE/GGM4uqntJ/EKrFu/kvAkSqaUl26jQtgQfoEMlpJJ
+   7yFjivMNOKRJ2+Sc5lVrdr01KwwPfPS+GXT2QlJOE3TNrYqstuGGoIgmT
+   3xdXsrxycdOXl3tRACAsqMADxHhwxbQGjFWRCUtTi+LWxaSWAulIPJgHA
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="244256895"
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="288767659"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="244256895"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:33:26 -0700
+   d="scan'208";a="288767659"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:33:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="665771761"
+   d="scan'208";a="575900487"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2022 21:33:24 -0700
+  by orsmga008.jf.intel.com with ESMTP; 18 Apr 2022 21:33:24 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1ngfYK-0005Lq-3B;
-        Tue, 19 Apr 2022 04:33:24 +0000
-Date:   Tue, 19 Apr 2022 12:32:41 +0800
+        id 1ngfYJ-0005LY-TX;
+        Tue, 19 Apr 2022 04:33:23 +0000
+Date:   Tue, 19 Apr 2022 12:32:43 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1770/2356]
- drivers/iio/dac/ltc2688.c:711:47: warning: incompatible integer to pointer
- conversion passing 'int' to parameter of type 'struct device_node *'
-Message-ID: <202204191213.e2qAQvKm-lkp@intel.com>
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     kbuild-all@lists.01.org, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Song Liu <song@kernel.org>,
+        linux-security-module@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>, dm-devel@redhat.com,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH 2/3] LoadPin: Enable loading from trusted dm-verity
+ devices
+Message-ID: <202204191222.n0HWtNe0-lkp@intel.com>
+References: <20220418141545.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220418141545.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 323ab388e14d9548f526543e901e7feb2459c442 [1770/2356] headers/deps: ACPI: Optimize <linux/acpi.h> dependencies, remove <linux/irqdomain.h> inclusion
-config: x86_64-randconfig-a012-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191213.e2qAQvKm-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+Hi Matthias,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on device-mapper-dm/for-next]
+[also build test ERROR on song-md/md-next kees/for-next/pstore v5.18-rc3 next-20220414]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthias-Kaehlcke/LoadPin-Enable-loading-from-trusted-dm-verity-devices/20220419-051810
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
+config: powerpc-buildonly-randconfig-r002-20220417 (https://download.01.org/0day-ci/archive/20220419/202204191222.n0HWtNe0-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=323ab388e14d9548f526543e901e7feb2459c442
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 323ab388e14d9548f526543e901e7feb2459c442
+        # https://github.com/intel-lab-lkp/linux/commit/5af892969b227a2602732e4be44a0c4a41967400
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Matthias-Kaehlcke/LoadPin-Enable-loading-from-trusted-dm-verity-devices/20220419-051810
+        git checkout 5af892969b227a2602732e4be44a0c4a41967400
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ drivers/block/aoe/ drivers/bus/mhi/host/ drivers/gpu/drm/i915/ drivers/gpu/drm/tiny/ drivers/hwmon/ drivers/iio/dac/ drivers/misc/ drivers/platform/x86/ drivers/power/supply/ drivers/spi/ drivers/thermal/intel/ lib/crypto/ net/mctp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash security/loadpin/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/iio/dac/ltc2688.c:711:47: error: implicit declaration of function 'to_of_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           clk = devm_get_clk_from_child(&st->spi->dev, to_of_node(node), NULL);
-                                                        ^
-   drivers/iio/dac/ltc2688.c:711:47: note: did you mean 'dev_of_node'?
-   include/linux/device_api.h:423:35: note: 'dev_of_node' declared here
-   static inline struct device_node *dev_of_node(struct device *dev)
-                                     ^
->> drivers/iio/dac/ltc2688.c:711:47: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct device_node *' [-Wint-conversion]
-           clk = devm_get_clk_from_child(&st->spi->dev, to_of_node(node), NULL);
-                                                        ^~~~~~~~~~~~~~~~
-   include/linux/clk.h:489:29: note: passing argument to parameter 'np' here
-                                       struct device_node *np, const char *con_id);
-                                                           ^
-   1 warning and 1 error generated.
+   security/loadpin/loadpin.c: In function 'loadpin_init':
+>> security/loadpin/loadpin.c:404:44: error: 'loadpin_sysctl_path' undeclared (first use in this function)
+     404 |                 if (!register_sysctl_paths(loadpin_sysctl_path,
+         |                                            ^~~~~~~~~~~~~~~~~~~
+   security/loadpin/loadpin.c:404:44: note: each undeclared identifier is reported only once for each function it appears in
+>> security/loadpin/loadpin.c:405:44: error: 'loadpin_sysctl_table_verity' undeclared (first use in this function)
+     405 |                                            loadpin_sysctl_table_verity))
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +711 drivers/iio/dac/ltc2688.c
+vim +/loadpin_sysctl_path +404 security/loadpin/loadpin.c
 
-832cb9eeb9312d Nuno Sá 2022-02-25  702  
-832cb9eeb9312d Nuno Sá 2022-02-25  703  static int ltc2688_tgp_clk_setup(struct ltc2688_state *st,
-832cb9eeb9312d Nuno Sá 2022-02-25  704  				 struct ltc2688_chan *chan,
-832cb9eeb9312d Nuno Sá 2022-02-25  705  				 struct fwnode_handle *node, int tgp)
-832cb9eeb9312d Nuno Sá 2022-02-25  706  {
-832cb9eeb9312d Nuno Sá 2022-02-25  707  	unsigned long rate;
-832cb9eeb9312d Nuno Sá 2022-02-25  708  	struct clk *clk;
-832cb9eeb9312d Nuno Sá 2022-02-25  709  	int ret, f;
-832cb9eeb9312d Nuno Sá 2022-02-25  710  
-832cb9eeb9312d Nuno Sá 2022-02-25 @711  	clk = devm_get_clk_from_child(&st->spi->dev, to_of_node(node), NULL);
-832cb9eeb9312d Nuno Sá 2022-02-25  712  	if (IS_ERR(clk))
-832cb9eeb9312d Nuno Sá 2022-02-25  713  		return dev_err_probe(&st->spi->dev, PTR_ERR(clk),
-832cb9eeb9312d Nuno Sá 2022-02-25  714  				     "failed to get tgp clk.\n");
-832cb9eeb9312d Nuno Sá 2022-02-25  715  
-832cb9eeb9312d Nuno Sá 2022-02-25  716  	ret = clk_prepare_enable(clk);
-832cb9eeb9312d Nuno Sá 2022-02-25  717  	if (ret)
-832cb9eeb9312d Nuno Sá 2022-02-25  718  		return dev_err_probe(&st->spi->dev, ret,
-832cb9eeb9312d Nuno Sá 2022-02-25  719  				     "failed to enable tgp clk.\n");
-832cb9eeb9312d Nuno Sá 2022-02-25  720  
-832cb9eeb9312d Nuno Sá 2022-02-25  721  	ret = devm_add_action_or_reset(&st->spi->dev, ltc2688_clk_disable, clk);
-832cb9eeb9312d Nuno Sá 2022-02-25  722  	if (ret)
-832cb9eeb9312d Nuno Sá 2022-02-25  723  		return ret;
-832cb9eeb9312d Nuno Sá 2022-02-25  724  
-832cb9eeb9312d Nuno Sá 2022-02-25  725  	if (chan->toggle_chan)
-832cb9eeb9312d Nuno Sá 2022-02-25  726  		return 0;
-832cb9eeb9312d Nuno Sá 2022-02-25  727  
-832cb9eeb9312d Nuno Sá 2022-02-25  728  	/* calculate available dither frequencies */
-832cb9eeb9312d Nuno Sá 2022-02-25  729  	rate = clk_get_rate(clk);
-832cb9eeb9312d Nuno Sá 2022-02-25  730  	for (f = 0; f < ARRAY_SIZE(chan->dither_frequency); f++)
-832cb9eeb9312d Nuno Sá 2022-02-25  731  		chan->dither_frequency[f] = DIV_ROUND_CLOSEST(rate, ltc2688_period[f]);
-832cb9eeb9312d Nuno Sá 2022-02-25  732  
-832cb9eeb9312d Nuno Sá 2022-02-25  733  	return 0;
-832cb9eeb9312d Nuno Sá 2022-02-25  734  }
-832cb9eeb9312d Nuno Sá 2022-02-25  735  
-
-:::::: The code at line 711 was first introduced by commit
-:::::: 832cb9eeb9312dd2e14133681d3920b773ef1eac iio: dac: add support for ltc2688
-
-:::::: TO: Nuno Sá <nuno.sa@analog.com>
-:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+   395	
+   396	static int __init loadpin_init(void)
+   397	{
+   398		pr_info("ready to pin (currently %senforcing)\n",
+   399			enforce ? "" : "not ");
+   400		parse_exclude();
+   401		security_add_hooks(loadpin_hooks, ARRAY_SIZE(loadpin_hooks), "loadpin");
+   402	
+   403		if (IS_ENABLED(CONFIG_SECURITY_LOADPIN_VERITY)) {
+ > 404			if (!register_sysctl_paths(loadpin_sysctl_path,
+ > 405						   loadpin_sysctl_table_verity))
+   406				pr_notice("sysctl registration failed!\n");
+   407		}
+   408	
+   409		return 0;
+   410	}
+   411	
 
 -- 
 0-DAY CI Kernel Test Service

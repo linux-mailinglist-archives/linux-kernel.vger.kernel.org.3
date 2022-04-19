@@ -2,77 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDE1507D18
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 01:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9895B507D1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 01:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347458AbiDSXOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 19:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
+        id S1358414AbiDSXTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 19:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242419AbiDSXOp (ORCPT
+        with ESMTP id S242419AbiDSXTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 19:14:45 -0400
-Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E137A2CC9C
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:12:00 -0700 (PDT)
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id D2514628D8;
-        Tue, 19 Apr 2022 23:11:59 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id E75EA20032;
-        Tue, 19 Apr 2022 23:11:58 +0000 (UTC)
-Message-ID: <b95d9b1058eed13489adba0bccdeb600950eb153.camel@perches.com>
-Subject: Re: [PATCH] MAINTAINERS: Broadcom internal lists aren't maintainers
-From:   Joe Perches <joe@perches.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Tue, 19 Apr 2022 16:11:58 -0700
-In-Reply-To: <db4b9db9-fa02-4b92-3b9a-bd866fa0e73e@gmail.com>
-References: <04eb301f5b3adbefdd78e76657eff0acb3e3d87f.camel@perches.com>
-         <db4b9db9-fa02-4b92-3b9a-bd866fa0e73e@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Tue, 19 Apr 2022 19:19:46 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6305A38BC0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650410222; x=1681946222;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jZw/QKKaBNsSJCaaLoMkKTTzNvnLg8yL3KWAJJVJ5G0=;
+  b=dhRVLaFhsJMIjWexLwWA2i/XtppicAk9o9Rhm/aZ337zKiXyLHOOdxU5
+   5Mx1bcAf0HwBzBeOcABFqcFhig/CVq5GWsOomSMBO+G0U9grF1+MKL3N9
+   a6xF8Bb7KDHay++mOs3jyeraJSet9aXfGviynW7DbZKInUZL7Wg63MMK8
+   c/WcKuoU34QRjRpmaaHCENaWr6REVbR+0EJHtD9KwfEdPH8Q8y5cgS/8q
+   x2Bh4igD+w2cpDguXBsvr4ETjfirPzh0zIldwoiJaIUmHHGruvRHWuLpK
+   +3pt4dEgUTLivhkOWrPpIXN0AJ4nt3i1wrqdHLu6oeoJZYUS3+7gYnskO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="263656644"
+X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
+   d="scan'208";a="263656644"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 16:17:01 -0700
+X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
+   d="scan'208";a="862277624"
+Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.209.68.17])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 16:17:00 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mcgrof@kernel.org, rafael@kernel.org, linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v4 0/8] Extend FW framework for user FW uploads
+Date:   Tue, 19 Apr 2022 16:16:50 -0700
+Message-Id: <20220419231658.664388-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: E75EA20032
-X-Stat-Signature: 3qohbj6dmugxg616wghxzag8j3xi14ct
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+0vnqgv9ZKZCWP1crLDZIVdAwCkwIzn1A=
-X-HE-Tag: 1650409918-560077
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-19 at 12:00 -0700, Florian Fainelli wrote:
-> On 4/12/2022 11:34 AM, Joe Perches wrote:
-> > Convert the broadcom internal list M: and L: entries to R: as
-> > exploder email addresses are neither maintainers nor mailing lists.
-> > 
-> > Reorder the entries as necessary.
-[]
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-[]
-> > @@ -3746,7 +3746,7 @@ F:	include/linux/platform_data/b53.h
-> >   
-> >   BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE
-> >   M:	Nicolas Saenz Julienne <nsaenz@kernel.org>
-> > -L:	bcm-kernel-feedback-list@broadcom.com
-> > +R:	Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>
-> 
-> There is not a "Broadcom Kernel Team", the description of R: appears to 
-> require some kind of full name, hence the choice of L: instead of R:.
+Extend the firmware loader subsystem to support a persistent sysfs
+interface that userspace may use to initiate a firmware update. For
+example, FPGA based PCIe cards automatically load firmware and FPGA images
+from local FLASH when the card boots. The images in FLASH may be updated
+with new images that are uploaded by the user.
 
-If you don't like "Broadcom Kernel Team", perhaps
-"Broadcom Kernel Reviewers" might work for you.
+A device driver may call firmware_upload_register() to expose persistent
+"loading" and "data" sysfs files at /sys/class/firmare/<NAME>/*. These
+files are used in the same way as the fallback sysfs "loading" and "data"
+files. However, when 0 is written to "loading" to complete the write of
+firmware data, the data is also transferred to the lower-level driver
+using pre-registered call-back functions. The data transfer is done in
+the context of a kernel worker thread.
 
-I think it doesn't matter much.
+Additional sysfs nodes are added in the same location as "loading" and
+"data" to monitor the transfer of the image data to the device using
+callback functions provided by the lower-level device driver and to allow
+the data transfer to be cancelled.
+
+Example usage:
+
+$ pwd
+/sys/class/firmware/secure-update.1
+$ ls
+cancel  device  loading  remaining_size  subsystem
+data    error   power    status          uevent
+$ echo 1 > loading
+$ cat /tmp/firmware.bin > data
+$ echo 0 > loading
+$ while :; do cat status; cat remaining_size ; sleep 3; done
+preparing
+44590080
+<--snip-->
+transferring
+44459008
+transferring
+44311552
+<--snip-->
+transferring
+173056
+<--snip-->
+programming
+0
+<--snip-->
+idle
+0
+^C
+$ cat error
+
+The first two patches in this set make minor changes to enable the
+fw_priv data structure and the sysfs interfaces to be used multiple times
+during the existence of the device driver instance. The third patch is
+mostly a reorganization of existing code in preparation for sharing common
+code with the firmware-upload support. The fourth and fifth patches provide
+the code for user-initiated firmware uploads. The final 3 patches extend
+selftest support to test firmware-upload functionality.
 
 
+Changelog v3 -> v4:
+  - Added Reviewed-by tag
+  - Fixed errors reported by the kernel test robot <lkp@intel.com> by adjusting
+    the functions that are bound by "#fdef CONFIG_FW_LOADER_USER_HELPER".
+
+Changelog v2 -> v3:
+  - Added Reviewed-by tag
+  - Added kdoc support for enum fw_upload_prog progress codes
+
+Changelog v1 -> v2:
+  - Rebased to 5.18-rc2.
+  - It was discovered that the new function in v1, fw_state_is_done(), is
+    equivalent to the existing fw_sysfs_done() function. Renamed
+    fw_sysfs_done() and fw_sysfs_loading() to fw_state_is_done() and
+    fw_state_is_loading() respectively, and placed them along side companion
+    functions in drivers/base/firmware_loader/firmware.h.
+  - Removed the "if !fw_sysfs_done(fw_priv))" condition in switch case 1 of
+    firmware_loading_store(). It is rendered unnecessary by other changes
+    to the function.
+  - Updated documentation Date and KernelVersion fields to July 2022
+    and 5.19.
+  - Unconditionally set fw_priv->is_paged_buf to true in
+    firmware_upload_register();
+
+Changelog RFC -> v1:
+  - Renamed files fw_sysfs.c and fw_sysfs.h to sysfs.c and sysfs.h
+  - Moved "MODULE_IMPORT_NS(FIRMWARE_LOADER_PRIVATE);" from sysfs.c to
+    sysfs.h to address an error identified by the kernel test robot
+    <lkp@intel.com>
+  - renamed fw_upload_register() and fw_upload_unregister() to
+    firmware_upload_register() and fw_upload_unregister().
+  - Moved ifdef'd section of code out of firmware_loading_store() in sysfs.c
+    into a new function, fw_upload_start(), in sysfs_upload.c.
+  - Changed #defines to enums for error codes and progress states
+  - Added additional kernel-doc supported symbols into the documentation.
+    Some rewording in documentation as well.
+  - Added module reference counting for the parent module in the
+    firmware_upload_register() and firmware_upload_unregister() functions
+    to fix problems found when testing with test_firmware module.
+  - Removed unnecessary module reference counting for THIS_MODULE.
+  - Added a new patch to modify the test_firmware module to support
+    testing of the firmware upload mechanism.
+  - Added a new patch to modify the test_firmware module to support
+    error injection for firmware upload.
+  - Added a new patch to extend the existing firmware selftests to cover
+    firmware upload.
+
+Russ Weight (8):
+  firmware_loader: Clear data and size in fw_free_paged_buf
+  firmware_loader: Check fw_state_is_done in loading_store
+  firmware_loader: Split sysfs support from fallback
+  firmware_loader: Add firmware-upload support
+  firmware_loader: Add sysfs nodes to monitor fw_upload
+  test_firmware: Add test support for firmware upload
+  test_firmware: Error injection for firmware upload
+  selftests: firmware: Add firmware upload selftests
+
+ .../ABI/testing/sysfs-class-firmware          |  77 ++++
+ .../driver-api/firmware/fw_upload.rst         | 126 +++++
+ Documentation/driver-api/firmware/index.rst   |   1 +
+ drivers/base/firmware_loader/Kconfig          |  18 +
+ drivers/base/firmware_loader/Makefile         |   2 +
+ drivers/base/firmware_loader/fallback.c       | 430 ------------------
+ drivers/base/firmware_loader/fallback.h       |  46 +-
+ drivers/base/firmware_loader/firmware.h       |  16 +
+ drivers/base/firmware_loader/main.c           |  18 +-
+ drivers/base/firmware_loader/sysfs.c          | 423 +++++++++++++++++
+ drivers/base/firmware_loader/sysfs.h          | 100 ++++
+ drivers/base/firmware_loader/sysfs_upload.c   | 397 ++++++++++++++++
+ drivers/base/firmware_loader/sysfs_upload.h   |  54 +++
+ include/linux/firmware.h                      |  82 ++++
+ lib/test_firmware.c                           | 378 +++++++++++++++
+ tools/testing/selftests/firmware/Makefile     |   2 +-
+ tools/testing/selftests/firmware/config       |   1 +
+ tools/testing/selftests/firmware/fw_lib.sh    |   7 +
+ .../selftests/firmware/fw_run_tests.sh        |   4 +
+ tools/testing/selftests/firmware/fw_upload.sh | 214 +++++++++
+ 20 files changed, 1910 insertions(+), 486 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-firmware
+ create mode 100644 Documentation/driver-api/firmware/fw_upload.rst
+ create mode 100644 drivers/base/firmware_loader/sysfs.c
+ create mode 100644 drivers/base/firmware_loader/sysfs.h
+ create mode 100644 drivers/base/firmware_loader/sysfs_upload.c
+ create mode 100644 drivers/base/firmware_loader/sysfs_upload.h
+ create mode 100755 tools/testing/selftests/firmware/fw_upload.sh
+
+-- 
+2.25.1
 

@@ -2,173 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9857F5064CD
+	by mail.lfdr.de (Postfix) with ESMTP id E645C5064CE
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349007AbiDSGrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 02:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58044 "EHLO
+        id S1349051AbiDSGrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 02:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349028AbiDSGrf (ORCPT
+        with ESMTP id S1349041AbiDSGrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 02:47:35 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46625BC0A
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:44:51 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id g18so30835637ejc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:44:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WDQdMsSQtFeONfrPWRQrEMWsmK9TYCXo9oQyKgCX1d4=;
-        b=W+DEw3OjhbAorYeQvkZAGbdpHDkjISIw2sWe7zSQRBSDh3kasiZwD3BvHX9g6DsaeF
-         Z1zeOIp/nCjpP4LNqhDwh2Bl39liGxKTC2D2N1TbhkAOpaEsRLf6zRK+OAfWbHawGpVb
-         dDc1ONAw+G1uVAm4MZnn/jw7CWyH7TD/VjyM9sfIHDdI+ENh9f2zRasrOFLafKxDS1h5
-         47lMDtfkJGU/nuspJfIvREbR+WZYQM6sy8m0HMbdeOjVLvGYLAcFsTJpMqz4qaYpbj6C
-         dwjMD3EC04lWTJeBRG1AqBD4X/cUvQ6+LjCk4SyMnRfaXQ0CEKvVtcRE2Ns0E+U1I3+k
-         ZeXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WDQdMsSQtFeONfrPWRQrEMWsmK9TYCXo9oQyKgCX1d4=;
-        b=HgCTBJrWpuW9bXOJIvwRZfBYBqEgEetPGWBKshxIKqpApwcSiphaeCH3PdXwS6v73F
-         5O9ID7s3CG+os4GJGMOdMoJQ0y5Tk4mLELifZL9QMb5i30gtDa+ot25tcFLUQcBhLrCw
-         BQqgMA6+B/TmoQ1YKxmfoZL9gSxgeFdaLxUlnzIdNdxG4Bn8r/XxMWGNokYlNEedgwNR
-         Z3OI1gLYWLyt0wSBqndKUvscdJ+Dj7Tm/vmqMeDyJnAigQSWW9K6IYNwxer9xuEZz3wa
-         EhCJXstwX8mWaLQU66OtTUy7888wB54FajLPq34/y0/fStAvY+O7i8tQI55jmEDgBTtj
-         U2qQ==
-X-Gm-Message-State: AOAM5306bVi4pbgBaNcL1S5Q+jB3RtTw8/Wbdu1M/697OzNu9SKm86ph
-        7EufEr5kf4DyIJezUoaikUDKKg==
-X-Google-Smtp-Source: ABdhPJxZvaWhIZoWqA8l9E3QzXXqm8pjAwVmspK/s+lgWoyTFUJy55XOrlYTGTP6SvstEVOAaHiuEQ==
-X-Received: by 2002:a17:907:6095:b0:6e7:cc3f:c33d with SMTP id ht21-20020a170907609500b006e7cc3fc33dmr12375812ejc.570.1650350689890;
-        Mon, 18 Apr 2022 23:44:49 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id eq7-20020a056402298700b00419d8d46a8asm7693260edb.39.2022.04.18.23.44.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 23:44:49 -0700 (PDT)
-Message-ID: <39b68e91-93cc-ad74-d064-a29ff01d60a6@linaro.org>
-Date:   Tue, 19 Apr 2022 08:44:48 +0200
+        Tue, 19 Apr 2022 02:47:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FCC713CFE
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650350696;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LefR+GnWqX3MjBts53Y0LYPST2a84sipLAxvttQVcyI=;
+        b=IaTh8DcPsaRi7nQnGhj4agQvDABFl0+Fe250uehKFCoSjY7ycMXaPdDA8yjux+o9QXB1w5
+        bRkK9XS4aeH2pFa7LiQuR7ynrXWEmAn8yv+iH1jz5tfV3YY05A7y2gbG16a6rNNGPBh4g3
+        BMggiX7Nl+RFrJNCnFuKhSqxtz1MY7w=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-297-k1KNzykeP-iWA7oMKLO9tw-1; Tue, 19 Apr 2022 02:44:52 -0400
+X-MC-Unique: k1KNzykeP-iWA7oMKLO9tw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 150BE29DD980;
+        Tue, 19 Apr 2022 06:44:52 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 04C19215CDD1;
+        Tue, 19 Apr 2022 06:44:48 +0000 (UTC)
+Message-ID: <8b2ff3dc317db18c8128381d5d62057a90f68265.camel@redhat.com>
+Subject: Re: [PATCH 2/4] KVM: nVMX: Defer APICv updates while L2 is active
+ until L1 is active
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Gaoning Pan <pgn@zju.edu.cn>,
+        Yongkang Jia <kangel@zju.edu.cn>
+Date:   Tue, 19 Apr 2022 09:44:48 +0300
+In-Reply-To: <Yl2FXfCjvkNgM4w3@google.com>
+References: <20220416034249.2609491-1-seanjc@google.com>
+         <20220416034249.2609491-3-seanjc@google.com>
+         <227adbe6e8d82ad4c5a803c117d4231808a0e451.camel@redhat.com>
+         <Yl2FXfCjvkNgM4w3@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] regulator: dt-bindings: qcom,rpmh: document
- supplies per variant
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220412073123.27229-1-krzysztof.kozlowski@linaro.org>
- <20220412073123.27229-2-krzysztof.kozlowski@linaro.org>
- <YlhC5B+ZaNn9wUuB@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YlhC5B+ZaNn9wUuB@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2022 17:51, Rob Herring wrote:
-> On Tue, Apr 12, 2022 at 09:31:22AM +0200, Krzysztof Kozlowski wrote:
->> The RPMH regulator binding covers several devices with different
->> regulator supplies, so it uses patterns matching broad range of these
->> supplies.  This works fine but is not specific and might miss actual
->> mistakes when a wrong supply property is used for given variant.
->>
->> Describe the supplies depending on the compatible, using a defs-allOf
->> method.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  .../regulator/qcom,rpmh-regulator.yaml        | 290 +++++++++++++++++-
->>  1 file changed, 276 insertions(+), 14 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->> index 842ccef691b8..773536fe37c7 100644
->> --- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->> +++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->> @@ -95,35 +95,297 @@ properties:
->>    vdd-rgb-supply:
->>      description: Input supply phandle of rgb.
->>  
->> -  vin-lvs-1-2-supply:
->> -    description: Input supply phandle of one or more regulators.
->> -
->> -  vdd-bob-supply:
->> -    description: BOB regulator parent supply phandle.
->> -
->>    bob:
->>      type: object
->>      $ref: "regulator.yaml#"
->>      description: BOB regulator node.
->>  
->>  patternProperties:
->> -  "^vdd-s([0-9]+)-supply$":
->> -    description: Input supply phandle(s) of one or more regulators.
->> -
->> -  "^vdd-(l[0-9]+[-]){1,5}supply$":
->> -    description: Input supply phandle(s) of one or more regulators.
->> -
->>    "^(smps|ldo|lvs)[0-9]+$":
->>      type: object
->>      $ref: "regulator.yaml#"
->>      description: smps/ldo regulator nodes(s).
->>  
->> -additionalProperties: false
->> -
->>  required:
->>    - compatible
->>    - qcom,pmic-id
->>  
->> +allOf:
->> +  - $ref: "#/$defs/pm6150"
->> +  - $ref: "#/$defs/pm6150l"
->> +  - $ref: "#/$defs/pm7325"
->> +  - $ref: "#/$defs/pm8005"
->> +  - $ref: "#/$defs/pm8009"
->> +  - $ref: "#/$defs/pm8150"
->> +  - $ref: "#/$defs/pm8150l"
->> +  - $ref: "#/$defs/pm8350"
->> +  - $ref: "#/$defs/pm8350c"
->> +  - $ref: "#/$defs/pm8450"
->> +  - $ref: "#/$defs/pm8998"
->> +  - $ref: "#/$defs/pmg1110"
->> +  - $ref: "#/$defs/pmi8998"
->> +  - $ref: "#/$defs/pmr735a"
->> +  - $ref: "#/$defs/pmx55"
->> +  - $ref: "#/$defs/pmx65"
->> +
->> +unevaluatedProperties: false
->> +
->> +$defs:
+On Mon, 2022-04-18 at 15:35 +0000, Sean Christopherson wrote:
+> On Mon, Apr 18, 2022, Maxim Levitsky wrote:
+> > On Sat, 2022-04-16 at 03:42 +0000, Sean Christopherson wrote:
+> > When L2 uses APICv/AVIC, we just safely passthrough its usage to the real hardware.
+> > 
+> > If we were to to need to inhibit it, we would have to emulate APICv/AVIC so that L1 would
+> > still think that it can use it - thankfully there is no need for that.
 > 
-> I'm not following on why you need $defs here rather than putting the 
-> if/then schemas under the 'allOf'. $defs should primarily only be used 
-> where it saves duplicating a schema 2 or more times. That could be the 
-> case here if there's a case that's a subset of another case.
+> What if L1 passes through IRQs and all MSRs to L2? 
 
-The allOf+defs is a workaround for schema behavior. The entire approach
-if defining properties in "if:then:" works only with
-unevaluatedProperties, not with additionalProperties. However
-unevaluatedProperties require to reference other schema, which I do not
-do here. I don't have other schema.
+KVM absolutely should inhibit L1 AVIC/APICv in this case if L2 triggers AUTOEOI inhibit via msr write via non
+intercepted msr, and I don't see why it won't work.
 
-allOf+def has references tricking schema to accept unevaluatedProperties.
+It should not affect L2's APICv/AVIC though, only L1 can decide that it wants to inhibit it,
+and it has all the means to do so without any help from L0.
 
 
+In regard to APICv, neither vmcs02 nor vmcs01 should need to be touched on a vCPU
+that does this though:
+ 
+ 
+- vmcs02 can't have APICv enabled, because passthrough of interrupts thankfully
+  conflicts with APICv (virtual interrupt delivery depends on intercepting interrupts)
+  and even if that was false, it would have contained L2's APICv settings which should
+  continue to work as usual.
+ 
+- vmcs01 isn't active on this vCPU, so no need to touch it. vmcs01 of other vCPUs
+  which don't run nested, does need to be updated to have APICv inhibited, 
+  which should work just fine unless there are bugs in KVM's APICv.
+ 
+ 
+- Posted interrupts that target L1 will be delivered as normal interrupts and cause KVM to 
+  inject them to L2 (because of no interception)
+ 
+- Posted interrupts that target L2 can't even happen because APICv can't be enabled in L1
+
+ 
+In regard to SVM, in theory you can have interrupt intercept disabled and yet have AVIC enabled
+in both L0 and L1, but it should work just fine as well:
+ 
+In this case, while running nested:
+ 
+L2 if it has direct access to L1's AVIC, will be able to write there but all writes will
+be normal MMIO writes and work as usual but not accelerated.
+ 
+Interrupts that target L1 will not go through AVIC, but be delivered via normal IPIs,
+because L1's avic is inhibited on this vCPU locally, and then KVM will inject them to L2.
+ 
+Interrupts that target L2 will go through nested AVIC and land there just fine.
+ 
+AVIC inhibition/uninhibition in this case has 0 effect on this vCPU, as L1 AVIC is already
+inhibited locally on this vCPU, and my code will correctly do nothing in this case.
+
+Yes in theory, when L1 doesn't use AVIC for L2, and passes through all interrupts to L2,
+I could have setup vmcb02 to use L0's AVIC and let interrupts that target L1 go to L2
+via AVIC, but it is just not worth the complexity this adds, and it might not even
+work correctly in some cases, since L1 still has its own APIC, even if it doesn't
+really receive interrupts while L2 is running.
+
+ 
+IMHO it all adds up.
+ 
 Best regards,
-Krzysztof
+	Maxim Levitsky
+
+
+
+>   L1 isn't expecting a VM-Exit, so
+> KVM can't safely punt to L1 even if conceptually we think that it's L1's problem.
+> 
+> It's a contrived scenario, but technically possible.
+> 
+
+

@@ -2,279 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E83507B52
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 056DC507B63
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357835AbiDSU44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S1357845AbiDSU6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241900AbiDSU4w (ORCPT
+        with ESMTP id S234976AbiDSU6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:56:52 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EED1419A3;
-        Tue, 19 Apr 2022 13:54:08 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id w19so31503403lfu.11;
-        Tue, 19 Apr 2022 13:54:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zkgBpYGcM/o4zjRdFSPGOetVHcmF0o/VikWzoHlnuzw=;
-        b=PLxnGBDkyrgrJUuefL+Q3WwJ4NxEy2GuvCARWZA0gHqpSNUAlY5ZCzCIoawUfG9VxK
-         tovXEYtvo+4mgDmqQKvSe5IJGs5GEwpXPbHjpkxx0edry48TxSP1jVutPQ71QHffnaxH
-         jJUQBxcBgX5GuEzelhxWDQ6Ks4/DnamtJkgU0g0LOvfBzoyK62zUBuxpmHS9owTy5Q45
-         n0EF8cu7/i9zwb1vhHdVlFrNOR0uCu7iiJRH/DpY9PxqWknLoKW9sioGGyXkeIUiW1Ey
-         VAkSPEfxhI13xSM++LidFF4k6AYY1ZGKqU84sntVOmc3X9Eoe50qRrVAKoNZoNGZHbvL
-         AUTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zkgBpYGcM/o4zjRdFSPGOetVHcmF0o/VikWzoHlnuzw=;
-        b=FFVE9nYIjmNj3gtCiY/c0Y/hBsuh4j9O0HFXkqtncaXgldEeP0meS1GjjvQvTzmn1/
-         Pb9L/UmPyFUsXxe8Q9xgBWYEtA4AAyS39WspdQpuf4FRXYnu2KPtCQnA5OWff1WB5c0j
-         TSdlt8XCh+5fCKWnjCFHI3cheaIKkb9vRf/DE6b/5I1y/nCwocLMVzAL8Ym343UyOcAg
-         eU5E9PgBtVqUDGQabbFumo66dKPn6nkEss42GbcqSoBhZZYbluLRFJqUfN07o87Mznm/
-         bPYZiYJei4PDa0O0dJAvKkZS58RBFx2RTvIKwuxcaKZ4XHKsXy/cg4Le5HDeQcpRvv/H
-         IXVQ==
-X-Gm-Message-State: AOAM533rfnLvaplc/QHPCbffLHH12GbxeX11m5ZBTa4UdMgdRD19fqLx
-        rQ3i/DCyfSY6cl8Z2swjhBY=
-X-Google-Smtp-Source: ABdhPJwKwjsyNF0hjSrqY/DXqfTAn7fw1UNsV/7nK9IAwonh5eGIzw5FN0XWBvT/1NSGtnwbr4533A==
-X-Received: by 2002:a05:6512:1189:b0:471:b7e1:5c41 with SMTP id g9-20020a056512118900b00471b7e15c41mr581738lfr.344.1650401646177;
-        Tue, 19 Apr 2022 13:54:06 -0700 (PDT)
-Received: from mobilestation ([95.79.134.149])
-        by smtp.gmail.com with ESMTPSA id o23-20020ac24357000000b0044adb34b68csm1614977lfl.32.2022.04.19.13.54.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 13:54:05 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 23:54:03 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 25/25] PCI: dwc: Add DW eDMA engine support
-Message-ID: <20220419205403.hdtp67mwoyrl6b6q@mobilestation>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-26-Sergey.Semin@baikalelectronics.ru>
- <20220328141521.GA17663@thinkpad>
+        Tue, 19 Apr 2022 16:58:51 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2058.outbound.protection.outlook.com [40.107.220.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9335341320;
+        Tue, 19 Apr 2022 13:56:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SezqDAs1FgGkGiM6BOBPDLw/qaMj/AdQJq18Q1Gl73lRg01RhJ/t+Nm/6sr5JxmkCE2nve8nseJrEXqRI2zNRw/9z50N+gV6jO5FKcZCAKG46sWK6BcqoEKZgm6Rb7PYbcDfALMxIVZchyrlgJOEtH3yOa9joZ+f5BEoN4dnM7njGpQdlkxhn5yxYMKAv2dDCB8HUJI0ukVMvIsO9Zeun54iDHgBkPUeB4EXtyQOGSYLBzHotabOApqBm2rdlJ1+GStTWcwsye4Ux4vObbkvtK0KT3HejBwBfjAgPdvKRMykUvLhjnVcgtRdDSVCoKC1Zha5xCEf3MK31f4mCt8kbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1tC31V6YYHw2Gi+T1KBXPBcvPGweJX8pP1qbk3t6X0w=;
+ b=ey2i3VFyvucxxcyVJ4RpWmcU1HVtyztIpSjkpINGAJ5pMPp8xjQFNxpqpTHOxdhMzITFIsHcuNxFHiPgjBU5jDm3utQxA+0Bx6d7pCYcmFNjT8uk2LPkZ3/cUrZMu2CygwTAZv327UyCPTkWEv7RJauy61Se9DmIlm9SFD2qY5WQA4XtwAK+zPBINcvzKbywxTkXpEUoC9+xmiwoUC99zU46iwTWQYiXV+WlrATUzFD3otSmgpP4RizUBcLLz4Hn9YSmxRCHDcLXXuXJbCsMKVo8DhPvRoPlMGp1vOWNqvgId9rHPdzpM9ixygXpb31pJ4FAyznfqlxgajs8DBrfXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1tC31V6YYHw2Gi+T1KBXPBcvPGweJX8pP1qbk3t6X0w=;
+ b=HBPAPY0ftnucoVBPzCWXzsLRgimIuS3NmK4G3dmv6McsdboxP4YSxnZGYkYnWyycfGG3v0sKA0ooY6JvL1MHSd1uZk4ccvUvPVGxpwlJhDLBNe0h+ROWxznlzRb30cbq5Bb8KZIGH2tebLU/EYzbXYU9O7r6HT206J0PnCkgDQksjk8/3sc2vF564AXgC8QFs5Q5/fCblTwrKKg7r5Frh9YyPHK4IIIz6hd72DxM/h63kXQ6Pyiy1+sYvlZLllYhE2Nq65piXsOIDm97KzVTlAcdrDCmdkQSB7KxXAYR6UY0XBhzXmx6pWnpmqkoX5zvFwNtObouyHgs7MIgo3R9aA==
+Received: from BN0PR04CA0147.namprd04.prod.outlook.com (2603:10b6:408:ed::32)
+ by BY5PR12MB4965.namprd12.prod.outlook.com (2603:10b6:a03:1c4::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
+ 2022 20:56:05 +0000
+Received: from BN8NAM11FT043.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ed:cafe::9b) by BN0PR04CA0147.outlook.office365.com
+ (2603:10b6:408:ed::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13 via Frontend
+ Transport; Tue, 19 Apr 2022 20:56:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT043.mail.protection.outlook.com (10.13.177.218) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5164.19 via Frontend Transport; Tue, 19 Apr 2022 20:56:05 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 19 Apr
+ 2022 20:55:26 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 19 Apr
+ 2022 13:55:25 -0700
+Received: from msst-build.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Tue, 19 Apr 2022 13:55:24 -0700
+From:   Besar Wicaksono <bwicaksono@nvidia.com>
+To:     <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <lorenzo.pieralisi@arm.com>, <guohanjun@huawei.com>,
+        <sudeep.holla@arm.com>
+CC:     <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
+        <jonathanh@nvidia.com>, <linux-acpi@vger.kernel.org>,
+        <devel@acpica.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Besar Wicaksono" <bwicaksono@nvidia.com>
+Subject: [PATCH 0/2] ACPI: ARM CoreSight Performance Monitoring Unit
+Date:   Tue, 19 Apr 2022 15:54:30 -0500
+Message-ID: <20220419205432.46021-1-bwicaksono@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328141521.GA17663@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a864497b-bced-42ba-1351-08da2247055f
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4965:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB496560B2A360584A0A3FC684A0F29@BY5PR12MB4965.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Vfr37aQrjEBmb7lPdoV87i/HXQsUEicVtnMm6/knUIQ54qyS2AQWeB4RyhEnns2w7xaJBipd++XHb2uiLVkl7uh+LJXXfE34LtEpCZqHgYWf8pRJ0anixsJSfEcau9kbV2/1Lv+hV1hE8CxGeh0aWwKg4weJ780aq8XJpDnBMAXHKOKFPSeGK+O5N+/+4tc6sacSkqd6lZmfHGpLatiKX9K7EHUleZnhqJ29zu3++nETjl0vQYtLidbOtpubRHib9IQjc2pUnqffyQ/Uur68ip0+uTpecsTqwQOZuFubQXU219zaMThTAcZQdz3Leg9du4ByjsRhaQpgIDQEf14Hye0OJ+3J67S2u21YVn42KwoQwyHIq0sJm1cuAVQ51o02ia3uwcVxZp2jKyDvQGDWHRdDy6CiW7sbaaU9LKDXldJKsfjbm0fBvADjM0V1ETLwhWPeRfHJTXytBquE3vHhKC5QGqfUghNQMuAvuNYrYJZmSrXsG0aEEpU8VXZ7wI9N/WNdTNKA7V3c7YY/UTfaTMIN8B7q+4DfL+hwGtbldC09UhDLU4qaKbNkmMXlOyuUUzDr2uVDUDhI+amsGcRa3gPx8rjsYxun2cWreZrV/Aq6gzOsj7eYKnmTZ573Whl56DCR1habGpJ0RSdZldZFy39VoJs8dgHNBdWYiLoR7WNihKG4j9HXlbsQIrdgGvHevUFuLBsd/wpDPQXBT52cB3RMj3fGgicoRLqp4GSilLi11fryNUYrWJbL05lW9WwB40bKnuIbBBNw7Ldfv9IqemYlWtwQRBL1ZPwbN+vMBaVjBAArsf5IqJoPdfrCUpAIhzHuxL5dJap8Gfd3ueVQbQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(8676002)(6666004)(36860700001)(70586007)(508600001)(1076003)(47076005)(36756003)(82310400005)(40460700003)(110136005)(54906003)(86362001)(7696005)(336012)(356005)(107886003)(426003)(4326008)(4744005)(70206006)(2616005)(5660300002)(2906002)(316002)(966005)(81166007)(8936002)(186003)(7416002)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 20:56:05.2610
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a864497b-bced-42ba-1351-08da2247055f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT043.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4965
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 07:45:21PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Mar 24, 2022 at 04:48:36AM +0300, Serge Semin wrote:
-> > Since the DW eDMA driver now supports eDMA controllers embedded into the
-> > locally accessible DW PCIe Root Ports and End-points, we can use the
-> > updated interface to register DW eDMA as DMA engine device if it's
-> > available. In order to successfully do that the DW PCIe core driver need
-> > to perform some preparations first. First of all it needs to find out the
-> > eDMA controller CSRs base address, whether they are accessible over the
-> > Port Logic or iATU unrolled space. Afterwards it can try to auto-detect
-> > the eDMA controller availability and number of it's read/write channels.
-> > If none was found the procedure will just silently halt with no error
-> > returned. Secondly the platform is supposed to provide either combined or
-> > per-channel IRQ signals. If no valid IRQs set is found the procedure will
-> > also halt with no error returned so to be backward compatible with
-> > platforms where DW PCIe controllers have eDMA embedded but lack of the
-> > IRQs defined for them. Finally before actually probing the eDMA device we
-> > need to allocate LLP items buffers. After that the DW eDMA can be
-> > registered. If registration is successful the info-message regarding the
-> > number of detected Read/Write eDMA channels will be printed to the system
-> > log in the same way as it's done for iATU settings.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  .../pci/controller/dwc/pcie-designware-ep.c   |   4 +
-> >  .../pci/controller/dwc/pcie-designware-host.c |  13 +-
-> >  drivers/pci/controller/dwc/pcie-designware.c  | 188 ++++++++++++++++++
-> >  drivers/pci/controller/dwc/pcie-designware.h  |  23 ++-
-> >  4 files changed, 225 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > index 23401f17e8f0..b2840d1a5b9a 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > @@ -712,6 +712,10 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >  
-> >  	dw_pcie_iatu_detect(pci);
-> >  
-> > +	ret = dw_pcie_edma_detect(pci);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> >  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
-> >  	if (!res)
-> >  		return -EINVAL;
-> 
+This patchset adds support for ARM CoreSight PMU device.
+Specifications for ARM Performance Monitoring Unit table (APMT) and
+ARM CoreSight PMU:
+ * APMT: https://developer.arm.com/documentation/den0117/latest
+ * ARM Coresight PMU:
+        https://developer.arm.com/documentation/ihi0091/latest
 
-> eDMA needs to be removed on error path
+The patchset applies on top of
+  git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
-So does the EPC memory... The dw_pcie_ep_init() and the code using it
-are broken in the cleanup part. Neither the platform drivers nor the
-method itself de-allocate the epc memory on any further error. See,
-the dw_pcie_ep_exit() function isn't called by any glue driver, while
-some of them do have the device remove method implemented. I
-am not going to fix the platform drivers (though the devm_add_action()
-method could be used for that in a least painful fix) due to lacking
-of an EP device to test it out. But since you are asking to revert
-the eDMA initialization in case of the EP init failure I'll add the
-cleanup-on-error path to the dw_pcie_ep_init() method. But it will be
-done in v2 of the "PCI: dwc: Various fixes and cleanups" series.
+Besar Wicaksono (2):
+  ACPICA: Add support for ARM Performance Monitoring Unit Table.
+  ACPI: ARM Performance Monitoring Unit Table (APMT) initial support
 
-> 
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > index 715a13b90e43..048b452ee4f3 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > @@ -405,14 +405,18 @@ int dw_pcie_host_init(struct pcie_port *pp)
-> >  
-> >  	dw_pcie_iatu_detect(pci);
-> >  
-> > -	ret = dw_pcie_setup_rc(pp);
-> > +	ret = dw_pcie_edma_detect(pci);
-> >  	if (ret)
-> >  		goto err_free_msi;
-> >  
-> > +	ret = dw_pcie_setup_rc(pp);
-> > +	if (ret)
-> > +		goto err_edma_remove;
-> > +
-> >  	if (!dw_pcie_link_up(pci) && pci->ops && pci->ops->start_link) {
-> >  		ret = pci->ops->start_link(pci);
-> >  		if (ret)
-> > -			goto err_free_msi;
-> > +			goto err_edma_remove;
-> >  	}
-> >  
-> >  	/* Ignore errors, the link may come up later */
-> > @@ -430,6 +434,9 @@ int dw_pcie_host_init(struct pcie_port *pp)
-> >  	if (pci->ops && pci->ops->stop_link)
-> >  		pci->ops->stop_link(pci);
-> >  
-> > +err_edma_remove:
-> > +	dw_pcie_edma_remove(pci);
-> > +
-> >  err_free_msi:
-> >  	if (pp->has_msi_ctrl)
-> >  		dw_pcie_free_msi(pp);
-> > @@ -452,6 +459,8 @@ void dw_pcie_host_deinit(struct pcie_port *pp)
-> >  	if (pci->ops && pci->ops->stop_link)
-> >  		pci->ops->stop_link(pci);
-> >  
-> > +	dw_pcie_edma_remove(pci);
-> > +
-> >  	if (pp->has_msi_ctrl)
-> >  		dw_pcie_free_msi(pp);
-> >  
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > index 4a95a7b112e9..dbe39a7ecb71 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> 
-> [...]
-> 
-> > +int dw_pcie_edma_detect(struct dw_pcie *pci)
-> > +{
-> > +	int ret;
-> > +
-> > +	pci->edma.dev = pci->dev;
-> > +	if (!pci->edma.ops)
-> > +		pci->edma.ops = &dw_pcie_edma_ops;
-> > +	pci->edma.flags |= DW_EDMA_CHIP_LOCAL;
-> > +
+ arch/arm64/Kconfig          |   1 +
+ drivers/acpi/arm64/Kconfig  |   3 +
+ drivers/acpi/arm64/Makefile |   1 +
+ drivers/acpi/arm64/apmt.c   | 176 ++++++++++++++++++++++++++++++++++++
+ drivers/acpi/bus.c          |   2 +
+ include/acpi/actbl2.h       |  81 +++++++++++++++++
+ include/linux/acpi_apmt.h   |  19 ++++
+ 7 files changed, 283 insertions(+)
+ create mode 100644 drivers/acpi/arm64/apmt.c
+ create mode 100644 include/linux/acpi_apmt.h
 
-> > +	pci->edma_unroll_enabled = dw_pcie_edma_unroll_enabled(pci);
-> 
-> Is is possible to continue the unroll path for eDMA if iATU unroll is enabled?
+-- 
+2.17.1
 
-Don't get it. Could you elaborate your question in more details?
-Are you talking about using the same flag for both eDMA and iATU
-unrolled space? If so then most likely yes. But in that case the
-iatu_unroll_enabled flag name and semantics need to be changed.
-
-> 
-> > +	if (pci->edma_unroll_enabled && pci->iatu_unroll_enabled) {
-> > +		pci->edma.mf = EDMA_MF_EDMA_UNROLL;
-> > +		if (pci->atu_base != pci->dbi_base + DEFAULT_DBI_ATU_OFFSET)
-> > +			pci->edma.reg_base = pci->atu_base + PCIE_DMA_UNROLL_BASE;
-> > +		else
-> > +			pci->edma.reg_base = pci->dbi_base + DEFAULT_DBI_DMA_OFFSET;
-> 
-
-> This assumption won't work on all platforms. Atleast on our platform, the
-> offsets vary. So I'd suggest to try getting the reg_base from DT first and use
-> these offsets as a fallback as we do for iATU.
-
-I don't know how the eDMA offset can vary at least concerning the
-normal DW PCIe setup. In any case the DW eDMA controller CSRs are
-mapped in the same way as the iATU space: CS2=1 CDM=1. They are either
-created as an unrolled region mapped into the particular MMIO space
-(as a separate MMIO space or as a part of the DBI space), or
-accessible over the PL viewports (as a part of the Port Logic CSRs).
-Nothing else is described in the hardware manuals. Based on that I
-don't see a reason to add one more reg space binding.
-
-> 
-> > +	} else {
-> > +		pci->edma.mf = EDMA_MF_EDMA_LEGACY;
-> > +		pci->edma.reg_base = pci->dbi_base + PCIE_DMA_VIEWPORT_BASE;
-> > +	}
-> > +
-> > +	ret = dw_pcie_edma_detect_channels(pci);
-> > +	if (ret) {
-> > +		dev_err(pci->dev, "Unexpected NoF eDMA channels found\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	/* Skip any further initialization if no eDMA found */
-> 
-
-> Should we introduce a new Kconfig option for enabling eDMA? My concern here is,
-> if eDMA is really needed for an usecase and if the platform support is broken
-> somehow (DT issues?), then we'll just simply go ahead without probe failure and
-> it may break somewhere else.
-> 
-> And we are returning errors if something wrong happens during eDMA probe. This
-> might annoy the existing users who don't care about eDMA but turning those
-> errors to debug will affect the real users of eDMA.
-> 
-> For these reasons, I think it'd be better to probe eDMA only if the Kconfig
-> option is enabled (which would be disabled by default). And properly return the
-> failure.
-
-I don't see a need in introducing of a new parametrization. Neither
-there is a point in dropping the eDMA support on all the platforms for
-the sake of some hypothetically malfunction hardware. Regarding the
-config, the DW eDMA driver already has one. It's CONFIG_DW_EDMA which
-can be used for what you say. Though I need to fix this patch a bit so
-the -ENODEV errno returned from the dw_edma_probe() method would be
-ignored in the dw_pcie_edma_detect() procedure to support the case of
-the disabled DW eDMA driver.
-
--Sergey
-
-> 
-> Thanks,
-> Mani

@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53580507AC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36E4507ACD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357630AbiDSUME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        id S1357601AbiDSULv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356787AbiDSUL2 (ORCPT
+        with ESMTP id S1357120AbiDSUL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:11:28 -0400
+        Tue, 19 Apr 2022 16:11:29 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0C23B54F;
-        Tue, 19 Apr 2022 13:08:40 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 20:08:37 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2066D3BF81;
+        Tue, 19 Apr 2022 13:08:41 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 20:08:38 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1650398919;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=grdZ2Oj3dJxAOhhOQTQGSWoAAOMuLN+PO2IJmd9VYYM=;
-        b=v27tyKEUBnENDrLRPaDLsD54L7GX3SmOk9GFPA5WudXbZWulZqo/8XyJvBdMplD9x3HoTm
-        1CQ0i2kD5ZWWA2z79jhvsESbSaUqgEEeWRN0UBdsEzM+u6wPpJQ5SDHBV/wLV6shK2U0yO
-        +KEmV6NsffXhEwmd2RS3yxtEG6UuNc2/G1g3DvYGvKUGIoE8ryMtkuyWW1Hukw3Xj5GWIP
-        xCXGncsQii9D04N/m3sxHnlr8psf6tI0FjLvSeYeM+NoAaMc3NXTtoeaeKrJ8hYNEBmpC8
-        9xKhLQ+Ok0TzaGdbmxSc8o/TzoAmFY0JENibJs0bJ20kblMHHK2oxDvPjNsdaA==
+        bh=8l7reSWjkYXMhIWsUQJFyIZ1inBA/aa7459JhwsivbA=;
+        b=xkafwJnCxELjwjqbRJmg9QC1kwhMVRnAlYwqyjoYX9OmjDUeVsXhgfns3AI+7MAMLAqDg5
+        TmdVWYM0EmdosP02KSNt3QNGzYil4vaZ4C0xbvGwfn6P/boiCgEqAIT6lMEd2SjyE3Udt6
+        6GmAYXuY5UWCotxxZ7ROunf7ozC/JYSnVyMxojV8EZhOdjKPDKiRo38CymMoWEeJ1sw3qS
+        t5RQhFtgzret5DEhMbibmZ3RZyFJ03Xiqt1aqg8tRiD/OkfYiZCBAHngUOuKCstffAxYNv
+        d5jBbz7jb0+cCE0Y6dn46urME2HFNo8zDBJyfXxkrEPu6tBPEXHTvtM3fTHC1g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1650398919;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=grdZ2Oj3dJxAOhhOQTQGSWoAAOMuLN+PO2IJmd9VYYM=;
-        b=p8cG9SdylvLJ+/5xZV6v/RzSIaErT090VmEn6rv9iAXbmdQTqtWrYl/kggl05n6y92xlnh
-        UXG9TpYkC2OFGADQ==
+        bh=8l7reSWjkYXMhIWsUQJFyIZ1inBA/aa7459JhwsivbA=;
+        b=bPj4zu2ZE8UMBRycrWk2oeLvnxBX3BiFZ7OSFYAy/PwIQDaNU5a3wOTO2DxgAif5UBbr4i
+        rrksebYDGMld1oBQ==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/uaccess: Add ENDBR to __put_user_nocheck*()
+Subject: [tip: x86/urgent] x86/retpoline: Add ANNOTATE_NOENDBR for retpolines
 Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <207f02177a23031091d1a608de6049a9e5e8ff80.1650300597.git.jpoimboe@redhat.com>
-References: <207f02177a23031091d1a608de6049a9e5e8ff80.1650300597.git.jpoimboe@redhat.com>
+In-Reply-To: <b6ec963dfd9301b6b1d74ef7758fcb0b540d6c6c.1650300597.git.jpoimboe@redhat.com>
+References: <b6ec963dfd9301b6b1d74ef7758fcb0b540d6c6c.1650300597.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-Message-ID: <165039891783.4207.3884581753436962797.tip-bot2@tip-bot2>
+Message-ID: <165039891874.4207.2931765503619062389.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,60 +67,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     7a00829f8ac3f76b3a3aa5c28ce4ddfd2f977bbe
-Gitweb:        https://git.kernel.org/tip/7a00829f8ac3f76b3a3aa5c28ce4ddfd2f977bbe
+Commit-ID:     1c0513dec41e4d40eb21402dff397ad84ca13a44
+Gitweb:        https://git.kernel.org/tip/1c0513dec41e4d40eb21402dff397ad84ca13a44
 Author:        Josh Poimboeuf <jpoimboe@redhat.com>
-AuthorDate:    Mon, 18 Apr 2022 09:50:24 -07:00
+AuthorDate:    Mon, 18 Apr 2022 09:50:23 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 19 Apr 2022 21:58:49 +02:00
 
-x86/uaccess: Add ENDBR to __put_user_nocheck*()
+x86/retpoline: Add ANNOTATE_NOENDBR for retpolines
 
-The __put_user_nocheck*() inner labels are exported, so in keeping with
-the "allow exported functions to be indirectly called" policy, add
-ENDBR.
+The retpolines are exported, so they're referenced by ksymtab sections.
+But they're never indirect-branched to, so add ANNOTATE_NOENDBR.
 
 Fixes: ed53a0d97192 ("x86/alternative: Use .ibt_endbr_seal to seal indirect calls")
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/207f02177a23031091d1a608de6049a9e5e8ff80.1650300597.git.jpoimboe@redhat.com
+Link: https://lkml.kernel.org/r/b6ec963dfd9301b6b1d74ef7758fcb0b540d6c6c.1650300597.git.jpoimboe@redhat.com
 ---
- arch/x86/lib/putuser.S | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/lib/retpoline.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/lib/putuser.S b/arch/x86/lib/putuser.S
-index ecb2049..b7dfd60 100644
---- a/arch/x86/lib/putuser.S
-+++ b/arch/x86/lib/putuser.S
-@@ -48,6 +48,7 @@ SYM_FUNC_START(__put_user_1)
- 	cmp %_ASM_BX,%_ASM_CX
- 	jae .Lbad_put_user
- SYM_INNER_LABEL(__put_user_nocheck_1, SYM_L_GLOBAL)
-+	ENDBR
- 	ASM_STAC
- 1:	movb %al,(%_ASM_CX)
- 	xor %ecx,%ecx
-@@ -62,6 +63,7 @@ SYM_FUNC_START(__put_user_2)
- 	cmp %_ASM_BX,%_ASM_CX
- 	jae .Lbad_put_user
- SYM_INNER_LABEL(__put_user_nocheck_2, SYM_L_GLOBAL)
-+	ENDBR
- 	ASM_STAC
- 2:	movw %ax,(%_ASM_CX)
- 	xor %ecx,%ecx
-@@ -76,6 +78,7 @@ SYM_FUNC_START(__put_user_4)
- 	cmp %_ASM_BX,%_ASM_CX
- 	jae .Lbad_put_user
- SYM_INNER_LABEL(__put_user_nocheck_4, SYM_L_GLOBAL)
-+	ENDBR
- 	ASM_STAC
- 3:	movl %eax,(%_ASM_CX)
- 	xor %ecx,%ecx
-@@ -90,6 +93,7 @@ SYM_FUNC_START(__put_user_8)
- 	cmp %_ASM_BX,%_ASM_CX
- 	jae .Lbad_put_user
- SYM_INNER_LABEL(__put_user_nocheck_8, SYM_L_GLOBAL)
-+	ENDBR
- 	ASM_STAC
- 4:	mov %_ASM_AX,(%_ASM_CX)
- #ifdef CONFIG_X86_32
+diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
+index 5f87bab..b2b2366 100644
+--- a/arch/x86/lib/retpoline.S
++++ b/arch/x86/lib/retpoline.S
+@@ -31,6 +31,7 @@
+ 	.align RETPOLINE_THUNK_SIZE
+ SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
+ 	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR
+ 
+ 	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
+ 		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
+@@ -55,7 +56,6 @@ SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
+ 
+ 	.align RETPOLINE_THUNK_SIZE
+ SYM_CODE_START(__x86_indirect_thunk_array)
+-	ANNOTATE_NOENDBR // apply_retpolines
+ 
+ #define GEN(reg) THUNK reg
+ #include <asm/GEN-for-each-reg.h>

@@ -2,95 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5225072F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F6D507300
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354641AbiDSQeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46974 "EHLO
+        id S1345368AbiDSQfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiDSQee (ORCPT
+        with ESMTP id S1354647AbiDSQf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:34:34 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEA323BF4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:31:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E07011F753;
-        Tue, 19 Apr 2022 16:31:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650385909; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FO3XX7Rny2nsJoT+gYq0ibjOzFl1Xd4EM1kydabFEzE=;
-        b=kjokVUJ3xRC0ikC463fBM8xhon5NE74/yvmE8X96/o1PsvEjmSm80uds6zRrMGyGjszGvm
-        rOy1yIYyESFXkRyVxxueBHQrQFCezHrP8mP0NmExj+b1M6/gfZIM5Sx/L/1vU9iqwEdxAq
-        CkATQbHpsq0f2Op5GAJyEbE+MCe5CnU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650385909;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FO3XX7Rny2nsJoT+gYq0ibjOzFl1Xd4EM1kydabFEzE=;
-        b=T9zksfhxLXx1ImU1UANHvwz0/HZ5i5o86PA59TzsIBJeQPbjUuPRdFLYwkLrmTn4rBRLJg
-        EXWdcvejuv6xGpBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 88124132E7;
-        Tue, 19 Apr 2022 16:31:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wDeNIPXjXmL5VQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 19 Apr 2022 16:31:49 +0000
-Message-ID: <3cc33611-a430-1ce4-bb30-7dc62a530cb8@suse.cz>
-Date:   Tue, 19 Apr 2022 18:31:49 +0200
+        Tue, 19 Apr 2022 12:35:27 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CD028E24
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:32:44 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id ll10so15903861pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+beZKhadRb9QR42fP8opIh478PeXQ0qU4zFY/sETBqY=;
+        b=kMjol9V1uY4GXuzugDURnjy4OL0zU3Kg9Sl71oCy6WD3M64lIJrWISqaCrVfpUDowz
+         f/vEiXwG4l58b+bxXYnG09TkvPqHTwO8QcgBrkVBzNILvLexWG/zYhvtdqNhrqvqzn8/
+         /laU5shLdQ5E+Jnjg56PvuSOYvxwg+IbXVgT5qBxyaDMZdskTu5kktj3IwolBZqZepjD
+         yXs8eDs0w/nY6LkjFzxKG6qkqxe+PaJz3Q5uAaREH0ucJN8SKf386d3CqfW7PQ/LIs94
+         wkB1tZuWaPAGrFnXB2QGRceVBzMXTtcPQ9fxjXR0RIe9y4H/cKFvUfXEsQTSimEFr87a
+         nt+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+beZKhadRb9QR42fP8opIh478PeXQ0qU4zFY/sETBqY=;
+        b=vDviuPvRtL2DtW4ufAuX2GCKK6s9q/E1Bkjk+ZQube6Oy8E/7Nkbecw1o1OG4hUIp7
+         TT5eGvNVGzsobcPEfc7o0K1XR4/ULKWeJCHY+e0Zsu2mfjc4LX4fYETm41bHghV48dmW
+         OJN1SwuidJx3AqD9qg0yU4szl6qbnVDU15O1O9HRYLBHyAixsYxwWmztsOIHwFpVXXCr
+         q86Zvw5SjkJ5oM47WF962kup3IG0Mb0GlMEDbYcy8qCQzy6rr47QLHjmiMenIDatHVkn
+         RpFfC/Wetmei3yTgXGviB7+HBb+O3q9TZfPtllCq02PguFkdzH3R68IBLGkEYRnYNdKI
+         Tb2A==
+X-Gm-Message-State: AOAM532meKNqXoDshV6mcSMS7HCeE8EH7V227DcNTDCWp1Pa86Vekhpo
+        mlhGEQtTnFCYKZCc3GpQblgZMIMYj9nnZ5dLnwoxsA==
+X-Google-Smtp-Source: ABdhPJx+0ojjTdq9N+q8WWzG1w7KU/sBXKZQo/lqOyZDziKDKzmIAXjaEVd0n4p7TGFBLF/kXrKOMbcOFFkd9Ou1E5Y=
+X-Received: by 2002:a17:90a:6501:b0:1ca:a7df:695c with SMTP id
+ i1-20020a17090a650100b001caa7df695cmr19913891pjj.152.1650385963261; Tue, 19
+ Apr 2022 09:32:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 14/16] mm: support GUP-triggered unsharing of anonymous
- pages
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-References: <20220329160440.193848-1-david@redhat.com>
- <20220329160440.193848-15-david@redhat.com>
- <9005b167-db08-c967-463b-5e0e092cbb6c@suse.cz>
- <c003964a-9fa1-b17c-158a-8ccbf4ff8656@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <c003964a-9fa1-b17c-158a-8ccbf4ff8656@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <cover.1649989179.git.Sandor.yu@nxp.com>
+In-Reply-To: <cover.1649989179.git.Sandor.yu@nxp.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 19 Apr 2022 18:32:32 +0200
+Message-ID: <CAG3jFyuhe9CJBLuqKH9u9NSujkqkOhh4NJ59xOD8xEVNO7gnEg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] DRM: Bridge: DW_HDMI: Add new features and bug fix
+To:     Sandor.yu@nxp.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl,
+        shengjiu.wang@nxp.com, cai.huoqing@linux.dev, maxime@cerno.tech,
+        harry.wentland@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -99,72 +70,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/22 18:29, David Hildenbrand wrote:
->>> @@ -4515,8 +4550,11 @@ static inline vm_fault_t create_huge_pmd(struct vm_fault *vmf)
->>>  /* `inline' is required to avoid gcc 4.1.2 build error */
->>>  static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
->>>  {
->>> +	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
->>> +
->>>  	if (vma_is_anonymous(vmf->vma)) {
->>> -		if (userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
->>> +		if (unlikely(unshare) &&
->> 
->> Is this condition flipped, should it be "likely(!unshare)"? As the similar
->> code in do_wp_page() does.
-> 
-> Good catch, this should affect uffd-wp on THP -- it wouldn't trigger as expected. Thanks a lot for finding that!
+On Fri, 15 Apr 2022 at 04:43, <Sandor.yu@nxp.com> wrote:
+>
+> From: Sandor Yu <Sandor.yu@nxp.com>
+>
+> This is new features and bug fix patch set for DW_HDMI DRM bridge driver
+> that has verified by NXP i.MX8MPlus.
+> Two new feature added:
+> 1. Add GPA interface for DW_HDMI Audio.
+> 3. New API for reset PHY Gen1.
+> Two bugs fixed:
+> 1. Enable overflow workaround for all IP versions later than v1.30a.
+> 2. Clear GCP_Auto bit for 24-bit color depth to pass CTS.
+>
+> v1->v2:
+> 1. Save CEC interrupt registers in struct dw_hdmi_cec
+> 2. Restore CEC logical address register by cec->addresses.
+> 3. Default enable overflow workaround for all versions later than v1.30a.
+> 4. Add clear_gcp_auto flag to clear gcp_auto bit for all 24-bit color.
+> 5. Remove i.MX8MPlus specific reference.
+>
+> v2->v3:
+> 1. Drop the patch of Add CEC Suspend/Resume to restore registers.
+> Because it is not a general feature for other SOCs, their CEC engine are
+> enabled in suspend for CEC wakeup.
+> 2. More detail comments for patch GCP only for Deep Color.
+> 3. Address coments for patch GPA driver and move enable_audio/disable_audio
+> from dw_hdmi_phy_ops to dw_hdmi_plat_data.
+>
+> Sandor Yu (4):
+>   drm: bridge: dw_hdmi: default enable workaround to clear the overflow
+>   drm: bridge: dw_hdmi: Enable GCP only for Deep Color
+>   drm: bridge: dw_hdmi: add reset function for PHY GEN1
+>   drm: bridge: dw_hdmi: Audio: Add General Parallel Audio (GPA) driver
+>
+>  drivers/gpu/drm/bridge/synopsys/Kconfig       |  10 +
+>  drivers/gpu/drm/bridge/synopsys/Makefile      |   1 +
+>  .../drm/bridge/synopsys/dw-hdmi-gp-audio.c    | 199 ++++++++++++++++++
+>  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c     | 186 ++++++++++++++--
+>  drivers/gpu/drm/bridge/synopsys/dw-hdmi.h     |  16 +-
+>  drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c        |   2 +-
+>  include/drm/bridge/dw_hdmi.h                  |  11 +-
+>  7 files changed, 400 insertions(+), 25 deletions(-)
+>  create mode 100644 drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c
 
-Yay, glad I was right this time.
+Fixed two checkpatch --strict formatting warnings.
 
->> 
->>> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
->>>  			return handle_userfault(vmf, VM_UFFD_WP);
->>>  		return do_huge_pmd_wp_page(vmf);
->>>  	}
->>> @@ -4651,10 +4689,11 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
->>>  		update_mmu_tlb(vmf->vma, vmf->address, vmf->pte);
->>>  		goto unlock;
->>>  	}
->>> -	if (vmf->flags & FAULT_FLAG_WRITE) {
->>> +	if (vmf->flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) {
->>>  		if (!pte_write(entry))
->>>  			return do_wp_page(vmf);
->>> -		entry = pte_mkdirty(entry);
->>> +		else if (likely(vmf->flags & FAULT_FLAG_WRITE))
->>> +			entry = pte_mkdirty(entry);
->>>  	}
->>>  	entry = pte_mkyoung(entry);
->>>  	if (ptep_set_access_flags(vmf->vma, vmf->address, vmf->pte, entry,
->> 
-> 
-> 
-> So the following on top, right?
-
-Looks good!
-
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 8b3cb73f5e44..4584c7e87a70 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3137,7 +3137,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
->                         free_swap_cache(old_page);
->                 put_page(old_page);
->         }
-> -       return page_copied && !unshare ? VM_FAULT_WRITE : 0;
-> +       return (page_copied && !unshare) ? VM_FAULT_WRITE : 0;
->  oom_free_new:
->         put_page(new_page);
->  oom:
-> @@ -4604,7 +4604,7 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
->         const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
->  
->         if (vma_is_anonymous(vmf->vma)) {
-> -               if (unlikely(unshare) &&
-> +               if (likely(!unshare) &&
->                     userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
->                         return handle_userfault(vmf, VM_UFFD_WP);
->                 return do_huge_pmd_wp_page(vmf);
-> 
-> 
-
+Applied to drm-misc-next.

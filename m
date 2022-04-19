@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 379705060AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF51E5060B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238234AbiDSAKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        id S238519AbiDSALC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237940AbiDSAKe (ORCPT
+        with ESMTP id S238490AbiDSAK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:10:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A654663D6;
-        Mon, 18 Apr 2022 17:07:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58FE8B8113A;
-        Tue, 19 Apr 2022 00:07:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF473C385B7;
-        Tue, 19 Apr 2022 00:07:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650326869;
-        bh=He2ZUlSMEvn9zM0ylx3h/dbdQFC19ze5vEZT/mXl27Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k2uS3++JmOpIsaj7TfjHXB6rdC7h/XHLbGy02RGZRGoVq0PoIr4L+wJep0WcVl0Rg
-         /YMkRUSTVWgW3b8b2O9tZvpcaZwDMRtfAoXAtFd48B3Y47HmGV1R4T43gmascbD1Yw
-         kNOHK096PPfWOVb4Mt7qmUEJBMVOp74O6s5bCX12D/7vyyYa3jonshy9d8e4MKgsvL
-         eCyYGf/9UpT0b3mWTMhdVndOrtBjn69nJTiLhrUWGTiMG+mzrXxOsXEbfBVILvRBG2
-         RjpiyrsqXQag3e2UhfwK/gI3x4DzCuY6WS5xn8zMMX3TMgMkQ1DAVrpCOiahsgPV6J
-         9ojJ+q+/n/ODw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2A6A05C0B86; Mon, 18 Apr 2022 17:07:49 -0700 (PDT)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 6/6] rcutorture: Call preempt_schedule() through static call/key
-Date:   Mon, 18 Apr 2022 17:07:46 -0700
-Message-Id: <20220419000746.3949667-6-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20220419000541.GA3949109@paulmck-ThinkPad-P17-Gen-1>
-References: <20220419000541.GA3949109@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 18 Apr 2022 20:10:59 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855B4140B9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:08:03 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id 79so7782177iou.7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:08:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7tF3c6TuAx2/gqKC2eSazVibSz9h+i31K2V91yIVOmA=;
+        b=fZlC3O4715i80XRaOmWBwU3+x4X86p4smdf/gHbChB8zH9gi0UOXVhriGODXSYRrNy
+         An6/mUOEEeUGymlWSiKIaaKetmXGTL+ZoEVph6wiknRmM48uyJIgSqN8ELf6JcSbRj15
+         tw8AApGeHduo7bjMQsbnr+7Z86oZnEPE6hMAE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7tF3c6TuAx2/gqKC2eSazVibSz9h+i31K2V91yIVOmA=;
+        b=XfCzlU8sIxJzHhxhqJLIL07HTmASzKVS9/bjRruNjwQeJN9g+KEWGpGoro5Gdj7fNO
+         iekOCxd7dBM0Rkrh7qlHZ3AKyM1P0EevNTCFhgGF0hhD/9uFhhGEL67VmxTG17dg7ZdL
+         8mx2T+gqPfYdGBhMzjZUhtXTQvGFIZlTxOofAgJV4vQct4251aWIXDQbsItux9GtbpFg
+         /MooYcdCphF0/0BTQYg7ECE8I+io81UpM4pXkw4jIYiFajemlzR9UwXKRUR3Vbqbh464
+         6kuFIO5jXSmuEMV/tZIPh9RN9zKTrINyS2gKz8ftW/4L46uMHzLrQfMeTn4q8yDBW0tK
+         u5rw==
+X-Gm-Message-State: AOAM532rrseYI6KmClT5fwfTSKDfzDNCQwksysXW3Ffdu011O6ppqMiX
+        FgyEGF+gwfv1jWIy8HOIffnohA==
+X-Google-Smtp-Source: ABdhPJwyLrEjl7dyWyFuPqzKlT6IcLHzzzasodqPCu2EXiRCwSUmvu2eEG3Rvy/FduzgNANfMTozmA==
+X-Received: by 2002:a02:c50b:0:b0:32a:6fd4:65d1 with SMTP id s11-20020a02c50b000000b0032a6fd465d1mr523482jam.88.1650326882950;
+        Mon, 18 Apr 2022 17:08:02 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id c9-20020a92d3c9000000b002ca966b8961sm8005000ilh.26.2022.04.18.17.08.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 17:08:02 -0700 (PDT)
+Subject: Re: [PATCH 5.17 000/219] 5.17.4-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <74014b97-0b5c-1a77-39ac-df097407fe65@linuxfoundation.org>
+Date:   Mon, 18 Apr 2022 18:08:01 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frederic Weisbecker <frederic@kernel.org>
+On 4/18/22 6:09 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.4 release.
+> There are 219 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.4-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-The rcutorture test suite sometimess triggers a random scheduler
-preemption call while simulating a read delay.  Unfortunately, its
-direct call to preempt_schedule() bypasses the static call/key filter
-used by CONFIG_PREEMPT_DYNAMIC.  This breaks the no-preempt assumption
-when the dynamic preemption mode is "none".
+Compiled and booted on my test system. No dmesg regressions.
 
-For example, rcu_blocking_is_gp() is fooled and abbreviates grace periods
-when the CPU runs in no-preempt UP mode.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Fix this by making torture_preempt_schedule() call __preempt_schedule(),
-which uses the static call/key.
-
-Reported-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- include/linux/torture.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/torture.h b/include/linux/torture.h
-index 63fa4196e51c..7038104463e4 100644
---- a/include/linux/torture.h
-+++ b/include/linux/torture.h
-@@ -118,7 +118,7 @@ void _torture_stop_kthread(char *m, struct task_struct **tp);
- 	_torture_stop_kthread("Stopping " #n " task", &(tp))
- 
- #ifdef CONFIG_PREEMPTION
--#define torture_preempt_schedule() preempt_schedule()
-+#define torture_preempt_schedule() __preempt_schedule()
- #else
- #define torture_preempt_schedule()	do { } while (0)
- #endif
--- 
-2.31.1.189.g2e36527f23
+thanks,
+-- Shuah
 

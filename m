@@ -2,96 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDC550796E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 728F9507974
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353732AbiDSSxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 14:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S1355038AbiDSSzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 14:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbiDSSxg (ORCPT
+        with ESMTP id S1347092AbiDSSzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 14:53:36 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BB13D4B4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:50:52 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 11:50:45 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1650394251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z5GW4a8wABiS59/ZTgTPVQRXCf8XswJ73zIFmnBfAHI=;
-        b=mwg+Z8nz95vbDEBX04x0Sh0igz6CXGr3uet+JlRjb3o5as9hAg+g/KqOEucZbMB+ttb8JC
-        2jFNWMEFHQj6UpiSuxEv/j5dKVgkdMbVQUWWejzzIjutqzfNOQoCZK7oTR7xOCx4g2wnJu
-        DyxVCTpkDBrZfj7Ct+fcDgx9g21E/i0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH rfc 0/5] mm: introduce shrinker sysfs interface
-Message-ID: <Yl8EhZIbePmlmJ6D@carbon>
-References: <20220416002756.4087977-1-roman.gushchin@linux.dev>
- <20220419183654.axbxcjehs6fpqg4z@moria.home.lan>
+        Tue, 19 Apr 2022 14:55:03 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9090D3DA59
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:52:19 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id bo5so9195504pfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:52:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NooUuNCkNMvpIoZXYh5tmIEgwsCUJNTDomQ0FyzjCCY=;
+        b=e5tBOqr4lavAAuGYjg9IsQpk5mL/uk7Hdvwg9DtAAbKtZmxEWJgmAQp7FQIqkewjbk
+         4YGEK7NP2wBE01hyYpf1yzb59q/zCTRm5NqBDu7ia28oqZbmNm5BSCnuDm60j0QDysmX
+         NLoyNLkz+clrh32C0DkZmjHlXO4s9ujkPH9I8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NooUuNCkNMvpIoZXYh5tmIEgwsCUJNTDomQ0FyzjCCY=;
+        b=mlRkwvgEB/zIoZbmyPRVeSZLjt0PqIq4pAu20SjkUQ7y4zsewwM5Q1TS1u4kEhCgFD
+         MeTvxU0MkiJQBgnJ4upHC95FkRyu04TEwKTc9QyJbcBdRyUfpvX8SEo/wRJLBhBlKMPK
+         I+/8UdfASL4mO4mA+CRCStuIBZNmBqfVab8jj6b4zpZsu7K66LutqQiZT+QOuX9zU86X
+         rNCdngXPHpdbWln2lvTUhH6ymMDOpjx7sASEA0V6vmONxMIwRaYw9P6J1CBfLNU+Rooi
+         Fwu290wPbQePzZMXvRbZZU6Rs3ezv7yJZ0Exjr2HOlp4yIqy1Jwk7WIa7bcoUhxkfZcF
+         UJoQ==
+X-Gm-Message-State: AOAM530APL6W7yV1m69qyMngF+V8FjQ3smz2bUr0+lO8OS2spmYeTs1q
+        MoKQ/FcUbzc29+QRcPIcEtPKlAmsVWEeJ7krW9cdIg==
+X-Google-Smtp-Source: ABdhPJw9leYYKP26T9hLXHvp/ankYK20nLxEHwwASoB++NOIyzORrRT1SBQhNE7UnLrUPU92v21CkG2tpm8Ax/lQl0k=
+X-Received: by 2002:a63:6e04:0:b0:398:409:2928 with SMTP id
+ j4-20020a636e04000000b0039804092928mr15992700pgc.250.1650394339106; Tue, 19
+ Apr 2022 11:52:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419183654.axbxcjehs6fpqg4z@moria.home.lan>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220419181444.485959-1-sashal@kernel.org> <20220419181444.485959-11-sashal@kernel.org>
+In-Reply-To: <20220419181444.485959-11-sashal@kernel.org>
+From:   Rob Clark <robdclark@chromium.org>
+Date:   Tue, 19 Apr 2022 11:53:23 -0700
+Message-ID: <CAJs_Fx7YVBn7qvaE23ThBOFzozKHBkefdSztfF+xtTw2hhgw2Q@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.4 11/14] drm/msm: Stop using iommu_present()
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 02:36:54PM -0400, Kent Overstreet wrote:
-> On Fri, Apr 15, 2022 at 05:27:51PM -0700, Roman Gushchin wrote:
-> > 7) Don't display cgroups with less than 500 attached objects
-> >   $ echo 500 > count_memcg
-> >   $ cat count_memcg
-> >     53 817
-> >     1868 886
-> >     2396 799
-> >     2462 861
-> > 
-> > 8) Don't display cgroups with less than 500 attached objects (sum over all nodes)
-> >   $ echo "500" > count_memcg_node
-> >   $ cat count_memcg_node
-> >     53 810 7
-> >     1868 886 0
-> >     2396 799 0
-> >     2462 861 0
-> > 
-> > 9) Scan system/root shrinker
-> >   $ cat count
-> >     212
-> >   $ echo 100 > scan
-> >   $ cat scan
-> >     97
-> >   $ cat count
-> >     115
-> 
-> This part seems entirely overengineered though and a really bad idea - can we
-> please _not_ store query state in the kernel? It's not thread safe, and it seems
-> like overengineering before we've done the basics (just getting this stuff in
-> sysfs is a major improvement!).
+You might want to drop this one, it seems to be causing some issues on
+older generations.. I'll be sending another PR shortly with a revert.
 
-Yes, it's not great, but I don't have a better idea yet. How to return the number
-of freed objects? Do you suggest to drop this functionality at all or there are
-other options I'm not seeing?
+https://patchwork.freedesktop.org/patch/482453
 
-Counting again isn't a good option either: new object could have been added to
-the list during the scan.
+BR,
+-R
 
-Thanks!
+On Tue, Apr 19, 2022 at 11:15 AM Sasha Levin <sashal@kernel.org> wrote:
+>
+> From: Robin Murphy <robin.murphy@arm.com>
+>
+> [ Upstream commit e2a88eabb02410267519b838fb9b79f5206769be ]
+>
+> Even if some IOMMU has registered itself on the platform "bus", that
+> doesn't necessarily mean it provides translation for the device we
+> care about. Replace iommu_present() with a more appropriate check.
+>
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> Reviewed-by: Rob Clark <robdclark@gmail.com>
+> Patchwork: https://patchwork.freedesktop.org/patch/480707/
+> Link: https://lore.kernel.org/r/5ab4f4574d7f3e042261da702d493ee40d003356.1649168268.git.robin.murphy@arm.com
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  drivers/gpu/drm/msm/msm_drv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> index 407b51cf6790..7322df9cf673 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.c
+> +++ b/drivers/gpu/drm/msm/msm_drv.c
+> @@ -303,7 +303,7 @@ bool msm_use_mmu(struct drm_device *dev)
+>         struct msm_drm_private *priv = dev->dev_private;
+>
+>         /* a2xx comes with its own MMU */
+> -       return priv->is_a2xx || iommu_present(&platform_bus_type);
+> +       return priv->is_a2xx || device_iommu_mapped(dev->dev);
+>  }
+>
+>  static int msm_init_vram(struct drm_device *dev)
+> --
+> 2.35.1
+>

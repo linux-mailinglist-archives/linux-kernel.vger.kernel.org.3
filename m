@@ -2,198 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317CF506FA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC30506FAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346251AbiDSOEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S1346590AbiDSOFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346063AbiDSOE3 (ORCPT
+        with ESMTP id S1344949AbiDSOF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:04:29 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E083969B;
-        Tue, 19 Apr 2022 07:01:46 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id r8so18201319oib.5;
-        Tue, 19 Apr 2022 07:01:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mt7uVgc54YUjQtx9Wdev1B+Wcl8E6zcRnvUq+Ap7mpU=;
-        b=SjlQ9VQb8gD6Cgv065x1WauoydmJUgJyfsbxAWrnzPwn+bb54wn6Pg8aNIBu+wuX2O
-         keu6XEiPR4tDKLTzifNqAxfBfVAHzMGD6qk8OhcNnU++FLEaVbUb4AsIqJxMKTYq4DrJ
-         1p++ptkstr49xLvioWfBaNJ0CXUzeExtAiKY/tOlwWsP57ibHFkHe85oHp1y9ICDb/YY
-         fRTl+/XVO8AXij7izT5EVsW/KyXYfY5M/PaaNvQaA2Se7ZTvtR9k2aAevNJGpFelQWC0
-         O/MnCX0giMAk4uiBldD5MyM5cn4E0d642+85Gt+puRUgiBSBc5a8Ea2Df/LyoUUr47jh
-         GSKg==
-X-Gm-Message-State: AOAM530CNk4PM8D19Y+W3QO9lBdz5dROJCg2sHzzoyc2meA9wakleVlj
-        jnBIA4Vehd/Gi/Hh4fFSWQ==
-X-Google-Smtp-Source: ABdhPJxpJIUSA95GyW1+vPT0tyqjivGQUiKsHq2oioysIJl2CsAbhyXZBLSNxZvsDwuh2ppF/zi1ig==
-X-Received: by 2002:a05:6808:1911:b0:322:c4ec:85e5 with SMTP id bf17-20020a056808191100b00322c4ec85e5mr932540oib.12.1650376906225;
-        Tue, 19 Apr 2022 07:01:46 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id hc3-20020a056870788300b000e5dfc7d6b9sm2222231oab.14.2022.04.19.07.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 07:01:45 -0700 (PDT)
-Received: (nullmailer pid 2460010 invoked by uid 1000);
-        Tue, 19 Apr 2022 14:01:45 -0000
-Date:   Tue, 19 Apr 2022 09:01:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Lee Jones <lee.jones@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] dt-bindings: mfd: Add bindings for Silicon Mitus
- SM5703 MFD
-Message-ID: <Yl7AyYAwkyO3oDrW@robh.at.kernel.org>
-References: <20220415164356.25165-1-markuss.broks@gmail.com>
- <20220415164356.25165-3-markuss.broks@gmail.com>
+        Tue, 19 Apr 2022 10:05:27 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B60396A2;
+        Tue, 19 Apr 2022 07:02:44 -0700 (PDT)
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23JDODrb032162;
+        Tue, 19 Apr 2022 07:01:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=message-id : date
+ : subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=PPS06212021;
+ bh=jXCFpMh4Gh2YVe5PbI6dIurLDiZEXeJwE3HRp81A8QA=;
+ b=KFJ5tTyNDMun33qlExgBxonV+Ds1jR8H/Hv8rHRPqSTvD1Ll2rCf/EwKVqIEhW3mEm9t
+ RP7Lw+veXRwjIuQdWH+C0gWAJannXQi0kDcxeqdvuYnQOHzW6zFJ47PQ3kkKwR2/xk+D
+ 1dU5TPuuJFFkKqrvy+C+HwkSJaztwP9654loxdKTdJJMSa0aj+KNyicMNTfrwjUk6ivC
+ NPirDrt/TiEnAAdubHfqoX8U8CSoEhFyqWeymEncxr7PWafTRwAYPc4trAeCDB+NyxAK
+ pgbv3g4TtIY9Z5ecag/5Fq28otObiZCkKXCg5RqkES48K7XuvEQxw6I+QWp7RRDFQkbJ 3w== 
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2173.outbound.protection.outlook.com [104.47.73.173])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3ffs3122w4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Apr 2022 07:01:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kW9lbKMcl+ew9NMrZlp/zytyB+fC3yZinAMkhcUB530DcDZKXbedSAbgR8jLBjrPwwyJyzDPqRvvrW8Eu7+0idwYvA256ShSxbkEqDHoneyuyDT3fkGx6UZJ22lsHbPwmtSM4i3nnqPDBJFnnZ1HOTJRY48FYlR6tlY19CMiRyVugDxC88D/eoZ2xA18A7kyibe1UNfY1NxYFWieKXKihwn4i4tHaugADq4h9USq5z7RuW9SKn9bQK6OItV+s6tlzUI56pmdGST6b1jmhR85yt900EHmI2cVzWxTmORM4Qg+AG+ZPWW6QD2RkCA0yLogzXGDb16eSTH7bH7E6/XB3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jXCFpMh4Gh2YVe5PbI6dIurLDiZEXeJwE3HRp81A8QA=;
+ b=nuVa+0bA1Eg4I/e61Q78Pyj8zJfE50GzKlXjniMh7Ylm4rm8G8kDzCuQEnKhHdsW3iE8QJDTU9bvA0JkBR8BjivBmNwrtKZAL71Su0EvF+tOh0Z/DVU6uhGqIhIMkdf0sV094g2vamrvLyAfth/yf5d5MLn2OY7EnVz3dqYn6UsfpZTJcow8U0rQKuyJuwfS0uq5Bd6NOb7g82TR7yIZsjkeO+i7C19uEvwKRqerhz/tcAXyMRg+55zSWS7YROux+sC+u+ploqJPdq27sS/PsYJcYlst6ILoEXsgQ6xg9o1gh9oY/EWNApn91JhOzlT27tYklBc+hhKYeHMYXASdvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from MWHPR11MB1358.namprd11.prod.outlook.com (2603:10b6:300:23::8)
+ by MWHPR11MB2032.namprd11.prod.outlook.com (2603:10b6:300:2b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
+ 2022 14:01:28 +0000
+Received: from MWHPR11MB1358.namprd11.prod.outlook.com
+ ([fe80::1cd4:125:344:9fc]) by MWHPR11MB1358.namprd11.prod.outlook.com
+ ([fe80::1cd4:125:344:9fc%7]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
+ 14:01:28 +0000
+Message-ID: <b328bed3-ebb9-6fba-9585-79946262c40f@windriver.com>
+Date:   Tue, 19 Apr 2022 22:01:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH RFC 2/8] arm64: stacktrace: Add arch_within_stack_frames
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
+        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, benh@kernel.crashing.org, paulus@samba.org,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220418132217.1573072-1-zhe.he@windriver.com>
+ <20220418132217.1573072-3-zhe.he@windriver.com>
+ <202204181457.9DE190CE@keescook>
+From:   He Zhe <zhe.he@windriver.com>
+In-Reply-To: <202204181457.9DE190CE@keescook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SL2P216CA0117.KORP216.PROD.OUTLOOK.COM (2603:1096:101::14)
+ To MWHPR11MB1358.namprd11.prod.outlook.com (2603:10b6:300:23::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415164356.25165-3-markuss.broks@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1f729ecc-0a84-4960-fd7a-08da220d1956
+X-MS-TrafficTypeDiagnostic: MWHPR11MB2032:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR11MB20324F72622BFAF8FFBAA91C8FF29@MWHPR11MB2032.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fkC/4I12arSLfooNxGGC600fzzrBRkKonAA3IUhPImD39Da+cWkOzqQ+WH6beSYAhktA8Q5CyMSVqPxvxIECEe0mqExzLdnqRxMssDWPdSy8FBMpi1oqEwPUFfWDeLYmpHIV9HQoX43pgq4iCbWBf3RQDji2/X16P8o1M28/K0gw8MkecA18f0R6sRcr/VKI5o3Pt9ZDBCnIptaYrno4mFkBIBJkwo2phqTGCiLbOvV1EaKwGhglDsv8Wu6xSFTj4MnfZnvqdhsyCD04YQG+GNN8I3NJ9lUVSJZgpDT26s9ufjWRK2ON6I9pZeB91epPkqVi33aSEl9DYg8UsoJUCtyu0VGsKmBpMbsgryPEfv+C/HJjY3guWINy9FfewcVEUNusCV7xK6ycaddohBV8hK3sfQj92/fzP6cvVi+00t42MCtL90GIsaiLKRJQQKo6Grzz/PEIyrbgKQqZu62vPfS4TDRJNEFT51yp9pMfUvCkL6Z0iBzeLGZCWOp0fRU86Su2gZQq9WudJzUO2qZtuXjkYRQ0hLugEeN5mO4V3dmbwjX7dlsjIUURkWll1iWaI/N8v6wOtzquaZ2c15RzoZsyXWsY2ZU6CilVkL8c+YxFSZw3W0UAoqnsQ+u+2o3TpdSW1DpVI7h/ponC6RXutKEQ2WIDIi6h1IC0TGxiqMML9OP9wZp/rtXYOsfmt+wS0wSSI4ExNKRvNg6041mstvm4ZeChV1hRDjxYXHCzKcot4nfRqYGI/OPBa48bT5Ej
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1358.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(2616005)(8676002)(186003)(38350700002)(4326008)(5660300002)(36756003)(31696002)(508600001)(6666004)(26005)(66946007)(66556008)(66476007)(2906002)(6506007)(6512007)(52116002)(53546011)(83380400001)(86362001)(31686004)(7416002)(8936002)(6916009)(6486002)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OFNDOWp4ekREQ2IyUytTQ25yUU1vaHRLNkxhaWpINjlLSnpBQ1lJNjJHdFBR?=
+ =?utf-8?B?VlJZYTQ4SkUySDdLTWdFVGxRK0w5L1F0a0xsVEhWT0Q0RGVrYWdud3VxS04w?=
+ =?utf-8?B?WFpSNmxhVkRrUndGb1lqREVBRDE4TEV6Z2VwOWhUZmdKYlJ1MjVuVkhGSjZ0?=
+ =?utf-8?B?M1FDeGdMeStKMm5aaktGQTVHRmF2di9VcThyOVc5Y0EvSkdwMjA1ME4xOTJO?=
+ =?utf-8?B?MXYvdWpRTkVhTjkydDE4c21rUEd4NFg3OXZwZG90eWxBRjhKL1IzTENmN2cy?=
+ =?utf-8?B?K2cvZ3dzeTdsYkVZL01TS1BXcjFlUXRabkhOOVdDS0QxNTIydTZUeENzVmhK?=
+ =?utf-8?B?ZmkvY1dBZ1NTUEMxZ1dPNW10bXhXSmxGTFJ4RnhzdkJhaWRsRWw0QWhiVWV4?=
+ =?utf-8?B?dmZOV1FBbXVibW9WbFZBTzVhUGdlRlN4ODhVaVJJd1FEYlQwc1pyNEgrK21o?=
+ =?utf-8?B?L2tJOGs3TlUyeGNubFBRK0xwN01ab1ExOEVWSVNudXdvMWtZNHpPRU9qa256?=
+ =?utf-8?B?ZkcyZ09NNVVZVWx4cEp1ek5WcGo2RlozZHEyOWxOalhWVzBxL2tveUtZbHdP?=
+ =?utf-8?B?ZEg4M242ZkIraWhoQWtFZkwzNDl1eE5kZHNqZWQ2NzFEYkRPRktvWW5QejQ0?=
+ =?utf-8?B?TFA3d2s0NHFJQjJkU0QwYzgzSHRBMDN3eDJMZ3ROcDhncHJOcXdQOEhQYTJ0?=
+ =?utf-8?B?d3ZHV3pMSENNZDJxWkdOcEhBZDdjQkozM0F1MXBPZjNUb0I3OEZDUVVjc0ww?=
+ =?utf-8?B?eEgzMTVFT09vRnRhMFZqTGpiL3UzcEpqUzlKSGxXQThmczNReDdVUm03dmZ2?=
+ =?utf-8?B?bzAvR2h4cHE3dW5uRnBMNjY2ZnRLZW12MFdXUHJSZjR4OGh0azF6M2dRMTVi?=
+ =?utf-8?B?K2FkZEdSZjIxUW5QWDgvTW1KRVZ5c2NDemd0NHZVaTBRVDlHbE5LTHp6R3U2?=
+ =?utf-8?B?UDJoaFpmMEJOb2h2M3MvK0V1d2VPaUIzYU0xNHQ1ck9mV1doTTZZVDRhYVhh?=
+ =?utf-8?B?Z01ySWgrQUhMNVRZQUVhcUZ0ejdSYzZvNHFrbDJUcFVwa1dEZDl0b1lVdXZt?=
+ =?utf-8?B?bnVyV1BVMlZwWWUxZEV5cCtBeURId2tMeTQrdkw3clF1NEVVbXVOQzE1aVkv?=
+ =?utf-8?B?UTNRcnhPcVdMZHhkbkp4UVNFTUlMSHlwWEJ4QXBuNlIrbUVERTJHNDAzeHB3?=
+ =?utf-8?B?dUxnelhHcCtsNzU2S1JGSktLSUQ4UVRRcFpiRnRNcTNKcnlOUVJkODA5YVNi?=
+ =?utf-8?B?eDNtM2dFbXlHOWZkR3Z3VWhXTlFUQ3M0b3JUNVlsdjBOdXBseFZXbjc3cUw4?=
+ =?utf-8?B?QUdzenV6bTlSVHdCRmxXSjdWZ29UK1VOb3pUYTJRcmRGWHc3Mk1EYjFCL3hH?=
+ =?utf-8?B?bzBVbWZORWt4K0xSNlBSdkJFcnBsRjJ5K3BlcUV5WlBtUDdJMXVWSzYwaDYy?=
+ =?utf-8?B?Q0dRVjh2NzdYZ1A1ZVpUVE1pek0zV3Bic1NEV244SHNIditBRE5BaFdxRVBv?=
+ =?utf-8?B?Z0JSaDhORUJBN0NMSXRxMy8zQWZvQ1VLWVZja1QwaHJyZXdWYXdXdjJoZTBZ?=
+ =?utf-8?B?KzVnOGZ1STJLQzRpRG5EMllqTDhUMmo2eVlPVDhwVnR6WExkKzJZR3d3L1VB?=
+ =?utf-8?B?R0NWcHRHWDFKbUF3ZkRnU1J1MEgwL28wNEoyQ1FIcHBsd1NBdlA4LzEvVTdz?=
+ =?utf-8?B?d3p6UFd6QThJcHl1SG9KejFVdWU0c0F5aENsV29XRkpzYm12NTI3MUdZbkRm?=
+ =?utf-8?B?TCtEWmw5eW0xN2crYmFYUEYzRUt2dGk1UFh6U1M2bDY3UkhpQjRRSVEwU3hS?=
+ =?utf-8?B?cEpZaDhNL1BKYjdtTFhRUWF4bnR5Q2dHODdxcXRVYnVYS2huUmhLYXZOREho?=
+ =?utf-8?B?RmNlN2IrSHduc2NUcncyREpycTFHVXJiREJUL2tiNlRsaUVsSHJ4dGU5OC9K?=
+ =?utf-8?B?RVVQYVR4LzRRMVNvcVExRVR2MEo5TzBXQXd5Tk5qeHNrY3BZR2FIZVhHQldq?=
+ =?utf-8?B?ZWdZd0VBeHBoYXdWL0t4OTk5MGRMMXhFWmpVSUJJa1NKR2xFYS9xMGQ1RGx3?=
+ =?utf-8?B?SXg0KzlxSmlCYXVKMTNMSnJSRHdTL1RFRk9oeDhnK0dteU9sdUFFZjh3RFA3?=
+ =?utf-8?B?d0xzM3FPdE42TGJua2taTml2VCtTNElRUlgwa3B0UXVlNnVNTWV6RGpYMFVo?=
+ =?utf-8?B?R2ZwZStXS2YyOXhYQXBFbEJkZEV5aTYyUlFzT2dFeklkTEpBMVZrbTBzemZ6?=
+ =?utf-8?B?Nk42WFN4aTZnbW92S3dyOFVUMHFocUc3Wjg3NmQ5OTd6eEJBdjJQQ24zVjBl?=
+ =?utf-8?B?VXl3aDhaRUJZbEx6eUorSmYrQ0VvOGMrbWdEeUc4clN3dm1wa1NpQT09?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1f729ecc-0a84-4960-fd7a-08da220d1956
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1358.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 14:01:28.4053
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ofdz986LEKxDB5WOOyhz1lzVQF6NK644vtKn+kHO+oVJz1O+tbou2+FlkgtBVKWPdqIeDPkFzHzuyoUZdFUyng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB2032
+X-Proofpoint-ORIG-GUID: XL_uwb1FUFV8AwVJ4nD0WxJv-_Y2mNvz
+X-Proofpoint-GUID: XL_uwb1FUFV8AwVJ4nD0WxJv-_Y2mNvz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-19_05,2022-04-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 mlxscore=0
+ adultscore=0 clxscore=1015 spamscore=0 bulkscore=0 malwarescore=0
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2204190080
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 07:43:53PM +0300, Markuss Broks wrote:
-> This patch adds device-tree bindings for the Silicon Mitus
-> SM5703 MFD.
-> 
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-> ---
->  .../bindings/mfd/siliconmitus,sm5703.yaml     | 95 +++++++++++++++++++
->  1 file changed, 95 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml b/Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-> new file mode 100644
-> index 000000000000..aa676967593d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-> @@ -0,0 +1,95 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/siliconmitus,sm5703.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Silicon Mitus SM5703 multi-function device bindings
-> +
-> +maintainers:
-> +  - Markuss Broks <markuss.broks@gmail.com>
-> +
-> +description: |
-> +  Silicon Mitus SM5703 is a multi-function device, that consists of several
-> +  modules, designed for a mobile phone use. It consists of
-> +  LDO, Buck, USBLDO and VBUS regulators, a flash LED driver, a MUIC unit,
-> +  a fuel gauge and a battery charger circuit. The MUIC and Fuel-Gauge units
-> +  are separate from the main MFD, having their own i2c lines, while the
-> +  LED driver, regulators and charger are sharing the main i2c bus of the MFD.
-> +
-> +properties:
-> +  compatible:
-> +    const: siliconmitus,sm5703-mfd
 
-'-mfd' is redundant. Drop.
 
-> +
-> +  reg:
-> +    description:
-> +      I2C slave address.
-> +    maxItems: 1
-> +
-> +  regulators:
-> +    $ref: ../regulator/siliconmitus,sm5703-regulator.yaml
+On 4/19/22 05:59, Kees Cook wrote:
+> On Mon, Apr 18, 2022 at 09:22:11PM +0800, He Zhe wrote:
+>> This function checks if the given address range crosses frame boundary.
+>> It is based on the existing x86 algorithm, but implemented via stacktrace.
+>> This can be tested by USERCOPY_STACK_FRAME_FROM and
+>> USERCOPY_STACK_FRAME_TO in lkdtm.
+> Hi,
+>
+> Thanks for doing this implementation! One reason usercopy hardening
+> didn't persue doing a "full" stacktrace was because it seemed relatively
+> expensive. Did you do any usercopy-heavily workload testing to see if
+> there was a noticeable performance impact?
+>
+> It would be nice to block the exposure of canaries and PAC bits, though,
+> so I'm not opposed, but I'd like to get a better sense of how "heavy"
+> this might be.
 
-/schemas/regulator/...
+I just did some rough tests:
+hackbench -s 512 -l 200 -g 15 -f 25 -P
+Such line would hit arch_within_stack_frames at least 5000 times in my environment.
+With hardened_usercopy=on, the execution time would be around 2.121 seconds(average for 30 times)
+With hardened_usercopy=off, the execution time would be around 2.011 seconds(average for 30 times)
 
-> +    description:
-> +      List of child nodes that specify the regulators.
-> +
-> +  reset-gpio:
+I'll test the original x86 way for arm64 tomorrow.
 
-'-gpios' is the preferred form even with 1.
+Any other workload needed to be run?
 
-Are the MUIC and Fuel-Gauge units independent from this reset?
+Thanks,
+Zhe
 
-> +    description:
-> +      GPIO which is connected to the MRSTB pin.
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - regulators
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      mfd@49 {
 
-'pmic' is the standard name.
+>
+> Thanks!
+>
+> -Kees
+>
 
-> +        compatible = "siliconmitus,sm5703-mfd";
-> +        reg = <0x49>;
-> +
-> +        reset-gpio = <&msmgpio 24 GPIO_ACTIVE_HIGH>;
-> +        pinctrl-0 = <&mrstb_default>;
-> +
-> +        regulator {
-> +          compatible = "siliconmitus,sm5703-regulator";
-> +
-> +          regulators {
-> +            sm5703_ldo1: ldo1 {
-> +              regulator-min-microvolt = <2800000>;
-> +              regulator-max-microvolt = <2800000>;
-> +            };
-> +
-> +            sm5703_ldo2: ldo2 {
-> +              regulator-min-microvolt = <1500000>;
-> +              regulator-max-microvolt = <3300000>;
-> +            };
-> +
-> +            sm5703_ldo3: ldo3 {
-> +              regulator-min-microvolt = <3300000>;
-> +              regulator-max-microvolt = <3300000>;
-> +            };
-> +
-> +            sm5703_usbldo1: usbldo1 {
-> +              regulator-min-microvolt = <4800000>;
-> +              regulator-max-microvolt = <4800000>;
-> +            };
-> +
-> +            sm5703_usbldo2: usbldo2 {
-> +              regulator-min-microvolt = <4800000>;
-> +              regulator-max-microvolt = <4800000>;
-> +            };
-> +
-> +            sm5703_vbus: vbus {
-> +              regulator-min-microvolt = <5000000>;
-> +              regulator-max-microvolt = <5000000>;
-> +            };
-> +          };
-> +        };
-> +      };
-> +    };
-> +...
-> -- 
-> 2.35.1
-> 
-> 

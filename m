@@ -2,72 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1975A5075DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C515075FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355523AbiDSRF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
+        id S1355639AbiDSRHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355644AbiDSRFK (ORCPT
+        with ESMTP id S1355727AbiDSRGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:05:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 625D446173
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:55:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650387296;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=1xJQ+Ui6UOB2KQXFqRu+TUHNHKwnrgyNZyqA1C89j8Q=;
-        b=DUX2aBJj/MX37j0RMvSNLYJgV2hfyXq9aqe5EKNFNEfQoutWjcx3bc6nQPU2lPVqwfCbrW
-        NRhsiSv5qqOM9JhZzqmHQVtDDO5TXn+d4cVbCSbVYzisykSmoRpcYKYnUbwrkRR9Oo7t75
-        1Z0Tvyn+dy+/do9i4f9Xdrx6EZbl3tQ=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-78-VQWz3EQIN3y9z0wArI8GQQ-1; Tue, 19 Apr 2022 12:54:52 -0400
-X-MC-Unique: VQWz3EQIN3y9z0wArI8GQQ-1
-Received: by mail-qt1-f198.google.com with SMTP id c17-20020ac85a91000000b002f1ff042e0eso3764681qtc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:54:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1xJQ+Ui6UOB2KQXFqRu+TUHNHKwnrgyNZyqA1C89j8Q=;
-        b=fMgFl62snRDDaUq/4eG7OVa6dt9NFe9d1IKmImSlcKOUWVp/NGX5l3HZGzxsVddBhx
-         LLZaCmMAYI8RN9olrAPaG9Q3xFpAJq03QY5rtt1thtP69Pf2zufJAwhjh/2YsVuPj3pd
-         ZworeTM3VIkMQP18GU18lJHQ8/GWVM7MDSgIhiOtEqGx9mqDFFJ3+YH/z9mCy6tOeQHM
-         PX2gBS1nz/zgu0OmilYrDKr/ksUpuKhyZHdqNOaVaVJfyHtz4Tnkoee9ZG8HSpRoqgy1
-         4TFate6w1vabExpeUmd9JTn+6K4mV4W1z/sIo5uKziIQTt6tC06KhuLidV1GjPLUIHJQ
-         gaUw==
-X-Gm-Message-State: AOAM530e03XRqT0ok797+U8Zdcve3mBAaV2TTs7fc4rIW80rRTaVbYxv
-        GXKuTR9KQlBF262lcLMzmNp0rDRfO81GFsUPbFdcjivwWOaCZC6jCP3L/0WFO1HOoZEi8nQm+DA
-        vR43mg/I8NDqtM9PaAtJeqfSl
-X-Received: by 2002:a05:620a:4086:b0:69e:98ce:cb42 with SMTP id f6-20020a05620a408600b0069e98cecb42mr6648614qko.6.1650387291936;
-        Tue, 19 Apr 2022 09:54:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxcY8O5YIPzumo1EajfB09IvC5PzqJVgfp5t3/0OIWU5zpX4IrqZmhRcYic1pp7h7e2/O4l9g==
-X-Received: by 2002:a05:620a:4086:b0:69e:98ce:cb42 with SMTP id f6-20020a05620a408600b0069e98cecb42mr6648606qko.6.1650387291729;
-        Tue, 19 Apr 2022 09:54:51 -0700 (PDT)
-Received: from treble.redhat.com ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id g9-20020ac85d49000000b002f1fbe305e7sm268406qtx.80.2022.04.19.09.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 09:54:51 -0700 (PDT)
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Joe Perches <joe@perches.com>
-Subject: [PATCH v2] MAINTAINERS: Add x86 unwinding entry
-Date:   Tue, 19 Apr 2022 09:54:41 -0700
-Message-Id: <db2b764b735a9481df9f7717a3a1f75ba496fcc1.1650387176.git.jpoimboe@redhat.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 19 Apr 2022 13:06:55 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B94A12AED
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1650387293; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N3keMFx7626/px/N5I87eyXv+dAR6bGNhk8NPvdrTME=;
+        b=Qf+J0eiBHYh8QxF1W/WnuHYdLzVtpgzVnCWC+xqIpQRsAulRAHQWbxTdONnbeGAc5CL8YT
+        Fh7Kbnq1s2IgEjk5Jj1ho3w4Dk3u8x7bnwRNfcoQ//WJ/DBPMUz1zWcRgiMx6ic0afX9Lk
+        2Jzg99jYUGHcLpBMbn0cr8w+qUokBRM=
+Date:   Tue, 19 Apr 2022 17:54:43 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: drm: of: Improve error handling in bridge/panel detection
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Message-Id: <7ZILAR.B5RI26D3L60Y1@crapouillou.net>
+In-Reply-To: <20220407093408.1478769-1-paul.kocialkowski@bootlin.com>
+References: <20220407093408.1478769-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,37 +51,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a new section for x86 unwinder maintenance.
+Hi Paul,
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
----
-v2:
-- tweak the component name
-- fix comma (oops)
+Le jeu., avril 7 2022 at 11:34:08 +0200, Paul Kocialkowski=20
+<paul.kocialkowski@bootlin.com> a =E9crit :
+> With the previous rework of drm_of_find_panel_or_bridge only
+> -EPROBE_DEFER is returned while previous behavior allowed -ENODEV
+> to be returned when the port/endpoint is either missing or=20
+> unavailable.
+>=20
+> Make the default return code of the function -ENODEV to handle this=20
+> and
+> only return -EPROBE_DEFER in find_panel_or_bridge when the of device=20
+> is
+> available but not yet registered. Also return the error code whenever
+> the remote node exists to avoid checking for child nodes.
+>=20
+> Checking child nodes could result in -EPROBE_DEFER returned by
+> find_panel_or_bridge with an unrelated child node that would overwrite
+> a legitimate -ENODEV from find_panel_or_bridge if the remote node from
+> the of graph is unavailable. This happens because find_panel_or_bridge
+> has no way to distinguish between a legitimate panel/bridge node that
+> isn't yet registered and an unrelated node.
+>=20
+> Add comments around to clarify this behavior.
+>=20
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Fixes: 67bae5f28c89 ("drm: of: Properly try all possible cases for=20
+> bridge/panel detection")
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
 
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+This fixes the ingenic-drm driver, which was broken by the commit this=20
+patch addresses.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 40fa1955ca3f..63ace80af8c8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21434,6 +21434,15 @@ F:	arch/x86/include/asm/uv/
- F:	arch/x86/kernel/apic/x2apic_uv_x.c
- F:	arch/x86/platform/uv/
- 
-+X86 STACK UNWINDING
-+M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Peter Zijlstra <peterz@infradead.org>
-+S:	Supported
-+F:	arch/x86/include/asm/unwind*.h
-+F:	arch/x86/kernel/dumpstack.c
-+F:	arch/x86/kernel/stacktrace.c
-+F:	arch/x86/kernel/unwind_*.c
-+
- X86 VDSO
- M:	Andy Lutomirski <luto@kernel.org>
- L:	linux-kernel@vger.kernel.org
--- 
-2.34.1
+So:
+Tested-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
+> ---
+>  drivers/gpu/drm/drm_of.c | 23 ++++++++++++++++++-----
+>  1 file changed, 18 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+> index 8716da6369a6..97ea9d2016ff 100644
+> --- a/drivers/gpu/drm/drm_of.c
+> +++ b/drivers/gpu/drm/drm_of.c
+> @@ -223,6 +223,9 @@ static int find_panel_or_bridge(struct=20
+> device_node *node,
+>  				struct drm_panel **panel,
+>  				struct drm_bridge **bridge)
+>  {
+> +	if (!of_device_is_available(node))
+> +		return -ENODEV;
+> +
+>  	if (panel) {
+>  		*panel =3D of_drm_find_panel(node);
+>  		if (!IS_ERR(*panel))
+> @@ -265,7 +268,7 @@ int drm_of_find_panel_or_bridge(const struct=20
+> device_node *np,
+>  				struct drm_bridge **bridge)
+>  {
+>  	struct device_node *node;
+> -	int ret;
+> +	int ret =3D -ENODEV;
+>=20
+>  	if (!panel && !bridge)
+>  		return -EINVAL;
+> @@ -282,8 +285,12 @@ int drm_of_find_panel_or_bridge(const struct=20
+> device_node *np,
+>  			ret =3D find_panel_or_bridge(node, panel, bridge);
+>  			of_node_put(node);
+>=20
+> -			if (!ret)
+> -				return 0;
+> +			/*
+> +			 * If the graph/remote node is present we consider it
+> +			 * to be the legitimate candidate here and return
+> +			 * whatever code we got from find_panel_or_bridge.
+> +			 */
+> +			return ret;
+>  		}
+>  	}
+>=20
+> @@ -296,12 +303,18 @@ int drm_of_find_panel_or_bridge(const struct=20
+> device_node *np,
+>  		ret =3D find_panel_or_bridge(node, panel, bridge);
+>  		of_node_put(node);
+>=20
+> -		/* Stop at the first found occurrence. */
+> +		/*
+> +		 * Note that an unrelated (available) child node will cause
+> +		 * find_panel_or_bridge to return -EPROBE_DEFER because there
+> +		 * is no way to distinguish the node from a legitimate
+> +		 * panel/bridge that didn't register yet. Keep iterating nodes
+> +		 * and only return on the first found occurrence.
+> +		 */
+>  		if (!ret)
+>  			return 0;
+>  	}
+>=20
+> -	return -EPROBE_DEFER;
+> +	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(drm_of_find_panel_or_bridge);
+
 

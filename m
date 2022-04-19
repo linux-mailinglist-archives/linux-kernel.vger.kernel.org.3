@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6F9507004
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D22507024
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353114AbiDSOVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        id S234124AbiDSOWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353047AbiDSOVp (ORCPT
+        with ESMTP id S1353070AbiDSOVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:21:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BBF643F;
-        Tue, 19 Apr 2022 07:19:02 -0700 (PDT)
+        Tue, 19 Apr 2022 10:21:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4018219009;
+        Tue, 19 Apr 2022 07:19:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5D116164E;
-        Tue, 19 Apr 2022 14:19:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F96DC385AE;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 813EACE1989;
+        Tue, 19 Apr 2022 14:19:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD063C385B0;
         Tue, 19 Apr 2022 14:19:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650377941;
-        bh=ZauIPuTUgV8S8InqPvFEHiaco3Cg3iHJJzYjp1UpXIA=;
+        bh=cRCYV4ONvrk9jWjiM5TimRmrTtxq52HaQNKijwURbC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B5V7sc0X6P9tfK4YAJ9v4QWD1NYregRSRnwOfnF+Uiev1GbHyjuQhe0ygL6hLbY3w
-         biWyTsLx3FNWZD60hmjNO32OFTwyDMMbSGAdWLHwZ3+cEWGFnUXa6D/tudgST3Gi9V
-         mMoNF1yjslKQ28qeyMCveeLlFqlcJDVf11n1q4qjqRK0+20EQLDCWSz5qh8XE3+mBu
-         JsahsXGU1ZePNSnzj1bktIo6r0bBUhVpqoRNm4oaHT88ZcKazJ32tYq4lQoIj1RNQ0
-         daHhoSVgBsJDliUtvcxvVUCHVEZX+/md1RhWVslV4I8c81Ek0Cu+dijZJ5nuJTMTl3
-         paTrRuw2EPkiA==
+        b=cWgIQajo5yyF79fFBaUa7F54iGslTG4Y7ucCi6P3Us+9+pCw/K7ZiXdZ9wAuiNPog
+         nnyC4Ymd+newtwYwajwHHT7IukZ4F3JImCw6Qjm02/Gb5zIGa1YopPZKQcyohmpG4p
+         gaZ6/8y4bIK4DkqSdrzvA8EAGdQ8D+joSrgivAZ9hIcA4nUKU8GXjHSlkAzDwD9qqw
+         RcpfsN1LleUNSkjvXYVvKJFc2tgpHi0iSQRBxmeU9X2WOLDBOYBAv1sfbCUMHVOmXB
+         9P28GjBANBmFrSqHHmug1QiuN/jvzESjhdjK44vD6hPG3WX6sougO4Az26/LbDyh6X
+         fCdCDFC45jxug==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1ngoh1-005MFS-8R; Tue, 19 Apr 2022 15:18:59 +0100
+        id 1ngoh1-005MFS-L0; Tue, 19 Apr 2022 15:18:59 +0100
 From:   Marc Zyngier <maz@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -56,17 +56,18 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, kernel-team@android.com
-Subject: [PATCH v3 03/10] gpio: Add helpers to ease the transition towards immutable irq_chip
-Date:   Tue, 19 Apr 2022 15:18:39 +0100
-Message-Id: <20220419141846.598305-4-maz@kernel.org>
+        linux-arm-msm@vger.kernel.org, kernel-team@android.com,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH v3 04/10] gpio: tegra186: Make the irqchip immutable
+Date:   Tue, 19 Apr 2022 15:18:40 +0100
+Message-Id: <20220419141846.598305-5-maz@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220419141846.598305-1-maz@kernel.org>
 References: <20220419141846.598305-1-maz@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com, joey.gouly@arm.com, jonathanh@nvidia.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, bjorn.andersson@linaro.org, agross@kernel.org, jeffrey.l.hugo@gmail.com, tglx@linutronix.de, Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com, andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com, joey.gouly@arm.com, jonathanh@nvidia.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, bjorn.andersson@linaro.org, agross@kernel.org, jeffrey.l.hugo@gmail.com, tglx@linutronix.de, Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com, andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, kernel-team@android.com, treding@nvidia.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -79,45 +80,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a couple of new helpers to make it slightly simpler to convert
-drivers to immutable irq_chip structures:
+Prevent gpiolib from messing with the irqchip by advertising
+the irq_chip structure as immutable, making it const, and adding
+the various calls that gpiolib relies upon.
 
-- GPIOCHIP_IRQ_RESOURCE_HELPERS populates the irq_chip structure
-  with the resource management callbacks
-
-- gpio_irq_chip_set_chip() populates the gpio_irq_chip.chip
-  structure, avoiding the proliferation of ugly casts
-
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Acked-by: Thierry Reding <treding@nvidia.com>
 Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- include/linux/gpio/driver.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/gpio/gpio-tegra186.c | 32 +++++++++++++++++++++++---------
+ 1 file changed, 23 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index 066bcfdf878d..832990099097 100644
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@ -583,6 +583,18 @@ void gpiochip_enable_irq(struct gpio_chip *gc, unsigned int offset);
- int gpiochip_irq_reqres(struct irq_data *data);
- void gpiochip_irq_relres(struct irq_data *data);
+diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
+index 031fe105b58e..84c4f1e9fb0c 100644
+--- a/drivers/gpio/gpio-tegra186.c
++++ b/drivers/gpio/gpio-tegra186.c
+@@ -80,7 +80,6 @@ struct tegra_gpio_soc {
  
-+/* Paste this in your irq_chip structure  */
-+#define	GPIOCHIP_IRQ_RESOURCE_HELPERS					\
-+		.irq_request_resources  = gpiochip_irq_reqres,		\
-+		.irq_release_resources  = gpiochip_irq_relres
+ struct tegra_gpio {
+ 	struct gpio_chip gpio;
+-	struct irq_chip intc;
+ 	unsigned int num_irq;
+ 	unsigned int *irq;
+ 
+@@ -372,6 +371,8 @@ static void tegra186_irq_mask(struct irq_data *data)
+ 	value = readl(base + TEGRA186_GPIO_ENABLE_CONFIG);
+ 	value &= ~TEGRA186_GPIO_ENABLE_CONFIG_INTERRUPT;
+ 	writel(value, base + TEGRA186_GPIO_ENABLE_CONFIG);
 +
-+static inline void gpio_irq_chip_set_chip(struct gpio_irq_chip *girq,
-+					  const struct irq_chip *chip)
++	gpiochip_disable_irq(&gpio->gpio, data->hwirq);
+ }
+ 
+ static void tegra186_irq_unmask(struct irq_data *data)
+@@ -385,6 +386,8 @@ static void tegra186_irq_unmask(struct irq_data *data)
+ 	if (WARN_ON(base == NULL))
+ 		return;
+ 
++	gpiochip_enable_irq(&gpio->gpio, data->hwirq);
++
+ 	value = readl(base + TEGRA186_GPIO_ENABLE_CONFIG);
+ 	value |= TEGRA186_GPIO_ENABLE_CONFIG_INTERRUPT;
+ 	writel(value, base + TEGRA186_GPIO_ENABLE_CONFIG);
+@@ -456,6 +459,24 @@ static int tegra186_irq_set_wake(struct irq_data *data, unsigned int on)
+ 	return 0;
+ }
+ 
++static void tegra186_irq_print_chip(struct irq_data *data, struct seq_file *p)
 +{
-+	/* Yes, dropping const is ugly, but it isn't like we have a choice */
-+	girq->chip = (struct irq_chip *)chip;
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++
++	seq_printf(p, dev_name(gc->parent));
 +}
 +
- /* Line status inquiry for drivers */
- bool gpiochip_line_is_open_drain(struct gpio_chip *gc, unsigned int offset);
- bool gpiochip_line_is_open_source(struct gpio_chip *gc, unsigned int offset);
++static const struct irq_chip tegra186_gpio_irq_chip = {
++	.irq_ack		= tegra186_irq_ack,
++	.irq_mask		= tegra186_irq_mask,
++	.irq_unmask		= tegra186_irq_unmask,
++	.irq_set_type		= tegra186_irq_set_type,
++	.irq_set_wake		= tegra186_irq_set_wake,
++	.irq_print_chip		= tegra186_irq_print_chip,
++	.flags			= IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
++};
++
+ static void tegra186_gpio_irq(struct irq_desc *desc)
+ {
+ 	struct tegra_gpio *gpio = irq_desc_get_handler_data(desc);
+@@ -760,15 +781,8 @@ static int tegra186_gpio_probe(struct platform_device *pdev)
+ 	gpio->gpio.of_xlate = tegra186_gpio_of_xlate;
+ #endif /* CONFIG_OF_GPIO */
+ 
+-	gpio->intc.name = dev_name(&pdev->dev);
+-	gpio->intc.irq_ack = tegra186_irq_ack;
+-	gpio->intc.irq_mask = tegra186_irq_mask;
+-	gpio->intc.irq_unmask = tegra186_irq_unmask;
+-	gpio->intc.irq_set_type = tegra186_irq_set_type;
+-	gpio->intc.irq_set_wake = tegra186_irq_set_wake;
+-
+ 	irq = &gpio->gpio.irq;
+-	irq->chip = &gpio->intc;
++	gpio_irq_chip_set_chip(irq, &tegra186_gpio_irq_chip);
+ 	irq->fwnode = of_node_to_fwnode(pdev->dev.of_node);
+ 	irq->child_to_parent_hwirq = tegra186_gpio_child_to_parent_hwirq;
+ 	irq->populate_parent_alloc_arg = tegra186_gpio_populate_parent_fwspec;
 -- 
 2.34.1
 

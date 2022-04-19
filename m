@@ -2,183 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955AB507955
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E44507959
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353529AbiDSSpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 14:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S1353776AbiDSSqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 14:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbiDSSpP (ORCPT
+        with ESMTP id S1353671AbiDSSq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 14:45:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E1E37A03;
-        Tue, 19 Apr 2022 11:42:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88A66B81A0A;
-        Tue, 19 Apr 2022 18:42:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40B93C385A5;
-        Tue, 19 Apr 2022 18:42:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650393749;
-        bh=aNoitcKVY+3runARZOKXlbXNRTPUSLUckf8FikGfbmg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i7mqUboZvJQO3DEpHzHUrQS1XU/Xq0/4kVpXYnuX/EY5TEq79O7i3JpbTNV1ank/D
-         3rovYl/JOrQRyL69n00/5WqcUh3N139NbOjfw9Vws7EtwFZbDgwrTGvU7g12xQdW9p
-         LxvxYyiDo1i7sTAkI1G+Hi3Og+ZHF3qXCBODPFufpxUraX0F2M3ibEylB05sF3c3pT
-         IXLgMLDp22fz/AeZ6W3BVY3YB4X5riLJN3ir8YrgRXD6yRtDtFvwS+QvfTKkG+K6K/
-         PF0XoUq4nMBSZz9alDletCJq+qESl0CTcWNQEq9IWjq1c57cap7A7bR/lvO+m4qv/s
-         ASgkvryZLfG/w==
-Date:   Tue, 19 Apr 2022 21:42:17 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "song@kernel.org" <song@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dborkman@redhat.com" <dborkman@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "bp@alien8.de" <bp@alien8.de>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Message-ID: <Yl8CicJGHpTrOK8m@kernel.org>
-References: <20220415164413.2727220-1-song@kernel.org>
- <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
- <YlpPW9SdCbZnLVog@infradead.org>
- <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
- <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
- <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com>
- <Yl04LO/PfB3GocvU@kernel.org>
- <Yl4F4w5NY3v0icfx@bombadil.infradead.org>
- <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
- <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com>
+        Tue, 19 Apr 2022 14:46:27 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE8F3DDF5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:43:43 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 11:43:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1650393821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GFIxKYdHlMseSO1tlyqNC0Z7+2W1DV8pV6RMcsFlSN4=;
+        b=J32CmAVJlieNJwRkipeOQWjw09E4O5dhfP8kD80buHhuD7SiitrR8Jm5naMrbQQDIam+2T
+        eNj2mvjCXN7eg2zF67LuKwz3ReZjWfv38baEg6aS2TZo3McQQ2ymVLj7LutgD14PNTtDlV
+        RqXuecTfdJigZkk2ZgjXT5HvBG6tLqM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [PATCH rfc 0/5] mm: introduce shrinker sysfs interface
+Message-ID: <Yl8C1nDr2jUnFn3V@carbon>
+References: <20220416002756.4087977-1-roman.gushchin@linux.dev>
+ <20220418212709.42f2ba15e00999bb57086b27@linux-foundation.org>
+ <Yl727M1Dxm+vC/R1@carbon>
+ <20220419112549.a42f1d86b025112d3a3aaf8c@linux-foundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220419112549.a42f1d86b025112d3a3aaf8c@linux-foundation.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Apr 19, 2022 at 05:36:45AM +0000, Song Liu wrote:
-> Hi Mike, Luis, and Rick,
+On Tue, Apr 19, 2022 at 11:25:49AM -0700, Andrew Morton wrote:
+> On Tue, 19 Apr 2022 10:52:44 -0700 Roman Gushchin <roman.gushchin@linux.dev> wrote:
 > 
-> Thanks for sharing your work and findings in the space. I didn't 
-> realize we were looking at the same set of problems. 
+> > > Unclear.  At the end of what output?
+> > 
+> > This is how it looks like when the output is too long:
+> > 
+> > [root@eth50-1 sb-btrfs-24]# cat count_memcg
+> > 1 226
+> > 20 96
+> > 53 811
+> > 2429 2
+> > 218 13
+> > 581 29
+> > 911 124
+> > 1010 3
+> > 1043 1
+> > 1076 1
+> > 1241 60
+> > 1274 7
+> > 1307 39
+> > 1340 3
+> > 1406 14
+> > 1439 63
+> > 1472 54
+> > 1505 8
+> > 1538 1
+> > 1571 6
+> > 1604 39
+> > 1637 9
+> > 1670 8
+> > 1703 4
+> > 1736 1094
+> > 1802 2
+> > 1868 2
+> > 1901 52
+> > 1934 592
+> > 1967 32
+> > 			< CUT >
+> > 18797 1
+> > 18830 1
 > 
-> > On Apr 18, 2022, at 6:56 PM, Edgecombe, Rick P <rick.p.edgecombe@intel.com> wrote:
-> > 
-> > On Mon, 2022-04-18 at 17:44 -0700, Luis Chamberlain wrote:
-> >>> There are use-cases that require 4K pages with non-default
-> >>> permissions in
-> >>> the direct map and the pages not necessarily should be executable.
-> >>> There
-> >>> were several suggestions to implement caches of 4K pages backed by
-> >>> 2M
-> >>> pages.
-> >> 
-> >> Even if we just focus on the executable side of the story... there
-> >> may
-> >> be users who can share this too.
-> >> 
-> >> I've gone down memory lane now at least down to year 2005 in kprobes
-> >> to see why the heck module_alloc() was used. At first glance there
-> >> are
-> >> some old comments about being within the 2 GiB text kernel range...
-> >> But
-> >> some old tribal knowledge is still lost. The real hints come from
-> >> kprobe work
-> >> since commit 9ec4b1f356b3 ("[PATCH] kprobes: fix single-step out of
-> >> line
-> >> - take2"), so that the "For the %rip-relative displacement fixups to
-> >> be
-> >> doable"... but this got me wondering, would other users who *do* want
-> >> similar funcionality benefit from a cache. If the space is limited
-> >> then
-> >> using a cache makes sense. Specially if architectures tend to require
-> >> hacks for some of this to all work.
-> > 
-> > Yea, that was my understanding. X86 modules have to be linked within
-> > 2GB of the kernel text, also eBPF x86 JIT generates code that expects
-> > to be within 2GB of the kernel text.
-> > 
-> > 
-> > I think of two types of caches we could have: caches of unmapped pages
-> > on the direct map and caches of virtual memory mappings. Caches of
-> > pages on the direct map reduce breakage of the large pages (and is
-> > somewhat x86 specific problem). Caches of virtual memory mappings
-> > reduce shootdowns, and are also required to share huge pages. I'll plug
-> > my old RFC, where I tried to work towards enabling both:
-> > 
-> > https://lore.kernel.org/lkml/20201120202426.18009-1-rick.p.edgecombe@intel.com/
-> > 
-> > Since then Mike has taken a lot further the direct map cache piece.
-> 
-> These are really interesting work. With this landed, we won't need 
-> the bpf_prog_pack work at all (I think). OTOH, this looks like a 
-> long term project, as some of the work in bpf_prog_pack took quite 
-> some time to discuss/debate, and that was just a subset of the 
-> whole thing. 
+> We do that in-kernel?  Why?  That just makes parsers harder to write?
+> If someone has issues then direct them at /usr/bin/less?
 
-I'd say that bpf_prog_pack was a cure for symptoms and this project tries
-to address more general problem.
-But you are right, it'll take some time and won't land in 5.19.
- 
-> I really like the two types of cache concept. But there are some 
-> details I cannot figure out about them:
-
-After some discussions we decided to try moving the caching of large pages
-to the page allocator and see if the second cache will be needed at all.
-But I've got distracted after posting the RFC and that work didn't have
-real progress since then.
- 
-> 1. Is "caches of unmapped pages on direct map" (cache #1) 
->    sufficient to fix all direct map fragmentation? IIUC, pages in
->    the cache may still be used by other allocation (with some 
->    memory pressure). If the system runs for long enough, there 
->    may be a lot of direct map fragmentation. Is this right?
-
-If the system runs long enough, it may run out of high-order free pages
-regardless of the way the caches are implemented. Then we either fail the
-allocation because it is impossible to refill the cache with large pages or
-fall back to 4k pages and fragment direct map.
-
-I don't see how can we avoid direct map fragmentation entirely and still be
-able to allocate memory for users of set_memory APIs.
-
-> 2. If we have "cache of virtual memory mappings" (cache #2), do we
->    still need cache #1? I know cache #2 alone may waste some 
->    memory, but I still think 2MB within noise for modern systems. 
-
-I presume that by cache #1 you mean the cache in the page allocator. In
-that case cache #2 is probably not needed at all, because the cache at page
-allocator level will be used by vmalloc() and friends to provide what Rick
-called "permissioned allocations".
-
-> Thanks,
-> Song
-
--- 
-Sincerely yours,
-Mike.
+It comes from the sysfs limitation: it expects that the output should fit
+into the PAGE_SIZE. If the number of cgroups (and nodes) is large, it's not
+always possible. In theory something like seq_file API should be used, but
+Idk how hard it's to mix it with the sysfs/debugfs API. I'll try to figure
+this out.

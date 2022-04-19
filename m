@@ -2,139 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3356D5068D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4508F5068DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348766AbiDSKgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 06:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
+        id S1350476AbiDSKkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 06:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238239AbiDSKgc (ORCPT
+        with ESMTP id S238239AbiDSKkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:36:32 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019C829CBE;
-        Tue, 19 Apr 2022 03:33:49 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23J7fDmK031408;
-        Tue, 19 Apr 2022 12:33:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+        Tue, 19 Apr 2022 06:40:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91372B19F;
+        Tue, 19 Apr 2022 03:37:15 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23J9L0pq028174;
+        Tue, 19 Apr 2022 10:37:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=/0f8BK/00om3y8sdVovlGdI6C+1xGoO5boVdTyUCN+I=;
- b=V9/TLbBSjUecSD3V5L03FnZNkfHdQH+bnk3tN/YrY9SKITLEiVEfbZyUUa1hni4mQg4+
- 9uEv7dSUXEuEonS/cWuF6yUC5UYS3KxIlQqDB/JY9Gam6AnDa5yynod06mUz7hzhBppO
- VEKE/x8oxQGSIKmyzqFTsGTuykSgrZNQWPEy5lqAbIc+Euw1QIatOw8AZBkVl/NkBYma
- OmTMoKJlvDRSylbwxG56FbZnJ5tvQlSLnqdiO4mInI1nBy09II8Fn1n1cIEP47Yc2ISG
- 6u46RxBO4SNPf4ckMiDCMH8Ck6Jggrb0P2nfamTzPcM5gOWfCcStwD04cxhwZUbekNOm Zw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fh09rf2qv-1
+ content-type : content-transfer-encoding; s=pp1;
+ bh=yC4FBruC+6vmK802CppACHaf5lBfmmagRdOytRhheOQ=;
+ b=kX5fFS9LM6gl99AwAiFuCnczuIWq16fpxRKaOlSjfp+NI/mhhYZZ+ebFx5NwAxrnHBnn
+ 5xwnj2E/iHCV8p5jmDYPqMjf2dZesBHRuc1IXe7bZynVAWjFvNbZzP1IV2QtA2dJmhDR
+ qHpceCNU00/OO+R/tYjTdnZQYRh0SUyCKMTzWG1APo6vOxY06myW5xipjlewnCj+PNUU
+ D/5hkoCDKDQjmREUO6Z5LwnRpAOBNf62ZcbxWBBi8EN4rUtJe7QljhJ1KHJfcDOEv8Ql
+ ujf46z4vnLM81B5rugkyX6n5XQRztOWknBOUyXppsE7GJm1+U28kzw/nvWZ1sAp2hK53 SQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg79x3u1s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 12:33:35 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EEE34100034;
-        Tue, 19 Apr 2022 12:33:34 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E5FB320B860;
-        Tue, 19 Apr 2022 12:33:34 +0200 (CEST)
-Received: from [10.201.20.168] (10.75.127.51) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 19 Apr
- 2022 12:33:34 +0200
-Message-ID: <1a3bbcf1-bc03-f3e0-a70b-1e7c47d38b59@foss.st.com>
-Date:   Tue, 19 Apr 2022 12:33:34 +0200
+        Tue, 19 Apr 2022 10:37:05 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23JAb4FI026940;
+        Tue, 19 Apr 2022 10:37:04 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg79x3u13-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Apr 2022 10:37:04 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23JAb2Ei032472;
+        Tue, 19 Apr 2022 10:37:02 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ffne8m6g9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Apr 2022 10:37:02 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23JAb0tA33423738
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Apr 2022 10:37:00 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F10EDA4084;
+        Tue, 19 Apr 2022 10:36:59 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 80DC1A4085;
+        Tue, 19 Apr 2022 10:36:59 +0000 (GMT)
+Received: from [9.171.65.20] (unknown [9.171.65.20])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 19 Apr 2022 10:36:59 +0000 (GMT)
+Message-ID: <ed643c3d-6ad0-1b3c-1fe3-9157e7aa5859@linux.ibm.com>
+Date:   Tue, 19 Apr 2022 12:37:12 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 1/3] serial: stm32: remove infinite loop possibility in
- putchar function
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] net/smc: sync err info when TCP connection is refused
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220419085330.1178925-1-valentin.caron@foss.st.com>
- <20220419085330.1178925-2-valentin.caron@foss.st.com>
- <CAMuHMdVCeuC5qStugnssWKUeOVWxd_3XyYtS0mrZpqQVaXAP2w@mail.gmail.com>
-From:   Valentin CARON <valentin.caron@foss.st.com>
-In-Reply-To: <CAMuHMdVCeuC5qStugnssWKUeOVWxd_3XyYtS0mrZpqQVaXAP2w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Tony Lu <tonylu@linux.alibaba.com>, yacanliu@163.com
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liuyacan <liuyacan@corp.netease.com>
+References: <20220417123307.1094747-1-yacanliu@163.com>
+ <Yl6Nnvnrvqv3ofES@TonyMac-Alibaba>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <Yl6Nnvnrvqv3ofES@TonyMac-Alibaba>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9GZAdY8RLP3kRzLJHUpw4rQi3LJ89Rd-
+X-Proofpoint-ORIG-GUID: tTdBiRFx4PYqPSNgyd4cloEcdp8i9IBd
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-19_04,2022-04-15_01,2022-02-23_01
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
+ priorityscore=1501 bulkscore=0 mlxlogscore=999 spamscore=0 phishscore=0
+ adultscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204190058
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/22 10:59, Geert Uytterhoeven wrote:
-> Hi Valentin,
->
-> On Tue, Apr 19, 2022 at 10:54 AM Valentin Caron
-> <valentin.caron@foss.st.com> wrote:
->> Rework stm32_usart_console_putchar() function in order to anticipate
->> the case where the character can never be sent.
+On 19/04/2022 12:23, Tony Lu wrote:
+> On Sun, Apr 17, 2022 at 08:33:07PM +0800, yacanliu@163.com wrote:
+>> From: liuyacan <liuyacan@corp.netease.com>
 >>
->> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
-> Thanks for your patch!
->
->> --- a/drivers/tty/serial/stm32-usart.c
->> +++ b/drivers/tty/serial/stm32-usart.c
->> @@ -1640,10 +1640,16 @@ static void stm32_usart_console_putchar(struct uart_port *port, unsigned char ch
->>   {
->>          struct stm32_port *stm32_port = to_stm32_port(port);
->>          const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
->> +       u32 isr;
->> +       int ret;
+>> In the current implementation, when TCP initiates a connection
+>> to an unavailable [ip,port], ECONNREFUSED will be stored in the
+>> TCP socket, but SMC will not. However, some apps (like curl) use
+>> getsockopt(,,SO_ERROR,,) to get the error information, which makes
+>> them miss the error message and behave strangely.
 >>
->> -       while (!(readl_relaxed(port->membase + ofs->isr) & USART_SR_TXE))
->> -               cpu_relax();
->> -
->> +       ret = readl_relaxed_poll_timeout_atomic(port->membase + ofs->isr, isr,
->> +                                               (isr & USART_SR_TXE), 100,
->> +                                               STM32_USART_TIMEOUT_USEC);
->> +       if (ret != 0) {
->> +               dev_err(port->dev, "Error while sending data in UART TX : %d\n", ret);
-> Does it make sense to print this message, i.e. will the user ever see it?
-> Or is the failure above temporary?
-> I assume that you have seen this trigger?
->
->> +               return;
->> +       }
->>          writel_relaxed(ch, port->membase + ofs->tdr);
->>   }
-> Gr{oetje,eeting}s,
->
->                          Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
-Hi Geert,
+>> Signed-off-by: liuyacan <liuyacan@corp.netease.com>
+> 
+> This fix works for me. I have tested it with curl for unavailable
+> address.
+> 
+> This patch missed net or net-next tag, I think net is preferred.
+> 
+> Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+> 
+> Thank you,
+> Tony Lu
 
-The failure is temporary. It can appears when the uart is too slow to 
-send data.
+Thank you both for the fix and the test!
 
-I never tested the case, but I prefer to show a message to know if the 
-console loses a character.
-
-Thanks,
-Valentin
-
-
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>

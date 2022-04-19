@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0639D5065DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B39D5065E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349363AbiDSHaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S1349315AbiDSHb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241889AbiDSHaC (ORCPT
+        with ESMTP id S236225AbiDSHby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:30:02 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13B3DEDC;
-        Tue, 19 Apr 2022 00:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=max1nfoHANuyh9gL3fVc7pOfnK
-        XANQhXogVRAki2FCZgXupfOQQCObmBs6wnR1pry/Utov/d8C2PsOH6O8BOVINf23HcpDINQgNGoKe
-        1k3XFkJhPZIs+pib0qFZbuSx7Sa/YNTYujUlGwYW4/GnrYphDvbaG3Sa4w+G6lvFzQzFBRzoem1kw
-        H+u+Y5dBbe0mYW8gdmWkgt1rGHafrxC4wo4c7mjXg+2Uvq/zrBymYDwCwq1U7Bp5ELvr9mWEim5Zn
-        yrcKSWkMdRXabGD+Bf5c6+L/IPnMqgi3bvjxmxUh0og7JWpoMSclODM5JozgA4s/najzH5rIp1Z2k
-        EfVDQJMQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ngiGe-001ywc-Eb; Tue, 19 Apr 2022 07:27:20 +0000
-Date:   Tue, 19 Apr 2022 00:27:20 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, djwong@kernel.org,
-        dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
-        jane.chu@oracle.com
-Subject: Re: [PATCH v13 7/7] fsdax: set a CoW flag when associate reflink
- mappings
-Message-ID: <Yl5kWMI81T9SorTL@infradead.org>
-References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
- <20220419045045.1664996-8-ruansy.fnst@fujitsu.com>
+        Tue, 19 Apr 2022 03:31:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA217DEA7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:29:12 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KjFlb2Tw4zfZ1q;
+        Tue, 19 Apr 2022 15:28:27 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 19 Apr 2022 15:29:10 +0800
+Subject: Re: [PATCH v2] mm/swapfile: unuse_pte can map random data if swap
+ read fails
+To:     Alistair Popple <apopple@nvidia.com>
+CC:     <akpm@linux-foundation.org>, <willy@infradead.org>,
+        <vbabka@suse.cz>, <dhowells@redhat.com>, <neilb@suse.de>,
+        <david@redhat.com>, <surenb@google.com>, <minchan@kernel.org>,
+        <peterx@redhat.com>, <sfr@canb.auug.org.au>,
+        <rcampbell@nvidia.com>, <naoya.horiguchi@nec.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220416030549.60559-1-linmiaohe@huawei.com>
+ <87tuapk9n7.fsf@nvdebian.thelocal>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <5a78dd68-343d-ac57-a698-2cfead8ee366@huawei.com>
+Date:   Tue, 19 Apr 2022 15:29:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419045045.1664996-8-ruansy.fnst@fujitsu.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <87tuapk9n7.fsf@nvdebian.thelocal>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,6 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+On 2022/4/19 11:51, Alistair Popple wrote:
+> Miaohe Lin <linmiaohe@huawei.com> writes:
+> 
+>> There is a bug in unuse_pte(): when swap page happens to be unreadable,
+>> page filled with random data is mapped into user address space. In case
+>> of error, a special swap entry indicating swap read fails is set to the
+>> page table. So the swapcache page can be freed and the user won't end up
+>> with a permanently mounted swap because a sector is bad. And if the page
+>> is accessed later, the user process will be killed so that corrupted data
+>> is never consumed. On the other hand, if the page is never accessed, the
+>> user won't even notice it.
+> 
+> Hi Miaohe,
+> > It seems we're not actually using the pfn that gets stored in the special swap
+> entry here. Is my understanding correct? If so I think it would be better to use
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Yes, you're right. The pfn is not used now. What we need here is a special swap entry
+to do the right things. I think we can change to store some debugging information instead
+of pfn if needed in the future.
+
+> the new PTE markers Peter introduced[1] rather than adding another swap entry
+> type.
+
+IIUC, we should not reuse that swap entry here. From definition:
+
+PTE markers
+===========
+...
+PTE marker is a new type of swap entry that is ony applicable to file
+backed memories like shmem and hugetlbfs.  It's used to persist some
+pte-level information even if the original present ptes in pgtable are
+zapped.
+
+It's designed for file backed memories while swapin error entry is for anonymous
+memories. And there has some differences in processing. So it's not a good idea
+to reuse pte markers. Or am I miss something?
+
+> 
+> [1] - <https://lore.kernel.org/linux-mm/20220405014833.14015-1-peterx@redhat.com/>
+
+Many thanks for your comment and suggestion! :)
+
+> 
+...
+

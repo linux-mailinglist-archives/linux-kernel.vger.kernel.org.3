@@ -2,226 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974D1507234
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A923A50722B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354054AbiDSPyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S1354060AbiDSPyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235771AbiDSPyP (ORCPT
+        with ESMTP id S237864AbiDSPyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:54:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA101ADAF;
-        Tue, 19 Apr 2022 08:51:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE22EB81B81;
-        Tue, 19 Apr 2022 15:51:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8408FC385B0;
-        Tue, 19 Apr 2022 15:51:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650383489;
-        bh=O4kGVoQeyYUokLkOOMtZf5WOtbhgJryyxOH96kgYGWg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=klJHKV5I+g2Y1d16IPc8lyj1aPp+9M5Mz4/MZb8GLEi2UzIvqnRpna2bs6GRg/RvB
-         DIRSqYsV/a/EX4sbCleHHU5NWQUqS7OEu3dcDv6n0iWPz7gx2C58sfCyTqB8hstH2T
-         V1v8Ccuy0wGWLTQIjc15N8ITf7AQKRYKDZuKuXkCmU194O32ViY4PClMNKd+yhH8p5
-         HviGRNHbYUXKiGsfzeRocm5BCRBhVIc/95trLdt/hgYu2l41XA2QdYhlMxm45CVsmM
-         Q4wUpVtraPwZ859xkSJkO5Fb5KcPTsgG8jEa0oK/SCJf8npZOsac3S26ihnoj5ohGx
-         Zct9bEjLhlP6A==
-Received: by mail-ed1-f48.google.com with SMTP id t25so21843307edt.9;
-        Tue, 19 Apr 2022 08:51:29 -0700 (PDT)
-X-Gm-Message-State: AOAM530SYMRldg2fvFLiP6Q9T8SSAWnfUUnQVftDDsSs+6oAJDhOEJ0T
-        9kXJSIoIsUFdIDVbyGmyyaNrERauGDhCJhmYMQ==
-X-Google-Smtp-Source: ABdhPJxRQq1KhhEnyhwExUKH5+pHmDmDmtEOzqa8MsO/Bzy4bhTSovBUc9c64I5QmB4PSBJ5skgDN0lf1caFPvqdiLw=
-X-Received: by 2002:a50:d4d9:0:b0:41d:6ee0:80d with SMTP id
- e25-20020a50d4d9000000b0041d6ee0080dmr17812286edj.254.1650383487528; Tue, 19
- Apr 2022 08:51:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220419033237.23405-1-rex-bc.chen@mediatek.com>
- <20220419033237.23405-4-rex-bc.chen@mediatek.com> <74b3f0e3-1d9f-de9e-ccf0-1f2174ba7c25@gmail.com>
-In-Reply-To: <74b3f0e3-1d9f-de9e-ccf0-1f2174ba7c25@gmail.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Tue, 19 Apr 2022 23:51:16 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__u3q1YcNwGpyEUpRbThsg6U1-gYtaqtGgy2J4jMwSOUg@mail.gmail.com>
-Message-ID: <CAAOTY__u3q1YcNwGpyEUpRbThsg6U1-gYtaqtGgy2J4jMwSOUg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] dt-bindings: mediatek: add vdosys1 RDMA definition
- for mt8195
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 19 Apr 2022 11:54:33 -0400
+Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.111.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E27D1DA7C
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:51:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1650383507;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L1izphotFERJwJFnYB6CAB3aiE/a/CarygHRryeTtIQ=;
+        b=VhJc1PsPospENL1cmBXx5uZC43pMiUhkqZSoJMNrseENp3dYnPE5SHP4k44nLqos05TP30
+        X0Cs6SxISAHZ/nHpi39rivNe4WA2xVFJK30tQqT2P66sIndY6KkDthK3XuBZ9YpmyeicMp
+        bKqA0c+Pj8McPOnLrqINz8gvI8eWZAw=
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com
+ (mail-db3eur04lp2050.outbound.protection.outlook.com [104.47.12.50]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-16-mlRJyHBxN5Seahg1TkMd0w-1; Tue, 19 Apr 2022 17:51:45 +0200
+X-MC-Unique: mlRJyHBxN5Seahg1TkMd0w-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VdHOzGGJmZrk2ezQMHpAdOta4iz/YYPEn0zURE5sCBdSyC2F/Rm48NjsZLzxX8nn0SLyJFluv0QIzvL0zzLXsMzNBfKEJspWcl6dewT4f60lbRrBHM84JpqWCcN2w8pzV57iRYpiAzQrvMNb0FLtzvlGAsWI9Q2NAxsObVmB4IDCKPS4EFVd0lw/B+S0e9Otyau7rEYndmUNOGkeWpdwR7ydzdqzHyUplF6SRZD0HZV15GncYTOs0pHkdrWgpse4oPTYM9bw3qUF+LtURcIX3UCQWwnqVjYZ/Cmram/P2dBGwm1coH/pE81++gpU0poXG4pV/M7zT5XHV5MI0HQ47w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/r4oVTSdZGgndO4tf+oD8E3r7K3rsGbzv4JkK240MJs=;
+ b=cPbznRpIiq2Oy2fm/w7qR9407ul88xwR21vJQlkG9zm+wRHxAcchNx6nacWe0fanHfD2tVWtfNG3TFh4eu7f/OvyfykY+n5peZ359WXjfJ+ux5/Uup07AH0nOWNarqXRJsn8CdTEzsPs/9cSzX/aDYH6p4Yr0UObGXoelJDlCCMapLIMI2UdQF8upJS3tT4UBZApmabdDxuKt80hUNW/FxZOM17BEAadGGodCmFxerybkNYJ4riLz3kpEtKIq8vpLE3mGF89x4LSA3GyjArbUKl+XKBI4jeLvqX4LoQhd6BZwEOLIWLrYTM6jHbEyTBb9LkcOb7TGNQ9v5/HDqv6Xg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16) by AM5PR0401MB2659.eurprd04.prod.outlook.com
+ (2603:10a6:203:35::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
+ 2022 15:51:42 +0000
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::8c82:19c5:ce96:491b]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::8c82:19c5:ce96:491b%4]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
+ 15:51:42 +0000
+Message-ID: <8321b2c6-5bdb-2853-6812-50cd4e4d1bc7@suse.com>
+Date:   Tue, 19 Apr 2022 17:51:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 0/2] USB: Quiesce interrupts across pm freeze
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
+CC:     Evan Green <evgreen@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Razvan Heghedus <heghedus.razvan@gmail.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20220418210046.2060937-1-evgreen@chromium.org>
+ <9f2752b5-8717-8ea3-1462-69bcfe42bb0e@suse.com>
+ <Yl7Iz/lGk3fITzMK@rowland.harvard.edu>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <Yl7Iz/lGk3fITzMK@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: AM6P193CA0096.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:209:88::37) To VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8ea8d6b8-ca46-4690-9108-08da221c7f4b
+X-MS-TrafficTypeDiagnostic: AM5PR0401MB2659:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-Microsoft-Antispam-PRVS: <AM5PR0401MB2659481E8F89C91E50A5B641C7F29@AM5PR0401MB2659.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bDeiwGseOMWVUwpgEiekRLGww4MlryZ9FF5VELsui9kwxykEMe3SEpr9gYvP9pv5O67wXiYFDVkqGXLLuK3bKLF10ifSCRyM/QCh9NIkckYtnwN7pxN4ajacds9QmLxYLnMqXmTf71YL4S7wHuiLFdHnjqq29TSQi7WEQKVOoy3dOFM8xGnpsoq/p+6DYu2npfImc4oOQeYZ2eBvb+HRegORHJO/U9usdICqvlbWvKtCNYySReMWmXjPueLgen0b0YoRca4i/LBi9d6PietJ/Dapf092s06EX+uORVpCid6M8X7Mak62QaTaD3yVU26X9TI/ZMZUzWi34DrVLpZBgRmeowPHU7qgQe05i+/pFMBmKW7ZOGUmKuNsREIMBp9QD6Rfs7XP+mBoSVfpRw0J5q8ranSpWO55rmLFhkdjEsqnhrqAxA87j+OYTJ4h4PooHwgCQLjzOmG/veNqq4++xsd4K64H991aDu7NK2aeHPHdbc+/fHCAqMPnXnox5v9SeQRM7y4Z0pZSyrOUFFW8mhgn+Oj5LuCNfkEsAFjXa/EcSqjzFySQxT8DrSHC8MXXiPyBxOHHb4Ps9JNkA4BYIhqVO4923jz1Dx4q6Cspl24w+2cS5rL8gG/XwC1IPsRzWowMnKacKfLa+hXwiKaBoeuGQy+TXWJmQNL6f8dHOfzoWiA147wip8htFHDRWLEw3JsgPsLXxUfspASO1ETtqhpAX6YxHZin+NCogprGV0k=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(36756003)(31686004)(2616005)(6512007)(186003)(5660300002)(6506007)(83380400001)(6666004)(6486002)(2906002)(53546011)(7416002)(508600001)(110136005)(38100700002)(8936002)(86362001)(54906003)(31696002)(316002)(4326008)(66556008)(66946007)(8676002)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ymIS91LMkwtUFtmSHkeRBFq3ZCYEkc+/OekTCUVu93RKtFbwF/tQbkcGj7vU?=
+ =?us-ascii?Q?NTf+It09WyiXdpFDZrPTCehro5Fqw3ryvhuK2MLPvz8IbSueplZ2maJ7AZa5?=
+ =?us-ascii?Q?zZbvys8HUDWPpJxmlGA0ahblO3+CLuDcyCx0jmcWh3IaD8a2OI53vDAxY0ti?=
+ =?us-ascii?Q?3yzhz68vfTG0gN7wmwK2EjiUHSapihdAs0tTM4Sr4RAC9YWYG+24bUgbYUK4?=
+ =?us-ascii?Q?zA5RpKQYXYn4NConoxmxCxfyS1ULGWL/rLoYmhEuigQECcwWC8g6y9aFIrWC?=
+ =?us-ascii?Q?cSLDrHfD17cOL6h+7Cfro6cQHsZS1oisLMbeTIDgTEBZdLDiTMe2uOE/Wql8?=
+ =?us-ascii?Q?Ohy2wjQdnhysz0P97WUV4nhVJKAo43v55xgKGuBKp1IlVSzhzWy+JJPXspQN?=
+ =?us-ascii?Q?eyP/aaVgt6IqilSh1puQv47sXMkwF/D5jzrQWOsFfAseEdBmu0ynQJT3iOhm?=
+ =?us-ascii?Q?0q5RbnoQDFolfisIIuktOmCaHZgR3H0ptFr/qjjsWKssMWUcl1O8ezdy16zM?=
+ =?us-ascii?Q?HrYcNFYJmXAmAB97PLrrF4/vwKmMRg0RzAKSWNJ1v4SbY0sq9g4NKPHHEKjg?=
+ =?us-ascii?Q?vZmjlg2T+I7yAanUo74K02ZfqirwyxMgatH9wJcATAcCaiSLp9wijclTSyiG?=
+ =?us-ascii?Q?YmOIxRgpx+lvR1HnpigAdmfWL3x1jGxREIP5yt2JhkmrJwpf/ONUpPqD/A2Q?=
+ =?us-ascii?Q?as9HaFTLF8DcniMifNkLihAcH/104eNA9ISSgklY3cmY2lNpl6dYXRVZYQuo?=
+ =?us-ascii?Q?dx2uaUsDr3LCxX0z3cBb7zl4yEdlhioEatzRzVqY8N+XQOJVTKCX1UJK/bqL?=
+ =?us-ascii?Q?DmZaKcgPsKZWnZ+md7XyesLlp53sLm+M5Ze9LgYPNcAD8oPqp5rq5o0EMpJ+?=
+ =?us-ascii?Q?fkAKapZxE5IsXQY+YlC/f7f0a24IbJcFUhEQCb3/0gbU+EdMQbt3DuTniTsk?=
+ =?us-ascii?Q?r9Cd0QAFxveCV39iaFbxqW1HaB0pD+JWpcET5kwQV0Y8Zt3v26H7Ysvy7OuO?=
+ =?us-ascii?Q?VzanAXuEtZVsAcQve5cB+XnvNs+C3888CXpPv0kPrTtbFOxFb6hAO0WkO/RB?=
+ =?us-ascii?Q?7qRRwjKnH0cV9sWNk1qXs8/swGY2SGwfY2ZJM9XbbWFwYznqrKgDYxGxjwnk?=
+ =?us-ascii?Q?Sx7iYOrtUFqNUqWv0CEa8SrQmjCiA9UXQ2DEUkez9WYn8P8otTdCgVsD09aG?=
+ =?us-ascii?Q?Bd0ca2YbwsQBwoUHtkAwzWaN4HnMrA6YBZkYDTKeeY+H/aaZEWKTdKg55m4Q?=
+ =?us-ascii?Q?Mq+97hdLsRdAHgo484mXRRI4JlVdwKYPwVR+Lac7PD3PX/NSlDcAY9WkKPZF?=
+ =?us-ascii?Q?4Al2C2hv4LEXCyqDsDqmWbZnF9o+jCaOLH0NLVHPGviwUzqYDyqZAIyTApZO?=
+ =?us-ascii?Q?iGSnQJZvGWPLtrWKVJLpLAFlN/aenuAf0cUWZfrNAGdC0+1MRE1s7dVlwqbp?=
+ =?us-ascii?Q?9PXAGDxUSAabE7EadXsnUGZF6fzSaXTFVNlBz5sZkFiekbURVrBCSlr0+eoA?=
+ =?us-ascii?Q?gV20rvxZDV3UYIlexYZKhkNOl+Pg6B9dUuJsuiDTxcxG20xWfIF+EYkVxoP7?=
+ =?us-ascii?Q?YD5nFk6JVPrcx4fVWUmbyDh+jDHMr7N4Hf/RHtNmrRC4+drWgv+jJKE1/rSg?=
+ =?us-ascii?Q?sGjw8kMtLa2vQVnutcus1KzUjy9uAOeTpWwpMPyl/+2Du9kOMcT7m451RQ/b?=
+ =?us-ascii?Q?4C60u8UsLWe28oS7HlNa6KlDFtpXuFf5B4EmPEpslOUgazznZswCZxAf9bV/?=
+ =?us-ascii?Q?9UnCt4nve9QW8mG/VR8yrRt7c8oP9glmvlz/r6QLSqlkLEDGTHAggprcFwXa?=
+X-MS-Exchange-AntiSpam-MessageData-1: 82/EwXKBhezyig==
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ea8d6b8-ca46-4690-9108-08da221c7f4b
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 15:51:42.0496
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5na8As98xcSlUdb6puuEOp8q+HcgGDEgq4Be7q1hUPIdcur0SVnppCmO90oYehvcTEH5UohQ1xOUa0wO+v/FOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0401MB2659
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthias Brugger <matthias.bgg@gmail.com> =E6=96=BC 2022=E5=B9=B44=E6=9C=88=
-19=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8810:57=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
->
->
-> On 19/04/2022 05:32, Rex-BC Chen wrote:
-> > From: "Nancy.Lin" <nancy.lin@mediatek.com>
-> >
-> > Add vdosys1 RDMA definition.
-> >
-> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> > ---
-> >   .../display/mediatek/mediatek,mdp-rdma.yaml   | 86 ++++++++++++++++++=
-+
-> >   1 file changed, 86 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/display/mediatek=
-/mediatek,mdp-rdma.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/display/mediatek/mediate=
-k,mdp-rdma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediat=
-ek,mdp-rdma.yaml
-> > new file mode 100644
-> > index 000000000000..6ab773569462
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-r=
-dma.yaml
-> > @@ -0,0 +1,86 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mdp-rdma.yaml=
-#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MediaTek MDP RDMA
-> > +
-> > +maintainers:
-> > +  - Matthias Brugger <matthias.bgg@gmail.com>
->
-> I don't think I would be the correct person to maintain this. This should=
- be the
-> person that is maintaining the driver.
 
-Agree. This should be
 
-Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Philipp Zabel <p.zabel@pengutronix.de>
-
-Regards,
-Chun-Kuang.
-
+On 19.04.22 16:35, Alan Stern wrote:
+> On Tue, Apr 19, 2022 at 09:05:53AM +0200, Oliver Neukum wrote:
 >
-> Regards,
-> Matthias
 >
-> > +
-> > +description: |
-> > +  The mediatek MDP RDMA stands for Read Direct Memory Access.
-> > +  It provides real time data to the back-end panel driver, such as DSI=
-,
-> > +  DPI and DP_INTF.
-> > +  It contains one line buffer to store the sufficient pixel data.
-> > +  RDMA device node must be siblings to the central MMSYS_CONFIG node.
-> > +  For a description of the MMSYS_CONFIG binding, see
-> > +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml f=
-or details.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - const: mediatek,mt8195-vdo1-rdma
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  power-domains:
-> > +    description: A phandle and PM domain specifier as defined by bindi=
-ngs of
-> > +      the power controller specified by phandle. See
-> > +      Documentation/devicetree/bindings/power/power-domain.yaml for de=
-tails.
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: RDMA Clock
-> > +
-> > +  iommus:
-> > +    description:
-> > +      This property should point to the respective IOMMU block with ma=
-ster port as argument,
-> > +      see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml =
-for details.
-> > +
-> > +  mediatek,gce-client-reg:
-> > +    description:
-> > +      The register of display function block to be set by gce. There a=
-re 4 arguments,
-> > +      such as gce node, subsys id, offset and register size. The subsy=
-s id that is
-> > +      mapping to the register of display function blocks is defined in=
- the gce header
-> > +      include/include/dt-bindings/gce/<chip>-gce.h of each chips.
-> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - power-domains
-> > +  - clocks
-> > +  - iommus
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/clock/mt8195-clk.h>
-> > +    #include <dt-bindings/power/mt8195-power.h>
-> > +    #include <dt-bindings/gce/mt8195-gce.h>
-> > +    #include <dt-bindings/memory/mt8195-memory-port.h>
-> > +
-> > +    soc {
-> > +        #address-cells =3D <2>;
-> > +        #size-cells =3D <2>;
-> > +
-> > +        vdo1_rdma0: mdp-rdma@1c104000 {
-> > +            compatible =3D "mediatek,mt8195-vdo1-rdma";
-> > +            reg =3D <0 0x1c104000 0 0x1000>;
-> > +            interrupts =3D <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +            clocks =3D <&vdosys1 CLK_VDO1_MDP_RDMA0>;
-> > +            power-domains =3D <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
-> > +            iommus =3D <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
-> > +            mediatek,gce-client-reg =3D <&gce0 SUBSYS_1c10XXXX 0x4000 =
-0x1000>;
-> > +        };
-> > +    };
+> We have a set of quirky devices that need HID_QUIRK_ALWAYS_POLL.
+> They have the nasty firmware bug that, if you suspend them without
+> remote wakeup, they will crash or reset themselves.
+> I am afraid that has an obvious relevance to your cool patches.
+> I am not completely sure how to deal with this. It seems to me that the
+> quirk will need to be shifted from HID to core USB and thaw() needs to
+> be translated into usb_device_reset() + reset_resume() for them,
+> but I am not really sure about the optimal mechanism.
+> We may not need to do anything.  This patch specifically addresses=20
+> hibernation, not system suspend or runtime suspend.  A device crashing=20
+> or resetting during hibernation is not at all unusual; we should be able=
+=20
+> to handle such cases properly.
+>
+> The THAW part of suspend-to-hibernation is used only for writing the=20
+> memory image to permanent storage.  I doubt that a malfunctioning HID=20
+> device would interfere with this process.
+>
+True, if and only if all goes well. At the time thaw() has run writing
+the image to disk can still fail. In that case the devices will still
+be needed.
+
+=C2=A0=C2=A0=C2=A0 Regards
+=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
+

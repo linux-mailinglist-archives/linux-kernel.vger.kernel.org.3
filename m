@@ -2,98 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B4B507585
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2524D507599
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349826AbiDSQuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
+        id S1351629AbiDSQvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235504AbiDSQqW (ORCPT
+        with ESMTP id S1355132AbiDSQqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:46:22 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B9939692;
-        Tue, 19 Apr 2022 09:43:39 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id x17so30408634lfa.10;
-        Tue, 19 Apr 2022 09:43:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gyw0DllU2NEgcTB/Sa92qGNKU8xdBjvfAuK5cohiajI=;
-        b=asRrscuJnEsdZ1tzYA0fN9xCDH2APZtdudLZmkQnLh6p0uiaAxipNglQMl57a4UMxy
-         78eqnW78ESl336vWjH8XLn8Zd43FNXLdVkToS0MiB6cvvCy2PmJYxYWrvV7lMB4CNhXR
-         6Y4WnxmZ0LRShtGTEkrW7DoErjKohz+R86lgBhFL1gi0q1bO0a/MR3mNtUq6EtaTE/i0
-         6ckG3UJ/dn5qBWqHdT98XxrjALJfahY+7izZrCdcWLEW9h2azZq5+m5LqeZqFzxfzu1/
-         F50tp++qazDDdaa4JJjgBBXRVfCClJcgaU6IZpyHKa6Maw20JmgOSW9AwydqsQ8I6qCz
-         gSNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gyw0DllU2NEgcTB/Sa92qGNKU8xdBjvfAuK5cohiajI=;
-        b=F7pbVJLUWUKzEyXLfODi0AwsRXNm1gtoyCrQIwZqWzsgAY/m/YuF4LXNr+Xij8H0VU
-         1S4AEkDdrzk4paUxBQNXoP+ZHJVvQjZvj5GLaIOAncChDLP2iZRWbO5rc2faEjlpndJF
-         NQmjL+Frg3Fb5cu26x9AaN7E1q4reSluxyqEQgdaIKTX/kxguB5xeuh6iAeaC51c8g4I
-         pfVvsGuUwkh4jvufHRMKghuM9JNFNxxThe0g6jFCNvbbdHIIet2688FkBjLrJijg8uD5
-         J8qcpZfObT/497oHpRXPFi+AkCVOw50yADiSx0m82ioJ1h3sx7SVxNlkJ707MH9LLARk
-         9hyA==
-X-Gm-Message-State: AOAM533VByyqEwIdg+34BYm83sqw2puBSdBkiDnRp5X+c0xUIVcE2LfH
-        sL5dXX4LQ9NzpBZBWVUhY1o=
-X-Google-Smtp-Source: ABdhPJw79nRXKU8UnnOwpeWQ6iU3EAQKrdBBD+fWBtL4nWEsSBKj2o68Cnkizg4e+tkZK6f6yIYWwA==
-X-Received: by 2002:ac2:4c4b:0:b0:471:a8e2:198d with SMTP id o11-20020ac24c4b000000b00471a8e2198dmr2671909lfk.121.1650386617950;
-        Tue, 19 Apr 2022 09:43:37 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id s22-20020a197716000000b0046bc65188d6sm1562325lfc.80.2022.04.19.09.43.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 09:43:37 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Tue, 19 Apr 2022 18:43:35 +0200
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rushikesh.s.kadam@intel.com, vineethrp@gmail.com, urezki@gmail.com
-Subject: Re: [PATCH v4] rcu/nocb: Add an option to offload all CPUs on boot
-Message-ID: <Yl7mt2XkHo7obhpz@pc638.lan>
-References: <20220418175403.2553842-1-joel@joelfernandes.org>
+        Tue, 19 Apr 2022 12:46:42 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1445339692
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:43:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AJfejJ1xRbeAbdDxHLT7uHPFlknNYzGKCJWzpyqVuJ0=; b=V0K+okUbjL2FdlW0dNWrPRnG19
+        hbP+LhTEco8cFNLakW0d+otCS5J0XlGHE5ruV1jrSTdyv6IY4ZgJYHOZahr+dREe8uImL7JRQWMq0
+        UY3IbmWubSoUqAMrkHWY+JRecGMLvv0nJpLJ+v/YYW/uFZBTXuY60VYpLzMio0pfvLjxR5rMapwsj
+        DLHaYW4PZasQC7Z+BM34rnhdtL+Y1GsWfq8EwSYq2LJE6pp2smCT799O0Vs2UFogwbo/6DmyUNwSi
+        k6yBGijSkOzC3x8NU1mv9yg2pyOTfrQtLSsTyDG/B0tmZZywr6iZl6mDPqqQGgPQWo6dbMyaPgjKh
+        TVd4LAnw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ngqxD-006s0I-WA; Tue, 19 Apr 2022 16:43:52 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B77DE986195; Tue, 19 Apr 2022 18:43:47 +0200 (CEST)
+Date:   Tue, 19 Apr 2022 18:43:47 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH v2 00/25] objtool: Interface overhaul
+Message-ID: <20220419164347.GX2731@worktop.programming.kicks-ass.net>
+References: <cover.1650300597.git.jpoimboe@redhat.com>
+ <20220419115130.GT2731@worktop.programming.kicks-ass.net>
+ <20220419153622.ydn6uurtaeencmol@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220418175403.2553842-1-joel@joelfernandes.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220419153622.ydn6uurtaeencmol@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 05:54:03PM +0000, Joel Fernandes (Google) wrote:
-> From: Joel Fernandes <joel@joelfernandes.org>
+On Tue, Apr 19, 2022 at 08:36:22AM -0700, Josh Poimboeuf wrote:
+> On Tue, Apr 19, 2022 at 01:51:30PM +0200, Peter Zijlstra wrote:
+> > I've taken the liberty of reordering it slightly:
+> > 
+> >    objtool: Enable unreachable warnings for CLANG LTO
+> >    x86/static_call: Add ANNOTATE_NOENDBR to static call trampoline
+> >    x86/retpoline: Add ANNOTATE_ENDBR for retpolines
+> >    x86/uaccess: Add ENDBR to __put_user_nocheck*()
+> >    x86/xen: Add ANNOTATE_ENDBR to startup_xen()
+> >    objtool: Print data address for "!ENDBR" data warnings
+> >    objtool: Use offstr() to print address of missing ENDBR
+> > 
+> > Go into x86/urgent, and I've added Fixes: tags with various patches from
+> > the IBT series, and then the rest goes into objtool/core.
+> > 
+> > As already indicated, there's going to be a few merge conflicts against
+> > x86/core, but alas. Resolved as per the below.
 > 
-> On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
-> which ends up not offloading any CPU. This patch removes a dependency
-> from the bootloader having to know about RCU and about how to provide
-> the mask.
-> 
-> With the new option enabled, all CPUs will be offloaded on boot unless
-> rcu_nocbs= or rcu_nohz_full= kernel parameters provide a CPU list.
-> 
-> Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
-> ---
-> v4: mostly style related fixes.
-> v3 is back to v1 but with a config option defaulting to 'n'.
-> v2 was forcing the option to override no_cbs=
->
-Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> Thanks!  I guess tip bot is broken?
 
---
-Uladzislau Rezki
+Not pushed out yet, still in queue.git. Hopefully a little later today.

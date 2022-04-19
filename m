@@ -2,340 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773D2507C20
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07381507C25
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355759AbiDSVvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 17:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S1344112AbiDSVxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 17:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358064AbiDSVvX (ORCPT
+        with ESMTP id S233514AbiDSVxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 17:51:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BCBF3FD8F
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:48:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650404918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7BABEWfImdlFz6h6c/n67mZugkGxrntzCJH3oamrW2E=;
-        b=Ai0Kjoeaio+CIPspI8ARsI9MIAmlvr9A5HoCFYqTQVpzPCT2XZuxDGw0rEx8kxQfMmuCB+
-        9TLDxBPJZqq2mVgB9A5HAF34CLyxD1O6mhw3lEyPOBvswOoHrw7lTSjYw5IKp78xinAnIy
-        SRXghHMb7AqkHFi/vlAZKclLqhRKdVI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-48-5XIQTabpMvGNsIPyvRDgeQ-1; Tue, 19 Apr 2022 17:48:37 -0400
-X-MC-Unique: 5XIQTabpMvGNsIPyvRDgeQ-1
-Received: by mail-wm1-f70.google.com with SMTP id n37-20020a05600c502500b0038fdc1394c6so9247387wmr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:48:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7BABEWfImdlFz6h6c/n67mZugkGxrntzCJH3oamrW2E=;
-        b=NZ8Va2l3e0QnIllYXPG43N49R+8nIl/J8QHGYlfYUuRxV+wUBlrzsSVP7RROmpM0+A
-         muOfU+gCz95VtRzxR7BModmH9RcpPxjEpjyRa0d1KFDs/jQWwercSHxvW2BrN8uhsMYj
-         i5on375kIEAU1xIvVkc8Wev0Xi4FhLOaxw3cuvL5Jm0DeCNoqQYjvOkcTwTqXO7ls7mT
-         vDwCXvQ4pAnz6PRG/A/wXE3OZInsZ1dkZlsh2Xzq7fl1oRqeQqhhn8kcMxn+LmaHDkCj
-         6YpU78SsUmBc1zYBE8h5y/c9KH9Xl+PF3G4tuYIUKcJwGG9+YBL8spDikTgOAPH2boFR
-         Be6Q==
-X-Gm-Message-State: AOAM530o9k9dXmb5QsKOGAAVl4n1868sW9JrY7u8zPpKyNSF2gw+fvRU
-        yipQRTmjR3z4HmAdFoT6iRJ9YeEp+ZWAQ8iyWFOqWhUIiwoIIoYgdGipUftCJyfNBrwQ4eNwFRC
-        bn56ZFK7E1brNcej36QfrueAvIj1ECwQHldKMGK4i8dGxQQF1cKiKRSrk4ssJhJOAFen3dppnIu
-        I=
-X-Received: by 2002:a05:6000:1f83:b0:207:a4d8:5173 with SMTP id bw3-20020a0560001f8300b00207a4d85173mr13509744wrb.556.1650404916209;
-        Tue, 19 Apr 2022 14:48:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwF2skj/V3EtDOGqDPbahJ0c56qmLcV68R71JLptBPDt4NcJfm0DW9YIY+OPcNJy8tLV2Jqxw==
-X-Received: by 2002:a05:6000:1f83:b0:207:a4d8:5173 with SMTP id bw3-20020a0560001f8300b00207a4d85173mr13509714wrb.556.1650404915863;
-        Tue, 19 Apr 2022 14:48:35 -0700 (PDT)
-Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id i7-20020a5d5587000000b00207a8cde900sm13333699wrv.19.2022.04.19.14.48.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 14:48:35 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <maxime@cerno.tech>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH v5 5/5] drm/solomon: Add SSD130x OLED displays SPI support
-Date:   Tue, 19 Apr 2022 23:48:23 +0200
-Message-Id: <20220419214824.335075-6-javierm@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220419214824.335075-1-javierm@redhat.com>
-References: <20220419214824.335075-1-javierm@redhat.com>
+        Tue, 19 Apr 2022 17:53:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B5639BA2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:50:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0B11B81A3D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 21:50:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8842EC385B2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 21:50:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650405024;
+        bh=19+C6lovXblzkzesiQNBstoa94kewx17o/4B7AAGQ3A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=N9vV7hIQyo8lzzHx/Up7J4SUised1IeJyLkHOyV+Qm0MrG8AvMoVkUj0cA5zMjfK6
+         5BbHpuyfX08WzvIYkX0cnMGoHWYgzfL2bFhqS19iwGcx9y6WzcK54/pt/UZfJvmrNo
+         yqcDZvmOMa3iAwF0gQd6k4Qn0FrGGIWfRLnh/s7mMQKWLBEW3t7o9jN7M7h8uMf4K3
+         GE1qgyfLzEvUyXIjkrTo6I96DOwYkgMvtpkUOcv4XZAWaojEYZ4XIDqgGd2hdBo/av
+         HgK6aOF79uGNkHIInXG8T6/02VzO3dfwfrzmtAEwbp6GpAYry5o0fAECdPJ9XUELz5
+         LwdToN9o/t8Yg==
+Received: by mail-oo1-f48.google.com with SMTP id f13-20020a4aa68d000000b0033a2c53d0baso1616797oom.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:50:24 -0700 (PDT)
+X-Gm-Message-State: AOAM532GdJheomF3XfRgrJK1LCSGy6Zl/MtczIpOhHtJKukF0JyI1/AK
+        jwpYrKau2i9IZf1+Zjj5h60FxfFYnIbhb51fgnk=
+X-Google-Smtp-Source: ABdhPJzRWwRTImhUHZlzz8/ohm/laqoDuDdJO2L+tATCho4Qe7V4mzxG7+EOW6PAztE6kFuaceKhdkUboY8OfCdbILk=
+X-Received: by 2002:a05:6820:16c:b0:33a:3348:bdbe with SMTP id
+ k12-20020a056820016c00b0033a3348bdbemr4949595ood.98.1650405023571; Tue, 19
+ Apr 2022 14:50:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAMj1kXFjLbtpJLFh-C_k3Ydcg4M7NqrCfOXnBY2iSxusWtBLbA@mail.gmail.com>
+ <YllM24eca/uxf9y7@gondor.apana.org.au> <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
+ <YlvK9iefUECy361O@gondor.apana.org.au> <YlvQTci7RP5evtTy@arm.com>
+ <YlvRbvWSWMTtBJiN@gondor.apana.org.au> <YlvU6ou14okbAbgW@arm.com>
+ <YlvWtc/dJ6luXzZf@gondor.apana.org.au> <YlxAo5BAy+ARlvqj@arm.com>
+ <Yl0jPdfdUkaStDN5@gondor.apana.org.au> <Yl2Vda/8S7qAvMjC@arm.com>
+In-Reply-To: <Yl2Vda/8S7qAvMjC@arm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 19 Apr 2022 23:50:11 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEGdPageO3tb2=eLnGAR9-nZtmTGXcGf5CiTQFC4JiXOg@mail.gmail.com>
+Message-ID: <CAMj1kXEGdPageO3tb2=eLnGAR9-nZtmTGXcGf5CiTQFC4JiXOg@mail.gmail.com>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ssd130x driver only provides the core support for these devices but it
-does not have any bus transport logic. Add a driver to interface over SPI.
+On Mon, 18 Apr 2022 at 18:44, Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Mon, Apr 18, 2022 at 04:37:17PM +0800, Herbert Xu wrote:
+> > On Sun, Apr 17, 2022 at 05:30:27PM +0100, Catalin Marinas wrote:
+> > > Do you mean as per Ard's proposal here:
+> > >
+> > > https://lore.kernel.org/r/CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com
+> > >
+> > > struct crypto_request {
+> > >     union {
+> > >             struct {
+> > >                     ... fields ...
+> > >             };
+> > >             u8 __padding[ARCH_DMA_MINALIGN];
+> > >     };
+> > >     void __ctx[]  __aligned(CRYPTO_MINALIGN);
+> > > };
+> > >
+> > > If CRYPTO_MINALIGN is lowered to, say, 8 (to be the same as lowest
+> > > ARCH_KMALLOC_MINALIGN), the __alignof__(req->__ctx) would be 8.
+> > > Functions like crypto_tfm_ctx_alignment() will return 8 when what you
+> > > need is 128. We can change those functions to return ARCH_DMA_MINALIGN
+> > > instead or always bump cra_alignmask to ARCH_DMA_MINALIGN-1.
+> >
+> > OK, at this point I think we need to let the code do the talking :)
+> >
+> > I've seen Ard's patches already and I think I understand what your
+> > needs are.  So let me whip up some code to show you guys what I
+> > think needs to be done.
+>
+> BTW before you have a go at this, there's also Linus' idea that does not
+> change the crypto code (at least not functionally). Of course, you and
+> Ard can still try to figure out how to reduce the padding but if we go
+> with Linus' idea of a new GFP_NODMA flag, there won't be any changes to
+> the crypto code as long as it doesn't pass such flag. So, the options:
+>
+> 1. Change ARCH_KMALLOC_MINALIGN to 8 (or ARCH_SLAB_MINALIGN if higher)
+>    while keeping ARCH_DMA_MINALIGN to 128. By default kmalloc() will
+>    honour the 128-byte alignment, unless GDP_NODMA is passed. This still
+>    requires changing CRYPTO_MINALIGN to ARCH_DMA_MINALIGN but there is
+>    no functional change, kmalloc() without the new flag will return
+>    CRYPTO_MINALIGN-aligned pointers.
+>
+> 2. Leave ARCH_KMALLOC_MINALIGN as ARCH_DMA_MINALIGN (128) and introduce
+>    a new GFP_PACKED (I think it fits better than 'NODMA') flag that
+>    reduces the minimum kmalloc() below ARCH_KMALLOC_MINALIGN (and
+>    probably at least ARCH_SLAB_MINALIGN). It's equivalent to (1) but
+>    does not touch the crypto code at all.
+>
+> (1) and (2) are the same, just minor naming difference. Happy to go with
+> any of them. They still have the downside that we need to add the new
+> GFP_ flag to those hotspots that allocate small objects (Arnd provided
+> an idea on how to find them with ftrace) but at least we know it won't
+> inadvertently break anything.
+>
 
-There is a difference in the communication protocol when using 4-wire SPI
-instead of I2C. For the latter, a control byte that contains a D/C# field
-has to be sent. This field tells the controller whether the data has to be
-written to the command register or to the graphics display data memory.
+I'm not sure GFP_NODMA adds much here.
 
-But for 4-wire SPI that control byte is not used, instead a real D/C# line
-must be pulled HIGH for commands data and LOW for graphics display data.
+The way I see it, the issue in the crypto code is that we are relying
+on a ARCH_KMALLOC_ALIGN aligned zero length __ctx[] array for three
+different things:
+- ensuring/informing the compiler that top-level request/TFM
+structures are aligned to ARCH_KMALLOC_ALIGN,
+- adding padding to ensure that driver context structures that are
+embedded in those top-level request/TFM structures are sufficiently
+aligned so that any member C types appear at the expected alignment
+(but those structures are not usually defined as being aligned to
+ARCH_KMALLOC_ALIGN)
+- adding padding to ensure that these driver context structures do not
+share cache lines with the preceding top-level struct.
 
-For this reason the standard SPI regmap can't be used and a custom .write
-bus handler is needed.
+One thing to note here is that the padding is only necessary when the
+driver context size > 0, and has nothing to do with the alignment of
+the top-level struct.
 
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Acked-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
+Using a single aligned ctx member was a nice way to accomplish all of
+these when it was introduced, but I think it might be better to get
+rid of it, and move the padding logic to the static inline helpers
+instead.
 
-Changes in v5:
-- Remove cast by just using u8 *reg instead of void *data (Geert Uytterhoeven).
-- Add Geert Uytterhoeven's Reviewed-by tag to patch 5/5.
+So something like
 
-Changes in v4:
-- Use MODULE_IMPORT_NS(DRM_SSD130X) in the ssd130x-spi driver (Andy Shevchenko)
+struct skcipher_request {
+  ...
+} CRYPTO_MINALIGN_ATTR;
 
-Changes in v3:
-- Drop ssd130x_spi_get_dc() helper and open code it (Geert Uytterhoeven)
-- Export variants array and use &info[ID] in device table (Andy Shevchenko)
+which states/ensures the alignment of the struct, and
 
-Changes in v2:
-- Add the same compatible strings than I2C (Geert Uytterhoeven)
+void *skcipher_request_ctx(struct skcipher_request *req) {
+  return (void *)PTR_ALIGN(req + 1, ARCH_DMA_MINALIGN);
+}
 
- drivers/gpu/drm/solomon/Kconfig       |   9 ++
- drivers/gpu/drm/solomon/Makefile      |   1 +
- drivers/gpu/drm/solomon/ssd130x-spi.c | 178 ++++++++++++++++++++++++++
- 3 files changed, 188 insertions(+)
- create mode 100644 drivers/gpu/drm/solomon/ssd130x-spi.c
+to get at the context struct, instead of using a struct field.
 
-diff --git a/drivers/gpu/drm/solomon/Kconfig b/drivers/gpu/drm/solomon/Kconfig
-index 8c0a0c788385..e170716d976b 100644
---- a/drivers/gpu/drm/solomon/Kconfig
-+++ b/drivers/gpu/drm/solomon/Kconfig
-@@ -20,3 +20,12 @@ config DRM_SSD130X_I2C
- 	  I2C bus.
- 
- 	  If M is selected the module will be called ssd130x-i2c.
-+
-+config DRM_SSD130X_SPI
-+	tristate "DRM support for Solomon SSD130X OLED displays (SPI bus)"
-+	depends on DRM_SSD130X && SPI
-+	select REGMAP
-+	help
-+	  Say Y here if the SSD130x OLED display is connected via SPI bus.
-+
-+	  If M is selected the module will be called ssd130x-spi.
-diff --git a/drivers/gpu/drm/solomon/Makefile b/drivers/gpu/drm/solomon/Makefile
-index 4bfc5acb0447..b5fc792257d7 100644
---- a/drivers/gpu/drm/solomon/Makefile
-+++ b/drivers/gpu/drm/solomon/Makefile
-@@ -1,2 +1,3 @@
- obj-$(CONFIG_DRM_SSD130X)	+= ssd130x.o
- obj-$(CONFIG_DRM_SSD130X_I2C)	+= ssd130x-i2c.o
-+obj-$(CONFIG_DRM_SSD130X_SPI)	+= ssd130x-spi.o
-diff --git a/drivers/gpu/drm/solomon/ssd130x-spi.c b/drivers/gpu/drm/solomon/ssd130x-spi.c
-new file mode 100644
-index 000000000000..43722adab1f8
---- /dev/null
-+++ b/drivers/gpu/drm/solomon/ssd130x-spi.c
-@@ -0,0 +1,178 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * DRM driver for Solomon SSD130X OLED displays (SPI bus)
-+ *
-+ * Copyright 2022 Red Hat Inc.
-+ * Authors: Javier Martinez Canillas <javierm@redhat.com>
-+ */
-+#include <linux/spi/spi.h>
-+#include <linux/module.h>
-+
-+#include "ssd130x.h"
-+
-+#define DRIVER_NAME	"ssd130x-spi"
-+#define DRIVER_DESC	"DRM driver for Solomon SSD130X OLED displays (SPI)"
-+
-+struct ssd130x_spi_transport {
-+	struct spi_device *spi;
-+	struct gpio_desc *dc;
-+};
-+
-+static const struct regmap_config ssd130x_spi_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+};
-+
-+/*
-+ * The regmap bus .write handler, it is just a wrapper around spi_write()
-+ * but toggling the Data/Command control pin (D/C#). Since for 4-wire SPI
-+ * a D/C# pin is used, in contrast with I2C where a control byte is sent,
-+ * prior to every data byte, that contains a bit with the D/C# value.
-+ *
-+ * These control bytes are considered registers by the ssd130x core driver
-+ * and can be used by the ssd130x SPI driver to determine if the data sent
-+ * is for a command register or for the Graphic Display Data RAM (GDDRAM).
-+ */
-+static int ssd130x_spi_write(void *context, const void *data, size_t count)
-+{
-+	struct ssd130x_spi_transport *t = context;
-+	struct spi_device *spi = t->spi;
-+	const u8 *reg = data;
-+
-+	if (*reg == SSD130X_COMMAND)
-+		gpiod_set_value_cansleep(t->dc, 0);
-+
-+	if (*reg == SSD130X_DATA)
-+		gpiod_set_value_cansleep(t->dc, 1);
-+
-+	/* Remove control byte since is not used in a 4-wire SPI interface */
-+	return spi_write(spi, reg + 1, count - 1);
-+}
-+
-+/* The ssd130x driver does not read registers but regmap expects a .read */
-+static int ssd130x_spi_read(void *context, const void *reg, size_t reg_size,
-+			    void *val, size_t val_size)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+/*
-+ * A custom bus is needed due the special write that toggles a D/C# pin,
-+ * another option could be to just have a .reg_write() callback but that
-+ * will prevent to do data writes in bulk.
-+ *
-+ * Once the regmap API is extended to support defining a bulk write handler
-+ * in the struct regmap_config, this can be simplified and the bus dropped.
-+ */
-+static struct regmap_bus regmap_ssd130x_spi_bus = {
-+	.write = ssd130x_spi_write,
-+	.read = ssd130x_spi_read,
-+};
-+
-+static int ssd130x_spi_probe(struct spi_device *spi)
-+{
-+	struct ssd130x_spi_transport *t;
-+	struct ssd130x_device *ssd130x;
-+	struct regmap *regmap;
-+	struct gpio_desc *dc;
-+	struct device *dev = &spi->dev;
-+
-+	dc = devm_gpiod_get(dev, "dc", GPIOD_OUT_LOW);
-+	if (IS_ERR(dc))
-+		return dev_err_probe(dev, PTR_ERR(dc),
-+				     "Failed to get dc gpio\n");
-+
-+	t = devm_kzalloc(dev, sizeof(*t), GFP_KERNEL);
-+	if (!t)
-+		return dev_err_probe(dev, -ENOMEM,
-+				     "Failed to allocate SPI transport data\n");
-+
-+	t->spi = spi;
-+	t->dc = dc;
-+
-+	regmap = devm_regmap_init(dev, &regmap_ssd130x_spi_bus, t,
-+				  &ssd130x_spi_regmap_config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	ssd130x = ssd130x_probe(dev, regmap);
-+	if (IS_ERR(ssd130x))
-+		return PTR_ERR(ssd130x);
-+
-+	spi_set_drvdata(spi, ssd130x);
-+
-+	return 0;
-+}
-+
-+static void ssd130x_spi_remove(struct spi_device *spi)
-+{
-+	struct ssd130x_device *ssd130x = spi_get_drvdata(spi);
-+
-+	ssd130x_remove(ssd130x);
-+}
-+
-+static void ssd130x_spi_shutdown(struct spi_device *spi)
-+{
-+	struct ssd130x_device *ssd130x = spi_get_drvdata(spi);
-+
-+	ssd130x_shutdown(ssd130x);
-+}
-+
-+static const struct of_device_id ssd130x_of_match[] = {
-+	{
-+		.compatible = "sinowealth,sh1106",
-+		.data = &ssd130x_variants[SH1106_ID],
-+	},
-+	{
-+		.compatible = "solomon,ssd1305",
-+		.data = &ssd130x_variants[SSD1305_ID],
-+	},
-+	{
-+		.compatible = "solomon,ssd1306",
-+		.data = &ssd130x_variants[SSD1306_ID],
-+	},
-+	{
-+		.compatible = "solomon,ssd1307",
-+		.data = &ssd130x_variants[SSD1307_ID],
-+	},
-+	{
-+		.compatible = "solomon,ssd1309",
-+		.data = &ssd130x_variants[SSD1309_ID],
-+	},
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ssd130x_of_match);
-+
-+/*
-+ * The SPI core always reports a MODALIAS uevent of the form "spi:<dev>", even
-+ * if the device was registered via OF. This means that the module will not be
-+ * auto loaded, unless it contains an alias that matches the MODALIAS reported.
-+ *
-+ * To workaround this issue, add a SPI device ID table. Even when this should
-+ * not be needed for this driver to match the registered SPI devices.
-+ */
-+static const struct spi_device_id ssd130x_spi_table[] = {
-+	{ "sh1106",  SH1106_ID },
-+	{ "ssd1305", SSD1305_ID },
-+	{ "ssd1306", SSD1306_ID },
-+	{ "ssd1307", SSD1307_ID },
-+	{ "ssd1309", SSD1309_ID },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(spi, ssd130x_spi_table);
-+
-+static struct spi_driver ssd130x_spi_driver = {
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.of_match_table = ssd130x_of_match,
-+	},
-+	.probe = ssd130x_spi_probe,
-+	.remove = ssd130x_spi_remove,
-+	.shutdown = ssd130x_spi_shutdown,
-+};
-+module_spi_driver(ssd130x_spi_driver);
-+
-+MODULE_DESCRIPTION(DRIVER_DESC);
-+MODULE_AUTHOR("Javier Martinez Canillas <javierm@redhat.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(DRM_SSD130X);
+Then, we could update skcipher_request_alloc() to only round up
+sizeof(struct skipher_request) to ARCH_DMA_MINALIGN if the reqsize is
+>0 to begin with, and if it is, to also round reqsize up to
+ARCH_DMA_MINALIGN when accessed. That way, we spell out the DMA
+padding requirements with relying on aligned struct members.
+
+If we do it this way, we have a clear distinction between expectations
+about what kmalloc returns in terms of alignment, and adding padding
+to influence the placement of the context struct. It also makes it
+easier to either apply the changes I proposed in the series I sent out
+a couple of weeks ago, or get rid of DMA alignment for request/TFM
+structures altogether, if we manage to identify and fix the drivers
+that are relying on this. In any case, it decouples these two things
+in a way that allows Catalin to make his kmalloc changes without
+having to redefine CRYPTO_MINALIGN to ARCH_DMA_MINALIGN.
+
 -- 
-2.35.1
-
+Ard.

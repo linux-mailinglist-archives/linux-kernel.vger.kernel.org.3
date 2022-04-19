@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F535070A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675A4507090
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353358AbiDSObw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
+        id S1353396AbiDSOcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353322AbiDSObp (ORCPT
+        with ESMTP id S1353325AbiDSObq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:31:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF258329BE
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:29:02 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 14:29:00 -0000
+        Tue, 19 Apr 2022 10:31:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7630DE0CF
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:29:03 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 14:29:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650378541;
+        s=2020; t=1650378542;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jlViW5fBVreJz2N2SEJ9Xl6za33WMKbA0WBc+NQbD/k=;
-        b=Y6mHUkhJ94XwzEevLr2JdGqUkTI2YyyGitV+3SbeJPnTCWWBfKmlbNVKu8Sxxp1ES38Y35
-        Ympn+4HZOSg6OH1Q6TS7+gGGvAEgjXmBKZTQOL5LWlqNYZroRdefnGy+NsbwYoUaahtZCp
-        Ih0LvVMpGaYkFDsjxs6BDH91Zqyt3da1eCn5BNwNB6oS3dSRebANq48Ovf19XOAzMeoRUK
-        TkBt71cNbgjy8JjAXTJ9lteRCuv7PUHXgcM+41m2gIhqWnwWnkKPAJsQ3OZFzg7qQ+CVJa
-        MEWOQMTDeb5rlF0FsZLMBNOakFbaXrUpoU796NhZU7n8hmdMuluyM6MijhdkAQ==
+        bh=dwTssSRZcN+l5J78amCyw5v7vRsMj/YExcd2H+0PI1I=;
+        b=OQTBPLdDhgFI/j8jtPz1A6UTaTyFMKo/sULD03fbFEuPkQf1q2393uTcT63UdjOuDkFqYD
+        51PmjbMPtv8yTaH4qwJB2u/oc5HWLAVESxYNKLbxot/excrvJyee0MlldsOrmjM+W99REg
+        Em9qu3Nrsf/JjViUu0lTQGH5dsYX1bIj/NTZ5+EnRlDcelY/u8Ivuxz6rhcYisEVygRB6I
+        XWF5uCcrwjzbbf6z0KQ/DDfoOJI25jw9JOsm375PN1ROl56zUbDfvYcciVXkZWJ9XPy/Kb
+        lUDduzinNXVby5ITZe/8/Pi0DvyBd9XyBUMDZ737DaxhePM4NVRkhXnfcRgaoA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650378541;
+        s=2020e; t=1650378542;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jlViW5fBVreJz2N2SEJ9Xl6za33WMKbA0WBc+NQbD/k=;
-        b=PPdL4jhnZEa5MZ0zl8gLPItDKPKvxiPnPcM1n3wAUf0Kq+1mvirb5eyq/WRfBBMcYodfKf
-        Y7qMZIwe2s0w0YBw==
+        bh=dwTssSRZcN+l5J78amCyw5v7vRsMj/YExcd2H+0PI1I=;
+        b=qz08UOWTgfBdgtFvpG2n6SsruC67FhqzjfCbcaUSNPIS6KX4IAnB+nZfmcG4je9KHY4QiO
+        LMspPyH8zmfDQ6CA==
 From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] pinctrl: amd: Make the irqchip immutable
+Subject: [irqchip: irq/irqchip-next] pinctrl: msmgpio: Make the irqchip immutable
 Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220419141846.598305-9-maz@kernel.org>
-References: <20220419141846.598305-9-maz@kernel.org>
+In-Reply-To: <20220419141846.598305-8-maz@kernel.org>
+References: <20220419141846.598305-8-maz@kernel.org>
 MIME-Version: 1.0
-Message-ID: <165037854017.4207.13810392986433536494.tip-bot2@tip-bot2>
+Message-ID: <165037854102.4207.4717736702206993862.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,72 +65,142 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     6173e56f76c712aac9d45208ccec7a065382911f
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/6173e56f76c712aac9d45208ccec7a065382911f
+Commit-ID:     14dbe186b9d42cbf662eae5a4da14687edbf0edb
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/14dbe186b9d42cbf662eae5a4da14687edbf0edb
 Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Tue, 19 Apr 2022 15:18:44 +01:00
+AuthorDate:    Tue, 19 Apr 2022 15:18:43 +01:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Tue, 19 Apr 2022 15:22:26 +01:00
 
-pinctrl: amd: Make the irqchip immutable
+pinctrl: msmgpio: Make the irqchip immutable
 
 Prevent gpiolib from messing with the irqchip by advertising
 the irq_chip structure as immutable, making it const, and adding
 the various calls that gpiolib relies upon.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220419141846.598305-9-maz@kernel.org
+Link: https://lore.kernel.org/r/20220419141846.598305-8-maz@kernel.org
 ---
- drivers/pinctrl/pinctrl-amd.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/pinctrl/qcom/pinctrl-msm.c | 53 ++++++++++++++++++-----------
+ 1 file changed, 33 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
-index 1a7d686..0645c2c 100644
---- a/drivers/pinctrl/pinctrl-amd.c
-+++ b/drivers/pinctrl/pinctrl-amd.c
-@@ -387,6 +387,8 @@ static void amd_gpio_irq_enable(struct irq_data *d)
+diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
+index 966ea66..a2abfe9 100644
+--- a/drivers/pinctrl/qcom/pinctrl-msm.c
++++ b/drivers/pinctrl/qcom/pinctrl-msm.c
+@@ -42,7 +42,6 @@
+  * @chip:           gpiochip handle.
+  * @desc:           pin controller descriptor
+  * @restart_nb:     restart notifier block.
+- * @irq_chip:       irq chip information
+  * @irq:            parent irq for the TLMM irq_chip.
+  * @intr_target_use_scm: route irq to application cpu using scm calls
+  * @lock:           Spinlock to protect register resources as well
+@@ -63,7 +62,6 @@ struct msm_pinctrl {
+ 	struct pinctrl_desc desc;
+ 	struct notifier_block restart_nb;
+ 
+-	struct irq_chip irq_chip;
+ 	int irq;
+ 
+ 	bool intr_target_use_scm;
+@@ -868,6 +866,8 @@ static void msm_gpio_irq_enable(struct irq_data *d)
  	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
- 	struct amd_gpio *gpio_dev = gpiochip_get_data(gc);
+ 	struct msm_pinctrl *pctrl = gpiochip_get_data(gc);
  
 +	gpiochip_enable_irq(gc, d->hwirq);
 +
- 	raw_spin_lock_irqsave(&gpio_dev->lock, flags);
- 	pin_reg = readl(gpio_dev->base + (d->hwirq)*4);
- 	pin_reg |= BIT(INTERRUPT_ENABLE_OFF);
-@@ -408,6 +410,8 @@ static void amd_gpio_irq_disable(struct irq_data *d)
- 	pin_reg &= ~BIT(INTERRUPT_MASK_OFF);
- 	writel(pin_reg, gpio_dev->base + (d->hwirq)*4);
- 	raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+ 	if (d->parent_data)
+ 		irq_chip_enable_parent(d);
+ 
+@@ -885,6 +885,8 @@ static void msm_gpio_irq_disable(struct irq_data *d)
+ 
+ 	if (!test_bit(d->hwirq, pctrl->skip_wake_irqs))
+ 		msm_gpio_irq_mask(d);
 +
 +	gpiochip_disable_irq(gc, d->hwirq);
  }
  
- static void amd_gpio_irq_mask(struct irq_data *d)
-@@ -577,7 +581,7 @@ static void amd_irq_ack(struct irq_data *d)
- 	*/
+ /**
+@@ -958,6 +960,14 @@ static void msm_gpio_irq_ack(struct irq_data *d)
+ 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
  }
  
--static struct irq_chip amd_gpio_irqchip = {
-+static const struct irq_chip amd_gpio_irqchip = {
- 	.name         = "amd_gpio",
- 	.irq_ack      = amd_irq_ack,
- 	.irq_enable   = amd_gpio_irq_enable,
-@@ -593,7 +597,8 @@ static struct irq_chip amd_gpio_irqchip = {
- 	 * the wake event. Otherwise the wake event will never clear and
- 	 * prevent the system from suspending.
- 	 */
--	.flags        = IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND,
-+	.flags        = IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND | IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
++static void msm_gpio_irq_eoi(struct irq_data *d)
++{
++	d = d->parent_data;
++
++	if (d)
++		d->chip->irq_eoi(d);
++}
++
+ static bool msm_gpio_needs_dual_edge_parent_workaround(struct irq_data *d,
+ 						       unsigned int type)
+ {
+@@ -1255,6 +1265,26 @@ static bool msm_gpio_needs_valid_mask(struct msm_pinctrl *pctrl)
+ 	return device_property_count_u16(pctrl->dev, "gpios") > 0;
+ }
  
- #define PIN_IRQ_PENDING	(BIT(INTERRUPT_STS_OFF) | BIT(WAKE_STS_OFF))
-@@ -1026,7 +1031,7 @@ static int amd_gpio_probe(struct platform_device *pdev)
- 	amd_gpio_irq_init(gpio_dev);
++static const struct irq_chip msm_gpio_irq_chip = {
++	.name			= "msmgpio",
++	.irq_enable		= msm_gpio_irq_enable,
++	.irq_disable		= msm_gpio_irq_disable,
++	.irq_mask		= msm_gpio_irq_mask,
++	.irq_unmask		= msm_gpio_irq_unmask,
++	.irq_ack		= msm_gpio_irq_ack,
++	.irq_eoi		= msm_gpio_irq_eoi,
++	.irq_set_type		= msm_gpio_irq_set_type,
++	.irq_set_wake		= msm_gpio_irq_set_wake,
++	.irq_request_resources	= msm_gpio_irq_reqres,
++	.irq_release_resources	= msm_gpio_irq_relres,
++	.irq_set_affinity	= msm_gpio_irq_set_affinity,
++	.irq_set_vcpu_affinity	= msm_gpio_irq_set_vcpu_affinity,
++	.flags			= (IRQCHIP_MASK_ON_SUSPEND |
++				   IRQCHIP_SET_TYPE_MASKED |
++				   IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND |
++				   IRQCHIP_IMMUTABLE),
++};
++
+ static int msm_gpio_init(struct msm_pinctrl *pctrl)
+ {
+ 	struct gpio_chip *chip;
+@@ -1276,22 +1306,6 @@ static int msm_gpio_init(struct msm_pinctrl *pctrl)
+ 	if (msm_gpio_needs_valid_mask(pctrl))
+ 		chip->init_valid_mask = msm_gpio_init_valid_mask;
  
- 	girq = &gpio_dev->gc.irq;
--	girq->chip = &amd_gpio_irqchip;
-+	gpio_irq_chip_set_chip(girq, &amd_gpio_irqchip);
- 	/* This will let us handle the parent IRQ in the driver */
- 	girq->parent_handler = NULL;
- 	girq->num_parents = 0;
+-	pctrl->irq_chip.name = "msmgpio";
+-	pctrl->irq_chip.irq_enable = msm_gpio_irq_enable;
+-	pctrl->irq_chip.irq_disable = msm_gpio_irq_disable;
+-	pctrl->irq_chip.irq_mask = msm_gpio_irq_mask;
+-	pctrl->irq_chip.irq_unmask = msm_gpio_irq_unmask;
+-	pctrl->irq_chip.irq_ack = msm_gpio_irq_ack;
+-	pctrl->irq_chip.irq_set_type = msm_gpio_irq_set_type;
+-	pctrl->irq_chip.irq_set_wake = msm_gpio_irq_set_wake;
+-	pctrl->irq_chip.irq_request_resources = msm_gpio_irq_reqres;
+-	pctrl->irq_chip.irq_release_resources = msm_gpio_irq_relres;
+-	pctrl->irq_chip.irq_set_affinity = msm_gpio_irq_set_affinity;
+-	pctrl->irq_chip.irq_set_vcpu_affinity = msm_gpio_irq_set_vcpu_affinity;
+-	pctrl->irq_chip.flags = IRQCHIP_MASK_ON_SUSPEND |
+-				IRQCHIP_SET_TYPE_MASKED |
+-				IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND;
+-
+ 	np = of_parse_phandle(pctrl->dev->of_node, "wakeup-parent", 0);
+ 	if (np) {
+ 		chip->irq.parent_domain = irq_find_matching_host(np,
+@@ -1300,7 +1314,6 @@ static int msm_gpio_init(struct msm_pinctrl *pctrl)
+ 		if (!chip->irq.parent_domain)
+ 			return -EPROBE_DEFER;
+ 		chip->irq.child_to_parent_hwirq = msm_gpio_wakeirq;
+-		pctrl->irq_chip.irq_eoi = irq_chip_eoi_parent;
+ 		/*
+ 		 * Let's skip handling the GPIOs, if the parent irqchip
+ 		 * is handling the direct connect IRQ of the GPIO.
+@@ -1313,7 +1326,7 @@ static int msm_gpio_init(struct msm_pinctrl *pctrl)
+ 	}
+ 
+ 	girq = &chip->irq;
+-	girq->chip = &pctrl->irq_chip;
++	gpio_irq_chip_set_chip(girq, &msm_gpio_irq_chip);
+ 	girq->parent_handler = msm_gpio_irq_handler;
+ 	girq->fwnode = pctrl->dev->fwnode;
+ 	girq->num_parents = 1;

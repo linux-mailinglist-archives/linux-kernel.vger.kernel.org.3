@@ -2,65 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF865063F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51395063FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348663AbiDSFqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 01:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
+        id S1348671AbiDSFqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 01:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232202AbiDSFqW (ORCPT
+        with ESMTP id S1348666AbiDSFqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 01:46:22 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B05E220EB;
-        Mon, 18 Apr 2022 22:43:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650347021; x=1681883021;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wL0mWb5EUPM1GhSsvIU5cWAq5FjA0Desn4tLJo1cmZc=;
-  b=hMHwFy2/CoOiGNeMGnB9gq7Vuv03PXf482rLkOjGSZbgHuqY3UxmpYzv
-   Ietqqrp58MqtYYFqHFZKOODGjeLItAczqrVpFA+hneSYLoKaxQNQwxT7G
-   EZbnOXpdsb5GrcqfaCZeoAVeBr8zJH+zHGIoG2ssiKDN3+60AqovEPOgE
-   Hbu9FTST9x4rBdglDskpJxq2IMRAKnrpsGqe5QM28VytazTLnXzuRLjJ1
-   Ymv2l9zhMgXXPbx8zaWeE7KrxwZa1Si9dqVuUt2HaT4dQbN3KC91npRdY
-   hS2Fh70ZR3neyFCYGMc6Ega1RLWzRU3pZxq7FKmAFTJ5p7S2aKKY7Muoy
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263856482"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="263856482"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 22:42:14 -0700
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="657511655"
-Received: from chferrer-mobl.amr.corp.intel.com (HELO [10.209.37.31]) ([10.209.37.31])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 22:42:12 -0700
-Message-ID: <abfb95df-4f34-1663-42e8-b9d06bab3b58@linux.intel.com>
-Date:   Mon, 18 Apr 2022 22:42:12 -0700
+        Tue, 19 Apr 2022 01:46:42 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BD327CF8;
+        Mon, 18 Apr 2022 22:44:01 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23J345KV020017;
+        Tue, 19 Apr 2022 05:43:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=obwN8oUvupwjyjKY/chlEjlYvImpg6BZ2gGJ3oZ9MwY=;
+ b=dgoPyJFhY+BNKhUlGkVjv4MfPskZ2U8A30ydo4lWJxo12l3hPljZVbMvaC07dE4SesLJ
+ v/D8c5AeoveyZe1hvLn+uJi8sLD9oe1stHeuz8dDcqjZsKp3xCiu4J0UzxRV2ULIok2e
+ sconbOrDN/BBn95u8vqH7OEiRggpRUYeYGtBunj7mJSkHlGn4uAfBikepY6n1nweeArH
+ 3mowyXlb+daSfF6FiUq7gKonObxzFnSAT0miyDxeNLPf2DlnFnaz6gCtGRF0Ye01KWiD
+ 9DwpxK8/wEAlGS1xLZEKKjjcIrAw52GA8+pD2iKqtT4lL6XTfNOeuurgEwnYsnV0nhZz 9w== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7bsx4vn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Apr 2022 05:43:55 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23J5baKD001935;
+        Tue, 19 Apr 2022 05:43:53 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ffn2huquf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Apr 2022 05:43:53 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23J5V55h48300306
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Apr 2022 05:31:05 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C1B252054;
+        Tue, 19 Apr 2022 05:43:50 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id C1CEF52050;
+        Tue, 19 Apr 2022 05:43:49 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+        <linux-s390@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] s390/dasd: Use kzalloc instead of kmalloc/memset
+References: <1650332600-5307-1-git-send-email-baihaowen@meizu.com>
+Date:   Tue, 19 Apr 2022 07:43:49 +0200
+In-Reply-To: <1650332600-5307-1-git-send-email-baihaowen@meizu.com> (Haowen
+        Bai's message of "Tue, 19 Apr 2022 09:43:20 +0800")
+Message-ID: <yt9dilr539wq.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v3 02/21] x86/virt/tdx: Detect TDX private KeyIDs
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
-References: <cover.1649219184.git.kai.huang@intel.com>
- <2fb62e93734163d2f367fd44e3335cd8a2bf2995.1649219184.git.kai.huang@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <2fb62e93734163d2f367fd44e3335cd8a2bf2995.1649219184.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _spaM9_F1r8VDQHNTlX6YYj_oLnddAYl
+X-Proofpoint-GUID: _spaM9_F1r8VDQHNTlX6YYj_oLnddAYl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-19_01,2022-04-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 adultscore=0 malwarescore=0 bulkscore=0 impostorscore=0
+ spamscore=0 mlxscore=0 mlxlogscore=757 phishscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204190030
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,18 +86,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+Haowen Bai <baihaowen@meizu.com> writes:
 
-On 4/5/22 9:49 PM, Kai Huang wrote:
->   	detect_seam(c);
-> +	detect_tdx_keyids(c);
+> Use kzalloc rather than duplicating its implementation, which
+> makes code simple and easy to understand.
+>
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>  drivers/s390/block/dasd_eckd.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/s390/block/dasd_eckd.c b/drivers/s390/block/dasd_eckd.c
+> index 8410a25a65c1..74a035c56c3e 100644
+> --- a/drivers/s390/block/dasd_eckd.c
+> +++ b/drivers/s390/block/dasd_eckd.c
+> @@ -1480,7 +1480,7 @@ static int dasd_eckd_pe_handler(struct dasd_device *device,
+>  {
+>  	struct pe_handler_work_data *data;
+>  
+> -	data = kmalloc(sizeof(*data), GFP_ATOMIC | GFP_DMA);
+> +	data = kzalloc(sizeof(*data), GFP_ATOMIC | GFP_DMA);
+>  	if (!data) {
+>  		if (mutex_trylock(&dasd_pe_handler_mutex)) {
+>  			data = pe_handler_worker;
+> @@ -1489,7 +1489,6 @@ static int dasd_eckd_pe_handler(struct dasd_device *device,
+>  			return -ENOMEM;
+>  		}
+>  	} else {
+> -		memset(data, 0, sizeof(*data));
+>  		data->isglobal = 0;
 
-Do you want to add some return value to detect_seam() and not
-proceed if it fails?
+Maybe also remove the isglobal assigment above, so the whole else block
+could go away?
 
-In case if this function is going to be extended by future
-patch set, maybe do the same for detect_tdx_keyids()?
+>  	}
+>  	INIT_WORK(&data->worker, do_pe_handler_work);
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Thanks,
+Sven

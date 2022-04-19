@@ -2,220 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2E850640A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E451B50640E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348720AbiDSFwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 01:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S234428AbiDSF5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 01:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbiDSFwQ (ORCPT
+        with ESMTP id S233616AbiDSF5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 01:52:16 -0400
-Received: from mail.meizu.com (unknown [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013D127FFF;
-        Mon, 18 Apr 2022 22:49:32 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 19 Apr
- 2022 13:49:34 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 19 Apr
- 2022 13:49:30 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <seakeel@gmail.com>
-CC:     <alexs@kernel.org>, <baihaowen@meizu.com>, <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <siyanteng01@gmail.com>, <siyanteng@loongson.cn>
-Subject: [PATCH V7] docs/zh_CN: sync with original text Documentation/vm/page_owner.rst
-Date:   Tue, 19 Apr 2022 13:49:28 +0800
-Message-ID: <1650347368-17858-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <fc9d5350-c4ef-8687-b041-eafcedf35aa8@gmail.com>
-References: <fc9d5350-c4ef-8687-b041-eafcedf35aa8@gmail.com>
+        Tue, 19 Apr 2022 01:57:06 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8CE2AE15
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 22:54:24 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ec0bb4b715so160967317b3.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 22:54:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QJZmsK4vKYnU0w6RHfAyLK/7+Llp4RiGehU2CWjNg24=;
+        b=MhTzfQVye+t/qRemYQqmjYRJKDjUqBOQvpJ+vm+DynqeTzQtpiuwhW+P5dAAMDerwc
+         yIrlDwUlW/nRDgvYzWIInMqPergHzVYZQdmKnFGJsKI3FAUDP01ZDyxDmzzg9wj9r1F/
+         giJtLil6yYyApXeiobxAlpVxEMxxA39fx3JpvvfvtQwQ5kGu2IP384WS/qM6/jr8qrVT
+         gqHGp2r63JgLmMmbYJJh1dz1wNwD/B5LWtSUMnFFAkUi1ZQUhgD6RlyLkxK5LjAxucMA
+         Af4C3ovEhpBv2ZiAdlqV2IiNw3ABnxuANJ058Lfva9MdbTGXlKhNHKYpIuJQKvjqtLUS
+         7iaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QJZmsK4vKYnU0w6RHfAyLK/7+Llp4RiGehU2CWjNg24=;
+        b=cTcrBnQ/5bBxV4jjn0vATcYppEqOsih7ZGkLpEwpsDJn7bIvtJUsi4507vPY5E5ksj
+         OYnkNuDcBuJOTVy8mOLFk52jZFmFFAfXyXobk28mUNCNdlN3tM+YTe04PqwzMDwpcqGo
+         FrE5ye1+FO4RGyTgSPeUKr+6Ap4uy8wMLZu5YOXcAOratEwxQG8rFuIegJCfRO1Rt0Fk
+         i7t7aWoieI0PptzdywZeenkjMBqppRnGjNqmNsEIXlV4MBBfO6trdHHUtc/5QhP0YBfC
+         OToMKlDCeVso/zU2Pdeqcm5nDbZrbktV4C4WrPs1do01EaKOeoXAEsksuiVirDSClpnz
+         rr+A==
+X-Gm-Message-State: AOAM5325ZdjzjE1SyQBECh1mNemAuaXxDRzaN7VEbc8FFYs9YguE+OlI
+        umDAeRTlriGr9VEFAX22Hn6ZsuU29UMXZ4+qLYi68A==
+X-Google-Smtp-Source: ABdhPJy4PYoWE5mXWwVzU7jxjccKuw/CPG7c2pCjoZKungtIdrvFAnfLBLVdpY0XGt6ytjqagPbRK37uqQJhRkCjzYk=
+X-Received: by 2002:a0d:ffc3:0:b0:2eb:2327:3361 with SMTP id
+ p186-20020a0dffc3000000b002eb23273361mr13779938ywf.36.1650347663981; Mon, 18
+ Apr 2022 22:54:23 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 19 Apr 2022 11:24:12 +0530
+Message-ID: <CA+G9fYt2yK_jPhhWVqj74SrwaJ+DQeW3adeoUAkuBw9M+7TtgQ@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/105] 5.10.112-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the tools/vm/page_owner_sort added some feature and original text
-updated, sync the translation of zh_CN as below.
+On Mon, 18 Apr 2022 at 18:06, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.112 release.
+> There are 105 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.112-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-BTW, the original text table which is made of tab will display all
-by one line. so we make a  standard table for STANDARD FORMAT SPECIFIERS
-description.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Commit 8bd16bc0a081 ("tools/vm/page_owner_sort.c: support sorting blocks
-by multiple keys") add sorting blocks by multiple keys usage
-description.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Commit 78a0b94f3829 ("tools/vm/page_owner_sort.c: support for multi-value
-selection in single argument") add multi-value selection in single
-argument usage description.
+## Build
+* kernel: 5.10.112-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: d5c581fe77b5122ed284c7739724414ca5059b0e
+* git describe: v5.10.111-106-gd5c581fe77b5
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.111-106-gd5c581fe77b5
 
-Commit c89b3ad2dea2 ("doc/vm/page_owner.rst: remove content related to -c
-option") remove  -c option usage description.
+## Test Regressions (compared to v5.10.110-171-g6c8e5cb264df)
+No test regressions found.
 
-Commit 9c8a0a8e599f ("tools/vm/page_owner_sort.c: support for user-defined
-culling rules") add user-defined culling rules usage description.
+## Metric Regressions (compared to v5.10.110-171-g6c8e5cb264df)
+No metric regressions found.
 
-Commit 8ea8613a616a ("tools/vm/page_owner_sort.c: support for selecting by
-PID, TGID or task command name") add selecting by PID, TGID or task
-command name usage description.
+## Test Fixes (compared to v5.10.110-171-g6c8e5cb264df)
+No metric fixes found.
 
-Commit 194d52d771b8 ("tools/vm/page_owner_sort: support for sorting by
-task command name") add sorting by task command name usage description.
+## Metric Fixes (compared to v5.10.110-171-g6c8e5cb264df)
+No metric fixes found.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
-V1->V2: fix whitespace warning.
-V2->V3: fix some tab Alignment issue.
-V3->V4: fix sphinx warning
-V4->V5: fix whitespace warning; add fix tags.
-V5->V6: fix refer tags format.
-V6->V7: combine these 2 patches as a patchset.
+## Test result summary
+total: 95928, pass: 81529, fail: 646, skip: 13045, xfail: 708
 
- Documentation/translations/zh_CN/vm/page_owner.rst | 61 +++++++++++++++++++++-
- Documentation/vm/page_owner.rst                    | 35 ++++++++-----
- 2 files changed, 81 insertions(+), 15 deletions(-)
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 296 total, 296 passed, 0 failed
+* arm64: 47 total, 47 passed, 0 failed
+* i386: 44 total, 41 passed, 3 failed
+* mips: 41 total, 38 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 53 passed, 12 failed
+* riscv: 32 total, 29 passed, 3 failed
+* s390: 26 total, 26 passed, 0 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 47 total, 47 passed, 0 failed
 
-diff --git a/Documentation/translations/zh_CN/vm/page_owner.rst b/Documentation/translations/zh_CN/vm/page_owner.rst
-index 9e951fabba9d..c692e81c724e 100644
---- a/Documentation/translations/zh_CN/vm/page_owner.rst
-+++ b/Documentation/translations/zh_CN/vm/page_owner.rst
-@@ -103,14 +103,73 @@ page owner在默认情况下是禁用的。所以，如果你想使用它，你
- 		-m		按总内存排序
- 		-p		按pid排序。
- 		-P		按tgid排序。
-+		-n		按任务名称排序。
- 		-r		按内存释放时间排序。
- 		-s		按堆栈跟踪排序。
- 		-t		按时间排序（默认）。
-+		--sort <order>	指定排序顺序。排序语法是 [+|-]key[,[+|-]key[,...]]. 从
-+						**标准格式说明符** 部分选择一个键。"+" 是可选的，因为默认方向是增加数字或字典顺序。
-+						允许混合使用缩写键和全称键。
-+
-+		Examples:
-+				./page_owner_sort <input> <output> --sort=n,+pid,-tgid
-+				./page_owner_sort <input> <output> --sort=at
- 
-    其它函数:
- 
- 	Cull:
--		-c		通过比较堆栈跟踪而不是总块来进行剔除。
-+		--cull <rules>
-+				指定筛选规则。筛选语法是 key[,key[,...]]。在**标准格式说明符**部分选择一个多字母键
-+
-+		<rules> 是逗号分隔列表形式的单个参数，它提供了一种指定单个筛选规则的方法。下面的**标准格式说明
-+				符**部分描述了可识别的关键字。<rules> 可以由键 k1,k2, ... 顺序指定，如下面的
-+				STANDARD SORT KEYS 部分所述。允许混合使用缩写形式和完整形式的键。
- 
-+		Examples:
-+				./page_owner_sort <input> <output> --cull=stacktrace
-+				./page_owner_sort <input> <output> --cull=st,pid,name
-+				./page_owner_sort <input> <output> --cull=n,f
- 	Filter:
- 		-f		过滤掉内存已被释放的块的信息。
-+
-+	Select:
-+		--pid <pidlist>		通过 pid 进行选择。这将选择进程 ID 号出现在 <pidlist> 中的块。
-+		--tgid <tgidlist>	通过 tgid 进行选择。这将选择线程组 ID 号出现在 <tgidlist> 中的块。
-+		--name <cmdlist>	按任务名称选择。这将选择任务名称出现在 <cmdlist> 中的块。
-+
-+		<pidlist>、<tgidlist>、<cmdlist>是逗号分隔列表形式的单参数，它提供了一种指定单个选择规则的方法。
-+
-+
-+		Examples:
-+				./page_owner_sort <input> <output> --pid=1
-+				./page_owner_sort <input> <output> --tgid=1,2,3
-+				./page_owner_sort <input> <output> --name name1,name2
-+
-+标准格式说明符
-+==============
-+
-+--sort 选项:
-+
-+        ======          ==========      ===================
-+        缩写键          全称键          描述
-+        ======          ==========      ===================
-+        p               pid             进程 ID
-+        tg              tgid            线程组 ID
-+        n               name            任务名称
-+        st              stacktrace      页面分配的调用栈
-+        T               txt             块的全文
-+        ft              free_ts         页面被释放的时间戳
-+        at              alloc_ts        页面分配的时间戳
-+        ======          ==========      ===================
-+
-+--curl 选项:
-+
-+        ======          ==========      ==================
-+        缩写键          全称键          描述
-+        ======          ==========      ==================
-+        p               pid             进程 ID
-+        tg              tgid            线程组 ID
-+        n               name            任务名称
-+        f               free            该页面是否已被释放
-+        st              stacktrace      页面分配的调用栈
-+        ======          ==========      ==================
-diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
-index 422d5fa99e84..9123e55669df 100644
---- a/Documentation/vm/page_owner.rst
-+++ b/Documentation/vm/page_owner.rst
-@@ -174,22 +174,29 @@ STANDARD FORMAT SPECIFIERS
- 
- For --sort option:
- 
--	KEY		LONG		DESCRIPTION
--	p		pid		process ID
--	tg		tgid		thread group ID
--	n		name		task command name
--	st		stacktrace	stack trace of the page allocation
--	T		txt		full text of block
--	ft		free_ts		timestamp of the page when it was released
--	at		alloc_ts	timestamp of the page when it was allocated
-+        ====            ==========      ============================================
-+        KEY             LONG            DESCRIPTION
-+        ====            ==========      ============================================
-+        p               pid             process ID
-+        tg              tgid            thread group ID
-+        n               name            task command name
-+        st              stacktrace      stack trace of the page allocation
-+        T               txt             full text of block
-+        ft              free_ts         timestamp of the page when it was released
-+        at              alloc_ts        timestamp of the page when it was allocated
-         ator            allocator       memory allocator for pages
-+        ====            ==========      ============================================
- 
- For --curl option:
- 
--	KEY		LONG		DESCRIPTION
--	p		pid		process ID
--	tg		tgid		thread group ID
--	n		name		task command name
--	f		free		whether the page has been released or not
--	st		stacktrace	stack trace of the page allocation
-+        ====            ===========     ============================================
-+        KEY             LONG            DESCRIPTION
-+        ====            ===========     ============================================
-+        p               pid             process ID
-+        tg              tgid            thread group ID
-+        n               name            task command name
-+        f               free            whether the page has been released or not
-+        st              stacktrace      stack trace of the page allocation
-         ator            allocator       memory allocator for pages
-+        ====            ===========     ============================================
-+
--- 
-2.7.4
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
 
+--
+Linaro LKFT
+https://lkft.linaro.org

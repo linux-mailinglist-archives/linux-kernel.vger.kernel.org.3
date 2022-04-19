@@ -2,102 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230A5507ADF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C5D507AE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357035AbiDSUYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
+        id S1352632AbiDSU2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354068AbiDSUX6 (ORCPT
+        with ESMTP id S236926AbiDSU2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:23:58 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E23286CA;
-        Tue, 19 Apr 2022 13:21:14 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id t1so23958791wra.4;
-        Tue, 19 Apr 2022 13:21:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KuUgvlE4fmeiilILKG1ZLlvrT1f2Vl+nDCg070wtPPg=;
-        b=e7JughPR4wMB3RJe6fqu/lzWsw6B7hEBwHd8NxXPclDSYtwrgro6K+QnKtJgSSdW3J
-         Mr3+MqBCCIn3xGByGzsIJk9vfIJVmi+E+7ap5eK0HEcnRSvp1Q9zhijODxrfTAZNsgGB
-         xO04RX+xgEK7xKV8yyGrdQQcMcRd0ttkx22VTZEC0THa7OOiw1ywZgQLr8t2x9bb7Vmf
-         LZJvZ6ZmJVzOTBJ+TY64en8ojJ3atfgrlzEV0/aUMjmJ6JhqcbhZYlDB6RAPlZ0AU23J
-         3PZqWnSnfL1PHqd5v66rnKC59964jH+59oqPbh5PNyRfFqO+6npawKF8zAGh05mlsMQn
-         vhRg==
+        Tue, 19 Apr 2022 16:28:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C68C8344FC
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650399936;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ax1hiIZ0I02ZmnVoS1FQGYcdelIwXVMzf8EDN4fi9ww=;
+        b=MX1mpwCD52cQqxz8sOif9zOvldjgm9D006UbUprR12cmZEfz4mGvw6Jiq97AJ2DK3luDTl
+        iI40ge4fivcrPQpuAzsKawnwRUwx5bq5yK2F0N6nY52lSzezTXDTIMmcINfT+AHr638mRV
+        mCFqPtWnF5OLS1cXDzKypJimWGBGgz4=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-194-Cfy7skdqOmi5XAYVMQnx5A-1; Tue, 19 Apr 2022 16:25:35 -0400
+X-MC-Unique: Cfy7skdqOmi5XAYVMQnx5A-1
+Received: by mail-io1-f69.google.com with SMTP id s12-20020a056602168c00b00654ae9e6963so3450977iow.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:25:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KuUgvlE4fmeiilILKG1ZLlvrT1f2Vl+nDCg070wtPPg=;
-        b=bpum+bCaZdhr/+LUxRcTHdlquS83tqBvPgoQsww9KuGT0Sp8qzYV9Fh6x7okWIXLda
-         LU8x2qYodatI3ixOIuHcWOrWDZrfXGfHEwpnPVRf/EwGk4wKnJgcXaVWOk1uCw2dK8d6
-         cvhcvs0zD34HReRjvURmlRKyGlOr6W0Rt2+MAZusrCrBBR0f7jdhxS4FRPdQAwojgXzm
-         rSTrafZa/z6czB6zg8hIJ3BEXUPCwEpDgF2sRAst3uca0KKQbd6E6dZ4ip9TuoBmdPZy
-         smNV3ID8ZsJiS67cST2r7+zT3+8S8nFKC1F7+4yE0cZjVe5cJNxDbYUJbsQdQbJPUNgP
-         s3Pw==
-X-Gm-Message-State: AOAM532bsMyL/sRIf37ruH+KEmQ/oyFuEjhFv4+dlqa7ZmWZr0OfKqJ/
-        dTGXHl5sS0rQObiloJFWNLhNNQCnpgQ=
-X-Google-Smtp-Source: ABdhPJyrQuLDn1Jn7QM5XCw/RXqBWMTbpcRjH4K7vsPjpbVj6MgZT7J7LZQYUvotmPbX1SdGtP5nJQ==
-X-Received: by 2002:adf:8162:0:b0:207:99d3:6c0b with SMTP id 89-20020adf8162000000b0020799d36c0bmr13032294wrm.429.1650399673289;
-        Tue, 19 Apr 2022 13:21:13 -0700 (PDT)
-Received: from localhost.localdomain ([141.72.243.13])
-        by smtp.gmail.com with ESMTPSA id b11-20020a5d45cb000000b0020a810f7726sm9959168wrs.5.2022.04.19.13.21.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 13:21:12 -0700 (PDT)
-From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-To:     matt.ranostay@konsulko.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Subject: [PATCH 3/3] media: i2c: video-i2c: Use GENMASK for masking bits
-Date:   Tue, 19 Apr 2022 22:20:51 +0200
-Message-Id: <20220419202051.44013-4-mosescb.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220419202051.44013-1-mosescb.dev@gmail.com>
-References: <20220419202051.44013-1-mosescb.dev@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ax1hiIZ0I02ZmnVoS1FQGYcdelIwXVMzf8EDN4fi9ww=;
+        b=asBZS5LQvyZFK6DRiZV1NXOl7XYk97cDI4RsHbVLGOzeQCXJT3GPu5Hr8fo4FM7p2d
+         ELcA4bJBmrh8V3buJZbwcIZ8m+Tw5Sw+jkMZT0PzSO8forRhMDME7qsjfAQ6fOxQOOmj
+         I/kbhfkOS38AQYfRFmcVaXgxqKLf9Mtsx9zsSkE+Ax98M8bZjIi9wR0/qIvntcF4Sf+M
+         Ck+xIsG/aO/W37xnL1k3lbF0iSNfp5l6lQVt5HflKFMiYc9N50Iv4FAGi3wdeQ/pbgjo
+         pSmnfi44nNlHAlB22AX3cR69Uj49r2vnYyLcWotOxz+MJimbBWIBlatuvA3E6xHX3Jxx
+         em4Q==
+X-Gm-Message-State: AOAM531fiXF9KiKmu4iJqfqRu5fZox7dHMAR/If3yNU3HzbkzkYmMze9
+        z65yc8dHYKbtlDJpwrkNrTPSQDGtvSLoc2DUqkKWRcd/yxQPNgio4WScdUA9ncUvbAYJSNNO92N
+        ptTW+dUDddaWVc6mbCDrUh4hS
+X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id q8-20020a920508000000b002cbebd8a76bmr7979245ile.156.1650399934583;
+        Tue, 19 Apr 2022 13:25:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwHYRlcO9x0OUHBCz2/TrnKyl0H5zUpCoJ20gT+VTXDMr9UebvFOOiY+EiFAxleSo0TP00xXg==
+X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id q8-20020a920508000000b002cbebd8a76bmr7979232ile.156.1650399934379;
+        Tue, 19 Apr 2022 13:25:34 -0700 (PDT)
+Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id i11-20020a92540b000000b002c9a82e8dacsm9403836ilb.32.2022.04.19.13.25.33
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 19 Apr 2022 13:25:34 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>, peterx@redhat.com,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] mm/uffd: Hide PTE_MARKER option
+Date:   Tue, 19 Apr 2022 16:25:31 -0400
+Message-Id: <20220419202531.27415-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace 0x0380 with GENMASK(9, 7) to obtain 0b0000_0011_1000_0000
+The PTE_MARKER option should not need to be exposed to the kernel builder,
+keep it internal and remove the prompt so it won't be seen.
 
-Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Instead, make the PTE_MARKER_UFFD_WP option to explicitly choose PTE_MARKER
+when necessary.
+
+While PTE_MARKER_UFFD_WP will still prompt to user, change the wording so
+that it'll not mention PTE_MARKER at all but renaming it to "Userfaultfd
+write protection support for shmem/hugetlbfs".
+
+Reported-by: Johannes Weiner <hannes@cmpxchg.org>
+Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- drivers/media/i2c/video-i2c.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
-index 1d5f48329cb2..e08e3579c0a1 100644
---- a/drivers/media/i2c/video-i2c.c
-+++ b/drivers/media/i2c/video-i2c.c
-@@ -9,6 +9,7 @@
-  * - Melexis MLX90640 Thermal Cameras
-  */
+NOTE: IMHO this patch can either be standalone if easier, or be squashed
+into patch "mm: Enable PTE markers by default" in -mm.
+
+Please review, thanks.
+---
+ mm/Kconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 3eca34c864c5..d740e1ff3b2f 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -910,16 +910,16 @@ config ANON_VMA_NAME
+ 	  difference in their name.
  
-+#include <linux/bits.h>
- #include <linux/delay.h>
- #include <linux/freezer.h>
- #include <linux/hwmon.h>
-@@ -62,7 +63,7 @@
+ config PTE_MARKER
+-	bool "Marker PTEs support"
+-	default y
++	bool
  
- /* Control register */
- #define MLX90640_REG_CTL1		0x800d
--#define MLX90640_REG_CTL1_MASK		0x0380
-+#define MLX90640_REG_CTL1_MASK		GENMASK(9, 7)
- #define MLX90640_REG_CTL1_MASK_SHIFT	7
+ 	help
+ 	  Allows to create marker PTEs for file-backed memory.
  
- struct video_i2c_chip;
+ config PTE_MARKER_UFFD_WP
+-	bool "Marker PTEs support for userfaultfd write protection"
++	bool "Userfaultfd write protection support for shmem/hugetlbfs"
+ 	default y
+-	depends on PTE_MARKER && HAVE_ARCH_USERFAULTFD_WP
++	depends on HAVE_ARCH_USERFAULTFD_WP
++	select PTE_MARKER
+ 
+ 	help
+ 	  Allows to create marker PTEs for userfaultfd write protection
 -- 
-2.30.2
+2.32.0
 

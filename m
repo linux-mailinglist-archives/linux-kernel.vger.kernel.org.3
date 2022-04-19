@@ -2,116 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EDD507BB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF267507BBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346744AbiDSVNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 17:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S1357900AbiDSVOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 17:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346674AbiDSVNn (ORCPT
+        with ESMTP id S1346674AbiDSVOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 17:13:43 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9435121257
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:10:59 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id d198so11363667qkc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:10:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WnNdXhUuHATImW9JHxx0jAQhjPW7uQy+AQSOTpvyn88=;
-        b=n+9QqXc3Ftz8xNj8iOWqmGYnzg2nXtKebRpGK69TfE8hPbe4ADCqbWxAhZoIjxDTsf
-         sJq8DBXVnW+DfgKev30iE5miKIJqAYT53PUQBxIwDLttICVLYwR3rhb9sSPo5q5fltcQ
-         hTfNNok/wP/YbdfCdGkclJzs3XnwIWGQoa5Vrpy8COg8nps9e9kSOx3po7Qv60B2zBRl
-         xfVBYo9Mtv1UdxFnId3HIfNrbrJelEAzVdU7HwJzCiX1ji20uTV2uLCMPibXglLrwp5a
-         vORWeZ3bp8exBwlXHouL05flY2gOBSP0ypllOWGt52EV9ug7KtTxge9n2MLuYsNPk+di
-         yhcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WnNdXhUuHATImW9JHxx0jAQhjPW7uQy+AQSOTpvyn88=;
-        b=1ha6a+Hmq8s24uWQfO9BsH2YOtcd5aAPFSJgDZxMi5FVRfl9hVnOcWk0IrQP5cXqYm
-         +CRS1HiPacCQolRJZq6pqFCEaIgQXe5ERg8WDpinJXtVuQA3qccTnUp+FRc6tmcXTaXl
-         oIY1KHsbUWmhmqnvYugf1o6RK+bwR3AIh/1ujdaybOsDZG6Oive4DHjPkTGDurc1L7eB
-         TGrAR+65+Zr4QRnXzV6fRjv7M3Ubagx85BVONJOvUVTXJrEJziNuba/C1ky7QWHsX0dC
-         n56piGCBNzbiBNDW4Y7Oehq05S9XSx7S+QdSK6FX8cKinatLmJ/db1liXTsI8gHIxevc
-         aZng==
-X-Gm-Message-State: AOAM533vDuhMMosnE3MuTwC/xZp1+V0L5/QzhRn/weiMOyXwD5iJLfWe
-        72tzYc4p2uG8M/HfnWE6cA==
-X-Google-Smtp-Source: ABdhPJxLzxp+JQHvuji7sFUC6p4TSQzUdisLzYA8qtzDGwOV+B/BnmdatZ0870iphWvi1Oi08rITsg==
-X-Received: by 2002:a05:620a:d87:b0:67b:311c:ecbd with SMTP id q7-20020a05620a0d8700b0067b311cecbdmr11017000qkl.146.1650402658294;
-        Tue, 19 Apr 2022 14:10:58 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id v23-20020ae9e317000000b0069ea555b54dsm532576qkf.128.2022.04.19.14.10.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 14:10:57 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 17:10:55 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH rfc 0/5] mm: introduce shrinker sysfs interface
-Message-ID: <20220419211055.jtzfvqagsiwrco6r@moria.home.lan>
-References: <20220416002756.4087977-1-roman.gushchin@linux.dev>
- <20220419183654.axbxcjehs6fpqg4z@moria.home.lan>
- <Yl8EhZIbePmlmJ6D@carbon>
+        Tue, 19 Apr 2022 17:14:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E18721257;
+        Tue, 19 Apr 2022 14:11:20 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650402678;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r/aQIgWXxwBmFGO013/E4FwX4lEBkuaiUJLDZEQdNAE=;
+        b=cr7DjwyrwAC1xj1sLtRiFpR+sBqbFVqNojlImLNsKBdnAmjfYqaOuoyb9phyuVLp5ppfSZ
+        dtd707TV/x8I5HqP5QwypxYvQrB5bsc1xtoRYRRi6X2QBApCbIeDQWRYRCuRDi1d63KMp/
+        9CPBxYNvr9X5pIERJXjRlaVFEjvunetwb8HJnLkHQAYQ6NhZPXkor/ZP6gH2DJEn7OojgC
+        Juhad1bgturpCdcAWMOtN7jCOAz7u0btW9CHX2J9A7M2hta+p4F4hrgttf4QUPyofTkqo7
+        R/y16yc54zp7n2lCSwLKMEC5OmpD9vEyV8Q09kZ3qtlLdPE7oHtP9CF0dvnoGQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650402678;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r/aQIgWXxwBmFGO013/E4FwX4lEBkuaiUJLDZEQdNAE=;
+        b=j72MpmW6lV/Z3DmwOd+aLbRYakj1ZRkHArWZR6R0Wo3oy/I0Ex81jvVCg7qxWbJZhpMRbN
+        dlCbsXjQ7RVaHeDg==
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Doug Smythies <dsmythies@telus.net>
+Cc:     the arch/x86 maintainers <x86@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [patch 00/10] x86/cpu: Consolidate APERF/MPERF code
+In-Reply-To: <CAJZ5v0jf-NGa4-xaNaxehkLGPVqwhZrUhLXw2cJ1avtjgT5yPA@mail.gmail.com>
+References: <20220415133356.179706384@linutronix.de>
+ <005001d85413$75e5dce0$61b196a0$@telus.net>
+ <CAJZ5v0jf-NGa4-xaNaxehkLGPVqwhZrUhLXw2cJ1avtjgT5yPA@mail.gmail.com>
+Date:   Tue, 19 Apr 2022 23:11:17 +0200
+Message-ID: <87bkwwvkwa.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl8EhZIbePmlmJ6D@carbon>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 11:50:45AM -0700, Roman Gushchin wrote:
-> On Tue, Apr 19, 2022 at 02:36:54PM -0400, Kent Overstreet wrote:
-> > On Fri, Apr 15, 2022 at 05:27:51PM -0700, Roman Gushchin wrote:
-> > > 7) Don't display cgroups with less than 500 attached objects
-> > >   $ echo 500 > count_memcg
-> > >   $ cat count_memcg
-> > >     53 817
-> > >     1868 886
-> > >     2396 799
-> > >     2462 861
-> > > 
-> > > 8) Don't display cgroups with less than 500 attached objects (sum over all nodes)
-> > >   $ echo "500" > count_memcg_node
-> > >   $ cat count_memcg_node
-> > >     53 810 7
-> > >     1868 886 0
-> > >     2396 799 0
-> > >     2462 861 0
-> > > 
-> > > 9) Scan system/root shrinker
-> > >   $ cat count
-> > >     212
-> > >   $ echo 100 > scan
-> > >   $ cat scan
-> > >     97
-> > >   $ cat count
-> > >     115
-> > 
-> > This part seems entirely overengineered though and a really bad idea - can we
-> > please _not_ store query state in the kernel? It's not thread safe, and it seems
-> > like overengineering before we've done the basics (just getting this stuff in
-> > sysfs is a major improvement!).
-> 
-> Yes, it's not great, but I don't have a better idea yet. How to return the number
-> of freed objects? Do you suggest to drop this functionality at all or there are
-> other options I'm not seeing?
+On Tue, Apr 19 2022 at 20:49, Rafael J. Wysocki wrote:
+> On Tue, Apr 19, 2022 at 7:32 PM Doug Smythies <dsmythies@telus.net> wrote:
+>> For intel_pstate (active), both HWP enabled or disabled, the behaviour
+>> of scaling_cur_freq is inconsistent with prior to this patch set and other
+>> scaling driver governor combinations.
+>>
+>> Note there is no issue with " grep MHz /proc/cpuinfo" for any
+>> combination.
+>>
+>> Examples:
+>>
+>> No-HWP:
+>>
+>> active/powersave:
+>> doug@s19:~/freq-scalers/trace$ grep . /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
+>> /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq:2300418
+>> /sys/devices/system/cpu/cpu10/cpufreq/scaling_cur_freq:0
+>> /sys/devices/system/cpu/cpu11/cpufreq/scaling_cur_freq:0
+>> /sys/devices/system/cpu/cpu1/cpufreq/scaling_cur_freq:0
+>> /sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq:0
+>> /sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq:0
+>> /sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq:0
+>> /sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq:0
+>> /sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq:0
+>> /sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq:2300006
+>> /sys/devices/system/cpu/cpu8/cpufreq/scaling_cur_freq:2300005
+>> /sys/devices/system/cpu/cpu9/cpufreq/scaling_cur_freq:0
+>
+> That's because after the changes in this series scaling_cur_freq
+> returns 0 if the given CPU is idle.
 
-I'd just drop all of the stateful stuff - or add an ioctl interface.
+Which is sensible IMO as there is really no point in waking an idle CPU
+just to read those MSRs, then wait 20ms wake it up again to read those
+MSRs again.
+
+> I guess it could return the last known result, but that wouldn't be
+> more meaningful.
+
+Right.
+
+Thanks,
+
+        tglx

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20272507640
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E779507643
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355970AbiDSRLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
+        id S1355984AbiDSRML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355694AbiDSRKU (ORCPT
+        with ESMTP id S1355698AbiDSRKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 19 Apr 2022 13:10:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6E612AF1
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABE313CC2
         for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:07:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1650388047; x=1681924047;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aCc6vZZks5fhxGxuEXFNNrEdo/tMegPVC4Stf9I/c9g=;
-  b=J+pdC6c/2KsaO5ZoHsRDlELw0wyTKbwCvS1DgzCV3u6cuTwznko9rlDT
-   ugh7g6Dn6GLJ9c/wZrvMnuiLDC1I2bQGIwCQbN2mPCLOce41UdL+sZI05
-   hJNEIRTWOHQxOrRSCZy3PY29xCmWxUQX4sVU6zrixeh6gBHbFXfKJzl9p
-   /F1oTtwspX1UjYkdjXDTtN25Ld3D5ORJLEo28QX2zJLlbd6gQqsN4iLJ2
-   KKmXXY5t8DlHyKmImmuua41ut3VFbta6DQFDblC2nP7o5KzH5WTkg6ro4
-   dxi/vyle1f3uqsRpL+sh+1QBR2HLwyxcZ1lC7NYJbum17aUKYs7+KiYDq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="326720652"
+  bh=ZSLyLZxH6D8Mp+7onzwQckyZ3t/ShnheZ0rUHeiHQM8=;
+  b=YqOveCABQR9PtwJZ1UQSPICZJn5COQOguPnacOL+Nz/m2ZIK/W6EuLTx
+   UPrS1VScvti3ELypTF3MPQRkfo6ErLEI6NymqOlQBUPPO1pH7q26scZWN
+   FbCVv0xaR/AQ93TjiJrn6v3U2QpYFIc0YbRjdCKYnzbRCys1tm4vClyHc
+   zUAVH8ozoHE5dh5KgnLP/QTpPrVn7drxbX3C+CNoPRluwybNjkiN17S9E
+   Bj80YjT9YJoVMfuerUdle/2KtcbuFBGJQ75Z0fWL4/Y/r0UIkP1MggHls
+   xJlEV0IJ1R84miJ2FKljk6ANZxdfOT7pJkbunujsDpmZ0Ai23AkMuAMPr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="262677119"
 X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="326720652"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:07:25 -0700
+   d="scan'208";a="262677119"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:07:27 -0700
 X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="530499070"
+   d="scan'208";a="727145629"
 Received: from ajacosta-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.11.4])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:07:25 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 10:07:26 -0700
 From:   ira.weiny@intel.com
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -45,9 +45,9 @@ Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V10 41/44] mm/pkeys: PKS testing, test context switching
-Date:   Tue, 19 Apr 2022 10:06:46 -0700
-Message-Id: <20220419170649.1022246-42-ira.weiny@intel.com>
+Subject: [PATCH V10 42/44] mm/pkeys: PKS testing, Add exception test
+Date:   Tue, 19 Apr 2022 10:06:47 -0700
+Message-Id: <20220419170649.1022246-43-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220419170649.1022246-1-ira.weiny@intel.com>
 References: <20220419170649.1022246-1-ira.weiny@intel.com>
@@ -65,358 +65,293 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-PKS software must maintain the PKRS value during a context switch.  Test
-this by running two processes simultaneously on the same CPU while using
-different permissions for the same pkey.
+During an exception the interrupted threads PKRS value is preserved
+and the exception receives the default value for that pkey.  Upon
+return from exception the threads PKRS value is restored.
 
-Leverage test_pks to create two threads scheduled on the same cpu.
+Add a PKS test which forces a fault to check that this works as
+intended.  Check that both the thread as well as the exception PKRS
+state is correct at the beginning, during, and after the exception.
 
-On the kernel side create two commands.  One to set up the pkey prior to
-the context switch (arm context switch) and a second to check the pkey
-after the context switch (check context switch).
+Add the test to the test_pks app.
 
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
-Changes for V10
-	Fix CPU command line option
+Change for V9
+	Add test to test_pks
+	Clean up the globals shared with the fault handler
+	Use the PKS Test specific fault callback
+	s/pks_mk*/pks_set*/
+	Change pkey type to u8
+	From Dave Hansen
+		use pkey
 
-Changes for V9
-	From Rick Edgecombe
-		Ensure the parent/child threads don't cause each other
-			to hang if one experiences a failure
-	Adjust for the new test_pks user space component
-	Adjust the debug output for '-d' option
-	s/pks_mk_*/pks_set_*/
-	Use new set_file_data() call
-
-Changes for V8
-	Split this off from the main testing patch
-	Remove unneeded prints
+Change for V8
+	Split this test off from the testing patch and place it after
+	the exception saving code.
 ---
- lib/pks/pks_test.c                     |  54 +++++++++
- tools/testing/selftests/x86/test_pks.c | 159 ++++++++++++++++++++++++-
- 2 files changed, 208 insertions(+), 5 deletions(-)
+ arch/x86/mm/pkeys.c                    |   2 +-
+ include/linux/pks.h                    |   6 ++
+ lib/pks/pks_test.c                     | 133 +++++++++++++++++++++++++
+ tools/testing/selftests/x86/test_pks.c |   5 +-
+ 4 files changed, 144 insertions(+), 2 deletions(-)
 
+diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+index 9e0948766427..ee5eff6bdbf3 100644
+--- a/arch/x86/mm/pkeys.c
++++ b/arch/x86/mm/pkeys.c
+@@ -216,7 +216,7 @@ u32 pkey_update_pkval(u32 pkval, u8 pkey, u32 accessbits)
+ 
+ #ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
+ 
+-static DEFINE_PER_CPU(u32, pkrs_cache);
++__static_or_pks_test DEFINE_PER_CPU(u32, pkrs_cache);
+ 
+ /**
+  * DOC: DEFINE_PKS_FAULT_CALLBACK
+diff --git a/include/linux/pks.h b/include/linux/pks.h
+index fd0ed09dd143..163c75992a8a 100644
+--- a/include/linux/pks.h
++++ b/include/linux/pks.h
+@@ -59,9 +59,15 @@ static inline void pks_update_exception(struct pt_regs *regs,
+ 
+ #ifdef CONFIG_PKS_TEST
+ 
++#define __static_or_pks_test
++
+ bool pks_test_fault_callback(struct pt_regs *regs, unsigned long address,
+ 			     bool write);
+ 
++#else /* !CONFIG_PKS_TEST */
++
++#define __static_or_pks_test static
++
+ #endif /* CONFIG_PKS_TEST */
+ 
+ #endif /* _LINUX_PKS_H */
 diff --git a/lib/pks/pks_test.c b/lib/pks/pks_test.c
-index dc309dd941be..86af2f61393d 100644
+index 86af2f61393d..762f4a19cb7d 100644
 --- a/lib/pks/pks_test.c
 +++ b/lib/pks/pks_test.c
-@@ -38,12 +38,16 @@
- #include <linux/pks.h>
- #include <linux/pks-keys.h>
- 
-+#include <uapi/asm-generic/mman-common.h>
-+
- #include <asm/ptrace.h>
- 
- #define PKS_TEST_MEM_SIZE (PAGE_SIZE)
- 
- #define CHECK_DEFAULTS		0
+@@ -48,19 +48,30 @@
  #define RUN_SINGLE		1
-+#define ARM_CTX_SWITCH		2
-+#define CHECK_CTX_SWITCH	3
+ #define ARM_CTX_SWITCH		2
+ #define CHECK_CTX_SWITCH	3
++#define RUN_EXCEPTION		4
  #define RUN_CRASH_TEST		9
  
++DECLARE_PER_CPU(u32, pkrs_cache);
++
  static struct dentry *pks_test_dentry;
-@@ -343,6 +347,48 @@ static void arm_or_run_crash_test(struct pks_session_data *sd)
- 	crash_it(sd);
+ 
+ DEFINE_MUTEX(test_run_lock);
+ 
+ struct pks_test_ctx {
+ 	u8 pkey;
++	bool pass;
+ 	char data[64];
+ 	void *test_page;
+ 	bool fault_seen;
++	bool validate_exp_handling;
+ };
+ 
++static bool check_pkey_val(u32 pk_reg, u8 pkey, u32 expected)
++{
++	pk_reg = (pk_reg >> PKR_PKEY_SHIFT(pkey)) & PKEY_ACCESS_MASK;
++	return (pk_reg == expected);
++}
++
+ static void debug_context(const char *label, struct pks_test_ctx *ctx)
+ {
+ 	pr_debug("%s [%d] %s <-> %p\n",
+@@ -96,6 +107,63 @@ static void debug_result(const char *label, int test_num,
+ 		     sd->last_test_pass ? "PASS" : "FAIL");
  }
  
-+static void arm_ctx_switch(struct pks_session_data *sd)
++/*
++ * Check if the register @pkey value matches @expected value
++ *
++ * Both the cached and actual MSR must match.
++ */
++static bool check_pkrs(u8 pkey, u8 expected)
 +{
++	bool ret = true;
++	u64 pkrs;
++	u32 *tmp_cache;
++
++	tmp_cache = get_cpu_ptr(&pkrs_cache);
++	if (!check_pkey_val(*tmp_cache, pkey, expected))
++		ret = false;
++	put_cpu_ptr(tmp_cache);
++
++	rdmsrl(MSR_IA32_PKRS, pkrs);
++	if (!check_pkey_val(pkrs, pkey, expected))
++		ret = false;
++
++	return ret;
++}
++
++static void validate_exception(struct pks_test_ctx *ctx, u32 thread_pkrs)
++{
++	u8 pkey = ctx->pkey;
++
++	/* Check that the thread state was saved */
++	if (!check_pkey_val(thread_pkrs, pkey, PKEY_DISABLE_WRITE)) {
++		pr_err("     FAIL: checking aux_pt_regs->thread_pkrs\n");
++		ctx->pass = false;
++	}
++
++	/* Check that the exception received the default of disabled access */
++	if (!check_pkrs(pkey, PKEY_DISABLE_ACCESS)) {
++		pr_err("     FAIL: PKRS cache and MSR\n");
++		ctx->pass = false;
++	}
++
++	/*
++	 * Ensure an update can occur during exception without affecting the
++	 * interrupted thread.  The interrupted thread is verified after the
++	 * exception returns.
++	 */
++	pks_set_readwrite(pkey);
++	if (!check_pkrs(pkey, 0)) {
++		pr_err("     FAIL: exception did not change register to 0\n");
++		ctx->pass = false;
++	}
++	pks_set_noaccess(pkey);
++	if (!check_pkrs(pkey, PKEY_DISABLE_ACCESS)) {
++		pr_err("     FAIL: exception did not change register to 0x%x\n",
++			PKEY_DISABLE_ACCESS);
++		ctx->pass = false;
++	}
++}
++
+ /* Global data protected by test_run_lock */
+ struct pks_test_ctx *g_ctx_under_test;
+ 
+@@ -122,6 +190,16 @@ bool pks_test_fault_callback(struct pt_regs *regs, unsigned long address,
+ 	if (!g_ctx_under_test)
+ 		return false;
+ 
++	if (g_ctx_under_test->validate_exp_handling) {
++		validate_exception(g_ctx_under_test, pkrs);
++		/*
++		 * Stop this check directly within the exception because the
++		 * fault handler clean up code will call again while checking
++		 * the PMD entry and there is no need to check this again.
++		 */
++		g_ctx_under_test->validate_exp_handling = false;
++	}
++
+ 	aux_pt_regs->pkrs = pkey_update_pkval(pkrs, g_ctx_under_test->pkey, 0);
+ 	g_ctx_under_test->fault_seen = true;
+ 	return true;
+@@ -255,6 +333,7 @@ static struct pks_test_ctx *alloc_ctx(u8 pkey)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	ctx->pkey = pkey;
++	ctx->pass = true;
+ 	sprintf(ctx->data, "%s", "DEADBEEF");
+ 
+ 	ctx->test_page = alloc_test_page(ctx->pkey);
+@@ -295,6 +374,56 @@ static bool run_single(struct pks_session_data *sd)
+ 	return rc;
+ }
+ 
++static bool run_exception_test(struct pks_session_data *sd)
++{
++	bool pass = true;
 +	struct pks_test_ctx *ctx;
 +
 +	ctx = alloc_ctx(PKS_KEY_TEST);
 +	if (IS_ERR(ctx)) {
-+		pr_err("Failed to allocate a context\n");
-+		sd->last_test_pass = false;
-+		return;
++		pr_debug("     FAIL: no context\n");
++		return false;
 +	}
 +
 +	set_ctx_data(sd, ctx);
 +
-+	/* Ensure a known state to test context switch */
-+	pks_set_readwrite(ctx->pkey);
-+}
++	/*
++	 * Set the thread pkey value to something other than the default of
++	 * access disable but something which still causes a fault, disable
++	 * writes.
++	 */
++	pks_update_protection(ctx->pkey, PKEY_DISABLE_WRITE);
 +
-+static void check_ctx_switch(struct pks_session_data *sd)
-+{
-+	struct pks_test_ctx *ctx = sd->ctx;
-+	unsigned long reg_pkrs;
-+	int access;
++	ctx->validate_exp_handling = true;
++	set_context_for_fault(ctx);
 +
-+	sd->last_test_pass = true;
++	memcpy(ctx->test_page, ctx->data, 8);
 +
-+	if (!ctx) {
-+		pr_err("No Context switch configured\n");
-+		sd->last_test_pass = false;
-+		return;
++	if (!ctx->fault_seen) {
++		pr_err("     FAIL: did not get an exception\n");
++		pass = false;
 +	}
 +
-+	rdmsrl(MSR_IA32_PKRS, reg_pkrs);
-+
-+	access = (reg_pkrs >> PKR_PKEY_SHIFT(ctx->pkey)) &
-+		  PKEY_ACCESS_MASK;
-+	if (access != 0) {
-+		pr_err("Context switch check failed: pkey %u: 0x%x reg: 0x%lx\n",
-+			ctx->pkey, access, reg_pkrs);
-+		sd->last_test_pass = false;
++	/*
++	 * The exception code has to enable access to keep the fault from
++	 * looping forever.  Therefore full access is seen here rather than
++	 * write disabled.
++	 *
++	 * However, this does verify that the exception state was independent
++	 * of the interrupted threads state because validate_exception()
++	 * disabled access during the exception.
++	 */
++	if (!check_pkrs(ctx->pkey, 0)) {
++		pr_err("     FAIL: PKRS not restored\n");
++		pass = false;
 +	}
++
++	if (!ctx->pass)
++		pass = false;
++
++	return pass;
 +}
 +
- static ssize_t pks_read_file(struct file *file, char __user *user_buf,
- 			     size_t count, loff_t *ppos)
+ static void crash_it(struct pks_session_data *sd)
  {
-@@ -397,6 +443,14 @@ static ssize_t pks_write_file(struct file *file, const char __user *user_buf,
- 		pr_debug("Single key\n");
- 		sd->last_test_pass = run_single(file->private_data);
+ 	struct pks_test_ctx *ctx;
+@@ -451,6 +580,10 @@ static ssize_t pks_write_file(struct file *file, const char __user *user_buf,
+ 		pr_debug("Checking Context switch test\n");
+ 		check_ctx_switch(file->private_data);
  		break;
-+	case ARM_CTX_SWITCH:
-+		pr_debug("Arming Context switch test\n");
-+		arm_ctx_switch(file->private_data);
-+		break;
-+	case CHECK_CTX_SWITCH:
-+		pr_debug("Checking Context switch test\n");
-+		check_ctx_switch(file->private_data);
++	case RUN_EXCEPTION:
++		pr_debug("Exception checking\n");
++		sd->last_test_pass = run_exception_test(file->private_data);
 +		break;
  	default:
  		pr_debug("Unknown test\n");
  		sd->last_test_pass = false;
 diff --git a/tools/testing/selftests/x86/test_pks.c b/tools/testing/selftests/x86/test_pks.c
-index 2c10b6c50416..626421fa8ed8 100644
+index 626421fa8ed8..c40035803e38 100644
 --- a/tools/testing/selftests/x86/test_pks.c
 +++ b/tools/testing/selftests/x86/test_pks.c
-@@ -17,6 +17,7 @@
-  *	...
-  */
- #define _GNU_SOURCE
-+#include <sched.h>
- #include <unistd.h>
- #include <getopt.h>
- #include <stdio.h>
-@@ -32,10 +33,13 @@
- /* Values from the kernel */
- #define CHECK_DEFAULTS		"0"
+@@ -35,6 +35,7 @@
  #define RUN_SINGLE		"1"
-+#define ARM_CTX_SWITCH		"2"
-+#define CHECK_CTX_SWITCH	"3"
+ #define ARM_CTX_SWITCH		"2"
+ #define CHECK_CTX_SWITCH	"3"
++#define RUN_EXCEPTION		"4"
  #define RUN_CRASH_TEST		"9"
  
  time_t g_start_time;
- int g_debug;
-+unsigned long g_cpu;
- 
- #define PRINT_DEBUG(fmt, ...) \
- 	do { \
-@@ -47,6 +51,7 @@ int g_debug;
- 	fprintf(stderr, "%s: " fmt, __func__, ##__VA_ARGS__)
- 
- static int do_simple_test(const char *debugfs_str);
-+static int do_context_switch(const char *debugfs_str);
- 
- /*
-  * The crash test is a special case which is not included in the run all
-@@ -55,6 +60,7 @@ static int do_simple_test(const char *debugfs_str);
- enum {
+@@ -61,6 +62,7 @@ enum {
  	TEST_DEFAULTS = 0,
  	TEST_SINGLE,
-+	TEST_CTX_SWITCH,
+ 	TEST_CTX_SWITCH,
++	TEST_EXCEPTION,
  	MAX_TESTS,
  } tests;
  
-@@ -67,7 +73,8 @@ struct test_item {
- 	int (*test_fn)(const char *debugfs_str);
+@@ -74,7 +76,8 @@ struct test_item {
  } test_list[] = {
  	{ "check_defaults", CHECK_DEFAULTS, do_simple_test },
--	{ "single", RUN_SINGLE, do_simple_test }
-+	{ "single", RUN_SINGLE, do_simple_test },
-+	{ "context_switch", ARM_CTX_SWITCH, do_context_switch }
+ 	{ "single", RUN_SINGLE, do_simple_test },
+-	{ "context_switch", ARM_CTX_SWITCH, do_context_switch }
++	{ "context_switch", ARM_CTX_SWITCH, do_context_switch },
++	{ "exception", RUN_EXCEPTION, do_simple_test }
  };
  
  static char *get_test_name(int test_num)
-@@ -101,6 +108,7 @@ static void print_help_and_exit(char *argv0)
- 	printf("Usage: %s [-h,-d] [test]\n", argv0);
- 	printf("	--help,-h   This help\n");
- 	printf("	--debug,-d  Output kernel debug via dynamic debug if available\n");
-+	printf("	--cpu,-c <cpu>  Use 'cpu' for context switch default 0\n");
- 	printf("\n");
- 	printf("        Run all PKS tests or the [test] specified.\n");
- 	printf("\n");
-@@ -116,6 +124,143 @@ static void print_help_and_exit(char *argv0)
- 	printf("\n");
- }
- 
-+/*
-+ * debugfs_str is ignored for this test.
-+ */
-+static int do_context_switch(const char *debugfs_str)
-+{
-+	int switch_done[2];
-+	int setup_done[2];
-+	cpu_set_t cpuset;
-+	char result[32];
-+	char done = 'P';
-+	int rc = 0;
-+	pid_t pid;
-+	int fd;
-+
-+	if (g_cpu >= sysconf(_SC_NPROCESSORS_ONLN)) {
-+		PRINT_ERROR("CPU %lu is invalid\n", g_cpu);
-+		g_cpu = sysconf(_SC_NPROCESSORS_ONLN) - 1;
-+		PRINT_ERROR("   running on max CPU: %lu\n", g_cpu);
-+	}
-+
-+	CPU_ZERO(&cpuset);
-+	CPU_SET(g_cpu, &cpuset);
-+	/*
-+	 * Ensure the two processes run on the same CPU so that they go through
-+	 * a context switch.
-+	 */
-+	sched_setaffinity(getpid(), sizeof(cpu_set_t), &cpuset);
-+
-+	if (pipe(setup_done)) {
-+		PRINT_ERROR("ERROR: Failed to create pipe\n");
-+		return -EIO;
-+	}
-+	if (pipe(switch_done)) {
-+		PRINT_ERROR("ERROR: Failed to create pipe\n");
-+		return -EIO;
-+	}
-+
-+	fd = open(PKS_TEST_FILE, O_RDWR);
-+	if (fd < 0) {
-+		PRINT_DEBUG("Failed to open test file : %s\n", PKS_TEST_FILE);
-+		return -ENOENT;
-+	}
-+
-+	/* Avoid duplicated output after fork */
-+	fflush(stderr);
-+	fflush(stdout);
-+
-+	pid = fork();
-+	if (pid == 0) {
-+		char done = 'P';
-+
-+		g_cpu = sched_getcpu();
-+		PRINT_DEBUG("Child: running on cpu %lu...\n", g_cpu);
-+
-+		/* Allocate and run test. */
-+		write(fd, RUN_SINGLE, 1);
-+
-+		/* Arm for context switch test */
-+		write(fd, ARM_CTX_SWITCH, 1);
-+
-+		PRINT_DEBUG("Child: Tell parent to go\n");
-+		write(setup_done[1], &done, sizeof(done));
-+
-+		/* Context switch out... */
-+		PRINT_DEBUG("Child: Waiting for parent...\n");
-+		read(switch_done[0], &done, sizeof(done));
-+
-+		/* Check msr restored */
-+		PRINT_DEBUG("Child: Checking result\n");
-+		rc = write(fd, CHECK_CTX_SWITCH, 1);
-+		if (rc < 0) {
-+			if (errno == ENOENT) {
-+				sprintf(result, "SKIP");
-+				done = 'S';
-+			} else {
-+				sprintf(result, "FAIL");
-+				done = 'F';
-+			}
-+			goto child_exit;
-+		}
-+
-+		read(fd, result, 10);
-+		if (strncmp(result, "PASS", 4))
-+			done = 'F';
-+
-+child_exit:
-+		PRINT_DEBUG("Child: Result (%c) %s\n", done, result);
-+
-+		/* Signal result */
-+		write(setup_done[1], &done, sizeof(done));
-+		close(fd);
-+
-+		exit(0);
-+	}
-+
-+	PRINT_DEBUG("Parent: Waiting for child\n");
-+	read(setup_done[0], &done, sizeof(done));
-+	g_cpu = sched_getcpu();
-+	PRINT_DEBUG("Parent: running on cpu %lu\n", g_cpu);
-+
-+	/* The parent needs a unique file context within the kernel */
-+	close(fd);
-+	fd = open(PKS_TEST_FILE, O_RDWR);
-+	if (fd < 0) {
-+		PRINT_ERROR("FATAL ERROR: cannot open %s\n", PKS_TEST_FILE);
-+		PRINT_DEBUG("Parent: Signaling child 'fail'\n");
-+		done = 'F';
-+		write(switch_done[1], &done, sizeof(done));
-+		return -ENOENT;
-+	}
-+
-+	/* run test with the same pkey */
-+	rc = write(fd, RUN_SINGLE, 1);
-+
-+	PRINT_DEBUG("Parent: Signaling child\n");
-+	write(switch_done[1], &done, sizeof(done));
-+
-+	if (rc < 0) {
-+		rc = -errno;
-+		goto close_file;
-+	}
-+	rc = 0;
-+
-+	/* Wait for result */
-+	read(setup_done[0], &done, sizeof(done));
-+	if (done == 'S')
-+		rc = -ENOENT;
-+	if (done == 'F')
-+		rc = -EFAULT;
-+
-+	PRINT_DEBUG("Parent: exiting with rc (%c) %d\n", done, rc);
-+
-+close_file:
-+	close(fd);
-+	return rc;
-+}
-+
- /*
-  * Do a simple test of writing the debugfs value and reading back for 'PASS'
-  */
-@@ -307,14 +452,15 @@ int main(int argc, char *argv[])
- 
- 	while (1) {
- 		static struct option long_options[] = {
--			{"help",	no_argument,	0,	'h' },
--			{"debug",	no_argument,	0,	'd' },
--			{0,		0,		0,	0 }
-+			{"help",	no_argument,		0,	'h' },
-+			{"debug",	no_argument,		0,	'd' },
-+			{"cpu",		required_argument,	0,	'c' },
-+			{0,		0,			0,	0 }
- 		};
- 		int option_index = 0;
- 		int c;
- 
--		c = getopt_long(argc, argv, "hd", long_options, &option_index);
-+		c = getopt_long(argc, argv, "hdc:", long_options, &option_index);
- 		if (c == -1)
- 			break;
- 
-@@ -325,6 +471,9 @@ int main(int argc, char *argv[])
- 		case 'd':
- 			g_debug++;
- 			break;
-+		case 'c':
-+			g_cpu = strtoul(optarg, NULL, 0);
-+			break;
- 		default:
- 			print_help_and_exit(argv[0]);
- 			exit(-1);
 -- 
 2.35.1
 

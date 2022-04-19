@@ -2,124 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3618506FDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DCC506FDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343865AbiDSOP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S1345496AbiDSOQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343586AbiDSOP5 (ORCPT
+        with ESMTP id S1343600AbiDSOP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 19 Apr 2022 10:15:57 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AF3396B5;
-        Tue, 19 Apr 2022 07:13:12 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id j70so3178642pgd.4;
-        Tue, 19 Apr 2022 07:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3c9VdvftnzoWdGwuqhCOC9bUI0K0J9rSYfyqiSN2afM=;
-        b=fWAd8cl2jmc/Bxdi9Zu2be0CuLUL9Twfu6ZbRyece8VrA16qVxDeN4WorJTOLDxRHv
-         f55IZWiXayAarCHp+k6nOtsgqBUBuLvDqV03Nh1GkfyQJvmok2Wzn8eJ2rSO+kcu0mkQ
-         4VDKmuFPvNsDgluNSSOk+3RTmurL9esBNangjumoCJ0CJgTFFxKYq0nratBxtPAPXDxN
-         et45b8xJijJvlFwJlCEcKxa8uF77Y+83rx/ldn6eCAZPbTbqcRoWTqfLX3HheCtSvnq0
-         8qN2B2/ii09PuSyWDNVbn1KRKv3jC3AEe+YFUhCIK0ZxEpCil8u4anKKPdiK9Gd5s+92
-         O+xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3c9VdvftnzoWdGwuqhCOC9bUI0K0J9rSYfyqiSN2afM=;
-        b=5Ods7e+mPFti1r4u7SCvosU06MxXnPiGZiLqaOiImnOS1P+/0ELD37qpUiwYL/bciJ
-         zom1yo2WbEqmvQFGe8ZegXkjTwa2G6woUYoBuyfn475TadOhmAp/sZ8BcB8N2btJyYmI
-         MiawvCW7FVb7R0a/Y+bAu/qSnFKU5X9nL3pxmb9O62kUCUEWNQffFxYZIR0U1tF1HkUh
-         MaoS6jEFZXvTBzJoJMxJd7NAU+o3j91E/JLZivIfAnqcGRUnipa1D6fPsbxp+Gc1gBAN
-         kU2HyfeMz86ZgW304B2oN2eFN0b8Sa7Q5WOtTLDUqzPnvnn2eN44tbby5kKgVAaU5qxO
-         i13w==
-X-Gm-Message-State: AOAM532xmi5kNUUl4VKgfmvVYg3raMk69YnqlXDdS6hk+yymOOuQF535
-        ESYCazySSfhD7dV9w95PFJ4=
-X-Google-Smtp-Source: ABdhPJxot1TBDIfRbsfd75H0bwlDvRcfvNxXqtVyDCqz6F5Ft5Xdy7QKmrK0yznwSFhj17EppqbR7Q==
-X-Received: by 2002:a63:e315:0:b0:3a9:efa0:18a with SMTP id f21-20020a63e315000000b003a9efa0018amr9306970pgh.33.1650377592324;
-        Tue, 19 Apr 2022 07:13:12 -0700 (PDT)
-Received: from ?IPV6:240b:12:16e1:e200:9658:2d0f:e000:a321? ([240b:12:16e1:e200:9658:2d0f:e000:a321])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056a00088a00b004f7ceff389esm18093287pfj.152.2022.04.19.07.13.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 07:13:11 -0700 (PDT)
-Message-ID: <67dca8f3-318b-808e-fac1-e9e69b87a027@gmail.com>
-Date:   Tue, 19 Apr 2022 23:13:08 +0900
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E8F396BE;
+        Tue, 19 Apr 2022 07:13:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650377595; x=1681913595;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=W+EH5yEIBiFrtUXyttaddEsTcopm5wfnex1IrAICx30=;
+  b=Pw7yl65stjlwQ8KsdmOTaT2HKShI/NSc927cylHkLJuHG5RTNLe6DyaY
+   /jgsCrzKdDRgMiqob2wApUlzhgDvc3M5ygnhMkLSc7UAdrQU08/vxCCYO
+   1x8O8n0zqbMdpaMPfTaESqg3H/fi2HUdQuG0sbVR2HydhsRjd9+6f27jn
+   3nYb0CwtLojhzHXsd1AUlqcdp5BSQWoKmxMz565uCpqEbK6LuXsgvO9KZ
+   rL6SxH2cT4S4G/HLEKVWmccNXS0cbQVrfhiEL6FgpWzh90vGyonxiSEJT
+   MvXZSokqUU+e4LZZxg8LxZnAdW4J8wVJqZn2YwpDer8rn1VkMeqsGLkih
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="245665434"
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="245665434"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 07:13:13 -0700
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="657653286"
+Received: from aislaslo-mobl.amr.corp.intel.com (HELO [10.212.57.245]) ([10.212.57.245])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 07:13:12 -0700
+Message-ID: <975b5050-2108-9ace-cc71-46f17db0a731@intel.com>
+Date:   Tue, 19 Apr 2022 07:13:11 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] docs/ja_JP/index: update section title in Japanese
 Content-Language: en-US
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-doc@vger.kernel.org,
-        Tsugikazu Shibata <shibata@linuxfoundation.org>
-References: <20220419081813.6838-1-fujimotokosuke0@gmail.com>
- <5a9c77ab-8627-b8e2-67bc-e7bd260654de@gmail.com>
-From:   Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-In-Reply-To: <5a9c77ab-8627-b8e2-67bc-e7bd260654de@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Kai Huang <kai.huang@intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <bd83067542a3519ee4c91f9d50e9bd4fac27e4bb.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+In-Reply-To: <bd83067542a3519ee4c91f9d50e9bd4fac27e4bb.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yokosawa-san,
+On 4/19/22 00:47, Kai Huang wrote:
+>>From security's perspective, attestation is an essential part of TDX.  That
+> being said, w/o attestation support in TD guest, I guess nobody will seriously
+> use TD guest.
 
-On 2022/04/19 20:52, Akira Yokosawa wrote:
-> [+Cc: Shibata-san, who originally picked the English title]
->
-> Hi,
->
-> On Tue, 19 Apr 2022 17:18:13 +0900,
-> Kosuke Fujimoto wrote:
->> Update section title "Japanese Translation" in Japanese instead of English
-> Please explain _why_ do you think Japanese title is better.
->
-> I think you want it to be consistent with other translations.
-Yes, this is to keep consistency with others. I will add the reason to 
-comment.
->> Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
->> Cc: Jonathan Corbet <corbet@lwn.net>
->> Cc: Akira Yokosawa <akiyks@gmail.com>
->> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
->> Cc: linux-doc@vger.kernel.org
->> ---
->>   Documentation/translations/ja_JP/index.rst | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/translations/ja_JP/index.rst b/Documentation/translations/ja_JP/index.rst
->> index 20738c931d02..558a1f5642b0 100644
->> --- a/Documentation/translations/ja_JP/index.rst
->> +++ b/Documentation/translations/ja_JP/index.rst
->> @@ -5,7 +5,7 @@
->>   	\kerneldocCJKon
->>   	\kerneldocBeginJP{
->>   
->> -Japanese translations
->> +日本語翻訳
-> "日本語翻訳" sounds a little bit redundant to me.  I'd say "日本語訳".
-> What do you think?
-Yes, it sounds better to me as well.
->          Thanks, Akira
->
->>   =====================>
->>   .. toctree::
+Are you saying you can't think of a single threat model where there's a
+benefit to running a TDX guest without attestation?  Will TDX only be
+used in environments where secrets are provisioned to guests on the
+basis of attestation?
 
-Thanks,
+>>From this perspective, I am not sure what's the value of having a dedicated
+> INTEL_TDX_ATTESTATION Kconfig.  The attestation support code should be turned on
+> unconditionally when CONFIG_INTEL_TDX_GUEST is on.  The code can also be just
+> under arch/x86/coco/tdx/ I guess?
 
-Kosuke
-
+How much code are we talking about?  What's the difference in the size
+of the binaries with this compiled in?

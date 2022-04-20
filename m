@@ -2,114 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E255080D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C01D5080D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356799AbiDTGEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 02:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
+        id S1350654AbiDTGF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 02:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343802AbiDTGEl (ORCPT
+        with ESMTP id S241143AbiDTGFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 02:04:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78AD61EECE
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:01:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4431B23A;
-        Tue, 19 Apr 2022 23:01:56 -0700 (PDT)
-Received: from a077893.arm.com (unknown [10.163.41.214])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B75F33F5A1;
-        Tue, 19 Apr 2022 23:01:52 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/page_table_check: Drop all redundant EXPORT_SYMBOL()
-Date:   Wed, 20 Apr 2022 11:32:21 +0530
-Message-Id: <20220420060221.1107736-1-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 20 Apr 2022 02:05:53 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E4D2CE15
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:03:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=AOOcnU+E44vIs+pheMoJXhmNTxpxQArBK8PCjZDPu1k=;
+  b=JeAqI8DLZD09zSdr45+0R8EO5Cgdby5+SpBtSnfHFkLwVpvLlmM/8hJ9
+   wfe3mkqS1RL5WtqKsk7VTWq8kMEy8kh2kMthaDBOjZovZNbHjvj+M86gZ
+   koeT8tRdLUdXrJXhjOnVGaG2G2dAAAAGX9BQtqO3MLoqF5FQ2TTUjsuDn
+   A=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,274,1643670000"; 
+   d="scan'208";a="32427415"
+Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 08:03:05 +0200
+Date:   Wed, 20 Apr 2022 08:03:05 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+cc:     outreachy@lists.linux.dev, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        ira.weiny@intel.com
+Subject: Re: [PATCH v2] xen:  Convert kmap() to kmap_local_page()
+In-Reply-To: <20220419234328.10346-1-eng.alaamohamedsoliman.am@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2204200759080.2937@hadrien>
+References: <20220419234328.10346-1-eng.alaamohamedsoliman.am@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function definitions need not be exported via EXPORT_SYMBOL() mechanism. In
-this case these functions just get called only inside their wrappers. Even
-__page_table_check_zero() gets called without such an export. Just drop all
-these redundant EXPORT_SYMBOL().
 
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This applies on v5.18-rc3
 
- mm/page_table_check.c | 6 ------
- 1 file changed, 6 deletions(-)
+On Wed, 20 Apr 2022, Alaa Mohamed wrote:
 
-diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-index 2458281bff89..5c2a96159832 100644
---- a/mm/page_table_check.c
-+++ b/mm/page_table_check.c
-@@ -167,7 +167,6 @@ void __page_table_check_pte_clear(struct mm_struct *mm, unsigned long addr,
- 				       PAGE_SIZE >> PAGE_SHIFT);
- 	}
- }
--EXPORT_SYMBOL(__page_table_check_pte_clear);
- 
- void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
- 				  pmd_t pmd)
-@@ -180,7 +179,6 @@ void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
- 				       PMD_PAGE_SIZE >> PAGE_SHIFT);
- 	}
- }
--EXPORT_SYMBOL(__page_table_check_pmd_clear);
- 
- void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
- 				  pud_t pud)
-@@ -193,7 +191,6 @@ void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
- 				       PUD_PAGE_SIZE >> PAGE_SHIFT);
- 	}
- }
--EXPORT_SYMBOL(__page_table_check_pud_clear);
- 
- void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
- 				pte_t *ptep, pte_t pte)
-@@ -208,7 +205,6 @@ void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
- 				     pte_write(pte));
- 	}
- }
--EXPORT_SYMBOL(__page_table_check_pte_set);
- 
- void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
- 				pmd_t *pmdp, pmd_t pmd)
-@@ -223,7 +219,6 @@ void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
- 				     pmd_write(pmd));
- 	}
- }
--EXPORT_SYMBOL(__page_table_check_pmd_set);
- 
- void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
- 				pud_t *pudp, pud_t pud)
-@@ -238,7 +233,6 @@ void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
- 				     pud_write(pud));
- 	}
- }
--EXPORT_SYMBOL(__page_table_check_pud_set);
- 
- void __page_table_check_pte_clear_range(struct mm_struct *mm,
- 					unsigned long addr,
--- 
-2.20.1
+> kmap() is being deprecated and these usages are all local to the thread
+> so there is no reason kmap_local_page() can't be used.
+>
+> Replace kmap() calls with kmap_local_page().
 
+OK, so from a Coccinelle point of view, could we do
+
+@@
+expression e1,e2,x,f;
+@@
+
+e1 =
+- kmap
++ kmap_local_page
+    (e2)
+... when != x = e1 // not stored in any location and not passed to another function
+    when != f(...,e1,...)
+    when != x = e2
+    when != f(...,e2,...)
+-kunmap(e2)
++kunmap_local(e1)
+
+julia
+
+>
+> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+> ---
+> changes in V2:
+> 	-edit commit subject
+> 	-edit commit message
+> ---
+>  drivers/xen/gntalloc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/xen/gntalloc.c b/drivers/xen/gntalloc.c
+> index 4849f94372a4..55acb32842a3 100644
+> --- a/drivers/xen/gntalloc.c
+> +++ b/drivers/xen/gntalloc.c
+> @@ -178,9 +178,9 @@ static void __del_gref(struct gntalloc_gref *gref)
+>  	unsigned long addr;
+>
+>  	if (gref->notify.flags & UNMAP_NOTIFY_CLEAR_BYTE) {
+> -		uint8_t *tmp = kmap(gref->page);
+> +		uint8_t *tmp = kmap_local_page(gref->page);
+>  		tmp[gref->notify.pgoff] = 0;
+> -		kunmap(gref->page);
+> +		kunmap_local(tmp);
+>  	}
+>  	if (gref->notify.flags & UNMAP_NOTIFY_SEND_EVENT) {
+>  		notify_remote_via_evtchn(gref->notify.event);
+> --
+> 2.35.2
+>
+>
+>

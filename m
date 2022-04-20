@@ -2,101 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AC850872E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FEC50873C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378215AbiDTLli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 07:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
+        id S1378081AbiDTLqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 07:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378187AbiDTLld (ORCPT
+        with ESMTP id S238863AbiDTLpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 07:41:33 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1036441601;
-        Wed, 20 Apr 2022 04:38:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 20 Apr 2022 07:45:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DCC419B6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 04:43:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A863F21115;
-        Wed, 20 Apr 2022 11:38:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650454724; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=07ddCTy31iWqzu2w3ATEUEla6+CUZWFYjXLLhVU25JE=;
-        b=NsEzrHym87dRqLZdHm9zjmy50aB2VETeUDmasiUdmVJRpWyP5115Oq/2VSMPRvdF4+9PP2
-        mMGflypdKXHtTAk+X9MbvZA5o6XZ0+gLznmA90DTyudhybdQJhhpIXPc3ydgcncyXpaQ3a
-        cTXE4JzMybSXV/Cvunq6Srwam+0FQxU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650454724;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=07ddCTy31iWqzu2w3ATEUEla6+CUZWFYjXLLhVU25JE=;
-        b=o2AOWv0G20CzzZ6G+WC6scUZZcFMrzJtB7EWcibiigLacAjwHkDFDOcAQwBcbYE1kOXNE7
-        gxtJ15U32IhKrPAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8F28213A30;
-        Wed, 20 Apr 2022 11:38:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yBfiIcTwX2K0TAAAMHmgww
-        (envelope-from <mliska@suse.cz>); Wed, 20 Apr 2022 11:38:44 +0000
-Message-ID: <2e8ea259-b77c-836a-2aea-d66eb47dd294@suse.cz>
-Date:   Wed, 20 Apr 2022 13:38:44 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66676B81DAB
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:43:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065B3C385B7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650454987;
+        bh=SJX0hL833Q2ataycRYrB6BhXBqWa4plfzhGevB+mLF0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oM1KQON57Ca6wBOgHh+FwifBZLN62uNymm74lCFy5MxgS/8YQn5HfvBjWuMraqk8r
+         8xanKPCKTIW0/Zxdzggzmp8RVE92mejk9Sq5b7LMEUxuKOqa9AHoOLG4WiuIoiAszo
+         xmPJDuxYDBzmf4Qrr61QC+MZdkaP+ch0AKLWPl2Z+C+XL6zdy/Dx1sfTTm98FAycnu
+         FUMJm1uEda+QrCbcCHFQI2Fa+4TAJIqN+FE2OMdjAZbV4BHeDQ6lnkuJdFX9zSeLUm
+         vByjWYsORkfYyMVKuyrE3+VRH525NnnVm30zHowKwLGimwP8M1z9ax4m+AU19AlCLJ
+         OKtbIg/i4yqOA==
+Received: by mail-ej1-f45.google.com with SMTP id g18so2914220ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 04:43:06 -0700 (PDT)
+X-Gm-Message-State: AOAM533a3Is6G8U+LR/jTywNH8hWKWcZG4WgEv1QUvwRUpXVo8LG30rD
+        jO70J/4uSkEDtTdtL8Iyy1yiR0vXGUAZKR2vBRKJ2w==
+X-Google-Smtp-Source: ABdhPJyANcMdvA+ktghYJ4f27ywVan8fgMqIgZ69qYBtSH3bIIwYJZEjs0aaoX0yznuqG16ZBoHNgWlTZ78/VQ4KW/g=
+X-Received: by 2002:a17:907:6089:b0:6db:a3d7:3fa9 with SMTP id
+ ht9-20020a170907608900b006dba3d73fa9mr18759957ejc.593.1650454985018; Wed, 20
+ Apr 2022 04:43:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] Add HAVE_DEBUGINFOD_SUPPORT to built-in features.
-Content-Language: en-US
-From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
-To:     linux-perf-users@vger.kernel.org
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-References: <0d1c5ace-88e8-7102-1565-7c143f01a966@suse.cz>
-In-Reply-To: <0d1c5ace-88e8-7102-1565-7c143f01a966@suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220414162220.1985095-1-xukuohai@huawei.com> <20220414162220.1985095-6-xukuohai@huawei.com>
+ <CAEf4Bzb_R56wAuD-Wgg7B5brT-dcsa+5sYynY+_CFzRwg+N5AA@mail.gmail.com>
+ <6c18a27f-c983-58f3-1dc0-5192f7df232a@huawei.com> <82e7faec-7f0c-573f-4945-de7072744dcb@huawei.com>
+In-Reply-To: <82e7faec-7f0c-573f-4945-de7072744dcb@huawei.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Wed, 20 Apr 2022 13:42:54 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ6QZek1VV-QgO52Kp9X4cCJnXaD7QJFkMtMLtzDTzDDsA@mail.gmail.com>
+Message-ID: <CACYkzJ6QZek1VV-QgO52Kp9X4cCJnXaD7QJFkMtMLtzDTzDDsA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 5/6] bpf, arm64: bpf trampoline for arm64
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, hpa@zytor.com,
+        Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(removing gcc-patches ML that was accidentally included)
+On Wed, Apr 20, 2022 at 9:44 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+>
+> On 4/16/2022 9:57 AM, Xu Kuohai wrote:
+> > On 4/16/2022 1:12 AM, Andrii Nakryiko wrote:
+> >> On Thu, Apr 14, 2022 at 9:10 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+> >>>
+> >>> Add bpf trampoline support for arm64. Most of the logic is the same as
+> >>> x86.
+> >>>
+> >>> fentry before bpf trampoline hooked:
+> >>>  mov x9, x30
+> >>>  nop
+> >>>
+> >>> fentry after bpf trampoline hooked:
+> >>>  mov x9, x30
+> >>>  bl  <bpf_trampoline>
+> >>>
+> >>> Tested on qemu, result:
+> >>>  #55 fentry_fexit:OK
+> >>>  #56 fentry_test:OK
+> >>>  #58 fexit_sleep:OK
+> >>>  #59 fexit_stress:OK
+> >>>  #60 fexit_test:OK
+> >>>  #67 get_func_args_test:OK
+> >>>  #68 get_func_ip_test:OK
+> >>>  #101 modify_return:OK
+> >>>
+> >>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> >>> Acked-by: Song Liu <songliubraving@fb.com>
+> >>> ---
+> >>
+> >> Can you please also take a look at [0], which is an ongoing work to
+> >> add support for BPF cookie to BPF trampoline-based BPF programs. It's
+> >> very close to being done, so it would be good if you can implement
+> >> that at the same time.
+> >
+> > OK, I'll take a look and try to implemnt it.
+>
+> already implemented, but there are some conflicts between these two
+> series, will send v3 after trampoline cookie are merged.
 
-On 4/20/22 13:30, Martin Liška wrote:
-> The change adds debuginfod to ./perf -vv:
-> 
-> ...
-> debuginfod: [ OFF ]  # HAVE_DEBUGINFOD_SUPPORT
-> ...
-> 
-> Signed-off-by: Martin Liska <mliska@suse.cz>
-> ---
->   tools/perf/builtin-version.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/perf/builtin-version.c b/tools/perf/builtin-version.c
-> index 9cd074a3d825..a71f491224da 100644
-> --- a/tools/perf/builtin-version.c
-> +++ b/tools/perf/builtin-version.c
-> @@ -65,6 +65,7 @@ static void library_status(void)
->   #endif
->       STATUS(HAVE_SYSCALL_TABLE_SUPPORT, syscall_table);
->       STATUS(HAVE_LIBBFD_SUPPORT, libbfd);
-> +    STATUS(HAVE_DEBUGINFOD_SUPPORT, debuginfod);
->       STATUS(HAVE_LIBELF_SUPPORT, libelf);
->       STATUS(HAVE_LIBNUMA_SUPPORT, libnuma);
->       STATUS(HAVE_LIBNUMA_SUPPORT, numa_num_possible_cpus);
-
+Awesome work, Thanks for doing this!

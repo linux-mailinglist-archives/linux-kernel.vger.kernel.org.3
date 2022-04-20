@@ -2,312 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A3A509154
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D811509172
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382067AbiDTUYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S1382114AbiDTUbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240148AbiDTUYJ (ORCPT
+        with ESMTP id S1353413AbiDTUbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:24:09 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E7C424BC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:21:21 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id h14-20020a056e020d4e00b002cbcdda66ccso1539620ilj.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:21:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=/7AzlNa8/FALVaRP572XGxvsULlwQnwZTl94YFSVfFY=;
-        b=DT2Yh7SUkrOd35tPcW9bD9AFVH0d0a8x/VyHhc3EYLiqGRJ4unH6PRKIuUVbRLgLt/
-         aRUrBlDJj6COwNU/NpgWfhVNz8kSRVffx0ThlekVbfACVw2b3FudoKOVpHOAUSU9p8kp
-         fXb1cSiqG9kf2vonIMSqgVFtCpAI/m+huRlKen8u7wwsc2b3wit/LbVZKar/FToQU9es
-         VQSL2XYDoIOKYMSy5G49kxwYFzjF5j+CMCy1+AEoA4zLqKDdP9ol66pwZvIIi1ZMVoCe
-         2rnD4rMXGIna6557DybJbw5r7ed0hXlMJINRWx/NwGbj5v1nSd+Z3aOmy1L3xZDvzW3K
-         EF4Q==
-X-Gm-Message-State: AOAM531zWVpMC3H4KTMosrQyVlkunlnEPa9Zchih6s+s65UonnmsAoVC
-        1CV+nvLUthew3r/cShgFUz3wnyob8SEP/Z6WLfnlSLhIU0g0
-X-Google-Smtp-Source: ABdhPJx/fPZYEV3il3PbgOzoFleVub4NRCGVMCQrtwCwGHb+P+JTGDCYpS/CHNBirahx/Y7vXwGDirQyZek7OrnpsuMQ3rCouILy
+        Wed, 20 Apr 2022 16:31:33 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2116.outbound.protection.outlook.com [40.107.113.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8423B28C;
+        Wed, 20 Apr 2022 13:28:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a2ZZdKMhDu4ghBURY9nYWFI6hRu0qvS38FK6+oPaROLMKtJj6mEp6KrC6uTGb+WhHbmF86clzkg+xeU3/KuxSpBRucnwgAO2SgKVh1gwbudLMRByD14POu9mMmRZpTsOf3qGqiKYmSenbT0FWKVCRGbINWxSP1sjxsjnYLsgDnKP7roM4Anvt6dd0BzSN2gNUZJoktCuvLeZ0JINi8ogd9SLaCHbk3OfVqkwvlmZV/NmKdxyCeYv4nnVamPAnHNethFmulhdWXZ0dd9XsZ8heuLBapxjZlyPnjHgNpOKE+j/m9ozb2m/yze4thqXnmBCF0ySbQhNz155IHTyKm72jw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cXyQo7GyVuVo5GkVjtumelgHfr7tlmu/0WqgA0y1nz4=;
+ b=kYTVBd8TEaIvDs9fTmJOndwHiR9sDeixb++CGC6k35K6sp9lgboVVGxD1i8LyGrb6JGpVTISnnUyT/y/LdRZav03bARqljc58e8LujaZvtt1BJCSdV86sPDl02BRUQGgudpxtRVTM4dUs/OyHh0YfV/gzVmSB4b8T1YPuxxzdV8w2XOLdl5VICVbxjiqs8wZL9S3krRDawb1cCypeIatM81TsZ5x1j5NxCwxlYYG23FjtQU/xwgDyYE9QRP09mISm3p3IRNwAZwiVg1a+ifB6UYwNkESkOfXMCKv7yin6q6CWQUfA/mxH9HksXDBitHr6j/cFVUMMoiQ74IjShzJcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cXyQo7GyVuVo5GkVjtumelgHfr7tlmu/0WqgA0y1nz4=;
+ b=UwmoFKsJ2jX8IZ/+K1XSmQYknCm6PtBPff4bNzjnDrZef9LrVD/fPymdZo/1NXfXNCHLDxQ/0z6dbM1fxfKImIvQdJUOm92siQQVZmR6gwYnd0IwrW0hKFWS2+1zOLwM120SyVsqT6yeOe0PwiXpNOtBRQTR0yf61ruxt5VG6Ok=
+Received: from TYYPR01MB7086.jpnprd01.prod.outlook.com (2603:1096:400:de::11)
+ by TYCPR01MB6640.jpnprd01.prod.outlook.com (2603:1096:400:9d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Wed, 20 Apr
+ 2022 20:28:42 +0000
+Received: from TYYPR01MB7086.jpnprd01.prod.outlook.com
+ ([fe80::7120:d44f:518:6daa]) by TYYPR01MB7086.jpnprd01.prod.outlook.com
+ ([fe80::7120:d44f:518:6daa%8]) with mapi id 15.20.5164.025; Wed, 20 Apr 2022
+ 20:28:41 +0000
+From:   Phil Edworthy <phil.edworthy@renesas.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 00/14] Add new Renesas RZ/V2M SoC and Renesas RZ/V2M
+ EVK support
+Thread-Topic: [PATCH v2 00/14] Add new Renesas RZ/V2M SoC and Renesas RZ/V2M
+ EVK support
+Thread-Index: AQHYREx+KCdmySc6EUmO5txhFJSXa6z5XQUAgAACc9A=
+Date:   Wed, 20 Apr 2022 20:28:41 +0000
+Message-ID: <TYYPR01MB70863D0C83AA776A2E48C58FF5F59@TYYPR01MB7086.jpnprd01.prod.outlook.com>
+References: <20220330154024.112270-1-phil.edworthy@renesas.com>
+ <CAMuHMdVV=PBfboHUk-wi1coAy7rcpDngKGSTqDWh-5vnSc91pg@mail.gmail.com>
+In-Reply-To: <CAMuHMdVV=PBfboHUk-wi1coAy7rcpDngKGSTqDWh-5vnSc91pg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a9aeb63f-5247-4337-4f96-08da230c5bb8
+x-ms-traffictypediagnostic: TYCPR01MB6640:EE_
+x-microsoft-antispam-prvs: <TYCPR01MB66404C861C820578FB177D10F5F59@TYCPR01MB6640.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: C4VhqE8CPZid1V5BBPwrU5dFYIrALBdgoDW7Z3LYSMzbOJM+Owr175sbZjJkds+WQIuHURMc3v4WeK4Ng8FAXkXW6rBxVtfJNCPUwAXm04D6utURUr0Z+ITStAlxpeGPWEOdW8L4iaAhy3RYqg6bfQFO65i1jgs+Ht2TWH8xc+Pr6hdtEl8akGEI39tFj7Wq+nXiI+UUsXE/u51R0Hfqn1m0axdZvO9SYl9O2ETzsMgSWWPtJtpspdwcNesH9ElQ4erf94s7M0Mh4V9jHf6nR5Z6wtCXSx6kJEjGEzK9e0ivKC8kcDX9jJYH2yze6v6ZiXzsBvBGFVM275eTkMgUvJR0Gdz+fdTrQMGUL1PNI9RvkFw2W49VgsNqrlfBTLX2S0KuywdyISIz5ri/VWmUSKpaqZMu6Oz7Tthd41Zd+BtYmdqguU+ifhjEOpmK7zD/FOPsEc2tAFqbz19UWKabxrDEezpfb4tYiXj2ZePx1KeVTrErMMqMu5HYSJ658njWG+sPv5yzmfMO+0REesBhVUKH6vqdibIdfuCe7Fv/Yrc0jMFvY8stham+QjTUIzCJ3Kr6efFpVSxSSHDzIU+Iwx3gbLHJ/C7u56di7iLpXwxyC1RcZJ9cAWrCzml9mFkrbJ89vbYr9wwHcqniHjXm+5WGG+K43qt9QOjX96apMlIQ1B0nLshJg6j4p1nAgM/uHVEW4YOP+4Zix1G3CI6LwE/zKjSeR/ZsHgXJzitLroNT1v/FhFgmGh/FD317v7lpkSNONqjdClj9ek0C6RR1FZ0yG8jkdU6dFpsBsYGx+PQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYYPR01MB7086.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52536014)(6506007)(53546011)(8936002)(9686003)(5660300002)(66946007)(7416002)(64756008)(76116006)(8676002)(54906003)(186003)(66556008)(66476007)(55016003)(26005)(86362001)(4326008)(66446008)(316002)(6916009)(33656002)(508600001)(71200400001)(2906002)(44832011)(38070700005)(966005)(38100700002)(7696005)(122000001)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?agtsnkUy0NBTVgAZWxG4mk2B/oGNm/bqpd0HeMJ2ilOBajHC3OxU7kQcx/t4?=
+ =?us-ascii?Q?RKYtUzap9KXEMDg37TltnnIHzMqc0XKvi95WFaBK32hjfHpjtquF+JganEjx?=
+ =?us-ascii?Q?xv0wclRahaQ1TuGQelQ4tNjxNACB+OAv47YW1n7SbQkobhb9e6gPGQVIpZ1Y?=
+ =?us-ascii?Q?keeUfNU4gQcJITLkKn3/OPIGiNWdg4FOJUR4bzwtWoCkebUjTD5ZRC6Ylm0v?=
+ =?us-ascii?Q?6oZFxY4rAQ/HUzaT9gRxS8gf14rw/A80VVFLFlebJEGAydRmI7ckkh/sE0NF?=
+ =?us-ascii?Q?N/650vey1GgpBs4KEZ00B0DLmSrhlZBlsXosUxry8EBRYSU6SdSpwnBXX3rF?=
+ =?us-ascii?Q?41fDx2UIgxEJ0wUWS2xC/AkRuuCP1rRcuCs+rbFx76iRLkuJ+G10pFUFJOnD?=
+ =?us-ascii?Q?Nx0QpQKbx/iwDlGXYpuJZBGgl+ZykInzT853mJncRX8Q1EKlwHM2sr5UkBoo?=
+ =?us-ascii?Q?clsiVRn8qzFSmdG0fBl4eFq+w7iWDLNI8cN1AxZzO7waJsGxfK3eu5ymFmMo?=
+ =?us-ascii?Q?ugJuaWHvaUdNPb26dFRkEH9YPi4NYNRRNk1xHFhWgwYzz96c1RNCFvh91Gc7?=
+ =?us-ascii?Q?jukDwHohIH+E3KnD/FcnTyQF9IOt444SZV4vWu2fX64+8bnPk6F1br+E8cDN?=
+ =?us-ascii?Q?2ecro+xjd6JoxtOoov6HVQ5mFU6LOQzg40KYjuOX7zFDO/Smsw5zgQESrNi8?=
+ =?us-ascii?Q?6JNcZUBTuTHvJ80aFSMyfDcHznCTh0g0GMGBZ/CplOOse6R+tL+hqi4/8UQm?=
+ =?us-ascii?Q?FwfOSxR2c4/fEYY+bOhzciFUIqInudHxW3yGBmESXXmCIhS0duAbrbAtk9AD?=
+ =?us-ascii?Q?XX0csScoMYCmxSJrDp/pi93WD/j5qWEvj4ehkqMGyUxSdtVgAHe7z7cjuCsf?=
+ =?us-ascii?Q?5fCZA0/uFTketu8j8NOIQC/ubHDVt/mCB6JMew9zatVuEn6PCl7xglx4Xnqb?=
+ =?us-ascii?Q?XhVuO/TRdXmgSRG7OFmcvBJXROEeAD51wmjrB4mMH09cnrB7MLRwNAZjdd+l?=
+ =?us-ascii?Q?nb3MTH4oCWsvlt0YnuuHOxGtjRwHPCXhIhv5W/Sm4+uoJnz/bNALiznP71mo?=
+ =?us-ascii?Q?UDSRGekrCHTz+QxWmWXB7vudMnZ1liXVL4sUrC41LlmG1kiufwKmY1tquY7Y?=
+ =?us-ascii?Q?KyFADKjK+31jQYoqlMzz2NVxKTh0UVIo7UaAUuf/UUnoDxeSOKJLwy1w+Tyf?=
+ =?us-ascii?Q?4rA0+rzApZtmIZF8175xSjI3mruo54jXY5KDey8AY5laI8I9nZ+YHAXePSPY?=
+ =?us-ascii?Q?D7oASrCp6Grc0K6EEM3EPx1pO/BzME4Reanr1UgAhhH05tzXnRZuBIfMKjG/?=
+ =?us-ascii?Q?W2yt/QGDNjlbKeBezDUGn2TnsylvpIYvrftIhiPM6WPzXuHcR2bWOZ+VNqW7?=
+ =?us-ascii?Q?d78n2Ib819TCxHqLjQHZT8xdQ2WTstfYPjJ5bCdyGSgKzKOR/w31T24pwrIs?=
+ =?us-ascii?Q?Y3DN0SVn8G3sXj1b9NWCjxRtDOvE1MpeoScqxdnMEnJUKoK2EV+56HzIdrzd?=
+ =?us-ascii?Q?SBXrPnw+k4mOal9i109e5lIhu4MX30dpkHlqxDF2GMBEYe3oODgCkhPf6aNS?=
+ =?us-ascii?Q?jzQf24a8WRQVXGmHP5SkkVL3tCE/xAwpUNeoQgc0U74x9g5UxgCAL4PkFrrU?=
+ =?us-ascii?Q?hUnSYqLIYbmNciWAtr/1Lgp56jdE+kEndemvK4nmYuMmhl28cXJszhvXvFOh?=
+ =?us-ascii?Q?vFcloK36quwsMbmLNtDuzpD59nI+GrQCVG9eTjVM9PdzVCiroBeKqQmZsdXw?=
+ =?us-ascii?Q?uUirV0fmdyS5d+C2DcYTkGK3JB+zbzM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1403:b0:63d:715a:269b with SMTP id
- t3-20020a056602140300b0063d715a269bmr9912090iov.188.1650486080982; Wed, 20
- Apr 2022 13:21:20 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 13:21:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009054b205dd1bbcd5@google.com>
-Subject: [syzbot] KASAN: slab-out-of-bounds Read in __bfs (2)
-From:   syzbot <syzbot+a7de825fb004b4dced19@syzkaller.appspotmail.com>
-To:     arnd@arndb.de, dinguyen@kernel.org, dvyukov@google.com,
-        ebiederm@xmission.com, elver@google.com,
-        linux-kernel@vger.kernel.org, shorne@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYYPR01MB7086.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9aeb63f-5247-4337-4f96-08da230c5bb8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2022 20:28:41.0950
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rsmt+w0IQ0OatMlg1/9RCbgN/P5k1LTKsQSgRdddCTTwgd+VU3orwbqd3HKjKSthd2bzxZwOx76im/EusANu3hFJ/SqRib7zaMvkve4/H2s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB6640
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Geert,
 
-syzbot found the following issue on:
+On 20 April 2022 21:11 Geert Uytterhoeven wrote:
+> Hi Phil,
+>=20
+> On Wed, Mar 30, 2022 at 5:40 PM Phil Edworthy <phil.edworthy@renesas.com>
+> wrote:
+> > RZ/V2M has a dual-core Cortex-A53 (1.0 GHz) CPU and built-in AI
+> > accelerator "DRP-AI" for vision, which is Renesas' original technology.
+> > It also has a 32-bit LPDDR4 interface and video codec (H.264).
+> >
+> > The RZ/V2M is used with ISP firmware that runs on one of the Cortex-A53
+> > cores. The firmware is an integral part of the SoC such that the HW
+> > User's Manual documents which of the peripheral modules are used by the
+> > firmware.
+> >
+> > Initial patches enables minimal peripherals on Renesas RZ/V2M EVK board
+> > and booted via nfs. Ethernet is broadly compatible with the
+> > etheravb-rcar-gen3 driver, but interrupts need some work so it's not
+> > been included in this patch set.
+> >
+> > Below blocks are enabled on Renesas RZ/V2M EVK board:
+> > - memory
+> > - External input clock
+> > - CPG
+> > - UART
+>=20
+> Thanks for your series!
+>=20
+> > v2:
+> >  * Removed SYS dt-bindings patch and corresponding SoC identification
+> >    as we only used the LSI version register. This can be dealt with
+> >    later on.
+>=20
+> That patch[1] also introduced the ARCH_R9A09G011 config symbol,
+> without which none of the new code in this series is built.
+>=20
+> [1] [PATCH 07/14] soc: renesas: Identify RZ/V2M SoC
+>=20
+> https://lore.kernel.org/all/20220321154232.56315-8-phil.edworthy@renesas.=
+com/
 
-HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
-console output: https://syzkaller.appspot.com/x/log.txt?x=10bc68e8f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
-dashboard link: https://syzkaller.appspot.com/bug?extid=a7de825fb004b4dced19
-compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: riscv64
+Ah, right. I should have said that I replaced that patch with
+"[PATCH v2 06/13] soc: renesas: Add RZ/V2M (R9A09G011) config option".
+However, looking back I managed to send that patch only to myself.
+Doh!
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a7de825fb004b4dced19@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in __bfs+0x154/0x394 kernel/locking/lockdep.c:1708
-Read of size 8 at addr ffffaf801145fed0 by task syz-executor.1/6775
-
-CPU: 1 PID: 6775 Comm: syz-executor.1 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
-[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
-[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
-[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
-[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
-[<ffffffff8047479e>] print_address_description.constprop.0+0x2a/0x330 mm/kasan/report.c:255
-[<ffffffff80474d4c>] __kasan_report mm/kasan/report.c:442 [inline]
-[<ffffffff80474d4c>] kasan_report+0x184/0x1e0 mm/kasan/report.c:459
-[<ffffffff80475b20>] check_region_inline mm/kasan/generic.c:183 [inline]
-[<ffffffff80475b20>] __asan_load8+0x6e/0x96 mm/kasan/generic.c:256
-[<ffffffff8010dd9a>] __bfs+0x154/0x394 kernel/locking/lockdep.c:1708
-[<ffffffff8010e52a>] __bfs_forwards kernel/locking/lockdep.c:1803 [inline]
-[<ffffffff8010e52a>] check_path.constprop.0+0x24/0x46 kernel/locking/lockdep.c:2104
-[<ffffffff8010f95c>] check_noncircular+0x11a/0x1fe kernel/locking/lockdep.c:2131
-[<ffffffff80113c26>] check_prev_add kernel/locking/lockdep.c:3063 [inline]
-[<ffffffff80113c26>] check_prevs_add kernel/locking/lockdep.c:3186 [inline]
-[<ffffffff80113c26>] validate_chain kernel/locking/lockdep.c:3801 [inline]
-[<ffffffff80113c26>] __lock_acquire+0x19a4/0x333e kernel/locking/lockdep.c:5027
-
-Allocated by task 1102416563:
-(stack is not available)
-
-Freed by task 6724:
- stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
- kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
- kasan_set_track+0x1a/0x26 mm/kasan/common.c:45
- kasan_set_free_info+0x1e/0x3a mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x15e/0x180 mm/kasan/common.c:328
- __kasan_slab_free+0x10/0x18 mm/kasan/common.c:374
- kasan_slab_free include/linux/kasan.h:236 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook+0x8e/0x1cc mm/slub.c:1754
- slab_free mm/slub.c:3509 [inline]
- kmem_cache_free+0xca/0x482 mm/slub.c:3526
- free_task_struct kernel/fork.c:176 [inline]
- free_task+0xac/0xd6 kernel/fork.c:472
- __put_task_struct+0x160/0x242 kernel/fork.c:760
- put_task_struct include/linux/sched/task.h:115 [inline]
- delayed_put_task_struct+0x2f0/0x394 kernel/exit.c:174
- rcu_do_batch kernel/rcu/tree.c:2527 [inline]
- rcu_core+0x63c/0xf36 kernel/rcu/tree.c:2778
- rcu_core_si+0xc/0x14 kernel/rcu/tree.c:2795
- __do_softirq+0x274/0x8fc kernel/softirq.c:558
-
-Last potentially related work creation:
-------------[ cut here ]------------
-slab index 1181800 out of bounds (419) for stack id 84520868
-WARNING: CPU: 1 PID: 6775 at lib/stackdepot.c:304 stack_depot_fetch lib/stackdepot.c:304 [inline]
-WARNING: CPU: 1 PID: 6775 at lib/stackdepot.c:304 stack_depot_print+0x66/0x70 lib/stackdepot.c:276
-Modules linked in:
-CPU: 1 PID: 6775 Comm: syz-executor.1 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-epc : stack_depot_fetch lib/stackdepot.c:304 [inline]
-epc : stack_depot_print+0x66/0x70 lib/stackdepot.c:276
- ra : stack_depot_fetch lib/stackdepot.c:304 [inline]
- ra : stack_depot_print+0x66/0x70 lib/stackdepot.c:276
-epc : ffffffff80c00b8a ra : ffffffff80c00b8a sp : ffffaf801145fc60
- gp : ffffffff85863ac0 tp : ffffaf800e583080 t0 : ffffffff86bcb657
- t1 : fffff5ef0b53c90c t2 : 0000000000000000 s0 : ffffaf801145fc70
- s1 : ffffaf807ab248c0 a0 : 000000000000003c a1 : 00000000000f0000
- a2 : 0000000000000104 a3 : ffffffff8012252a a4 : 36206938ade05e00
- a5 : 36206938ade05e00 a6 : 0000000000f00000 a7 : ffffaf805a9e4863
- s2 : ffffaf801145fed0 s3 : ffffaf800723ea00 s4 : ffffaf801145e100
- s5 : ffffaf801145f840 s6 : ffffffff8588bb20 s7 : ffffffff85e09180
- s8 : ffffaf801145fde0 s9 : ffffaf800e583bd8 s10: ffffffff85899680
- s11: ffffaf800e583080 t3 : ffffffff801163b2 t4 : fffff5ef0b53c90c
- t5 : fffff5ef0b53c90d t6 : ffffaf801145f758
-status: 0000000000000100 badaddr: 0000000000000000 cause: 0000000000000003
-[<ffffffff80474a70>] describe_object_stacks mm/kasan/report.c:216 [inline]
-[<ffffffff80474a70>] describe_object mm/kasan/report.c:231 [inline]
-[<ffffffff80474a70>] print_address_description.constprop.0+0x2fc/0x330 mm/kasan/report.c:263
-[<ffffffff80474d4c>] __kasan_report mm/kasan/report.c:442 [inline]
-[<ffffffff80474d4c>] kasan_report+0x184/0x1e0 mm/kasan/report.c:459
-[<ffffffff80475b20>] check_region_inline mm/kasan/generic.c:183 [inline]
-[<ffffffff80475b20>] __asan_load8+0x6e/0x96 mm/kasan/generic.c:256
-[<ffffffff8010dd9a>] __bfs+0x154/0x394 kernel/locking/lockdep.c:1708
-[<ffffffff8010e52a>] __bfs_forwards kernel/locking/lockdep.c:1803 [inline]
-[<ffffffff8010e52a>] check_path.constprop.0+0x24/0x46 kernel/locking/lockdep.c:2104
-[<ffffffff8010f95c>] check_noncircular+0x11a/0x1fe kernel/locking/lockdep.c:2131
-[<ffffffff80113c26>] check_prev_add kernel/locking/lockdep.c:3063 [inline]
-[<ffffffff80113c26>] check_prevs_add kernel/locking/lockdep.c:3186 [inline]
-[<ffffffff80113c26>] validate_chain kernel/locking/lockdep.c:3801 [inline]
-[<ffffffff80113c26>] __lock_acquire+0x19a4/0x333e kernel/locking/lockdep.c:5027
-irq event stamp: 435
-hardirqs last  enabled at (434): [<ffffffff8041714a>] rmqueue_pcplist mm/page_alloc.c:3671 [inline]
-hardirqs last  enabled at (434): [<ffffffff8041714a>] rmqueue mm/page_alloc.c:3698 [inline]
-hardirqs last  enabled at (434): [<ffffffff8041714a>] get_page_from_freelist+0xfc8/0x12d8 mm/page_alloc.c:4162
-hardirqs last disabled at (435): [<ffffffff80417140>] rmqueue_pcplist mm/page_alloc.c:3660 [inline]
-hardirqs last disabled at (435): [<ffffffff80417140>] rmqueue mm/page_alloc.c:3698 [inline]
-hardirqs last disabled at (435): [<ffffffff80417140>] get_page_from_freelist+0xfbe/0x12d8 mm/page_alloc.c:4162
-softirqs last  enabled at (376): [<ffffffff82af5e6e>] rcu_read_unlock_bh include/linux/rcupdate.h:760 [inline]
-softirqs last  enabled at (376): [<ffffffff82af5e6e>] ip_finish_output2+0x540/0x1720 net/ipv4/ip_output.c:222
-softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
-softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq kernel/softirq.c:459 [inline]
-softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq+0x158/0x15a kernel/softirq.c:446
----[ end trace 0000000000000000 ]---
-
-Second to last potentially related work creation:
-------------[ cut here ]------------
-slab index 2097151 out of bounds (419) for stack id ffffffff
-WARNING: CPU: 1 PID: 6775 at lib/stackdepot.c:304 stack_depot_fetch lib/stackdepot.c:304 [inline]
-WARNING: CPU: 1 PID: 6775 at lib/stackdepot.c:304 stack_depot_print+0x66/0x70 lib/stackdepot.c:276
-Modules linked in:
-CPU: 1 PID: 6775 Comm: syz-executor.1 Tainted: G        W         5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-epc : stack_depot_fetch lib/stackdepot.c:304 [inline]
-epc : stack_depot_print+0x66/0x70 lib/stackdepot.c:276
- ra : stack_depot_fetch lib/stackdepot.c:304 [inline]
- ra : stack_depot_print+0x66/0x70 lib/stackdepot.c:276
-epc : ffffffff80c00b8a ra : ffffffff80c00b8a sp : ffffaf801145fc60
- gp : ffffffff85863ac0 tp : ffffaf800e583080 t0 : ffffffff86bcb657
- t1 : fffff5ef0b53c90c t2 : 0000000000000000 s0 : ffffaf801145fc70
- s1 : ffffaf807ab248c0 a0 : 000000000000003c a1 : 00000000000f0000
- a2 : 0000000000000104 a3 : ffffffff8012252a a4 : 36206938ade05e00
- a5 : 36206938ade05e00 a6 : 0000000000f00000 a7 : ffffaf805a9e4863
- s2 : ffffaf801145fed0 s3 : ffffaf800723ea00 s4 : ffffaf801145e100
- s5 : ffffaf801145f840 s6 : ffffffff8588bb20 s7 : ffffffff85e09180
- s8 : ffffaf801145fde0 s9 : ffffaf800e583bd8 s10: ffffffff85899680
- s11: ffffaf800e583080 t3 : ffffffff801163b2 t4 : fffff5ef0b53c90c
- t5 : fffff5ef0b53c90d t6 : ffffaf801145f758
-status: 0000000000000100 badaddr: 0000000000000000 cause: 0000000000000003
-[<ffffffff80474a22>] describe_object_stacks mm/kasan/report.c:221 [inline]
-[<ffffffff80474a22>] describe_object mm/kasan/report.c:231 [inline]
-[<ffffffff80474a22>] print_address_description.constprop.0+0x2ae/0x330 mm/kasan/report.c:263
-[<ffffffff80474d4c>] __kasan_report mm/kasan/report.c:442 [inline]
-[<ffffffff80474d4c>] kasan_report+0x184/0x1e0 mm/kasan/report.c:459
-[<ffffffff80475b20>] check_region_inline mm/kasan/generic.c:183 [inline]
-[<ffffffff80475b20>] __asan_load8+0x6e/0x96 mm/kasan/generic.c:256
-[<ffffffff8010dd9a>] __bfs+0x154/0x394 kernel/locking/lockdep.c:1708
-[<ffffffff8010e52a>] __bfs_forwards kernel/locking/lockdep.c:1803 [inline]
-[<ffffffff8010e52a>] check_path.constprop.0+0x24/0x46 kernel/locking/lockdep.c:2104
-[<ffffffff8010f95c>] check_noncircular+0x11a/0x1fe kernel/locking/lockdep.c:2131
-[<ffffffff80113c26>] check_prev_add kernel/locking/lockdep.c:3063 [inline]
-[<ffffffff80113c26>] check_prevs_add kernel/locking/lockdep.c:3186 [inline]
-[<ffffffff80113c26>] validate_chain kernel/locking/lockdep.c:3801 [inline]
-[<ffffffff80113c26>] __lock_acquire+0x19a4/0x333e kernel/locking/lockdep.c:5027
-irq event stamp: 435
-hardirqs last  enabled at (434): [<ffffffff8041714a>] rmqueue_pcplist mm/page_alloc.c:3671 [inline]
-hardirqs last  enabled at (434): [<ffffffff8041714a>] rmqueue mm/page_alloc.c:3698 [inline]
-hardirqs last  enabled at (434): [<ffffffff8041714a>] get_page_from_freelist+0xfc8/0x12d8 mm/page_alloc.c:4162
-hardirqs last disabled at (435): [<ffffffff80417140>] rmqueue_pcplist mm/page_alloc.c:3660 [inline]
-hardirqs last disabled at (435): [<ffffffff80417140>] rmqueue mm/page_alloc.c:3698 [inline]
-hardirqs last disabled at (435): [<ffffffff80417140>] get_page_from_freelist+0xfbe/0x12d8 mm/page_alloc.c:4162
-softirqs last  enabled at (376): [<ffffffff82af5e6e>] rcu_read_unlock_bh include/linux/rcupdate.h:760 [inline]
-softirqs last  enabled at (376): [<ffffffff82af5e6e>] ip_finish_output2+0x540/0x1720 net/ipv4/ip_output.c:222
-softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
-softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq kernel/softirq.c:459 [inline]
-softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq+0x158/0x15a kernel/softirq.c:446
----[ end trace 0000000000000000 ]---
-
-The buggy address belongs to the object at ffffaf801145e100
- which belongs to the cache task_struct of size 5952
-The buggy address is located 1680 bytes to the right of
- 5952-byte region [ffffaf801145e100, ffffaf801145f840)
-The buggy address belongs to the page:
-page:ffffaf807ab248c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x91658
-head:ffffaf807ab248c0 order:3 compound_mapcount:0 compound_pincount:0
-memcg:ffffaf8021359281
-flags: 0x9000010200(slab|head|section=18|node=0|zone=0)
-raw: 0000009000010200 ffffaf807aaad940 0000000000000003 ffffaf800723ea00
-raw: 0000000000000000 0000000000050005 00000001ffffffff ffffaf8021359281
-raw: 00000000000007ff
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 3072, ts 1369164483600, free_ts 1354406359600
- __set_page_owner+0x48/0x136 mm/page_owner.c:183
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0xd0/0x10a mm/page_alloc.c:2427
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0x8da/0x12d8 mm/page_alloc.c:4165
- __alloc_pages+0x150/0x3b6 mm/page_alloc.c:5389
- alloc_pages+0x132/0x2a6 mm/mempolicy.c:2271
- alloc_slab_page.constprop.0+0xc2/0xfa mm/slub.c:1799
- allocate_slab mm/slub.c:1944 [inline]
- new_slab+0x25a/0x2cc mm/slub.c:2004
- ___slab_alloc+0x56e/0x918 mm/slub.c:3018
- __slab_alloc.constprop.0+0x50/0x8c mm/slub.c:3105
- slab_alloc_node mm/slub.c:3196 [inline]
- kmem_cache_alloc_node+0x1f2/0x41c mm/slub.c:3266
- alloc_task_struct_node kernel/fork.c:171 [inline]
- dup_task_struct kernel/fork.c:883 [inline]
- copy_process+0x203e/0x3c34 kernel/fork.c:1998
- kernel_clone+0xee/0x920 kernel/fork.c:2555
- __do_sys_clone+0xf2/0x12e kernel/fork.c:2672
- sys_clone+0x32/0x44 kernel/fork.c:2640
- ret_from_syscall+0x0/0x2
-page last free stack trace:
- __reset_page_owner+0x4a/0xea mm/page_owner.c:142
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1352 [inline]
- free_pcp_prepare+0x29c/0x45e mm/page_alloc.c:1404
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page+0x6a/0x31e mm/page_alloc.c:3404
- free_the_page mm/page_alloc.c:706 [inline]
- __free_pages+0xe2/0x112 mm/page_alloc.c:5474
- __free_slab+0x122/0x27c mm/slub.c:2028
- free_slab mm/slub.c:2043 [inline]
- discard_slab+0x4c/0x7a mm/slub.c:2049
- __slab_free+0x20a/0x29c mm/slub.c:3414
- do_slab_free mm/slub.c:3497 [inline]
- ___cache_free+0x17c/0x354 mm/slub.c:3516
- qlink_free mm/kasan/quarantine.c:157 [inline]
- qlist_free_all+0x7c/0x132 mm/kasan/quarantine.c:176
- kasan_quarantine_reduce+0x14c/0x1c8 mm/kasan/quarantine.c:283
- __kasan_slab_alloc+0x5c/0x98 mm/kasan/common.c:446
- kasan_slab_alloc include/linux/kasan.h:260 [inline]
- slab_post_alloc_hook mm/slab.h:732 [inline]
- slab_alloc_node mm/slub.c:3230 [inline]
- kmem_cache_alloc_node+0x368/0x41c mm/slub.c:3266
- __alloc_skb+0x234/0x2e4 net/core/skbuff.c:414
- alloc_skb_fclone include/linux/skbuff.h:1208 [inline]
- tcp_stream_alloc_skb+0x70/0x4c0 net/ipv4/tcp.c:861
- tcp_sendmsg_locked+0x880/0x1d9e net/ipv4/tcp.c:1281
- tcp_sendmsg+0x32/0x4e net/ipv4/tcp.c:1440
-
-Memory state around the buggy address:
- ffffaf801145fd80: f1 f1 f1 f1 00 f3 f3 f3 fc fc fc fc fc fc fc fc
- ffffaf801145fe00: fc fc fc fc fc fc fc fc fc fc fc fc 00 00 00 00
->ffffaf801145fe80: f1 f1 f1 f1 00 f2 f2 f2 fc fc fc fc 00 00 00 f3
-                                                 ^
- ffffaf801145ff00: f3 f3 f3 f3 fc fc fc fc fc fc fc fc fc fc fc fc
- ffffaf801145ff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+Thanks
+Phil
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> Gr{oetje,eeting}s,
+>=20
+>                         Geert
+>=20
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-
+> m68k.org
+>=20
+> In personal conversations with technical people, I call myself a hacker.
+> But
+> when I'm talking to journalists I just say "programmer" or something like
+> that.
+>                                 -- Linus Torvalds

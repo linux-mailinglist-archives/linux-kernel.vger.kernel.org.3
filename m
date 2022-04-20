@@ -2,157 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE43508B6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777CD508B76
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379951AbiDTPDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
+        id S1379885AbiDTPEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379881AbiDTPC4 (ORCPT
+        with ESMTP id S1379904AbiDTPEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:02:56 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9877E11A20;
-        Wed, 20 Apr 2022 08:00:09 -0700 (PDT)
-Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23KETO8K024773;
-        Wed, 20 Apr 2022 14:59:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id; s=pps0720;
- bh=SrJ1s9ybwVbdOOH7gaX0781T69f23uJScMgAQXx2D9s=;
- b=mVF4jgUb+ooe5pMgvTeUB8D2IRz/uWHiglputfztkKAkwk6gsaEwG7oS6upmuSAJYrZC
- mRfEWStqBrfn7UfCC1Hkk4ZwoJjL/NddIwX58nxUWasnE4DzlZFoKqqN7KtY7SFn6i7O
- ZyyU49dZzCjy7/k13YU7u0/BiUb4cPgkjl2iHV+hr2+cz6yC4u8akKmVK2UnKZUn/yo7
- XPQjmMzexasVeotZmsUxRgRaToSjYjK1zG8W+qodNuWZ+cYXHDMw1Gj5rTt4sehGTcct
- 0UnZinGKVaYO6VVwAKA3PLjMwP60njxIfyEIE4otZ2EVXQ/2SBaooxc/hVVaU3P07gjR 2Q== 
-Received: from g9t5009.houston.hpe.com (g9t5009.houston.hpe.com [15.241.48.73])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fjkypr8t3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 14:59:15 +0000
-Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
-        by g9t5009.houston.hpe.com (Postfix) with ESMTP id F03E255;
-        Wed, 20 Apr 2022 14:59:13 +0000 (UTC)
-Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
-        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id 711514A;
-        Wed, 20 Apr 2022 14:59:12 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        gregkh@linuxfoundation.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, linux@armlinux.org.uk, arnd@arndb.de,
-        olof@lixom.net, joel@jms.id.au, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 00/11] ARM: Introduce HPE GXP Architecture
-Date:   Wed, 20 Apr 2022 10:01:14 -0500
-Message-Id: <20220420150114.47356-1-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-X-Proofpoint-ORIG-GUID: HaEgkcqBFgiSzCPe6r6przRCKLH88dHH
-X-Proofpoint-GUID: HaEgkcqBFgiSzCPe6r6przRCKLH88dHH
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-20_04,2022-04-20_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- malwarescore=0 bulkscore=0 spamscore=0 clxscore=1011 adultscore=0
- impostorscore=0 mlxlogscore=851 lowpriorityscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204200089
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 11:04:32 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E469440E77;
+        Wed, 20 Apr 2022 08:01:42 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id y21so1398584wmi.2;
+        Wed, 20 Apr 2022 08:01:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XsQiKH6TajJPAJHa8yDpCvGZxUo92/efC5z+5+H0ZlA=;
+        b=QgKJcishop3aV1xXrheRV4qyylb1AI5grf9+ZvrBgbbHio91mGzOh5Sujl1rBYh5HS
+         yPYdO/Rwprg0JLDluwQVIlnxMABdTWOdgiKbnEvQCe6wvGAb7QkRyMrd9c92iPGNZBcc
+         ClsZmZQCDrCbjxPIywrrQ3LHxysH8DgN50f9Hvd8ua+hioe42+3WKdeaAh+71xIMRyAZ
+         v5MMQMNd1zciCw3y/DgAY/GTBvdO2IOsFVbqb0jri9eOFcmqsmRN77dcBnjLUPhXDmFx
+         w3NBnyGr/fqQcCrB2SQFnTD9YULHVm0OLSEWdVaM2QA0fv2RbpJDlVAB5bgfZbKQc+40
+         9Kbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XsQiKH6TajJPAJHa8yDpCvGZxUo92/efC5z+5+H0ZlA=;
+        b=PXZUsEVzujfnYEc7Eof626x4LJ3J6zDQ26H30SnbGPDuLw4xBoYLHXbBydZ6nE8rEQ
+         GhxxXJjd/pZJcQo62xRLY0z/r6Bx0bLkQl+YrDeZcE/aHdLAuxnF8kXmyQPPOIPAtz6e
+         YNR2n6VTevuaNCUlHIm2mNB1gfMH+4yrj1qAjUvCN6NxZgRUEN0pLdGh7fwzXEa+DYkW
+         3G4Hoq4ODfXWY+QBnaywlT27/UGKWK3P9F8ZAhvtTqCdGBmexTb8jIwFuW3Yp7FAwaRT
+         7B7M5lAq2qHvOh6wj/egDYmI5/jWFwk0uek+XO4jKUhSyGnO0rEd1gUbc9XpEGvzWTUb
+         FXfg==
+X-Gm-Message-State: AOAM532vNHep422WMoFV5mVn7Raq99s2WSt2qcjoFeMH0wy5ppc5waUt
+        47lTG0uKuJ4ymyUBAqF+uH+3aRUNBQxdyw==
+X-Google-Smtp-Source: ABdhPJxR8PYfXuaXr7lmmOaz11HRXe8ImqDUmbKI+XvfJWLNFr3Gfkjge/cQEqozYmF/1axP319Q2g==
+X-Received: by 2002:a05:600c:1987:b0:392:90f9:98df with SMTP id t7-20020a05600c198700b0039290f998dfmr4115302wmq.72.1650466901452;
+        Wed, 20 Apr 2022 08:01:41 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id y6-20020a05600015c600b0020a8f950471sm89128wry.115.2022.04.20.08.01.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 08:01:41 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <792073cb-c1ea-2fd0-f05c-3f793a013ce2@redhat.com>
+Date:   Wed, 20 Apr 2022 17:01:38 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 3/8] KVM: SVM: Unwind "speculative" RIP advancement if
+ INTn injection "fails"
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>
+References: <20220402010903.727604-1-seanjc@google.com>
+ <20220402010903.727604-4-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220402010903.727604-4-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+On 4/2/22 03:08, Sean Christopherson wrote:
+>   		 * but re-execute the instruction instead. Rewind RIP first
+>   		 * if we emulated INT3 before.
+>   		 */
+> -		if (kvm_exception_is_soft(vector)) {
+> -			if (vector == BP_VECTOR && int3_injected &&
+> -			    kvm_is_linear_rip(vcpu, svm->int3_rip))
+> -				kvm_rip_write(vcpu,
+> -					      kvm_rip_read(vcpu) - int3_injected);
+> +		if (kvm_exception_is_soft(vector))
+>   			break;
+> -		}
 
-Changes since v3:
- *Completely redid the dtsi file to represent architecture
- *Reduced device tree size
- *Rewrote the timer driver to start the watchdog driver due
- to similar register region
- *Made adjustments to timer
- *Made adjustments to watchdog
- *Changed gxp.yaml to hpe,gxp.yaml with changes
- *Updated Maintainers to represent new file names
- *Added hpe bindings to generic-ehci and generic-ohci
- *Fixed clock architecture to be accurate
+Stale comment.
 
-Changes since v2:
- *Reduced size of changes, put them into patchset format
-
-Changes since v1:
- *Fixed compiler warnings
-
-The GXP is the HPE BMC SoC that is used in the majority
-of HPE Generation 10 servers. Traditionally the asic will
-last multiple generations of server before being replaced.
-
-Info about SoC:
-
- HPE GXP is the name of the HPE Soc. This SoC is used to implement
- many BMC features at HPE. It supports ARMv7 architecture based on
- the Cortex A9 core. It is capable of using an AXI bus to which
- a memory controller is attached. It has multiple SPI interfaces
- to connect boot flash and BIOS flash. It uses a 10/100/1000 MAC
- for network connectivity. It has multiple i2c engines to drive
- connectivity with a host infrastructure. The initial patches
- enable the watchdog and timer enabling the host to be able to
- boot. Based on feedback from the device tree gxp-timer now
- creates a gxp-wdt child because of similar register region.
-
-Nick Hawkins (11):
-  arch: arm: mach-hpe: Introduce the HPE GXP architecture
-  arch: arm: configs: multi_v7_defconfig
-  drivers: wdt: Introduce HPE GXP SoC Watchdog
-  clocksource/drivers: Add HPE GXP timer
-  dt-bindings: timer: Add HPE GXP Timer Binding
-  dt-bindings: watchdog: Add HPE GXP Watchdog timer binding
-  dt-bindings: arm: Add HPE GXP Binding
-  dt-bindings: usb: generic-echi:  Add HPE GXP echi binding
-  dt-bindings: usb: generic-ochi:  Add HPE GXP ochi binding
-  arch: arm: boot: dts: Introduce HPE GXP Device tree
-  maintainers: Introduce HPE GXP Architecture
-
- .../devicetree/bindings/arm/hpe,gxp.yaml      |  22 +++
- .../bindings/timer/hpe,gxp-timer.yaml         |  49 +++++
- .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
- .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
- .../bindings/watchdog/hpe,gxp-wdt.yaml        |  30 +++
- MAINTAINERS                                   |  13 ++
- arch/arm/Kconfig                              |   2 +
- arch/arm/Makefile                             |   1 +
- arch/arm/boot/dts/Makefile                    |   2 +
- arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  13 ++
- arch/arm/boot/dts/hpe-gxp.dtsi                | 128 ++++++++++++
- arch/arm/configs/multi_v7_defconfig           |   3 +
- arch/arm/mach-hpe/Kconfig                     |  17 ++
- arch/arm/mach-hpe/Makefile                    |   1 +
- arch/arm/mach-hpe/gxp.c                       |  16 ++
- drivers/clocksource/Kconfig                   |   8 +
- drivers/clocksource/Makefile                  |   1 +
- drivers/clocksource/timer-gxp.c               | 183 ++++++++++++++++++
- drivers/watchdog/Kconfig                      |   8 +
- drivers/watchdog/Makefile                     |   1 +
- drivers/watchdog/gxp-wdt.c                    | 166 ++++++++++++++++
- 21 files changed, 666 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/hpe,gxp.yaml
- create mode 100644 Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
- create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
- create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
- create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
- create mode 100644 arch/arm/mach-hpe/Kconfig
- create mode 100644 arch/arm/mach-hpe/Makefile
- create mode 100644 arch/arm/mach-hpe/gxp.c
- create mode 100644 drivers/clocksource/timer-gxp.c
- create mode 100644 drivers/watchdog/gxp-wdt.c
-
--- 
-2.17.1
-
+Paolo

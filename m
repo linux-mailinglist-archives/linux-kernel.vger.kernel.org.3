@@ -2,113 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E18450827C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68ACA508282
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376340AbiDTHq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 03:46:58 -0400
+        id S1376352AbiDTHrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 03:47:04 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241235AbiDTHqm (ORCPT
+        with ESMTP id S1376348AbiDTHqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:46:42 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5453BBE6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 00:43:54 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ec0bb4b715so9195827b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 00:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4rECfG0J0jcZuxwrgwhg30CvDbd+wKJQrKHF5lEEWz8=;
-        b=JJ84zEuWmJdIZ7TstEV8XP6tov0sYCEo450P8hEILZNpuvqlc8LvmWDw8vMK9BIzyx
-         p80wG38wyBCDllGZ8kRIEVtDhjYvl5nJhws3qJnrkrbECz8bby3fQzPYKA5RPVLCLzfJ
-         eni5YMWY7Iu1XUrIumWZfAM5TinCUnaEoTBPI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4rECfG0J0jcZuxwrgwhg30CvDbd+wKJQrKHF5lEEWz8=;
-        b=pUMujZ4DhtnWotk+zu953XYKwPbPxEPvK3c4XtfEV+fLXLlMMOKVDbvANFsCyjO8JP
-         CYzowivHX2dTMMARDKapqJz/ox630rpbxHUCklEk6xEVwc+2CpA0GAqUlJFDavUzR3XU
-         G1U3ePGVUjbfyEeTQI1dsOdPjocDWa7YgindrFRc+BCXcgv5wMNewCF4tXPjUISA/Jdf
-         Bv7IG2iuyoWDVmGnsIho3o1tZt6xbbluCNokTOhi2KA89eV7b7qmdNFqWsGgXdCIDCcq
-         QiwAs2olgqyBCdjJDOTGVQbaTp7qQc5Czh7ikWZfI/XTNIdMPwm9T2xPkXIu28NQA+eB
-         SJ6w==
-X-Gm-Message-State: AOAM531ObvTbZDpsCz6N1NLUc7tz5P6CaKsJ83ghNRbyRAVImxoiDMs4
-        C424tecyeVKUIxkr3iIIYKcDCMUsc7VUMnIIhfLO
-X-Google-Smtp-Source: ABdhPJwC6ND2mFoDrO8/LZH+VaOdsYNDA7F6jKsenEvyVuoe+DYFot+AtDlzxrI+mCwBEaCI0C4EwGHyNVH1lr+kPjQ=
-X-Received: by 2002:a81:5285:0:b0:2ec:471:e745 with SMTP id
- g127-20020a815285000000b002ec0471e745mr19863668ywb.443.1650440633909; Wed, 20
- Apr 2022 00:43:53 -0700 (PDT)
+        Wed, 20 Apr 2022 03:46:55 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE483BFA3;
+        Wed, 20 Apr 2022 00:44:03 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kjt2x1R9KzhXY4;
+        Wed, 20 Apr 2022 15:43:53 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 20 Apr 2022 15:43:59 +0800
+Message-ID: <82e7faec-7f0c-573f-4945-de7072744dcb@huawei.com>
+Date:   Wed, 20 Apr 2022 15:43:59 +0800
 MIME-Version: 1.0
-References: <20220420013258.3639264-1-atishp@rivosinc.com> <20220420013258.3639264-2-atishp@rivosinc.com>
-In-Reply-To: <20220420013258.3639264-2-atishp@rivosinc.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Wed, 20 Apr 2022 00:43:43 -0700
-Message-ID: <CAOnJCU+r8KhhQP-LZN+oGGCDkdQt9ZbF+LCTtZWY8r=qwmSOng@mail.gmail.com>
-Subject: Re: [PATCH 1/2] RISC-V: KVM: Remove 's' & 'u' as valid ISA extension
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     KVM General <kvm@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>, kvm-riscv@lists.infradead.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH bpf-next v2 5/6] bpf, arm64: bpf trampoline for arm64
+Content-Language: en-US
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>
+References: <20220414162220.1985095-1-xukuohai@huawei.com>
+ <20220414162220.1985095-6-xukuohai@huawei.com>
+ <CAEf4Bzb_R56wAuD-Wgg7B5brT-dcsa+5sYynY+_CFzRwg+N5AA@mail.gmail.com>
+ <6c18a27f-c983-58f3-1dc0-5192f7df232a@huawei.com>
+In-Reply-To: <6c18a27f-c983-58f3-1dc0-5192f7df232a@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 6:33 PM Atish Patra <atishp@rivosinc.com> wrote:
->
-> There are no ISA extension defined as 's' & 'u' in RISC-V specifications.
-> The misa register defines 's' & 'u' bit as Supervisor/User privilege mode
-> enabled. But it should not appear in the ISA extension in the device tree.
->
-> Remove those from the allowed ISA extension for kvm.
->
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/kvm/vcpu.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 6785aef4cbd4..2e25a7b83a1b 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -43,9 +43,7 @@ const struct kvm_stats_header kvm_vcpu_stats_header = {
->                                  riscv_isa_extension_mask(d) | \
->                                  riscv_isa_extension_mask(f) | \
->                                  riscv_isa_extension_mask(i) | \
-> -                                riscv_isa_extension_mask(m) | \
-> -                                riscv_isa_extension_mask(s) | \
-> -                                riscv_isa_extension_mask(u))
-> +                                riscv_isa_extension_mask(m))
->
->  static void kvm_riscv_reset_vcpu(struct kvm_vcpu *vcpu)
->  {
-> --
-> 2.25.1
->
+On 4/16/2022 9:57 AM, Xu Kuohai wrote:
+> On 4/16/2022 1:12 AM, Andrii Nakryiko wrote:
+>> On Thu, Apr 14, 2022 at 9:10 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+>>>
+>>> Add bpf trampoline support for arm64. Most of the logic is the same as
+>>> x86.
+>>>
+>>> fentry before bpf trampoline hooked:
+>>>  mov x9, x30
+>>>  nop
+>>>
+>>> fentry after bpf trampoline hooked:
+>>>  mov x9, x30
+>>>  bl  <bpf_trampoline>
+>>>
+>>> Tested on qemu, result:
+>>>  #55 fentry_fexit:OK
+>>>  #56 fentry_test:OK
+>>>  #58 fexit_sleep:OK
+>>>  #59 fexit_stress:OK
+>>>  #60 fexit_test:OK
+>>>  #67 get_func_args_test:OK
+>>>  #68 get_func_ip_test:OK
+>>>  #101 modify_return:OK
+>>>
+>>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>>> Acked-by: Song Liu <songliubraving@fb.com>
+>>> ---
+>>
+>> Can you please also take a look at [0], which is an ongoing work to
+>> add support for BPF cookie to BPF trampoline-based BPF programs. It's
+>> very close to being done, so it would be good if you can implement
+>> that at the same time.
+> 
+> OK, I'll take a look and try to implemnt it.
 
-Sorry. Forgot to add the fixes tag.
-
-Fixes: a33c72faf2d7 (RISC-V: KVM: Implement VCPU create, init and
-destroy functions)
-
--- 
-Regards,
-Atish
+already implemented, but there are some conflicts between these two
+series, will send v3 after trampoline cookie are merged.

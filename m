@@ -2,225 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBDF509155
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A3A509154
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382100AbiDTUYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
+        id S1382067AbiDTUYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350611AbiDTUYK (ORCPT
+        with ESMTP id S240148AbiDTUYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:24:10 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CF0427C0;
-        Wed, 20 Apr 2022 13:21:21 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 011C23D1688;
-        Wed, 20 Apr 2022 16:21:21 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Ek6fNalRIvCM; Wed, 20 Apr 2022 16:21:20 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 612683D13D3;
-        Wed, 20 Apr 2022 16:21:20 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 612683D13D3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1650486080;
-        bh=+xYwnPY4oBEnKj/FiKgSLgZGGF5AvXGUMEdznkje8po=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=ZlxEXD6pMfcip85/ctrawJPX26EmH1hQq+erdw4d9chnkZwpmPRt5XzGi/PCBZUWY
-         2DtRtstkdVxKuTK2agq6w+2BzhLOx87VPTsAuVhHkqozLouj574cw1yDx4PbKBU8+j
-         286yA1hMw2EJoEDDloexl/9iv+tY+It/ReRl+jO4cGXBTh8BPNumPieqWFvRUBkO5q
-         KGIyVknMjbSqFe3P4/Il0BZYco1SxPzXG61VE1eL1Ip3l4pSho80tfBOvQc60Vp6Dl
-         PoFIe+9Zv0Odf10YCl8E90hkWFKaU976WAZPrQ8Vo7KSz9Ui8P48Fi0pV5EQGb3Dvq
-         S9s08LszzEvcw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id n3maqjzf6Kiq; Wed, 20 Apr 2022 16:21:20 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 4FEC13D1534;
-        Wed, 20 Apr 2022 16:21:20 -0400 (EDT)
-Date:   Wed, 20 Apr 2022 16:21:20 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Message-ID: <1647936661.29102.1650486080281.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220420201242.GA2091@kbox>
-References: <20220401234309.21252-1-beaub@linux.microsoft.com> <20220401234309.21252-7-beaub@linux.microsoft.com> <337584634.26921.1650378945485.JavaMail.zimbra@efficios.com> <20220419185708.GA1908@kbox> <1722727424.27500.1650403580798.JavaMail.zimbra@efficios.com> <20220419234845.GA1805@kbox> <580163630.28705.1650477227106.JavaMail.zimbra@efficios.com> <20220420201242.GA2091@kbox>
-Subject: Re: [PATCH 6/7] tracing/user_events: Use bits vs bytes for enabled
- status page data
+        Wed, 20 Apr 2022 16:24:09 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E7C424BC
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:21:21 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id h14-20020a056e020d4e00b002cbcdda66ccso1539620ilj.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:21:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=/7AzlNa8/FALVaRP572XGxvsULlwQnwZTl94YFSVfFY=;
+        b=DT2Yh7SUkrOd35tPcW9bD9AFVH0d0a8x/VyHhc3EYLiqGRJ4unH6PRKIuUVbRLgLt/
+         aRUrBlDJj6COwNU/NpgWfhVNz8kSRVffx0ThlekVbfACVw2b3FudoKOVpHOAUSU9p8kp
+         fXb1cSiqG9kf2vonIMSqgVFtCpAI/m+huRlKen8u7wwsc2b3wit/LbVZKar/FToQU9es
+         VQSL2XYDoIOKYMSy5G49kxwYFzjF5j+CMCy1+AEoA4zLqKDdP9ol66pwZvIIi1ZMVoCe
+         2rnD4rMXGIna6557DybJbw5r7ed0hXlMJINRWx/NwGbj5v1nSd+Z3aOmy1L3xZDvzW3K
+         EF4Q==
+X-Gm-Message-State: AOAM531zWVpMC3H4KTMosrQyVlkunlnEPa9Zchih6s+s65UonnmsAoVC
+        1CV+nvLUthew3r/cShgFUz3wnyob8SEP/Z6WLfnlSLhIU0g0
+X-Google-Smtp-Source: ABdhPJx/fPZYEV3il3PbgOzoFleVub4NRCGVMCQrtwCwGHb+P+JTGDCYpS/CHNBirahx/Y7vXwGDirQyZek7OrnpsuMQ3rCouILy
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4257 (ZimbraWebClient - FF99 (Linux)/8.8.15_GA_4257)
-Thread-Topic: tracing/user_events: Use bits vs bytes for enabled status page data
-Thread-Index: xdsy70MxTbCwZAhfL9mrV150HBzH+w==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:1403:b0:63d:715a:269b with SMTP id
+ t3-20020a056602140300b0063d715a269bmr9912090iov.188.1650486080982; Wed, 20
+ Apr 2022 13:21:20 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 13:21:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009054b205dd1bbcd5@google.com>
+Subject: [syzbot] KASAN: slab-out-of-bounds Read in __bfs (2)
+From:   syzbot <syzbot+a7de825fb004b4dced19@syzkaller.appspotmail.com>
+To:     arnd@arndb.de, dinguyen@kernel.org, dvyukov@google.com,
+        ebiederm@xmission.com, elver@google.com,
+        linux-kernel@vger.kernel.org, shorne@gmail.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Apr 20, 2022, at 4:12 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
+Hello,
 
-> On Wed, Apr 20, 2022 at 01:53:47PM -0400, Mathieu Desnoyers wrote:
->> 
->> 
->> ----- On Apr 19, 2022, at 7:48 PM, Beau Belgrave beaub@linux.microsoft.com
->> wrote:
->> 
->> > On Tue, Apr 19, 2022 at 05:26:20PM -0400, Mathieu Desnoyers wrote:
->> >> ----- On Apr 19, 2022, at 2:57 PM, Beau Belgrave beaub@linux.microsoft.com
->> >> wrote:
->> >> 
->> >> > On Tue, Apr 19, 2022 at 10:35:45AM -0400, Mathieu Desnoyers wrote:
->> >> >> ----- On Apr 1, 2022, at 7:43 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
->> >> >> 
->> >> >> > User processes may require many events and when they do the cache
->> >> >> > performance of a byte index status check is less ideal than a bit index.
->> >> >> > The previous event limit per-page was 4096, the new limit is 32,768.
->> >> >> > 
->> >> >> > This change adds a mask property to the user_reg struct. Programs check
->> >> >> > that the byte at status_index has a bit set by ANDing the status_mask.
->> >> >> > 
->> >> >> > Link:
->> >> >> > https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
->> >> >> > 
->> >> >> > Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> >> >> > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
->> >> >> 
->> >> >> Hi Beau,
->> >> >> 
->> >> >> Considering this will be used in a fast-path, why choose bytewise
->> >> >> loads for the byte at status_index and the status_mask ?
->> >> >> 
->> >> > 
->> >> > First, thanks for the review!
->> >> > 
->> >> > Which loads are you concerned about? The user programs can store the
->> >> > index and mask in another type after registration instead of an int.
->> >> 
->> >> I'm concerned about the loads from user-space, considering that
->> >> those are on the fast-path.
->> >> 
->> >> Indeed user programs will need to copy the status index and mask
->> >> returned in struct user_reg, so adapting the indexing and mask to
->> >> deal with an array of unsigned long rather than bytes can be done
->> >> at that point, but I wonder how many users will go through that
->> >> extra trouble unless there are helpers to convert the status index
->> >> from byte-wise to long-wise, and convert the status mask from a
->> >> byte-wise mask to a long-wise mask (and associated documentation).
->> >> 
->> > 
->> > Yeah, do you think it's wise to maybe add inline functions in
->> > user_events.h to do this conversion? I could then add them to our
->> > documentation.
->> > 
->> > Hopefully this would make more APIs/people do the better approach?
->> > 
->> >> 
->> >> > 
->> >> > However, you may be referring to something on the kernel side?
->> >> 
->> >> No.
->> >> 
->> > 
->> > [..]
->> > 
->> >> >> Ideally I would be tempted to use "unsigned long" type (32-bit on 32-bit
->> >> >> binaries and 64-bit on 64-bit binaries) for both the array access
->> >> >> and the status mask, but this brings extra complexity for 32-bit compat
->> >> >> handling.
->> >> >> 
->> >> > 
->> >> > User programs can store the index and mask returned into better value
->> >> > types for their architecture.
->> >> > 
->> >> > I agree it will cause compat handling issues if it's put into the user
->> >> > facing header as a long.
->> >> > 
->> >> > I was hoping APIs, like libtracefs, could abstract many callers from how
->> >> > best to use the returned values. For example, it could save the index
->> >> > and mask as unsigned long for the callers and use those for the
->> >> > enablement checks.
->> >> > 
->> >> > Do you think there is a way to enable these native types in the ABI
->> >> > without causing compat handling issues? I used ints to prevent compat
->> >> > issues between 32-bit user mode and 64-bit kernel mode.
->> >> 
->> >> I think you are right: this is not an ABI issue, but rather a usability
->> >> issue that can be solved by implementing and documenting user-space library
->> >> helpers to help user applications index the array and apply the mask to an
->> >> unsigned long type.
->> >> 
->> > 
->> > Great. Let me know if updating user_events.h to do the conversion is a
->> > good idea or not, or if you have other thoughts how to make more people
->> > do the best thing.
->> 
->> Usually uapi headers are reserved for exposing the kernel ABI to user-space.
->> I think the helpers we are discussing here do not belong to the uapi because
->> they
->> do not define the ABI, and should probably sit elsewhere in a proper library.
->> 
-> 
-> Makes sense.
-> 
-> That likely means I should remove the enablement helper check from
-> user_events.h, right?
+syzbot found the following issue on:
 
-Yes, I would be tempted to remove it, and document the bitwise index ABI
-instead.
+HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+console output: https://syzkaller.appspot.com/x/log.txt?x=10bc68e8f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
+dashboard link: https://syzkaller.appspot.com/bug?extid=a7de825fb004b4dced19
+compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: riscv64
 
-> 
->> If the status_mask is meant to be modified in some ways by user-space before it
->> can
->> be used as a mask, I wonder why it is exposed as a byte-wise mask at all ?
->> 
->> Rather than exposing a byte-wise index and single-byte mask as ABI, the kernel
->> could
->> simply expose a bit-wise index, which can then be used by the application to
->> calculate
->> index and mask, which it should interpret in little endian if it wants to apply
->> the
->> mask on types larger than a single byte.
->> 
->> Thoughts ?
->> 
-> 
-> Yeah, you're right, we can just expose out the bit-wise index at the
-> ABI.
-> 
-> I'll switch over to that model in the next version.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Allright !
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a7de825fb004b4dced19@syzkaller.appspotmail.com
 
-Thanks,
+==================================================================
+BUG: KASAN: slab-out-of-bounds in __bfs+0x154/0x394 kernel/locking/lockdep.c:1708
+Read of size 8 at addr ffffaf801145fed0 by task syz-executor.1/6775
 
-Mathieu
+CPU: 1 PID: 6775 Comm: syz-executor.1 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
+Hardware name: riscv-virtio,qemu (DT)
+Call Trace:
+[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
+[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
+[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
+[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
+[<ffffffff8047479e>] print_address_description.constprop.0+0x2a/0x330 mm/kasan/report.c:255
+[<ffffffff80474d4c>] __kasan_report mm/kasan/report.c:442 [inline]
+[<ffffffff80474d4c>] kasan_report+0x184/0x1e0 mm/kasan/report.c:459
+[<ffffffff80475b20>] check_region_inline mm/kasan/generic.c:183 [inline]
+[<ffffffff80475b20>] __asan_load8+0x6e/0x96 mm/kasan/generic.c:256
+[<ffffffff8010dd9a>] __bfs+0x154/0x394 kernel/locking/lockdep.c:1708
+[<ffffffff8010e52a>] __bfs_forwards kernel/locking/lockdep.c:1803 [inline]
+[<ffffffff8010e52a>] check_path.constprop.0+0x24/0x46 kernel/locking/lockdep.c:2104
+[<ffffffff8010f95c>] check_noncircular+0x11a/0x1fe kernel/locking/lockdep.c:2131
+[<ffffffff80113c26>] check_prev_add kernel/locking/lockdep.c:3063 [inline]
+[<ffffffff80113c26>] check_prevs_add kernel/locking/lockdep.c:3186 [inline]
+[<ffffffff80113c26>] validate_chain kernel/locking/lockdep.c:3801 [inline]
+[<ffffffff80113c26>] __lock_acquire+0x19a4/0x333e kernel/locking/lockdep.c:5027
 
-> 
-> Thanks,
-> -Beau
-> 
->> Thanks,
->> 
->> Mathieu
->> 
-> 
-> [..]
+Allocated by task 1102416563:
+(stack is not available)
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Freed by task 6724:
+ stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
+ kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
+ kasan_set_track+0x1a/0x26 mm/kasan/common.c:45
+ kasan_set_free_info+0x1e/0x3a mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x15e/0x180 mm/kasan/common.c:328
+ __kasan_slab_free+0x10/0x18 mm/kasan/common.c:374
+ kasan_slab_free include/linux/kasan.h:236 [inline]
+ slab_free_hook mm/slub.c:1728 [inline]
+ slab_free_freelist_hook+0x8e/0x1cc mm/slub.c:1754
+ slab_free mm/slub.c:3509 [inline]
+ kmem_cache_free+0xca/0x482 mm/slub.c:3526
+ free_task_struct kernel/fork.c:176 [inline]
+ free_task+0xac/0xd6 kernel/fork.c:472
+ __put_task_struct+0x160/0x242 kernel/fork.c:760
+ put_task_struct include/linux/sched/task.h:115 [inline]
+ delayed_put_task_struct+0x2f0/0x394 kernel/exit.c:174
+ rcu_do_batch kernel/rcu/tree.c:2527 [inline]
+ rcu_core+0x63c/0xf36 kernel/rcu/tree.c:2778
+ rcu_core_si+0xc/0x14 kernel/rcu/tree.c:2795
+ __do_softirq+0x274/0x8fc kernel/softirq.c:558
+
+Last potentially related work creation:
+------------[ cut here ]------------
+slab index 1181800 out of bounds (419) for stack id 84520868
+WARNING: CPU: 1 PID: 6775 at lib/stackdepot.c:304 stack_depot_fetch lib/stackdepot.c:304 [inline]
+WARNING: CPU: 1 PID: 6775 at lib/stackdepot.c:304 stack_depot_print+0x66/0x70 lib/stackdepot.c:276
+Modules linked in:
+CPU: 1 PID: 6775 Comm: syz-executor.1 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
+Hardware name: riscv-virtio,qemu (DT)
+epc : stack_depot_fetch lib/stackdepot.c:304 [inline]
+epc : stack_depot_print+0x66/0x70 lib/stackdepot.c:276
+ ra : stack_depot_fetch lib/stackdepot.c:304 [inline]
+ ra : stack_depot_print+0x66/0x70 lib/stackdepot.c:276
+epc : ffffffff80c00b8a ra : ffffffff80c00b8a sp : ffffaf801145fc60
+ gp : ffffffff85863ac0 tp : ffffaf800e583080 t0 : ffffffff86bcb657
+ t1 : fffff5ef0b53c90c t2 : 0000000000000000 s0 : ffffaf801145fc70
+ s1 : ffffaf807ab248c0 a0 : 000000000000003c a1 : 00000000000f0000
+ a2 : 0000000000000104 a3 : ffffffff8012252a a4 : 36206938ade05e00
+ a5 : 36206938ade05e00 a6 : 0000000000f00000 a7 : ffffaf805a9e4863
+ s2 : ffffaf801145fed0 s3 : ffffaf800723ea00 s4 : ffffaf801145e100
+ s5 : ffffaf801145f840 s6 : ffffffff8588bb20 s7 : ffffffff85e09180
+ s8 : ffffaf801145fde0 s9 : ffffaf800e583bd8 s10: ffffffff85899680
+ s11: ffffaf800e583080 t3 : ffffffff801163b2 t4 : fffff5ef0b53c90c
+ t5 : fffff5ef0b53c90d t6 : ffffaf801145f758
+status: 0000000000000100 badaddr: 0000000000000000 cause: 0000000000000003
+[<ffffffff80474a70>] describe_object_stacks mm/kasan/report.c:216 [inline]
+[<ffffffff80474a70>] describe_object mm/kasan/report.c:231 [inline]
+[<ffffffff80474a70>] print_address_description.constprop.0+0x2fc/0x330 mm/kasan/report.c:263
+[<ffffffff80474d4c>] __kasan_report mm/kasan/report.c:442 [inline]
+[<ffffffff80474d4c>] kasan_report+0x184/0x1e0 mm/kasan/report.c:459
+[<ffffffff80475b20>] check_region_inline mm/kasan/generic.c:183 [inline]
+[<ffffffff80475b20>] __asan_load8+0x6e/0x96 mm/kasan/generic.c:256
+[<ffffffff8010dd9a>] __bfs+0x154/0x394 kernel/locking/lockdep.c:1708
+[<ffffffff8010e52a>] __bfs_forwards kernel/locking/lockdep.c:1803 [inline]
+[<ffffffff8010e52a>] check_path.constprop.0+0x24/0x46 kernel/locking/lockdep.c:2104
+[<ffffffff8010f95c>] check_noncircular+0x11a/0x1fe kernel/locking/lockdep.c:2131
+[<ffffffff80113c26>] check_prev_add kernel/locking/lockdep.c:3063 [inline]
+[<ffffffff80113c26>] check_prevs_add kernel/locking/lockdep.c:3186 [inline]
+[<ffffffff80113c26>] validate_chain kernel/locking/lockdep.c:3801 [inline]
+[<ffffffff80113c26>] __lock_acquire+0x19a4/0x333e kernel/locking/lockdep.c:5027
+irq event stamp: 435
+hardirqs last  enabled at (434): [<ffffffff8041714a>] rmqueue_pcplist mm/page_alloc.c:3671 [inline]
+hardirqs last  enabled at (434): [<ffffffff8041714a>] rmqueue mm/page_alloc.c:3698 [inline]
+hardirqs last  enabled at (434): [<ffffffff8041714a>] get_page_from_freelist+0xfc8/0x12d8 mm/page_alloc.c:4162
+hardirqs last disabled at (435): [<ffffffff80417140>] rmqueue_pcplist mm/page_alloc.c:3660 [inline]
+hardirqs last disabled at (435): [<ffffffff80417140>] rmqueue mm/page_alloc.c:3698 [inline]
+hardirqs last disabled at (435): [<ffffffff80417140>] get_page_from_freelist+0xfbe/0x12d8 mm/page_alloc.c:4162
+softirqs last  enabled at (376): [<ffffffff82af5e6e>] rcu_read_unlock_bh include/linux/rcupdate.h:760 [inline]
+softirqs last  enabled at (376): [<ffffffff82af5e6e>] ip_finish_output2+0x540/0x1720 net/ipv4/ip_output.c:222
+softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
+softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq kernel/softirq.c:459 [inline]
+softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq+0x158/0x15a kernel/softirq.c:446
+---[ end trace 0000000000000000 ]---
+
+Second to last potentially related work creation:
+------------[ cut here ]------------
+slab index 2097151 out of bounds (419) for stack id ffffffff
+WARNING: CPU: 1 PID: 6775 at lib/stackdepot.c:304 stack_depot_fetch lib/stackdepot.c:304 [inline]
+WARNING: CPU: 1 PID: 6775 at lib/stackdepot.c:304 stack_depot_print+0x66/0x70 lib/stackdepot.c:276
+Modules linked in:
+CPU: 1 PID: 6775 Comm: syz-executor.1 Tainted: G        W         5.17.0-rc1-syzkaller-00002-g0966d385830d #0
+Hardware name: riscv-virtio,qemu (DT)
+epc : stack_depot_fetch lib/stackdepot.c:304 [inline]
+epc : stack_depot_print+0x66/0x70 lib/stackdepot.c:276
+ ra : stack_depot_fetch lib/stackdepot.c:304 [inline]
+ ra : stack_depot_print+0x66/0x70 lib/stackdepot.c:276
+epc : ffffffff80c00b8a ra : ffffffff80c00b8a sp : ffffaf801145fc60
+ gp : ffffffff85863ac0 tp : ffffaf800e583080 t0 : ffffffff86bcb657
+ t1 : fffff5ef0b53c90c t2 : 0000000000000000 s0 : ffffaf801145fc70
+ s1 : ffffaf807ab248c0 a0 : 000000000000003c a1 : 00000000000f0000
+ a2 : 0000000000000104 a3 : ffffffff8012252a a4 : 36206938ade05e00
+ a5 : 36206938ade05e00 a6 : 0000000000f00000 a7 : ffffaf805a9e4863
+ s2 : ffffaf801145fed0 s3 : ffffaf800723ea00 s4 : ffffaf801145e100
+ s5 : ffffaf801145f840 s6 : ffffffff8588bb20 s7 : ffffffff85e09180
+ s8 : ffffaf801145fde0 s9 : ffffaf800e583bd8 s10: ffffffff85899680
+ s11: ffffaf800e583080 t3 : ffffffff801163b2 t4 : fffff5ef0b53c90c
+ t5 : fffff5ef0b53c90d t6 : ffffaf801145f758
+status: 0000000000000100 badaddr: 0000000000000000 cause: 0000000000000003
+[<ffffffff80474a22>] describe_object_stacks mm/kasan/report.c:221 [inline]
+[<ffffffff80474a22>] describe_object mm/kasan/report.c:231 [inline]
+[<ffffffff80474a22>] print_address_description.constprop.0+0x2ae/0x330 mm/kasan/report.c:263
+[<ffffffff80474d4c>] __kasan_report mm/kasan/report.c:442 [inline]
+[<ffffffff80474d4c>] kasan_report+0x184/0x1e0 mm/kasan/report.c:459
+[<ffffffff80475b20>] check_region_inline mm/kasan/generic.c:183 [inline]
+[<ffffffff80475b20>] __asan_load8+0x6e/0x96 mm/kasan/generic.c:256
+[<ffffffff8010dd9a>] __bfs+0x154/0x394 kernel/locking/lockdep.c:1708
+[<ffffffff8010e52a>] __bfs_forwards kernel/locking/lockdep.c:1803 [inline]
+[<ffffffff8010e52a>] check_path.constprop.0+0x24/0x46 kernel/locking/lockdep.c:2104
+[<ffffffff8010f95c>] check_noncircular+0x11a/0x1fe kernel/locking/lockdep.c:2131
+[<ffffffff80113c26>] check_prev_add kernel/locking/lockdep.c:3063 [inline]
+[<ffffffff80113c26>] check_prevs_add kernel/locking/lockdep.c:3186 [inline]
+[<ffffffff80113c26>] validate_chain kernel/locking/lockdep.c:3801 [inline]
+[<ffffffff80113c26>] __lock_acquire+0x19a4/0x333e kernel/locking/lockdep.c:5027
+irq event stamp: 435
+hardirqs last  enabled at (434): [<ffffffff8041714a>] rmqueue_pcplist mm/page_alloc.c:3671 [inline]
+hardirqs last  enabled at (434): [<ffffffff8041714a>] rmqueue mm/page_alloc.c:3698 [inline]
+hardirqs last  enabled at (434): [<ffffffff8041714a>] get_page_from_freelist+0xfc8/0x12d8 mm/page_alloc.c:4162
+hardirqs last disabled at (435): [<ffffffff80417140>] rmqueue_pcplist mm/page_alloc.c:3660 [inline]
+hardirqs last disabled at (435): [<ffffffff80417140>] rmqueue mm/page_alloc.c:3698 [inline]
+hardirqs last disabled at (435): [<ffffffff80417140>] get_page_from_freelist+0xfbe/0x12d8 mm/page_alloc.c:4162
+softirqs last  enabled at (376): [<ffffffff82af5e6e>] rcu_read_unlock_bh include/linux/rcupdate.h:760 [inline]
+softirqs last  enabled at (376): [<ffffffff82af5e6e>] ip_finish_output2+0x540/0x1720 net/ipv4/ip_output.c:222
+softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
+softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq kernel/softirq.c:459 [inline]
+softirqs last disabled at (377): [<ffffffff80060ea0>] do_softirq+0x158/0x15a kernel/softirq.c:446
+---[ end trace 0000000000000000 ]---
+
+The buggy address belongs to the object at ffffaf801145e100
+ which belongs to the cache task_struct of size 5952
+The buggy address is located 1680 bytes to the right of
+ 5952-byte region [ffffaf801145e100, ffffaf801145f840)
+The buggy address belongs to the page:
+page:ffffaf807ab248c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x91658
+head:ffffaf807ab248c0 order:3 compound_mapcount:0 compound_pincount:0
+memcg:ffffaf8021359281
+flags: 0x9000010200(slab|head|section=18|node=0|zone=0)
+raw: 0000009000010200 ffffaf807aaad940 0000000000000003 ffffaf800723ea00
+raw: 0000000000000000 0000000000050005 00000001ffffffff ffffaf8021359281
+raw: 00000000000007ff
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 3072, ts 1369164483600, free_ts 1354406359600
+ __set_page_owner+0x48/0x136 mm/page_owner.c:183
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0xd0/0x10a mm/page_alloc.c:2427
+ prep_new_page mm/page_alloc.c:2434 [inline]
+ get_page_from_freelist+0x8da/0x12d8 mm/page_alloc.c:4165
+ __alloc_pages+0x150/0x3b6 mm/page_alloc.c:5389
+ alloc_pages+0x132/0x2a6 mm/mempolicy.c:2271
+ alloc_slab_page.constprop.0+0xc2/0xfa mm/slub.c:1799
+ allocate_slab mm/slub.c:1944 [inline]
+ new_slab+0x25a/0x2cc mm/slub.c:2004
+ ___slab_alloc+0x56e/0x918 mm/slub.c:3018
+ __slab_alloc.constprop.0+0x50/0x8c mm/slub.c:3105
+ slab_alloc_node mm/slub.c:3196 [inline]
+ kmem_cache_alloc_node+0x1f2/0x41c mm/slub.c:3266
+ alloc_task_struct_node kernel/fork.c:171 [inline]
+ dup_task_struct kernel/fork.c:883 [inline]
+ copy_process+0x203e/0x3c34 kernel/fork.c:1998
+ kernel_clone+0xee/0x920 kernel/fork.c:2555
+ __do_sys_clone+0xf2/0x12e kernel/fork.c:2672
+ sys_clone+0x32/0x44 kernel/fork.c:2640
+ ret_from_syscall+0x0/0x2
+page last free stack trace:
+ __reset_page_owner+0x4a/0xea mm/page_owner.c:142
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1352 [inline]
+ free_pcp_prepare+0x29c/0x45e mm/page_alloc.c:1404
+ free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+ free_unref_page+0x6a/0x31e mm/page_alloc.c:3404
+ free_the_page mm/page_alloc.c:706 [inline]
+ __free_pages+0xe2/0x112 mm/page_alloc.c:5474
+ __free_slab+0x122/0x27c mm/slub.c:2028
+ free_slab mm/slub.c:2043 [inline]
+ discard_slab+0x4c/0x7a mm/slub.c:2049
+ __slab_free+0x20a/0x29c mm/slub.c:3414
+ do_slab_free mm/slub.c:3497 [inline]
+ ___cache_free+0x17c/0x354 mm/slub.c:3516
+ qlink_free mm/kasan/quarantine.c:157 [inline]
+ qlist_free_all+0x7c/0x132 mm/kasan/quarantine.c:176
+ kasan_quarantine_reduce+0x14c/0x1c8 mm/kasan/quarantine.c:283
+ __kasan_slab_alloc+0x5c/0x98 mm/kasan/common.c:446
+ kasan_slab_alloc include/linux/kasan.h:260 [inline]
+ slab_post_alloc_hook mm/slab.h:732 [inline]
+ slab_alloc_node mm/slub.c:3230 [inline]
+ kmem_cache_alloc_node+0x368/0x41c mm/slub.c:3266
+ __alloc_skb+0x234/0x2e4 net/core/skbuff.c:414
+ alloc_skb_fclone include/linux/skbuff.h:1208 [inline]
+ tcp_stream_alloc_skb+0x70/0x4c0 net/ipv4/tcp.c:861
+ tcp_sendmsg_locked+0x880/0x1d9e net/ipv4/tcp.c:1281
+ tcp_sendmsg+0x32/0x4e net/ipv4/tcp.c:1440
+
+Memory state around the buggy address:
+ ffffaf801145fd80: f1 f1 f1 f1 00 f3 f3 f3 fc fc fc fc fc fc fc fc
+ ffffaf801145fe00: fc fc fc fc fc fc fc fc fc fc fc fc 00 00 00 00
+>ffffaf801145fe80: f1 f1 f1 f1 00 f2 f2 f2 fc fc fc fc 00 00 00 f3
+                                                 ^
+ ffffaf801145ff00: f3 f3 f3 f3 fc fc fc fc fc fc fc fc fc fc fc fc
+ ffffaf801145ff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

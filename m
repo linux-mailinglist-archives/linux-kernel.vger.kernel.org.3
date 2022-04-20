@@ -2,127 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847D5509323
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6293750931B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382980AbiDTWtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 18:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
+        id S1382967AbiDTWrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 18:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382964AbiDTWtS (ORCPT
+        with ESMTP id S245190AbiDTWrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 18:49:18 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AC127CDC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:46:31 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id 12so3099790pll.12
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:46:31 -0700 (PDT)
+        Wed, 20 Apr 2022 18:47:12 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C05E2B186
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:44:24 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ef4a241cc5so34355127b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:44:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J00nUig6FU1iS+CYuX/r/SUYB9GfMxq2KFZFBX82bIQ=;
-        b=JYATQizpk3AS+5NjkeucdAb78Lea6qbioEnGkOVtu39RXhVxgOYlNTizUCvj3ftF5R
-         YUhkh1+4pwPk9pLyGa+a8cUWGK2+cISrbPmPSXNfviog8XocUAXFp0mtXbAUVTZGz0JV
-         Yck0peX5E8YyY4cu14o3fiokS2g8Y4qIAkMQYxTiQjKL3gHF+UC25l3cio2cy5rIvlt8
-         VdSDL+uoMgfWPrpD8SJVBFGGeobwdjG3lNk9ht5eyxv0IZH8+VJumEuqKlA7gUFpYWsI
-         94MfC13oHdX+H+yqWIvboXHKDWe9okP68OvzBzKhbEvCGCi6PnXScTqSxR7grz2zPA9O
-         skLA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=biQCpdNqt9EOdNzfaHDH0wXEREY4vMB2K+noZnpNvLk=;
+        b=nx9H6BpSgpwEF2wWC4PiwzkFKcfePbpZyW7Y/ioyrB7zH3fR2hVJ3jP61Q83EkQOVf
+         uqz/nEKYIaSyferNkUQEqhgguM6ai2UqxzvBbHqJKTAjIZM7dapFIroSb5TQAJfztSzl
+         znZ0XvpeJSe4qc3AXfwezdaBF1FxV/RtMW/SZKHCr4cZjDKiM6zZ7tseDOQFKrEpN71Z
+         kbEOCSdp7IXDxK2hrCp577+J9wr1zGaIGA2sQcSrrnQm2GihN09ysTmXlsFuXctNCxGc
+         VvPQqbemiGA8XBxBSFF2WrLbYpJGis+6K0SeP7bZ3RjxixBbKigdNmVWAemfFejCRilL
+         8Ylg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J00nUig6FU1iS+CYuX/r/SUYB9GfMxq2KFZFBX82bIQ=;
-        b=qncUdwPJo7n+ZH9ogczVC0gq7GXIjNDGDwyjmPOoSTPG6n0OGxtcOJ049eJXeoRH3+
-         drev8R2upwSkYRU2d/KWb5VsW1NNarh6rbeNCa+tOkB0SCbDepg8Hd+1FvCmRfbg7QLh
-         Tr5WS4vhW54+ITsoDgebRcZ+Ifr7Zi6aHhiYWmwjrcRItRuwRrZ+MY0iKVbNItsQ+xhk
-         FZc7tWxIC/vKenKM2PIyoLWSPeWztf+GQfgn8Zazv4cynFVShc2ySkf8xRVLg6+CWoZ7
-         5iOD98/eB090jeL5lEuclaS92zQJ+3Y22oMFw7f9cEDiUMxe7Aq2WpTFhJpvzUTpBGNi
-         iSrw==
-X-Gm-Message-State: AOAM53395lBM3MnHhvFD76y7Ag/CIj+6tXLS/2swXuDSwV5DBbBCBxES
-        +R3N+dFTRZG4k5Ej8tO45g==
-X-Google-Smtp-Source: ABdhPJxQaqGbYOaxZ0SIUndDSFLyttMAYvQLvpF0D+y02HTgrdiAE4d5UdCT0XCv7cyVJEOkTqEH+Q==
-X-Received: by 2002:a17:902:ee13:b0:158:a3ca:3def with SMTP id z19-20020a170902ee1300b00158a3ca3defmr22870694plb.97.1650494790692;
-        Wed, 20 Apr 2022 15:46:30 -0700 (PDT)
-Received: from ubuntu.lan (64.64.231.132.16clouds.com. [64.64.231.132])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056a00088a00b004f7ceff389esm23130088pfj.152.2022.04.20.15.46.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 15:46:30 -0700 (PDT)
-From:   Hailong Tu <tuhailong@gmail.com>
-To:     tuhailong@gmail.com, akpm@linux-foundation.org, sj@kernel.org,
-        torvalds@linux-foundation.org, gregkh@google.com,
-        surenb@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     tuhailong@oppo.com, lichunpeng@oppo.com
-Subject: [PATCH v2] mm/damon: Fix the timer always stays active
-Date:   Thu, 21 Apr 2022 06:43:57 +0800
-Message-Id: <20220420224356.322697-1-tuhailong@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=biQCpdNqt9EOdNzfaHDH0wXEREY4vMB2K+noZnpNvLk=;
+        b=fgZLiYiqciHQyIGA78wqDEWI8M/0y//Tbili1pRDzXO9U8jmSSO6u+W0TOaZEb8myN
+         8NILEofP3UWZKUKAKCJheZTpAikhOua1jHg1UvLRpnMWXTUBARzBWA/5jqJpcEoD6CnV
+         JvqndeTLWTWJQY8DqEQkjCvdYIL2I78PW6SP0oP8TG2BPeoQmwgfVO8tAG0Y89D6SuMF
+         ZSHERkuqNEbNltmhsvLulpYv9QqOSQd6wrJg0dUGb5zU1l5WjLF8ucdFfph8Gdc7iDG0
+         tfa2x60+d/W93R8riKIRU2N+1ZGAr+RggEe0NfhOIGTAuRn149fsowJS2GuCf8CqSY+c
+         9TJA==
+X-Gm-Message-State: AOAM5333XgQ5yD25uPreNQt1TlBW3QMY4HsQXIxF62KCD+DGzKWMvQ/Z
+        PqDBt8M76NEkfjtTv58iYgqgWUo6mSLr97JiSB8MbCcG9LA=
+X-Google-Smtp-Source: ABdhPJzF3FvLViXjWfev1hwRIHaerfHNAEFSRiDR07ODCQZKYbqJ/OG2lTs7Ul6E/bd3pAQDeY+Ar6m5rRgqx6vZmQ0=
+X-Received: by 2002:a81:1d48:0:b0:2f1:8ebf:25f3 with SMTP id
+ d69-20020a811d48000000b002f18ebf25f3mr17254983ywd.118.1650494663286; Wed, 20
+ Apr 2022 15:44:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220407202509.23228-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220407202509.23228-1-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 21 Apr 2022 00:44:12 +0200
+Message-ID: <CACRpkdaR5Oa8=WQtrQwwZVv7AU3AKpKk37L5upe1+tPq3R=acA@mail.gmail.com>
+Subject: Re: [RESEND PATCH] pinctrl: max77620: drop unneeded MODULE_ALIAS
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The timer stays active even if the reclaim mechanism is never enabled.
-It is unnecessary overhead can be completely avoided by using module_param_call() for enabled flag.
+On Thu, Apr 7, 2022 at 10:25 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-Signed-off-by: Hailong Tu <tuhailong@gmail.com>
----
- mm/damon/reclaim.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+> The MODULE_DEVICE_TABLE already creates proper alias for platform
+> driver.  Having another MODULE_ALIAS causes the alias to be duplicated.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-index e34c4d0c4d93..389c4be4f62b 100644
---- a/mm/damon/reclaim.c
-+++ b/mm/damon/reclaim.c
-@@ -28,7 +28,6 @@
-  * this.
-  */
- static bool enabled __read_mostly;
--module_param(enabled, bool, 0600);
- 
- /*
-  * Time threshold for cold memory regions identification in microseconds.
-@@ -358,11 +357,32 @@ static void damon_reclaim_timer_fn(struct work_struct *work)
- 			enabled = last_enabled;
- 	}
- 
--	schedule_delayed_work(&damon_reclaim_timer,
-+	if (enabled)
-+		schedule_delayed_work(&damon_reclaim_timer,
- 			msecs_to_jiffies(ENABLE_CHECK_INTERVAL_MS));
- }
- static DECLARE_DELAYED_WORK(damon_reclaim_timer, damon_reclaim_timer_fn);
- 
-+static int enabled_show(char *buffer, const struct kernel_param *kp)
-+{
-+	return sprintf(buffer, "%c\n", enabled ? 'Y' : 'N');
-+}
-+
-+static int enabled_store(const char *val,
-+		const struct kernel_param *kp)
-+{
-+	int rc = param_set_bool(val, kp);
-+
-+	if (rc < 0)
-+		return rc;
-+
-+	if (enabled)
-+		schedule_delayed_work(&damon_reclaim_timer, 0);
-+
-+	return 0;
-+}
-+module_param_call(enabled, enabled_store, enabled_show, &enabled, 0600);
-+
- static int damon_reclaim_after_aggregation(struct damon_ctx *c)
- {
- 	struct damos *s;
--- 
-2.25.1
+Patch applied!
 
+Yours,
+Linus Walleij

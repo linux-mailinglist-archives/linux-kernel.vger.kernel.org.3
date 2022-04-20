@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51264509286
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCBE509283
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244022AbiDTWOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 18:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
+        id S1382775AbiDTWNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 18:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382763AbiDTWMg (ORCPT
+        with ESMTP id S244022AbiDTWNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 18:12:36 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C156C34;
-        Wed, 20 Apr 2022 15:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650492587; x=1682028587;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=H4xfv6xnEOb5EM82ED0+xKFwfPsnVvkv6xR9nOQGtlc=;
-  b=M3jCrsdDEfVtUcXaoG4N6812XIXYShiknl+o03cXxYPjiris0pJA8CaL
-   oG37lpjyP5+Ee+fZn5y8YAr8PCF/O/GBHDK9btf47foKuGwAuVefSpga0
-   1j3b8MYZirhZS83Un7BHi4hlhzkoH9Wx9cD+bp7Z3UfCCf9CpSFMQy59Q
-   BaVzVXEc63r4tQe5VkpxQBiGK5/PlrwYLPweJOYMaFn4+kbl1PkuZNW5j
-   9tJ8pBZ24uCrSn4r88iBLzERAsnKGyJB8lAaXsPZwn2owiNzIOC6hg8z5
-   zFLi1m0ss45mLurKymK636w80W4Kx24IJ2JXzpxiCWxsIjGXbq7T4WD5a
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="251472015"
-X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
-   d="scan'208";a="251472015"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 15:09:47 -0700
-X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
-   d="scan'208";a="593355840"
-Received: from dmertma-mobl4.amr.corp.intel.com (HELO [10.209.83.57]) ([10.209.83.57])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 15:09:44 -0700
-Message-ID: <088a3cbc-5d83-ca47-f544-087f0d59e331@linux.intel.com>
-Date:   Wed, 20 Apr 2022 15:09:44 -0700
+        Wed, 20 Apr 2022 18:13:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AC21EC78;
+        Wed, 20 Apr 2022 15:10:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 113A761994;
+        Wed, 20 Apr 2022 22:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 63495C385A1;
+        Wed, 20 Apr 2022 22:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650492611;
+        bh=G8vNznOpkTfw9H8uWYpTCo/GdOJHcgmx9HT492axnms=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=K+RdLTX0e89xAbkcAcQ+gjKuzt/XZK3PmIdK90yJ0XuMANnvL7a7/j2W5xOYNmtx/
+         9RMPipbdi4pnHVIa1iDI2AOoCyXGXbeho8jrYLk/jAt2rVaM7v84QxtOxHjHwAq6Gy
+         b79bAoUIpavRumzL9sAiSxJzoMGjC5F/nS7nAznQDjltchxJLHGlY48YwnMw6qGjnk
+         oKMspcQkU4jhswuSbaageo329NodoOz7aU2c+ZVP+jlUOqxWRqvEm4+K8CKqaNYN2+
+         S9otFaNywXkvFPFHSCfoVC5ewwuCK7Qqm1jbYe9A2gnR3dv67xu+yuLKXqH4rxPMhD
+         u9ggF4taw04zQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B81DE8DBD4;
+        Wed, 20 Apr 2022 22:10:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
- attestation interface driver
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Kai Huang <kai.huang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
- <bd83067542a3519ee4c91f9d50e9bd4fac27e4bb.camel@intel.com>
- <Yl5vGIfUFp4TfTWk@zn.tnic>
- <9198cc36-67d6-9365-5d18-f23ba4075151@linux.intel.com>
- <YmCCdtF10dYZOQ2a@zn.tnic>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <YmCCdtF10dYZOQ2a@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] samples/bpf: reduce the sampling interval in
+ xdp1_user
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165049261123.2236.3984383189414860962.git-patchwork-notify@kernel.org>
+Date:   Wed, 20 Apr 2022 22:10:11 +0000
+References: <20220419114746.291613-1-shaozhengchao@huawei.com>
+In-Reply-To: <20220419114746.291613-1-shaozhengchao@huawei.com>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        john.fastabend@gmail.com, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, kpsingh@kernel.org,
+        weiyongjun1@huawei.com, yuehaibing@huawei.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Boris,
+Hello:
 
-On 4/20/22 3:00 PM, Borislav Petkov wrote:
-> On Tue, Apr 19, 2022 at 05:48:57AM -0700, Sathyanarayanan Kuppuswamy wrote:
->> Make sense. We can just go with CONFIG_INTEL_TDX_ATTESTATION.
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Tue, 19 Apr 2022 19:47:46 +0800 you wrote:
+> If interval is 2, and sum - prev[key] = 1, the result = 0. This will
+> mislead the tester that the port has no traffic right now. So reduce the
+> sampling interval to 1.
 > 
-> Sounds like you didn't read my mail. Kai was questioning the need for a
-> Kconfig symbol at all. And me too.
-> 
-> If this thing is not going to be used by anything else besides TDX
-> guests, why does it need a Kconfig option at all?!
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> ---
+>  samples/bpf/xdp1_user.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sorry, it is a typo. I meant we can just compile it with
-TDX guest config (CONFIG_INTEL_TDX_GUEST).
+Here is the summary with links:
+  - [bpf-next] samples/bpf: reduce the sampling interval in xdp1_user
+    https://git.kernel.org/bpf/bpf-next/c/db69264f983a
 
-> 
->> Boris, this is a simple platform driver which adds IOCTL interfaces to allow
->> user space to get TDREPORT and TDQuote support.
->>
->> So, would prefer to leave in platform/x86 or move it to arch/x86/coco/tdx/ ?
-> 
-> See above.
-
-I agree with dropping the new CONFIG option. But regarding driver
-location, which is preferred (platform/x86/intel/tdx or arch/x86/coco/tdx/)?
-
-> 
-
+You are awesome, thank you!
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

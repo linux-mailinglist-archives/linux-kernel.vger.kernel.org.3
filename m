@@ -2,270 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE10F507FA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01715507FA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359274AbiDTDkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 23:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        id S1359281AbiDTDmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 23:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239413AbiDTDkW (ORCPT
+        with ESMTP id S239413AbiDTDmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 23:40:22 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DA52657E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 20:37:37 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KjmYt6cvMzfYvM;
-        Wed, 20 Apr 2022 11:36:50 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 20 Apr 2022 11:37:35 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 20 Apr
- 2022 11:37:35 +0800
-Message-ID: <b2924e07-2650-6877-a4a3-34abfc62b618@huawei.com>
-Date:   Wed, 20 Apr 2022 11:37:32 +0800
+        Tue, 19 Apr 2022 23:42:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8494827CD3;
+        Tue, 19 Apr 2022 20:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650425974; x=1681961974;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=QAAMbcEYUt+6OP4vuzFwSxzEGL1Ps0A/86dnh5N4Rug=;
+  b=OfabQy+59vYOEJhxxNuQV0QKA05ptNzK2TsGWWN3YWQfj7d/4WQKTHYo
+   2wlqIvqB2MrXJx3KZoDX4oBXUKQ3vlx3QFBVj9NM2yg4WCtMgJNEY313I
+   D/n7jy31aDsww1WSBIY548ZYOpzhLByKZLqjZzfummgEDzhRxSmkg087y
+   JbIOZOrSPvFRIxf/CKu3MsQFRI45O9y2usCXczxlVHrPKH+Sadw2eIlIk
+   NBDqHB/2w4Xdp4R5d7/1pNCaCtHpiCVk1eR/9SERyLsb8mHGwb3GYpQqW
+   zd/ni9Zr+LbosSOrMvA3gVyHeEdrqitNUkFixQejzyw90KpVmiv/RaTcx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="264101105"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="264101105"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:39:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="667624099"
+Received: from aubrey-app.sh.intel.com (HELO [10.239.53.25]) ([10.239.53.25])
+  by orsmga004.jf.intel.com with ESMTP; 19 Apr 2022 20:39:30 -0700
+Subject: Re: [PATCH v3 2/4] x86/tdx: Add tdx_hcall_get_quote() API support
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220415220109.282834-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Aubrey Li <aubrey.li@linux.intel.com>
+Message-ID: <f4d1fdb6-b836-a7c7-c9fb-cc4e6c14a335@linux.intel.com>
+Date:   Wed, 20 Apr 2022 11:39:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4] ARM: module: Add all unwind tables when load module
+In-Reply-To: <20220415220109.282834-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     <alexander.sverdlin@nokia.com>, <ardb@kernel.org>,
-        <linus.walleij@linaro.org>, <nico@fluxnic.net>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220401131534.241205-1-chenzhongjin@huawei.com>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20220401131534.241205-1-chenzhongjin@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping for review, thanks!
-
-On 2022/4/1 21:15, Chen Zhongjin wrote:
-> For EABI stack unwinding, when loading .ko module
-> the EXIDX sections will be added to a unwind_table list.
+On 2022/4/16 上午6:01, Kuppuswamy Sathyanarayanan wrote:
+> Attestation is the process used by two un-trusted entities to prove to
+> each other that it can be trusted. In TDX guest, attestation is mainly
+> used to verify the trustworthiness of a TD to the 3rd party key
+> servers.
 > 
-> However not all EXIDX sections are added because EXIDX
-> sections are searched by hardcoded section names.
+> First step in the attestation process is to generate the TDREPORT data.
+> This support is added using tdx_mcall_tdreport() API. The second stage
+> in the attestation process is for the guest to request the VMM generate
+> and sign a quote based on the TDREPORT acquired earlier. More details
+> about the steps involved in attestation process can be found in TDX
+> Guest-Host Communication Interface (GHCI) for Intel TDX 1.5, section
+> titled "TD attestation"
 > 
-> For functions in other sections such as .ref.text
-> or .kprobes.text, gcc generates seprated EXIDX sections
-> (such as .ARM.exidx.ref.text or .ARM.exidx.kprobes.text).
+> Add tdx_hcall_get_quote() helper function to implement the GetQuote
+> hypercall.
 > 
-> These extra EXIDX sections are not loaded, so when unwinding
-> functions in these sections, we will failed with:
+> More details about the GetQuote TDVMCALL are in the Guest-Host
+> Communication Interface (GHCI) Specification, sec 3.3, titled
+> "VP.VMCALL<GetQuote>".
 > 
-> 	unwind: Index not found xxx
+> This will be used by the TD attestation driver in follow-on patches.
 > 
-> To fix that, I refactor the code for searching and adding
-> EXIDX sections:
-> 
-> - Check section type to search EXIDX tables (0x70000001)
-> instead of strcmp() the hardcoded names. Then find the
-> corresponding text sections by their section names.
-> 
-> - Add a unwind_table list in module->arch to save their own
-> unwind_table instead of the fixed-lenth array.
-> 
-> - Save .ARM.exidx.init.text section ptr, because it should
-> be cleaned after module init.
-> 
-> Now all EXIDX sections of .ko can be added correctly.
-> 
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 > ---
-> Changes v3 -> v4:
-> - Fix indent by replace tab with code.
+>  arch/x86/coco/tdx/tdx.c    | 38 ++++++++++++++++++++++++++++++++++++++
+>  arch/x86/include/asm/tdx.h |  2 ++
+>  2 files changed, 40 insertions(+)
 > 
-> Changes v2 -> v3:
-> - Unwind "txtname" and add some blank, to make code more clear.
-> 
-> Changes v1 -> v2:
-> - Rename "table_list" to "unwind_list" for consistency.
-> - Drop unnecessary locals variable "txtname" and "sectype".
-> - Merge condition checks for sh_flags and sh_type.
-> ---
->  arch/arm/include/asm/module.h | 17 ++------
->  arch/arm/include/asm/unwind.h |  1 +
->  arch/arm/kernel/module.c      | 78 ++++++++++++++++++-----------------
->  3 files changed, 45 insertions(+), 51 deletions(-)
-> 
-> diff --git a/arch/arm/include/asm/module.h b/arch/arm/include/asm/module.h
-> index cfffae67c04e..8139b6a33a22 100644
-> --- a/arch/arm/include/asm/module.h
-> +++ b/arch/arm/include/asm/module.h
-> @@ -3,20 +3,10 @@
->  #define _ASM_ARM_MODULE_H
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index 3e409b618d3f..c259d81a5d7f 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -21,6 +21,7 @@
 >  
->  #include <asm-generic/module.h>
-> -
-> -struct unwind_table;
-> +#include <asm/unwind.h>
+>  /* TDX hypercall Leaf IDs */
+>  #define TDVMCALL_MAP_GPA		0x10001
+> +#define TDVMCALL_GET_QUOTE		0x10002
 >  
->  #ifdef CONFIG_ARM_UNWIND
-> -enum {
-> -	ARM_SEC_INIT,
-> -	ARM_SEC_DEVINIT,
-> -	ARM_SEC_CORE,
-> -	ARM_SEC_EXIT,
-> -	ARM_SEC_DEVEXIT,
-> -	ARM_SEC_HOT,
-> -	ARM_SEC_UNLIKELY,
-> -	ARM_SEC_MAX,
-> -};
-> +#define ELF_SECTION_UNWIND 0x70000001
->  #endif
->  
->  #define PLT_ENT_STRIDE		L1_CACHE_BYTES
-> @@ -36,7 +26,8 @@ struct mod_plt_sec {
->  
->  struct mod_arch_specific {
->  #ifdef CONFIG_ARM_UNWIND
-> -	struct unwind_table *unwind[ARM_SEC_MAX];
-> +	struct unwind_table unwind_list;
-> +	struct unwind_table *init_table;
->  #endif
->  #ifdef CONFIG_ARM_MODULE_PLTS
->  	struct mod_plt_sec	core;
-> diff --git a/arch/arm/include/asm/unwind.h b/arch/arm/include/asm/unwind.h
-> index 0f8a3439902d..b51f85417f58 100644
-> --- a/arch/arm/include/asm/unwind.h
-> +++ b/arch/arm/include/asm/unwind.h
-> @@ -24,6 +24,7 @@ struct unwind_idx {
->  
->  struct unwind_table {
->  	struct list_head list;
-> +	struct list_head mod_list;
->  	const struct unwind_idx *start;
->  	const struct unwind_idx *origin;
->  	const struct unwind_idx *stop;
-> diff --git a/arch/arm/kernel/module.c b/arch/arm/kernel/module.c
-> index 549abcedf795..b98bcb47e337 100644
-> --- a/arch/arm/kernel/module.c
-> +++ b/arch/arm/kernel/module.c
-> @@ -459,46 +459,41 @@ int module_finalize(const Elf32_Ehdr *hdr, const Elf_Shdr *sechdrs,
->  #ifdef CONFIG_ARM_UNWIND
->  	const char *secstrs = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
->  	const Elf_Shdr *sechdrs_end = sechdrs + hdr->e_shnum;
-> -	struct mod_unwind_map maps[ARM_SEC_MAX];
-> -	int i;
-> +	struct unwind_table *unwind_list = &mod->arch.unwind_list;
->  
-> -	memset(maps, 0, sizeof(maps));
-> +	INIT_LIST_HEAD(&unwind_list->mod_list);
-> +	mod->arch.init_table = NULL;
->  
->  	for (s = sechdrs; s < sechdrs_end; s++) {
->  		const char *secname = secstrs + s->sh_name;
-> +		const char *txtname;
-> +		const Elf_Shdr *txt_sec;
->  
-> -		if (!(s->sh_flags & SHF_ALLOC))
-> +		if (!strcmp(".ARM.exidx", secname))
-> +			txtname = ".text";
-> +		else
-> +			txtname = secname + strlen(".ARM.exidx");
-> +
-> +		txt_sec = find_mod_section(hdr, sechdrs, txtname);
-> +
-> +		if (!(s->sh_flags & SHF_ALLOC) ||
-> +		    s->sh_type != ELF_SECTION_UNWIND)
->  			continue;
->  
-> -		if (strcmp(".ARM.exidx.init.text", secname) == 0)
-> -			maps[ARM_SEC_INIT].unw_sec = s;
-> -		else if (strcmp(".ARM.exidx", secname) == 0)
-> -			maps[ARM_SEC_CORE].unw_sec = s;
-> -		else if (strcmp(".ARM.exidx.exit.text", secname) == 0)
-> -			maps[ARM_SEC_EXIT].unw_sec = s;
-> -		else if (strcmp(".ARM.exidx.text.unlikely", secname) == 0)
-> -			maps[ARM_SEC_UNLIKELY].unw_sec = s;
-> -		else if (strcmp(".ARM.exidx.text.hot", secname) == 0)
-> -			maps[ARM_SEC_HOT].unw_sec = s;
-> -		else if (strcmp(".init.text", secname) == 0)
-> -			maps[ARM_SEC_INIT].txt_sec = s;
-> -		else if (strcmp(".text", secname) == 0)
-> -			maps[ARM_SEC_CORE].txt_sec = s;
-> -		else if (strcmp(".exit.text", secname) == 0)
-> -			maps[ARM_SEC_EXIT].txt_sec = s;
-> -		else if (strcmp(".text.unlikely", secname) == 0)
-> -			maps[ARM_SEC_UNLIKELY].txt_sec = s;
-> -		else if (strcmp(".text.hot", secname) == 0)
-> -			maps[ARM_SEC_HOT].txt_sec = s;
-> -	}
-> +		if (txt_sec) {
-> +			struct unwind_table *table =
-> +				unwind_table_add(s->sh_addr,
-> +						s->sh_size,
-> +						txt_sec->sh_addr,
-> +						txt_sec->sh_size);
-> +
-> +			list_add(&table->mod_list, &unwind_list->mod_list);
->  
-> -	for (i = 0; i < ARM_SEC_MAX; i++)
-> -		if (maps[i].unw_sec && maps[i].txt_sec)
-> -			mod->arch.unwind[i] =
-> -				unwind_table_add(maps[i].unw_sec->sh_addr,
-> -					         maps[i].unw_sec->sh_size,
-> -					         maps[i].txt_sec->sh_addr,
-> -					         maps[i].txt_sec->sh_size);
-> +			/* save init table for module_arch_freeing_init */
-> +			if (strcmp(".ARM.exidx.init.text", secname) == 0)
-> +				mod->arch.init_table = table;
-> +		}
-> +	}
->  #endif
->  #ifdef CONFIG_ARM_PATCH_PHYS_VIRT
->  	s = find_mod_section(hdr, sechdrs, ".pv_table");
-> @@ -519,11 +514,13 @@ void
->  module_arch_cleanup(struct module *mod)
->  {
->  #ifdef CONFIG_ARM_UNWIND
-> -	int i;
-> +	struct unwind_table *tmp;
-> +	struct unwind_table *n;
->  
-> -	for (i = 0; i < ARM_SEC_MAX; i++) {
-> -		unwind_table_del(mod->arch.unwind[i]);
-> -		mod->arch.unwind[i] = NULL;
-> +	list_for_each_entry_safe(tmp, n,
-> +			&mod->arch.unwind_list.mod_list, mod_list) {
-> +		list_del(&tmp->mod_list);
-> +		unwind_table_del(tmp);
->  	}
->  #endif
+>  /* MMIO direction */
+>  #define EPT_READ	0
+> @@ -144,6 +145,43 @@ long tdx_mcall_tdreport(void *data, void *reportdata)
 >  }
-> @@ -531,7 +528,12 @@ module_arch_cleanup(struct module *mod)
->  void __weak module_arch_freeing_init(struct module *mod)
->  {
->  #ifdef CONFIG_ARM_UNWIND
-> -	unwind_table_del(mod->arch.unwind[ARM_SEC_INIT]);
-> -	mod->arch.unwind[ARM_SEC_INIT] = NULL;
-> +	struct unwind_table *init = mod->arch.init_table;
+>  EXPORT_SYMBOL_GPL(tdx_mcall_tdreport);
+>  
+> +/*
+> + * tdx_hcall_get_quote() - Generate TDQUOTE using TDREPORT_STRUCT.
+> + *
+> + * @data        : Address of 8KB GPA memory which contains
+> + *                TDREPORT_STRUCT.
+> + * @len		: Length of the GPA in bytes.
+> + *
+> + * return 0 on success or failure error number.
+> + */
+> +long tdx_hcall_get_quote(void *data, u64 len)
+> +{
+> +	u64 ret;
 > +
-> +	if (init) {
-> +		mod->arch.init_table = NULL;
-> +		list_del(&init->mod_list);
-> +		unwind_table_del(init);
-> +	}
->  #endif
->  }
+> +	/*
+> +	 * Use confidential guest TDX check to ensure this API is only
+> +	 * used by TDX guest platforms.
+> +	 */
+> +	if (!data || !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Pass the physical address of tdreport data to the VMM
+> +	 * and trigger the tdquote generation. Quote data will be
+> +	 * stored back in the same physical address space. More info
+> +	 * about ABI can be found in TDX Guest-Host-Communication
+> +	 * Interface (GHCI), sec titled "TDG.VP.VMCALL<GetQuote>".
+> +	 */
+> +	ret = _tdx_hypercall(TDVMCALL_GET_QUOTE, cc_mkdec(virt_to_phys(data)),
+> +			     len, 0, 0);
+> +
 
+I commented here in v2 but no response, so let me try again.
+
+IIUC, virt_to_phys(data) (GPA) will be stored in the register when
+TDCALL brings the context back to the VMX root mode, and hypervisor(QEMU)
+will find the mapped host virtual address(HVA) with the GPA in the register,
+and the subsequent ops will be HVA<->HVA in hypervisor, EPT will not be
+involved so no need to cc_mkdec() this GPA.
+
+Please help to correct me if I was wrong.
+
+Thanks,
+-Aubrey

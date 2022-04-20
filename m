@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4E4508AA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894FA508A9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379690AbiDTOUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S1379493AbiDTOTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 10:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380122AbiDTOSf (ORCPT
+        with ESMTP id S1380138AbiDTOSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 10:18:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FB843EC1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:13:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40FF0B81D61
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:13:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E93C385A0;
-        Wed, 20 Apr 2022 14:12:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650463978;
-        bh=iULM7A9fCQ7Zxmf8Gc24aApToUhdP1WhjkyXL/nyKwY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=etV8oUqfv9dE6yVfXu40FtLwMs0AHRaSfiXSrVnw5u5E3gykqT9hC9jVunWEhQtKr
-         vXaeK9dvE1i/ycJLZWRdUYwANww1DspDiyGKMikswRlVgs6LM/9MxEFKPanorWx2Hf
-         5dpya0CVEygSSR049gjUdt+vWOohBUZPzXpHs8fKl3AXDmdYBIK4KbgP0vICxggBNj
-         DpMShLr5MSDo5STVL1WeCTeBxDXWCHJFSrkJuMxdf+gHN7ODIywGvZrCpR7KN55EaP
-         fvgZ3Eyj8pYDXQx4wrpWRGX35Nff9p0j/ghgMSzfnT4of+/oeivp4RH3zAOUt1eoT2
-         Ubnb2CTQeVPYQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 807475C0269; Wed, 20 Apr 2022 07:12:58 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 07:12:58 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Hillf Danton <hdanton@sina.com>, linux-kernel@vger.kernel.org,
-        syzkaller <syzkaller@googlegroups.com>
-Subject: Re: [PATCH rcu 04/11] kernel/smp: Provide boot-time timeout for CSD
- lock diagnostics
-Message-ID: <20220420141258.GB4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
- <20220419085607.2014-1-hdanton@sina.com>
- <20220419134616.GE4285@paulmck-ThinkPad-P17-Gen-1>
- <CACT4Y+Y8Az3_gi-UX-KCfQ1dxARJtL1NhB1AGLv9o_5gNtkWOg@mail.gmail.com>
- <20220419164908.GM4285@paulmck-ThinkPad-P17-Gen-1>
- <20220419231820.2089-1-hdanton@sina.com>
- <CACT4Y+YwP0Vvupn3QmQj9Ks4NV4hkBcc6gDQ7ro3_Dzy-benCg@mail.gmail.com>
- <20220420134149.GX4285@paulmck-ThinkPad-P17-Gen-1>
- <CACT4Y+ZNXT1HHDT3aBzMtSouTYbetHcbFz-bVscj=5sbVdsaew@mail.gmail.com>
+        Wed, 20 Apr 2022 10:18:38 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0BB443C7;
+        Wed, 20 Apr 2022 07:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650464005; x=1682000005;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xSVtxqfp4JLpW3WWMuvDsq9oB3gov9dYbIhWlNNxBEo=;
+  b=fGaX0bEOO3yLXFTRbq+fdgafIeGDFeJSRJ9m20mLf12anuDBZWeoG+og
+   QfEEp6aSbz2pKHDakxjmBfzwFh0s/avH/K+alifaEr0LCaeNlHyxOctpG
+   tIY8TBua3yeqAxX1pkTfuuQ9zVPinzSU+BoajTVh3oPALYm40g8WX2iOr
+   k=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Apr 2022 07:13:25 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 07:13:24 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Apr 2022 07:13:24 -0700
+Received: from [10.226.58.18] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 20 Apr
+ 2022 07:13:23 -0700
+Message-ID: <2100eed4-8081-6070-beaf-7c6ba65ad9be@quicinc.com>
+Date:   Wed, 20 Apr 2022 08:13:22 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+ZNXT1HHDT3aBzMtSouTYbetHcbFz-bVscj=5sbVdsaew@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2] PCI: hv: Fix multi-MSI to allow more than one MSI
+ vector
+Content-Language: en-US
+To:     <kys@microsoft.com>, <haiyangz@microsoft.com>,
+        <sthemmin@microsoft.com>, <wei.liu@kernel.org>,
+        <decui@microsoft.com>, <lorenzo.pieralisi@arm.com>,
+        <robh@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>,
+        <jakeo@microsoft.com>
+CC:     <bjorn.andersson@linaro.org>, <linux-hyperv@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1649856981-14649-1-git-send-email-quic_jhugo@quicinc.com>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <1649856981-14649-1-git-send-email-quic_jhugo@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,94 +70,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 04:00:07PM +0200, Dmitry Vyukov wrote:
-> On Wed, 20 Apr 2022 at 15:41, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > > > > > Debugging of problems involving insanely long-running SMI handlers
-> > > > > > > > > proceeds better if the CSD-lock timeout can be adjusted.  This commit
-> > > > > > > > > therefore provides a new smp.csd_lock_timeout kernel boot parameter
-> > > > > > > > > that specifies the timeout in milliseconds.  The default remains at the
-> > > > > > > > > previously hard-coded value of five seconds.
-> > > > > > > > >
-> > > > > > > > > Cc: Rik van Riel <riel@surriel.com>
-> > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > > > > > > > Cc: Ingo Molnar <mingo@kernel.org>
-> > > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > > > > > > > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > > > > > > > > Cc: Juergen Gross <jgross@suse.com>
-> > > > > > > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > > > ---
-> > > > > > > > >  Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
-> > > > > > > > >  kernel/smp.c                                    |  7 +++++--
-> > > > > > > > >  2 files changed, 16 insertions(+), 2 deletions(-)
-> > > > > > > > >
-> > > > > > > > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > > > > > > > index 3f1cc5e317ed..645c4c001b16 100644
-> > > > > > > > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > > > > > > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > > > > > > > @@ -5377,6 +5377,17 @@
-> > > > > > > > >     smart2=         [HW]
-> > > > > > > > >                     Format: <io1>[,<io2>[,...,<io8>]]
-> > > > > > > > >
-> > > > > > > > > +   smp.csd_lock_timeout= [KNL]
-> > > > > > > > > +                   Specify the period of time in milliseconds
-> > > > > > > > > +                   that smp_call_function() and friends will wait
-> > > > > > > > > +                   for a CPU to release the CSD lock.  This is
-> > > > > > > > > +                   useful when diagnosing bugs involving CPUs
-> > > > > > > > > +                   disabling interrupts for extended periods
-> > > > > > > > > +                   of time.  Defaults to 5,000 milliseconds, and
-> > > > > > > > > +                   setting a value of zero disables this feature.
-> > > > > > > > > +                   This feature may be more efficiently disabled
-> > > > > > > > > +                   using the csdlock_debug- kernel parameter.
-> > > > > > > > > +
-> > > > > > > >
-> > > > > > > > Can non-responsive CSD lock detected trigger syzbot (warning) report?
-> > > > > > >
-> > > > > > > If they enable it by building with CONFIG_CSD_LOCK_WAIT_DEBUG=y, yes.
-> > > > > >
-> > > > > > +syzkaller mailing list
-> > > > > >
-> > > > > > Currently we don't enable CONFIG_CSD_LOCK_WAIT_DEBUG in syzbot configs.
-> > > > > > Is it a generally useful debugging feature recommended to be enabled
-> > > > > > in kernel testing systems?
-> > > > >
-> > > > > With the default value for smp.csd_lock_timeout, it detects CPUs that have
-> > > > > had interrupts disabled for more than five seconds, which can be useful
-> > > > > for detecting what would otherwise be silent response-time failures.
-> > > >
-> > > > The five seconds take precedence over the 143s in reports [1] IMO.
-> > > > The shorter timeout helps select reproducers which in turn help find answer
-> > > > to questions there.
-> > >
-> > > I've sent https://github.com/google/syzkaller/pull/3090 to enable the config.
-> > > 5 seconds won't be reliable, I've set it to 100s to match CPU stall timeout.
-> >
-> > Thank you, Dmitry!
-> >
-> > Is there something I should be doing to enable the RCU CPU stall timeout
-> > to be reduced?
+On 4/13/2022 7:36 AM, Jeffrey Hugo wrote:
+> If the allocation of multiple MSI vectors for multi-MSI fails in the core
+> PCI framework, the framework will retry the allocation as a single MSI
+> vector, assuming that meets the min_vecs specified by the requesting
+> driver.
 > 
-> No.
-> We just bumped it to a high enough value to not cause false positives.
-> If it's stalled, it's stalled.
+> Hyper-V advertises that multi-MSI is supported, but reuses the VECTOR
+> domain to implement that for x86.  The VECTOR domain does not support
+> multi-MSI, so the alloc will always fail and fallback to a single MSI
+> allocation.
+> 
+> In short, Hyper-V advertises a capability it does not implement.
+> 
+> Hyper-V can support multi-MSI because it coordinates with the hypervisor
+> to map the MSIs in the IOMMU's interrupt remapper, which is something the
+> VECTOR domain does not have.  Therefore the fix is simple - copy what the
+> x86 IOMMU drivers (AMD/Intel-IR) do by removing
+> X86_IRQ_ALLOC_CONTIGUOUS_VECTORS after calling the VECTOR domain's
+> pci_msi_prepare().
+> 
+> Fixes: 4daace0d8ce8 ("PCI: hv: Add paravirtual PCI front-end for Microsoft Hyper-V VMs")
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Reviewed-by: Dexuan Cui <decui@microsoft.com>
+> ---
 
-Ah, your goal is to find perma-stalls.  Got it, thank you!
+Ping?
 
-                                                        Thanx, Paul
+I don't see this in -next, nor have I seen any replies.  It is possible 
+I have missed some kind of update, but currently I'm wondering if this 
+change is progressing or not.  If there is some kind of process used in 
+this area, I'm not familiar with it, so I would appreciate an introduction.
 
-> > > > [1] https://lore.kernel.org/lkml/20220321210140.GK4285@paulmck-ThinkPad-P17-Gen-1/
-> > > >
-> > > > >
-> > > > > > If we enabled it, we also need to figure out where it fits into the
-> > > > > > timeout hierarchy and adjust smp.csd_lock_timeout:
-> > > > > > https://github.com/google/syzkaller/blob/master/dashboard/config/linux/bits/x86_64.yml#L15-L40
-> > > > >
-> > > > > On this, I must defer to you guys.  I can say that the larger the value
-> > > > > that you choose for smp.csd_lock_timeout, the nearer the beginnning of
-> > > > > that group it should go, but you guys knew that already.  ;-)
-> > > > >
-> > > > >                                                         Thanx, Paul
-> > > >
-> > > > --
-> > > > You received this message because you are subscribed to the Google Groups "syzkaller" group.
-> > > > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller+unsubscribe@googlegroups.com.
-> > > > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller/20220419231820.2089-1-hdanton%40sina.com.
+Thanks
+
+-Jeff

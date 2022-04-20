@@ -2,86 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B70850864D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92511508659
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377792AbiDTKuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
+        id S1377820AbiDTKxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377780AbiDTKux (ORCPT
+        with ESMTP id S1377248AbiDTKxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:50:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3665F18381
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650451687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YeuUl3FgKBq3ulAiRQVIkPodY1d8UaUkeElFnx59KAU=;
-        b=GIDmaWdu0/7eEd02Vj466NLjX63wJcxhHmFzE69eoKjFC/Fbw8Mv8lveMAJBSe3IV87K6D
-        S9hUqQ90OT1P1YN30gKhVODGAs1RiEU5AdMAQKKw8PNPteDtgZirJIUZ3OLdztp7tI5tBE
-        eRb6z1P30KqSAjTSlGntzcQhk7q3src=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-110-CZ15ePgHOjCgsVQ2kn_MbA-1; Wed, 20 Apr 2022 06:48:01 -0400
-X-MC-Unique: CZ15ePgHOjCgsVQ2kn_MbA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 731AD80346F;
-        Wed, 20 Apr 2022 10:48:00 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 24E4C403D19A;
-        Wed, 20 Apr 2022 10:47:59 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Yl95wykQMHc/tIq8@kernel.org>
-References: <Yl95wykQMHc/tIq8@kernel.org>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     dhowells@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org, James Morris <jmorris@namei.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?us-ascii?Q?=3D=3Fiso-8859-1=3FQ=3FMicka=3DEBl?=
-         =?us-ascii?Q?=5FSala=3DFCn=3F=3D?= <mic@linux.microsoft.com>
-Subject: Re: [GIT PULL] TPM DEVICE DRIVER updates for tpmdd-next-v5.18-rc4
+        Wed, 20 Apr 2022 06:53:19 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AF426120
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:50:33 -0700 (PDT)
+Received: from kwepemi100011.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kjy7N1D3NzFq0Q;
+        Wed, 20 Apr 2022 18:48:00 +0800 (CST)
+Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
+ kwepemi100011.china.huawei.com (7.221.188.134) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 20 Apr 2022 18:50:30 +0800
+Received: from DESKTOP-E0KHRBE.china.huawei.com (10.67.111.5) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 20 Apr 2022 18:50:30 +0800
+From:   Shaobo Huang <huangshaobo6@huawei.com>
+To:     <glider@google.com>, <elver@google.com>, <dvyukov@google.com>,
+        <akpm@linux-foundation.org>, <kasan-dev@googlegroups.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+CC:     <young.liuyang@huawei.com>, <zengweilin@huawei.com>,
+        <chenzefeng2@huawei.com>, <nixiaoming@huawei.com>,
+        <wangbing6@huawei.com>, <huangshaobo6@huawei.com>,
+        <wangfangpeng1@huawei.com>, <zhongjubin@huawei.com>
+Subject: [PATCH] kfence: check kfence canary in panic and reboot
+Date:   Wed, 20 Apr 2022 18:49:27 +0800
+Message-ID: <20220420104927.59056-1-huangshaobo6@huawei.com>
+X-Mailer: git-send-email 2.21.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 20 Apr 2022 11:47:58 +0100
-Message-ID: <649342.1650451678@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.111.5]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jarkko Sakkinen <jarkko@kernel.org> wrote:
+From: huangshaobo <huangshaobo6@huawei.com>
 
-> Micka=C3=ABl's patches to add signed hash to the blacklist keyring that w=
-ere
-> left out from the original v5.18 PR. They should be safe to include to
-> rc4 as they've been in circulation for ages, and have been tested
-> throughly.
+when writing out of bounds to the red zone, it can only be detected at
+kfree. However, there were many scenarios before kfree that caused this
+out-of-bounds write to not be detected. Therefore, it is necessary to
+provide a method for actively detecting out-of-bounds writing to the red
+zone, so that users can actively detect, and can be detected in the
+system reboot or panic.
 
-Barring a bit in patch 3 where I think strncmp() would be better employed f=
-or
-checking prefixes (and can be fixed up later):
+for example, if the application memory is out of bounds and written to
+the red zone in the kfence object, the system suddenly panics, and the
+following log can be seen during system reset:
+BUG: KFENCE: memory corruption in atomic_notifier_call_chain+0x49/0x70
 
-Reviewed-by: David Howells <dhowells@redhat.com>
+Corrupted memory at 0x(____ptrval____) [ ! ] (in kfence-#59):
+ atomic_notifier_call_chain+0x49/0x70
+ panic+0x134/0x278
+ sysrq_handle_crash+0x11/0x20
+ __handle_sysrq+0x99/0x160
+ write_sysrq_trigger+0x26/0x30
+ proc_reg_write+0x51/0x70
+ vfs_write+0xb6/0x290
+ ksys_write+0x9c/0xd0
+ __do_fast_syscall_32+0x67/0xe0
+ do_fast_syscall_32+0x2f/0x70
+ entry_SYSCALL_compat_after_hwframe+0x45/0x4d
+
+kfence-#59: 0x(____ptrval____)-0x(____ptrval____),size=100,cache=kmalloc-128
+ allocated by task 77 on cpu 0 at 28.018073s:
+ 0xffffffffc007703d
+ do_one_initcall+0x3c/0x1e0
+ do_init_module+0x46/0x1d8
+ load_module+0x2397/0x2860
+ __do_sys_init_module+0x160/0x190
+ __do_fast_syscall_32+0x67/0xe0
+ do_fast_syscall_32+0x2f/0x70
+ entry_SYSCALL_compat_after_hwframe+0x45/0x4d
+
+Suggested-by: chenzefeng <chenzefeng2@huawei.com>
+Signed-off-by: huangshaobo <huangshaobo6@huawei.com>
+---
+ mm/kfence/core.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+index 9b2b5f56f4ae..85cc3ca4b71c 100644
+--- a/mm/kfence/core.c
++++ b/mm/kfence/core.c
+@@ -29,6 +29,9 @@
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <linux/string.h>
++#include <linux/notifier.h>
++#include <linux/reboot.h>
++#include <linux/panic_notifier.h>
+ 
+ #include <asm/kfence.h>
+ 
+@@ -716,6 +719,29 @@ static const struct file_operations objects_fops = {
+ 	.release = seq_release,
+ };
+ 
++static void kfence_check_all_canary(void)
++{
++	int i;
++
++	for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++) {
++		struct kfence_metadata *meta = &kfence_metadata[i];
++
++		if (meta->state == KFENCE_OBJECT_ALLOCATED)
++			for_each_canary(meta, check_canary_byte);
++	}
++}
++
++static int kfence_check_canary_callback(struct notifier_block *nb,
++					unsigned long reason, void *arg)
++{
++	kfence_check_all_canary();
++	return NOTIFY_OK;
++}
++
++static struct notifier_block kfence_check_canary_notifier = {
++	.notifier_call = kfence_check_canary_callback,
++};
++
+ static int __init kfence_debugfs_init(void)
+ {
+ 	struct dentry *kfence_dir = debugfs_create_dir("kfence", NULL);
+@@ -806,6 +832,8 @@ static void kfence_init_enable(void)
+ 
+ 	WRITE_ONCE(kfence_enabled, true);
+ 	queue_delayed_work(system_unbound_wq, &kfence_timer, 0);
++	register_reboot_notifier(&kfence_check_canary_notifier);
++	atomic_notifier_chain_register(&panic_notifier_list, &kfence_check_canary_notifier);
+ 
+ 	pr_info("initialized - using %lu bytes for %d objects at 0x%p-0x%p\n", KFENCE_POOL_SIZE,
+ 		CONFIG_KFENCE_NUM_OBJECTS, (void *)__kfence_pool,
+-- 
+2.12.3
 

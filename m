@@ -2,80 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF904508840
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458A4508841
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378584AbiDTMhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
+        id S1378605AbiDTMid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiDTMhj (ORCPT
+        with ESMTP id S232153AbiDTMia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:37:39 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B24CD2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:34:53 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id DE45C1F380;
-        Wed, 20 Apr 2022 12:34:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650458091; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b/mzIHtYOca9ivGkXcLop9wA8toChfAbWT0m3l15a+g=;
-        b=oC95MYYeoJbR9hKkj1VOb6aRZEanirfw5PTlbkD2ZXT+ouF1Aq3tf99fIKuLdgJfgkw3Re
-        7h+n0F2VHsTaB+6cSfXPP9dEVn7b7b/uKUyR155YRZXeLRhmRmFzN2Uz0nJl4smBOyybj3
-        LLp0kivQwr39ID2FqLidTgRJEfBrq2w=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AA9A62C145;
-        Wed, 20 Apr 2022 12:34:51 +0000 (UTC)
-Date:   Wed, 20 Apr 2022 14:34:50 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v3 03/15] printk: add missing memory barrier to
- wake_up_klogd()
-Message-ID: <Yl/9iDqRL3zKBoSJ@alley>
-References: <20220419234637.357112-1-john.ogness@linutronix.de>
- <20220419234637.357112-4-john.ogness@linutronix.de>
+        Wed, 20 Apr 2022 08:38:30 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837911277F
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:35:43 -0700 (PDT)
+Received: from [10.28.39.106] (10.28.39.106) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 20 Apr
+ 2022 20:35:41 +0800
+Message-ID: <f20078df-bf96-a972-25ce-7e9dce3f99d7@amlogic.com>
+Date:   Wed, 20 Apr 2022 20:35:41 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419234637.357112-4-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 2/2] dt-bindings: nand: meson: refine Amlogic NAND
+ controller driver
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20220402074921.13316-1-liang.yang@amlogic.com>
+ <20220402074921.13316-3-liang.yang@amlogic.com>
+ <20220420094107.4799f15a@xps13>
+ <b880c64c-7651-c445-4e5e-74cb7a1e76ee@amlogic.com>
+ <20220420141620.4fd68eef@xps13>
+From:   Liang Yang <liang.yang@amlogic.com>
+In-Reply-To: <20220420141620.4fd68eef@xps13>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.28.39.106]
+X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
+ (10.28.11.5)
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-04-20 01:52:25, John Ogness wrote:
-> It is important that any new records are visible to preparing
-> waiters before the waker checks if the wait queue is empty.
-> Otherwise it is possible that:
-> 
-> - there are new records available
-> - the waker sees an empty wait queue and does not wake
-> - the preparing waiter sees no new records and begins to wait
-> 
-> This is exactly the problem that the function description of
-> waitqueue_active() warns about.
-> 
-> Use wq_has_sleeper() instead of waitqueue_active() because it
-> includes the necessary full memory barrier.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Hi Miquel,
 
-Great catch! Looks good to me.
+On 2022/4/20 20:16, Miquel Raynal wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> Hi Liang,
+> 
+>>>> +maintainers:
+>>>> +  - liang.yang@amlogic.com
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - "amlogic,meson-gxl-nfc"
+>>>> +      - "amlogic,meson-axg-nfc"
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 2
+>>>> +
+>>>> +  '#address-cells':
+>>>> +    const: 1
+>>>
+>>> Not sure this property is needed.
+>> this is for the subnode, such as nand@0.
+> 
+> Yes but if you refer to nand-controller.yaml you no longer need these.
+ok, i will try it.
+> 
+>>>    
+>>>> +
+>>>> +  '#size-cells':
+>>>> +    const: 0
+>>>
+>>> Ditto. Plus, this one looks wrong anyway.
+>> this is for the subnode, such as nand@0. do you mean s/''/""/?
+> 
+> Sorry, this is not "wrong anyway", my fault. But still, you don't need
+> this property for the same reason as above.
+ok.
+> 
+>>>    
+>>>> +
+>>>> +  reg-names:
+>>>> +    items:
+>>>> +      - const: nfc
+>>>> +      - const: emmc
+>>>
+>>> Why do you need the emmc register map? Do you really need to perform a
+>>> register access there?
+>> yes, we have to access the emmc register map. because the NFC clock comes from SDEMMC_CLOCK register.
+> 
+> But if it's a clock you should get the clock and call
+> clk_prepare_enable(), you don't need to poke directly in the registers.
+> Do you?
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+no, it doesn't. it is special and the reason why need to implement a MMC 
+sub clock driver previously. also we don't implement it as a clock 
+provider in drivers/clk/meson/, because the SDEMMC_CLOCK register is 
+internal in MCI controller.
+> 
+>>>> +examples:
+>>>> +  - |
+>>>> +    #include <dt-bindings/clock/axg-clkc.h>
+>>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>>> +    apb {
+>>>> +      #address-cells = <2>;
+>>>> +      #size-cells = <2>;
+>>>
+>>> Not sure you need this upper node in the example.
+>> use the upper node to indicate the "#address-cells" and "#size-cells". if i do not do that, dt_binding_check will report:
+>>    ".....reg:0: [0, 30720, 0, 256] is too long" and
+>>    ".....reg:1: [0, 28672, 0, 2048] is too long".
+> 
+> ok, maybe, I'll let bindings maintainer review that.
 
-Best Regards,
-Petr
+ok. thanks.
+
+> 
+>>>    
+>>>> +      nand-controller@7800 {
+>>>> +        #address-cells = <1>;
+>>>> +        #size-cells = <0>;
+>>>> +        compatible = "amlogic,meson-axg-nfc";
+>>>> +        reg = <0x0 0x7800 0x0 0x100>,
+>>>> +              <0x0 0x7000 0x0 0x800>;
+>>>> +        reg-names = "nfc", "emmc";
+>>>> +
+>>>> +        interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
+>>>> +        clocks = <&clkc CLKID_SD_EMMC_C>,
+>>>> +                 <&clkc CLKID_FCLK_DIV2>;
+>>>> +        clock-names = "core", "device";
+>>>> +
+>>>> +      };
+>>>> +    };
+>>>> +...
+> 
+> 
+> Thanks,
+> Miquèl
+> 
+> .

@@ -2,146 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192E2508D41
+	by mail.lfdr.de (Postfix) with ESMTP id AE426508D43
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380555AbiDTQaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
+        id S1380234AbiDTQaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237190AbiDTQaK (ORCPT
+        with ESMTP id S237190AbiDTQaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:30:10 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CB130F7E;
-        Wed, 20 Apr 2022 09:27:23 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id e15-20020a9d63cf000000b006054e65aaecso1465116otl.0;
-        Wed, 20 Apr 2022 09:27:23 -0700 (PDT)
+        Wed, 20 Apr 2022 12:30:14 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900C530F7E;
+        Wed, 20 Apr 2022 09:27:27 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id bg25so856476wmb.4;
+        Wed, 20 Apr 2022 09:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=r6/1LJ6bEhhBqRzSKXoEbeE0rdJ9IO1XFkaZ2FJo+Pg=;
+        b=VVR/LaYO3RzlOTagucqR1RML8ejvY1psyRLd5bTXvzz7zuT7wgzJwqxg9fnsaVRI/6
+         rs7RO2dZR8EwPmC+O/bpn6OkhZoiIa3mQ2kjFFALt9yFJ0eie4tc6GIsJUmzutMQNrAx
+         KvSKAZbaumWANWDULse2KHAmFrpMvkzF1zM7rTUaybz98BrSvD0K54EGEDk0nxH1KVCM
+         XXw356u/Kb1+DyZkHioKyvI6HWxkNftkOgkUIY/pRXWddHQ3crbc0bhHSSfp0pHmkUCO
+         mHCVkXqcWdQ7aV76PRNCBq6BV09p+0WqpWtQvcYIxlciVc9pMy+8zpJJjOlvcDvYL09x
+         IizQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jFuQiVxiXaw/El9IycEi9N+hGxVYoIfTUPQ0SiPX/0c=;
-        b=OOSHy1bjN31vB+wJ+/DJaizVPTMo5u9qcXgWIQi/bmhOKu5r/Jpfa4p/LLrOGcbawj
-         gfzkDKGmQJH3zvnUQX74TPotuXXx0IAmkD0rMU1LQZp/G4SKMAEoE/rfXulP5bCn4+IQ
-         UnLpECYqgoRGohmkQJBHdlTbHBPbXcYQyJkUalJk0aR7xJTSNlioWOj+zawt5fcnxJpu
-         yEYT+dSYW23Te8/6HFr5JiRsSbRu0z7uYdniMLSXb6UpK/VwaleJ9k2mDUtK3gaCymhX
-         AnZzPNoLpYzhzvqo775NZMUhoLYlF8JMlreEO1gtJ9kV67Qo2FGqlZD1Vyl99JFrKBDS
-         K7zQ==
-X-Gm-Message-State: AOAM532uxtp6FSOarUQBPGNNyjLMzFDS54z9USmXDOhEuxTdOF01+G+R
-        Nbvu7SXlDJ8D44eVK21QxQ==
-X-Google-Smtp-Source: ABdhPJy5120ZKKxc25SIrkCRbf3UzELRwnoGL36gZxRGSW/S3gcNKYd4KBxbuxmyp3sVrkV4/KxeBw==
-X-Received: by 2002:a05:6830:25c1:b0:5e6:f161:423a with SMTP id d1-20020a05683025c100b005e6f161423amr8007220otu.78.1650472043196;
-        Wed, 20 Apr 2022 09:27:23 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f24-20020a9d5e98000000b006055789d903sm1850856otl.16.2022.04.20.09.27.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 09:27:22 -0700 (PDT)
-Received: (nullmailer pid 1427968 invoked by uid 1000);
-        Wed, 20 Apr 2022 16:27:22 -0000
-Date:   Wed, 20 Apr 2022 11:27:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Peter Rosin <peda@axentia.se>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v8 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
-Message-ID: <YmA0ahwtJJxq0EcQ@robh.at.kernel.org>
-References: <20220419124025.1733230-1-patrick.rudolph@9elements.com>
- <20220419124025.1733230-2-patrick.rudolph@9elements.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=r6/1LJ6bEhhBqRzSKXoEbeE0rdJ9IO1XFkaZ2FJo+Pg=;
+        b=7YH2nCfEZHObJ+zqeF1D1E4U4yjHMzfzVKoY9XPneGWKFFrfymNJazYp+BO3ok2Hhl
+         MxwKVzV0uh+/UvOo8bmTlxc6rBkfkZFB8gHXx+uWcpQIQUgbm97fy/+2bybTvKrD6cEz
+         9w/fdqv9WLs6flN67WYGBEcFoa0s2EWWtbJnZ09+W+By4y+iHL9+hI8jj9QgUTmreJn6
+         Bdwp1TI4DN8mI6ciA5cshlrBkms1QIiO8A23uA431fI2vgX06LEP+Oz45fg2oxma194+
+         KypDUiVCK8jGcUbzkiMf+ToeuqlyEhvj9fypetgDZUwsA9q/oDDCnyv/gPbfb9gouqn8
+         7wRw==
+X-Gm-Message-State: AOAM531xEX+QdkN4EoVeyDZcferDxtVY2z4l9rZnLvP3s4dSAis8aZNy
+        iEgI2bo6qLXneBkoPTXztL8=
+X-Google-Smtp-Source: ABdhPJwF7KqLSE5LuXgnXxDM3O1OPa2mvlH5rrta77NPNra9zi504DUMJ5Ylo71dUF7S6KaqrNQR+g==
+X-Received: by 2002:a1c:f211:0:b0:381:6c60:742f with SMTP id s17-20020a1cf211000000b003816c60742fmr4766034wmc.130.1650472046061;
+        Wed, 20 Apr 2022 09:27:26 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id 2-20020a1c1902000000b00380d3873d6asm210737wmz.43.2022.04.20.09.27.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 09:27:25 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <e5f976aa-d993-7e4a-c69d-e02e86bec1f4@redhat.com>
+Date:   Wed, 20 Apr 2022 18:27:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419124025.1733230-2-patrick.rudolph@9elements.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Babu Moger <babu.moger@amd.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, seanjc@google.com
+Cc:     vkuznets@redhat.com, jmattson@google.com, joro@8bytes.org,
+        wanpengli@tencent.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, x86@kernel.org
+References: <165040157111.1399644.6123821125319995316.stgit@bmoger-ubuntu>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v2 1/2] x86/cpufeatures: Add virtual TSC_AUX feature bit
+In-Reply-To: <165040157111.1399644.6123821125319995316.stgit@bmoger-ubuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 02:40:22PM +0200, Patrick Rudolph wrote:
-> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
-> chips. The functionality will be provided by the exisintg pca954x driver.
-> 
-> While on it make the interrupts support conditionally as not all of the
-> existing chips have interrupts.
-> 
-> For chips that are powered off by default add an optional regulator
-> called vdd-supply.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> ---
->  .../bindings/i2c/i2c-mux-pca954x.yaml         | 39 ++++++++++++++++---
->  1 file changed, 34 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> index 9f1726d0356b..21ab286c74f2 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> @@ -4,21 +4,25 @@
->  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: NXP PCA954x I2C bus switch
-> +title: NXP PCA954x I2C and compatible bus switches
->  
->  maintainers:
->    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  
->  description:
-> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
-> -
-> -allOf:
-> -  - $ref: /schemas/i2c/i2c-mux.yaml#
-> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
-> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
->  
->  properties:
->    compatible:
->      oneOf:
->        - enum:
-> +          - maxim,max7356
-> +          - maxim,max7357
-> +          - maxim,max7358
-> +          - maxim,max7367
-> +          - maxim,max7368
-> +          - maxim,max7369
->            - nxp,pca9540
->            - nxp,pca9542
->            - nxp,pca9543
-> @@ -59,10 +63,33 @@ properties:
->      description: if present, overrides i2c-mux-idle-disconnect
->      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
->  
-> +  vdd-supply:
-> +    description: A voltage regulator supplying power to the chip.
-> +
->  required:
->    - compatible
->    - reg
->  
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-mux.yaml#
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              enum:
-> +                - maxim,max7367
-> +                - maxim,max7369
-> +                - nxp,pca9542
-> +                - nxp,pca9543
-> +                - nxp,pca9544
-> +                - nxp,pca9545
-> +      then:
+On 4/19/22 22:53, Babu Moger wrote:
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index b24ca7f4ed7c..99a4c078b397 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -674,7 +674,7 @@ void kvm_set_cpu_caps(void)
+>   
+>   	kvm_cpu_cap_mask(CPUID_8000_001F_EAX,
+>   		0 /* SME */ | F(SEV) | 0 /* VM_PAGE_FLUSH */ | F(SEV_ES) |
+> -		F(SME_COHERENT));
+> +		F(V_TSC_AUX) | F(SME_COHERENT));
+>   
+>   	kvm_cpu_cap_mask(CPUID_C000_0001_EDX,
+>   		F(XSTORE) | F(XSTORE_EN) | F(XCRYPT) | F(XCRYPT_EN) |
 
-'then' is aligned with the 'not', so guess what all this does? Nothing.
+Not needed, since V_TSC_AUX is not exposed to guests.
 
-Rob
+I made the changes and queued both patches.
+
+Paolo

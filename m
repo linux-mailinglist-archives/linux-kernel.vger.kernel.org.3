@@ -2,85 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE185080BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 07:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACB250809F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 07:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359461AbiDTF4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 01:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S1359418AbiDTFfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 01:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359443AbiDTFzy (ORCPT
+        with ESMTP id S1351114AbiDTFfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 01:55:54 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3659DED7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 22:53:08 -0700 (PDT)
-Received: from epcas3p4.samsung.com (unknown [182.195.41.22])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220420055302epoutp02b86766413fba097997de3607fbf94b40~nhPaQRNCo1974519745epoutp02I
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:53:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220420055302epoutp02b86766413fba097997de3607fbf94b40~nhPaQRNCo1974519745epoutp02I
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1650433983;
-        bh=RFg2GFARn3OEAPm61BfWvSGMJNe57DN3zV3e1mXnTJg=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=duPI7ypXhXqQTdxhz2tzd4XNrS+YgYhUvu77d8747C4kIjz5ISbgRVpi4/Da/jG3K
-         k+O6qh8Qid4kkjphTi7ScWS0Vf5YJofOl0qyd0i+6ejNz99Pk2OuhcZA9/314sTxRD
-         oW5rTtG08hei/pEKW2Kk9FQzl+4lkhNFBCMRo3r4=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas3p3.samsung.com (KnoxPortal) with ESMTP id
-        20220420055302epcas3p312c7c243e82ca629daaad8b747b44216~nhPZySKAr0579705797epcas3p3S;
-        Wed, 20 Apr 2022 05:53:02 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp1.localdomain
-        (Postfix) with ESMTP id 4Kjqb232LYz4x9QW; Wed, 20 Apr 2022 05:53:02 +0000
-        (GMT)
-Mime-Version: 1.0
-Subject: RE: [PATCH v2 4/5] scsi: ufshpb: Add handing of device reset HPB
- regions Infos in HPB device mode
-Reply-To: keosung.park@samsung.com
-Sender: Keoseong Park <keosung.park@samsung.com>
-From:   Keoseong Park <keosung.park@samsung.com>
-To:     Bean Huo <huobean@gmail.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "powen.kao@mediatek.com" <powen.kao@mediatek.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        cpgsproxy3 <cpgsproxy3@samsung.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220419183044.789065-5-huobean@gmail.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <1381713434.41650433982422.JavaMail.epsvc@epcpadp4>
-Date:   Wed, 20 Apr 2022 14:31:17 +0900
-X-CMS-MailID: 20220420053117epcms2p72dd1a5dfcc6ab4ba72d46f84998259f6
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20220419183934epcas2p28272bfd9167253c2d9136c60f9050c5f
-References: <20220419183044.789065-5-huobean@gmail.com>
-        <20220419183044.789065-1-huobean@gmail.com>
-        <CGME20220419183934epcas2p28272bfd9167253c2d9136c60f9050c5f@epcms2p7>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Wed, 20 Apr 2022 01:35:12 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2047.outbound.protection.outlook.com [40.107.244.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22C236B63;
+        Tue, 19 Apr 2022 22:32:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UL4kPgPe+IfZLQkeAhUWHMA44PZpTHJ/j9Vz5DZJLE1EDETN7ewxUHd//LycUR4N1osiKwEElTNVqZVTPlvIZynCOtskYBDJ+ci8yUc/FTk3CJREamsKmyiqZdBxb1YAvfycPFFmOYwonBIVH7DnJ0MnlPGXgawalE6q/5f6EynTHCqRMNaYd+v4rG4ukrgWr0U4NT/+4WixRcz46mRvu+fBY+wjo3TRVKIjDCeaowo0pe2FAGZ3L3k9uAfcUFFE50i597D/CEB14pCl/PYb4wwbogPPac1UC38ix+8fBxutw6pnXv9RQNxoCU1g31uYuLkbMfRDvbYBF8QTCNxM2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a/yibClq7gykEmzpjNZZjY8WKSm5G8WhrlHQylLN/CA=;
+ b=aJooSVWRIwehLX8iRZnVJ51lnJpN+bhgREjae8nv3sfOf9HpQnmgYtrFuGplBgAagsroOXWC/cKPL+qatfLc8FTEAj75MB2bsHTEEJRz36JDnoPdTfvmmxy6GHggAV8QFhTASz5cWQE/sPU9Acjv2Iyml34Rr2aApIzjCHKYKRxqLkjdznez/469TvVurLppMRyT9uOWAPH19fv0tHq+dpM7Aph8c0eHSNFXTFfRQPXtCD9lY3WsjZgzKkyFOWpi/TbBBhJNlYQp7pH9h++o81fHnQclnD7vRLlrMvLCN/LFH2QURmK+A7B80Nad0paRRcwFFKF40Fq6XUNxNNPbbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a/yibClq7gykEmzpjNZZjY8WKSm5G8WhrlHQylLN/CA=;
+ b=ps6UHEKdijlaTaCUaO3Aw1CADpfjeu48jSfSyHF5dgodWEB7NC2I1ozZbrqPNgv2RXg4uMaEdA/b9Riw4LiJYnByb6+zteLSTkK7UHf6EEw/+QIx/hsDNNnL+m3gzmRPQ9cD9G4aRNIPw4AEZ15lynOuzt2hN/NNa4ydElgQb8u2khETEWi0G/v6uiSajBNMjUeHRBlHOKDqdi+mziu63TnRhfOTb8KgvV6+ypKxOTvKk72tTEpYB8EdGblXtcjz2eyq5AVhP4ujL3DdPr8p+HCfuUE733UkDXqKWtpMicc/yif/qEU/5gw71r+Xa+1s0cvUSnjK7eu+bkQBY5B6iQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA0PR12MB4349.namprd12.prod.outlook.com (2603:10b6:806:98::21)
+ by BN8PR12MB2979.namprd12.prod.outlook.com (2603:10b6:408:66::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Wed, 20 Apr
+ 2022 05:32:24 +0000
+Received: from SA0PR12MB4349.namprd12.prod.outlook.com
+ ([fe80::e15c:41ca:1c76:2ef]) by SA0PR12MB4349.namprd12.prod.outlook.com
+ ([fe80::e15c:41ca:1c76:2ef%3]) with mapi id 15.20.5164.025; Wed, 20 Apr 2022
+ 05:32:24 +0000
+Message-ID: <9b6b65ed-180b-ed33-43c3-7042ec895cff@nvidia.com>
+Date:   Wed, 20 Apr 2022 11:02:10 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [Patch v1] iommu: arm-smmu: disable large page mappings for
+ Nvidia arm-smmu
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>, thierry.reding@gmail.com,
+        vdumpa@nvidia.com, will@kernel.org, joro@8bytes.org,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Cc:     nicolinc@nvidia.com, Snikam@nvidia.com,
+        Pritesh Raithatha <praithatha@nvidia.com>
+References: <20220417090432.21110-1-amhetre@nvidia.com>
+ <52df6c79-3ee7-35e2-b72a-44ee9cb48c34@arm.com>
+From:   Ashish Mhetre <amhetre@nvidia.com>
+In-Reply-To: <52df6c79-3ee7-35e2-b72a-44ee9cb48c34@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA1PR0101CA0022.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:21::32) To SA0PR12MB4349.namprd12.prod.outlook.com
+ (2603:10b6:806:98::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8ddbcca7-4093-49a0-d220-08da228f2630
+X-MS-TrafficTypeDiagnostic: BN8PR12MB2979:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB2979C970F7082F05A1C10ADCCAF59@BN8PR12MB2979.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +7JqmURINwGXor6yurXLPEejlBytVH/N2nJRBlDSsDSOcGMATidtUcc5xnirB+rOzrPCyybHA6LjXuENlG48I8VT6ZU8lOscvPMZGMH7LAIwhpFuau0ZT2gGZ8r57xZl6poOTHWV9AtYCwinR0gfUAbEAclLKempPH25grXGfdHpEYO1EYDP1WZNgDNT2ATBZrtj9sjk8+55diXJgZhFdN6aP6t3odBwLfltsbkO7mCIvlKfcWra6ktuDxvACw+4m73l5yeBL+tkByBDd8sjRdgni9tJ+rVPFfQTBlOShy1ZOJRopAAuQxsvE2KbJt0oFcuRBhTPr55aorcUCuTsWrx8WTLZHLZ5xovcTJZyabJ518NRT+j19vUoqchdFFy7yjMmdMHbTN/Z/SLgKaa5DGdmy3Asa/A5pwRWMrh2dHBjqL1jeL8qwhuxpekHr5Fhy7lL+VdAOwaHAD1rTU5AOxTnRE7A4p3ZucFoItQStfxec4X3FNOjzs1JvTwXbJ71sbcPhqNFrblos+N+ZfCLVLXLtIFgHzKOkKbPoipVTq/QByPLEyNdi0rL76vOrywZX1Rvy0dzoN4Ukuel6HACbW/kvy1Y8AdRfDHAbH1EusLWMv/jA8IrLU7sPcCNPmWw0+BS4vWe1WjFqqRljI7O7ByiSqL3nPXlu0myKH4ZE6wqo3M6pcu1/5ih7CHxLgj4h7nLANc2tZQYIJCIfSwBPrtr6s+6dd4KHJu2VNczi9oaIYdyqlp/RTbRPqgOgEgS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4349.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(508600001)(186003)(86362001)(107886003)(6512007)(6486002)(8936002)(2616005)(2906002)(5660300002)(53546011)(55236004)(83380400001)(6506007)(31696002)(6666004)(66946007)(66476007)(36756003)(31686004)(4326008)(66556008)(8676002)(921005)(316002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RGdxKzdrSWtuK0w1ajB5c2N2V1VZN0NiWGRlcnJ5TGE4QUcyRnhUTmtIL2Yw?=
+ =?utf-8?B?c291ZWFwYUlBQUxldVFnZFdlMmRqMDVUZExnSnVPRVNyajN0TlVqeWh1eGlG?=
+ =?utf-8?B?dHVoYlVyWXM2MEtWN2JQL3ZWanVyZlhLYWM2V3BPMjFPaVhrL3NOcUI1RGx5?=
+ =?utf-8?B?dUdkazRkQ2NJRmxPelZOSXhjOUJ6N2ZLTEhVY1orOWFTTDlFZ0lhTlhnTlh1?=
+ =?utf-8?B?UHpuUk43dUs1bUhuMmhDcmx5cVp1WHRRZzNZdUdKTnJ1b3d3YlJHZ2paaXlm?=
+ =?utf-8?B?a2d4TWo5SVNuNitNWGtOeFBjdTJCdkRSMlQzVUJ6QnU4bUVITjNQSE9EWTkr?=
+ =?utf-8?B?Wm9lc3AraEs5eWtWUkY0QjZxMEFTVk9HdXl1NXljMFF0amtDbVdUdm1yZ0pL?=
+ =?utf-8?B?b2o0bVBvYUFIS1l2QUZHS1g0UmhWUHRaNE9vK2hSUVdoeWxkMG1sZWp3c0hR?=
+ =?utf-8?B?cFRRTE5iZ2Z2WE51OEJoSzRTUGtCelAwYWNDK0M2QXFpQ0p0K29uUDRBSDk3?=
+ =?utf-8?B?cGFUNVBqT2hZMEpSeTBUcy9VKyswMUI4RU9oMVRlY3hoT09lYVFsOEVGMWly?=
+ =?utf-8?B?Sk1BaFRENGo0R012dTU5bU0zK1lUNGpUSmgzenhYNnZzZGpCQUxDdFgxY1RK?=
+ =?utf-8?B?blMwZVRoSUpobDZPZENESXdQeFB0MUdQY1VRWlVmampEaE80K0k5L3VPQlBw?=
+ =?utf-8?B?WWppNVhKNHIwMTBIYTZYMTYzVHFuMUZkSnA3a291b2p1bXdrQmZZWTY5UDE5?=
+ =?utf-8?B?bS9rU2JPK0M2QnNzOTFxZVIvWGk2WHdFYkxuS1hFSjBBN1hFRlBCRHRITzR6?=
+ =?utf-8?B?ZHZGT044SmRnTEZVOTkxUWE2Z21xUFdNSW82NDZhMUljaHdjcEh4K2VkcWtm?=
+ =?utf-8?B?Mkl1VFNjLzBETGR1VkhnTnk3SElicFVuZVBEOTY4NEd3dnpvZlRDQW0rMnlw?=
+ =?utf-8?B?RHR3UjQyZTFJZ3Jqai9ZYmpGZjJvTGQ4K0ZpaVRreW1VQW9CalZscHpLdlNt?=
+ =?utf-8?B?RzFHb21XTUJFMnZBcFZUcTEzYWVzZHczL21maWxCd0NuOCtsYXlYNXlGdVk1?=
+ =?utf-8?B?allpcDRJOUNBSUEybDQ4cUlvS1QxdmJjdmREbVBXb0FNUzF0STZLT1JGNFI1?=
+ =?utf-8?B?RHpTdkxqYnUrWXNtRjM2Q1BSTEFEU245TlphL1B3ajlnMnc0Y1V2QmV5Qm5D?=
+ =?utf-8?B?d2FJSXFiV1NNWjA4K1dYQUl5TmlqS0o2Mm5VZkt4YWVVV056YUZnQVZjUDF4?=
+ =?utf-8?B?NkhCTXFzUjRpcTd2bUNvNXBCa2lxdDFHV1pyQTFmR2dLczZUN0VLbXM3WTdI?=
+ =?utf-8?B?VWpYUlVhV3hUN3lXTWh4aFhvQmo1ZFVjbVh0UTRVUmF3czdITEdLTjVJYWti?=
+ =?utf-8?B?aGllb3d5WnVPaGFhL296TlpLZngrOSt5bHFwTEFVUHJuRCt0Y0tXLzZKd1Z5?=
+ =?utf-8?B?UUtrRUQ4VXYvVy9QMSttZkFNaXVXOUJmd25MM0x5TFBCRHJ0MFFTVnNUTDhy?=
+ =?utf-8?B?VUtzMnNiRmU4eWhHVE5rdVl1eXVEa1pzOTBUaVJzZVVkSFMrMEg5MHlWamQ0?=
+ =?utf-8?B?V2MyV0tOK3l1RnhZQnQ1OXp2OWkvWE5jaWphcVcydUZCRmxqR2t1aC8xVjZB?=
+ =?utf-8?B?VzltVkNqREdSbE5VMVFvOXp5ajJuU1NvZ0dtRDlUcUpQZmlsd1JYVVlEdytk?=
+ =?utf-8?B?NTlueGExNWlkdU9wQUZNeCtkMThvN0R4dXc4c3kzZ05FU2pwUEw1MnVKM2g5?=
+ =?utf-8?B?OTBMTkxCaFpyZ09NRzE2NW0vNGl4YUpLVWM1a0V0bGFVa0FIVEZTWDBwZTZW?=
+ =?utf-8?B?eEUxQ0k3cHRPMSt5c3ZRYmZUYzJZbDdLa0ZyQkhxR3pYSlRrT2RQNE1uUmhy?=
+ =?utf-8?B?MURMTWIva0dSVHhnandWbFlveEhwS2RIYlRSUDRnNFplV3FkbkJyd09LZHVR?=
+ =?utf-8?B?a3lxd2Jnd2s1dTMvbHYzbERFRjkrZ1ZzMllsU2tXOExYdzN2d0VHc3NqYjlS?=
+ =?utf-8?B?bkZUaTg5UTNwUTcrSTJKYktqaWg4eHlFQXc4cS9pTHRlWDhLSG5tcE5FSStF?=
+ =?utf-8?B?YVBhdmZjdnpPNkJtZnViK2xTcmR1Rm5kWTV3dFppTWkzb1N6dzFsZ0I0Vjdv?=
+ =?utf-8?B?cWZxTjNGWWMrWitXTThwS05YbmlDSE14R0YvdS82aENxUnNtandWUHNTWUZh?=
+ =?utf-8?B?RldlYzZqejE5QU56VXRxejhKeEJWaXljVTIwV1VoS2l6N2VpeHpBbllOcWpJ?=
+ =?utf-8?B?YktXTkdoNWNDOWV6RmR1SWZZQStVT0xsbnBvWlZEZjJpR3FLdkpjR0dpaEZF?=
+ =?utf-8?B?QmdscVk1dEJOcE0reDdIQU9kUWs5d3E4Q04rNWNLTE1YVHMzRGd5UT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ddbcca7-4093-49a0-d220-08da228f2630
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4349.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 05:32:24.6028
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 80okRS9fZ4EU8No8KimrNLsvw6ZK3MlCwlinetesTtB7BOsJPjWO8+GZfrzHIMri7tlVSJay4qotaEW554EHmg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2979
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,176 +136,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bean,
 
->From: Bean Huo <beanhuo@micron.com>
->=20
->In UFS HPB Spec JESD220-3A,
->=20
->"5.8. Active and inactive information upon power cycle
->...
->When the device is powered off by the host, the device may restore L2P map=
- data
->upon power up or build from the host=E2=80=99s HPB READ command. In case d=
-evice powered
->up and lost HPB information, device can signal to the host through HPB Sen=
-se data,
->by setting HPB Operation as =E2=80=982=E2=80=99 which will inform the host=
- that device reset HPB
->information."
->=20
->Therefore, for HPB device control mode, if the UFS device is reset via the=
- RST_N
->pin, the active region information in the device will be reset. If the hos=
-t side
->receives this notification from the device side, it is recommended to inac=
-tivate
->all active regions in the host's HPB cache.
->=20
->Signed-off-by: Bean Huo <beanhuo@micron.com>
->---
-> drivers/scsi/ufs/ufshpb.c | 73 ++++++++++++++++++++++++++++-----------
-> 1 file changed, 53 insertions(+), 20 deletions(-)
->=20
->diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
->index 4538164fc493..4b15fa862beb 100644
->--- a/drivers/scsi/ufs/ufshpb.c
->+++ b/drivers/scsi/ufs/ufshpb.c
->@@ -1143,6 +1143,39 @@ static int ufshpb_add_region(struct ufshpb_lu *hpb,=
- struct ufshpb_region *rgn)
->         spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
->         return ret;
-> }
->+/**
->+ *ufshpb_submit_region_inactive() - submit a region to be inactivated lat=
-er
->+ *@hpb: per-LU HPB instance
->+ *@region_index: the index associated with the region that will be inacti=
-vated later
->+ */
->+static void ufshpb_submit_region_inactive(struct ufshpb_lu *hpb, int regi=
-on_index)
->+{
->+        int subregion_index;
->+        struct ufshpb_region *rgn;
->+        struct ufshpb_subregion *srgn;
->+
->+        /*
->+         * Remove this region from active region list and add it to inact=
-ive list
->+         */
->+        spin_lock(&hpb->rsp_list_lock);
->+        ufshpb_update_inactive_info(hpb, region_index);
-How about separating the "hpb->stats.rb_inactive_cnt++" code from ufshpb_up=
-date_inactive_info()?
-Because I think this code should only be used in ufshpb_rsp_req_region_upda=
-te().
 
->+        spin_unlock(&hpb->rsp_list_lock);
->+
->+        rgn =3D hpb->rgn_tbl + region_index;
->+
->+        /*
->+         * Set subregion state to be HPB_SRGN_INVALID, there will no HPB =
-read on this subregion
->+         */
->+        spin_lock(&hpb->rgn_state_lock);
->+        if (rgn->rgn_state !=3D HPB_RGN_INACTIVE) {
->+                for (subregion_index =3D 0; subregion_index < rgn->srgn_c=
-nt; subregion_index++) {
->+                        srgn =3D rgn->srgn_tbl + subregion_index;
->+                        if (srgn->srgn_state =3D=3D HPB_SRGN_VALID)
->+                                srgn->srgn_state =3D HPB_SRGN_INVALID;
->+                }
->+        }
->+        spin_unlock(&hpb->rgn_state_lock);
->+}
->=20
-> static void ufshpb_rsp_req_region_update(struct ufshpb_lu *hpb,
->                                          struct utp_hpb_rsp *rsp_field)
->@@ -1202,25 +1235,8 @@ static void ufshpb_rsp_req_region_update(struct ufs=
-hpb_lu *hpb,
->=20
->         for (i =3D 0; i < rsp_field->inactive_rgn_cnt; i++) {
->                 rgn_i =3D be16_to_cpu(rsp_field->hpb_inactive_field[i]);
->-                dev_dbg(&hpb->sdev_ufs_lu->sdev_dev,
->-                        "inactivate(%d) region %d\n", i, rgn_i);
->-
->-                spin_lock(&hpb->rsp_list_lock);
->-                ufshpb_update_inactive_info(hpb, rgn_i);
->-                spin_unlock(&hpb->rsp_list_lock);
->-
->-                rgn =3D hpb->rgn_tbl + rgn_i;
->-
->-                spin_lock(&hpb->rgn_state_lock);
->-                if (rgn->rgn_state !=3D HPB_RGN_INACTIVE) {
->-                        for (srgn_i =3D 0; srgn_i < rgn->srgn_cnt; srgn_i=
-++) {
->-                                srgn =3D rgn->srgn_tbl + srgn_i;
->-                                if (srgn->srgn_state =3D=3D HPB_SRGN_VALI=
-D)
->-                                        srgn->srgn_state =3D HPB_SRGN_INV=
-ALID;
->-                        }
->-                }
->-                spin_unlock(&hpb->rgn_state_lock);
->-
->+                dev_dbg(&hpb->sdev_ufs_lu->sdev_dev, "inactivate(%d) regi=
-on %d\n", i, rgn_i);
->+                ufshpb_submit_region_inactive(hpb, rgn_i);
->         }
->=20
-> out:
->@@ -1255,7 +1271,10 @@ static void ufshpb_dev_reset_handler(struct ufs_hba=
- *hba)
->=20
->         __shost_for_each_device(sdev, hba->host) {
->                 hpb =3D ufshpb_get_hpb_data(sdev);
->-                if (hpb && hpb->is_hcm)
->+                if (!hpb)
->+                        continue;
->+
->+                if (hpb->is_hcm) {
->                         /*
->                          * For the HPB host mode, in case device powered =
-up and lost HPB
-For the HPB host control mode, ...
+On 4/20/2022 1:57 AM, Robin Murphy wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 2022-04-17 10:04, Ashish Mhetre wrote:
+>> Tegra194 and Tegra234 SoCs have the erratum that causes walk cache
+>> entries to not be invalidated correctly. The problem is that the walk
+>> cache index generated for IOVA is not same across translation and
+>> invalidation requests. This is leading to page faults when PMD entry is
+>> released during unmap and populated with new PTE table during subsequent
+>> map request. Disabling large page mappings avoids the release of PMD
+>> entry and avoid translations seeing stale PMD entry in walk cache.
+>> Fix this by limiting the page mappings to PAGE_SIZE for Tegra194 and
+>> Tegra234 devices. This is recommended fix from Tegra hardware design
+>> team.
+> 
+> Is this related to any of the several known MMU-500 invalidation errata,
+> or is it definitely specific to something NVIDIA have done with their
+> integration?
+> 
+It's not a known MMU-500 errata. It is specific to NVIDIA.
 
->                          * information, we will set the region flag to be=
- RGN_FLAG_UPDATE,
->@@ -1263,6 +1282,20 @@ static void ufshpb_dev_reset_handler(struct ufs_hba=
- *hba)
->                          * in the UFS device).
->                          */
->                         ufshpb_set_regions_update(hpb);
->+                } else {
->+                        /*
->+                         * For the HPB device mode, we add all active reg=
-ions to inactive list,
-For the HPB device control mode, ...
+>> Co-developed-by: Pritesh Raithatha <praithatha@nvidia.com>
+>> Signed-off-by: Pritesh Raithatha <praithatha@nvidia.com>
+>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+>> ---
+>>   drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c | 23 ++++++++++++++++++++
+>>   drivers/iommu/arm/arm-smmu/arm-smmu.c        |  3 +++
+>>   drivers/iommu/arm/arm-smmu/arm-smmu.h        |  1 +
+>>   3 files changed, 27 insertions(+)
+>>
+>> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c 
+>> b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+>> index 01e9b50b10a1..b7a3d06da2f4 100644
+>> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+>> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+>> @@ -258,6 +258,27 @@ static void nvidia_smmu_probe_finalize(struct 
+>> arm_smmu_device *smmu, struct devi
+>>                       dev_name(dev), err);
+>>   }
+>>
+>> +static void nvidia_smmu_cfg_pgsize_bitmap(struct arm_smmu_device *smmu)
+>> +{
+>> +     const struct device_node *np = smmu->dev->of_node;
+>> +
+>> +     /*
+>> +      * Tegra194 and Tegra234 SoCs have the erratum that causes walk 
+>> cache
+>> +      * entries to not be invalidated correctly. The problem is that 
+>> the walk
+>> +      * cache index generated for IOVA is not same across translation 
+>> and
+>> +      * invalidation requests. This is leading to page faults when 
+>> PMD entry
+>> +      * is released during unmap and populated with new PTE table during
+>> +      * subsequent map request. Disabling large page mappings avoids the
+>> +      * release of PMD entry and avoid translations seeing stale PMD 
+>> entry in
+>> +      * walk cache.
+>> +      * Fix this by limiting the page mappings to PAGE_SIZE on 
+>> Tegra194 and
+>> +      * Tegra234.
+>> +      */
+>> +     if (of_device_is_compatible(np, "nvidia,tegra234-smmu") ||
+>> +         of_device_is_compatible(np, "nvidia,tegra194-smmu"))
+>> +             smmu->pgsize_bitmap = PAGE_SIZE;
+>> +}
+>> +
+>>   static const struct arm_smmu_impl nvidia_smmu_impl = {
+>>       .read_reg = nvidia_smmu_read_reg,
+>>       .write_reg = nvidia_smmu_write_reg,
+>> @@ -268,10 +289,12 @@ static const struct arm_smmu_impl 
+>> nvidia_smmu_impl = {
+>>       .global_fault = nvidia_smmu_global_fault,
+>>       .context_fault = nvidia_smmu_context_fault,
+>>       .probe_finalize = nvidia_smmu_probe_finalize,
+>> +     .cfg_pgsize_bitmap = nvidia_smmu_cfg_pgsize_bitmap,
+>>   };
+>>
+>>   static const struct arm_smmu_impl nvidia_smmu_single_impl = {
+>>       .probe_finalize = nvidia_smmu_probe_finalize,
+>> +     .cfg_pgsize_bitmap = nvidia_smmu_cfg_pgsize_bitmap,
+>>   };
+>>
+>>   struct arm_smmu_device *nvidia_smmu_impl_init(struct arm_smmu_device 
+>> *smmu)
+>> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c 
+>> b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+>> index 568cce590ccc..3692a19a588a 100644
+>> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+>> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+>> @@ -1872,6 +1872,9 @@ static int arm_smmu_device_cfg_probe(struct 
+>> arm_smmu_device *smmu)
+>>       if (smmu->features & ARM_SMMU_FEAT_FMT_AARCH64_64K)
+>>               smmu->pgsize_bitmap |= SZ_64K | SZ_512M;
+>>
+>> +     if (smmu->impl && smmu->impl->cfg_pgsize_bitmap)
+>> +             smmu->impl->cfg_pgsize_bitmap(smmu);
+> 
+> I'm not the biggest fan of adding a super-specific hook for this, when
+> it seems like it could just as easily be handled in the init_context
+> hook, which is where it is precisely for the purpose of mangling the
+> pgtable_cfg to influence io-pgtable's behaviour.
+> 
+Yes, we can use init_context() to override pgsize_bitmap. I'll update
+that in next version.
 
->+                         * they will be inactivated later in ufshpb_map_w=
-ork_handler()
->+                         */
->+                        struct victim_select_info *lru_info =3D &hpb->lru=
-_info;
->+                        struct ufshpb_region *rgn;
->+
->+                        list_for_each_entry(rgn, &lru_info->lh_lru_rgn, l=
-ist_lru_rgn)
->+                                ufshpb_submit_region_inactive(hpb, rgn->r=
-gn_idx);
->+
->+                        if (ufshpb_get_state(hpb) =3D=3D HPB_PRESENT)
->+                                queue_work(ufshpb_wq, &hpb->map_work);
->+                }
->         }
-> }
->=20
->--=20
->2.34.1
->=20
->=20
-
-Best Regards,
-Keoseong Park
+> Thanks,
+> Robin.
+> 
+>> +
+>>       if (arm_smmu_ops.pgsize_bitmap == -1UL)
+>>               arm_smmu_ops.pgsize_bitmap = smmu->pgsize_bitmap;
+>>       else
+>> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.h 
+>> b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+>> index 2b9b42fb6f30..5d9b03024969 100644
+>> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.h
+>> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+>> @@ -442,6 +442,7 @@ struct arm_smmu_impl {
+>>       void (*write_s2cr)(struct arm_smmu_device *smmu, int idx);
+>>       void (*write_sctlr)(struct arm_smmu_device *smmu, int idx, u32 
+>> reg);
+>>       void (*probe_finalize)(struct arm_smmu_device *smmu, struct 
+>> device *dev);
+>> +     void (*cfg_pgsize_bitmap)(struct arm_smmu_device *smmu);
+>>   };
+>>
+>>   #define INVALID_SMENDX                      -1

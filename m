@@ -2,231 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BA3509134
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7225509127
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382101AbiDTULW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
+        id S1381958AbiDTUOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382066AbiDTUKo (ORCPT
+        with ESMTP id S1351344AbiDTUOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:10:44 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252594738F;
-        Wed, 20 Apr 2022 13:07:52 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id f17so3759819edt.4;
-        Wed, 20 Apr 2022 13:07:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jgbU6+UKMrFaCyV2cRMHk+0IULMTYKeEHlBySELDljA=;
-        b=k4l0mt+CPkmxIn2s/XBG5DM9kpYWuVHWRLSOarEzjqOPxZwGfBONSzl5nSNPsrXwzh
-         wvg6/oO2H9ZW9qy3y9i4hc0/TPlmIOjf/ssPlGwtY9RAre7q5xSLqzWgGBxEtMJHQM5Y
-         55kmmKFiM6J77fQuT8vWRy0J8B+IbtxKAZG4oGgc4ywFAzlpcSGDuMKY4dWqoambEIIU
-         n/XsTQ7ktiYYHy88ZwaFBlj08dCPA77bpyvf0jBZ5886XJBVSo0t+eHFuLCGYPdmk6fs
-         lGXX9to3SE0myYhpLyD9hdXa7ecs25IPVJepGXvAtn9vQmeLFBN3Ps568marx9PzyqsV
-         vWug==
+        Wed, 20 Apr 2022 16:14:37 -0400
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B1A4615B;
+        Wed, 20 Apr 2022 13:11:49 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id r18so3271117ljp.0;
+        Wed, 20 Apr 2022 13:11:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jgbU6+UKMrFaCyV2cRMHk+0IULMTYKeEHlBySELDljA=;
-        b=unQw4HLyUPhhS82gCO3szf1tN/+NeK2CTWl2GG/3jM6JSYsIBR9gmR8VS0Sx6Ym3Lz
-         5h1CqOlfFWzVf7FNyGoyxNZmCqqvAy+71AmvlmNcRyqnLXb9wT5bQb80lAtDka7BLxwo
-         yfQT1vVQYwzWITUR8BISm1wsJG0uKZKUFOLyXG0FsOvYbLF1P+IWU3PfFuZNCY9o5uUF
-         wS+GlF2TI2Mz1tjXZt5/6TPiKfB6i9GYLcfxBWpLI7PobjfUnKQa29xdyLOCGp0kOyBZ
-         XolUA3E28Om6NrzTGJgHjUJ1HquOeXhjIxSkSs4FAYmNZXPukRB3bOrPYWdzTe0ukSaV
-         g+/Q==
-X-Gm-Message-State: AOAM533UUhWsUAbI8SDTFmu6CSj3l2b4YE4B9c9RBYI2miTpzTGuGn3D
-        olrOU9CMMqhJpoMiktl2DOc2kQQuwALhvsJd
-X-Google-Smtp-Source: ABdhPJyRPMuB76L1g7iwvZj7xk/t0HTeEYFXgzyK0fRO/y7PZhA4FyYJe4doPA/3rcCveWfsIF3tVQ==
-X-Received: by 2002:aa7:d047:0:b0:41d:57cf:d588 with SMTP id n7-20020aa7d047000000b0041d57cfd588mr24916641edo.172.1650485270544;
-        Wed, 20 Apr 2022 13:07:50 -0700 (PDT)
-Received: from anparri.mshome.net (host-82-53-3-95.retail.telecomitalia.it. [82.53.3.95])
-        by smtp.gmail.com with ESMTPSA id gy10-20020a170906f24a00b006e894144707sm7126853ejb.53.2022.04.20.13.07.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 13:07:50 -0700 (PDT)
-From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-To:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-Subject: [PATCH 5/5] Drivers: hv: vmbus: Refactor the ring-buffer iterator functions
-Date:   Wed, 20 Apr 2022 22:07:20 +0200
-Message-Id: <20220420200720.434717-6-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220420200720.434717-1-parri.andrea@gmail.com>
-References: <20220420200720.434717-1-parri.andrea@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kituK6OBdqTi+kxAeHHv4yFs1BiJnSRSgcn1u3Ell74=;
+        b=iiBTwI/x1GL+h0uosviF8NDkpNvDIKwbQie12nqQrfFob9vxSGJzNHzl5YJPCpif4U
+         dTamnNBzcBFi9MQKZ+DCzrBc904Dmw80scj2s2rr5pQ8ruwuOgnWesEgtbH2FUVSPnTO
+         5wcvIljHDLeU2EL7nmqffRp2wyhaKSDpCBUof3qqWYxcakoXttCQAjfwO4Ali58vckyd
+         HAbyaHzQGnNJZQSGNhlRAp5I9aYHNoqSH8vRKOQGw1yflzI77+3xUm4kqdX3iPeovKhF
+         grC6ch6eT93zFGfEVCILGIra51bVqeALCnZpB+vKU17YjeSCR9o+Fr/YhB0tG5ixqTP9
+         BvIg==
+X-Gm-Message-State: AOAM531ZYrJNKUBNArre6MjJynQczBj/t7uE5q869GE93hRYdDplL9Y2
+        O0lkJSW+SsmhvQ2f9mPRmIVHWwY6eylzZKpfgLY=
+X-Google-Smtp-Source: ABdhPJybRBIjDP+5BAIib8bSg9t516qHkD6xvIc7IexyqYv45hzQlZwIieiIhem1fSD/qEfR01uOTg==
+X-Received: by 2002:a2e:9ecb:0:b0:24b:4e2a:a555 with SMTP id h11-20020a2e9ecb000000b0024b4e2aa555mr14496285ljk.149.1650485506839;
+        Wed, 20 Apr 2022 13:11:46 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id k10-20020a19560a000000b0046d1707fcbdsm1927162lfb.215.2022.04.20.13.11.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 13:11:43 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id b21so4963738lfb.5;
+        Wed, 20 Apr 2022 13:11:39 -0700 (PDT)
+X-Received: by 2002:a05:6512:b0e:b0:44a:a5a0:f60e with SMTP id
+ w14-20020a0565120b0e00b0044aa5a0f60emr15727328lfu.669.1650485498400; Wed, 20
+ Apr 2022 13:11:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220330154024.112270-1-phil.edworthy@renesas.com>
+In-Reply-To: <20220330154024.112270-1-phil.edworthy@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 20 Apr 2022 22:11:24 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVV=PBfboHUk-wi1coAy7rcpDngKGSTqDWh-5vnSc91pg@mail.gmail.com>
+Message-ID: <CAMuHMdVV=PBfboHUk-wi1coAy7rcpDngKGSTqDWh-5vnSc91pg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/14] Add new Renesas RZ/V2M SoC and Renesas RZ/V2M
+ EVK support
+To:     Phil Edworthy <phil.edworthy@renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With no users of hv_pkt_iter_next_raw() and no "external" users of
-hv_pkt_iter_first_raw(), the iterator functions can be refactored
-and simplified to remove some indirection/code.
+Hi Phil,
 
-Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
----
- drivers/hv/ring_buffer.c | 32 +++++++++-----------------------
- include/linux/hyperv.h   | 35 ++++-------------------------------
- 2 files changed, 13 insertions(+), 54 deletions(-)
+On Wed, Mar 30, 2022 at 5:40 PM Phil Edworthy <phil.edworthy@renesas.com> wrote:
+> RZ/V2M has a dual-core Cortex-A53 (1.0 GHz) CPU and built-in AI
+> accelerator "DRP-AI" for vision, which is Renesas' original technology.
+> It also has a 32-bit LPDDR4 interface and video codec (H.264).
+>
+> The RZ/V2M is used with ISP firmware that runs on one of the Cortex-A53
+> cores. The firmware is an integral part of the SoC such that the HW
+> User's Manual documents which of the peripheral modules are used by the
+> firmware.
+>
+> Initial patches enables minimal peripherals on Renesas RZ/V2M EVK board
+> and booted via nfs. Ethernet is broadly compatible with the
+> etheravb-rcar-gen3 driver, but interrupts need some work so it's not
+> been included in this patch set.
+>
+> Below blocks are enabled on Renesas RZ/V2M EVK board:
+> - memory
+> - External input clock
+> - CPG
+> - UART
 
-diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-index 3d215d9dec433..fa98b3a91206a 100644
---- a/drivers/hv/ring_buffer.c
-+++ b/drivers/hv/ring_buffer.c
-@@ -421,7 +421,7 @@ int hv_ringbuffer_read(struct vmbus_channel *channel,
- 	memcpy(buffer, (const char *)desc + offset, packetlen);
- 
- 	/* Advance ring index to next packet descriptor */
--	__hv_pkt_iter_next(channel, desc, true);
-+	__hv_pkt_iter_next(channel, desc);
- 
- 	/* Notify host of update */
- 	hv_pkt_iter_close(channel);
-@@ -456,22 +456,6 @@ static u32 hv_pkt_iter_avail(const struct hv_ring_buffer_info *rbi)
- 		return (rbi->ring_datasize - priv_read_loc) + write_loc;
- }
- 
--/*
-- * Get first vmbus packet without copying it out of the ring buffer
-- */
--struct vmpacket_descriptor *hv_pkt_iter_first_raw(struct vmbus_channel *channel)
--{
--	struct hv_ring_buffer_info *rbi = &channel->inbound;
--
--	hv_debug_delay_test(channel, MESSAGE_DELAY);
--
--	if (hv_pkt_iter_avail(rbi) < sizeof(struct vmpacket_descriptor))
--		return NULL;
--
--	return (struct vmpacket_descriptor *)(hv_get_ring_buffer(rbi) + rbi->priv_read_index);
--}
--EXPORT_SYMBOL_GPL(hv_pkt_iter_first_raw);
--
- /*
-  * Get first vmbus packet from ring buffer after read_index
-  *
-@@ -483,11 +467,14 @@ struct vmpacket_descriptor *hv_pkt_iter_first(struct vmbus_channel *channel)
- 	struct vmpacket_descriptor *desc, *desc_copy;
- 	u32 bytes_avail, pkt_len, pkt_offset;
- 
--	desc = hv_pkt_iter_first_raw(channel);
--	if (!desc)
-+	hv_debug_delay_test(channel, MESSAGE_DELAY);
-+
-+	bytes_avail = hv_pkt_iter_avail(rbi);
-+	if (bytes_avail < sizeof(struct vmpacket_descriptor))
- 		return NULL;
-+	bytes_avail = min(rbi->pkt_buffer_size, bytes_avail);
- 
--	bytes_avail = min(rbi->pkt_buffer_size, hv_pkt_iter_avail(rbi));
-+	desc = (struct vmpacket_descriptor *)(hv_get_ring_buffer(rbi) + rbi->priv_read_index);
- 
- 	/*
- 	 * Ensure the compiler does not use references to incoming Hyper-V values (which
-@@ -534,8 +521,7 @@ EXPORT_SYMBOL_GPL(hv_pkt_iter_first);
-  */
- struct vmpacket_descriptor *
- __hv_pkt_iter_next(struct vmbus_channel *channel,
--		   const struct vmpacket_descriptor *desc,
--		   bool copy)
-+		   const struct vmpacket_descriptor *desc)
- {
- 	struct hv_ring_buffer_info *rbi = &channel->inbound;
- 	u32 packetlen = desc->len8 << 3;
-@@ -548,7 +534,7 @@ __hv_pkt_iter_next(struct vmbus_channel *channel,
- 		rbi->priv_read_index -= dsize;
- 
- 	/* more data? */
--	return copy ? hv_pkt_iter_first(channel) : hv_pkt_iter_first_raw(channel);
-+	return hv_pkt_iter_first(channel);
- }
- EXPORT_SYMBOL_GPL(__hv_pkt_iter_next);
- 
-diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-index 1112c5cf894e6..370adc9971d3e 100644
---- a/include/linux/hyperv.h
-+++ b/include/linux/hyperv.h
-@@ -1673,55 +1673,28 @@ static inline u32 hv_pkt_len(const struct vmpacket_descriptor *desc)
- 	return desc->len8 << 3;
- }
- 
--struct vmpacket_descriptor *
--hv_pkt_iter_first_raw(struct vmbus_channel *channel);
--
- struct vmpacket_descriptor *
- hv_pkt_iter_first(struct vmbus_channel *channel);
- 
- struct vmpacket_descriptor *
- __hv_pkt_iter_next(struct vmbus_channel *channel,
--		   const struct vmpacket_descriptor *pkt,
--		   bool copy);
-+		   const struct vmpacket_descriptor *pkt);
- 
- void hv_pkt_iter_close(struct vmbus_channel *channel);
- 
- static inline struct vmpacket_descriptor *
--hv_pkt_iter_next_pkt(struct vmbus_channel *channel,
--		     const struct vmpacket_descriptor *pkt,
--		     bool copy)
-+hv_pkt_iter_next(struct vmbus_channel *channel,
-+		 const struct vmpacket_descriptor *pkt)
- {
- 	struct vmpacket_descriptor *nxt;
- 
--	nxt = __hv_pkt_iter_next(channel, pkt, copy);
-+	nxt = __hv_pkt_iter_next(channel, pkt);
- 	if (!nxt)
- 		hv_pkt_iter_close(channel);
- 
- 	return nxt;
- }
- 
--/*
-- * Get next packet descriptor without copying it out of the ring buffer
-- * If at end of list, return NULL and update host.
-- */
--static inline struct vmpacket_descriptor *
--hv_pkt_iter_next_raw(struct vmbus_channel *channel,
--		     const struct vmpacket_descriptor *pkt)
--{
--	return hv_pkt_iter_next_pkt(channel, pkt, false);
--}
--
--/*
-- * Get next packet descriptor from iterator
-- * If at end of list, return NULL and update host.
-- */
--static inline struct vmpacket_descriptor *
--hv_pkt_iter_next(struct vmbus_channel *channel,
--		 const struct vmpacket_descriptor *pkt)
--{
--	return hv_pkt_iter_next_pkt(channel, pkt, true);
--}
--
- #define foreach_vmbus_pkt(pkt, channel) \
- 	for (pkt = hv_pkt_iter_first(channel); pkt; \
- 	    pkt = hv_pkt_iter_next(channel, pkt))
--- 
-2.25.1
+Thanks for your series!
 
+> v2:
+>  * Removed SYS dt-bindings patch and corresponding SoC identification
+>    as we only used the LSI version register. This can be dealt with
+>    later on.
+
+That patch[1] also introduced the ARCH_R9A09G011 config symbol,
+without which none of the new code in this series is built.
+
+[1] [PATCH 07/14] soc: renesas: Identify RZ/V2M SoC
+    https://lore.kernel.org/all/20220321154232.56315-8-phil.edworthy@renesas.com/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

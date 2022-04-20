@@ -2,108 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814AF508386
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDE350838C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376786AbiDTIiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S1376773AbiDTIjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349648AbiDTIiB (ORCPT
+        with ESMTP id S1376768AbiDTIjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:38:01 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0181AF09
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650443715; x=1681979715;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CkmnpT2BiykIfBUkPlFNUPmuDfziFdvXwZoi8G7LQ1k=;
-  b=NGQTRmog+7JBGkTSJt7EWsoeiMpOzQNqVydzdCRwtB+l8UDW05lySNWi
-   0CPdZS2I30sw0r2COLh8q7B+bPXsXdE4N/IQHnbuY44dZuVDr81F9N3N/
-   f9YwKnKJsAzs5hw2BcY0A79UoyPCIElzGTho/QaP4TZCvdUalFOa8G2Nd
-   uQVSjAKkncrXEuOs2uNqFRUCc/gLl6syNRmM5QUK/N5cHaPwfbKoXjBGd
-   aZCTN8wzCMjRmA/uhyatCGR3xug1h2iGRlO9m4l/UbvpKa2HnkzFWc1Cw
-   LGkm9ExdzGxJqtlg0nIUFxdYb/gxoab0oPLIp5ovC8JzuvG46wuY7OzxU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="244558168"
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="244558168"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 01:35:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="702561051"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Apr 2022 01:35:13 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nh5ns-0006m8-Re;
-        Wed, 20 Apr 2022 08:35:12 +0000
-Date:   Wed, 20 Apr 2022 16:34:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, sudeep.holla@arm.com,
-        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, lukasz.luba@arm.com
-Subject: Re: [PATCH] arch_topology: Trace the update thermal pressure
-Message-ID: <202204201654.vcszVDGb-lkp@intel.com>
-References: <20220419164801.29078-1-lukasz.luba@arm.com>
+        Wed, 20 Apr 2022 04:39:53 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7452A242
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:37:07 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Kjv7D3rd1zCrbG;
+        Wed, 20 Apr 2022 16:32:40 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 20 Apr 2022 16:37:05 +0800
+Subject: Re: [PATCH v2] mm/swapfile: unuse_pte can map random data if swap
+ read fails
+To:     David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>
+CC:     <akpm@linux-foundation.org>, <willy@infradead.org>,
+        <vbabka@suse.cz>, <dhowells@redhat.com>, <neilb@suse.de>,
+        <surenb@google.com>, <minchan@kernel.org>, <peterx@redhat.com>,
+        <sfr@canb.auug.org.au>, <rcampbell@nvidia.com>,
+        <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220416030549.60559-1-linmiaohe@huawei.com>
+ <87tuapk9n7.fsf@nvdebian.thelocal> <87r15tjy76.fsf@nvdebian.thelocal>
+ <e320fb01-7d53-668e-53b5-463312ae0909@huawei.com>
+ <87k0bkk2rp.fsf@nvdebian.thelocal>
+ <6cf3726c-d6d0-4255-2deb-3688227c633e@huawei.com>
+ <e2352989-959d-2969-40e4-2d92eb8a5f9b@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <4d14dcfc-0053-bfd6-433e-f264d22069d0@huawei.com>
+Date:   Wed, 20 Apr 2022 16:37:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419164801.29078-1-lukasz.luba@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e2352989-959d-2969-40e4-2d92eb8a5f9b@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukasz,
+On 2022/4/20 15:07, David Hildenbrand wrote:
+> On 20.04.22 08:15, Miaohe Lin wrote:
+>> On 2022/4/20 8:25, Alistair Popple wrote:
+>>> Miaohe Lin <linmiaohe@huawei.com> writes:
+>>>
+>>>> On 2022/4/19 15:53, Alistair Popple wrote:
+>>>>> Also in madvise_free_pte_range() you could just remove the swap entry as it's no
+>>>>> longer needed.
+>>>>>
+>>>>
+>>>> This swap entry will be removed in madvise_dontneed_single_vma().
+>>>> And in madvise_free_pte_range(), we may need to keep it as same as
+>>>> hwpoison entry. Or am I supposed to remove it even if hwpoison entry
+>>>> is reused later?
+>>>
+>>> Why would we need to keep it for MADV_FREE though? It only works on private
+>>> anonymous memory, and once the MADV_FREE operation has succeeded callers can
+>>> expect they might get zero-fill pages if accessing the memory again. Therefore
+>>> it should be safe to delete the entry. I think that applies equally to a
+>>> hwpoison entry too - there's no reason to kill the process if it has called
+>>> MADV_FREE on the range.
+>>
+>> I tend to agree. We can drop the swapin error entry and hwpoison entry when MADV_FREE
+>> is called. Should I squash these into the current patch or a separate one is preferred?
+>>
+> 
+> That should go into a separate patch.
 
-I love your patch! Yet something to improve:
+Will do. Many thanks for your suggestion.
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on rostedt-trace/for-next linus/master linux/master v5.18-rc3 next-20220419]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Luba/arch_topology-Trace-the-update-thermal-pressure/20220420-005845
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 3123109284176b1532874591f7c81f3837bbdc17
-config: riscv-randconfig-c024-20220420 (https://download.01.org/0day-ci/archive/20220420/202204201654.vcszVDGb-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/aeff700a88be6a7469acfc312155bd213f76de95
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lukasz-Luba/arch_topology-Trace-the-update-thermal-pressure/20220420-005845
-        git checkout aeff700a88be6a7469acfc312155bd213f76de95
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   riscv64-linux-ld: drivers/base/arch_topology.o: in function `.L18':
->> arch_topology.c:(.text+0x136): undefined reference to `__traceiter_thermal_pressure_update'
-   riscv64-linux-ld: drivers/base/arch_topology.o: in function `.L20':
->> arch_topology.c:(.text+0x168): undefined reference to `__tracepoint_thermal_pressure_update'
->> riscv64-linux-ld: arch_topology.c:(.text+0x16c): undefined reference to `__tracepoint_thermal_pressure_update'
-   riscv64-linux-ld: drivers/base/arch_topology.o: in function `.L0 ':
->> arch_topology.c:(__jump_table+0x8): undefined reference to `__tracepoint_thermal_pressure_update'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

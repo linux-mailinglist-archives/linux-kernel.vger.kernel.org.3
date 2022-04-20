@@ -2,120 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D101D50896B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 848E150896C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353819AbiDTNfd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 20 Apr 2022 09:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        id S1356873AbiDTNfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240333AbiDTNf0 (ORCPT
+        with ESMTP id S1353397AbiDTNfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:35:26 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7454B1D331;
-        Wed, 20 Apr 2022 06:32:40 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id hh4so924266qtb.10;
-        Wed, 20 Apr 2022 06:32:40 -0700 (PDT)
+        Wed, 20 Apr 2022 09:35:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FD871D331
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650461562;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3MgJiiCpC3oIJlTcptz7g4sdjvu/V+8X1Bh4oqWn0GQ=;
+        b=VULOMg795ayW4BHmyBq4/Kfzk1XKKI7lyiC0QayIjfUMkRBK74OjwPw1M5x2w0WZTaQ4sg
+        IWjRgUS3kt4nuqwOIHLjB8iVNlLB36sPC4Vrm/QR+7yLBb2nhR+dIWXzT+auOFP8tBCV2y
+        GUTHRiF3q1F3/CAgOtFKPPHuOD4Eq94=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-641-AVD0i1bGPuC67XYjg6o6Ug-1; Wed, 20 Apr 2022 09:32:41 -0400
+X-MC-Unique: AVD0i1bGPuC67XYjg6o6Ug-1
+Received: by mail-il1-f200.google.com with SMTP id v11-20020a056e0213cb00b002cbcd972206so910865ilj.11
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:32:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=O2zqYz6f2JW9p8GXuaBeDIZrjGwPRsDUFhT2oeYzVjQ=;
-        b=ms1qTTMei8PAz3/Q/ZVW8+2780zDm6ABOXPxULthMRKMYxdG4K/xEBZH8EFNbo2pX9
-         cvhF92PylJAa2ERXgutVWl0dprZdTpcVYrbY4tVK7eOKasmr5gGeMPH5/N+E/xzM17IS
-         8W54a09PL+KF0Gh4pUCVtRZJvpOTQIFtXDCWPDDpItq+LxBru8BPd+y37qlqhdVwnJxU
-         U3YfJxLQSn2RW6pP+wzP3i/17QRxkVzfptswrO6m7nvft35J3uNq/tqJk/1uUWW2Cjgd
-         6GOaphyYNkVZviaGLnC1QVLJ7ymCFPfrS/eOlqm2+KPKdn9fX0hUufrM4zvAFa3eXfw4
-         givQ==
-X-Gm-Message-State: AOAM531Y/tYRT7QszW55Tx4Ip9fpGBv0YPdeajZ0JYMQfR3/n7LrmbA4
-        G59W53FR9dfDcJQkahltVaZZe+iA+MGnMw==
-X-Google-Smtp-Source: ABdhPJx696Sb89RhmnZFCCPKEIhmeynIZ7Scb+hIJmNcAnIH6HM2oyoxlQtvwymzaMIXipV+ny9V+Q==
-X-Received: by 2002:ac8:1487:0:b0:2ef:ca47:89c1 with SMTP id l7-20020ac81487000000b002efca4789c1mr13915535qtj.646.1650461559411;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3MgJiiCpC3oIJlTcptz7g4sdjvu/V+8X1Bh4oqWn0GQ=;
+        b=ATk+uHZPdK3mfqKTAovU/UjTtJ+Ba6KtB6qveoA3ddfxHq8kKrJsayB9M/fk/1CqZz
+         28Av54MHMNb3eQnohDW31hV6pt1bg+QClfOP37E+IScmi8ZFmayKBcMlwI0ccBvFdotL
+         NnhSo/fLGrho81ckqivaYFGT/4mUTF9+e2n51j1ZW8OmZYOmiNdiJMqc2/PGM2wrcBJY
+         MdfKkKVRhLSeR1dtj4bhWSL2FLg264957s7wIvd0KkYIAdRZi14sHqsvIKA3Xe2KHHSB
+         19TQsN5Anbmp9MbCecUn7I+QSnRMZJoV4iJRyGcOIlO+2ykJjAhsu1pIFxX9lhtCCmOF
+         jUPg==
+X-Gm-Message-State: AOAM531e9+FORBtXxYevT3OYlLdeOhdbiDeBlvljdsFhQX+6Oy0vjh1J
+        fyMGrRcSwXJCi8d0lb84pvG8JD3ot11cKVihpDn8/Y+l0AfyuFij2p6Zf9zbiRoRj3qQjbSPa5M
+        yBymXK4UZ0wi7SoxR5q2Yj2E+
+X-Received: by 2002:a05:6602:2a47:b0:649:ee6f:c5e1 with SMTP id k7-20020a0566022a4700b00649ee6fc5e1mr8927235iov.91.1650461560707;
+        Wed, 20 Apr 2022 06:32:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyxbD8sUedy0Kg1XMhNrWWoYZRKB7/yobBvP9IYOO+qywfy89teUSdYwAemjcGGbdg37ZNEQw==
+X-Received: by 2002:a05:6602:2a47:b0:649:ee6f:c5e1 with SMTP id k7-20020a0566022a4700b00649ee6fc5e1mr8927224iov.91.1650461560490;
+        Wed, 20 Apr 2022 06:32:40 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id a3-20020a5ec303000000b006496b4dd21csm11386663iok.5.2022.04.20.06.32.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 20 Apr 2022 06:32:39 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id 19-20020a05620a079300b0069eb4c4e007sm1452690qka.29.2022.04.20.06.32.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 06:32:39 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2ebf4b91212so18017907b3.8;
-        Wed, 20 Apr 2022 06:32:38 -0700 (PDT)
-X-Received: by 2002:a81:c703:0:b0:2d0:cc6b:3092 with SMTP id
- m3-20020a81c703000000b002d0cc6b3092mr20700663ywi.449.1650461558616; Wed, 20
- Apr 2022 06:32:38 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 09:32:38 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, vbabka@suse.cz,
+        dhowells@redhat.com, neilb@suse.de, david@redhat.com,
+        apopple@nvidia.com, surenb@google.com, minchan@kernel.org,
+        sfr@canb.auug.org.au, rcampbell@nvidia.com,
+        naoya.horiguchi@nec.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm/swapfile: unuse_pte can map random data if swap
+ read fails
+Message-ID: <YmALdt9MV2MI9FRp@xz-m1.local>
+References: <20220416030549.60559-1-linmiaohe@huawei.com>
+ <Yl8rZkhU/B0iE2ob@xz-m1.local>
+ <8e01e276-c956-2486-c55f-c689f33a9106@huawei.com>
 MIME-Version: 1.0
-References: <20220414074011.500533-1-herve.codina@bootlin.com>
- <20220414074011.500533-4-herve.codina@bootlin.com> <CAMuHMdWZyuNQJhxkhzs5H8+8DFGDS95nvptrO-s9RC4QL5kibA@mail.gmail.com>
- <20220420150759.713fcd02@bootlin.com>
-In-Reply-To: <20220420150759.713fcd02@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 20 Apr 2022 15:32:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWqVDwdyNuB3tBrWNGt7tuNOXQwqB_Un9sZYCS-6P99bA@mail.gmail.com>
-Message-ID: <CAMuHMdWqVDwdyNuB3tBrWNGt7tuNOXQwqB_Un9sZYCS-6P99bA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/8] dt-bindings: PCI: renesas-pci-usb: Allow multiple clocks
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8e01e276-c956-2486-c55f-c689f33a9106@huawei.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hervé,
+On Wed, Apr 20, 2022 at 02:21:27PM +0800, Miaohe Lin wrote:
+> On 2022/4/20 5:36, Peter Xu wrote:
+> > On Sat, Apr 16, 2022 at 11:05:49AM +0800, Miaohe Lin wrote:
+> >> @@ -1797,6 +1797,17 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+> >>  		goto out;
+> >>  	}
+> >>  
+> >> +	if (unlikely(!PageUptodate(page))) {
+> >> +		pte_t pteval;
+> >> +
+> >> +		dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
+> >> +		pteval = swp_entry_to_pte(make_swapin_error_entry(page));
+> >> +		set_pte_at(vma->vm_mm, addr, pte, pteval);
+> >> +		swap_free(entry);
+> >> +		ret = 0;
+> >> +		goto out;
+> >> +	}
+> >> +
+> >>  	/* See do_swap_page() */
+> >>  	BUG_ON(!PageAnon(page) && PageMappedToDisk(page));
+> >>  	BUG_ON(PageAnon(page) && PageAnonExclusive(page));
+> > 
+> > Totally off-topic, but.. today when I was looking at the unuse path I just
+> > found that the swp bits could have got lost for either soft-dirty and
+> > uffd-wp here?  A quick patch attached.
+> 
+> Am I supposed to test-and-send this patch? The patch looks good to me except the
+> build error pointed out by kernel test robot.
 
-On Wed, Apr 20, 2022 at 3:08 PM Herve Codina <herve.codina@bootlin.com> wrote:
-> Is there a way to have the clocks description depending on the compatible value.
+I was planning to post a patch after yours since they're touching the same
+function, but yeah it'll be great if you could also take that over, thanks!
 
-Rob already replied.
-For an example, check out the various bindings for RZ/G2L devices,
-e.g. Documentation/devicetree/bindings/net/renesas,etheravb.yaml
+-- 
+Peter Xu
 
-> I mean something like:
-> --- 8< ---
-> properties:
->   clocks:
->     maxItems: 1
->
-> if:
->   properties:
->     compatible:
->       contains:
->         enum:
->           - renesas,pci-r9a06g032
->           - renesas,pci-rzn1
-
-Checking only for the second compatible value should be sufficient.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

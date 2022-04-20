@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4A5508BC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5647C508BD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380046AbiDTPNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
+        id S1380199AbiDTPO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380087AbiDTPMr (ORCPT
+        with ESMTP id S1380088AbiDTPMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 20 Apr 2022 11:12:47 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBBD3E5F7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:10:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4219B3E5FC
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:10:01 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A9A2B2129B;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D9190212CA;
         Wed, 20 Apr 2022 15:09:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
         t=1650467399; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tOhV6YQDouFKSF4kDrscgmAnoCYSHdFmpTsct9Kqzek=;
-        b=M2CSLl0VqnHJJC0YsOCEQojyDKPkmBs5veLj38AgGdJxabAIf7h7XElPNlT4+0mo0+eBOj
-        zKrOb0vmHAlVaH4Nbwvy1oILNfIjzCnCLFr0PRRGVQhPpjPeLu24cZScK/vIUcyE6IHG/O
-        MNv+w8hsIg/uI1+QirFTAqLXtACWMas=
+        bh=nqfEAJYikez5yuRaJWQFVEnr7bTvqklH6kJ7XEyZeH4=;
+        b=uZzO2cwIu/sM9Hdm1fFLMi4NNhXH9dzuMEXeAORI9mIENpJgMi0mH8YBRcV8SfzpXm4aCJ
+        mgsKBrn4Aeo/6RKAQb2zKRH4zXldm3hlBxeNEOtRX2j1vJT8fz76y2iMt2w21WFF5SD4De
+        UvfkRO//eO3i1T3ieg9KOtmlKggUaBw=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6D87713AD5;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A555313AE0;
         Wed, 20 Apr 2022 15:09:59 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id MJhzGUciYGJILQAAMHmgww
+        id iIX9JkciYGJILQAAMHmgww
         (envelope-from <jgross@suse.com>); Wed, 20 Apr 2022 15:09:59 +0000
 From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
 Cc:     Juergen Gross <jgross@suse.com>,
         Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: [PATCH 05/18] xen/drm: switch xen_drm_front to use INVALID_GRANT_REF
-Date:   Wed, 20 Apr 2022 17:09:29 +0200
-Message-Id: <20220420150942.31235-6-jgross@suse.com>
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Subject: [PATCH 06/18] xen/sound: switch xen_snd_front to use INVALID_GRANT_REF
+Date:   Wed, 20 Apr 2022 17:09:30 +0200
+Message-Id: <20220420150942.31235-7-jgross@suse.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220420150942.31235-1-jgross@suse.com>
 References: <20220420150942.31235-1-jgross@suse.com>
@@ -69,52 +68,52 @@ the common one.
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
 ---
- drivers/gpu/drm/xen/xen_drm_front.h         | 9 ---------
- drivers/gpu/drm/xen/xen_drm_front_evtchnl.c | 4 ++--
+ sound/xen/xen_snd_front_evtchnl.c | 4 ++--
+ sound/xen/xen_snd_front_evtchnl.h | 9 ---------
  2 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/xen/xen_drm_front.h b/drivers/gpu/drm/xen/xen_drm_front.h
-index cefafe859aba..a987c78abe41 100644
---- a/drivers/gpu/drm/xen/xen_drm_front.h
-+++ b/drivers/gpu/drm/xen/xen_drm_front.h
-@@ -80,15 +80,6 @@ struct drm_pending_vblank_event;
- /* timeout in ms to wait for backend to respond */
- #define XEN_DRM_FRONT_WAIT_BACK_MS	3000
+diff --git a/sound/xen/xen_snd_front_evtchnl.c b/sound/xen/xen_snd_front_evtchnl.c
+index ecbc294fc59a..3e21369c8216 100644
+--- a/sound/xen/xen_snd_front_evtchnl.c
++++ b/sound/xen/xen_snd_front_evtchnl.c
+@@ -167,7 +167,7 @@ static void evtchnl_free(struct xen_snd_front_info *front_info,
+ 		xenbus_free_evtchn(front_info->xb_dev, channel->port);
+ 
+ 	/* End access and free the page. */
+-	if (channel->gref != GRANT_INVALID_REF)
++	if (channel->gref != INVALID_GRANT_REF)
+ 		gnttab_end_foreign_access(channel->gref, page);
+ 	else
+ 		free_page(page);
+@@ -207,7 +207,7 @@ static int evtchnl_alloc(struct xen_snd_front_info *front_info, int index,
+ 	channel->index = index;
+ 	channel->front_info = front_info;
+ 	channel->state = EVTCHNL_STATE_DISCONNECTED;
+-	channel->gref = GRANT_INVALID_REF;
++	channel->gref = INVALID_GRANT_REF;
+ 	page = get_zeroed_page(GFP_KERNEL);
+ 	if (!page) {
+ 		ret = -ENOMEM;
+diff --git a/sound/xen/xen_snd_front_evtchnl.h b/sound/xen/xen_snd_front_evtchnl.h
+index cbe51fd1ec15..3675fba70564 100644
+--- a/sound/xen/xen_snd_front_evtchnl.h
++++ b/sound/xen/xen_snd_front_evtchnl.h
+@@ -15,15 +15,6 @@
+ 
+ struct xen_snd_front_info;
  
 -#ifndef GRANT_INVALID_REF
 -/*
-- * Note on usage of grant reference 0 as invalid grant reference:
+- * FIXME: usage of grant reference 0 as invalid grant reference:
 - * grant reference 0 is valid, but never exposed to a PV driver,
 - * because of the fact it is already in use/reserved by the PV console.
 - */
 -#define GRANT_INVALID_REF	0
 -#endif
 -
- struct xen_drm_front_info {
- 	struct xenbus_device *xb_dev;
- 	struct xen_drm_front_drm_info *drm_info;
-diff --git a/drivers/gpu/drm/xen/xen_drm_front_evtchnl.c b/drivers/gpu/drm/xen/xen_drm_front_evtchnl.c
-index 08b526eeec16..4006568b9e32 100644
---- a/drivers/gpu/drm/xen/xen_drm_front_evtchnl.c
-+++ b/drivers/gpu/drm/xen/xen_drm_front_evtchnl.c
-@@ -147,7 +147,7 @@ static void evtchnl_free(struct xen_drm_front_info *front_info,
- 		xenbus_free_evtchn(front_info->xb_dev, evtchnl->port);
+ /* Timeout in ms to wait for backend to respond. */
+ #define VSND_WAIT_BACK_MS	3000
  
- 	/* end access and free the page */
--	if (evtchnl->gref != GRANT_INVALID_REF)
-+	if (evtchnl->gref != INVALID_GRANT_REF)
- 		gnttab_end_foreign_access(evtchnl->gref, page);
- 
- 	memset(evtchnl, 0, sizeof(*evtchnl));
-@@ -168,7 +168,7 @@ static int evtchnl_alloc(struct xen_drm_front_info *front_info, int index,
- 	evtchnl->index = index;
- 	evtchnl->front_info = front_info;
- 	evtchnl->state = EVTCHNL_STATE_DISCONNECTED;
--	evtchnl->gref = GRANT_INVALID_REF;
-+	evtchnl->gref = INVALID_GRANT_REF;
- 
- 	page = get_zeroed_page(GFP_NOIO | __GFP_HIGH);
- 	if (!page) {
 -- 
 2.34.1
 

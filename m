@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DD8508045
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85903508048
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359345AbiDTEtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 00:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
+        id S1359348AbiDTEwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 00:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347823AbiDTEts (ORCPT
+        with ESMTP id S238259AbiDTEwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 00:49:48 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107FA2716C;
-        Tue, 19 Apr 2022 21:47:02 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kjp6r2Qqvz4xNm;
-        Wed, 20 Apr 2022 14:47:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650430021;
-        bh=JLEeU9OwjmVMFLMs8WsriEOViHzhWndg0ZSQF4hb0no=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bUoydZnlb0isZe4mRNOyFYMRDrS5FcmGlcd8wsOIIfRofKqP+322hjwU91uTNmFmd
-         FP+307qIIyjHkQJt7InlfoRjvs6WbLkG0N4+x1m5SCL9CVScR0OhyUrky71/L3s227
-         /wm+cNKMxbJkrjR4so6iasCSgkbEfvbWU7OSPd9aifG8Ou65C6V2U9bwRNRy3zGSDA
-         lRoVAqHeNn34AI56VFHCpvRXG/Rrxu5PheR3blIJ+0sKVh5wXx/SolsBHj4bodRRRK
-         bxz9kvYimEjjvxT7GUCijjFXLNWc85oP8qk7rF+6WRUlmt/9Ctd4lwdKNpjsneBSx2
-         Iu6QA2xOM2lWw==
-Date:   Wed, 20 Apr 2022 14:46:56 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robherring2@gmail.com>
-Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the pinctrl tree with the devicetree
- tree
-Message-ID: <20220420144656.251e6261@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SOjFdFnKjhlEH4jnc2w4GVl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 20 Apr 2022 00:52:01 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23912275D4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 21:49:16 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id t4so546478pgc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 21:49:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=F+SNI6ZhHsirUO9usNliSeUPedFWMdKyf9VNSlCdVbY=;
+        b=c4KMrt+fwRje0c7WzOZQubm2Gpc13Z+BKkK+K6SoqWf7LTdw68mI7t6Z6Cfkf0TiNY
+         E7i0SuiB9EPgX5yUoFfspleKuNib8po0ItT5myeK3+qa8+42qE+H8nU2kJGn/83rn0RO
+         U6470hFqvwycQn3JUTjwSRiZRi23veobH195i9RNCtKheEiP9swwicPa98xfYFQr9Odm
+         M6Gpa8ooYnX16610o0STT8AZonBO+AIN9hv/vT9CAA+tqI0alSbfsECfuAaarafNQdla
+         /ZNBd+z7RkgpVxQpEBzFvQ7GB5cU5d7yq41zo9KwurtZVN6u15jPDaPk4Epms02+jbFr
+         XyJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=F+SNI6ZhHsirUO9usNliSeUPedFWMdKyf9VNSlCdVbY=;
+        b=z5h+1sJn1XOdhoo7WRQrAEX84ikX4twEpo6aSf/TJgBwak/pIWOKohLBpt+TuhfRcC
+         0wQEqvHhWnM3EpL44t+XMvAWBwCapaNGDtNtReJV59VdSjogBPORuzufhfHWH4NU/gCf
+         M45DnBfG5VLimhlYM57vWAVAgikvdmsxLIb0uM5fqxasHOd0uJHGG41InG3oNtsCP2PI
+         sDtR0d6oC+IQIzsgwNp7kYy6cmz7Z5m8X8MZozG3fxtpf2Ir73B1VfuSvO4KqtDiw3dG
+         M7OWbLaINlUi5yWiTdpekCUv44dYsPQSq5gnmcp+3EkV9UVJCvRSMNftyLfhqkBtzJnG
+         o7yQ==
+X-Gm-Message-State: AOAM53258EpQ019x6W8mLouPGzeTxFNgakNOr4QO8P7dEnNBLRyeBxqX
+        C4Jv7jF4eFmmok+1X4m6uho=
+X-Google-Smtp-Source: ABdhPJyRBK4IecUu8kA+XNAbcJU+Yc1QJ5QFkvvT2Vi+gKVJH9tNsi1WUtHoYam7N5VPv83WMhxMag==
+X-Received: by 2002:a05:6a00:2442:b0:4fd:8b00:d2f with SMTP id d2-20020a056a00244200b004fd8b000d2fmr21364305pfj.39.1650430155675;
+        Tue, 19 Apr 2022 21:49:15 -0700 (PDT)
+Received: from localhost.localdomain ([211.212.143.131])
+        by smtp.gmail.com with ESMTPSA id o3-20020a056a001bc300b0050a7b7257b2sm7957225pfw.25.2022.04.19.21.49.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 21:49:15 -0700 (PDT)
+From:   Steve Lee <steve.lee.analog@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     krzk@kernel.org, nuno.sa@analog.com, ryans.lee@analog.com,
+        Steve Lee <steve.lee.analog@gmail.com>
+Subject: [V4 1/2] ASoC: max98390: Add reset gpio control
+Date:   Wed, 20 Apr 2022 13:48:59 +0900
+Message-Id: <20220420044900.2989-1-steve.lee.analog@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,71 +66,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/SOjFdFnKjhlEH4jnc2w4GVl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+ Add reset gpio control to support RESET PIN connected to gpio.
 
-Hi all,
+Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
+---
+V3 -> V4: change reset gpio control as GPIO_ACTIVE_LOW in DT
 
-Today's linux-next merge of the pinctrl tree got a conflict in:
+ sound/soc/codecs/max98390.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-  Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
+diff --git a/sound/soc/codecs/max98390.c b/sound/soc/codecs/max98390.c
+index 40fd6f363f35..bdfd6cccc3d2 100644
+--- a/sound/soc/codecs/max98390.c
++++ b/sound/soc/codecs/max98390.c
+@@ -1022,6 +1022,7 @@ static int max98390_i2c_probe(struct i2c_client *i2c,
+ 
+ 	struct max98390_priv *max98390 = NULL;
+ 	struct i2c_adapter *adapter = i2c->adapter;
++	struct gpio_desc *reset_gpio;
+ 
+ 	ret = i2c_check_functionality(adapter,
+ 		I2C_FUNC_SMBUS_BYTE
+@@ -1073,6 +1074,17 @@ static int max98390_i2c_probe(struct i2c_client *i2c,
+ 		return ret;
+ 	}
+ 
++	reset_gpio = devm_gpiod_get_optional(&i2c->dev,
++					     "reset", GPIOD_OUT_HIGH);
++
++	/* Power on device */
++	if (reset_gpio) {
++		usleep_range(1000, 2000);
++		/* bring out of reset */
++		gpiod_set_value_cansleep(reset_gpio, 0);
++		usleep_range(1000, 2000);
++	}
++
+ 	/* Check Revision ID */
+ 	ret = regmap_read(max98390->regmap,
+ 		MAX98390_R24FF_REV_ID, &reg);
+-- 
+2.17.1
 
-between commit:
-
-  998282c6dad8 ("dt-bindings: qcom,pdc: Add SM6350 compatible")
-
-from the devicetree tree and commit:
-
-  6d289c378af4 ("dt-bindings: qcom,pdc: Add compatible for SM8150")
-
-from the pinctrl tree.
-
-I fixed it up (see below - I "corrected" the SM8150 in line with the former
-commit) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.t=
-xt
-index 3b7b1134dea9,bd3539644d3f..000000000000
---- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
-+++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
-@@@ -21,9 -21,9 +21,10 @@@ Properties
-  		    - "qcom,sc7180-pdc": For SC7180
-  		    - "qcom,sc7280-pdc": For SC7280
-  		    - "qcom,sdm845-pdc": For SDM845
- -		    - "qcom,sdm8150-pdc": For SM8150
- -		    - "qcom,sdm8250-pdc": For SM8250
- -		    - "qcom,sdm8350-pdc": For SM8350
- +		    - "qcom,sm6350-pdc": For SM6350
-++		    - "qcom,sm8150-pdc": For SM8150
- +		    - "qcom,sm8250-pdc": For SM8250
- +		    - "qcom,sm8350-pdc": For SM8350
- =20
-  - reg:
-  	Usage: required
-
---Sig_/SOjFdFnKjhlEH4jnc2w4GVl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJfkEAACgkQAVBC80lX
-0GzEaQf9GSFO8+rtJuMZJNMGMGkEZ8rUPp5YVPwFMjJEBqe/NukCRE0SWNtGKsRJ
-27UDhWrNAR+TdiKOYECLX2UnZUhPTkBe8zyp6sv+QsVrDbP0lhg06nxE4vlwVYOr
-kd66cU0J6jbIrKWtczrSeAWoSRZLsn0pz37XELfX4S4E7DH+EsmJNkSmf3YxIS/N
-Qcf1CG14Zaq8RUk6e/78wj94wp7luGxQwbPn5LrYnvX/RQyhA7ydqaHVeMphzWnr
-MjPrBvFH+IQOYvCi2/Tx6HJPr5XStLSGi8NiaBx6LRANBbw0aLBVpqseDG00i9HV
-Y+wkQRudzl+W7mtzBzKC8+I/TnNUUA==
-=DvAS
------END PGP SIGNATURE-----
-
---Sig_/SOjFdFnKjhlEH4jnc2w4GVl--

@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA2F507EDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378C4507EDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358956AbiDTCfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 22:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
+        id S1358971AbiDTCfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 22:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358945AbiDTCfp (ORCPT
+        with ESMTP id S1358958AbiDTCfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 22:35:45 -0400
+        Tue, 19 Apr 2022 22:35:47 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4212C1839A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:33:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DF91839A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:33:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650421981; x=1681957981;
+  t=1650421983; x=1681957983;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=0eWwMl+ObBY5gfMXyIhi98beSo6eDTBnlE0TeJeZonY=;
-  b=URmYQrr9Dkg6mvXqmzRBTJ4kZmVziYP3HTOyVnZW808CN1c5C4LRv6ne
-   UR0TRYECz6ObIM2Ch8s2SC0YMAd5KgeN1DnBkk69+x5a0PPz4ZvP3LfoN
-   fex6DKPOolUL1kFdn7FVSXKHeZW+kVQo7Svsj/MbNJeiuGLFYUwvRE+9x
-   h8N6tCNsfESk1BgVmPFVdNjU1Q0nP6yNfBdzcC9NzbRk+bjsqccKUOWqN
-   GmDcM4ihtFIOHET+XcfOyc8PZS4AnvcAkZSowP9uczLFFYR6bF8ePWxeP
-   jcOtJxsa0ZG8o6LCQPLAOAWQb5T7el3vPNdw3DoVun+szWoNL4LXmMrDU
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="261522438"
+  bh=de3CW2NHaO3Zlt6dACJu87GE5nxvTHKkn6BThHigbYQ=;
+  b=T/1lS1+bH68M2wP2G94GaHWPTrMhij04n2dSECHT4fz4q2ANdnuhyZOC
+   Sxd7UEbQOf8ygxyzq7nY6eHiOPG1+qTvjraidS8F6rmBW8FR/ckYfecgC
+   qOOzyluiz0jd/qDRPSuSYQdJrOyJHK44jSvfQHIKlpz2cVQzy1JMDv2WW
+   IdCjNRaLdPdFbk16j/chp6bm0qKqkZ1yHoLpxtQIJ0l5WXyhT5c4fDdZQ
+   vavox2nDDpoCN3iOuaXQNzWyheXCIyKvtVXfZafC4pDwi1xriJQOzCsR6
+   i0B3kv22LbfO7k5bxJt65M9hsRAqWamw/Pqr66EBbCUyl1SCCyREciZkE
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="261522446"
 X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="261522438"
+   d="scan'208";a="261522446"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 19:33:01 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 19:33:03 -0700
 X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="529554562"
+   d="scan'208";a="529554573"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 19:32:58 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 19:33:00 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org
 Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
         gregkh@linuxfoundation.org, srinivas.kandagatla@linaro.org,
         pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
         bard.liao@intel.com
-Subject: [PATCH 1/3] soundwire: intel: prevent pm_runtime resume prior to system suspend
-Date:   Wed, 20 Apr 2022 10:32:39 +0800
-Message-Id: <20220420023241.14335-2-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH 2/3] soundwire: intel: disable WAKEEN in pm_runtime resume
+Date:   Wed, 20 Apr 2022 10:32:40 +0800
+Message-Id: <20220420023241.14335-3-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220420023241.14335-1-yung-chuan.liao@linux.intel.com>
 References: <20220420023241.14335-1-yung-chuan.liao@linux.intel.com>
@@ -61,27 +61,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-commit e38f9ff63e6d ("ACPI: scan: Do not add device IDs from _CID if _HID is not valid")
-exposes a race condition on a TGL RVP device leading to a timeout.
+When the manager device is pm_runtime resumed, we see a series of
+spurious wakes and attempts to resume the same device:
 
-The detailed analysis shows the RT711 codec driver scheduling a jack
-detection workqueue while attaching during a spurious pm_runtime
-resume, and the work function happens to be scheduled after the
-manager device is suspended.
+soundwire_intel.link.0: intel_resume_runtime: start
+soundwire_intel.link.0: intel_link_power_up: powering up all links
+soundwire_intel.link.0: intel_link_power_up: first link up, programming SYNCPRD
+soundwire_intel.link.0: intel_shim_wake: WAKEEN disabled for link 0
+soundwire_intel.link.0: intel_link_process_wakeen_event: pm_request_resume start
+soundwire_intel.link.0: intel_link_process_wakeen_event: pm_request_resume done
+soundwire_intel.link.0: intel_shim_wake: WAKEEN disabled for link 0
+soundwire_intel.link.0: intel_link_process_wakeen_event: pm_request_resume start
+soundwire_intel.link.0: intel_link_process_wakeen_event: pm_request_resume done
 
-The direct link between this ACPI patch and a spurious pm_runtime
-resume is not obvious; the most likely explanation is that a change in
-the ACPI device linked list management modifies the order in which the
-pm_runtime device status is checked and exposes a race condition that
-was probably present for a very long time, but was not identified.
+This sequence does not break anything but is totally unnecessary.
 
-We already have a check in the .prepare stage, where we will resume to
-full power from specific clock-stop modes. In all other cases, we
-don't need to resume to full power by default. Adding the
-SMART_SUSPEND flag prevents the spurious resume from happening.
+Currently the wakes are only disabled after the peripheral generates a
+wake, e.g. for jack detection.
 
-BugLink: https://github.com/thesofproject/linux/issues/3459
-Fixes: 029bfd1cd53cd ("soundwire: intel: conditionally exit clock stop mode on system suspend")
+If the resume is initiated by the host drivers as a result of
+userspace actions (play/record typically), we need to disable wake
+detection as well. Doing so prevents the spurious wakes and calls to
+pm_request_resume().
+
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
@@ -91,19 +93,19 @@ Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index 63101f1ba271..32e5fdb823c4 100644
+index 32e5fdb823c4..4b458e5e7336 100644
 --- a/drivers/soundwire/intel.c
 +++ b/drivers/soundwire/intel.c
-@@ -1293,6 +1293,9 @@ static int intel_link_probe(struct auxiliary_device *auxdev,
- 	/* use generic bandwidth allocation algorithm */
- 	sdw->cdns.bus.compute_params = sdw_compute_params;
+@@ -1831,6 +1831,9 @@ static int __maybe_unused intel_resume_runtime(struct device *dev)
+ 		return 0;
+ 	}
  
-+	/* avoid resuming from pm_runtime suspend if it's not required */
-+	dev_pm_set_driver_flags(dev, DPM_FLAG_SMART_SUSPEND);
++	/* unconditionally disable WAKEEN interrupt */
++	intel_shim_wake(sdw, false);
 +
- 	ret = sdw_bus_master_add(bus, dev, dev->fwnode);
- 	if (ret) {
- 		dev_err(dev, "sdw_bus_master_add fail: %d\n", ret);
+ 	link_flags = md_flags >> (bus->link_id * 8);
+ 	multi_link = !(link_flags & SDW_INTEL_MASTER_DISABLE_MULTI_LINK);
+ 
 -- 
 2.17.1
 

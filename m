@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C31508E3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31FB3508E41
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381006AbiDTRSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 13:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
+        id S1381022AbiDTRSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 13:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381042AbiDTRRq (ORCPT
+        with ESMTP id S1381040AbiDTRRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 20 Apr 2022 13:17:46 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294A32BD7;
-        Wed, 20 Apr 2022 10:14:58 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id c4so1096743vkq.9;
-        Wed, 20 Apr 2022 10:14:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d76SzSLsBTkFqFFguIDMrMvNHnCvFYILc5XiPKskwYo=;
-        b=Gju+6I2rCSYu423lBeSyL0oV5n9GSgLkcJh4F2N6s0OI6R11yXpVW3Lvg5ysdv8Ka+
-         HH563Lr1r3cjei21MPMfIeUe1ngDm9GNnlgGaRzjS57S4/T4EwLCjP/1zQfsjmnMG6sH
-         /cv+/+MR9RxgVL+5WwO4iT8lHYIz5t4YwNMTAga5Wu0/xX6Dlw28CANZIGfH82hcaoC1
-         zOAMpZ+kO7DEPK9sPDTrAhoGQrELT9mP8tlq5zbmtoIa75nxxt3qdgnOROc2dz5/Cj2w
-         hEqq3pN5wlD5eQcXJB76l/sZbv2x3uEJcoAZeKA+hhltTm3In7Th887jdy4rIvz0GU7Y
-         lSyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d76SzSLsBTkFqFFguIDMrMvNHnCvFYILc5XiPKskwYo=;
-        b=7zboJY2CtSl62rnr4oFVPzmghAKI32K0hjyKYS07dYe9KWSaK/DKCZ7lVfLhP7JNwS
-         X2hKeGe3WEINtP1GrdUZqDDdqP5jzR+r8kblJBR5di3MZRByvFG7hSx0dKx3WFur0Da7
-         U+Fr4gb8ScFesk5cc0eVAfFR5DsEnqYwfKXTQaPN1wXPNpzCGkWL3DIBHum7xenqMlv8
-         fO8RWK0KOYlstZHOU1x+XrDxRDRg+6x0ooogjWVvdl910IWpAf9wbleA5TjYawupnRSW
-         6zRE+pZ9vabp4A3kjZM8aR/fv4kaCAqOzYKJxU3BoDDUFzf2GzcG9Xruo1Tw61OtSdDC
-         D3dA==
-X-Gm-Message-State: AOAM5312q+vkqXxAxZJFi+Q2YbYavDWHNmJSui1TcYAlu9L3VYzK9nMO
-        99miOSct7U2Lsa5L0Uq6mF8AuHFd4S7m6kGscEQ=
-X-Google-Smtp-Source: ABdhPJzCk1CPND/tmyjLwT0j9L9ckm9gszTVGpOnR/dZfdzYIBae1hLXue47DPEDB9+arzUsxUO71KIhbqhPk7K3OvI=
-X-Received: by 2002:ac5:cd88:0:b0:32c:5497:6995 with SMTP id
- i8-20020ac5cd88000000b0032c54976995mr6271589vka.33.1650474897363; Wed, 20 Apr
- 2022 10:14:57 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C062AEE;
+        Wed, 20 Apr 2022 10:14:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6F8ADCE1F38;
+        Wed, 20 Apr 2022 17:14:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 658ECC385A1;
+        Wed, 20 Apr 2022 17:14:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650474894;
+        bh=BOE8M66NoW0jpL4xn18L8Ak7nnXuciSXX4ZW9yjMTx8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B5i5y2BkRjc1O3qYYtgxfPRCQamSS1CNqYHSvulOq4k2kR62dTLYjpA/xzaNQAeQv
+         oYnTQWwzwQ4JzG5n9YiRcIVBbMheUduyZhQu681ld+qq2KUcg3ubJuRBvXBa3bKGri
+         vdn895iW6K7cyNXiAvkmCfuP8YfTeEALw97x8j8Y=
+Date:   Wed, 20 Apr 2022 19:14:52 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Spencer Baugh <sbaugh@catern.com>
+Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcin@juszkiewicz.com.pl, torvalds@linux-foundation.org,
+        arnd@arndb.de
+Subject: Re: Explicitly defining the userspace API
+Message-ID: <YmA/jFztk5GkjIr2@kroah.com>
+References: <874k2nhgtg.fsf@catern.com>
 MIME-Version: 1.0
-References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-8-alobakin@pm.me>
-In-Reply-To: <20220414223704.341028-8-alobakin@pm.me>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 20 Apr 2022 10:14:46 -0700
-Message-ID: <CAEf4BzZZ7Hxg4XgTTF4m=wG6aMZi88WMXrMgV3_4rs0FPugrtA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 07/11] samples: bpf: fix uin64_t format literals
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Chenbo Feng <fengc@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Daniel Wagner <daniel.wagner@bmw-carit.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874k2nhgtg.fsf@catern.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:46 PM Alexander Lobakin <alobakin@pm.me> wrote:
->
-> There's a couple places where uin64_t is being passed as an %ld
-> format argument, which is incorrect (should be %lld). Fix them.
+On Wed, Apr 20, 2022 at 04:15:25PM +0000, Spencer Baugh wrote:
+> 
+> Linux guarantees the stability of its userspace API, but the API
+> itself is only informally described, primarily with English prose.  I
+> want to add an explicit, authoritative machine-readable definition of
+> the Linux userspace API.
+> 
+> As background, in a conventional libc like glibc, read(2) calls the
+> Linux system call read, passing arguments in an architecture-specific
+> way according to the specific details of read.
+> 
+> The details of these syscalls are at best documented in manpages, and
+> often defined only by the implementation.  Anyone else who wants to
+> work with a syscall, in any way, needs to duplicate all those details.
+> 
+> So the most basic definition of the API would just represent the
+> information already present in SYSCALL_DEFINE macros: the C types of
+> arguments and return values.  More usefully, it would describe the
+> formats of those arguments and return values: that the first argument
+> to read is a file descriptor rather than an arbitrary integer, and
+> what flags are valid in the flags argument of openat, and that open
+> returns a file descriptor.  A step beyond that would be describing, in
+> some limited way, the effects of syscalls; for example, that read
+> writes into the passed buffer the number of bytes that it returned.
 
-It depends on architecture, on some it will be %lu, on some it will be
-%llu. But instead of PRIu64, just cast it to size_t and use %zu as
-formatter
+So how would you define read() in this format in a way that has not
+already been attempted in the past?  How are you going to define a
+format that explains functionality in a way that is not just the
+implementation in the end?
 
->
-> Fixes: 51570a5ab2b7 ("A Sample of using socket cookie and uid for traffic monitoring")
-> Fixes: 00f660eaf378 ("Sample program using SO_COOKIE")
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> ---
->  samples/bpf/cookie_uid_helper_example.c | 12 ++++++------
->  samples/bpf/lwt_len_hist_user.c         |  4 ++--
->  2 files changed, 8 insertions(+), 8 deletions(-)
->
+> One step in this direction is Documentation/ABI, which specifies the
+> stability guarantees for different userspace APIs in a semi-formal
+> way.  But it doesn't specify the actual content of those APIs, and it
+> doesn't cover individual syscalls at all.
 
-[...]
+The content is described in Documentation/ABI/ entries, where do you see
+that missing?
+
+And you are correct, that place does not describe syscalls, or other
+user/kernel interfaces that predate sysfs.
+
+good luck!
+
+greg k-h

@@ -2,123 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6CB508321
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5662508325
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376619AbiDTIJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S1376629AbiDTIJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376695AbiDTIIq (ORCPT
+        with ESMTP id S1376630AbiDTIJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:08:46 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3B9C16
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:05:41 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id j8so1096456pll.11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:05:41 -0700 (PDT)
+        Wed, 20 Apr 2022 04:09:17 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF0FE23
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:06:31 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id n11so839924qvl.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:06:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VJvWJPipJHgyfcIiSRVr/9+92NOFrMY62eI57j6ONHM=;
-        b=eElVku/lXRj5TNoEgMrlC4V4RxNI2mlNrAa9/FIK4ITD9l6EbTmL9iexMMBYFrKfVZ
-         IslU9ZhkZcElVrTPzIaD71hnmB/or5KvGOZr5EP29vDn3EmwQ16vU8IokKSXEdbksf9R
-         UXlW+7wyTDdcaEN0Hzz+WSFnQ28AvijGNL4uiPyBCvvE+irC81iDfs9C1SURc8/QQ/0D
-         ilH+LFnIXN9e6gvQpRW3CP2CttkaDspJ3V72h9noxjPYQpJ+MWxnnKg4H6P1hBMaGnrt
-         6yZmv08vUquiFonc+o21ceFlbSkelwmv1ICyw/DYRH63tXRcPTUQSp8AHuIKD5DyHNGt
-         w0Jg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+eE3WMmFBHt9qFLIivrenNFjT6R/u5U6XLtVu6wSVa4=;
+        b=Erq3+piETQp5RWzwuFjK9X3j+PcBZrBcFwHVVHWoNkc5BLWhm6a6xeNm8TCZz2SOL8
+         f5Db0959Jq5aYJtp62b5f3klqBty+15MCTFgQzNSRZFsRH7sSum1c9xYV9cJkvWcQrXn
+         lTLPc0WNET0R6aBwyHs/6kHn+AJ+AHByzu4tXlVvhInBxtkYVVb9QZcSiYlPCI7XLmFw
+         6kkMedNi4WCOvlFG9LzxCwYng8kuqoTzqJj3JbT/EW7K5UXkuiXGhwwe8G7I3xgcZYLs
+         XSnCh97TCEtwi+0c0rDQ3NM5FUGwg8QqMKG/QtBB8EosVzAot/QMT+/pVVNGavnZ0MmA
+         sHdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VJvWJPipJHgyfcIiSRVr/9+92NOFrMY62eI57j6ONHM=;
-        b=BQf7+i8TNTerDh/exQGMkld9NXLepNJRpUSHNNJxM5axckxTrTxT5WzLZIM58UI5Fv
-         GYkpnTs+N5yH7wTMLUDhihDaiJ6ckcbxYN6QZxnbrd7Xbh43q9gf0n8O7o61lVdbqs39
-         E5IMHURs9qn87t1LUD30gGkp1OLmz35o6M0N5A+Xa4gPa83ZcHLl45VxXXy71wBTOETd
-         3Mw+V7S7Jkf7NPKtcikOA9G9i+PZUZVMceWdKw6VB+bLdo7xLnDFzsyw6rUqg2EK5Wxx
-         9ATMnAYV2e8YdldS6CXUldFPtQYSBrnR2cuMbiCEYOV8h5Sddapwjbg1pRmmpF/tx8CB
-         w/oQ==
-X-Gm-Message-State: AOAM530iZpE4wul8Gfo/ah4JvB4SGhjMPnKTnq0+Jf7D32jP6twDbnAY
-        Lb9OMrtOlsFY3LccywXi5NES0iOQv1YXn6kJ
-X-Google-Smtp-Source: ABdhPJzk0weKl78YNFVL165GqBuD7AaxSEu7AdBAJT4DJwASOnYKRTq/tqmUp4CBXgx/fW/PllS9ew==
-X-Received: by 2002:a17:90a:db08:b0:1c9:7cf3:6363 with SMTP id g8-20020a17090adb0800b001c97cf36363mr3033125pjv.35.1650441940309;
-        Wed, 20 Apr 2022 01:05:40 -0700 (PDT)
-Received: from [192.168.1.100] ([159.226.95.33])
-        by smtp.gmail.com with ESMTPSA id z1-20020a17090a014100b001d2eb7fe951sm3339335pje.13.2022.04.20.01.05.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 01:05:40 -0700 (PDT)
-Message-ID: <96d27d1f-55e4-578a-75e5-686362c05dcf@gmail.com>
-Date:   Wed, 20 Apr 2022 16:05:35 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+eE3WMmFBHt9qFLIivrenNFjT6R/u5U6XLtVu6wSVa4=;
+        b=wi39RtefvFoHJF7pHVKHDFeedwUw6IfskKq/tzJqVjLubpDcFceoM4CUyrS8x8K0+U
+         B7rZdZc+YnREaP7fP1rLZ4G3DYGNfE8aj93srMG5u3rFIBOWs5dvi2lUQG1XXuNfUXI2
+         Y4P625y/mGVtbilQNJ+1aMDhEsewoKSmuz2dfU5pMFfPFCVTG2cR9/e/NxnVxFCnIsBR
+         EMFOmcMMz4GVFe7RYMEdGOmw+Wod5S/l/KxKJEOFpxryE5IExRY4mefD3Zr/hNu1hCfw
+         R6td1FukpNpvxKIRd3tu1eTBbppGb9th7AnQJRPlaMXlQoQS3y+y3Rb4kpCsm3v7qioC
+         HDcg==
+X-Gm-Message-State: AOAM531TUbHtUkMOTfAJoF0ZvBYqraG8laKN7SsHn8deb7W6hYnyaBat
+        XJq52V4ySVlhqicAZ9ZKajODTA==
+X-Google-Smtp-Source: ABdhPJwAhnapy/3QfM8gMgmTzWAzita1u/CrFffinAcEwTa3eqdvUFvcrn3uzoKu1buIbLYYEdt1Vw==
+X-Received: by 2002:ad4:5b8f:0:b0:446:646a:a508 with SMTP id 15-20020ad45b8f000000b00446646aa508mr8529527qvp.113.1650441990983;
+        Wed, 20 Apr 2022 01:06:30 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id p3-20020a05620a15e300b0069e5b556f75sm1128265qkm.5.2022.04.20.01.06.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 01:06:30 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 09:06:02 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     jgg@ziepe.ca, will@kernel.org, robin.murphy@arm.com,
+        joro@8bytes.org, jacob.jun.pan@linux.intel.com,
+        baolu.lu@linux.intel.com, fenghua.yu@intel.com,
+        rikard.falkeborn@gmail.com, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] iommu/arm-smmu-v3: Fix size calculation in
+ arm_smmu_mm_invalidate_range()
+Message-ID: <Yl++6nLMLuOFcFPM@myrica>
+References: <20220419210158.21320-1-nicolinc@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2] drm/vc4: Fix pm_runtime_get_sync() usage
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Eric Anholt <eric@anholt.net>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220419124407.ugzl7hknsytbhrmr@houat>
- <20220420004949.20508-1-linmq006@gmail.com>
- <20220420075108.xm5ujthootlpayy2@houat>
-From:   Miaoqian Lin <linmq006@gmail.com>
-In-Reply-To: <20220420075108.xm5ujthootlpayy2@houat>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419210158.21320-1-nicolinc@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 19, 2022 at 02:01:58PM -0700, Nicolin Chen wrote:
+> The arm_smmu_mm_invalidate_range function is designed to be called
+> by mm core for Shared Virtual Addressing purpose between IOMMU and
+> CPU MMU. However, the ways of two subsystems defining their "end"
+> addresses are slightly different. IOMMU defines its "end" address
+> using the last address of an address range, while mm core defines
+> that using the following address of an address range:
+> 
+> 	include/linux/mm_types.h:
+> 		unsigned long vm_end;
+> 		/* The first byte after our end address ...
+> 
+> This mismatch resulted in an incorrect calculation for size so it
+> failed to be page-size aligned. Further, it caused a dead loop at
+> "while (iova < end)" check in __arm_smmu_tlb_inv_range function.
+> 
+> This patch fixes the issue by doing the calculation correctly.
+> 
+> Fixes: 2f7e8c553e98d ("iommu/arm-smmu-v3: Hook up ATC invalidation to mm ops")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 
-On 2022/4/20 15:51, Maxime Ripard wrote:
-> On Wed, Apr 20, 2022 at 12:49:48AM +0000, Miaoqian Lin wrote:
->> If the device is already in a runtime PM enabled state
->> pm_runtime_get_sync() will return 1, so a test for negative
->> value should be used to check for errors.
->>
->> Also, we need to call pm_runtime_put_noidle() when pm_runtime_get_sync()
->> fails, so use pm_runtime_resume_and_get() instead. this function
->> will handle this.
->>
->> Fixes: 4078f5757144 ("drm/vc4: Add DSI driver")
->> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
->> ---
->> change in v2:
->> - switch to pm_runtime_resume_and_get() to fix refcount leak.
->> ---
->>  drivers/gpu/drm/vc4/vc4_dsi.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
->> index 752f921735c6..9d7ffaf6bc70 100644
->> --- a/drivers/gpu/drm/vc4/vc4_dsi.c
->> +++ b/drivers/gpu/drm/vc4/vc4_dsi.c
->> @@ -846,8 +846,8 @@ static void vc4_dsi_encoder_enable(struct drm_encoder *encoder)
->>  	unsigned long phy_clock;
->>  	int ret;
->>  
->> -	ret = pm_runtime_get_sync(dev);
->> -	if (ret) {
->> +	ret = pm_runtime_resume_and_get(dev);
->> +	if (ret < 0) {
-> pm_runtime_resume_and_get will return 0 on success, so the previous check was correct
+Thanks for the fix, I guess we didn't catch this earlier because our test
+platforms didn't support range invalidation, so __arm_smmu_tlb_inv_range()
+would always use PAGE_SIZE as increment.
 
-previous check is for pm_runtime_get_sync() not for pm_runtime_resume_and_get (),
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-I switch to pm_runtime_resume_and_get() to fix the refcount leak bug at the same time.
-
-Sure it's ok to use check if(ret) to check the retval, I just follow a more common way
-
-for usage of pm_runtime_resume_and_get() in the codebase—— check ret<0
-
-Since pm_runtime_resume_and_get() return negative error code.
-
-> Maxime
+> ---
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> index 22ddd05bbdcd..c623dae1e115 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> @@ -183,7 +183,14 @@ static void arm_smmu_mm_invalidate_range(struct mmu_notifier *mn,
+>  {
+>  	struct arm_smmu_mmu_notifier *smmu_mn = mn_to_smmu(mn);
+>  	struct arm_smmu_domain *smmu_domain = smmu_mn->domain;
+> -	size_t size = end - start + 1;
+> +	size_t size;
+> +
+> +	/*
+> +	 * The mm_types defines vm_end as the first byte after the end address,
+> +	 * different from IOMMU subsystem using the last address of an address
+> +	 * range. So do a simple translation here by calculating size correctly.
+> +	 */
+> +	size = end - start;
+>  
+>  	if (!(smmu_domain->smmu->features & ARM_SMMU_FEAT_BTM))
+>  		arm_smmu_tlb_inv_range_asid(start, size, smmu_mn->cd->asid,
+> -- 
+> 2.17.1
+> 

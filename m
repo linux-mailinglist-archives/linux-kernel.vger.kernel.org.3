@@ -2,74 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF61508269
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A5950826A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359835AbiDTHnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 03:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
+        id S1359867AbiDTHn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 03:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344927AbiDTHmg (ORCPT
+        with ESMTP id S241235AbiDTHnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:42:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31DFC3B;
-        Wed, 20 Apr 2022 00:39:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A20921F380;
-        Wed, 20 Apr 2022 07:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650440388; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rM682Lb8fL2UKkPcEluwR0jk2UCL0AHARXD1NFlbBT8=;
-        b=Vjx06ThO0pWHrtZMr22S/MUv2hJlclIicyggZcMaY79YgR5M1zIVQQDVXNGXIbL8eNgZg2
-        eRL6tM1NEaG0Bc6fMm4PuBysZIzRAeUjl+uPGS16EzqQXYVsnfziJ3r39MWVZPdBbeLRNj
-        wqFSbWQ0pOp/NvqfUm0MLh/kZAYq/QY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650440388;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rM682Lb8fL2UKkPcEluwR0jk2UCL0AHARXD1NFlbBT8=;
-        b=iXz7L2KFlQ/KhDZ5gVRti02zPis9oWyvm0JMGfY6/g+0bjx+LlNeCAPoSUJoE5wlWBhxjY
-        rQpq6Qp1v80sTDCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 61D3F13A30;
-        Wed, 20 Apr 2022 07:39:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NeuwFsS4X2J9XwAAMHmgww
-        (envelope-from <vkarasulli@suse.de>); Wed, 20 Apr 2022 07:39:48 +0000
-Date:   Wed, 20 Apr 2022 09:39:47 +0200
-From:   Vasant Karasulli <vkarasulli@suse.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, jroedel@suse.de, kvm@vger.kernel.org,
-        bp@alien8.de, x86@kernel.org, thomas.lendacky@amd.com,
-        varad.gautam@suse.com
-Subject: Re: [PATCH v6 2/4] x86/tests: Add tests for AMD SEV-ES #VC handling
- Add KUnit based tests to validate Linux's VC handling for instructions cpuid
- and wbinvd. These tests: 1. install a kretprobe on the #VC handler
- (sev_es_ghcb_hv_call, to access GHCB before/after the resulting VMGEXIT). 2.
- trigger an NAE by executing either cpuid or wbinvd. 3. check that the
- kretprobe was hit with the right exit_code available in GHCB.
-Message-ID: <Yl+4w1OK9E7+qRqP@vasant-suse>
-References: <20220318094532.7023-1-vkarasulli@suse.de>
- <20220318094532.7023-3-vkarasulli@suse.de>
- <Ykzrb1uyPZ2AKWos@google.com>
+        Wed, 20 Apr 2022 03:43:53 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4847F396B1;
+        Wed, 20 Apr 2022 00:41:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=loHgwO9WdPiHY+qI9O6T45I75jtAzJoMT4qm2QpWt5g=; b=V2RchLGI6xz9pyK8YlHujLlD/X
+        EE6WJAMG0vax+Uflad9dXecchGGgdrEsgr9/jn+Mlna3FwhPqKb8soGIf+88VVZHsT+f+4RamJTHg
+        0i4jQfkRusmvaBRyWgvTg0oUNrm0KRgEEqWI4AHB6Po/2YoCgzyxIhwI6YMo3tGYZCjyDYffHF83B
+        fcn90QQ0wuA5gcSv9F6QzLORGiSSO75scNG7C5EvYN2+q6Ppq38Bh+q8BEhD3AQnsivSvFPtIzE03
+        F6mTVl5e7Wc3jcFL2ZMB40pMwhnaSS8x4TcDmkG9C/Go20R/TKuhBgzJXOZev+/Lovfl/XL64d0A8
+        mdiuVEwA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nh4xC-0073vt-Eu; Wed, 20 Apr 2022 07:40:46 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B013B9861A4; Wed, 20 Apr 2022 09:40:44 +0200 (CEST)
+Date:   Wed, 20 Apr 2022 09:40:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     joao@overdrivepizza.com
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, hjl.tools@gmail.com,
+        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
+        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
+Subject: Re: [RFC PATCH 00/11] Kernel FineIBT Support
+Message-ID: <20220420074044.GC2731@worktop.programming.kicks-ass.net>
+References: <20220420004241.2093-1-joao@overdrivepizza.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ykzrb1uyPZ2AKWos@google.com>
+In-Reply-To: <20220420004241.2093-1-joao@overdrivepizza.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,103 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mi 06-04-22 01:22:55, Sean Christopherson wrote:
-> The shortlog and changelog are all messed up.  Ditto for the other patches in this
-> series.
+On Tue, Apr 19, 2022 at 05:42:30PM -0700, joao@overdrivepizza.com wrote:
+> @PeterZ @JoshP
+> 
+> I'm a bit unaware of the details on why the objtool approach to bypass ENDBRs
+> was removed from the IBT series. Is this approach now sensible considering that
+> it is a requirement for a new/enhanced feature? If not, how extending the Linker
+> to emit already fixed offsets sounds like?
 
-I am really sorry about that. I had sent another mail with the same patch version
-with subject line corrected.
-https://lore.kernel.org/kvm/20220318104646.8313-1-vkarasulli@suse.de/T/#t
->
-> On Fri, Mar 18, 2022, Vasant Karasulli wrote:
-> > Signed-off-by: Vasant Karasulli <vkarasulli@suse.de>
-> > ---
-> >  arch/x86/tests/Makefile      |   2 +
-> >  arch/x86/tests/sev-test-vc.c | 114 +++++++++++++++++++++++++++++++++++
-> >  2 files changed, 116 insertions(+)
-> >  create mode 100644 arch/x86/tests/sev-test-vc.c
->
-> ...
->
-> > +int sev_es_test_vc_init(struct kunit *test)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (!cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
-> > +		kunit_info(test, "Not a SEV-ES guest. Skipping.");
-> > +		ret = -EINVAL;
-> > +		goto out;
-> > +	}
-> > +
-> > +	memset(&hv_call_krp, 0, sizeof(hv_call_krp));
-> > +	hv_call_krp.entry_handler = hv_call_krp_entry;
-> > +	hv_call_krp.handler = hv_call_krp_ret;
-> > +	hv_call_krp.maxactive = 100;
-> > +	hv_call_krp.data_size = sizeof(unsigned long);
-> > +	hv_call_krp.kp.symbol_name = "sev_es_ghcb_hv_call";
-> > +	hv_call_krp.kp.addr = 0;
-> > +
-> > +	ret = register_kretprobe(&hv_call_krp);
-> > +	if (ret) {
-> > +		kunit_info(test, "Could not register kretprobe. Skipping.");
-> > +		goto out;
-> > +	}
-> > +
-> > +	test->priv = kunit_kzalloc(test, sizeof(u64), GFP_KERNEL);
->
-> Allocating 8 bytes and storing the pointer an 8-byte field is rather pointless :-)
+Josh hates objtool modifying actualy code. He much prefers objtool only
+emits out of band data.
 
-Yes, I will remove this in the next version.
->
-> > +	if (!test->priv) {
-> > +		ret = -ENOMEM;
-> > +		kunit_info(test, "Could not allocate. Skipping.");
-> > +		goto out;
-> > +	}
-> > +
-> > +out:
-> > +	return ret;
-> > +}
-> > +
-> > +void sev_es_test_vc_exit(struct kunit *test)
-> > +{
-> > +	if (test->priv)
-> > +		kunit_kfree(test, test->priv);
-> > +
-> > +	if (hv_call_krp.kp.addr)
-> > +		unregister_kretprobe(&hv_call_krp);
-> > +}
-> > +
-> > +#define check_op(kt, ec, op)			\
-> > +do {						\
-> > +	struct kunit *t = (struct kunit *) kt;	\
-> > +	op;					\
-> > +	KUNIT_EXPECT_EQ(t, (typeof(ec)) ec,	\
-> > +		*((typeof(ec) *)(t->priv)));		\
-> > +} while (0)
-> > +
-> > +static void sev_es_nae_cpuid(struct kunit *test)
-> > +{
-> > +	unsigned int cpuid_fn = 0x8000001f;
-> > +
-> > +	check_op(test, SVM_EXIT_CPUID, native_cpuid_eax(cpuid_fn));
->
-> Are there plans to go beyond basic checks?  Neat idea, but it seems like it will
-> be prone to bitrot since it requires a somewhat esoteric setup and an opt-in config.
-> And odds are very good that if the kernel can make it this far as an SEV-ES guest,
-> it's gotten the basics right.
+Now, I did sneak in that jump_label nop'ing, and necessity (broken
+compilers) had us do the KCOV nop'ing in noinstr, but if you look at the
+recent objtool series here:
 
-I will definitely think about adding more checks and performing these checks
-early enough in the guest run.
+  https://lkml.kernel.org/r/cover.1650300597.git.jpoimboe@redhat.com
 
-Thanks for your feedback.
+you'll see his thoughs on that :-)
 
-Thanks,
-Vasant Karasulli
-Kernel generalist
-www.suse.com<http://www.suse.com>
-[https://www.suse.com/assets/img/social-platforms-suse-logo.png]<http://www.suse.com/>
-SUSE - Open Source Solutions for Enterprise Servers & Cloud<http://www.suse.com/>
-Modernize your infrastructure with SUSE Linux Enterprise servers, cloud technology for IaaS, and SUSE's software-defined storage.
-www.suse.com
+Now, I obviously don't mind, it's easy enough to figure out what objtool
+actually does with something like:
 
+  $ OBJTOOL_ARGS="--backup" make O=ibt-build/ -j$lots vmlinux
+  $ objdiff.sh ibt-build/vmlinux.o
+
+Where objdiff.sh is the below crummy script.
+
+Now, one compromise that I did get out of Josh was that he objected less
+to rewriting relocations than to rewriting the immediates. From my
+testing the relocations got us the vast majority of direct call sites,
+very few are immediates.
+
+Josh, any way you might reconsider all that? :-)
+
+---
+#!/bin/bash
+
+name=$1
+pre=${name}.orig
+post=${name}
+
+function to_text {
+	obj=$1
+	( objdump -wdr $obj;
+	  readelf -W --relocs --symbols $obj |
+		  awk '/^Relocation section/ { $6=0 } { print $0 }'
+	) > ${obj}.tmp
+}
+
+to_text $pre
+to_text $post
+
+diff -u ${pre}.tmp ${post}.tmp
+
+rm ${pre}.tmp ${post}.tmp

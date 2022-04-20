@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11517507EB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7B5507EB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358883AbiDTCQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 22:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S1358875AbiDTCQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 22:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiDTCQj (ORCPT
+        with ESMTP id S229791AbiDTCQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 22:16:39 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B13C289BC
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:13:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650420835; x=1681956835;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8r0tP4tVUtTNBiRI7kELiBfkISrTH3l3zHHdmYedFNY=;
-  b=M5BzQLvYpOICoVuw9HSaTa6csL98AtV1RoFdWnv4wjm7Fa3UuFHLNyy4
-   MOWm49HC23seOPajvaN30tRKR7LQTZI0soxif5FDznQvTpaUGkmiEGU8y
-   P9yQH7FBGgJ3valNWH1a7Q/68n+fID9K43NhQq4yhyJCOjuy/NqGzqwLi
-   btOi65BfypWOVI54djcuaQHnnGeTLR7O8I8Qz98/Ev5tlhMdo0jfQt38a
-   uqEUGNYUc2oPvvya1JjiOl9h4dmSKOPYbhixS2SCgre6wnjqE4KviHH30
-   8GGVe+6kKfC5HLHvleZnGTByfGJjZZ+MlfqeLEp+ZtrRUcSqIh7cV9cBS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="245811969"
-X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="245811969"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 19:13:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="529550215"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 19 Apr 2022 19:13:53 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngzqq-0006SD-HG;
-        Wed, 20 Apr 2022 02:13:52 +0000
-Date:   Wed, 20 Apr 2022 10:13:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     kbuild-all@lists.01.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v3 14/15] printk: extend console_lock for proper
- kthread support
-Message-ID: <202204201041.ZwRzv18o-lkp@intel.com>
-References: <20220419234637.357112-15-john.ogness@linutronix.de>
+        Tue, 19 Apr 2022 22:16:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B50289BC;
+        Tue, 19 Apr 2022 19:13:43 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kjkjr0kH9zhXYf;
+        Wed, 20 Apr 2022 10:13:36 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 20 Apr 2022 10:13:41 +0800
+Received: from [10.174.178.120] (10.174.178.120) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 20 Apr 2022 10:13:40 +0800
+Message-ID: <b2864968-3cc7-dba3-5361-d8ee4cc3482a@huawei.com>
+Date:   Wed, 20 Apr 2022 10:13:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419234637.357112-15-john.ogness@linutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 0/9] introduce mirrored memory support for arm64
+To:     <ardb@kernel.org>
+CC:     <akpm@linux-foundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <corbet@lwn.net>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <x86@kernel.org>, <dvhart@infradead.org>, <andy@infradead.org>,
+        <rppt@kernel.org>, <paulmck@kernel.org>, <peterz@infradead.org>,
+        <jroedel@suse.de>, <songmuchun@bytedance.com>, <macro@orcam.me.uk>,
+        <frederic@kernel.org>, <W_Armin@gmx.de>, <john.garry@huawei.com>,
+        <seanjc@google.com>, <tsbogend@alpha.franken.de>,
+        <anshuman.khandual@arm.com>, <chenhuacai@kernel.org>,
+        <david@redhat.com>, <gpiccoli@igalia.com>, <mark.rutland@arm.com>,
+        <wangkefeng.wang@huawei.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-efi@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-mm@kvack.org>
+References: <20220414101314.1250667-1-mawupeng1@huawei.com>
+ <CAMj1kXGSStDgj9ABmUaTLnBmpQFksh3wx4tx=mJohum4GQe3Gg@mail.gmail.com>
+ <6de859df-e1c3-e9aa-4530-3b61b9c69a28@huawei.com>
+ <CAMj1kXGyKQMeFWSK-s84pdL89qPTyTN_x3WHTgp_R7sH1+qOfA@mail.gmail.com>
+From:   mawupeng <mawupeng1@huawei.com>
+In-Reply-To: <CAMj1kXGyKQMeFWSK-s84pdL89qPTyTN_x3WHTgp_R7sH1+qOfA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.120]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,55 +70,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on 84d7df104dbab9c3dda8f2c5b46f9a6fc256fe02]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Ogness/printk-for-next/20220420-080725
-base:   84d7df104dbab9c3dda8f2c5b46f9a6fc256fe02
-config: openrisc-randconfig-r022-20220419 (https://download.01.org/0day-ci/archive/20220420/202204201041.ZwRzv18o-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5139c5b347088e124f3812a3fa63eb284b14f2dc
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review John-Ogness/printk-for-next/20220420-080725
-        git checkout 5139c5b347088e124f3812a3fa63eb284b14f2dc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash kernel/printk/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/printk/printk.c:2703:6: warning: no previous prototype for 'console_lock_single_hold' [-Wmissing-prototypes]
-    2703 | void console_lock_single_hold(struct console *con)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/console_lock_single_hold +2703 kernel/printk/printk.c
+在 2022/4/20 2:32, Ard Biesheuvel 写道:
+> On Sat, 16 Apr 2022 at 03:32, mawupeng <mawupeng1@huawei.com> wrote:
+>>
+>>
+>>
+>> 在 2022/4/14 18:22, Ard Biesheuvel 写道:
+>>> On Thu, 14 Apr 2022 at 11:54, Wupeng Ma <mawupeng1@huawei.com> wrote:
+>>>>
+>>>> From: Ma Wupeng <mawupeng1@huawei.com>
+>>>>
+>>>> Commit b05b9f5f9dcf ("x86, mirror: x86 enabling - find mirrored memory ranges")
+>>>> introduced mirrored memory support for x86. This support rely on UEFI to
+>>>> report mirrored memory address ranges.  See UEFI 2.5 spec pages 157-158:
+>>>>
+>>>>     http://www.uefi.org/sites/default/files/resources/UEFI%202_5.pdf
+>>>>
+>>>> Memory mirroring is a technique used to separate memory into two separate
+>>>> channels, usually on a memory device, like a server. In memory mirroring,
+>>>> one channel is copied to another to create redundancy. This method makes
+>>>> input/output (I/O) registers and memory appear with more than one address
+>>>> range because the same physical byte is accessible at more than one
+>>>> address. Using memory mirroring, higher memory reliability and a higher
+>>>> level of memory consolidation are possible.
+>>>>
+>>>> Arm64 can support this too. So mirrored memory support is added to support
+>>>> arm64.
+>>>>
+>>>> Efi_fake_mem is used for testing mirrored features and will not be used in
+>>>> production environment. This test features can fake memory's attribute
+>>>> values.
+>>>>
+>>>> The reason why efi_fake_mem support is put first is that memory's attribute
+>>>> is reported by BIOS which is hard to simulate. With this support, any arm64
+>>>> machines with efi support can easily test mirrored features.
+>>>>
+>>>> The main purpose of this patchset is to introduce mirrored support for
+>>>> arm64 and we have already fixed the problems we had which is shown in
+>>>> patch #5 to patch #7 and try to bring total isolation in patch #8 which
+>>>> will disable mirror feature if kernelcore is not specified.
+>>>>
+>>>> In order to test this support in arm64:
+>>>> - patch this patchset
+>>>> - add efi_fake_mem=8G@0:0x10000 in kernel parameter to simulate mirrored
+>>>>     memroy between phy addr 0-8G.
+>>>> - add kernelcore=mirror in kernel parameter
+>>>> - start you kernel
+>>>>
+>>>
+>>> As I explained before:
+>>>
+>>> - NAK to EFI fake_mem support on arm64
+>>
+>> fake_mem support on arm64 will be removed in subsequent version.
+>>
+>>> - NAK to the whole series until you come up with a proposal on how to
+>>> locate the static kernel image itself into more reliable memory, as
+>>> there is really no point to any of this otherwise.
+>>
+>> Sorry I am not familiar with this, as you metioned before,
+>>
+>>   > you have to iterate over the memory map and look for regions with
+>>   > the desired attribute, and allocate those pages explicitly.
+>>
+>> Do you mean this is x86, commit c05cd79750fb
+>> ("x86/boot/KASLR: Prefer mirrored memory regions for the kernel physical address").
+>> I will do some research.
+>>
+>>   > I'd prefer to implement this in the bootloader, and only add minimal
+>>   > logic to the stub to respect the placement of the kernel by the loader
+>>   > if the loader signals it to do so.
+>>
+>> Does this bootloader refer to grub and then add minimal logic to arm64-stub.c?
+>>
+> 
+> Any bootloader, yes.
+> 
+>> What is the loader signal?
+> 
+> A protocol installed onto the image handle, as I suggested before. I
+> even cc'ed you on a patch that implements this.
 
-  2697	
-  2698	/*
-  2699	 * Lock the console_lock, but rather than blocking all the kthread printers,
-  2700	 * lock a specified kthread printer and hold the lock. This is useful if
-  2701	 * console flags for a particular console need to be updated.
-  2702	 */
-> 2703	void console_lock_single_hold(struct console *con)
-  2704	{
-  2705		might_sleep();
-  2706		down_console_sem();
-  2707		mutex_lock(&con->lock);
-  2708		console_locked = 1;
-  2709		console_may_schedule = 1;
-  2710	}
-  2711	
+Sorry to bother you.
+I didn't receive any patches.
+Could you share the link?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+>> System exists mirrored memory reported by uefi?
+>>
+> 
+> What on earth is the point of any of this if the only use case being
+> targeted is efi_fake_mem with arbitrary fake mirrored regions?
+> 
+> So yes, unless there are systems that need this, I don't see a point
+> in merging any of this
+We do have mirrored memory reported by uefi and efi_fake_mem is added for easy testing
+with qemu/hardware without update UEFI.
+
+> .

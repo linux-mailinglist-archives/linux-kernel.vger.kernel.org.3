@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22252508DD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC37508DCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380800AbiDTQ5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S1380795AbiDTQ4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234342AbiDTQ5H (ORCPT
+        with ESMTP id S234342AbiDTQ4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:57:07 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D633F3E5C4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:54:20 -0700 (PDT)
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 23KGrnri003946
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:53:49 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 23KGrnri003946
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1650473629;
-        bh=z2vQXfsB4fXcjEsk0DIVaRzap9JiljN6sNWS4DQ1igw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Eg+RtSp9AsBhjhK2prhsGIEj5CN/ry7/pGzK3EqRUOTIPS2v9WskwfE2pEIZqjR4c
-         JQkXaUXv/9E4YZB3mQ6/A8WnZR4y9G4gQTE3rD0iHS/LFQD3eSm6k5Hrmmcb+9c4Ig
-         vtizcyRWVNvXRJeJ01/I1F1dbzVcGf+QkNBIQkUV9bU90tqmchjtSrYs8OLL4PB9pH
-         nPhQyZ9hQHV+tFJ643rUHXietgH6SvTpVv9hm3xGugY6Txvu3QzleHbCaWefufhkw/
-         DZqJ8Vyzkuv/sfzBqBs6CCa6Jzx7b2P41Jf8M0LmzHuNCQy4y59cNE+0vlHq1+TucF
-         e7CiiKrc4gFcw==
-X-Nifty-SrcIP: [209.85.210.180]
-Received: by mail-pf1-f180.google.com with SMTP id p8so2469792pfh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:53:49 -0700 (PDT)
-X-Gm-Message-State: AOAM531NnsMCDwMr+B85LEINAM6A9HcC+Jt6O3VjR/QuZ+BspDpXbIVm
-        bJ7X+VauA4QJYyWGi7/l753JXwTI3QT+WGOLbL8=
-X-Google-Smtp-Source: ABdhPJzE85rGVe/eao0UDw4UZervYHePBzjr5r9QXOwN40U2faUR8iNPFtDsVHL+PTnARoyuO8Iw0LS5/+47oVeY0uQ=
-X-Received: by 2002:a05:6a02:182:b0:374:5a57:cbf9 with SMTP id
- bj2-20020a056a02018200b003745a57cbf9mr19699006pgb.616.1650473628452; Wed, 20
- Apr 2022 09:53:48 -0700 (PDT)
+        Wed, 20 Apr 2022 12:56:31 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8FB3E5C4;
+        Wed, 20 Apr 2022 09:53:43 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id lc2so4733866ejb.12;
+        Wed, 20 Apr 2022 09:53:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Rfm74VEUMWZeXlpuLUyC+UQS6WldzCAHTX0ZUV4DSls=;
+        b=blpgcPwCTkxucUu2qZrWjwcq7sstE9xLRf5AbMMlxE8YZrJ0K0DNZxOq4mCHEiyIyZ
+         XdoMlOsuUf/eyx3g2tt7V7BIGpKZARWCyw1YovPsqhkocExAa58e2kNc0dv0QBaUvZTa
+         ObRRFqQ4FyNMmEiFGHCCqZyPP+x7gzFpMJbnyt2QOVwKfhkFb3cu+p9W2jcva0Vxo2JL
+         lO9F9NUmdDYZfFpt3wm6+UBs1MD6omwNrsa9yUtpOxuAmZ8f7zy3kfQpG3afpx91hIaT
+         XBh/sjnCyaTmpslP6liNlZldDuaPtD9AyVqE2rsH4dciA+m8PBxfVU+bGhG2acy4lRXn
+         OzIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Rfm74VEUMWZeXlpuLUyC+UQS6WldzCAHTX0ZUV4DSls=;
+        b=Ga428sQXnIt8y9TLN9dmCYe7YR4MYziCIzq3hq6bdMmKcZjyn51xtepg9cix9q1RA8
+         pkag3NnZqTrXRckXKQaAMxunTI6ms+d7r+DFWUXPYsFuoi7izJZpaDR5ftEtCEMKvCiX
+         MWlGxUl0BholX0v6rqAxngtSDTAtbsCfYcGs8S1+4lm+WunImFlqgcZ42noHAHKGByPU
+         y63dpo+dMTy5vkjtG5pEfJZSJoWtvrzTcaZCfaVBF1ZPHxU1KaYysuhW5jKs/FaIs6Et
+         a18e+jT6b9HcTy9Pv4Y22CVLcFlyp/hVNjrp7owktUwWiOedrtEZPS5XKE6l/fR7n2C8
+         e3yg==
+X-Gm-Message-State: AOAM533pMuWmFHM8YB4K9t2ki8U9RAy6SevE0cKDGC0pvkmwPvcvu2Ef
+        vET3Dw2uUYnREZoxJil+5dk=
+X-Google-Smtp-Source: ABdhPJxQ3uQH39NmcFzDqchDbenZC7Dj2C9W1dhPLDuReZA2QBfhi5bpkVEuZLM9fty7klo1viKK2g==
+X-Received: by 2002:a17:907:6d96:b0:6e8:d7d9:d573 with SMTP id sb22-20020a1709076d9600b006e8d7d9d573mr19276189ejc.90.1650473621788;
+        Wed, 20 Apr 2022 09:53:41 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id ee17-20020a056402291100b0041fe1e4e342sm10006539edb.27.2022.04.20.09.53.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 09:53:40 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jaehee Park <jhpark1013@gmail.com>, Kalle Valo <kvalo@kernel.org>
+Cc:     =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jerome.pouiller@silabs.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev, Stefano Brivio <sbrivio@redhat.com>
+Subject: Re: [PATCH] wfx: use container_of() to get vif
+Date:   Wed, 20 Apr 2022 18:53:39 +0200
+Message-ID: <2258432.bcXerOTE6V@leap>
+In-Reply-To: <87y200nf0a.fsf@kernel.org>
+References: <20220418035110.GA937332@jaehee-ThinkPad-X1-Extreme> <87y200nf0a.fsf@kernel.org>
 MIME-Version: 1.0
-References: <20220413233649.1394087-1-danielmentz@google.com>
-In-Reply-To: <20220413233649.1394087-1-danielmentz@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 21 Apr 2022 01:52:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQSeTnaHbsTTaY-2nD8Nb=44nc06EicNMhxh_zze-Tj9g@mail.gmail.com>
-Message-ID: <CAK7LNAQSeTnaHbsTTaY-2nD8Nb=44nc06EicNMhxh_zze-Tj9g@mail.gmail.com>
-Subject: Re: [PATCH] kheaders: Have cpio unconditionally replace files
-To:     Daniel Mentz <danielmentz@google.com>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 8:37 AM Daniel Mentz <danielmentz@google.com> wrote:
->
-> For out-of-tree builds, this script invokes cpio twice to copy header
-> files from the srctree and subsequently from the objtree. According to a
-> comment in the script, there might be situations in which certain files
-> already exist in the destination directory when header files are copied
-> from the objtree:
->
-> "The second CPIO can complain if files already exist which can happen
-> with out of tree builds having stale headers in srctree. Just silence
-> CPIO for now."
->
-> GNU cpio might simply print a warning like "newer or same age version
-> exists", but toybox cpio exits with a non-zero exit code unless the
-> command line option "-u" is specified.
->
-> To improve compatibility with toybox cpio, add the command line option
-> "-u" to unconditionally replace existing files in the destination
-> directory.
->
-> Signed-off-by: Daniel Mentz <danielmentz@google.com>
-> ---
+On mercoled=C3=AC 20 aprile 2022 13:57:57 CEST Kalle Valo wrote:
+> Jaehee Park <jhpark1013@gmail.com> writes:
+>=20
+> > Currently, upon virtual interface creation, wfx_add_interface() stores
+> > a reference to the corresponding struct ieee80211_vif in private data,
+> > for later usage. This is not needed when using the container_of
+> > construct. This construct already has all the info it needs to retrieve
+> > the reference to the corresponding struct from the offset that is
+> > already available, inherent in container_of(), between its type and
+> > member inputs (struct ieee80211_vif and drv_priv, respectively).
+> > Remove vif (which was previously storing the reference to the struct
+> > ieee80211_vif) from the struct wfx_vif, define a function
+> > wvif_to_vif(wvif) for container_of(), and replace all wvif->vif with
+> > the newly defined container_of construct.
+> >
+> > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+>=20
+> [...]
+>=20
+> > +static inline struct ieee80211_vif *wvif_to_vif(struct wfx_vif *wvif)
+> > +{
+> > +	return container_of((void *)wvif, struct ieee80211_vif,=20
+drv_priv);
+> > +}
+>=20
+> Why the void pointer cast? Avoid casts as much possible.
 
-Applied to linux-kbuild.
-Thanks.
+In a previous email Jaehee wrote that she could compile her changes only by=
+=20
+using that "(void *)" cast.
 
+I replied that probably this is a hint that something is broken, although=20
+my argument is not necessarily a "proof". Might very well be that this cast=
+=20
+was needed in this particular situation but I cannot see why.
 
->  kernel/gen_kheaders.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
-> index 1966a749e0d9..0c78e64f747d 100755
-> --- a/kernel/gen_kheaders.sh
-> +++ b/kernel/gen_kheaders.sh
-> @@ -74,7 +74,7 @@ fi
->  # of tree builds having stale headers in srctree. Just silence CPIO for now.
->  for f in $dir_list;
->         do find "$f" -name "*.h";
-> -done | cpio --quiet -pd $cpio_dir >/dev/null 2>&1
-> +done | cpio --quiet -pdu $cpio_dir >/dev/null 2>&1
->
->  # Remove comments except SDPX lines
->  find $cpio_dir -type f -print0 |
-> --
-> 2.36.0.rc0.470.gd361397f0d-goog
->
+@Jaehee, please try to explain why this "(void *)" cast is actually=20
+necessary and why your changes cannot avoid it.
+
+Thanks,
+
+=46abio M. De Francesco
 
 
--- 
-Best Regards
-Masahiro Yamada
+

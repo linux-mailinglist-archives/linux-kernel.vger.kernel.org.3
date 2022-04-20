@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451CE5082F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EBF508309
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376546AbiDTH5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 03:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S1376588AbiDTIBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348806AbiDTH5Q (ORCPT
+        with ESMTP id S1357036AbiDTIA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:57:16 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7373C4AA;
-        Wed, 20 Apr 2022 00:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1650441268; x=1681977268;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bWFEfGitKdMdgdAQmadBNZq/Q/gzOOJXd/nmAVkjgXU=;
-  b=ogFIotafdHIMt2uD3LEg2IPZwU2YNmwxh2x2lDLDKBYmmp6t/maSPdNR
-   kVFsb9WxaK8o474oyx6cGDZxou5caaupWnymD/d+8AbgHEp//7d79qC0I
-   gzQjCpruP7tHnsg2YUMfuSByowsGm9lTl+86JeEWl2JZjEMUODCpXXhIo
-   Nxrwc3VQD5gs96y0c3p+PKZZ2kJnWbA3OKe/eFVT1j50hGL/CfPz6+GLQ
-   yNtd3PemM8dyOa3Qfmc6Kx8MM8LEyTDlajh86Zaa70wXjWwn8qVWwHmAb
-   YozGbZthGj4xm5ZZPeYst6Ecnk9D1uVzI4fLaGEje6AW2KGmMW1SWZTd/
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,275,1643698800"; 
-   d="scan'208";a="160657894"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Apr 2022 00:54:28 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 20 Apr 2022 00:54:27 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 20 Apr 2022 00:54:27 -0700
-Date:   Wed, 20 Apr 2022 09:57:43 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>, <richardcochran@gmail.com>
-Subject: Re: [RFC PATCH net-next 0/2] net: phy: Extend sysfs to adjust PHY
- latency.
-Message-ID: <20220420075743.zlragdh525vpzgkz@soft-dev3-1.localhost>
-References: <20220419083704.48573-1-horatiu.vultur@microchip.com>
- <Yl6oZLIaBnPVkeqN@lunn.ch>
+        Wed, 20 Apr 2022 04:00:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EDA625E;
+        Wed, 20 Apr 2022 00:58:11 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1D1A721112;
+        Wed, 20 Apr 2022 07:58:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1650441490; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zh1+qCZ/MYXJ0sRvzfY4sa1n6TDnYaGX5/J1ORSZtfg=;
+        b=fK/qA+XzGW35/9w2tvE+4x0zKayfY5S1REDI0Hj+Wv7kazxwNLOX5GtAsN3xI2vwpGp0Li
+        UpZRRdnfs3qfCIlF00lXuhhreXhdDvkhiNqTs6bgNrdBkgTBQwAOGtZqJv0+LppY79rot2
+        KuWaR/55MHeREPMSv9wljkh6Kuxns1w=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9C31F2C142;
+        Wed, 20 Apr 2022 07:58:09 +0000 (UTC)
+Date:   Wed, 20 Apr 2022 09:58:09 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "Kernel-team@fb.com" <Kernel-team@fb.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "dborkman@redhat.com" <dborkman@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "bp@alien8.de" <bp@alien8.de>, "mbenes@suse.cz" <mbenes@suse.cz>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
+Message-ID: <Yl+9ETR8qc1sRKy3@alley>
+References: <20220415164413.2727220-1-song@kernel.org>
+ <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
+ <YlpPW9SdCbZnLVog@infradead.org>
+ <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
+ <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
+ <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com>
+ <Yl04LO/PfB3GocvU@kernel.org>
+ <Yl4F4w5NY3v0icfx@bombadil.infradead.org>
+ <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
+ <Yl8olpqvZxY8KoNf@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yl6oZLIaBnPVkeqN@lunn.ch>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yl8olpqvZxY8KoNf@bombadil.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/19/2022 14:17, Andrew Lunn wrote:
-
-Hi Andrew,
-
+On Tue 2022-04-19 14:24:38, Luis Chamberlain wrote:
+> On Tue, Apr 19, 2022 at 01:56:03AM +0000, Edgecombe, Rick P wrote:
+> > Yea, that was my understanding. X86 modules have to be linked within
+> > 2GB of the kernel text, also eBPF x86 JIT generates code that expects
+> > to be within 2GB of the kernel text.
 > 
-> On Tue, Apr 19, 2022 at 10:37:02AM +0200, Horatiu Vultur wrote:
-> > The previous try of setting the PHY latency was here[1]. But this approach
-> > could not work for multiple reasons:
-> > - the interface was not generic enough so it would be hard to be extended
-> >   in the future
-> > - if there were multiple time stamper in the system then it was not clear
-> >   to which one should adjust these values.
-> >
-> > So the next try is to extend sysfs and configure exactly the desired PHY.
+> And kprobes / live patching / ftrace.
 > 
-> What about timestampers which are not PHYs? Ideally you want one
-> interface which will work for any sort of stamper, be it MAC, PHY, or
-> a bump in the wire between the MAC and the PHY.
-
-My initial idea was that each of the timestampers will need to extend
-the sysfs to add this file or multiple files. But from what I can see
-this approach will not fly.
-
-If we want an interface to be used by any sort of stamper, we could
-create a new generic class (eth_tunable/eth_obj). Then each driver will
-register a device that will use this generic class.
-We will continue to use sysfs to expose all the modes supported by the
-driver. But this time create a file for each mode.
-The entire approach should be something similar with the ptp clocks.
-What do you think, is this the right approach?
-
+> Another architectural fun fact, powerpc book3s/32 requires executability
+> to be set per 256 Mbytes segments. Some architectures like this one
+> will want to also optimize how they use the module alloc area.
 > 
->   Andrew
+> Even though today the use cases might be limited, we don't exactly know
+> how much memory a target device has a well, and so treating memory
+> failures for "special memory" request as regular memory failures seems
+> a bit odd, and users could get confused. For instance slapping on
+> extra memory on a system won't resolve any issues if the limit for a
+> special type of memory is already hit. Very likely not a problem at all today,
+> given how small modules / eBPF jit programs are / etc, but conceptually it
+> would seem wrong to just say -ENOMEM when in fact it's a special type of
+> required memory which cannot be allocated and the issue cannot possibly be
+> fixed. I don't think we have an option but to use -ENOMEM but at least
+> hinting of the special failure would have seem desirable.
 
--- 
-/Horatiu
+I am not mm expert but I think that this is common problem. There are
+many types of "special memory". And mm provides many details via procfs, e.g.
+/proc/meminfo, /proc/slabinfo, /proc/vmstat.
+
+Best Regards,
+Petr

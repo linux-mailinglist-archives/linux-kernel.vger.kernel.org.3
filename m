@@ -2,314 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8D1508C3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8834C508C6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380269AbiDTPgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S1380311AbiDTPwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346215AbiDTPgk (ORCPT
+        with ESMTP id S1380211AbiDTPwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:36:40 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2069.outbound.protection.outlook.com [40.107.94.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F80B3EBB4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:33:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J5gE5kun4zVCoYvdyxseFUDoB9sFYEHZBr8Npd8AWJkMOMaqP7NVZjVkbOSj4eZXXWZQ6Bi+7vqmOkVTvligGMXn3A6YESbfnqFr/jeLvpJBZdB1uT/zVXpRQSJ0B9v3t8EKKise5a9KiXUo4RJ5AxEWHLIzYxWZMnWtaP5Do+qg7kfau0WENsgaOvaYIqt399QaDOtB1MbFAs9gS6cYQyTdXRGrv9fjyepPMKehoszgcq40dsQqswPiqpwbOFPhQmcEDC1c/Rreq9f1gU/sxDPwKBGFA9hTSqf7wgIIL47inEMROoMq7MPLvcnY+nW+ScUcmj/SO/VlwKMELnHaOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/wIL+qRfGg7BqDNctAjokZGZAqIIHfOkut2KlYqJKK4=;
- b=GXjv797qNnYGpiCnW8C/zNCvxK5JVLUcqpA5a+EbJctDbvIGvTtGSnggOtduQ802j8NHUySQAO+79qs1RtoUMM1fOtqIE7Fn8EKq8R/qATXf4v+JHGwRgH30Bx0g3bc2xxZUlgymtrCTRpNDIF371P6VTwWLuE59tOGptTU/x1ud2EqxhyRDCWtafV9AVV6/pETxj11UrVYZWwVozcIgnphTVIt9fGOT4BeY2WgRWZsuMVMN7t/9k7LMFgrxpSKN+wfiVr67A4gVWq8SRtk1BRMxotc+Biyt44Xcg7Q1Lr1Yb9PTgRlZ1zNJ02K+iJwK9BHlUBlwtMMxPVpn+nPqpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/wIL+qRfGg7BqDNctAjokZGZAqIIHfOkut2KlYqJKK4=;
- b=G01EN5hQB/y3H+nNSHwLuRYtUzTAR9niRUx9Te4gZV8xyw2BZ01xhELY/DklYXnGOl5KngZVUoJFfXrNgRVV5FbGmUO6atTBxKe+xqcOvZ+k/fdMzW6aZQFRuhq14Tmu26E0tYqwoCi5Jh1uF2kWILktBBPyfP0XabCCg7S9xVQ=
-Received: from DS7PR03CA0092.namprd03.prod.outlook.com (2603:10b6:5:3b7::7) by
- MN2PR12MB3342.namprd12.prod.outlook.com (2603:10b6:208:c3::32) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5164.20; Wed, 20 Apr 2022 15:33:51 +0000
-Received: from DM6NAM11FT044.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b7:cafe::e9) by DS7PR03CA0092.outlook.office365.com
- (2603:10b6:5:3b7::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14 via Frontend
- Transport; Wed, 20 Apr 2022 15:33:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT044.mail.protection.outlook.com (10.13.173.185) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5186.14 via Frontend Transport; Wed, 20 Apr 2022 15:33:51 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 20 Apr
- 2022 10:33:47 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Wed, 20 Apr 2022 11:52:16 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED43F40935;
+        Wed, 20 Apr 2022 08:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650469770; x=1682005770;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/aT/uybwZGUBqHJAa/El+PMS98PqvKBE4Ru4gZtuJEU=;
+  b=GExNJ8skvIFFdUNpazFAI3vU28MWNL9PCFq3pTMqD5SRILw27b1FZZfx
+   SvEM2A15n6PJP6u9t9lU5bDVaKSDEyVh17XxlStEF29IH9ZdtXGvZXxgA
+   VAYx6PMEJwjrffiUyzuEJ5Wj3jnswTkTG7kvUow9e+SA+9UebvYKt2I+9
+   VUxrDfhA7PwdvSgUyWJMG8j/0zJV20WSxonPhtwY7ykculDfBxlUgysZy
+   Vrqmcs6DQakZ+VoDKz3waogA17dJSktaFV06JHiCPXUU22RmwxJwp/iSi
+   A3jvdOqBc7PXIkUEtxUcKDzJqA+Pop9Nkmdg1mbgJOULl9YALpZVLjZDJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="263524837"
+X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
+   d="scan'208";a="263524837"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 08:27:55 -0700
+X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
+   d="scan'208";a="647705664"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 08:27:54 -0700
+Date:   Wed, 20 Apr 2022 08:27:53 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        "Joerg Roedel" <jroedel@suse.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "Brijesh Singh" <brijesh.singh@amd.com>
-Subject: [PATCH] x86/sev: get the AP jump table address from secrets page
-Date:   Wed, 20 Apr 2022 10:27:51 -0500
-Message-ID: <20220420152751.145180-1-michael.roth@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        Ravi V Shankar <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH v3 03/11] platform/x86/intel/ifs: Create device for Intel
+ IFS (In Field Scan)
+Message-ID: <YmAmebezoc8m6n2E@agluck-desk3.sc.intel.com>
+References: <20220407191347.9681-1-jithu.joseph@intel.com>
+ <20220419163859.2228874-1-tony.luck@intel.com>
+ <20220419163859.2228874-4-tony.luck@intel.com>
+ <Yl7npfrVTPFEIivC@kroah.com>
+ <CAPcyv4jzscs3Dg4QN0+XHRYdekBeqy1=dRX-mWCj1OXo8jS2vQ@mail.gmail.com>
+ <Yl+66oyQhI0AkEDC@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a5b0b6c1-084d-4a0b-2ec5-08da22e32bb3
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3342:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB334218259CFF8302851C70CB95F59@MN2PR12MB3342.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ceoei1lgT/mv6GO0be2PBjF38W7uVe/a/ZixkFihFrwDviGl7437ovpRC5sucVPUh18wCAINgw4ftMTmOweilIimQvCu8z/7jaS6q819dHXYf/kKl0bJ1n6MrnZJx7SAQQv8+pr10Web7IplhfFcaSR1hhoeLosbOTXPYusttzUBPLmY4+GxBQOH0kCwqBfSJmptYIm8ep/9ncym012e3TKSMFnJ4SBVXA+6t9iLMbl9LoR8KMWLecu5TyC8FLr9l9pl7rHgtw78HEvVHahYR5sAVsdrlzUZLU8BAa0+s/3i4hvFPnUFvZ8Wr/sqCTPnRBpg8NZ/rjgC+vb16mCcOkzsRSdu08dlSjtPXRLU2d+/N8nfKSYxm0PDTRcxvpr6k/RX+6sHAbSLI4EDidglaYwzLWiUxeCe/5lkn45lnBLrBmlPCt3ZLcOfaI+0+VJ3FSY5iwogtCD5cONUEibzc3NMkALTLJ9PDUW97/d1e8X4mfgWIHxYVKfu77Mmb8Ywrppr96FyOhAWmjchLdB9RDZuHabps9zhx3i9esxiKeCEpm2IJsX08GEOkBak3A3jqazfv6DaI2u1n4Uz/cgJaf7FrarVELGIxcFn314Sb+AIjc1dc3fbf0YJ39B0a3InkBXjGCSoc8wwpZnglJkUJFx5tI6GRHTk9uFKb8+81ZPd4ZJrQHjx3iWcnUzryRsBccLv7ulvFZuRR76mUImCWdXEeleBoCMSwyiGUS1tr9Y=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(81166007)(82310400005)(6916009)(54906003)(2906002)(1076003)(186003)(16526019)(2616005)(47076005)(6666004)(426003)(336012)(4326008)(36756003)(316002)(40460700003)(8676002)(508600001)(86362001)(5660300002)(356005)(70206006)(70586007)(44832011)(83380400001)(36860700001)(26005)(7416002)(8936002)(15583001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 15:33:51.1492
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5b0b6c1-084d-4a0b-2ec5-08da22e32bb3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT044.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3342
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yl+66oyQhI0AkEDC@kroah.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brijesh Singh <brijesh.singh@amd.com>
+On Wed, Apr 20, 2022 at 09:48:58AM +0200, Greg KH wrote:
+> Don't write code today for stuff you do not have right now, you all know
+> that.  We can always revisit it in the future.
 
-The GHCB specification section 2.7 states that when SEV-SNP is enabled,
-a hypervisor must provide the AP jump table physical address through
-the SNP secrets pages.
+Direction check on the virtual device option. Is this what
+you are asking for in "core.c"?
 
-Fixes: 0afb6b660a6b ("x86/sev: Use SEV-SNP AP creation to start secondary CPUs")
-Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-Signed-off-by: Michael Roth <michael.roth@amd.com>
----
- arch/x86/include/asm/sev.h            | 35 ++++++++++++++
- arch/x86/kernel/sev.c                 | 70 ++++++++++++++++++---------
- drivers/virt/coco/sevguest/sevguest.h | 35 --------------
- 3 files changed, 81 insertions(+), 59 deletions(-)
+The second test type is happening internally right away ... so I
+put in some example code of how it can be added. Upstream submission
+will just have the one test that exists today.
 
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 9c2d33f1cfee..509a23c85fe8 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -99,6 +99,41 @@ struct snp_guest_platform_data {
- 	u64 secrets_gpa;
- };
- 
-+/*
-+ * The secrets page contains 96-bytes of reserved field that can be used by
-+ * the guest OS. The guest OS uses the area to save the message sequence
-+ * number for each VMPCK.
-+ *
-+ * See the GHCB spec section Secret page layout for the format for this area.
-+ */
-+struct secrets_os_area {
-+	u32 msg_seqno_0;
-+	u32 msg_seqno_1;
-+	u32 msg_seqno_2;
-+	u32 msg_seqno_3;
-+	u64 ap_jump_table_pa;
-+	u8 rsvd[40];
-+	u8 guest_usage[32];
-+} __packed;
-+
-+#define VMPCK_KEY_LEN		32
-+
-+/* See the SNP spec version 0.9 for secrets page format */
-+struct snp_secrets_page_layout {
-+	u32 version;
-+	u32 imien	: 1,
-+	    rsvd1	: 31;
-+	u32 fms;
-+	u32 rsvd2;
-+	u8 gosvw[16];
-+	u8 vmpck0[VMPCK_KEY_LEN];
-+	u8 vmpck1[VMPCK_KEY_LEN];
-+	u8 vmpck2[VMPCK_KEY_LEN];
-+	u8 vmpck3[VMPCK_KEY_LEN];
-+	struct secrets_os_area os_area;
-+	u8 rsvd3[3840];
-+} __packed;
-+
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- extern struct static_key_false sev_es_enable_key;
- extern void __sev_es_ist_enter(struct pt_regs *regs);
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index f01f4550e2c6..9cb27490745c 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -558,6 +558,49 @@ void noinstr __sev_es_nmi_complete(void)
- 	__sev_put_ghcb(&state);
- }
- 
-+static u64 get_secrets_page(void)
-+{
-+	u64 pa_data = boot_params.cc_blob_address;
-+	struct cc_blob_sev_info info;
-+	void *map;
-+
-+	/*
-+	 * The CC blob contains the address of the secrets page, check if the
-+	 * blob is present.
-+	 */
-+	if (!pa_data)
-+		return 0;
-+
-+	map = early_memremap(pa_data, sizeof(info));
-+	memcpy(&info, map, sizeof(info));
-+	early_memunmap(map, sizeof(info));
-+
-+	/* smoke-test the secrets page passed */
-+	if (!info.secrets_phys || info.secrets_len != PAGE_SIZE)
-+		return 0;
-+
-+	return info.secrets_phys;
-+}
-+
-+static u64 get_snp_jump_table_addr(void)
-+{
-+	struct snp_secrets_page_layout *layout;
-+	u64 pa = get_secrets_page();
-+	u64 addr;
-+
-+	if (!pa)
-+		return 0;
-+
-+	layout = (__force void *)ioremap_encrypted(pa, PAGE_SIZE);
-+	if (!layout)
-+		return 0;
-+
-+	addr = layout->os_area.ap_jump_table_pa;
-+	iounmap(layout);
-+
-+	return addr;
-+}
-+
- static u64 get_jump_table_addr(void)
- {
- 	struct ghcb_state state;
-@@ -565,6 +608,9 @@ static u64 get_jump_table_addr(void)
- 	struct ghcb *ghcb;
- 	u64 ret = 0;
- 
-+	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-+		return get_snp_jump_table_addr();
-+
- 	local_irq_save(flags);
- 
- 	ghcb = __sev_get_ghcb(&state);
-@@ -2171,30 +2217,6 @@ static struct platform_device guest_req_device = {
- 	.id		= -1,
- };
- 
--static u64 get_secrets_page(void)
--{
--	u64 pa_data = boot_params.cc_blob_address;
--	struct cc_blob_sev_info info;
--	void *map;
--
--	/*
--	 * The CC blob contains the address of the secrets page, check if the
--	 * blob is present.
--	 */
--	if (!pa_data)
--		return 0;
--
--	map = early_memremap(pa_data, sizeof(info));
--	memcpy(&info, map, sizeof(info));
--	early_memunmap(map, sizeof(info));
--
--	/* smoke-test the secrets page passed */
--	if (!info.secrets_phys || info.secrets_len != PAGE_SIZE)
--		return 0;
--
--	return info.secrets_phys;
--}
--
- static int __init snp_init_platform_device(void)
- {
- 	struct snp_guest_platform_data data;
-diff --git a/drivers/virt/coco/sevguest/sevguest.h b/drivers/virt/coco/sevguest/sevguest.h
-index d39bdd013765..21bda26fdb95 100644
---- a/drivers/virt/coco/sevguest/sevguest.h
-+++ b/drivers/virt/coco/sevguest/sevguest.h
-@@ -60,39 +60,4 @@ struct snp_guest_msg {
- 	u8 payload[4000];
- } __packed;
- 
--/*
-- * The secrets page contains 96-bytes of reserved field that can be used by
-- * the guest OS. The guest OS uses the area to save the message sequence
-- * number for each VMPCK.
-- *
-- * See the GHCB spec section Secret page layout for the format for this area.
-- */
--struct secrets_os_area {
--	u32 msg_seqno_0;
--	u32 msg_seqno_1;
--	u32 msg_seqno_2;
--	u32 msg_seqno_3;
--	u64 ap_jump_table_pa;
--	u8 rsvd[40];
--	u8 guest_usage[32];
--} __packed;
--
--#define VMPCK_KEY_LEN		32
--
--/* See the SNP spec version 0.9 for secrets page format */
--struct snp_secrets_page_layout {
--	u32 version;
--	u32 imien	: 1,
--	    rsvd1	: 31;
--	u32 fms;
--	u32 rsvd2;
--	u8 gosvw[16];
--	u8 vmpck0[VMPCK_KEY_LEN];
--	u8 vmpck1[VMPCK_KEY_LEN];
--	u8 vmpck2[VMPCK_KEY_LEN];
--	u8 vmpck3[VMPCK_KEY_LEN];
--	struct secrets_os_area os_area;
--	u8 rsvd3[3840];
--} __packed;
--
- #endif /* __VIRT_SEVGUEST_H__ */
--- 
-2.25.1
+Static definition of:
 
+ static struct ifs_data ifs_data[IFS_NUMTESTS];
+
+keeps the code simpler (no need to have code to
+cleanup if dynamic allocation of this small structure
+fails). But if you feel strongly that all static allocation
+is bad, then I can kzallloc() per enumerated test type.
+
+With this change it is no longer a platform driver. So maybe
+doesn't belong in drivers/platform/x86/intel/ifs/*
+
+Any thoughts on where I should move it to?
+
+-Tony
+
+---- core.c ---
+
+// SPDX-License-Identifier: GPL-2.0-only
+/* Copyright(c) 2022 Intel Corporation. */
+
+#include <linux/module.h>
+#include <linux/device.h>
+#include <linux/kdev_t.h>
+#include <linux/semaphore.h>
+
+#include <asm/cpu_device_id.h>
+
+#include "ifs.h"
+
+enum test_types {
+	IFS_SAF,
+	IFS_ANOTHER,
+	IFS_NUMTESTS
+};
+
+static struct class *ifs_class;
+static struct ifs_data ifs_data[IFS_NUMTESTS];
+
+#define MSR_IA32_CORE_CAPS_INTEGRITY_BIT	2
+#define MSR_IA32_CORE_CAPS_INTEGRITY		BIT(MSR_IA32_CORE_CAPS_INTEGRITY_BIT)
+
+#define X86_MATCH(model)				\
+	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6,	\
+		INTEL_FAM6_##model, X86_FEATURE_CORE_CAPABILITIES, NULL)
+
+static const struct x86_cpu_id ifs_cpu_ids[] __initconst = {
+	X86_MATCH(SAPPHIRERAPIDS_X),
+	{}
+};
+MODULE_DEVICE_TABLE(x86cpu, ifs_cpu_ids);
+
+static int ifs_device_unregister(struct device *dev, void *data)
+{
+	device_unregister(dev);
+
+	return 0;
+}
+
+static int __init ifs_init(void)
+{
+	const struct x86_cpu_id *m;
+	u64 ia32_core_caps;
+	struct device *dev;
+	int ndevices = 0;
+	int ret = 0;
+
+	m = x86_match_cpu(ifs_cpu_ids);
+	if (!m)
+		return -ENODEV;
+
+	if (rdmsrl_safe(MSR_IA32_CORE_CAPS, &ia32_core_caps))
+		return -ENODEV;
+
+	ifs_class = class_create(THIS_MODULE, "intel_ifs");
+	if (IS_ERR(ifs_class))
+		return PTR_ERR(ifs_class);
+
+	ret = ifs_setup_wq();
+	if (ret)
+		goto class_cleanup;
+
+	if (ia32_core_caps & MSR_IA32_CORE_CAPS_INTEGRITY) {
+		dev = device_create_with_groups(ifs_class, NULL, MKDEV(0, 0), &ifs_data[IFS_SAF],
+					        plat_ifs_groups, "ifs%d", IFS_SAF);
+		if (dev) {
+			ndevices++;
+
+			down(&ifs_sem);
+			ifs_data[IFS_SAF].loaded = !ifs_load_firmware(dev);
+			up(&ifs_sem);
+		}
+	}
+
+	if (1) { // placeholder to test 2nd test
+		dev = device_create_with_groups(ifs_class, NULL, MKDEV(0, 0), &ifs_data[IFS_ANOTHER],
+					        plat_ifs_groups, "ifs%d", IFS_ANOTHER);
+		if (dev)
+			ndevices++;
+	}
+
+	if (ndevices)
+		goto done;
+
+	ret = -ENODEV;
+
+	class_for_each_device(ifs_class, NULL, NULL, ifs_device_unregister);
+
+class_cleanup:
+	class_destroy(ifs_class);
+done:
+	return ret;
+}
+
+static void __exit ifs_exit(void)
+{
+	class_for_each_device(ifs_class, NULL, NULL, ifs_device_unregister);
+	class_destroy(ifs_class);
+	ifs_destroy_wq();
+}
+
+module_init(ifs_init);
+module_exit(ifs_exit);
+
+MODULE_LICENSE("GPL");
+MODULE_DESCRIPTION("Intel In Field Scan (IFS) driver");

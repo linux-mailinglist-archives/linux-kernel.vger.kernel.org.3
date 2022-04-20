@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9E7508369
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE72508367
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376748AbiDTIcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        id S1376728AbiDTIcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376737AbiDTIcF (ORCPT
+        with ESMTP id S1356317AbiDTIcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:32:05 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C9137A17
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:29:19 -0700 (PDT)
+        Wed, 20 Apr 2022 04:32:00 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CC035267
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:29:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650443359; x=1681979359;
+  t=1650443355; x=1681979355;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=6fH3i24AyfOr1qkgqZIalpr4phfwOGdxKLwtwdoFzpE=;
-  b=cE3teIM45baZjrDEWLvJfaZc91veZIwagBKMLBe1IvVCgiGUVHKmsbm1
-   c27aYOwBitg/bsuHFLAtNmwZNPilfuy47wYX0tsuXFNgIP2RkjeVEQF+J
-   OPTuGuKxKQ53Y0ptvX7GV/T7is9z8FotshAGdMKDLp2mgpWkw4vFTf/ki
-   rKvFfU8d9rLECyf1yMX9zbmOgTWClkjCr5MWjk6w3/qVuwSluU0tRwcol
-   9TSdeuPLVis57tObuAuAEbd+wFXQYt0j6L9+1agBMHPCJ+8CP4Y0Zl8Z4
-   PSYKcxFilFOr3Vkum3QRgPDYhy1cxQo3L/3pL7SOp6eLJ2Nn/3Mrq0FOi
+  bh=JasKDBeVLP1zJSJYbQNj5seH4o0bOxyYGLLMqWscjXg=;
+  b=OoNpvcXSErdYviWjvoG8E3SRy2x5aZeNZvyyCIZAJqWEg+PgKNXYoT/R
+   auJG1ta+6HqXADbGZWBmNTBCkA9BaIFP0d5soMZfDZT8XczWqrb+0mpCX
+   kbFtNx5KG5Ebkqfo9w5Vso9lh5KYFmIXyXC88H+2q+ZgKNlQNZVOXI4v+
+   Wmxol5JQ6vjzX4N8zQmfE0bAnNMM3ZcF+npOxVJHJKZZ5zzgCcvLoW+Ar
+   rJbHMOEJi2foHWhHjMwytEbE2UdwBkM32BSHFGQClQaZ7o9Yj9egAgiEu
+   KBF4u4pLYPCJ2LgNUari/ZtMaEzZppCSWUILkwIYlh1tAj03EZXQS3Isw
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="262830803"
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="261576582"
 X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="262830803"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 01:29:19 -0700
+   d="scan'208";a="261576582"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 01:29:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="727400361"
+   d="scan'208";a="593095216"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 20 Apr 2022 01:29:15 -0700
+  by orsmga001.jf.intel.com with ESMTP; 20 Apr 2022 01:29:13 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nh5i4-0006lm-Jx;
+        id 1nh5i4-0006lo-LA;
         Wed, 20 Apr 2022 08:29:12 +0000
-Date:   Wed, 20 Apr 2022 16:28:20 +0800
+Date:   Wed, 20 Apr 2022 16:28:41 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/urgent] BUILD SUCCESS
- 40f5aa4c5eaebfeaca4566217cb9c468e28ed682
-Message-ID: <625fc424.G+6AEy26RN/V5tvi%lkp@intel.com>
+Subject: [tip:perf/urgent] BUILD SUCCESS
+ 528c9f1daf20da14d3e7348dc4b1d7c55743ee64
+Message-ID: <625fc439.4PsjwBZpneBDpkVQ%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/urgent
-branch HEAD: 40f5aa4c5eaebfeaca4566217cb9c468e28ed682  sched/pelt: Fix attach_entity_load_avg() corner case
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/urgent
+branch HEAD: 528c9f1daf20da14d3e7348dc4b1d7c55743ee64  perf/x86/cstate: Add SAPPHIRERAPIDS_X CPU support
 
-elapsed time: 735m
+elapsed time: 736m
 
-configs tested: 139
+configs tested: 136
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -81,12 +81,13 @@ arm                              allmodconfig
 arm                                 defconfig
 arm                              allyesconfig
 i386                          randconfig-c001
-arm                         at91_dt_defconfig
-openrisc                            defconfig
-sh                     sh7710voipgw_defconfig
 powerpc                       eiger_defconfig
 nios2                         10m50_defconfig
 arm                          pxa910_defconfig
+h8300                    h8300h-sim_defconfig
+m68k                        m5272c3_defconfig
+xtensa                  nommu_kc705_defconfig
+mips                      loongson3_defconfig
 ia64                         bigsur_defconfig
 arm                        keystone_defconfig
 powerpc                     redwood_defconfig
@@ -101,7 +102,6 @@ mips                           jazz_defconfig
 arc                           tb10x_defconfig
 arm                          gemini_defconfig
 mips                         cobalt_defconfig
-mips                      loongson3_defconfig
 arc                        nsimosci_defconfig
 sh                            hp6xx_defconfig
 microblaze                          defconfig
@@ -152,12 +152,12 @@ mips                             allmodconfig
 powerpc                          allyesconfig
 powerpc                           allnoconfig
 powerpc                          allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
 x86_64                        randconfig-a006
 x86_64                        randconfig-a004
 x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
 x86_64                        randconfig-a011
 x86_64                        randconfig-a013
 x86_64                        randconfig-a015
@@ -194,8 +194,8 @@ mips                 randconfig-c004-20220419
 s390                 randconfig-c005-20220419
 mips                        qi_lb60_defconfig
 arm                         s3c2410_defconfig
-powerpc                    socrates_defconfig
 mips                           ip22_defconfig
+powerpc                    socrates_defconfig
 mips                       lemote2f_defconfig
 mips                       rbtx49xx_defconfig
 arm                       mainstone_defconfig
@@ -210,9 +210,6 @@ x86_64                        randconfig-a016
 x86_64                        randconfig-a005
 x86_64                        randconfig-a003
 x86_64                        randconfig-a001
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
 hexagon              randconfig-r041-20220420
 riscv                randconfig-r042-20220420
 hexagon              randconfig-r045-20220420

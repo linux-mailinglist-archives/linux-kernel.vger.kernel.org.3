@@ -2,74 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C40508864
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C1B50886D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353352AbiDTMrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
+        id S1353713AbiDTMtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237999AbiDTMq6 (ORCPT
+        with ESMTP id S1348748AbiDTMtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:46:58 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9756B201B2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:44:12 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id x8-20020a056602160800b00654b3a46b66so1118129iow.19
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:44:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=D4cHpkDZsSvHotz5ZPOKW6x/SBIpuMTJuj0KKbrXmlU=;
-        b=dj+dpXi0INeqHkr8ujk3/zenRU46PXiP8XIxEMVj8SJ5sEJQkGK6XGf3H6Xb78l+um
-         N1iVmtUVzePoH2D2Ck828D8A1e9FiQQUvizh3HMrSgSDkxEyRhboZRQEn5chbh7PCfmn
-         yl+ni9bqAQKwyF//4qTOrmd85Evs66ARo2xUnGB+E1SVp/Ag/OZDSwBWaSaOek5bp/gk
-         unoZNWhtteGXZ9U51tIlouRMpPqJabUrOIGg9TBUnKr/e9KvXSgLtugi8aVWw1HZysKN
-         Uf59VcUKTEiJw04pckf4TH2T1LKDiQtFk/vrlF2PxLX8iRdTnQT4UTinCYgxuyWfCsd2
-         S9Ow==
-X-Gm-Message-State: AOAM530eF1qCWT+ulSe4XhmevtLuEtnEQ8CcYws9tUGvAItj5/ErhkSo
-        xJv3Knm2J47dAGnH8T9/2sxj3DG2NwFHtXE+M50f+PCCbTPl
-X-Google-Smtp-Source: ABdhPJx7zci4bHGbHwRnpnbelQqfHsdh0Sg1WcrSrtVffdHJmd8RaDbRAPVvE6sTVjZii++8vphDSFbKIFmI1qbD8sYdsqyVg32C
-MIME-Version: 1.0
-X-Received: by 2002:a02:8604:0:b0:326:681e:eef1 with SMTP id
- e4-20020a028604000000b00326681eeef1mr9259926jai.275.1650458651970; Wed, 20
- Apr 2022 05:44:11 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 05:44:11 -0700
-In-Reply-To: <20220420122610.7k2qx5dwdchu27mg@wittgenstein>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000aacee405dd1559b7@google.com>
-Subject: Re: [syzbot] INFO: rcu detected stall in sys_setxattr (2)
-From:   syzbot <syzbot+10a16d1c43580983f6a2@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, fweisbec@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        Wed, 20 Apr 2022 08:49:02 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9383C485;
+        Wed, 20 Apr 2022 05:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650458776; x=1681994776;
+  h=from:to:cc:subject:date:message-id;
+  bh=wpZPNcTrbg6UuvRsRNQ06iL7QRinWmpeDhD7MtVprBQ=;
+  b=WuED9DTVS5DuhpAVB9Pw1Cq7gCMinbQZhkRduEAjRYj64MCOPdDSJjh5
+   9Bplpp3f6Cb74QpClsZSTgDaCL+nwfOmzQkvQDgw6fVihh5jbMemd16kP
+   jPEFYmrzjqT4TiFRq299yxaUmykzXYawhdnlY7ASBL2P3bprUlNZNk1JU
+   0=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 20 Apr 2022 05:46:16 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 20 Apr 2022 05:46:14 -0700
+X-QCInternal: smtphost
+Received: from hyd-lablnx377.qualcomm.com ([10.204.178.226])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 20 Apr 2022 18:15:52 +0530
+Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
+        id 51BCB21656; Wed, 20 Apr 2022 18:15:51 +0530 (IST)
+From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com,
+        bjorn.andersson@linaro.org, agross@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org
+Cc:     mka@chromium.org, quic_hemantg@quicinc.com,
+        quic_bgodavar@quicinc.com, quic_rjliao@quicinc.com,
+        quic_hbandi@quicinc.com, abhishekpandit@chromium.org,
+        mcchou@chromium.org, Sai Teja Aluvala <quic_saluvala@quicinc.com>
+Subject: [PATCH v4] Bluetooth: arm64: dts: qcom: sc7280: Add IO regulator handler in SC7280 CRD platforms
+Date:   Wed, 20 Apr 2022 18:15:40 +0530
+Message-Id: <1650458740-16957-1-git-send-email-quic_saluvala@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+As IO regulator varies in different SC7280 platforms
+updating this handler in individual platform bluetooth node.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+---
+v4: updated commit text
+v3: Updated commit text to reflect the change
+v2: updated reviewer comments.
+v1: intial patch
+---
+---
+ arch/arm64/boot/dts/qcom/sc7280-crd.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Reported-and-tested-by: syzbot+10a16d1c43580983f6a2@syzkaller.appspotmail.com
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+index e2efbdd..6cbbddc 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+@@ -35,6 +35,10 @@
+ 	};
+ };
+ 
++&bluetooth {
++	vddio-supply = <&vreg_l18b_1p8>;
++};
++
+ ap_tp_i2c: &i2c0 {
+ 	status = "okay";
+ 	clock-frequency = <400000>;
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
 
-Tested on:
-
-commit:         bbc1e8c5 fs: unset MNT_WRITE_HOLD on failure
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git fs.mount_setattr.cleanup
-kernel config:  https://syzkaller.appspot.com/x/.config?x=34d641b059469a42
-dashboard link: https://syzkaller.appspot.com/bug?extid=10a16d1c43580983f6a2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.

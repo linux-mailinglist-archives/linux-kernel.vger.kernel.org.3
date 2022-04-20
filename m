@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4D0508A09
+	by mail.lfdr.de (Postfix) with ESMTP id 82D25508A08
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379329AbiDTOIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55070 "EHLO
+        id S1379330AbiDTOI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 10:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379314AbiDTOIq (ORCPT
+        with ESMTP id S1379319AbiDTOIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 10:08:46 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1F93E0E2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:06:00 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id j8so1837438pll.11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:06:00 -0700 (PDT)
+        Wed, 20 Apr 2022 10:08:49 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F19433A9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:06:03 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so5049077pjn.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:06:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=iQPhbY+LxZLej2JSRwshiiNk4MKgpm0s/70/5SE/Spw=;
-        b=BeznbCe320Iwc28CPWiQKfI6oFePospyKcwGywCHWnFSddTpMFekmYVGIUo5xODNL4
-         eKIQyXaEuaMz4suKWnDAmWuAGp/TAArKty/wtGqd2RX6OJuryeh5didBpgXMjGjiC+Uo
-         TWfT4omujCztsxLAIsr8bJdQemveNhF7U9fyQJZcToIxZfDDDZaVtwvT/ZlNq/sQg7cA
-         6e9OTdX+gmNJJlGJY3YhhcnwwjkkzmESWdoPj0VpCCTlt1UafYTmKJ8p3h/jsIeMIHze
-         g4z+l29ROVu3rl8J2LMQ0xGMlPGkv379qNbUhkpDFavtRR6NuFLgs5v+RXmsW3W7NmPe
-         48qw==
+        bh=2BbdN1kr5sGoIGX1dtNP33lYM00rauT2fciX5GfBZWk=;
+        b=qPaGt8W1SqBUdOv9jbIxxS6ZyJAG8y3H45tHU2B/Rku9YW/MdoizmUnnz/k3hzJuFL
+         PwKCyUmQuU00oINndtdwHZGGA9NeIIp4Ja7sCeCsbVIxJx/6vqgyB2Wm5sUvQsUWqYur
+         5XrzKb6MyXbu3tr/UpAj6JhAP06wKMWV63FSUCkG9AMYgMGPXfTHQ5PHuZqReyCIoQCa
+         eqlk9W1RBcZV6naDaBUkwHO/hpuNEy2xvG02iPOa9acTWBJb1tned1CLlL2IYSmTyaej
+         2CPr3alR9H1u8xODMebyeOSV5SuwemSA5rHLqGmq1RboRqULztcVquB/DVby9RpXMCBU
+         Vl+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iQPhbY+LxZLej2JSRwshiiNk4MKgpm0s/70/5SE/Spw=;
-        b=NGyxUxSJU/eVZJbHqe+cZZa4Yo8cOAZS/ppPlREKrnmRoYvnG/v1KKyYwPaMDtiDF5
-         6wFP8ymuYjU2ZRC/ivlIr6RNgKbiY9C+4XG0q/a1r5pLmB1Tz58Byy2mxKNxF1rA0Ss7
-         FgLbr21oWV8BOBvwZbZg/c+/3eyZhxpnXNDIdiE+DOj8Mgs7zqmPjGcOTNF7En0Zy7ki
-         5/67Zp0/87MdAA6OgTDanY/G/7aChaRNthhR/Aya7bzSw65iL4dFvvRsSGxcDuN9odo5
-         1UzRNX/fB/Yavq8wwP2phnBClAxi+CjsCVxAmDwnAFOKdWCxmS+//KpaHijUn6Fc0PbZ
-         +JaA==
-X-Gm-Message-State: AOAM532yJU2Q9g/0l/I0jDG5KMS4ZzjJs1A3GzYFKSndVQFWry9EN8Zc
-        7ONZwHLuoUuw7D18+17hzg==
-X-Google-Smtp-Source: ABdhPJzeBkW3f0H9B2QpGGlxphhGMhWdnwiBvidcfwjRhxfxPxp8jQe7B+tCT/0j6S+aAfNzeJhwsA==
-X-Received: by 2002:a17:90b:1e10:b0:1ce:8478:ea09 with SMTP id pg16-20020a17090b1e1000b001ce8478ea09mr4767019pjb.134.1650463559607;
-        Wed, 20 Apr 2022 07:05:59 -0700 (PDT)
+        bh=2BbdN1kr5sGoIGX1dtNP33lYM00rauT2fciX5GfBZWk=;
+        b=mGs3wqf1/TKQl5EC7hNRTj7GnsB8PfRrkko54boblKRZEZAYGkuFj3ia0Nf2dlr5N1
+         AUm+N4MAq2AGPaSBMt9xPpWD7eUWkKvdkCAfGML5v76PJzG0ktFCkvEzHeYTUAaENuhh
+         I889ZZpi4V9d/E1K/pDY/Q0Ow9PtB9vFbPLnzAIkpuUzE1arPiSiS/tPfWocjKIsgHyU
+         YTkKlemDnUyGya4WEU5rigFtT3DMO6g8kaCCSQkeKH5YlwLdunlvfw8VQULWCpa3cxGh
+         LCf+jz0fT+2b1aw6sXJ8MRiu8O0sN8EASb4P56Neap9b6Mh3pbk4cV5cFgpvMOy2TQXq
+         GHwg==
+X-Gm-Message-State: AOAM533pIHv3KxjOyLink1ii9JLEj0F8QOmfsAhnbo0xB0arJlRvZ7ot
+        y1LEMA7IqNLxfDP33+sG9zlkjb3PfQ==
+X-Google-Smtp-Source: ABdhPJy93n7MJeCi0rQR1oa0d4fp/Wo2Zw8s/BAo8O+6HmRdt6k0l6D5iy/e9DK4uqrR9bVmfGDL/Q==
+X-Received: by 2002:a17:90b:350e:b0:1d2:b6e2:1000 with SMTP id ls14-20020a17090b350e00b001d2b6e21000mr4702893pjb.199.1650463562517;
+        Wed, 20 Apr 2022 07:06:02 -0700 (PDT)
 Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id br10-20020a056a00440a00b0050a777cd10csm10959178pfb.91.2022.04.20.07.05.55
+        by smtp.gmail.com with ESMTPSA id br10-20020a056a00440a00b0050a777cd10csm10959178pfb.91.2022.04.20.07.06.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 07:05:59 -0700 (PDT)
+        Wed, 20 Apr 2022 07:06:02 -0700 (PDT)
 From:   Pingfan Liu <kernelfans@gmail.com>
-To:     x86@kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Pingfan Liu <kernelfans@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/9] x86/irq: place for_each_active_irq() in rcu read section
-Date:   Wed, 20 Apr 2022 22:05:17 +0800
-Message-Id: <20220420140521.45361-6-kernelfans@gmail.com>
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH 6/9] pm/irq: make for_each_irq_desc() safe of irq_desc release
+Date:   Wed, 20 Apr 2022 22:05:18 +0800
+Message-Id: <20220420140521.45361-7-kernelfans@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220420140521.45361-1-kernelfans@gmail.com>
 References: <20220420140521.45361-1-kernelfans@gmail.com>
@@ -75,51 +71,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since there are access to irq_desc, and no preemption is provided at the
-involved, it requires rcu read lock to protect irq_desc.
+The invloved context is no a RCU read section. Furthermore there may be
+more than one task at this point. Hence it demands a measure to prevent
+irq_desc from freeing. Use irq_lock_sparse to serve the protection
+purpose.
 
 Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-To: x86@kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+To: linux-kernel@vger.kernel.org
 ---
- arch/x86/kernel/apic/io_apic.c | 3 +++
+ kernel/irq/pm.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kernel/apic/io_apic.c b/arch/x86/kernel/apic/io_apic.c
-index c1bb384935b0..4bb16edcbe4d 100644
---- a/arch/x86/kernel/apic/io_apic.c
-+++ b/arch/x86/kernel/apic/io_apic.c
-@@ -1333,6 +1333,7 @@ void __init print_IO_APICs(void)
- 		print_IO_APIC(ioapic_idx);
+diff --git a/kernel/irq/pm.c b/kernel/irq/pm.c
+index ca71123a6130..4b67a4c7de3c 100644
+--- a/kernel/irq/pm.c
++++ b/kernel/irq/pm.c
+@@ -133,6 +133,7 @@ void suspend_device_irqs(void)
+ 	struct irq_desc *desc;
+ 	int irq;
  
- 	printk(KERN_DEBUG "IRQ to pin mappings:\n");
-+	rcu_read_lock();
- 	for_each_active_irq(irq) {
- 		struct irq_pin_list *entry;
- 		struct irq_chip *chip;
-@@ -1352,6 +1353,7 @@ void __init print_IO_APICs(void)
- 			pr_cont("-> %d:%d", entry->apic, entry->pin);
- 		pr_cont("\n");
++	irq_lock_sparse();
+ 	for_each_irq_desc(irq, desc) {
+ 		unsigned long flags;
+ 		bool sync;
+@@ -146,6 +147,7 @@ void suspend_device_irqs(void)
+ 		if (sync)
+ 			synchronize_irq(irq);
  	}
-+	rcu_read_unlock();
- 
- 	printk(KERN_INFO ".................................... done.\n");
++	irq_unlock_sparse();
  }
-@@ -2009,6 +2011,7 @@ static inline void init_IO_APIC_traps(void)
- 	struct irq_cfg *cfg;
- 	unsigned int irq;
+ EXPORT_SYMBOL_GPL(suspend_device_irqs);
  
-+	/* The early boot stage is free of irq_desc release */
- 	for_each_active_irq(irq) {
- 		cfg = irq_cfg(irq);
- 		if (IO_APIC_IRQ(irq) && cfg && !cfg->vector) {
+@@ -186,6 +188,7 @@ static void resume_irqs(bool want_early)
+ 	struct irq_desc *desc;
+ 	int irq;
+ 
++	/* The early resume stage is free of irq_desc release */
+ 	for_each_irq_desc(irq, desc) {
+ 		unsigned long flags;
+ 		bool is_early = desc->action &&
 -- 
 2.31.1
 

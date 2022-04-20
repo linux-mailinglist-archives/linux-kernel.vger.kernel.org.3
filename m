@@ -2,83 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924CB508D36
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D1E508D3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355812AbiDTQ2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S1380476AbiDTQ3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355207AbiDTQ2G (ORCPT
+        with ESMTP id S1355807AbiDTQ3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:28:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCD213EA6;
-        Wed, 20 Apr 2022 09:25:19 -0700 (PDT)
+        Wed, 20 Apr 2022 12:29:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F5A30F7E;
+        Wed, 20 Apr 2022 09:26:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7E8DB81EB2;
-        Wed, 20 Apr 2022 16:25:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A5FC385A1;
-        Wed, 20 Apr 2022 16:25:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650471917;
-        bh=KRSXZmE7hCvpkyvfMj0ubOPyiELhK6uWuOp6vCc4fXs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=pQTbSjplIUSJia1MVZnBiEVHxSrwdkaCx+zw9Rsr2MZnmGNZgoc1xTKQ2dnQPsANd
-         QcNVx1hfNw5tqF1p1FA1DDajLrvtYrMMgXa8qyznqG8BG53rfDD+30SmjOa5EPvbAX
-         1gIV7AaPhFKhJs7gYbzApeLCiKEpuSS3DpKq6MxnK+VAmXRJb6M1UHFUppk+eRl4lb
-         tVZc3qUs9LlTL9mUdwG6arH3TZ1OfBu8rjrVxzxQ+QJ1gCaGU9UMHw1si4LLgn6sc0
-         50toeWv9jX+XkslhvtqifYU+tbYtbpfstjQxNOl/Ono/gEuxVSCWDDXHUgQ53hx2qw
-         rw+VeoXKUuxfQ==
-Date:   Wed, 20 Apr 2022 11:25:14 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v3 0/9] PCI/PM: Improvements related to device
- transitions into D0
-Message-ID: <20220420162514.GA1301392@bhelgaas>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12BB6619F4;
+        Wed, 20 Apr 2022 16:26:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D706C385A0;
+        Wed, 20 Apr 2022 16:26:35 +0000 (UTC)
+Date:   Wed, 20 Apr 2022 12:26:33 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     patrick wang <patrick.wang.shcn@gmail.com>
+Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: ftrace: avoid tracing a few functions executed in
+ multi_cpu_stop()
+Message-ID: <20220420122633.55d4ff6b@gandalf.local.home>
+In-Reply-To: <20220420114454.69ab108c@gandalf.local.home>
+References: <20220418043735.11441-1-patrick.wang.shcn@gmail.com>
+        <20220418143404.55c8fcab@gandalf.local.home>
+        <CAGcnep8bH4Nncbt3t+VRLff35ZyD8JyzHcEgkq-u6TEq47jqzQ@mail.gmail.com>
+        <CAGcnep_Gx+3KiUvDVronYKn_divU3OM-RQEOPZakv7MRYh4EJw@mail.gmail.com>
+        <20220420114454.69ab108c@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5838942.lOV4Wx5bFT@kreacher>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 03:00:23PM +0200, Rafael J. Wysocki wrote:
-> On Monday, April 11, 2022 4:17:41 PM CEST Rafael J. Wysocki wrote:
-> > Hi All,
-> > 
-> > On Saturday, April 9, 2022 3:03:14 PM CEST Rafael J. Wysocki wrote:
-> > > Hi All,
-> > > 
-> > > This series supersedes the one at
-> > > 
-> > > https://lore.kernel.org/linux-pm/4198163.ejJDZkT8p0@kreacher
-> > > 
-> > > It addresses some potential issues related to PCI device transitions from
-> > > low-power states into D0 and makes the related code more straightforward
-> > > and so easier to follow.
-> > > 
-> > > Please refer to the patch changelogs for details.
-> > 
-> > Here's a v2 of this patch series which is being sent, because I realized that
-> > one of the checks in pci_power_up() added by patch [4/7] in v1 was redundant
-> > and can be dropped, but that affected the last 3 patches in the series and
-> > then I noticed that more improvements were possible and hence the new patches
-> > [2/9].
-> 
-> Here's a v3 of this series with some minor review comments addressed and R-by
-> tags from Mika added.
+On Wed, 20 Apr 2022 11:44:54 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Applied to pci/pm for v5.19, thanks, Rafael!
+> [*] You really should come up with a better way than stop machine, because
+> the stop machine method is really disruptive, can you not use the break
+> point method for updates?
+
+Talk about dejavu!
+
+  https://lore.kernel.org/all/mhng-62c2ef00-fb64-48c3-a2bb-43b2799161bf@palmer-ri-x1c9/
+
+-- Steve

@@ -2,119 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FC4507EC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B636507ECD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358928AbiDTCYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 22:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
+        id S1348638AbiDTCdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 22:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356849AbiDTCYK (ORCPT
+        with ESMTP id S1348564AbiDTCdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 22:24:10 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEDE2C64E;
-        Tue, 19 Apr 2022 19:21:26 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id z16so593263pfh.3;
-        Tue, 19 Apr 2022 19:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g71afBe03kBYuxiT9CusOK+qbu46m0CphYm7CF5fRTQ=;
-        b=oA7X0J5wj1JyA7Pva/Rylb7Gvkt1hdiEl92H4JvGgufP2ViDVvxtwuh8qRawYrpAcy
-         XzFHjcS8ChQdptHrFyA//Ma1wo4UoOXQFCY7PA83PIbVE2h360oSOwhZbeC48vgJNmAa
-         Y9tylgfh/mY4MwcfljQ5q+Id9w2z0z7O0fisqY/Kulu6BMEBLwAEdNC7I+sSr9MCYmEp
-         Q1BigWesesQP9OkmRLHFGeqEFrolFOb1O4MFEDvTTktrgXIc7BTfFfU2WMY4EQ/bV+Gh
-         gHKLWF5R9nus9QwdY5/MMd/iPjVWk2/oMEMT348v1Y4qqCfaMcu7zmV466MJOGh93asZ
-         1USQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g71afBe03kBYuxiT9CusOK+qbu46m0CphYm7CF5fRTQ=;
-        b=wtzqZgrZN0PjorSqePX8oRmuYTZyvy/BoYBW8maaMCpJOOtISJo3v5wmqq6D+Whzge
-         xPoxiZ+QTgBpFwcGM4MAqOikM4z5jRtuRZ4QlH8euI/SZsVpFv6q2nISQp3gyRfsWdEF
-         vt1tM0xOdiWCsS4PHQAB66+pQb45gEWsOsHSq9OGXjR+GCcVPPN//EYmgYA7ujCu1G25
-         9k1FYXCwEiWKRhciw2S/BVtPehVNuZhfvEGXzczMwl/M180pA5zzrM/rJSyuy8zx+k57
-         zOzT7IHs1NFnzDBQNa3aLnayppI9kDq7ivNXz9Tffndumb3y24IFDYA7SAPMpyiWXJNk
-         briA==
-X-Gm-Message-State: AOAM531iP8LBE49UuZc3KXsbHhiDeau+z1ZIbcEjaNDAIsrwaoqJGdjI
-        wHFaPhGhksCIPRuDX0G29tLGWXApgJ8ZUBrSqQ==
-X-Google-Smtp-Source: ABdhPJxdhiqCMbSuciWgIU0XOlbdgGSS7iKlAAMJ7MpBmeJRWin2AJ41Z/DwmoMHHj4EayThMxJYFg0TorvHa4sa8Hc=
-X-Received: by 2002:a63:ce45:0:b0:399:1124:fbfe with SMTP id
- r5-20020a63ce45000000b003991124fbfemr17587195pgi.542.1650421286100; Tue, 19
- Apr 2022 19:21:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAMhUBjkVME8D5KsHvT=uddBsW_Bh6wr7qeXS=UpQD4LgPmHffQ@mail.gmail.com>
- <05433153-0424-ab66-1573-993d0490c5bc@opensource.wdc.com> <CAMhUBj=JsiHnnQzrqPKzA=Z2+589Ju_HE0cFKyon58Fk0waeAQ@mail.gmail.com>
- <3045fde1-2d5b-e731-ef18-6cf3f0987259@opensource.wdc.com>
-In-Reply-To: <3045fde1-2d5b-e731-ef18-6cf3f0987259@opensource.wdc.com>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Wed, 20 Apr 2022 10:21:14 +0800
-Message-ID: <CAMhUBjnG75XANF1E5KUyigKSmhxzvJytfapieC6_jpKdiFwzSg@mail.gmail.com>
-Subject: Re: [BUG] ata: pata_marvell: Warning when probing the module
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 19 Apr 2022 22:33:36 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D790811161
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650421849; x=1681957849;
+  h=from:to:cc:subject:date:message-id;
+  bh=2x5p0qshyNJJblwHIKzMWnvRCa7FvV22Ri0Wm88vg/s=;
+  b=Ceb8FsFw+OB0nGb7cFtOAqLPqVbfUB5Lng0+WpWJ+7Wpl+b+eNnVDYAR
+   9R36Yf+/bFOsJTBF/H2I/dOAXTywht1jQn8yYrabtKTbq0Eo3xIyy3scv
+   tVx4RBxoYgnwG2NePbIrTQ2Q0ntVuaoy0middT1vOxs+kJGm3Ryi2pjQP
+   HwwzUELly8SWh2qjVN0fCu6QIXwfC81fbfG2EDJDH01HJOEkrvliduCtB
+   k33muiVm1VUIg6QwDRxtE+S/LoV5BbO7D3OPNSozTWCmfcBvxxiN9SatA
+   0+rKRnKEeuzS42tbzhRUZqPOTcE9ifI+hdHqbmZhZq8cjZnD+iSOvwW87
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="243852890"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="243852890"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 19:30:49 -0700
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="529554083"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 19:30:46 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, srinivas.kandagatla@linaro.org,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        bard.liao@intel.com
+Subject: [PATCH] soundwire: cadence: recheck device0 attachment after status change
+Date:   Wed, 20 Apr 2022 10:30:39 +0800
+Message-Id: <20220420023039.14144-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 11:42 AM Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
->
-> On 4/12/22 15:34, Zheyu Ma wrote:
-> > On Mon, Apr 11, 2022 at 7:53 AM Damien Le Moal
-> > <damien.lemoal@opensource.wdc.com> wrote:
-> >>
-> >> On 4/10/22 15:30, Zheyu Ma wrote:
-> >>> Hello,
-> >>>
-> >>> I found a bug in the pata_marvell module.
-> >>> When probing the driver, it seems to trigger the error path and
-> >>> executes the function marvell_cable_detect(), but the
-> >>> 'ap->ioaddr.bmdma_addr' is not initialized, which causes a warning.
-> >>
-> >> I do not have this hardware so I cannot debug this. Please debug it and
-> >> send a patch. bmdma_addr is normally set in ata_pci_bmdma_init(), but some
-> >> drivers set it manually in their probe functions. No idea about the
-> >> marvell driver, I have not checked it.
-> >
-> > To be honest I don't have a good solution to this problem, because
-> > other drivers don't have similar behavior. The marvell driver doesn't
-> > even initialize 'bmdma_addr' before calling 'cable_detect'.
->
-> Then this is the bug that needs to be fixed, no ?
->
-> > So a simple idea I have is to check if 'bmdma_addr' is 0 before
-> > reading it and if so return the error code ATA_CBL_NONE.
->
-> And if indeed, even after it is initialized it is still 0, then yes, this
-> change seems sensible.
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-Sorry for the late reply, I found the root cause of this issue.
-The marvell driver execute the ata_pci_bmdma_init() function, but the
-driver just returned at the following code snippet.
+This patch adds a status check after device0 attachment to solve race
+conditions observed during attachment with multiple devices per link
 
-if (pci_resource_start(pdev, 4) == 0) {
-      ata_bmdma_nodma(host, "BAR4 is zero");
-      return;
-}
+The sequence is the following
 
-So the driver didn't initialize the 'bmdma_addr' but used it in the
-cable_detect() function.
-It seems that the problem is caused by the hardware, is this a bug
-that we should fix?
+1) deviceA attaches as device0
 
-Zheyu Ma
+2) the hardware detects a device0 status change and throws an
+ interrupt.
 
+3) the interrupt handler schedules the work function
 
-Zheyu Ma
+4) the workqueue starts, we read the status
+slave0 = cdns_readl(cdns, CDNS_MCP_SLAVE_INTSTAT0);
+slave1 = cdns_readl(cdns, CDNS_MCP_SLAVE_INTSTAT1);
+
+we deal with the status change and program deviceA device number to a
+non-zero value.
+
+5) deviceB attaches as device0, the device0 status seen by the
+hardware does not change.
+
+6) we clear the CDNS_MCP_SLAVE_INTSTAT0/1 registers -> we will never detect
+deviceB!
+
+This patch suggest re-checking in a loop the device0 status with a
+PING frame, i.e. using the real device0 status instead of information
+on status changes.
+
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+---
+ drivers/soundwire/cadence_master.c | 37 ++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
+index 558390af44b6..47d59190a96e 100644
+--- a/drivers/soundwire/cadence_master.c
++++ b/drivers/soundwire/cadence_master.c
+@@ -959,6 +959,8 @@ static void cdns_update_slave_status_work(struct work_struct *work)
+ 		container_of(work, struct sdw_cdns, work);
+ 	u32 slave0, slave1;
+ 	u64 slave_intstat;
++	u32 device0_status;
++	int retry_count = 0;
+ 
+ 	slave0 = cdns_readl(cdns, CDNS_MCP_SLAVE_INTSTAT0);
+ 	slave1 = cdns_readl(cdns, CDNS_MCP_SLAVE_INTSTAT1);
+@@ -968,10 +970,45 @@ static void cdns_update_slave_status_work(struct work_struct *work)
+ 
+ 	dev_dbg_ratelimited(cdns->dev, "Slave status change: 0x%llx\n", slave_intstat);
+ 
++update_status:
+ 	cdns_update_slave_status(cdns, slave_intstat);
+ 	cdns_writel(cdns, CDNS_MCP_SLAVE_INTSTAT0, slave0);
+ 	cdns_writel(cdns, CDNS_MCP_SLAVE_INTSTAT1, slave1);
+ 
++	/*
++	 * When there is more than one peripheral per link, it's
++	 * possible that a deviceB becomes attached after we deal with
++	 * the attachment of deviceA. Since the hardware does a
++	 * logical AND, the attachment of the second device does not
++	 * change the status seen by the driver.
++	 *
++	 * In that case, clearing the registers above would result in
++	 * the deviceB never being detected - until a change of status
++	 * is observed on the bus.
++	 *
++	 * To avoid this race condition, re-check if any device0 needs
++	 * attention with PING commands. There is no need to check for
++	 * ALERTS since they are not allowed until a non-zero
++	 * device_number is assigned.
++	 */
++
++	device0_status = cdns_readl(cdns, CDNS_MCP_SLAVE_STAT);
++	device0_status &= 3;
++
++	if (device0_status == SDW_SLAVE_ATTACHED) {
++		if (retry_count++ < SDW_MAX_DEVICES) {
++			dev_dbg_ratelimited(cdns->dev,
++					    "Device0 detected after clearing status, iteration %d\n",
++					    retry_count);
++			slave_intstat = CDNS_MCP_SLAVE_INTSTAT_ATTACHED;
++			goto update_status;
++		} else {
++			dev_err_ratelimited(cdns->dev,
++					    "Device0 detected after %d iterations\n",
++					    retry_count);
++		}
++	}
++
+ 	/* clear and unmask Slave interrupt now */
+ 	cdns_writel(cdns, CDNS_MCP_INTSTAT, CDNS_MCP_INT_SLAVE_MASK);
+ 	cdns_updatel(cdns, CDNS_MCP_INTMASK,
+-- 
+2.17.1
+

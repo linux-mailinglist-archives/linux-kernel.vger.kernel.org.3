@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B028550936A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B50A50936F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354986AbiDTXNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 19:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
+        id S1383110AbiDTXRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 19:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383099AbiDTXNO (ORCPT
+        with ESMTP id S1345452AbiDTXRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 19:13:14 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A19111A08
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:10:27 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e5e8523fcbso3622753fac.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:10:27 -0700 (PDT)
+        Wed, 20 Apr 2022 19:17:08 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AEA13DF0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:14:21 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ec04a2ebadso34594637b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TRei6a1qHKhnvQ3GEDyy4E1WwK9zRMbycKgIfFir6MI=;
-        b=aicu3OOVauGYbi8Leet6cjCpJNEgBJymsZ53QG5imPcqz+s0HavG6bOHqFTs66yXIv
-         LrBNrePj1v5MHkeJVRGkNxlEl4w8DZeajSPgP4ajg2fo0tpcYidi6/McS2LDw9BkQUZS
-         r2a/rcaqJ5rb8AH4YWOmMMNcZ9dZ/NrIz/2dLjfJAOAhMPDZiZEkIzZfD/ELmXSU12W5
-         w3BhYqm0iLRcUZ3zYV6DJgIPvHxd0IAK+TkTwur23IHBuYYHbOErXj+E8w/RhFeP6ibL
-         kjTYwtJXxLTUoJb0vT2X+frl2s81XACMBnaR4bw4+tn8zgLS5xDLAUqoQ6X9QHutROOZ
-         0GUQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qYRM9qktnYDaa3m8ekDwBnefJ70L+h8+LPGzeuAwAW8=;
+        b=PM9Q4FWkCG9dzfZg0PVI2vzhj45QKMnRwiq7QmmlnRFeMdzS74TyWfUFCtQNmsOjht
+         goEjr7b0a+mmKNjqg763zJCKW1Y3Vsj/ETv6gGXXor9fpSi02aizIOzJx9GlgWKOHvyV
+         fyUA6ogjKBV6nag2EKCpPT/UcN+bty/fNl/rOTijVnNi9mCxZMpvVzlMvB04wVZsxBHf
+         E6dio4yncjQwEqpTU/Q/DkMVJdZZ8aoDXGbg1FE3RuFTHhHiQVbtNEx2uGwW09PjUL+r
+         +d22UOmWFDu0jXwXwxcVO5Z3FWzl6HugwZ8NGiALvehDK9z8zUHO9bOuFxx3Pa/g+Dxq
+         0vgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TRei6a1qHKhnvQ3GEDyy4E1WwK9zRMbycKgIfFir6MI=;
-        b=bTmnoBHlDTWf9iOWpdkgAFLpmnb6NCXlnrXIMwUuzX2utbrfMRJEDWhBa+1ZjWwz1l
-         s5R+MqigiB7q+8JCpM1owd5R581Dm+p+ZYGcp2eNkw4w6ZiPcehnaG/OAKXzTqjZCBTb
-         h4A0vl55FsRGo3030rlbYFdZtCOHHvCdBfPVL2hxJce+n6dFitUJK6DEYcirEj4GIi05
-         FRnzFABZcxHua3Yoo0IwZyvJPKOYYaD61kOzFCipeFwp09uCWFRmjzekMDDe3O1j9cho
-         95jagY3dP2v09txomS1kV4dEY12Q6pSzPnvYpAd/KiKqQaOBc+Qb4oHX6QbmKMTUYhqH
-         qRdA==
-X-Gm-Message-State: AOAM533hQGEGpZ1e9jUqfiGC6aPljda797s8r7nvaPOJjKqLOgN3qkg3
-        vjURTOV11G3Uh6wjeXNzpyaNTw==
-X-Google-Smtp-Source: ABdhPJwFhn3WUPESS5w8sSu50szxQr6qmD32XDF7sWlOuuj5eugzUOUVYzym5mk0Jr/OIAp4Jq2Jiw==
-X-Received: by 2002:a05:6871:1d0:b0:da:b3f:2b28 with SMTP id q16-20020a05687101d000b000da0b3f2b28mr2674159oad.199.1650496226847;
-        Wed, 20 Apr 2022 16:10:26 -0700 (PDT)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id a17-20020a4ae931000000b0032933be7230sm7424481ooe.4.2022.04.20.16.10.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 16:10:26 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or bridge"
-Date:   Wed, 20 Apr 2022 16:12:30 -0700
-Message-Id: <20220420231230.58499-2-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220420231230.58499-1-bjorn.andersson@linaro.org>
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qYRM9qktnYDaa3m8ekDwBnefJ70L+h8+LPGzeuAwAW8=;
+        b=0SzPV1kCifAs0g/QUMOouA2sbIaLzHZIkXYyM5uN6REO8zIPo8Qwb71v6eHOJ0lJbp
+         yXDnT0Yymxh8ceAIECgPuL/g+E/dXD6MeaPL8boOmg0u/NaMyP2FxkIcZz680dtZn1HS
+         6v1zOrbqPz6VtmLPysp1THhqBbtj/wYxS/8x3QHjvE2ZTREMF6G6rNMMlcleIYj5PyV/
+         PgTxtDDM4y7NL2fRh9dpLE79D4rdFiDe4hzwRhRKnWZkNmz/lYas9tYb64IlthwZF19U
+         GB411WE9k7zWptv3TcIF6MD1UhegkuyiF0mmZqkEkMcst1qwtRtk+WkYr5mh3P/xjNK6
+         kRNA==
+X-Gm-Message-State: AOAM5329z0CEMpe8xwFlppmELagsPkNEtyqRFUzDS3HR5S1XqAJ74A8n
+        WAi6u1kJnZ/fbpguXAqX4uhlD+32f9Ea+lUisFByYw==
+X-Google-Smtp-Source: ABdhPJzrOvt+32bvB/JOtbibZUy7E1gzG00WtbSE17MMsGjTOm8rogn79zYa9DvcpEodQdUtI64CWfpl2gi/QFxwYI4=
+X-Received: by 2002:a81:5dc5:0:b0:2eb:3feb:686c with SMTP id
+ r188-20020a815dc5000000b002eb3feb686cmr23848260ywb.268.1650496460802; Wed, 20
+ Apr 2022 16:14:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220409034849.3717231-1-zheyuma97@gmail.com> <20220410165425.6c2f60e7@jic23-huawei>
+In-Reply-To: <20220410165425.6c2f60e7@jic23-huawei>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 21 Apr 2022 01:14:09 +0200
+Message-ID: <CACRpkdaFgB55HHR8a3vyVbZphu5fpguutBYemyVvGz=tcn6j+A@mail.gmail.com>
+Subject: Re: [PATCH] iio: magnetometer: ak8974: Fix the error handling of ak8974_probe()
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Zheyu Ma <zheyuma97@gmail.com>, lars@metafoo.de,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,62 +66,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-bridge")' attempted to simplify the case of expressing a simple panel
-under a DSI controller, by assuming that the first non-graph child node
-was a panel or bridge.
+On Sun, Apr 10, 2022 at 5:46 PM Jonathan Cameron <jic23@kernel.org> wrote:
+> On Sat,  9 Apr 2022 11:48:48 +0800
+> Zheyu Ma <zheyuma97@gmail.com> wrote:
+>
+> > When the driver fail at devm_regmap_init_i2c(), we will get the
+> > following splat:
+> >
+> > [  106.797388] WARNING: CPU: 4 PID: 413 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
+> > [  106.802183] RIP: 0010:_regulator_put+0x3ec/0x4e0
+> > [  106.811237] Call Trace:
+> > [  106.811515]  <TASK>
+> > [  106.811695]  regulator_bulk_free+0x82/0xe0
+> > [  106.812032]  devres_release_group+0x319/0x3d0
+> > [  106.812425]  i2c_device_probe+0x766/0x940
+> >
+> > Fix this by disabling the regulators at the error path.
+> >
+> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> + CC Linus W as it's his driver.
+>
+> Fix looks correct to me, though the handling of runtime pm in here is
+> probably more complex than it needs to be (and hence this odd error
+> handling for this one place in the probe).
 
-Unfortunately for non-trivial cases the first child node might not be a
-panel or bridge.  Examples of this can be a aux-bus in the case of
-DisplayPort, or an opp-table represented before the panel node.
+At the time I discussed how to do runtime pm with Ulf Hansson a lot
+and I think it was the state of the art at that time. It might have
+changed since.
 
-In these cases the reverted commit prevents the caller from ever finding
-a reference to the panel.
+> > ---
+> >  drivers/iio/magnetometer/ak8974.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/iio/magnetometer/ak8974.c b/drivers/iio/magnetometer/ak8974.c
+> > index e54feacfb980..84bbf7ccc887 100644
+> > --- a/drivers/iio/magnetometer/ak8974.c
+> > +++ b/drivers/iio/magnetometer/ak8974.c
+> > @@ -862,6 +862,7 @@ static int ak8974_probe(struct i2c_client *i2c,
+> >               dev_err(&i2c->dev, "failed to allocate register map\n");
+> >               pm_runtime_put_noidle(&i2c->dev);
+> >               pm_runtime_disable(&i2c->dev);
+> > +             regulator_bulk_disable(ARRAY_SIZE(ak8974->regs), ak8974->regs);
 
-This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
-panel or bridge")', in favor of using an explicit graph reference to the
-panel in the trivial case as well.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/gpu/drm/drm_of.c | 17 -----------------
- 1 file changed, 17 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
-index 026e4e29a0f3..9a2cfab3a177 100644
---- a/drivers/gpu/drm/drm_of.c
-+++ b/drivers/gpu/drm/drm_of.c
-@@ -244,21 +244,6 @@ int drm_of_find_panel_or_bridge(const struct device_node *np,
- 	if (panel)
- 		*panel = NULL;
- 
--	/**
--	 * Devices can also be child nodes when we also control that device
--	 * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
--	 *
--	 * Lookup for a child node of the given parent that isn't either port
--	 * or ports.
--	 */
--	for_each_available_child_of_node(np, remote) {
--		if (of_node_name_eq(remote, "port") ||
--		    of_node_name_eq(remote, "ports"))
--			continue;
--
--		goto of_find_panel_or_bridge;
--	}
--
- 	/*
- 	 * of_graph_get_remote_node() produces a noisy error message if port
- 	 * node isn't found and the absence of the port is a legit case here,
-@@ -269,8 +254,6 @@ int drm_of_find_panel_or_bridge(const struct device_node *np,
- 		return -ENODEV;
- 
- 	remote = of_graph_get_remote_node(np, port, endpoint);
--
--of_find_panel_or_bridge:
- 	if (!remote)
- 		return -ENODEV;
- 
--- 
-2.35.1
-
+Yours,
+Linus Walleij

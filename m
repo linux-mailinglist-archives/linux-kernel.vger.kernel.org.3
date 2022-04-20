@@ -2,135 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0014F5090E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA0D5090F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348602AbiDTUAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
+        id S1381999AbiDTUDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382005AbiDTUAH (ORCPT
+        with ESMTP id S1381982AbiDTUDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:00:07 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117B648E5A;
-        Wed, 20 Apr 2022 12:56:38 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id b188so3247533oia.13;
-        Wed, 20 Apr 2022 12:56:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OyeWgb/U4rnVtnxBVHnhz7nKAu2v5/SnAMiyr6yT0DY=;
-        b=lIBAUr6lUBTbGfhbxt/8RBCVnrfZL7OV6XAwZ6IffIpZ677jVTtE5lFs5RjxsZe1G3
-         eHmzf22tfIQDaQoz34rhqWiphw5vl5tr+gtNqQjmJfaOfdOzZ91kOGk5Th/0UiesO2kZ
-         uj4xp1/Gti0JgWIdX1gIUtsWo3LkrLsNX+aQWj9IHBDEKO2Zdn0VCoWZYXKMbCnlq3ab
-         QWgNWghUYOPieusND/CmLYKJuzC0f0oFg+mq5WHzvUoNMAqitiGK9R5vGW3DJEUOdBM6
-         cePt9o48dDfcfRsPg5eumtToTvLW+jKQh+K79kyHZdKzqQ8kUQEE7ZupEMDXAxIq5pTD
-         9CYA==
-X-Gm-Message-State: AOAM531Y6oIlXYmq+hWUsMZGOGaeEJRj29QLvcIwwFCdVcTcIFh0zpE5
-        Eh3AnDF6hk2QwQJ6hV7f0w==
-X-Google-Smtp-Source: ABdhPJyj+vjWS3Xi9zNx7tqjswIgQJkTRSUgANyjKvQv0BOw6vDI4yXWSqcqH1OdfMHyl2Mgrf0rbw==
-X-Received: by 2002:aca:1811:0:b0:2ef:3c0f:f169 with SMTP id h17-20020aca1811000000b002ef3c0ff169mr2523761oih.61.1650484597182;
-        Wed, 20 Apr 2022 12:56:37 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x2-20020a4a2a42000000b0033a3c4392c3sm4066899oox.26.2022.04.20.12.56.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 12:56:36 -0700 (PDT)
-Received: (nullmailer pid 1749528 invoked by uid 1000);
-        Wed, 20 Apr 2022 19:56:35 -0000
-Date:   Wed, 20 Apr 2022 14:56:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Herve Codina <herve.codina@bootlin.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v2 6/8] ARM: dts: r9a06g032: Add internal PCI bridge node
-Message-ID: <YmBlc7e69INL4bfI@robh.at.kernel.org>
-References: <20220414074011.500533-1-herve.codina@bootlin.com>
- <20220414074011.500533-7-herve.codina@bootlin.com>
- <05c96b4d-313b-1aad-0ee5-61e54672765e@omp.ru>
+        Wed, 20 Apr 2022 16:03:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEF73DDEC;
+        Wed, 20 Apr 2022 13:00:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47C1EB82171;
+        Wed, 20 Apr 2022 20:00:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BCB3C385A0;
+        Wed, 20 Apr 2022 20:00:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650484831;
+        bh=6LaU3F/jCQfZw6zxuK9X0ySvN6qUfHqEJ6lGydnop44=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tTTSInI8F99rxgu1B0qJWLeIul55SHmcfk2XoOQ90GefTf3tYCCewlSGv0XDMfDh7
+         Z0gfO8BUWwpRe7vFNr0stA2fvpU+veeqGj8X4dtAAMP+71o6mJUg/sPSqUxlu+ULuo
+         oT0S6xjq4cbwogY8eYCb+x8No/lm+/RcuSLbCGjk19uugO+JINpbLTFeEWyaEopW/x
+         lweTuMOOUBVuFVg4/k2kXIP8mpZn+WouT6CWBwWGzqmjZqAjIfMK2WcT4xN9+P5OGu
+         53fTbKDiRNLPpY+ZJg9cT17Ibl1y8hQ/1xJAqK44EW7UAoTFJbIP4klfgcYI29A7th
+         eAbyB39usRP9w==
+Received: by mail-wr1-f51.google.com with SMTP id b19so3690567wrh.11;
+        Wed, 20 Apr 2022 13:00:30 -0700 (PDT)
+X-Gm-Message-State: AOAM5317GF9EwsnxWtm6HV5fMbJTWScVhoabz9V7AIKLLwMfVJLU/Wrj
+        o60vR0Z1yucWuBWUQOyIfDbtVdkGrmXb4+/wQmc=
+X-Google-Smtp-Source: ABdhPJwLyvz/ceR9rvvT4XHyqR02gbMMBhrAsRpzGtmhlle4bD/ec4+YXpGg4bc2rqdxlPo8PGopdbH+2zzsbpztAUk=
+X-Received: by 2002:a5d:6da5:0:b0:20a:8805:6988 with SMTP id
+ u5-20020a5d6da5000000b0020a88056988mr15481338wrs.317.1650484829308; Wed, 20
+ Apr 2022 13:00:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05c96b4d-313b-1aad-0ee5-61e54672765e@omp.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220419133723.1394715-1-arnd@kernel.org> <20220420170836.GB1947@darkstar.musicnaut.iki.fi>
+In-Reply-To: <20220420170836.GB1947@darkstar.musicnaut.iki.fi>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 20 Apr 2022 22:00:13 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1+sOrn8BWPVc7f+QFZ5=7fE6=MLsMYV9t+HJcG2aRCXA@mail.gmail.com>
+Message-ID: <CAK8P3a1+sOrn8BWPVc7f+QFZ5=7fE6=MLsMYV9t+HJcG2aRCXA@mail.gmail.com>
+Subject: Re: [PATCH 00/41] OMAP1 full multiplatform conversion
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc:     linux-omap <linux-omap@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Walmsley <paul@pwsan.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        dmaengine@vger.kernel.org,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 12:02:52PM +0300, Sergey Shtylyov wrote:
-> Hello!
-> 
-> On 4/14/22 10:40 AM, Herve Codina wrote:
-> 
-> > Add the device node for the r9a06g032 internal PCI bridge device.
-> > 
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  arch/arm/boot/dts/r9a06g032.dtsi | 28 ++++++++++++++++++++++++++++
-> >  1 file changed, 28 insertions(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
-> > index 636a6ab31c58..848dc034bb8c 100644
-> > --- a/arch/arm/boot/dts/r9a06g032.dtsi
-> > +++ b/arch/arm/boot/dts/r9a06g032.dtsi
-> > @@ -211,6 +211,34 @@ gic: interrupt-controller@44101000 {
-> >  			interrupts =
-> >  				<GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_HIGH)>;
-> >  		};
-> > +
-> > +		pci_usb: pci@40030000 {
-> > +			compatible = "renesas,pci-r9a06g032", "renesas,pci-rzn1";
-> > +			device_type = "pci";
-> > +			clocks = <&sysctrl R9A06G032_HCLK_USBH>,
-> > +				 <&sysctrl R9A06G032_HCLK_USBPM>,
-> > +				 <&sysctrl R9A06G032_CLK_PCI_USB>;
-> > +			clock-names = "hclk_usbh", "hclk_usbpm", "clk_pci_usb";
-> > +			reg = <0x40030000 0xc00>,
-> > +			      <0x40020000 0x1100>;
-> > +			interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
-> > +			status = "disabled";
-> > +
-> > +			bus-range = <0 0>;
-> > +			#address-cells = <3>;
-> > +			#size-cells = <2>;
-> > +			#interrupt-cells = <1>;
-> 
->    Really? I don't think this PCI bridge is also an interrupt controller...
+On Wed, Apr 20, 2022 at 7:08 PM Aaro Koskinen <aaro.koskinen@iki.fi> wrote:
+> On Tue, Apr 19, 2022 at 03:36:42PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > This is the full series for converting OMAP1 to multiplatform, rebased
+> > from my 2019 attempt to do the same thing. The soc tree contains simpler
+> > patches to do the same for iop32x, ixp4xx, ep93xx and s3c24xx, which
+> > means we are getting closer to completing this for all ARMv5 platforms
+> > (I have patches for PXA, which is the last one remaining).
+> >
+> > Janusz already tested the branch separately and did the missing work
+> > for the common-clk conversion after my previous approach was broken.
+>
+> I tested the full series on the following OMAP1 boards: ams-delta,
+> nokia770, osk, palmte and sx1 (QEMU only).
+>
+> Apart from the earlyprintk breakage, everything seemed to work OK.
 
-'interrupt-map' depends on '#interrupt-cells'.
+Nice, thanks a lot for testing!
 
-> 
-> > +			ranges = <0x02000000 0 0x40020000 0x40020000 0 0x00010000>;
-> > +			/* Should map all possible DDR as inbound ranges, but
-> > +			 * the IP only supports a 256MB, 512MB, or 1GB window.
-> > +			 * flags, PCI addr (64-bit), CPU addr, PCI size (64-bit)
-> > +			 */
-> > +			dma-ranges = <0x42000000 0 0x80000000 0x80000000 0 0x40000000>;
-> > +			interrupt-map-mask = <0xf800 0 0 0x7>;
-> > +			interrupt-map = <0x0000 0 0 1 &gic GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH
-> > +					 0x0800 0 0 1 &gic GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH
-> > +					 0x1000 0 0 2 &gic GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
-> > +		};
-> >  	};
-> >  
-> >  	timer {
-> 
-> MBR, Sergey
+> A minor note, zImage grows about 50 KB with a minimal kernel config. This
+> is not yet critical, there's still about 7% headroom on 770 to the 2 MB
+> bootloader limit on my setup. Also the decompression time is approaching
+> the hardcoded watchdog timeout...
+
+I suspect that most of this is for the added devicetree code, and some
+more for the common-clk layer. For the omap1_defconfig, there is some
+hope to get part of the overhead back eventually by replacing board files
+with dts descriptions that are not part of the zImage itself, but it's unlikely
+to ever get smaller than it was.
+
+       Arnd

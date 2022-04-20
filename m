@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830FE50848B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2392508485
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377007AbiDTJNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 05:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
+        id S1377010AbiDTJNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 05:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377048AbiDTJNN (ORCPT
+        with ESMTP id S1352601AbiDTJM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 05:13:13 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A7D28E18;
-        Wed, 20 Apr 2022 02:10:25 -0700 (PDT)
-Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N0Fl9-1nsBMN0ERL-00xJW1; Wed, 20 Apr 2022 11:10:24 +0200
-Received: by mail-wr1-f46.google.com with SMTP id c10so1351772wrb.1;
-        Wed, 20 Apr 2022 02:10:23 -0700 (PDT)
-X-Gm-Message-State: AOAM533ri6+6sbSQsHwjA230VB/UYGyMv6gZKZgIoz6S93RTpHirDkdV
-        vMzaF/OOofaBvUrnM67Tu6p2G2MtdhjSwDKO8vE=
-X-Google-Smtp-Source: ABdhPJwtLOp969nuzl2HcHrjTrE/8+7taAszNCD7/wMyEv6mWoZB/KbZc5q+V3PBrcZaYVxcH5WclGOcWViagO5a7ww=
-X-Received: by 2002:a5d:6389:0:b0:207:a7d8:2b64 with SMTP id
- p9-20020a5d6389000000b00207a7d82b64mr14665624wru.12.1650445823721; Wed, 20
- Apr 2022 02:10:23 -0700 (PDT)
+        Wed, 20 Apr 2022 05:12:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E927615A00
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:10:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A10ADB81DB7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F9D0C385A8;
+        Wed, 20 Apr 2022 09:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650445811;
+        bh=11pfjz1i2MS42xR7uvvDnDe7JxVoRfoPmLnKDExZ3Dc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ckTqUZryaTng3rCKHFe97gt9yNXMk3QrKYyKS1V0Qcx/fpvCTgI0wesrhA9G2y3om
+         +AtmyJAcPmTqAhvMY6j3OAqzDkOZ/5QCHns/1iZC0YJb3dq6jv3SIIbsB1tQ/ceWyX
+         0slT9md2Ri+CG+LBl+OC3YgSDuOkoPj4b+6t3NfD5lu81OQ0lmwl/9inhsdRCsF3Sq
+         Yr4B4V4nCB+HK5ZowIeMxp5jy737BqaV0JxfwODGiBtGYY8oP0dq+SX2MoopSBUr5Q
+         tEecNlxwdrS0utn5sop+wH+5Pijv5HpIGrhsK50OnKnmv3xettCtmudySrHRt+Q/g+
+         QnjO74qT4JaLg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 244A9E8DD85;
+        Wed, 20 Apr 2022 09:10:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220420084249.2186634-1-arnd@kernel.org>
-In-Reply-To: <20220420084249.2186634-1-arnd@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 20 Apr 2022 11:10:07 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1mBdcGxV1nP15nY7sVfjya_VEeS78M5KQHjw66Kg+=Kg@mail.gmail.com>
-Message-ID: <CAK8P3a1mBdcGxV1nP15nY7sVfjya_VEeS78M5KQHjw66Kg+=Kg@mail.gmail.com>
-Subject: Re: [PATCH] [v3] m68k: coldfire: drop ISA_DMA_API support
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:qF8uUzsZN4LBwJDSKSRH/nzVuSsVw7fvjZm56gLdoXhtyFIOiA/
- vWqfrkUIsfiRwqfZgQVrc89fNjZdCn9Nidl3eh/Deop3xw05hp/JMIGtBHnsBmVxrwhMqVN
- PRj+JNjY6kEEGEDk5LOw6R+4YXw9Vzn28CkjvOtBzBoJBrI5VyuUaeBifBw47kHkqo+iNfO
- HffoTegv9OaoUKoMxlbNA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kWQqunrDJgc=:A0Ijx97e6NH2mW7PukdQrm
- KanLPf8FjiMVs24OaVWRawRGtbfUQIMbzlX+zjfu6FZBqgE0r4yMoXf1dvD6eVIlK/0+XxtR8
- PO4mvC5DS+/pgiz2o4gv3/uyUB/x46V0IbY2hMYHWjriwP2I3FFQ56CqOXicN8PZTf2LMRlmn
- 2J0XbBjNuMxUz3QfRREWOxlxd/ioemkX1nx5gfCmyRDQjeNbt5kThrTcdb1/0UA939lPxFVbD
- AyeUEmvF+QQfovy+BsgXt6FLD5CRnpwlp+aAzUD9L/owr7isyUospGX+nEuZZUykRE70CfXCA
- DdYY5U60MH70LMOuhziLfyq3gaYKlzJkzRj7SdrvkzERzyBz+bpgpAQkx/ktyoQMkEU0XbsQi
- uV3AyWXNFobcHiVrZPUWEwZYY6XjJR3UDQX6qaCqWhyWwyT9ZT/1KYjhnOc5BXj3IRFayHXqF
- ZQVspluhg9Pn+Js9VB2CsYL60bKYXwvKvCJ9gM2u4HUfh5ONLAY864JxEjY7qt+AOxYAoD91D
- fOCfJZzKuOjV7PwTQzNwls1EQ9x0RywFwTuNocS7nzxgm7DK+bmGQel26jEI9uIq7Qzm8qY9g
- kz81wMW5B4B6ncVSLYobW3BJEzXvpaJLEaxu7s0sQdiW148CJfjWBzEsVVXYpNuvuHHexoypQ
- XvbZGYApHJYRDjhEqha63zQzVEZMSaRvVGGdlSYuXT69DB8BDvJkAw3Ir2ZH+swoRpuo=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] platform/chrome: Re-introduce cros_ec_cmd_xfer and use it
+ for ioctls
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <165044581114.11968.7352761617264023399.git-patchwork-notify@kernel.org>
+Date:   Wed, 20 Apr 2022 09:10:11 +0000
+References: <20220318165422.686848-1-linux@roeck-us.net>
+In-Reply-To: <20220318165422.686848-1-linux@roeck-us.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     bleung@chromium.org, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dnojiri@chromium.org,
+        robbarnes@google.com, rajatja@google.com, briannorris@chromium.org,
+        parthmalkan@google.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:42 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> After a build regression report, I took a look at possible users of
-> CONFIG_ISA_DMA_API on m68k and found none, which Greg confirmed. The
-> CONFIG_GENERIC_ISA_DMA option in turn is only needed to implement
-> ISA_DMA_API, and is clearly not used on the platforms with ISA support.
->
-> The CONFIG_ISA support for AMIGA_PCMCIA is probably also unneeded,
-> but this is less clear. Unlike other PCMCIA implementations, this one
-> does not use the drivers/pcmcia subsystem at all and just supports
-> the "apne" network driver. When it was first added, one could use
-> ISA drivers on it as well, but this probably broke at some point.
->
-> With no reason to keep this, let's just drop the corresponding files
-> and prevent the remaining ISA drivers that use this from getting built.
->
-> The remaining definitions in asm/dma.h are used for PCI support.
->
-> Link: https://lore.kernel.org/lkml/9e5ee1c3-ca80-f343-a1f5-66f3dd1c0727@linux-m68k.org/
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
-> Acked-by: Greg Ungerer <gerg@linux-m68k.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hello:
 
-Nevermind, this is the same as before, I forgot the 'git add' for the trivial
-Makefile change.
+This patch was applied to chrome-platform/linux.git (for-next)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-       Arnd
+On Fri, 18 Mar 2022 09:54:22 -0700 you wrote:
+> Commit 413dda8f2c6f ("platform/chrome: cros_ec_chardev: Use
+> cros_ec_cmd_xfer_status helper") inadvertendly changed the userspace ABI.
+> Previously, cros_ec ioctls would only report errors if the EC communication
+> failed, and otherwise return success and the result of the EC
+> communication. An EC command execution failure was reported in the EC
+> response field. The above mentioned commit changed this behavior, and the
+> ioctl itself would fail. This breaks userspace commands trying to analyze
+> the EC command execution error since the actual EC command response is no
+> longer reported to userspace.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] platform/chrome: Re-introduce cros_ec_cmd_xfer and use it for ioctls
+    https://git.kernel.org/chrome-platform/c/57b888ca2541
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

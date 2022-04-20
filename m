@@ -2,79 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF5250875D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FAE6508760
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378250AbiDTLxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 07:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S1378270AbiDTLxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 07:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234463AbiDTLxO (ORCPT
+        with ESMTP id S1352702AbiDTLxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 07:53:14 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D442511A1B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 04:50:28 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b58ed329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58ed:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 897111EC04EC;
-        Wed, 20 Apr 2022 13:50:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1650455427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=QcJGoUKK849qjQfP32KT/DB395vjWIaLjTRFtrLgTuM=;
-        b=jaMNswgxDqnjPA7/EwDWeH05ltD+uM/+vnRG3VTzzayBMBM1VsdbYJUCNOkVqcZ1Fqn4Hk
-        Ymzh2wmsJTuf6VNHzuOUuMLyVbn5qvCq05aDgX61YeH965OHoNvhuVG/yh+3VPyDPDFAKm
-        eSjbZoOanroDJDmBtcOSrl61Ay7o7pg=
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/tdx: Annotate a noreturn function
-Date:   Wed, 20 Apr 2022 13:50:25 +0200
-Message-Id: <20220420115025.5448-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+        Wed, 20 Apr 2022 07:53:40 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9CE1208A;
+        Wed, 20 Apr 2022 04:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=e//dGrepWn7jS9BGgfc47xqnbF5iiCNsWca8XJ9Scbo=; b=p9kNFmSNauYxhJ9ue+3HRA2/Sp
+        XglgEYEv2K81hgCmNw9FzjRwLCmmriyByATQynMDLwxN+oHlUqiXOXMcgYRBCVLWJ+52fE76Tinhx
+        VnNeWeM5BWo8VVwgnqLuV/jHvvLrRr5ZW0/FUCPNO+HNQ8W0qwlHW6+4plkO8+kEDJXWitJTf21q9
+        7IyYANdI1o0TwCKpmOY1HKx6kMjnt+H46NWFfPoi0m5UhbgF+UJ9SgeBNw56vkSxMbkBahKnZevRC
+        Yt5sl7cnLOOOWpY7CrGjPyogibKPnS17AafKmelx0F6mMt+06bSNNSWhEfVZzEcNCXsZgO1p0bgBQ
+        DFSXN5JQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nh8r4-0076rr-JF; Wed, 20 Apr 2022 11:50:42 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AFF899861A4; Wed, 20 Apr 2022 13:50:40 +0200 (CEST)
+Date:   Wed, 20 Apr 2022 13:50:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] signal: Deliver SIGTRAP on perf event asynchronously if
+ blocked
+Message-ID: <20220420115040.GE2731@worktop.programming.kicks-ass.net>
+References: <20220404111204.935357-1-elver@google.com>
+ <CACT4Y+YiDhmKokuqD3dhtj67HxZpTumiQvvRp35X-sR735qjqQ@mail.gmail.com>
+ <CANpmjNPQ9DWzPRx4QWDnZatKGU96xLhb2qN-wgbD84zyZ6_Mig@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNPQ9DWzPRx4QWDnZatKGU96xLhb2qN-wgbD84zyZ6_Mig@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On Tue, Apr 12, 2022 at 01:00:00PM +0200, Marco Elver wrote:
 
-objdump complains:
+> Should there be any further comments, please shout.
 
-  vmlinux.o: warning: objtool: __tdx_hypercall()+0x74: unreachable instruction
-
-because __tdx_hypercall_failed() won't return but panic the guest.
-Annotate that that is ok and desired.
-
-Fixes: eb94f1b6a70a ("x86/tdx: Add __tdx_module_call() and __tdx_hypercall() helper functions")
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/coco/tdx/tdcall.S | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
-index 245888290bb6..eeb4511dc414 100644
---- a/arch/x86/coco/tdx/tdcall.S
-+++ b/arch/x86/coco/tdx/tdcall.S
-@@ -200,5 +200,6 @@ SYM_FUNC_START(__tdx_hypercall)
- .Lpanic:
- 	call __tdx_hypercall_failed
- 	/* __tdx_hypercall_failed never returns */
-+	REACHABLE
- 	jmp .Lpanic
- SYM_FUNC_END(__tdx_hypercall)
--- 
-2.35.1
+Barring objections, I'm going to queue this for perf/core.
 

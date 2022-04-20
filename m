@@ -2,128 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D247508B72
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE43508B6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379961AbiDTPDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
+        id S1379951AbiDTPDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379875AbiDTPCz (ORCPT
+        with ESMTP id S1379881AbiDTPC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:02:55 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1428110FC6;
-        Wed, 20 Apr 2022 08:00:07 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id x3so1382967wmj.5;
-        Wed, 20 Apr 2022 08:00:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=OxqISZ3PhyCe5pZOlEZIasOqnMsXsO76KKiBjnHunxA=;
-        b=lFQcgrWobsgpW7viU3ZTb9wdOFGUZDGqwSyg0cV7Kli9Azkgk7Cpjo1qsoJzvkwAoI
-         OAde/6iSG5xnggIrmJRXGXr0qAG2EDMbUPGxEvXLJz4KJu9jqH4WBYDbpyquK/JZ64bF
-         r5+Z532/g0SeC8v+uvJj230tK5OegzCd0pag9kU3Q0QRLnskAnksihWeFsAQjmFSTFb5
-         BZ6NV7HCgHb7Bw2OFCQ5YE/xXkXAE9rn9w4hRkfvalPy40nF12xAO2g5Za09Z91PdStH
-         krV6lG9NUkAZFHhP/Q4fqvrVvilDEq3uHlsRU4AJvMYQcXzO6S+V4iRuATH4jzffpgCz
-         R76g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=OxqISZ3PhyCe5pZOlEZIasOqnMsXsO76KKiBjnHunxA=;
-        b=ovBAlsWWWX2AFGYLe/8wRMG3qkYVl2tLRduEzVU/bQppeeK8F/aa95rwH258DUVUd4
-         fau081hE68l17XdbGjj+PdAz7I3qFIjkNvpQcppMbR9m4wIcypcVsqqRT/+c/ftPcC7g
-         kU6XY4tyzWGgDqx5hodJOkbTGcqQ/W7k3eKUN07PIZXA415TdYCaR6ciorojEbmBugNW
-         M3WY55KwaEAEJW+gWtg+i85IVQmOU/amxBtDYygWapYkpdyl7QzW1pwVOiRLNRwKLq7/
-         p40Rtz67DW7rVD2fJnc592To5y6zq5iBx2zY43QbObQ9iLvy2mKpXW05aaAyHqlJ/LGP
-         zscw==
-X-Gm-Message-State: AOAM532wZqo5n0/c4qOlHdayDW8YsnW4OclbaIa1FKrrCmlY5oizkpQP
-        7ujud1+77Mp8UPAVNmZGeCI=
-X-Google-Smtp-Source: ABdhPJwnr4sQBBSJEglycv2Tu5vNhaI8eNnAP0123HsG2diJW30WuE7yrKnypB1R6AEhTkpqKqV15g==
-X-Received: by 2002:a05:600c:4ed4:b0:392:90a5:b7e6 with SMTP id g20-20020a05600c4ed400b0039290a5b7e6mr4255941wmq.33.1650466805548;
-        Wed, 20 Apr 2022 08:00:05 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id e16-20020a05600c2dd000b0038ed449cbdbsm114678wmh.3.2022.04.20.08.00.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 08:00:04 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <4505b43d-5c33-4199-1259-6d4e8ebac1ec@redhat.com>
-Date:   Wed, 20 Apr 2022 17:00:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220402010903.727604-1-seanjc@google.com>
- <20220402010903.727604-2-seanjc@google.com>
- <112c2108-7548-f5bd-493d-19b944701f1b@maciej.szmigiero.name>
- <YkspIjFMwpMYWV05@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 1/8] KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
-In-Reply-To: <YkspIjFMwpMYWV05@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 11:02:56 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9877E11A20;
+        Wed, 20 Apr 2022 08:00:09 -0700 (PDT)
+Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23KETO8K024773;
+        Wed, 20 Apr 2022 14:59:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=SrJ1s9ybwVbdOOH7gaX0781T69f23uJScMgAQXx2D9s=;
+ b=mVF4jgUb+ooe5pMgvTeUB8D2IRz/uWHiglputfztkKAkwk6gsaEwG7oS6upmuSAJYrZC
+ mRfEWStqBrfn7UfCC1Hkk4ZwoJjL/NddIwX58nxUWasnE4DzlZFoKqqN7KtY7SFn6i7O
+ ZyyU49dZzCjy7/k13YU7u0/BiUb4cPgkjl2iHV+hr2+cz6yC4u8akKmVK2UnKZUn/yo7
+ XPQjmMzexasVeotZmsUxRgRaToSjYjK1zG8W+qodNuWZ+cYXHDMw1Gj5rTt4sehGTcct
+ 0UnZinGKVaYO6VVwAKA3PLjMwP60njxIfyEIE4otZ2EVXQ/2SBaooxc/hVVaU3P07gjR 2Q== 
+Received: from g9t5009.houston.hpe.com (g9t5009.houston.hpe.com [15.241.48.73])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fjkypr8t3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 14:59:15 +0000
+Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
+        by g9t5009.houston.hpe.com (Postfix) with ESMTP id F03E255;
+        Wed, 20 Apr 2022 14:59:13 +0000 (UTC)
+Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
+        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id 711514A;
+        Wed, 20 Apr 2022 14:59:12 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        gregkh@linuxfoundation.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, linux@armlinux.org.uk, arnd@arndb.de,
+        olof@lixom.net, joel@jms.id.au, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v4 00/11] ARM: Introduce HPE GXP Architecture
+Date:   Wed, 20 Apr 2022 10:01:14 -0500
+Message-Id: <20220420150114.47356-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-ORIG-GUID: HaEgkcqBFgiSzCPe6r6przRCKLH88dHH
+X-Proofpoint-GUID: HaEgkcqBFgiSzCPe6r6przRCKLH88dHH
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-20_04,2022-04-20_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ malwarescore=0 bulkscore=0 spamscore=0 clxscore=1011 adultscore=0
+ impostorscore=0 mlxlogscore=851 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204200089
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 19:21, Sean Christopherson wrote:
-> On Mon, Apr 04, 2022, Maciej S. Szmigiero wrote:
->>> @@ -1606,7 +1622,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
->>>    	nested_copy_vmcb_control_to_cache(svm, ctl);
->>>    	svm_switch_vmcb(svm, &svm->nested.vmcb02);
->>> -	nested_vmcb02_prepare_control(svm);
->>> +	nested_vmcb02_prepare_control(svm, save->rip);
->>
->> 					   ^
->> I guess this should be "svm->vmcb->save.rip", since
->> KVM_{GET,SET}_NESTED_STATE "save" field contains vmcb01 data,
->> not vmcb{0,1}2 (in contrast to the "control" field).
-> 
-> Argh, yes.  Is userspace required to set L2 guest state prior to KVM_SET_NESTED_STATE?
-> If not, this will result in garbage being loaded into vmcb02.
-> 
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-Let's just require X86_FEATURE_NRIPS, either in general or just to
-enable nested virtualiazation, i.e.:
+Changes since v3:
+ *Completely redid the dtsi file to represent architecture
+ *Reduced device tree size
+ *Rewrote the timer driver to start the watchdog driver due
+ to similar register region
+ *Made adjustments to timer
+ *Made adjustments to watchdog
+ *Changed gxp.yaml to hpe,gxp.yaml with changes
+ *Updated Maintainers to represent new file names
+ *Added hpe bindings to generic-ehci and generic-ohci
+ *Fixed clock architecture to be accurate
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index fc1725b7d05f..f8fc8a1b09f1 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4904,10 +4904,12 @@ static __init int svm_hardware_setup(void)
-  			goto err;
-  	}
-  
--	if (nrips) {
--		if (!boot_cpu_has(X86_FEATURE_NRIPS))
--			nrips = false;
--	}
-+	if (!boot_cpu_has(X86_FEATURE_NRIPS))
-+		nrips = false;
-+	if (nested & !nrips) {
-+		pr_warn("Next RIP Save not available, disabling nested virtualization\n");
-+		nested = false;
-+	}
-  
-  	enable_apicv = avic = avic && npt_enabled && (boot_cpu_has(X86_FEATURE_AVIC) || force_avic);
-  
+Changes since v2:
+ *Reduced size of changes, put them into patchset format
 
-If I looked it up correctly it was introduced around 2010-2011.
+Changes since v1:
+ *Fixed compiler warnings
 
-Paolo
+The GXP is the HPE BMC SoC that is used in the majority
+of HPE Generation 10 servers. Traditionally the asic will
+last multiple generations of server before being replaced.
+
+Info about SoC:
+
+ HPE GXP is the name of the HPE Soc. This SoC is used to implement
+ many BMC features at HPE. It supports ARMv7 architecture based on
+ the Cortex A9 core. It is capable of using an AXI bus to which
+ a memory controller is attached. It has multiple SPI interfaces
+ to connect boot flash and BIOS flash. It uses a 10/100/1000 MAC
+ for network connectivity. It has multiple i2c engines to drive
+ connectivity with a host infrastructure. The initial patches
+ enable the watchdog and timer enabling the host to be able to
+ boot. Based on feedback from the device tree gxp-timer now
+ creates a gxp-wdt child because of similar register region.
+
+Nick Hawkins (11):
+  arch: arm: mach-hpe: Introduce the HPE GXP architecture
+  arch: arm: configs: multi_v7_defconfig
+  drivers: wdt: Introduce HPE GXP SoC Watchdog
+  clocksource/drivers: Add HPE GXP timer
+  dt-bindings: timer: Add HPE GXP Timer Binding
+  dt-bindings: watchdog: Add HPE GXP Watchdog timer binding
+  dt-bindings: arm: Add HPE GXP Binding
+  dt-bindings: usb: generic-echi:  Add HPE GXP echi binding
+  dt-bindings: usb: generic-ochi:  Add HPE GXP ochi binding
+  arch: arm: boot: dts: Introduce HPE GXP Device tree
+  maintainers: Introduce HPE GXP Architecture
+
+ .../devicetree/bindings/arm/hpe,gxp.yaml      |  22 +++
+ .../bindings/timer/hpe,gxp-timer.yaml         |  49 +++++
+ .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
+ .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
+ .../bindings/watchdog/hpe,gxp-wdt.yaml        |  30 +++
+ MAINTAINERS                                   |  13 ++
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  13 ++
+ arch/arm/boot/dts/hpe-gxp.dtsi                | 128 ++++++++++++
+ arch/arm/configs/multi_v7_defconfig           |   3 +
+ arch/arm/mach-hpe/Kconfig                     |  17 ++
+ arch/arm/mach-hpe/Makefile                    |   1 +
+ arch/arm/mach-hpe/gxp.c                       |  16 ++
+ drivers/clocksource/Kconfig                   |   8 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-gxp.c               | 183 ++++++++++++++++++
+ drivers/watchdog/Kconfig                      |   8 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/gxp-wdt.c                    | 166 ++++++++++++++++
+ 21 files changed, 666 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/hpe,gxp.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
+ create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+ create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
+ create mode 100644 arch/arm/mach-hpe/Kconfig
+ create mode 100644 arch/arm/mach-hpe/Makefile
+ create mode 100644 arch/arm/mach-hpe/gxp.c
+ create mode 100644 drivers/clocksource/timer-gxp.c
+ create mode 100644 drivers/watchdog/gxp-wdt.c
+
+-- 
+2.17.1
+

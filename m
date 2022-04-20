@@ -2,81 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8CC50815D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A1F508167
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355703AbiDTGrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 02:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S1352987AbiDTGuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 02:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352533AbiDTGrt (ORCPT
+        with ESMTP id S1343934AbiDTGuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 02:47:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4377F2702;
-        Tue, 19 Apr 2022 23:45:04 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23K5NsRi027973;
-        Wed, 20 Apr 2022 06:45:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=Q/OoGAt84YUtee6RudtEDHYR8suIEFSOH24kMxzGjmI=;
- b=GAFsjJISaJyjPi+dbLXRTDxNt5+ntyRFkPyiaEGqalwFgFpZunYGfxOHLLFOduZwU1sE
- CDczYIL6zfuEk3+/h7NL35SJxey5UBWQb54lebwDCGw7RzqpM0oxv+4h58zNUTY46xse
- DWwRyMpPCBOW6BO/bd2z3WFLzHgKj1/lB8Lcfc/hZBCRPpodaLl5AutUiXVhveSPpDV0
- hrqCS+HrHN7TjUUZGM/E1D5TsShLnqTTERoVwoi0utWAC7/HpAlEJrbXV+RSwDMQIGoR
- BU1bzHsLt6ag1wofucNXhQFOeSMXTHrGEtlQDSXorx36X6g4qRe8YP15ayT33U0WthvJ ag== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7ctv3db-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 06:45:00 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23K6hBVD002772;
-        Wed, 20 Apr 2022 06:44:58 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ffne95s3v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 06:44:58 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23K6itMk50201000
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Apr 2022 06:44:55 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 10CE952051;
-        Wed, 20 Apr 2022 06:44:55 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id B96895204F;
-        Wed, 20 Apr 2022 06:44:54 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     <agordeev@linux.ibm.com>, <borntraeger@linux.ibm.com>,
-        <gor@linux.ibm.com>, <hca@linux.ibm.com>, <hoeppner@linux.ibm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-s390@vger.kernel.org>,
-        <sth@linux.ibm.com>
-Subject: Re: [PATCH V2] s390/dasd: Use kzalloc instead of kmalloc/memset
-References: <yt9dilr539wq.fsf@linux.ibm.com>
-        <1650348310-18553-1-git-send-email-baihaowen@meizu.com>
-Date:   Wed, 20 Apr 2022 08:44:54 +0200
-In-Reply-To: <1650348310-18553-1-git-send-email-baihaowen@meizu.com> (Haowen
-        Bai's message of "Tue, 19 Apr 2022 14:05:10 +0800")
-Message-ID: <yt9dy200xnh5.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Wed, 20 Apr 2022 02:50:09 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E7A6576
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:47:24 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id s18so1579422ejr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:47:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vAFJ5Jy7fcFeVcUMp2gfVGhJtgw8jdXee9hX3koFUP4=;
+        b=GVbK4VM0/4etSp27b5bmq7t/DzlSN93x9/8ZsVbOSRIrMgd8ENWgAs9lmj7YRIh/vk
+         LvDGnOpAgyPWnc3HYVXZuGrkkJD3YULNrP6Qjz/BNpRv/fwLr6Rl+mMLc3E8tNx+c4cb
+         lLyw4AJjzMkxykXu2lZ1ev0VbvcI5bAbjwUkkceMnva89oDw6RJxYBkyk6gEUcjnhaYn
+         VQ2JRAzsIyG66cxNGyetyzEPSUic7+LQbdZQDb+shhrxJj4Gsjjcly8XRZK3yW/Aj05z
+         vj1g99Fixbfcc863+p9Lvi/fhvzwLjgfVRxnYskXw5SbuSKln76cpuUtAFoRZ3dx/JJm
+         aqMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vAFJ5Jy7fcFeVcUMp2gfVGhJtgw8jdXee9hX3koFUP4=;
+        b=ZCQ74G9aXDEodGV3Avyp0WGXK3cB50tz1Im7sHYBKKAvt+9vuxtzewldOWKPebPUWB
+         IS6gN7Sff9D1LxQfE1A+pwqVnZ0i9bS7kOCniOMkamVQVrMMVCUaar1dMP0fOGJkkYJ1
+         cnIbx0YkoNE/qWyJVeLW2TV/YUUOAeJa4tHK+dfp2l+yXeI+WdaGy4VosqaHOGWpvEdY
+         eMQp6TG825FbYup9eDujFjcJRO+nX+TvCDuXQRKoe5yqaSfXZFPZ1ak2An3CJ3LkUFew
+         YVSCEQwYXx9Nsa/FjzEeKhlCv0w/7YB8yO7jVR38BnYfp97nY6MODr67/kTM46j6OBtY
+         /wyA==
+X-Gm-Message-State: AOAM530QNQn8dUExvoXknUEv57RLS2vKwb2Kr9qa8HDGf2p3/itF4Mhu
+        2BwByqd7iLKjIlFkL0JC0mn4vQ==
+X-Google-Smtp-Source: ABdhPJzxwUOONgHqHYaO73Ouj3/x4695MZhoOW7uiVUkaAN93uoh0N43FLOs0S6pvn5pcp3OL6IlyQ==
+X-Received: by 2002:a17:907:2d0c:b0:6f0:a56:1c63 with SMTP id gs12-20020a1709072d0c00b006f00a561c63mr517861ejc.72.1650437243094;
+        Tue, 19 Apr 2022 23:47:23 -0700 (PDT)
+Received: from [192.168.0.222] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id x24-20020a1709064bd800b006ef606fe5c1sm5185295ejv.43.2022.04.19.23.47.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 23:47:22 -0700 (PDT)
+Message-ID: <efc6d3ee-b060-b070-1471-af940428964a@linaro.org>
+Date:   Wed, 20 Apr 2022 08:47:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: imJ-wYaYsRrgwYw1_S3lcLJjrUhUSfkP
-X-Proofpoint-ORIG-GUID: imJ-wYaYsRrgwYw1_S3lcLJjrUhUSfkP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_08,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 phishscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 malwarescore=0 mlxlogscore=747 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204200039
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3] dt-bindings: arm: mediatek: topckgen: Convert to DT
+ schema
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Sam Shih <sam.shih@mediatek.com>, Stephen Boyd <sboyd@kernel.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220419180938.19397-1-y.oudjana@protonmail.com>
+ <20220419180938.19397-2-y.oudjana@protonmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220419180938.19397-2-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,41 +82,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Haowen Bai <baihaowen@meizu.com> writes:
+On 19/04/2022 20:09, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> Convert topckgen bindings to DT schema format. MT2701, MT7623 and
+> MT7629 device trees currently have the syscon compatible without
+> it being mentioned in the old DT bindings file which introduces
+> dtbs_check errors when converting to DT schema as-is, so
+> mediatek,mt2701-topckgen and mediatek,mt7629-topckgen are placed
+> in the last items list with the syscon compatible, and syscon is
+> added to the mediatek,mt7623-topckgen list.
+>
 
-> Use kzalloc rather than duplicating its implementation, which
-> makes code simple and easy to understand.
->
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
-> V1->V2: also remove the isglobal assigment above, so the whole else block
-> could go away
->
->  drivers/s390/block/dasd_eckd.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/s390/block/dasd_eckd.c b/drivers/s390/block/dasd_eckd.c
-> index 8410a25a65c1..6b70f9dfff02 100644
-> --- a/drivers/s390/block/dasd_eckd.c
-> +++ b/drivers/s390/block/dasd_eckd.c
-> @@ -1480,7 +1480,7 @@ static int dasd_eckd_pe_handler(struct dasd_device *device,
->  {
->  	struct pe_handler_work_data *data;
->  
-> -	data = kmalloc(sizeof(*data), GFP_ATOMIC | GFP_DMA);
-> +	data = kzalloc(sizeof(*data), GFP_ATOMIC | GFP_DMA);
->  	if (!data) {
->  		if (mutex_trylock(&dasd_pe_handler_mutex)) {
->  			data = pe_handler_worker;
-> @@ -1488,9 +1488,6 @@ static int dasd_eckd_pe_handler(struct dasd_device *device,
->  		} else {
->  			return -ENOMEM;
->  		}
-> -	} else {
-> -		memset(data, 0, sizeof(*data));
-> -		data->isglobal = 0;
->  	}
->  	INIT_WORK(&data->worker, do_pe_handler_work);
->  	dasd_get_device(device);
+Thank you for your patch. There is something to discuss/improve.
 
-Reviewed-by: Sven Schnelle <svens@linux.ibm.com>
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.yaml
+> new file mode 100644
+> index 000000000000..9ce9cf673cbc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,topckgen.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: MediaTek Top Clock Generator Controller
+> +
+> +maintainers:
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +
+> +description:
+> +  The Mediatek topckgen controller provides various clocks to the system.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+
+These are not a list, so skip items. Just enum. Rest looks good.
+
+> +          - enum:
+> +              - mediatek,mt6797-topckgen
+> +              - mediatek,mt7622-topckgen
+> +              - mediatek,mt8135-topckgen
+> +              - mediatek,mt8173-topckgen
+> +              - mediatek,mt8516-topckgen
+
+
+
+Best regards,
+Krzysztof

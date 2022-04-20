@@ -2,178 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E90508EC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E2F508EC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381292AbiDTRs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 13:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S1381297AbiDTRs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 13:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380246AbiDTRss (ORCPT
+        with ESMTP id S1381289AbiDTRsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 13:48:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7EC45AFD;
-        Wed, 20 Apr 2022 10:46:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13B86B81EB6;
-        Wed, 20 Apr 2022 17:46:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97AFEC385A4;
-        Wed, 20 Apr 2022 17:45:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650476758;
-        bh=0IQpL7Wg9Mq/y7A3UKLbFuWQ6Lpmm0AsHYlcuGIKTnQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hEaP/ZkMcPr/FLQVEXXLW8MN/yKztzZ2AiYNM2IuCxtEIh8aE8FNZ3D9GQWtp/fA5
-         TtPGbmrGpjXaEQj0HRw62q8BxcaSVulsv02HdrUX47CkSufe2JmP4puPGvcpiaDQwP
-         iMFChnjCgtnkZ2AGt8bfRw3xmml/dgWEwCZBtyAOGdGgFUi5IaUOVDcaSXI/IvXF3a
-         k6pru5d2tI/zkEtjYUUr8OlID89SP74vaiAa/NntqvUSEHEoPl0WlWacSMoDKR5Rmn
-         ukYkeuSrNQOulKMe49AKTTml9kUo6clqFab7LYnDX/AmShAKXwh50aNPa3zhWS91LD
-         0A1CuoZzkbMVA==
-Date:   Wed, 20 Apr 2022 10:45:58 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
-        david@fromorbit.com, hch@infradead.org, jane.chu@oracle.com,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v13 3/7] pagemap,pmem: Introduce ->memory_failure()
-Message-ID: <20220420174558.GW17025@magnolia>
-References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
- <20220419045045.1664996-4-ruansy.fnst@fujitsu.com>
-MIME-Version: 1.0
+        Wed, 20 Apr 2022 13:48:54 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060.outbound.protection.outlook.com [40.107.92.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA28345AF1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:46:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h6w+lSJxQJMoaPWWhCP/G4BsdRxroBUDP+qPZcygHjWpGHVTxKuoPgDTRlLfekyUpt4CsmkycBgYUdBF4Z8UIZXXf3o8JXX2GpCQsALn6P99XFfI/J2YbuybDWK57giRGhRkBUhYPUrvvv8loAyWftQvDqOJSlZpMxzZZOw8B46MIIvO1stXaFnj35J0y+VdKWEOZj5m9+ujbVsfvWK+/CQItL8OU1GTyPW62lYMrapWzhZ2H3GfD+ycfaE2JH1YgOiuIpHhOTJx853hYHn1Hovs1rN+wtl9jFlrmFCaE2WT9RFx8dq3NcUEMHEZ010gsYOpvx/5TE3ruHaLkDIU6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ip0VFHwyOvPu/3yyT7DgACY9/+QlOFfJ3d/RXKniolo=;
+ b=Xae66jsOVgosR8bF8FL34ixJqORfe8PCNsAJGQrU3bZ0KAJyZ2fEIcL6BT9cZ6Orq59DqzoAp/X/zdeuc8wpuL6ar5pohncpXDdMiPoYDMR5eIYaF1jm7MwVwaQhizwsK+JYznRums6K7WOLDV1BPC/cGCAEjJPQnvPuAS4nSr8q+sPDwcrne4ikzLMq+De9S6dOk/54Z6iCFo3DB0B1jiLskQl3CJdV8zLHKgLa6FMTGbixh4wexX5oymJqDUUTXVHBs66IDE3X5cmd4iRocD6w6bIztbvY43eEp648wZCuGqeXfR/I7zL1oAIhEj5SwG60ipzB4XJvpo/irjAsfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ip0VFHwyOvPu/3yyT7DgACY9/+QlOFfJ3d/RXKniolo=;
+ b=CDjGaXGyVv41SKmTZNotDVuP3OT39yG/mJcpWwjFJgVXPCMEANnB/b0EpTVJYpGSM7fS2fIaRSLIszZY/07e9HMdRghFspLPVvyBXD0OQu1A46doBsJ6k8bJzTIyNbMNpK9c1bvsrAMOo72xEiu4cN6PAdc148bbCQL1KOq/Dw3Cs00++S5UqyplGaVnVXZReKzmIzc1m5+/dv+sQeFr1ooCEZPF/ayXpKBcNt6BwSsk89i4BfGh1y4IJbvqpT8fzlXvJK4nCX64vzaNCOMnyPIgBuzry6fSu6Y7SzP9spfJPQrqdNT11fmdnLbs1N5MCG4K+tqL7eBss7Dl5DdQNA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by SN1PR12MB2525.namprd12.prod.outlook.com (2603:10b6:802:29::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Wed, 20 Apr
+ 2022 17:46:01 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%6]) with mapi id 15.20.5186.014; Wed, 20 Apr 2022
+ 17:46:01 +0000
+Date:   Wed, 20 Apr 2022 14:46:00 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>
+Subject: Re: [PULL v2] gvt-next
+Message-ID: <20220420174600.GD2120790@nvidia.com>
+References: <5a8b9f48-2c32-8177-1c18-e3bd7bfde558@intel.com>
+ <20220420164351.GC2120790@nvidia.com>
+ <20220420114033.7f8b57c7.alex.williamson@redhat.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419045045.1664996-4-ruansy.fnst@fujitsu.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220420114033.7f8b57c7.alex.williamson@redhat.com>
+X-ClientProxiedBy: BL1PR13CA0320.namprd13.prod.outlook.com
+ (2603:10b6:208:2c1::25) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7860aaa8-89cf-405d-e6fd-08da22f5a28c
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2525:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR12MB2525EC075E41E20A44DBBD93C2F59@SN1PR12MB2525.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5tjYM7DY24uymuQLYnneDQ9t1KFk1GWrVDiMnYsfI/Kgp7BQErIZzFlyjF0whGiX1+7zW7MjCH3akeMuM/bSOvktwoHg780Q6I+njKJCZKLgC0thQYmo+w7a8dglPFdzwIvlBfWbsQH78T14NHFYduIVTdsF1E+Baul3Kj/5BP0oMJMuJNX21kQOb8n/pTU93I4PPOnxtjRy2kZiUCRoU9sog/dXQwrz0CodPVNkQc79YqHoSKTu0SXlluBbLHvT0mOZ9CzUzHxmbv4141pQJ0UQ8zjgfLwivONd5cw1QQuyzT9LeATuInH5uvtZX2K74HC+bw0+9uNBkccBEZmiJNVXYj6/mV/5GmYwDkh/StWBNodds0ymG1xXA14VfH34hL8OgBX7LnvemUdGAvQVSoWHuwzbv1pMqbFebbEMuR1KIGpL2uoltQPisIESeyLWYDVKNNRBrynkLunThc2s37p+tDgZ1gC+WnO214SDWA6B2F1yAPo770Cgj9rUHRE0OdXOwNIz2d8X7eMwE7QRMBiP1KnBD3GIYbKCYoLfuPrJdJEX1k5mhZyFuv0UPW1FDHc/5QMMIVzzA6HIxiUQA97IY1kAzfUV5dXu7ENKnIiyLbigGkGEg1Y+wj0RHn1tn5dIcWm3LnkM+0KnYDJTuXp8sNR2eDZ4WAbWDxlrqAB4FXwi3B4wowqSbUgv5+MHQC/TiC4jDzjYLxhb28aviRFt4HKRZ7QFzmOQ4ZLPwZo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7416002)(8676002)(6512007)(6916009)(26005)(8936002)(38100700002)(33656002)(54906003)(508600001)(66556008)(86362001)(1076003)(4326008)(316002)(966005)(6506007)(66946007)(2616005)(5660300002)(66476007)(83380400001)(6486002)(2906002)(36756003)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lPiQ07UKjRslpSpOmJ5k/ZaKCTF2KOkHzAUqvWuw8PG8nIzQsFwlEg3LLCvs?=
+ =?us-ascii?Q?jQztxu3Je/jcBcgcZj11h37He8Z4fwNn/zOG/Pm8tuuEdxL+Io0h5LZrk24R?=
+ =?us-ascii?Q?iVP11M8IIlSo0HLPWoL6IWKc8P3FeasYFOTGr6qyDYvzPslDktcCtAriKSVF?=
+ =?us-ascii?Q?E+DDGY5crEJtkrMmvIL2ItqPnyLlH/dg8lY9c/MsofER5j5QWcz4AzHm/Ns6?=
+ =?us-ascii?Q?qF/Ly2aLNkdnTV3jRosVBMiBKiwhEn9KfzREGmGw3sb9mu8Xfe3JO2kBI/4C?=
+ =?us-ascii?Q?74nR/cwefVsIOZ+P6h45b5X3v3uWcrJOnZmeVrppo9jORvox/xBjZRNeIW3D?=
+ =?us-ascii?Q?kH2yK1IQeItCAR4r5KIT37BmI91Y/tF4FiG5RqQXMd+2QK5gi0HzfTCWEXYP?=
+ =?us-ascii?Q?oAaS599+hzdEiO3DbxYg0OPkgVvRMnuPJDKezMcnXitl5T+MZnObsKK//uTN?=
+ =?us-ascii?Q?bIhWy//nWjR/aWzsCD3LdDObtsN+GqdWaTLq3mmSamPqyRFyNqHSwhw9Amul?=
+ =?us-ascii?Q?YgA7Lc/G1RHsUrnITNIBr0I6EQx/kzqSNxH/L1rC3OTpn0Jh0dzAgz7/p8lU?=
+ =?us-ascii?Q?Rj6gCQsSfj1osJUCWDbpeve9C6HtzTHI3+hQ0TtDpUIDZNkJT/SPAkfRm4Tb?=
+ =?us-ascii?Q?hPnvdpSjEWNJgFojaP5FpT7rKbUwH2OQPOxfYpc+t3aC79sJvidGVaihqQOk?=
+ =?us-ascii?Q?ojtbLsDdSln9xnavkw125PrIqo97sZfSHbE3uW2IeY91SMhCg2Ho1OvKuJ4+?=
+ =?us-ascii?Q?CNdo/cwcKuScSIlp8C6t6vJIF96B4njpQGS00+YdKYZxUHuckDPW58DewIO5?=
+ =?us-ascii?Q?oAcHsD1ReG+YvJ+i6m7Qpf6dauS+V0JlNrPJ1ymjC4Eb/WkPGHGLa1jGDr0D?=
+ =?us-ascii?Q?wsrLpVtGl2N/v+WqFsyCoHBxsej+CstC2rxnow7U/H37N5oe6ofQhQFTZfvC?=
+ =?us-ascii?Q?liKiR8ooFxrGDO4N5MC5J9R0L01yrQYLYas2xhDl5LB4ItYEuP6XzPnNY8SD?=
+ =?us-ascii?Q?txJAFE/Ib5kSkwAQzDguciVFuRuwlaHyfOAus4BJF/va56TLNBvbHFP9iP7o?=
+ =?us-ascii?Q?H2nQ/EV0xLGvmEj0gjTwBLFx54lQT60xC/+xEGuKXp/Y86O5RPJju7FIBLDP?=
+ =?us-ascii?Q?6Z54BFa207oHrySJHWMiK6/b03eUTXUDIVZICI49+O1QC5G69a//Qpjg2RZW?=
+ =?us-ascii?Q?RuKptKua8ImdcjKCOahZejQ1X0z7E6RHL85PrdHCVXpECFn/h4Hc7bdsbr4R?=
+ =?us-ascii?Q?XeU0WNupF47n+En1EpSr+n9n/TO2PYBa/Vwyd1O563XVZZr67pCtX5TDQrkV?=
+ =?us-ascii?Q?ocPy9g6actZ/DKsA23jQTy0I3BhOSScu2GUi8kozZDBfHXvPgEe2BnrqpRqy?=
+ =?us-ascii?Q?tR27GVTw8+5pda2CjCnkZYNnyCXeePwcxzhSzIFvmJjIZoGgcZwEwvXK2yzB?=
+ =?us-ascii?Q?g9EylkFd7VOcEAIPTmKWkJCdXTlm9vYMJe+IlaM/lL1Ug0SpnFBAhUxulOvU?=
+ =?us-ascii?Q?gcp6+5qJfgiCSFpWUccmOpkgDOKqgz5CFsZC4s0UwwjHNooS4vYfPWUd+GFf?=
+ =?us-ascii?Q?7Yz8/Wh0/D8wIKvEomsgzyfdNjZCHM858vPk0G6KBHLQ/tk06rx5EDENscUz?=
+ =?us-ascii?Q?XpOHiO8WvMNQEtTSl4TnUEw8EqCWHTieGYucXWTeUX0lhE3T2meVTaKh35PA?=
+ =?us-ascii?Q?e69yAwBREf4DQ/1C/7co9ts7A8nGhEAZ0/b7mlsWFNO2NvQYzH38P8K3g8ls?=
+ =?us-ascii?Q?0IoN+Ln29A=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7860aaa8-89cf-405d-e6fd-08da22f5a28c
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 17:46:01.6758
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4jv+dlW099O9JE+0OsUKYqDJWzul8GfNalLh/CeBnvxEVpkth9wo+0PmYmIQl3xw
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2525
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 12:50:41PM +0800, Shiyang Ruan wrote:
-> When memory-failure occurs, we call this function which is implemented
-> by each kind of devices.  For the fsdax case, pmem device driver
-> implements it.  Pmem device driver will find out the filesystem in which
-> the corrupted page located in.
+On Wed, Apr 20, 2022 at 11:40:33AM -0600, Alex Williamson wrote:
+> On Wed, 20 Apr 2022 13:43:51 -0300
+> Jason Gunthorpe <jgg@nvidia.com> wrote:
 > 
-> With dax_holder notify support, we are able to notify the memory failure
-> from pmem driver to upper layers.  If there is something not support in
-> the notify routine, memory_failure will fall back to the generic hanlder.
+> > On Wed, Apr 20, 2022 at 04:34:47PM +0000, Wang, Zhi A wrote:
+> > > Hi folks:
+> > > 
+> > > Here is the PR of gvt-next. Thanks so much for the patience.
+> > > 
+> > > Mostly it includes the patch bundle of GVT-g re-factor patches for adapting the GVT-g with the
+> > > new MDEV interfaces:
+> > > 
+> > > - Separating the MMIO table from GVT-g. (Zhi)
+> > > - GVT-g re-factor. (Christoph)
+> > > - GVT-g mdev API cleanup. (Jason)
+> > > - GVT-g trace/makefile cleanup. (Jani)
+> > > 
+> > > Thanks so much for making this happen.
+> > > 
+> > > This PR has been tested as following and no problem shows up:
+> > > 
+> > > $dim update-branches
+> > > $dim apply-pull drm-intel-next < this_email.eml
+> > > 
+> > > The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> > > 
+> > >   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> > > 
+> > > are available in the Git repository at:
+> > > 
+> > >   https://github.com/intel/gvt-linux tags/gvt-next-2022-04-20-for-christoph
+> > > 
+> > > for you to fetch changes up to ae7875879b7c838bffb42ed6db4658e5c504032e:
+> > > 
+> > >   vfio/mdev: Remove mdev drvdata (2022-04-20 03:15:58 -0400)  
+> > 
+> > This looks well constructed now! thanks
+> > 
+> > Alex you can pull this for VFIO after Jani&co grab it
+> > 
+> > I'll respin my vfio_group series on top of this branch
 > 
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Sure, so just to confirm tags/gvt-next-2022-04-20-for-christoph is
+> pruned down to exactly the commits we're looking for now?  Thanks,
 
-Looks good to me now that we've ironed out the earlier unit questions,
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Yes, the above is correct and the tag points to commit
+ae7875879b7c838bffb42ed6db4658e5c504032e
 
---D
+It is the bare minimum series
 
-> ---
->  drivers/nvdimm/pmem.c    | 17 +++++++++++++++++
->  include/linux/memremap.h | 12 ++++++++++++
->  mm/memory-failure.c      | 14 ++++++++++++++
->  3 files changed, 43 insertions(+)
-> 
-> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-> index 58d95242a836..bd502957cfdf 100644
-> --- a/drivers/nvdimm/pmem.c
-> +++ b/drivers/nvdimm/pmem.c
-> @@ -366,6 +366,21 @@ static void pmem_release_disk(void *__pmem)
->  	blk_cleanup_disk(pmem->disk);
->  }
->  
-> +static int pmem_pagemap_memory_failure(struct dev_pagemap *pgmap,
-> +		unsigned long pfn, unsigned long nr_pages, int mf_flags)
-> +{
-> +	struct pmem_device *pmem =
-> +			container_of(pgmap, struct pmem_device, pgmap);
-> +	u64 offset = PFN_PHYS(pfn) - pmem->phys_addr - pmem->data_offset;
-> +	u64 len = nr_pages << PAGE_SHIFT;
-> +
-> +	return dax_holder_notify_failure(pmem->dax_dev, offset, len, mf_flags);
-> +}
-> +
-> +static const struct dev_pagemap_ops fsdax_pagemap_ops = {
-> +	.memory_failure		= pmem_pagemap_memory_failure,
-> +};
-> +
->  static int pmem_attach_disk(struct device *dev,
->  		struct nd_namespace_common *ndns)
->  {
-> @@ -427,6 +442,7 @@ static int pmem_attach_disk(struct device *dev,
->  	pmem->pfn_flags = PFN_DEV;
->  	if (is_nd_pfn(dev)) {
->  		pmem->pgmap.type = MEMORY_DEVICE_FS_DAX;
-> +		pmem->pgmap.ops = &fsdax_pagemap_ops;
->  		addr = devm_memremap_pages(dev, &pmem->pgmap);
->  		pfn_sb = nd_pfn->pfn_sb;
->  		pmem->data_offset = le64_to_cpu(pfn_sb->dataoff);
-> @@ -440,6 +456,7 @@ static int pmem_attach_disk(struct device *dev,
->  		pmem->pgmap.range.end = res->end;
->  		pmem->pgmap.nr_range = 1;
->  		pmem->pgmap.type = MEMORY_DEVICE_FS_DAX;
-> +		pmem->pgmap.ops = &fsdax_pagemap_ops;
->  		addr = devm_memremap_pages(dev, &pmem->pgmap);
->  		pmem->pfn_flags |= PFN_MAP;
->  		bb_range = pmem->pgmap.range;
-> diff --git a/include/linux/memremap.h b/include/linux/memremap.h
-> index ad6062d736cd..bcfb6bf4ce5a 100644
-> --- a/include/linux/memremap.h
-> +++ b/include/linux/memremap.h
-> @@ -79,6 +79,18 @@ struct dev_pagemap_ops {
->  	 * the page back to a CPU accessible page.
->  	 */
->  	vm_fault_t (*migrate_to_ram)(struct vm_fault *vmf);
-> +
-> +	/*
-> +	 * Handle the memory failure happens on a range of pfns.  Notify the
-> +	 * processes who are using these pfns, and try to recover the data on
-> +	 * them if necessary.  The mf_flags is finally passed to the recover
-> +	 * function through the whole notify routine.
-> +	 *
-> +	 * When this is not implemented, or it returns -EOPNOTSUPP, the caller
-> +	 * will fall back to a common handler called mf_generic_kill_procs().
-> +	 */
-> +	int (*memory_failure)(struct dev_pagemap *pgmap, unsigned long pfn,
-> +			      unsigned long nr_pages, int mf_flags);
->  };
->  
->  #define PGMAP_ALTMAP_VALID	(1 << 0)
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 7c8c047bfdc8..a40e79e634a4 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1741,6 +1741,20 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
->  	if (!pgmap_pfn_valid(pgmap, pfn))
->  		goto out;
->  
-> +	/*
-> +	 * Call driver's implementation to handle the memory failure, otherwise
-> +	 * fall back to generic handler.
-> +	 */
-> +	if (pgmap->ops->memory_failure) {
-> +		rc = pgmap->ops->memory_failure(pgmap, pfn, 1, flags);
-> +		/*
-> +		 * Fall back to generic handler too if operation is not
-> +		 * supported inside the driver/device/filesystem.
-> +		 */
-> +		if (rc != -EOPNOTSUPP)
-> +			goto out;
-> +	}
-> +
->  	rc = mf_generic_kill_procs(pfn, flags, pgmap);
->  out:
->  	/* drop pgmap ref acquired in caller */
-> -- 
-> 2.35.1
-> 
-> 
-> 
+Thanks,
+Jason

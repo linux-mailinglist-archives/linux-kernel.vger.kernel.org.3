@@ -2,120 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4CD508680
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81578508686
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377827AbiDTLCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 07:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
+        id S1377859AbiDTLGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 07:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351910AbiDTLCz (ORCPT
+        with ESMTP id S1351910AbiDTLGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 07:02:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E37C1C91C
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 04:00:09 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id DC3E21F74E;
-        Wed, 20 Apr 2022 11:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650452407; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eers+BWbGc+1iHyvVXcqWTntrGa8/fIk6MV3Gi4a3aA=;
-        b=V0bDgUE2UNQ92tNHVJmhOnooRsRtw1Exrf59ACs0jRyUznidnlHJyICFCqBzZXwPHmXSx0
-        fMkY62Ojyz1kNR2qRMbSXgsiCOJ0cpNDdOl5b4L1WONp1bdANxpzA53pRRGD/h+3HfO5HU
-        ybDJs/10o9JYyJ0WLXl0qm8jWnmewKU=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8A8EC2C141;
-        Wed, 20 Apr 2022 11:00:07 +0000 (UTC)
-Date:   Wed, 20 Apr 2022 13:00:03 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Maninder Singh <maninder1.s@samsung.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>
-Cc:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "wedsonaf@google.com" <wedsonaf@google.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "gary@garyguo.net" <gary@garyguo.net>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Vaneet Narang <v.narang@samsung.com>,
-        Onkarnath <onkarnath.1@samsung.com>
-Subject: Re: [PATCH 1/1] kallsyms: add kallsyms_show_value definition in all
- cases
-Message-ID: <Yl/ns04PGU8ahIKJ@alley>
-References: <YlaWxh5qYCe40US7@alley>
- <20220413055305.1768223-1-maninder1.s@samsung.com>
- <CGME20220413055318epcas5p3df3cdde54a559d4002a74de9f23289f2@epcms5p5>
- <747830777.1512786.1650256482294@mail-kr5-3>
+        Wed, 20 Apr 2022 07:06:31 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2087.outbound.protection.outlook.com [40.107.237.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC675403DE;
+        Wed, 20 Apr 2022 04:03:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nYrGNNjp61RXT7zFXgIFWYzhkTwVidbvzHjf1Qhrs7/20LGlnDSe3f/HYB+3FQRgNVH6nNwO7ur7Sfy83xo5Nbxf36mbvCdz1uvMegO18SbKnADSh7yFNIeFEQyZOAJTSXo5LBb2vbNJCWCOKJubSS0EH/zR7xiwDPy9DBgBSZFVYIYo5iwyCOj2wyVXwAEpY1mxuRyFncXBiyzeNP8cu5NnqRtX9g7rx3CCt8L4cQdaSV8VLNfncLCQJnGMD1moObzOC+Vs4IDfiYdA73FoYoNKKsxiY4fvlpHDIuodJN3ZXzwvVC+PlI0HxP0QNOyUIO6glb7lXvRW8sr3u0CeBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J7P3N2D2y6pxTWuOwDVKWtOLwnFsKpUx3dMhbWWNcJ4=;
+ b=ZtdoGGHXLZZc82BAO5Mjqy0L1dHZxKpYRxjCiGct74WkAPuNWvxBWXVexMyzqrFV2sOIO6zoTD26XH0j0NCa7iQKNVkqnwvUxxgezHv8iAwOQgRQqzRSmDFEGJcZwrEp7FDQY7ci48EWSHxcXEmxVZoAdjb04v/MfzTfzOvGvqudv49SmrUNGmFZEIOquo4Jy2MFdzTQ9poz6ByYAF1pfcrk2IWUK88gbkfMQR/B7tv8oRSWFTMWo5qhLuyAve/B9lRSfnzCLA0h5I1jJvs6jUWmvmGpRCHQOdOIHT+8B1STERfgP+HC1n7X/v/eqtEq5mWsHo1m098WKLjLvANn5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=davemloft.net smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=J7P3N2D2y6pxTWuOwDVKWtOLwnFsKpUx3dMhbWWNcJ4=;
+ b=bn6EiC86lH1bfZ2qsPAJQCnqPc2m6HJtAYMnQ62L+U/VI3hNWtBMG664rur7IwsPu4GlkTvisjSB1MB1xcGphmqZpP+6QoEZ88Zbq6fYwWCp5GdEUeGYz9N/qSI3p3Ksf82A+ESKt5qYy7YsofVau9f9scVw125UPTd4NPjG9vM=
+Received: from DM6PR01CA0013.prod.exchangelabs.com (2603:10b6:5:296::18) by
+ DM6PR02MB5243.namprd02.prod.outlook.com (2603:10b6:5:43::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.14; Wed, 20 Apr 2022 11:03:40 +0000
+Received: from DM3NAM02FT024.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:296:cafe::4e) by DM6PR01CA0013.outlook.office365.com
+ (2603:10b6:5:296::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13 via Frontend
+ Transport; Wed, 20 Apr 2022 11:03:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT024.mail.protection.outlook.com (10.13.5.128) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5186.14 via Frontend Transport; Wed, 20 Apr 2022 11:03:39 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 20 Apr 2022 04:03:38 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Wed, 20 Apr 2022 04:03:38 -0700
+Envelope-to: git@xilinx.com,
+ davem@davemloft.net,
+ krzk+dt@kernel.org,
+ kuba@kernel.org,
+ robh+dt@kernel.org,
+ claudiu.beznea@microchip.com,
+ nicolas.ferre@microchip.com,
+ pabeni@redhat.com,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org
+Received: from [172.23.63.71] (port=43966 helo=xhdvnc211.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <radhey.shyam.pandey@xilinx.com>)
+        id 1nh87W-00062E-1t; Wed, 20 Apr 2022 04:03:38 -0700
+Received: by xhdvnc211.xilinx.com (Postfix, from userid 13245)
+        id 47D80606CD; Wed, 20 Apr 2022 16:33:37 +0530 (IST)
+From:   Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <michals@xilinx.com>,
+        <harinik@xilinx.com>, <git@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Subject: [PATCH 0/2] net: macb: Make ZynqMP SGMII phy configuration optional
+Date:   Wed, 20 Apr 2022 16:33:08 +0530
+Message-ID: <1650452590-32948-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <747830777.1512786.1650256482294@mail-kr5-3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d8951018-de63-42b9-5b32-08da22bd6d13
+X-MS-TrafficTypeDiagnostic: DM6PR02MB5243:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR02MB5243A63DAC43A4E472962655C7F59@DM6PR02MB5243.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jVhLF8JPwIMgdg8pqeJvJPLbIBFa3VfirNpHMFejVC9PMMWLbcapwSfQ+GXigCrFHcY1sURLxa1euBsR9RfI3L1L+D9YaicQUtXUhsnZmKKj0p/DOAsFhCD4TCbZ/uspEDJGDUKSJxvApu67KnydMJNceSZw2OStBzO8EvFupKJviqw9OhB49pF+93Q6dOD5Wj1q58sN95oW55dyP+Sh0UcGX64EdMO9cM/Z4adul9LiYeKU90WO36ZPahMhTvQc9Q5DCZFl2dkBS4cfLGKEPNlfqHef62lviCvCrdjROKD0jA2aFsKVbeu5uXI80o9A1eCEOQsuQxPJ7D4ysTq/V2Qdz8YoSzETz+T1N9QUHLI+Fq0l+XUWVhHgI1rS857H/W1QVGJohDXBUO50FbhOn+KqkEFGFU83nNDCmkIXmGNUkCgYbXJSnWeWAsAReZBCtdqHNRyPJ9IgOXtYdLsGZ6Ek12aakL3ZgmBLLZFodfRU+xagm/1hIyMw3wRvrFlh+u1w8084WRxwk+4MHq4hQmaE1gpTj6aEi1le7yaJa5jzKmjKGoVEq1jbEYbynMAvQNGrwHrULOZwowgh3ytDPObJUDoFLWqX7rWX05SO3vFQBXBuH0Jxv3yWHND8ojv6H7tipMZXPDhh1jC1vXTMDLuIHMU8a7uUgAlJZ8PvMcXXLSTXXERXITKwe7J3QD0VotkcgzEIlBnKmWCZ7yu2Ag==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(26005)(356005)(36860700001)(4744005)(6666004)(2906002)(5660300002)(508600001)(7416002)(7636003)(83380400001)(8936002)(2616005)(107886003)(6266002)(40460700003)(186003)(426003)(336012)(47076005)(70586007)(70206006)(110136005)(36756003)(82310400005)(42186006)(54906003)(8676002)(316002)(4326008)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 11:03:39.9557
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8951018-de63-42b9-5b32-08da22bd6d13
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT024.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5243
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-04-18 10:04:42, Maninder Singh wrote:
-> > It is really weird that the function is declared in kallsyms.h
-> > and implemented in vsprintf.c.
-> >
-> 
-> Yes it does not look good.
-> Initially we thought to make it as static inline function in kallsyms.h only.
-> But as function is little big and it will increase code size, so we added
-> definition in vsprintf.c, because its alwyas compilable code and also it has
-> some wrapper APIs for kallsyms.
->  
-> But as you suggested to make a new file, it will be good.
-> 
-> > What about splitting kallsyms.c into two source files where one
-> > would be always compiled? It would be usable also for the
-> > spring function introduced by
-> > https://lore.kernel.org/r/20220323164742.2984281-1-maninder1.s@samsung.com
-> > 
-> > It might be something like kallsyms_full.c and/or kallsyms_tiny.c.
-> >
-> 
-> This patch is not taken by Luis yet in module-tetsing branch.
-> So what will be the best approach to make new version of this patch ?
-
-I am not sure about Luis' plans and if the patch applies on top of
-the current module.c split patchset (linux-next).
+This patchset drop phy-names property from MACB node and also make
+SGMII Phy configuration optional. The motivation for this change
+is to support traditional usescase in which first stage bootloader
+does PS-GT configuration, and should still be supported in macb 
+driver.
 
 
-> A) to make new file kallsyms_tiny.c and add only one definition in that file
-> and when above patch of spring functions is merged in next we can move definitions
-> to new file
->
-> or
-> 
-> B) we send patch to Luis's branch of module-testing with moving definition(of earlier patch)
-> to new file and current patch also.
+Radhey Shyam Pandey (2):
+  dt-bindings: net: cdns,macb: Drop phy-names property for ZynqMP SGMII
+    PHY
+  net: macb: In ZynqMP initialization make SGMII phy configuration
+    optional
 
-I wonder how many conflicts it might cause. The patchset splitting
-module.c actually does not touch kernel/kallsyms.c.
+ Documentation/devicetree/bindings/net/cdns,macb.yaml | 8 --------
+ drivers/net/ethernet/cadence/macb_main.c             | 2 +-
+ 2 files changed, 1 insertion(+), 9 deletions(-)
 
-Anyway, I would probably prepare it on top of linux-next.
+-- 
+2.7.4
 
-Best Regards,
-Petr

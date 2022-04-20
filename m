@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2D6509233
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65D2509234
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240006AbiDTVnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 17:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
+        id S1382603AbiDTVnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 17:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382586AbiDTVnp (ORCPT
+        with ESMTP id S1382595AbiDTVns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 17:43:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6794838DA7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:40:57 -0700 (PDT)
+        Wed, 20 Apr 2022 17:43:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7228138DA7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:41:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C928B821AD
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 21:40:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C055AC385A1;
-        Wed, 20 Apr 2022 21:40:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0402BB821AD
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 21:41:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D897C385A0;
+        Wed, 20 Apr 2022 21:40:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650490854;
-        bh=7QRfVrCEKqRJBhIOT39b+us9XDpvDmsvc9P5y3uEIgQ=;
+        s=k20201202; t=1650490858;
+        bh=6jaiM5EEkZokoyNt2f05Dgwu++Zj3+Z8+mfjrNupSEI=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Dw4PX0/QOfCA9Axml6+wtRwf0dWzIhjobeBWuNexSWb2iCB43+dVAzPmkLJzmQ9N9
-         2V+iDC2pfywqVMyhv607Obsj4sjZYJE9AeVyZIOMZ2R8ESmL+90w+kYqV8ZSvfs38l
-         uymh9PFzC/Kdtmg581d2skPwxUu8Ui8oLhLTsazTxRw3pNFIlCNmkGkno9Ite8YNJQ
-         QkjSVHofmBRP58Y/eEAoReOzW/fRBH/+2mxzqItUijuU68A5hOYyhYKlzpDOEPXVPp
-         ftoyuq9Ii2ZNJPOs0zo5lF2oITuiNPbXAh23tQNDVfZiF5v+3eHr7Yc9ElOOMecSgM
-         Xn35nEO9gdzmA==
+        b=OeUkZbODgwjPKvS1nHtnuZlnoQvT041gNVtxebkD7ofNZOZnQbM4vvhfET+1DfEHN
+         babP+yod5/7sLDCUDQTG9mgtqtoQKpC+/HlA+ytRbPnyUxKkbBdcThRzufTdk8tVfD
+         wvZFsJyZg9M8KM+yetLt6cZmYCpmNcoiu2k2vZhV+tTV9hfs3OOrSiNvgb3NNMsXCb
+         Gnf0k3QUIY0fOuHSEId6pO/pF55QR9R8B6bO+1pGr91U1lK18XrCBc2oZopUiOK8vS
+         Gd1Jt9WRIQ+COAmIrPZjzb5PzWuGmoui0SLUGgVa56wQLkOwZo+ZhH1m4alZI9NOsp
+         jvD7uOtrKWkxQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     rf@opensource.cirrus.com, ranjani.sridharan@linux.intel.com,
-        kai.vehmanen@linux.intel.com, peter.ujfalusi@linux.intel.com,
-        lgirdwood@gmail.com, pierre-louis.bossart@linux.intel.com
-Cc:     sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20220407153813.1231866-1-rf@opensource.cirrus.com>
-References: <20220407153813.1231866-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH] ASoC: SOF: Kconfig: Make SND_SOC_SOF_HDA_PROBES tristate
-Message-Id: <165049085249.138067.17008390714250645371.b4-ty@kernel.org>
-Date:   Wed, 20 Apr 2022 22:40:52 +0100
+To:     samuel@sholland.org, rf@opensource.cirrus.com,
+        Takashi Iwai <tiwai@suse.com>, robert.hancock@calian.com,
+        spujar@nvidia.com, olivier.moysan@foss.st.com,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Liam Girdwood <lgirdwood@gmail.com>, stephan@gerhold.net,
+        Jaroslav Kysela <perex@perex.cz>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220412111658.11015-1-olivier.moysan@foss.st.com>
+References: <20220412111658.11015-1-olivier.moysan@foss.st.com>
+Subject: Re: [PATCH] ASoC: simple-card-utils: fix sysclk shutdown
+Message-Id: <165049085609.138067.16736006063801162834.b4-ty@kernel.org>
+Date:   Wed, 20 Apr 2022 22:40:56 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,16 +57,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022 16:38:13 +0100, Richard Fitzgerald wrote:
-> SND_SOC_SOF_HDA_PROBES must be tristate because the code it builds
-> depends on code that is tristate.
+On Tue, 12 Apr 2022 13:16:58 +0200, Olivier Moysan wrote:
+> In asoc_simple_shutdown() the snd_soc_dai_set_sysclk() function
+> is called twice with input direction SND_SOC_CLOCK_IN.
+> Restore one call with output direction SND_SOC_CLOCK_OUT.
 > 
-> If SND_SOC_SOF_HDA_PROBES is bool it leads to the following build
-> inconsistency:
+> Fixes: 5ca2ab459817 ("ASoC: simple-card-utils: Add new system-clock-fixed flag")
 > 
-> SND_SOC_SOF_HDA_COMMON=m
->   which selects SND_SOC_SOF_HDA_PROBES
->     but since this is a bool SND_SOC_SOF_HDA_PROBES=y
 > 
 > [...]
 
@@ -74,8 +73,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: SOF: Kconfig: Make SND_SOC_SOF_HDA_PROBES tristate
-      commit: e18610eaa66a1849aaa00ca43d605fb1a6fed800
+[1/1] ASoC: simple-card-utils: fix sysclk shutdown
+      commit: 3756aa16fadaef2873cfbd2659dfa1978a7e1859
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

@@ -2,219 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04EC508935
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC542508949
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347982AbiDTN17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
+        id S1379056AbiDTN2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379033AbiDTN1s (ORCPT
+        with ESMTP id S1379021AbiDTN2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:27:48 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DC72ACA;
-        Wed, 20 Apr 2022 06:25:01 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-e656032735so650585fac.0;
-        Wed, 20 Apr 2022 06:25:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WRdWfSi+1sG2KdTR7O9gGMtklLx/TqYIp/Pa2T6eLoc=;
-        b=GDwpn5XZGJluUeTqroiCc62FSLIveUwlQfWyFQPEx/HMvx9HAGMCm+9mIsWStjai5U
-         tyMG5Ip7w79SdJM9cH88WSRVmwqxRxNn3PUGPTpARUA1U6gwPuZCyoJdfXT5W3O5V5ni
-         y4jHJDFFYCH6O4hU9STLapCftge+L8pruDz9HAVxnvK8ctTDv+yYNR7H/8loDFK3wg5H
-         ILgE/R2Ud+va+9Cn3xeCsstBgXBnfCL2qKIfbapc0eUHpVhUcAi+nANMZR7+49TcOy2C
-         Af2TWHOO8WM61ljNX7PU4s8mwriH5uXs6dj3S6pSFvK7HscsLf3JcmXwc6OJbq795+04
-         dh0A==
-X-Gm-Message-State: AOAM53087NTvusEclWKQIeoo8R1Jmp7Oazqye57mSKCcowGMKUSuGRPO
-        hL1i8esjwQHLi92Z65xVp2ZeVfOHaw==
-X-Google-Smtp-Source: ABdhPJwYthaBVW4OLOo5KMUT4jqoFd7LEF5hP00id1qgTvfJFswDcuqE5YofCT+RwIiybfHmHygosQ==
-X-Received: by 2002:a05:6870:339d:b0:e1:e7e9:dfb2 with SMTP id w29-20020a056870339d00b000e1e7e9dfb2mr1590921oae.67.1650461100728;
-        Wed, 20 Apr 2022 06:25:00 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q17-20020a9d7c91000000b0060542dc13d5sm4997869otn.68.2022.04.20.06.24.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 06:25:00 -0700 (PDT)
-Received: (nullmailer pid 1161723 invoked by uid 1000);
-        Wed, 20 Apr 2022 13:24:59 -0000
-Date:   Wed, 20 Apr 2022 08:24:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v2 3/8] dt-bindings: PCI: renesas-pci-usb: Allow multiple
- clocks
-Message-ID: <YmAJq+qUF34IvfiZ@robh.at.kernel.org>
-References: <20220414074011.500533-1-herve.codina@bootlin.com>
- <20220414074011.500533-4-herve.codina@bootlin.com>
- <CAMuHMdWZyuNQJhxkhzs5H8+8DFGDS95nvptrO-s9RC4QL5kibA@mail.gmail.com>
- <20220420150759.713fcd02@bootlin.com>
+        Wed, 20 Apr 2022 09:28:37 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412DC3A5D8;
+        Wed, 20 Apr 2022 06:25:51 -0700 (PDT)
+Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MMFdY-1nRI9D2Fs6-00JKba; Wed, 20 Apr 2022 15:25:49 +0200
+Received: by mail-wm1-f46.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso3707201wma.0;
+        Wed, 20 Apr 2022 06:25:49 -0700 (PDT)
+X-Gm-Message-State: AOAM533Ruzzhq3AJnT/ApE5/MdAhSW3ZXbnGtnby3NKLfiyYe6w5d3f+
+        57jVaS0GWfE6nujzi1m53KI5P/uSFE7Jda3XKrI=
+X-Google-Smtp-Source: ABdhPJwiG3EyuSNpaHqra2dahTK/JnvqbUz+C9/o2SqI7KlR071QCZmOW+DAbeiKB7yYo6yDeDE/gbVIPvIMFUY5Nvg=
+X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
+ s25-20020a1cf219000000b0038c782c03bbmr3668880wmc.94.1650461149002; Wed, 20
+ Apr 2022 06:25:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220420150759.713fcd02@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220420115512.175917-1-krzysztof.kozlowski@linaro.org>
+ <CAK8P3a0uH5KjaobrqUmJQnvMmjkUaR1iC-7jEPjZFjZF1Z-GfQ@mail.gmail.com> <0c0b53c3-294a-b1ac-487a-ca96266c4bb7@linaro.org>
+In-Reply-To: <0c0b53c3-294a-b1ac-487a-ca96266c4bb7@linaro.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 20 Apr 2022 15:25:32 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2uuFMVcsR9c+J28ZsA1cC9+FJCnFy5Lnq6uUY=nPoTEQ@mail.gmail.com>
+Message-ID: <CAK8P3a2uuFMVcsR9c+J28ZsA1cC9+FJCnFy5Lnq6uUY=nPoTEQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: samsung: fix missing GPIOLIB on ARM64 Exynos config
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        "# 3.4.x" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:kbYlLd+2VeG+VWzjp2K6Ui5Pwogjevu9don8FxO2FstBnYgOmnb
+ LOavINgChxrc7d/yNCNs3yYy+Z4YBCrOM4OU+St7NMVCZ22FTO65Rp5CSFdfeeJuZDZgTA+
+ wR8Yv/7zq9QQ+dYn4fdSgUu0r9J0U3Uga2wpngv3mw62rFq4AnWMrqofibanPF7LmBKuMDP
+ tyyddHoxnf2MhEeiTex6A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oOEJXlPpHLE=:0/LNQHR2Jtklkx+Q/alL+R
+ bTjXpgO+yhO5xs0fEl5t1X2v1CysRELdtgaQwna8vDG51FulKc/cMuZ6ME3zTF2hc2XCuC/gL
+ iPEMotvBDdQmQX8EV+II6I7qvmg7BjJgrX1rApPooRigWQaAWHCG+QQIjfpOU0044gCXD87WH
+ 2kkwyHVpSUfdJu5kg0oZANkeS31KLhQsxLDq3cowdxPnY1S0vgTR9P1MjNBcv+J0gktnD8w9T
+ ElkDgyey6/5pCPudRFsqoBAQQ60miirEliEmSI48ZGcxDuRQo24cibQwo4EW6LBcGxzRT05Ka
+ da/jM6oiXrIWOHjX/97w+XGs4pkiMKEs/19M9yuKlEi2YdNZY4PKShzblUNCkXvTNUqDWeOPl
+ RUSs9YiYx1KID8bx0NiDOn4vS90gQbnf0eU6SS3ppPP3YbF36rSECuatiYv2gZxc5/a8KxITf
+ shENMZuBk/242pATS8zcTXa01DmnBLL2mDucwl2OZfWwLsMwMeuTJoRYT2iJj9iq56gPbb/QH
+ K4pzegIECuI/dLXfcY95iwGNNBEuQz5PKkVYrQz1Ct5wh0SNmzMcOfKnI1Fp2HKB7v3iJopVR
+ v29NKvylAR3araV1BNou5bHtgixNg/dPJFRWsBF4pLTV5emsNck+y37wPPmI0npP1Hbr+pgy6
+ DRVHu69fYU+MhdIJplOmC+06L1RFktrLc1iwk6kDTqTUWfhBHbPft2FoK9MSfkzWW754=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 03:07:59PM +0200, Herve Codina wrote:
-> Hi Geert, Rob,
-> 
-> On Thu, 14 Apr 2022 10:35:07 +0200
-> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> 
-> > Hi Hervé,
-> > 
-> > On Thu, Apr 14, 2022 at 9:40 AM Herve Codina <herve.codina@bootlin.com> wrote:
-> > > Define that multiple clocks can be present at clocks property.
-> > >
-> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>  
-> > 
-> > Thanks for your patch!
-> > 
-> > > --- a/Documentation/devicetree/bindings/pci/renesas,pci-usb.yaml
-> > > +++ b/Documentation/devicetree/bindings/pci/renesas,pci-usb.yaml
-> > > @@ -54,7 +54,8 @@ properties:
-> > >        Standard property that helps to define the interrupt mapping.
-> > >
-> > >    clocks:
-> > > -    description: The reference to the device clock.
-> > > +    description:
-> > > +      The references to the device clocks (several clocks can be referenced).  
-> > 
-> > Please describe the clocks, and add the missing "clock-names" property.
-> > 
-> > >
-> > >    bus-range:
-> > >      description: |  
-> > 
-> > I think it would be better to combine this with [PATCH v2 4/8], as the
-> > additional clocks are only present on RZ/N1.
-> > 
-> > Then you can easily add json-schema logic to enforce the correct
-> > number of clocks, depending on the compatible value.
-> 
-> Sure.
-> 
-> Is there a way to have the clocks description depending on the compatible value.
-> I mean something like:
-> --- 8< ---
-> properties:
->   clocks:
->     maxItems: 1
+On Wed, Apr 20, 2022 at 2:13 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 20/04/2022 14:10, Arnd Bergmann wrote:
+> > On Wed, Apr 20, 2022 at 1:55 PM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> The Samsung pinctrl drivers depend on OF_GPIO, which is part of GPIOLIB.
+> >> ARMv7 Exynos platform selects GPIOLIB and Samsung pinctrl drivers. ARMv8
+> >> Exynos selects only the latter leading to possible wrong configuration
+> >> on ARMv8 build:
+> >>
+> >>   WARNING: unmet direct dependencies detected for PINCTRL_EXYNOS
+> >>     Depends on [n]: PINCTRL [=y] && OF_GPIO [=n] && (ARCH_EXYNOS [=y] || ARCH_S5PV210 || COMPILE_TEST [=y])
+> >>     Selected by [y]:
+> >>     - ARCH_EXYNOS [=y]
+> >>
+> >>  config PINCTRL_EXYNOS
+> >>         bool "Pinctrl common driver part for Samsung Exynos SoCs"
+> >> -       depends on OF_GPIO
+> >>         depends on ARCH_EXYNOS || ARCH_S5PV210 || COMPILE_TEST
+> >>         select PINCTRL_SAMSUNG
+> >>         select PINCTRL_EXYNOS_ARM if ARM && (ARCH_EXYNOS || ARCH_S5PV210)
+> >
+> >
+> > The problem here is that PINCTRL_EXYNOS and the others can be built for
+> > compile-testing without CONFIG_OF on non-arm machines.
+> >
+> > I think the correct dependency line would be
+> >
+> >       depends on ARCH_EXYNOS || ARCH_S5PV210 || (COMPILE_TEST && OF)
+> >
+> > which guarantees that OF_GPIO is also enabled.
+>
+> I don't think OF is the problem here, because the error is in missing
+> GPIOLIB.
 
-This would need to cover both cases:
+You are correct that the added dependency is not the solution for the
+original problem. What I meant is that by dropping the dependency on
+OF_GPIO, you create a new problem for compile-testing without
+CONFIG_OF. Adding back the OF dependency avoids the regression.
 
-minItems: 1
-maxItems: 3
+> The platform selects Samsung pinctrl but it does not select
+> GPIOLIB. Possible fixes are:
+> 1. Do not select Samsung pinctrl from the platform (but have some
+> default), so on compile test build it might not work.
+> 2. Select GPIOLIB from the platform (ARMv7 Exynos does it).
+> 3. Select GPIOLIB from here - this is current proposal.
 
-> 
-> if:
->   properties:
->     compatible:
->       contains:
->         enum:
->           - renesas,pci-r9a06g032
->           - renesas,pci-rzn1
-> 
-> then:
->   properties:
->     clocks:
->       items:
->         - description: Internal bus clock (AHB) for HOST
->         - description: Internal bus clock (AHB) Power Management
->         - description: PCI clock for USB subsystem
->       minItems: 3
->       maxItems: 3
+Agreed, either 2. or 3. is fine, as long as you keep the CONFIG_OF
+dependency.
 
-Don't need minItems or maxItems here. 3 is the default size based on 
-'items' length.
-
-> 
-> else:
->   properties:
->     items:
-
-I think you meant for this to be under 'clocks'.
-
->        - description: Device clock
->     clocks:
->       minItems: 1
->       maxItems: 1
-
-Just 'maxItems' is enough.
-
-> --- 8< ---
-> 
-> In fact, I would like to describe the 3 clocks only for the r9a06g032 SOC
-> and the rzn1 family and have an other description for the other 'compatible'.
-> 
-> I cannot succeed to do it.
-> 
-> The only thing I can do is to leave the description of the 3 clocks out of the
-> conditional part. This leads to :
-> 
-> --- 8< ---
-> properties:
->   clocks:
->     items:
->       - description: Internal bus clock (AHB) for HOST
->       - description: Internal bus clock (AHB) Power Management
->       - description: PCI clock for USB subsystem
->     minItems: 1
-> 
-> if:
->   properties:
->     compatible:
->       contains:
->         enum:
->           - renesas,pci-r9a06g032
->           - renesas,pci-rzn1
-> 
-> then:
->   properties:
->     clocks:
->       minItems: 3
->       maxItems: 3
-
-minItems is enough.
-
-> 
-> else:
->   properties:
->     clocks:
->       minItems: 1
->       maxItems: 1
-
-This doesn't seem right as the description of the first clock is wrong 
-for this case.
-
-I would go with the first way.
-
-Rob
+       Arnd

@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66CC508FBF
+	by mail.lfdr.de (Postfix) with ESMTP id F1C7A508FC0
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 20:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381602AbiDTSvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 14:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
+        id S1381606AbiDTSvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 14:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381581AbiDTSvA (ORCPT
+        with ESMTP id S1381589AbiDTSvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 14:51:00 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF86242EEC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:48:13 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso5699197pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:48:13 -0700 (PDT)
+        Wed, 20 Apr 2022 14:51:01 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EA542EEC
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:48:15 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id x191so2442764pgd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:48:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding:cc:from:to;
-        bh=SoH+rXIkHfn2tDchhhZbSJ+crMNxbZGozRfYvpl+XoE=;
-        b=juiLZLej55jZaTBjD9xwVIR/YAR4i7cO0bpHr89TY+dz1ORy2ejFFIdrCOQXcP2D8H
-         cIxDjtw4zoR/+O/+Cz7gJVkbmHNOFMtnczcO1N4hDW2YNoDdFy7kJvt4NocRNaWc0rrK
-         rDxA4wJWcdvspC6ywEgV5rv2Z03Jb9GhkEjoFsHw1t6EhYernuYtCEVUod4KD52lB5iP
-         s/aDAOti+/mtT0ZCn/3oAcvuMjjaJ6zzBso+eeSET7y8Nwo2WVkVUSMAt3YlM6JRpRZD
-         BvFtCMyG1ZheaQ4dagFcdUGWYCLZ3BHz7skwKmfSnGeYNrdPtlsudMgmLO3FdKIT+CFZ
-         SurQ==
+        bh=UGpQa9Z2U55MjYUDsvGvuFzYMVtZARYuOzPYtbUizPg=;
+        b=6rfdm/phCRlmO8Ct/g6arSMLvjyQ+UArCdCgU2d60t/F49+e8zW9hVbe0Hw+/6auz8
+         0smG66pG/9D7UcRw9gX9si6y6NvYkgsIezoJskMu1TuSK+aiSONGS9esu5svctCYwycs
+         zy/DbrDagPCD6MWiRgjfG/1SHvaO15wkNDoUpyA8uxDBpOIZNjhiiQIbshZmfbNLbAZ6
+         K0wOBieQ++3HSV2zjACVh9DwCHCYxumykHQ+9uX1l+MYsJ/d3koVe32FE4ThTDttjd4t
+         +cG0lApXd9/8MkrFy5CCYjjb/EMIcrfBtlvGGtw4/ZxtWBEMpGYveainQmNzAiPJLESC
+         ZT8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding:cc:from:to;
-        bh=SoH+rXIkHfn2tDchhhZbSJ+crMNxbZGozRfYvpl+XoE=;
-        b=Fs4eWquEjfxg5jvWXnqDaf+/UyLa3Za0r1fIiLNtf8edbvCCth053Lsm53zHHT41q1
-         UHqMwaSaij2E0p3fAgSs4I6q3B1KtnTMoqElxDq1ZksZsf+schTjX2+eHD21NOr1Nsyo
-         n6Xrgh5d3CUV8RZ26nhZYg5DayH3706patihgMLlvmGGQ1XnwMhPuD0VzSDs573RXoKU
-         MemJZ+m71qcd//9TfDrdUtnxJsLH/4bp9aw5EYYJoQaTR28aa7c069rp1z9jR0EPtMTs
-         jqr9dQtkbEyDTsowGqqsoOR8xo2teukHIB65hBy7soKu6LvSJbRJVS03m7Q0Qh6b9bp1
-         S2/w==
-X-Gm-Message-State: AOAM531fnw9DNbkIUijkefXlPySpGLHBelG+q7JlA/ngz9/gljQ7zOVi
-        uz6GWdUYngXrEs4ND+j2WVwg3w==
-X-Google-Smtp-Source: ABdhPJxdrixrp+jfH8hvzdp/Eg4oHxPBPiHlreQAn5N+O4widmijdWQO8V5yAwiXQNEjtkHlm2bdxQ==
-X-Received: by 2002:a17:90b:4acb:b0:1d1:efc:39bd with SMTP id mh11-20020a17090b4acb00b001d10efc39bdmr6085138pjb.49.1650480493464;
-        Wed, 20 Apr 2022 11:48:13 -0700 (PDT)
+        bh=UGpQa9Z2U55MjYUDsvGvuFzYMVtZARYuOzPYtbUizPg=;
+        b=ZgzDWpeo+5+BhcltL4bkwNxmYsEeKGt3HRoC995dUgd99h499LPu84yYr4NYJp2J2u
+         Kwc9Yv+6MHK88Hgmyx9khb2bHxBWdChqOBzAk1klPwnc+XLcJ/R/ovBjQNTp6Kk7zUz7
+         gomttVdiFNSHIiWEk5RVkwuM1zoV5VHSB0ti9ir+VTBvH4/tQRBJqNI6Tn5gpIip7JAF
+         uN/1SXHP+QDbmed1QR8sf8liCC/HftkBYg82LALPRgyOrd1O4dMKOqBevlHzFsL0Ur1E
+         o9v6dJtwb0xrwRuIfAvZBWX9WILHF2SjfzZNL85+5kzL2YMpn1CodYSU4TTOlXXvqb59
+         XWpQ==
+X-Gm-Message-State: AOAM530TnOuG9RU4ykTpwt4KizQT5FazXqpLg/0eF5yG/5MbBNLhJUD4
+        SQ9xYobowoY2B+OMtDN054q8Zg==
+X-Google-Smtp-Source: ABdhPJyQtvhwqEgVVnVRRdlklc0eCKG6jyhiAA/OuM6Vae1V/BWG9miXV/9kwjPjjDrjfrYbblnoIw==
+X-Received: by 2002:a63:e452:0:b0:3a9:fd43:fd10 with SMTP id i18-20020a63e452000000b003a9fd43fd10mr14420896pgk.541.1650480494575;
+        Wed, 20 Apr 2022 11:48:14 -0700 (PDT)
 Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id i11-20020a654d0b000000b0039d82c3e68csm20741715pgt.55.2022.04.20.11.48.13
+        by smtp.gmail.com with ESMTPSA id n20-20020a634d54000000b0039d18bf7864sm20229604pgl.20.2022.04.20.11.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 11:48:13 -0700 (PDT)
-Subject: [PATCH v2 2/4] RISC-V: ignore xipImage
-Date:   Wed, 20 Apr 2022 11:40:54 -0700
-Message-Id: <20220420184056.7886-3-palmer@rivosinc.com>
+        Wed, 20 Apr 2022 11:48:14 -0700 (PDT)
+Subject: [PATCH v2 3/4] RISC-V: Split out the XIP fixups into their own file
+Date:   Wed, 20 Apr 2022 11:40:55 -0700
+Message-Id: <20220420184056.7886-4-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220420184056.7886-1-palmer@rivosinc.com>
 References: <20220420184056.7886-1-palmer@rivosinc.com>
@@ -79,22 +79,119 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Palmer Dabbelt <palmer@rivosinc.com>
 
-This built file shows up in "git status" without an explicit ignore.
+This was broken by the original refactoring (as the XIP definitions
+depend on <asm/pgtable.h>) and then more broken by the merge (as I
+accidentally took the old version).  This fixes both breakages, while
+also pulling this out of <asm/asm.h> to avoid polluting most assembly
+files with the XIP fixups.
 
+Fixes: bee7fbc38579 ("RISC-V CPU Idle Support")
+Fixes: 63b13e64a829 ("RISC-V: Add arch functions for non-retentive suspend entry/exit")
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/riscv/boot/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+ arch/riscv/include/asm/asm.h       | 26 ------------------------
+ arch/riscv/include/asm/xip_fixup.h | 32 ++++++++++++++++++++++++++++++
+ arch/riscv/kernel/head.S           |  1 +
+ arch/riscv/kernel/suspend_entry.S  |  1 +
+ 4 files changed, 34 insertions(+), 26 deletions(-)
+ create mode 100644 arch/riscv/include/asm/xip_fixup.h
 
-diff --git a/arch/riscv/boot/.gitignore b/arch/riscv/boot/.gitignore
-index 90e66adb7de5..0cea9f7fa9d5 100644
---- a/arch/riscv/boot/.gitignore
-+++ b/arch/riscv/boot/.gitignore
-@@ -4,3 +4,4 @@ Image.*
- loader
- loader.lds
- loader.bin
-+xipImage
+diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
+index 8c2549b16ac0..618d7c5af1a2 100644
+--- a/arch/riscv/include/asm/asm.h
++++ b/arch/riscv/include/asm/asm.h
+@@ -67,30 +67,4 @@
+ #error "Unexpected __SIZEOF_SHORT__"
+ #endif
+ 
+-#ifdef __ASSEMBLY__
+-
+-/* Common assembly source macros */
+-
+-#ifdef CONFIG_XIP_KERNEL
+-.macro XIP_FIXUP_OFFSET reg
+-	REG_L t0, _xip_fixup
+-	add \reg, \reg, t0
+-.endm
+-.macro XIP_FIXUP_FLASH_OFFSET reg
+-	la t1, __data_loc
+-	REG_L t1, _xip_phys_offset
+-	sub \reg, \reg, t1
+-	add \reg, \reg, t0
+-.endm
+-_xip_fixup: .dword CONFIG_PHYS_RAM_BASE - CONFIG_XIP_PHYS_ADDR - XIP_OFFSET
+-_xip_phys_offset: .dword CONFIG_XIP_PHYS_ADDR + XIP_OFFSET
+-#else
+-.macro XIP_FIXUP_OFFSET reg
+-.endm
+-.macro XIP_FIXUP_FLASH_OFFSET reg
+-.endm
+-#endif /* CONFIG_XIP_KERNEL */
+-
+-#endif /* __ASSEMBLY__ */
+-
+ #endif /* _ASM_RISCV_ASM_H */
+diff --git a/arch/riscv/include/asm/xip_fixup.h b/arch/riscv/include/asm/xip_fixup.h
+new file mode 100644
+index 000000000000..0d0754305324
+--- /dev/null
++++ b/arch/riscv/include/asm/xip_fixup.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * XIP fixup macros, only useful in assembly.
++ */
++#ifndef _ASM_RISCV_XIP_FIXUP_H
++#define _ASM_RISCV_XIP_FIXUP_H
++
++#include <linux/pgtable.h>
++
++#ifdef CONFIG_XIP_KERNEL
++.macro XIP_FIXUP_OFFSET reg
++        REG_L t0, _xip_fixup
++        add \reg, \reg, t0
++.endm
++.macro XIP_FIXUP_FLASH_OFFSET reg
++        la t1, __data_loc
++        li t0, XIP_OFFSET_MASK
++        and t1, t1, t0
++        li t1, XIP_OFFSET
++        sub t0, t0, t1
++        sub \reg, \reg, t0
++.endm
++
++_xip_fixup: .dword CONFIG_PHYS_RAM_BASE - CONFIG_XIP_PHYS_ADDR - XIP_OFFSET
++#else
++.macro XIP_FIXUP_OFFSET reg
++.endm
++.macro XIP_FIXUP_FLASH_OFFSET reg
++.endm
++#endif /* CONFIG_XIP_KERNEL */
++
++#endif
+diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+index 893b8bb69391..822c33aa7f45 100644
+--- a/arch/riscv/kernel/head.S
++++ b/arch/riscv/kernel/head.S
+@@ -14,6 +14,7 @@
+ #include <asm/hwcap.h>
+ #include <asm/image.h>
++#include <asm/xip_fixup.h>
+ #include "efi-header.S"
+ 
+ __HEAD
+diff --git a/arch/riscv/kernel/suspend_entry.S b/arch/riscv/kernel/suspend_entry.S
+index 4b07b809a2b8..aafcca58c19d 100644
+--- a/arch/riscv/kernel/suspend_entry.S
++++ b/arch/riscv/kernel/suspend_entry.S
+@@ -8,6 +8,7 @@
+ #include <asm/asm.h>
+ #include <asm/asm-offsets.h>
+ #include <asm/csr.h>
++#include <asm/xip_fixup.h>
+ 
+ 	.text
+ 	.altmacro
 -- 
 2.34.1
 

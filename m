@@ -2,62 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6FF50805F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 07:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81119508062
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 07:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359367AbiDTFFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 01:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
+        id S1359373AbiDTFHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 01:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349475AbiDTFFH (ORCPT
+        with ESMTP id S239797AbiDTFHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 01:05:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57CF25EB9;
-        Tue, 19 Apr 2022 22:02:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=F1TRa4GgWFl5NwS3j0g57cX1Szs0+a429bfPNvd6Wh4=; b=aow36qpIfTmkQVZ/a9t+WjO2d2
-        PhZtl5g7RNxNlhtI5UlFdR66JnzwggDW6PsWbhoLPy5f5IwPfnmF0v4fsuxHK6xtm64njV5vIvPGR
-        F1FujOdhxeM6acg+Q/xUltl/5ypMm13ihS8rGHV/ADfGpCeRwAASaNW2JoQPrQWiqNrvoUFqDn5Ux
-        vPWBBcg5xsGz88zvtjoiz1OxFK7Tw+mV0nfTPv8EZF7GV6x8MS1ypxQiHFXUMOA0VcrJbYb8aqeWZ
-        3LJTtcJfW7ua+Rudi7PZpBSUmF5KpeeQXshTabkJiNFNWGDtDaGB4YALHwYbF7cEuy3Ob7JDPnIQu
-        wT/DtFWA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nh2Ts-007MLW-TQ; Wed, 20 Apr 2022 05:02:20 +0000
-Date:   Tue, 19 Apr 2022 22:02:20 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, roman.gushchin@linux.dev,
-        hannes@cmpxchg.org
-Subject: Re: [PATCH 1/4] lib/printbuf: New data structure for heap-allocated
- strings
-Message-ID: <Yl+T3Mx408HiC6dS@infradead.org>
-References: <20220419203202.2670193-1-kent.overstreet@gmail.com>
- <20220419203202.2670193-2-kent.overstreet@gmail.com>
+        Wed, 20 Apr 2022 01:07:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B07326109;
+        Tue, 19 Apr 2022 22:04:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4035BB81CFA;
+        Wed, 20 Apr 2022 05:04:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01483C385A1;
+        Wed, 20 Apr 2022 05:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650431053;
+        bh=JU6yORDTL9h+dGHWHJptPQAh/3rQDGzHsH4SL2gTeNA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jeJ5XndMk5w1NZPnXNkNHOHf0jJDmiBmCOgFvGoxqH2mYfUJY1pBDawwluwcWLiey
+         XF+aF0fYnQ6qttx/C21DgC2XkqiyK9Jpl3aKskDZjVx9vw93FMSG6X8dWZqRyoaMqi
+         7kCT2urvTMsxwx7dh7lQTHefcZyaUaWtjGbLBpmUxqtW0RPrqK5VTvtt6KBgr8Nmn/
+         hV6VPRDR8n7jWk7+/7okxQENeJo46wSNMQMfdOHMW7ymW02Gt6Q+c03qLH2XcWIlCr
+         YoPSBTnmkihFnrX5jQ2zQFjycImxyMpEidEIqAq30Ho0JmCCjpMYTF2UZOXgVO8uA3
+         zQMRU5Yk4NJWg==
+Date:   Wed, 20 Apr 2022 10:34:09 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Cc:     sboyd@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        david@ixit.cz, devicetree@vger.kernel.org, lee.jones@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, ~okias/devicetree@lists.sr.ht
+Subject: Re: [PATCH v3] dt-bindings: spmi: convert QCOM PMIC SPMI bindings to
+ yaml
+Message-ID: <Yl+UScVRfO0USVlk@matsya>
+References: <YfjJOQIuGJvedFmJ@matsya>
+ <1650408175-12973-1-git-send-email-quic_subbaram@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419203202.2670193-2-kent.overstreet@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1650408175-12973-1-git-send-email-quic_subbaram@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 04:31:59PM -0400, Kent Overstreet wrote:
-> This adds printbufs: simple heap-allocated strings meant for building up
-> structured messages, for logging/procfs/sysfs and elsewhere. They've
-> been heavily used in bcachefs for writing .to_text() functions/methods -
-> pretty printers, which has in turn greatly improved the overall quality
-> of error messages.
+On 19-04-22, 15:42, Subbaraman Narayanamurthy wrote:
+> >> Convert Qualcomm PMIC SPMI binding to yaml format.
+> 
+> > Reviewed-by: Vinod Koul <vkoul@kernel.org>
+> 
+> > Steve, Can this be picked up please. I will rebase my v7 update based on
+> > this...
+> 
+> Can this DT bindings conversion patch be picked up please?
+Yes please
 
-How does this use case differ from that of lib/seq_buf.c?
+This and spmi v7 support patches have been on list for quite long...
+
+Thanks
+-- 
+~Vinod

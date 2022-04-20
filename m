@@ -2,96 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C301509337
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AAC509340
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383023AbiDTW44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 18:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S1383031AbiDTXBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 19:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345330AbiDTW4y (ORCPT
+        with ESMTP id S1356367AbiDTXBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 18:56:54 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609A12251E
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:54:07 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KkGF85JJwz4xR9;
-        Thu, 21 Apr 2022 08:54:04 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1650495246;
-        bh=qLGjkp6XaJCG2v9la8Z0Z1LTGbSB3IZhkcSgJ6/yvwg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=PErqBP2jpEF4B/n7y1EbTTycn/YDD/Zd3naDd0QJs/z4v+AgYgf9XdgIVCdUtaQYw
-         4FwVbt6qqTFcXzCRMll0FheC6mKtJ84MyV8b5nTEWTGu9PDEQnaCO5sjpy9o0l2VQV
-         ykE3BoykcnWH3H6ui7YZ3wgsN+SkhCW3ufppgnNXNINAtxQ3zaFhH+uRrSUzwZw038
-         HELDg4p9aNQbWegyo7fkesOFjSbjds8lhcI2wm/UAeN3K0AMVhwo4oodnoiiBpuELi
-         qSre6nYZRuZGYhZASVtnmuQAmRsx2Ul3t4e+zw1IQlN+XJTlYQYc7zhVXaKe9fndkh
-         ayhFeoZcy4c2Q==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Hangyu Hua <hbh25y@gmail.com>, fbarrat@linux.ibm.com,
-        ajd@linux.ibm.com, arnd@arndb.de, gregkh@linuxfoundation.org,
-        alastair@d-silva.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: Re: [PATCH] misc: ocxl: fix possible double free in
- ocxl_file_register_afu
-In-Reply-To: <20220418085758.38145-1-hbh25y@gmail.com>
-References: <20220418085758.38145-1-hbh25y@gmail.com>
-Date:   Thu, 21 Apr 2022 08:54:04 +1000
-Message-ID: <87czhbfjsj.fsf@mpe.ellerman.id.au>
+        Wed, 20 Apr 2022 19:01:41 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB6167E8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:58:51 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id i3-20020a056830010300b00605468119c3so2098308otp.11
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=D/sEi/2+cVqpCIq91LcVmWCZlF+pWsMqa17bfCQo3OU=;
+        b=hCDsogPxydJMDkQ7gKztLKAEpi3v1TiAqC/NcA4UkhO4iJYHUO6SZDdqSxQwpv2H5j
+         B0ZNeLFb4y3Bjtm7hPANo7XuEBdttK8x00YkOmhPzTxB/oeoUYgssEUDBzHanAgDxhOC
+         x3fBBNGIdyLbaTTGWNeT9EySdGmM5ZGB6VmPI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=D/sEi/2+cVqpCIq91LcVmWCZlF+pWsMqa17bfCQo3OU=;
+        b=qd72uhyAhgGbhg9drzEEcjXvy/EifANhVH4zInLtlOY/B/uZnbPvyCxDJmB9ADn+es
+         DDvNm2lYc8+XOR1HLy2EV9x+erDSeu431592rysgnPLstiPt7KIlHsNO5O7GKih+nPi/
+         UHah6RUgq/SIaoygj5wXiirNrwEqwu2rWBAExTN9ouCJuceW5yTAPw4jc85x58xKqv0U
+         iFEx69Rj+H+FUXvOiRVyZShTakiXvGmH7KitBliDTtqXjIySRimEix3/Q4Vk7hmto1X8
+         0vYtP5SJI/sGBr6l7hD+zfzAbruxvqL3gbCqMXEtRgXzn1Ib8lu4GzSr3kM7JjFog31p
+         EkSw==
+X-Gm-Message-State: AOAM530dNXQ6IqOYDhiFWOw1O9w+rG53pCC0CC9W9X//OWP/RcQuRalt
+        7MRfrWdzCtDJm+3bKvvcP1ckStFbEmc83M0tWqc4AQ==
+X-Google-Smtp-Source: ABdhPJxVwjd5x5zLGqJQIHe9mf25daLALtOL8ozyt8Hvub9dABrVZsKj8sNwp81VZNO9erWnf6HfF7+CU1PIT/aikfw=
+X-Received: by 2002:a9d:b85:0:b0:5cb:3eeb:d188 with SMTP id
+ 5-20020a9d0b85000000b005cb3eebd188mr8524679oth.77.1650495530519; Wed, 20 Apr
+ 2022 15:58:50 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 20 Apr 2022 15:58:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <02d31565-4ae4-a319-30b0-76a6e4917f6f@quicinc.com>
+References: <1649280493-4393-1-git-send-email-quic_khsieh@quicinc.com>
+ <625ce8a0-4e25-5513-5599-c1cdebf5a3a5@linaro.org> <09fd563f-4a2c-f670-51c2-0e5ff023816d@quicinc.com>
+ <CAA8EJpqzucFGf8ndDi2LZqtKiOt_w=_h1oPAUNVCdmUyh_3+zA@mail.gmail.com>
+ <2039ef97-4fdb-bffe-1e02-18ae79c18be4@quicinc.com> <27bb2732-b322-75b0-3883-773e6eb4b1b9@linaro.org>
+ <02d31565-4ae4-a319-30b0-76a6e4917f6f@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 20 Apr 2022 15:58:49 -0700
+Message-ID: <CAE-0n51F+S4a2mQoyWa-TpJcd73hstm2Sh1uO+4T_75UaWQASQ@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/msm/dp: enhance both connect and disconnect
+ pending_timeout handle
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        bjorn.andersson@linaro.org, quic_abhinavk@quicinc.com,
+        quic_aravindh@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hangyu Hua <hbh25y@gmail.com> writes:
-> info_release() will be called in device_unregister() when info->dev's
-> reference count is 0. So there is no need to call ocxl_afu_put() and
-> kfree() again.
-
-Double frees are often exploitable. But it looks to me like this error
-path is not easily reachable by an attacker.
-
-ocxl_file_register_afu() is only called from ocxl_probe(), and we only
-go to err_unregister if the sysfs or cdev initialisation fails, which
-should only happen if we hit ENOMEM, or we have a duplicate device which
-would be a device-tree/hardware error. But maybe Fred can check more
-closely, I don't know the driver that well.
-
-cheers
-
-
-> Fix this by adding free_minor() and return to err_unregister error path.
+Quoting Kuogee Hsieh (2022-04-15 17:06:48)
 >
-> Fixes: 75ca758adbaf ("ocxl: Create a clear delineation between ocxl backend & frontend")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
->  drivers/misc/ocxl/file.c | 2 ++
->  1 file changed, 2 insertions(+)
+> On 4/14/2022 4:34 PM, Dmitry Baryshkov wrote:
+> >
+> > I'm not sure how should the driver react if the client doesn't disable
+> > the output, but then the sink gets reattached?
 >
-> diff --git a/drivers/misc/ocxl/file.c b/drivers/misc/ocxl/file.c
-> index d881f5e40ad9..6777c419a8da 100644
-> --- a/drivers/misc/ocxl/file.c
-> +++ b/drivers/misc/ocxl/file.c
-> @@ -556,7 +556,9 @@ int ocxl_file_register_afu(struct ocxl_afu *afu)
->  
->  err_unregister:
->  	ocxl_sysfs_unregister_afu(info); // safe to call even if register failed
-> +	free_minor(info);
->  	device_unregister(&info->dev);
-> +	return rc;
->  err_put:
->  	ocxl_afu_put(afu);
->  	free_minor(info);
-> -- 
-> 2.25.1
+> I do not know that either.
+>
+> But it should not happen as long as framework response to uevent.
+
+In talking with seanpaul@ it sounds like we can update the link status
+to BAD with drm_connector_set_link_status_property() and then put it
+back to GOOD when the link is re-established. This way userspace will
+know it needs to retry the modeset. Does that help here?

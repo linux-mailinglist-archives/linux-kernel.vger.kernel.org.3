@@ -2,46 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4372A50878A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF48D50878E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378351AbiDTMAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
+        id S1378363AbiDTMAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244583AbiDTMAC (ORCPT
+        with ESMTP id S1376472AbiDTMAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:00:02 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79721CFC9;
-        Wed, 20 Apr 2022 04:57:15 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nh8xN-0007Pq-Am; Wed, 20 Apr 2022 13:57:13 +0200
-Message-ID: <20ad7c63-c837-6f6e-6bbe-7b49d653e033@leemhuis.info>
-Date:   Wed, 20 Apr 2022 13:57:12 +0200
+        Wed, 20 Apr 2022 08:00:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6561C90B;
+        Wed, 20 Apr 2022 04:58:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8616F61956;
+        Wed, 20 Apr 2022 11:58:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F898C385A1;
+        Wed, 20 Apr 2022 11:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650455885;
+        bh=jIZaCR72MF416k5GIz4UoDMTlUaPThfpK+9Q+0zcmnA=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=NfDGpu1qdTYrgU1CsS4C493/8J8g7H83U69IwcitBhqJRfSidYmtcLEanfyNq6EbH
+         /5j8jbyJHH8uyMGmM3drZuhFOOARrXoDzSm70oiHYofgNXtYaMg2/VNW2z67PhjB0I
+         L4DUYj6f0hTq6Sfnz8HGZXxpjbXVHN0HJugl5dQz+9BLCt7+wJqfKUSEnpiZDs6jNx
+         3gJe4Xxx/tDHdNnl+aFTdYKgEcKP2jUiI+AZRM/L6gbU9nXlrAYlFH0fGiCbef64I1
+         a1ftlEy/XIt2moCYmXDBBveAANFowT7iLF7M/MrDGdBnNUpN+L6ek8sv+HVoGaPnvt
+         hZN/i+uTYH5bA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Jaehee Park <jhpark1013@gmail.com>
+Cc:     =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev, Stefano Brivio <sbrivio@redhat.com>
+Subject: Re: [PATCH] wfx: use container_of() to get vif
+References: <20220418035110.GA937332@jaehee-ThinkPad-X1-Extreme>
+Date:   Wed, 20 Apr 2022 14:57:57 +0300
+In-Reply-To: <20220418035110.GA937332@jaehee-ThinkPad-X1-Extreme> (Jaehee
+        Park's message of "Sun, 17 Apr 2022 23:51:10 -0400")
+Message-ID: <87y200nf0a.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        workflows@vger.kernel.org
-References: <6808cd17-b48c-657d-de60-ef9d8bfa151e@leemhuis.info>
- <acccdf28-3c5d-a81b-8e3a-f72e0f46149c@kernel.org>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: A lot of regression reports submitted to bugzilla.kernel.org are
- apparently ignored, even bisected ones
-In-Reply-To: <acccdf28-3c5d-a81b-8e3a-f72e0f46149c@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1650455836;2df81ad0;
-X-HE-SMSGID: 1nh8xN-0007Pq-Am
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,80 +59,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.04.22 12:31, Krzysztof Kozlowski wrote:
-> On 06/04/2022 14:35, Thorsten Leemhuis wrote:
->> Hi! TLDR: I looked closer at every ticket filed in bugzilla.kernel.org
->> over a time span of two weeks to see how well reports are handled, in
->> particular those for kernel regressions. The results of this rough
->> analysis are kinda devastating from my point of view. I for example
->> found 8 tickets describing a regression where the reporter had even
->> bisected the problem, but nevertheless the ticket afaics didn’t get a
->> single reply or any other reaction from a regular kernel developer
->> within about a week; in fact out of a total of 20 reports that looked
->> like regressions to me (17 if you exclude tickets where the reporter
->> used an afaics lightly patched distro kernel), only one got a helpful
->> reply from a developer within a week. 
-> To respond, developer would first had to be notified. Did it happen? Or
-> just some default assignee got automated notification?
+Jaehee Park <jhpark1013@gmail.com> writes:
 
-I didn't check, as I didn't care about the individual developers
-performance for this analysis: I just wanted to check how good or bad
-bugzilla is working for the Linux kernel development community as a
-whole. My expectations were low already, but the numbers I came up with
-were even worse than expected.
+> Currently, upon virtual interface creation, wfx_add_interface() stores
+> a reference to the corresponding struct ieee80211_vif in private data,
+> for later usage. This is not needed when using the container_of
+> construct. This construct already has all the info it needs to retrieve
+> the reference to the corresponding struct from the offset that is
+> already available, inherent in container_of(), between its type and
+> member inputs (struct ieee80211_vif and drv_priv, respectively).
+> Remove vif (which was previously storing the reference to the struct
+> ieee80211_vif) from the struct wfx_vif, define a function
+> wvif_to_vif(wvif) for container_of(), and replace all wvif->vif with
+> the newly defined container_of construct.
+>
+> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
 
->> That makes us miss valuable
->> reports and puts our "no regressions" rule into a bad light. Hence,
->> something IMHO should be done here to improve the situation, but I'm not
->> sure myself what exactly -- that's why I'm writing this mail. A better
->> warning on bugzilla’s frontpage suggesting to report issues by mail
->> maybe? And/or disable all bugzilla products and components where it's
->> not clear that somebody will be looking at least once at submitted tickets?
-> 
-> I find such Bugzilla useless - the Components are not matching reality,
-> Products look ok except missing really a lot. Does it have proper
-> assigners based on maintainers? Nope. At least not everywhere.
-> 
-> All the bug or issue reports I get via email and I think I am not alone
-> in this. All automated tools (kbuild, kernelCI) are using emails for bug
-> reporting. Why having one more system which seems not up to date?
+[...]
 
-I'm the wrong one to ask, as I think it's a disservice right now that
-needs to be dealt with -- for example by turning it off or by making it
-work properly. But to my knowledge there is nobody really responsible
-for it (apart from Konstantin and his team, but they are afaics only
-responsible for running bugzilla the software -- not for maintaining
-components, products, and such things). That's afaics why we as the
-kernel developers community need to come up with a decision. But maybe
-mailing lists are a bad tool for this and this needs to wait till kernel
-and/or maintainers summit in September (it's already on the list of
-topics I plan to propose).
+> +static inline struct ieee80211_vif *wvif_to_vif(struct wfx_vif *wvif)
+> +{
+> +	return container_of((void *)wvif, struct ieee80211_vif, drv_priv);
+> +}
 
-> The only reliable and up to date information we have in maintainers
-> file: who is responsible and whom to CC (e.g. lists).
+Why the void pointer cast? Avoid casts as much possible.
 
-That's why the current "reporting issues" document (which is even linked
-prominently on the front-page of bugzilla.kernel.org and mostly written
-by yours truely) tells everyone to look there and even discourages using
-bugzilla.kernel, unless the MAINTAINERS file mentions it as official
-point of contact (the last time I checked that was the case for
-roundabout 20 entries, mainly ACPI, PM, and PCI). But most people simply
-don't read the docs and just use the bug-tracker; seems that's just how
-humans are. :-D
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-> I can give example from my domain:
-> https://bugzilla.kernel.org/show_bug.cgi?id=210047
-> 
-> This is clearly issue for me but there is no way I was notified about
-> this. I just found it by using the keyword from maintainers. Wrong
-> mailing list as Assignee, no CC to me. Such bug reports will be missed
-> because there is no way I can receive information about them. Why then
-> providing interface for bug reports which by design will not reach the
-> respective person?
-
-I have no idea, but to play devils advocate for a moment: it didn't
-happen by design, things like that just happened in loosely organized
-projects -- and for many years now nobody simply cared enough to do
-anything about it.
-
-Ciao, Thorsten
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

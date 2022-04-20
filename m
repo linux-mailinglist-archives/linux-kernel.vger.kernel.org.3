@@ -2,49 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57E35085F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576465085F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352046AbiDTKfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        id S1352151AbiDTKg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348216AbiDTKfL (ORCPT
+        with ESMTP id S236192AbiDTKg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:35:11 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D51B93FBC4;
-        Wed, 20 Apr 2022 03:32:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E7F123A;
-        Wed, 20 Apr 2022 03:32:25 -0700 (PDT)
-Received: from [10.57.12.48] (unknown [10.57.12.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C71933F766;
-        Wed, 20 Apr 2022 03:32:23 -0700 (PDT)
-Message-ID: <281fd0f0-d2fc-95cf-d183-31ca8c25830e@arm.com>
-Date:   Wed, 20 Apr 2022 11:32:22 +0100
+        Wed, 20 Apr 2022 06:36:56 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56813F8B7;
+        Wed, 20 Apr 2022 03:34:10 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23K919nX024979;
+        Wed, 20 Apr 2022 10:34:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=PpX6WuxG/jalbB31OImhOuSRHOCLWrsapvSdJsAGK1Y=;
+ b=earW7e0HaCWAqyBaPd5U1v0HzHNL6Km3e+miRZjUb0UiEsRimOfEl2PxveQXd0V4jJeU
+ qY96xYTUkzfm/nsZIecn1Trat10vjBBNTi8H9mW9C+0kBSFRA7WDF56CHoQUNkhCnMRw
+ 5q0thnzKAS0EqjGvdeutmnAVpFRBm0xbjpXKCXobPdtuluSUGtUrmA0rgU3fmOfcaWds
+ /wXgz4GnGIwNrXfyI4pthbLILjm7MDaUctOld5bEXrSsuzZ6jmPyBiq2N8q94tUD1Dve
+ l2cP7gNHh9HvtNcU5+1PUb4UlGFV++/DYppNN0IevOy0zdM5SODO+nNXPIqONpH0QQgh BA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fhuukb7sn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 10:34:07 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23K9qflQ029579;
+        Wed, 20 Apr 2022 10:34:07 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fhuukb7rt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 10:34:06 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23KARmrr016525;
+        Wed, 20 Apr 2022 10:34:04 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04fra.de.ibm.com with ESMTP id 3ffvt9cew4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 10:34:04 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23KALEGk53281106
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Apr 2022 10:21:14 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A64EAAE059;
+        Wed, 20 Apr 2022 10:34:01 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2FEB2AE056;
+        Wed, 20 Apr 2022 10:34:01 +0000 (GMT)
+Received: from [9.145.164.14] (unknown [9.145.164.14])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 20 Apr 2022 10:34:01 +0000 (GMT)
+Message-ID: <fb468756-2f80-3e0b-91d9-8e6a0679f36c@linux.ibm.com>
+Date:   Wed, 20 Apr 2022 12:34:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
- ops
+ Thunderbird/91.7.0
 Content-Language: en-US
-To:     Kant Fan <kant@allwinnertech.com>
-Cc:     amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com,
-        stable@vger.kernel.org, orjan.eide@arm.com, edubezval@gmail.com,
-        javi.merino@kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com
-References: <20220325094436.101419-1-kant@allwinnertech.com>
- <4db6b25c-dd78-a6ba-02a5-ac2e49996be1@arm.com>
- <6b89fa96-07f0-19bb-2e18-22afa27554a1@allwinnertech.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <6b89fa96-07f0-19bb-2e18-22afa27554a1@allwinnertech.com>
+To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+References: <20220419185857.128351-1-thuth@redhat.com>
+ <20220419185857.128351-5-thuth@redhat.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v2 4/4] KVM: s390: selftests: Use TAP interface in the
+ reset test
+In-Reply-To: <20220419185857.128351-5-thuth@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: isTQJwZiTYD7a-wuVFkHyAuRqCEYN0-F
+X-Proofpoint-GUID: T0QPBP9OvwGQAnm-0EX5pfpxfpOiL-Q9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-20_02,2022-04-20_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
+ lowpriorityscore=0 phishscore=0 mlxscore=0 priorityscore=1501 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204200065
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,111 +102,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kant,
-
-On 4/19/22 16:49, Kant Fan wrote:
-> On 29/03/2022 14:59, Lukasz Luba wrote:
->>
->>
->> On 3/25/22 09:44, Kant Fan wrote:
->>> commit 7b62935828266658714f81d4e9176edad808dc70 upstream.
->>>
->>> Fix access illegal address problem in following condition:
->>> There are muti devfreq cooling devices in system, some of them register
->>> with dfc_power but other does not, power model ops such as 
->>> state2power will
->>> append to global devfreq_cooling_ops when the cooling device with
->>> dfc_power register. It makes the cooling device without dfc_power
->>> also use devfreq_cooling_ops after appending when register later by
->>> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
->>>
->>> IPA governor regards the cooling devices without dfc_power as a power 
->>> actor
->>> because they also have power model ops, and will access illegal 
->>> address at
->>> dfc->power_ops when execute cdev->ops->get_requested_power or
->>> cdev->ops->power2state. As the calltrace below shows:
->>>
->>> Unable to handle kernel NULL pointer dereference at virtual address
->>> 00000008
->>> ...
->>> calltrace:
->>> [<c06e5488>] devfreq_cooling_power2state+0x24/0x184
->>> [<c06df420>] power_actor_set_power+0x54/0xa8
->>> [<c06e3774>] power_allocator_throttle+0x770/0x97c
->>> [<c06dd120>] handle_thermal_trip+0x1b4/0x26c
->>> [<c06ddb48>] thermal_zone_device_update+0x154/0x208
->>> [<c014159c>] process_one_work+0x1ec/0x36c
->>> [<c0141c58>] worker_thread+0x204/0x2ec
->>> [<c0146788>] kthread+0x140/0x154
->>> [<c01010e8>] ret_from_fork+0x14/0x2c
->>>
->>> Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
->>> Cc: stable@vger.kernel.org # 4.4+
->>> Signed-off-by: Kant Fan <kant@allwinnertech.com>
->>> ---
->>>   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
->>>   1 file changed, 18 insertions(+), 7 deletions(-)
->>>
->>
->> Looks good. So this patch should be applied for all stable
->> kernels starting from v4.4 to v5.12 (the v5.13 and later need
->> other patch).
->>
->> Next time you might use in the subject something like:
->> [PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global ops
->> It would be better distinguished from your other patch with the
->> same subject, which was for mainline and v5.13+
+On 4/19/22 20:58, Thomas Huth wrote:
+> Let's standardize the s390x KVM selftest output to the TAP output
+> generated via the kselftests.h interface.
 > 
-> Hi Lukasz,
-> Thank you for the guidance. I want to know if I'm understanding you in a 
-> right way. Could you confirm the following information?
-> 
-> 1. The stable patches
-> After the patch is merged into mainline later, I'll submit the following 
-> patches individually for v4.4 ~ v5.12:
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
 
-Correct, after it gets mainline you can point to that commit hash and
-process with those patches. I don't now which of those older stable
-kernels are still maintained, since some of them have longer support
-and the rest had shorter and might already ended. You can check the
-end of life for those 'Longterm' here [1]. AFAICS the 4.4 is not in that
-table, so you can start from 4.9, should be OK.
-So the list of needed patches would be for those stable kernels:
-4.9, 4.14, 4.19, 5.4, 5.10
-I can see that last release for 5.11.x was in May 2021, so it's probably
-ended, similar for 5.12.x (Jul 2021). That's why I suggested that list
-for the long support kernels.
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-> 
-> [PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global ops
-> [PATCH 4.5] thermal: devfreq_cooling: use local ops instead of global ops
-> ...
-> [PATCH 5.12] thermal: devfreq_cooling: use local ops instead of global ops
-> 
-> And also the following patches individually for v5.13+ :
+[...]
+> -	return 0;
+> +
+> +	ksft_finished();
 
-For this, you probably don't have to. You have added 'v5.13+' in the
-original patch v2, so it will be picked correctly. It should apply
-on those stable kernels w/o issues. If there will be, stable kernel
-engineers will ping us.
+main() is still int so it looks really weird, that we remove the return 
+here. After reading the ksft_finished() code I know that we never return 
+because we do an exit() but I'd like to have a comment, change to void 
+or noreturn tag to make this clearer.
 
-> [PATCH 5.13] thermal: devfreq_cooling: use local ops instead of global ops
-> [PATCH 5.14] thermal: devfreq_cooling: use local ops instead of global ops
-> ...
-> [PATCH 5.17] thermal: devfreq_cooling: use local ops instead of global ops
-> 
-> 2. The mainline patch
-> I saw your mail with Rafael, seems there are conflicts... I wonder if 
-> there's anything wrong with my patch, or anything I can help?
-> 
+I'd guess that's true for all 4 patches.
 
-Thank you for offering help. Rafael solved that correctly, so it doesn't
-need any more work.
+>   }
 
-Thank you for doing that work!
-
-Regards,
-Lukasz
-
-[1] https://www.kernel.org/category/releases.html

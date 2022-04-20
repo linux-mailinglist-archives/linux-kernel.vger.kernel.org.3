@@ -2,145 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660A35089E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4E65089E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379254AbiDTOAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
+        id S1379262AbiDTOAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 10:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243224AbiDTOAD (ORCPT
+        with ESMTP id S1358948AbiDTOAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 10:00:03 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6F943496
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:57:16 -0700 (PDT)
+        Wed, 20 Apr 2022 10:00:15 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B4043493;
+        Wed, 20 Apr 2022 06:57:29 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id a15so1978973pfv.11;
+        Wed, 20 Apr 2022 06:57:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=3SSJXbjOy1qLhNGe/bTpSNKpfz9W3niG2+rjeL4z3oQ=;
-  b=F1RqfgRYhqbxqwAW8IPNwtEdU9s3utkiBmSyM33s/tK87vtA39lDLms7
-   ZYZ1ezEJuAYnR7oCrzO9U2fn2sOe7CQHEfHoxmc1XaA3p7stMQNcIVlNU
-   ZPlmIehfFMfeB/H7ieZwqZ4Igw0nJ/8AwzOggEnXp1UXOMI0mm3dC1ZAC
-   0=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,275,1643670000"; 
-   d="scan'208";a="32531422"
-Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 15:57:15 +0200
-Date:   Wed, 20 Apr 2022 15:57:14 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-cc:     Julia Lawall <julia.lawall@inria.fr>, ira.weiny@intel.com,
-        Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>,
-        outreachy@lists.linux.dev, boris.ostrovsky@oracle.com,
-        jgross@suse.com, sstabellini@kernel.org,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] xen:  Convert kmap() to kmap_local_page()
-In-Reply-To: <3990312.6PsWsQAL7t@leap>
-Message-ID: <alpine.DEB.2.22.394.2204201556330.2937@hadrien>
-References: <20220419234328.10346-1-eng.alaamohamedsoliman.am@gmail.com> <2940450.687JKscXgg@leap> <alpine.DEB.2.22.394.2204201538560.2937@hadrien> <3990312.6PsWsQAL7t@leap>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HpMPiUGHpXCsgnMCagieewwrqdtad7tzOvjt/RtNvd0=;
+        b=UdMn9sXzMeLQSq47m58dcrWjNAfrZCJsqJ1gdtKD+H3AgYyx3PQ0jut3Dw8czzvHtz
+         TIC9b4dYsXDcWLYD0WwJ1K1pfdrFs1Qxgo6aQ4pufBhkQKj/bFnq4xpKmXtHx4oDWl2X
+         DwHh9hNwOlL9qbsacaKOROsl1vWMqAEjoU4aIFtu39Zgz4KXv98tf/kQqhfTEZzSOeQH
+         hjXwz4MNWqGeV6LJCATqk60zN3N4H+W4nN+Ul7+si0pl2P+0bN43fDCi6llDlcXCu4SM
+         1A8suRbwloopErfaQ2wARpC11Vd8l7FYQEbVyt0Dsm7HooLDvCh1oG8xe0w4odm7H34v
+         HPJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HpMPiUGHpXCsgnMCagieewwrqdtad7tzOvjt/RtNvd0=;
+        b=enUwcTS73KvvVEtG0xMo5id7zDNdIwdW7jjBoXwfC6WtMp5g4iz8s2WlPYe1Bsxh1O
+         YVqsVH6dSUMWoib2RgLffr49+8Cc8V9ysM8FImxpblp7CiUEObZZp2cHcVpxnHJAPgIs
+         NMgkUkwAGT+Kg2Jb1KmkwZm6M7OkObF4LFyWjKIL+xFYct9H2LcNrFg0Jcx9o/zcIdZp
+         nikcfUgaD6otp6mdnAj+2/pdyX+4RpGAwXge9wrM8CWXRj8k+wsunPjY6I+NM6E+ekB3
+         zkc6jNPkJvlYuZ9kMxeTMq2oEmoUW1vPgpl8vJa/lj0pP70xQxWkOKS4YoDfkqxp2B5g
+         60RA==
+X-Gm-Message-State: AOAM530R7WK3PEKzVxolNVGhgyxESzebHwZloXAPX2RZQVv8XYDGoh3b
+        01wYrwlEfpHoiiS0VHSnr24=
+X-Google-Smtp-Source: ABdhPJw/0fIpt1yg2bRHai5xIYiXrW/+gGepiyH7f+HN7RAFp1o0ohn5kiqdM4MTrbNiFV2pdBy2pw==
+X-Received: by 2002:a63:6fc4:0:b0:393:9567:16dc with SMTP id k187-20020a636fc4000000b00393956716dcmr19105513pgc.593.1650463049011;
+        Wed, 20 Apr 2022 06:57:29 -0700 (PDT)
+Received: from [192.168.1.46] (bb42-60-144-185.singnet.com.sg. [42.60.144.185])
+        by smtp.gmail.com with ESMTPSA id h20-20020a056a001a5400b0050abaf55b5fsm3476770pfv.191.2022.04.20.06.57.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 06:57:28 -0700 (PDT)
+Message-ID: <032b3468-4328-eda6-d3ce-6fda6673ab14@gmail.com>
+Date:   Wed, 20 Apr 2022 21:57:25 +0800
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-915472296-1650463034=:2937"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [syzbot] kernel BUG in ext4_es_cache_extent
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>
+Cc:     syzbot <syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tytso@mit.edu
+References: <0000000000003d898d05d759c00a@google.com>
+ <e58c5085-c351-a7a6-fe97-3da6eb1a804f@gmail.com>
+ <20220420121626.edhvfibz4n3trnvg@quack3.lan>
+From:   Phi Nguyen <phind.uet@gmail.com>
+In-Reply-To: <20220420121626.edhvfibz4n3trnvg@quack3.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 4/20/2022 8:16 PM, Jan Kara wrote:
+> On Mon 14-02-22 02:03:37, Phi Nguyen wrote:
+>> The non-journal mounted fs is corrupted, syzbot was able to mount it because
+>> a [fast commit] patch exclude its inodes from verification process.
+>>
+>> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>> master
+> 
+> This patch seems to have fallen through the cracks. Phi, care to submit it
+> properly with your Signed-off-by etc?
+> 
+> 								Honza
+> 
+>> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+>> index 01c9e4f743ba..385f4ae71573 100644
+>> --- a/fs/ext4/inode.c
+>> +++ b/fs/ext4/inode.c
+>> @@ -4912,7 +4912,7 @@ struct inode *__ext4_iget(struct super_block *sb, unsigned long ino,
+>>   		goto bad_inode;
+>>   	} else if (!ext4_has_inline_data(inode)) {
+>>   		/* validate the block references in the inode */
+>> -		if (!(EXT4_SB(sb)->s_mount_state & EXT4_FC_REPLAY) &&
+>> +		if (!(journal && EXT4_SB(sb)->s_mount_state & EXT4_FC_REPLAY) &&
+>>   			(S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode) ||
+>>   			(S_ISLNK(inode->i_mode) &&
+>>   			!ext4_inode_is_fast_symlink(inode)))) {
+> 
 
---8323329-915472296-1650463034=:2937
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Okay, I will send a patch.
 
-
-
-On Wed, 20 Apr 2022, Fabio M. De Francesco wrote:
-
-> On mercoledì 20 aprile 2022 15:40:10 CEST Julia Lawall wrote:
-> >
-> > On Wed, 20 Apr 2022, Fabio M. De Francesco wrote:
-> >
-> > > On mercoledì 20 aprile 2022 08:03:05 CEST Julia Lawall wrote:
-> > > >
-> > > > On Wed, 20 Apr 2022, Alaa Mohamed wrote:
-> > > >
-> > > > > kmap() is being deprecated and these usages are all local to the
-> thread
-> > > > > so there is no reason kmap_local_page() can't be used.
-> > > > >
-> > > > > Replace kmap() calls with kmap_local_page().
-> > > >
-> > > > OK, so from a Coccinelle point of view, could we do
-> > > >
-> > > > @@
-> > > > expression e1,e2,x,f;
-> > > > @@
-> > > >
-> > > > e1 =
-> > > > - kmap
-> > > > + kmap_local_page
-> > > >     (e2)
-> > > > ... when != x = e1 // not stored in any location and not passed to
-> > > another function
-> > > >     when != f(...,e1,...)
-> > > >     when != x = e2
-> > > >     when != f(...,e2,...)
-> > > > -kunmap(e2)
-> > > > +kunmap_local(e1)
-> > > >
-> > > > julia
-> > > >
-> > >
-> > > I've never spent sufficient time to understand properly the syntax and
-> > > semantics of expressions of Coccinelle. However, thanks Julia, this
-> code
-> > > looks good and can be very helpful.
-> > >
-> > > Only a minor objection... it doesn't tell when 'e2' has been allocated
-> > > within the same function where the kmap() call is.
-> > >
-> > > In the particular case that I cite above, I'd prefer to remove the
-> > > allocation of the page (say with alloc_page()) and convert kmap() /
-> kunmap()
-> > > to use kmalloc() / kfree().
-> > >
-> > > Fox example, this is done in the following patch:
-> > >
-> > > commit 633b0616cfe0 ("x86/sgx: Remove unnecessary kmap() from
-> > > sgx_ioc_enclave_init()") from Ira Weiny.
-> > >
-> > > Can Coccinelle catch also those special cases where a page that is
-> passed
-> > > to kmap() is allocated within that same function (vs. being passed as
-> > > argument to this function) and, if so, propose a replacement with
-> > > kmalloc()?
-> >
-> > It looks complex in this case, because the allocation is in another
-> > function, and it is passed to another function.
->
-> This is not the special case I was talking about. In this case your code
-> for Coccinelle tells the right proposal and it is exactly what Alaa did in
-> her patch (which is good!).
->
-> I'm talking about other special cases like the one I pointed to with the
-> link I provided. I'm sorry if my bad English made you think that Alaa's
-> patch was one of those cases where the page is allocated within the same
-> function where kmap() is.
->
-> I hope that now I've been clearer :)
-
-Ah, sorry for the misunderstanding.  If you have an example, I can take a
-look and propose something for this special case.
-
-julia
---8323329-915472296-1650463034=:2937--
+BR,
+Phi

@@ -2,157 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B33508E7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF0E508E7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381108AbiDTRhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 13:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+        id S1381138AbiDTRiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 13:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239686AbiDTRhu (ORCPT
+        with ESMTP id S1381123AbiDTRiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 13:37:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B64D64F5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:35:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650476102;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OKAkPbXEzZV1qW7Yf+K43ZjoPL2L8btAjUFH9iivH88=;
-        b=hzyHL+4shNnTqYE2zK2ntSpIHQ/vmmYKdni5nMsqeWljXt28We1xZqmANcFFy92Yucu8Ol
-        zGgwMnRTi6iOUZU4lM1cDjlMmxjzdi53d+4cUg0HrMGpXztGdelvwZCIe87J812nGikxrc
-        efiQRpbY9gIYcaKAJceW/bE3IWLC5Ug=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-246-7sfD_bbvO5yWfwj68A2r6A-1; Wed, 20 Apr 2022 13:35:01 -0400
-X-MC-Unique: 7sfD_bbvO5yWfwj68A2r6A-1
-Received: by mail-qt1-f197.google.com with SMTP id m11-20020ac807cb000000b002f33f7f7d69so1460852qth.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:35:01 -0700 (PDT)
+        Wed, 20 Apr 2022 13:38:04 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA02E020
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:35:17 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id s2-20020a17090302c200b00158ea215fa2so1213665plk.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=tU5Q7AkrYRkb/Zz2lPFDi8k7QtsqyIwswpbby7oV6Iw=;
+        b=AquOJoyB2fnkjHD6l/OfOFQOR360AjjZZ/PfrEdvVu88ycHUXtWCVzXLlE2VHg+Kqc
+         ZFFKLXaloES0yYy02F1YG2fhY0kSX8RDJzn0ZeXJLSkLwb3+mjCiYVslaQk/g3YiVOX3
+         E1MoDbIxCA4Kh6gOnx1vxkLzPiufuvExDg9mr/8MRhPzqUg5Lt1qDQq5hj1HXuhFNfB3
+         01eKcBTRNnUimOyQiV6JlBoZUhjJcgVOIEwuEWXghf+2utrmLJ9iRJzSGQD5K4zEsDMg
+         0WBDCYoKkZzJriv/49acSi9DbKwIgsCD5qUz6M2vgOoH137ySiMQ5eH9FmKd+3M5zvne
+         X1nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OKAkPbXEzZV1qW7Yf+K43ZjoPL2L8btAjUFH9iivH88=;
-        b=5QWumtay+Pzy6egSqQa91sA4DffNG2+x6Q5GC8cP0hUoRJFqhldnFZ2La4F76T8yY4
-         8AmFaHo+sCbllmaL15EhTHXKMiKbDwFk1j9PuevOO/nNktOWtoiIMJdmegGYQAfc08Dz
-         AAeSzmBr9KKHU5Km/XDKG7nysuilYiVEYaoT5XlWCqTWdX5W7HmmtVh3m2/iliY3FX6m
-         quMQ7H+nIO2U/SaWCf4otE6P2xwJrFdmaRLKXz33YC9rDFRiphu9UIfasbxJydwohajs
-         vBWNZoyix2aYwGo0Aig9HDwj9X6n3ohoQm2JMNLhJR+nJpwqDZslsiZGW+taecmUG2pO
-         4oMw==
-X-Gm-Message-State: AOAM531zMKLsuVS8Jjrlb1J95EDhHWnh/4/FTj2m+j6TIlHlwaR/GV7Z
-        wnZiN9HTNjuCpI/h6whPJVoen+WvYgw4FAVnbLv572XXcDzqHmv5Ot9adRU/K+EssgYx/BxN3SO
-        bDuC4/IciUcqCE+2mkxaIIMVu
-X-Received: by 2002:a37:bc7:0:b0:69e:e276:6bb1 with SMTP id 190-20020a370bc7000000b0069ee2766bb1mr1750870qkl.167.1650476100026;
-        Wed, 20 Apr 2022 10:35:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxnLjVdFYI/13G+bE3rTsQ8NB67Vc1qHeY1rAUEDrVf2oy9SKMyiCXWuHubCyzVvInKsh2p5g==
-X-Received: by 2002:a37:bc7:0:b0:69e:e276:6bb1 with SMTP id 190-20020a370bc7000000b0069ee2766bb1mr1750863qkl.167.1650476099801;
-        Wed, 20 Apr 2022 10:34:59 -0700 (PDT)
-Received: from [192.168.0.188] ([24.48.139.231])
-        by smtp.gmail.com with ESMTPSA id m4-20020ac85b04000000b002e1dcaed228sm1959757qtw.7.2022.04.20.10.34.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 10:34:59 -0700 (PDT)
-Message-ID: <bc9f5209-5c59-c921-d85e-e2e54b2375db@redhat.com>
-Date:   Wed, 20 Apr 2022 13:34:58 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] vm_swappiness=0 should still try to avoid swapping
- anon memory
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, aquini@redhat.com,
-        shakeelb@google.com, llong@redhat.com, mhocko@suse.com,
-        hakavlad@inbox.lv
-References: <20210809223740.59009-1-npache@redhat.com>
- <b5575449-08a2-2901-e7e1-a97150e4878c@redhat.com>
- <Yl8Dk+a1YDwupLMv@cmpxchg.org>
- <e495901c-f2f3-cc85-10a6-0d2944255b19@redhat.com>
- <YmASIHjTVndHHoL4@cmpxchg.org>
-From:   Nico Pache <npache@redhat.com>
-In-Reply-To: <YmASIHjTVndHHoL4@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=tU5Q7AkrYRkb/Zz2lPFDi8k7QtsqyIwswpbby7oV6Iw=;
+        b=QNWxbUYnbvNNqfAd2eccVaCeJHqNeAcZNd7W5QQH2hkB6Tjfo0rQZNJp5RozocA6Gq
+         VW8OOjos2iQKaZ9ZCJm8SmfAEWXxr1gCrUz5QwFc2t1MvhVcCDf1OHXeUHQnAAseF3iY
+         C3CmiHYR9K9Bbavb+W9XZr8jNL236cLQTl7flLf1j2G85fRBA22v9nfGku55pZ6sEs+e
+         IgDedekCZJoy5Xw+m+GyjK3M4mbgkp4WRXX2niLdIMX24IijIuJipahZwgOYDGCcD7mm
+         phxkMti9kXsgy97/NluNIizDN2/RKjbouobuLJUeO6W0ObWmjFKYVKRw0dy6+1yJtCOm
+         Z5wQ==
+X-Gm-Message-State: AOAM530sZO/TBeT3cThNNxs9xOGMcb3MokB2BJmG4k/AKOH+OlZv0LL+
+        zrkF3HIQFGWDVkwZYkIcLzalW8ObI3F/Tc1xld/glfEFTFRrCkAJ/vUFYz61QpQtQFfIzYWAeWI
+        p9282BCwwLCqGcnhaBeMHdr76nRBk4KNdFe8CiRrBvpwkY6Q4rG6fxC2LS/R6i7fmVE+F/Xqq
+X-Google-Smtp-Source: ABdhPJz+OMnkdiTtcqZmdSPNIRuOO1Dleu8nq+GBJsZhB1GkN3juXnyvUJ7I1PR8pJQaUzYMjRVAqdym5f6p
+X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:6ea6:489a:aad6:761c])
+ (user=bgardon job=sendgmr) by 2002:a17:902:d0cb:b0:158:7c60:2297 with SMTP id
+ n11-20020a170902d0cb00b001587c602297mr21509537pln.145.1650476116665; Wed, 20
+ Apr 2022 10:35:16 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 10:35:03 -0700
+Message-Id: <20220420173513.1217360-1-bgardon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+Subject: [PATCH v6 00/10] KVM: x86: Add a cap to disable NX hugepages on a VM
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Given the high cost of NX hugepages in terms of TLB performance, it may
+be desirable to disable the mitigation on a per-VM basis. In the case of public
+cloud providers with many VMs on a single host, some VMs may be more trusted
+than others. In order to maximize performance on critical VMs, while still
+providing some protection to the host from iTLB Multihit, allow the mitigation
+to be selectively disabled.
 
+Disabling NX hugepages on a VM is relatively straightforward, but I took this
+as an opportunity to add some NX hugepages test coverage and clean up selftests
+infrastructure a bit.
 
-On 4/20/22 10:01, Johannes Weiner wrote:
->> My swappiness=0 solution was a minimal approach to regaining the 'avoid swapping
->> ANON' behavior that was previously there, but as Shakeel pointed out, there may
->> be something larger at play.
-> 
-> So with my patch and swappiness=0 you get excessive swapping on v1 but
-> not on v2? And the patch to avoid DEACTIVATE_ANON fixes it?
+This series was tested with the new selftest and the rest of the KVM selftests
+on an Intel Haswell machine.
 
-correct, I haven't tested the DEACTIVATE_ANON patch since last time I was
-working on this, but it did cure it. I can build a new kernel with it and verify
-again.
+The following tests failed, but I do not believe that has anything to do with
+this series:
+	userspace_io_test
+	vmx_nested_tsc_scaling_test
+	vmx_preemption_timer_test
 
-The larger issue is that our workload has regressed in performance.
+Changelog:
+v1->v2:
+	Dropped the complicated memslot refactor in favor of Ricardo Koller's
+	patch with a similar effect.
+	Incorporated David Dunn's feedback and reviewed by tag: shortened waits
+	to speed up test.
+v2->v3:
+	Incorporated a suggestion from David on how to build the NX huge pages
+	test.
+	Fixed a build breakage identified by David.
+	Dropped the per-vm nx_huge_pages field in favor of simply checking the
+	global + per-VM disable override.
+	Documented the new capability
+	Separated out the commit to test disabling NX huge pages
+	Removed permission check when checking if the disable NX capability is
+	supported.
+	Added test coverage for the permission check.
+v3->v4:
+	Collected RB's from Jing and David
+	Modified stat collection to reduce a memory allocation [David]
+	Incorporated various improvments to the NX test [David]
+	Changed the NX disable test to run by default [David]
+	Removed some now unnecessary commits
+	Dropped the code to dump KVM stats from the binary stats test, and
+	factor out parts of the existing test to library functions instead.
+	[David, Jing, Sean]
+	Dropped the improvement to a debugging log message as it's no longer
+	relevant to this series.
+v4->v5:
+	Incorporated cleanup suggestions from David and Sean
+	Added a patch with style fixes for the binary stats test from Sean
+	Added a restriction that NX huge pages can only be disabled before
+	vCPUs are created [Sean]
 
-With V2 and swappiness=10 we are still seeing some swap, but very little tearing
-down of THPs over time. With swappiness=0 it did some when swap but we are not
-losings GBs of THPS (with your patch swappiness=0 has swap or THP issues on V2).
+v5->v6:
+	Scooped up David's RBs
+	Added a magic token to skip nx_huge_pages_test when not run via
+	wrapper script [Sean]
+	Made the call to nx_huge_pages_test in the wrapper script more
+	robust [Sean]
+	Incorportated various nits and comment / documentation suggestions from
+	Sean.
+	Improved negative testing of NX disable without reboot permissions. [Sean]
 
-With V1 and swappiness=(0|10)(with and without your patch), it swaps a ton and
-ultimately leads to a significant amount of THP splitting. So the longer the
-system/workload runs, the less likely we are to get THPs backing the guest and
-the performance gain from THPs is lost.
+Ben Gardon (9):
+  KVM: selftests: Remove dynamic memory allocation for stats header
+  KVM: selftests: Read binary stats header in lib
+  KVM: selftests: Read binary stats desc in lib
+  KVM: selftests: Read binary stat data in lib
+  KVM: selftests: Add NX huge pages test
+  KVM: x86: Fix errant brace in KVM capability handling
+  KVM: x86/MMU: Allow NX huge pages to be disabled on a per-vm basis
+  KVM: selftests: Factor out calculation of pages needed for a VM
+  KVM: selftests: Test disabling NX hugepages on a VM
 
-So your patch does help return the old swappiness=0 behavior, but only for V2.
+Sean Christopherson (1):
+  KVM: selftests: Clean up coding style in binary stats test
 
-Ideally we would like to keep swappiness>0 but I found that with my patch and
-swappiness=0 we could create a workaround for this effect on V1, but any other
-value still results in the THP issue.
+ Documentation/virt/kvm/api.rst                |  17 ++
+ arch/x86/include/asm/kvm_host.h               |   2 +
+ arch/x86/kvm/mmu.h                            |   8 +-
+ arch/x86/kvm/mmu/spte.c                       |   7 +-
+ arch/x86/kvm/mmu/spte.h                       |   3 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                    |   2 +-
+ arch/x86/kvm/x86.c                            |  31 ++-
+ include/uapi/linux/kvm.h                      |   1 +
+ tools/testing/selftests/kvm/Makefile          |  10 +
+ .../selftests/kvm/include/kvm_util_base.h     |  13 +
+ .../selftests/kvm/kvm_binary_stats_test.c     | 142 +++++-----
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 248 ++++++++++++++++--
+ .../selftests/kvm/x86_64/nx_huge_pages_test.c | 224 ++++++++++++++++
+ .../kvm/x86_64/nx_huge_pages_test.sh          |  38 +++
+ 14 files changed, 652 insertions(+), 94 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+ create mode 100755 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
 
-
-After the workload is run with V2 and swappiness=0 the host system look like this**:
-               total        used        free      shared  buff/cache   available
-Mem:       264071432   257536896      927424        4664     5607112     4993184
-Swap:        4194300           0     4194300
-
-Node 0 AnonPages:      128145476 kB	Node 1 AnonPages:      128111908 kB
-Node 0 AnonHugePages:  128026624 kB	Node 1 AnonHugePages:  128090112 kB
-
-** without your patch there is still some swap and THP splitting but nothing
-like the case below.
-
-Same workload on V1/swappiness=0 looks like this:
-               total        used        free	  shared  buff/cache   available
-Mem:	   264071432   257169500     1032612        4192     5869320     5357944
-Swap:        4194300      623008     3571292
-
-Node 0 AnonPages:      127927156 kB     Node 1 AnonPages:      127701088 kB
-Node 0 AnonHugePages:  127789056 kB     Node 1 AnonHugePages:  87552000 kB
-								^^^^^^^
-
-This leads to the performance regression I'm referring to in later workloads.
-V2 used to have a similar effect to V1, but not nearly as bad. Recent updates
-upstream fixed this in V2.
-
-The workload tests multiple FS types so this is most likely not a FS specific
-issue either.
-
-> If you haven't done so, it could be useful to litter shrink_node() and
-> get_scan_count() with trace_printk() to try to make sense of all the
-> decisions that result in it swapping.
-Will do :) I was originally doing some BPF tracing that lead me to find the
-DEACTIVE_ANON case.
-
-Thanks,
--- Nico
+-- 
+2.36.0.rc0.470.gd361397f0d-goog
 

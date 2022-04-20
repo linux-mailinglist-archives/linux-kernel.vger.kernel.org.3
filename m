@@ -2,159 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88ACC50892E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E52508BED
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378975AbiDTN0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
+        id S1378989AbiDTPVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356684AbiDTN03 (ORCPT
+        with ESMTP id S1344823AbiDTPVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:26:29 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E511442A2D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:23:43 -0700 (PDT)
+        Wed, 20 Apr 2022 11:21:52 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645B544A2A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:19:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650461023; x=1681997023;
-  h=from:to:cc:subject:date:message-id;
-  bh=bFw9jBOeodp0zCARNf/d8JtgIIyNELjWMG7lzca9XA4=;
-  b=krgLlgf1DnoLEA8dnR81xc45UXPseGoJzQlm5+A79Nh37YIyM6t2mRKj
-   IsIJgq3GKVDVlPQeXBfHGV3F3sl4KyxjY66LCMs1IcUpR71jkJPfoZ7Ck
-   KAWFswth+RAC/im3UytMG6Vir5QTOU/pJ4GAhAB7HyD3Qieu28AZ4WnWn
-   t9l+3xbj+rWsOQoiIgsZ+bKI8ieve3hZBUali5n69AOPPkoYeA7nz8Tth
-   xXmusVNfrwoGyFJY2SZuGNJ8B1v9sgK0hXkq7ZlJGBB+hpqucvcqaqWNU
-   edI4HqEayyLlI5kTCcUr5l2vuwYDhLoiYt+JRdk/mDt3DnBqEhuQrXilA
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="244606005"
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="244606005"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 06:23:23 -0700
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="555191349"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.12])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 06:23:20 -0700
-From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        linux-mm@kvack.org (open list:HWPOISON MEMORY FAILURE HANDLING),
-        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
-        64-BIT))
-Subject: [PATCH 1/1] x86/mm: Forbid the zero page once it has uncorrectable errors
-Date:   Wed, 20 Apr 2022 17:00:09 -0400
-Message-Id: <20220420210009.65666-1-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+  t=1650467945; x=1682003945;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=+f8zw2+M+xo4E4iKHv4DnPjhY06IfOG5lA6m98XiFlk=;
+  b=WO+3tYG/1leprZWcx98fKkWIPttOlp3yX5FD6Z7CHc/omwgvhfbG2Etx
+   cFlQN/wNJO4oDAJQKhyu6kDol2TBIQjzKxLclIFzlPKZxFfxz2hX3iTbu
+   zJfCuOzN+Bcrjy8CLohiYVmNpqZgBJ84hSzHH6RVobH+QrVNJJ3/A3igR
+   QI+Mz1ZicHCCUazL7xJDmCkeduUV6Wu0iwEGHkh2H7W5aP9Vn8VfwRp1f
+   B7recV/fElxD5c3SiBIfeiGDlaAHHiONDOi9VRX+E2n16UebITW00QU5b
+   8GcSDyPO9j7zPZmikTHbY5GohNjuGiBwnLTktOe3zmwBr55zm6z6Oa4E9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="262908382"
+X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
+   d="scan'208";a="262908382"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 08:05:37 -0700
+X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
+   d="scan'208";a="576625740"
+Received: from sbidasar-mobl.amr.corp.intel.com (HELO [10.209.100.171]) ([10.209.100.171])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 08:05:36 -0700
+Message-ID: <78c7edc3-f431-9735-238d-9aa2b45ec45e@linux.intel.com>
+Date:   Wed, 20 Apr 2022 08:28:31 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: Re: [PATCH] ASoC: SOF: using pm_runtime_resume_and_get to simplify
+ the code
+To:     cgel.zte@gmail.com
+Cc:     lgirdwood@gmail.com, ranjani.sridharan@linux.intel.com,
+        kai.vehmanen@linux.intel.com, daniel.baluta@nxp.com,
+        broonie@kernel.org, sound-open-firmware@alsa-project.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220420030315.2575691-1-chi.minghao@zte.com.cn>
+Content-Language: en-US
+In-Reply-To: <20220420030315.2575691-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Accessing to the zero page with uncorrectable errors causes unexpected
-machine checks. So forbid the zero page from being used by user-space
-processes once it has uncorrectable errors. Processes that have already
-mapped the zero page with uncorrectable errors will get killed once they
-access to it. New processes will not use the zero page.
 
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
-1) Processes that have already mapped the zero page with uncorrectable
-   errors could be recovered by attaching a new zeroed anonymous page.
-   But this may need to walk all page tables for all such processes to
-   update the PTEs pointing to the zero page. Looks like a big modification
-   for a rare problem?
 
-2) Some validation tests that sometimes pick up the virtual address
-   mapped to the zero page to inject errors get themself killed and can't
-   run anymore until reboot the system. To avoid injecting errors to the
-   zero page, please refer to the path:
+On 4/19/22 22:03, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
+> pm_runtime_put_noidle. This change is just to simplify the code, no
+> actual functional changes.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
-   https://lore.kernel.org/all/20220419211921.2230752-1-tony.luck@intel.com/
+Well, maybe that's a simplification, but we've been using the same pattern for years now.
 
- arch/x86/include/asm/pgtable.h | 3 +++
- arch/x86/kernel/cpu/mce/core.c | 6 ++++++
- arch/x86/mm/pgtable.c          | 2 ++
- mm/memory-failure.c            | 2 +-
- 4 files changed, 12 insertions(+), 1 deletion(-)
+Is there really a clear direction to use this new function?
 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 62ab07e24aef..d4b8693452e5 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -55,6 +55,9 @@ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
- 	__visible;
- #define ZERO_PAGE(vaddr) ((void)(vaddr),virt_to_page(empty_zero_page))
- 
-+extern bool __read_mostly forbids_zeropage;
-+#define mm_forbids_zeropage(x)	forbids_zeropage
-+
- extern spinlock_t pgd_lock;
- extern struct list_head pgd_list;
- 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 981496e6bc0e..5b3af27cc8fa 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -44,6 +44,7 @@
- #include <linux/sync_core.h>
- #include <linux/task_work.h>
- #include <linux/hardirq.h>
-+#include <linux/pgtable.h>
- 
- #include <asm/intel-family.h>
- #include <asm/processor.h>
-@@ -1370,6 +1371,11 @@ static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callba
- 	if (count > 1)
- 		return;
- 
-+	if (is_zero_pfn(current->mce_addr >> PAGE_SHIFT) && !forbids_zeropage) {
-+		pr_err("Forbid user-space process from using zero page\n");
-+		forbids_zeropage = true;
-+	}
-+
- 	task_work_add(current, &current->mce_kill_me, TWA_RESUME);
- }
- 
-diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index 3481b35cb4ec..c0c56bce3acc 100644
---- a/arch/x86/mm/pgtable.c
-+++ b/arch/x86/mm/pgtable.c
-@@ -28,6 +28,8 @@ void paravirt_tlb_remove_table(struct mmu_gather *tlb, void *table)
- 
- gfp_t __userpte_alloc_gfp = GFP_PGTABLE_USER | PGTABLE_HIGHMEM;
- 
-+bool __read_mostly forbids_zeropage;
-+
- pgtable_t pte_alloc_one(struct mm_struct *mm)
- {
- 	return __pte_alloc_one(mm, __userpte_alloc_gfp);
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index dcb6bb9cf731..30ad7bdeb89f 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1744,7 +1744,7 @@ int memory_failure(unsigned long pfn, int flags)
- 		goto unlock_mutex;
- 	}
- 
--	if (TestSetPageHWPoison(p)) {
-+	if (TestSetPageHWPoison(p) || is_zero_pfn(pfn)) {
- 		pr_err("Memory failure: %#lx: already hardware poisoned\n",
- 			pfn);
- 		res = -EHWPOISON;
--- 
-2.17.1
+the overwhelming majority of drivers in sound/soc still rely on the pm_runtime_get_sync (111 v. 7).
 
+
+> ---
+>  sound/soc/sof/sof-client-probes.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/sound/soc/sof/sof-client-probes.c b/sound/soc/sof/sof-client-probes.c
+> index 797dedb26163..c4c6e03c8133 100644
+> --- a/sound/soc/sof/sof-client-probes.c
+> +++ b/sound/soc/sof/sof-client-probes.c
+> @@ -503,10 +503,9 @@ static ssize_t sof_probes_dfs_points_read(struct file *file, char __user *to,
+>  	if (!buf)
+>  		return -ENOMEM;
+>  
+> -	ret = pm_runtime_get_sync(dev);
+> +	ret = pm_runtime_resume_and_get(dev);
+>  	if (ret < 0 && ret != -EACCES) {
+>  		dev_err_ratelimited(dev, "debugfs read failed to resume %d\n", ret);
+> -		pm_runtime_put_noidle(dev);
+>  		goto exit;
+>  	}
+>  
+> @@ -568,10 +567,9 @@ sof_probes_dfs_points_write(struct file *file, const char __user *from,
+>  
+>  	desc = (struct sof_probe_point_desc *)tkns;
+>  
+> -	ret = pm_runtime_get_sync(dev);
+> +	ret = pm_runtime_resume_and_get(dev);
+>  	if (ret < 0 && ret != -EACCES) {
+>  		dev_err_ratelimited(dev, "debugfs write failed to resume %d\n", ret);
+> -		pm_runtime_put_noidle(dev);
+>  		goto exit;
+>  	}
+>  
+> @@ -621,10 +619,9 @@ sof_probes_dfs_points_remove_write(struct file *file, const char __user *from,
+>  		goto exit;
+>  	}
+>  
+> -	ret = pm_runtime_get_sync(dev);
+> +	ret = pm_runtime_resume_and_get(dev);
+>  	if (ret < 0) {
+>  		dev_err_ratelimited(dev, "debugfs write failed to resume %d\n", ret);
+> -		pm_runtime_put_noidle(dev);
+>  		goto exit;
+>  	}
+>  

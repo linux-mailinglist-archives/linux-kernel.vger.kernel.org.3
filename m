@@ -2,135 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA86750880A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356F850880E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378499AbiDTM0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
+        id S1378502AbiDTM0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378495AbiDTM0R (ORCPT
+        with ESMTP id S1376472AbiDTM0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:26:17 -0400
-Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9781403E5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:23:31 -0700 (PDT)
-Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-e5ca5c580fso1752503fac.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=TIUNz0EBmXcqRPlOdyGN4ICv5GdtKevGFMV0dTVCKRM=;
-        b=KN1EH+ZkU67vRFXgDO4xfqUjsgFZyKpCOMKnhjRkjH16Co9PlrgjbBEy9UTyOLeelA
-         BGzYm53QGEti6u/01jPf2J8shH0+mxiJ5IrtOsWmul23Wl1NXQKn0U7MLdEs8YqUExF/
-         YlmLgtWchtqGNs5FMe7MNnrGWjh4sf8woOiql6m1NlDZG5y+gVAvno9hT/9tJBYCvh1F
-         lNegr90SmksTyexOtEt4VVCnDy1af3PNP3MYZc/FdPy/JSj25LqEdbi60G0PSWLqjSsr
-         Q2s8R9l2Vpfw/KXhycFZM3XbMkCBSU1hLhdtOlUeTOeL2BQaTWbvVebKwA7rbDLwx8q7
-         sw5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=TIUNz0EBmXcqRPlOdyGN4ICv5GdtKevGFMV0dTVCKRM=;
-        b=Af9hEq+nBYsHMsFhejn1Tyhefcpoau9oJmTIdtK4tWST40HcFinKwgguOExxrV6MQg
-         NDX5OSRWhQYZATFg49aWgtZKXQsi97rI2dW//gqOaI+T+nVRY0gkju89F8mOWhFw4U53
-         Mqc/82rj88VMHJo/87xVJ54JpUf8cszNDxa2M2bfPaVycUJKtSdVjsU8ETHUdHfLZQm5
-         Js8stimJHM7PmcLVKfIkkvsY7idhnT/Rikj7PO8qwu4jZPDK7g3sXHnd9lSNTEIBAlXQ
-         TG/vVYSn5foswAwjNB7flXeWvv04aFPoRcrsBFU/ROvnWehKhOuyZyhwU+wY9oypaF/F
-         KB4A==
-X-Gm-Message-State: AOAM531O9Pfr9jCW+BumN+CE9vP0Nb28Tybtva6BQkY2tNgN1E69GgN7
-        aEKcT23hzZ9rDAOHk40oe+3EBr4N86OMxQ==
-X-Google-Smtp-Source: ABdhPJwfZfjdD7QWExbNx3daNAWGm7vWiwN/GrOXV6HfntYFHwxdgyn3VeFjMqXaPJJKA284z7plkg==
-X-Received: by 2002:a05:6870:c151:b0:e5:bf64:38d with SMTP id g17-20020a056870c15100b000e5bf64038dmr1389721oad.8.1650457410282;
-        Wed, 20 Apr 2022 05:23:30 -0700 (PDT)
-Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id q13-20020a4ab3cd000000b0032830efe365sm6541879ooo.43.2022.04.20.05.23.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 05:23:29 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 07:23:28 -0500
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: [PATCH] staging: rtl8192u: change get_key functions to return 0
- instead of -1
-Message-ID: <Yl/7QPKXer7YtXOs@bertie>
+        Wed, 20 Apr 2022 08:26:30 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212363A71A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:23:39 -0700 (PDT)
+X-UUID: 63e924ed9ce74d97bf03f3c9ee80405b-20220420
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:f7b8aa47-61bc-4004-a2b8-62bdb08e4030,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:6f1a5cf0-da02-41b4-b6df-58f4ccd36682,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 63e924ed9ce74d97bf03f3c9ee80405b-20220420
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1360268970; Wed, 20 Apr 2022 20:23:33 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 20 Apr 2022 20:23:31 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 20 Apr 2022 20:23:31 +0800
+Message-ID: <91c52b76872e6339cce3bd671f4ae1143251e2c3.camel@mediatek.com>
+Subject: Re: [PATCH v2] drm/mediatek: dpi: Use mt8183 output formats for
+ mt8192
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <kernel@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <ck.hu@mediatek.com>
+Date:   Wed, 20 Apr 2022 20:23:31 +0800
+In-Reply-To: <20220408013950.674477-1-nfraprado@collabora.com>
+References: <20220408013950.674477-1-nfraprado@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, these three get_key functions return -1 when the provided len
-value is less a specific key length value, which can result in buffer
-overflow depending on how the returned value is used. These functions are
-used in three places in ieee80211/ieee80211_wx.c:
+On Thu, 2022-04-07 at 21:39 -0400, Nícolas F. R. A. Prado wrote:
+> The configuration for mt8192 was incorrectly using the output formats
+> from mt8173. Since the output formats for mt8192 are instead the same
+> ones as for mt8183, which require two bus samples per pixel, the
+> pixelclock and DDR edge setting were misconfigured. This made
+> external
+> displays unable to show the image.
+> 
+> Fix the issue by correcting the output format for mt8192 to be the
+> same
+> as for mt8183, fixing the usage of external displays for mt8192.
+> 
+> Fixes: be63f6e8601f ("drm/mediatek: dpi: Add output bus formats to
+> driver data")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+> 
+> Changes in v2:
+> - Added Fixes tag
+> 
+>  drivers/gpu/drm/mediatek/mtk_dpi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index 4554e2de1430..e61cd67b978f 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -819,8 +819,8 @@ static const struct mtk_dpi_conf mt8192_conf = {
+>  	.cal_factor = mt8183_calculate_factor,
+>  	.reg_h_fre_con = 0xe0,
+>  	.max_clock_khz = 150000,
+> -	.output_fmts = mt8173_output_fmts,
+> -	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
+> +	.output_fmts = mt8183_output_fmts,
+> +	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+>  };
+>  
+>  static int mtk_dpi_probe(struct platform_device *pdev)
 
-  ieee80211_wx_get_encode() :
-    The behavior of this function will be unchanged.
+Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
-  ieee80211_wx_get_encode_ext() :
-    The result of the get_key function is written to ext->key_len,
-    resulting in a buffer overflow if the result is negative.
+Hello CK,
 
-  ieee80211_wx_set_encode() :
-    The behavior of this function will change. When len is less than the
-    key length value, it will set a default key of all 0.
+Gentle ping for this patch.
+This patch is confirmed by Xinlei and Jitao.
 
-Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
----
- drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_ccmp.c | 2 +-
- drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c | 2 +-
- drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_wep.c  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_ccmp.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_ccmp.c
-index 101c28265e91..f17d07dad56d 100644
---- a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_ccmp.c
-+++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_ccmp.c
-@@ -362,7 +362,7 @@ static int ieee80211_ccmp_get_key(void *key, int len, u8 *seq, void *priv)
- 	struct ieee80211_ccmp_data *data = priv;
- 
- 	if (len < CCMP_TK_LEN)
--		return -1;
-+		return 0;
- 
- 	if (!data->key_set)
- 		return 0;
-diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-index 689d8843f538..7b120b8cb982 100644
---- a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-+++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-@@ -637,7 +637,7 @@ static int ieee80211_tkip_get_key(void *key, int len, u8 *seq, void *priv)
- 	struct ieee80211_tkip_data *tkey = priv;
- 
- 	if (len < TKIP_KEY_LEN)
--		return -1;
-+		return 0;
- 
- 	if (!tkey->key_set)
- 		return 0;
-diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_wep.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_wep.c
-index 8a51ea1dd6e5..a2cdf3bfd1a4 100644
---- a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_wep.c
-+++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_wep.c
-@@ -201,7 +201,7 @@ static int prism2_wep_get_key(void *key, int len, u8 *seq, void *priv)
- 	struct prism2_wep_data *wep = priv;
- 
- 	if (len < wep->key_len)
--		return -1;
-+		return 0;
- 
- 	memcpy(key, wep->key, wep->key_len);
- 
--- 
-2.32.0
+BRs,
+Rex
 

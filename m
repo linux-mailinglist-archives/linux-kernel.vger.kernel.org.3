@@ -2,183 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6339508408
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A759750840B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354166AbiDTIw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S1376821AbiDTIx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377011AbiDTIwy (ORCPT
+        with ESMTP id S1376899AbiDTIxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:52:54 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992EF1EED1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:50:04 -0700 (PDT)
-Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 9AB6F3F7B4;
-        Wed, 20 Apr 2022 10:50:01 +0200 (CEST)
-Date:   Wed, 20 Apr 2022 10:49:59 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org
-Subject: Re: [PATCH v2 1/1] arm64: dts: qcom: sm8350-sagami: usb qmp phy node
- - add 'vdda-pll-supply' & 'vdda-phy-supply'
-Message-ID: <20220420084959.fvswkrcimkvxleii@SoMainline.org>
-References: <20220419205854.1269922-1-bhupesh.sharma@linaro.org>
- <Yl9y668H/N+bcrP4@builder.lan>
- <CAH=2NtwCsRmPbBJ6SAb4fL_Di3SxfUsw=mZMrRGyefd+NW=PQQ@mail.gmail.com>
+        Wed, 20 Apr 2022 04:53:24 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F195A33EBE;
+        Wed, 20 Apr 2022 01:50:36 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KjvW21g3Fz1J9sP;
+        Wed, 20 Apr 2022 16:49:50 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 20 Apr 2022 16:50:34 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 20 Apr 2022 16:50:34 +0800
+Message-ID: <a3300d4d-6428-8157-b2dc-eaeb9f249858@huawei.com>
+Date:   Wed, 20 Apr 2022 16:50:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH=2NtwCsRmPbBJ6SAb4fL_Di3SxfUsw=mZMrRGyefd+NW=PQQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
+Subject: Re: [PATCH -next 1/2] nfs: nfs{,4}_file_flush should consume
+ writeback error
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "anna@kernel.org" <anna@kernel.org>,
+        "smayhew@redhat.com" <smayhew@redhat.com>
+CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
+References: <20220305124636.2002383-1-chenxiaosong2@huawei.com>
+ <20220305124636.2002383-2-chenxiaosong2@huawei.com>
+ <ca81e90788eabbf6b5df5db7ea407199a6a3aa04.camel@hammerspace.com>
+ <5666cb64-c9e4-0549-6ddb-cfc877c9c071@huawei.com>
+ <eab4bbb565a50bd09c2dbd3522177237fde2fad9.camel@hammerspace.com>
+ <037054f5ac2cd13e59db14b12f4ab430f1ddef5d.camel@hammerspace.com>
+ <4a8e21fb-d8bf-5428-67e5-41c47529e641@huawei.com>
+ <0528423f710cd612262666b1533763943c717273.camel@hammerspace.com>
+ <ccd017a4-31f1-297f-b2e2-e71eb16f1159@huawei.com>
+ <9fc83915a24d7b65d743910dd0f0e5f3d0373596.camel@hammerspace.com>
+In-Reply-To: <9fc83915a24d7b65d743910dd0f0e5f3d0373596.camel@hammerspace.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-20 12:28:24, Bhupesh Sharma wrote:
-> Hi Bjorn,
+在 2022/4/12 22:27, Trond Myklebust 写道:
+
+>
+> It will clear ENOSPC, EDQUOT and EFBIG. It should not clear other
+> errors that are not supposed to be reported by write().
 > 
-> On Wed, 20 Apr 2022 at 08:11, Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > On Tue 19 Apr 15:58 CDT 2022, Bhupesh Sharma wrote:
-> >
-> > How about making the subject:
-> >
-> > "arm64: dts: qcom: sm8350-sagami: add supplies to USB phy node"
-> >
-> > It still says the same thing, but in much less characters.
+> As I keep repeating, that is _documented behaviour_!
 > 
-> Sure, this wording seems better to me. Will fix this in v3.
-> 
-> > > As suggested by Bjorn during review of [1], the 'vdda-pll-supply' &
-> > > 'vdda-phy-supply' supplies denote the power for the bus and the
-> > > clock of the usb qmp phy and are used by the qcom qmp phy driver.
-> > >
-> > > So, its safe to assume that the two regulators are the same as on
-> > > the MTP. So let's wire them up in the same way as the MTP.
-> > >
-> >
-> > I'm not sure it's "safe to assume", so I would like to get Konrad's
-> > input before merging this.
-> 
-> Right. @Konrad Dybcio , @Marijn Suijten - Any comments on this fix?
-> Please share your thoughts.
 
-All we can do is read downstream sources (and/or check compiled DTS
-after all overrides have been flattened together), or read sysfs to
-validate values where applicable.
+Hi Trond:
 
-These are indeed the two regulators used by USB in:
+You may mean that write(2) manpage described:
 
-	https://github.com/sonyxperiadev/kernel/blob/7378fb627b546e0eae24cccd3ab37fa9e0802f95/arch/arm64/boot/dts/qcom/lahaina-usb.dtsi#L146-L149
+> Since Linux 4.13, errors from write-back come with a promise that
+> they may be reported by subsequent.  write(2) requests, and will be
+> reported by a subsequent fsync(2) (whether or not they were also
+> reported by write(2)).
 
-And the voltages are correct for our board too as per:
+The manpage mentioned that "reported by a subsequent fsync(2)", your 
+patch[1] clear the wb err on _async_ write(), and wb err will _not_ be 
+reported by subsequent fsync(2), is it documented behaviour?
 
-	https://github.com/sonyxperiadev/kernel/blob/7378fb627b546e0eae24cccd3ab37fa9e0802f95/arch/arm64/boot/dts/qcom/lahaina-regulators.dtsi
+All other filesystems will _not_ clear any wb err on _async_ write().
 
-It appears only L6 is used by other hardware nodes, but that should be
-fine.
+[1] 
+https://patchwork.kernel.org/project/linux-nfs/patch/20220411213346.762302-4-trondmy@kernel.org/
 
-As such, with the suggestions from Bjorn applied:
 
-	Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-
-- Marijn
-
-> Thanks,
-> Bhupesh
-> 
-> > > In absence of the same 'make dtbs_check' leads to following warnings:
-> > >
-> > > arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
-> > >  phy-wrapper@88e9000: 'vdda-phy-supply' is a required property
-> > >
-> > > arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
-> > >  phy-wrapper@88e9000: 'vdda-pll-supply' is a required property
-> > >
-> >
-> > This is good!
-> >
-> > Thanks for the patch Bhupesh,
-> > Bjorn
-> >
-> > > [1]. https://lore.kernel.org/lkml/20220228123019.382037-9-bhupesh.sharma@linaro.org/
-> > >
-> > > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > Cc: konrad.dybcio@somainline.org
-> > > Cc: Vinod Koul <vkoul@kernel.org>
-> > > Cc: Marijn Suijten <marijn.suijten@somainline.org>
-> > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > > ---
-> > > Changes since v1:
-> > > -----------------
-> > > - v1 can be found here: https://www.spinics.net/lists/linux-arm-msm/msg108467.html
-> > > - Fixed the commit message to read usb qmp phy instead of ufs phy (which
-> > >   was introduced erroraneously in the commit log).
-> > >
-> > >  .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 25 +++++++++++++++++++
-> > >  1 file changed, 25 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> > > index 90b13cbe2fa6..238ac9380ca2 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> > > @@ -3,6 +3,7 @@
-> > >   * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
-> > >   */
-> > >
-> > > +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> > >  #include "sm8350.dtsi"
-> > >  #include "pm8350.dtsi"
-> > >  #include "pm8350b.dtsi"
-> > > @@ -75,6 +76,27 @@ ramoops@ffc00000 {
-> > >       };
-> > >  };
-> > >
-> > > +&apps_rsc {
-> > > +     pm8350-rpmh-regulators {
-> > > +             compatible = "qcom,pm8350-rpmh-regulators";
-> > > +             qcom,pmic-id = "b";
-> > > +
-> > > +             vreg_l1b_0p88: ldo1 {
-> > > +                     regulator-name = "vreg_l1b_0p88";
-> > > +                     regulator-min-microvolt = <912000>;
-> > > +                     regulator-max-microvolt = <920000>;
-> > > +                     regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> > > +             };
-> > > +
-> > > +             vreg_l6b_1p2: ldo6 {
-> > > +                     regulator-name = "vreg_l6b_1p2";
-> > > +                     regulator-min-microvolt = <1200000>;
-> > > +                     regulator-max-microvolt = <1208000>;
-> > > +                     regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> > > +             };
-> > > +     };
-> > > +};
-> > > +
-> > >  &adsp {
-> > >       status = "okay";
-> > >       firmware-name = "qcom/adsp.mbn";
-> > > @@ -256,4 +278,7 @@ &usb_1_hsphy {
-> > >
-> > >  &usb_1_qmpphy {
-> > >       status = "okay";
-> > > +
-> > > +     vdda-phy-supply = <&vreg_l6b_1p2>;
-> > > +     vdda-pll-supply = <&vreg_l1b_0p88>;
-> > >  };
-> > > --
-> > > 2.35.1
-> > >

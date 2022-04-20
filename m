@@ -2,143 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D674507DAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 02:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24211507DB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 02:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358581AbiDTAmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 20:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
+        id S1348077AbiDTApk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 20:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244069AbiDTAmk (ORCPT
+        with ESMTP id S244069AbiDTApj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 20:42:40 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAA011A2D
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 17:39:54 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id d9so130036vsh.10
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 17:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KT16lddZpOeYEOzxjkpuLBwqew5J7d3LxwdLjYYWCDQ=;
-        b=sctCgxK1K3o1FcCO7rvQr3ADGC+2y/q5zKIjHhpp8W+eXKQaq+DYjntlCpz7UR9H81
-         Tv5YrcqPtfHJzmdKz9P80FH3XA7nIEBfI2SwjV9PwgwTIyvcDxCDY/ahHe4b9Y29ubQS
-         ZZuUKsJTeqbluvdFLtz6CwI3+FWQY4RjkNiEQhQrJtX5EFCjClPp+ZSEkCiY6TejT/m/
-         2n+FES1CNoeKXkI9nvvM9uUg3IBqLEA2B/SjcEQ/TTR6KJM4SXYQXXBaJN8W8BDSXgZX
-         rUmsCxlXsk1u1leLF4gcOGUcacKgrve+KnL4WN1a7FtjdIBjU8L11UzWS8weJnlr8/qd
-         63gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KT16lddZpOeYEOzxjkpuLBwqew5J7d3LxwdLjYYWCDQ=;
-        b=VuIGD/nTsNHigM/7yp8XaYjlAtn2NEznpLnYdM5JaZ4snC23b3u/a/e3rAK/TdfKTi
-         dyXyiewlECPWxkklmpMErA8FG8EZ+C7fwb34RLF6cMrpbZhN4ZPLBRiHi0R3OFPpGBK5
-         NDz6yW3AnH+luclczrqTv+LjYu6uULkqSlgj0vPaLBJBbbKHwNCeF66otp/44FVgFMI0
-         Zzt7Xse2MUpvFI/dubiU9cyRx4Xr1MYjJjTRhL7ls7jqctzOJ23sLFs2b1b/ER0AQbxO
-         LsVCHzE1sRuU1nPoJdpDDYdIC6wdo9Irkv7eWCzlWPghH/MhHi/9f94TiDyVn1g9iNym
-         hjmw==
-X-Gm-Message-State: AOAM531iNOgRkMi4rxvkKUFw91JYo6NCsmWS5Gj3l3/MmT4+bPnbcncX
-        kQGIeU5HW9JJHboduJ2AH/lChpz6SuFZZxn55+iD1g==
-X-Google-Smtp-Source: ABdhPJxtK3l4fn9+QFdiu0rNZ2xlRrzY2+o6YQzD7NeHRc8+S6Z7hXRtCYNygpfogrJcYbf8Hrjskc6cyluLwGUtJnM=
-X-Received: by 2002:a05:6102:5113:b0:32a:76b1:e1bc with SMTP id
- bm19-20020a056102511300b0032a76b1e1bcmr622157vsb.41.1650415193573; Tue, 19
- Apr 2022 17:39:53 -0700 (PDT)
+        Tue, 19 Apr 2022 20:45:39 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C43517A93;
+        Tue, 19 Apr 2022 17:42:53 -0700 (PDT)
+Received: (Authenticated sender: joao@overdrivepizza.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 70D161BF206;
+        Wed, 20 Apr 2022 00:42:43 +0000 (UTC)
+From:   joao@overdrivepizza.com
+To:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Cc:     joao@overdrivepizza.com, peterz@infradead.org, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com, hjl.tools@gmail.com,
+        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
+        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
+Subject: [RFC PATCH 00/11] Kernel FineIBT Support
+Date:   Tue, 19 Apr 2022 17:42:30 -0700
+Message-Id: <20220420004241.2093-1-joao@overdrivepizza.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-6-yuzhao@google.com>
- <20220411191615.a34959bdcc25ef3f9c16a7ce@linux-foundation.org> <20220412070616.GT2731@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220412070616.GT2731@worktop.programming.kicks-ass.net>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 19 Apr 2022 18:39:17 -0600
-Message-ID: <CAOUHufbUyTL-xx1RBovfSh+CrK7mBHGOouvyQBjy1RX1f3dkzw@mail.gmail.com>
-Subject: Re: [PATCH v10 05/14] mm: multi-gen LRU: groundwork
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 1:06 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Apr 11, 2022 at 07:16:15PM -0700, Andrew Morton wrote:
->
-> > > +{
-> > > +   int gen;
-> > > +   unsigned long old_flags, new_flags;
-> > > +
-> > > +   do {
-> > > +           new_flags = old_flags = READ_ONCE(folio->flags);
-> > > +           if (!(new_flags & LRU_GEN_MASK))
-> > > +                   return false;
-> > > +
-> > > +           VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
-> > > +           VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
-> > > +
-> > > +           gen = ((new_flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
-> > > +
-> > > +           new_flags &= ~LRU_GEN_MASK;
-> > > +           /* for shrink_page_list() */
-> > > +           if (reclaiming)
-> > > +                   new_flags &= ~(BIT(PG_referenced) | BIT(PG_reclaim));
-> > > +           else if (lru_gen_is_active(lruvec, gen))
-> > > +                   new_flags |= BIT(PG_active);
-> > > +   } while (cmpxchg(&folio->flags, old_flags, new_flags) != old_flags);
->
-> Also; please use the form:
->
->         unsigned long new, old = READ_ONCE(folio->flags);
->
->         do {
->                 new = /* something */ old;
->         } while (!try_cmpxchg(&folio->flags, &old, new))
+From: Joao Moreira <joao@overdrivepizza.com>
 
-Sweet. Thanks.
+Disclaimer: This is all in a very early/poc stage and is mostly research work
+-- be advised to proceed with care and to bring a towel with you.
 
-A related question: if I pass new = old to try_cmpxchg(), does it know
-that and avoid an unnecessary atomic op?
+This patch series enables FineIBT in the kernel. FineIBT is a compiler-enhanced
+forward-edge CFI scheme built on top of Intel's CET-IBT that works by setting a
+hash on the caller side which is then checked at the callee side. Because IBT
+requires indirect branches to land on ENDBR instructions, these hash checks
+shouldn't be bypassable on the occasion of function pointer corruption. More
+details on the general FineIBT design are here [1, 2].
+
+When compared to IBT itself, FineIBT imposes a more restrictive policy that
+should be more robust against control-flow hijacking attacks. When compared to
+schemes like KCFI [3], it has the benefit of not depending on memory reads
+(which not only might be more efficient in terms of performance and power but
+also makes it compatible with XOM [4]) and brings in the benefits of IBT
+regarding speculative execution hardening.
+
+A debatable point is the fact that on FineIBT the checks are made on the callee
+side. On a quick look, this seems to be cool because it allows strict
+reachability refinement of more security-critical functions (like hardware
+feature disabling ones) while still allowing other less critical functions to be
+relaxed/coarse-grained; under caller-side checks, if one single function is
+required to be relaxed, this leads into an indirect call instruction being
+relaxed, then becoming a branch capable of reaching all the functions in the
+executable address space, including those considered security-critical. Inputs
+and opinions on this are very welcome, as there are other perspectives about
+this I might be missing.
+
+This series relies heavily on the recently upstreamed IBT support and also
+respins some sorcery proposed by Peter Zijlstra in his IBT v2 series [5]. A huge
+part of these is a repurpose of work originally cast by Peter.
+
+The FineIBT enablement uses a modified clang version to emit code with the
+FineIBT hash set/check operations. The modified clang is available here [6]. The
+.config used for building and testing is available here [7] along with more or
+less general instructions on how to build it. A tree with this series on top is
+available here [8].
+
+Key insights:
+- On IBT v2, Peter proposed an optimization that uses objtool to add an offset
+  to operands of direct branches targeting ENDBR instructions, skipping the need
+to fetch/decode these. With FineIBT, skipping ENDBRs+hash checks is not only
+desirable but needed, as a way to prevent direct calls from being considered a
+violation whenever they reach a function without priorly setting the respective
+hash. This series respins the approach and uses objtool to fix direct branches
+targeting FineIBT hash check operations. Fixing this in objtool instead of using
+the compiler is convenient because then it becomes easy to mix
+FineIBT-instrumented code with binaries only augmented with regular ENDBRs (such
+as currently-existing assembly).
+- The same approach (identifying FineIBT hash check sequences and fixing direct
+  branch targets) is also used dynamically to support module loading (fix the
+relocations), text-patching (support static calls), and on BPF (support jitted
+calls to core functions).
+- When a direct branch into a FineIBT hash check cannot be fixed (because it is
+  a short jump targeting an instruction which, once incremented with the needed
+offset, becomes unreachable) the respective functionality patches the FineIBT
+sequence with nops, making it a valid target that is still constrained by IBT.
+- This series also fixes unmatching prototypes of certain indirect calls that
+  will trigger violations on any prototype-based CFI scheme.
+- Also adds test modules for both IBT and FineIBT.
+- Also adds coarsecf_check attributes to specific functions, making the compiler
+  emit them with regular ENDBRs instead of the FineIBT hash check. This is
+useful because certain functions are called from assembly and we currently don't
+have a sane scheme to set hashes in all of these (although we do it in one more
+relevant spot).
+- In the occasion of violations, the hash check invokes a __fineibt_handler,
+  which is a function that makes it easier to debug unmatching prototypes and
+such. It can be easily switched to an ud2 instruction or anything like that.
+- In my tests, the above-mentioned .config runs this series smoothly, without
+  any false-positive violations.
+
+Some obvious possible improvements:
+- The support should identify FineIBT sequences based on annotations, not on
+  parsing the actual instructions. This would make things less hacky and more
+reliable.
+- Assembly coverage must be improved eventually.
+- The FineIBT hash check operation can have its length reduced by replacing the
+  inlined check with a call to a checker.
+
+@PeterZ @JoshP
+
+I'm a bit unaware of the details on why the objtool approach to bypass ENDBRs
+was removed from the IBT series. Is this approach now sensible considering that
+it is a requirement for a new/enhanced feature? If not, how extending the Linker
+to emit already fixed offsets sounds like?
+
+@Kees
+
+I'm considering detaching the prototype fixes from this series and reworking
+them to submit actual fixes (patches 10 and 11). Any specific suggestions for
+these specific patches? Maybe you want to take a look and help in co-authorship
+as we did with the void*-in-x86-crypto patches in the past? I guess these are
+useful for whatever CFI scheme is in place.
+
+@all
+
+Any other major concerns, ideas, or suggestions? :)
+
+Refs:
+
+[1] - FineIBT:
+https://www.openwall.com/lists/kernel-hardening/2021/02/11/1
+
+[2] - FineIBT on Linux Security Summit:
+https://static.sched.com/hosted_files/lssna2021/8f/LSS_FINEIBT_JOAOMOREIRA.pdf
+
+[3] - KCFI Clang Patches:
+https://reviews.llvm.org/D119296/new/
+
+[4] - eXecute-Only Memory:
+https://lpc.events/event/4/contributions/283/attachments/357/588/Touch_but_dont_look__Running_the_kernel_in_execute_only_memory-presented.pdf
+
+[5] - IBT Patches v2:
+https://lore.kernel.org/lkml/20220224145138.952963315@infradead.org/
+
+[6] - FineIBT-capable Clang:
+https://github.com/lvwr/llvm-project/tree/fineibt/kernel
+
+[7] - Kernel .config and dummy stuff:
+https://github.com/lvwr/kfineibt_testing
+
+[8] - Linux + FineIBT:
+https://github.com/lvwr/linux/tree/x86/fineibt
+
+Joao Moreira (11):
+  x86: kernel FineIBT
+  kbuild: Support FineIBT build
+  objtool: Support FineIBT offset fixes
+  x86/module: Support FineIBT in modules
+  x86/text-patching: Support FineIBT text-patching
+  x86/bpf: Support FineIBT
+  x86/lib: Prevent UACCESS call warning from objtool
+  x86/ibt: Add CET_TEST module for IBT testing
+  x86/FineIBT: Add FINEIBT_TEST module
+  linux/interrupt: Fix prototype matching property
+  driver/int3400_thermal: Fix prototype matching
+
+ arch/x86/Kconfig                              |  10 +
+ arch/x86/Kconfig.debug                        |  10 +
+ arch/x86/Makefile                             |   3 +
+ arch/x86/entry/entry_64.S                     |   1 +
+ arch/x86/entry/vdso/Makefile                  |   5 +
+ arch/x86/include/asm/ibt.h                    |  16 ++
+ arch/x86/include/asm/setup.h                  |  12 +-
+ arch/x86/include/asm/special_insns.h          |   4 +-
+ arch/x86/include/asm/text-patching.h          |  92 ++++++++-
+ arch/x86/kernel/Makefile                      |   3 +
+ arch/x86/kernel/cet_test.c                    |  30 +++
+ arch/x86/kernel/cpu/common.c                  |   2 +-
+ arch/x86/kernel/fineibt.c                     | 123 ++++++++++++
+ arch/x86/kernel/fineibt_test.c                |  39 ++++
+ arch/x86/kernel/head64.c                      |  12 +-
+ arch/x86/kernel/module.c                      |  45 ++++-
+ arch/x86/kernel/smpboot.c                     |   2 +-
+ arch/x86/lib/copy_mc.c                        |   2 +-
+ arch/x86/net/bpf_jit_comp.c                   |  31 +++
+ arch/x86/purgatory/Makefile                   |   4 +
+ .../intel/int340x_thermal/int3400_thermal.c   |  10 +-
+ include/linux/interrupt.h                     |   6 +-
+ scripts/Makefile.build                        |   1 +
+ scripts/link-vmlinux.sh                       |   8 +
+ tools/objtool/arch/x86/decode.c               | 175 +++++++++++++----
+ tools/objtool/arch/x86/include/arch/special.h |   2 +
+ tools/objtool/builtin-check.c                 |   3 +-
+ tools/objtool/check.c                         | 183 +++++++++++++++++-
+ tools/objtool/include/objtool/arch.h          |   3 +
+ tools/objtool/include/objtool/builtin.h       |   2 +-
+ 30 files changed, 767 insertions(+), 72 deletions(-)
+ create mode 100644 arch/x86/kernel/cet_test.c
+ create mode 100644 arch/x86/kernel/fineibt.c
+ create mode 100644 arch/x86/kernel/fineibt_test.c
+
+-- 
+2.35.1
+

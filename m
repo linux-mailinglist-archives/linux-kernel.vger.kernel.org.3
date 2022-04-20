@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB1D5084D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7605084DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377172AbiDTJYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 05:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S1377194AbiDTJ1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 05:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244208AbiDTJYX (ORCPT
+        with ESMTP id S1377174AbiDTJ06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 05:24:23 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC9427FE2;
-        Wed, 20 Apr 2022 02:21:38 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23K8wpsl005532;
-        Wed, 20 Apr 2022 09:21:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Qi5kOMn/VW1X7Sgjn67bEyOT03thHhFxSSziyXqmlOc=;
- b=oMxsytYqpiPpT0PGjZa0GncbiJHyFDxtDxkBYEeXacBhb7pN8EMrUwvoHargG9KHWzCp
- jJHzYRKoaXKdjmNvR1yqvHzKt1uksmHV7hunER+nmeHbAodftBdM8y8KAMayfyKqtvCN
- lVn5iaOaZbHTqgi0FwJnjvhjnvg7UTPhR2WWk4/WhBcu+aq+shAZJlkFFLgl1MHDJ80f
- 51aH85/+J3CgQpwxF+GiOFkLT8ttvCfGxH1EwKiTyq6VOV65TfoPYp5p69ouW9AHqWIr
- oUSew4N/RVdFclmbGB3+vLjiH/dIdLmAlvzs3Xv3yZWgqnNw/SoVJk0krLeoQKJppwcb hg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fjf51rdcy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 09:21:35 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23K9DTBJ004214;
-        Wed, 20 Apr 2022 09:21:34 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fjf51rdc5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 09:21:34 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23K97Ata013842;
-        Wed, 20 Apr 2022 09:21:32 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ffne9616v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 09:21:32 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23K9LTGt49545570
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Apr 2022 09:21:29 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B00BEAE04D;
-        Wed, 20 Apr 2022 09:21:29 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D576AE045;
-        Wed, 20 Apr 2022 09:21:29 +0000 (GMT)
-Received: from [9.145.164.14] (unknown [9.145.164.14])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 20 Apr 2022 09:21:29 +0000 (GMT)
-Message-ID: <f836b7e2-f581-3002-0d99-cd0f186c33c8@linux.ibm.com>
-Date:   Wed, 20 Apr 2022 11:21:28 +0200
+        Wed, 20 Apr 2022 05:26:58 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD283B039;
+        Wed, 20 Apr 2022 02:24:12 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id w1so1749960lfa.4;
+        Wed, 20 Apr 2022 02:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=u55Ek4ovTu93jGC6owGr6QZtrHl98TBOqnvlwoTCUt0=;
+        b=VCx/HeNdAIrVvK22LWtPVkq9Bv1IKELkDsHc9ZDCJpEzPZXiUk1L12Dy+mMZouB4Kb
+         Sm5gqeWiHiAo7O1rqL4fR/FRWrLwV1sxcNCEE/ser/ng6KnPEXuXeI6mJT4hEuhbpkyR
+         CnEwq7dF8XjnevURjfPXlQSPsthUbrMgXmTx0ftPiqNOdHSrKFkOiwbXMIgL4L8pif1x
+         S2OC7crPo4slcyULVJrhskiIc37n3wR0KWOXQ2sj5i0hsb8hGWYGa7c9kFuF9uQx1Lrd
+         PnwrnrwZvh2dBVEvqkQHhB/xuL6v+vJ4eVgGVRgIh8ublrifvFa02qV7bdCp+CMifVZv
+         cETg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=u55Ek4ovTu93jGC6owGr6QZtrHl98TBOqnvlwoTCUt0=;
+        b=55Zz5VXfyuyO9tEV2yEjN8Ldm9TK+io3F/MI5EJqGc/HQ3mH8rXju020y4VXUolXIW
+         bwOoTjeDuH2JlairDwziZgu+vYQvmRPH/kEwoqdiZnNazOyuxEOfph2YCBCvU6+6nzP8
+         3Eq4c6ZMMe7x1040quAHf2M7bz++V5VU+YO8ZycDlz0NIQJfidDzQiWYmxlmQMu7JFhH
+         LISM9zxiezlh5A/wYrjslqwk/J94zCB9qSYkeKsIAAus+7Z80wdpk71wbd6ZviFTUbd3
+         QtVf2T9AYjbwz2QNTW29xs+RR72sBgXZxr5xrEnD/zDw3AyTe0scJ4ODCLTSypD3wFoe
+         ZMXQ==
+X-Gm-Message-State: AOAM533CBkLY+YR3ZKlRpB/NBnnDAvN9wpGQyeRXL0Kuyo1BrncCldyr
+        B24iMJH+xrswkBbCL9WgEF8=
+X-Google-Smtp-Source: ABdhPJwBIjGhPQR/MG3suNBpw+sG1uqlbM+4wIOJy5ZknDOvMCYopGuZbVrLmdXv8OTjIhB4lEs0Kw==
+X-Received: by 2002:a05:6512:168d:b0:471:6cb9:c20f with SMTP id bu13-20020a056512168d00b004716cb9c20fmr11611107lfb.229.1650446651069;
+        Wed, 20 Apr 2022 02:24:11 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.74.70])
+        by smtp.gmail.com with ESMTPSA id d11-20020a19384b000000b0046bbd144dfesm1760268lfj.125.2022.04.20.02.24.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 02:24:10 -0700 (PDT)
+Subject: Re: [PATCH 01/41] video: fbdev: omapfb: lcd_ams_delta: fix unused
+ variable warning
+To:     Arnd Bergmann <arnd@kernel.org>, linux-omap@vger.kernel.org,
+        tony@atomide.com, aaro.koskinen@iki.fi, jmkrzyszt@gmail.com
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Walmsley <paul@pwsan.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20220419133723.1394715-1-arnd@kernel.org>
+ <20220419133723.1394715-2-arnd@kernel.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <ddaf112d-f997-84b7-2c57-bab3d0cca382@gmail.com>
+Date:   Wed, 20 Apr 2022 12:24:08 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
+In-Reply-To: <20220419133723.1394715-2-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-References: <20220419185857.128351-1-thuth@redhat.com>
- <20220419185857.128351-2-thuth@redhat.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v2 1/4] KVM: s390: selftests: Use TAP interface in the
- memop test
-In-Reply-To: <20220419185857.128351-2-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: kFU9QUo-RCANII1yt6kiiUSw1kmkRhJG
-X-Proofpoint-ORIG-GUID: oaBnK_-JulFlsAtJCq-b1JW6nmmB9GHe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-20_02,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- spamscore=0 phishscore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204200057
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,137 +98,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/22 20:58, Thomas Huth wrote:
-> The memop test currently does not have any output (unless one of the
-> TEST_ASSERT statement fails), so it's hard to say for a user whether
-> a certain new sub-test has been included in the binary or not. Let's
-> make this a little bit more user-friendly and include some TAP output
-> via the kselftests.h interface.
+Hello!
+
+On 4/19/22 4:36 PM, Arnd Bergmann wrote:
+
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-
+> A recent cleanup patch removed the only reference to a local variable
+> in some configurations.
+> 
+> Move the variable into the one block it is still used in, inside
+> of an #ifdef, to avoid this warning.
+> 
+> Fixes: 9d773f103b89 ("video: fbdev: omapfb: lcd_ams_delta: Make use of the helper function dev_err_probe()")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->   tools/testing/selftests/kvm/s390x/memop.c | 90 ++++++++++++++++++-----
->   1 file changed, 73 insertions(+), 17 deletions(-)
+>  drivers/video/fbdev/omap/lcd_ams_delta.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> index b04c2c1b3c30..ad9fe86c0592 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -12,6 +12,7 @@
->   
->   #include "test_util.h"
->   #include "kvm_util.h"
-> +#include "kselftest.h"
->   
->   enum mop_target {
->   	LOGICAL,
-> @@ -648,33 +649,88 @@ static void test_errors(void)
->   	kvm_vm_free(t.kvm_vm);
->   }
->   
-> +struct testdef {
-> +	const char *name;
-> +	void (*test)(void);
-> +	int cap;
-> +} testlist[] = {
-> +	{
-> +		.name = "simple copy",
-> +		.test = test_copy,
-> +	},
-> +	{
-> +		.name = "generic error checks",
-> +		.test = test_errors,
-> +	},
-> +	{
-> +		.name = "copy with storage keys",
-> +		.test = test_copy_key,
-> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
-> +	},
-> +	{
-> +		.name = "copy with key storage protection override",
-> +		.test = test_copy_key_storage_prot_override,
-> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
-> +	},
-> +	{
-> +		.name = "copy with key fetch protection",
-> +		.test = test_copy_key_fetch_prot,
-> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
-> +	},
-> +	{
-> +		.name = "copy with key fetch protection override",
-> +		.test = test_copy_key_fetch_prot_override,
-> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
-> +	},
-> +	{
-> +		.name = "error checks with key",
-> +		.test = test_errors_key,
-> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
-> +	},
-> +	{
-> +		.name = "error checks with key storage protection override",
-> +		.test = test_errors_key_storage_prot_override,
-> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
-> +	},
-> +	{
-> +		.name = "error checks without key fetch prot override",
-> +		.test = test_errors_key_fetch_prot_override_not_enabled,
-> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
-> +	},
-> +	{
-> +		.name = "error checks with key fetch prot override",
-> +		.test = test_errors_key_fetch_prot_override_enabled,
-> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
-> +	},
-> +};
-> +
->   int main(int argc, char *argv[])
->   {
-> -	int memop_cap, extension_cap;
-> +	int memop_cap, extension_cap, idx;
->   
->   	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
->   
-> +	ksft_print_header();
-> +
->   	memop_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP);
->   	extension_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP_EXTENSION);
->   	if (!memop_cap) {
-> -		print_skip("CAP_S390_MEM_OP not supported");
-> -		exit(KSFT_SKIP);
-> +		ksft_exit_skip("CAP_S390_MEM_OP not supported.\n");
->   	}
->   
-> -	test_copy();
-> -	if (extension_cap > 0) {
-> -		test_copy_key();
-> -		test_copy_key_storage_prot_override();
-> -		test_copy_key_fetch_prot();
-> -		test_copy_key_fetch_prot_override();
-> -		test_errors_key();
-> -		test_errors_key_storage_prot_override();
-> -		test_errors_key_fetch_prot_override_not_enabled();
-> -		test_errors_key_fetch_prot_override_enabled();
-> -	} else {
-> -		print_skip("storage key memop extension not supported");
-> +	ksft_set_plan(ARRAY_SIZE(testlist));
-> +
-> +	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
-> +		if (!testlist[idx].cap || (extension_cap &&
-> +		    testlist[idx].cap == KVM_CAP_S390_MEM_OP_EXTENSION)) {
-> +			testlist[idx].test();
-> +			ksft_test_result_pass("%s\n", testlist[idx].name);
-> +		} else {
-> +			ksft_test_result_skip("%s - capability %d not supported\n",
-> +					      testlist[idx].name,
-> +					      testlist[idx].cap);
-> +		}
->   	}
-> -	test_errors();
->   
-> -	return 0;
-> +	ksft_finished();
->   }
+> diff --git a/drivers/video/fbdev/omap/lcd_ams_delta.c b/drivers/video/fbdev/omap/lcd_ams_delta.c
+> index bbf871f9d862..01944ce46aa1 100644
+> --- a/drivers/video/fbdev/omap/lcd_ams_delta.c
+> +++ b/drivers/video/fbdev/omap/lcd_ams_delta.c
+[...]
+> @@ -145,7 +144,7 @@ static int ams_delta_panel_probe(struct platform_device *pdev)
+>  						&ams_delta_lcd_ops);
+>  
+>  	if (IS_ERR(lcd_device)) {
+> -		ret = PTR_ERR(lcd_device);
+> +		int ret = PTR_ERR(lcd_device);
 
+   How about inserting an empty line after declaration?
+
+>  		dev_err(&pdev->dev, "failed to register device\n");
+>  		return ret;
+>  	}
+
+MBR, Sergey

@@ -2,108 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDAD5508B57
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D247508B72
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379858AbiDTPBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
+        id S1379961AbiDTPDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236824AbiDTPBf (ORCPT
+        with ESMTP id S1379875AbiDTPCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:01:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A1983CFE8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650466727;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gVlN8Zg4CYoppK6dzP2BhOdvAfuQF4ICX4dEGXbmFsY=;
-        b=PpRiazzsg3UwxXzGlK00qr1Hn8Z7jmCWHXHNDGEL+vVBR9zlqTOsBTyT9j6XTzPDT0z9Xu
-        IDAr1y3oM9XWZ2+qJPtCRo5+IxEso9O3uhO/C5cg3iPrH7Pc4u3jRDFj9RwN6Mq4S1vDnx
-        JMwsJ7ZazUuK1SWpWmgQa7OE1Jr1aV4=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-185-Jr6eas8WPJOxEPdCViPkwQ-1; Wed, 20 Apr 2022 10:58:45 -0400
-X-MC-Unique: Jr6eas8WPJOxEPdCViPkwQ-1
-Received: by mail-qk1-f200.google.com with SMTP id t3-20020a05620a034300b0069e60a0760cso1364092qkm.20
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:58:45 -0700 (PDT)
+        Wed, 20 Apr 2022 11:02:55 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1428110FC6;
+        Wed, 20 Apr 2022 08:00:07 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id x3so1382967wmj.5;
+        Wed, 20 Apr 2022 08:00:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=OxqISZ3PhyCe5pZOlEZIasOqnMsXsO76KKiBjnHunxA=;
+        b=lFQcgrWobsgpW7viU3ZTb9wdOFGUZDGqwSyg0cV7Kli9Azkgk7Cpjo1qsoJzvkwAoI
+         OAde/6iSG5xnggIrmJRXGXr0qAG2EDMbUPGxEvXLJz4KJu9jqH4WBYDbpyquK/JZ64bF
+         r5+Z532/g0SeC8v+uvJj230tK5OegzCd0pag9kU3Q0QRLnskAnksihWeFsAQjmFSTFb5
+         BZ6NV7HCgHb7Bw2OFCQ5YE/xXkXAE9rn9w4hRkfvalPy40nF12xAO2g5Za09Z91PdStH
+         krV6lG9NUkAZFHhP/Q4fqvrVvilDEq3uHlsRU4AJvMYQcXzO6S+V4iRuATH4jzffpgCz
+         R76g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gVlN8Zg4CYoppK6dzP2BhOdvAfuQF4ICX4dEGXbmFsY=;
-        b=O9JOvX5B3GEzLCYaZMr0BZxu5oJUmMcXYbqBKtcuH2GnJApd1FDOYZKAGTc2ZzJAaZ
-         RB3vn/V7hbRLECNrRCxN5bWT+Vq7usUp7SSboz9V37rSYy8WndZwiFqvmLuuB2++DAeI
-         dHD3ykjc4PctzItc69nstK1hY8q0iWW3PccXh/mL88pVz6RPeQFC8r07ePAIc1YqcV1V
-         hcOWL8rLO0vlsT2DnZBo1pDsVmZKQxEySdAd3xwqhbthnM4J/tmxFu16ZAUgrqGF6RwS
-         RPvQ7Fxquoz0zEXi9df1e0gaCU4lwMkbIxUMbcF5kppqyweMiUuhD1Qaf4MGo55u5D6Q
-         EiWQ==
-X-Gm-Message-State: AOAM531UvXLZOdYIXzh2wiFvGwscHiUEjmEly+p2KZ1Dc92wwE0Lw3rm
-        4l1EOwn/HB7RAvoqcEeUcVz6N0tyGq+Lmk66qBy/yH2OU5Fm+zVRc8SJV9lET1iFByaSTYLoQTx
-        OKtiEIsEfyeonhYAzfuD1j9WQ
-X-Received: by 2002:a05:622a:8:b0:2e1:cb36:9244 with SMTP id x8-20020a05622a000800b002e1cb369244mr14013039qtw.93.1650466725043;
-        Wed, 20 Apr 2022 07:58:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxq/ZRQJonnRQsfg4icRnn9DNb+9S7+/UnCmslakhte52WcKz4tNmErjGTi7BcnwZxiDd3Alw==
-X-Received: by 2002:a05:622a:8:b0:2e1:cb36:9244 with SMTP id x8-20020a05622a000800b002e1cb369244mr14013027qtw.93.1650466724829;
-        Wed, 20 Apr 2022 07:58:44 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id c17-20020ac85a91000000b002e1dd8ae44bsm1861775qtc.29.2022.04.20.07.58.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 07:58:44 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 07:58:41 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, brgerst@gmail.com, jiangshanlai@gmail.com,
-        Andrew.Cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH 2/2] x86,entry: Use PUSH_AND_CLEAR_REGS for compat
-Message-ID: <20220420145841.mgt2eya5hhe4abd5@treble>
-References: <20220419204109.520779286@infradead.org>
- <20220419205241.339242797@infradead.org>
- <20220420032123.6c344rjr4poockjr@treble>
- <20220420070730.GB2731@worktop.programming.kicks-ass.net>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=OxqISZ3PhyCe5pZOlEZIasOqnMsXsO76KKiBjnHunxA=;
+        b=ovBAlsWWWX2AFGYLe/8wRMG3qkYVl2tLRduEzVU/bQppeeK8F/aa95rwH258DUVUd4
+         fau081hE68l17XdbGjj+PdAz7I3qFIjkNvpQcppMbR9m4wIcypcVsqqRT/+c/ftPcC7g
+         kU6XY4tyzWGgDqx5hodJOkbTGcqQ/W7k3eKUN07PIZXA415TdYCaR6ciorojEbmBugNW
+         M3WY55KwaEAEJW+gWtg+i85IVQmOU/amxBtDYygWapYkpdyl7QzW1pwVOiRLNRwKLq7/
+         p40Rtz67DW7rVD2fJnc592To5y6zq5iBx2zY43QbObQ9iLvy2mKpXW05aaAyHqlJ/LGP
+         zscw==
+X-Gm-Message-State: AOAM532wZqo5n0/c4qOlHdayDW8YsnW4OclbaIa1FKrrCmlY5oizkpQP
+        7ujud1+77Mp8UPAVNmZGeCI=
+X-Google-Smtp-Source: ABdhPJwnr4sQBBSJEglycv2Tu5vNhaI8eNnAP0123HsG2diJW30WuE7yrKnypB1R6AEhTkpqKqV15g==
+X-Received: by 2002:a05:600c:4ed4:b0:392:90a5:b7e6 with SMTP id g20-20020a05600c4ed400b0039290a5b7e6mr4255941wmq.33.1650466805548;
+        Wed, 20 Apr 2022 08:00:05 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id e16-20020a05600c2dd000b0038ed449cbdbsm114678wmh.3.2022.04.20.08.00.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 08:00:04 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <4505b43d-5c33-4199-1259-6d4e8ebac1ec@redhat.com>
+Date:   Wed, 20 Apr 2022 17:00:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220420070730.GB2731@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220402010903.727604-1-seanjc@google.com>
+ <20220402010903.727604-2-seanjc@google.com>
+ <112c2108-7548-f5bd-493d-19b944701f1b@maciej.szmigiero.name>
+ <YkspIjFMwpMYWV05@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 1/8] KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
+In-Reply-To: <YkspIjFMwpMYWV05@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 09:07:30AM +0200, Peter Zijlstra wrote:
-> On Tue, Apr 19, 2022 at 08:21:23PM -0700, Josh Poimboeuf wrote:
-> > On Tue, Apr 19, 2022 at 10:41:11PM +0200, Peter Zijlstra wrote:
-> > > Since the upper regs don't exist for ia32 code, preserving them
-> > > doesn't hurt and it simplifies the code.
-> > 
-> > But an attacker can still control those registers, so clearing them on
-> > the stack is better, as it reduces user control over the kernel stack.
-> > 
-> > 64-bit syscalls *do* have to save those registers to the stack, so
-> > whether it truly matters if compat mode is made equally insecure, I
-> > can't say.  But without evidence to the contrary, my feeling is that we
-> > should err on the side of caution.
+On 4/4/22 19:21, Sean Christopherson wrote:
+> On Mon, Apr 04, 2022, Maciej S. Szmigiero wrote:
+>>> @@ -1606,7 +1622,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+>>>    	nested_copy_vmcb_control_to_cache(svm, ctl);
+>>>    	svm_switch_vmcb(svm, &svm->nested.vmcb02);
+>>> -	nested_vmcb02_prepare_control(svm);
+>>> +	nested_vmcb02_prepare_control(svm, save->rip);
+>>
+>> 					   ^
+>> I guess this should be "svm->vmcb->save.rip", since
+>> KVM_{GET,SET}_NESTED_STATE "save" field contains vmcb01 data,
+>> not vmcb{0,1}2 (in contrast to the "control" field).
 > 
-> Right, so earlier Brian said simpler might be better, and I figured I'd
-> try to see if I could make that stick, because I too like simpler ;-)
+> Argh, yes.  Is userspace required to set L2 guest state prior to KVM_SET_NESTED_STATE?
+> If not, this will result in garbage being loaded into vmcb02.
+> 
 
-Simple is good.
+Let's just require X86_FEATURE_NRIPS, either in general or just to
+enable nested virtualiazation, i.e.:
 
-> Also, since int80 already has to do this, attackers already have their
-> attack surface.
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index fc1725b7d05f..f8fc8a1b09f1 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -4904,10 +4904,12 @@ static __init int svm_hardware_setup(void)
+  			goto err;
+  	}
+  
+-	if (nrips) {
+-		if (!boot_cpu_has(X86_FEATURE_NRIPS))
+-			nrips = false;
+-	}
++	if (!boot_cpu_has(X86_FEATURE_NRIPS))
++		nrips = false;
++	if (nested & !nrips) {
++		pr_warn("Next RIP Save not available, disabling nested virtualization\n");
++		nested = false;
++	}
+  
+  	enable_apicv = avic = avic && npt_enabled && (boot_cpu_has(X86_FEATURE_AVIC) || force_avic);
+  
 
-Hm, probably true...
+If I looked it up correctly it was introduced around 2010-2011.
 
--- 
-Josh
-
+Paolo

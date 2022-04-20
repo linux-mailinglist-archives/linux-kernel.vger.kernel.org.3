@@ -2,46 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95960508C07
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9713508C09
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354818AbiDTP0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
+        id S1354789AbiDTP1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351566AbiDTP0i (ORCPT
+        with ESMTP id S1351566AbiDTP0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:26:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8411545784;
-        Wed, 20 Apr 2022 08:23:52 -0700 (PDT)
+        Wed, 20 Apr 2022 11:26:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B77A45784
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:24:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0221A618EF;
-        Wed, 20 Apr 2022 15:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CDAC385A1;
-        Wed, 20 Apr 2022 15:23:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 143FDB81FC2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:24:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B52C385A1;
+        Wed, 20 Apr 2022 15:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650468231;
-        bh=fGoYvTCERq6W+4c1n/bIy8S4IsI8Y/53T0F5nkCUz/0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=d02SIrWFUjLs3gpjnr72vQQbxEbBHNSx47OM8gzk3Lxb7GxwD6I74Lp8hIZTrTurf
-         AMFRqY2MoGSlpV2SjW6kvPhCVBjdNHBU93OS5t4/Kv+XPEUmqMsO5n1uCUb+dxs2JU
-         dZnLSny1UXKCC9VGiBTxEcHnKX+rpq7vnhZqClheAFR/MKpeN9+5zCv1EhtxWUm/1w
-         +65vfutAqtgOvnDQ2USvBliFIQXRrJeA0sNcCgV9reOAj0aDjcOvQa9YHn4t06OT58
-         kNZEdjQeUastUozhr3jmHJOyNQf2z8YjKRZ/YUXhlHDDCeabCXOwJaolHM/8hWrNij
-         jdKp23lyik0ew==
-From:   Dinh Nguyen <dinguyen@kernel.org>
-To:     davem@davemloft.net
-Cc:     dinguyen@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-stable <stable@vger.kernel.org>
-Subject: [PATCH] net: ethernet: stmmac: fix write to sgmii_adapter_base
-Date:   Wed, 20 Apr 2022 10:23:45 -0500
-Message-Id: <20220420152345.27415-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        s=k20201202; t=1650468245;
+        bh=pTegFcEzPPzXHOlhThQwB50tWAx2IuniG5QgJSoNRBw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vDjy4CeioT1M/pnJcfekxFqW5ZiVgGgJ4riZPiFjYyv5YRgdNXA2FU5IwW7dEsm10
+         KuO08g4r4BCEqyGP6W7+e87bzcnrszXjrjMuR+G9AAU+x2gwKyN7acwx7C+giY7iYK
+         McjEEGACHuMZboB671mbAjyvYrhWbTh98YCJI9RepNSU2DO4qyAnO8m0VQQ/C/CSQz
+         VUWuFYZC0KLt5+oI9olTL2IL0dLsnFSXvHuKv1cHnCMZGYXkEhesEcoOv6cFHwgruA
+         Zng0osQR/cnHAQ857cuBLQ3XEggOsvi0r0GkucgosS6A1yYXgfpFeV2l2p+0FQTY6U
+         PiicTLOhar3CQ==
+Date:   Wed, 20 Apr 2022 16:23:57 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     cgel.zte@gmail.com, lgirdwood@gmail.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        daniel.baluta@nxp.com, sound-open-firmware@alsa-project.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] ASoC: SOF: using pm_runtime_resume_and_get to simplify
+ the code
+Message-ID: <YmAljQjpLCoBv+nj@sirena.org.uk>
+References: <20220420030315.2575691-1-chi.minghao@zte.com.cn>
+ <78c7edc3-f431-9735-238d-9aa2b45ec45e@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zeKpAx+TuuUhkCBw"
+Content-Disposition: inline
+In-Reply-To: <78c7edc3-f431-9735-238d-9aa2b45ec45e@linux.intel.com>
+X-Cookie: Will it improve my CASH FLOW?
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,52 +61,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I made a mistake with the commit a6aaa0032424 ("net: ethernet: stmmac:
-fix altr_tse_pcs function when using a fixed-link"). I should have
-tested against both scenario of having a SGMII interface and one
-without.
 
-Without the SGMII PCS TSE adpater, the sgmii_adapter_base address is
-NULL, thus a write to this address will fail.
+--zeKpAx+TuuUhkCBw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fixes: a6aaa0032424 ("net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link")
-Cc: linux-stable <stable@vger.kernel.org>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
----
- drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+On Wed, Apr 20, 2022 at 08:28:31AM -0500, Pierre-Louis Bossart wrote:
+> On 4/19/22 22:03, cgel.zte@gmail.com wrote:
+> > From: Minghao Chi <chi.minghao@zte.com.cn>
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-index ac9e6c7a33b5..6b447d8f0bd8 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-@@ -65,8 +65,9 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
- 	struct phy_device *phy_dev = ndev->phydev;
- 	u32 val;
- 
--	writew(SGMII_ADAPTER_DISABLE,
--	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
-+	if (sgmii_adapter_base)
-+		writew(SGMII_ADAPTER_DISABLE,
-+		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
- 
- 	if (splitter_base) {
- 		val = readl(splitter_base + EMAC_SPLITTER_CTRL_REG);
-@@ -88,10 +89,11 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
- 		writel(val, splitter_base + EMAC_SPLITTER_CTRL_REG);
- 	}
- 
--	writew(SGMII_ADAPTER_ENABLE,
--	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
--	if (phy_dev)
-+	if (phy_dev && sgmii_adapter_base) {
-+		writew(SGMII_ADAPTER_ENABLE,
-+		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
- 		tse_pcs_fix_mac_speed(&dwmac->pcs, phy_dev, speed);
-+	}
- }
- 
- static int socfpga_dwmac_parse_data(struct socfpga_dwmac *dwmac, struct device *dev)
--- 
-2.25.1
+> > Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
+> > pm_runtime_put_noidle. This change is just to simplify the code, no
+> > actual functional changes.
 
+> Well, maybe that's a simplification, but we've been using the same pattern for years now.
+
+> Is there really a clear direction to use this new function?
+
+It seems like a much better pattern and there's been a steady stream of
+conversion patches.  The whole get/idle thing is pretty much just sharp
+edges.
+
+> the overwhelming majority of drivers in sound/soc still rely on the pm_runtime_get_sync (111 v. 7).
+
+We'll get there I'm sure.
+
+--zeKpAx+TuuUhkCBw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJgJYwACgkQJNaLcl1U
+h9ByVAf8DXE7lOFokxmahlu7hkfvPBsSrIveu11ngt9J9BUWxMgtsaM8uX7VcAEl
+7si3QcSbzKxs4nTCChbLWU8ok7JZ06ArH2cKnKlDyeEC4u4nvUchV5CV3BkxrnKR
+y/afCq90x9JXGnBD3UzdYDR33Myi6EQZ/mjIB3bM7Mgvf1O5ELCHruTkBdQADnTJ
+gOgYg3AEGyQQCeDNJfLN4Ss8h0ofay9PGoYs9ibb0jnMP/qCfL9Z0Upo/KmfivHn
+Zr9U4JasNeArdoGexSCe0Z0jyZlInbX2xqQBa03XFo6lzI2NAZzsyPSj6wprDgXR
+h1QIOFvzTsQWTKbcXYd6wEIgbgI0Rw==
+=qioF
+-----END PGP SIGNATURE-----
+
+--zeKpAx+TuuUhkCBw--

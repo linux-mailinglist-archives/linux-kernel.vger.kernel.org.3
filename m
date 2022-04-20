@@ -2,90 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4320507FCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA4A507FCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349334AbiDTETT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 00:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
+        id S1353057AbiDTEYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 00:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiDTETR (ORCPT
+        with ESMTP id S230163AbiDTEYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 00:19:17 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7C335854;
-        Tue, 19 Apr 2022 21:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650428191; x=1681964191;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=u81sku0Dv0pejA3/j4OL8kvO+Wy+SJum2+dmhEsJwaA=;
-  b=lw/GkZoJ1AE6I62GnnPGtCzfW/aHjP2gHpPi67rjCra38EWlqD1gCQ80
-   dUmngWfsUUIkB9hRo9DsEweQBMs1H5ASIJ7UYxFmpDfjMHV+NArP5t4nB
-   FfGIBdfkn/7iu1r5/SlJHiR3NCISlq25unlW3Adkmhz1ordvBN9jcsNaa
-   qzJI82VOFvpe0rRFLfPa/px7VTCGdycD3+6semqNoTV9C4wniCfoOLpmd
-   lffVkiBHgvACWw4xv+SOVIdrEG/rl4AP2jyOLrHtY6z8fK6EntJC2+Z88
-   YqJDyO7idb98Zc1Ci0NG/ig1jQL5TfAApIcUb46iLrxU9n+cib5iiJStK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="263397432"
-X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="263397432"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 21:16:31 -0700
-X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="667683964"
-Received: from asaini1-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.58.15])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 21:16:27 -0700
-Message-ID: <d1b88a6e08feee137df9acd2cdf37f7685171f4b.camel@intel.com>
-Subject: Re: [PATCH v3 03/21] x86/virt/tdx: Implement the SEAMCALL base
- function
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
-Date:   Wed, 20 Apr 2022 16:16:25 +1200
-In-Reply-To: <dd9d6f7d-5cec-e6b7-2fa0-5bf1fdcb79b5@linux.intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <1c3f555934c73301a9cbf10232500f3d15efe3cc.1649219184.git.kai.huang@intel.com>
-         <dd9d6f7d-5cec-e6b7-2fa0-5bf1fdcb79b5@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 20 Apr 2022 00:24:35 -0400
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1035512A9B;
+        Tue, 19 Apr 2022 21:21:51 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id e62-20020a17090a6fc400b001d2cd8e9b0aso819470pjk.5;
+        Tue, 19 Apr 2022 21:21:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iTuAOAHUVJpjTZpyLgo06z+SkuCW6MaTC46oAl7CAV8=;
+        b=KND7Kyl89AbTqodWvopHMSw3iqXJVmY+aB7O4m+Oc3lUMn9pNkQKSJaT+PTgPp/slu
+         HKeDAlyhS0hVOf47dmrvS00+OFCe8CiWNcE4QwqjYdaMm0E6RMX1/T93zOv0WSYAORBr
+         MaoeDtk/zor4pxQkXLAR2au82IiEPR8vkApldHZbjQWu6EyTAQlnj92qSHZ3oePLZVvf
+         0nRmgLbzNtZjvu271eIsQYNHgmLkbVu94xi1YsmqPHGg/LOCNyzUH5MwAXqqtEZcEBga
+         fM493yG5MCkNyIss0BCsIWoLcD0PrpFPrx0OtDT5oVTF2WLkZNjXX4Cknkn/2qMCSlR3
+         uhjg==
+X-Gm-Message-State: AOAM530R5k0jbwEGhTSPLC6C6y/czOxXgGuZ3hHwwfnD0gPT2/n3mVc9
+        9RI5YGscOdOyBR7Uo3uGems=
+X-Google-Smtp-Source: ABdhPJw7VNM6Dhl3/Pqg0G9eiYvHhyFDhwCVWdneoxzoozLi+Cjjm+bUmepyQouwZoTwWuQU+dyZfw==
+X-Received: by 2002:a17:90b:4c84:b0:1d2:cadc:4e4d with SMTP id my4-20020a17090b4c8400b001d2cadc4e4dmr2237395pjb.8.1650428510408;
+        Tue, 19 Apr 2022 21:21:50 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:ece1:6248:e226:d2e0:1f33])
+        by smtp.gmail.com with ESMTPSA id w60-20020a17090a6bc200b001cbc1a6963asm18060666pjj.29.2022.04.19.21.21.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 21:21:49 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 21:21:47 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Moritz Fischer <mdf@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] MAINTAINERS: Update linux-fpga repository location
+Message-ID: <Yl+KW2BfkEYXeQz8@archbook>
+References: <20220408022002.22957-1-mdf@kernel.org>
+ <20220409154739.1a85472d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409154739.1a85472d@canb.auug.org.au>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-19 at 07:07 -0700, Sathyanarayanan Kuppuswamy wrote:
+On Sat, Apr 09, 2022 at 03:47:39PM +1000, Stephen Rothwell wrote:
+> Hi Moritz,
 > 
-> On 4/5/22 9:49 PM, Kai Huang wrote:
-> > SEAMCALL leaf functions use an ABI different from the x86-64 system-v
-> > ABI.  Instead, they share the same ABI with the TDCALL leaf functions.
-> 
-> TDCALL is a new term for this patch set. Maybe add some detail about
-> it in ()?.
-> 
+> On Thu,  7 Apr 2022 19:20:02 -0700 Moritz Fischer <mdf@kernel.org> wrote:
+> >
+> > As maintainer team we have decided to move the linux-fpga development
+> > to a shared repository with shared access.
 > > 
+> > Cc: Xu Yilun <yilun.xu@intel.com>
+> > Cc: Wu Hao <hao.wu@intel.com>
+> > Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Moritz Fischer <mdf@kernel.org>
+> > ---
+> > 
+> > Hi Stephen,
+> > 
+> > can you help us update the linux-next part accordingly?
+> 
+> I have done so, but you forgot to create the "fixes" branch in the new
+> tree.  Also, did you want more contacts listed for the tree (apart from
+> yourself)?
 
-TDCALL implementation is already in tip/tdx.  This series will be rebased to it.
-I don't think we need to explain more about something that is already in the tip
-tree?
+Fixed. Thanks!
 
+If you could add Xu Yilun and Wu Hao as contacts that'd be great!
 
--- 
-Thanks,
--Kai
+Sorry for the late reply. I was OOO.
 
-
+- Moritz

@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDA8509397
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D44509398
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383199AbiDTX1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 19:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
+        id S1383206AbiDTX2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 19:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383193AbiDTX1u (ORCPT
+        with ESMTP id S1380110AbiDTX2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 19:27:50 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AA313E22
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:25:03 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2eba37104a2so35421277b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:25:03 -0700 (PDT)
+        Wed, 20 Apr 2022 19:28:41 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E40E2B24B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:25:54 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so6224847pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:25:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=faX+8xEq5cxeln2IAgBzOZYC6emkLLqmLHlpGzsrZsI=;
-        b=IdysWrk64gPASP4iboMXdeQr8OBqMtOScTiocxTj/PrXpZ3MpyJ7PLa30ylu64mytC
-         dNZJ48LUjpecPRUYztsGI+HRaMLrBaDd/kcZaLV36ygFMFvmDY057Y+HEiWLnX8GNMwh
-         zze4Y1X6WoKVDIaAGotw8iPC/K8l1onAsVljpkbYO8mFC4YRPbjpiKuiKdaF631UerU7
-         ti+4EtfpHTfW3DMrUIqjmE+KiLWxhORMBfjPtP60A/UoWuR7wTx2P7q+WOBQloAXxCtG
-         qRwDmPi3kFPBahDbTJXN2rIts8IFZDSrsrgjbq8RbD36cnyF6n/kd7e/lTwEP0I1lCt6
-         WPMg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=e1hyArb/5whGQ4faeg6YhO5mzcFT0LHHgxgGSNRPGMg=;
+        b=IzXr0U1vcfIgbzGgGTh6dzx0nqn8WMMdbN9zCGPRHGsgRNwmqpeKdhuU6wGXF5Eus0
+         tnX6M+8p1i/EgZPwRUH7d9fyTDOw6+AymUSFKxGYPNNLKlqV+5h4TYcbImd28Zmn5CNk
+         uNU0UwQac8mauwk90fO5L4zkY9PezSZxF5t4k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=faX+8xEq5cxeln2IAgBzOZYC6emkLLqmLHlpGzsrZsI=;
-        b=3yrGQNFwpAbn9az1qjv+iXa87C1Hle9nqNvyW2I+qjHpd0wM88yD03d5HnkRxflfrF
-         ZbRPSP9Yk9aLXnQ6aaG6EznqPX4MrjfCHnPnR56IRG3WhBcLP8Qe5Y6amZS6XD5/KeZB
-         AXOCKFLamsH4Oh6CFy3r/m8h8dlAZnJu7M1C6weqQHUzaCzqss5xpJUmb0fx8dYYQ5CE
-         mRYGig+u1Lk/qmmVFkvFkhRaE/oXEsZto5vFz4naGxrEh+6XIHb7oXEkJhRWMAxeIsb1
-         ACwU02o5mrygzLNozMmywO2WP15zhIBMSNegr5jCQtRlgonfFgpcB8nE5CflY0NrrEXq
-         gW8A==
-X-Gm-Message-State: AOAM532RYy8shpSXdG5v0P4bClNudEmUyj3m2d8M1Pj2hwGPq9pW3zaH
-        GJ5/+jDyjnpFVKmy9wdxzBVyi7naMnSgTX4uW5MUdl+DveU=
-X-Google-Smtp-Source: ABdhPJza/ohc+w9rdaX0OxSl3QRR+W9TuPshb4dunNAUPl5XzezXZp8QbAzXuRYReRzLiYb+1tYgVyY2qzk5SSpHy3I=
-X-Received: by 2002:a81:2154:0:b0:2f4:d79e:35dc with SMTP id
- h81-20020a812154000000b002f4d79e35dcmr227895ywh.126.1650497102573; Wed, 20
- Apr 2022 16:25:02 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e1hyArb/5whGQ4faeg6YhO5mzcFT0LHHgxgGSNRPGMg=;
+        b=z722NrxZa3SRcXAZapoewiaUXN4twrmmclUNxUeu4gw9h6vxXqH3haEQxGhRXfvbPi
+         N4G8gIKV4zHqBjj1ZjoCr4GzKVd9iPZ+Oi7P4aVBqww+6zLq0V1fIbph9Fki66EhUgrC
+         C3LdpA5uuQwivPojYkwhnzMXqOD0LLlBJ+TRGqb/bCS2nJEudeh6PZYN+pffUj0KnBiL
+         EqRAdO5avYLG7o0b98Hje/JHo6k6ZqVtFltLraoFpV2UqY6zed0n3ZY+WnMLuaf45+sL
+         zdUtemxSyWWwy3YSkK1Qy5iZhb0cOl7F4NKcuBM0LGWreB3zS2NxNfxx0b0fBoLw57bw
+         w+bQ==
+X-Gm-Message-State: AOAM531INMIdNszE+Gzi2HzKsvRC9YyjTVRCzXUbZl2TMH90/L0ZRIJh
+        f1a4Pk1RAlvQ/oYsAZGVZ2Z1tA==
+X-Google-Smtp-Source: ABdhPJzW9o2jnlLh8gq/h5f1Xtg7444K7l2n/xm75BoEkh9+XT5HTYM3lQ/QPMNZwG+qExghHvv9ug==
+X-Received: by 2002:a17:90b:218d:b0:1d0:90f5:4064 with SMTP id ku13-20020a17090b218d00b001d090f54064mr7158993pjb.95.1650497153809;
+        Wed, 20 Apr 2022 16:25:53 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id cp14-20020a17090afb8e00b001cd4989ff55sm266911pjb.28.2022.04.20.16.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 16:25:53 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 16:25:52 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Joao Moreira <joao@overdrivepizza.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        peterz@infradead.org, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, samitolvanen@google.com,
+        mark.rutland@arm.com, hjl.tools@gmail.com,
+        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
+        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
+Subject: Re: [RFC PATCH 11/11] driver/int3400_thermal: Fix prototype matching
+Message-ID: <202204201625.5BBB91ADB8@keescook>
+References: <20220420004241.2093-1-joao@overdrivepizza.com>
+ <20220420004241.2093-12-joao@overdrivepizza.com>
+ <202204191946.2843CF71@keescook>
+ <06435f0b44681588052d145a17d60316@overdrivepizza.com>
+ <202204201601.8291F550@keescook>
+ <4dd9a9a3a7fb6f9af0fa04b8d2e3d5a2@overdrivepizza.com>
 MIME-Version: 1.0
-References: <YYCOTx68LXu1Tn1i@fedora>
-In-Reply-To: <YYCOTx68LXu1Tn1i@fedora>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 21 Apr 2022 01:24:51 +0200
-Message-ID: <CACRpkdYmw4yBm3Y1P42TcRs4fFNEiy3LXxmO_j=zeTv_usDR+g@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI: imx6: Replace legacy gpio interface for gpiod interface
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
-Cc:     hongxing.zhu@nxp.com, l.stach@pengutronix.de,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, bhelgaas@google.com,
-        helgaas@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4dd9a9a3a7fb6f9af0fa04b8d2e3d5a2@overdrivepizza.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,27 +75,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maira and sorry for being slow on reviews.
+On Wed, Apr 20, 2022 at 04:12:26PM -0700, Joao Moreira wrote:
+> > 
+> > Ah-ha, thanks. I think this will fix it, but I haven't tested it:
+> 
+> I tried that, and IIRC, there was an error or warning in the assignment that
+> happens a bit further in the file. My bad for not having it all properly
+> tracked.
 
-On Tue, Nov 2, 2021 at 2:04 AM Ma=C3=ADra Canal <maira.canal@usp.br> wrote:
+This builds for me without warnings, but maybe there is some weird
+config I'm missing.
 
-> -               gpio_set_value_cansleep(imx6_pcie->reset_gpio,
-> +               gpiod_set_raw_value_cansleep(imx6_pcie->reset_gpio,
->                                         !imx6_pcie->gpio_active_high);
-
-Hm I see you got advised to use the raw api. I'm not so sure about
-that I like v1 better.
-
-> +       imx6_pcie->reset_gpio =3D devm_gpiod_get_optional(dev, "reset",
-> +                       imx6_pcie->gpio_active_high ?  GPIOD_OUT_HIGH : G=
-PIOD_OUT_LOW);
-> +       if (IS_ERR(imx6_pcie->reset_gpio))
-> +               return dev_err_probe(dev, PTR_ERR(imx6_pcie->reset_gpio),
-> +                               "unable to get reset gpio\n");
-
-Where is this descriptor coming from? Device trees? Can't we just fix the
-DTS file(s) in that case given how wrong they are if they don't set
-GPIO_ACTIVE_LOW flag on this IRQ.
-
-Yours,
-Linus Walleij
+-- 
+Kees Cook

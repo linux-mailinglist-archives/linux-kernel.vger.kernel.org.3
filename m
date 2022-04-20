@@ -2,115 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1260350921D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1FA50921F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382539AbiDTVgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 17:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
+        id S1382547AbiDTVhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 17:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237756AbiDTVgv (ORCPT
+        with ESMTP id S1382542AbiDTVhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 17:36:51 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C977C46142;
-        Wed, 20 Apr 2022 14:34:02 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 20 Apr 2022 17:37:19 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05A2488A1;
+        Wed, 20 Apr 2022 14:34:30 -0700 (PDT)
+Received: from localhost (mdns.lwn.net [45.79.72.68])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KkDSk4XBnz4xXs;
-        Thu, 21 Apr 2022 07:33:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650490439;
-        bh=lNulJ0gQn8G6+yul2/45wg7sbMZtqY5S1QclA2Rfwyc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NbkhvBEuYBggx+VafRAWmF2jxU7gH19Kf6RYRp/HR2q11dFZmvee0K/CHPqwTcRYN
-         VkDjV7jpMxY6n8LgZmjqP/aCdn6V4dAvxGWWbj8HK6xcxkhhn8Eu1dnsRA1vwIKMHq
-         0UwMq1y5PuhbMbAnwLkYYhUo+iCaJUDj8IeT/Z7zl7vfuPO/1mQNIuW2QicPVYnnAw
-         qjfZvBy3QLq3huyEutth6rKsJil0cw0XajXwcEOadZp1x+C0kVu3ZaFBpRGTYDa98r
-         rY+iZQD8Vv/z+TdvQ0TKbKzcn8Dt0lrgItEG5bIoi6DsPDVFeainhFVgXNSuWKWdUn
-         Scf6U7VGzBANg==
-Date:   Thu, 21 Apr 2022 07:33:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] MAINTAINERS: Update linux-fpga repository location
-Message-ID: <20220421073357.07bb69ec@canb.auug.org.au>
-In-Reply-To: <Yl+KW2BfkEYXeQz8@archbook>
-References: <20220408022002.22957-1-mdf@kernel.org>
-        <20220409154739.1a85472d@canb.auug.org.au>
-        <Yl+KW2BfkEYXeQz8@archbook>
+        by ms.lwn.net (Postfix) with ESMTPSA id DCB90536;
+        Wed, 20 Apr 2022 21:34:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net DCB90536
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1650490470; bh=6T0lvX8RNX9xGYkNbu6K5mxfaWl3HxhoGMIgYH6RZgk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=EQpMNXKGIxm38WSQDxnU2OdP/4CzkhHcofv0U0qShswpXUT1Hkk9mmRTNoIfYP7YN
+         yd7D6NQU2ueg5+AjSzzYWO0YAs3ortCaoNy048kqLPG+qR7KUWMRE7oBBldiOwEbHG
+         6QPzRlP8bjEAPdGBzvP1d3cj3IgVmxiEezT/GofTarisxddOGNc0uTyrGkE7eyAKaV
+         xZdO6L0SfWQkgv4rla7xsCk0Wk7jLC/vbX/wzTw/C9+PKc4Fhyc3USGVAHFRu4lKBM
+         SExjDE70Y7pDHa8oXj/tn1s94SQxyY0T1GS0gdbWrDPOSxwbWn6VnWCvtY832M07Lw
+         UgolFy9dY8XQg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bruno Moreira-Guedes <codeagain@codeagain.dev>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
+Subject: Re: [PATCH v2 0/2] Docs: Update information at changes.rst
+In-Reply-To: <20220420172731.ru7kfrdkmprybtu7@AN5Bruno>
+References: <cover.1650376049.git.codeagain@codeagain.dev>
+ <8735i83xo1.fsf@meer.lwn.net> <20220420172731.ru7kfrdkmprybtu7@AN5Bruno>
+Date:   Wed, 20 Apr 2022 15:34:26 -0600
+Message-ID: <878rrz30d9.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MEgvWSOY=h3dig+.BLAkWI_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MEgvWSOY=h3dig+.BLAkWI_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Bruno Moreira-Guedes <codeagain@codeagain.dev> writes:
 
-Hi Moritz,
+> On Wed, Apr 20, 2022 at 03:35:10AM -0600, Jonathan Corbet wrote:
+>> Bruno Moreira-Guedes <codeagain@codeagain.dev> writes:
+>> >
+>> > The PATCH 1/2 fixes the missing cpio requirement, while PATCH 2/2 fixes
+>> > the kernel version reference.
+>> >
+>> > Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
+>> 
+>> Patches applied, thanks.
+> Thanks, Jon! I have also been thinking whether this filename
+> ('changes.rst') is a good description of the file contents. Do you think
+> renaming it to something like 'requirements.rst' and updating its
+> references would be a good patch?
 
-On Tue, 19 Apr 2022 21:21:47 -0700 Moritz Fischer <mdf@kernel.org> wrote:
->
-> On Sat, Apr 09, 2022 at 03:47:39PM +1000, Stephen Rothwell wrote:
-> > Hi Moritz,
-> >=20
-> > On Thu,  7 Apr 2022 19:20:02 -0700 Moritz Fischer <mdf@kernel.org> wrot=
-e: =20
-> > >
-> > > As maintainer team we have decided to move the linux-fpga development
-> > > to a shared repository with shared access.
-> > >=20
-> > > Cc: Xu Yilun <yilun.xu@intel.com>
-> > > Cc: Wu Hao <hao.wu@intel.com>
-> > > Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Signed-off-by: Moritz Fischer <mdf@kernel.org>
-> > > ---
-> > >=20
-> > > Hi Stephen,
-> > >=20
-> > > can you help us update the linux-next part accordingly? =20
-> >=20
-> > I have done so, but you forgot to create the "fixes" branch in the new
-> > tree.  Also, did you want more contacts listed for the tree (apart from
-> > yourself)? =20
->=20
-> Fixed. Thanks!
->=20
-> If you could add Xu Yilun and Wu Hao as contacts that'd be great!
+It's best not to rename things unnecessarily, especially relatively
+well-known files that a lot of people expect to find in a specific
+place.  We've done a lot of renaming over the last few years, but this
+is one I might let slide for now.
 
-Done.
+Thanks,
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MEgvWSOY=h3dig+.BLAkWI_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJgfEUACgkQAVBC80lX
-0GyCjwf6AlD/Hgfi5wrFGsk0x6swTtz7TLKugkQ4rO2GRSlrWgf0vOZRtqprTjuT
-Uk+opD0rd89zlrwDticrhcP4GCFbMx81nsuP9aWSdZh1MFo59hoyqePT9+UE/YeK
-krfwm3OqrtwAcD1x9etLr7ct0hambcfuMRAwmcbCDCXBt79DOFcdQ/y1qLYQZEf5
-rf7KlEnV4R9QNqwHYMn6hLSq+FDsWrsWets+rkIkBGBWs4og9TzVX3mIDrc90OWl
-QYRvpZOHnFoX7UhqtM37VwrJOdKk/n4VDp3y86EcUwtn78xo4ykLdsTHK0TMRMz+
-zR+K1rvfPSIgH63i/JBOrNAWHnabmQ==
-=Nk29
------END PGP SIGNATURE-----
-
---Sig_/MEgvWSOY=h3dig+.BLAkWI_--
+jon

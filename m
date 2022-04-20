@@ -2,76 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E460F507EF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD6A507EFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359008AbiDTClA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 22:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        id S1348705AbiDTCoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 22:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346789AbiDTCk6 (ORCPT
+        with ESMTP id S1344734AbiDTCof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 22:40:58 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED90737ABD
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:38:13 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id q129so629595oif.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:38:13 -0700 (PDT)
+        Tue, 19 Apr 2022 22:44:35 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFE7377D7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:41:50 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e5ca5c580fso619090fac.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:41:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=rWgc+OLGgaqRanc4pUDKhoEVnq85GoX137OEPhM1wdc=;
-        b=PAdiTR0AM6Sd4SX5/scSP3Ik6G6kqetRl8KoD/CFfJ0y+6iLJ5ny/s6g4W6Drhgmaf
-         k/V3ra1qAzhrTlWrLuvPodvJGLvuuGjIn0l7cloTHZX6IA4zz39RtFAB08vxbmDix7CL
-         0Bn5uk0xffWUylhVCSg4pYcxZ1EUfgnwjwzNNqxzWOXLbqykpdIFMeMo/iPDOSd1FRVE
-         pkI5dEkjqTyEKSEA2WxNiD+LqmRZH3/mS+KVXwxY3xyIOuUt/sNe956cFuYxhkusaJV2
-         xuoIkIbF66hf6V3o/1ywYeCdxM48esbVlesdh7KDrVFaBdTIesIFDmd9Y5fd7yYVaDiR
-         A2Kw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aaX/UB/2BnqdVf5C8GfwvoatWrRoN/yQh5VPxrROKnA=;
+        b=w8ElRxixNxczkAPSzOilsYI1pNXrdnHKeUV12k8IHbGZw24Riiz/+1SYrEvkxMxDjy
+         4JdAV2AM8nbTtjYWWiE60Yn1kamcRup6xEeaYY/sV3MGVU74FttnhcUn6E3cUVVrW1I6
+         QQwX5Ct4amk+euAWMhLxPc2KjUx6EU9Y48eKZ2GsM7DlfaVce84NN1KHpfl+IHaepuxu
+         UODZOwOc/LXe7NneiytyjbYQ5uq0LGv3YNl1MXyr3RhlCN3bpupDiDvXTRUFX86D3L3h
+         wOznhUtAB9kiRMWKbesYmSpDENs4AiHxpjyE9FOw8y1pHLLC5uuNCyfml/bdaGmavy3P
+         Wzlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=rWgc+OLGgaqRanc4pUDKhoEVnq85GoX137OEPhM1wdc=;
-        b=3XTa9OXPXof72d48uZFz+g+F0IurZRmbTxjTv6i366innqaNAEMylxa6iSXUQvqXtu
-         HX9tdc8yIlWiuYbzod6d0xL/l7cQNwNh73IfepdnIZ3aBbIp2LJ8n9RvUF8cqW5BTkRk
-         fDSF0l+sgyefbfSOY7SfOP5hqxwP9N+SrLaR8QerzsKYWsQTxvJZHTl/mb2Rlxk/th/a
-         oRAuBARG1EMRGxZ8QbHVqXNgX1YZjc3w5khNRlo+taluCfjxN2QrTpx+Ls72eLX6sFui
-         ita6bH5M/JbakVGQCXXCDtQkX+dqCqLx2VPB3+9zRe7aD2oSfA8pe4D2P5GCbK+ReSN9
-         RZYg==
-X-Gm-Message-State: AOAM531LNl8aBn/2xJ6x8FP3OjXHOhMbyYjqBJgsAvCWJzfa4LIYLeH1
-        dwy/a4ShGHqlV9pTVZMNIAzLXw==
-X-Google-Smtp-Source: ABdhPJyGQmY8Xk+gHmh45e2p/D/SaaXT2n2jB4Ds+WJ1C7lIP85sqsfrbhQJBPnnjuf5yn7AGB9TNw==
-X-Received: by 2002:a05:6808:1984:b0:322:7bbf:aae2 with SMTP id bj4-20020a056808198400b003227bbfaae2mr712685oib.125.1650422292841;
-        Tue, 19 Apr 2022 19:38:12 -0700 (PDT)
-Received: from [192.168.17.16] ([189.219.73.83])
-        by smtp.gmail.com with ESMTPSA id z3-20020a056830290300b005b2316db9c9sm5941476otu.30.2022.04.19.19.38.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 19:38:12 -0700 (PDT)
-Message-ID: <392ba1bf-3b2a-3be2-67fc-53745eab0914@linaro.org>
-Date:   Tue, 19 Apr 2022 21:38:10 -0500
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aaX/UB/2BnqdVf5C8GfwvoatWrRoN/yQh5VPxrROKnA=;
+        b=FVG0Gbf8NZcCvUyTH/ZCgWGrFlcG+dV6vmZjb3BPLrDqgf033sCGj4WPY87WN2iWoz
+         X5akneigyUrPR9z6Db5VE+VhQLYEFCnAY8drLHyFURnSTi01uLEeNSNMGL/n642FZM6x
+         C9RjJtmxiRDfQAfvuI5V05mn0sXMoULLYgjmM2zLEys/WMzwZeOZRug5SfHRjVjLAKkN
+         N3+YK2VjsyrcxSGKWHRzigFSU2Z0FUmvkT1Db43c6yWwZA+zldHd1RxUQNy9XtqwjbIO
+         8cOUDO4lqutv9WfrPRyqj4J+XjNEeyJXrq3xp2NM1LvqtLgjd3/9B/ZPcibbZj98rV3u
+         wPYw==
+X-Gm-Message-State: AOAM531/qhlmxMxLDPPkVzksHXLg4R37I2l5cvThPC4/MENzHdW64+1a
+        TnyZAzPppUg2107iW11mtsy16w==
+X-Google-Smtp-Source: ABdhPJx/b7/bSQcrLQiriSkVkxOgSx/ZCNnuCH6SWCqN2lWYiL+xBRcWyS2xtW/clxXTZAw9aszy0A==
+X-Received: by 2002:a05:6870:7090:b0:e6:49ed:4a9b with SMTP id v16-20020a056870709000b000e649ed4a9bmr219923oae.177.1650422510011;
+        Tue, 19 Apr 2022 19:41:50 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id e18-20020a9d7312000000b006054dfa7eb6sm2781708otk.78.2022.04.19.19.41.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 19:41:49 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 21:41:47 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        konrad.dybcio@somainline.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        vkoul@kernel.org, Marijn Suijten <marijn.suijten@somainline.org>
+Subject: Re: [PATCH v2 1/1] arm64: dts: qcom: sm8350-sagami: usb qmp phy node
+ - add 'vdda-pll-supply' & 'vdda-phy-supply'
+Message-ID: <Yl9y668H/N+bcrP4@builder.lan>
+References: <20220419205854.1269922-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.15 000/189] 5.15.35-rc2 review
-Content-Language: en-US
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220419073048.315594917@linuxfoundation.org>
- <bc25b6b5-d202-18c5-a485-217f858fc986@linaro.org>
-In-Reply-To: <bc25b6b5-d202-18c5-a485-217f858fc986@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419205854.1269922-1-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,36 +73,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Tue 19 Apr 15:58 CDT 2022, Bhupesh Sharma wrote:
 
-On 19/04/22 18:25, Daniel Díaz wrote:
-> On 19/04/22 02:32, Greg Kroah-Hartman wrote:
->> This is the start of the stable review cycle for the 5.15.35 release.
->> There are 189 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Thu, 21 Apr 2022 07:30:20 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>     https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.35-rc2.gz
->> or in the git tree and branch at:
->>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
+How about making the subject:
+
+"arm64: dts: qcom: sm8350-sagami: add supplies to USB phy node"
+
+It still says the same thing, but in much less characters.
+
+> As suggested by Bjorn during review of [1], the 'vdda-pll-supply' &
+> 'vdda-phy-supply' supplies denote the power for the bus and the
+> clock of the usb qmp phy and are used by the qcom qmp phy driver.
 > 
-> Results from Linaro's test farm.
-> No regressions on arm64, arm, x86_64, and i386.
+> So, its safe to assume that the two regulators are the same as on
+> the MTP. So let's wire them up in the same way as the MTP.
+> 
 
-Forgot to mention that it was
+I'm not sure it's "safe to assume", so I would like to get Konrad's
+input before merging this.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> In absence of the same 'make dtbs_check' leads to following warnings:
+> 
+> arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
+>  phy-wrapper@88e9000: 'vdda-phy-supply' is a required property
+> 
+> arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
+>  phy-wrapper@88e9000: 'vdda-pll-supply' is a required property
+> 
 
-Greetings!
+This is good!
 
-Daniel Díaz
-daniel.diaz@linaro.org
+Thanks for the patch Bhupesh,
+Bjorn
+
+> [1]. https://lore.kernel.org/lkml/20220228123019.382037-9-bhupesh.sharma@linaro.org/
+> 
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: konrad.dybcio@somainline.org
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Marijn Suijten <marijn.suijten@somainline.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+> Changes since v1:
+> -----------------
+> - v1 can be found here: https://www.spinics.net/lists/linux-arm-msm/msg108467.html
+> - Fixed the commit message to read usb qmp phy instead of ufs phy (which
+>   was introduced erroraneously in the commit log).
+> 
+>  .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 25 +++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> index 90b13cbe2fa6..238ac9380ca2 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> @@ -3,6 +3,7 @@
+>   * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
+>   */
+>  
+> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>  #include "sm8350.dtsi"
+>  #include "pm8350.dtsi"
+>  #include "pm8350b.dtsi"
+> @@ -75,6 +76,27 @@ ramoops@ffc00000 {
+>  	};
+>  };
+>  
+> +&apps_rsc {
+> +	pm8350-rpmh-regulators {
+> +		compatible = "qcom,pm8350-rpmh-regulators";
+> +		qcom,pmic-id = "b";
+> +
+> +		vreg_l1b_0p88: ldo1 {
+> +			regulator-name = "vreg_l1b_0p88";
+> +			regulator-min-microvolt = <912000>;
+> +			regulator-max-microvolt = <920000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l6b_1p2: ldo6 {
+> +			regulator-name = "vreg_l6b_1p2";
+> +			regulator-min-microvolt = <1200000>;
+> +			regulator-max-microvolt = <1208000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +	};
+> +};
+> +
+>  &adsp {
+>  	status = "okay";
+>  	firmware-name = "qcom/adsp.mbn";
+> @@ -256,4 +278,7 @@ &usb_1_hsphy {
+>  
+>  &usb_1_qmpphy {
+>  	status = "okay";
+> +
+> +	vdda-phy-supply = <&vreg_l6b_1p2>;
+> +	vdda-pll-supply = <&vreg_l1b_0p88>;
+>  };
+> -- 
+> 2.35.1
+> 

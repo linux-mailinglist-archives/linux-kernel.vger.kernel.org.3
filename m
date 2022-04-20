@@ -2,92 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23CF508C00
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EA7508BF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380202AbiDTPZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S1380137AbiDTPYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379997AbiDTPZZ (ORCPT
+        with ESMTP id S1379944AbiDTPYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:25:25 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AC745797;
-        Wed, 20 Apr 2022 08:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1650468159; x=1682004159;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=j+mvbu/M3dlkNs8jRAn3m6Ffvc707IPqJrGe+7x0aT4=;
-  b=n+3Euad3BDJXQu/71vzpEtNo4yyAbkfbkwdIgsadXCo2u0hqCBda23vb
-   DtZXDuYtjjJ2ofvcNL4c4xKsy0bpw7RnccCvRh8CLY6rP+YC7YuVa7EoK
-   uakJOC/YB4vS1qpgQt/H5zSLhycpcYkN+J0zDMawvl3HtwO22mnyIaBDH
-   l5v1shmWoNQ39yXm6jw/02Vlv4f3dUQEtSFr0xr7sivJaIvApvpTxazwf
-   DLlXjdffFsfY4Hb8HgZSZj37c/6GIrxw9AnZhEIajkNtyXRemtRiS9X7V
-   DinZtmd28kPRUQslFpkpMl643r1PfMUdXiA709uO/PbJFbmefVITIkzKH
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,276,1643698800"; 
-   d="scan'208";a="92976880"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Apr 2022 08:21:05 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 20 Apr 2022 08:20:52 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 20 Apr 2022 08:20:47 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, <UNGLinuxDriver@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>
-Subject: [Patch net-next v3 2/2] MAINTAINERS: Add maintainers for Microchip T1 Phy driver
-Date:   Wed, 20 Apr 2022 20:50:16 +0530
-Message-ID: <20220420152016.9680-3-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220420152016.9680-1-arun.ramadoss@microchip.com>
-References: <20220420152016.9680-1-arun.ramadoss@microchip.com>
+        Wed, 20 Apr 2022 11:24:12 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7699045536
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:21:26 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id p21so2185708ioj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=XGUcPAyFYtUWMYO5tKtj4ZzzebuC3OQHKF+J/C0blWA=;
+        b=hDA9+9WDhq3oTrBMc7XC5/79dUHLKCYnS6ngQ6mgcL98tfITd1M527u2YPl2DoUH3j
+         rUeSYB/J1O2RXlWAONOWGzaWcRbTVdgnxvQX3ShBRTa2IO1jsx8OejhrkJg/XtfJgz1X
+         /hCnDHDKxkoOQZRJ/vRTYlyuVph1Wb6INtF9xSuFo1zUUxqppgCHZToJyOm8+IA/rMtf
+         /Y2AW7S8OgnxdPQ5IE4V8umfUgSjGCC1WBCttZhrrXLbPd1iYfWYc9Aqt1ePXD8UC1SD
+         8iogedA8KOiW49vhdETltNJJhJqzIAlrSinx4pWU8S6rDzMCaYLbGHEYl4FB87VV9/0O
+         s6vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=XGUcPAyFYtUWMYO5tKtj4ZzzebuC3OQHKF+J/C0blWA=;
+        b=Vbdf/wGawhNflCSqzNS6j1H4x1+O8wYvAOHNINb1Ulc/ZPV4T8wo/IvxCFOUNNtXo/
+         6XMx+g8g66sqYcjRWWivwl30Yu+u1O4SJiENCSAClpBwJbYa1TvdEmu2LZN5zVNKBq+e
+         gPoHx7Ar/QabWqSBqd6LsRsV/RFBfXsmGHh+IfPjEuxxfwVexmuSLYBqMpi8wECGQeqO
+         Z9s4pik74JliRtdsDhC9xPuK+YzlQ86cyis7iZC9BbFtMha1ylCJ2wn0gUgBFE3GDoOc
+         HfUOCVuCf0Cqx/RknSo1pnQAQQw2TM/c00Ks9XLA2a8YLUKw0VlDK73/cpQS9Dv0/fkL
+         RWEg==
+X-Gm-Message-State: AOAM533He0PIaOfCwIdI+0NrszeJHALZ8rNXA0MdUtPKsDINI8oufMOV
+        wUbUgcIh5M59cdqlFZ3RvsFiQT/bx+ApAXA0bWo=
+X-Google-Smtp-Source: ABdhPJx8pcKSRDZ2vFIDPCQ6r1mB5g5K+SrZHoZ4xK8oJr4DhednMjzjKkYoKWEKJkD2U71L3Z+RTUERLXGlhu0XcdY=
+X-Received: by 2002:a05:6602:1683:b0:64f:ba36:d3cf with SMTP id
+ s3-20020a056602168300b0064fba36d3cfmr9054810iow.144.1650468085899; Wed, 20
+ Apr 2022 08:21:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6638:3490:0:0:0:0 with HTTP; Wed, 20 Apr 2022 08:21:25
+ -0700 (PDT)
+Reply-To: isabeljffrsn@gmail.com
+From:   Isabel Jefferson <dembadioh@gmail.com>
+Date:   Wed, 20 Apr 2022 17:21:25 +0200
+Message-ID: <CALvF5q4+=HZYyrt-3CST8mo_i5Uncok-jnNrXZXifT0CGOq_vw@mail.gmail.com>
+Subject: HELLO.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        HK_RANDOM_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d35 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4426]
+        *  1.0 HK_RANDOM_REPLYTO Reply-To username looks random
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [dembadioh[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 25d2a5d417bc..1adf2cac1865 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12920,6 +12920,13 @@ F:	drivers/net/dsa/microchip/*
- F:	include/linux/platform_data/microchip-ksz.h
- F:	net/dsa/tag_ksz.c
- 
-+MICROCHIP LAN87xx/LAN937x T1 PHY DRIVER
-+M:	Arun Ramadoss <arun.ramadoss@microchip.com>
-+R:	UNGLinuxDriver@microchip.com
-+L:	netdev@vger.kernel.org
-+S:	Maintained
-+F:	drivers/net/phy/microchip_t1.c
-+
- MICROCHIP LAN743X ETHERNET DRIVER
- M:	Bryan Whitehead <bryan.whitehead@microchip.com>
- M:	UNGLinuxDriver@microchip.com
 -- 
-2.33.0
-
+How are you today? I hope everything is alright?

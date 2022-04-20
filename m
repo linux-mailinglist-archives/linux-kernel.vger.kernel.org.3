@@ -2,131 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6AF508525
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C09050852E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377300AbiDTJp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 05:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
+        id S1377329AbiDTJuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 05:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243155AbiDTJpZ (ORCPT
+        with ESMTP id S237711AbiDTJuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 05:45:25 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5221245AC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:42:38 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id z12so1540941edl.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:42:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rn9+aR7ucf5Qs0Vd1a84QfPbfL7HErKfiyJaK63fdzI=;
-        b=HQMPJdFZ3OUwVe1C8+R8Cckio65mWY8zyespQRGKLt4Ijdmkr9Q9iw11Dj9T5WvO44
-         bk11pWw1bC1xY0Q+vWVviNwp7oudqs3tBPXenAzz+bME6Hpp2Y+HmS0q7Q/n5FzLmI2n
-         otIdN74LIBW2/29yO9B+QmQ5O8lmsWn93jyQEcP5QKwBMVgacCFYrQQTA+6BX9/t+kf6
-         UhSr1g354B2s7xLot41ROfHo0jcZBbeGQh3gOYRkvhf72okwgregKJdyrIL3SCd10op6
-         rPBtOJuJvjv0BRCm2BGuxckfyZpObp4ppmefkOwIYuso9bMiIwI24slexsYBdCnCwYWb
-         ntUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rn9+aR7ucf5Qs0Vd1a84QfPbfL7HErKfiyJaK63fdzI=;
-        b=O9rGgkYxd4wVrKjoTMoRO9lSjV+NSaAHfH9Po44h8wxxSPJBKksoqIEk51rUf6XpsW
-         +IP7sISOKi7Hx41iIhC1JRflncxc6v/EQr+cORN6DRkI61zT+S5/uZMfUtMCTKonV3mK
-         0MVIafDiyRjGJgxw7RvBhy9YFGeQByWBBaDvi+LqzEVdsMhV03dV0C2/MapEeEsb2IW6
-         WPrVexlnO1zm6MV4V+w3ciPVyKbiHMl0EUpnxi4XX+fmQPrxEODbTyQG2D3N8G2CufY0
-         gmIu6EeSmBTEq5oiK6ttiycMehvqOdpf0GhVkqQNQY3FW7BBuxM/y7p+CmaO7OgpF8Yv
-         4vDA==
-X-Gm-Message-State: AOAM531VLv6LsUQTEsOGTwpCwPMHBA1H3TlRQSbGQz0dBkdidt8g9fkL
-        qWHLp1tefo8muT4HMa+yunV99I72M2UHKQ==
-X-Google-Smtp-Source: ABdhPJyodpwb0BYmTXR0M9qTaRjek4VTZFUEQzLMObA2ycevQY/4bi69l4QL3XHp9hm3koBbFtbHZA==
-X-Received: by 2002:a05:6402:2753:b0:423:3895:7031 with SMTP id z19-20020a056402275300b0042338957031mr22097598edd.170.1650447757469;
-        Wed, 20 Apr 2022 02:42:37 -0700 (PDT)
-Received: from [192.168.0.223] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id la10-20020a170907780a00b006e889ee7741sm6530550ejc.75.2022.04.20.02.42.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 02:42:37 -0700 (PDT)
-Message-ID: <1c3cb265-2497-537d-3c7b-ca4766775b46@linaro.org>
-Date:   Wed, 20 Apr 2022 11:42:36 +0200
+        Wed, 20 Apr 2022 05:50:04 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2067.outbound.protection.outlook.com [40.107.92.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6300737AB0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:47:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QOERUQBsHQhGJ10FcTwIonWNyIrjExuKdvucRCqkJEEyNYHNG7mJuF+UySlUh5kIG04PexOLGE22gyw3dCXn4UW0k7ebYs1suT/N1f2d6gL0zN+UtKpY+QU4S8rYD1Pa7HgpHvzLZt4JmULfI6VFFn11lVbRu5kBp/inuwEk37r/mU5NozIKir0nwGpx4/fF8Gz2an8g/rSBUMqb2/lxbq3AODKBBKq/ZJCmQClfQZfdEoJ/U53u0IBvWWwlXcBhvVHp1ghOxzhY26bSyVNEC+i3srt8RbkyR4Tv5nMUsMNKz24IX871DJoO5Bjey14GYUmU5MFpe3rTIRWkwqNTGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hk7y61S4MYspjU9K0oGnCwieEh5wahxFcWq5rTdnsE8=;
+ b=OqokoGwtLmj+BVE7KdCKUxboxJs2ip4cvfYrnFHwpYT7OOFado9k6Ggxuogs8KBSa8A5Xi7qsVQ0Zn83ebMxNvoacTQVRWIrN/bdKxUEse49Hbyn98VGHB2oppDAHr7N+PLjzbR3s8sIuULO74Lb4XDqBrtXoVhDI/D5D2pwj2HCqKwW/m4w2QiXwES7oPS6a+oq5QSK0kXSVfv0X7PlQMg7NKTKIjRe4HTZJ6CjG+7j7/K5aWpxmmeEL7uwHhcGgGxEdfXcSHkkY9ofMlpymMtBCH0HoncB1tHq5y2R13gDtc9rR3a0/kuptZHcoSOvnEVuKR/BisS/YO4Nmk1TYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hk7y61S4MYspjU9K0oGnCwieEh5wahxFcWq5rTdnsE8=;
+ b=Hd2rd7vODWl1UhZfCDzzUWQnwdD8ZuarbuUqblP5VZCZoqDCDMaAkUzYj8gZnRoSpLN6lrhVSixKOCIoJGvEGHGzGTqo56RP5VmlWdGCuT7IXK/cRsj3R1Cr3cp8Ec4QZulgtnzp/kqF8dyyuza6G3425ZVfcDMosvWrmKRqF9g=
+Received: from DS7PR03CA0176.namprd03.prod.outlook.com (2603:10b6:5:3b2::31)
+ by DM4PR12MB5841.namprd12.prod.outlook.com (2603:10b6:8:64::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Wed, 20 Apr
+ 2022 09:47:15 +0000
+Received: from DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b2:cafe::22) by DS7PR03CA0176.outlook.office365.com
+ (2603:10b6:5:3b2::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20 via Frontend
+ Transport; Wed, 20 Apr 2022 09:47:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT022.mail.protection.outlook.com (10.13.172.210) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5186.14 via Frontend Transport; Wed, 20 Apr 2022 09:47:15 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 20 Apr
+ 2022 04:47:15 -0500
+Received: from chrome.amd.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Wed, 20 Apr 2022 04:47:11 -0500
+From:   Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Vijendar.Mukunda@amd.com>, <Alexander.Deucher@amd.com>,
+        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
+        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "V sujith kumar Reddy" <vsujithkumar.reddy@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ASoC: amd: acp: Add pm ops callback in machine driver
+Date:   Wed, 20 Apr 2022 15:14:36 +0530
+Message-ID: <20220420094442.1352717-1-AjitKumar.Pandey@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 2/3] genirq: Always limit the affinity to online CPUs
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Garry <john.garry@huawei.com>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        David Decotigny <ddecotig@google.com>
-References: <20220405185040.206297-1-maz@kernel.org>
- <20220405185040.206297-3-maz@kernel.org>
- <CGME20220413145922eucas1p2dc46908354f4d2b48db79978d086a838@eucas1p2.samsung.com>
- <4b7fc13c-887b-a664-26e8-45aed13f048a@samsung.com>
- <878rs8c2t2.wl-maz@kernel.org>
- <5dcf8d22-e9b3-f306-4c5f-256707e08fbf@samsung.com>
- <877d7sar5k.wl-maz@kernel.org>
- <39f69dfe-32e5-4cb3-118b-5c02b28cbcff@samsung.com>
- <70123e98-046f-f10e-1032-8d112edd3ecf@linaro.org>
- <87mtgg9jok.wl-maz@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <87mtgg9jok.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fdfd806f-2a1c-4dee-06b4-08da22b2c0b2
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5841:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB5841B54B7AFD864445B0C03982F59@DM4PR12MB5841.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p2UC2fpwrTUWkBjS3yz1NaF3zTTRDrmJuyV0JH2ssMVK6QATTd+XKZqqJwvWKIckbSMG+4Lp6SGAvJeOKkFGW9ewHrS2auap/lnqGZ9Saf7jTwtR3+IZK6xHLEZW5mUwxl3DWj/yXed2f50Ho2NlfegTz19ZofxatRaAlndefnTER9dNurE4EqOW0xxP8Z7wHYbgyaIz4BSYnuDhz5iW4bf0OMIrIxo1KdjgEmatUsek8d/GEUZWQ1ShBxX5wzxCgggxbOxYCLsSwCfVXImlCUWv2jMzpuYEsVXZGjnIvFRheCaT4eprWzHy4a3pq2rsTCJNk4v5OjxSvO4E2lNuYtjKKlrxwY7c9/6brfM3dKUxnnxep1HDqBXRAB+Mi+qVvNOgU6Zrw2QWrGmVckKw/EspG/sCeCuryWUxrhdJ4WxBXlzAC/+B6IOhQhoWMDZorz1kUzkJTB+RqxjFPVtx+/4SCgZnTkklcdEAP4TdmTUAs1+yLgUvVC/Z58tVyQi/LI2F+ZQB2B7ZfeyBIaVU9aVd4WFLxwe0HOxL+mcjNkGZ15h8lhrE8PZon6h7A58bCIHSHey1DY//B7+FBnPnzNBiXuJhAdKkn52Bbn06Xb85Lkf+KKnvHpwpHzP+UthA/f+6fNUE7008VER1pyDIEqA5sNkTZV9Ln0zY/K+Uv4tQhP+rdKh+dPwS4ABMWBWyj7EG2bcYLYNroWF8KW+0mA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(70586007)(356005)(40460700003)(4326008)(83380400001)(81166007)(70206006)(8676002)(316002)(36756003)(7696005)(508600001)(6666004)(336012)(426003)(2906002)(2616005)(82310400005)(86362001)(47076005)(54906003)(8936002)(110136005)(26005)(36860700001)(5660300002)(1076003)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 09:47:15.7825
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fdfd806f-2a1c-4dee-06b4-08da22b2c0b2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5841
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2022 11:40, Marc Zyngier wrote:
-> It was picked up by Thomas and pushed out into tip, which is pulled by
-> -next:
-> 
-> maz@hot-poop:~/arm-platforms$ git describe --contains c48c8b829d2b966a6649827426bcdba082ccf922
-> next-20220420~51^2~3^2
-> 
-> So it definitely is in today's -next.
-> 
->> Instead of silent fail there is now "Unable to handle kernel paging
->> request at virtual address f0836644", so it is slightly different.
->>
->> See the dmesg:
->> https://krzk.eu/#/builders/21/builds/3542/steps/15/logs/serial0
-> 
-> This looks completely unrelated:
-> 
-> [   10.382010] Unable to handle kernel paging request at virtual address f0836644
-> [   10.388597] [f0836644] *pgd=41c83811, *pte=00000000, *ppte=00000000
-> [   10.394482] Internal error: Oops: 807 [#1] PREEMPT SMP ARM
-> [   10.399567] Modules linked in:
-> [   10.402583] CPU: 2 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc3-next-20220420 #2
-> [   10.410060] Hardware name: Samsung Exynos (Flattened Device Tree)
-> [   10.416106] PC is at cpu_ca15_set_pte_ext+0x4c/0x58
-> [   10.420952] LR is at handle_pte_fault+0x218/0x260
-> [   10.425631] pc : [<c011d588>]    lr : [<c02ab188>]    psr: 40000113
-> [   10.431874] sp : f0835df0  ip : f0835e5c  fp : 00000081
-> [   10.437069] r10: c0f2eafc  r9 : c1d31000  r8 : 00000000
-> [   10.442268] r7 : c1d58000  r6 : 00000081  r5 : befffff6  r4 : f0835e24
-> [   10.448773] r3 : 00000000  r2 : 00000000  r1 : 00000040  r0 : f0835e44
-> [   10.455273] Flags: nZcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-> [   10.462381] Control: 10c5387d  Table: 4000406a  DAC: 00000051
-> 
-> This is a crash in cpu_ca15_set_pte_ext() when populating the
-> userspace page tables, which seems unrelated to interrupt affinity.
-> 
-> I suggest you bisect this to find the actual problem.
+Add alsa snd_soc_pm_ops callback in ACP machine driver to support
+suspend and resume operation of sound card components
 
-Thanks for checking.
+Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+---
+ sound/soc/amd/acp/acp-legacy-mach.c | 1 +
+ sound/soc/amd/acp/acp-sof-mach.c    | 1 +
+ 2 files changed, 2 insertions(+)
 
+diff --git a/sound/soc/amd/acp/acp-legacy-mach.c b/sound/soc/amd/acp/acp-legacy-mach.c
+index 5d276365d644..442d5644e0f3 100644
+--- a/sound/soc/amd/acp/acp-legacy-mach.c
++++ b/sound/soc/amd/acp/acp-legacy-mach.c
+@@ -131,6 +131,7 @@ static const struct platform_device_id board_ids[] = {
+ };
+ static struct platform_driver acp_asoc_audio = {
+ 	.driver = {
++		.pm = &snd_soc_pm_ops,
+ 		.name = "acp_mach",
+ 	},
+ 	.probe = acp_asoc_probe,
+diff --git a/sound/soc/amd/acp/acp-sof-mach.c b/sound/soc/amd/acp/acp-sof-mach.c
+index 3346677949e3..bf61a1726f0e 100644
+--- a/sound/soc/amd/acp/acp-sof-mach.c
++++ b/sound/soc/amd/acp/acp-sof-mach.c
+@@ -144,6 +144,7 @@ static const struct platform_device_id board_ids[] = {
+ static struct platform_driver acp_asoc_audio = {
+ 	.driver = {
+ 		.name = "sof_mach",
++		.pm = &snd_soc_pm_ops,
+ 	},
+ 	.probe = acp_sof_probe,
+ 	.id_table = board_ids,
+-- 
+2.25.1
 
-Best regards,
-Krzysztof

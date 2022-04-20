@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B03F508D7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93549508D7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380669AbiDTQk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
+        id S1380674AbiDTQmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355833AbiDTQk0 (ORCPT
+        with ESMTP id S1380595AbiDTQm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:40:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577F23C73E;
-        Wed, 20 Apr 2022 09:37:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6A3061A1D;
-        Wed, 20 Apr 2022 16:37:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04565C385A4;
-        Wed, 20 Apr 2022 16:37:38 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QqnanUkR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650472657;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k0T1EA0oTFWB7zpScDc5u9F5eGYrVS61Bm9+xdnYgX0=;
-        b=QqnanUkRBBLncuZxPNmWSfNtfPXFl84sesxbV7XrayclHtmMZfcnPRDIV29uYP/MyRXSUP
-        +VX44yck+8Gdiln34V0KfGFzbrsBS2eGgFl4VfqJvEnF2E9jtTvM308OB+LWgfRjFslMu/
-        4sOBxeqR6smnWMzITL4xL5xD66qu+wM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 59b67bc1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 20 Apr 2022 16:37:37 +0000 (UTC)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2eba37104a2so24775317b3.0;
-        Wed, 20 Apr 2022 09:37:36 -0700 (PDT)
-X-Gm-Message-State: AOAM532x7c8jGflRI8+YzsdgJviw9X/TRvQTdKjmr1jfG9CCq767NHpt
-        l07qvJrdD/TR34pjWHOZErYFniwvMH+F9QbgCCg=
-X-Google-Smtp-Source: ABdhPJw1SvYzkrJYtAOpmP0c/NPYhdogO4aqIhMujpMFmNuXwvbwsi3Rzp9fW35qmJrOrSfi1BqQQrRwoepzEO+xLoE=
-X-Received: by 2002:a0d:c005:0:b0:2eb:d29d:8bf5 with SMTP id
- b5-20020a0dc005000000b002ebd29d8bf5mr23402744ywd.404.1650472655570; Wed, 20
- Apr 2022 09:37:35 -0700 (PDT)
+        Wed, 20 Apr 2022 12:42:26 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96F64615A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:39:39 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id v15so3008235edb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b5N2uBwvU/R1T3nBWRA2gGypa77nKQwkQAmB3bWEi9A=;
+        b=jxB9R4cclEOKuzCKOWbdtfUR3unE2Ot3c7bJ7kNRuSpiqY8HhPJN2/rMtaxEwVJf1o
+         YvbOH+sesfzSRsTO5dJCbSfBxTY4w6DeMDeZk3vcUZio/kKkjPQFZzMd+PZJzxTmBjze
+         K5y32W6KxLokKJyf4NO+wnND1YVXlhVhWoZPK9+cnl02H53Egy/WAR0O1CG1El3xba6k
+         0/Bl+ctMPlQqkq14K9xQ4u14s9+oqSK264HU5vyaKJdFskmemIwExELQRrsXMQuDOfzP
+         kVeT6GTH6teoSww657WuBopnAHRtPKJTgFnnPyVXw6vN7Kfx69OLEqVfWnZLK84iK9o4
+         c+ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b5N2uBwvU/R1T3nBWRA2gGypa77nKQwkQAmB3bWEi9A=;
+        b=GugoCMu1U66LugB86GZ73ykWwc53hO3Yvj3ZxRPIeJ4tDUUfmryFsMN7f+msYwTulN
+         fKb1u8nZeiESbKq6qVwh7GmcvY6mCxkq3Zbg3Es9XoQd3giFR+qNXmUleS5JGKVmw9K8
+         c+NOSIr26R6NDkNcKBSNcqtZXRZ/TG2i8jfhIs8mUNI/vRXu9gXxoVRLd6w1pWdxWF3V
+         0izxODc6Vt/F6ldKfaGqrPygMCEXZVHKwU5iUtST3a5cnpgrBmt6LSJicOV3oPoNRot9
+         Y5uV/4DCkIBbcGRDdad9Ps95VxIaKIjB3/+FhnI0+jbGJUbN/GiOLtKAl5V9BNMRy2RJ
+         NhLA==
+X-Gm-Message-State: AOAM5321ipcvFseXParufRcCzNJmxs6Ws2aeodx2aamRAnJRrCtzOvAi
+        jXXCU0oMMYIkNjU4EP0DsLhDn0svPn89VKJ46axoIh2PNVHzmw==
+X-Google-Smtp-Source: ABdhPJzEjDcNUsqnj/BsQTDpZO1AkHXHew4UR3HKk4uskAu0ispgivCheHHbNR8dunwRsDycqsBdWiO+52yjHOkmB44=
+X-Received: by 2002:a05:6402:2689:b0:422:15c4:e17e with SMTP id
+ w9-20020a056402268900b0042215c4e17emr24763350edd.33.1650472778279; Wed, 20
+ Apr 2022 09:39:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220419160407.1740458-1-Jason@zx2c4.com> <CAG48ez3amS6=omb8XVDEz9H2bk3MxTEK_XPjD=ZO-cXcDqz-cg@mail.gmail.com>
- <CAHmME9r7Vt1XFzceHhy7O67iVMhtpLJ-d0p8UGgV4Srd4Dt2Hg@mail.gmail.com>
- <CAG48ez2X72XkpxaEDmzykewreuhk8=5t5L5b2Qdr1dn8LcFutw@mail.gmail.com>
- <CAHmME9q+mDw6n3FNJLvoZoD3UsX-G5PvTwb5L7h_M9RFKNemSw@mail.gmail.com>
- <YmAJoGtqA3PMrZmD@zx2c4.com> <CAG48ez1F0P7Wnp=PGhiUej=u=8CSF6gpD9J=Oxxg0buFRqV1tA@mail.gmail.com>
-In-Reply-To: <CAG48ez1F0P7Wnp=PGhiUej=u=8CSF6gpD9J=Oxxg0buFRqV1tA@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 20 Apr 2022 18:37:23 +0200
-X-Gmail-Original-Message-ID: <CAHmME9rAidi+KXBiOJyEfz+R2enGTSCK5Q2Xf2iH_MsW2_e_2g@mail.gmail.com>
-Message-ID: <CAHmME9rAidi+KXBiOJyEfz+R2enGTSCK5Q2Xf2iH_MsW2_e_2g@mail.gmail.com>
-Subject: Re: [PATCH] random: add fork_event sysctl for polling VM forks
-To:     Jann Horn <jannh@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Alexander Graf <graf@amazon.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Colm MacCarthaigh <colmmacc@amazon.com>
+References: <20220418175932.1809770-1-wonchung@google.com> <Yl/l7gjRXj41a93q@lahna>
+In-Reply-To: <Yl/l7gjRXj41a93q@lahna>
+From:   Won Chung <wonchung@google.com>
+Date:   Wed, 20 Apr 2022 09:39:25 -0700
+Message-ID: <CAOvb9yidpOZ4jCjme+u1a4fPTRnLmxUHSTO3yHPPuYtDbe1V0g@mail.gmail.com>
+Subject: Re: [PATCH 0/2] thunderbolt: Link USB4 ports to their USB Type-C connectors
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,9 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Jann,
+On Wed, Apr 20, 2022 at 3:54 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Mon, Apr 18, 2022 at 05:59:30PM +0000, Won Chung wrote:
+> > Currently, USB port is linked to Type C connector, using the component
+> > framework, if they share the same _PLD fields from ACPI table. Type C
+> > port-mapper searches for devices with the same _PLD values, and
+> > aggregate them as components.
+> >
+> > When there is another device that share the same _PLD but does not
+> > registers a component, Type C connector (component master) would never
+> > be bound due to a component match entry device without a component
+> > registered. There exists some cases where USB4 port also shares the same
+> > _PLD with USB port and Type C connector, so we need to register a
+> > component for USB4 ports too, linking USB4 port with Type C connector.
+> > Otherwise, link between USB port and Type C connector would not
+> > work either.
+> >
+> > Due to the nature of the component framework, all registered components
+> > are shared by all component match despite the relevance. MEI subsystems
+> > also use the component framework to bind to i915 driver, which try to
+> > match components registered by USB ports and USB4 ports. This can be
+> > problematic since MEI assumes that there is a driver bound to the
+> > component device, while USB4 port does not bind to any drivers. MEI's
+> > component match callback functions should handle such case to avoid NULL
+> > pointer dereference when USB4 port registers a component.
+> >
+> > In summary this patch series
+> > 1. Fixes MEI subsystem's component match callbacks to handle a component
+> > device without any driver bound
+> > 2. Registers a component for USB4 ports to link them to Type C
+> > connectors, similar to USB ports.
+> >
+> > Heikki Krogerus (1):
+> >   thunderbolt: Link USB4 ports to their USB Type-C connectors
+> >
+> > Won Chung (1):
+> >   misc/mei: Add NULL check to component match callback functions
+>
+> The Thunderbolt patch looks good to me. Do you want me to take the both
+> patches through the Thunderbolt tree or they can go separately? I need
+> an ack from the mei maintainer it goes through my tree.
 
-Ahh, gotcha, that makes sense. Either way, sounds like something to
-fix in the sysctl proc API (option c) if possible...
+Hi Mika,
 
-Jason
+I would prefer the two patches to go to the same tree since it can
+cause a crash with only the second patch (tbt). Would that sound okay?
+
+Hey Alexander, would you be the right person to ask for an ack on this?
+
+Thanks,
+Won

@@ -2,122 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C978507F04
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A591C507F0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358993AbiDTCsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 22:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        id S1359011AbiDTCsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 22:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239192AbiDTCsD (ORCPT
+        with ESMTP id S239192AbiDTCsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 22:48:03 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C01725284
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:45:18 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso3683880pjb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1syVurlPdZtVxfD77EA07da6Q0rSSJ2SEOZ9IIvMxUw=;
-        b=TGBBcj36GCla9UWEXP4zSj1zN0lOz5f2ul/fVLRyFgR+Vmtff+G7616OT5lwErhECF
-         9l49f5c5cC6fMMAfxNJcj0Bb8iXOIzz6GM+mMs2I7aEAwJCy25tk/uj4wogq/zPS9Qgq
-         2cK93xOr7di3AU/YzmT6A8NyM/aHbOBD2bq2k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1syVurlPdZtVxfD77EA07da6Q0rSSJ2SEOZ9IIvMxUw=;
-        b=T1OS3Dig8V3IMcNwIYdukXPS1tGY2hOwnwByLIWgizyaz3AfOQncjD9kNy87Ic/zTK
-         05JlLJktTPlR80AOrcMCLr/0NdrnhDKNEduURcMw0YoO14b+fqHAaaDRte5QABI5I+Td
-         a+SReysvC0GUaIlDCzAnaTOIR5MwyPj0WrkI0k569fntA3C3kvaLRHEsUbeNTgL1m67y
-         V5hwI/9pOXPnYl4CYatGo23MzJ5ff1IvjYy57Q2LARtWq70uBDoOWgzUWWtkJ9RGWpHE
-         uDely52ZWQXiHGAw7IpaYOA89trSkiHv8eF5+j3UUqtoGNTJY9g4hqihuZKJ329AlyWB
-         /G/A==
-X-Gm-Message-State: AOAM533vmN+1vcxBprVj96TuWk97xJZIhsbyhKE2TnPIGVybc+DzoG7T
-        7MeT2xpyDzigoorFv8x4qTSSRw==
-X-Google-Smtp-Source: ABdhPJyY7WO8H0dT1tmNr/jgQbtrjy7gcp4/rbnWxhnW4FecMs7HlQysjTPVoOohhl8xgekBtwjY2w==
-X-Received: by 2002:a17:90a:31cb:b0:1d2:8998:61f9 with SMTP id j11-20020a17090a31cb00b001d2899861f9mr1854240pjf.186.1650422717621;
-        Tue, 19 Apr 2022 19:45:17 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n3-20020a056a000d4300b0050ac8dbfd0csm745637pfv.163.2022.04.19.19.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 19:45:17 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 19:45:16 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     joao@overdrivepizza.com
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        peterz@infradead.org, jpoimboe@redhat.com,
-        andrew.cooper3@citrix.com, samitolvanen@google.com,
-        mark.rutland@arm.com, hjl.tools@gmail.com,
-        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
-        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
-Subject: Re: [RFC PATCH 10/11] linux/interrupt: Fix prototype matching
- property
-Message-ID: <202204191942.3C273AB@keescook>
-References: <20220420004241.2093-1-joao@overdrivepizza.com>
- <20220420004241.2093-11-joao@overdrivepizza.com>
+        Tue, 19 Apr 2022 22:48:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80972F01B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:45:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73A7D61616
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE93C385A5;
+        Wed, 20 Apr 2022 02:45:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650422729;
+        bh=dqJj8cxS5GfPVVKnznBjD5JCJjlatiZ36UsnvCkAqdU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=t7hyOiEZA5rsal29kufImzA7DtamHpc4g66YlVBPR60X8mdVmNtZmJ0Hqh5VFVosu
+         bhKqxpVCmBmB1Q+prNwfR8uuvz0jp/vdZSyuZYbZLcXfFBiGmJRTEKHb7VtxKY/0D0
+         t3u66PEYuGl1/m2LgpBAy2pVaqxQi9jPj18u0XyD2xgWtONZ/Vqz8dPm91qpDXjSR2
+         mRr42Z96nK7216CHcl8eomJ2StHS7NrJTaOiNk+4H+TMD3E01jmBLSX40LI5JmJjvN
+         X2Ulh88OdGqg7zdT0oS5ZuEmMviajkMyhLY3q9MLmQRxRnRUO5YT5fW/qUaIW1Hl8N
+         jkcJek0od1uRw==
+Message-ID: <47f19561-11a7-9da3-1cf9-78843e0d0ec3@kernel.org>
+Date:   Wed, 20 Apr 2022 10:45:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420004241.2093-11-joao@overdrivepizza.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [f2fs-dev] [PATCH 2/2] f2fs: keep io_flags to avoid IO split due
+ to different op_flags in two fio holders
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220413154920.2024872-1-jaegeuk@kernel.org>
+ <20220413154920.2024872-2-jaegeuk@kernel.org>
+ <d22c42f8-525a-a0a6-2fef-a43b2fc3a2c7@kernel.org>
+ <Yl88F3RVRMfwyB7+@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Yl88F3RVRMfwyB7+@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 05:42:40PM -0700, joao@overdrivepizza.com wrote:
-> Unions will make function pointers with different prototypes be used through
-> the same call. This leads into the same call instruction being used for
-> calling functions with different prototypes, making them unsuitable for
-> prototype-based fine-grained CFI.
+On 2022/4/20 6:47, Jaegeuk Kim wrote:
+> On 04/17, Chao Yu wrote:
+>> On 2022/4/13 23:49, Jaegeuk Kim wrote:
+>>> Let's attach io_flags to bio only, so that we can merge IOs given original
+>>> io_flags only.
+>>>
+>>> Fixes: 64bf0eef0171 ("f2fs: pass the bio operation to bio_alloc_bioset")
+>>
+>> Nice catch.
+>>
+>> Wasn't this bug introduced by:
+> 
+> I don't think so.
 
-Why? Shouldn't the callers be using different prototypes?
+Oh, correct, it looks in original patch, we only attach IO flag before
+__submit_bio().
 
-> Fix this CFI policy violation by removing the function pointer union in
-> the tasklet struct.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-The good news is that tasklet is on the way out the door[1], so this may
-quickly become a non-issue, but also to that end, this fix is hardly a
-problem for a deprecated API...
-
--Kees
-
-[1] https://lore.kernel.org/linux-hardening/20220419211658.11403-1-apais@linux.microsoft.com/
+Thanks,
 
 > 
-> Signed-off-by: Joao Moreira <joao@overdrivepizza.com>
-> ---
->  include/linux/interrupt.h | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
-> index f40754caaefa..8d5504b0f20b 100644
-> --- a/include/linux/interrupt.h
-> +++ b/include/linux/interrupt.h
-> @@ -650,10 +650,8 @@ struct tasklet_struct
->  	unsigned long state;
->  	atomic_t count;
->  	bool use_callback;
-> -	union {
-> -		void (*func)(unsigned long data);
-> -		void (*callback)(struct tasklet_struct *t);
-> -	};
-> +	void (*func)(unsigned long data);
-> +	void (*callback)(struct tasklet_struct *t);
->  	unsigned long data;
->  };
->  
-> -- 
-> 2.35.1
-> 
-
--- 
-Kees Cook
+>>
+>> commit da9953b729c1 ("f2fs: introduce sysfs/data_io_flag to attach REQ_META/FUA")
+>>
+>> static void __attach_data_io_flag(struct f2fs_io_info *fio)
+>> {
+>> ...
+>>         if ((1 << fio->temp) & meta_flag)
+>>                 fio->op_flags |= REQ_META;
+>>         if ((1 << fio->temp) & fua_flag)
+>>                 fio->op_flags |= REQ_FUA;
+>> ...
+>>
+>> Thanks,
+>>
+>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>> ---
+>>>    fs/f2fs/data.c | 33 +++++++++++++++++++++------------
+>>>    1 file changed, 21 insertions(+), 12 deletions(-)
+>>>
+>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>> index acc523f893ba..fcf0daa386de 100644
+>>> --- a/fs/f2fs/data.c
+>>> +++ b/fs/f2fs/data.c
+>>> @@ -387,11 +387,23 @@ int f2fs_target_device_index(struct f2fs_sb_info *sbi, block_t blkaddr)
+>>>    	return 0;
+>>>    }
+>>> -static void __attach_io_flag(struct f2fs_io_info *fio, unsigned int io_flag)
+>>> +static unsigned int f2fs_io_flags(struct f2fs_io_info *fio)
+>>>    {
+>>>    	unsigned int temp_mask = (1 << NR_TEMP_TYPE) - 1;
+>>> -	unsigned int fua_flag = io_flag & temp_mask;
+>>> -	unsigned int meta_flag = (io_flag >> NR_TEMP_TYPE) & temp_mask;
+>>> +	unsigned int fua_flag, meta_flag, io_flag;
+>>> +	unsigned int op_flags = 0;
+>>> +
+>>> +	if (fio->op != REQ_OP_WRITE)
+>>> +		return 0;
+>>> +	if (fio->type == DATA)
+>>> +		io_flag = fio->sbi->data_io_flag;
+>>> +	else if (fio->type == NODE)
+>>> +		io_flag = fio->sbi->node_io_flag;
+>>> +	else
+>>> +		return 0;
+>>> +
+>>> +	fua_flag = io_flag & temp_mask;
+>>> +	meta_flag = (io_flag >> NR_TEMP_TYPE) & temp_mask;
+>>>    	/*
+>>>    	 * data/node io flag bits per temp:
+>>> @@ -400,9 +412,10 @@ static void __attach_io_flag(struct f2fs_io_info *fio, unsigned int io_flag)
+>>>    	 * Cold | Warm | Hot | Cold | Warm | Hot |
+>>>    	 */
+>>>    	if ((1 << fio->temp) & meta_flag)
+>>> -		fio->op_flags |= REQ_META;
+>>> +		op_flags |= REQ_META;
+>>>    	if ((1 << fio->temp) & fua_flag)
+>>> -		fio->op_flags |= REQ_FUA;
+>>> +		op_flags |= REQ_FUA;
+>>> +	return op_flags;
+>>>    }
+>>>    static struct bio *__bio_alloc(struct f2fs_io_info *fio, int npages)
+>>> @@ -412,14 +425,10 @@ static struct bio *__bio_alloc(struct f2fs_io_info *fio, int npages)
+>>>    	sector_t sector;
+>>>    	struct bio *bio;
+>>> -	if (fio->type == DATA)
+>>> -		__attach_io_flag(fio, sbi->data_io_flag);
+>>> -	else if (fio->type == NODE)
+>>> -		__attach_io_flag(fio, sbi->node_io_flag);
+>>> -
+>>>    	bdev = f2fs_target_device(sbi, fio->new_blkaddr, &sector);
+>>> -	bio = bio_alloc_bioset(bdev, npages, fio->op | fio->op_flags, GFP_NOIO,
+>>> -			       &f2fs_bioset);
+>>> +	bio = bio_alloc_bioset(bdev, npages,
+>>> +				fio->op | fio->op_flags | f2fs_io_flags(fio),
+>>> +				GFP_NOIO, &f2fs_bioset);
+>>>    	bio->bi_iter.bi_sector = sector;
+>>>    	if (is_read_io(fio->op)) {
+>>>    		bio->bi_end_io = f2fs_read_end_io;

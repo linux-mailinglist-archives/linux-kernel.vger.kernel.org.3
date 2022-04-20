@@ -2,155 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B735091A8
+	by mail.lfdr.de (Postfix) with ESMTP id 28CB65091A7
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382279AbiDTUyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S1382286AbiDTUyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358062AbiDTUyg (ORCPT
+        with ESMTP id S1358062AbiDTUyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:54:36 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2100.outbound.protection.outlook.com [40.107.22.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB4317E11;
-        Wed, 20 Apr 2022 13:51:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eNO08+F1b4glwLSu0axL8vzY268XdsMuj3WEh2Cz19a0KaDRdQa1YqP2EsQjrU4rnSQmkQy54jwNL8HZreusZDqzKQvwO3ujjB46DKedDtI1JHzz3oWF1wS1wQsvoyWx0Edq3HiLHEhAaHrFbD/+pAm9ONe+3uhiNySe9bgUGLCxIWpyUmr6Q2bLOcNHivaru21wKtHNxz/vSfCkYdWoHMdfEx13EV86gGG4Wh1NHr3NZZeRZ9lo3+WStSyqZtW5Ds29Mgw4AI2yNsbgVojK+pOsoQFZ1aF8R7r1RHJCjSlJ2XFykGBlFE5z2ghpy0OJmhDVXNopIZCSc85jAihSIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BxBILNihGtyY6rBstYsAHqeDbbxKn0dB4PuzoEZrhBI=;
- b=c70r0P+vL6rTJpTZrHMhZFjgV9GMGLs7E1FlYYfzbd8kVyDt7HVNKDQ9uf4SkefUyjlsHIefkuzPXvbTBcqoAPTAo9RcYByh88VZJDRhYjdARtwFDij3Yt1nn6uNzCEh2jaNdVcECEjzUwzC9g8+DghzfbqprmjtQDKBoOo5pjwFBrtOVn+ChOXEtvTK4b22+Ewn7prFMp55GkipTh52ZbSMtFPRfJi8PauqA04euixMVnQneQ13W7CKeMIZ1irsD9rX0N6Iw3DQKWdc/dDByZC22ah3irqFCpYGPwGQ5dTBRaR+kTin27SUQPDK1JV8bEHcMT52E3tUw8jOfHDGkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=silicom-usa.com; dmarc=pass action=none
- header.from=silicom-usa.com; dkim=pass header.d=silicom-usa.com; arc=none
+        Wed, 20 Apr 2022 16:54:49 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C9618E1D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:52:02 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id w4so3850797wrg.12
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:52:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BxBILNihGtyY6rBstYsAHqeDbbxKn0dB4PuzoEZrhBI=;
- b=ntyAmYRyNf58EOs4yVkQt6KPP2kWAAqK4OQegst1cnfLl4JC2D4SaUoafpHjhdQcR+MHAqMG5JZ950u9fXaYNJIAxyblDFfVzmuNURszeaSidEpRGLJWRFP1+NvIsvVUCO5tw24LRyaGf+LpVuU34ZPbAenQGx/jgl/JiyXe1Ic=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=silicom-usa.com;
-Received: from AM0PR0402MB3506.eurprd04.prod.outlook.com
- (2603:10a6:208:17::29) by DU2PR04MB8647.eurprd04.prod.outlook.com
- (2603:10a6:10:2de::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Wed, 20 Apr
- 2022 20:51:44 +0000
-Received: from AM0PR0402MB3506.eurprd04.prod.outlook.com
- ([fe80::193e:c83e:7e13:ddb]) by AM0PR0402MB3506.eurprd04.prod.outlook.com
- ([fe80::193e:c83e:7e13:ddb%6]) with mapi id 15.20.5164.026; Wed, 20 Apr 2022
- 20:51:44 +0000
-From:   Jeff Daly <jeffd@silicom-usa.com>
-To:     intel-wired-lan@osuosl.org
-Cc:     Stephen Douthit <stephend@silicom-usa.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Don Skidmore <donald.c.skidmore@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 1/1] ixgbe: correct SDP0 check of SFP cage for X550
-Date:   Wed, 20 Apr 2022 16:51:30 -0400
-Message-Id: <20220420205130.23616-1-jeffd@silicom-usa.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0325.namprd13.prod.outlook.com
- (2603:10b6:208:2c1::30) To AM0PR0402MB3506.eurprd04.prod.outlook.com
- (2603:10a6:208:17::29)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3JjZNfNNHQddbdE7dRgADOWUcU0u4ilUb+2W95f9XPQ=;
+        b=SqaFUo4HiNRx7FlnZCFSLKKmNu8cokMvMms2aXqn9dVke/sHmWt61etrPD6pHpgYsm
+         /JhAHP+U8ZD3zcXjm35+qPwUlHO04DPYzc7tenBl+r02Nssi/kPo5R3cdJuCymWyG470
+         k8X0k798mZUyAGoFDLEY9lVSjpm+pBmccS6ZBRzO5SAGTlspbPaxP27AtVLvflgiBi+J
+         ryd9TKY83fKMoJcscH3oj1G/r/tjKWkKk7cq4ckLHJ2xvva3zKZc/OULGOQqohYlmcGC
+         nUCWrJ4Z+LSEryBIpsTpYJBKq/Lxl7/GJxzWRHKHj+eV26KIyD8Sj/+t5xXh00d588pH
+         LvsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3JjZNfNNHQddbdE7dRgADOWUcU0u4ilUb+2W95f9XPQ=;
+        b=wYCxIrPf8u4Od7IEZpqj5NniOQppNnLy2AvG+vOA+ASZYliS2EoQQ9T5fLD2VQnVnB
+         u5LMsA4BpbzgxhYLsjQUJxU4lAgFse/WM5vPJQ3+BsTrE3eM80GWyG8kiT11C9NgZYA4
+         4buSeMaxZsSKIK3Xr9Bz3YyBznOZqMrFxHXSUCu5C1L4LbKaS+Rq+LRm5sq1nahrutbe
+         TOYZk6xgQ7GDolUMZ38CdIAhiJFXbqgZucmzOCA56MsIy4qO+JXY0BqNTsAVRw9KK+OE
+         fj1xd80HPn3b+lxMBhCP01hEwkvZSQOJbN7Y++v9WewLUfSBDrHObsjfIqr2+Ar1raW0
+         l+PQ==
+X-Gm-Message-State: AOAM532bOF4CSA0GFhzkvDx5Cml26IDbtt8RzGXABNzKJU1bpYgk0xvw
+        o8DQp3kHCEXe93BmwzShVwi5+ic9WXTw3lwIB8I=
+X-Google-Smtp-Source: ABdhPJzOo1DhAuiY+5Uhag0ddv/uQcNDfet82duBL/2Pe2QDUaGvHxuQDJtfJ4FBWifkOPS997BAlwzC7+B000PtZ7Q=
+X-Received: by 2002:a05:6000:154a:b0:20a:9529:aa8d with SMTP id
+ 10-20020a056000154a00b0020a9529aa8dmr12838371wry.93.1650487920552; Wed, 20
+ Apr 2022 13:52:00 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: df23258d-0d95-46b7-b96f-08da230f9402
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8647:EE_
-X-Microsoft-Antispam-PRVS: <DU2PR04MB8647D5EB07CAF31872862303EAF59@DU2PR04MB8647.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aB4Yb5NAD+PVtb9srNdn2PKhkJV5vpQRs4xGrYvQMdFYNktKQ4B/IbJb2Kq+qu/dsbnhpMpzoFqny1jakHfUZPiRlrDGbyqchHGY7i+N3gY0YWzFahVlSwU9rS7DHYzTLdtqrTEXBYwsfBPXjvOr2JUGa4zjDOxYtaVUAn0tHl0BdcKko6A0QFBy2eN6ZrMD1LdesZXyPCH1yOPInRmDCwTHW5qC0R+eku+dB6MANnDUdqje0XjOJNJnJQ3qAwBfx1HPOntAQaNzCxWm/4FX4U1iUWvX7qHsbDKNX5oq7rP/c3nVClVrKtpaTcwL+e1xISluCuMtQ+SmnXO8uhoLMVskupP+AsqyrIqA1Gywhi5XYTp4CgpwnUOXsLs4dhVdp1r1nEmUP41WVuMz6dPWC9c85xy2A3wiaAuUQ+VBHYLnUDQDQEPUAAF9NNnH3W/bpWeUBjvI4aHw74eSBx9VXA5dEtSeVLrVr1AezgLNkXlT/g4eILa5iD6CqW0abwcvCOjGdhDG+KExL7aWnGgM4jsuu/KdWACS3YaQt+C0sYexhm8RIxGtIvDRMZGSBZyK2BQwb2OY1kIES0nMJ+G6+Rxr62yJQU5yeESUfMQjW4MX0785UNdEc3hN+2NBdilxtMnIGO6C2OfmOUgJahNP2j2YolLByOFSqNJyM2GPSqZpH3a1ZS+QyxAqYyZbpoGLG3d4cOJ/oBCKRCuRNz1LSg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3506.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(38100700002)(38350700002)(8936002)(316002)(86362001)(66556008)(4326008)(54906003)(66946007)(6916009)(8676002)(7416002)(6512007)(6506007)(66476007)(52116002)(26005)(83380400001)(1076003)(2616005)(508600001)(6486002)(186003)(6666004)(2906002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FAhNooq9rQjaTRX1oFwrACdrVekyyocNc1NJ3ZSLwUckDZRP2fv09qriSGR7?=
- =?us-ascii?Q?3h3MsNAF9elqtehJIMkgE5nEJpDrJKfjaZRFUiBAdqxgOosU19SKZq4460ZC?=
- =?us-ascii?Q?U2eTJmn5rLLEpptWc0sjKZHy1a5pFNFO/CMzPiduKpEamnmKWRMaogA55b8/?=
- =?us-ascii?Q?opYBcZ110SEM6k6JDHkMLi7SLIkV10r9URLRGg5YURsNURqHkev9ZpvrwFI6?=
- =?us-ascii?Q?ncFaJLCSFb9GSbLir+wl8Yg54vTdJ6F9HUXMaRFmfFpUy9nRBeluIo5581Lh?=
- =?us-ascii?Q?x0AQr3gS354/TFRhqtMNJsWS2HoJS6BTaZusIyTfs6SzmPvWlaUG6XsGz2nc?=
- =?us-ascii?Q?zAfcKFfhmfZyJd4jAFUZcclwgnr2jc67KZgmeEhYUqVDrEazRUjuBsyDOrac?=
- =?us-ascii?Q?UyvmqCrEiHtogypXedr90PaSDsDZ9g2bX084PXsiiVj5PM+f4yOxVimHwiVn?=
- =?us-ascii?Q?e8QTNx3Bsm720a/KWt+FEJM7+jgXF4p0ip6g9XtrMqMb066wn4Iuw5y3JfZh?=
- =?us-ascii?Q?u3pZNKsvuks7Zj2SoUJisyeHBPe23tv515a11hwQA4kjL3Mf5q7InuvL2vHU?=
- =?us-ascii?Q?Kjf49GehlIx0pMyFByjwiUtzIvw5rco6ZhrzfNGiO7ecNAEhuhtXBWq1k3tb?=
- =?us-ascii?Q?d8Q4CJpFnuDb8N+ulJYJo8INb0nUPf9Ik0Vm6/EnrxFrvik9Qg08OA+eX8F7?=
- =?us-ascii?Q?5f7BjJhskXI7azHsE0gAvRToNibPHi2rP6fElXRd6QDFOKgHnm4vprxxlc94?=
- =?us-ascii?Q?Sy4/H7SM8dia7iyg0WKWA+qH//xEoZ1FkF/oi1C9yrBHFplsTVeb5cKEHu5S?=
- =?us-ascii?Q?ZnUCanAiRlASQPfZJlcTfwNGNfh+NJzNSolQc81cXOkgNlk8wQBIj4o86zsy?=
- =?us-ascii?Q?rsqO1yzGC5Xj9zsC67THOD/v8cngBO8nsGFqs6sT4T42TFzfOuksA+Tr07WU?=
- =?us-ascii?Q?bY+G18obz6CD8gY5tNGhUlbYywAz544+ZUXXXTYhD7fOoNUzKSZGnIs45DRy?=
- =?us-ascii?Q?p+MqF9Kt6eaQYxGXQ8e/aH5M4Oku32VQw9JhKUYvGAYCUNwc/xLdvCaql4Im?=
- =?us-ascii?Q?PqTLSOMMdKb1Oa0xFa1wUpDYHOYcnUqrNWiV8Twbv2xhgxvB7QaPp1FkPT8k?=
- =?us-ascii?Q?vp6Bq3J2yyjPLxRY1SCAlyvK88se7W8PalHvVRd86X0DDJPLpVoASYr8UmUB?=
- =?us-ascii?Q?ON+FrehAngLQrLsRkfZxqx9hqmsosZbJABbF4ZtFToChgN/pJtZ5T+W2k/jf?=
- =?us-ascii?Q?m4ADRnc0dX+DRxEKoVPsYJQoVivKBhQuzcO2McBwlS5t+H2X6A0vadzZQmUe?=
- =?us-ascii?Q?cGxnRPXj1+xatwh32SfBpr70yHjxq7sQw+l5zj5ITOHsgicsouqguQiH5az5?=
- =?us-ascii?Q?46wbbAZ1a960cyMwTpT9anw9TuQiENbe7+FEXfgLBz8ALjC39boT1jfxRvOm?=
- =?us-ascii?Q?yLadWqVV4CAfytTcBnSjbCJ1mWlzbcanRQoF/Dh56oWGcVRJvPc57TY3yaA+?=
- =?us-ascii?Q?Plo0oPM3F2Fj3ra2nejF775vf5pUvADAVb4nDoW6veq1xfjgwGPrCyaI0uPn?=
- =?us-ascii?Q?JxneZuW6n5La47Dc6E0KTAuYRsqwV6GPhFuZcsH1YC2VmpajHQfAQIHHSi28?=
- =?us-ascii?Q?QlFo6D+fhEZ3CLT0Sv5t7DxZcNH1VtCpxRxSe8E7iw4J0UWV32dYX6ONddF+?=
- =?us-ascii?Q?vicOA1ljx7m92o3VY6CN6QRkz6RmJkL9mjyHPu6qtG/uqGv2k9D9gDYHBUQE?=
- =?us-ascii?Q?JrVbvL4jiw=3D=3D?=
-X-OriginatorOrg: silicom-usa.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: df23258d-0d95-46b7-b96f-08da230f9402
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3506.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 20:51:44.3534
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zvxcMskD6CkHDN54sodZKERmF6DXmDsgzBc4FZOFSH5kBE8PveQJC14hp3+lDFoU46hfpWdoUytx5JSf93jrBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8647
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220329132732.628474-1-paul.kocialkowski@bootlin.com>
+ <YkZulslrzeurp43U@ripper> <YkatbpubQjwBWOiK@aptenodytes> <Ykx1yQGROqyiu/yJ@orome>
+In-Reply-To: <Ykx1yQGROqyiu/yJ@orome>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 20 Apr 2022 13:51:47 -0700
+Message-ID: <CAF6AEGvD0VAA2u0LzcZg01O44GbWn7PWa3VPQF1LP-mL5syX1Q@mail.gmail.com>
+Subject: Re: [PATCH v3] drm: of: Properly try all possible cases for
+ bridge/panel detection
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SDP0 for X550 NICs is active low to indicate the presence of an SFP in the
-cage (MOD_ABS#).  Invert the results of the logical AND to set
-sfp_cage_full variable correctly.
+On Tue, Apr 5, 2022 at 10:01 AM Thierry Reding <thierry.reding@gmail.com> wrote:
+>
+> On Fri, Apr 01, 2022 at 09:44:46AM +0200, Paul Kocialkowski wrote:
+> > Hi Bjorn,
+> >
+> > On Thu 31 Mar 22, 20:16, Bjorn Andersson wrote:
+> > > On Tue 29 Mar 06:27 PDT 2022, Paul Kocialkowski wrote:
+> > >
+> > > > While bridge/panel detection was initially relying on the usual
+> > > > port/ports-based of graph detection, it was recently changed to
+> > > > perform the lookup on any child node that is not port/ports
+> > > > instead when such a node is available, with no fallback on the
+> > > > usual way.
+> > > >
+> > > > This results in breaking detection when a child node is present
+> > > > but does not contain any panel or bridge node, even when the
+> > > > usual port/ports-based of graph is there.
+> > > >
+> > > > In order to support both situations properly, this commit reworks
+> > > > the logic to try both options and not just one of the two: it will
+> > > > only return -EPROBE_DEFER when both have failed.
+> > > >
+> > >
+> > > Thanks for your patch Paul, it fixed a regression on a device where I
+> > > have a eDP bridge with an of_graph and a aux-bus defined.
+> > >
+> > > But unfortunately it does not resolve the regression I have for the
+> > > USB based DisplayPort setup described below.
+> > >
+> > >
+> > > In the Qualcomm DisplayPort driver We're calling:
+> > >
+> > >     devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
+> > >
+> > > and with the following DT snippet the behavior changed:
+> > >
+> > > displayport-controller@ae90000 {
+> > >     compatible = "qcom,sc8180x-dp";
+> > >     ...
+> > >
+> > >     operating-points-v2 = <&dp0_opp_table>;
+> > >
+> > >     ports {
+> > >             #address-cells = <1>;
+> > >             #size-cells = <0>;
+> > >
+> > >             port@0 {
+> > >                     reg = <0>;
+> > >                     dp0_in: endpoint {
+> > >                             remote-endpoint = <&display_driver>;
+> > >                     };
+> > >             };
+> > >     };
+> > >
+> > >     dp0_opp_table: opp-table {
+> > >             ...;
+> > >     };
+> > > };
+> > >
+> > > Prior to the introduction of 80253168dbfd ("drm: of: Lookup if child
+> > > node has panel or bridge") this would return -ENODEV, so we could
+> > > differentiate the case when we have a statically defined eDP panel from
+> > > that of a dynamically attached (over USB) DP panel.
+> > >
+> > > Prior to your change, above case without the opp-table node would have
+> > > still returned -ENODEV.
+> > >
+> > > But now this will just return -EPROBE_DEFER in both cases.
+> >
+> > Oh that's right, the -ENODEV case was just completely removed by my change.
+> > Initially this would happen if !of_graph_is_present or if the remote node
+> > doesn't exist.
+> >
+> > Now that we are also checking for child nodes, we can't just return -ENODEV
+> > when the graph or remote node is missing: we must also check that there is no
+> > child node that is a panel/bridge.
+> >
+> > For the graph remote case, we can reliabily return -EPROBE_DEFER when
+> > of_graph_is_present and the remote exists and of_device_is_available.
+> > Otherwise we can go for -ENODEV. I think getting -EPROBE_DEFER at this point
+> > should stop the drm_of_find_panel_or_bridge process.
+> >
+> > On the other hand for the child panel/bridge node case, I don't see how we
+> > can reliably distinguish between -EPROBE_DEFER and -ENODEV, because
+> > of_drm_find_panel and of_drm_find_bridge will behave the same if the child
+> > node is a not-yet-probed panel/bridge or a totally unrelated node.
+> > So I think we should always return -EPROBE_DEFER in that case.
+> >
+> > As a result you can't get -ENODEV if using the of graph while having any
+> > (unrelated) child node there, so your issue remains.
+> >
+> > Do you see any way we could make this work?
+> >
+> > > I thought the appropriate method of referencing the dsi panel was to
+> > > actually reference that using the of_graph, even though it's a child of
+> > > the dsi controller - that's at least how we've done it in e.g. [1].
+> > > I find this to be much nicer than to just blindly define that all
+> > > children of any sort of display controller must be a bridge or a panel.
+> >
+> > Yes I totally agree. Given that using the child node directly apparently
+> > can't allow us to distinguish between -EPROBE_DEFER/-ENODEV I would be in
+> > favor of dropping this mechanism and going with explicit of graph in any case
+> > (even if it's a child node). I don't see any downside to this approach.
+> >
+> > What do yout think?
+>
+> This patch has recently starting causing failures on various Tegra
+> devices that use drm_of_find_panel_or_bridge() for the case where the
+> output might be connected to an eDP or LVDS panel. However, that same
+> output could also be connected to an HDMI or DP monitor, in which case
+> we obviously don't want a DT representation because it's all
+> discoverable.
+>
+> If I understand correctly, that's similar to what Bjorn described. In my
+> case I was able to fix the regression by returning -ENODEV at the very
+> end of the function (i.e. no matching ports were found and no graph is
+> present).
+>
 
-Fixes: aac9e053f104 ("ixgbe: cleanup crosstalk fix")
+All the qcom laptops/chromebooks with eDP bridge are also still broken
+as of -rc3.. I need to revert the following:
 
-Suggested-by: Stephen Douthit <stephend@silicom-usa.com>
-Signed-off-by: Jeff Daly <jeffd@silicom-usa.com>
----
- drivers/net/ethernet/intel/ixgbe/ixgbe_common.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+67bae5f28c89 (drm: of: Properly try all possible cases for
+bridge/panel detection, 2022-03-29)
+80253168dbfd (drm: of: Lookup if child node has panel or bridge, 2022-02-02)
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_common.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_common.c
-index 4c26c4b92f07..26d16bc85c59 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_common.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_common.c
-@@ -3308,8 +3308,8 @@ s32 ixgbe_check_mac_link_generic(struct ixgbe_hw *hw, ixgbe_link_speed *speed,
- 			break;
- 		case ixgbe_mac_X550EM_x:
- 		case ixgbe_mac_x550em_a:
--			sfp_cage_full = IXGBE_READ_REG(hw, IXGBE_ESDP) &
--					IXGBE_ESDP_SDP0;
-+			sfp_cage_full = !(IXGBE_READ_REG(hw, IXGBE_ESDP) &
-+					IXGBE_ESDP_SDP0);
- 			break;
- 		default:
- 			/* sanity check - No SFP+ devices here */
--- 
-2.25.1
+Since it is already -rc3 could we just go ahead and revert those two
+and try again next time?
 
+BR,
+-R

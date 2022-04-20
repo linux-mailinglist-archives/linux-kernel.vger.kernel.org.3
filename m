@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8C850928A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040D550928C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382799AbiDTWPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 18:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
+        id S1352014AbiDTWQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 18:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354188AbiDTWOz (ORCPT
+        with ESMTP id S229731AbiDTWQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 18:14:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA60448E5D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:11:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21A65B821B9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 22:11:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB941C385A0;
-        Wed, 20 Apr 2022 22:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650492703;
-        bh=3jG6oVH2gHG5S5CoAbfXYb/iLXrxT6JSgZNfp2QlZu8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=V/De21DIy005tQ4qGJq93QHov1T5vmFg6sTyk8WF3N9JVU1eXzvQe/vdLctKK9LgG
-         DG8GbaEXYzmUGU+LHJID/Rpf9FhhPDRcx0w1T5E9maBKHQItsowHsJ9kVqx1GOt5gr
-         nxRv/I+tWZ4n3svPJ/nVkxjDSbiwZ8f32a518Z9Q=
-Date:   Wed, 20 Apr 2022 15:11:42 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        christian.koenig@amd.com, jhubbard@nvidia.com,
-        rcampbell@nvidia.com, Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH v2] mm/mmu_notifier.c: Fix race in
- mmu_interval_notifier_remove()
-Message-Id: <20220420151142.f60307e749033a24ef0c68d5@linux-foundation.org>
-In-Reply-To: <20220420043734.476348-1-apopple@nvidia.com>
-References: <20220420043734.476348-1-apopple@nvidia.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 20 Apr 2022 18:16:55 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086CB20BD4;
+        Wed, 20 Apr 2022 15:14:06 -0700 (PDT)
+Received: (Authenticated sender: joao@overdrivepizza.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 88149100004;
+        Wed, 20 Apr 2022 22:14:02 +0000 (UTC)
+MIME-Version: 1.0
+Date:   Wed, 20 Apr 2022 15:14:02 -0700
+From:   Joao Moreira <joao@overdrivepizza.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        peterz@infradead.org, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, samitolvanen@google.com,
+        mark.rutland@arm.com, hjl.tools@gmail.com,
+        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
+        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
+Subject: Re: [RFC PATCH 10/11] linux/interrupt: Fix prototype matching
+ property
+In-Reply-To: <202204191942.3C273AB@keescook>
+References: <20220420004241.2093-1-joao@overdrivepizza.com>
+ <20220420004241.2093-11-joao@overdrivepizza.com>
+ <202204191942.3C273AB@keescook>
+Message-ID: <2d7e424f13682295f655faf9b8c8f1cf@overdrivepizza.com>
+X-Sender: joao@overdrivepizza.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,32 +47,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 14:37:34 +1000 Alistair Popple <apopple@nvidia.com> wrote:
+>> Fix this CFI policy violation by removing the function pointer union 
+>> in
+>> the tasklet struct.
+> 
+> The good news is that tasklet is on the way out the door[1], so this 
+> may
+> quickly become a non-issue, but also to that end, this fix is hardly a
+> problem for a deprecated API...
 
-> In some cases it is possible for mmu_interval_notifier_remove() to race
-> with mn_tree_inv_end() allowing it to return while the notifier data
-> structure is still in use. Consider the following sequence:
-> 
-> CPU0 - mn_tree_inv_end()            CPU1 - mmu_interval_notifier_remove()
-> ----------------------------------- ------------------------------------
->                                     spin_lock(subscriptions->lock);
->                                     seq = subscriptions->invalidate_seq;
-> spin_lock(subscriptions->lock);     spin_unlock(subscriptions->lock);
-> subscriptions->invalidate_seq++;
->                                     wait_event(invalidate_seq != seq);
->                                     return;
-> interval_tree_remove(interval_sub); kfree(interval_sub);
-> spin_unlock(subscriptions->lock);
-> wake_up_all();
-> 
-> As the wait_event() condition is true it will return immediately. This
-> can lead to use-after-free type errors if the caller frees the data
-> structure containing the interval notifier subscription while it is
-> still on a deferred list. Fix this by taking the appropriate lock when
-> reading invalidate_seq to ensure proper synchronisation.
-> 
-> ...
->
-> Fixes: 99cb252f5e68 ("mm/mmu_notifier: add an interval tree notifier")
+You are right, sorry for the noise. I looked a bit further and the 
+problem I saw was actually caused by a compiler bug fusing similar 
+instructions/basic blocks. It was fixed when I later stumbled on the 
+problem again and added the following lines (668 and 669 in 
+llvm/lib/CodeGen/MachineInstr.cpp) to the compiler, but without properly 
+realizing what was actually behind the previous issue. Hopefully this is 
+at least a good heads-up about possible pitfalls to other people (@Sami) 
+implementing CFI in the compiler.
 
-Do you think fix this should be backported into older kernels?
+https://github.com/lvwr/llvm-project/commit/0a22ca42877fd156ce95145b11f29c642092dbb7#diff-92843a1f037a9a1e56f92242c4e1746a1166a6b7044ad47a0b4fd2f4b1c6a359R668-R669

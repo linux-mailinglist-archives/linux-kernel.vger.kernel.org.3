@@ -2,205 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D236B50912F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D430250913C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351533AbiDTUOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        id S1350960AbiDTUPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbiDTUOP (ORCPT
+        with ESMTP id S233033AbiDTUPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:14:15 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC06337BFE;
-        Wed, 20 Apr 2022 13:11:28 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-e2afb80550so3196660fac.1;
-        Wed, 20 Apr 2022 13:11:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=yg1QMdJD0jJidIacTdvCTSB235cSU+8ZTTNRkM2ZhJM=;
-        b=c4pIxYy1XlZmICyjmUlFECXjMtsTtDdB+SOS0fPzI41ybSOyINq5r38bIuBYfQ+ziv
-         IgkYJFjB1EcAnAJxdLfJmoKSbyhhEV8o4l/6v3V506iJHTwQINViNnElCLzo6uiuQmJ8
-         sycqnJDi5WN7tqt0sei8zTpeacaQo+0ey+ORuwXZjQg0t56k04N+pbGkSvnTQLdtKQVF
-         dAxVNwMg7cFRGy/urYDCYlq7SpGbGDYE7oejLzd0lSDCnsBq1/238uqcswXHZOV2l/f1
-         wZLXX1tP/eY9xek5ui3xOCgpjnqEbZkViN1TBn5O/B4a5sCvELv29pawvxAqJcMBhZ32
-         iuLQ==
-X-Gm-Message-State: AOAM532mzbjlZf1c43nwqiIdawSvldirDCTjyZ4q2E5TwIpR6UFwkFAT
-        L+wTZA3l6ij+S2+2LBgZSA==
-X-Google-Smtp-Source: ABdhPJzk0iwR/4QLK+YIVMDxkKcItJAz53c1pSD6X7dA6YF5QyXZfuX7erDU2k1C6MEjztKQmcAGiw==
-X-Received: by 2002:a05:6870:4252:b0:e6:3ad5:cff6 with SMTP id v18-20020a056870425200b000e63ad5cff6mr2290495oac.196.1650485488205;
-        Wed, 20 Apr 2022 13:11:28 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g5-20020a9d5f85000000b006057056774esm380928oti.33.2022.04.20.13.11.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 13:11:27 -0700 (PDT)
-Received: (nullmailer pid 1770236 invoked by uid 1000);
-        Wed, 20 Apr 2022 20:11:26 -0000
-Date:   Wed, 20 Apr 2022 15:11:26 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 03/12] dt-bindings: net: pcs: add bindings for
- Renesas RZ/N1 MII converter
-Message-ID: <YmBo7sj+PXoJaqo8@robh.at.kernel.org>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
- <20220414122250.158113-4-clement.leger@bootlin.com>
- <Yl68k22fUw7uBgV9@robh.at.kernel.org>
- <20220419170044.450050ca@fixe.home>
+        Wed, 20 Apr 2022 16:15:38 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B43BC3EAB5;
+        Wed, 20 Apr 2022 13:12:51 -0700 (PDT)
+Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1F0CB20E2D0B;
+        Wed, 20 Apr 2022 13:12:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1F0CB20E2D0B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1650485571;
+        bh=MDhA/ZAoV0EVezZuKhr9gsvqOEuaEbb4xLsvMqvOxYk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b9QaK7FfpU3QnoJikpUobgKHlvcfDJUYyp4GP3095vq1/lELGBZsJaBik0L6Y7nXt
+         Mw+D7+4q1eJ4iO/bLo0spFBGwzeM1nCUY+t7m7JNXLPGXicQPHjfzuNwqsNIjYco4L
+         paUJUC9J8a4RrKhiVB+R+66XsBpoE5dNqCh92M5Q=
+Date:   Wed, 20 Apr 2022 13:12:42 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 6/7] tracing/user_events: Use bits vs bytes for enabled
+ status page data
+Message-ID: <20220420201242.GA2091@kbox>
+References: <20220401234309.21252-1-beaub@linux.microsoft.com>
+ <20220401234309.21252-7-beaub@linux.microsoft.com>
+ <337584634.26921.1650378945485.JavaMail.zimbra@efficios.com>
+ <20220419185708.GA1908@kbox>
+ <1722727424.27500.1650403580798.JavaMail.zimbra@efficios.com>
+ <20220419234845.GA1805@kbox>
+ <580163630.28705.1650477227106.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220419170044.450050ca@fixe.home>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <580163630.28705.1650477227106.JavaMail.zimbra@efficios.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 05:00:44PM +0200, Clément Léger wrote:
-> Le Tue, 19 Apr 2022 08:43:47 -0500,
-> Rob Herring <robh@kernel.org> a écrit :
+On Wed, Apr 20, 2022 at 01:53:47PM -0400, Mathieu Desnoyers wrote:
 > 
-> > > +  clocks:
-> > > +    items:
-> > > +      - description: MII reference clock
-> > > +      - description: RGMII reference clock
-> > > +      - description: RMII reference clock
-> > > +      - description: AHB clock used for the MII converter register interface
-> > > +
-> > > +  renesas,miic-cfg-mode:
-> > > +    description: MII mux configuration mode. This value should use one of the
-> > > +                 value defined in dt-bindings/net/pcs-rzn1-miic.h.  
+> 
+> ----- On Apr 19, 2022, at 7:48 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
+> 
+> > On Tue, Apr 19, 2022 at 05:26:20PM -0400, Mathieu Desnoyers wrote:
+> >> ----- On Apr 19, 2022, at 2:57 PM, Beau Belgrave beaub@linux.microsoft.com
+> >> wrote:
+> >> 
+> >> > On Tue, Apr 19, 2022 at 10:35:45AM -0400, Mathieu Desnoyers wrote:
+> >> >> ----- On Apr 1, 2022, at 7:43 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
+> >> >> 
+> >> >> > User processes may require many events and when they do the cache
+> >> >> > performance of a byte index status check is less ideal than a bit index.
+> >> >> > The previous event limit per-page was 4096, the new limit is 32,768.
+> >> >> > 
+> >> >> > This change adds a mask property to the user_reg struct. Programs check
+> >> >> > that the byte at status_index has a bit set by ANDing the status_mask.
+> >> >> > 
+> >> >> > Link:
+> >> >> > https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
+> >> >> > 
+> >> >> > Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> >> >> > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> >> >> 
+> >> >> Hi Beau,
+> >> >> 
+> >> >> Considering this will be used in a fast-path, why choose bytewise
+> >> >> loads for the byte at status_index and the status_mask ?
+> >> >> 
+> >> > 
+> >> > First, thanks for the review!
+> >> > 
+> >> > Which loads are you concerned about? The user programs can store the
+> >> > index and mask in another type after registration instead of an int.
+> >> 
+> >> I'm concerned about the loads from user-space, considering that
+> >> those are on the fast-path.
+> >> 
+> >> Indeed user programs will need to copy the status index and mask
+> >> returned in struct user_reg, so adapting the indexing and mask to
+> >> deal with an array of unsigned long rather than bytes can be done
+> >> at that point, but I wonder how many users will go through that
+> >> extra trouble unless there are helpers to convert the status index
+> >> from byte-wise to long-wise, and convert the status mask from a
+> >> byte-wise mask to a long-wise mask (and associated documentation).
+> >> 
 > > 
-> > Describe possible values here as constraints. At present, I don't see 
-> > the point of this property if there is only 1 possible value and it is 
-> > required.
-> 
-> The ethernet subsystem contains a number of internal muxes that allows
-> to configure ethernet routing. This configuration option allows to set
-> the register that configure these muxes.
-> 
-> After talking with Andrew, I considered moving to something like this:
-> 
-> eth-miic@44030000 {
->   compatible = "renesas,rzn1-miic";
-> 
->   mii_conv1: mii-conv-1 {
->     renesas,miic-input = <MIIC_GMAC1_PORT>;
->     port = <1>;
-
-'port' is already used, find another name. Maybe 'reg' here. Don't know. 
-What do 1 and 2 represent?
-
-
->   };
->   mii_conv2: mii-conv-2 {
->     renesas,miic-input = <MIIC_SWITCHD_PORT>;
->     port = <2>;
->   };
->    ...
-> };
-> 
-> Which would allow embedding the configuration inside the port
-> sub-nodes. Moreover, it allows a better validation of the values using
-> the schema validation directly since only a limited number of values
-> are allowed for each port.
-> 
+> > Yeah, do you think it's wise to maybe add inline functions in
+> > user_events.h to do this conversion? I could then add them to our
+> > documentation.
 > > 
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > +  
-> > > +patternProperties:
-> > > +  "^mii-conv@[0-4]$":
-> > > +    type: object  
+> > Hopefully this would make more APIs/people do the better approach?
 > > 
-> >        additionalProperties: false
+> >> 
+> >> > 
+> >> > However, you may be referring to something on the kernel side?
+> >> 
+> >> No.
+> >> 
 > > 
-> > > +    description: MII converter port
-> > > +
-> > > +    properties:
-> > > +      reg:
-> > > +        maxItems: 1  
+> > [..]
 > > 
-> > Why do you need sub-nodes? They don't have any properties. A simple mask 
-> > property could tell you which ports are present/active/enabled if that's 
-> > what you are tracking. Or the SoC specific compatibles you need to add 
-> > can imply the ports if they are SoC specific.
+> >> >> Ideally I would be tempted to use "unsigned long" type (32-bit on 32-bit
+> >> >> binaries and 64-bit on 64-bit binaries) for both the array access
+> >> >> and the status mask, but this brings extra complexity for 32-bit compat
+> >> >> handling.
+> >> >> 
+> >> > 
+> >> > User programs can store the index and mask returned into better value
+> >> > types for their architecture.
+> >> > 
+> >> > I agree it will cause compat handling issues if it's put into the user
+> >> > facing header as a long.
+> >> > 
+> >> > I was hoping APIs, like libtracefs, could abstract many callers from how
+> >> > best to use the returned values. For example, it could save the index
+> >> > and mask as unsigned long for the callers and use those for the
+> >> > enablement checks.
+> >> > 
+> >> > Do you think there is a way to enable these native types in the ABI
+> >> > without causing compat handling issues? I used ints to prevent compat
+> >> > issues between 32-bit user mode and 64-bit kernel mode.
+> >> 
+> >> I think you are right: this is not an ABI issue, but rather a usability
+> >> issue that can be solved by implementing and documenting user-space library
+> >> helpers to help user applications index the array and apply the mask to an
+> >> unsigned long type.
+> >> 
+> > 
+> > Great. Let me know if updating user_events.h to do the conversion is a
+> > good idea or not, or if you have other thoughts how to make more people
+> > do the best thing.
 > 
-> The MACs are using phandles to these sub-nodes to query a specific MII
-> converter port PCS:
+> Usually uapi headers are reserved for exposing the kernel ABI to user-space.
+> I think the helpers we are discussing here do not belong to the uapi because they
+> do not define the ABI, and should probably sit elsewhere in a proper library.
 > 
-> switch@44050000 {
->     compatible = "renesas,rzn1-a5psw";
-> 
->     ports {
->         port@0 {
 
-ethernet-ports and ethernet-port so we don't collide with the graph 
-binding.
+Makes sense.
 
+That likely means I should remove the enablement helper check from
+user_events.h, right?
 
->             reg = <0>;
->             label = "lan0";
->             phy-handle = <&switch0phy3>;
->             pcs-handle = <&mii_conv4>;
->         };
->     };
-> };
+> If the status_mask is meant to be modified in some ways by user-space before it can
+> be used as a mask, I wonder why it is exposed as a byte-wise mask at all ?
 > 
-> According to Andrew, this is not a good idea to represent the PCS as a
-> bus since it is indeed not a bus. I could also switch to something like
-> pcs-handle = <&eth_mii 4> but i'm not sure what you'd prefer. We could
-> also remove this from the device-tree and consider each driver to
-> request the MII ouput to be configured using something like this for
-> instance:
-
-I'm pretty sure we already defined pcs-handle as only a phandle. If you 
-want variable cells, then it's got to be extended like all the other 
-properties using that pattern.
-
+> Rather than exposing a byte-wise index and single-byte mask as ABI, the kernel could
+> simply expose a bit-wise index, which can then be used by the application to calculate
+> index and mask, which it should interpret in little endian if it wants to apply the
+> mask on types larger than a single byte.
 > 
->  miic_request_pcs(pcs_np, miic_port_nr, MIIC_SWITCHD_PORT);
+> Thoughts ?
 > 
-> But I'm not really fan of this because it requires the drivers to
-> assume some specificities of the MII converter (port number are not in
-> the same order of the switch for instance) and thus I would prefer this
-> to be in the device-tree.
-> 
-> Let me know if you can think of something that would suit you
-> better but  keep in mind that I need to correctly match a switch/MAC
-> port with a PCS port and that I also need to configure MII internal
-> muxes. 
-> 
-> For more information, you can look at section 8 of the manual at [1].
 
-I can't really. Other people want their bindings reviewed too.
+Yeah, you're right, we can just expose out the bit-wise index at the
+ABI.
 
-Rob
+I'll switch over to that model in the next version.
+
+Thanks,
+-Beau
+
+> Thanks,
+> 
+> Mathieu
+> 
+
+[..]

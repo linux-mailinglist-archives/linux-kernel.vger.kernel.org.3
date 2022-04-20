@@ -2,113 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3531A5085E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141D15085EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351740AbiDTKcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        id S1351794AbiDTKdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349339AbiDTKcB (ORCPT
+        with ESMTP id S238282AbiDTKc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:32:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7457F3F887
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:29:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650450555;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KIJu0PnDJV4/uO0UdPgu/58WGciQu1suUPJ1SFUvK60=;
-        b=SM0CWFeQRknY+2vXhIKwxZDRIEAcagCUbNhNyNGPN3vin+UWjSybQYLQlbLX0z1tv3E0Mz
-        E4r0wCSEM5GiDEDVfjJ/SF6jp9wPb+EF+DER2runUmY6dMeB/H4AdFbJcWvqP42Yl+PGDn
-        3lp/IhsoPd9ZuaRyJNtF3PvgPQcibWg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-5Q0XG3XRM2uJXHWtLXv0tg-1; Wed, 20 Apr 2022 06:29:12 -0400
-X-MC-Unique: 5Q0XG3XRM2uJXHWtLXv0tg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 20 Apr 2022 06:32:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA5C3F885;
+        Wed, 20 Apr 2022 03:30:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83F2338149C1;
-        Wed, 20 Apr 2022 10:29:11 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E39654022C4;
-        Wed, 20 Apr 2022 10:29:08 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20210312171232.2681989-4-mic@digikod.net>
-References: <20210312171232.2681989-4-mic@digikod.net> <20210312171232.2681989-1-mic@digikod.net>
-To:     =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl=3D20Sala=3DC3=3DBCn=3F?=
-         =?us-ascii?Q?=3D?= <mic@digikod.net>
-Cc:     dhowells@redhat.com, David Woodhouse <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl?=
-         =?us-ascii?Q?=3D20Sala=3DC3=3DBCn=3F=3D?= 
-        <mic@linux.microsoft.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v7 3/5] certs: Make blacklist_vet_description() more strict
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8F86B81E8D;
+        Wed, 20 Apr 2022 10:30:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE298C385A0;
+        Wed, 20 Apr 2022 10:30:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650450609;
+        bh=kEDDxF17hrgH58OVXjuIFepbkYbLgvtx7CEHRjDCwCY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NuN7WrdOgPrnpmS28LNzTXFdP0/6JFpbRoUr8/TS88N1o8Cdkyx4z17A2P6Y6NyAN
+         5mZ6/kGu36j0rAd+C7uf3DXMWLq6LYjta+6Mz8wX7AhgC+8qwq/yOgI36IFJdvOxGK
+         fgiox1MxAGqv2hcK4BuHaeXsS05hug5qZJm/sCD+ZQr2B/4vyDQRTgDEw89ckih+sX
+         asjureABj9XGif273HwHcxBenmh2LvafbGcBD6yf2Gf5gBmbSE1Ttb5b7UmC2996YX
+         aIXXfFeH4Bi6M9/3FIUVsPQb7OUe2glfii1bl/dbBfg7X1YkdyCt/aI0O+J6OpFGON
+         ksxKZ1CFX4e9g==
+Date:   Wed, 20 Apr 2022 16:00:04 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Yunbo Yu <yuyunbo519@gmail.com>
+Cc:     logang@deltatee.com, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: plx_dma: Move spin_lock_bh() to spin_lock()
+Message-ID: <Yl/grDCcX0/SRusw@matsya>
+References: <20220418142021.1241558-1-yuyunbo519@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 20 Apr 2022 11:29:08 +0100
-Message-ID: <648218.1650450548@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418142021.1241558-1-yuyunbo519@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
+On 18-04-22, 22:20, Yunbo Yu wrote:
+> It is unnecessary to call spin_lock_bh() for you are already in a tasklet.
 
-> +	/* The following algorithm only works if prefix lengths match. */
-> +	BUILD_BUG_ON(sizeof(tbs_prefix) !=3D sizeof(bin_prefix));
-> +	prefix_len =3D sizeof(tbs_prefix) - 1;
-> +	for (i =3D 0; *desc; desc++, i++) {
-> +		if (*desc =3D=3D ':') {
-> +			if (tbs_step =3D=3D prefix_len)
-> +				goto found_colon;
-> +			if (bin_step =3D=3D prefix_len)
-> +				goto found_colon;
-> +			return -EINVAL;
-> +		}
-> +		if (i >=3D prefix_len)
-> +			return -EINVAL;
-> +		if (*desc =3D=3D tbs_prefix[i])
-> +			tbs_step++;
-> +		if (*desc =3D=3D bin_prefix[i])
-> +			bin_step++;
-> +	}
+call spin_lock_bh() if you are already in a ..
 
-I wonder if:
 
-	static const char tbs_prefix[] =3D "tbs:";
-	static const char bin_prefix[] =3D "bin:";
+With that fixed, applied. Thanks
+> 
+> Signed-off-by: Yunbo Yu <yuyunbo519@gmail.com>
+> ---
+>  drivers/dma/plx_dma.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma/plx_dma.c b/drivers/dma/plx_dma.c
+> index 1ffcb5ca9788..12725fa1655f 100644
+> --- a/drivers/dma/plx_dma.c
+> +++ b/drivers/dma/plx_dma.c
+> @@ -137,7 +137,7 @@ static void plx_dma_process_desc(struct plx_dma_dev *plxdev)
+>  	struct plx_dma_desc *desc;
+>  	u32 flags;
+>  
+> -	spin_lock_bh(&plxdev->ring_lock);
+> +	spin_lock(&plxdev->ring_lock);
+>  
+>  	while (plxdev->tail != plxdev->head) {
+>  		desc = plx_dma_get_desc(plxdev, plxdev->tail);
+> @@ -165,7 +165,7 @@ static void plx_dma_process_desc(struct plx_dma_dev *plxdev)
+>  		plxdev->tail++;
+>  	}
+>  
+> -	spin_unlock_bh(&plxdev->ring_lock);
+> +	spin_unlock(&plxdev->ring_lock);
+>  }
+>  
+>  static void plx_dma_abort_desc(struct plx_dma_dev *plxdev)
+> -- 
+> 2.25.1
 
-	if (strncmp(desc, tbs_prefix, sizeof(tbs_prefix) - 1) =3D=3D 0 ||
-	    strncmp(desc, bin_prefix, sizeof(bin_prefix) - 1) =3D=3D 0)
-		goto found_colon;
-
-might be better.
-
-David
-
+-- 
+~Vinod

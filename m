@@ -2,113 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DE8508CFC
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF0E508CFD
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359218AbiDTQS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        id S1380450AbiDTQSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348512AbiDTQS0 (ORCPT
+        with ESMTP id S1380432AbiDTQSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:18:26 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A86E27CC8;
-        Wed, 20 Apr 2022 09:15:38 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id r8so2585188oib.5;
-        Wed, 20 Apr 2022 09:15:38 -0700 (PDT)
+        Wed, 20 Apr 2022 12:18:30 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD65327CDD
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:15:43 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id n18so2219252plg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=tnEdHKpPyZkZmrpdyV+90S+5wmdBROjGyPq57BetpoU=;
+        b=D4JPc+7j0ulu+47aOpYDf++g8UTividvLRWK2iqrM38t4CWHmEoGr8rz8OOYNdiNyO
+         GOKHSHQAFxq2lF8cjaOFbwh9GTn4d87loazZMySaAMuNgdtiP2QB+IUHC10aAWMzK/oo
+         eg0fgki2O3/oP+Yo2CywVQsBFo3U5SFVtqkdF6K5/S07SwcB7IeNC+Kn+UJqfIKtT+X9
+         +6L3PYP6IJcAY6zyffxblxGRhjXelIWutWa9WDwxZGnTh1Hklfpu4LcTLesYtkMFKUFR
+         C+m8eoQGlpdQcP/Esz+2sogoUlGc9mGlMIFOy7nCbQbU+jmYwW/UhJk4yblgmZltuBz0
+         T6JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mMtqLmkNBwbaTgADKyEBhTC53U6B2x21wOWtV99B4Jk=;
-        b=rjFb/+DE8UBGOXzR3cI5xj+TRXSrHofAYMundlEN7VP8pZ6cTOog1Xw8TBjTqCHQnu
-         VmDFzV3BuiDdWcK8qpvswkUcBhTT+32+7kiDsYV4ZkwniSkEI3AtgJHPgsN/jqK9F+ma
-         iIB4mVWjLdufBvgYkdaQb+GPNRWoPKunFNOeFAxo2gpRZSLU/TJJ5wFNDu5Ulxh4nox8
-         cyjXNpKAfi5UA3lflj7+R4gw6+pswgC3GBcAUrNgqHVjkeNUQiS5KV7VacorqspnsQCC
-         tnmptEz3SoCYTf4NtQY4BGrKyoXyr6Mt6K+Rh4NFQc/F3+h1Dfb9cQJ05j0ELPRHE9tM
-         yVmw==
-X-Gm-Message-State: AOAM5330fXXLSr7gK68CDBKqtrrSe5COCbtOvj1q7HjHKUyzoWb1ba43
-        AX7smyaI3p4pm0+kJc9TfQ==
-X-Google-Smtp-Source: ABdhPJwUNQ7FBgit0u+Y1WJjPH+rXvzlqZYthoA9oJQSfjV65Mp88v/mECrK91YMRuCQXkqpzFo9lA==
-X-Received: by 2002:a05:6808:3009:b0:2f9:6119:d676 with SMTP id ay9-20020a056808300900b002f96119d676mr2108712oib.205.1650471337926;
-        Wed, 20 Apr 2022 09:15:37 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l14-20020a4ac60e000000b0032993003287sm6845329ooq.38.2022.04.20.09.15.36
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=tnEdHKpPyZkZmrpdyV+90S+5wmdBROjGyPq57BetpoU=;
+        b=Jq33Q8E6/RtMf8YnEfObGXDCaUK9o9p+K9e60aAseM9LO04J5wXT2Sjb8l+9scg8SW
+         oV7seEwUmVMp1KRKFSJRDW0HbO04POovoYLmkEwi5dfvtH6uDVy6MAqeDpyneY9To2vD
+         oN4xGFpfWKaPExPjGrebMbzf/bxAPmAdTTD2XFuDCGWl93pFtQZ4V6Y8VSn1Ma13Uk6U
+         YnKT56l4Ek2YlvmjbAl/uUC8ZRIO/t0dCFEgWte2MBF+7MVEbTHvhVPRwzOxe50xo+Yn
+         dA72n7R23hBTdE0U9FPg2BOSsk7HjiakBko2r/h6tRVdWpnwVAKHdmRXkuiV7zqaFrxW
+         fgHA==
+X-Gm-Message-State: AOAM533dOzoSw664DARdwniRl29HZTY3ENqMlW0vqMee83bTLhMVxdH6
+        yY9a/YzjFf6AyeNnyOQiytrJMfK+q11dyg==
+X-Google-Smtp-Source: ABdhPJwiECiSV47yGzjO1OSK5czfQAfEaTNuFinGeQPK7mUTXZmde2s/5XsQi8Zbio0IBM1grb9y/A==
+X-Received: by 2002:a17:902:bc8c:b0:156:bc64:fa47 with SMTP id bb12-20020a170902bc8c00b00156bc64fa47mr21385934plb.135.1650471343113;
+        Wed, 20 Apr 2022 09:15:43 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a9-20020aa78649000000b004fe3d6c1731sm20575560pfo.175.2022.04.20.09.15.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 09:15:37 -0700 (PDT)
-Received: (nullmailer pid 1410409 invoked by uid 1000);
-        Wed, 20 Apr 2022 16:15:36 -0000
-Date:   Wed, 20 Apr 2022 11:15:36 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH v5 1/5] dt-bindings: display: ssd1307fb: Deprecate "-i2c"
- compatible strings
-Message-ID: <YmAxqNb7nKlypkqD@robh.at.kernel.org>
-References: <20220419214824.335075-1-javierm@redhat.com>
- <20220419214824.335075-2-javierm@redhat.com>
+        Wed, 20 Apr 2022 09:15:42 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 16:15:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
+Message-ID: <YmAxqrbMRx76Ye5a@google.com>
+References: <20220402010903.727604-1-seanjc@google.com>
+ <20220402010903.727604-2-seanjc@google.com>
+ <112c2108-7548-f5bd-493d-19b944701f1b@maciej.szmigiero.name>
+ <YkspIjFMwpMYWV05@google.com>
+ <4505b43d-5c33-4199-1259-6d4e8ebac1ec@redhat.com>
+ <98fca5c8-ca8e-be1f-857d-3d04041b66d7@maciej.szmigiero.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220419214824.335075-2-javierm@redhat.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <98fca5c8-ca8e-be1f-857d-3d04041b66d7@maciej.szmigiero.name>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Apr 2022 23:48:19 +0200, Javier Martinez Canillas wrote:
-> The current compatible strings for SSD130x I2C controllers contain both an
-> "fb" and "-i2c" suffixes. It seems to indicate that are for a fbdev driver
-> and also that are for devices that can be accessed over an I2C bus.
+On Wed, Apr 20, 2022, Maciej S. Szmigiero wrote:
+> On 20.04.2022 17:00, Paolo Bonzini wrote:
+> > On 4/4/22 19:21, Sean Christopherson wrote:
+> > > On Mon, Apr 04, 2022, Maciej S. Szmigiero wrote:
+> > > > > @@ -1606,7 +1622,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+> > > > >        nested_copy_vmcb_control_to_cache(svm, ctl);
+> > > > >        svm_switch_vmcb(svm, &svm->nested.vmcb02);
+> > > > > -    nested_vmcb02_prepare_control(svm);
+> > > > > +    nested_vmcb02_prepare_control(svm, save->rip);
+> > > > 
+> > > >                        ^
+> > > > I guess this should be "svm->vmcb->save.rip", since
+> > > > KVM_{GET,SET}_NESTED_STATE "save" field contains vmcb01 data,
+> > > > not vmcb{0,1}2 (in contrast to the "control" field).
+> > > 
+> > > Argh, yes.  Is userspace required to set L2 guest state prior to KVM_SET_NESTED_STATE?
+> > > If not, this will result in garbage being loaded into vmcb02.
+> > > 
+> > 
+> > Let's just require X86_FEATURE_NRIPS, either in general or just to
+> > enable nested virtualiazation
 > 
-> But a DT is supposed to describe the hardware and not Linux implementation
-> details. So let's deprecate those compatible strings and add new ones that
-> only contain the vendor and device name, without any of these suffixes.
-> 
-> These will just describe the device and can be matched by both I2C and SPI
-> DRM drivers. The required properties should still be enforced for old ones.
-> 
-> While being there, just drop the "sinowealth,sh1106-i2c" compatible string
-> since that was never present in a released Linux version.
-> 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> 
-> (no changes since v3)
-> 
-> Changes in v3:
-> - Drop the "sinowealth,sh1106-i2c", wasn't in a released version (Chen-Yu Tsai)
-> - Continue enforcing required properties for deprecated strings (Maxime Ripard)
-> 
-> Changes in v2:
-> - Drop the -i2c suffixes from the compatible strings too (Geert Uytterhoeven)
-> 
->  .../bindings/display/solomon,ssd1307fb.yaml   | 44 +++++++++++++------
->  1 file changed, 31 insertions(+), 13 deletions(-)
-> 
+> 👍
 
+Hmm, so requiring NRIPS for nested doesn't actually buy us anything.  KVM still
+has to deal with userspace hiding NRIPS from L1, so unless I'm overlooking something,
+the only change would be:
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index bdf8375a718b..7bed4e05aaea 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -686,7 +686,7 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+         */
+        if (svm->nrips_enabled)
+                vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
+-       else if (boot_cpu_has(X86_FEATURE_NRIPS))
++       else
+                vmcb02->control.next_rip    = vmcb12_rip;
 
-If a tag was not added on purpose, please state why and what changed.
+        if (is_evtinj_soft(vmcb02->control.event_inj)) {
+
+And sadly, because SVM doesn't provide the instruction length if an exit occurs
+while vectoring a software interrupt/exception, making NRIPS mandatory doesn't buy
+us much either.
+
+I believe the below diff is the total savings (plus the above nested thing) against
+this series if NRIPS is mandatory (ignoring the setup code, which is a wash).  It
+does eliminate the rewind in svm_complete_soft_interrupt() and the funky logic in
+svm_update_soft_interrupt_rip(), but that's it AFAICT.  The most obnoxious code of
+having to unwind EMULTYPE_SKIP when retrieving the next RIP for software int/except
+injection doesn't go away :-(
+
+I'm not totally opposed to requiring NRIPS, but I'm not in favor of it either.
+
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 66cfd533aaf8..6b48af423246 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -354,7 +354,7 @@ static int __svm_skip_emulated_instruction(struct kvm_vcpu *vcpu,
+        if (sev_es_guest(vcpu->kvm))
+                goto done;
+
+-       if (nrips && svm->vmcb->control.next_rip != 0) {
++       if (svm->vmcb->control.next_rip != 0) {
+                WARN_ON_ONCE(!static_cpu_has(X86_FEATURE_NRIPS));
+                svm->next_rip = svm->vmcb->control.next_rip;
+        }
+@@ -401,7 +401,7 @@ static int svm_update_soft_interrupt_rip(struct kvm_vcpu *vcpu)
+         * in use, the skip must not commit any side effects such as clearing
+         * the interrupt shadow or RFLAGS.RF.
+         */
+-       if (!__svm_skip_emulated_instruction(vcpu, !nrips))
++       if (!__svm_skip_emulated_instruction(vcpu, false))
+                return -EIO;
+
+        rip = kvm_rip_read(vcpu);
+@@ -420,11 +420,8 @@ static int svm_update_soft_interrupt_rip(struct kvm_vcpu *vcpu)
+        svm->soft_int_old_rip = old_rip;
+        svm->soft_int_next_rip = rip;
+
+-       if (nrips)
+-               kvm_rip_write(vcpu, old_rip);
+-
+-       if (static_cpu_has(X86_FEATURE_NRIPS))
+-               svm->vmcb->control.next_rip = rip;
++       kvm_rip_write(vcpu, old_rip);
++       svm->vmcb->control.next_rip = rip;
+
+        return 0;
+ }
+@@ -3738,20 +3735,9 @@ static void svm_complete_soft_interrupt(struct kvm_vcpu *vcpu, u8 vector,
+         * the same event, i.e. if the event is a soft exception/interrupt,
+         * otherwise next_rip is unused on VMRUN.
+         */
+-       if (nrips && (is_soft || (is_exception && kvm_exception_is_soft(vector))) &&
++       if ((is_soft || (is_exception && kvm_exception_is_soft(vector))) &&
+            kvm_is_linear_rip(vcpu, svm->soft_int_old_rip + svm->soft_int_csbase))
+                svm->vmcb->control.next_rip = svm->soft_int_next_rip;
+-       /*
+-        * If NextRIP isn't enabled, KVM must manually advance RIP prior to
+-        * injecting the soft exception/interrupt.  That advancement needs to
+-        * be unwound if vectoring didn't complete.  Note, the new event may
+-        * not be the injected event, e.g. if KVM injected an INTn, the INTn
+-        * hit a #NP in the guest, and the #NP encountered a #PF, the #NP will
+-        * be the reported vectored event, but RIP still needs to be unwound.
+-        */
+-       else if (!nrips && (is_soft || is_exception) &&
+-                kvm_is_linear_rip(vcpu, svm->soft_int_next_rip + svm->soft_int_csbase))
+-               kvm_rip_write(vcpu, svm->soft_int_old_rip);
+ }
+
+ static void svm_complete_interrupts(struct kvm_vcpu *vcpu)
 

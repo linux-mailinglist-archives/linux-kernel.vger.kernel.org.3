@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EBF508309
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5809508317
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376588AbiDTIBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
+        id S1376593AbiDTIEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357036AbiDTIA5 (ORCPT
+        with ESMTP id S1376433AbiDTIEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:00:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EDA625E;
-        Wed, 20 Apr 2022 00:58:11 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1D1A721112;
-        Wed, 20 Apr 2022 07:58:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650441490; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zh1+qCZ/MYXJ0sRvzfY4sa1n6TDnYaGX5/J1ORSZtfg=;
-        b=fK/qA+XzGW35/9w2tvE+4x0zKayfY5S1REDI0Hj+Wv7kazxwNLOX5GtAsN3xI2vwpGp0Li
-        UpZRRdnfs3qfCIlF00lXuhhreXhdDvkhiNqTs6bgNrdBkgTBQwAOGtZqJv0+LppY79rot2
-        KuWaR/55MHeREPMSv9wljkh6Kuxns1w=
-Received: from suse.cz (unknown [10.100.224.162])
+        Wed, 20 Apr 2022 04:04:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57333C4B0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:01:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9C31F2C142;
-        Wed, 20 Apr 2022 07:58:09 +0000 (UTC)
-Date:   Wed, 20 Apr 2022 09:58:09 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "Kernel-team@fb.com" <Kernel-team@fb.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dborkman@redhat.com" <dborkman@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "bp@alien8.de" <bp@alien8.de>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Message-ID: <Yl+9ETR8qc1sRKy3@alley>
-References: <20220415164413.2727220-1-song@kernel.org>
- <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
- <YlpPW9SdCbZnLVog@infradead.org>
- <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
- <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
- <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com>
- <Yl04LO/PfB3GocvU@kernel.org>
- <Yl4F4w5NY3v0icfx@bombadil.infradead.org>
- <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
- <Yl8olpqvZxY8KoNf@bombadil.infradead.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86DB8B81D71
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:01:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 477A7C385A0;
+        Wed, 20 Apr 2022 08:01:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650441707;
+        bh=Ge7E9HICwWwQG131Jf3ckANSQzLOy8iKlQ7ubnvSwOE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JeS89kslXNeoe/14aNyZVhJNwoHZm7zO/0Qe4YxeS5ihEUYcUZBsaCF4mp/zu44jS
+         ndMvssJfmJ9NDK3dZYYBR2uHzoWQOOY3BQK2lHTPNY16I9OODhd0H9ueB77dYkYesM
+         vH1SrAc4BF/gJE0NjoJuulld6oUXfnmCDexHnc2NyK/Np+2O7Mw9mmbFFW2vrTNqVL
+         lgBKnwj46pTrvcJTRbGkt8VrN5Lkdr3a23ezVilfISqvfnZ0iVJG67QhRqXy7xw9Gj
+         iwr2og4EHlQ1GjqAQ6g/AAGaaM3zjh/K4yaaUtp7jZvSHD1tkoBYWccyyH7JWBwy0I
+         COxD2cbd1Qt4A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nh5HP-0006ca-HS; Wed, 20 Apr 2022 10:01:39 +0200
+Date:   Wed, 20 Apr 2022 10:01:39 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] greybus: using pm_runtime_resume_and_get to simplify the
+ code
+Message-ID: <Yl+948unOoDFdLe2@hovoldconsulting.com>
+References: <20220420030658.2575942-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yl8olpqvZxY8KoNf@bombadil.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220420030658.2575942-1-chi.minghao@zte.com.cn>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-04-19 14:24:38, Luis Chamberlain wrote:
-> On Tue, Apr 19, 2022 at 01:56:03AM +0000, Edgecombe, Rick P wrote:
-> > Yea, that was my understanding. X86 modules have to be linked within
-> > 2GB of the kernel text, also eBPF x86 JIT generates code that expects
-> > to be within 2GB of the kernel text.
-> 
-> And kprobes / live patching / ftrace.
-> 
-> Another architectural fun fact, powerpc book3s/32 requires executability
-> to be set per 256 Mbytes segments. Some architectures like this one
-> will want to also optimize how they use the module alloc area.
-> 
-> Even though today the use cases might be limited, we don't exactly know
-> how much memory a target device has a well, and so treating memory
-> failures for "special memory" request as regular memory failures seems
-> a bit odd, and users could get confused. For instance slapping on
-> extra memory on a system won't resolve any issues if the limit for a
-> special type of memory is already hit. Very likely not a problem at all today,
-> given how small modules / eBPF jit programs are / etc, but conceptually it
-> would seem wrong to just say -ENOMEM when in fact it's a special type of
-> required memory which cannot be allocated and the issue cannot possibly be
-> fixed. I don't think we have an option but to use -ENOMEM but at least
-> hinting of the special failure would have seem desirable.
+On Wed, Apr 20, 2022 at 03:06:58AM +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 
-I am not mm expert but I think that this is common problem. There are
-many types of "special memory". And mm provides many details via procfs, e.g.
-/proc/meminfo, /proc/slabinfo, /proc/vmstat.
+Why are you sending patches from a random non-personal gmail address?
 
-Best Regards,
-Petr
+> Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
+> pm_runtime_put_noidle. This change is just to simplify the code, no
+> actual functional changes.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+
+And why is this here?
+
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  drivers/greybus/core.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/greybus/core.c b/drivers/greybus/core.c
+> index e546c6431877..434aa5d9dd47 100644
+> --- a/drivers/greybus/core.c
+> +++ b/drivers/greybus/core.c
+> @@ -174,11 +174,9 @@ static int greybus_probe(struct device *dev)
+>  	if (!id)
+>  		return -ENODEV;
+>  
+> -	retval = pm_runtime_get_sync(&bundle->intf->dev);
+> -	if (retval < 0) {
+> -		pm_runtime_put_noidle(&bundle->intf->dev);
+> +	retval = pm_runtime_resume_and_get(&bundle->intf->dev);
+> +	if (retval < 0)
+>  		return retval;
+> -	}
+
+NAK.
+
+Greybus is using the pm_runtime_get_sync() consistently and mixing it up
+with the new helper that uses a different naming scheme is just
+confusing.
+
+Use the new helper for your own code if you prefer, but there's really
+no need to go around submitting this automatic conversions for code
+that's already in the tree.
+
+>  	retval = gb_control_bundle_activate(bundle->intf->control, bundle->id);
+>  	if (retval) {
+
+Johan

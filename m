@@ -2,137 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBE9508915
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB866508921
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378915AbiDTNVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
+        id S1378936AbiDTNYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242970AbiDTNVq (ORCPT
+        with ESMTP id S233144AbiDTNYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:21:46 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4757F42A11;
-        Wed, 20 Apr 2022 06:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650460740; x=1681996740;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=E9RTNBXOoMcT8m9LfR3nKt3g7nqLHXacsFd0iJAtk8s=;
-  b=grYJ0Elp/nDOrtMJNahoNH5gOm4UvEE5UIRTpAm+hsuzH8o374d2QS7t
-   5RBVUlimRkf3t2IuTfZ2NB9DAEDmYelFFlWDKJicuRHl+BQPKtXjRGIQA
-   3WRaVoCBESt71M/MfGf1urQL3fIypaQAGeqTBI5+QF0DiqdksVPw2bNZA
-   IZ4NA0EcnfDxY0/6WhM8CgUSEyPR+UXbS20dCizRW9bWZNEMtAFDXgwUb
-   7z2QzTupUepR55uS/6h+tPLpZpZnF6MlZS666udkKN5cCjHTMI+x+miCB
-   Ivk6YQbvGUHIfpx/TABFBV2CwSKWhiCNCRJLO0x11qblui8XsNFxnqvqX
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="243954024"
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="243954024"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 06:18:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="727490441"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga005.jf.intel.com with ESMTP; 20 Apr 2022 06:18:55 -0700
-To:     "Sandeep Maheswaram (Temp) (QUIC)" <quic_c_sanm@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Pavan Kumar Kondeti (QUIC)" <quic_pkondeti@quicinc.com>,
-        "Pratham Pratap (QUIC)" <quic_ppratap@quicinc.com>,
-        "Krishna Kurapati PSSNV (QUIC)" <quic_kriskura@quicinc.com>,
-        "Vidya Sagar Pulyala (Temp) (QUIC)" <quic_vpulyala@quicinc.com>
-References: <1649323888-12420-1-git-send-email-quic_c_sanm@quicinc.com>
- <DM6PR02MB4857A0ADCDA1558DE58E103ADFF29@DM6PR02MB4857.namprd02.prod.outlook.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v3 0/2] Skip phy initialization for DWC3 USB Controllers
-Message-ID: <4b34735f-8e1f-bf37-398f-9b4a8aa2e939@linux.intel.com>
-Date:   Wed, 20 Apr 2022 16:20:52 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Wed, 20 Apr 2022 09:24:30 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F04427FF;
+        Wed, 20 Apr 2022 06:21:43 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id z99so2270594ede.5;
+        Wed, 20 Apr 2022 06:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=yTrKoeSx5DVhv4GKSGEZu42X2Dj3HZfus9gjzjDWtLo=;
+        b=jZdbFV5860QLbLI4Aa30pkXGVvf+mub3Ozvr8NOYxoqL2q2lY6k1RukB4ekJ9Ge9vE
+         5HusUBWHxsYowhC1HNVmkARaR784eKvj8c8Px5UmFTpgoL6Fo+/iaeVOzrkqLwo9teQV
+         f23FzTjLkEgi/dZpwJZACmP4vgT46hbuJY8Qo+ZlkdLXo9tdGQEnv8ULNf2sdgELeVVO
+         6S/JPmxEcZzYdosOKNEeph3F+ozBkNtZyttgwTpbQekwTLC7Ur7whgHT2bZwEKN0yoXE
+         /z3tLz2NHCZ59F4caRfn5BT4fMk7f0vJY3IiSxMp3gs4y2oWPlwk5ng7YlDYtCaWKFUG
+         wk2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=yTrKoeSx5DVhv4GKSGEZu42X2Dj3HZfus9gjzjDWtLo=;
+        b=ASAXt+JCyQLCmCl4G3UTOZGj556VPVdJS66IYLdsW7i8/unSx6DCIV6Ja53iJS1mq9
+         2hE0sKWzmRYDpccCd8IkSxYkRLFUSePKCBn7lAims+07H+zO4UJBRx/47rUOVK+h4zzh
+         XfGEBB/oBSMFJtS5L2UbUnR04px+BPpAzeptaK30puscpsRrrhbRwafY1LRzsqN3lzVO
+         qJkjDcDsGBRzrkMlLmWWQh4Vksvzu/ic36QYE5ElnqgoYDwaUzhrF6Xgc9ylttuIj78+
+         jQlIoEQToefs0Wf523byGeqvLgELpTc1FdHVemA9XsPH9e/I3aruNn/BDW4/kKAPPvPG
+         7ReA==
+X-Gm-Message-State: AOAM531CTFy9z8LCqZTBoHrUMagP6yE7+g8Ofw7GysKwjVnellIfrUau
+        gbTwp8G0M8cXwvyWQ5EelFE=
+X-Google-Smtp-Source: ABdhPJzcEcvHPxV6MF5NXWWou4veSt8SMjyDNTprQ4qC/0zHlveZsQAso1FXieKDqSDP6jt5ZtjyEg==
+X-Received: by 2002:a05:6402:3592:b0:423:d71e:41dc with SMTP id y18-20020a056402359200b00423d71e41dcmr20806464edc.402.1650460902000;
+        Wed, 20 Apr 2022 06:21:42 -0700 (PDT)
+Received: from [192.168.3.2] (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
+        by smtp.googlemail.com with ESMTPSA id g24-20020a056402321800b00423e43ebb60sm4827837eda.61.2022.04.20.06.21.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 06:21:41 -0700 (PDT)
+Message-ID: <d26393a3323dc646df88fb09ee47d712c80eafc9.camel@gmail.com>
+Subject: Re: [PATCH v2 4/5] scsi: ufshpb: Add handing of device reset HPB
+ regions Infos in HPB device mode
+From:   Bean Huo <huobean@gmail.com>
+To:     keosung.park@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "powen.kao@mediatek.com" <powen.kao@mediatek.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        cpgsproxy3 <cpgsproxy3@samsung.com>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Wed, 20 Apr 2022 15:21:41 +0200
+In-Reply-To: <1381713434.41650433982422.JavaMail.epsvc@epcpadp4>
+References: <20220419183044.789065-5-huobean@gmail.com>
+         <20220419183044.789065-1-huobean@gmail.com>
+         <CGME20220419183934epcas2p28272bfd9167253c2d9136c60f9050c5f@epcms2p7>
+         <1381713434.41650433982422.JavaMail.epsvc@epcpadp4>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0-1 
 MIME-Version: 1.0
-In-Reply-To: <DM6PR02MB4857A0ADCDA1558DE58E103ADFF29@DM6PR02MB4857.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.4.2022 13.17, Sandeep Maheswaram (Temp) (QUIC) wrote:
-> Hi Mathias, Felipe,
-> 
->> -----Original Message-----
->> From: Sandeep Maheswaram (Temp) (QUIC) <quic_c_sanm@quicinc.com>
->> Sent: Thursday, April 7, 2022 3:01 PM
->> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Felipe Balbi
->> <balbi@kernel.org>; Stephen Boyd <swboyd@chromium.org>; Doug
->> Anderson <dianders@chromium.org>; Matthias Kaehlcke
->> <mka@chromium.org>; Mathias Nyman <mathias.nyman@intel.com>
->> Cc: linux-arm-msm@vger.kernel.org; linux-usb@vger.kernel.org; linux-
->> kernel@vger.kernel.org; Pavan Kumar Kondeti (QUIC)
->> <quic_pkondeti@quicinc.com>; Pratham Pratap (QUIC)
->> <quic_ppratap@quicinc.com>; Krishna Kurapati PSSNV (QUIC)
->> <quic_kriskura@quicinc.com>; Vidya Sagar Pulyala (Temp) (QUIC)
->> <quic_vpulyala@quicinc.com>; Sandeep Maheswaram (Temp) (QUIC)
->> <quic_c_sanm@quicinc.com>
->> Subject: [PATCH v3 0/2] Skip phy initialization for DWC3 USB Controllers
->>
->> Runtime suspend of phy drivers was failing from DWC3 driver as runtime
->> usage value is 2 because the phy is initialized from
->> DWC3 core and HCD core.
->> Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
->> This property can be set to avoid phy initialization in HCD core.
->>
->> v3:
->> Coming back to this series based on discussion at below thread
->> https://patchwork.kernel.org/project/linux-arm-msm/patch/1648103831-
->> 12347-4-git-send-email-quic_c_sanm@quicinc.com/
->> Dropped the dt bindings PATCH 1/3 in v2
->> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-
->> 25582-1-git-send-email-quic_c_sanm@quicinc.com/
->>
->> v2:
->> Updated the commit descriptions.
->> Changed subject prefix from dwc to dwc3.
->> Increased props array size.
->>
->> Sandeep Maheswaram (2):
->>   usb: host: xhci-plat: Add device property to set XHCI_SKIP_PHY_INIT
->>     quirk
->>   usb: dwc3: host: Set the property usb-skip-phy-init
->>
->>  drivers/usb/dwc3/host.c      | 4 +++-
->>  drivers/usb/host/xhci-plat.c | 3 +++
->>  2 files changed, 6 insertions(+), 1 deletion(-)
->>
->> --
->> 2.7.4
-> 
-> Please let me know your opinion about this series.
+On Wed, 2022-04-20 at 14:31 +0900, Keoseong Park wrote:
+> > +/**
+> > + *ufshpb_submit_region_inactive() - submit a region to be
+> > inactivated later
+> > + *@hpb: per-LU HPB instance
+> > + *@region_index: the index associated with the region that will be
+> > inactivated later
+> > + */
+> > +static void ufshpb_submit_region_inactive(struct ufshpb_lu *hpb,
+> > int region_index)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int subregion_index;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct ufshpb_region *rgn;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct ufshpb_subregion *sr=
+gn;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Remove this region =
+from active region list and add it
+> > to inactive list
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spin_lock(&hpb->rsp_list_lo=
+ck);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ufshpb_update_inactive_info=
+(hpb, region_index);
+> How about separating the "hpb->stats.rb_inactive_cnt++" code from
+> ufshpb_update_inactive_info()?
+> Because I think this code should only be used in
+> ufshpb_rsp_req_region_update().
 
-Otherwise looks good but wondering if we should document that new device
-property somewhere. 
 
-Couldn't find a standard way how those device properties excluded from
-Documentation/devicetree/binding are documented
+based on Documentation/ABI/testing/sysfs-driver-ufs:
 
-Thanks
--Mathias
+"What:       /sys/class/scsi_device/*/device/hpb_stats/rb_inactive_cnt
+Date:       June 2021
+Contact:    Daejun Park <daejun7.park@samsung.com>
+Description:    This entry shows the number of inactive regions
+recommended by  response UPIUs."
 
+
+This parameter should be increased only when recieving inactive
+recommended.
+
+I will change it in the next version, thanks.
+
+
+Kind regards,
+Bean

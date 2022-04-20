@@ -2,65 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7684B5089A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668965089B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379137AbiDTNtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        id S1379146AbiDTNtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379127AbiDTNtD (ORCPT
+        with ESMTP id S1379139AbiDTNtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:49:03 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09A421E0D;
-        Wed, 20 Apr 2022 06:46:15 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 930D14000D;
-        Wed, 20 Apr 2022 13:46:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650462374;
+        Wed, 20 Apr 2022 09:49:09 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2575A21E0D;
+        Wed, 20 Apr 2022 06:46:22 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-69-216-nat.elisa-mobile.fi [85.76.69.216])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id AD3B7205A6;
+        Wed, 20 Apr 2022 16:46:17 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1650462379;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Gu9XIPDQFJtF5X1LIwJgSFyBvY1NGDGQ+pRrZhn5KiY=;
-        b=GeLia+C9QE8jie0TY69D9ZmjKetBmS0vJX/CXbcYhUD/5S8pnohoodLfUas21s2Xk40UGB
-        GP8EODtmGOitGKtwEXC5VUGV1Hw8wTthv7zqLTZmQkMpPrc/v8tJwiwe7XLqcpA+ronfv/
-        ix3jrqhvJX1EBYP3aMTFTfn1xfqTh/lsWDY8OC/l8sarpeyA/MBTqDIChKcA+Q6p6xLTfX
-        vlGtYPICVNJMIivU0TS/QCDws6rUaUCvenJeqwx3H6Jwji9zmZ2isYF7w8IQBDAO58wi8p
-        Us0mcCq7cFLJPH8AC9ZGD2igjVA4R1KJ04bPpsM4CrNND5iacJT5+wEyucCyxQ==
-Date:   Wed, 20 Apr 2022 15:46:11 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRz?= =?UTF-8?B?a2k=?= 
-        <kw@linux.com>, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v2 2/8] dt-bindings: PCI: renesas-pci-usb: Convert
- bindings to json-schema
-Message-ID: <20220420154611.7dd34c24@bootlin.com>
-In-Reply-To: <YmAIOt1vAEzHGvBP@robh.at.kernel.org>
-References: <20220414074011.500533-1-herve.codina@bootlin.com>
-        <20220414074011.500533-3-herve.codina@bootlin.com>
-        <YlhkwvGdcf4ozTzG@robh.at.kernel.org>
-        <20220420144411.2d369b49@bootlin.com>
-        <YmAIOt1vAEzHGvBP@robh.at.kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        bh=hPdeBaZ6eVr/qRTevscI2sSHgl9RZPmaXc8iV1TPOYQ=;
+        b=TWxI7Ho2RtsaPS6MDuk2M+E+sq1KJYxSGS4DmJDZp6BP1taIQkAU15m6enkHBtGqJiUXvp
+        lXQHG+v4JXQrypyUiMgoBHrh9vRs0uJa78N5cmw1Dkb39AobNvcLF22yj6OlonUngPVdl9
+        hg/zZ4gRXP0aP/DTuM9FEXSAfDl6JAk=
+Date:   Wed, 20 Apr 2022 16:46:15 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-omap@vger.kernel.org, tony@atomide.com, jmkrzyszt@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Walmsley <paul@pwsan.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 26/41] ARM: omap1: relocate static I/O mapping
+Message-ID: <20220420134615.GA1947@darkstar.musicnaut.iki.fi>
+References: <20220419133723.1394715-1-arnd@kernel.org>
+ <20220419133723.1394715-27-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419133723.1394715-27-arnd@kernel.org>
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1650462379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hPdeBaZ6eVr/qRTevscI2sSHgl9RZPmaXc8iV1TPOYQ=;
+        b=H/ymb4ClmH02P6z9wJPj5hwDvA4ML4CAqvyTrTXpyzakXMrwIF7fhncpTt2p+tyb+n415S
+        rXswuQZfImMNpPXfbjLG2A2bYft152C7y10qe9zeKLi8GlOcXPiCV9y/0Eijq+J6KgXV6K
+        JExPxjG2F+njcVYYdJlNrzaNBE0jppU=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1650462379; a=rsa-sha256; cv=none;
+        b=CVy72ecIkI6wF0iqwa+Xy91DJU3aDMoxGNfzuIx9Vt1gzOxFw+Q04asMI9whLP3P8s501X
+        P2eVWVYDpVAr6tfbV1PJEm52Z8VQMrb77N573CgDjOg+UHf97HnYPA9FH0wGgHHkmeXpu6
+        wtihpIfPU1zC4kkQJy4ZZuJBXIgiXlA=
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,87 +91,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hi,
 
-On Wed, 20 Apr 2022 08:18:50 -0500
-Rob Herring <robh@kernel.org> wrote:
+On Tue, Apr 19, 2022 at 03:37:08PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The address range 0xfee00000-0xfeffffff is used for PCI and
+> PCMCIA I/O port mappings, but OMAP1 has its static mappings
+> there as well.
+> 
+> Move the OMAP1 addresses a little higher to avoid crashing
+> at boot.
 
-...
+This has the same problem I reported in 2019, with earlyprintk the
+system no longer boots:
 
-> > > > +  bus-range:
-> > > > +    description: |
-> > > > +      The PCI bus number range; as this is a single bus, the range
-> > > > +      should be specified as the same value twice.   =20
-> > >=20
-> > > items:
-> > >   const: 0 =20
-> >=20
-> > Well, some other values are present in some dtsi files such as
-> > 'bus_range =3D <1 1>;' or 'bus_range =3D <2 2>;' in r8a7742.dtsi.
-> >=20
-> > The constraint is to have the same value twice. Is there a way
-> > to specify this constraint ? =20
->=20
-> Yes, but probably not worthwhile. Just drop it as pci-bus.yaml already=20
-> defines it.
+	https://marc.info/?t=156530014200005&r=1&w=2
 
-Instead of fully dropping the property, don't you think that keeping
-the given description here can be a way to express that the same value
-is needed twice ?
+Tested on OSK and SX1/qemu.
 
->=20
-> > > > +
-> > > > +  "#address-cells":
-> > > > +    const: 3
-> > > > +
-> > > > +  "#size-cells":
-> > > > +    const: 2
-> > > > +
-> > > > +  "#interrupt-cells":
-> > > > +    const: 1   =20
-> > >=20
-> > > All these are defined by pci-bus.yaml =20
-> >=20
-> > Right.
-> > Replaced by:
-> >=20
-> > "#address-cells": true
-> > "#size-cells": true
-> > "#interrupt-cells": true
-> >=20
-> > Is that correct ? =20
->=20
-> You can just drop them completely.
+A.
 
-Ok for #address-cells and #size-cells but not for #interrupt-cells.
-
-Dropping #interrupt-cells makes 'make dtbindings_check' unhappy:
---- 8< ---
-$ make dt_binding_check DT_SCHEMA_FILES=3Drenesas,pci-rcar-gen2.yaml
-  LINT    Documentation/devicetree/bindings
-  CHKDT   Documentation/devicetree/bindings/processed-schema.json
-/home/hcodina/xxx/Documentation/devicetree/bindings/pci/renesas,pci-rcar-ge=
-n2.yaml: properties: '#interrupt-cells' is a dependency of 'interrupt-map'
-	from schema $id: http://devicetree.org/meta-schemas/interrupts.yaml#
-  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-/home/hcodina/xxx/Documentation/devicetree/bindings/pci/renesas,pci-rcar-ge=
-n2.yaml: ignoring, error in schema: properties
-  DTEX    Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.examp=
-le.dts
-  DTC     Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.examp=
-le.dtb
-  CHECK   Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.examp=
-le.dtb
-$=20
---- 8< ---
-
-So I keep=20
-"#interrupt-cells": true
-
-Regards,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/Kconfig.debug                      | 6 +++---
+>  arch/arm/mach-omap1/include/mach/hardware.h | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+> index 0c9497d549e3..f57b449000f7 100644
+> --- a/arch/arm/Kconfig.debug
+> +++ b/arch/arm/Kconfig.debug
+> @@ -1837,9 +1837,9 @@ config DEBUG_UART_VIRT
+>  	default 0xfec00000 if ARCH_IXP4XX && !CPU_BIG_ENDIAN
+>  	default 0xfec00003 if ARCH_IXP4XX && CPU_BIG_ENDIAN
+>  	default 0xfef36000 if DEBUG_HIGHBANK_UART
+> -	default 0xfefb0000 if DEBUG_OMAP1UART1 || DEBUG_OMAP7XXUART1
+> -	default 0xfefb0800 if DEBUG_OMAP1UART2 || DEBUG_OMAP7XXUART2
+> -	default 0xfefb9800 if DEBUG_OMAP1UART3 || DEBUG_OMAP7XXUART3
+> +	default 0xff000000 if DEBUG_OMAP1UART1 || DEBUG_OMAP7XXUART1
+> +	default 0xff000800 if DEBUG_OMAP1UART2 || DEBUG_OMAP7XXUART2
+> +	default 0xff009800 if DEBUG_OMAP1UART3 || DEBUG_OMAP7XXUART3
+>  	default 0xffd01000 if DEBUG_HIP01_UART
+>  	default DEBUG_UART_PHYS if !MMU
+>  	depends on DEBUG_LL_UART_8250 || DEBUG_LL_UART_PL01X || \
+> diff --git a/arch/arm/mach-omap1/include/mach/hardware.h b/arch/arm/mach-omap1/include/mach/hardware.h
+> index 05c5cd3e95f4..e3522e601ccd 100644
+> --- a/arch/arm/mach-omap1/include/mach/hardware.h
+> +++ b/arch/arm/mach-omap1/include/mach/hardware.h
+> @@ -63,7 +63,7 @@ static inline u32 omap_cs3_phys(void)
+>  
+>  #endif	/* ifndef __ASSEMBLER__ */
+>  
+> -#define OMAP1_IO_OFFSET		0x01000000	/* Virtual IO = 0xfefb0000 */
+> +#define OMAP1_IO_OFFSET		0x00fb0000	/* Virtual IO = 0xff000000 */
+>  #define OMAP1_IO_ADDRESS(pa)	IOMEM((pa) - OMAP1_IO_OFFSET)
+>  
+>  #include <mach/serial.h>
+> -- 
+> 2.29.2
+> 

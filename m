@@ -2,58 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F605085F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57E35085F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351974AbiDTKeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S1352046AbiDTKfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350520AbiDTKeJ (ORCPT
+        with ESMTP id S1348216AbiDTKfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:34:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3F13F8A9;
-        Wed, 20 Apr 2022 03:31:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAF3E617C5;
-        Wed, 20 Apr 2022 10:31:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC5EC385A0;
-        Wed, 20 Apr 2022 10:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650450682;
-        bh=VATqHpxy4xhyHxhfLQ62wyl7CnEWwvltNAvm4ld1EQk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=uh5gJB3axqdKC5OsivTse8L4a7Jij90v2MJSBj/nQGBUO5CgTBhN4wsVNnFzlHy21
-         m/upJaNGtunQ9DdX4OQJ+5KpQ5sga4HsG2MzmadYls3bbCG3lIuV3lmPd4Al2nDxeE
-         t6dz+E4Xh2JFatRiw7FH4e3o9nPSSHNNkBAhGSQH91h+EwyYYQ4hkaR/5a1L2/N3nu
-         JjmZ1u3th3JBvHqG8F7OhYQRm/RtMOQsSO2G3LaxURuQTzw0/+5BQsXZnRdCVUJgLF
-         04qV6ao7eo3aobR8EWlrGPU1XVuWVVWONwT8GmqvwD3A4HO4wo5SNU7BQ4thrqkM/S
-         zaAmJmg5i4PdQ==
-Message-ID: <acccdf28-3c5d-a81b-8e3a-f72e0f46149c@kernel.org>
-Date:   Wed, 20 Apr 2022 12:31:16 +0200
+        Wed, 20 Apr 2022 06:35:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D51B93FBC4;
+        Wed, 20 Apr 2022 03:32:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E7F123A;
+        Wed, 20 Apr 2022 03:32:25 -0700 (PDT)
+Received: from [10.57.12.48] (unknown [10.57.12.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C71933F766;
+        Wed, 20 Apr 2022 03:32:23 -0700 (PDT)
+Message-ID: <281fd0f0-d2fc-95cf-d183-31ca8c25830e@arm.com>
+Date:   Wed, 20 Apr 2022 11:32:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: A lot of regression reports submitted to bugzilla.kernel.org are
- apparently ignored, even bisected ones
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
+ ops
 Content-Language: en-US
-To:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        workflows@vger.kernel.org
-References: <6808cd17-b48c-657d-de60-ef9d8bfa151e@leemhuis.info>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <6808cd17-b48c-657d-de60-ef9d8bfa151e@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
+To:     Kant Fan <kant@allwinnertech.com>
+Cc:     amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com,
+        stable@vger.kernel.org, orjan.eide@arm.com, edubezval@gmail.com,
+        javi.merino@kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com
+References: <20220325094436.101419-1-kant@allwinnertech.com>
+ <4db6b25c-dd78-a6ba-02a5-ac2e49996be1@arm.com>
+ <6b89fa96-07f0-19bb-2e18-22afa27554a1@allwinnertech.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <6b89fa96-07f0-19bb-2e18-22afa27554a1@allwinnertech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,50 +52,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2022 14:35, Thorsten Leemhuis wrote:
-> Hi! TLDR: I looked closer at every ticket filed in bugzilla.kernel.org
-> over a time span of two weeks to see how well reports are handled, in
-> particular those for kernel regressions. The results of this rough
-> analysis are kinda devastating from my point of view. I for example
-> found 8 tickets describing a regression where the reporter had even
-> bisected the problem, but nevertheless the ticket afaics didn’t get a
-> single reply or any other reaction from a regular kernel developer
-> within about a week; in fact out of a total of 20 reports that looked
-> like regressions to me (17 if you exclude tickets where the reporter
-> used an afaics lightly patched distro kernel), only one got a helpful
-> reply from a developer within a week. 
+Hi Kant,
 
-To respond, developer would first had to be notified. Did it happen? Or
-just some default assignee got automated notification?
+On 4/19/22 16:49, Kant Fan wrote:
+> On 29/03/2022 14:59, Lukasz Luba wrote:
+>>
+>>
+>> On 3/25/22 09:44, Kant Fan wrote:
+>>> commit 7b62935828266658714f81d4e9176edad808dc70 upstream.
+>>>
+>>> Fix access illegal address problem in following condition:
+>>> There are muti devfreq cooling devices in system, some of them register
+>>> with dfc_power but other does not, power model ops such as 
+>>> state2power will
+>>> append to global devfreq_cooling_ops when the cooling device with
+>>> dfc_power register. It makes the cooling device without dfc_power
+>>> also use devfreq_cooling_ops after appending when register later by
+>>> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+>>>
+>>> IPA governor regards the cooling devices without dfc_power as a power 
+>>> actor
+>>> because they also have power model ops, and will access illegal 
+>>> address at
+>>> dfc->power_ops when execute cdev->ops->get_requested_power or
+>>> cdev->ops->power2state. As the calltrace below shows:
+>>>
+>>> Unable to handle kernel NULL pointer dereference at virtual address
+>>> 00000008
+>>> ...
+>>> calltrace:
+>>> [<c06e5488>] devfreq_cooling_power2state+0x24/0x184
+>>> [<c06df420>] power_actor_set_power+0x54/0xa8
+>>> [<c06e3774>] power_allocator_throttle+0x770/0x97c
+>>> [<c06dd120>] handle_thermal_trip+0x1b4/0x26c
+>>> [<c06ddb48>] thermal_zone_device_update+0x154/0x208
+>>> [<c014159c>] process_one_work+0x1ec/0x36c
+>>> [<c0141c58>] worker_thread+0x204/0x2ec
+>>> [<c0146788>] kthread+0x140/0x154
+>>> [<c01010e8>] ret_from_fork+0x14/0x2c
+>>>
+>>> Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
+>>> Cc: stable@vger.kernel.org # 4.4+
+>>> Signed-off-by: Kant Fan <kant@allwinnertech.com>
+>>> ---
+>>>   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+>>>   1 file changed, 18 insertions(+), 7 deletions(-)
+>>>
+>>
+>> Looks good. So this patch should be applied for all stable
+>> kernels starting from v4.4 to v5.12 (the v5.13 and later need
+>> other patch).
+>>
+>> Next time you might use in the subject something like:
+>> [PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global ops
+>> It would be better distinguished from your other patch with the
+>> same subject, which was for mainline and v5.13+
+> 
+> Hi Lukasz,
+> Thank you for the guidance. I want to know if I'm understanding you in a 
+> right way. Could you confirm the following information?
+> 
+> 1. The stable patches
+> After the patch is merged into mainline later, I'll submit the following 
+> patches individually for v4.4 ~ v5.12:
 
-> That makes us miss valuable
-> reports and puts our "no regressions" rule into a bad light. Hence,
-> something IMHO should be done here to improve the situation, but I'm not
-> sure myself what exactly -- that's why I'm writing this mail. A better
-> warning on bugzilla’s frontpage suggesting to report issues by mail
-> maybe? And/or disable all bugzilla products and components where it's
-> not clear that somebody will be looking at least once at submitted tickets?
+Correct, after it gets mainline you can point to that commit hash and
+process with those patches. I don't now which of those older stable
+kernels are still maintained, since some of them have longer support
+and the rest had shorter and might already ended. You can check the
+end of life for those 'Longterm' here [1]. AFAICS the 4.4 is not in that
+table, so you can start from 4.9, should be OK.
+So the list of needed patches would be for those stable kernels:
+4.9, 4.14, 4.19, 5.4, 5.10
+I can see that last release for 5.11.x was in May 2021, so it's probably
+ended, similar for 5.12.x (Jul 2021). That's why I suggested that list
+for the long support kernels.
 
-I find such Bugzilla useless - the Components are not matching reality,
-Products look ok except missing really a lot. Does it have proper
-assigners based on maintainers? Nope. At least not everywhere.
+> 
+> [PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global ops
+> [PATCH 4.5] thermal: devfreq_cooling: use local ops instead of global ops
+> ...
+> [PATCH 5.12] thermal: devfreq_cooling: use local ops instead of global ops
+> 
+> And also the following patches individually for v5.13+ :
 
-All the bug or issue reports I get via email and I think I am not alone
-in this. All automated tools (kbuild, kernelCI) are using emails for bug
-reporting. Why having one more system which seems not up to date?
+For this, you probably don't have to. You have added 'v5.13+' in the
+original patch v2, so it will be picked correctly. It should apply
+on those stable kernels w/o issues. If there will be, stable kernel
+engineers will ping us.
 
-The only reliable and up to date information we have in maintainers
-file: who is responsible and whom to CC (e.g. lists).
+> [PATCH 5.13] thermal: devfreq_cooling: use local ops instead of global ops
+> [PATCH 5.14] thermal: devfreq_cooling: use local ops instead of global ops
+> ...
+> [PATCH 5.17] thermal: devfreq_cooling: use local ops instead of global ops
+> 
+> 2. The mainline patch
+> I saw your mail with Rafael, seems there are conflicts... I wonder if 
+> there's anything wrong with my patch, or anything I can help?
+> 
 
-I can give example from my domain:
-https://bugzilla.kernel.org/show_bug.cgi?id=210047
+Thank you for offering help. Rafael solved that correctly, so it doesn't
+need any more work.
 
-This is clearly issue for me but there is no way I was notified about
-this. I just found it by using the keyword from maintainers. Wrong
-mailing list as Assignee, no CC to me. Such bug reports will be missed
-because there is no way I can receive information about them. Why then
-providing interface for bug reports which by design will not reach the
-respective person?
+Thank you for doing that work!
 
-Best regards,
-Krzysztof
+Regards,
+Lukasz
+
+[1] https://www.kernel.org/category/releases.html

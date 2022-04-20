@@ -2,108 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF556509132
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DBD509136
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382079AbiDTUKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        id S1382033AbiDTUKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382028AbiDTUKd (ORCPT
+        with ESMTP id S1381909AbiDTUK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:10:33 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A2745AED
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:07:46 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id y20so5752005eju.7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:07:46 -0700 (PDT)
+        Wed, 20 Apr 2022 16:10:28 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFC245AD7;
+        Wed, 20 Apr 2022 13:07:41 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u15so5720513ejf.11;
+        Wed, 20 Apr 2022 13:07:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=or6JCjKhYhBiaiW00aMF7rUmRM1Om7N8+nnkFL4bbB4=;
-        b=PwJpWKVjNrMu7Gg4yVflFwYwWc4nnM7umtCY/l7yKXyV5Ft110X2v0svZpu5ToN4Y5
-         DixablUApzvMzWya52D6gsldNClKZ0hyWeT/vhefyz8p4NqsfRLxoQJka5SJ7qGYV5KB
-         ffG4ldzo9WpYNDxAEPmlwy7ETPe2MogPwMbPI=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cccalB/f7dl98H1DWBiuWR8XYUD40T0nXDNgYapNT6Q=;
+        b=mReAvsGhWJGmo5vlFsepe6okBMMhYkdttmKKqi6+6iE82RuA0CqCTeJIpUHAx535Ub
+         FLfKBECIy+HwDsZ1UTQkIungkf1EZypG088XIvz2/VbDZYBkWb/e5B6GjvStlpCS3Lqg
+         W6xaBnZHkNRO56XNZvacULwDaZvaGfA1vgDk8QXg1qHfWHaEX6tGXrdezq92aNETbEi3
+         oE3O8FB4e73i+CFXfvIr+I0is7GefKKCZuLvWDnRUrH0fyVrvR1ndFqvK5m9p6f2D2yV
+         j93tUjDxaBngw3/gXnMQf63yBvDTIJb3WSBh6xGJodQfYV1jcvk0eYHMs1T74oHzrJGb
+         BSsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=or6JCjKhYhBiaiW00aMF7rUmRM1Om7N8+nnkFL4bbB4=;
-        b=G4SkrcYNyC/3uBq/gzO2GRXNQEZwymj5Ewgb3jgveSN9AYpEXemWx/eGmIhdyIQYvJ
-         yLP436nYbRCH+7qdUMk03AyxA4+rOkhlVSzSSQA6Tg0A7AWYUiW0RQGp7PxGuE+/IwJT
-         rdUZACg8bM6S3zJjWLtOsPfLA1/meLhjVtacaWYHwYxJIFcH3O86qAS2Z880rQqnHVij
-         JSUZK/adQMxzXAz2mb0j6Lmxc/sympQ1D+2Ln8wnnXwyL2oFV36WavSgTlPZLsVkKDkS
-         AlWoOx4ZniMmEr9mROxjzmkD/r1zZrVriiKvflX3tqb546jJI1+C4Ec4keSaIyT7CsRk
-         +qNw==
-X-Gm-Message-State: AOAM533PN8itZSQVURtP2e1Xl/iBcD8w7T04UfVdYs6IwID45sFiR3YD
-        0fmiwQtRJOk/6VnT8Q2HRMMSwAmSlwq2dnIzmx0=
-X-Google-Smtp-Source: ABdhPJwcV73eWJKl6y1TZ8kmk+VMYL9f7Lq4R3XWgarfOsOR1Cp64ME3FwcsnnO7UkuI3clhFkNFZw==
-X-Received: by 2002:a17:906:360d:b0:6e8:7f57:2d4d with SMTP id q13-20020a170906360d00b006e87f572d4dmr20453845ejb.736.1650485264557;
-        Wed, 20 Apr 2022 13:07:44 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm7133435ejj.142.2022.04.20.13.07.42
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 13:07:42 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id u3so3762384wrg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:07:42 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr15354025lfh.687.1650485251826; Wed, 20
- Apr 2022 13:07:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cccalB/f7dl98H1DWBiuWR8XYUD40T0nXDNgYapNT6Q=;
+        b=llci3FhfUTn+q+HOGwnga44skNvOCyAz+Wvvkkr4FmujjZaQnimWCrUX947W06Qaaw
+         YKq+mdoloNgaZl3kUmjMZ7jqlpzvfxMu2s1Eby8QWjRn9/gZ37Vhpwm8vIlnm+1/L+VN
+         fydsY/uyZeOWBlOxrdpllaPR9IlobrXfycly6c5ejwp2JKcape46gBfh26LHcYBml9md
+         Zq+CYvGqzMI96gU7hS7yF5x30EPSplq6/La9Pdi5ge2yEfEmwulq4FijaX8Y9zyZvQYB
+         lFfrY1bN0RQPOjc2+1cbXFC9bh4bY5NDnm2S6y00ZeLOPSF1ogG5yF1rEPgbHwiRSQhp
+         BoKQ==
+X-Gm-Message-State: AOAM530G0bZY548P49jrc/GIWHgI9BUkZ0ewTG5Qj5bj28gKLRY9TPL7
+        RJ8PDpwY9FKWpX5cM2QaLK0=
+X-Google-Smtp-Source: ABdhPJyZfzCx8LHq+K++oK2wId/JfxwpHxd20K3/BkHPNopiYdq5l3FNSMvilCLfPyoLPw1CmeE5Xg==
+X-Received: by 2002:a17:907:8687:b0:6e8:d71a:7a51 with SMTP id qa7-20020a170907868700b006e8d71a7a51mr20171221ejc.265.1650485259524;
+        Wed, 20 Apr 2022 13:07:39 -0700 (PDT)
+Received: from anparri.mshome.net (host-82-53-3-95.retail.telecomitalia.it. [82.53.3.95])
+        by smtp.gmail.com with ESMTPSA id gy10-20020a170906f24a00b006e894144707sm7126853ejb.53.2022.04.20.13.07.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 13:07:38 -0700 (PDT)
+From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+To:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Subject: [PATCH 0/5] hv_sock: Hardening changes
+Date:   Wed, 20 Apr 2022 22:07:15 +0200
+Message-Id: <20220420200720.434717-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-6-yuzhao@google.com>
- <20220411191615.a34959bdcc25ef3f9c16a7ce@linux-foundation.org>
- <20220412070616.GT2731@worktop.programming.kicks-ass.net> <CAOUHufbUyTL-xx1RBovfSh+CrK7mBHGOouvyQBjy1RX1f3dkzw@mail.gmail.com>
-In-Reply-To: <CAOUHufbUyTL-xx1RBovfSh+CrK7mBHGOouvyQBjy1RX1f3dkzw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 20 Apr 2022 13:07:15 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiPHodQRZuO=b9bzB_e42NkpW4MH6-kWbTp8oYnHMk0WA@mail.gmail.com>
-Message-ID: <CAHk-=wiPHodQRZuO=b9bzB_e42NkpW4MH6-kWbTp8oYnHMk0WA@mail.gmail.com>
-Subject: Re: [PATCH v10 05/14] mm: multi-gen LRU: groundwork
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,12 +78,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 5:39 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> A related question: if I pass new = old to try_cmpxchg(), does it know
-> that and avoid an unnecessary atomic op?
+Changes since RFC[1]:
 
-No. try_cmpxchg() basically translates directly to a cmpxchg
-instruction (on x86) with the return value being the eflags 'Z' bit.
+  - Massage changelogs, fix typo
+  - Drop "hv_sock: Initialize send_buf in hvs_stream_enqueue()"
+  - Remove style/newline change
+  - Remove/"inline" hv_pkt_iter_first_raw()
 
-               Linus
+Applies to v5.18-rc3.
+
+Thanks,
+  Andrea
+
+[1] https://lkml.kernel.org/r/20220413204742.5539-1-parri.andrea@gmail.com
+
+Andrea Parri (Microsoft) (5):
+  hv_sock: Check hv_pkt_iter_first_raw()'s return value
+  hv_sock: Copy packets sent by Hyper-V out of the ring buffer
+  hv_sock: Add validation for untrusted Hyper-V values
+  Drivers: hv: vmbus: Accept hv_sock offers in isolated guests
+  Drivers: hv: vmbus: Refactor the ring-buffer iterator functions
+
+ drivers/hv/channel_mgmt.c        |  8 ++++--
+ drivers/hv/ring_buffer.c         | 32 ++++++---------------
+ include/linux/hyperv.h           | 48 ++++++++++----------------------
+ net/vmw_vsock/hyperv_transport.c | 22 ++++++++++++---
+ 4 files changed, 48 insertions(+), 62 deletions(-)
+
+-- 
+2.25.1
+

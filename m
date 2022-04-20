@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD595087E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887265087EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378393AbiDTMSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
+        id S1378427AbiDTMS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244556AbiDTMSF (ORCPT
+        with ESMTP id S242236AbiDTMSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:18:05 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C25C167F4;
-        Wed, 20 Apr 2022 05:15:18 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q12so1427733pgj.13;
-        Wed, 20 Apr 2022 05:15:18 -0700 (PDT)
+        Wed, 20 Apr 2022 08:18:25 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4A0167F4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:15:39 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id o127so1567466iof.12
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:15:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YbcYiKXfCytla+BW4m2NKTI4lgOrUp85w6nmM+TEXIw=;
-        b=Z0jvUNK8/qSRcR9etARXOLLU5B+2xz3X6wOCfHECJfGbT3gLbiJ13mZruISUgE3FMG
-         JwxvK4kvsmkIPtHmrHtcE9mu71jkG+4eSi4adiwCm85XTdbGBL9aYTE7Y5Yks93NDP/v
-         yT/pymRk/On1pQFIqvzpGNKrJKxfI6qjx0C17FVpL+7ErX2kvIY+khOUPGB4ZUAGio/r
-         IqHpb2rNvHePX9QLSlM2eyDp0hh5f/KdrBysbGbI+SqwXqeXWb0HNyOuWhX3bIEiN4uG
-         J0b2qj94ba21wttJ9LONUB/CB8/RDXgauhgjEU9FuTlo6ScO1ZjlJUbu+/U9w10Aq6z4
-         /0KA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=Ctf05BnnO/qOOsj3lddSfaG/ckbIuPH18mve0wqxytc=;
+        b=MOLLrmIbPhbcuVPkAQ//MoR8UOLTM7HHPzV8X75L6wD9+Wdrs1poUTr/Dge/vUt5Sl
+         g3JxL8ioJFyr49Foa1yI8VuHEwf7Urlsu6wkJI+RL36Cy1vQUwkchkt7JdPmtuXORkQ4
+         x8RMivE61Gx/gtWTJnsLGiKnd8M8gPPExucRmI+KrI2/FAxVdNQwNxO7coS3ll0/wUuk
+         l/DukXjH5WTNMfBpn5TM+wOkOqoURzbNEfcmeBhTOui/4WnCxqL+IniflFx4v6rqmTCa
+         3fzieVNrdABSaiWvxg6hCSReLlqHZpUuo2eGZoui1RivR1kxMK3ZQJIVJsnk1Je1dv5+
+         Z/kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YbcYiKXfCytla+BW4m2NKTI4lgOrUp85w6nmM+TEXIw=;
-        b=OBI4HNQSkFH+QSuwXq2+Ky8eiGDYBC7wcCad7ee2fOApAxblXQrzrtDW2mTnqJ/Xjg
-         KM/tRPzhbQoNdvFlPx6cooDaMTSIACzYi10tZzUbYvti1kSD2A9v1pofyVKyQxYbOmlg
-         BI3kr89vQiqt4mdAsUXNR9UeWFZ8dPUL6cSAhDKx69yf35SxgsaA1vvAKFoUqUgVdqC0
-         yf2bY6wkGgN25ESpEI6FF4lHgd9Xp14e6HEGXqPsMv2eai7kYkRAzJFKpO1EB+Dsn0Kn
-         lUUC1sJw+rs+YQgmFT4riSm2au9pPcyP55gxh20IWZIm0G7vQl0G+aeYTW65rgOdPWFQ
-         A3OA==
-X-Gm-Message-State: AOAM533oyB8QHVCT+WHgH3v5jVGn3fSPBN+v8Es/Tj+jfzv9RM8fxg19
-        TqI8zjHmMfAI5byjC/AA2vXNn4fCBwbjnIdFTVv3iIGkbOWP
-X-Google-Smtp-Source: ABdhPJyZ+PcwvhxxbxJOT+h82qW3FnSblF7avVFdG6+aRm4zvELC8w+IzdSN0zx7uwAcdfqzChII1d/w6xflu3Rxb6c=
-X-Received: by 2002:a63:ce45:0:b0:399:1124:fbfe with SMTP id
- r5-20020a63ce45000000b003991124fbfemr19430118pgi.542.1650456918078; Wed, 20
- Apr 2022 05:15:18 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ctf05BnnO/qOOsj3lddSfaG/ckbIuPH18mve0wqxytc=;
+        b=OCq2ULG8OQuwOZVHCHFFhFYPax3bCOGt0Jja1PTtFEWdluAS9p860yfpQST7gzujkG
+         bNVkOlVZmYLxSgVEMzZ6CCJNKFLbeTCSMBTvr0D17QcIdRpU9GRAwKV7LuEj2/IMuCiJ
+         ETJ+kK9hVCVhSwuhiSO7PYZ0iSFjHoE0uj5pDyGsM8X0u9HdivqA+GPl0nPMQ4coJ7k/
+         pCFrrug9mflTHEP3tIB8dUF+4xbl+KDeDy26FM4Ed5AlGeLic+s6mOl+tWDa5ccsyP/U
+         NBiec6ve8EdWi8pW07deQJke7GZnJkRvphAQzuJk4Wy7jUVbkrxc+sJwHOD/kRiGgyiS
+         bgMQ==
+X-Gm-Message-State: AOAM5316jZVNlb2s/YSQu4xtKYdgllZ3d1ccmLju3NFg7wLerwwhfqKa
+        CWj7iMzT3hpXuhwE4PGK5IwV8+CaUG0y5Q==
+X-Google-Smtp-Source: ABdhPJxWfk/nAf1Dm0w32dF4UstB4QlQHnDUirwxOVjblMaKE8IgXOAi2O3VwePL6xJC0hz1fj2o7Q==
+X-Received: by 2002:a05:6638:481a:b0:326:6a2c:2396 with SMTP id cp26-20020a056638481a00b003266a2c2396mr9535358jab.122.1650456938840;
+        Wed, 20 Apr 2022 05:15:38 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id 131-20020a6b0189000000b0065393383518sm8806980iob.48.2022.04.20.05.15.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 05:15:38 -0700 (PDT)
+Message-ID: <caec273c-b15c-6dca-cd8e-e1b48c5d5490@gmail.com>
+Date:   Wed, 20 Apr 2022 14:15:35 +0200
 MIME-Version: 1.0
-References: <CAMhUBjkVME8D5KsHvT=uddBsW_Bh6wr7qeXS=UpQD4LgPmHffQ@mail.gmail.com>
- <05433153-0424-ab66-1573-993d0490c5bc@opensource.wdc.com> <CAMhUBj=JsiHnnQzrqPKzA=Z2+589Ju_HE0cFKyon58Fk0waeAQ@mail.gmail.com>
- <3045fde1-2d5b-e731-ef18-6cf3f0987259@opensource.wdc.com> <CAMhUBjnG75XANF1E5KUyigKSmhxzvJytfapieC6_jpKdiFwzSg@mail.gmail.com>
- <e7bd823c-c387-00e7-3060-97f224df6da4@opensource.wdc.com>
-In-Reply-To: <e7bd823c-c387-00e7-3060-97f224df6da4@opensource.wdc.com>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Wed, 20 Apr 2022 20:15:07 +0800
-Message-ID: <CAMhUBjmz1rCDDps3guWBXyOREB6K-dZDg0xQ78FJ18WQvWtejA@mail.gmail.com>
-Subject: Re: [BUG] ata: pata_marvell: Warning when probing the module
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RESEND PATCH] soc: mediatek: cmdq: Use mailbox rx_callback
+ instead of cmdq_task_cb
+Content-Language: en-US
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1650102868-26219-1-git-send-email-chunkuang.hu@kernel.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <1650102868-26219-1-git-send-email-chunkuang.hu@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,65 +75,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 11:07 AM Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
->
-> On 4/20/22 11:21, Zheyu Ma wrote:
-> > On Wed, Apr 13, 2022 at 11:42 AM Damien Le Moal
-> > <damien.lemoal@opensource.wdc.com> wrote:
-> >>
-> >> On 4/12/22 15:34, Zheyu Ma wrote:
-> >>> On Mon, Apr 11, 2022 at 7:53 AM Damien Le Moal
-> >>> <damien.lemoal@opensource.wdc.com> wrote:
-> >>>>
-> >>>> On 4/10/22 15:30, Zheyu Ma wrote:
-> >>>>> Hello,
-> >>>>>
-> >>>>> I found a bug in the pata_marvell module.
-> >>>>> When probing the driver, it seems to trigger the error path and
-> >>>>> executes the function marvell_cable_detect(), but the
-> >>>>> 'ap->ioaddr.bmdma_addr' is not initialized, which causes a warning.
-> >>>>
-> >>>> I do not have this hardware so I cannot debug this. Please debug it and
-> >>>> send a patch. bmdma_addr is normally set in ata_pci_bmdma_init(), but some
-> >>>> drivers set it manually in their probe functions. No idea about the
-> >>>> marvell driver, I have not checked it.
-> >>>
-> >>> To be honest I don't have a good solution to this problem, because
-> >>> other drivers don't have similar behavior. The marvell driver doesn't
-> >>> even initialize 'bmdma_addr' before calling 'cable_detect'.
-> >>
-> >> Then this is the bug that needs to be fixed, no ?
-> >>
-> >>> So a simple idea I have is to check if 'bmdma_addr' is 0 before
-> >>> reading it and if so return the error code ATA_CBL_NONE.
-> >>
-> >> And if indeed, even after it is initialized it is still 0, then yes, this
-> >> change seems sensible.
-> >
-> > Sorry for the late reply, I found the root cause of this issue.
-> > The marvell driver execute the ata_pci_bmdma_init() function, but the
-> > driver just returned at the following code snippet.
-> >
-> > if (pci_resource_start(pdev, 4) == 0) {
-> >       ata_bmdma_nodma(host, "BAR4 is zero");
-> >       return;
-> > }
-> >
-> > So the driver didn't initialize the 'bmdma_addr' but used it in the
-> > cable_detect() function.
-> > It seems that the problem is caused by the hardware, is this a bug
-> > that we should fix?
->
-> So it looks like your adapter is saying: I do not support DMA.
-> In that case, having bmdma_addr as 0 should be expected and
-> pata_marvel_cable_detect() should check the address before attempting an
-> ioread8(). It is weird that the cable information is in that bar though...
->
-> In any case, you should check the adapter specs to verify how the cable
-> type can be detected. And if unknown when bmdma_addr is 0, then just
-> return ATA_CBL_PATA_UNK.
 
-Thank you very much for your detailed explanation, it helped me a lot :)
 
-Zheyu Ma
+On 16/04/2022 11:54, Chun-Kuang Hu wrote:
+> rx_callback is a standard mailbox callback mechanism and could cover the
+> function of proprietary cmdq_task_cb, so use the standard one instead of
+> the proprietary one. Client has changed to use the standard callback
+> machanism and sync dma buffer in client driver, so remove the proprietary
+> callback in cmdq helper.
+> 
+> Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+
+Applied, thanks
+
+> ---
+>   drivers/soc/mediatek/mtk-cmdq-helper.c | 25 +------------------------
+>   include/linux/soc/mediatek/mtk-cmdq.h  |  5 +----
+>   2 files changed, 2 insertions(+), 28 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
+> index 3c8e421..c1837a4 100644
+> --- a/drivers/soc/mediatek/mtk-cmdq-helper.c
+> +++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
+> @@ -425,34 +425,11 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt)
+>   }
+>   EXPORT_SYMBOL(cmdq_pkt_finalize);
+>   
+> -static void cmdq_pkt_flush_async_cb(struct cmdq_cb_data data)
+> -{
+> -	struct cmdq_pkt *pkt = (struct cmdq_pkt *)data.data;
+> -	struct cmdq_task_cb *cb = &pkt->cb;
+> -	struct cmdq_client *client = (struct cmdq_client *)pkt->cl;
+> -
+> -	dma_sync_single_for_cpu(client->chan->mbox->dev, pkt->pa_base,
+> -				pkt->cmd_buf_size, DMA_TO_DEVICE);
+> -	if (cb->cb) {
+> -		data.data = cb->data;
+> -		cb->cb(data);
+> -	}
+> -}
+> -
+> -int cmdq_pkt_flush_async(struct cmdq_pkt *pkt, cmdq_async_flush_cb cb,
+> -			 void *data)
+> +int cmdq_pkt_flush_async(struct cmdq_pkt *pkt)
+>   {
+>   	int err;
+>   	struct cmdq_client *client = (struct cmdq_client *)pkt->cl;
+>   
+> -	pkt->cb.cb = cb;
+> -	pkt->cb.data = data;
+> -	pkt->async_cb.cb = cmdq_pkt_flush_async_cb;
+> -	pkt->async_cb.data = pkt;
+> -
+> -	dma_sync_single_for_device(client->chan->mbox->dev, pkt->pa_base,
+> -				   pkt->cmd_buf_size, DMA_TO_DEVICE);
+> -
+>   	err = mbox_send_message(client->chan, pkt);
+>   	if (err < 0)
+>   		return err;
+> diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
+> index ac6b5f3..2b498f4 100644
+> --- a/include/linux/soc/mediatek/mtk-cmdq.h
+> +++ b/include/linux/soc/mediatek/mtk-cmdq.h
+> @@ -268,8 +268,6 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt);
+>    * cmdq_pkt_flush_async() - trigger CMDQ to asynchronously execute the CMDQ
+>    *                          packet and call back at the end of done packet
+>    * @pkt:	the CMDQ packet
+> - * @cb:		called at the end of done packet
+> - * @data:	this data will pass back to cb
+>    *
+>    * Return: 0 for success; else the error code is returned
+>    *
+> @@ -277,7 +275,6 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt);
+>    * at the end of done packet. Note that this is an ASYNC function. When the
+>    * function returned, it may or may not be finished.
+>    */
+> -int cmdq_pkt_flush_async(struct cmdq_pkt *pkt, cmdq_async_flush_cb cb,
+> -			 void *data);
+> +int cmdq_pkt_flush_async(struct cmdq_pkt *pkt);
+>   
+>   #endif	/* __MTK_CMDQ_H__ */

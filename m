@@ -2,122 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04936508047
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DD8508045
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359333AbiDTEsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 00:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
+        id S1359345AbiDTEtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 00:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359324AbiDTEsu (ORCPT
+        with ESMTP id S1347823AbiDTEts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 00:48:50 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF5F27169
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 21:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650429965; x=1681965965;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6Jq42IRGEEJWZkcmP/MYUdDiJ4JiyROYfjSGbMV+q4Y=;
-  b=R6oU3aAQ9ORGorGLW6Mm24H3ZKLnvJMgObb5jU+sm5Tp39rsC6CjUbcG
-   713kqUT0IYx2Asxoe0PdFm03T1Ra1gZL7jfTQkokBvW8G3WD0TaliDpiT
-   GxwK9dDSZ/NlS5qDUP+foaaWINW2iPZjVqehYVu6mJHX163QSBng6PJSq
-   ihRK3lMpG4Y2v7yxK9jW/VCzG8uoIvCrwe5iFwU52MiGxCtvwzVbhDUjH
-   0+T7vOGO0aSt+Far5hovKUADB3P5q1pahcJzzh3Gyi6eGwmx0Kewod3dC
-   1TQt/b4quEkS+eXepNXpMCj60ZjpV8lTB4xEBijnrkEvoawM/N4p12OgA
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="244521018"
-X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="244521018"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 21:46:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="667730569"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 19 Apr 2022 21:46:03 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nh2E6-0006ZH-9C;
-        Wed, 20 Apr 2022 04:46:02 +0000
-Date:   Wed, 20 Apr 2022 12:45:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:tglx/devel/x86/amperf 7/10]
- arch/x86/kernel/cpu/aperfmperf.c:502:6: warning: no previous prototype for
- 'arch_scale_freq_tick'
-Message-ID: <202204201220.MiahK9Vg-lkp@intel.com>
+        Wed, 20 Apr 2022 00:49:48 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107FA2716C;
+        Tue, 19 Apr 2022 21:47:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kjp6r2Qqvz4xNm;
+        Wed, 20 Apr 2022 14:47:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650430021;
+        bh=JLEeU9OwjmVMFLMs8WsriEOViHzhWndg0ZSQF4hb0no=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bUoydZnlb0isZe4mRNOyFYMRDrS5FcmGlcd8wsOIIfRofKqP+322hjwU91uTNmFmd
+         FP+307qIIyjHkQJt7InlfoRjvs6WbLkG0N4+x1m5SCL9CVScR0OhyUrky71/L3s227
+         /wm+cNKMxbJkrjR4so6iasCSgkbEfvbWU7OSPd9aifG8Ou65C6V2U9bwRNRy3zGSDA
+         lRoVAqHeNn34AI56VFHCpvRXG/Rrxu5PheR3blIJ+0sKVh5wXx/SolsBHj4bodRRRK
+         bxz9kvYimEjjvxT7GUCijjFXLNWc85oP8qk7rF+6WRUlmt/9Ctd4lwdKNpjsneBSx2
+         Iu6QA2xOM2lWw==
+Date:   Wed, 20 Apr 2022 14:46:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robherring2@gmail.com>
+Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Rob Herring <robh@kernel.org>
+Subject: linux-next: manual merge of the pinctrl tree with the devicetree
+ tree
+Message-ID: <20220420144656.251e6261@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/SOjFdFnKjhlEH4jnc2w4GVl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block tglx/devel/x86/amperf
-head:   9968b9bf69c36ec939d25ac6e0cc8e1d52075490
-commit: 1d1a6fffce4ecc387d657ef959e5b7519098265e [7/10] x86/aperfmperf: Make parts of the frequency invariance code unconditional
-config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220420/202204201220.MiahK9Vg-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/1d1a6fffce4ecc387d657ef959e5b7519098265e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tglx/devel/x86/amperf
-        git checkout 1d1a6fffce4ecc387d657ef959e5b7519098265e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/cpu/
+--Sig_/SOjFdFnKjhlEH4jnc2w4GVl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi all,
 
-All warnings (new ones prefixed by >>):
+Today's linux-next merge of the pinctrl tree got a conflict in:
 
->> arch/x86/kernel/cpu/aperfmperf.c:502:6: warning: no previous prototype for 'arch_scale_freq_tick' [-Wmissing-prototypes]
-     502 | void arch_scale_freq_tick(void)
-         |      ^~~~~~~~~~~~~~~~~~~~
+  Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
 
+between commit:
 
-vim +/arch_scale_freq_tick +502 arch/x86/kernel/cpu/aperfmperf.c
+  998282c6dad8 ("dt-bindings: qcom,pdc: Add SM6350 compatible")
 
-a700c9188e7c84 Thomas Gleixner 2022-04-13  501  
-a700c9188e7c84 Thomas Gleixner 2022-04-13 @502  void arch_scale_freq_tick(void)
-a700c9188e7c84 Thomas Gleixner 2022-04-13  503  {
-a700c9188e7c84 Thomas Gleixner 2022-04-13  504  	struct aperfmperf *s = this_cpu_ptr(&cpu_samples);
-a700c9188e7c84 Thomas Gleixner 2022-04-13  505  	u64 acnt, mcnt, aperf, mperf;
-a700c9188e7c84 Thomas Gleixner 2022-04-13  506  
-1d1a6fffce4ecc Thomas Gleixner 2022-04-13  507  	if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
-a700c9188e7c84 Thomas Gleixner 2022-04-13  508  		return;
-a700c9188e7c84 Thomas Gleixner 2022-04-13  509  
-a700c9188e7c84 Thomas Gleixner 2022-04-13  510  	rdmsrl(MSR_IA32_APERF, aperf);
-a700c9188e7c84 Thomas Gleixner 2022-04-13  511  	rdmsrl(MSR_IA32_MPERF, mperf);
-a700c9188e7c84 Thomas Gleixner 2022-04-13  512  	acnt = aperf - s->aperf;
-a700c9188e7c84 Thomas Gleixner 2022-04-13  513  	mcnt = mperf - s->mperf;
-a700c9188e7c84 Thomas Gleixner 2022-04-13  514  
-a700c9188e7c84 Thomas Gleixner 2022-04-13  515  	s->aperf = aperf;
-a700c9188e7c84 Thomas Gleixner 2022-04-13  516  	s->mperf = mperf;
-a700c9188e7c84 Thomas Gleixner 2022-04-13  517  
-a700c9188e7c84 Thomas Gleixner 2022-04-13  518  	scale_freq_tick(acnt, mcnt);
-a700c9188e7c84 Thomas Gleixner 2022-04-13  519  }
-1d1a6fffce4ecc Thomas Gleixner 2022-04-13  520  
+from the devicetree tree and commit:
 
-:::::: The code at line 502 was first introduced by commit
-:::::: a700c9188e7c842054b480a303988ea37e111e8b x86/aperfmperf: Restructure arch_scale_freq_tick()
+  6d289c378af4 ("dt-bindings: qcom,pdc: Add compatible for SM8150")
 
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+from the pinctrl tree.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I fixed it up (see below - I "corrected" the SM8150 in line with the former
+commit) and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be mentioned
+to your upstream maintainer when your tree is submitted for merging.
+You may also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.t=
+xt
+index 3b7b1134dea9,bd3539644d3f..000000000000
+--- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
++++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
+@@@ -21,9 -21,9 +21,10 @@@ Properties
+  		    - "qcom,sc7180-pdc": For SC7180
+  		    - "qcom,sc7280-pdc": For SC7280
+  		    - "qcom,sdm845-pdc": For SDM845
+ -		    - "qcom,sdm8150-pdc": For SM8150
+ -		    - "qcom,sdm8250-pdc": For SM8250
+ -		    - "qcom,sdm8350-pdc": For SM8350
+ +		    - "qcom,sm6350-pdc": For SM6350
+++		    - "qcom,sm8150-pdc": For SM8150
+ +		    - "qcom,sm8250-pdc": For SM8250
+ +		    - "qcom,sm8350-pdc": For SM8350
+ =20
+  - reg:
+  	Usage: required
+
+--Sig_/SOjFdFnKjhlEH4jnc2w4GVl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJfkEAACgkQAVBC80lX
+0GzEaQf9GSFO8+rtJuMZJNMGMGkEZ8rUPp5YVPwFMjJEBqe/NukCRE0SWNtGKsRJ
+27UDhWrNAR+TdiKOYECLX2UnZUhPTkBe8zyp6sv+QsVrDbP0lhg06nxE4vlwVYOr
+kd66cU0J6jbIrKWtczrSeAWoSRZLsn0pz37XELfX4S4E7DH+EsmJNkSmf3YxIS/N
+Qcf1CG14Zaq8RUk6e/78wj94wp7luGxQwbPn5LrYnvX/RQyhA7ydqaHVeMphzWnr
+MjPrBvFH+IQOYvCi2/Tx6HJPr5XStLSGi8NiaBx6LRANBbw0aLBVpqseDG00i9HV
+Y+wkQRudzl+W7mtzBzKC8+I/TnNUUA==
+=DvAS
+-----END PGP SIGNATURE-----
+
+--Sig_/SOjFdFnKjhlEH4jnc2w4GVl--

@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149155085D8
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7205085D9
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377671AbiDTK12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
+        id S1377684AbiDTK1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349965AbiDTK1Q (ORCPT
+        with ESMTP id S1359472AbiDTK1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:27:16 -0400
+        Wed, 20 Apr 2022 06:27:17 -0400
 Received: from euporie.uberspace.de (euporie.uberspace.de [185.26.156.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3339A3F338
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:24:29 -0700 (PDT)
-Received: (qmail 15688 invoked by uid 989); 20 Apr 2022 10:24:28 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789753F885
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:24:31 -0700 (PDT)
+Received: (qmail 15788 invoked by uid 989); 20 Apr 2022 10:24:29 -0000
 Authentication-Results: euporie.uberspace.de;
         auth=pass (plain)
 From:   Florian Fischer <florian.fischer@muhq.space>
@@ -27,19 +27,19 @@ Cc:     Ian Rogers <irogers@google.com>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Florian Fischer <florian.fischer@muhq.space>
-Subject: [PATCH v4 2/3] perf stat: add user_time and system_time events
-Date:   Wed, 20 Apr 2022 12:23:53 +0200
-Message-Id: <20220420102354.468173-3-florian.fischer@muhq.space>
+Subject: [PATCH v4 3/3] perf list: print all available tool events
+Date:   Wed, 20 Apr 2022 12:23:54 +0200
+Message-Id: <20220420102354.468173-4-florian.fischer@muhq.space>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220420102354.468173-1-florian.fischer@muhq.space>
 References: <20220420102354.468173-1-florian.fischer@muhq.space>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Bar: -----
-X-Rspamd-Report: R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) REPLY(-4) MID_CONTAINS_FROM(1) BAYES_HAM(-2.984822)
-X-Rspamd-Score: -5.584822
+X-Rspamd-Report: R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) REPLY(-4) MID_CONTAINS_FROM(1) BAYES_HAM(-2.968525)
+X-Rspamd-Score: -5.568525
 Received: from unknown (HELO unkown) (::1)
-        by euporie.uberspace.de (Haraka/2.8.28) with ESMTPSA; Wed, 20 Apr 2022 12:24:28 +0200
+        by euporie.uberspace.de (Haraka/2.8.28) with ESMTPSA; Wed, 20 Apr 2022 12:24:29 +0200
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,FROM_SUSPICIOUS_NTLD,
         MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
@@ -49,160 +49,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It bothered me that during benchmarking using perf stat (to collect
-for example CPU cache events) I could not simultaneously retrieve the
-times spend in user or kernel mode in a machine readable format.
-
-When running perf stat the output for humans contains the times
-reported by rusage and wait4.
-
-$ perf stat -e cache-misses:u -- true
-
- Performance counter stats for 'true':
-
-             4,206      cache-misses:u
-
-       0.001113619 seconds time elapsed
-
-       0.001175000 seconds user
-       0.000000000 seconds sys
-
-But perf stat's machine-readable format does not provide this information.
-
-$ perf stat -x, -e cache-misses:u -- true
-4282,,cache-misses:u,492859,100.00,,
-
-I found no way to retrieve this information using the available events
-while using machine-readable output.
-
-This patch adds two new tool internal events 'user_time'
-and 'system_time', similarly to the already present 'duration_time' event.
-
-Both events use the already collected rusage information obtained by wait4
-and tracked in the global ru_stats.
-
-Examples presenting cache-misses and rusage information in both human and
-machine-readable form:
-
-$ ./perf stat -e duration_time,user_time,system_time,cache-misses -- grep -q -r duration_time .
-
- Performance counter stats for 'grep -q -r duration_time .':
-
-        67,422,542 ns   duration_time:u
-        50,517,000 ns   user_time:u
-        16,839,000 ns   system_time:u
-            30,937      cache-misses:u
-
-       0.067422542 seconds time elapsed
-
-       0.050517000 seconds user
-       0.016839000 seconds sys
-
-$ ./perf stat -x, -e duration_time,user_time,system_time,cache-misses -- grep -q -r duration_time .
-72134524,ns,duration_time:u,72134524,100.00,,
-65225000,ns,user_time:u,65225000,100.00,,
-6865000,ns,system_time:u,6865000,100.00,,
-38705,,cache-misses:u,71189328,100.00,,
+Introduce names for the new tool events 'user_time' and 'system_time'.
 
 Signed-off-by: Florian Fischer <florian.fischer@muhq.space>
 ---
- tools/perf/builtin-stat.c      | 36 ++++++++++++++++++++++++++--------
- tools/perf/util/evsel.h        |  4 ++++
- tools/perf/util/parse-events.c |  4 +++-
- tools/perf/util/parse-events.l |  2 ++
- 4 files changed, 37 insertions(+), 9 deletions(-)
+ tools/perf/util/evsel.c        | 19 ++++++++++------
+ tools/perf/util/evsel.h        |  1 +
+ tools/perf/util/parse-events.c | 40 +++++++++++++++++++++++++++++-----
+ 3 files changed, 47 insertions(+), 13 deletions(-)
 
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 61faffb535f5..dea34c8990ae 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -342,15 +342,35 @@ static int evsel__write_stat_event(struct evsel *counter, int cpu_map_idx, u32 t
- static int read_single_counter(struct evsel *counter, int cpu_map_idx,
- 			       int thread, struct timespec *rs)
- {
--	if (counter->tool_event == PERF_TOOL_DURATION_TIME) {
--		u64 val = rs->tv_nsec + rs->tv_sec*1000000000ULL;
--		struct perf_counts_values *count =
--			perf_counts(counter->counts, cpu_map_idx, thread);
--		count->ena = count->run = val;
--		count->val = val;
--		return 0;
-+	switch(counter->tool_event) {
-+		case PERF_TOOL_DURATION_TIME: {
-+			u64 val = rs->tv_nsec + rs->tv_sec*1000000000ULL;
-+			struct perf_counts_values *count =
-+				perf_counts(counter->counts, cpu_map_idx, thread);
-+			count->ena = count->run = val;
-+			count->val = val;
-+			return 0;
-+		}
-+		case PERF_TOOL_USER_TIME:
-+		case PERF_TOOL_SYSTEM_TIME: {
-+			u64 val;
-+			struct perf_counts_values *count =
-+				perf_counts(counter->counts, cpu_map_idx, thread);
-+			if (counter->tool_event == PERF_TOOL_USER_TIME)
-+				val = ru_stats.ru_utime_usec_stat.mean;
-+			else
-+				val = ru_stats.ru_stime_usec_stat.mean;
-+			count->ena = count->run = val;
-+			count->val = val;
-+			return 0;
-+		}
-+		default:
-+		case PERF_TOOL_NONE:
-+			return evsel__read_counter(counter, cpu_map_idx, thread);
-+		case PERF_TOOL_MAX:
-+			/* This should never be reached */
-+			return 0;
- 	}
--	return evsel__read_counter(counter, cpu_map_idx, thread);
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 2a1729e7aee4..d38722560e80 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -597,6 +597,17 @@ static int evsel__sw_name(struct evsel *evsel, char *bf, size_t size)
+ 	return r + evsel__add_modifiers(evsel, bf + r, size - r);
  }
  
- /*
++const char *evsel__tool_names[PERF_TOOL_MAX] = {
++	"duration_time",
++	"user_time",
++	"system_time",
++};
++
++static int evsel__tool_name(enum perf_tool_event ev, char *bf, size_t size)
++{
++	return scnprintf(bf, size, "%s", evsel__tool_names[ev]);
++}
++
+ static int __evsel__bp_name(char *bf, size_t size, u64 addr, u64 type)
+ {
+ 	int r;
+@@ -723,12 +734,6 @@ static int evsel__raw_name(struct evsel *evsel, char *bf, size_t size)
+ 	return ret + evsel__add_modifiers(evsel, bf + ret, size - ret);
+ }
+ 
+-static int evsel__tool_name(char *bf, size_t size)
+-{
+-	int ret = scnprintf(bf, size, "duration_time");
+-	return ret;
+-}
+-
+ const char *evsel__name(struct evsel *evsel)
+ {
+ 	char bf[128];
+@@ -754,7 +759,7 @@ const char *evsel__name(struct evsel *evsel)
+ 
+ 	case PERF_TYPE_SOFTWARE:
+ 		if (evsel->tool_event)
+-			evsel__tool_name(bf, sizeof(bf));
++			evsel__tool_name(evsel->tool_event, bf, sizeof(bf));
+ 		else
+ 			evsel__sw_name(evsel, bf, sizeof(bf));
+ 		break;
 diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index 041b42d33bf5..7e2209b47b39 100644
+index 7e2209b47b39..45d674812239 100644
 --- a/tools/perf/util/evsel.h
 +++ b/tools/perf/util/evsel.h
-@@ -30,6 +30,10 @@ typedef int (evsel__sb_cb_t)(union perf_event *event, void *data);
- enum perf_tool_event {
- 	PERF_TOOL_NONE		= 0,
- 	PERF_TOOL_DURATION_TIME = 1,
-+	PERF_TOOL_USER_TIME = 2,
-+	PERF_TOOL_SYSTEM_TIME = 3,
-+
-+	PERF_TOOL_MAX,
- };
+@@ -262,6 +262,7 @@ extern const char *evsel__hw_cache_op[PERF_COUNT_HW_CACHE_OP_MAX][EVSEL__MAX_ALI
+ extern const char *evsel__hw_cache_result[PERF_COUNT_HW_CACHE_RESULT_MAX][EVSEL__MAX_ALIASES];
+ extern const char *evsel__hw_names[PERF_COUNT_HW_MAX];
+ extern const char *evsel__sw_names[PERF_COUNT_SW_MAX];
++extern const char *evsel__tool_names[PERF_TOOL_MAX];
+ extern char *evsel__bpf_counter_events;
+ bool evsel__match_bpf_counter_events(const char *name);
  
- /** struct evsel - event selector
 diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index dd84fed698a3..064ec368a90b 100644
+index 064ec368a90b..c0e88d3b3e3c 100644
 --- a/tools/perf/util/parse-events.c
 +++ b/tools/perf/util/parse-events.c
-@@ -402,7 +402,9 @@ static int add_event_tool(struct list_head *list, int *idx,
- 	if (!evsel)
- 		return -ENOMEM;
- 	evsel->tool_event = tool_event;
--	if (tool_event == PERF_TOOL_DURATION_TIME) {
-+	if (tool_event == PERF_TOOL_DURATION_TIME
-+	    || tool_event == PERF_TOOL_USER_TIME
-+	    || tool_event == PERF_TOOL_SYSTEM_TIME) {
- 		free((char *)evsel->unit);
- 		evsel->unit = strdup("ns");
- 	}
-diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
-index 5b6e4b5249cf..3a9ce96c8bce 100644
---- a/tools/perf/util/parse-events.l
-+++ b/tools/perf/util/parse-events.l
-@@ -353,6 +353,8 @@ alignment-faults				{ return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_AL
- emulation-faults				{ return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_EMULATION_FAULTS); }
- dummy						{ return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_DUMMY); }
- duration_time					{ return tool(yyscanner, PERF_TOOL_DURATION_TIME); }
-+user_time						{ return tool(yyscanner, PERF_TOOL_USER_TIME); }
-+system_time						{ return tool(yyscanner, PERF_TOOL_SYSTEM_TIME); }
- bpf-output					{ return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_BPF_OUTPUT); }
- cgroup-switches					{ return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_CGROUP_SWITCHES); }
+@@ -154,6 +154,21 @@ struct event_symbol event_symbols_sw[PERF_COUNT_SW_MAX] = {
+ 	},
+ };
  
++struct event_symbol event_symbols_tool[PERF_TOOL_MAX] = {
++	[PERF_TOOL_DURATION_TIME] = {
++		.symbol = "duration_time",
++		.alias  = "",
++	},
++	[PERF_TOOL_USER_TIME] = {
++		.symbol = "user_time",
++		.alias  = "",
++	},
++	[PERF_TOOL_SYSTEM_TIME] = {
++		.symbol = "system_time",
++		.alias  = "",
++	},
++};
++
+ #define __PERF_EVENT_FIELD(config, name) \
+ 	((config & PERF_EVENT_##name##_MASK) >> PERF_EVENT_##name##_SHIFT)
+ 
+@@ -3058,21 +3073,34 @@ int print_hwcache_events(const char *event_glob, bool name_only)
+ 	return evt_num;
+ }
+ 
+-static void print_tool_event(const char *name, const char *event_glob,
++static void print_tool_event(const struct event_symbol *syms, const char *event_glob,
+ 			     bool name_only)
+ {
+-	if (event_glob && !strglobmatch(name, event_glob))
++	if (syms->symbol == NULL)
++		return;
++
++	if (event_glob && !(strglobmatch(syms->symbol, event_glob) ||
++	      (syms->alias && strglobmatch(syms->alias, event_glob))))
+ 		return;
++
+ 	if (name_only)
+-		printf("%s ", name);
+-	else
++		printf("%s ", syms->symbol);
++	else {
++		char name[MAX_NAME_LEN];
++		if (syms->alias)
++			snprintf(name, MAX_NAME_LEN, "%s OR %s", syms->symbol, syms->alias);
++		else
++			strlcpy(name, syms->symbol, MAX_NAME_LEN);
+ 		printf("  %-50s [%s]\n", name, "Tool event");
+-
++	}
+ }
+ 
+ void print_tool_events(const char *event_glob, bool name_only)
+ {
+-	print_tool_event("duration_time", event_glob, name_only);
++	// Start at 1 because the first enum entry symbols no tool event
++	for (int i = 1; i < PERF_TOOL_MAX; ++i) {
++		print_tool_event(event_symbols_tool + i, event_glob, name_only);
++	}
+ 	if (pager_in_use())
+ 		printf("\n");
+ }
 -- 
 2.36.0
 

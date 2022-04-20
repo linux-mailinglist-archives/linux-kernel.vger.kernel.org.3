@@ -2,94 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DBE508CAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CA6508CB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355310AbiDTQCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
+        id S1355374AbiDTQDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351205AbiDTQCW (ORCPT
+        with ESMTP id S1351205AbiDTQDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:02:22 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773E144A01
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:59:36 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id s18so4587625ejr.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:59:36 -0700 (PDT)
+        Wed, 20 Apr 2022 12:03:18 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE647648
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:00:31 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id 12so2144393pll.12
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:00:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YGFlvUF+6fFWy1fX1MYp4Kv8VavogLHQZ1swJRkagR4=;
-        b=VrGhL5UriOqITgYWid/yHAnlnzX/ygVds9FFW9oUPAy99QMw4Z8dDJZytWmZzwf2Ww
-         OWB7+EYY6KulPcWe7U5xX0b47etDOjTYHT+jG9wyOAQF4hXjDukNLZuNdYLbadf7D6Oy
-         sYrAmLi0Lwj4VofOM8/nN78y8+yJ2Hf5WPYJI=
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T2e4gNzW9WvbaYYhRQN8RA/sJzl40ME+FaDXHpo4ThY=;
+        b=TRx6k6nQBr/yZAp6R3CZ9o6VwyHajsNXSIktFiSElT+CKFQKR8a4aqIWqZKKeq4E/L
+         PLh6brBiSPL4DXEUy4POTH9XEhqGqEtHSrVeKMH9m7rwg0b1KQ1wlhfi4k3OfTBJXCdm
+         Ky9s3OR+3DHDNM3GnnciwZw4XF3kqZFWShliy/tmiSZ2aYisFxlTqGbV+HQnv5xu9Qun
+         AxEOHCqSQWKBH21vAqWA2Z9kbzeyQZQje9iLUaCjfVTUHQiE05eBGm3apJ7FEwxj5UaX
+         wO4Ec6HFu+QdTlrHA9nYTfXlfNyC7JPK2JrSmTDfMasSLrLfpbaSKzbITrMMrGlP9TRA
+         p2gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YGFlvUF+6fFWy1fX1MYp4Kv8VavogLHQZ1swJRkagR4=;
-        b=vtfh1eNC8r5vrtQWMvgoY1A+Vjrv/vgKbIAwC+/lG9KtP59/OBFspVJ6/Axdmg0Yv2
-         15VIeWKnp+TA4E0QGCySwAnSICSkS04W/NOoCH46eNpJe72i0KSyTnxj6DwDxjwOdgQW
-         2ZEuGrUBSXDjrTgVj6Wt0k+vjiq9kxMaizj1F26zghEEJNuEnQRKyinuC+rLgYvjsm2o
-         1AsQDA4MeaLoZGiRMJkFOGUITcJ5cDBR2G2M+ZYNX4gcSx3Rm21kzoUSJ1CKH+EPLXZX
-         IZ0lQB1UAt9Ths+lhfvSzX0FbNYb9BhO5/oF4xRezHIcTynWYS4S4gdTtr5vHvrYamBq
-         TUcQ==
-X-Gm-Message-State: AOAM533joPXxJe6GhrCJrT6PhI+QxZRrF5UtW57BaS/Y238FD1giKgxl
-        fYpsyPbmy6/loNswveqqPfeqXyPrInDxLDIM
-X-Google-Smtp-Source: ABdhPJzGgukv3K1cZEGdBlI30pcvTp7cT2L2KgyCdJvRj4B8ydBpJHR7Lr+oOHvkazE+SpETgRPYFw==
-X-Received: by 2002:a17:906:974e:b0:6bb:4f90:a6ae with SMTP id o14-20020a170906974e00b006bb4f90a6aemr19770214ejy.452.1650470374773;
-        Wed, 20 Apr 2022 08:59:34 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id lx17-20020a170906af1100b006e873dd9228sm6815185ejb.52.2022.04.20.08.59.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 08:59:33 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id w4so2856082wrg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:59:33 -0700 (PDT)
-X-Received: by 2002:a05:6000:1acb:b0:20a:a4b0:dbc8 with SMTP id
- i11-20020a0560001acb00b0020aa4b0dbc8mr7616987wry.513.1650470372923; Wed, 20
- Apr 2022 08:59:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T2e4gNzW9WvbaYYhRQN8RA/sJzl40ME+FaDXHpo4ThY=;
+        b=c3czSx2531S5jcsMHOqAA2CyyezNIipOe5orcqoNf49GZkbc4silTEO6lr3FLT+PCc
+         Kp/HFsZ2HiT6WAPTCUrnovb+Be+8LDmOOl6ueIiKLxroCwS7nQAZ/didR6sK11YEXjQi
+         ne8p0dWzdV1uaVxJ6q4MaPejB9MdMMMg3WcAho5gox+nTq8G5Lh6LTfpyR7lHzrrAQ8s
+         UyjTRXSKwcYCLlfFnAoiL4aop8MQJXynqIojj2Yix/WAGL6h/Fr0PpYTtxHTZHsPfh8D
+         9EshKC83FXpJ0z3JyGzH14cppFSuiYayw+cjCFH5hiU4Ype3F8u+oEsGOQf8nz1ezAw5
+         6qPw==
+X-Gm-Message-State: AOAM531pU4LBwivWzOPi6aPnHoIS8EHkHalUIUY29Cfi9z74vxFPNKxj
+        FdGNBqLrW5FV02qHZUbxIVck3NQyHnTqvA==
+X-Google-Smtp-Source: ABdhPJwtFoPpijOIMdaju6Yi0fGgtpz+tkg/dgMTSfHbX0Bgl4+8n48gKLhDpJGbHjbufO+Jd/r+Iw==
+X-Received: by 2002:a17:902:f143:b0:158:f8f3:73ca with SMTP id d3-20020a170902f14300b00158f8f373camr16108854plb.123.1650470431338;
+        Wed, 20 Apr 2022 09:00:31 -0700 (PDT)
+Received: from localhost.localdomain ([2409:8a28:e66:6380:7568:1633:647:d3a2])
+        by smtp.gmail.com with ESMTPSA id h18-20020a63c012000000b0039cc3c323f7sm20198676pgg.33.2022.04.20.09.00.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 09:00:30 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     rostedt@goodmis.org, mark.rutland@arm.com, mingo@redhat.com,
+        catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, broonie@kernel.org, ardb@kernel.org
+Cc:     x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, zhengqi.arch@bytedance.com,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v5 1/2] ftrace: cleanup ftrace_graph_caller enable and disable
+Date:   Thu, 21 Apr 2022 00:00:05 +0800
+Message-Id: <20220420160006.17880-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <1650439639-28428-1-git-send-email-quic_vnivarth@quicinc.com>
-In-Reply-To: <1650439639-28428-1-git-send-email-quic_vnivarth@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 20 Apr 2022 08:59:21 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XZjstRUd7tP=2ZhFMFDYtsKkzY3D5-L=UU2wD5KHXGmQ@mail.gmail.com>
-Message-ID: <CAD=FV=XZjstRUd7tP=2ZhFMFDYtsKkzY3D5-L=UU2wD5KHXGmQ@mail.gmail.com>
-Subject: Re: [V5 0/2] arm64: dts: qcom: Configure CTS pin to bias-bus-hold for bluetooth
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        quic_msavaliy@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The ftrace_[enable,disable]_ftrace_graph_caller() are used to do
+special hooks for graph tracer, which are not needed on some ARCHs
+that use graph_ops:func function to install return_hooker.
 
-On Wed, Apr 20, 2022 at 12:27 AM Vijaya Krishna Nivarthi
-<quic_vnivarth@quicinc.com> wrote:
->
-> WLAN rail was leaking power during RBSC/sleep even after turning BT off.
-> Change pinctrl configuration to handle same.
->
-> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+So introduce the weak version in ftrace core code to cleanup
+in x86.
 
-Just as a note for future patches, you don't need tags on the cover
-letter. If I respond to the cover letter and add tags it means that
-they should be added to all the patches in the series but you don't
-need to carry them forward on the cover letter itself.
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+v4:
+ - put weak ftrace_enable,disable_ftrace_graph_caller() in
+   fgraph.c instead of ftrace.c as suggested by Steve.
+
+v3:
+ - consolidate two #if into a single #if, suggested by Steve. Thanks.
+---
+ arch/x86/kernel/ftrace.c | 17 ++---------------
+ kernel/trace/fgraph.c    | 18 ++++++++++++++++++
+ 2 files changed, 20 insertions(+), 15 deletions(-)
+
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 1e31c7d21597..b09d73c2ba89 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -579,9 +579,7 @@ void arch_ftrace_trampoline_free(struct ftrace_ops *ops)
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ 
+-#ifdef CONFIG_DYNAMIC_FTRACE
+-
+-#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
++#if defined(CONFIG_DYNAMIC_FTRACE) && !defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS)
+ extern void ftrace_graph_call(void);
+ static const char *ftrace_jmp_replace(unsigned long ip, unsigned long addr)
+ {
+@@ -610,18 +608,7 @@ int ftrace_disable_ftrace_graph_caller(void)
+ 
+ 	return ftrace_mod_jmp(ip, &ftrace_stub);
+ }
+-#else /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+-int ftrace_enable_ftrace_graph_caller(void)
+-{
+-	return 0;
+-}
+-
+-int ftrace_disable_ftrace_graph_caller(void)
+-{
+-	return 0;
+-}
+-#endif /* CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+-#endif /* !CONFIG_DYNAMIC_FTRACE */
++#endif /* CONFIG_DYNAMIC_FTRACE && !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+ 
+ /*
+  * Hook the return address and push it in the stack of return addrs
+diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+index 8f4fb328133a..289311680c29 100644
+--- a/kernel/trace/fgraph.c
++++ b/kernel/trace/fgraph.c
+@@ -30,6 +30,24 @@ int ftrace_graph_active;
+ /* Both enabled by default (can be cleared by function_graph tracer flags */
+ static bool fgraph_sleep_time = true;
+ 
++/*
++ * archs can override this function if they must do something
++ * to enable hook for graph tracer.
++ */
++int __weak ftrace_enable_ftrace_graph_caller(void)
++{
++	return 0;
++}
++
++/*
++ * archs can override this function if they must do something
++ * to disable hook for graph tracer.
++ */
++int __weak ftrace_disable_ftrace_graph_caller(void)
++{
++	return 0;
++}
++
+ /**
+  * ftrace_graph_stop - set to permanently disable function graph tracing
+  *
+-- 
+2.35.2
+

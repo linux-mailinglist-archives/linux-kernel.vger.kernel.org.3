@@ -2,115 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07591508ECD
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A730508ECC
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381285AbiDTRsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 13:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S1381282AbiDTRq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 13:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243437AbiDTRsq (ORCPT
+        with ESMTP id S1381255AbiDTRqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 13:48:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C12C945AF1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650476757;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=W3NAe+4do7OzwFXlslJ1yxbsun/Vq+K/0OpwWY5c86Y=;
-        b=LbMromMblwqh32MhnadJ0rXgb9q6AVDRY/AhinJ12X+qoc/bMDFLCNrG6JBA1LnkON67ku
-        L67CB50CZxiHswm+uA1outhgDBlNslIurbHLRrq/WXIsv8+2W4RntzTzcmjWDJ+Av16HLc
-        z8IRo5zwR1cfBmQ2C2+laiVj2XhfgWU=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-490-e_KNliv9NKS4afXVA19Y6Q-1; Wed, 20 Apr 2022 13:45:56 -0400
-X-MC-Unique: e_KNliv9NKS4afXVA19Y6Q-1
-Received: by mail-qv1-f70.google.com with SMTP id ke23-20020a056214301700b0044bba34469eso963834qvb.17
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:45:56 -0700 (PDT)
+        Wed, 20 Apr 2022 13:46:53 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D2B4739A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:44:06 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id md4so2603032pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Rx+BcE/gSceiKr/zTECjP4EwFSfIzQ9iSKcxGEqhZ8E=;
+        b=S+jeltxbAM3NoFlwTYpJWXeazpb8JERjrM1BTuTkj5LB0pDMpt8FbrJbHowAG9ESGx
+         bF3K1477oF5SMjqvKdyQyw5RvTRXY8zWS3R4UbhQ0goj60wthxhIKo4p3mAIZ3o4hK2S
+         uFVIERf5sWiA4L+yQp4Dau9kCtCAGescfc61A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W3NAe+4do7OzwFXlslJ1yxbsun/Vq+K/0OpwWY5c86Y=;
-        b=OcB924CHIDZTmaAogzcKfDVlhRJLaJRYSW0sysTkXww3yPvmFRaJ9jTvh9STsteL54
-         SPyQz+E/2fEfrrgJ//eCBAWDakjBEr2ml5fORKIsvKPbQyO1hZ8/HiLMSUjSgY0JjP3i
-         243gOTvZb7fugteYyYNquAZKJiNL2RTYt3BqTj9SyLTLK0XKy0WX8iGZpgLT68+00iVM
-         2eERak6dimcXLtvYAbp/LdfdadUJ2MepdG39g9vVplDCf2R2qb+QZle0OM/aEU9cWwW8
-         xDvMbM4k7jp9vxdGE9TpwHaGt1Mz1wp3O8/CxoHp7T2pmuk0yjGmpR/6ZZ6BgrP8dd0D
-         L2IQ==
-X-Gm-Message-State: AOAM530lIjL0bG1hYI+LCqQ0naEBwEVJ7VCmf9QkRqz9voza1V0Xdfqw
-        laXxTmFtCkVpaDzeTOj2njehuLELLHRJJK87DU4bx27+YrhJTGvlaAfYrG6vRcThpwBhqirClfE
-        WpknhNW8obne609ABZmUJYZYI
-X-Received: by 2002:a05:6214:5185:b0:443:a821:31fc with SMTP id kl5-20020a056214518500b00443a82131fcmr16587285qvb.129.1650476755311;
-        Wed, 20 Apr 2022 10:45:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzYAEQ1WmpR2JrVhqp2P3DD9igLq38fXCUMcnoHblogOvHnqs0AXZEApIUEBRvAIyTJ3afR3w==
-X-Received: by 2002:a05:6214:5185:b0:443:a821:31fc with SMTP id kl5-20020a056214518500b00443a82131fcmr16587273qvb.129.1650476755110;
-        Wed, 20 Apr 2022 10:45:55 -0700 (PDT)
-Received: from fedora.redhat.com (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
-        by smtp.gmail.com with ESMTPSA id s15-20020a05620a29cf00b00680ca4b3755sm1867721qkp.119.2022.04.20.10.45.52
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Rx+BcE/gSceiKr/zTECjP4EwFSfIzQ9iSKcxGEqhZ8E=;
+        b=dapI+Anv3wLWo7JCAXdFhZb7lfSnuVxvV8xV/p0nMO1aVAzCY2ucWwh6QgW3Ay/SHV
+         taNaQ+8bBAY+Qi/oX+H6qXvHfrR7foe2hMIHrgIN1L1inYE+OERGHKWZRne7eK+DVn5O
+         DMPACav/UBOq4b0wkw1j2QNlyT/4mNJz4lTQaN8qoURETLnJ3eGgAFJWJsOYCvagA2lE
+         9A+rlyJC0nRdYwLzHNx76xG0VwkU5ugkZEUvMDbXBr3KoteDlGYpuIuvqyOq6SgpHgW3
+         Ozlj/IeqrGlbRDGOM7gyCkWw/w4G3ftWkg+TF9gPVLdimGMkTvWXFtNgiVhjPE9af2Ax
+         Cj/A==
+X-Gm-Message-State: AOAM533v8rAGF9x8gdG77vQpygpIRffADhve8wnJkCHi7tyfW3p/hr99
+        CsjrNFgOCBZvikkjLwho9d0fSw==
+X-Google-Smtp-Source: ABdhPJzHXgBTMlSzaXENo42O6xuwYeC0Yi0z/Itbb3PnHI+h5sdz1fnNSuD5YgXE9SazzmYGLZ0n/g==
+X-Received: by 2002:a17:902:c205:b0:15a:2e1b:6360 with SMTP id 5-20020a170902c20500b0015a2e1b6360mr3945500pll.152.1650476645567;
+        Wed, 20 Apr 2022 10:44:05 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p10-20020a637f4a000000b00373a2760775sm20402378pgn.2.2022.04.20.10.44.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 10:45:54 -0700 (PDT)
-From:   Adrien Thierry <athierry@redhat.com>
-To:     Maxime Ripard <mripard@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-Cc:     Adrien Thierry <athierry@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] staging: bcm2835-audio: delete TODO
-Date:   Wed, 20 Apr 2022 13:44:00 -0400
-Message-Id: <20220420174401.305964-1-athierry@redhat.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 20 Apr 2022 10:44:05 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 10:44:04 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Topi Miettinen <toiwoton@gmail.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net,
+        linux-hardening@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Salvatore Mesoraca <s.mesoraca16@gmail.com>,
+        Igor Zhbanov <izh1979@gmail.com>
+Subject: Re: [PATCH RFC 0/4] mm, arm64: In-kernel support for
+ memory-deny-write-execute (MDWE)
+Message-ID: <202204200952.F2B1F58D6B@keescook>
+References: <20220413134946.2732468-1-catalin.marinas@arm.com>
+ <202204141028.0482B08@keescook>
+ <YmAEDsGtxhim46UI@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmAEDsGtxhim46UI@arm.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete TODO since all tasks were completed:
+On Wed, Apr 20, 2022 at 02:01:02PM +0100, Catalin Marinas wrote:
+> I agree we should look at what we want to cover, though trying to avoid
+> re-inventing SELinux. With this patchset I went for the minimum that
+> systemd MDWE does with BPF.
 
-1 - fixed here:
-https://lore.kernel.org/all/20220408150359.26661-1-athierry@redhat.com/
+Right -- and I don't think we're at any risk of slippery-sloping into a
+full MAC system. :)
 
-2 - there are no remaining checkpatch.pl errors or warnings
+I'm fine with doing the implementation in stages, if we've attempted to
+design the steps (which I think you've got a good start on below).
 
-Signed-off-by: Adrien Thierry <athierry@redhat.com>
----
- drivers/staging/vc04_services/bcm2835-audio/TODO | 10 ----------
- 1 file changed, 10 deletions(-)
- delete mode 100644 drivers/staging/vc04_services/bcm2835-audio/TODO
+> I think JITs get around it using something like memfd with two separate
+> mappings to the same page. We could try to prevent such aliases but
+> allow it if an ELF note is detected (or get the JIT to issue a prctl()).
 
-diff --git a/drivers/staging/vc04_services/bcm2835-audio/TODO b/drivers/staging/vc04_services/bcm2835-audio/TODO
-deleted file mode 100644
-index b85451255db0..000000000000
---- a/drivers/staging/vc04_services/bcm2835-audio/TODO
-+++ /dev/null
-@@ -1,10 +0,0 @@
--*****************************************************************************
--*                                                                           *
--*                           TODO: BCM2835-AUDIO                             *
--*                                                                           *
--*****************************************************************************
--
--1) Revisit multi-cards options and PCM route mixer control (as per comment
--https://lore.kernel.org/lkml/s5hd0to5598.wl-tiwai@suse.de)
--
--2) Fix the remaining checkpatch.pl errors and warnings.
+Right -- I'd rather JITs carry some hard-coded property (i.e. ELF note)
+to indicate the fact that they're expecting to do these kinds of things
+rather than leaving it open for all processes.
+
+> Anyway, with a prctl() we can allow finer-grained control starting with
+> anonymous and file mappings and later extending to vma aliases,
+> writeable files etc. On top we can add a seal mask so that a process
+> cannot disable a control was set. Something like (I'm not good at
+> names):
+> 
+> 	prctl(PR_MDWX_SET, flags, seal_mask);
+> 	prctl(PR_MDWX_GET);
+> 
+> with flags like:
+> 
+> 	PR_MDWX_MMAP - basics, should cover mmap() and mprotect()
+> 	PR_MDWX_ALIAS - vma aliases, allowed with an ELF note
+> 	PR_MDWX_WRITEABLE_FILE
+
+The SARA proposal lists a lot of behavioral details to consider.
+Quoting it[1] here:
+>> - W^X enforcement will cause problems to any programs that needs
+>>   memory pages mapped both as writable and executable at the same time e.g.
+>>   programs with executable stack markings in the PT_GNU_STACK segment.
+
+IMO, executable stack markings should be considered completely
+deprecated. In fact, we've been warning about it since 2020:
+47a2ebb7f505 ("execve: warn if process starts with executable stack")
+
+So with execstack, under W^X, I think we should either:
+- refuse to exec the process (default)
+- disable W^X for the process (but not its children)
+
+>> - W!->X restriction will cause problems to any program that
+>>   needs to generate executable code at run time or to modify executable
+>>   pages e.g. programs with a JIT compiler built-in or linked against a
+>>   non-PIC library.
+
+This seems solvable with an ELF flag.
+
+>> - Executable MMAP prevention can work only with programs that have at least
+>>   partial RELRO support. It's disabled automatically for programs that
+>>   lack this feature. It will cause problems to any program that uses dlopen
+>>   or tries to do an executable mmap. Unfortunately this feature is the one
+>>   that could create most problems and should be enabled only after careful
+>>   evaluation.
+
+This seems like a variation on the execstack case, and we should be
+able to detect the state and choose a behavior based on system settings,
+and a smarter version (as SARA has) would track RELRO pages waiting for
+the loader to make them read-only.
+
+SARA was proposed with a set of feature flags[2]; quoting here:
+>> | W^X                          |  0x0008  |
+
+This is the basic property, refusing PROT_WRITE | PROT_EXEC. I note that
+SARA also rejects opening /proc/$pid/mem with FMODE_WRITE when this is
+enabled for a process. (It likely should extend to process_vm_write()
+too.)
+
+>> | W!->X Heap                   |  0x0001  |
+>> | W!->X Stack                  |  0x0002  |
+>> | W!->X Other memory           |  0x0004  |
+
+This is for the vma history tracking, and I don't think we need to
+separate this by memory type? It's nice to have the granularity, but for
+a first-pass it seems like overkill? Maybe I'm missing some detail.
+
+>> | Don't enforce, just complain |  0x0010  |
+>> | Be Verbose                   |  0x0020  |
+
+Unclear if these would work well with a non-LSM approach.
+
+>> | Executable MMAP prevention   |  0x0040  |
+
+This is the relro detection piece.
+
+>> | Trampoline emulation         |  0x0100  |
+
+This is a more advanced case for emulating execstack, but if we can just
+ignore execstack entirely, this can go away?
+
+>> | Children will inherit flags  |  0x0200  |
+
+Should a process have that control?
+
+>> | Force W^X on setprocattr     |  0x0080  |
+
+This is a "seal" trigger, which could be done through prctl().
+
+
+It looks like a bunch of the features are designed around having as much
+as possible enabled at exec time, and then tightening it further as
+various things are finished (e.g. execstack, relro, sealing, etc), which
+is, I think, what would still be needed for a process launcher to be
+able to enable this kind of protection. (i.e. hoping the process calls a
+prctl() to enable the protection isn't going to work well with systemd.)
+
+So, I *think* we could have a minimal form with these considerations:
+ - execstack: declare it distinctly incompatible.
+ - relro: I think this is solved with BIND_NOW. It's been a while since
+   I looked deeply at this, but I think under BIND_NOW, the (executable)
+   PLT doesn't ever need to be writable (since it points into the GOT),
+   and the (initially writable) GOT is already never executable. This
+   needs to be verified...
+ - JITs can be allowed with a ELF flag and can choose to opt-in with
+   a prctl().
+
+-Kees
+
+[1] https://lore.kernel.org/lkml/1562410493-8661-1-git-send-email-s.mesoraca16@gmail.com/
+[2] https://lore.kernel.org/lkml/1562410493-8661-2-git-send-email-s.mesoraca16@gmail.com/
+
 -- 
-2.35.1
-
+Kees Cook

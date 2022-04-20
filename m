@@ -2,91 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BCA0508395
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A77D508399
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376791AbiDTIlg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 20 Apr 2022 04:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S1376802AbiDTImN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376766AbiDTIld (ORCPT
+        with ESMTP id S1376766AbiDTImK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:41:33 -0400
-X-Greylist: delayed 77379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Apr 2022 01:38:47 PDT
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D67029C9B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:38:46 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5829B40004;
-        Wed, 20 Apr 2022 08:38:42 +0000 (UTC)
-Message-ID: <892475a2d458aa1e8f5027f13d6582f0f6b4b05e.camel@hadess.net>
-Subject: Re: [PATCH] HID: wacom: Correct power_supply type
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Ping Cheng <ping.cheng@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>
-Date:   Wed, 20 Apr 2022 10:38:41 +0200
-In-Reply-To: <nycvar.YFH.7.76.2204111708230.30217@cbobk.fhfr.pm>
-References: <20220407115406.115112-1-hadess@hadess.net>
-         <nycvar.YFH.7.76.2204111708230.30217@cbobk.fhfr.pm>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        Wed, 20 Apr 2022 04:42:10 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6E43AA74
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:39:24 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 97F673200907;
+        Wed, 20 Apr 2022 04:39:23 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 20 Apr 2022 04:39:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1650443963; x=
+        1650530363; bh=3SrGdyUlIGHjwPve02v+z7KFpEXmCdWDSAufyz8H+V0=; b=M
+        EidIBmJtKvdiITV7506Db1V3rtZsA1haJpJScJmKeBbXjPI/O6KXHNPn9EmOVs39
+        nJz4OEvhSzZ4IMgJTcuZzM1ovBJWiJ+w1YpbvatLRsr7SslXP6fjCwZBlkXWphEz
+        +PHArC6mFPw60sppTSnSkAm9k9ltaKFA+Vr6rzhhRH6d7/fCQ/FAELvfdohQgTq+
+        XlipU1lPDh+jXja5csUZZyVBehPp7e9eq9bytFwT5BGXuCzTqjRPTD55mgOX+tz0
+        D8HTXX83YcFyDsjB5gOAIc63nQmqODDb1GgtghhjjJaj+ntuybl7MwUMknOzPnhv
+        0ZX8N/bXM7r9MbVEY+vUQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650443963; x=1650530363; bh=3SrGdyUlIGHjw
+        Pve02v+z7KFpEXmCdWDSAufyz8H+V0=; b=V4nJywdq0t/iWAywM1mzmyNx/7n3k
+        6aulAJdz7ZGJ9nAJqZvon8NLvY9ZBR9pTomqVts4CgUrbwpHyPqcBKUrwydBChZ4
+        +gzdC3mJ2s9MuPftgl8Nn681KxZP0qixOdvMp8AG74VNfUu5tiX1SLgFfiJtP1Z3
+        phnSN7GY/Er0wRfGixLEI9bt8mgJ8yYgc2z5MKbMn/x1ykNZBgQE3fvoj3fK/hjz
+        Y4M8pXW8FaxF1NKTsUK4q8xOUQoG498gCHR+4LI1W5NIfmFN+v52wuPWo3a7Cm7f
+        SCzIZ6TEAb74HK1VWtKUQSacxWBcexg8zidkosYwcup74itlivnrY+tDA==
+X-ME-Sender: <xms:usZfYv6Ic3YT3G46m2CbXKAs1D45_HeEASJ1XsZ1RgzsKLm56aoNRw>
+    <xme:usZfYk6kYxIzPpCtG0EOgyQ_hJVgzJDO89GarWOXyAoiPHgUoKa7NoniLbQlNBudI
+    AZFZl0ez9gc3WLcA6M>
+X-ME-Received: <xmr:usZfYmdhU21bvNyxX21ssCpPEJ14hOle69kqOgXthCq6MnrNUgFzYQB0BpuRyrbO7okZNrR4874TtCDgEqMwnACC2hZVXcXJwqrEXxQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvddthedgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejuefggeekfffgueevtddvudffhfejffejjedvvdduudethefhfefhfeeg
+    ieekkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:usZfYgJv2tfYgPvfnaPIbY_VMfoLafDNNQB9eWcg6T_S1e3FoY5a9Q>
+    <xmx:usZfYjLU2HUq9vebsHAPQeTaZl5vuyZw3hy8rd3rfJ6J5SLseftrVw>
+    <xmx:usZfYpzh9XbKkZd3LICKBB50WtsO1VdGg6XXHCRXCjpGa-wb0lvFLA>
+    <xmx:u8ZfYgreVhhpa67kTOhSnBkzU0c54xEAJD46ZAFnDw6A9HQgWoMB1Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 20 Apr 2022 04:39:21 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: (subset) [PATCH 1/2] drm/panel/raspberrypi-touchscreen: Avoid NULL deref if not initialised
+Date:   Wed, 20 Apr 2022 10:39:17 +0200
+Message-Id: <165044395513.303702.1698535902830603869.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220415162513.42190-2-stefan.wahren@i2se.com>
+References: <20220415162513.42190-1-stefan.wahren@i2se.com> <20220415162513.42190-2-stefan.wahren@i2se.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-11 at 17:08 +0200, Jiri Kosina wrote:
-> On Thu, 7 Apr 2022, Bastien Nocera wrote:
+On Fri, 15 Apr 2022 18:25:12 +0200, Stefan Wahren wrote:
+> From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 > 
-> > POWER_SUPPLY_TYPE_USB seems to only ever be used by USB ports that
-> > are
-> > used to charge the machine itself (so a "system" scope), like the
-> > single USB port on a phone, rather than devices.
-> > 
-> > The wacom_sys driver is the only driver that sets its device
-> > battery as
-> > being a USB type, which doesn't seem correct based on its usage, so
-> > switch it to be a battery type like all the other USB-connected
-> > devices.
-> > 
-> > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > ---
-> >  drivers/hid/wacom_sys.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
-> > index 066c567dbaa2..620fe74f5676 100644
-> > --- a/drivers/hid/wacom_sys.c
-> > +++ b/drivers/hid/wacom_sys.c
-> > @@ -1777,7 +1777,7 @@ static int __wacom_initialize_battery(struct
-> > wacom *wacom,
-> >         bat_desc->get_property = wacom_battery_get_property;
-> >         sprintf(battery->bat_name, "wacom_battery_%ld", n);
-> >         bat_desc->name = battery->bat_name;
-> > -       bat_desc->type = POWER_SUPPLY_TYPE_USB;
-> > +       bat_desc->type = POWER_SUPPLY_TYPE_BATTERY;
-> >         bat_desc->use_for_apm = 0;
-> >  
-> >         ps_bat = devm_power_supply_register(dev, bat_desc,
-> > &psy_cfg);
+> If a call to rpi_touchscreen_i2c_write from rpi_touchscreen_probe
+> fails before mipi_dsi_device_register_full is called, then
+> in trying to log the error message if uses ts->dsi->dev when
+> it is still NULL.
 > 
-> Thanks Bastien, makes sense. CCing Jason and Ping (the Wacom driver 
-> maintainers) to get their Ack.
+> [...]
 
-Hey,
+Applied to drm/drm-misc (drm-misc-fixes).
 
-I know both Jason and Ping, but their name didn't show up when running
-get_maintainers.pl and neither of their names are in the MAINTAINERS
-file.
-
-This probably needs fixing.
-
-Cheers
+Thanks!
+Maxime

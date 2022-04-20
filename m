@@ -2,167 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CD150937C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8E6509379
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383153AbiDTXVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 19:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
+        id S1383147AbiDTXT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 19:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243760AbiDTXVh (ORCPT
+        with ESMTP id S1383141AbiDTXTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 19:21:37 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D8818B2D;
-        Wed, 20 Apr 2022 16:18:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650496729; x=1682032729;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wDzQY2+PCspZFvBhtBaNeIPM6Iwdxd0YJ8CLxltVuzA=;
-  b=fFZNqZfk+NsUoRijVa5sl/EeTlplpiaH4AfnkT9+EM55oktdNEdYkeD4
-   i9HHnpzMRhaHYhncJn5dP0YHw4EZr8n572S3X5EAecnYTnW+jXlujtu6o
-   1645ZgoLzhtyOV/imoUVF0Lyo8bXOq7nOMawquVN/7OdQlrGrOrCeEOtV
-   BmiZ/hcxhsSn52ok+wg/Orcja7+nqGHkBtAuZ5K2qXRC6ZPX7ey2nJgNA
-   NPpBGF2HKh/S9+fhFu+3ha/0zYJVLdwwd0e1TdgNdElMTlMMt369ha0wm
-   l/w1Zp3PpodxcZGgpjEjsFWLwKNiGHU59Da+8c5O6C/0QN/HHWwmqQcij
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="327073935"
-X-IronPort-AV: E=Sophos;i="5.90,277,1643702400"; 
-   d="scan'208";a="327073935"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 16:18:49 -0700
-X-IronPort-AV: E=Sophos;i="5.90,277,1643702400"; 
-   d="scan'208";a="669300098"
-Received: from ssharm9-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.30.148])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 16:18:46 -0700
-Message-ID: <b209ee09b74394ab7aed85e0244e2191ee3d4171.camel@intel.com>
-Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
- attestation interface driver
-From:   Kai Huang <kai.huang@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Date:   Thu, 21 Apr 2022 11:18:43 +1200
-In-Reply-To: <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 20 Apr 2022 19:19:55 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EA818E03
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:17:07 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-e5e433d66dso3647533fac.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vliR5m4+9Io2lsKOoIVUBS6H3HJfYGUKUnCPcRHXbHc=;
+        b=Mm8xHxm1KXW4R/PQpGJk73bpm/m/PPNPif5efxIB2A29vM2A729AeTgLcO1pxSY4Ho
+         IDMq+0HIKx68vqPrTIqetfJ8vr8WY3YrMod3KzVfUaVD6YGerW/LFzspcu+asS+e8RS+
+         9fH8g/9ka+g7i4zNk0SyrHzPEOGRqTAnImxZ2cxdldUSXhtVHzwPmbNWbj8YaBgzvES+
+         yoWbfmncvhFPSKRSlAHcsEP4/w5apAK0GJ2eYmzt/I1NxVVM2u+B2LaF0Cu6c3OmWf7A
+         QYHylq4xftIkatQZCbAjzfoLFKFEUg/sziSNL286M+BK1EDOc1JyIzDs+pXQ/LW9MDBv
+         ymKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vliR5m4+9Io2lsKOoIVUBS6H3HJfYGUKUnCPcRHXbHc=;
+        b=3fv0/YJvgljhjun6RLZSaWRcHjoFHp3GMevmEXZBPK4dolVSupZwnV4TmYlOXNL3Mp
+         WGkn7e9UVv43EDtwzMs2K/LiMpSv2DPcukj8iHalTWEANyASV2/SLvP9kZByDh53wvco
+         8drVhznYzcd13SxIdz5X47acdp4CiNjAROz7q//w/WyFoVCNzqDEvqQ4jAPLdQM0AREv
+         gfLPtsRylvDEk5LNQsKsQy/orwCV/cUfkVrMBM+6d4A9nFY9/94L2PaSatc7sQ30B7jB
+         +nuCXqGStFJUvpGqQ9WViKLiKX13DrMiKC0Up4gLMsveM6Ws+1XI0hnriq3oRPd3aNec
+         AAJg==
+X-Gm-Message-State: AOAM5332XIusLzK1RfF9kcu8pEkzg8YC0Ti/CNzfZrUXD6Sm6JDG75aA
+        KpTAHk5Q/lyRS3kROJL/6ZWCrw==
+X-Google-Smtp-Source: ABdhPJxo5jgjf2YdQ3EWrP/Sx4Xzsr3pB+WFBSX++5bjBY9vN8gA6ZqMT/9awz/BK2ls1V17owxGcw==
+X-Received: by 2002:a05:6870:fba0:b0:e5:ad3c:32d7 with SMTP id kv32-20020a056870fba000b000e5ad3c32d7mr2506634oab.144.1650496626144;
+        Wed, 20 Apr 2022 16:17:06 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id j5-20020a4a7505000000b0033a47bb6a74sm2552361ooc.47.2022.04.20.16.17.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 16:17:05 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 16:19:09 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] Revert "drm: of: Properly try all possible cases for
+ bridge/panel detection"
+Message-ID: <YmCU7YLx/+ILPptK@ripper>
+References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-15 at 15:01 -0700, Kuppuswamy Sathyanarayanan wrote:
-> TDX guest supports encrypted disk as root or secondary drives.
-> Decryption keys required to access such drives are usually maintained
-> by 3rd party key servers. Attestation is required by 3rd party key
-> servers to get the key for an encrypted disk volume, or possibly other
-> encrypted services. Attestation is used to prove to the key server that
-> the TD guest is running in a valid TD and the kernel and virtual BIOS
-> and other environment are secure.
+On Wed 20 Apr 16:12 PDT 2022, Bjorn Andersson wrote:
+
+Sorry, I missed Jagan and Linus, author and reviewer of the reverted
+patch 2, among the recipients.
+
+Regards,
+Bjorn
+
+> Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
+> bridge")' introduced the ability to describe a panel under a display
+> controller without having to use a graph to connect the controller to
+> its single child panel (or bridge).
 > 
-> During the boot process various components before the kernel accumulate
-> hashes in the TDX module, which can then combined into a report. This
-> would typically include a hash of the bios, bios configuration, boot
-> loader, command line, kernel, initrd.  After checking the hashes the
-> key server will securely release the keys.
+> The implementation of this would find the first non-graph node and
+> attempt to acquire the related panel or bridge. This prevents cases
+> where any other child node, such as a aux bus for a DisplayPort
+> controller, or an opp-table to find the referenced panel.
 > 
-> The actual details of the attestation protocol depend on the particular
-> key server configuration, but some parts are common and need to
-> communicate with the TDX module.
-
-As we discussed "key provisioning from key server to support disk decryption" is
-only one use case of attestation, so I don't think you need 3 paragraphs to talk
-about details of this use case here.  The attestation flow is documented in GHCI
-so it's clear.  The attestation flow (and what this patch does) does not have
-any direct relation to the "disk decryption" details above.  I think you can
-discard above entirely or using one or two simple sentences to explain.
-
-Also, as you agreed you will remove the 8K shared memory assumption:
-
-https://lore.kernel.org/lkml/20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com/T/
-
-and if you agree with my approach (again, I recommend) to split the driver to
-two parts (reorganize your patches essentially):
-
-https://lore.kernel.org/lkml/20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com/T/#m9e3c5115df0be0b53d41f987e1eda1715255d1d8
-
-I'll review again once you finish updating the driver.
-
-Btw some minor comments below.
-
-
-[...]
-
-> --- /dev/null
-> +++ b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
-
-Perhaps attest.c is enough, no matter where the file will reside.
-
-> @@ -0,0 +1,302 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * intel_tdx_attest.c - TDX guest attestation interface driver.
-> + *
-> + * Implements user interface to trigger attestation process and
-> + * read the TD Quote result.
-> + *
-> + * Copyright (C) 2021-2022 Intel Corporation
-
-For upstream I guess just need 2022.
-
-[...]
-
-> +struct attest_dev {
-> +	/* Mutex to serialize attestation requests */
-> +	struct mutex lock;
-
-I think we need a comment to explain why the driver doesn't support multiple
-GetQuote requests in parallel.  In fact the updated GHCI spec doesn't explicitly
-say GetQuote cannot be done in parallel.  It has a new "GET_QUOTE_IN_FLIGHT"
-flag introduced, which can be used to determine which Quote is finished I think.
-
-I am fine with only supporting GetQuote in serialized way, but perhaps we need
-to call out the reason somewhere.
-
-[...]
-
-> +
-> +	/* Allocate DMA buffer to get TDQUOTE data from the VMM */
-> +	adev->tdquote_buf = dma_alloc_coherent(dev, GET_QUOTE_MAX_SIZE,
-> +						&adev->handle,
-> +						GFP_KERNEL | __GFP_ZERO);
-> +	if (!adev->tdquote_buf) {
-> +		ret = -ENOMEM;
-> +		goto failed;
+> Commit '67bae5f28c89 ("drm: of: Properly try all possible cases for
+> bridge/panel detection")' attempted to solve this problem by not
+> bypassing the graph reference lookup before attempting to find the panel
+> or bridge.
+> 
+> While this does solve the case where a proper graph reference is
+> present, it does not allow the caller to distinguish between a
+> yet-to-be-probed panel or bridge and the absence of a reference to a
+> panel.
+> 
+> One such case is a DisplayPort controller that on some boards have an
+> explicitly described reference to a panel, but on others have a
+> discoverable DisplayPort display attached (which doesn't need to be
+> expressed in DeviceTree).
+> 
+> This reverts commit '67bae5f28c89 ("drm: of: Properly try all possible
+> cases for bridge/panel detection")', as a step towards reverting commit
+> '80253168dbfd ("drm: of: Lookup if child node has panel or bridge")'.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/gpu/drm/drm_of.c | 99 ++++++++++++++++++++--------------------
+>  1 file changed, 49 insertions(+), 50 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+> index f4df344509a8..026e4e29a0f3 100644
+> --- a/drivers/gpu/drm/drm_of.c
+> +++ b/drivers/gpu/drm/drm_of.c
+> @@ -214,29 +214,6 @@ int drm_of_encoder_active_endpoint(struct device_node *node,
+>  }
+>  EXPORT_SYMBOL_GPL(drm_of_encoder_active_endpoint);
+>  
+> -static int find_panel_or_bridge(struct device_node *node,
+> -				struct drm_panel **panel,
+> -				struct drm_bridge **bridge)
+> -{
+> -	if (panel) {
+> -		*panel = of_drm_find_panel(node);
+> -		if (!IS_ERR(*panel))
+> -			return 0;
+> -
+> -		/* Clear the panel pointer in case of error. */
+> -		*panel = NULL;
+> -	}
+> -
+> -	/* No panel found yet, check for a bridge next. */
+> -	if (bridge) {
+> -		*bridge = of_drm_find_bridge(node);
+> -		if (*bridge)
+> -			return 0;
+> -	}
+> -
+> -	return -EPROBE_DEFER;
+> -}
+> -
+>  /**
+>   * drm_of_find_panel_or_bridge - return connected panel or bridge device
+>   * @np: device tree node containing encoder output ports
+> @@ -259,44 +236,66 @@ int drm_of_find_panel_or_bridge(const struct device_node *np,
+>  				struct drm_panel **panel,
+>  				struct drm_bridge **bridge)
+>  {
+> -	struct device_node *node;
+> -	int ret;
+> +	int ret = -EPROBE_DEFER;
+> +	struct device_node *remote;
+>  
+>  	if (!panel && !bridge)
+>  		return -EINVAL;
+> -
+>  	if (panel)
+>  		*panel = NULL;
+> -	if (bridge)
+> -		*bridge = NULL;
+> -
+> -	/* Check for a graph on the device node first. */
+> -	if (of_graph_is_present(np)) {
+> -		node = of_graph_get_remote_node(np, port, endpoint);
+> -		if (node) {
+> -			ret = find_panel_or_bridge(node, panel, bridge);
+> -			of_node_put(node);
+> -
+> -			if (!ret)
+> -				return 0;
+> -		}
+> -	}
+>  
+> -	/* Otherwise check for any child node other than port/ports. */
+> -	for_each_available_child_of_node(np, node) {
+> -		if (of_node_name_eq(node, "port") ||
+> -		    of_node_name_eq(node, "ports"))
+> +	/**
+> +	 * Devices can also be child nodes when we also control that device
+> +	 * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
+> +	 *
+> +	 * Lookup for a child node of the given parent that isn't either port
+> +	 * or ports.
+> +	 */
+> +	for_each_available_child_of_node(np, remote) {
+> +		if (of_node_name_eq(remote, "port") ||
+> +		    of_node_name_eq(remote, "ports"))
+>  			continue;
+>  
+> -		ret = find_panel_or_bridge(node, panel, bridge);
+> -		of_node_put(node);
+> +		goto of_find_panel_or_bridge;
 > +	}
-
-The buffer needs to be shared.  Guest must have called MapGPA to convert the
-buffer to shared.  Is this guaranteed by calling dma_alloc_coherent(), since
-seems I didn't see any MapGPA in the driver?  Anyway this deserves a comment I
-think.
-
-
--- 
-Thanks,
--Kai
-
-
+> +
+> +	/*
+> +	 * of_graph_get_remote_node() produces a noisy error message if port
+> +	 * node isn't found and the absence of the port is a legit case here,
+> +	 * so at first we silently check whether graph presents in the
+> +	 * device-tree node.
+> +	 */
+> +	if (!of_graph_is_present(np))
+> +		return -ENODEV;
+> +
+> +	remote = of_graph_get_remote_node(np, port, endpoint);
+> +
+> +of_find_panel_or_bridge:
+> +	if (!remote)
+> +		return -ENODEV;
+> +
+> +	if (panel) {
+> +		*panel = of_drm_find_panel(remote);
+> +		if (!IS_ERR(*panel))
+> +			ret = 0;
+> +		else
+> +			*panel = NULL;
+> +	}
+> +
+> +	/* No panel found yet, check for a bridge next. */
+> +	if (bridge) {
+> +		if (ret) {
+> +			*bridge = of_drm_find_bridge(remote);
+> +			if (*bridge)
+> +				ret = 0;
+> +		} else {
+> +			*bridge = NULL;
+> +		}
+>  
+> -		/* Stop at the first found occurrence. */
+> -		if (!ret)
+> -			return 0;
+>  	}
+>  
+> -	return -EPROBE_DEFER;
+> +	of_node_put(remote);
+> +	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(drm_of_find_panel_or_bridge);
+>  
+> -- 
+> 2.35.1
+> 

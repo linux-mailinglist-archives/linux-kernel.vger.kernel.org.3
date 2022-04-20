@@ -2,75 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721845090FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F71E5090FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381966AbiDTUDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        id S1381916AbiDTUDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381882AbiDTUDK (ORCPT
+        with ESMTP id S1382006AbiDTUDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:03:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237513D481
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:00:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B31FAB8216C
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 20:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 577DCC385A1;
-        Wed, 20 Apr 2022 20:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650484820;
-        bh=QqV87m7fP2qffAEvZHncjqlUzSmtRv+pIC3XzpEiCFc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=iF8Mq2n/imsVVePqo0SXyakpy5l2x5rPjeiJXT/6ldj0laSqB8mLKWwDcEN00Wmcc
-         HYZQME20e3Supvi9QThvMwBPMVadW4tAEiz5eqmgif9mzZFMkkphR8vNYpWbOq+K3d
-         pWw0ScVj1t+L1EOEqYGULLIrps90LX3eFDGoHvGVmfLgEqbFfE75KZ35APLiS/+nD6
-         6rP7/sfklZc0LvhkLP6a/qqvsb/0hpK8RtdhbQWGZq9/SwS5CPL8U/JgcbtHqzoEsF
-         46tV7XysExt+fGmt+/y9oZAiQ6JCJsDer/GBM2HjVu6vL1iFE6U1CfwTiuVX2fSw7C
-         VS2Mq5pIumaZA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A022E85D90;
-        Wed, 20 Apr 2022 20:00:20 +0000 (UTC)
-Subject: Re: [GIT PULL] erofs fixes for 5.18-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yl2VJEuDCWT4lycg@debian>
-References: <Yl2VJEuDCWT4lycg@debian>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yl2VJEuDCWT4lycg@debian>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.18-rc4-fixes
-X-PR-Tracked-Commit-Id: 8b1ac84dcf2cf0fc86f29e92e5c63c4862de6e55
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 10c5f102e2be6d816938b168104e8dacdd5bace7
-Message-Id: <165048482022.8655.12098974779681773850.pr-tracker-bot@kernel.org>
-Date:   Wed, 20 Apr 2022 20:00:20 +0000
-To:     Gao Xiang <xiang@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        Chao Yu <chao@kernel.org>, Hongyu Jin <hongyu.jin@unisoc.com>,
-        Hans de Goede <hdegoede@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 16:03:25 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2057.outbound.protection.outlook.com [40.107.94.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABFA3DA67
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:00:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FNY3Oxd5mI0KxzW3mnx0VTpYsbl9tnZ7nN2hh9NmzH1nlfP/NMf08O8PoyYdjD/27+h4WbMYiTbSJpwmfKQfESuYoGmCGIDuwtvFkYVBu9/IQLTH3vpzOig/HYjA0yF/U6TQCyO23b6osPShXqCu+PLNTXcNR8E0fgFh64RY9wj3d4soS+0KIz2hhHfNSAbzWzXPcNxkqP3XW6FI/CnltYBdNr74F1Sv7TLEHvFdWm5kFkTgr4p9dX5oyPwr6nuIMp1iXPeqKapyq+f4ihKlc4s+M8tj/qi7DwkzticxUSwG11ooa2LKedD7yzEVaXUQWhPQ+fNZKmjHLfXzFX0Ikw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VvryBg/FfFMLekrZoVLGwCZ+CfqhBxQZNghJ/0jZlYg=;
+ b=H7m5D1+kzdv64c1jUJfzpTvo8aYv/Y11Tx3TDLk2ci8j+9VNGdGqPyrzNWQlRSnnvGh339dfQ4jhxedQ8MF4vQmLnxN6imweJA/sdqzfTbYIaq0UYIx8zkRPizAcguKKdNsRPTvdnNDYrPz62ADSRogWPjf6s9SZEw1SH5zbKDL3dbtujFx4EkQ/Xx4rpAbIL9N9Hj/NnkgNYEWL4BfrPHjPbhE0cgSn2WCMGy746nNRoT7jNM1nD2YVT+OjAMlemCdYsJ3yJkcPTWaAqKzkm5CGKtICMPNWhSRR0NhL3qP+3b61txVIUOZfi+u7hMyqZ1hVZFXA2XnznBKpq9d4bA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VvryBg/FfFMLekrZoVLGwCZ+CfqhBxQZNghJ/0jZlYg=;
+ b=Rr6eh9FRQ8sJmxW4huAWAvN7bCRSKbL84Wjto2LG/xHrIqlN/9RpBvnYUQUh3CxpDAgeHAlo7SwXOhgFMX03xsalpUMQpbw8HT2VFgn0VURYhwtKmgK7uu/5fH9LsfEmrb7C0BkarFqnB1Y5AeR0Ie0bZdeAwx3Zr0wU9EfdYyNu0A/pe43DIdjLXJs9thrdqBlzhLjEb37PJMoFU6raUR8Ke6HDIoI0lNS+BKWDOWifoOB6mFRv0FNjbzU4SZUAXXgguuTwSxUuG5h1QssVJGmRcTcXcSjCroW/0vDGwgwlAPLHYEviumfu6X0EAexHbD6hMlYVZIW0BxRZpWRCdA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by MWHPR12MB1598.namprd12.prod.outlook.com (2603:10b6:301:4::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Wed, 20 Apr
+ 2022 20:00:36 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%6]) with mapi id 15.20.5186.014; Wed, 20 Apr 2022
+ 20:00:35 +0000
+Date:   Wed, 20 Apr 2022 17:00:34 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>
+Subject: Re: [PULL v2] gvt-next
+Message-ID: <20220420200034.GE2120790@nvidia.com>
+References: <5a8b9f48-2c32-8177-1c18-e3bd7bfde558@intel.com>
+ <20220420164351.GC2120790@nvidia.com>
+ <20220420114033.7f8b57c7.alex.williamson@redhat.com>
+ <20220420174600.GD2120790@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420174600.GD2120790@nvidia.com>
+X-ClientProxiedBy: BLAPR03CA0035.namprd03.prod.outlook.com
+ (2603:10b6:208:32d::10) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2bae995d-bfb1-43db-4950-08da23086f25
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1598:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB15980AD4C88D5EED238E8E01C2F59@MWHPR12MB1598.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eEQ5ewM2rsgGSGSlUKgrIX4+u/DM9K+3F+iehG8GFpLdojLXhWWzAVTEKStp6LPFgykf/2LyUQ4Grwq56pFP98Rv2z7lr25A7PNtByXqqQD+J006/rjTCibTVWdRz4AkOqIxiHwYMnI9Jbwp7o8yLPhdAOsCH/P/dnFIgSDN2dWdpf9zzFQJkjAptwSeiodE7yh575r4I0epvfqnMVcbwmeW6XLAcPdYLDK85Rv8wv5EN7L2J7yPlK9naTx0Kt9IOxC8bqQ3E6imPkIf9myfkcwLvklqXRFsl1MMJ9aZxq9K3e3YKL1xmjTJFZtRiT0toQn90UrmTCixwzkeEDfDcrsYKttesIZMDtmyV1TvQlOP04ORToBJajEVhL0RWCtT+c0R8oM9T8M9mqYXqerI0w2Y/s4yZy02usPzeNyoWORVjbUylZ7eyyFDQLT+QpU1I131cx/RjoGOsLNPmeCGSapN2gl824BVbazVsXxMx+souEZvFs6oCAPgPS+XphG414lP30QHBBk/kyH7pq6jYs6cVE47whJL04LImueCUWZyEfaYS8QWjtK+GCmb/lvskCmvzX6wicsxDAHPyBA9veL+HGTvzgArZPX5Fvd7Xd8dVEW/JfqLksJZRhQ+Amh7CVrHCA77xSmOHvXLGadeW0pHh/5ESUUYq8WbztMYHGj9PyPqODIfdN2BcTzn5sH8iiFsXBLbFGz5yQ6wjJBUkhPyvAsFy+HUDOItm3A5HdI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(316002)(38100700002)(5660300002)(54906003)(66556008)(66476007)(33656002)(66946007)(36756003)(6486002)(83380400001)(966005)(7416002)(8676002)(8936002)(86362001)(6512007)(2906002)(6506007)(26005)(4326008)(186003)(508600001)(1076003)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qPZcYJDMnvLxnAyaGk82vJugv98rPH6zq3MK+Rg6zsbunRzd1qL8NH6179OJ?=
+ =?us-ascii?Q?DyvW7RdF89MPJhdJueVDczZNIYCSZC6ScETJvIqivPySfJ+521ejwFfe9WZ1?=
+ =?us-ascii?Q?supIY2rTSEdUjYOvMfYPZ6Ucnk5rcjKq0oLTwikpUclSZ3MffHaB0rNqbvvp?=
+ =?us-ascii?Q?JY9rJh4NbrVIe2vU1HaH4316jcSlt5Q23f+D6ZsiPAeKIYUjvRY4/DBNvbr9?=
+ =?us-ascii?Q?hiwC2uCB3+wRKpDPKH/JLA/lHW/4wELtioIozuP+8OkNEdsvKuqARjDyvBD0?=
+ =?us-ascii?Q?PTWmZ61QWYiMxmX5l8OznhNT9/NHsk4PbIcJ9v1hYqHDmNKesGWyE3OKyX4y?=
+ =?us-ascii?Q?Lv15A4Vp5pbzO2Y/9ACrdJP5nK73N8tc3t7usF2vJ7x9awjbJplE82HhlXdO?=
+ =?us-ascii?Q?25huML67EwagUpyTPkmLkFZMvFzmi7zq4J0/PiPQBE9DAuNdNcapyaajBTpR?=
+ =?us-ascii?Q?NAg6ZDS5t5kqr7eTvBtQcXiKoIydoOisEX2YsA7PLFrYb8+UZ4Fu3uf1c5Qk?=
+ =?us-ascii?Q?NhWVjCYm2r9FsTHYW96hrAYQbitA6sDLkFUJrNjJ47Nv5Z2XSiFhr7/+vCqI?=
+ =?us-ascii?Q?aLkWS8c68eXF/3QoU4k3FuAL4HLlRyTN8y3OTIq4c0Ioeu72n5usz6qipH7W?=
+ =?us-ascii?Q?G3Wf2wpu8DLJ38K0D7bpehXmHTu3kYoIIBuPIBUq3TCm4BQAXHWpVpsXCWfc?=
+ =?us-ascii?Q?R2GYO3g08ppNlCtT89CIxqiC3uqQMcrk7FklMNjCRft/gOxun5DTkxfOPw9Q?=
+ =?us-ascii?Q?Q8P2MnNb2E/gBsCs+B3S7JW0cbqnNvRIkxMiSgqYpacMW5UqPir15K+S1SSa?=
+ =?us-ascii?Q?YHn1bW4TY93D+LYyJYlDKq3YzHQpqX9V5c2xv75Oq1BkZG2Xc6Vonc9Otse3?=
+ =?us-ascii?Q?wrmuPF4EPhPPIrKyYDWuzdpQXdKcRT+194p0KHLNCGWgZjIMrbQeVSG1Zupn?=
+ =?us-ascii?Q?oqBgn/OU9bPYCVzpiCNmOtWzKGyTfcm9FHaDruKUvTD4oPaltQcLZ3uQxrRS?=
+ =?us-ascii?Q?A7UTzkJjwjf7mGcyyPIQ2EgHkfpfWp3Qz7X7aLL119JUgFNxkRqb76ODJO8K?=
+ =?us-ascii?Q?96IbWsPHzK5lk1OqCXgdTY6iLKQKJOHNTpzlwQA/gsGRxp/QPzbKWTDRIfY1?=
+ =?us-ascii?Q?pp5mguzLi9XMjruExO1mq39e6kBgEx3nRPH0V6039aw5VoNAobw4fsfpDLJi?=
+ =?us-ascii?Q?flww6Mnl3KaXW5B6WZA6B9tsWHHJHGinzWaYCTPXBed+By4M3ufdywJF7rTR?=
+ =?us-ascii?Q?oVWQEo6Ighn4a4Iz5ZkwytgkgzFkQJ4zDYg6W7UVs5/ocLQg0CVDnlhme1Y4?=
+ =?us-ascii?Q?3vo2s2/Fk+KjMWk2vIdQsIjmgmVxX92Eq3VKut47ncwcvb5v6F1mZleP2Tl8?=
+ =?us-ascii?Q?TTwyDtrUm56UhDMSC4GZeW+QePvPmWNPn8L1P4ENfeyChDJzc1cbvL+R/F0F?=
+ =?us-ascii?Q?93baGnzLme7NQKMIjThhru6HHjCVFvtfcWc8vIDJPT3RuLzoWs8wtmNfOi+D?=
+ =?us-ascii?Q?evANeW47d8PCG5dTyYI5ij5nwCpA0eTWPUdRxPMCnPG625GmcEnt6NrJ1Mdg?=
+ =?us-ascii?Q?vy95kFt0uFXVtR/t86krABwkNvsXN8v0h3oY0NaROdxN6k2wZdHf3foxfw7o?=
+ =?us-ascii?Q?wjjXmCchziW885UNJGsiQbyEMHPHP6s3ZcebWyxaiK7mQpeIzMA+I4/scBDA?=
+ =?us-ascii?Q?RL+H3gH+/8QEN0kDs4US/yu+LfzjYUcGRP+u1HRICCyHxG/z/ghelYbNzKI7?=
+ =?us-ascii?Q?OAz73e1fBA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bae995d-bfb1-43db-4950-08da23086f25
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 20:00:35.9333
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GZUyaf+3QHVGmdXFOVfCgqjd9EG7Bv5F84DyR9+YX+AFuPMbSDXWhXXD0mX7keu1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1598
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 19 Apr 2022 00:43:16 +0800:
+On Wed, Apr 20, 2022 at 02:46:00PM -0300, Jason Gunthorpe wrote:
+> On Wed, Apr 20, 2022 at 11:40:33AM -0600, Alex Williamson wrote:
+> > On Wed, 20 Apr 2022 13:43:51 -0300
+> > Jason Gunthorpe <jgg@nvidia.com> wrote:
+> > 
+> > > On Wed, Apr 20, 2022 at 04:34:47PM +0000, Wang, Zhi A wrote:
+> > > > Hi folks:
+> > > > 
+> > > > Here is the PR of gvt-next. Thanks so much for the patience.
+> > > > 
+> > > > Mostly it includes the patch bundle of GVT-g re-factor patches for adapting the GVT-g with the
+> > > > new MDEV interfaces:
+> > > > 
+> > > > - Separating the MMIO table from GVT-g. (Zhi)
+> > > > - GVT-g re-factor. (Christoph)
+> > > > - GVT-g mdev API cleanup. (Jason)
+> > > > - GVT-g trace/makefile cleanup. (Jani)
+> > > > 
+> > > > Thanks so much for making this happen.
+> > > > 
+> > > > This PR has been tested as following and no problem shows up:
+> > > > 
+> > > > $dim update-branches
+> > > > $dim apply-pull drm-intel-next < this_email.eml
+> > > > 
+> > > > The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> > > > 
+> > > >   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> > > > 
+> > > > are available in the Git repository at:
+> > > > 
+> > > >   https://github.com/intel/gvt-linux tags/gvt-next-2022-04-20-for-christoph
+> > > > 
+> > > > for you to fetch changes up to ae7875879b7c838bffb42ed6db4658e5c504032e:
+> > > > 
+> > > >   vfio/mdev: Remove mdev drvdata (2022-04-20 03:15:58 -0400)  
+> > > 
+> > > This looks well constructed now! thanks
+> > > 
+> > > Alex you can pull this for VFIO after Jani&co grab it
+> > > 
+> > > I'll respin my vfio_group series on top of this branch
+> > 
+> > Sure, so just to confirm tags/gvt-next-2022-04-20-for-christoph is
+> > pruned down to exactly the commits we're looking for now?  Thanks,
+> 
+> Yes, the above is correct and the tag points to commit
+> ae7875879b7c838bffb42ed6db4658e5c504032e
+> 
+> It is the bare minimum series
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.18-rc4-fixes
+Actually this topic branch doesn't compile:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/10c5f102e2be6d816938b168104e8dacdd5bace7
+../drivers/gpu/drm/i915/intel_gvt_mmio_table.c:7:10: fatal error: 'display/intel_dmc_regs.h' file not found
+#include "display/intel_dmc_regs.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
 
-Thank you!
+:( :(
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+This is the merge conflict that was mentioned. This topic branch needs
+to delete the above intel_dmc_regs.h include file
+
+When drm-intel-next merges this PR then need to add it back as part of
+the merge resolution - so explain this in the PR text above and
+include a diff that does it when you send it again. (or do the merge
+yourself as I showed before, it depends on what drm-intel-next wants)
+
+Jason

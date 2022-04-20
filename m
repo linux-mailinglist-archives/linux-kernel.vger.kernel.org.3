@@ -2,139 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528B1508D95
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DDB508D99
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380738AbiDTQrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S1380739AbiDTQrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380724AbiDTQrT (ORCPT
+        with ESMTP id S1380737AbiDTQrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:47:19 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B534665F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:44:32 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id 12so2269918pll.12
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:44:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=mmUDe7z0b0FTLJ9wvVbnLdVpkfi8vNaqEQvU41wotf8=;
-        b=EhmOxAP7NMWiC0dM6+rCeAa0PCDqYByqawACSsIs2E6eanZPg9Bq+ts26QVKu2bQcz
-         LHRfk1U7f9I/0FTB+S5j0KxaT6zN4Ks9h4GvCS5SIEIr6w34WuDlv3swX6ZMgDOXhOCK
-         pCUdbPAvqlvW4JD0jACrMXV64cMxsww9zxB1cso7wqZX7ji5IQ/cNiy4/gmmO7WSTiz8
-         sqmlEsqoJ40YJJgGsxHMG1NzSx5pl1QE9x8rlnULNt96G/fAs/kLYq5TkC/lWCeaI/y+
-         sigjzPOV5Nu/duAKbA2bjfxMY60SYlQ+JmVoIqCpVIjs5neEljK9Wh0Kr6fEUOskUi9/
-         ORgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=mmUDe7z0b0FTLJ9wvVbnLdVpkfi8vNaqEQvU41wotf8=;
-        b=HmrbILD+BErwZuGDSNhJm84x2260R2rNa0TXYe9Dh8EBEgMUPy2iiNz8ETbqlvjLW4
-         ItNo58GXnGrY+uCuGMy3GVtMviyXox+Eu6+oEj+ktkvVNukS4vQJlJE1YPfwhF6jwbCh
-         xDALG6d1gZ/4p6Wj/LqZDD5m7Y761V/xBeA0W9jPVyOuQgZrLLf88UZUPihVDyHk2IUS
-         1miZB62G3ECrXX5BytLtY/L6iDkpHMv6te8JIw2q9FwPWgPJcMBsWwm/JTqk5DJVs5lN
-         6PJMlr+CBcSLdGjNEWiP7wyPjP+9w0DQ2JckTI4D6qgNJIGhIgNehjObzm2Kemm2m2zK
-         F2sQ==
-X-Gm-Message-State: AOAM530NkVTr+rHrEMh1QQJeCB4s1wzW1Ky3JYu115qzIDO4H/EbQX/n
-        CuiV8d/92Czrp/T3hYNr01P/+g==
-X-Google-Smtp-Source: ABdhPJyDyGoYOudnVdumER/MV2n/NsBRU/3RKfNR1fONov5Rh0TSOA0eXyIZ64x4VIQ+ZRyavxZKCQ==
-X-Received: by 2002:a17:902:ab4c:b0:158:e896:7939 with SMTP id ij12-20020a170902ab4c00b00158e8967939mr20392237plb.154.1650473071757;
-        Wed, 20 Apr 2022 09:44:31 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056a00115000b004f6ff260c9esm20844971pfm.207.2022.04.20.09.44.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 09:44:31 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 16:44:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/8] KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
-Message-ID: <YmA4a8jwcL0PzkIr@google.com>
-References: <20220402010903.727604-1-seanjc@google.com>
- <20220402010903.727604-2-seanjc@google.com>
- <112c2108-7548-f5bd-493d-19b944701f1b@maciej.szmigiero.name>
- <YkspIjFMwpMYWV05@google.com>
- <4505b43d-5c33-4199-1259-6d4e8ebac1ec@redhat.com>
- <98fca5c8-ca8e-be1f-857d-3d04041b66d7@maciej.szmigiero.name>
- <YmAxqrbMRx76Ye5a@google.com>
- <41d956ab-3d25-2c2f-8b1a-2c49e03b4df4@redhat.com>
+        Wed, 20 Apr 2022 12:47:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECFB4666B;
+        Wed, 20 Apr 2022 09:44:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 756ADB81FB6;
+        Wed, 20 Apr 2022 16:44:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFBE9C385A1;
+        Wed, 20 Apr 2022 16:44:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650473074;
+        bh=y7SdXt71n1BDdaDOsWRdrF7usDyjXHRWkjywHnzgDqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mcYpeSpyz+Y5b9DgPgyl3EQQrzBuMqa9nlzseC6A5isszBQ3P7vvbNroi56n3uCfn
+         4l8x5tuRMQgIFg6XaWykmPEFvyF/I8Zv8Au3raRqYwL2zN4U4OjORKXUrdVYVLZr7p
+         eSRPrlTzt1bOVJiwj/ItdoIC6V/YA6wU6eWoGVZJjysVE59k2zZh4oKiZORL04RA/X
+         sqQW0pdn4k73AddP26D6v9EYusnGzsiqUkXpYrSxzll6FfQ0MGtwC2eZVqBOtzjaq3
+         DPbx5SySMY2w5WXzskYVWGv7ShQmKiej2hL7ealfSEZ/BConwtNTd+s0LR8DP5d9/c
+         FuHTkpFhC5XlA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3208D400B1; Wed, 20 Apr 2022 13:44:31 -0300 (-03)
+Date:   Wed, 20 Apr 2022 13:44:31 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Florian Fischer <florian.fischer@muhq.space>
+Cc:     linux-perf-users@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH v4 3/3] perf list: print all available tool events
+Message-ID: <YmA4byoEa3QBNeST@kernel.org>
+References: <20220420102354.468173-1-florian.fischer@muhq.space>
+ <20220420102354.468173-4-florian.fischer@muhq.space>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <41d956ab-3d25-2c2f-8b1a-2c49e03b4df4@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220420102354.468173-4-florian.fischer@muhq.space>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022, Paolo Bonzini wrote:
-> On 4/20/22 18:15, Sean Christopherson wrote:
-> > > > Let's just require X86_FEATURE_NRIPS, either in general or just to
-> > > > enable nested virtualiazation
-> > > 👍
-> > Hmm, so requiring NRIPS for nested doesn't actually buy us anything.  KVM still
-> > has to deal with userspace hiding NRIPS from L1, so unless I'm overlooking something,
-> > the only change would be:
-> > 
-> > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> > index bdf8375a718b..7bed4e05aaea 100644
-> > --- a/arch/x86/kvm/svm/nested.c
-> > +++ b/arch/x86/kvm/svm/nested.c
-> > @@ -686,7 +686,7 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
-> >           */
-> >          if (svm->nrips_enabled)
-> >                  vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
-> > -       else if (boot_cpu_has(X86_FEATURE_NRIPS))
-> > +       else
-> >                  vmcb02->control.next_rip    = vmcb12_rip;
-> > 
-> >          if (is_evtinj_soft(vmcb02->control.event_inj)) {
-> > 
-> > And sadly, because SVM doesn't provide the instruction length if an exit occurs
-> > while vectoring a software interrupt/exception, making NRIPS mandatory doesn't buy
-> > us much either.
-> > 
-> > I believe the below diff is the total savings (plus the above nested thing) against
-> > this series if NRIPS is mandatory (ignoring the setup code, which is a wash).  It
-> > does eliminate the rewind in svm_complete_soft_interrupt() and the funky logic in
-> > svm_update_soft_interrupt_rip(), but that's it AFAICT.  The most obnoxious code of
-> > having to unwind EMULTYPE_SKIP when retrieving the next RIP for software int/except
-> > injection doesn't go away:-(
-> > 
-> > I'm not totally opposed to requiring NRIPS, but I'm not in favor of it either.
+Em Wed, Apr 20, 2022 at 12:23:54PM +0200, Florian Fischer escreveu:
+> Introduce names for the new tool events 'user_time' and 'system_time'.
+
+Before:
+
+  duration_time                                      [Tool event]
+
+After:
+
+$ perf list | grep Tool
+  duration_time OR                                   [Tool event]
+  user_time OR                                       [Tool event]
+  system_time OR                                     [Tool event]
+$ 
+
+So now we have that extraneous "OR", can you please take a look?
+Probably needs to check if there is an alias?
+
+- Arnaldo
+ 
+> Signed-off-by: Florian Fischer <florian.fischer@muhq.space>
+> ---
+>  tools/perf/util/evsel.c        | 19 ++++++++++------
+>  tools/perf/util/evsel.h        |  1 +
+>  tools/perf/util/parse-events.c | 40 +++++++++++++++++++++++++++++-----
+>  3 files changed, 47 insertions(+), 13 deletions(-)
 > 
-> Yeah, you're right.  However:
-> 
-> * the rewind might already be worth it;
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index 2a1729e7aee4..d38722560e80 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -597,6 +597,17 @@ static int evsel__sw_name(struct evsel *evsel, char *bf, size_t size)
+>  	return r + evsel__add_modifiers(evsel, bf + r, size - r);
+>  }
+>  
+> +const char *evsel__tool_names[PERF_TOOL_MAX] = {
+> +	"duration_time",
+> +	"user_time",
+> +	"system_time",
+> +};
+> +
+> +static int evsel__tool_name(enum perf_tool_event ev, char *bf, size_t size)
+> +{
+> +	return scnprintf(bf, size, "%s", evsel__tool_names[ev]);
+> +}
+> +
+>  static int __evsel__bp_name(char *bf, size_t size, u64 addr, u64 type)
+>  {
+>  	int r;
+> @@ -723,12 +734,6 @@ static int evsel__raw_name(struct evsel *evsel, char *bf, size_t size)
+>  	return ret + evsel__add_modifiers(evsel, bf + ret, size - ret);
+>  }
+>  
+> -static int evsel__tool_name(char *bf, size_t size)
+> -{
+> -	int ret = scnprintf(bf, size, "duration_time");
+> -	return ret;
+> -}
+> -
+>  const char *evsel__name(struct evsel *evsel)
+>  {
+>  	char bf[128];
+> @@ -754,7 +759,7 @@ const char *evsel__name(struct evsel *evsel)
+>  
+>  	case PERF_TYPE_SOFTWARE:
+>  		if (evsel->tool_event)
+> -			evsel__tool_name(bf, sizeof(bf));
+> +			evsel__tool_name(evsel->tool_event, bf, sizeof(bf));
+>  		else
+>  			evsel__sw_name(evsel, bf, sizeof(bf));
+>  		break;
+> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> index 7e2209b47b39..45d674812239 100644
+> --- a/tools/perf/util/evsel.h
+> +++ b/tools/perf/util/evsel.h
+> @@ -262,6 +262,7 @@ extern const char *evsel__hw_cache_op[PERF_COUNT_HW_CACHE_OP_MAX][EVSEL__MAX_ALI
+>  extern const char *evsel__hw_cache_result[PERF_COUNT_HW_CACHE_RESULT_MAX][EVSEL__MAX_ALIASES];
+>  extern const char *evsel__hw_names[PERF_COUNT_HW_MAX];
+>  extern const char *evsel__sw_names[PERF_COUNT_SW_MAX];
+> +extern const char *evsel__tool_names[PERF_TOOL_MAX];
+>  extern char *evsel__bpf_counter_events;
+>  bool evsel__match_bpf_counter_events(const char *name);
+>  
+> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+> index 064ec368a90b..c0e88d3b3e3c 100644
+> --- a/tools/perf/util/parse-events.c
+> +++ b/tools/perf/util/parse-events.c
+> @@ -154,6 +154,21 @@ struct event_symbol event_symbols_sw[PERF_COUNT_SW_MAX] = {
+>  	},
+>  };
+>  
+> +struct event_symbol event_symbols_tool[PERF_TOOL_MAX] = {
+> +	[PERF_TOOL_DURATION_TIME] = {
+> +		.symbol = "duration_time",
+> +		.alias  = "",
+> +	},
+> +	[PERF_TOOL_USER_TIME] = {
+> +		.symbol = "user_time",
+> +		.alias  = "",
+> +	},
+> +	[PERF_TOOL_SYSTEM_TIME] = {
+> +		.symbol = "system_time",
+> +		.alias  = "",
+> +	},
+> +};
+> +
+>  #define __PERF_EVENT_FIELD(config, name) \
+>  	((config & PERF_EVENT_##name##_MASK) >> PERF_EVENT_##name##_SHIFT)
+>  
+> @@ -3058,21 +3073,34 @@ int print_hwcache_events(const char *event_glob, bool name_only)
+>  	return evt_num;
+>  }
+>  
+> -static void print_tool_event(const char *name, const char *event_glob,
+> +static void print_tool_event(const struct event_symbol *syms, const char *event_glob,
+>  			     bool name_only)
+>  {
+> -	if (event_glob && !strglobmatch(name, event_glob))
+> +	if (syms->symbol == NULL)
+> +		return;
+> +
+> +	if (event_glob && !(strglobmatch(syms->symbol, event_glob) ||
+> +	      (syms->alias && strglobmatch(syms->alias, event_glob))))
+>  		return;
+> +
+>  	if (name_only)
+> -		printf("%s ", name);
+> -	else
+> +		printf("%s ", syms->symbol);
+> +	else {
+> +		char name[MAX_NAME_LEN];
+> +		if (syms->alias)
+> +			snprintf(name, MAX_NAME_LEN, "%s OR %s", syms->symbol, syms->alias);
+> +		else
+> +			strlcpy(name, syms->symbol, MAX_NAME_LEN);
+>  		printf("  %-50s [%s]\n", name, "Tool event");
+> -
+> +	}
+>  }
+>  
+>  void print_tool_events(const char *event_glob, bool name_only)
+>  {
+> -	print_tool_event("duration_time", event_glob, name_only);
+> +	// Start at 1 because the first enum entry symbols no tool event
+> +	for (int i = 1; i < PERF_TOOL_MAX; ++i) {
+> +		print_tool_event(event_symbols_tool + i, event_glob, name_only);
+> +	}
+>  	if (pager_in_use())
+>  		printf("\n");
+>  }
+> -- 
+> 2.36.0
 
-FWIW, I don't actually care about supporting nrips=false, it's the ability to test
-EMULTYPE_SKIP that I find valuable.  I also find the extra perspective of how RIP
-interacts with software interrupts/exceptions to be very helpful/educational, though
-that's of debatable value going forward.
+-- 
 
-> * if we require NRIPS for nested, we can also assume that the SVM save state
-> data has a valid next_rip; even if !svm->nrips_enabled.  There's the pesky
-> issue of restoring from an old system that did not have NRIPS, but let's
-> assume for now that NRIPS was set on the source as well.
-
-How about I throw a Not-signed-off-by patch on the end of the series to make NRIPS
-mandatory, that way we (in theory) have a fully functional snapshot for nrips=false
-if we want to go back in time.  And we probably need to give a deprecation grace
-period, i.e. wait a release or two before disappearing nrips?
+- Arnaldo

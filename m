@@ -2,141 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7245D5092E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EE75092DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382848AbiDTWgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 18:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
+        id S1382841AbiDTWgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 18:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239674AbiDTWgp (ORCPT
+        with ESMTP id S233746AbiDTWgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 18:36:45 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC933CFDD
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1650494037; x=1682030037;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4lgTYp4beWNQQ0PzTvH+WAeDNBZ25X0ElX3e2wBoqyY=;
-  b=LvEVoO/VrfRzbmHEsbRmMjPy2R9bLNtLWd/xQzo6c9AE8vdTrUEDHXsX
-   4jK7FIZat2CNgcfxHmjgroUvxBdNOqcCTkm/D25Paio5cGF+02ZRr0boO
-   tPI1+myBBGwO4fupaMvuP9HGWZ8FUPcUBWhxks878L7J9JyIBUN9CgXCk
-   TrsnWAGh1SHgLre1d1Crq0uOqwJkmjlIEtqr7dRCq3fI8i/l8iWfGmZsa
-   4bitdP+IgqZmhohtIz8DVub9g3v54xXC+KyxzFd2Znvtty7+CqPrg2XmM
-   uhd573uXkRvBNLhBnRCUj3JQmsHMvRpfUH3jcRFCBN9bWw7VMMjSxPZhe
+        Wed, 20 Apr 2022 18:36:36 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DAA3980A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:33:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650494028; x=1682030028;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=h7ss3pq1fGb/RJBq21Rmn3EWxFU3sDjJBWnaWblVCGI=;
+  b=BFr7mZKIu+hV8+9HZJc+oc1NTCI9unCKnBue8/etQtCkLW7AwVPZvuYD
+   CYIfVvsiy+HvZjXW/tuoIg6+hTQqR3lnlWdQ6Apuj02rFIOq7u70/ktW1
+   dVEOFDnfCwTye2xbhQwlZD+ZTDcyW/9R76CWl8bNAUhfLlUEDpEDDR13z
+   BEneDjWmQif/yfqT4V/wnxQIKIevKvyBpa50ELmwMG9dBwt8Zm+Yapya0
+   rsfGXhXyaO65gjptuSm+8k2G5ivtR8MqtQ4jVjgkKgk5NAq2MQL7uwbvK
+   J9ZAgiidXxnCXXh/KX9pC+Od+rEmMWH3vsZE8stAfZXpPIKAvbOm6bjl6
    g==;
-X-IronPort-AV: E=Sophos;i="5.90,276,1643644800"; 
-   d="scan'208";a="203273501"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Apr 2022 06:33:55 +0800
-IronPort-SDR: TK25q4UoYzoHTFk7ttfw3o1/QCyVbVJojDucCzXYB6sHU4ci5v+Sjv0jwJJrVUOj7d+ze2xb5g
- D3ZPTE1JGsnudJH/OFJzKru06/naci6EL6dFSuj5IbaeeED1O5OEq8IB9jLvOLl5HEnueC/5Nb
- hpeTE38gDObfRRI8Fizob9I9Vx6Aum/SOtzaFjHlOJ80b6RnuBw1WGZFrGc3vY75i4hgxi1YJW
- BPyPNAanfTUam3psnAoy76KEFCx6spZcZDnGaRWHAWwK3QeatKRMr+0Hni+SXn3+Yzr+TyBbVF
- qgGSKcBXDH2OFV+u50CaRKJ0
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Apr 2022 15:04:14 -0700
-IronPort-SDR: 2aSaWKKp56SH8Lw3jAWWhXmhct+Kc7cshZb3F1zxOUF1x0XSy1iiATo86Yh7qzfwxWabSUKFBz
- kY1rSxp9l9SSSh3VnE2h0Yc03P+kxBLePfsbGo4+RbaIfZlLnLrmCWnDFOddesfDIdUzA96GOf
- F+dPkiYRP8A40wF5mKFT/ZuUEFADtbPfDIz3u+9p2nq3jyVl2FG1fEqACghhhDynZ4LVHD2oxi
- TlOeglPrsoNC8YmV83Awyw+8wpwvu6zb++LGxyY7gJTF5ZfVLTSLcxyRYAglTOlXqfqzkuGfSA
- /7M=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Apr 2022 15:33:56 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KkFnv3m81z1SVp0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:33:55 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1650494034; x=1653086035; bh=4lgTYp4beWNQQ0PzTvH+WAeDNBZ25X0ElX3
-        e2wBoqyY=; b=bWDY651T5piuKIZEzu/pqHevDlQF+nH8LEBqH2TmRoyOgMo7Mtv
-        mdE1WtVPjY4+58pFJ8s0bZHkjev4DCi80eppn/nR++1lLNwz7My0rqNaAspZHL9p
-        oTeiEMeuekE3GnnbRgolbpuzBESk/9zZwE+k08EfbTZUWTCGeqXygwSFkL2GgCgp
-        /To7SBNQ8PszPzPYSWnNlWe2gaolErwce1ccHuzaTQhSz+XpOPPgSvuW1/u5Nx0T
-        QullpKAPdB7DR53MAsufyYgacsRJM+y1cBF5+vXWx9hPE7WurC5cTWgvNQnpb4cC
-        MKrHguBvPVjWQx3WMHm+eCaj0W/BZ5hSFRQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Xlp4GOfBWzm3 for <linux-kernel@vger.kernel.org>;
-        Wed, 20 Apr 2022 15:33:54 -0700 (PDT)
-Received: from [10.225.163.14] (unknown [10.225.163.14])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KkFns6zfRz1Rvlx;
-        Wed, 20 Apr 2022 15:33:53 -0700 (PDT)
-Message-ID: <da32482a-a38c-091d-ae28-aecb56fe1e7a@opensource.wdc.com>
-Date:   Thu, 21 Apr 2022 07:33:52 +0900
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264338324"
+X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
+   d="scan'208";a="264338324"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 15:33:48 -0700
+X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
+   d="scan'208";a="576833471"
+Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 15:33:48 -0700
+Date:   Wed, 20 Apr 2022 15:35:28 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Bruno Moreira-Guedes <codeagain@codeagain.dev>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
+Subject: Re: [PATCH v3 0/3] staging: vme: Cleanup driver tree old structures
+Message-ID: <20220420223528.GA1279659@alison-desk>
+References: <cover.1650321310.git.codeagain@codeagain.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] ata: pata_marvell: Check the 'bmdma_addr' beforing
- reading
-Content-Language: en-US
-To:     Zheyu Ma <zheyuma97@gmail.com>, s.shtylyov@omp.ru
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220420122134.430997-1-zheyuma97@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220420122134.430997-1-zheyuma97@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1650321310.git.codeagain@codeagain.dev>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/22 21:21, Zheyu Ma wrote:
-> Before detecting the cable type on the dma bar, the driver should check
-> whether the 'bmdma_addr' is zero, which means the adapter does not
-> support DMA, otherwise we will get the following error:
+On Mon, Apr 18, 2022 at 08:29:49PM -0300, Bruno Moreira-Guedes wrote:
+> This patch series modify the vme_user driver's place in
+> menuconfig (1/3), fixes a missing `depends on` line in a Kconfig file
+> (2/3), and rearrages the directory tree for the driver allowing a more
+> straightforward comprehension of its contents (3/3).
 > 
-> [    5.146634] Bad IO access at port 0x1 (return inb(port))
-> [    5.147206] WARNING: CPU: 2 PID: 303 at lib/iomap.c:44 ioread8+0x4a/0x60
-> [    5.150856] RIP: 0010:ioread8+0x4a/0x60
-> [    5.160238] Call Trace:
-> [    5.160470]  <TASK>
-> [    5.160674]  marvell_cable_detect+0x6e/0xc0 [pata_marvell]
-> [    5.161728]  ata_eh_recover+0x3520/0x6cc0
-> [    5.168075]  ata_do_eh+0x49/0x3c0
+> The 'vme_user/' driver is the only remaining vme-family driver in the
+> 'staging/' tree, but its structure, entry in menuconfig and building
+> routines are still attached to the 'vme/' subtree now outside
+> 'staging/'. The present patchset fixes it.
 > 
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
+
+Hi Bruno,
+
+I see your follow-on questions to GregKH about the 2 v2's and rolling
+this set. I imagine you are going to work with many maintainers across
+the kernel, so although understanding their processes is interesting and
+useful, at some point just keeping your submittals clean, simple, and
+straightforward is the more efficient path forward. If it were me, I think
+I could get a v4 in GregKHs mailbox quicker than going around with him
+on why his tools don't understand my oddities. (I admire your curiosity,
+seriously! I'm just in a get it done and move on mood.)
+
+In this case - you can see that this set is confusing because of the
+v2, then v3 of a single patch. I suggest cleaning it up while GregKH is
+sleeping ;) and get a clean v4 in his mbox. 
+
+Not sure your process - but if you are using git send-email, the 
+--dry-run option is how I do the final eye-balling of what I'm 
+about to send. Try that out.
+
+The changelog below can be more succinct. I made a suggestion below.
+
 > ---
->  drivers/ata/pata_marvell.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> CHANGE SUMMARY
 > 
-> diff --git a/drivers/ata/pata_marvell.c b/drivers/ata/pata_marvell.c
-> index 0c5a51970fbf..d2922699be5e 100644
-> --- a/drivers/ata/pata_marvell.c
-> +++ b/drivers/ata/pata_marvell.c
-> @@ -77,7 +77,9 @@ static int marvell_cable_detect(struct ata_port *ap)
->  	switch(ap->port_no)
->  	{
->  	case 0:
-> -		if (ioread8(ap->ioaddr.bmdma_addr + 1) & 1)
-> +		if (!ap->ioaddr.bmdma_addr)
-> +			return ATA_CBL_PATA_UNK;
-> +		else if (ioread8(ap->ioaddr.bmdma_addr + 1) & 1)
+>   Version:  v1  v2  v3
+> [PATCH 1/3] *   -   *
+> [PATCH 2/3] -   *   *
+> [PATCH 3/3] -   *   *
+> 
+> CHANGELOG
+> [PATCH 0/3] staging: vme: Restructuring menuconfig and tree
+> v1:
+>   Created PATCH 1/3 as a single patch
+> v2:
+>   Added PATCH 2/3 and 3/3, turning it into a patchset
+> v3:
+>   Fixed and improved commit messages according to previous comments by
+>   Greg and Alison (to whom I'm indebted for their kind reviews). The
+>   commit titles got changed to be more specific and use the present
+>   imperative tense as for Alison's suggestions. The message body got
+>   fixed according to Greg formatting comments. The changelogs were moved
+>   to the cover letter as per another suggestion by Alison, and I added
+>   missing details (like the update in the MAINTAINERS I failed to
+>   mention in v2) and made textual improvements for clarity that I also
+>   noticed.
+> 
+> [PATCH 1/3] staging: vme: Move vme_user to staging KConfig
+> v1:
+>  - Sourced "drivers/staging/vme/devices/Kconfig" in
+>    "drivers/staging/Kconfig" and unsourced in "drivers/vme/Kconfig".
+> v3:
+>  - Modified the commit subject and text body.
+> 
+> [PATCH 2/3] staging: vme: Add VME_BUS dependency to Kconfig
+> v2:
+>  - Added this patch to the patchset.
+> v3:
+>  - Modified the commit subject and text body.
+> 
+> [PATCH 3/3] staging: vme: Move 'vme/devices' to 'vme_user/'
+> v2:
+>  - Added this patch to the patchset
+> v3
+>  - Modified the commit subject and text body.
 
-No need for the "else" here.
+Changes in v4:
+- Remove extraneous patch from set
 
->  			return ATA_CBL_PATA40;
->  		return ATA_CBL_PATA80;
->  	case 1: /* Legacy SATA port */
+Changes in v3:
+- Move changelog to cover letter (Alison)
+- Update commit messages and logs (Greg, Alison)
+
+Changes in v2:
+- Add new patch to set: Move 'vme/devices' to 'vme_user/'
+- Add new patch to set: Add VME_BUS dependency to Kconfig
 
 
--- 
-Damien Le Moal
-Western Digital Research
+**I really want you to get this accepted before the next patch
+comes along and removes the driver entirely :(.
+
+Alison
+
+> 
+> Bruno Moreira-Guedes (3):
+>   staging: vme: Adjusted VME_USER in Kconfig
+>   staging: vme: Fix missing `depends on` at KConfig
+>   staging: vme: "drivers/staging/vme" tree cleanup
+> 
+>  MAINTAINERS                                          | 2 +-
+>  drivers/staging/Kconfig                              | 1 +
+>  drivers/staging/Makefile                             | 2 +-
+>  drivers/staging/vme/Makefile                         | 2 --
+>  drivers/staging/{vme/devices => vme_user}/Kconfig    | 2 +-
+>  drivers/staging/{vme/devices => vme_user}/Makefile   | 0
+>  drivers/staging/{vme/devices => vme_user}/vme_user.c | 0
+>  drivers/staging/{vme/devices => vme_user}/vme_user.h | 0
+>  drivers/vme/Kconfig                                  | 2 --
+>  9 files changed, 4 insertions(+), 7 deletions(-)
+>  delete mode 100644 drivers/staging/vme/Makefile
+>  rename drivers/staging/{vme/devices => vme_user}/Kconfig (93%)
+>  rename drivers/staging/{vme/devices => vme_user}/Makefile (100%)
+>  rename drivers/staging/{vme/devices => vme_user}/vme_user.c (100%)
+>  rename drivers/staging/{vme/devices => vme_user}/vme_user.h (100%)
+> 
+> -- 
+> 2.35.3
+> 
+
+

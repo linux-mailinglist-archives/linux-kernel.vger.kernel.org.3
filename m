@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9933050928B
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8C850928A
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353504AbiDTWP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 18:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S1382799AbiDTWPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 18:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355967AbiDTWO5 (ORCPT
+        with ESMTP id S1354188AbiDTWOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 18:14:57 -0400
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671B248E68
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:11:49 -0700 (PDT)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4KkFJD0kZCz1r0PY;
-        Thu, 21 Apr 2022 00:11:40 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4KkFJC5Cqvz1qqkB;
-        Thu, 21 Apr 2022 00:11:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id 3mtlwbvpiYJD; Thu, 21 Apr 2022 00:11:38 +0200 (CEST)
-X-Auth-Info: 8HbkyrIVus8sGoHUetusB0Obnv7jg/sLKvDsDI9Z4rWZKW80iKNKFlX3jwZgpAnd
-Received: from igel.home (ppp-46-244-167-235.dynamic.mnet-online.de [46.244.167.235])
+        Wed, 20 Apr 2022 18:14:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA60448E5D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:11:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Thu, 21 Apr 2022 00:11:38 +0200 (CEST)
-Received: by igel.home (Postfix, from userid 1000)
-        id B225C2C3AC9; Thu, 21 Apr 2022 00:11:37 +0200 (CEST)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, rdunlap@infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        anup@brainfault.org, vincent.chen@sifive.com, guoren@kernel.org,
-        Atish Patra <atishp@rivosinc.com>,
-        alexandre.ghiti@canonical.com, jszhang@kernel.org,
-        vitaly.wool@konsulko.com, gatecat@ds0.me,
-        wangkefeng.wang@huawei.com, mick@ics.forth.gr,
-        panqinglin2020@iscas.ac.cn, rppt@kernel.org,
-        linux-kernel@vger.kernel.org, linux@rivosinc.com,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 1/4] RISC-V: Avoid empty create_*_mapping definitions
-References: <20220420184056.7886-1-palmer@rivosinc.com>
-        <20220420184056.7886-2-palmer@rivosinc.com>
-X-Yow:  If I am elected, the concrete barriers around the WHITE HOUSE
- will be replaced by tasteful foam replicas of ANN MARGARET!
-Date:   Thu, 21 Apr 2022 00:11:37 +0200
-In-Reply-To: <20220420184056.7886-2-palmer@rivosinc.com> (Palmer Dabbelt's
-        message of "Wed, 20 Apr 2022 11:40:53 -0700")
-Message-ID: <87a6cfh0bq.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21A65B821B9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 22:11:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB941C385A0;
+        Wed, 20 Apr 2022 22:11:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1650492703;
+        bh=3jG6oVH2gHG5S5CoAbfXYb/iLXrxT6JSgZNfp2QlZu8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V/De21DIy005tQ4qGJq93QHov1T5vmFg6sTyk8WF3N9JVU1eXzvQe/vdLctKK9LgG
+         DG8GbaEXYzmUGU+LHJID/Rpf9FhhPDRcx0w1T5E9maBKHQItsowHsJ9kVqx1GOt5gr
+         nxRv/I+tWZ4n3svPJ/nVkxjDSbiwZ8f32a518Z9Q=
+Date:   Wed, 20 Apr 2022 15:11:42 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        christian.koenig@amd.com, jhubbard@nvidia.com,
+        rcampbell@nvidia.com, Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v2] mm/mmu_notifier.c: Fix race in
+ mmu_interval_notifier_remove()
+Message-Id: <20220420151142.f60307e749033a24ef0c68d5@linux-foundation.org>
+In-Reply-To: <20220420043734.476348-1-apopple@nvidia.com>
+References: <20220420043734.476348-1-apopple@nvidia.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Apr 20 2022, Palmer Dabbelt wrote:
+On Wed, 20 Apr 2022 14:37:34 +1000 Alistair Popple <apopple@nvidia.com> wrote:
 
-> (create_pmd_mpping() ends up skipped on XIP_KERNEL).
+> In some cases it is possible for mmu_interval_notifier_remove() to race
+> with mn_tree_inv_end() allowing it to return while the notifier data
+> structure is still in use. Consider the following sequence:
+> 
+> CPU0 - mn_tree_inv_end()            CPU1 - mmu_interval_notifier_remove()
+> ----------------------------------- ------------------------------------
+>                                     spin_lock(subscriptions->lock);
+>                                     seq = subscriptions->invalidate_seq;
+> spin_lock(subscriptions->lock);     spin_unlock(subscriptions->lock);
+> subscriptions->invalidate_seq++;
+>                                     wait_event(invalidate_seq != seq);
+>                                     return;
+> interval_tree_remove(interval_sub); kfree(interval_sub);
+> spin_unlock(subscriptions->lock);
+> wake_up_all();
+> 
+> As the wait_event() condition is true it will return immediately. This
+> can lead to use-after-free type errors if the caller frees the data
+> structure containing the interval notifier subscription while it is
+> still on a deferred list. Fix this by taking the appropriate lock when
+> reading invalidate_seq to ensure proper synchronisation.
+> 
+> ...
+>
+> Fixes: 99cb252f5e68 ("mm/mmu_notifier: add an interval tree notifier")
 
-Does it?  There is always the semicolon left as the body of the
-conditional (which is why you get the empty-body warning in the first
-place).
-
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+Do you think fix this should be backported into older kernels?

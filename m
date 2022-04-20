@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657B9507F40
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8D4507F44
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348788AbiDTC7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 22:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
+        id S1348767AbiDTDB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 23:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239816AbiDTC7e (ORCPT
+        with ESMTP id S236622AbiDTDB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 22:59:34 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5818538BDB
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:56:49 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e2fa360f6dso649713fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:56:49 -0700 (PDT)
+        Tue, 19 Apr 2022 23:01:57 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FCF38BE5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:59:13 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id s25so523859edi.13
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:59:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Bpdl3onC2L+yuDtcrh15IbOpDqZIMLfc1uBqp1f+cK8=;
-        b=gr9rbqbPFrPKF6qrn9PR00iutEKQ4qGhvKekLBdKxT+fCdsoHCkixQhZar2+85UiBC
-         6nbTGsbcQIjw7NNhbr36TGDAVwu1F0FlgNdextRhKwZhHYWEoXdedE0Kto+iGP41JbyB
-         LxH01oDyC7N4sFgkl+0+eest9ZdFTUCYsRAwat8qu8yM/3BjOXYmHsFMgnH0kY4w/uOe
-         FTgQrz4nrB1CWbLxzNDyuQCfaG9cWo83OWTuaSnROQGrzAGsy/SSXOfMhjtbQAg73daa
-         3ADzEiMsTRcl18Fk1anuBjcVaKn7BqjhsoXS3hVgy+pxmBCCXv2cC9pAjN9/ulIt5h59
-         I8cQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fCO4DZsrcFJvW/h/KDtAy5sw4iMAoyjRegeBhEbbGME=;
+        b=VLMO61q8IHewHYHM+ceMtC79fS4nbOR09SzueO2v0renQPlbKB+sYErCZmDWQISUxq
+         dAy7rjD9ePHa73NGG3vI5tQxYMoyk0NHHFIBrJOgJS0+kcKKkJ+4XVuyxi/wB57xyzf6
+         xfn/dmEBSgJe+n0h0MNuHjf3TY6P2Wzeyoqhf9Lb01rS9b7Z2f2mMCzQj3+i8U0qCoLL
+         JvzcfmEvWj7l8ounT9+YIjpwE2Kt3g3yLS3U5yt1vXMkge1MAgpy0gQna4RtMc68qf3p
+         OfBIy1d/14iISwBl7a1z1hEkRL21Y/FnU140T4UWkdYzTPOvgLtTdK8TtMq9FpC7uHFA
+         NVzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Bpdl3onC2L+yuDtcrh15IbOpDqZIMLfc1uBqp1f+cK8=;
-        b=eKZtfthpw9h4AinpuR+zx1n/Qj+0/xTcNNHs10+H8ho5cj57ai9QtP6x608WKfLdHe
-         RaOGYfoAwyaVvnUxcFP4t0Hoby6CqFWCBAyTWIwKMes6Q9ZSDJvr1JvuenlcBRlBHdo7
-         nvrF3jvZi6SKVamdUKylqRNPwPulmawSuxUGrukw80mlC8edmaQ5BdTpRFhFqc95rhuY
-         wamD0TWDNzRjyHsAgu9Az/b8LrA5JvYIpHdO3orSGY1WBfFj9cUxtqY7GHLi5tj//Zsi
-         5QjeGByTWQirU782iIKRVXnH3qKFqQyrfZ/U0vqR11nRfVRAtj6kWKJ0g7iDXsMrbsjS
-         ye4w==
-X-Gm-Message-State: AOAM530A0HCDtQhnV1ABZ2qEA9wWBrOs0GOZQKeVVsYOuqHptaHk1TDG
-        NqWuwuz1PPbmHyHxeQVguqwHDw==
-X-Google-Smtp-Source: ABdhPJz1r1HbhjstrYl2H7CsBk3Ua1ucqJR7Lb2QJhnvesT98prMjuWrzu/us0Ykm/iAhf04AjAsSQ==
-X-Received: by 2002:a05:6870:f697:b0:d7:5679:8fc8 with SMTP id el23-20020a056870f69700b000d756798fc8mr721436oab.172.1650423408693;
-        Tue, 19 Apr 2022 19:56:48 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id c14-20020a4ad20e000000b0033a371fa815sm3549603oos.37.2022.04.19.19.56.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 19:56:48 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 21:56:46 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 1/2] arm64: dts: qcom: sm8150: Add support for SDC2
-Message-ID: <Yl92blX6FaCMU48p@builder.lan>
-References: <20220414213139.476240-1-bhupesh.sharma@linaro.org>
- <20220414213139.476240-2-bhupesh.sharma@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fCO4DZsrcFJvW/h/KDtAy5sw4iMAoyjRegeBhEbbGME=;
+        b=BQh+crVHZ5BEjGeEVt0QJOMF+bgIwu7fxKtLJiW+AFZrn7MFzcqdLIFKqCqaOt16bz
+         aNGZDpJOsgG+hrLor+8AXpKGTBVfPs0D7NvzKHJgHuCCaGwFUBPLi/fP5uRCn7/SLMC1
+         q+IZFxR51FfUPhg9hulcWxW6ho2R2QxhyXoszYsrcyRWiKplWDBG7GOgkui/w6QgT00d
+         wpS44jaAOOPY8dpqXHSmPukLII8JVvRPgKS6hl7h5YHyFiEQ7cGGW/2By0Y37XHlxd8/
+         ezegMfIGM+G9ZI2S16eIt3F+b8FcffwO5W3BCRnMzcwFT2GsjWy0iqbY8rrbgldFtGOB
+         S6vg==
+X-Gm-Message-State: AOAM531MrK9MGNGBorfsaFKz4G0/ezM9ViFkryUk2d/e9AcAFW3/4dts
+        1ck0noZb82nq8VlZhMazuUe2IlE9sExvafxedhh/Of77Rp1mfg==
+X-Google-Smtp-Source: ABdhPJzR30WrOjJGK0N9yWaNaxGZPKkcmI8ZbZ3Wm+OCJRl0d/iiOBFvtsZCDx9vwKq0k6AJXbyPWUDxshgOKWRGfHo=
+X-Received: by 2002:a05:6402:350a:b0:423:e41e:75cb with SMTP id
+ b10-20020a056402350a00b00423e41e75cbmr14422528edd.178.1650423551851; Tue, 19
+ Apr 2022 19:59:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414213139.476240-2-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220416081355.2155050-1-jcmvbkbc@gmail.com> <CANpmjNNW0kLf2Ou6i_dNeRLO=Qrru4bOEfJ=be=Dfig4wnQ67g@mail.gmail.com>
+In-Reply-To: <CANpmjNNW0kLf2Ou6i_dNeRLO=Qrru4bOEfJ=be=Dfig4wnQ67g@mail.gmail.com>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Tue, 19 Apr 2022 19:59:00 -0700
+Message-ID: <CAMo8BfJM0JHqh8Nz3LuK7Ccu7WB1Cup0mX+RYvO1yft_K4hyLQ@mail.gmail.com>
+Subject: Re: [PATCH] xtensa: enable KCSAN
+To:     Marco Elver <elver@google.com>
+Cc:     "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Chris Zankel <chris@zankel.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,80 +69,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 14 Apr 16:31 CDT 2022, Bhupesh Sharma wrote:
+Hi Marco,
 
-> Add support for SDC2 which can be used to interface uSD card.
-> 
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+On Tue, Apr 19, 2022 at 3:16 AM Marco Elver <elver@google.com> wrote:
+>
+> Nice to see this happen!
+>
+> On Sat, 16 Apr 2022 at 10:14, Max Filippov <jcmvbkbc@gmail.com> wrote:
+> > Provide stubs for 64-bit atomics when building with KCSAN.
+>
+> The stubs are the only thing I don't understand. More elaboration on
+> why this is required would be useful (maybe there's another way to
+> solve?).
 
-Thanks for the patch Bhupesh. I have already applied v1 though. Can you
-please double check linux-next to confirm that things are in order?
+It doesn't build without it, because the compiler left function calls
+in the code:
 
-Thanks,
-Bjorn
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic32_compare_exchange_val':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_load_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_load':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_load_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_store_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_store':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_store_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_exchange_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_exchange':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_exchange_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_fetch_add_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_fetch_add':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_fetch_add_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_fetch_sub_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_fetch_sub':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_fetch_sub_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_fetch_and_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_fetch_and':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_fetch_and_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_fetch_or_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_fetch_or':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_fetch_or_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_fetch_xor_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_fetch_xor':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_fetch_xor_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_fetch_nand_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_fetch_nand':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_fetch_nand_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_compare_exchange_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_compare_exchange_strong':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_compare_exchange_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_compare_exchange_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.o: in function
+`__tsan_atomic64_compare_exchange_weak':
+kernel/kcsan/core.c:1262: undefined reference to `__atomic_compare_exchange_8'
+xtensa-de233_fpu-elf-ld: kernel/kcsan/core.c:1262: undefined reference
+to `__atomic_compare_exchange_8'
 
-> ---
->  arch/arm64/boot/dts/qcom/sm8150.dtsi | 45 ++++++++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index 15f3bf2e7ea0..0fecebf0a473 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -3270,6 +3270,51 @@ usb_2_ssphy: phy@88eb200 {
->  			};
->  		};
->  
-> +		sdhc_2: sdhci@8804000 {
-> +			compatible = "qcom,sm8150-sdhci", "qcom,sdhci-msm-v5";
-> +			reg = <0 0x08804000 0 0x1000>;
-> +
-> +			interrupts = <GIC_SPI 204 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 222 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "hc_irq", "pwr_irq";
-> +
-> +			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
-> +				 <&gcc GCC_SDCC2_APPS_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "iface", "core", "xo";
-> +			iommus = <&apps_smmu 0x6a0 0x0>;
-> +			qcom,dll-config = <0x0007642c>;
-> +			qcom,ddr-config = <0x80040868>;
-> +			power-domains = <&rpmhpd 0>;
-> +			operating-points-v2 = <&sdhc2_opp_table>;
-> +
-> +			status = "disabled";
-> +
-> +			sdhc2_opp_table: sdhc2-opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-19200000 {
-> +					opp-hz = /bits/ 64 <19200000>;
-> +					required-opps = <&rpmhpd_opp_min_svs>;
-> +				};
-> +
-> +				opp-50000000 {
-> +					opp-hz = /bits/ 64 <50000000>;
-> +					required-opps = <&rpmhpd_opp_low_svs>;
-> +				};
-> +
-> +				opp-100000000 {
-> +					opp-hz = /bits/ 64 <100000000>;
-> +					required-opps = <&rpmhpd_opp_svs>;
-> +				};
-> +
-> +				opp-202000000 {
-> +					opp-hz = /bits/ 64 <202000000>;
-> +					required-opps = <&rpmhpd_opp_svs_l1>;
-> +				};
-> +			};
-> +		};
-> +
->  		dc_noc: interconnect@9160000 {
->  			compatible = "qcom,sm8150-dc-noc";
->  			reg = <0 0x09160000 0 0x3200>;
-> -- 
-> 2.35.1
-> 
+None of these functions are called because xtensa doesn't have
+64-bit atomic ops.
+
+I guess that another way to fix it would be making
+DEFINE_TSAN_ATOMIC_OPS(64);
+conditional and not enabling it when building for xtensa.
+
+> > Disable KCSAN instrumentation in arch/xtensa/boot.
+>
+> Given you went for barrier instrumentation, I assume you tested with a
+> CONFIG_KCSAN_STRICT=y config?
+
+Yes.
+
+> Did the kcsan_test pass?
+
+current results are the following on QEMU:
+
+     # test_missing_barrier: EXPECTATION FAILED at
+kernel/kcsan/kcsan_test.c:1313
+     Expected match_expect to be true, but is false
+     # test_atomic_builtins_missing_barrier: EXPECTATION FAILED at
+kernel/kcsan/kcsan_test.c:1356
+     Expected match_expect to be true, but is false
+ # kcsan: pass:27 fail:2 skip:0 total:29
+ # Totals: pass:193 fail:4 skip:0 total:197
+
+and the following on the real hardware:
+
+    # test_concurrent_races: EXPECTATION FAILED at kernel/kcsan/kcsan_test.c:762
+    Expected match_expect to be true, but is false
+    # test_write_write_struct_part: EXPECTATION FAILED at
+kernel/kcsan/kcsan_test.c:910
+    Expected match_expect to be true, but is false
+    # test_assert_exclusive_access_writer: EXPECTATION FAILED at
+kernel/kcsan/kcsan_test.c:1077
+    Expected match_expect_access_writer to be true, but is false
+    # test_assert_exclusive_bits_change: EXPECTATION FAILED at
+kernel/kcsan/kcsan_test.c:1098
+    Expected match_expect to be true, but is false
+    # test_assert_exclusive_writer_scoped: EXPECTATION FAILED at
+kernel/kcsan/kcsan_test.c:1136
+    Expected match_expect_start to be true, but is false
+    # test_missing_barrier: EXPECTATION FAILED at kernel/kcsan/kcsan_test.c:1313
+    Expected match_expect to be true, but is false
+    # test_atomic_builtins_missing_barrier: EXPECTATION FAILED at
+kernel/kcsan/kcsan_test.c:1356
+    Expected match_expect to be true, but is false
+# kcsan: pass:22 fail:7 skip:0 total:29
+# Totals: pass:177 fail:20 skip:0 total:197
+
+-- 
+Thanks.
+-- Max

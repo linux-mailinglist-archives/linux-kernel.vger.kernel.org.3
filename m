@@ -2,83 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F6D509088
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7F4509087
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381806AbiDTTgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 15:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
+        id S1381812AbiDTThZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 15:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353156AbiDTTgp (ORCPT
+        with ESMTP id S1351468AbiDTThY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 15:36:45 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02723EAA2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:33:58 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id g19so4812838lfv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:33:58 -0700 (PDT)
+        Wed, 20 Apr 2022 15:37:24 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C7C3EF1D;
+        Wed, 20 Apr 2022 12:34:37 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id q14so3095907ljc.12;
+        Wed, 20 Apr 2022 12:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VQf/c6SFLeLbkhwhXbufAJYZwI77Oi3QbNygfxlLBy4=;
-        b=Nkom6JPjm5rIdy+ECNM+jePflCglXSUYJ7CZDmOzRAMIROG4MFMgW70DQmc0n29WOZ
-         RiM7dK0nWYcPuGZJVSQSfzH17vt8dW+R8FBVhg60w9CfD7gJqmK93xV5KSRu9ZpjGaHL
-         eeumdg/5zwYLL8Du6jUBRtqtAU29zaZ4nSbtc=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tjgtD5b88stSGfQKWtLEKZrrmLsw2qkBuwSeeJ0zuRk=;
+        b=REQ3x7fKLP/EuTnv0GmQmMXaaniRwUtG/2NAsMQ0MKCDkm1I6tRznXQUJsItKuoTlm
+         p2MF8iE5Zzu70G+Gasx2709mXA32PLi1wAASYvs9Q+xTSQ6+D9l0maFctJ2wOTMXGrai
+         bXT3nA9aBaIPBAQsD2PONNhOJkMpkO0CtaImBZd91OqIgwwKnIukZKvAOeSfejYz+uoA
+         pmSTmTrd9MKdpBJza5p0CZyEbb97EnQ4kmBNIyEBE9MjU3kxGEbL/vd8cAMOmYYBgV+E
+         cM5GkendfRXfCHNQhG1krUj2XdXAt5aLy1IZPHTXMHM/5rGHWxU+ZYijqStV6BvlSlGD
+         r2Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VQf/c6SFLeLbkhwhXbufAJYZwI77Oi3QbNygfxlLBy4=;
-        b=nKYei1P2c6AXB2HrJdgcTt9j7OwPwA9rGcmswRRVH5s0n9BP2+l+rI7gjcV4nm0S5P
-         Le6fbblkWCoTXeYWschPbfOoeOV6viNo2CStgaSNWDRB8WcR7cjX7CXOz5tJPjtKKMtM
-         P+TE7TQY6QdPwxeaLr8dFDREKsAFA2FuycoDEewxl0aj6Gyp3gbmS6UYkIqMIBcGYtC5
-         Gv7rN6BQaaHmKMXyT/7TXj677qT28yy1Ok4I3rNuH3+fmeDpMzEmwkdLRVI8Wc4SBQug
-         fSmSN4WNmB6+7p1z8avv7e5C2sK6Jqt0QIXcwqYGBeoc6Lms3UORpNlp/XKN3Mx7ZbT9
-         W2hw==
-X-Gm-Message-State: AOAM530o/YCNRInHJ0owhYjqGTkuMiHFT2q2oZjYBEgTZTRzJY3X21s4
-        c6VeGqjEqz7DIM7eVOJ5BK9b4byNRgZel6Ucqeo=
-X-Google-Smtp-Source: ABdhPJzXFRZ0VtlqVK0fMtISBCEA48rm+X4zED9mvZ8iQedY1cOfGj/Lrr5VjZreRK948evxynjy0A==
-X-Received: by 2002:a05:6512:228e:b0:471:9022:c4d3 with SMTP id f14-20020a056512228e00b004719022c4d3mr11352430lfu.513.1650483236967;
-        Wed, 20 Apr 2022 12:33:56 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id d28-20020a056512321c00b00470d2987b50sm1368270lfe.137.2022.04.20.12.33.55
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tjgtD5b88stSGfQKWtLEKZrrmLsw2qkBuwSeeJ0zuRk=;
+        b=A8WtQ+iIAH04sp9ymTQmdrko69Haa6UNbB57Om7Oh7DvO6yY8s4h4qm54RoVvJb9Ep
+         5pNpKUk8X4EW/SPCTPWN4p8afaxKRdRdT8R/c6YOZJEdEgYBbWgsywxGG85t6FsGazZ3
+         mdsh1Cg/z6SwBRjbAphxso3tyS+kzZPWnBy30+zqzazcZPaK2zsDVjRo063rkQn6jDsE
+         vuEou1LYugkrf8oPW/Mu3zthsptfS05oJSu7BGNK5sqx6IBPD3KRHQYaBOL54jaPJV6B
+         kVUhl1mdnkK0H1aqL6Qtams3qagdkY6t6PMuLUrtDz9b4bp6sdEtmsWubgagS3sndPje
+         gJKQ==
+X-Gm-Message-State: AOAM533rzEgjktU1nfe3sDf9WyhL94c6JoFFte6bvUb1D6x5blPXMfFJ
+        VVhL7LFqfLl8/51hNnNWSGk=
+X-Google-Smtp-Source: ABdhPJxsHjCQqq6WluovUBYdrQyV3jelbuozqG0OYcQa6CZdvrrYWe8QWnKWHKNYaNel51RNGyzwhg==
+X-Received: by 2002:a05:651c:905:b0:247:e451:48a5 with SMTP id e5-20020a05651c090500b00247e45148a5mr14529352ljq.313.1650483275515;
+        Wed, 20 Apr 2022 12:34:35 -0700 (PDT)
+Received: from [192.168.1.38] (91-159-150-194.elisa-laajakaista.fi. [91.159.150.194])
+        by smtp.gmail.com with ESMTPSA id d14-20020a19f24e000000b00471a405963asm698679lfk.304.2022.04.20.12.34.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 12:33:56 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id x17so4766390lfa.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:33:55 -0700 (PDT)
-X-Received: by 2002:a05:6512:108b:b0:470:90b9:fb51 with SMTP id
- j11-20020a056512108b00b0047090b9fb51mr14612420lfg.52.1650483235692; Wed, 20
- Apr 2022 12:33:55 -0700 (PDT)
+        Wed, 20 Apr 2022 12:34:35 -0700 (PDT)
+Message-ID: <c62170c6-5993-2417-4143-5a37a98b227c@gmail.com>
+Date:   Wed, 20 Apr 2022 22:34:33 +0300
 MIME-Version: 1.0
-References: <YlVHSvkyUBXZPUr2@arm.com> <YlVJKjXkcHqkwyt4@gondor.apana.org.au>
- <YlVOTsaTVkBOxthG@arm.com> <YlVSBuEqMt2S1Gi6@gondor.apana.org.au>
- <YlVxGAHHD/j6lW3c@arm.com> <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
- <YlaOIbSA7B/G9222@arm.com> <CAHk-=wjr9-n7vHiVdm-L-KX4kXWyY45++8jenFA1QV5oc=yhZg@mail.gmail.com>
- <Ylh61CCMkESmurIp@arm.com> <CAHk-=wjwupOLq3xh8z02CpXe8-=Lb_z0kXXQJYQ5YaQPpi3MiA@mail.gmail.com>
- <YmBaA5O8cnBuoGuG@arm.com>
-In-Reply-To: <YmBaA5O8cnBuoGuG@arm.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 20 Apr 2022 12:33:39 -0700
-X-Gmail-Original-Message-ID: <CAHk-=widM2Zt2BK3dwpUG8SzPG7_oG7t7ZvDoQmvDWDWwkB7TA@mail.gmail.com>
-Message-ID: <CAHk-=widM2Zt2BK3dwpUG8SzPG7_oG7t7ZvDoQmvDWDWwkB7TA@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH RFC 0/4] mm, arm64: In-kernel support for
+ memory-deny-write-execute (MDWE)
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        =?UTF-8?Q?Zbigniew_J=c4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net,
+        linux-hardening@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Salvatore Mesoraca <s.mesoraca16@gmail.com>,
+        Igor Zhbanov <izh1979@gmail.com>
+References: <20220413134946.2732468-1-catalin.marinas@arm.com>
+ <202204141028.0482B08@keescook> <YmAEDsGtxhim46UI@arm.com>
+From:   Topi Miettinen <toiwoton@gmail.com>
+In-Reply-To: <YmAEDsGtxhim46UI@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,37 +90,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 12:08 PM Catalin Marinas
-<catalin.marinas@arm.com> wrote:
->
-> With kstrdup() modified to pass __GFP_PACKED (as per the last hunk in
-> the diff below), I get just after boot:
->
-> kmalloc-128         8966   9056    128   32
-> kmalloc-96             0      0     96   42
-> kmalloc-64           192    192     64   64
-> kmalloc-32           768    768     32  128
-> kmalloc-16          2048   2048     16  256
-> kmalloc-8           2560   2560      8  512
->
-> So that's probably the simplest approach and using the ftrace histogram
-> we can add the flag to more places.
+On 20.4.2022 16.01, Catalin Marinas wrote:
+> On Thu, Apr 14, 2022 at 11:52:17AM -0700, Kees Cook wrote:
+>> On Wed, Apr 13, 2022 at 02:49:42PM +0100, Catalin Marinas wrote:
+>>> The background to this is that systemd has a configuration option called
+>>> MemoryDenyWriteExecute [1], implemented as a SECCOMP BPF filter. Its aim
+>>> is to prevent a user task from inadvertently creating an executable
+>>> mapping that is (or was) writeable. Since such BPF filter is stateless,
+>>> it cannot detect mappings that were previously writeable but
+>>> subsequently changed to read-only. Therefore the filter simply rejects
+>>> any mprotect(PROT_EXEC). The side-effect is that on arm64 with BTI
+>>> support (Branch Target Identification), the dynamic loader cannot change
+>>> an ELF section from PROT_EXEC to PROT_EXEC|PROT_BTI using mprotect().
+>>> For libraries, it can resort to unmapping and re-mapping but for the
+>>> main executable it does not have a file descriptor. The original bug
+>>> report in the Red Hat bugzilla - [2] - and subsequent glibc workaround
+>>> for libraries - [3].
+>>
+>> Right, so, the systemd filter is a big hammer solution for the kernel
+>> not having a very easy way to provide W^X mapping protections to
+>> userspace. There's stuff in SELinux, and there have been several
+>> attempts[1] at other LSMs to do it too, but nothing stuck.
+>>
+>> Given the filter, and the implementation of how to enable BTI, I see two
+>> solutions:
+>>
+>> - provide a way to do W^X so systemd can implement the feature differently
+>> - provide a way to turn on BTI separate from mprotect to bypass the filter
+>>
+>> I would agree, the latter seems like the greater hack,
+> 
+> We discussed such hacks in the past but they are just working around the
+> fundamental issue - systemd wants W^X but with BPF it can only achieve
+> it by preventing mprotect(PROT_EXEC) irrespective of whether the mapping
+> was already executable. If we find a better solution for W^X, we
+> wouldn't have to hack anything for mprotect(PROT_EXEC|PROT_BTI).
+> 
+>> so I welcome
+>> this RFC, though I think it might need to explore a bit of the feature
+>> space exposed by other solutions[1] (i.e. see SARA and NAX), otherwise
+>> it risks being too narrowly implemented. For example, playing well with
+>> JITs should be part of the design, and will likely need some kind of
+>> ELF flags and/or "sealing" mode, and to handle the vma alias case as
+>> Jann Horn pointed out[2].
+> 
+> I agree we should look at what we want to cover, though trying to avoid
+> re-inventing SELinux. With this patchset I went for the minimum that
+> systemd MDWE does with BPF.
+> 
+> I think JITs get around it using something like memfd with two separate
+> mappings to the same page. We could try to prevent such aliases but
+> allow it if an ELF note is detected (or get the JIT to issue a prctl()).
+> 
+> Anyway, with a prctl() we can allow finer-grained control starting with
+> anonymous and file mappings and later extending to vma aliases,
+> writeable files etc. On top we can add a seal mask so that a process
+> cannot disable a control was set. Something like (I'm not good at
+> names):
+> 
+> 	prctl(PR_MDWX_SET, flags, seal_mask);
+> 	prctl(PR_MDWX_GET);
+> 
+> with flags like:
+> 
+> 	PR_MDWX_MMAP - basics, should cover mmap() and mprotect()
+> 	PR_MDWX_ALIAS - vma aliases, allowed with an ELF note
+> 	PR_MDWX_WRITEABLE_FILE
+> 
+> (needs some more thinking)
+> 
 
-I agree that this seems to be the safest thing to do, and maybe
-__GFP_PACKED is a better flag name than __GFP_NODMA.
+For systemd, feature compatibility with the BPF version is important so 
+that we could automatically switch to the kernel version once available 
+without regressions. So I think PR_MDWX_MMAP (or maybe PR_MDWX_COMPAT) 
+should match exactly what MemoryDenyWriteExecute=yes as implemented with 
+BPF has: only forbid mmap(PROT_EXEC|PROT_WRITE) and mprotect(PROT_EXEC). 
+Like BPF, once installed there should be no way to escape and ELF flags 
+should be also ignored. ARM BTI should be allowed though (allow 
+PROT_EXEC|PROT_BTI if the old flags had PROT_EXEC).
 
-That said, It worries me a bit in that to me "PACKED" implies "no
-alignment at all". And I could _easily_ see people still wanting to do
-8-byte allocations that have 8-byte alignment because it's some kind
-of private pointer thing or whatever.
+Then we could have improved versions (other PR_MDWX_ prctls) with lots 
+more checks. This could be enabled with MemoryDenyWriteExecute=strict or so.
 
-For "kstrdup()", a flag like __GFP_PACKED makes 100% sense, since it
-literally wants byte alignment.
+Perhaps also more relaxed versions (like SARA) could be interesting 
+(system service running Python with FFI, or perhaps JVM etc), enabled 
+with for example MemoryDenyWriteExecute=trampolines. That way even those 
+programs would get some protection (though there would be a gap in the 
+defences).
 
-But what about those "random small structures" cases?
-
-Anyway, I'm perfectly happy calling it __GFP_PACKED, but at a minimum
-document that "packed" in this case still means "__alignof__(unsigned
-long long)" or something like that?
-
-                      Linus
+-Topi

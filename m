@@ -2,93 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAC3508040
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CC5508042
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359321AbiDTEr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 00:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S1359327AbiDTEsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 00:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349430AbiDTErY (ORCPT
+        with ESMTP id S1359324AbiDTEsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 00:47:24 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081AE1BE8E;
-        Tue, 19 Apr 2022 21:44:40 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id z99so740827ede.5;
-        Tue, 19 Apr 2022 21:44:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=p4hqPR2FQCDiioryNJZrJzUVBeqS3PlrFw0l8N9UTZA=;
-        b=1KmXU/4cWtqxI3DslzR7vvXW/tCJLdW3QR4GHGtmuJjKWnr+L9BWSIw30gzVSK/1su
-         r1uVi6+99Gv68VpALBaMf3BGv44dQNXit4GlVHxU3Z9zcvu4J4OfngLO2qY+KEX5YwjS
-         XZ/vpx7BtrI8hj66vteIzU88utsS3DcDdoS7LAeSegKhHpx+RArBLwaP1KA8QPeHgswz
-         kfpuPweFS/55LaNfYeYYNtly7vOmGZAW0RBmqAE/N0rLOTo91/CXpD+bzC2QehmrOnuf
-         p9hytMtuN1XEa+9VusnXxuV4ELHnqJydjwrD2Cw/DP4C35xkHagLHgUc+wcm2PnYkAKg
-         76YA==
-X-Gm-Message-State: AOAM5326SShKx3mVUZqdNkPrC+IO/00KtqpFgw8dYoHn3JVcNxqjLCXD
-        weka1evrqY9qeMxrz2ctIq8=
-X-Google-Smtp-Source: ABdhPJw1ELVDLd/t3J7IhXSWaNyv52UcQV3URJJXqeQmVlRkcvpmh+HB+0rcJeOWzt9dgu1GaavQhw==
-X-Received: by 2002:aa7:d394:0:b0:41d:799e:e5ed with SMTP id x20-20020aa7d394000000b0041d799ee5edmr21338873edq.347.1650429878478;
-        Tue, 19 Apr 2022 21:44:38 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id cb25-20020a170906a45900b006e87e5f9c4asm6386201ejb.140.2022.04.19.21.44.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 21:44:38 -0700 (PDT)
-Message-ID: <2ed80464-d3cc-c233-eb80-94086345b997@kernel.org>
-Date:   Wed, 20 Apr 2022 06:44:36 +0200
+        Wed, 20 Apr 2022 00:48:09 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6366022BFC;
+        Tue, 19 Apr 2022 21:45:24 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23K4jFiD068326;
+        Tue, 19 Apr 2022 23:45:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650429915;
+        bh=yoUJcGH7XjeMYUSfVQBkbwHE7wXqfLs5bUxZT4pWJw8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=PYToANBoBdOP9EHcr3k3y4WAflpKOsSc6WJqk+KZ+21fGfc/dC+4FVU0E+OvxR2Jd
+         iNPws0Eu1cpp/ixn9XOn06lN9t0JMk745XZkndWg5GFj9xcMY98x6G5qHmDGCYzoye
+         TqqBSyGGL820i16GORH2X5lgK3kjr9eRzqcXbqyc=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23K4jFsw048662
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 19 Apr 2022 23:45:15 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 19
+ Apr 2022 23:45:14 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 19 Apr 2022 23:45:15 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23K4jEcw015303;
+        Tue, 19 Apr 2022 23:45:14 -0500
+Date:   Wed, 20 Apr 2022 10:15:13 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+CC:     Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ramuthevar Vadivel Murugan 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] spi: cadence-quadspi: further simplify
+ cqspi_set_protocol()
+Message-ID: <20220420044513.y7i7k3cxypxwlk7n@ti.com>
+References: <20220419084640.191299-1-matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.17 000/219] 5.17.4-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220418121203.462784814@linuxfoundation.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220419084640.191299-1-matthias.schiffer@ew.tq-group.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18. 04. 22, 14:09, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.4 release.
-> There are 219 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Hi Matthias,
+
+On 19/04/22 10:46AM, Matthias Schiffer wrote:
+> - Remove checks for unsupported modes that are already handled by
+>   supports_op(). This allows to change the function to return void.
+> - Distinguishing DTR and non-DTR modes is not necessary for the setup of
+>   the bus widths
+> - Only cmd DTR flag needs to be checked, supports_op() already checks
+>   that the DTR flags of all relevant parts of the op match
+> - Check nbytes instead of buswidth for 0, for consistency with
+>   supports_op() etc.
 > 
-> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> ---
+>  drivers/spi/spi-cadence-quadspi.c | 73 +++++--------------------------
+>  1 file changed, 10 insertions(+), 63 deletions(-)
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
+> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+> index 19686fb47bb3..96d14f3847b5 100644
+> --- a/drivers/spi/spi-cadence-quadspi.c
+> +++ b/drivers/spi/spi-cadence-quadspi.c
+> @@ -368,58 +368,13 @@ static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
+>  	return dummy_clk;
+>  }
+>  
+> -static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+> -			      const struct spi_mem_op *op)
+> +static void cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+> +			       const struct spi_mem_op *op)
+>  {
+> -	/*
+> -	 * For an op to be DTR, cmd phase along with every other non-empty
+> -	 * phase should have dtr field set to 1. If an op phase has zero
+> -	 * nbytes, ignore its dtr field; otherwise, check its dtr field.
+> -	 */
+> -	f_pdata->dtr = op->cmd.dtr &&
+> -		       (!op->addr.nbytes || op->addr.dtr) &&
+> -		       (!op->data.nbytes || op->data.dtr);
+> -
+> -	f_pdata->inst_width = 0;
+> -	if (op->cmd.buswidth)
+> -		f_pdata->inst_width = ilog2(op->cmd.buswidth);
+> -
+> -	f_pdata->addr_width = 0;
+> -	if (op->addr.buswidth)
+> -		f_pdata->addr_width = ilog2(op->addr.buswidth);
+> -
+> -	f_pdata->data_width = 0;
+> -	if (op->data.buswidth)
+> -		f_pdata->data_width = ilog2(op->data.buswidth);
+> -
+> -	/* Right now we only support 8-8-8 DTR mode. */
+> -	if (f_pdata->dtr) {
+> -		switch (op->cmd.buswidth) {
+> -		case 0:
+> -		case 8:
+> -			break;
+> -		default:
+> -			return -EINVAL;
+> -		}
+> -
+> -		switch (op->addr.buswidth) {
+> -		case 0:
+> -		case 8:
+> -			break;
+> -		default:
+> -			return -EINVAL;
+> -		}
+> -
+> -		switch (op->data.buswidth) {
+> -		case 0:
+> -		case 8:
+> -			break;
+> -		default:
+> -			return -EINVAL;
+> -		}
+> -	}
+> -
+> -	return 0;
+> +	f_pdata->inst_width = op->cmd.nbytes ? ilog2(op->cmd.buswidth) : 0;
+> +	f_pdata->addr_width = op->addr.nbytes ? ilog2(op->addr.buswidth) : 0;
+> +	f_pdata->data_width = op->data.nbytes ? ilog2(op->data.buswidth) : 0;
+> +	f_pdata->dtr = op->cmd.dtr;
 
-openSUSE configs¹⁾ all green.
+I would suggest getting rid of these 4 entirely. It seems like 
+unnecessary bit of state to carry around when we can get this 
+information directly from the op. And it is not like these are re-used 
+in lots of places or are particularly complicated to calculate. There 
+are only a small number of uses for these, for which we can directly get 
+the values by looking at the op. That way we get rid of 
+cqspi_set_protocol() entirely and reduce a bit of complexity.
 
-Tested-by: Jiri Slaby <jirislaby@kernel.org>
-
-¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
+>  }
+>  
+>  static int cqspi_wait_idle(struct cqspi_st *cqspi)
+> @@ -549,9 +504,7 @@ static int cqspi_command_read(struct cqspi_flash_pdata *f_pdata,
+>  	size_t read_len;
+>  	int status;
+>  
+> -	status = cqspi_set_protocol(f_pdata, op);
+> -	if (status)
+> -		return status;
+> +	cqspi_set_protocol(f_pdata, op);
+>  
+>  	status = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_STIG_LSB,
+>  				  f_pdata->dtr);
+> @@ -622,9 +575,7 @@ static int cqspi_command_write(struct cqspi_flash_pdata *f_pdata,
+>  	size_t write_len;
+>  	int ret;
+>  
+> -	ret = cqspi_set_protocol(f_pdata, op);
+> -	if (ret)
+> -		return ret;
+> +	cqspi_set_protocol(f_pdata, op);
+>  
+>  	ret = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_STIG_LSB,
+>  			       f_pdata->dtr);
+> @@ -1244,9 +1195,7 @@ static ssize_t cqspi_write(struct cqspi_flash_pdata *f_pdata,
+>  	const u_char *buf = op->data.buf.out;
+>  	int ret;
+>  
+> -	ret = cqspi_set_protocol(f_pdata, op);
+> -	if (ret)
+> -		return ret;
+> +	cqspi_set_protocol(f_pdata, op);
+>  
+>  	ret = cqspi_write_setup(f_pdata, op);
+>  	if (ret)
+> @@ -1348,9 +1297,7 @@ static ssize_t cqspi_read(struct cqspi_flash_pdata *f_pdata,
+>  	int ret;
+>  
+>  	ddata = of_device_get_match_data(dev);
+> -	ret = cqspi_set_protocol(f_pdata, op);
+> -	if (ret)
+> -		return ret;
+> +	cqspi_set_protocol(f_pdata, op);
+>  
+>  	ret = cqspi_read_setup(f_pdata, op);
+>  	if (ret)
+> -- 
+> 2.25.1
+> 
 
 -- 
-js
-suse labs
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

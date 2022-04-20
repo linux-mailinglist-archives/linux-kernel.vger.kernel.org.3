@@ -2,50 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A1C508D57
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F6E508D5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380601AbiDTQdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
+        id S1380614AbiDTQfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355756AbiDTQdR (ORCPT
+        with ESMTP id S1380542AbiDTQfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:33:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F300B43EDC;
-        Wed, 20 Apr 2022 09:30:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3AE4B82025;
-        Wed, 20 Apr 2022 16:30:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A5DFC385A1;
-        Wed, 20 Apr 2022 16:30:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650472228;
-        bh=ACQZOVB/l83rJdkIlMLCLxGx7mGxCiS0d0I8YudmpVw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=brZnXSwWtiJ4r2AyJ7L3IiEV0ri9GiNqNiSiZrKEpdtZwrxVxwZ+KbkbmowBew47w
-         jUEGCLr+G9LyYrkgZWHkA2nu7jBX2sWy3c/pf6TbmH1qWkRD0QNdLNjWnDJ4aOvuE7
-         1jbR2Uud7rDD7q8bnILGIcoO9IYv4/srR4cszLbu8x3FZtd/0RrsFOA4iZq5fd5KZD
-         WMY8X2MZpxrvFbLKkuA8IWC/ETp4ZoHefhFYEukbyrdq3dYyLhuqcLDwYXbRBqDeeq
-         SDAwvJO+s9noI8qztkm/ZmS+ejJM/sNWNMUyWFi/d8pDq97ItLeaHaPNBMOdjh5Bjz
-         ZnZMQ9eovHgOw==
-Date:   Wed, 20 Apr 2022 11:30:26 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Rajvi Jingar <rajvi.jingar@intel.com>, bhelgaas@google.com,
-        david.e.box@linux.intel.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] PCI/PM: refactor pci_pm_suspend_noirq()
-Message-ID: <20220420163026.GA1304353@bhelgaas>
+        Wed, 20 Apr 2022 12:35:12 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A29443AD1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:32:26 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id o18so1350793qtk.7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:32:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3J4XthPQxhmZkFCcoyfDlVHXj50acCyi35YWGqXRzhQ=;
+        b=MnuBJjSO+X5Pn8+P5NO2V5AJCtF1cWQ6TPbAd8C+4hJ5Qvnsyy7d412pABypCnNTlk
+         GqdXNfazFth9H0OxyARXt//T6KxxcABwfqHwl0XjhcpQ73Lq//+viSjwoBWzsN9BjwH+
+         LDRP+DaHS0tzYKk8DZQz6i/TNoeBRlftRxZNQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3J4XthPQxhmZkFCcoyfDlVHXj50acCyi35YWGqXRzhQ=;
+        b=qvs/9e4Lz//L5+Xgb17v3VOuBJ8Iz8oXrhQr93+b9BR8iF13RHA7Jkpi5RH4GU5Xbe
+         75DOn43lJJEPDaRXSDhHx1EdoKr2DsFtTx2X/HHeNSj9ZGtA5FCTn0KH5hQeewuTVmxq
+         0U1XnY2XDxicm8XofRaXv4v47RE4qQgAQbABMz/SVZEoVGmFlGnKDAZqHomhj/vdZ4ot
+         ALFQ2AOu3B3IV9pbbRHaNbZu+z6jOu4x2TyrbYnd8MLvXMmG5QkIJgjFFEbj/jlSEF7/
+         o7ex29/kXy5au5MiHWokwBeabAecvwKwoUHsmEvYlfY8mvjvro2O0avLSKv9crmTHSBu
+         +89A==
+X-Gm-Message-State: AOAM532q0KEn76Gk6VSUDeJPWmmndj28ipFdJOLXKugDGM/aPgrU+nhS
+        8Ag8Gc7YT2T0PPinsuMhtl1/og==
+X-Google-Smtp-Source: ABdhPJx539AYgJ3/MSSBaHkjC7fNsv8ltIIot/KmpPFw8OAWDw6agxwItmPKNSuHHH1eKaSLKSEWOg==
+X-Received: by 2002:ac8:5c4c:0:b0:2e2:1006:2b21 with SMTP id j12-20020ac85c4c000000b002e210062b21mr14391034qtj.423.1650472345134;
+        Wed, 20 Apr 2022 09:32:25 -0700 (PDT)
+Received: from nitro.local (bras-base-mtrlpq5031w-grc-32-216-209-220-127.dsl.bell.ca. [216.209.220.127])
+        by smtp.gmail.com with ESMTPSA id k20-20020a05622a03d400b002ec16d2694fsm1978359qtx.39.2022.04.20.09.32.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 09:32:24 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 12:32:23 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        workflows@vger.kernel.org
+Subject: Re: A lot of regression reports submitted to bugzilla.kernel.org are
+ apparently ignored, even bisected ones
+Message-ID: <20220420163223.kz32qomzj3y4hjj5@nitro.local>
+References: <6808cd17-b48c-657d-de60-ef9d8bfa151e@leemhuis.info>
+ <acccdf28-3c5d-a81b-8e3a-f72e0f46149c@kernel.org>
+ <20ad7c63-c837-6f6e-6bbe-7b49d653e033@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cb94e592-0fd8-3274-aeeb-49fbd6f74761@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20ad7c63-c837-6f6e-6bbe-7b49d653e033@leemhuis.info>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,70 +73,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 07:53:25PM +0200, Rafael J. Wysocki wrote:
-> On 3/25/2022 8:50 PM, Rajvi Jingar wrote:
-> > The state of the device is saved during pci_pm_suspend_noirq(), if it
-> > has not already been saved, regardless of the skip_bus_pm flag value. So
-> > skip_bus_pm check is removed before saving the device state.
-> > 
-> > Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
-> > Suggested-by: David E. Box <david.e.box@linux.intel.com>
-> 
-> Sorry for the delay here.
-> 
-> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Apr 20, 2022 at 01:57:12PM +0200, Thorsten Leemhuis wrote:
+> > I find such Bugzilla useless - the Components are not matching reality,
+> > Products look ok except missing really a lot. Does it have proper
+> > assigners based on maintainers? Nope. At least not everywhere.
 
-Rajvi, can you post these again?  It looks like they didn't make it to
-the linux-pci mailing list, and I can't find them in the lore archives:
+Nobody has stepped up to maintain bugzilla for the past 10 years. Managing
+components, products, assignees -- that's not the job of the infrastructure
+team. Linux development is so compartmentalized that cross-subsystem tasks
+like bug reporting have been thoroughly neglected.
 
-  https://lore.kernel.org/all/?q=f%3Arajvi.jingar
+However, I would argue that bugzilla needs fewer components, not more of them.
+Otherwise people get confused and file bugs against "kernel.org" or whatever
+happens to be the first entry in the list. For bugzilla to be useful, it needs
+to have a bugmaster -- and nobody has volunteered thus far. It's not something
+that members of the LF IT team can do, since none of us are kernel developers.
 
-Maybe some formatting issue that vger didn't like?  Some possible
-issues here:
+If someone steps up, I'll be happy to grant them admin rights to manage all
+the components, etc.
 
-  http://vger.kernel.org/majordomo-info.html
+> > All the bug or issue reports I get via email and I think I am not alone
+> > in this. All automated tools (kbuild, kernelCI) are using emails for bug
+> > reporting. Why having one more system which seems not up to date?
 
-They should appear on the list so others can comment and so the lore
-URL can be included in the commit when applying.
+Email is a poor choice when someone needs to share large files (usually,
+dumps). Besides, I really don't want stuff like that in public-inbox archives,
+either.
 
-Please incorporate Rafael's reviewed-by when you repost.
+This is one major upside of bugzilla -- it can still be largely email-based,
+but it also provides a way to share large files without the need to ship them
+around as attachments or use some other 3rd-party file sharing services.
 
-> > ---
-> >   v1 -> v2: add comments to the changes
-> >   v2 -> v3: move changelog after "---" marker
-> >   v3 -> v4: add "---" marker after changelog
-> > ---
-> >   drivers/pci/pci-driver.c | 18 ++++++------------
-> >   1 file changed, 6 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> > index 4ceeb75fc899..8b55a90126a2 100644
-> > --- a/drivers/pci/pci-driver.c
-> > +++ b/drivers/pci/pci-driver.c
-> > @@ -845,20 +845,14 @@ static int pci_pm_suspend_noirq(struct device *dev)
-> >   		}
-> >   	}
-> > -	if (pci_dev->skip_bus_pm) {
-> > +	if (!pci_dev->state_saved) {
-> > +		pci_save_state(pci_dev);
-> >   		/*
-> > -		 * Either the device is a bridge with a child in D0 below it, or
-> > -		 * the function is running for the second time in a row without
-> > -		 * going through full resume, which is possible only during
-> > -		 * suspend-to-idle in a spurious wakeup case.  The device should
-> > -		 * be in D0 at this point, but if it is a bridge, it may be
-> > -		 * necessary to save its state.
-> > +		 * If the device is a bridge with a child in D0 below it, it needs to
-> > +		 * stay in D0, so check skip_bus_pm to avoid putting it into a
-> > +		 * low-power state in that case.
-> >   		 */
-> > -		if (!pci_dev->state_saved)
-> > -			pci_save_state(pci_dev);
-> > -	} else if (!pci_dev->state_saved) {
-> > -		pci_save_state(pci_dev);
-> > -		if (pci_power_manageable(pci_dev))
-> > +		if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
-> >   			pci_prepare_to_sleep(pci_dev);
-> >   	}
-> 
-> 
+> I'm the wrong one to ask, as I think it's a disservice right now that
+> needs to be dealt with -- for example by turning it off or by making it
+> work properly. But to my knowledge there is nobody really responsible
+> for it (apart from Konstantin and his team, but they are afaics only
+> responsible for running bugzilla the software -- not for maintaining
+> components, products, and such things). That's afaics why we as the
+> kernel developers community need to come up with a decision. But maybe
+> mailing lists are a bad tool for this and this needs to wait till kernel
+> and/or maintainers summit in September (it's already on the list of
+> topics I plan to propose).
+
+All that really needs to happen to improve the situation:
+
+1. have an actual kernel developer be responsible for managing bugzilla; this
+   person would manage components and keep an eye on new bugs to make sure
+   they get to proper subsystem owners
+
+That's it, there are no other entries here. Bugzilla *can* be a useful tool
+and works reasonably well with email back-and-forth, but nobody wants to do
+this work -- so everyone ends up blaming the tool.
+
+-K

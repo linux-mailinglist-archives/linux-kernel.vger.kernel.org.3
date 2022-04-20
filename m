@@ -2,172 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB79508A96
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDD1508A9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379681AbiDTOTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
+        id S242473AbiDTOT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 10:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380264AbiDTOSq (ORCPT
+        with ESMTP id S1380270AbiDTOSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 10:18:46 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADA5DEFC;
-        Wed, 20 Apr 2022 07:15:12 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id q129so2178391oif.4;
-        Wed, 20 Apr 2022 07:15:12 -0700 (PDT)
+        Wed, 20 Apr 2022 10:18:47 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849F643ACF
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:16:00 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id e21so2455229wrc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:16:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=gbllx+zYcqJDDzwcpoWdcYZQmSKhFnQL5hSmsALhTPk=;
-        b=hzipemxVxo+MVpHqws+M38o17ysnggup9oNWAxF4UIn97NG9G/h8B9JOWAXQuS0AUT
-         9iKnLYMpUqPXgPUhtEwqsXtJtcoQHqsUn7PqjBhr4m8jPvLTe7r5nh6hpdOYTKtiA1BB
-         X8wPDUpjhoOUEqfZH0FNeusKAvcpUNuDZRtXgON9CaklT2piYAfEt4o/PNDzFX7/MQ/w
-         ygjMxhNEQ2ZDcJr+M2t7upM8S32iir3lsSxsQx0qJYDlraiUjoWIdo1w8z6eq+kspWOt
-         cdKRM/nREZOCzpoBO4z+NcGEHYah1YU9FYpru5Nbk157mngO8RZtkJBkKvYcwvMNCp4n
-         1WUw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cTYoMHmRd8x2g8GH9Ji8JGhHbq82MUsWN/GB8tPt1yU=;
+        b=n8mi8e7eEYzj/at3sY83ewAcZVoqenDD9PYYKJWyE+15q6pkMyzz5Hpi7FRz0qBxCN
+         5zrG9je4/2Y1jvnu+WUp7vD0nk86sTnRGciDbCHXk7fStN7xvCERFy9W7lqomZAE7WF3
+         3aMkn81BILnSO+oJ3aozsKRh2t5vVAngNjTR4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=gbllx+zYcqJDDzwcpoWdcYZQmSKhFnQL5hSmsALhTPk=;
-        b=fAVqlEVELf59WaK4vYBgs8eV9pQA8XmjRYwlO1JLPeioruNHn+ZRN6L4oZzhSJKhz6
-         oNeXat5mSMg1PsBGx9ObAlNJCFc3qSpdr/UECBY9KG4xZQ/pVDAiFqt9xsrT7dCLMefD
-         9UgbxMwxRhozEm/OG41wrlu1PBBFvCmciOM2vJt1lWKtip/RFzLbrwU8VcnG6LmsorH+
-         ubmvlb7lzYYMDnwD0s+9bgodZskJt3AqqZpg9szZrwMYuHIvoulMV/ykfgaRvZVbp+fp
-         3hupcTHn869CGqdoZxVZK1PdM8l8Go4Fw+E8EK5tvkXNP0Xy48tkMqHorISp+A/fRwNx
-         QpoQ==
-X-Gm-Message-State: AOAM533zMCOLSSgRnucpBbx+SFLlpxE5zs0STLedB0qosKQW9/q7G/i2
-        Y76DEspSpOCl7HthxPPtR4k=
-X-Google-Smtp-Source: ABdhPJz/Jgy5A/q7ITH2562syP2+iOUzNPBeF8m6CT9NsLyL8lCuja7TiK/VFBU0i5IqMZ1l2ajGpw==
-X-Received: by 2002:a05:6808:13d1:b0:2da:7f74:3f45 with SMTP id d17-20020a05680813d100b002da7f743f45mr1853538oiw.119.1650464111454;
-        Wed, 20 Apr 2022 07:15:11 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n18-20020a056820055200b003299b79f3e2sm6781408ooj.9.2022.04.20.07.15.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 07:15:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6f697b2c-58aa-6ca4-966b-147bcc184dad@roeck-us.net>
-Date:   Wed, 20 Apr 2022 07:15:09 -0700
+        bh=cTYoMHmRd8x2g8GH9Ji8JGhHbq82MUsWN/GB8tPt1yU=;
+        b=L8wMz5eVuNmIYtbMGy7WwGHAGZEnAVdAsz2s2NuSz9iIQCzzyKhzYPiZAyJQmu6CXm
+         hrmR2tVxu145x5GoeLVy97Y+wAUwT8Y7k2tlqRR+7Bvbh+IOhiXZa5hCUxxX7FIIxP7U
+         nrR74cUlC1PrpYbKLAAsDWbzoeExPDA7uV8tQVhjYDU5BUhG0bygAs7q42LTzHOWSKNy
+         kgeEfkgL0ldtRYOXrqlmtrYo8VTF7hjBJ8rSyBmotwWczuIt6s+9DxG9+XZ3LS1dh5P5
+         5j7Z1pH5kAIYNg55E2uBqf6ZzDRRigm4YSbFthvoc0at+khFth1FfCqj1oIqnA/EO9iI
+         jsGQ==
+X-Gm-Message-State: AOAM533z2GxJeIKZEw3LCocw8FEi9KE3hc5STCeKVJk8z4XJZwKYt/Sl
+        hQs8d10DV9Zaw6eT3WifLx2m8Q==
+X-Google-Smtp-Source: ABdhPJzrC+wiN8Z4WSTVKPyrot7MeUxiYsCYgUc+BR8e7Wp2Gmf2AocqvfIHgXDNK2O8R53eI1B5Cg==
+X-Received: by 2002:adf:db8b:0:b0:207:9a90:3819 with SMTP id u11-20020adfdb8b000000b002079a903819mr16431510wri.617.1650464159041;
+        Wed, 20 Apr 2022 07:15:59 -0700 (PDT)
+Received: from localhost.localdomain ([37.228.205.1])
+        by smtp.gmail.com with ESMTPSA id v2-20020adf8b42000000b0020aa790a258sm12447wra.8.2022.04.20.07.15.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 07:15:58 -0700 (PDT)
+From:   Fabio Baltieri <fabiobaltieri@chromium.org>
+To:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        chrome-platform@lists.linux.dev, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fabio Baltieri <fabiobaltieri@chromium.org>
+Subject: [PATCH v5 0/4] Add channel type support to pwm-cros-ec
+Date:   Wed, 20 Apr 2022 14:15:52 +0000
+Message-Id: <20220420141556.681212-1-fabiobaltieri@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     wujek dev <dev_public@wujek.eu>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220419215326.309991-1-dev_public@wujek.eu>
- <20220420122128.411757-1-dev_public@wujek.eu>
- <f34ec7ac-7b34-6d98-25ad-31b13fe08c59@roeck-us.net>
- <PFzjnraIDClF6umMOqlCKCzxG6q5lIhBLHpynRA6juh6gXSp5Y7SLPpzXZGNU6L7OGCEwl_F-niJn1jTflifWnqm9PX3Rcfqbtdo6rmPAT4=@wujek.eu>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus) add MFR_* registers to debugfs
-In-Reply-To: <PFzjnraIDClF6umMOqlCKCzxG6q5lIhBLHpynRA6juh6gXSp5Y7SLPpzXZGNU6L7OGCEwl_F-niJn1jTflifWnqm9PX3Rcfqbtdo6rmPAT4=@wujek.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/22 06:58, wujek dev wrote:
-> ------- Original Message -------
-> On Wednesday, April 20th, 2022 at 15:53, Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->>
->>
->> On 4/20/22 05:22, Adam Wujek wrote:
->>
->>> Add registers to debugfs:
->>> PMBUS_MFR_ID
->>> PMBUS_MFR_MODEL
->>> PMBUS_MFR_REVISION
->>> PMBUS_MFR_LOCATION
->>> PMBUS_MFR_DATE
->>> PMBUS_MFR_SERIAL
->>>
->>> Signed-off-by: Adam Wujek dev_public@wujek.eu
->>
->>
->> Where is patch 1/2, and why did you resend this patch ?
->>
-> There should be no "1/2" since this and the second patch are unrelated.
-> I resend it because I rebased it on master.
-> 
-Please provide change logs and version your patches in the future.
+Hi,
 
-> Adam
-> 
->> Guenter
->>
->>> ---
->>> drivers/hwmon/pmbus/pmbus_core.c | 84 ++++++++++++++++++++++++++++++++
->>> 1 file changed, 84 insertions(+)
->>>
->>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->>> index 0af7a3d74f47..1dc186780ccf 100644
->>> --- a/drivers/hwmon/pmbus/pmbus_core.c
->>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->>> @@ -2625,6 +2625,30 @@ static int pmbus_debugfs_get_status(void *data, u64 *val)
->>> DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_status,
->>> NULL, "0x%04llx\n");
->>>
->>> +static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __user *buf,
->>> + size_t count, loff_t *ppos)
->>> +{
->>> + int rc;
->>> + struct pmbus_debugfs_entry *entry = file->private_data;
->>> + char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
->>> +
->>> + rc = i2c_smbus_read_block_data(entry->client, entry->reg, data);
->>> + if (rc < 0)
->>> + return rc;
->>> +
->>> + data[rc] = '\n';
->>> + rc += 2;
+The ChromiumOS EC PWM host command protocol supports specifying the
+requested PWM by type rather than channel. [1]
 
-Why +2 ?
+This series adds support for specifying PWM by type rather than channel
+number in the pwm-cros-ec driver, which abstracts the node definitions
+from the actual hardware configuration from the kernel perspective,
+aligns the API with the one used by the bootloader, and allows removing
+some dtsi overrides.
 
->>> +
->>> + return simple_read_from_buffer(buf, count, ppos, data, rc);
->>> +}
->>> +
->>> +static const struct file_operations pmbus_debugfs_ops_mfr = {
->>> + .llseek = noop_llseek,
->>> + .read = pmbus_debugfs_mfr_read,
->>> + .write = NULL,
->>> + .open = simple_open,
->>> +};
->>> +
->>> static int pmbus_debugfs_get_pec(void *data, u64 *val)
->>> {
->>> struct i2c_client *client = data;
->>> @@ -2801,6 +2825,66 @@ static int pmbus_init_debugfs(struct i2c_client *client,
->>> &entries[idx++],
->>> &pmbus_debugfs_ops);
->>> }
->>> +
->>> + if (pmbus_check_byte_register(client, i, PMBUS_MFR_ID)) {
->>> + entries[idx].client = client;
->>> + entries[idx].page = i;
->>> + entries[idx].reg = PMBUS_MFR_ID;
->>> + scnprintf(name, PMBUS_NAME_SIZE, "mfr%d_id", i);
->>> + debugfs_create_file(name, 0444, data->debugfs,
->>> + &entries[idx++],
->>> + &pmbus_debugfs_ops_mfr);
->>> + }
+Tested on a sc7180-trogdor board, build tested on x86.
 
-You are adding several debugfs entries without increasing the size
-of the entries array. That means that up to 16 debugfs entries are
-now created into an array of size 10. That won't work.
+Changes from v4:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=632212)
+- fixed wrong indentation in the devietree file on patch 3
+- added review and ack tags from the previous run
 
-Guenter
+Changes from v3:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=631131)
+- actually reworded patch 2 commit description
+- reworked patch 2 to use of_device_is_compatible() instead of compatible .data
+
+Changes from v2:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=627837)
+- reworded patch 2 commit description
+- reworked the driver and dt documentation to use a new compatible rather than
+  boolean property
+- dropped the comment about build test only, tested on actual hardware
+  (trogdor), build test on x86 (with CONFIG_OF=n).
+
+Changes from v1:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=625182)
+- fixed the dt include file license
+- fixed the property name (s/_/-/)
+- rebased on current linus tree (few dts files changed from a soc tree
+  pull, so patch 4 needs a recent base to apply correctly)
+
+[1] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/ec/common/pwm.c;l=24
+[2] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/depthcharge/src/drivers/ec/cros/ec.c;l=1271-1273
+
+Fabio Baltieri (4):
+  dt-bindings: add mfd/cros_ec definitions
+  pwm: pwm-cros-ec: add channel type support
+  dt-bindings: update google,cros-ec-pwm documentation
+  arm64: dts: address cros-ec-pwm channels by type
+
+ .../bindings/pwm/google,cros-ec-pwm.yaml      |  9 +-
+ .../mt8183-kukui-jacuzzi-fennel-sku1.dts      |  4 +-
+ .../dts/mediatek/mt8183-kukui-jacuzzi.dtsi    |  4 +-
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  1 +
+ .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |  4 -
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  9 +-
+ .../qcom/sc7280-herobrine-herobrine-r0.dts    |  7 +-
+ .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  7 +-
+ .../arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi |  4 +-
+ arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi    |  7 +-
+ .../boot/dts/rockchip/rk3399-gru-bob.dts      |  4 -
+ .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  5 +-
+ .../boot/dts/rockchip/rk3399-gru-kevin.dts    |  4 -
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  |  1 +
+ drivers/pwm/pwm-cros-ec.c                     | 82 +++++++++++++++----
+ include/dt-bindings/mfd/cros_ec.h             | 18 ++++
+ 16 files changed, 121 insertions(+), 49 deletions(-)
+ create mode 100644 include/dt-bindings/mfd/cros_ec.h
+
+-- 
+2.36.0.rc0.470.gd361397f0d-goog
+

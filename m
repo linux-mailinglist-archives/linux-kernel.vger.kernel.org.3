@@ -2,161 +2,391 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC75F508C91
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6528508C9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380371AbiDTP5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
+        id S1353970AbiDTQAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380254AbiDTP5T (ORCPT
+        with ESMTP id S242908AbiDTQAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:57:19 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C375443E1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:54:33 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id r20-20020a056e02109400b002cc174742c9so1146097ilj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:54:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=x+XLXhiJwur7r2ElCoLum2H1T2sjURDvAZdqJGEZZHg=;
-        b=isjvPqEMxlVuxv18t7wJ33jZTTKBXshaI0C3r8uR3+tzSABwv+w0eUOWk9t25JbgwE
-         MDd9kxSPzR3VBIxGiN9ZFZQ4565agDU41v+/Mu4Fv1Z4PHIfAOMccxNEbfMTBCpGFNNm
-         DjhkczGvVAKB8dEnRu9a64PoGl9CF9Zprp+sTvZNCInE7Jiz/VvCW7gCaCLOl/aRbTEM
-         de6+Qbe/eoEzjJsBZTuoKyZHl4oZo37F2Xkz+z+f816tcpnQbpMoBfsTN5EPxda8KitN
-         2CngYP9rPXtmAtEROnsA3vFma3jPvV/xqAYMyIMQHXhJVVtWHWfApnN/CIvJJ4gfSpGD
-         XK2Q==
-X-Gm-Message-State: AOAM530SeYYiA3ZnJQMdSXfxljBOT24HkS4sI9lGkF0d+5a3gKBK/93K
-        W/ZQ+IGgVJm2yLWz5C7ri6In5FZ5+5tUf1ni8NryO2ABm+Sq
-X-Google-Smtp-Source: ABdhPJw6uDs9SLREWsdW9u4lKKJlRHybodaGf/UGj6xjQDGJfpl8aRcdLASwIoJUFHQ34Y9QpygTNuYiD8bibyvi0nT3Y8TQXMcF
+        Wed, 20 Apr 2022 12:00:02 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4833E2A24C;
+        Wed, 20 Apr 2022 08:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1650470235; x=1682006235;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=b5buSbS/Y6YBWpO3y41GUfU3t//7M1BjS48dP9Par3w=;
+  b=QH3YmD+Ir6Xr0a32moDtpzICUFCA9LpT6TJWnu/9tzvQMsDBWAvvW8Ah
+   KQuGonp0ie2WFvpQ6SFAYe9QdMRPGPew4oRuSGklEuBMzWfu5V3aI71FM
+   hDIOGrBLke4KcXDr1I7XkdUDk60jwAImD54yh8fY0X3JKfsYbVfnxbTA5
+   W3sb3j9nPoMpCH8plrSQ8uVd1kmNWWGpdgplEiukuQ52+SazRnUwEqXg/
+   bmOrWMRj8ucQKSti8BVArLhpI9gISvC1OEVx5z3gJbOIml6Q+p4S/n74s
+   q9qSnVJ/Tvtba2WjzxvkN4tgKFAtflMVlZdMVewfx7A58FOhXWR7LQe4M
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,276,1643670000"; 
+   d="scan'208";a="23392890"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 20 Apr 2022 17:57:13 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 20 Apr 2022 17:57:13 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 20 Apr 2022 17:57:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1650470233; x=1682006233;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=b5buSbS/Y6YBWpO3y41GUfU3t//7M1BjS48dP9Par3w=;
+  b=KAz8L97BaMoM7aKwZN655b9AdwPXyIn9pG5nRQyjwzRlVezjZeK4BcOz
+   pUTteTko2Ai1JjDJeYNnOdJoKmu04Cl21bBzhish+tzD/25B+Zr8QzP51
+   9JFuxhbc9JHjCKY5YIX2t8tDZvo+XBNZ+1gAXreqvqhSqMyH9pCgfIJnG
+   k9W0JCvflZBp1bRFhm8chJ9/EO4HNfsvgfnCKSWxELEsj3PKICKXxmBLO
+   lDI2fP06jxlDigi9AXJoulOzGzj1r7FuVj2zvpw816r2Q5mrj562Lgkz9
+   6YaWDjkJaiWpOgGi6M2pFanKL1M7oTcZDcLQ0WOOeQmi/s0enEUjKM2fe
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,276,1643670000"; 
+   d="scan'208";a="23392889"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 20 Apr 2022 17:57:13 +0200
+Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 08F26280070;
+        Wed, 20 Apr 2022 17:57:13 +0200 (CEST)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Pratyush Yadav <p.yadav@ti.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ramuthevar Vadivel Murugan 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH v2 1/2] spi: cadence-quadspi: drop cqspi_set_protocol()
+Date:   Wed, 20 Apr 2022 17:56:15 +0200
+Message-Id: <20220420155616.281730-1-matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4128:b0:323:62b4:30c3 with SMTP id
- ay40-20020a056638412800b0032362b430c3mr11021388jab.318.1650470072507; Wed, 20
- Apr 2022 08:54:32 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 08:54:32 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000625fa705dd1802e3@google.com>
-Subject: [syzbot] kernel BUG in __filemap_get_folio
-From:   syzbot <syzbot+cf4cf13056f85dec2c40@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, dhowells@redhat.com, hughd@google.com,
-        kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        vbabka@suse.cz, william.kucharski@oracle.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+As suggested, this removes the whole cqspi_set_protocol() function, as it
+is not actually needed:
 
-syzbot found the following issue on:
+- Checks for unsupported operations are already handled by supports_op(),
+  removing the need to distinguish DTR and non-DTR modes in the buswidth
+  setup
+- supports_op() ensures that the DTR flags match for all relevant parts of
+  an operation, so op->cmd.dtr can be used instead of copying the flag to
+  the cqspi_flash_pdata
+- The logic in cqspi_set_protocol() is moved to cqspi_calc_rdreg() and
+  cqspi_write_setup() (with a helper macro CQSPI_OP_WIDTH())
 
-HEAD commit:    559089e0a93d vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLO..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1306a768f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dd7c9a79dfcfa205
-dashboard link: https://syzkaller.appspot.com/bug?extid=cf4cf13056f85dec2c40
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16554fd0f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=147f41ecf00000
+The helper macro checks nbytes instead of buswidth for 0, for consistency
+with supports_op() etc.
 
-The issue was bisected to:
-
-commit 6b24ca4a1a8d4ee3221d6d44ddbb99f542e4bda3
-Author: Matthew Wilcox (Oracle) <willy@infradead.org>
-Date:   Sun Jun 28 02:19:08 2020 +0000
-
-    mm: Use multi-index entries in the page cache
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=173fc7d0f00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14bfc7d0f00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10bfc7d0f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cf4cf13056f85dec2c40@syzkaller.appspotmail.com
-Fixes: 6b24ca4a1a8d ("mm: Use multi-index entries in the page cache")
-
- do_initcall_level init/main.c:1371 [inline]
- do_initcalls init/main.c:1387 [inline]
- do_basic_setup init/main.c:1406 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1613
- kernel_init+0x1a/0x1d0 init/main.c:1502
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-------------[ cut here ]------------
-kernel BUG at mm/filemap.c:1971!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3867 Comm: syz-executor935 Not tainted 5.18.0-rc3-syzkaller-00007-g559089e0a93d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__filemap_get_folio+0xc65/0xf00 mm/filemap.c:1971
-Code: db 45 31 f6 e9 fd f5 ff ff 44 8b 6c 24 10 48 89 eb e9 f0 f5 ff ff e8 ba f5 d8 ff 48 c7 c6 80 d9 d5 89 48 89 df e8 6b 8d 0e 00 <0f> 0b e8 a4 f5 d8 ff 48 89 df 31 db e8 4a af 03 00 e9 78 f7 ff ff
-RSP: 0018:ffffc900033d78b0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffffea00014c8dc0 RCX: 0000000000000000
-RDX: ffff88807bb560c0 RSI: ffffffff819f5865 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000018 R09: 00000000ffffffff
-R10: ffffffff891d5eec R11: 00000000ffffffff R12: 0000000000000180
-R13: 0000000000000182 R14: 0000000000000000 R15: dffffc0000000000
-FS:  00007f78863e0700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000002013f000 CR3: 0000000075648000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- pagecache_get_page+0x2e/0x290 mm/folio-compat.c:126
- shmem_getpage_gfp+0x471/0x2370 mm/shmem.c:1812
- shmem_getpage mm/shmem.c:149 [inline]
- shmem_write_begin+0xff/0x1e0 mm/shmem.c:2446
- generic_perform_write+0x249/0x560 mm/filemap.c:3787
- __generic_file_write_iter+0x2aa/0x4d0 mm/filemap.c:3915
- generic_file_write_iter+0xd7/0x220 mm/filemap.c:3947
- call_write_iter include/linux/fs.h:2050 [inline]
- new_sync_write+0x38a/0x560 fs/read_write.c:504
- vfs_write+0x7c0/0xac0 fs/read_write.c:591
- ksys_write+0x127/0x250 fs/read_write.c:644
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f78864331c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f78863e0308 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f78864b73e8 RCX: 00007f78864331c9
-RDX: 000000000208e24b RSI: 0000000020000080 RDI: 0000000000000004
-RBP: 00007f78864b73e0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f78864b73ec
-R13: 00007f78864840ac R14: 776c613d65677568 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__filemap_get_folio+0xc65/0xf00 mm/filemap.c:1971
-Code: db 45 31 f6 e9 fd f5 ff ff 44 8b 6c 24 10 48 89 eb e9 f0 f5 ff ff e8 ba f5 d8 ff 48 c7 c6 80 d9 d5 89 48 89 df e8 6b 8d 0e 00 <0f> 0b e8 a4 f5 d8 ff 48 89 df 31 db e8 4a af 03 00 e9 78 f7 ff ff
-RSP: 0018:ffffc900033d78b0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffffea00014c8dc0 RCX: 0000000000000000
-RDX: ffff88807bb560c0 RSI: ffffffff819f5865 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000018 R09: 00000000ffffffff
-R10: ffffffff891d5eec R11: 00000000ffffffff R12: 0000000000000180
-R13: 0000000000000182 R14: 0000000000000000 R15: dffffc0000000000
-FS:  00007f78863e0700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020800000 CR3: 0000000075648000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
+Suggested-by: Pratyush Yadav <p.yadav@ti.com>
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+v2: remove cqspi_set_protocol() instead of simplifying it
+
+
+ drivers/spi/spi-cadence-quadspi.c | 130 +++++++-----------------------
+ 1 file changed, 27 insertions(+), 103 deletions(-)
+
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 19686fb47bb3..8c12c6dd58ae 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -43,6 +43,8 @@
+ /* Capabilities */
+ #define CQSPI_SUPPORTS_OCTAL		BIT(0)
+ 
++#define CQSPI_OP_WIDTH(part) ((part).nbytes ? ilog2((part).buswidth) : 0)
++
+ struct cqspi_st;
+ 
+ struct cqspi_flash_pdata {
+@@ -53,10 +55,6 @@ struct cqspi_flash_pdata {
+ 	u32		tsd2d_ns;
+ 	u32		tchsh_ns;
+ 	u32		tslch_ns;
+-	u8		inst_width;
+-	u8		addr_width;
+-	u8		data_width;
+-	bool		dtr;
+ 	u8		cs;
+ };
+ 
+@@ -343,18 +341,18 @@ static irqreturn_t cqspi_irq_handler(int this_irq, void *dev)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static unsigned int cqspi_calc_rdreg(struct cqspi_flash_pdata *f_pdata)
++static unsigned int cqspi_calc_rdreg(const struct spi_mem_op *op)
+ {
+ 	u32 rdreg = 0;
+ 
+-	rdreg |= f_pdata->inst_width << CQSPI_REG_RD_INSTR_TYPE_INSTR_LSB;
+-	rdreg |= f_pdata->addr_width << CQSPI_REG_RD_INSTR_TYPE_ADDR_LSB;
+-	rdreg |= f_pdata->data_width << CQSPI_REG_RD_INSTR_TYPE_DATA_LSB;
++	rdreg |= CQSPI_OP_WIDTH(op->cmd) << CQSPI_REG_RD_INSTR_TYPE_INSTR_LSB;
++	rdreg |= CQSPI_OP_WIDTH(op->addr) << CQSPI_REG_RD_INSTR_TYPE_ADDR_LSB;
++	rdreg |= CQSPI_OP_WIDTH(op->data) << CQSPI_REG_RD_INSTR_TYPE_DATA_LSB;
+ 
+ 	return rdreg;
+ }
+ 
+-static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
++static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op)
+ {
+ 	unsigned int dummy_clk;
+ 
+@@ -362,66 +360,12 @@ static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
+ 		return 0;
+ 
+ 	dummy_clk = op->dummy.nbytes * (8 / op->dummy.buswidth);
+-	if (dtr)
++	if (op->cmd.dtr)
+ 		dummy_clk /= 2;
+ 
+ 	return dummy_clk;
+ }
+ 
+-static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+-			      const struct spi_mem_op *op)
+-{
+-	/*
+-	 * For an op to be DTR, cmd phase along with every other non-empty
+-	 * phase should have dtr field set to 1. If an op phase has zero
+-	 * nbytes, ignore its dtr field; otherwise, check its dtr field.
+-	 */
+-	f_pdata->dtr = op->cmd.dtr &&
+-		       (!op->addr.nbytes || op->addr.dtr) &&
+-		       (!op->data.nbytes || op->data.dtr);
+-
+-	f_pdata->inst_width = 0;
+-	if (op->cmd.buswidth)
+-		f_pdata->inst_width = ilog2(op->cmd.buswidth);
+-
+-	f_pdata->addr_width = 0;
+-	if (op->addr.buswidth)
+-		f_pdata->addr_width = ilog2(op->addr.buswidth);
+-
+-	f_pdata->data_width = 0;
+-	if (op->data.buswidth)
+-		f_pdata->data_width = ilog2(op->data.buswidth);
+-
+-	/* Right now we only support 8-8-8 DTR mode. */
+-	if (f_pdata->dtr) {
+-		switch (op->cmd.buswidth) {
+-		case 0:
+-		case 8:
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-
+-		switch (op->addr.buswidth) {
+-		case 0:
+-		case 8:
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-
+-		switch (op->data.buswidth) {
+-		case 0:
+-		case 8:
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+ static int cqspi_wait_idle(struct cqspi_st *cqspi)
+ {
+ 	const unsigned int poll_idle_retry = 3;
+@@ -503,8 +447,7 @@ static int cqspi_setup_opcode_ext(struct cqspi_flash_pdata *f_pdata,
+ }
+ 
+ static int cqspi_enable_dtr(struct cqspi_flash_pdata *f_pdata,
+-			    const struct spi_mem_op *op, unsigned int shift,
+-			    bool enable)
++			    const struct spi_mem_op *op, unsigned int shift)
+ {
+ 	struct cqspi_st *cqspi = f_pdata->cqspi;
+ 	void __iomem *reg_base = cqspi->iobase;
+@@ -517,7 +460,7 @@ static int cqspi_enable_dtr(struct cqspi_flash_pdata *f_pdata,
+ 	 * We enable dual byte opcode here. The callers have to set up the
+ 	 * extension opcode based on which type of operation it is.
+ 	 */
+-	if (enable) {
++	if (op->cmd.dtr) {
+ 		reg |= CQSPI_REG_CONFIG_DTR_PROTO;
+ 		reg |= CQSPI_REG_CONFIG_DUAL_OPCODE;
+ 
+@@ -549,12 +492,7 @@ static int cqspi_command_read(struct cqspi_flash_pdata *f_pdata,
+ 	size_t read_len;
+ 	int status;
+ 
+-	status = cqspi_set_protocol(f_pdata, op);
+-	if (status)
+-		return status;
+-
+-	status = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_STIG_LSB,
+-				  f_pdata->dtr);
++	status = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_STIG_LSB);
+ 	if (status)
+ 		return status;
+ 
+@@ -565,17 +503,17 @@ static int cqspi_command_read(struct cqspi_flash_pdata *f_pdata,
+ 		return -EINVAL;
+ 	}
+ 
+-	if (f_pdata->dtr)
++	if (op->cmd.dtr)
+ 		opcode = op->cmd.opcode >> 8;
+ 	else
+ 		opcode = op->cmd.opcode;
+ 
+ 	reg = opcode << CQSPI_REG_CMDCTRL_OPCODE_LSB;
+ 
+-	rdreg = cqspi_calc_rdreg(f_pdata);
++	rdreg = cqspi_calc_rdreg(op);
+ 	writel(rdreg, reg_base + CQSPI_REG_RD_INSTR);
+ 
+-	dummy_clk = cqspi_calc_dummy(op, f_pdata->dtr);
++	dummy_clk = cqspi_calc_dummy(op);
+ 	if (dummy_clk > CQSPI_DUMMY_CLKS_MAX)
+ 		return -EOPNOTSUPP;
+ 
+@@ -622,12 +560,7 @@ static int cqspi_command_write(struct cqspi_flash_pdata *f_pdata,
+ 	size_t write_len;
+ 	int ret;
+ 
+-	ret = cqspi_set_protocol(f_pdata, op);
+-	if (ret)
+-		return ret;
+-
+-	ret = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_STIG_LSB,
+-			       f_pdata->dtr);
++	ret = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_STIG_LSB);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -638,10 +571,10 @@ static int cqspi_command_write(struct cqspi_flash_pdata *f_pdata,
+ 		return -EINVAL;
+ 	}
+ 
+-	reg = cqspi_calc_rdreg(f_pdata);
++	reg = cqspi_calc_rdreg(op);
+ 	writel(reg, reg_base + CQSPI_REG_RD_INSTR);
+ 
+-	if (f_pdata->dtr)
++	if (op->cmd.dtr)
+ 		opcode = op->cmd.opcode >> 8;
+ 	else
+ 		opcode = op->cmd.opcode;
+@@ -688,21 +621,20 @@ static int cqspi_read_setup(struct cqspi_flash_pdata *f_pdata,
+ 	int ret;
+ 	u8 opcode;
+ 
+-	ret = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_READ_LSB,
+-			       f_pdata->dtr);
++	ret = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_READ_LSB);
+ 	if (ret)
+ 		return ret;
+ 
+-	if (f_pdata->dtr)
++	if (op->cmd.dtr)
+ 		opcode = op->cmd.opcode >> 8;
+ 	else
+ 		opcode = op->cmd.opcode;
+ 
+ 	reg = opcode << CQSPI_REG_RD_INSTR_OPCODE_LSB;
+-	reg |= cqspi_calc_rdreg(f_pdata);
++	reg |= cqspi_calc_rdreg(op);
+ 
+ 	/* Setup dummy clock cycles */
+-	dummy_clk = cqspi_calc_dummy(op, f_pdata->dtr);
++	dummy_clk = cqspi_calc_dummy(op);
+ 
+ 	if (dummy_clk > CQSPI_DUMMY_CLKS_MAX)
+ 		return -EOPNOTSUPP;
+@@ -947,22 +879,21 @@ static int cqspi_write_setup(struct cqspi_flash_pdata *f_pdata,
+ 	void __iomem *reg_base = cqspi->iobase;
+ 	u8 opcode;
+ 
+-	ret = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_WRITE_LSB,
+-			       f_pdata->dtr);
++	ret = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_WRITE_LSB);
+ 	if (ret)
+ 		return ret;
+ 
+-	if (f_pdata->dtr)
++	if (op->cmd.dtr)
+ 		opcode = op->cmd.opcode >> 8;
+ 	else
+ 		opcode = op->cmd.opcode;
+ 
+ 	/* Set opcode. */
+ 	reg = opcode << CQSPI_REG_WR_INSTR_OPCODE_LSB;
+-	reg |= f_pdata->data_width << CQSPI_REG_WR_INSTR_TYPE_DATA_LSB;
+-	reg |= f_pdata->addr_width << CQSPI_REG_WR_INSTR_TYPE_ADDR_LSB;
++	reg |= CQSPI_OP_WIDTH(op->data) << CQSPI_REG_WR_INSTR_TYPE_DATA_LSB;
++	reg |= CQSPI_OP_WIDTH(op->addr) << CQSPI_REG_WR_INSTR_TYPE_ADDR_LSB;
+ 	writel(reg, reg_base + CQSPI_REG_WR_INSTR);
+-	reg = cqspi_calc_rdreg(f_pdata);
++	reg = cqspi_calc_rdreg(op);
+ 	writel(reg, reg_base + CQSPI_REG_RD_INSTR);
+ 
+ 	/*
+@@ -1244,10 +1175,6 @@ static ssize_t cqspi_write(struct cqspi_flash_pdata *f_pdata,
+ 	const u_char *buf = op->data.buf.out;
+ 	int ret;
+ 
+-	ret = cqspi_set_protocol(f_pdata, op);
+-	if (ret)
+-		return ret;
+-
+ 	ret = cqspi_write_setup(f_pdata, op);
+ 	if (ret)
+ 		return ret;
+@@ -1260,7 +1187,7 @@ static ssize_t cqspi_write(struct cqspi_flash_pdata *f_pdata,
+ 	 * mode. So, we can not use direct mode when in DTR mode for writing
+ 	 * data.
+ 	 */
+-	if (!f_pdata->dtr && cqspi->use_direct_mode &&
++	if (!op->cmd.dtr && cqspi->use_direct_mode &&
+ 	    ((to + len) <= cqspi->ahb_size)) {
+ 		memcpy_toio(cqspi->ahb_base + to, buf, len);
+ 		return cqspi_wait_idle(cqspi);
+@@ -1348,9 +1275,6 @@ static ssize_t cqspi_read(struct cqspi_flash_pdata *f_pdata,
+ 	int ret;
+ 
+ 	ddata = of_device_get_match_data(dev);
+-	ret = cqspi_set_protocol(f_pdata, op);
+-	if (ret)
+-		return ret;
+ 
+ 	ret = cqspi_read_setup(f_pdata, op);
+ 	if (ret)
+-- 
+2.25.1
+

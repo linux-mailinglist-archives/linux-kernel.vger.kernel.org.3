@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30C35091B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E525091B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382340AbiDTU7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
+        id S1382349AbiDTU7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382320AbiDTU7J (ORCPT
+        with ESMTP id S1382367AbiDTU71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:59:09 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6502047AD3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:56:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650488169; x=1682024169;
-  h=message-id:date:mime-version:to:references:from:subject:
-   in-reply-to:content-transfer-encoding;
-  bh=3Rtfob+huina/55HMFVC0p+JdnFzo9FvVFAZEOpk6b4=;
-  b=bDCJ2EgioKQ1ZzH+IEQtg0+1XINwT3eTpDe6D951mPTMyimnxZf25LKn
-   EOB1feMmFCN9jzeE5Gebh/6RRHFGwGn4FuAV9MF3EX49S1mfjOiDzNHAf
-   GjbXWTYie0e5EPsrqHxTFM21grenYkgHrnTypnSLOS5/WGfjT8XXfAdT/
-   t6r4ulv8oIki7E/Whp/rwKzfZVGNuLolLMv4GaLu98iS2c9iJ8q2pyvAb
-   EPOJ64vz2HY2enfdR+PU6JVebCpFR2UqZR0V8Wsz0Qe/KvZTLuDVFQORw
-   CN8p5AiC1FZqId3jl7JYDJ0bftUUNQ3jW8l1di2H45oMUsP3SLMtNgJ4F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="244734017"
-X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
-   d="scan'208";a="244734017"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 13:56:09 -0700
-X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
-   d="scan'208";a="562267203"
-Received: from mileskin-mobl.amr.corp.intel.com (HELO [10.213.184.8]) ([10.213.184.8])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 13:56:08 -0700
-Message-ID: <2eb705cd-8607-4b8c-2c0b-31265d503eed@intel.com>
-Date:   Wed, 20 Apr 2022 13:56:07 -0700
+        Wed, 20 Apr 2022 16:59:27 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA244738C
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:56:24 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id h83so3213311iof.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:56:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RyBXxxIH/nLXI3G0qXD2cOtw9sd5zWd0oLZhbOg6kmM=;
+        b=Nas5cf2D8yuFWDtgt5Rq8i1udp0jfH0r++qOT7EtKk3M1w5904AY+C2TM5LTb3SHy/
+         eZFgsfhblj24Lq9GkYIOWFG6cVxnngLzUXL9ciEf3HYxYaaSGt2ohuVHEqEFRB0PvSVR
+         XBHKsVoOCOjPCJ5iVbch9d8881Vjc/PDkiQDqEwLug5o0GXCFxG3yD2EGVJIkNd+JyPy
+         oTIJrc9ZyvlQO5HWfRFB5DGWLruqOsSbkCwWuEljLB9FX1OFYwuEK/xZSH3QZaEf04MR
+         7vnJ7w6g0D5XWRUtimE1ey3EVwq/UnOSfHkICByDbb/i0p7yzhZcxv0IsXyD7l8Fs3zS
+         Vklw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RyBXxxIH/nLXI3G0qXD2cOtw9sd5zWd0oLZhbOg6kmM=;
+        b=4WdMH0gAi3gw6pebRvOm0NfEHPyoE5015MBfGw1MrB1esS2XA+gEP0ndWglnXkMnzm
+         q1VK/iE58RCgM+51qlHa9pAr15pK/NpZJLCjFSW9SQkxcq/CW1eTdUAu8Xf3OAM6Z+Eg
+         0kMalTFHD77HUAnuwITIczxRKhdF908C2NTH2xWEdkPUcmsRlgyx7HGyJDkgztK3PSaO
+         gB349DsfyGu8q/cXvKdt4t0b1PSSs8tuZEp45d1LMyGWY1AhnGMNni1fwPIzg+zyg2r9
+         ezMW4H4jiV4qmS2IZWqK1tIyPZbUfOmQzPpvJ5pb3EApTiricJrqaNfiRhNg6UsAU7mQ
+         RhEg==
+X-Gm-Message-State: AOAM5321ekqyqUXJeAeauBGo+AWrHEUMFNYmz55z4k62Je0FsGU4gYYF
+        Z1cgs79SeswYmk3TaDiGHAaGLQugraeK6WM9NR4=
+X-Google-Smtp-Source: ABdhPJxkhTGy7FOTlWARsPgxbu2EhND0YDaee5yx9j6CACvFF2cHYCBtYiFwvCbBrAxDCZt2bzo6miS29qrYah1J974=
+X-Received: by 2002:a6b:6b0c:0:b0:651:95fa:bf33 with SMTP id
+ g12-20020a6b6b0c000000b0065195fabf33mr9832103ioc.64.1650488183860; Wed, 20
+ Apr 2022 13:56:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>,
-        catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fenghua.yu@intel.com, reinette.chatre@intel.com
-References: <20220420030223.689259-1-tarumizu.kohei@fujitsu.com>
- <20220420030223.689259-7-tarumizu.kohei@fujitsu.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v3 6/9] x86: resctrl: pseudo_lock: Fix to restore to
- original value when re-enabling hardware prefetch register
-In-Reply-To: <20220420030223.689259-7-tarumizu.kohei@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220420140521.45361-1-kernelfans@gmail.com> <20220420140521.45361-4-kernelfans@gmail.com>
+In-Reply-To: <20220420140521.45361-4-kernelfans@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 20 Apr 2022 22:56:13 +0200
+Message-ID: <CANiq72n98uuJS4ao7p==nwwfWeGfekm6X8xz667Hn7EPM+qQRA@mail.gmail.com>
+Subject: Re: [PATCH 3/9] irq/manage: remove some unreferenced code
+To:     Pingfan Liu <kernelfans@gmail.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,16 +74,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/22 20:02, Kohei Tarumizu wrote:
-> The current pseudo_lock.c code overwrittes the value of the
-> MSR_MISC_FEATURE_CONTROL to 0 even if the original value is not 0.
-> Therefore, modify it to save and restore the original values.
+On Wed, Apr 20, 2022 at 4:05 PM Pingfan Liu <kernelfans@gmail.com> wrote:
+>
+> Neither remove_percpu_irq() nor for_each_irq_nr() has any users, so they
+> can be removed.
 
-It would be nice to mention that the wrmsr()'s in this patch are only
-done inside of an interrupt-disabled region.  Without that little tidbit
-of information, it's not obviously correct that the smp_call_function()
-in patch 8/9 is correct.
+For `.clang-format`:
 
-The x86 code here looks reasonable otherwise.  It's a little bit of a
-shame that this is *ONLY* for BROADWELL_X for now, but I assume you were
-just conservative about it because that's all you have to test on.
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
+
+Cheers,
+Miguel

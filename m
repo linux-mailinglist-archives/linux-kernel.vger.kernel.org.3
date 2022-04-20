@@ -2,143 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABE1508D25
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADD6508D28
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380518AbiDTQZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S1380523AbiDTQ0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380384AbiDTQZh (ORCPT
+        with ESMTP id S1376497AbiDTQ0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:25:37 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B027A39B99;
-        Wed, 20 Apr 2022 09:22:50 -0700 (PDT)
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 23KGMccr017946;
-        Thu, 21 Apr 2022 01:22:38 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 23KGMccr017946
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1650471759;
-        bh=g1D7GXEz3zPiKR6ViztNpGgyzc3O/TLrapN2L8mCzMc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PlXVhddlRZHS7g51tQ+BfT48O30S5ckKf2dyGoE9XPGqopjqbQbwBSmonw+LOZVMY
-         JPfbNYurcmLVb1kSBU0sGPO7oD9NGvcVM4kaXbgD5oTRUSmUTzfqOe/x2DPnw7tlYc
-         TuhZf4ycC20c8u8FYY1O7sauZfN0cHSQM61heYFOxhS0jR8Mb10c7wNi4EFH0xx7az
-         6wFd9Kc4ARi5EhJskbGv3xu62DiOUptmrsVCFvgeIB6a8b0HY99aDzrxZDyAIvCUmP
-         9a/FrpLKZ16J09jX7puGORzTPCsgfEca23uDpdGFvj45dkNKNtKaR+QZtpHmycAhLm
-         Hn8qpqT9+/FSg==
-X-Nifty-SrcIP: [209.85.216.49]
-Received: by mail-pj1-f49.google.com with SMTP id n33-20020a17090a5aa400b001d28f5ee3f9so2477514pji.4;
-        Wed, 20 Apr 2022 09:22:38 -0700 (PDT)
-X-Gm-Message-State: AOAM531guYGUZZVDfUlNcNraT4SY4gdLlgzgdL/599M8fI8m9rOMJDkz
-        ljO8CiQMUFONZuehtGaSEdrLLT0Gu5SenrPCKvM=
-X-Google-Smtp-Source: ABdhPJxm+6uKlQArnmwWK1to0XFTv3Hj9dLecMwfdgMqj/wvAfg90qkdUljRa/Aqd8G195TpJa7TqkAyVer/swDSKAQ=
-X-Received: by 2002:a17:90a:de87:b0:1cb:b207:a729 with SMTP id
- n7-20020a17090ade8700b001cbb207a729mr5401383pjv.144.1650471757865; Wed, 20
- Apr 2022 09:22:37 -0700 (PDT)
+        Wed, 20 Apr 2022 12:26:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902E83DA46
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:23:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32EEC619E4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:23:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2886CC385A1;
+        Wed, 20 Apr 2022 16:23:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650471811;
+        bh=SBnyZwALtyPYeKnG3vPDUEjUDcPRsFRW6H4/3UQsehI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JjtEy44tAZJMG/MPWmRPct3HexSkYWqmoasVTFPZ0uDJo4SfOND2yhrgLZrbiom4E
+         mAGZAKGNCF60K4HILY+oQR1dyXxr4n/3mH3rfA7VOBsYl1mujCzegSxvutbkcuH0dU
+         zGS9YqNNGBQkE9j9glelr4mQpowsUk1hD//UDzaPtn3AFPs7VNGhbJGgT2gudlmy+7
+         hxEq/KBeXcuts/XtmA3+D1MCzJXMMxaAxoC1ClyIv2nlOfmZ8V4JP1HJJR51dvjDl/
+         vmkVJsVvyG5oY7wufmwSGblpizL0tpauqJBzYmyq5iNkjO4pWNOYYSZZoZunBmFrF2
+         UOFmw635NmDog==
+Date:   Wed, 20 Apr 2022 17:23:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, kai.vehmanen@linux.intel.com,
+        cgel.zte@gmail.com, Zeal Robot <zealci@zte.com.cn>,
+        lgirdwood@gmail.com, Minghao Chi <chi.minghao@zte.com.cn>,
+        ranjani.sridharan@linux.intel.com, daniel.baluta@nxp.com,
+        linux-kernel@vger.kernel.org, sound-open-firmware@alsa-project.org
+Subject: Re: [PATCH] ASoC: SOF: using pm_runtime_resume_and_get to simplify
+ the code
+Message-ID: <YmAzfTlr9VauoyLu@sirena.org.uk>
+References: <20220420030315.2575691-1-chi.minghao@zte.com.cn>
+ <78c7edc3-f431-9735-238d-9aa2b45ec45e@linux.intel.com>
+ <YmAljQjpLCoBv+nj@sirena.org.uk>
+ <2572220e-57d0-4f10-1695-bfeab54de38d@linux.intel.com>
 MIME-Version: 1.0
-References: <1422803720-14723-1-git-send-email-ydroneaud@opteya.com> <20220408084607.106468-1-ydroneaud@opteya.com>
-In-Reply-To: <20220408084607.106468-1-ydroneaud@opteya.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 21 Apr 2022 01:21:39 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARk+mpdQhHnQP8pKf8oAqVVkZaQ+cckdRosFCv_SsHP5Q@mail.gmail.com>
-Message-ID: <CAK7LNARk+mpdQhHnQP8pKf8oAqVVkZaQ+cckdRosFCv_SsHP5Q@mail.gmail.com>
-Subject: Re: [PATCHv1] kbuild: support W=e to make build abort in case of warning
-To:     Yann Droneaud <ydroneaud@opteya.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pPSA/PyGUaMRPFlK"
+Content-Disposition: inline
+In-Reply-To: <2572220e-57d0-4f10-1695-bfeab54de38d@linux.intel.com>
+X-Cookie: Will it improve my CASH FLOW?
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 5:46 PM Yann Droneaud <ydroneaud@opteya.com> wrote:
->
-> When developing new code/feature, CONFIG_WERROR is most
-> often turned off, especially for people using make W=12 to
-> get more warnings.
->
-> In such case, turning on -Werror temporarily would require
-> switching on CONFIG_WERROR in the configuration, building,
-> then switching off CONFIG_WERROR.
->
-> For this use case, this patch introduces a new 'e' modifier
-> to W= as a short hand for KCFLAGS+=-Werror" so that -Werror
-> got added to the kernel (built-in) and modules' CFLAGS.
->
-> Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
-> ---
 
+--pPSA/PyGUaMRPFlK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Applied to linux-kbuild.
-Thanks.
+On Wed, Apr 20, 2022 at 11:11:03AM -0500, Pierre-Louis Bossart wrote:
 
->  Makefile                   |  1 +
->  scripts/Makefile.extrawarn | 13 +++++++++++--
->  2 files changed, 12 insertions(+), 2 deletions(-)
->
-> Changes since v0[0]:
->
->  - rebase on top of commit 64a91907c896 ("kbuild: refactor scripts/Makefile.extrawarn")
->  - document use case after commit 3fe617ccafd6 ("Enable '-Werror' by default for all kernel builds")
->
-> [0] https://lore.kernel.org/all/1422803720-14723-1-git-send-email-ydroneaud@opteya.com/
->
-> diff --git a/Makefile b/Makefile
-> index 8c7de9a72ea2..6dc621af18d1 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1649,6 +1649,7 @@ help:
->         @echo  '                1: warnings which may be relevant and do not occur too often'
->         @echo  '                2: warnings which occur quite often but may still be relevant'
->         @echo  '                3: more obscure warnings, can most likely be ignored'
-> +       @echo  '                e: warnings are being treated as errors'
->         @echo  '                Multiple levels can be combined with W=12 or W=123'
->         @echo  ''
->         @echo  'Execute "make" or "make all" to build all targets marked with [*] '
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 650d0b8ceec3..f5f0d6f09053 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -2,8 +2,8 @@
->  # ==========================================================================
->  # make W=... settings
->  #
-> -# There are three warning groups enabled by W=1, W=2, W=3.
-> -# They are independent, and can be combined like W=12 or W=123.
-> +# There are four warning groups enabled by W=1, W=2, W=3, and W=e
-> +# They are independent, and can be combined like W=12 or W=123e.
->  # ==========================================================================
->
->  KBUILD_CFLAGS += $(call cc-disable-warning, packed-not-aligned)
-> @@ -94,3 +94,12 @@ KBUILD_CFLAGS += $(call cc-option, -Wpacked-bitfield-compat)
->  KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN3
->
->  endif
-> +
-> +#
-> +# W=e - error out on warnings
-> +#
-> +ifneq ($(findstring e, $(KBUILD_EXTRA_WARN)),)
-> +
-> +KBUILD_CFLAGS += -Werror
-> +
-> +endif
-> --
-> 2.32.0
->
+> ok, I'll send follow-up patches for the remaining code.
 
+Thanks, like you say there's a lot to get through here!
 
--- 
-Best Regards
-Masahiro Yamada
+--pPSA/PyGUaMRPFlK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJgM3wACgkQJNaLcl1U
+h9CQJgf/fmHmEvmSkw+o5cwa89eqRnsRjl0W9UEoY268KcH7oP1YF3/DZCS5KkLi
+fkv2zMjTMNU96KRgcX7T0LQ1nqatX4hkWZXfYmTfPTT03sVzJ1q9FXT4IEERV587
+Y+R0wsTgHWV2e4/n3GNsYcq3dgfeDt1c2LrcLnhpClO8SMTl0Qjdv2ci0NCBdmqe
+ISS9aCBtP2e2zAu8MOqwFBR0BVwaPu8euKJiVtpu7y6cXuh3awKaqOQYnGCUm/dD
+cqYtMnQwLh3WzAoyKUrK5Pohu/AtQBkssGiS/n3c9JMjU7utg/K5x2+t2tZrBh88
+fvVmR2Mo8H18gUzxmZ6rybDj0TM1BA==
+=XETb
+-----END PGP SIGNATURE-----
+
+--pPSA/PyGUaMRPFlK--

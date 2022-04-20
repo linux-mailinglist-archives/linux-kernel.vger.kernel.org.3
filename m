@@ -2,98 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A250C507FD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AD950801D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354191AbiDTE1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 00:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S1356045AbiDTEcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 00:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiDTE1C (ORCPT
+        with ESMTP id S236411AbiDTEcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 00:27:02 -0400
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9E212AD1;
-        Tue, 19 Apr 2022 21:24:17 -0700 (PDT)
-Received: by mail-pj1-f47.google.com with SMTP id e62-20020a17090a6fc400b001d2cd8e9b0aso823982pjk.5;
-        Tue, 19 Apr 2022 21:24:17 -0700 (PDT)
+        Wed, 20 Apr 2022 00:32:39 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA0062DE
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 21:29:54 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id r189so755657ybr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 21:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ca0BuBVr/d8uQqf5viG8UycJ7VWTDMA7hYPu8iqyqE0=;
+        b=YzXagblC6H8cB8lRJtSr5Z8G7olqqRNFPijud3sJXVYI/FAakCkj2Dnha1DMQzQ3Q7
+         ABbpJZVwpHzpgyEz1f1xZA8SvDMn6ua6TuMzpaLSyxFJmIcmPkhrXfXlAuxL7G6wTKDp
+         F7hxEmqTBwtwbqYklooazDESdDTlD2A52eFWKQz+O3H/W2jMIlIqLld5OU/FFKWYa3kh
+         7EVkJU974u987fluC+xjR7LmLc2yVUujAa1bmaVjAUEyas4xZm6vlkrzttNloEKdLjJi
+         5in88C8szLmc7V7PyrYRhv6gYVOpN3X3ES8+Ny+es2JzmTEGQ/2Tk3cWIfieIrd17DkR
+         e8pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L3G/zycN/gWAd7Y5wcbb/visDS0CApx2O53NC+SKxow=;
-        b=WBIlZfN1BjXkBtEhIlGns1kXe23njaMQ6MM9dpHOf9kxcoeblNl8ucAXV84odagNQ5
-         MZkYNxvtHPe4e7HxEdJ/jMAbm+g8z2q4XDTairu42M6gRRXmRdk7g1H468oU7UdK1IeZ
-         cgYxZZGvJMzh5Rx4Hcw6KgY/P+yxdObZnwPJTST15RAWBrm3zFfZzxxlUDqFiWwRwQMF
-         jaqsfBddZBPqF49AZH0l5EFW1pinTvlNEMfqyDSKoLQGBM0XosKiPomLUzS8YUHTdj9f
-         JuMQpW+9ScCCp0XFX/PVSk4tDEEGevW2OEW5y8un7FXxoVWfi29BTSrCvN3wXEhd79WK
-         Gh/Q==
-X-Gm-Message-State: AOAM530VWTWBQpjH+pK7f5UrZKEzSnnczNeRI5UrUDFn6yM+ZuxzUL3/
-        OzoonA0x6jhHzc9SpG6SftY=
-X-Google-Smtp-Source: ABdhPJwR2+M3apg3q4iRN5ROp+CeVXqPxI1Vk/Z71Y0mjiIsmPluV9gkFIqciPE6WGVIfZRDdCuNLw==
-X-Received: by 2002:a17:90b:2691:b0:1d2:72b9:b9b with SMTP id pl17-20020a17090b269100b001d272b90b9bmr2261004pjb.80.1650428657128;
-        Tue, 19 Apr 2022 21:24:17 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:ece1:6248:e226:d2e0:1f33])
-        by smtp.gmail.com with ESMTPSA id d18-20020a056a0010d200b004fa2e13ce80sm19353650pfu.76.2022.04.19.21.24.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 21:24:16 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 21:24:15 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: altera-pr-ip: fix unsigned comparison with less
- than zero
-Message-ID: <Yl+K789ZUWd5Si0B@archbook>
-References: <20220405185349.220607-1-marpagan@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ca0BuBVr/d8uQqf5viG8UycJ7VWTDMA7hYPu8iqyqE0=;
+        b=a6nOJh3/UsONXf/Ne2bwUDTw6KJmsPdQj+bkYIDDJM34uW+R92UjbQG6J3D9yFfJnW
+         yz9d8yjx3IDTb75nFM2izXkaYDAvuUiqt2ezsB0FFNO+JPndXpAz+5vdgCaksnnLYf4o
+         9PhPAJD8dIppgMKATv11SCHhWAelFHsmR8XQ01pf419KDc93Ppgvi1HbsK33hE/Lm3gM
+         kaL4186PcfvGd74F7lnh22LsvFfMRm6KwBz9EV7mBRhqkmvxrSmZvGQm4b0akLfwdUkE
+         KZe9a7aHm2yYnj4bjbXPiDpTxI+qLAdeSMnHk3yFFR+C6/EtMKVR/nahsMsZRgtUFOQy
+         qcXw==
+X-Gm-Message-State: AOAM530IcgOMcRESqCCgFabq2DDkt/PyuNUdmmFNydH240GN/ZqsJNng
+        thqYh8ktPGNSwyadILIcB2T51IDcCiY0GA05AuY=
+X-Google-Smtp-Source: ABdhPJzwDzIu//iTtmXHlpWB9WaYG7mL/oELc2V02NCn8O0mBo54/rC/FE0UtyzQqj7VRnwcCpVT86WnpzqiI+lDFW0=
+X-Received: by 2002:a25:b991:0:b0:610:bf4e:1b33 with SMTP id
+ r17-20020a25b991000000b00610bf4e1b33mr19029133ybg.352.1650428993716; Tue, 19
+ Apr 2022 21:29:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405185349.220607-1-marpagan@redhat.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220419204109.520779286@infradead.org> <20220419205241.339242797@infradead.org>
+In-Reply-To: <20220419205241.339242797@infradead.org>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Wed, 20 Apr 2022 12:29:41 +0800
+Message-ID: <CAJhGHyAhoRQWF1eWnUQTnUSVQHtYCudb1Ka2XF5EE9Bb9g7a4g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] x86,entry: Use PUSH_AND_CLEAR_REGS for compat
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     X86 ML <x86@kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marco,
+On Wed, Apr 20, 2022 at 4:53 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Since the upper regs don't exist for ia32 code, preserving them
+> doesn't hurt and it simplifies the code.
 
-On Tue, Apr 05, 2022 at 08:53:49PM +0200, Marco Pagani wrote:
-> Fix the "comparison with less than zero" warning reported by
-> cppcheck for the unsigned (size_t) parameter "count" of the
-> "alt_pr_fpga_write()" function.
-> 
-Should this have a Reported-by: tag?
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> ---
->  drivers/fpga/altera-pr-ip-core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
-> index be0667968d33..2ff3d8e46a0c 100644
-> --- a/drivers/fpga/altera-pr-ip-core.c
-> +++ b/drivers/fpga/altera-pr-ip-core.c
-> @@ -108,7 +108,7 @@ static int alt_pr_fpga_write(struct fpga_manager *mgr, const char *buf,
->  	u32 *buffer_32 = (u32 *)buf;
->  	size_t i = 0;
->  
-> -	if (count <= 0)
-> +	if (count == 0)
->  		return -EINVAL;
+In entry_INT80_compat(), the upper regs need to be preserved on the
+stack which makes the code identical to the macro idtentry except the
+special prolog.
 
-if (!count)
-	return -EINVAL?
->  
->  	/* Write out the complete 32-bit chunks */
-> -- 
-> 2.35.1
+So reusing idtentry simplifiers more.
 
-Cheers,
-Moritz
-> 
+I don't ask to remove the change to entry_INT80_compat().
+
+But I don't think the change to entry_INT80_compat()
+fit the changelog.
+
+I think it is better to split this patch into two.
+
+The first one contains the change to entry_SYSENTER_compat()
+and entry_SYSCALL_compat() with current changelog.
+
+The second one contains the change to entry_INT80_compat()
+and PUSH_AND_CLEAR_REGS with changelog saying it simplifies
+entry_SYSENTER_compat().
+
+My patchset can do the simplification by using idtentry
+and remove save_rdi from PUSH_AND_CLEAR_REGS on top of it.
+
+Thanks
+Lai

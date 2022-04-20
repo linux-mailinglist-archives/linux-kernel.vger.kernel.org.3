@@ -2,136 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D998508132
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1374508135
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344839AbiDTGdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 02:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
+        id S1346821AbiDTGd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 02:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241754AbiDTGc5 (ORCPT
+        with ESMTP id S241754AbiDTGdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 02:32:57 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF7F11C0A;
-        Tue, 19 Apr 2022 23:30:11 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23K5gAtK020335;
-        Wed, 20 Apr 2022 06:29:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=dwK7Jz5egacq4U7B1418c7gUMdrS3O8V298T2k9VQP4=;
- b=J2J0o+bvOeekQ8xyL1aXk6QUjgxUX1sfKcFY+I7D5txGRaHPr/+dqEKqhE8HvLe9Fwm8
- 5/f3n1ycG7sIfR9VNJfAsIh4ecqBGEq7g1KVFalp3FxZSb8E4agdhcXKyY4h7VQi6vKu
- lKnNMTXyK1BDLnvmWgG3osMFUK9H2lr+rlyYTV6kIDhZ7Uku3T/QaqBq40XuYRg97Y8C
- RwP5jvEmUryGft+0S6whI4WUq1y25cT/qY6gtsyODufpaLKMM3ld2EiNUa2+6fQvfC/R
- djef0jTv7B2/J0qWH15cVLmFvxRCFUzbujWVakWnoomRJboR5B5lnbnZmOLYqr7dgssR rw== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fg75r3hp8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 06:29:37 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23K6HnUi024667;
-        Wed, 20 Apr 2022 06:29:35 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ffn2hwra2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 06:29:34 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23K6TVIN16318904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Apr 2022 06:29:31 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C8AC52059;
-        Wed, 20 Apr 2022 06:29:31 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 41B495204F;
-        Wed, 20 Apr 2022 06:29:31 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, chengdongli@tencent.com, adrian.hunter@intel.com
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH] perf/test: test case 71 fails on s390
-Date:   Wed, 20 Apr 2022 08:29:21 +0200
-Message-Id: <20220420062921.1211825-1-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 20 Apr 2022 02:33:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BD411C0A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650436270; x=1681972270;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4jR3EFxRFOzturlFugVQAcZ+IFecgSENuMS8nkVcJMM=;
+  b=cQftW5Rgak8BQipJAL+7AbxYdDR86mc7EAjJ2noVquZoVmBztVVfVq7A
+   Le0WNnxKH9p3uIYbEPO3GhOQFFrE5hI4K+b+trslw3gRj5GkmJoPvY61m
+   hxWZSI9R3YHAKLVQ3FYBurUPBhS9/JgCU3ZsfKLnGdf2zRyTyeUsAey4e
+   A9U3S9idSq3pAy820fRMEXbc/Wvyvwx52U8oVjnYbdcNwHRdLJLUGW/XR
+   jVSoaaWgq3MzgO79sDkVRmCgRoAPVfWRdWdMKK17cMY+t//LvDTDEV3/x
+   Eb4x3lhse01Vf0f6U+HcvboJI9PYD6d9RlFZ4zBHMefm/l73xCMU59yo5
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="263415353"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="263415353"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 23:31:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="531356066"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 19 Apr 2022 23:31:08 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nh3rn-0006fW-Cc;
+        Wed, 20 Apr 2022 06:31:07 +0000
+Date:   Wed, 20 Apr 2022 14:30:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Karol Herbst <kherbst@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, Karol Herbst <kherbst@redhat.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>
+Subject: Re: [Intel-gfx] [PATCH] drm/i915: Fix race in
+ __i915_vma_remove_closed
+Message-ID: <202204201422.5Bu5aV2Z-lkp@intel.com>
+References: <20220419234436.2638649-1-kherbst@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: WnTCLPGNRju_nnAMgMIKkS4pxJafbQ3X
-X-Proofpoint-GUID: WnTCLPGNRju_nnAMgMIKkS4pxJafbQ3X
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_08,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
- mlxlogscore=999 spamscore=0 suspectscore=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204200036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419234436.2638649-1-kherbst@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test case 71 'Convert perf time to TSC' is not supported on s390.
-Subtest 71.1 is skipped with the correct message, but
-subtest 71.2 is not skipped and fails.
+Hi Karol,
 
-The root cause is function evlist__open() called from
-test__perf_time_to_tsc().  evlist__open() returns -ENOENT because the
-event cycles:u is not supported by the selected PMU, for example 
-platform s390 on z/VM or an x86_64 virtual machine.
-The PMU driver returns -ENOENT in this case. This error is leads to
-the failure.
-Fix this by returning TEST_SKIP on -ENOENT.
+I love your patch! Perhaps something to improve:
 
-Output before:
- 71: Convert perf time to TSC:
- 71.1: TSC support:             Skip (This architecture does not support)
- 71.2: Perf time to TSC:        FAILED!
+[auto build test WARNING on drm-tip/drm-tip]
+[also build test WARNING on linus/master v5.18-rc3 next-20220419]
+[cannot apply to drm-intel/for-linux-next linux/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Output after:
- 71: Convert perf time to TSC:
- 71.1: TSC support:             Skip (This architecture does not support)
- 71.2: Perf time to TSC:        Skip (perf_read_tsc_conversion is not supported)
+url:    https://github.com/intel-lab-lkp/linux/commits/Karol-Herbst/drm-i915-Fix-race-in-__i915_vma_remove_closed/20220420-074525
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220420/202204201422.5Bu5aV2Z-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/50a17180127b7d2527ee9a8f5c9e8207e158afb6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Karol-Herbst/drm-i915-Fix-race-in-__i915_vma_remove_closed/20220420-074525
+        git checkout 50a17180127b7d2527ee9a8f5c9e8207e158afb6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-This also happens on an x86_64 virtual machine:
-   # uname -m
-   x86_64
-   $ ./perf test -F 71
-    71: Convert perf time to TSC  :
-    71.1: TSC support             : Ok
-    71.2: Perf time to TSC        : FAILED!
-   $ 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: 290fa68bdc45 ("perf test tsc: Fix error message when not supported")
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-Acked-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
----
- tools/perf/tests/perf-time-to-tsc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+All warnings (new ones prefixed by >>):
 
-diff --git a/tools/perf/tests/perf-time-to-tsc.c b/tools/perf/tests/perf-time-to-tsc.c
-index cc6df49a65a1..4ad0dfbc8b21 100644
---- a/tools/perf/tests/perf-time-to-tsc.c
-+++ b/tools/perf/tests/perf-time-to-tsc.c
-@@ -123,6 +123,10 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 		evsel->core.attr.enable_on_exec = 0;
- 	}
- 
-+	if (evlist__open(evlist) == -ENOENT) {
-+		err = TEST_SKIP;
-+		goto out_err;
-+	}
- 	CHECK__(evlist__open(evlist));
- 
- 	CHECK__(evlist__mmap(evlist, UINT_MAX));
+   drivers/gpu/drm/i915/i915_vma.c: In function 'release_references':
+>> drivers/gpu/drm/i915/i915_vma.c:1654:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+    1654 |         struct intel_gt *gt = vma->vm->gt;
+         |         ^~~~~~
+
+
+vim +1654 drivers/gpu/drm/i915/i915_vma.c
+
+  1640	
+  1641	static void release_references(struct i915_vma *vma, bool vm_ddestroy)
+  1642	{
+  1643		struct drm_i915_gem_object *obj = vma->obj;
+  1644	
+  1645		GEM_BUG_ON(i915_vma_is_active(vma));
+  1646	
+  1647		spin_lock(&obj->vma.lock);
+  1648		list_del(&vma->obj_link);
+  1649		if (!RB_EMPTY_NODE(&vma->obj_node))
+  1650			rb_erase(&vma->obj_node, &obj->vma.tree);
+  1651	
+  1652		spin_unlock(&obj->vma.lock);
+  1653	
+> 1654		struct intel_gt *gt = vma->vm->gt;
+  1655	
+  1656		spin_lock_irq(&gt->closed_lock);
+  1657		__i915_vma_remove_closed(vma);
+  1658		spin_unlock_irq(&gt->closed_lock);
+  1659	
+  1660		if (vm_ddestroy)
+  1661			i915_vm_resv_put(vma->vm);
+  1662	
+  1663		i915_active_fini(&vma->active);
+  1664		GEM_WARN_ON(vma->resource);
+  1665		i915_vma_free(vma);
+  1666	}
+  1667	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

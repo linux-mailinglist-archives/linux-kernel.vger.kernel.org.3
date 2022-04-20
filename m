@@ -2,200 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5365088E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5665088F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359075AbiDTNLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
+        id S1353952AbiDTNOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235000AbiDTNK5 (ORCPT
+        with ESMTP id S235000AbiDTNOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:10:57 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0831A3A7;
-        Wed, 20 Apr 2022 06:08:03 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 310E94000E;
-        Wed, 20 Apr 2022 13:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650460081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yuk0DkDPEInPbO2/7/mEfOaFgM8OSF6LY257uIAIVYU=;
-        b=gVZD0Yq66dGtbd3tNLTW39EtL5QZSEA+tJfDOou3z24FIgHn7EWKkxiriGZLXKFlhJabzM
-        LYKitguMS9+J49ShBJNH4gDXPKjmRJ5e41XKskhTGH0hoDuZnWF9swiLtyZTVKj8IQKv1H
-        0EWXxgla8Mrm/dHHaXQ70G65oCcNjSA3KFJLiH7jyAERAK8v1tnuHvEtL6Wyjv2X8PFVsy
-        cQi88TkKlaTwTVHcot5kG/ti3/jJ2VvSB+j9BSKocIL43fubwY48Pn/WIhh2KS62dYpHNY
-        zowk7iRgXtsIOv8ENuZm3bvAA4Y3tkJ3AvCh9gKD9u6fIh2AGxAR7zHFfnF9dw==
-Date:   Wed, 20 Apr 2022 15:07:59 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v2 3/8] dt-bindings: PCI: renesas-pci-usb: Allow
- multiple clocks
-Message-ID: <20220420150759.713fcd02@bootlin.com>
-In-Reply-To: <CAMuHMdWZyuNQJhxkhzs5H8+8DFGDS95nvptrO-s9RC4QL5kibA@mail.gmail.com>
-References: <20220414074011.500533-1-herve.codina@bootlin.com>
-        <20220414074011.500533-4-herve.codina@bootlin.com>
-        <CAMuHMdWZyuNQJhxkhzs5H8+8DFGDS95nvptrO-s9RC4QL5kibA@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Wed, 20 Apr 2022 09:14:03 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2212E39BBB;
+        Wed, 20 Apr 2022 06:11:16 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id c23so1774611plo.0;
+        Wed, 20 Apr 2022 06:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=90Tzna36JvZCbTdn0O+HXfIE/8jQaXux5FeOavE9K5c=;
+        b=oo4IlDOQLB9vf9sOvQgt5qcMV1m5fPJRwKVH7AbNJY2YOr6bdY8z56G1I53Y2xaxKj
+         Ws09gRdSlzGsduzkYhmv4OYUAV7v+8mjMy9ESxbXeZP+Hue7SOww1d51dnFbW+zjr7fk
+         l/5JzBh93qEoVsNXEJFQSEglMlWoJSCVzc7OlmS+EItGcKUpPv0twjJhTSaWNuPtXZq0
+         wJ5v7NRno1wsURPZEkEDCP7wYEtnU055PPYbXYo0TIJmvk3bZyAn4B6ZLLUZ0CSSNoYK
+         QQWfTI9gKo8BcjMBBuxtV0IejVPei5v4xF+cADxbeATUXPORdVztTiGvmroJ/O+ugU1k
+         UcuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=90Tzna36JvZCbTdn0O+HXfIE/8jQaXux5FeOavE9K5c=;
+        b=InkqzUZ/8kBD3IruL2Ed/vzmFU2nnlT6q7f69P1TbWkKUsC4uA6wQWbYLx7dVtn4+L
+         KKiq7kkv7Yv57FnE+GvUnY0Y5fb+r9KT0iDqNCpOxIe608yvPf9Lo9UC12WI+lZIMezz
+         0b+Yqp+q/+A4isKLI+iNWgKnXjWb/Va0mfkYkK6vl2U2o0CwWaR5FWV46ouoet4fnaBg
+         iycRSvQ2sUKc0hwLEZIA3c1I9Q+raCgHgdUDcE480B3iZYddMMKrgo3zSoLbTwewnxjp
+         mqEM+QD05aVZN6Jqfte2PI7MRkCJcghT6SYy3WaxZ/7KdWdoviNvQJCA0vajGGVUFQ3n
+         DvZg==
+X-Gm-Message-State: AOAM531uw+LnIZqjwf7l1dV3kZO7JiV127aUlf1MMgz7e4lswLUxDNKq
+        qmcpvEB2L1qmFODrg6K4artDiX7ai1k=
+X-Google-Smtp-Source: ABdhPJxV7JCfrDBJ9iW1SXvIcuclt7clj5Ex9KC5O7Ey2hQ2PgI+iQMc/wCbbhbM+G2BO9BQ375NdA==
+X-Received: by 2002:a17:903:1c6:b0:158:d1d8:19b with SMTP id e6-20020a17090301c600b00158d1d8019bmr20237933plh.108.1650460275376;
+        Wed, 20 Apr 2022 06:11:15 -0700 (PDT)
+Received: from localhost ([47.251.4.198])
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm20792882pfj.55.2022.04.20.06.11.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 20 Apr 2022 06:11:15 -0700 (PDT)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: [PATCH 0/2] KVM: X86/MMU: Fix problem for shadowing 5-level NPT for 4-level NPT L1 guest
+Date:   Wed, 20 Apr 2022 21:12:02 +0800
+Message-Id: <20220420131204.2850-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert, Rob,
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-On Thu, 14 Apr 2022 10:35:07 +0200
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+When shadowing 5-level NPT for 4-level NPT L1 guest, the root_sp is
+allocated with role.level = 5 and the guest pagetable's root gfn.
 
-> Hi Herv=C3=A9,
->=20
-> On Thu, Apr 14, 2022 at 9:40 AM Herve Codina <herve.codina@bootlin.com> w=
-rote:
-> > Define that multiple clocks can be present at clocks property.
-> >
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
->=20
-> Thanks for your patch!
->=20
-> > --- a/Documentation/devicetree/bindings/pci/renesas,pci-usb.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/renesas,pci-usb.yaml
-> > @@ -54,7 +54,8 @@ properties:
-> >        Standard property that helps to define the interrupt mapping.
-> >
-> >    clocks:
-> > -    description: The reference to the device clock.
-> > +    description:
-> > +      The references to the device clocks (several clocks can be refer=
-enced). =20
->=20
-> Please describe the clocks, and add the missing "clock-names" property.
->=20
-> >
-> >    bus-range:
-> >      description: | =20
->=20
-> I think it would be better to combine this with [PATCH v2 4/8], as the
-> additional clocks are only present on RZ/N1.
->=20
-> Then you can easily add json-schema logic to enforce the correct
-> number of clocks, depending on the compatible value.
+And root_sp->spt[0] is also allocated with the same gfn and the same
+role except role.level = 4.  Luckily that they are different shadow
+pages, but only root_sp->spt[0] is the real translation of the guest
+pagetable.
 
-Sure.
+Here comes a problem:
 
-Is there a way to have the clocks description depending on the compatible v=
-alue.
-I mean something like:
---- 8< ---
-properties:
-  clocks:
-    maxItems: 1
+If the guest switches from gCR4_LA57=0 to gCR4_LA57=1 (or vice verse)
+and uses the same gfn as the root page for nested NPT before and after
+switching gCR4_LA57.  The host (hCR4_LA57=1) might use the same root_sp
+for the guest even the guest switches gCR4_LA57.  The guest will see
+unexpected page mapped and L2 may exploit the bug and hurt L1.  It is
+lucky that the problem can't hurt L0.
 
-if:
-  properties:
-    compatible:
-      contains:
-        enum:
-          - renesas,pci-r9a06g032
-          - renesas,pci-rzn1
+Fix it by introducing role.passthrough.
 
-then:
-  properties:
-    clocks:
-      items:
-        - description: Internal bus clock (AHB) for HOST
-        - description: Internal bus clock (AHB) Power Management
-        - description: PCI clock for USB subsystem
-      minItems: 3
-      maxItems: 3
+Lai Jiangshan (2):
+  KVM: X86/MMU: Add sp_has_gptes()
+  KVM: X86/MMU: Introduce role.passthrough for shadowing 5-level NPT for
+    4-level NPT L1 guest
 
-else:
-  properties:
-    items:
-       - description: Device clock
-    clocks:
-      minItems: 1
-      maxItems: 1
---- 8< ---
+ Documentation/virt/kvm/mmu.rst  |  3 +++
+ arch/x86/include/asm/kvm_host.h |  5 +++--
+ arch/x86/kvm/mmu/mmu.c          | 38 +++++++++++++++++++++++++++------
+ arch/x86/kvm/mmu/paging_tmpl.h  |  1 +
+ 4 files changed, 38 insertions(+), 9 deletions(-)
 
-In fact, I would like to describe the 3 clocks only for the r9a06g032 SOC
-and the rzn1 family and have an other description for the other 'compatible=
-'.
+-- 
+2.19.1.6.gb485710b
 
-I cannot succeed to do it.
-
-The only thing I can do is to leave the description of the 3 clocks out of =
-the
-conditional part. This leads to :
-
---- 8< ---
-properties:
-  clocks:
-    items:
-      - description: Internal bus clock (AHB) for HOST
-      - description: Internal bus clock (AHB) Power Management
-      - description: PCI clock for USB subsystem
-    minItems: 1
-
-if:
-  properties:
-    compatible:
-      contains:
-        enum:
-          - renesas,pci-r9a06g032
-          - renesas,pci-rzn1
-
-then:
-  properties:
-    clocks:
-      minItems: 3
-      maxItems: 3
-
-else:
-  properties:
-    clocks:
-      minItems: 1
-      maxItems: 1
---- 8< ---
-
-Also the clock-names items can be different depending on the
-compatible value.
-
-Regards,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com

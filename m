@@ -2,126 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC542508949
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA4A50894B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379056AbiDTN2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S1379073AbiDTN25 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 20 Apr 2022 09:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379021AbiDTN2h (ORCPT
+        with ESMTP id S1379036AbiDTN2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:28:37 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412DC3A5D8;
-        Wed, 20 Apr 2022 06:25:51 -0700 (PDT)
-Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MMFdY-1nRI9D2Fs6-00JKba; Wed, 20 Apr 2022 15:25:49 +0200
-Received: by mail-wm1-f46.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso3707201wma.0;
-        Wed, 20 Apr 2022 06:25:49 -0700 (PDT)
-X-Gm-Message-State: AOAM533Ruzzhq3AJnT/ApE5/MdAhSW3ZXbnGtnby3NKLfiyYe6w5d3f+
-        57jVaS0GWfE6nujzi1m53KI5P/uSFE7Jda3XKrI=
-X-Google-Smtp-Source: ABdhPJwiG3EyuSNpaHqra2dahTK/JnvqbUz+C9/o2SqI7KlR071QCZmOW+DAbeiKB7yYo6yDeDE/gbVIPvIMFUY5Nvg=
-X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
- s25-20020a1cf219000000b0038c782c03bbmr3668880wmc.94.1650461149002; Wed, 20
- Apr 2022 06:25:49 -0700 (PDT)
+        Wed, 20 Apr 2022 09:28:41 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D322C42A0C;
+        Wed, 20 Apr 2022 06:25:54 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id fu34so913641qtb.8;
+        Wed, 20 Apr 2022 06:25:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rFIpc07kdcdErSG52Vnbbh7AXlY7+Cv1PmRK4le+8hE=;
+        b=qg+WFdkx4IbdGAhs6Qg8ioPAL7HPsKaHU9gHRJX4SoGOKv3t0XJrr6VSrjoyezTaLX
+         cEAfNbtVAWjOkGXTB0BGTDKdf6ph1+vJtTQSqVqwpi+tfGtAv/CHct/aaAeVDgNCdj5L
+         zGwf0cIgTKADFvc0LSXaAQvaT7ZrzGOZNmIgOFEvjxaO7cqN17QfpHkrGB+KAg0eBXve
+         9MHe6YV611CU5lYPvMpp1tBHwojtqR7Vje6CDdNoL7WaKZV1x3Tns3kgzfRijuvtoX1g
+         UejEVI9pGaRGJ1Hl/k6HPPMRjRJbQbZFa8oYuwqe7gDWcMPJXoz/EJWerv9ExzwWAoZM
+         azLA==
+X-Gm-Message-State: AOAM531cEGJVvRDu8jIqDbAABj+O2E6mBlsKPTLQqsx7QJSu0QoIt8Fm
+        wWvfgoF+KurBQNisLxOJ4/31c3mQ2+EUBg==
+X-Google-Smtp-Source: ABdhPJy1h9FAARtdksCNxxWNLmD6QSb2LbPLHU2aqWwqhgHDmK+7y/M0BDYaDsymgIgngtXhwDIaKg==
+X-Received: by 2002:ac8:5f07:0:b0:2e1:d695:d857 with SMTP id x7-20020ac85f07000000b002e1d695d857mr13815421qta.40.1650461153730;
+        Wed, 20 Apr 2022 06:25:53 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id n11-20020a05622a11cb00b002f344f11849sm293030qtk.71.2022.04.20.06.25.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 06:25:52 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id f38so2841486ybi.3;
+        Wed, 20 Apr 2022 06:25:52 -0700 (PDT)
+X-Received: by 2002:a05:6902:724:b0:644:c37b:4e21 with SMTP id
+ l4-20020a056902072400b00644c37b4e21mr19809816ybt.6.1650461152378; Wed, 20 Apr
+ 2022 06:25:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220420115512.175917-1-krzysztof.kozlowski@linaro.org>
- <CAK8P3a0uH5KjaobrqUmJQnvMmjkUaR1iC-7jEPjZFjZF1Z-GfQ@mail.gmail.com> <0c0b53c3-294a-b1ac-487a-ca96266c4bb7@linaro.org>
-In-Reply-To: <0c0b53c3-294a-b1ac-487a-ca96266c4bb7@linaro.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 20 Apr 2022 15:25:32 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2uuFMVcsR9c+J28ZsA1cC9+FJCnFy5Lnq6uUY=nPoTEQ@mail.gmail.com>
-Message-ID: <CAK8P3a2uuFMVcsR9c+J28ZsA1cC9+FJCnFy5Lnq6uUY=nPoTEQ@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: samsung: fix missing GPIOLIB on ARM64 Exynos config
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
+References: <20220414122250.158113-1-clement.leger@bootlin.com> <20220414122250.158113-5-clement.leger@bootlin.com>
+In-Reply-To: <20220414122250.158113-5-clement.leger@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 20 Apr 2022 15:25:39 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXcnZ64q+VAMW9f4PNTXR4o+zW9s7EHZQWWh++x94Pz7g@mail.gmail.com>
+Message-ID: <CAMuHMdXcnZ64q+VAMW9f4PNTXR4o+zW9s7EHZQWWh++x94Pz7g@mail.gmail.com>
+Subject: Re: [PATCH net-next 04/12] net: pcs: add Renesas MII converter driver
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        "# 3.4.x" <stable@vger.kernel.org>
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:kbYlLd+2VeG+VWzjp2K6Ui5Pwogjevu9don8FxO2FstBnYgOmnb
- LOavINgChxrc7d/yNCNs3yYy+Z4YBCrOM4OU+St7NMVCZ22FTO65Rp5CSFdfeeJuZDZgTA+
- wR8Yv/7zq9QQ+dYn4fdSgUu0r9J0U3Uga2wpngv3mw62rFq4AnWMrqofibanPF7LmBKuMDP
- tyyddHoxnf2MhEeiTex6A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oOEJXlPpHLE=:0/LNQHR2Jtklkx+Q/alL+R
- bTjXpgO+yhO5xs0fEl5t1X2v1CysRELdtgaQwna8vDG51FulKc/cMuZ6ME3zTF2hc2XCuC/gL
- iPEMotvBDdQmQX8EV+II6I7qvmg7BjJgrX1rApPooRigWQaAWHCG+QQIjfpOU0044gCXD87WH
- 2kkwyHVpSUfdJu5kg0oZANkeS31KLhQsxLDq3cowdxPnY1S0vgTR9P1MjNBcv+J0gktnD8w9T
- ElkDgyey6/5pCPudRFsqoBAQQ60miirEliEmSI48ZGcxDuRQo24cibQwo4EW6LBcGxzRT05Ka
- da/jM6oiXrIWOHjX/97w+XGs4pkiMKEs/19M9yuKlEi2YdNZY4PKShzblUNCkXvTNUqDWeOPl
- RUSs9YiYx1KID8bx0NiDOn4vS90gQbnf0eU6SS3ppPP3YbF36rSECuatiYv2gZxc5/a8KxITf
- shENMZuBk/242pATS8zcTXa01DmnBLL2mDucwl2OZfWwLsMwMeuTJoRYT2iJj9iq56gPbb/QH
- K4pzegIECuI/dLXfcY95iwGNNBEuQz5PKkVYrQz1Ct5wh0SNmzMcOfKnI1Fp2HKB7v3iJopVR
- v29NKvylAR3araV1BNou5bHtgixNg/dPJFRWsBF4pLTV5emsNck+y37wPPmI0npP1Hbr+pgy6
- DRVHu69fYU+MhdIJplOmC+06L1RFktrLc1iwk6kDTqTUWfhBHbPft2FoK9MSfkzWW754=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 2:13 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 20/04/2022 14:10, Arnd Bergmann wrote:
-> > On Wed, Apr 20, 2022 at 1:55 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> The Samsung pinctrl drivers depend on OF_GPIO, which is part of GPIOLIB.
-> >> ARMv7 Exynos platform selects GPIOLIB and Samsung pinctrl drivers. ARMv8
-> >> Exynos selects only the latter leading to possible wrong configuration
-> >> on ARMv8 build:
-> >>
-> >>   WARNING: unmet direct dependencies detected for PINCTRL_EXYNOS
-> >>     Depends on [n]: PINCTRL [=y] && OF_GPIO [=n] && (ARCH_EXYNOS [=y] || ARCH_S5PV210 || COMPILE_TEST [=y])
-> >>     Selected by [y]:
-> >>     - ARCH_EXYNOS [=y]
-> >>
-> >>  config PINCTRL_EXYNOS
-> >>         bool "Pinctrl common driver part for Samsung Exynos SoCs"
-> >> -       depends on OF_GPIO
-> >>         depends on ARCH_EXYNOS || ARCH_S5PV210 || COMPILE_TEST
-> >>         select PINCTRL_SAMSUNG
-> >>         select PINCTRL_EXYNOS_ARM if ARM && (ARCH_EXYNOS || ARCH_S5PV210)
-> >
-> >
-> > The problem here is that PINCTRL_EXYNOS and the others can be built for
-> > compile-testing without CONFIG_OF on non-arm machines.
-> >
-> > I think the correct dependency line would be
-> >
-> >       depends on ARCH_EXYNOS || ARCH_S5PV210 || (COMPILE_TEST && OF)
-> >
-> > which guarantees that OF_GPIO is also enabled.
+Hi Clément,
+
+Thanks for your patch!
+Only cosmetic comments from me, as I'm not too familiar with MII.
+
+On Thu, Apr 14, 2022 at 2:24 PM Clément Léger <clement.leger@bootlin.com> wrote:
+> Add PCS driver for the MII converter that is present on Renesas RZ/N1
+
+Add a ... on the ...
+
+> SoC. This MII converter is reponsible of converting MII to RMII/RGMII
+
+responsible for
+
+> or act as a MII passtrough. Exposing it as a PCS allows to reuse it
+
+pass-through
+
+> in both the switch driver and the stmmac driver. Currently, this driver
+> only allows the PCS to be used by the dual Cortex-A7 subsystem since
+> the register locking system is not used.
 >
-> I don't think OF is the problem here, because the error is in missing
-> GPIOLIB.
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 
-You are correct that the added dependency is not the solution for the
-original problem. What I meant is that by dropping the dependency on
-OF_GPIO, you create a new problem for compile-testing without
-CONFIG_OF. Adding back the OF dependency avoids the regression.
+> --- a/drivers/net/pcs/Kconfig
+> +++ b/drivers/net/pcs/Kconfig
+> @@ -18,4 +18,11 @@ config PCS_LYNX
+>           This module provides helpers to phylink for managing the Lynx PCS
+>           which is part of the Layerscape and QorIQ Ethernet SERDES.
+>
+> +config PCS_RZN1_MIIC
+> +       tristate "Renesas RZN1 MII converter"
 
-> The platform selects Samsung pinctrl but it does not select
-> GPIOLIB. Possible fixes are:
-> 1. Do not select Samsung pinctrl from the platform (but have some
-> default), so on compile test build it might not work.
-> 2. Select GPIOLIB from the platform (ARMv7 Exynos does it).
-> 3. Select GPIOLIB from here - this is current proposal.
+RZ/N1
 
-Agreed, either 2. or 3. is fine, as long as you keep the CONFIG_OF
-dependency.
+> +       help
+> +         This module provides a driver for the MII converter that is available
+> +         on RZN1 SoC. This PCS convert MII to RMII/RGMII or can be in
 
-       Arnd
+RZ/N1
+
+> +         passthrough mode for MII.
+> +
+>  endmenu
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

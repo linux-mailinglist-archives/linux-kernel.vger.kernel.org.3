@@ -2,112 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A5950826A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D1C50826B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359867AbiDTHn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 03:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S1376294AbiDTHoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 03:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241235AbiDTHnx (ORCPT
+        with ESMTP id S241235AbiDTHn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:43:53 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4847F396B1;
-        Wed, 20 Apr 2022 00:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=loHgwO9WdPiHY+qI9O6T45I75jtAzJoMT4qm2QpWt5g=; b=V2RchLGI6xz9pyK8YlHujLlD/X
-        EE6WJAMG0vax+Uflad9dXecchGGgdrEsgr9/jn+Mlna3FwhPqKb8soGIf+88VVZHsT+f+4RamJTHg
-        0i4jQfkRusmvaBRyWgvTg0oUNrm0KRgEEqWI4AHB6Po/2YoCgzyxIhwI6YMo3tGYZCjyDYffHF83B
-        fcn90QQ0wuA5gcSv9F6QzLORGiSSO75scNG7C5EvYN2+q6Ppq38Bh+q8BEhD3AQnsivSvFPtIzE03
-        F6mTVl5e7Wc3jcFL2ZMB40pMwhnaSS8x4TcDmkG9C/Go20R/TKuhBgzJXOZev+/Lovfl/XL64d0A8
-        mdiuVEwA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nh4xC-0073vt-Eu; Wed, 20 Apr 2022 07:40:46 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B013B9861A4; Wed, 20 Apr 2022 09:40:44 +0200 (CEST)
-Date:   Wed, 20 Apr 2022 09:40:44 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     joao@overdrivepizza.com
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, hjl.tools@gmail.com,
-        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
-        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
-Subject: Re: [RFC PATCH 00/11] Kernel FineIBT Support
-Message-ID: <20220420074044.GC2731@worktop.programming.kicks-ass.net>
-References: <20220420004241.2093-1-joao@overdrivepizza.com>
+        Wed, 20 Apr 2022 03:43:59 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5213B00E
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 00:41:13 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8C5DB20002;
+        Wed, 20 Apr 2022 07:41:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650440472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zNCqHdoDiIIO8GrtVq7oJYoQzRKdLynJa7XVU5UOud4=;
+        b=i/MXxswxLD8ta458UREAWTH+0ALFDKozqVuToRsulIqcGNM2YAptjjqKvLAiZz5e2gCndm
+        nqgIMYpubMC1APg2m6WTDjD/Vr1Qlh6UnZ0VB1Z8jA0C6U9vNu7p/6L4Xa1k1r9yP/f5cc
+        Y38ZhebeyKs5bP2uC++iRWh1dajZQgWbv2maBEy/L9zS1dDoCTkRP9I669nwiBMtdpvdH5
+        FUFlJ/S6RDN7TraAHsce2Hd2joNQF2f57iF3u6iAGcORrGXLZ4JcOa8EuYypCrDv5/5xZo
+        TJjB8vhalj11RjqP5K0Yy3yXK1X4BeuP22UxU5lHKoEWJb76svGcRlKTn2l+eA==
+Date:   Wed, 20 Apr 2022 09:41:07 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Liang Yang <liang.yang@amlogic.com>
+Cc:     <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 2/2] dt-bindings: nand: meson: refine Amlogic NAND
+ controller driver
+Message-ID: <20220420094107.4799f15a@xps13>
+In-Reply-To: <20220402074921.13316-3-liang.yang@amlogic.com>
+References: <20220402074921.13316-1-liang.yang@amlogic.com>
+        <20220402074921.13316-3-liang.yang@amlogic.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420004241.2093-1-joao@overdrivepizza.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 05:42:30PM -0700, joao@overdrivepizza.com wrote:
-> @PeterZ @JoshP
-> 
-> I'm a bit unaware of the details on why the objtool approach to bypass ENDBRs
-> was removed from the IBT series. Is this approach now sensible considering that
-> it is a requirement for a new/enhanced feature? If not, how extending the Linker
-> to emit already fixed offsets sounds like?
+Hi Liang,
 
-Josh hates objtool modifying actualy code. He much prefers objtool only
-emits out of band data.
+liang.yang@amlogic.com wrote on Sat, 2 Apr 2022 15:49:20 +0800:
 
-Now, I did sneak in that jump_label nop'ing, and necessity (broken
-compilers) had us do the KCOV nop'ing in noinstr, but if you look at the
-recent objtool series here:
+> convert txt to yaml and refine the meson NFC clock document.
 
-  https://lkml.kernel.org/r/cover.1650300597.git.jpoimboe@redhat.com
+We generally prefer to split this into two changes (yaml conversion
+then modifications). You need to be very explicit on the changes you
+bring to this file afterward. Also you may s/refine/fix/ in your title
+if this really is a correction of something that does not work at all as
+you suggest.
 
-you'll see his thoughs on that :-)
+Please mention that due to the other series about the clock changes
+never being accepted the current binding was never valid/working
+(again, I'm not sure it's the case on all Amlogic SoCs, so please be
+very careful about that).
 
-Now, I obviously don't mind, it's easy enough to figure out what objtool
-actually does with something like:
+And please use a Link: tag to point to the discussion with Neil and
+Jerome on your MMC/NAND subclock final discussion.
 
-  $ OBJTOOL_ARGS="--backup" make O=ibt-build/ -j$lots vmlinux
-  $ objdiff.sh ibt-build/vmlinux.o
+> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
+> ---
+>  .../bindings/mtd/amlogic,meson-nand.txt       | 60 --------------
+>  .../bindings/mtd/amlogic,meson-nand.yaml      | 80 +++++++++++++++++++
+>  2 files changed, 80 insertions(+), 60 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-n=
+and.txt
+>  create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-n=
+and.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt=
+ b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+> deleted file mode 100644
+> index 5794ab1147c1..000000000000
+> --- a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+> +++ /dev/null
+> @@ -1,60 +0,0 @@
+> -Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
+> -
+> -This file documents the properties in addition to those available in
+> -the MTD NAND bindings.
+> -
+> -Required properties:
+> -- compatible : contains one of:
+> -  - "amlogic,meson-gxl-nfc"
+> -  - "amlogic,meson-axg-nfc"
+> -- clocks     :
+> -	A list of phandle + clock-specifier pairs for the clocks listed
+> -	in clock-names.
+> -
+> -- clock-names: Should contain the following:
+> -	"core" - NFC module gate clock
+> -	"device" - device clock from eMMC sub clock controller
+> -	"rx" - rx clock phase
+> -	"tx" - tx clock phase
+> -
+> -- amlogic,mmc-syscon	: Required for NAND clocks, it's shared with SD/eMMC
+> -				controller port C
+> -
+> -Optional children nodes:
+> -Children nodes represent the available nand chips.
+> -
+> -Other properties:
+> -see Documentation/devicetree/bindings/mtd/nand-controller.yaml for gener=
+ic bindings.
+> -
+> -Example demonstrate on AXG SoC:
+> -
+> -	sd_emmc_c_clkc: mmc@7000 {
+> -		compatible =3D "amlogic,meson-axg-mmc-clkc", "syscon";
+> -		reg =3D <0x0 0x7000 0x0 0x800>;
+> -	};
+> -
+> -	nand-controller@7800 {
+> -		compatible =3D "amlogic,meson-axg-nfc";
+> -		reg =3D <0x0 0x7800 0x0 0x100>;
+> -		#address-cells =3D <1>;
+> -		#size-cells =3D <0>;
+> -		interrupts =3D <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
+> -
+> -		clocks =3D <&clkc CLKID_SD_EMMC_C>,
+> -			<&sd_emmc_c_clkc CLKID_MMC_DIV>,
+> -			<&sd_emmc_c_clkc CLKID_MMC_PHASE_RX>,
+> -			<&sd_emmc_c_clkc CLKID_MMC_PHASE_TX>;
+> -		clock-names =3D "core", "device", "rx", "tx";
+> -		amlogic,mmc-syscon =3D <&sd_emmc_c_clkc>;
+> -
+> -		pinctrl-names =3D "default";
+> -		pinctrl-0 =3D <&nand_pins>;
+> -
+> -		nand@0 {
+> -			reg =3D <0>;
+> -			#address-cells =3D <1>;
+> -			#size-cells =3D <1>;
+> -
+> -			nand-on-flash-bbt;
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yam=
+l b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+> new file mode 100644
+> index 000000000000..965a2dd20645
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+> @@ -0,0 +1,80 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/amlogic,meson-nand.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
 
-Where objdiff.sh is the below crummy script.
+Maybe you need to inherit from nand-controller.yaml.
 
-Now, one compromise that I did get out of Josh was that he objected less
-to rewriting relocations than to rewriting the immediates. From my
-testing the relocations got us the vast majority of direct call sites,
-very few are immediates.
+> +
+> +maintainers:
+> +  - liang.yang@amlogic.com
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - "amlogic,meson-gxl-nfc"
+> +      - "amlogic,meson-axg-nfc"
+> +
+> +  reg:
+> +    maxItems: 2
+> +
+> +  '#address-cells':
+> +    const: 1
 
-Josh, any way you might reconsider all that? :-)
+Not sure this property is needed.
 
----
-#!/bin/bash
+> +
+> +  '#size-cells':
+> +    const: 0
 
-name=$1
-pre=${name}.orig
-post=${name}
+Ditto. Plus, this one looks wrong anyway.
 
-function to_text {
-	obj=$1
-	( objdump -wdr $obj;
-	  readelf -W --relocs --symbols $obj |
-		  awk '/^Relocation section/ { $6=0 } { print $0 }'
-	) > ${obj}.tmp
-}
+> +
+> +  reg-names:
+> +    items:
+> +      - const: nfc
+> +      - const: emmc
 
-to_text $pre
-to_text $post
+Why do you need the emmc register map? Do you really need to perform a
+register access there?
 
-diff -u ${pre}.tmp ${post}.tmp
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    items:
+> +      - const: core
+> +      - const: device
+> +
+> +  "#clock-cells":
+> +    const: 1
 
-rm ${pre}.tmp ${post}.tmp
+?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +  - reg-names
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+
+I will let Rob check that but I think what you need is
+
+unevaluatedProperties: false
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/axg-clkc.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    apb {
+> +      #address-cells =3D <2>;
+> +      #size-cells =3D <2>;
+
+Not sure you need this upper node in the example.
+
+> +      nand-controller@7800 {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +        compatible =3D "amlogic,meson-axg-nfc";
+> +        reg =3D <0x0 0x7800 0x0 0x100>,
+> +              <0x0 0x7000 0x0 0x800>;
+> +        reg-names =3D "nfc", "emmc";
+> +
+> +        interrupts =3D <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
+> +        clocks =3D <&clkc CLKID_SD_EMMC_C>,
+> +                 <&clkc CLKID_FCLK_DIV2>;
+> +        clock-names =3D "core", "device";
+> +
+> +      };
+> +    };
+> +...
+
+
+Thanks,
+Miqu=C3=A8l

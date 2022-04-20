@@ -2,213 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E93508EE4
+	by mail.lfdr.de (Postfix) with ESMTP id D1A58508EE6
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381334AbiDTR4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 13:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
+        id S1381346AbiDTR4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 13:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381298AbiDTR4h (ORCPT
+        with ESMTP id S1381339AbiDTR4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 13:56:37 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580243DA46;
-        Wed, 20 Apr 2022 10:53:49 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 14ACA3D0069;
-        Wed, 20 Apr 2022 13:53:48 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id mGcMI48_ih4O; Wed, 20 Apr 2022 13:53:47 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 4BDD23D02E0;
-        Wed, 20 Apr 2022 13:53:47 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 4BDD23D02E0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1650477227;
-        bh=NH3eElMnuNmGgWaWAOZdaMAOe1XdqcV8YtS5lvgIzgY=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=qU6qUg9qAyuGFwTRySowJsa7LWK78nHIx9mmAtZ/XZzJTwn7Jmk6hGPHuKPDqxdfH
-         1z8QSFQNP8574BGL6Znmva8RrpWdxaEirzoIsuLqU/hLDWei20moHeXN6ReKqCGcw9
-         UbleNO6rP7osERsblIdwWQeNtQ2KUtRclTTl4cTV+pD51uVsDxm+Vj7kyvfCkMx13y
-         2tFV7g2gFyEvYNXCSvQnvGfnbPID57ry/Kac/Sf8Th7FA9ybsYFIoGDbFkizaK29rH
-         uxb1gVA1fXgKGUZzNuxRfnV/u7BGoXFjaP+XOHOVoR2U/+WVjp4CqYvh+3kdBGqPRH
-         VcEqZWGoKvXpw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dwnR1Q2zacEs; Wed, 20 Apr 2022 13:53:47 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 3DA573D046E;
-        Wed, 20 Apr 2022 13:53:47 -0400 (EDT)
-Date:   Wed, 20 Apr 2022 13:53:47 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Message-ID: <580163630.28705.1650477227106.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220419234845.GA1805@kbox>
-References: <20220401234309.21252-1-beaub@linux.microsoft.com> <20220401234309.21252-7-beaub@linux.microsoft.com> <337584634.26921.1650378945485.JavaMail.zimbra@efficios.com> <20220419185708.GA1908@kbox> <1722727424.27500.1650403580798.JavaMail.zimbra@efficios.com> <20220419234845.GA1805@kbox>
-Subject: Re: [PATCH 6/7] tracing/user_events: Use bits vs bytes for enabled
- status page data
+        Wed, 20 Apr 2022 13:56:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F6D43EC4;
+        Wed, 20 Apr 2022 10:53:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C959B81EB6;
+        Wed, 20 Apr 2022 17:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D90C385A1;
+        Wed, 20 Apr 2022 17:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650477232;
+        bh=rPJ14Ac12EFXoPf+Opo+3BFlBnnBFWwCWA10Yw/roM4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DNJCvLcrczQXOR26pFils3zVtLSX+a22jx4HK/7JTzY0VRs1YnJUYbApEMP3PqiuO
+         htygMdsMH95ETCitJaEoVaHUfM7AO3em3vx2FrjIVfQLW+QjJZ8hO/BC2evMuPRso2
+         HNt6Cm9ixu01cWQrjkNlTJbny/ezw3kHmxEOcZMU4TxTOJoy07BP4YTSveRhrW5m86
+         w4m+vpYFWBy5Y6rKjRaQQoReY3y0rT6b1n0UfLvAGWJTNUhx93kzLRbXrxx3Iwm5i+
+         3vjQMEHpyrRDLyYMgIk0ADlpSsLo+uyt3DSecmRMNI6eY+hMbq3LW7M2FosswmmNPC
+         Ao9k2Wu7rcS7A==
+Date:   Wed, 20 Apr 2022 10:53:51 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
+        david@fromorbit.com, hch@infradead.org, jane.chu@oracle.com,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v13 4/7] fsdax: Introduce dax_lock_mapping_entry()
+Message-ID: <20220420175351.GX17025@magnolia>
+References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
+ <20220419045045.1664996-5-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4257 (ZimbraWebClient - FF99 (Linux)/8.8.15_GA_4257)
-Thread-Topic: tracing/user_events: Use bits vs bytes for enabled status page data
-Thread-Index: 8J92siFMwIQNblKmIaHIWTTXYFwqhw==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419045045.1664996-5-ruansy.fnst@fujitsu.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
------ On Apr 19, 2022, at 7:48 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
-
-> On Tue, Apr 19, 2022 at 05:26:20PM -0400, Mathieu Desnoyers wrote:
->> ----- On Apr 19, 2022, at 2:57 PM, Beau Belgrave beaub@linux.microsoft.com
->> wrote:
->> 
->> > On Tue, Apr 19, 2022 at 10:35:45AM -0400, Mathieu Desnoyers wrote:
->> >> ----- On Apr 1, 2022, at 7:43 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
->> >> 
->> >> > User processes may require many events and when they do the cache
->> >> > performance of a byte index status check is less ideal than a bit index.
->> >> > The previous event limit per-page was 4096, the new limit is 32,768.
->> >> > 
->> >> > This change adds a mask property to the user_reg struct. Programs check
->> >> > that the byte at status_index has a bit set by ANDing the status_mask.
->> >> > 
->> >> > Link:
->> >> > https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
->> >> > 
->> >> > Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> >> > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
->> >> 
->> >> Hi Beau,
->> >> 
->> >> Considering this will be used in a fast-path, why choose bytewise
->> >> loads for the byte at status_index and the status_mask ?
->> >> 
->> > 
->> > First, thanks for the review!
->> > 
->> > Which loads are you concerned about? The user programs can store the
->> > index and mask in another type after registration instead of an int.
->> 
->> I'm concerned about the loads from user-space, considering that
->> those are on the fast-path.
->> 
->> Indeed user programs will need to copy the status index and mask
->> returned in struct user_reg, so adapting the indexing and mask to
->> deal with an array of unsigned long rather than bytes can be done
->> at that point, but I wonder how many users will go through that
->> extra trouble unless there are helpers to convert the status index
->> from byte-wise to long-wise, and convert the status mask from a
->> byte-wise mask to a long-wise mask (and associated documentation).
->> 
+On Tue, Apr 19, 2022 at 12:50:42PM +0800, Shiyang Ruan wrote:
+> The current dax_lock_page() locks dax entry by obtaining mapping and
+> index in page.  To support 1-to-N RMAP in NVDIMM, we need a new function
+> to lock a specific dax entry corresponding to this file's mapping,index.
+> And output the page corresponding to the specific dax entry for caller
+> use.
 > 
-> Yeah, do you think it's wise to maybe add inline functions in
-> user_events.h to do this conversion? I could then add them to our
-> documentation.
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  fs/dax.c            | 63 +++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/dax.h | 15 +++++++++++
+>  2 files changed, 78 insertions(+)
 > 
-> Hopefully this would make more APIs/people do the better approach?
+> diff --git a/fs/dax.c b/fs/dax.c
+> index 1ac12e877f4f..57efd3f73655 100644
+> --- a/fs/dax.c
+> +++ b/fs/dax.c
+> @@ -455,6 +455,69 @@ void dax_unlock_page(struct page *page, dax_entry_t cookie)
+>  	dax_unlock_entry(&xas, (void *)cookie);
+>  }
+>  
+> +/*
+> + * dax_lock_mapping_entry - Lock the DAX entry corresponding to a mapping
+> + * @mapping: the file's mapping whose entry we want to lock
+> + * @index: the offset within this file
+> + * @page: output the dax page corresponding to this dax entry
+> + *
+> + * Return: A cookie to pass to dax_unlock_mapping_entry() or 0 if the entry
+> + * could not be locked.
+> + */
+> +dax_entry_t dax_lock_mapping_entry(struct address_space *mapping, pgoff_t index,
+> +		struct page **page)
+> +{
+> +	XA_STATE(xas, NULL, 0);
+> +	void *entry;
+> +
+> +	rcu_read_lock();
+> +	for (;;) {
+> +		entry = NULL;
+> +		if (!dax_mapping(mapping))
+> +			break;
+> +
+> +		xas.xa = &mapping->i_pages;
+> +		xas_lock_irq(&xas);
+> +		xas_set(&xas, index);
+> +		entry = xas_load(&xas);
+> +		if (dax_is_locked(entry)) {
+> +			rcu_read_unlock();
+> +			wait_entry_unlocked(&xas, entry);
+> +			rcu_read_lock();
+> +			continue;
+> +		}
+> +		if (!entry ||
+> +		    dax_is_zero_entry(entry) || dax_is_empty_entry(entry)) {
+> +			/*
+> +			 * Because we are looking for entry from file's mapping
+> +			 * and index, so the entry may not be inserted for now,
+> +			 * or even a zero/empty entry.  We don't think this is
+> +			 * an error case.  So, return a special value and do
+> +			 * not output @page.
+> +			 */
+> +			entry = (void *)~0UL;
+
+In this case we exit to the caller with the magic return value, having
+not set *page.  Either the comment for this function should note that
+the caller must set *page to a known value (NULL?) before the call, or
+we should set *page = NULL here.
+
+AFAICT the callers in this series initialize page to NULL before passing
+in &page, so I think the comment update would be fine.
+
+With the **page requirement documented,
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+
+--D
+
+
+> +		} else {
+> +			*page = pfn_to_page(dax_to_pfn(entry));
+> +			dax_lock_entry(&xas, entry);
+> +		}
+> +		xas_unlock_irq(&xas);
+> +		break;
+> +	}
+> +	rcu_read_unlock();
+> +	return (dax_entry_t)entry;
+> +}
+> +
+> +void dax_unlock_mapping_entry(struct address_space *mapping, pgoff_t index,
+> +		dax_entry_t cookie)
+> +{
+> +	XA_STATE(xas, &mapping->i_pages, index);
+> +
+> +	if (cookie == ~0UL)
+> +		return;
+> +
+> +	dax_unlock_entry(&xas, (void *)cookie);
+> +}
+> +
+>  /*
+>   * Find page cache entry at given index. If it is a DAX entry, return it
+>   * with the entry locked. If the page cache doesn't contain an entry at
+> diff --git a/include/linux/dax.h b/include/linux/dax.h
+> index 9c426a207ba8..c152f315d1c9 100644
+> --- a/include/linux/dax.h
+> +++ b/include/linux/dax.h
+> @@ -143,6 +143,10 @@ struct page *dax_layout_busy_page(struct address_space *mapping);
+>  struct page *dax_layout_busy_page_range(struct address_space *mapping, loff_t start, loff_t end);
+>  dax_entry_t dax_lock_page(struct page *page);
+>  void dax_unlock_page(struct page *page, dax_entry_t cookie);
+> +dax_entry_t dax_lock_mapping_entry(struct address_space *mapping,
+> +		unsigned long index, struct page **page);
+> +void dax_unlock_mapping_entry(struct address_space *mapping,
+> +		unsigned long index, dax_entry_t cookie);
+>  #else
+>  static inline struct page *dax_layout_busy_page(struct address_space *mapping)
+>  {
+> @@ -170,6 +174,17 @@ static inline dax_entry_t dax_lock_page(struct page *page)
+>  static inline void dax_unlock_page(struct page *page, dax_entry_t cookie)
+>  {
+>  }
+> +
+> +static inline dax_entry_t dax_lock_mapping_entry(struct address_space *mapping,
+> +		unsigned long index, struct page **page)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void dax_unlock_mapping_entry(struct address_space *mapping,
+> +		unsigned long index, dax_entry_t cookie)
+> +{
+> +}
+>  #endif
+>  
+>  int dax_zero_range(struct inode *inode, loff_t pos, loff_t len, bool *did_zero,
+> -- 
+> 2.35.1
 > 
->> 
->> > 
->> > However, you may be referring to something on the kernel side?
->> 
->> No.
->> 
 > 
-> [..]
 > 
->> >> Ideally I would be tempted to use "unsigned long" type (32-bit on 32-bit
->> >> binaries and 64-bit on 64-bit binaries) for both the array access
->> >> and the status mask, but this brings extra complexity for 32-bit compat
->> >> handling.
->> >> 
->> > 
->> > User programs can store the index and mask returned into better value
->> > types for their architecture.
->> > 
->> > I agree it will cause compat handling issues if it's put into the user
->> > facing header as a long.
->> > 
->> > I was hoping APIs, like libtracefs, could abstract many callers from how
->> > best to use the returned values. For example, it could save the index
->> > and mask as unsigned long for the callers and use those for the
->> > enablement checks.
->> > 
->> > Do you think there is a way to enable these native types in the ABI
->> > without causing compat handling issues? I used ints to prevent compat
->> > issues between 32-bit user mode and 64-bit kernel mode.
->> 
->> I think you are right: this is not an ABI issue, but rather a usability
->> issue that can be solved by implementing and documenting user-space library
->> helpers to help user applications index the array and apply the mask to an
->> unsigned long type.
->> 
-> 
-> Great. Let me know if updating user_events.h to do the conversion is a
-> good idea or not, or if you have other thoughts how to make more people
-> do the best thing.
-
-Usually uapi headers are reserved for exposing the kernel ABI to user-space.
-I think the helpers we are discussing here do not belong to the uapi because they
-do not define the ABI, and should probably sit elsewhere in a proper library.
-
-If the status_mask is meant to be modified in some ways by user-space before it can
-be used as a mask, I wonder why it is exposed as a byte-wise mask at all ?
-
-Rather than exposing a byte-wise index and single-byte mask as ABI, the kernel could
-simply expose a bit-wise index, which can then be used by the application to calculate
-index and mask, which it should interpret in little endian if it wants to apply the
-mask on types larger than a single byte.
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
-> 
->> Thanks,
->> 
->> Mathieu
->> 
->> > 
->> >> Thanks,
->> >> 
->> >> Mathieu
->> >> 
->> >> --
->> >> Mathieu Desnoyers
->> >> EfficiOS Inc.
->> >> http://www.efficios.com
->> > 
->> > Thanks,
->> > -Beau
->> 
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> http://www.efficios.com
-> 
-> Thanks,
-> -Beau
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com

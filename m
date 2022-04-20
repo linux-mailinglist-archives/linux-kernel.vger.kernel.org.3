@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3EA508EF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F1E508EF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381374AbiDTSAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 14:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
+        id S1381389AbiDTSBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 14:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381362AbiDTSAh (ORCPT
+        with ESMTP id S1381385AbiDTSBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 14:00:37 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D474756D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:57:39 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23KC6qk1009257;
-        Wed, 20 Apr 2022 10:57:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : subject
- : date : message-id : mime-version : content-type; s=pfpt0220;
- bh=A0HtCp2tynCEi42rEm66H/yvK3b33NoJskOoLtuAASc=;
- b=iVULywRm7IZRv/jJuHM7DlOWFl8eApChEgdBBvPoWS7yZJ98F/00xgspcD+Ao6sMlftM
- WG4ZcclnNlZMc02ytKUSE6hhoCZKOmuMsN5keQBRRHI1qGsGWXtbok27uwbelgpb/NUM
- IdoWDq6b8Mt0zBaQx7F2zeJ0LMNwdgIkImFnLkCkppITckbR14aOhmsMcL4m9WCMPE8w
- fyiOO1ivpyeYbl213rM1f3dQt6r1uym07U8eMysz0YzM9rbn6Zv9dcUXy67ZOKKuT/Bf
- qiKNH7spKCiF9fPnsxxRApvnNbQ23wIvSe+VOruZd18Wmz/i32gfdclgQUMn5ozNuVJP zA== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3fhtapefa9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 10:57:33 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 20 Apr
- 2022 10:57:31 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 20 Apr 2022 10:57:31 -0700
-Received: from localhost.localdomain (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id 4F9F43F7068;
-        Wed, 20 Apr 2022 10:57:31 -0700 (PDT)
-From:   Vasyl Gomonovych <vgomonovych@marvell.com>
-To:     <bp@suse.de>, <ying.huang@intel.com>, <alex.kluver@hpe.com>,
-        <linux-kernel@vger.kernel.org>, <vgomonovych@marvell.com>
-Subject: [PATCH] efi: cper: Define macro for errors type
-Date:   Wed, 20 Apr 2022 10:57:24 -0700
-Message-ID: <20220420175726.27789-1-vgomonovych@marvell.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 20 Apr 2022 14:01:07 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF8F47558;
+        Wed, 20 Apr 2022 10:58:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id ED57ECE1F6D;
+        Wed, 20 Apr 2022 17:58:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34BF2C385A0;
+        Wed, 20 Apr 2022 17:58:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650477485;
+        bh=HjqNizz2UkQgCdLOC/F3s0q1QlXx1JsTyvOA/jgUXyw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YlB03/js/4fzWqeo1WlTqDwGajsOcrbi219jHadJoI410A2TWR5KYbzmWkjj4FJTY
+         McQ/4WftYtN8zwEfhuKO/jH668k4OMSQqSyAxVyNC+PBNR9RO2K6n4+0qT7oeArkA2
+         dMtdNRL1SF4NOuUMpNuEAytkwh8o/l5/rUjmM7M40cHicBLnCzJz7cuse2cVUaHoQB
+         leiLBMZRfOYzv/N41lQ//R5wo9TPQfqwAK1FQ8jThkYv4I8plGVqwJmR7ynVFyVgy7
+         s6gQa6W3Y+VJb8xCGHCMKI8YDNtewZtUemj9SepwCeDbPkXEgam7v6o+Uydsmhh6rs
+         GoZI8BwVbjoaA==
+Date:   Wed, 20 Apr 2022 10:58:04 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
+        david@fromorbit.com, hch@infradead.org, jane.chu@oracle.com,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v13 5/7] mm: Introduce mf_dax_kill_procs() for fsdax case
+Message-ID: <20220420175804.GY17025@magnolia>
+References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
+ <20220419045045.1664996-6-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: bF1Tm5LyJxiCmxYQg_p48xWZXp1iC3JK
-X-Proofpoint-ORIG-GUID: bF1Tm5LyJxiCmxYQg_p48xWZXp1iC3JK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-20_05,2022-04-20_01,2022-02-23_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419045045.1664996-6-ruansy.fnst@fujitsu.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,47 +57,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CPER defines errors type, which is currently in
-form of raw numbers referenced from cper and
-ghes_edac modules. CPER format sharable with
-firmware. This errors type macro can be common
-and share errors type between kernel and firmware
-and eliminate magic numbers uses. Also will
-simplify do code reuse in ghes_edac_report_mem_error.
+On Tue, Apr 19, 2022 at 12:50:43PM +0800, Shiyang Ruan wrote:
+> This new function is a variant of mf_generic_kill_procs that accepts a
+> file, offset pair instead of a struct to support multiple files sharing
+> a DAX mapping.  It is intended to be called by the file systems as part
+> of the memory_failure handler after the file system performed a reverse
+> mapping from the storage address to the file and file offset.
+> 
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-Signed-off-by: Vasyl Gomonovych <vgomonovych@marvell.com>
----
- include/linux/cper.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Looks ok,
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-diff --git a/include/linux/cper.h b/include/linux/cper.h
-index 6a511a1078ca069c4fa0e120b781c4203571afc8..13c09b08695241c9f040680c7435081f1cd2bcff 100644
---- a/include/linux/cper.h
-+++ b/include/linux/cper.h
-@@ -314,6 +314,23 @@ enum {
- #define CPER_ARM_ERR_ACCESS_MODE_SHIFT		43
- #define CPER_ARM_ERR_ACCESS_MODE_MASK		GENMASK(0,0)
- 
-+#define CPER_MEM_ERR_TYPE_UNKNOWN		0
-+#define CPER_MEM_ERR_TYPE_NO_ERR		1
-+#define CPER_MEM_ERR_TYPE_SBIT_ECC		2
-+#define CPER_MEM_ERR_TYPE_MBIT_ECC		3
-+#define CPER_MEM_ERR_TYPE_SSB_ECC		4
-+#define CPER_MEM_ERR_TYPE_MSB_ECC		5
-+#define CPER_MEM_ERR_TYPE_MSTR_ABRT		6
-+#define CPER_MEM_ERR_TYPE_TARG_ABRT		7
-+#define CPER_MEM_ERR_TYPE_PARITY_ERR		8
-+#define CPER_MEM_ERR_TYPE_WDG_TIMOUT		9
-+#define CPER_MEM_ERR_TYPE_INVAL_ADDR		10
-+#define CPER_MEM_ERR_TYPE_MIRR_BROK		11
-+#define CPER_MEM_ERR_TYPE_MEM_SPARING		12
-+#define CPER_MEM_ERR_TYPE_SBR_CE		13
-+#define CPER_MEM_ERR_TYPE_SBR_UE		14
-+#define CPER_MEM_ERR_TYPE_PHYS_MAPOUT		15
-+
- /*
-  * All tables and structs must be byte-packed to match CPER
-  * specification, since the tables are provided by the system BIOS
--- 
-2.17.1
+--D
 
+> ---
+>  include/linux/mm.h  |  2 +
+>  mm/memory-failure.c | 96 ++++++++++++++++++++++++++++++++++++++++-----
+>  2 files changed, 88 insertions(+), 10 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index ad4b6c15c814..52208d743546 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3233,6 +3233,8 @@ enum mf_flags {
+>  	MF_SOFT_OFFLINE = 1 << 3,
+>  	MF_UNPOISON = 1 << 4,
+>  };
+> +int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+> +		      unsigned long count, int mf_flags);
+>  extern int memory_failure(unsigned long pfn, int flags);
+>  extern void memory_failure_queue(unsigned long pfn, int flags);
+>  extern void memory_failure_queue_kick(int cpu);
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index a40e79e634a4..dc47c5f83d85 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -295,10 +295,9 @@ void shake_page(struct page *p)
+>  }
+>  EXPORT_SYMBOL_GPL(shake_page);
+>  
+> -static unsigned long dev_pagemap_mapping_shift(struct page *page,
+> -		struct vm_area_struct *vma)
+> +static unsigned long dev_pagemap_mapping_shift(struct vm_area_struct *vma,
+> +		unsigned long address)
+>  {
+> -	unsigned long address = vma_address(page, vma);
+>  	unsigned long ret = 0;
+>  	pgd_t *pgd;
+>  	p4d_t *p4d;
+> @@ -338,10 +337,14 @@ static unsigned long dev_pagemap_mapping_shift(struct page *page,
+>  /*
+>   * Schedule a process for later kill.
+>   * Uses GFP_ATOMIC allocations to avoid potential recursions in the VM.
+> + *
+> + * Notice: @fsdax_pgoff is used only when @p is a fsdax page.
+> + *   In other cases, such as anonymous and file-backend page, the address to be
+> + *   killed can be caculated by @p itself.
+>   */
+>  static void add_to_kill(struct task_struct *tsk, struct page *p,
+> -		       struct vm_area_struct *vma,
+> -		       struct list_head *to_kill)
+> +			pgoff_t fsdax_pgoff, struct vm_area_struct *vma,
+> +			struct list_head *to_kill)
+>  {
+>  	struct to_kill *tk;
+>  
+> @@ -352,9 +355,15 @@ static void add_to_kill(struct task_struct *tsk, struct page *p,
+>  	}
+>  
+>  	tk->addr = page_address_in_vma(p, vma);
+> -	if (is_zone_device_page(p))
+> -		tk->size_shift = dev_pagemap_mapping_shift(p, vma);
+> -	else
+> +	if (is_zone_device_page(p)) {
+> +		/*
+> +		 * Since page->mapping is not used for fsdax, we need
+> +		 * calculate the address based on the vma.
+> +		 */
+> +		if (p->pgmap->type == MEMORY_DEVICE_FS_DAX)
+> +			tk->addr = vma_pgoff_address(fsdax_pgoff, 1, vma);
+> +		tk->size_shift = dev_pagemap_mapping_shift(vma, tk->addr);
+> +	} else
+>  		tk->size_shift = page_shift(compound_head(p));
+>  
+>  	/*
+> @@ -503,7 +512,7 @@ static void collect_procs_anon(struct page *page, struct list_head *to_kill,
+>  			if (!page_mapped_in_vma(page, vma))
+>  				continue;
+>  			if (vma->vm_mm == t->mm)
+> -				add_to_kill(t, page, vma, to_kill);
+> +				add_to_kill(t, page, 0, vma, to_kill);
+>  		}
+>  	}
+>  	read_unlock(&tasklist_lock);
+> @@ -539,13 +548,41 @@ static void collect_procs_file(struct page *page, struct list_head *to_kill,
+>  			 * to be informed of all such data corruptions.
+>  			 */
+>  			if (vma->vm_mm == t->mm)
+> -				add_to_kill(t, page, vma, to_kill);
+> +				add_to_kill(t, page, 0, vma, to_kill);
+>  		}
+>  	}
+>  	read_unlock(&tasklist_lock);
+>  	i_mmap_unlock_read(mapping);
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_FS_DAX)
+> +/*
+> + * Collect processes when the error hit a fsdax page.
+> + */
+> +static void collect_procs_fsdax(struct page *page,
+> +		struct address_space *mapping, pgoff_t pgoff,
+> +		struct list_head *to_kill)
+> +{
+> +	struct vm_area_struct *vma;
+> +	struct task_struct *tsk;
+> +
+> +	i_mmap_lock_read(mapping);
+> +	read_lock(&tasklist_lock);
+> +	for_each_process(tsk) {
+> +		struct task_struct *t = task_early_kill(tsk, true);
+> +
+> +		if (!t)
+> +			continue;
+> +		vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
+> +			if (vma->vm_mm == t->mm)
+> +				add_to_kill(t, page, pgoff, vma, to_kill);
+> +		}
+> +	}
+> +	read_unlock(&tasklist_lock);
+> +	i_mmap_unlock_read(mapping);
+> +}
+> +#endif /* CONFIG_FS_DAX */
+> +
+>  /*
+>   * Collect the processes who have the corrupted page mapped to kill.
+>   */
+> @@ -1582,6 +1619,45 @@ static int mf_generic_kill_procs(unsigned long long pfn, int flags,
+>  	return rc;
+>  }
+>  
+> +#ifdef CONFIG_FS_DAX
+> +/**
+> + * mf_dax_kill_procs - Collect and kill processes who are using this file range
+> + * @mapping:	the file in use
+> + * @index:	start pgoff of the range within the file
+> + * @count:	length of the range, in unit of PAGE_SIZE
+> + * @mf_flags:	memory failure flags
+> + */
+> +int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+> +		unsigned long count, int mf_flags)
+> +{
+> +	LIST_HEAD(to_kill);
+> +	dax_entry_t cookie;
+> +	struct page *page;
+> +	size_t end = index + count;
+> +
+> +	mf_flags |= MF_ACTION_REQUIRED | MF_MUST_KILL;
+> +
+> +	for (; index < end; index++) {
+> +		page = NULL;
+> +		cookie = dax_lock_mapping_entry(mapping, index, &page);
+> +		if (!cookie)
+> +			return -EBUSY;
+> +		if (!page)
+> +			goto unlock;
+> +
+> +		SetPageHWPoison(page);
+> +
+> +		collect_procs_fsdax(page, mapping, index, &to_kill);
+> +		unmap_and_kill(&to_kill, page_to_pfn(page), mapping,
+> +				index, mf_flags);
+> +unlock:
+> +		dax_unlock_mapping_entry(mapping, index, cookie);
+> +	}
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(mf_dax_kill_procs);
+> +#endif /* CONFIG_FS_DAX */
+> +
+>  /*
+>   * Called from hugetlb code with hugetlb_lock held.
+>   *
+> -- 
+> 2.35.1
+> 
+> 
+> 

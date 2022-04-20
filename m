@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B2150857C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8257550856D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377517AbiDTKKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
+        id S1377396AbiDTKFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347063AbiDTKJs (ORCPT
+        with ESMTP id S1347063AbiDTKFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:09:48 -0400
-Received: from outbound-smtp31.blacknight.com (outbound-smtp31.blacknight.com [81.17.249.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51163ED09
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:07:01 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp31.blacknight.com (Postfix) with ESMTPS id 20194C0E27
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:00:01 +0100 (IST)
-Received: (qmail 12208 invoked from network); 20 Apr 2022 10:00:01 -0000
-Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 20 Apr 2022 10:00:00 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 4/6] mm/page_alloc: Remove unnecessary page == NULL check in rmqueue
-Date:   Wed, 20 Apr 2022 10:59:04 +0100
-Message-Id: <20220420095906.27349-5-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220420095906.27349-1-mgorman@techsingularity.net>
-References: <20220420095906.27349-1-mgorman@techsingularity.net>
+        Wed, 20 Apr 2022 06:05:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 908FB2DD77
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650448956;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=KXqUB6TxNv1ETNZsocH/QeQC1EXjbPRsnjrxM7WoAwbnou5Sew1kowWVgZMY1JkH6qxh4S
+        0jCE/I0fTJz2nAoiU0KAxwzFXE0r3Tgfj+HTBSG2/xQKOVNs6EFuZfvKuZZVh/hMAoHSXj
+        FbNLtqlBZTxo4axhkTXwU58CvsuS7k4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-282-7lBzOQ9VO_uQDxTu84rUaw-1; Wed, 20 Apr 2022 06:02:32 -0400
+X-MC-Unique: 7lBzOQ9VO_uQDxTu84rUaw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A5018038E3;
+        Wed, 20 Apr 2022 10:02:31 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6C77C40D0166;
+        Wed, 20 Apr 2022 10:02:31 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        syzbot+df6fbbd2ee39f21289ef@syzkaller.appspotmail.com
+Subject: Re: [PATCH] KVM: Initialize debugfs_dentry when a VM is created to avoid NULL deref
+Date:   Wed, 20 Apr 2022 06:02:30 -0400
+Message-Id: <20220420100230.1093187-1-pbonzini@redhat.com>
+In-Reply-To: <20220415004622.2207751-1-seanjc@google.com>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The VM_BUG_ON check for a valid page can be avoided with a simple
-change in the flow. The ZONE_BOOSTED_WATERMARK is unlikely in general
-and even more unlikely if the page allocation failed so mark the
-branch unlikely.
+Queued, thanks.
 
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
----
- mm/page_alloc.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Paolo
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 4c1acf666056..dc0fdeb3795c 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3765,17 +3765,18 @@ struct page *rmqueue(struct zone *preferred_zone,
- 
- 	page = rmqueue_buddy(preferred_zone, zone, order, alloc_flags,
- 							migratetype);
--	if (unlikely(!page))
--		return NULL;
- 
- out:
- 	/* Separate test+clear to avoid unnecessary atomics */
--	if (test_bit(ZONE_BOOSTED_WATERMARK, &zone->flags)) {
-+	if (unlikely(test_bit(ZONE_BOOSTED_WATERMARK, &zone->flags))) {
- 		clear_bit(ZONE_BOOSTED_WATERMARK, &zone->flags);
- 		wakeup_kswapd(zone, 0, 0, zone_idx(zone));
- 	}
- 
--	VM_BUG_ON_PAGE(page && bad_range(zone, page), page);
-+	if (unlikely(!page))
-+		return NULL;
-+
-+	VM_BUG_ON_PAGE(bad_range(zone, page), page);
- 	return page;
- }
- 
--- 
-2.34.1
 

@@ -2,95 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480015091FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4563509202
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382466AbiDTVTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 17:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
+        id S1382472AbiDTVZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 17:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382459AbiDTVT3 (ORCPT
+        with ESMTP id S236500AbiDTVZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 17:19:29 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FD843AFF;
-        Wed, 20 Apr 2022 14:16:41 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-e2442907a1so3352596fac.8;
-        Wed, 20 Apr 2022 14:16:41 -0700 (PDT)
+        Wed, 20 Apr 2022 17:25:13 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142434830D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:22:25 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id t4so2869142pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GnUXeRCRlyzRf4rHdM1oimaR4S836ovYjQgTQFKqNaU=;
+        b=gWl8HFUCd0VGT49+fwFZtJrDzR6cLq8eoQKfT7+sFz6AyIaBn6QtaD+GGFAb7ngmhZ
+         jCc6qaKnHtubCn4m3L3bS454ZKDk7i5EB8oUKFyEO+RGbItlZ3Y+JdcHZ0RwkdtnZEgL
+         HaXTXCFWlLlkdw+10hDiJQuI/lN32tua38RwA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Th0dX12lMZvuR5tp3w0qZKCRz9BSomG0+8iVjF7Mv6I=;
-        b=eX0QqQW88hx8G7QCneDX3tSDfbba4bDnHm4r3NuLshiBISt+QJJFmME46HogJOayMN
-         /DjW98J2IQkQJj8CLV08BwA6Z7iof/Su33m4kmx2Mc0C+MQnHah/lomP8vb5O67XMEBw
-         HwYLz9hL8X2g9/zSEIVh5egWAXGdxXmGPpwHXJgr8Q21xjqGC6v9I6msBWW/dhnW3JqE
-         QGHS2gw6DB8GvxGBTeUhutnbY9/hTCyBHSVFkLywWA/x97qRR4ylta1/+Lf9OZpszkVd
-         QYlMRPc7ObP82HSYyWO8BnK6qQegaGKRAlPKxizYDEQJX3EjAJAndiKj+CCjDIptzuCY
-         XgaQ==
-X-Gm-Message-State: AOAM5333TUuLb4HJdKJA4v2NC5/Cxdngz1xU0I2WWuR5gIMCQqQOV/UD
-        1pXPi75WnK0svWI/Bt1mJA==
-X-Google-Smtp-Source: ABdhPJyZQZnIeSTcR5QuXFH20WVVwckci/cxd1Nup7ns0hvWRZjAm9QuV170gcMZwvBniomX13r5Jw==
-X-Received: by 2002:a05:6870:b39c:b0:d1:4a9f:35f9 with SMTP id w28-20020a056870b39c00b000d14a9f35f9mr2310887oap.119.1650489400567;
-        Wed, 20 Apr 2022 14:16:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y23-20020a056808061700b00322e73cd18bsm953770oih.16.2022.04.20.14.16.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 14:16:40 -0700 (PDT)
-Received: (nullmailer pid 1863106 invoked by uid 1000);
-        Wed, 20 Apr 2022 21:16:39 -0000
-Date:   Wed, 20 Apr 2022 16:16:39 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     sebastian.hesselbarth@gmail.com, ulf.hansson@linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, andrew@lunn.ch,
-        linux-mmc@vger.kernel.org, gregory.clement@bootlin.com,
-        krzk+dt@kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: mmc: convert orion-sdio to JSON schema
-Message-ID: <YmB4N1w/dgioauMA@robh.at.kernel.org>
-References: <20220414230603.567049-1-chris.packham@alliedtelesis.co.nz>
- <20220414230603.567049-4-chris.packham@alliedtelesis.co.nz>
- <1650033161.788328.251788.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GnUXeRCRlyzRf4rHdM1oimaR4S836ovYjQgTQFKqNaU=;
+        b=6TUbnmXx2qdUTdtO0Z1Aad7KebetmNo8jW6wTyrLad3KxD5hEQ2wPgfeZ+Vk9AlEyU
+         SN5hlllYIj6TS0aJkbBaE3p/Z5rpFUmzc/vQRcoD7XgrN/pLKZCv5FwY/VAxIGf4K/IV
+         TCMGKPNCUUwfVhpJlsQbPdyY0Rx6P2R9XRGam1UcjPo/SYZ0YVXTjoThBdAs9+/OXmUA
+         FEs909seyXHNQTvgDSCq3bNaovAM5BIkPzFbUiZQGZzsG+HZKw6PILxezQcBwpdXc/8c
+         ouS3GjiRXzJSTRQgF7rrWULQiZ89epiqEdssth6izMp4LoQtXJG0zpvbPyRSTu4G0wkf
+         lr1g==
+X-Gm-Message-State: AOAM5312IcybFzZumc/GnSOpywon2CLJ4dDno1MKjqJBtTBDCbi47e6j
+        2vTgHSAVBh0tuPEXjy3Q3U8v7A==
+X-Google-Smtp-Source: ABdhPJxTjfLCvhJXWrF1Gg7cXHw23OVJmwCdXvURQB5+mzF7Dj9X1z9AxW0R2IZtgpia8wrRGRAseA==
+X-Received: by 2002:a63:4a09:0:b0:382:597:3d0d with SMTP id x9-20020a634a09000000b0038205973d0dmr20869896pga.18.1650489744589;
+        Wed, 20 Apr 2022 14:22:24 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:22df:200c:2f31:fe5])
+        by smtp.gmail.com with UTF8SMTPSA id h6-20020a056a00218600b004f65315bb37sm22232512pfi.13.2022.04.20.14.22.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 14:22:23 -0700 (PDT)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH v2 1/2] regulator: core: Rename _regulator_enable_delay()
+Date:   Wed, 20 Apr 2022 14:22:12 -0700
+Message-Id: <20220420141511.v2.1.I31ef0014c9597d53722ab513890f839f357fdfb3@changeid>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650033161.788328.251788.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 09:32:41AM -0500, Rob Herring wrote:
-> On Fri, 15 Apr 2022 11:06:02 +1200, Chris Packham wrote:
-> > Convert the orion-sdio binding to JSON schema.
-> > 
-> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > ---
-> >  .../bindings/mmc/marvell,orion-sdio.yaml      | 43 +++++++++++++++++++
-> >  .../devicetree/bindings/mmc/orion-sdio.txt    | 16 -------
-> >  2 files changed, 43 insertions(+), 16 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/mmc/marvell,orion-sdio.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/mmc/orion-sdio.txt
-> > 
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
-> 
-> 
-> mvsdio@90000: $nodename:0: 'mvsdio@90000' does not match '^mmc(@.*)?$'
+I want to use it in other contexts besides _regulator_do_enable().
 
-Looks like all these will be fixed with patch 1, so nothing to do here.
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
 
-Rob
+Changes in v2:
+ * Rename/retain this helper, instead of using fsleep() (see also patch
+   2)
+
+ drivers/regulator/core.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index d2553970a67b..8b188e56fd0b 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -2511,17 +2511,17 @@ static int regulator_ena_gpio_ctrl(struct regulator_dev *rdev, bool enable)
+ }
+ 
+ /**
+- * _regulator_enable_delay - a delay helper function
++ * _regulator_delay_helper - a delay helper function
+  * @delay: time to delay in microseconds
+  *
+  * Delay for the requested amount of time as per the guidelines in:
+  *
+  *     Documentation/timers/timers-howto.rst
+  *
+- * The assumption here is that regulators will never be enabled in
++ * The assumption here is that these regulator operations will never used in
+  * atomic context and therefore sleeping functions can be used.
+  */
+-static void _regulator_enable_delay(unsigned int delay)
++static void _regulator_delay_helper(unsigned int delay)
+ {
+ 	unsigned int ms = delay / 1000;
+ 	unsigned int us = delay % 1000;
+@@ -2603,7 +2603,7 @@ static int _regulator_do_enable(struct regulator_dev *rdev)
+ 		s64 remaining = ktime_us_delta(end, ktime_get());
+ 
+ 		if (remaining > 0)
+-			_regulator_enable_delay(remaining);
++			_regulator_delay_helper(remaining);
+ 	}
+ 
+ 	if (rdev->ena_pin) {
+@@ -2630,14 +2630,14 @@ static int _regulator_do_enable(struct regulator_dev *rdev)
+ 	/* If poll_enabled_time is set, poll upto the delay calculated
+ 	 * above, delaying poll_enabled_time uS to check if the regulator
+ 	 * actually got enabled.
+-	 * If the regulator isn't enabled after enable_delay has
+-	 * expired, return -ETIMEDOUT.
++	 * If the regulator isn't enabled after our delay helper has expired,
++	 * return -ETIMEDOUT.
+ 	 */
+ 	if (rdev->desc->poll_enabled_time) {
+ 		unsigned int time_remaining = delay;
+ 
+ 		while (time_remaining > 0) {
+-			_regulator_enable_delay(rdev->desc->poll_enabled_time);
++			_regulator_delay_helper(rdev->desc->poll_enabled_time);
+ 
+ 			if (rdev->desc->ops->get_status) {
+ 				ret = _regulator_check_status_enabled(rdev);
+@@ -2656,7 +2656,7 @@ static int _regulator_do_enable(struct regulator_dev *rdev)
+ 			return -ETIMEDOUT;
+ 		}
+ 	} else {
+-		_regulator_enable_delay(delay);
++		_regulator_delay_helper(delay);
+ 	}
+ 
+ 	trace_regulator_enable_complete(rdev_get_name(rdev));
+-- 
+2.36.0.rc0.470.gd361397f0d-goog
+

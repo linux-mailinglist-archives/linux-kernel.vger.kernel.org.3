@@ -2,137 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25832508156
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52B8508155
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350525AbiDTGo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 02:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
+        id S1350485AbiDTGn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 02:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244956AbiDTGoZ (ORCPT
+        with ESMTP id S233571AbiDTGny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 02:44:25 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10E3340DA
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:41:40 -0700 (PDT)
+        Wed, 20 Apr 2022 02:43:54 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E2B340DA
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650436900; x=1681972900;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vxykZxzH8oZ0y8aC/wNv+t6K1cQ/j1YSAfUR65oTco4=;
-  b=HLq6OvgqjO7zXhtQCR0koptqKHiTn3Pmbkh8ok0bp2vNytJlFoSDHk/R
-   bzR7h/O/Eu8hmR+bw3l6FWmoaM7QMDieaG6ANC0keeyFshwkS8PIVgjX3
-   hTxe2tj6JKYW12Bd9ABYYG+zkWP7CkZoY18jvN+8HLPEqR2O44vifj/MT
-   ZomwyWfoqAef8FQbL9wlyzsKvCsoATX2IT91DrkhnjKOI5WY7W9WGma1Q
-   YkGb2hrcO61JXBsOiGkyhrtqbZXlcEvj3CX1hGYUPDR59Q9JgQyzsmlEB
-   TL7UEs9kguPWZc3LNO34UI/QdupI49K/z8HtTbcw7/r0EOc8wEUs+Kroc
+  t=1650436869; x=1681972869;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eSMluGEM3zFG2k5bkshxCznXFVNbgyN9Ew7MMKDa1J4=;
+  b=adIUEu81dqO/43jmnaZPBrfTlBw8x0D/FnbNJyiCOtfhxyL947THWDJE
+   Bu4icBjKOGDBCbJ7KzOzmR0Fxm+ED5GX6vMfjMH4HzTKTah6J5tIuDQRL
+   85qYumyswc9I3kLVBrYalkZTEk/7fd83JrunC9lLaJ0ornbk4Zba0eHNv
+   R8ZoJGTVOvFGdNPwFJUz8ey52HlzDas2EjUhuQLgxV0Y3Z9oOVrw+CJdb
+   XLl3csUaMP2qz4rT9a9kwZ3j7r7mJY8s1crAdN9Jz8nvmqyJtovwjZlHB
+   ceZzO4xYikwTkiBWTKhosORHAJOANAEjpHhplldqb0IBvPIPCAR5V43ty
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="263417181"
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="261555609"
 X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="263417181"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 23:41:40 -0700
+   d="scan'208";a="261555609"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 23:41:09 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="576448341"
-Received: from rli9-dbox.sh.intel.com (HELO rli9-dbox) ([10.239.159.142])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 23:41:35 -0700
-Date:   Wed, 20 Apr 2022 14:39:38 +0800
-From:   Philip Li <philip.li@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     kernel test robot <lkp@intel.com>, Peter Xu <peterx@redhat.com>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        akpm@linux-foundation.org, willy@infradead.org, vbabka@suse.cz,
-        dhowells@redhat.com, neilb@suse.de, david@redhat.com,
-        apopple@nvidia.com, surenb@google.com, minchan@kernel.org,
-        sfr@canb.auug.org.au, rcampbell@nvidia.com,
-        naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [kbuild-all] Re: [PATCH] mm/swap: Fix lost swap bits in
- unuse_pte()
-Message-ID: <Yl+qqmH19VxwgK4C@rli9-dbox>
-References: <Yl8rZkhU/B0iE2ob@xz-m1.local>
- <202204201313.QYiDBRbL-lkp@intel.com>
- <c14c0865-867c-ca14-8b2c-7e6e94ee7c85@huawei.com>
+   d="scan'208";a="727364130"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 19 Apr 2022 23:41:08 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nh41T-0006ft-Lr;
+        Wed, 20 Apr 2022 06:41:07 +0000
+Date:   Wed, 20 Apr 2022 14:41:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 621/2579]
+ include/asm-generic/barrier.h:16:10: fatal error: asm/vdso/processor.h: No
+ such file or directory
+Message-ID: <202204201450.pNRIlkjX-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c14c0865-867c-ca14-8b2c-7e6e94ee7c85@huawei.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 02:23:27PM +0800, Miaohe Lin wrote:
-> On 2022/4/20 13:56, kernel test robot wrote:
-> > Hi Peter,
-> > 
-> > Thank you for the patch! Yet something to improve:
-> > 
-> > [auto build test ERROR on hnaz-mm/master]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Xu/mm-swap-Fix-lost-swap-bits-in-unuse_pte/20220420-053845
-> > base:   https://github.com/hnaz/linux-mm master
-> > config: s390-randconfig-r023-20220420 (https://download.01.org/0day-ci/archive/20220420/202204201313.QYiDBRbL-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install s390 cross compiling tool for clang build
-> >         # apt-get install binutils-s390x-linux-gnu
-> >         # https://github.com/intel-lab-lkp/linux/commit/355ac3eb45402f7aab25b76af029d4390af05238
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Peter-Xu/mm-swap-Fix-lost-swap-bits-in-unuse_pte/20220420-053845
-> >         git checkout 355ac3eb45402f7aab25b76af029d4390af05238
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> 
-> The variable name is newpte. But it's written as new_pte latter. Many thanks for report!
-> 
-> BTW: Since this is not a formal patch (no compile tested). Is Reported-by tag still needed?
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 224dbd4b77caebda16df2f388e4cb826e22ea64c [621/2579] headers/deps: Add header dependencies to .h files: <asm/vdso/processor.h>
+config: h8300-buildonly-randconfig-r003-20220420 (https://download.01.org/0day-ci/archive/20220420/202204201450.pNRIlkjX-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=224dbd4b77caebda16df2f388e4cb826e22ea64c
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 224dbd4b77caebda16df2f388e4cb826e22ea64c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=h8300 prepare
 
-thanks, this is not needed. It mostly needed for already upstreamed one
-and actually not mandatory from 0-day ci perspective.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> Thanks!
-> 
-> > All errors (new ones prefixed by >>):
-> > 
-> >>> mm/swapfile.c:1824:2: error: use of undeclared identifier 'new_pte'; did you mean 'newpte'?
-> >            new_pte = pte_mkold(mk_pte(page, vma->vm_page_prot));
-> >            ^~~~~~~
-> >            newpte
-> >    mm/swapfile.c:1786:14: note: 'newpte' declared here
-> >            pte_t *pte, newpte;
-> >                        ^
-> >    mm/swapfile.c:1826:26: error: use of undeclared identifier 'new_pte'
-> >                    pte = pte_mksoft_dirty(new_pte);
-> >                                           ^
-> >    mm/swapfile.c:1828:23: error: use of undeclared identifier 'new_pte'
-> >                    pte = pte_mkuffd_wp(new_pte);
-> >                                        ^
-> >    mm/swapfile.c:1829:36: error: use of undeclared identifier 'new_pte'; did you mean 'newpte'?
-> >            set_pte_at(vma->vm_mm, addr, pte, new_pte);
-> >                                              ^~~~~~~
-> >                                              newpte
-> >    mm/swapfile.c:1786:14: note: 'newpte' declared here
-> >            pte_t *pte, newpte;
-> >                        ^
-> >    4 errors generated.
-> ...
-> >   1839	
-> > 
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+All errors (new ones prefixed by >>):
+
+   In file included from ./arch/h8300/include/generated/asm/barrier.h:1,
+                    from include/asm-generic/atomic.h:13,
+                    from ./arch/h8300/include/generated/asm/atomic.h:1,
+                    from include/linux/atomic.h:7,
+                    from include/asm-generic/bitops/lock.h:5,
+                    from arch/h8300/include/asm/bitops.h:173,
+                    from include/linux/bitops.h:28,
+                    from include/linux/log2.h:12,
+                    from include/asm-generic/getorder.h:8,
+                    from include/asm-generic/page.h:95,
+                    from arch/h8300/include/asm/page.h:5,
+                    from arch/h8300/include/asm/string.h:8,
+                    from include/linux/string.h:20,
+                    from include/linux/uuid.h:12,
+                    from include/linux/mod_devicetable.h:13,
+                    from scripts/mod/devicetable-offsets.c:3:
+>> include/asm-generic/barrier.h:16:10: fatal error: asm/vdso/processor.h: No such file or directory
+      16 | #include <asm/vdso/processor.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+   make[2]: *** [scripts/Makefile.build:120: scripts/mod/devicetable-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1193: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +16 include/asm-generic/barrier.h
+
+    15	
+  > 16	#include <asm/vdso/processor.h>
+    17	#include <linux/compiler.h>
+    18	#include <linux/kcsan-checks.h>
+    19	#include <asm/rwonce.h>
+    20	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

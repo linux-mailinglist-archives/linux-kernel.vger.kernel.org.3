@@ -2,97 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C60508E4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861DB508E50
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381038AbiDTRVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 13:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S1381048AbiDTRWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 13:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235399AbiDTRVG (ORCPT
+        with ESMTP id S1381041AbiDTRV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 13:21:06 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F60E45AF4;
-        Wed, 20 Apr 2022 10:18:20 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id t202so2173807vst.8;
-        Wed, 20 Apr 2022 10:18:20 -0700 (PDT)
+        Wed, 20 Apr 2022 13:21:57 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B147846150
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:19:10 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id bn33so2678470ljb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:19:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=E8pbstQIKMU8n6W0382loX5SA213a1sxeL3uH3Qg3JI=;
-        b=k3XSeJBNpwXtCKAiE6JPyVsJWnTxJ4iqv54j9tbN8FuaqK46ZMp4gtSFZCjKfonLPE
-         R/cnoFlLe7QKfuwRT9aYsfaMsGKOets5M+f+K9PmO09ISJssgjjb52fl+KGPKvKJOdks
-         FYpMcjAmjLbc8HeOPo6IiJ1qSx1KwtuP4hStjQ48xQbeH2F/YNOSCVUEwjNItGkzQ2lf
-         8WBUkXWJOTK9mXA0qLglRkFXFzxbf1t1YRo3No1Y6xRmw7sEBSY6xxuOuHoOuzHR4Yk3
-         e5Z5bS3okR3eq8MWMu5cq91aUu191A6fSfCRx7XiR9Nm4CoAYk+UVlYzPRle/M1JzMJr
-         DTuw==
+        bh=QDx0+OI/qSjmxfaZ2RU746dMr9V2CB+G11HI7Wlu0nQ=;
+        b=gFbmnqStrskqts56tcXSCl54ZClNg5uAYTF7SaMt/Zlt9oxJv2OxrK3KNVEG7TvsUi
+         qD2/0TsE6N0l5L7bbw6eJSPiAfsNsRkgwpmGHC5sSpSF03qH5pz8eKIBfSGByVjxUW8I
+         0Mi3Qalz7MwAsj/D1nTunBvDc9+7ikclPw6SZqwZ1XZEJ+dB/2TYyZ8xWOG//mXBPA/M
+         R0bEmog7Dc141NWbOkoSlntwYZG3eMH0w60QXw7OBRod2TN5Bnuq/usT/k6HheHtULiI
+         hqQXhkXo6GmrledqMohi5AlKGKxsKlzxwPY/GNZLvbXwYtJFOPUXXh+gCh8RIAtPzneK
+         LVoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=E8pbstQIKMU8n6W0382loX5SA213a1sxeL3uH3Qg3JI=;
-        b=pzOQzXzzadA7KMuQTcn9m9y0awaElFzr18a/kvmqdlpOrO6nVT7k8dTM64HItfKOMU
-         bSocJW9eL2kWZ4+7wDRWR/eiN1zxpTiVAodqI62b2QyfltUXcxNoSK5giJIN8+a2ns0Q
-         yQyX5cz+FS7gBTUaEE7rzthdqSGqpOZV6nYmiddVbqFhh+G5lbVgvnxNHPOBLUyKaBwd
-         A5PQsEsd1G/iWhL6NaDEnIUqE+/2cpFLQoL6+8EA5+ol44d8ugCJDmiubU4LKqT83jTT
-         2ao/KJ47iO98ff+OouQaPDUNYpfDxXOU1bUQ7QkPgxyzFlIvzjhSiWKvvsHKUwd12CjX
-         mLhA==
-X-Gm-Message-State: AOAM530GpNG7b4LEQtoPmkhQHZXcRDTLyngTPi1YXXld15RFO7fBCMmz
-        sQILDIrFUN4s8ucBwUh2qlp2gyT5e++FEKxnwew=
-X-Google-Smtp-Source: ABdhPJwcuJYCkBW10RtqOqWTejiFdCLoEZrniTSO/MDyY/NMI4lGYtijRlZqeNR9qXFnkLnvS8yvyDGcgoCFEdKHVDY=
-X-Received: by 2002:a67:f80b:0:b0:32a:17d6:7fb2 with SMTP id
- l11-20020a67f80b000000b0032a17d67fb2mr6263197vso.40.1650475099231; Wed, 20
- Apr 2022 10:18:19 -0700 (PDT)
+        bh=QDx0+OI/qSjmxfaZ2RU746dMr9V2CB+G11HI7Wlu0nQ=;
+        b=GINVCJVyC//7OXvjPS+pWDshG/Zfvi3B0PTJQOBoHQ8+mosd2udmv4q7UlqIVe9NaN
+         1ndk94VGlAFGUndDGpDrtO8/oWHDJYRcCPYRtjfBKQzuYkFasqRnRBeHM6FvdOKNWRS1
+         goC0nGOnDhL5U3sHhVNNB3J4IjwsDFXdTa77AQf0Nxbwy9XMLtej2Pze68+9NxET/aP4
+         aDwQVugZlpBiv+g87LdNOI7tEcqA3PNx5f+zmtTIJAS73Lfw68adsReMd74VZ7K+B6Qb
+         rxBkbu0PFNAM37gFrzYIBXj5RPX3Tt0pwJZxTSCzZ9omeEXCYvWt4oiRdG+MDfe6zq2e
+         rz7Q==
+X-Gm-Message-State: AOAM531oyBbOydJSy9bEfvc/nISHJ5okuDu0P0rPFIZQIzt9JQv/SyLJ
+        wJ+1d+Jk58KzLRO3rwj8KzScRBuj2Y8KgwIw5LfqlA==
+X-Google-Smtp-Source: ABdhPJwRetxn/IgYVS6GD+Q9qLe4SykXWoh+uPF7wEP3xag79my4A9VOvbV3gygmnNUeMfeBLvBh/SjUq7BN5tgb1LM=
+X-Received: by 2002:a05:651c:1204:b0:24e:e127:f509 with SMTP id
+ i4-20020a05651c120400b0024ee127f509mr1374221lja.459.1650475148777; Wed, 20
+ Apr 2022 10:19:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-9-alobakin@pm.me>
-In-Reply-To: <20220414223704.341028-9-alobakin@pm.me>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 20 Apr 2022 10:18:08 -0700
-Message-ID: <CAEf4BzZVohaHdCTz_KFVdEus2pndLTZvg=BHfujpgt29qbio3Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 08/11] samples: bpf: fix shifting unsigned long
- by 32 positions
-To:     Alexander Lobakin <alobakin@pm.me>, Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Chenbo Feng <fengc@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Daniel Wagner <daniel.wagner@bmw-carit.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        llvm@lists.linux.dev
+References: <874k2nhgtg.fsf@catern.com>
+In-Reply-To: <874k2nhgtg.fsf@catern.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 20 Apr 2022 19:18:32 +0200
+Message-ID: <CAG48ez1PcDV5LvUomM6MsoA0pbg_7oJyfBLt6M2e3541gxx-LA@mail.gmail.com>
+Subject: Re: Explicitly defining the userspace API
+To:     Spencer Baugh <sbaugh@catern.com>
+Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcin@juszkiewicz.com.pl, torvalds@linux-foundation.org,
+        arnd@arndb.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,36 +68,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:46 PM Alexander Lobakin <alobakin@pm.me> wrote:
+On Wed, Apr 20, 2022 at 6:30 PM Spencer Baugh <sbaugh@catern.com> wrote:
+> Linux guarantees the stability of its userspace API, but the API
+> itself is only informally described, primarily with English prose.  I
+> want to add an explicit, authoritative machine-readable definition of
+> the Linux userspace API.
 >
-> On 32 bit systems, shifting an unsigned long by 32 positions
-> yields the following warning:
+> As background, in a conventional libc like glibc, read(2) calls the
+> Linux system call read, passing arguments in an architecture-specific
+> way according to the specific details of read.
 >
-> samples/bpf/tracex2_kern.c:60:23: warning: shift count >= width of type [-Wshift-count-overflow]
->         unsigned int hi = v >> 32;
->                             ^  ~~
+> The details of these syscalls are at best documented in manpages, and
+> often defined only by the implementation.  Anyone else who wants to
+> work with a syscall, in any way, needs to duplicate all those details.
 >
+> So the most basic definition of the API would just represent the
+> information already present in SYSCALL_DEFINE macros: the C types of
+> arguments and return values.
 
-long is always 64-bit in BPF, but I suspect this is due to
-samples/bpf/Makefile still using this clang + llc combo, where clang
-is called with native target and llc for -target bpf. Not sure if we
-are ready to ditch that complicated combination. Yonghong, do we still
-need that or can we just use -target bpf in samples/bpf?
+FWIW, I believe ftrace already gets that basic information from the
+SYSCALL_DEFINE macros via struct syscall_metadata, and exports it to
+root-privileged userspace (although I think it won't actually tell you
+what the syscall number is that way):
 
+# cat /sys/kernel/debug/tracing/events/syscalls/sys_enter_epoll_wait/format
+name: sys_enter_epoll_wait
+ID: 902
+format:
+field:unsigned short common_type; offset:0; size:2; signed:0;
+field:unsigned char common_flags; offset:2; size:1; signed:0;
+field:unsigned char common_preempt_count; offset:3; size:1; signed:0;
+field:int common_pid; offset:4; size:4; signed:1;
 
-> The usual way to avoid this is to shift by 16 two times (see
-> upper_32_bits() macro in the kernel). Use it across the BPF sample
-> code as well.
->
-> Fixes: d822a1926849 ("samples/bpf: Add counting example for kfree_skb() function calls and the write() syscall")
-> Fixes: 0fb1170ee68a ("bpf: BPF based latency tracing")
-> Fixes: f74599f7c530 ("bpf: Add tests and samples for LWT-BPF")
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> ---
->  samples/bpf/lathist_kern.c      | 2 +-
->  samples/bpf/lwt_len_hist_kern.c | 2 +-
->  samples/bpf/tracex2_kern.c      | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
->
+field:int __syscall_nr; offset:8; size:4; signed:1;
+field:int epfd; offset:16; size:8; signed:0;
+field:struct epoll_event * events; offset:24; size:8; signed:0;
+field:int maxevents; offset:32; size:8; signed:0;
+field:int timeout; offset:40; size:8; signed:0;
 
-[...]
+print fmt: "epfd: 0x%08lx, events: 0x%08lx, maxevents: 0x%08lx,
+timeout: 0x%08lx", ((unsigned long)(REC->epfd)), ((unsigned
+long)(REC->events)), ((unsigned long)(REC->maxevents)), ((unsigned
+long)(REC->timeout))
+
+You could probably also get that data from DWARF somehow.

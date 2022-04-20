@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46434507F5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754DC507F5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359254AbiDTDI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 23:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S1359189AbiDTDJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 23:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359219AbiDTDH4 (ORCPT
+        with ESMTP id S1359167AbiDTDIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 23:07:56 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C55E393FA
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 20:04:46 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id i14so438637qvk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 20:04:46 -0700 (PDT)
+        Tue, 19 Apr 2022 23:08:47 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4411C2AFE;
+        Tue, 19 Apr 2022 20:05:51 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id e128so361183qkd.7;
+        Tue, 19 Apr 2022 20:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lB8BBizelOBxUY2qv4ST0PrKLXMyNa9DnyNjkNLjmec=;
-        b=mcy+8bJ87Z1l9XR9HkNwLxGZ2d01t/zLaFzmkL9u+V4+NTMaTgs/UOqd+4QMo7ic5L
-         EYJdaw5EuIMuj/mlno8UafIv6PpPUdLJy8Tv9mFhboZDBbZf82gaYQyNoDLHj6nVLZRz
-         uqL87jpEvsJpeJ0UIBkLowFYgEjBTYVt+h/CaOsshOxFb7j/f6ea/hdw+FzQHjnpkVu+
-         J1+3TqNXrZbJm1JtY/N2FmcsiGCopI+Tu0+1poJPQDlymb8SQa2F690vpaR7i161LFD2
-         PnAvlWnyhvUbEUXNLN3ehGRuHfr6pAuUM9ceJhXHQvPOJJ8cUCgcV8yYgXnFvTrn2h19
-         0YZw==
+        bh=jXVd4JyYt+RLNj/hac0Knj+pNB+a1zaGjepppWkJ+bY=;
+        b=ZFxLZ3jbqwA5VN/V3U/Sorl04NGsIMy+K76HC0ts1VMujTqraPtXgbpy5j38Vr9y25
+         P03eTzrb5j+T55kQJmLGL0oTfrJhhIKMehj4M43TrxjbvCUE5i2lnBnXedwhUB0Hrg8T
+         Km317NMpdTpDEDCNWEwmM0UIdwDiGLeChlukAexTd1u+qP0rZqP16/WcVoKDON3/vYwq
+         i7vFxRBZmRhliRki+IgBDiztCxmLGNoxw7Zgao2S8BI1opGRiguZJh9M5gUsCVwo9kNR
+         f9HEzFx1zQc5GciqiPzoiVb8snwF2//GFjEDjuvFlX95ZL3WxdzAKWNBqKf/cpmMIev2
+         lQyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lB8BBizelOBxUY2qv4ST0PrKLXMyNa9DnyNjkNLjmec=;
-        b=DyTq2in3mzXkSsmBOd3f3cKY6l/Xz+/tZkiZT0cVqOpr31Crl/aD1DMNCrxnvHdTO1
-         UJkrjI9mq2dZ3upnVOTqkmxAJkwZeJwcwOecIBpxFSq934y43QNyfBe62Jc6nDo8kBKQ
-         /FADW9lqVby4a3CB8/oLqNem/EMoWcP8DdLsewJUjibMRQVIesoSXK8oLdSklRAIWVex
-         bRfsxY0oFkXjYCCHcaLIQefSMcpdY6mmhWBeizURWZszjrZGjpQWI9z2kxx69HVQoN8p
-         XBRMD3hX5M41eN73Y6AJKC9qbYZZZiA/ym0F0A+0+8Gn4G69xIoNlh1R2wmhXlptFC+r
-         FXfw==
-X-Gm-Message-State: AOAM530GdpwybvCC59QkM56cax0FklVDA54/Xu1CyJ9WpIM8cHs5M7hu
-        U7tXC4z7htKoekJCDZwfLZM=
-X-Google-Smtp-Source: ABdhPJyJwovdSHHmviYSU+xbTbk8rPDBT8hoeRFAFiOmmlTco6MShhHIWqg6Rr+19MxApe+oSfiDIQ==
-X-Received: by 2002:ad4:5c45:0:b0:446:5af6:7706 with SMTP id a5-20020ad45c45000000b004465af67706mr9583174qva.112.1650423885729;
-        Tue, 19 Apr 2022 20:04:45 -0700 (PDT)
+        bh=jXVd4JyYt+RLNj/hac0Knj+pNB+a1zaGjepppWkJ+bY=;
+        b=8Eljv12YMj5RIK5MCsL1cuuuqrB/L6iIRM5Y0KR9Uf7ju+5cdfSmLRQVie6OlEb8At
+         SKJIr2eGfJHL0QaLQwl+2MiLFWKcHomakDggYnfLvX0O9zqRu9BVKxQpze71BVoigkby
+         9x2EeKMlmMkMiCoWI3OL1bUyCRRmJWHu+PThMRrAtapczbxv+XY9H2FSFzhaTfEFDUQB
+         G1rIOtoBOjtR8j1s87U9jXL/zfOJDOzpMF5dKxoeoBEfi16BX4wN6R+dtT4E+RKYi8Nc
+         +vuPfPrtr2gCTW3G98j5D4u5FbFTBKIOBVtQ9GEHy7pxdpQU/had2vNUSvVr/M15tWV6
+         NfVA==
+X-Gm-Message-State: AOAM530iiGOZNPxlxqcCj15y0rMiDhHrMRKR5cVKfMCVuDg5PAlapLRi
+        YLVb2w90ZRRkE0AXTMErGAM=
+X-Google-Smtp-Source: ABdhPJzL0eDkXCbFY6rkISzDtHZ8674iDU2OWn1mphdzKQERD2iJuHbptDQuf4Brr0rJp8/htPELXg==
+X-Received: by 2002:a37:b502:0:b0:69a:ca1:298 with SMTP id e2-20020a37b502000000b0069a0ca10298mr11469168qkf.133.1650423950492;
+        Tue, 19 Apr 2022 20:05:50 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id e13-20020a05620a12cd00b0069e908ab48dsm898490qkl.106.2022.04.19.20.04.43
+        by smtp.gmail.com with ESMTPSA id s16-20020ac85cd0000000b002e1ed82f1e5sm1157252qta.75.2022.04.19.20.05.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 20:04:45 -0700 (PDT)
+        Tue, 19 Apr 2022 20:05:50 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     lgirdwood@gmail.com
-Cc:     broonie@kernel.org, alsa-devel@alsa-project.org,
+To:     agross@kernel.org
+Cc:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ASoC: img-spdif-out: using pm_runtime_resume_and_get to simplify the code
-Date:   Wed, 20 Apr 2022 03:04:39 +0000
-Message-Id: <20220420030439.2575817-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] remoteproc: qcom: using pm_runtime_resume_and_get to simplify the code
+Date:   Wed, 20 Apr 2022 03:05:11 +0000
+Message-Id: <20220420030511.2575880-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -79,27 +80,27 @@ actual functional changes.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- sound/soc/img/img-spdif-out.c | 6 ++----
+ drivers/remoteproc/qcom_wcnss.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/img/img-spdif-out.c b/sound/soc/img/img-spdif-out.c
-index c3189d9ff72f..f7062eba2611 100644
---- a/sound/soc/img/img-spdif-out.c
-+++ b/sound/soc/img/img-spdif-out.c
-@@ -362,11 +362,9 @@ static int img_spdif_out_probe(struct platform_device *pdev)
- 		if (ret)
- 			goto err_pm_disable;
- 	}
--	ret = pm_runtime_get_sync(&pdev->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0)
- 		goto err_suspend;
--	}
+diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
+index 9a223d394087..2c471c763b5b 100644
+--- a/drivers/remoteproc/qcom_wcnss.c
++++ b/drivers/remoteproc/qcom_wcnss.c
+@@ -228,11 +228,9 @@ static int wcnss_start(struct rproc *rproc)
  
- 	img_spdif_out_writel(spdif, IMG_SPDIF_OUT_CTL_FS_MASK,
- 			     IMG_SPDIF_OUT_CTL);
+ 	for (i = 0; i < wcnss->num_pds; i++) {
+ 		dev_pm_genpd_set_performance_state(wcnss->pds[i], INT_MAX);
+-		ret = pm_runtime_get_sync(wcnss->pds[i]);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(wcnss->pds[i]);
++		ret = pm_runtime_resume_and_get(wcnss->pds[i]);
++		if (ret < 0)
+ 			goto disable_pds;
+-		}
+ 	}
+ 
+ 	ret = regulator_bulk_enable(wcnss->num_vregs, wcnss->vregs);
 -- 
 2.25.1
 

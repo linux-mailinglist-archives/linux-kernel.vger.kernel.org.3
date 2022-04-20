@@ -2,192 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95C3508D72
+	by mail.lfdr.de (Postfix) with ESMTP id 7882F508D71
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380652AbiDTQhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44124 "EHLO
+        id S1380664AbiDTQhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380647AbiDTQhT (ORCPT
+        with ESMTP id S1380702AbiDTQhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:37:19 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5715445506;
-        Wed, 20 Apr 2022 09:34:32 -0700 (PDT)
+        Wed, 20 Apr 2022 12:37:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54C42AD4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:34:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650472491; x=1682008491;
+  h=from:to:cc:subject:date:message-id:content-id:
+   content-transfer-encoding:mime-version;
+  bh=qHLOIHWW8TMIMBvbzYAaOefpY40H4bX0sk9IWQ6Twnc=;
+  b=H5SRmkafbs4iLKIxVNhtMDgqUCZ1tGCT1zRYTHDAkV2yhbzYMnU+9uXk
+   HyVZJM+uo+a6oB5NM/+TwCGIk40K0PFxGyA6l+ttCyScNdjLhCLq8eAtn
+   wYAje8twlOjRTqhV6xFsfqy1rIadLky+/yWortwSQIVI5ka7pf7QsGR8z
+   RhBTMvD/Nh6wqK0iGflN/Hyg0l0/bIgtwMhF3E1zJNLUojBcI2hn35Tx0
+   sPSdUOtmkw/agZof6e/RMqh30jyw2GxEFA+cDZv8c//agnLzsuU4gtWXA
+   23gfE+g9OVJF3yLqI9nGe6K8BA5JZ+BE4Qpj1ed/nlsZfrmT/6CzI2USZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="262940474"
+X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
+   d="scan'208";a="262940474"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 09:34:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
+   d="scan'208";a="555284788"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2022 09:34:50 -0700
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 20 Apr 2022 09:34:50 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 20 Apr 2022 09:34:50 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 20 Apr 2022 09:34:49 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 20 Apr 2022 09:34:49 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ahEmDqX4mD9mN6TmikrwT6ZVbpbBbnb7vR4uzI2QEikosZxIhtad+7ha1fsLRNs3WRwM620Qq4SQebdkBB/5f9aEFYrmJawIgzfLre1qraZ4b3KaSNV0K8rZVuog4Y18d1GNGhhjogm/xFFq1+iWtsrV1f+F1H37EjuwBtXuGQDMXRJW2EyJVsG4TNVoNPNP31oH5vLAO1DRLKLvpJFy3hvx5R3zqXe6o6G6m165ZAPBy3qPxY8djq8VQMO/tcQwp5cvXQoFXpRkDrWJt8huEmGYL3qOYpBSA+mcLfE9V4v70GMQIFp2mJMCXDDF4IICMX2TnHFVPGdsSSccizPNPA==
+ b=EhBtjD8CC8ctFIClU7eK26EtucW+UsO6T4xbW+iKaPjelqATB+8/I0lKrRiJ3IfvPXI7GlYgAAauQErOmZri+u9wNwJMkAK7Y3iCv4DpW8Rm22m5UaP+UFPd1q/e5lDRhfb7MHGnhfJIAS8Pyb4QYHDuZRplafnaKZalFAvTZRizApLE8Sq9ggvtkf4ELYSj4RExAnOZqnSkwLwB8rlcCcyib6Nk2zVHHHTuKPEHTW5ztfT9mYyAXK1bg8CcJLMIF+TmvRebTTbPJ14WNs8f4Yeo0Vs+ZUjRr/X6P6jGEcVMZ9hsgSFQ0RzhhAA+NRNm/2BgYEYUesCpSxNX0+Ywnw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nlR66Yp1oRcjf+ji4xi5CG5/c0cDg0AfuaE7T3nVU4E=;
- b=CMMYPPMCrwcBJwi0bBAUWZw0yqpCAVLeDu6vKlZY42t/8cZXsGOuTZTEtWBOj81qB51rD3qiNRHHyrKW8DzzR64wTR/uoqLQz+0m5J7Id/0g1F4voM2ADBWwfA4xRGcOuI6V3n3edm5867my9IBkc76rc1jDmYA6e2spP9sK+E7emc5ZaOYmL4ZVfYqMGAY4FqlwyDgCFoF09VljhfRyh0TC9lDEcV/h1qkGtDWfJHck+uS+cmmS2CtAQGUxPeWGRPjRu+iTxuUBkqGCsThYNTUkQCdELIjfBOlcWFZXAIWil4j3/Q0+qKxBWalGZMHyyziV4poHtpAUHmy9Vexqrw==
+ bh=j42lhOE7khyAhtz6guweDdjIsV/4GPuhC15rmKfHf2o=;
+ b=gQba1mC9iqsm3N7CefEuVbwPh9Afd/QvvMIwN6cL4WovBbosGYx8UpbdocuY2h+t3IhnMylLblnN4UBvj0gAvUGRzL7N+99ryNKVcQOCydKLIyrafNql7NzffIc1R/bYqKNkv1Ubvc85Jw2dHY96Dvj9DxNa+blIoFXNRqfGTKMXkZmA7PSjlzSqdHXsQ8KycNN3bxhL+QdogEmlBqsbmMIrRCohNuM2y1QGeh3nYi8fvswFHgeUrW/1ZTdJWE5CAlPe632otJLz6V1b19fJOQ8CZk3m9WZn9+5W+jjRn1oCF/cir94pNhbWsU7DD0COUhrd/lGSzBshaTLBlcoedw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nlR66Yp1oRcjf+ji4xi5CG5/c0cDg0AfuaE7T3nVU4E=;
- b=v00LDXGYKmSoqMPF1h59Q2Fs3iYJKhP26uaO6W2bye6+NIhkF67jIxy7tIji3lDWKSSwFdrKSCOuhs99y2vNUiBSS3QgqMLeks1/M3wRgZKyeobrxePNH+5iScmMNVHJO9KjyG9ZaL1RhpocTh0xzGLZfnxTEUdvQ+O8kMojUWg=
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
- by DM5PR12MB1225.namprd12.prod.outlook.com (2603:10b6:3:7a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Wed, 20 Apr
- 2022 16:34:30 +0000
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::3157:3164:59df:b603]) by BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::3157:3164:59df:b603%8]) with mapi id 15.20.5186.013; Wed, 20 Apr 2022
- 16:34:30 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     "David E. Box" <david.e.box@linux.intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/3] platform/x86/intel/sdsi: Poll on ready bit for writes
-Thread-Topic: [PATCH 2/3] platform/x86/intel/sdsi: Poll on ready bit for
- writes
-Thread-Index: AQHYVNOgtzw4T/fCYEOX/WTS19QP1Kz4/udg
-Date:   Wed, 20 Apr 2022 16:34:30 +0000
-Message-ID: <BL1PR12MB5157EBB51DA629A40BE514EDE2F59@BL1PR12MB5157.namprd12.prod.outlook.com>
-References: <20220420155622.1763633-1-david.e.box@linux.intel.com>
- <20220420155622.1763633-3-david.e.box@linux.intel.com>
-In-Reply-To: <20220420155622.1763633-3-david.e.box@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM4PR11MB5549.namprd11.prod.outlook.com (2603:10b6:5:388::7) by
+ SN6PR11MB3200.namprd11.prod.outlook.com (2603:10b6:805:ba::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5164.20; Wed, 20 Apr 2022 16:34:47 +0000
+Received: from DM4PR11MB5549.namprd11.prod.outlook.com
+ ([fe80::e5b8:93eb:e06b:f1ab]) by DM4PR11MB5549.namprd11.prod.outlook.com
+ ([fe80::e5b8:93eb:e06b:f1ab%6]) with mapi id 15.20.5164.025; Wed, 20 Apr 2022
+ 16:34:47 +0000
+From:   "Wang, Zhi A" <zhi.a.wang@intel.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>
+CC:     "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Subject: [PULL v2] gvt-next
+Thread-Topic: [PULL v2] gvt-next
+Thread-Index: AQHYVNSMOPXpKvGgN0OvGCZ3HfiQDg==
+Date:   Wed, 20 Apr 2022 16:34:47 +0000
+Message-ID: <5a8b9f48-2c32-8177-1c18-e3bd7bfde558@intel.com>
+Accept-Language: en-FI, en-US
+Content-Language: aa
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Enabled=true;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SetDate=2022-04-20T16:34:28Z;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Method=Standard;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Name=AMD Official Use
- Only-AIP 2.0;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ActionId=186afc40-4e5d-443d-833d-7f0eb297ca6b;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ContentBits=1
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_enabled: true
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_setdate: 2022-04-20T16:34:28Z
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_method: Standard
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_name: AMD Official Use
- Only-AIP 2.0
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_actionid: 7b8c15c0-3267-40f3-bfea-7638c98237a9
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_contentbits: 0
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
+ header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f757bfe6-740d-4a61-58d8-08da22eba4c3
-x-ms-traffictypediagnostic: DM5PR12MB1225:EE_
-x-microsoft-antispam-prvs: <DM5PR12MB122588DC3D4EE1047A4DB441E2F59@DM5PR12MB1225.namprd12.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: 2f970324-6b2a-4ad5-5ee9-08da22ebaefd
+x-ms-traffictypediagnostic: SN6PR11MB3200:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <SN6PR11MB32009B3959B72E2485DDBA2DCAF59@SN6PR11MB3200.namprd11.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Xly/49xNlfn3maC0bqHx/HCGXqkBTfuUtCYWxdEAqGQKanakGmkumy27EhtekRRUqzNUj3GjzC7WB+XxVGiAUgRsb59PShDek29CqwTTEppjv2a6k6qFHL8PO/uzgDjdqOwGkTQT89eUV0btJgFWBanI0ejl6eGJKmw5z6A1b6N2C/aO+nWm/8IyrNMAoyj48Wo0KJENCD6mz0LTFzVZo6bQNLlKkrjOlx8N3+u/XpPKy8JlaC0Rs+jy4rHOLaifKa/aCEpsw7NaWLBVfYypyb7VEEBGF/ZICTDeF3B+MKZrbJyyaMlfBmWZH+aXOERB+a0I5X8TGSEDXeYvwaforRcoWtgz2ET1o9AQcYuPOEM4LmEuq/j1XKHOhBw0jiefUHq2aYJ1xLUyyaL9Ggk0Bvg39UX1PunZLjyCRS0XwAiyXjE+XgHq2bzsrT5axUZYjSHuWYl94/AUNF0W+zmkcUZbctOjrpTRXZBasICfEfkEHe/Bm/J07SBEBLn+NnZk0vkB15a19xVz/xcpiz7CD7xSTauxzA2ceP0x/IZl1nmveXeK7/bg8vx0AE775/0XOTKCGuSvdc8VpT9fm2zcF7FWcbnaSsbULQ2Dff98daDan+Ca9ka8f3cC3GI6WNcp0lZq5t43p1SYonD5SV4xmvqAauQZe9Kt76uwM10+BcLh8K0CDrh04zjdV7NE49u6S4Q/7cifuKT6G+iwYFAlpA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(53546011)(6506007)(52536014)(5660300002)(38070700005)(2906002)(38100700002)(508600001)(26005)(122000001)(33656002)(8936002)(7696005)(55016003)(71200400001)(186003)(66556008)(66446008)(64756008)(66946007)(66476007)(8676002)(9686003)(83380400001)(86362001)(316002)(76116006);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: A+3zqZDqLoIPGrxuaenUfign0+sj85lwEtgL0DQ1VR7l+CDcnWy3a8AA2bAskKnV0okZNawE0p/Uz8BQFrIfN16vfIjY3DNdtjw7dqx3rA3cIkwIlw4k/cZTl/PDeJpz9Y5birUEiFWTC1U4h61p43tnbS2FP40LwxZLQ6VEQAj8mucyNy7gT3bxSHtm+XYyJzVPoQ1DKYHu1AvB3la406QGSRs2lJ/cDo62ySTLPfWlJuAFXYWVbzgTY2vz4UWZQmfs+iVBjgGEYO5btDAs0nQcC4kCUDDcugoI8Jz6xQrKrwRwSrbwFwvHYgz/pTjnqaEHXZYCfML+8YCZ/GgvxYuatDyTQN7BMLCS/KAD79Y5+WCJWYwIJXOrLMZrFool/ICr1LpbPyqSwig3YjlFnQTfGbu3bqLS0oJnKOqOKFOh+La6xZcw5FbYlXIrFE3jILjT0F+DY98nFy+TJ0D1oZFKole2Rn0o6wpMbEEgyFH6EP0BXH7N8DeyR0EPCcQhjLEKdZ1aS+3J/c4xck2IOqDlrvEWMbm+P0ksqSSN0N1fDMvY6YFAn8GjNcmnct/NJ3lZ4SOUSAkToPa4h2RRQz0ze/kCxw8IPLLVELhVxJSccEO13gzKdt7SHA3bsCAAZa6IwVNgo2y6Wy54WxBBxlTmHpcBa00TIGucNLxove5ksJTkNTOu1e7m7I2zc8jYQe99bhnS5Ywdp6EA6uSxXIpufupUw7lT2Erc9eANP/WrD9RAnGLfTdkiLmcV28zvAZYOJLmgiDcWPhc4DnHAb3Rmov786VMHMd2sMwh8Y3TQiciswrYupmxEPK0x/Cc5EQLfyKH7wtmr8ggLdsv3Iygv8DRIKj6qoLX56HLMhWY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5549.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(82960400001)(6512007)(31686004)(71200400001)(26005)(508600001)(2906002)(8936002)(36756003)(966005)(6486002)(7416002)(66946007)(8676002)(4326008)(86362001)(38100700002)(110136005)(38070700005)(83380400001)(91956017)(122000001)(66556008)(66476007)(66446008)(64756008)(2616005)(186003)(5660300002)(31696002)(54906003)(76116006)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KMj2twwrNYuHH1FYG8jzqADnKYIJM2Pr6jkZmIwoD4j6KG4NaKM6wrS8X0Io?=
- =?us-ascii?Q?OZZ8Cbf1UcLDfjP75Cw3BxFgyQz7d3JQ74huWeYmmHGkZqpHxGZcTSM0KO3X?=
- =?us-ascii?Q?uCa15cgWr8A61ozUX+oBec2jZEgRNiBed73eeBzmY86q3ZzyrwmewPIzF+ON?=
- =?us-ascii?Q?65ZmgO9CgF+GfdiO9r5C0I1Fq9VqhhZwQfZLgp1oCvEB+go2uhqUq5WMRq8N?=
- =?us-ascii?Q?VO0Ma6Z/qSoifa+HpkhcKNQoXA9hsiTvz2wzdBAxINfjapyN2KCcnsonEzRt?=
- =?us-ascii?Q?N1J7HwmCxyF5cKzNpEectVE0ErDFjFcj51AX9vYM0HVgnQ3DIFGX/KqF/7M/?=
- =?us-ascii?Q?1VfiPtQ4rlXBWuhHjsWKOIT+SBmMYhEMQ6Hr4GjLCfH1xGTZU1Vl1aWoAQyv?=
- =?us-ascii?Q?RO3zDP2kYAVdr8svh3cBkHpPNNG6003xv1nnS0gXcrsHZB0r+E6V12BlKMQh?=
- =?us-ascii?Q?ylvynst0YdPz/NZwJHH4c/wG8rF2dRcBzGPSAfpMLqY/KlDGK+Lc391WVT2S?=
- =?us-ascii?Q?QuSIoeEU3kOyyYbJA804K+7I2+Jip+bcAV+IJr+pR2MI8tWhBsKjp0P2Yn2J?=
- =?us-ascii?Q?4LFJf6LGPMwqwIBU3qmRmi3qpCuD1oAbtQZ56scR25vvs9FDFZkS90xJS015?=
- =?us-ascii?Q?XxYVY5J8DvdCqQzGIcmiY/MsWY+Br3z1gVvkBE19ExnVQuVP8rkr68hkIYZi?=
- =?us-ascii?Q?bPXL4ZwTOzq0Lbm+BZqNZXBn8mA61gL0Xe/9MPj0/2KjOpYbL48josVz05K3?=
- =?us-ascii?Q?QrZtmeQnJaLpQR5uJWS4oi792OseZl70rUCx6pY2sQEWPZsFbQprsXy5d4xs?=
- =?us-ascii?Q?nCwQFuS3NvA73g4kq0CKsWp/RC7haWcVD8OaoUSYGcO1NaT3P9d/MTd2VJoX?=
- =?us-ascii?Q?a9PECywHvT5Fx2mBw0/X4i384S94y8zwKenKSwQNassOrBkjiSi96XzgJdQ8?=
- =?us-ascii?Q?fIzeuRwIT8VU//N74bPDfqUHHlLFUPonm1xrY56cFrFh+FU3GagBzmEldDqR?=
- =?us-ascii?Q?IgSrP8ANxY5A4smU8TEorUOMEsRs8X1iWGy8KIpuo7+o39lCJ19RBzZH+LpR?=
- =?us-ascii?Q?vjdPoeCKivPhSnEOshlW5oiKU/KhNgv04A15EYXaTSvJHsXVxdMO7BElS8Ol?=
- =?us-ascii?Q?pL0AI0hLcudiHo9gP0rjDBQfvX6AwC6p50Zs+Pu4rcesVuIK+PMFIF0+om0u?=
- =?us-ascii?Q?Ej7NmP7Nlir3NT8ws9554z/g/lBAZPTL6tkkPDzFChho5fpNHPxYl7wSG+Rs?=
- =?us-ascii?Q?ceCyvIulRBw16aUR1zyWmp18dqlHhwH48Cc2t64aIbMX7SHIbpWalkkbitnn?=
- =?us-ascii?Q?hJJCwzUvf+NWWjuEKnIVgZHUitH3MnT8J6SNXdVyrtq3PFHCZEparuFp3U1a?=
- =?us-ascii?Q?1qtv+jw8WBgxNz66ZXsNw+mLhFNm+wH9GagIpoaaG4yB69R/lUknQ8o7TLHn?=
- =?us-ascii?Q?WXEKHItZ32MH393coxjvxOujse8aRB7j5NYmP0DoQsLs8sNn/BF1niQ/dO0e?=
- =?us-ascii?Q?wLeUKwzvUWgk5T1vQMH+J9paBLR4u0n3LUAjIh13IgYWMowBFIV6QZaZ5TP1?=
- =?us-ascii?Q?cGuZaXohaVACjqz9+7CZPeZdq7u2E1FQEnsuDHp/zIb0YbCTyNcRWnYzmv+3?=
- =?us-ascii?Q?4tK03hd3i4FinsHMmMEeiJ7C6oHavDpAxJmzKQZsXS4zPUpW0RpsQ28VUHR9?=
- =?us-ascii?Q?V7usizO5vVrsYWuIXNF7jXAbEVaJ1SymjMAbiBrTCsCzt5IN?=
-Content-Type: text/plain; charset="us-ascii"
+x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?YP/CWdbaUcFqBpJiB9apA4DTD6Nn5bLDZI+dwMVT7E8RqQiZWC82W4Xh?=
+ =?Windows-1252?Q?uy7DKnj7L6f/KkFYJmgYgf+aLLWWajrjpdlZ9/TRhs/Nw6nodPhqIL2C?=
+ =?Windows-1252?Q?OiAxsRh3Kif5dGHIk0Mb0eo3f/hIHxSl2frh5j1SKJe+0GSjWWfsVSuT?=
+ =?Windows-1252?Q?qzs1QTe2/boDdT3jRHBDb+kaUq9Iozn1THIs2FCEVRZDY6iU49eITbBz?=
+ =?Windows-1252?Q?tEgFlNdXfpbjPO3AyOvNISMADRGbnoMIljSuvE+ahw8pLFbKyPEBIjIL?=
+ =?Windows-1252?Q?gz5EMsEpCq68yiQT7CbQ0dYz4HYSvX3oBFeAJXdUQPUCyXNt4bv41FtP?=
+ =?Windows-1252?Q?kL3PfyP6SKcliFjAH1+T3gFqrJ/NfkwJOnyDvQF4wS/31VCnbbtrjrGr?=
+ =?Windows-1252?Q?fnHqZDjqia+rSJoeumvyYglc8LlG20ph6tow4YGtNTxIXI9SAIiuG9kZ?=
+ =?Windows-1252?Q?jBlr8rz93qgnZ+qOxICYp7TdPzZq5HZchGxbzvdtQNuB6haUIlbYPlil?=
+ =?Windows-1252?Q?CsQo+fK8+iMuddH9FOc1k5eYx2hSawaIGOiaZz3P0xrTPwuaZqbJ+52v?=
+ =?Windows-1252?Q?XbJ75dJTFfy+bAChoTEzlfGXvRY9v5qwLiqyNYpYWLA7QiAQTcxmN0xU?=
+ =?Windows-1252?Q?nqPzeCZKmNqzecj61JvLQZq4QMjpAv2cZ+RzhwiViX+7b8DQoFMsSv0P?=
+ =?Windows-1252?Q?qXWJ83UHBu4kEX81yOK8W6yn+E47jja4lS6pIIwsdfSPxXq642rkLtW0?=
+ =?Windows-1252?Q?MuZYTnRLfB8gXH+8bTg94VrdMtTra4q9br+sk8lYg5SK9qxVGcfxMLRx?=
+ =?Windows-1252?Q?BrdJuazonOhhPuFrLrK7hE5x+3Kj5hsM2NcKGLiqH3QuvTjS0cGM/JbQ?=
+ =?Windows-1252?Q?8isOYjzRKZy4YVidKm7pWnQ6RfIqE1rc6ZemP6o0wPlSQCuInwxj4sj7?=
+ =?Windows-1252?Q?IfRx6aV2CiL539zLabPIC3XQqz2ir8BZnBPM70Jh0a0JE3mSAIPRnRxS?=
+ =?Windows-1252?Q?dq+7nwT9PqP8iGH/aHHEzAEIo46eA6IVpPnmv/i+TOqOSnsU0fXQG+Rj?=
+ =?Windows-1252?Q?cYcaqDrGKgs4BOvDthrL5gYfMJVukSIdRwTcG+XHube3U8fPzTfuo3ZQ?=
+ =?Windows-1252?Q?rnnKZUyQ6jQJAwiorHti36PlJj21gj+ZvLZywmhXxAdg0LnwPU9pSiAe?=
+ =?Windows-1252?Q?xIH6012X+yX3f/gi5avx2QHJ+V/fkogdoQfZTiJCQCW6JSyAwg86jLOS?=
+ =?Windows-1252?Q?DDqZtOKvP2y0LzoTy9yIUvHDGiTs5Djcot11A3SZ3HbGuok1O7qRuDXZ?=
+ =?Windows-1252?Q?7rSzrMp5wIgZcwsbWsS69oq0tuuYa3zwL4G6WKH0CpTCKIL8C/X8JQVi?=
+ =?Windows-1252?Q?pUcb+TRyrXKBlfSE74gaRtC3PJ5deMjtbeRZww2jr534td1z9PDK0zwJ?=
+ =?Windows-1252?Q?Re3+ipcnhQBWCDc/TSLvHyWLXCWkXCV8gHWR2ZSKpCETl08/NAJWU99v?=
+ =?Windows-1252?Q?TsH1AGka/4L6VsrXqIDGy/D9eV8wQMUASOxd6wlQhz+AxXttdBLwaaXG?=
+ =?Windows-1252?Q?6w/089Xzb5YjdewMLkr8NtORORCu4WY9qjMzWwMPOCutLaUYdINjlnDq?=
+ =?Windows-1252?Q?BlzC1oc9bUZYinX8DTTCHtCMrN/lBGjHGlEy2jNHClnLK6TZtIfHDfHS?=
+ =?Windows-1252?Q?y7iMbvoHy/x9TTH8IzC9ft0lw1z3ruTyq9HsgS8uB9u9Bu5IGmydYOT1?=
+ =?Windows-1252?Q?UCYV0o9PDe4Y7Og+UDQHXRx+fAPAYlBNHZtggWOI7a+2Oduye4jYJsmh?=
+ =?Windows-1252?Q?WpC0AgcS3P9YwHX4CRaIWibDGT1vGrUNX1e2RXRRZU5Pqr/2lE/Y945y?=
+ =?Windows-1252?Q?MiNXv5dHhrsFVA=3D=3D?=
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <B91DB2F8DBDB4D4B81C889F3F77A209A@namprd11.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f757bfe6-740d-4a61-58d8-08da22eba4c3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2022 16:34:30.2958
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5549.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f970324-6b2a-4ad5-5ee9-08da22ebaefd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2022 16:34:47.3596
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 63RnNJStCWfBJykr8iBUkhI1LsN6X1yAS8PUJViUwaR5iPS55AM/ezVDJkgxTwkKgvBHGNbDLLjvGSvR5ozlxw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1225
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: eOcz+L9ln+sauf5A0HzU55XAd8bzI85KWny3OBHf59vcm5KGDRMQS6gFYlh/WaT5iCNhfdMSwYDT8XLyuu63UA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3200
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only]
+Hi folks:
 
+Here is the PR of gvt-next. Thanks so much for the patience.
 
+Mostly it includes the patch bundle of GVT-g re-factor patches for adapting=
+ the GVT-g with the
+new MDEV interfaces:
 
-> -----Original Message-----
-> From: David E. Box <david.e.box@linux.intel.com>
-> Sent: Wednesday, April 20, 2022 10:56
-> To: hdegoede@redhat.com; david.e.box@linux.intel.com;
-> markgross@kernel.org; platform-driver-x86@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Subject: [PATCH 2/3] platform/x86/intel/sdsi: Poll on ready bit for write=
-s
->=20
-> Due to change in firmware flow, update mailbox writes to poll on ready bi=
-t
-> instead of run_busy bit. This change makes the polling method consistent
-> for both writes and reads, which also uses the ready bit.
+- Separating the MMIO table from GVT-g. (Zhi)
+- GVT-g re-factor. (Christoph)
+- GVT-g mdev API cleanup. (Jason)
+- GVT-g trace/makefile cleanup. (Jani)
 
-Does this need some sort of guard on the behavior based on the firmware
-version you are running on or are these all pre-production still?
+Thanks so much for making this happen.
 
->=20
-> Fixes: 2546c6000430 ("platform/x86: Add Intel Software Defined Silicon dr=
-iver")
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> ---
->  drivers/platform/x86/intel/sdsi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/platform/x86/intel/sdsi.c b/drivers/platform/x86/int=
-el/sdsi.c
-> index 11f211402479..89729fed030c 100644
-> --- a/drivers/platform/x86/intel/sdsi.c
-> +++ b/drivers/platform/x86/intel/sdsi.c
-> @@ -245,8 +245,8 @@ static int sdsi_mbox_cmd_write(struct sdsi_priv *priv=
-,
-> struct sdsi_mbox_info *in
->  		  FIELD_PREP(CTRL_PACKET_SIZE, info->size);
->  	writeq(control, priv->control_addr);
->=20
-> -	/* Poll on run_busy bit */
-> -	ret =3D readq_poll_timeout(priv->control_addr, control, !(control &
-> CTRL_RUN_BUSY),
-> +	/* Poll on ready bit */
-> +	ret =3D readq_poll_timeout(priv->control_addr, control, control &
-> CTRL_READY,
->  				 MBOX_POLLING_PERIOD_US,
-> MBOX_TIMEOUT_US);
->=20
->  	if (ret)
-> --
-> 2.25.1
+This PR has been tested as following and no problem shows up:
+
+$dim update-branches
+$dim apply-pull drm-intel-next < this_email.eml
+
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17=
+:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/intel/gvt-linux tags/gvt-next-2022-04-20-for-christoph
+
+for you to fetch changes up to ae7875879b7c838bffb42ed6db4658e5c504032e:
+
+  vfio/mdev: Remove mdev drvdata (2022-04-20 03:15:58 -0400)
+
+----------------------------------------------------------------
+gvt-next-2022-04-22-for-christoph
+
+- Separating the MMIO table from GVT-g. (Zhi)
+- GVT-g re-factor. (Christoph)
+- GVT-g mdev API cleanup. (Jason)
+- GVT-g trace/makefile cleanup. (Jani)
+
+----------------------------------------------------------------
+Christoph Hellwig (27):
+      drm/i915/gvt: remove module refcounting in intel_gvt_{,un}register_hy=
+pervisor
+      drm/i915/gvt: remove enum hypervisor_type
+      drm/i915/gvt: rename intel_vgpu_ops to intel_vgpu_mdev_ops
+      drm/i915/gvt: move the gvt code into kvmgt.ko
+      drm/i915/gvt: remove intel_gvt_ops
+      drm/i915/gvt: remove the map_gfn_to_mfn and set_trap_area ops
+      drm/i915/gvt: remove the unused from_virt_to_mfn op
+      drm/i915/gvt: merge struct kvmgt_vdev into struct intel_vgpu
+      drm/i915/gvt: merge struct kvmgt_guest_info into strut intel_vgpu
+      drm/i915/gvt: remove vgpu->handle
+      drm/i915/gvt: devirtualize ->{read,write}_gpa
+      drm/i915/gvt: devirtualize ->{get,put}_vfio_device
+      drm/i915/gvt: devirtualize ->set_edid and ->set_opregion
+      drm/i915/gvt: devirtualize ->detach_vgpu
+      drm/i915/gvt: devirtualize ->inject_msi
+      drm/i915/gvt: devirtualize ->is_valid_gfn
+      drm/i915/gvt: devirtualize ->gfn_to_mfn
+      drm/i915/gvt: devirtualize ->{enable,disable}_page_track
+      drm/i915/gvt: devirtualize ->dma_{,un}map_guest_page
+      drm/i915/gvt: devirtualize dma_pin_guest_page
+      drm/i915/gvt: remove struct intel_gvt_mpt
+      drm/i915/gvt: remove the extra vfio_device refcounting for dmabufs
+      drm/i915/gvt: streamline intel_vgpu_create
+      drm/i915/gvt: pass a struct intel_vgpu to the vfio read/write helpers
+      drm/i915/gvt: remove kvmgt_guest_{init,exit}
+      drm/i915/gvt: convert to use vfio_register_emulated_iommu_dev
+      drm/i915/gvt: merge gvt.c into kvmgvt.c
+
+Jani Nikula (2):
+      drm/i915/gvt: fix trace TRACE_INCLUDE_PATH
+      drm/i915/gvt: better align the Makefile with i915 Makefile
+
+Jason Gunthorpe (5):
+      vfio/mdev: Remove vfio_mdev.c
+      vfio/mdev: Remove mdev_parent_ops dev_attr_groups
+      vfio/mdev: Remove mdev_parent_ops
+      vfio/mdev: Use the driver core to create the 'remove' file
+      vfio/mdev: Remove mdev drvdata
+
+Zhi Wang (3):
+      i915/gvt: Separate the MMIO tracking table from GVT-g
+      i915/gvt: Save the initial HW state snapshot in i915
+      i915/gvt: Use the initial HW state snapshot saved in i915
+
+ Documentation/driver-api/vfio-mediated-device.rst |   27 +-
+ drivers/gpu/drm/i915/Kconfig                      |   36 +-
+ drivers/gpu/drm/i915/Makefile                     |    8 +-
+ drivers/gpu/drm/i915/gvt/Makefile                 |   30 +-
+ drivers/gpu/drm/i915/gvt/cfg_space.c              |   89 +-
+ drivers/gpu/drm/i915/gvt/cmd_parser.c             |    4 +-
+ drivers/gpu/drm/i915/gvt/dmabuf.c                 |   36 +-
+ drivers/gpu/drm/i915/gvt/execlist.c               |   12 +-
+ drivers/gpu/drm/i915/gvt/firmware.c               |   25 +-
+ drivers/gpu/drm/i915/gvt/gtt.c                    |   55 +-
+ drivers/gpu/drm/i915/gvt/gvt.c                    |  340 ------
+ drivers/gpu/drm/i915/gvt/gvt.h                    |  128 +-
+ drivers/gpu/drm/i915/gvt/handlers.c               | 1033 +++-------------
+ drivers/gpu/drm/i915/gvt/hypercall.h              |   82 --
+ drivers/gpu/drm/i915/gvt/interrupt.c              |   40 +-
+ drivers/gpu/drm/i915/gvt/kvmgt.c                  | 1097 +++++++++--------
+ drivers/gpu/drm/i915/gvt/mmio.c                   |    4 +-
+ drivers/gpu/drm/i915/gvt/mmio.h                   |    1 -
+ drivers/gpu/drm/i915/gvt/mpt.h                    |  400 -------
+ drivers/gpu/drm/i915/gvt/opregion.c               |  148 +--
+ drivers/gpu/drm/i915/gvt/page_track.c             |    8 +-
+ drivers/gpu/drm/i915/gvt/reg.h                    |    9 +-
+ drivers/gpu/drm/i915/gvt/scheduler.c              |   37 +-
+ drivers/gpu/drm/i915/gvt/trace.h                  |    2 +-
+ drivers/gpu/drm/i915/gvt/vgpu.c                   |   22 +-
+ drivers/gpu/drm/i915/i915_driver.c                |    7 -
+ drivers/gpu/drm/i915/i915_drv.h                   |    3 +
+ drivers/gpu/drm/i915/intel_gvt.c                  |  248 +++-
+ drivers/gpu/drm/i915/intel_gvt.h                  |   32 +-
+ drivers/gpu/drm/i915/intel_gvt_mmio_table.c       | 1292 +++++++++++++++++=
+++++
+ drivers/s390/cio/vfio_ccw_ops.c                   |    7 +-
+ drivers/s390/crypto/vfio_ap_ops.c                 |    9 +-
+ drivers/vfio/mdev/Makefile                        |    2 +-
+ drivers/vfio/mdev/mdev_core.c                     |   52 +-
+ drivers/vfio/mdev/mdev_driver.c                   |   10 -
+ drivers/vfio/mdev/mdev_private.h                  |    6 +-
+ drivers/vfio/mdev/mdev_sysfs.c                    |   37 +-
+ drivers/vfio/mdev/vfio_mdev.c                     |  152 ---
+ include/linux/mdev.h                              |   82 +-
+ samples/vfio-mdev/mbochs.c                        |    9 +-
+ samples/vfio-mdev/mdpy.c                          |    9 +-
+ samples/vfio-mdev/mtty.c                          |   39 +-
+ 42 files changed, 2531 insertions(+), 3138 deletions(-)
+ delete mode 100644 drivers/gpu/drm/i915/gvt/gvt.c
+ delete mode 100644 drivers/gpu/drm/i915/gvt/hypercall.h
+ delete mode 100644 drivers/gpu/drm/i915/gvt/mpt.h
+ create mode 100644 drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+ delete mode 100644 drivers/vfio/mdev/vfio_mdev.c

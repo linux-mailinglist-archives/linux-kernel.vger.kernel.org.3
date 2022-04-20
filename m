@@ -2,92 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405C950864F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6A150863F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377806AbiDTKvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
+        id S1377777AbiDTKtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiDTKvT (ORCPT
+        with ESMTP id S1359564AbiDTKsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:51:19 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18F318381;
-        Wed, 20 Apr 2022 03:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650451713; x=1681987713;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yiWtHyh0+dkP7vvS/980PY5qigFMLm0paOIezN2buEA=;
-  b=nydwTQ2fk6jOPIuWHNDYmBHVdpwaaq6aLWjsNMcdRraSAvufjSpRgtM+
-   dJVP13/UjdPMBKV1kgJNW9lT5KIn6c1fAb1BpTEqIIFjbA4Iz8e/DfCdo
-   7DAC1MwKkROXhB5p8GaRdhIn7H6M5Thy6R5mvex4dSB5L8Q2vGZWYm7SF
-   rg5nZpOqiX/+0VhKBZieXFdd2lepK56ALLPJ60G0LtqJBiUYjk/cEOo9H
-   3DusgwqeyjW5AhoFaFLKseK+9CumDFQNA8lhrBvJ4/t+c+fo7O14eVDNU
-   ZpQV4qHiMIYI/h17tCPqWNXfzfNdUNVT2/YHfovqlT8GFNhdQrg9y3MYM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="350446355"
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="350446355"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 03:48:33 -0700
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="593132230"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 03:48:30 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 20 Apr 2022 13:45:32 +0300
-Date:   Wed, 20 Apr 2022 13:45:32 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>
-Subject: Re: linux-next: manual merge of the kunit-next tree with the
- thunderbolt tree
-Message-ID: <Yl/kTEZxet0fLPj4@lahna>
-References: <20220420151612.117f84b9@canb.auug.org.au>
+        Wed, 20 Apr 2022 06:48:55 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E2718381
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:46:05 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id v4so1719118edl.7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:46:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5OVcjGSiJ+nlq65WcsbONfbpSCZlHZow1k2gE+HwcCo=;
+        b=pldrgPUIn2R72Z4tJz+rlp+UluL86LT0jyZUo9kf++27hTM0pzPgHXY+I0M40I9NY+
+         eXHUPwO7vQ/zVAdxzXO9RKovW5dOXy0S5vgPrJugzugD/sq0a2wj43vGseINag5cVdUp
+         buPuCcPXISqc1w3yzNrwnzmOwhtZ0oLxlWmhbyJfxD8UXXjuKPksUTMSoVw5W80s0IQg
+         bVQSOTj2RWia9S9xt0eVOxCzR9YWNhIAy7RyNMVAdlrNb1+wXoVQFsKqBO+PyXd6PNNq
+         Eyk0d+inH3oMBNt0rtRAWn9mTvYqYFsYPUvCQfVRZVk4jEt03BzBm1WDPSE9X25GU3F7
+         y5Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5OVcjGSiJ+nlq65WcsbONfbpSCZlHZow1k2gE+HwcCo=;
+        b=PMMjNFA7KfNrz86w+tV8/TaMGIhJeI2hbs/coK7z+w4VqUax7uvEXsSGqC3ZlVeFkv
+         I3K3tyo3KKGkUpBxtEl6MNih/Yjn5tqsT+qcR1yMQN0mSoBdqqHgk9Eotx14dbAtgG16
+         vp7Wc4NTg5T7vwb4cknuUKusRXwtgGLEZhRoHQjHmrF4xNc75e3Ta9OLJT5m5rbfSW9v
+         3R1RnRnI5y4/JOJVXKOi/C3yepX1xt4bqTednvqhWY9BkUPUAVsrrfJNNeHYbXX4Vxpe
+         oKLG5BLS4nhLTy8hAKvQ2nNi6QPrlAuO3RtTDLneF5Lkejhu+ylPlG9/wlYEkgBv4kn4
+         pRbg==
+X-Gm-Message-State: AOAM533Kn0FIBP0WyvJt4E1VQONhRRamjP/OpfdJGqg/IOHreEqzZtc1
+        QVeJq22jeZFi0G3tqUkQyNbTkQ==
+X-Google-Smtp-Source: ABdhPJw/4gOK7xeclDA9097uwkEU8w5LJ7LCVdGl20UroQC9SxTNcI8HyNfFl0xGksOd2Y3YCOPhbQ==
+X-Received: by 2002:aa7:d059:0:b0:41d:76b4:bcc1 with SMTP id n25-20020aa7d059000000b0041d76b4bcc1mr22299244edo.389.1650451563871;
+        Wed, 20 Apr 2022 03:46:03 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id mv12-20020a170907838c00b006e87c0247f4sm6529912ejc.186.2022.04.20.03.46.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 03:46:03 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] nfc: MAINTAINERS: add Bug entry
+Date:   Wed, 20 Apr 2022 12:46:01 +0200
+Message-Id: <20220420104601.106540-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420151612.117f84b9@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+Add a Bug section, indicating preferred mailing method for bug reports,
+to NFC Subsystem entry.
 
-On Wed, Apr 20, 2022 at 03:16:12PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the kunit-next tree got a conflict in:
-> 
->   drivers/thunderbolt/test.c
-> 
-> between commit:
-> 
->   9d2d0a5cf0ca ("thunderbolt: Use different lane for second DisplayPort tunnel")
-> 
-> from the thunderbolt tree and commit:
-> 
->   7aadf8433357 ("thunderbolt: test: use NULL macros")
-> 
-> from the kunit-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-The fixup looks good to me, thanks!
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2d746723306a..1786cbdd43a2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13842,6 +13842,7 @@ M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ L:	linux-nfc@lists.01.org (subscribers-only)
+ L:	netdev@vger.kernel.org
+ S:	Maintained
++B:	mailto:linux-nfc@lists.01.org
+ F:	Documentation/devicetree/bindings/net/nfc/
+ F:	drivers/nfc/
+ F:	include/linux/platform_data/nfcmrvl.h
+-- 
+2.32.0
+

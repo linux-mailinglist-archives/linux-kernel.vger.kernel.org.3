@@ -2,109 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0F4508D61
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB1D508D5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380623AbiDTQfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S1380618AbiDTQfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380628AbiDTQfq (ORCPT
+        with ESMTP id S1380542AbiDTQfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:35:46 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D3643EDC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:32:54 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b58ed329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58ed:329c:23ff:fea6:a903])
+        Wed, 20 Apr 2022 12:35:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3334477D;
+        Wed, 20 Apr 2022 09:32:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 631221EC0104;
-        Wed, 20 Apr 2022 18:32:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1650472367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9UyBlcyj9qmPmLqcx+Y9IVqbgazV7crvGV9M069W33g=;
-        b=kiEG+mOgRrJDs9kkDSzfs3HRsquiuc6o84iYCAbyH3h3FzrMTnqNZ0q6kk9yoTRfMqMzbK
-        07895Hkv4GbvryjlB/upmx0ALyblW2kpYs5XqVAGBic4V7EPHZTt75s6QLgHy/DDQbxxD9
-        fWf7k+nbG2V4scjKjixDxI6Kq+LQ/A8=
-Date:   Wed, 20 Apr 2022 18:32:43 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        =?utf-8?Q?J=C3=BCrgen?= Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH V5 5/7] x86/entry: Don't call error_entry() for XENPV
-Message-ID: <YmA1q3PyEEWmDtQy@zn.tnic>
-References: <20220412121541.4595-1-jiangshanlai@gmail.com>
- <20220412121541.4595-6-jiangshanlai@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C123061A15;
+        Wed, 20 Apr 2022 16:32:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D50B4C385A8;
+        Wed, 20 Apr 2022 16:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650472371;
+        bh=PKoMbzxs1jAqbWrI4BDBNRwBDYIIy5G49keGciMb3ms=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SI4kaMcEMZ6i7oO8ym6ohIaj94G8elOXuhFwyqi0csSsxFdLiSjiwHGBuSh7YWhu+
+         8IPhIJyqKqIarfF7RbfUNw3m97l93gho5VSJTTL1zP+0lEHq4s7pUz08hwl+cCHH8L
+         elHbECcZTWLjx5cDyrEYVAEu97isMbgChbKgkHJycQT+4gIs73b7fyN28oV1KZSVP5
+         priQ7R4mB36C6urAvsZL04DvLZv/AjsDC7ON6mQzoHOQm4ZaWvhd6DW1dx2sTTGFuS
+         J9x4ql0ltvdHdlV3btaNj+LxYDm8SdjC9l+hr2Mf7YlfF9Eim05FXPh95Jok2WFmCq
+         8yPkj4q4YXdVA==
+Date:   Wed, 20 Apr 2022 11:32:49 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
+        prime.zeng@huawei.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3] PCI: Make sure the bus bridge powered on when
+ scanning bus
+Message-ID: <20220420163249.GA1305194@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220412121541.4595-6-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220414123736.34150-1-yangyicong@hisilicon.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 08:15:39PM +0800, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+[+cc Rafael, linux-pm, since I'd really like his ack/review]
+
+On Thu, Apr 14, 2022 at 08:37:36PM +0800, Yicong Yang wrote:
+> When the bus bridge is runtime suspended, we'll fail to rescan
+> the devices through sysfs as we cannot access the configuration
+> space correctly when the bridge is in D3hot.
+> It can be reproduced like:
 > 
-> When in XENPV, it is already in the task stack, and it can't fault for
-> native_iret() nor native_load_gs_index() since XENPV uses its own pvops
-> for IRET and load_gs_index().  And it doesn't need to switch the CR3.
+> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
+> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
 > 
-> So there is no reason to call error_entry() in XENPV.
+> 0000:80:00.0 is root port and is runtime suspended and we cannot
+> get 0000:81:00.1 after rescan.
 > 
-> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> Make bridge powered on when scanning the child bus, by adding
+> pm_runtime_get_sync()/pm_runtime_put() in pci_scan_child_bus_extend().
+> 
+> A similar issue is met and solved by
+> d963f6512e15 ("PCI: Power on bridges before scanning new devices")
+> which rescan the devices through /sys/bus/pci/devices/0000:80:00.0/rescan.
+> The callstack is like:
+> 
+> dev_rescan_restore()
+>   pci_rescan_bus()
+>     pci_scan_bridge_extend()
+>       pci_scan_child_bus_extend() /* will wake up the bridge with this patch */
+> 
+> With this patch the issue is also resolved, so let's remove the calls of
+> pm_runtime_*() in pci_scan_bridge_extend().
+> 
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 > ---
->  arch/x86/entry/entry_64.S | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
+> Change since v2:
+> - just rebase it on v5.18-rc2
+> Link: https://lore.kernel.org/linux-pci/1601029386-4928-1-git-send-email-yangyicong@hisilicon.com/
 > 
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index 7b6a0f15bb20..3aca7815fe79 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -328,8 +328,17 @@ SYM_CODE_END(ret_from_fork)
->  	PUSH_AND_CLEAR_REGS
->  	ENCODE_FRAME_POINTER
+> Change since v1:
+> - use an intermediate variable *bridge as suggested
+> - remove the pm_runtime_*() calls in pci_scan_bridge_extend()
+> Link: https://lore.kernel.org/linux-pci/1596022223-4765-1-git-send-email-yangyicong@hisilicon.com/
+> 
+>  drivers/pci/probe.c | 21 ++++++++++++---------
+>  1 file changed, 12 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 17a969942d37..2ca6b4b708e3 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -1257,12 +1257,6 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
+>  	u8 fixed_sec, fixed_sub;
+>  	int next_busnr;
 >  
-> -	call	error_entry
-> -	movq	%rax, %rsp			/* switch to the task stack if from userspace */
+> -	/*
+> -	 * Make sure the bridge is powered on to be able to access config
+> -	 * space of devices below it.
+> -	 */
+> -	pm_runtime_get_sync(&dev->dev);
+> -
+>  	pci_read_config_dword(dev, PCI_PRIMARY_BUS, &buses);
+>  	primary = buses & 0xFF;
+>  	secondary = (buses >> 8) & 0xFF;
+> @@ -1464,8 +1458,6 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
+>  out:
+>  	pci_write_config_word(dev, PCI_BRIDGE_CONTROL, bctl);
+>  
+> -	pm_runtime_put(&dev->dev);
+> -
+>  	return max;
+>  }
+>  
+> @@ -2859,11 +2851,19 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+>  	unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
+>  	unsigned int start = bus->busn_res.start;
+>  	unsigned int devfn, fn, cmax, max = start;
+> -	struct pci_dev *dev;
+> +	struct pci_dev *dev, *bridge = bus->self;
+>  	int nr_devs;
+>  
+>  	dev_dbg(&bus->dev, "scanning bus\n");
+>  
 > +	/*
-> +	 * Call error_entry() and switch to the task stack if from userspace.
-> +	 *
-> +	 * When in XENPV, it is already in the task stack, and it can't fault
-> +	 * for native_iret() nor native_load_gs_index() since XENPV uses its
-> +	 * own pvops for IRET and load_gs_index().  And it doesn't need to
-> +	 * switch the CR3.  So it can skip invoking error_entry().
+> +	 * Make sure the bus bridge is powered on, otherwise we may not be
+> +	 * able to scan the devices as we may fail to access the configuration
+> +	 * space of subordinates.
 > +	 */
-> +	ALTERNATIVE "call error_entry; movq %rax, %rsp", \
-> +		"", X86_FEATURE_XENPV
+> +	if (bridge)
+> +		pm_runtime_get_sync(&bridge->dev);
 > +
->  	ENCODE_FRAME_POINTER
->  	UNWIND_HINT_REGS
+>  	/* Go find them, Rover! */
+>  	for (devfn = 0; devfn < 256; devfn += 8) {
+>  		nr_devs = pci_scan_slot(bus, devfn);
+> @@ -2976,6 +2976,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+>  		}
+>  	}
 >  
+> +	if (bridge)
+> +		pm_runtime_put(&bridge->dev);
+> +
+>  	/*
+>  	 * We've scanned the bus and so we know all about what's on
+>  	 * the other side of any bridges that may be on this bus plus
 > -- 
-
-This one needs Jürgen. CCed.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> 2.24.0
+> 

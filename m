@@ -2,108 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F496508665
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC622508674
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377855AbiDTKzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
+        id S1377872AbiDTK6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359695AbiDTKzM (ORCPT
+        with ESMTP id S1377857AbiDTK5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:55:12 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A01C403C6;
-        Wed, 20 Apr 2022 03:52:26 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 5BC4061CCD786;
-        Wed, 20 Apr 2022 12:52:23 +0200 (CEST)
-Message-ID: <c8f5ada2-c5cc-fe1b-bdeb-8b7d134250ee@molgen.mpg.de>
-Date:   Wed, 20 Apr 2022 12:52:23 +0200
+        Wed, 20 Apr 2022 06:57:33 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD021138
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:54:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650452087; x=1681988087;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hyqDQuSmqIjjQPXkotxKrGwioZ0GHsZ6wRaW/+HeR68=;
+  b=W7etYtnLqY8vbZ+/uQjBqCyi1v/wXIANYXAq8LWgKyknsqPZeB9Np4hf
+   QBm/Yab+ueuzYlw8CP0mJ3g/RNwdnH452Uv67rI1+VQIZj1GXpUfWpYxO
+   HAy38dEMXhjnMHCIW1b1Zb/5qoOqVTWKPnKjezzgU4n6dGHpJU72Qql7R
+   LOdR3WKRN907R3Sdgor33GLz6bP75hIw0PC1YUaVh2oP8y1hUiq/RONxG
+   W0AHfcvXy5GxcjCaj/gsiftGYFYZbz2APHV21/8B0zXqdzetf5NvsH7o3
+   aLQtVYLJTPbQxmpFKcu1mSLwsmICLfYoWQMuXeqiVx1vRLV9QCz70Ory7
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="324439207"
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="324439207"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 03:54:47 -0700
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="510505952"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 03:54:43 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 20 Apr 2022 13:52:30 +0300
+Date:   Wed, 20 Apr 2022 13:52:30 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Won Chung <wonchung@google.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] thunderbolt: Link USB4 ports to their USB Type-C
+ connectors
+Message-ID: <Yl/l7gjRXj41a93q@lahna>
+References: <20220418175932.1809770-1-wonchung@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] tpm: cr50: Add new device/vendor ID 0x504a6666
-Content-Language: en-US
-To:     "Jes B. Klinke" <jbk@chromium.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org
-References: <20220419163749.1.Ica39bd8d1494f750a70a668e5929f6e5e63241f2@changeid>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220419163749.1.Ica39bd8d1494f750a70a668e5929f6e5e63241f2@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418175932.1809770-1-wonchung@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Jes,
+Hi,
 
-
-Am 20.04.22 um 01:37 schrieb Jes B. Klinke:
-> Accept one additional numerical value of DID:VID for next generation
-> Google TPM with new firmware, to be used in future Chromebooks.
+On Mon, Apr 18, 2022 at 05:59:30PM +0000, Won Chung wrote:
+> Currently, USB port is linked to Type C connector, using the component
+> framework, if they share the same _PLD fields from ACPI table. Type C
+> port-mapper searches for devices with the same _PLD values, and
+> aggregate them as components.
 > 
-> The TPM with the new firmware has the code name TI50, and is going to
-> use the same interfaces.
+> When there is another device that share the same _PLD but does not
+> registers a component, Type C connector (component master) would never
+> be bound due to a component match entry device without a component
+> registered. There exists some cases where USB4 port also shares the same
+> _PLD with USB port and Type C connector, so we need to register a
+> component for USB4 ports too, linking USB4 port with Type C connector.
+> Otherwise, link between USB port and Type C connector would not
+> work either.
 > 
-> Signed-off-by: Jes B. Klinke <jbk@chromium.org>
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
+> Due to the nature of the component framework, all registered components
+> are shared by all component match despite the relevance. MEI subsystems
+> also use the component framework to bind to i915 driver, which try to
+> match components registered by USB ports and USB4 ports. This can be
+> problematic since MEI assumes that there is a driver bound to the
+> component device, while USB4 port does not bind to any drivers. MEI's
+> component match callback functions should handle such case to avoid NULL
+> pointer dereference when USB4 port registers a component.
 > 
->   drivers/char/tpm/tpm_tis_i2c_cr50.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
+> In summary this patch series
+> 1. Fixes MEI subsystem's component match callbacks to handle a component
+> device without any driver bound
+> 2. Registers a component for USB4 ports to link them to Type C
+> connectors, similar to USB ports.
 > 
-> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> index f6c0affbb4567..4ddb8ff3a8569 100644
-> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> @@ -31,6 +31,7 @@
->   #define TPM_CR50_TIMEOUT_SHORT_MS	2		/* Short timeout during transactions */
->   #define TPM_CR50_TIMEOUT_NOIRQ_MS	20		/* Timeout for TPM ready without IRQ */
->   #define TPM_CR50_I2C_DID_VID		0x00281ae0L	/* Device and vendor ID reg value */
-> +#define TPM_TI50_I2C_DID_VID		0x504a6666L	/* Device and vendor ID reg value */
->   #define TPM_CR50_I2C_MAX_RETRIES	3		/* Max retries due to I2C errors */
->   #define TPM_CR50_I2C_RETRY_DELAY_LO	55		/* Min usecs between retries on I2C */
->   #define TPM_CR50_I2C_RETRY_DELAY_HI	65		/* Max usecs between retries on I2C */
-> @@ -742,15 +743,15 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
->   	}
->   
->   	vendor = le32_to_cpup((__le32 *)buf);
-> -	if (vendor != TPM_CR50_I2C_DID_VID) {
-> +	if (vendor != TPM_CR50_I2C_DID_VID && vendor != TPM_TI50_I2C_DID_VID) {
->   		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
->   		tpm_cr50_release_locality(chip, true);
->   		return -ENODEV;
->   	}
->   
-> -	dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
-> +	dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
-> +		 vendor == TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
->   		 client->addr, client->irq, vendor >> 16);
-> -
+> Heikki Krogerus (1):
+>   thunderbolt: Link USB4 ports to their USB Type-C connectors
+> 
+> Won Chung (1):
+>   misc/mei: Add NULL check to component match callback functions
 
-Remove this blank line wasn’t needed, I gues.
-
->   	return tpm_chip_register(chip);
->   }
->   
-
-Thank for addressing the other comments, and congratulations on getting 
-your first commit into the Linux kernel.
-
-
-Kind regards,
-
-Paul
+The Thunderbolt patch looks good to me. Do you want me to take the both
+patches through the Thunderbolt tree or they can go separately? I need
+an ack from the mei maintainer it goes through my tree.

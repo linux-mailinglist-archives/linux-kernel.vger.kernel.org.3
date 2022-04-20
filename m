@@ -2,96 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E324A508101
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904185080F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238730AbiDTGY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 02:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
+        id S1359514AbiDTGVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 02:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbiDTGYR (ORCPT
+        with ESMTP id S1359509AbiDTGVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 02:24:17 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0DC3A197
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:21:30 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KjrBz4shRz1J9q9;
-        Wed, 20 Apr 2022 14:20:43 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+        Wed, 20 Apr 2022 02:21:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EB939694;
+        Tue, 19 Apr 2022 23:18:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1650435499; x=1681971499;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s9LPH8JBvnn8wboJ6v237vLso4yR85Mqf/BUwurYhWU=;
+  b=kSsGGCSPo7amXr01QJTjqfg5yocdbmT1ONdDzl+8g0uKyeD9+PcSgHxv
+   iB6PExhpizC8bSMbbJbXTBy85wsU9im92QF6SkelJfvvgINbXiVurFOz7
+   Le3FZQ/6+Jvzmr25LnRe51juPtY9X/X9/8VgiL/Sh8LCunl+ZeumeKJbJ
+   HrMbYYd+XjbTzxEUfanxU8dRxMoO/QQItsZoztsMWHJvziqed7n0jNuCL
+   NP5/aAs2jKSmCNvaUnw8NyUsRahKgG3XBP85Xot64XXj560kbz5OOezlQ
+   I4/RYhFKzIX9pgQ3fWSCXTdbV1RbhI4qs+BAmrCnJ4YwODi9kq9DdqarL
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,274,1643698800"; 
+   d="scan'208";a="161062216"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Apr 2022 23:18:18 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 20 Apr 2022 14:21:27 +0800
-Subject: Re: [PATCH v2] mm/swapfile: unuse_pte can map random data if swap
- read fails
-To:     Peter Xu <peterx@redhat.com>
-CC:     <akpm@linux-foundation.org>, <willy@infradead.org>,
-        <vbabka@suse.cz>, <dhowells@redhat.com>, <neilb@suse.de>,
-        <david@redhat.com>, <apopple@nvidia.com>, <surenb@google.com>,
-        <minchan@kernel.org>, <sfr@canb.auug.org.au>,
-        <rcampbell@nvidia.com>, <naoya.horiguchi@nec.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220416030549.60559-1-linmiaohe@huawei.com>
- <Yl8rZkhU/B0iE2ob@xz-m1.local>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <8e01e276-c956-2486-c55f-c689f33a9106@huawei.com>
-Date:   Wed, 20 Apr 2022 14:21:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ 15.1.2375.17; Tue, 19 Apr 2022 23:18:18 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 19 Apr 2022 23:18:18 -0700
+Date:   Wed, 20 Apr 2022 08:21:34 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] pinctrl: ocelot: add optional shared reset
+Message-ID: <20220420062134.4cyux7sz5xyyg6mr@soft-dev3-1.localhost>
+References: <20220419230324.3221779-1-michael@walle.cc>
+ <20220419230324.3221779-3-michael@walle.cc>
 MIME-Version: 1.0
-In-Reply-To: <Yl8rZkhU/B0iE2ob@xz-m1.local>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220419230324.3221779-3-michael@walle.cc>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/20 5:36, Peter Xu wrote:
-> On Sat, Apr 16, 2022 at 11:05:49AM +0800, Miaohe Lin wrote:
->> @@ -1797,6 +1797,17 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->>  		goto out;
->>  	}
->>  
->> +	if (unlikely(!PageUptodate(page))) {
->> +		pte_t pteval;
->> +
->> +		dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
->> +		pteval = swp_entry_to_pte(make_swapin_error_entry(page));
->> +		set_pte_at(vma->vm_mm, addr, pte, pteval);
->> +		swap_free(entry);
->> +		ret = 0;
->> +		goto out;
->> +	}
->> +
->>  	/* See do_swap_page() */
->>  	BUG_ON(!PageAnon(page) && PageMappedToDisk(page));
->>  	BUG_ON(PageAnon(page) && PageAnonExclusive(page));
-> 
-> Totally off-topic, but.. today when I was looking at the unuse path I just
-> found that the swp bits could have got lost for either soft-dirty and
-> uffd-wp here?  A quick patch attached.
+The 04/20/2022 01:03, Michael Walle wrote:
 
-Am I supposed to test-and-send this patch? The patch looks good to me except the
-build error pointed out by kernel test robot.
+Hi Michael,
 
 > 
-> Maybe at some point we should start to have some special helpers for
-> set_pte_at() when we're converting between present/non-present ptes, so as
-> to make sure all these will always be taken care of properly.
+> On the LAN9668 there is a shared reset line which affects GPIO, SGPIO
+> and the switch core. Add support for this shared reset line.
 
-That will be helpful. There are many places doing the similar thing.
+I have just a small comment below. Otherwise:
+Tested-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
 > 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/pinctrl/pinctrl-ocelot.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
+> index 1bdced67464b..b25eb04e4e1d 100644
+> --- a/drivers/pinctrl/pinctrl-ocelot.c
+> +++ b/drivers/pinctrl/pinctrl-ocelot.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/pinctrl/pinconf-generic.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> +#include <linux/reset.h>
+>  #include <linux/slab.h>
+> 
+>  #include "core.h"
+> @@ -1912,6 +1913,7 @@ static int ocelot_pinctrl_probe(struct platform_device *pdev)
+>  {
+>         struct device *dev = &pdev->dev;
+>         struct ocelot_pinctrl *info;
+> +       struct reset_control *reset;
+>         struct regmap *pincfg;
+>         void __iomem *base;
+>         int ret;
+> @@ -1927,6 +1929,13 @@ static int ocelot_pinctrl_probe(struct platform_device *pdev)
+> 
+>         info->desc = (struct pinctrl_desc *)device_get_match_data(dev);
+> 
+> +       reset = devm_reset_control_get_optional_shared(dev, "switch");
+> +       if (IS_ERR(reset)) {
+> +               dev_err(dev, "Failed to get reset\n");
+> +               return PTR_ERR(reset);
 
-Thanks!
+Can you use dev_err_probe here?
+
+> +       }
+> +       reset_control_reset(reset);
+> +
+>         base = devm_ioremap_resource(dev,
+>                         platform_get_resource(pdev, IORESOURCE_MEM, 0));
+>         if (IS_ERR(base))
+> --
+> 2.30.2
+> 
+
+-- 
+/Horatiu

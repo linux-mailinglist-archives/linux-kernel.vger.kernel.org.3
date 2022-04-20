@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504645089F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6155089F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350325AbiDTODH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        id S1354209AbiDTOD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 10:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358948AbiDTODF (ORCPT
+        with ESMTP id S1379276AbiDTODx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 10:03:05 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BC73ED0B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:00:19 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-e5ca5c580fso2028380fac.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:00:19 -0700 (PDT)
+        Wed, 20 Apr 2022 10:03:53 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC523A191
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:01:06 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id f22so980992qtp.13
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:01:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pRUovkRnUG5rsqiSGYYciuRz6wxFzq+vPKuuxpFfXUo=;
-        b=PQpStd3WB8blyRYPJjAKgJzVsAmx6hSfRMraO6TRBiu7Erv+6RnN4mquv4g39Mjilr
-         PXcmuTB58z2m92XVWaWKFA0Jg62cy3mCBZFf1N9coaVhubq76RO8zKSnun9haCKFvWtz
-         rjRNMTU4IaDNXm142k/1pNOZVO1tYKZA3mNaqo/RpWhiPh2OIYRLUFlUwNNe5eEp0ka4
-         zmIncZ8YOf1yOw1hRZWWDefwroJObTn3GImIz6qlyZM8gPNeHF4rzEacNWy1kuAoB/f9
-         ulb+qLAd3pOI0NuLnUKHwQ+ciRG0CRXZn278wuwBeOnchWvoh/P/4SNd4LYb0cx4HGVs
-         22CQ==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=e1Sscqvoo7rz90w552fG1qluFSOgbb1+p44eFkfXZXw=;
+        b=BkM9SmDrgxYj+HcWafYKsLOSaaQkvO8MYXKQsOg921qCb4v0nRrMUOznRS4a5VLFUx
+         BmxCxhwGnDs978fatHUFHPnnRmuVlZEG4QPYYZhOhUdxamvwrFCjwlrEjVZzHgguwQ7q
+         Is50mVeULvFhzQ6RDedeNeXWimUX2TQE6G9BXWCWhSuaU9okmm7z401UarFu3BI2MPIa
+         67HKueLQiSlF/pvRGANYugd3ckQ3FFq/8kVzXdQZMRkqsBtP8AX0yFz4QRa+bokecm7J
+         ycWK6Z8HBEH93VeWncKSsfEAJz975O1T/3Y619q5R69A0ccap8aZPTzxRaC8df8PQ5JT
+         bzHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pRUovkRnUG5rsqiSGYYciuRz6wxFzq+vPKuuxpFfXUo=;
-        b=sxdCf0ge/+9AP9YIVbT5vFdeqlor4v3qYrExWk7gye/y0Z80e0FwL3JpcdwcniHs4k
-         DEUgVGGYA3zr23m3KzgaT6P3edV+pFSE9bPJHPBQYQbql3MdZjIJp+qurX5QggW4tHjC
-         V1cO019i86o1p34eTkBCg9uyRwVnc8CC/vQe/MS97Bqrz61iq+95vF+vkmotL2CArwWX
-         ukutPSIJYkAtxGrwK4+4hAAt8z+KZYBVMPTP8Vyfu0UY+iNMcoqHPtTaZXJCr9MEkry4
-         FlkZwEj7ikMRGW7adabWG4f85+nR84bCZrlPVtrHLuuMGJIikkUmAcONgAdG2fquCf0+
-         TYWA==
-X-Gm-Message-State: AOAM531gc7/EUAqO3VWtglrqEO/1zCfpEHeKbV3VzAPRlduInSMw/53j
-        ByCI97N8+cOfZ5OwhazirPKqoE30z3yqzzspLw8lsmpeMasNng==
-X-Google-Smtp-Source: ABdhPJyH5eDMZ1icoGiWXmfcVrCjHAWGXbVirHYPtqz+ahHo7c+PHG38du6elkK9vWiAQ75WwpH8if614euWAUIKzAw=
-X-Received: by 2002:a05:6870:d254:b0:db:12b5:da3 with SMTP id
- h20-20020a056870d25400b000db12b50da3mr1624205oac.211.1650463218336; Wed, 20
- Apr 2022 07:00:18 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e1Sscqvoo7rz90w552fG1qluFSOgbb1+p44eFkfXZXw=;
+        b=yDYMUZj49Mi04JGfU+Qj7C7N8o1Qqq0MSf/4+5XLofhevo6PdE0SuOwLH0+I7NJ419
+         CTFNmnsKn83y2V8JEwldCG4JXjvySmFZPX8qnB4vJ8mM+l/qxx3aA/cpdGleJptABM0t
+         BzaMsWZdzwdYlXfgxs+47HsxGBwfXF/yAIV0118a/Uot4pzYCK0912x9kD6Oby29YKV7
+         2qynT4Ql5ZWyGIDVRJZen/c8sQMVauF9wuXraiAUY5N9IgQSX553AgbH+za4TQ7akxiH
+         xxVGREUL3Wh5dZJnqgN6xZ+OBR8xQmlnE9mjn8eUul06hOUpy+okvJIle3DfOVPczsZ5
+         wHwg==
+X-Gm-Message-State: AOAM531y2rpge7heBOFeAQxbmYI70CNf8nouYLR7Trg70q14UZUqal96
+        cPZUNtFBOu3ijQ5NFqmBn+xn7g==
+X-Google-Smtp-Source: ABdhPJwozpmC0SgweInYjDsRTNf8wKGRtqJ3jxjVI8LofpTyn+G1S8X1pHxVhVdLfumr1ntlcJDH1A==
+X-Received: by 2002:ac8:7d55:0:b0:2f3:458f:236f with SMTP id h21-20020ac87d55000000b002f3458f236fmr544454qtb.251.1650463265504;
+        Wed, 20 Apr 2022 07:01:05 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id i18-20020a05620a27d200b0069ecf023d1asm1535936qkp.129.2022.04.20.07.01.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 07:01:05 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 10:01:04 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Nico Pache <npache@redhat.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, aquini@redhat.com,
+        shakeelb@google.com, llong@redhat.com, mhocko@suse.com,
+        hakavlad@inbox.lv
+Subject: Re: [PATCH v3] vm_swappiness=0 should still try to avoid swapping
+ anon memory
+Message-ID: <YmASIHjTVndHHoL4@cmpxchg.org>
+References: <20210809223740.59009-1-npache@redhat.com>
+ <b5575449-08a2-2901-e7e1-a97150e4878c@redhat.com>
+ <Yl8Dk+a1YDwupLMv@cmpxchg.org>
+ <e495901c-f2f3-cc85-10a6-0d2944255b19@redhat.com>
 MIME-Version: 1.0
-References: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
- <20220419085607.2014-1-hdanton@sina.com> <20220419134616.GE4285@paulmck-ThinkPad-P17-Gen-1>
- <CACT4Y+Y8Az3_gi-UX-KCfQ1dxARJtL1NhB1AGLv9o_5gNtkWOg@mail.gmail.com>
- <20220419164908.GM4285@paulmck-ThinkPad-P17-Gen-1> <20220419231820.2089-1-hdanton@sina.com>
- <CACT4Y+YwP0Vvupn3QmQj9Ks4NV4hkBcc6gDQ7ro3_Dzy-benCg@mail.gmail.com> <20220420134149.GX4285@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220420134149.GX4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 20 Apr 2022 16:00:07 +0200
-Message-ID: <CACT4Y+ZNXT1HHDT3aBzMtSouTYbetHcbFz-bVscj=5sbVdsaew@mail.gmail.com>
-Subject: Re: [PATCH rcu 04/11] kernel/smp: Provide boot-time timeout for CSD
- lock diagnostics
-To:     paulmck@kernel.org
-Cc:     Hillf Danton <hdanton@sina.com>, linux-kernel@vger.kernel.org,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e495901c-f2f3-cc85-10a6-0d2944255b19@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,92 +75,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 at 15:41, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > > > > Debugging of problems involving insanely long-running SMI handlers
-> > > > > > > > proceeds better if the CSD-lock timeout can be adjusted.  This commit
-> > > > > > > > therefore provides a new smp.csd_lock_timeout kernel boot parameter
-> > > > > > > > that specifies the timeout in milliseconds.  The default remains at the
-> > > > > > > > previously hard-coded value of five seconds.
-> > > > > > > >
-> > > > > > > > Cc: Rik van Riel <riel@surriel.com>
-> > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > > > > > > Cc: Ingo Molnar <mingo@kernel.org>
-> > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > > > > > > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > > > > > > > Cc: Juergen Gross <jgross@suse.com>
-> > > > > > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > > ---
-> > > > > > > >  Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
-> > > > > > > >  kernel/smp.c                                    |  7 +++++--
-> > > > > > > >  2 files changed, 16 insertions(+), 2 deletions(-)
-> > > > > > > >
-> > > > > > > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > > > > > > index 3f1cc5e317ed..645c4c001b16 100644
-> > > > > > > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > > > > > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > > > > > > @@ -5377,6 +5377,17 @@
-> > > > > > > >     smart2=         [HW]
-> > > > > > > >                     Format: <io1>[,<io2>[,...,<io8>]]
-> > > > > > > >
-> > > > > > > > +   smp.csd_lock_timeout= [KNL]
-> > > > > > > > +                   Specify the period of time in milliseconds
-> > > > > > > > +                   that smp_call_function() and friends will wait
-> > > > > > > > +                   for a CPU to release the CSD lock.  This is
-> > > > > > > > +                   useful when diagnosing bugs involving CPUs
-> > > > > > > > +                   disabling interrupts for extended periods
-> > > > > > > > +                   of time.  Defaults to 5,000 milliseconds, and
-> > > > > > > > +                   setting a value of zero disables this feature.
-> > > > > > > > +                   This feature may be more efficiently disabled
-> > > > > > > > +                   using the csdlock_debug- kernel parameter.
-> > > > > > > > +
-> > > > > > >
-> > > > > > > Can non-responsive CSD lock detected trigger syzbot (warning) report?
-> > > > > >
-> > > > > > If they enable it by building with CONFIG_CSD_LOCK_WAIT_DEBUG=y, yes.
-> > > > >
-> > > > > +syzkaller mailing list
-> > > > >
-> > > > > Currently we don't enable CONFIG_CSD_LOCK_WAIT_DEBUG in syzbot configs.
-> > > > > Is it a generally useful debugging feature recommended to be enabled
-> > > > > in kernel testing systems?
-> > > >
-> > > > With the default value for smp.csd_lock_timeout, it detects CPUs that have
-> > > > had interrupts disabled for more than five seconds, which can be useful
-> > > > for detecting what would otherwise be silent response-time failures.
-> > >
-> > > The five seconds take precedence over the 143s in reports [1] IMO.
-> > > The shorter timeout helps select reproducers which in turn help find answer
-> > > to questions there.
-> >
-> > I've sent https://github.com/google/syzkaller/pull/3090 to enable the config.
-> > 5 seconds won't be reliable, I've set it to 100s to match CPU stall timeout.
->
-> Thank you, Dmitry!
->
-> Is there something I should be doing to enable the RCU CPU stall timeout
-> to be reduced?
+On Tue, Apr 19, 2022 at 07:54:52PM -0400, Nico Pache wrote:
+> 
+> 
+> On 4/19/22 14:46, Johannes Weiner wrote:
+> > Hi Nico,
+> > 
+> > On Tue, Apr 19, 2022 at 02:11:53PM -0400, Nico Pache wrote:
+> >> I think its is important to note the issue we are seeing has greatly improved
+> >> since the initial posting. However we have noticed that the issue is still
+> >> present (and significantly worse) when cgroupV1 is set.
+> >>
+> >> We were initially testing with CgroupV1 and later found that the issue was not
+> >> as bad in CgroupV2 (but was still an noticeable issue). This is also resulting
+> >> in the splitting of THPs in the host kernel.
+> > 
+> > When swappiness is 0, cgroup limit reclaim has a fixed SCAN_FILE
+> > branch, so it shouldn't ever look at anon. I'm assuming you're getting
+> > global reclaim mixed in. Indeed, I think we can try harder not to swap
+> > for global reclaim if the user asks for that.
+> > 
+> > Can you try the below patch?
+> Sadly this did not fix the V1 case.
+> 
+> I will have to go back through my notes and over the code again to find what
+> difference between the two may be causing this issue. Im just starting to focus
+> on this issue again so my memory needs some refreshing of where I was last at.
+> 
+> The good news is that with the current state of upstream the issue of swap
+> storms tearing down THPs seems to be minimized to sane amount with V2.
+> 
+> My swappiness=0 solution was a minimal approach to regaining the 'avoid swapping
+> ANON' behavior that was previously there, but as Shakeel pointed out, there may
+> be something larger at play.
 
-No.
-We just bumped it to a high enough value to not cause false positives.
-If it's stalled, it's stalled.
+So with my patch and swappiness=0 you get excessive swapping on v1 but
+not on v2? And the patch to avoid DEACTIVATE_ANON fixes it?
 
-
->                                                         Thanx, Paul
->
-> > > [1] https://lore.kernel.org/lkml/20220321210140.GK4285@paulmck-ThinkPad-P17-Gen-1/
-> > >
-> > > >
-> > > > > If we enabled it, we also need to figure out where it fits into the
-> > > > > timeout hierarchy and adjust smp.csd_lock_timeout:
-> > > > > https://github.com/google/syzkaller/blob/master/dashboard/config/linux/bits/x86_64.yml#L15-L40
-> > > >
-> > > > On this, I must defer to you guys.  I can say that the larger the value
-> > > > that you choose for smp.csd_lock_timeout, the nearer the beginnning of
-> > > > that group it should go, but you guys knew that already.  ;-)
-> > > >
-> > > >                                                         Thanx, Paul
-> > >
-> > > --
-> > > You received this message because you are subscribed to the Google Groups "syzkaller" group.
-> > > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller+unsubscribe@googlegroups.com.
-> > > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller/20220419231820.2089-1-hdanton%40sina.com.
+If you haven't done so, it could be useful to litter shrink_node() and
+get_scan_count() with trace_printk() to try to make sense of all the
+decisions that result in it swapping.

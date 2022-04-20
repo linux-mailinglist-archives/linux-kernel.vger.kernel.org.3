@@ -2,118 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EEAD508ACA
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA98508ABD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379698AbiDTObj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
+        id S1379594AbiDTO23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 10:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356305AbiDTObh (ORCPT
+        with ESMTP id S1351242AbiDTO21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 10:31:37 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3A44475E;
-        Wed, 20 Apr 2022 07:28:50 -0700 (PDT)
-Received: from relay2-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::222])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 1BAD5CC1CE;
-        Wed, 20 Apr 2022 14:25:03 +0000 (UTC)
-Received: from melee.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 3E61A4000C;
-        Wed, 20 Apr 2022 14:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650464699;
+        Wed, 20 Apr 2022 10:28:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4555927B06
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650464740;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/lpWbOBK6IO2z3uDyg+lEKla8M6bLRGjKIKLiN7eH2A=;
-        b=UeGls1/Nu2/pL7jtBXGf/ZoBeCVa/JvdTjAuW+gH9Ej7jbnWCWt34wJbLgkK9IWVhATAvM
-        pbXjbYpwNtP1Sa5qXZ53HPl2riukmqPZzLwtr1WFd64nHqTL2lKaeKFGp84fDyJ1uq/DQF
-        5uCyJJ9r/ha/zbKmTQX5LuLskUGTzZP780UQAqmvmtlOgZYQhsPbSt1/cgWnk3J/k3mVaJ
-        2xCQ6Yu3OnUD6BJm7FZ1ePfaNzzGR/XFXL6uyujvCQcShh6anII3lySicjPq6fOz9EP+MP
-        MXAcuwbhITaUwB6FJF5l7lVYB4DdxFpzctNL0irx/7RxGRrT2vuRIQn+EBPw3Q==
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     linux-gpio@vger.kernel.org
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] pinctrl: rockchip: sort the rk3308_mux_recalced_data entries
-Date:   Wed, 20 Apr 2022 16:24:32 +0200
-Message-Id: <20220420142432.248565-2-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220420142432.248565-1-luca.ceresoli@bootlin.com>
-References: <20220420142432.248565-1-luca.ceresoli@bootlin.com>
+        bh=8DSx54ImoIrDcTZ0ltEH183UWHNgTANiSB/5rc9D3JE=;
+        b=E3O+mx+IzmnUhzamyu1/pwbCMznXze385BFv/A5DjrQP183x7P85UomUu7NVfiEq+Z6D41
+        vIqq00k31rX0qFr/K+3psqTxDbpOcGxRxSy7DanwTvf1wQUWNhCR7jnezqpezlAIyG+yY3
+        iswvWBV2wLITzwJ0rNoVygybUiI1Klo=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-sut2He30OsSCkWS-EwLmZA-1; Wed, 20 Apr 2022 10:25:39 -0400
+X-MC-Unique: sut2He30OsSCkWS-EwLmZA-1
+Received: by mail-il1-f200.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso986372ilu.19
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:25:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8DSx54ImoIrDcTZ0ltEH183UWHNgTANiSB/5rc9D3JE=;
+        b=BtIcz07C0GE8S4FEabFripwprLNUze3YfsuX1di63f8DG7xBoSIlYcIiVxuqMmrwQZ
+         WTQbF1JKiPSSuIc8OjZxwD+LBKvGIxE9b29ZWDDpwREtpqMNUyJJhPden9yOsa9KrxPW
+         +73gULZoThLbcEtMsnQh1zvjsESl0G+FI0DE7aiYQXC66pOmAPucuFU/UDFB6oJLqGri
+         zYmAHkaAIFq2RdM8qXSYDOpaQPemMzWK522W9wBevfPROT1DvvcPgOuddLG3FjjESJzE
+         F4LNdFHoQbW7I8iqTF6qIUBdE2gP/AuCOofQ89Zv4dfD/jvW0jx0Yw/Ovhg+1G4TdACp
+         jdAg==
+X-Gm-Message-State: AOAM532qIPvkrDJ+gi+UuEFlFxPrv3D9KJp1kNL17fHr3Diz9nJy5qwk
+        0JhjX8Vzdo0pESS4tC+ZM0xwguFXE+VhrmxwMNlb0jAaCZXSnvAFFpgtLBGdYm7t53kN0YlFjbI
+        PN9PQohSWuGyapnem5KIpd7rW
+X-Received: by 2002:a05:6e02:194e:b0:2cc:4e4c:fc9a with SMTP id x14-20020a056e02194e00b002cc4e4cfc9amr3237222ilu.178.1650464738515;
+        Wed, 20 Apr 2022 07:25:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyi8FH0j2gA8lyKO+QYNzf/oX37oN05YYk2uSAyOY7pC5pV0T5sVp835XJOoARGa9P9Xd6aOQ==
+X-Received: by 2002:a05:6e02:194e:b0:2cc:4e4c:fc9a with SMTP id x14-20020a056e02194e00b002cc4e4cfc9amr3237212ilu.178.1650464738323;
+        Wed, 20 Apr 2022 07:25:38 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id r9-20020a6b6009000000b006412abddbbbsm11320909iog.24.2022.04.20.07.25.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 07:25:37 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 10:25:36 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Alistair Popple <apopple@nvidia.com>
+Subject: Re: [PATCH v8 22/23] mm: Enable PTE markers by default
+Message-ID: <YmAX4IGu128Kinte@xz-m1.local>
+References: <20220405014646.13522-1-peterx@redhat.com>
+ <20220405014929.15158-1-peterx@redhat.com>
+ <Yl7RrKV5mXtNAAzi@cmpxchg.org>
+ <Yl8UmWQodLX+JkZ7@xz-m1.local>
+ <Yl8YE+w+OWz5RNOL@cmpxchg.org>
+ <Yl8bYKOJGW2py7Q0@xz-m1.local>
+ <Yl8ojDwxsD/wqWM4@cmpxchg.org>
+ <Yl8xKh9Dc+nPr30a@xz-m1.local>
+ <YmAOn75O7zOOioXQ@cmpxchg.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YmAOn75O7zOOioXQ@cmpxchg.org>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All the entries are sorted according to num/pin except for two
-entries. Sort them too.
+On Wed, Apr 20, 2022 at 09:46:07AM -0400, Johannes Weiner wrote:
+> My point was simply that for the user it might be easiest and most
+> intuitive if userfaultfd and its related suboptions are 1) grouped
+> together and 2) in the MM submenu.
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- drivers/pinctrl/pinctrl-rockchip.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+Very reasonable request.
 
-diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
-index 65fa305b5f59..2cb79e649fcf 100644
---- a/drivers/pinctrl/pinctrl-rockchip.c
-+++ b/drivers/pinctrl/pinctrl-rockchip.c
-@@ -512,20 +512,6 @@ static struct rockchip_mux_recalced_data rk3308_mux_recalced_data[] = {
- 		.reg = 0x34,
- 		.bit = 8,
- 		.mask = 0xf
--	}, {
--		/* gpio3b4_sel */
--		.num = 3,
--		.pin = 12,
--		.reg = 0x68,
--		.bit = 8,
--		.mask = 0xf
--	}, {
--		/* gpio3b5_sel */
--		.num = 3,
--		.pin = 13,
--		.reg = 0x68,
--		.bit = 12,
--		.mask = 0xf
- 	}, {
- 		/* gpio2a2_sel */
- 		.num = 2,
-@@ -561,6 +547,20 @@ static struct rockchip_mux_recalced_data rk3308_mux_recalced_data[] = {
- 		.reg = 0x68,
- 		.bit = 6,
- 		.mask = 0x3
-+	}, {
-+		/* gpio3b4_sel */
-+		.num = 3,
-+		.pin = 12,
-+		.reg = 0x68,
-+		.bit = 8,
-+		.mask = 0xf
-+	}, {
-+		/* gpio3b5_sel */
-+		.num = 3,
-+		.pin = 13,
-+		.reg = 0x68,
-+		.bit = 12,
-+		.mask = 0xf
- 	},
- };
- 
+> Yeah it looks like there is a healthy mix ;) To add to the list:
+> 
+> - mm/Kconfig has CONFIG_SWAP for the swapon/swapoff syscalls.
+> - fs/Kconfig has CONFIG_FILE_LOCKING, which adds the flock() syscall.
+> - Interestingly, fs/Kconfig has CONFIG_MEMFD_CREATE for memfd_create()
+>   which is implemented in mm/memfd.c.
+> 
+> It seems reasonable to me to move the userfaultfd stuff to mm as well,
+> especially when it's becoming more than just a single binary question
+> on whether you want a syscall or not, and has MM-specific suboptions.
+
+Thanks for the extra information!
+
+Obviously as you said it's growing a little bit.  I'll give it a shot later
+today.
+
 -- 
-2.25.1
+Peter Xu
 

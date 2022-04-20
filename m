@@ -2,88 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6D550875B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF5250875D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378261AbiDTLxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 07:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        id S1378250AbiDTLxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 07:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378252AbiDTLxQ (ORCPT
+        with ESMTP id S234463AbiDTLxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 07:53:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F19611A1B;
-        Wed, 20 Apr 2022 04:50:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 20 Apr 2022 07:53:14 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D442511A1B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 04:50:28 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b58ed329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58ed:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49BBAB81D03;
-        Wed, 20 Apr 2022 11:50:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66082C385A0;
-        Wed, 20 Apr 2022 11:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650455428;
-        bh=wG8tmbya06CPHuXCrYxIi0BacRXo9h6kKzxQ63v1SQ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=goW7qCzb0qVQ+i8Tl9MVckC5HdTcV77J9bk4vVuQ+jn7j8V1i0usNZd1k0zAgHJ32
-         QZL12QXEGFp5yzjlMHi5wt/S7o/4aAxDXTPniexIgN+boLPFlJd/1Kt7YlR9QgoT7t
-         pMYjM5kpCPeEscMQBFVWOMLOX9S+SFUhKpfqs5NNazbOP/uhdtVLl7zcO7fj/u0drw
-         tS9fii/pMGGyPtSrdW0v6m/zkJdUGLVMCSMtHsbPBuWzrBB08Sx74uQtA2/RAJuEMt
-         llYZAYqp28vxsAZQZvqVRHuxtqa4z9QvIGZR+lX72+caha7s3vQVDQ/Jr1bsVqZ8Ti
-         ObDJSVkmEzNIA==
-Date:   Wed, 20 Apr 2022 17:20:24 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: mediatek: mtk-hsdma: use NULL instead of
- using plain integer as pointer
-Message-ID: <Yl/zgH28KL9zbcQb@matsya>
-References: <1649750340-30777-1-git-send-email-baihaowen@meizu.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 897111EC04EC;
+        Wed, 20 Apr 2022 13:50:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650455427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=QcJGoUKK849qjQfP32KT/DB395vjWIaLjTRFtrLgTuM=;
+        b=jaMNswgxDqnjPA7/EwDWeH05ltD+uM/+vnRG3VTzzayBMBM1VsdbYJUCNOkVqcZ1Fqn4Hk
+        Ymzh2wmsJTuf6VNHzuOUuMLyVbn5qvCq05aDgX61YeH965OHoNvhuVG/yh+3VPyDPDFAKm
+        eSjbZoOanroDJDmBtcOSrl61Ay7o7pg=
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] x86/tdx: Annotate a noreturn function
+Date:   Wed, 20 Apr 2022 13:50:25 +0200
+Message-Id: <20220420115025.5448-1-bp@alien8.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1649750340-30777-1-git-send-email-baihaowen@meizu.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12-04-22, 15:59, Haowen Bai wrote:
-> This fixes the following sparse warnings:
-> drivers/dma/mediatek/mtk-hsdma.c:604:26: warning: Using plain integer
-> as NULL pointer
+From: Borislav Petkov <bp@suse.de>
 
-Applied, thanks
+objdump complains:
 
-> 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  drivers/dma/mediatek/mtk-hsdma.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma/mediatek/mtk-hsdma.c b/drivers/dma/mediatek/mtk-hsdma.c
-> index 6ad8afbb95f2..358894e72fba 100644
-> --- a/drivers/dma/mediatek/mtk-hsdma.c
-> +++ b/drivers/dma/mediatek/mtk-hsdma.c
-> @@ -601,7 +601,7 @@ static void mtk_hsdma_free_rooms_in_ring(struct mtk_hsdma_device *hsdma)
->  			cb->flag = 0;
->  		}
->  
-> -		cb->vd = 0;
-> +		cb->vd = NULL;
->  
->  		/*
->  		 * Recycle the RXD with the helper WRITE_ONCE that can ensure
-> -- 
-> 2.7.4
+  vmlinux.o: warning: objtool: __tdx_hypercall()+0x74: unreachable instruction
 
+because __tdx_hypercall_failed() won't return but panic the guest.
+Annotate that that is ok and desired.
+
+Fixes: eb94f1b6a70a ("x86/tdx: Add __tdx_module_call() and __tdx_hypercall() helper functions")
+Signed-off-by: Borislav Petkov <bp@suse.de>
+---
+ arch/x86/coco/tdx/tdcall.S | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
+index 245888290bb6..eeb4511dc414 100644
+--- a/arch/x86/coco/tdx/tdcall.S
++++ b/arch/x86/coco/tdx/tdcall.S
+@@ -200,5 +200,6 @@ SYM_FUNC_START(__tdx_hypercall)
+ .Lpanic:
+ 	call __tdx_hypercall_failed
+ 	/* __tdx_hypercall_failed never returns */
++	REACHABLE
+ 	jmp .Lpanic
+ SYM_FUNC_END(__tdx_hypercall)
 -- 
-~Vinod
+2.35.1
+

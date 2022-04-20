@@ -2,107 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AB5508479
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830FE50848B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377004AbiDTJJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 05:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S1377007AbiDTJNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 05:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351352AbiDTJJ0 (ORCPT
+        with ESMTP id S1377048AbiDTJNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 05:09:26 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84C612756;
-        Wed, 20 Apr 2022 02:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650445600; x=1681981600;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uf3MUfIrMG7NSD6MLuF40FAUsLWXCYmgBZwz5nCggiw=;
-  b=HRPLN2c+ZFkwho5c3pPTyUFilYVZMWOyZksjSB+IdFiRrLariD1Q2vTu
-   2DXWpzRANm3YuoCe9iIHjojy4GqXJyA7++mDQk4vy6mLPVsNsYhJUB1ar
-   XqPZr9LxQJZ8yYEfFzIVoZ5Wagy/SqgUshXqDQEw/SO7PJ5vbu4/XlVJ1
-   YD5m3U/JZdKDwPrKNE7uAIYVjXg6rbIpc6WvqczgrZ7ZFVlO/An6P/Rq8
-   Y6ji3Ow9tETniJA6NLT1vPunht6VD230NfyOnESgnwaz0jahugq0gT6Bs
-   yi4n/xwM8F6iD3FAP7C13wsE1NeDXnG2U8opbG1tayMM1VfVKWLL1rmGH
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="326880507"
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="326880507"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 02:06:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="702568859"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 20 Apr 2022 02:06:37 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 20 Apr 2022 12:06:36 +0300
-Date:   Wed, 20 Apr 2022 12:06:36 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     gregkh@linuxfoundation.org, cy_huang@richtek.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] usb: typec: rt1719: Fix build error without
- CONFIG_POWER_SUPPLY
-Message-ID: <Yl/NHAaXFh1UzFdI@kuha.fi.intel.com>
-References: <20220418082425.41566-1-renzhijie2@huawei.com>
+        Wed, 20 Apr 2022 05:13:13 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A7D28E18;
+        Wed, 20 Apr 2022 02:10:25 -0700 (PDT)
+Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N0Fl9-1nsBMN0ERL-00xJW1; Wed, 20 Apr 2022 11:10:24 +0200
+Received: by mail-wr1-f46.google.com with SMTP id c10so1351772wrb.1;
+        Wed, 20 Apr 2022 02:10:23 -0700 (PDT)
+X-Gm-Message-State: AOAM533ri6+6sbSQsHwjA230VB/UYGyMv6gZKZgIoz6S93RTpHirDkdV
+        vMzaF/OOofaBvUrnM67Tu6p2G2MtdhjSwDKO8vE=
+X-Google-Smtp-Source: ABdhPJwtLOp969nuzl2HcHrjTrE/8+7taAszNCD7/wMyEv6mWoZB/KbZc5q+V3PBrcZaYVxcH5WclGOcWViagO5a7ww=
+X-Received: by 2002:a5d:6389:0:b0:207:a7d8:2b64 with SMTP id
+ p9-20020a5d6389000000b00207a7d82b64mr14665624wru.12.1650445823721; Wed, 20
+ Apr 2022 02:10:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418082425.41566-1-renzhijie2@huawei.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420084249.2186634-1-arnd@kernel.org>
+In-Reply-To: <20220420084249.2186634-1-arnd@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 20 Apr 2022 11:10:07 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1mBdcGxV1nP15nY7sVfjya_VEeS78M5KQHjw66Kg+=Kg@mail.gmail.com>
+Message-ID: <CAK8P3a1mBdcGxV1nP15nY7sVfjya_VEeS78M5KQHjw66Kg+=Kg@mail.gmail.com>
+Subject: Re: [PATCH] [v3] m68k: coldfire: drop ISA_DMA_API support
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:qF8uUzsZN4LBwJDSKSRH/nzVuSsVw7fvjZm56gLdoXhtyFIOiA/
+ vWqfrkUIsfiRwqfZgQVrc89fNjZdCn9Nidl3eh/Deop3xw05hp/JMIGtBHnsBmVxrwhMqVN
+ PRj+JNjY6kEEGEDk5LOw6R+4YXw9Vzn28CkjvOtBzBoJBrI5VyuUaeBifBw47kHkqo+iNfO
+ HffoTegv9OaoUKoMxlbNA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kWQqunrDJgc=:A0Ijx97e6NH2mW7PukdQrm
+ KanLPf8FjiMVs24OaVWRawRGtbfUQIMbzlX+zjfu6FZBqgE0r4yMoXf1dvD6eVIlK/0+XxtR8
+ PO4mvC5DS+/pgiz2o4gv3/uyUB/x46V0IbY2hMYHWjriwP2I3FFQ56CqOXicN8PZTf2LMRlmn
+ 2J0XbBjNuMxUz3QfRREWOxlxd/ioemkX1nx5gfCmyRDQjeNbt5kThrTcdb1/0UA939lPxFVbD
+ AyeUEmvF+QQfovy+BsgXt6FLD5CRnpwlp+aAzUD9L/owr7isyUospGX+nEuZZUykRE70CfXCA
+ DdYY5U60MH70LMOuhziLfyq3gaYKlzJkzRj7SdrvkzERzyBz+bpgpAQkx/ktyoQMkEU0XbsQi
+ uV3AyWXNFobcHiVrZPUWEwZYY6XjJR3UDQX6qaCqWhyWwyT9ZT/1KYjhnOc5BXj3IRFayHXqF
+ ZQVspluhg9Pn+Js9VB2CsYL60bKYXwvKvCJ9gM2u4HUfh5ONLAY864JxEjY7qt+AOxYAoD91D
+ fOCfJZzKuOjV7PwTQzNwls1EQ9x0RywFwTuNocS7nzxgm7DK+bmGQel26jEI9uIq7Qzm8qY9g
+ kz81wMW5B4B6ncVSLYobW3BJEzXvpaJLEaxu7s0sQdiW148CJfjWBzEsVVXYpNuvuHHexoypQ
+ XvbZGYApHJYRDjhEqha63zQzVEZMSaRvVGGdlSYuXT69DB8BDvJkAw3Ir2ZH+swoRpuo=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, Apr 18, 2022 at 04:24:25PM +0800, Ren Zhijie kirjoitti:
-> Building without CONFIG_POWER_SUPPLY will fail:
-> 
-> drivers/usb/typec/rt1719.o: In function `rt1719_psy_set_property':
-> rt1719.c:(.text+0x10a): undefined reference to `power_supply_get_drvdata'
-> drivers/usb/typec/rt1719.o: In function `rt1719_psy_get_property':
-> rt1719.c:(.text+0x2c8): undefined reference to `power_supply_get_drvdata'
-> drivers/usb/typec/rt1719.o: In function `devm_rt1719_psy_register':
-> rt1719.c:(.text+0x3e9): undefined reference to `devm_power_supply_register'
-> drivers/usb/typec/rt1719.o: In function `rt1719_irq_handler':
-> rt1719.c:(.text+0xf9f): undefined reference to `power_supply_changed'
-> drivers/usb/typec/rt1719.o: In function `rt1719_update_pwr_opmode.part.9':
-> rt1719.c:(.text+0x657): undefined reference to `power_supply_changed'
-> drivers/usb/typec/rt1719.o: In function `rt1719_attach':
-> rt1719.c:(.text+0x83e): undefined reference to `power_supply_changed'
-> 
-> Add POWER_SUPPLY dependency to Kconfig.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: 25d29b980912 ("usb: typec: rt1719: Add support for Richtek RT1719")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+On Wed, Apr 20, 2022 at 10:42 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> After a build regression report, I took a look at possible users of
+> CONFIG_ISA_DMA_API on m68k and found none, which Greg confirmed. The
+> CONFIG_GENERIC_ISA_DMA option in turn is only needed to implement
+> ISA_DMA_API, and is clearly not used on the platforms with ISA support.
+>
+> The CONFIG_ISA support for AMIGA_PCMCIA is probably also unneeded,
+> but this is less clear. Unlike other PCMCIA implementations, this one
+> does not use the drivers/pcmcia subsystem at all and just supports
+> the "apne" network driver. When it was first added, one could use
+> ISA drivers on it as well, but this probably broke at some point.
+>
+> With no reason to keep this, let's just drop the corresponding files
+> and prevent the remaining ISA drivers that use this from getting built.
+>
+> The remaining definitions in asm/dma.h are used for PCI support.
+>
+> Link: https://lore.kernel.org/lkml/9e5ee1c3-ca80-f343-a1f5-66f3dd1c0727@linux-m68k.org/
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
+> Acked-by: Greg Ungerer <gerg@linux-m68k.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Nevermind, this is the same as before, I forgot the 'git add' for the trivial
+Makefile change.
 
-> ---
->  drivers/usb/typec/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> index 8f921213b17d..ba24847fb245 100644
-> --- a/drivers/usb/typec/Kconfig
-> +++ b/drivers/usb/typec/Kconfig
-> @@ -56,6 +56,7 @@ config TYPEC_RT1719
->  	tristate "Richtek RT1719 Sink Only Type-C controller driver"
->  	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
->  	depends on I2C
-> +	depends on POWER_SUPPLY
->  	select REGMAP_I2C
->  	help
->  	  Say Y or M here if your system has Richtek RT1719 sink only
-> -- 
-> 2.17.1
-
--- 
-heikki
+       Arnd

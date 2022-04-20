@@ -2,87 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AF6509184
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEAA509192
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380876AbiDTUqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
+        id S1382187AbiDTUsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232987AbiDTUqE (ORCPT
+        with ESMTP id S1382217AbiDTUsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:46:04 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BD134B84
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sc6vMSh29FXFMOxHdh8/k5TpOxZ+/Ckh32u1TBe7ffY=; b=uVaWmWoxPOVjgn/PAs+FuiZZ3Y
-        jthciLPP8g1gBgzFSoW8ORucEXldJYp5fXeGkqj04+Cl6Y/oFsf8iXHVqK7U9zrsYOGjcpuHr/O1h
-        XhYFQ+ZphcoObyohah3E6WimoJWzuvn4H6N2Kgb6Oax331yePFQUGFGFuladE+IC6S6xdmu4NnmZO
-        Jzka/tzLRlykNOjTLc6VMY/XknG3VlVJOKQvRMSZeon6i3zEVa0IElUN5rRjCVKj17YMVm6gF9NdZ
-        gmE2wjAJQr/LIGGnJ+GwSaQfqZBfjv/dT3HyPoofpjxgLFVUquVXDH6imv3mIFiz4sjpnrf3bwot6
-        xbyNPm3A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhHAH-004R5x-Id; Wed, 20 Apr 2022 20:43:05 +0000
-Date:   Wed, 20 Apr 2022 21:43:05 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 1/6] mm/page_alloc: Add page->buddy_list and
- page->pcp_list
-Message-ID: <YmBwWa8Wbea4WhvF@casper.infradead.org>
-References: <20220420095906.27349-1-mgorman@techsingularity.net>
- <20220420095906.27349-2-mgorman@techsingularity.net>
+        Wed, 20 Apr 2022 16:48:09 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEBB1014
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650487498; x=1682023498;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GpIdCWD/WGC20h2+9do7Cd7eJNXlQ2ceElVJQSTUdBI=;
+  b=wSrvY1bYNf6GGaX5zV7wltEn0hzVACBN+/DORZ51W8K+INEHT9j8AOJC
+   MVrbL3LZ3v8Zdt5d1X8twqvSM1R/xpUZ9YHCK5Kmo+MrxwHSWzxYTQ2wG
+   N1ZXeKb26GmdbvjitaiutrmsztkiYcGV6+ckCjkQx0mIf5hdY0ix/PDA4
+   I=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Apr 2022 13:44:57 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 13:44:57 -0700
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Apr 2022 13:44:56 -0700
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC:     Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        <virtualization@lists.linux-foundation.org>, <x86@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+Subject: [PATCH] arm64: paravirt: Disable IRQs during stolen_time_cpu_down_prepare
+Date:   Wed, 20 Apr 2022 13:44:17 -0700
+Message-ID: <20220420204417.155194-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420095906.27349-2-mgorman@techsingularity.net>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:59:01AM +0100, Mel Gorman wrote:
-> The page allocator uses page->lru for storing pages on either buddy or
-> PCP lists. Create page->buddy_list and page->pcp_list as a union with
-> page->lru. This is simply to clarify what type of list a page is on
-> in the page allocator.
+From: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 
-Hi Mel,
+During hotplug, the stolen time data structure is unmapped and memset.
+There is a possibility of the timer IRQ being triggered before memset
+and stolen time is getting updated as part of this timer IRQ handler. This
+causes the below crash in timer handler -
 
-No objection to this change, and I certainly don't want to hold up
-fixing this (or any other) problem in the page allocator.  I would
-like to talk about splitting out free page management from struct page.
-Maybe you'd like to discuss that in person at LSFMM, but a quick
-sketch of a data structure might look like ...
+  [ 3457.473139][    C5] Unable to handle kernel paging request at virtual address ffffffc03df05148
+  ...
+  [ 3458.154398][    C5] Call trace:
+  [ 3458.157648][    C5]  para_steal_clock+0x30/0x50
+  [ 3458.162319][    C5]  irqtime_account_process_tick+0x30/0x194
+  [ 3458.168148][    C5]  account_process_tick+0x3c/0x280
+  [ 3458.173274][    C5]  update_process_times+0x5c/0xf4
+  [ 3458.178311][    C5]  tick_sched_timer+0x180/0x384
+  [ 3458.183164][    C5]  __run_hrtimer+0x160/0x57c
+  [ 3458.187744][    C5]  hrtimer_interrupt+0x258/0x684
+  [ 3458.192698][    C5]  arch_timer_handler_virt+0x5c/0xa0
+  [ 3458.198002][    C5]  handle_percpu_devid_irq+0xdc/0x414
+  [ 3458.203385][    C5]  handle_domain_irq+0xa8/0x168
+  [ 3458.208241][    C5]  gic_handle_irq.34493+0x54/0x244
+  [ 3458.213359][    C5]  call_on_irq_stack+0x40/0x70
+  [ 3458.218125][    C5]  do_interrupt_handler+0x60/0x9c
+  [ 3458.223156][    C5]  el1_interrupt+0x34/0x64
+  [ 3458.227560][    C5]  el1h_64_irq_handler+0x1c/0x2c
+  [ 3458.232503][    C5]  el1h_64_irq+0x7c/0x80
+  [ 3458.236736][    C5]  free_vmap_area_noflush+0x108/0x39c
+  [ 3458.242126][    C5]  remove_vm_area+0xbc/0x118
+  [ 3458.246714][    C5]  vm_remove_mappings+0x48/0x2a4
+  [ 3458.251656][    C5]  __vunmap+0x154/0x278
+  [ 3458.255796][    C5]  stolen_time_cpu_down_prepare+0xc0/0xd8
+  [ 3458.261542][    C5]  cpuhp_invoke_callback+0x248/0xc34
+  [ 3458.266842][    C5]  cpuhp_thread_fun+0x1c4/0x248
+  [ 3458.271696][    C5]  smpboot_thread_fn+0x1b0/0x400
+  [ 3458.276638][    C5]  kthread+0x17c/0x1e0
+  [ 3458.280691][    C5]  ret_from_fork+0x10/0x20
 
-struct free_mem {
-	unsigned long __page_flags;
-	union {
-		struct list_head buddy_list;
-		struct list_head pcp_list;
-	};
-	unsigned long __rsvd4;
-	unsigned long pcp_migratetype_and_order;
-	unsigned long buddy_order;
-	unsigned int __page_type;
-	atomic_t _refcount;
-};
+As a fix, disable the IRQs during hotplug until we unmap and memset the
+stolen time structure.
 
-Am I missing anything there?
+Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+---
+ arch/arm64/kernel/paravirt.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-(Would you like to use separate types for pcp and buddy?  That might be
-overkill, or it might help keep the different stages of "free" memory
-separate from each other)
+diff --git a/arch/arm64/kernel/paravirt.c b/arch/arm64/kernel/paravirt.c
+index 75fed4460407..fc05a08557e0 100644
+--- a/arch/arm64/kernel/paravirt.c
++++ b/arch/arm64/kernel/paravirt.c
+@@ -70,13 +70,16 @@ static u64 para_steal_clock(int cpu)
+ static int stolen_time_cpu_down_prepare(unsigned int cpu)
+ {
+ 	struct pv_time_stolen_time_region *reg;
++	unsigned long flags;
+ 
+ 	reg = this_cpu_ptr(&stolen_time_region);
+ 	if (!reg->kaddr)
+ 		return 0;
+ 
++	local_irq_save(flags);
+ 	memunmap(reg->kaddr);
+ 	memset(reg, 0, sizeof(*reg));
++	local_irq_restore(flags);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
+

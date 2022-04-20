@@ -2,166 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BA250809B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 07:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88EAE508099
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 07:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359410AbiDTFeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 01:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        id S1359395AbiDTFdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 01:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbiDTFeL (ORCPT
+        with ESMTP id S231815AbiDTFdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 01:34:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3005736B6A;
-        Tue, 19 Apr 2022 22:31:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 651ABB81D04;
-        Wed, 20 Apr 2022 05:31:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2778C385A0;
-        Wed, 20 Apr 2022 05:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650432683;
-        bh=0tICag3wjBLWnC1CErQHOddo7JavOzZDqZo5vBzXRBk=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=LmJJaYzWw54mjurtZaBe3quCZMs1vYxJT0gXxwltWSk70Opmas18De47WEYSGr6MP
-         ii2iXsg2MqMG8K7r42pPtA7w+4nKYhaTdOyLDpY8gjXqQgZMe+xNY+NuTnF5ZiFAmL
-         VNRY7cbOz6PN52SHnTC7s5HCTS/cB++rxoTJ6qpX3cFHR9zyAYUqCrTaYgZnidlIU7
-         HPSb7vVA4hkFJN65/Lyjc7Ka40LFyj3aDD/oU07GMvd4dTzhZvGbr//DjqzEgXieyC
-         t4UsxI7/nd+gf8dBWi9/4Pd9EYzVTiP7JNMLR7pZnmsVsKzj4wxKkXYd1RBDtWXN8K
-         5rkuOmHoxzTqA==
-Message-ID: <c8c0c5fb614d8b2de2a5faee2ef5ff3214281064.camel@kernel.org>
-Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
-        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        twawrzynczak@chromium.org
-Date:   Wed, 20 Apr 2022 08:30:09 +0300
-In-Reply-To: <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
-References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
-         <20210501135727.17747-3-LinoSanfilippo@gmx.de>
-         <YJAby8mmiJ74qWAh@kernel.org> <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
-         <YJNKs8bUMGOzFre+@kernel.org>
-         <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
-         <Yj0lhqTP1RoedxSc@iki.fi>
-         <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
-         <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 
+        Wed, 20 Apr 2022 01:33:46 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFF611C02;
+        Tue, 19 Apr 2022 22:31:01 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id e1so339542ile.2;
+        Tue, 19 Apr 2022 22:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nuxxapEs+M5yK26jsf4JOVoP3RaTp9CaYMXH3Qi7BnM=;
+        b=m6n3UDbwyYseWE0m3xwpSMxKMAQg7O+DYd9PY3jsVi5Vt8MdUMbWJ5BbMgjz0BLkQ1
+         6Osczxl3Rx/2WnIhaqf6d9NB5vc/zN8cbIgGWqTn3AEhUMtf7gayYr6k7Kz1HHAu+IDx
+         RryeOpN5H73JSax+jCknmY3/7vRPK+Dz/WFiARIiO5lNp9WGmRga4xIyGu5FbV0AYlrs
+         y+184FwL3curFzsFKWcKpxIWZG91jaRxAIL4HoWCbe0taLf3STJYeregu81oeOsa53GW
+         8YNXEdmBN9ENyp48LIRZ430fKDfP1u20700D9cvnx2hUbmxqf/2yb0g31yHtrM4o5TDI
+         QZBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nuxxapEs+M5yK26jsf4JOVoP3RaTp9CaYMXH3Qi7BnM=;
+        b=qP4w+zmwBtAzbpSnIjH8ahh3WsQRqj1vGEFjTYzff7TYEH6jeKXq7YKtXfhF7IrWmm
+         7SEESOPw90/MsHsPML0CgXuY+VeoCDHUE7CZNEg2ZjtPYljc9+GZ1AGmjtR4TYCzT0US
+         ZLenKkFvbtztsuOBopiRqEWX6h67IIFOWXsDpZXIChMtS2lK+ieFB9uRTsQmwEDn2xMW
+         2z6BUGHxZsgNlYm44CVHPwjta2GkmrWuSxpnPG623Jb2kwzp2JD1GHTSW0rI+yviq8Yl
+         fhjbbFRKXhDFWhwnnH+tgYxTBGvnU8DYh7pLI2G97ilzdSDM5coLeQ/lK0vzSi4KDekR
+         BDkA==
+X-Gm-Message-State: AOAM53106cEJs8qoVPhRDn2hmGr1skCd1yAGt5x4tjEryj4QhLyg5lVg
+        OmYdp98ZCQPczRmL10/Z8/yydvovYa1x5a9lX0k=
+X-Google-Smtp-Source: ABdhPJzzqRVICUIJZyiBou/6sakX22tJlgAFvBTlOQOgOFFGsk6sXr6KK0CLtFM+CVx9UoVb7o+5cVtuaFR3tpGT4Mg=
+X-Received: by 2002:a92:6406:0:b0:2bb:f1de:e13e with SMTP id
+ y6-20020a926406000000b002bbf1dee13emr8064445ilb.305.1650432661257; Tue, 19
+ Apr 2022 22:31:01 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-2-alobakin@pm.me>
+ <20220419090355.GP2731@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220419090355.GP2731@worktop.programming.kicks-ass.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 19 Apr 2022 22:30:50 -0700
+Message-ID: <CAEf4Bza=Ver5J-PYCceEohjgLSFVTCoYKXUEnc=uNkUC3rrZ5Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 01/11] bpf, perf: fix bpftool compilation with !CONFIG_PERF_EVENTS
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Chenbo Feng <fengc@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Daniel Wagner <daniel.wagner@bmw-carit.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-n Sat, 2022-03-26 at 04:24 +0100, Lino Sanfilippo wrote:
->=20
-> Hi Michael,
->=20
-> On 25.03.22 at 13:32, Michael Niew=C3=B6hner wrote:
-> > > >=20
-> > > > Lino, I'd be happy to test the patches, when you have time and inte=
-rest to
-> > > > work
-> > > > on this again!
-> > > >=20
-> > > > Thanks, Michael
-> > >=20
-> > > It's quite easy to test them out. Both fixes are in the mainline GIT =
-tree.
-> > > E.g. give a shot rc1, and please report if any issues persists to:
-> > >=20
-> > > =C2=A0 linux-integrity@vger.kernel.org=C2=A0
-> > >=20
-> > > BR, Jarkko
-> >=20
-> > I don't see Linos patches on mainline. Also, the series included four p=
-atches:
-> > [PATCH v3 0/4] Fixes for TPM interrupt handling
-> > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
-> > [PATCH v3 2/4] tpm: Simplify locality handling
-> > [PATCH v3 3/4] tpm: Fix test for interrupts
-> > [PATCH v3 4/4] tpm: Only enable supported irqs
-> >=20
-> > Three of them are relevant for the interrupt problem, which is still pr=
-esent in
-> > mainline, as these patches were refused:
-> > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
-> > [PATCH v3 2/4] tpm: Simplify locality handling
-> > [PATCH v3 3/4] tpm: Fix test for interrupts
-> >=20
-> > Michael
-> >=20
->=20
-> You are right, the interrupts are still not working in the mainline kerne=
-l.
-> I would gladly make another attempt to fix this but rather step by step
-> than in a series that tries to fix (different) things at once.
->=20
-> A first step could be to have a sleepable context for the interrupt handl=
-ing,
-> since in case of SPI the accesses to the irq status register may sleep.
->=20
-> I sent a patch for this purpose once, but it seems to have gone lost:
->=20
-> https://lore.kernel.org/all/20210620023444.14684-1-LinoSanfilippo@gmx.de/
->=20
->=20
-> Best regards,
-> Lino
+On Tue, Apr 19, 2022 at 2:04 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Apr 14, 2022 at 10:44:48PM +0000, Alexander Lobakin wrote:
+> > When CONFIG_PERF_EVENTS is not set, struct perf_event remains empty.
+> > However, the structure is being used by bpftool indirectly via BTF.
+> > This leads to:
+> >
+> > skeleton/pid_iter.bpf.c:49:30: error: no member named 'bpf_cookie' in 'struct perf_event'
+> >         return BPF_CORE_READ(event, bpf_cookie);
+> >                ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+> >
+> > ...
+> >
+> > skeleton/pid_iter.bpf.c:49:9: error: returning 'void' from a function with incompatible result type '__u64' (aka 'unsigned long long')
+> >         return BPF_CORE_READ(event, bpf_cookie);
+> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > Tools and samples can't use any CONFIG_ definitions, so the fields
+> > used there should always be present.
+> > Move CONFIG_BPF_SYSCALL block out of the CONFIG_PERF_EVENTS block
+> > to make it available unconditionally.
+>
+> Urgh, this is nasty.. did you verify nothing relies on that structure
+> actually being empty?
+>
+> Also, why are we changing kernel headers to fix some daft userspace
+> issue?
+>
 
-I went these through one by one.
+I agree, this is quite ugly. And I think it's not necessary at all.
 
-# Above linked patch=20
+BPF CO-RE, which bpftool relies on here, allows to have bpftool's own
+minimal definition of struct perf_event with bpf_cookie field and not
+rely on UAPI headers having full definition. Something like this:
 
-Boolean parameters are considered bad. I.e. use named flags
-instead. This is for above linked patch.
+struct perf_event___local {
+    u64 bpf_cookie;
+} __attribute__((preserve_access_index));
 
-# [PATCH v3 3/4] tpm: Fix test for interrupts
+Then use `struct perf_event___local` (note the three underscores, they
+are important) instead of struct perf_event in BPF code.
 
-1. Please remove "unnecessarily complicated" sentence because
-   it cannot be evaluated. It's your opinion, which might perhaps
-   be correct, but it is irrelevant for any possible patch
-   description.
-2. There's no such thing as "fix by re-implementation". Please
-   explain instead code change is relevant for the bug fix.
-3. If set_bit() et al necessarily to fix a possible race condition
-   you need to have a separate patch for that.
+And we'll have to do the same for struct bpf_perf_link, I presume?
 
-To move forward, start with a better summary such as
-
-"tpm: move interrupt test to tpm_tis_probe_irq_single()"
-
-I'd also either revert the change for flags, or alternatively
-move it to separate patch explaining race condition. Otherwise,
-there's no argument of saying that using set_bit() is more=20
-proper. This will make the change more localized.
-
-
-# [PATCH v3 2/4] tpm: Simplify locality handling
-
-"As a side-effect these modifications fix a bug which results in the
-following warning when using TPM 2:"
-
-Generally speaking, the simplifications should be done on top of code
-that does not have known bugs, even if the simplification renders out
-the bug. This is because then we have code that have potentially unknown
-unknown bugs.
-
-I hope you see my point. The problem with these patches were then
-and is still that they intermix bug fixes and other modifications and
-thus cannot be taken in.
-
-BR, Jarkko
+> > Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
+> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> > ---
+> >  include/linux/perf_event.h | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> > index af97dd427501..b1d5715b8b34 100644
+> > --- a/include/linux/perf_event.h
+> > +++ b/include/linux/perf_event.h
+> > @@ -762,12 +762,14 @@ struct perf_event {
+> >       u64                             (*clock)(void);
+> >       perf_overflow_handler_t         overflow_handler;
+> >       void                            *overflow_handler_context;
+> > +#endif /* CONFIG_PERF_EVENTS */
+> >  #ifdef CONFIG_BPF_SYSCALL
+> >       perf_overflow_handler_t         orig_overflow_handler;
+> >       struct bpf_prog                 *prog;
+> >       u64                             bpf_cookie;
+> >  #endif
+> >
+> > +#ifdef CONFIG_PERF_EVENTS
+> >  #ifdef CONFIG_EVENT_TRACING
+> >       struct trace_event_call         *tp_event;
+> >       struct event_filter             *filter;
+> > --
+> > 2.35.2
+> >
+> >

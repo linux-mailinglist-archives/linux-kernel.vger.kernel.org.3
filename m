@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF3B507EB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDC1507EBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358877AbiDTCSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 22:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
+        id S1358899AbiDTCTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 22:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiDTCSw (ORCPT
+        with ESMTP id S229791AbiDTCTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 22:18:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0852215A39
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:16:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650420966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WeWR3XuRtCV+SmnQ0j5vbT57cYudBfkDBtTnd1vmbQ0=;
-        b=By0DsteslAX5pRCtsXKGXe3MCKCkREFGmrtC+XpjGXqvqiWyq7naWGEFrqX8mC8vf+eajs
-        4UAcywxAAGH5FQeLKC8v+xCobvC7nbtf9PWgPF3Aybn9kvRryW1F78KWJ5hQ6HZsC7IHo3
-        7zdNbPp1RkhbOMDGEGRPb5cmMY2iCRo=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-624-fzWxGiDyPpuPiePQR4bpKQ-1; Tue, 19 Apr 2022 22:16:05 -0400
-X-MC-Unique: fzWxGiDyPpuPiePQR4bpKQ-1
-Received: by mail-qk1-f199.google.com with SMTP id ay14-20020a05620a178e00b0069a9c319c64so291253qkb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:16:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WeWR3XuRtCV+SmnQ0j5vbT57cYudBfkDBtTnd1vmbQ0=;
-        b=4o+Va66PpiCU0euXqs+l1eXfATknv0M8vEimcRkKMldVzthO3PkE2UfwOeb0khoRgr
-         0OrpP2X9B27MCUGazaGwR83mssYYTbKhVx+d+gc0EIki9piLEhk+Ra880B2cg9p2/F3n
-         N0GBWO5YjXzLTcLP7CLXGlJ/VDw9Trpz07HipPvhAyW9B/hkxFO+PSdBE5z59NjTpGG0
-         Sx85lP5lGrmy0KAZlda+aGeUbhPsduIJwZTcsBNbizLFf/4lVOhP6FerKpAEP16RIlat
-         8jDZMRrAV4c7ftWoE/qCUPnuRVNmChdqKQ3Vz042dwTJUqrxXZx9T9U/Jj9brigGDiba
-         bbHw==
-X-Gm-Message-State: AOAM530B8oFIINgOcCjj0nXgXXl9a6QSEiSupRBdl3xyDpE50Z/WRiXf
-        dOvEejainu5y/2Tfpfs7VLJ5WTkPGyxX+cC1HoFJ4k7CdnICrV2vp3wUUvnRvJnJcchWesoVBHM
-        LY890q4AYy5fpHbSWK0hNTRTM
-X-Received: by 2002:a05:622a:610a:b0:2f1:d998:319b with SMTP id hg10-20020a05622a610a00b002f1d998319bmr12355278qtb.478.1650420965154;
-        Tue, 19 Apr 2022 19:16:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxNF08kJey/nZHLAoEzUc1glCXv/MzFYlP6AafwehMWYz8RHKIFqAFVUkulmOySqWD67hcEhA==
-X-Received: by 2002:a05:622a:610a:b0:2f1:d998:319b with SMTP id hg10-20020a05622a610a00b002f1d998319bmr12355265qtb.478.1650420964845;
-        Tue, 19 Apr 2022 19:16:04 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id p5-20020ae9f305000000b0069e6dcc4188sm871227qkg.57.2022.04.19.19.16.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 19:16:04 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 19:16:01 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, mbenes@suse.cz
-Subject: Re: [PATCH 2/2] objtool: Fix code relocs vs weak symbols
-Message-ID: <20220420021601.kiughdji3avh2uua@treble>
-References: <20220419203254.034493341@infradead.org>
- <20220419203807.655552918@infradead.org>
+        Tue, 19 Apr 2022 22:19:46 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EE815A39;
+        Tue, 19 Apr 2022 19:16:57 -0700 (PDT)
+X-UUID: 8409fd70d4b3458cb584da2a769e1a0c-20220420
+X-UUID: 8409fd70d4b3458cb584da2a769e1a0c-20220420
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 870627283; Wed, 20 Apr 2022 10:16:51 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 20 Apr 2022 10:16:50 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 20 Apr 2022 10:16:50 +0800
+Message-ID: <dd069ad818e13ab30847d5da93ca4a9ef7c13bf9.camel@mediatek.com>
+Subject: Re: [PATCH 4/7] clk: mediatek: reset: Add reset.h
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>
+CC:     <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>,
+        <chun-jie.chen@mediatek.com>, <wenst@chromium.org>,
+        <yong.liang@mediatek.com>, <runyang.chen@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <allen-kh.cheng@mediatek.com>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 20 Apr 2022 10:16:50 +0800
+In-Reply-To: <20eaaba7-19cb-8f1d-ecf4-bfac14d50f67@collabora.com>
+References: <20220418132154.7401-1-rex-bc.chen@mediatek.com>
+         <20220418132154.7401-5-rex-bc.chen@mediatek.com>
+         <20eaaba7-19cb-8f1d-ecf4-bfac14d50f67@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220419203807.655552918@infradead.org>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 10:32:56PM +0200, Peter Zijlstra wrote:
-> +	/* XXX create ? */
-> +	if (symtab_shndx) {
+On Tue, 2022-04-19 at 12:46 +0200, AngeloGioacchino Del Regno wrote:
+> Il 18/04/22 15:21, Rex-BC Chen ha scritto:
+> > Add a new file "reset.h" to place some definitions for clock reset.
+> > 
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   drivers/clk/mediatek/clk-mtk.h | 10 +---------
+> >   drivers/clk/mediatek/reset.h   | 20 ++++++++++++++++++++
+> >   2 files changed, 21 insertions(+), 9 deletions(-)
+> >   create mode 100644 drivers/clk/mediatek/reset.h
+> > 
+> > diff --git a/drivers/clk/mediatek/clk-mtk.h
+> > b/drivers/clk/mediatek/clk-mtk.h
+> > index dafdf30fe94e..dfb0549ceb6c 100644
+> > --- a/drivers/clk/mediatek/clk-mtk.h
+> > +++ b/drivers/clk/mediatek/clk-mtk.h
+> > @@ -12,6 +12,7 @@
+> >   #include <linux/kernel.h>
+> >   #include <linux/spinlock.h>
+> >   #include <linux/types.h>
+> > +#include <reset.h>
+> 
+> This should be
+> 
+> #include "reset.h"
+> 
+> ...since the header is in the same directory.
+> 
+> 
+Hello Angelo,
 
-Not sure what this comment means?
+I will fix this in next version.
+Thanks!
 
-Otherwise both patches look good to me.  Let me run it through some
-tests.
-
--- 
-Josh
+BRs,
+Rex
 

@@ -2,131 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900F6509074
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F361850907D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349218AbiDTT3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 15:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S1354000AbiDTTdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 15:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232645AbiDTT3b (ORCPT
+        with ESMTP id S1349446AbiDTTdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 15:29:31 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7C9E029;
-        Wed, 20 Apr 2022 12:26:44 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id p3so1538665pfw.0;
-        Wed, 20 Apr 2022 12:26:44 -0700 (PDT)
+        Wed, 20 Apr 2022 15:33:46 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95AF3BBF9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:30:57 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e2442907a1so3049830fac.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:30:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IgqiBza+UCNF6Lg1MV20zNXZ6HKe5iB4r9YwaejwpyQ=;
-        b=BKtnxZ8Q0H2mTQqEzdTvOtyalh4S0jtW3BHsw1A/6klutBp/9wMza50tDNE/vZvGOD
-         RgQRyvoFz7W0Ly+gfGDAWt0FkHNFh0stcrRZ/S2332DH2R+5HfB7ClKiQf1fE2PS1mqh
-         zIiKjNtT//z2xO/0AttEndZtCi3PX4ul50Yzel84Pw2j5CBP4TdyIcc1sYIjFXaZ+C4H
-         9CtReabuexjlVgvmqrBk+5Fy35kNbmjjQSX/LntkwydIah8rffoDKOs1b+zMtbRQfcYB
-         rNCYT+xiCr6/vO7WITkkkGKuKoQ82w7GunY7lSWRpA6xZ5FGA75/mHm81rWSa0Y7z+X/
-         grbA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xIiCDpfY7BZIAGghFoSj6HCmwvDL6jlr0Z/Ms0MR3R0=;
+        b=MzcWDOfLJXWY1gU7R6uLN9tTgWJgCIPTmOVBFgypmQomMAdfqWQrQ+tCAazxJ7/ZQH
+         alBWfDT4XTNGp7PZEVQFDX3JmtVRlFCJkGk1mKRBmyj1miJRPaU6qlBq0L9Su1X0oMUw
+         0SlnxE7v9xuiYt8MHPByf/Xo+21xDn+XMABhQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IgqiBza+UCNF6Lg1MV20zNXZ6HKe5iB4r9YwaejwpyQ=;
-        b=Fh0Dk6/PIODIEWpymbHrs8YjxbnjgLc/hK1fV7R+LblkLjjbPXmb7CGkH+z1o/2E2B
-         ULiVso8llpy6t47ur4XJv5H7rtvaCtTYiq21V9OAoWHttT45rZKP7y3/evwhryOWNVJW
-         LxIM8cVHIOuha1z+pDO9fRbbEq6/16cprAFr2JiR6FOTq/coG+OmPfJH8dL16VQuKhSX
-         TJTIgPpk0G2Jq6PxF8nOKHlzNMTb2WPGIqeKnSjCoM+lJChwTU+bK0xhxBnmq9dl6VTn
-         G6tRmcFnPTEKiQ05zHu3LQI9cxKgRDy4RP0PCHx0DeuB217N/rv051aL3N+2ymFIm9MM
-         dpVw==
-X-Gm-Message-State: AOAM533Zw9TXqlL7KNpEOmOT6fVCA6h3h+QFvjYTiuTCKJQUKLmrUcsK
-        5bl6NRZIG/R0cSkDSvu7Z/xGLx32p2Q=
-X-Google-Smtp-Source: ABdhPJyMpVZrz1ziI/qVGYw9vbpQp0nB/0zfLVsugmuDs4vuS6Adw4DlfreSic2erfGh6+wzvD3CuQ==
-X-Received: by 2002:a05:6a00:15d4:b0:50a:665f:5072 with SMTP id o20-20020a056a0015d400b0050a665f5072mr20485784pfu.6.1650482804325;
-        Wed, 20 Apr 2022 12:26:44 -0700 (PDT)
-Received: from localhost.localdomain (bb42-60-144-185.singnet.com.sg. [42.60.144.185])
-        by smtp.gmail.com with ESMTPSA id k4-20020a17090a3e8400b001cd37f6c0b7sm151460pjc.46.2022.04.20.12.26.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 12:26:43 -0700 (PDT)
-From:   Nguyen Dinh Phi <phind.uet@gmail.com>
-To:     "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Cc:     Nguyen Dinh Phi <phind.uet@gmail.com>,
-        syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ext4: Fix block validation on non-journal fs in __ext4_iget()
-Date:   Thu, 21 Apr 2022 03:23:12 +0800
-Message-Id: <20220420192312.1655305-1-phind.uet@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xIiCDpfY7BZIAGghFoSj6HCmwvDL6jlr0Z/Ms0MR3R0=;
+        b=t7evhazWC5KSBK1QiwT4zhUe2E919x/aTMG4tMpgKNVfszW/6rXMoBMpL+Y9+ueyLy
+         W2cZg5WCKwPvz4UEWmMz75HHsHnvCYc1jIYtwXIp73Qy+aTqI6OlHajBmaZrIDhDYmbH
+         qNcfbJWKiaercNi/7dnfWzrRaCkN2x6muXt0kEPK7+x3/dU3p22Q9y2ColDRTH74pxrZ
+         ChYRmhuffZwyI8X1PiyZmS3J3f2X6UcwRl8PMva+t+scaXfzgJPkQY3rM6Fwpm0vBOSl
+         fFt8LGHZ4fFahC078uEtx/94Zp3X3OscmYTK6VzfsjDjdgI93GuX4H12NywncmjJc33A
+         dlIw==
+X-Gm-Message-State: AOAM533LrzCM59ALOhGz5/8gYL/JNh27UZwfx9mU8+6tIwqDa9tIavBw
+        gXTNIANZ6tluIrg7CAIIynWDH1dMdmV8kA==
+X-Google-Smtp-Source: ABdhPJyTo46Lew1+Dd9OUfkZpureNg6lx4OD5cjGx50MbZxDjd6ZtLOMRaPLh56ACzHtO4Q4ycLc/Q==
+X-Received: by 2002:a05:6870:e754:b0:e6:706f:8323 with SMTP id t20-20020a056870e75400b000e6706f8323mr74344oak.293.1650483056665;
+        Wed, 20 Apr 2022 12:30:56 -0700 (PDT)
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com. [209.85.167.182])
+        by smtp.gmail.com with ESMTPSA id c8-20020a4ad788000000b0031ce69b1640sm6991209oou.10.2022.04.20.12.30.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 12:30:54 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id e4so3224229oif.2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:30:53 -0700 (PDT)
+X-Received: by 2002:a54:4197:0:b0:322:c080:4d4c with SMTP id
+ 23-20020a544197000000b00322c0804d4cmr2492033oiy.241.1650483052521; Wed, 20
+ Apr 2022 12:30:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220418210046.2060937-1-evgreen@chromium.org>
+ <20220418135819.v2.1.I2c636c4decc358f5e6c27b810748904cc69beada@changeid> <Yl7KEX++hJac8T6I@rowland.harvard.edu>
+In-Reply-To: <Yl7KEX++hJac8T6I@rowland.harvard.edu>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Wed, 20 Apr 2022 12:30:16 -0700
+X-Gmail-Original-Message-ID: <CAE=gft7DAXo628WjdmMkogVM5th4FSaG44poZhyyG=45sCMxfA@mail.gmail.com>
+Message-ID: <CAE=gft7DAXo628WjdmMkogVM5th4FSaG44poZhyyG=45sCMxfA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] USB: core: Disable remote wakeup for freeze/quiesce
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Razvan Heghedus <heghedus.razvan@gmail.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot report following KERNEL BUG:
-	kernel BUG at fs/ext4/extents_status.c:899!
-	....
-	Call Trace:
-	 <TASK>
-	 ext4_cache_extents+0x13e/0x2d0 fs/ext4/extents.c:518
-	 ext4_find_extent+0x8f6/0xd10 fs/ext4/extents.c:916
-	 ext4_ext_map_blocks+0x1e2/0x5f30 fs/ext4/extents.c:4098
-	 ext4_map_blocks+0x9ca/0x18a0 fs/ext4/inode.c:563
-	 ext4_getblk+0x553/0x6b0 fs/ext4/inode.c:849
-	 ext4_bread_batch+0x7c/0x550 fs/ext4/inode.c:923
-	 __ext4_find_entry+0x482/0x1050 fs/ext4/namei.c:1600
-	 ext4_lookup_entry fs/ext4/namei.c:1701 [inline]
-	 ext4_lookup fs/ext4/namei.c:1769 [inline]
-	 ext4_lookup+0x4fc/0x730 fs/ext4/namei.c:1760
-	 __lookup_slow+0x24c/0x480 fs/namei.c:1707
-	 lookup_slow fs/namei.c:1724 [inline]
-	 walk_component+0x40f/0x6a0 fs/namei.c:2020
-	 link_path_walk.part.0+0x7ef/0xf70 fs/namei.c:2347
-	 link_path_walk fs/namei.c:2272 [inline]
-	 path_openat+0x266/0x2940 fs/namei.c:3605
-	 do_filp_open+0x1aa/0x400 fs/namei.c:3636
-	 do_sys_openat2+0x16d/0x4d0 fs/open.c:1214
-	 do_sys_open fs/open.c:1230 [inline]
-	 __do_sys_openat fs/open.c:1246 [inline]
-	 __se_sys_openat fs/open.c:1241 [inline]
-	 __x64_sys_openat+0x13f/0x1f0 fs/open.c:1241
-	 do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-	 do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-	 entry_SYSCALL_64_after_hwframe+0x44/0xae
-	 </TASK>
+On Tue, Apr 19, 2022 at 7:41 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Mon, Apr 18, 2022 at 02:00:45PM -0700, Evan Green wrote:
+> > The PM_EVENT_FREEZE and PM_EVENT_QUIESCE messages should cause the
+> > device to stop generating interrupts. USB core was previously allowing
+> > devices that were already runtime suspended to keep remote wakeup
+> > enabled if they had gone down that way. This violates the contract with
+> > pm, and can potentially cause MSI interrupts to be lost.
+> >
+> > Change that so that if a device is runtime suspended with remote wakeups
+> > enabled, it will be resumed to ensure remote wakeup is always disabled
+> > across a freeze.
+> >
+> > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > ---
+> >
+> > (no changes since v1)
+> >
+> >  drivers/usb/core/driver.c | 20 +++++++++-----------
+> >  1 file changed, 9 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> > index 355ed33a21792b..93c8cf66adccec 100644
+> > --- a/drivers/usb/core/driver.c
+> > +++ b/drivers/usb/core/driver.c
+> > @@ -1533,20 +1533,18 @@ static void choose_wakeup(struct usb_device *udev, pm_message_t msg)
+> >  {
+> >       int     w;
+> >
+> > -     /* Remote wakeup is needed only when we actually go to sleep.
+> > -      * For things like FREEZE and QUIESCE, if the device is already
+> > -      * autosuspended then its current wakeup setting is okay.
+> > +     /* For FREEZE/QUIESCE, disable remote wakeups so no interrupts get generated
+> > +      * by the device.
+>
+> You mean "by the host controller".  USB devices don't generate
+> interrupts; they generate wakeup requests (which can cause a host
+> controller to generate an interrupt).
 
-The reason is fast commit recovery path will skip block validation in
-__ext4_iget(), it allows syzbot be able to mount a corrupted non-journal
-filesystem and cause kernel BUG when accessing it.
+Right, I guess I mean "at the behest of the device". I could probably
+just delete "by the device", since the goal of the comment is simply
+to highlight that we're trying to kill interrupts, and describing
+their provenance isn't as relevant.
 
-Fix it by adding a condition checking.
+>
+> >        */
+> >       if (msg.event == PM_EVENT_FREEZE || msg.event == PM_EVENT_QUIESCE) {
+> > -             if (udev->state != USB_STATE_SUSPENDED)
+> > -                     udev->do_remote_wakeup = 0;
+> > -             return;
+> > -     }
+> > +             w = 0;
+> >
+> > -     /* Enable remote wakeup if it is allowed, even if no interface drivers
+> > -      * actually want it.
+> > -      */
+> > -     w = device_may_wakeup(&udev->dev);
+> > +     } else {
+> > +             /* Enable remote wakeup if it is allowed, even if no interface drivers
+> > +              * actually want it.
+> > +              */
+> > +             w = device_may_wakeup(&udev->dev);
+> > +     }
+> >
+> >       /* If the device is autosuspended with the wrong wakeup setting,
+> >        * autoresume now so the setting can be changed.
+> > --
+>
+> I would prefer it if you reformatted the comments to agree with the
+> current style:
+>
+>         /*
+>          * Blah blah blah
+>          */
+>
+> and to avoid line wrap beyond 80 columns.  Apart from that:
 
-Signed-off-by: Nguyen Dinh Phi <phind.uet@gmail.com>
-Reported-by: syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com
----
- fs/ext4/inode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sure, I can fix these up, add your tags, and repost.
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 560e56b42829..66c86d85081e 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -4951,7 +4951,7 @@ struct inode *__ext4_iget(struct super_block *sb, unsigned long ino,
- 		goto bad_inode;
- 	} else if (!ext4_has_inline_data(inode)) {
- 		/* validate the block references in the inode */
--		if (!(EXT4_SB(sb)->s_mount_state & EXT4_FC_REPLAY) &&
-+		if (!(journal && EXT4_SB(sb)->s_mount_state & EXT4_FC_REPLAY) &&
- 			(S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode) ||
- 			(S_ISLNK(inode->i_mode) &&
- 			!ext4_inode_is_fast_symlink(inode)))) {
--- 
-2.25.1
+>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
+Thanks!
+
+>
+> Alan Stern

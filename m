@@ -2,86 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CA2508573
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8CB508578
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351514AbiDTKHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S1377483AbiDTKJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347063AbiDTKHJ (ORCPT
+        with ESMTP id S1347063AbiDTKJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:07:09 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB4F3EAAD
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:04:23 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z99so1596410ede.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=O/+Bq4GD0i1aeDJZB6KF270FrYsDWC9ZLK3WKl7pvtw=;
-        b=iQg0xYNVkHIZo0BFivFUh7zcofwerY9qIBuS1eg1pq1Wa+PK0moNksnXr2ibxPi8Nt
-         U4lJJn9AKf4k/TObba/Cc6oO4TsZpgIvDsGSOI4d+MrBlA6kaCK7lviv+aa2F++37KgR
-         N/r+QzoV+OnRGchrRwCncCZWkuUNshBr9/El/cp2eZVL39X0sLxwhSLBbrR2SosL706Q
-         QGwTbqgSZE0x2tcPBwFlyXbQQGpGtE5ZbEhr9iglUhXQg2XhGbPhvxh1iQ7sSxD8Ekyp
-         pSwmybpiz//I9XHylVbYKw8D03YZv3IELSfETGs8FfNIZ0DB7WpSpuQJKb7nPEVuVJ9w
-         vvUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=O/+Bq4GD0i1aeDJZB6KF270FrYsDWC9ZLK3WKl7pvtw=;
-        b=qm0eVXCxB0rCiRtHXxjwOuPoCMN7cGU+UZ8yIVeRLhTo8hH4MlgRTxvxKNNHBhYVYO
-         hzvElje1rRMmdXBOCSCCyeiqQqmeGFAOkvA7CNCcf/OT9Ru59FSvXqZu8Z8jLsVn80ra
-         b4QaLc06uGX2GBmh0H8bpqmDIMHPTaatiWDNhJm4RGVvRlcJ9E81em0ZHHfdrdUsNzZv
-         ZOZ5QjLKzWc+nb4DrKYobXW22hlswXnmgu6RwxNRAI3c2tFp4LQUm0OrfZYiU2I1DL88
-         kAyf94akXirIBhFt7/S/MWPilJc9PC0RIdpny26O9+0lpMJ+19ZL7nFxIK8JHsJqqa5a
-         T5rw==
-X-Gm-Message-State: AOAM530iXFwDRtbarLveKoNVsWAUKQHdIHAcWTFLKv3aDqo6ivNlj/+B
-        dW9bC03rdtMLRt02CFfyXJ/hlA==
-X-Google-Smtp-Source: ABdhPJzL1lJX7sEUE2x5amjeU9v9hVjpMQnJ3qC7rbHT6pjZahpCdoZq2EmtCY7VhfWQbkBr/EYySQ==
-X-Received: by 2002:a05:6402:31ee:b0:41d:7038:c04a with SMTP id dy14-20020a05640231ee00b0041d7038c04amr22411161edb.142.1650449061949;
-        Wed, 20 Apr 2022 03:04:21 -0700 (PDT)
-Received: from [192.168.0.224] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id kw5-20020a170907770500b006db075e5358sm6599740ejc.66.2022.04.20.03.04.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 03:04:21 -0700 (PDT)
-Message-ID: <6dc5e28b-e84d-95c3-3967-476b2126314e@linaro.org>
-Date:   Wed, 20 Apr 2022 12:04:20 +0200
+        Wed, 20 Apr 2022 06:09:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591D918B32;
+        Wed, 20 Apr 2022 03:06:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6C24B81E61;
+        Wed, 20 Apr 2022 10:06:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93993C385A1;
+        Wed, 20 Apr 2022 10:06:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650449211;
+        bh=TkzaIXVfmy/5OEl78ORgSpwgfioQr5mxDuXVgiEkTDg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HKl8FAkCXv6aTwWXIuGURVGJg2g7lNcLWuxBXb9ke5XDyru1he5+zJi0bs+PfbTEY
+         E+Tn7JK9xydyiNgTLnlqNP5yBlQVTL1xpDkorka6QINWM0OcmBBbtOshNhwW2UrgIf
+         YnwOj5X1jWdCZni/4Fv+8CL4FqJzZixpnYxrccjB+Q5JLL4NQ+kwmw7Qew6hQFaojG
+         vCBswZnSYh+xbwWyUU5vUClqWgAGLGrQnWQIC2ukIOgdIz3bHJGJH1g6boUiXaEqXw
+         t0rnY0QvKNhhZegP4jDaa0SZbwhMkV46U1k2UHYPpDNhyFRqz99NxxOatUnSUexRbQ
+         RG51Zx2mrYuJQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nh7ER-0007Xi-N9; Wed, 20 Apr 2022 12:06:43 +0200
+Date:   Wed, 20 Apr 2022 12:06:43 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Oliver Neukum <oliver@neukum.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com,
+        USB <linux-usb@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] driver: usb: nullify dangling pointer in cdc_ncm_free
+Message-ID: <Yl/bMxXKeNdLI87G@hovoldconsulting.com>
+References: <20220409120901.267526-1-dzm91@hust.edu.cn>
+ <YlQbqnYP/jcYinvz@hovoldconsulting.com>
+ <CAHp75VeTqmdLhavZ+VbBYSFMDHr0FG4iKFGdbzE-wo5MCNikAA@mail.gmail.com>
+ <d851497f-7960-b606-2f87-eb9bff89c8ac@suse.com>
+ <Yl+utFmKEgILDFr5@hovoldconsulting.com>
+ <aef0c568-e088-b897-f8ec-f22cfef124f6@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v2 5/6] ufs: use PM OPP when scaling gears
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-6-krzysztof.kozlowski@linaro.org>
- <20220419170149.GB8699@thinkpad>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220419170149.GB8699@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aef0c568-e088-b897-f8ec-f22cfef124f6@suse.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,111 +70,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2022 19:01, Manivannan Sadhasivam wrote:
-> On Mon, Apr 11, 2022 at 05:43:46PM +0200, Krzysztof Kozlowski wrote:
->> Scaling gears requires not only scaling clocks, but also voltage levels,
->> e.g. via performance states.
->>
->> Use the provided OPP table, to set proper OPP frequency which through
->> required-opps will trigger performance state change.  This deprecates
->> the old freq-table-hz Devicetree property and old clock scaling method
->> in favor of PM core code.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  drivers/scsi/ufs/ufshcd-pltfrm.c |  69 +++++++++++++++++++
->>  drivers/scsi/ufs/ufshcd.c        | 115 +++++++++++++++++++++++--------
->>  drivers/scsi/ufs/ufshcd.h        |   4 ++
->>  3 files changed, 158 insertions(+), 30 deletions(-)
->>
->> diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
->> index c1d8b6f46868..edba585db0c1 100644
->> --- a/drivers/scsi/ufs/ufshcd-pltfrm.c
->> +++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
->> @@ -107,6 +107,69 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
->>  	return ret;
->>  }
->>  
->> +static int ufshcd_parse_operating_points(struct ufs_hba *hba)
->> +{
->> +	struct device *dev = hba->dev;
->> +	struct device_node *np = dev->of_node;
->> +	struct ufs_clk_info *clki;
->> +	const char *names[16];
->> +	bool clocks_done;
-> 
-> Maybe freq_table?
+On Wed, Apr 20, 2022 at 11:45:49AM +0200, Oliver Neukum wrote:
 
-ok
+> >> -	if (dev->driver_info->unbind)
+> >> -		dev->driver_info->unbind(dev, intf);
+> >> +	if (dev->driver_info->disable)
+> >> +		dev->driver_info->disable(dev, intf);
+> >>  
+> >>  	net = dev->net;
+> >>  	unregister_netdev (net);
+> >> @@ -1651,6 +1651,9 @@ void usbnet_disconnect (struct usb_interface *intf)
+> >>  
+> >>  	usb_scuttle_anchored_urbs(&dev->deferred);
+> >>  
+> >> +	if (dev->driver_info->unbind)
+> >> +		dev->driver_info->unbind (dev, intf);
+> >> +
+> >>  	usb_kill_urb(dev->interrupt);
 
-> 
->> +	int cnt, i, ret;
->> +
->> +	if (!of_find_property(dev->of_node, "operating-points-v2", NULL))
->> +		return 0;
->> +
->> +	cnt = of_property_count_strings(np, "clock-names");
->> +	if (cnt <= 0) {
->> +		dev_warn(dev, "%s: Missing clock-names\n",
->> +			 __func__);
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (cnt > ARRAY_SIZE(names)) {
->> +		dev_info(dev, "%s: Too many clock-names\n",  __func__);
->> +		return -EINVAL;
->> +	}
-> 
-> How did you come up with 16 as the max clock count? Is this check necessary?
+> > Don't you need to quiesce all I/O, including stopping the interrupt URB,
+> > before unbind?
 
-16 was an arbitrary choice, also mentioned in the bindings:
-https://lore.kernel.org/all/20220411154347.491396-3-krzysztof.kozlowski@linaro.org/
+> If I do that, how do I prevent people from relaunching the URB between
+> kill and unbind? Do I need to poison it?
 
-The check is necessary from current code point of view - array is
-locally allocated with fixed size. Since bindings do not allow more than
-16, I am not sure if there is a point to make the code flexible now...
-but if this is something you wish, I can change.
+You could, but it would seem you have bigger problems if something can
+submit the URB after having deregistered the netdev.
 
-> 
->> +
->> +	/* clocks parsed by ufshcd_parse_clock_info() */
->> +	clocks_done = !!of_find_property(np, "freq-table-hz", NULL);
-> 
-> freq-table-hz and opp-table are mutually exclusive, isn't it?
+Looks like the URB should already have been stopped by
+usbnet_status_stop() so that the usb_kill_urb() above is (or should be)
+a noop.
 
-You're right, this should be an exit.
-
-(...)
-
->>  	ufshcd_init_lanes_per_dir(hba);
->>  
->>  	err = ufshcd_init(hba, mmio_base, irq);
->> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
->> index 5bfa62fa288a..aec7da18a550 100644
->> --- a/drivers/scsi/ufs/ufshcd.c
->> +++ b/drivers/scsi/ufs/ufshcd.c
->> @@ -1022,6 +1022,9 @@ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
->>  	int ret = 0;
->>  	ktime_t start = ktime_get();
->>  
->> +	if (hba->use_pm_opp)
->> +		return 0;
->> +
-> 
-> So you don't need pre and post clock changes below?
-
-That's tricky. The UFS HCD core does not need it, but of course the
-question is about the drivers actually using ufshcd_vops_clk_scale_notify().
-
-Only QCOM UFS driver implements it and actually we might need it. Qcom
-driver changes DME_VS_CORE_CLK_CTRL, so maybe this should be done here
-as well. I don't know yet how to incorporate it into PM-opp framework,
-because now changing frequencies and voltage is atomic from the UFS
-driver perspective. Before it was not - for example first clock (with
-these pre/post changes) and then voltage.
-
-I will need to solve it somehow...
-
-
-Best regards,
-Krzysztof
+Johan

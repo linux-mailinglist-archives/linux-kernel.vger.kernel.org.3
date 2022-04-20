@@ -2,199 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE0450836A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC81050836D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376740AbiDTIcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S1376767AbiDTIcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356317AbiDTIcC (ORCPT
+        with ESMTP id S1376756AbiDTIcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:32:02 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475F035A8A;
-        Wed, 20 Apr 2022 01:29:15 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso1340979pjj.3;
-        Wed, 20 Apr 2022 01:29:15 -0700 (PDT)
+        Wed, 20 Apr 2022 04:32:25 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CE63C4B5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:29:34 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id r10so1266581pfh.13
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:29:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uAM52mYRx4qBEh42tbPo6qRRezPozANpFEE+yUsZh1M=;
-        b=PLBx8sIfEo7u7z0vDmz374mj6swYn89R0DC396DQ1IrKdi6dtsykJG7OpVWO6BprE3
-         d+osOcXdTb2UWBy19hUay57jdOueZzEG2i/wbIF9VUUwiphodqy7XCKe4PnFa8b64LWM
-         YohwU+lps6GObSG34fz53DOoDTK1WyeSGCcRyYuuhBeBCWnWvrz2i7G+maIP+Ku9cI/2
-         WnYGlAOo3Vpc7eBBeQQzyyjZT9/BfAom/1v/06uA1MdZD25YZ7ejcrtY5rpDjjsFgj55
-         YzZmPXImfDL62N2cI9Oo+h2s3nUZRULbGdcEIU4o418DJaYfvRorkrRIbIgecpjTODkV
-         b2Zw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=/gMOazwPGCF48oWaubXLl3yTaXSa/SV3Ov0ADwQj0+8=;
+        b=N8qFmaJY0yTBSP9E9uWoP8EeQtlj5QzMInXmJ42TLPnNdIksY8FqLABOFhXJmXO2vp
+         Zhv1rOfVCCnZfxtQ8AaDRol1ULKbF2Ts2UfcZmhul56+ePeCtqxaUueBpib8pZP7Q3Xo
+         9et1cB6XH1QrYa5lMqTR9yeSMHXYotvpAQ3iR+SpSnouKwTzGAOAvUxM/QWtdTHKBK85
+         Pkqs0iuHVVubbPAbKJGo1yZTmPu7F8Utej+dnO1zcmuuxSHi0OhlEDhGyAfvKGVtvXBj
+         G+0z6vCPwxu1ecS4sUjP3657N+G0WGDtOT1UCHR9/oZ2KLHn0K5A1eEsH2xtVvGUhIeG
+         HjgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uAM52mYRx4qBEh42tbPo6qRRezPozANpFEE+yUsZh1M=;
-        b=DC1c7+rV/ZgOCtsknDtFx+PFUkPdrSlsjk/nK76n8fTKFJiAIKlIdsOx4DPKBq1Pf7
-         RlaU0OcHJtVlfGupSFEv70gekzdCidmxa7Xf9DAeFt2ESSht05hVl/yqp/hHk54tbenK
-         tNkdCSiVaf/rSl4QK7A1F4TAO1ztT9DLmRIOz5dmxzAYbAoRwQoBD9vKIqO0hYXgGYSR
-         +qhyDcBAf3aH3Bn6DY5TElaDlKUeRXTJMIblXlZ7q+3DorAi4Dxs24ajyK7OvCuqqX4A
-         mgjeenP2NER3rPAtS3KFB2idNLzdGEdFX09iRfr5/aREb//lhTiSpN2gH5KXXDC4/9nc
-         S63Q==
-X-Gm-Message-State: AOAM530BtyIxHTq03bbm2VIfvP59JIwSpxasaCnsYYYtNYAD8B+yhrHK
-        Zj12hSOpoi8c4qGc6CNid/MnWeBduOXbwe0hPtPhWCTwR90=
-X-Google-Smtp-Source: ABdhPJztltEmK8pxuKsgH84cz3z1ArsVEVvKIsVhy7FM2nE1eHHgpkkAhkBr7DgY8ILW7tHZ5UN3S2yGbMwtFd2Q0HU=
-X-Received: by 2002:a17:903:18f:b0:15a:d3e:1e47 with SMTP id
- z15-20020a170903018f00b0015a0d3e1e47mr7424334plg.54.1650443354615; Wed, 20
- Apr 2022 01:29:14 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/gMOazwPGCF48oWaubXLl3yTaXSa/SV3Ov0ADwQj0+8=;
+        b=14HIfoIFvjT69e2uXIerXxMZN2rr1/yIAZKE5Up9Ow6/PPd2D4g8uGg5UXHaTrR+ra
+         bMYlY+WK7wcTUSH3WvmZxpnvuaXv7kzpdhVfC9vUm7lsxWAWdXEijoVjDfcRaO0OltEY
+         POuZmqrKV4TzylkQuTbffqkkzEd+TyYImF+KOZUDcGNOsK/OOC5m2kYkha8/91I8UzCA
+         XhS2lNX6p/8It2OyCyF83o8Ykb+lES7yFDC49CxtFYN0nQFXQE20Mi32qdqXtblu+PCI
+         Xu296DsFiSXNiqkr7O4h5mNXW76tvjrBq5lx4o5PIvFaoWwfbX7/2MZ61ETohuVNFNmg
+         odCw==
+X-Gm-Message-State: AOAM530uTlELR+nAUmJJXsXk3msThA7VTkpEb/2Qvad/h5vB06VmHWau
+        Y3mkAhIel53LGDq5auvATF1nZA==
+X-Google-Smtp-Source: ABdhPJy4XY5JdZmVFLkzaVYPIXFZ3tYJdbBKU3WLHTWgVidSJ0yvJsxUsESBVp5bI8QE5p/QOAXOxg==
+X-Received: by 2002:a05:6a00:8c8:b0:4fe:ecb:9b8f with SMTP id s8-20020a056a0008c800b004fe0ecb9b8fmr21869634pfu.55.1650443374135;
+        Wed, 20 Apr 2022 01:29:34 -0700 (PDT)
+Received: from [10.85.115.102] ([139.177.225.244])
+        by smtp.gmail.com with ESMTPSA id h7-20020aa786c7000000b00505bf336385sm18547212pfo.124.2022.04.20.01.29.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 01:29:33 -0700 (PDT)
+Message-ID: <c1e7fc17-b091-1da1-7fa8-0490cc7f7e4b@bytedance.com>
+Date:   Wed, 20 Apr 2022 16:29:24 +0800
 MIME-Version: 1.0
-References: <20220420175500.240e4eb3@canb.auug.org.au>
-In-Reply-To: <20220420175500.240e4eb3@canb.auug.org.au>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Wed, 20 Apr 2022 01:29:03 -0700
-Message-ID: <CAAH8bW9gb+OKcTHUFDE9V38F=yniXZyxauBmbapre3ymBc9Zwg@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the bitmap tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [External] Re: [PATCH] sched/core: Avoid obvious double
+ update_rq_clock warning
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org
+References: <20220418090929.54005-1-jiahao.os@bytedance.com>
+ <20220419104828.GQ2731@worktop.programming.kicks-ass.net>
+From:   Hao Jia <jiahao.os@bytedance.com>
+In-Reply-To: <20220419104828.GQ2731@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
 
-(Adding Maxim Kuvyrkov from linaro/TCWG as he might be interested in
-arm part of this.
 
-On Wed, Apr 20, 2022 at 12:55 AM Stephen Rothwell <sfr@canb.auug.org.au> wr=
-ote:
->
-> Hi all,
->
-> After merging the bitmap tree, today's linux-next build (htmldocs)
-> produced this warning:
->
-> Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/b=
-itmap.h:425: WARNING: Unexpected indentation.
-> Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/b=
-itmap.h:426: WARNING: Block quote ends without a blank line; unexpected uni=
-ndent.
-> Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/b=
-itmap.h:431: WARNING: Unexpected indentation.
->
-> Introduced by commit
->
->   6f46c24da767 ("bitmap: add bitmap_weight_{cmp, eq, gt, ge, lt, le} func=
-tions")
+On 4/19/22 6:48 PM, Peter Zijlstra wrote:
+> On Mon, Apr 18, 2022 at 05:09:29PM +0800, Hao Jia wrote:
+>> When we use raw_spin_rq_lock to acquire the rq lock and have to
+>> update the rq clock while holding the lock, the kernel may issue
+>> a WARN_DOUBLE_CLOCK warning.
+>>
+>> Since we directly use raw_spin_rq_lock to acquire rq lock instead of
+>> rq_lock, there is no corresponding change to rq->clock_update_flags.
+>> In particular, we have obtained the rq lock of other cores,
+>> the core rq->clock_update_flags may be RQCF_UPDATED at this time, and
+>> then calling update_rq_clock will trigger the WARN_DOUBLE_CLOCK warning.
+> 
+>> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+>> ---
+>>   kernel/sched/deadline.c | 18 +++++++++++-------
+>>   kernel/sched/rt.c       | 20 ++++++++++++++++++--
+> 
+> Very good for keeping them in sync.
+> 
+>>   2 files changed, 29 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+>> index fb4255ae0b2c..9207b978cc43 100644
+>> --- a/kernel/sched/deadline.c
+>> +++ b/kernel/sched/deadline.c
+> 
+>> @@ -2317,16 +2318,14 @@ static int push_dl_task(struct rq *rq)
+>>   		goto retry;
+>>   	}
+>>   
+>> +	rq_pin_lock(rq, &srf);
+>> +	rq_pin_lock(later_rq, &drf);
+>>   	deactivate_task(rq, next_task, 0);
+>>   	set_task_cpu(next_task, later_rq->cpu);
+>> -
+>> -	/*
+>> -	 * Update the later_rq clock here, because the clock is used
+>> -	 * by the cpufreq_update_util() inside __add_running_bw().
+>> -	 */
+>> -	update_rq_clock(later_rq);
+>> -	activate_task(later_rq, next_task, ENQUEUE_NOCLOCK);
+>> +	activate_task(later_rq, next_task, 0);
+>>   	ret = 1;
+>> +	rq_unpin_lock(rq, &srf);
+>> +	rq_unpin_lock(later_rq, &drf);
+>>   
+>>   	resched_curr(later_rq);
+>>   
+> 
+>> @@ -2413,11 +2413,15 @@ static void pull_dl_task(struct rq *this_rq)
+>>   			if (is_migration_disabled(p)) {
+>>   				push_task = get_push_task(src_rq);
+>>   			} else {
+>> +				rq_pin_lock(this_rq, &this_rf);
+>> +				rq_pin_lock(src_rq, &src_rf);
+>>   				deactivate_task(src_rq, p, 0);
+>>   				set_task_cpu(p, this_cpu);
+>>   				activate_task(this_rq, p, 0);
+>>   				dmin = p->dl.deadline;
+>>   				resched = true;
+>> +				rq_unpin_lock(this_rq, &this_rf);
+>> +				rq_unpin_lock(src_rq, &src_rf);
+>>   			}
+>>   
+>>   			/* Is there any other task even earlier? */
+> 
+> I'm really not sure about this part though. This is a bit of a mess. The
+> balancer doesn't really need the pinning stuff. I realize you did that
+> because we got the clock annotation mixed up with that, but urgh.
+> 
+> Basically we want double_rq_lock() / double_lock_balance() to clear
+> RQCF_UPDATED, right? Perhaps do that directly?
+> 
+> (maybe with an inline helper and a wee comment?)
+> 
+> The only immediate problem with this would appear to be that
+> _double_rq_lock() behaves differently when it returns 0. Not sure that
+> matters.
+> 
+> Hmm?
 
-I'll build docs and fix those warnings. Thanks for pointing this out.
+Thanks for your review comments.
+As you have prompted, the WARN_DOUBLE_CLOCK warning is still triggered 
+when _double_rq_lock() returns 0.
+Please review the solution below, and based on your review, I will 
+submit the v2 patch as soon as possible.
+Thanks.
 
-From previous linux-next build message:
 
-> ../lib/bitmap.c:21:5: error: conflicting types for '__bitmap_weight_cmp';=
- have 'int(const long unsigned int *, unsigned int,  int)'
->    21 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
- bits, int num)
->       |     ^~~~~~~~~~~~~~~~~~~
-> In file included from ../lib/bitmap.c:6:
-> tools/include/linux/bitmap.h:15:5: note: previous declaration of '__bitma=
-p_weight_cmp' with type 'int(const long unsigned int *, unsigned int,  unsi=
-gned int)'
->    15 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
- bits,
->       |     ^~~~~~~~~~~~~~~~~~~
-> ../lib/bitmap.c: In function '__bitmap_weight_cmp':
-> ../lib/bitmap.c:26:50: error: comparison of integer expressions of differ=
-ent signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
->    26 |                 if (w + bits - k * BITS_PER_LONG < num)
->       |                                                  ^
-> ../lib/bitmap.c:31:23: error: comparison of integer expressions of differ=
-ent signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
->    31 |                 if (w > num)
->       |                       ^
-> cc1: all warnings being treated as errors
-> tools/perf/../lib/bitmap.c:21:5: error: conflicting types for '__bitmap_w=
-eight_cmp'; have 'int(const long unsigned int *, unsigned int,  int)'
->    21 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
- bits, int num)
->       |     ^~~~~~~~~~~~~~~~~~~
-> In file included from tools/perf/../lib/bitmap.c:6:
-> tools/include/linux/bitmap.h:15:5: note: previous declaration of '__bitma=
-p_weight_cmp' with type 'int(const long unsigned int *, unsigned int,  unsi=
-gned int)'
->    15 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
- bits,
->       |     ^~~~~~~~~~~~~~~~~~~
-> tools/perf/../lib/bitmap.c: In function '__bitmap_weight_cmp':
-> tools/perf/../lib/bitmap.c:26:50: error: comparison of integer expression=
-s of different signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare=
-]
->    26 |                 if (w + bits - k * BITS_PER_LONG < num)
->       |                                                  ^
-> tools/perf/../lib/bitmap.c:31:23: error: comparison of integer expression=
-s of different signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare=
-]
->    31 |                 if (w > num)
->       |                       ^
-> cc1: all warnings being treated as errors
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 51efaabac3e4..b73fe46cd6c7 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -610,10 +610,13 @@ void double_rq_lock(struct rq *rq1, struct rq *rq2)
+         swap(rq1, rq2);
 
-I fixed tools build error and updated the bitmap-for-next branch. The
-problem is that tools/perf
-enables -Werror=3Dsign-compare, and main kernel not. So direct copying
-of functions from kernel
-to tools doesn't work. This might be an issue by itself because I
-think it would be better to keep
-kernel and tools code consistent whenever possible.
+     raw_spin_rq_lock(rq1);
+-   if (__rq_lockp(rq1) == __rq_lockp(rq2))
+-       return;
++   if (__rq_lockp(rq1) != __rq_lockp(rq2))
++       raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
 
-Another problem is that the tools lacks testing from (obviously) me,
-0-day and TCWG. I added
-tools/perf to my testing build suite, and found that the build fails
-for arm and s390 on v5.18-rc2.
-See tools/perf build log attached.
+-   raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
++#ifdef CONFIG_SCHED_DEBUG
++   rq1->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
++   rq2->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
++#endif
+  }
+  #endif
 
-Thanks,
-Yury
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 8dccb34eb190..9fe506a6b7b4 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2544,20 +2544,25 @@ static inline int _double_lock_balance(struct rq 
+*this_rq, struct rq *busiest)
+     __acquires(this_rq->lock)
+  {
+     if (__rq_lockp(this_rq) == __rq_lockp(busiest))
+-       return 0;
++       goto out;
 
-s390:
-  PERF_VERSION =3D 5.18.rc2.gce522ba9ef7e
-In file included from /usr/s390x-linux-gnu/include/stdio.h:866,
-                 from
-/home/yury/work/linux/tools/lib/perf/include/perf/cpumap.h:7,
-                 from util/session.c:13:
-In function =E2=80=98printf=E2=80=99,
-    inlined from =E2=80=98dump_event=E2=80=99 at util/session.c:1292:2,
-    inlined from =E2=80=98machines__deliver_event=E2=80=99 at util/session.=
-c:1502:2,
-    inlined from =E2=80=98perf_session__deliver_synth_event=E2=80=99 at uti=
-l/session.c:1703:9:
-/usr/s390x-linux-gnu/include/bits/stdio2.h:112:10: error: =E2=80=98%s=E2=80=
-=99
-directive argument is null [-Werror=3Dformat-overflow=3D]
-  112 |   return __printf_chk (__USE_FORTIFY_LEVEL - 1, __fmt,
-__va_arg_pack ());
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~
-util/session.c: In function =E2=80=98perf_session__deliver_synth_event=E2=
-=80=99:
-util/session.c:1292:25: note: format string is defined here
- 1292 |  printf("\n%#" PRIx64 "@%s [%#x]: event: %d\n",
-      |                         ^~
-cc1: all warnings being treated as errors
+     if (likely(raw_spin_rq_trylock(busiest)))
+-       return 0;
++       goto out;
 
-arm:
-  PERF_VERSION =3D 5.18.rc2.gce522ba9ef7e
-/tmp/ccHIlKZJ.s: Assembler messages:
-/tmp/ccHIlKZJ.s:541: Error: selected processor does not support `ldrd
-r0,r1,[r2]' in ARM mode
-/tmp/ccHIlKZJ.s:630: Error: selected processor does not support `strd
-r4,r5,[r3]' in ARM mode
-make[9]: *** [/home/yury/work/linux/tools/build/Makefile.build:96:
-/home/yury/work/linux/build/arm/tools/perf/arch/arm/util/auxtrace.o]
-Error 1
+     if (rq_order_less(this_rq, busiest)) {
+         raw_spin_rq_lock_nested(busiest, SINGLE_DEPTH_NESTING);
+-       return 0;
++       goto out;
++   } else {
++       raw_spin_rq_unlock(this_rq);
++       double_rq_lock(this_rq, busiest);
++       return 1;
+     }
+-
+-   raw_spin_rq_unlock(this_rq);
+-   double_rq_lock(this_rq, busiest);
+-
+-   return 1;
++out:
++#ifdef CONFIG_SCHED_DEBUG
++   this_rq->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
++   busiest->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
++#endif
++   return 0;
+  }
+
+  #endif /* CONFIG_PREEMPTION */
+@@ -2644,6 +2649,9 @@ static inline void double_rq_lock(struct rq *rq1, 
+struct rq *rq2)
+     BUG_ON(rq1 != rq2);
+     raw_spin_rq_lock(rq1);
+     __acquire(rq2->lock);   /* Fake it out ;) */
++#ifdef CONFIG_SCHED_DEBUG
++   rq1->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
++#endif
+  }
+> 
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index f259621f4c93..be4baec84430 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -610,10 +610,13 @@ void double_rq_lock(struct rq *rq1, struct rq *rq2)
+>   		swap(rq1, rq2);
+>   
+>   	raw_spin_rq_lock(rq1);
+> -	if (__rq_lockp(rq1) == __rq_lockp(rq2))
+> -		return;
+> +	if (__rq_lockp(rq1) != __rq_lockp(rq2))
+> +		raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
+>   
+> -	raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
+> +#ifdef CONFIG_SCHED_DEBUG
+> +	rq1->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
+> +	rq2->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
+> +#endif
+>   }
+>   #endif
+>   
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 8dccb34eb190..3ca8dd5ca17c 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -2644,6 +2644,10 @@ static inline void double_rq_lock(struct rq *rq1, struct rq *rq2)
+>   	BUG_ON(rq1 != rq2);
+>   	raw_spin_rq_lock(rq1);
+>   	__acquire(rq2->lock);	/* Fake it out ;) */
+> +#ifdef CONFIG_SCHED_DEBUG
+> +	rq1->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
+> +	rq2->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
+> +#endif
+>   }
+>   
+>   /*

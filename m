@@ -2,136 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEAA509192
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C75450918F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382187AbiDTUsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S233526AbiDTUsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382217AbiDTUsJ (ORCPT
+        with ESMTP id S1382204AbiDTUrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:48:09 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEBB1014
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650487498; x=1682023498;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GpIdCWD/WGC20h2+9do7Cd7eJNXlQ2ceElVJQSTUdBI=;
-  b=wSrvY1bYNf6GGaX5zV7wltEn0hzVACBN+/DORZ51W8K+INEHT9j8AOJC
-   MVrbL3LZ3v8Zdt5d1X8twqvSM1R/xpUZ9YHCK5Kmo+MrxwHSWzxYTQ2wG
-   N1ZXeKb26GmdbvjitaiutrmsztkiYcGV6+ckCjkQx0mIf5hdY0ix/PDA4
-   I=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Apr 2022 13:44:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 13:44:57 -0700
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Apr 2022 13:44:56 -0700
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Juergen Gross <jgross@suse.com>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-CC:     Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        <virtualization@lists.linux-foundation.org>, <x86@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>
-Subject: [PATCH] arm64: paravirt: Disable IRQs during stolen_time_cpu_down_prepare
-Date:   Wed, 20 Apr 2022 13:44:17 -0700
-Message-ID: <20220420204417.155194-1-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 20 Apr 2022 16:47:46 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600262FF;
+        Wed, 20 Apr 2022 13:44:49 -0700 (PDT)
+Received: from mail-wm1-f47.google.com ([209.85.128.47]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MBUuP-1ncaDQ1aAx-00Cy14; Wed, 20 Apr 2022 22:44:47 +0200
+Received: by mail-wm1-f47.google.com with SMTP id n40-20020a05600c3ba800b0038ff1939b16so2039631wms.2;
+        Wed, 20 Apr 2022 13:44:47 -0700 (PDT)
+X-Gm-Message-State: AOAM531/amy6vpVqdLyvh/km3RQ5zXWyAw3BLbtAl0Oxiolcdq+SfXB+
+        qFvGibAIq+l/vK+WwQQhvF3pwBvAUhkolAc2NKM=
+X-Google-Smtp-Source: ABdhPJwoE/46hGiARhv3tKg+p0kqAu/eocy+mBiqzPM2R0nAAwz2tdGE9MsZwAZOi3w4jDqBoyNBFzmBVn/t1jr6p8g=
+X-Received: by 2002:a05:600c:4e4a:b0:392:88e1:74a7 with SMTP id
+ e10-20020a05600c4e4a00b0039288e174a7mr5387757wmq.174.1650487486994; Wed, 20
+ Apr 2022 13:44:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420141407.470955-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220420141407.470955-1-krzysztof.kozlowski@linaro.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 20 Apr 2022 22:44:30 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0QRgv3ebv_=UYHb61PdqprB0wC+mfQpsGHsw3KqQSo7w@mail.gmail.com>
+Message-ID: <CAK8P3a0QRgv3ebv_=UYHb61PdqprB0wC+mfQpsGHsw3KqQSo7w@mail.gmail.com>
+Subject: Re: [PATCH v2] pinctrl: samsung: fix missing GPIOLIB on ARM64 Exynos config
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        "# 3.4.x" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:oIBco06TIdU9VvNTN6sHftImfHgEgvzAg6iix2VW0bJhJZH37Ar
+ LxlkYVOYUTccFs4pvMqSJoAzoVu43cO6EkSMrtBjUWdtHClJMlJWHGLAIQGpLCFFkwFZVPA
+ J96sPqhjHNyS/dOUJ8t+HWDMi7DsaWzn5uUKIVClXNJ7l3K1QUbKaJfPO0kB+7Rfkb9J/RT
+ lhKX/tLqUT6hRPcSywrMA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bBDsRkeS32o=:RsHYfojhNEFP3LuPV743Pf
+ 4vFHPMS+ZTQ6s9nu/MXWgp/b/cuvCkIVVjb3hDb198r4/73KEclSZqIiHhkm/MvrfgObi+h3/
+ Z9r0vmv3FKbn7bcJZegG2C7Tgq3FBcR+6Y/uzmRZopUzllCpe8Yw1/kgK2YlyFYoLTh6j5vtF
+ AtkgC5+uGzVHWVLb03ApgZIiA5x4Sx9vELiPStplh9kVrkFVUq+OQyWXyYUI+cwj1yySaJJmO
+ muhDPWNAzZBLXnjU4gdsEPY7TNGI1ad4gnEV60drIHeLXmys+Ems5kZReju0IdARjwI2SJ2nd
+ CiQbnj6knrk3XF8PtySXnCXPchJRKyzuJ4LQI0QFLc2G/lrA+R4AqLu4msj2XCSMNP3+yT6l4
+ JcFPtf9h8vfD97Thd6vn/Id3linQs/mUT5SFb/q+GwN2z1hmU0Qf4VS0rxwfvRm5L9TQfZ8ZT
+ 3FEMNyceqCwe2FgiDGJzsJ6scKW10gAXeZgRsWK1ZQNmiJ2mKlmd6EkGA153B5lapd6ax1LtW
+ hFjPmIz5YSfUXwV7X+1nBXFDPohBaEPZo2KNbndJpL7TThANLFdiPA+KgiQAaMOluDVbtA4P4
+ QrnE/uSGS99Jq8XL53M+XyOWcugQy9mOAIIOkAAYdcQNDrNTdZiHkkeEt5PtYA2+owc3UGE1h
+ 6XcoYG7qZDUqNeyFIMq8T/v9IAurQcpo/EcbUEnCPmuj3n7HQDnkLkzBvFZJFCb5U3jKthwrr
+ efh0WL14uk0fJv1DF+oGuLjOYs8GD7NPj/hrMKy60LJb91uCiJLRvKrP+XfxPluo9z648MsR+
+ 6qXTk5bBPZh+ozEIBNgkNUDnI6zvX6034AG/ZaTsyRL8jJhGn4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+On Wed, Apr 20, 2022 at 4:14 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The Samsung pinctrl drivers depend on OF_GPIO, which is part of GPIOLIB.
+> ARMv7 Exynos platform selects GPIOLIB and Samsung pinctrl drivers. ARMv8
+> Exynos selects only the latter leading to possible wrong configuration
+> on ARMv8 build:
+>
+>   WARNING: unmet direct dependencies detected for PINCTRL_EXYNOS
+>     Depends on [n]: PINCTRL [=y] && OF_GPIO [=n] && (ARCH_EXYNOS [=y] || ARCH_S5PV210 || COMPILE_TEST [=y])
+>     Selected by [y]:
+>     - ARCH_EXYNOS [=y]
+>
+> Always select the GPIOLIB from the Samsung pinctrl drivers to fix the
+> issue.  This requires removing of OF_GPIO dependency (to avoid recursive
+> dependency), so add dependency on OF for COMPILE_TEST cases.
+>
+> Reported-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+> Fixes: eed6b3eb20b9 ("arm64: Split out platform options to separate Kconfig")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-During hotplug, the stolen time data structure is unmapped and memset.
-There is a possibility of the timer IRQ being triggered before memset
-and stolen time is getting updated as part of this timer IRQ handler. This
-causes the below crash in timer handler -
+Looks good to me,
 
-  [ 3457.473139][    C5] Unable to handle kernel paging request at virtual address ffffffc03df05148
-  ...
-  [ 3458.154398][    C5] Call trace:
-  [ 3458.157648][    C5]  para_steal_clock+0x30/0x50
-  [ 3458.162319][    C5]  irqtime_account_process_tick+0x30/0x194
-  [ 3458.168148][    C5]  account_process_tick+0x3c/0x280
-  [ 3458.173274][    C5]  update_process_times+0x5c/0xf4
-  [ 3458.178311][    C5]  tick_sched_timer+0x180/0x384
-  [ 3458.183164][    C5]  __run_hrtimer+0x160/0x57c
-  [ 3458.187744][    C5]  hrtimer_interrupt+0x258/0x684
-  [ 3458.192698][    C5]  arch_timer_handler_virt+0x5c/0xa0
-  [ 3458.198002][    C5]  handle_percpu_devid_irq+0xdc/0x414
-  [ 3458.203385][    C5]  handle_domain_irq+0xa8/0x168
-  [ 3458.208241][    C5]  gic_handle_irq.34493+0x54/0x244
-  [ 3458.213359][    C5]  call_on_irq_stack+0x40/0x70
-  [ 3458.218125][    C5]  do_interrupt_handler+0x60/0x9c
-  [ 3458.223156][    C5]  el1_interrupt+0x34/0x64
-  [ 3458.227560][    C5]  el1h_64_irq_handler+0x1c/0x2c
-  [ 3458.232503][    C5]  el1h_64_irq+0x7c/0x80
-  [ 3458.236736][    C5]  free_vmap_area_noflush+0x108/0x39c
-  [ 3458.242126][    C5]  remove_vm_area+0xbc/0x118
-  [ 3458.246714][    C5]  vm_remove_mappings+0x48/0x2a4
-  [ 3458.251656][    C5]  __vunmap+0x154/0x278
-  [ 3458.255796][    C5]  stolen_time_cpu_down_prepare+0xc0/0xd8
-  [ 3458.261542][    C5]  cpuhp_invoke_callback+0x248/0xc34
-  [ 3458.266842][    C5]  cpuhp_thread_fun+0x1c4/0x248
-  [ 3458.271696][    C5]  smpboot_thread_fn+0x1b0/0x400
-  [ 3458.276638][    C5]  kthread+0x17c/0x1e0
-  [ 3458.280691][    C5]  ret_from_fork+0x10/0x20
-
-As a fix, disable the IRQs during hotplug until we unmap and memset the
-stolen time structure.
-
-Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- arch/arm64/kernel/paravirt.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/arm64/kernel/paravirt.c b/arch/arm64/kernel/paravirt.c
-index 75fed4460407..fc05a08557e0 100644
---- a/arch/arm64/kernel/paravirt.c
-+++ b/arch/arm64/kernel/paravirt.c
-@@ -70,13 +70,16 @@ static u64 para_steal_clock(int cpu)
- static int stolen_time_cpu_down_prepare(unsigned int cpu)
- {
- 	struct pv_time_stolen_time_region *reg;
-+	unsigned long flags;
- 
- 	reg = this_cpu_ptr(&stolen_time_region);
- 	if (!reg->kaddr)
- 		return 0;
- 
-+	local_irq_save(flags);
- 	memunmap(reg->kaddr);
- 	memset(reg, 0, sizeof(*reg));
-+	local_irq_restore(flags);
- 
- 	return 0;
- }
--- 
-2.25.1
-
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

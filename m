@@ -2,84 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3E650930C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733B9509310
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345803AbiDTWoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 18:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
+        id S1382935AbiDTWol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 18:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359233AbiDTWn6 (ORCPT
+        with ESMTP id S1357858AbiDTWod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 18:43:58 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B0633E16;
-        Wed, 20 Apr 2022 15:40:47 -0700 (PDT)
-Received: (Authenticated sender: joao@overdrivepizza.com)
-        by mail.gandi.net (Postfix) with ESMTPA id AA7401BF204;
-        Wed, 20 Apr 2022 22:40:41 +0000 (UTC)
+        Wed, 20 Apr 2022 18:44:33 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4923B42A30;
+        Wed, 20 Apr 2022 15:41:32 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id j9so2385109qkg.1;
+        Wed, 20 Apr 2022 15:41:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=SwoMNkAayM1tGtIPzhdqe+GGGbTWcPc9hf6KXEvIQFI=;
+        b=UChEwxvVmlgoXQ/dzIfmm8v8hKOVL5+jR55AcJURNhPlKL+BIsf/KSWCDjG/m1eXeZ
+         6jjDAdazrGaycUznHOyxrC2wC/ZbfE+aZrdeX9QyQ2QYEghLpWG1riyww47UNcWr85yq
+         ikujT3FmqgtzcOwQFmFyMUh8X/r9jQIEJFF4U6WvWXoG0cHbmEPcSQn/QxvHOSXIXlNc
+         916QzdTupJB+aL4KVRo0D0qWyxHz/faPCVlUinXns/w+dyi8zZgM3rBdYrvsR2do36an
+         BY93qO1qWMscBHcej3upnI3g42pFwfFuah9iLLmWSuzuApnuggGHz2EDLY4kztW3PjNN
+         VVaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SwoMNkAayM1tGtIPzhdqe+GGGbTWcPc9hf6KXEvIQFI=;
+        b=Z81lp+1Qbe2Qeq47olXvK3Z2sfUMiN7A/gmirotPP0qftDR6Ip8VoClhjmPwFXw0Sq
+         OeJm+ZGorLXAs2wBKaT92U8nywGveZ3t4pBpid/wIPJBaysGd2WQaIMywuYGP5gnw00X
+         VoU5F/CIT0BeHcIaTc7OcYf2LH/0Sj3SFMwMyTR56kunVCV5klpubuP+fAOb6/Z/oBwj
+         xV7+8eVbG9tLv6VcJDEtAmGAniEOL2D7Iaq7dePgdm8KQQt945r055mrDD78c2nSyhVa
+         kbv1GZS/hWP331UQEuTOoh4Kcp9RMIWa/MyKiIM1P2HtRP0UR8tapE9vN6tBsvVdzOtJ
+         dY/Q==
+X-Gm-Message-State: AOAM533QAbHvRP8xxxzj1S6qZkDwUZZ5xCbLiOU7oDEAXny601o58flb
+        FMvRaH53wdMBpmovMOvjqwgG4zpR8sg=
+X-Google-Smtp-Source: ABdhPJx+cJj+hjYtc8sD2VNJvWCriKrBX+gkOIJ7TIxfipQHy/mUJXbSZqqrI18/l4r0rk2iFvqyVg==
+X-Received: by 2002:a05:620a:1a99:b0:680:f33c:dbd3 with SMTP id bl25-20020a05620a1a9900b00680f33cdbd3mr14008035qkb.17.1650494487360;
+        Wed, 20 Apr 2022 15:41:27 -0700 (PDT)
+Received: from localhost ([2601:c4:c432:60a:7d5c:9c92:ea6c:f1c8])
+        by smtp.gmail.com with ESMTPSA id x10-20020a37630a000000b0069ecbe5dd32sm2119311qkb.130.2022.04.20.15.41.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 15:41:27 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Yury Norov <yury.norov@gmail.com>, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Guchun Chen <guchun.chen@amd.com>,
+        Chengming Gui <Jack.Gui@amd.com>,
+        Darren Powell <darren.powell@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kevin Wang <kevin1.wang@amd.com>,
+        Xiaomeng Hou <Xiaomeng.Hou@amd.com>,
+        Prike Liang <Prike.Liang@amd.com>,
+        Yifan Zhang <yifan1.zhang@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH 4/4] drm/amd/pm: use bitmap_{from,to}_arr32 where appropriate
+Date:   Wed, 20 Apr 2022 15:41:28 -0700
+Message-Id: <20220420224128.911759-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220420222530.910125-1-yury.norov@gmail.com>
+References: 
 MIME-Version: 1.0
-Date:   Wed, 20 Apr 2022 15:40:41 -0700
-From:   Joao Moreira <joao@overdrivepizza.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, hjl.tools@gmail.com,
-        Fangrui Song <maskray@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        andrew.cooper3@citrix.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@linux.intel.com, gabriel.gomes@linux.intel.com,
-        rick.p.edgecombe@intel.com
-Subject: Re: [RFC PATCH 00/11] Kernel FineIBT Support
-In-Reply-To: <CAKwvOdm6J9TFUWJA2Q7VRjx1CpBme9z_Dp99+7YTjN5Jqp5=Aw@mail.gmail.com>
-References: <20220420004241.2093-1-joao@overdrivepizza.com>
- <20220420074044.GC2731@worktop.programming.kicks-ass.net>
- <20220420151714.fderdz4dzea75rvg@treble>
- <CAKwvOdm6J9TFUWJA2Q7VRjx1CpBme9z_Dp99+7YTjN5Jqp5=Aw@mail.gmail.com>
-Message-ID: <bf3273120d8d48a79357f229c5890576@overdrivepizza.com>
-X-Sender: joao@overdrivepizza.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> 
->> If FineIBT needs it, I could reconsider.  But I think there's a strong
->> case to be made that the linker should be doing that instead.
-> 
-> That sounds reasonable to me (and reminds me of linker relaxation).
-> Joao, can you please work with Fangrui (LLD) and HJ (GNU binutils) to
-> determine how feasible this would be? I assume code outside the kernel
-> might enjoy such an optimization, too.  When that's the case, then it
-> probably makes more sense to "upstream" such "optimizations" from the
-> kernel-specific objtool into the toolchains.
+The smu_v1X_0_set_allowed_mask() uses bitmap_copy() to convert
+bitmap to 32-bit array. This may be wrong due to endianness issues.
+Fix it by switching to bitmap_{from,to}_arr32.
 
-Alright, these are the greenlights I was hoping for.
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c | 2 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I went quickly into this with HJ and he mentioned that it should be 
-doable in the linker, and that he has a patch for it in gcc (for local 
-function, from what I could see): 
-https://gcc.gnu.org/pipermail/gcc-patches/2022-February/590832.html
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
+index b87f550af26b..5f8809f6990d 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
+@@ -781,7 +781,7 @@ int smu_v11_0_set_allowed_mask(struct smu_context *smu)
+ 		goto failed;
+ 	}
+ 
+-	bitmap_copy((unsigned long *)feature_mask, feature->allowed, 64);
++	bitmap_to_arr32(feature_mask, feature->allowed, 64);
+ 
+ 	ret = smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_SetAllowedFeaturesMaskHigh,
+ 					  feature_mask[1], NULL);
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
+index cf09e30bdfe0..747430ce6394 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
+@@ -730,7 +730,7 @@ int smu_v13_0_set_allowed_mask(struct smu_context *smu)
+ 	    feature->feature_num < 64)
+ 		return -EINVAL;
+ 
+-	bitmap_copy((unsigned long *)feature_mask, feature->allowed, 64);
++	bitmap_to_arr32(feature_mask, feature->allowed, 64);
+ 
+ 	ret = smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_SetAllowedFeaturesMaskHigh,
+ 					      feature_mask[1], NULL);
+-- 
+2.32.0
 
-If @Fangrui is fine with it, I would like to try implementing this 
-myself in lld (I'm still learning a lot about lld and having an actual 
-problem to solve is the kind of fuel I need). Should take me a while, 
-but I think this is not urgent, right? I can also go ahead and replicate 
-HJ's gcc patch into clang, so we can also handle the local functions 
-within the compiler (I think this makes a lot of sense).
-
-Once we have these in, I'll revisit FineIBT and extend the features to 
-handle the FineIBT instrumentation. Hopefully we'll be released from 
-needing objtool (famous last words?!).
-
-This sounds like a plan, but I'm ofc open to suggestions or different 
-ideas/plans.
-
-Tks,
-Joao

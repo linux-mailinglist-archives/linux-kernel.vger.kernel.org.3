@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE72508367
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE0450836A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376728AbiDTIcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S1376740AbiDTIcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356317AbiDTIcA (ORCPT
+        with ESMTP id S1356317AbiDTIcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:32:00 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CC035267
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650443355; x=1681979355;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JasKDBeVLP1zJSJYbQNj5seH4o0bOxyYGLLMqWscjXg=;
-  b=OoNpvcXSErdYviWjvoG8E3SRy2x5aZeNZvyyCIZAJqWEg+PgKNXYoT/R
-   auJG1ta+6HqXADbGZWBmNTBCkA9BaIFP0d5soMZfDZT8XczWqrb+0mpCX
-   kbFtNx5KG5Ebkqfo9w5Vso9lh5KYFmIXyXC88H+2q+ZgKNlQNZVOXI4v+
-   Wmxol5JQ6vjzX4N8zQmfE0bAnNMM3ZcF+npOxVJHJKZZ5zzgCcvLoW+Ar
-   rJbHMOEJi2foHWhHjMwytEbE2UdwBkM32BSHFGQClQaZ7o9Yj9egAgiEu
-   KBF4u4pLYPCJ2LgNUari/ZtMaEzZppCSWUILkwIYlh1tAj03EZXQS3Isw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="261576582"
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="261576582"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 01:29:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="593095216"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 20 Apr 2022 01:29:13 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nh5i4-0006lo-LA;
-        Wed, 20 Apr 2022 08:29:12 +0000
-Date:   Wed, 20 Apr 2022 16:28:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/urgent] BUILD SUCCESS
- 528c9f1daf20da14d3e7348dc4b1d7c55743ee64
-Message-ID: <625fc439.4PsjwBZpneBDpkVQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 20 Apr 2022 04:32:02 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475F035A8A;
+        Wed, 20 Apr 2022 01:29:15 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso1340979pjj.3;
+        Wed, 20 Apr 2022 01:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=uAM52mYRx4qBEh42tbPo6qRRezPozANpFEE+yUsZh1M=;
+        b=PLBx8sIfEo7u7z0vDmz374mj6swYn89R0DC396DQ1IrKdi6dtsykJG7OpVWO6BprE3
+         d+osOcXdTb2UWBy19hUay57jdOueZzEG2i/wbIF9VUUwiphodqy7XCKe4PnFa8b64LWM
+         YohwU+lps6GObSG34fz53DOoDTK1WyeSGCcRyYuuhBeBCWnWvrz2i7G+maIP+Ku9cI/2
+         WnYGlAOo3Vpc7eBBeQQzyyjZT9/BfAom/1v/06uA1MdZD25YZ7ejcrtY5rpDjjsFgj55
+         YzZmPXImfDL62N2cI9Oo+h2s3nUZRULbGdcEIU4o418DJaYfvRorkrRIbIgecpjTODkV
+         b2Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uAM52mYRx4qBEh42tbPo6qRRezPozANpFEE+yUsZh1M=;
+        b=DC1c7+rV/ZgOCtsknDtFx+PFUkPdrSlsjk/nK76n8fTKFJiAIKlIdsOx4DPKBq1Pf7
+         RlaU0OcHJtVlfGupSFEv70gekzdCidmxa7Xf9DAeFt2ESSht05hVl/yqp/hHk54tbenK
+         tNkdCSiVaf/rSl4QK7A1F4TAO1ztT9DLmRIOz5dmxzAYbAoRwQoBD9vKIqO0hYXgGYSR
+         +qhyDcBAf3aH3Bn6DY5TElaDlKUeRXTJMIblXlZ7q+3DorAi4Dxs24ajyK7OvCuqqX4A
+         mgjeenP2NER3rPAtS3KFB2idNLzdGEdFX09iRfr5/aREb//lhTiSpN2gH5KXXDC4/9nc
+         S63Q==
+X-Gm-Message-State: AOAM530BtyIxHTq03bbm2VIfvP59JIwSpxasaCnsYYYtNYAD8B+yhrHK
+        Zj12hSOpoi8c4qGc6CNid/MnWeBduOXbwe0hPtPhWCTwR90=
+X-Google-Smtp-Source: ABdhPJztltEmK8pxuKsgH84cz3z1ArsVEVvKIsVhy7FM2nE1eHHgpkkAhkBr7DgY8ILW7tHZ5UN3S2yGbMwtFd2Q0HU=
+X-Received: by 2002:a17:903:18f:b0:15a:d3e:1e47 with SMTP id
+ z15-20020a170903018f00b0015a0d3e1e47mr7424334plg.54.1650443354615; Wed, 20
+ Apr 2022 01:29:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220420175500.240e4eb3@canb.auug.org.au>
+In-Reply-To: <20220420175500.240e4eb3@canb.auug.org.au>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Wed, 20 Apr 2022 01:29:03 -0700
+Message-ID: <CAAH8bW9gb+OKcTHUFDE9V38F=yniXZyxauBmbapre3ymBc9Zwg@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the bitmap tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,159 +68,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/urgent
-branch HEAD: 528c9f1daf20da14d3e7348dc4b1d7c55743ee64  perf/x86/cstate: Add SAPPHIRERAPIDS_X CPU support
+Hi Stephen,
 
-elapsed time: 736m
+(Adding Maxim Kuvyrkov from linaro/TCWG as he might be interested in
+arm part of this.
 
-configs tested: 136
-configs skipped: 3
+On Wed, Apr 20, 2022 at 12:55 AM Stephen Rothwell <sfr@canb.auug.org.au> wr=
+ote:
+>
+> Hi all,
+>
+> After merging the bitmap tree, today's linux-next build (htmldocs)
+> produced this warning:
+>
+> Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/b=
+itmap.h:425: WARNING: Unexpected indentation.
+> Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/b=
+itmap.h:426: WARNING: Block quote ends without a blank line; unexpected uni=
+ndent.
+> Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/b=
+itmap.h:431: WARNING: Unexpected indentation.
+>
+> Introduced by commit
+>
+>   6f46c24da767 ("bitmap: add bitmap_weight_{cmp, eq, gt, ge, lt, le} func=
+tions")
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I'll build docs and fix those warnings. Thanks for pointing this out.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc                       eiger_defconfig
-nios2                         10m50_defconfig
-arm                          pxa910_defconfig
-h8300                    h8300h-sim_defconfig
-m68k                        m5272c3_defconfig
-xtensa                  nommu_kc705_defconfig
-mips                      loongson3_defconfig
-ia64                         bigsur_defconfig
-arm                        keystone_defconfig
-powerpc                     redwood_defconfig
-mips                     loongson1b_defconfig
-m68k                         amcore_defconfig
-s390                                defconfig
-powerpc                      makalu_defconfig
-ia64                        generic_defconfig
-mips                            ar7_defconfig
-xtensa                    xip_kc705_defconfig
-mips                           jazz_defconfig
-arc                           tb10x_defconfig
-arm                          gemini_defconfig
-mips                         cobalt_defconfig
-arc                        nsimosci_defconfig
-sh                            hp6xx_defconfig
-microblaze                          defconfig
-sh                           se7722_defconfig
-i386                                defconfig
-xtensa                       common_defconfig
-sh                            titan_defconfig
-sh                             shx3_defconfig
-sh                        sh7757lcr_defconfig
-arm                           u8500_defconfig
-sh                           sh2007_defconfig
-csky                                defconfig
-sh                        apsh4ad0a_defconfig
-ia64                             alldefconfig
-sh                          r7785rp_defconfig
-arm                        shmobile_defconfig
-m68k                        m5307c3_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220419
-arm                  randconfig-c002-20220420
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220419
-arc                  randconfig-r043-20220419
-s390                 randconfig-r044-20220419
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                         rhel-8.3-kunit
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
+From previous linux-next build message:
 
-clang tested configs:
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220419
-arm                  randconfig-c002-20220419
-i386                          randconfig-c001
-riscv                randconfig-c006-20220419
-mips                 randconfig-c004-20220419
-s390                 randconfig-c005-20220419
-mips                        qi_lb60_defconfig
-arm                         s3c2410_defconfig
-mips                           ip22_defconfig
-powerpc                    socrates_defconfig
-mips                       lemote2f_defconfig
-mips                       rbtx49xx_defconfig
-arm                       mainstone_defconfig
-powerpc                     ksi8560_defconfig
-powerpc                      ppc64e_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-hexagon              randconfig-r041-20220420
-riscv                randconfig-r042-20220420
-hexagon              randconfig-r045-20220420
-hexagon              randconfig-r041-20220419
-hexagon              randconfig-r045-20220419
+> ../lib/bitmap.c:21:5: error: conflicting types for '__bitmap_weight_cmp';=
+ have 'int(const long unsigned int *, unsigned int,  int)'
+>    21 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
+ bits, int num)
+>       |     ^~~~~~~~~~~~~~~~~~~
+> In file included from ../lib/bitmap.c:6:
+> tools/include/linux/bitmap.h:15:5: note: previous declaration of '__bitma=
+p_weight_cmp' with type 'int(const long unsigned int *, unsigned int,  unsi=
+gned int)'
+>    15 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
+ bits,
+>       |     ^~~~~~~~~~~~~~~~~~~
+> ../lib/bitmap.c: In function '__bitmap_weight_cmp':
+> ../lib/bitmap.c:26:50: error: comparison of integer expressions of differ=
+ent signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
+>    26 |                 if (w + bits - k * BITS_PER_LONG < num)
+>       |                                                  ^
+> ../lib/bitmap.c:31:23: error: comparison of integer expressions of differ=
+ent signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
+>    31 |                 if (w > num)
+>       |                       ^
+> cc1: all warnings being treated as errors
+> tools/perf/../lib/bitmap.c:21:5: error: conflicting types for '__bitmap_w=
+eight_cmp'; have 'int(const long unsigned int *, unsigned int,  int)'
+>    21 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
+ bits, int num)
+>       |     ^~~~~~~~~~~~~~~~~~~
+> In file included from tools/perf/../lib/bitmap.c:6:
+> tools/include/linux/bitmap.h:15:5: note: previous declaration of '__bitma=
+p_weight_cmp' with type 'int(const long unsigned int *, unsigned int,  unsi=
+gned int)'
+>    15 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
+ bits,
+>       |     ^~~~~~~~~~~~~~~~~~~
+> tools/perf/../lib/bitmap.c: In function '__bitmap_weight_cmp':
+> tools/perf/../lib/bitmap.c:26:50: error: comparison of integer expression=
+s of different signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare=
+]
+>    26 |                 if (w + bits - k * BITS_PER_LONG < num)
+>       |                                                  ^
+> tools/perf/../lib/bitmap.c:31:23: error: comparison of integer expression=
+s of different signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare=
+]
+>    31 |                 if (w > num)
+>       |                       ^
+> cc1: all warnings being treated as errors
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I fixed tools build error and updated the bitmap-for-next branch. The
+problem is that tools/perf
+enables -Werror=3Dsign-compare, and main kernel not. So direct copying
+of functions from kernel
+to tools doesn't work. This might be an issue by itself because I
+think it would be better to keep
+kernel and tools code consistent whenever possible.
+
+Another problem is that the tools lacks testing from (obviously) me,
+0-day and TCWG. I added
+tools/perf to my testing build suite, and found that the build fails
+for arm and s390 on v5.18-rc2.
+See tools/perf build log attached.
+
+Thanks,
+Yury
+
+s390:
+  PERF_VERSION =3D 5.18.rc2.gce522ba9ef7e
+In file included from /usr/s390x-linux-gnu/include/stdio.h:866,
+                 from
+/home/yury/work/linux/tools/lib/perf/include/perf/cpumap.h:7,
+                 from util/session.c:13:
+In function =E2=80=98printf=E2=80=99,
+    inlined from =E2=80=98dump_event=E2=80=99 at util/session.c:1292:2,
+    inlined from =E2=80=98machines__deliver_event=E2=80=99 at util/session.=
+c:1502:2,
+    inlined from =E2=80=98perf_session__deliver_synth_event=E2=80=99 at uti=
+l/session.c:1703:9:
+/usr/s390x-linux-gnu/include/bits/stdio2.h:112:10: error: =E2=80=98%s=E2=80=
+=99
+directive argument is null [-Werror=3Dformat-overflow=3D]
+  112 |   return __printf_chk (__USE_FORTIFY_LEVEL - 1, __fmt,
+__va_arg_pack ());
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~
+util/session.c: In function =E2=80=98perf_session__deliver_synth_event=E2=
+=80=99:
+util/session.c:1292:25: note: format string is defined here
+ 1292 |  printf("\n%#" PRIx64 "@%s [%#x]: event: %d\n",
+      |                         ^~
+cc1: all warnings being treated as errors
+
+arm:
+  PERF_VERSION =3D 5.18.rc2.gce522ba9ef7e
+/tmp/ccHIlKZJ.s: Assembler messages:
+/tmp/ccHIlKZJ.s:541: Error: selected processor does not support `ldrd
+r0,r1,[r2]' in ARM mode
+/tmp/ccHIlKZJ.s:630: Error: selected processor does not support `strd
+r4,r5,[r3]' in ARM mode
+make[9]: *** [/home/yury/work/linux/tools/build/Makefile.build:96:
+/home/yury/work/linux/build/arm/tools/perf/arch/arm/util/auxtrace.o]
+Error 1

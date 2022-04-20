@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2D35080A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 07:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833645080A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 07:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359427AbiDTFgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 01:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S1359396AbiDTFgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 01:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359421AbiDTFgV (ORCPT
+        with ESMTP id S234892AbiDTFgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 01:36:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C3937008;
-        Tue, 19 Apr 2022 22:33:35 -0700 (PDT)
+        Wed, 20 Apr 2022 01:36:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C666E36B6A;
+        Tue, 19 Apr 2022 22:33:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CF08B81D1A;
-        Wed, 20 Apr 2022 05:33:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5D2C385A1;
-        Wed, 20 Apr 2022 05:33:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 528A961770;
+        Wed, 20 Apr 2022 05:33:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87352C385B3;
+        Wed, 20 Apr 2022 05:33:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650432812;
-        bh=zRhZIPPy8+A1gM9MSqmPl1VrgmpvHpTsHcMODL/z21Q=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=I4kcrD1vxLocaK4D1R0W4FpRNeywg0JN5NOGbV3rUMznbnAF8m8bDRVc7zYMrYtt8
-         jkA+Lyf2u8FI46KEfi4m53J+Hv5+WC0bC/VRj7SLKX3RAnMTOA80rywqAfC6D3fg+v
-         fq2cs+uNOe/KDdkqM/RSQjV755fcYwgi1AODaXcbSAcO6HcPOd8S6M6THmtCYry0zj
-         rtpNPnShZhVNFktC4l4ma7wTqiaHtIk31rdS5niUy+eCPw4RStGAzgOGgewqaxmg6j
-         iVIxaghCmaF1Nm9BQoIq6OeXK9mi/aFaHCd5p5X0uCmV+d8a/8HQUN7peWZNyFvB1H
-         AXJvLlC72PsTg==
-Message-ID: <59d5026897bff15e371f2770335270cf1b540766.camel@kernel.org>
-Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
-        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        twawrzynczak@chromium.org
-Date:   Wed, 20 Apr 2022 08:32:19 +0300
-In-Reply-To: <c8c0c5fb614d8b2de2a5faee2ef5ff3214281064.camel@kernel.org>
-References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
-         <20210501135727.17747-3-LinoSanfilippo@gmx.de>
-         <YJAby8mmiJ74qWAh@kernel.org> <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
-         <YJNKs8bUMGOzFre+@kernel.org>
-         <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
-         <Yj0lhqTP1RoedxSc@iki.fi>
-         <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
-         <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
-         <c8c0c5fb614d8b2de2a5faee2ef5ff3214281064.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 
+        s=k20201202; t=1650432807;
+        bh=O+/nEn2mJyhhn71+9IxwyXxxEqAUenQtbBMtmhNPlZ4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=F8XWcttAhn58uuRRQCfZPF4XR4sjrUNLlEOu7E4EnbPGA+ZUiCa3hSOwX96HY7H24
+         l1kIK4aMq1Z0N9e35ItfcLgPzagAOw66G4sMnjmfvXfn9ds17S0ZOzNUuogFbMlO8m
+         rSyNbnH1K8giaSEuXuzdrdqqdhQnCnx0xwffBS1oFSG+maukHZNmguAJaE2PxAmFiT
+         xM9nSoqRjd3tOrpsMbxCLPNSZ3vOvRIAydywm1E9s7WciFYosZyruKQ9QfiiHbpkHU
+         MVgd10fduek7QfJRqyrQUzIgCcIFjVml0fJ8Dec3Wa57ygHjjoC5Zc6LiDh0uiIYjQ
+         b3hyYEIgEnDmg==
+Received: by mail-ua1-f41.google.com with SMTP id g6so230943uaw.8;
+        Tue, 19 Apr 2022 22:33:27 -0700 (PDT)
+X-Gm-Message-State: AOAM533f+5YO8YwidFTNFaxVHBF2bYK9yBxK3ki+luSgVpJou+CPuF2w
+        JiBOcDd1ftsdRRiaf5MYd7JhTeTnYxhq10emdyY=
+X-Google-Smtp-Source: ABdhPJyGiHphDY/NN2jjsA9reE76seGGyg1Qp3EEewMxF5ur2Eod0CCcuEaMFxNqOaSuEE8GU6Hny7R/Sp6/S526sSw=
+X-Received: by 2002:ab0:4306:0:b0:35c:df5b:d7ab with SMTP id
+ k6-20020ab04306000000b0035cdf5bd7abmr5134224uak.83.1650432806290; Tue, 19 Apr
+ 2022 22:33:26 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220412034957.1481088-1-guoren@kernel.org> <YlbwOG46mCR8Q5tJ@tardis>
+ <CAJF2gTRws6RqKmJHBdKsycWSkFgYna_MocJ+qp3Z9r1v7mQzsg@mail.gmail.com>
+ <Ylt6zqPgimmKpJzg@tardis> <CAJF2gTTZnBh_z31VK81cYiBrTt5NRVpSahoPh35Zo4Ns5hCv7A@mail.gmail.com>
+ <3f7dd397-2ccd-dfa3-a0ec-dcce6cbc0476@nvidia.com>
+In-Reply-To: <3f7dd397-2ccd-dfa3-a0ec-dcce6cbc0476@nvidia.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 20 Apr 2022 13:33:14 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQzPsM0X-gib3V0EYYU=weMFXMQZCEbru9y+dDbV+9eXQ@mail.gmail.com>
+Message-ID: <CAJF2gTQzPsM0X-gib3V0EYYU=weMFXMQZCEbru9y+dDbV+9eXQ@mail.gmail.com>
+Subject: Re: [PATCH V2 0/3] riscv: atomic: Optimize AMO instructions usage
+To:     Dan Lustig <dlustig@nvidia.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,111 +75,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-20 at 08:30 +0300, Jarkko Sakkinen wrote:
-> n Sat, 2022-03-26 at 04:24 +0100, Lino Sanfilippo wrote:
-> >=20
-> > Hi Michael,
-> >=20
-> > On 25.03.22 at 13:32, Michael Niew=C3=B6hner wrote:
-> > > > >=20
-> > > > > Lino, I'd be happy to test the patches, when you have time and in=
-terest to
-> > > > > work
-> > > > > on this again!
-> > > > >=20
-> > > > > Thanks, Michael
-> > > >=20
-> > > > It's quite easy to test them out. Both fixes are in the mainline GI=
-T tree.
-> > > > E.g. give a shot rc1, and please report if any issues persists to:
-> > > >=20
-> > > > =C2=A0 linux-integrity@vger.kernel.org=C2=A0
-> > > >=20
-> > > > BR, Jarkko
-> > >=20
-> > > I don't see Linos patches on mainline. Also, the series included four=
- patches:
-> > > [PATCH v3 0/4] Fixes for TPM interrupt handling
-> > > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
-> > > [PATCH v3 2/4] tpm: Simplify locality handling
-> > > [PATCH v3 3/4] tpm: Fix test for interrupts
-> > > [PATCH v3 4/4] tpm: Only enable supported irqs
-> > >=20
-> > > Three of them are relevant for the interrupt problem, which is still =
-present in
-> > > mainline, as these patches were refused:
-> > > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
-> > > [PATCH v3 2/4] tpm: Simplify locality handling
-> > > [PATCH v3 3/4] tpm: Fix test for interrupts
-> > >=20
-> > > Michael
-> > >=20
-> >=20
-> > You are right, the interrupts are still not working in the mainline ker=
-nel.
-> > I would gladly make another attempt to fix this but rather step by step
-> > than in a series that tries to fix (different) things at once.
-> >=20
-> > A first step could be to have a sleepable context for the interrupt han=
-dling,
-> > since in case of SPI the accesses to the irq status register may sleep.
-> >=20
-> > I sent a patch for this purpose once, but it seems to have gone lost:
-> >=20
-> > https://lore.kernel.org/all/20210620023444.14684-1-LinoSanfilippo@gmx.d=
-e/
-> >=20
-> >=20
-> > Best regards,
-> > Lino
->=20
-> I went these through one by one.
->=20
-> # Above linked patch=20
->=20
-> Boolean parameters are considered bad. I.e. use named flags
-> instead. This is for above linked patch.
->=20
-> # [PATCH v3 3/4] tpm: Fix test for interrupts
->=20
-> 1. Please remove "unnecessarily complicated" sentence because
-> =C2=A0=C2=A0 it cannot be evaluated. It's your opinion, which might perha=
-ps
-> =C2=A0=C2=A0 be correct, but it is irrelevant for any possible patch
-> =C2=A0=C2=A0 description.
-> 2. There's no such thing as "fix by re-implementation". Please
-> =C2=A0=C2=A0 explain instead code change is relevant for the bug fix.
-> 3. If set_bit() et al necessarily to fix a possible race condition
-> =C2=A0=C2=A0 you need to have a separate patch for that.
->=20
-> To move forward, start with a better summary such as
->=20
-> "tpm: move interrupt test to tpm_tis_probe_irq_single()"
->=20
-> I'd also either revert the change for flags, or alternatively
-> move it to separate patch explaining race condition. Otherwise,
-> there's no argument of saying that using set_bit() is more=20
-> proper. This will make the change more localized.
->=20
->=20
-> # [PATCH v3 2/4] tpm: Simplify locality handling
->=20
-> "As a side-effect these modifications fix a bug which results in the
-> following warning when using TPM 2:"
->=20
-> Generally speaking, the simplifications should be done on top of code
-> that does not have known bugs, even if the simplification renders out
-> the bug. This is because then we have code that have potentially unknown
-> unknown bugs.
->=20
-> I hope you see my point. The problem with these patches were then
-> and is still that they intermix bug fixes and other modifications and
-> thus cannot be taken in.
+Thx Dan,
 
-I.e. to move forward create first localized fixes, and only after those
-clean ups if there is point. Removing code (like in 2/4) is not a bug
-fix fo anything. This not to say that some changes would be illegit, I'm
-only saying that the patches are badly scoped.
+On Wed, Apr 20, 2022 at 1:12 AM Dan Lustig <dlustig@nvidia.com> wrote:
+>
+> On 4/17/2022 12:51 AM, Guo Ren wrote:
+> > Hi Boqun & Andrea,
+> >
+> > On Sun, Apr 17, 2022 at 10:26 AM Boqun Feng <boqun.feng@gmail.com> wrote:
+> >>
+> >> On Sun, Apr 17, 2022 at 12:49:44AM +0800, Guo Ren wrote:
+> >> [...]
+> >>>
+> >>> If both the aq and rl bits are set, the atomic memory operation is
+> >>> sequentially consistent and cannot be observed to happen before any
+> >>> earlier memory operations or after any later memory operations in the
+> >>> same RISC-V hart and to the same address domain.
+> >>>                 "0:     lr.w     %[p],  %[c]\n"
+> >>>                 "       sub      %[rc], %[p], %[o]\n"
+> >>>                 "       bltz     %[rc], 1f\n".
+> >>> -               "       sc.w.rl  %[rc], %[rc], %[c]\n"
+> >>> +               "       sc.w.aqrl %[rc], %[rc], %[c]\n"
+> >>>                 "       bnez     %[rc], 0b\n"
+> >>> -               "       fence    rw, rw\n"
+> >>>                 "1:\n"
+> >>> So .rl + fence rw, rw is over constraints, only using sc.w.aqrl is more proper.
+> >>>
+> >>
+> >> Can .aqrl order memory accesses before and after it (not against itself,
+> >> against each other), i.e. act as a full memory barrier? For example, can
+> > From the RVWMO spec description, the .aqrl annotation appends the same
+> > effect with "fence rw, rw" to the AMO instruction, so it's RCsc.
+> >
+> > Not only .aqrl, and I think the below also could be an RCsc when
+> > sc.w.aq is executed:
+> > A: Pre-Access
+> > B: lr.w.rl ADDR-0
+> > ...
+> > C: sc.w.aq ADDR-0
+> > D: Post-Acess
+> > Because sc.w.aq has overlap address & data dependency on lr.w.rl, the
+> > global memory order should be A->B->C->D when sc.w.aq is executed. For
+> > the amoswap
+>
+> These opcodes aren't actually meaningful, unfortunately.
+>
+> Quoting the ISA manual chapter 10.2: "Software should not set the rl bit
+> on an LR instruction unless the aq bit is also set, nor should software
+> set the aq bit on an SC instruction unless the rl bit is also set."
+1. Oh, I've missed the behind half of the ISA manual. But why can't we
+utilize lr.rl & sc.aq in software programming to guarantee the
+sequence?
 
-BR, Jarkko
+2. Using .aqrl to replace the fence rw, rw is okay to ISA manual,
+right? And reducing a fence instruction to gain better performance:
+                "0:     lr.w     %[p],  %[c]\n"
+                 "       sub      %[rc], %[p], %[o]\n"
+                 "       bltz     %[rc], 1f\n".
+ -               "       sc.w.rl  %[rc], %[rc], %[c]\n"
+ +              "       sc.w.aqrl %[rc], %[rc], %[c]\n"
+                 "       bnez     %[rc], 0b\n"
+ -               "       fence    rw, rw\n"
 
+>
+> Dan
+>
+> > The purpose of the whole patchset is to reduce the usage of
+> > independent fence rw, rw instructions, and maximize the usage of the
+> > .aq/.rl/.aqrl aonntation of RISC-V.
+> >
+> >                 __asm__ __volatile__ (                                  \
+> >                         "0:     lr.w %0, %2\n"                          \
+> >                         "       bne  %0, %z3, 1f\n"                     \
+> >                         "       sc.w.rl %1, %z4, %2\n"                  \
+> >                         "       bnez %1, 0b\n"                          \
+> >                         "       fence rw, rw\n"                         \
+> >                         "1:\n"                                          \
+> >
+> >> we end up with u == 1, v == 1, r1 on P0 is 0 and r1 on P1 is 0, for the
+> >> following litmus test?
+> >>
+> >>     C lr-sc-aqrl-pair-vs-full-barrier
+> >>
+> >>     {}
+> >>
+> >>     P0(int *x, int *y, atomic_t *u)
+> >>     {
+> >>             int r0;
+> >>             int r1;
+> >>
+> >>             WRITE_ONCE(*x, 1);
+> >>             r0 = atomic_cmpxchg(u, 0, 1);
+> >>             r1 = READ_ONCE(*y);
+> >>     }
+> >>
+> >>     P1(int *x, int *y, atomic_t *v)
+> >>     {
+> >>             int r0;
+> >>             int r1;
+> >>
+> >>             WRITE_ONCE(*y, 1);
+> >>             r0 = atomic_cmpxchg(v, 0, 1);
+> >>             r1 = READ_ONCE(*x);
+> >>     }
+> >>
+> >>     exists (u=1 /\ v=1 /\ 0:r1=0 /\ 1:r1=0)
+> > I think my patchset won't affect the above sequence guarantee. Current
+> > RISC-V implementation only gives RCsc when the original value is the
+> > same at least once. So I prefer RISC-V cmpxchg should be:
+> >
+> >
+> > -                       "0:     lr.w %0, %2\n"                          \
+> > +                      "0:     lr.w.rl %0, %2\n"                          \
+> >                         "       bne  %0, %z3, 1f\n"                     \
+> >                         "       sc.w.rl %1, %z4, %2\n"                  \
+> >                         "       bnez %1, 0b\n"                          \
+> > -                       "       fence rw, rw\n"                         \
+> >                         "1:\n"                                          \
+> > +                        "       fence w, rw\n"                    \
+> >
+> > To give an unconditional RSsc for atomic_cmpxchg.
+> >
+> >>
+> >> Regards,
+> >> Boqun
+> >
+> >
+> >
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

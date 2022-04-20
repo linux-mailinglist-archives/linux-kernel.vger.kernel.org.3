@@ -2,106 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B799D508D2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39833508D2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380530AbiDTQ0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
+        id S1380541AbiDTQ0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376497AbiDTQ0p (ORCPT
+        with ESMTP id S1376497AbiDTQ0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:26:45 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAAB3D1F3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:23:59 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id h8so3781284ybj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:23:59 -0700 (PDT)
+        Wed, 20 Apr 2022 12:26:51 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE6D3DDFB;
+        Wed, 20 Apr 2022 09:24:04 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id w194so2580727oiw.11;
+        Wed, 20 Apr 2022 09:24:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mcUG9jT1MP4gZGzrrHFPQrMBUUAYLB2/16OlxpDgwWY=;
-        b=nY9QlGpa/L1JQzvLHxjLJvAwIbAq0fWwlRPtc2dM/Ev/sqZs4xZbBEZhdFf8gjK9pX
-         oI0+UKjcVkq1dsmAMwtL/BnPkNT0nHocEJiN0LeuDN0UTut3vd0dU0eTnkvZ7SroHxzS
-         6ay/yUQ9DVtKIgWjmR2I5MpynMWJHr/+tmB3dw0i6s0Klg7Vy6nyKuWi9oZF94heZrUm
-         PiYeWgfHymwSRU3jae4Z0mZfn/yyxBv411ItBYGvKI4v/+924+JQIXdWM/3Yg6dnsGgi
-         qH6VqgBQAk5TUucZ9uS7rOnKbRKfP2mVz4veDmvIby3vrY0CSGahDas/qqQuoUqHftGJ
-         F2rg==
-X-Gm-Message-State: AOAM532MMDFYGowkjvnYWCWZ24v+0HIOjC5kkssOB3P8Zlj9Q0AW1UUs
-        bG1uA4WMXYkt9m5L17aqujbWP0r6FmKbOHZjTOSUwAbJ
-X-Google-Smtp-Source: ABdhPJyWjpIqJVTaJBzTKbjNHExUScy+MpTY4jLQTcUxMAG9nD1txHvzGK4YxK/U4et3/Zpia43Yq/GPHrhUxWj1r5w=
-X-Received: by 2002:a25:e082:0:b0:641:cf5:b91f with SMTP id
- x124-20020a25e082000000b006410cf5b91fmr20653666ybg.482.1650471838920; Wed, 20
- Apr 2022 09:23:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eqRuR80cwcGhb1bZpUFPS9H8sCLdtwMaN4leB1jQaUo=;
+        b=ugxoj5NFkVAZbXODfuSHPRZ91dkseGSrlIiD/x81FDFlvXBFgVNwBOK26go969rzj2
+         JJmlvGvuHjPuq9g6M/PAXrycI2O65BAQ+Kccx+HAZGczUfh/mKtwiJe1zoM00guVhqUM
+         mL6uriX3/bIXyxsr5XQXrmBiu4v7BbiV0/Q47gjBAwsC9TCrcqcDd47JpL5VN1nvgabO
+         OiBUBNeL4JvippwoidxPMnUS9XL8kzjTflp1vhHJYRezouYZNPdskilidoxMCLNzxezo
+         qiFODhVQ3XoPx26FU2Cbkrg6rZ2her7MdfvIkyk0wkNHduAwly+pd/rKnKuz9zHFvNsN
+         IRhw==
+X-Gm-Message-State: AOAM530ulcNGFsw7Ls/zmLPU0KEa6LnvxEvYvIdxXSIoPeWWfAhTqS13
+        a4NU4B09L8c3uvTbVuWf6w==
+X-Google-Smtp-Source: ABdhPJy5sRyqbV6H1nky7jUgsc4SvVnBgGMkW66trSKOz92/NZSbbjjYt53XFfCWY+uBTYHwI2PVeQ==
+X-Received: by 2002:a05:6808:e8c:b0:322:4b82:d33d with SMTP id k12-20020a0568080e8c00b003224b82d33dmr2128366oil.21.1650471843684;
+        Wed, 20 Apr 2022 09:24:03 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j9-20020a056808056900b0032252797ea4sm5551746oig.6.2022.04.20.09.24.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 09:24:03 -0700 (PDT)
+Received: (nullmailer pid 1423242 invoked by uid 1000);
+        Wed, 20 Apr 2022 16:24:02 -0000
+Date:   Wed, 20 Apr 2022 11:24:02 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, netdev@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
+Subject: Re: [PATCH v8 08/13] dt-bindings: arm: Document i.MX8DXL EVK board
+ binding
+Message-ID: <YmAzos7VBz2vgJd6@robh.at.kernel.org>
+References: <20220419113516.1827863-1-abel.vesa@nxp.com>
+ <20220419113516.1827863-9-abel.vesa@nxp.com>
 MIME-Version: 1.0
-References: <20220420140521.45361-1-kernelfans@gmail.com> <20220420140521.45361-7-kernelfans@gmail.com>
-In-Reply-To: <20220420140521.45361-7-kernelfans@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 20 Apr 2022 18:23:48 +0200
-Message-ID: <CAJZ5v0h2SWN-=-5=OsMGm1amMJrYELqM6BC+J=98EAxSUmxMqg@mail.gmail.com>
-Subject: Re: [PATCH 6/9] pm/irq: make for_each_irq_desc() safe of irq_desc release
-To:     Pingfan Liu <kernelfans@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419113516.1827863-9-abel.vesa@nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 4:06 PM Pingfan Liu <kernelfans@gmail.com> wrote:
->
-> The invloved context is no a RCU read section. Furthermore there may be
-> more than one task at this point. Hence it demands a measure to prevent
-> irq_desc from freeing. Use irq_lock_sparse to serve the protection
-> purpose.
+On Tue, 19 Apr 2022 14:35:11 +0300, Abel Vesa wrote:
+> Document devicetree binding of i.XM8DXL EVK board.
 
-Can you please describe an example scenario in which the added locking
-will prevent a failure from occurring?
+i.XM?
 
-> Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> To: linux-kernel@vger.kernel.org
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 > ---
->  kernel/irq/pm.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/kernel/irq/pm.c b/kernel/irq/pm.c
-> index ca71123a6130..4b67a4c7de3c 100644
-> --- a/kernel/irq/pm.c
-> +++ b/kernel/irq/pm.c
-> @@ -133,6 +133,7 @@ void suspend_device_irqs(void)
->         struct irq_desc *desc;
->         int irq;
->
-> +       irq_lock_sparse();
->         for_each_irq_desc(irq, desc) {
->                 unsigned long flags;
->                 bool sync;
-> @@ -146,6 +147,7 @@ void suspend_device_irqs(void)
->                 if (sync)
->                         synchronize_irq(irq);
->         }
-> +       irq_unlock_sparse();
->  }
->  EXPORT_SYMBOL_GPL(suspend_device_irqs);
->
-> @@ -186,6 +188,7 @@ static void resume_irqs(bool want_early)
->         struct irq_desc *desc;
->         int irq;
->
-> +       /* The early resume stage is free of irq_desc release */
->         for_each_irq_desc(irq, desc) {
->                 unsigned long flags;
->                 bool is_early = desc->action &&
-> --
-> 2.31.1
->
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+
+Acked-by: Rob Herring <robh@kernel.org>

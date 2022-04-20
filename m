@@ -2,126 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BA2508B79
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54085508B6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358061AbiDTPFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S1379963AbiDTPDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354534AbiDTPFB (ORCPT
+        with ESMTP id S1379904AbiDTPDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:05:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE053EABD
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:01:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5FD861856
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:01:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F551C385A1;
-        Wed, 20 Apr 2022 15:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650466918;
-        bh=2vIiY1L64BcyRyAV+vdLWojloBWckIp6ZU0kUPht5UU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DYTF+ijch4goHtfn6Rz5jPqeV+0zU6CH8r3wCjAM9kkyEXhq22MQWG/L9ryu31j82
-         rnPJM+aLVuNJKZAUmXyxqFZhIrnWoHawjeuf5fAAVwpkGooaKvgjJ6wQgpDQMhhKpm
-         Ul0JX2UVFTpRkhlv3esMcmP8IlNG39tnQB9n40NEnxWxcIjtmEjwXbfkFJup+6sLzX
-         cZcAD/nBriBYgo8SdZi5nKU7eXe32KLpBQTt581FbU4ZngVdK5Bjp0Rd7FPU3+bVNv
-         GfDUmF8A44gHAl1wAFX/+N97vo1WJuQSbVoC/QIuVHkQpDmHLFC9ftF3IOB3i8G77+
-         Zx56gAEKoXayw==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Kirill Shutemov <kirill.shutemov@intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Wed, 20 Apr 2022 11:03:01 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3981E14013;
+        Wed, 20 Apr 2022 08:00:13 -0700 (PDT)
+Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23KERNLq001481;
+        Wed, 20 Apr 2022 14:59:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version; s=pps0720;
+ bh=zBrTf6Qo31CzintAEZ1ZV+ruktO4W9tsAWx5OVdR+dM=;
+ b=KupYLTLCRJ816BY6MxTsA3kTlXLHqoCQ2eUbX+X5vMz4Lfl7wuRFAtQDNh9pwLVYBK+L
+ flou89e0Ap6sIPUsP0vsiPbtoH9Hi32NGOjw28iIXJC11ZFCx9y4QyWUNYXMWTWaJeHY
+ kE6qRi+FhCZLAvWhgiCKamiZCd+NhFQZfBmd9klOg4DH2raB+FaBHbhQilVOn+VqfNPP
+ zw+oQmahUD/lq3u7nG5TFO2nYHOVwLthGN/NZKSlr7k1B1WzlOh+d5lisAwJpZsMLseB
+ FFykq86XkIPSON0xL2mIR2Sl1kpO6aghZJly6kMTAwit+vffU0bW+64jMGut9dFyClSq Lw== 
+Received: from g2t2353.austin.hpe.com (g2t2353.austin.hpe.com [15.233.44.26])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fjky1g9va-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 14:59:54 +0000
+Received: from g2t2360.austin.hpecorp.net (g2t2360.austin.hpecorp.net [16.196.225.135])
+        by g2t2353.austin.hpe.com (Postfix) with ESMTP id 8708465;
+        Wed, 20 Apr 2022 14:59:53 +0000 (UTC)
+Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
+        by g2t2360.austin.hpecorp.net (Postfix) with ESMTP id 2C7C03A;
+        Wed, 20 Apr 2022 14:59:53 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     verdun@hpe.com, nick@hpe.com, joel@jms.id.au, arnd@arndb.de
+Cc:     Nick Hawkins <nick.hawkins@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2] x86/mm/ptdump: display page encryption state
-Date:   Wed, 20 Apr 2022 18:01:49 +0300
-Message-Id: <20220420150149.1691573-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.34.1
+Subject: [PATCH v4 06/11] dt-bindings: watchdog: Add HPE GXP Watchdog timer binding
+Date:   Wed, 20 Apr 2022 10:01:50 -0500
+Message-Id: <20220420150156.47405-6-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220420150156.47405-1-nick.hawkins@hpe.com>
+References: <20220420150156.47405-1-nick.hawkins@hpe.com>
+X-Proofpoint-ORIG-GUID: ybzwJOOO4EBSPXrdjN8Ue_p6Yr-YjTJq
+X-Proofpoint-GUID: ybzwJOOO4EBSPXrdjN8Ue_p6Yr-YjTJq
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-20_04,2022-04-20_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1015 phishscore=0 spamscore=0
+ suspectscore=0 adultscore=0 impostorscore=0 mlxlogscore=923
+ lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2204200089
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-When memory encryption is enabled, for instance in SEV guest, it is useful
-to see what memory ranges are mapped as encrypted in the kernel page tables
-and what ranges are left plain.
+Add the hpe gxp watchdog timer binding hpe,gxp-wdt.
+This will enable support for the HPE GXP Watchdog
 
-Add printing of 'ENC' for the encrypted ranges to the page table dumps.
+Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
+v2:
+*Made watchdog a child of timer because of same register
+area based on review feedback
+*Simplified the watchdog yaml as it will get information
+from parent device
+---
+ .../bindings/watchdog/hpe,gxp-wdt.yaml        | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
 
-v2: use cc_is_enc() instead of _PAGE_ENC as Dave suggested for TDX
-compatibility
-
- arch/x86/include/asm/coco.h   | 10 ++++++++++
- arch/x86/mm/dump_pagetables.c |  4 ++++
- 2 files changed, 14 insertions(+)
-
-diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
-index 3d98c3a60d34..cfc85a080a22 100644
---- a/arch/x86/include/asm/coco.h
-+++ b/arch/x86/include/asm/coco.h
-@@ -17,6 +17,11 @@ void cc_set_mask(u64 mask);
- #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
- u64 cc_mkenc(u64 val);
- u64 cc_mkdec(u64 val);
+diff --git a/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
+new file mode 100644
+index 000000000000..c20da146352f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/hpe,gxp-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+static inline bool cc_is_enc(u64 prot)
-+{
-+	return cc_mkdec(prot) != prot;
-+}
- #else
- static inline u64 cc_mkenc(u64 val)
- {
-@@ -27,6 +32,11 @@ static inline u64 cc_mkdec(u64 val)
- {
- 	return val;
- }
++title: HPE GXP Controlled Watchdog
 +
-+static inline bool cc_is_enc(u64 prot)
-+{
-+	return false;
-+}
- #endif
- 
- #endif /* _ASM_X86_COCO_H */
-diff --git a/arch/x86/mm/dump_pagetables.c b/arch/x86/mm/dump_pagetables.c
-index e1b599ecbbc2..0eaa0cc0b3b1 100644
---- a/arch/x86/mm/dump_pagetables.c
-+++ b/arch/x86/mm/dump_pagetables.c
-@@ -201,6 +201,10 @@ static void printk_prot(struct seq_file *m, pgprotval_t pr, int level, bool dmsg
- 			pt_dump_cont_printf(m, dmsg, "PCD ");
- 		else
- 			pt_dump_cont_printf(m, dmsg, "    ");
-+		if (cc_is_enc(pr))
-+			pt_dump_cont_printf(m, dmsg, "ENC ");
-+		else
-+			pt_dump_cont_printf(m, dmsg, "    ");
- 
- 		/* Bit 7 has a different meaning on level 3 vs 4 */
- 		if (level <= 3 && pr & _PAGE_PSE)
-
-base-commit: b2d229d4ddb17db541098b83524d901257e93845
++allOf:
++  - $ref: "watchdog.yaml#"
++
++maintainers:
++  - Nick Hawkins <nick.hawkins@hpe.com>
++  - Jean-Marie Verdun <verdun@hpe.com>
++
++properties:
++  compatible:
++    const: hpe,gxp-wdt
++
++required:
++  - compatible
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog0:  watchdog {
++      compatible = "hpe,gxp-wdt";
++    };
++
 -- 
-2.34.1
+2.17.1
 

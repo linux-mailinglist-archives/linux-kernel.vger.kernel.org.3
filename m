@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4EE508226
+	by mail.lfdr.de (Postfix) with ESMTP id 32599508225
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359804AbiDTHce convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 20 Apr 2022 03:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
+        id S242171AbiDTHcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 03:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359815AbiDTHc2 (ORCPT
+        with ESMTP id S1359719AbiDTHcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:32:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B35D3B03B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 00:29:43 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nh4mB-0007Lb-2j; Wed, 20 Apr 2022 09:29:23 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nh4m9-0047V2-BD; Wed, 20 Apr 2022 09:29:19 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nh4m6-0002mx-Pi; Wed, 20 Apr 2022 09:29:18 +0200
-Message-ID: <9ee4e73d0b6c9d1cdf6c9ebe94474e7200240701.camel@pengutronix.de>
-Subject: Re: [RFC/RFT 3/6] phy: rockchip: Support pcie v3
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Date:   Wed, 20 Apr 2022 09:29:18 +0200
-In-Reply-To: <20220416135458.104048-4-linux@fw-web.de>
-References: <20220416135458.104048-1-linux@fw-web.de>
-         <20220416135458.104048-4-linux@fw-web.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Wed, 20 Apr 2022 03:32:18 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9B43B2AC;
+        Wed, 20 Apr 2022 00:29:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650439773; x=1681975773;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+2VkkaHgs7Bi4lmS3LREzrgtsND2nPSs2jyfSDUHHGU=;
+  b=UZluPZINbjZCeCKdtOV5ANkT+aU0cv1b24ntmZoknuYw8hqim/iNpULc
+   MNhHhovbHKJgrWCRnRq0CAm/hfY3qC+jwgfs2tI0uA1r29zk5m7erIc4D
+   VWQIsuBdANH6hV3Ub5OFX16LbupJSUaiE42YJNsTG1p+X6kUsMgBaLaQJ
+   dUTl0atcHYsmCVG5BYaZoZkEHKwJMMzj1A0oV1Wyu2XcKmeRwKyi++bCl
+   +aLB4G2+JTCCqsGSbrGfYGgQ+8rDHVVlKvjU88A6OKx/7t5L01f8urPWK
+   P+0pfy03Cd/h17GCO1778ODdMuBhw4bdtY38Kh7vWCaXef0PNPD/C/aaS
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="261565065"
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="261565065"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 00:29:33 -0700
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="562007675"
+Received: from ktuv-desk2.amr.corp.intel.com (HELO [10.212.227.192]) ([10.212.227.192])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 00:29:32 -0700
+Message-ID: <faf366f9-a0cb-4121-e5bf-c63e6d0b14aa@linux.intel.com>
+Date:   Wed, 20 Apr 2022 00:29:31 -0700
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v3 03/21] x86/virt/tdx: Implement the SEAMCALL base
+ function
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <1c3f555934c73301a9cbf10232500f3d15efe3cc.1649219184.git.kai.huang@intel.com>
+ <dd9d6f7d-5cec-e6b7-2fa0-5bf1fdcb79b5@linux.intel.com>
+ <d1b88a6e08feee137df9acd2cdf37f7685171f4b.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <d1b88a6e08feee137df9acd2cdf37f7685171f4b.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,24 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sa, 2022-04-16 at 15:54 +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> RK3568 supports PCIe v3 using not Combphy like PCIe v2 on rk3566.
-> It use a dedicated pcie-phy. Add support for this.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> driver was taken from linux 5.10 based on in
-> https://github.com/JeffyCN/mirrors
-> which now has disappeared
-> ---
-[...]
-> +	priv->p30phy = devm_reset_control_get(dev, "phy");
 
-Please use devm_reset_control_get_exclusive() instead. It is
-functionally identical but makes clear that this driver requires
-exclusive control over the reset line.
 
-regards
-Philipp
+On 4/19/22 9:16 PM, Kai Huang wrote:
+> On Tue, 2022-04-19 at 07:07 -0700, Sathyanarayanan Kuppuswamy wrote:
+>>
+>> On 4/5/22 9:49 PM, Kai Huang wrote:
+>>> SEAMCALL leaf functions use an ABI different from the x86-64 system-v
+>>> ABI.  Instead, they share the same ABI with the TDCALL leaf functions.
+>>
+>> TDCALL is a new term for this patch set. Maybe add some detail about
+>> it in ()?.
+>>
+>>>
+> 
+> TDCALL implementation is already in tip/tdx.  This series will be rebased to it.
+> I don't think we need to explain more about something that is already in the tip
+> tree?
+
+Since you have already expanded terms like TD,TDX and SEAM in this patch
+set, I thought you wanted to explain TDX terms to make it easy for new 
+readers. So to keep it uniform, I have suggested adding some brief 
+details about the TDCALL.
+
+But I am fine either way.
+
+> 
+> 
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

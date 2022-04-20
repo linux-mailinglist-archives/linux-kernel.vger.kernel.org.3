@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755AB5092A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098A95092B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356269AbiDTW2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 18:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
+        id S1382764AbiDTW2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 18:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355311AbiDTW2D (ORCPT
+        with ESMTP id S1356019AbiDTW2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 18:28:03 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9426C403FC;
-        Wed, 20 Apr 2022 15:25:15 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-e5bdd14b59so3513165fac.11;
-        Wed, 20 Apr 2022 15:25:15 -0700 (PDT)
+        Wed, 20 Apr 2022 18:28:04 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9B2403E0;
+        Wed, 20 Apr 2022 15:25:16 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id z2so3686015oic.6;
+        Wed, 20 Apr 2022 15:25:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=D4+QPbz82rtOedo463vcO+MJxyQBRkAwzP5mqzEFQjU=;
-        b=Sznx0vGBNYddPrdOY4agdMV1Xm8aMvjh6//i4muHp4jQdySf5wSdr2TYQMfGWdt0rQ
-         JvtkDojL7GdHy2eLstGZfoKiT09RVsNuPT90eoiGA5dsm3IeJvy3iBaPVaAXU4mESGSx
-         2PstZV54jByDLJsDaRRhZNFxI2fwhOUhsj46X44nhI81ki2JEHSsWuGSlqGg3QXYrvdf
-         dtPIHCZEkGNvuqw1Xv4Swc7oFOligcjzzwKq/28nPbzaOb4FIwKlEc6zs8JwTSOkrEEk
-         GAKCCTc/gMyofY8gyuRj4lXoXUNVI9m8UfNVETNmfmJVa1/EeaD98rkRrSCGM4lG+MF8
-         +iwA==
+        bh=TJKLk7jw46EJJsGFXfaNuI0ws/NusZb8W8RliELFRTU=;
+        b=neuuPCNTajg6f3BxYzZ/T7Sm+k1TPXY9iLT+Gn46D1eEVeDrENjQOBrqc65QPBMPCa
+         zX/sESKA3B1CyoD0V1mvwusjICkVD+GdYXOOib7FeDuax8p0pAUXE50hrKA+wmECa1om
+         UqFEC70HHED8eps4SJNEtQjybQODVO+rxyaoFcUCqESumTdr3m2FJBq9r6QG1MpgYoYL
+         ISGIWO1b/JjMIzwXhJReMHEoatjUgE0dhDFvU2lCRjQTtd+fyPdzIFC+L+wa733El+CX
+         gUHa2gnxHFLGgBIIANiGbAbemqm+dZ3uTRRQqbfdYKyx4by2AJAmAPbwMCW7YAdeY2td
+         RhAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=D4+QPbz82rtOedo463vcO+MJxyQBRkAwzP5mqzEFQjU=;
-        b=TN94CwnNtC2WurNags7onjJN2w3+TXzRyX9SrRWJbrTEAbHG1zhd3ykHUBK5TxBDfW
-         OsPuri5G+nXtls0HMRPV46zC5VjVJzor9YVwnMvyrC4k11itgS6vEPiEfSg6/e6yRbxH
-         Zxgpi7KKQ1Ok+FIEVGWs1WbYKlh12XU2bN+YkIZYeLRRkL60jGD2kc9cDCATVHUDp8fT
-         uEueSW16CCHA/M4vhlshLIY+6ehTRLvL/3XKoJBXQrciGj5c9zI0+KQcvkIN2Rg/EP8F
-         GGcWY7jy3d0pBvbx2oNWMa0nUvpg/cFnR12Z8LCLFXzMUVtKYvDmfb9Op2hCXdbkowJP
-         jGCg==
-X-Gm-Message-State: AOAM53204PVB895YkoHUO83noIJ3Hjre7Ikt24+p82bCZBOHrEqwgf+T
-        7FGNXqNrXBCNR9Fui053K2w=
-X-Google-Smtp-Source: ABdhPJzEkawscWxQoDUDIy93SGVGpaj5GJGz1IF8Je1Xi7U60DixdCI8/OlVaSmWqX0E5DDrrPPwng==
-X-Received: by 2002:a05:6870:6006:b0:e5:e6f1:5f2a with SMTP id t6-20020a056870600600b000e5e6f15f2amr2580471oaa.160.1650493514918;
-        Wed, 20 Apr 2022 15:25:14 -0700 (PDT)
+        bh=TJKLk7jw46EJJsGFXfaNuI0ws/NusZb8W8RliELFRTU=;
+        b=LHIB7vu8m5+8WpE9iySHj+Ku40HtfgtJE3RJRUk53N4jIXVTh0KCzFaXanNtwoBhjR
+         0S341Cd2e9FEwgaVxYz02KL9jyaMuxCWvs9pPbHJWGcF3KH125dIPSYUINVzzoIoRSby
+         SVOWVPACbM1+wcEcwTe+4Lqx+uE9jo2B1rg1o9KuB3zp/LexuwobsRnVTxf3MTm1CgLX
+         ByhnH9RCPv91rznQstZ5Uf2cBTemgw/rEbMP9ubxRT4PXPHkLWvGUdUbB9eTA0Cstj2C
+         ypHmue1vAnUUnYH5h5urDNkqeNocG6cIHRmWO5ubGiCxPfiQX6mqna9PaNksBTF5AlOi
+         OykA==
+X-Gm-Message-State: AOAM533lGTnkMcZSiCCOEGlX3fQCB+yRMdMXFpNRT0dbHUEOeMANR0t1
+        kgjNPYSNbc4NQK6LE+7z8QY=
+X-Google-Smtp-Source: ABdhPJxKbxWR8nRXrCYr3AXq+j0sx0lySOQln7ftwW8tViU9R0bZlMmSnuC2VEHNnTtp3C+nVx2cTA==
+X-Received: by 2002:aca:4254:0:b0:322:953b:872 with SMTP id p81-20020aca4254000000b00322953b0872mr2679151oia.32.1650493515910;
+        Wed, 20 Apr 2022 15:25:15 -0700 (PDT)
 Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:3d22:92f4:9980:5ff8])
-        by smtp.gmail.com with ESMTPSA id b188-20020aca34c5000000b002da579c994dsm6792744oia.31.2022.04.20.15.25.14
+        by smtp.gmail.com with ESMTPSA id b188-20020aca34c5000000b002da579c994dsm6792744oia.31.2022.04.20.15.25.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 15:25:14 -0700 (PDT)
+        Wed, 20 Apr 2022 15:25:15 -0700 (PDT)
 From:   frowand.list@gmail.com
 To:     Rob Herring <robh+dt@kernel.org>, pantelis.antoniou@konsulko.com,
         Slawomir Stepien <slawomir.stepien@nokia.com>
@@ -55,9 +55,9 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Slawomir Stepien <sst@poczta.fm>,
         Jan Kiszka <jan.kiszka@siemens.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v4 1/2] of: overlay: rename variables to be consistent
-Date:   Wed, 20 Apr 2022 17:25:04 -0500
-Message-Id: <20220420222505.928492-2-frowand.list@gmail.com>
+Subject: [PATCH v4 2/2] of: overlay: rework overlay apply and remove kfree()s
+Date:   Wed, 20 Apr 2022 17:25:05 -0500
+Message-Id: <20220420222505.928492-3-frowand.list@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220420222505.928492-1-frowand.list@gmail.com>
 References: <20220420222505.928492-1-frowand.list@gmail.com>
@@ -75,268 +75,663 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frank Rowand <frank.rowand@sony.com>
 
-Variables change name across function calls when there is not a good
-reason to do so.  Fix by changing "fdt" to "new_fdt" and "tree" to
-"overlay_root".
+Fix various kfree() issues related to of_overlay_apply().
+  - Double kfree() of fdt and tree when init_overlay_changeset()
+    returns an error.
+  - free_overlay_changeset() free the root of the unflattened
+    overlay (variable tree) instead of the memory that contains
+    the unflattened overlay.
+  - For the case of a failure during applying an overlay, move kfree()
+    of new_fdt and overlay_mem into free_overlay_changeset(), which
+    is called by the function that allocated them.
+  - For the case of removing an overlay, the kfree() of new_fdt and
+    overlay_mem remains in free_overlay_changeset().
+  - Check return value of of_fdt_unflatten_tree() for error instead
+    of checking the returned value of overlay_root.
+  - When storing pointers to allocated objects in ovcs, do so as
+    near to the allocation as possible instead of in deeply layered
+    function.
 
-The name disparity was confusing when creating the following commit.
-The name changes are in this separate commit to make review of the
-following commmit less complex.
+More clearly document policy related to lifetime of pointers into
+overlay memory.
+
+Double kfree()
+Reported-by: Slawomir Stepien <slawomir.stepien@nokia.com>
 
 Signed-off-by: Frank Rowand <frank.rowand@sony.com>
 
 ---
+
+Chose value of zero for OF_OVERLAY_INIT instead of -1, so that the
+value of ovcs->notify_state would be properly initialed by the
+kzalloc() of ovcs.
+
+My first reply to this email will be a diff of this patch vs
+v3 of this patch.
+
 Changes since v3:
-   - none
+   - Instead of field kfree_unsafe in struct overlay_changeset, add
+     field notify_state to track action of most recent notification,
+     allowing the free_overlay_changeset() code to choose whether
+     to free overlay_mem and new_fdt.
+   - Add new value OF_OVERLAY_INIT to enum of_overlay_notify_action
 
 Changes since v2:
-   - use new variable name "overlay_root" instead of new variable
-     new "overlay_tree"
+  - A version 2 review comment correctly said "This screams hack".
+    Restructure as listed below in response to the comment.
+  - Quit passing kfree_unsafe in function parameters, move it to
+    be a field of ovcs
+  - Quit passing a bunch of objects as function parameters, which
+    were used only for saving in ovcs
+  - Save pointers to allocated objects as near to the allocation as
+    possible instead of in a different function.
+  - Move object allocation as early in the calling stack (starting
+    at of_overlay_fdt_apply()) and move object freeing more fully
+    into free_overlay_changeset(), which is called in two places:
+    (1) on error path of applying overlay and (2) removal of an
+    overlay by of_overlay_remove().
+  - Additional notes in the overlay documentation regarding pointers
+    into overlay nodes and data.
 
- drivers/of/overlay.c | 94 ++++++++++++++++++++++----------------------
- 1 file changed, 47 insertions(+), 47 deletions(-)
+Changes since v1:
+  - Move kfree()s from init_overlay_changeset() to of_overlay_fdt_apply()
+  - Better document lifetime of pointers into overlay, both in overlay.c
+    and Documentation/devicetree/overlay-notes.rst
 
+ Documentation/devicetree/overlay-notes.rst |  30 ++-
+ drivers/of/overlay.c                       | 263 ++++++++++-----------
+ include/linux/of.h                         |   3 +-
+ 3 files changed, 153 insertions(+), 143 deletions(-)
+
+diff --git a/Documentation/devicetree/overlay-notes.rst b/Documentation/devicetree/overlay-notes.rst
+index b2b8db765b8c..e139f22b363e 100644
+--- a/Documentation/devicetree/overlay-notes.rst
++++ b/Documentation/devicetree/overlay-notes.rst
+@@ -119,10 +119,32 @@ Finally, if you need to remove all overlays in one-go, just call
+ of_overlay_remove_all() which will remove every single one in the correct
+ order.
+ 
+-In addition, there is the option to register notifiers that get called on
++There is the option to register notifiers that get called on
+ overlay operations. See of_overlay_notifier_register/unregister and
+ enum of_overlay_notify_action for details.
+ 
+-Note that a notifier callback is not supposed to store pointers to a device
+-tree node or its content beyond OF_OVERLAY_POST_REMOVE corresponding to the
+-respective node it received.
++A notifier callback for OF_OVERLAY_PRE_APPLY, OF_OVERLAY_POST_APPLY, or
++OF_OVERLAY_PRE_REMOVE may store pointers to a device tree node in the overlay
++or its content but these pointers must not persist past the notifier callback
++for OF_OVERLAY_POST_REMOVE.  The memory containing the overlay will be
++kfree()ed after OF_OVERLAY_POST_REMOVE notifiers are called.  Note that the
++memory will be kfree()ed even if the notifier for OF_OVERLAY_POST_REMOVE
++returns an error.
++
++The changeset notifiers in drivers/of/dynamic.c are a second type of notifier
++that could be triggered by applying or removing an overlay.  These notifiers
++are not allowed to store pointers to a device tree node in the overlay
++or its content.  The overlay code does not protect against such pointers
++remaining active when the memory containing the overlay is freed as a result
++of removing the overlay.
++
++Any other code that retains a pointer to the overlay nodes or data is
++considered to be a bug because after removing the overlay the pointer
++will refer to freed memory.
++
++Users of overlays must be especially aware of the overall operations that
++occur on the system to ensure that other kernel code does not retain any
++pointers to the overlay nodes or data.  Any example of an inadvertent use
++of such pointers is if a driver or subsystem module is loaded after an
++overlay has been applied, and the driver or subsystem scans the entire
++devicetree or a large portion of it, including the overlay nodes.
 diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
-index d80160cf34bb..0a98e3254a1a 100644
+index 0a98e3254a1a..64588bff99ce 100644
 --- a/drivers/of/overlay.c
 +++ b/drivers/of/overlay.c
-@@ -57,8 +57,8 @@ struct fragment {
-  * struct overlay_changeset
+@@ -58,7 +58,9 @@ struct fragment {
   * @id:			changeset identifier
   * @ovcs_list:		list on which we are located
-- * @fdt:		base of memory allocated to hold aligned FDT that was unflattened to create @overlay_tree
-- * @overlay_tree:	expanded device tree that contains the fragment nodes
-+ * @new_fdt:		Memory allocated to hold unflattened aligned FDT
-+ * @overlay_root:	expanded device tree that contains the fragment nodes
+  * @new_fdt:		Memory allocated to hold unflattened aligned FDT
++ * @overlay_mem:	the memory chunk that contains @overlay_root
+  * @overlay_root:	expanded device tree that contains the fragment nodes
++ * @notify_state:	most recent notify action used on overlay
   * @count:		count of fragment structures
   * @fragments:		fragment nodes in the overlay expanded device tree
   * @symbols_fragment:	last element of @fragments[] is the  __symbols__ node
-@@ -67,8 +67,8 @@ struct fragment {
- struct overlay_changeset {
+@@ -68,7 +70,9 @@ struct overlay_changeset {
  	int id;
  	struct list_head ovcs_list;
--	const void *fdt;
--	struct device_node *overlay_tree;
-+	const void *new_fdt;
-+	struct device_node *overlay_root;
+ 	const void *new_fdt;
++	const void *overlay_mem;
+ 	struct device_node *overlay_root;
++	enum of_overlay_notify_action notify_state;
  	int count;
  	struct fragment *fragments;
  	bool symbols_fragment;
-@@ -185,7 +185,7 @@ static int overlay_notify(struct overlay_changeset *ovcs,
+@@ -115,7 +119,6 @@ void of_overlay_mutex_unlock(void)
+ 	mutex_unlock(&of_overlay_phandle_mutex);
+ }
  
- /*
-  * The values of properties in the "/__symbols__" node are paths in
-- * the ovcs->overlay_tree.  When duplicating the properties, the paths
-+ * the ovcs->overlay_root.  When duplicating the properties, the paths
-  * need to be adjusted to be the correct path for the live device tree.
-  *
-  * The paths refer to a node in the subtree of a fragment node's "__overlay__"
-@@ -221,7 +221,7 @@ static struct property *dup_and_fixup_symbol_prop(
+-
+ static LIST_HEAD(ovcs_list);
+ static DEFINE_IDR(ovcs_idr);
  
- 	if (path_len < 1)
- 		return NULL;
--	fragment_node = __of_find_node_by_path(ovcs->overlay_tree, path + 1);
-+	fragment_node = __of_find_node_by_path(ovcs->overlay_root, path + 1);
- 	overlay_node = __of_find_node_by_path(fragment_node, "__overlay__/");
- 	of_node_put(fragment_node);
- 	of_node_put(overlay_node);
-@@ -718,19 +718,20 @@ static struct device_node *find_target(struct device_node *info_node)
+@@ -162,6 +165,8 @@ static int overlay_notify(struct overlay_changeset *ovcs,
+ 	struct of_overlay_notify_data nd;
+ 	int i, ret;
  
++	ovcs->notify_state = action;
++
+ 	for (i = 0; i < ovcs->count; i++) {
+ 		struct fragment *fragment = &ovcs->fragments[i];
+ 
+@@ -719,53 +724,49 @@ static struct device_node *find_target(struct device_node *info_node)
  /**
   * init_overlay_changeset() - initialize overlay changeset from overlay tree
-- * @ovcs:	Overlay changeset to build
-- * @fdt:	base of memory allocated to hold aligned FDT that was unflattened to create @tree
-- * @tree:	Contains the overlay fragments and overlay fixup nodes
-+ * @ovcs:		Overlay changeset to build
-+ * @new_fdt:		Memory allocated to hold unflattened aligned FDT
-+ * @overlay_root:	Contains the overlay fragments and overlay fixup nodes
+  * @ovcs:		Overlay changeset to build
+- * @new_fdt:		Memory allocated to hold unflattened aligned FDT
+- * @overlay_root:	Contains the overlay fragments and overlay fixup nodes
   *
   * Initialize @ovcs.  Populate @ovcs->fragments with node information from
-- * the top level of @tree.  The relevant top level nodes are the fragment
-- * nodes and the __symbols__ node.  Any other top level node will be ignored.
-+ * the top level of @overlay_root.  The relevant top level nodes are the
-+ * fragment nodes and the __symbols__ node.  Any other top level node will
-+ * be ignored.
+  * the top level of @overlay_root.  The relevant top level nodes are the
+  * fragment nodes and the __symbols__ node.  Any other top level node will
+- * be ignored.
++ * be ignored.  Populate other @ovcs fields.
   *
   * Return: 0 on success, -ENOMEM if memory allocation failure, -EINVAL if error
-- * detected in @tree, or -ENOSPC if idr_alloc() error.
-+ * detected in @overlay_root, or -ENOSPC if idr_alloc() error.
+- * detected in @overlay_root, or -ENOSPC if idr_alloc() error.
++ * detected in @overlay_root.  On error return, the caller of
++ * init_overlay_changeset() must call free_overlay_changeset().
   */
- static int init_overlay_changeset(struct overlay_changeset *ovcs,
--		const void *fdt, struct device_node *tree)
-+		const void *new_fdt, struct device_node *overlay_root)
+-static int init_overlay_changeset(struct overlay_changeset *ovcs,
+-		const void *new_fdt, struct device_node *overlay_root)
++static int init_overlay_changeset(struct overlay_changeset *ovcs)
  {
  	struct device_node *node, *overlay_node;
  	struct fragment *fragment;
-@@ -741,17 +742,17 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+ 	struct fragment *fragments;
+-	int cnt, id, ret;
++	int cnt, ret;
++
++	/*
++	 * None of the resources allocated by this function will be freed in
++	 * the error paths.  Instead the caller of this function is required
++	 * to call free_overlay_changeset() (which will free the resources)
++	 * if error return.
++	 */
+ 
+ 	/*
  	 * Warn for some issues.  Can not return -EINVAL for these until
  	 * of_unittest_apply_overlay() is fixed to pass these checks.
  	 */
--	if (!of_node_check_flag(tree, OF_DYNAMIC))
--		pr_debug("%s() tree is not dynamic\n", __func__);
-+	if (!of_node_check_flag(overlay_root, OF_DYNAMIC))
-+		pr_debug("%s() overlay_root is not dynamic\n", __func__);
+-	if (!of_node_check_flag(overlay_root, OF_DYNAMIC))
+-		pr_debug("%s() overlay_root is not dynamic\n", __func__);
++	if (!of_node_check_flag(ovcs->overlay_root, OF_DYNAMIC))
++		pr_debug("%s() ovcs->overlay_root is not dynamic\n", __func__);
  
--	if (!of_node_check_flag(tree, OF_DETACHED))
--		pr_debug("%s() tree is not detached\n", __func__);
-+	if (!of_node_check_flag(overlay_root, OF_DETACHED))
-+		pr_debug("%s() overlay_root is not detached\n", __func__);
+-	if (!of_node_check_flag(overlay_root, OF_DETACHED))
+-		pr_debug("%s() overlay_root is not detached\n", __func__);
++	if (!of_node_check_flag(ovcs->overlay_root, OF_DETACHED))
++		pr_debug("%s() ovcs->overlay_root is not detached\n", __func__);
  
--	if (!of_node_is_root(tree))
--		pr_debug("%s() tree is not root\n", __func__);
-+	if (!of_node_is_root(overlay_root))
-+		pr_debug("%s() overlay_root is not root\n", __func__);
+-	if (!of_node_is_root(overlay_root))
+-		pr_debug("%s() overlay_root is not root\n", __func__);
+-
+-	ovcs->overlay_root = overlay_root;
+-	ovcs->new_fdt = new_fdt;
+-
+-	INIT_LIST_HEAD(&ovcs->ovcs_list);
++	if (!of_node_is_root(ovcs->overlay_root))
++		pr_debug("%s() ovcs->overlay_root is not root\n", __func__);
  
--	ovcs->overlay_tree = tree;
--	ovcs->fdt = fdt;
-+	ovcs->overlay_root = overlay_root;
-+	ovcs->new_fdt = new_fdt;
+ 	of_changeset_init(&ovcs->cset);
  
- 	INIT_LIST_HEAD(&ovcs->ovcs_list);
- 
-@@ -764,7 +765,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+-	id = idr_alloc(&ovcs_idr, ovcs, 1, 0, GFP_KERNEL);
+-	if (id <= 0)
+-		return id;
+-
  	cnt = 0;
  
  	/* fragment nodes */
--	for_each_child_of_node(tree, node) {
-+	for_each_child_of_node(overlay_root, node) {
+-	for_each_child_of_node(overlay_root, node) {
++	for_each_child_of_node(ovcs->overlay_root, node) {
  		overlay_node = of_get_child_by_name(node, "__overlay__");
  		if (overlay_node) {
  			cnt++;
-@@ -772,7 +773,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+@@ -773,7 +774,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
  		}
  	}
  
--	node = of_get_child_by_name(tree, "__symbols__");
-+	node = of_get_child_by_name(overlay_root, "__symbols__");
+-	node = of_get_child_by_name(overlay_root, "__symbols__");
++	node = of_get_child_by_name(ovcs->overlay_root, "__symbols__");
  	if (node) {
  		cnt++;
  		of_node_put(node);
-@@ -785,7 +786,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+@@ -782,11 +783,12 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+ 	fragments = kcalloc(cnt, sizeof(*fragments), GFP_KERNEL);
+ 	if (!fragments) {
+ 		ret = -ENOMEM;
+-		goto err_free_idr;
++		goto err_out;
  	}
++	ovcs->fragments = fragments;
  
  	cnt = 0;
--	for_each_child_of_node(tree, node) {
-+	for_each_child_of_node(overlay_root, node) {
+-	for_each_child_of_node(overlay_root, node) {
++	for_each_child_of_node(ovcs->overlay_root, node) {
  		overlay_node = of_get_child_by_name(node, "__overlay__");
  		if (!overlay_node)
  			continue;
-@@ -807,7 +808,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+@@ -798,7 +800,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+ 			of_node_put(fragment->overlay);
+ 			ret = -EINVAL;
+ 			of_node_put(node);
+-			goto err_free_fragments;
++			goto err_out;
+ 		}
+ 
+ 		cnt++;
+@@ -808,7 +810,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
  	 * if there is a symbols fragment in ovcs->fragments[i] it is
  	 * the final element in the array
  	 */
--	node = of_get_child_by_name(tree, "__symbols__");
-+	node = of_get_child_by_name(overlay_root, "__symbols__");
+-	node = of_get_child_by_name(overlay_root, "__symbols__");
++	node = of_get_child_by_name(ovcs->overlay_root, "__symbols__");
  	if (node) {
  		ovcs->symbols_fragment = 1;
  		fragment = &fragments[cnt];
-@@ -861,12 +862,12 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+@@ -818,7 +820,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+ 		if (!fragment->target) {
+ 			pr_err("symbols in overlay, but not in live tree\n");
+ 			ret = -EINVAL;
+-			goto err_free_fragments;
++			goto err_out;
+ 		}
+ 
+ 		cnt++;
+@@ -827,20 +829,14 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+ 	if (!cnt) {
+ 		pr_err("no fragments or symbols in overlay\n");
+ 		ret = -EINVAL;
+-		goto err_free_fragments;
++		goto err_out;
+ 	}
+ 
+-	ovcs->id = id;
+ 	ovcs->count = cnt;
+-	ovcs->fragments = fragments;
+ 
+ 	return 0;
+ 
+-err_free_fragments:
+-	kfree(fragments);
+-err_free_idr:
+-	idr_remove(&ovcs_idr, id);
+-
++err_out:
+ 	pr_err("%s() failed, ret = %d\n", __func__, ret);
+ 
+ 	return ret;
+@@ -853,21 +849,34 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+ 	if (ovcs->cset.entries.next)
+ 		of_changeset_destroy(&ovcs->cset);
+ 
+-	if (ovcs->id)
++	if (ovcs->id) {
+ 		idr_remove(&ovcs_idr, ovcs->id);
++		list_del(&ovcs->ovcs_list);
++		ovcs->id = 0;
++	}
++
+ 
+ 	for (i = 0; i < ovcs->count; i++) {
+ 		of_node_put(ovcs->fragments[i].target);
+ 		of_node_put(ovcs->fragments[i].overlay);
  	}
  	kfree(ovcs->fragments);
++
  	/*
--	 * There should be no live pointers into ovcs->overlay_tree and
--	 * ovcs->fdt due to the policy that overlay notifiers are not allowed
--	 * to retain pointers into the overlay devicetree.
-+	 * There should be no live pointers into ovcs->overlay_root and
-+	 * ovcs->new_fdt due to the policy that overlay notifiers are not
-+	 * allowed to retain pointers into the overlay devicetree.
+-	 * There should be no live pointers into ovcs->overlay_root and
++	 * There should be no live pointers into ovcs->overlay_mem and
+ 	 * ovcs->new_fdt due to the policy that overlay notifiers are not
+-	 * allowed to retain pointers into the overlay devicetree.
++	 * allowed to retain pointers into the overlay devicetree other
++	 * than during the window from OF_OVERLAY_PRE_APPLY overlay
++	 * notifiers until the OF_OVERLAY_POST_REMOVE overlay notifiers.
++	 *
++	 * A memory leak will occur here if within the window.
  	 */
--	kfree(ovcs->overlay_tree);
--	kfree(ovcs->fdt);
-+	kfree(ovcs->overlay_root);
-+	kfree(ovcs->new_fdt);
+-	kfree(ovcs->overlay_root);
+-	kfree(ovcs->new_fdt);
++
++	if (ovcs->notify_state == OF_OVERLAY_INIT ||
++	    ovcs->notify_state == OF_OVERLAY_POST_REMOVE) {
++		kfree(ovcs->overlay_mem);
++		kfree(ovcs->new_fdt);
++	}
  	kfree(ovcs);
  }
  
-@@ -874,16 +875,15 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+@@ -875,27 +884,13 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
   * internal documentation
   *
   * of_overlay_apply() - Create and apply an overlay changeset
-- * @fdt:	base of memory allocated to hold the aligned FDT
-- * @tree:	Expanded overlay device tree
-- * @ovcs_id:	Pointer to overlay changeset id
-+ * @new_fdt:		Memory allocated to hold the aligned FDT
-+ * @overlay_root:	Expanded overlay device tree
-+ * @ovcs_id:		Pointer to overlay changeset id
+- * @new_fdt:		Memory allocated to hold the aligned FDT
+- * @overlay_root:	Expanded overlay device tree
+- * @ovcs_id:		Pointer to overlay changeset id
++ * @ovcs:	overlay changeset
   *
   * Creates and applies an overlay changeset.
   *
-  * If an error occurs in a pre-apply notifier, then no changes are made
-  * to the device tree.
+- * If an error occurs in a pre-apply notifier, then no changes are made
+- * to the device tree.
+- *
+- * A non-zero return value will not have created the changeset if error is from:
+- *   - parameter checks
+- *   - building the changeset
+- *   - overlay changeset pre-apply notifier
+- *
+  * If an error is returned by an overlay changeset pre-apply notifier
+  * then no further overlay changeset pre-apply notifier will be called.
   *
--
-  * A non-zero return value will not have created the changeset if error is from:
-  *   - parameter checks
-  *   - building the changeset
-@@ -913,8 +913,8 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
-  * id is returned to *ovcs_id.
+- * A non-zero return value will have created the changeset if error is from:
+- *   - overlay changeset entry notifier
+- *   - overlay changeset post-apply notifier
+- *
+  * If an error is returned by an overlay changeset post-apply notifier
+  * then no further overlay changeset post-apply notifier will be called.
+  *
+@@ -909,64 +904,37 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+  * following attempt to apply or remove an overlay changeset will be
+  * refused.
+  *
+- * Returns 0 on success, or a negative error number.  Overlay changeset
+- * id is returned to *ovcs_id.
++ * Returns 0 on success, or a negative error number.  On error return,
++ * the caller of of_overlay_apply() must call free_overlay_changeset().
   */
  
--static int of_overlay_apply(const void *fdt, struct device_node *tree,
--		int *ovcs_id)
-+static int of_overlay_apply(const void *new_fdt,
-+		struct device_node *overlay_root, int *ovcs_id)
+-static int of_overlay_apply(const void *new_fdt,
+-		struct device_node *overlay_root, int *ovcs_id)
++static int of_overlay_apply(struct overlay_changeset *ovcs)
  {
- 	struct overlay_changeset *ovcs;
+-	struct overlay_changeset *ovcs;
  	int ret = 0, ret_revert, ret_tmp;
-@@ -926,16 +926,16 @@ static int of_overlay_apply(const void *fdt, struct device_node *tree,
  
+-	/*
+-	 * As of this point, fdt and tree belong to the overlay changeset.
+-	 * overlay changeset code is responsible for freeing them.
+-	 */
+-
  	if (devicetree_corrupt()) {
  		pr_err("devicetree state suspect, refuse to apply overlay\n");
--		kfree(fdt);
--		kfree(tree);
-+		kfree(new_fdt);
-+		kfree(overlay_root);
+-		kfree(new_fdt);
+-		kfree(overlay_root);
  		ret = -EBUSY;
  		goto out;
  	}
  
- 	ovcs = kzalloc(sizeof(*ovcs), GFP_KERNEL);
- 	if (!ovcs) {
--		kfree(fdt);
--		kfree(tree);
-+		kfree(new_fdt);
-+		kfree(overlay_root);
- 		ret = -ENOMEM;
- 		goto out;
- 	}
-@@ -943,20 +943,20 @@ static int of_overlay_apply(const void *fdt, struct device_node *tree,
- 	of_overlay_mutex_lock();
- 	mutex_lock(&of_mutex);
- 
--	ret = of_resolve_phandles(tree);
-+	ret = of_resolve_phandles(overlay_root);
+-	ovcs = kzalloc(sizeof(*ovcs), GFP_KERNEL);
+-	if (!ovcs) {
+-		kfree(new_fdt);
+-		kfree(overlay_root);
+-		ret = -ENOMEM;
+-		goto out;
+-	}
+-
+-	of_overlay_mutex_lock();
+-	mutex_lock(&of_mutex);
+-
+-	ret = of_resolve_phandles(overlay_root);
++	ret = of_resolve_phandles(ovcs->overlay_root);
  	if (ret)
- 		goto err_free_tree;
+-		goto err_free_tree;
++		goto out;
  
--	ret = init_overlay_changeset(ovcs, fdt, tree);
-+	ret = init_overlay_changeset(ovcs, new_fdt, overlay_root);
+-	ret = init_overlay_changeset(ovcs, new_fdt, overlay_root);
++	ret = init_overlay_changeset(ovcs);
  	if (ret)
- 		goto err_free_tree;
+-		goto err_free_tree;
++		goto out;
  
- 	/*
--	 * after overlay_notify(), ovcs->overlay_tree related pointers may have
-+	 * After overlay_notify(), ovcs->overlay_root related pointers may have
- 	 * leaked to drivers, so can not kfree() tree, aka ovcs->overlay_tree;
- 	 * and can not free memory containing aligned fdt.  The aligned fdt
--	 * is contained within the memory at ovcs->fdt, possibly at an offset
--	 * from ovcs->fdt.
-+	 * is contained within the memory at ovcs->new_fdt, possibly at an
-+	 * offset from ovcs->new_fdt.
- 	 */
+-	/*
+-	 * After overlay_notify(), ovcs->overlay_root related pointers may have
+-	 * leaked to drivers, so can not kfree() tree, aka ovcs->overlay_tree;
+-	 * and can not free memory containing aligned fdt.  The aligned fdt
+-	 * is contained within the memory at ovcs->new_fdt, possibly at an
+-	 * offset from ovcs->new_fdt.
+-	 */
  	ret = overlay_notify(ovcs, OF_OVERLAY_PRE_APPLY);
  	if (ret) {
-@@ -998,8 +998,8 @@ static int of_overlay_apply(const void *fdt, struct device_node *tree,
- 	goto out_unlock;
+ 		pr_err("overlay changeset pre-apply notify error %d\n", ret);
+-		goto err_free_overlay_changeset;
++		goto out;
+ 	}
  
- err_free_tree:
--	kfree(fdt);
--	kfree(tree);
-+	kfree(new_fdt);
-+	kfree(overlay_root);
+ 	ret = build_changeset(ovcs);
+ 	if (ret)
+-		goto err_free_overlay_changeset;
++		goto out;
  
- err_free_overlay_changeset:
+ 	ret_revert = 0;
+ 	ret = __of_changeset_apply_entries(&ovcs->cset, &ret_revert);
+@@ -976,7 +944,7 @@ static int of_overlay_apply(const void *new_fdt,
+ 				 ret_revert);
+ 			devicetree_state_flags |= DTSF_APPLY_FAIL;
+ 		}
+-		goto err_free_overlay_changeset;
++		goto out;
+ 	}
+ 
+ 	ret = __of_changeset_apply_notify(&ovcs->cset);
+@@ -984,9 +952,6 @@ static int of_overlay_apply(const void *new_fdt,
+ 		pr_err("overlay apply changeset entry notify error %d\n", ret);
+ 	/* notify failure is not fatal, continue */
+ 
+-	list_add_tail(&ovcs->ovcs_list, &ovcs_list);
+-	*ovcs_id = ovcs->id;
+-
+ 	ret_tmp = overlay_notify(ovcs, OF_OVERLAY_POST_APPLY);
+ 	if (ret_tmp) {
+ 		pr_err("overlay changeset post-apply notify error %d\n",
+@@ -995,19 +960,6 @@ static int of_overlay_apply(const void *new_fdt,
+ 			ret = ret_tmp;
+ 	}
+ 
+-	goto out_unlock;
+-
+-err_free_tree:
+-	kfree(new_fdt);
+-	kfree(overlay_root);
+-
+-err_free_overlay_changeset:
+-	free_overlay_changeset(ovcs);
+-
+-out_unlock:
+-	mutex_unlock(&of_mutex);
+-	of_overlay_mutex_unlock();
+-
+ out:
+ 	pr_debug("%s() err=%d\n", __func__, ret);
+ 
+@@ -1015,15 +967,16 @@ static int of_overlay_apply(const void *new_fdt,
+ }
+ 
+ int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
+-			 int *ovcs_id)
++			 int *ret_ovcs_id)
+ {
+ 	void *new_fdt;
+ 	void *new_fdt_align;
++	void *overlay_mem;
+ 	int ret;
+ 	u32 size;
+-	struct device_node *overlay_root = NULL;
++	struct overlay_changeset *ovcs;
+ 
+-	*ovcs_id = 0;
++	*ret_ovcs_id = 0;
+ 
+ 	if (overlay_fdt_size < sizeof(struct fdt_header) ||
+ 	    fdt_check_header(overlay_fdt)) {
+@@ -1035,41 +988,67 @@ int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
+ 	if (overlay_fdt_size < size)
+ 		return -EINVAL;
+ 
++	ovcs = kzalloc(sizeof(*ovcs), GFP_KERNEL);
++	if (!ovcs)
++		return -ENOMEM;
++
++	of_overlay_mutex_lock();
++	mutex_lock(&of_mutex);
++
++	/*
++	 * ovcs->notify_state must be set to OF_OVERLAY_INIT before allocating
++	 * ovcs resources, implicitly set by kzalloc() of ovcs
++	 */
++
++	ovcs->id = idr_alloc(&ovcs_idr, ovcs, 1, 0, GFP_KERNEL);
++	if (ovcs->id <= 0) {
++		ret = ovcs->id;
++		goto err_free_ovcs;
++	}
++
++	INIT_LIST_HEAD(&ovcs->ovcs_list);
++	list_add_tail(&ovcs->ovcs_list, &ovcs_list);
++
+ 	/*
+ 	 * Must create permanent copy of FDT because of_fdt_unflatten_tree()
+ 	 * will create pointers to the passed in FDT in the unflattened tree.
+ 	 */
+ 	new_fdt = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
+-	if (!new_fdt)
+-		return -ENOMEM;
++	if (!new_fdt) {
++		ret = -ENOMEM;
++		goto err_free_ovcs;
++	}
++	ovcs->new_fdt = new_fdt;
+ 
+ 	new_fdt_align = PTR_ALIGN(new_fdt, FDT_ALIGN_SIZE);
+ 	memcpy(new_fdt_align, overlay_fdt, size);
+ 
+-	of_fdt_unflatten_tree(new_fdt_align, NULL, &overlay_root);
+-	if (!overlay_root) {
++	overlay_mem = of_fdt_unflatten_tree(new_fdt_align, NULL,
++					    &ovcs->overlay_root);
++	if (!overlay_mem) {
+ 		pr_err("unable to unflatten overlay_fdt\n");
+ 		ret = -EINVAL;
+-		goto out_free_new_fdt;
++		goto err_free_ovcs;
+ 	}
++	ovcs->overlay_mem = overlay_mem;
+ 
+-	ret = of_overlay_apply(new_fdt, overlay_root, ovcs_id);
+-	if (ret < 0) {
+-		/*
+-		 * new_fdt and overlay_root now belong to the overlay
+-		 * changeset.
+-		 * overlay changeset code is responsible for freeing them.
+-		 */
+-		goto out;
+-	}
++	ret = of_overlay_apply(ovcs);
++	if (ret < 0)
++		goto err_free_ovcs;
++
++	mutex_unlock(&of_mutex);
++	of_overlay_mutex_unlock();
++
++	*ret_ovcs_id = ovcs->id;
+ 
+ 	return 0;
+ 
++err_free_ovcs:
++	free_overlay_changeset(ovcs);
+ 
+-out_free_new_fdt:
+-	kfree(new_fdt);
++	mutex_unlock(&of_mutex);
++	of_overlay_mutex_unlock();
+ 
+-out:
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(of_overlay_fdt_apply);
+@@ -1206,28 +1185,26 @@ int of_overlay_remove(int *ovcs_id)
+ 	if (!ovcs) {
+ 		ret = -ENODEV;
+ 		pr_err("remove: Could not find overlay #%d\n", *ovcs_id);
+-		goto out_unlock;
++		goto err_unlock;
+ 	}
+ 
+ 	if (!overlay_removal_is_ok(ovcs)) {
+ 		ret = -EBUSY;
+-		goto out_unlock;
++		goto err_unlock;
+ 	}
+ 
+ 	ret = overlay_notify(ovcs, OF_OVERLAY_PRE_REMOVE);
+ 	if (ret) {
+ 		pr_err("overlay changeset pre-remove notify error %d\n", ret);
+-		goto out_unlock;
++		goto err_unlock;
+ 	}
+ 
+-	list_del(&ovcs->ovcs_list);
+-
+ 	ret_apply = 0;
+ 	ret = __of_changeset_revert_entries(&ovcs->cset, &ret_apply);
+ 	if (ret) {
+ 		if (ret_apply)
+ 			devicetree_state_flags |= DTSF_REVERT_FAIL;
+-		goto out_unlock;
++		goto err_unlock;
+ 	}
+ 
+ 	ret = __of_changeset_revert_notify(&ovcs->cset);
+@@ -1237,6 +1214,11 @@ int of_overlay_remove(int *ovcs_id)
+ 
+ 	*ovcs_id = 0;
+ 
++	/*
++	 * Note that the overlay memory will be kfree()ed by
++	 * free_overlay_changeset() even if the notifier for
++	 * OF_OVERLAY_POST_REMOVE returns an error.
++	 */
+ 	ret_tmp = overlay_notify(ovcs, OF_OVERLAY_POST_REMOVE);
+ 	if (ret_tmp) {
+ 		pr_err("overlay changeset post-remove notify error %d\n",
+@@ -1247,7 +1229,12 @@ int of_overlay_remove(int *ovcs_id)
+ 
  	free_overlay_changeset(ovcs);
+ 
+-out_unlock:
++err_unlock:
++	/*
++	 * If jumped over free_overlay_changeset(), then did not kfree()
++	 * overlay related memory.  This is a memory leak unless a subsequent
++	 * of_overlay_remove() of this overlay is successful.
++	 */
+ 	mutex_unlock(&of_mutex);
+ 
+ out:
+diff --git a/include/linux/of.h b/include/linux/of.h
+index 04971e85fbc9..17741eee0ca4 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -1543,7 +1543,8 @@ static inline bool of_device_is_system_power_controller(const struct device_node
+  */
+ 
+ enum of_overlay_notify_action {
+-	OF_OVERLAY_PRE_APPLY = 0,
++	OF_OVERLAY_INIT = 0,	/* kzalloc() of ovcs sets this value */
++	OF_OVERLAY_PRE_APPLY,
+ 	OF_OVERLAY_POST_APPLY,
+ 	OF_OVERLAY_PRE_REMOVE,
+ 	OF_OVERLAY_POST_REMOVE,
 -- 
 Frank Rowand <frank.rowand@sony.com>
 

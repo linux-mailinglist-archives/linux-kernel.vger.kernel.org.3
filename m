@@ -2,115 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CD75083F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C9A5083F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346893AbiDTIt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
+        id S234278AbiDTIty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235189AbiDTIt1 (ORCPT
+        with ESMTP id S233689AbiDTItp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:49:27 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BFB17AB4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:46:41 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id r13so2055664ejd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:46:41 -0700 (PDT)
+        Wed, 20 Apr 2022 04:49:45 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C631837F
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:46:59 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id y11so1108865ljh.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:46:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=ventanamicro.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QArLsIT6s7ntTWKM79ixwz9SubeDVO+01rJZYCmJhAI=;
-        b=OsIBgFMwkBRs8Cs9x6FSqYpOYCxffAMrLFyciN8d4alWeBg0B3naUc5D4lFt/Zy5Z9
-         oxz4hmz/fUARL5SRiGrU028x2VvNTvV/TBWLe1Q/FYgxlrp1wdw+oMovghLTMQBmUkoc
-         t9MRNC/qpOZo7ivU/O8sfIN/GdojfxQ/EBbgVbG7RDOJ3Vwe3LAwR87JZD2Cxg3RtiQ+
-         dCnuIJnxIAwyOyoAyZBlBipC7Grg5tMl/6yhiA7djiSTZ66M/CqoiretBkcZ8n+bloU5
-         LY5FImBBanm5ZjvtSm4jLVzdtXO/yr2/RHHXZpsjl2SaFS3+um/PgcSfDuQC1WnNg3Ki
-         OT6Q==
+         :cc;
+        bh=JjwgVR25fOpo94MrJPZVArRITLkolD2RuuKCBdYhNzY=;
+        b=RZ+ikrgo+BjsNGw26e+go2LbMbf96IPh2LW4clRqX8E2MnxFpzoFF8JiPsOQv5xAy7
+         NZwc3XyJEvUe8gJ/3QsBAwWl/Di4ditGXZ6zJTARZOj8GMVpycdsO8rAu0uK4/a+DbgB
+         Pbc20OzJRVV3LjHumKVHbdWO1V6a0/Bfa1EtfsUob3C/viSfnSxaxBCKnNmLEbR23NfM
+         9NSe+IOUfKbNfsd/vL5KRU9w6TSEzm+Z4oxXnCjyldFCHQ4HcQgS30evggmpLC9WprTh
+         /4X0G38pPFj0fV0e8yHy1xg8HJds0Rk4riqcssz5CwJD7TmiQb4l3dUJO6ZpSlCyvgVw
+         O7tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QArLsIT6s7ntTWKM79ixwz9SubeDVO+01rJZYCmJhAI=;
-        b=nHOnJYrYQpWajwINij1vKbVPpjqbCKjvfaJ9HCWdO/ZE0qcPzsqu5ew/5F1w16lNz8
-         L1ph6qgb/TAoXCgeqmhB+wyzNnaCtsX0JB9Yr7KWXMcJF0gTrTv1Xkm+6I+FUuj/YokO
-         F5aEECh8PYN22kgXszBZfGbLBis4uMHZzRVPiE5HduZByNDEzN9bK1n6Vro7iw8o6bCv
-         Ev9iSskY0DUmtVuBm6t9Cf0iASUtcBJTbiS0IKFFHbse4As0038SffSo6BC/y48lGDbK
-         irML7hY6lNfD1F1hU9zS/e3mHqioqXf29d4N9SzU9XjvuilkpIGcPhRRJFg3nbf+3KPN
-         OO3w==
-X-Gm-Message-State: AOAM530MNNnAGoDoi3njBz0X3QpW97QNS1tSim/uHKPr4u4Xo6yYj4sH
-        4oJhJaG//DExw6d/UKZH9wCoWmR9FcNXUBNcwB4=
-X-Google-Smtp-Source: ABdhPJxDX2Ox5D1qveJJ6puhBQK4jNgpG+yRgcrayoM/GjnIN4VQYO0yVUePdYt8VF0a6RX+J3+SnMl5GmeYMKU8AZg=
-X-Received: by 2002:a17:907:7f9f:b0:6ef:a120:4ea6 with SMTP id
- qk31-20020a1709077f9f00b006efa1204ea6mr13428222ejc.607.1650444400170; Wed, 20
- Apr 2022 01:46:40 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=JjwgVR25fOpo94MrJPZVArRITLkolD2RuuKCBdYhNzY=;
+        b=C4rq9fOledYWdLxrjfcZLpkVK0nttg6QZf0ExYtLBr37VDIgxZ97oD86DbP53YFkrE
+         qe0sicCFEQg6pgDz/V3VdkhaorCxRhwnXmMjF5T9hNptrnD5FrDKIyLpkpA5fXIPiNlD
+         haTuoWMyTP609BBR0OP8MHafvVNYpPabeSx1MmpS/aeAOxS6RKmSrt5hy5XpQPsloOIg
+         RW6e3C/Rh9lWkQH7OQmX+OjzxUTRIHj8H0Smj9lofZizwfSPmOhoigfhJtSS4Esp4SWe
+         MkMKDVksUNepkDjoc/0pHolQ0kYORXpp+iBmxDxeEF64d3Yi2YT92TyZNY6uJx3eR5Op
+         Xuyg==
+X-Gm-Message-State: AOAM531tItP18t191XUBhsT3s5xk8HgVDl/fchhoQ9BGUoNJpfqgUNL5
+        wSvCNA7A12allh4jWAaZxZ9yq/uHTpgn0LP5C0S/xw==
+X-Google-Smtp-Source: ABdhPJz+h1GX4XLudNgrwSIEdojpi93OmucwSzatZwTI4giwColnNsRBurf+uc0IKVn49/2aHe9h3XLzaMebnRm9LS4=
+X-Received: by 2002:a05:651c:1784:b0:24b:ce8:528a with SMTP id
+ bn4-20020a05651c178400b0024b0ce8528amr12675701ljb.364.1650444417868; Wed, 20
+ Apr 2022 01:46:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220419071855.23338-1-guozhengkui@vivo.com> <7cb4d3be-925f-05bd-78fe-67a69dfee18d@deltatee.com>
-In-Reply-To: <7cb4d3be-925f-05bd-78fe-67a69dfee18d@deltatee.com>
-From:   Alexander Fomichev <fomichev.ru@gmail.com>
-Date:   Wed, 20 Apr 2022 11:46:28 +0300
-Message-ID: <CAEKnZG4qTOn8mbTNPaaHbkttnfLz9Nc88DpCcm84T32hiPA5uQ@mail.gmail.com>
-Subject: Re: [PATCH] ntb_perf: fix doubletest cocci warning
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     Guo Zhengkui <guozhengkui@vivo.com>, Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        "open list:NTB DRIVER CORE" <ntb@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        zhengkui_guo@outlook.com
+References: <20220420013258.3639264-1-atishp@rivosinc.com> <20220420013258.3639264-2-atishp@rivosinc.com>
+ <CAOnJCU+r8KhhQP-LZN+oGGCDkdQt9ZbF+LCTtZWY8r=qwmSOng@mail.gmail.com>
+In-Reply-To: <CAOnJCU+r8KhhQP-LZN+oGGCDkdQt9ZbF+LCTtZWY8r=qwmSOng@mail.gmail.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Wed, 20 Apr 2022 14:16:45 +0530
+Message-ID: <CAK9=C2WHwRLyRHw4AVFpZcYJsDdGwaza_cpQsaMz-4qVamc+VQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] RISC-V: KVM: Remove 's' & 'u' as valid ISA extension
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>, kvm-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks, nice catch.
-I'll include it into the next patch version.
-
-Regards,
-Alexander.
-
-=D0=B2=D1=82, 19 =D0=B0=D0=BF=D1=80. 2022 =D0=B3. =D0=B2 18:50, Logan Gunth=
-orpe <logang@deltatee.com>:
+On Wed, Apr 20, 2022 at 1:14 PM Atish Patra <atishp@atishpatra.org> wrote:
 >
->
->
-> On 2022-04-19 01:18, Guo Zhengkui wrote:
-> > `!data->ops.init` has been repeated triple. The original logic is to
-> > check whether `.init`, `.run` and `.clear` callbacks are NULL or not.
+> On Tue, Apr 19, 2022 at 6:33 PM Atish Patra <atishp@rivosinc.com> wrote:
 > >
-> > Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
->
-> This appears to be a patch against Alexander's patch which has not been
-> accepted yet. Posting a note on his patch so he fixes it for the next
-> posting would be preferable.
->
-> Logan
->
+> > There are no ISA extension defined as 's' & 'u' in RISC-V specifications.
+> > The misa register defines 's' & 'u' bit as Supervisor/User privilege mode
+> > enabled. But it should not appear in the ISA extension in the device tree.
+> >
+> > Remove those from the allowed ISA extension for kvm.
+> >
+> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
 > > ---
-> >  drivers/ntb/test/ntb_perf.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >  arch/riscv/kvm/vcpu.c | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
 > >
-> > diff --git a/drivers/ntb/test/ntb_perf.c b/drivers/ntb/test/ntb_perf.c
-> > index c106c3a5097e..dcae4be91365 100644
-> > --- a/drivers/ntb/test/ntb_perf.c
-> > +++ b/drivers/ntb/test/ntb_perf.c
-> > @@ -1451,7 +1451,7 @@ static void perf_ext_lat_work(struct work_struct =
-*work)
+> > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> > index 6785aef4cbd4..2e25a7b83a1b 100644
+> > --- a/arch/riscv/kvm/vcpu.c
+> > +++ b/arch/riscv/kvm/vcpu.c
+> > @@ -43,9 +43,7 @@ const struct kvm_stats_header kvm_vcpu_stats_header = {
+> >                                  riscv_isa_extension_mask(d) | \
+> >                                  riscv_isa_extension_mask(f) | \
+> >                                  riscv_isa_extension_mask(i) | \
+> > -                                riscv_isa_extension_mask(m) | \
+> > -                                riscv_isa_extension_mask(s) | \
+> > -                                riscv_isa_extension_mask(u))
+> > +                                riscv_isa_extension_mask(m))
+> >
+> >  static void kvm_riscv_reset_vcpu(struct kvm_vcpu *vcpu)
 > >  {
-> >       struct perf_ext_lat_data *data =3D to_ext_lat_data(work);
+> > --
+> > 2.25.1
 > >
-> > -     if (!data->ops.init || !data->ops.init || !data->ops.init) {
-> > +     if (!data->ops.init || !data->ops.run || !data->ops.clear) {
-> >               struct perf_ctx *perf =3D data->perf;
-> >
-> >               data->status =3D -EFAULT;
+>
+> Sorry. Forgot to add the fixes tag.
+>
+> Fixes: a33c72faf2d7 (RISC-V: KVM: Implement VCPU create, init and
+> destroy functions)
+
+I have queued this for fixes.
+
+Thanks,
+Anup
+
+>
+> --
+> Regards,
+> Atish
+>
+> --
+> kvm-riscv mailing list
+> kvm-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kvm-riscv

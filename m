@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12634507E15
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 03:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D41E507E23
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 03:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241319AbiDTBXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 21:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
+        id S1346200AbiDTBag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 21:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiDTBXV (ORCPT
+        with ESMTP id S232010AbiDTBae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 21:23:21 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8FA32EC3;
-        Tue, 19 Apr 2022 18:20:35 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id k14so166059pga.0;
-        Tue, 19 Apr 2022 18:20:35 -0700 (PDT)
+        Tue, 19 Apr 2022 21:30:34 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B350524969;
+        Tue, 19 Apr 2022 18:27:49 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 12so459220oix.12;
+        Tue, 19 Apr 2022 18:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kt0BA6E2YVz9rnggJc+TiKb9bbmdQfz/mieF7YR0eTY=;
-        b=nPetD018frdQiGN1xpLyv+3uSuUXRlLIAw/Q2KO+NA8JE5r19ZuBQk/jLrNcWqqZ63
-         4scmHiHLF7HRFSJdnuMnu0kxHqR1NBDB/BjgaTd2MGeJeJVfif1KuFpr56WYX2zPkoXt
-         nqDXLPKPYbYwkd+qIyX52w7J6VoPrs4npeBZA7LXWI11yUTodroygKZgwnTbu2AJNPb9
-         wdJ8eowa9aeo0ndzSoMBhrwyp3TeYcvR6OK5kjw1omdyCvVC6ODyIcl33JgyxE05ZPGF
-         YM/QNmt9fYwSMfXrmBDi4iGW2DtDY5Ox9Ca3sz6iURzrpk+wzTLxzIxCJXp5bU3h4XmP
-         lYQw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=6RZt3pRY2aKwzYWHycI06GL3k6VJx2KQpfieK912YU8=;
+        b=B+cxRY9FhW3qdrJo5zcX6sM27c423HY/NsSxFAgyuclMXAJFwQK1KTll69IMEU19Su
+         20uLodQmfsoLbbRgBO1oFs/wUrRP13lxDSZSt44zqP8G+DteCzjY0ybV5oJgRQL3bgaW
+         oL6afyZgrOEIVVpilc7VdFeRUhRpflx2IH60v0ZaFqjpnzYT4zDNijDaJErUFQR3NdN3
+         rSgBxlNvI0tjgjQb65SZ8gtcqqOyhcT7dUYuSC2fuR8ciQ33E+K2Lbkkd+1+Ew5YtMkM
+         RIw5Z/8GN7/6BzNwJl+EVKneuM2X8FAhSR1jNV6DD1h4OMfBD8bg48zfUH9Vn6N3xFid
+         hUVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kt0BA6E2YVz9rnggJc+TiKb9bbmdQfz/mieF7YR0eTY=;
-        b=AQWeQppUFrbJPQXVdSaiX1IHNsyaPLtz0TSubAhaRb/45xTKy043kHTUQmIhDdoF0Z
-         xFStVtGztVoarkZazSOKQeVtM4bKtYMIbTifEbG0rJWkzKJToevASl5A2YkbYYo0dEqF
-         Ze3fDA6TDxL0t5agw9aXSAycwhWjGy1ss5oY84RocUql4cwIRFaZt50St5/b+mDgWRMt
-         Vg8Sd/zz48cDsJOO5v9fZtW75lSe0q1CnEBB9J1J0rJ3bTcvbsVYJSzVnve3XOk+hNx0
-         sqivCcWAG57wEBMoHb1shJZ7iXTFxPdJ/q5phFTG80qiJlCi2HR4eBNjY0Edb74jCoWd
-         ropg==
-X-Gm-Message-State: AOAM532Ojd4oizQuUqS1pIxFw7q3pRV6IlvWY2Jzwjnl7TcdcwiPdmUI
-        L7PDuWw5EHtuUB0h3SIMwUM=
-X-Google-Smtp-Source: ABdhPJxZ2jY+wMDYjTy7G8OoBSAEtjGieq42V1SbbKU98nxxVnPAyKFImwL4eXny0f4+7V1WbEHmHA==
-X-Received: by 2002:a63:5421:0:b0:3aa:5717:fadb with SMTP id i33-20020a635421000000b003aa5717fadbmr2259402pgb.422.1650417634718;
-        Tue, 19 Apr 2022 18:20:34 -0700 (PDT)
-Received: from localhost ([192.55.54.52])
-        by smtp.gmail.com with ESMTPSA id c15-20020a17090a674f00b001cba1008a3csm17225172pjm.51.2022.04.19.18.20.33
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=6RZt3pRY2aKwzYWHycI06GL3k6VJx2KQpfieK912YU8=;
+        b=0Xdv3h6/I2JlQzxJvtEDT8nZ0lgU9D+SeiHW1hIXEl9e6gulDeG6ew+MgA1RThWvUr
+         BDPB7w662WB1uWpbQKfz5xEG0Jq9Uv27btonTvf0GFuoEpXjQiKcex+ToMDOgKIp9GTY
+         wTGPuaz9S+1drFyEbIFVu/TkQ0J/hMFZK/rr3u4pdfmDu3UU8vPbfWxN7WM6uUodSQHO
+         5pFuUMhs1YHJ5ZzdihJzAFDyuO29oDMzd5lNlMYh+UObtbaljrSeHY8IQaxrfDZ5uF0u
+         9efDr1kFh5DYWUV6gQpSzTg2P1VByCxOS0g1984Y6Df9FB2+4XSKaVKUKzMOnlAirOWd
+         h4Dw==
+X-Gm-Message-State: AOAM530gyR3gVIqQTVCrSX8iVTyydSn+dLtiCslZPegvrk7pxS6OeiqH
+        k8AjWFFP3EXYx8rEMpZXzPWHvIrkttpmWgLi
+X-Google-Smtp-Source: ABdhPJy65y7OiIVCslGTDjTngaUh+H8salM/co/xL+9jxZxE9vPUet2d6AEN2W7VgaiYwaDveYO/zw==
+X-Received: by 2002:aca:d9c3:0:b0:2fa:6f51:7bfe with SMTP id q186-20020acad9c3000000b002fa6f517bfemr639590oig.59.1650418069051;
+        Tue, 19 Apr 2022 18:27:49 -0700 (PDT)
+Received: from toe.qscaudio.com ([65.113.122.35])
+        by smtp.gmail.com with ESMTPSA id i26-20020a4a929a000000b0033a29c8d564sm4284530ooh.3.2022.04.19.18.27.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 18:20:34 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 18:20:32 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, isaku.yamahata@gmail.com
-Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
- attestation interface driver
-Message-ID: <20220420012032.GA2224031@ls.amr.corp.intel.com>
-References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Tue, 19 Apr 2022 18:27:48 -0700 (PDT)
+From:   jeff.evanson@gmail.com
+X-Google-Original-From: jeff.evanson@qsc.com
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vedang Patel <vedang.patel@intel.com>,
+        Andre Guedes <andre.guedes@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-kernel@vger.kernel.org (open list),
+        bpf@vger.kernel.org (open list:XDP (eXpress Data Path))
+Cc:     Jeff Evanson <jeff.evanson@qsc.com>
+Subject: [PATCH v2 1/2] igc: Fix race in igc_xdp_xmit_zc
+Date:   Tue, 19 Apr 2022 19:26:34 -0600
+Message-Id: <20220420012635.13733-2-jeff.evanson@qsc.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220420012635.13733-1-jeff.evanson@qsc.com>
+References: <20220420012635.13733-1-jeff.evanson@qsc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,80 +82,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 03:01:09PM -0700,
-Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
-...
-> diff --git a/drivers/platform/x86/intel/tdx/intel_tdx_attest.c b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
-> new file mode 100644
-> index 000000000000..9124db800d4f
-> --- /dev/null
-> +++ b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
-...
-> +static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
-> +			     unsigned long arg)
-> +{
-> +	struct attest_dev *adev = platform_get_drvdata(pdev);
-> +	void __user *argp = (void __user *)arg;
-> +	struct tdx_gen_quote tdquote_req;
-> +	long ret = 0, err;
-> +
-> +	mutex_lock(&adev->lock);
-> +
-> +	switch (cmd) {
-> +	case TDX_CMD_GET_TDREPORT:
-> +		if (copy_from_user(adev->report_buf, argp,
-> +					TDX_REPORT_DATA_LEN)) {
-> +			ret = -EFAULT;
-> +			break;
-> +		}
-> +
-> +		/* Generate TDREPORT_STRUCT */
-> +		err = tdx_mcall_tdreport(adev->tdreport_buf, adev->report_buf);
-> +		if (err) {
-> +			ret = put_user(err, (long __user *)argp);
-> +			ret = -EIO;
-> +			break;
-> +		}
-> +
-> +		if (copy_to_user(argp, adev->tdreport_buf, TDX_TDREPORT_LEN))
-> +			ret = -EFAULT;
-> +		break;
-> +	case TDX_CMD_GEN_QUOTE:
-> +		reinit_completion(&adev->req_compl);
-> +
-> +		/* Copy TDREPORT data from user buffer */
-> +		if (copy_from_user(&tdquote_req, argp, sizeof(struct tdx_gen_quote))) {
-> +			ret = -EFAULT;
-> +			break;
-> +		}
-> +
-> +		if (tdquote_req.len <= 0 || tdquote_req.len > GET_QUOTE_MAX_SIZE) {
-> +			ret = -EINVAL;
-> +			break;
-> +		}
-> +
-> +		if (copy_from_user(adev->tdquote_buf, (void __user *)tdquote_req.buf,
-> +					tdquote_req.len)) {
-> +			ret = -EFAULT;
-> +			break;
-> +		}
-> +
-> +		/* Submit GetQuote Request */
-> +		err = tdx_hcall_get_quote(adev->tdquote_buf, GET_QUOTE_MAX_SIZE);
-> +		if (err) {
-> +			ret = put_user(err, (long __user *)argp);
-> +			ret = -EIO;
-> +			break;
-> +		}
-> +
-> +		/* Wait for attestation completion */
-> +		ret = wait_for_completion_interruptible_timeout(
-> +				&adev->req_compl,
-> +				msecs_to_jiffies(GET_QUOTE_TIMEOUT));
+From: Jeff Evanson <jeff.evanson@qsc.com>
 
-If timeout occurs, the state of adev->tdquote_buf is unknown.  It's not safe
-to continue to using adev->tdquote_buf.  VMM would continue to processing
-getquote request with this buffer.  What if TDX_CMD_GEN_QUOTE is issued again,
-and tdquote_buf is re-used?
+In igc_xdp_xmit_zc, initialize next_to_use while holding the netif_tx_lock
+to prevent racing with other users of the tx ring.
+
+Fixes: 9acf59a752d4 (igc: Enable TX via AF_XDP zero-copy)
+---
+ drivers/net/ethernet/intel/igc/igc_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 1c00ee310c19..a36a18c84aeb 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -2598,7 +2598,7 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+ 	struct netdev_queue *nq = txring_txq(ring);
+ 	union igc_adv_tx_desc *tx_desc = NULL;
+ 	int cpu = smp_processor_id();
+-	u16 ntu = ring->next_to_use;
++	u16 ntu;
+ 	struct xdp_desc xdp_desc;
+ 	u16 budget;
+ 
+@@ -2607,6 +2607,8 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+ 
+ 	__netif_tx_lock(nq, cpu);
+ 
++	ntu = ring->next_to_use;
++
+ 	budget = igc_desc_unused(ring);
+ 
+ 	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+2.17.1
+

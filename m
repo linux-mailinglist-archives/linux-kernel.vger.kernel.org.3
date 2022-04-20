@@ -2,182 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496D9509266
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AD650926B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382703AbiDTV4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 17:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
+        id S1382711AbiDTV74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 17:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236516AbiDTV4R (ORCPT
+        with ESMTP id S236516AbiDTV7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 17:56:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAB945513;
-        Wed, 20 Apr 2022 14:53:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7BB0EB821B0;
-        Wed, 20 Apr 2022 21:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA5B1C385A0;
-        Wed, 20 Apr 2022 21:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650491607;
-        bh=s+1aSxlHOsrj2r/dbmg/La17ENCktIGI5EcH703yDBc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Hu+OnO1lFWn0QE4re9JajSeGmR5kc3K1HYS0x0FiHx6jDoziq07AlVY5PEFh5BjgS
-         Rm2DTG+CDczCpPcm554B8IQhnTa+tpdLZWulhnB8jlTzzk6CP8OfXszgO9DIB6xc+S
-         uwnsNhQI+uwo2WH/xQPSe4cE5602DcO9CUVattq8=
-Date:   Wed, 20 Apr 2022 14:53:25 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, max.krummenacher@toradex.com,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefano Stabellini <stefano.stabellini@xilinx.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: Re: [next] arm: boot failed - PC is at cpu_ca15_set_pte_ext
-Message-Id: <20220420145325.602b45256b98c14c9325c61d@linux-foundation.org>
-In-Reply-To: <9eb0c1a4f805a75e3e9f24dfcae3077b772a06c0.camel@gmail.com>
-References: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
-        <CAMj1kXFKzi14UCoiDOMwS5jyNz61_UzxGXm+ke0EWEt4nn6E1g@mail.gmail.com>
-        <9eb0c1a4f805a75e3e9f24dfcae3077b772a06c0.camel@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 17:59:53 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFBC3BBC2;
+        Wed, 20 Apr 2022 14:57:05 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id o132so1438804vko.11;
+        Wed, 20 Apr 2022 14:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XV35Uhu02nhpc/+S29bQrcl9X0sx9xBTyC1cMcdAS0s=;
+        b=LEBmYdStR/8Bi3o9F1wTA7JXqWfejnTtHV7VFQdsVGTF7bYv9Dt3LOfHyoKU64TyfO
+         d/aXaMmspy4+NEm7Aa8Ctz6WE8EmC5fe3H7vRBBP2jA75fAHZGPTP8eedjfUyAtEI7Kd
+         oQZx+4vlwIP/Nt8ePNk4+y/3b3UsUh0h7HFEgIzEgiv9fzQQbJILWZavjiatsHL62CBy
+         YovP3WmFBekWBd47GvLm5zJOMB1BooXf3UqLtFV9WjA87wRuP6OqmfBudJXbzENLRoPQ
+         Huu8H2FvoRrffbOHbhB8fl8KdqSkvV9rAYOc6U4R7wg1XKZJH8PvXVbo3e2bl3SZojiC
+         8MkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XV35Uhu02nhpc/+S29bQrcl9X0sx9xBTyC1cMcdAS0s=;
+        b=eG4iOQwLJ/ax3EedKZYQDF1YonLzCTXO9ToMd4c3V2GuNL1OU6mvIX6gWeSJbael9t
+         xWR760TSSqLmnrC+D9Zp6/B3zKNGY7LCJtRgHCmS8IksT4wlLfDqXunvkENxRLvhD3Gj
+         1I382DBvIdYh9Q8+AXMEez71KBOcBIYorEU1OftBVCBBa4NAAjn3tIvmVmrYrNIJp6db
+         ZcDTGClpHzh+4wogIos/RoNuDQn492HDbkrK503r6Xq8Xvl2CsHjXKlUIldwx9S9BSuB
+         ricMfsa/b/Mvm7UPsn+Z4aEFy+addko+g6Rj/BReh9tOpPaVF1EZuLrXWZSH8h9gv0Ta
+         NASg==
+X-Gm-Message-State: AOAM533yZHRE5h7RoWdbn7rpcioqDXAVazsYUU/6nl6lWDQT6aPdn3o9
+        unC4xP231mSNwx22uiynHcs5WAJrO4tCCOE5FaM=
+X-Google-Smtp-Source: ABdhPJyQrA5iKhRxkhWVa13LFirIDjHKiG+P5vHxgIV322/EvSZCLYGcooTZswfDe58+Pp+eCyxbrpi2LGbJ0Jq6JCA=
+X-Received: by 2002:ac5:cd88:0:b0:32c:5497:6995 with SMTP id
+ i8-20020ac5cd88000000b0032c54976995mr6630525vka.33.1650491824683; Wed, 20 Apr
+ 2022 14:57:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220418124834.829064-1-jolsa@kernel.org> <20220418124834.829064-5-jolsa@kernel.org>
+In-Reply-To: <20220418124834.829064-5-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 20 Apr 2022 14:56:53 -0700
+Message-ID: <CAEf4BzYuvLgVtxbtz7pjCmtSp0hEKJd0peCnbX0E_-Tqy5g4dw@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf-next 4/4] selftests/bpf: Add attach bench test
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 09:50:52 +0200 Max Krummenacher <max.oss.09@gmail.com> wrote:
+On Mon, Apr 18, 2022 at 5:49 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Adding test that reads all functions from ftrace available_filter_functions
+> file and attach them all through kprobe_multi API.
+>
+> It also prints stats info with -v option, like on my setup:
+>
+>   test_bench_attach: found 48712 functions
+>   test_bench_attach: attached in   1.069s
+>   test_bench_attach: detached in   0.373s
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  .../bpf/prog_tests/kprobe_multi_test.c        | 136 ++++++++++++++++++
+>  .../selftests/bpf/progs/kprobe_multi_empty.c  |  12 ++
+>  2 files changed, 148 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> index b9876b55fc0c..05f0fab8af89 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> @@ -2,6 +2,9 @@
+>  #include <test_progs.h>
+>  #include "kprobe_multi.skel.h"
+>  #include "trace_helpers.h"
+> +#include "kprobe_multi_empty.skel.h"
+> +#include "bpf/libbpf_internal.h"
+> +#include "bpf/hashmap.h"
+>
+>  static void kprobe_multi_test_run(struct kprobe_multi *skel, bool test_return)
+>  {
+> @@ -301,6 +304,137 @@ static void test_attach_api_fails(void)
+>         kprobe_multi__destroy(skel);
+>  }
+>
+> +static inline __u64 get_time_ns(void)
+> +{
+> +       struct timespec t;
+> +
+> +       clock_gettime(CLOCK_MONOTONIC, &t);
+> +       return (__u64) t.tv_sec * 1000000000 + t.tv_nsec;
+> +}
+> +
+> +static size_t symbol_hash(const void *key, void *ctx __maybe_unused)
+> +{
+> +       return str_hash((const char *) key);
+> +}
+> +
+> +static bool symbol_equal(const void *key1, const void *key2, void *ctx __maybe_unused)
+> +{
+> +       return strcmp((const char *) key1, (const char *) key2) == 0;
+> +}
+> +
+> +#define DEBUGFS "/sys/kernel/debug/tracing/"
+> +
+> +static int get_syms(char ***symsp, size_t *cntp)
+> +{
+> +       size_t cap = 0, cnt = 0, i;
+> +       char *name, **syms = NULL;
+> +       struct hashmap *map;
+> +       char buf[256];
+> +       FILE *f;
+> +       int err;
+> +
+> +       /*
+> +        * The available_filter_functions contains many duplicates,
+> +        * but other than that all symbols are usable in kprobe multi
+> +        * interface.
+> +        * Filtering out duplicates by using hashmap__add, which won't
+> +        * add existing entry.
+> +        */
+> +       f = fopen(DEBUGFS "available_filter_functions", "r");
 
-> > 
-> > Unfortunately, the vmlinux.xz file I downloaded from the link below
-> > seems to be different from the one that produced the crash, given that
-> > the LR address of c04cfeb8 does not seem to correspond with
-> > handle_mm_fault+0x60c/0xed0.
-> > 
-> > Can you please double check the artifacts?
-> 
-> Commit "mm: check against orig_pte for finish_fault()" introduced this,
-> i.e. on yesterdays next reverting a066bab3c0eb made a i.MX6 boot again.
-> A fix is discussed here:
-> 
-> https://lore.kernel.org/all/YliNP7ADcdc4Puvs@xz-m1.local/
-> 
+nit: DEBUGFS "constant" just makes it harder to follow the code and
+doesn't add anything, please just use the full path here directly
 
-Thanks for finding that.  I have Peter's fix queued and shall push out
-a snapshot later today, for integration into linux-next.
+> +       if (!f)
+> +               return -EINVAL;
+> +
+> +       map = hashmap__new(symbol_hash, symbol_equal, NULL);
+> +       err = libbpf_get_error(map);
 
+hashmap__new() is an internal API, so please use IS_ERR() directly
+here. libbpf_get_error() should be used for public libbpf APIs, and
+preferably not in libbpf 1.0 mode
 
-From: Peter Xu <peterx@redhat.com>
-Subject: mm-check-against-orig_pte-for-finish_fault-fix
+> +       if (err)
+> +               goto error;
+> +
+> +       while (fgets(buf, sizeof(buf), f)) {
+> +               /* skip modules */
+> +               if (strchr(buf, '['))
+> +                       continue;
 
-fix crash reported by Marek
+[...]
 
-Link: https://lkml.kernel.org/r/Ylb9rXJyPm8/ao8f@xz-m1.local
-Signed-off-by: Peter Xu <peterx@redhat.com>
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Alistair Popple <apopple@nvidia.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Axel Rasmussen <axelrasmussen@google.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Jerome Glisse <jglisse@redhat.com>
-Cc: "Kirill A . Shutemov" <kirill@shutemov.name>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
+> +       attach_delta = (attach_end_ns - attach_start_ns) / 1000000000.0;
+> +       detach_delta = (detach_end_ns - detach_start_ns) / 1000000000.0;
+> +
+> +       fprintf(stderr, "%s: found %lu functions\n", __func__, cnt);
+> +       fprintf(stderr, "%s: attached in %7.3lfs\n", __func__, attach_delta);
+> +       fprintf(stderr, "%s: detached in %7.3lfs\n", __func__, detach_delta);
 
 
---- a/include/linux/mm_types.h~mm-check-against-orig_pte-for-finish_fault-fix
-+++ a/include/linux/mm_types.h
-@@ -814,6 +814,8 @@ typedef struct {
-  * @FAULT_FLAG_UNSHARE: The fault is an unsharing request to unshare (and mark
-  *                      exclusive) a possibly shared anonymous page that is
-  *                      mapped R/O.
-+ * @FAULT_FLAG_ORIG_PTE_VALID: whether the fault has vmf->orig_pte cached.
-+ *                        We should only access orig_pte if this flag set.
-  *
-  * About @FAULT_FLAG_ALLOW_RETRY and @FAULT_FLAG_TRIED: we can specify
-  * whether we would allow page faults to retry by specifying these two
-@@ -850,6 +852,7 @@ enum fault_flag {
- 	FAULT_FLAG_INSTRUCTION =	1 << 8,
- 	FAULT_FLAG_INTERRUPTIBLE =	1 << 9,
- 	FAULT_FLAG_UNSHARE =		1 << 10,
-+	FAULT_FLAG_ORIG_PTE_VALID =	1 << 11,
- };
- 
- #endif /* _LINUX_MM_TYPES_H */
---- a/mm/memory.c~mm-check-against-orig_pte-for-finish_fault-fix
-+++ a/mm/memory.c
-@@ -4194,6 +4194,15 @@ void do_set_pte(struct vm_fault *vmf, st
- 	set_pte_at(vma->vm_mm, addr, vmf->pte, entry);
- }
- 
-+static bool vmf_pte_changed(struct vm_fault *vmf)
-+{
-+	if (vmf->flags & FAULT_FLAG_ORIG_PTE_VALID) {
-+		return !pte_same(*vmf->pte, vmf->orig_pte);
-+	}
-+
-+	return !pte_none(*vmf->pte);
-+}
-+
- /**
-  * finish_fault - finish page fault once we have prepared the page to fault
-  *
-@@ -4252,7 +4261,7 @@ vm_fault_t finish_fault(struct vm_fault
- 				      vmf->address, &vmf->ptl);
- 	ret = 0;
- 	/* Re-check under ptl */
--	if (likely(pte_same(*vmf->pte, vmf->orig_pte)))
-+	if (likely(!vmf_pte_changed(vmf)))
- 		do_set_pte(vmf, page, vmf->address);
- 	else
- 		ret = VM_FAULT_NOPAGE;
-@@ -4720,13 +4729,7 @@ static vm_fault_t handle_pte_fault(struc
- 		 * concurrent faults and from rmap lookups.
- 		 */
- 		vmf->pte = NULL;
--		/*
--		 * Always initialize orig_pte.  This matches with below
--		 * code to have orig_pte to be the none pte if pte==NULL.
--		 * This makes the rest code to be always safe to reference
--		 * it, e.g. in finish_fault() we'll detect pte changes.
--		 */
--		pte_clear(vmf->vma->vm_mm, vmf->address, &vmf->orig_pte);
-+		vmf->flags &= ~FAULT_FLAG_ORIG_PTE_VALID;
- 	} else {
- 		/*
- 		 * If a huge pmd materialized under us just retry later.  Use
-@@ -4750,6 +4753,7 @@ static vm_fault_t handle_pte_fault(struc
- 		 */
- 		vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
- 		vmf->orig_pte = *vmf->pte;
-+		vmf->flags |= FAULT_FLAG_ORIG_PTE_VALID;
- 
- 		/*
- 		 * some architectures can have larger ptes than wordsize,
-_
+why stderr? just do printf() and let test_progs handle output
 
+
+> +
+> +cleanup:
+> +       kprobe_multi_empty__destroy(skel);
+> +       if (syms) {
+> +               for (i = 0; i < cnt; i++)
+> +                       free(syms[i]);
+> +               free(syms);
+> +       }
+> +}
+> +
+>  void test_kprobe_multi_test(void)
+>  {
+>         if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
+> @@ -320,4 +454,6 @@ void test_kprobe_multi_test(void)
+>                 test_attach_api_syms();
+>         if (test__start_subtest("attach_api_fails"))
+>                 test_attach_api_fails();
+> +       if (test__start_subtest("bench_attach"))
+> +               test_bench_attach();
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c b/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
+> new file mode 100644
+> index 000000000000..be9e3d891d46
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
+> @@ -0,0 +1,12 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +SEC("kprobe.multi/*")
+
+use SEC("kprobe.multi") to make it clear that we are attaching it "manually"?
+
+> +int test_kprobe_empty(struct pt_regs *ctx)
+> +{
+> +       return 0;
+> +}
+> --
+> 2.35.1
+>

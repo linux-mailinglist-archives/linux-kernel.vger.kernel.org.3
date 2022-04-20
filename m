@@ -2,196 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B53C507F8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D14507F8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359235AbiDTDUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 23:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S1359230AbiDTDUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 23:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238897AbiDTDUq (ORCPT
+        with ESMTP id S238897AbiDTDUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 23:20:46 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8C112AF2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 20:18:01 -0700 (PDT)
+        Tue, 19 Apr 2022 23:20:21 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB139FD6;
+        Tue, 19 Apr 2022 20:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650424681; x=1681960681;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rfdxw0Hk/HN40rYPoecaHd+ugnHIaANA/T0syfvG8I8=;
-  b=El3e6nQ8ZIfLzNo4vIsaoqRuI3ikgOsHjwc70OQO8Som6ECGKZR1g/6E
-   Hcw3N24hxSYoIMK4WYNf/IHeRjENGEXQ8btvzqqvZiXvApADFwSYFdhL1
-   KqCyABWkcCe+CGQ4uecmIYNFVKKy4W2hdgtX6Ll1d5khahKCMG0DIyB93
-   339yNi9QtZP+8GrbVSkNL6WoSUKtcCooZRg4d1PGPwlHq6smtzqormz/8
-   dJyiJmsjipfGiYOAIVwyyIkV9EcBqLqBH2OOf4My9SUTgUSofGatc1S1c
-   FKO5+2kvH52QYIxajIRV8MWovK9F11YY/Coa54Udgt7GVmC3Qz5J0ZbSd
+  t=1650424656; x=1681960656;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=aSlmWYo67979bXI+8rgE6ppMUFAAUoPR5mX4oC2meD8=;
+  b=QzBDTsvB3pu732uwEag5dKe9Z5E4wa2OBJsOu4qRT8u9ak/Jwj8wDepy
+   hrvclFPbcUWUmVpyOIRKUJ8ybBNU+dDgHMzBKzKMHRieiGfcMVXiuUPcK
+   C2sLPXkWyP6AHeM9M2kvB1CAXL9fvOdyyhvl3Wd2lgnUCV05eaq//irld
+   m8PEQd3mOZkWzJz1N1+Z2OFBWt77Zrrg4/PzhZWQgWyfEVsMHLR90TyXQ
+   4u8juvKqF0fiNsgu+RiS4oFwTOXNqcuYX4uCRG1zbcGO2HHwyVJreDvR8
+   6vVg458hdAiLnQrEOfMRCgSCO/rfRpkqXnF1n1Zirg0JHrclmKisYCgVb
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="264098261"
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="350375126"
 X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="264098261"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:18:01 -0700
+   d="scan'208";a="350375126"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:17:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="727316428"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 19 Apr 2022 20:17:59 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nh0qt-0006Vg-6t;
-        Wed, 20 Apr 2022 03:17:59 +0000
-Date:   Wed, 20 Apr 2022 11:17:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/tdx] BUILD SUCCESS
- 51964015565d302fda63ce84ef151e1c9a5939cc
-Message-ID: <625f7b33.1E2Xe10hwdSKNw8Z%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="667588846"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga004.jf.intel.com with ESMTP; 19 Apr 2022 20:17:27 -0700
+Date:   Wed, 20 Apr 2022 11:17:18 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jun Nakajima <jun.nakajima@intel.com>, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 11/13] KVM: Zap existing KVM mappings when pages
+ changed in the private fd
+Message-ID: <20220420031718.GA39591@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-12-chao.p.peng@linux.intel.com>
+ <CAGtprH-qTB2sehidF7xkSvR3X4D5cUOLpMBXf4mhTEh0BUR-mQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CAGtprH-qTB2sehidF7xkSvR3X4D5cUOLpMBXf4mhTEh0BUR-mQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/tdx
-branch HEAD: 51964015565d302fda63ce84ef151e1c9a5939cc  x86/mm: Fix spacing within memory encryption features message
+On Tue, Apr 19, 2022 at 03:43:56PM -0700, Vishal Annapurve wrote:
+> On Thu, Mar 10, 2022 at 6:11 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> >
+> > KVM gets notified when memory pages changed in the memory backing store.
+> > When userspace allocates the memory with fallocate() or frees memory
+> > with fallocate(FALLOC_FL_PUNCH_HOLE), memory backing store calls into
+> > KVM fallocate/invalidate callbacks respectively. To ensure KVM never
+> > maps both the private and shared variants of a GPA into the guest, in
+> > the fallocate callback, we should zap the existing shared mapping and
+> > in the invalidate callback we should zap the existing private mapping.
+> >
+> > In the callbacks, KVM firstly converts the offset range into the
+> > gfn_range and then calls existing kvm_unmap_gfn_range() which will zap
+> > the shared or private mapping. Both callbacks pass in a memslot
+> > reference but we need 'kvm' so add a reference in memslot structure.
+> >
+> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> >  include/linux/kvm_host.h |  3 ++-
+> >  virt/kvm/kvm_main.c      | 36 ++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 38 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index 9b175aeca63f..186b9b981a65 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -236,7 +236,7 @@ bool kvm_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+> >  int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
+> >  #endif
+> >
+> > -#ifdef KVM_ARCH_WANT_MMU_NOTIFIER
+> > +#if defined(KVM_ARCH_WANT_MMU_NOTIFIER) || defined(CONFIG_MEMFILE_NOTIFIER)
+> >  struct kvm_gfn_range {
+> >         struct kvm_memory_slot *slot;
+> >         gfn_t start;
+> > @@ -568,6 +568,7 @@ struct kvm_memory_slot {
+> >         loff_t private_offset;
+> >         struct memfile_pfn_ops *pfn_ops;
+> >         struct memfile_notifier notifier;
+> > +       struct kvm *kvm;
+> >  };
+> >
+> >  static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index 67349421eae3..52319f49d58a 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -841,8 +841,43 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
+> >  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
+> >
+> >  #ifdef CONFIG_MEMFILE_NOTIFIER
+> > +static void kvm_memfile_notifier_handler(struct memfile_notifier *notifier,
+> > +                                        pgoff_t start, pgoff_t end)
+> > +{
+> > +       int idx;
+> > +       struct kvm_memory_slot *slot = container_of(notifier,
+> > +                                                   struct kvm_memory_slot,
+> > +                                                   notifier);
+> > +       struct kvm_gfn_range gfn_range = {
+> > +               .slot           = slot,
+> > +               .start          = start - (slot->private_offset >> PAGE_SHIFT),
+> > +               .end            = end - (slot->private_offset >> PAGE_SHIFT),
+> > +               .may_block      = true,
+> > +       };
+> > +       struct kvm *kvm = slot->kvm;
+> > +
+> > +       gfn_range.start = max(gfn_range.start, slot->base_gfn);
+> 
+> gfn_range.start seems to be page offset within the file. Should this rather be:
+> gfn_range.start = slot->base_gfn + min(gfn_range.start, slot->npages);
 
-elapsed time: 723m
+Right. For start we don't really need care about the uppper bound
+here (will check below), so this should be enough:
+	gfn_range.start = slot->base_gfn + gfn_range.start;
 
-configs tested: 112
-configs skipped: 94
+> 
+> > +       gfn_range.end = min(gfn_range.end, slot->base_gfn + slot->npages);
+> > +
+> 
+> Similar to previous comment, should this rather be:
+> gfn_range.end = slot->base_gfn + min(gfn_range.end, slot->npages);
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This is correct.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc                       eiger_defconfig
-nios2                         10m50_defconfig
-arm                          pxa910_defconfig
-sh                            hp6xx_defconfig
-powerpc                 linkstation_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                      pcm030_defconfig
-ia64                             alldefconfig
-powerpc                     redwood_defconfig
-sh                           se7343_defconfig
-mips                           jazz_defconfig
-arc                           tb10x_defconfig
-arm                          gemini_defconfig
-mips                         cobalt_defconfig
-sh                            titan_defconfig
-sh                             shx3_defconfig
-sh                        sh7757lcr_defconfig
-arm                      footbridge_defconfig
-sh                        apsh4ad0a_defconfig
-ia64                        generic_defconfig
-sh                   rts7751r2dplus_defconfig
-h8300                       h8s-sim_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220419
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-riscv                randconfig-r042-20220419
-arc                  randconfig-r043-20220419
-s390                 randconfig-r044-20220419
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220419
-arm                  randconfig-c002-20220419
-i386                          randconfig-c001
-riscv                randconfig-c006-20220419
-mips                 randconfig-c004-20220419
-s390                 randconfig-c005-20220419
-arm                       netwinder_defconfig
-arm                     davinci_all_defconfig
-mips                           ip28_defconfig
-mips                       lemote2f_defconfig
-powerpc                     tqm5200_defconfig
-powerpc                     kilauea_defconfig
-arm                           spitz_defconfig
-powerpc                      ppc64e_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Chao
+> 
+> > +       if (gfn_range.start >= gfn_range.end)
+> > +               return;
+> > +
+> > +       idx = srcu_read_lock(&kvm->srcu);
+> > +       KVM_MMU_LOCK(kvm);
+> > +       kvm_unmap_gfn_range(kvm, &gfn_range);
+> > +       kvm_flush_remote_tlbs(kvm);
+> > +       KVM_MMU_UNLOCK(kvm);
+> > +       srcu_read_unlock(&kvm->srcu, idx);
+> > +}
+> > +
+> > +static struct memfile_notifier_ops kvm_memfile_notifier_ops = {
+> > +       .invalidate = kvm_memfile_notifier_handler,
+> > +       .fallocate = kvm_memfile_notifier_handler,
+> > +};
+> > +
+> >  static inline int kvm_memfile_register(struct kvm_memory_slot *slot)
+> >  {
+> > +       slot->notifier.ops = &kvm_memfile_notifier_ops;
+> >         return memfile_register_notifier(file_inode(slot->private_file),
+> >                                          &slot->notifier,
+> >                                          &slot->pfn_ops);
+> > @@ -1963,6 +1998,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> >         new->private_file = file;
+> >         new->private_offset = mem->flags & KVM_MEM_PRIVATE ?
+> >                               region_ext->private_offset : 0;
+> > +       new->kvm = kvm;
+> >
+> >         r = kvm_set_memslot(kvm, old, new, change);
+> >         if (!r)
+> > --
+> > 2.17.1
+> >

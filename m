@@ -2,148 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66A1508366
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9E7508369
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376739AbiDTIbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S1376748AbiDTIcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356317AbiDTIa7 (ORCPT
+        with ESMTP id S1376737AbiDTIcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:30:59 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6164935267
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1650443293;
-  x=1681979293;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=v8LWDDcHCeryoL0yiBGiT7o390KlBFvaYjqfzBcj75E=;
-  b=i1MsQnctOEFDVMfTUkQsN+avotk5hkUEhiwjBNPy6CVVlWsvZlBG9+q5
-   KxQK1TtYtf3cdFdqRtdxjAOw8yMyaVAx3YFVDbK6DjgZsqXa1uGf6RhvQ
-   10hZuh2P0bB22qug7k2IwhErSmP/APnIKSLPZmTtw40sAjMmpT+j/Gq75
-   AcoOhnk2qmGU+GBJHlEkRf2BvTbZn1Ue+0aSA1B8xPM05wZ7nir/EAVzO
-   2mxoudG83uyl1/J6UF2GAIS4DLqO9ZIlr6pEBWRjh5NKPkNCdzPVwcWdK
-   Ll64TIMDsu13ga05SVkAHTgQ+4cL6jD6kwltNLCT60xtR/BJ6WdiOQhw0
-   Q==;
-Message-ID: <487bbd00-d763-0a86-9984-1dfd957fbb38@axis.com>
-Date:   Wed, 20 Apr 2022 10:28:00 +0200
+        Wed, 20 Apr 2022 04:32:05 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C9137A17
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:29:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650443359; x=1681979359;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6fH3i24AyfOr1qkgqZIalpr4phfwOGdxKLwtwdoFzpE=;
+  b=cE3teIM45baZjrDEWLvJfaZc91veZIwagBKMLBe1IvVCgiGUVHKmsbm1
+   c27aYOwBitg/bsuHFLAtNmwZNPilfuy47wYX0tsuXFNgIP2RkjeVEQF+J
+   OPTuGuKxKQ53Y0ptvX7GV/T7is9z8FotshAGdMKDLp2mgpWkw4vFTf/ki
+   rKvFfU8d9rLECyf1yMX9zbmOgTWClkjCr5MWjk6w3/qVuwSluU0tRwcol
+   9TSdeuPLVis57tObuAuAEbd+wFXQYt0j6L9+1agBMHPCJ+8CP4Y0Zl8Z4
+   PSYKcxFilFOr3Vkum3QRgPDYhy1cxQo3L/3pL7SOp6eLJ2Nn/3Mrq0FOi
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="262830803"
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="262830803"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 01:29:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="727400361"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 20 Apr 2022 01:29:15 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nh5i4-0006lm-Jx;
+        Wed, 20 Apr 2022 08:29:12 +0000
+Date:   Wed, 20 Apr 2022 16:28:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:sched/urgent] BUILD SUCCESS
+ 40f5aa4c5eaebfeaca4566217cb9c468e28ed682
+Message-ID: <625fc424.G+6AEy26RN/V5tvi%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] mailbox: forward the hrtimer if not queued and under a
- lock
-Content-Language: en-US
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-CC:     kernel <kernel@axis.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220331070115.29421-1-bjorn.ardo@axis.com>
- <CABb+yY1zrHYLBjY_EoC7bkTsWcKOhzCjp-5vgvqP0HEAJicdXQ@mail.gmail.com>
- <c4aa28b2-5550-ed39-3869-556b451ff54b@axis.com>
- <CABb+yY1BNsdMq7CNOBDk3sn7uvpL4=-fT7eOcbuL-+Yjz+iqHw@mail.gmail.com>
-From:   Bjorn Ardo <bjorn.ardo@axis.com>
-In-Reply-To: <CABb+yY1BNsdMq7CNOBDk3sn7uvpL4=-fT7eOcbuL-+Yjz+iqHw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail02w.axis.com (10.20.40.8) To se-mail04w.axis.com
- (10.20.40.10)
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/urgent
+branch HEAD: 40f5aa4c5eaebfeaca4566217cb9c468e28ed682  sched/pelt: Fix attach_entity_load_avg() corner case
 
+elapsed time: 735m
 
-On 4/19/22 16:10, Jassi Brar wrote:
-> I don't have access to your client driver, but if it submits another
-> message from rx_callback() that is the problem.
->
-> Please have a look at how other platforms do, for example
-> imx_dsp_rproc_rx_tx_callback()
->
-> /**
->   * mbox_chan_received_data - A way for controller driver to push data
->   *              received from remote to the upper layer.
->   * @chan: Pointer to the mailbox channel on which RX happened.
->   * @mssg: Client specific message typecasted as void *
->   *
->   * After startup and before shutdown any data received on the chan
->   * is passed on to the API via atomic mbox_chan_received_data().
->   * The controller should ACK the RX only after this call returns.
->   */
-> void mbox_chan_received_data(struct mbox_chan *chan, void *mssg)
->
-> If not this, please share your client code as well.
->
-> thanks.
+configs tested: 139
+configs skipped: 3
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-In rx_callback() we call tasklet_hi_schedule() to schedule a tasklet and 
-this tasklet calls mbox_send_message(). The mailbox is setup with 
-.tx_block = false.
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arm                         at91_dt_defconfig
+openrisc                            defconfig
+sh                     sh7710voipgw_defconfig
+powerpc                       eiger_defconfig
+nios2                         10m50_defconfig
+arm                          pxa910_defconfig
+ia64                         bigsur_defconfig
+arm                        keystone_defconfig
+powerpc                     redwood_defconfig
+mips                     loongson1b_defconfig
+m68k                         amcore_defconfig
+s390                                defconfig
+powerpc                      makalu_defconfig
+ia64                        generic_defconfig
+mips                            ar7_defconfig
+xtensa                    xip_kc705_defconfig
+mips                           jazz_defconfig
+arc                           tb10x_defconfig
+arm                          gemini_defconfig
+mips                         cobalt_defconfig
+mips                      loongson3_defconfig
+arc                        nsimosci_defconfig
+sh                            hp6xx_defconfig
+microblaze                          defconfig
+sh                           se7722_defconfig
+i386                                defconfig
+xtensa                       common_defconfig
+sh                            titan_defconfig
+sh                             shx3_defconfig
+sh                        sh7757lcr_defconfig
+arm                           u8500_defconfig
+sh                           sh2007_defconfig
+csky                                defconfig
+sh                        apsh4ad0a_defconfig
+ia64                             alldefconfig
+sh                          r7785rp_defconfig
+arm                        shmobile_defconfig
+m68k                        m5307c3_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220419
+arm                  randconfig-c002-20220420
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220419
+arc                  randconfig-r043-20220419
+s390                 randconfig-r044-20220419
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                         rhel-8.3-kunit
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
 
-I do not quite understand how calling mbox_send_message() from another 
-contex (like a work thread as in imx_dsp_rproc_rx_tx_callback()) will 
-resolve the race, could you explain this? Or do you mean that it should 
-not be called from any interrupt context at all? Looking at the 
-documentation of mbox_send_message() it states:
+clang tested configs:
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220419
+arm                  randconfig-c002-20220419
+i386                          randconfig-c001
+riscv                randconfig-c006-20220419
+mips                 randconfig-c004-20220419
+s390                 randconfig-c005-20220419
+mips                        qi_lb60_defconfig
+arm                         s3c2410_defconfig
+powerpc                    socrates_defconfig
+mips                           ip22_defconfig
+mips                       lemote2f_defconfig
+mips                       rbtx49xx_defconfig
+arm                       mainstone_defconfig
+powerpc                     ksi8560_defconfig
+powerpc                      ppc64e_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+hexagon              randconfig-r041-20220420
+riscv                randconfig-r042-20220420
+hexagon              randconfig-r045-20220420
+hexagon              randconfig-r041-20220419
+hexagon              randconfig-r045-20220419
 
-
-  * This function could be called from atomic context as it simply
-  * queues the data and returns a token against the request.
-
-
-If I look at the code in msg_submit() the part that calls 
-hrtimer_active() and hrtimer_start() is completely without a lock. Also 
-the code in txdone_hrtimer() that calls hrtimer_forward_now() is without 
-a lock. So I cannot see anything preventing these two functions to be 
-called concurrently on two different processors (as they do in my 
-trace). And looking at the hr_timer code then hrtimer_active() will 
-return true if the hrtimer is currently executing txdone_hrtimer().
-
-The way I see the race is if the timer has called txdone_hrtimer() and 
-it has passed the part with the for-loop looking at the individual 
-channels when the msg_submit() runs. Then txdone_hrtimer() has decided 
-to not restart the timer, but hrtimer_active() will still return true 
-for a while (until txdone_hrtimer() return completely and the hrtimer 
-code can change its status). In this time there is nothing that prevents 
-msg_submit() from running, adding a new message that the timer should 
-monitor. But if it manages to call hrtimer_active() in the time period 
-before the hrtimer code updates it then the current code will never 
-start the timer.
-
-Also the poll_hrt is shared between all channels in the mailbox, so it 
-does not have to be the same mailbox channel that hrtimer is currently 
-waiting for that is calling msg_submit(). So not calling 
-mbox_send_message() from rx_callback() will only alter timing for that 
-channel. There could still be a race between two different mailbox channels.
-
-
-This is my understanding of the current code, please tell me if I have 
-missed or misunderstood any part of it?
-
-
-Our current solution are using 4 different mailbox channels 
-asynchronously. The code is part of a larger system, but I can put down 
-some time and try and extract the relevant parts if you still think this 
-is a client issue? But with my current understanding of the code, the 
-race between msg_submit() and txdone_hrtimer() is quite clear, and with 
-my proposed patch that removes this race we have be able to run for very 
-long time without any problems (that is several days). Without the fix 
-we get the race after 5-10 min.
-
-
-Best Regards,
-
-Björn
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

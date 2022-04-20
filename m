@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8CB508578
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E294F50857B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377483AbiDTKJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S1377507AbiDTKJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347063AbiDTKJj (ORCPT
+        with ESMTP id S1377490AbiDTKJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:09:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591D918B32;
-        Wed, 20 Apr 2022 03:06:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6C24B81E61;
-        Wed, 20 Apr 2022 10:06:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93993C385A1;
-        Wed, 20 Apr 2022 10:06:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650449211;
-        bh=TkzaIXVfmy/5OEl78ORgSpwgfioQr5mxDuXVgiEkTDg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HKl8FAkCXv6aTwWXIuGURVGJg2g7lNcLWuxBXb9ke5XDyru1he5+zJi0bs+PfbTEY
-         E+Tn7JK9xydyiNgTLnlqNP5yBlQVTL1xpDkorka6QINWM0OcmBBbtOshNhwW2UrgIf
-         YnwOj5X1jWdCZni/4Fv+8CL4FqJzZixpnYxrccjB+Q5JLL4NQ+kwmw7Qew6hQFaojG
-         vCBswZnSYh+xbwWyUU5vUClqWgAGLGrQnWQIC2ukIOgdIz3bHJGJH1g6boUiXaEqXw
-         t0rnY0QvKNhhZegP4jDaa0SZbwhMkV46U1k2UHYPpDNhyFRqz99NxxOatUnSUexRbQ
-         RG51Zx2mrYuJQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nh7ER-0007Xi-N9; Wed, 20 Apr 2022 12:06:43 +0200
-Date:   Wed, 20 Apr 2022 12:06:43 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com,
-        USB <linux-usb@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] driver: usb: nullify dangling pointer in cdc_ncm_free
-Message-ID: <Yl/bMxXKeNdLI87G@hovoldconsulting.com>
-References: <20220409120901.267526-1-dzm91@hust.edu.cn>
- <YlQbqnYP/jcYinvz@hovoldconsulting.com>
- <CAHp75VeTqmdLhavZ+VbBYSFMDHr0FG4iKFGdbzE-wo5MCNikAA@mail.gmail.com>
- <d851497f-7960-b606-2f87-eb9bff89c8ac@suse.com>
- <Yl+utFmKEgILDFr5@hovoldconsulting.com>
- <aef0c568-e088-b897-f8ec-f22cfef124f6@suse.com>
+        Wed, 20 Apr 2022 06:09:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50161D321
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:07:01 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nh7Eh-0003GG-RX; Wed, 20 Apr 2022 12:06:59 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nh7Eh-0000fi-0s; Wed, 20 Apr 2022 12:06:59 +0200
+Date:   Wed, 20 Apr 2022 12:06:59 +0200
+From:   Sascha Hauer <sha@pengutronix.de>
+To:     Codrin.Ciubotariu@microchip.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        lars@metafoo.de, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, robh+dt@kernel.org, Nicolas.Ferre@microchip.com
+Subject: Re: [PATCH v3 1/6] ASoC: dmaengine: do not use a NULL
+ prepare_slave_config() callback
+Message-ID: <20220420100658.GU4012@pengutronix.de>
+References: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
+ <20220307122202.2251639-2-codrin.ciubotariu@microchip.com>
+ <20220420091552.GD2387@pengutronix.de>
+ <968f9bfb-bddf-a8f0-6d8f-18b92d865aa2@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aef0c568-e088-b897-f8ec-f22cfef124f6@suse.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <968f9bfb-bddf-a8f0-6d8f-18b92d865aa2@microchip.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:03:21 up 20 days, 22:33, 67 users,  load average: 0.55, 0.31,
+ 0.16
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,35 +61,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 11:45:49AM +0200, Oliver Neukum wrote:
+On Wed, Apr 20, 2022 at 09:58:06AM +0000, Codrin.Ciubotariu@microchip.com wrote:
+> On 20.04.2022 12:15, Sascha Hauer wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > Hi,
+> 
+> Hi Sascha,
+> 
+> > 
+> > On Mon, Mar 07, 2022 at 02:21:57PM +0200, Codrin Ciubotariu wrote:
+> >> Even if struct snd_dmaengine_pcm_config is used, prepare_slave_config()
+> >> callback might not be set. Check if this callback is set before using it.
+> >>
+> >> Fixes: fa654e085300 ("ASoC: dmaengine-pcm: Provide default config")
+> >> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> >> ---
+> >>
+> >> Changes in v2,v3:
+> >>   - none
+> >>
+> >>   sound/soc/soc-generic-dmaengine-pcm.c | 6 +++---
+> >>   1 file changed, 3 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/sound/soc/soc-generic-dmaengine-pcm.c b/sound/soc/soc-generic-dmaengine-pcm.c
+> >> index 285441d6aeed..2ab2ddc1294d 100644
+> >> --- a/sound/soc/soc-generic-dmaengine-pcm.c
+> >> +++ b/sound/soc/soc-generic-dmaengine-pcm.c
+> >> @@ -86,10 +86,10 @@ static int dmaengine_pcm_hw_params(struct snd_soc_component *component,
+> >>
+> >>        memset(&slave_config, 0, sizeof(slave_config));
+> >>
+> >> -     if (!pcm->config)
+> >> -             prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
+> >> -     else
+> >> +     if (pcm->config && pcm->config->prepare_slave_config)
+> >>                prepare_slave_config = pcm->config->prepare_slave_config;
+> >> +     else
+> >> +             prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
+> >>
+> >>        if (prepare_slave_config) {
+> >>                int ret = prepare_slave_config(substream, params, &slave_config);
+> > 
+> > I wonder if this patch is correct. There are drivers like
+> > sound/soc/mxs/mxs-pcm.c which call snd_dmaengine_pcm_register() with a
+> > config which has the prepare_slave_config callback unset. For these
+> > drivers dmaengine_pcm_hw_params() previously was a no-op. Now with this
+> > patch snd_dmaengine_pcm_prepare_slave_config() and
+> > dmaengine_slave_config() are called. At least for the mxs-pcm driver
+> > calling dmaengine_slave_config() will return -ENOSYS.
+> > 
+> > At least the "Check if this callback is set before using it" part is
+> > wrong, the callback is checked before using it with
+> > 
+> >          if (prepare_slave_config) {
+> >                  ...
+> >          }
+> > 
+> > I don't have any mxs hardware at hand to test this. I just stumbled upon
+> > the change of behaviour when rebasing
+> > https://patchwork.kernel.org/project/alsa-devel/patch/20220301122111.1073174-1-s.hauer@pengutronix.de/
+> > on current master.
+> 
+> You are right. I changed the behavior from:
+> if (pmc->config && !pcm->config->prepare_slave_config)
+> 	<do nothing>
+> to:
+> if (pmc->config && !pcm->config->prepare_slave_config)
+> 	snd_dmaengine_pcm_prepare_slave_config()
+> 
+> It was not intended and I agree that the commit message is not accurate. 
+> I guess some drivers might not need dmaengine_slave_config()...
+> However, in my case, for the mchp-pdmc driver, I do have pcm->config 
+> with pcm->config->prepare_slave_config NULL, but I still need 
+> snd_dmaengine_pcm_prepare_slave_config() to be called. Should we add a 
+> separate flag to call snd_dmaengine_pcm_prepare_slave_config() if 
+> pcm->config->prepare_slave_config is NULL?
 
-> >> -	if (dev->driver_info->unbind)
-> >> -		dev->driver_info->unbind(dev, intf);
-> >> +	if (dev->driver_info->disable)
-> >> +		dev->driver_info->disable(dev, intf);
-> >>  
-> >>  	net = dev->net;
-> >>  	unregister_netdev (net);
-> >> @@ -1651,6 +1651,9 @@ void usbnet_disconnect (struct usb_interface *intf)
-> >>  
-> >>  	usb_scuttle_anchored_urbs(&dev->deferred);
-> >>  
-> >> +	if (dev->driver_info->unbind)
-> >> +		dev->driver_info->unbind (dev, intf);
-> >> +
-> >>  	usb_kill_urb(dev->interrupt);
+Other drivers set pcm->config->prepare_slave_config to
+snd_dmaengine_pcm_prepare_slave_config() explicitly:
 
-> > Don't you need to quiesce all I/O, including stopping the interrupt URB,
-> > before unbind?
+sound/soc/fsl/imx-pcm-dma.c:33: .prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config,
 
-> If I do that, how do I prevent people from relaunching the URB between
-> kill and unbind? Do I need to poison it?
+I think that's the way to go.
 
-You could, but it would seem you have bigger problems if something can
-submit the URB after having deregistered the netdev.
+Regards,
+Sascha
 
-Looks like the URB should already have been stopped by
-usbnet_status_stop() so that the usb_kill_urb() above is (or should be)
-a noop.
 
-Johan
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

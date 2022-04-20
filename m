@@ -2,187 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77A250938D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC05A509390
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232806AbiDTXYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 19:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S1383158AbiDTXZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 19:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383158AbiDTXYf (ORCPT
+        with ESMTP id S1348970AbiDTXZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 19:24:35 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADA41C13D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:21:47 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id t13so3105751pgn.8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:21:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6Ty3DFGunF6jW21MAnsyi+iAr+gyos3k1HPrH3m9fTc=;
-        b=XnWq2s9XXwGGB2wgFdDYbKC7tkgxh2/Z4V4PkH12svVokJESgvrFm5JNzgsc74GH3y
-         PRmXS5NWLTC5YYg3pP+kw7BUee1T44m8duw4HXfmeLtW6YHy8MuBR4c8niTk8T0VuZ9b
-         QJEAL6A9MGfaxtHAG67ubRu9en7CGwFeOVg9E=
+        Wed, 20 Apr 2022 19:25:22 -0400
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9561CFE5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:22:34 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id 12so3164317pll.12
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:22:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6Ty3DFGunF6jW21MAnsyi+iAr+gyos3k1HPrH3m9fTc=;
-        b=g1EOS6h6uWeMSXalCakKxrh+pJKxsttUkm3rL4+Tf09/ZplkqopR+eVSrRJ96wSrOG
-         b/jtOPVYVrH56GWjI+KJEqp4NfgzNdnV9tJ9uBLXRgGGIhWYpIAYBL+4OMKemlzcwGSc
-         YufsUEk6v2l67n8RYYW7PXWI0/asGK4pk2/3rgONowFc5jowerj5aCliKMqpf7fkJrWl
-         f6cZXOoX4PA11yc9NTirZNoa1Rnp1sTrOduWydd9610nUhV33+z+qjt8uVpv9nBflooe
-         yT97H2F1mlw1aR8VVBgTjycKWL/o58+LhALdikJeJDlCqkBsNbjXLCWtRsyh3MBLGXMu
-         6zbg==
-X-Gm-Message-State: AOAM5325a0IQnwb/Cm87q5MzMP3b0bRqDSJRHzD5e0ZuNvM4X7TOYyx7
-        TIzuc8+nIk5K1JopvWxC7UpvyQ==
-X-Google-Smtp-Source: ABdhPJwXpf1B85gWACAiQZBQg4zWKjO4yRVSkAvJBvOqRuLOMe9Mwe1L7hhkVq+XyKdgJYc9LDZ6kA==
-X-Received: by 2002:a65:46cf:0:b0:399:13b3:dd8b with SMTP id n15-20020a6546cf000000b0039913b3dd8bmr21529884pgr.585.1650496906919;
-        Wed, 20 Apr 2022 16:21:46 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u7-20020aa78487000000b00505d9277cb3sm20637059pfn.38.2022.04.20.16.21.46
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=fV4JkmrG7edeYR97GeotnP7wPuRJ0USB98sxOGhu5Ko=;
+        b=zv1WyQ59XUr2oNeLYrE7yiPcvNIHe+cVardfJstv2z+e68fr2/5xNhvuMYW5oY9Qkw
+         LnVqMJQwZR5EIOekS71jEUmw6nU2JtPpyFuMfaLjJRGYSQ65C4gw1hajycJuCFzOQYnW
+         N/ibctpxDIlTMixXcdOkCM8YyleaFXcnMUalI84ovRa7EVUoKsdrp4rnhjgIegBDjsg+
+         OZkeq1Zb0nz6rXzj1YtumGACQCwglJi+ZOLBgHAMb1bGV7Yy+duP7AwsIXkJuSWe4tkD
+         5698DhkGXXhwZBAGTjDoYvjxHg3bXSX78UC8aHKzlHMCmMuWo20ET/xUclWTRjxWrUOh
+         /qdQ==
+X-Gm-Message-State: AOAM531RCsibzQ5+wytu/MvcRT4AsKYefsf47e0p+jkg+k6Ya17b/it9
+        BdHMuCUyCU/mH6or96Ek8fIIXw==
+X-Google-Smtp-Source: ABdhPJw1U+sE5q5vVGNJMiWtWbA91DsbiUZKDbDGss51Ta+5DIVK209skvrhfVxxVAgBCnpsiz/S9Q==
+X-Received: by 2002:a17:90a:b014:b0:1cb:ba36:8fe1 with SMTP id x20-20020a17090ab01400b001cbba368fe1mr7229694pjq.67.1650496954035;
+        Wed, 20 Apr 2022 16:22:34 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id l13-20020a056a00140d00b004e13da93eaasm21870519pfu.62.2022.04.20.16.22.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 16:21:46 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 16:21:45 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Topi Miettinen <toiwoton@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lennart Poettering <lennart@poettering.net>,
-        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-abi-devel@lists.sourceforge.net,
-        linux-hardening@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Salvatore Mesoraca <s.mesoraca16@gmail.com>,
-        Igor Zhbanov <izh1979@gmail.com>
-Subject: Re: [PATCH RFC 0/4] mm, arm64: In-kernel support for
- memory-deny-write-execute (MDWE)
-Message-ID: <202204201610.093C9D5FE8@keescook>
-References: <20220413134946.2732468-1-catalin.marinas@arm.com>
- <202204141028.0482B08@keescook>
- <YmAEDsGtxhim46UI@arm.com>
- <c62170c6-5993-2417-4143-5a37a98b227c@gmail.com>
+        Wed, 20 Apr 2022 16:22:33 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
+In-Reply-To: <20220420102044.10832-1-roger.lu@mediatek.com>
+References: <20220420102044.10832-1-roger.lu@mediatek.com>
+Date:   Wed, 20 Apr 2022 16:22:32 -0700
+Message-ID: <7hczhbe3wn.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c62170c6-5993-2417-4143-5a37a98b227c@gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:34:33PM +0300, Topi Miettinen wrote:
-> On 20.4.2022 16.01, Catalin Marinas wrote:
-> > On Thu, Apr 14, 2022 at 11:52:17AM -0700, Kees Cook wrote:
-> > > On Wed, Apr 13, 2022 at 02:49:42PM +0100, Catalin Marinas wrote:
-> > > > The background to this is that systemd has a configuration option called
-> > > > MemoryDenyWriteExecute [1], implemented as a SECCOMP BPF filter. Its aim
-> > > > is to prevent a user task from inadvertently creating an executable
-> > > > mapping that is (or was) writeable. Since such BPF filter is stateless,
-> > > > it cannot detect mappings that were previously writeable but
-> > > > subsequently changed to read-only. Therefore the filter simply rejects
-> > > > any mprotect(PROT_EXEC). The side-effect is that on arm64 with BTI
-> > > > support (Branch Target Identification), the dynamic loader cannot change
-> > > > an ELF section from PROT_EXEC to PROT_EXEC|PROT_BTI using mprotect().
-> > > > For libraries, it can resort to unmapping and re-mapping but for the
-> > > > main executable it does not have a file descriptor. The original bug
-> > > > report in the Red Hat bugzilla - [2] - and subsequent glibc workaround
-> > > > for libraries - [3].
-> > > 
-> > > Right, so, the systemd filter is a big hammer solution for the kernel
-> > > not having a very easy way to provide W^X mapping protections to
-> > > userspace. There's stuff in SELinux, and there have been several
-> > > attempts[1] at other LSMs to do it too, but nothing stuck.
-> > > 
-> > > Given the filter, and the implementation of how to enable BTI, I see two
-> > > solutions:
-> > > 
-> > > - provide a way to do W^X so systemd can implement the feature differently
-> > > - provide a way to turn on BTI separate from mprotect to bypass the filter
-> > > 
-> > > I would agree, the latter seems like the greater hack,
-> > 
-> > We discussed such hacks in the past but they are just working around the
-> > fundamental issue - systemd wants W^X but with BPF it can only achieve
-> > it by preventing mprotect(PROT_EXEC) irrespective of whether the mapping
-> > was already executable. If we find a better solution for W^X, we
-> > wouldn't have to hack anything for mprotect(PROT_EXEC|PROT_BTI).
-> > 
-> > > so I welcome
-> > > this RFC, though I think it might need to explore a bit of the feature
-> > > space exposed by other solutions[1] (i.e. see SARA and NAX), otherwise
-> > > it risks being too narrowly implemented. For example, playing well with
-> > > JITs should be part of the design, and will likely need some kind of
-> > > ELF flags and/or "sealing" mode, and to handle the vma alias case as
-> > > Jann Horn pointed out[2].
-> > 
-> > I agree we should look at what we want to cover, though trying to avoid
-> > re-inventing SELinux. With this patchset I went for the minimum that
-> > systemd MDWE does with BPF.
-> > 
-> > I think JITs get around it using something like memfd with two separate
-> > mappings to the same page. We could try to prevent such aliases but
-> > allow it if an ELF note is detected (or get the JIT to issue a prctl()).
-> > 
-> > Anyway, with a prctl() we can allow finer-grained control starting with
-> > anonymous and file mappings and later extending to vma aliases,
-> > writeable files etc. On top we can add a seal mask so that a process
-> > cannot disable a control was set. Something like (I'm not good at
-> > names):
-> > 
-> > 	prctl(PR_MDWX_SET, flags, seal_mask);
-> > 	prctl(PR_MDWX_GET);
-> > 
-> > with flags like:
-> > 
-> > 	PR_MDWX_MMAP - basics, should cover mmap() and mprotect()
-> > 	PR_MDWX_ALIAS - vma aliases, allowed with an ELF note
-> > 	PR_MDWX_WRITEABLE_FILE
-> > 
-> > (needs some more thinking)
-> > 
-> 
-> For systemd, feature compatibility with the BPF version is important so that
-> we could automatically switch to the kernel version once available without
-> regressions. So I think PR_MDWX_MMAP (or maybe PR_MDWX_COMPAT) should match
-> exactly what MemoryDenyWriteExecute=yes as implemented with BPF has: only
-> forbid mmap(PROT_EXEC|PROT_WRITE) and mprotect(PROT_EXEC). Like BPF, once
-> installed there should be no way to escape and ELF flags should be also
-> ignored. ARM BTI should be allowed though (allow PROT_EXEC|PROT_BTI if the
-> old flags had PROT_EXEC).
-> 
-> Then we could have improved versions (other PR_MDWX_ prctls) with lots more
-> checks. This could be enabled with MemoryDenyWriteExecute=strict or so.
-> 
-> Perhaps also more relaxed versions (like SARA) could be interesting (system
-> service running Python with FFI, or perhaps JVM etc), enabled with for
-> example MemoryDenyWriteExecute=trampolines. That way even those programs
-> would get some protection (though there would be a gap in the defences).
+Hi Roger,
 
-Yup, I think we're all on the same page. Catalin, can you respin with a
-prctl for enabling MDWE? I propose just:
 
-	prctl(PR_MDWX_SET, flags);
-	prctl(PR_MDWX_GET);
+Roger Lu <roger.lu@mediatek.com> writes:
 
-	PR_MDWX_FLAG_MMAP
-		disallows PROT_EXEC on any VMA that is or was PROT_WRITE,
-		covering at least: mmap, mprotect, pkey_mprotect, and shmat.
+> The Smart Voltage Scaling(SVS) engine is a piece of hardware
+> which calculates suitable SVS bank voltages to OPP voltage table.
+> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+>
+> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
+>
+> Change since v23:
+> - Change wording from "Mediatek" to "MediaTek" (uppercase T) in mtk-svs.yaml.
+> - Use cpuidle_pause_and_lock() to prevent system from entering cpuidle instead of applying pm_qos APIs.
+> - Add kfree() at the end of svs_probe() when encountering probe fail.
+> - Change MODULE_LICENSE from "GPL v2" to "GPL".
+> - Add nvmem_cell_put() in error handling when nvmem_cell_read() encounters fail.
 
-I don't think anything should be allowed to be disabled once set.
+I also gave you a reviewed-by on v23, but here it is again:
 
--- 
-Kees Cook
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+
+
+That being said, it would be really nice to see an integration tree
+where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
+
+For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
+board, it fails to probe[1] because there is no CCI node in the upstream
+mt8183.dtsi.
+
+I'm assuming this series is also not very useful without the CPUfreq
+series from Rex, so being able to test this, CCI and CPUfreq together on
+MT8183 on a mainline kernel would be very helpful.
+
+Kevin
+
+[1]
+[    0.573332] mtk-svs 1100b000.svs: cannot find cci node
+[    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe fail

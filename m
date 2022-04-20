@@ -2,122 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657C4509718
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5741F509853
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383667AbiDUGEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
+        id S1385401AbiDUG6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 02:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237590AbiDUGEH (ORCPT
+        with ESMTP id S1385501AbiDUG5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:04:07 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0CC64DD
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 23:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650520878; x=1682056878;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O7MKbuqHNRvjU+QrsuUcPlZPeoTt9r3lAbYwnQzZZ0U=;
-  b=avtKaeZwKlBHniTjgWQp0Gl1AJJaGxhO5YktdbhGSiiD7iSkMKh1nh/a
-   QtN1mH0oYZUlgTfVftxRPyOzt+4/j+KRgdPyHmYHbLeyVYuHVGVln/WJQ
-   PNGupCidu0SysIocF3toAwNV+7jCfrZ/AeYlzLgx08OeWf25WRXBQij9o
-   BhDask37cpluGRtOHu66rI2RaBNXfSLgPhSl8vhq6eM0NFlcU9qxG6bBq
-   z7ZUmyVr7puEXEsdqhNnW3j3jedBXLcfbVkJJ223pqmKi9wrBETdm0t3I
-   CGWDTM54KcKzcjqLbmb1dhrB0njp3DANXwn6IkCY37XFNMsbZ8ZwLmDLl
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="261850469"
-X-IronPort-AV: E=Sophos;i="5.90,277,1643702400"; 
-   d="scan'208";a="261850469"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:00:58 -0700
-X-IronPort-AV: E=Sophos;i="5.90,277,1643702400"; 
-   d="scan'208";a="555594587"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:00:54 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 21 Apr 2022 09:00:31 +0300
-Date:   Thu, 21 Apr 2022 09:00:31 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Won Chung <wonchung@google.com>
-Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] thunderbolt: Link USB4 ports to their USB Type-C
- connectors
-Message-ID: <YmDy/xEsyktRS6D+@lahna>
-References: <20220418175932.1809770-1-wonchung@google.com>
- <Yl/l7gjRXj41a93q@lahna>
- <CAOvb9yidpOZ4jCjme+u1a4fPTRnLmxUHSTO3yHPPuYtDbe1V0g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOvb9yidpOZ4jCjme+u1a4fPTRnLmxUHSTO3yHPPuYtDbe1V0g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Apr 2022 02:57:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4F216586
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 23:54:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C71C6198B
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:54:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1799C385A1;
+        Thu, 21 Apr 2022 06:54:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650524071;
+        bh=FdF1NAKBmWO075waiXVJwrPyloe9VbS4QA0FHSWBn9w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dsngWohCqGLymVZBVR/znk4ixic3Y3+mkX8RnutaDFE6ZhAoghPP0A5mcrq01w7eq
+         gRPOR322zocUC2TOHvei/UqbVcy8ENpWzMCjVvTq1it33rS/aVQnV/u5lAvyYSb0oE
+         FFwNPV+/SMkCcVBovwRlVcyR/V0w7vwyL3lEto1HKTnlXWQ16WXBc29uuxMjFBEX0/
+         zicJfqe4pUb9tigI8HSx97xVLcaHjDJRxctJoFe4c1hSASIL/i8WQHZ1KuyxTKKAUM
+         avZ5vu39+TR/mkuI56cxqHHEWIOGg2Vr8YAfUHe6MCBG+vwzL09t7Fq7lPODaD2YUQ
+         luw7ffihH0aNQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nhQhv-005o4Q-Hu; Thu, 21 Apr 2022 07:54:29 +0100
+Date:   Thu, 21 Apr 2022 00:19:02 +0100
+Message-ID: <87mtgfgx7d.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nathan Rossi <nathan@nathanrossi.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nathan Rossi <nathan.rossi@digi.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] irqchip/armada-370-xp: Enable MSI affinity configuration
+In-Reply-To: <20220421015728.86912-1-nathan@nathanrossi.com>
+References: <20220421015728.86912-1-nathan@nathanrossi.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: nathan@nathanrossi.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, nathan.rossi@digi.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Nathan,
 
-On Wed, Apr 20, 2022 at 09:39:25AM -0700, Won Chung wrote:
-> On Wed, Apr 20, 2022 at 3:54 AM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, Apr 18, 2022 at 05:59:30PM +0000, Won Chung wrote:
-> > > Currently, USB port is linked to Type C connector, using the component
-> > > framework, if they share the same _PLD fields from ACPI table. Type C
-> > > port-mapper searches for devices with the same _PLD values, and
-> > > aggregate them as components.
-> > >
-> > > When there is another device that share the same _PLD but does not
-> > > registers a component, Type C connector (component master) would never
-> > > be bound due to a component match entry device without a component
-> > > registered. There exists some cases where USB4 port also shares the same
-> > > _PLD with USB port and Type C connector, so we need to register a
-> > > component for USB4 ports too, linking USB4 port with Type C connector.
-> > > Otherwise, link between USB port and Type C connector would not
-> > > work either.
-> > >
-> > > Due to the nature of the component framework, all registered components
-> > > are shared by all component match despite the relevance. MEI subsystems
-> > > also use the component framework to bind to i915 driver, which try to
-> > > match components registered by USB ports and USB4 ports. This can be
-> > > problematic since MEI assumes that there is a driver bound to the
-> > > component device, while USB4 port does not bind to any drivers. MEI's
-> > > component match callback functions should handle such case to avoid NULL
-> > > pointer dereference when USB4 port registers a component.
-> > >
-> > > In summary this patch series
-> > > 1. Fixes MEI subsystem's component match callbacks to handle a component
-> > > device without any driver bound
-> > > 2. Registers a component for USB4 ports to link them to Type C
-> > > connectors, similar to USB ports.
-> > >
-> > > Heikki Krogerus (1):
-> > >   thunderbolt: Link USB4 ports to their USB Type-C connectors
-> > >
-> > > Won Chung (1):
-> > >   misc/mei: Add NULL check to component match callback functions
-> >
-> > The Thunderbolt patch looks good to me. Do you want me to take the both
-> > patches through the Thunderbolt tree or they can go separately? I need
-> > an ack from the mei maintainer it goes through my tree.
+On Thu, 21 Apr 2022 02:57:28 +0100,
+Nathan Rossi <nathan@nathanrossi.com> wrote:
 > 
-> Hi Mika,
+> From: Nathan Rossi <nathan.rossi@digi.com>
 > 
-> I would prefer the two patches to go to the same tree since it can
-> cause a crash with only the second patch (tbt). Would that sound okay?
+> With multiple devices attached via PCIe to an Armada 385 it is possible
+> to overwhelm a single CPU with MSI interrupts. Under certain scenarios
+> configuring the interrupts to be handled by more than one CPU would
+> prevent the system from being overwhelmed. However the
+> irqchip-aramada-370-xp driver is configured to only handle MSIs on the
+> boot CPU, and provides no affinity configuration.
+> 
+> This change adds support to the armada-370-xp driver to allow for
+> configuring the affinity of specific MSI irqs and to generate the
+> interrupts on secondary CPUs. This is done by enabling the private
+> doorbell for all online CPUs and configures all CPUs to unmask MSI
+> specific private doorbell bits. The CPU affinity selection of the
+> interrupt is handled by the target list of the software triggered
+> interrupt value, which is provided as the MSI message. The message has
+> the associated CPU bit set for the target CPU. For private doorbell
+> interrupts only one bit can be set otherwise all CPUs will receive the
+> interrupt, so the lowest CPU in the affinity mask is used. This means
+> that by default the first CPU will handle all the interrupts as was the
+> case before.
+> 
+> Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
+> ---
+>  drivers/irqchip/irq-armada-370-xp.c | 34 ++++++++++++++++++++++++++++++++--
+>  1 file changed, 32 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-armada-370-xp.c b/drivers/irqchip/irq-armada-370-xp.c
+> index 5b8d571c04..42c257f576 100644
+> --- a/drivers/irqchip/irq-armada-370-xp.c
+> +++ b/drivers/irqchip/irq-armada-370-xp.c
+> @@ -209,15 +209,37 @@ static struct msi_domain_info armada_370_xp_msi_domain_info = {
+>  
+>  static void armada_370_xp_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  {
+> +#ifdef CONFIG_SMP
+> +	unsigned int cpu = cpumask_first(irq_data_get_effective_affinity_mask(data));
+> +
+> +	msg->data = (1 << (cpu + 8)) | (data->hwirq + PCI_MSI_DOORBELL_START);
 
-Sounds good to me.
+BIT(cpu + 8) | ...
+
+> +#else
+> +	msg->data = 0xf00 | (data->hwirq + PCI_MSI_DOORBELL_START);
+
+This paints the existing code a bit differently. This seems to target
+all 4 CPUs. Why is that? I'd expect only bit 8 to be set, and the
+whole #ifdefery to go away.
+
+> +#endif
+>  	msg->address_lo = lower_32_bits(msi_doorbell_addr);
+>  	msg->address_hi = upper_32_bits(msi_doorbell_addr);
+> -	msg->data = 0xf00 | (data->hwirq + PCI_MSI_DOORBELL_START);
+>  }
+>  
+>  static int armada_370_xp_msi_set_affinity(struct irq_data *irq_data,
+>  					  const struct cpumask *mask, bool force)
+>  {
+> -	 return -EINVAL;
+> +#ifdef CONFIG_SMP
+> +	unsigned int cpu;
+> +
+> +	if (!force)
+> +		cpu = cpumask_any_and(mask, cpu_online_mask);
+> +	else
+> +		cpu = cpumask_first(mask);
+> +
+> +	if (cpu >= nr_cpu_ids)
+> +		return -EINVAL;
+> +
+> +	irq_data_update_effective_affinity(irq_data, cpumask_of(cpu));
+> +
+> +	return IRQ_SET_MASK_OK;
+> +#else
+> +	return -EINVAL;
+> +#endif
+>  }
+>  
+>  static struct irq_chip armada_370_xp_msi_bottom_irq_chip = {
+> @@ -482,6 +504,7 @@ static void armada_xp_mpic_smp_cpu_init(void)
+>  static void armada_xp_mpic_reenable_percpu(void)
+>  {
+>  	unsigned int irq;
+> +	u32 reg;
+>  
+>  	/* Re-enable per-CPU interrupts that were enabled before suspend */
+>  	for (irq = 0; irq < ARMADA_370_XP_MAX_PER_CPU_IRQS; irq++) {
+> @@ -501,6 +524,13 @@ static void armada_xp_mpic_reenable_percpu(void)
+>  	}
+>  
+>  	ipi_resume();
+> +
+> +	/* Enable MSI doorbell mask and combined cpu local interrupt */
+> +	reg = readl(per_cpu_int_base + ARMADA_370_XP_IN_DRBEL_MSK_OFFS)
+> +		| PCI_MSI_DOORBELL_MASK;
+> +	writel(reg, per_cpu_int_base + ARMADA_370_XP_IN_DRBEL_MSK_OFFS);
+> +	/* Unmask local doorbell interrupt */
+> +	writel(1, per_cpu_int_base + ARMADA_370_XP_INT_CLEAR_MASK_OFFS);
+
+This is a duplicate of what is already in armada_370_xp_msi_init().
+Please refactor it so that this doesn't happen twice on the first CPU.
+
+This otherwise seem like a valuable improvement on the current
+behaviour,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

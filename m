@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B0D5091AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5EF5091B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382309AbiDTU6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S1382302AbiDTU7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382298AbiDTU6U (ORCPT
+        with ESMTP id S1382333AbiDTU7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:58:20 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F7540E6F;
-        Wed, 20 Apr 2022 13:55:32 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id s137so2781506pgs.5;
-        Wed, 20 Apr 2022 13:55:32 -0700 (PDT)
+        Wed, 20 Apr 2022 16:59:07 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDFB4738F;
+        Wed, 20 Apr 2022 13:56:06 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id q1so1733026plx.13;
+        Wed, 20 Apr 2022 13:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=fCKKqwYAgNFMuMZk7qFUivljqs2QZAfOtceIVZfFhSE=;
-        b=bToosJticFpPUsB2CwiZtE80vfviMsd4VbanwyouG59MzWbv4bc2d9GOruhytns/PE
-         VD6RGQPMKaqcgM8oYaznVMPhXSZexU5HvzNIbqDfWUW1/7t1q6oh/+2iObh/i34hXkEk
-         aN2/d7orkViSkwv6GSghdgtkIHgJ81eb9Y7as984EMfDs6ZoonOlzLFyLKSFDlwIE8qo
-         WD9Skk3JZMEhYZKU12LDln1LaSVWg5FdwUJcOmyOakvOiobO6OmbsTpKluW0IFRUWb1e
-         FIZo6tCkN7OFxaf+3v8vuCoc1ecZS0WDeLR0nctSx8CbF/E60pqqlNhsuunthPpHACHi
-         QQ7g==
+        bh=iyNh/cgw372mgMuoCpBOD5OLepcke4CvqRSVyft8dEI=;
+        b=Pjvu+5wlOm0zbvm9BXVkOQIBJbIIx1+BuScH7ve1SvNr3jK3hzMmJq7Oy6+e5bMQx3
+         EUWq5pSdndTu7VFL13N3pccgmPcI6DSNQa1igjEak09RnccAL7iyPL3UZFYVyDhvdYXX
+         thpHo5hbJuGT3B1Wyrjy7n0zqsry2KJ30ai8fjsebOryZb/msh3EI8pl7zhwQ0ky+AHC
+         QjN7256MqxCw0Ze85jqAdYBZdIgZ9iAQ28pd9KMDpcdWF4tvmEY19EgJr/RvpdQFi6zq
+         S7zsic7PNs7BtciZFpPKTU/Oi1ewDdI4LgXVZRlaN4o24hOKPL7/BTBY+jafVEMpZcAS
+         PsEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=fCKKqwYAgNFMuMZk7qFUivljqs2QZAfOtceIVZfFhSE=;
-        b=uPOpfvK5kR7oC+TbNNTEhBA26znhm2pLIzpCIpqILIPFSpPOWfE2ilzVqTLPiUgOPA
-         q3CD4L7UPQPKiWicZyvy3LT5B1ov1ybkCB1Pg5tvRWkN2CaIv4EyaWO2sMmaYJ4iN3XI
-         p+fc7LmBr/2uHDfpNRk1fH+q3uZGj6w1qyFZSJon2qAFtRZfJ3H59+nBsuPehv7u5E1v
-         FwjPMKo/ypWcrXLqyntKpzZiT/qoWKY6hHsx3TrMOp5Wn8Ouclc/cEJMQ7x+Xz9orhdY
-         TzbuImMZDJKQiNNbeBJJcSsDMzW5L0y3oyelIE3tdLZU+kh0noh7DTbG9kU7rd8n4XnX
-         L0OQ==
-X-Gm-Message-State: AOAM533HN2nO2JHlsVa4fiAi0Drc1Zekau91KMuHG9XyynKPZGxms5OI
-        T8U0PqnPK7gZPzRTACDbGTg=
-X-Google-Smtp-Source: ABdhPJx9ESxq6+gHBspcLB5Ib9Qq71Twks0gOK23673r77ghkkU8qcV+sJvxeyi88cKdTsdWPbT5oA==
-X-Received: by 2002:a65:45c5:0:b0:39c:ec64:cc16 with SMTP id m5-20020a6545c5000000b0039cec64cc16mr20915389pgr.505.1650488131741;
-        Wed, 20 Apr 2022 13:55:31 -0700 (PDT)
-Received: from localhost ([192.55.54.52])
-        by smtp.gmail.com with ESMTPSA id u20-20020a056a00159400b0050a946e0548sm7545332pfk.165.2022.04.20.13.55.31
+        bh=iyNh/cgw372mgMuoCpBOD5OLepcke4CvqRSVyft8dEI=;
+        b=nh5dmKTp8EIMLEreqn+pByQfoTK9qO5KMcU1LP+2Uw0vdlKCtJxq6WpvZb5wN18IK+
+         L5hr6ZFguIJ37xqdVNFXcg5jgm1swEUHYQRtOwdfT/3aDLoH8OLsPxDB4oIheF/SLSvu
+         KMfa9dKisquV7H9Xb2AhPvjNoFNiYfwKqY7d+RLoG9b/k00D3mtiNyzFtK+IAR6QxUD8
+         ql83Q/e8x724WDCVWSpMQ2aRMqek0/FTo2sXGYdI5xquki0yE5MKuTTfg7xlNOUEryFz
+         +oQ9+kg7XEi1dmmEY3AZAK0YngcRWlVvbNVkI1D7wHYxaKvVIV4ZgWdOCtszjagIZgxh
+         Bacw==
+X-Gm-Message-State: AOAM530lQWtx7Ed9nJ2XpIQZ2mmiX6TAm0oop37gYOjr44KQa6gBpuwU
+        IMFOFVusv042ml8c3L5s9ZI=
+X-Google-Smtp-Source: ABdhPJzWNfD4QdoKGiy4HD3wAKCNVrRtgJ9RHg39Ydkly85OJOUKE6GjmttoYlAImRh6F0mGhCs0NQ==
+X-Received: by 2002:a17:90b:1bc5:b0:1d2:699a:54e3 with SMTP id oa5-20020a17090b1bc500b001d2699a54e3mr6471988pjb.136.1650488165771;
+        Wed, 20 Apr 2022 13:56:05 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:fe4b:9301:599b:d734])
+        by smtp.gmail.com with ESMTPSA id m18-20020a639412000000b003820bd9f2f2sm20737577pge.53.2022.04.20.13.56.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 13:55:31 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 13:55:30 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com, isaku.yamahata@gmail.com
-Subject: Re: [PATCH v3 11/21] x86/virt/tdx: Choose to use all system RAM as
- TDX memory
-Message-ID: <20220420205530.GB2789321@ls.amr.corp.intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
- <dee8fb1cc2ab79cf80d4718405069715b0d51235.1649219184.git.kai.huang@intel.com>
+        Wed, 20 Apr 2022 13:56:04 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 13:56:02 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     cgel.zte@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] Input: Remove unneeded variable
+Message-ID: <YmBzYpGW+9rn+SaJ@google.com>
+References: <20220419064255.2563333-1-deng.changcheng@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dee8fb1cc2ab79cf80d4718405069715b0d51235.1649219184.git.kai.huang@intel.com>
+In-Reply-To: <20220419064255.2563333-1-deng.changcheng@zte.com.cn>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,34 +71,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 04:49:23PM +1200,
-Kai Huang <kai.huang@intel.com> wrote:
+Ov> HID-over-I2C devices might reset on their own. Any device configuration
+> applied before the reset might be brought back to defaults so we need to
+> reconfigure to make sure the driver state is consistent.
+> 
+> Add a reset callback to the hid driver structure.
+> Issue it if the driver implements it and the device reset gets observed.
+> 
+> Signed-off-by: Angela Czubak <acz@semihalf.com>
 
-> +/*
-> + * Helper to loop all e820 RAM entries with low 1MB excluded
-> + * in a given e820 table.
-> + */
-> +#define _e820_for_each_mem(_table, _i, _start, _end)				\
-> +	for ((_i) = 0, e820_next_mem((_table), &(_i), &(_start), &(_end));	\
-> +		(_start) < (_end);						\
-> +		e820_next_mem((_table), &(_i), &(_start), &(_end)))
-> +
-> +/*
-> + * Helper to loop all e820 RAM entries with low 1MB excluded
-> + * in kernel modified 'e820_table' to honor 'mem' and 'memmap' kernel
-> + * command lines.
-> + */
-> +#define e820_for_each_mem(_i, _start, _end)	\
-> +	_e820_for_each_mem(e820_table, _i, _start, _end)
-> +
-> +/* Check whether first range is the subrange of the second */
-> +static bool is_subrange(u64 r1_start, u64 r1_end, u64 r2_start, u64 r2_end)
-> +{
-> +	return (r1_start >= r2_start && r1_end <= r2_end) ? true : false;
-
-nitpick:
-Just "return (r1_start >= r2_start && r1_end <= r2_end)"
-Maybe this is a matter of preference, though.
+Applied, thank you.
 
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Dmitry

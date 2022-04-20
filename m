@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19808507EF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E460F507EF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358984AbiDTCjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 22:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S1359008AbiDTClA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 22:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358986AbiDTCjH (ORCPT
+        with ESMTP id S1346789AbiDTCk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 22:39:07 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5925537AAD
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:36:20 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-e2fa360f6dso615355fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:36:20 -0700 (PDT)
+        Tue, 19 Apr 2022 22:40:58 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED90737ABD
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:38:13 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id q129so629595oif.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:38:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uPpeQw/Svxec6EB5vDEdkM6+QwQAh4U7mOcWgKqa4Vo=;
-        b=zLR210LIyC5pG3HErtCaJG3Swm3AE6TefCzVOjS9CFMDRXbeJiI1F3wBEMUNfzTJW5
-         UIFvh4TubzbwaoBeJqLobgpOtWdaXkxQ00XPyq93bjlc6bNBF7tRmSpbGJhn0/iqNBkU
-         AARav9d7tGA5hGF7FTfhGHS5ZND3IZsLa0cxtwnuaGv5HzVm51wXonnlZ7rIvpkcWCF2
-         BdXj6l9SLH4+isw/LqD6YvlOWOmFqxL63EG26MdrvgEp2Hnbjc8toReO/+ZAL0pyqPat
-         gOKWn8ABpZAbUzk8jrWL8ZmGYoqSqg0qVu9rvwGZrZxwTk4yX/YZIpO4tOkRrGu3BKus
-         /crQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=rWgc+OLGgaqRanc4pUDKhoEVnq85GoX137OEPhM1wdc=;
+        b=PAdiTR0AM6Sd4SX5/scSP3Ik6G6kqetRl8KoD/CFfJ0y+6iLJ5ny/s6g4W6Drhgmaf
+         k/V3ra1qAzhrTlWrLuvPodvJGLvuuGjIn0l7cloTHZX6IA4zz39RtFAB08vxbmDix7CL
+         0Bn5uk0xffWUylhVCSg4pYcxZ1EUfgnwjwzNNqxzWOXLbqykpdIFMeMo/iPDOSd1FRVE
+         pkI5dEkjqTyEKSEA2WxNiD+LqmRZH3/mS+KVXwxY3xyIOuUt/sNe956cFuYxhkusaJV2
+         xuoIkIbF66hf6V3o/1ywYeCdxM48esbVlesdh7KDrVFaBdTIesIFDmd9Y5fd7yYVaDiR
+         A2Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uPpeQw/Svxec6EB5vDEdkM6+QwQAh4U7mOcWgKqa4Vo=;
-        b=ApXGH2ysPDyiQzzMgiGXPoJR07GYtauBsuLOmami/5G/q9FGSnd0XOxYU/hHu1qOe9
-         JJGh34PLCyw4XcARY7XcNogIOzhnngWyRmehS39qxnjkKImGmEpRVBt/p4yNEUsYHPxE
-         xthowr+mVMo772e7IP2utWb7OeMC9Dbv+6U8u3OjN/6YY7D0r3ymo+KPkKwp7eZofDPR
-         YX2M01uNlRsA1RmInSZ6izf1HZPTGqHnM6BffPHe0g0vYkrvBywJM2AGdT5urgy4BZKH
-         OrtLoqFmH1l2ookjAZkYzb/F85Nhz7fatyBXZS+FC24NGSBgub2fnIgqWiB+557HZlC4
-         6Tqw==
-X-Gm-Message-State: AOAM532hGsnBrsXUt63NCQ/+gmJCrhXRH5mqEcS+E0PVhmVBkPJS4g/D
-        20d3DGhbpugIiaDLTbDDcw/86g==
-X-Google-Smtp-Source: ABdhPJyKHPVDEDnzZkxF9L9vrMd3VNFmgySs4pbsIaO2GrjCdMyTc6jlRLdrA0XgQHO0pa/l8eLpvg==
-X-Received: by 2002:a05:6870:632a:b0:e5:a05d:3c29 with SMTP id s42-20020a056870632a00b000e5a05d3c29mr653638oao.293.1650422179516;
-        Tue, 19 Apr 2022 19:36:19 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id y22-20020a4aea36000000b0033914f661a2sm5077728ood.33.2022.04.19.19.36.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 19:36:18 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 21:36:17 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     agross@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_msavaliy@quicinc.com, dianders@chromium.org
-Subject: Re: [V4 1/2] arch: arm64: dts: qcom: sc7280-idp: Configure cts
- pinctrl to bias-bus-hold
-Message-ID: <Yl9xoYo8z7z4gSTT@builder.lan>
-References: <1650349697-13540-1-git-send-email-quic_vnivarth@quicinc.com>
- <1650349697-13540-2-git-send-email-quic_vnivarth@quicinc.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=rWgc+OLGgaqRanc4pUDKhoEVnq85GoX137OEPhM1wdc=;
+        b=3XTa9OXPXof72d48uZFz+g+F0IurZRmbTxjTv6i366innqaNAEMylxa6iSXUQvqXtu
+         HX9tdc8yIlWiuYbzod6d0xL/l7cQNwNh73IfepdnIZ3aBbIp2LJ8n9RvUF8cqW5BTkRk
+         fDSF0l+sgyefbfSOY7SfOP5hqxwP9N+SrLaR8QerzsKYWsQTxvJZHTl/mb2Rlxk/th/a
+         oRAuBARG1EMRGxZ8QbHVqXNgX1YZjc3w5khNRlo+taluCfjxN2QrTpx+Ls72eLX6sFui
+         ita6bH5M/JbakVGQCXXCDtQkX+dqCqLx2VPB3+9zRe7aD2oSfA8pe4D2P5GCbK+ReSN9
+         RZYg==
+X-Gm-Message-State: AOAM531LNl8aBn/2xJ6x8FP3OjXHOhMbyYjqBJgsAvCWJzfa4LIYLeH1
+        dwy/a4ShGHqlV9pTVZMNIAzLXw==
+X-Google-Smtp-Source: ABdhPJyGQmY8Xk+gHmh45e2p/D/SaaXT2n2jB4Ds+WJ1C7lIP85sqsfrbhQJBPnnjuf5yn7AGB9TNw==
+X-Received: by 2002:a05:6808:1984:b0:322:7bbf:aae2 with SMTP id bj4-20020a056808198400b003227bbfaae2mr712685oib.125.1650422292841;
+        Tue, 19 Apr 2022 19:38:12 -0700 (PDT)
+Received: from [192.168.17.16] ([189.219.73.83])
+        by smtp.gmail.com with ESMTPSA id z3-20020a056830290300b005b2316db9c9sm5941476otu.30.2022.04.19.19.38.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 19:38:12 -0700 (PDT)
+Message-ID: <392ba1bf-3b2a-3be2-67fc-53745eab0914@linaro.org>
+Date:   Tue, 19 Apr 2022 21:38:10 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650349697-13540-2-git-send-email-quic_vnivarth@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.15 000/189] 5.15.35-rc2 review
+Content-Language: en-US
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220419073048.315594917@linuxfoundation.org>
+ <bc25b6b5-d202-18c5-a485-217f858fc986@linaro.org>
+In-Reply-To: <bc25b6b5-d202-18c5-a485-217f858fc986@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,73 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 19 Apr 01:28 CDT 2022, Vijaya Krishna Nivarthi wrote:
+Hello!
 
-> WLAN rail was leaking power during RBSC/sleep even after turning BT off.
-> Change sleep pinctrl configuration to handle same.
+On 19/04/22 18:25, Daniel Díaz wrote:
+> On 19/04/22 02:32, Greg Kroah-Hartman wrote:
+>> This is the start of the stable review cycle for the 5.15.35 release.
+>> There are 189 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, please
+>> let me know.
+>>
+>> Responses should be made by Thu, 21 Apr 2022 07:30:20 +0000.
+>> Anything received after that time might be too late.
+>>
+>> The whole patch series can be found in one patch at:
+>>     https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.35-rc2.gz
+>> or in the git tree and branch at:
+>>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+>> and the diffstat can be found below.
+>>
+>> thanks,
+>>
+>> greg k-h
 > 
+> Results from Linaro's test farm.
+> No regressions on arm64, arm, x86_64, and i386.
 
-As I said before, I would like the subject to contain the word
-"bluetooth" (or possibly BT if bluetooth doesn't fit).
+Forgot to mention that it was
 
-And drop "arch: " from the subject prefix. If you're uncertain what to
-put there, run below command and follow what everyone else does:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-  git log --oneline -- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+Greetings!
 
-> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> ---
-> v4: modify subject of patch to indicate file it is applying to
-> v3: apply same change to active state and other sc7280*.dts* as well
-> v2: used bias-bus-hold as per review comments
-> v1: intial patch used bias-disable for sleep pinctrl in sc7280-idp only
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> index 015a347..85e7467 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> @@ -400,10 +400,10 @@
->  
->  &qup_uart7_cts {
->  	/*
-> -	 * Configure a pull-down on CTS to match the pull of
-> -	 * the Bluetooth module.
-> +	 * Configure a bias-bus-hold on CTS to lower power usage
-> +	 * when BT is turned off.
-
-This comment would just leave a future reader with the question about
-_why_ does this lower the power usage...
-
-This problem you're seeing is likely to come back in the next platform
-and your successor (or even yourself) will have no use of this comment
-to figure out what bias to configure on these pins.
-
-Thanks,
-Bjorn
-
->  	 */
-> -	bias-pull-down;
-> +	bias-bus-hold;
->  };
->  
->  &qup_uart7_rts {
-> @@ -495,10 +495,10 @@
->  		pins = "gpio28";
->  		function = "gpio";
->  		/*
-> -		 * Configure a pull-down on CTS to match the pull of
-> -		 * the Bluetooth module.
-> +		 * Configure a bias-bus-hold on CTS to lower power usage
-> +		 * when BT is turned off.
->  		 */
-> -		bias-pull-down;
-> +		bias-bus-hold;
->  	};
->  
->  	qup_uart7_sleep_rts: qup-uart7-sleep-rts {
-> -- 
-> Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
-> 
+Daniel Díaz
+daniel.diaz@linaro.org

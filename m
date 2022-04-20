@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAE6508760
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A50508764
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378270AbiDTLxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 07:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
+        id S1378266AbiDTLzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 07:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352702AbiDTLxk (ORCPT
+        with ESMTP id S1347396AbiDTLzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 07:53:40 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9CE1208A;
-        Wed, 20 Apr 2022 04:50:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=e//dGrepWn7jS9BGgfc47xqnbF5iiCNsWca8XJ9Scbo=; b=p9kNFmSNauYxhJ9ue+3HRA2/Sp
-        XglgEYEv2K81hgCmNw9FzjRwLCmmriyByATQynMDLwxN+oHlUqiXOXMcgYRBCVLWJ+52fE76Tinhx
-        VnNeWeM5BWo8VVwgnqLuV/jHvvLrRr5ZW0/FUCPNO+HNQ8W0qwlHW6+4plkO8+kEDJXWitJTf21q9
-        7IyYANdI1o0TwCKpmOY1HKx6kMjnt+H46NWFfPoi0m5UhbgF+UJ9SgeBNw56vkSxMbkBahKnZevRC
-        Yt5sl7cnLOOOWpY7CrGjPyogibKPnS17AafKmelx0F6mMt+06bSNNSWhEfVZzEcNCXsZgO1p0bgBQ
-        DFSXN5JQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nh8r4-0076rr-JF; Wed, 20 Apr 2022 11:50:42 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AFF899861A4; Wed, 20 Apr 2022 13:50:40 +0200 (CEST)
-Date:   Wed, 20 Apr 2022 13:50:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] signal: Deliver SIGTRAP on perf event asynchronously if
- blocked
-Message-ID: <20220420115040.GE2731@worktop.programming.kicks-ass.net>
-References: <20220404111204.935357-1-elver@google.com>
- <CACT4Y+YiDhmKokuqD3dhtj67HxZpTumiQvvRp35X-sR735qjqQ@mail.gmail.com>
- <CANpmjNPQ9DWzPRx4QWDnZatKGU96xLhb2qN-wgbD84zyZ6_Mig@mail.gmail.com>
+        Wed, 20 Apr 2022 07:55:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2881208A;
+        Wed, 20 Apr 2022 04:52:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 277476195B;
+        Wed, 20 Apr 2022 11:52:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2504C385A0;
+        Wed, 20 Apr 2022 11:52:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650455572;
+        bh=Y9tpE6eXII7HUGJZvCy6bLohqRKwZvWsLqA0XWyHEfg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p5ILxmJrmD9W2Vt6HqO9NFmOnhnlkU+Ipwss8w0n5PAHehAWv+T4UAjvKz+8ozSiC
+         dMKECFCJR4yS47w5v5uk7Ce120HA8LiYf/ZBpeAxHQB48nCP9Xwe3UGOHcNu7RuhLr
+         y7aQz9+ZkN7KBcdLgupzYGhZLJrRIrGnFw09qLrb8vbOj5MEfre5Yu1ntIbZQOxboV
+         W/FwzANrWlL4c+ox1NDZ5DugxjKqo2vVi/AtoZUDOCcz6Rdmi+pR68Hyjo28gcyBI8
+         xbHg1D/GPeOulWwYHTDOFuAWcZA+5sWVCKBFcvFMvQBtckld1zkUDpIG3sJE3os84n
+         MBwebGD4dxzfw==
+Date:   Wed, 20 Apr 2022 17:22:48 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     gustavo.pimentel@synopsys.com, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] dmaengine: dw-edma: Fix inconsistent indenting
+Message-ID: <Yl/0EMsnFnAXVzy6@matsya>
+References: <20220413023442.18856-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANpmjNPQ9DWzPRx4QWDnZatKGU96xLhb2qN-wgbD84zyZ6_Mig@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220413023442.18856-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 01:00:00PM +0200, Marco Elver wrote:
+On 13-04-22, 10:34, Jiapeng Chong wrote:
+> Eliminate the follow smatch warning:
+> 
+> drivers/dma/dw-edma/dw-edma-v0-core.c:419 dw_edma_v0_core_start() warn:
+> inconsistent indenting.
 
-> Should there be any further comments, please shout.
+Applied, thanks
 
-Barring objections, I'm going to queue this for perf/core.
-
+-- 
+~Vinod

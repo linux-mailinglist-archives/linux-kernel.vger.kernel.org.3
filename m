@@ -2,74 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BAD55088AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0855088BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378715AbiDTND5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
+        id S1378742AbiDTNHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353831AbiDTNDz (ORCPT
+        with ESMTP id S1352604AbiDTNHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:03:55 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FC615A13
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:01:09 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso853068ilu.19
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:01:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=2IgGQLD5G+5Tfxlq7KIln/oteLHYJ2GP/WcMqcq8IfM=;
-        b=6mmp0tatUmHYTYhOSGvVGbtRi0NexJT7vfKtkyb4ZcMpmMqQRdMQ5L/w+ruPRqWwMQ
-         NLZplG9IEtnjJxxiG5VRFWG2VE4Q531htirhgc2IG31tBgYCA9RoS9vToS93rlV+W9i9
-         tTEv6BtZ5UfVO7SMOW8SYlFVQWXvwEBi3++sj0Egqh35aUFypbgPraF+hUNufIfEtfN+
-         Swq6iyNQhKMx12Lo7lvsPv7YlsBuj3OGbB0+HdD3+tVkUmcLp/VfBIDIvUeAOwOH17iW
-         nojeyUd0A3OVjXlZqW49om+iSZ41BVzmqrSLau0d/pbaPm13WDZYDnTZ/L6EBu0fmeXo
-         ntYw==
-X-Gm-Message-State: AOAM531b+dq0nGO7O7TYdP4iSEY4bKiNHSS+/iMBw1YZXOBd4h5n1b3+
-        6ihySPnWf5uwsnBhEke+SvMGpn4zmawBL7iYdhcFl/s40A5n
-X-Google-Smtp-Source: ABdhPJzqgate6rM+viCu2evOUewTb40FXkpQJff38RYGkcV8cjBRUVacaL8fdpt38dEG5KKBk/tHmbreuHsoSkA+fxnJNfPU0Prp
+        Wed, 20 Apr 2022 09:07:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A2415A13;
+        Wed, 20 Apr 2022 06:04:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82E8BB81F0D;
+        Wed, 20 Apr 2022 13:04:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF021C385A1;
+        Wed, 20 Apr 2022 13:04:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650459869;
+        bh=xWASg+ifbn2uVha8nfvnCveQNEqoOf0q74ePOsRwNE8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HGh9s/mBegJmMEJbl/CbemQQcdqWqduGRlNe8NolJJusCEepEAGhP4EIUYzP/EgAC
+         GmuHVNPpK+iY7/laRC1PcOFQ8cpjNFtqmpzHDe3CluEkHLai1DAEMoDTuFedKXwv4n
+         02rUGQNbuCh5T+gfrxsgqLHPaWEkhxiINgl1ZtLap/qWGm68arBvMRzcquZsz27pN2
+         DcLj2pe6sdgfrFoRCEz59tymcpcqYvFc+3wd7pHxzlVmvsDX1rT78GZyPxJ+vATnrp
+         ShoPqO+kiXzVLoocs7Sam6hHnvymZNhWjD4zIoSYhPvjV7aSln8ZYv562U88W/ebiG
+         DJeBzBek6avpQ==
+Date:   Wed, 20 Apr 2022 14:04:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Takahiro Kuwano <tkuw584924@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spi: spi-mem: check if data buffers are on stack
+Message-ID: <YmAE2IVRgPyWxmbn@sirena.org.uk>
+References: <20220420102022.3310970-1-p.yadav@ti.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:9302:0:b0:648:c246:291 with SMTP id
- k2-20020a5e9302000000b00648c2460291mr8782140iom.88.1650459668859; Wed, 20 Apr
- 2022 06:01:08 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 06:01:08 -0700
-In-Reply-To: <20220420122702.lseed5l3lrssyat2@wittgenstein>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000474d8205dd1596ba@google.com>
-Subject: Re: [syzbot] INFO: rcu detected stall in sys_lsetxattr
-From:   syzbot <syzbot+306090cfa3294f0bbfb3@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, fweisbec@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aiCEfvR0m8oWhfqc"
+Content-Disposition: inline
+In-Reply-To: <20220420102022.3310970-1-p.yadav@ti.com>
+X-Cookie: Will it improve my CASH FLOW?
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+--aiCEfvR0m8oWhfqc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reported-and-tested-by: syzbot+306090cfa3294f0bbfb3@syzkaller.appspotmail.com
+On Wed, Apr 20, 2022 at 03:50:22PM +0530, Pratyush Yadav wrote:
+> The buffers passed in the data phase must be DMA-able. Programmers often
+> don't realise this requirement and pass in buffers that reside on the
+> stack. This can be hard to spot when reviewing code. Reject ops if their
+> data buffer is on the stack to avoid this.
+>=20
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> ---
+>=20
+> Changes in v2:
+> - Include task_stack.h. It might not get included indirectly on some
+>   platforms and can cause build failures.
+> - Add a WARN_ON_ONCE() for debuggability.
+> - Add Mark's Ack.
 
-Tested on:
+Since this is now an isolated patch does that mean whatever meant that I
+acked rather than applying this patch has gone in and I can now apply it
+directly?
 
-commit:         bbc1e8c5 fs: unset MNT_WRITE_HOLD on failure
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git fs.mount_setattr.cleanup
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c01066a8395ef6d7
-dashboard link: https://syzkaller.appspot.com/bug?extid=306090cfa3294f0bbfb3
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+--aiCEfvR0m8oWhfqc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJgBNcACgkQJNaLcl1U
+h9AVUAf/Thouk4ikZ3+sC6mFcLBnUb0rdoYUyN/9GyPZwVx0Bu6Bj3KLvfMdR2HI
++tn5BCsE8epyRgcCG0tiCfD0Mmv/CV68z8GPMnDdQGtvnMVRSKy9VsBhAuzvy68x
+e9lQdmScs6JUJezqCJIGHW+ElYAGR8lymrCHbfFsI1/0+WTj6LueWOAR4m4e3F9P
+KNkk50p8ulvfQBu++34jUgHOOJF1HktB5DfqpY4UabmP+iUMvm10Cj6WytRZoztG
+CcpugWP1yiqoiLjEQQal8tYvLMIWMmSlGPYl2nylVGxGCzf07TZNtk17R1CIGQjN
+zMcrx5SUsSY7THkrvpdybENmrvUVow==
+=CnG+
+-----END PGP SIGNATURE-----
+
+--aiCEfvR0m8oWhfqc--

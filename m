@@ -2,93 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D5A508C2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F2C508C2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380227AbiDTPfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
+        id S1380239AbiDTPfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380196AbiDTPfM (ORCPT
+        with ESMTP id S1380153AbiDTPfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:35:12 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034963CA72
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:32:26 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id y129so1473625qkb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:32:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L0g4XuTRG1BcMh3P4chNByt9PFI5OL5q3B7G+owBR8U=;
-        b=FyeZeZSppgey1yzrOZBduf7WJjqMTN3eBIWg8pYNMvAs9tTOORR5hdc46LLBFm9yVI
-         dip3ByXQKCtJSOzon2XjnEVpF9qA2zrV3gsT1gqCetYQfz8GnqiqmF4pXEvnBxoMN/18
-         uqCtX2TEgfSPJCONEWqCmNJ3b+JxscvzSSwjvpw8dxNbhR1kSk9zDkSxp4Cjt0SYi96Q
-         EQkvFn7suyIaoXiDA6EStVPUtnAzUIbRr9wGoINlKuQIMbRDqCyWncR4KyS4q4NIMCHD
-         RIjk6jhMit8jr7TCVELTMacuv5yq6YvUU3+ZQpiLHmK3bMPDlRn9AURlNTwyevbHlXMG
-         j4qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L0g4XuTRG1BcMh3P4chNByt9PFI5OL5q3B7G+owBR8U=;
-        b=PVxjsmoqx9B75mINObdxujNP8zPjI3oOUABbrHO89EquNG2FWQlcZF7OKrOgAWl4Gt
-         dReIGRm2sCHH/XIMFULp9x4XdLJ6r/P8NqxzYfUfRIGF7oY8NCoJWGQmVpJhzpGniOBs
-         uj7M+KOAWXAosMGQxmf1X1FWWqCSCXifzJDQBFvbpTiiaycLFqYqogmt68ZYIC2P6gnh
-         +U9QrhENahMlMzLUc+xNEgBgLupTYZmEEsmdqIuSsJ2kxrxnK+PE+xWRb/rgGk2cKnOW
-         6Fyc+UktraoR/LEHMf/O6FQI97FPdBPqIhfeTQOH1WrAQCGxRmBpQqpTaENXRsco1Yqf
-         ym6w==
-X-Gm-Message-State: AOAM531y4FnccXiFw2vFwetZQbCX2RvoSnbGMgh8bxSxXruI4WyzBG7Q
-        1fGqQoYqiHhDwsAVPuTqcjfrkg==
-X-Google-Smtp-Source: ABdhPJzk+XJXypkAQTD39I889slmS94qjjnFfomT/oy6p5fyHYoUrBLE/w2RoCzJsicuEbeUINctKQ==
-X-Received: by 2002:ae9:eb04:0:b0:69e:d174:fa97 with SMTP id b4-20020ae9eb04000000b0069ed174fa97mr3588295qkg.338.1650468744898;
-        Wed, 20 Apr 2022 08:32:24 -0700 (PDT)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id y18-20020ac85f52000000b002ed08a7dc8dsm1923995qta.13.2022.04.20.08.32.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 08:32:24 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 11:32:23 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Alistair Popple <apopple@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] mm/uffd: Hide PTE_MARKER option
-Message-ID: <YmAnh/fgbPmTRUqj@cmpxchg.org>
-References: <20220419202531.27415-1-peterx@redhat.com>
+        Wed, 20 Apr 2022 11:35:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262B63EAB6;
+        Wed, 20 Apr 2022 08:32:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D06C4B81EB2;
+        Wed, 20 Apr 2022 15:32:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E4C9C385AB;
+        Wed, 20 Apr 2022 15:32:33 +0000 (UTC)
+Date:   Wed, 20 Apr 2022 11:32:31 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH rcu 1/2] docs: Add documentation for rude and trace RCU
+ flavors
+Message-ID: <20220420113231.6d3202e4@gandalf.local.home>
+In-Reply-To: <20220418225033.3944860-1-paulmck@kernel.org>
+References: <20220418225004.GA3944767@paulmck-ThinkPad-P17-Gen-1>
+        <20220418225033.3944860-1-paulmck@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419202531.27415-1-peterx@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 04:25:31PM -0400, Peter Xu wrote:
-> The PTE_MARKER option should not need to be exposed to the kernel builder,
-> keep it internal and remove the prompt so it won't be seen.
-> 
-> Instead, make the PTE_MARKER_UFFD_WP option to explicitly choose PTE_MARKER
-> when necessary.
-> 
-> While PTE_MARKER_UFFD_WP will still prompt to user, change the wording so
-> that it'll not mention PTE_MARKER at all but renaming it to "Userfaultfd
-> write protection support for shmem/hugetlbfs".
-> 
-> Reported-by: Johannes Weiner <hannes@cmpxchg.org>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+On Mon, 18 Apr 2022 15:50:32 -0700
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> This commit belatedly adds documentation of Tasks Rude RCU and Tasks
+> Trace RCU to RCU's requirements document.
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>  .../RCU/Design/Requirements/Requirements.rst  | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+> 
+> diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documentation/RCU/Design/Requirements/Requirements.rst
+> index 45278e2974c0..ff2be1ac54c4 100644
+> --- a/Documentation/RCU/Design/Requirements/Requirements.rst
+> +++ b/Documentation/RCU/Design/Requirements/Requirements.rst
+> @@ -2654,6 +2654,38 @@ synchronize_rcu(), and rcu_barrier(), respectively. In
+>  three APIs are therefore implemented by separate functions that check
+>  for voluntary context switches.
+>  
+> +Tasks Rude RCU
+> +~~~~~~~~~~~~~~
+> +
+> +Some forms of tracing need to wait for all preemption-disabled regions
+> +of code running on any online CPU, including those executed when RCU is
+> +not watching.  This means that synchronize_rcu() is insufficient, and
+> +Tasks Rude RCU must be used instead.  This flavor of RCU does its work by
+> +forcing a workqueue to be scheduled on each online CPU, hence the "Rude"
+> +moniker.  And this operation is considered to be quite rude by real-time
+> +workloads that don't want their ``nohz_full`` CPUs receiving IPIs and
+> +by battery-powered systems that don't want their idle CPUs to be awakened.
+> +
+> +The tasks-rude-RCU API is also reader-marking-free and thus quite compact,
+> +consisting of call_rcu_tasks_rude(), synchronize_rcu_tasks_rude(),
+> +and rcu_barrier_tasks_rude().
 
-Thank you Peter
+Are we going to be able to get rid of the "rude" version once we have all
+tracing in a RCU visible section?
+
+> +
+> +Tasks Trace RCU
+> +~~~~~~~~~~~~~~~
+> +
+> +Some forms of tracing need to sleep in readers, but cannot tolerate
+> +SRCU's read-side overhead, which includes a full memory barrier in both
+> +srcu_read_lock() and srcu_read_unlock().  This need is handled by a
+> +Tasks Trace RCU that uses scheduler locking and IPIs to synchronize with
+> +readers.  Real-time systems that cannot tolerate IPIs may build their
+> +kernels with ``CONFIG_TASKS_TRACE_RCU_READ_MB=y``, which avoids the IPIs at
+> +the expense of adding full memory barriers to the read-side primitives.
+
+If NOHZ_FULL is enabled, is there a way to also be able to have this full
+mb on RT removed as well?
+
+> +
+> +The tasks-trace-RCU API is also reasonably compact,
+> +consisting of rcu_read_lock_trace(), rcu_read_unlock_trace(),
+> +rcu_read_lock_trace_held(), call_rcu_tasks_trace(),
+> +synchronize_rcu_tasks_trace(), and rcu_barrier_tasks_trace().
+> +
+>  Possible Future Changes
+>  -----------------------
+>  
+
+For the documentation:
+
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve

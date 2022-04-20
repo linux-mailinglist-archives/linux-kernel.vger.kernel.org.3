@@ -2,97 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31511508121
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B71A508127
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350212AbiDTG2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 02:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
+        id S1345622AbiDTG3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 02:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241372AbiDTG1V (ORCPT
+        with ESMTP id S244501AbiDTG32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 02:27:21 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0F83A5EC;
-        Tue, 19 Apr 2022 23:24:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KjrHP1h8Nz4xPw;
-        Wed, 20 Apr 2022 16:24:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650435874;
-        bh=/zHO/0ZsN7tcC3Lxb9ooaUNEwaM2L33rQaty8QyuL8M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=c8Aq6Qlp2MKgzIdyWLtmFEzRKY3HJYlN0Jd3qG1JTgrrG2sxFnE6mZTEiQ5rHLMRh
-         PWgsBKN3GjYC+hXodxKC3fd0krdyPeB1jHFOPks7HFAV4Xax9XDICoEzqFQ29VP6YB
-         vpgaWOTIGe6gpfNxD+R/AY8FfDgablX+e/qio7jaj2wAig/eKR/nNOUR27dAXUwVt/
-         eJWTtb41gyaodAjjj2m7fHtid0XPV1Uw9qNffjSPRuF3O7GUmcn57BGYPcyTfzqVle
-         R7FzlIHRP2c7Fq7sbLINiEm0GU3Gyw2L6zPHu1x+ZaMuIQSPzpG5XjJ1/lewZ3xveO
-         O+4psYer2xF1g==
-Date:   Wed, 20 Apr 2022 16:24:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the drm-misc tree
-Message-ID: <20220420162431.2b28ddea@canb.auug.org.au>
+        Wed, 20 Apr 2022 02:29:28 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0843233365
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:26:43 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id bg24so1037066pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i/B+07Pdy/i99xOuJm1AhASljd/y0M0ZEBVCIGcpJEk=;
+        b=sopR1yn2nxsBc7ADfwFn/SWVrtJf9vSVuS5tSKUXtu79LcNiX52TDT5EJzOv8j990R
+         X7on1VJ0Knbc/a/cZVJgJVVR1JkUoSMhNJF5tfTTfYnUfP9QcvppIdge2k2kdCaiCvdc
+         mVPYdcWIKwQ5rqis8wCgcW0oBE0f2k8ZZXjP1fbM76+1LWFx5w7tUzyPB8K2CN37GhWa
+         oPxDdQPnLA/ErxICkcFFOQ1K6VzYiWOXj60p3lURuXYdwhe2GR3SnGevDxFhRdcTHBc/
+         I4harbVtT5a80PKLqmQ+ElWi/y3stKqfiP9jbb8Fp0glT1x3EqS4tDbnDcriWWXKWwO5
+         gWLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i/B+07Pdy/i99xOuJm1AhASljd/y0M0ZEBVCIGcpJEk=;
+        b=jPZr0h7PxL39ZickulndGvj6MvR+O504LbqiYz+k3YxwVunGHZE8plZR6AwdV04j/O
+         1U+RnsJmE/YTaC2DKDVnvzQN54yGgAW0kLjJLdGGL58D+yXNU1WLXobdxOW09OxVu0ON
+         RjGa77lpsTOSy4X5bjh7KbLCJpyjBXfIQC0rIWbzNAncae4TCLwcTKyXx8ObqGgF+FjH
+         0l0+Lg8uTPY4GlQVTJGAGhXWy+qxtYyQDtQbCdmlP+PU2kUV/rPDHbSlZZV5XIELPV0T
+         7ZH7ejTTlkJkBMHA4GRM6SjuZ7w5QHEfnrETKqYzaD07GBWRZlHhahWnzXDpatCJUrBp
+         N9XA==
+X-Gm-Message-State: AOAM530D7CHsRjxVQtncJZgcgWdcy9Puho+M6V+gIpIrZdeHT592Fdrp
+        ZJXum5BtZa/QKXpibDhjzYe7rUuKp78HtQ41fPTf0g==
+X-Google-Smtp-Source: ABdhPJxixqBz/WgugT7SEaDoh37n3VChx++gr3ojEoEsdleLCNUq06QhC6jeLOdiLDQ4Vb1/+A5HVkXtu9FHqLKx4aA=
+X-Received: by 2002:a17:90b:4c84:b0:1d2:cadc:4e4d with SMTP id
+ my4-20020a17090b4c8400b001d2cadc4e4dmr2676295pjb.8.1650436002497; Tue, 19 Apr
+ 2022 23:26:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+/yu2sxTOFQJ6m8YC9ZDH_y";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420020435.90326-1-jane.chu@oracle.com> <20220420020435.90326-8-jane.chu@oracle.com>
+In-Reply-To: <20220420020435.90326-8-jane.chu@oracle.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 19 Apr 2022 23:26:31 -0700
+Message-ID: <CAPcyv4gs2rEs71c6Lmtk1La2g3POhzBrppLvM0pkGxx+QZ3SbA@mail.gmail.com>
+Subject: Re: [PATCH v8 7/7] pmem: implement pmem_recovery_write()
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, david <david@fromorbit.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vivek Goyal <vgoyal@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+/yu2sxTOFQJ6m8YC9ZDH_y
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Apr 19, 2022 at 7:06 PM Jane Chu <jane.chu@oracle.com> wrote:
+>
+> The recovery write thread started out as a normal pwrite thread and
+> when the filesystem was told about potential media error in the
+> range, filesystem turns the normal pwrite to a dax_recovery_write.
+>
+> The recovery write consists of clearing media poison, clearing page
+> HWPoison bit, reenable page-wide read-write permission, flush the
+> caches and finally write.  A competing pread thread will be held
+> off during the recovery process since data read back might not be
+> valid, and this is achieved by clearing the badblock records after
+> the recovery write is complete. Competing recovery write threads
+> are serialized by pmem device level .recovery_lock.
+>
+> Signed-off-by: Jane Chu <jane.chu@oracle.com>
+> ---
+>  drivers/nvdimm/pmem.c | 56 ++++++++++++++++++++++++++++++++++++++++++-
+>  drivers/nvdimm/pmem.h |  1 +
+>  2 files changed, 56 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+> index c3772304d417..134f8909eb65 100644
+> --- a/drivers/nvdimm/pmem.c
+> +++ b/drivers/nvdimm/pmem.c
+> @@ -332,10 +332,63 @@ static long pmem_dax_direct_access(struct dax_device *dax_dev,
+>         return __pmem_direct_access(pmem, pgoff, nr_pages, mode, kaddr, pfn);
+>  }
+>
+> +/*
+> + * The recovery write thread started out as a normal pwrite thread and
+> + * when the filesystem was told about potential media error in the
+> + * range, filesystem turns the normal pwrite to a dax_recovery_write.
+> + *
+> + * The recovery write consists of clearing media poison, clearing page
+> + * HWPoison bit, reenable page-wide read-write permission, flush the
+> + * caches and finally write.  A competing pread thread will be held
+> + * off during the recovery process since data read back might not be
+> + * valid, and this is achieved by clearing the badblock records after
+> + * the recovery write is complete. Competing recovery write threads
+> + * are serialized by pmem device level .recovery_lock.
+> + */
+>  static size_t pmem_recovery_write(struct dax_device *dax_dev, pgoff_t pgoff,
+>                 void *addr, size_t bytes, struct iov_iter *i)
+>  {
+> -       return 0;
+> +       struct pmem_device *pmem = dax_get_private(dax_dev);
+> +       size_t olen, len, off;
+> +       phys_addr_t pmem_off;
+> +       struct device *dev = pmem->bb.dev;
+> +       long cleared;
+> +
+> +       off = offset_in_page(addr);
+> +       len = PFN_PHYS(PFN_UP(off + bytes));
+> +       if (!is_bad_pmem(&pmem->bb, PFN_PHYS(pgoff) >> SECTOR_SHIFT, len))
+> +               return _copy_from_iter_flushcache(addr, bytes, i);
+> +
+> +       /*
+> +        * Not page-aligned range cannot be recovered. This should not
+> +        * happen unless something else went wrong.
+> +        */
+> +       if (off || !PAGE_ALIGNED(bytes)) {
+> +               dev_warn(dev, "Found poison, but addr(%p) or bytes(%#lx) not page aligned\n",
+> +                       addr, bytes);
 
-Hi all,
+If this warn stays:
 
-After merging the drm-misc tree, today's linux-next build (htmldocs)
-produced this warning:
+s/dev_warn/dev_warn_ratelimited/
 
-drivers/gpu/drm/drm_edid.c:2136: warning: Function parameter or member 'rea=
-d_block' not described in 'drm_do_get_edid'
-drivers/gpu/drm/drm_edid.c:2136: warning: Function parameter or member 'con=
-text' not described in 'drm_do_get_edid'
-drivers/gpu/drm/drm_edid.c:2136: warning: Excess function parameter 'get_ed=
-id_block' description in 'drm_do_get_edid'
-drivers/gpu/drm/drm_edid.c:2136: warning: Excess function parameter 'data' =
-description in 'drm_do_get_edid'
+The kernel prints hashed addresses for %p, so I'm not sure printing
+@addr is useful or @bytes because there is nothing actionable that can
+be done with that information in the log. @pgoff is probably the only
+variable worth printing (after converting to bytes or sectors) as that
+might be able to be reverse mapped back to the impacted data.
 
-Introduced by commit
+> +               return 0;
+> +       }
+> +
+> +       mutex_lock(&pmem->recovery_lock);
+> +       pmem_off = PFN_PHYS(pgoff) + pmem->data_offset;
+> +       cleared = __pmem_clear_poison(pmem, pmem_off, len);
+> +       if (cleared > 0 && cleared < len) {
+> +               dev_warn(dev, "poison cleared only %ld out of %lu bytes\n",
+> +                       cleared, len);
 
-  89fb7536ad2f ("drm/edid: add typedef for block read function")
+This looks like dev_dbg() to me, or at minimum the same
+dev_warn_ratelimited() print as the one above to just indicate a write
+to the device at the given offset failed.
 
---=20
-Cheers,
-Stephen Rothwell
+> +               mutex_unlock(&pmem->recovery_lock);
+> +               return 0;
+> +       }
+> +       if (cleared < 0) {
+> +               dev_warn(dev, "poison clear failed: %ld\n", cleared);
 
---Sig_/+/yu2sxTOFQJ6m8YC9ZDH_y
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Same feedback here, these should probably all map to the identical
+error exit ratelimited print.
 
------BEGIN PGP SIGNATURE-----
+> +               mutex_unlock(&pmem->recovery_lock);
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJfpx8ACgkQAVBC80lX
-0GxZZAf/T1Y2OmjSqd8ow7L2wUV3wqHTL9yWRQSLudTi092OiWNhhyZ/ub4w++UU
-wU+yyI4V7jhVsbd00t+en4S7BvMlzeMfKjF7uso7+XwcsX7/tTcZcWpvW+VUj13V
-guOuZM+8Rse9UYaWVYmrH0tWYDiukkICQp779gh2+HH7LULg6wI3dyL1UmCu3NYR
-ra2mdJUv98+6jG437X5oytYOy6NKBrx4hcKlhcx2LKnKLwSzeIsENUFpreEjHYu1
-ivMGR9lc8yngyi4eCUlnAGdjRhMAl3f7RlshQkb5KjuYbdAD8b0rwLBpk3JpKRuJ
-JH1jmonsq35wEKyhtJwip4xkFScKbA==
-=GLfA
------END PGP SIGNATURE-----
+It occurs to me that all callers of this are arriving through the
+fsdax iomap ops and all of these callers take an exclusive lock to
+prevent simultaneous access to the inode. If recovery_write() is only
+used through that path then this lock is redundant. Simultaneous reads
+are protected by the fact that the badblocks are cleared last. I think
+this can wait to add the lock when / if a non-fsdax access path
+arrives for dax_recovery_write(), and even then it should probably
+enforce the single writer exclusion guarantee of the fsdax path.
 
---Sig_/+/yu2sxTOFQJ6m8YC9ZDH_y--
+> +               return 0;
+> +       }
+> +
+> +       olen = _copy_from_iter_flushcache(addr, bytes, i);
+> +       pmem_clear_bb(pmem, to_sect(pmem, pmem_off), cleared >> SECTOR_SHIFT);
+> +
+> +       mutex_unlock(&pmem->recovery_lock);
+> +       return olen;
+>  }
+>
+>  static const struct dax_operations pmem_dax_ops = {
+> @@ -525,6 +578,7 @@ static int pmem_attach_disk(struct device *dev,
+>         if (rc)
+>                 goto out_cleanup_dax;
+>         dax_write_cache(dax_dev, nvdimm_has_cache(nd_region));
+> +       mutex_init(&pmem->recovery_lock);
+>         pmem->dax_dev = dax_dev;
+>
+>         rc = device_add_disk(dev, disk, pmem_attribute_groups);
+> diff --git a/drivers/nvdimm/pmem.h b/drivers/nvdimm/pmem.h
+> index 392b0b38acb9..91e40f5e3c0e 100644
+> --- a/drivers/nvdimm/pmem.h
+> +++ b/drivers/nvdimm/pmem.h
+> @@ -27,6 +27,7 @@ struct pmem_device {
+>         struct dax_device       *dax_dev;
+>         struct gendisk          *disk;
+>         struct dev_pagemap      pgmap;
+> +       struct mutex            recovery_lock;
+>  };
+>
+>  long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
+> --
+> 2.18.4
+>

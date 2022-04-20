@@ -2,91 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C1B50886D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F20350886F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353713AbiDTMtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S1353774AbiDTMtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348748AbiDTMtC (ORCPT
+        with ESMTP id S1348748AbiDTMtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:49:02 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9383C485;
-        Wed, 20 Apr 2022 05:46:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650458776; x=1681994776;
-  h=from:to:cc:subject:date:message-id;
-  bh=wpZPNcTrbg6UuvRsRNQ06iL7QRinWmpeDhD7MtVprBQ=;
-  b=WuED9DTVS5DuhpAVB9Pw1Cq7gCMinbQZhkRduEAjRYj64MCOPdDSJjh5
-   9Bplpp3f6Cb74QpClsZSTgDaCL+nwfOmzQkvQDgw6fVihh5jbMemd16kP
-   jPEFYmrzjqT4TiFRq299yxaUmykzXYawhdnlY7ASBL2P3bprUlNZNk1JU
-   0=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 20 Apr 2022 05:46:16 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 20 Apr 2022 05:46:14 -0700
-X-QCInternal: smtphost
-Received: from hyd-lablnx377.qualcomm.com ([10.204.178.226])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 20 Apr 2022 18:15:52 +0530
-Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
-        id 51BCB21656; Wed, 20 Apr 2022 18:15:51 +0530 (IST)
-From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        bjorn.andersson@linaro.org, agross@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org
-Cc:     mka@chromium.org, quic_hemantg@quicinc.com,
-        quic_bgodavar@quicinc.com, quic_rjliao@quicinc.com,
-        quic_hbandi@quicinc.com, abhishekpandit@chromium.org,
-        mcchou@chromium.org, Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Subject: [PATCH v4] Bluetooth: arm64: dts: qcom: sc7280: Add IO regulator handler in SC7280 CRD platforms
-Date:   Wed, 20 Apr 2022 18:15:40 +0530
-Message-Id: <1650458740-16957-1-git-send-email-quic_saluvala@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 08:49:22 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D6B3BFBE;
+        Wed, 20 Apr 2022 05:46:37 -0700 (PDT)
+Received: from localhost (unknown [151.68.223.215])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id E7117378;
+        Wed, 20 Apr 2022 12:46:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E7117378
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1650458797; bh=BgIHcvaj/KfUgAyHJOsk+OU5MNNVxfxAo3KS8RmYeZQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=PSbP6DALguwm5EHOwD+FPf46VnpXKWokAPBHEZT6JTiGrfZ/cvzHvNFFqfSjfCGzv
+         0LDWiacpkpBLdqZc20gNp0vpv/6QGs03hsWcQapmDdAxXfHtRRRUB68ZljI5u/lnPY
+         j390tH0EOa0Uo0drO5TXJW6gA2VzotevbS4EjNPYj+2NCDHZ35/2SWlXa5mGBw5ggN
+         AvmUj1rQ9XJffMJdoeNJeoaRQQ09wMpWQzEfU3KovjqkbzfHpckNZnfPPdQAz5A7D2
+         E7YQ/Z/ohWp2YcnBi8Sgl5MQNjAFPSUTyaKJjBObHEjK2x2r6ZHDLyZZ4Uk7bOSX7P
+         SfkG4L7ePMRpQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Haowen Bai <baihaowen@meizu.com>, siyanteng01@gmail.com
+Cc:     alexs@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, seakeel@gmail.com,
+        siyanteng@loongson.cn
+Subject: Re: [PATCH 2/2] doc/vm/page_owner.rst: Fix table display confusion
+In-Reply-To: <cbb540d1-151d-f5a0-0a24-ce2d2fba4825@gmail.com>
+References: <CAEensMzuQ0uAw8_5Xb7u1n685au=DpaJyPevGCT8GCG7xS42ow@mail.gmail.com>
+ <1650424016-7225-1-git-send-email-baihaowen@meizu.com>
+ <1650424016-7225-3-git-send-email-baihaowen@meizu.com>
+ <cbb540d1-151d-f5a0-0a24-ce2d2fba4825@gmail.com>
+Date:   Wed, 20 Apr 2022 06:46:32 -0600
+Message-ID: <87tuan3ot3.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As IO regulator varies in different SC7280 platforms
-updating this handler in individual platform bluetooth node.
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
 
-Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
----
-v4: updated commit text
-v3: Updated commit text to reflect the change
-v2: updated reviewer comments.
-v1: intial patch
----
----
- arch/arm64/boot/dts/qcom/sc7280-crd.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+> On 4/20/22 10:06, Haowen Bai wrote:
+>> After make htmldocs, the table which is made of tab will
+>> display all by one line. so we make a standard table for STANDARD
+>> FORMAT SPECIFIERS description.
+>> 
+>> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+>> ---
+>>  Documentation/vm/page_owner.rst | 34 ++++++++++++++++++++--------------
+>>  1 file changed, 20 insertions(+), 14 deletions(-)
+>> 
+>
+> I guess this patch can be factored into its own single-patch series,
+> so the zh_CN patch at [1/2] can depend on it, right?
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-index e2efbdd..6cbbddc 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-@@ -35,6 +35,10 @@
- 	};
- };
- 
-+&bluetooth {
-+	vddio-supply = <&vreg_l18b_1p8>;
-+};
-+
- ap_tp_i2c: &i2c0 {
- 	status = "okay";
- 	clock-frequency = <400000>;
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+I'm not quite sure what that would buy for anybody ... ?  Arguably the
+two patches could have appeared in the opposite order, but nothing will
+break with it done this way.
 
+jon

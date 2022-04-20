@@ -2,146 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829B1509037
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AC950903D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381710AbiDTTTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 15:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S1352685AbiDTTUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 15:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352685AbiDTTS5 (ORCPT
+        with ESMTP id S234251AbiDTTUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 15:18:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06EB13F30;
-        Wed, 20 Apr 2022 12:16:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A49961509;
-        Wed, 20 Apr 2022 19:16:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE11C385A1;
-        Wed, 20 Apr 2022 19:16:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650482167;
-        bh=90J9aD9zT3htgXVQTw8ouf0HIcIHMtBImhyv16+lDq8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GEEKKPP+Xa4cHqDtv/sxYRbFCUlGsE+oRLXEZCYd29qOuwCx3b0B45rUe2dZmzqA1
-         MFpMFyFOuPjVEgDW1AuGM6rJq4LV0k4RRBrhfy42qFHXC/q6drdTQ6jfEfZJeMoV9e
-         k2xy8GrnwxSZx25lIeuOHUvC2Dw5DaJF+x9BcySE/P1yElQyu3hPc2SdagB5dq/bXk
-         Ms4JUDIihC8WK/nisnuBX6zRnxglchPx2Xdl6OGtrm2IfiqEsk7A9Hcm3lre2crq0e
-         eNS2CvzYRPKnBk4wH1psSdKn5R2u0JcxOhokpTPlhmyE21Vn6dYEDdzc3Nwu1wNHSL
-         CTY+xfFz/mtqw==
-Message-ID: <ae54dbb1-2b02-cba2-5de2-cf3d9a4e35f5@kernel.org>
-Date:   Wed, 20 Apr 2022 22:16:01 +0300
+        Wed, 20 Apr 2022 15:20:04 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27B3BC92
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:17:16 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-e5e8523fcbso2999776fac.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1TCOhglIGNgOTRPzEMPv22iNf7fy3Rv4APS9ZnU1ZjQ=;
+        b=Y7PF7PZmbKiZEOcuh53wZ5s5U4XZvi4C9SUp9uAOPuM9Nd3jxF0g6Wn1C6g7udlzzJ
+         5mZoXebGfzee8t6mClwtLEmfeE3q7cO7ZoHgMA7kxQqApBf9KX97hNEIuLJuWOtsmukv
+         cqGtGT4I2CIlAZN7WGGA/okNy/9GTaEAUnf06nf4opWJV6e4knXQ5KirfJak5PrgZI3/
+         ikum6xC/i9L8xTOgaLuHOCAtOdVPoKihz5IRhuWeqC1/SNlGw5hekFmaiEMbRzyxdyl4
+         jJwBZXqN87mTp5C0lctA4FRMhxrKnIcj/FUfh9F1L2Cv4alF5XxkgIMfdKXC5lq3aWB6
+         VMRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1TCOhglIGNgOTRPzEMPv22iNf7fy3Rv4APS9ZnU1ZjQ=;
+        b=eY8M+oQlJ9twAzZEeLs00NxskD1i02YQJWQrEFn4CNU2PrLK4jjSfG13NYcLkH9NTY
+         tyLo3f9VjP9VxeYZx+Y7OvgeJMu+2VaDVHlLE/bZdyNNwZ2IvTI8P1ue2c+FZCXBndT6
+         xjQjUgVVg3kZv9b/0Q6s35eoRS/Z/tkHeSIGVLgDipQ4kkU7V5TMmmUpB8BwC0b+SrOd
+         cuaLN2qUQIhoSf0lrMBAiySxOcHAnSaLc2+U55s/v9Lj17JIvnZihmOsDYuarYDKEEFZ
+         4EyCnIC68nLVNg1Eg1F7mzNVFBU6Cjgm7frIN9n+lwWYt4S+J+Z1YhUgWWJ3wqLYl61x
+         k8cQ==
+X-Gm-Message-State: AOAM5337vXpfkcumsi+h+L8iXTcUREKp7obxbk5oXciYL4ngnh7XGMay
+        MskaD945z0T2U/kTwre6UMNxNvezcZRjzi61u3GNZg==
+X-Google-Smtp-Source: ABdhPJyjiEM+F7UrwLUCs8qvqdo9Zmqdb6JokHc7sEV/Yazs36hKuO9v8MlsW9+iYXtnbXtJeKjY84S9iXLG3vhl7wE=
+X-Received: by 2002:a05:6870:2156:b0:e5:bb8d:f6e3 with SMTP id
+ g22-20020a056870215600b000e5bb8df6e3mr2280187oae.48.1650482236169; Wed, 20
+ Apr 2022 12:17:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: usb: tps6598x: Make the interrupts
- property optional
-Content-Language: en-US
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Martin Kepplinger <martink@posteo.de>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220414083120.22535-1-a-govindraju@ti.com>
- <20220414083120.22535-2-a-govindraju@ti.com>
- <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
- <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220410175056.79330-1-singh.kuldeep87k@gmail.com>
+ <20220410175056.79330-7-singh.kuldeep87k@gmail.com> <CAH=2Ntx1D8C6xu+RysO0o5OkG5kPMMJ-Xr+B-udLtizY+4HiaQ@mail.gmail.com>
+ <20220418192012.GA6868@9a2d8922b8f1> <1965ed9f-0258-cd28-f1c3-ef87272f6c03@linaro.org>
+ <20220420132955.GA63070@9a2d8922b8f1> <20220420153316.GA63129@9a2d8922b8f1>
+In-Reply-To: <20220420153316.GA63129@9a2d8922b8f1>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Thu, 21 Apr 2022 00:47:04 +0530
+Message-ID: <CAH=2NtwxX5Gj9bD3ymN0bJcqNnwi-pr2sDkm1s8iBOaMFJRvWQ@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA binding
+ to json format
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 20 Apr 2022 at 21:03, Kuldeep Singh <singh.kuldeep87k@gmail.com> wrote:
+>
+> On Wed, Apr 20, 2022 at 06:59:55PM +0530, Kuldeep Singh wrote:
+> > > I appreciate your work Kuldeep, it is important and valuable
+> > > contribution. It is sad to see duplicated effort, I don't like it for my
+> > > own patches either. In general, I believe the FIFO approach should be
+> > > applied, so in this case Bhupesh patches.
+> >
+> > Yep, I also agree with FIFO approach w.r.t contributions. But one thing
+> > daunts me here is the waiting time with latest revision, it's too high.
+> >
+> > Anyway, Bhupesh had more than BAM changes and was already on v5, I can
+> > give benefit of doubt to him and won't argue much here.
+> >
+> > Bhupesh, feel free to include my armv7 based dts patches in your series
+> > otherwise you might stumble DT checks warnings.
+>
+> Or do you want me to keep my changes separate? Sorry for spam.
 
-On 18/04/2022 08:19, Aswath Govindraju wrote:
-> Hi Roger,
-> 
-> On 14/04/22 23:40, Roger Quadros wrote:
->> Hi,
->>
->> On 14/04/2022 11:31, Aswath Govindraju wrote:
->>> Support for polling has been added in the driver, which will be used by
->>> default if interrupts property is not populated. Therefore, remove
->>> interrupts and interrupt-names from the required properties and add a note
->>> under interrupts property describing the above support in driver.
->>>
->>> Suggested-by: Roger Quadros <rogerq@kernel.org>
->>
->> I did not suggest to make interrupts optional by default.
->>
->> What I suggested was that if a DT property exists to explicitly
->> indicate polling mode then interrupts are not required.
->>
-> 
-> ohh okay, got it. However, may I know if adding a dt property to
-> indicate polling for aiding the driver, is the correct approach to model it?
-> 
-> In terms of modelling hardware, as interrupts are not connected we are
-> not populating the interrupts property. Shouldn't that be all. If we are
-> adding a property explicitly to indicate polling that can be used by
-> driver, wouldn't that be a software aid being added in the device tree?
+Please send your changes separately, as my patchset already exceeds 25
+patches or so in the current form.
 
-The hardware (tps6598x chip) has an interrupt pin and is expected to be used
-in normal case.
-
-Some buggy boards might have forgot to connect it. We are adding polling mode only for these buggy boards. ;)
-So polling mode is an exception.
-
-cheers,
--roger
-
-> 
-> Thanks,
-> Aswath
-> 
->>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->>> ---
->>>  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 4 ++--
->>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->>> index a4c53b1f1af3..1c4b8c6233e5 100644
->>> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->>> @@ -25,6 +25,8 @@ properties:
->>>  
->>>    interrupts:
->>>      maxItems: 1
->>> +    description:
->>> +      If interrupts are not populated then by default polling will be used.
->>>  
->>>    interrupt-names:
->>>      items:
->>> @@ -33,8 +35,6 @@ properties:
->>>  required:
->>>    - compatible
->>>    - reg
->>> -  - interrupts
->>> -  - interrupt-names
->>>  
->>>  additionalProperties: true
->>>  
->>
->> cheers,
->> -roger
+Thanks,
+Bhupesh

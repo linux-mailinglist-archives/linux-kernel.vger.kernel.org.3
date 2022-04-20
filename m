@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C94E509235
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB26509238
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382609AbiDTVn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 17:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S1382604AbiDTVoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 17:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382592AbiDTVnu (ORCPT
+        with ESMTP id S1382599AbiDTVnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 17:43:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F1738DA7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:41:03 -0700 (PDT)
+        Wed, 20 Apr 2022 17:43:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA1742EE4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:41:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A94C8B821AE
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 21:41:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 321CBC385A1;
-        Wed, 20 Apr 2022 21:40:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FED661856
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 21:41:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C77EEC385A0;
+        Wed, 20 Apr 2022 21:41:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650490861;
-        bh=8X2QEt2lhi2nHtjk6Rs3WVQZYib5Iw0DT7J8jUnG10I=;
+        s=k20201202; t=1650490864;
+        bh=F8AeT1gPh9EBU1TCJSOcCs0CcyJJkegE+/aoO8QW668=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ZeE1O5EpvOwXFbK6lO1RpwVY4KTk0d+yzNGNW47alh9PFEi6TKVJabMSeAlPawhkz
-         PibaSiyJsufJmgusHMEPpvL38T2XcqXTj8Y/Ftt5hd4m4cGsAvUr0px5kBkCe8qtrc
-         S/rB0k+UHp6zS3TyvLVIQO+R24U6Yn7lR4+IbIZ1Qjkpf3U92P+ZHehH+RthulPy4k
-         TAHLP68rMA06V+SqNbHfMjBzayGJpdO+AqE/7n8IyTd8wBt7a3bkVgBlwiEv9GgzIz
-         KUI66IxVvvsnzwJ8n6lqmXx4owvaqqfEBut1GfqVkibrdQPSCM4APPaClwuzTHsUI7
-         InTyrTC7K2Jfg==
+        b=X7pEUC2WxvodOpeK94bF0YdDjxehU8afHnEejPFz2CKDsmdIPM4c/cLT+Ot4czbQE
+         B+iO17j3/0Mz5KxTeonal+AzYI3xwI5DOJYb3qdJTQBjHEykYeHLVp/1IeBp3FDSuG
+         tEMgOoXsydeBS/spPk8xFLXZnMHDL/FMQ6Oe9oqTNZMq0vL6WZBzNoTEqJPa3AKJXw
+         D8l1VSUEwMQkLenMSVl9ALZtKhgrA8noBy0qgSKDVYfFc0Tw5GKrzFmvX7S7qPSBLg
+         QMRMYSOYTsFrcDC1+reR5M3mtcOW5B/HUnxA7J8/KM2BabcmLdzRV92Sar+QdYrW6F
+         xJJfkRnFqHgjA==
 From:   Mark Brown <broonie@kernel.org>
-To:     AjitKumar.Pandey@amd.com, alsa-devel@alsa-project.org
-Cc:     Vijendar.Mukunda@amd.com, Takashi Iwai <tiwai@suse.com>,
-        Sunil-kumar.Dommati@amd.com,
-        open list <linux-kernel@vger.kernel.org>,
-        Basavaraj.Hiregoudar@amd.com, vsujithkumar.reddy@amd.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Alexander.Deucher@amd.com
-In-Reply-To: <20220420094442.1352717-1-AjitKumar.Pandey@amd.com>
-References: <20220420094442.1352717-1-AjitKumar.Pandey@amd.com>
-Subject: Re: [PATCH] ASoC: amd: acp: Add pm ops callback in machine driver
-Message-Id: <165049085891.138067.2699474360256184999.b4-ty@kernel.org>
-Date:   Wed, 20 Apr 2022 22:40:58 +0100
+To:     pierre-louis.bossart@linux.intel.com, cgel.zte@gmail.com
+Cc:     zealci@zte.com.cn, ranjani.sridharan@linux.intel.com,
+        chi.minghao@zte.com.cn, kai.vehmanen@linux.intel.com,
+        daniel.baluta@nxp.com, lgirdwood@gmail.com,
+        alsa-devel@alsa-project.org, sound-open-firmware@alsa-project.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220420030315.2575691-1-chi.minghao@zte.com.cn>
+References: <20220420030315.2575691-1-chi.minghao@zte.com.cn>
+Subject: Re: [PATCH] ASoC: SOF: using pm_runtime_resume_and_get to simplify the code
+Message-Id: <165049086153.138067.9717341459328892843.b4-ty@kernel.org>
+Date:   Wed, 20 Apr 2022 22:41:01 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,11 +56,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 15:14:36 +0530, Ajit Kumar Pandey wrote:
-> Add alsa snd_soc_pm_ops callback in ACP machine driver to support
-> suspend and resume operation of sound card components
+On Wed, 20 Apr 2022 03:03:15 +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
+> pm_runtime_put_noidle. This change is just to simplify the code, no
+> actual functional changes.
 > 
 > 
+> [...]
 
 Applied to
 
@@ -69,8 +72,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: amd: acp: Add pm ops callback in machine driver
-      commit: fbae863de87bf50c7b13b40e3b4dc4b479335020
+[1/1] ASoC: SOF: using pm_runtime_resume_and_get to simplify the code
+      commit: b3598fe6d009b2f2144115dfc381615c8b534aec
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

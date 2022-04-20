@@ -2,94 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5299150882A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABA3508833
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378552AbiDTMeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
+        id S1378559AbiDTMeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353229AbiDTMd4 (ORCPT
+        with ESMTP id S1378580AbiDTMeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:33:56 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3613FDB9;
-        Wed, 20 Apr 2022 05:31:11 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso1874300pjj.2;
-        Wed, 20 Apr 2022 05:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mVOmSvu/QkyoUDoaCks1TklFl6bhUL0cfDQZbrDtx0c=;
-        b=eFrXzuQVru1SO/Jm++W8BFQ/TrnadQKCmTFewy4D+IvOJEkOyy/IxcF3Nl5lMJXZSG
-         3LR1ddukzf/0l4cFRiLP9e/SNgVj754fkMk6ex6W6/GT9vhz1+XIYwEzsMA2Od0z1vEm
-         fBLliE3poB2EQB3/yzUcYLHh8hrWQ86fbEOG8TWbGW8+O7t5/SKSyaFPSK7i5Zux3G/j
-         cxSmXvEt+PdNYcc1iz9EJrPBlnwJ2ImTuy1mqKgDdyk8VwfcMfOz91G6Y2J2fdYGeaDN
-         owWuWpmYLKEP6FZAPSeaHFrB43Nq6NqwVriNMKiAT93gO50FMc7waA3ETUalCch2m8sg
-         2T8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mVOmSvu/QkyoUDoaCks1TklFl6bhUL0cfDQZbrDtx0c=;
-        b=Qi09TN6oKO7pWokEcA50CdWnTuoVm2U26Z0fVOjz8XvsdbjHME34vnjLQ0hJPO9Phn
-         x5teoW02kwjdOErj3eW9XY0SrqUl5CPfXxm+7AtCcTkFa17RzxkK+7uRwHGpPTouusox
-         uuRr85e2M+0lf3qzK2nymvKRgtDHJyf6WyGQ42mVi/JU2TLrFtFFM2/5j1MnpHqz/FWx
-         A4zZoKV/f6ky0fg3XoS9wlLQaxkY4avGdKn0KgnxA96qZM84VNOJ/2rrJsxNtxOgfe5G
-         Ls0V/3xr5HYMsvYN5W8BuGBI6VbBBAKp2zDdhHqpOTCo6Zv1WKThPExU0Sa0oXts2sjo
-         8reQ==
-X-Gm-Message-State: AOAM533C17CcYl5ynNxp9NIToFDe9s0j2hncAuwMIfY9mfs55N1apdtB
-        fYltc6pvkAWYlVYiyKaGu7NjsGjqOuARng==
-X-Google-Smtp-Source: ABdhPJxIfSVgLOciGFWpy5cIRm2hHQBq9p8H/yilz0yZPsHnVLamtbYiXQo5NM1eaNGP99t3RSkGkg==
-X-Received: by 2002:a17:90a:2983:b0:1cb:8d6e:e10b with SMTP id h3-20020a17090a298300b001cb8d6ee10bmr4161825pjd.208.1650457870525;
-        Wed, 20 Apr 2022 05:31:10 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-76.three.co.id. [180.214.232.76])
-        by smtp.gmail.com with ESMTPSA id e1-20020a056a00162100b0050a40f75a82sm18588603pfc.113.2022.04.20.05.31.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 05:31:09 -0700 (PDT)
-Message-ID: <cbb540d1-151d-f5a0-0a24-ce2d2fba4825@gmail.com>
-Date:   Wed, 20 Apr 2022 19:31:06 +0700
+        Wed, 20 Apr 2022 08:34:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6BA41615;
+        Wed, 20 Apr 2022 05:31:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54137B81ED1;
+        Wed, 20 Apr 2022 12:31:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34703C385A1;
+        Wed, 20 Apr 2022 12:31:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650457888;
+        bh=xFBxXROoKf7u+JAvuiZg1qFNSkoOxNBQ8DLIUz0UXt0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VvD6eMwnKgud8prkIqkDyIzKkAwnMUG4UDyyfYe5GozZoG+JQD9ZC+MWEawYLhELH
+         0hs82Censkr6ZKriGuk5xCI8kZvqNjS2ShtpnewUZGs/rHnoy7JER51sXpcFOHyHJd
+         4w+zU+Ph3yxGaGChG7V0qCp4ZV33CvLWCyxvRqHGJgCMa3G6ckchns1V8GDedi7lls
+         x9z5xtoClxAUKqZt9X+vrgmAIL0TCf+Td8S1Xd/FyCAytoUxrZ4tVXTsZaH6oZw9SI
+         L7UBS0eW7oRNR9gmS8JUdYIodtOY26V6MAWwBDUsh1SnJ6sjmEgj/wBJ4T44IezRCD
+         6O7NfTrnHhCGg==
+From:   Will Deacon <will@kernel.org>
+To:     joro@8bytes.org, jgg@ziepe.ca, robin.murphy@arm.com,
+        Nicolin Chen <nicolinc@nvidia.com>, jean-philippe@linaro.org
+Cc:     catalin.marinas@arm.com, kernel-team@android.com,
+        Will Deacon <will@kernel.org>, stable@vger.kernel.org,
+        jacob.jun.pan@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, fenghua.yu@intel.com,
+        iommu@lists.linux-foundation.org, rikard.falkeborn@gmail.com,
+        linux-kernel@vger.kernel.org, baolu.lu@linux.intel.com
+Subject: Re: [PATCH] iommu/arm-smmu-v3: Fix size calculation in arm_smmu_mm_invalidate_range()
+Date:   Wed, 20 Apr 2022 13:31:21 +0100
+Message-Id: <165044753398.180787.4069543281631212706.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220419210158.21320-1-nicolinc@nvidia.com>
+References: <20220419210158.21320-1-nicolinc@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 2/2] doc/vm/page_owner.rst: Fix table display confusion
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>, siyanteng01@gmail.com
-Cc:     alexs@kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, seakeel@gmail.com,
-        siyanteng@loongson.cn
-References: <CAEensMzuQ0uAw8_5Xb7u1n685au=DpaJyPevGCT8GCG7xS42ow@mail.gmail.com>
- <1650424016-7225-1-git-send-email-baihaowen@meizu.com>
- <1650424016-7225-3-git-send-email-baihaowen@meizu.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <1650424016-7225-3-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/22 10:06, Haowen Bai wrote:
-> After make htmldocs, the table which is made of tab will
-> display all by one line. so we make a standard table for STANDARD
-> FORMAT SPECIFIERS description.
+On Tue, 19 Apr 2022 14:01:58 -0700, Nicolin Chen wrote:
+> The arm_smmu_mm_invalidate_range function is designed to be called
+> by mm core for Shared Virtual Addressing purpose between IOMMU and
+> CPU MMU. However, the ways of two subsystems defining their "end"
+> addresses are slightly different. IOMMU defines its "end" address
+> using the last address of an address range, while mm core defines
+> that using the following address of an address range:
 > 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  Documentation/vm/page_owner.rst | 34 ++++++++++++++++++++--------------
->  1 file changed, 20 insertions(+), 14 deletions(-)
-> 
+> [...]
 
-I guess this patch can be factored into its own single-patch series,
-so the zh_CN patch at [1/2] can depend on it, right?
+Applied to will (for-joerg/arm-smmu/fixes), thanks!
 
+[1/1] iommu/arm-smmu-v3: Fix size calculation in arm_smmu_mm_invalidate_range()
+      https://git.kernel.org/will/c/95d4782c34a6
+
+Cheers,
 -- 
-An old man doll... just what I always wanted! - Clara
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev

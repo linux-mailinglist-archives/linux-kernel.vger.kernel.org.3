@@ -2,281 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3A2507F92
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30474507F94
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359245AbiDTDYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 23:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S1359255AbiDTDZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 23:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359239AbiDTDYk (ORCPT
+        with ESMTP id S1359239AbiDTDZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 23:24:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E31D220E2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 20:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650424914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N4Qu9Vgv3L9GdF/GCpm7gFi/cqqJoTgTzG6l8G/JRjw=;
-        b=HoJj4VyCG0/BMtlPhD4v+XoGhU/oK5mWnW8l9vZW1JaLUd7LORZ4PR94fMkJ2IV+7ll6ad
-        gpi/wdJ0wQGkd50akjaU4KxLCs1KJmLCgrJOpVDb7YmNDpV6CCr3ldI9OQwSvAXktBdIpH
-        s14EBVQy3ft6zL30o4V3I6rjz7L68Rg=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-eKxC-StFOv-qApZy0Wj1cg-1; Tue, 19 Apr 2022 23:21:53 -0400
-X-MC-Unique: eKxC-StFOv-qApZy0Wj1cg-1
-Received: by mail-pf1-f197.google.com with SMTP id h66-20020a628345000000b0050ac8fa710eso479705pfe.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 20:21:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=N4Qu9Vgv3L9GdF/GCpm7gFi/cqqJoTgTzG6l8G/JRjw=;
-        b=whC2+qcDxpYUboFRia5ri1QCgv4PdXc6T8P3se1f+gs44CzT+sKKP5ovz5bQtNmFeK
-         q38eSKdaoGArKiahyepC6Sp0Vn3ykmBwAG6TYpmq48tlG7swRrp/75ARPwhY0UIoHKr2
-         ohXGNIBTeV1t6gbG20h1my96+ZTmDWAPrYpAbjarttGrCh2GeN1JxZCxgmptNjI5xrsA
-         576/IafOlrY+k1IkD+qkCzFolnQVxZc0qkUZ1C+TbdXnZZaK4u3E9bn3RYFkKE8w3lmR
-         ldshjzE1CFy+y2AuUy78Jth+gH8nbYPsULA66yJOEncSQwqqcVsn1uTgErCaxmqkxpix
-         hRlQ==
-X-Gm-Message-State: AOAM531lMyhMVSMZtdQFnwoEtzwr920tcwX4hJaw+gO7BDAYB2vjkmKo
-        PvI7rcbsCnTCpzDvRXWjqAe2LTKpKDKPhfAx6KHtYRpedFEriLT46obkSeSkZEvKMLstRJQ34hb
-        5KOrmMI1jXVEnVhK6uUhetvk6
-X-Received: by 2002:a17:90b:19d7:b0:1c7:3413:87e0 with SMTP id nm23-20020a17090b19d700b001c7341387e0mr2041632pjb.132.1650424912039;
-        Tue, 19 Apr 2022 20:21:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwfaKG8EOIcgAODaFpfwEbTUzq+ZZbbNoh/URJ8tDm6N1qcWFB7yxMhvWAv676JwqKc5ZA6lA==
-X-Received: by 2002:a17:90b:19d7:b0:1c7:3413:87e0 with SMTP id nm23-20020a17090b19d700b001c7341387e0mr2041616pjb.132.1650424911767;
-        Tue, 19 Apr 2022 20:21:51 -0700 (PDT)
-Received: from [10.72.14.13] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id g14-20020a63200e000000b0039d9816238fsm17655895pgg.81.2022.04.19.20.21.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 20:21:51 -0700 (PDT)
-Message-ID: <32c1113d-4991-0ab0-5a85-33fe85295b93@redhat.com>
-Date:   Wed, 20 Apr 2022 11:21:47 +0800
+        Tue, 19 Apr 2022 23:25:45 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3932421E2C;
+        Tue, 19 Apr 2022 20:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650424981; x=1681960981;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1AiC9VeveMPhro24gHqzjyeU34rUd2EVyr+r3itMve4=;
+  b=iUfOVHrmqmBRjJ3bzkShScz8IUtZ5GaGCaxA7HbL6XPn9bfkhfvYSMvp
+   UMozJuBSCJ3MxYW+xpcvTI48R1ahJvCLOMTYSmF1KN6VwNUwiQVjJCm08
+   k4gx6wE+AoCcTfj/l1IT0sVmtnQ7t0mJSbY5nKg5oSuMJyZFPevHL0pNF
+   8EbazH8M3gSoLoOPMy4E5QyytLJF9Ti+tUq1n/jaZWxVq+7QHrb8RLrs8
+   qdUBdP9f5KTERxd0v4tRNBLtRKz4/gu1tHmwF+HBP3QB1V0FMwV07YTgx
+   yvKJpLwnn7Fv4eVu3dfqrYyFcmhQuSJDze+xzi2gdlf2zfqmHmrZNGi+6
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="251234129"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="251234129"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:23:00 -0700
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="727317671"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:22:55 -0700
+Date:   Wed, 20 Apr 2022 11:22:51 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>
+Subject: Re: [PATCH v9 8/9] KVM: x86: Allow userspace set maximum VCPU id for
+ VM
+Message-ID: <20220420032245.GA14083@gao-cwp>
+References: <20220419154444.11888-1-guang.zeng@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH v1] vdpa/vp_vdpa : add vdpa tool support in vp_vdpa
-Content-Language: en-US
-To:     Cindy Lu <lulu@redhat.com>, mst@redhat.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-References: <20220419014025.218121-1-lulu@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220419014025.218121-1-lulu@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419154444.11888-1-guang.zeng@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/4/19 09:40, Cindy Lu 写道:
-> this patch is to add the support for vdpa tool in vp_vdpa
-> here is the example steps
-> modprobe vp_vdpa
-> modprobe vhost_vdpa
+On Tue, Apr 19, 2022 at 11:44:44PM +0800, Zeng Guang wrote:
+>Introduce new max_vcpu_ids in KVM for x86 architecture. Userspace
+>can assign maximum possible vcpu id for current VM session using
+>KVM_CAP_MAX_VCPU_ID of KVM_ENABLE_CAP ioctl().
 >
-> echo 0000:00:06.0>/sys/bus/pci/drivers/virtio-pci/unbind
-> echo 1af4 1041 > /sys/bus/pci/drivers/vp-vdpa/new_id
+>This is done for x86 only because the sole use case is to guide
+>memory allocation for PID-pointer table, a structure needed to
+>enable VMX IPI.
 >
-> vdpa dev add name vdpa1 mgmtdev pci/0000:00:06.0
+>By default, max_vcpu_ids set as KVM_MAX_VCPU_IDS.
 >
-> Signed-off-by: Cindy Lu <lulu@redhat.com>
-> ---
->   drivers/vdpa/virtio_pci/vp_vdpa.c | 86 ++++++++++++++++++++++++++++---
->   1 file changed, 78 insertions(+), 8 deletions(-)
+>Suggested-by: Sean Christopherson <seanjc@google.com>
+>Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+>Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+>---
+> Documentation/virt/kvm/api.rst  | 18 ++++++++++++++++++
+> arch/x86/include/asm/kvm_host.h |  6 ++++++
+> arch/x86/kvm/x86.c              | 25 ++++++++++++++++++++++++-
+> 3 files changed, 48 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
-> index cce101e6a940..d8a1d2f8e9bb 100644
-> --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
-> +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
-> @@ -17,6 +17,8 @@
->   #include <linux/virtio_ring.h>
->   #include <linux/virtio_pci.h>
->   #include <linux/virtio_pci_modern.h>
-> +#include <uapi/linux/virtio_net.h>
-> +#include <uapi/linux/vdpa.h>
->   
->   #define VP_VDPA_QUEUE_MAX 256
->   #define VP_VDPA_DRIVER_NAME "vp_vdpa"
-> @@ -41,6 +43,18 @@ struct vp_vdpa {
->   	int vectors;
->   };
->   
-> +struct vp_vdpa_mgmtdev {
-> +	struct vdpa_mgmt_dev mgtdev;
-> +	struct vp_vdpa *vp_vdpa;
-> +	struct pci_dev *pdev;
-> +};
-> +
-> +#define VP_VDPA_NET_FEATURES                                                   \
-> +	((1ULL << VIRTIO_F_ANY_LAYOUT) | (1ULL << VIRTIO_F_VERSION_1) |        \
-> +	 (1ULL << VIRTIO_F_ACCESS_PLATFORM))
-> +
-> +#define VP_VDPA_NET_VQ_NUM 2
+>diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+>index d13fa6600467..0c6ad2d8bea0 100644
+>--- a/Documentation/virt/kvm/api.rst
+>+++ b/Documentation/virt/kvm/api.rst
+>@@ -7136,6 +7136,24 @@ The valid bits in cap.args[0] are:
+>                                     IA32_MISC_ENABLE[bit 18] is cleared.
+> =================================== ============================================
+> 
+>+7.32 KVM_CAP_MAX_VCPU_ID
+>+------------------------
+>+
+>+:Architectures: x86
+>+:Target: VM
+>+:Parameters: args[0] - maximum APIC ID value set for current VM
+>+:Returns: 0 on success, -EINVAL if args[0] is beyond KVM_MAX_VCPU_IDS
+>+          supported in KVM or if it has been settled.
+>+
+>+Userspace is able to calculate the limit to APIC ID values from designated CPU
+>+topology. This capability allows userspace to specify maximum possible APIC ID
+>+assigned for current VM session prior to the creation of vCPUs. By design, it
+>+can set only once and doesn't accept change any more. KVM will manage memory
+>+allocation of VM-scope structures which depends on the value of APIC ID.
+>+
+>+Calling KVM_CHECK_EXTENSION for this capability returns the value of maximum APIC
+>+ID that KVM supports at runtime. It sets as KVM_MAX_VCPU_IDS by default.
+>+
+> 8. Other capabilities.
+> ======================
+> 
+>diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>index d23e80a56eb8..cdd14033988d 100644
+>--- a/arch/x86/include/asm/kvm_host.h
+>+++ b/arch/x86/include/asm/kvm_host.h
+>@@ -1238,6 +1238,12 @@ struct kvm_arch {
+> 	hpa_t	hv_root_tdp;
+> 	spinlock_t hv_root_tdp_lock;
+> #endif
+>+	/*
+>+	 * VM-scope maximum vCPU ID. Used to determine the size of structures
+>+	 * that increase along with the maximum vCPU ID, in which case, using
+>+	 * the global KVM_MAX_VCPU_IDS may lead to significant memory waste.
+>+	 */
+>+	u32 max_vcpu_ids;
+> };
+> 
+> struct kvm_vm_stat {
+>diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>index 277a0da8c290..744e88a71b63 100644
+>--- a/arch/x86/kvm/x86.c
+>+++ b/arch/x86/kvm/x86.c
+>@@ -4320,7 +4320,10 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+> 		r = KVM_MAX_VCPUS;
+> 		break;
+> 	case KVM_CAP_MAX_VCPU_ID:
+>-		r = KVM_MAX_VCPU_IDS;
+>+		if (!kvm->arch.max_vcpu_ids)
+>+			r = KVM_MAX_VCPU_IDS;
+>+		else
+>+			r = kvm->arch.max_vcpu_ids;
+> 		break;
+> 	case KVM_CAP_PV_MMU:	/* obsolete */
+> 		r = 0;
+>@@ -6064,6 +6067,20 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+> 		}
+> 		mutex_unlock(&kvm->lock);
+> 		break;
+>+	case KVM_CAP_MAX_VCPU_ID:
+>+		r = -EINVAL;
+>+		if (cap->args[0] > KVM_MAX_VCPU_IDS)
+>+			break;
+>+
+>+		mutex_lock(&kvm->lock);
+>+		if (kvm->arch.max_vcpu_ids == cap->args[0]) {
+>+			r = 0;
+>+		} else if (!kvm->arch.max_vcpu_ids) {
+>+			kvm->arch.max_vcpu_ids = cap->args[0];
+>+			r = 0;
+>+		}
+>+		mutex_unlock(&kvm->lock);
+>+		break;
 
+It would be better to have a kselftest to exercise this capability.
+For example,
+1. launch a VM.
+2. set the max vCPU ID via KVM_CAP_MAX_VCPU_ID
+3. read the max vCPU ID to check if the value written is returned.
+4. create a vCPU which has apic id larger than the maximum.
+5. try to change the max vCPU ID after set once.
+...
 
-Let's not go backwards, e.g we've already support any kind of virtio 
-device with any kind of features. see the comment in vp_vdpa_probe().
-
-
-> +
->   static struct vp_vdpa *vdpa_to_vp(struct vdpa_device *vdpa)
->   {
->   	return container_of(vdpa, struct vp_vdpa, vdpa);
-> @@ -454,9 +468,14 @@ static void vp_vdpa_free_irq_vectors(void *data)
->   	pci_free_irq_vectors(data);
->   }
->   
-> -static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> +static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
-> +			   const struct vdpa_dev_set_config *add_config)
->   {
-> +	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =
-> +		container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev);
-> +
->   	struct virtio_pci_modern_device *mdev;
-> +	struct pci_dev *pdev = vp_vdpa_mgtdev->pdev;
->   	struct device *dev = &pdev->dev;
->   	struct vp_vdpa *vp_vdpa;
->   	int ret, i;
-> @@ -465,8 +484,9 @@ static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	if (ret)
->   		return ret;
->   
-> -	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa,
-> -				    dev, &vp_vdpa_ops, NULL, false);
-> +	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa, dev, &vp_vdpa_ops,
-> +				    name, false);
-
-
-Nit: let's keep the line of vdpa_alloc_device() unchanged to reduce the 
-changeset.
-
-
-> +
->   	if (IS_ERR(vp_vdpa)) {
->   		dev_err(dev, "vp_vdpa: Failed to allocate vDPA structure\n");
->   		return PTR_ERR(vp_vdpa);
-> @@ -480,9 +500,10 @@ static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   		dev_err(&pdev->dev, "Failed to probe modern PCI device\n");
->   		goto err;
->   	}
-> +	vp_vdpa_mgtdev->vp_vdpa = vp_vdpa;
->   
->   	pci_set_master(pdev);
-> -	pci_set_drvdata(pdev, vp_vdpa);
-> +	pci_set_drvdata(pdev, vp_vdpa_mgtdev);
->   
->   	vp_vdpa->vdpa.dma_dev = &pdev->dev;
->   	vp_vdpa->queues = vp_modern_get_num_queues(mdev);
-> @@ -516,7 +537,8 @@ static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	}
->   	vp_vdpa->config_irq = VIRTIO_MSI_NO_VECTOR;
->   
-> -	ret = vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues);
-> +	vp_vdpa->vdpa.mdev = &vp_vdpa_mgtdev->mgtdev;
-> +	ret = _vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues);
->   	if (ret) {
->   		dev_err(&pdev->dev, "Failed to register to vdpa bus\n");
->   		goto err;
-> @@ -529,12 +551,60 @@ static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	return ret;
->   }
->   
-> -static void vp_vdpa_remove(struct pci_dev *pdev)
-> +static void vp_vdpa_dev_del(struct vdpa_mgmt_dev *v_mdev,
-> +			    struct vdpa_device *dev)
->   {
-> -	struct vp_vdpa *vp_vdpa = pci_get_drvdata(pdev);
-> +	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =
-> +		container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev);
-> +
-> +	struct vp_vdpa *vp_vdpa = vp_vdpa_mgtdev->vp_vdpa;
->   
->   	vp_modern_remove(&vp_vdpa->mdev);
-> -	vdpa_unregister_device(&vp_vdpa->vdpa);
-> +	_vdpa_unregister_device(&vp_vdpa->vdpa);
-> +	vp_vdpa_mgtdev->vp_vdpa = NULL;
-> +}
-> +
-> +static const struct vdpa_mgmtdev_ops vp_vdpa_mdev_ops = {
-> +	.dev_add = vp_vdpa_dev_add,
-> +	.dev_del = vp_vdpa_dev_del,
-> +};
-> +
-> +static struct virtio_device_id vp_vdpa_id_table[] = {
-> +	{ VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID },
-> +	{ 0 },
-> +};
-
-
-Let's not limit the vp_vdpa to net, it can support all other virtio devices.
-
-
-> +
-> +static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> +{
-> +	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev;
-> +	struct vdpa_mgmt_dev *mgtdev;
-> +	struct device *dev = &pdev->dev;
-> +	int err;
-> +
-> +	vp_vdpa_mgtdev = kzalloc(sizeof(*vp_vdpa_mgtdev), GFP_KERNEL);
-> +	if (!vp_vdpa_mgtdev)
-> +		return -ENOMEM;
-> +	mgtdev = &vp_vdpa_mgtdev->mgtdev;
-> +
-> +	mgtdev->ops = &vp_vdpa_mdev_ops;
-> +	mgtdev->device = dev;
-> +	mgtdev->id_table = vp_vdpa_id_table;
-> +	vp_vdpa_mgtdev->pdev = pdev;
-> +
-> +	mgtdev->max_supported_vqs = VP_VDPA_NET_VQ_NUM;
-
-
-Let's read this from the device instead of using the hard-coded value.
-
-
-> +	mgtdev->supported_features = VP_VDPA_NET_FEATURES;
-
-
-Let's read this from the device.
-
-
-> +
-> +	err = vdpa_mgmtdev_register(mgtdev);
-
-
-Do we need to free the vp_vdpa_mgtdev here?
-
-Thanks
-
-
-> +
-> +	return err;
-> +}
-> +
-> +static void vp_vdpa_remove(struct pci_dev *pdev)
-> +{
-> +	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev = pci_get_drvdata(pdev);
-> +
-> +	vdpa_mgmtdev_unregister(&vp_vdpa_mgtdev->mgtdev);
-> +	kfree(vp_vdpa_mgtdev);
->   }
->   
->   static struct pci_driver vp_vdpa_driver = {
-
+This test can be the last patch of this series or posted separately.

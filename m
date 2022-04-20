@@ -2,224 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4712509260
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496D9509266
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382689AbiDTVyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 17:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S1382703AbiDTV4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 17:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357179AbiDTVyN (ORCPT
+        with ESMTP id S236516AbiDTV4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 17:54:13 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6EA403C5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:51:25 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id n40-20020a05600c3ba800b0038ff1939b16so2134692wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rP5OWtrk4WktWLxKaOlM9djXhcx1PFOBsoG0vk8ejJ4=;
-        b=IsIFYApUU0Ui4KekTPmRGr3ZeeQ6LFZW58iPNtRFHIdkWqkpazH/3PBI2H9j4xODGo
-         yeto18wxSYb5ugdm7IdeP8jGmcSvKcDVJOTBELz870GpPOJ666CGkJPy9sLxDaTuktFY
-         xCOfOimswxqF5K+eZrWyGXah1s826WKqxyZYZz3OTINFe6EXkkOT4pI9iY5ibMzZwYpx
-         E6ZrPEYCqUQ1KA6ovQQ3fY4PezQSEm+xmse+M+WWD8f2I3WluGBCMLVOjcQSvf1t+81y
-         T3d+QGfCtHfgvB9+vgeUCtciDXP1XcuJFvSPL4ojn+03j9LWdglXlCOIoD8C1frT0KiH
-         j5cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rP5OWtrk4WktWLxKaOlM9djXhcx1PFOBsoG0vk8ejJ4=;
-        b=LJndifcc0lRum5+f891JN+Ntdyaum0iu/iSxfsuSucVgENybxuVH5TcfVUAk3CzPFU
-         oYEGSLABuENWoChJlSYDVkGXSDIVZQZB3Aw3bl/HVqBWPxslyS0bGGg4Yh4CsibI17vd
-         WaB5aNPvf12twcxIpxoG+UkcIfR+idJATNiRP3ebyA9c5mnVTNdNOBV3RfdIi7No/JLa
-         XF9aL31/m0/31ZpvP4A3XioyKH/DSnh1qTNesa70x+hU/khKeHiT9wZG3CESVQWhCfzh
-         UU0w5b1MiJQwqV6aVaDOOy42BX39C8I1pplSA4lTxkg4+GyXYR0ITs/wjW6jOSXFVRyP
-         r0jg==
-X-Gm-Message-State: AOAM5335Pevv8mEemsaVZrmXlbwmSbcIr2U6fnz5otRdwn2/QxGY6vqG
-        JweKjsNlkhBWaHesvqEu6s25aE1UdV02oHx8C/Nqcw==
-X-Google-Smtp-Source: ABdhPJwPjeINIU8CHmBNAe17pDAu6Ngpj5ab0xFuVeaOMxuTV2W3WzInKm3hX/Q/Wnmh0WyECF668faVm90Xu6UAEfc=
-X-Received: by 2002:a05:600c:4f87:b0:392:9236:3c73 with SMTP id
- n7-20020a05600c4f8700b0039292363c73mr5637940wmq.158.1650491483628; Wed, 20
- Apr 2022 14:51:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220408200349.1529080-1-kaleshsingh@google.com>
- <20220408200349.1529080-6-kaleshsingh@google.com> <87v8v6aek0.wl-maz@kernel.org>
- <CAC_TJvd=ubTMM+BRdELFokbxiKqaePAprG-pq3fR1vjKV9L6aA@mail.gmail.com>
-In-Reply-To: <CAC_TJvd=ubTMM+BRdELFokbxiKqaePAprG-pq3fR1vjKV9L6aA@mail.gmail.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 20 Apr 2022 14:51:12 -0700
-Message-ID: <CAC_TJvcWkieK9XQeKi4-nB1ijUZs0csd3wAaWpRE9a375Zx=qw@mail.gmail.com>
-Subject: Re: [PATCH v7 5/6] KVM: arm64: Detect and handle hypervisor stack overflows
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Quentin Perret <qperret@google.com>,
-        Fuad Tabba <tabba@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Walbran <qwandor@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 17:56:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAB945513;
+        Wed, 20 Apr 2022 14:53:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BB0EB821B0;
+        Wed, 20 Apr 2022 21:53:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA5B1C385A0;
+        Wed, 20 Apr 2022 21:53:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1650491607;
+        bh=s+1aSxlHOsrj2r/dbmg/La17ENCktIGI5EcH703yDBc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hu+OnO1lFWn0QE4re9JajSeGmR5kc3K1HYS0x0FiHx6jDoziq07AlVY5PEFh5BjgS
+         Rm2DTG+CDczCpPcm554B8IQhnTa+tpdLZWulhnB8jlTzzk6CP8OfXszgO9DIB6xc+S
+         uwnsNhQI+uwo2WH/xQPSe4cE5602DcO9CUVattq8=
+Date:   Wed, 20 Apr 2022 14:53:25 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Max Krummenacher <max.oss.09@gmail.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, max.krummenacher@toradex.com,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefano Stabellini <stefano.stabellini@xilinx.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: Re: [next] arm: boot failed - PC is at cpu_ca15_set_pte_ext
+Message-Id: <20220420145325.602b45256b98c14c9325c61d@linux-foundation.org>
+In-Reply-To: <9eb0c1a4f805a75e3e9f24dfcae3077b772a06c0.camel@gmail.com>
+References: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
+        <CAMj1kXFKzi14UCoiDOMwS5jyNz61_UzxGXm+ke0EWEt4nn6E1g@mail.gmail.com>
+        <9eb0c1a4f805a75e3e9f24dfcae3077b772a06c0.camel@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 7:41 PM Kalesh Singh <kaleshsingh@google.com> wrote:
->
-> On Mon, Apr 18, 2022 at 3:09 AM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > On Fri, 08 Apr 2022 21:03:28 +0100,
-> > Kalesh Singh <kaleshsingh@google.com> wrote:
-> > >
-> > > The hypervisor stacks (for both nVHE Hyp mode and nVHE protected mode)
-> > > are aligned such  that any valid stack address has PAGE_SHIFT bit as 1.
-> > > This allows us to conveniently check for overflow in the exception entry
-> > > without corrupting any GPRs. We won't recover from a stack overflow so
-> > > panic the hypervisor.
-> > >
-> > > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > > Tested-by: Fuad Tabba <tabba@google.com>
-> > > Reviewed-by: Fuad Tabba <tabba@google.com>
-> > > ---
-> > >
-> > > Changes in v7:
-> > >   - Add Fuad's Reviewed-by and Tested-by tags.
-> > >
-> > > Changes in v5:
-> > >   - Valid stack addresses now have PAGE_SHIFT bit as 1 instead of 0
-> > >
-> > > Changes in v3:
-> > >   - Remove test_sp_overflow macro, per Mark
-> > >   - Add asmlinkage attribute for hyp_panic, hyp_panic_bad_stack, per Ard
-> > >
-> > >
-> > >  arch/arm64/kvm/hyp/nvhe/host.S   | 24 ++++++++++++++++++++++++
-> > >  arch/arm64/kvm/hyp/nvhe/switch.c |  7 ++++++-
-> > >  2 files changed, 30 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
-> > > index 3d613e721a75..be6d844279b1 100644
-> > > --- a/arch/arm64/kvm/hyp/nvhe/host.S
-> > > +++ b/arch/arm64/kvm/hyp/nvhe/host.S
-> > > @@ -153,6 +153,18 @@ SYM_FUNC_END(__host_hvc)
-> > >
-> > >  .macro invalid_host_el2_vect
-> > >       .align 7
-> > > +
-> > > +     /*
-> > > +      * Test whether the SP has overflowed, without corrupting a GPR.
-> > > +      * nVHE hypervisor stacks are aligned so that the PAGE_SHIFT bit
-> > > +      * of SP should always be 1.
-> > > +      */
-> > > +     add     sp, sp, x0                      // sp' = sp + x0
-> > > +     sub     x0, sp, x0                      // x0' = sp' - x0 = (sp + x0) - x0 = sp
-> > > +     tbz     x0, #PAGE_SHIFT, .L__hyp_sp_overflow\@
-> > > +     sub     x0, sp, x0                      // x0'' = sp' - x0' = (sp + x0) - sp = x0
-> > > +     sub     sp, sp, x0                      // sp'' = sp' - x0 = (sp + x0) - x0 = sp
-> > > +
-> > >       /* If a guest is loaded, panic out of it. */
-> > >       stp     x0, x1, [sp, #-16]!
-> > >       get_loaded_vcpu x0, x1
-> > > @@ -165,6 +177,18 @@ SYM_FUNC_END(__host_hvc)
-> > >        * been partially clobbered by __host_enter.
-> > >        */
-> > >       b       hyp_panic
-> > > +
-> > > +.L__hyp_sp_overflow\@:
-> > > +     /*
-> > > +      * Reset SP to the top of the stack, to allow handling the hyp_panic.
-> > > +      * This corrupts the stack but is ok, since we won't be attempting
-> > > +      * any unwinding here.
-> > > +      */
-> > > +     ldr_this_cpu    x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
-> > > +     mov     sp, x0
-> > > +
-> > > +     bl      hyp_panic_bad_stack
-> >
-> > Why bl? You clearly don't expect to return here, given that you have
-> > an ASM_BUG() right below, and that you are calling a __no_return
-> > function. I think we should be consistent with the rest of the code
-> > and just do a simple branch.
->
-> The idea was to use bl  to give the hyp_panic_bad_stack() frame in the
-> stack trace, which makes it easy to identify overflows. I can add a
-> comment and drop the redundant ASM_BUG()
+On Wed, 20 Apr 2022 09:50:52 +0200 Max Krummenacher <max.oss.09@gmail.com> wrote:
 
-Sorry, my mistake here: bl will give us the current frame in the stack
-trace (hyp_host_vector) so it doesn't affect hyp_panic_bad_stack (next
-frame) being in the strace trace. Addressed in v8:
-https://lore.kernel.org/r/20220420214317.3303360-6-kaleshsingh@google.com/
+> > 
+> > Unfortunately, the vmlinux.xz file I downloaded from the link below
+> > seems to be different from the one that produced the crash, given that
+> > the LR address of c04cfeb8 does not seem to correspond with
+> > handle_mm_fault+0x60c/0xed0.
+> > 
+> > Can you please double check the artifacts?
+> 
+> Commit "mm: check against orig_pte for finish_fault()" introduced this,
+> i.e. on yesterdays next reverting a066bab3c0eb made a i.MX6 boot again.
+> A fix is discussed here:
+> 
+> https://lore.kernel.org/all/YliNP7ADcdc4Puvs@xz-m1.local/
+> 
 
-Thanks,
-Kalesh
+Thanks for finding that.  I have Peter's fix queued and shall push out
+a snapshot later today, for integration into linux-next.
 
->
-> Thanks,
-> Kalesh
->
-> >
-> > It also gives us a chance to preserve an extra register from the
-> > context.
-> >
-> > > +     ASM_BUG()
-> > >  .endm
-> > >
-> > >  .macro invalid_host_el1_vect
-> > > diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
-> > > index 6410d21d8695..703a5d3f611b 100644
-> > > --- a/arch/arm64/kvm/hyp/nvhe/switch.c
-> > > +++ b/arch/arm64/kvm/hyp/nvhe/switch.c
-> > > @@ -347,7 +347,7 @@ int __kvm_vcpu_run(struct kvm_vcpu *vcpu)
-> > >       return exit_code;
-> > >  }
-> > >
-> > > -void __noreturn hyp_panic(void)
-> > > +asmlinkage void __noreturn hyp_panic(void)
-> > >  {
-> > >       u64 spsr = read_sysreg_el2(SYS_SPSR);
-> > >       u64 elr = read_sysreg_el2(SYS_ELR);
-> > > @@ -369,6 +369,11 @@ void __noreturn hyp_panic(void)
-> > >       unreachable();
-> > >  }
-> > >
-> > > +asmlinkage void __noreturn hyp_panic_bad_stack(void)
-> > > +{
-> > > +     hyp_panic();
-> > > +}
-> > > +
-> > >  asmlinkage void kvm_unexpected_el2_exception(void)
-> > >  {
-> > >       return __kvm_unexpected_el2_exception();
-> > > --
-> > > 2.35.1.1178.g4f1659d476-goog
-> > >
-> > >
-> >
-> > Thanks,
-> >
-> >         M.
-> >
-> > --
-> > Without deviation from the norm, progress is not possible.
+
+From: Peter Xu <peterx@redhat.com>
+Subject: mm-check-against-orig_pte-for-finish_fault-fix
+
+fix crash reported by Marek
+
+Link: https://lkml.kernel.org/r/Ylb9rXJyPm8/ao8f@xz-m1.local
+Signed-off-by: Peter Xu <peterx@redhat.com>
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Alistair Popple <apopple@nvidia.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Axel Rasmussen <axelrasmussen@google.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Jerome Glisse <jglisse@redhat.com>
+Cc: "Kirill A . Shutemov" <kirill@shutemov.name>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
+Cc: Nadav Amit <nadav.amit@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+
+--- a/include/linux/mm_types.h~mm-check-against-orig_pte-for-finish_fault-fix
++++ a/include/linux/mm_types.h
+@@ -814,6 +814,8 @@ typedef struct {
+  * @FAULT_FLAG_UNSHARE: The fault is an unsharing request to unshare (and mark
+  *                      exclusive) a possibly shared anonymous page that is
+  *                      mapped R/O.
++ * @FAULT_FLAG_ORIG_PTE_VALID: whether the fault has vmf->orig_pte cached.
++ *                        We should only access orig_pte if this flag set.
+  *
+  * About @FAULT_FLAG_ALLOW_RETRY and @FAULT_FLAG_TRIED: we can specify
+  * whether we would allow page faults to retry by specifying these two
+@@ -850,6 +852,7 @@ enum fault_flag {
+ 	FAULT_FLAG_INSTRUCTION =	1 << 8,
+ 	FAULT_FLAG_INTERRUPTIBLE =	1 << 9,
+ 	FAULT_FLAG_UNSHARE =		1 << 10,
++	FAULT_FLAG_ORIG_PTE_VALID =	1 << 11,
+ };
+ 
+ #endif /* _LINUX_MM_TYPES_H */
+--- a/mm/memory.c~mm-check-against-orig_pte-for-finish_fault-fix
++++ a/mm/memory.c
+@@ -4194,6 +4194,15 @@ void do_set_pte(struct vm_fault *vmf, st
+ 	set_pte_at(vma->vm_mm, addr, vmf->pte, entry);
+ }
+ 
++static bool vmf_pte_changed(struct vm_fault *vmf)
++{
++	if (vmf->flags & FAULT_FLAG_ORIG_PTE_VALID) {
++		return !pte_same(*vmf->pte, vmf->orig_pte);
++	}
++
++	return !pte_none(*vmf->pte);
++}
++
+ /**
+  * finish_fault - finish page fault once we have prepared the page to fault
+  *
+@@ -4252,7 +4261,7 @@ vm_fault_t finish_fault(struct vm_fault
+ 				      vmf->address, &vmf->ptl);
+ 	ret = 0;
+ 	/* Re-check under ptl */
+-	if (likely(pte_same(*vmf->pte, vmf->orig_pte)))
++	if (likely(!vmf_pte_changed(vmf)))
+ 		do_set_pte(vmf, page, vmf->address);
+ 	else
+ 		ret = VM_FAULT_NOPAGE;
+@@ -4720,13 +4729,7 @@ static vm_fault_t handle_pte_fault(struc
+ 		 * concurrent faults and from rmap lookups.
+ 		 */
+ 		vmf->pte = NULL;
+-		/*
+-		 * Always initialize orig_pte.  This matches with below
+-		 * code to have orig_pte to be the none pte if pte==NULL.
+-		 * This makes the rest code to be always safe to reference
+-		 * it, e.g. in finish_fault() we'll detect pte changes.
+-		 */
+-		pte_clear(vmf->vma->vm_mm, vmf->address, &vmf->orig_pte);
++		vmf->flags &= ~FAULT_FLAG_ORIG_PTE_VALID;
+ 	} else {
+ 		/*
+ 		 * If a huge pmd materialized under us just retry later.  Use
+@@ -4750,6 +4753,7 @@ static vm_fault_t handle_pte_fault(struc
+ 		 */
+ 		vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
+ 		vmf->orig_pte = *vmf->pte;
++		vmf->flags |= FAULT_FLAG_ORIG_PTE_VALID;
+ 
+ 		/*
+ 		 * some architectures can have larger ptes than wordsize,
+_
+

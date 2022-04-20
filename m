@@ -2,137 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A155087C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4685087E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378437AbiDTMNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S1352906AbiDTMQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352815AbiDTMND (ORCPT
+        with ESMTP id S244556AbiDTMQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:13:03 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0616E237C8;
-        Wed, 20 Apr 2022 05:10:17 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23K9KKgH024495;
-        Wed, 20 Apr 2022 12:10:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=iCgUOzBhDfl6Q/aq4LR70HlGXG5TAEqD5SgugqIK7/o=;
- b=KMaOUgYSwDEaO76AhrgE6Q0xw9E52NMzNKofBA3nE/Rj5NrV7QAZPvKM5CjMih0BkLs/
- 0f5QQf/qHWxqnoL+omAF/86oufqGV6HS0veKynYGX1Aaoo1Be9S4L8r0L94M/K7U05+V
- F8ge/ASN+I1PRGcd4M18ur5ymFONo8b7qEHWfg9GQDqIAHeV44DUnxzKmN7l3kgDwWyH
- 0IS81bVW6Ux8TcEE0PTWHtWchJgHG+A7tmOBRN0wKZTH9rjFdSWzsafBiuo2ed7XUHGw
- yo/oU+ZyULVXC8q28S9Qnw8UKtGtKfJT2VH6YDUvLSGn1LzGb/286a5T3JbpvBSjyMXt lQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjff2u8k7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 12:10:16 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23KC8EcH013057;
-        Wed, 20 Apr 2022 12:10:16 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjff2u8hx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 12:10:16 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23KC8mdl030107;
-        Wed, 20 Apr 2022 12:10:13 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3ffne8vx56-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 12:10:13 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23KCALe46750794
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Apr 2022 12:10:21 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D2CA11C052;
-        Wed, 20 Apr 2022 12:10:10 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C839411C04A;
-        Wed, 20 Apr 2022 12:10:09 +0000 (GMT)
-Received: from [9.171.58.217] (unknown [9.171.58.217])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 20 Apr 2022 12:10:09 +0000 (GMT)
-Message-ID: <75a152f6-2ea3-8af9-ca9a-5493c3ac885e@linux.ibm.com>
-Date:   Wed, 20 Apr 2022 14:13:27 +0200
+        Wed, 20 Apr 2022 08:16:25 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB13366B5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:13:38 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id c64so1995167edf.11
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=t4fnkhjiK7o7zoKvIVj8krdFqshM+NAvjEpfPjIpMNE=;
+        b=oesE1IY+fZaZQAK7RVRyEFGXJv0OHXbxWD8BJTs9H6XZ5ov9VhWpB+X+ynfaWlF6KP
+         NU/z+zj6ysinrY/GiZnPNG+F6MeIlG44haXQ7l4CURDsWrl6OQgLyZwXYIebaxyBR9JT
+         kXTgf0BI7TdjuOCkzvkwNv823Wr2wKlmGkCSJOlaOStPvX8ibW20jPHwAM6nD3k2Mblc
+         Uj/bPf69I98fnN5lgO7OQDAhACAwqkxlc7quoTASh5537AAuC0fxZrv8lawDskal3qRV
+         3LXx6WuvAZ8xu7pDmOEDEU2NjPAxY02ZjMxq/sNlx1svNodffFkrhmIvBTvYhhTWfY/C
+         DxVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=t4fnkhjiK7o7zoKvIVj8krdFqshM+NAvjEpfPjIpMNE=;
+        b=Cx68QzGnNeNnlcgiFRekLh8+D2BbG62sZw/zjZEMjq1nXwGRBFoiRt3L1vkULWivkS
+         AfYVA3epQENKIvC2A8HgRYu/HTO7Q+Qw50k6kHn6G0/gTg7hVqoC0DdpUtAiBytkUR9g
+         3P02pI5EEDX3fxVP6E1HzwBCS1dXeKt+W77MHjX0ZY3QwNl67R1YvBEPfSq9Ses6QQuG
+         HMW0ZYHaJoncUEGXXCcmv59LXh25YQExyKynTAy6VfyXIa+Numtawdn/eG43PSMqP1fj
+         uJ492ofVqdoeSq6FYl0B34NRq1uhrtL37KYKTmVtJ5j12OOBQ1rE4Lr15x5ubj/8X84L
+         DYcQ==
+X-Gm-Message-State: AOAM532l2TNEWtUrtkaJy8yvQkdQpahRo02d4xcWypEtxdFl6brZOUyl
+        M5vRIojJkC2pBBeRUBsAFbCFWg==
+X-Google-Smtp-Source: ABdhPJze27l1aXD+D4yIQEK0h88zbma4f2jYuOAuBnfilQml1/mAiidAIhshNW98oRXBiF5le2r20w==
+X-Received: by 2002:a05:6402:321b:b0:41d:888a:3ff0 with SMTP id g27-20020a056402321b00b0041d888a3ff0mr23117956eda.167.1650456817280;
+        Wed, 20 Apr 2022 05:13:37 -0700 (PDT)
+Received: from [192.168.0.225] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id fy11-20020a1709069f0b00b006e8b68c92d8sm6559748ejc.162.2022.04.20.05.13.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 05:13:36 -0700 (PDT)
+Message-ID: <0c0b53c3-294a-b1ac-487a-ca96266c4bb7@linaro.org>
+Date:   Wed, 20 Apr 2022 14:13:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 1/2] s390x: KVM: guest support for topology function
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] pinctrl: samsung: fix missing GPIOLIB on ARM64 Exynos
+ config
 Content-Language: en-US
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, cohuck@redhat.com, david@redhat.com,
-        thuth@redhat.com, imbrenda@linux.ibm.com, gor@linux.ibm.com,
-        wintera@linux.ibm.com, seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220420113430.11876-1-pmorel@linux.ibm.com>
- <20220420113430.11876-2-pmorel@linux.ibm.com> <Yl/27Pz3pvARmIHn@osiris>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <Yl/27Pz3pvARmIHn@osiris>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        "# 3.4.x" <stable@vger.kernel.org>
+References: <20220420115512.175917-1-krzysztof.kozlowski@linaro.org>
+ <CAK8P3a0uH5KjaobrqUmJQnvMmjkUaR1iC-7jEPjZFjZF1Z-GfQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAK8P3a0uH5KjaobrqUmJQnvMmjkUaR1iC-7jEPjZFjZF1Z-GfQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zItRefrBfeE5ux2YTOmHTHvjNgormApQ
-X-Proofpoint-ORIG-GUID: x4tiqNpaDvKIjuO6jMd7KOJubM6WDBII
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-20_03,2022-04-20_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=980 adultscore=0 clxscore=1015 lowpriorityscore=0
- malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0 priorityscore=1501
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204200073
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/20/22 14:05, Heiko Carstens wrote:
->> +static inline bool kvm_s390_topology_changed(struct kvm_vcpu *vcpu)
->> +{
->> +	if (!test_kvm_facility(vcpu->kvm, 11))
->> +		return false;
->> +
->> +	/* A new vCPU has been hotplugged */
->> +	if (vcpu->arch.prev_cpu == S390_KVM_TOPOLOGY_NEW_CPU)
->> +		return true;
->> +
->> +	/* The real CPU backing up the vCPU moved to another socket */
->> +	if (cpumask_test_cpu(vcpu->cpu,
->> +			     topology_core_cpumask(vcpu->arch.prev_cpu)))
->> +		return true;
->> +
->> +	return false;
->> +}
+On 20/04/2022 14:10, Arnd Bergmann wrote:
+> On Wed, Apr 20, 2022 at 1:55 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> The Samsung pinctrl drivers depend on OF_GPIO, which is part of GPIOLIB.
+>> ARMv7 Exynos platform selects GPIOLIB and Samsung pinctrl drivers. ARMv8
+>> Exynos selects only the latter leading to possible wrong configuration
+>> on ARMv8 build:
+>>
+>>   WARNING: unmet direct dependencies detected for PINCTRL_EXYNOS
+>>     Depends on [n]: PINCTRL [=y] && OF_GPIO [=n] && (ARCH_EXYNOS [=y] || ARCH_S5PV210 || COMPILE_TEST [=y])
+>>     Selected by [y]:
+>>     - ARCH_EXYNOS [=y]
+>>
+>> Reported-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+>> Fixes: eed6b3eb20b9 ("arm64: Split out platform options to separate Kconfig")
+>> Cc: <stable@vger.kernel.org>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
 > 
-> This seems to be wrong. I'd guess that you need
+> This does not look like a correct fix:
 > 
-> 	if (cpumask_test_cpu(vcpu->cpu,
-> 			     topology_core_cpumask(vcpu->arch.prev_cpu)))
-> -->		return false;
-> -->	return true;
+>> diff --git a/drivers/pinctrl/samsung/Kconfig b/drivers/pinctrl/samsung/Kconfig
+>> index dfd805e76862..c852fd1dd284 100644
+>> --- a/drivers/pinctrl/samsung/Kconfig
+>> +++ b/drivers/pinctrl/samsung/Kconfig
+>> @@ -4,13 +4,13 @@
+>>  #
+>>  config PINCTRL_SAMSUNG
+>>         bool
+>> -       depends on OF_GPIO
+>> +       select GPIOLIB
+>> +       select OF_GPIO
+>>         select PINMUX
+>>         select PINCONF
 > 
+> OF_GPIO is an automatic symbol that is always enabled when both
+> GPIOLIB and OF are enabled. Selecting it from somewhere else cannot
+> really work at all. I see we have a few other instances and should probably
+> fix those as well.
 
-/o\
+True, OF_GPIO I could skip here.
 
-I do not know if I can do this right at the end!
+> 
+>>  config PINCTRL_EXYNOS
+>>         bool "Pinctrl common driver part for Samsung Exynos SoCs"
+>> -       depends on OF_GPIO
+>>         depends on ARCH_EXYNOS || ARCH_S5PV210 || COMPILE_TEST
+>>         select PINCTRL_SAMSUNG
+>>         select PINCTRL_EXYNOS_ARM if ARM && (ARCH_EXYNOS || ARCH_S5PV210)
+> 
+> 
+> The problem here is that PINCTRL_EXYNOS and the others can be built for
+> compile-testing without CONFIG_OF on non-arm machines.
+> 
+> I think the correct dependency line would be
+> 
+>       depends on ARCH_EXYNOS || ARCH_S5PV210 || (COMPILE_TEST && OF)
+> 
+> which guarantees that OF_GPIO is also enabled.
 
-Thanks, I send an update immediately
-Pierre
+I don't think OF is the problem here, because the error is in missing
+GPIOLIB. The platform selects Samsung pinctrl but it does not select
+GPIOLIB. Possible fixes are:
+1. Do not select Samsung pinctrl from the platform (but have some
+default), so on compile test build it might not work.
+2. Select GPIOLIB from the platform (ARMv7 Exynos does it).
+3. Select GPIOLIB from here - this is current proposal.
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+
+Best regards,
+Krzysztof

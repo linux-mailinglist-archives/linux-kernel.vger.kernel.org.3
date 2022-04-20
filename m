@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8DB5093EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD46C5093F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383309AbiDTXz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 19:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
+        id S1383317AbiDTXzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 19:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbiDTXzY (ORCPT
+        with ESMTP id S1383306AbiDTXz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 19:55:24 -0400
+        Wed, 20 Apr 2022 19:55:28 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF033DDC7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:52:36 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d7eaa730d9so29355787b3.13
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:52:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18A93E0C1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:52:40 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2ec12272fb2so29235947b3.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=wXmJayhij+TwqNidzBSB+0E2/eNzdXfcp3O+/c0CbLs=;
-        b=OaTB0NiuNGz3gZItyS5lGwvFOV7EZfpnX61C01bWWJjrQvw2KVEzFOtQmxRdxaSqrK
-         DyZu71fHPSfuIhXETJEDfwfomhHzLen7FXo4xGDixCofaw1VUz53e+6jEJsNCFKbS4R2
-         b32RTlbQVSExtwz2j01qt89K5YDAARZUOHLDBkXMIjUvYc2di8K1OGvXpUpBQA9KxVQe
-         VqDWByInG2C9PEoeUTqqMWo3pWkEziJDfUyj4iIBaw0drmx47/i43FMmzuAJ665mVVL1
-         mu6hSBkRK9Kj23/NVYHS3v83cv/2KEOTKYF7s8dEDCyuNULl9QHRJ2FdImYzP++gH5jq
-         o9KA==
+         :cc;
+        bh=VlK/N65m/5fmcNRwSLWo0mws2lFJ6Ub3DEivUEYg98M=;
+        b=tLUmazkmovB9iU+mqAK5knrhBSAPu3QjDm8b1hLdL0BVb1j0pMw8PSvaQf8re5PeSJ
+         bUzsFis4ic1vlC1T6VD3o4VBQ95vY+V7WvjYmAArKb3twFoFPabqbKQkMB0uHL/kETLr
+         mPick5SnaYURJyuTlp3SKEreeO+FIQKujI+tHqd9woBtbQqj6pkpZ8ALfUxRGSns90CB
+         pFXW86i04HAslSUgE8CzJUkioFJUCVbEQ8Fn7San8Y8iebvj+uelJbyuJcrhnXLVUp1M
+         ir9v/JKNIObXhEM6k122Ah+TjJn0dl3RHtHq/eYh3xn2Z0P92GtkwLnqJF8RdY4nr3cW
+         AoLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=wXmJayhij+TwqNidzBSB+0E2/eNzdXfcp3O+/c0CbLs=;
-        b=mdSSx5AEt6KoqVTxn9zXKBzo32JMZEG3idAsEiM0sA80GSb6+f5pQBlqJ4GQ3Sx8Yb
-         wOV3IXblHz19p5OuQZPweogIQaCHBxqHUX3ADork6iYC7WF+oJJGUxpVgdCK/C9WYvGR
-         h7Y8LnRvWf4k/C+dv4b3yJ4E+X/82KgCvcnmL7MTWSW+edAwv8IncYLglw7QQSlE/vKh
-         dML+xR0bz7rVBVMzd+Kw0kaDOQ8XfuElr7KkzySum7RMAv0EjVZ4mCSstLR+fxVx4y79
-         gq4b6pVP43i9KO0QEgRqqqmoIgrtLICJaYu1aata61KerAM5x75yDaAwy39JmyZiU6Hg
-         YUaQ==
-X-Gm-Message-State: AOAM530G8xAJR+qKsH3bf4Xa1fnRi8elTmrevbs68zcXlDdEnwsWusJp
-        0k5OT5yZt+3nwxQ3ZU87oNZ2vSdbQC0szNo=
-X-Google-Smtp-Source: ABdhPJwdyO1a59Wbmq1dxswXBXqz9W9bswYyvbTDUV+1oi//Kyi7KDzuR7vBGAHyOSEgZ4kGsGhEe+dl4K2LpjM=
+         :references:subject:from:to:cc;
+        bh=VlK/N65m/5fmcNRwSLWo0mws2lFJ6Ub3DEivUEYg98M=;
+        b=YRN6vSX0Qclk3kU1ID16t3yA77egQboAiRgY59w+WwqMg4lJU9EvN/mEhHelwwAoTl
+         4NP/YETr1a/E/euSU4pDS+Lg2m5Nc29/J5aHA8zsxiZ+fCT1aXBHIEZ+xIuSCPB4vK7c
+         RUSZDt6mfc/iVm5GDjAOKo4i7d2JtfXw4qIix3PSCcE6Nws1YLyP+MMgQ/MEt4gt+KxF
+         43kDh0EwQBlPKQSPeMjCJXkEsqyucQtCA+HP8QbaW+exWfauXGjaGwYTA4+0s1vP7OKC
+         UHjeLLmEXR7FYhKCxVXArEwTI/95Scc2+r2sEbqMHl7riKKtVmmkpMe6RgMP3X9xZ4UD
+         MHdQ==
+X-Gm-Message-State: AOAM532pOJTbwnQh+Flua9syVUWkqZajtKiM2rz5WsRB6ZLcNGnx8E3L
+        xFtUUOpeZcHp8wAG+IFEXeFhajwYnngXUR4=
+X-Google-Smtp-Source: ABdhPJwgNKzjVGsHBaxiO+vOasI6LOgyAKHvcZIMVyf5+8nsBCJgMdx3an95uJ3DGrx5zydqTMLIpN5BTFBb3Eo=
 X-Received: from tj.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:53a])
- (user=tjmercier job=sendgmr) by 2002:a05:6902:1244:b0:644:b8a5:e195 with SMTP
- id t4-20020a056902124400b00644b8a5e195mr22014142ybu.556.1650498755305; Wed,
- 20 Apr 2022 16:52:35 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 23:52:19 +0000
+ (user=tjmercier job=sendgmr) by 2002:a81:2557:0:b0:2ef:3c92:afd4 with SMTP id
+ l84-20020a812557000000b002ef3c92afd4mr22686874ywl.408.1650498759906; Wed, 20
+ Apr 2022 16:52:39 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 23:52:20 +0000
 In-Reply-To: <20220420235228.2767816-1-tjmercier@google.com>
-Message-Id: <20220420235228.2767816-2-tjmercier@google.com>
+Message-Id: <20220420235228.2767816-3-tjmercier@google.com>
 Mime-Version: 1.0
 References: <20220420235228.2767816-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [RFC v5 1/6] gpu: rfc: Proposal for a GPU cgroup controller
+Subject: [RFC v5 2/6] cgroup: gpu: Add a cgroup controller for allocator
+ attribution of GPU memory
 From:   "T.J. Mercier" <tjmercier@google.com>
 To:     tjmercier@google.com, daniel@ffwll.ch, tj@kernel.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
 Cc:     hridya@google.com, christian.koenig@amd.com, jstultz@google.com,
         tkjos@android.com, cmllamas@google.com, surenb@google.com,
         kaleshsingh@google.com, Kenny.Ho@amd.com, mkoutny@suse.com,
         skhan@linuxfoundation.org, kernel-team@android.com,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,300 +76,570 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hridya Valsaraju <hridya@google.com>
 
-This patch adds a proposal for a new GPU cgroup controller for
-accounting/limiting GPU and GPU-related memory allocations.
-The proposed controller is based on the DRM cgroup controller[1] and
-follows the design of the RDMA cgroup controller.
+The cgroup controller provides accounting for GPU and GPU-related
+memory allocations. The memory being accounted can be device memory or
+memory allocated from pools dedicated to serve GPU-related tasks.
 
-The new cgroup controller would:
-* Allow setting per-device limits on the total size of buffers
-  allocated by device within a cgroup.
-* Expose a per-device/allocator breakdown of the buffers charged to a
-  cgroup.
+This patch adds APIs to:
+-allow a device to register for memory accounting using the GPU cgroup
+controller.
+-charge and uncharge allocated memory to a cgroup.
 
-The prototype in the following patches is only for memory accounting
-using the GPU cgroup controller and does not implement limit setting.
+When the cgroup controller is enabled, it would expose information about
+the memory allocated by each device(registered for GPU cgroup memory
+accounting) for each cgroup.
 
-[1]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty@int=
-el.com/
+The API/UAPI can be extended to set per-device/total allocation limits
+in the future.
+
+The cgroup controller has been named following the discussion in [1].
+
+[1]: https://lore.kernel.org/amd-gfx/YCJp%2F%2FkMC7YjVMXv@phenom.ffwll.local/
 
 Signed-off-by: Hridya Valsaraju <hridya@google.com>
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
 
 ---
 v5 changes
-Drop the global GPU cgroup "total" (sum of all device totals) portion
-of the design since there is no currently known use for this per
-Tejun Heo.
+Support all strings for gpucg_register_device instead of just string
+literals.
 
-Update for renamed functions/variables.
+Enforce globally unique gpucg_bucket names.
+
+Constrain gpucg_bucket name lengths to 64 bytes.
+
+Obtain just a single css refcount instead of nr_pages for each
+charge.
+
+Rename:
+gpucg_try_charge -> gpucg_charge
+find_cg_rpool_locked -> cg_rpool_find_locked
+init_cg_rpool -> cg_rpool_init
+get_cg_rpool_locked -> cg_rpool_get_locked
+"gpu cgroup controller" -> "GPU controller"
+gpucg_device -> gpucg_bucket
+usage -> size
+
+v4 changes
+Adjust gpucg_try_charge critical section for future charge transfer
+functionality.
 
 v3 changes
-Remove Upstreaming Plan from gpu-cgroup.rst per John Stultz.
-
 Use more common dual author commit message format per John Stultz.
----
- Documentation/gpu/rfc/gpu-cgroup.rst | 190 +++++++++++++++++++++++++++
- Documentation/gpu/rfc/index.rst      |   4 +
- 2 files changed, 194 insertions(+)
- create mode 100644 Documentation/gpu/rfc/gpu-cgroup.rst
 
-diff --git a/Documentation/gpu/rfc/gpu-cgroup.rst b/Documentation/gpu/rfc/g=
-pu-cgroup.rst
+v2 changes
+Fix incorrect Kconfig help section indentation per Randy Dunlap.
+---
+ include/linux/cgroup_gpu.h    | 123 +++++++++++++
+ include/linux/cgroup_subsys.h |   4 +
+ init/Kconfig                  |   7 +
+ kernel/cgroup/Makefile        |   1 +
+ kernel/cgroup/gpu.c           | 324 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 459 insertions(+)
+ create mode 100644 include/linux/cgroup_gpu.h
+ create mode 100644 kernel/cgroup/gpu.c
+
+diff --git a/include/linux/cgroup_gpu.h b/include/linux/cgroup_gpu.h
 new file mode 100644
-index 000000000000..0be2a3a9f641
+index 000000000000..4dfe633d6ec7
 --- /dev/null
-+++ b/Documentation/gpu/rfc/gpu-cgroup.rst
-@@ -0,0 +1,190 @@
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+GPU cgroup controller
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++++ b/include/linux/cgroup_gpu.h
+@@ -0,0 +1,123 @@
++/* SPDX-License-Identifier: MIT
++ * Copyright 2019 Advanced Micro Devices, Inc.
++ * Copyright (C) 2022 Google LLC.
++ */
++#ifndef _CGROUP_GPU_H
++#define _CGROUP_GPU_H
 +
-+Goals
-+=3D=3D=3D=3D=3D
-+This document intends to outline a plan to create a cgroup v2 controller s=
-ubsystem
-+for the per-cgroup accounting of device and system memory allocated by the=
- GPU
-+and related subsystems.
++#include <linux/cgroup.h>
++#include <linux/list.h>
 +
-+The new cgroup controller would:
++#define GPUCG_BUCKET_NAME_MAX_LEN 64
 +
-+* Allow setting per-device limits on the total size of buffers allocated b=
-y a
-+  device/allocator within a cgroup.
++#ifdef CONFIG_CGROUP_GPU
++ /* The GPU cgroup controller data structure */
++struct gpucg {
++	struct cgroup_subsys_state css;
 +
-+* Expose a per-device/allocator breakdown of the buffers charged to a cgro=
-up.
++	/* list of all resource pools that belong to this cgroup */
++	struct list_head rpools;
++};
 +
-+Alternatives Considered
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++/* A named entity representing bucket of tracked memory. */
++struct gpucg_bucket {
++	/* list of various resource pools in various cgroups that the bucket is part of */
++	struct list_head rpools;
 +
-+The following alternatives were considered:
++	/* list of all buckets registered for GPU cgroup accounting */
++	struct list_head bucket_node;
 +
-+The memory cgroup controller
-+____________________________
++	/* string to be used as identifier for accounting and limit setting */
++	const char *name;
++};
 +
-+1. As was noted in [1], memory accounting provided by the GPU cgroup
-+controller is not a good fit for integration into memcg due to the
-+differences in how accounting is performed. It implements a mechanism
-+for the allocator attribution of GPU and GPU-related memory by
-+charging each buffer to the cgroup of the process on behalf of which
-+the memory was allocated. The buffer stays charged to the cgroup until
-+it is freed regardless of whether the process retains any references
-+to it. On the other hand, the memory cgroup controller offers a more
-+fine-grained charging and uncharging behavior depending on the kind of
-+page being accounted.
++/**
++ * css_to_gpucg - get the corresponding gpucg ref from a cgroup_subsys_state
++ * @css: the target cgroup_subsys_state
++ *
++ * Returns: gpu cgroup that contains the @css
++ */
++static inline struct gpucg *css_to_gpucg(struct cgroup_subsys_state *css)
++{
++	return css ? container_of(css, struct gpucg, css) : NULL;
++}
 +
-+2. Memcg performs accounting in units of pages. In the DMA-BUF buffer shar=
-ing model,
-+a process takes a reference to the entire buffer(hence keeping it alive) e=
-ven if
-+it is only accessing parts of it. Therefore, per-page memory tracking for =
-DMA-BUF
-+memory accounting would only introduce additional overhead without any ben=
-efits.
++/**
++ * gpucg_get - get the gpucg reference that a task belongs to
++ * @task: the target task
++ *
++ * This increases the reference count of the css that the @task belongs to.
++ *
++ * Returns: reference to the gpu cgroup the task belongs to.
++ */
++static inline struct gpucg *gpucg_get(struct task_struct *task)
++{
++	if (!cgroup_subsys_enabled(gpu_cgrp_subsys))
++		return NULL;
++	return css_to_gpucg(task_get_css(task, gpu_cgrp_id));
++}
 +
-+[1]: https://patchwork.kernel.org/project/dri-devel/cover/20190501140438.9=
-506-1-brian.welty@intel.com/#22624705
++/**
++ * gpucg_put - put a gpucg reference
++ * @gpucg: the target gpucg
++ *
++ * Put a reference obtained via gpucg_get
++ */
++static inline void gpucg_put(struct gpucg *gpucg)
++{
++	if (gpucg)
++		css_put(&gpucg->css);
++}
 +
-+Userspace service to keep track of buffer allocations and releases
-+__________________________________________________________________
++/**
++ * gpucg_parent - find the parent of a gpu cgroup
++ * @cg: the target gpucg
++ *
++ * This does not increase the reference count of the parent cgroup
++ *
++ * Returns: parent gpu cgroup of @cg
++ */
++static inline struct gpucg *gpucg_parent(struct gpucg *cg)
++{
++	return css_to_gpucg(cg->css.parent);
++}
 +
-+1. There is no way for a userspace service to intercept all allocations an=
-d releases.
-+2. In case the process gets killed or restarted, we lose all accounting so=
- far.
++int gpucg_charge(struct gpucg *gpucg, struct gpucg_bucket *bucket, u64 size);
++void gpucg_uncharge(struct gpucg *gpucg, struct gpucg_bucket *bucket, u64 size);
++int gpucg_register_bucket(struct gpucg_bucket *bucket, const char *name);
++#else /* CONFIG_CGROUP_GPU */
 +
-+UAPI
-+=3D=3D=3D=3D
-+When enabled, the new cgroup controller would create the following files i=
-n every cgroup.
++struct gpucg;
++struct gpucg_bucket;
 +
-+::
++static inline struct gpucg *css_to_gpucg(struct cgroup_subsys_state *css)
++{
++	return NULL;
++}
 +
-+        gpu.memory.current (R)
-+        gpu.memory.max (R/W)
++static inline struct gpucg *gpucg_get(struct task_struct *task)
++{
++	return NULL;
++}
 +
-+gpu.memory.current is a read-only file and would contain per-device memory=
- allocations
-+in a key-value format where key is a string representing the device name a=
-nd the value
-+is the size of memory charged to the device in the cgroup in bytes. The de=
-vice name
-+should be globally unique.
++static inline void gpucg_put(struct gpucg *gpucg) {}
 +
-+For example:
++static inline struct gpucg *gpucg_parent(struct gpucg *cg)
++{
++	return NULL;
++}
 +
-+::
++static inline int gpucg_charge(struct gpucg *gpucg,
++			       struct gpucg_bucket *bucket,
++			       u64 size)
++{
++	return 0;
++}
 +
-+        cat /sys/kernel/fs/cgroup1/gpu.memory.current
-+        dev1 4194304
-+        dev2 4194304
++static inline void gpucg_uncharge(struct gpucg *gpucg,
++				  struct gpucg_bucket *bucket,
++				  u64 size) {}
 +
-+The string key for each device is set by the device driver when the device=
- registers
-+with the GPU cgroup controller to participate in resource accounting (see =
-section
-+'Design and Implementation' for more details).
++static inline int gpucg_register_bucket(struct gpucg_bucket *bucket, const char *name) {}
++#endif /* CONFIG_CGROUP_GPU */
++#endif /* _CGROUP_GPU_H */
+diff --git a/include/linux/cgroup_subsys.h b/include/linux/cgroup_subsys.h
+index 445235487230..46a2a7b93c41 100644
+--- a/include/linux/cgroup_subsys.h
++++ b/include/linux/cgroup_subsys.h
+@@ -65,6 +65,10 @@ SUBSYS(rdma)
+ SUBSYS(misc)
+ #endif
+ 
++#if IS_ENABLED(CONFIG_CGROUP_GPU)
++SUBSYS(gpu)
++#endif
 +
-+gpu.memory.max is a read/write file. It would show the current size limits=
- on
-+memory usage for each allocator/device.
+ /*
+  * The following subsystems are not supported on the default hierarchy.
+  */
+diff --git a/init/Kconfig b/init/Kconfig
+index ddcbefe535e9..2e00a190e170 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -984,6 +984,13 @@ config BLK_CGROUP
+ 
+ 	See Documentation/admin-guide/cgroup-v1/blkio-controller.rst for more information.
+ 
++config CGROUP_GPU
++	bool "GPU controller (EXPERIMENTAL)"
++	select PAGE_COUNTER
++	help
++	  Provides accounting and limit setting for memory allocations by the GPU and
++	  GPU-related subsystems.
 +
-+Setting a limit for a particular device/allocator can be done as follows:
+ config CGROUP_WRITEBACK
+ 	bool
+ 	depends on MEMCG && BLK_CGROUP
+diff --git a/kernel/cgroup/Makefile b/kernel/cgroup/Makefile
+index 12f8457ad1f9..be95a5a532fc 100644
+--- a/kernel/cgroup/Makefile
++++ b/kernel/cgroup/Makefile
+@@ -7,3 +7,4 @@ obj-$(CONFIG_CGROUP_RDMA) += rdma.o
+ obj-$(CONFIG_CPUSETS) += cpuset.o
+ obj-$(CONFIG_CGROUP_MISC) += misc.o
+ obj-$(CONFIG_CGROUP_DEBUG) += debug.o
++obj-$(CONFIG_CGROUP_GPU) += gpu.o
+diff --git a/kernel/cgroup/gpu.c b/kernel/cgroup/gpu.c
+new file mode 100644
+index 000000000000..34d0a5b85834
+--- /dev/null
++++ b/kernel/cgroup/gpu.c
+@@ -0,0 +1,324 @@
++// SPDX-License-Identifier: MIT
++// Copyright 2019 Advanced Micro Devices, Inc.
++// Copyright (C) 2022 Google LLC.
 +
-+::
++#include <linux/cgroup.h>
++#include <linux/cgroup_gpu.h>
++#include <linux/err.h>
++#include <linux/gfp.h>
++#include <linux/mm.h>
++#include <linux/page_counter.h>
++#include <linux/seq_file.h>
++#include <linux/slab.h>
++#include <linux/string.h>
 +
-+        echo =E2=80=9Cdev1 4194304=E2=80=9D >  /sys/kernel/fs/cgroup1/gpu.=
-memory.max
++static struct gpucg *root_gpucg __read_mostly;
 +
-+In this example, 'dev1' is the string key set by the device driver during
-+registration.
++/*
++ * Protects list of resource pools maintained on per cgroup basis and list
++ * of buckets registered for memory accounting using the GPU cgroup controller.
++ */
++static DEFINE_MUTEX(gpucg_mutex);
++static LIST_HEAD(gpucg_buckets);
 +
-+Design and Implementation
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
++struct gpucg_resource_pool {
++	/* The bucket whose resource usage is tracked by this resource pool */
++	struct gpucg_bucket *bucket;
 +
-+The cgroup controller would closely follow the design of the RDMA cgroup c=
-ontroller
-+subsystem where each cgroup maintains a list of resource pools.
-+Each resource pool is associated with a device name via a pointer to a str=
-uct gpucg_bucket
-+and contains a counter to track current, total, and the maximum limit set =
-for the device.
++	/* list of all resource pools for the cgroup */
++	struct list_head cg_node;
 +
-+The below code block is a preliminary estimation on how the core kernel da=
-ta structures
-+and APIs would look like.
++	/* list maintained by the gpucg_bucket to keep track of its resource pools */
++	struct list_head bucket_node;
 +
-+.. code-block:: c
++	/* tracks memory usage of the resource pool */
++	struct page_counter total;
++};
 +
-+        /* The GPU cgroup controller data structure */
-+        struct gpucg {
-+                struct cgroup_subsys_state css;
++static void free_cg_rpool_locked(struct gpucg_resource_pool *rpool)
++{
++	lockdep_assert_held(&gpucg_mutex);
 +
-+                /* list of all resource pools that belong to this cgroup *=
-/
-+                struct list_head rpools;
-+        };
++	list_del(&rpool->cg_node);
++	list_del(&rpool->bucket_node);
++	kfree(rpool);
++}
 +
-+        /* A named entity representing bucket of tracked memory. */
-+        struct gpucg_bucket {
-+                /* list of various resource pools in various cgroups that =
-the bucket is part of */
-+                struct list_head rpools;
++static void gpucg_css_free(struct cgroup_subsys_state *css)
++{
++	struct gpucg_resource_pool *rpool, *tmp;
++	struct gpucg *gpucg = css_to_gpucg(css);
 +
-+                /* list of all buckets registered for GPU cgroup accountin=
-g */
-+                struct list_head bucket_node;
++	// delete all resource pools
++	mutex_lock(&gpucg_mutex);
++	list_for_each_entry_safe(rpool, tmp, &gpucg->rpools, cg_node)
++		free_cg_rpool_locked(rpool);
++	mutex_unlock(&gpucg_mutex);
 +
-+                /* string to be used as identifier for accounting and limi=
-t setting */
-+                const char *name;
-+        };
++	kfree(gpucg);
++}
 +
-+        struct gpucg_resource_pool {
-+                /* The bucket whose resource usage is tracked by this reso=
-urce pool */
-+                struct gpucg_bucket *bucket;
++static struct cgroup_subsys_state *
++gpucg_css_alloc(struct cgroup_subsys_state *parent_css)
++{
++	struct gpucg *gpucg, *parent;
 +
-+                /* list of all resource pools for the cgroup */
-+                struct list_head cg_node;
++	gpucg = kzalloc(sizeof(struct gpucg), GFP_KERNEL);
++	if (!gpucg)
++		return ERR_PTR(-ENOMEM);
 +
-+                /* list maintained by the gpucg_bucket to keep track of it=
-s resource pools */
-+                struct list_head bucket_node;
++	parent = css_to_gpucg(parent_css);
++	if (!parent)
++		root_gpucg = gpucg;
 +
-+                /* tracks memory usage of the resource pool */
-+                struct page_counter total;
-+        };
++	INIT_LIST_HEAD(&gpucg->rpools);
 +
-+        /**
-+         * gpucg_register_bucket - Registers a bucket for memory accountin=
-g using the
-+         * GPU cgroup controller.
-+         *
-+         * @bucket: The bucket to register for memory accounting.
-+         * @name: Pointer to a null-terminated string to denote the name o=
-f the bucket. This name
-+         *        should be globally unique, and should not exceed @GPUCG_=
-BUCKET_NAME_MAX_LEN bytes.
-+         *
-+         * @bucket must remain valid. @name will be copied.
-+         */
-+        void gpucg_register_bucket(struct gpucg_bucket *bucket, const char=
- *name)
++	return &gpucg->css;
++}
 +
-+        /**
-+         * gpucg_charge - charge memory to the specified gpucg and gpucg_b=
-ucket.
-+         *
-+         * @gpucg: The gpu cgroup to charge the memory to.
-+         * @bucket: The pool to charge the memory to.
-+         * @size: The size of memory to charge in bytes.
-+         *        This size will be rounded up to the nearest page size.
-+         *
-+         * Return: returns 0 if the charging is successful and otherwise r=
-eturns an
-+         * error code.
-+         */
-+        int gpucg_charge(struct gpucg *gpucg, struct gpucg_bucket *bucket,=
- u64 size);
++static struct gpucg_resource_pool *cg_rpool_find_locked(
++	struct gpucg *cg,
++	struct gpucg_bucket *bucket)
++{
++	struct gpucg_resource_pool *rpool;
 +
-+        /**
-+         * gpucg_uncharge - uncharge memory from the specified gpucg and g=
-pucg_bucket.
-+         * The caller must hold a reference to @gpucg obtained through gpu=
-cg_get().
-+         *
-+         * @gpucg: The gpu cgroup to uncharge the memory from.
-+         * @bucket: The bucket to uncharge the memory from.
-+         * @size: The size of memory to uncharge in bytes.
-+         *        This size will be rounded up to the nearest page size.
-+         */
-+        void gpucg_uncharge(struct gpucg *gpucg, struct gpucg_bucket *buck=
-et, u64 size);
++	lockdep_assert_held(&gpucg_mutex);
 +
-+        /**
-+         * gpucg_transfer_charge - Transfer a GPU charge from one cgroup t=
-o another.
-+         *
-+         * @source:	[in]	The GPU cgroup the charge will be transferred fro=
-m.
-+         * @dest:	[in]	The GPU cgroup the charge will be transferred to.
-+         * @bucket:	[in]	The GPU cgroup bucket corresponding to the charge=
-.
-+         * @size:	[in]	The size of the memory in bytes.
-+         *                      This size will be rounded up to the neares=
-t page size.
-+         *
-+         * Returns 0 on success, or a negative errno code otherwise.
-+         */
-+        int gpucg_transfer_charge(struct gpucg *source,
-+                                  struct gpucg *dest,
-+                                  struct gpucg_bucket *bucket,
-+                                  u64 size)
++	list_for_each_entry(rpool, &cg->rpools, cg_node)
++		if (rpool->bucket == bucket)
++			return rpool;
 +
++	return NULL;
++}
 +
-+Future Work
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Additional GPU resources can be supported by adding new controller files.
-diff --git a/Documentation/gpu/rfc/index.rst b/Documentation/gpu/rfc/index.=
-rst
-index 91e93a705230..0a9bcd94e95d 100644
---- a/Documentation/gpu/rfc/index.rst
-+++ b/Documentation/gpu/rfc/index.rst
-@@ -23,3 +23,7 @@ host such documentation:
- .. toctree::
-=20
-     i915_scheduler.rst
++static struct gpucg_resource_pool *cg_rpool_init(struct gpucg *cg,
++						 struct gpucg_bucket *bucket)
++{
++	struct gpucg_resource_pool *rpool = kzalloc(sizeof(*rpool),
++							GFP_KERNEL);
++	if (!rpool)
++		return ERR_PTR(-ENOMEM);
 +
-+.. toctree::
++	rpool->bucket = bucket;
 +
-+    gpu-cgroup.rst
---=20
++	page_counter_init(&rpool->total, NULL);
++	INIT_LIST_HEAD(&rpool->cg_node);
++	INIT_LIST_HEAD(&rpool->bucket_node);
++	list_add_tail(&rpool->cg_node, &cg->rpools);
++	list_add_tail(&rpool->bucket_node, &bucket->rpools);
++
++	return rpool;
++}
++
++/**
++ * get_cg_rpool_locked - find the resource pool for the specified bucket and
++ * specified cgroup. If the resource pool does not exist for the cg, it is
++ * created in a hierarchical manner in the cgroup and its ancestor cgroups who
++ * do not already have a resource pool entry for the bucket.
++ *
++ * @cg: The cgroup to find the resource pool for.
++ * @bucket: The bucket associated with the returned resource pool.
++ *
++ * Return: return resource pool entry corresponding to the specified bucket in
++ * the specified cgroup (hierarchically creating them if not existing already).
++ *
++ */
++static struct gpucg_resource_pool *
++cg_rpool_get_locked(struct gpucg *cg, struct gpucg_bucket *bucket)
++{
++	struct gpucg *parent_cg, *p, *stop_cg;
++	struct gpucg_resource_pool *rpool, *tmp_rpool;
++	struct gpucg_resource_pool *parent_rpool = NULL, *leaf_rpool = NULL;
++
++	rpool = cg_rpool_find_locked(cg, bucket);
++	if (rpool)
++		return rpool;
++
++	stop_cg = cg;
++	do {
++		rpool = cg_rpool_init(stop_cg, bucket);
++		if (IS_ERR(rpool))
++			goto err;
++
++		if (!leaf_rpool)
++			leaf_rpool = rpool;
++
++		stop_cg = gpucg_parent(stop_cg);
++		if (!stop_cg)
++			break;
++
++		rpool = cg_rpool_find_locked(stop_cg, bucket);
++	} while (!rpool);
++
++	/*
++	 * Re-initialize page counters of all rpools created in this invocation
++	 * to enable hierarchical charging.
++	 * stop_cg is the first ancestor cg who already had a resource pool for
++	 * the bucket. It can also be NULL if no ancestors had a pre-existing
++	 * resource pool for the bucket before this invocation.
++	 */
++	rpool = leaf_rpool;
++	for (p = cg; p != stop_cg; p = parent_cg) {
++		parent_cg = gpucg_parent(p);
++		if (!parent_cg)
++			break;
++		parent_rpool = cg_rpool_find_locked(parent_cg, bucket);
++		page_counter_init(&rpool->total, &parent_rpool->total);
++
++		rpool = parent_rpool;
++	}
++
++	return leaf_rpool;
++err:
++	for (p = cg; p != stop_cg; p = gpucg_parent(p)) {
++		tmp_rpool = cg_rpool_find_locked(p, bucket);
++		free_cg_rpool_locked(tmp_rpool);
++	}
++	return rpool;
++}
++
++/**
++ * gpucg_charge - charge memory to the specified gpucg and gpucg_bucket.
++ * Caller must hold a reference to @gpucg obtained through gpucg_get(). The size
++ * of the memory is rounded up to be a multiple of the page size.
++ *
++ * @gpucg: The gpu cgroup to charge the memory to.
++ * @bucket: The bucket to charge the memory to.
++ * @size: The size of memory to charge in bytes.
++ *        This size will be rounded up to the nearest page size.
++ *
++ * Return: returns 0 if the charging is successful and otherwise returns an
++ * error code.
++ */
++int gpucg_charge(struct gpucg *gpucg, struct gpucg_bucket *bucket, u64 size)
++{
++	struct page_counter *counter;
++	u64 nr_pages;
++	struct gpucg_resource_pool *rp;
++	int ret = 0;
++
++	nr_pages = PAGE_ALIGN(size) >> PAGE_SHIFT;
++
++	mutex_lock(&gpucg_mutex);
++	rp = cg_rpool_get_locked(gpucg, bucket);
++	/*
++	 * Continue to hold gpucg_mutex because we use it to block charges while transfers are in
++	 * progress to avoid potentially exceeding a limit.
++	 */
++	if (IS_ERR(rp)) {
++		mutex_unlock(&gpucg_mutex);
++		return PTR_ERR(rp);
++	}
++
++	if (page_counter_try_charge(&rp->total, nr_pages, &counter))
++		css_get(&gpucg->css);
++	else
++		ret = -ENOMEM;
++	mutex_unlock(&gpucg_mutex);
++
++	return ret;
++}
++
++/**
++ * gpucg_uncharge - uncharge memory from the specified gpucg and gpucg_bucket.
++ * The caller must hold a reference to @gpucg obtained through gpucg_get().
++ *
++ * @gpucg: The gpu cgroup to uncharge the memory from.
++ * @bucket: The bucket to uncharge the memory from.
++ * @size: The size of memory to uncharge in bytes.
++ *        This size will be rounded up to the nearest page size.
++ */
++void gpucg_uncharge(struct gpucg *gpucg, struct gpucg_bucket *bucket, u64 size)
++{
++	u64 nr_pages;
++	struct gpucg_resource_pool *rp;
++
++	mutex_lock(&gpucg_mutex);
++	rp = cg_rpool_find_locked(gpucg, bucket);
++	/*
++	 * gpucg_mutex can be unlocked here, rp will stay valid until gpucg is freed and there are
++	 * active refs on gpucg. Uncharges are fine while transfers are in progress since there is
++	 * no potential to exceed a limit while uncharging and transferring.
++	 */
++	mutex_unlock(&gpucg_mutex);
++
++	if (unlikely(!rp)) {
++		pr_err("Resource pool not found, incorrect charge/uncharge ordering?\n");
++		return;
++	}
++
++	nr_pages = PAGE_ALIGN(size) >> PAGE_SHIFT;
++	page_counter_uncharge(&rp->total, nr_pages);
++	css_put(&gpucg->css);
++}
++
++/**
++ * gpucg_register_bucket - Registers a bucket for memory accounting using the
++ * GPU cgroup controller.
++ *
++ * @bucket: The bucket to register for memory accounting.
++ * @name: Pointer to a null-terminated string to denote the name of the bucket. This name should be
++ *        globally unique, and should not exceed @GPUCG_BUCKET_NAME_MAX_LEN bytes.
++ *
++ * @bucket must remain valid. @name will be copied.
++ *
++ * Returns 0 on success, or a negative errno code otherwise.
++ */
++int gpucg_register_bucket(struct gpucg_bucket *bucket, const char *name)
++{
++	struct gpucg_bucket *b;
++
++	if (!bucket || !name)
++		return -EINVAL;
++
++	if (strlen(name) >= GPUCG_BUCKET_NAME_MAX_LEN)
++		return -ENAMETOOLONG;
++
++	INIT_LIST_HEAD(&bucket->bucket_node);
++	INIT_LIST_HEAD(&bucket->rpools);
++	bucket->name = kstrdup_const(name, GFP_KERNEL);
++
++	mutex_lock(&gpucg_mutex);
++	list_for_each_entry(b, &gpucg_buckets, bucket_node) {
++		if (strncmp(b->name, bucket->name, GPUCG_BUCKET_NAME_MAX_LEN) == 0) {
++			mutex_unlock(&gpucg_mutex);
++			kfree_const(bucket->name);
++			return -EEXIST;
++		}
++	}
++	list_add_tail(&bucket->bucket_node, &gpucg_buckets);
++	mutex_unlock(&gpucg_mutex);
++
++	return 0;
++}
++
++static int gpucg_resource_show(struct seq_file *sf, void *v)
++{
++	struct gpucg_resource_pool *rpool;
++	struct gpucg *cg = css_to_gpucg(seq_css(sf));
++
++	mutex_lock(&gpucg_mutex);
++	list_for_each_entry(rpool, &cg->rpools, cg_node) {
++		seq_printf(sf, "%s %lu\n", rpool->bucket->name,
++			   page_counter_read(&rpool->total) * PAGE_SIZE);
++	}
++	mutex_unlock(&gpucg_mutex);
++
++	return 0;
++}
++
++struct cftype files[] = {
++	{
++		.name = "memory.current",
++		.seq_show = gpucg_resource_show,
++	},
++	{ }     /* terminate */
++};
++
++struct cgroup_subsys gpu_cgrp_subsys = {
++	.css_alloc      = gpucg_css_alloc,
++	.css_free       = gpucg_css_free,
++	.early_init     = false,
++	.legacy_cftypes = files,
++	.dfl_cftypes    = files,
++};
+-- 
 2.36.0.rc0.470.gd361397f0d-goog
 

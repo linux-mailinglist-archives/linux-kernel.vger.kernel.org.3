@@ -2,47 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F09E508D9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9D6508DA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 18:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380761AbiDTQtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 12:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
+        id S1380769AbiDTQum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380497AbiDTQtu (ORCPT
+        with ESMTP id S239724AbiDTQui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 12:49:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791C244A20
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 09:47:04 -0700 (PDT)
+        Wed, 20 Apr 2022 12:50:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E69E4507F;
+        Wed, 20 Apr 2022 09:47:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 175E861A5A
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:47:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED7DC385A0;
-        Wed, 20 Apr 2022 16:47:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650473223;
-        bh=4fRcsXUhyVGIx/AjQuBcKxjrSKJPAxMI3mcZszc6S1A=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37FFBB81FB6;
+        Wed, 20 Apr 2022 16:47:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF0C8C385A0;
+        Wed, 20 Apr 2022 16:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650473269;
+        bh=ZFEnnoJ0V3bmUpNbtwzofwaKYze8ukC5EiqVvI8/chI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ns/VOAU3hEltoED5s7v6fzhSb0W6hQRhd/5yUdx1pv7ZV8nNNrxsmkd9gpybhTW4A
-         HD0TBIT5tMO+z2aDZIf0Vh/YsMTOWynaCjKWT1cmI3Hrxbx+D0CLzMl2Y1UNWd++fK
-         5NE2BJu1ULUgMZ9OGwE1Pz1GgJQU33dtloYIxbQg=
-Date:   Wed, 20 Apr 2022 18:47:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Artur Bujdoso <artur.bujdoso@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-Subject: Re: [PATCH v2] staging: rtl8723bs: remove leftover code for other
- chips
-Message-ID: <YmA5BM2Fkie5xMk/@kroah.com>
-References: <Yl8bCE8Rjh/w4Ogz@crux>
+        b=gFLKEXNI7atLTte+D+RjS5mY62ZGdhYdWUzcWdX5tyaAcvNeto4awO7jteIRXntTS
+         K+V+Lv9Fahx0ul8Hf49u5gf1QijaJunhK6dCn8ix/R7484RJtO+BlAH8/2JZyHXt5c
+         rb2w6FSwJg8xfPMBuiFLxZ6DehuBPrIFnhnn1fu7/Xys1nbMm+wb0X5e2hGZ8zyHHZ
+         he2IZVVKSzX/k3jYTPRbOn0XXJYeCjI0fcdiXWt2mBfA3QNd/w6uDWVN0yiavOwbIN
+         LzQiaqlQJuE4uHVZ0M5EUNULpQKbxiYTTL5cXMRPQmE8eSGZfXnFwIkzz86Wzi5tig
+         Gpz0prn917Acw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 31D9F400B1; Wed, 20 Apr 2022 13:47:46 -0300 (-03)
+Date:   Wed, 20 Apr 2022 13:47:46 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     German Gomez <german.gomez@arm.com>,
+        Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, benh@kernel.crashing.org,
+        Nick.Forrington@arm.com, alexander.shishkin@linux.intel.com,
+        andrew.kilroy@arm.com, james.clark@arm.com, john.garry@huawei.com,
+        jolsa@kernel.org, kjain@linux.ibm.com, lihuafei1@huawei.com,
+        mark.rutland@arm.com, mathieu.poirier@linaro.org, mingo@redhat.com,
+        namhyung@kernel.org, peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v5 5/5] perf mem: Support mem_lvl_num in c2c command
+Message-ID: <YmA5MqWxxLCp1Nff@kernel.org>
+References: <20220408195344.32764-1-alisaidi@amazon.com>
+ <20220408195344.32764-6-alisaidi@amazon.com>
+ <3ad0128a-1b3d-37a7-81f6-fd597b565b18@arm.com>
+ <20220420084823.GE843168@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yl8bCE8Rjh/w4Ogz@crux>
+In-Reply-To: <20220420084823.GE843168@leoy-ThinkPad-X240s>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,42 +66,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 10:26:48PM +0200, Artur Bujdoso wrote:
-> Clean up unreferenced definitions in hal headers and code.
+Em Wed, Apr 20, 2022 at 04:48:23PM +0800, Leo Yan escreveu:
+> On Mon, Apr 11, 2022 at 11:04:28AM +0100, German Gomez wrote:
+> > 
+> > On 08/04/2022 20:53, Ali Saidi wrote:
+> > > In addition to summarizing data encoded in mem_lvl also support data
+> > > encoded in mem_lvl_num.
+> > >
+> > > Since other architectures don't seem to populate the mem_lvl_num field
+> > > here there shouldn't be a change in functionality.
+> > >
+> > > Signed-off-by: Ali Saidi <alisaidi@amazon.com>
+> > > ---
+> > >  tools/perf/util/mem-events.c | 11 +++++++----
+> > >  1 file changed, 7 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+> > > index ed0ab838bcc5..e5e405185498 100644
+> > > --- a/tools/perf/util/mem-events.c
+> > > +++ b/tools/perf/util/mem-events.c
+> > > @@ -485,6 +485,7 @@ int c2c_decode_stats(struct c2c_stats *stats, struct mem_info *mi)
+> > >  	u64 daddr  = mi->daddr.addr;
+> > >  	u64 op     = data_src->mem_op;
+> > >  	u64 lvl    = data_src->mem_lvl;
+> > > +	u64 lnum   = data_src->mem_lvl_num;
+> > >  	u64 snoop  = data_src->mem_snoop;
+> > >  	u64 lock   = data_src->mem_lock;
+> > >  	u64 blk    = data_src->mem_blk;
+> > > @@ -527,16 +528,18 @@ do {				\
+> > >  			if (lvl & P(LVL, UNC)) stats->ld_uncache++;
+> > >  			if (lvl & P(LVL, IO))  stats->ld_io++;
+> > >  			if (lvl & P(LVL, LFB)) stats->ld_fbhit++;
+> > 
+> > Just for completion, can we also handle LFB as it seems to be being set
+> > in "/arch/x86/events/intel/ds.c"? (Sorry I missed this in the v4)
 > 
-> Signed-off-by: Artur Bujdoso <artur.bujdoso@gmail.com>
-> ---
->  drivers/staging/rtl8723bs/hal/HalBtcOutSrc.h  |  11 -
->  drivers/staging/rtl8723bs/hal/hal_btcoex.c    |   8 -
->  drivers/staging/rtl8723bs/include/HalVerDef.h |  10 -
->  .../staging/rtl8723bs/include/hal_com_reg.h   | 295 ------------------
->  4 files changed, 324 deletions(-)
+> With fixing LFB issue pointed by German, the change looks good to me:
+
+Waiting for a v6 then, please collect Leo's reviewed-by tag when
+submitting it.
+
+- Arnaldo
+ 
+> Reviewed-by: Leo Yan <leo.yan@linaro.org>
 > 
+> It would be appreciate if x86 or PowerPC maintainers could take a look
+> for this patch.  Thanks!
+ 
 
-Hi,
+> Leo
+> 
+> > > -			if (lvl & P(LVL, L1 )) stats->ld_l1hit++;
+> > > -			if (lvl & P(LVL, L2 )) stats->ld_l2hit++;
+> > > -			if (lvl & P(LVL, L3 )) {
+> > > +			if (lvl & P(LVL, L1) || lnum == P(LVLNUM, L1))
+> > > +				stats->ld_l1hit++;
+> > > +			if (lvl & P(LVL, L2) || lnum == P(LVLNUM, L2))
+> > > +				stats->ld_l2hit++;
+> > > +			if (lvl & P(LVL, L3) || lnum == P(LVLNUM, L3)) {
+> > >  				if (snoop & P(SNOOP, HITM))
+> > >  					HITM_INC(lcl_hitm);
+> > >  				else
+> > >  					stats->ld_llchit++;
+> > >  			}
+> > >  
+> > > -			if (lvl & P(LVL, LOC_RAM)) {
+> > > +			if (lvl & P(LVL, LOC_RAM) || lnum == P(LVLNUM, RAM)) {
+> > >  				stats->lcl_dram++;
+> > >  				if (snoop & P(SNOOP, HIT))
+> > >  					stats->ld_shared++;
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+-- 
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+- Arnaldo

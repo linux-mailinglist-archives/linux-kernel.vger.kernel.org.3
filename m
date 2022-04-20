@@ -2,128 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15203508EB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35901508EAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381114AbiDTRoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 13:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S1349757AbiDTRmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 13:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359710AbiDTRoI (ORCPT
+        with ESMTP id S237160AbiDTRmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 13:44:08 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1BA47049;
-        Wed, 20 Apr 2022 10:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650476481; x=1682012481;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rbZu7eWEid6dNs7PEy4WsbHQMUyRtvOvvbZT7aD6MhU=;
-  b=bNa3FBoF5FnRcQc6cTFnI73IfR4KQQwyTelGlKyq4ycO56Z1ZSPKOET9
-   R9IOoAQYLnB8b18rPkmWxEqrbgCOuHbGpZ5tSLoO1MDMQ8REOdPuo5/EB
-   Z9DZD0MYRb07eEcTPsHzYzJn6luCgvMQimtO75drFJ5qvb6G1MprLivTU
-   9ltlH6pNa8zpdtpM0JGm9fOosxi3/hHAjICGTvMcOY+tdQLo7h2G5OdJX
-   MZ+kt8AP2yBnHL49JXSo5I0W7ZvW6OM8Z05Z/aTVg5VIOOoA3jxR59EGv
-   fk4RF8GzzDXSaJ5IAWuO9VKP8+ilZmYXtD7q9phyHZqawXs+E9FREZcky
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="251416868"
-X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
-   d="scan'208";a="251416868"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 10:40:57 -0700
-X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
-   d="scan'208";a="576712395"
-Received: from sbidasar-mobl.amr.corp.intel.com (HELO [10.209.100.171]) ([10.209.100.171])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 10:40:56 -0700
-Message-ID: <10eb3973-03c4-74cd-d28a-014fc280cdf8@linux.intel.com>
-Date:   Wed, 20 Apr 2022 12:39:26 -0500
+        Wed, 20 Apr 2022 13:42:51 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9971B43ADF;
+        Wed, 20 Apr 2022 10:40:04 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id x33so4311302lfu.1;
+        Wed, 20 Apr 2022 10:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fDm0hCeP1iuF9WL7RiqDe/J3rtlxPQX1zeA/vezHRa0=;
+        b=WA6ZRCaU3cdlumlpbvWHxfloi03BAMhbknENhqsaWPbHRTCv9SZOTLs6l5atjl/rNB
+         WhDgJgxuFoJ/Qjj/q6o0HjImWWNexAoe3iis41zRi8T7cp+cNxoIeLsaIrzGx7M+aP5f
+         yTAUWAt+k6SrK4lNorKyp7zkayVMzWGHtU826B3wT4VF+PqS8rhJhhQw+6nzVJOpHjPO
+         Z+fl0//75bOefoMVkqelSYCTT7/Fe7c10WZtohovtXDzsn3PyILek6foHM5/OQmQFSLW
+         u1+mJd34DWLpm19EGHWC0J1RcHPjVNnGwatLnAkk0E4lmNtGfNVpgiVhfCCchSqTE+cC
+         Tr+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fDm0hCeP1iuF9WL7RiqDe/J3rtlxPQX1zeA/vezHRa0=;
+        b=zdu1gMgQd6+MDp3H8S+NCcjuLHjg29gxBItxzhtBIdwItURUHeGDvVxDd7Mc09tuhc
+         4oUUPfWa+8mEi0zyGAq7GcVNFvvm5YRDMX78DVR8C5Iinw7UeEm5BXDXhei5gVf+G1mT
+         AG8R71Q4zAmHEtvlJ6CcP5NS/fhk/iO+FXA46+t6f3/RD/XHCToyooePf3PbLN75+T7u
+         lvG9VDHtV8lkQr2DwRgsbV34xOE86cDYZAS2W5GgHfI5Sv853ZA5K+MTAF37JVftQA4J
+         avGSEeR493mgbugCyRHNtobBOhgqvnjhU4CwvU+xYZz3pZsFzuhc/3gw2d10pKpgkTcq
+         F4Cg==
+X-Gm-Message-State: AOAM533Nzb5cLxGlJXU9gTDaSRq0L8vJ+19cmOs2DzZXm9rIccZNRuMt
+        knmk/celBkcCvJHMFaB9GwA=
+X-Google-Smtp-Source: ABdhPJxge8XTkpASmraJ0VjrGWjf9n/ju/ayI7pvlM3z8AJpfQOWU1Cqk3TRPVw0hpSrfMk+YQhJmQ==
+X-Received: by 2002:a05:6512:1504:b0:44b:36e:b50d with SMTP id bq4-20020a056512150400b0044b036eb50dmr15640332lfb.558.1650476402746;
+        Wed, 20 Apr 2022 10:40:02 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:9cae:8c00:9682:e720:334f:2fac? (dxw3k4yf2tnxwyp6sg02y-3.rev.dnainternet.fi. [2001:14ba:9cae:8c00:9682:e720:334f:2fac])
+        by smtp.gmail.com with ESMTPSA id s17-20020a195e11000000b0046eec768984sm1785063lfb.200.2022.04.20.10.40.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 10:40:02 -0700 (PDT)
+Message-ID: <90e11a93-4f3a-2209-2bc2-acfb791b8ac0@gmail.com>
+Date:   Wed, 20 Apr 2022 20:40:08 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/3] soundwire: qcom: add runtime pm support
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] fs/ntfs3: remove redundant assignment to variable vcn
 Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        robh+dt@kernel.org, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com
-Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
-References: <20220228172528.3489-1-srinivas.kandagatla@linaro.org>
- <20220228172528.3489-2-srinivas.kandagatla@linaro.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220228172528.3489-2-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20220418140038.82843-1-colin.i.king@gmail.com>
+From:   Kari Argillander <kari.argillander@gmail.com>
+In-Reply-To: <20220418140038.82843-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 18.4.2022 17.00, Colin Ian King wrote:
+> Variable vcn is being assigned a value that is never read, it is
+> being re-assigned again in the initialization of a for-loop.  The
+> assignment is redundant and can be removed.
+> 
+> Cleans up clang scan build warning:
+> fs/ntfs3/attrib.c:1176:7: warning: Value stored to 'vcn' during its
+> initialization is never read [deadcode.DeadStores]
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
+Reviewed-by: Kari Argillander <kari.argillander@gmail.com>
 
-> @@ -1017,6 +1032,15 @@ static int qcom_swrm_startup(struct snd_pcm_substream *substream,
->  	struct snd_soc_dai *codec_dai;
->  	int ret, i;
->  
-> +	ret = pm_runtime_get_sync(ctrl->dev);
-> +	if (ret < 0 && ret != -EACCES) {
-> +		dev_err_ratelimited(ctrl->dev,
-> +				    "pm_runtime_get_sync failed in %s, ret %d\n",
-> +				    __func__, ret);
-> +		pm_runtime_put_noidle(ctrl->dev);
-> +		return ret;
-
-here there's an error handling, but ...
-
-> +	}
-> +
->  	sruntime = sdw_alloc_stream(dai->name);
->  	if (!sruntime)
->  		return -ENOMEM;
-> @@ -1044,6 +1068,9 @@ static void qcom_swrm_shutdown(struct snd_pcm_substream *substream,
->  
->  	sdw_release_stream(ctrl->sruntime[dai->id]);
->  	ctrl->sruntime[dai->id] = NULL;
-> +	pm_runtime_mark_last_busy(ctrl->dev);
-> +	pm_runtime_put_autosuspend(ctrl->dev);
-> +
->  }
->  
->  static const struct snd_soc_dai_ops qcom_swrm_pdm_dai_ops = {
-> @@ -1197,12 +1224,23 @@ static int qcom_swrm_get_port_config(struct qcom_swrm_ctrl *ctrl)
->  static int swrm_reg_show(struct seq_file *s_file, void *data)
->  {
->  	struct qcom_swrm_ctrl *swrm = s_file->private;
-> -	int reg, reg_val;
-> +	int reg, reg_val, ret;
-> +
-> +	ret = pm_runtime_get_sync(swrm->dev);
-> +	if (ret < 0 && ret != -EACCES) {
-> +		dev_err_ratelimited(swrm->dev,
-> +				    "pm_runtime_get_sync failed in %s, ret %d\n",
-> +				    __func__, ret);
-> +		pm_runtime_put_noidle(swrm->dev);
-
-... here it's missing?
-
-I have a fix ready but thought I would check first if this was intentional
-
-https://github.com/thesofproject/linux/pull/3602/commits/6353eec8dc971c5f0fda0166ae1777f71784ea32
-
-> +	}
->  
->  	for (reg = 0; reg <= SWR_MSTR_MAX_REG_ADDR; reg += 4) {
->  		swrm->reg_read(swrm, reg, &reg_val);
->  		seq_printf(s_file, "0x%.3x: 0x%.2x\n", reg, reg_val);
->  	}
-> +	pm_runtime_mark_last_busy(swrm->dev);
-> +	pm_runtime_put_autosuspend(swrm->dev);
-> +
->  
->  	return 0;
+> ---
+>   fs/ntfs3/attrib.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
+> index e8c00dda42ad..fc0623b029e6 100644
+> --- a/fs/ntfs3/attrib.c
+> +++ b/fs/ntfs3/attrib.c
+> @@ -1173,7 +1173,7 @@ int attr_load_runs_range(struct ntfs_inode *ni, enum ATTR_TYPE type,
+>   {
+>   	struct ntfs_sb_info *sbi = ni->mi.sbi;
+>   	u8 cluster_bits = sbi->cluster_bits;
+> -	CLST vcn = from >> cluster_bits;
+> +	CLST vcn;
+>   	CLST vcn_last = (to - 1) >> cluster_bits;
+>   	CLST lcn, clen;
+>   	int err;

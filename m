@@ -2,48 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23443508C7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412C6508C7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380352AbiDTPym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S1380355AbiDTPz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380346AbiDTPyk (ORCPT
+        with ESMTP id S243762AbiDTPz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:54:40 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E474093C
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:51:53 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 15:51:46 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
-        s=protonmail2; t=1650469911;
-        bh=0ixJXXvnTgsn0qDHr6/TrGav1WNXehlytEOiTCtxmF0=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=mTLL0lfK5o9bnjeTxBBFyrm4t3CjTJtirqcbNrZZw3S3uPtA1PIeQLvb2W8YbbDhE
-         vcreQA2TpMKmNRF4yPMItYBBAFkdsmTasIf4GtiEe23MVIpUMNX9ev/phxfgZTJX8W
-         XG7e1uCDjFtQzJ/bDMuCkHtLp64v0qMoob3Baz/P7OkEvSTv0LhyNyPM4LUYHjAEyN
-         wAMHMN9mw4yVTBBdr0Ui8SEEXqZPi121jOF4oaEazvAaFG0txgMFxp5Jm+pyw9xcgC
-         pGxqhv3hSIF8SH1dsqq7dzbUXF+sB+tVna770ma1mO3qT4Vu+2NfMs1MTKAhyye+/a
-         Ifab719HOn/3A==
-To:     Guenter Roeck <linux@roeck-us.net>
-From:   wujek dev <dev_public@wujek.eu>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: wujek dev <dev_public@wujek.eu>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus) add MFR_* registers to debugfs
-Message-ID: <Liq6d7nBil1lQx274diOvpjRJ9cEYH6co7ZMjrudPfYn0TTzOsfqsjuVBK-pMpFF5nBC0jhuoFEtbtmUY4Td4uY-a4qn6j-OmQD-Qu_xdck=@wujek.eu>
-In-Reply-To: <6f697b2c-58aa-6ca4-966b-147bcc184dad@roeck-us.net>
-References: <20220419215326.309991-1-dev_public@wujek.eu> <20220420122128.411757-1-dev_public@wujek.eu> <f34ec7ac-7b34-6d98-25ad-31b13fe08c59@roeck-us.net> <PFzjnraIDClF6umMOqlCKCzxG6q5lIhBLHpynRA6juh6gXSp5Y7SLPpzXZGNU6L7OGCEwl_F-niJn1jTflifWnqm9PX3Rcfqbtdo6rmPAT4=@wujek.eu> <6f697b2c-58aa-6ca4-966b-147bcc184dad@roeck-us.net>
-Feedback-ID: 23425257:user:proton
+        Wed, 20 Apr 2022 11:55:26 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E27642EC6;
+        Wed, 20 Apr 2022 08:52:40 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-e656032735so1108146fac.0;
+        Wed, 20 Apr 2022 08:52:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=S0Y+0UT+7f6lERv3TdG5Ai4gbifQsP7CueENIDn6iDI=;
+        b=HHDcTfqtKJJlOYnA3RbW39Sf73Tg4OWL6Gx9TkWyDBUvQDCIy9jQwrjbkRNYkiJ960
+         2RpG8pJ2ljU+wA1dbWb0bxqNkUVCzCOaHp7BYugalpEajtNdVGIw/i/DJ5QMXzlPAUCi
+         dFnplebdE3J4SkMu9+SeuGhJvvcsz4nB/t4RikzvutGM8wjO8y2F+avjL+P2fCQddmr/
+         mKkZeM/X/pUxXy94Iq4Ti75aYhwKqg6PX/Q+b0nhmuGTCpgGeo4YfHSwvGTr2hiGN6j/
+         TqbFRHkWpTAoPUMBv9eyceyih77w7w3K8s4wAPpmS2lkImcDPBmz6WBkAr7Wzm+30y9W
+         Tv6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=S0Y+0UT+7f6lERv3TdG5Ai4gbifQsP7CueENIDn6iDI=;
+        b=X8WZYM2mPY5iEtnGrkmaOf4ipb3+jFtg+NT9P6J16+961fgWjpwz+nA6STp+Q8vBTw
+         AA4KUZpse/LBnk6eJ9jS+EST6YQ/ElcvQGOl+hb2wf71S/vr5jqKDCSj8H02SYeWlmT4
+         U0EguD6v8GQ++ih8fjeWNEDg9wP7p39Z747Hn52AJIjcYT4KHKwCNlzlmoD8PKYz9T2e
+         /1dQrtQBSuONM3bM+ZebD01mh27/ZmFJDMm6C0y2ThzzHyNQeN2/r/ntdYM64K6ZOVei
+         u7O2/4qjKNWThbvJnl3J4uRXGVeXOaaCRvQlQ2F3yErx2xa+4/6FNg1Kepx0A2DSM9US
+         EdRQ==
+X-Gm-Message-State: AOAM531saY/RRx6RTXcRoTIipWAdptx+m++btHTGWIuLMYwUR/as5kb0
+        oNgFe2kzu1Hw+QcYb8RoSD0=
+X-Google-Smtp-Source: ABdhPJwz/Up2CY8UTFI4JWLbKvaAjU97j9CdzJksLTSDtq3YrVYm/ZBpR2T5FUzLnC7/CHjXXyKkXw==
+X-Received: by 2002:a05:6870:2184:b0:e5:ee28:d858 with SMTP id l4-20020a056870218400b000e5ee28d858mr1879597oae.211.1650469959467;
+        Wed, 20 Apr 2022 08:52:39 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f8-20020a056830264800b006056d7c27absm346901otu.77.2022.04.20.08.52.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 08:52:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <565f92d7-78d1-7623-4c13-70d49eed5821@roeck-us.net>
+Date:   Wed, 20 Apr 2022 08:52:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com, nick@hpe.com, joel@jms.id.au,
+        arnd@arndb.de
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20220420150156.47405-1-nick.hawkins@hpe.com>
+ <20220420150156.47405-3-nick.hawkins@hpe.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v4 03/11] drivers: wdt: Introduce HPE GXP SoC Watchdog
+In-Reply-To: <20220420150156.47405-3-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,119 +78,251 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------- Original Message -------
-On Wednesday, April 20th, 2022 at 16:15, Guenter Roeck <linux@roeck-us.net>=
- wrote:
+On 4/20/22 08:01, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> Adding support for the HPE GXP Watchdog. It is new to the linux
+> community and this along with several other patches is the first
+> support for it. The GXP asic contains a full compliment of
+> timers one of which is the watchdog timer. The watchdog timer
+> is 16 bit and has 10ms resolution. The watchdog is now
 
+Drop "now".
 
->
->
-> On 4/20/22 06:58, wujek dev wrote:
->
-> > ------- Original Message -------
-> > On Wednesday, April 20th, 2022 at 15:53, Guenter Roeck linux@roeck-us.n=
-et wrote:
-> >
-> > > On 4/20/22 05:22, Adam Wujek wrote:
-> > >
-> > > > Add registers to debugfs:
-> > > > PMBUS_MFR_ID
-> > > > PMBUS_MFR_MODEL
-> > > > PMBUS_MFR_REVISION
-> > > > PMBUS_MFR_LOCATION
-> > > > PMBUS_MFR_DATE
-> > > > PMBUS_MFR_SERIAL
-> > > >
-> > > > Signed-off-by: Adam Wujek dev_public@wujek.eu
-> > >
-> > > Where is patch 1/2, and why did you resend this patch ?
-> >
-> > There should be no "1/2" since this and the second patch are unrelated.
-> > I resend it because I rebased it on master.
->
-> Please provide change logs and version your patches in the future.
-ok, thank you for your patience.
->
-> > Adam
-> >
-> > > Guenter
-> > >
-> > > > ---
-> > > > drivers/hwmon/pmbus/pmbus_core.c | 84 +++++++++++++++++++++++++++++=
-+++
-> > > > 1 file changed, 84 insertions(+)
-> > > >
-> > > > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus=
-/pmbus_core.c
-> > > > index 0af7a3d74f47..1dc186780ccf 100644
-> > > > --- a/drivers/hwmon/pmbus/pmbus_core.c
-> > > > +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> > > > @@ -2625,6 +2625,30 @@ static int pmbus_debugfs_get_status(void *da=
-ta, u64 *val)
-> > > > DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_ge=
-t_status,
-> > > > NULL, "0x%04llx\n");
-> > > >
-> > > > +static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __us=
-er *buf,
-> > > > + size_t count, loff_t *ppos)
-> > > > +{
-> > > > + int rc;
-> > > > + struct pmbus_debugfs_entry *entry =3D file->private_data;
-> > > > + char data[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
-> > > > +
-> > > > + rc =3D i2c_smbus_read_block_data(entry->client, entry->reg, data)=
-;
-> > > > + if (rc < 0)
-> > > > + return rc;
-> > > > +
-> > > > + data[rc] =3D '\n';
-> > > > + rc +=3D 2;
->
->
-> Why +2 ?
->
-Copied from another driver.
-+1 due to '\n'
-+1 due to NULL character (smbus block transfer does not include it in the l=
-ength)
-Explanation included in v3 patch.
-> > > > +
-> > > > + return simple_read_from_buffer(buf, count, ppos, data, rc);
-> > > > +}
-> > > > +
-> > > > +static const struct file_operations pmbus_debugfs_ops_mfr =3D {
-> > > > + .llseek =3D noop_llseek,
-> > > > + .read =3D pmbus_debugfs_mfr_read,
-> > > > + .write =3D NULL,
-> > > > + .open =3D simple_open,
-> > > > +};
-> > > > +
-> > > > static int pmbus_debugfs_get_pec(void *data, u64 *val)
-> > > > {
-> > > > struct i2c_client *client =3D data;
-> > > > @@ -2801,6 +2825,66 @@ static int pmbus_init_debugfs(struct i2c_cli=
-ent *client,
-> > > > &entries[idx++],
-> > > > &pmbus_debugfs_ops);
-> > > > }
-> > > > +
-> > > > + if (pmbus_check_byte_register(client, i, PMBUS_MFR_ID)) {
-> > > > + entries[idx].client =3D client;
-> > > > + entries[idx].page =3D i;
-> > > > + entries[idx].reg =3D PMBUS_MFR_ID;
-> > > > + scnprintf(name, PMBUS_NAME_SIZE, "mfr%d_id", i);
-> > > > + debugfs_create_file(name, 0444, data->debugfs,
-> > > > + &entries[idx++],
-> > > > + &pmbus_debugfs_ops_mfr);
-> > > > + }
->
->
-> You are adding several debugfs entries without increasing the size
-> of the entries array. That means that up to 16 debugfs entries are
-> now created into an array of size 10. That won't work.
-You're right, I just sent another patch.
+> created as a child device of timer since the same register
+> range is used. This was done due to changes requested with
+> the device tree.
+> 
 
-Adam
->
-> Guenter
+Drop last sentence; it is part of the change log and should stay there.
+
+> ---
+
+Changes made in v3 and v4 are missing.
+
+> v2:
+> *Made watchdog a child of timer as they share the same register
+> region per change request on dtsi.
+> *Removed extra parenthesis
+> *Fixed u8 u32 u64 usage
+> *Fixed alignment issue
+> *Removed unused gxp_wdt_remove function
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>   drivers/watchdog/Kconfig   |   8 ++
+>   drivers/watchdog/Makefile  |   1 +
+>   drivers/watchdog/gxp-wdt.c | 166 +++++++++++++++++++++++++++++++++++++
+>   3 files changed, 175 insertions(+)
+>   create mode 100644 drivers/watchdog/gxp-wdt.c
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index c8fa79da23b3..cb210d2978d2 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1820,6 +1820,14 @@ config RALINK_WDT
+>   	help
+>   	  Hardware driver for the Ralink SoC Watchdog Timer.
+>   
+> +config GXP_WATCHDOG
+> +	tristate "HPE GXP watchdog support"
+> +	depends on ARCH_HPE_GXP
+> +	select WATCHDOG_CORE
+> +	help
+> +	  Say Y here to include support for the watchdog timer
+> +	  in HPE GXP SoCs.
+> +
+
+Add something like:
+
+To compile this driver as a module, choose M here: the
+module will be calledgxp_wdt.
+
+>   config MT7621_WDT
+>   	tristate "Mediatek SoC watchdog"
+>   	select WATCHDOG_CORE
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index f7da867e8782..e2acf3a0d0fc 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -92,6 +92,7 @@ obj-$(CONFIG_RTD119X_WATCHDOG) += rtd119x_wdt.o
+>   obj-$(CONFIG_SPRD_WATCHDOG) += sprd_wdt.o
+>   obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
+>   obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
+> +obj-$(CONFIG_GXP_WATCHDOG) += gxp-wdt.o
+>   obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
+>   obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
+>   obj-$(CONFIG_APPLE_WATCHDOG) += apple_wdt.o
+> diff --git a/drivers/watchdog/gxp-wdt.c b/drivers/watchdog/gxp-wdt.c
+> new file mode 100644
+> index 000000000000..f45ab9a826d6
+> --- /dev/null
+> +++ b/drivers/watchdog/gxp-wdt.c
+> @@ -0,0 +1,166 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P. */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/types.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define MASK_WDGCS_ENABLE	0x01
+> +#define MASK_WDGCS_RELOAD	0x04
+> +#define MASK_WDGCS_NMIEN	0x08
+> +#define MASK_WDGCS_WARN		0x80
+> +
+> +#define WDT_MAX_TIMEOUT_MS	655000
+> +#define WDT_DEFAULT_TIMEOUT	30
+> +#define SECS_TO_WDOG_TICKS(x) ((x) * 100)
+> +#define WDOG_TICKS_TO_SECS(x) ((x) / 100)
+> +
+> +#define GXP_WDT_CNT_OFS		0x10
+> +#define GXP_WDT_CTRL_OFS	0x16
+> +
+> +struct gxp_wdt {
+> +	void __iomem *base;
+> +	struct watchdog_device wdd;
+> +};
+> +
+> +static void gxp_wdt_enable_reload(struct gxp_wdt *drvdata)
+> +{
+> +	u8 val;
+> +
+> +	val = readb(drvdata->base + GXP_WDT_CTRL_OFS);
+> +	val |= (MASK_WDGCS_ENABLE | MASK_WDGCS_RELOAD);
+> +	writeb(val, drvdata->base + GXP_WDT_CTRL_OFS);
+> +}
+> +
+> +static int gxp_wdt_start(struct watchdog_device *wdd)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +
+> +	writew(SECS_TO_WDOG_TICKS(wdd->timeout), drvdata->base + GXP_WDT_CNT_OFS);
+> +	gxp_wdt_enable_reload(drvdata);
+> +	return 0;
+> +}
+> +
+> +static int gxp_wdt_stop(struct watchdog_device *wdd)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +	u8 val;
+> +
+> +	val = readb_relaxed(drvdata->base + GXP_WDT_CTRL_OFS);
+> +	val &= ~MASK_WDGCS_ENABLE;
+> +	writeb(val, drvdata->base + GXP_WDT_CTRL_OFS);
+> +	return 0;
+> +}
+> +
+> +static int gxp_wdt_set_timeout(struct watchdog_device *wdd,
+> +			       unsigned int timeout)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +	u32 actual;
+> +
+> +	wdd->timeout = timeout;
+> +	actual = min(timeout, wdd->max_hw_heartbeat_ms / 1000);
+> +	writew(SECS_TO_WDOG_TICKS(actual), drvdata->base + GXP_WDT_CNT_OFS);
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int gxp_wdt_get_timeleft(struct watchdog_device *wdd)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +	u32 val = readw(drvdata->base + GXP_WDT_CNT_OFS);
+> +
+> +	return WDOG_TICKS_TO_SECS(val);
+> +}
+> +
+> +static int gxp_wdt_ping(struct watchdog_device *wdd)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +
+> +	gxp_wdt_enable_reload(drvdata);
+> +	return 0;
+> +}
+> +
+> +static int gxp_restart(struct watchdog_device *wdd, unsigned long action,
+> +		       void *data)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +
+> +	writew(10, drvdata->base + GXP_WDT_CNT_OFS);
+> +	gxp_wdt_enable_reload(drvdata);
+> +	mdelay(100);
+> +	return 0;
+> +}
+> +
+> +static const struct watchdog_ops gxp_wdt_ops = {
+> +	.owner =	THIS_MODULE,
+> +	.start =	gxp_wdt_start,
+> +	.stop =		gxp_wdt_stop,
+> +	.ping =		gxp_wdt_ping,
+> +	.set_timeout =	gxp_wdt_set_timeout,
+> +	.get_timeleft =	gxp_wdt_get_timeleft,
+> +	.restart =	gxp_restart,
+> +};
+> +
+> +static const struct watchdog_info gxp_wdt_info = {
+> +	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
+> +	.identity = "HPE GXP Watchdog timer",
+> +};
+> +
+> +static int gxp_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct gxp_wdt *drvdata;
+> +	int err;
+> +	u8 val;
+> +
+> +	drvdata = devm_kzalloc(dev, sizeof(struct gxp_wdt), GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	drvdata->base = (void __iomem *)dev->platform_data;
+> +
+> +	drvdata->wdd.info = &gxp_wdt_info;
+> +	drvdata->wdd.ops = &gxp_wdt_ops;
+> +	drvdata->wdd.max_hw_heartbeat_ms = WDT_MAX_TIMEOUT_MS;
+> +	drvdata->wdd.parent = dev;
+> +	drvdata->wdd.timeout = WDT_DEFAULT_TIMEOUT;
+> +
+> +	watchdog_set_drvdata(&drvdata->wdd, drvdata);
+> +	watchdog_set_nowayout(&drvdata->wdd, WATCHDOG_NOWAYOUT);
+> +
+> +	val = readb(drvdata->base + GXP_WDT_CTRL_OFS);
+> +
+> +	if (val & MASK_WDGCS_ENABLE)
+> +		set_bit(WDOG_HW_RUNNING, &drvdata->wdd.status);
+> +
+> +	watchdog_set_restart_priority(&drvdata->wdd, 128);
+> +
+> +	watchdog_stop_on_reboot(&drvdata->wdd);
+> +	err = devm_watchdog_register_device(dev, &drvdata->wdd);
+> +	if (err) {
+> +		dev_err(dev, "Failed to register watchdog device");
+> +		return err;
+> +	}
+> +
+> +	dev_info(dev, "HPE GXP watchdog timer");
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver gxp_wdt_driver = {
+> +	.probe = gxp_wdt_probe,
+> +	.driver = {
+> +		.name =	"gxp-wdt",
+> +	},
+> +};
+> +module_platform_driver(gxp_wdt_driver);
+> +
+> +MODULE_AUTHOR("Nick Hawkins <nick.hawkins@hpe.com>");
+> +MODULE_AUTHOR("Jean-Marie Verdun <verdun@hpe.com>");
+> +MODULE_DESCRIPTION("Driver for GXP watchdog timer");
+

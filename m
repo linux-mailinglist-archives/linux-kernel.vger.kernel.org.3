@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C7A508FC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 20:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489EC508FC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 20:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381606AbiDTSvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 14:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
+        id S1381614AbiDTSvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 14:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381589AbiDTSvB (ORCPT
+        with ESMTP id S1381592AbiDTSvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 14:51:01 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EA542EEC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:48:15 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id x191so2442764pgd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:48:15 -0700 (PDT)
+        Wed, 20 Apr 2022 14:51:02 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4C642EEC
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:48:16 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id c23so2653205plo.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:48:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding:cc:from:to;
-        bh=UGpQa9Z2U55MjYUDsvGvuFzYMVtZARYuOzPYtbUizPg=;
-        b=6rfdm/phCRlmO8Ct/g6arSMLvjyQ+UArCdCgU2d60t/F49+e8zW9hVbe0Hw+/6auz8
-         0smG66pG/9D7UcRw9gX9si6y6NvYkgsIezoJskMu1TuSK+aiSONGS9esu5svctCYwycs
-         zy/DbrDagPCD6MWiRgjfG/1SHvaO15wkNDoUpyA8uxDBpOIZNjhiiQIbshZmfbNLbAZ6
-         K0wOBieQ++3HSV2zjACVh9DwCHCYxumykHQ+9uX1l+MYsJ/d3koVe32FE4ThTDttjd4t
-         +cG0lApXd9/8MkrFy5CCYjjb/EMIcrfBtlvGGtw4/ZxtWBEMpGYveainQmNzAiPJLESC
-         ZT8A==
+        bh=LErP8U/PzejnwsS9KxvOA1A5d+doq+yW06k2+06H9yw=;
+        b=SrUq1R9xL5OZEC4Ze67UAVTlCaR8u01nNPPk8oP1eppqz7PD0gBzsRZXnuhDevMwsl
+         JKPcgMqhBle7UJ1lQpjq81l3IaPYq1YfYIuc22hlfQe+sJEpAGeTpitbhg0M9FoMS6Eb
+         JWh7O5Qk/dz8TgOSvZTVv8rfk+D9uarBySHEo1zK+XMILDSzBxe93kfQ/D3iNRSmWyHv
+         MrUz5aeweAEgbOxEYUVYklujxkRgWZAP2UNLy2aImjJR3QZW2LwyKanqf0piJX1tCQxW
+         p6gg7IVLhUVllO4RYluFhedDiovafl5YmzL0213rDk5ywouSLj4h86NRtxyqUbjVmbcm
+         hyGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding:cc:from:to;
-        bh=UGpQa9Z2U55MjYUDsvGvuFzYMVtZARYuOzPYtbUizPg=;
-        b=ZgzDWpeo+5+BhcltL4bkwNxmYsEeKGt3HRoC995dUgd99h499LPu84yYr4NYJp2J2u
-         Kwc9Yv+6MHK88Hgmyx9khb2bHxBWdChqOBzAk1klPwnc+XLcJ/R/ovBjQNTp6Kk7zUz7
-         gomttVdiFNSHIiWEk5RVkwuM1zoV5VHSB0ti9ir+VTBvH4/tQRBJqNI6Tn5gpIip7JAF
-         uN/1SXHP+QDbmed1QR8sf8liCC/HftkBYg82LALPRgyOrd1O4dMKOqBevlHzFsL0Ur1E
-         o9v6dJtwb0xrwRuIfAvZBWX9WILHF2SjfzZNL85+5kzL2YMpn1CodYSU4TTOlXXvqb59
-         XWpQ==
-X-Gm-Message-State: AOAM530TnOuG9RU4ykTpwt4KizQT5FazXqpLg/0eF5yG/5MbBNLhJUD4
-        SQ9xYobowoY2B+OMtDN054q8Zg==
-X-Google-Smtp-Source: ABdhPJyQtvhwqEgVVnVRRdlklc0eCKG6jyhiAA/OuM6Vae1V/BWG9miXV/9kwjPjjDrjfrYbblnoIw==
-X-Received: by 2002:a63:e452:0:b0:3a9:fd43:fd10 with SMTP id i18-20020a63e452000000b003a9fd43fd10mr14420896pgk.541.1650480494575;
-        Wed, 20 Apr 2022 11:48:14 -0700 (PDT)
+        bh=LErP8U/PzejnwsS9KxvOA1A5d+doq+yW06k2+06H9yw=;
+        b=by3P9Idk5D24rIN1lbkIozgGrkUEUMx7EfJf2h5KX1fYfJDATwZuJ8v8PSZ7tDy3K3
+         Sq0YFcEuvUp/mJFcpSGNoK3VjneMvdTdHHJoGXvLbD7f1EeoH6KkMFxMYNfcH8Fxcp88
+         IIG7XPlhlM2zOIXcprBhkHY/7F5pc283pDWGrxlOQEdbCvRW1IOutLUYkcXkunX+Qles
+         AOkZwZ067bu2k5S1ZW2hQlvQUE1mD3gh4ul3LznMYOUfvD6BUuX8fcwbtQNAkh4ySX5f
+         eJmjRR/hlGeUJp1xC+qzT0xonhxLlc4KypppffiSSdvNyAo5tRrn99MJrhey5IoyRXBv
+         QHJQ==
+X-Gm-Message-State: AOAM530uSmK4rHvTTG52aWkFTqZk/epanrEVHom6EmY6rdqrJO3mPxxO
+        9/CL8noGTgV+LOXU4H6XAZ9QjDvhCQgpZw==
+X-Google-Smtp-Source: ABdhPJwMcgsPdT/Mfw3ofmgGrcnyzn6fQu1hFzXbYaHfj+5RimVQrPpgk9LKR0TuPR+a5veVzb58Yg==
+X-Received: by 2002:a17:902:b590:b0:153:a243:3331 with SMTP id a16-20020a170902b59000b00153a2433331mr22836465pls.129.1650480495784;
+        Wed, 20 Apr 2022 11:48:15 -0700 (PDT)
 Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id n20-20020a634d54000000b0039d18bf7864sm20229604pgl.20.2022.04.20.11.48.14
+        by smtp.gmail.com with ESMTPSA id g14-20020a63200e000000b0039d9816238fsm20335794pgg.81.2022.04.20.11.48.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 11:48:14 -0700 (PDT)
-Subject: [PATCH v2 3/4] RISC-V: Split out the XIP fixups into their own file
-Date:   Wed, 20 Apr 2022 11:40:55 -0700
-Message-Id: <20220420184056.7886-4-palmer@rivosinc.com>
+        Wed, 20 Apr 2022 11:48:15 -0700 (PDT)
+Subject: [PATCH v2 4/4] RISC-V: Fix the XIP build
+Date:   Wed, 20 Apr 2022 11:40:56 -0700
+Message-Id: <20220420184056.7886-5-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220420184056.7886-1-palmer@rivosinc.com>
 References: <20220420184056.7886-1-palmer@rivosinc.com>
@@ -79,119 +79,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Palmer Dabbelt <palmer@rivosinc.com>
 
-This was broken by the original refactoring (as the XIP definitions
-depend on <asm/pgtable.h>) and then more broken by the merge (as I
-accidentally took the old version).  This fixes both breakages, while
-also pulling this out of <asm/asm.h> to avoid polluting most assembly
-files with the XIP fixups.
+A handful of functions unused functions were enabled during XIP builds,
+which themselves didn't build correctly.  This just disables the
+functions entirely.
 
-Fixes: bee7fbc38579 ("RISC-V CPU Idle Support")
-Fixes: 63b13e64a829 ("RISC-V: Add arch functions for non-retentive suspend entry/exit")
+Fixes: e8a62cc26ddf ("riscv: Implement sv48 support")
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/riscv/include/asm/asm.h       | 26 ------------------------
- arch/riscv/include/asm/xip_fixup.h | 32 ++++++++++++++++++++++++++++++
- arch/riscv/kernel/head.S           |  1 +
- arch/riscv/kernel/suspend_entry.S  |  1 +
- 4 files changed, 34 insertions(+), 26 deletions(-)
- create mode 100644 arch/riscv/include/asm/xip_fixup.h
+ arch/riscv/mm/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-index 8c2549b16ac0..618d7c5af1a2 100644
---- a/arch/riscv/include/asm/asm.h
-+++ b/arch/riscv/include/asm/asm.h
-@@ -67,30 +67,4 @@
- #error "Unexpected __SIZEOF_SHORT__"
- #endif
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 7bc9a21e29fb..d2054a6cd791 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -660,7 +660,7 @@ static __init pgprot_t pgprot_from_va(uintptr_t va)
+ }
+ #endif /* CONFIG_STRICT_KERNEL_RWX */
  
--#ifdef __ASSEMBLY__
--
--/* Common assembly source macros */
--
--#ifdef CONFIG_XIP_KERNEL
--.macro XIP_FIXUP_OFFSET reg
--	REG_L t0, _xip_fixup
--	add \reg, \reg, t0
--.endm
--.macro XIP_FIXUP_FLASH_OFFSET reg
--	la t1, __data_loc
--	REG_L t1, _xip_phys_offset
--	sub \reg, \reg, t1
--	add \reg, \reg, t0
--.endm
--_xip_fixup: .dword CONFIG_PHYS_RAM_BASE - CONFIG_XIP_PHYS_ADDR - XIP_OFFSET
--_xip_phys_offset: .dword CONFIG_XIP_PHYS_ADDR + XIP_OFFSET
--#else
--.macro XIP_FIXUP_OFFSET reg
--.endm
--.macro XIP_FIXUP_FLASH_OFFSET reg
--.endm
--#endif /* CONFIG_XIP_KERNEL */
--
--#endif /* __ASSEMBLY__ */
--
- #endif /* _ASM_RISCV_ASM_H */
-diff --git a/arch/riscv/include/asm/xip_fixup.h b/arch/riscv/include/asm/xip_fixup.h
-new file mode 100644
-index 000000000000..0d0754305324
---- /dev/null
-+++ b/arch/riscv/include/asm/xip_fixup.h
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * XIP fixup macros, only useful in assembly.
-+ */
-+#ifndef _ASM_RISCV_XIP_FIXUP_H
-+#define _ASM_RISCV_XIP_FIXUP_H
-+
-+#include <linux/pgtable.h>
-+
-+#ifdef CONFIG_XIP_KERNEL
-+.macro XIP_FIXUP_OFFSET reg
-+        REG_L t0, _xip_fixup
-+        add \reg, \reg, t0
-+.endm
-+.macro XIP_FIXUP_FLASH_OFFSET reg
-+        la t1, __data_loc
-+        li t0, XIP_OFFSET_MASK
-+        and t1, t1, t0
-+        li t1, XIP_OFFSET
-+        sub t0, t0, t1
-+        sub \reg, \reg, t0
-+.endm
-+
-+_xip_fixup: .dword CONFIG_PHYS_RAM_BASE - CONFIG_XIP_PHYS_ADDR - XIP_OFFSET
-+#else
-+.macro XIP_FIXUP_OFFSET reg
-+.endm
-+.macro XIP_FIXUP_FLASH_OFFSET reg
-+.endm
-+#endif /* CONFIG_XIP_KERNEL */
-+
-+#endif
-diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-index 893b8bb69391..822c33aa7f45 100644
---- a/arch/riscv/kernel/head.S
-+++ b/arch/riscv/kernel/head.S
-@@ -14,6 +14,7 @@
- #include <asm/hwcap.h>
- #include <asm/image.h>
-+#include <asm/xip_fixup.h>
- #include "efi-header.S"
- 
- __HEAD
-diff --git a/arch/riscv/kernel/suspend_entry.S b/arch/riscv/kernel/suspend_entry.S
-index 4b07b809a2b8..aafcca58c19d 100644
---- a/arch/riscv/kernel/suspend_entry.S
-+++ b/arch/riscv/kernel/suspend_entry.S
-@@ -8,6 +8,7 @@
- #include <asm/asm.h>
- #include <asm/asm-offsets.h>
- #include <asm/csr.h>
-+#include <asm/xip_fixup.h>
- 
- 	.text
- 	.altmacro
+-#ifdef CONFIG_64BIT
++#if defined(CONFIG_64BIT) && !defined(CONFIG_XIP_KERNEL)
+ static void __init disable_pgtable_l5(void)
+ {
+ 	pgtable_l5_enabled = false;
 -- 
 2.34.1
 

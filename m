@@ -2,161 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B89509395
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDA8509397
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383190AbiDTX1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 19:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S1383199AbiDTX1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 19:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344735AbiDTX07 (ORCPT
+        with ESMTP id S1383193AbiDTX1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 19:26:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A142C1D315;
-        Wed, 20 Apr 2022 16:24:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38DA861B07;
-        Wed, 20 Apr 2022 23:24:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE565C385A1;
-        Wed, 20 Apr 2022 23:24:06 +0000 (UTC)
-Date:   Wed, 20 Apr 2022 19:24:05 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>
-Subject: Re: [PATCH bpf-next v2 2/6] ftrace: Fix deadloop caused by direct
- call in ftrace selftest
-Message-ID: <20220420192405.4e43a966@gandalf.local.home>
-In-Reply-To: <20220414162220.1985095-3-xukuohai@huawei.com>
-References: <20220414162220.1985095-1-xukuohai@huawei.com>
-        <20220414162220.1985095-3-xukuohai@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 20 Apr 2022 19:27:50 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AA313E22
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:25:03 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2eba37104a2so35421277b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:25:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=faX+8xEq5cxeln2IAgBzOZYC6emkLLqmLHlpGzsrZsI=;
+        b=IdysWrk64gPASP4iboMXdeQr8OBqMtOScTiocxTj/PrXpZ3MpyJ7PLa30ylu64mytC
+         dNZJ48LUjpecPRUYztsGI+HRaMLrBaDd/kcZaLV36ygFMFvmDY057Y+HEiWLnX8GNMwh
+         zze4Y1X6WoKVDIaAGotw8iPC/K8l1onAsVljpkbYO8mFC4YRPbjpiKuiKdaF631UerU7
+         ti+4EtfpHTfW3DMrUIqjmE+KiLWxhORMBfjPtP60A/UoWuR7wTx2P7q+WOBQloAXxCtG
+         qRwDmPi3kFPBahDbTJXN2rIts8IFZDSrsrgjbq8RbD36cnyF6n/kd7e/lTwEP0I1lCt6
+         WPMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=faX+8xEq5cxeln2IAgBzOZYC6emkLLqmLHlpGzsrZsI=;
+        b=3yrGQNFwpAbn9az1qjv+iXa87C1Hle9nqNvyW2I+qjHpd0wM88yD03d5HnkRxflfrF
+         ZbRPSP9Yk9aLXnQ6aaG6EznqPX4MrjfCHnPnR56IRG3WhBcLP8Qe5Y6amZS6XD5/KeZB
+         AXOCKFLamsH4Oh6CFy3r/m8h8dlAZnJu7M1C6weqQHUzaCzqss5xpJUmb0fx8dYYQ5CE
+         mRYGig+u1Lk/qmmVFkvFkhRaE/oXEsZto5vFz4naGxrEh+6XIHb7oXEkJhRWMAxeIsb1
+         ACwU02o5mrygzLNozMmywO2WP15zhIBMSNegr5jCQtRlgonfFgpcB8nE5CflY0NrrEXq
+         gW8A==
+X-Gm-Message-State: AOAM532RYy8shpSXdG5v0P4bClNudEmUyj3m2d8M1Pj2hwGPq9pW3zaH
+        GJ5/+jDyjnpFVKmy9wdxzBVyi7naMnSgTX4uW5MUdl+DveU=
+X-Google-Smtp-Source: ABdhPJza/ohc+w9rdaX0OxSl3QRR+W9TuPshb4dunNAUPl5XzezXZp8QbAzXuRYReRzLiYb+1tYgVyY2qzk5SSpHy3I=
+X-Received: by 2002:a81:2154:0:b0:2f4:d79e:35dc with SMTP id
+ h81-20020a812154000000b002f4d79e35dcmr227895ywh.126.1650497102573; Wed, 20
+ Apr 2022 16:25:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <YYCOTx68LXu1Tn1i@fedora>
+In-Reply-To: <YYCOTx68LXu1Tn1i@fedora>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 21 Apr 2022 01:24:51 +0200
+Message-ID: <CACRpkdYmw4yBm3Y1P42TcRs4fFNEiy3LXxmO_j=zeTv_usDR+g@mail.gmail.com>
+Subject: Re: [PATCH v3] PCI: imx6: Replace legacy gpio interface for gpiod interface
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
+Cc:     hongxing.zhu@nxp.com, l.stach@pengutronix.de,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, bhelgaas@google.com,
+        helgaas@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 12:22:16 -0400
-Xu Kuohai <xukuohai@huawei.com> wrote:
+Hi Maira and sorry for being slow on reviews.
 
-> After direct call is enabled for arm64, ftrace selftest enters a
-> dead loop:
-> 
-> <trace_selftest_dynamic_test_func>:
-> 00  bti     c
-> 01  mov     x9, x30                            <trace_direct_tramp>:
-> 02  bl      <trace_direct_tramp>    ---------->     ret
->                                                      |
->                                          lr/x30 is 03, return to 03
->                                                      |
-> 03  mov     w0, #0x0   <-----------------------------|
->      |                                               |
->      |                   dead loop!                  |
->      |                                               |
-> 04  ret   ---- lr/x30 is still 03, go back to 03 ----|
-> 
-> The reason is that when the direct caller trace_direct_tramp() returns
-> to the patched function trace_selftest_dynamic_test_func(), lr is still
-> the address after the instrumented instruction in the patched function,
-> so when the patched function exits, it returns to itself!
-> 
-> To fix this issue, we need to restore lr before trace_direct_tramp()
-> exits, so make trace_direct_tramp() a weak symbol and rewrite it for
-> arm64.
-> 
-> To detect this issue directly, call DYN_FTRACE_TEST_NAME() before
-> register_ftrace_graph().
-> 
-> Reported-by: Li Huafei <lihuafei1@huawei.com>
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> ---
->  arch/arm64/kernel/entry-ftrace.S | 10 ++++++++++
->  kernel/trace/trace_selftest.c    |  4 +++-
->  2 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-> index dfe62c55e3a2..e58eb06ec9b2 100644
-> --- a/arch/arm64/kernel/entry-ftrace.S
-> +++ b/arch/arm64/kernel/entry-ftrace.S
-> @@ -357,3 +357,13 @@ SYM_CODE_START(return_to_handler)
->  	ret
->  SYM_CODE_END(return_to_handler)
->  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-> +
-> +#ifdef CONFIG_FTRACE_SELFTEST
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> +SYM_FUNC_START(trace_direct_tramp)
-> +	mov	x10, x30
-> +	mov	x30, x9
-> +	ret	x10
-> +SYM_FUNC_END(trace_direct_tramp)
-> +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
-> +#endif /* CONFIG_FTRACE_SELFTEST */
-> diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
-> index abcadbe933bb..38b0d5c9a1e0 100644
-> --- a/kernel/trace/trace_selftest.c
-> +++ b/kernel/trace/trace_selftest.c
-> @@ -785,7 +785,7 @@ static struct fgraph_ops fgraph_ops __initdata  = {
->  };
->  
->  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> -noinline __noclone static void trace_direct_tramp(void) { }
-> +void __weak trace_direct_tramp(void) { }
->  #endif
->  
->  /*
+On Tue, Nov 2, 2021 at 2:04 AM Ma=C3=ADra Canal <maira.canal@usp.br> wrote:
 
+> -               gpio_set_value_cansleep(imx6_pcie->reset_gpio,
+> +               gpiod_set_raw_value_cansleep(imx6_pcie->reset_gpio,
+>                                         !imx6_pcie->gpio_active_high);
 
-> @@ -868,6 +868,8 @@ trace_selftest_startup_function_graph(struct tracer *trace,
->  	if (ret)
->  		goto out;
->  
-> +	DYN_FTRACE_TEST_NAME();
+Hm I see you got advised to use the raw api. I'm not so sure about
+that I like v1 better.
 
-This doesn't look like it belongs in this patch.
+> +       imx6_pcie->reset_gpio =3D devm_gpiod_get_optional(dev, "reset",
+> +                       imx6_pcie->gpio_active_high ?  GPIOD_OUT_HIGH : G=
+PIOD_OUT_LOW);
+> +       if (IS_ERR(imx6_pcie->reset_gpio))
+> +               return dev_err_probe(dev, PTR_ERR(imx6_pcie->reset_gpio),
+> +                               "unable to get reset gpio\n");
 
--- Steve
+Where is this descriptor coming from? Device trees? Can't we just fix the
+DTS file(s) in that case given how wrong they are if they don't set
+GPIO_ACTIVE_LOW flag on this IRQ.
 
-> +
->  	ret = register_ftrace_graph(&fgraph_ops);
->  	if (ret) {
->  		warn_failed_init_tracer(trace, ret);
-
+Yours,
+Linus Walleij

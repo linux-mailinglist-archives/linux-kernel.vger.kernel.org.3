@@ -2,190 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA513508E18
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F63508E1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380935AbiDTRNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 13:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S1380951AbiDTRPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 13:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380924AbiDTRNR (ORCPT
+        with ESMTP id S1380918AbiDTRPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 13:13:17 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6600345502;
-        Wed, 20 Apr 2022 10:10:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9598221107;
-        Wed, 20 Apr 2022 17:10:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650474628; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fv+DUHDuv75iqi/speofL8fyyiV3PO12nkEaPGAjVpg=;
-        b=qEFLX/t/h3r7OpqmNOmGOP8dA4rSO2sikq6ol1N77QIelrvEBFghQ7bcvovldgvJObmH6p
-        66q5lRqmWi9t95sVzEwUZIP8Cr7uNETQRm4NEKf64zjhBKay2Q/2JBXNnuG2fhAbtkoWOO
-        HtmZ7GIqs22vDe7hH9NqFNk4XWWgWUo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650474628;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fv+DUHDuv75iqi/speofL8fyyiV3PO12nkEaPGAjVpg=;
-        b=Lz02F1m0uYxMKVcER4wii/ZMq3u7/dEO9YPxA0w+R8Q7KJp2LiDa55Odye1bSPkQBU7LeS
-        pJ2pECEhijNbb1DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E940913A30;
-        Wed, 20 Apr 2022 17:10:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +h0eOIM+YGIqXwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 20 Apr 2022 17:10:27 +0000
-Message-ID: <b49f1b4c-defa-ef32-1984-0273e1fad178@suse.cz>
-Date:   Wed, 20 Apr 2022 19:10:27 +0200
+        Wed, 20 Apr 2022 13:15:41 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A014578A;
+        Wed, 20 Apr 2022 10:12:54 -0700 (PDT)
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 23KHCZ77026093;
+        Thu, 21 Apr 2022 02:12:35 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 23KHCZ77026093
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1650474755;
+        bh=Fk2/b3chLadxxWYR7TJuggZMmEaTZ15R1Bl8NCeoLQw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ARgD5/tIAHSdmMMtb7NUu93xkSGxzvvKSvM6ViAIAMDlTiFJnxXLs1DOTnQjHuYQ4
+         f2pYiIjxiVXwOySQOeVtE+zncDSKUFsk3I3F66Zsa+BzeuCamPFN7AeieGCiyMvX91
+         75NlsPxWTWMcdTAUwnmV7SbTCasLzoFUiyNfso33DDFqes00T3OG5gNQQzZDFenB8R
+         4JgCnT4NYjgT31bkdl5EVR5gGCzUWaZXuh2hsGc4s6budcsleuEacb8butjFUhogic
+         kDflNYr1obyVpohbCZr1y9tMbNqiebeN+XWiqJx0P0yVjagyG39ldjKCUvjQ2TBX8s
+         fBaumduZXZM6A==
+X-Nifty-SrcIP: [209.85.215.174]
+Received: by mail-pg1-f174.google.com with SMTP id bg9so2168690pgb.9;
+        Wed, 20 Apr 2022 10:12:35 -0700 (PDT)
+X-Gm-Message-State: AOAM532DcY9CgbnpVonKz/gecx+RbuQQxmZZVw2lrS0PcEb2ZgpG3d8U
+        dPRK6beYefLhYS8jG0sGam8z8uk7Ilovw8AnUr0=
+X-Google-Smtp-Source: ABdhPJxOQtBOOzOzHz6j7UNKrhcW2BGLKttRmgmlW//TR+NzqtbsEr8i0spqFRmnkBFUS4Q6boqKGjMOv67/TlpIZao=
+X-Received: by 2002:a63:5212:0:b0:3a9:fb93:462b with SMTP id
+ g18-20020a635212000000b003a9fb93462bmr14310900pgb.126.1650474754505; Wed, 20
+ Apr 2022 10:12:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/8] mm/swap: remember PG_anon_exclusive via a swp pte
- bit
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        linux-mm@kvack.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
-References: <20220329164329.208407-1-david@redhat.com>
- <20220329164329.208407-2-david@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220329164329.208407-2-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220413144748.84106-1-songmuchun@bytedance.com> <20220413144748.84106-2-songmuchun@bytedance.com>
+In-Reply-To: <20220413144748.84106-2-songmuchun@bytedance.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 21 Apr 2022 02:11:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARNyYNMMYcEwU-pVFb-b21cKN+K_jwseLTtoOfscS2Ggw@mail.gmail.com>
+Message-ID: <CAK7LNARNyYNMMYcEwU-pVFb-b21cKN+K_jwseLTtoOfscS2Ggw@mail.gmail.com>
+Subject: Re: [PATCH v8 1/4] mm: hugetlb_vmemmap: introduce CONFIG_HUGETLB_PAGE_HAS_OPTIMIZE_VMEMMAP
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, mike.kravetz@oracle.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        David Hildenbrand <david@redhat.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        duanxiongchun@bytedance.com, smuchun@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/22 18:43, David Hildenbrand wrote:
-> Currently, we clear PG_anon_exclusive in try_to_unmap() and forget about
-> it. We do this, to keep fork() logic on swap entries easy and efficient:
-> for example, if we wouldn't clear it when unmapping, we'd have to lookup
-> the page in the swapcache for each and every swap entry during fork() and
-> clear PG_anon_exclusive if set.
-> 
-> Instead, we want to store that information directly in the swap pte,
-> protected by the page table lock, similarly to how we handle
-> SWP_MIGRATION_READ_EXCLUSIVE for migration entries. However, for actual
-> swap entries, we don't want to mess with the swap type (e.g., still one
-> bit) because it overcomplicates swap code.
-> 
-> In try_to_unmap(), we already reject to unmap in case the page might be
-> pinned, because we must not lose PG_anon_exclusive on pinned pages ever.
-> Checking if there are other unexpected references reliably *before*
-> completely unmapping a page is unfortunately not really possible: THP
-> heavily overcomplicate the situation. Once fully unmapped it's easier --
-> we, for example, make sure that there are no unexpected references
-> *after* unmapping a page before starting writeback on that page.
-> 
-> So, we currently might end up unmapping a page and clearing
-> PG_anon_exclusive if that page has additional references, for example,
-> due to a FOLL_GET.
-> 
-> do_swap_page() has to re-determine if a page is exclusive, which will
-> easily fail if there are other references on a page, most prominently
-> GUP references via FOLL_GET. This can currently result in memory
-> corruptions when taking a FOLL_GET | FOLL_WRITE reference on a page even
-> when fork() is never involved: try_to_unmap() will succeed, and when
-> refaulting the page, it cannot be marked exclusive and will get replaced
-> by a copy in the page tables on the next write access, resulting in writes
-> via the GUP reference to the page being lost.
-> 
-> In an ideal world, everybody that uses GUP and wants to modify page
-> content, such as O_DIRECT, would properly use FOLL_PIN. However, that
-> conversion will take a while. It's easier to fix what used to work in the
-> past (FOLL_GET | FOLL_WRITE) remembering PG_anon_exclusive. In addition,
-> by remembering PG_anon_exclusive we can further reduce unnecessary COW
-> in some cases, so it's the natural thing to do.
-> 
-> So let's transfer the PG_anon_exclusive information to the swap pte and
-> store it via an architecture-dependant pte bit; use that information when
-> restoring the swap pte in do_swap_page() and unuse_pte(). During fork(), we
-> simply have to clear the pte bit and are done.
-> 
-> Of course, there is one corner case to handle: swap backends that don't
-> support concurrent page modifications while the page is under writeback.
-> Special case these, and drop the exclusive marker. Add a comment why that
-> is just fine (also, reuse_swap_page() would have done the same in the
-> past).
-> 
-> In the future, we'll hopefully have all architectures support
-> __HAVE_ARCH_PTE_SWP_EXCLUSIVE, such that we can get rid of the empty
-> stubs and the define completely. Then, we can also convert
-> SWP_MIGRATION_READ_EXCLUSIVE. For architectures it's fairly easy to
-> support: either simply use a yet unused pte bit that can be used for swap
-> entries, steal one from the arch type bits if they exceed 5, or steal one
-> from the offset bits.
-> 
-> Note: R/O FOLL_GET references were never really reliable, especially
-> when taking one on a shared page and then writing to the page (e.g., GUP
-> after fork()). FOLL_GET, including R/W references, were never really
-> reliable once fork was involved (e.g., GUP before fork(),
-> GUP during fork()). KSM steps back in case it stumbles over unexpected
-> references and is, therefore, fine.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+On Wed, Apr 13, 2022 at 11:48 PM Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> If the size of "struct page" is not the power of two but with the feature
+> of minimizing overhead of struct page associated with each HugeTLB is
+> enabled, then the vmemmap pages of HugeTLB will be corrupted after
+> remapping (panic is about to happen in theory).  But this only exists when
+> !CONFIG_MEMCG && !CONFIG_SLUB on x86_64.  However, it is not a conventional
+> configuration nowadays.  So it is not a real word issue, just the result
+> of a code review.  But we have to prevent anyone from configuring that
+> combined configurations.  In order to avoid many checks like "is_power_of_2
+> (sizeof(struct page))" through mm/hugetlb_vmemmap.c.  Introduce a new macro
+> CONFIG_HUGETLB_PAGE_HAS_OPTIMIZE_VMEMMAP to represent the size of struct
+> page is power of two and CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP is
+> configured.  Then make the codes of this feature depends on this new macro.
+> Then we could prevent anyone do any unexpected configurations.  A new
+> autoconf_ext.h is introduced as well, which serves as an extension for
+> autoconf.h since those special configurations (e.g.
+> CONFIG_HUGETLB_PAGE_HAS_OPTIMIZE_VMEMMAP here) are rely on the autoconf.h
+> (generated from Kconfig), so we cannot embed those configurations into
+> Kconfig.  After this change, it would be easy if someone want to do the
+> similar thing (add a new CONFIG) in the future.
+>
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>  Kbuild                     | 19 +++++++++++++++++++
+>  arch/x86/mm/init_64.c      |  2 +-
+>  include/linux/hugetlb.h    |  2 +-
+>  include/linux/kconfig.h    |  4 ++++
+>  include/linux/mm.h         |  2 +-
+>  include/linux/page-flags.h |  2 +-
+>  kernel/autoconf_ext.c      | 26 ++++++++++++++++++++++++++
+>  mm/hugetlb_vmemmap.c       |  8 ++------
+>  mm/hugetlb_vmemmap.h       |  4 ++--
+>  mm/sparse-vmemmap.c        |  4 ++--
+>  scripts/mod/Makefile       |  2 ++
+>  11 files changed, 61 insertions(+), 14 deletions(-)
+>  create mode 100644 kernel/autoconf_ext.c
+>
+> diff --git a/Kbuild b/Kbuild
+> index fa441b98c9f6..83c0d5a418d1 100644
+> --- a/Kbuild
+> +++ b/Kbuild
+> @@ -2,6 +2,12 @@
+>  #
+>  # Kbuild for top-level directory of the kernel
+>
+> +# autoconf_ext.h is generated last since it depends on other generated headers,
+> +# however those other generated headers may include autoconf_ext.h. Use the
+> +# following macro to avoid circular dependency.
+> +
+> +KBUILD_CFLAGS_KERNEL += -D__EXCLUDE_AUTOCONF_EXT_H
+> +
+>  #####
+>  # Generate bounds.h
+>
+> @@ -37,6 +43,19 @@ $(offsets-file): arch/$(SRCARCH)/kernel/asm-offsets.s FORCE
+>         $(call filechk,offsets,__ASM_OFFSETS_H__)
+>
+>  #####
+> +# Generate autoconf_ext.h.
+> +
+> +autoconf_ext-file := include/generated/autoconf_ext.h
+> +
+> +always-y += $(autoconf_ext-file)
+> +targets += kernel/autoconf_ext.s
+> +
+> +kernel/autoconf_ext.s: $(bounds-file) $(timeconst-file) $(offsets-file)
+> +
+> +$(autoconf_ext-file): kernel/autoconf_ext.s FORCE
+> +       $(call filechk,offsets,__LINUX_AUTOCONF_EXT_H__)
+> +
+> +#####
+>  # Check for missing system calls
+>
+>  always-y += missing-syscalls
+> diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+> index 4b9e0012bbbf..9b8dfa6e4da8 100644
+> --- a/arch/x86/mm/init_64.c
+> +++ b/arch/x86/mm/init_64.c
+> @@ -1268,7 +1268,7 @@ static struct kcore_list kcore_vsyscall;
+>
+>  static void __init register_page_bootmem_info(void)
+>  {
+> -#if defined(CONFIG_NUMA) || defined(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP)
+> +#if defined(CONFIG_NUMA) || defined(CONFIG_HUGETLB_PAGE_HAS_OPTIMIZE_VMEMMAP)
+>         int i;
+>
+>         for_each_online_node(i)
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index ac2ece9e9c79..d42de8abd2b6 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -623,7 +623,7 @@ struct hstate {
+>         unsigned int nr_huge_pages_node[MAX_NUMNODES];
+>         unsigned int free_huge_pages_node[MAX_NUMNODES];
+>         unsigned int surplus_huge_pages_node[MAX_NUMNODES];
+> -#ifdef CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+> +#ifdef CONFIG_HUGETLB_PAGE_HAS_OPTIMIZE_VMEMMAP
+>         unsigned int optimize_vmemmap_pages;
+>  #endif
+>  #ifdef CONFIG_CGROUP_HUGETLB
+> diff --git a/include/linux/kconfig.h b/include/linux/kconfig.h
+> index 20d1079e92b4..00796794f177 100644
+> --- a/include/linux/kconfig.h
+> +++ b/include/linux/kconfig.h
+> @@ -4,6 +4,10 @@
+>
+>  #include <generated/autoconf.h>
+>
+> +#if defined(__KERNEL__) && !defined(__EXCLUDE_AUTOCONF_EXT_H)
+> +#include <generated/autoconf_ext.h>
+> +#endif
+> +
 
-With the fixup as reportedy by Miaohe Lin
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Please do not do this either.
 
-(sent a separate mm-commits mail to inquire about the fix going missing from
-mmotm)
+When autoconf_ext.h is updated, the kernel tree
+would be rebuilt entirely.
 
-https://lore.kernel.org/mm-commits/c3195d8a-2931-0749-973a-1d04e4baec94@suse.cz/T/#m4e98ccae6f747e11f45e4d0726427ba2fef740eb
 
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

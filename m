@@ -2,181 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311DB508202
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F468508206
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359789AbiDTH0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 03:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
+        id S1359718AbiDTH1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 03:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241305AbiDTH0a (ORCPT
+        with ESMTP id S1359796AbiDTH1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:26:30 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5533B544;
-        Wed, 20 Apr 2022 00:22:20 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id b128so731863vsc.13;
-        Wed, 20 Apr 2022 00:22:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=an8Y6T4fVZE54BITp3FmoMlxViK/7pDo+RKZKhqsE+Y=;
-        b=OkCMl/iijHw/NECX67njrTVj1iP1oKTqTBm7dAdANNVJjHD1uj6kF9+Oifdxx8raTI
-         22oj0Oxz/qdELe5FwfUF8qrTTwtrE2CI0sEbIhz66sjvNtuYnAp/FTbsgaEvpF2tGh34
-         7m90kgS3wPIHaLicCi79lVCmC7r0jDXpF/UgGoWTchTro+GcXeW31pjtvA0Btcw7whIZ
-         GD8Vp4inyFdmwjZk3Yth16sj34vD+Mv8PovgyxcERHE3GZHAqsy2mUojz9kxy6cBtYXB
-         QNEyh6KupbOi3wTf6A8mf3WeLXo4Q1q1Up5MT26hQoVc1L2nhsd2j9DCsfgYB+YVXKYY
-         Up4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=an8Y6T4fVZE54BITp3FmoMlxViK/7pDo+RKZKhqsE+Y=;
-        b=aAlZztRlXuSGr/T6ZBMyU+k2sOhENSg0I3GCNLBrQbCMWL15ABVI8fwgnxSO6oT531
-         GorX6afi+LDp5FcQ64H4dtt7G5iACnK4bHMsfRH9njAHR0k/x9D2nnSNOwN6zu82WjUF
-         9mCB8lRlNT3K/5oKSOVCdjGzuudQUxh93M8QcXRMdQ0E52/gJQuES/w1JMrSvpeLO5C0
-         6Qou3aQW5/vCN06db/b20kBuQOw4VqD1r+HrB/PRxtsl4p1dVaOeFbEIPCD/yC6jeypc
-         LicEtYI55RDpVEYpuIekWHmJK1vYpQ4IY04pb3xUDaOsVMhz05JrvEXp48MZohiKCFhV
-         8c1w==
-X-Gm-Message-State: AOAM531ljLxXjbT3nSfyVIet5jOU/a2NqonQrZB/S1o+Ty9YEj8gxHdl
-        S6LUmrme5D+Nnb4tcZdYxWDY24cVYNzTSleYyXA=
-X-Google-Smtp-Source: ABdhPJxdyv8gWP16mCgcl0q+o4/I/z8NVR+Nl82FcpaIpoaMjrk3l90ZPZrN5oo4rLffj8g/nQZhHacUxjBg71rI3k4=
-X-Received: by 2002:a67:fd65:0:b0:32a:27e9:7c09 with SMTP id
- h5-20020a67fd65000000b0032a27e97c09mr5760412vsa.55.1650439338801; Wed, 20 Apr
- 2022 00:22:18 -0700 (PDT)
+        Wed, 20 Apr 2022 03:27:06 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5124E3A733;
+        Wed, 20 Apr 2022 00:23:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650439434; x=1681975434;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VZ2QcDDsn09EZJ9ChcAfXKxOwF3NNkLHqhHF7SzxBPU=;
+  b=iHRMumNbF95vnKvrnxk249pTvzggOv+FSA0pWFRYRev1dMzt8/S+MCQd
+   G53B7X9dd/FgZeNbAILZcuEJv4fGXOamL+CYgL6I4hh/N7L0/PZxpgt86
+   cL/Lv48w1jpx/he8gJP+SRQc5qD8gafitwmQwv6Jt2VQke4O27MMxFAs2
+   Dx48uoPGygiznrfl2zub7ayJQQCVS6cw098qNgRya71EH2AbuZbUlLI2/
+   chd+Lgr++YQFAPdZtTdN8NBLhZns7ouSb1XsYNr0SEjIYqXwLvb/ab7Hg
+   PaWhPGnUnvKPgeeI1H/3ObqK4iQvsA0+ZzWMksat8dJA87gJqQHrRkjiM
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="350410498"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="350410498"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 00:23:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="555076861"
+Received: from xpf.sh.intel.com ([10.239.182.112])
+  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2022 00:23:49 -0700
+Date:   Wed, 20 Apr 2022 15:22:32 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
+        sandipan@linux.ibm.com, fweimer@redhat.com,
+        desnesn@linux.vnet.ibm.com, mingo@kernel.org,
+        bauerman@linux.ibm.com, mpe@ellerman.id.au, msuchanek@suse.de,
+        linux-mm@kvack.org, chang.seok.bae@intel.com, bp@suse.de,
+        tglx@linutronix.de, hpa@zytor.com, x86@kernel.org, luto@kernel.org,
+        heng.su@intel.com
+Subject: Re: [PATCH V2 1/4] selftests: Provide local define of __cpuid_count()
+Message-ID: <Yl+0uGJMnJ0+mDhV@xpf.sh.intel.com>
+References: <cover.1647360971.git.reinette.chatre@intel.com>
+ <7c49dbfe5bab04389ed84c516fcbfe31d66df880.1647360971.git.reinette.chatre@intel.com>
+ <Ylp1oFenjgxWpM0D@xpf.sh.intel.com>
+ <50067c2d-5563-7d8c-f992-5fef787d4d38@intel.com>
+ <Yl47IGLggYsFYolo@xpf.sh.intel.com>
+ <a3ceede0-ebab-6586-dfd5-247c37b976ec@intel.com>
 MIME-Version: 1.0
-References: <20220415130005.85879-1-andrea.merello@gmail.com>
- <20220415130005.85879-13-andrea.merello@gmail.com> <20220415174808.3b81baa4@jic23-huawei>
-In-Reply-To: <20220415174808.3b81baa4@jic23-huawei>
-Reply-To: andrea.merello@gmail.com
-From:   Andrea Merello <andrea.merello@gmail.com>
-Date:   Wed, 20 Apr 2022 09:22:07 +0200
-Message-ID: <CAN8YU5Pfc6t=3_Yj7v5PF36Ut=1_Vr86Li60z=+SENKRyn+iTw@mail.gmail.com>
-Subject: Re: [v4 12/14] iio: imu: add BNO055 serdev driver
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Andrea Merello <andrea.merello@iit.it>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3ceede0-ebab-6586-dfd5-247c37b976ec@intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il giorno ven 15 apr 2022 alle ore 18:40 Jonathan Cameron
-<jic23@kernel.org> ha scritto:
->
-> On Fri, 15 Apr 2022 15:00:03 +0200
-> Andrea Merello <andrea.merello@gmail.com> wrote:
->
-> > From: Andrea Merello <andrea.merello@iit.it>
-> >
-> > This path adds a serdev driver for communicating to a BNO055 IMU via
-> > serial bus, and it enables the BNO055 core driver to work in this
-> > scenario.
-> >
-> > Signed-off-by: Andrea Merello <andrea.merello@iit.it>
-> Hi Andrea
->
-> A few really trivial things in here from me.
+On 2022-04-19 at 15:34:11 -0700, Reinette Chatre wrote:
+> Hi Pengfei,
+> 
+> On 4/18/2022 9:31 PM, Pengfei Xu wrote:
+> > On 2022-04-18 at 09:04:33 -0700, Reinette Chatre wrote:
+> >> Hi Pengfei,
+> >>
+> >> On 4/16/2022 12:52 AM, Pengfei Xu wrote:
+> >>> On 2022-03-15 at 09:44:25 -0700, Reinette Chatre wrote:
+> >>>> Some selftests depend on information provided by the CPUID instruction.
+> >>>> To support this dependency the selftests implement private wrappers for
+> >>>> CPUID.
+> >>>>
+> >>>> Duplication of the CPUID wrappers should be avoided.
+> >>>>
+> >>>> Both gcc and clang/LLVM provide __cpuid_count() macros but neither
+> >>>> the macro nor its header file are available in all the compiler
+> >>>> versions that need to be supported by the selftests. __cpuid_count()
+> >>>> as provided by gcc is available starting with gcc v4.4, so it is
+> >>>> not available if the latest tests need to be run in all the
+> >>>> environments required to support kernels v4.9 and v4.14 that
+> >>>> have the minimal required gcc v3.2.
+> >>>>
+> >>>> Provide a centrally defined macro for __cpuid_count() to help
+> >>>> eliminate the duplicate CPUID wrappers while continuing to
+> >>>> compile in older environments.
+> >>>>
+> >>>> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+> >>>> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> >>>> ---
+> >>>> Note to maintainers:
+> >>>> - Macro is identical to the one provided by gcc, but not liked by
+> >>>>   checkpatch.pl with message "Macros with complex values should
+> >>>>   be enclosed in parentheses". Similar style is used in kernel,
+> >>>>   for example in arch/x86/kernel/fpu/xstate.h.
+> >>>>
+> >>>>  tools/testing/selftests/kselftest.h | 15 +++++++++++++++
+> >>>>  1 file changed, 15 insertions(+)
+> >>>>
+> >>>> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> >>>> index f1180987492c..898d7b2fac6c 100644
+> >>>> --- a/tools/testing/selftests/kselftest.h
+> >>>> +++ b/tools/testing/selftests/kselftest.h
+> >>>> @@ -52,6 +52,21 @@
+> >>>> + * have __cpuid_count().
+> >>>> + */
+> >>>> +#ifndef __cpuid_count
+> >>>> +#define __cpuid_count(level, count, a, b, c, d)				\
+> >>>> +	__asm__ __volatile__ ("cpuid\n\t"				\
+> >>>> +			      : "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
+> >>>> +			      : "0" (level), "2" (count))
+> >>>> +#endif
+> >>>    Linux C check tool "scripts/checkpatch.pl" shows an error:
+> >>> "
+> >>> ERROR: Macros with complex values should be enclosed in parentheses
+> >>
+> >> I encountered this also and that is why this patch contains the "Note to
+> >> maintainers" above. It is not clear to me whether you considered the note
+> >> since your response does not acknowledge it.
+> >>
+> >   Sorry, I just made a suggestion to fix this problem mentioned by the script.
+> >   I didn't notice and reply for the note.
+> > 
+> >>> ...
+> >>> +#define __cpuid_count(level, count, a, b, c, d)                        \
+> >>> +       __asm__ __volatile__ ("cpuid\n\t"                               \
+> >>> +                             : "=a" (a), "=b" (b), "=c" (c), "=d" (d)  \
+> >>> +                             : "0" (level), "2" (count))
+> >>> "
+> >>> Googling:
+> >>> https://www.google.com/search?q=Macros+with+complex+values+should+be+enclosed+in+parentheses&rlz=1C1GCEB_enUS884US884&oq=Macros+with+complex+values+should+be+enclosed+in+parentheses&aqs=chrome.0.69i59j0i5i30l2.313j0j7&sourceid=chrome&ie=UTF-8
+> >>> -> https://stackoverflow.com/questions/8142280/why-do-we-need-parentheses-around-block-macro
+> >>
+> >> More information available in
+> >> https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs
+> >> but from what I understand it does not apply to this macro. Even so, I do
+> >> not know what checkpatch.pl uses to determine that this is a "Macro with
+> >> complex values".
+> >>
+> >   Checked checkpatch.pl and it seems to suggest using ({ }) for any asm macro
+> >   definition.
+> > 
+> >>>
+> >>> Could we fix it as follow, shall we?
+> >>> "
+> >>> #ifndef __cpuid_count
+> >>> #define __cpuid_count(level, count, a, b, c, d) ({			\
+> >>> 	__asm__ __volatile__ ("cpuid\n\t"				\
+> >>> 			      : "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
+> >>> 			      : "0" (level), "2" (count))		\
+> >>> })
+> >>> #endif
+> >>> "
+> >>
+> >> Sure, I can do so.
+> >>
+> >   I just made a suggestion to fix the problem reported by the checkpatch.pl.
+> >   But I didn't think deeply enough before: I'm not sure is there any real
+> >   improvment or help after the fix.
+> 
+> In this case I would prefer to not implicitly follow the checkpatch.pl without
+> understanding what the concern is.
+> 
+> The goal of this change is to make the __cpuid_count() macro available
+> within kselftest and it does so by duplicating gcc's __cpuid_count() macro.
+> 
+> The macro style is not unique and you would, for example, encounter the same
+> checkpatch.pl complaint if you run:
+> ./scripts/checkpatch.pl -f arch/x86/kernel/fpu/xstate.h
+  Ok, no question from my side.
 
-Few inline comments below; OK for all indeed.
-
-> > +struct bno055_ser_priv {
-> > +     struct serdev_device *serdev;
-> > +     struct completion cmd_complete;
-> > +     enum {
-> > +             CMD_NONE,
-> > +             CMD_READ,
-> > +             CMD_WRITE,
-> > +     } expect_response;
-> > +     int expected_data_len;
-> > +     u8 *response_buf;
-> > +
-> > +     /**
-> > +      * enum cmd_status - represent the status of a command sent to the HW.
-> > +      * @STATUS_CRIT: The command failed: the serial communication failed.
-> > +      * @STATUS_OK:   The command executed successfully.
-> > +      * @STATUS_FAIL: The command failed: HW responded with an error.
-> > +      */
-> > +     enum {
-> > +             STATUS_CRIT = -1,
-> > +             STATUS_OK = 0,
-> > +             STATUS_FAIL = 1,
-> > +     } cmd_status;
->
-> Locks need documentation to say what scope they cover. In this case
-> I think it is most but not quite all of this structure.
-
-I admit my comments here are awkward: I've put a couple of comment
-that indicate what doesn't need the lock.. I'll change to do the
-reverse (comment on what need the lock)
-
-> See comment on completion below.
->
-> > +     struct mutex lock;
-> > +
-> > +     /* Only accessed in RX callback context. No lock needed. */
-> > +     struct {
-> > +             enum {
-> > +                     RX_IDLE,
-> > +                     RX_START,
-> > +                     RX_DATA,
-> > +             } state;
-> > +             int databuf_count;
-> > +             int expected_len;
-> > +             int type;
-> > +     } rx;
-> > +
-> > +     /* Never accessed in behalf of RX callback context. No lock needed */
-> > +     bool cmd_stale;
-> > +};
->
-[...]
-
-> > +             }
-> > +             break;
-> > +
-> > +     case CMD_WRITE:
-> > +             priv->cmd_status = status;
-> > +             break;
-> > +     }
-> > +
-> > +     priv->expect_response = CMD_NONE;
-> > +     complete(&priv->cmd_complete);
->
-> I argued with myself a bit on whether the complete() should be inside the lock
-> or not - but then concluded it doesn't really matter and moving it out is
-> probably premature optimisation... Maybe it's worth moving it out simply
-> so that it's clear the lock isn't needed to protect it, or am I missing something?
-
-It should make no real difference to move the complete() out of the lock.
-
-I think I put it inside the lock because of the (paranoid, and
-hopefully not really required - would mean we have been too strict
-with completion timeout) reinit_completion(). On serdev rx handler
-side (i.e. bno055_ser_handle_rx()) we clear expect_response and
-complete(), on the other side (bno055_ser_send_cmd()) we set
-expect_response and clear spurious completed state, before issuing the
-command and waiting for outcome. This looks symmetric, but those two
-shouldn't really race in practice.
-
-
-> > +     mutex_unlock(&priv->lock);
-> > +}
-> > +
-> > +/*
+  Thanks!
+  --Pengfei
+> 
+> Reinette

@@ -2,234 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B28A5088F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A3E508905
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378849AbiDTNO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
+        id S1376460AbiDTNSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235000AbiDTNOX (ORCPT
+        with ESMTP id S1347381AbiDTNR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:14:23 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648B942A0A;
-        Wed, 20 Apr 2022 06:11:28 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso4901465pjb.5;
-        Wed, 20 Apr 2022 06:11:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mWNorpTVTS8YkgukxxtTFjnF+otEpg4XNgwVUHpZnIQ=;
-        b=jj9A5Cyr874v3eIGy0ew2ad/5LfmJKMdu135QHTykt4YCKFEy0TWjxYdTejZso8y82
-         dDqAS+/8N+GIHN169rU+B689RGLl6EgNyCnrGTSpfGAw2V8eB3Yfqw5jBd8wYk8/FUA5
-         xwJbr0OwEEQhVkbTN/bo55HSk6SGS0e8s6wXQxfDhWLQRAZA/9+k1OWdmT7lGAEreqhJ
-         8Tg+UC71kewIwzZ8GSzXgzh/TraoW02d910vwan1oyZJqd9y3epvrW6aK3k21CytHhfL
-         x8F/3NRj3lccxZxSyRJBvT/b6lBTlDjcLeI0LzvxUD7bI8ScP2FT2BiPs4wqBR4kWJh4
-         Thng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mWNorpTVTS8YkgukxxtTFjnF+otEpg4XNgwVUHpZnIQ=;
-        b=OYKBy7Yc7ff+m4DQ1oPPvGTLW4R2Gej8BN/Rj7cFEvLwlENFtpWXk5KFkZGo5Jo1Hv
-         HhZuWtIA1qrotwICjBOzhFpxb870Z2hk7TF/wrwSFrayIrMsZdHMrippdFqWwPHsWm+g
-         p69YMFagf6PyhMkRYdNCrNzdn8cUc0NF/bNEMW1JeWes5N3JUZv/dTJjbqzjZdzE04UD
-         CugDt5odI831Vd8jRIdr6AhbYL/+NvhnG7isS1oMYnn1DObbq+GhUPP0+CTook25gxp3
-         uyHHW1FvBJXvSxZVqppanZazymGTDP6Sef77lC28MVmkl/193VPdjQF4IfdFlCMVf+Iz
-         f15w==
-X-Gm-Message-State: AOAM533E1PfEW1OsFuzkc8isba1qk9RKNK79ObS0rPZlES/r3HA8x4fO
-        8u/ft7KBW5oLJFgGmP+GTrlRYK3Enbg=
-X-Google-Smtp-Source: ABdhPJy1Bwddw+H4T+PkoT9mTXN79JdHLJy9h4FOaLbu6y5LW6r9REHfASht15WV4yo9Cc0p1Z352w==
-X-Received: by 2002:a17:90a:6501:b0:1ca:a7df:695c with SMTP id i1-20020a17090a650100b001caa7df695cmr4467780pjj.152.1650460287648;
-        Wed, 20 Apr 2022 06:11:27 -0700 (PDT)
-Received: from localhost ([47.251.4.198])
-        by smtp.gmail.com with ESMTPSA id m13-20020a62a20d000000b004fe0ce6d7a1sm20353148pff.193.2022.04.20.06.11.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Apr 2022 06:11:27 -0700 (PDT)
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
-Subject: [PATCH 2/2] KVM: X86/MMU: Introduce role.passthrough for shadowing 5-level NPT for 4-level NPT L1 guest
-Date:   Wed, 20 Apr 2022 21:12:04 +0800
-Message-Id: <20220420131204.2850-3-jiangshanlai@gmail.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20220420131204.2850-1-jiangshanlai@gmail.com>
-References: <20220420131204.2850-1-jiangshanlai@gmail.com>
+        Wed, 20 Apr 2022 09:17:59 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2065.outbound.protection.outlook.com [40.107.101.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22D86251;
+        Wed, 20 Apr 2022 06:15:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l5zPNPyTnoesvlEmM6bFeKXmRuKpOd3EcvrR4iq27ozEzdLiXC53wojbLYV1EHeTOVKsB6gcy9IRRzsLt/pO0HxU0mVf/sfmQQyyxPiMseUFuryTyLRLp8qJD9jRYbIMbgnAsWP8iShcV+mrAUNjpdjC1tTQ0n04TEVb7u/D4DkixzJ1ekFb05GV2a4Vm7Aji2s3lTZpLg6FPrwf7Zns8/nvVJCXI71d2lwiL7D4gIvFN24YA3LiO7dOz8aXGZ/kqh61dOnYcPkYSg4MN4Asu6bPmK0GuIkeF20ab0zYb76LYXLpYJvH/0vvm2U2xMY6A01DPznyKB4yDxqLiqkCzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=E1onWfq4sOwQhls3l/I2R7puwWFOXLhwg/ZURYFBvBY=;
+ b=aJlGgC7RihpLcy2HGkn5nlJin976rcJaJvYgjRI8LaZWQpzAlbSJS3ODM2sfC8nMyU4M3qY88Yx+R59RJnLiECsQDok8eEtUnQMmL8PC68MPgD1GCkvNQOJWb+jdD8A5EHIYibCVNf6/8m+J/FQ0Z8P9ekskGp7FAK4dlGQ2CFJ4VR+e3GnrTtr5INLdVLTzXKwoIlrSuFEHQ1IvSfNjLnZL9dcxFprnZR4xw+CJUT3G7CM8/fWJzLfqmjf/R6cptjWa2elWoqKezp/ApWoAirw/Dd/9mW1EcgS874RnMwpjEm62TKoUl8lNHE1zWchX9PUlul50j68xT7tHsRk4Lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=E1onWfq4sOwQhls3l/I2R7puwWFOXLhwg/ZURYFBvBY=;
+ b=r5FmvYqhPTUv2gJlrrJSNemGuKhSgUJPxumRaAU8wOgtxifY2ob+15l4KDNMMSRnusaVH5wyaGj3+zYpX75Zzq9cITJxuA45tFzqNQbWeD7dAaOAM2MWtLR9kICFkUF+0EKzt2Kpk5RNGuryRdkIQb7WHy3xnjLOb6QHOhQUPudSyhlM3b137Eek6AtWK/tsqDVvFgN/U6rB2Fb+8iz04VQfLe3iIOd+nnZtpliihC9AUNsJ4e8UiDqY1+4p9XkyxKhNDIU2U3eEXMzMXcXN4fMPQoNzg/AcM690yYu+1WJCr2bUkgRUDRkGqv1ZAQbmmd3kVAKSzS3YV5J+KAq/Zg==
+Received: from DM6PR04CA0016.namprd04.prod.outlook.com (2603:10b6:5:334::21)
+ by SN6PR12MB4749.namprd12.prod.outlook.com (2603:10b6:805:e8::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Wed, 20 Apr
+ 2022 13:15:11 +0000
+Received: from DM6NAM11FT040.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:334:cafe::21) by DM6PR04CA0016.outlook.office365.com
+ (2603:10b6:5:334::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13 via Frontend
+ Transport; Wed, 20 Apr 2022 13:15:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.234) by
+ DM6NAM11FT040.mail.protection.outlook.com (10.13.173.133) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5186.14 via Frontend Transport; Wed, 20 Apr 2022 13:15:09 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 20 Apr
+ 2022 13:15:03 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 20 Apr
+ 2022 06:15:02 -0700
+Received: from kkartik-desktop.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Wed, 20 Apr 2022 06:14:58 -0700
+From:   Kartik <kkartik@nvidia.com>
+To:     <robh@kernel.org>
+CC:     <akhilrajeev@nvidia.com>, <daniel.lezcano@linaro.org>,
+        <devicetree@vger.kernel.org>, <jonathanh@nvidia.com>,
+        <kkartik@nvidia.com>, <krzk+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <mkumard@nvidia.com>, <mperttunen@nvidia.com>, <pshete@nvidia.com>,
+        <rgumasta@nvidia.com>, <spujar@nvidia.com>, <tglx@linutronix.de>,
+        <thierry.reding@gmail.com>, <vidyas@nvidia.com>
+Subject: Re: [PATCH 1/6] dt-bindings: timer: Add Tegra186 & Tegra234 Timer
+Date:   Wed, 20 Apr 2022 18:44:57 +0530
+Message-ID: <1650460497-26715-1-git-send-email-kkartik@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <YlhmAQsZVU92OZ3W@robh.at.kernel.org>
+References: <YlhmAQsZVU92OZ3W@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 97cdfc88-0bf4-4e4f-be7a-08da22cfcb58
+X-MS-TrafficTypeDiagnostic: SN6PR12MB4749:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR12MB4749D931D28FEA22E3396F07CDF59@SN6PR12MB4749.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LiuTF4KInAaLIzYomJCXAQS4ImHL/+TRxiKaRMbuixFYHK5buq+I0mLzhU9/qWqhrLYRb3y10bGgeDV/aDfDDYhq9NKK1oyyr+O6UVFiK0FxCoupYe6KpwFpaOAu1WDAG95RObhoCUpPu7nFQdF5KwpvCRt1QciPoMIXHnuyciiSCzCXTrgkb6AmNAjarsorcTSajL6RhzHoUaJ39jV7qMVB3GYh1iGwUGfj69g1G4UeIb394elJpEnznNuigapHFDhOoX5ieCqwxhaNFExxgb/C/8XK+THiTt7fY8C1hL4xUT3dCtcLDzlchLsaBvx1H4PO2WQeXj7P231yI8ZfIn+22kmvuGNllL8gd9sY0VdoUHKKiJjPV9V6+SwYCEdKEclsPow65E+FQPWdEyTXLwSiaEqY1g8D/829nvLN/qyqqu18uGpprCiZHPkqYOGuwajuO8ny4LoM88x28e9v5gUkfbTcbPo8UONWOlUVd7rPSxoeTl2VUSMxI6ErYvzSWouFxIyZlzsAOtWLt+C6eWMLhr+Bmy1nw4DhLmh6OvRY+Golsq8vQZhP53OgGSmaOplPeFhDWpetd4GlFNcWOrMDQwDIiXzKsPcL6qP8o4QGeDtRiq8RWpF0Vd8tZ+rXIrv8af0qGNB8HHblmr0Pew9BL0gquUsbPv8zyUaVx53TUVmMqE3IvWzTNYPqR1Dyl5TxIH8/kM23HgpzT4/QI5xqsEy1f6ZTPUziBzFcWO1SDVOXs1DKwDsb3jpXrGtwlCkQWw9IVlt7reYxTeZIkdUS9BJkSLnuOonUjhZSM7zHd14E6BsJO8RYEL7hM0XabT0hLhpmGHc56wLd6i/c5A==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(36860700001)(8676002)(70586007)(86362001)(70206006)(83380400001)(40460700003)(8936002)(5660300002)(82310400005)(7696005)(186003)(4326008)(107886003)(426003)(81166007)(356005)(2906002)(2616005)(47076005)(508600001)(26005)(36756003)(6916009)(53546011)(336012)(54906003)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 13:15:09.0105
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97cdfc88-0bf4-4e4f-be7a-08da22cfcb58
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB4749
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+On 14/04/2022 18:20, Rob Herring wrote:
+>> timestamp counter. The Tegra234 timer provides sixteen 29-bit timer
+>> counters and one 32-bit timestamp counter. Each NV timer selects its
+>> timing reference signal from the 1 MHz reference generated by USEC,
+>> TSC or either clk_m or OSC. Each TMR can be programmed to generate
+>> one-shot, periodic, or watchdog interrupts.
+>> 
+>> Signed-off-by: Kartik <kkartik@nvidia.com>
+>
+>Full name please.
 
-When shadowing 5-level NPT for 4-level NPT L1 guest, the root_sp is
-allocated with role.level = 5 and the guest pagetable's root gfn.
+This is my legal name.
 
-And root_sp->spt[0] is also allocated with the same gfn and the same
-role except role.level = 4.  Luckily that they are different shadow
-pages, but only root_sp->spt[0] is the real translation of the guest
-pagetable.
+>
+>> ---
+>>  .../bindings/timer/nvidia,tegra186-timer.yaml | 116 ++++++++++++++++++
+>>  1 file changed, 116 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml b/Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
+>> new file mode 100644
+>> index 000000000000..7841a68d19f3
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
+>> @@ -0,0 +1,116 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/timer/nvidia,tegra186-timer.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: NVIDIA Tegra186 timer
+>> +
+>> +maintainers:
+>> +  - Thierry Reding <treding@nvidia.com>
+>> +
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: nvidia,tegra186-timer
+>> +    then:
+>> +      properties:
+>> +        interrupts:
+>> +          # Either a single combined interrupt or up to 14 individual interrupts
+>
+>This can be part of 'description'
 
-Here comes a problem:
+I will include this in the description in v2.
 
-If the guest switches from gCR4_LA57=0 to gCR4_LA57=1 (or vice verse)
-and uses the same gfn as the root page for nested NPT before and after
-switching gCR4_LA57.  The host (hCR4_LA57=1) might use the same root_sp
-for the guest even the guest switches gCR4_LA57.  The guest will see
-unexpected page mapped and L2 may exploit the bug and hurt L1.  It is
-lucky that the problem can't hurt L0.
+>
+>> +          minItems: 1
+>> +          maxItems: 10
+>> +          description: >
+>> +            A list of 10 interrupts; one per each timer channels 0 through 9.
+>
+>Is it 10 or 14? I'm confused.
 
-And three special cases need to be handled:
+My bad, it is 10.
 
-The root_sp should be like role.direct=1 sometimes: its contents are
-not backed by gptes, root_sp->gfns is meaningless.  (For a normal high
-level sp in shadow paging, sp->gfns is often unused and kept zero, but
-it could be relevant and meaningful if sp->gfns is used because they
-are backed by concrete gptes.)
+>
+>> +
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: nvidia,tegra234-timer
+>> +    then:
+>> +      properties:
+>> +        interrupts:
+>> +          # Either a single combined interrupt or up to 16 individual interrupts
+>> +          minItems: 1
+>> +          maxItems: 16
+>> +          description: >
+>> +            A list of 16 interrupts; one per each timer channels 0 through 15.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    oneOf:
+>> +      - const: nvidia,tegra186-timer
+>> +        description: >
+>> +          The Tegra186 timer provides ten 29-bit timer counters and one 32-bit
+>> +          timestamp counter. Each NV timer selects its timing reference signal
+>> +          from the 1 MHz reference generated by USEC, TSC or either clk_m or
+>> +          OSC. Each TMR can be programmed to generate one-shot, periodic, or
+>> +          watchdog interrupts.
+>> +      - const: nvidia,tegra234-timer
+>> +        description: >
+>> +          The Tegra234 timer provides sixteen 29-bit timer counters and one 32-bit
+>> +          timestamp counter. Each NV timer selects its timing reference signal
+>> +          from the 1 MHz reference generated by USEC, TSC or either clk_m or
+>> +          OSC. Each TMR can be programmed to generate one-shot, periodic, or
+>> +          watchdog interrupts.
+>
+>Move all this description to top-level description leaving out the exact 
+>number of counters (as the schema defines that).
+>
 
-For such root_sp in the case, root_sp is just a portal to contribute
-root_sp->spt[0], and root_sp->gfns should not be used and
-root_sp->spt[0] should not be dropped if gpte[0] of the guest root
-pagetable is changed.
+Do you mean it to be this way?
 
-Such root_sp should not be accounted too.
+title: NVIDIA Tegra186 timer
 
-So add role.passthrough to distinguish the shadow pages in the hash
-when gCR4_LA57 is toggled and fix above special cases by using it in
-kvm_mmu_page_{get|set}_gfn() and sp_has_gptes().
+maintainers:
+  - Thierry Reding <treding@nvidia.com>
 
-Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
----
- Documentation/virt/kvm/mmu.rst  |  3 +++
- arch/x86/include/asm/kvm_host.h |  5 +++--
- arch/x86/kvm/mmu/mmu.c          | 16 ++++++++++++++++
- arch/x86/kvm/mmu/paging_tmpl.h  |  1 +
- 4 files changed, 23 insertions(+), 2 deletions(-)
+description: >
+  The Tegra timer provides 29-bit timer counters and a 32-bit timestamp
+  counter. Each NV timer selects its timing reference signal from the 1 MHz
+  reference generated by USEC, TSC or either clk_m or OSC. Each TMR can be
+  programmed to generate one-shot, periodic, or watchdog interrupts.
 
-diff --git a/Documentation/virt/kvm/mmu.rst b/Documentation/virt/kvm/mmu.rst
-index 5b1ebad24c77..4018b9d7a0d3 100644
---- a/Documentation/virt/kvm/mmu.rst
-+++ b/Documentation/virt/kvm/mmu.rst
-@@ -202,6 +202,9 @@ Shadow pages contain the following information:
-     Is 1 if the MMU instance cannot use A/D bits.  EPT did not have A/D
-     bits before Haswell; shadow EPT page tables also cannot use A/D bits
-     if the L1 hypervisor does not enable them.
-+  role.passthrough:
-+    Is 1 if role.level = 5 when shadowing 5-level shadow NPT for
-+    4-level NPT L1.
-   gfn:
-     Either the guest page table containing the translations shadowed by this
-     page, or the base page frame for linear translations.  See role.direct.
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 9694dd5e6ccc..d4f8f4784d87 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -285,7 +285,7 @@ struct kvm_kernel_irq_routing_entry;
-  * minimize the size of kvm_memory_slot.arch.gfn_track, i.e. allows allocating
-  * 2 bytes per gfn instead of 4 bytes per gfn.
-  *
-- * Indirect upper-level shadow pages are tracked for write-protection via
-+ * Upper-level shadow pages having gptes are tracked for write-protection via
-  * gfn_track.  As above, gfn_track is a 16 bit counter, so KVM must not create
-  * more than 2^16-1 upper-level shadow pages at a single gfn, otherwise
-  * gfn_track will overflow and explosions will ensure.
-@@ -331,7 +331,8 @@ union kvm_mmu_page_role {
- 		unsigned smap_andnot_wp:1;
- 		unsigned ad_disabled:1;
- 		unsigned guest_mode:1;
--		unsigned :6;
-+		unsigned passthrough:1;
-+		unsigned :5;
- 
- 		/*
- 		 * This is left at the top of the word so that
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 1bdff55218ef..d14cb6f99cb1 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -737,6 +737,9 @@ static void mmu_free_pte_list_desc(struct pte_list_desc *pte_list_desc)
- 
- static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index)
- {
-+	if (sp->role.passthrough)
-+		return sp->gfn;
-+
- 	if (!sp->role.direct)
- 		return sp->gfns[index];
- 
-@@ -745,6 +748,11 @@ static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index)
- 
- static void kvm_mmu_page_set_gfn(struct kvm_mmu_page *sp, int index, gfn_t gfn)
- {
-+	if (sp->role.passthrough) {
-+		WARN_ON_ONCE(gfn != sp->gfn);
-+		return;
-+	}
-+
- 	if (!sp->role.direct) {
- 		sp->gfns[index] = gfn;
- 		return;
-@@ -1861,6 +1869,9 @@ static bool sp_has_gptes(struct kvm_mmu_page *sp)
- 	if (sp->role.direct)
- 		return false;
- 
-+	if (sp->role.passthrough)
-+		return false;
-+
- 	return true;
- }
- 
-@@ -2059,6 +2070,8 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
- 		quadrant &= (1 << ((PT32_PT_BITS - PT64_PT_BITS) * level)) - 1;
- 		role.quadrant = quadrant;
- 	}
-+	if (level <= vcpu->arch.mmu->root_level)
-+		role.passthrough = 0;
- 
- 	sp_list = &vcpu->kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
- 	for_each_valid_sp(vcpu->kvm, sp, sp_list) {
-@@ -4890,6 +4903,9 @@ kvm_calc_shadow_npt_root_page_role(struct kvm_vcpu *vcpu,
- 
- 	role.base.direct = false;
- 	role.base.level = kvm_mmu_get_tdp_level(vcpu);
-+	if (role.base.level == PT64_ROOT_5LEVEL &&
-+	    role_regs_to_root_level(regs) == PT64_ROOT_4LEVEL)
-+		role.base.passthrough = 1;
- 
- 	return role;
- }
-diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-index 8621188b46df..c1b975fb85a2 100644
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -1042,6 +1042,7 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
- 		.level = 0xf,
- 		.access = 0x7,
- 		.quadrant = 0x3,
-+		.passthrough = 0x1,
- 	};
- 
- 	/*
--- 
-2.19.1.6.gb485710b
 
+properties:
+  compatible:
+    oneOf:
+      - const: nvidia,tegra186-timer
+        description: >
+          The Tegra186 timer provides ten 29-bit timer counters.
+      - const: nvidia,tegra234-timer
+        description: >
+          The Tegra234 timer provides sixteen 29-bit timer counters.
+
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts: true
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +
+>> +    timer@3010000 {
+>> +        compatible = "nvidia,tegra186-timer";
+>> +        reg = <0x03010000 0x000e0000>;
+>> +        interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> +        status = "disabled";
+>
+>Drop status.
+>
+
+I will remove this in v2.
+
+>> +    };
+>> +
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +
+>> +    timer@2080000 {
+>> +        compatible = "nvidia,tegra234-timer";
+>> +        reg = <0x02080000 0x00121000>;
+>> +        interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
+>> +        status = "disabled";
+>> +    };
+>> -- 
+>> 2.17.1
+>> 
+>> 

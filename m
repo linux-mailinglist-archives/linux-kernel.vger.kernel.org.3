@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326F85087EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8508E5087EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378439AbiDTMTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S1378451AbiDTMTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242236AbiDTMTN (ORCPT
+        with ESMTP id S242236AbiDTMTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:19:13 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B048425284
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:16:26 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 23321FF805;
-        Wed, 20 Apr 2022 12:16:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650456985;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 20 Apr 2022 08:19:17 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E1C25284;
+        Wed, 20 Apr 2022 05:16:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id BA26B210F4;
+        Wed, 20 Apr 2022 12:16:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650456990; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=z6u55jL+XmZA+fHd05psyLDQ16L/uB8ALDHyFrbmkic=;
-        b=aJkjaeqJFBhCS2FkHRCKWdLWfLlpTA4DxfP+ZF47mKkengFjj4PyzO/qrovv6sFgfsbDDJ
-        ynMAI2a5RdfIQv8i8MNgAxwcbSrtg5V0WW6X8E0txevji75qDUZug8PAcwTCcGM/xIBg5L
-        KsneZafPiuvbM1yGwWuEsECzQNCg9jrjJlq8SunHQIgTfaq6x+VsyaziI+wEV2jH+CVMDu
-        Ya8Wel/qLkxBmnLtyMaxQ62hSKk5vz9v3y+zrAPZpnV+iYyOFMsNPYNyXXHV5qjH3YJiR5
-        M/dmHwPBlQm7ANzENtulJFZ405nEg/VGVqUF7kQ5NAP5YZjsO39tL6uBJVdWVQ==
-Date:   Wed, 20 Apr 2022 14:16:20 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Liang Yang <liang.yang@amlogic.com>
-Cc:     <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 2/2] dt-bindings: nand: meson: refine Amlogic NAND
- controller driver
-Message-ID: <20220420141620.4fd68eef@xps13>
-In-Reply-To: <b880c64c-7651-c445-4e5e-74cb7a1e76ee@amlogic.com>
-References: <20220402074921.13316-1-liang.yang@amlogic.com>
-        <20220402074921.13316-3-liang.yang@amlogic.com>
-        <20220420094107.4799f15a@xps13>
-        <b880c64c-7651-c445-4e5e-74cb7a1e76ee@amlogic.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        bh=p3mKrvxIbu8LibPS3UuSRgaTh+XcU6Jc9U1SK1ytPZc=;
+        b=SLFbyZ99CoJObP0g9Ep1Sb+iQfkJPZqg86vwl9d9S4I/5KojvITG614cB8v6fOyvWfNQt9
+        noUBDSRHFuAH6Q2NkohZOrgNMvsetwDim+9oM3mmYvklNBxW+4JQMiDiiNMt2+oGnIc1x4
+        pFz34r0DAtyUbBg8Q3XCqN3AO+0+kDY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650456990;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p3mKrvxIbu8LibPS3UuSRgaTh+XcU6Jc9U1SK1ytPZc=;
+        b=CgtjQrmNT0B7okUm5pzcriN+HzEImF38XfsVF88gKCn1//J7f2ktgzDuSJtCSnND2mfJ1y
+        vFU/+LMWf1nxxeBw==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 88C2D2C145;
+        Wed, 20 Apr 2022 12:16:30 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 723EEA061E; Wed, 20 Apr 2022 14:16:26 +0200 (CEST)
+Date:   Wed, 20 Apr 2022 14:16:26 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Phi Nguyen <phind.uet@gmail.com>
+Cc:     syzbot <syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tytso@mit.edu
+Subject: Re: [syzbot] kernel BUG in ext4_es_cache_extent
+Message-ID: <20220420121626.edhvfibz4n3trnvg@quack3.lan>
+References: <0000000000003d898d05d759c00a@google.com>
+ <e58c5085-c351-a7a6-fe97-3da6eb1a804f@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e58c5085-c351-a7a6-fe97-3da6eb1a804f@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,89 +64,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liang,
+On Mon 14-02-22 02:03:37, Phi Nguyen wrote:
+> The non-journal mounted fs is corrupted, syzbot was able to mount it because
+> a [fast commit] patch exclude its inodes from verification process.
+> 
+> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> master
 
-> >> +maintainers:
-> >> +  - liang.yang@amlogic.com
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - "amlogic,meson-gxl-nfc"
-> >> +      - "amlogic,meson-axg-nfc"
-> >> +
-> >> +  reg:
-> >> +    maxItems: 2
-> >> +
-> >> +  '#address-cells':
-> >> +    const: 1 =20
-> >=20
-> > Not sure this property is needed. =20
-> this is for the subnode, such as nand@0.
+This patch seems to have fallen through the cracks. Phi, care to submit it
+properly with your Signed-off-by etc?
 
-Yes but if you refer to nand-controller.yaml you no longer need these.
+								Honza
 
-> >  =20
-> >> +
-> >> +  '#size-cells':
-> >> +    const: 0 =20
-> >=20
-> > Ditto. Plus, this one looks wrong anyway. =20
-> this is for the subnode, such as nand@0. do you mean s/''/""/?
+> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> index 01c9e4f743ba..385f4ae71573 100644
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@ -4912,7 +4912,7 @@ struct inode *__ext4_iget(struct super_block *sb, unsigned long ino,
+>  		goto bad_inode;
+>  	} else if (!ext4_has_inline_data(inode)) {
+>  		/* validate the block references in the inode */
+> -		if (!(EXT4_SB(sb)->s_mount_state & EXT4_FC_REPLAY) &&
+> +		if (!(journal && EXT4_SB(sb)->s_mount_state & EXT4_FC_REPLAY) &&
+>  			(S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode) ||
+>  			(S_ISLNK(inode->i_mode) &&
+>  			!ext4_inode_is_fast_symlink(inode)))) {
 
-Sorry, this is not "wrong anyway", my fault. But still, you don't need
-this property for the same reason as above.
-
-> >  =20
-> >> +
-> >> +  reg-names:
-> >> +    items:
-> >> +      - const: nfc
-> >> +      - const: emmc =20
-> >=20
-> > Why do you need the emmc register map? Do you really need to perform a
-> > register access there? =20
-> yes, we have to access the emmc register map. because the NFC clock comes=
- from SDEMMC_CLOCK register.
-
-But if it's a clock you should get the clock and call
-clk_prepare_enable(), you don't need to poke directly in the registers.
-Do you?
-
-> >> +examples:
-> >> +  - |
-> >> +    #include <dt-bindings/clock/axg-clkc.h>
-> >> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> >> +    apb {
-> >> +      #address-cells =3D <2>;
-> >> +      #size-cells =3D <2>; =20
-> >=20
-> > Not sure you need this upper node in the example. =20
-> use the upper node to indicate the "#address-cells" and "#size-cells". if=
- i do not do that, dt_binding_check will report:
->   ".....reg:0: [0, 30720, 0, 256] is too long" and
->   ".....reg:1: [0, 28672, 0, 2048] is too long".
-
-ok, maybe, I'll let bindings maintainer review that.
-
-> >  =20
-> >> +      nand-controller@7800 {
-> >> +        #address-cells =3D <1>;
-> >> +        #size-cells =3D <0>;
-> >> +        compatible =3D "amlogic,meson-axg-nfc";
-> >> +        reg =3D <0x0 0x7800 0x0 0x100>,
-> >> +              <0x0 0x7000 0x0 0x800>;
-> >> +        reg-names =3D "nfc", "emmc";
-> >> +
-> >> +        interrupts =3D <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
-> >> +        clocks =3D <&clkc CLKID_SD_EMMC_C>,
-> >> +                 <&clkc CLKID_FCLK_DIV2>;
-> >> +        clock-names =3D "core", "device";
-> >> +
-> >> +      };
-> >> +    };
-> >> +... =20
-
-
-Thanks,
-Miqu=C3=A8l
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

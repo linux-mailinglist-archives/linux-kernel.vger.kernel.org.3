@@ -2,64 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB19E508616
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCFF50862E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377532AbiDTKkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
+        id S1377759AbiDTKnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244679AbiDTKj6 (ORCPT
+        with ESMTP id S1352448AbiDTKnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:39:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FA93FBEF;
-        Wed, 20 Apr 2022 03:37:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32130617B3;
-        Wed, 20 Apr 2022 10:37:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D6ABC385A0;
-        Wed, 20 Apr 2022 10:37:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650451032;
-        bh=n2/KXZViQ7g32t2KOrz2MRwdeYqVUXZJ0RBtcu4P010=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XGHzw0S6lHf6P/MyoCpiQR/W1FvqbcvkEu4DixWFSJ05D8C++rtG4rJXVnyc4gj4A
-         WRBe1sErB2pSTYKeZUjh5iCPn5laOBgT7q0PrXKQIv7b5i1Sgn2skSohvtTm/YuC2I
-         rh8Ig/VKWJYDNGAKU751nKBwRcn0m1a7DS+HKvYBFvXXPcA2Ke8Uxa5b00b6R32aAf
-         bxL43k4kE3A9r5mwPtyE8B5u4TcDCCs5R9Pifa7D1kxqyJC2rA1/1gh3DSPT4K6NY9
-         vsWpJ23QPgvHNp8hEDog+T3K34HTC23aogmCTZXvX4o8zyCzrvEj2T8qulA/pS5tYI
-         ZpoAi/A7XcuLg==
-Date:   Wed, 20 Apr 2022 16:07:08 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: dmaengine: qcom: gpi: add compatible for
- sc7280
-Message-ID: <Yl/iVLa0YDkUgNC6@matsya>
-References: <20220414064216.1182177-1-vkoul@kernel.org>
+        Wed, 20 Apr 2022 06:43:46 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0875F101F0;
+        Wed, 20 Apr 2022 03:40:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650451259; x=1681987259;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=potqXVYX3OmiIRlmNKrPcjYJve3h2E3TfCZOfajoLII=;
+  b=jRQLXEFE7O+xbTplljjZhrYH6m+bRiOATr4uKMlPQKjbLHdw+F38WDcC
+   fuv7VNv1BFe3uedHKJ/+mOtkC/5htYOwRbUmUuluGlIpgUkdpztZOtIp9
+   wMM+k+Wn1vPYL/CLRq/++62LGlcuaEp4JCV7T6pVTXdhlG/GNVuw26oO6
+   Z8Me8DOlZuea+oW8XrGhR0m+DbPZ4G4ciE38aMvwS6eKsPQ3wtJqiNvTU
+   Hv//Qh87AvlyE5c3+CvYaOI05K1HRAkfJwCqEBYFkSrC3aAKmQOW+tHtn
+   TXiUvgJO1qxCDSehwR3SZ1rt8/PosqQpBCKilHvRtWdi/hI9vZn1CuvZ5
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="350445387"
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="350445387"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 03:40:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="555142556"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2022 03:40:55 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 23KAer2s026937;
+        Wed, 20 Apr 2022 11:40:53 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Jeff Evanson <jeff.evanson@gmail.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [Intel-wired-lan] [PATCH 1/2] Fix race in igc_xdp_xmit_zc
+Date:   Wed, 20 Apr 2022 12:37:08 +0200
+Message-Id: <20220420103708.1841070-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220415210421.11217-1-jeff.evanson@qsc.com>
+References: <20220415210421.11217-1-jeff.evanson@qsc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414064216.1182177-1-vkoul@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-04-22, 12:12, Vinod Koul wrote:
-> Document the compatible for GPI DMA controller on SC7280 SoC
+From: Jeff Evanson <jeff.evanson@gmail.com>
+Date: Fri, 15 Apr 2022 15:04:21 -0600
 
-Applied, thanks
+> in igc_xdp_xmit_zc, initialize next_to_use while holding the netif_tx_lock
+> to prevent racing with other users of the tx ring
+> 
+> Signed-off-by: Jeff Evanson <jeff.evanson@qsc.com>
+> ---
+>  drivers/net/ethernet/intel/igc/igc_main.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> index 1c00ee310c19..a36a18c84aeb 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> @@ -2598,7 +2598,7 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+>  	struct netdev_queue *nq = txring_txq(ring);
+>  	union igc_adv_tx_desc *tx_desc = NULL;
+>  	int cpu = smp_processor_id();
+> -	u16 ntu = ring->next_to_use;
+> +	u16 ntu;
 
--- 
-~Vinod
+Please don't break the RCT (reverse christmas tree) style here. You
+should move it to the bottom of the declaration block, ideally
+combine it with the declaration of @budget as they're both u16s.
+
+>  	struct xdp_desc xdp_desc;
+>  	u16 budget;
+>  
+> @@ -2607,6 +2607,8 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+>  
+>  	__netif_tx_lock(nq, cpu);
+>  
+> +	ntu = ring->next_to_use;
+> +
+
+There's no need for this empty newline I believe.
+
+>  	budget = igc_desc_unused(ring);
+>  
+>  	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
+> -- 
+> 2.17.1
+
+Thanks,
+Al

@@ -2,188 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B44D5089CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1683F5089CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379197AbiDTNwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S1379071AbiDTNxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240617AbiDTNwH (ORCPT
+        with ESMTP id S1379263AbiDTNxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:52:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478EC434B5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:49:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAB45B81D6E
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:49:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9047DC385A0;
-        Wed, 20 Apr 2022 13:49:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650462558;
-        bh=CGz3cFAbrwU2Jgt4y+fKjgyBtQYs0UtifVstpEDTGDM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=TiGKK6Y6AnZ8wgqbZS1mvxsBcp+00HuAFa46wYyQmnJp7F7G/K/4Y0n/75jrzvPDn
-         63nYAPSaNE9C1JuqrL/fledTHeF+nxWPfi3TY3Vt87w+/LYmYHuBKYLmTUZ+O8S20F
-         m5P08N8yGDgdMqy1jn1loxNocqmn6IugmZ13/3WNlqTNZ9Q7hvaIF5WEMBykeZ44Nj
-         8Oi0LWjjwWlgpt99lxgX/S8k9WOKjW6e9ueUZFCT1UP2YQ3QCIZIxFEFS7+yFfRBXh
-         NIp7iQxXCCUMp+8wfMGhSnwrIeUc1a+FggcXJYMZ419iiJlnk//CuGkVsCtFS8WYZ3
-         0bZhXT8cRILrA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 39BE95C0269; Wed, 20 Apr 2022 06:49:18 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 06:49:18 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Kalesh Singh <kaleshsingh@google.com>
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dev 28/28]
- kernel/rcu/tree_nocb.h:1213:3: warning: misleading indentation; statement is
- not part of the previous 'if'
-Message-ID: <20220420134918.GZ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202204201732.oTzYh0Xo-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202204201732.oTzYh0Xo-lkp@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 09:53:00 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0939D1A061
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:50:14 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id ll10so1976439pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:50:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=hwpE4P0PAK++IoF87d4GxulRADSGpUtTFQUdjv5LNcw=;
+        b=H45VCtXdf6GfWkzyk5L6TRFXA93Hkt+3Qy+nVISRnNytt384I4SE2Fa1cJNV6flsae
+         5bScYbioWdXQKuRDQICsrEfAWOx7e4txX64dN9pS9F8QqrFiG2e+oVchSv5vEelq8011
+         gIABJAVN6Udx4mJ7uUArgP3/6lP8Q5TXh2besSwyX5ngw2VyMaSiQE6vxGcr6HNAyW5c
+         g9ap4MsFPYuKnMCL6spP2RSFcM0UueI9jc+5r+6USDigMexmWADzq0TaoKKfzCKnAfpp
+         weelRWGALLBQTs+e3YWi7mTRS9IuB5POun0yDQp/SA4N/fqVqXFD1klEptXWJSs4RAdl
+         cNqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=hwpE4P0PAK++IoF87d4GxulRADSGpUtTFQUdjv5LNcw=;
+        b=kpZlIKBC5f7BvPToe3loNigI3+RxEcKVldOv3AuWGsZGYAYCQM0Iy0+yuYAFZ6rhvJ
+         JJf/BA706oJEK+L1uQFR2R7D01RDwlyhxiAJtHG/hmsEbWiMOs+MSLDOOIPeKxONiaaB
+         o2izlf0p4jMMujf63GCy2roZt7yXrcz3vn6xaYo1wcz2IndGGkPCPhJYin8PIGCfxEq1
+         EVxygiR7RQ4cmqN8mJHj0CqeAbamtfmIoWEmb5h822bA8fb6i3LSYRyfhXsSDD1G4w2Q
+         XTK9cwCx2sywePds3hZjaxel+tDBVuMoMV2vo3dV6Vk7Yq2QoVGaXhJCmYXcAisi7Znl
+         T80g==
+X-Gm-Message-State: AOAM532wTIIxoIU7MOVrxyat4TIM7nkyohBQxsmuWvvLeEQk5UGDBGxQ
+        OF2ULPuj3d1N1/Nh8bV3tLg=
+X-Google-Smtp-Source: ABdhPJwzRIaufinLodvQbo05m+YRV47g8bGZU9n2OpavHyOuPdouIljKB/BGuDv28AzfQiqjzEaTMQ==
+X-Received: by 2002:a17:90b:1e01:b0:1cf:573c:5625 with SMTP id pg1-20020a17090b1e0100b001cf573c5625mr4558482pjb.75.1650462613605;
+        Wed, 20 Apr 2022 06:50:13 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id c30-20020a631c1e000000b003aa66be569csm2487949pgc.32.2022.04.20.06.50.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 06:50:13 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Eric Anholt <eric@anholt.net>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH v3] drm/vc4: Use pm_runtime_resume_and_get to fix pm_runtime_get_sync() usage
+Date:   Wed, 20 Apr 2022 21:50:07 +0800
+Message-Id: <20220420135008.2757-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220420132814.3sy2ojw3dxnd5tcz@houat>
+References: <20220420132814.3sy2ojw3dxnd5tcz@houat>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 05:57:46PM +0800, kernel test robot wrote:
-> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-> head:   ad68d8bf085421e4f22731c8b64c0b774a154e06
-> commit: ad68d8bf085421e4f22731c8b64c0b774a154e06 [28/28] rcu/nocb: Add an option to offload all CPUs on boot
-> config: riscv-randconfig-r024-20220420 (https://download.01.org/0day-ci/archive/20220420/202204201732.oTzYh0Xo-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://github.com/ammarfaizi2/linux-block/commit/ad68d8bf085421e4f22731c8b64c0b774a154e06
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
->         git checkout ad68d8bf085421e4f22731c8b64c0b774a154e06
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
+If the device is already in a runtime PM enabled state
+pm_runtime_get_sync() will return 1.
 
-I am dropping this commit, and thank you for your testing efforts!
+Also, we need to call pm_runtime_put_noidle() when pm_runtime_get_sync()
+fails, so use pm_runtime_resume_and_get() instead. this function
+will handle this.
 
-							Thanx, Paul
+Fixes: 4078f5757144 ("drm/vc4: Add DSI driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+change in v2:
+- switch to pm_runtime_resume_and_get() to fix refcount leak.
+changes in v3:
+- keep the original checking way for retval.
+---
+ drivers/gpu/drm/vc4/vc4_dsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->    In file included from kernel/rcu/tree.c:5031:
-> >> kernel/rcu/tree_nocb.h:1213:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
->                    offload_all = false; /* NO_HZ_FULL has its own mask. */
->                    ^
->    kernel/rcu/tree_nocb.h:1211:2: note: previous statement is here
->            if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
->            ^
->    kernel/rcu/tree_nocb.h:1198:6: warning: unused variable 'cpu' [-Wunused-variable]
->            int cpu;
->                ^
->    kernel/rcu/tree_nocb.h:1199:7: warning: variable 'need_rcu_nocb_mask' set but not used [-Wunused-but-set-variable]
->            bool need_rcu_nocb_mask = false;
->                 ^
->    kernel/rcu/tree_nocb.h:1200:7: warning: variable 'offload_all' set but not used [-Wunused-but-set-variable]
->            bool offload_all = false;
->                 ^
->    kernel/rcu/tree_nocb.h:1201:19: warning: unused variable 'rdp' [-Wunused-variable]
->            struct rcu_data *rdp;
->                             ^
->    kernel/rcu/tree_nocb.h:1217:2: error: expected identifier or '('
->            if (need_rcu_nocb_mask) {
->            ^
->    kernel/rcu/tree_nocb.h:1227:2: error: expected identifier or '('
->            if (!rcu_state.nocb_is_setup)
->            ^
->    kernel/rcu/tree_nocb.h:1231:2: error: expected identifier or '('
->            if (tick_nohz_full_running)
->            ^
->    kernel/rcu/tree_nocb.h:1235:2: error: expected identifier or '('
->            if (offload_all)
->            ^
->    kernel/rcu/tree_nocb.h:1238:2: error: expected identifier or '('
->            if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
->            ^
->    kernel/rcu/tree_nocb.h:1243:2: error: expected identifier or '('
->            if (cpumask_empty(rcu_nocb_mask))
->            ^
->    kernel/rcu/tree_nocb.h:1245:2: error: expected identifier or '('
->            else
->            ^
->    kernel/rcu/tree_nocb.h:1248:2: error: expected identifier or '('
->            if (rcu_nocb_poll)
->            ^
->    kernel/rcu/tree_nocb.h:1251:2: error: expected identifier or '('
->            for_each_cpu(cpu, rcu_nocb_mask) {
->            ^
->    include/linux/cpumask.h:276:2: note: expanded from macro 'for_each_cpu'
->            for ((cpu) = -1;                                \
->            ^
->    In file included from kernel/rcu/tree.c:5031:
->    kernel/rcu/tree_nocb.h:1259:2: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
->            rcu_organize_nocb_kthreads();
->            ^
->    kernel/rcu/tree_nocb.h:1259:28: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
->            rcu_organize_nocb_kthreads();
->                                      ^
->                                       void
->    kernel/rcu/tree_nocb.h:1259:2: error: conflicting types for 'rcu_organize_nocb_kthreads'
->            rcu_organize_nocb_kthreads();
->            ^
->    kernel/rcu/tree.h:463:20: note: previous declaration is here
->    static void __init rcu_organize_nocb_kthreads(void);
->                       ^
->    In file included from kernel/rcu/tree.c:5031:
->    kernel/rcu/tree_nocb.h:1260:1: error: extraneous closing brace ('}')
->    }
->    ^
->    5 warnings and 13 errors generated.
-> 
-> 
-> vim +/if +1213 kernel/rcu/tree_nocb.h
-> 
->   1209	
->   1210	#if defined(CONFIG_NO_HZ_FULL)
->   1211		if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
->   1212			need_rcu_nocb_mask = true;
-> > 1213			offload_all = false; /* NO_HZ_FULL has its own mask. */
->   1214		}
->   1215	#endif /* #if defined(CONFIG_NO_HZ_FULL) */
->   1216	
->   1217		if (need_rcu_nocb_mask) {
->   1218			if (!cpumask_available(rcu_nocb_mask)) {
->   1219				if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
->   1220					pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
->   1221					return;
->   1222				}
->   1223			}
->   1224			rcu_state.nocb_is_setup = true;
->   1225		}
->   1226	
->   1227		if (!rcu_state.nocb_is_setup)
->   1228			return;
->   1229	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
+index 752f921735c6..98308a17e4ed 100644
+--- a/drivers/gpu/drm/vc4/vc4_dsi.c
++++ b/drivers/gpu/drm/vc4/vc4_dsi.c
+@@ -846,7 +846,7 @@ static void vc4_dsi_encoder_enable(struct drm_encoder *encoder)
+ 	unsigned long phy_clock;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret) {
+ 		DRM_ERROR("Failed to runtime PM enable on DSI%d\n", dsi->variant->port);
+ 		return;
+-- 
+2.17.1
+

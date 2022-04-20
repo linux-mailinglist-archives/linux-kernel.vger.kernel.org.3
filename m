@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70C85087A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091545087AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378381AbiDTMH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
+        id S1378386AbiDTMJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241549AbiDTMHz (ORCPT
+        with ESMTP id S1378383AbiDTMJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:07:55 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD8B13F60;
-        Wed, 20 Apr 2022 05:05:09 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23KBabgG000407;
-        Wed, 20 Apr 2022 12:05:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=DMK4RtPEXc4aCRxWUjvnynrQQ7uId43lB2XEBLBDo9k=;
- b=AxJI/dbvd0aPXzNiyE/bfimPYYcZklYixH8zHccfepikAvWw2jD7/mQm/haO1N7BdaxM
- 96boqR3cBCG+r5U5qwd409lz7tkOJHP95+e0FCrSHWmQ2b414rx7zNTPctMuTZQRlIsE
- W/sSejHICeuz+R3DxmJOWeLZMAEmDy1zH28VU/ylY26LqNZ6uJIMHI+0aSnDqsZ4dVlF
- UNl3pSvksVgC3wBx+K7eD9c9NR+wBTlBHF5zcxdFXeX4rWF0kMhBLtIuFPP8fTzi9ahW
- sXtKCteJfBZO3fbw3j2hSwP6vvEsKfLWxbnfiKbIoV92VspuMWsjoowhQZbxe8WVNNmB +g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7kb8ps6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 12:05:08 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23KBqskX007633;
-        Wed, 20 Apr 2022 12:05:08 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7kb8prh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 12:05:08 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23KBr1cx023275;
-        Wed, 20 Apr 2022 12:05:06 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ffne8p8h2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 12:05:06 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23KC52dR48693546
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Apr 2022 12:05:03 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBEBD5204F;
-        Wed, 20 Apr 2022 12:05:02 +0000 (GMT)
-Received: from osiris (unknown [9.145.25.85])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 4938652050;
-        Wed, 20 Apr 2022 12:05:02 +0000 (GMT)
-Date:   Wed, 20 Apr 2022 14:05:00 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Pierre Morel <pmorel@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, cohuck@redhat.com, david@redhat.com,
-        thuth@redhat.com, imbrenda@linux.ibm.com, gor@linux.ibm.com,
-        wintera@linux.ibm.com, seiden@linux.ibm.com, nrb@linux.ibm.com
-Subject: Re: [PATCH v8 1/2] s390x: KVM: guest support for topology function
-Message-ID: <Yl/27Pz3pvARmIHn@osiris>
-References: <20220420113430.11876-1-pmorel@linux.ibm.com>
- <20220420113430.11876-2-pmorel@linux.ibm.com>
+        Wed, 20 Apr 2022 08:09:02 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F7E27FDF
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:06:13 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id t25so1976924edt.9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 05:06:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=UlAja3YPVFSaCcjRJzEPZI+7Ai3V2k+mQnAfV+fzWps=;
+        b=QSywyv596dXT8X/29BiGuSl4JY9hscZylHITHlYHy6CCE9hWlNmZw73t+jbz33HpHh
+         8mVDucM15hiz0lfxr7SdFoUF315ped2/T1bMg3X5YCoNi8FZdtHj50dlDpaXhGDKAndj
+         UkbdP1+Pv9YnYKALr48m32NTXWYqMpT/WTzghaxEwbR/OZrcQ9J/kvwDL9xuZs8QwUta
+         pBAAcWi0VhP58Ol2iL/pIHCe9vQyEsQ/+wLpTFfffKEexRqeSiSZ2577ltVHnnLbxUh5
+         loeCMuybCRKGN2HGqtdh3nC4prfEWbSWFbERVTF+2hKpuw9k48L36UljxXj14zsmfp5z
+         lEkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UlAja3YPVFSaCcjRJzEPZI+7Ai3V2k+mQnAfV+fzWps=;
+        b=yJ9YUX+QKV2XbUXoW2E17yCzwwtZ+9Xy1LKWB++0Zjaph8w/96NAcEzqAQZKGD4vYJ
+         1VZswGNYiU42wBudAdj5orU68p5oM11iIdriCCLypsIlKbqSoJQ2wHiMYNiaGaQxjGqs
+         ZvZQ0uy4QRe6xo+PvJyrfTYHn5xOd+nXQV1ErQDW3skabXFZVAAfMFrXrxqMpp8W7BEK
+         MOKFfF0ptRRF+vQagVOfehhjXK1xSqzrcg93Yw64K3h1YQlV4a53kgcvSNFh5QY+r1EM
+         lS0kcuXHZNXMkAZstUieQ16PY0H3MnrJ4HeOP0KjofCktOFXbIyj/kPNAiFx8EVaXeGI
+         29nA==
+X-Gm-Message-State: AOAM530/wG9rj/7RxAYbJaWTs6yjeSUe9Ik/JS/iva9nkmeuY8AIWBq5
+        BVedDsghRD7jZvmQrAETBk3SNA==
+X-Google-Smtp-Source: ABdhPJzJlKoCJPioJ/m0NnVQMdZ6j2pDYJ7mzkCaxZoPVg5LHSGsEo73lBQ7kzJo1XeAYP0Uv/JK+Q==
+X-Received: by 2002:a05:6402:2694:b0:423:fd1f:30c2 with SMTP id w20-20020a056402269400b00423fd1f30c2mr9265290edd.343.1650456371790;
+        Wed, 20 Apr 2022 05:06:11 -0700 (PDT)
+Received: from [192.168.0.225] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id vr7-20020a170906bfe700b006e8325fe130sm6570787ejb.31.2022.04.20.05.06.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 05:06:11 -0700 (PDT)
+Message-ID: <d74f62d7-7aea-b31f-1c2f-540c54df289c@linaro.org>
+Date:   Wed, 20 Apr 2022 14:06:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420113430.11876-2-pmorel@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: J0rFueCiVfJMxrhK7mQuXmjYb4w5WObt
-X-Proofpoint-GUID: 2wgfhGRqB5wbxbmXLB63v09yc57GCV1I
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-20_02,2022-04-20_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- priorityscore=1501 adultscore=0 malwarescore=0 suspectscore=0 phishscore=0
- mlxscore=0 mlxlogscore=839 bulkscore=0 lowpriorityscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204200073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2 v4] dt-bindings: dspi: added for semtech sx1301
+Content-Language: en-US
+To:     Changming Huang <jerry.huang@nxp.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
+        leoyang.li@nxp.com, linux-arm-kernel@lists.infradead.org
+References: <20220420073146.38086-1-jerry.huang@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220420073146.38086-1-jerry.huang@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static inline bool kvm_s390_topology_changed(struct kvm_vcpu *vcpu)
-> +{
-> +	if (!test_kvm_facility(vcpu->kvm, 11))
-> +		return false;
+On 20/04/2022 09:31, Changming Huang wrote:
+> Add DT Binding doc for semtech sx1301
+> 
+> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+> ---
+> changes in v4:
+>   - rename example node, adjust description
+> changes in v3:
+>   - add the dt-bindings
+> 
+>  .../bindings/spi/semtech,sx1301.yaml          | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml b/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
+> new file mode 100644
+> index 000000000000..420fe8d23a1e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
+> @@ -0,0 +1,45 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/semtech,sx1301.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	/* A new vCPU has been hotplugged */
-> +	if (vcpu->arch.prev_cpu == S390_KVM_TOPOLOGY_NEW_CPU)
-> +		return true;
-> +
-> +	/* The real CPU backing up the vCPU moved to another socket */
-> +	if (cpumask_test_cpu(vcpu->cpu,
-> +			     topology_core_cpumask(vcpu->arch.prev_cpu)))
-> +		return true;
-> +
-> +	return false;
-> +}
+> +title: Semtech sx1301 SPI controller bindings
 
-This seems to be wrong. I'd guess that you need
+This is still wrong.
 
-	if (cpumask_test_cpu(vcpu->cpu,
-			     topology_core_cpumask(vcpu->arch.prev_cpu)))
--->		return false;
--->	return true;
+Please also answer Michael's comments.
+
+Best regards,
+Krzysztof

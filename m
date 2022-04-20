@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65D2509234
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C94E509235
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 23:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382603AbiDTVnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 17:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S1382609AbiDTVn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 17:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382595AbiDTVns (ORCPT
+        with ESMTP id S1382592AbiDTVnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 17:43:48 -0400
+        Wed, 20 Apr 2022 17:43:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7228138DA7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:41:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F1738DA7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 14:41:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0402BB821AD
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 21:41:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D897C385A0;
-        Wed, 20 Apr 2022 21:40:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A94C8B821AE
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 21:41:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 321CBC385A1;
+        Wed, 20 Apr 2022 21:40:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650490858;
-        bh=6jaiM5EEkZokoyNt2f05Dgwu++Zj3+Z8+mfjrNupSEI=;
+        s=k20201202; t=1650490861;
+        bh=8X2QEt2lhi2nHtjk6Rs3WVQZYib5Iw0DT7J8jUnG10I=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=OeUkZbODgwjPKvS1nHtnuZlnoQvT041gNVtxebkD7ofNZOZnQbM4vvhfET+1DfEHN
-         babP+yod5/7sLDCUDQTG9mgtqtoQKpC+/HlA+ytRbPnyUxKkbBdcThRzufTdk8tVfD
-         wvZFsJyZg9M8KM+yetLt6cZmYCpmNcoiu2k2vZhV+tTV9hfs3OOrSiNvgb3NNMsXCb
-         Gnf0k3QUIY0fOuHSEId6pO/pF55QR9R8B6bO+1pGr91U1lK18XrCBc2oZopUiOK8vS
-         Gd1Jt9WRIQ+COAmIrPZjzb5PzWuGmoui0SLUGgVa56wQLkOwZo+ZhH1m4alZI9NOsp
-         jvD7uOtrKWkxQ==
+        b=ZeE1O5EpvOwXFbK6lO1RpwVY4KTk0d+yzNGNW47alh9PFEi6TKVJabMSeAlPawhkz
+         PibaSiyJsufJmgusHMEPpvL38T2XcqXTj8Y/Ftt5hd4m4cGsAvUr0px5kBkCe8qtrc
+         S/rB0k+UHp6zS3TyvLVIQO+R24U6Yn7lR4+IbIZ1Qjkpf3U92P+ZHehH+RthulPy4k
+         TAHLP68rMA06V+SqNbHfMjBzayGJpdO+AqE/7n8IyTd8wBt7a3bkVgBlwiEv9GgzIz
+         KUI66IxVvvsnzwJ8n6lqmXx4owvaqqfEBut1GfqVkibrdQPSCM4APPaClwuzTHsUI7
+         InTyrTC7K2Jfg==
 From:   Mark Brown <broonie@kernel.org>
-To:     samuel@sholland.org, rf@opensource.cirrus.com,
-        Takashi Iwai <tiwai@suse.com>, robert.hancock@calian.com,
-        spujar@nvidia.com, olivier.moysan@foss.st.com,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Liam Girdwood <lgirdwood@gmail.com>, stephan@gerhold.net,
-        Jaroslav Kysela <perex@perex.cz>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220412111658.11015-1-olivier.moysan@foss.st.com>
-References: <20220412111658.11015-1-olivier.moysan@foss.st.com>
-Subject: Re: [PATCH] ASoC: simple-card-utils: fix sysclk shutdown
-Message-Id: <165049085609.138067.16736006063801162834.b4-ty@kernel.org>
-Date:   Wed, 20 Apr 2022 22:40:56 +0100
+To:     AjitKumar.Pandey@amd.com, alsa-devel@alsa-project.org
+Cc:     Vijendar.Mukunda@amd.com, Takashi Iwai <tiwai@suse.com>,
+        Sunil-kumar.Dommati@amd.com,
+        open list <linux-kernel@vger.kernel.org>,
+        Basavaraj.Hiregoudar@amd.com, vsujithkumar.reddy@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Alexander.Deucher@amd.com
+In-Reply-To: <20220420094442.1352717-1-AjitKumar.Pandey@amd.com>
+References: <20220420094442.1352717-1-AjitKumar.Pandey@amd.com>
+Subject: Re: [PATCH] ASoC: amd: acp: Add pm ops callback in machine driver
+Message-Id: <165049085891.138067.2699474360256184999.b4-ty@kernel.org>
+Date:   Wed, 20 Apr 2022 22:40:58 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,15 +57,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 13:16:58 +0200, Olivier Moysan wrote:
-> In asoc_simple_shutdown() the snd_soc_dai_set_sysclk() function
-> is called twice with input direction SND_SOC_CLOCK_IN.
-> Restore one call with output direction SND_SOC_CLOCK_OUT.
-> 
-> Fixes: 5ca2ab459817 ("ASoC: simple-card-utils: Add new system-clock-fixed flag")
+On Wed, 20 Apr 2022 15:14:36 +0530, Ajit Kumar Pandey wrote:
+> Add alsa snd_soc_pm_ops callback in ACP machine driver to support
+> suspend and resume operation of sound card components
 > 
 > 
-> [...]
 
 Applied to
 
@@ -73,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: simple-card-utils: fix sysclk shutdown
-      commit: 3756aa16fadaef2873cfbd2659dfa1978a7e1859
+[1/1] ASoC: amd: acp: Add pm ops callback in machine driver
+      commit: fbae863de87bf50c7b13b40e3b4dc4b479335020
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

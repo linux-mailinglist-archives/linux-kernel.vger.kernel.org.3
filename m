@@ -2,211 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4773F5087FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49735508802
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353105AbiDTMY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
+        id S1378472AbiDTMYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243205AbiDTMY2 (ORCPT
+        with ESMTP id S1353046AbiDTMYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:24:28 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0FA31217;
-        Wed, 20 Apr 2022 05:21:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5EAEC21118;
-        Wed, 20 Apr 2022 12:21:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650457300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KK1r6VYYIt7hQrJ5dgHOs6wdcfyWeyUTEorKnVY1GCc=;
-        b=tb0SXgOpxO9hJ7cHc8EZwwW2GR7DXAkFGFCMZBezwuJiz1+h4z7ew/vd7lAeOT6i/CzohK
-        oaNFI/sxI1eE2YnImaIoEwzvi4iEdnJebn1M6IC7oJFyioMxJiLxyu1KecDb2B2zeqzKaM
-        B7NTOvI5srPygt4ZKoIf62QB/9E0vNM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650457300;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KK1r6VYYIt7hQrJ5dgHOs6wdcfyWeyUTEorKnVY1GCc=;
-        b=ba/xWdB7dUDuFdWlkX+w2EccmN4BPb5FEB0y69Fy8JwzRxyW3I3yG8Wc8Q7hwO8BEOry73
-        pQsYbzPluHOa3OAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3784613A30;
-        Wed, 20 Apr 2022 12:21:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ek+ZC9T6X2JXYQAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 20 Apr 2022 12:21:40 +0000
-Message-ID: <929aede0-9e58-9c3d-5951-6151a3281edd@suse.de>
-Date:   Wed, 20 Apr 2022 14:21:39 +0200
+        Wed, 20 Apr 2022 08:24:52 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2B931DC4;
+        Wed, 20 Apr 2022 05:22:06 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id i196so1624489ioa.1;
+        Wed, 20 Apr 2022 05:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zIMuGelOwwNQPwE8FTN91rI+ZWWawKZ6vr/oEWb7r+g=;
+        b=L9rw5Zhh1ttkACZ/UGkE41DhurYpDRfwGSN0hXY3lcyM86w4izh9lfYEKMQA2eqfl5
+         2YnZx5keDv1+QJa5V6FjhombQD+A7uRVFdVH5in7N87ElIKD774KuDHwcEVQ3FHUwvY7
+         F1ugXlCzETRdv2V/dHui53j2ZCkbyjbv6M7XT8C859yRfW3GY8ptWYCq7Acj+NHGGDZe
+         Z8TQqJepf7XKTF9shFLSwBQ2fld+kNvCVXZyjXI2PPp2ApIYjJ6CMOsB9ayJfhKXn1E1
+         uKXVJdXz85Rmi4YVg9eRM8nW2tzIdU//ZPnPbffGTfGWcAF4XZqxMBjPaB/4YCto+tdP
+         yBSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zIMuGelOwwNQPwE8FTN91rI+ZWWawKZ6vr/oEWb7r+g=;
+        b=XWQyAnVUXLbpkmcTd0dIvmj+mFKHD1zwGsqSzja4Iob2ZeQ4RSKySwFoC2XkdsXnsW
+         kpvmKbao+WAPLHjXmfzm/GcSNFGC89YJG+9w/gl3y73Qn3aAkIvJxxAdVQWlN+EXHDCj
+         pebegsUmdE+B5iQK/pf//1K0+d1tI94hx37Xhp3gIhWn8dBt7xZC4EQbAKLvZTXL6IAG
+         oX27Q9750NTchMxmsfR15NDuelwk5IVrskdWHHJWsyqz8gL9VWg77ME/pHs9lXb39RdQ
+         lkINPxFP+qhXHn5INHZpJNLWO2CTeOKOMlNd15se0EmWhiMVJRyHvXPJlxHNU2byLT1W
+         61uA==
+X-Gm-Message-State: AOAM533rAPMYT6vKLS7ojvgTNu51ke74Pd+a2frqmj9HuMAlgXtDwxrm
+        Q74o9KD9qSKpw8epNfMKiMREN6SHWfCkYCWz+30=
+X-Google-Smtp-Source: ABdhPJzTPl3fpisqquEunK202EZu+8nIk8CqPrym6nw4Ij8xrv+W8LHM0AuAQ5fzaPtaanpkSEYPKBd97UXjkMJwTQo=
+X-Received: by 2002:a05:6602:1c6:b0:657:2c41:7d0 with SMTP id
+ w6-20020a05660201c600b006572c4107d0mr94775iot.31.1650457326295; Wed, 20 Apr
+ 2022 05:22:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/4] scsi: libsas: Add sas_execute_internal_abort_single()
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
-        damien.lemoal@opensource.wdc.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ajish.Koshy@microchip.com, linuxarm@huawei.com,
-        Viswas.G@microchip.com, hch@lst.de, liuqi115@huawei.com,
-        chenxiang66@hisilicon.com
-References: <1646309930-138960-1-git-send-email-john.garry@huawei.com>
- <1646309930-138960-2-git-send-email-john.garry@huawei.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <1646309930-138960-2-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220330094126.30252-1-alistair@alistair23.me>
+ <20220330094126.30252-2-alistair@alistair23.me> <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
+In-Reply-To: <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Wed, 20 Apr 2022 22:21:40 +1000
+Message-ID: <CAKmqyKOqjperoku_uOy4sCa6LmCUtfB7SCvhLEKxLtcwDkzRyA@mail.gmail.com>
+Subject: Re: [PATCH v20 1/4] mfd: silergy,sy7636a: Add config option
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Zhang Rui <rui.zhang@intel.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/22 13:18, John Garry wrote:
-> The internal abort feature is common to hisi_sas and pm8001 HBAs, and the
-> driver support is similar also, so add a common handler.
-> 
-> Two modes of operation will be supported:
-> - single: Abort a single tagged command
-> - device: Abort all commands associated with a specific domain device
-> 
-> A new protocol is added, SAS_PROTOCOL_INTERNAL_ABORT, so the common queue
-> command API may be re-used.
-> 
-> Only add "single" support as a first step.
-> 
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> ---
->   drivers/scsi/libsas/sas_scsi_host.c | 75 +++++++++++++++++++++++++++++
->   include/scsi/libsas.h               | 14 ++++++
->   include/scsi/sas.h                  |  2 +
->   3 files changed, 91 insertions(+)
-> 
-> diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
-> index 5b5747e33dbd..0d05826e6e8c 100644
-> --- a/drivers/scsi/libsas/sas_scsi_host.c
-> +++ b/drivers/scsi/libsas/sas_scsi_host.c
-> @@ -920,6 +920,81 @@ void sas_task_internal_timedout(struct timer_list *t)
->   #define TASK_TIMEOUT			(20 * HZ)
->   #define TASK_RETRY			3
->   
-> +static int sas_execute_internal_abort(struct domain_device *device,
-> +				      enum sas_internal_abort type, u16 tag,
-> +				      unsigned int qid, void *data)
-> +{
-> +	struct sas_ha_struct *ha = device->port->ha;
-> +	struct sas_internal *i = to_sas_internal(ha->core.shost->transportt);
-> +	struct sas_task *task = NULL;
-> +	int res, retry;
-> +
-> +	for (retry = 0; retry < TASK_RETRY; retry++) {
-> +		task = sas_alloc_slow_task(GFP_KERNEL);
-> +		if (!task)
-> +			return -ENOMEM;
-> +
-> +		task->dev = device;
-> +		task->task_proto = SAS_PROTOCOL_INTERNAL_ABORT;
-> +		task->task_done = sas_task_internal_done;
-> +		task->slow_task->timer.function = sas_task_internal_timedout;
-> +		task->slow_task->timer.expires = jiffies + TASK_TIMEOUT;
-> +		add_timer(&task->slow_task->timer);
-> +
-> +		task->abort_task.tag = tag;
-> +		task->abort_task.type = type;
-> +
-> +		res = i->dft->lldd_execute_task(task, GFP_KERNEL);
-> +		if (res) {
-> +			del_timer_sync(&task->slow_task->timer);
-> +			pr_err("Executing internal abort failed %016llx (%d)\n",
-> +			       SAS_ADDR(device->sas_addr), res);
-> +			break;
-> +		}
-> +
-> +		wait_for_completion(&task->slow_task->completion);
-> +		res = TMF_RESP_FUNC_FAILED;
-> +
-> +		/* Even if the internal abort timed out, return direct. */
-> +		if (task->task_state_flags & SAS_TASK_STATE_ABORTED) {
-> +			pr_err("Internal abort: timeout %016llx\n",
-> +			       SAS_ADDR(device->sas_addr));
-> +
-> +			res = -EIO;
-> +			break;
-> +		}
-> +
-> +		if (task->task_status.resp == SAS_TASK_COMPLETE &&
-> +			task->task_status.stat == SAS_SAM_STAT_GOOD) {
-> +			res = TMF_RESP_FUNC_COMPLETE;
-> +			break;
-> +		}
-> +
-> +		if (task->task_status.resp == SAS_TASK_COMPLETE &&
-> +			task->task_status.stat == TMF_RESP_FUNC_SUCC) {
-> +			res = TMF_RESP_FUNC_SUCC;
-> +			break;
-> +		}
-> +
-> +		pr_err("Internal abort: task to dev %016llx response: 0x%x status 0x%x\n",
-> +		       SAS_ADDR(device->sas_addr), task->task_status.resp,
-> +		       task->task_status.stat);
-> +		sas_free_task(task);
-> +		task = NULL;
-> +	}
-> +	BUG_ON(retry == TASK_RETRY && task != NULL);
-> +	sas_free_task(task);
-> +	return res;
-> +}
-> +
-> +int sas_execute_internal_abort_single(struct domain_device *device, u16 tag,
-> +				      unsigned int qid, void *data)
-> +{
-> +	return sas_execute_internal_abort(device, SAS_INTERNAL_ABORT_SINGLE,
-> +					  tag, qid, data);
-> +}
-> +EXPORT_SYMBOL_GPL(sas_execute_internal_abort_single);
-> +
->   int sas_execute_tmf(struct domain_device *device, void *parameter,
->   		    int para_len, int force_phy_id,
->   		    struct sas_tmf_task *tmf)
-> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-> index df2c8fc43429..2d30d57916e5 100644
-> --- a/include/scsi/libsas.h
-> +++ b/include/scsi/libsas.h
-> @@ -557,6 +557,16 @@ struct sas_ata_task {
->   	int    force_phy_id;
->   };
->   
-> +/* LLDDs rely on these values */
-> +enum sas_internal_abort {
-> +	SAS_INTERNAL_ABORT_SINGLE	= 0,
-> +};
-> +
+On Thu, Mar 31, 2022 at 6:02 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 3/30/22 02:41, Alistair Francis wrote:
+> > Add a specific MFD_SY7636A config option.
+> >
+> > As part of this change we can use MFD_SY7636A as a dependency for all
+> > SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C as
+> > it no longer needs to be selectable.
+> >
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Why don't you use the existing TMF_XXX values here?
-Your 'single' method pretty much _is_ a TMF_ABORT_TASK, and the 'device' 
-method _is_ a TMF_ABORT_TASK_SET, no?
+Any chance of getting this in for 5.18? It would be nice to have the
+configs all sorted before the release
 
-Cheers,
+Alistair
 
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+>
+> > ---
+> >   drivers/hwmon/Kconfig     |  1 +
+> >   drivers/mfd/Kconfig       | 12 +++++++++++-
+> >   drivers/regulator/Kconfig |  1 +
+> >   3 files changed, 13 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > index 68a8a27ab3b7..74b60d24e740 100644
+> > --- a/drivers/hwmon/Kconfig
+> > +++ b/drivers/hwmon/Kconfig
+> > @@ -1693,6 +1693,7 @@ config SENSORS_SIS5595
+> >
+> >   config SENSORS_SY7636A
+> >       tristate "Silergy SY7636A"
+> > +     depends on MFD_SY7636A
+> >       help
+> >         If you say yes here you get support for the thermistor readout of
+> >         the Silergy SY7636A PMIC.
+> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > index 3b59456f5545..c47cb755757b 100644
+> > --- a/drivers/mfd/Kconfig
+> > +++ b/drivers/mfd/Kconfig
+> > @@ -1095,6 +1095,16 @@ config MFD_SPMI_PMIC
+> >         Say M here if you want to include support for the SPMI PMIC
+> >         series as a module.  The module will be called "qcom-spmi-pmic".
+> >
+> > +config MFD_SY7636A
+> > +     tristate "Silergy SY7636A voltage regulator"
+> > +     depends on I2C
+> > +     select MFD_SIMPLE_MFD_I2C
+> > +     help
+> > +       Enable support for Silergy SY7636A voltage regulator.
+> > +
+> > +       To enable support for building sub-devices as modules,
+> > +       choose M here.
+> > +
+> >   config MFD_RDC321X
+> >       tristate "RDC R-321x southbridge"
+> >       select MFD_CORE
+> > @@ -1202,7 +1212,7 @@ config MFD_SI476X_CORE
+> >         module will be called si476x-core.
+> >
+> >   config MFD_SIMPLE_MFD_I2C
+> > -     tristate "Simple Multi-Functional Device support (I2C)"
+> > +     tristate
+> >       depends on I2C
+> >       select MFD_CORE
+> >       select REGMAP_I2C
+> > diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+> > index 5ef2306fce04..c8ce6e5eea24 100644
+> > --- a/drivers/regulator/Kconfig
+> > +++ b/drivers/regulator/Kconfig
+> > @@ -1219,6 +1219,7 @@ config REGULATOR_STW481X_VMMC
+> >
+> >   config REGULATOR_SY7636A
+> >       tristate "Silergy SY7636A voltage regulator"
+> > +     depends on MFD_SY7636A
+> >       help
+> >         This driver supports Silergy SY3686A voltage regulator.
+> >
+>

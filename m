@@ -2,131 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3877D508146
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC259508144
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 08:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350825AbiDTGjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 02:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S1350251AbiDTGji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 02:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348640AbiDTGjg (ORCPT
+        with ESMTP id S235577AbiDTGjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 02:39:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE64F34668;
-        Tue, 19 Apr 2022 23:36:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 616F3617D2;
-        Wed, 20 Apr 2022 06:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7288C385A1;
-        Wed, 20 Apr 2022 06:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650436607;
-        bh=R56RE4aFvkqPZGVd/hDyRfNwHqmFG6X+wUFjItkexZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Etueqch0dQr9WeF/PuZNwLlZr40/aaQba//XEMXDxNUPVmTE8fibMEZ/mSBuQJAV1
-         iO6MvnFaY4pkkHwvqVtpq4ge/rIvdlum1x9Tp6VQD9/PpNDxQ53s6hX5Hcsyiqfv2r
-         kNAQ0icd3l54h/agDkwZ+hpfvFokBILKULHqu0CmAjwkeKilAmS/AspuDC9wLUjweL
-         GXpQa8Tw/xrjolKej5BlQBcoDTPa1IYjsaQhqjllWpF8EQ/C+fkU4EtXdGILEzJazU
-         vvvHOWEO1lfLMcK6UN1OAkRFUnx6knTwCgKPVniAo9fNQyi5ZhjGk7D18Nx1Qx99SO
-         SEUmf19Uuadcg==
-Date:   Wed, 20 Apr 2022 09:36:43 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ivan Vecera <ivecera@redhat.com>
-Cc:     Michal Schmidt <mschmidt@redhat.com>, netdev@vger.kernel.org,
-        Petr Oros <poros@redhat.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Dave Ertman <david.m.ertman@intel.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] ice: Fix race during aux device (un)plugging
-Message-ID: <Yl+p+7C7JQDj1jt1@unreal>
-References: <20220414163907.1456925-1-ivecera@redhat.com>
- <CADEbmW3eUAnvn4gvNxqjCMmO333-=OdObGhDXkrTbDwn0YkJDw@mail.gmail.com>
- <20220415174932.6c85d5ab@ceranb>
+        Wed, 20 Apr 2022 02:39:33 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11C8167C3;
+        Tue, 19 Apr 2022 23:36:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=JBXsl+mIATRCufdITmGTK7ymrd2L37dxDsu//jC6hbo=; b=1ugSkmXxYniz3j3eOGVH62DtMn
+        ID7m2g6IITyaYw6VLRbde7ww6RM6JW7W5QHgyxFQP95RMQFzaNv/kGLl2nxWEDjlwjxP2YQuPy74J
+        6IyY5SuNqUi7nZrYGUv+MuZWzw1vOEA1+Iiw+Vbp8X3KmKm1O3yEV8GlXiS2aQQxRug+pCPu0XkAz
+        1VghU01vBl1TL/VrZAkbwSoaMYDrS9IA+dmNXEm3D0BA4kWp5zVzMDO5pTkt1xZMwmBAqj77ZV48d
+        OlVB6ZuinUm9Rj00Hd/2snHZ9efjMB30v/MAEtN9wroEK7wsRXC/MH/juGJ2rXFD8Ygm6ZYIbzh0z
+        3ogvOZxA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nh3xF-007a6R-CB; Wed, 20 Apr 2022 06:36:45 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH] media: make RADIO_ADAPTERS tristate
+Date:   Tue, 19 Apr 2022 23:36:44 -0700
+Message-Id: <20220420063644.17758-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415174932.6c85d5ab@ceranb>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 05:49:32PM +0200, Ivan Vecera wrote:
-> On Fri, 15 Apr 2022 13:12:03 +0200
-> Michal Schmidt <mschmidt@redhat.com> wrote:
-> 
-> > On Thu, Apr 14, 2022 at 6:39 PM Ivan Vecera <ivecera@redhat.com> wrote:
-> > 
-> > > Function ice_plug_aux_dev() assigns pf->adev field too early prior
-> > > aux device initialization and on other side ice_unplug_aux_dev()
-> > > starts aux device deinit and at the end assigns NULL to pf->adev.
-> > > This is wrong and can causes a crash when ice_send_event_to_aux()
-> > > call occurs during these operations because that function depends
-> > > on non-NULL value of pf->adev and does not assume that aux device
-> > > is half-initialized or half-destroyed.
-> > >
-> > > Modify affected functions so pf->adev field is set after aux device
-> > > init and prior aux device destroy.
-> > >  
-> > [...]
-> > 
-> > > @@ -320,12 +319,14 @@ int ice_plug_aux_dev(struct ice_pf *pf)
-> > >   */
-> > >  void ice_unplug_aux_dev(struct ice_pf *pf)
-> > >  {
-> > > -       if (!pf->adev)
-> > > +       struct auxiliary_device *adev = pf->adev;
-> > > +
-> > > +       if (!adev)
-> > >                 return;
-> > >
-> > > -       auxiliary_device_delete(pf->adev);
-> > > -       auxiliary_device_uninit(pf->adev);
-> > >         pf->adev = NULL;
-> > > +       auxiliary_device_delete(adev);
-> > > +       auxiliary_device_uninit(adev);
-> > >  }
-> > >  
-> > 
-> > Hi Ivan,
-> > What prevents ice_unplug_aux_dev() from running immediately after
-> > ice_send_event_to_aux() gets past its "if (!pf->adev)" test ?
-> > Michal
-> 
-> ice_send_event_to_aux() takes aux device lock. ice_unplug_aux_dev()
-> calls auxiliary_device_delete() that calls device_del(). device_del()
-> takes device_lock() prior kill_device(). So if ice_send_event_to_aux()
-> is in progress then device_del() waits for its completion.
+Fix build errors when RADIO_TEA575X=y, VIDEO_BT848=m, and VIDEO_DEV=m.
 
-Not really, you nullify pf->adev without any lock protection and
-ice_send_event_to_aux() will simply crash.
+The build errors occur due to [in drivers/media/Makefile]:
+obj-$(CONFIG_VIDEO_DEV) += radio/
+so the (would be) builtin tea575x.o is not being built.
 
- CPU#1          	|   CPU#2
-			| ice_send_event_to_aux
- ice_unplug_aux_dev()   | ...
- ...                    | 
- pf->adev = NULL;       | 
-      			| device_lock(&pf->adev->dev); <--- crash here.
+This is also due to drivers/media/radio/Kconfig declaring a bool
+Kconfig symbol (RADIO_ADAPTERS) that depends on a tristate (VIDEO_DEV),
+so when VIDEO_DEV=m, RADIO_ADAPTERS becomes =y, and then the drivers
+that depend on RADIO_ADPATERS can be configured as builtin (=y) or
+as loadable modules (=m).
 
-Thanks
+Fix this by converting RADIO_ADAPTERS to a tristate symbol instead
+of a bool symbol.
 
+Fixes these build errors:
 
-> 
-> Thanks,
-> Ivan
-> 
+ERROR: modpost: "snd_tea575x_hw_init" [drivers/media/pci/bt8xx/bttv.ko] undefined!
+ERROR: modpost: "snd_tea575x_set_freq" [drivers/media/pci/bt8xx/bttv.ko] undefined!
+ERROR: modpost: "snd_tea575x_s_hw_freq_seek" [drivers/media/pci/bt8xx/bttv.ko] undefined!
+ERROR: modpost: "snd_tea575x_enum_freq_bands" [drivers/media/pci/bt8xx/bttv.ko] undefined!
+ERROR: modpost: "snd_tea575x_g_tuner" [drivers/media/pci/bt8xx/bttv.ko] undefined!
+
+Fixes: 9958d30f38b9 ("media: Kconfig: cleanup VIDEO_DEV dependencies")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: lore.kernel.org/r/202204191711.IKJJFjgU-lkp@intel.com
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Jacopo Mondi <jacopo@jmondi.org>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: linux-media@vger.kernel.org
+---
+Just for fun I tested a change to drivers/media/Makefile:
+
+-obj-y += common/ platform/ pci/ usb/ mmc/ firewire/ spi/ test-drivers/
+-obj-$(CONFIG_VIDEO_DEV) += radio/
++obj-y += common/ platform/ pci/ usb/ mmc/ firewire/ spi/ test-drivers/ radio/
+
+but that leaves a slew of other build errors (undefined symbols).
+
+ drivers/media/radio/Kconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- a/drivers/media/radio/Kconfig
++++ b/drivers/media/radio/Kconfig
+@@ -4,10 +4,10 @@
+ #
+ 
+ menuconfig RADIO_ADAPTERS
+-	bool "Radio Adapters"
++	tristate "Radio Adapters"
+ 	depends on VIDEO_DEV
+ 	depends on MEDIA_RADIO_SUPPORT
+-	default y
++	default VIDEO_DEV
+ 	help
+ 	  Say Y here to enable selecting AM/FM radio adapters.
+ 

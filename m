@@ -2,95 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832AE508F66
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 20:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0612508F7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 20:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381479AbiDTSbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 14:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
+        id S1381517AbiDTSdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 14:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381470AbiDTSbB (ORCPT
+        with ESMTP id S1380958AbiDTSdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 14:31:01 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03351EEC9;
-        Wed, 20 Apr 2022 11:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=T1t1cTSum3OzRMUjY8k+SNYpptc4cLa0jL7we78Ggyc=; b=GEPlYe+XYe3dHkUmdDio8B/BN6
-        +ikXU0KkvaMRv/XNsGUpfWuxTFJ76oGWO9rpd1tdhAehY5Qgwqgc7vAnYetBB2n0yIv3BYnjZuZU5
-        1eau5eyzqsO/Uif2KnpsaYjX/GJpAXn9zTK0f7ICSyOjlpY9r5mbjcvYzTDV8AdNKUxOAR28F+NJ8
-        tkg++xBYRcoMum3dt+K8yUA2PHrM3AVGXApvXYuk3c4KKLTI1E/ZZKtUP966BuR/ZIw07vJMEcdNn
-        2I3ZKzlzm+vBj4/WdA4aol5LzvRLUCCstV8r6Ev9CBBKTUh5g5SWYsCRA8YFCaEqL7OQViSSnjYfI
-        ksG5l2ig==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhF3f-00A38V-Ql; Wed, 20 Apr 2022 18:28:07 +0000
-Date:   Wed, 20 Apr 2022 11:28:07 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "song@kernel.org" <song@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dborkman@redhat.com" <dborkman@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "bp@alien8.de" <bp@alien8.de>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Message-ID: <YmBQt1RjDY1hGQlJ@bombadil.infradead.org>
-References: <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com>
- <Yl04LO/PfB3GocvU@kernel.org>
- <Yl4F4w5NY3v0icfx@bombadil.infradead.org>
- <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
- <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com>
- <Yl8CicJGHpTrOK8m@kernel.org>
- <CAHk-=wh6um5AFR6TObsYY0v+jUSZxReiZM_5Kh4gAMU8Z8-jVw@mail.gmail.com>
- <20220420020311.6ojfhcooumflnbbk@MacBook-Pro.local.dhcp.thefacebook.com>
- <CAHk-=wiF1KnM1_paB3jCONR9Mh1D_RCsnXKBau1K7XLG-mwwTQ@mail.gmail.com>
- <3F75142B-3E87-4195-A026-3A7F1E595960@fb.com>
+        Wed, 20 Apr 2022 14:33:47 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F73129
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 11:31:00 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b58ed329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58ed:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 35BB91EC0373;
+        Wed, 20 Apr 2022 20:30:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650479455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BoNR3/TdNmyezoOlYlqywibUKdPvf4k/cpq0M78h2eM=;
+        b=FxfdO9k+Kak1V3zq5HzCJV24/DCBM9ITfIJXMCjtrbnkvjuY9cD3nWzi+TcRyKYYoE7h7V
+        W+U16zdwWF0EIaR8psuZpFjrEJiVqXzmWQIVO/BCXJcVtkjsPoJ12w2Ai8Jbql2zS41QWt
+        orZ7vA8q61+iMidIq0T/jx/rZ7hwUvM=
+Date:   Wed, 20 Apr 2022 20:30:51 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Venu Busireddy <venu.busireddy@oracle.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Brijesh Singh <brijesh.singh@amd.com>
+Subject: Re: [PATCH] x86/sev: get the AP jump table address from secrets page
+Message-ID: <YmBRW6xMhNiW7JRU@zn.tnic>
+References: <20220420152751.145180-1-michael.roth@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3F75142B-3E87-4195-A026-3A7F1E595960@fb.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220420152751.145180-1-michael.roth@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 02:42:37PM +0000, Song Liu wrote:
-> For (b), we have seen direct map fragmentation causing visible
-> performance drop for our major services. This is the shadow 
-> production benchmark, so it is not possible to run it out of 
-> our data centers. Tracing showed that BPF program was the top 
-> trigger of these direct map splits. 
+On Wed, Apr 20, 2022 at 10:27:51AM -0500, Michael Roth wrote:
+> +static u64 get_secrets_page(void)
+> +{
+> +	u64 pa_data = boot_params.cc_blob_address;
+> +	struct cc_blob_sev_info info;
+> +	void *map;
+> +
+> +	/*
+> +	 * The CC blob contains the address of the secrets page, check if the
+> +	 * blob is present.
+> +	 */
+> +	if (!pa_data)
+> +		return 0;
+> +
+> +	map = early_memremap(pa_data, sizeof(info));
 
-It's often not easy to reproduce issues like these, but I've
-ran into that before for other Proof of Concept issues before
-and the solution has been a Linux selftest. For instance a
-"multithreaded" bombing for kmod can be triggered with
-lib/test_kmod.c and tools/testing/selftests/kmod/kmod.sh
+That function can return NULL so you need to handle it.
 
-Would desinging a selftest to abuse eBPF JIT be a possible
-way to reproduce the issue?
+> +	memcpy(&info, map, sizeof(info));
+> +	early_memunmap(map, sizeof(info));
+> +
+> +	/* smoke-test the secrets page passed */
+> +	if (!info.secrets_phys || info.secrets_len != PAGE_SIZE)
+> +		return 0;
+> +
+> +	return info.secrets_phys;
+> +}
+> +
+> +static u64 get_snp_jump_table_addr(void)
+> +{
+> +	struct snp_secrets_page_layout *layout;
+> +	u64 pa = get_secrets_page();
+> +	u64 addr;
 
-  Luis
+Please don't hide the function call in the local variables declaration
+but do this instead:
+
+        struct snp_secrets_page_layout *layout;
+        u64 pa, addr;
+
+        pa = get_secrets_page();
+        if (!pa)
+                return 0;
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

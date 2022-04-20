@@ -2,70 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF4A50865F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F496508665
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377824AbiDTKya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
+        id S1377855AbiDTKzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233908AbiDTKy2 (ORCPT
+        with ESMTP id S1359695AbiDTKzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:54:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 280B8403C1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650451902;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=TpOSJjOApJjCAau8uRw30yAoaFNCDcBC0oKh3anjbkT6gXBVc2QcerdVFWf70xgT/XeusK
-        K72GHcVw4O1n5qlAqpBYY5TsYsHV4NQJMxBCQ2poWOqtlpeTbPzR8ZMfCdwZj2GRtF5BNK
-        Tu1hw8XHZuLroeJbk0cWNBnQD2Y56tc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-fZR-POXDP5WGVTgfAt0lfQ-1; Wed, 20 Apr 2022 06:51:39 -0400
-X-MC-Unique: fZR-POXDP5WGVTgfAt0lfQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 20 Apr 2022 06:55:12 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A01C403C6;
+        Wed, 20 Apr 2022 03:52:26 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ABC9386B8A3;
-        Wed, 20 Apr 2022 10:51:38 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ED5851410F39;
-        Wed, 20 Apr 2022 10:51:37 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Gaoning Pan <pgn@zju.edu.cn>, Yongkang Jia <kangel@zju.edu.cn>
-Subject: Re: [PATCH v2 0/4] KVM: x86: APICv fixes
-Date:   Wed, 20 Apr 2022 06:51:36 -0400
-Message-Id: <20220420105136.1144769-1-pbonzini@redhat.com>
-In-Reply-To: <20220420013732.3308816-1-seanjc@google.com>
-References: 
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 5BC4061CCD786;
+        Wed, 20 Apr 2022 12:52:23 +0200 (CEST)
+Message-ID: <c8f5ada2-c5cc-fe1b-bdeb-8b7d134250ee@molgen.mpg.de>
+Date:   Wed, 20 Apr 2022 12:52:23 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] tpm: cr50: Add new device/vendor ID 0x504a6666
+Content-Language: en-US
+To:     "Jes B. Klinke" <jbk@chromium.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org
+References: <20220419163749.1.Ica39bd8d1494f750a70a668e5929f6e5e63241f2@changeid>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220419163749.1.Ica39bd8d1494f750a70a668e5929f6e5e63241f2@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
-
-Paolo
+Dear Jes,
 
 
+Am 20.04.22 um 01:37 schrieb Jes B. Klinke:
+> Accept one additional numerical value of DID:VID for next generation
+> Google TPM with new firmware, to be used in future Chromebooks.
+> 
+> The TPM with the new firmware has the code name TI50, and is going to
+> use the same interfaces.
+> 
+> Signed-off-by: Jes B. Klinke <jbk@chromium.org>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> 
+>   drivers/char/tpm/tpm_tis_i2c_cr50.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> index f6c0affbb4567..4ddb8ff3a8569 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> @@ -31,6 +31,7 @@
+>   #define TPM_CR50_TIMEOUT_SHORT_MS	2		/* Short timeout during transactions */
+>   #define TPM_CR50_TIMEOUT_NOIRQ_MS	20		/* Timeout for TPM ready without IRQ */
+>   #define TPM_CR50_I2C_DID_VID		0x00281ae0L	/* Device and vendor ID reg value */
+> +#define TPM_TI50_I2C_DID_VID		0x504a6666L	/* Device and vendor ID reg value */
+>   #define TPM_CR50_I2C_MAX_RETRIES	3		/* Max retries due to I2C errors */
+>   #define TPM_CR50_I2C_RETRY_DELAY_LO	55		/* Min usecs between retries on I2C */
+>   #define TPM_CR50_I2C_RETRY_DELAY_HI	65		/* Max usecs between retries on I2C */
+> @@ -742,15 +743,15 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
+>   	}
+>   
+>   	vendor = le32_to_cpup((__le32 *)buf);
+> -	if (vendor != TPM_CR50_I2C_DID_VID) {
+> +	if (vendor != TPM_CR50_I2C_DID_VID && vendor != TPM_TI50_I2C_DID_VID) {
+>   		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
+>   		tpm_cr50_release_locality(chip, true);
+>   		return -ENODEV;
+>   	}
+>   
+> -	dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> +	dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> +		 vendor == TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
+>   		 client->addr, client->irq, vendor >> 16);
+> -
+
+Remove this blank line wasn’t needed, I gues.
+
+>   	return tpm_chip_register(chip);
+>   }
+>   
+
+Thank for addressing the other comments, and congratulations on getting 
+your first commit into the Linux kernel.
+
+
+Kind regards,
+
+Paul

@@ -2,48 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD214509012
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B399509033
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354704AbiDTTPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 15:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S1381687AbiDTTSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 15:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347774AbiDTTO4 (ORCPT
+        with ESMTP id S234251AbiDTTSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 15:14:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B94D845054
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:12:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56BF81477;
-        Wed, 20 Apr 2022 12:12:09 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D29213F766;
-        Wed, 20 Apr 2022 12:12:07 -0700 (PDT)
-Message-ID: <df0c4d87-68be-7aef-597f-043b3c7fea59@arm.com>
-Date:   Wed, 20 Apr 2022 21:11:58 +0200
+        Wed, 20 Apr 2022 15:18:45 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F4C647C;
+        Wed, 20 Apr 2022 12:15:58 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id h4so1625221ilq.8;
+        Wed, 20 Apr 2022 12:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vOudaK8u8RZc6AtXty/18V0scDsmCBhssZ3goh1YV7A=;
+        b=P5BGBaGXMvgspLe6ktrXk40s0GI2UxD6dSMsksk7uwnzfMZh4+gf0hovfAGkZ3Cb1C
+         ydnSEbIqVWq0UJUe8EYLK85BUxfnxW2S9F5qdvCnrKXhhAEJZCFic8weXuHXlnKu/H8d
+         LeAL2FB/REz6NJ/7jjwU/3KVUbnp2gY2Cf/SocLof6NRyycn7ZPXBVgupnKV871ZmafN
+         1IY7HJc1zm3l8l5eJXk2RkM9g5EzaL7xFXEOL98RzH4NxNByj4bO4wsqd/a05snyoCyl
+         r4ber8wKyflk+bOdN3i9xjFXt8vA0fFHJCMIRw87lZfCTxwE50e+Tp5ePo5alUEvN4QH
+         3cfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vOudaK8u8RZc6AtXty/18V0scDsmCBhssZ3goh1YV7A=;
+        b=aWkJ3RLf2ZVGMv0at2Ikpo2G3R2v8GbYDu+TCbYBA1HSMgTo0W9XiRczc+9fvckjks
+         ENceL6vb+08PXk0KTudVMIHhPFFPXwYQOcNQX5yZy4mVrBX/u3uBZ2h2L9mN3qFTYAhH
+         sRcDflFksK8+iinY9ObqKQYtQ/EaHYv+iwqlYIgvZ2KKLSZ605fCdFJJNHhhvDq98WJt
+         cwjZ3BK0PtzbPW6ZYcBDgVMYdvoJg4dyydeZQv1s6A8I2zvvaPUsC8KLDsbHqfck9WVP
+         wzI0zx3/aY5n9Tgqz1YXEKjMsPlf9gXklCUrV1GTzwjjDbxrAYeJD5MmXfQoRasUms0w
+         NWnw==
+X-Gm-Message-State: AOAM5333y6q5TnULQ/cLWx+CfjzV+TVxOeqqdmM56zmchgTd2mQT1YUO
+        EPN7WiCy5lV0BKC+fdf2PN0=
+X-Google-Smtp-Source: ABdhPJwasSMXid+ZBWeJxd8gP8wdY75eGF7pQFjwtMcvpEUo6pZts6ETQ2KWiqu4E0GJe0a+cKjK4g==
+X-Received: by 2002:a05:6e02:c28:b0:2ca:8380:8390 with SMTP id q8-20020a056e020c2800b002ca83808390mr9350897ilg.174.1650482158192;
+        Wed, 20 Apr 2022 12:15:58 -0700 (PDT)
+Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with UTF8SMTPSA id c15-20020a5d8b4f000000b00648f75d0289sm11834873iot.6.2022.04.20.12.15.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 12:15:57 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        schspa@gmail.com
+Subject: [PATCH] cpufreq: fix race on cpufreq online
+Date:   Thu, 21 Apr 2022 03:15:41 +0800
+Message-Id: <20220420191541.99528-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [External] Re: [PATCH] sched/core: Avoid obvious double
- update_rq_clock warning
-To:     Hao Jia <jiahao.os@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <20220418090929.54005-1-jiahao.os@bytedance.com>
- <20220419104828.GQ2731@worktop.programming.kicks-ass.net>
- <c1e7fc17-b091-1da1-7fa8-0490cc7f7e4b@bytedance.com>
-Content-Language: en-US
-In-Reply-To: <c1e7fc17-b091-1da1-7fa8-0490cc7f7e4b@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,118 +68,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2022 10:29, Hao Jia wrote:
-> On 4/19/22 6:48 PM, Peter Zijlstra wrote:
->> On Mon, Apr 18, 2022 at 05:09:29PM +0800, Hao Jia wrote:
+When cpufreq online failed, policy->cpus are not empty while
+cpufreq sysfs file available, we may access some data freed.
 
-[...]
+Take policy->clk as an example:
 
->> I'm really not sure about this part though. This is a bit of a mess. The
->> balancer doesn't really need the pinning stuff. I realize you did that
->> because we got the clock annotation mixed up with that, but urgh.
->>
->> Basically we want double_rq_lock() / double_lock_balance() to clear
->> RQCF_UPDATED, right? Perhaps do that directly?
->>
->> (maybe with an inline helper and a wee comment?)
->>
->> The only immediate problem with this would appear to be that
->> _double_rq_lock() behaves differently when it returns 0. Not sure that
->> matters.
->>
->> Hmm?
-> 
-> Thanks for your review comments.
-> As you have prompted, the WARN_DOUBLE_CLOCK warning is still triggered
-> when _double_rq_lock() returns 0.
-> Please review the solution below, and based on your review, I will
-> submit the v2 patch as soon as possible.
-> Thanks.
+static int cpufreq_online(unsigned int cpu)
+{
+  ...
+  // policy->cpus != 0 at this time
+  down_write(&policy->rwsem);
+  ret = cpufreq_add_dev_interface(policy);
+  up_write(&policy->rwsem);
 
+  return 0;
 
-[...]
+out_destroy_policy:
+	for_each_cpu(j, policy->real_cpus)
+		remove_cpu_dev_symlink(policy, get_cpu_device(j));
+    up_write(&policy->rwsem);
+...
+out_exit_policy:
+  if (cpufreq_driver->exit)
+    cpufreq_driver->exit(policy);
+      clk_put(policy->clk);
+      // policy->clk is a wild pointer
+...
+                                    ^
+                                    |
+                            Another process access
+                            __cpufreq_get
+                              cpufreq_verify_current_freq
+                                cpufreq_generic_get
+                                  // acces wild pointer of policy->clk;
+                                    |
+                                    |
+out_offline_policy:                 |
+  cpufreq_policy_free(policy);      |
+    // deleted here, and will wait for no body reference
+    cpufreq_policy_put_kobj(policy);
+}
 
-Maybe something like this:
-
--->8--
-
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Date: Wed, 20 Apr 2022 11:12:10 +0200
-Subject: [PATCH] sched/core: Clear RQCF_UPDATED in _double_lock_balance() &
- double_rq_lock()
-
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Signed-off-by: Schspa Shi <schspa@gmail.com>
 ---
- kernel/sched/core.c  |  6 +++---
- kernel/sched/sched.h | 20 ++++++++++++++++----
- 2 files changed, 19 insertions(+), 7 deletions(-)
+ drivers/cpufreq/cpufreq.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 068c088e9584..f4cfe7eea861 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -610,10 +610,10 @@ void double_rq_lock(struct rq *rq1, struct rq *rq2)
- 		swap(rq1, rq2);
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 80f535cc8a75..0d58b0f8f3af 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1533,8 +1533,6 @@ static int cpufreq_online(unsigned int cpu)
+ 	for_each_cpu(j, policy->real_cpus)
+ 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
  
- 	raw_spin_rq_lock(rq1);
--	if (__rq_lockp(rq1) == __rq_lockp(rq2))
--		return;
-+	if (__rq_lockp(rq1) != __rq_lockp(rq2))
-+		raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
- 
--	raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
-+	rq_clock_clear_update(rq1, rq2);
- }
- #endif
- 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 58263f90c559..3a77b10d7cc4 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2515,6 +2515,16 @@ static inline bool rq_order_less(struct rq *rq1, struct rq *rq2)
- 
- extern void double_rq_lock(struct rq *rq1, struct rq *rq2);
- 
-+#ifdef CONFIG_SCHED_DEBUG
-+static inline void rq_clock_clear_update(struct rq *rq1, struct rq *rq2)
-+{
-+	rq1->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-+	rq2->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-+}
-+#else
-+static inline void rq_clock_clear_update(struct rq *rq1, struct rq *rq2) {}
-+#endif
-+
- #ifdef CONFIG_PREEMPTION
- 
- /*
-@@ -2549,14 +2559,15 @@ static inline int _double_lock_balance(struct rq *this_rq, struct rq *busiest)
- 	__acquires(busiest->lock)
- 	__acquires(this_rq->lock)
- {
--	if (__rq_lockp(this_rq) == __rq_lockp(busiest))
--		return 0;
+-	up_write(&policy->rwsem);
 -
--	if (likely(raw_spin_rq_trylock(busiest)))
-+	if (__rq_lockp(this_rq) == __rq_lockp(busiest) ||
-+	    likely(raw_spin_rq_trylock(busiest))) {
-+		rq_clock_clear_update(this_rq, busiest);
- 		return 0;
-+	}
+ out_offline_policy:
+ 	if (cpufreq_driver->offline)
+ 		cpufreq_driver->offline(policy);
+@@ -1543,6 +1541,9 @@ static int cpufreq_online(unsigned int cpu)
+ 	if (cpufreq_driver->exit)
+ 		cpufreq_driver->exit(policy);
  
- 	if (rq_order_less(this_rq, busiest)) {
- 		raw_spin_rq_lock_nested(busiest, SINGLE_DEPTH_NESTING);
-+		rq_clock_clear_update(this_rq, busiest);
- 		return 0;
- 	}
- 
-@@ -2650,6 +2661,7 @@ static inline void double_rq_lock(struct rq *rq1, struct rq *rq2)
- 	BUG_ON(rq1 != rq2);
- 	raw_spin_rq_lock(rq1);
- 	__acquire(rq2->lock);	/* Fake it out ;) */
-+	rq_clock_clear_update(rq1, rq2);
- }
- 
- /*
++	cpumask_clear(policy->cpus);
++	up_write(&policy->rwsem);
++
+ out_free_policy:
+ 	cpufreq_policy_free(policy);
+ 	return ret;
 -- 
-2.25.1
+2.24.3 (Apple Git-128)
+

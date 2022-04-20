@@ -2,131 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8878508815
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A9650881A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378481AbiDTM2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S1378517AbiDTM3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353130AbiDTM2T (ORCPT
+        with ESMTP id S1353193AbiDTM3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:28:19 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642D61C91D;
-        Wed, 20 Apr 2022 05:25:33 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id h4so853249ilq.8;
-        Wed, 20 Apr 2022 05:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hRURk4DN2eZqCTEqfyXp6e+58OlcNywvCaEhVw8AW1k=;
-        b=NhfhqCCs3Hf2EcKb/RtIq/hjv48Ps2GXEYJ25dNCUTbtl1svXYZdaLXsrgj7QWWPdM
-         3oPVrUA81IyvWsn6DwAwMq/wFx4wtiCNIZ4QMETSQs8O1/Ye+puhovoY8VYUq1iH/jXX
-         XrqVbKAbZpXr39qKer3R/EqS37otJinwycoykfbrxTXYCCQpBa/ljq9oFdjT6hziWSS7
-         9D1VG3znG9Hyl+SjpRiJLYwyJ/6/CFz0ltHThGbWLEEy6Bpf4OHCM43Hf1lncvlyeP2v
-         t9bW6z6eQS1zHeK4eOBVQWQoY/2TdPvuLDlrwSEql08qeayxkYpHay7K4KcQoTyPt6vf
-         HlZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hRURk4DN2eZqCTEqfyXp6e+58OlcNywvCaEhVw8AW1k=;
-        b=fifMWz89yuIEqxuYDnpGPu4HwuFKgu3v7UnJ+ANgAwCEsrUUd0d922k/2/YYQfpFwU
-         P48RZYdYZKbhQh7F5YgvQq7NSC8n1uqQh8WXXpnD/unK3s7RZ2dStE0EmpvuH6BvFCsX
-         8hz6xLmb5BjbWnvJcRZkbWwuvNFPhFIFovvpdOSGZYVehaWZ2MYkb/1/P7rzUqEmfzPX
-         KZepdddMAA0A79aOi1AiFDjd+LZurzDzkLKmiesIJSHTQVV6FytknjehsxcaENiwz9VA
-         VpAygZbCqeP48f6Nv46jMQs44wlYI/u0GkbCNcnVUe/ISs9el81aXqNu9f6xqPzyvvP9
-         P+5A==
-X-Gm-Message-State: AOAM533H9j9G9utLPNz7zLKtA3dxhHq/3q0DR+5ruvmuBwYKH7YXaR2A
-        ZKgG2vFCPZw8YGdMQs80L7A59xLPdHwTYzg3INQ=
-X-Google-Smtp-Source: ABdhPJxR05XY11iOWutfHq8oz3L83XIEM/5S8NVV9L7I7mrKegnWO3BlDIq1sHEfoLPpDNiMs/wLF6X1KXkixVdCtjk=
-X-Received: by 2002:a92:6012:0:b0:2bd:fb5f:d627 with SMTP id
- u18-20020a926012000000b002bdfb5fd627mr8766792ilb.86.1650457532838; Wed, 20
- Apr 2022 05:25:32 -0700 (PDT)
+        Wed, 20 Apr 2022 08:29:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4BE286E1;
+        Wed, 20 Apr 2022 05:26:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAFDFB81ECD;
+        Wed, 20 Apr 2022 12:26:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F20C385A0;
+        Wed, 20 Apr 2022 12:26:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650457575;
+        bh=iECp8GFjCkhpAv51gZMBcltLbreh5Jd0z16B9i8dGhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K9JLCLk1cvj6L2BUtW7SHoF2XwCCyJeDqlDglccjY64wW5vHz9YutWn+Qhx/mmO6B
+         i2AOcQRyOmimm3rFTNeM2dWpQuJeZrPAFmgnXyL1cX4K/3zFGQaah+dTo4bvQa7Wf/
+         inAUVba37yveUyQlszapXlHX2OFrnEiE20vR5CIqTQUM6e4dIXqYvVhe29jwSaatGX
+         LGbWSHjxaWHHCgVeIJfqtYmJfRpxlJ4leH7rVATPJ8prUX6WZgeY6I6P2EA6PrfBFT
+         fihe6+IH3Y6W03OlB6MwqQ1t+hU56tj55lNqUM1TW9egbnZzpGpMVNv0XvmsGiOwMH
+         fETLGHUh0mWzQ==
+Date:   Wed, 20 Apr 2022 14:26:10 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     syzbot <syzbot+10a16d1c43580983f6a2@syzkaller.appspotmail.com>
+Cc:     fweisbec@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] INFO: rcu detected stall in sys_setxattr (2)
+Message-ID: <20220420122610.7k2qx5dwdchu27mg@wittgenstein>
+References: <0000000000007cc21d05dd0432b8@google.com>
 MIME-Version: 1.0
-References: <20220323120021.361137-1-alistair@alistair23.me>
-In-Reply-To: <20220323120021.361137-1-alistair@alistair23.me>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Wed, 20 Apr 2022 22:25:06 +1000
-Message-ID: <CAKmqyKP5CRDx4acc6yg9SwADaGTNqKmDUrBs2ODXR30OZuunoA@mail.gmail.com>
-Subject: Re: [PATCH v7 0/4] Add support for the Cypress cyttsp5
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     linux-input <linux-input@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0000000000007cc21d05dd0432b8@google.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 10:00 PM Alistair Francis
-<alistair@alistair23.me> wrote:
->
-> This patch series builds on top of [1] and adds support for the cyttsp5
-> touchscreen controller for the reMarkable 2.
->
-> I first tried to add an I2C HID device. Although the cyttsp5 has some HID
-> looking aspects it is not HID compatible. Just in trying to probe the device
-> I found:
->  - The HID descriptor has extra padding
->  - The HID descriptor sets the high bytes of the descriptor length
->  - The HID descriptor has extra unrecognised tags
->  - The HID reset command doesn't appear to work
->
-> I don't think there is a way to use the I2C HID framework with the cyttsp5.
-> For anyone interested you can see the work here [2]. In that branch though I
-> can only obtain a HID descriptor, nothing else works without more core
-> changes.
->
-> So instead I rebased the series from [1]. Converted to the new yaml DTS
-> documentation, added regulator support and fixed a x/y miscalculation bug.
+On Tue, Apr 19, 2022 at 09:16:20AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    b2d229d4ddb1 Linux 5.18-rc3
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=144417ccf00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=6cb89c879305f336
+> dashboard link: https://syzkaller.appspot.com/bug?extid=10a16d1c43580983f6a2
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=104a88e8f00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=132a840cf00000
+> 
+> The issue was bisected to:
+> 
+> commit e257039f0fc7da36ac3a522ef9a5cb4ae7852e67
+> Author: Al Viro <viro@zeniv.linux.org.uk>
+> Date:   Tue Mar 1 04:04:20 2022 +0000
+> 
+>     mount_setattr(): clean the control flow and calling conventions
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16b313c0f00000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=15b313c0f00000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11b313c0f00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+10a16d1c43580983f6a2@syzkaller.appspotmail.com
+> Fixes: e257039f0fc7 ("mount_setattr(): clean the control flow and calling conventions")
 
-The DT bindings have been reviewed, any comments on the driver
-implementation? It has been tested on a few different devices
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git fs.mount_setattr.cleanup
 
-Alistair
 
->
-> 1: https://lwn.net/ml/linux-kernel/20180703094309.18514-1-mylene.josserand@bootlin.com/
-> 2: https://github.com/alistair23/linux/commits/rM2-mainline-cyttsp5-hid
->
-> v7:
->  - Fix device tree warnings
-> v6:
->  - Use reg for the button properties
-> v5:
->  - Address review comments from v4
->
-> Alistair Francis (4):
->   Input: Add driver for Cypress Generation 5 touchscreen
->   dt-bindings: input: Add Cypress TT2100 touchscreen controller
->   ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen
->   ARM: dts: imx7d-remarkable2: Enable the cyttsp5
->
->  .../input/touchscreen/cypress,tt21000.yaml    | 101 ++
->  arch/arm/boot/dts/imx7d-remarkable2.dts       | 100 ++
->  arch/arm/configs/imx_v6_v7_defconfig          |   1 +
->  drivers/input/touchscreen/Kconfig             |  16 +
->  drivers/input/touchscreen/Makefile            |   1 +
->  drivers/input/touchscreen/cyttsp5.c           | 902 ++++++++++++++++++
->  6 files changed, 1121 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
->  create mode 100644 drivers/input/touchscreen/cyttsp5.c
->
-> --
-> 2.35.1
->

@@ -2,199 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A58508EE6
+	by mail.lfdr.de (Postfix) with ESMTP id 85D52508EE5
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381346AbiDTR4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 13:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
+        id S1381351AbiDTR4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 13:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381339AbiDTR4l (ORCPT
+        with ESMTP id S1381342AbiDTR4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 13:56:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F6D43EC4;
-        Wed, 20 Apr 2022 10:53:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 20 Apr 2022 13:56:46 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E374477D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:53:56 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id F18162112B;
+        Wed, 20 Apr 2022 17:53:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1650477234; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fGH9FdJMgDznKesllL476v8fxOKmtY44S9R3LqseiJ0=;
+        b=smW+TvVAYOFaUpzX1xbliF3Q2LEuWE2g2H5k1ekdqOelqNluFb83itUiWKfSWWvONp+67N
+        G8GHPus0R+5tvzEhDYKex2dVNKsyybOf3Bw7mXWiQDT+qwNh2vE8rEAC2ggaNMV00NqG+k
+        MMMPNk4KxxB2tfxuDR6kiKKAfl+tQtc=
+Received: from suse.cz (unknown [10.100.224.162])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C959B81EB6;
-        Wed, 20 Apr 2022 17:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D90C385A1;
-        Wed, 20 Apr 2022 17:53:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650477232;
-        bh=rPJ14Ac12EFXoPf+Opo+3BFlBnnBFWwCWA10Yw/roM4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DNJCvLcrczQXOR26pFils3zVtLSX+a22jx4HK/7JTzY0VRs1YnJUYbApEMP3PqiuO
-         htygMdsMH95ETCitJaEoVaHUfM7AO3em3vx2FrjIVfQLW+QjJZ8hO/BC2evMuPRso2
-         HNt6Cm9ixu01cWQrjkNlTJbny/ezw3kHmxEOcZMU4TxTOJoy07BP4YTSveRhrW5m86
-         w4m+vpYFWBy5Y6rKjRaQQoReY3y0rT6b1n0UfLvAGWJTNUhx93kzLRbXrxx3Iwm5i+
-         3vjQMEHpyrRDLyYMgIk0ADlpSsLo+uyt3DSecmRMNI6eY+hMbq3LW7M2FosswmmNPC
-         Ao9k2Wu7rcS7A==
-Date:   Wed, 20 Apr 2022 10:53:51 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
-        david@fromorbit.com, hch@infradead.org, jane.chu@oracle.com,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v13 4/7] fsdax: Introduce dax_lock_mapping_entry()
-Message-ID: <20220420175351.GX17025@magnolia>
-References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
- <20220419045045.1664996-5-ruansy.fnst@fujitsu.com>
+        by relay2.suse.de (Postfix) with ESMTPS id BEE392C141;
+        Wed, 20 Apr 2022 17:53:54 +0000 (UTC)
+Date:   Wed, 20 Apr 2022 19:53:51 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH printk v3 13/15] printk: add kthread console printers
+Message-ID: <YmBIr1mkmIN1Zkb+@alley>
+References: <20220419234637.357112-1-john.ogness@linutronix.de>
+ <20220419234637.357112-14-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419045045.1664996-5-ruansy.fnst@fujitsu.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220419234637.357112-14-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 12:50:42PM +0800, Shiyang Ruan wrote:
-> The current dax_lock_page() locks dax entry by obtaining mapping and
-> index in page.  To support 1-to-N RMAP in NVDIMM, we need a new function
-> to lock a specific dax entry corresponding to this file's mapping,index.
-> And output the page corresponding to the specific dax entry for caller
-> use.
+On Wed 2022-04-20 01:52:35, John Ogness wrote:
+> Create a kthread for each console to perform console printing. During
+> normal operation (@system_state == SYSTEM_RUNNING), the kthread
+> printers are responsible for all printing on their respective
+> consoles.
 > 
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> ---
->  fs/dax.c            | 63 +++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/dax.h | 15 +++++++++++
->  2 files changed, 78 insertions(+)
+> During non-normal operation, console printing is done as it has been:
+> within the context of the printk caller or within irqwork triggered
+> by the printk caller, referred to as direct printing.
 > 
-> diff --git a/fs/dax.c b/fs/dax.c
-> index 1ac12e877f4f..57efd3f73655 100644
-> --- a/fs/dax.c
-> +++ b/fs/dax.c
-> @@ -455,6 +455,69 @@ void dax_unlock_page(struct page *page, dax_entry_t cookie)
->  	dax_unlock_entry(&xas, (void *)cookie);
+> Since threaded console printers are responsible for all printing
+> during normal operation, this also includes messages generated via
+> deferred printk calls. If direct printing is in effect during a
+> deferred printk call, the queued irqwork will perform the direct
+> printing. To make it clear that this is the only time that the
+> irqwork will perform direct printing, rename the flag
+> PRINTK_PENDING_OUTPUT to PRINTK_PENDING_DIRECT_OUTPUT.
+> 
+> Threaded console printers synchronize against each other and against
+> console lockers by taking the console lock for each message that is
+> printed.
+> 
+> Note that the kthread printers do not care about direct printing.
+> They will always try to print if new records are available. They can
+> be blocked by direct printing, but will be woken again once direct
+> printing is finished.
+> 
+> Console unregistration is a bit tricky because the associated
+> kthread printer cannot be stopped while the console lock is held.
+> A policy is implemented that states: whichever task clears
+> con->thread (under the console lock) is responsible for stopping
+> the kthread. unregister_console() will clear con->thread while
+> the console lock is held and then stop the kthread after releasing
+> the console lock.
+> 
+> For consoles that have implemented the exit() callback, the kthread
+> is stopped before exit() is called.
+> 
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -390,6 +397,14 @@ void printk_prefer_direct_exit(void)
+>  	WARN_ON(atomic_dec_if_positive(&printk_prefer_direct) < 0);
 >  }
 >  
-> +/*
-> + * dax_lock_mapping_entry - Lock the DAX entry corresponding to a mapping
-> + * @mapping: the file's mapping whose entry we want to lock
-> + * @index: the offset within this file
-> + * @page: output the dax page corresponding to this dax entry
-> + *
-> + * Return: A cookie to pass to dax_unlock_mapping_entry() or 0 if the entry
-> + * could not be locked.
-> + */
-> +dax_entry_t dax_lock_mapping_entry(struct address_space *mapping, pgoff_t index,
-> +		struct page **page)
+> +static inline bool allow_direct_printing(void)
 > +{
-> +	XA_STATE(xas, NULL, 0);
-> +	void *entry;
-> +
-> +	rcu_read_lock();
-> +	for (;;) {
-> +		entry = NULL;
-> +		if (!dax_mapping(mapping))
-> +			break;
-> +
-> +		xas.xa = &mapping->i_pages;
-> +		xas_lock_irq(&xas);
-> +		xas_set(&xas, index);
-> +		entry = xas_load(&xas);
-> +		if (dax_is_locked(entry)) {
-> +			rcu_read_unlock();
-> +			wait_entry_unlocked(&xas, entry);
-> +			rcu_read_lock();
-> +			continue;
-> +		}
-> +		if (!entry ||
-> +		    dax_is_zero_entry(entry) || dax_is_empty_entry(entry)) {
-> +			/*
-> +			 * Because we are looking for entry from file's mapping
-> +			 * and index, so the entry may not be inserted for now,
-> +			 * or even a zero/empty entry.  We don't think this is
-> +			 * an error case.  So, return a special value and do
-> +			 * not output @page.
-> +			 */
-> +			entry = (void *)~0UL;
-
-In this case we exit to the caller with the magic return value, having
-not set *page.  Either the comment for this function should note that
-the caller must set *page to a known value (NULL?) before the call, or
-we should set *page = NULL here.
-
-AFAICT the callers in this series initialize page to NULL before passing
-in &page, so I think the comment update would be fine.
-
-With the **page requirement documented,
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-
---D
-
-
-> +		} else {
-> +			*page = pfn_to_page(dax_to_pfn(entry));
-> +			dax_lock_entry(&xas, entry);
-> +		}
-> +		xas_unlock_irq(&xas);
-> +		break;
-> +	}
-> +	rcu_read_unlock();
-> +	return (dax_entry_t)entry;
+> +	return (!printk_kthreads_available ||
+> +		system_state > SYSTEM_RUNNING ||
+> +		oops_in_progress ||
+> +		atomic_read(&printk_prefer_direct));
 > +}
 > +
-> +void dax_unlock_mapping_entry(struct address_space *mapping, pgoff_t index,
-> +		dax_entry_t cookie)
-> +{
-> +	XA_STATE(xas, &mapping->i_pages, index);
-> +
-> +	if (cookie == ~0UL)
-> +		return;
-> +
-> +	dax_unlock_entry(&xas, (void *)cookie);
-> +}
-> +
->  /*
->   * Find page cache entry at given index. If it is a DAX entry, return it
->   * with the entry locked. If the page cache doesn't contain an entry at
-> diff --git a/include/linux/dax.h b/include/linux/dax.h
-> index 9c426a207ba8..c152f315d1c9 100644
-> --- a/include/linux/dax.h
-> +++ b/include/linux/dax.h
-> @@ -143,6 +143,10 @@ struct page *dax_layout_busy_page(struct address_space *mapping);
->  struct page *dax_layout_busy_page_range(struct address_space *mapping, loff_t start, loff_t end);
->  dax_entry_t dax_lock_page(struct page *page);
->  void dax_unlock_page(struct page *page, dax_entry_t cookie);
-> +dax_entry_t dax_lock_mapping_entry(struct address_space *mapping,
-> +		unsigned long index, struct page **page);
-> +void dax_unlock_mapping_entry(struct address_space *mapping,
-> +		unsigned long index, dax_entry_t cookie);
->  #else
->  static inline struct page *dax_layout_busy_page(struct address_space *mapping)
->  {
-> @@ -170,6 +174,17 @@ static inline dax_entry_t dax_lock_page(struct page *page)
->  static inline void dax_unlock_page(struct page *page, dax_entry_t cookie)
->  {
->  }
-> +
-> +static inline dax_entry_t dax_lock_mapping_entry(struct address_space *mapping,
-> +		unsigned long index, struct page **page)
-> +{
-> +	return 0;
-> +}
-> +
-> +static inline void dax_unlock_mapping_entry(struct address_space *mapping,
-> +		unsigned long index, dax_entry_t cookie)
-> +{
-> +}
->  #endif
+>  DECLARE_WAIT_QUEUE_HEAD(log_wait);
+>  /* All 3 protected by @syslog_lock. */
+>  /* the next printk record to read by syslog(READ) or /proc/kmsg */
+> @@ -2280,10 +2295,10 @@ asmlinkage int vprintk_emit(int facility, int level,
+>  	printed_len = vprintk_store(facility, level, dev_info, fmt, args);
 >  
->  int dax_zero_range(struct inode *inode, loff_t pos, loff_t len, bool *did_zero,
-> -- 
-> 2.35.1
-> 
-> 
-> 
+>  	/* If called from the scheduler, we can not call up(). */
+> -	if (!in_sched) {
+> +	if (!in_sched && allow_direct_printing()) {
+
+allow_direct_printing() is racy here. But I think that we could live
+with it, see below.
+
+
+>  		/*
+>  		 * The caller may be holding system-critical or
+> -		 * timing-sensitive locks. Disable preemption during
+> +		 * timing-sensitive locks. Disable preemption during direct
+>  		 * printing of all remaining records to all consoles so that
+>  		 * this context can return as soon as possible. Hopefully
+>  		 * another printk() caller will take over the printing.
+
+[...]
+
+> @@ -3475,10 +3720,14 @@ static void wake_up_klogd_work_func(struct irq_work *irq_work)
+>  {
+>  	int pending = this_cpu_xchg(printk_pending, 0);
+>  
+> -	if (pending & PRINTK_PENDING_OUTPUT) {
+> +	if (pending & PRINTK_PENDING_DIRECT_OUTPUT) {
+> +		printk_prefer_direct_enter();
+> +
+>  		/* If trylock fails, someone else is doing the printing */
+>  		if (console_trylock())
+>  			console_unlock();
+> +
+> +		printk_prefer_direct_exit();
+>  	}
+>  
+>  	if (pending & PRINTK_PENDING_WAKEUP)
+> @@ -3503,10 +3752,11 @@ static void __wake_up_klogd(int val)
+>  	 * prepare_to_wait_event(), which is called after ___wait_event() adds
+>  	 * the waiter but before it has checked the wait condition.
+>  	 *
+> -	 * This pairs with devkmsg_read:A and syslog_print:A.
+> +	 * This pairs with devkmsg_read:A, syslog_print:A, and
+> +	 * printk_kthread_func:A.
+>  	 */
+>  	if (wq_has_sleeper(&log_wait) || /* LMM(__wake_up_klogd:A) */
+> -	    (val & PRINTK_PENDING_OUTPUT)) {
+> +	    (val & PRINTK_PENDING_DIRECT_OUTPUT)) {
+>  		this_cpu_or(printk_pending, val);
+>  		irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
+>  	}
+> @@ -3524,7 +3774,16 @@ void defer_console_output(void)
+>  	 * New messages may have been added directly to the ringbuffer
+>  	 * using vprintk_store(), so wake any waiters as well.
+>  	 */
+> -	__wake_up_klogd(PRINTK_PENDING_WAKEUP | PRINTK_PENDING_OUTPUT);
+> +	int val = PRINTK_PENDING_WAKEUP;
+> +
+> +	/*
+> +	 * If console deferring was called with preferred direct printing,
+> +	 * make the irqwork perform the direct printing.
+> +	 */
+> +	if (atomic_read(&printk_prefer_direct))
+> +		val |= PRINTK_PENDING_DIRECT_OUTPUT;
+
+We actually need:
+
+	/*
+	 * Make sure that someone will handle the messages when direct
+	 * printing is allowed. It happens when the kthreads are less
+	 * reliable or unusable at all.
+	 */
+	if (allow_direct_printing())
+		val |= PRINTK_PENDING_DIRECT_OUTPUT;
+
+
+It is racy. But the same race is also in vprintk_emit().
+
+False positive is fine. console_flush_all() will bail out when
+the direct printing gets disabled in the meantime.
+
+False negative is worse. But we will still queue PRINTK_PENDING_WAKEUP
+that will try to wake up the kthreads that should still be around.
+
+And it was always problem even with console_trylock() approach.
+Failure means an expectation that someone else is doing the printing.
+It might be either a kthread or the current console_lock owner.
+But it is never guaranteed because both might be sleeping.
+
+We do our best by calling pr_flush() or console_flush_on_panic()
+on various places. Also PRINTK_PENDING_WAKEUP will always try to wake
+up the kthreads.
+
+
+Anyway, we should document this somewhere. At least in the commit
+message.
+
+My dream is Documentation/core-api/printk-design.rst but I do not
+want to force you to do it ;-)
+
+
+> +	__wake_up_klogd(val);
+>  }
+>  
+>  void printk_trigger_flush(void)
+
+Otherwise, it looks good.
+
+Best Regards,
+Petr

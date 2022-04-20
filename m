@@ -2,220 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67203508438
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707DF50843B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377028AbiDTI50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S1377008AbiDTI5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377025AbiDTI5Y (ORCPT
+        with ESMTP id S1349589AbiDTI5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:57:24 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D83F3BBDD;
-        Wed, 20 Apr 2022 01:54:33 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23K7lK3M009092;
-        Wed, 20 Apr 2022 08:54:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=n1wOzqDYc/OrsNWR+p+tHM6d8vbPcqAXfvwnhSPAvOE=;
- b=jHztad9HrShQPgd1BTJnmtqixqEtaanBG05AGUa6oyJbuKupJcohxa45LCAH8G4oPYUq
- Wz85QRdCSJnb5bLuoODxur4oApemrGB4iwaYbtqk+AfoCpvb7uK0um3PuDNjnvdfumb6
- GQcklUWAH3YWSxUzgFxs514/Soxq3SnI6EpPR2P6JSQSNLFpV07jqj5ASI8moe2P5OR4
- wDQnxUhorHKGCEMPKQNJZi3gC+jpYBvIxBNFGVnAtR2hf9ub3Et9Ceq2Aq0KhmecY7YO
- hTMSnZfwn7ljrBWsSpjDF7BPx573vu3RWK2cKUv7jfS0Smevolctdg+W9O/O6xV6v7p9 /Q== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ffmk2rdvk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Apr 2022 08:54:08 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23K8nh8V012661;
-        Wed, 20 Apr 2022 08:54:07 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3ffm8916ew-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Apr 2022 08:54:07 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oTyAXoLkwxgBQq/05QBxksMI4P+g2IHfZOb8vUMXuKss2fzd9iJweBvI7kTGDVEsc6muuWmab1HKZeELAqmL573KHOcTQ+FtjflAEIu2vcctnpsN4qoYAEmkoYx3kAkESq1yszse3CT3JW+X5LUw0Pn88w0kYI90IizXzCYQ+h1EcskYjpFAShiNTLlqNzqIzGSlv4ZMXom18nGIHQ35T0GgC6J2I6Js/dWGjGLfoKrdFMkldWADnKkkc06IDVApd5JKwGAwsVrm0VOq9AfmdUXF2u7qB9xMxxEuTfLwTK7tn01BKjQZnuef66qJo1EbFBPB83wWYtmhLGW3ND3JRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n1wOzqDYc/OrsNWR+p+tHM6d8vbPcqAXfvwnhSPAvOE=;
- b=e7kpMj7yfDhNwhydTX9b1NifT9NVXWA0DPYif8VKoglTppfHSf2hQpkry2J8DtpmoB43m75pSwW3F04Ygh0Y30hG8rJBcWuA8GwCsqvtRxfvd38iR/pDV9vM0GnW9S9JbF/rFCgXCtlCe8iQyUPe/dq4e4guw9MRuQxMbF9qKFzETopiGycBIa5FDidp234gJLFoL+oPHKDeQx6uzDv75f9CNaFZNyfI+d2csXIkH6cJDkVvs0lhvEhe05tcYB520MTSeJpqiXTQItIt9jUr/+aPpK2t9xlDnl6Pmoe+49aDoTpgWgdmgwdrD8a/1/pJyKS16E5sjLDHhkpRKnIzRw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 20 Apr 2022 04:57:10 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2713B3E6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:54:24 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2f16645872fso10795017b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n1wOzqDYc/OrsNWR+p+tHM6d8vbPcqAXfvwnhSPAvOE=;
- b=tPn/W/9sEn0A3OQlYhy9EuOxJ5X5DhJUsVDaOs0TBBah9HwKLI5o3QXwqqOz/9ar8tafGwQhvSrEFV0CmLx09hy/vJFIaQ8i/gbxuuSFlQsSHdfWkkxVv1PZVa/CEGau3viyUi1BASpGN5zbL9LwbFd5GghTR4+PKUnQWIISdVY=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by DM6PR10MB3387.namprd10.prod.outlook.com
- (2603:10b6:5:1aa::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Wed, 20 Apr
- 2022 08:54:06 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5164.025; Wed, 20 Apr 2022
- 08:54:05 +0000
-Date:   Wed, 20 Apr 2022 11:53:39 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 3/4] staging: media: Add support for the Allwinner A31
- ISP
-Message-ID: <20220420085339.GA2969@kadam>
-References: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
- <20220415153708.637804-4-paul.kocialkowski@bootlin.com>
- <20220420074249.GB2951@kadam>
- <Yl+7UrQFyLvfKRdG@aptenodytes>
- <20220420085132.GC2951@kadam>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420085132.GC2951@kadam>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JN2P275CA0007.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:3::19)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wLb6JbYsWBBApP0Mc9bUp5iLpj1TLGjQFNYgA4f58jY=;
+        b=Z5uO5aHIflhbnOadvmxDtFLCizKRo1UqS7cTKCrhpc4fG4g6SUUUMFIKuoHkr+Num2
+         n07blE0e5TZu46EsQ1SS0MUjLsKnU21sr2iJIV2WHWoDFF63kyvIch+not84gEOjExGr
+         0IbUg8b/5jSjlcTPry4Ila/roGc69AVBSeE7Ukh7ph+ub9oBZCGntsoXfYSCzQifN+B2
+         rqQbVyFMw08on2jkL5R7HavrzQMK8WFn9yzYOBleSYdCGypDe/5C6CeEROqEFF5pC5xe
+         PyEjGcuor5dZd+V3sp8HqwDjp6OgM5kPSra2+hkFvBBMCcmJXjz2AOFGP9zYlkvjET4h
+         ZbAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wLb6JbYsWBBApP0Mc9bUp5iLpj1TLGjQFNYgA4f58jY=;
+        b=BUfLSPrtVJk2rnJXiq0nV4trzpWI09r1ntg+eviMiDoJU8qbPG75K5sHPMexQ9G/B2
+         iYWPlASARk7aar5FklrP7P5kldpLfNTr7ncBFF5zb8m6kCGpIWQsgYDLBGkTEg1dln8i
+         bDNw61tGbMGRyzzkykwAvYFWMeQESOc9WSfm8QwLwzgLZmVamPfxDva53pgYrGjJQY25
+         o/Dnrc6gQaMhUatf4nVzJcKr+h6k64cqW5gBS25WCZHDiloU1f6wPdmBlq+m8RZ7aVD2
+         ZSUonCXmjg/xUqVGeAjmQjGYllxSd2OAnKyreGfrDQvG2dqD6WhxyCXdymHsYzSfdpUk
+         umzw==
+X-Gm-Message-State: AOAM531gXxviuTbedBtUjhXjI9+oaYCMmipM+obhaNPbzvjLZChPb3pd
+        lyZ+FHI6/l/CXXJDs/kBz3MMOj1aWtfuMO11pUEN6A==
+X-Google-Smtp-Source: ABdhPJxqWslF3f2CGWOJcNab6oG/sR2XviNs/WLvatn0fSI5Dx9gYNvanGHc1PAgK+WrJakb5fgu0yUuCX9H2BE5UBQ=
+X-Received: by 2002:a81:6dc7:0:b0:2f1:c5bf:8f64 with SMTP id
+ i190-20020a816dc7000000b002f1c5bf8f64mr8609703ywc.120.1650444863090; Wed, 20
+ Apr 2022 01:54:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d2d6d51d-e021-41dc-c312-08da22ab5321
-X-MS-TrafficTypeDiagnostic: DM6PR10MB3387:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB3387DD7B4617B46F44C3C7118EF59@DM6PR10MB3387.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pN9y6T2uscLIkmdR8clQ8eOQiId+jksJVV9wk/PcEChbukYHUm1LiYoWLS1J3hzxQ9qQl2YVU5CE+bEs6aQeMZQrQVm/KKyDZvsEyjq7RqGVHRXB1oyy5+PyBh+E3UPwd1DAMXC45qC/TRcVFigzPvOcL3crQv6NQRyLL9hOKoEIQZxP57UtpOqrn+IEAFpO1gzdCkekYAgOOlP3LfpAwivOLlW/7yuSSS8bVLG6mGgcIcY2VVv8cJmJNvlXsRUzB5afsZGjhstBAgnQpjSXnqBkQCatgKrUt9ix0G4Z+EVLwKHbAnRTFVLtTrZsqJeLS9F03sdn7ozHUeoOCuPDy6AP5dXBQMgsBv+uBAEUW19ZK2LcHEdn2NigQtABpgVoI165XH9J/MgrrSSW/v1cGHfrU30v8EMT4mD30apXHPNEVeSCQO9ttlL2IARkYFZSEHTICdgZgCH9tULElCS4hjQlvqRaYGI/jCUk6hP4Uy9aBDcuZETcCMk1lxWLxOLv0GA0FEFJfdvMGfcV+u4aHCPrjmNuFSnLyg3CyxnyyiRk5Z0kuN+vOv+C6J3Ah08sszasEa7Y3QAaeM/qCBwo/c533WbIQanuaeqDfGYXoGtWUS7zQPTbLVwsxWDH7dggSEWvhA08C4ZBFQbDRkCyK9edCn8wgp8mBV7a16echHRHeYtP/49Z7H/JUX8a7zfW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(8936002)(52116002)(83380400001)(6666004)(508600001)(66556008)(4326008)(26005)(2906002)(66476007)(33716001)(8676002)(7416002)(33656002)(316002)(5660300002)(6506007)(6486002)(6916009)(9686003)(186003)(38350700002)(1076003)(38100700002)(86362001)(66946007)(54906003)(6512007)(44832011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IAtVm/dsgPBT/LD38J80fjr+SGYVwl/w6o/vBhCnchgJMHEk70ugCdSAMvrY?=
- =?us-ascii?Q?N282VmIatnJXlghnCsD3mjz8PPjwjdfhMdquFWhRbeK+xHnba6DjCuvzZhS2?=
- =?us-ascii?Q?rJYakVco5aQZ6wKwWvdUoujzDkMadKz6p+2Ix2gAaN0CiTilX0pcbHEa1Gkc?=
- =?us-ascii?Q?VLyl/rTqJMrBAXGJrqBntsxoHAXPt+hX71kg/ovqJoYwcE3Hkg7rT5R60Vdu?=
- =?us-ascii?Q?E6Xv0fZaGQLgmXjykuk+hwTemNZ2uGVplawKTxWrCha4OPweD1sftSnCBALp?=
- =?us-ascii?Q?gRZceBIuJOtXylQ+IiN7mx2ehxKhZs5HnJmpIjSzSMTdkKLOLYRnJ15FBbuG?=
- =?us-ascii?Q?N3dFt0Nj7gftlkmsAxguWlakxWD1nXeTI3sgYnE9mM/YPMAT3XQ2kKF/I/S2?=
- =?us-ascii?Q?FQL8Lq3/i+DNk0GhX2Isq9xrc81aeMAStD5NH2mEoDi3qFWtBDwR1925TXZ+?=
- =?us-ascii?Q?Z4gR0t5PrjJI3+Ksz5pHPDJgY5//Run7RqZyuoqBV8RTydMm65kmVQchSBd2?=
- =?us-ascii?Q?LI5hNSI+lxx7veEaqDdzePp0jdtOT4YgG8ceTmL49MRQNrqEILmWO1V1WSvi?=
- =?us-ascii?Q?HS28EhFJ70wh/FKmQwf4merulX3R4IDQmcUn52X9X1fn/9QxG3BO1vG9aKLW?=
- =?us-ascii?Q?UcbeIuP+QbzsUe/QngimWrB3k1e7JW+FWOXhCWjwRPOQ8e6u+HKXG0celJ54?=
- =?us-ascii?Q?WfTJil1Zv88p4Q4P1dqxqKYAg31t+A8mRRjs0vWCDz6ZLS99jfOcso12XuYC?=
- =?us-ascii?Q?TiNZ0AGYz3j7d0FUmPCIztvlldLK5M1kn8YzrqH+yH4WGuTum8v282tP/HIp?=
- =?us-ascii?Q?lENaSr6Lzlrd7oHoatrySF4l5nHCEV/6Ijz1UzcAbjNkF66L28A6KMih7VrD?=
- =?us-ascii?Q?S/sg7teo9KYCe7Gw3QA21aEnoPFNfrV6/ZSSdM4me49Jz01cG3JKySwydQl4?=
- =?us-ascii?Q?pbuDJKYwdJBzl6f2H5Ht0RKGWHLSm9wAsm15d3vaHfKBha554eCoyIOx2X65?=
- =?us-ascii?Q?epXWFBSAinGQ9cXyNJnbSxcg1xgB7/9vJchobVOTn74p+ykRSGt7bsfBrC1A?=
- =?us-ascii?Q?ZADD9TBB5yt3doLkD19K4/QezIM+EdEV4gF8yYkK/+D0mbYu9Df8Bkrmoh44?=
- =?us-ascii?Q?Z7dia/XAeZexZ9w0cHHktyhk7IVgK7befoukEzDqY7MZQlBy+iknWePt55Cg?=
- =?us-ascii?Q?WNUlJvyqym6I22hTu7r/wdtDQjnIl1hPFaViRDrZMyKNIgNwb9FP2BgOrH/1?=
- =?us-ascii?Q?lgiFzJPmA8+KtKs7OEmgqc6Qf/9mBd6jouLBKHOSt+Xq+sKTNVUVAan43OlY?=
- =?us-ascii?Q?1fygqucz0SrBPkLxUIOJ/PpGBeV+u/foMG2E4LHogkOVDx2E3TzY06skyE7s?=
- =?us-ascii?Q?lbPhaHLiTAEUYRWsupfT90EsK4lE5HBwTtdi1AIDYBq5md00RKJALUl0W95y?=
- =?us-ascii?Q?CTj9X7yAz+DswfZoJ+gqK+vbcLiHWudpYBww6cdmwdYnDfXgnxMH4637h1oU?=
- =?us-ascii?Q?11e19NLR+GRU8DhMoOauyGPzb1jYxRxbwUZZTi82AHBDTfESIP+d5tSi78KZ?=
- =?us-ascii?Q?OyiQEwaid3T7cwudXiuzr2Ea9OkpVrt17HP54dC7tLq8uwZNTzR1bGqAKjvg?=
- =?us-ascii?Q?FcBYl6OYdK+wpeQd9HzvjpqNWIBB5ae+sbOiN57Kyrt0qheVmMSETwFeE0NX?=
- =?us-ascii?Q?OkSYXKqv2TrVHZMG8LOmqNdwSP9OJk+5SKXs1JmJwHxM3hSqO5THz+7oSsZl?=
- =?us-ascii?Q?i/bjEm1GK+7W7eLu5D0jMhSRW4ejfyo=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2d6d51d-e021-41dc-c312-08da22ab5321
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 08:54:05.7069
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wETI6hM3EqJH8ycARIl4MCP0WgHgzbKeYIDcDsDIcydPL0JfMMlMAp95gZiBs5a7wmLgDoUBc1m03tsTcwXq0uzh4BtdQZc2vKXKQqNif1w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3387
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-04-19_08:2022-04-15,2022-04-19 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 mlxscore=0
- adultscore=0 mlxlogscore=999 suspectscore=0 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204200055
-X-Proofpoint-GUID: tMof3bDAhjrHLJYjxDzUU4jUu2Z35j9V
-X-Proofpoint-ORIG-GUID: tMof3bDAhjrHLJYjxDzUU4jUu2Z35j9V
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
+ <CAMj1kXFKzi14UCoiDOMwS5jyNz61_UzxGXm+ke0EWEt4nn6E1g@mail.gmail.com>
+In-Reply-To: <CAMj1kXFKzi14UCoiDOMwS5jyNz61_UzxGXm+ke0EWEt4nn6E1g@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 20 Apr 2022 14:24:11 +0530
+Message-ID: <CA+G9fYtv8D2eR4dME6Ecx4sPpBcBtKerdZxcxsqfaCJdKVa3VQ@mail.gmail.com>
+Subject: Re: [next] arm: boot failed - PC is at cpu_ca15_set_pte_ext
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        max.krummenacher@toradex.com, Shawn Guo <shawnguo@kernel.org>,
+        Stefano Stabellini <stefano.stabellini@xilinx.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 11:51:33AM +0300, Dan Carpenter wrote:
-> On Wed, Apr 20, 2022 at 09:50:42AM +0200, Paul Kocialkowski wrote:
-> > Hi Dan,
-> > 
-> > On Wed 20 Apr 22, 10:42, Dan Carpenter wrote:
-> > > I ran Smatch on this patch.
-> > 
-> > Thanks for doing this!
-> > 
-> > > On Fri, Apr 15, 2022 at 05:37:07PM +0200, Paul Kocialkowski wrote:
-> > > > +void sun6i_isp_capture_configure(struct sun6i_isp_device *isp_dev)
-> > > > +{
-> > > > +	unsigned int width, height;
-> > > > +	unsigned int stride_luma, stride_chroma = 0;
-> > > > +	unsigned int stride_luma_div4, stride_chroma_div4;
-> > > > +	const struct sun6i_isp_capture_format *format;
-> > > > +	const struct v4l2_format_info *info;
-> > > > +	u32 pixelformat;
-> > > > +
-> > > > +	sun6i_isp_capture_dimensions(isp_dev, &width, &height);
-> > > > +	sun6i_isp_capture_format(isp_dev, &pixelformat);
-> > > > +
-> > > > +	format = sun6i_isp_capture_format_find(pixelformat);
-> > > > +	if (WARN_ON(!format))
-> > > > +		return;
-> > > > +
-> > > > +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_SIZE_CFG_REG,
-> > > > +			     SUN6I_ISP_MCH_SIZE_CFG_WIDTH(width) |
-> > > > +			     SUN6I_ISP_MCH_SIZE_CFG_HEIGHT(height));
-> > > > +
-> > > > +	info = v4l2_format_info(pixelformat);
-> > > > +	if (WARN_ON(!info))
-> > > > +		return;
-> > > > +
-> > > > +	stride_luma = width * info->bpp[0];
-> > > > +	stride_luma_div4 = DIV_ROUND_UP(stride_luma, 4);
-> > > > +
-> > > > +	if (info->comp_planes > 1) {
-> > > > +		stride_chroma = width * info->bpp[1] / info->hdiv;
-> > > > +		stride_chroma_div4 = DIV_ROUND_UP(stride_chroma, 4);
-> > > 
-> > > stride_chroma_div4 is not intialized on the else path.
-> > 
-> > One could say it's not an issue to put an uninitialized value in this situation
-> > since the hardware won't be taking it into account but I'll initialize the value
-> > early in the next iteration.
-> > 
-> 
-> My understanding is that it will trigger a KASAN warning at run time.
+On Wed, 20 Apr 2022 at 13:01, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Tue, 19 Apr 2022 at 12:59, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > Linux next 20220419 boot failed on arm architecture qemu_arm and BeagleBoard
+> > x15 device.
+> >
+> > kernel crash log from x15:
+> > -----------------
+> > [    6.866516] 8<--- cut here ---
+> > [    6.869598] Unable to handle kernel paging request at virtual
+> > address f000e62c
+> > [    6.876861] [f000e62c] *pgd=82935811, *pte=00000000, *ppte=00000000
+> > [    6.883209] Internal error: Oops: 807 [#3] SMP ARM
+> > [    6.888000] Modules linked in:
+> > [    6.891082] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G      D W
+> >   5.18.0-rc3-next-20220419 #1
+> > [    6.899993] Hardware name: Generic DRA74X (Flattened Device Tree)
+> > [    6.906127] PC is at cpu_ca15_set_pte_ext+0x4c/0x58
+> > [    6.911041] LR is at handle_mm_fault+0x60c/0xed0
+> > [    6.915679] pc : [<c031f26c>]    lr : [<c04cfeb8>]    psr: 40000013
+> > [    6.921966] sp : f000dde8  ip : f000de44  fp : a0000013
+> > [    6.927215] r10: 00000000  r9 : 00000000  r8 : c1e95194
+> > [    6.932464] r7 : c3c95000  r6 : befffff1  r5 : 00000081  r4 : c29d8000
+> > [    6.939025] r3 : 00000000  r2 : 00000000  r1 : 00000040  r0 : f000de2c
+> > [    6.945587] Flags: nZcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+> > [    6.952758] Control: 10c5387d  Table: 8020406a  DAC: 00000051
+> > [    6.958526] Register r0 information: 2-page vmalloc region starting
+> > at 0xf000c000 allocated at kernel_clone+0x94/0x3b0
+> > [    6.969299] Register r1 information: non-paged memory
+> > [    6.974365] Register r2 information: NULL pointer
+> > [    6.979095] Register r3 information: NULL pointer
+> > [    6.983825] Register r4 information: slab task_struct start
+> > c29d8000 pointer offset 0
+> > [    6.991729] Register r5 information: non-paged memory
+> > [    6.996795] Register r6 information: non-paged memory
+> > [    7.001861] Register r7 information: slab vm_area_struct start
+> > c3c95000 pointer offset 0
+> > [    7.010009] Register r8 information: non-slab/vmalloc memory
+> > [    7.015716] Register r9 information: NULL pointer
+> > [    7.020446] Register r10 information: NULL pointer
+> > [    7.025238] Register r11 information: non-paged memory
+> > [    7.030426] Register r12 information: 2-page vmalloc region
+> > starting at 0xf000c000 allocated at kernel_clone+0x94/0x3b0
+> > [    7.041259] Process swapper/0 (pid: 1, stack limit = 0xfaff0077)
+> > [    7.047302] Stack: (0xf000dde8 to 0xf000e000)
+> > [    7.051696] dde0:                   c29d8000 00000cc0 c20a1108
+> > c2065fa0 c1e09f50 b6db6db7
+> > [    7.059906] de00: c195bf0c 17c0f572 c29d8000 c3c95000 00000cc0
+> > 000befff befff000 befffff1
+> > [    7.068115] de20: 00000081 c3c3afb8 c3c3afb8 00000000 00000000
+> > 00000000 00000000 00000000
+> > [    7.076324] de40: 00000000 17c0f572 befff000 c3c95000 00002017
+> > befffff1 00002017 00002fb8
+> > [    7.084564] de60: c2d04000 00000081 c29d8000 c04c6790 c20d01d4
+> > 00000000 00000001 c20ce440
+> > [    7.092773] de80: c1e10bcc fffff000 00000000 c2a45680 eeb33cc0
+> > c29d8000 00000000 c2d04000
+> > [    7.100982] dea0: befffff1 f000df18 00000000 00002017 c20661a0
+> > c04c77e8 f000df18 00000000
+> > [    7.109222] dec0: 00000000 c1d95c40 00000002 c20661e0 00000000
+> > 00000001 00000000 c04c7ad0
+> > [    7.117431] dee0: 00000011 c2d02a00 00000001 befffff1 c29d8000
+> > 00000000 00000011 c2a30010
+> > [    7.125640] df00: c29d8000 c0524c24 f000df18 00000000 00000000
+> > 2cd9e000 c1d95c40 17c0f572
+> > [    7.133850] df20: 00000000 c2d02a00 0000000b 00000ffc 00000000
+> > befffff1 00000000 c0524f74
+> > [    7.142089] df40: c1e0e394 c2d02a00 c209a71c 38e38e39 c29d8000
+> > bee00008 c2d02a00 c2a30000
+> > [    7.150299] df60: c1e0e394 c1e0e420 00000000 00000000 00000000
+> > c05266bc c209a000 c1944c60
+> > [    7.158508] df80: 00000000 00000000 00000000 c129d2b4 c209a000
+> > c1e0e394 00000000 c12b5600
+> > [    7.166748] dfa0: 00000000 c12b5518 00000000 c0300168 00000000
+> > 00000000 00000000 00000000
+> > [    7.174957] dfc0: 00000000 00000000 00000000 00000000 00000000
+> > 00000000 00000000 00000000
+> > [    7.183166] dfe0: 00000000 00000000 00000000 00000000 00000013
+> > 00000000 00000000 00000000
+> > [    7.191406] Code: 13110001 12211b02 13110b02 03a03000 (e5a03800)
+>
+> This decodes to
+>
+>    0: 13110001 tstne r1, #1
+>    4: 12211b02 eorne r1, r1, #2048 ; 0x800
+>    8: 13110b02 tstne r1, #2048 ; 0x800
+>    c: 03a03000 moveq r3, #0
+>   10:* e5a03800 str r3, [r0, #2048]! ; 0x800 <-- trapping instruction
+>
+> and R0 points into the stack. So we are updating a PTE that is located
+> on the stack rather than in a page table somewhere, which seems very
+> odd. However, this could be a latent bug that got uncovered by the
+> VMAP stacks changes.
+>
+> Unfortunately, the vmlinux.xz file I downloaded from the link below
+> seems to be different from the one that produced the crash, given that
+> the LR address of c04cfeb8 does not seem to correspond with
+> handle_mm_fault+0x60c/0xed0.
+> Can you please double check the artifacts?
 
-Or is it KMEMsan?  One of those.  The one that complains about
-uninitialized memory.
+You can find the vmlinux.xz for the trace log I have pasted.
 
-regards,
-dan carpenter
+vmlinux.xz : https://builds.tuxbuild.com/280TS8MuM6sYWk5aUtrvWIw0RQ7/vmlinux.xz
+artifact-location: https://builds.tuxbuild.com/280TS8MuM6sYWk5aUtrvWIw0RQ7
 
+- Naresh

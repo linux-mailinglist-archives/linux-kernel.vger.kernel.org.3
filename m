@@ -2,37 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0054508ACB
+	by mail.lfdr.de (Postfix) with ESMTP id 3EEAD508ACA
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379706AbiDTObl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
+        id S1379698AbiDTObj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 10:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbiDTObh (ORCPT
+        with ESMTP id S1356305AbiDTObh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 20 Apr 2022 10:31:37 -0400
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEB544759;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3A44475E;
         Wed, 20 Apr 2022 07:28:50 -0700 (PDT)
-Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 4393CCD147;
-        Wed, 20 Apr 2022 14:24:59 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::222])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 1BAD5CC1CE;
+        Wed, 20 Apr 2022 14:25:03 +0000 (UTC)
 Received: from melee.fritz.box (unknown [77.244.183.192])
         (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id A9FA940005;
-        Wed, 20 Apr 2022 14:24:53 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPA id 3E61A4000C;
+        Wed, 20 Apr 2022 14:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650464695;
+        t=1650464699;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=psA6iM1Q1qYNvi/shbhgNJN0YpWI69oasIrc52R//8o=;
-        b=A/LejFrbDQbZww+XzPBLIe1NZDFAmF0mLv3HgI/lp8NT9R+TGZAq+lZtkrvy2cVXA39zQc
-        4ZfzRm3N9yVtW14/5VowhX8K073TIwMENBpfPLOsFhyEOrrD5VKpMg6rBG4+TLbUChvkGo
-        xl4OMwPCKahsIL0gPeTj/gKMcGQpyybc6RlDmAXVILD7HbcmB+EBYyL9V2Uc/nOfKWJIrV
-        BLEwV+qUHyY+X7vgaC4cgnB0YQgJY8ikxtdFEGWXZ/oDP6OLQXjGyaGDKsyCa2rCV24OGp
-        XQxOaq4I5ZkwyQiz9ePqRoF5TqPjzciiuYqrIXuxUnzp1q6KVb/NnH5hr5LBYQ==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/lpWbOBK6IO2z3uDyg+lEKla8M6bLRGjKIKLiN7eH2A=;
+        b=UeGls1/Nu2/pL7jtBXGf/ZoBeCVa/JvdTjAuW+gH9Ej7jbnWCWt34wJbLgkK9IWVhATAvM
+        pbXjbYpwNtP1Sa5qXZ53HPl2riukmqPZzLwtr1WFd64nHqTL2lKaeKFGp84fDyJ1uq/DQF
+        5uCyJJ9r/ha/zbKmTQX5LuLskUGTzZP780UQAqmvmtlOgZYQhsPbSt1/cgWnk3J/k3mVaJ
+        2xCQ6Yu3OnUD6BJm7FZ1ePfaNzzGR/XFXL6uyujvCQcShh6anII3lySicjPq6fOz9EP+MP
+        MXAcuwbhITaUwB6FJF5l7lVYB4DdxFpzctNL0irx/7RxGRrT2vuRIQn+EBPw3Q==
 From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
 To:     linux-gpio@vger.kernel.org
 Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
@@ -41,10 +42,12 @@ Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
         Jianqun Xu <jay.xu@rock-chips.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] pinctrl: rockchip: fix RK3308 pinmux bits
-Date:   Wed, 20 Apr 2022 16:24:31 +0200
-Message-Id: <20220420142432.248565-1-luca.ceresoli@bootlin.com>
+Subject: [PATCH 2/2] pinctrl: rockchip: sort the rk3308_mux_recalced_data entries
+Date:   Wed, 20 Apr 2022 16:24:32 +0200
+Message-Id: <20220420142432.248565-2-luca.ceresoli@bootlin.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220420142432.248565-1-luca.ceresoli@bootlin.com>
+References: <20220420142432.248565-1-luca.ceresoli@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,149 +60,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of the pinmuxing bits described in rk3308_mux_recalced_data are wrong,
-pointing to non-existing registers.
+All the entries are sorted according to num/pin except for two
+entries. Sort them too.
 
-Fix the entire table.
-
-Also add a comment in front of each entry with the same string that appears
-in the datasheet to make the table easier to compare with the docs.
-
-This fix has been tested on real hardware for the gpio3b3_sel entry.
-
-Fixes: 7825aeb7b208 ("pinctrl: rockchip: add rk3308 SoC support")
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- drivers/pinctrl/pinctrl-rockchip.c | 45 ++++++++++++++++++++----------
- 1 file changed, 30 insertions(+), 15 deletions(-)
+ drivers/pinctrl/pinctrl-rockchip.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
-index a1b598b86aa9..65fa305b5f59 100644
+index 65fa305b5f59..2cb79e649fcf 100644
 --- a/drivers/pinctrl/pinctrl-rockchip.c
 +++ b/drivers/pinctrl/pinctrl-rockchip.c
-@@ -457,95 +457,110 @@ static  struct rockchip_mux_recalced_data rk3128_mux_recalced_data[] = {
- 
- static struct rockchip_mux_recalced_data rk3308_mux_recalced_data[] = {
- 	{
-+		/* gpio1b6_sel */
- 		.num = 1,
- 		.pin = 14,
- 		.reg = 0x28,
- 		.bit = 12,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1b7_sel */
- 		.num = 1,
- 		.pin = 15,
- 		.reg = 0x2c,
- 		.bit = 0,
- 		.mask = 0x3
- 	}, {
-+		/* gpio1c2_sel */
- 		.num = 1,
- 		.pin = 18,
- 		.reg = 0x30,
- 		.bit = 4,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c3_sel */
- 		.num = 1,
- 		.pin = 19,
- 		.reg = 0x30,
- 		.bit = 8,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c4_sel */
- 		.num = 1,
- 		.pin = 20,
- 		.reg = 0x30,
- 		.bit = 12,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c5_sel */
- 		.num = 1,
- 		.pin = 21,
- 		.reg = 0x34,
- 		.bit = 0,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c6_sel */
- 		.num = 1,
- 		.pin = 22,
- 		.reg = 0x34,
- 		.bit = 4,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c7_sel */
- 		.num = 1,
- 		.pin = 23,
+@@ -512,20 +512,6 @@ static struct rockchip_mux_recalced_data rk3308_mux_recalced_data[] = {
  		.reg = 0x34,
  		.bit = 8,
  		.mask = 0xf
- 	}, {
-+		/* gpio3b4_sel */
- 		.num = 3,
- 		.pin = 12,
- 		.reg = 0x68,
- 		.bit = 8,
- 		.mask = 0xf
- 	}, {
-+		/* gpio3b5_sel */
- 		.num = 3,
- 		.pin = 13,
- 		.reg = 0x68,
- 		.bit = 12,
- 		.mask = 0xf
- 	}, {
-+		/* gpio2a2_sel */
- 		.num = 2,
- 		.pin = 2,
--		.reg = 0x608,
--		.bit = 0,
--		.mask = 0x7
-+		.reg = 0x40,
-+		.bit = 4,
-+		.mask = 0x3
- 	}, {
-+		/* gpio2a3_sel */
- 		.num = 2,
- 		.pin = 3,
--		.reg = 0x608,
--		.bit = 4,
--		.mask = 0x7
-+		.reg = 0x40,
-+		.bit = 6,
-+		.mask = 0x3
- 	}, {
-+		/* gpio2c0_sel */
- 		.num = 2,
- 		.pin = 16,
--		.reg = 0x610,
+-	}, {
+-		/* gpio3b4_sel */
+-		.num = 3,
+-		.pin = 12,
+-		.reg = 0x68,
 -		.bit = 8,
--		.mask = 0x7
-+		.reg = 0x50,
-+		.bit = 0,
-+		.mask = 0x3
+-		.mask = 0xf
+-	}, {
+-		/* gpio3b5_sel */
+-		.num = 3,
+-		.pin = 13,
+-		.reg = 0x68,
+-		.bit = 12,
+-		.mask = 0xf
  	}, {
-+		/* gpio3b2_sel */
- 		.num = 3,
- 		.pin = 10,
--		.reg = 0x610,
--		.bit = 0,
--		.mask = 0x7
+ 		/* gpio2a2_sel */
+ 		.num = 2,
+@@ -561,6 +547,20 @@ static struct rockchip_mux_recalced_data rk3308_mux_recalced_data[] = {
+ 		.reg = 0x68,
+ 		.bit = 6,
+ 		.mask = 0x3
++	}, {
++		/* gpio3b4_sel */
++		.num = 3,
++		.pin = 12,
 +		.reg = 0x68,
-+		.bit = 4,
-+		.mask = 0x3
- 	}, {
-+		/* gpio3b3_sel */
- 		.num = 3,
- 		.pin = 11,
--		.reg = 0x610,
--		.bit = 4,
--		.mask = 0x7
++		.bit = 8,
++		.mask = 0xf
++	}, {
++		/* gpio3b5_sel */
++		.num = 3,
++		.pin = 13,
 +		.reg = 0x68,
-+		.bit = 6,
-+		.mask = 0x3
++		.bit = 12,
++		.mask = 0xf
  	},
  };
  

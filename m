@@ -2,94 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44945082F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB17508303
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376580AbiDTH54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 03:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
+        id S1376584AbiDTH7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 03:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376586AbiDTH5u (ORCPT
+        with ESMTP id S1376567AbiDTH7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:57:50 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4388E1140;
-        Wed, 20 Apr 2022 00:55:02 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 20 Apr 2022 03:59:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C19F2668;
+        Wed, 20 Apr 2022 00:56:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KjtHm60KTz4xL3;
-        Wed, 20 Apr 2022 17:55:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650441300;
-        bh=7DqJZLk9JJ2luoJ4/Lv5FieQn4ef6HXW5YFKn1HV/j8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BZDshJ7ODeEiJVB7Or/0tWR7PqG5efI47v1giQX2I5DC35lRLsYYuQQr71vSLcw61
-         CAb50Tfw2ucIEgYIGVrF1mQr0QgAT2DArVWcv2OdkVRLTsrJtLGcXHSkp5qy/fiewV
-         JZS9KlC3Bnx36gc1b7widY/ISEm9clUrkc13bjbRqJbCBoclggv9IXB4dfi644M1JD
-         2eJ9FW/54VbIiF36x1V/ZdD/TlxdDjcwi8jwMFAUghzgNskdE8vx0x283aNTh9r0HV
-         DAmJuNrSjn3hZLoHKGeIS1DS4rrbeEyDSlA9f2HhhsFF7iQvp4YMAl4dztFUGif1Wm
-         Y32PGUGcamsow==
-Date:   Wed, 20 Apr 2022 17:55:00 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the bitmap tree
-Message-ID: <20220420175500.240e4eb3@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF8ADB81D57;
+        Wed, 20 Apr 2022 07:56:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730F5C385A1;
+        Wed, 20 Apr 2022 07:56:30 +0000 (UTC)
+Message-ID: <c3d0d176-252b-5823-0c34-f1bfc7c4978c@xs4all.nl>
+Date:   Wed, 20 Apr 2022 09:56:28 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WYh/yvE9rIn74qrixDodstz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/5] dt-bindings: media: platform: visconti: Add
+ Toshiba Visconti Video Input Interface bindings
+Content-Language: en-US
+To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220414053528.31460-1-yuji2.ishikawa@toshiba.co.jp>
+ <20220414053528.31460-2-yuji2.ishikawa@toshiba.co.jp>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220414053528.31460-2-yuji2.ishikawa@toshiba.co.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WYh/yvE9rIn74qrixDodstz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 14/04/2022 07:35, Yuji Ishikawa wrote:
+> Adds the Device Tree binding documentation that allows to describe
+> the Video Input Interface found in Toshiba Visconti SoCs.
+> 
+> Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+> Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> ---
+>  .../bindings/media/toshiba,visconti-viif.yaml | 103 ++++++++++++++++++
+>  1 file changed, 103 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml b/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+> new file mode 100644
 
-Hi all,
+You need to CC this series to devicetree@vger.kernel.org so that the device tree reviewers
+can take a look at this.
 
-After merging the bitmap tree, today's linux-next build (htmldocs)
-produced this warning:
+Regards,
 
-Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/bit=
-map.h:425: WARNING: Unexpected indentation.
-Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/bit=
-map.h:426: WARNING: Block quote ends without a blank line; unexpected unind=
-ent.
-Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/bit=
-map.h:431: WARNING: Unexpected indentation.
+	Hans
 
-Introduced by commit
+> index 000000000..848ea5019
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+> @@ -0,0 +1,103 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/toshiba,visconti-viif.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Toshiba Visconti5 SoC Video Input Interface Device Tree Bindings
+> +
+> +maintainers:
+> +  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> +
+> +description: |
+> +  Toshiba Visconti5 SoC Video Input Interface (VIIF) receives MIPI CSI2 video stream,
+> +  processes the stream with embedded image signal processor (L1ISP, L2ISP), then stores pictures to main memory.
+> +
+> +properties:
+> +  compatible:
+> +    const: toshiba,visconti-viif
+> +
+> +  reg:
+> +    items:
+> +      - description: registers for capture control
+> +      - description: registers for CSI2 receiver control
+> +
+> +  interrupts:
+> +    items:
+> +      - description: Sync Interrupt
+> +      - description: Status (Error) Interrupt
+> +      - description: CSI2 Receiver Interrupt
+> +      - description: L1ISP Interrupt
+> +
+> +  index:
+> +    enum: [0, 1]
+> +
+> +  port:
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
+> +    unevaluatedProperties: false
+> +    description: Input port node, single endpoint describing the CSI-2 transmitter.
+> +
+> +    properties:
+> +      endpoint:
+> +        $ref: video-interfaces.yaml#
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          data-lanes:
+> +            description: VIIF supports 2 or 4 data lines
+> +            items:
+> +              minItems: 1
+> +              maxItems: 4
+> +              items:
+> +                - const: 1
+> +                - const: 2
+> +                - const: 3
+> +                - const: 4
+> +          clock-lanes:
+> +            description: VIIF supports 1 clock line
+> +            const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        viif0: viif@1c000000 {
+> +            compatible = "toshiba,visconti-viif";
+> +            reg = <0 0x1c000000 0 0x6000>,
+> +                  <0 0x1c008000 0 0x400>;
+> +            interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>,
+> +                         <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
+> +                         <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
+> +                         <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
+> +            index = <0>;
+> +            status = "disabled";
+> +
+> +            port {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                csi_in0: endpoint {
+> +                    remote-endpoint = <&imx219_out0>;
+> +                    bus-type = <4>;
+> +                    data-lanes = <1 2>;
+> +                    clock-lanes = <0>;
+> +                    clock-noncontinuous;
+> +                    link-frequencies = /bits/ 64 <456000000>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
 
-  6f46c24da767 ("bitmap: add bitmap_weight_{cmp, eq, gt, ge, lt, le} functi=
-ons")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/WYh/yvE9rIn74qrixDodstz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJfvFQACgkQAVBC80lX
-0Gw9pggAiyjb08xshT06M1IV8SEaekXyKg+ZHBMWRGynTqR0Iuv/SVlP4j1xMKlN
-9T4J2J4JQbhU+OstBsR3NPZqSaaH/FOfULu1b+VlJLdNKDgZDuvdPua5S5nc+oMj
-WC0Ejf25H4K/ItXBQ3UpMB+uiQ92sI/jCGritMqogUdv3PtI4YxhzNty2SExzJ0b
-AuH0+hp1vKLRfjraVEcxwuJFhFIZZa4akzlulkZNLUNYs0IHLSx3xjMz/OlU0S+B
-iOAIvrRjDg/Sc/ydEzoaJLoLKqbogM3RfZchvUKVBSKQSN12KWBI+IQU4BfS8mA2
-E3xxEI4QPkDoHF8UgJ7MX3LOwJEaGw==
-=PmVI
------END PGP SIGNATURE-----
-
---Sig_/WYh/yvE9rIn74qrixDodstz--

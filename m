@@ -2,122 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC715084BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3092A5084CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377070AbiDTJVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 05:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
+        id S1377110AbiDTJW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 05:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359423AbiDTJVf (ORCPT
+        with ESMTP id S244208AbiDTJW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 05:21:35 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E363D49F;
-        Wed, 20 Apr 2022 02:18:49 -0700 (PDT)
-X-UUID: 73dc67efba0a4edea8631f75926afc2d-20220420
-X-UUID: 73dc67efba0a4edea8631f75926afc2d-20220420
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 145167488; Wed, 20 Apr 2022 17:18:41 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 20 Apr 2022 17:18:40 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 20 Apr 2022 17:18:39 +0800
-Message-ID: <37276fd01a518dadff57ef66c7971b78baa9dc15.camel@mediatek.com>
-Subject: Re: [PATCH] usb: mtu3: fix USB 3.0 dual-role-switch from device to
- host
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Miles Chen <miles.chen@mediatek.com>,
-        Bear Wang <bear.wang@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul@gmail.com>, <stable@vger.kernel.org>,
-        Tainping Fang <tianping.fang@mediatek.com>
-Date:   Wed, 20 Apr 2022 17:18:38 +0800
-In-Reply-To: <20220419081245.21015-1-macpaul.lin@mediatek.com>
-References: <20220419081245.21015-1-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 20 Apr 2022 05:22:56 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDCE3056A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:20:10 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id g18so2183983ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:20:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nAIc8jlNaoNP4j8LrfgKPUem0987eG/5mImWoVHHT10=;
+        b=rSRtnZiF0xfnneRi/FQEzgnTo4L29Yzksiymt9g7h909EamxwG1M03+cfLGJz2BCOj
+         30CAL0kYOBVzStPIrvYb0monKtCFSnzsD3kwCqSU+bWHouMJvSzgKzZ6TdGkdgNy2yzz
+         C01rq4MLEeIVrGL5bI2/gmeJphR7o7jGVzdRCQK8jV3eM/SIu9DarQScr8dPeApgsm4q
+         PVkvnWdJ0MciYcWlYYKEOAtj/lRtmYDnu4oNkN19u4GUIU3PjvK/cEdkwCiD73LdOoQg
+         xyjB1TqyC1taYNXURg86XIpc8UnubKhBcODOIH7ohGWzGoAIPK9A3eD02O9kuRE3/jfE
+         /lCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nAIc8jlNaoNP4j8LrfgKPUem0987eG/5mImWoVHHT10=;
+        b=ZQaI3amUBM1ncg1kgaWbKwC2SZyt4i272WR8yikT4cOuwpOVCOyLvFrV1OEF6BkX5U
+         rEcj3GNnnjTIpRX45U1nfyNb+q7B9OH9s/EqNWp+ulcLTtICMWvHZbR8s9nTKOyxJwcv
+         Rd0VejOzPgey6kEMLrB1rJvnFcmFPhxfvuSdE5PF5dIBCaqrWj5WG74PcuSJIg4Bpz57
+         bZEY7QZGwm5+KkBqV5IEo/YKzLrv4qkxizs/fr+lM5v5Ejcqxj0DMdO5tkTRmtOVQ4Km
+         sxSTqJLfEbmV2XaSzXVMc0HKpbPK+Oy27r1HwC1xwAzg/3NOD3tlrcRes/d1MCiu7L+k
+         POOw==
+X-Gm-Message-State: AOAM533IKmxpJM0dYKuSyMsRyj52711FwFx2y+5MG0wEKsS2Xbav97fU
+        KL0ZzynyPBoAQ2AH5yqJRpaLTA==
+X-Google-Smtp-Source: ABdhPJzOe0WrGTYQeCapieJbroGE75Jk3m16hGQK/9UYOPl2KmErfi3BqssRPBI5BShzU5h2D40NFw==
+X-Received: by 2002:a17:906:7a51:b0:6e8:8e6c:f182 with SMTP id i17-20020a1709067a5100b006e88e6cf182mr17160922ejo.506.1650446408596;
+        Wed, 20 Apr 2022 02:20:08 -0700 (PDT)
+Received: from [192.168.0.223] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id kx5-20020a170907774500b006e1382b8192sm6643906ejc.147.2022.04.20.02.20.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 02:20:08 -0700 (PDT)
+Message-ID: <529de1fd-7e98-1634-c61e-0e69ddcd9e73@linaro.org>
+Date:   Wed, 20 Apr 2022 11:20:06 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 00/12] Fix broken usage of driver_override (and kfree
+ of static memory)
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-19 at 16:12 +0800, Macpaul Lin wrote:
-> Issue description:
->   When an OTG port has been switched to device role and then switch
-> back
->   to host role again, the USB 3.0 Host (XHCI) will not be able to
-> detect
->   "plug in event of a connected USB 2.0/1.0 ((Highspeed and
-> Fullspeed)
->   devices until system reboot.
-> 
-> Root cause and Solution:
->   There is a condition checking flag "ssusb->otg_switch.is_u3_drd" in
->   toggle_opstate(). At the end of role switch procedure,
-> toggle_opstate()
->   will be called to set DC_SESSION and SOFT_CONN bit. If "is_u3_drd"
-> was
->   set and switched the role to USB host 3.0, bit DC_SESSION and
-> SOFT_CONN
->   will be skipped hence caused the port cannot detect connected USB
-> 2.0
->   (Highspeed and Fullspeed) devices. Simply remove the condition
-> check to
->   solve this issue.
-> 
-> Fixes: d0ed062a8b75 ("usb: mtu3: dual-role mode support")
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> Signed-off-by: Tainping Fang <tianping.fang@mediatek.com>
-> Tested-by: Fabien Parent <fparent@baylibre.com>
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/usb/mtu3/mtu3_dr.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_dr.c b/drivers/usb/mtu3/mtu3_dr.c
-> index ec6ec621838b..b820724c56e4 100644
-> --- a/drivers/usb/mtu3/mtu3_dr.c
-> +++ b/drivers/usb/mtu3/mtu3_dr.c
-> @@ -21,10 +21,8 @@ static inline struct ssusb_mtk
-> *otg_sx_to_ssusb(struct otg_switch_mtk *otg_sx)
->  
->  static void toggle_opstate(struct ssusb_mtk *ssusb)
->  {
-> -	if (!ssusb->otg_switch.is_u3_drd) {
-> -		mtu3_setbits(ssusb->mac_base, U3D_DEVICE_CONTROL,
-> DC_SESSION);
-> -		mtu3_setbits(ssusb->mac_base, U3D_POWER_MANAGEMENT,
-> SOFT_CONN);
-> -	}
-> +	mtu3_setbits(ssusb->mac_base, U3D_DEVICE_CONTROL, DC_SESSION);
-> +	mtu3_setbits(ssusb->mac_base, U3D_POWER_MANAGEMENT, SOFT_CONN);
->  }
->  
-Reviewed-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+On 19/04/2022 13:34, Krzysztof Kozlowski wrote:
 
-Thanks
+Hi Greg, Rafael,
 
->  /* only port0 supports dual-role mode */
+The patchset was for some time on the lists, got some reviews, some
+changes/feedback which I hope I applied/responded.
 
+Entire set depends on the driver core changes, so maybe you could pick
+up everything via drivers core tree?
+
+> Dependencies (and stable):
+> ==========================
+> 1. All patches, including last three fixes, depend on the first patch
+>    introducing the helper.
+> 2. The last three commits - fixes - are probably not backportable
+>    directly, because of this dependency. I don't know how to express
+>    this dependency here, since stable-kernel-rules.rst mentions only commits as
+>    possible dependencies.
+
+
+Best regards,
+Krzysztof

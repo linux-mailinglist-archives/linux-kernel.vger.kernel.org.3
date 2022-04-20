@@ -2,178 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C469508835
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5299150882A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 14:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378581AbiDTMe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 08:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
+        id S1378552AbiDTMeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 08:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378557AbiDTMeU (ORCPT
+        with ESMTP id S1353229AbiDTMd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:34:20 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8CB4093B;
-        Wed, 20 Apr 2022 05:31:34 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id m14so2061929wrb.6;
-        Wed, 20 Apr 2022 05:31:33 -0700 (PDT)
+        Wed, 20 Apr 2022 08:33:56 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3613FDB9;
+        Wed, 20 Apr 2022 05:31:11 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso1874300pjj.2;
+        Wed, 20 Apr 2022 05:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ieFyPM7qLxem8XQW8qH6ZsBF3gD5CdZ45mGbsiUiaFc=;
-        b=MSTUZCHRR2Dst97gveOvSCqtDiE4vDdw9/hXTqBcAGSZuPnC+WiO0RLeOQtSABs3c7
-         qmVndv0HXVZ6B4cBz/dfUonUmYBSWKn2MNW0RXCZ50UOKLGIuTID/ImB1l4UeP0U2SPA
-         UZVBnaqwnYZfQp3kabQXTKCL2bmPh4P7QEkKU9SQqx/SfT0mXKfvo0e+bt/ATWhqhrog
-         F1b7f6c7DW/gN744+2Le7J8ai+rYhUHMN6TJHMMLtxYAGJAruBowWRKRjoTceg+N0K82
-         /gXMfjq/bN6veVy8hTqtkSETGRKaVDKncRE2+FukNUoLgUk192ckD3KYhhVKhCq7V//0
-         wARA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mVOmSvu/QkyoUDoaCks1TklFl6bhUL0cfDQZbrDtx0c=;
+        b=eFrXzuQVru1SO/Jm++W8BFQ/TrnadQKCmTFewy4D+IvOJEkOyy/IxcF3Nl5lMJXZSG
+         3LR1ddukzf/0l4cFRiLP9e/SNgVj754fkMk6ex6W6/GT9vhz1+XIYwEzsMA2Od0z1vEm
+         fBLliE3poB2EQB3/yzUcYLHh8hrWQ86fbEOG8TWbGW8+O7t5/SKSyaFPSK7i5Zux3G/j
+         cxSmXvEt+PdNYcc1iz9EJrPBlnwJ2ImTuy1mqKgDdyk8VwfcMfOz91G6Y2J2fdYGeaDN
+         owWuWpmYLKEP6FZAPSeaHFrB43Nq6NqwVriNMKiAT93gO50FMc7waA3ETUalCch2m8sg
+         2T8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ieFyPM7qLxem8XQW8qH6ZsBF3gD5CdZ45mGbsiUiaFc=;
-        b=5ovXnXl3geuhBueNLMK/ohakID3nj/Byme+Gavttqrw7Vol6N+YPNktZXLZHVopKbM
-         PqjjBkP1BtXXSGTnbpawaSck4nFtJV+UtK20Ir8JGgtcyo+6cjvJN6vy2ViqfVDvJ/3r
-         cPi3P8I2nfhS5QcaiUtbo4/kU6pyIekLH2w7h7hD3AQpa0bW/x2+24Pu4G+hP8Y7bBjn
-         rrzn7pCjSdpzM97mEcA821TppsHNvJL4WN3s4S4tgbGl+0bDAycHT20crrZ8WZqyDxiI
-         S9ckwYBlhbVI0JQvl6PEHze0N+ScFRbPomOH1ABEfmOadUASNU8FRGxOcm5TqXEjEhSo
-         JKKg==
-X-Gm-Message-State: AOAM531vlUqcSI2gv/V/OI24TMpUuUPUFRkH5ae8ROd4WC4OaYCNMKax
-        rM5EmdKkhm9qjJfIMDI5j0tz/DSAUv0j+g==
-X-Google-Smtp-Source: ABdhPJwaP28Yz/dBy3z2KMxh3KoGE5KGifFFq6Ff0We44WEvco4tinvVT2CYQV6wP6omeKldMIX32A==
-X-Received: by 2002:a5d:6983:0:b0:207:a226:df4b with SMTP id g3-20020a5d6983000000b00207a226df4bmr15389885wru.192.1650457892485;
-        Wed, 20 Apr 2022 05:31:32 -0700 (PDT)
-Received: from tpt440p.steeds.sam ([41.84.241.188])
-        by smtp.gmail.com with ESMTPSA id c12-20020a05600c0a4c00b00381141f4967sm21277277wmq.35.2022.04.20.05.31.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 05:31:32 -0700 (PDT)
-From:   "Sicelo A. Mhlongo" <absicsz@gmail.com>
-To:     pali@kernel.org, sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Sicelo A. Mhlongo" <absicsz@gmail.com>
-Subject: [PATCH v2 1/1] power: supply: bq27xxx: expose battery data when CI=1
-Date:   Wed, 20 Apr 2022 14:30:59 +0200
-Message-Id: <20220420123059.1206443-2-absicsz@gmail.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220420123059.1206443-1-absicsz@gmail.com>
-References: <20220420123059.1206443-1-absicsz@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mVOmSvu/QkyoUDoaCks1TklFl6bhUL0cfDQZbrDtx0c=;
+        b=Qi09TN6oKO7pWokEcA50CdWnTuoVm2U26Z0fVOjz8XvsdbjHME34vnjLQ0hJPO9Phn
+         x5teoW02kwjdOErj3eW9XY0SrqUl5CPfXxm+7AtCcTkFa17RzxkK+7uRwHGpPTouusox
+         uuRr85e2M+0lf3qzK2nymvKRgtDHJyf6WyGQ42mVi/JU2TLrFtFFM2/5j1MnpHqz/FWx
+         A4zZoKV/f6ky0fg3XoS9wlLQaxkY4avGdKn0KgnxA96qZM84VNOJ/2rrJsxNtxOgfe5G
+         Ls0V/3xr5HYMsvYN5W8BuGBI6VbBBAKp2zDdhHqpOTCo6Zv1WKThPExU0Sa0oXts2sjo
+         8reQ==
+X-Gm-Message-State: AOAM533C17CcYl5ynNxp9NIToFDe9s0j2hncAuwMIfY9mfs55N1apdtB
+        fYltc6pvkAWYlVYiyKaGu7NjsGjqOuARng==
+X-Google-Smtp-Source: ABdhPJxIfSVgLOciGFWpy5cIRm2hHQBq9p8H/yilz0yZPsHnVLamtbYiXQo5NM1eaNGP99t3RSkGkg==
+X-Received: by 2002:a17:90a:2983:b0:1cb:8d6e:e10b with SMTP id h3-20020a17090a298300b001cb8d6ee10bmr4161825pjd.208.1650457870525;
+        Wed, 20 Apr 2022 05:31:10 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-76.three.co.id. [180.214.232.76])
+        by smtp.gmail.com with ESMTPSA id e1-20020a056a00162100b0050a40f75a82sm18588603pfc.113.2022.04.20.05.31.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 05:31:09 -0700 (PDT)
+Message-ID: <cbb540d1-151d-f5a0-0a24-ce2d2fba4825@gmail.com>
+Date:   Wed, 20 Apr 2022 19:31:06 +0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/2] doc/vm/page_owner.rst: Fix table display confusion
+Content-Language: en-US
+To:     Haowen Bai <baihaowen@meizu.com>, siyanteng01@gmail.com
+Cc:     alexs@kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, seakeel@gmail.com,
+        siyanteng@loongson.cn
+References: <CAEensMzuQ0uAw8_5Xb7u1n685au=DpaJyPevGCT8GCG7xS42ow@mail.gmail.com>
+ <1650424016-7225-1-git-send-email-baihaowen@meizu.com>
+ <1650424016-7225-3-git-send-email-baihaowen@meizu.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <1650424016-7225-3-git-send-email-baihaowen@meizu.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the Capacity Inaccurate flag is set, the chip still provides data
-about the battery, albeit inaccurate. Instead of discarding capacity
-values for CI=1, expose the stale data and use the
-POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED property to indicate that the
-values should be used with care.
+On 4/20/22 10:06, Haowen Bai wrote:
+> After make htmldocs, the table which is made of tab will
+> display all by one line. so we make a standard table for STANDARD
+> FORMAT SPECIFIERS description.
+> 
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>  Documentation/vm/page_owner.rst | 34 ++++++++++++++++++++--------------
+>  1 file changed, 20 insertions(+), 14 deletions(-)
+> 
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
----
- drivers/power/supply/bq27xxx_battery.c | 59 ++++++++++++--------------
- 1 file changed, 27 insertions(+), 32 deletions(-)
+I guess this patch can be factored into its own single-patch series,
+so the zh_CN patch at [1/2] can depend on it, right?
 
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 72e727cd31e8..9adc7f43bbfd 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -1572,14 +1572,6 @@ static int bq27xxx_battery_read_charge(struct bq27xxx_device_info *di, u8 reg)
-  */
- static inline int bq27xxx_battery_read_nac(struct bq27xxx_device_info *di)
- {
--	int flags;
--
--	if (di->opts & BQ27XXX_O_ZERO) {
--		flags = bq27xxx_read(di, BQ27XXX_REG_FLAGS, true);
--		if (flags >= 0 && (flags & BQ27000_FLAG_CI))
--			return -ENODATA;
--	}
--
- 	return bq27xxx_battery_read_charge(di, BQ27XXX_REG_NAC);
- }
- 
-@@ -1742,6 +1734,18 @@ static bool bq27xxx_battery_dead(struct bq27xxx_device_info *di, u16 flags)
- 		return flags & (BQ27XXX_FLAG_SOC1 | BQ27XXX_FLAG_SOCF);
- }
- 
-+/*
-+ * Returns true if reported battery capacity is inaccurate
-+ */
-+static bool bq27xxx_battery_capacity_inaccurate(struct bq27xxx_device_info *di,
-+						 u16 flags)
-+{
-+	if (di->opts & BQ27XXX_O_HAS_CI)
-+		return (flags & BQ27000_FLAG_CI);
-+	else
-+		return false;
-+}
-+
- static int bq27xxx_battery_read_health(struct bq27xxx_device_info *di)
- {
- 	/* Unlikely but important to return first */
-@@ -1751,6 +1755,8 @@ static int bq27xxx_battery_read_health(struct bq27xxx_device_info *di)
- 		return POWER_SUPPLY_HEALTH_COLD;
- 	if (unlikely(bq27xxx_battery_dead(di, di->cache.flags)))
- 		return POWER_SUPPLY_HEALTH_DEAD;
-+	if (unlikely(bq27xxx_battery_capacity_inaccurate(di, di->cache.flags)))
-+		return POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED;
- 
- 	return POWER_SUPPLY_HEALTH_GOOD;
- }
-@@ -1766,30 +1772,19 @@ void bq27xxx_battery_update(struct bq27xxx_device_info *di)
- 		cache.flags = -1; /* read error */
- 	if (cache.flags >= 0) {
- 		cache.temperature = bq27xxx_battery_read_temperature(di);
--		if (has_ci_flag && (cache.flags & BQ27000_FLAG_CI)) {
--			dev_info_once(di->dev, "battery is not calibrated! ignoring capacity values\n");
--			cache.capacity = -ENODATA;
--			cache.energy = -ENODATA;
--			cache.time_to_empty = -ENODATA;
--			cache.time_to_empty_avg = -ENODATA;
--			cache.time_to_full = -ENODATA;
--			cache.charge_full = -ENODATA;
--			cache.health = -ENODATA;
--		} else {
--			if (di->regs[BQ27XXX_REG_TTE] != INVALID_REG_ADDR)
--				cache.time_to_empty = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTE);
--			if (di->regs[BQ27XXX_REG_TTECP] != INVALID_REG_ADDR)
--				cache.time_to_empty_avg = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTECP);
--			if (di->regs[BQ27XXX_REG_TTF] != INVALID_REG_ADDR)
--				cache.time_to_full = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF);
--
--			cache.charge_full = bq27xxx_battery_read_fcc(di);
--			cache.capacity = bq27xxx_battery_read_soc(di);
--			if (di->regs[BQ27XXX_REG_AE] != INVALID_REG_ADDR)
--				cache.energy = bq27xxx_battery_read_energy(di);
--			di->cache.flags = cache.flags;
--			cache.health = bq27xxx_battery_read_health(di);
--		}
-+		if (di->regs[BQ27XXX_REG_TTE] != INVALID_REG_ADDR)
-+			cache.time_to_empty = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTE);
-+		if (di->regs[BQ27XXX_REG_TTECP] != INVALID_REG_ADDR)
-+			cache.time_to_empty_avg = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTECP);
-+		if (di->regs[BQ27XXX_REG_TTF] != INVALID_REG_ADDR)
-+			cache.time_to_full = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF);
-+
-+		cache.charge_full = bq27xxx_battery_read_fcc(di);
-+		cache.capacity = bq27xxx_battery_read_soc(di);
-+		if (di->regs[BQ27XXX_REG_AE] != INVALID_REG_ADDR)
-+			cache.energy = bq27xxx_battery_read_energy(di);
-+		di->cache.flags = cache.flags;
-+		cache.health = bq27xxx_battery_read_health(di);
- 		if (di->regs[BQ27XXX_REG_CYCT] != INVALID_REG_ADDR)
- 			cache.cycle_count = bq27xxx_battery_read_cyct(di);
- 
 -- 
-2.35.2
-
+An old man doll... just what I always wanted! - Clara

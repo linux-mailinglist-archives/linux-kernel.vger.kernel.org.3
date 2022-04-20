@@ -2,76 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF5E508C5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32382508C62
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380076AbiDTPr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
+        id S1380247AbiDTPuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380366AbiDTPrq (ORCPT
+        with ESMTP id S1349122AbiDTPuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:47:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478662ACF;
-        Wed, 20 Apr 2022 08:44:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC3316194F;
-        Wed, 20 Apr 2022 15:44:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1888CC385A1;
-        Wed, 20 Apr 2022 15:44:55 +0000 (UTC)
-Date:   Wed, 20 Apr 2022 11:44:54 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     patrick wang <patrick.wang.shcn@gmail.com>
-Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: ftrace: avoid tracing a few functions executed in
- multi_cpu_stop()
-Message-ID: <20220420114454.69ab108c@gandalf.local.home>
-In-Reply-To: <CAGcnep_Gx+3KiUvDVronYKn_divU3OM-RQEOPZakv7MRYh4EJw@mail.gmail.com>
-References: <20220418043735.11441-1-patrick.wang.shcn@gmail.com>
-        <20220418143404.55c8fcab@gandalf.local.home>
-        <CAGcnep8bH4Nncbt3t+VRLff35ZyD8JyzHcEgkq-u6TEq47jqzQ@mail.gmail.com>
-        <CAGcnep_Gx+3KiUvDVronYKn_divU3OM-RQEOPZakv7MRYh4EJw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 20 Apr 2022 11:50:16 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C538E016
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:47:29 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id d23-20020a17090a115700b001d2bde6c234so3723574pje.1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:47:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cqlJftLH7LHu8dCSErsdrnwCHb1OWQ+El5mNGRz6CTM=;
+        b=W0Qzt+Ms8vroIUw71xYpAS+6OEn3MUJEOz6v8iktT067NsTQXfff+TDX3hwl8sNUK4
+         FI9Kelf5oNKVRcSKP2KGDfWGWB33AvEB4xyp54L2ziPXzTTzH7O38P93IaNpjyYISC2x
+         lrspa+IGFFjOTu+lHwI0rk0F1StDPmwlQfg0OfJE7FEzsy9yJAqj/yUBOeyqeZnGxswX
+         x6sVEKpuMpHpAY7INbq/1vP//9SKrhAKI1vBqpO9kic469zTJoR274FDLKiGilFJh6CS
+         B603k99CmO2bi+2w1GeTnKhln9msdGJKA1qRW6YWzJyVDiRdQ3Zv7ybEkOyoq/6nU5KK
+         Ej+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cqlJftLH7LHu8dCSErsdrnwCHb1OWQ+El5mNGRz6CTM=;
+        b=Rx/Wyb4PDtYz6DeMCUC+gJ2vHKwWkuMo2wAbU81rc6H/iCGaz8wxltFazkML82+qQG
+         lsSi2C6yqDZP51Z6C3pQJ24O320+U2Qx7nFjpGA6yH4OQ0rffwpWXq3Gv4ljx5p0+Kcp
+         QfB4k6a+LaFXWcOWiWhCrE0o7rGe5jAL5iiZjClVspmfFDh7THw+nxKEeuEqqTLP5y8p
+         C1HjjpODO8RMET3mpkzKTjz7vwKITDDZgFyQSbAxnXsxAONgkgHbNoBJMMhZyB+Bbw56
+         H+VOlCKdpdnhqBdKnZ6hNbIfyo3ATF1zi2o6J3Q1vdnmuf7axKV+8VAFvg0hbfP26+F8
+         GVLw==
+X-Gm-Message-State: AOAM5319IWWpCrmv+m13KTahcLg+C/vsQ81JNeDhIbbsTG/8SMB4lCt+
+        5aLWnCBSh52uhfXmQbRfAigvWA==
+X-Google-Smtp-Source: ABdhPJwo8kbb/lVSaTjgR1gKI8cyICpyngATTNb6AxQoNPCrkFq2Ln7Mjzv4TKJZsooHBeCBIYiGCg==
+X-Received: by 2002:a17:90a:ee81:b0:1cb:ade8:6c61 with SMTP id i1-20020a17090aee8100b001cbade86c61mr5179240pjz.167.1650469648947;
+        Wed, 20 Apr 2022 08:47:28 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y21-20020a631815000000b0039fcedd7bedsm21104065pgl.41.2022.04.20.08.47.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 08:47:28 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 15:47:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        peterx@redhat.com
+Subject: Re: [PATCH] kvm: selftests: do not use bitfields larger than 32-bits
+ for PTEs
+Message-ID: <YmArDFQXF1lA3z8K@google.com>
+References: <20220420103624.1143824-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420103624.1143824-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 18:34:34 +0800
-patrick wang <patrick.wang.shcn@gmail.com> wrote:
-
-[ I had a power outage yesterday, just catching up now ]
-
-> Sorry for the format. Need get used to gmail.
+On Wed, Apr 20, 2022, Paolo Bonzini wrote:
+> ---
+>  .../selftests/kvm/lib/x86_64/processor.c      | 202 ++++++++----------
+>  1 file changed, 89 insertions(+), 113 deletions(-)
 > 
-> These functions are running within stop machine and ftrace modify
-> code by using stop machine to ensure the safety on some
-> architectures(e.g. RISC-V). These functions' instructions will be
-> modified during ftrace modifying code. When instructions are being
-> modified, they shouldn't be executed typically. Or the executor
-> may behave unpredictably.
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 9f000dfb5594..90c3d34ce80b 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -20,36 +20,18 @@
+>  vm_vaddr_t exception_handlers;
+>  
+>  /* Virtual translation table structure declarations */
 
-Interesting. On x86 when we used stop machine[*] it was not an issue to
-modify the code that is being executed in stop machine. I'm curious to
-exactly what the issue is if something does get traced in the stop machine
-processing. Why does it crash?
+Stale comment.
 
--- Steve
+> -struct pageUpperEntry {
+> -	uint64_t present:1;
+> -	uint64_t writable:1;
+> -	uint64_t user:1;
+> -	uint64_t write_through:1;
+> -	uint64_t cache_disable:1;
+> -	uint64_t accessed:1;
+> -	uint64_t ignored_06:1;
+> -	uint64_t page_size:1;
+> -	uint64_t ignored_11_08:4;
+> -	uint64_t pfn:40;
+> -	uint64_t ignored_62_52:11;
+> -	uint64_t execute_disable:1;
+> -};
+> -
+> -struct pageTableEntry {
+> -	uint64_t present:1;
+> -	uint64_t writable:1;
+> -	uint64_t user:1;
+> -	uint64_t write_through:1;
+> -	uint64_t cache_disable:1;
+> -	uint64_t accessed:1;
+> -	uint64_t dirty:1;
+> -	uint64_t reserved_07:1;
+> -	uint64_t global:1;
+> -	uint64_t ignored_11_09:3;
+> -	uint64_t pfn:40;
+> -	uint64_t ignored_62_52:11;
+> -	uint64_t execute_disable:1;
+> -};
+> +#define PTE_PRESENT_MASK  (1ULL << 0)
+> +#define PTE_WRITABLE_MASK (1ULL << 1)
+> +#define PTE_USER_MASK     (1ULL << 2)
+> +#define PTE_ACCESSED_MASK (1ULL << 5)
+> +#define PTE_DIRTY_MASK    (1ULL << 6)
+> +#define PTE_LARGE_MASK    (1ULL << 7)
+> +#define PTE_GLOBAL_MASK   (1ULL << 8)
+> +#define PTE_NX_MASK       (1ULL << 63)
+
+Any objection to using BIT_ULL()?  And tab(s) after the MASK so that there's some
+breathing room in the unlikely scenario we need a new, longer flag?
+
+> +#define PTE_PFN_MASK      0xFFFFFFFFFF000ULL
+
+GENMASK_ULL(52, 12), or maybe use the PAGE_SHIFT in the generation, though I find
+that more difficult to read for whatever reason.
+
+> +#define PTE_PFN_SHIFT     12
+
+Can we use the kernel's nomenclature?  That way if selftests ever find a way to
+pull in arch/x86/include/asm/page_types.h, we don't need to do a bunch of renames.
+And IMO it will make it easier to context switch between KVM and selftests.
 
 
-[*] You really should come up with a better way than stop machine, because
-the stop machine method is really disruptive, can you not use the break
-point method for updates?
+#define PTE_PRESENT_MASK	BIT_ULL(0)
+#define PTE_WRITABLE_MASK	BIT_ULL(1)
+#define PTE_USER_MASK		BIT_ULL(2)
+#define PTE_ACCESSED_MASK	BIT_ULL(5)
+#define PTE_DIRTY_MASK		BIT_ULL(6)
+#define PTE_LARGE_MASK		BIT_ULL(7)
+#define PTE_GLOBAL_MASK		BIT_ULL(8)
+#define PTE_NX_MASK		BIT_ULL(63)
+
+#define PAGE_SHIFT		12
+#define PAGE_SIZE		(1ULL << PAGE_SHIFT)
+#define PHYSICAL_PAGE_MASK	GENMASK_ULL(51, 12)
+
+#define PTE_GET_PFN(pte) (((pte) & PHYSICAL_PAGE_MASK) >> PAGE_SHIFT)
+
+
+I'd also vote to move these (in a different patch) to processor.h so that selftests
+can use PAGE_SIZE in particular.
+
+  tools/testing/selftests/kvm/x86_64 $ git grep -E "define\s+PAGE_SIZE" | wc -l
+  6
+
+And _vm_get_page_table_entry() has several gross open-coded masks/shifts that can
+be opportunistically converted now
+
+@@ -269,8 +270,7 @@ static uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid,
+        struct kvm_cpuid_entry2 *entry;
+        struct kvm_sregs sregs;
+        int max_phy_addr;
+-       /* Set the bottom 52 bits. */
+-       uint64_t rsvd_mask = 0x000fffffffffffff;
++       uint64_t rsvd_mask = PHYSICAL_PAGE_MASK;
+ 
+        entry = kvm_get_supported_cpuid_index(0x80000008, 0);
+        max_phy_addr = entry->eax & 0x000000ff;
+@@ -284,9 +284,8 @@ static uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid,
+         * the XD flag (bit 63) is reserved.
+         */
+        vcpu_sregs_get(vm, vcpuid, &sregs);
+-       if ((sregs.efer & EFER_NX) == 0) {
+-               rsvd_mask |= (1ull << 63);
+-       }
++       if (!(sregs.efer & EFER_NX))
++               rsvd_mask |= PTE_NX_MASK;
+ 
+
+
+and even more that can/should be cleaned up in the future, e.g. this pile, though
+that can be left for a different day.
+
+	/*
+	 * Based on the mode check above there are 48 bits in the vaddr, so
+	 * shift 16 to sign extend the last bit (bit-47),
+	 */
+	TEST_ASSERT(vaddr == (((int64_t)vaddr << 16) >> 16),
+		"Canonical check failed.  The virtual address is invalid.");
+
+	index[0] = (vaddr >> 12) & 0x1ffu;
+	index[1] = (vaddr >> 21) & 0x1ffu;
+	index[2] = (vaddr >> 30) & 0x1ffu;
+	index[3] = (vaddr >> 39) & 0x1ffu;
+  
+> -	return (pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
+> +	return (PTE_GET_PFN(pte[index[0]]) * vm->page_size) + (gva & 0xfffu);
+
+Yeesh, and yet more cleanup.  Probably worth adding
+
+#define PAGE_MASK		(~(PAGE_SIZE-1))
+
+and using ~PAGE_MASK here?  Or defining PAGE_OFFSET?  Though that would conflict
+with the kernel's use of PAGE_OFFSET.

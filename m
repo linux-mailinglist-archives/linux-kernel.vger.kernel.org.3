@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39754509313
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456BE509316
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 00:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbiDTWpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 18:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        id S1382984AbiDTWpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 18:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382975AbiDTWpL (ORCPT
+        with ESMTP id S1382968AbiDTWpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 18:45:11 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331833DA72
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:42:10 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id p65so5502364ybp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xvgHYkX1gitxHFx0lp3h64Eqoa6L9VIgehho/WG25qA=;
-        b=ckup5OEW1GScLDsBEVcIf+nm/kcNKdSSnHfUQ7P60qBEKfYhFMJaCZ9GuX+nKS9/yZ
-         9aJPXnvNZ0xmjpDEi6vLws7Ox3DT34yjdg3ydpUd+c0PxZZ90uq0GV7lZYicNFed7N9g
-         JlkkmUQ3SxoxBFByZIgqHAAMZM7vJJLW+SPWEvg/+vYBAgYCb+fJ9lF45CXAqu/1kjQ3
-         a9saqasBRiwkkbFcFfEF81WRcYVv5in3/egOqp0JEFxPMLBAokK1XXxmwjUuZuaOFsuV
-         087g+K3gzhJsfhrpWxI/4DnTZnuoBSleXpOdWjZRC4Q+1rWtL1nt8v+Vx2ns0IL9l3Cx
-         eHCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xvgHYkX1gitxHFx0lp3h64Eqoa6L9VIgehho/WG25qA=;
-        b=NJ/FGW0F6ebIchU4hbWNMshAsFGLcudevqARB/u7fwmOC7IRErfi43V50GVfkleDnh
-         OZfoaVpiLTcWIKcJN1i9ZhIzLD1KStPT6eyfdc6GTRFZmUWpIAgWBClb5MxdbPlBKKgG
-         OClxOe6JmKijpL16GNi+u85hpzcTL8qVpWwEAcEN4InJ/Qoqodfb0dDNE/Yv8vda9fDi
-         snURQV1F2f06Nk2eaP3t2emSYLJMuWZx1hX6YGCe3qznVRwAmN7ICH4dFK7L2TIMXn44
-         kkTD4Ymgr6igiu9IwUkb/a5YT6TNcDZFw3QdjrvNKhyPB+/mRc3hxm+MyjjXOaanSF7U
-         Jlyw==
-X-Gm-Message-State: AOAM532mrC442VQiDPRIhgq72xIrocDgXoWxOTGvQb7DfAhmAGNL7gka
-        67FYYQIyAi48DA8cX9YoEIheaBSOzLJVy1Ay4+PtzA==
-X-Google-Smtp-Source: ABdhPJzEECoSw57FBizByjTYMqQYVDek90inKa5zx9AxvgyUzaHj0vkksZUgsx5Ylv+ZOjZ6jwguCMe2X12RIRGZthg=
-X-Received: by 2002:a25:4e82:0:b0:633:68d7:b864 with SMTP id
- c124-20020a254e82000000b0063368d7b864mr23162602ybb.514.1650494525070; Wed, 20
- Apr 2022 15:42:05 -0700 (PDT)
+        Wed, 20 Apr 2022 18:45:39 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E352BB0B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 15:42:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KkFzr5dD6z4xTX;
+        Thu, 21 Apr 2022 08:42:32 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1650494554;
+        bh=o602KQ/+agNDKL9zbAJn0li/P3xi6zOfUFviZ8GVtWA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=YnyIJSjfggiqOcBnpaqnJxPQIU9gjrc8XhMQET/vTLn6XrgAJKxmDJ83Na9yAupO7
+         sKCFl2RHCtdB561lmK224mYwiDZyw6lK1XsN9NeC187Q4v8MrVnfMAzlTfPfcXqB4v
+         M8DwK6vhU64YTqCazpMHH6eMaOztsabNjZmwZQd3OatGbExtBCsCSHiHxtnHVrFivH
+         yX4UBJTjOL3KCSBK3R8I5zB4UWNm2Va0gC4JHxEMjabJU9IjTkE2hCoy2RLQTtboi6
+         HTiBLkhjZMv0ajpAfyOK+BQvm+ZyXJ6D7tWEpJbosO8g0nJUjbXa9z70KUT/U2BG7H
+         EcIo6Kh3UMpGQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Scott Wood <oss@buserror.net>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v1 1/1] powerpc/83xx/mpc8349emitx: Get rid of of_node
+ assignment
+In-Reply-To: <CACRpkdbqfNiWQG6ayqMXACby4xkW0pY6JhdYE-x+pWkSxJU5TQ@mail.gmail.com>
+References: <20220323174342.56187-1-andriy.shevchenko@linux.intel.com>
+ <CACRpkdbUWE8knM=9uUVLTX792Y8_J1aPj4KtFh=yJxaKi+ZqRw@mail.gmail.com>
+ <Yk2PE7+oEEtGri95@smile.fi.intel.com>
+ <CACRpkdbqfNiWQG6ayqMXACby4xkW0pY6JhdYE-x+pWkSxJU5TQ@mail.gmail.com>
+Date:   Thu, 21 Apr 2022 08:42:30 +1000
+Message-ID: <87fsm7fkbt.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <fd813c7d-888a-ce53-b1e5-d9b41003b58b@sudomaker.com>
-In-Reply-To: <fd813c7d-888a-ce53-b1e5-d9b41003b58b@sudomaker.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 21 Apr 2022 00:41:53 +0200
-Message-ID: <CACRpkdZXhy3zkwg8UQj=+-4cqooUYhceEwQEcv1MyM-RLwvoLQ@mail.gmail.com>
-Subject: Re: [PATCH v2] pinctrl: Ingenic: Add missing UART2 group C for X1000/E
-To:     Yunian Yang <reimu@sudomaker.com>
-Cc:     linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 2:32 PM Yunian Yang <reimu@sudomaker.com> wrote:
-
-> v2: Define PC31 pin only once, noted by Paul Cercueil <paul@crapouillou.net>
->     Confirmed to work on hardware. Although the Ingenic folks did this twice
->     in their 4.4 kernel fork; not sure why.
-
-Put the changelog after the commit text at least please.
-
-> X1000/E has a third UART2 pin group selection, which uses the TDI(G2) as RX
-> and TDO(G1) as TX. This configuration is becoming increasingly popular in
-> newer core boards, such as the Halley2 v4.1. This is done by enabling
-> function 1 of a "virtual pin" PC31. See section 19.3.3 of the X1000
-> Programming Manual for details.
+Linus Walleij <linus.walleij@linaro.org> writes:
+> On Wed, Apr 6, 2022 at 3:02 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+>> On Mon, Mar 28, 2022 at 03:16:08PM +0200, Linus Walleij wrote:
+>> > On Wed, Mar 23, 2022 at 6:43 PM Andy Shevchenko
+>> > <andriy.shevchenko@linux.intel.com> wrote:
+>> >
+>> > > Let GPIO library to assign of_node from the parent device.
+>> > > This allows to move GPIO library and drivers to use fwnode
+>> > > APIs instead of being stuck with OF-only interfaces.
+>> > >
+>> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> >
+>> > That's a nice patch.
+>> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>>
+>> Thanks!
+>>
+>> Can we have this applied now?
 >
-> Signed-off-by: Yunian Yang <reimu@sudomaker.com>
+> I think Michael Ellerman could help with this?
+>
+> Michael?
 
-> @@ -2058,6 +2059,7 @@ static const struct group_desc x1000_groups[] = {
->         INGENIC_PIN_GROUP("uart1-data-d", x1000_uart1_data_d, 1),
->         INGENIC_PIN_GROUP("uart1-hwflow", x1000_uart1_hwflow, 1),
->         INGENIC_PIN_GROUP("uart2-data-a", x1000_uart2_data_a, 2),
-> +       INGENIC_PIN_GROUP("uart2-data-c", x1000_uart2_data_c, 1),
+Yep, I'll pick it up when I start putting things into next.
 
-This doesn't apply to the current mainline kernel, which doesn't
-even have the uart2-data-a designation.
+That's usually the week after rc2, but I had a break for Easter.
 
-Clearly this patch depend on something that I haven't
-yet applied? Something I missed?
-
-Yours,
-Linus Walleij
+cheers

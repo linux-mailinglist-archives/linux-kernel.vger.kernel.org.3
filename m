@@ -2,116 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6155089F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF545089F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354209AbiDTOD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
+        id S1379284AbiDTOEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 10:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379276AbiDTODx (ORCPT
+        with ESMTP id S1379282AbiDTOEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 10:03:53 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC523A191
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:01:06 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id f22so980992qtp.13
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=e1Sscqvoo7rz90w552fG1qluFSOgbb1+p44eFkfXZXw=;
-        b=BkM9SmDrgxYj+HcWafYKsLOSaaQkvO8MYXKQsOg921qCb4v0nRrMUOznRS4a5VLFUx
-         BmxCxhwGnDs978fatHUFHPnnRmuVlZEG4QPYYZhOhUdxamvwrFCjwlrEjVZzHgguwQ7q
-         Is50mVeULvFhzQ6RDedeNeXWimUX2TQE6G9BXWCWhSuaU9okmm7z401UarFu3BI2MPIa
-         67HKueLQiSlF/pvRGANYugd3ckQ3FFq/8kVzXdQZMRkqsBtP8AX0yFz4QRa+bokecm7J
-         ycWK6Z8HBEH93VeWncKSsfEAJz975O1T/3Y619q5R69A0ccap8aZPTzxRaC8df8PQ5JT
-         bzHw==
+        Wed, 20 Apr 2022 10:04:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B730B3ED0B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650463277;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6dWgrGMk58Q4Et8ectVGURfERYkJuTF84oKkc2EBf/s=;
+        b=NuYCfMFIqyMDZnwDzlli4nR25/OoeDWMWQk0skcGfm8ZnhsB1dbwE/0MkwIAbqQZR0CTsD
+        CZI6vSHEc9cHDs6Jt76QCZv7zvVLfsagVys6lMIOEih0la8irVbGZJ61qMPCLn99uXmvN/
+        kG0d/qHclE5EkEZuQ+aRoSNotw1herY=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-j9nBVWE6N_OtYFd5kZL6LQ-1; Wed, 20 Apr 2022 10:01:16 -0400
+X-MC-Unique: j9nBVWE6N_OtYFd5kZL6LQ-1
+Received: by mail-io1-f69.google.com with SMTP id i19-20020a5d9353000000b006495ab76af6so1306052ioo.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:01:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=e1Sscqvoo7rz90w552fG1qluFSOgbb1+p44eFkfXZXw=;
-        b=yDYMUZj49Mi04JGfU+Qj7C7N8o1Qqq0MSf/4+5XLofhevo6PdE0SuOwLH0+I7NJ419
-         CTFNmnsKn83y2V8JEwldCG4JXjvySmFZPX8qnB4vJ8mM+l/qxx3aA/cpdGleJptABM0t
-         BzaMsWZdzwdYlXfgxs+47HsxGBwfXF/yAIV0118a/Uot4pzYCK0912x9kD6Oby29YKV7
-         2qynT4Ql5ZWyGIDVRJZen/c8sQMVauF9wuXraiAUY5N9IgQSX553AgbH+za4TQ7akxiH
-         xxVGREUL3Wh5dZJnqgN6xZ+OBR8xQmlnE9mjn8eUul06hOUpy+okvJIle3DfOVPczsZ5
-         wHwg==
-X-Gm-Message-State: AOAM531y2rpge7heBOFeAQxbmYI70CNf8nouYLR7Trg70q14UZUqal96
-        cPZUNtFBOu3ijQ5NFqmBn+xn7g==
-X-Google-Smtp-Source: ABdhPJwozpmC0SgweInYjDsRTNf8wKGRtqJ3jxjVI8LofpTyn+G1S8X1pHxVhVdLfumr1ntlcJDH1A==
-X-Received: by 2002:ac8:7d55:0:b0:2f3:458f:236f with SMTP id h21-20020ac87d55000000b002f3458f236fmr544454qtb.251.1650463265504;
-        Wed, 20 Apr 2022 07:01:05 -0700 (PDT)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id i18-20020a05620a27d200b0069ecf023d1asm1535936qkp.129.2022.04.20.07.01.04
+        bh=6dWgrGMk58Q4Et8ectVGURfERYkJuTF84oKkc2EBf/s=;
+        b=UmPTWrkTDTByK1DvcrzJGtMgJN7Nx4f4dtJMemaABayNvwIJ1R+ePQtVAcQvHDjjFt
+         jBW4c7pR1e3BYrFzdcvNcRmi8W3SpQHQAe3hnQhxbP6vHn7OypO7OfBET6lfsnN5rjb2
+         czujZyYQgfKpqJoxBbzJVZVHjwFh3UPZo16qi2zssbbKwK0KdGSMO3L5h0tjazTCuttU
+         CHaavjQ0Kg/xL2FIXDIemZkje0/87cSPpfjZHVh4FJi/xm8CUhNgjUACW9X1Q/W/LtEy
+         r9NpsB2TYOX+aBoZY/ri5I2oCFJ/6Sss2rK3q5phtT2sp7oC3I223iIJGudZsAqwFe33
+         5k4A==
+X-Gm-Message-State: AOAM5308Q7RPP6VuVxpTuB4c41ll2IFIS5OnX9XDtR1ftvxhP3tniE0J
+        Vf4obKXQh8zqoJVCSLTyrWwc0Sj33ADcgJQOA6+BlaSsWUcrm5TlEi3+Yt3P++QwgZ9B/bEdzZ0
+        DbyK0xHI24zioyYe6kxt0JTJa
+X-Received: by 2002:a05:6638:380e:b0:32a:777c:607f with SMTP id i14-20020a056638380e00b0032a777c607fmr3733036jav.47.1650463275404;
+        Wed, 20 Apr 2022 07:01:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyrbSBHT7Qold9RT6iIj368nVCg7wwcQRqm4XTm0xUjEZXcAj1xlH0C5Yv3q6FhP2UXQNLn2Q==
+X-Received: by 2002:a05:6638:380e:b0:32a:777c:607f with SMTP id i14-20020a056638380e00b0032a777c607fmr3733020jav.47.1650463275188;
+        Wed, 20 Apr 2022 07:01:15 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id m8-20020a92cac8000000b002ca9d826c3fsm10823497ilq.34.2022.04.20.07.01.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 07:01:05 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 10:01:04 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Nico Pache <npache@redhat.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, aquini@redhat.com,
-        shakeelb@google.com, llong@redhat.com, mhocko@suse.com,
-        hakavlad@inbox.lv
-Subject: Re: [PATCH v3] vm_swappiness=0 should still try to avoid swapping
- anon memory
-Message-ID: <YmASIHjTVndHHoL4@cmpxchg.org>
-References: <20210809223740.59009-1-npache@redhat.com>
- <b5575449-08a2-2901-e7e1-a97150e4878c@redhat.com>
- <Yl8Dk+a1YDwupLMv@cmpxchg.org>
- <e495901c-f2f3-cc85-10a6-0d2944255b19@redhat.com>
+        Wed, 20 Apr 2022 07:01:14 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 10:01:13 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com
+Subject: Re: [PATCH] kvm: selftests: do not use bitfields larger than 32-bits
+ for PTEs
+Message-ID: <YmASKf+pMma+Qf0O@xz-m1.local>
+References: <20220420103624.1143824-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e495901c-f2f3-cc85-10a6-0d2944255b19@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220420103624.1143824-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 07:54:52PM -0400, Nico Pache wrote:
+On Wed, Apr 20, 2022 at 06:36:24AM -0400, Paolo Bonzini wrote:
+> Red Hat's QE team reported test failure on access_tracking_perf_test:
 > 
+> Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
+> guest physical test memory offset: 0x3fffbffff000
 > 
-> On 4/19/22 14:46, Johannes Weiner wrote:
-> > Hi Nico,
-> > 
-> > On Tue, Apr 19, 2022 at 02:11:53PM -0400, Nico Pache wrote:
-> >> I think its is important to note the issue we are seeing has greatly improved
-> >> since the initial posting. However we have noticed that the issue is still
-> >> present (and significantly worse) when cgroupV1 is set.
-> >>
-> >> We were initially testing with CgroupV1 and later found that the issue was not
-> >> as bad in CgroupV2 (but was still an noticeable issue). This is also resulting
-> >> in the splitting of THPs in the host kernel.
-> > 
-> > When swappiness is 0, cgroup limit reclaim has a fixed SCAN_FILE
-> > branch, so it shouldn't ever look at anon. I'm assuming you're getting
-> > global reclaim mixed in. Indeed, I think we can try harder not to swap
-> > for global reclaim if the user asks for that.
-> > 
-> > Can you try the below patch?
-> Sadly this did not fix the V1 case.
+> Populating memory             : 0.684014577s
+> Writing to populated memory   : 0.006230175s
+> Reading from populated memory : 0.004557805s
+> ==== Test Assertion Failure ====
+>   lib/kvm_util.c:1411: false
+>   pid=125806 tid=125809 errno=4 - Interrupted system call
+>      1  0x0000000000402f7c: addr_gpa2hva at kvm_util.c:1411
+>      2   (inlined by) addr_gpa2hva at kvm_util.c:1405
+>      3  0x0000000000401f52: lookup_pfn at access_tracking_perf_test.c:98
+>      4   (inlined by) mark_vcpu_memory_idle at access_tracking_perf_test.c:152
+>      5   (inlined by) vcpu_thread_main at access_tracking_perf_test.c:232
+>      6  0x00007fefe9ff81ce: ?? ??:0
+>      7  0x00007fefe9c64d82: ?? ??:0
+>   No vm physical memory at 0xffbffff000
 > 
-> I will have to go back through my notes and over the code again to find what
-> difference between the two may be causing this issue. Im just starting to focus
-> on this issue again so my memory needs some refreshing of where I was last at.
+> I can easily reproduce it with a Intel(R) Xeon(R) CPU E5-2630 with 46 bits
+> PA.
 > 
-> The good news is that with the current state of upstream the issue of swap
-> storms tearing down THPs seems to be minimized to sane amount with V2.
+> It turns out that the address translation for clearing idle page tracking
+> returned a wrong result; addr_gva2gpa()'s last step, which is based on
+> "pte[index[0]].pfn", did the calculation with 40 bits length and the
+> high 12 bits got truncated.  In above case the GPA address to be returned
+> should be 0x3fffbffff000 for GVA 0xc0000000, but it got truncated into
+> 0xffbffff000 and the subsequent gpa2hva lookup failed.
 > 
-> My swappiness=0 solution was a minimal approach to regaining the 'avoid swapping
-> ANON' behavior that was previously there, but as Shakeel pointed out, there may
-> be something larger at play.
+> The width of operations on bit fields greater than 32-bit is
+> implementation defined, and differs between GCC (which uses the bitfield
+> precision) and clang (which uses 64-bit arithmetic), so this is a
+> potential minefield.  Remove the bit fields and using manual masking
+> instead.
+> 
+> Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2075036
+> Reported-by: Peter Xu <peterx@redhat.com>
 
-So with my patch and swappiness=0 you get excessive swapping on v1 but
-not on v2? And the patch to avoid DEACTIVATE_ANON fixes it?
+Should be:
 
-If you haven't done so, it could be useful to litter shrink_node() and
-get_scan_count() with trace_printk() to try to make sense of all the
-decisions that result in it swapping.
+Reported-by: Nana Liu <nanliu@redhat.com>
+
+Meanwhile:
+
+Reviewed-by: Peter Xu <peterx@redhat.com>
+Tested-by: Peter Xu <peterx@redhat.com>
+
+Thanks,
+
+-- 
+Peter Xu
+

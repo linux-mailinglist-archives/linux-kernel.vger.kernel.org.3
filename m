@@ -2,471 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA52508035
+	by mail.lfdr.de (Postfix) with ESMTP id B6C32508036
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 06:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359320AbiDTEk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 00:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S1359322AbiDTElM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 00:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359299AbiDTEkV (ORCPT
+        with ESMTP id S242849AbiDTElK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 00:40:21 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0A51A819;
-        Tue, 19 Apr 2022 21:37:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650429455; x=1681965455;
-  h=message-id:subject:from:to:cc:in-reply-to:references:
-   mime-version:date:content-transfer-encoding;
-  bh=JGHVxQmvQ1Ff7igrrS3X4Y8AJbzw2ajXfF/fr+Fs8BQ=;
-  b=HR2JkQydhsrxC4zfT59y61XxJvl3POV5HOXzVAefanyNhQylOmkinQ8P
-   +FTOcbfsoMA2rZSRcuKPpJad2dVmI2SFx8Z5f3bG9x8PGOy1agWeR6inL
-   X9OXtUeDrxQlFSHaCpX6Yq/ePlw/iF2nrhsdu1B8Rug+8ersHeoJ4mf9m
-   Me2QRpZ/UScXdWlp+kG+94wG8+v3d+zUZouWLDvHeZ2SRtBJBjEVn8352
-   Iry2Z8HS8s9AGQjd3AIBnXDYB8tMy9ED1rLCBA9srX0vWNtyuIn8X6z4W
-   i993+Vgr41zQZyaOC8l35YCJ1Ktv9GekJRczcAiIRz5WvHNDbv4EPrPxS
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="263700125"
-X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="263700125"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 21:37:35 -0700
-X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="667717035"
-Received: from rnmatson-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.31.26])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 21:37:32 -0700
-Message-ID: <fd954918981d5c823a8c2b8d1b346d4eb13f334f.camel@intel.com>
-Subject: Re: [PATCH v3 04/21] x86/virt/tdx: Add skeleton for detecting and
- initializing TDX on demand
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
-In-Reply-To: <bc078c41-89fd-0a24-7d8e-efcd5a697686@linux.intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <32dcf4c7acc95244a391458d79cd6907125c5c29.1649219184.git.kai.huang@intel.com>
-         <bc078c41-89fd-0a24-7d8e-efcd5a697686@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 20 Apr 2022 00:41:10 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2063.outbound.protection.outlook.com [40.107.236.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6161AD8B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 21:38:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SwJCwN1saRR6vZa/C1UDTo3MaT6i4U08BTzUaqfS7gL74mWTYOBPsbvKmJHyIeQ2OgjhzFcw90vaoopQomtIYPmDzyJ8jtNeMxmhx3ni+Ku+ng1b/IgPe5YPDnyMzcUcO8RMLVPUAhRX2uVazL6HVYVmFOCENE4oe1x//q+cyR18ctIMW7uouUDOuXXTMiXEsLKduAGJIx5O5lP4HnJVbWgI+A4tukKBuH13Vg7DsRKMRH+wO5TvCMvfDKjbEP0fIGMQLRhwQgjhdxMww5a5SXe2CwWfJ59YGEPIvTNaTGuhVZZwopusrcmMybt0LJP5f/zH1A6Oyqs1igR6o0bA/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5uMTFQ5bepkouB90poSYhvFc2Yf6VIs9rr+ETkJNwPY=;
+ b=dZN6+hS4ux7+hf/CfKO4WOvWwmiNvBYtOYP3J9z0xBq44kCj84hAwQGW/ztJGv8bELDTTifEBbMIBO1cUR1V76gejknf9K0Dgqa5ynxDA5amstSOB2gI3rDHG0tTywuwYOSkWdBAR5gAdTIirTAA7bOYjxQCLmmz1u87JCsXxELdGmCw7MkNP1iddCk1+H4KdElvNlpMD7230y8rKsWtjHtvbmDUaeRIZPqbz4AW45kLeiKAeB8OhUfXdxyxyfnU2pEFke99JnPUDJLR6i2lwLLZkHl5eZcDJpR+vxLGu9KrNHkaSei3BTBcGrho+qmlaZhYEV79cVZ9sCoE3tPo+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5uMTFQ5bepkouB90poSYhvFc2Yf6VIs9rr+ETkJNwPY=;
+ b=RA26HtoCfFHTqwKGNJE8iiR4+RS4RE6gwP2e3R/VZI1o2YJJQvpMzUccestGPpcbO3NNeXuKmx3qq4Z5vdnPUmjTlqd1isWNhsF44u9WHFvFww6TQqwSLv5Gab5vdfnj/7xTyzXE4u1yqsbk+lKYwu47jZhzbHuxmglXG+dyD+Ql6af9VpGjDBDWN/Dpilx1+gPy14MPssHRKDNhet4O2v0TpxGAQFbrIPitD3uAfa1Co0IOtvniVYsHRBiR2i+/zCltF6M2kRosaLqoHkgp5mY7jpq0ev4XNIIa7fB/dFlLEZWdaJE6HV0G9mhjwx4tXlCC7IvHNN2OoDcPepxosw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by SN1PR12MB2477.namprd12.prod.outlook.com (2603:10b6:802:28::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Wed, 20 Apr
+ 2022 04:38:19 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::2d17:b68a:e101:4c18]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::2d17:b68a:e101:4c18%6]) with mapi id 15.20.5164.025; Wed, 20 Apr 2022
+ 04:38:19 +0000
+From:   Alistair Popple <apopple@nvidia.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        christian.koenig@amd.com, jhubbard@nvidia.com,
+        rcampbell@nvidia.com, Alistair Popple <apopple@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH v2] mm/mmu_notifier.c: Fix race in mmu_interval_notifier_remove()
+Date:   Wed, 20 Apr 2022 14:37:34 +1000
+Message-Id: <20220420043734.476348-1-apopple@nvidia.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0045.namprd03.prod.outlook.com
+ (2603:10b6:a03:33e::20) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Date:   Wed, 20 Apr 2022 16:37:11 +1200
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 01d0bbb1-cdc0-4710-766c-08da2287982f
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2477:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR12MB24777452B143159427BF7584DFF59@SN1PR12MB2477.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XBakrtWIw/1qJ0inNNTB/onVi1GUSfr6Vo5FNrZEsNr2BRiBeN+2fDdPfsIsE/AjvIZBZhOnlsasPPPACtLj1eBJpfASz5Ii4kVeh3AnL1WuR5x4Fqo6ZCVa06ZC3yy16q+tK46dGcBz8gfdbkKv3mZIjmSzSy9reTnq2iMMKo+rJqrEKP8saSAxhK2lMGWMHj8Fh6qYWbdjqenKrkt4cuyftccEghPzOK3b/rXYKn0FjbZiZF2uHpBF9U3U/F4ChPIIAxZWcVNjgm4AFOBpDwkMccPiKr9mzozCOcge2NTa+id8dn3M2XCkUkxCMQb2DRNqVLm2xjBaRT/uoWmJ/3+g2wwZa2Zk4kItwj+kz8vxL8KkKlQF/ZGHs4vunZSKkTnte/SseRs7P50deTB2ExkjGjNIKZe62m1lHinyEIQPYtZOm4tGWuljupp7rPWML5y/V080LOBOSQvdHWN2nUCJKcXkRRqaT02JsEDBOtFlpasLsforKfN1WRaSeDbwpbl66OkVgvOQ6/5l3hpYxLaPON/tgWJpcCoLdxkTLXe/7BwWt5LGltHo9H/RPi5QiS7jw0Pa0prsUhiUgaKq3QrVrZzzpE3py4N/4/whBjg+1ecf8PBUjCI8SUvxnjETPDAXy9d7A1U+ZajByyQ5pg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(107886003)(26005)(8676002)(86362001)(6916009)(2616005)(6666004)(2906002)(66476007)(8936002)(6506007)(6512007)(6486002)(38100700002)(508600001)(66556008)(1076003)(66946007)(83380400001)(186003)(54906003)(36756003)(4326008)(5660300002)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hXJ3wI5gifKOMLigI3a64mnOM158k97j8fIGiNJUxJ9pel48QGmEHD/SBUnC?=
+ =?us-ascii?Q?28Z6/NeA+MpCdGb8EgkPnCFhIYGpR3vxgamNr0FYAsOn7c8ZzDLQbW0erCNQ?=
+ =?us-ascii?Q?Qn8vhMhA3AK5mfNlspYVdBr8B9jQ4FNK0Fu44vGJUlOoTagUjoEYlugzvap3?=
+ =?us-ascii?Q?ivCAVWCh3UXyPwL4kaxwzM6E9gAzbM8BYq+0ojVe+3gcCxP5cnaT6l/26Arp?=
+ =?us-ascii?Q?5tVKiKmSz+bkDBBW/RPJCXdyPX2UfyGb3Cqmhbyfq4K31QfE1uuU40bG1Z7u?=
+ =?us-ascii?Q?ShKaZBMwT85Mek89/ND3+CddN/ZUbM650NY4lprIeLo5ZcEbo/oqbs2UcIvZ?=
+ =?us-ascii?Q?7uSHF4FRI+15q4H20LACm3jz+iQY4qQtvdAd6W4ZV8kst5iTxcZG5tFL1vm/?=
+ =?us-ascii?Q?k111GuD9dSnFg3np7YMdAbZixCOYIbz1l7SqUul6xvB4Cz2QMXUEtVH/bnAW?=
+ =?us-ascii?Q?66j8JLWgegSoj2ku8wTEzcRmR0LLrwOkWlExuR2yNmcUGXUgtpYugunbIhE5?=
+ =?us-ascii?Q?hWQN7mwtDjV61w3hCQ9QDCKd+R24bFyqZtGxcrT2/aLqxq2McBmeyYc5r3RP?=
+ =?us-ascii?Q?WIsTBqYq6/YjYOct/YOCLNeuuLWCvOej1F/FgqzKfqlXdwkifQAg+Yir9LLm?=
+ =?us-ascii?Q?6vDNPkE0LTjuvpFkiIHN2WF4OiJx/GirmuZyDALmwMsT+oY00t0mVq00r8vX?=
+ =?us-ascii?Q?pYKrGRR0l2AfUiHWoKpDJoXc5JFuKzp8pB1Qc7iQMfW0SPg/6tElQNsyUA8V?=
+ =?us-ascii?Q?XNLZTojAqLtlw87PeEFu3NpGpQvsNaHBIrgRzZ/GPP/QsL43rdKAYxj2ZBcZ?=
+ =?us-ascii?Q?NrypDjDgOb0E4BzSO2Cm5zac+Cl19RC2sfOsmq7HbSM9Vn+nogA2hq1RUGJN?=
+ =?us-ascii?Q?q4PU95WKYKdhVJ25WzHL+GCH9kJxN0zRct3XvE1c1Igaopz6pqkIwcesdprP?=
+ =?us-ascii?Q?d+41bME0EQBAxaeVc6mcGoKzmvkQlyYQRoulR7+qtdnxZscomJPdIy7lGvAA?=
+ =?us-ascii?Q?RH5ns8HZD4E7SRGRykhfSyW6tdL71ea4PU2OICUq9EmyqkHwIkl3gp3HpTh8?=
+ =?us-ascii?Q?ACAm/ZP7MJp2z7l0UhBLS0Ex0U0skY6Tv5ugmfKTKDdShjS6p/YEz9tlRY3+?=
+ =?us-ascii?Q?mI+Ouqd+BfWl1BY2zinYNieHPD6JcsVWIEwJmsR9fge49D2/I9sZYvRwP77r?=
+ =?us-ascii?Q?b1hnVYVXKjIrBP4V/2anBy5QhawPciENTvZ6BoDZXVSW4Vl2VuEzIKD7BSrZ?=
+ =?us-ascii?Q?K0DYPiLmn0LO4LfEm55hkbGXhjT2W5IqMMcLHiIuvsUxt1NGKy76NxDJ9cLV?=
+ =?us-ascii?Q?ttGgWHhHzXjWtfWuFVB9SZy3XEPHE9a5sIKxchdIEadaz8tBQJYLK/pcGWZu?=
+ =?us-ascii?Q?LzQUyJgEXK/GEku9Cvnj4oVWZa9YKaRoNAb0tf8dGDfGzoX0/rqLJ3cNo2PF?=
+ =?us-ascii?Q?mZZFAmfT9FOsfq5mlDUNtwh7jXQWm30F+dkx4UxFRhGQ78ZVS5na+enAEFyn?=
+ =?us-ascii?Q?KtuJS0Q+Wptz23LpX4YnbtKu1wJXblBMKw7F2ifeXYBR3Y1nCmnsu7xli5ZV?=
+ =?us-ascii?Q?JdeqnObXYTStEk654hZ8P9HEUnGOYaBYAheGJPzN/nvS4oYFrk8vQRNvK2EI?=
+ =?us-ascii?Q?6lnw9s1qoN2bKkQHPYoH67xhDpjgHFqOTu8mcVPjuOSJStMi4BrrV7aDUa7J?=
+ =?us-ascii?Q?/H1d98YSDOqe7ajL7BPIU9oVv8rsU98LZGM65n71Xs8JuoBFcJV2bfFgDVsY?=
+ =?us-ascii?Q?FwwrmTCtTSWu6zc4d5zDQN+XaZUQ/mg=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01d0bbb1-cdc0-4710-766c-08da2287982f
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 04:38:19.6929
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZqSYAm0xM0tpzB9iH3x8d/Fzj8kHpax81ppjHseOssXivxpASt82Eq+rVyGuSXwY6Kdb1flNaeX5VQUjIBpZmQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2477
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-19 at 07:53 -0700, Sathyanarayanan Kuppuswamy wrote:
-> 
-> On 4/5/22 9:49 PM, Kai Huang wrote:
-> > The TDX module is essentially a CPU-attested software module running
-> > in the new Secure Arbitration Mode (SEAM) to protect VMs from malicious
-> > host and certain physical attacks.  The TDX module implements the
-> 
-> /s/host/hosts
+In some cases it is possible for mmu_interval_notifier_remove() to race
+with mn_tree_inv_end() allowing it to return while the notifier data
+structure is still in use. Consider the following sequence:
 
-I don't quite get.  Could you explain why there are multiple hosts?
+CPU0 - mn_tree_inv_end()            CPU1 - mmu_interval_notifier_remove()
+----------------------------------- ------------------------------------
+                                    spin_lock(subscriptions->lock);
+                                    seq = subscriptions->invalidate_seq;
+spin_lock(subscriptions->lock);     spin_unlock(subscriptions->lock);
+subscriptions->invalidate_seq++;
+                                    wait_event(invalidate_seq != seq);
+                                    return;
+interval_tree_remove(interval_sub); kfree(interval_sub);
+spin_unlock(subscriptions->lock);
+wake_up_all();
 
-> 
-> > functions to build, tear down and start execution of the protected VMs
-> > called Trusted Domains (TD).  Before the TDX module can be used to
-> 
-> /s/Trusted/Trust
+As the wait_event() condition is true it will return immediately. This
+can lead to use-after-free type errors if the caller frees the data
+structure containing the interval notifier subscription while it is
+still on a deferred list. Fix this by taking the appropriate lock when
+reading invalidate_seq to ensure proper synchronisation.
 
-Thanks.
+Signed-off-by: Alistair Popple <apopple@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 99cb252f5e68 ("mm/mmu_notifier: add an interval tree notifier")
+---
+ mm/mmu_notifier.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-> 
-> > create and run TD guests, it must be loaded into the SEAM Range Register
-> > (SEAMRR) and properly initialized.  The TDX module is expected to be
-> > loaded by BIOS before booting to the kernel, and the kernel is expected
-> > to detect and initialize it, using the SEAMCALLs defined by TDX
-> > architecture.
-> > 
-> > The TDX module can be initialized only once in its lifetime.  Instead
-> > of always initializing it at boot time, this implementation chooses an
-> > on-demand approach to initialize TDX until there is a real need (e.g
-> > when requested by KVM).  This avoids consuming the memory that must be
-> > allocated by kernel and given to the TDX module as metadata (~1/256th of
-> 
-> allocated by the kernel
-
-Ok.
-
-> 
-> > the TDX-usable memory), and also saves the time of initializing the TDX
-> > module (and the metadata) when TDX is not used at all.  Initializing the
-> > TDX module at runtime on-demand also is more flexible to support TDX
-> > module runtime updating in the future (after updating the TDX module, it
-> > needs to be initialized again).
-> > 
-> > Introduce two placeholders tdx_detect() and tdx_init() to detect and
-> > initialize the TDX module on demand, with a state machine introduced to
-> > orchestrate the entire process (in case of multiple callers).
-> > 
-> > To start with, tdx_detect() checks SEAMRR and TDX private KeyIDs.  The
-> > TDX module is reported as not loaded if either SEAMRR is not enabled, or
-> > there are no enough TDX private KeyIDs to create any TD guest.  The TDX
-> > module itself requires one global TDX private KeyID to crypto protect
-> > its metadata.
-> > 
-> > And tdx_init() is currently empty.  The TDX module will be initialized
-> > in multi-steps defined by the TDX architecture:
-> > 
-> >    1) Global initialization;
-> >    2) Logical-CPU scope initialization;
-> >    3) Enumerate the TDX module capabilities and platform configuration;
-> >    4) Configure the TDX module about usable memory ranges and global
-> >       KeyID information;
-> >    5) Package-scope configuration for the global KeyID;
-> >    6) Initialize usable memory ranges based on 4).
-> > 
-> > The TDX module can also be shut down at any time during its lifetime.
-> > In case of any error during the initialization process, shut down the
-> > module.  It's pointless to leave the module in any intermediate state
-> > during the initialization.
-> > 
-> > SEAMCALL requires SEAMRR being enabled and CPU being already in VMX
-> > operation (VMXON has been done), otherwise it generates #UD.  So far
-> > only KVM handles VMXON/VMXOFF.  Choose to not handle VMXON/VMXOFF in
-> > tdx_detect() and tdx_init() but depend on the caller to guarantee that,
-> > since so far KVM is the only user of TDX.  In the long term, more kernel
-> > components are likely to use VMXON/VMXOFF to support TDX (i.e. TDX
-> > module runtime update), so a reference-based approach to do VMXON/VMXOFF
-> > is likely needed.
-> > 
-> > Signed-off-by: Kai Huang <kai.huang@intel.com>
-> > ---
-> >   arch/x86/include/asm/tdx.h  |   4 +
-> >   arch/x86/virt/vmx/tdx/tdx.c | 222 ++++++++++++++++++++++++++++++++++++
-> >   2 files changed, 226 insertions(+)
-> > 
-> > diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> > index 1f29813b1646..c8af2ba6bb8a 100644
-> > --- a/arch/x86/include/asm/tdx.h
-> > +++ b/arch/x86/include/asm/tdx.h
-> > @@ -92,8 +92,12 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
-> >   
-> >   #ifdef CONFIG_INTEL_TDX_HOST
-> >   void tdx_detect_cpu(struct cpuinfo_x86 *c);
-> > +int tdx_detect(void);
-> > +int tdx_init(void);
-> >   #else
-> >   static inline void tdx_detect_cpu(struct cpuinfo_x86 *c) { }
-> > +static inline int tdx_detect(void) { return -ENODEV; }
-> > +static inline int tdx_init(void) { return -ENODEV; }
-> >   #endif /* CONFIG_INTEL_TDX_HOST */
-> >   
-> >   #endif /* !__ASSEMBLY__ */
-> > diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> > index ba2210001ea8..53093d4ad458 100644
-> > --- a/arch/x86/virt/vmx/tdx/tdx.c
-> > +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> > @@ -9,6 +9,8 @@
-> >   
-> >   #include <linux/types.h>
-> >   #include <linux/cpumask.h>
-> > +#include <linux/mutex.h>
-> > +#include <linux/cpu.h>
-> >   #include <asm/msr-index.h>
-> >   #include <asm/msr.h>
-> >   #include <asm/cpufeature.h>
-> > @@ -45,12 +47,33 @@
-> >   		((u32)(((_keyid_part) & 0xffffffffull) + 1))
-> >   #define TDX_KEYID_NUM(_keyid_part)	((u32)((_keyid_part) >> 32))
-> >   
-> > +/*
-> > + * TDX module status during initialization
-> > + */
-> > +enum tdx_module_status_t {
-> > +	/* TDX module status is unknown */
-> > +	TDX_MODULE_UNKNOWN,
-> > +	/* TDX module is not loaded */
-> > +	TDX_MODULE_NONE,
-> > +	/* TDX module is loaded, but not initialized */
-> > +	TDX_MODULE_LOADED,
-> > +	/* TDX module is fully initialized */
-> > +	TDX_MODULE_INITIALIZED,
-> > +	/* TDX module is shutdown due to error during initialization */
-> > +	TDX_MODULE_SHUTDOWN,
-> > +};
-> > +
-> 
-> May be adding these states when you really need will make
-> more sense. Currently this patch only uses SHUTDOWN and
-> NONE states. Other state usage is not very clear.
-
-They are all used in tdx_detect() and tdx_init(), no?
-
-> 
-> >   /* BIOS must configure SEAMRR registers for all cores consistently */
-> >   static u64 seamrr_base, seamrr_mask;
-> >   
-> >   static u32 tdx_keyid_start;
-> >   static u32 tdx_keyid_num;
-> >   
-> > +static enum tdx_module_status_t tdx_module_status;
-> > +
-> > +/* Prevent concurrent attempts on TDX detection and initialization */
-> > +static DEFINE_MUTEX(tdx_module_lock);
-> 
-> Any possible concurrent usage models?
-
-tdx_detect() and tdx_init() are called on demand by callers, so it's possible
-multiple callers can call into them concurrently.
-
-> 
-> > +
-> >   static bool __seamrr_enabled(void)
-> >   {
-> >   	return (seamrr_mask & SEAMRR_ENABLED_BITS) == SEAMRR_ENABLED_BITS;
-> > @@ -172,3 +195,202 @@ void tdx_detect_cpu(struct cpuinfo_x86 *c)
-> >   	detect_seam(c);
-> >   	detect_tdx_keyids(c);
-> >   }
-> > +
-> > +static bool seamrr_enabled(void)
-> > +{
-> > +	/*
-> > +	 * To detect any BIOS misconfiguration among cores, all logical
-> > +	 * cpus must have been brought up at least once.  This is true
-> > +	 * unless 'maxcpus' kernel command line is used to limit the
-> > +	 * number of cpus to be brought up during boot time.  However
-> > +	 * 'maxcpus' is basically an invalid operation mode due to the
-> > +	 * MCE broadcast problem, and it should not be used on a TDX
-> > +	 * capable machine.  Just do paranoid check here and do not
-> 
-> a paranoid check
-
-Ok.
-
-> 
-> > +	 * report SEAMRR as enabled in this case.
-> > +	 */
-> > +	if (!cpumask_equal(&cpus_booted_once_mask,
-> > +					cpu_present_mask))
-> > +		return false;
-> > +
-> > +	return __seamrr_enabled();
-> > +}
-> > +
-> > +static bool tdx_keyid_sufficient(void)
-> > +{
-> > +	if (!cpumask_equal(&cpus_booted_once_mask,
-> > +					cpu_present_mask))
-> > +		return false;
-> > +
-> > +	/*
-> > +	 * TDX requires at least two KeyIDs: one global KeyID to
-> > +	 * protect the metadata of the TDX module and one or more
-> > +	 * KeyIDs to run TD guests.
-> > +	 */
-> > +	return tdx_keyid_num >= 2;
-> > +}
-> > +
-> > +static int __tdx_detect(void)
-> > +{
-> > +	/* The TDX module is not loaded if SEAMRR is disabled */
-> > +	if (!seamrr_enabled()) {
-> > +		pr_info("SEAMRR not enabled.\n");
-> > +		goto no_tdx_module;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Also do not report the TDX module as loaded if there's
-> > +	 * no enough TDX private KeyIDs to run any TD guests.
-> > +	 */
-> 
-> You are not returning TDX_MODULE_LOADED under any current
-> scenarios. So think above comment is not accurate.
-
-This comment is to explain the logic behind of below TDX KeyID check.  I don't
-see how is it related to your comments?
-
-This patch is pretty much a placeholder to express the idea of how are
-tdx_detect() and tdx_init() going to be implemented.  In below after the
-tdx_keyid_sufficient() check, I also have a comment to explain the module hasn't
-been detected yet which means there will be code to detect the module here, and
-at that time, logically this function will return TDX_MODULE_LOADED.  I don't
-see this is hard to understand?
-
-> 
-> > +	if (!tdx_keyid_sufficient()) {
-> > +		pr_info("Number of TDX private KeyIDs too small: %u.\n",
-> > +				tdx_keyid_num);
-> > +		goto no_tdx_module;
-> > +	}
-> > +
-> > +	/* Return -ENODEV until the TDX module is detected */
-> > +no_tdx_module:
-> > +	tdx_module_status = TDX_MODULE_NONE;
-> > +	return -ENODEV;
-> > +}
-> > +
-> > +static int init_tdx_module(void)
-> > +{
-> > +	/*
-> > +	 * Return -EFAULT until all steps of TDX module
-> > +	 * initialization are done.
-> > +	 */
-> > +	return -EFAULT;
-> > +}
-> > +
-> > +static void shutdown_tdx_module(void)
-> > +{
-> > +	/* TODO: Shut down the TDX module */
-> > +	tdx_module_status = TDX_MODULE_SHUTDOWN;
-> > +}
-> > +
-> > +static int __tdx_init(void)
-> > +{
-> > +	int ret;
-> > +
-> > +	/*
-> > +	 * Logical-cpu scope initialization requires calling one SEAMCALL
-> > +	 * on all logical cpus enabled by BIOS.  Shutting down the TDX
-> > +	 * module also has such requirement.  Further more, configuring
-> 
-> such a requirement
-
-Thanks.
-
-> 
-> > +	 * the key of the global KeyID requires calling one SEAMCALL for
-> > +	 * each package.  For simplicity, disable CPU hotplug in the whole
-> > +	 * initialization process.
-> > +	 *
-> > +	 * It's perhaps better to check whether all BIOS-enabled cpus are
-> > +	 * online before starting initializing, and return early if not.
-> > +	 * But none of 'possible', 'present' and 'online' CPU masks
-> > +	 * represents BIOS-enabled cpus.  For example, 'possible' mask is
-> > +	 * impacted by 'nr_cpus' or 'possible_cpus' kernel command line.
-> > +	 * Just let the SEAMCALL to fail if not all BIOS-enabled cpus are
-> > +	 * online.
-> > +	 */
-> > +	cpus_read_lock();
-> > +
-> > +	ret = init_tdx_module();
-> > +
-> > +	/*
-> > +	 * Shut down the TDX module in case of any error during the
-> > +	 * initialization process.  It's meaningless to leave the TDX
-> > +	 * module in any middle state of the initialization process.
-> > +	 */
-> > +	if (ret)
-> > +		shutdown_tdx_module();
-> > +
-> > +	cpus_read_unlock();
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +/**
-> > + * tdx_detect - Detect whether the TDX module has been loaded
-> > + *
-> > + * Detect whether the TDX module has been loaded and ready for
-> > + * initialization.  Only call this function when all cpus are
-> > + * already in VMX operation.
-> > + *
-> > + * This function can be called in parallel by multiple callers.
-> > + *
-> > + * Return:
-> > + *
-> > + * * -0:	The TDX module has been loaded and ready for
-> > + *		initialization.
-> > + * * -ENODEV:	The TDX module is not loaded.
-> > + * * -EPERM:	CPU is not in VMX operation.
-> > + * * -EFAULT:	Other internal fatal errors.
-> > + */
-> > +int tdx_detect(void)
-> 
-> Will this function be used separately or always along with
-> tdx_init()?
-
-The caller should first use tdx_detect() and then use tdx_init().  If caller
-only uses tdx_detect(), then TDX module won't be initialized (unless other
-caller does this).  If caller calls tdx_init() before tdx_detect(),  it will get
-error.
-
-> 
-> > +{
-> > +	int ret;
-> > +
-> > +	mutex_lock(&tdx_module_lock);
-> > +
-> > +	switch (tdx_module_status) {
-> > +	case TDX_MODULE_UNKNOWN:
-> > +		ret = __tdx_detect();
-> > +		break;
-> > +	case TDX_MODULE_NONE:
-> > +		ret = -ENODEV;
-> > +		break;
-> > +	case TDX_MODULE_LOADED:
-> > +	case TDX_MODULE_INITIALIZED:
-> > +		ret = 0;
-> > +		break;
-> > +	case TDX_MODULE_SHUTDOWN:
-> > +		ret = -EFAULT;
-> > +		break;
-> > +	default:
-> > +		WARN_ON(1);
-> > +		ret = -EFAULT;
-> > +	}
-> > +
-> > +	mutex_unlock(&tdx_module_lock);
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(tdx_detect);
-> > +
-> > +/**
-> > + * tdx_init - Initialize the TDX module
-> 
-> If it for tdx module initialization, why not call it
-> tdx_module_init()? If not, update the description
-> appropriately.
-
-Besides do the actual module initialization, it also has a state machine.
-
-But point taken, and I'll try to refine the description.  Thanks.
-
-> 
-> > + *
-> > + * Initialize the TDX module to make it ready to run TD guests.  This
-> > + * function should be called after tdx_detect() returns successful.
-> > + * Only call this function when all cpus are online and are in VMX
-> > + * operation.  CPU hotplug is temporarily disabled internally.
-> > + *
-> > + * This function can be called in parallel by multiple callers.
-> > + *
-> > + * Return:
-> > + *
-> > + * * -0:	The TDX module has been successfully initialized.
-> > + * * -ENODEV:	The TDX module is not loaded.
-> > + * * -EPERM:	The CPU which does SEAMCALL is not in VMX operation.
-> > + * * -EFAULT:	Other internal fatal errors.
-> > + */
-> 
-> You return differnt error values just for debug prints or there are
-> other uses for it?
-
-Caller can distinguish them and act differently.  Even w/o any purpose, I think
-it's better to return different error codes to reflect different error reasons.
-
-
-
+diff --git a/mm/mmu_notifier.c b/mm/mmu_notifier.c
+index 3f3bbcd298c6..e0275b9f6b81 100644
+--- a/mm/mmu_notifier.c
++++ b/mm/mmu_notifier.c
+@@ -1036,6 +1036,18 @@ int mmu_interval_notifier_insert_locked(
+ }
+ EXPORT_SYMBOL_GPL(mmu_interval_notifier_insert_locked);
+ 
++static bool
++mmu_interval_seq_released(struct mmu_notifier_subscriptions *subscriptions,
++			  unsigned long seq)
++{
++	bool ret;
++
++	spin_lock(&subscriptions->lock);
++	ret = subscriptions->invalidate_seq != seq;
++	spin_unlock(&subscriptions->lock);
++	return ret;
++}
++
+ /**
+  * mmu_interval_notifier_remove - Remove a interval notifier
+  * @interval_sub: Interval subscription to unregister
+@@ -1086,7 +1098,7 @@ void mmu_interval_notifier_remove(struct mmu_interval_notifier *interval_sub)
+ 	lock_map_release(&__mmu_notifier_invalidate_range_start_map);
+ 	if (seq)
+ 		wait_event(subscriptions->wq,
+-			   READ_ONCE(subscriptions->invalidate_seq) != seq);
++			   mmu_interval_seq_released(subscriptions, seq));
+ 
+ 	/* pairs with mmgrab in mmu_interval_notifier_insert() */
+ 	mmdrop(mm);
 -- 
-Thanks,
--Kai
-
+2.34.1
 

@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098A5509046
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E3F509057
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381708AbiDTTWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 15:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
+        id S1381741AbiDTTXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 15:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381696AbiDTTWZ (ORCPT
+        with ESMTP id S230233AbiDTTXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 15:22:25 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F52BF4A;
-        Wed, 20 Apr 2022 12:19:38 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 20 Apr 2022 15:23:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1ED13FBB;
+        Wed, 20 Apr 2022 12:21:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 78B8622255;
-        Wed, 20 Apr 2022 21:19:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1650482376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hjU3itzIvEGXkt6RShfQqX8saZi833+CMTU68RceKbQ=;
-        b=F9rSym0G72plU7oK+A56qOR5TtXmlsY7KjmAhZmdks/dpMAheGWfs/qkrqPUcD/lgPTvF9
-        37z4Bzu6qawEri58sMuCtpgq2Ge311h9JunC3sU8mYumU3hjJO2zz/p0SBqMAvxK189KHl
-        Fh3ohRyVZhT8xFuFWjXGRd8RqgJ+qQQ=
-From:   Michael Walle <michael@walle.cc>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 2/2] pinctrl: ocelot: add optional shared reset
-Date:   Wed, 20 Apr 2022 21:19:26 +0200
-Message-Id: <20220420191926.3411830-3-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220420191926.3411830-1-michael@walle.cc>
-References: <20220420191926.3411830-1-michael@walle.cc>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64F6161647;
+        Wed, 20 Apr 2022 19:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C350EC385A8;
+        Wed, 20 Apr 2022 19:21:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650482464;
+        bh=+PgOfT87QXZRKpM2v9ZNowWskAsreLZEe6RAZERVuxs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LWkg8+P3Xly8sjIxoqjEgUnQ8BqoLngtqGiQEPZggl4dkK1DiOpgHHwSwn56ifoYf
+         0jYMBC2y9oudEQNk98zILpE9CQilgE7tkJqFfirwGiPaSzGz60rXyG7LagSrWPhQem
+         gbXXIArHrbaEUbVwFKFsMGfZw+kiVhQTkNWJBmFatyWcBtF+i4qgINtXXuldo7Vx0G
+         RpToCuYAP6mrwt+aiH/IjOOBsTv71f5Oi3+i5AJ3tiOTaMEh/815Em+H9EnYveGtMX
+         wgIyjIS3nQS3pxspnrQ1f27FpB7+Y6rOGSmBE7zDDiBd809M2ZhAxpsXP8A+8SQw2R
+         w9+fnlrAhUS+g==
+Received: by mail-wr1-f47.google.com with SMTP id m14so3602817wrb.6;
+        Wed, 20 Apr 2022 12:21:04 -0700 (PDT)
+X-Gm-Message-State: AOAM531HBf5PvIpNJOJDMxIoRo2xda1qDyp1WenSvo6XtyrM6cHHhQeu
+        u4iC9XS8SJYNsKkRkMm7dhmZ0zBzHXaHtBvuABs=
+X-Google-Smtp-Source: ABdhPJznf39uJYDI3N62QzlkS6buptTPqwk86KhjNzbLbHyB/jaRCmYyra2UZ9f1wUtI0joZyTmyxGE4xOIYt2PeYqA=
+X-Received: by 2002:a5d:64a3:0:b0:20a:7931:5b84 with SMTP id
+ m3-20020a5d64a3000000b0020a79315b84mr17397786wrp.407.1650482462896; Wed, 20
+ Apr 2022 12:21:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220419133723.1394715-1-arnd@kernel.org> <20220419133723.1394715-27-arnd@kernel.org>
+ <20220420134615.GA1947@darkstar.musicnaut.iki.fi>
+In-Reply-To: <20220420134615.GA1947@darkstar.musicnaut.iki.fi>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 20 Apr 2022 21:20:46 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a00DgKYdzTZFiBfKDF_zwaJjL6Duw8aOOJ-gVkz4L1ZwQ@mail.gmail.com>
+Message-ID: <CAK8P3a00DgKYdzTZFiBfKDF_zwaJjL6Duw8aOOJ-gVkz4L1ZwQ@mail.gmail.com>
+Subject: Re: [PATCH 26/41] ARM: omap1: relocate static I/O mapping
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc:     linux-omap <linux-omap@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Walmsley <paul@pwsan.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        dmaengine@vger.kernel.org,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On the LAN9668 there is a shared reset line which affects GPIO, SGPIO
-and the switch core. Add support for this shared reset line.
+On Wed, Apr 20, 2022 at 3:46 PM Aaro Koskinen <aaro.koskinen@iki.fi> wrote:
+>
+> Hi,
+>
+> On Tue, Apr 19, 2022 at 03:37:08PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > The address range 0xfee00000-0xfeffffff is used for PCI and
+> > PCMCIA I/O port mappings, but OMAP1 has its static mappings
+> > there as well.
+> >
+> > Move the OMAP1 addresses a little higher to avoid crashing
+> > at boot.
+>
+> This has the same problem I reported in 2019, with earlyprintk the
+> system no longer boots:
+>
+>         https://marc.info/?t=156530014200005&r=1&w=2
+>
+> Tested on OSK and SX1/qemu.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-Tested-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/pinctrl/pinctrl-ocelot.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Thanks a lot for testing!
 
-diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
-index 1bdced67464b..843704fa8625 100644
---- a/drivers/pinctrl/pinctrl-ocelot.c
-+++ b/drivers/pinctrl/pinctrl-ocelot.c
-@@ -19,6 +19,7 @@
- #include <linux/pinctrl/pinconf-generic.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-+#include <linux/reset.h>
- #include <linux/slab.h>
- 
- #include "core.h"
-@@ -1912,6 +1913,7 @@ static int ocelot_pinctrl_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct ocelot_pinctrl *info;
-+	struct reset_control *reset;
- 	struct regmap *pincfg;
- 	void __iomem *base;
- 	int ret;
-@@ -1927,6 +1929,12 @@ static int ocelot_pinctrl_probe(struct platform_device *pdev)
- 
- 	info->desc = (struct pinctrl_desc *)device_get_match_data(dev);
- 
-+	reset = devm_reset_control_get_optional_shared(dev, "switch");
-+	if (IS_ERR(reset))
-+		return dev_err_probe(dev, PTR_ERR(reset),
-+				     "Failed to get reset\n");
-+	reset_control_reset(reset);
-+
- 	base = devm_ioremap_resource(dev,
- 			platform_get_resource(pdev, IORESOURCE_MEM, 0));
- 	if (IS_ERR(base))
--- 
-2.30.2
+I managed to get to the bottom of this after just a few hours, and
+it turned out to be a simple math error on my end, as I got
+the alignment wrong, the offset has to be 0x00f00000
+instead of 0x00fb0000 be section aligned. I made sure the
+kernel boots up (to the point of missing a rootfs) and uploaded
+the fixed branch.
 
+      Arnd

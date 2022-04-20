@@ -2,90 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B75550807B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 07:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2E150807D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 07:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346594AbiDTFVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 01:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S1354940AbiDTFXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 01:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiDTFVm (ORCPT
+        with ESMTP id S231731AbiDTFXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 01:21:42 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9131D340E3;
-        Tue, 19 Apr 2022 22:18:57 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id e128so496130qkd.7;
-        Tue, 19 Apr 2022 22:18:57 -0700 (PDT)
+        Wed, 20 Apr 2022 01:23:12 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C116E340E3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 22:20:26 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id 12so776604pll.12
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 22:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jRBAKSNTX3OPR1ejw6VcnPzpXTqvP8rwf6yGE9zvTRs=;
-        b=jnjFR1ymmSrPNyMHCu25MqxYRGsrlYdv1hzv/xd7UCQAvgKJl8vg+15+ee5LJtGZyg
-         pK8YJUj+X74FdID5/A3RaMj/3gbQjcxbVX+Cyzv+DSnQHIDnFkQA0YgOOB64kAi6zod0
-         8M5PYOlNXB8lAw+AMTavpsQxWmUVSLhqUSnDhx6aTUfPU3v5RPij8KQVJWLhuly50OWU
-         Fw+qtDSjP0bzVLiyZ8QJD7WuQG0NgJO0Y0vAYZw4wGHlXbiky0KuwLgs5hMUh0XPuDHA
-         zoadeBbrqspxVifgip76C9nhfMVfaXVUwl2H+ut1mt4qv6eYu6dgxli6m18pbS3q6+L7
-         WYIw==
+        h=from:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=JZkx/n/p7b6ySTx2ldt9RivXk5pNmCw4WRsx44qY0Ws=;
+        b=Tq4vABg+4hyQP54GofN1qIh6eoKGlrApJrWSp3c3KgoVqCbsc+EgHE+3aTb7V60l7Q
+         RU5DVDjnrc55YfCFkrN1YuzJkt3ipeXVnq2GfXeycdHMLS5ae06o8vszL3cg487IbFEa
+         ufzH7R2UutbjcXgVFZZuFoo0WMQCDQ7ZcujZZYEGyPVpqtwvah3L2ct71Fz6hKZdN3ZX
+         U2j54ZiTjbxCQHg8myxq0s1UC61b28itChxyBqrUWRvQv6aSuoe+t7p3tC7Q87gwedWv
+         /YHy7X6ZSLN1/Wnk85F+0PKkNOjUUcAcWReN2bqIRdhbdUgMlY7RBglrKUzPzPFTRJOe
+         tkXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jRBAKSNTX3OPR1ejw6VcnPzpXTqvP8rwf6yGE9zvTRs=;
-        b=ON9FkEPly8qVua1Yo1McndVtezI1HqXc7vtZGd5q0CJbNvaLZjkblup3iXYLUbROPC
-         2GBd82IiS643FM8qLVkgrqYjyHzt+gUUbUkcuwi6HiKkvGgLB359N2FVg//pjRJrza8e
-         Qm2Ly0g3u7/+IR9s18evRkgru+/lC4PsxzZyTVCEjvwEozEBtGPtgWDX5ejS9zmCSesz
-         E3wA05un2Yo/vGSjwyg5wWplAHWttIBujGFNxcj0hWqve7ZE9i3D7Q7J1/L8HgwFHJzy
-         nRkAU4s4DUxwk5pSvZTRMggDgqiivPvJu0bsym2hw/A70zf54ZWrck14Q8axaibYJztZ
-         3qxQ==
-X-Gm-Message-State: AOAM530bwNsQXDHFMgWTkr9towdMrCp67ogY2kM3wkEx4lSv9cZu8s96
-        mRMiR+XTEMVUnHhSCzKZsDpeSoOdDE5M
-X-Google-Smtp-Source: ABdhPJy+zsCfxOjoQRrsWeFxSM/HX+HUNvFFWNnnsMNhQTEA8qiEipcsnFZfAdahiNyxdqyBSiWqJQ==
-X-Received: by 2002:a05:620a:4706:b0:69e:b913:e592 with SMTP id bs6-20020a05620a470600b0069eb913e592mr5668468qkb.18.1650431936757;
-        Tue, 19 Apr 2022 22:18:56 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id d13-20020a37c40d000000b0069ebc29ddc1sm993292qki.136.2022.04.19.22.18.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 22:18:55 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 01:18:54 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, roman.gushchin@linux.dev,
-        hannes@cmpxchg.org
-Subject: Re: [PATCH 1/4] lib/printbuf: New data structure for heap-allocated
- strings
-Message-ID: <20220420051854.qioq4nt4dejpnip6@moria.home.lan>
-References: <20220419203202.2670193-1-kent.overstreet@gmail.com>
- <20220419203202.2670193-2-kent.overstreet@gmail.com>
- <Yl+T3Mx408HiC6dS@infradead.org>
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=JZkx/n/p7b6ySTx2ldt9RivXk5pNmCw4WRsx44qY0Ws=;
+        b=kV5AO3X0V3U8RuAO1ohs/x7p++KU5yjTVqUw8dqBoqJavqvNegNXlruVNHCsm9LtC9
+         FUK/TeM289xzirp4AWHdr9BpFeXHf1G/+4vIjj+bIyBBr2t4QUhuoDJQvVsN0UoCtbuO
+         sWwVNo9QzBGbQ/a5ZQaTe4GbJYaBTUW30hWjm976emdpc4cYQnq1sQyG1GRuv9siMnuH
+         Q0y1bgCWgFyKtoLPnZWRfL0FQGx8jrx7YBzeqA8TFMSHN4bpzta434dlfzsLhi56Cjyp
+         I+eOStTibhR0G10mjIzcCJFcg86AZB0tdThBA6PXdayVIyft8RnW0s2WR/CzoVLqppb9
+         U1PQ==
+X-Gm-Message-State: AOAM532IxS8cTKesVTVNcqOzYX7BtVmbHZKFIsqhUtaJLPNA/Z9GGlxI
+        Rl2YrPmdKkzZsjvI8GHOkhfHoy+wSYw=
+X-Google-Smtp-Source: ABdhPJxfDJjqoSntvyEMjUAZrtP48TBzoup54jMkCX4yPAvO1JZrKy7Lkd+kOaTYzitnmqwBworCWQ==
+X-Received: by 2002:a17:902:cece:b0:158:d875:e6d6 with SMTP id d14-20020a170902cece00b00158d875e6d6mr18136030plg.165.1650432026222;
+        Tue, 19 Apr 2022 22:20:26 -0700 (PDT)
+Received: from [192.168.1.3] (fp76ee264d.knge102.ap.nuro.jp. [118.238.38.77])
+        by smtp.gmail.com with ESMTPSA id w20-20020a17090a529400b001d2f1a8e191sm2090941pjh.22.2022.04.19.22.20.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 22:20:25 -0700 (PDT)
+From:   Takahiro Kuwano <tkuw584924@gmail.com>
+X-Google-Original-From: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
+Message-ID: <140aa0dd-edd0-f241-672d-d48afe29ef8b@gmail.com>
+Date:   Wed, 20 Apr 2022 14:20:22 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl+T3Mx408HiC6dS@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 6/9] mtd: spi-nor: core: Add helpers to read/write any
+ register
+Content-Language: en-US
+To:     Pratyush Yadav <p.yadav@ti.com>, Tudor.Ambarus@microchip.com
+Cc:     michael@walle.cc, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Nicolas.Ferre@microchip.com,
+        Takahiro.Kuwano@infineon.com
+References: <20220411091033.98754-1-tudor.ambarus@microchip.com>
+ <20220411091033.98754-7-tudor.ambarus@microchip.com>
+ <0e4ec58c21490dcd9cf82ab89bd8c34c@walle.cc>
+ <e21b0d76bf778f78f432ba27a673222d@walle.cc>
+ <f318dbd9-d4bf-301a-b5c9-556d04d5bfe6@microchip.com>
+ <20220419123245.zu4hypebz77ckygn@ti.com>
+ <996f36b1303d191e472f56393aa6398e@walle.cc>
+ <89083a31-b862-de50-fdca-d427fb908a08@microchip.com>
+ <20220420043425.l77hmc4zm7cwfwdn@ti.com>
+In-Reply-To: <20220420043425.l77hmc4zm7cwfwdn@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 10:02:20PM -0700, Christoph Hellwig wrote:
-> On Tue, Apr 19, 2022 at 04:31:59PM -0400, Kent Overstreet wrote:
-> > This adds printbufs: simple heap-allocated strings meant for building up
-> > structured messages, for logging/procfs/sysfs and elsewhere. They've
-> > been heavily used in bcachefs for writing .to_text() functions/methods -
-> > pretty printers, which has in turn greatly improved the overall quality
-> > of error messages.
+
+
+On 4/20/2022 1:34 PM, Pratyush Yadav wrote:
+> On 19/04/22 12:56PM, Tudor.Ambarus@microchip.com wrote:
+>> On 4/19/22 15:46, Michael Walle wrote:
+>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>
+>>> Am 2022-04-19 14:32, schrieb Pratyush Yadav:
+>>>> On 19/04/22 12:08PM, Tudor.Ambarus@microchip.com wrote:
+>>>>> On 4/19/22 14:46, Michael Walle wrote:
+>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>>>>
+>>>>>> Am 2022-04-19 13:19, schrieb Michael Walle:
+>>>>>>> Am 2022-04-11 11:10, schrieb Tudor Ambarus:
+>>>>>>>> There are manufacturers that use registers indexed by address. Some of
+>>>>>>>> them support "read/write any register" opcodes. Provide core methods
+>>>>>>>> that
+>>>>>>>> can be used by all manufacturers. SPI NOR controller ops are
+>>>>>>>> intentionally
+>>>>>>>> not supported as we intend to move all the SPI NOR controller drivers
+>>>>>>>> under the SPI subsystem.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+>>>>>>>> Tested-by: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
+>>>>>>>> Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+>>>>>>>
+>>>>>>> I still don't like it because the function doesn't do
+>>>>>>> anything what the function name might suggest. The read
+>>>>>>> just executes an op, the write executes an op with a
+>>>>>>> write enable before. All the behavior is determined by the
+>>>>>>> 'op' argument.
+>>>>>>>
+>>>>>>> Anyway,
+>>>>>>> Reviewed-by: Michael Walle <michael@walle.cc>
+>>>>>>>
+>>>>>>>> ---
+>>>>>>>> v3: no changes
+>>>>>>>>
+>>>>>>>>   drivers/mtd/spi-nor/core.c | 41
+>>>>>>>> ++++++++++++++++++++++++++++++++++++++
+>>>>>>>>   drivers/mtd/spi-nor/core.h |  4 ++++
+>>>>>>>>   2 files changed, 45 insertions(+)
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+>>>>>>>> index 6165dc7bfd17..42794328d3b6 100644
+>>>>>>>> --- a/drivers/mtd/spi-nor/core.c
+>>>>>>>> +++ b/drivers/mtd/spi-nor/core.c
+>>>>>>>> @@ -307,6 +307,47 @@ ssize_t spi_nor_write_data(struct spi_nor *nor,
+>>>>>>>> loff_t to, size_t len,
+>>>>>>>>       return nor->controller_ops->write(nor, to, len, buf);
+>>>>>>>>   }
+>>>>>>>>
+>>>>>>>> +/**
+>>>>>>>> + * spi_nor_read_reg() - read register to flash memory
+>>>>>>>> + * @nor:        pointer to 'struct spi_nor'.
+>>>>>>>> + * @op:             SPI memory operation. op->data.buf must be DMA-able.
+>>>>>>>> + * @proto:  SPI protocol to use for the register operation.
+>>>>>>>> + *
+>>>>>>>> + * Return: zero on success, -errno otherwise
+>>>>>>>> + */
+>>>>>>>> +int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
+>>>>>>>> +                 enum spi_nor_protocol proto)
+>>>>>>>> +{
+>>>>>>>> +    if (!nor->spimem)
+>>>>>>>> +            return -EOPNOTSUPP;
+>>>>>>>> +
+>>>>>>>> +    spi_nor_spimem_setup_op(nor, op, proto);
+>>>>>>>> +    return spi_nor_spimem_exec_op(nor, op);
+>>>>>>>> +}
+>>>>>>>> +
+>>>>>>>> +/**
+>>>>>>>> + * spi_nor_write_reg() - write register to flash memory
+>>>>>>>> + * @nor:        pointer to 'struct spi_nor'
+>>>>>>>> + * @op:             SPI memory operation. op->data.buf must be DMA-able.
+>>>>>>>> + * @proto:  SPI protocol to use for the register operation.
+>>>>>>>> + *
+>>>>>>>> + * Return: zero on success, -errno otherwise
+>>>>>>>> + */
+>>>>>>>> +int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
+>>>>>>>> +                  enum spi_nor_protocol proto)
+>>>>>>>> +{
+>>>>>>>> +    int ret;
+>>>>>>>> +
+>>>>>>>> +    if (!nor->spimem)
+>>>>>>>> +            return -EOPNOTSUPP;
+>>>>>>>> +
+>>>>>>>> +    ret = spi_nor_write_enable(nor);
+>>>>>>>> +    if (ret)
+>>>>>>>> +            return ret;
+>>>>>>>> +    spi_nor_spimem_setup_op(nor, op, proto);
+>>>>>>>> +    return spi_nor_spimem_exec_op(nor, op);
+>>>>>>
+>>>>>> After seeing your next two patches. Shouldn't the
+>>>>>> spi_nor_wait_until_ready() call be here too?
+>>>>>>
+>>>>>
+>>>>> I thought of this too, but seems that for a reason that I don't
+>>>>> remember, we don't call for spi_nor_wait_until_ready after we
+>>>>> write the octal DTR bit. Pratyush, do you remember why?
+>>>>
+>>>> We are not sure the protocol changed correctly so we can't rely on
+>>>> spi_nor_wait_until_ready(). We read the ID instead to be sure.
+>>>
+>>> So besides the fact that the write_reg only works with the 'correct'
+>>> op parameter, it is also tailored to the special use case. For real
+>>> write_reg(), the user would actually has to poll the status bit
+>>> afterwards? :(
+>>>
+>> Don't be sad :D. Are the octal DTR methods an exception?
+>> If yes, let's add the call to spi_nor_wait_until_ready() in the
+>> read/write_any_reg() methods, and let the octal methods handle
+>> the specific write themselves, without calling for ready()
 > 
-> How does this use case differ from that of lib/seq_buf.c?
+> It has been a while, but IIRC I asked Cypress about this, because I was 
+> worried about reading ID while the switch to 8D mode was still in 
+> progress. They said that volatile register writes are instant and do not 
+> need any status polling. So the switch to 8D-8D-8D mode would be instant 
+> and there is no need to wait for anything.
+> 
+Yes, it is correct.
 
-I hadn't come across that code before, thanks for pointing it out :)
+> The Cypress S28 flash datasheet does not say this explicitly. It does 
+It is what we (Infineon) need to solve...
 
-seq_buf.c looks exactly like an older version of printbufs, from before I added
-the auto heap allocating functionality. seq_buf.c could be dropped, I could go
-ahead and convert existing users to printbufs.
+> say that writing to non-volatile registers takes time and you need to 
+> wait for ready for those, but makes no mention of volatile registers. We 
+> don't ever want to write non-volatile registers so we can ignore that 
+> problem.
+> 
+> I see the Micron MT35 datasheet say this explicitly, that changes to 
+> volatile registers are instant.
+> 
+> So I would say that based on my limited sample size, volatile register 
+> writes for Cypress and Micron flashes do _not_ need 
+> spi_nor_wait_until_ready().
+> 
+
+Thanks,
+Takahiro Kuwano

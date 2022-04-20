@@ -2,191 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85A65089DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C6D5089DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379239AbiDTN6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S1379248AbiDTN6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379232AbiDTN6e (ORCPT
+        with ESMTP id S1379238AbiDTN6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:58:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0A24186F7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:55:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650462947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oH7gu/xzVmtcanjocJ87OHouz9O553w779jbyyEl/Jw=;
-        b=QVEPr0ol8Jb7BibZri4gR+965bcCNk7v1AllJVm3BgfyApu5gz+BOZzKi8RlNtIs0wppZ1
-        GkMqXOnLebHrhb3ujTbsEItnhtoTvE02zAcsT9toz8c8gpIFGsYA/JEaqxIw/pf4HEQGa5
-        /Io2VZFigKpun4Sxg1ThAuVc5LOatJM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-393-0wkoF-_2OLeXjBtv6Z21zA-1; Wed, 20 Apr 2022 09:55:43 -0400
-X-MC-Unique: 0wkoF-_2OLeXjBtv6Z21zA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 95F3F80159B;
-        Wed, 20 Apr 2022 13:55:43 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4BE442026D2D;
-        Wed, 20 Apr 2022 13:55:35 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Yl75D02pXj71kQBx@rabbit.intern.cm-ag>
-References: <Yl75D02pXj71kQBx@rabbit.intern.cm-ag> <Yl7d++G25sNXIR+p@rabbit.intern.cm-ag> <YlWWbpW5Foynjllo@rabbit.intern.cm-ag> <507518.1650383808@warthog.procyon.org.uk> <509961.1650386569@warthog.procyon.org.uk>
-To:     Max Kellermann <mk@cm4all.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: fscache corruption in Linux 5.17?
+        Wed, 20 Apr 2022 09:58:42 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910503BBDD;
+        Wed, 20 Apr 2022 06:55:55 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id w127so2078932oig.10;
+        Wed, 20 Apr 2022 06:55:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IRy0yxXRNyzDR7SN7n1UYbDK9PkCvcJTLmCT9iysKEs=;
+        b=R0q20o3vnEjtV7LFMdjT/uR5WN99pmqfuPaVmdmUWRBRzFpgaw3MPrYc2YeIWxaBam
+         9CyHCKX/pCav32Cv1yqHl+L7EYxILoIoywLLR+9P2HAqvvYkcJfy3UzE/EGBSRT5vNUC
+         830hDYQCs4669/zSIl+9kn1OOq9kPp+Db1fj7jcrnn3qSRl5F2Y6W0BL4WN1TH37rw7k
+         tIhRMoM6rrxdsMUUiYZuL0HlysAclqSpsiz8O4asO/agxWNVn3ZPyK8CQtKmgYcvOadT
+         pqhvSb8zOejcJ6VlapGJa1343ZCIO8or5dCfezVNUvb6D93oZG90s2V8D6cM3C4zxhVm
+         3uNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IRy0yxXRNyzDR7SN7n1UYbDK9PkCvcJTLmCT9iysKEs=;
+        b=P+AOphCru9DCJQHtf2jxlsFdEsmYhKIIGNwHT+GlZnTPkPYD4fnnpbKRmKjKTkjA6R
+         rZ+znB6pY3EgvqNwVdG4ZcleMClXvEUxLBsDvPST+ToEsVa6ZKhyLsjGEwzZxng0NRNh
+         bUr7iMPbXIjoO1m+bAU0yQDktDZ2FLMM3HUUdVWgqw4gAgT4xKU+wIBccPts5GEXVltw
+         LN9ciAw2h7MaL7IKUU//k7mLjm9VOzLWiHAoT5clo7SoPCCWuGU2ddYa1VPdQKUwZ8Ji
+         RWeWZ01oCADIw4Ku2KrAaV9+MEuYg9VOwvBJXjlSVNLxRnGPzR502oEksGyMh8sBQcKd
+         ghYA==
+X-Gm-Message-State: AOAM5303WxTiNrwrOwDQ8yhSIESlonxeFqB/1qEA5Buri2qPImU7WmCE
+        el+SwsICHTef2/iUZPGFU1mXH3ITSDg=
+X-Google-Smtp-Source: ABdhPJyqMBsqrzfPhavBjk3nE6MEQivYtQbx/Yc7Oo2SCkIpY02gW+eXfx+CNliYPc7yCR18/sc0Bw==
+X-Received: by 2002:a05:6808:d51:b0:2ec:b129:1197 with SMTP id w17-20020a0568080d5100b002ecb1291197mr1867059oik.12.1650462954913;
+        Wed, 20 Apr 2022 06:55:54 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z13-20020a9d62cd000000b006056f8657ccsm109569otk.10.2022.04.20.06.55.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 06:55:54 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3da420df-234e-4701-2182-1f043b9ccc56@roeck-us.net>
+Date:   Wed, 20 Apr 2022 06:55:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <705277.1650462934.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 20 Apr 2022 14:55:34 +0100
-Message-ID: <705278.1650462934@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] hwmod: (pmbus) disable PEC if not enabled
+Content-Language: en-US
+To:     Adam Wujek <dev_public@wujek.eu>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220419205228.303952-1-dev_public@wujek.eu>
+ <d2d09fe1-dada-e844-cafa-da48424855a4@roeck-us.net>
+ <20220420125421.415716-1-dev_public@wujek.eu>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220420125421.415716-1-dev_public@wujek.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Max Kellermann <mk@cm4all.com> wrote:
+On 4/20/22 05:54, Adam Wujek wrote:
+> Explicitly disable PEC when the client does not support it.
+> The problematic scenario is the following. A device with enabled PEC
+> support is up and running, a kernel driver loaded.
+> Then the driver is unloaded (or device unbound), the HW device
+> is reconfigured externally (e.g. by i2cset) to advertise itself as not
+> supporting PEC. Without a new code, at the second load of the driver
+> (or bind) the "flags" variable is not updated to avoid PEC usage. As a
+> consequence the further communication with the device is done with
+> the PEC enabled, which is wrong.
+> 
+> Signed-off-by: Adam Wujek <dev_public@wujek.eu>
 
-> > Do the NFS servers change the files that are being served - or is it
-> > just WordPress pushing the changes to the NFS servers for the web
-> > servers to then export?
-> =
+Subject should start with hwmon:. Please version your patches,
+and provide change logs.
 
-> I'm not sure if I understand this question correctly.  The NFS server
-> (a NetApp, btw.) sees the new file contents correctly; all other web
-> servers also see non-corrupt new files.  Only the one web server which
-> performed the update saw broken files.
+> ---
+>   drivers/hwmon/pmbus/pmbus_core.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index b2618b1d529e..0af7a3d74f47 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2334,7 +2334,8 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+>   				client->flags |= I2C_CLIENT_PEC;
+>   			}
+>   		}
+> -	}
+> +	} else
+> +		client->flags &= ~I2C_CLIENT_PEC;
 
-I was wondering if there was missing invalidation if the web clients were
-modifying the same files in parallel, but it sounds like only one place is
-doing the modification, and the problem is the lack of invalidation when a
-file is opened for writing.
+Since if() is in {}, else should be in {} as well.
 
-I have a tentative patch for this - see attached.
+Guenter
 
-David
----
-commit 9b00af0190dfee6073aab47ee88e15c31d3c357d
-Author: David Howells <dhowells@redhat.com>
-Date:   Wed Apr 20 14:27:17 2022 +0100
-
-    fscache: Fix invalidation/lookup race
-    =
-
-    If an NFS file is opened for writing and closed, fscache_invalidate() =
-will
-    be asked to invalidate the file - however, if the cookie is in the
-    LOOKING_UP state (or the CREATING state), then request to invalidate
-    doesn't get recorded for fscache_cookie_state_machine() to do somethin=
-g
-    with.
-    =
-
-    Fix this by making __fscache_invalidate() set a flag if it sees the co=
-okie
-    is in the LOOKING_UP state to indicate that we need to go to invalidat=
-ion.
-    Note that this requires a count on the n_accesses counter for the stat=
-e
-    machine, which that will release when it's done.
-    =
-
-    fscache_cookie_state_machine() then shifts to the INVALIDATING state i=
-f it
-    sees the flag.
-    =
-
-    Without this, an nfs file can get corrupted if it gets modified locall=
-y and
-    then read locally as the cache contents may not get updated.
-    =
-
-    Fixes: d24af13e2e23 ("fscache: Implement cookie invalidation")
-    Reported-by: Max Kellermann <mk@cm4all.com>
-    Signed-off-by: David Howells <dhowells@redhat.com>
-    Link: https://lore.kernel.org/r/YlWWbpW5Foynjllo@rabbit.intern.cm-ag [=
-1]
-
-diff --git a/fs/fscache/cookie.c b/fs/fscache/cookie.c
-index 9d3cf0111709..3bb6deeb4279 100644
---- a/fs/fscache/cookie.c
-+++ b/fs/fscache/cookie.c
-@@ -705,7 +705,11 @@ static void fscache_cookie_state_machine(struct fscac=
-he_cookie *cookie)
- 		spin_unlock(&cookie->lock);
- 		fscache_init_access_gate(cookie);
- 		fscache_perform_lookup(cookie);
--		goto again;
-+		spin_lock(&cookie->lock);
-+		if (test_and_clear_bit(FSCACHE_COOKIE_DO_INVALIDATE, &cookie->flags))
-+			__fscache_set_cookie_state(cookie,
-+						   FSCACHE_COOKIE_STATE_INVALIDATING);
-+		goto again_locked;
- =
-
- 	case FSCACHE_COOKIE_STATE_INVALIDATING:
- 		spin_unlock(&cookie->lock);
-@@ -752,6 +756,9 @@ static void fscache_cookie_state_machine(struct fscach=
-e_cookie *cookie)
- 			spin_lock(&cookie->lock);
- 		}
- =
-
-+		if (test_and_clear_bit(FSCACHE_COOKIE_DO_INVALIDATE, &cookie->flags))
-+			fscache_end_cookie_access(cookie, fscache_access_invalidate_cookie_end=
-);
-+
- 		switch (state) {
- 		case FSCACHE_COOKIE_STATE_RELINQUISHING:
- 			fscache_see_cookie(cookie, fscache_cookie_see_relinquish);
-@@ -1048,6 +1055,9 @@ void __fscache_invalidate(struct fscache_cookie *coo=
-kie,
- 		return;
- =
-
- 	case FSCACHE_COOKIE_STATE_LOOKING_UP:
-+		__fscache_begin_cookie_access(cookie, fscache_access_invalidate_cookie)=
-;
-+		set_bit(FSCACHE_COOKIE_DO_INVALIDATE, &cookie->flags);
-+		fallthrough;
- 	case FSCACHE_COOKIE_STATE_CREATING:
- 		spin_unlock(&cookie->lock);
- 		_leave(" [look %x]", cookie->inval_counter);
-diff --git a/include/linux/fscache.h b/include/linux/fscache.h
-index e25539072463..a25804f141d3 100644
---- a/include/linux/fscache.h
-+++ b/include/linux/fscache.h
-@@ -129,6 +129,7 @@ struct fscache_cookie {
- #define FSCACHE_COOKIE_DO_PREP_TO_WRITE	12		/* T if cookie needs write pr=
-eparation */
- #define FSCACHE_COOKIE_HAVE_DATA	13		/* T if this cookie has data stored =
-*/
- #define FSCACHE_COOKIE_IS_HASHED	14		/* T if this cookie is hashed */
-+#define FSCACHE_COOKIE_DO_INVALIDATE	15		/* T if cookie needs invalidatio=
-n */
- =
-
- 	enum fscache_cookie_state	state;
- 	u8				advice;		/* FSCACHE_ADV_* */
+> 
+>   	/*
+>   	 * Check if the chip is write protected. If it is, we can not clear
+> --
+> 2.25.1
+> 
+> 
 

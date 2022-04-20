@@ -2,107 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDCD507F46
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F83507F55
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348853AbiDTDFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 23:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
+        id S1359128AbiDTDGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 23:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236622AbiDTDFL (ORCPT
+        with ESMTP id S1359099AbiDTDGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 23:05:11 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2ED39172;
-        Tue, 19 Apr 2022 20:02:26 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id y129so370258qkb.2;
-        Tue, 19 Apr 2022 20:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KavF0KS5KLJOY2dExE8lwinSJ4LN/Ebtbb6yL/bzNzQ=;
-        b=HUVQ9hYwgHZNg5WnRMOni56Ap1MZ70xEe/27UfralAfuzxuhGwVEV7sWnzKU7PE4VI
-         mnKA/Syzu4UHEK8i3A3VZhFq4N884cadqvoFjq9hasIXcxROpbhLDufXszewlNUNUprm
-         SC2zMIdzeDG70E8tfF8MaTn9yYZ+ux+BVsWNxDqT/iWCu961dXsxBo8lhVnJVGd+LblU
-         T6NZM6wNYsriaZFLgU0RhtFvlK0We6tBHyraDAUTUpXFAIzwmBOy+3j6uB9PUncT1aYG
-         pq1v1yQmpd/dhl8kM2xtD7kbhDfM/EB6D63MeBdhvRcguPoJqzVO0LTfo5DlVs2IP3ZV
-         y4GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KavF0KS5KLJOY2dExE8lwinSJ4LN/Ebtbb6yL/bzNzQ=;
-        b=GZ5i7hnWOO+0DMuF88CEewbTUsFzj6oG5bMH4Pl+K0sAvI9lqGPEaajGqYGZvqTM1r
-         x5xzfm3KHufMkUqGHrQrgDLnkh0MMiCpmpmg0TWEuHfSwDkBUge+AHOb6E0eRTkDhX59
-         KRFh94w2tkLPs9+xqUmKuJ1GxxZJ/4GN8IrYyiJLYwGB2j6+ceIxRIPa6CJ/50y5fUgj
-         DoTwbgk49LhpibXoP/ysnm/GvJcOLH+KoTozGZrYbDbLIvVyZPC0YKTuT+CH0tV1inlz
-         YhROBGS6Rj16uyPXUAxCV6TdJVazFZvdtsOGiKjNkydJSNyDoc44Py9GsZG6yn1nq5yn
-         Blbw==
-X-Gm-Message-State: AOAM532FGI+MVmZA3byEu3f5D+5mFkStwqX3kQitYUx19LeRhlIK5kFV
-        L/0yHhSOxjx5mCNSGsYJ1tU=
-X-Google-Smtp-Source: ABdhPJze4x0EooB6fj4coS6yKRAfPwsXGsHPWMbc2mEf9a1fZVmbOKI/UVTTi1Cheg3zVUKCLBbzEw==
-X-Received: by 2002:a37:88c2:0:b0:69b:f243:b5c7 with SMTP id k185-20020a3788c2000000b0069bf243b5c7mr11102150qkd.758.1650423745722;
-        Tue, 19 Apr 2022 20:02:25 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id q139-20020a37a791000000b0069e88513517sm947132qke.91.2022.04.19.20.02.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 20:02:24 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     clabbe.montjoie@gmail.com
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] crypto: sun8i-ce: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Wed, 20 Apr 2022 03:02:18 +0000
-Message-Id: <20220420030218.2575565-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 19 Apr 2022 23:06:15 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Apr 2022 20:03:30 PDT
+Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE69639699
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 20:03:30 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="70545362"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643641200"; 
+   d="scan'208";a="70545362"
+Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
+  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP; 20 Apr 2022 12:02:25 +0900
+Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
+        by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id A1FA2E07EA
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:02:24 +0900 (JST)
+Received: from yto-om1.fujitsu.com (yto-om1.o.css.fujitsu.com [10.128.89.162])
+        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 5C6C2104546
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:02:23 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om1.fujitsu.com (Postfix) with ESMTP id D882E40618A82;
+        Wed, 20 Apr 2022 12:02:21 +0900 (JST)
+From:   Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+To:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fenghua.yu@intel.com, reinette.chatre@intel.com
+Cc:     tarumizu.kohei@fujitsu.com
+Subject: [PATCH v3 4/9] soc: fujitsu: Add Kconfig/Makefile to build hardware prefetch control driver
+Date:   Wed, 20 Apr 2022 12:02:18 +0900
+Message-Id: <20220420030223.689259-5-tarumizu.kohei@fujitsu.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220420030223.689259-1-tarumizu.kohei@fujitsu.com>
+References: <20220420030223.689259-1-tarumizu.kohei@fujitsu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+This adds Kconfig/Makefile to build hardware prefetch control driver
+for A64FX support. This also adds a MAINTAINERS entry.
 
-Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-pm_runtime_put_noidle. This change is just to simplify the code, no
-actual functional changes.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
 ---
- drivers/crypto/allwinner/sun8i-ce/sun8i-ce-prng.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ MAINTAINERS                  |  1 +
+ drivers/soc/Kconfig          |  1 +
+ drivers/soc/Makefile         |  1 +
+ drivers/soc/fujitsu/Kconfig  | 11 +++++++++++
+ drivers/soc/fujitsu/Makefile |  2 ++
+ 5 files changed, 16 insertions(+)
+ create mode 100644 drivers/soc/fujitsu/Kconfig
+ create mode 100644 drivers/soc/fujitsu/Makefile
 
-diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-prng.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-prng.c
-index b3a9bbfb8831..b3cc43ea6c8a 100644
---- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-prng.c
-+++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-prng.c
-@@ -108,11 +108,9 @@ int sun8i_ce_prng_generate(struct crypto_rng *tfm, const u8 *src,
- 		goto err_dst;
- 	}
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f6640dc053c0..b359dcc38be3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8619,6 +8619,7 @@ HARDWARE PREFETCH CONTROL DRIVERS
+ M:	Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+ S:	Maintained
+ F:	drivers/base/pfctl.c
++F:	drivers/soc/fujitsu/a64fx-pfctl.c
+ F:	include/linux/pfctl.h
  
--	err = pm_runtime_get_sync(ce->dev);
--	if (err < 0) {
--		pm_runtime_put_noidle(ce->dev);
-+	err = pm_runtime_resume_and_get(ce->dev);
-+	if (err < 0)
- 		goto err_pm;
--	}
- 
- 	mutex_lock(&ce->rnglock);
- 	chan = &ce->chanlist[flow];
+ HARDWARE RANDOM NUMBER GENERATOR CORE
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index c5aae42673d3..d87754799d90 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -9,6 +9,7 @@ source "drivers/soc/atmel/Kconfig"
+ source "drivers/soc/bcm/Kconfig"
+ source "drivers/soc/canaan/Kconfig"
+ source "drivers/soc/fsl/Kconfig"
++source "drivers/soc/fujitsu/Kconfig"
+ source "drivers/soc/imx/Kconfig"
+ source "drivers/soc/ixp4xx/Kconfig"
+ source "drivers/soc/litex/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index 904eec2a7871..6c8ff1792cda 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -12,6 +12,7 @@ obj-$(CONFIG_SOC_CANAAN)	+= canaan/
+ obj-$(CONFIG_ARCH_DOVE)		+= dove/
+ obj-$(CONFIG_MACH_DOVE)		+= dove/
+ obj-y				+= fsl/
++obj-y				+= fujitsu/
+ obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
+ obj-y				+= imx/
+ obj-y				+= ixp4xx/
+diff --git a/drivers/soc/fujitsu/Kconfig b/drivers/soc/fujitsu/Kconfig
+new file mode 100644
+index 000000000000..d9db05d5055d
+--- /dev/null
++++ b/drivers/soc/fujitsu/Kconfig
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++menu "Fujitsu SoC drivers"
++
++config A64FX_HWPF_CONTROL
++	tristate "A64FX Hardware Prefetch Control driver"
++	depends on ARM64 || HWPF_CONTROL
++	help
++	  This adds Hardware Prefetch driver control support for A64FX.
++
++endmenu
+diff --git a/drivers/soc/fujitsu/Makefile b/drivers/soc/fujitsu/Makefile
+new file mode 100644
+index 000000000000..35e284a548bb
+--- /dev/null
++++ b/drivers/soc/fujitsu/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_A64FX_HWPF_CONTROL)	+= a64fx-pfctl.o
 -- 
-2.25.1
-
+2.27.0
 

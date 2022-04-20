@@ -2,194 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E277508236
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA8150823B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359812AbiDTHed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 03:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        id S1359771AbiDTHes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 03:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356242AbiDTHe3 (ORCPT
+        with ESMTP id S1359819AbiDTHeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:34:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF853338AB;
-        Wed, 20 Apr 2022 00:31:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D4DAB81D49;
-        Wed, 20 Apr 2022 07:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED4C7C385A9;
-        Wed, 20 Apr 2022 07:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650439901;
-        bh=Gaa/kKlQJ1FZzJzU//2sD+rws3+4VoYKDAstnglOxLs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KzbmApoCTqXK1O3oM3GyEcjozjtNIABT3CpFhb4STIN1XPXY3rl2WkwJvMyMGEGQA
-         Czz/kvS89Mx/Fgxo4Ty+rSNUTMckCSKLS219iKzR36zKkWyUOH4Eou4GPXMebiRjCy
-         jiVn6UqvHmNV5BRPYlEiVJ1Ai8Af/vxoirKye0DkkXj0DF/ROgx8ilWgSGO8haSQUn
-         GEaALLypW10Vl6Cc5BWi2cnLPgm1eNoZiRaH1IOwKR54ttwG4+/FjdEnO/E7gQHyf6
-         Cf20nKY98g9nq63ukKyD+2mRS0cHhgfNrAlKkHdoLAq4NdtdNOsGGQORdXKRu8XZnq
-         HH7m2YfwW76nA==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-e2afb80550so1139221fac.1;
-        Wed, 20 Apr 2022 00:31:40 -0700 (PDT)
-X-Gm-Message-State: AOAM532zVaWfOrSBjjOxzJdSPzu++7PUvSY5ZXwxQsqq9Uvywl3YiP7f
-        GBvXsyF1E9xoANRmKZOD7BPYBxK0DyjqBGns+9w=
-X-Google-Smtp-Source: ABdhPJynajv3K6AdbTR66x16tS+6R53JFDVzu1p0IAT/68oZB2y+PB3uPGIU0m+ilSMwbTvCOiCV4egJ4cUxv0EEA1E=
-X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
- s37-20020a056870eaa500b000da0b3f2b45mr1036835oap.228.1650439900047; Wed, 20
- Apr 2022 00:31:40 -0700 (PDT)
+        Wed, 20 Apr 2022 03:34:44 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80058.outbound.protection.outlook.com [40.107.8.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E443B550;
+        Wed, 20 Apr 2022 00:31:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jbNN44zpVqENT/npo1ptUhD7r72GYN7DtIGtwszIN2qQXHFv1rh9QVsw5/JbWFPjsz6JGP+OxKkvXjB3uJKW230tk7afBHZVXmVU9Wm5epj8QcQ+Di3eTnEFX+j2Ms6nGUteeWBJFX9m39Dyxyfv4rOwigEZFwgK318zDRMgq54nmXbPQ8+3ZiDM5JDB/DX+EENGIiQPo6YndKC5Si6uwvXvEh0NCfdDiBR4GY2dG7rYBKlGiSJAcmyYPJd3njj/ck7bLcKhFvU/+5Xy30SsCBSYbTkcCz2xR38MjFqrfedVCF5dIn6kq0KOcB2AqAGySAsJz8+7KX2JglE3DFEF6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6fBw8nQBGDRBUdWGdHrESTuPnUT9Rrkye6zwMCyQnDs=;
+ b=ZF3s1PsbgKCfsGlbd4dDvLNK9RFywzrIz9fxe995bZ+ZBkk4/94Mqfd7YBUPY/Owts2merP0CA1jDD7pW8BDrRT20t6JrkfwQHNFONaxqHTG5sT3IeZ9FFVQ85+kspkialwWLLsuZSm0Jgds8SDEOrv94/wgIEVRwVif6X5USOS5jWr0n3AczO/08zTT198FORcEmjiqLm+biqH05xv27Wszku5OZH+woXMcEiKMqaAEUcvO5jebdVgnW+goiZXHA9oUicYhGh9ScYatTcdS5KrwmyLT9W7BqfemBaI6zfyqmDHy7kxYDnW3adlhCC7THbp6nI6lM1LPrsBuyu4Zug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6fBw8nQBGDRBUdWGdHrESTuPnUT9Rrkye6zwMCyQnDs=;
+ b=B0RQmAPWn+trB6d9bFAitWUU1NciArhQxiw8WdGCR9wlEBnYODZaFw3vYHXv6SNUsHxhnIzjuGKHoyT7o4mpvTgfd6XowD2SoKgvxxyP7b0XWd8COOdVOCSn1gnDApRfjmS33+2OPJjs+GeLqi0KhruTuzKQoJySRJ3AbtuFvzM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VE1PR04MB6477.eurprd04.prod.outlook.com (2603:10a6:803:11e::14)
+ by AS8PR04MB8628.eurprd04.prod.outlook.com (2603:10a6:20b:42b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Wed, 20 Apr
+ 2022 07:31:50 +0000
+Received: from VE1PR04MB6477.eurprd04.prod.outlook.com
+ ([fe80::60ad:e5ec:cdfd:1b01]) by VE1PR04MB6477.eurprd04.prod.outlook.com
+ ([fe80::60ad:e5ec:cdfd:1b01%3]) with mapi id 15.20.5186.014; Wed, 20 Apr 2022
+ 07:31:50 +0000
+From:   Changming Huang <jerry.huang@nxp.com>
+To:     broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shawnguo@kernel.org, leoyang.li@nxp.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Changming Huang <jerry.huang@nxp.com>
+Subject: [PATCH 1/2 v4] dt-bindings: dspi: added for semtech sx1301
+Date:   Wed, 20 Apr 2022 15:31:45 +0800
+Message-Id: <20220420073146.38086-1-jerry.huang@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG3P274CA0009.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::21)
+ To VE1PR04MB6477.eurprd04.prod.outlook.com (2603:10a6:803:11e::14)
 MIME-Version: 1.0
-References: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
-In-Reply-To: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 20 Apr 2022 09:31:29 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFKzi14UCoiDOMwS5jyNz61_UzxGXm+ke0EWEt4nn6E1g@mail.gmail.com>
-Message-ID: <CAMj1kXFKzi14UCoiDOMwS5jyNz61_UzxGXm+ke0EWEt4nn6E1g@mail.gmail.com>
-Subject: Re: [next] arm: boot failed - PC is at cpu_ca15_set_pte_ext
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        max.krummenacher@toradex.com, Shawn Guo <shawnguo@kernel.org>,
-        Stefano Stabellini <stefano.stabellini@xilinx.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b22bab82-0d16-4e3b-ad1f-08da229fd529
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8628:EE_
+X-Microsoft-Antispam-PRVS: <AS8PR04MB86281A487FFC3E20E74009B4FEF59@AS8PR04MB8628.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XE0M7IQsci1XN0C46slOjTYZFqG54VZ9+YSsewCzfest4bp8eznXcAYN00bW3cL3ylPK1Hu1nmE0iw/XbQVylI+KqQsCsIixzREGppA0mh0alaASmtTpWv8JzAHd7hKMfkHWPOPAmfnlR6I9rvogE6ru6k++U+xv52yDQPCZo4gcqm3LkVlLUgSEr6veRHrRdneoD+SR8k2HNj0rdHzh5/xspVccMOl/jdKIILRoX50gMlXYtHNoj0xvQIzH9DqYTHpyJE7T6gqqyT3eqGe26iSKAFCNX3yyp4hPxX5ogJ18YCBbFYizQLhF0oJKzRfu2m+yAgQ1cuLpSMqGwEMMaHkYRyM5oWraWiz+BPnspu2kvwmTz2LYt9jXyl4bv/2PLLS5jWZiKuGaYw3MwoGV9wA4Y/FMeswl0kEGO3r6gAkcvtvN2h6E7mSzdK6wWUDL2Xpze4cMCZ4vWCcNGj+DQumKEjHoAypul/2tGKiOFOHR/bOn8vdmWTL87gABdUduyPQrHQZ5ajVR4VsCGs0/tES0TAcqxz/je1J0Lv9HJAmbhO69yLbgpM3byJ5+JE6BrcKl9+e5kJFslf0Az062QOnVxxktfBC4Zjhfk6fx8z7Qt3KDD51W1S6JENYRlx6OVLFQr0FqUghta4+/76DHqZRvqpXKOUCn8qJYa2wgxGFeEvfRBhAwuk5lTHtH8lewPPqSIBxSLeXrtpCz+AeqtnjgS5p5PY9YwGIJnYw0IJcTtCXK355eSt7e/ebLiDLHPicJkb6SrVvJQdioa5pI4uxePVipcETDYT8NuhmggVWWhF2n/YkwXhhJG/ppNUrB4DyeyIZyWV52EboF2J7Oqg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6477.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(66476007)(4326008)(66556008)(966005)(316002)(8676002)(36756003)(66946007)(38350700002)(38100700002)(86362001)(6506007)(6666004)(2616005)(1076003)(26005)(6512007)(186003)(52116002)(8936002)(508600001)(5660300002)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m/TNxjx3/oM4iA9p59W7MCLyEjn+mb/3PKbwYgWm5iptIct4J79AkBzy8WGh?=
+ =?us-ascii?Q?qtfNdb6ZGio+DZyEiMkRKKIkZaWMq9GTKCAcotDgTrW89fKpEtKULcSIeBdr?=
+ =?us-ascii?Q?9AKbCohv2QVaKJtKwpDIm56U0EM948q5/KLxYnarh1WHB0LZapdb0EPdziud?=
+ =?us-ascii?Q?blLWzmQ4quwnYJEFtaVUPc+1mkHMJdLJliBxQWRgRooH9hlMO/XKpCnhYiUc?=
+ =?us-ascii?Q?bpPYyG8jhwCNNe4QjHVz8D1/cCu+9GWkiWL7eHd/r8vJ5epKehHpl1i6dNRA?=
+ =?us-ascii?Q?xl1MR5mrrBxmtYLZyLnLGWmocEkVOul1/JJZ8eNaK1J20sZ9NqFpuWFfGU3Q?=
+ =?us-ascii?Q?wbge5Eus9wMlsoM406MIP9Ynzum0da9r8pwgH8/xU9yydjv3bGLGRg0BjLFn?=
+ =?us-ascii?Q?pYhYPLdmJqW6o/LaQwRtpmsEhIefNh0Igic2wTyysx6nXex8V1OQGGnlWMmC?=
+ =?us-ascii?Q?djQnZvv0r+XC1x7t2lxxFvKldXIzZdaC3kN9BfanPRisgOcEluBjG2TXq+V1?=
+ =?us-ascii?Q?kkL5nfD7q2aibB1kTVQxMJ0RmpIi7BBbHWtDjpnU6k5pUMRenaKCCMmUCDXx?=
+ =?us-ascii?Q?VQLADGFnvQQPdC6lyqpXj2f7epBzw7/tKDEfvHdHJbtc8Ej3H5U6ql+Dcpny?=
+ =?us-ascii?Q?zi0NGSIXRTMVlHMsLS6R/ls3mM/DWC12SJwDr6VCwoYdjpe5LMewPBmgmI6X?=
+ =?us-ascii?Q?LePsaXSWkTKmH55JoeUO5xMSwNnqh20v5Ltoyj5ukFVRWUL8H8bGB0n5VkGi?=
+ =?us-ascii?Q?gz/zoD8tZlIkT47wZ7lv+iFkb2mFVnxBnfLtCb1EkM8Upd/tfXgMaStW8UcT?=
+ =?us-ascii?Q?8i5LvnKCIreGPd3vm6jC+J3oKkGRM0qlzVhGcGhpx30PTyKy2q8yWmCqXWet?=
+ =?us-ascii?Q?i/4H4N12VKbqp75jot9zLWzbOk7Y1Ml8cBbGTO3hRQyXOwF+4fd802bXY7OH?=
+ =?us-ascii?Q?slosfxwSPEurTH+3QMwI+KRiwDcbTAieGlT2WiopyfFF1gxMqXvlPSAufdJ7?=
+ =?us-ascii?Q?zMZ6EPuA0U4GuoltObD7mntoi0ciaYHebanXDZWqRR8zDdBikW/9Orsr8+c5?=
+ =?us-ascii?Q?g9IADTJH9ZfJNHOSWm9Z0YYHgwfQ73lviDJ5ldPK3IJPl4omD/cOyT8sAlb5?=
+ =?us-ascii?Q?q8HVjoPD2nh8dY+fEC9IL1RVdizVcbD/kjUFpe9ykBD3A5etuE2MwnVpHlUb?=
+ =?us-ascii?Q?c5HPdCctqj/CBrrXdwkIRIwNKiLZN2UHVvnKS5fjBeLVOyo49Hyx/rtT4GTq?=
+ =?us-ascii?Q?BZ7U70gtL7q1BEXhCS9y5n5zkVVYvMvVro/rP7b2+VUacV4Lox30xtfUy5ZD?=
+ =?us-ascii?Q?ZRNpDjZzCEePrxLpr5G/AJFxPPoE0EfWSP6JCGEOEpQqcKcQEnMD+qk5rMq8?=
+ =?us-ascii?Q?4N3ffTe3rUy2nSU8jX0jQg4FB0ZqK5PvXYANEvWmYI6nDdm9r5MftrvAEnnK?=
+ =?us-ascii?Q?kCf5p+0L3vZXMHUKe3fUfIrTdzK3QN1WbuMkxjyo6JC7fYgBguJLmdda2OJz?=
+ =?us-ascii?Q?0D3BP8tgezjFXxOqxOOXVyZdPM1AMO59ffM56OCOZBwYRs5owsev7KSe4Ewr?=
+ =?us-ascii?Q?f60jc+EZHGMnpHQwg2IKCe+e9znBtrRISS2NU5LkIh/gJHWssm147HNX3xxT?=
+ =?us-ascii?Q?SERJ8hcF2YlBAytaEy1/admGwqQXtOfMsNdr+n5gGdlwjVFbf1tlAqqOvOFz?=
+ =?us-ascii?Q?WcmgXlLcSK9lb3HxxadO3NqTuCL7ks7MPrUQAU94P6bywp5k0XF7LTKnlP8/?=
+ =?us-ascii?Q?EtpW4u7bBw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b22bab82-0d16-4e3b-ad1f-08da229fd529
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6477.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 07:31:49.9487
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mLMjKJg58/QmpA6oLyntTInbqai9dBxeugaYYX2YMbara4ZN0NVr2Sy2OKbx4claaLpuG+20hP691A7dthwAfw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8628
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Apr 2022 at 12:59, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> Linux next 20220419 boot failed on arm architecture qemu_arm and BeagleBoard
-> x15 device.
->
-> kernel crash log from x15:
-> -----------------
-> [    6.866516] 8<--- cut here ---
-> [    6.869598] Unable to handle kernel paging request at virtual
-> address f000e62c
-> [    6.876861] [f000e62c] *pgd=82935811, *pte=00000000, *ppte=00000000
-> [    6.883209] Internal error: Oops: 807 [#3] SMP ARM
-> [    6.888000] Modules linked in:
-> [    6.891082] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G      D W
->   5.18.0-rc3-next-20220419 #1
-> [    6.899993] Hardware name: Generic DRA74X (Flattened Device Tree)
-> [    6.906127] PC is at cpu_ca15_set_pte_ext+0x4c/0x58
-> [    6.911041] LR is at handle_mm_fault+0x60c/0xed0
-> [    6.915679] pc : [<c031f26c>]    lr : [<c04cfeb8>]    psr: 40000013
-> [    6.921966] sp : f000dde8  ip : f000de44  fp : a0000013
-> [    6.927215] r10: 00000000  r9 : 00000000  r8 : c1e95194
-> [    6.932464] r7 : c3c95000  r6 : befffff1  r5 : 00000081  r4 : c29d8000
-> [    6.939025] r3 : 00000000  r2 : 00000000  r1 : 00000040  r0 : f000de2c
-> [    6.945587] Flags: nZcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-> [    6.952758] Control: 10c5387d  Table: 8020406a  DAC: 00000051
-> [    6.958526] Register r0 information: 2-page vmalloc region starting
-> at 0xf000c000 allocated at kernel_clone+0x94/0x3b0
-> [    6.969299] Register r1 information: non-paged memory
-> [    6.974365] Register r2 information: NULL pointer
-> [    6.979095] Register r3 information: NULL pointer
-> [    6.983825] Register r4 information: slab task_struct start
-> c29d8000 pointer offset 0
-> [    6.991729] Register r5 information: non-paged memory
-> [    6.996795] Register r6 information: non-paged memory
-> [    7.001861] Register r7 information: slab vm_area_struct start
-> c3c95000 pointer offset 0
-> [    7.010009] Register r8 information: non-slab/vmalloc memory
-> [    7.015716] Register r9 information: NULL pointer
-> [    7.020446] Register r10 information: NULL pointer
-> [    7.025238] Register r11 information: non-paged memory
-> [    7.030426] Register r12 information: 2-page vmalloc region
-> starting at 0xf000c000 allocated at kernel_clone+0x94/0x3b0
-> [    7.041259] Process swapper/0 (pid: 1, stack limit = 0xfaff0077)
-> [    7.047302] Stack: (0xf000dde8 to 0xf000e000)
-> [    7.051696] dde0:                   c29d8000 00000cc0 c20a1108
-> c2065fa0 c1e09f50 b6db6db7
-> [    7.059906] de00: c195bf0c 17c0f572 c29d8000 c3c95000 00000cc0
-> 000befff befff000 befffff1
-> [    7.068115] de20: 00000081 c3c3afb8 c3c3afb8 00000000 00000000
-> 00000000 00000000 00000000
-> [    7.076324] de40: 00000000 17c0f572 befff000 c3c95000 00002017
-> befffff1 00002017 00002fb8
-> [    7.084564] de60: c2d04000 00000081 c29d8000 c04c6790 c20d01d4
-> 00000000 00000001 c20ce440
-> [    7.092773] de80: c1e10bcc fffff000 00000000 c2a45680 eeb33cc0
-> c29d8000 00000000 c2d04000
-> [    7.100982] dea0: befffff1 f000df18 00000000 00002017 c20661a0
-> c04c77e8 f000df18 00000000
-> [    7.109222] dec0: 00000000 c1d95c40 00000002 c20661e0 00000000
-> 00000001 00000000 c04c7ad0
-> [    7.117431] dee0: 00000011 c2d02a00 00000001 befffff1 c29d8000
-> 00000000 00000011 c2a30010
-> [    7.125640] df00: c29d8000 c0524c24 f000df18 00000000 00000000
-> 2cd9e000 c1d95c40 17c0f572
-> [    7.133850] df20: 00000000 c2d02a00 0000000b 00000ffc 00000000
-> befffff1 00000000 c0524f74
-> [    7.142089] df40: c1e0e394 c2d02a00 c209a71c 38e38e39 c29d8000
-> bee00008 c2d02a00 c2a30000
-> [    7.150299] df60: c1e0e394 c1e0e420 00000000 00000000 00000000
-> c05266bc c209a000 c1944c60
-> [    7.158508] df80: 00000000 00000000 00000000 c129d2b4 c209a000
-> c1e0e394 00000000 c12b5600
-> [    7.166748] dfa0: 00000000 c12b5518 00000000 c0300168 00000000
-> 00000000 00000000 00000000
-> [    7.174957] dfc0: 00000000 00000000 00000000 00000000 00000000
-> 00000000 00000000 00000000
-> [    7.183166] dfe0: 00000000 00000000 00000000 00000000 00000013
-> 00000000 00000000 00000000
-> [    7.191406] Code: 13110001 12211b02 13110b02 03a03000 (e5a03800)
+Add DT Binding doc for semtech sx1301
 
-This decodes to
+Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+---
+changes in v4:
+  - rename example node, adjust description
+changes in v3:
+  - add the dt-bindings
 
-   0: 13110001 tstne r1, #1
-   4: 12211b02 eorne r1, r1, #2048 ; 0x800
-   8: 13110b02 tstne r1, #2048 ; 0x800
-   c: 03a03000 moveq r3, #0
-  10:* e5a03800 str r3, [r0, #2048]! ; 0x800 <-- trapping instruction
+ .../bindings/spi/semtech,sx1301.yaml          | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
 
-and R0 points into the stack. So we are updating a PTE that is located
-on the stack rather than in a page table somewhere, which seems very
-odd. However, this could be a latent bug that got uncovered by the
-VMAP stacks changes.
+diff --git a/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml b/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
+new file mode 100644
+index 000000000000..420fe8d23a1e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
+@@ -0,0 +1,45 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/semtech,sx1301.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Semtech sx1301 SPI controller bindings
++
++maintainers:
++  - Changming Huang <jerry.huang@nxp.com>
++
++allOf:
++  - $ref: "spi-controller.yaml"
++
++properties:
++  compatible:
++    const: semtech,sx1301
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency: true
++
++  fsl,spi-cs-sck-delay: true
++
++  fsl,spi-sck-cs-delay: true
++
++required:
++  - compatible
++  - reg
++  - spi-max-frequency
++
++additionalProperties: false
++
++examples:
++  - |
++    spi@0 {
++      compatible = "semtech,sx1301";
++      reg = <0>;
++      spi-max-frequency = <2000000>;
++      fsl,spi-cs-sck-delay = <1000000>;
++      fsl,spi-sck-cs-delay = <50>;
++    };
++
++...
+-- 
+2.25.1
 
-Unfortunately, the vmlinux.xz file I downloaded from the link below
-seems to be different from the one that produced the crash, given that
-the LR address of c04cfeb8 does not seem to correspond with
-handle_mm_fault+0x60c/0xed0.
-
-Can you please double check the artifacts?
-
-
-
-> metadata:
->   git_ref: master
->   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git_sha: 634de1db0e9bbeb90d7b01020e59ec3dab4d38a1
->   git_describe: next-20220419
->   kernel-config: https://builds.tuxbuild.com/280TXP6P7tIBfnowvFY4wobXp3R/config
->   System.map:  https://builds.tuxbuild.com/280TXP6P7tIBfnowvFY4wobXp3R/System.map
->   vmlinux.xz: https://builds.tuxbuild.com/280TXP6P7tIBfnowvFY4wobXp3R/vmlinux.xz
->   build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/519362851
->   build: https://builds.tuxbuild.com/280TXP6P7tIBfnowvFY4wobXp3R
->   toolchain: gcc-10
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
->
-> [1] https://lkft.validation.linaro.org/scheduler/job/4921995#L2616
-> [2] https://lkft.validation.linaro.org/scheduler/job/4922061#L552

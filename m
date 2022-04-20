@@ -2,159 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE68508AA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B922508A98
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345172AbiDTOUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
+        id S1379589AbiDTOTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 10:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380235AbiDTOSo (ORCPT
+        with ESMTP id S1380254AbiDTOSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 10:18:44 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AAB45535
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:14:13 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id g18so3799224ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aQ942c+7vb6/qCDUQRQxRZC5wp53vmGcX8QQSZzWOFI=;
-        b=RKgHBFDDg/JiJVmQisIRJGrEpZ2E81++nBGY0N2innYsm9KQAUjV3TMkLMqjEHYVS9
-         YZaFLrTh4hw6/QQOk7r+dFztN7u2F93uJ19L89b8wvGbMIGBU/WgRsT9Xhf+6OvtkVGe
-         eu/aBE6k1BTjoN6Kv01mXZC1A6v9J+sIGU9BWSrr1HZdxGckhRvmqjLZVgLIF73rKxOy
-         4dc+itvEHSCspXMYIEO7jA1xFgufPizM0UGXerRCyyqFicrjmJU85htg3BYMrT6fc1Z/
-         wbzAeF5MTeUKVrFCBQccR90OAFB9fakXUe2+aROc6hYTv6SyqzbDyl1n7H0v8Iw0Iq7+
-         /ngw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aQ942c+7vb6/qCDUQRQxRZC5wp53vmGcX8QQSZzWOFI=;
-        b=LDuEinL8ZWtH0ToPyZz+O9DbVjQmLdQZ0Z1UnY40DMNwydGCcSSCyHTBhIuExyUM6Q
-         1FEUC2geG6p6H7NDb8/o2HUSfbdaYc12yz2Ehe8fK8B9z8pp4hUb3bSaWUGRzSXvmdhI
-         pDZ9MLyPeylhC6/g5fSw2njL6/T4EtvsMTiTWbpD3NOsG30+Yz9lMyIDX9uDUcRt0YIU
-         hFDiBAB9hqN+dPYbTko48Z4DNgSw6M/ZxA3Tw6Vr0sIXEyfOLYJcRwU95DTKOo9RoNjs
-         24lho8Wnsgn4/hYIJLaVcGkIgmUOyO7Chbr8NEax/Pjq7PGBSd1b2/35YhdZsLISom1q
-         LGQw==
-X-Gm-Message-State: AOAM533ROwq5tSmpn8cLxeV1nvNA4/xlipDqX8J8EvQouHh4Rg5aW+Oy
-        0maRKrFv8CzaYrzWqSsJf2fwDQ==
-X-Google-Smtp-Source: ABdhPJxp5IWPFIxb6KZ3dRafE5gv7h8/JLmZGz6bqI5HkNKyelttYLmZhMfHrNc95/3MtEr1mWRUlg==
-X-Received: by 2002:a17:906:9754:b0:6da:7d72:1353 with SMTP id o20-20020a170906975400b006da7d721353mr18472378ejy.273.1650464052444;
-        Wed, 20 Apr 2022 07:14:12 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id yy18-20020a170906dc1200b006d6e5c75029sm6635599ejb.187.2022.04.20.07.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 07:14:11 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v2] pinctrl: samsung: fix missing GPIOLIB on ARM64 Exynos config
-Date:   Wed, 20 Apr 2022 16:14:07 +0200
-Message-Id: <20220420141407.470955-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Wed, 20 Apr 2022 10:18:45 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2048.outbound.protection.outlook.com [40.107.236.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6549C45783;
+        Wed, 20 Apr 2022 07:14:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CStNmSy3nl5ZvL7dc+tffoEgtaIw6G/sn+FoqOqHL+5Fg9lFFjWA40hicUKVFIoOj5LdZyfTXgRk/+FCUBpy2+6zmGRybAUym9jqKbJj/jbRlBOdyjbp+qnM7ON3/jOrURzjJHH+vSHv9NyuxiL353AlHf1IScc6BzGBC23DVxPlaXMpTUp5qJNaluo1/36OEtyob7u4Uua9W8Lct8dihMJz+Q4WQYQLDY80/inB5GCB6wG8xBKNG4tT9iWZlnrH7tRx5dKI9bIaoAuMI4CZcNNeY4LmSGlUboG0H96v4x3/ds4Abr3sWq+MZ181gxZBGwPqnDs4brcwutuhz3jvkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ztl3nDsYub7t/6+KbSrM6Z07arLY4BUgZOkZlmMD9Xo=;
+ b=e9coObp1ZXKWRZo7liFgGEedh4NFr/savfthPCkog2bMldWGQ+YTndlAuj0B18hGOmTxxafu3gPt6ODBvQWKbkTz+ZFzd0U9fNImHQi6eT5b4MLVf55LefDG0o9HvBebgCwDt3OhoS7stBzYavWY4lSwMY7Mq9IIrn+cCPy9U88EVGY6acMDyPkJdBRk/uK9mcjFdTTmUecjVj3xIT2JSO4ONkUNPDT9OndZ+fCkuYNLLd86SnZIheU5q1PuZCyVibsCpjzQkQW3L2GA0F8BcsLoqkG97iKBqCbq/7VaKjy5U/Gt6aPUl/V38sVpROL4V7/rN7vdnwlgipvG6I9Smg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ztl3nDsYub7t/6+KbSrM6Z07arLY4BUgZOkZlmMD9Xo=;
+ b=wjMYyarbFUoMjwMFF8uVyWeE5Rfdt4KtC2tzLE2hW7bdhC/VWewvb3Uq/1FjqL+whQK6ViMUEMHS8ID542GrmJ99cm5r2zbByagwqoARBxZK5DqdnQMa41i/SvBFV91domC+3QmMJxk1tc8M4/+wcBCM1zz4o/V8yuMGTQ3a4bU=
+Received: from MW4PR04CA0120.namprd04.prod.outlook.com (2603:10b6:303:83::35)
+ by BN8PR12MB3380.namprd12.prod.outlook.com (2603:10b6:408:43::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Wed, 20 Apr
+ 2022 14:14:28 +0000
+Received: from CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:83:cafe::81) by MW4PR04CA0120.outlook.office365.com
+ (2603:10b6:303:83::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20 via Frontend
+ Transport; Wed, 20 Apr 2022 14:14:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT012.mail.protection.outlook.com (10.13.175.192) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5186.14 via Frontend Transport; Wed, 20 Apr 2022 14:14:27 +0000
+Received: from tlendack-t1.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 20 Apr
+ 2022 09:14:25 -0500
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        <linux-doc@vger.kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joerg Roedel <jroedel@suse.de>,
+        "Michael Roth" <michael.roth@amd.com>
+Subject: [PATCH 0/2] Provide consistent name of the SEV Guest driver
+Date:   Wed, 20 Apr 2022 09:14:12 -0500
+Message-ID: <cover.1650464054.git.thomas.lendacky@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 02bf770c-6e56-4f75-222a-08da22d81461
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3380:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB33806489BA92A3BC4B974CDBECF59@BN8PR12MB3380.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VsWw07WgCcHue5Es9c/4fFHWqGpw7Ky/hze/+t2CxEgrGYj4qcTWLWSroLTaJE4RaSVAW2atFdiUil6Nyf0yeUObhoeP/1b2d+njQIi0Sf9urDEOQDr4IMyilyWMpJCxa5Mrm4JKliBAb40O8RbDU/LFa8+Osd5f6kOy84osuzzWq3f8+yQ8T4mzWjgfWEDbuObgYF8bVyNDTVQH6cGF5c2eFB6i0m3PN5s012SS8HeHWoeS1yywEOs0TSV62Oob3eczdM2v9lEcCKwFKHJ+X5yfzebQ6yZe29kE5dU/ENGXrn1eIZQlpmqbOHpeXrGkmVh6UHuteEJVy7Jzulh5z+w+9SJ0zPbrac7I2vk8S5C8gmD0VlrgPEb40moVCRpHxTTGRN3Gk3BrhwAhnxJp7O+6sEmBmwesXeDmbvwbFHMWa71Vtw4MNhGn9qWaz9RdvDI16GN1E5OkWjrbMU7zqpboGAZQbWjx/oSkD8SAQYkrF2wPUjmi7xqNYN0XTVCRZbfAVQwT601ALIAnx/cyF1EaWyyydP+od900V6oZejPZ4wsDmld0alZvR5sWCx9yg5/YU9oLwVY9r8rhAuD8V1PkPbxEcSOeA8gEYORacAGUrJTclzpIOlL43PisjplqATsr+FcrU2xXwi5LbofsY+IPQHl40YW6hNOjmtvOLzR+SDxIXiIKJrpE+mByTWnHi0bXak2WfuOlMGmOU73ycw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(40460700003)(2616005)(5660300002)(316002)(110136005)(508600001)(356005)(86362001)(54906003)(7696005)(2906002)(83380400001)(6666004)(70206006)(70586007)(336012)(82310400005)(36860700001)(26005)(186003)(4326008)(16526019)(8676002)(426003)(8936002)(47076005)(81166007)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 14:14:27.4505
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02bf770c-6e56-4f75-222a-08da22d81461
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3380
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Samsung pinctrl drivers depend on OF_GPIO, which is part of GPIOLIB.
-ARMv7 Exynos platform selects GPIOLIB and Samsung pinctrl drivers. ARMv8
-Exynos selects only the latter leading to possible wrong configuration
-on ARMv8 build:
+This series renames the SEV guest driver from snp-guest to sev-guest. This
+consists of changing the driver name field, some functions and structs and
+renaming the driver directory and files.
 
-  WARNING: unmet direct dependencies detected for PINCTRL_EXYNOS
-    Depends on [n]: PINCTRL [=y] && OF_GPIO [=n] && (ARCH_EXYNOS [=y] || ARCH_S5PV210 || COMPILE_TEST [=y])
-    Selected by [y]:
-    - ARCH_EXYNOS [=y]
-
-Always select the GPIOLIB from the Samsung pinctrl drivers to fix the
-issue.  This requires removing of OF_GPIO dependency (to avoid recursive
-dependency), so add dependency on OF for COMPILE_TEST cases.
-
-Reported-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
-Fixes: eed6b3eb20b9 ("arm64: Split out platform options to separate Kconfig")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This provides consistent naming between the driver name, the module name,
+the misc device name and the file names.
 
 ---
 
-Changes since v1:
-1. Do not select OF_GPIO and add back dependency on OF (Arnd).
+Patches based on:
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
 
-Original report:
-https://bugzilla.kernel.org/show_bug.cgi?id=210047
----
- arch/arm/mach-exynos/Kconfig    |  1 -
- drivers/pinctrl/samsung/Kconfig | 11 ++++-------
- 2 files changed, 4 insertions(+), 8 deletions(-)
+and commit:
+  6a0111882747 ("Merge branch into tip/master: 'x86/platform'")
 
-diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
-index 51a336f349f4..4d3b40e4049a 100644
---- a/arch/arm/mach-exynos/Kconfig
-+++ b/arch/arm/mach-exynos/Kconfig
-@@ -16,7 +16,6 @@ menuconfig ARCH_EXYNOS
- 	select EXYNOS_PMU
- 	select EXYNOS_SROM
- 	select EXYNOS_PM_DOMAINS if PM_GENERIC_DOMAINS
--	select GPIOLIB
- 	select HAVE_ARM_ARCH_TIMER if ARCH_EXYNOS5
- 	select HAVE_ARM_SCU if SMP
- 	select PINCTRL
-diff --git a/drivers/pinctrl/samsung/Kconfig b/drivers/pinctrl/samsung/Kconfig
-index dfd805e76862..7b0576f71376 100644
---- a/drivers/pinctrl/samsung/Kconfig
-+++ b/drivers/pinctrl/samsung/Kconfig
-@@ -4,14 +4,13 @@
- #
- config PINCTRL_SAMSUNG
- 	bool
--	depends on OF_GPIO
-+	select GPIOLIB
- 	select PINMUX
- 	select PINCONF
- 
- config PINCTRL_EXYNOS
- 	bool "Pinctrl common driver part for Samsung Exynos SoCs"
--	depends on OF_GPIO
--	depends on ARCH_EXYNOS || ARCH_S5PV210 || COMPILE_TEST
-+	depends on ARCH_EXYNOS || ARCH_S5PV210 || (COMPILE_TEST && OF)
- 	select PINCTRL_SAMSUNG
- 	select PINCTRL_EXYNOS_ARM if ARM && (ARCH_EXYNOS || ARCH_S5PV210)
- 	select PINCTRL_EXYNOS_ARM64 if ARM64 && ARCH_EXYNOS
-@@ -26,12 +25,10 @@ config PINCTRL_EXYNOS_ARM64
- 
- config PINCTRL_S3C24XX
- 	bool "Samsung S3C24XX SoC pinctrl driver"
--	depends on OF_GPIO
--	depends on ARCH_S3C24XX || COMPILE_TEST
-+	depends on ARCH_S3C24XX || (COMPILE_TEST && OF)
- 	select PINCTRL_SAMSUNG
- 
- config PINCTRL_S3C64XX
- 	bool "Samsung S3C64XX SoC pinctrl driver"
--	depends on OF_GPIO
--	depends on ARCH_S3C64XX || COMPILE_TEST
-+	depends on ARCH_S3C64XX || (COMPILE_TEST && OF)
- 	select PINCTRL_SAMSUNG
+Tom Lendacky (2):
+  virt: sevguest: Change driver name to reflect generic SEV support
+  virt: sevguest: Rename the sevguest dir and files to sev-guest
+
+ Documentation/virt/index.rst                  |  2 +-
+ arch/x86/include/asm/sev.h                    |  2 +-
+ arch/x86/kernel/sev.c                         | 10 ++---
+ drivers/virt/Kconfig                          |  2 +-
+ drivers/virt/Makefile                         |  2 +-
+ .../virt/coco/{sevguest => sev-guest}/Kconfig |  2 +-
+ .../coco/{sevguest => sev-guest}/Makefile     |  2 +-
+ .../sevguest.c => sev-guest/sev-guest.c}      | 41 ++++++++++---------
+ .../sevguest.h => sev-guest/sev-guest.h}      |  0
+ 9 files changed, 33 insertions(+), 30 deletions(-)
+ rename drivers/virt/coco/{sevguest => sev-guest}/Kconfig (87%)
+ rename drivers/virt/coco/{sevguest => sev-guest}/Makefile (50%)
+ rename drivers/virt/coco/{sevguest/sevguest.c => sev-guest/sev-guest.c} (94%)
+ rename drivers/virt/coco/{sevguest/sevguest.h => sev-guest/sev-guest.h} (100%)
+
 -- 
-2.32.0
+2.34.1
 

@@ -2,94 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985A7508B81
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A331508B87
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379977AbiDTPGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S1379982AbiDTPHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379812AbiDTPGh (ORCPT
+        with ESMTP id S241054AbiDTPH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:06:37 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D211427C6;
-        Wed, 20 Apr 2022 08:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=MqRy5uOENRenwCweqKVKazl/zwptPRAhGLk8TN0xBVE=; b=ZfNSnErbK5pFp00soQ9733fFLA
-        D/eTR2WsYJ3a4BdstrPQAdKRFg7TymQik1QrmrVN8abvu9E1ZF7oqp6LtwhwVtOI69AJGmINAcc+c
-        dGQGB9l7+RX98w2vluAbST2VgwLpjEW75o1jnYd2PdADD0cUIy2un17/Eavpcsp7P5Bo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nhBrH-00Gg5f-DV; Wed, 20 Apr 2022 17:03:07 +0200
-Date:   Wed, 20 Apr 2022 17:03:07 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] net: phy: marvell: Add LED accessors for Marvell
- 88E1510
-Message-ID: <YmAgq1pm37Glw2v+@lunn.ch>
-References: <20220420124053.853891-1-kai.heng.feng@canonical.com>
- <20220420124053.853891-5-kai.heng.feng@canonical.com>
+        Wed, 20 Apr 2022 11:07:26 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A469A44A21;
+        Wed, 20 Apr 2022 08:04:36 -0700 (PDT)
+Received: from [185.156.123.69] (helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nhBsd-0006QZ-7U; Wed, 20 Apr 2022 17:04:31 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     linux-gpio@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] pinctrl: rockchip: fix RK3308 pinmux bits
+Date:   Wed, 20 Apr 2022 17:04:23 +0200
+Message-ID: <5942762.lOV4Wx5bFT@phil>
+In-Reply-To: <20220420142432.248565-1-luca.ceresoli@bootlin.com>
+References: <20220420142432.248565-1-luca.ceresoli@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420124053.853891-5-kai.heng.feng@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 08:40:51PM +0800, Kai-Heng Feng wrote:
-> Implement get_led_config() and set_led_config() callbacks so phy core
-> can use firmware LED as platform requested.
+Am Mittwoch, 20. April 2022, 16:24:31 CEST schrieb Luca Ceresoli:
+> Some of the pinmuxing bits described in rk3308_mux_recalced_data are wrong,
+> pointing to non-existing registers.
 > 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Fix the entire table.
+> 
+> Also add a comment in front of each entry with the same string that appears
+> in the datasheet to make the table easier to compare with the docs.
+> 
+> This fix has been tested on real hardware for the gpio3b3_sel entry.
+> 
+> Fixes: 7825aeb7b208 ("pinctrl: rockchip: add rk3308 SoC support")
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+
+Thanks for walking through the datasheet for the fixes :-)
+
 > ---
->  drivers/net/phy/marvell.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
+>  drivers/pinctrl/pinctrl-rockchip.c | 45 ++++++++++++++++++++----------
+>  1 file changed, 30 insertions(+), 15 deletions(-)
 > 
-> diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-> index 2702faf7b0f60..c5f13e09b0692 100644
-> --- a/drivers/net/phy/marvell.c
-> +++ b/drivers/net/phy/marvell.c
-> @@ -750,6 +750,30 @@ static int m88e1510_config_aneg(struct phy_device *phydev)
->  	return err;
->  }
+> diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
+> index a1b598b86aa9..65fa305b5f59 100644
+> --- a/drivers/pinctrl/pinctrl-rockchip.c
+> +++ b/drivers/pinctrl/pinctrl-rockchip.c
+> @@ -457,95 +457,110 @@ static  struct rockchip_mux_recalced_data rk3128_mux_recalced_data[] = {
 >  
-> +static int marvell_get_led_config(struct phy_device *phydev)
-> +{
-> +	int led;
-> +
-> +	led = phy_read_paged(phydev, MII_MARVELL_LED_PAGE, MII_PHY_LED_CTRL);
-> +	if (led < 0) {
-> +		phydev_warn(phydev, "Fail to get marvell phy LED.\n");
-> +		led = 0;
-> +	}
+>  static struct rockchip_mux_recalced_data rk3308_mux_recalced_data[] = {
+>  	{
+> +		/* gpio1b6_sel */
+>  		.num = 1,
+>  		.pin = 14,
+>  		.reg = 0x28,
+>  		.bit = 12,
+>  		.mask = 0xf
+>  	}, {
+> +		/* gpio1b7_sel */
+>  		.num = 1,
+>  		.pin = 15,
+>  		.reg = 0x2c,
+>  		.bit = 0,
+>  		.mask = 0x3
+>  	}, {
+> +		/* gpio1c2_sel */
+>  		.num = 1,
+>  		.pin = 18,
+>  		.reg = 0x30,
+>  		.bit = 4,
+>  		.mask = 0xf
+>  	}, {
+> +		/* gpio1c3_sel */
+>  		.num = 1,
+>  		.pin = 19,
+>  		.reg = 0x30,
+>  		.bit = 8,
+>  		.mask = 0xf
+>  	}, {
+> +		/* gpio1c4_sel */
+>  		.num = 1,
+>  		.pin = 20,
+>  		.reg = 0x30,
+>  		.bit = 12,
+>  		.mask = 0xf
+>  	}, {
+> +		/* gpio1c5_sel */
+>  		.num = 1,
+>  		.pin = 21,
+>  		.reg = 0x34,
+>  		.bit = 0,
+>  		.mask = 0xf
+>  	}, {
+> +		/* gpio1c6_sel */
+>  		.num = 1,
+>  		.pin = 22,
+>  		.reg = 0x34,
+>  		.bit = 4,
+>  		.mask = 0xf
+>  	}, {
+> +		/* gpio1c7_sel */
+>  		.num = 1,
+>  		.pin = 23,
+>  		.reg = 0x34,
+>  		.bit = 8,
+>  		.mask = 0xf
+>  	}, {
+> +		/* gpio3b4_sel */
+>  		.num = 3,
+>  		.pin = 12,
+>  		.reg = 0x68,
+>  		.bit = 8,
+>  		.mask = 0xf
+>  	}, {
+> +		/* gpio3b5_sel */
+>  		.num = 3,
+>  		.pin = 13,
+>  		.reg = 0x68,
+>  		.bit = 12,
+>  		.mask = 0xf
+>  	}, {
+> +		/* gpio2a2_sel */
+>  		.num = 2,
+>  		.pin = 2,
+> -		.reg = 0x608,
+> -		.bit = 0,
+> -		.mask = 0x7
+> +		.reg = 0x40,
+> +		.bit = 4,
+> +		.mask = 0x3
+>  	}, {
+> +		/* gpio2a3_sel */
+>  		.num = 2,
+>  		.pin = 3,
+> -		.reg = 0x608,
+> -		.bit = 4,
+> -		.mask = 0x7
+> +		.reg = 0x40,
+> +		.bit = 6,
+> +		.mask = 0x3
+>  	}, {
+> +		/* gpio2c0_sel */
+>  		.num = 2,
+>  		.pin = 16,
+> -		.reg = 0x610,
+> -		.bit = 8,
+> -		.mask = 0x7
+> +		.reg = 0x50,
+> +		.bit = 0,
+> +		.mask = 0x3
+>  	}, {
+> +		/* gpio3b2_sel */
+>  		.num = 3,
+>  		.pin = 10,
+> -		.reg = 0x610,
+> -		.bit = 0,
+> -		.mask = 0x7
+> +		.reg = 0x68,
+> +		.bit = 4,
+> +		.mask = 0x3
+>  	}, {
+> +		/* gpio3b3_sel */
+>  		.num = 3,
+>  		.pin = 11,
+> -		.reg = 0x610,
+> -		.bit = 4,
+> -		.mask = 0x7
+> +		.reg = 0x68,
+> +		.bit = 6,
+> +		.mask = 0x3
+>  	},
+>  };
+>  
+> 
 
-I've said this multiple times, there are three LED registers, The
-Function Control register, the Priority Control register and the Timer
-control register. It is the combination of all three that defines how
-the LEDs work. You need to save all of them.
 
-And you need to make your API generic enough that the PHY driver can
-save anywhere from 1 bit to 42 bytes of configuration.
 
-I don't know ACPI, but i'm pretty sure this is not the ACPI way of
-doing this. I think you should be defining an ACPI method, which
-phylib can call after initialising the hardware to allow the firmware
-to configure the LED.
 
-     Andrew

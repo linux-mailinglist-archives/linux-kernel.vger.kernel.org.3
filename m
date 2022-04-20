@@ -2,70 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2686A508BD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44728508BE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380177AbiDTPOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
+        id S1346048AbiDTPRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380144AbiDTPNE (ORCPT
+        with ESMTP id S238205AbiDTPRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:13:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7AD3EA8F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:10:17 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id AE22C2129B;
-        Wed, 20 Apr 2022 15:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650467416; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sQeaxnSpOix98+BTCcyhGUVcBJC3FXSTwJn87R/5qbo=;
-        b=j1IrCsXm5Wo4ciTR3vRvZ73ECvh0ih5277DUiEPHA5CNIx2GnzkFe6vIUXVUj8Y1+afnMO
-        jC01Ysyom2vinF68OZsy1p00GJU9wafbTOk7Y+na8SpUK/VxwMmCmRY77O4qjw+53ZRVRM
-        Vg52G0MOM5dvVIqjPuT3SnyK8+uH7x8=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 89C8E2C14B;
-        Wed, 20 Apr 2022 15:10:16 +0000 (UTC)
-Date:   Wed, 20 Apr 2022 17:10:16 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v3 11/15] printk: add pr_flush()
-Message-ID: <YmAiWHPxyGylFL+x@alley>
-References: <20220419234637.357112-1-john.ogness@linutronix.de>
- <20220419234637.357112-12-john.ogness@linutronix.de>
+        Wed, 20 Apr 2022 11:17:08 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC5F43389
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:14:18 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id t25so2700420edt.9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TyhnT3S9LREa/PJcUvjDmD1nY9IkR07FNMCsUt52Jy4=;
+        b=aT/Gd5rLhE2unVfrl7s+gRgj+bZLy2p7OjaU8CTj8Cj3jWVf9FS4NwaZR0ZFqAbtxT
+         w7I/OrbtpbO2KvDDy6YAPogiPtI/IlO6iIU0bdRke4N8oV1+CNaE5Ul9SERzmqSebb69
+         RX4hGqkyH3zGxHIUUFFs9sHFFGNV25mJGnwK4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TyhnT3S9LREa/PJcUvjDmD1nY9IkR07FNMCsUt52Jy4=;
+        b=tpylWm8DsK/NJkPZTzDEvJESyMta+3eH0uFbZW/SMxtGFb4A8oRWhX7H2MGrM8Ixiz
+         1b9gpksyuUc1rFfiqklwquh+lihvNIdXakvTvJgROwpIxPzliGDP4kRI4mnAmn5jICxl
+         qWVik6o94QjsjIhynHG6nTTC45tPHSp2/vSlqsXYj0Rr3V4nn0DuBbaxCe7x3u7kGHPl
+         xeHFkIavReYT7tVIhTCDOiuDBa5MGtdR5d42aMMrvTpGiOwti6ZolHvMpK9F2C7K7KTp
+         6qdjw1CV+/VQ8r3acBBaDG+iUNKRsseOGWmddAchzx46qnwrISEFpZHw8rJLDPiqQOFA
+         lgbw==
+X-Gm-Message-State: AOAM533IvMwujCoZ8HwZqmRxOk+VEagRSpbdlw2Vp7lwT/VxSTrkjfCR
+        bGy9UYcNbz/O9KkWXsyiNLbm6R9mxinjXIcqhF8EKa/ctr4I1g==
+X-Google-Smtp-Source: ABdhPJwEjwjbxxGf9KaBZVVvXKgqQoE5eGuB6H6+D5Gim9u7yx6WZmM1Knh+yfw2qbYWv5OhyeIOjah61kzGh3pFqbs=
+X-Received: by 2002:a05:6402:274b:b0:423:fe73:95a0 with SMTP id
+ z11-20020a056402274b00b00423fe7395a0mr9912851edd.224.1650467657421; Wed, 20
+ Apr 2022 08:14:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419234637.357112-12-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000e88cad05d1525c27@google.com>
+In-Reply-To: <000000000000e88cad05d1525c27@google.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 20 Apr 2022 17:14:06 +0200
+Message-ID: <CAJfpegsd-TokH5b8pgLr2mR2QQq7u-_E+8LYMwkT5BCtEyPffA@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in fuse_writepage_locked
+To:     syzbot <syzbot+d0dd8d6b123d46c4dcf2@syzkaller.appspotmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-04-20 01:52:33, John Ogness wrote:
-> Provide a might-sleep function to allow waiting for console printers
-> to catch up to the latest logged message.
-> 
-> Use pr_flush() whenever it is desirable to get buffered messages
-> printed before continuing: suspend_console(), resume_console(),
-> console_stop(), console_start(), console_unblank().
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+On Sun, 21 Nov 2021 at 21:29, syzbot
+<syzbot+d0dd8d6b123d46c4dcf2@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    42eb8fdac2fc Merge tag 'gfs2-v5.16-rc2-fixes' of git://git..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=137ec159b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=6d3b8fd1977c1e73
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d0dd8d6b123d46c4dcf2
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+Likely a dup:
 
-Best Regards,
-Petr
+#syz dup: WARNING in fuse_write_file_get
+
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+d0dd8d6b123d46c4dcf2@syzkaller.appspotmail.com
+>
+> WARNING: CPU: 1 PID: 17813 at fs/fuse/file.c:1833 fuse_write_file_get fs/fuse/file.c:1833 [inline]
+> WARNING: CPU: 1 PID: 17813 at fs/fuse/file.c:1833 fuse_write_file_get fs/fuse/file.c:1830 [inline]
+> WARNING: CPU: 1 PID: 17813 at fs/fuse/file.c:1833 fuse_writepage_locked+0xa84/0xd40 fs/fuse/file.c:1918
+> Modules linked in:
+> CPU: 1 PID: 17813 Comm: syz-executor.2 Not tainted 5.16.0-rc1-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:fuse_write_file_get fs/fuse/file.c:1833 [inline]
+> RIP: 0010:fuse_write_file_get fs/fuse/file.c:1830 [inline]
+> RIP: 0010:fuse_writepage_locked+0xa84/0xd40 fs/fuse/file.c:1918
+> Code: 20 5b 5d 41 5c 41 5d 41 5e 41 5f c3 41 bc f4 ff ff ff e9 2d ff ff ff e8 8a dd c6 fe 48 8b 3c 24 e8 b1 fe a3 06 e8 7c dd c6 fe <0f> 0b 49 8d be c8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa
+> RSP: 0018:ffffc90018f3f5f0 EFLAGS: 00010212
+> RAX: 000000000000a311 RBX: ffff8880834ba688 RCX: ffffc9000d9e9000
+> RDX: 0000000000040000 RSI: ffffffff82b10a64 RDI: 0000000000000001
+> RBP: ffffea0000263e40 R08: 0000000000000000 R09: ffff8880834ba7a3
+> R10: ffffed10106974f4 R11: 000000000000001f R12: ffff8880834ba1c0
+> R13: ffffea000258d080 R14: ffff888018b83c00 R15: ffff88814a7ac800
+> FS:  00007f75e4cad700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffc15c0ef7c CR3: 0000000073f74000 CR4: 0000000000350ee0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
+> Call Trace:
+>  <TASK>
+>  fuse_writepage+0x104/0x160 fs/fuse/file.c:1976
+>  writeout mm/migrate.c:826 [inline]
+>  fallback_migrate_page mm/migrate.c:850 [inline]
+>  move_to_new_page+0x7ea/0xf00 mm/migrate.c:901
+>  __unmap_and_move mm/migrate.c:1063 [inline]
+>  unmap_and_move mm/migrate.c:1204 [inline]
+>  migrate_pages+0x27f5/0x3810 mm/migrate.c:1481
+>  compact_zone+0x1abb/0x3860 mm/compaction.c:2399
+>  compact_node+0x129/0x1f0 mm/compaction.c:2683
+>  compact_nodes mm/compaction.c:2699 [inline]
+>  sysctl_compaction_handler+0x10e/0x160 mm/compaction.c:2741
+>  proc_sys_call_handler+0x437/0x620 fs/proc/proc_sysctl.c:586
+>  call_write_iter include/linux/fs.h:2162 [inline]
+>  new_sync_write+0x429/0x660 fs/read_write.c:503
+>  vfs_write+0x7cd/0xae0 fs/read_write.c:590
+>  ksys_write+0x12d/0x250 fs/read_write.c:643
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f75e7737ae9
+> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f75e4cad188 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+> RAX: ffffffffffffffda RBX: 00007f75e784af60 RCX: 00007f75e7737ae9
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
+> RBP: 00007f75e7791f6d R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> R13: 00007ffee68ffeff R14: 00007f75e4cad300 R15: 0000000000022000
+>  </TASK>
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

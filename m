@@ -2,121 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3092A5084CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB1D5084D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377110AbiDTJW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 05:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
+        id S1377172AbiDTJYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 05:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244208AbiDTJW4 (ORCPT
+        with ESMTP id S244208AbiDTJYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 05:22:56 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDCE3056A
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:20:10 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id g18so2183983ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:20:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nAIc8jlNaoNP4j8LrfgKPUem0987eG/5mImWoVHHT10=;
-        b=rSRtnZiF0xfnneRi/FQEzgnTo4L29Yzksiymt9g7h909EamxwG1M03+cfLGJz2BCOj
-         30CAL0kYOBVzStPIrvYb0monKtCFSnzsD3kwCqSU+bWHouMJvSzgKzZ6TdGkdgNy2yzz
-         C01rq4MLEeIVrGL5bI2/gmeJphR7o7jGVzdRCQK8jV3eM/SIu9DarQScr8dPeApgsm4q
-         PVkvnWdJ0MciYcWlYYKEOAtj/lRtmYDnu4oNkN19u4GUIU3PjvK/cEdkwCiD73LdOoQg
-         xyjB1TqyC1taYNXURg86XIpc8UnubKhBcODOIH7ohGWzGoAIPK9A3eD02O9kuRE3/jfE
-         /lCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nAIc8jlNaoNP4j8LrfgKPUem0987eG/5mImWoVHHT10=;
-        b=ZQaI3amUBM1ncg1kgaWbKwC2SZyt4i272WR8yikT4cOuwpOVCOyLvFrV1OEF6BkX5U
-         rEcj3GNnnjTIpRX45U1nfyNb+q7B9OH9s/EqNWp+ulcLTtICMWvHZbR8s9nTKOyxJwcv
-         Rd0VejOzPgey6kEMLrB1rJvnFcmFPhxfvuSdE5PF5dIBCaqrWj5WG74PcuSJIg4Bpz57
-         bZEY7QZGwm5+KkBqV5IEo/YKzLrv4qkxizs/fr+lM5v5Ejcqxj0DMdO5tkTRmtOVQ4Km
-         sxSTqJLfEbmV2XaSzXVMc0HKpbPK+Oy27r1HwC1xwAzg/3NOD3tlrcRes/d1MCiu7L+k
-         POOw==
-X-Gm-Message-State: AOAM533IKmxpJM0dYKuSyMsRyj52711FwFx2y+5MG0wEKsS2Xbav97fU
-        KL0ZzynyPBoAQ2AH5yqJRpaLTA==
-X-Google-Smtp-Source: ABdhPJzOe0WrGTYQeCapieJbroGE75Jk3m16hGQK/9UYOPl2KmErfi3BqssRPBI5BShzU5h2D40NFw==
-X-Received: by 2002:a17:906:7a51:b0:6e8:8e6c:f182 with SMTP id i17-20020a1709067a5100b006e88e6cf182mr17160922ejo.506.1650446408596;
-        Wed, 20 Apr 2022 02:20:08 -0700 (PDT)
-Received: from [192.168.0.223] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id kx5-20020a170907774500b006e1382b8192sm6643906ejc.147.2022.04.20.02.20.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 02:20:08 -0700 (PDT)
-Message-ID: <529de1fd-7e98-1634-c61e-0e69ddcd9e73@linaro.org>
-Date:   Wed, 20 Apr 2022 11:20:06 +0200
+        Wed, 20 Apr 2022 05:24:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC9427FE2;
+        Wed, 20 Apr 2022 02:21:38 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23K8wpsl005532;
+        Wed, 20 Apr 2022 09:21:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Qi5kOMn/VW1X7Sgjn67bEyOT03thHhFxSSziyXqmlOc=;
+ b=oMxsytYqpiPpT0PGjZa0GncbiJHyFDxtDxkBYEeXacBhb7pN8EMrUwvoHargG9KHWzCp
+ jJHzYRKoaXKdjmNvR1yqvHzKt1uksmHV7hunER+nmeHbAodftBdM8y8KAMayfyKqtvCN
+ lVn5iaOaZbHTqgi0FwJnjvhjnvg7UTPhR2WWk4/WhBcu+aq+shAZJlkFFLgl1MHDJ80f
+ 51aH85/+J3CgQpwxF+GiOFkLT8ttvCfGxH1EwKiTyq6VOV65TfoPYp5p69ouW9AHqWIr
+ oUSew4N/RVdFclmbGB3+vLjiH/dIdLmAlvzs3Xv3yZWgqnNw/SoVJk0krLeoQKJppwcb hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fjf51rdcy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 09:21:35 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23K9DTBJ004214;
+        Wed, 20 Apr 2022 09:21:34 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fjf51rdc5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 09:21:34 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23K97Ata013842;
+        Wed, 20 Apr 2022 09:21:32 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ffne9616v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 09:21:32 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23K9LTGt49545570
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Apr 2022 09:21:29 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B00BEAE04D;
+        Wed, 20 Apr 2022 09:21:29 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D576AE045;
+        Wed, 20 Apr 2022 09:21:29 +0000 (GMT)
+Received: from [9.145.164.14] (unknown [9.145.164.14])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 20 Apr 2022 09:21:29 +0000 (GMT)
+Message-ID: <f836b7e2-f581-3002-0d99-cd0f186c33c8@linux.ibm.com>
+Date:   Wed, 20 Apr 2022 11:21:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v7 00/12] Fix broken usage of driver_override (and kfree
- of static memory)
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Stuart Yoder <stuyoder@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
+To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+References: <20220419185857.128351-1-thuth@redhat.com>
+ <20220419185857.128351-2-thuth@redhat.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v2 1/4] KVM: s390: selftests: Use TAP interface in the
+ memop test
+In-Reply-To: <20220419185857.128351-2-thuth@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kFU9QUo-RCANII1yt6kiiUSw1kmkRhJG
+X-Proofpoint-ORIG-GUID: oaBnK_-JulFlsAtJCq-b1JW6nmmB9GHe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-20_02,2022-04-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ spamscore=0 phishscore=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204200057
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2022 13:34, Krzysztof Kozlowski wrote:
+On 4/19/22 20:58, Thomas Huth wrote:
+> The memop test currently does not have any output (unless one of the
+> TEST_ASSERT statement fails), so it's hard to say for a user whether
+> a certain new sub-test has been included in the binary or not. Let's
+> make this a little bit more user-friendly and include some TAP output
+> via the kselftests.h interface.
+> 
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
 
-Hi Greg, Rafael,
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-The patchset was for some time on the lists, got some reviews, some
-changes/feedback which I hope I applied/responded.
+> ---
+>   tools/testing/selftests/kvm/s390x/memop.c | 90 ++++++++++++++++++-----
+>   1 file changed, 73 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index b04c2c1b3c30..ad9fe86c0592 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -12,6 +12,7 @@
+>   
+>   #include "test_util.h"
+>   #include "kvm_util.h"
+> +#include "kselftest.h"
+>   
+>   enum mop_target {
+>   	LOGICAL,
+> @@ -648,33 +649,88 @@ static void test_errors(void)
+>   	kvm_vm_free(t.kvm_vm);
+>   }
+>   
+> +struct testdef {
+> +	const char *name;
+> +	void (*test)(void);
+> +	int cap;
+> +} testlist[] = {
+> +	{
+> +		.name = "simple copy",
+> +		.test = test_copy,
+> +	},
+> +	{
+> +		.name = "generic error checks",
+> +		.test = test_errors,
+> +	},
+> +	{
+> +		.name = "copy with storage keys",
+> +		.test = test_copy_key,
+> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
+> +	},
+> +	{
+> +		.name = "copy with key storage protection override",
+> +		.test = test_copy_key_storage_prot_override,
+> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
+> +	},
+> +	{
+> +		.name = "copy with key fetch protection",
+> +		.test = test_copy_key_fetch_prot,
+> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
+> +	},
+> +	{
+> +		.name = "copy with key fetch protection override",
+> +		.test = test_copy_key_fetch_prot_override,
+> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
+> +	},
+> +	{
+> +		.name = "error checks with key",
+> +		.test = test_errors_key,
+> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
+> +	},
+> +	{
+> +		.name = "error checks with key storage protection override",
+> +		.test = test_errors_key_storage_prot_override,
+> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
+> +	},
+> +	{
+> +		.name = "error checks without key fetch prot override",
+> +		.test = test_errors_key_fetch_prot_override_not_enabled,
+> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
+> +	},
+> +	{
+> +		.name = "error checks with key fetch prot override",
+> +		.test = test_errors_key_fetch_prot_override_enabled,
+> +		.cap = KVM_CAP_S390_MEM_OP_EXTENSION,
+> +	},
+> +};
+> +
+>   int main(int argc, char *argv[])
+>   {
+> -	int memop_cap, extension_cap;
+> +	int memop_cap, extension_cap, idx;
+>   
+>   	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
+>   
+> +	ksft_print_header();
+> +
+>   	memop_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP);
+>   	extension_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP_EXTENSION);
+>   	if (!memop_cap) {
+> -		print_skip("CAP_S390_MEM_OP not supported");
+> -		exit(KSFT_SKIP);
+> +		ksft_exit_skip("CAP_S390_MEM_OP not supported.\n");
+>   	}
+>   
+> -	test_copy();
+> -	if (extension_cap > 0) {
+> -		test_copy_key();
+> -		test_copy_key_storage_prot_override();
+> -		test_copy_key_fetch_prot();
+> -		test_copy_key_fetch_prot_override();
+> -		test_errors_key();
+> -		test_errors_key_storage_prot_override();
+> -		test_errors_key_fetch_prot_override_not_enabled();
+> -		test_errors_key_fetch_prot_override_enabled();
+> -	} else {
+> -		print_skip("storage key memop extension not supported");
+> +	ksft_set_plan(ARRAY_SIZE(testlist));
+> +
+> +	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
+> +		if (!testlist[idx].cap || (extension_cap &&
+> +		    testlist[idx].cap == KVM_CAP_S390_MEM_OP_EXTENSION)) {
+> +			testlist[idx].test();
+> +			ksft_test_result_pass("%s\n", testlist[idx].name);
+> +		} else {
+> +			ksft_test_result_skip("%s - capability %d not supported\n",
+> +					      testlist[idx].name,
+> +					      testlist[idx].cap);
+> +		}
+>   	}
+> -	test_errors();
+>   
+> -	return 0;
+> +	ksft_finished();
+>   }
 
-Entire set depends on the driver core changes, so maybe you could pick
-up everything via drivers core tree?
-
-> Dependencies (and stable):
-> ==========================
-> 1. All patches, including last three fixes, depend on the first patch
->    introducing the helper.
-> 2. The last three commits - fixes - are probably not backportable
->    directly, because of this dependency. I don't know how to express
->    this dependency here, since stable-kernel-rules.rst mentions only commits as
->    possible dependencies.
-
-
-Best regards,
-Krzysztof

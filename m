@@ -2,84 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC7E508487
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F1F50848A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 11:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377038AbiDTJNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 05:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
+        id S1377057AbiDTJNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 05:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352496AbiDTJNJ (ORCPT
+        with ESMTP id S1377044AbiDTJNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 05:13:09 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B5728E18
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:10:23 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id y10so2149468ejw.8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:10:23 -0700 (PDT)
+        Wed, 20 Apr 2022 05:13:12 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D22D2A279
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:10:26 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 21so1447585edv.1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 02:10:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=jJsxXV8EMMhthRc3vB8IfBBVtPfucIwecsNFn+e8HbE=;
-        b=ZJMGtco/H9XPuW2SE4ktBATyGVY/N+aP1nFYKbziT8wGZGBVAnWk749IhbRXRgl5yW
-         qBY8zfG9oZtKzN6Rp5jaUAVd2VZ+YIEbYzdbUcP4Oz4qaCdbmjppy38zs+tIumAEEIzB
-         4t/0uUa9d0DW+4Eia1hD04owbrh5J/xWcdsg6nLHp3ZZZ97nVWc1SjUL002MAjaG9mbw
-         szvrKsy1WIqtm+MJkX5ko3OJxgfBhVvryKOy0YWFwvlM/HNWamSzIpljjGWWtdyZvBVF
-         R8A/Wwc+Bs+TTam0U2XmeF8ceTOHq3gCdw4dE4l2yfn5j8XMCmfXJfLZqgqivITG44NA
-         yL1w==
+        bh=CW7ss/SfIduEfosB0bJE6aZJ+mUWxaKEHg5jy2t+LL0=;
+        b=nbfRX9jYhWBbKHxqEzKD/L2tUdHsjXi08CkbX3BwKY6LyTkYjApwgVONqzUDfi6FQs
+         xgB8pSAi30b7y/G34qKGviIYrtQAGOspXJguVdVZavBzxNu8kmEnty3VBGkyb/bE6/R4
+         UkpvuppvrK3hA4YCvoQY6LNaF5paELjpv6Tl/mpJpC1T1dtMQrNO7dhjl+wpWYXKamoq
+         E8hpAfLyL2Ffmsk4K9ob9H4gp0knJTgjSQOFkpQ6L1flBwMFNBfk0Ut3KJze0q1OWGbm
+         aNP9KenU3XTQnzCgLBY0QHOWlUNoIdWnDEijnJd7kUaElJ590HBseIcraLXEyaxqlif9
+         NpWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jJsxXV8EMMhthRc3vB8IfBBVtPfucIwecsNFn+e8HbE=;
-        b=TxiKa+wPhasYTHCQiv/v6+Lb+OLOIuIphYINjrH8n7Lzm/AqOc284k7gjxvB855T90
-         Q7vGCMwl/1Zwgn1gr2eajZUipWKLwtmvermG41IGRcvfvmlgX7b6oNgULxJ1s4EPvMNS
-         zR4dbMOxsuCFLOpoV/xlEKOYPLnHOgrhsRGjZEed3IGuDWHTBgX7FKXA3VTVRE6UiIOz
-         U5RGm6lcihJT0knnsmRdhI6XRUrNvLhBWVHwC+f6tPe0AH0cHhgQeu7nH2epamwnfYcM
-         yG+aSCW2Cn6NzlQQg3lw6h7T7Ro3yZ5MLvjLjmyXBiejMh+K33pHRWEFSPVsPaiRrzEo
-         wezA==
-X-Gm-Message-State: AOAM532mvkzt0BugDEZKhKLVJdUkYiyWO+sHQ7Echl4Z6ZhwBdJt40lt
-        Z8m5hZC1C3d6Kg2+rcDz8rynVQ==
-X-Google-Smtp-Source: ABdhPJxFcMytroUnW++2h6HEflko848F6MeBqWaGooGJAcQB4r9SyVe5rLHNDiEaEAeAD29JfXsPqg==
-X-Received: by 2002:a17:906:730c:b0:6f0:f69:b2e with SMTP id di12-20020a170906730c00b006f00f690b2emr77312ejc.276.1650445822302;
-        Wed, 20 Apr 2022 02:10:22 -0700 (PDT)
+        bh=CW7ss/SfIduEfosB0bJE6aZJ+mUWxaKEHg5jy2t+LL0=;
+        b=VxzEkUKozEVzekOGM5j7XR9dr7h0Wm8kbTBxybNBjKgrV+31c2w4rHZSI8H7EeBZ9L
+         xdFWqZyC0yg4KXXAyUww017FtegTRC9Ws9FCawtJGRp8CrMlllyBhD7MEKku0ZxOaBzc
+         ixKmtSRgZmdCpTp7IM6H3XGxUjC43Lp7Wum+7Of4AZHnDAYq57zdfwVr3imSfDmIyrFT
+         mWhjASvedUTNISyQdLhciDXIJ+wV5TcIuWLUKtyTvORgRuFWwyKhKKfckjg4eJFLbqad
+         gtYzsiddchYXT96Y7+djhNJVhA/3qUTk45YARViN/MM9gINENcb5u7vViK07OenHDZ/e
+         wY5A==
+X-Gm-Message-State: AOAM532xMR1TIhjPKHfJ8MEgdYxoHuqekWh1hR+i1tQ78c0jXwWysm0+
+        GJ/2DttLgdqgNFhJ8oPfkf3c9A==
+X-Google-Smtp-Source: ABdhPJwcCzesZSaAEqQinHvzpf+j5DC/nCnw50/23JlU7UmOtoKfMpUOJAlwTajn7V9XTLr/UdMJMA==
+X-Received: by 2002:a05:6402:3318:b0:41d:893e:4d6 with SMTP id e24-20020a056402331800b0041d893e04d6mr21866356eda.225.1650445824763;
+        Wed, 20 Apr 2022 02:10:24 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id r3-20020aa7d583000000b00420a8b66566sm9727057edq.97.2022.04.20.02.10.21
+        by smtp.gmail.com with ESMTPSA id r3-20020aa7d583000000b00420a8b66566sm9727057edq.97.2022.04.20.02.10.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 02:10:21 -0700 (PDT)
+        Wed, 20 Apr 2022 02:10:23 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Luka Perkov <luka.perkov@sartura.hr>, Andrew Lunn <andrew@lunn.ch>,
-        Russell King <linux@armlinux.org.uk>,
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         devicetree@vger.kernel.org,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Luka Kovacic <luka.kovacic@sartura.hr>
-Subject: Re: [PATCH 1/2] ARM: dts: marvell: align SPI NOR node name with dtschema
-Date:   Wed, 20 Apr 2022 11:10:13 +0200
-Message-Id: <165044570802.75184.1383491192018211849.b4-ty@linaro.org>
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        UNGLinuxDriver@microchip.com
+Subject: Re: (subset) [PATCH 2/2] arm64: dts: microchip: align SPI NOR node name with dtschema
+Date:   Wed, 20 Apr 2022 11:10:14 +0200
+Message-Id: <165044570802.75184.311784035555489676.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220407143234.295426-1-krzysztof.kozlowski@linaro.org>
-References: <20220407143234.295426-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220407143223.295344-2-krzysztof.kozlowski@linaro.org>
+References: <20220407143223.295344-1-krzysztof.kozlowski@linaro.org> <20220407143223.295344-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022 16:32:33 +0200, Krzysztof Kozlowski wrote:
+On Thu, 7 Apr 2022 16:32:23 +0200, Krzysztof Kozlowski wrote:
 > The node names should be generic and SPI NOR dtschema expects "flash".
 > 
 > 
@@ -88,10 +87,8 @@ Looks like no one wants to take this, so let me take care of it.
 
 Applied, thanks!
 
-[1/2] ARM: dts: marvell: align SPI NOR node name with dtschema
-      commit: 9cc510ff788ce2f93e45c64767a8215363735a2e
-[2/2] arm64: dts: marvell: align SPI NOR node name with dtschema
-      commit: 456e580bf08fd9a0f499ad64fbe1a2b6e89add0d
+[2/2] arm64: dts: microchip: align SPI NOR node name with dtschema
+      commit: b5ff234ffa602bea7f7409dea427596fbe72561c
 
 Best regards,
 -- 

@@ -2,118 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53612507EBF
+	by mail.lfdr.de (Postfix) with ESMTP id 0B74B507EBE
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 04:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358912AbiDTCVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 22:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiDTCVx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1358904AbiDTCVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 19 Apr 2022 22:21:53 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6AB30F54
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:19:09 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id bn33so259640ljb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:19:09 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229791AbiDTCVu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 19 Apr 2022 22:21:50 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C8B30574
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:19:06 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id o5so600914pjr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:19:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vzcM0Fy8zoXIYtzw0zgKr6w3uu0pvrZ7K2myKeDxUvc=;
-        b=XlMHlA1yW/3psqu/gqNph/O3AA7PrGeW5068j/3DUXbJp9LCr/qQwXvvlCgRY66YZs
-         bfbo2buBJiwcJj5XorkSa+q8/5Dd97EEFrzXKMkVvKZ2Q6hHadvYR+AeJLYW8cad9NkT
-         BkTcdQwom8v7pt4NN84cQ97G02o6Ks7iPjqGw=
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references;
+        bh=rF0d2fPjjYbYQnGkxkUzLty/3S+O+5X64cLZKZhZO4E=;
+        b=a687CipGVP6S8l+yw3Z2qapCCMGrDznZGl7Hg3EB037BBEABhZ6eF3M10/IylPutLq
+         tQk4PoARW3oQOylOYrHMJUSK816QZrgIdfkSTwwL0QdHAkJVcmKoL9XaORVH2tFZ8bkQ
+         suw0zsEntUJBE2xRXZ3LyV8uwnGt9PxlXtBzTac8aTchaXiMvgmTCOZPXXL6jawi62ut
+         YG/CoFhUJ9DK3+VJLvU6h9rohaJqhLf1gVWx+op8HU8pcClxlOXXbY1WGA2Y41fi03v6
+         q6u8qH5e52PTYTG/EQ2jyxwTOkR9v9EjEuQQpyd1QGp4cAZO59SpZQ1J0naqroyozhTl
+         HKuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vzcM0Fy8zoXIYtzw0zgKr6w3uu0pvrZ7K2myKeDxUvc=;
-        b=G13U3XjPfWenPIe31+SUrvnWIBILWZN00Q5iz4YR+xSu/i2hmwLXnayehThoDLNKgB
-         ceKBhbBhPqsrF53UBOj5yF5imsD1GthH4+YhEZmYCrAtXEBPe40OXvZjLzDD7NKPp58t
-         6D1ZVsJ2Wgckb92uzFa5TCp213/KG50Lw2+RInHrA6mrnhHkOSTiUYy2cGUSw2MwBk2c
-         L9Cn9xfxy1fQIj5g5UaHMlIHLJLMxb2VpOUBgkQeJWqOmiBuQCpyO71lD0do455KPg51
-         O8cvn7hHkyOTdbjJ4+ew/Nl+SOnGFn873F9MCIuQF7SqIc73KtrkPXrnaOO2lOMk7vw/
-         qoQw==
-X-Gm-Message-State: AOAM533+Wxosc/8DI/MJIZ/UENwGnQ4glzv5yZjDtq9lB0DQ1uwdWrHW
-        5ZOZiqO5bYmR+Q2I6ql4Ba0SMquQDOCzz/uttvs=
-X-Google-Smtp-Source: ABdhPJwWSaOKSr5HNjyEqgLsr0uTd7VQR9sC0EbC35LD/1LAu/KdUeyQCJuOJX8jeZvItSwKbQqjGA==
-X-Received: by 2002:a2e:a26b:0:b0:24d:b6e5:1097 with SMTP id k11-20020a2ea26b000000b0024db6e51097mr9546740ljm.110.1650421147558;
-        Tue, 19 Apr 2022 19:19:07 -0700 (PDT)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
-        by smtp.gmail.com with ESMTPSA id n7-20020a196f47000000b0046d1859fc45sm1672834lfk.102.2022.04.19.19.19.07
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 19:19:07 -0700 (PDT)
-Received: by mail-lj1-f170.google.com with SMTP id y11so260888ljh.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 19:19:07 -0700 (PDT)
-X-Received: by 2002:a2e:9041:0:b0:24a:ce83:dcb4 with SMTP id
- n1-20020a2e9041000000b0024ace83dcb4mr12387816ljg.291.1650421146776; Tue, 19
- Apr 2022 19:19:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <YlpPW9SdCbZnLVog@infradead.org> <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
- <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
- <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com> <Yl04LO/PfB3GocvU@kernel.org>
- <Yl4F4w5NY3v0icfx@bombadil.infradead.org> <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
- <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com> <Yl8CicJGHpTrOK8m@kernel.org>
- <CAHk-=wh6um5AFR6TObsYY0v+jUSZxReiZM_5Kh4gAMU8Z8-jVw@mail.gmail.com> <20220420020311.6ojfhcooumflnbbk@MacBook-Pro.local.dhcp.thefacebook.com>
-In-Reply-To: <20220420020311.6ojfhcooumflnbbk@MacBook-Pro.local.dhcp.thefacebook.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 19 Apr 2022 19:18:50 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiF1KnM1_paB3jCONR9Mh1D_RCsnXKBau1K7XLG-mwwTQ@mail.gmail.com>
-Message-ID: <CAHk-=wiF1KnM1_paB3jCONR9Mh1D_RCsnXKBau1K7XLG-mwwTQ@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, Song Liu <songliubraving@fb.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "song@kernel.org" <song@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dborkman@redhat.com" <dborkman@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "bp@alien8.de" <bp@alien8.de>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references;
+        bh=rF0d2fPjjYbYQnGkxkUzLty/3S+O+5X64cLZKZhZO4E=;
+        b=OAruLsKv41TN5Cbx5WYmnIV7qMzikoysVJqhPieL1V3Z73b+J73V03OCyBbueDoXlA
+         mxqUb6/YLrj1XXJEP69xwzHbAO3YrPjMPkQNbBMasJrRQdOlbCj+qj38luspOSzenYiM
+         IM0kxgGcnH/Ip1RZVXnpgcEfYzLVAZ/Y+d6ostWTM1aVdrXT3Sv+4gBgQkdRiSAWEzYN
+         zK0tROeILjwf2VdQTW5prWB7OoXoIsd5PGIIF/+OP6DHgOnpJ8C1cNiErJBIrzuqjxB5
+         dXHI4xyeBsKf9Kh8MsCPpiYscyD4L+M1odwwizH15Pu90VXkcDdQ7+o0wtIx+SpDKXXZ
+         xeZw==
+X-Gm-Message-State: AOAM530S2BQe2T4siTcHb+s5Nsmo7CgX4oV/wgVYH4rtoFnKf5YfmZA+
+        U6SbCfT8VS9RsGbiNcP2S2E=
+X-Google-Smtp-Source: ABdhPJxbaX8P4DgFAq5AqtRlie8zEQAmzOhdP6082cOtk6bDfu+J7/3gLmB876ENEQEoVEvDJTvcPQ==
+X-Received: by 2002:a17:902:bd06:b0:158:8973:b16b with SMTP id p6-20020a170902bd0600b001588973b16bmr18598380pls.129.1650421145605;
+        Tue, 19 Apr 2022 19:19:05 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id x22-20020aa784d6000000b005082b06cc58sm17015120pfn.215.2022.04.19.19.19.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 19:19:05 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Miaoqian Lin <linmq006@gmail.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ASoC: fsl: Fix error handling in pcm030_fabric_probe
+Date:   Wed, 20 Apr 2022 02:18:52 +0000
+Message-Id: <20220420021855.8224-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <Yh90u+E3RTuGEDWU@sirena.org.uk>
+References: <Yh90u+E3RTuGEDWU@sirena.org.uk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 7:03 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> Here is the quote from Song's cover letter for bpf_prog_pack series:
+This will call twice platform_device_put()
+if both platform_device_add() and snd_soc_register_card() fails.
+return early on error  to avoid duplicating the error code logic.
 
-I care about performance as much as the next person, but I care about
-correctness too.
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+changes in v2:
+- use return statement to return early when fails
+- rebase on top of commit 559089e0a93d ("vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLOW_HUGE_VMAP")
+---
+ sound/soc/fsl/pcm030-audio-fabric.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-That large-page code was a disaster, and was buggy and broken.
+diff --git a/sound/soc/fsl/pcm030-audio-fabric.c b/sound/soc/fsl/pcm030-audio-fabric.c
+index 83b4a22bf15a..096a37993ad3 100644
+--- a/sound/soc/fsl/pcm030-audio-fabric.c
++++ b/sound/soc/fsl/pcm030-audio-fabric.c
+@@ -89,13 +89,16 @@ static int pcm030_fabric_probe(struct platform_device *op)
+ 		dev_err(&op->dev, "request_module returned: %d\n", ret);
+ 
+ 	pdata->codec_device = platform_device_alloc("wm9712-codec", -1);
+-	if (!pdata->codec_device)
++	if (!pdata->codec_device) {
+ 		dev_err(&op->dev, "platform_device_alloc() failed\n");
++		return -ENOMEM;
++	}
+ 
+ 	ret = platform_device_add(pdata->codec_device);
+ 	if (ret) {
+ 		dev_err(&op->dev, "platform_device_add() failed: %d\n", ret);
+ 		platform_device_put(pdata->codec_device);
++		return ret;
+ 	}
+ 
+ 	ret = snd_soc_register_card(card);
+@@ -103,6 +106,7 @@ static int pcm030_fabric_probe(struct platform_device *op)
+ 		dev_err(&op->dev, "snd_soc_register_card() failed: %d\n", ret);
+ 		platform_device_del(pdata->codec_device);
+ 		platform_device_put(pdata->codec_device);
++		return ret;
+ 	}
+ 
+ 	platform_set_drvdata(op, pdata);
+-- 
+2.17.1
 
-And even with those four patches, it's still broken.
-
-End result: there's no way that thigh gets re-enabled without the
-correctness being in place.
-
-At a minimum, to re-enable it, it needs (a) that zeroing and (b)
-actual numbers on real loads. (not some artificial benchmark).
-
-Because without (a) there's no way in hell I'll enable it.
-
-And without (b), "performance" isn't actually an argument.
-
-                  Linus

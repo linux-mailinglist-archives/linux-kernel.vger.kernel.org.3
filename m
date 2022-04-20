@@ -2,51 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261D85083D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653065083B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376872AbiDTIqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
+        id S1376834AbiDTIpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376845AbiDTIpq (ORCPT
+        with ESMTP id S1376816AbiDTIpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:45:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C353B3C8;
-        Wed, 20 Apr 2022 01:42:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DAF261349;
-        Wed, 20 Apr 2022 08:42:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96FE6C385A1;
-        Wed, 20 Apr 2022 08:42:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650444178;
-        bh=2VSItCzrwIINjsTruIqPy/Gb1JJrFBYUD2Uf0WhNza8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lbngd04FkUSRoYia+aufTEho37E3HifnB6cC1WcPiKzBi0UW4aQbJhWV1Mq0h3TS0
-         XMwamyt6hZHtWH92IiSi+UlbR3O3H4BWntyiislX22s74Zjoua2n2CJJKSMPvVEXvm
-         VY0bvYJVO/S9QO/80qlH4A+fMJs6wcVOSJY9WFWUpNrUyxB/9jVH0xCOkxoPSiBq5t
-         kWj/w7GrInSEZb07yvfTkkdtMfhuzyou3EU8yAYKd4NUDCqUM5+acKjQwKKLNrFywq
-         sZnYLVXJiJqUBV3u0yZckqXuUj5Jr1IzZXNXJ7DNY2vLetHfBG62HwWXyxzKVJDnF7
-         UmLQzaXwc4GSQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH] [v3] m68k: coldfire: drop ISA_DMA_API support
-Date:   Wed, 20 Apr 2022 10:42:15 +0200
-Message-Id: <20220420084249.2186634-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        Wed, 20 Apr 2022 04:45:33 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21493B03B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:42:46 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id v4so1331153edl.7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MVCMmRDupWVNp3EektJX9PkYrpmkhE+GVak1SDvod4s=;
+        b=Z+Fg+M32NBiEVbQoBiuviPChWxOW0h+dqN5hlHC8pitQtK+k1M+fgW34j9uiVvIWEG
+         E5gBbUqeaBL6PhIWrlus/Fn90V+tVSvoRfC5RXK3GKiZuQ5yuoom618SH2AWzPowvKTm
+         Y9tevSi7LVtSfP/RCgn96XUAX4R7ZtPJpGrvomwprD0ARWN5vCvx9LSq3g7MGB2jJEd2
+         jkQnvi9xRkI7M5BTFhQRuzQTa2XUe+zu/7mU6dsAFOJ1z8MX0tn19rxmVS2UmD+ThaD/
+         yH1rojDNZIF6IBs/hvPHWbtZDXPR67OiqeSUGwchaEwhSqNkRNLvtgJsOhVPO1K2qpYu
+         Pa0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MVCMmRDupWVNp3EektJX9PkYrpmkhE+GVak1SDvod4s=;
+        b=PTL4O7WFQCwu/UsRGifBu+Q8AYFlqfzJ4l4gvnYnmOy44mWD+aJhOMCtbwA4Z4SnBH
+         2pydZtrbpJSbpmuKeiX3nDAfCOnOv9HZ60nQCMIuTEru0WkPB426+Avc8M+H2SjJbllB
+         1W8mG+JT4uFojwzi+vq5I3l8m2KdMTvuWIOlx5J/FsBZI036AuPvdrg7sQXwVcB46cwt
+         WuYLE7TD/fVfUlsAh4zFIK4FA+A0fk+C8KeghmRCIavuO0a4Cn/SAjuJjHxyiP1844W1
+         SwwG6W8Yu2pEdqFnze2RlqPxQYUWptdB/xifs33CqpqA+LC5gVEArquxvuBJZGZyQnGM
+         gy0g==
+X-Gm-Message-State: AOAM531MxqkLSkHDLPkLTKTqTodHAHz9S+/CCMPZEQqikNgvnO+XKH9T
+        qi9nkwzHXN14QsuHGpIBPAC6sm4z6njmbpDBreJXEg==
+X-Google-Smtp-Source: ABdhPJzq+UmiGH73w3WVb5N/f0UxlU+a3ZjIu42E1R9z8JmIzVcN5CFnOiOVzq7f9t99+Tm82GSmzQ==
+X-Received: by 2002:a05:6402:34c9:b0:423:deb7:f69e with SMTP id w9-20020a05640234c900b00423deb7f69emr17014053edc.335.1650444165378;
+        Wed, 20 Apr 2022 01:42:45 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.96.34])
+        by smtp.gmail.com with ESMTPSA id s14-20020aa7cb0e000000b00410bf015567sm9529157edt.92.2022.04.20.01.42.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 01:42:44 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 16:42:37 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Ali Saidi <alisaidi@amazon.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
+        acme@kernel.org, benh@kernel.crashing.org, Nick.Forrington@arm.com,
+        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
+        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
+        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v5 4/5] perf arm-spe: Use SPE data source for neoverse
+ cores
+Message-ID: <20220420084237.GD843168@leoy-ThinkPad-X240s>
+References: <20220408195344.32764-1-alisaidi@amazon.com>
+ <20220408195344.32764-5-alisaidi@amazon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408195344.32764-5-alisaidi@amazon.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,663 +77,304 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Apr 08, 2022 at 07:53:43PM +0000, Ali Saidi wrote:
+> When synthesizing data from SPE, augment the type with source information
+> for Arm Neoverse cores. The field is IMPLDEF but the Neoverse cores all use
+> the same encoding. I can't find encoding information for any other SPE
+> implementations to unify their choices with Arm's thus that is left for
+> future work.
+> 
+> This change populates the mem_lvl_num for Neoverse cores instead of the
+> deprecated mem_lvl namespace.
+> 
+> Signed-off-by: Ali Saidi <alisaidi@amazon.com>
+> ---
+>  .../util/arm-spe-decoder/arm-spe-decoder.c    |   1 +
+>  .../util/arm-spe-decoder/arm-spe-decoder.h    |  12 ++
+>  tools/perf/util/arm-spe.c                     | 127 ++++++++++++++++--
+>  3 files changed, 126 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+> index 5e390a1a79ab..091987dd3966 100644
+> --- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+> +++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+> @@ -220,6 +220,7 @@ static int arm_spe_read_record(struct arm_spe_decoder *decoder)
+>  
+>  			break;
+>  		case ARM_SPE_DATA_SOURCE:
+> +			decoder->record.source = payload;
+>  			break;
+>  		case ARM_SPE_BAD:
+>  			break;
+> diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+> index 69b31084d6be..46a61df1145b 100644
+> --- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+> +++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+> @@ -29,6 +29,17 @@ enum arm_spe_op_type {
+>  	ARM_SPE_ST		= 1 << 1,
+>  };
+>  
+> +enum arm_spe_neoverse_data_source {
+> +	ARM_SPE_NV_L1D		 = 0x0,
+> +	ARM_SPE_NV_L2		 = 0x8,
+> +	ARM_SPE_NV_PEER_CORE	 = 0x9,
+> +	ARM_SPE_NV_LOCAL_CLUSTER = 0xa,
+> +	ARM_SPE_NV_SYS_CACHE	 = 0xb,
+> +	ARM_SPE_NV_PEER_CLUSTER	 = 0xc,
+> +	ARM_SPE_NV_REMOTE	 = 0xd,
+> +	ARM_SPE_NV_DRAM		 = 0xe,
+> +};
+> +
+>  struct arm_spe_record {
+>  	enum arm_spe_sample_type type;
+>  	int err;
+> @@ -40,6 +51,7 @@ struct arm_spe_record {
+>  	u64 virt_addr;
+>  	u64 phys_addr;
+>  	u64 context_id;
+> +	u16 source;
+>  };
+>  
+>  struct arm_spe_insn;
+> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+> index d2b64e3f588b..a20285cf98e3 100644
+> --- a/tools/perf/util/arm-spe.c
+> +++ b/tools/perf/util/arm-spe.c
+> @@ -34,6 +34,7 @@
+>  #include "arm-spe-decoder/arm-spe-decoder.h"
+>  #include "arm-spe-decoder/arm-spe-pkt-decoder.h"
+>  
+> +#include "../../arch/arm64/include/asm/cputype.h"
+>  #define MAX_TIMESTAMP (~0ULL)
+>  
+>  struct arm_spe {
+> @@ -45,6 +46,7 @@ struct arm_spe {
+>  	struct perf_session		*session;
+>  	struct machine			*machine;
+>  	u32				pmu_type;
+> +	u64				midr;
+>  
+>  	struct perf_tsc_conversion	tc;
+>  
+> @@ -399,33 +401,127 @@ static bool arm_spe__is_memory_event(enum arm_spe_sample_type type)
+>  	return false;
+>  }
+>  
+> -static u64 arm_spe__synth_data_source(const struct arm_spe_record *record)
+> +static const struct midr_range neoverse_spe[] = {
+> +	MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N1),
+> +	MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N2),
+> +	MIDR_ALL_VERSIONS(MIDR_NEOVERSE_V1),
+> +	{},
+> +};
+> +
+> +
+> +static void arm_spe__synth_data_source_neoverse(const struct arm_spe_record *record,
+> +						union perf_mem_data_src *data_src)
+>  {
+> -	union perf_mem_data_src	data_src = { 0 };
+> +	/*
+> +	 * Even though four levels of cache hierarchy are possible, no known
+> +	 * production Neoverse systems currently include more than three levels
+> +	 * so for the time being we assume three exist. If a production system
+> +	 * is built with four the this function would have to be changed to
+> +	 * detect the number of levels for reporting.
+> +	 */
+>  
+> -	if (record->op == ARM_SPE_LD)
+> -		data_src.mem_op = PERF_MEM_OP_LOAD;
+> -	else
+> -		data_src.mem_op = PERF_MEM_OP_STORE;
+> +	/*
+> +	 * We have no data on the hit level or data source for stores in the
+> +	 * Neoverse SPE records.
+> +	 */
+> +	if (record->op & ARM_SPE_ST) {
+> +		data_src->mem_lvl = PERF_MEM_LVL_NA;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_ANY_CACHE;
+> +		data_src->mem_snoop = PERF_MEM_SNOOP_NA;
+> +		return;
+> +	}
+> +
+> +
 
-After a build regression report, I took a look at possible users of
-CONFIG_ISA_DMA_API on m68k and found none, which Greg confirmed. The
-CONFIG_GENERIC_ISA_DMA option in turn is only needed to implement
-ISA_DMA_API, and is clearly not used on the platforms with ISA support.
+Redundant new line.
 
-The CONFIG_ISA support for AMIGA_PCMCIA is probably also unneeded,
-but this is less clear. Unlike other PCMCIA implementations, this one
-does not use the drivers/pcmcia subsystem at all and just supports
-the "apne" network driver. When it was first added, one could use
-ISA drivers on it as well, but this probably broke at some point.
+> +	switch (record->source) {
+> +	case ARM_SPE_NV_L1D:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L1;
+> +		data_src->mem_snoop = PERF_MEM_SNOOP_NONE;
+> +		break;
+> +	case ARM_SPE_NV_L2:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L2;
+> +		data_src->mem_snoop = PERF_MEM_SNOOP_NONE;
+> +		break;
+> +	case ARM_SPE_NV_PEER_CORE:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_snoopx = PERF_MEM_SNOOPX_PEER;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L2;
+> +		break;
+> +	/*
+> +	 * We don't know if this is L1, L2 but we do know it was a cache-2-cache
+> +	 * transfer, so set SNOOPX_PEER
+> +	 */
+> +	case ARM_SPE_NV_LOCAL_CLUSTER:
+> +	case ARM_SPE_NV_PEER_CLUSTER:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_snoopx = PERF_MEM_SNOOPX_PEER;
 
-With no reason to keep this, let's just drop the corresponding files
-and prevent the remaining ISA drivers that use this from getting built.
+As a side topic, it's better to use a new patch to dump snooping flag
+PERF_MEM_SNOOPX_PEER, some code like below:
 
-The remaining definitions in asm/dma.h are used for PCI support.
-
-Link: https://lore.kernel.org/lkml/9e5ee1c3-ca80-f343-a1f5-66f3dd1c0727@linux-m68k.org/
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
-Acked-by: Greg Ungerer <gerg@linux-m68k.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v3: fix build regression
-v2: drop GENERIC_ISA_DMA as well, add some background on CONFIG_ISA.
----
- arch/m68k/Kconfig.bus       |  10 -
- arch/m68k/coldfire/dma.c    |  43 ----
- arch/m68k/include/asm/dma.h | 483 ------------------------------------
- arch/m68k/mm/motorola.c     |   1 -
- drivers/mmc/host/Kconfig    |   2 +-
- sound/core/Makefile         |   2 -
- sound/isa/Kconfig           |   2 +-
- 7 files changed, 2 insertions(+), 541 deletions(-)
- delete mode 100644 arch/m68k/coldfire/dma.c
-
-diff --git a/arch/m68k/Kconfig.bus b/arch/m68k/Kconfig.bus
-index d1e93a39cd3b..d5c0b2990ee1 100644
---- a/arch/m68k/Kconfig.bus
-+++ b/arch/m68k/Kconfig.bus
-@@ -56,16 +56,6 @@ config ATARI_ROM_ISA
- 	  The only driver currently using this adapter is the EtherNEC
- 	  driver for RTL8019AS based NE2000 compatible network cards.
+diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+index f8f234251f92..66d44280a4ea 100644
+--- a/tools/perf/util/mem-events.c
++++ b/tools/perf/util/mem-events.c
+@@ -410,6 +410,11 @@ static const char * const snoop_access[] = {
+ 	"HitM",
+ };
  
--config GENERIC_ISA_DMA
--	def_bool ISA
--
- source "drivers/zorro/Kconfig"
++static const char * const snoopx_access[] = {
++	"Fwd",
++	"Peer",
++};
++
+ int perf_mem__snp_scnprintf(char *out, size_t sz, struct mem_info *mem_info)
+ {
+ 	size_t i, l = 0;
+@@ -430,13 +435,18 @@ int perf_mem__snp_scnprintf(char *out, size_t sz, struct mem_info *mem_info)
+ 		}
+ 		l += scnprintf(out + l, sz - l, snoop_access[i]);
+ 	}
+-	if (mem_info &&
+-	     (mem_info->data_src.mem_snoopx & PERF_MEM_SNOOPX_FWD)) {
++
++	if (mem_info)
++		m = mem_info->data_src.mem_snoopx;
++
++	for (i = 0; m && i < ARRAY_SIZE(snoopx_access); i++, m >>= 1) {
++		if (!(m & 0x1))
++			continue;
+ 		if (l) {
+ 			strcat(out, " or ");
+ 			l += 4;
+ 		}
+-		l += scnprintf(out + l, sz - l, "Fwd");
++		l += scnprintf(out + l, sz - l, snoopx_access[i]);
+ 	}
  
- endif
--
--if COLDFIRE
--
--config ISA_DMA_API
--	def_bool !M5272
--
--endif
-diff --git a/arch/m68k/coldfire/dma.c b/arch/m68k/coldfire/dma.c
-deleted file mode 100644
-index c3279f7467d7..000000000000
---- a/arch/m68k/coldfire/dma.c
-+++ /dev/null
-@@ -1,43 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/***************************************************************************/
--
--/*
-- *	dma.c -- Freescale ColdFire DMA support
-- *
-- *	Copyright (C) 2007, Greg Ungerer (gerg@snapgear.com)
-- */
--
--/***************************************************************************/
--
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <asm/dma.h>
--#include <asm/coldfire.h>
--#include <asm/mcfsim.h>
--#include <asm/mcfdma.h>
--
--/***************************************************************************/
--
--/*
-- *      DMA channel base address table.
-- */
--unsigned int dma_base_addr[MAX_M68K_DMA_CHANNELS] = {
--#ifdef MCFDMA_BASE0
--	MCFDMA_BASE0,
--#endif
--#ifdef MCFDMA_BASE1
--	MCFDMA_BASE1,
--#endif
--#ifdef MCFDMA_BASE2
--	MCFDMA_BASE2,
--#endif
--#ifdef MCFDMA_BASE3
--	MCFDMA_BASE3,
--#endif
--};
--EXPORT_SYMBOL(dma_base_addr);
--
--unsigned int dma_device_address[MAX_M68K_DMA_CHANNELS];
--EXPORT_SYMBOL(dma_device_address);
--
--/***************************************************************************/
-diff --git a/arch/m68k/include/asm/dma.h b/arch/m68k/include/asm/dma.h
-index ae2021964e32..f6c5e0dfb4e5 100644
---- a/arch/m68k/include/asm/dma.h
-+++ b/arch/m68k/include/asm/dma.h
-@@ -2,493 +2,10 @@
- #ifndef _M68K_DMA_H
- #define _M68K_DMA_H 1
- 
--#ifdef CONFIG_COLDFIRE
--/*
-- * ColdFire DMA Model:
-- *   ColdFire DMA supports two forms of DMA: Single and Dual address. Single
-- * address mode emits a source address, and expects that the device will either
-- * pick up the data (DMA READ) or source data (DMA WRITE). This implies that
-- * the device will place data on the correct byte(s) of the data bus, as the
-- * memory transactions are always 32 bits. This implies that only 32 bit
-- * devices will find single mode transfers useful. Dual address DMA mode
-- * performs two cycles: source read and destination write. ColdFire will
-- * align the data so that the device will always get the correct bytes, thus
-- * is useful for 8 and 16 bit devices. This is the mode that is supported
-- * below.
-- *
-- * AUG/22/2000 : added support for 32-bit Dual-Address-Mode (K) 2000
-- *               Oliver Kamphenkel (O.Kamphenkel@tu-bs.de)
-- *
-- * AUG/25/2000 : added support for 8, 16 and 32-bit Single-Address-Mode (K)2000
-- *               Oliver Kamphenkel (O.Kamphenkel@tu-bs.de)
-- *
-- * APR/18/2002 : added proper support for MCF5272 DMA controller.
-- *               Arthur Shipkowski (art@videon-central.com)
-- */
--
--#include <asm/coldfire.h>
--#include <asm/mcfsim.h>
--#include <asm/mcfdma.h>
--
--/*
-- * Set number of channels of DMA on ColdFire for different implementations.
-- */
--#if defined(CONFIG_M5249) || defined(CONFIG_M5307) || defined(CONFIG_M5407) || \
--	defined(CONFIG_M523x) || defined(CONFIG_M527x) || \
--	defined(CONFIG_M528x) || defined(CONFIG_M525x)
--
--#define MAX_M68K_DMA_CHANNELS 4
--#elif defined(CONFIG_M5272)
--#define MAX_M68K_DMA_CHANNELS 1
--#elif defined(CONFIG_M53xx)
--#define MAX_M68K_DMA_CHANNELS 0
--#else
--#define MAX_M68K_DMA_CHANNELS 2
--#endif
--
--extern unsigned int dma_base_addr[MAX_M68K_DMA_CHANNELS];
--extern unsigned int dma_device_address[MAX_M68K_DMA_CHANNELS];
--
--#if !defined(CONFIG_M5272)
--#define DMA_MODE_WRITE_BIT  0x01  /* Memory/IO to IO/Memory select */
--#define DMA_MODE_WORD_BIT   0x02  /* 8 or 16 bit transfers */
--#define DMA_MODE_LONG_BIT   0x04  /* or 32 bit transfers */
--#define DMA_MODE_SINGLE_BIT 0x08  /* single-address-mode */
--
--/* I/O to memory, 8 bits, mode */
--#define DMA_MODE_READ	            0
--/* memory to I/O, 8 bits, mode */
--#define DMA_MODE_WRITE	            1
--/* I/O to memory, 16 bits, mode */
--#define DMA_MODE_READ_WORD          2
--/* memory to I/O, 16 bits, mode */
--#define DMA_MODE_WRITE_WORD         3
--/* I/O to memory, 32 bits, mode */
--#define DMA_MODE_READ_LONG          4
--/* memory to I/O, 32 bits, mode */
--#define DMA_MODE_WRITE_LONG         5
--/* I/O to memory, 8 bits, single-address-mode */
--#define DMA_MODE_READ_SINGLE        8
--/* memory to I/O, 8 bits, single-address-mode */
--#define DMA_MODE_WRITE_SINGLE       9
--/* I/O to memory, 16 bits, single-address-mode */
--#define DMA_MODE_READ_WORD_SINGLE  10
--/* memory to I/O, 16 bits, single-address-mode */
--#define DMA_MODE_WRITE_WORD_SINGLE 11
--/* I/O to memory, 32 bits, single-address-mode */
--#define DMA_MODE_READ_LONG_SINGLE  12
--/* memory to I/O, 32 bits, single-address-mode */
--#define DMA_MODE_WRITE_LONG_SINGLE 13
--
--#else /* CONFIG_M5272 is defined */
--
--/* Source static-address mode */
--#define DMA_MODE_SRC_SA_BIT 0x01
--/* Two bits to select between all four modes */
--#define DMA_MODE_SSIZE_MASK 0x06
--/* Offset to shift bits in */
--#define DMA_MODE_SSIZE_OFF  0x01
--/* Destination static-address mode */
--#define DMA_MODE_DES_SA_BIT 0x10
--/* Two bits to select between all four modes */
--#define DMA_MODE_DSIZE_MASK 0x60
--/* Offset to shift bits in */
--#define DMA_MODE_DSIZE_OFF  0x05
--/* Size modifiers */
--#define DMA_MODE_SIZE_LONG  0x00
--#define DMA_MODE_SIZE_BYTE  0x01
--#define DMA_MODE_SIZE_WORD  0x02
--#define DMA_MODE_SIZE_LINE  0x03
--
--/*
-- * Aliases to help speed quick ports; these may be suboptimal, however. They
-- * do not include the SINGLE mode modifiers since the MCF5272 does not have a
-- * mode where the device is in control of its addressing.
-- */
--
--/* I/O to memory, 8 bits, mode */
--#define DMA_MODE_READ	              ((DMA_MODE_SIZE_BYTE << DMA_MODE_DSIZE_OFF) | (DMA_MODE_SIZE_BYTE << DMA_MODE_SSIZE_OFF) | DMA_SRC_SA_BIT)
--/* memory to I/O, 8 bits, mode */
--#define DMA_MODE_WRITE	            ((DMA_MODE_SIZE_BYTE << DMA_MODE_DSIZE_OFF) | (DMA_MODE_SIZE_BYTE << DMA_MODE_SSIZE_OFF) | DMA_DES_SA_BIT)
--/* I/O to memory, 16 bits, mode */
--#define DMA_MODE_READ_WORD	        ((DMA_MODE_SIZE_WORD << DMA_MODE_DSIZE_OFF) | (DMA_MODE_SIZE_WORD << DMA_MODE_SSIZE_OFF) | DMA_SRC_SA_BIT)
--/* memory to I/O, 16 bits, mode */
--#define DMA_MODE_WRITE_WORD         ((DMA_MODE_SIZE_WORD << DMA_MODE_DSIZE_OFF) | (DMA_MODE_SIZE_WORD << DMA_MODE_SSIZE_OFF) | DMA_DES_SA_BIT)
--/* I/O to memory, 32 bits, mode */
--#define DMA_MODE_READ_LONG	        ((DMA_MODE_SIZE_LONG << DMA_MODE_DSIZE_OFF) | (DMA_MODE_SIZE_LONG << DMA_MODE_SSIZE_OFF) | DMA_SRC_SA_BIT)
--/* memory to I/O, 32 bits, mode */
--#define DMA_MODE_WRITE_LONG         ((DMA_MODE_SIZE_LONG << DMA_MODE_DSIZE_OFF) | (DMA_MODE_SIZE_LONG << DMA_MODE_SSIZE_OFF) | DMA_DES_SA_BIT)
--
--#endif /* !defined(CONFIG_M5272) */
--
--#if !defined(CONFIG_M5272)
--/* enable/disable a specific DMA channel */
--static __inline__ void enable_dma(unsigned int dmanr)
--{
--  volatile unsigned short *dmawp;
--
--#ifdef DMA_DEBUG
--  printk("enable_dma(dmanr=%d)\n", dmanr);
--#endif
--
--  dmawp = (unsigned short *) dma_base_addr[dmanr];
--  dmawp[MCFDMA_DCR] |= MCFDMA_DCR_EEXT;
--}
--
--static __inline__ void disable_dma(unsigned int dmanr)
--{
--  volatile unsigned short *dmawp;
--  volatile unsigned char  *dmapb;
--
--#ifdef DMA_DEBUG
--  printk("disable_dma(dmanr=%d)\n", dmanr);
--#endif
--
--  dmawp = (unsigned short *) dma_base_addr[dmanr];
--  dmapb = (unsigned char *) dma_base_addr[dmanr];
--
--  /* Turn off external requests, and stop any DMA in progress */
--  dmawp[MCFDMA_DCR] &= ~MCFDMA_DCR_EEXT;
--  dmapb[MCFDMA_DSR] = MCFDMA_DSR_DONE;
--}
--
--/*
-- * Clear the 'DMA Pointer Flip Flop'.
-- * Write 0 for LSB/MSB, 1 for MSB/LSB access.
-- * Use this once to initialize the FF to a known state.
-- * After that, keep track of it. :-)
-- * --- In order to do that, the DMA routines below should ---
-- * --- only be used while interrupts are disabled! ---
-- *
-- * This is a NOP for ColdFire. Provide a stub for compatibility.
-- */
--static __inline__ void clear_dma_ff(unsigned int dmanr)
--{
--}
--
--/* set mode (above) for a specific DMA channel */
--static __inline__ void set_dma_mode(unsigned int dmanr, char mode)
--{
--
--  volatile unsigned char  *dmabp;
--  volatile unsigned short *dmawp;
--
--#ifdef DMA_DEBUG
--  printk("set_dma_mode(dmanr=%d,mode=%d)\n", dmanr, mode);
--#endif
--
--  dmabp = (unsigned char *) dma_base_addr[dmanr];
--  dmawp = (unsigned short *) dma_base_addr[dmanr];
--
--  /* Clear config errors */
--  dmabp[MCFDMA_DSR] = MCFDMA_DSR_DONE;
--
--  /* Set command register */
--  dmawp[MCFDMA_DCR] =
--    MCFDMA_DCR_INT |         /* Enable completion irq */
--    MCFDMA_DCR_CS |          /* Force one xfer per request */
--    MCFDMA_DCR_AA |          /* Enable auto alignment */
--    /* single-address-mode */
--    ((mode & DMA_MODE_SINGLE_BIT) ? MCFDMA_DCR_SAA : 0) |
--    /* sets s_rw (-> r/w) high if Memory to I/0 */
--    ((mode & DMA_MODE_WRITE_BIT) ? MCFDMA_DCR_S_RW : 0) |
--    /* Memory to I/O or I/O to Memory */
--    ((mode & DMA_MODE_WRITE_BIT) ? MCFDMA_DCR_SINC : MCFDMA_DCR_DINC) |
--    /* 32 bit, 16 bit or 8 bit transfers */
--    ((mode & DMA_MODE_WORD_BIT)  ? MCFDMA_DCR_SSIZE_WORD :
--     ((mode & DMA_MODE_LONG_BIT) ? MCFDMA_DCR_SSIZE_LONG :
--                                   MCFDMA_DCR_SSIZE_BYTE)) |
--    ((mode & DMA_MODE_WORD_BIT)  ? MCFDMA_DCR_DSIZE_WORD :
--     ((mode & DMA_MODE_LONG_BIT) ? MCFDMA_DCR_DSIZE_LONG :
--                                   MCFDMA_DCR_DSIZE_BYTE));
--
--#ifdef DEBUG_DMA
--  printk("%s(%d): dmanr=%d DSR[%x]=%x DCR[%x]=%x\n", __FILE__, __LINE__,
--         dmanr, (int) &dmabp[MCFDMA_DSR], dmabp[MCFDMA_DSR],
--	 (int) &dmawp[MCFDMA_DCR], dmawp[MCFDMA_DCR]);
--#endif
--}
--
--/* Set transfer address for specific DMA channel */
--static __inline__ void set_dma_addr(unsigned int dmanr, unsigned int a)
--{
--  volatile unsigned short *dmawp;
--  volatile unsigned int   *dmalp;
--
--#ifdef DMA_DEBUG
--  printk("set_dma_addr(dmanr=%d,a=%x)\n", dmanr, a);
--#endif
--
--  dmawp = (unsigned short *) dma_base_addr[dmanr];
--  dmalp = (unsigned int *) dma_base_addr[dmanr];
--
--  /* Determine which address registers are used for memory/device accesses */
--  if (dmawp[MCFDMA_DCR] & MCFDMA_DCR_SINC) {
--    /* Source incrementing, must be memory */
--    dmalp[MCFDMA_SAR] = a;
--    /* Set dest address, must be device */
--    dmalp[MCFDMA_DAR] = dma_device_address[dmanr];
--  } else {
--    /* Destination incrementing, must be memory */
--    dmalp[MCFDMA_DAR] = a;
--    /* Set source address, must be device */
--    dmalp[MCFDMA_SAR] = dma_device_address[dmanr];
--  }
--
--#ifdef DEBUG_DMA
--  printk("%s(%d): dmanr=%d DCR[%x]=%x SAR[%x]=%08x DAR[%x]=%08x\n",
--	__FILE__, __LINE__, dmanr, (int) &dmawp[MCFDMA_DCR], dmawp[MCFDMA_DCR],
--	(int) &dmalp[MCFDMA_SAR], dmalp[MCFDMA_SAR],
--	(int) &dmalp[MCFDMA_DAR], dmalp[MCFDMA_DAR]);
--#endif
--}
--
--/*
-- * Specific for Coldfire - sets device address.
-- * Should be called after the mode set call, and before set DMA address.
-- */
--static __inline__ void set_dma_device_addr(unsigned int dmanr, unsigned int a)
--{
--#ifdef DMA_DEBUG
--  printk("set_dma_device_addr(dmanr=%d,a=%x)\n", dmanr, a);
--#endif
--
--  dma_device_address[dmanr] = a;
--}
--
--/*
-- * NOTE 2: "count" represents _bytes_.
-- */
--static __inline__ void set_dma_count(unsigned int dmanr, unsigned int count)
--{
--  volatile unsigned short *dmawp;
--
--#ifdef DMA_DEBUG
--  printk("set_dma_count(dmanr=%d,count=%d)\n", dmanr, count);
--#endif
--
--  dmawp = (unsigned short *) dma_base_addr[dmanr];
--  dmawp[MCFDMA_BCR] = (unsigned short)count;
--}
--
--/*
-- * Get DMA residue count. After a DMA transfer, this
-- * should return zero. Reading this while a DMA transfer is
-- * still in progress will return unpredictable results.
-- * Otherwise, it returns the number of _bytes_ left to transfer.
-- */
--static __inline__ int get_dma_residue(unsigned int dmanr)
--{
--  volatile unsigned short *dmawp;
--  unsigned short count;
--
--#ifdef DMA_DEBUG
--  printk("get_dma_residue(dmanr=%d)\n", dmanr);
--#endif
--
--  dmawp = (unsigned short *) dma_base_addr[dmanr];
--  count = dmawp[MCFDMA_BCR];
--  return((int) count);
--}
--#else /* CONFIG_M5272 is defined */
--
--/*
-- * The MCF5272 DMA controller is very different than the controller defined above
-- * in terms of register mapping.  For instance, with the exception of the 16-bit
-- * interrupt register (IRQ#85, for reference), all of the registers are 32-bit.
-- *
-- * The big difference, however, is the lack of device-requested DMA.  All modes
-- * are dual address transfer, and there is no 'device' setup or direction bit.
-- * You can DMA between a device and memory, between memory and memory, or even between
-- * two devices directly, with any combination of incrementing and non-incrementing
-- * addresses you choose.  This puts a crimp in distinguishing between the 'device
-- * address' set up by set_dma_device_addr.
-- *
-- * Therefore, there are two options.  One is to use set_dma_addr and set_dma_device_addr,
-- * which will act exactly as above in -- it will look to see if the source is set to
-- * autoincrement, and if so it will make the source use the set_dma_addr value and the
-- * destination the set_dma_device_addr value.  Otherwise the source will be set to the
-- * set_dma_device_addr value and the destination will get the set_dma_addr value.
-- *
-- * The other is to use the provided set_dma_src_addr and set_dma_dest_addr functions
-- * and make it explicit.  Depending on what you're doing, one of these two should work
-- * for you, but don't mix them in the same transfer setup.
-- */
--
--/* enable/disable a specific DMA channel */
--static __inline__ void enable_dma(unsigned int dmanr)
--{
--  volatile unsigned int  *dmalp;
--
--#ifdef DMA_DEBUG
--  printk("enable_dma(dmanr=%d)\n", dmanr);
--#endif
--
--  dmalp = (unsigned int *) dma_base_addr[dmanr];
--  dmalp[MCFDMA_DMR] |= MCFDMA_DMR_EN;
--}
--
--static __inline__ void disable_dma(unsigned int dmanr)
--{
--  volatile unsigned int   *dmalp;
--
--#ifdef DMA_DEBUG
--  printk("disable_dma(dmanr=%d)\n", dmanr);
--#endif
--
--  dmalp = (unsigned int *) dma_base_addr[dmanr];
--
--  /* Turn off external requests, and stop any DMA in progress */
--  dmalp[MCFDMA_DMR] &= ~MCFDMA_DMR_EN;
--  dmalp[MCFDMA_DMR] |= MCFDMA_DMR_RESET;
--}
--
--/*
-- * Clear the 'DMA Pointer Flip Flop'.
-- * Write 0 for LSB/MSB, 1 for MSB/LSB access.
-- * Use this once to initialize the FF to a known state.
-- * After that, keep track of it. :-)
-- * --- In order to do that, the DMA routines below should ---
-- * --- only be used while interrupts are disabled! ---
-- *
-- * This is a NOP for ColdFire. Provide a stub for compatibility.
-- */
--static __inline__ void clear_dma_ff(unsigned int dmanr)
--{
--}
--
--/* set mode (above) for a specific DMA channel */
--static __inline__ void set_dma_mode(unsigned int dmanr, char mode)
--{
--
--  volatile unsigned int   *dmalp;
--  volatile unsigned short *dmawp;
--
--#ifdef DMA_DEBUG
--  printk("set_dma_mode(dmanr=%d,mode=%d)\n", dmanr, mode);
--#endif
--  dmalp = (unsigned int *) dma_base_addr[dmanr];
--  dmawp = (unsigned short *) dma_base_addr[dmanr];
--
--  /* Clear config errors */
--  dmalp[MCFDMA_DMR] |= MCFDMA_DMR_RESET;
--
--  /* Set command register */
--  dmalp[MCFDMA_DMR] =
--    MCFDMA_DMR_RQM_DUAL |         /* Mandatory Request Mode setting */
--    MCFDMA_DMR_DSTT_SD  |         /* Set up addressing types; set to supervisor-data. */
--    MCFDMA_DMR_SRCT_SD  |         /* Set up addressing types; set to supervisor-data. */
--    /* source static-address-mode */
--    ((mode & DMA_MODE_SRC_SA_BIT) ? MCFDMA_DMR_SRCM_SA : MCFDMA_DMR_SRCM_IA) |
--    /* dest static-address-mode */
--    ((mode & DMA_MODE_DES_SA_BIT) ? MCFDMA_DMR_DSTM_SA : MCFDMA_DMR_DSTM_IA) |
--    /* burst, 32 bit, 16 bit or 8 bit transfers are separately configurable on the MCF5272 */
--    (((mode & DMA_MODE_SSIZE_MASK) >> DMA_MODE_SSIZE_OFF) << MCFDMA_DMR_DSTS_OFF) |
--    (((mode & DMA_MODE_SSIZE_MASK) >> DMA_MODE_SSIZE_OFF) << MCFDMA_DMR_SRCS_OFF);
--
--  dmawp[MCFDMA_DIR] |= MCFDMA_DIR_ASCEN;   /* Enable completion interrupts */
--
--#ifdef DEBUG_DMA
--  printk("%s(%d): dmanr=%d DMR[%x]=%x DIR[%x]=%x\n", __FILE__, __LINE__,
--	 dmanr, (int) &dmalp[MCFDMA_DMR], dmalp[MCFDMA_DMR],
--	 (int) &dmawp[MCFDMA_DIR], dmawp[MCFDMA_DIR]);
--#endif
--}
--
--/* Set transfer address for specific DMA channel */
--static __inline__ void set_dma_addr(unsigned int dmanr, unsigned int a)
--{
--  volatile unsigned int   *dmalp;
--
--#ifdef DMA_DEBUG
--  printk("set_dma_addr(dmanr=%d,a=%x)\n", dmanr, a);
--#endif
--
--  dmalp = (unsigned int *) dma_base_addr[dmanr];
--
--  /* Determine which address registers are used for memory/device accesses */
--  if (dmalp[MCFDMA_DMR] & MCFDMA_DMR_SRCM) {
--    /* Source incrementing, must be memory */
--    dmalp[MCFDMA_DSAR] = a;
--    /* Set dest address, must be device */
--    dmalp[MCFDMA_DDAR] = dma_device_address[dmanr];
--  } else {
--    /* Destination incrementing, must be memory */
--    dmalp[MCFDMA_DDAR] = a;
--    /* Set source address, must be device */
--    dmalp[MCFDMA_DSAR] = dma_device_address[dmanr];
--  }
--
--#ifdef DEBUG_DMA
--  printk("%s(%d): dmanr=%d DMR[%x]=%x SAR[%x]=%08x DAR[%x]=%08x\n",
--	__FILE__, __LINE__, dmanr, (int) &dmalp[MCFDMA_DMR], dmalp[MCFDMA_DMR],
--	(int) &dmalp[MCFDMA_DSAR], dmalp[MCFDMA_DSAR],
--	(int) &dmalp[MCFDMA_DDAR], dmalp[MCFDMA_DDAR]);
--#endif
--}
--
--/*
-- * Specific for Coldfire - sets device address.
-- * Should be called after the mode set call, and before set DMA address.
-- */
--static __inline__ void set_dma_device_addr(unsigned int dmanr, unsigned int a)
--{
--#ifdef DMA_DEBUG
--  printk("set_dma_device_addr(dmanr=%d,a=%x)\n", dmanr, a);
--#endif
--
--  dma_device_address[dmanr] = a;
--}
--
--/*
-- * NOTE 2: "count" represents _bytes_.
-- *
-- * NOTE 3: While a 32-bit register, "count" is only a maximum 24-bit value.
-- */
--static __inline__ void set_dma_count(unsigned int dmanr, unsigned int count)
--{
--  volatile unsigned int *dmalp;
--
--#ifdef DMA_DEBUG
--  printk("set_dma_count(dmanr=%d,count=%d)\n", dmanr, count);
--#endif
--
--  dmalp = (unsigned int *) dma_base_addr[dmanr];
--  dmalp[MCFDMA_DBCR] = count;
--}
--
--/*
-- * Get DMA residue count. After a DMA transfer, this
-- * should return zero. Reading this while a DMA transfer is
-- * still in progress will return unpredictable results.
-- * Otherwise, it returns the number of _bytes_ left to transfer.
-- */
--static __inline__ int get_dma_residue(unsigned int dmanr)
--{
--  volatile unsigned int *dmalp;
--  unsigned int count;
--
--#ifdef DMA_DEBUG
--  printk("get_dma_residue(dmanr=%d)\n", dmanr);
--#endif
--
--  dmalp = (unsigned int *) dma_base_addr[dmanr];
--  count = dmalp[MCFDMA_DBCR];
--  return(count);
--}
--
--#endif /* !defined(CONFIG_M5272) */
--#endif /* CONFIG_COLDFIRE */
--
- /* it's useless on the m68k, but unfortunately needed by the new
-    bootmem allocator (but this should do it for this) */
- #define MAX_DMA_ADDRESS PAGE_OFFSET
- 
--#define MAX_DMA_CHANNELS 8
--
--extern int request_dma(unsigned int dmanr, const char * device_id);	/* reserve a DMA channel */
--extern void free_dma(unsigned int dmanr);	/* release it again */
--
- #ifdef CONFIG_PCI
- extern int isa_dma_bridge_buggy;
- #else
-diff --git a/arch/m68k/mm/motorola.c b/arch/m68k/mm/motorola.c
-index ecbe948f4c1a..df7f797c908a 100644
---- a/arch/m68k/mm/motorola.c
-+++ b/arch/m68k/mm/motorola.c
-@@ -27,7 +27,6 @@
- #include <asm/pgalloc.h>
- #include <asm/machdep.h>
- #include <asm/io.h>
--#include <asm/dma.h>
- #ifdef CONFIG_ATARI
- #include <asm/atari_stram.h>
- #endif
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index af6c3c329076..d6144978e32d 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -508,7 +508,7 @@ config MMC_OMAP_HS
- 
- config MMC_WBSD
- 	tristate "Winbond W83L51xD SD/MMC Card Interface support"
--	depends on ISA_DMA_API && !M68K
-+	depends on ISA_DMA_API
- 	help
- 	  This selects the Winbond(R) W83L51xD Secure digital and
- 	  Multimedia card Interface.
-diff --git a/sound/core/Makefile b/sound/core/Makefile
-index 350d704ced98..2762f03d9b7b 100644
---- a/sound/core/Makefile
-+++ b/sound/core/Makefile
-@@ -9,9 +9,7 @@ ifneq ($(CONFIG_SND_PROC_FS),)
- snd-y += info.o
- snd-$(CONFIG_SND_OSSEMUL) += info_oss.o
- endif
--ifneq ($(CONFIG_M68K),y)
- snd-$(CONFIG_ISA_DMA_API) += isadma.o
--endif
- snd-$(CONFIG_SND_OSSEMUL) += sound_oss.o
- snd-$(CONFIG_SND_VMASTER) += vmaster.o
- snd-$(CONFIG_SND_JACK)	  += ctljack.o jack.o
-diff --git a/sound/isa/Kconfig b/sound/isa/Kconfig
-index 570b88e0b201..6ffa48dd5983 100644
---- a/sound/isa/Kconfig
-+++ b/sound/isa/Kconfig
-@@ -22,7 +22,7 @@ config SND_SB16_DSP
- menuconfig SND_ISA
- 	bool "ISA sound devices"
- 	depends on ISA || COMPILE_TEST
--	depends on ISA_DMA_API && !M68K
-+	depends on ISA_DMA_API
- 	default y
- 	help
- 	  Support for sound devices connected via the ISA bus.
--- 
-2.29.2
 
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L3;
+> +		break;
+> +	/*
+> +	 * System cache is assumed to be L3
+> +	 */
+> +	case ARM_SPE_NV_SYS_CACHE:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L3;
+> +		data_src->mem_snoop = PERF_MEM_SNOOP_HIT;
+> +		break;
+> +	/*
+> +	 * We don't know what level it hit in, except it came from the other
+> +	 * socket
+> +	 */
+> +	case ARM_SPE_NV_REMOTE:
+> +		data_src->mem_snoop = PERF_MEM_SNOOP_HIT;
+> +		data_src->mem_remote = PERF_MEM_REMOTE_REMOTE;
+> +		data_src->mem_snoop = PERF_MEM_SNOOP_NA;
+> +		break;
+> +	case ARM_SPE_NV_DRAM:
+> +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_RAM;
+> +		data_src->mem_snoop = PERF_MEM_SNOOP_NONE;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +}
+>
+> +static void arm_spe__synth_data_source_generic(const struct arm_spe_record *record,
+> +						union perf_mem_data_src *data_src)
+> +{
+>  	if (record->type & (ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS)) {
+> -		data_src.mem_lvl = PERF_MEM_LVL_L3;
+> +		data_src->mem_lvl = PERF_MEM_LVL_L3;
+>  
+>  		if (record->type & ARM_SPE_LLC_MISS)
+> -			data_src.mem_lvl |= PERF_MEM_LVL_MISS;
+> +			data_src->mem_lvl |= PERF_MEM_LVL_MISS;
+>  		else
+> -			data_src.mem_lvl |= PERF_MEM_LVL_HIT;
+> +			data_src->mem_lvl |= PERF_MEM_LVL_HIT;
+>  	} else if (record->type & (ARM_SPE_L1D_ACCESS | ARM_SPE_L1D_MISS)) {
+> -		data_src.mem_lvl = PERF_MEM_LVL_L1;
+> +		data_src->mem_lvl = PERF_MEM_LVL_L1;
+>  
+>  		if (record->type & ARM_SPE_L1D_MISS)
+> -			data_src.mem_lvl |= PERF_MEM_LVL_MISS;
+> +			data_src->mem_lvl |= PERF_MEM_LVL_MISS;
+>  		else
+> -			data_src.mem_lvl |= PERF_MEM_LVL_HIT;
+> +			data_src->mem_lvl |= PERF_MEM_LVL_HIT;
+>  	}
+>  
+>  	if (record->type & ARM_SPE_REMOTE_ACCESS)
+> -		data_src.mem_lvl |= PERF_MEM_LVL_REM_CCE1;
+> +		data_src->mem_lvl |= PERF_MEM_LVL_REM_CCE1;
+> +}
+> +
+> +static u64 arm_spe__synth_data_source(const struct arm_spe_record *record, u64 midr)
+> +{
+> +	union perf_mem_data_src	data_src = { 0 };
+> +	bool is_neoverse = is_midr_in_range(midr, neoverse_spe);
+> +
+> +	if (record->op & ARM_SPE_LD)
+> +		data_src.mem_op = PERF_MEM_OP_LOAD;
+> +	else
+> +		data_src.mem_op = PERF_MEM_OP_STORE;
+> +
+> +	if (is_neoverse)
+> +		arm_spe__synth_data_source_neoverse(record, &data_src);
+> +	else
+> +		arm_spe__synth_data_source_generic(record, &data_src);
+>  
+>  	if (record->type & (ARM_SPE_TLB_ACCESS | ARM_SPE_TLB_MISS)) {
+>  		data_src.mem_dtlb = PERF_MEM_TLB_WK;
+> @@ -446,7 +542,7 @@ static int arm_spe_sample(struct arm_spe_queue *speq)
+>  	u64 data_src;
+>  	int err;
+>  
+> -	data_src = arm_spe__synth_data_source(record);
+> +	data_src = arm_spe__synth_data_source(record, spe->midr);
+>  
+>  	if (spe->sample_flc) {
+>  		if (record->type & ARM_SPE_L1D_MISS) {
+> @@ -1183,6 +1279,8 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
+>  	struct perf_record_auxtrace_info *auxtrace_info = &event->auxtrace_info;
+>  	size_t min_sz = sizeof(u64) * ARM_SPE_AUXTRACE_PRIV_MAX;
+>  	struct perf_record_time_conv *tc = &session->time_conv;
+> +	const char *cpuid = perf_env__cpuid(session->evlist->env);
+> +	u64 midr = strtol(cpuid, NULL, 16);
+>  	struct arm_spe *spe;
+>  	int err;
+>  
+> @@ -1202,6 +1300,7 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
+>  	spe->machine = &session->machines.host; /* No kvm support */
+>  	spe->auxtrace_type = auxtrace_info->type;
+>  	spe->pmu_type = auxtrace_info->priv[ARM_SPE_PMU_TYPE];
+> +	spe->midr = midr;
+
+Except the redundant line, the patch is good for me and I tested it at
+my side:
+
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Tested-by: Leo Yan <leo.yan@linaro.org>
+
+>  
+>  	spe->timeless_decoding = arm_spe__is_timeless_decoding(spe);
+>  
+> -- 
+> 2.32.0
+> 

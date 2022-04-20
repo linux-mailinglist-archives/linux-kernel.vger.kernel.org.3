@@ -2,97 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A759750840B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C372E50840F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376821AbiDTIx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
+        id S1376946AbiDTIyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376899AbiDTIxY (ORCPT
+        with ESMTP id S1376828AbiDTIyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:53:24 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F195A33EBE;
-        Wed, 20 Apr 2022 01:50:36 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KjvW21g3Fz1J9sP;
-        Wed, 20 Apr 2022 16:49:50 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+        Wed, 20 Apr 2022 04:54:18 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52231CFD5;
+        Wed, 20 Apr 2022 01:51:32 -0700 (PDT)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KjvVC3YPyz688Ky;
+        Wed, 20 Apr 2022 16:49:07 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 20 Apr 2022 16:50:34 +0800
-Received: from [10.174.176.52] (10.174.176.52) by
- kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 20 Apr 2022 16:50:34 +0800
-Message-ID: <a3300d4d-6428-8157-b2dc-eaeb9f249858@huawei.com>
-Date:   Wed, 20 Apr 2022 16:50:33 +0800
+ 15.1.2375.24; Wed, 20 Apr 2022 10:51:29 +0200
+Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 20 Apr
+ 2022 09:51:28 +0100
+Date:   Wed, 20 Apr 2022 09:51:27 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 3/3] dt-bindings: iio: accel: add dt-binding schema
+ for msa311 accel driver
+Message-ID: <20220420095127.000059d4@Huawei.com>
+In-Reply-To: <20220419154555.24191-4-ddrokosov@sberdevices.ru>
+References: <20220419154555.24191-1-ddrokosov@sberdevices.ru>
+        <20220419154555.24191-4-ddrokosov@sberdevices.ru>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
-Subject: Re: [PATCH -next 1/2] nfs: nfs{,4}_file_flush should consume
- writeback error
-To:     Trond Myklebust <trondmy@hammerspace.com>,
-        "anna@kernel.org" <anna@kernel.org>,
-        "smayhew@redhat.com" <smayhew@redhat.com>
-CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
-        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
-References: <20220305124636.2002383-1-chenxiaosong2@huawei.com>
- <20220305124636.2002383-2-chenxiaosong2@huawei.com>
- <ca81e90788eabbf6b5df5db7ea407199a6a3aa04.camel@hammerspace.com>
- <5666cb64-c9e4-0549-6ddb-cfc877c9c071@huawei.com>
- <eab4bbb565a50bd09c2dbd3522177237fde2fad9.camel@hammerspace.com>
- <037054f5ac2cd13e59db14b12f4ab430f1ddef5d.camel@hammerspace.com>
- <4a8e21fb-d8bf-5428-67e5-41c47529e641@huawei.com>
- <0528423f710cd612262666b1533763943c717273.camel@hammerspace.com>
- <ccd017a4-31f1-297f-b2e2-e71eb16f1159@huawei.com>
- <9fc83915a24d7b65d743910dd0f0e5f3d0373596.camel@hammerspace.com>
-In-Reply-To: <9fc83915a24d7b65d743910dd0f0e5f3d0373596.camel@hammerspace.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.52]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600015.china.huawei.com (7.193.23.52)
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.41]
+X-ClientProxiedBy: lhreml717-chm.china.huawei.com (10.201.108.68) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/4/12 22:27, Trond Myklebust 写道:
+On Tue, 19 Apr 2022 15:45:58 +0000
+Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru> wrote:
 
->
-> It will clear ENOSPC, EDQUOT and EFBIG. It should not clear other
-> errors that are not supposed to be reported by write().
+> Introduce devicetree binding json-schema for MSA311 tri-axial,
+> low-g accelerometer driver.
 > 
-> As I keep repeating, that is _documented behaviour_!
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Hi Dmitry and welcome to IIO.
+
+Sign off generally matches the From: of the email.
+Makes it easier for scripts to check than having different name forms.
+
+> ---
+>  .../bindings/iio/accel/memsensing,msa311.yaml      | 64 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
+> new file mode 100644
+> index 00000000..3e4660f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/iio/accel/memsensing,msa311.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: MEMSensing digital 3-Axis accelerometer
+> +
+> +maintainers:
+> +  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> +
+> +description: |
+> +  MSA311 is a tri-axial, low-g accelerometer with I2C digital output for
+> +  sensitivity consumer applications. It has dynamical user selectable full
+> +  scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measurements
+> +  with output data rates from 1Hz to 1000Hz.
+> +  Datasheet can be found at following URL
+> +  https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
+> +
+> +properties:
+> +  compatible:
+> +    const: memsensing,msa311
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: I2C registers address
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description: optional I2C int pin can be freely mapped to specific func
+> +
+> +  interrupt-names:
+> +    const: irq
 
-Hi Trond:
+For a single IRQ giving it a name isn't that useful so I would drop this.
 
-You may mean that write(2) manpage described:
 
-> Since Linux 4.13, errors from write-back come with a promise that
-> they may be reported by subsequent.  write(2) requests, and will be
-> reported by a subsequent fsync(2) (whether or not they were also
-> reported by write(2)).
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
 
-The manpage mentioned that "reported by a subsequent fsync(2)", your 
-patch[1] clear the wb err on _async_ write(), and wb err will _not_ be 
-reported by subsequent fsync(2), is it documented behaviour?
+Why have this?
 
-All other filesystems will _not_ clear any wb err on _async_ write().
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c0 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        msa311: msa311@62 {
+Generic naming required.
+           accelerometer@62 {
 
-[1] 
-https://patchwork.kernel.org/project/linux-nfs/patch/20220411213346.762302-4-trondmy@kernel.org/
+> +            compatible = "memsensing,msa311";
+> +            reg = <0x62>;
+> +            interrupt-parent = <&gpio_intc>;
+> +            interrupts = <29 IRQ_TYPE_LEVEL_HIGH>;
+> +            interrupt-names = "irq";
+> +            status = "okay";
 
+We don't often have status in the examples. 
+
+
+Otherwise looks good to me.
+
+Thanks,
+
+Jonathan
+
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c75be17..4227914 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12482,6 +12482,7 @@ MEMSENSING MICROSYSTEMS MSA311 ACCELEROMETER DRIVER
+>  M:	Dmitry Rokosov <ddrokosov@sberdevices.ru>
+>  L:	linux-iio@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
+>  F:	drivers/iio/accel/msa311.c
+>  
+>  MEN A21 WATCHDOG DRIVER
 

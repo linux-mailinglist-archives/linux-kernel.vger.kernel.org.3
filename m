@@ -2,115 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B914A5085B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD41A5085C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377592AbiDTKXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
+        id S1377640AbiDTKXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377530AbiDTKXV (ORCPT
+        with ESMTP id S1377612AbiDTKXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:23:21 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C3A1D0F3;
-        Wed, 20 Apr 2022 03:20:33 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23KAKPWT008426;
-        Wed, 20 Apr 2022 05:20:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650450025;
-        bh=WQz1NXqH44zqQrsGYhOZZwpDPw6pIXS8bNm5c+6Gswg=;
-        h=From:To:CC:Subject:Date;
-        b=ERHtbJypMGZGDVRQh/XWzhjbTclYMIQU4Gpyidl6lY+v8OvjiySyT3+HXHXujtThY
-         X/EIknPBxFig8l9xqh2Aw9NV6sva2+fu3in+OaXa4+Dyy4Ak3CoNoIkyMVwEwagzeL
-         lU4JJ/Q1V91SkEhUXalp5sMldQhtblH9muVeY2lM=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23KAKP10018050
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 20 Apr 2022 05:20:25 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 20
- Apr 2022 05:20:25 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 20 Apr 2022 05:20:25 -0500
-Received: from pratyush-4F-325.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23KAKMq7033245;
-        Wed, 20 Apr 2022 05:20:23 -0500
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Pratyush Yadav <p.yadav@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Takahiro Kuwano <tkuw584924@gmail.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] spi: spi-mem: check if data buffers are on stack
-Date:   Wed, 20 Apr 2022 15:50:22 +0530
-Message-ID: <20220420102022.3310970-1-p.yadav@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 20 Apr 2022 06:23:45 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59C722BD9;
+        Wed, 20 Apr 2022 03:20:57 -0700 (PDT)
+X-UUID: e87945b3112d4a4f8bb22443e10d11b1-20220420
+X-UUID: e87945b3112d4a4f8bb22443e10d11b1-20220420
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 358565788; Wed, 20 Apr 2022 18:20:50 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 20 Apr 2022 18:20:48 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 20 Apr
+ 2022 18:20:48 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 20 Apr 2022 18:20:48 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Subject: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
+Date:   Wed, 20 Apr 2022 18:20:37 +0800
+Message-ID: <20220420102044.10832-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The buffers passed in the data phase must be DMA-able. Programmers often
-don't realise this requirement and pass in buffers that reside on the
-stack. This can be hard to spot when reviewing code. Reject ops if their
-data buffer is on the stack to avoid this.
+The Smart Voltage Scaling(SVS) engine is a piece of hardware
+which calculates suitable SVS bank voltages to OPP voltage table.
+Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+when receiving OPP_EVENT_ADJUST_VOLTAGE.
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Acked-by: Mark Brown <broonie@kernel.org>
----
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
 
-Changes in v2:
-- Include task_stack.h. It might not get included indirectly on some
-  platforms and can cause build failures.
-- Add a WARN_ON_ONCE() for debuggability.
-- Add Mark's Ack.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
 
- drivers/spi/spi-mem.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Change since v23:
+- Change wording from "Mediatek" to "MediaTek" (uppercase T) in mtk-svs.yaml.
+- Use cpuidle_pause_and_lock() to prevent system from entering cpuidle instead of applying pm_qos APIs.
+- Add kfree() at the end of svs_probe() when encountering probe fail.
+- Change MODULE_LICENSE from "GPL v2" to "GPL".
+- Add nvmem_cell_put() in error handling when nvmem_cell_read() encounters fail.
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index 7d7091aa0c22..e8de4f5017cd 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -10,6 +10,7 @@
- #include <linux/pm_runtime.h>
- #include <linux/spi/spi.h>
- #include <linux/spi/spi-mem.h>
-+#include <linux/sched/task_stack.h>
+Roger Lu (7):
+  [v24,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v24,2/7] arm64: dts: mt8183: add svs device information
+  [v24,3/7] soc: mediatek: SVS: introduce MTK SVS engine
+  [v24,4/7] soc: mediatek: SVS: add monitor mode
+  [v24,5/7] soc: mediatek: SVS: add debug commands
+  [v24,6/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v24,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
 
- #include "internals.h"
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   91 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   16 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2403 +++++++++++++++++
+ 5 files changed, 2521 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
 
-@@ -211,6 +212,15 @@ static int spi_mem_check_op(const struct spi_mem_op *op)
- 	    !spi_mem_buswidth_is_valid(op->data.buswidth))
- 		return -EINVAL;
-
-+	/* Buffers must be DMA-able. */
-+	if (WARN_ON_ONCE(op->data.dir == SPI_MEM_DATA_IN &&
-+			 object_is_on_stack(op->data.buf.in)))
-+		return -EINVAL;
-+
-+	if (WARN_ON_ONCE(op->data.dir == SPI_MEM_DATA_OUT &&
-+			 object_is_on_stack(op->data.buf.out)))
-+		return -EINVAL;
-+
- 	return 0;
- }
-
---
-2.34.1
 

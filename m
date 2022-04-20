@@ -2,132 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF545089F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88ACC50892E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379284AbiDTOEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S1378975AbiDTN0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379282AbiDTOEF (ORCPT
+        with ESMTP id S1356684AbiDTN03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 10:04:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B730B3ED0B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650463277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6dWgrGMk58Q4Et8ectVGURfERYkJuTF84oKkc2EBf/s=;
-        b=NuYCfMFIqyMDZnwDzlli4nR25/OoeDWMWQk0skcGfm8ZnhsB1dbwE/0MkwIAbqQZR0CTsD
-        CZI6vSHEc9cHDs6Jt76QCZv7zvVLfsagVys6lMIOEih0la8irVbGZJ61qMPCLn99uXmvN/
-        kG0d/qHclE5EkEZuQ+aRoSNotw1herY=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-j9nBVWE6N_OtYFd5kZL6LQ-1; Wed, 20 Apr 2022 10:01:16 -0400
-X-MC-Unique: j9nBVWE6N_OtYFd5kZL6LQ-1
-Received: by mail-io1-f69.google.com with SMTP id i19-20020a5d9353000000b006495ab76af6so1306052ioo.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:01:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6dWgrGMk58Q4Et8ectVGURfERYkJuTF84oKkc2EBf/s=;
-        b=UmPTWrkTDTByK1DvcrzJGtMgJN7Nx4f4dtJMemaABayNvwIJ1R+ePQtVAcQvHDjjFt
-         jBW4c7pR1e3BYrFzdcvNcRmi8W3SpQHQAe3hnQhxbP6vHn7OypO7OfBET6lfsnN5rjb2
-         czujZyYQgfKpqJoxBbzJVZVHjwFh3UPZo16qi2zssbbKwK0KdGSMO3L5h0tjazTCuttU
-         CHaavjQ0Kg/xL2FIXDIemZkje0/87cSPpfjZHVh4FJi/xm8CUhNgjUACW9X1Q/W/LtEy
-         r9NpsB2TYOX+aBoZY/ri5I2oCFJ/6Sss2rK3q5phtT2sp7oC3I223iIJGudZsAqwFe33
-         5k4A==
-X-Gm-Message-State: AOAM5308Q7RPP6VuVxpTuB4c41ll2IFIS5OnX9XDtR1ftvxhP3tniE0J
-        Vf4obKXQh8zqoJVCSLTyrWwc0Sj33ADcgJQOA6+BlaSsWUcrm5TlEi3+Yt3P++QwgZ9B/bEdzZ0
-        DbyK0xHI24zioyYe6kxt0JTJa
-X-Received: by 2002:a05:6638:380e:b0:32a:777c:607f with SMTP id i14-20020a056638380e00b0032a777c607fmr3733036jav.47.1650463275404;
-        Wed, 20 Apr 2022 07:01:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyrbSBHT7Qold9RT6iIj368nVCg7wwcQRqm4XTm0xUjEZXcAj1xlH0C5Yv3q6FhP2UXQNLn2Q==
-X-Received: by 2002:a05:6638:380e:b0:32a:777c:607f with SMTP id i14-20020a056638380e00b0032a777c607fmr3733020jav.47.1650463275188;
-        Wed, 20 Apr 2022 07:01:15 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id m8-20020a92cac8000000b002ca9d826c3fsm10823497ilq.34.2022.04.20.07.01.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 07:01:14 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 10:01:13 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com
-Subject: Re: [PATCH] kvm: selftests: do not use bitfields larger than 32-bits
- for PTEs
-Message-ID: <YmASKf+pMma+Qf0O@xz-m1.local>
-References: <20220420103624.1143824-1-pbonzini@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220420103624.1143824-1-pbonzini@redhat.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 09:26:29 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E511442A2D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:23:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650461023; x=1681997023;
+  h=from:to:cc:subject:date:message-id;
+  bh=bFw9jBOeodp0zCARNf/d8JtgIIyNELjWMG7lzca9XA4=;
+  b=krgLlgf1DnoLEA8dnR81xc45UXPseGoJzQlm5+A79Nh37YIyM6t2mRKj
+   IsIJgq3GKVDVlPQeXBfHGV3F3sl4KyxjY66LCMs1IcUpR71jkJPfoZ7Ck
+   KAWFswth+RAC/im3UytMG6Vir5QTOU/pJ4GAhAB7HyD3Qieu28AZ4WnWn
+   t9l+3xbj+rWsOQoiIgsZ+bKI8ieve3hZBUali5n69AOPPkoYeA7nz8Tth
+   xXmusVNfrwoGyFJY2SZuGNJ8B1v9sgK0hXkq7ZlJGBB+hpqucvcqaqWNU
+   edI4HqEayyLlI5kTCcUr5l2vuwYDhLoiYt+JRdk/mDt3DnBqEhuQrXilA
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="244606005"
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="244606005"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 06:23:23 -0700
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="555191349"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.12])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 06:23:20 -0700
+From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        linux-mm@kvack.org (open list:HWPOISON MEMORY FAILURE HANDLING),
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH 1/1] x86/mm: Forbid the zero page once it has uncorrectable errors
+Date:   Wed, 20 Apr 2022 17:00:09 -0400
+Message-Id: <20220420210009.65666-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 06:36:24AM -0400, Paolo Bonzini wrote:
-> Red Hat's QE team reported test failure on access_tracking_perf_test:
-> 
-> Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
-> guest physical test memory offset: 0x3fffbffff000
-> 
-> Populating memory             : 0.684014577s
-> Writing to populated memory   : 0.006230175s
-> Reading from populated memory : 0.004557805s
-> ==== Test Assertion Failure ====
->   lib/kvm_util.c:1411: false
->   pid=125806 tid=125809 errno=4 - Interrupted system call
->      1  0x0000000000402f7c: addr_gpa2hva at kvm_util.c:1411
->      2   (inlined by) addr_gpa2hva at kvm_util.c:1405
->      3  0x0000000000401f52: lookup_pfn at access_tracking_perf_test.c:98
->      4   (inlined by) mark_vcpu_memory_idle at access_tracking_perf_test.c:152
->      5   (inlined by) vcpu_thread_main at access_tracking_perf_test.c:232
->      6  0x00007fefe9ff81ce: ?? ??:0
->      7  0x00007fefe9c64d82: ?? ??:0
->   No vm physical memory at 0xffbffff000
-> 
-> I can easily reproduce it with a Intel(R) Xeon(R) CPU E5-2630 with 46 bits
-> PA.
-> 
-> It turns out that the address translation for clearing idle page tracking
-> returned a wrong result; addr_gva2gpa()'s last step, which is based on
-> "pte[index[0]].pfn", did the calculation with 40 bits length and the
-> high 12 bits got truncated.  In above case the GPA address to be returned
-> should be 0x3fffbffff000 for GVA 0xc0000000, but it got truncated into
-> 0xffbffff000 and the subsequent gpa2hva lookup failed.
-> 
-> The width of operations on bit fields greater than 32-bit is
-> implementation defined, and differs between GCC (which uses the bitfield
-> precision) and clang (which uses 64-bit arithmetic), so this is a
-> potential minefield.  Remove the bit fields and using manual masking
-> instead.
-> 
-> Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2075036
-> Reported-by: Peter Xu <peterx@redhat.com>
+Accessing to the zero page with uncorrectable errors causes unexpected
+machine checks. So forbid the zero page from being used by user-space
+processes once it has uncorrectable errors. Processes that have already
+mapped the zero page with uncorrectable errors will get killed once they
+access to it. New processes will not use the zero page.
 
-Should be:
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+1) Processes that have already mapped the zero page with uncorrectable
+   errors could be recovered by attaching a new zeroed anonymous page.
+   But this may need to walk all page tables for all such processes to
+   update the PTEs pointing to the zero page. Looks like a big modification
+   for a rare problem?
 
-Reported-by: Nana Liu <nanliu@redhat.com>
+2) Some validation tests that sometimes pick up the virtual address
+   mapped to the zero page to inject errors get themself killed and can't
+   run anymore until reboot the system. To avoid injecting errors to the
+   zero page, please refer to the path:
 
-Meanwhile:
+   https://lore.kernel.org/all/20220419211921.2230752-1-tony.luck@intel.com/
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
-Tested-by: Peter Xu <peterx@redhat.com>
+ arch/x86/include/asm/pgtable.h | 3 +++
+ arch/x86/kernel/cpu/mce/core.c | 6 ++++++
+ arch/x86/mm/pgtable.c          | 2 ++
+ mm/memory-failure.c            | 2 +-
+ 4 files changed, 12 insertions(+), 1 deletion(-)
 
-Thanks,
-
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 62ab07e24aef..d4b8693452e5 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -55,6 +55,9 @@ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
+ 	__visible;
+ #define ZERO_PAGE(vaddr) ((void)(vaddr),virt_to_page(empty_zero_page))
+ 
++extern bool __read_mostly forbids_zeropage;
++#define mm_forbids_zeropage(x)	forbids_zeropage
++
+ extern spinlock_t pgd_lock;
+ extern struct list_head pgd_list;
+ 
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 981496e6bc0e..5b3af27cc8fa 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -44,6 +44,7 @@
+ #include <linux/sync_core.h>
+ #include <linux/task_work.h>
+ #include <linux/hardirq.h>
++#include <linux/pgtable.h>
+ 
+ #include <asm/intel-family.h>
+ #include <asm/processor.h>
+@@ -1370,6 +1371,11 @@ static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callba
+ 	if (count > 1)
+ 		return;
+ 
++	if (is_zero_pfn(current->mce_addr >> PAGE_SHIFT) && !forbids_zeropage) {
++		pr_err("Forbid user-space process from using zero page\n");
++		forbids_zeropage = true;
++	}
++
+ 	task_work_add(current, &current->mce_kill_me, TWA_RESUME);
+ }
+ 
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index 3481b35cb4ec..c0c56bce3acc 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -28,6 +28,8 @@ void paravirt_tlb_remove_table(struct mmu_gather *tlb, void *table)
+ 
+ gfp_t __userpte_alloc_gfp = GFP_PGTABLE_USER | PGTABLE_HIGHMEM;
+ 
++bool __read_mostly forbids_zeropage;
++
+ pgtable_t pte_alloc_one(struct mm_struct *mm)
+ {
+ 	return __pte_alloc_one(mm, __userpte_alloc_gfp);
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index dcb6bb9cf731..30ad7bdeb89f 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1744,7 +1744,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 		goto unlock_mutex;
+ 	}
+ 
+-	if (TestSetPageHWPoison(p)) {
++	if (TestSetPageHWPoison(p) || is_zero_pfn(pfn)) {
+ 		pr_err("Memory failure: %#lx: already hardware poisoned\n",
+ 			pfn);
+ 		res = -EHWPOISON;
 -- 
-Peter Xu
+2.17.1
 

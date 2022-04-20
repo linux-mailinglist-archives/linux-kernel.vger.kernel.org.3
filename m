@@ -2,201 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B96FE5090A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC105090A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 21:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381820AbiDTTs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 15:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        id S1381839AbiDTTtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 15:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381688AbiDTTsX (ORCPT
+        with ESMTP id S1381761AbiDTTs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 15:48:23 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E41B1C913
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 12:45:35 -0700 (PDT)
-Received: from [10.1.250.9] (riviera.nat.ds.pw.edu.pl [194.29.137.1])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 20 Apr 2022 15:48:57 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F74A1C928;
+        Wed, 20 Apr 2022 12:46:11 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 5FB233F8BD;
-        Wed, 20 Apr 2022 21:45:33 +0200 (CEST)
-Message-ID: <eb54c810-8121-7de1-e2cf-008bd59552ce@somainline.org>
-Date:   Wed, 20 Apr 2022 21:45:32 +0200
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 29AD722249;
+        Wed, 20 Apr 2022 21:46:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1650483969;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7WHTmyBnw+kRKp9ai99bDBnCL1nOdm+EiFK2nOE9oeg=;
+        b=szzAM2xkKF+cJM6oJdlWwkQXLgmxWnwehN8OLhIg/XccmkdzlUMI7q4XCk7FldPo1aLBJR
+        pSHLkBwbOjPXBF+aLbcZ46+HswmQLkXG68RPNf+oFNm+kSeGQbCPMTR2bJ6ieHnzO6O2V9
+        rI8iLhiSzDP3MtwKrgbA3Bq4ghlRw2s=
+From:   Michael Walle <michael@walle.cc>
+To:     Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        UNGLinuxDriver@microchip.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] arm64: dts: sparx5: rename pinctrl nodes
+Date:   Wed, 20 Apr 2022 21:46:00 +0200
+Message-Id: <20220420194600.3416282-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/1] arm64: dts: qcom: sm8350-sagami: usb qmp phy node
- - add 'vdda-pll-supply' & 'vdda-phy-supply'
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        vkoul@kernel.org, bjorn.andersson@linaro.org,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20220419205854.1269922-1-bhupesh.sharma@linaro.org>
- <997f91b9-c22e-41f0-300b-92559bc7896e@somainline.org>
- <CAH=2Ntw7Zy8nyDwNEnYQ=j=+25hjZsw3TGUW2TmT3+FvrLNu=A@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <CAH=2Ntw7Zy8nyDwNEnYQ=j=+25hjZsw3TGUW2TmT3+FvrLNu=A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pinctrl device tree binding will be converted to YAML format. Rename
+the pin nodes so they end with "-pins" to match the schema.
 
-On 20/04/2022 21:33, Bhupesh Sharma wrote:
-> Hi Konrad,
->
-> Thanks for your comments. Please see my comments below:
->
-> On Wed, 20 Apr 2022 at 22:30, Konrad Dybcio
-> <konrad.dybcio@somainline.org> wrote:
->>
->> On 19/04/2022 22:58, Bhupesh Sharma wrote:
->>> As suggested by Bjorn during review of [1], the 'vdda-pll-supply' &
->>> 'vdda-phy-supply' supplies denote the power for the bus and the
->>> clock of the usb qmp phy and are used by the qcom qmp phy driver.
->>>
->>> So, its safe to assume that the two regulators are the same as on
->>> the MTP. So let's wire them up in the same way as the MTP.
->>>
->>> In absence of the same 'make dtbs_check' leads to following warnings:
->>>
->>> arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
->>>    phy-wrapper@88e9000: 'vdda-phy-supply' is a required property
->>>
->>> arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
->>>    phy-wrapper@88e9000: 'vdda-pll-supply' is a required property
->>>
->>> [1]. https://lore.kernel.org/lkml/20220228123019.382037-9-bhupesh.sharma@linaro.org/
->>>
->>> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
->>> Cc: konrad.dybcio@somainline.org
->>> Cc: Vinod Koul <vkoul@kernel.org>
->>> Cc: Marijn Suijten <marijn.suijten@somainline.org>
->>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>> ---
->>> Changes since v1:
->>> -----------------
->>> - v1 can be found here: https://www.spinics.net/lists/linux-arm-msm/msg108467.html
->>> - Fixed the commit message to read usb qmp phy instead of ufs phy (which
->>>     was introduced erroraneously in the commit log).
->>>
->>>    .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 25 +++++++++++++++++++
->>>    1 file changed, 25 insertions(+)
->> Hi, I actually threw together a patch with [almost] all RPMh regulators
->> on Sagami quite a while ago (if thunderbird doesn't explode, you should
->> find it as an attachment to this message), but I haven't sent it, as
->> pm8350c_l3 and pmr735a_s3 are broken on the .c driver side (the step
->> numbers and/or values are not correct), but Qualcomm in their infinite
->> Qualcommery will not let us, mere mortals, access the PDFs that contain
->> the correct specifications, so I have to wait for somebody with access
->> to them to pick them up. That said, the values you supplied seem correct
->> (say for lack of allow-set-load which will bite when (if?) UFS is ever
->> functional upstream on this piece of Japanese engineering), but adding
->> the configuration of all regulators at once just seems more complete to me..
-> The complete set of regulator enablement was something on my mind and
-> which I tried before sending out the smaller (only relevant to USB)
-> patch.
->
-> My main concern was leaving the upstream kernel on the board in an
-> unbootable form, as I don't have the sagami board to test the changes
-> on.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+The YAML conversion patch is alread in
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
 
-Yeah, messing with power rails on somebody else's device is stressful in 
-general, especially with downstream kernels #including 9999 other DTs, 
-it's really easy to make a mistake.. Personally, I sometimes even dump 
-the regulator settings from syfs on a running device just to be ultra sure.
+ .../dts/microchip/sparx5_pcb134_board.dtsi    | 26 +++++++++----------
+ .../dts/microchip/sparx5_pcb135_board.dtsi    | 10 +++----
+ 2 files changed, 18 insertions(+), 18 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
+index 33faf1f3264f..6f488e774215 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
+@@ -325,69 +325,69 @@ &sgpio2 {
+ };
+ 
+ &gpio {
+-	i2cmux_pins_i: i2cmux-pins-i {
++	i2cmux_pins_i: i2cmux-pins {
+ 	       pins = "GPIO_16", "GPIO_17", "GPIO_18", "GPIO_19",
+ 		      "GPIO_20", "GPIO_22", "GPIO_36", "GPIO_35",
+ 		      "GPIO_50", "GPIO_51", "GPIO_56", "GPIO_57";
+ 		function = "twi_scl_m";
+ 		output-low;
+ 	};
+-	i2cmux_0: i2cmux-0 {
++	i2cmux_0: i2cmux-0-pins {
+ 		pins = "GPIO_16";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_1: i2cmux-1 {
++	i2cmux_1: i2cmux-1-pins {
+ 		pins = "GPIO_17";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_2: i2cmux-2 {
++	i2cmux_2: i2cmux-2-pins {
+ 		pins = "GPIO_18";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_3: i2cmux-3 {
++	i2cmux_3: i2cmux-3-pins {
+ 		pins = "GPIO_19";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_4: i2cmux-4 {
++	i2cmux_4: i2cmux-4-pins {
+ 		pins = "GPIO_20";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_5: i2cmux-5 {
++	i2cmux_5: i2cmux-5-pins {
+ 		pins = "GPIO_22";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_6: i2cmux-6 {
++	i2cmux_6: i2cmux-6-pins {
+ 		pins = "GPIO_36";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_7: i2cmux-7 {
++	i2cmux_7: i2cmux-7-pins {
+ 		pins = "GPIO_35";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_8: i2cmux-8 {
++	i2cmux_8: i2cmux-8-pins {
+ 		pins = "GPIO_50";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_9: i2cmux-9 {
++	i2cmux_9: i2cmux-9-pins {
+ 		pins = "GPIO_51";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_10: i2cmux-10 {
++	i2cmux_10: i2cmux-10-pins {
+ 		pins = "GPIO_56";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_11: i2cmux-11 {
++	i2cmux_11: i2cmux-11-pins {
+ 		pins = "GPIO_57";
+ 		function = "twi_scl_m";
+ 		output-high;
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
+index ef96e6d8c6b3..d9e519bfbf68 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
+@@ -59,28 +59,28 @@ led@7 {
+ };
+ 
+ &gpio {
+-	i2cmux_pins_i: i2cmux-pins-i {
++	i2cmux_pins_i: i2cmux-pins {
+ 	       pins = "GPIO_35", "GPIO_36",
+ 		      "GPIO_50", "GPIO_51";
+ 		function = "twi_scl_m";
+ 		output-low;
+ 	};
+-	i2cmux_s29: i2cmux-0 {
++	i2cmux_s29: i2cmux-0-pins {
+ 		pins = "GPIO_35";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_s30: i2cmux-1 {
++	i2cmux_s30: i2cmux-1-pins {
+ 		pins = "GPIO_36";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_s31: i2cmux-2 {
++	i2cmux_s31: i2cmux-2-pins {
+ 		pins = "GPIO_50";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_s32: i2cmux-3 {
++	i2cmux_s32: i2cmux-3-pins {
+ 		pins = "GPIO_51";
+ 		function = "twi_scl_m";
+ 		output-high;
+-- 
+2.30.2
 
->
-> That said, if you intend to send the complete regulator enablement
-> patch for the sagami board, it would be probably better in the longer
-> run (as currently any change to the common binding, dts or driver
-> files is held up by "make dtbs_check" warnings during upstream
-> review).
->
->> On a note, USB - among other more or less necessary peripherals - along
->> with its supplies, is brought up in XBL (or bootrom if you jump to EDL),
->> so not setting these supplies in Linux does not bite in any way, shape
->> or form other than "make dtbs_check" screaming.
-> I agree. If you want, you can include my simple patch as the followup
-> (just enabling the right regulators for the usb qmp phy), to your big
-> patch (which enables the complete regulator support). It should be
-> fine as well, as we eventually want to use the regulators defined in
-> the 'big' patch for some 'real' peripheral nodes like the usb qmp phy.
->
-> Please let me know your views.
->
-> Regards,
-> Bhupesh
-
-I will send this patch (of course rebased) along with the 
-add-all-regulators one, once the .c driver is fixed then.
-
-
-Thanks,
-
-Konrad
-
->> I'm not against this patch, but once again, even though this point may
->> not sound very convincing to you all, I think it would be "nice" to
->> configure all regulators in one go.
->>
->>
->> Konrad
->>
->>
->>> diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
->>> index 90b13cbe2fa6..238ac9380ca2 100644
->>> --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
->>> @@ -3,6 +3,7 @@
->>>     * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
->>>     */
->>>
->>> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->>>    #include "sm8350.dtsi"
->>>    #include "pm8350.dtsi"
->>>    #include "pm8350b.dtsi"
->>> @@ -75,6 +76,27 @@ ramoops@ffc00000 {
->>>        };
->>>    };
->>>
->>> +&apps_rsc {
->>> +     pm8350-rpmh-regulators {
->>> +             compatible = "qcom,pm8350-rpmh-regulators";
->>> +             qcom,pmic-id = "b";
->>> +
->>> +             vreg_l1b_0p88: ldo1 {
->>> +                     regulator-name = "vreg_l1b_0p88";
->>> +                     regulator-min-microvolt = <912000>;
->>> +                     regulator-max-microvolt = <920000>;
->>> +                     regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->>> +             };
->>> +
->>> +             vreg_l6b_1p2: ldo6 {
->>> +                     regulator-name = "vreg_l6b_1p2";
->>> +                     regulator-min-microvolt = <1200000>;
->>> +                     regulator-max-microvolt = <1208000>;
->>> +                     regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->>> +             };
->>> +     };
->>> +};
->>> +
->>>    &adsp {
->>>        status = "okay";
->>>        firmware-name = "qcom/adsp.mbn";
->>> @@ -256,4 +278,7 @@ &usb_1_hsphy {
->>>
->>>    &usb_1_qmpphy {
->>>        status = "okay";
->>> +
->>> +     vdda-phy-supply = <&vreg_l6b_1p2>;
->>> +     vdda-pll-supply = <&vreg_l1b_0p88>;
->>>    };

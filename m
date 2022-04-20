@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787CD507DE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 03:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435EA507DE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 03:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355429AbiDTBD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 21:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        id S1358673AbiDTBKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 21:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348181AbiDTBD0 (ORCPT
+        with ESMTP id S1351126AbiDTBKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 21:03:26 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89251275CC;
-        Tue, 19 Apr 2022 18:00:41 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-deb9295679so421944fac.6;
-        Tue, 19 Apr 2022 18:00:41 -0700 (PDT)
+        Tue, 19 Apr 2022 21:10:18 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95671D0FE
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 18:07:33 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id bo5so450771pfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 18:07:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
          :content-transfer-encoding;
-        bh=9jqaNc5GS93TqmOq2Cq3d6a6vz0jEdB9F8+DagCs+Co=;
-        b=h8epfsKDDQhn9rNEqVXlRvWdOyABHN1ZbHL/SpuTNNPtHIrikHxXUOWCErWTnFONvX
-         SlUhfrcbJg6m/raBZAEtQcM8ePyH13DkirRtX5k6Zbf3sHs1UGHzHsUGuDHacn6nJ2Jf
-         fY0Xdfla0BXMaGIr5JjjKw5aqvBz+4yQca7hiuDls6LVlnyKIucmogdTH2yNKeWagszR
-         jpzPI3XwdMR0WLj8hijz+kQYs38OpuUrZTlAlby0harTRJ6m/KZxAAe7rvuYSQoo2X4j
-         B2XBhlNQ2ovTwfp3Tp7aWR6/Hg2OIksju+xuHihX3oa4/gdtPN00xm8JZ23CpViEiPeB
-         9MaQ==
+        bh=uh+zqoa0RmF45pIO3fKwJcIuuOmmQqr7ZHT+lq3wkxM=;
+        b=c+RLqjbokVzeFTNw9hc8x+ovEmdLmAVh+jAijGNIU2aP2z9Kn/2M5CVbWFQbp3uaYa
+         G2yJ7RQXUcZiR97mRMuENoPfBv/t0NyC1qNrxT7PvouX4a7uAeH/Z5NeKzncDrWGTu6i
+         TrenHavLMjhVjxXVbMPKEpnK76ncrbU5kyYp5qX7wLMhWx0rkgqxNEHn+4bZc+GlTcv8
+         +mkx3DmZVeCVa5ER8W4GHlhgYsPWVAXzqalQefy8VLihg0JRzIq+nfHyjd67REslJVKb
+         fOvAOnsTclyZdrMiN15qZ4vmRxI7slVgDYrjxfOPLCEIO+9GrAwgv4WnKl/Q4ba+WZeS
+         9qbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9jqaNc5GS93TqmOq2Cq3d6a6vz0jEdB9F8+DagCs+Co=;
-        b=8N5vDBbdIjUFE2S26pu4wpx2sk6odiewqsEMAlO20yLaL0ZjGCK5hchg5Vy1zKFLzh
-         rkxkGumjjNoiRPVNciaVEYE1dbO4XZ3JLgjPNj6StU4LHY/DtyayAxJ7djU/Y8aifweH
-         /ySktLbwOZGF1eFd89B2jwI2zeXKb6oe6hYEb5wRiX4SzYKsUCdPojf5nUp7BIBJZbO2
-         UHbBk8h0lu9IpxOpTrxatXYXgwMOCXGSMt2svVo4208rDCfLcFcL1R1zZnjfuYj9UJUg
-         5FfzLbQut6EQsL9HdjwouIMcHAToGqTKrhhckUrUtNK2lZKQkvVsdUTnlkRdITfnkR+K
-         riQA==
-X-Gm-Message-State: AOAM532UZ5jDOTUJI11KbQtoJVYf5d+lg7THzPmyE4egGAcRacLtyb4J
-        K+1/72Hvzk0oclNBQmSZ0RfCN4EOl9Y=
-X-Google-Smtp-Source: ABdhPJzq/wMmB0JIONSUhoRlRLpkCwI5rH7guTD9k3y5UejmwncJ3nD46HwNX5PJe8t/qOkSUENZfA==
-X-Received: by 2002:a05:6871:b22:b0:e6:49ed:4af0 with SMTP id fq34-20020a0568710b2200b000e649ed4af0mr93723oab.102.1650416440828;
-        Tue, 19 Apr 2022 18:00:40 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j5-20020a4a7505000000b0033a47bb6a74sm1332178ooc.47.2022.04.19.18.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 18:00:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d2d09fe1-dada-e844-cafa-da48424855a4@roeck-us.net>
-Date:   Tue, 19 Apr 2022 18:00:38 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] hwmod: (pmbus) disable PEC if not enabled
-Content-Language: en-US
-To:     Adam Wujek <dev_public@wujek.eu>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220419205228.303952-1-dev_public@wujek.eu>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220419205228.303952-1-dev_public@wujek.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=uh+zqoa0RmF45pIO3fKwJcIuuOmmQqr7ZHT+lq3wkxM=;
+        b=MY1hxRvDXT5qNDCeRHpjZaM4X/GJOx1i2AtaQMvjtkcfwH6xp5LG244u5d9J29cVvb
+         ctgSOAFGWoZTtvXraee+DWmNxNfDk0KzBy7w5jGZ7TcJKc3/1bSDfWhWaJaZNc0kPjDJ
+         AvsMGrfAirc+aSBGo2g9JXfDYhAcwEthfvGQlelENv6O08fFr9yc77wYJL5FCtzuCFqE
+         61yupG3DmGP8ue0rHeLnv+gllrPFsBvIOvsvwQMKLuqe5AATx5/pnFFPRUjofKGOyCr2
+         5NGSoET7KWBgLQ+arPq424qcTHlXBCIYmDzYiO7ZbTwQWjREFjnwPCjn+s8qXih7d03j
+         6Jcg==
+X-Gm-Message-State: AOAM530y/J54lsRJjYpyuAMEW1byttMGhFId/0jYf8mmTND2kn0j5g+X
+        IOePEdLQNB+XmSisVYGs4AyLdgq9+KaNrw==
+X-Google-Smtp-Source: ABdhPJyBw5NXF/715OeKg6IgA5qyU6RYVd0hslcVhCUZywZ8kfoHLoOdaHJGPyf4uS10BVIJ569zzA==
+X-Received: by 2002:a63:4945:0:b0:398:efe8:3b7a with SMTP id y5-20020a634945000000b00398efe83b7amr17202310pgk.106.1650416853229;
+        Tue, 19 Apr 2022 18:07:33 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id x36-20020a634a24000000b0039cc6fff510sm17693532pga.58.2022.04.19.18.07.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 18:07:32 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 18:07:32 -0700 (PDT)
+X-Google-Original-Date: Tue, 19 Apr 2022 18:04:50 PDT (-0700)
+Subject:     Re: [PATCH -next] cpuidle: riscv: support non-SMP config
+In-Reply-To: <20220403031355.20894-1-rdunlap@infradead.org>
+CC:     linux-kernel@vger.kernel.org, rdunlap@infradead.org, lkp@intel.com,
+        anup@brainfault.org, anup@brainfault.org, apatel@ventanamicro.com,
+        Atish Patra <atishp@rivosinc.com>, daniel.lezcano@linaro.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     rdunlap@infradead.org
+Message-ID: <mhng-d1fe9967-3f64-4ec7-aa82-72571e03bef4@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/22 13:53, Adam Wujek wrote:
-> Explicitly disable PEC when the client does not support it.
-> Without the explicit disable, when the device with the PEC support is removed
-> later when a device without PEC support is inserted into the same address,
-> the driver uses the old value of client->flags which contains the I2C_CLIENT_PEC
-> flag. As a consequence the PEC is used when it should not.
-> 
-> Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+On Sat, 02 Apr 2022 20:13:55 PDT (-0700), rdunlap@infradead.org wrote:
+> Add <asm/smp.h> for cpuid_to_hartid_map etc.
+> This is needed for both SMP and non-SMP builds, but not having it
+> causes a build error for non-SMP:
+>
+> drivers/cpuidle/cpuidle-riscv-sbi.c: In function 'sbi_cpuidle_init_cpu':
+> drivers/cpuidle/cpuidle-riscv-sbi.c:350:26: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror=implicit-function-declaration]
+>
+> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Anup Patel <anup.patel@wdc.com>
+> Cc: Anup Patel <anup@brainfault.org>
+> Cc: Anup Patel <apatel@ventanamicro.com>
+> Cc: Atish Patra <atishp@rivosinc.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
 > ---
->   drivers/hwmon/pmbus/pmbus_core.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 82c3754e21e3..f8ca36759b0a 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2014,6 +2014,8 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
->   	ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
->   	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
->   		client->flags |= I2C_CLIENT_PEC;
-> +	else
-> +		client->flags &= ~I2C_CLIENT_PEC;
-> 
+>  drivers/cpuidle/cpuidle-riscv-sbi.c |    1 +
+>  1 file changed, 1 insertion(+)
+>
+> --- linux-next-20220401.orig/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ linux-next-20220401/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <asm/cpuidle.h>
+>  #include <asm/sbi.h>
+> +#include <asm/smp.h>
+>  #include <asm/suspend.h>
+>
+>  #include "dt_idle_states.h"
 
-I just realized that this patch is not based on the latest
-kernel version. Please rebase.
-
-Guenter
+Thanks, this is on fixes.

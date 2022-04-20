@@ -2,96 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3819750841D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697EB508428
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376976AbiDTIzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S1376978AbiDTI4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376971AbiDTIzd (ORCPT
+        with ESMTP id S1376971AbiDTI4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:55:33 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A2E3B2AC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:52:48 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bv19so2074932ejb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:52:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:cc:from:in-reply-to:content-transfer-encoding;
-        bh=AU7MCQUakNHJSzUOPCzW8odZ6YUqvOfObVVCUB/LrxI=;
-        b=WucVp4n1s8jRE4t2dWoIlo9QVwtl9uxsWHfpMti2hPK0bkDCyifIk5ZizzB7QhXDIv
-         k9MwNhBWlVfsmScmJGS4OPGvZVhTRWHJE3+KL0wuEqeJ2vbbOvZeURxDl/lGP5DzKYlE
-         9AcCpPeFTzNuJq9ai3Y23+VkISDF/bLG4gxBBHzntw1A9I87CXdz/bgm8IZYWHyI5TKC
-         w4RuOE2HcsM/N/GqyWTplUFaTIk3FMT+/wJ/IBj1uTKhxkVV/vRibuRm2+rPwhPdFE+B
-         cbquCbMcFDuMBUIhdIoO8/9Ohawa0zdZJlCPuJX+EYRLR7tjKYiRICRlQPa1ZaBWPfMT
-         8nOg==
+        Wed, 20 Apr 2022 04:56:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E68C93B2AC
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650444797;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=E0YhsAgzYjv+lmX1BaJJCZkRLt/I7LvOa39GZEIhqUY=;
+        b=HShUpXSy9Lmk1ayjyUlaNjqpc2vWg2GlC5BuVu64pUDSLC8mhECPb88WTTou7nDobOonvT
+        WVhUUlOEj0WOjhRGspLKLNxL1P+gPExHjpwxkFpnuY1UE3q6GT2iOXmcDSJQCLXZBODOsF
+        yKhG3BRBlsjgisBwY2CvFp1uoue4Y/E=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-25-BGY-yOY4Nn6sqiSL8uNMuA-1; Wed, 20 Apr 2022 04:53:15 -0400
+X-MC-Unique: BGY-yOY4Nn6sqiSL8uNMuA-1
+Received: by mail-wm1-f70.google.com with SMTP id n37-20020a05600c502500b0038fdc1394c6so633469wmr.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:53:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:cc:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=AU7MCQUakNHJSzUOPCzW8odZ6YUqvOfObVVCUB/LrxI=;
-        b=oJ8AkRRzBr+BPKcy9sRP3j/lcXxxnBWNJEwmtkuFOMkRQmshoimxQnZ3Gn0khCzVQ9
-         wI/Ox7rsfYmJJiEAi5xrtZOb1dS3gqFMzkeSOoivqka2GdhJA3X9WucewmfCW+W+SSnl
-         f0SHCTRwQLdk3k5wU2hrstvgMUIyIDRmXPPxpwri3f6do2n0x4V0MuvL61Ck3p0vKhwv
-         ONjC+JK1MTHwQqmEe39+HgQK3KebY7Pasx++bpiYO1MtKL8ryiSlP/M54+CusbKjMaPG
-         Bt2tI8+nsQKkmvqwFwzlqkKT7JcKHkXzgAXvXmCkiWJ7hZsGsI68IIJZf3rRDNSqNwZH
-         RQ3w==
-X-Gm-Message-State: AOAM532ddB3eCh+1JdBmJGlZ5agDJwQCSwyEm/GbxOcvsSEC+HUTv/0A
-        2qFR3Afe9won23FpnLvn6gTDJQ==
-X-Google-Smtp-Source: ABdhPJzbpinMoil4O4fTma5Fi8dg+thZtDOYXftfnb+1qu0lPGb1koYVYUbft1EwE0Kx+/ZwBRHj9g==
-X-Received: by 2002:a17:907:2d08:b0:6e8:8e58:f70e with SMTP id gs8-20020a1709072d0800b006e88e58f70emr18240985ejc.301.1650444766450;
-        Wed, 20 Apr 2022 01:52:46 -0700 (PDT)
-Received: from [192.168.0.223] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k26-20020a056402049a00b004197b0867e0sm9675138edv.42.2022.04.20.01.52.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 01:52:45 -0700 (PDT)
-Message-ID: <2079f567-ff8f-5790-cba7-837c311e5fce@linaro.org>
-Date:   Wed, 20 Apr 2022 10:52:45 +0200
+        bh=E0YhsAgzYjv+lmX1BaJJCZkRLt/I7LvOa39GZEIhqUY=;
+        b=fBTqGGWq3aG5zFVPOVg6DkJpW3GDJkIgsRdDiMPo3Ojb1MF9QEp3MzPlcXWBGp9/16
+         WvyfPYHZvp48JS9n6cvwiclB56OWZe5CZH17nYZUD+MlUaYJmFAYy5zH84RqgzFLmSe3
+         wt2p0AVm0VODm7D7YGXVT/D/NsrIwFjeerTOTS4ExrCFWEO343MklZc3L/XqfuzxqTu1
+         2HUCJYZZD+MdwX+36aXeaO940yDrRqW6iNcSFr2ivTCVu194tNXSGQUAdkYmPMwhFrJw
+         Nqm++FKcrbuYFr5Gx7L+HN6Ia8/SIA8xuzkOQUnoRS974WySoqHZeRWyPJGC2QxSAHWP
+         ihnw==
+X-Gm-Message-State: AOAM533eXQhsU9lZjMlkO8dYia7mgyjLhg7jcdlfp7edgAaWsR6jp5+O
+        TTTwYXn2lYTol48kKvYMZ3Ps5T7aiU80ET7C9HOtmRJmycYnl65/dEtxd/4OH3XcoytfBCGYDG8
+        sm5C2r2D2mY2MQWirgfIneNG15eiFrp20HoSahC1/cmgkcodfi3nBDd9quPnxA9Op4Wk/A4ww1Z
+        Q=
+X-Received: by 2002:a1c:f018:0:b0:37b:c13c:3128 with SMTP id a24-20020a1cf018000000b0037bc13c3128mr2496912wmb.157.1650444794433;
+        Wed, 20 Apr 2022 01:53:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxheIU3MZtHSmbm2S30h9XB//sGVs+fBzUrdX6TE0Ye/x/JWHfdB5GuD6LrNgo08kTzLr689Q==
+X-Received: by 2002:a1c:f018:0:b0:37b:c13c:3128 with SMTP id a24-20020a1cf018000000b0037bc13c3128mr2496874wmb.157.1650444794081;
+        Wed, 20 Apr 2022 01:53:14 -0700 (PDT)
+Received: from minerva.home ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id i14-20020a0560001ace00b0020aac00f862sm1895343wry.98.2022.04.20.01.53.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 01:53:13 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Borislav Petkov <bp@suse.de>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Helge Deller <deller@gmx.de>, Johan Hovold <johan@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Peter Jones <pjones@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Yizhuo Zhai <yzhai003@ucr.edu>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org
+Subject: [PATCH v3 0/5] Fix some race conditions that exists between fbmem and sysfb
+Date:   Wed, 20 Apr 2022 10:52:58 +0200
+Message-Id: <20220420085303.100654-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] arm64: dts: broadcom: align SPI NOR node name with
- dtschema
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>
-References: <20220407143211.295271-1-krzysztof.kozlowski@linaro.org>
- <20220407143211.295271-2-krzysztof.kozlowski@linaro.org>
- <20220407185710.2576287-1-f.fainelli@gmail.com>
-Cc:     Scott Branden <sbranden@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ray Jui <rjui@broadcom.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407185710.2576287-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 20:57, Florian Fainelli wrote:
-> On Thu,  7 Apr 2022 16:32:11 +0200, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->> The node names should be generic and SPI NOR dtschema expects "flash".
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
-> 
-> Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
+Hello,
 
-Thanks Florian. It seems that patch is still not in linux-next. Is your
-tree included in the linux-next?
+The patches in this series are mostly changes suggested by Daniel Vetter
+to fix some race conditions that exists between the fbdev core (fbmem)
+and sysfb with regard to device registration and removal.
+
+For example, it is currently possible for sysfb to register a platform
+device after a real DRM driver was registered and requested to remove the
+conflicting framebuffers.
+
+A symptom of this issue, was worked around with by commit fb561bf9abde
+("fbdev: Prevent probing generic drivers if a FB is already registered")
+but that's really a hack and should be reverted.
+
+This series attempt to fix it more properly and revert the mentioned hack.
+That will also unblock a pending patch to not make the num_registered_fb
+variable visible to drivers anymore, since that's internal to fbdev core.
+
+Patch #1 is just a trivial preparatory change.
+
+Patch #2 add sysfb_disable() and sysfb_try_unregister() helpers for fbmem
+to use them.
+
+Patch #3 changes how is dealt with conflicting framebuffers unregistering,
+rather than having a variable to determine if a lock should be take, it
+just drops the lock before unregistering the platform device.
+
+Patch #4 fixes the mentioned race conditions and finally patch #5 is the
+revert patch that was posted by Daniel before but he dropped from his set.
+
+The patches were tested on a rpi4 using different video configurations:
+(simpledrm -> vc4 both builtin, only vc4 builtin, only simpledrm builtin
+and simpledrm builtin with vc4 built as a module).
 
 Best regards,
-Krzysztof
+Javier
+
+Changes in v3:
+- Rebase on top of latest drm-misc-next branch.
+
+Changes in v2:
+- Rebase on top of latest drm-misc-next and fix conflicts (Daniel Vetter).
+- Add kernel-doc comments and include in other_interfaces.rst (Daniel Vetter).
+- Explain in the commit message that fbmem has to unregister the device
+  as fallback if a driver registered the device itself (Daniel Vetter).
+- Also explain that fallback in a comment in the code (Daniel Vetter).
+- Don't encode in fbmem the assumption that sysfb will always register
+  platform devices (Daniel Vetter).
+- Add a FIXME comment about drivers registering devices (Daniel Vetter).
+- Drop RFC prefix since patches were already reviewed by Daniel Vetter.
+- Add Daniel Reviewed-by tags to the patches.
+
+Daniel Vetter (1):
+  Revert "fbdev: Prevent probing generic drivers if a FB is already
+    registered"
+
+Javier Martinez Canillas (4):
+  firmware: sysfb: Make sysfb_create_simplefb() return a pdev pointer
+  firmware: sysfb: Add helpers to unregister a pdev and disable
+    registration
+  fbdev: Restart conflicting fb removal loop when unregistering devices
+  fbdev: Fix some race conditions between fbmem and sysfb
+
+ .../driver-api/firmware/other_interfaces.rst  |  6 ++
+ drivers/firmware/sysfb.c                      | 77 +++++++++++++++++--
+ drivers/firmware/sysfb_simplefb.c             | 16 ++--
+ drivers/video/fbdev/core/fbmem.c              | 62 ++++++++++++---
+ drivers/video/fbdev/efifb.c                   | 11 ---
+ drivers/video/fbdev/simplefb.c                | 11 ---
+ include/linux/fb.h                            |  1 -
+ include/linux/sysfb.h                         | 29 +++++--
+ 8 files changed, 158 insertions(+), 55 deletions(-)
+
+-- 
+2.35.1
+

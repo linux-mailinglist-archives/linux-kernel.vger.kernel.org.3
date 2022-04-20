@@ -2,228 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF3750869E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9973508694
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 13:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377953AbiDTLKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 07:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
+        id S1377891AbiDTLJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 07:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377919AbiDTLKI (ORCPT
+        with ESMTP id S1345841AbiDTLJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 07:10:08 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4F2403EC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 04:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650452843; x=1681988843;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TtwTHoO5atTQ2H81BFrV3Wixw91sYTYWDsf5M5GpB6o=;
-  b=AYRuGWlGeupVoEe2rmDtGoKyd688d3W19bys5VmDakax3H0FIZYSaixy
-   2MDjuuW4OZdAlx4KoziV3IjDu6yBjoI0ZQ2P3X2ZhBhBvzLfE5GyFSeSZ
-   CgpczrJj3dm2u5+m0gkKZLjk7zChq7mDBSfGB4j9rfiVXhyi9Z/rHHHBX
-   8Mk1igXc2jvLjLlzTcD1v76TQ/A9HKwnpcW2gIFwWVNIawI2DP14pEzlX
-   L1tKGs5H7L0+soQwXnrY5n/y9LTPsAVLRRzTEzIOnske5lk617K7Kqhsg
-   UNAhJT++DiGG7QKKIJp7RfSl0UnYbOaHKq90Vo1mbzItRYfd+pJXwCWnp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="243931946"
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="243931946"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 04:07:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="562068595"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Apr 2022 04:07:21 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nh8B6-0006vS-M4;
-        Wed, 20 Apr 2022 11:07:20 +0000
-Date:   Wed, 20 Apr 2022 19:06:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 4cdfc11b2836e659c0b7b31152a8b0d976167b59
-Message-ID: <625fe943.6RufSGwnR31P9ybA%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 20 Apr 2022 07:09:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0C70289B5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 04:06:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650452816;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nAoKseYG0ZFXZ4TIIvPqFWraz/lYMRREh5HCpMpt4SA=;
+        b=Da2jmX2GOFjOwzsQlyquc1OxhNKXyHyz3OPUXP/Oy2lyC41HALtzaXxMxNo7s6FFUrc3Rf
+        33LL+24+onHMeHiwgZ2VpcGUn5c3cG2meNW+VwozMA7v58KoxMDxCE5bcXcJ6ZvilF4Zbp
+        WE2s805cpfpoIb9bO4GS2II1/GvvbN4=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-372-mmW3oFlXOPusIZm1zMpDdw-1; Wed, 20 Apr 2022 07:06:55 -0400
+X-MC-Unique: mmW3oFlXOPusIZm1zMpDdw-1
+Received: by mail-ed1-f71.google.com with SMTP id w8-20020a50d788000000b00418e6810364so958317edi.13
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 04:06:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nAoKseYG0ZFXZ4TIIvPqFWraz/lYMRREh5HCpMpt4SA=;
+        b=7KLU1vXi7XK8d8HGH/bNlvUQ3QcuVbkb2GUSkHSDMGnISKMCPRNAW/RYe6A1mXmXRd
+         I5ZwU0x55vkiJjadeDAgmzf0lCkBOPER7bH+q/+BgDM55dc1biUcBEtQ8+oH9sroPLOd
+         tq+bHRief2GWtfA76Fr/izAAxta6vQJfoISIOOzQ64Cgu+/nAJMbrUxT4RKdz7dQAtQN
+         wG8o39rHjYnjWe8oECEm10muxEsovj7I/3U2GeU2u4gDFSjpagqqPun3dung/MACNFpa
+         n9of8jbg0MPk4kePCV3KeJYJYVcnqms4iDLE4XAiCvQX3gNka3jIa4gX81CocLWnNPl1
+         Ar5w==
+X-Gm-Message-State: AOAM533J74a4MCg18IqRDFXF0xzRY3hukggfG5KZeSiczxo0m/HVANk9
+        3dB4xYUoyRLtb+zx3nQ7j/s4pbV9TPL/y/xVeVZcg6MzCwQzMbpuPngRLAu3fdA2RDHcDFlcRuX
+        IIstnRkLWWco6ZN8k/1PHOjsv
+X-Received: by 2002:aa7:d553:0:b0:416:4dfc:126d with SMTP id u19-20020aa7d553000000b004164dfc126dmr22214672edr.213.1650452813009;
+        Wed, 20 Apr 2022 04:06:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw4lQnFeV1UHw8eIKZeNMMfyCfsjkXPEdIsO3tYie3sWTmFFwMJD3/SNL1PcBjG6qYKpen0OQ==
+X-Received: by 2002:aa7:d553:0:b0:416:4dfc:126d with SMTP id u19-20020aa7d553000000b004164dfc126dmr22214651edr.213.1650452812873;
+        Wed, 20 Apr 2022 04:06:52 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id yy18-20020a170906dc1200b006d6e5c75029sm6477872ejb.187.2022.04.20.04.06.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 04:06:52 -0700 (PDT)
+Message-ID: <b0aed731-b56f-4378-b50e-fc0cbccbdb84@redhat.com>
+Date:   Wed, 20 Apr 2022 13:06:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] staging: media: atomisp: Convert kmap() to
+ kmap_local_page()
+Content-Language: en-US
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Martiros Shakhzadyan <vrzh@vrzh.net>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
+References: <20220408223129.3844-1-fmdefrancesco@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220408223129.3844-1-fmdefrancesco@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 4cdfc11b2836e659c0b7b31152a8b0d976167b59  x86/Kconfig: fix the spelling of 'becoming' in X86_KERNEL_IBT config
+Hi,
 
-elapsed time: 893m
+On 4/9/22 00:31, Fabio M. De Francesco wrote:
+> The use of kmap() is being deprecated in favor of kmap_local_page() where
+> it is feasible. With kmap_local_page(), the mapping is per thread, CPU
+> local and not globally visible.
+> 
+> load_and_flush_by_kmap() is a function where the use of kmap_local_page()
+> in place of kmap() is correctly suited.
+> 
+> Convert load_and_flush_by_kmap() from kmap() to kmap_local_page().
+> 
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-configs tested: 143
-configs skipped: 5
+I've successfully tested this on both the front and back cams
+of a chuwi hi8 tablet:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Tested-by: Hans de Goede <hdegoede@redhat.com>
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-mips                 randconfig-c004-20220420
-sh                              ul2_defconfig
-arm                       aspeed_g5_defconfig
-nios2                               defconfig
-powerpc64                           defconfig
-arm                       imx_v6_v7_defconfig
-sh                  sh7785lcr_32bit_defconfig
-powerpc                 mpc85xx_cds_defconfig
-xtensa                    xip_kc705_defconfig
-h8300                       h8s-sim_defconfig
-powerpc                   motionpro_defconfig
-sh                 kfr2r09-romimage_defconfig
-xtensa                       common_defconfig
-arc                      axs103_smp_defconfig
-ia64                         bigsur_defconfig
-arm                        keystone_defconfig
-powerpc                     redwood_defconfig
-mips                     loongson1b_defconfig
-m68k                         amcore_defconfig
-s390                                defconfig
-powerpc                      makalu_defconfig
-ia64                        generic_defconfig
-mips                            ar7_defconfig
-um                           x86_64_defconfig
-mips                    maltaup_xpa_defconfig
-arm                          lpd270_defconfig
-sh                           se7721_defconfig
-powerpc                 mpc8540_ads_defconfig
-m68k                        mvme16x_defconfig
-arc                            hsdk_defconfig
-mips                       bmips_be_defconfig
-mips                      loongson3_defconfig
-arc                        nsimosci_defconfig
-sh                            hp6xx_defconfig
-microblaze                          defconfig
-sh                           se7722_defconfig
-i386                                defconfig
-arc                           tb10x_defconfig
-arm                          iop32x_defconfig
-m68k                        mvme147_defconfig
-ia64                             alldefconfig
-sh                        dreamcast_defconfig
-sh                   rts7751r2dplus_defconfig
-mips                         cobalt_defconfig
-arc                     nsimosci_hs_defconfig
-arm                           u8500_defconfig
-sh                           sh2007_defconfig
-csky                                defconfig
-sh                        apsh4ad0a_defconfig
-sh                          r7785rp_defconfig
-arm                        shmobile_defconfig
-m68k                        m5307c3_defconfig
-arm                        mvebu_v7_defconfig
-powerpc                     asp8347_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220420
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                         rhel-8.3-kunit
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
+Regards,
 
-clang tested configs:
-riscv                randconfig-c006-20220420
-mips                 randconfig-c004-20220420
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-arm                  randconfig-c002-20220420
-powerpc              randconfig-c003-20220420
-s390                 randconfig-c005-20220420
-mips                        qi_lb60_defconfig
-arm                         s3c2410_defconfig
-powerpc                    socrates_defconfig
-mips                           ip22_defconfig
-arm                         shannon_defconfig
-powerpc                      katmai_defconfig
-mips                       rbtx49xx_defconfig
-arm                       mainstone_defconfig
-powerpc                     ksi8560_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                         mv78xx0_defconfig
-powerpc                      ppc64e_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220420
-riscv                randconfig-r042-20220420
-hexagon              randconfig-r045-20220420
+Hans
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+
+> ---
+>  drivers/staging/media/atomisp/pci/hmm/hmm.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+> index c1cda16f2dc0..6394385b6637 100644
+> --- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
+> +++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+> @@ -350,7 +350,7 @@ static int load_and_flush_by_kmap(ia_css_ptr virt, void *data,
+>  		idx = (virt - bo->start) >> PAGE_SHIFT;
+>  		offset = (virt - bo->start) - (idx << PAGE_SHIFT);
+>  
+> -		src = (char *)kmap(bo->page_obj[idx].page) + offset;
+> +		src = (char *)kmap_local_page(bo->page_obj[idx].page) + offset;
+>  
+>  		if ((bytes + offset) >= PAGE_SIZE) {
+>  			len = PAGE_SIZE - offset;
+> @@ -369,7 +369,7 @@ static int load_and_flush_by_kmap(ia_css_ptr virt, void *data,
+>  
+>  		clflush_cache_range(src, len);
+>  
+> -		kunmap(bo->page_obj[idx].page);
+> +		kunmap_local(src);
+>  	}
+>  
+>  	return 0;
+

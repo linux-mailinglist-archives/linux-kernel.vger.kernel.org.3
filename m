@@ -2,44 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C875093AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F76F5093B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383264AbiDTXld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 19:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S1356513AbiDTXro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 19:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344527AbiDTXlc (ORCPT
+        with ESMTP id S230418AbiDTXrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 19:41:32 -0400
+        Wed, 20 Apr 2022 19:47:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4323969C;
-        Wed, 20 Apr 2022 16:38:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535A3E9C
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:44:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0C5D61B38;
-        Wed, 20 Apr 2022 23:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCADC385A1;
-        Wed, 20 Apr 2022 23:38:41 +0000 (UTC)
-Date:   Wed, 20 Apr 2022 19:38:39 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0DCF61B45
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 23:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E660C385A0;
+        Wed, 20 Apr 2022 23:44:53 +0000 (UTC)
+Date:   Wed, 20 Apr 2022 19:44:51 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        jithu.joseph@intel.com, ashok.raj@intel.com,
-        dan.j.williams@intel.com, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com
-Subject: Re: [PATCH v3 10/11] trace: platform/x86/intel/ifs: Add trace point
- to track Intel IFS operations
-Message-ID: <20220420193839.6e9d810b@gandalf.local.home>
-In-Reply-To: <20220419163859.2228874-11-tony.luck@intel.com>
-References: <20220407191347.9681-1-jithu.joseph@intel.com>
-        <20220419163859.2228874-1-tony.luck@intel.com>
-        <20220419163859.2228874-11-tony.luck@intel.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, mingo@redhat.com
+Subject: Re: [PATCH] arch_topology: Trace the update thermal pressure
+Message-ID: <20220420194451.6b9661a0@gandalf.local.home>
+In-Reply-To: <20220419164801.29078-1-lukasz.luba@arm.com>
+References: <20220419164801.29078-1-lukasz.luba@arm.com>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -53,39 +45,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Apr 2022 09:38:58 -0700
-Tony Luck <tony.luck@intel.com> wrote:
+On Tue, 19 Apr 2022 17:48:01 +0100
+Lukasz Luba <lukasz.luba@arm.com> wrote:
 
-> +TRACE_EVENT(ifs_status,
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 1d6636ebaac5..4f0392de3081 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -19,6 +19,8 @@
+>  #include <linux/rcupdate.h>
+>  #include <linux/sched.h>
+>  
+> +#include <trace/events/thermal.h>
 > +
-> +	TP_PROTO(union ifs_scan activate, union ifs_status status),
+>  static DEFINE_PER_CPU(struct scale_freq_data __rcu *, sft_data);
+>  static struct cpumask scale_freq_counters_mask;
+>  static bool scale_freq_invariant;
+> @@ -195,6 +197,8 @@ void topology_update_thermal_pressure(const struct cpumask *cpus,
+>  
+>  	th_pressure = max_capacity - capacity;
+>  
+> +	trace_thermal_pressure_update(cpu, th_pressure);
+> +
+>  	for_each_cpu(cpu, cpus)
+>  		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
+>  }
+> diff --git a/include/trace/events/thermal.h b/include/trace/events/thermal.h
+> index 8a5f04888abd..1bf08ee1a25b 100644
+> --- a/include/trace/events/thermal.h
+> +++ b/include/trace/events/thermal.h
+> @@ -65,6 +65,25 @@ TRACE_EVENT(cdev_update,
+>  	TP_printk("type=%s target=%lu", __get_str(type), __entry->target)
+>  );
+>  
+> +TRACE_EVENT(thermal_pressure_update,
+> +
+> +	TP_PROTO(int cpu, unsigned long thermal_pressure),
+> +
+> +	TP_ARGS(cpu, thermal_pressure),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(int, cpu)
+> +		__field(unsigned long, thermal_pressure)
 
-Really, you want to pass the structure in by value, so that we have two
-copies? One to get to this function and then one to write to the ring
-buffer?
+Note, it is always best to place the bigger object before the smaller one
+(when not properly aligned), as that will help to prevent structure
+"holes". That is:
+
+		__field(unsigned long, thermal_pressure)
+		__field(int, cpu)
+
+
+Otherwise, you are pretty much guaranteed to have a 4 byte hole between cpu
+and thermal_pressure on 64 bit machines.
+
+Also, for the warning you got from the test robot, if you are using this in
+a module and defining it in the core kernel, you need to add:
+
+EXPORT_TRACEPOINT_SYMBOL_GPL(thermal_pressure_update);
+
+Somewhere in the C file that includes this file and defines
+CREATE_TRACE_POINTS.
 
 -- Steve
 
 
-> +
-> +	TP_ARGS(activate, status),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(	u64,	status	)
-> +		__field(	u8,	start	)
-> +		__field(	u8,	stop	)
+
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->start	= activate.start;
-> +		__entry->stop	= activate.stop;
-> +		__entry->status	= status.data;
+> +		__entry->cpu = cpu;
+> +		__entry->thermal_pressure = thermal_pressure;
 > +	),
 > +
-> +	TP_printk("start: %.2x, stop: %.2x, status: %llx",
-> +		__entry->start,
-> +		__entry->stop,
-> +		__entry->status)
+> +	TP_printk("cpu=%d thermal_pressure=%lu", __entry->cpu, __entry->thermal_pressure)
 > +);
 > +
-> +#endif /* _TRACE_IFS_H */
+>  TRACE_EVENT(thermal_zone_trip,
+>  
+>  	TP_PROTO(struct thermal_zone_device *tz, int trip,
+

@@ -2,188 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 577CE508B7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26AB508B84
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379994AbiDTPGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S1379999AbiDTPGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 11:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379883AbiDTPGH (ORCPT
+        with ESMTP id S1379979AbiDTPGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:06:07 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2054.outbound.protection.outlook.com [40.107.236.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8FF4553A;
-        Wed, 20 Apr 2022 08:02:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h5VrS6MrP+dA5jYQURsPRJypLN0JB+lM7IJ+gWZqBELpADDaUXnSVW27QpfE9OYPzgcNNdoVrojXVzK82n7R7UmMBYXJGJzREhJyNQvhRyhUKR7MPbMQ2JNAx6s63zInCOwmp3vZsvRGTc/aus+SLv20aSivJGOawlkk78nUQXmqvexNay1Dzaxijgo06VxGHxi4Vp5pYNP/Cit18HHZ7SW0LGURSTNdmdFWQCrywpKccTb2SFP/K4tlWKu505WHSUm5WxI1d3jTGDdUZakFmHJ1zV66g488JL3G63uBZtqh5C1uP3bdjWooqxz8PB9X1/9pFiD5O+YN4AziDMpZZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WZcln9eVISDec3FFyoMgyAx6ve2w8LBtG0PXWpBDrHs=;
- b=i8zqkfLLOSj8dTYgbmN+nOmEybyiwDhj0kndbquLyplJPkErZr0s7RvNhEY2sloSaRO5saRKMyKoMRvz9QnugVwc/hrTlGvvsboK64SVah1DubkW/VRhLYZY1zZSbSVSTXP3oD3MJVpCcwVsBv5+FmpweMksaaJpvFB0Kn31aeHfok5TvrqWJE2Y8I6Oijme27n+hObGBED/KaDKMINJ5PSp3PKMdGksYwDWKwkxtK2rAD1FW+oFpbfCjh7D+lAsrkcKqRSGeoQOo1OxQomDDu7TKp6zc1q0R44lwb4zudb2faG2Z66NbMSwh2oDJx6UsRLTvORClGQ55aXJonTQiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WZcln9eVISDec3FFyoMgyAx6ve2w8LBtG0PXWpBDrHs=;
- b=PLXtHcl8N5tPLOTWLSnVct3jB46jAbaSZ54eMBAijS3+opu5uLUi0mzjQqhi3foYzIdeJUC5eNzbJyDAVlIGCRdC2c5okNjnT3viiPl2BvSWCG+ofOdLdixNq0AM53NR1o7Qdn2wNCuZB/Qdbn2E7tarN7oYHOnSC/wllFz68CU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
- by CH2PR12MB3975.namprd12.prod.outlook.com (2603:10b6:610:2f::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Wed, 20 Apr
- 2022 15:02:25 +0000
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::f42a:9b66:c760:9fae]) by MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::f42a:9b66:c760:9fae%9]) with mapi id 15.20.5186.013; Wed, 20 Apr 2022
- 15:02:25 +0000
-Message-ID: <186da20a-c4a2-98a1-1027-7b4390bf8cf2@amd.com>
-Date:   Wed, 20 Apr 2022 10:02:21 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Reply-To: babu.moger@amd.com
-Subject: Re: [PATCH v2 1/2] x86/cpufeatures: Add virtual TSC_AUX feature bit
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        hpa@zytor.com, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, joro@8bytes.org,
-        wanpengli@tencent.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, x86@kernel.org
-References: <165040157111.1399644.6123821125319995316.stgit@bmoger-ubuntu>
- <Yl/x2kpQeKylIyPb@zn.tnic>
-From:   "Moger, Babu" <babu.moger@amd.com>
-In-Reply-To: <Yl/x2kpQeKylIyPb@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0168.namprd13.prod.outlook.com
- (2603:10b6:208:2bd::23) To MW3PR12MB4553.namprd12.prod.outlook.com
- (2603:10b6:303:2c::19)
+        Wed, 20 Apr 2022 11:06:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 896C945052
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650466988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jntkh3AwC3J8OY7gWPfdf/3F9Twk7pkdRfKiiJLmegA=;
+        b=iKA8PKACNvUMy81CPcLCG2QMdq1tOTZqvL5485OL+jhOnBrjU5oZuftqB/ICYxbCKhZN8g
+        sAckt8oSbajJsJRKowjUy+0n5DxsgZrYMUw9H//hAnWd/iRpUXDdSEUxdp4oQdr/UJCbca
+        Ns6Il3bJQakvTV2l2Cn2NvbwRNv3X8g=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-115-ufO-bh3MNVqrh9qFt8VD6Q-1; Wed, 20 Apr 2022 11:03:04 -0400
+X-MC-Unique: ufO-bh3MNVqrh9qFt8VD6Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EAEF229AB40C;
+        Wed, 20 Apr 2022 15:03:03 +0000 (UTC)
+Received: from ceranb.redhat.com (unknown [10.40.194.169])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 83A7440CFD06;
+        Wed, 20 Apr 2022 15:03:01 +0000 (UTC)
+From:   Ivan Vecera <ivecera@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     poros@redhat.com, mschmidt@redhat.com,
+        Leon Romanovsky <leon@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dave Ertman <david.m.ertman@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net v2] ice: Fix race during aux device (un)plugging
+Date:   Wed, 20 Apr 2022 17:02:59 +0200
+Message-Id: <20220420150300.1062689-1-ivecera@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5cdfa2a1-a72f-47fc-f3d4-08da22dec73d
-X-MS-TrafficTypeDiagnostic: CH2PR12MB3975:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB3975462B4A33286E91DE824395F59@CH2PR12MB3975.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E3dUKinNycZdZd2ED0T3VTEn684Xs78KMnLSk6noV7oLOXlck8RQSx++DJG0UctclDIHQos8XsfolwalCHNxryraSpc8jTuzHh5TcaZHHrFzeXCrt5N/tqjSy2o7gioVo7y7YyIIvItBvSvANZDppcf1sVO25ufj6pb/MnakMgSAyD1ZHiUz2TwyOo0NuoXxcm51FR/me2H4DlWcsMSD2S2t0macEANvZk74GbWNZ06j7WBocmvdSsaF/p2OcUYF6dhnUT5pLYAh99OexOwFJhV6D7QqX0u3udvvDaVkcMOAAFNGG9a8u0KIpfZgB+vq10NTM0g/8mhMsFXM1a/IgkU+7ej4o9L5gSubUGCoF/Kh1rrkurB3Sin6Jm7iWN0eQ3rKc2lUGPC6DL/i5VaRJncBAfRrOctpECcNN98t2AdvTCi4MEZi/W9meGcYhYPcKp/Ph+b+yH2NUF/kpjMtZrPDCsj/cT5SsIVl2CaYX6/0dQMcNKsN/VAjswJiBuPp9ExBCt5fDqPY4aPgfg+7IjRCfedL65qFFlAv6wr/VoNcIqTAr6R9OmAVylUJSSL4x498zr7MlLP7Ex9yBkkqCwy+ZKTjTzk20N6xD19MVN7Sidogqkl1s2NJl+sGgLDaDY1Qurc0PKhSndKWBoWd0Iga2RPSM7DSSfZxVxYJgzLEtACc3tcgRAdyKXaipKajw28B/57h5INZghf58Jbg9JtN40mmKgHdzGnictLFqSV61dA+yx4DuxEr78t10IToeTBZb3Yhlp7bSnpl4ivnc7FQCpyRY6ThdYVul/LSYUSBjylSByTU4+4OgsInvW2P
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6666004)(8676002)(6512007)(86362001)(66946007)(66556008)(6486002)(508600001)(38100700002)(36756003)(66476007)(53546011)(3450700001)(6916009)(6506007)(45080400002)(7416002)(2906002)(31686004)(4326008)(2616005)(966005)(5660300002)(8936002)(186003)(316002)(83380400001)(31696002)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b3ZtUUdoZk5UYnJLNG51V3FIbmxIMEYzdlM3blVxSVg4amNKQyt6dGQ0Z0RQ?=
- =?utf-8?B?dkVYajRkdlV5TmRYTGRFS1BZWWZ3NlZQTzJvejQ3akpnREpBZk40TXZmQ2hX?=
- =?utf-8?B?eVhNejJZWTFFSW1NQ2g2WmRQMWNkOEVoSXp0RmtsWWt0WDNKSkZFVlZab0tl?=
- =?utf-8?B?UzFacEhvbzMxbis3bmJoLzZubVBBU1YyNkdQUUtDSU14aEZQcjJTNUkrL2k5?=
- =?utf-8?B?VDJDb2IrOFVQNU11d0VrNVNKZ015RlRtRmFxOTJTeXhMZS9lVkJMZzNzZ04v?=
- =?utf-8?B?aEdtRWNQcU9mRlR5Sm85elZLWHlpZnZlblc0R01PNU1NWGI4ME04dDJSZjZV?=
- =?utf-8?B?dG85ellVdUl5NG91WUwvOWJwS25ZRjdPYWF6SDRNUTd2OEdQSERqTGswUjlh?=
- =?utf-8?B?VENnK1paSktYY0VkeEJ1OUZaQW1JVThTRHI0QktSUEFLSFRhU0RWN21ZNGZL?=
- =?utf-8?B?ZXlLU0NkOFRISzIwQjY3TlNXMitHa3B5a1dnc0Y4SDdwVUtFOHJxN1lZTng0?=
- =?utf-8?B?cEY2a054M0F4S2pmcnNwa2RIem0zVTV2Q3c2SCt4QlFyRkRwdVVSS0VCY3pt?=
- =?utf-8?B?Mzdjd0ZET1l0djM0QVhJOHY1clhGdG1JOFZNU3JzK0RBUUlrM1R0OFVpNWlU?=
- =?utf-8?B?UHkxRGZuUSttRUxHd1dPckNnZVpQMGxOdmNiam96T1h6YjBublJLaUI5MW9D?=
- =?utf-8?B?VmdFamMrTFhwVFpuQ0VQWjgzQjRKejZZRVdUR0ZwV2tvcHVHOTdTSGgwNURR?=
- =?utf-8?B?dzRZK3JRU0RQb0NXQmdDMjF3STBleGt6bW90M3NQZTZPK3FNWDc4TmhQU05a?=
- =?utf-8?B?T0E4b0JBZnhvalZwMkQxemxpTEd0dE5BMmlUS0Z5Vll2NHlJSTF3YXl4Y1BQ?=
- =?utf-8?B?dHlFOVYwVWRBaGJtNnRTemVJcVpuRWtHMTEwbWI1MmFRMG9XSlFCMlhpWHJ3?=
- =?utf-8?B?MFdUZUpIaWo1dks5QjNoQkNXL3gyQldYVzZDaWVRQzcyazhaaFc4MGRuVkZL?=
- =?utf-8?B?RFZFZ2pGWEpObjgwNmtlUGl5L05YOW14S0lHb29qWGhSOHB6K25Sc1JnSjZI?=
- =?utf-8?B?ajQwWmJaWFFBUWhoSmo4M0F2YlozbTZ2cVlSRS85MXU5TmVTblJvMEVTRkR6?=
- =?utf-8?B?RVRyVUdVSjZRdlZsTm5oTnc5WGt3Y0Z3NUl6SzVlYlhjVVIvMTc5Qzk5NXZq?=
- =?utf-8?B?RU9jWnFtOHVPOFlEU09WRlJtMjdtTVh5WmpzNStCZXlKbFlFc1lobHlqeXQ3?=
- =?utf-8?B?Z21sTmsyNVI5OW5GYmJzelJKTjl1OEZTWVA1RnFha1VMTjlsVDh1Wlp4cWVz?=
- =?utf-8?B?eFlESXNDcXJuWEVwUDdEZHJ2OFVsQ3MrMUVabkRGVjl0ZWlDa0paK1NidUdr?=
- =?utf-8?B?TG93T2FzQ0VlSVE0UTZFUUg2b3E5VW9WeWdXQUh4NVZhVm80cU1NZWZReSt3?=
- =?utf-8?B?WTU0Ym5WcDk4MXhuSWtpRlQ0b0owK0o1NWw3aWI3YUFOZWVQeWdMRGxmTGl6?=
- =?utf-8?B?Q0ljV0dibGpkOEtJZDkvdWhTNklOY2FsdUhyVktXK0hyZmRudk9yRVJpOFN2?=
- =?utf-8?B?aTZlN1lWcnBOZytwOTJDaU5YeE1tcFF6WG8xMmI0THM0elZRVWpNK0FzSzYw?=
- =?utf-8?B?cGpBSXluR2h2OVM1Nm9BYXdGQUtPd05EWXBoZjhtWE9Yek42UHpoTTJBcm0r?=
- =?utf-8?B?aTlYUVdrY3l0Z2E2VnBPZkRsdCs1MWZtdFpSQmU4NXQ4b051bTg2eS8zUlF3?=
- =?utf-8?B?cm5qRCtocVRSMDQ1dlh4bmkrbkRqaVBCa1JvcW53Y1Q4WExTNDFiZEtORTdK?=
- =?utf-8?B?eHdvRVlsWkZrM29PMjBSZ0xzMzlYcFBqT0FuOGZWUzhZODBVSExhZjV5VWpN?=
- =?utf-8?B?SjRORzJvSlJmaTFZYklIOUhXWG9jdGNMYktjTHpxaVRVV01acUt3eTQ5SExW?=
- =?utf-8?B?QTRFNjNVdlF3TEtBaUVqWGRGa3JKSlc4UFVudTJ4V01jNXducGI2OS9UeVVM?=
- =?utf-8?B?Vm5nMWU1QWdiY1hTR2gva2ZqWUdSRjJsbGllUWJPbjhzOU5xK0ZKTUFsT3Bw?=
- =?utf-8?B?U2lvR2NTbmxXZ2tjS0k5NzBZYi9UbGlWdU1XVWgwK1JlMkRrUENTZ3MwRVcx?=
- =?utf-8?B?MVI0NnRhdU9SY21aRHlubnN5V0w5d3REUHRZWS9Va0J1aGx1Y0JJQlJpWUJy?=
- =?utf-8?B?MTY1VkZWYmpIK0VqYTUzNEtCVFE5OEhVK25VV0VMNjBTK3dYQXpKeFlNSHpw?=
- =?utf-8?B?ZWZFY0JOcjFMMitGS0FLek9IVjdHN2xQN3NTTytiVVBOWlpPWkk2S25HVnlj?=
- =?utf-8?Q?ftPGzGW3RxP7osIzXr?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5cdfa2a1-a72f-47fc-f3d4-08da22dec73d
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 15:02:24.9358
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1KpwNEI/j0UG2PAvtkmB0jXsWOFB0q9hLdNGET4VV88Qes/HGWmQgbtclIhKRXml
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3975
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Function ice_plug_aux_dev() assigns pf->adev field too early prior
+aux device initialization and on other side ice_unplug_aux_dev()
+starts aux device deinit and at the end assigns NULL to pf->adev.
+This is wrong because pf->adev should always be non-NULL only when
+aux device is fully initialized and ready. This wrong order causes
+a crash when ice_send_event_to_aux() call occurs because that function
+depends on non-NULL value of pf->adev and does not assume that
+aux device is half-initialized or half-destroyed.
+After order correction the race window is tiny but it is still there,
+as Leon mentioned and manipulation with pf->adev needs to be protected
+by mutex.
 
-On 4/20/22 06:43, Borislav Petkov wrote:
-> On Tue, Apr 19, 2022 at 03:53:52PM -0500, Babu Moger wrote:
->> The TSC_AUX Virtualization feature allows AMD SEV-ES guests to securely use
->> TSC_AUX (auxiliary time stamp counter data) MSR in RDTSCP and RDPID
->> instructions.
->>
->> The TSC_AUX MSR is typically initialized to APIC ID or another unique
->> identifier so that software can quickly associate returned TSC value
->> with the logical processor.
->>
->> Add the feature bit and also include it in the kvm for detection.
->>
->> Signed-off-by: Babu Moger <babu.moger@amd.com>
->> Acked-by: Borislav Petkov <bp@suse.de>
->> ---
->> v2:
->> Fixed the text(commented by Boris).
->> Added Acked-by from Boris.
->>
->> v1:
->> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fkvm%2F164937947020.1047063.14919887750944564032.stgit%40bmoger-ubuntu%2F&amp;data=05%7C01%7Cbabu.moger%40amd.com%7Cf826192970c549ae73af08da22c2ff93%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637860518176768607%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=fExIt5ghvuew%2BXKzGyixye2%2BLQncv91274nt8I0NXbY%3D&amp;reserved=0
->>
->>  arch/x86/include/asm/cpufeatures.h |    1 +
->>  arch/x86/kvm/cpuid.c               |    2 +-
->>  2 files changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
->> index 73e643ae94b6..1bc66a17a95a 100644
->> --- a/arch/x86/include/asm/cpufeatures.h
->> +++ b/arch/x86/include/asm/cpufeatures.h
->> @@ -405,6 +405,7 @@
->>  #define X86_FEATURE_SEV			(19*32+ 1) /* AMD Secure Encrypted Virtualization */
->>  #define X86_FEATURE_VM_PAGE_FLUSH	(19*32+ 2) /* "" VM Page Flush MSR is supported */
->>  #define X86_FEATURE_SEV_ES		(19*32+ 3) /* AMD Secure Encrypted Virtualization - Encrypted State */
->> +#define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* Virtual TSC_AUX */
-> I forgot from the last time: nothing is going to use that bit in
-> userspace so make that
->
-> #define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* "" Virtual TSC_AUX */
+Fix (un-)plugging functions so pf->adev field is set after aux device
+init and prior aux device destroy and protect pf->adev assignment by
+new mutex. This mutex is also held during ice_send_event_to_aux()
+call to ensure that aux device is valid during that call. Device
+lock used ice_send_event_to_aux() to avoid its concurrent run can
+be removed as this is secured by that mutex.
 
-Ok. Sure.
+Reproducer:
+cycle=1
+while :;do
+        echo "#### Cycle: $cycle"
 
-Thanks
+        ip link set ens7f0 mtu 9000
+        ip link add bond0 type bond mode 1 miimon 100
+        ip link set bond0 up
+        ifenslave bond0 ens7f0
+        ip link set bond0 mtu 9000
+        ethtool -L ens7f0 combined 1
+        ip link del bond0
+        ip link set ens7f0 mtu 1500
+        sleep 1
 
->
-> please.
->
-> Thx.
->
+        let cycle++
+done
+
+In short when the device is added/removed to/from bond the aux device
+is unplugged/plugged. When MTU of the device is changed an event is
+sent to aux device asynchronously. This can race with (un)plugging
+operation and because pf->adev is set too early (plug) or too late
+(unplug) the function ice_send_event_to_aux() can touch uninitialized
+or destroyed fields. In the case of crash below pf->adev->dev.mutex.
+
+Crash:
+[   53.372066] bond0: (slave ens7f0): making interface the new active one
+[   53.378622] bond0: (slave ens7f0): Enslaving as an active interface with an u
+p link
+[   53.386294] IPv6: ADDRCONF(NETDEV_CHANGE): bond0: link becomes ready
+[   53.549104] bond0: (slave ens7f1): Enslaving as a backup interface with an up
+ link
+[   54.118906] ice 0000:ca:00.0 ens7f0: Number of in use tx queues changed inval
+idating tc mappings. Priority traffic classification disabled!
+[   54.233374] ice 0000:ca:00.1 ens7f1: Number of in use tx queues changed inval
+idating tc mappings. Priority traffic classification disabled!
+[   54.248204] bond0: (slave ens7f0): Releasing backup interface
+[   54.253955] bond0: (slave ens7f1): making interface the new active one
+[   54.274875] bond0: (slave ens7f1): Releasing backup interface
+[   54.289153] bond0 (unregistering): Released all slaves
+[   55.383179] MII link monitoring set to 100 ms
+[   55.398696] bond0: (slave ens7f0): making interface the new active one
+[   55.405241] BUG: kernel NULL pointer dereference, address: 0000000000000080
+[   55.405289] bond0: (slave ens7f0): Enslaving as an active interface with an u
+p link
+[   55.412198] #PF: supervisor write access in kernel mode
+[   55.412200] #PF: error_code(0x0002) - not-present page
+[   55.412201] PGD 25d2ad067 P4D 0
+[   55.412204] Oops: 0002 [#1] PREEMPT SMP NOPTI
+[   55.412207] CPU: 0 PID: 403 Comm: kworker/0:2 Kdump: loaded Tainted: G S
+           5.17.0-13579-g57f2d6540f03 #1
+[   55.429094] bond0: (slave ens7f1): Enslaving as a backup interface with an up
+ link
+[   55.430224] Hardware name: Dell Inc. PowerEdge R750/06V45N, BIOS 1.4.4 10/07/
+2021
+[   55.430226] Workqueue: ice ice_service_task [ice]
+[   55.468169] RIP: 0010:mutex_unlock+0x10/0x20
+[   55.472439] Code: 0f b1 13 74 96 eb e0 4c 89 ee eb d8 e8 79 54 ff ff 66 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 65 48 8b 04 25 40 ef 01 00 31 d2 <f0> 48 0f b1 17 75 01 c3 e9 e3 fe ff ff 0f 1f 00 0f 1f 44 00 00 48
+[   55.491186] RSP: 0018:ff4454230d7d7e28 EFLAGS: 00010246
+[   55.496413] RAX: ff1a79b208b08000 RBX: ff1a79b2182e8880 RCX: 0000000000000001
+[   55.503545] RDX: 0000000000000000 RSI: ff4454230d7d7db0 RDI: 0000000000000080
+[   55.510678] RBP: ff1a79d1c7e48b68 R08: ff4454230d7d7db0 R09: 0000000000000041
+[   55.517812] R10: 00000000000000a5 R11: 00000000000006e6 R12: ff1a79d1c7e48bc0
+[   55.524945] R13: 0000000000000000 R14: ff1a79d0ffc305c0 R15: 0000000000000000
+[   55.532076] FS:  0000000000000000(0000) GS:ff1a79d0ffc00000(0000) knlGS:0000000000000000
+[   55.540163] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   55.545908] CR2: 0000000000000080 CR3: 00000003487ae003 CR4: 0000000000771ef0
+[   55.553041] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   55.560173] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   55.567305] PKRU: 55555554
+[   55.570018] Call Trace:
+[   55.572474]  <TASK>
+[   55.574579]  ice_service_task+0xaab/0xef0 [ice]
+[   55.579130]  process_one_work+0x1c5/0x390
+[   55.583141]  ? process_one_work+0x390/0x390
+[   55.587326]  worker_thread+0x30/0x360
+[   55.590994]  ? process_one_work+0x390/0x390
+[   55.595180]  kthread+0xe6/0x110
+[   55.598325]  ? kthread_complete_and_exit+0x20/0x20
+[   55.603116]  ret_from_fork+0x1f/0x30
+[   55.606698]  </TASK>
+
+Fixes: f9f5301e7e2d ("ice: Register auxiliary device to provide RDMA")
+Cc: Leon Romanovsky <leon@kernel.org>
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+---
+ drivers/net/ethernet/intel/ice/ice.h      |  1 +
+ drivers/net/ethernet/intel/ice/ice_idc.c  | 33 ++++++++++++++---------
+ drivers/net/ethernet/intel/ice/ice_main.c |  2 ++
+ 3 files changed, 23 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
+index 8ed3c9ab7ff7..a895e3a8e988 100644
+--- a/drivers/net/ethernet/intel/ice/ice.h
++++ b/drivers/net/ethernet/intel/ice/ice.h
+@@ -540,6 +540,7 @@ struct ice_pf {
+ 	struct mutex avail_q_mutex;	/* protects access to avail_[rx|tx]qs */
+ 	struct mutex sw_mutex;		/* lock for protecting VSI alloc flow */
+ 	struct mutex tc_mutex;		/* lock to protect TC changes */
++	struct mutex adev_mutex;	/* lock to protect aux device access */
+ 	u32 msg_enable;
+ 	struct ice_ptp ptp;
+ 	struct tty_driver *ice_gnss_tty_driver;
+diff --git a/drivers/net/ethernet/intel/ice/ice_idc.c b/drivers/net/ethernet/intel/ice/ice_idc.c
+index 25a436d342c2..aef07accd63b 100644
+--- a/drivers/net/ethernet/intel/ice/ice_idc.c
++++ b/drivers/net/ethernet/intel/ice/ice_idc.c
+@@ -10,13 +10,15 @@
+  * ice_get_auxiliary_drv - retrieve iidc_auxiliary_drv struct
+  * @pf: pointer to PF struct
+  *
+- * This function has to be called with a device_lock on the
+- * pf->adev.dev to avoid race conditions.
++ * This function has to be called with pf->adev_mutex held
++ * to avoid race conditions.
+  */
+ static struct iidc_auxiliary_drv *ice_get_auxiliary_drv(struct ice_pf *pf)
+ {
+ 	struct auxiliary_device *adev;
+ 
++	BUG_ON(!mutex_is_locked(&pf->adev_mutex));
++
+ 	adev = pf->adev;
+ 	if (!adev || !adev->dev.driver)
+ 		return NULL;
+@@ -37,14 +39,13 @@ void ice_send_event_to_aux(struct ice_pf *pf, struct iidc_event *event)
+ 	if (WARN_ON_ONCE(!in_task()))
+ 		return;
+ 
+-	if (!pf->adev)
+-		return;
++	mutex_lock(&pf->adev_mutex);
+ 
+-	device_lock(&pf->adev->dev);
+ 	iadrv = ice_get_auxiliary_drv(pf);
+ 	if (iadrv && iadrv->event_handler)
+ 		iadrv->event_handler(pf, event);
+-	device_unlock(&pf->adev->dev);
++
++	mutex_unlock(&pf->adev_mutex);
+ }
+ 
+ /**
+@@ -290,7 +291,6 @@ int ice_plug_aux_dev(struct ice_pf *pf)
+ 		return -ENOMEM;
+ 
+ 	adev = &iadev->adev;
+-	pf->adev = adev;
+ 	iadev->pf = pf;
+ 
+ 	adev->id = pf->aux_idx;
+@@ -300,18 +300,20 @@ int ice_plug_aux_dev(struct ice_pf *pf)
+ 
+ 	ret = auxiliary_device_init(adev);
+ 	if (ret) {
+-		pf->adev = NULL;
+ 		kfree(iadev);
+ 		return ret;
+ 	}
+ 
+ 	ret = auxiliary_device_add(adev);
+ 	if (ret) {
+-		pf->adev = NULL;
+ 		auxiliary_device_uninit(adev);
+ 		return ret;
+ 	}
+ 
++	mutex_lock(&pf->adev_mutex);
++	pf->adev = adev;
++	mutex_unlock(&pf->adev_mutex);
++
+ 	return 0;
+ }
+ 
+@@ -320,12 +322,17 @@ int ice_plug_aux_dev(struct ice_pf *pf)
+  */
+ void ice_unplug_aux_dev(struct ice_pf *pf)
+ {
+-	if (!pf->adev)
+-		return;
++	struct auxiliary_device *adev;
+ 
+-	auxiliary_device_delete(pf->adev);
+-	auxiliary_device_uninit(pf->adev);
++	mutex_lock(&pf->adev_mutex);
++	adev = pf->adev;
+ 	pf->adev = NULL;
++	mutex_unlock(&pf->adev_mutex);
++
++	if (adev) {
++		auxiliary_device_delete(adev);
++		auxiliary_device_uninit(adev);
++	}
+ }
+ 
+ /**
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 5b1198859da7..2cbbf7abefc4 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -3769,6 +3769,7 @@ u16 ice_get_avail_rxq_count(struct ice_pf *pf)
+ static void ice_deinit_pf(struct ice_pf *pf)
+ {
+ 	ice_service_task_stop(pf);
++	mutex_destroy(&pf->adev_mutex);
+ 	mutex_destroy(&pf->sw_mutex);
+ 	mutex_destroy(&pf->tc_mutex);
+ 	mutex_destroy(&pf->avail_q_mutex);
+@@ -3847,6 +3848,7 @@ static int ice_init_pf(struct ice_pf *pf)
+ 
+ 	mutex_init(&pf->sw_mutex);
+ 	mutex_init(&pf->tc_mutex);
++	mutex_init(&pf->adev_mutex);
+ 
+ 	INIT_HLIST_HEAD(&pf->aq_wait_list);
+ 	spin_lock_init(&pf->aq_wait_lock);
 -- 
-Thanks
-Babu Moger
+2.35.1
 

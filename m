@@ -2,141 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802C15082DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D6C5082EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 09:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376490AbiDTHzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 03:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S1355264AbiDTH5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 03:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376348AbiDTHzA (ORCPT
+        with ESMTP id S1348806AbiDTH5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:55:00 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CF83DDFB
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 00:51:15 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 1E4373201F24;
-        Wed, 20 Apr 2022 03:51:13 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 20 Apr 2022 03:51:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1650441072; x=1650527472; bh=MsKOodruT2
-        oXaRJF6VJaF5JiZnjQuI98fj1xuyGxqGI=; b=lRgfqF8HAlnNz1RhVxyNF9hva4
-        KMnLtw03fYLTisjKVZAfr25kSfwD5heiwv4fIpkaYFE1qVpNsYPXqUHl7yw8SH2m
-        64B+SY/bBGUC8uU32lv8OUJyzBjkU8ki4KtIrwDKqVzrn/GZtmLjayZu2o1QXO/O
-        K08kzktMPSOalj//Y+H3S6iTMyguejAFdcS26VgRFLrI01OsNKJQZBQcjoV1jyhY
-        btPdMsswDM+TbVYE7WBxqX4FsuADXWgpI+BQFNT43RtkxVqcrSApEM704Z8PRnun
-        a4GttotHbNrUzd6CUlK7NwdqpweS6VWQjs6/NWXDXk4fVeBWGQMXpjz9yGmg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1650441072; x=
-        1650527472; bh=MsKOodruT2oXaRJF6VJaF5JiZnjQuI98fj1xuyGxqGI=; b=D
-        T96WEXLoyIgOcPE8dN0zlg5F1yA0uAB7vIoBer09Ao06/zg/eRQiLgOtYzz1TjGs
-        4rQOBXzaew1BG2T8/0wDXMCjU5GlakgFKlvvfxh4Cw0VqJvtaM6YGuKALXIoMg/z
-        t3vjx0T/k5iDyX3rQ1fY4SP6ItEiPBdpc1ASlRE7bVqApVuxK5ZDoe8CcGZsikJC
-        GuIdCfdDmh/EWOgZZKM2I9ZQvHuZbQ8EVE+lYtNLYSo62Zfj8JSfw2aV5Jvj5NWo
-        ItuhgPtnxM8gd//6egBBEFrguLSfwO4Yc1CpKnMbrvzwkayFHEF0nOQJwFtcvycT
-        KWU6RAuAC31YQDFbp3bIA==
-X-ME-Sender: <xms:cLtfYps7X0Dgjz_svKwr8gO0t6OVvcwMMpWbNLL2-fPJFbHN3509Fg>
-    <xme:cLtfYie_85xxZYZvN_Qlq6FikBwgP9_Q7s6hGVmmraJ5Rq6goGpsuxDcXqSmREvIu
-    b2n68lcxTnTDYhId68>
-X-ME-Received: <xmr:cLtfYszF2dIPBP7FYyygTayjagetDYUUWKknS2152i_3VxZMQ9FLkSdG4CYLU_QGaCjzwj-R4vXozUw2wTL-2kaubbt-k9HxMqzzyaI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvddtgedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheei
-    heegudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:cLtfYgPsYfPc_9LZ-NsGx_ono0acG0wlnslAAiqFEDITDwSd3TzQ_w>
-    <xmx:cLtfYp_zwwOPQ7-5kYShpdoPohsxA5v3BrqQyvXcLubfr3L2Ijy3nA>
-    <xmx:cLtfYgUxyqBK7ngkiaWPSV-OblgWmRRh2XbSjex3GqeqjGGVqoxCcA>
-    <xmx:cLtfYskNwGftDty77EvceA8I2_ocdjliCXbUMUphchd3rSolQpMRKA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 20 Apr 2022 03:51:11 -0400 (EDT)
-Date:   Wed, 20 Apr 2022 09:51:08 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Eric Anholt <eric@anholt.net>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drm/vc4: Fix pm_runtime_get_sync() usage
-Message-ID: <20220420075108.xm5ujthootlpayy2@houat>
-References: <20220419124407.ugzl7hknsytbhrmr@houat>
- <20220420004949.20508-1-linmq006@gmail.com>
+        Wed, 20 Apr 2022 03:57:01 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3C63C490;
+        Wed, 20 Apr 2022 00:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650441255; x=1681977255;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/cXH9mhL+Kc+JfnZMdiLurkemiqzhu8RI4LasdVuTxk=;
+  b=V/kxdcz+grfL340Lm8b3vZO3CaqCUEOQe4H8M7zCoN2j+IS1CvvgMDku
+   jg9MrN8X6ZGqMMYlwgGcxay7v2qOWoSpeYguzMpTEiBrE1lS7DkEYaId3
+   Sc11LElfZxzMH7UjhSJpUorQ1VEKZ2svp0GPgVHJfab8kdBDp98ij7bAT
+   z3XvgEvFEu9P5XJbtn3fEKjWP3udXqEBfsrb5/21PGpwvcFBtSOBelVI2
+   PVQ/hVcXQ1J4I6CGxfrfbjfPRBY4GuIdPfwzLcunH7bUdOTM7Rps3iazL
+   J6j9dVyQIF3xPoy81GrK00VFZsgGq2VbVahLETciRPf6V+uc4MRtGCwef
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="251274579"
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="251274579"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 00:54:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="804962470"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Apr 2022 00:54:12 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nh5AB-0006jg-9D;
+        Wed, 20 Apr 2022 07:54:11 +0000
+Date:   Wed, 20 Apr 2022 15:53:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     kbuild-all@lists.01.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH 2/2] drm/nvdla: Add driver support for NVDLA
+Message-ID: <202204201512.pp20MXT5-lkp@intel.com>
+References: <20220419135908.39606-3-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oly5e7o3uziyspjr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420004949.20508-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220419135908.39606-3-cai.huoqing@linux.dev>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Cai,
 
---oly5e7o3uziyspjr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Yet something to improve:
 
-On Wed, Apr 20, 2022 at 12:49:48AM +0000, Miaoqian Lin wrote:
-> If the device is already in a runtime PM enabled state
-> pm_runtime_get_sync() will return 1, so a test for negative
-> value should be used to check for errors.
->=20
-> Also, we need to call pm_runtime_put_noidle() when pm_runtime_get_sync()
-> fails, so use pm_runtime_resume_and_get() instead. this function
-> will handle this.
->=20
-> Fixes: 4078f5757144 ("drm/vc4: Add DSI driver")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-> change in v2:
-> - switch to pm_runtime_resume_and_get() to fix refcount leak.
-> ---
->  drivers/gpu/drm/vc4/vc4_dsi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
-> index 752f921735c6..9d7ffaf6bc70 100644
-> --- a/drivers/gpu/drm/vc4/vc4_dsi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_dsi.c
-> @@ -846,8 +846,8 @@ static void vc4_dsi_encoder_enable(struct drm_encoder=
- *encoder)
->  	unsigned long phy_clock;
->  	int ret;
-> =20
-> -	ret =3D pm_runtime_get_sync(dev);
-> -	if (ret) {
-> +	ret =3D pm_runtime_resume_and_get(dev);
-> +	if (ret < 0) {
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on drm-intel/for-linux-next drm-tip/drm-tip linus/master v5.18-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-pm_runtime_resume_and_get will return 0 on success, so the previous check w=
-as correct
+url:    https://github.com/intel-lab-lkp/linux/commits/Cai-Huoqing/drm-nvdla-Add-driver-support-for-NVDLA/20220419-220255
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: h8300-randconfig-r014-20220420 (https://download.01.org/0day-ci/archive/20220420/202204201512.pp20MXT5-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7539e5487eb7d0c6f13c03bba596e51a2238106d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Cai-Huoqing/drm-nvdla-Add-driver-support-for-NVDLA/20220419-220255
+        git checkout 7539e5487eb7d0c6f13c03bba596e51a2238106d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/gpu/
 
-Maxime
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---oly5e7o3uziyspjr
-Content-Type: application/pgp-signature; name="signature.asc"
+All error/warnings (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+>> make[5]: *** No rule to make target 'drivers/gpu/drm/nvdla/nvdla_engine_data.o', needed by 'drivers/gpu/drm/nvdla/built-in.a'.
+>> make[5]: *** No rule to make target 'drivers/gpu/drm/nvdla/nvdla_engine_debug.o', needed by 'drivers/gpu/drm/nvdla/built-in.a'.
+   make[5]: Target '__build' not remade because of errors.
+--
+>> drivers/gpu/drm/nvdla/nvdla_drm.c:45:9: warning: no previous prototype for 'dla_get_time_us' [-Wmissing-prototypes]
+      45 | int64_t dla_get_time_us(void)
+         |         ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/nvdla/nvdla_drm.c: In function 'nvdla_engine_isr':
+>> drivers/gpu/drm/nvdla/nvdla_drm.c:75:18: warning: variable 'mask' set but not used [-Wunused-but-set-variable]
+      75 |         uint32_t mask;
+         |                  ^~~~
+--
+   drivers/gpu/drm/nvdla/nvdla_gem.c: In function 'nvdla_fill_task_desc':
+>> drivers/gpu/drm/nvdla/nvdla_gem.c:39:17: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+      39 |                 (void __user *)local_task->address_list,
+         |                 ^
+--
+   drivers/gpu/drm/nvdla/nvdla_scheduler.c: In function 'dla_op_completion':
+>> drivers/gpu/drm/nvdla/nvdla_scheduler.c:513:26: warning: variable 'task' set but not used [-Wunused-but-set-variable]
+     513 |         struct dla_task *task;
+         |                          ^~~~
+--
+>> drivers/gpu/drm/nvdla/nvdla_scheduler.c:363: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Dequeue next operation of same type from list of operations
+   drivers/gpu/drm/nvdla/nvdla_scheduler.c:505: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Handle operation completion notification
+   drivers/gpu/drm/nvdla/nvdla_scheduler.c:610: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Read network configuration from DRAM, network descriptor address
+   drivers/gpu/drm/nvdla/nvdla_scheduler.c:920: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Execute task selected by task scheduler
+--
+   drivers/gpu/drm/nvdla/nvdla_bdma.c: In function 'dla_bdma_dump_config':
+>> drivers/gpu/drm/nvdla/nvdla_bdma.c:157:39: warning: variable 'bdma_surface' set but not used [-Wunused-but-set-variable]
+     157 |         struct dla_bdma_surface_desc *bdma_surface;
+         |                                       ^~~~~~~~~~~~
+>> drivers/gpu/drm/nvdla/nvdla_bdma.c:156:34: warning: variable 'bdma_op' set but not used [-Wunused-but-set-variable]
+     156 |         struct dla_bdma_op_desc *bdma_op;
+         |                                  ^~~~~~~
+--
+   drivers/gpu/drm/nvdla/nvdla_conv.c: In function 'dla_conv_dump_config':
+>> drivers/gpu/drm/nvdla/nvdla_conv.c:666:39: warning: variable 'conv_surface' set but not used [-Wunused-but-set-variable]
+     666 |         struct dla_conv_surface_desc *conv_surface;
+         |                                       ^~~~~~~~~~~~
+>> drivers/gpu/drm/nvdla/nvdla_conv.c:665:34: warning: variable 'conv_op' set but not used [-Wunused-but-set-variable]
+     665 |         struct dla_conv_op_desc *conv_op;
+         |                                  ^~~~~~~
+--
+>> drivers/gpu/drm/nvdla/nvdla_engine.c:67: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Get DMA data cube address
+   drivers/gpu/drm/nvdla/nvdla_engine.c:88: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Read input buffer address
+--
+>> drivers/gpu/drm/nvdla/nvdla_bdma.c:56: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Program BDMA slot for transfer
+--
+   drivers/gpu/drm/nvdla/nvdla_sdp.c: In function 'processor_sdp_program':
+>> drivers/gpu/drm/nvdla/nvdla_sdp.c:190:18: warning: variable 'atom_size' set but not used [-Wunused-but-set-variable]
+     190 |         uint32_t atom_size;
+         |                  ^~~~~~~~~
+   drivers/gpu/drm/nvdla/nvdla_sdp.c: In function 'dla_sdp_dump_config':
+>> drivers/gpu/drm/nvdla/nvdla_sdp.c:708:38: warning: variable 'sdp_surface' set but not used [-Wunused-but-set-variable]
+     708 |         struct dla_sdp_surface_desc *sdp_surface;
+         |                                      ^~~~~~~~~~~
+>> drivers/gpu/drm/nvdla/nvdla_sdp.c:707:33: warning: variable 'sdp_op' set but not used [-Wunused-but-set-variable]
+     707 |         struct dla_sdp_op_desc *sdp_op;
+         |                                 ^~~~~~
+   At top level:
+   drivers/gpu/drm/nvdla/nvdla_sdp.c:118:22: warning: 'map_perf_nan_inf' defined but not used [-Wunused-const-variable=]
+     118 | static const uint8_t map_perf_nan_inf[] = {
+         |                      ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/nvdla/nvdla_sdp.c:113:22: warning: 'map_perf_sat' defined but not used [-Wunused-const-variable=]
+     113 | static const uint8_t map_perf_sat[] = {
+         |                      ^~~~~~~~~~~~
+   drivers/gpu/drm/nvdla/nvdla_sdp.c:108:22: warning: 'map_perf_lut' defined but not used [-Wunused-const-variable=]
+     108 | static const uint8_t map_perf_lut[] = {
+         |                      ^~~~~~~~~~~~
+   drivers/gpu/drm/nvdla/nvdla_sdp.c:103:22: warning: 'map_perf_dma' defined but not used [-Wunused-const-variable=]
+     103 | static const uint8_t map_perf_dma[] = {
+         |                      ^~~~~~~~~~~~
+--
+   drivers/gpu/drm/nvdla/nvdla_cdp.c: In function 'dla_cdp_dump_config':
+>> drivers/gpu/drm/nvdla/nvdla_cdp.c:280:38: warning: variable 'cdp_surface' set but not used [-Wunused-but-set-variable]
+     280 |         struct dla_cdp_surface_desc *cdp_surface;
+         |                                      ^~~~~~~~~~~
+>> drivers/gpu/drm/nvdla/nvdla_cdp.c:279:33: warning: variable 'cdp_op' set but not used [-Wunused-but-set-variable]
+     279 |         struct dla_cdp_op_desc *cdp_op;
+         |                                 ^~~~~~
+   At top level:
+   drivers/gpu/drm/nvdla/nvdla_cdp.c:28:22: warning: 'map_perf_lut' defined but not used [-Wunused-const-variable=]
+      28 | static const uint8_t map_perf_lut[] = {
+         |                      ^~~~~~~~~~~~
+   drivers/gpu/drm/nvdla/nvdla_cdp.c:23:22: warning: 'map_perf_dma' defined but not used [-Wunused-const-variable=]
+      23 | static const uint8_t map_perf_dma[] = {
+         |                      ^~~~~~~~~~~~
+..
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYl+7bAAKCRDj7w1vZxhR
-xYhXAP9VaFI+97/fQ1k4qQ9WQJniyAR3mlrk9f9hApGc2o4CegEA63kjjD3m0HzB
-DkaJU2zePXhUfjiPl+yySOfcgIsH3wo=
-=Nz+v
------END PGP SIGNATURE-----
 
---oly5e7o3uziyspjr--
+vim +/dla_get_time_us +45 drivers/gpu/drm/nvdla/nvdla_drm.c
+
+    44	
+  > 45	int64_t dla_get_time_us(void)
+    46	{
+    47		return ktime_get_ns() / NSEC_PER_USEC;
+    48	}
+    49	
+    50	void dla_reg_write(void *driver_context, uint32_t addr, uint32_t reg)
+    51	{
+    52		struct nvdla_device *nvdla_dev =
+    53				(struct nvdla_device *)driver_context;
+    54	
+    55		if (!nvdla_dev)
+    56			return;
+    57	
+    58		writel(reg, nvdla_dev->base + addr);
+    59	}
+    60	
+    61	uint32_t dla_reg_read(void *driver_context, uint32_t addr)
+    62	{
+    63		struct nvdla_device *nvdla_dev =
+    64				(struct nvdla_device *)driver_context;
+    65	
+    66		if (!nvdla_dev)
+    67			return 0;
+    68	
+    69		return readl(nvdla_dev->base + addr);
+    70	}
+    71	
+    72	static irqreturn_t nvdla_engine_isr(int32_t irq, void *data)
+    73	{
+    74		unsigned long flags;
+  > 75		uint32_t mask;
+    76		uint32_t reg;
+    77		struct dla_processor *processor = NULL;
+    78		struct dla_processor_group *group;
+    79		struct dla_engine *engine;
+    80		struct nvdla_device *nvdla_dev = (struct nvdla_device *)data;
+    81	
+    82		if (!nvdla_dev)
+    83			return IRQ_NONE;
+    84	
+    85		engine = nvdla_dev->engine_context;
+    86		spin_lock_irqsave(&nvdla_dev->nvdla_lock, flags);
+    87	
+    88		mask = glb_reg_read(engine, S_INTR_MASK);
+    89		reg = glb_reg_read(engine, S_INTR_STATUS);
+    90	
+    91		if (reg & MASK(GLB_S_INTR_STATUS_0, CACC_DONE_STATUS0)) {
+    92			processor = &engine->processors[DLA_OP_CONV];
+    93			group = &processor->groups[0];
+    94			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+    95		}
+    96		if (reg & MASK(GLB_S_INTR_STATUS_0, CACC_DONE_STATUS1)) {
+    97			processor = &engine->processors[DLA_OP_CONV];
+    98			group = &processor->groups[1];
+    99			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   100		}
+   101		if (reg & MASK(GLB_S_INTR_STATUS_0, SDP_DONE_STATUS0)) {
+   102			processor = &engine->processors[DLA_OP_SDP];
+   103			group = &processor->groups[0];
+   104			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   105		}
+   106		if (reg & MASK(GLB_S_INTR_STATUS_0, SDP_DONE_STATUS1)) {
+   107			processor = &engine->processors[DLA_OP_SDP];
+   108			group = &processor->groups[1];
+   109			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   110		}
+   111		if (reg & MASK(GLB_S_INTR_STATUS_0, CDP_DONE_STATUS0)) {
+   112			processor = &engine->processors[DLA_OP_CDP];
+   113			group = &processor->groups[0];
+   114			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   115		}
+   116		if (reg & MASK(GLB_S_INTR_STATUS_0, CDP_DONE_STATUS1)) {
+   117			processor = &engine->processors[DLA_OP_CDP];
+   118			group = &processor->groups[1];
+   119			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   120		}
+   121		if (reg & MASK(GLB_S_INTR_STATUS_0, RUBIK_DONE_STATUS0)) {
+   122			processor = &engine->processors[DLA_OP_RUBIK];
+   123			group = &processor->groups[0];
+   124			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   125		}
+   126		if (reg & MASK(GLB_S_INTR_STATUS_0, RUBIK_DONE_STATUS1)) {
+   127			processor = &engine->processors[DLA_OP_RUBIK];
+   128			group = &processor->groups[1];
+   129			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   130		}
+   131		if (reg & MASK(GLB_S_INTR_STATUS_0, PDP_DONE_STATUS0)) {
+   132			processor = &engine->processors[DLA_OP_PDP];
+   133			group = &processor->groups[0];
+   134			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   135		}
+   136		if (reg & MASK(GLB_S_INTR_STATUS_0, PDP_DONE_STATUS1)) {
+   137			processor = &engine->processors[DLA_OP_PDP];
+   138			group = &processor->groups[1];
+   139			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   140		}
+   141		if (reg & MASK(GLB_S_INTR_STATUS_0, BDMA_DONE_STATUS0)) {
+   142			processor = &engine->processors[DLA_OP_BDMA];
+   143			group = &processor->groups[0];
+   144			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   145		}
+   146		if (reg & MASK(GLB_S_INTR_STATUS_0, BDMA_DONE_STATUS1)) {
+   147			processor = &engine->processors[DLA_OP_BDMA];
+   148			group = &processor->groups[1];
+   149			group->events |= (1 << DLA_EVENT_OP_COMPLETED);
+   150		}
+   151		if (reg & MASK(GLB_S_INTR_STATUS_0, CDMA_DAT_DONE_STATUS0)) {
+   152			processor = &engine->processors[DLA_OP_CONV];
+   153			group = &processor->groups[0];
+   154			group->events |= (1 << DLA_EVENT_CDMA_DT_DONE);
+   155		}
+   156		if (reg & MASK(GLB_S_INTR_STATUS_0, CDMA_DAT_DONE_STATUS1)) {
+   157			processor = &engine->processors[DLA_OP_CONV];
+   158			group = &processor->groups[1];
+   159			group->events |= (1 << DLA_EVENT_CDMA_DT_DONE);
+   160		}
+   161		if (reg & MASK(GLB_S_INTR_STATUS_0, CDMA_WT_DONE_STATUS0)) {
+   162			processor = &engine->processors[DLA_OP_CONV];
+   163			group = &processor->groups[0];
+   164			group->events |= (1 << DLA_EVENT_CDMA_WT_DONE);
+   165		}
+   166		if (reg & MASK(GLB_S_INTR_STATUS_0, CDMA_WT_DONE_STATUS1)) {
+   167			processor = &engine->processors[DLA_OP_CONV];
+   168			group = &processor->groups[1];
+   169			group->events |= (1 << DLA_EVENT_CDMA_WT_DONE);
+   170		}
+   171	
+   172		glb_reg_write(engine, S_INTR_STATUS, reg);
+   173		mask = glb_reg_read(engine, S_INTR_MASK);
+   174		reg = glb_reg_read(engine, S_INTR_STATUS);
+   175	
+   176		complete(&nvdla_dev->event_notifier);
+   177		spin_unlock_irqrestore(&nvdla_dev->nvdla_lock, flags);
+   178	
+   179		return IRQ_HANDLED;
+   180	}
+   181	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

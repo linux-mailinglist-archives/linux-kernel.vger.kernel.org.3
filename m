@@ -2,248 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61D5507F81
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B782B507F86
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 05:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359202AbiDTDSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 23:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S1359212AbiDTDT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 23:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349010AbiDTDSW (ORCPT
+        with ESMTP id S1349010AbiDTDTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 23:18:22 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95E46304;
-        Tue, 19 Apr 2022 20:15:37 -0700 (PDT)
-X-UUID: 1fb72d17eccb4215ad8f9712affdea33-20220420
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:af9358d1-00b9-4c26-8d5a-21d9f751190f,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:53
-X-CID-INFO: VERSION:1.1.4,REQID:af9358d1-00b9-4c26-8d5a-21d9f751190f,OB:0,LOB:
-        0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:53
-X-CID-META: VersionHash:faefae9,CLOUDID:274074ef-06b0-4305-bfbf-554bfc9d151a,C
-        OID:b1f79c9c742c,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: 1fb72d17eccb4215ad8f9712affdea33-20220420
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1562580671; Wed, 20 Apr 2022 11:15:31 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 20 Apr 2022 11:15:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 20 Apr
- 2022 11:15:30 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 20 Apr 2022 11:15:30 +0800
-Message-ID: <0b85798f63deb0c943ed1803aaa06cde6437e7bd.camel@mediatek.com>
-Subject: Re: [PATCH 3/5] dt-bindings: mediatek: add vdosys1 RDMA definition
- for mt8195
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jason-JH Lin =?UTF-8?Q?=28=E6=9E=97=E7=9D=BF=E7=A5=A5=29?= 
-        <Jason-JH.Lin@mediatek.com>,
-        Nancy Lin =?UTF-8?Q?=28=E6=9E=97=E6=AC=A3=E8=9E=A2=29?= 
-        <Nancy.Lin@mediatek.com>, DTML <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 20 Apr 2022 11:15:30 +0800
-In-Reply-To: <CAAOTY__u3q1YcNwGpyEUpRbThsg6U1-gYtaqtGgy2J4jMwSOUg@mail.gmail.com>
-References: <20220419033237.23405-1-rex-bc.chen@mediatek.com>
-         <20220419033237.23405-4-rex-bc.chen@mediatek.com>
-         <74b3f0e3-1d9f-de9e-ccf0-1f2174ba7c25@gmail.com>
-         <CAAOTY__u3q1YcNwGpyEUpRbThsg6U1-gYtaqtGgy2J4jMwSOUg@mail.gmail.com>
+        Tue, 19 Apr 2022 23:19:25 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7109FD6;
+        Tue, 19 Apr 2022 20:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650424601; x=1681960601;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xjxCuPU1wDXGLoKd2DsY+kJ78tcX02C4AYF3wxGy00A=;
+  b=XZ+VoGmTr0oSig5pJ7UGumJicNTfgzbIZWi1RZqQxnAoV7YCgLPXJx6t
+   innQiSHAMWp4KoG6ixP8OeOD4X+n7hzaKmpqDUeY8RWQS6D3SMBuWN32i
+   m6aal5PlbjItJUw0N42yblmqKLxMd9LTesMaVAGLvkcHTlA86xzx7HTtC
+   BInTI4BOrraqPdoNouJPtGRCDXAE4D1uHw8taT56loZu8ebV62uh+FNOl
+   Ck9oHUTbZqTBS/cduzyAeRnNb/d7UD9hCrfL6fdxKIdInusirr1+Y/VrE
+   uXgFdMCpmRUkXXcCGM5LaQ2mafFGxib/CJjTxV4Xm8IDT2Gsmh+8jSJio
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="289029155"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="289029155"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:16:40 -0700
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="529566305"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:16:40 -0700
+Message-ID: <b78bd722081baa4db571c0360559f105d0a7d175.camel@linux.intel.com>
+Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Date:   Tue, 19 Apr 2022 20:16:40 -0700
+In-Reply-To: <51d63f20-4834-184b-2ac2-30c399bd9988@linaro.org>
+References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+         <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
+         <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
+         <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
+         <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
+         <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
+         <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
+         <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
+         <dc9b317f88f7d43cd30141376156c0f3eec687d8.camel@linux.intel.com>
+         <ba3cbf3d-938b-1530-1178-68b447f20a9c@linaro.org>
+         <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
+         <51d63f20-4834-184b-2ac2-30c399bd9988@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-19 at 23:51 +0800, Chun-Kuang Hu wrote:
-> Matthias Brugger <matthias.bgg@gmail.com> 於 2022年4月19日 週二 下午10:57寫道：
-> > 
-> > 
-> > 
-> > On 19/04/2022 05:32, Rex-BC Chen wrote:
-> > > From: "Nancy.Lin" <nancy.lin@mediatek.com>
-> > > 
-> > > Add vdosys1 RDMA definition.
-> > > 
-> > > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > > Reviewed-by: AngeloGioacchino Del Regno <
-> > > angelogioacchino.delregno@collabora.com>
-> > > ---
-> > >   .../display/mediatek/mediatek,mdp-rdma.yaml   | 86
-> > > +++++++++++++++++++
-> > >   1 file changed, 86 insertions(+)
-> > >   create mode 100644
-> > > Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
-> > > rdma.yaml
-> > > 
-> > > diff --git
-> > > a/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp
-> > > -rdma.yaml
-> > > b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp
-> > > -rdma.yaml
-> > > new file mode 100644
-> > > index 000000000000..6ab773569462
-> > > --- /dev/null
-> > > +++
-> > > b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp
-> > > -rdma.yaml
-> > > @@ -0,0 +1,86 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: 
-> > > https://urldefense.com/v3/__http://devicetree.org/schemas/arm/mediatek/mediatek,mdp-rdma.yaml*__;Iw!!CTRNKA9wMg0ARbw!2Ig4llRcam253qgvT99ty3TWC4Yo6D6Dy1DgFiNuA_fMhtu1lJHERS1f4pzOBELsqIl__FAiHl5bJCAJqNc7FAWGTw$
-> > >  
-> > > +$schema: 
-> > > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!2Ig4llRcam253qgvT99ty3TWC4Yo6D6Dy1DgFiNuA_fMhtu1lJHERS1f4pzOBELsqIl__FAiHl5bJCAJqNdU9sgsvg$
-> > >  
-> > > +
-> > > +title: MediaTek MDP RDMA
-> > > +
-> > > +maintainers:
-> > > +  - Matthias Brugger <matthias.bgg@gmail.com>
-> > 
-> > I don't think I would be the correct person to maintain this. This
-> > should be the
-> > person that is maintaining the driver.
-> 
-> Agree. This should be
-> 
-> Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Philipp Zabel <p.zabel@pengutronix.de>
-> 
-> Regards,
-> Chun-Kuang.
-> 
-> > 
-> > Regards,
-> > Matthias
-> > 
+Hi Daniel,
 
-Hello Chun-Kuang and Matthias,
+On Tue, 2022-04-19 at 22:26 +0200, Daniel Lezcano wrote:
+> 
+> Hi Srinivas,
+> 
+> 
+> On 18/04/2022 05:36, srinivas pandruvada wrote:
+> > Hi Daniel,
+> > 
+> > The attached diff fixes the crash,
+> > 
+> > Also when you run in daemon mode, you need to use some pid lock
+> > file.
+> > Otherwise it launches multiple daemons.
+> 
+> I've been thinking about it and I don't think it is a problem to have
+> multiple instances of the daemon. The netlink allows multicast and
+> can 
+> be run as non-root user.
+> 
+> If the finality of the thermal engine is to manage the system and has
+> some code making actions on the system with the root privilege, the
+> init 
+> scripts can take care of the pid lock
+> 
+If there is use case, then this is fine otherwise wasting system
+resources.
 
-OK, I will update the list in next version.
+Thanks,
+Srinivas
 
-BRs,
-Rex
 
-> > > +
-> > > +description: |
-> > > +  The mediatek MDP RDMA stands for Read Direct Memory Access.
-> > > +  It provides real time data to the back-end panel driver, such
-> > > as DSI,
-> > > +  DPI and DP_INTF.
-> > > +  It contains one line buffer to store the sufficient pixel
-> > > data.
-> > > +  RDMA device node must be siblings to the central MMSYS_CONFIG
-> > > node.
-> > > +  For a description of the MMSYS_CONFIG binding, see
-> > > +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.
-> > > yaml for details.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    oneOf:
-> > > +      - items:
-> > > +          - const: mediatek,mt8195-vdo1-rdma
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  power-domains:
-> > > +    description: A phandle and PM domain specifier as defined by
-> > > bindings of
-> > > +      the power controller specified by phandle. See
-> > > +      Documentation/devicetree/bindings/power/power-domain.yaml
-> > > for details.
-> > > +
-> > > +  clocks:
-> > > +    items:
-> > > +      - description: RDMA Clock
-> > > +
-> > > +  iommus:
-> > > +    description:
-> > > +      This property should point to the respective IOMMU block
-> > > with master port as argument,
-> > > +      see
-> > > Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for
-> > > details.
-> > > +
-> > > +  mediatek,gce-client-reg:
-> > > +    description:
-> > > +      The register of display function block to be set by gce.
-> > > There are 4 arguments,
-> > > +      such as gce node, subsys id, offset and register size. The
-> > > subsys id that is
-> > > +      mapping to the register of display function blocks is
-> > > defined in the gce header
-> > > +      include/include/dt-bindings/gce/<chip>-gce.h of each
-> > > chips.
-> > > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > > +    maxItems: 1
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - power-domains
-> > > +  - clocks
-> > > +  - iommus
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > > +    #include <dt-bindings/clock/mt8195-clk.h>
-> > > +    #include <dt-bindings/power/mt8195-power.h>
-> > > +    #include <dt-bindings/gce/mt8195-gce.h>
-> > > +    #include <dt-bindings/memory/mt8195-memory-port.h>
-> > > +
-> > > +    soc {
-> > > +        #address-cells = <2>;
-> > > +        #size-cells = <2>;
-> > > +
-> > > +        vdo1_rdma0: mdp-rdma@1c104000 {
-> > > +            compatible = "mediatek,mt8195-vdo1-rdma";
-> > > +            reg = <0 0x1c104000 0 0x1000>;
-> > > +            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
-> > > +            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
-> > > +            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
-> > > +            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
-> > > +            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX
-> > > 0x4000 0x1000>;
-> > > +        };
-> > > +    };
+
+
+
+> 
+> 
+
 

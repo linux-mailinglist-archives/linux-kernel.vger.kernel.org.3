@@ -2,80 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A4B508E14
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA513508E18
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 19:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380922AbiDTRMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 13:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
+        id S1380935AbiDTRNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 13:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236999AbiDTRMP (ORCPT
+        with ESMTP id S1380924AbiDTRNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 13:12:15 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F909140E8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:09:28 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id u15so4824448ejf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 10:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AAgH39aqYNkZFEmodz4sdJEW8mfR6G5OOFNZA9oagFY=;
-        b=Qakj4tsgGstygvOiA9O5uUiBRICg8fcpw/1UHUJrVZbFOhFCY0TdFI1pvox2kHpZgH
-         JSzFyfkKv3KQLl1eyfhgd31h1VFGLKj9W2N5FNE4Kcj9UoxMgvXJLLBEqqVzwmdYbd9K
-         AGPuZhTJW91gSkIGkaT46ezQqI3t2yyIfZUpbYiYay9oonrQOZgK7DTxYF1Ei0q0eyvt
-         JHMswMR1rslz6HHA4TrJgDw2A5tzuAcJZt+1E2kCRnEIojalj0MUOYBF9ZlGDB3lvFnh
-         FZrlwygxooC5bPWiA5moln7z2YrRO/koHDOPaG3aph3BreOUNXqGGpDm3CAjBhODORn0
-         cxEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AAgH39aqYNkZFEmodz4sdJEW8mfR6G5OOFNZA9oagFY=;
-        b=FtCgjukV8LA9c3o1GyO3GsRLmOkXkbpUZ3gWzwFzEUzlelPCjrw9XbHo1W9nct5MTD
-         90xWMGotZPI/W028ldRE14YDKJ1qXOcmSao5SCQhWimU8eG+DbJyPYaNT/n9BrREmdBM
-         xwMuryXECZRr88FoLJE1cnTqtBbsc3Pyf7JgySlgN3elWNjWy0x5r0ufSh5Z90rhi7RO
-         VKLbC8QsumdoKpqq36gTdQNe9sD1cQ7hRu5buNYmniyVfAmj4MZMHv0BXFHBN1AfgQrW
-         r33y7i3c9EUvsRkwsF1dJHIamFOCWSbxBVqcbqn2xl4ofdNkSNNF5CX7xb0vRCs9BPGG
-         0maQ==
-X-Gm-Message-State: AOAM530qzvzRIyXcaPHaeB+Smk8opO201+Uc4HeTgeQ8kU/vYuQOT1B1
-        KnxncpR/QLGow1TBH5Xp0tArBBFEvOjhtI8q7QeDQg==
-X-Google-Smtp-Source: ABdhPJyY9jAsgVicM8NGt7TWLzng0j4SkCK0Eh+NgNRIs5YdqcuU/etlcZJHfeXkYbVjr1I5apItKjFwDo3ZegsFvbI=
-X-Received: by 2002:a17:906:4cd8:b0:6db:372:c4ba with SMTP id
- q24-20020a1709064cd800b006db0372c4bamr18923831ejt.57.1650474566609; Wed, 20
- Apr 2022 10:09:26 -0700 (PDT)
+        Wed, 20 Apr 2022 13:13:17 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6600345502;
+        Wed, 20 Apr 2022 10:10:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9598221107;
+        Wed, 20 Apr 2022 17:10:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650474628; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fv+DUHDuv75iqi/speofL8fyyiV3PO12nkEaPGAjVpg=;
+        b=qEFLX/t/h3r7OpqmNOmGOP8dA4rSO2sikq6ol1N77QIelrvEBFghQ7bcvovldgvJObmH6p
+        66q5lRqmWi9t95sVzEwUZIP8Cr7uNETQRm4NEKf64zjhBKay2Q/2JBXNnuG2fhAbtkoWOO
+        HtmZ7GIqs22vDe7hH9NqFNk4XWWgWUo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650474628;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fv+DUHDuv75iqi/speofL8fyyiV3PO12nkEaPGAjVpg=;
+        b=Lz02F1m0uYxMKVcER4wii/ZMq3u7/dEO9YPxA0w+R8Q7KJp2LiDa55Odye1bSPkQBU7LeS
+        pJ2pECEhijNbb1DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E940913A30;
+        Wed, 20 Apr 2022 17:10:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +h0eOIM+YGIqXwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 20 Apr 2022 17:10:27 +0000
+Message-ID: <b49f1b4c-defa-ef32-1984-0273e1fad178@suse.cz>
+Date:   Wed, 20 Apr 2022 19:10:27 +0200
 MIME-Version: 1.0
-References: <20220418034444.520928-1-tongtiangen@huawei.com>
- <20220418034444.520928-4-tongtiangen@huawei.com> <073cb6a6-3dbc-75d4-dbfe-a5299a6b0510@arm.com>
- <CA+CK2bCPrQ=F0jNRxcVZ9f18Rm-kAATO3xFE79TZDoWQ99GC4Q@mail.gmail.com> <16a2620e-986a-6a8f-24eb-d0f7e9c91f24@arm.com>
-In-Reply-To: <16a2620e-986a-6a8f-24eb-d0f7e9c91f24@arm.com>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Wed, 20 Apr 2022 13:08:50 -0400
-Message-ID: <CA+CK2bAmaweQoiBmo_igEzeKdsPmT-xzCtar36iNzaiFMEJB+w@mail.gmail.com>
-Subject: Re: [PATCH -next v4 3/4] arm64: mm: add support for page table check
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Tong Tiangen <tongtiangen@huawei.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/8] mm/swap: remember PG_anon_exclusive via a swp pte
+ bit
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv@lists.infradead.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        linux-mm@kvack.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
+References: <20220329164329.208407-1-david@redhat.com>
+ <20220329164329.208407-2-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220329164329.208407-2-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,100 +111,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 1:05 AM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
->
->
->
-> On 4/19/22 18:49, Pasha Tatashin wrote:
-> > On Tue, Apr 19, 2022 at 6:22 AM Anshuman Khandual
-> > <anshuman.khandual@arm.com> wrote:
-> >>
-> >>
-> >> On 4/18/22 09:14, Tong Tiangen wrote:
-> >>> +#ifdef CONFIG_PAGE_TABLE_CHECK
-> >>> +static inline bool pte_user_accessible_page(pte_t pte)
-> >>> +{
-> >>> +     return pte_present(pte) && (pte_user(pte) || pte_user_exec(pte));
-> >>> +}
-> >>> +
-> >>> +static inline bool pmd_user_accessible_page(pmd_t pmd)
-> >>> +{
-> >>> +     return pmd_present(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
-> >>> +}
-> >>> +
-> >>> +static inline bool pud_user_accessible_page(pud_t pud)
-> >>> +{
-> >>> +     return pud_present(pud) && pud_user(pud);
-> >>> +}
-> >>> +#endif
-> >> Wondering why check for these page table entry states when init_mm
-> >> has already being excluded ? Should not user page tables be checked
-> >> for in entirety for all updates ? what is the rationale for filtering
-> >> out only pxx_user_access_page entries ?
-> >
-> > The point is to prevent false sharing and memory corruption issues.
-> > The idea of PTC to be simple and relatively independent  from the MM
-> > state machine that catches invalid page sharing. I.e. if an R/W anon
->
-> Right, this mechanism here is truly interdependent validation, which is
-> orthogonal to other MM states. Although I was curious, if mm_struct is
-> not 'init_mm', what percentage of its total page table mapped entries
-> will be user accessible ? These new helpers only filter out entries that
-> could potentially create false sharing leading upto memory corruption ?
+On 3/29/22 18:43, David Hildenbrand wrote:
+> Currently, we clear PG_anon_exclusive in try_to_unmap() and forget about
+> it. We do this, to keep fork() logic on swap entries easy and efficient:
+> for example, if we wouldn't clear it when unmapping, we'd have to lookup
+> the page in the swapcache for each and every swap entry during fork() and
+> clear PG_anon_exclusive if set.
+> 
+> Instead, we want to store that information directly in the swap pte,
+> protected by the page table lock, similarly to how we handle
+> SWP_MIGRATION_READ_EXCLUSIVE for migration entries. However, for actual
+> swap entries, we don't want to mess with the swap type (e.g., still one
+> bit) because it overcomplicates swap code.
+> 
+> In try_to_unmap(), we already reject to unmap in case the page might be
+> pinned, because we must not lose PG_anon_exclusive on pinned pages ever.
+> Checking if there are other unexpected references reliably *before*
+> completely unmapping a page is unfortunately not really possible: THP
+> heavily overcomplicate the situation. Once fully unmapped it's easier --
+> we, for example, make sure that there are no unexpected references
+> *after* unmapping a page before starting writeback on that page.
+> 
+> So, we currently might end up unmapping a page and clearing
+> PG_anon_exclusive if that page has additional references, for example,
+> due to a FOLL_GET.
+> 
+> do_swap_page() has to re-determine if a page is exclusive, which will
+> easily fail if there are other references on a page, most prominently
+> GUP references via FOLL_GET. This can currently result in memory
+> corruptions when taking a FOLL_GET | FOLL_WRITE reference on a page even
+> when fork() is never involved: try_to_unmap() will succeed, and when
+> refaulting the page, it cannot be marked exclusive and will get replaced
+> by a copy in the page tables on the next write access, resulting in writes
+> via the GUP reference to the page being lost.
+> 
+> In an ideal world, everybody that uses GUP and wants to modify page
+> content, such as O_DIRECT, would properly use FOLL_PIN. However, that
+> conversion will take a while. It's easier to fix what used to work in the
+> past (FOLL_GET | FOLL_WRITE) remembering PG_anon_exclusive. In addition,
+> by remembering PG_anon_exclusive we can further reduce unnecessary COW
+> in some cases, so it's the natural thing to do.
+> 
+> So let's transfer the PG_anon_exclusive information to the swap pte and
+> store it via an architecture-dependant pte bit; use that information when
+> restoring the swap pte in do_swap_page() and unuse_pte(). During fork(), we
+> simply have to clear the pte bit and are done.
+> 
+> Of course, there is one corner case to handle: swap backends that don't
+> support concurrent page modifications while the page is under writeback.
+> Special case these, and drop the exclusive marker. Add a comment why that
+> is just fine (also, reuse_swap_page() would have done the same in the
+> past).
+> 
+> In the future, we'll hopefully have all architectures support
+> __HAVE_ARCH_PTE_SWP_EXCLUSIVE, such that we can get rid of the empty
+> stubs and the define completely. Then, we can also convert
+> SWP_MIGRATION_READ_EXCLUSIVE. For architectures it's fairly easy to
+> support: either simply use a yet unused pte bit that can be used for swap
+> entries, steal one from the arch type bits if they exceed 5, or steal one
+> from the offset bits.
+> 
+> Note: R/O FOLL_GET references were never really reliable, especially
+> when taking one on a shared page and then writing to the page (e.g., GUP
+> after fork()). FOLL_GET, including R/W references, were never really
+> reliable once fork was involved (e.g., GUP before fork(),
+> GUP during fork()). KSM steps back in case it stumbles over unexpected
+> references and is, therefore, fine.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Yes, the intention is to filter out the false sharing scenarios.
-Allows crashing the system prior to memory corruption or memory
-leaking.
+With the fixup as reportedy by Miaohe Lin
 
->
-> I am wondering if there is any other way such filtering could have been
-> applied without adding all these new page table helpers just for page
-> table check purpose.
->
-> > page is accessible by user land, that page can never be mapped into
-> > another process (internally shared anons are treated as named
-> > mappings).
->
-> Right.
->
-> >
-> > Therefore, we try not to rely on MM states, and ensure that when a
-> > page-table entry is accessible by user it meets the required
-> > assumptions: no false sharing, etc.
->
-> Right, filtering reduces the page table entries that needs interception
-> during update (set/clear), but was just curious is there another way of
-> doing it, without adding page table check specific helpers on platforms
-> subscribing PAGE_TABLE_CHECK ?
->
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-It makes sense to limit the scope of PTC only to user accessible
-pages, and not try to catch other bugs. This keeps it reasonably
-small, and also lowers runtime overhead so it can be used in
-production as well. IMO the extra helpers are not very intrusive, and
-generic enough that in the future might be used elsewhere as well.
+(sent a separate mm-commits mail to inquire about the fix going missing from
+mmotm)
 
+https://lore.kernel.org/mm-commits/c3195d8a-2931-0749-973a-1d04e4baec94@suse.cz/T/#m4e98ccae6f747e11f45e4d0726427ba2fef740eb
 
-> >
-> > For example, one bug that was caught with PTC was where a driver on an
-> > unload would put memory on a freelist but memory is still mapped in
-> > user page table.
->
-> Should not page's refcount (that it is being used else where) prevented
-> releases into free list ? But page table check here might just detect
-> such scenarios even before page gets released.
-
-Usually yes. However, there are a number of recent bugs related to
-refcount [1][2][3]. This is why we need a stronger checker.
-
-The particular bug, however, did not rely on refcount. The driver
-allocated a kernel page for a ringbuffer, upon request shared it with
-a userspace by mapping it into the user address space, and later when
-the driver was unloaded, it never removed the mapping from the user
-address space. Thus, even though the page was freed when the driver
-was unloaded, the mapping stayed in the user page table.
-
-[1] https://lore.kernel.org/all/xr9335nxwc5y.fsf@gthelen2.svl.corp.google.com
-[2] https://lore.kernel.org/all/1582661774-30925-2-git-send-email-akaher@vmware.com
-[3] https://lore.kernel.org/all/20210622021423.154662-3-mike.kravetz@oracle.com

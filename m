@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608C65088BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8435088C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 15:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378762AbiDTNH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 09:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S1378750AbiDTNIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 09:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378749AbiDTNHY (ORCPT
+        with ESMTP id S1378746AbiDTNIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:07:24 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F143ED12
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:04:38 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id h8so2692498ybj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 06:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Zh9xrdg7JGVlbXGj1KLrJNtfkiMVGaQ5+QuOrZAABFs=;
-        b=c0iU3u/Hkrb6Nhm2878WxfDrRS0GnecQywOou3pKLWWjNi3SxMHL+dInbFHJRsGyPg
-         cvyGPFJr05vddC+8pdRjV/5iUGGdyx7Y9XMdT4Ox6LxwREnuU3eJr4oCCDI5+9IERm6o
-         Tf21VI1fJtFTBusLKMKeUP/FruxWUmGckqjFE85Q4SIQ9JkPHsnBWhZXXR4fjKTHChvk
-         mCtfr4O1t/hd3z7V+zwt0VYt3ITzGxM3g11oyjbJl23zvWMPoKzQ/4LQ0CH/IcXzE8Ow
-         tKo5UKB+dFxNGWplSZO+G4PI4OYpJcqntysXgfC3mfbBTRhdgDliN6g9aDa5AY99VH7V
-         RzRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zh9xrdg7JGVlbXGj1KLrJNtfkiMVGaQ5+QuOrZAABFs=;
-        b=YMK1hfp4XsxM2zI15u8kXyUzhkzZupVxJNBnvVSPGEh2Pe+2yte7UXg6b4zL3Vt1nA
-         FzlR6IpQtTQpzGO56wrtvA/PWHvy/vPlxFajharq6L1+dS4DYeaLVAlFwiUYeD5BKqga
-         cs5PvWrsyFwE8oAL6AnIJX70TmDrw0QVirXSyZmtE4ku815RF0HIFmrLBQh+Iljbw2HN
-         ErGPAHTQ7j7qQjB/1SxJFmCpa9fFgHlYsLLp0L0hOKgoUqxvlR5PKmCsVHocw5pVJi1l
-         yRIIigJzKuu0/zovqzJInWINx9tVgBi0eP3RXZkNUfgr0iEGjKKRbMCFmB/buidxg5ln
-         FaXg==
-X-Gm-Message-State: AOAM530VCPldyNQKO0W6VpP/DpFeY1NUNjCdyzDTetxq33uFWSycm1B5
-        R5uMzw3ianiOIbfdbSCQ+nMTGmwVi8nWbkG5OF7m9A==
-X-Google-Smtp-Source: ABdhPJz59FbR+guYw/1W41GaZq4cDR2IawSiZvI//U+BtW1SR2+3zD1vpud+R1BVbToxwZB9dBiWl5Yg9qd1wJcwZ8U=
-X-Received: by 2002:a5b:d4c:0:b0:645:3fb3:fa9e with SMTP id
- f12-20020a5b0d4c000000b006453fb3fa9emr7525143ybr.474.1650459877838; Wed, 20
- Apr 2022 06:04:37 -0700 (PDT)
+        Wed, 20 Apr 2022 09:08:01 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECEB222AC;
+        Wed, 20 Apr 2022 06:05:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1650459879;
+        bh=wOmewmRrbd5TBpBZqdHt25VeQoHFPRad0GP83DFE/KA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=KnsycIGSKRyZ0zSYB26Acbmgps+aknmDjPdrIVk97n9wZCzqTb9JUdQPb+kLOgW9s
+         1eiGH1oOYrToBBcafHSbdNfR0kCycUlJ8Mltx4UTkg8M3VmXVzi+V0E9A3d0zyMJmy
+         6TXFZ+TQ3Lk+jyJLchu4+Lw+zbDqL7teMZ1oh1rs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.147.126] ([217.61.147.126]) by web-mail.gmx.net
+ (3c-app-gmx-bap05.server.lan [172.19.172.75]) (via HTTP); Wed, 20 Apr 2022
+ 15:04:38 +0200
 MIME-Version: 1.0
-References: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
- <CAMj1kXFKzi14UCoiDOMwS5jyNz61_UzxGXm+ke0EWEt4nn6E1g@mail.gmail.com> <9eb0c1a4f805a75e3e9f24dfcae3077b772a06c0.camel@gmail.com>
-In-Reply-To: <9eb0c1a4f805a75e3e9f24dfcae3077b772a06c0.camel@gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 20 Apr 2022 18:34:25 +0530
-Message-ID: <CA+G9fYsJtp6YtDF=jHuq23BN8e=CZ-FQZm+7nYt_kG=NL5-2fQ@mail.gmail.com>
-Subject: Re: [next] arm: boot failed - PC is at cpu_ca15_set_pte_ext
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        max.krummenacher@toradex.com, Shawn Guo <shawnguo@kernel.org>,
-        Stefano Stabellini <stefano.stabellini@xilinx.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Message-ID: <trinity-bf1af823-9e46-4da7-bec5-6e749a4dc2e3-1650459878842@3c-app-gmx-bap05>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Aw: Re:  Re: [RFC/RFT 2/6] dt-bindings: soc: grf: add
+ pcie30-{phy,pipe}-grf
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 20 Apr 2022 15:04:38 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <8b9ad0a6-acc0-aad9-c49d-e4a4b38374bb@linaro.org>
+References: <20220416135458.104048-1-linux@fw-web.de>
+ <20220416135458.104048-3-linux@fw-web.de>
+ <02b3fe1c-12f9-8f96-a9b5-df44ca001825@linaro.org>
+ <trinity-c60358c4-ebd1-47bf-91e0-9ae0beefd39f-1650389348418@3c-app-gmx-bap70>
+ <8b9ad0a6-acc0-aad9-c49d-e4a4b38374bb@linaro.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:9xmgXgx0V9zQ9oJQ2v4jyZ8k5GDOHaZWDau5uvMohn+mtj1rU3a888flYq5JkzAbi24mD
+ FHd6jW/TzjLC2M3aDwNp3kInEFdlDMp+mq2ha/0uYCNocwhoVXzNtHCUDW7cXu16sKCUH7D36rOs
+ Ew8bePdsiJqO5iuOwaJ7KZfa213xpuyDOaVzLGmQW0VEb7L3Qr3ka6J3KZZOLDxdbz0DTagUk4HL
+ FwkqjHfbMegxDqz0IhXu0RQO3z9bvFV+F2dOOCG/bw04UaHRR/FCH+hlHTqequG6P/qVknBwxrSN
+ Gs=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3yJGss0AXv8=:3z9IDXCNImRErPGVveLkWg
+ 9FT2mUQ/uub+5d3eCaoGXd8z2JJQJ/cbe3gPEp1CpWlXoCK1YZu2z2vCf8SSfXIL1vfVKLsa9
+ uZU/9l50P7Fzg+caJijuhBzryf2tfXTOUVtRuT/nxeYZbwOBle3xBUqNdyqqI975vBwyydTan
+ BDBPMZm4975M4ANAAYxWJQ0XFVy9wdpSuE02aTa/9q96WzGnyTeiwkIV3pKE9btu+H1eidmcL
+ NVYNXBWtRxfs/WMYzclPMAgrKHAqRyP9TcaUtEkCiaPG23o6UPHdlWj0sB8xSGYk0go2NPbH6
+ 2npwGihW0ljkW+dulz39OoBpJmnAPzjJltc/9A8E42yXqB1N0qcATtrTE0BNTMQB0/R+5GyFP
+ Gp/kgCGlpHQEw+kkHMXi9m9byjZu4qjgBlOR5KsHxgZv0pgI3yiwg2FSVQAgzQ7ADvqp3On+G
+ 5pGfPsM0nZLXqHwjBEeOTSl/i3s5SNw1WiNnXEH3GesYaBvMRPWwzAIyPrJlAGPLaPyI14Izl
+ +Q8adU+ytcdUVAtt9bFmjJqfHOg755J1UDNVsBOSeHMnopes1sP6LIkrcqQi7DNjKDVtTVgmi
+ qs8w2EXFR/n5kqKO3AkdVso57wm/v3dxxGErPIQkuCEg3JE/52lrMITvVODGmWkewej5Y/jfX
+ 3uBxui4FFo3Vv0RUVTD3k3/gj0hV4diJ5Zp4jCf5RyWfmssGdNL6/an0zz/sVu7wbNRBGjxzv
+ FbDUW7w2OuiN+EVheyKLggtZM2QoweeZGeiUdz9rh8IAbHNuPgK5qxCt4tt6ogkiIeEj4jZ7C
+ UBYIbbG
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,42 +89,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
-
-On Wed, 20 Apr 2022 at 13:20, Max Krummenacher <max.oss.09@gmail.com> wrote:
->
-> Am Mittwoch, den 20.04.2022, 09:31 +0200 schrieb Ard Biesheuvel:
-> > On Tue, 19 Apr 2022 at 12:59, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > > Linux next 20220419 boot failed on arm architecture qemu_arm and BeagleBoard
-> > > x15 device.
-> > >
-> > > kernel crash log from x15:
-> > > -----------------
-> > > [    6.866516] 8<--- cut here ---
-> > > [    6.869598] Unable to handle kernel paging request at virtual
-> > > address f000e62c
-
-<trim>
-
-> > Unfortunately, the vmlinux.xz file I downloaded from the link below
-> > seems to be different from the one that produced the crash, given that
-> > the LR address of c04cfeb8 does not seem to correspond with
-> > handle_mm_fault+0x60c/0xed0.
+> Gesendet: Dienstag, 19. April 2022 um 21:40 Uhr
+> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+> On 19/04/2022 19:29, Frank Wunderlich wrote:
+> >> Gesendet: Montag, 18. April 2022 um 17:54 Uhr
+> >> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
 > >
-> > Can you please double check the artifacts?
+> >>> --- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> >>> +++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> >>> @@ -14,6 +14,8 @@ properties:
+> >>>      oneOf:
+> >>>        - items:
+> >>>            - enum:
+> >>> +              - rockchip,pcie30-phy-grf
+> >>> +              - rockchip,pcie30-pipe-grf
+> >>
+> >> These are without SoC parts. Are these PCIe v3 General Register Files
+> >> part of some PCIe spec?
+> >
+> > imho they are shared across SoCs rk3568 and rk3588, but have only seen=
+ rk3568 implementation yet.
+> > PCIe driver currently supports these 2 Soc (different offsets in the P=
+hy-GRF), but can only test rk3568.
+> >
+> > pipe-grf seems only be used for rk35688 (offset used in probe is defin=
+ed for this SoC), which i cannot test.
+> >
+> > so i have left them SoC independed.
 >
-> Commit "mm: check against orig_pte for finish_fault()" introduced this,
-> i.e. on yesterdays next reverting a066bab3c0eb made a i.MX6 boot again.
+> Compatibles should be SoC dependent, with some exceptions. Lack of
+> documentation or lack of possibility of testing is actually argument
+> against any exception, so they should be SoC specific/dependent.
 
-Thanks for the pointers,
-I have reverted the suggested commit and boot pass now.
+so i will change to
 
-Revert "mm: check against orig_pte for finish_fault()"
-       This reverts commit a066bab3c0eb8f6155257f1345f07d1f6550bc4a.
+              - rockchip,rk3568-pcie30-phy-grf
+              - rockchip,rk3588-pcie30-pipe-grf
 
-> A fix is discussed here:
-> https://lore.kernel.org/all/YliNP7ADcdc4Puvs@xz-m1.local/
->
-> Max
+and maybe add
 
-- Naresh
+              - rockchip,rk3588-pcie30-phy-grf
+
+these compatibles are not directly taken by any driver as the nodes be lin=
+ked via phandle (rockchip,phy-grf property) from the phy driver (rockchip,=
+rk3568-pcie3-phy / rockchip,rk3588-pcie3-phy). So these compatibles are on=
+ly in the yaml and dts present.
+
+regards Frank

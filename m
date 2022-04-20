@@ -2,95 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA8E508A01
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40872508A03
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 16:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379174AbiDTOI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 10:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        id S1379282AbiDTOIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 10:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiDTOI0 (ORCPT
+        with ESMTP id S1379228AbiDTOI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 10:08:26 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C157E3E0DD
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:05:40 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id i63so1697071pge.11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:05:40 -0700 (PDT)
+        Wed, 20 Apr 2022 10:08:29 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86E73E0DD
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:05:42 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id z16so2031254pfh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 07:05:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lawfx27xta4vfR+4MosfdO7oG8Hnj+YwEmI/W9otsus=;
-        b=GxVa8lq0hY3BT7fav05p0SMUyezgEY1uIy+ZgBDa4XsugOwBffXhDQFr0P/vMBVjD7
-         QVnDqaz9KiXDgjfFaldOiKsWg05ZvCb7dHm+GjZZfcYEjDaXhMnKtxVLVfeAR/2yb3h2
-         uFruHDNkNflM9LEwUzwISQmnjWoaPfodfDT2x738I2zQyHkQUCcdqBYZXzLHDFoPLOjs
-         uW8IB98LbxCnWy/h3CutN2oTgYFFtZvgHFDVHj7Vb8Fg+9HvRuMtNjqqz5zWgoFb1dqn
-         3fgQjJ8ounYpaudnkKyqjbSsvSW1MCupJGYrHQURJ+CMZeeqzptZdiEhv8x/WjvmOTyU
-         0JfA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XOKJyrS8QtzQoeHSOkLR7Y1klkfAcATQqfMHIhBU3dw=;
+        b=ZX3TjlWVIUa6DvnJkhrX3gVqjsqt6eo7qvybPLa7T6oIsBDQw7Mb0r7DCJog0kL2Ol
+         UH0MM6WRaZpuwbYQKyYfRLfEjhOsTDGfL4Bpga8Bv5xTUWvAWbWWcSd8XejK2Pd5cVf6
+         hGkgMpxNaZq5N7U69xre+mNALmWV1kex7FWpXVXvpPwDYweXGLrLQQaVXgM+1M8gER/z
+         rUqaOucEHqdNVbx5YKuzMOL3zJ4XqLPkZ7/8kc+3mgeBpAOh0vo4LgmU1s51Al+K2kO7
+         hMHMYe0j+XJA0PIpN7aQJV+9W2BxmpwpyNQ/JNT9qTpbfaBjPcewH+6wHkwtTG/FmEEC
+         BG/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lawfx27xta4vfR+4MosfdO7oG8Hnj+YwEmI/W9otsus=;
-        b=B/7Zne24nf6pYZ5TUm6T91bySemmlfU9dKLf2lBtvupcjKoVRx6BymoyjaRB+nmZ/m
-         z9Dbgto4geviVtMhtB8vhSHQSQfo2wi2Yfly0ZcRC6iUn2P6PoEnEIy82T04vTkrV2gd
-         PcZFl099YlKVOVSZp+OquLFZnKUYJAK7b0+QnqTcc6yl8Jy6EFhKajm2NsfpiftGsZkF
-         Py4T+zjlsBsrWotrlL7/n2TS2ihlwtk233KK+L0bhN6RlVydMLytnB5+KvEbyj3MYdds
-         qFhyn/n8n4PHalSfR4S8UbpMpAvwjZrnkEKj4oIEbrJjh69DOpshob7eiU1ZsvuS6vqn
-         Os3A==
-X-Gm-Message-State: AOAM5305/DVFWG0BUqNjhn58ulWCbLg5aakCTxhobSBVzoC/HVOKYhsj
-        UDtJ9yBUIlEgtIyXGZyRIOM8A1csIQ==
-X-Google-Smtp-Source: ABdhPJyqV6J9YtrSx9zs543pGsBRCkaga0d8/OJxaVvsfbUHMaMpwB8ODXnAm19kyamE/o8+sBlktQ==
-X-Received: by 2002:a63:482:0:b0:3aa:5637:e33a with SMTP id 124-20020a630482000000b003aa5637e33amr4832486pge.536.1650463540097;
-        Wed, 20 Apr 2022 07:05:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XOKJyrS8QtzQoeHSOkLR7Y1klkfAcATQqfMHIhBU3dw=;
+        b=SJa5QR6+nhbqhfIhDJPckvn167oY2Fy/tFAAuCMJyoKBrxOlwglnMPY+jNPM0zzSRc
+         i7bh3iHUE5pz3AqyY+PZ55i7EAiOBkg4y0E71cYX6/X5XBop8MUajvL+d+4sG1388nmI
+         aBGt2KDwRcvrur6lXT3z+PLLfbEGDCx1x1FBXPOUKmDSYDbrPYjyuqEBnUvtzxI539Q5
+         APu0SPPHvlnH1fmjnvAZFEJtbKs/Snm5YMqcsgROnQMVY5sfihhOtcFzsonoY26Gkv11
+         HxGEIlXajfWY5qclqyvS8hNCPMpUfHw9YDJieTO0ngACZRkLnH26hQd6sNCMYAC2Qa7G
+         HgIw==
+X-Gm-Message-State: AOAM531ik6cJh8hxL425JKhCy+qqvOiaetAonSlu6hgnL30gnzacu/gJ
+        rwQJ49ZjIk6Kb/2s44X51Cy3z2rOiA==
+X-Google-Smtp-Source: ABdhPJwZ2FrncAHnqzoABz25ayfNH+RftLyH/2iLGiBMZpb5Jq/7i0nzYWrvg1eeYSh1pcTSPB0Erw==
+X-Received: by 2002:a63:ec46:0:b0:381:81c4:ebbd with SMTP id r6-20020a63ec46000000b0038181c4ebbdmr19418649pgj.534.1650463542277;
+        Wed, 20 Apr 2022 07:05:42 -0700 (PDT)
 Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id br10-20020a056a00440a00b0050a777cd10csm10959178pfb.91.2022.04.20.07.05.28
+        by smtp.gmail.com with ESMTPSA id br10-20020a056a00440a00b0050a777cd10csm10959178pfb.91.2022.04.20.07.05.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 07:05:39 -0700 (PDT)
+        Wed, 20 Apr 2022 07:05:42 -0700 (PDT)
 From:   Pingfan Liu <kernelfans@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pingfan Liu <kernelfans@gmail.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Borislav Petkov <bp@alien8.de>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Steven Price <steven.price@arm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH 0/9] trival fix or improvement about irq_desc access
-Date:   Wed, 20 Apr 2022 22:05:12 +0800
-Message-Id: <20220420140521.45361-1-kernelfans@gmail.com>
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 1/9] irq/irqdesc: put the lock at the exact place in irq_sysfs_init()
+Date:   Wed, 20 Apr 2022 22:05:13 +0800
+Message-Id: <20220420140521.45361-2-kernelfans@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220420140521.45361-1-kernelfans@gmail.com>
+References: <20220420140521.45361-1-kernelfans@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -102,78 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When I went through the access of irq_to_desc(), I found the following
-trival issue or improvement can be done.
-[1-4/9]: clean up or small improvement
-[5-6/9]: bugfix for access to irq_desc under releasable context
-[7/9]: clean up
-[8-9/9]: bugfix for irq debugfs
+sparse_irq_lock is used to protect irq_desc, and furthermore
+irq_sysfs_init() is called only once, so put irq_lock_sparse() at the
+exact place, where the race condition may start.
 
-
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Baokun Li <libaokun1@huawei.com>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: "Cédric Le Goater" <clg@kaod.org>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Dongli Zhang <dongli.zhang@oracle.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Qais Yousef <qais.yousef@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Steven Price <steven.price@arm.com>
-Cc: Sven Schnelle <svens@linux.ibm.com>
+Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tom Rix <trix@redhat.com>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
-Cc: YueHaibing <yuehaibing@huawei.com>
 To: linux-kernel@vger.kernel.org
+---
+ kernel/irq/irqdesc.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-
-Pingfan Liu (9):
-  irq/irqdesc: put the lock at the exact place in irq_sysfs_init()
-  irq/irqdesc: change the name of delete_irq_desc() to irq_delete_desc()
-  irq/manage: remove some unreferenced code
-  s390/irq: utilize RCU instead of irq_lock_sparse() in
-    show_msi_interrupt()
-  x86/irq: place for_each_active_irq() in rcu read section
-  pm/irq: make for_each_irq_desc() safe of irq_desc release
-  irq: remove needless lock in takedown_cpu()
-  irq: make irq_lock_sparse() independent of CONFIG_SPARSE_IRQ
-  irq/irqdesc: rename sparse_irq_lock to bitmap_lock
-
- .clang-format                  |  1 -
- arch/s390/kernel/irq.c         | 11 ++++----
- arch/x86/kernel/apic/io_apic.c |  3 +++
- include/linux/irq.h            |  1 -
- include/linux/irqdesc.h        | 10 +++-----
- include/linux/irqnr.h          |  3 ---
- kernel/cpu.c                   | 15 ++++-------
- kernel/irq/cpuhotplug.c        |  4 +--
- kernel/irq/debugfs.c           |  4 +--
- kernel/irq/irqdesc.c           | 47 +++++++++++++++++-----------------
- kernel/irq/manage.c            | 15 -----------
- kernel/irq/pm.c                |  3 +++
- 12 files changed, 47 insertions(+), 70 deletions(-)
-
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index 939d21cd55c3..8d0982233277 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -312,15 +312,14 @@ static int __init irq_sysfs_init(void)
+ 	struct irq_desc *desc;
+ 	int irq;
+ 
+-	/* Prevent concurrent irq alloc/free */
+-	irq_lock_sparse();
+-
+ 	irq_kobj_base = kobject_create_and_add("irq", kernel_kobj);
+ 	if (!irq_kobj_base) {
+-		irq_unlock_sparse();
+ 		return -ENOMEM;
+ 	}
+ 
++	/* Prevent concurrent irq alloc/free */
++	irq_lock_sparse();
++
+ 	/* Add the already allocated interrupts */
+ 	for_each_irq_desc(irq, desc)
+ 		irq_sysfs_add(irq, desc);
 -- 
 2.31.1
 

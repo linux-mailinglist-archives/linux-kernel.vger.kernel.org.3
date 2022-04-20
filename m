@@ -2,130 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BBA50863C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3531A5085E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 12:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377818AbiDTKsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 06:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
+        id S1351740AbiDTKcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 06:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378096AbiDTKsM (ORCPT
+        with ESMTP id S1349339AbiDTKcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:48:12 -0400
-X-Greylist: delayed 966 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Apr 2022 03:45:19 PDT
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1117313F66;
-        Wed, 20 Apr 2022 03:45:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=7ut0Q
-        D0SeAhwHJ2wa4JZOw2v3iSr/i3NVuFHELZO3Hs=; b=iaitjDKGmArIa/RPsuIEE
-        uEdtSERqqRtURhqUx7BHXlYyE0/CAP0PZ3lIF2Min+CujtsfLf9GLnqFDtArgVWa
-        8eU9niGT+Dqr8RGBQ4uQK/Lg2k+mMzVFJs+TmUIim1CjoJV5TpOTYCqEOpkvpWS1
-        mg+3vZYGicnICipA0AZcxY=
-Received: from localhost.localdomain (unknown [112.97.59.179])
-        by smtp4 (Coremail) with SMTP id HNxpCgDX9AlY4F9i69iSAA--.8118S2;
-        Wed, 20 Apr 2022 18:28:42 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     mani@kernel.org, quic_hemantk@quicinc.com
-Cc:     gregkh@linuxfoundation.org, loic.poulain@linaro.org,
-        slark_xiao@163.com, bbhatt@codeaurora.org,
-        christophe.jaillet@wanadoo.fr, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] bus: mhi: host: Add support for Cinterion MV32-WA/MV32-WB
-Date:   Wed, 20 Apr 2022 18:28:11 +0800
-Message-Id: <20220420102811.3157-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 20 Apr 2022 06:32:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7457F3F887
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 03:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650450555;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KIJu0PnDJV4/uO0UdPgu/58WGciQu1suUPJ1SFUvK60=;
+        b=SM0CWFeQRknY+2vXhIKwxZDRIEAcagCUbNhNyNGPN3vin+UWjSybQYLQlbLX0z1tv3E0Mz
+        E4r0wCSEM5GiDEDVfjJ/SF6jp9wPb+EF+DER2runUmY6dMeB/H4AdFbJcWvqP42Yl+PGDn
+        3lp/IhsoPd9ZuaRyJNtF3PvgPQcibWg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-5Q0XG3XRM2uJXHWtLXv0tg-1; Wed, 20 Apr 2022 06:29:12 -0400
+X-MC-Unique: 5Q0XG3XRM2uJXHWtLXv0tg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83F2338149C1;
+        Wed, 20 Apr 2022 10:29:11 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E39654022C4;
+        Wed, 20 Apr 2022 10:29:08 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20210312171232.2681989-4-mic@digikod.net>
+References: <20210312171232.2681989-4-mic@digikod.net> <20210312171232.2681989-1-mic@digikod.net>
+To:     =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl=3D20Sala=3DC3=3DBCn=3F?=
+         =?us-ascii?Q?=3D?= <mic@digikod.net>
+Cc:     dhowells@redhat.com, David Woodhouse <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl?=
+         =?us-ascii?Q?=3D20Sala=3DC3=3DBCn=3F=3D?= 
+        <mic@linux.microsoft.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v7 3/5] certs: Make blacklist_vet_description() more strict
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgDX9AlY4F9i69iSAA--.8118S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGw48JF17ArW8KFyktr4xJFb_yoW5GFWDpF
-        WIvrWYyF4vqayaqanay34qgF98Cw4kG343KrnrKw12ywn0y34kZFykK343tFyYvw4vqrs3
-        tr1vqrW3uF4Dt3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zioGQfUUUUU=
-X-Originating-IP: [112.97.59.179]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdRPoZGBbCtHDJAAAst
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 20 Apr 2022 11:29:08 +0100
+Message-ID: <648218.1650450548@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MV32-WA is designed based on Qualcomm SDX62, and
-MV32-WB is designed based on QUalcomm SDX65. Both
-products' enumeration would align with previous
-product MV31-W.
-Add some new items for mv32 to separate it from
-mv31-w, in case we need to do any changes in
-future.
+Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/bus/mhi/host/pci_generic.c | 41 ++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+> +	/* The following algorithm only works if prefix lengths match. */
+> +	BUILD_BUG_ON(sizeof(tbs_prefix) !=3D sizeof(bin_prefix));
+> +	prefix_len =3D sizeof(tbs_prefix) - 1;
+> +	for (i =3D 0; *desc; desc++, i++) {
+> +		if (*desc =3D=3D ':') {
+> +			if (tbs_step =3D=3D prefix_len)
+> +				goto found_colon;
+> +			if (bin_step =3D=3D prefix_len)
+> +				goto found_colon;
+> +			return -EINVAL;
+> +		}
+> +		if (i >=3D prefix_len)
+> +			return -EINVAL;
+> +		if (*desc =3D=3D tbs_prefix[i])
+> +			tbs_step++;
+> +		if (*desc =3D=3D bin_prefix[i])
+> +			bin_step++;
+> +	}
 
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index 541ced27d941..a2da40340df7 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -406,6 +406,41 @@ static const struct mhi_pci_dev_info mhi_mv31_info = {
- 	.mru_default = 32768,
- };
- 
-+static const struct mhi_channel_config mhi_mv32_channels[] = {
-+	MHI_CHANNEL_CONFIG_UL(0, "LOOPBACK", 64, 0),
-+	MHI_CHANNEL_CONFIG_DL(1, "LOOPBACK", 64, 0),
-+	/* MBIM Control Channel */
-+	MHI_CHANNEL_CONFIG_UL(12, "MBIM", 64, 0),
-+	MHI_CHANNEL_CONFIG_DL(13, "MBIM", 64, 0),
-+	/* MBIM Data Channel */
-+	MHI_CHANNEL_CONFIG_HW_UL(100, "IP_HW0_MBIM", 512, 2),
-+	MHI_CHANNEL_CONFIG_HW_DL(101, "IP_HW0_MBIM", 512, 3),
-+};
-+
-+static struct mhi_event_config mhi_mv32_events[] = {
-+	MHI_EVENT_CONFIG_CTRL(0, 256),
-+	MHI_EVENT_CONFIG_DATA(1, 256),
-+	MHI_EVENT_CONFIG_HW_DATA(2, 1024, 100),
-+	MHI_EVENT_CONFIG_HW_DATA(3, 1024, 101),
-+};
-+
-+static const struct mhi_controller_config modem_mv32_config = {
-+	.max_channels = 128,
-+	.timeout_ms = 20000,
-+	.num_channels = ARRAY_SIZE(mhi_mv32_channels),
-+	.ch_cfg = mhi_mv32_channels,
-+	.num_events = ARRAY_SIZE(mhi_mv32_events),
-+	.event_cfg = mhi_mv32_events,
-+};
-+
-+static const struct mhi_pci_dev_info mhi_mv32_info = {
-+	.name = "cinterion-mv32",
-+	.config = &modem_mv32_config,
-+	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
-+	.dma_data_width = 32,
-+	.mru_default = 32768,
-+};
-+
- static const struct mhi_channel_config mhi_sierra_em919x_channels[] = {
- 	MHI_CHANNEL_CONFIG_UL_SBL(2, "SAHARA", 32, 0),
- 	MHI_CHANNEL_CONFIG_DL_SBL(3, "SAHARA", 256, 0),
-@@ -475,6 +510,12 @@ static const struct pci_device_id mhi_pci_id_table[] = {
- 	/* MV31-W (Cinterion) */
- 	{ PCI_DEVICE(0x1269, 0x00b3),
- 		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
-+	/* MV32-WA (Cinterion) */
-+	{ PCI_DEVICE(0x1269, 0x00ba),
-+		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
-+	/* MV32-WB (Cinterion) */
-+	{ PCI_DEVICE(0x1269, 0x00bb),
-+		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
- 	{  }
- };
- MODULE_DEVICE_TABLE(pci, mhi_pci_id_table);
--- 
-2.25.1
+I wonder if:
+
+	static const char tbs_prefix[] =3D "tbs:";
+	static const char bin_prefix[] =3D "bin:";
+
+	if (strncmp(desc, tbs_prefix, sizeof(tbs_prefix) - 1) =3D=3D 0 ||
+	    strncmp(desc, bin_prefix, sizeof(bin_prefix) - 1) =3D=3D 0)
+		goto found_colon;
+
+might be better.
+
+David
 

@@ -2,141 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420D5508404
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6339508408
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 10:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351501AbiDTIvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 04:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
+        id S1354166AbiDTIw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 04:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbiDTIvR (ORCPT
+        with ESMTP id S1377011AbiDTIwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 04:51:17 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CF4252B3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:48:31 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id l7so2109362ejn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qpUXxpkY1LQrTCewxX/BwK6Ql1sWiAOxr2avilSjOww=;
-        b=D5HHuJNPDcWp1NhI9j9oJPY7JJPhJj+u4XdYy1OxHt81Dn0FBmrtkeHQZMXe3qs7in
-         F5uWxg1sMMIckuW84/EW22jv0iNA9uPUNUpXhBgwaGBXD90wfqoVeAg5vD0JqA7Z6V7R
-         afuF9PVp7P5c3qnx7lTC/QrKKRVORLV0+dR8r5DdRSOj1wqhtdBcrRypRedRZAPBtWwy
-         SaH54loFCEpKBqpyIIQjPlk2f5KhSC5u2TKKbh624a6BsRP+Fseii00sZ3ehon6fl+Fb
-         NwXX7xs3MKYk8Fm1MGhuUZRKZPNDmxLf/pVUe+jps6uDt3Aywxj6szZxoi3F2pSjopHn
-         yMcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qpUXxpkY1LQrTCewxX/BwK6Ql1sWiAOxr2avilSjOww=;
-        b=3gI3GY+p/r90L4KlC4PEDeJ3Uduo6+h0jJbEWGcO2Bu/GQh7Np7w3aVEtnxuqeug0E
-         +XWGLVyl6kEP6I7L3/pB1INziELgyfZJ1sMYy404gC/iOMvjiv/8tVqDP1bcz4tgi3rC
-         Fqop6Ryg03STLhvyiBSOP6C5n5OfmhJDnRSeSm0JbgKrjCRqC5zny8SeJiOCqRjyUcQt
-         0+TaF9iRsPI/ABj0MnB2r3qWarNugSjOlBjwqbA/3VXSWfzg0wq7f8NIddT9//WGigR2
-         HDplHDIhWS8SiSyo9EB+dVy+CXBCxlfBd4UOkjU8rg1O4/xfR2sbgkhTRPjqRDIbaZJp
-         /RIA==
-X-Gm-Message-State: AOAM5333Iq2pTUmUhQndnDm6QLt5ahs4WhujGCRY7ehE4ykNmZVi4Eat
-        JwU+5/59/QbVfqEWK7mK31y+VQ==
-X-Google-Smtp-Source: ABdhPJw837T3cRO9mLC5fpo5UIyr0XVBpI4v0Nlm9M0zRzKPBvuTg9N+7xCZv7v5VIuNF5cHZ9SIrg==
-X-Received: by 2002:a17:907:7286:b0:6ef:f594:e063 with SMTP id dt6-20020a170907728600b006eff594e063mr2925426ejc.611.1650444510495;
-        Wed, 20 Apr 2022 01:48:30 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id n25-20020a1709062bd900b006e8766b7907sm6490432ejg.223.2022.04.20.01.48.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 01:48:29 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 16:48:23 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     German Gomez <german.gomez@arm.com>
-Cc:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, acme@kernel.org,
-        benh@kernel.crashing.org, Nick.Forrington@arm.com,
-        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-Subject: Re: [PATCH v5 5/5] perf mem: Support mem_lvl_num in c2c command
-Message-ID: <20220420084823.GE843168@leoy-ThinkPad-X240s>
-References: <20220408195344.32764-1-alisaidi@amazon.com>
- <20220408195344.32764-6-alisaidi@amazon.com>
- <3ad0128a-1b3d-37a7-81f6-fd597b565b18@arm.com>
+        Wed, 20 Apr 2022 04:52:54 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992EF1EED1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 01:50:04 -0700 (PDT)
+Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 9AB6F3F7B4;
+        Wed, 20 Apr 2022 10:50:01 +0200 (CEST)
+Date:   Wed, 20 Apr 2022 10:49:59 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, vkoul@kernel.org
+Subject: Re: [PATCH v2 1/1] arm64: dts: qcom: sm8350-sagami: usb qmp phy node
+ - add 'vdda-pll-supply' & 'vdda-phy-supply'
+Message-ID: <20220420084959.fvswkrcimkvxleii@SoMainline.org>
+References: <20220419205854.1269922-1-bhupesh.sharma@linaro.org>
+ <Yl9y668H/N+bcrP4@builder.lan>
+ <CAH=2NtwCsRmPbBJ6SAb4fL_Di3SxfUsw=mZMrRGyefd+NW=PQQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3ad0128a-1b3d-37a7-81f6-fd597b565b18@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAH=2NtwCsRmPbBJ6SAb4fL_Di3SxfUsw=mZMrRGyefd+NW=PQQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 11:04:28AM +0100, German Gomez wrote:
+On 2022-04-20 12:28:24, Bhupesh Sharma wrote:
+> Hi Bjorn,
 > 
-> On 08/04/2022 20:53, Ali Saidi wrote:
-> > In addition to summarizing data encoded in mem_lvl also support data
-> > encoded in mem_lvl_num.
+> On Wed, 20 Apr 2022 at 08:11, Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
 > >
-> > Since other architectures don't seem to populate the mem_lvl_num field
-> > here there shouldn't be a change in functionality.
+> > On Tue 19 Apr 15:58 CDT 2022, Bhupesh Sharma wrote:
 > >
-> > Signed-off-by: Ali Saidi <alisaidi@amazon.com>
-> > ---
-> >  tools/perf/util/mem-events.c | 11 +++++++----
-> >  1 file changed, 7 insertions(+), 4 deletions(-)
+> > How about making the subject:
 > >
-> > diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
-> > index ed0ab838bcc5..e5e405185498 100644
-> > --- a/tools/perf/util/mem-events.c
-> > +++ b/tools/perf/util/mem-events.c
-> > @@ -485,6 +485,7 @@ int c2c_decode_stats(struct c2c_stats *stats, struct mem_info *mi)
-> >  	u64 daddr  = mi->daddr.addr;
-> >  	u64 op     = data_src->mem_op;
-> >  	u64 lvl    = data_src->mem_lvl;
-> > +	u64 lnum   = data_src->mem_lvl_num;
-> >  	u64 snoop  = data_src->mem_snoop;
-> >  	u64 lock   = data_src->mem_lock;
-> >  	u64 blk    = data_src->mem_blk;
-> > @@ -527,16 +528,18 @@ do {				\
-> >  			if (lvl & P(LVL, UNC)) stats->ld_uncache++;
-> >  			if (lvl & P(LVL, IO))  stats->ld_io++;
-> >  			if (lvl & P(LVL, LFB)) stats->ld_fbhit++;
+> > "arm64: dts: qcom: sm8350-sagami: add supplies to USB phy node"
+> >
+> > It still says the same thing, but in much less characters.
 > 
-> Just for completion, can we also handle LFB as it seems to be being set
-> in "/arch/x86/events/intel/ds.c"? (Sorry I missed this in the v4)
+> Sure, this wording seems better to me. Will fix this in v3.
+> 
+> > > As suggested by Bjorn during review of [1], the 'vdda-pll-supply' &
+> > > 'vdda-phy-supply' supplies denote the power for the bus and the
+> > > clock of the usb qmp phy and are used by the qcom qmp phy driver.
+> > >
+> > > So, its safe to assume that the two regulators are the same as on
+> > > the MTP. So let's wire them up in the same way as the MTP.
+> > >
+> >
+> > I'm not sure it's "safe to assume", so I would like to get Konrad's
+> > input before merging this.
+> 
+> Right. @Konrad Dybcio , @Marijn Suijten - Any comments on this fix?
+> Please share your thoughts.
 
-With fixing LFB issue pointed by German, the change looks good to me:
+All we can do is read downstream sources (and/or check compiled DTS
+after all overrides have been flattened together), or read sysfs to
+validate values where applicable.
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
+These are indeed the two regulators used by USB in:
 
-It would be appreciate if x86 or PowerPC maintainers could take a look
-for this patch.  Thanks!
+	https://github.com/sonyxperiadev/kernel/blob/7378fb627b546e0eae24cccd3ab37fa9e0802f95/arch/arm64/boot/dts/qcom/lahaina-usb.dtsi#L146-L149
 
-Leo
+And the voltages are correct for our board too as per:
 
-> > -			if (lvl & P(LVL, L1 )) stats->ld_l1hit++;
-> > -			if (lvl & P(LVL, L2 )) stats->ld_l2hit++;
-> > -			if (lvl & P(LVL, L3 )) {
-> > +			if (lvl & P(LVL, L1) || lnum == P(LVLNUM, L1))
-> > +				stats->ld_l1hit++;
-> > +			if (lvl & P(LVL, L2) || lnum == P(LVLNUM, L2))
-> > +				stats->ld_l2hit++;
-> > +			if (lvl & P(LVL, L3) || lnum == P(LVLNUM, L3)) {
-> >  				if (snoop & P(SNOOP, HITM))
-> >  					HITM_INC(lcl_hitm);
-> >  				else
-> >  					stats->ld_llchit++;
-> >  			}
-> >  
-> > -			if (lvl & P(LVL, LOC_RAM)) {
-> > +			if (lvl & P(LVL, LOC_RAM) || lnum == P(LVLNUM, RAM)) {
-> >  				stats->lcl_dram++;
-> >  				if (snoop & P(SNOOP, HIT))
-> >  					stats->ld_shared++;
+	https://github.com/sonyxperiadev/kernel/blob/7378fb627b546e0eae24cccd3ab37fa9e0802f95/arch/arm64/boot/dts/qcom/lahaina-regulators.dtsi
+
+It appears only L6 is used by other hardware nodes, but that should be
+fine.
+
+As such, with the suggestions from Bjorn applied:
+
+	Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+
+- Marijn
+
+> Thanks,
+> Bhupesh
+> 
+> > > In absence of the same 'make dtbs_check' leads to following warnings:
+> > >
+> > > arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
+> > >  phy-wrapper@88e9000: 'vdda-phy-supply' is a required property
+> > >
+> > > arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
+> > >  phy-wrapper@88e9000: 'vdda-pll-supply' is a required property
+> > >
+> >
+> > This is good!
+> >
+> > Thanks for the patch Bhupesh,
+> > Bjorn
+> >
+> > > [1]. https://lore.kernel.org/lkml/20220228123019.382037-9-bhupesh.sharma@linaro.org/
+> > >
+> > > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > Cc: konrad.dybcio@somainline.org
+> > > Cc: Vinod Koul <vkoul@kernel.org>
+> > > Cc: Marijn Suijten <marijn.suijten@somainline.org>
+> > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > > ---
+> > > Changes since v1:
+> > > -----------------
+> > > - v1 can be found here: https://www.spinics.net/lists/linux-arm-msm/msg108467.html
+> > > - Fixed the commit message to read usb qmp phy instead of ufs phy (which
+> > >   was introduced erroraneously in the commit log).
+> > >
+> > >  .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 25 +++++++++++++++++++
+> > >  1 file changed, 25 insertions(+)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> > > index 90b13cbe2fa6..238ac9380ca2 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> > > +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> > > @@ -3,6 +3,7 @@
+> > >   * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
+> > >   */
+> > >
+> > > +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+> > >  #include "sm8350.dtsi"
+> > >  #include "pm8350.dtsi"
+> > >  #include "pm8350b.dtsi"
+> > > @@ -75,6 +76,27 @@ ramoops@ffc00000 {
+> > >       };
+> > >  };
+> > >
+> > > +&apps_rsc {
+> > > +     pm8350-rpmh-regulators {
+> > > +             compatible = "qcom,pm8350-rpmh-regulators";
+> > > +             qcom,pmic-id = "b";
+> > > +
+> > > +             vreg_l1b_0p88: ldo1 {
+> > > +                     regulator-name = "vreg_l1b_0p88";
+> > > +                     regulator-min-microvolt = <912000>;
+> > > +                     regulator-max-microvolt = <920000>;
+> > > +                     regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> > > +             };
+> > > +
+> > > +             vreg_l6b_1p2: ldo6 {
+> > > +                     regulator-name = "vreg_l6b_1p2";
+> > > +                     regulator-min-microvolt = <1200000>;
+> > > +                     regulator-max-microvolt = <1208000>;
+> > > +                     regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> > > +             };
+> > > +     };
+> > > +};
+> > > +
+> > >  &adsp {
+> > >       status = "okay";
+> > >       firmware-name = "qcom/adsp.mbn";
+> > > @@ -256,4 +278,7 @@ &usb_1_hsphy {
+> > >
+> > >  &usb_1_qmpphy {
+> > >       status = "okay";
+> > > +
+> > > +     vdda-phy-supply = <&vreg_l6b_1p2>;
+> > > +     vdda-pll-supply = <&vreg_l1b_0p88>;
+> > >  };
+> > > --
+> > > 2.35.1
+> > >

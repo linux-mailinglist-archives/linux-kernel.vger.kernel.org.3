@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8377D509369
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B028550936A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383126AbiDTXNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 19:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        id S1354986AbiDTXNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 19:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231873AbiDTXNO (ORCPT
+        with ESMTP id S1383099AbiDTXNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 20 Apr 2022 19:13:14 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA6211142
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:10:26 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-e2afb80550so3648230fac.1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:10:26 -0700 (PDT)
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A19111A08
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:10:27 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e5e8523fcbso3622753fac.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 16:10:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gdbvXFvPlODxwWrm89MVekUAyc4cmb0QzNZ5AG9eFow=;
-        b=EIrQ4znQvoRLhPbawBtJopfbUloIV6vDLCxZk3sov+7xSyIliKoQDb839QzGpgLDQo
-         BqTL/gRHVYKJUjuwrZF1D6PtoXmLKXvsRJO1UHFgfHiVFKnSv78BKD7wqpvuI4zk7rpK
-         /wAa+6cjF2x6WZP1ngaHFOc/f8kYLqo8M2iRnVtLUi5aRnqn1CTrkdZTSAeD6f+SrhvT
-         x3MXw+mHXXSpB1yrW41SLawFwtsbScYebG6PLX+FWsmWTa+YjK6fbGyJtotp60dO+ONS
-         ZbIYLcuwIb+/SBJwyMH7zP3BWTZyNagbxjIrWCWNTkKbFKALjUXE9ecA78YzFVOsTo1g
-         Xbvg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TRei6a1qHKhnvQ3GEDyy4E1WwK9zRMbycKgIfFir6MI=;
+        b=aicu3OOVauGYbi8Leet6cjCpJNEgBJymsZ53QG5imPcqz+s0HavG6bOHqFTs66yXIv
+         LrBNrePj1v5MHkeJVRGkNxlEl4w8DZeajSPgP4ajg2fo0tpcYidi6/McS2LDw9BkQUZS
+         r2a/rcaqJ5rb8AH4YWOmMMNcZ9dZ/NrIz/2dLjfJAOAhMPDZiZEkIzZfD/ELmXSU12W5
+         w3BhYqm0iLRcUZ3zYV6DJgIPvHxd0IAK+TkTwur23IHBuYYHbOErXj+E8w/RhFeP6ibL
+         kjTYwtJXxLTUoJb0vT2X+frl2s81XACMBnaR4bw4+tn8zgLS5xDLAUqoQ6X9QHutROOZ
+         0GUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gdbvXFvPlODxwWrm89MVekUAyc4cmb0QzNZ5AG9eFow=;
-        b=E0rT1deSNV0reZ40yq3bQMkSokX1h0xIzAqmlnnmhyqIazJbhrRdYGIeodk9Fg/NZQ
-         7V329vp8WnmEfgBtfT75KysrP2Q8Lm+DecnW6W/D6/8TNn/Z39yrmLZgQU4IYQ7+A08W
-         4ylK6mmDUWEvf7RPW/erXDGdfOzmPp8jedNwRo3J0tymitE23az3DzXuScqeg0YdqBYv
-         Hr5iSjYQ9HIjGBXeU+Fww4p/CO0AX9jaufu+IQkvK7sG5b6+2LyA5Okz3chEhoGjxcUd
-         wAyE6iyvdTSg1r7dYqi32cpVeuUMG2ep97E1LYriSMTn0a96s0+DsH3zYdaVlaqNRPm4
-         NxMQ==
-X-Gm-Message-State: AOAM532mAZWgCO2P+hlUbi82FtyQ+u39125AL9Exw3hvUV7dVya3rKRn
-        HM/hTsC8vI4WlzHjU+ZsBNllHQ==
-X-Google-Smtp-Source: ABdhPJzPxgkBrvYOoWCIf9X6VfGoaFD8q7kori051/muyYdzC7jXkmvbY1cdg5Sms4Q5n+dspakupw==
-X-Received: by 2002:a05:6870:d1c9:b0:e5:9f16:c94f with SMTP id b9-20020a056870d1c900b000e59f16c94fmr2629205oac.273.1650496225618;
-        Wed, 20 Apr 2022 16:10:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TRei6a1qHKhnvQ3GEDyy4E1WwK9zRMbycKgIfFir6MI=;
+        b=bTmnoBHlDTWf9iOWpdkgAFLpmnb6NCXlnrXIMwUuzX2utbrfMRJEDWhBa+1ZjWwz1l
+         s5R+MqigiB7q+8JCpM1owd5R581Dm+p+ZYGcp2eNkw4w6ZiPcehnaG/OAKXzTqjZCBTb
+         h4A0vl55FsRGo3030rlbYFdZtCOHHvCdBfPVL2hxJce+n6dFitUJK6DEYcirEj4GIi05
+         FRnzFABZcxHua3Yoo0IwZyvJPKOYYaD61kOzFCipeFwp09uCWFRmjzekMDDe3O1j9cho
+         95jagY3dP2v09txomS1kV4dEY12Q6pSzPnvYpAd/KiKqQaOBc+Qb4oHX6QbmKMTUYhqH
+         qRdA==
+X-Gm-Message-State: AOAM533hQGEGpZ1e9jUqfiGC6aPljda797s8r7nvaPOJjKqLOgN3qkg3
+        vjURTOV11G3Uh6wjeXNzpyaNTw==
+X-Google-Smtp-Source: ABdhPJwFhn3WUPESS5w8sSu50szxQr6qmD32XDF7sWlOuuj5eugzUOUVYzym5mk0Jr/OIAp4Jq2Jiw==
+X-Received: by 2002:a05:6871:1d0:b0:da:b3f:2b28 with SMTP id q16-20020a05687101d000b000da0b3f2b28mr2674159oad.199.1650496226847;
+        Wed, 20 Apr 2022 16:10:26 -0700 (PDT)
 Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id a17-20020a4ae931000000b0032933be7230sm7424481ooe.4.2022.04.20.16.10.24
+        by smtp.gmail.com with ESMTPSA id a17-20020a4ae931000000b0032933be7230sm7424481ooe.4.2022.04.20.16.10.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 16:10:25 -0700 (PDT)
+        Wed, 20 Apr 2022 16:10:26 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -58,10 +58,12 @@ To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Rob Clark <robdclark@gmail.com>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] Revert "drm: of: Properly try all possible cases for bridge/panel detection"
-Date:   Wed, 20 Apr 2022 16:12:29 -0700
-Message-Id: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+Subject: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or bridge"
+Date:   Wed, 20 Apr 2022 16:12:30 -0700
+Message-Id: <20220420231230.58499-2-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,166 +76,60 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-bridge")' introduced the ability to describe a panel under a display
-controller without having to use a graph to connect the controller to
-its single child panel (or bridge).
+bridge")' attempted to simplify the case of expressing a simple panel
+under a DSI controller, by assuming that the first non-graph child node
+was a panel or bridge.
 
-The implementation of this would find the first non-graph node and
-attempt to acquire the related panel or bridge. This prevents cases
-where any other child node, such as a aux bus for a DisplayPort
-controller, or an opp-table to find the referenced panel.
+Unfortunately for non-trivial cases the first child node might not be a
+panel or bridge.  Examples of this can be a aux-bus in the case of
+DisplayPort, or an opp-table represented before the panel node.
 
-Commit '67bae5f28c89 ("drm: of: Properly try all possible cases for
-bridge/panel detection")' attempted to solve this problem by not
-bypassing the graph reference lookup before attempting to find the panel
-or bridge.
+In these cases the reverted commit prevents the caller from ever finding
+a reference to the panel.
 
-While this does solve the case where a proper graph reference is
-present, it does not allow the caller to distinguish between a
-yet-to-be-probed panel or bridge and the absence of a reference to a
-panel.
-
-One such case is a DisplayPort controller that on some boards have an
-explicitly described reference to a panel, but on others have a
-discoverable DisplayPort display attached (which doesn't need to be
-expressed in DeviceTree).
-
-This reverts commit '67bae5f28c89 ("drm: of: Properly try all possible
-cases for bridge/panel detection")', as a step towards reverting commit
-'80253168dbfd ("drm: of: Lookup if child node has panel or bridge")'.
+This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
+panel or bridge")', in favor of using an explicit graph reference to the
+panel in the trivial case as well.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/gpu/drm/drm_of.c | 99 ++++++++++++++++++++--------------------
- 1 file changed, 49 insertions(+), 50 deletions(-)
+ drivers/gpu/drm/drm_of.c | 17 -----------------
+ 1 file changed, 17 deletions(-)
 
 diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
-index f4df344509a8..026e4e29a0f3 100644
+index 026e4e29a0f3..9a2cfab3a177 100644
 --- a/drivers/gpu/drm/drm_of.c
 +++ b/drivers/gpu/drm/drm_of.c
-@@ -214,29 +214,6 @@ int drm_of_encoder_active_endpoint(struct device_node *node,
- }
- EXPORT_SYMBOL_GPL(drm_of_encoder_active_endpoint);
- 
--static int find_panel_or_bridge(struct device_node *node,
--				struct drm_panel **panel,
--				struct drm_bridge **bridge)
--{
--	if (panel) {
--		*panel = of_drm_find_panel(node);
--		if (!IS_ERR(*panel))
--			return 0;
--
--		/* Clear the panel pointer in case of error. */
--		*panel = NULL;
--	}
--
--	/* No panel found yet, check for a bridge next. */
--	if (bridge) {
--		*bridge = of_drm_find_bridge(node);
--		if (*bridge)
--			return 0;
--	}
--
--	return -EPROBE_DEFER;
--}
--
- /**
-  * drm_of_find_panel_or_bridge - return connected panel or bridge device
-  * @np: device tree node containing encoder output ports
-@@ -259,44 +236,66 @@ int drm_of_find_panel_or_bridge(const struct device_node *np,
- 				struct drm_panel **panel,
- 				struct drm_bridge **bridge)
- {
--	struct device_node *node;
--	int ret;
-+	int ret = -EPROBE_DEFER;
-+	struct device_node *remote;
- 
- 	if (!panel && !bridge)
- 		return -EINVAL;
--
+@@ -244,21 +244,6 @@ int drm_of_find_panel_or_bridge(const struct device_node *np,
  	if (panel)
  		*panel = NULL;
--	if (bridge)
--		*bridge = NULL;
+ 
+-	/**
+-	 * Devices can also be child nodes when we also control that device
+-	 * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
+-	 *
+-	 * Lookup for a child node of the given parent that isn't either port
+-	 * or ports.
+-	 */
+-	for_each_available_child_of_node(np, remote) {
+-		if (of_node_name_eq(remote, "port") ||
+-		    of_node_name_eq(remote, "ports"))
+-			continue;
 -
--	/* Check for a graph on the device node first. */
--	if (of_graph_is_present(np)) {
--		node = of_graph_get_remote_node(np, port, endpoint);
--		if (node) {
--			ret = find_panel_or_bridge(node, panel, bridge);
--			of_node_put(node);
--
--			if (!ret)
--				return 0;
--		}
+-		goto of_find_panel_or_bridge;
 -	}
+-
+ 	/*
+ 	 * of_graph_get_remote_node() produces a noisy error message if port
+ 	 * node isn't found and the absence of the port is a legit case here,
+@@ -269,8 +254,6 @@ int drm_of_find_panel_or_bridge(const struct device_node *np,
+ 		return -ENODEV;
  
--	/* Otherwise check for any child node other than port/ports. */
--	for_each_available_child_of_node(np, node) {
--		if (of_node_name_eq(node, "port") ||
--		    of_node_name_eq(node, "ports"))
-+	/**
-+	 * Devices can also be child nodes when we also control that device
-+	 * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
-+	 *
-+	 * Lookup for a child node of the given parent that isn't either port
-+	 * or ports.
-+	 */
-+	for_each_available_child_of_node(np, remote) {
-+		if (of_node_name_eq(remote, "port") ||
-+		    of_node_name_eq(remote, "ports"))
- 			continue;
- 
--		ret = find_panel_or_bridge(node, panel, bridge);
--		of_node_put(node);
-+		goto of_find_panel_or_bridge;
-+	}
-+
-+	/*
-+	 * of_graph_get_remote_node() produces a noisy error message if port
-+	 * node isn't found and the absence of the port is a legit case here,
-+	 * so at first we silently check whether graph presents in the
-+	 * device-tree node.
-+	 */
-+	if (!of_graph_is_present(np))
-+		return -ENODEV;
-+
-+	remote = of_graph_get_remote_node(np, port, endpoint);
-+
-+of_find_panel_or_bridge:
-+	if (!remote)
-+		return -ENODEV;
-+
-+	if (panel) {
-+		*panel = of_drm_find_panel(remote);
-+		if (!IS_ERR(*panel))
-+			ret = 0;
-+		else
-+			*panel = NULL;
-+	}
-+
-+	/* No panel found yet, check for a bridge next. */
-+	if (bridge) {
-+		if (ret) {
-+			*bridge = of_drm_find_bridge(remote);
-+			if (*bridge)
-+				ret = 0;
-+		} else {
-+			*bridge = NULL;
-+		}
- 
--		/* Stop at the first found occurrence. */
--		if (!ret)
--			return 0;
- 	}
- 
--	return -EPROBE_DEFER;
-+	of_node_put(remote);
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(drm_of_find_panel_or_bridge);
+ 	remote = of_graph_get_remote_node(np, port, endpoint);
+-
+-of_find_panel_or_bridge:
+ 	if (!remote)
+ 		return -ENODEV;
  
 -- 
 2.35.1

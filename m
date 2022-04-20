@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5EF5091B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30C35091B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382302AbiDTU7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S1382340AbiDTU7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382333AbiDTU7H (ORCPT
+        with ESMTP id S1382320AbiDTU7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:59:07 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDFB4738F;
-        Wed, 20 Apr 2022 13:56:06 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id q1so1733026plx.13;
-        Wed, 20 Apr 2022 13:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iyNh/cgw372mgMuoCpBOD5OLepcke4CvqRSVyft8dEI=;
-        b=Pjvu+5wlOm0zbvm9BXVkOQIBJbIIx1+BuScH7ve1SvNr3jK3hzMmJq7Oy6+e5bMQx3
-         EUWq5pSdndTu7VFL13N3pccgmPcI6DSNQa1igjEak09RnccAL7iyPL3UZFYVyDhvdYXX
-         thpHo5hbJuGT3B1Wyrjy7n0zqsry2KJ30ai8fjsebOryZb/msh3EI8pl7zhwQ0ky+AHC
-         QjN7256MqxCw0Ze85jqAdYBZdIgZ9iAQ28pd9KMDpcdWF4tvmEY19EgJr/RvpdQFi6zq
-         S7zsic7PNs7BtciZFpPKTU/Oi1ewDdI4LgXVZRlaN4o24hOKPL7/BTBY+jafVEMpZcAS
-         PsEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iyNh/cgw372mgMuoCpBOD5OLepcke4CvqRSVyft8dEI=;
-        b=nh5dmKTp8EIMLEreqn+pByQfoTK9qO5KMcU1LP+2Uw0vdlKCtJxq6WpvZb5wN18IK+
-         L5hr6ZFguIJ37xqdVNFXcg5jgm1swEUHYQRtOwdfT/3aDLoH8OLsPxDB4oIheF/SLSvu
-         KMfa9dKisquV7H9Xb2AhPvjNoFNiYfwKqY7d+RLoG9b/k00D3mtiNyzFtK+IAR6QxUD8
-         ql83Q/e8x724WDCVWSpMQ2aRMqek0/FTo2sXGYdI5xquki0yE5MKuTTfg7xlNOUEryFz
-         +oQ9+kg7XEi1dmmEY3AZAK0YngcRWlVvbNVkI1D7wHYxaKvVIV4ZgWdOCtszjagIZgxh
-         Bacw==
-X-Gm-Message-State: AOAM530lQWtx7Ed9nJ2XpIQZ2mmiX6TAm0oop37gYOjr44KQa6gBpuwU
-        IMFOFVusv042ml8c3L5s9ZI=
-X-Google-Smtp-Source: ABdhPJzWNfD4QdoKGiy4HD3wAKCNVrRtgJ9RHg39Ydkly85OJOUKE6GjmttoYlAImRh6F0mGhCs0NQ==
-X-Received: by 2002:a17:90b:1bc5:b0:1d2:699a:54e3 with SMTP id oa5-20020a17090b1bc500b001d2699a54e3mr6471988pjb.136.1650488165771;
-        Wed, 20 Apr 2022 13:56:05 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:fe4b:9301:599b:d734])
-        by smtp.gmail.com with ESMTPSA id m18-20020a639412000000b003820bd9f2f2sm20737577pge.53.2022.04.20.13.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 13:56:04 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 13:56:02 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     cgel.zte@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] Input: Remove unneeded variable
-Message-ID: <YmBzYpGW+9rn+SaJ@google.com>
-References: <20220419064255.2563333-1-deng.changcheng@zte.com.cn>
+        Wed, 20 Apr 2022 16:59:09 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6502047AD3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650488169; x=1682024169;
+  h=message-id:date:mime-version:to:references:from:subject:
+   in-reply-to:content-transfer-encoding;
+  bh=3Rtfob+huina/55HMFVC0p+JdnFzo9FvVFAZEOpk6b4=;
+  b=bDCJ2EgioKQ1ZzH+IEQtg0+1XINwT3eTpDe6D951mPTMyimnxZf25LKn
+   EOB1feMmFCN9jzeE5Gebh/6RRHFGwGn4FuAV9MF3EX49S1mfjOiDzNHAf
+   GjbXWTYie0e5EPsrqHxTFM21grenYkgHrnTypnSLOS5/WGfjT8XXfAdT/
+   t6r4ulv8oIki7E/Whp/rwKzfZVGNuLolLMv4GaLu98iS2c9iJ8q2pyvAb
+   EPOJ64vz2HY2enfdR+PU6JVebCpFR2UqZR0V8Wsz0Qe/KvZTLuDVFQORw
+   CN8p5AiC1FZqId3jl7JYDJ0bftUUNQ3jW8l1di2H45oMUsP3SLMtNgJ4F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="244734017"
+X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
+   d="scan'208";a="244734017"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 13:56:09 -0700
+X-IronPort-AV: E=Sophos;i="5.90,276,1643702400"; 
+   d="scan'208";a="562267203"
+Received: from mileskin-mobl.amr.corp.intel.com (HELO [10.213.184.8]) ([10.213.184.8])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 13:56:08 -0700
+Message-ID: <2eb705cd-8607-4b8c-2c0b-31265d503eed@intel.com>
+Date:   Wed, 20 Apr 2022 13:56:07 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419064255.2563333-1-deng.changcheng@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>,
+        catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fenghua.yu@intel.com, reinette.chatre@intel.com
+References: <20220420030223.689259-1-tarumizu.kohei@fujitsu.com>
+ <20220420030223.689259-7-tarumizu.kohei@fujitsu.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v3 6/9] x86: resctrl: pseudo_lock: Fix to restore to
+ original value when re-enabling hardware prefetch register
+In-Reply-To: <20220420030223.689259-7-tarumizu.kohei@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,16 +67,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ov> HID-over-I2C devices might reset on their own. Any device configuration
-> applied before the reset might be brought back to defaults so we need to
-> reconfigure to make sure the driver state is consistent.
-> 
-> Add a reset callback to the hid driver structure.
-> Issue it if the driver implements it and the device reset gets observed.
-> 
-> Signed-off-by: Angela Czubak <acz@semihalf.com>
+On 4/19/22 20:02, Kohei Tarumizu wrote:
+> The current pseudo_lock.c code overwrittes the value of the
+> MSR_MISC_FEATURE_CONTROL to 0 even if the original value is not 0.
+> Therefore, modify it to save and restore the original values.
 
-Applied, thank you.
+It would be nice to mention that the wrmsr()'s in this patch are only
+done inside of an interrupt-disabled region.  Without that little tidbit
+of information, it's not obviously correct that the smp_call_function()
+in patch 8/9 is correct.
 
--- 
-Dmitry
+The x86 code here looks reasonable otherwise.  It's a little bit of a
+shame that this is *ONLY* for BROADWELL_X for now, but I assume you were
+just conservative about it because that's all you have to test on.

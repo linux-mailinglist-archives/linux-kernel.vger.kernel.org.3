@@ -2,55 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6794509171
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE4050916B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 22:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382120AbiDTUcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 16:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S1382150AbiDTUdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 16:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379800AbiDTUcM (ORCPT
+        with ESMTP id S1382138AbiDTUdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 16:32:12 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B0845079
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:29:24 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5ae925.dynamic.kabel-deutschland.de [95.90.233.37])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 0CFCC61CCD7D8;
-        Wed, 20 Apr 2022 22:29:21 +0200 (CEST)
-Message-ID: <efc1dfd1-2b54-aee5-1497-4b800a468141@molgen.mpg.de>
-Date:   Wed, 20 Apr 2022 22:29:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based
- systems
-Content-Language: en-US
-To:     Richard Gong <richard.gong@amd.com>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Dave Airlie <airlied@linux.ie>,
-        Xinhui Pan <xinhui.pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alexander Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-References: <20220412215000.897344-1-richard.gong@amd.com>
- <d4ba3998-34aa-86d2-bde9-bc6ae9d8d08d@molgen.mpg.de>
- <CADnq5_MgvcGPWf2gYn_3qCr+Gq1P39tvv-W-o8NhivvMpMwUBA@mail.gmail.com>
- <91e916e3-d793-b814-6cbf-abee0667f5f8@molgen.mpg.de>
- <94fd858d-1792-9c05-b5c6-1b028427687d@amd.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <94fd858d-1792-9c05-b5c6-1b028427687d@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 20 Apr 2022 16:33:17 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C647344C4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:30:30 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2ec1914e315so25258447b3.23
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 13:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=AXD6tg0Y/lSZ4l/KU4T2EXjDq6mZdsK/9IDg33E4+DA=;
+        b=qwZe0Qz42RUbQQDExper1fKktpd02nJILCYCAaAF8IT4RrvRn/Sgg/K9iLi6C9d7Z7
+         CefqGeUGfmTZbYxwBHWGjNzcPIwDcG1ruhL9E9q+tm34m3EuhQNo7gZvDOKouClwoZwY
+         Anzy9OvgJPS2lFEb4dWeSSQIQfrw2IjnOqYj7JjPWTfuc5L2zQnT8wLJyqrH+mnyK7xH
+         G22pVzEcPGxVfrM7mWqUfhQ79H3/SU2vp+9AqtdaFjJxzH8Qb01Dibznk5cJn+qtZ6bK
+         Ekr6iFjyoSNuuV1noVL1hNL35cwbkREvHwc6PkuWBQ6lXmZmfsOSnHU91c4vAHo0a4ed
+         BsuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=AXD6tg0Y/lSZ4l/KU4T2EXjDq6mZdsK/9IDg33E4+DA=;
+        b=lMq/fI4/u4zhzQMKzYGkhqcHZBllO8fd9BP3d8q/x1NWqrlyNIVcCaZRechBwzQ0pH
+         d/NL7wwWgTeDx0W7fO09Q66MaXRXEipRSoZQAjhguubjHW9X3JUIueNgjVjwKTEqSbGx
+         axXe+Oh2SwkPC+NdZ3CyhxkOuP188oMGJl1FWvdYhtm6ktRrE2KpQQ5sl34ruRdwBnOR
+         UA3j18cc+MMSZWbRfBIgjuwAwgaEhp/z0t1/hst2fa2wfkCEOvOrl1X3IfBCXzI6loi8
+         Dwjkm9qI9vNG9j6G8TYn5wmsr4eyybGEbCCEf/zYq4zt/EQBr589tcKNJp/HFGabRCGK
+         zsZA==
+X-Gm-Message-State: AOAM531+5PzkdVrMU2Qz0Bd9vNIryhgg51F0k/tCLOv1ovJG9lLws9/E
+        hAoX6Qn9p1j8zs082r7Muar3nBrLE9YK7w==
+X-Google-Smtp-Source: ABdhPJyeZNWg0oaUVoRVWM+O13/EhmeQRvWqCylEwV+94Me2sT9LP1a8LKqYUGIgbvH6iw+XwaE92QePTs6rjg==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:ccc:f7fa:7a7e:1435])
+ (user=dlatypov job=sendgmr) by 2002:a25:bc04:0:b0:641:cfe9:ff38 with SMTP id
+ i4-20020a25bc04000000b00641cfe9ff38mr21647645ybh.213.1650486629286; Wed, 20
+ Apr 2022 13:30:29 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 13:30:20 -0700
+Message-Id: <20220420203020.1412886-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+Subject: [PATCH] kunit: tool: stop using a shell to run kernel under QEMU
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,196 +65,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Richard,
+Note: this potentially breaks custom qemu_configs if people are using
+them! But the fix for them is simple, don't specify multiple arguments
+in one string and don't add on a redundant ''.
 
+It feels a bit iffy to be using a shell in the first place.
 
-Am 19.04.22 um 23:46 schrieb Gong, Richard:
+There's the usual shenanigans where people could pass in arbitrary shell
+commands via --kernel_arg (since we're just adding '' around the
+kernel_cmdline) or via a custom qemu_config.
+This isn't too much of a concern given the nature of this script (and
+the qemu_config file is in python, you can do w/e you want already).
 
-> On 4/14/2022 2:52 AM, Paul Menzel wrote:
->> [Cc: -kernel test robot <lkp@intel.com>]
+But it does have some other drawbacks.
 
-[…]
+One example of a kunit-specific pain point:
+If the relevant qemu binary is missing, we get output like this:
+> /bin/sh: line 1: qemu-system-aarch64: command not found
+This in turn results in our KTAP parser complaining about
+missing/invalid KTAP, but we don't directly show the error!
+It's even more annoying to debug when you consider --raw_output only
+shows KUnit output by default, i.e. you need --raw_output=all to see it.
 
->> Am 13.04.22 um 15:00 schrieb Alex Deucher:
->>> On Wed, Apr 13, 2022 at 3:43 AM Paul Menzel wrote:
->>
->>>> Thank you for sending out v4.
->>>>
->>>> Am 12.04.22 um 23:50 schrieb Richard Gong:
->>>>> Active State Power Management (ASPM) feature is enabled since 
->>>>> kernel 5.14.
->>>>> There are some AMD GFX cards (such as WX3200 and RX640) that won't 
->>>>> work
->>>>> with ASPM-enabled Intel Alder Lake based systems. Using these GFX 
->>>>> cards as
->>>>> video/display output, Intel Alder Lake based systems will hang during
->>>>> suspend/resume.
+Whereas directly invoking the binary, Python will raise a
+FileNotFoundError for us, which is a noisier but more clear.
 
-[Your email program wraps lines in cited text for some reason, making 
-the citation harder to read.]
+Making this change requires
+* splitting parameters like ['-m 256'] into ['-m', '256'] in
+  kunit/qemu_configs/*.py
+* change [''] to [] in kunit/qemu_configs/*.py since otherwise
+  QEMU fails w/ 'Device needs media, but drive is empty'
+* dropping explicit quoting of the kernel cmdline
+* using shlex.quote() when we print what command we're running
+  so the user can copy-paste and run it
 
->>>>
->>>> I am still not clear, what “hang during suspend/resume” means. I guess
->>>> suspending works fine? During resume (S3 or S0ix?), where does it hang?
->>>> The system is functional, but there are only display problems?
-> System freeze after suspend/resume.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit_kernel.py         | 18 ++++++++++--------
+ tools/testing/kunit/qemu_configs/alpha.py   |  2 +-
+ tools/testing/kunit/qemu_configs/arm.py     |  2 +-
+ tools/testing/kunit/qemu_configs/arm64.py   |  2 +-
+ tools/testing/kunit/qemu_configs/i386.py    |  2 +-
+ tools/testing/kunit/qemu_configs/powerpc.py |  2 +-
+ tools/testing/kunit/qemu_configs/riscv.py   |  6 +++---
+ tools/testing/kunit/qemu_configs/s390.py    |  4 ++--
+ tools/testing/kunit/qemu_configs/sparc.py   |  2 +-
+ tools/testing/kunit/qemu_configs/x86_64.py  |  2 +-
+ 10 files changed, 22 insertions(+), 20 deletions(-)
 
-But you see certain messages still? At what point does it freeze 
-exactly? In the bug report you posted Linux messages.
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 483f78e15ce9..1b9c4922a675 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -11,6 +11,7 @@ import importlib.util
+ import logging
+ import subprocess
+ import os
++import shlex
+ import shutil
+ import signal
+ import threading
+@@ -118,16 +119,17 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+ 				'-nodefaults',
+ 				'-m', '1024',
+ 				'-kernel', kernel_path,
+-				'-append', '\'' + ' '.join(params + [self._kernel_command_line]) + '\'',
++				'-append', ' '.join(params + [self._kernel_command_line]),
+ 				'-no-reboot',
+ 				'-nographic',
+-				'-serial stdio'] + self._extra_qemu_params
+-		print('Running tests with:\n$', ' '.join(qemu_command))
+-		return subprocess.Popen(' '.join(qemu_command),
+-					   stdin=subprocess.PIPE,
+-					   stdout=subprocess.PIPE,
+-					   stderr=subprocess.STDOUT,
+-					   text=True, shell=True, errors='backslashreplace')
++				'-serial', 'stdio'] + self._extra_qemu_params
++		# Note: shlex.join() does what we want, but requires python 3.8+.
++		print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
++		return subprocess.Popen(qemu_command,
++					stdin=subprocess.PIPE,
++					stdout=subprocess.PIPE,
++					stderr=subprocess.STDOUT,
++					text=True, errors='backslashreplace')
+ 
+ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+ 	"""An abstraction over command line operations performed on a source tree."""
+diff --git a/tools/testing/kunit/qemu_configs/alpha.py b/tools/testing/kunit/qemu_configs/alpha.py
+index 5d0c0cff03bd..3ac846e03a6b 100644
+--- a/tools/testing/kunit/qemu_configs/alpha.py
++++ b/tools/testing/kunit/qemu_configs/alpha.py
+@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+ 			   qemu_arch='alpha',
+ 			   kernel_path='arch/alpha/boot/vmlinux',
+ 			   kernel_command_line='console=ttyS0',
+-			   extra_qemu_params=[''])
++			   extra_qemu_params=[])
+diff --git a/tools/testing/kunit/qemu_configs/arm.py b/tools/testing/kunit/qemu_configs/arm.py
+index b9c2a35e0296..db2160200566 100644
+--- a/tools/testing/kunit/qemu_configs/arm.py
++++ b/tools/testing/kunit/qemu_configs/arm.py
+@@ -10,4 +10,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+ 			   qemu_arch='arm',
+ 			   kernel_path='arch/arm/boot/zImage',
+ 			   kernel_command_line='console=ttyAMA0',
+-			   extra_qemu_params=['-machine virt'])
++			   extra_qemu_params=['-machine', 'virt'])
+diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
+index 517c04459f47..67d04064f785 100644
+--- a/tools/testing/kunit/qemu_configs/arm64.py
++++ b/tools/testing/kunit/qemu_configs/arm64.py
+@@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+ 			   qemu_arch='aarch64',
+ 			   kernel_path='arch/arm64/boot/Image.gz',
+ 			   kernel_command_line='console=ttyAMA0',
+-			   extra_qemu_params=['-machine virt', '-cpu cortex-a57'])
++			   extra_qemu_params=['-machine', 'virt', '-cpu', 'cortex-a57'])
+diff --git a/tools/testing/kunit/qemu_configs/i386.py b/tools/testing/kunit/qemu_configs/i386.py
+index aed3ffd3937d..52b80be40e4b 100644
+--- a/tools/testing/kunit/qemu_configs/i386.py
++++ b/tools/testing/kunit/qemu_configs/i386.py
+@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+ 			   qemu_arch='x86_64',
+ 			   kernel_path='arch/x86/boot/bzImage',
+ 			   kernel_command_line='console=ttyS0',
+-			   extra_qemu_params=[''])
++			   extra_qemu_params=[])
+diff --git a/tools/testing/kunit/qemu_configs/powerpc.py b/tools/testing/kunit/qemu_configs/powerpc.py
+index 35e9de24f0db..6c901149726b 100644
+--- a/tools/testing/kunit/qemu_configs/powerpc.py
++++ b/tools/testing/kunit/qemu_configs/powerpc.py
+@@ -9,4 +9,4 @@ CONFIG_HVC_CONSOLE=y''',
+ 			   qemu_arch='ppc64',
+ 			   kernel_path='vmlinux',
+ 			   kernel_command_line='console=ttyS0',
+-			   extra_qemu_params=['-M pseries', '-cpu power8'])
++			   extra_qemu_params=['-M', ' pseries', '-cpu', 'power8'])
+diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
+index 9e528087cd7c..b882fde39435 100644
+--- a/tools/testing/kunit/qemu_configs/riscv.py
++++ b/tools/testing/kunit/qemu_configs/riscv.py
+@@ -26,6 +26,6 @@ CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
+ 			   kernel_path='arch/riscv/boot/Image',
+ 			   kernel_command_line='console=ttyS0',
+ 			   extra_qemu_params=[
+-					   '-machine virt',
+-					   '-cpu rv64',
+-					   '-bios opensbi-riscv64-generic-fw_dynamic.bin'])
++					   '-machine', 'virt',
++					   '-cpu', 'rv64',
++					   '-bios', 'opensbi-riscv64-generic-fw_dynamic.bin'])
+diff --git a/tools/testing/kunit/qemu_configs/s390.py b/tools/testing/kunit/qemu_configs/s390.py
+index e310bd521113..98fa4fb60c0a 100644
+--- a/tools/testing/kunit/qemu_configs/s390.py
++++ b/tools/testing/kunit/qemu_configs/s390.py
+@@ -10,5 +10,5 @@ CONFIG_MODULES=y''',
+ 			   kernel_path='arch/s390/boot/bzImage',
+ 			   kernel_command_line='console=ttyS0',
+ 			   extra_qemu_params=[
+-					   '-machine s390-ccw-virtio',
+-					   '-cpu qemu',])
++					   '-machine', 's390-ccw-virtio',
++					   '-cpu', 'qemu',])
+diff --git a/tools/testing/kunit/qemu_configs/sparc.py b/tools/testing/kunit/qemu_configs/sparc.py
+index 27f474e7ad6e..e975c4331a7c 100644
+--- a/tools/testing/kunit/qemu_configs/sparc.py
++++ b/tools/testing/kunit/qemu_configs/sparc.py
+@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+ 			   qemu_arch='sparc',
+ 			   kernel_path='arch/sparc/boot/zImage',
+ 			   kernel_command_line='console=ttyS0 mem=256M',
+-			   extra_qemu_params=['-m 256'])
++			   extra_qemu_params=['-m', '256'])
+diff --git a/tools/testing/kunit/qemu_configs/x86_64.py b/tools/testing/kunit/qemu_configs/x86_64.py
+index 77ab1aeee8a3..dc7949076863 100644
+--- a/tools/testing/kunit/qemu_configs/x86_64.py
++++ b/tools/testing/kunit/qemu_configs/x86_64.py
+@@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+ 			   qemu_arch='x86_64',
+ 			   kernel_path='arch/x86/boot/bzImage',
+ 			   kernel_command_line='console=ttyS0',
+-			   extra_qemu_params=[''])
++			   extra_qemu_params=[])
 
->>>>> The issue was initially reported on one system (Dell Precision 3660 
->>>>> with
->>>>> BIOS version 0.14.81), but was later confirmed to affect at least 4 
->>>>> Alder
->>>>> Lake based systems.
->>>>>
->>>>> Add extra check to disable ASPM on Intel Alder Lake based systems.
->>>>>
->>>>> Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
->>>>> Link: 
->>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgitlab.freedesktop.org%2Fdrm%2Famd%2F-%2Fissues%2F1885&amp;data=04%7C01%7Crichard.gong%40amd.com%7Ce7febed5d6a441c3a58008da1debb99c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637855195670542145%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=7cEnE%2BSM9e5IGFxSLloCLtCOxovBpaPz0Ns0Ta2vVlc%3D&amp;reserved=0
+base-commit: 59729170afcd4900e08997a482467ffda8d88c7f
+-- 
+2.36.0.rc0.470.gd361397f0d-goog
 
-Thank you Microsoft Outlook for keeping us safe. :(
-
->>>>>
->>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>
->>>> This tag is a little confusing. Maybe clarify that it was for an issue
->>>> in a previous patch iteration?
-> 
-> I did describe in change-list version 3 below, which corrected the build 
-> error with W=1 option.
-> 
-> It is not good idea to add the description for that to the commit 
-> message, this is why I add descriptions on change-list version 3.
-
-Do as you wish, but the current style is confusing, and readers of the 
-commit are going to think, the kernel test robot reported the problem 
-with AMD VI ASICs and Intel Alder Lake systems.
-
->>>>
->>>>> Signed-off-by: Richard Gong <richard.gong@amd.com>
->>>>> ---
->>>>> v4: s/CONFIG_X86_64/CONFIG_X86
->>>>>       enhanced check logic
->>>>> v3: s/intel_core_asom_chk/aspm_support_quirk_check
->>>>>       correct build error with W=1 option
->>>>> v2: correct commit description
->>>>>       move the check from chip family to problematic platform
->>>>> ---
->>>>>    drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
->>>>>    1 file changed, 16 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c 
->>>>> b/drivers/gpu/drm/amd/amdgpu/vi.c
->>>>> index 039b90cdc3bc..b33e0a9bee65 100644
->>>>> --- a/drivers/gpu/drm/amd/amdgpu/vi.c
->>>>> +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
->>>>> @@ -81,6 +81,10 @@
->>>>>    #include "mxgpu_vi.h"
->>>>>    #include "amdgpu_dm.h"
->>>>>
->>>>> +#if IS_ENABLED(CONFIG_X86)
->>>>> +#include <asm/intel-family.h>
->>>>> +#endif
->>>>> +
->>>>>    #define ixPCIE_LC_L1_PM_SUBSTATE    0x100100C6
->>>>>    #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK 
->>>>> 0x00000001L
->>>>>    #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK 
->>>>> 0x00000002L
->>>>> @@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct 
->>>>> amdgpu_device *adev)
->>>>>                WREG32_PCIE(ixPCIE_LC_CNTL, data);
->>>>>    }
->>>>>
->>>>> +static bool aspm_support_quirk_check(void)
->>>>> +{
->>>>> +     if (IS_ENABLED(CONFIG_X86)) {
->>>>> +             struct cpuinfo_x86 *c = &cpu_data(0);
->>>>> +
->>>>> +             return !(c->x86 == 6 && c->x86_model == 
->>>>> INTEL_FAM6_ALDERLAKE);
->>>>> +     }
->>>>> +
->>>>> +     return true;
->>>>> +}
->>>>> +
->>>>>    static void vi_program_aspm(struct amdgpu_device *adev)
->>>>>    {
->>>>>        u32 data, data1, orig;
->>>>>        bool bL1SS = false;
->>>>>        bool bClkReqSupport = true;
->>>>>
->>>>> -     if (!amdgpu_device_should_use_aspm(adev))
->>>>> +     if (!amdgpu_device_should_use_aspm(adev) || 
->>>>> !aspm_support_quirk_check())
->>>>>                return;
->>>>
->>>> Can users still forcefully enable ASPM with the parameter 
->>>> `amdgpu.aspm`?
->>>>
-> As Mario mentioned in a separate reply, we can't forcefully enable ASPM 
-> with the parameter 'amdgpu.aspm'.
-
-That would be a regression on systems where ASPM used to work. Hmm. I 
-guess, you could say, there are no such systems.
-
->>>>>
->>>>>        if (adev->flags & AMD_IS_APU ||
->>>>
->>>> If I remember correctly, there were also newer cards, where ASPM worked
->>>> with Intel Alder Lake, right? Can only the problematic generations for
->>>> WX3200 and RX640 be excluded from ASPM?
->>>
->>> This patch only disables it for the generatioaon that was problematic.
->>
->> Could that please be made clear in the commit message summary, and 
->> message?
-> 
-> Are you ok with the commit messages below?
-
-Please change the commit message summary. Maybe:
-
-drm/amdgpu: VI: Disable ASPM on Intel Alder Lake based systems
-
-> Active State Power Management (ASPM) feature is enabled since kernel 5.14.
-> 
-> There are some AMD GFX cards (such as WX3200 and RX640) that won't work
-> with ASPM-enabled Intel Alder Lake based systems. Using these GFX cards as
-> video/display output, Intel Alder Lake based systems will freeze after
-> suspend/resume.
-
-Something like:
-
-On Intel Alder Lake based systems using ASPM with AMD GFX Volcanic 
-Islands (VI) cards, like WX3200 and RX640, graphics don’t initialize 
-when resuming from S0ix(?).
-
-
-> The issue was initially reported on one system (Dell Precision 3660 with
-> BIOS version 0.14.81), but was later confirmed to affect at least 4 Alder
-> Lake based systems.
-
-Which ones?
-
-> Add extra check to disable ASPM on Intel Alder Lake based systems with
-> problematic generation GFX cards.
-
-… with the problematic Volcanic Islands GFX cards.
-
->>
->> Loosely related, is there a public (or internal issue) to analyze how 
->> to get ASPM working for VI generation devices with Intel Alder Lake?
-> 
-> As Alex mentioned, we need support from Intel. We don't have any update 
-> on that.
-
-It’d be great to get that fixed properly.
-
-Last thing, please don’t hate me, does Linux log, that ASPM is disabled?
-
-
-Kind regards,
-
-Paul

@@ -2,104 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B708508C96
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E288A508CA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 17:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350606AbiDTP7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 11:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
+        id S1355243AbiDTQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 12:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242908AbiDTP7l (ORCPT
+        with ESMTP id S232100AbiDTQBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:59:41 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EE32DD63
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 08:56:55 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 17:56:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650470213;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VVj4PC9oWNqvYVPXKPf4qEimB9W75/+kwVZ5tR23GpI=;
-        b=XuI+FMLzOWNK0frrgUoXV8NElncf/dmQtHo1wQaRoKrXtriVicAAu+eLQUn1NfTcc+5Uoc
-        Aza3nXF97Gr+bhoQQoA/IrJY0ijOjUeVkF9AzThgV10uVH7zw3yetKIKELAJkt8KBZcbLa
-        bja5awR4dB67a6gVmtqf85vRn8776HmZG4K4X0o4fg1SCZ708Q4Bk5ovBH5kZgR9vSgEum
-        GlxBeKxRguORhDYuLZ14CdSNjbL3UPS/uzGu2o04V+tlIRi3MJ1EpP0YHaGu1EWz3fpDuI
-        grxhHufQFSVM6l1JVJSy4ql7q4W02dqsi1kMtdS9Vnt1eAtMe43Gj4J15YUrAA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650470213;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VVj4PC9oWNqvYVPXKPf4qEimB9W75/+kwVZ5tR23GpI=;
-        b=DM27W01wqlcTieEjBDOGN84ro76MphENbP1EauMN0mtTmhqZ11Gx0bhVQyGZkx0Q/eZjBS
-        P2fqeYCSvVI6BjAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [patch V5 3/3] smp: Make softirq handling RT safe in
- flush_smp_call_function_queue()
-Message-ID: <YmAtQZHSbcqbwGj4@linutronix.de>
-References: <20220413132836.099363044@linutronix.de>
- <20220413133024.356509586@linutronix.de>
+        Wed, 20 Apr 2022 12:01:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAA7326D6;
+        Wed, 20 Apr 2022 08:58:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 769D8618FA;
+        Wed, 20 Apr 2022 15:58:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A839EC385A1;
+        Wed, 20 Apr 2022 15:58:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650470307;
+        bh=VvLMFQx+kyGUgqKbI5QdNFQWU8MFY2kgwwVYHLQ1fjg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Al1tKU0PVMhdgvBzcru+cjod1p0+mweJT3K9CV5c+C9Pgfz7Tw4QPaGjXyVYsWtB5
+         xgTwiHh8kHcD+FpxZzTx2vwEo5iT6Yv9fZ7FFQZNzCmpcdoTOU3gEjy2sQjt+TVYGc
+         befJfu4gftHbZdludJ669rTmJI7BxUpySPFzHaOe8sytcI+fiNZO520CFnkXMYAKy8
+         6eh/A7Jal0X353b3UX8SloBkNA9/8RFhVa24aU/acM4gS4Hp1UKlGMQVbf1z8Cb7Vp
+         QSQEoqfY6a56IoidVgyfwm9nEDJNjKc29U6SoAfoZ+/b5LvUK8q+QLGtcfqj4SirZl
+         KUP7qEn+kzh0g==
+Date:   Wed, 20 Apr 2022 10:58:25 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] PCI: fix unused pci_restore_standard_config without
+ suspend/hibernate
+Message-ID: <20220420155825.GA1298368@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220413133024.356509586@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220420141135.444820-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-13 15:31:05 [+0200], Thomas Gleixner wrote:
-=E2=80=A6
-> +#ifdef CONFIG_PREEMPT_RT
-> +extern void do_softirq_post_smp_call_flush(unsigned int was_pending);
-> +#else
-> +static inline void do_softirq_post_smp_call_flush(unsigned int unused)
-> +{
-> +	do_softirq();
-> +}
-> +#endif
+On Wed, Apr 20, 2022 at 04:11:35PM +0200, Krzysztof Kozlowski wrote:
+> The pci_restore_standard_config() is called only by functions within
+> CONFIG_SUSPEND or CONFIG_HIBERNATION, so a configuration with only PM
+> leads to a warning:
+> 
+>   drivers/pci/pci-driver.c:533:12: error: ‘pci_restore_standard_config’ defined but not used [-Werror=unused-function]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Applied to pci/pm for v5.19, thanks!
+
+> ---
+>  drivers/pci/pci-driver.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index dc18c1faf5e5..a2e6aabfa324 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -522,9 +522,9 @@ static void pci_device_shutdown(struct device *dev)
+>  		pci_clear_master(pci_dev);
+>  }
+>  
+> -#ifdef CONFIG_PM
+> +#ifdef CONFIG_PM_SLEEP
+>  
+> -/* Auxiliary functions used for system resume and run-time resume. */
+> +/* Auxiliary functions used for system resume. */
+>  
+>  /**
+>   * pci_restore_standard_config - restore standard config registers of PCI device
+> @@ -544,6 +544,11 @@ static int pci_restore_standard_config(struct pci_dev *pci_dev)
+>  	pci_pme_restore(pci_dev);
+>  	return 0;
+>  }
+> +#endif /* CONFIG_PM_SLEEP */
 > +
-=E2=80=A6
-> +void softirq_post_smp_call_flush(unsigned int was_pending)
-> +{
-> +	if (WARN_ON_ONCE(was_pending !=3D local_softirq_pending()))
-> +		invoke_softirq();
-> +}
+> +#ifdef CONFIG_PM
 > +
->  #else /* CONFIG_PREEMPT_RT */
-
-fold, please.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- kernel/softirq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index 1682586a69139..5b36ebe5e20de 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -301,7 +301,7 @@ static inline void invoke_softirq(void)
-  * get raised which haven't been raised before the flush, warn so it can be
-  * investigated.
-  */
--void softirq_post_smp_call_flush(unsigned int was_pending)
-+void do_softirq_post_smp_call_flush(unsigned int was_pending)
- {
- 	if (WARN_ON_ONCE(was_pending !=3D local_softirq_pending()))
- 		invoke_softirq();
-
-Sebastian
+> +/* Auxiliary functions used for system resume and run-time resume. */
+>  
+>  static void pci_pm_default_resume(struct pci_dev *pci_dev)
+>  {
+> @@ -558,8 +563,7 @@ static void pci_pm_default_resume_early(struct pci_dev *pci_dev)
+>  	pci_restore_state(pci_dev);
+>  	pci_pme_restore(pci_dev);
+>  }
+> -
+> -#endif
+> +#endif /* CONFIG_PM */
+>  
+>  #ifdef CONFIG_PM_SLEEP
+>  
+> -- 
+> 2.32.0
+> 

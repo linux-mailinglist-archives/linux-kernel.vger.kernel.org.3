@@ -2,104 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333B650A2E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905C850A301
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389552AbiDUOqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
+        id S1389574AbiDUOrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235484AbiDUOqH (ORCPT
+        with ESMTP id S1389564AbiDUOrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:46:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7077C4092D
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650552196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ePPTKrCMwADglYVO5peeQ4QQVf5OFLO0wZ8LDZ1O6g8=;
-        b=dfecRGW+qXw79jTVfA4P6Ly8jKHi3YMiG+u1y4yVPoIsGX9Ni822ZM6sxtBvUj6aMUl5kp
-        XLP/2NJ3Zx54kRfQr0Ey1aMJ3i+73wrNwnXOq6EHgaDqLomp17gHtW1oYabkYACSZI833d
-        j9w6oX3PfbHptCTCPXfqU9R3Odx/WZE=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-389-6L1E9lw0PIeH0uQx5A2P4A-1; Thu, 21 Apr 2022 10:43:15 -0400
-X-MC-Unique: 6L1E9lw0PIeH0uQx5A2P4A-1
-Received: by mail-qv1-f69.google.com with SMTP id f18-20020ad442d2000000b0044642dd1d7eso4095013qvr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:43:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ePPTKrCMwADglYVO5peeQ4QQVf5OFLO0wZ8LDZ1O6g8=;
-        b=N9wB6epof7XfxffTiRoB2jSchPAOvcvSvP68Z0/C61sZeVkyq9cK40bWnZNuYP3wdX
-         UcfQwKX8zvVNjvhyPoo0cpVEMWM7QspQynd7yIjyfJWMVxLJ7NuAySUFpd0YBgVCcV44
-         albqKfESU60M6UMKqBNcaOHxIIR6ZWq83heOfnPqRJgFB5eCJ4aXNCUljX3yrZifQoQt
-         pFb9ub5iUgzMdh/rN4ce3hnbYtPdse7k1hmmDp0c3kVeu9HBX0khY6qfOMhVFHnunwPR
-         zQTDimbC2ssgYEKETsAGi1bhARmTG2DwutVWn2gCuTAhdf9tG0xLXtWXwj1xYm1okNA0
-         Cr/g==
-X-Gm-Message-State: AOAM532P3p/VarDo6E49SNqqwJGfsCH2smNtWC3xfRDSr0MTeBMy8uev
-        fAACzHsrV+S3U5RaeMnRgIw58O0rIc3rrYvDwAhIFSk/mUCVb3yWrHy1rx69AlmVt6TX7WQFqwp
-        eXZXy0xEumXIsGdDZ+a0Xk+rh
-X-Received: by 2002:ad4:5bc1:0:b0:42d:758c:f694 with SMTP id t1-20020ad45bc1000000b0042d758cf694mr19026789qvt.99.1650552194915;
-        Thu, 21 Apr 2022 07:43:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx2jn3q9z234SvBuh9QXKIyb+5gtFlLQqL5BZmnHLuyhZev75JSd04yeLJ/gjoODjM5Sghq+Q==
-X-Received: by 2002:ad4:5bc1:0:b0:42d:758c:f694 with SMTP id t1-20020ad45bc1000000b0042d758cf694mr19026774qvt.99.1650552194715;
-        Thu, 21 Apr 2022 07:43:14 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05622a138e00b002f335c3dbf2sm3538660qtk.37.2022.04.21.07.43.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 07:43:14 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     hjc@rock-chips.com, heiko@sntech.de, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/rockchip: cdn-dp: change rk3399_cdn_dp from global to static
-Date:   Thu, 21 Apr 2022 10:43:04 -0400
-Message-Id: <20220421144304.586396-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 21 Apr 2022 10:47:04 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FD140E76;
+        Thu, 21 Apr 2022 07:44:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1650552224; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=nbdQctQ3NMB6Azygoollyi98j1+gOoW3m7kP8+kIzEJgV2tGoTDPbmS2Ivz8y7qFshxDSrpxgwFk5dgcGmgaee53NjiA8a9qEve8uyAWFYAp0dVaVaYM4xhHBpoyJCz95OKSxBM9Jj5VrWQ+FmMSMjKFGlG1AodNSubN9UMc2z8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1650552224; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=ezL7d6UT6p1AeMHEGpnZeZmFAvnmD9WI18X7MSI3d/k=; 
+        b=VH/Mi58H9v1KRSjeNyH5/jJxO+R2Pmhgf0IS1rGU8+ye0a/bG0kPsmQoiIEznVwPloJG1B626jzE9vE4hYg+7NfgF9Q07ENZZCkLD6azij+Onman5MacM6DnulqmGLv187YXghbXCu/WPAIw21QJvHOBwTvjs90U0dhPSQ28whk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1650552224;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=ezL7d6UT6p1AeMHEGpnZeZmFAvnmD9WI18X7MSI3d/k=;
+        b=AUzbWmEBG1bhlGXpDr/3Us4XJfC5rsXEH98tYb0vsCF9C8tTnA9sUo/cF5OGp4fq
+        MB+7YT28SwlppWnpZxqptnOLD8Ug3lDZ2CtaQWCcDrxus/QqBBTEG5DsOhdVCDbf/yc
+        Uo0EkzlovbchG+nUvwQGgYsJCZ2swQEdYIHZJStE=
+Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 1650552221122931.4968849395214; Thu, 21 Apr 2022 07:43:41 -0700 (PDT)
+Message-ID: <26418320-64e0-3ed2-c792-7f72878b7592@arinc9.com>
+Date:   Thu, 21 Apr 2022 17:43:35 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 0/14] Refactor Ralink Pinctrl and Add Documentation
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20220413060729.27639-1-arinc.unal@arinc9.com>
+ <CACRpkdbbMFYNNjAKwhysKpu1JVh2JSB-N=Y8QMx1JvMhCPBpwg@mail.gmail.com>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <CACRpkdbbMFYNNjAKwhysKpu1JVh2JSB-N=Y8QMx1JvMhCPBpwg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports this issue
-cdn-dp-core.c:51:20: warning: symbol 'rk3399_cdn_dp' was not declared. Should it be static?
+On 21/04/2022 17:27, Linus Walleij wrote:
+> On Wed, Apr 13, 2022 at 8:08 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+> 
+>> This patch series brings complete refactoring to the Ralink pinctrl driver
+>> and its subdrivers.
+> 
+> I just merged all the patches, the comments seem minor and any further
+> fixes can certainly be done on top of this. Anyone interested in ralink
+> working nicely is likely in the thread and we mostly care about that this
+> works for OpenWrt, and if it works for them we are happy.
+> 
+>>    mips: dts: ralink: mt7621: use the new compatible string for MT7621 pinctrl
+> 
+> This was a bit scary since we usually take these through the respective
+> SoC tree, but I just applied it anyway, it makes logical sense in the
+> series.
+> 
+> I hope it will not lead to conflicts.
+> 
+> Good work with this series!
 
-rk3399_cdn_dp is only used in cdn-dp-core.c so change
-its storge-class specifier to static.
+Thanks. There is a v2 of this series which has been waiting for a week, 
+I hope that was the one you applied as you replied under v1 (I'm not 
+sure which repository you applied this so I can't check myself).
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/rockchip/cdn-dp-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=632370
 
-diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-index d3e6c93739bf..ce67c9daa2b1 100644
---- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
-+++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-@@ -48,7 +48,7 @@ struct cdn_dp_data {
- 	u8 max_phy;
- };
- 
--struct cdn_dp_data rk3399_cdn_dp = {
-+static struct cdn_dp_data rk3399_cdn_dp = {
- 	.max_phy = 2,
- };
- 
--- 
-2.27.0
-
+Arınç

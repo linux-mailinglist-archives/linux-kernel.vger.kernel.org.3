@@ -2,67 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A2E509B4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133A9509B53
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387023AbiDUIzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S233419AbiDUI6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345809AbiDUIzp (ORCPT
+        with ESMTP id S230393AbiDUI6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:55:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D810120F4E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5H5M+/nukyq+ClIyXnFYHWEZmwimqI4Y/2Onc+gYQxU=; b=gsjaTQGvOWmOn0vHz+72zmXEHr
-        AYkDtYPJmAcOsS9lf7AVqAfme9yuQPkQkw/vi+dYFCPealXjIdSjwBgO6MI62inuPu6chfWjeRvGW
-        9nk/cUwJJFa4vli7aGIOOLsn2CJWOi2NGaq3aopxw2ISsQ+Xj/5rk7Mdci1spKWyxgr5LQ+U+MisS
-        EdHi76NZzn49tlhhQ4OVZCNgYx22TbO8BrH3es2IrPp0q/pxXMYy9BjqTWvU0WnBYhhlF2oK/PtLU
-        uf8sOj+gPym7dLGXY+dvmtZAbs+uOOXHGTqkh0FfyavVrI6oCgUcuI2DdcJ+lhirJF3kRVgdxQmqJ
-        dTkB5b0g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhSYQ-004vhL-R3; Thu, 21 Apr 2022 08:52:47 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ACFC19861C1; Thu, 21 Apr 2022 10:52:44 +0200 (CEST)
-Date:   Thu, 21 Apr 2022 10:52:44 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Miroslav Benes <mbenes@suse.cz>, Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v3] scripts: Create objdump-func helper script
-Message-ID: <20220421085244.GL2731@worktop.programming.kicks-ass.net>
-References: <4d3ab1f17230f0188698cfbc7ba08696fe1abfe9.1650474927.git.jpoimboe@redhat.com>
+        Thu, 21 Apr 2022 04:58:37 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112751AF2C;
+        Thu, 21 Apr 2022 01:55:49 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id m14so5675067wrb.6;
+        Thu, 21 Apr 2022 01:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Rx6YW0z7TNgwrZzCOM/LadQs2IROT5w7euvFjQgv97I=;
+        b=KF2vkyN/kcWb3uC+3v/wWOoqsfdtj2UwSVyPlTbFTNKEMy6eNSh3WI6DKjEac6mKA0
+         eEE8dgZGBRacJwS9FyI8He8jccbvTR4qE3SfEzC+aN3FFphgG0TwKMcwB9lG50K/Pktd
+         E4sXnZ/laH6RvPi7kFR+vqz+PdnLuOvtgjfCSW5YNmwDzfRY2qOm5hhHs4jhI1zsQzrw
+         lsH+f15LfyCR1YAEdKKamN5rLaOe5H75Xn8NuHuYKv923XxcNklBgNqO8oFyR1VUPiwr
+         i+gxqvXyh+jb7ttNvF4IahsukBwcsXUuzZh6xUweqravQosdFu/rcgeBazlpbywI/C/H
+         m0xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Rx6YW0z7TNgwrZzCOM/LadQs2IROT5w7euvFjQgv97I=;
+        b=EDCjv1fnVn6NW6MwW0jkyOYAXL2JUtMyIs4UdeO8YkANYkCZOYNatxPIQmhGuv/Cb/
+         6DVaF3DgqulcWE5mX5FEF2N+500RHeK7mEQ1mVTpd+Qt1qp8kO+fgX/XGwuaOpGfBcgh
+         KAKGR+M4w+cXlXEbOicApajlw0KwMf8vI98BsaFI6ognymyKmmxOI8BjfxDUQEITOd6K
+         6xSN8b95iR2upxHpg0LfXdJaf+8qk8A9J6u0a4OnNoZUUNBOql8+Y/YCdQlJ5ujjp4Zj
+         vbmTD8WLaV5RWkxXq6cqxBDTOw+OZhteOzf4UApsfynFtbhehvIJ/TZbgXNEfKmzPgK4
+         HFUg==
+X-Gm-Message-State: AOAM531uUP3GyxUC/J65wlUE8Ow3GWrmXPHf9VNzBNozEeX4SRlUK6zY
+        LhWIhaAzmaKvYeYeUA/D850=
+X-Google-Smtp-Source: ABdhPJxWKzmGEVET2B/IQtcjzG1GiBxqmi9/CRN/U34lV/Xj2CT045mFHvG8LKRvHXGM3gcTi8SiiA==
+X-Received: by 2002:a5d:52c9:0:b0:207:99d3:7b4d with SMTP id r9-20020a5d52c9000000b0020799d37b4dmr19770425wrv.77.1650531347604;
+        Thu, 21 Apr 2022 01:55:47 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id m4-20020a7bcb84000000b00389efb7a5b4sm1539091wmi.17.2022.04.21.01.55.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 01:55:47 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] net: hns3: Fix spelling mistake "actvie" -> "active"
+Date:   Thu, 21 Apr 2022 09:55:46 +0100
+Message-Id: <20220421085546.321792-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d3ab1f17230f0188698cfbc7ba08696fe1abfe9.1650474927.git.jpoimboe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:16:36AM -0700, Josh Poimboeuf wrote:
+There is a spelling mistake in a netdev_info message. Fix it.
 
-> +${OBJDUMP} -wdr $OBJ | gawk -M -v f=$FUNC '/^$/ { P=0; } $0 ~ "<" f ">:" { P=1; O=strtonum("0x" $1); } { if (P) { o=strtonum("0x" $1); printf("%04x ", o-O); print $0; } }'
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Two noteworthy changes:
-
- - $@ went missing, I've occasionally abused that to add extra argument
-   to objdump.
-
- - you removed the glob after FUNC, I had that so that .cold and
-   .constprop etc.. variants of the function also show up.
-
-I don't suppose either one are super important, but esp. that latter one
-has been convenient.
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
+index bb001f597857..1db8a86f046d 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
+@@ -1915,7 +1915,7 @@ static int hns3_set_tunable(struct net_device *netdev,
+ 			return ret;
+ 		}
+ 
+-		netdev_info(netdev, "the actvie tx spare buf size is %u, due to page order\n",
++		netdev_info(netdev, "the active tx spare buf size is %u, due to page order\n",
+ 			    priv->ring->tx_spare->len);
+ 
+ 		break;
+-- 
+2.35.1
 

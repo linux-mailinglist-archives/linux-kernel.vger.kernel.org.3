@@ -2,99 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563AD509B04
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A005509B8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386911AbiDUIve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S1387258AbiDUJJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386902AbiDUIv0 (ORCPT
+        with ESMTP id S1387248AbiDUJJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:51:26 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5A615805
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:48:37 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KkWQy2zQ3zhY3w;
-        Thu, 21 Apr 2022 16:48:26 +0800 (CST)
-Received: from localhost.localdomain (10.175.102.38) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 16:48:35 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Adam Ward <Adam.Ward.opensource@diasemi.com>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH] regulator: da9121: Fix uninit-value in da9121_assign_chip_model()
-Date:   Thu, 21 Apr 2022 09:03:35 +0000
-Message-ID: <20220421090335.1876149-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Apr 2022 05:09:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAC6822B24
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:06:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650531989;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=92MeHe1O2XEwswakE1YC1636cVBjLw+9Sy+IL3NtyVk=;
+        b=OyskmkGBvqm2D1jUs23VQOOBVJhA44Fvr+GPjEDj+S8LBDKwiQIctwUk64ADfbRe9MYlEi
+        U/EqxHVlf93cpSJIN30EBzkKhN8z+/viiUdVqztQ5sEoof7GCu4Kvg0oL0qwJXFAg+xu2g
+        1Q00hrSD63s84l/VLeqPZu8T/TW/jSo=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-190-lo6MelUOOdirx1-2n3Iapw-1; Thu, 21 Apr 2022 05:06:27 -0400
+X-MC-Unique: lo6MelUOOdirx1-2n3Iapw-1
+Received: by mail-wr1-f71.google.com with SMTP id 46-20020adf8031000000b00207ad3febaeso924654wrk.6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:06:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=92MeHe1O2XEwswakE1YC1636cVBjLw+9Sy+IL3NtyVk=;
+        b=CdTYSSL+MKo8V6lKVXZVpCMr/p7qkFUGLpZXdcHx5AARS7T4heKyBG25BcG418DqD8
+         Rk798yeMEv6QlEM5nr+PEvHzUzLjCb3ppBMhsRtmzsbMXRSTw7DCZ27NMbJYkYloufTQ
+         aE8nQJfZfGUAJpAXSWsh14XmV4cV854qVhlelWDDc/Ds0I47QMZ+01FRTb/LPqnb6bs6
+         keeH46IzdQNI2zfx7/M6JzSSqKZ9Mj/smD6b9KLdd7I0F+bSQU1sTSciHOwmZJzwy28A
+         WPpaWvWrR2lloyiktbcooXPVNtPjnOhnV7Tv2DOLk97NqIVZrdAOWLcsQ357CAJDhHfY
+         jGDg==
+X-Gm-Message-State: AOAM5300s8TJjrk3ngG80dud+sIFNj7CDhgKj5dUL8bYPZNyYh8wsedb
+        3EZVaaGiHgPzu3vjH4E8P2EYit5lFt6cqTuPR67g9NzBWoXy1ZvILM6hIRitfclbpVbgHA37jF5
+        FqYG8ca+ig51vfdQme1KDpO0F
+X-Received: by 2002:a7b:c5d0:0:b0:389:fe85:3d79 with SMTP id n16-20020a7bc5d0000000b00389fe853d79mr7663483wmk.77.1650531986431;
+        Thu, 21 Apr 2022 02:06:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzwll6X4aclR/cAp2Q5uSbwuZ7wO3cz51c3cWWvwaJIW1wrvG5E24IeLoGyMjdGjZ/7adpFcg==
+X-Received: by 2002:a7b:c5d0:0:b0:389:fe85:3d79 with SMTP id n16-20020a7bc5d0000000b00389fe853d79mr7663463wmk.77.1650531986214;
+        Thu, 21 Apr 2022 02:06:26 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:de00:711b:76af:b335:9b70? (p200300cbc702de00711b76afb3359b70.dip0.t-ipconnect.de. [2003:cb:c702:de00:711b:76af:b335:9b70])
+        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b0037c91e085ddsm1798885wmq.40.2022.04.21.02.06.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 02:06:24 -0700 (PDT)
+Message-ID: <707ad285-349c-9788-51dc-12f7caf77f11@redhat.com>
+Date:   Thu, 21 Apr 2022 11:06:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.102.38]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v6 1/2] selftests: vm: bring common functions to a new
+ file
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     kernel@collabora.com, krisman@collabora.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+References: <20220420084036.4101604-1-usama.anjum@collabora.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220420084036.4101604-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN report slab-out-of-bounds in __regmap_init as follows:
+On 20.04.22 10:40, Muhammad Usama Anjum wrote:
+> Bring common functions to a new file while keeping code as much same as
+> possible. These functions can be used in the new tests. This helps in
+> avoiding code duplication.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> Changes in V6:
+> - Correct header files inclusion
+> 
+> Changes in V5:
+> Keep moved code as same as possible
+> - Updated macros names
+> - Removed macro used to show bit number of dirty bit, added a comment
+>   instead
+> - Corrected indentation
+> ---
+>  tools/testing/selftests/vm/Makefile           |   7 +-
+>  tools/testing/selftests/vm/madv_populate.c    |  34 +-----
+>  .../selftests/vm/split_huge_page_test.c       |  79 +------------
+>  tools/testing/selftests/vm/vm_util.c          | 108 ++++++++++++++++++
+>  tools/testing/selftests/vm/vm_util.h          |   9 ++
+>  5 files changed, 124 insertions(+), 113 deletions(-)
+>  create mode 100644 tools/testing/selftests/vm/vm_util.c
+>  create mode 100644 tools/testing/selftests/vm/vm_util.h
+> 
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 5e43f072f5b76..4e68edb26d6b6 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
+>  TEST_GEN_FILES += hugepage-shm
+>  TEST_GEN_FILES += hugepage-vmemmap
+>  TEST_GEN_FILES += khugepaged
+> -TEST_GEN_FILES += madv_populate
+> +TEST_GEN_PROGS = madv_populate
+>  TEST_GEN_FILES += map_fixed_noreplace
+>  TEST_GEN_FILES += map_hugetlb
+>  TEST_GEN_FILES += map_populate
+> @@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
+>  TEST_GEN_FILES += thuge-gen
+>  TEST_GEN_FILES += transhuge-stress
+>  TEST_GEN_FILES += userfaultfd
+> -TEST_GEN_FILES += split_huge_page_test
+> +TEST_GEN_PROGS += split_huge_page_test
+>  TEST_GEN_FILES += ksm_tests
+>  
+>  ifeq ($(MACHINE),x86_64)
+> @@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
+>  KSFT_KHDR_INSTALL := 1
+>  include ../lib.mk
+>  
 
-BUG: KASAN: slab-out-of-bounds in __regmap_init drivers/base/regmap/regmap.c:841
-Read of size 1 at addr ffff88803678cdf1 by task xrun/9137
+Acked-by: David Hildenbrand <david@redhat.com>
 
-CPU: 0 PID: 9137 Comm: xrun Tainted: G        W         5.18.0-rc2
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x15a lib/dump_stack.c:88
- print_report.cold+0xcd/0x69b mm/kasan/report.c:313
- kasan_report+0x8e/0xc0 mm/kasan/report.c:491
- __regmap_init+0x4540/0x4ba0 drivers/base/regmap/regmap.c:841
- __devm_regmap_init+0x7a/0x100 drivers/base/regmap/regmap.c:1266
- __devm_regmap_init_i2c+0x65/0x80 drivers/base/regmap/regmap-i2c.c:394
- da9121_i2c_probe+0x386/0x6d1 drivers/regulator/da9121-regulator.c:1039
- i2c_device_probe+0x959/0xac0 drivers/i2c/i2c-core-base.c:563
+BTW, I realized that my madv_populate test fails when run without
+softdirty support in the kernel. Eventually we should sense support
+somehow and skip softdirty tests.
 
-This happend when da9121 device is probe by da9121_i2c_id, but with
-invalid dts. Thus, chip->subvariant_id is set to -EINVAL, and later
-da9121_assign_chip_model() will access 'regmap' without init it.
+Maybe we can sense by writing to some page and then testing if the page
+is reported as softdirty. If it isn't, we know the kernel doesn't
+support it (or is extremely buggy :D ).
 
-Fix it by return -EINVAL from da9121_assign_chip_model() if
-'chip->subvariant_id' is invalid.
+Such a sense check would be common functionality in the helper file as well.
 
-Fixes: f3fbd5566f6a ("regulator: da9121: Add device variants")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/regulator/da9121-regulator.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/regulator/da9121-regulator.c b/drivers/regulator/da9121-regulator.c
-index eb9df485bd8a..76e0e23bf598 100644
---- a/drivers/regulator/da9121-regulator.c
-+++ b/drivers/regulator/da9121-regulator.c
-@@ -1030,6 +1030,8 @@ static int da9121_assign_chip_model(struct i2c_client *i2c,
- 		chip->variant_id = DA9121_TYPE_DA9142;
- 		regmap = &da9121_2ch_regmap_config;
- 		break;
-+	default:
-+		return -EINVAL;
- 	}
- 
- 	/* Set these up for of_regulator_match call which may want .of_map_modes */
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 

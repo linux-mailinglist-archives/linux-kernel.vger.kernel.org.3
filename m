@@ -2,146 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5921C50A718
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A9350A726
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390764AbiDURbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S1390786AbiDURcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiDURbT (ORCPT
+        with ESMTP id S1390780AbiDURb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:31:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9F0C443CB
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650562107;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C2uOipi3GKnpM62yNx2qLO8Kw4BDhZHaF3HCYYZ6xuI=;
-        b=OIdPswRC36WWPIzCIPr5AtdFYC4T8/w+g2KXunJhSvUd9kA8fOigUv9jjZSn4mzwFk9O/i
-        Fy4KDwsBDlordBv9DzxiXwh8jovrULaZkTOOSbzZxafpOIRF9K9tIl/6uCtyRT87gbtFrS
-        i5K8obDIBhz9B8ViwQOCjj3jBtbCOa8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-424-osLykL0TPRmq8Lq9ucUMbQ-1; Thu, 21 Apr 2022 13:28:22 -0400
-X-MC-Unique: osLykL0TPRmq8Lq9ucUMbQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 21 Apr 2022 13:31:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CBC46B1E;
+        Thu, 21 Apr 2022 10:29:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B68981C07386;
-        Thu, 21 Apr 2022 17:28:21 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B788C28126;
-        Thu, 21 Apr 2022 17:28:21 +0000 (UTC)
-Message-ID: <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
-Date:   Thu, 21 Apr 2022 13:28:20 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mm/memcg: Free percpu stats memory of dying memcg's
-Content-Language: en-US
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3F60B82870;
+        Thu, 21 Apr 2022 17:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ABA7C385A5;
+        Thu, 21 Apr 2022 17:29:01 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 18:28:58 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Topi Miettinen <toiwoton@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Muchun Song <songmuchun@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-References: <20220421145845.1044652-1-longman@redhat.com>
- <YmGHYNuAp8957ouq@carbon>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YmGHYNuAp8957ouq@carbon>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Christoph Hellwig <hch@infradead.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net,
+        linux-hardening@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Salvatore Mesoraca <s.mesoraca16@gmail.com>,
+        Igor Zhbanov <izh1979@gmail.com>
+Subject: Re: [PATCH RFC 0/4] mm, arm64: In-kernel support for
+ memory-deny-write-execute (MDWE)
+Message-ID: <YmGUWq1Ea5koA8mt@arm.com>
+References: <20220413134946.2732468-1-catalin.marinas@arm.com>
+ <202204141028.0482B08@keescook>
+ <YmAEDsGtxhim46UI@arm.com>
+ <c62170c6-5993-2417-4143-5a37a98b227c@gmail.com>
+ <202204201610.093C9D5FE8@keescook>
+ <YmF5s4KqT5WL4O0G@arm.com>
+ <400be309-ef3f-4175-594d-7dc45a43dc36@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <400be309-ef3f-4175-594d-7dc45a43dc36@gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 21, 2022 at 07:48:27PM +0300, Topi Miettinen wrote:
+> On 21.4.2022 18.35, Catalin Marinas wrote:
+> > Do we want the "was PROT_WRITE" or we just reject mprotect(PROT_EXEC) if
+> > the vma is not already PROT_EXEC? The latter is closer to the current
+> > systemd approach. The former allows an mprotect(PROT_EXEC) if the
+> > mapping was PROT_READ only for example.
+> > 
+> > I'd drop the "was PROT_WRITE" for now if the aim is a drop-in
+> > replacement for BPF MDWE.
+> 
+> I think we'd want existing installations with MemoryDenyWriteExecute=yes not
+> start failing when the implementation is changed to in-kernel version. The
+> implementation could be very simple and not even check existing PROT_ flags
+> (except for BTI case) to be maximally compatible to BPF version.
 
-On 4/21/22 12:33, Roman Gushchin wrote:
-> On Thu, Apr 21, 2022 at 10:58:45AM -0400, Waiman Long wrote:
->> For systems with large number of CPUs, the majority of the memory
->> consumed by the mem_cgroup structure is actually the percpu stats
->> memory. When a large number of memory cgroups are continuously created
->> and destroyed (like in a container host), it is possible that more
->> and more mem_cgroup structures remained in the dying state holding up
->> increasing amount of percpu memory.
->>
->> We can't free up the memory of the dying mem_cgroup structure due to
->> active references in some other places. However, the percpu stats memory
->> allocated to that mem_cgroup is a different story.
->>
->> This patch adds a new percpu_stats_disabled variable to keep track of
->> the state of the percpu stats memory. If the variable is set, percpu
->> stats update will be disabled for that particular memcg. All the stats
->> update will be forward to its parent instead. Reading of the its percpu
->> stats will return 0.
->>
->> The flushing and freeing of the percpu stats memory is a multi-step
->> process. The percpu_stats_disabled variable is set when the memcg is
->> being set to offline state. After a grace period with the help of RCU,
->> the percpu stats data are flushed and then freed.
->>
->> This will greatly reduce the amount of memory held up by dying memory
->> cgroups.
->>
->> By running a simple management tool for container 2000 times per test
->> run, below are the results of increases of percpu memory (as reported
->> in /proc/meminfo) and nr_dying_descendants in root's cgroup.stat.
-> Hi Waiman!
->
-> I've been proposing the same idea some time ago:
-> https://lore.kernel.org/all/20190312223404.28665-7-guro@fb.com/T/ .
->
-> However I dropped it with the thinking that with many other fixes
-> preventing the accumulation of the dying cgroups it's not worth the added
-> complexity and a potential cpu overhead.
->
-> I think it ultimately comes to the number of dying cgroups. If it's low,
-> memory savings are not worth the cpu overhead. If it's high, they are.
-> I hope long-term to drive it down significantly (with lru-pages reparenting
-> being the first major milestone), but it might take a while.
->
-> I don't have a strong opinion either way, just want to dump my thoughts
-> on this.
+It would have to check the existing flags otherwise this could have been
+implemented in the BPF filter. The dynamic loader (or kernel loader)
+first mmap(PROT_READ|PROT_EXEC) and, if the BTI note is found, it
+switches it to mprotect(PROT_READ|PROT_EXEC|PROT_BTI). If we allowed
+this to pass simply because of PROT_BTI, one could create such
+executable mapping even if it is (or was) writeable.
 
-I have quite a number of customer cases complaining about increasing 
-percpu memory usages. The number of dying memcg's can go to tens of 
-thousands. From my own investigation, I believe that those dying memcg's 
-are not freed because they are pinned down by references in the page 
-structure. I am aware that we support the use of objcg in the page 
-structure which will allow easy reparenting, but most pages don't do 
-that and it is not easy to do this conversion and it may take quite a 
-while to do that.
+So we can either allow mprotect(PROT_EXEC) if the mapping was never
+writeable or we allow mprotect(PROT_EXEC) if the mapping is already
+PROT_EXEC (and the check for W^X was previously done by mmap()).
 
-In term of overhead, it is mostly one more memory read from the 
-mem_cgroup structure in the update path. I don't expect there will be 
-that many updates when the memcg is in an offline state as updates will 
-be slower in this case. Freeing the dying memcg will take a bit longer 
-though, but its impact on the overall system performance should still be 
-negligible.
+> So I'd leave "was PROT_WRITE" and other checks to more advanced
+> versions, enabled with a different PR_MDWX_FLAG_.
 
-I am also thinking about using a static_key for turning it on only for 
-systems with more than, say, 20 cpus as the percpu memory overhead 
-increases linearly with the number of possible cpus.
+This works for me as well. See my reply to Kees for the use-cases.
 
-Any other suggestions and improvements are welcome.
+Thanks.
 
-Cheers,
-Longman
-
+-- 
+Catalin

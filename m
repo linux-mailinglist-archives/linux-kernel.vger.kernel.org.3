@@ -2,91 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125B050A737
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0915950A73B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390801AbiDURg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S1390676AbiDURiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390780AbiDURgY (ORCPT
+        with ESMTP id S241579AbiDURiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:36:24 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12F849FAF
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
-        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=3vnCj58Uy2hBNqDsDkWH/3x4dZv1Du+MQHF275KeKzc=; b=gaGLywGcMptZYY3F4IpQVsnaNR
-        liN0WxgX28PqdgaLZL0oPAP+uSRC5JYww8YMe5vbDsyASw3CctGvdITli5gocsVNinboP5JspNthU
-        84WYcKwRy7yIsGceCKTBAMoETpeL0s0ttU32yEkWMJ6laE1uQpdo4w4wmaVQAcu8sTQb19fdQPAKF
-        F5Wu2+ARCXkHl0XNZUAdjJFDCkR7DsbXsGJqBJaERR8QeEH48yTVPKw8md5NObQBnixBSBsfeIF8t
-        jRFdBaAkOHUb5RNP2V3B7rq9+JPNYuibx+v6lk1pyt8bMJ937hjsENRC3KqWFVNRs5ldZ0FTIvY8N
-        0vtmD2uQ==;
-Received: from [191.19.79.104] (helo=localhost.localdomain)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1nhagA-0004i6-2P; Thu, 21 Apr 2022 19:33:18 +0200
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Cc:     kernel-dev@igalia.com,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-Subject: [PATCH] =?UTF-8?q?futex:=20MAINTAINERS,=20.mailmap:=20Update=20An?= =?UTF-8?q?dr=C3=A9's=20email=20address?=
-Date:   Thu, 21 Apr 2022 14:32:54 -0300
-Message-Id: <20220421173254.29855-1-andrealmeid@igalia.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 21 Apr 2022 13:38:19 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D854738C;
+        Thu, 21 Apr 2022 10:35:28 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id n17so6620672ljc.11;
+        Thu, 21 Apr 2022 10:35:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CDk3a6VgKrZuT8ZcRh1/xIe6Q0/s0tC/sVKTkENgNak=;
+        b=HeelgZvGa0y6CTancPNWQ6vJjNAi4x3ORh1p9cTFIepZtsgDrk5Ua6dZiycoOCMVcL
+         c4GF4hlUa93OAG6fjFG70QF72SD6PrFkoHV1ild6F5WtUNjX56+ZucwjS8QgIhLBMVk9
+         QpsHGI+ifnv0PcHajHaqLWcLbi6w0wTAcWOpYB3zsIgeoZ9PZxnuYeAEHKN8PiPUvTkW
+         tk4m8PijCv/+ZhESRdi9DypwJQb5g+NPDE9hd2T+FtJN+xX+UabFM0JJlhzrTcsSEnaq
+         LMZDZ1VM7onPn8PAGmVO+bscs7PfEfZGf9HRPC7G23BkqZwfoFO6cQHTQ2CHu1k4T6RK
+         OdrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CDk3a6VgKrZuT8ZcRh1/xIe6Q0/s0tC/sVKTkENgNak=;
+        b=6ja9LK+yBwBamsMfnmvQA32ZpfV8YWmYBoEr827m7A59WbHTJ3MoalQ7b1RBrLNpW/
+         3XssaFL/anituinIjFP8oAXqAEztaEZS0lNx9PG/TnnghxVndIlOsfwlkX4qZ3BICj8g
+         He3UZ0F6znyGCRsdV21s/hzUUrJ7qHGYYa2cfQUXueVFwqF4bwgg7hUWp1VEd3StN0FV
+         JghjVc8Cs8kE6W0/rAoM/ER0XYOJrtZXgP3dt3d5dn1KEpXyYMauv0W0sc+t2VVRmNCm
+         yqL8FqMWIMxfw+inY3je2a8hC4Y5aSf6Rx1BzcN8W6G2f2Nm5+S5mnil/++h+W2MNu3y
+         4gBg==
+X-Gm-Message-State: AOAM533HBIXfvEHK6NHMv/RsopXlGf4V2VqEuK8CNPfmywjR3hansVE8
+        YUPjQG/hyx+Ty6myThRHe28=
+X-Google-Smtp-Source: ABdhPJymumgPppR/Yl89vnqcwNccCGJXbwHpQ2AQqL54zDGwa3jfofsqs/k5W5r/iygpYJQNVkNePw==
+X-Received: by 2002:a2e:9e10:0:b0:24b:5cb5:867c with SMTP id e16-20020a2e9e10000000b0024b5cb5867cmr458277ljk.401.1650562526246;
+        Thu, 21 Apr 2022 10:35:26 -0700 (PDT)
+Received: from mobilestation ([95.79.183.147])
+        by smtp.gmail.com with ESMTPSA id m20-20020a194354000000b0046f8c68f965sm2004975lfj.166.2022.04.21.10.35.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 10:35:25 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 20:35:23 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Subject: Re: [PATCH 03/25] dma-direct: take dma-ranges/offsets into account
+ in resource mapping
+Message-ID: <20220421173523.ig62jtvj7qbno6q7@mobilestation>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-4-Sergey.Semin@baikalelectronics.ru>
+ <0baff803-b0ea-529f-095a-897398b4f63f@arm.com>
+ <20220417224427.drwy3rchwplthelh@mobilestation>
+ <20220420071217.GA5152@lst.de>
+ <20220420083207.pd3hxbwezrm2ud6x@mobilestation>
+ <20220420084746.GA11606@lst.de>
+ <20220420085538.imgibqcyupvvjpaj@mobilestation>
+ <20220421144536.GA23289@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421144536.GA23289@lst.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update futex entry to use my new professional email address.
+On Thu, Apr 21, 2022 at 04:45:36PM +0200, Christoph Hellwig wrote:
+> On Wed, Apr 20, 2022 at 11:55:38AM +0300, Serge Semin wrote:
+> > On Wed, Apr 20, 2022 at 10:47:46AM +0200, Christoph Hellwig wrote:
+> > > I can't really comment on the dma-ranges exlcusion for P2P mappings,
+> > > as that predates my involvedment, however:
+> > 
+> > My example wasn't specific to the PCIe P2P transfers, but about PCIe
+> > devices reaching some platform devices over the system interconnect
+> > bus.
+> 
+> So strike PCIe, but this our definition of Peer to Peer accesses.
+> 
+> > What if I get to have a physical address of a platform device and want
+> > have that device being accessed by a PCIe peripheral device? The
+> > dma_map_resource() seemed very much suitable for that. But considering
+> > what you say it isn't.
+> 
 
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
----
- .mailmap    | 1 +
- MAINTAINERS | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+> dma_map_resource is the right thing for that.  But the physical address
+> of MMIO ranges in the platform device should not have struct pages
+> allocated for it, and thus the other dma_map_* APIs should not work on
+> it to start with.
 
-diff --git a/.mailmap b/.mailmap
-index 93458154ce7d..ea1ba4a9a77e 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -45,6 +45,7 @@ Andrey Konovalov <andreyknvl@gmail.com> <andreyknvl@google.com>
- Andrey Ryabinin <ryabinin.a.a@gmail.com> <a.ryabinin@samsung.com>
- Andrey Ryabinin <ryabinin.a.a@gmail.com> <aryabinin@virtuozzo.com>
- Andrzej Hajda <andrzej.hajda@intel.com> <a.hajda@samsung.com>
-+André Almeida <andrealmeid@igalia.com> <andrealmeid@collabora.com>
- Andy Adamson <andros@citi.umich.edu>
- Antoine Tenart <atenart@kernel.org> <antoine.tenart@bootlin.com>
- Antoine Tenart <atenart@kernel.org> <antoine.tenart@free-electrons.com>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 40fa1955ca3f..35dea3d12981 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8109,7 +8109,7 @@ M:	Ingo Molnar <mingo@redhat.com>
- R:	Peter Zijlstra <peterz@infradead.org>
- R:	Darren Hart <dvhart@infradead.org>
- R:	Davidlohr Bueso <dave@stgolabs.net>
--R:	André Almeida <andrealmeid@collabora.com>
-+R:	André Almeida <andrealmeid@igalia.com>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
--- 
-2.35.3
+The problem is that the dma_map_resource() won't work for that, but
+presumably the dma_map_sg()-like methods will (after some hacking with
+the phys address, but anyway). Consider the system diagram in my
+previous email. Here is what I would do to initialize a DMA
+transaction between a platform device and a PCIe peripheral device:
+
+1) struct resource *rsc = platform_get_resource(plat_dev, IORESOURCE_MEM, 0);
+
+2) dma_addr_t dar = dma_map_resource(&pci_dev->dev, rsc->start, rsc->end - rsc->start + 1,
+                                      DMA_FROM_DEVICE, 0);
+
+3) dma_addr_t sar;
+   void *tmp = dma_alloc_coherent(&pci_dev->dev, PAGE_SIZE, &sar, GFP_KERNEL);
+   memset(tmp, 0xaa, PAGE_SIZE);
+
+4) PCIe device: DMA.DAR=dar, DMA.SAR=sar. RUN.
+
+If there is no dma-ranges specified in the PCIe Host controller
+DT-node, the PCIe peripheral devices will see the rest of the system
+memory as is (no offsets and remappings). But if there is dma-ranges
+with some specific system settings it may affect the PCIe MRd/MWr TLPs
+address translation including the addresses targeted to the MMIO
+space. In that case the mapping performed on step 2) will return a
+wrong DMA-address since the corresponding dma_direct_map_resource()
+just returns the passed physical address missing the
+'pci_dev->dma_range_map'-based mapping performed in
+translate_phys_to_dma().
+
+Note the mapping on step 3) works correctly because it calls the
+translate_phys_to_dma() of the direct DMA interface thus taking the
+PCie dma-ranges into account.
+
+To sum up as I see it either restricting dma_map_resource() to map
+just the intra-bus addresses was wrong or there must be some
+additional mapping infrastructure for the denoted systems. Though I
+don't see a way the dma_map_resource() could be fixed to be suitable
+for each considered cases.
+
+-Sergey
+   
+map the platforms
 

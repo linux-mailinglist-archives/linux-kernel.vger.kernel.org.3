@@ -2,108 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D69509825
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB435097C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385128AbiDUGtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S1384960AbiDUGmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 02:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385422AbiDUGrw (ORCPT
+        with ESMTP id S1384922AbiDUGmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:47:52 -0400
-X-Greylist: delayed 371 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Apr 2022 23:45:03 PDT
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC4E11A20
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 23:45:03 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.101.197.31])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 672DE3F7E2;
-        Thu, 21 Apr 2022 06:38:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1650523131;
-        bh=7E8gP7qXCjJXg+TBnr+pJ+eIzE0s+bO3ojbZKNQi4lA=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=AK+XnMcvK/oZd2uPp/2LK66Jd1zNAK2fGQB2y0Cxgdz/MkEjNrX03bc0eGsjY847/
-         LIAX3MtDaFdlJ7oX0/B3/kewNnTNRt6KWSfXNsle40CscwFmVohFVnsTqJBuSY4hbD
-         QCDyVsFrSaVIIFxgosDmIWkH07WProVWvu7b+kRzVaHYvIgHUdDO9zEp2M509KPjxF
-         c/XQOTMkpGqil6dl6c4T2c29Yl3Oo6XON9CdG3wyS+jctnwqPFV2vcXJ86y028Ttbu
-         P3oG3mqwHH92MGIA0ErGQw17RNQfWKBB+E3Gts+ikLyvLnvqjCyBVb9INu3kq+1dj3
-         lZR3XbxN7sHcQ==
-From:   Andy Chi <andy.chi@canonical.com>
-Cc:     andy.chi@canonical.com, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jeremy Szu <jeremy.szu@canonical.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: hda/realtek: Enable mute/micmute LEDs and limit mic boost on EliteBook 845/865 G9
-Date:   Thu, 21 Apr 2022 14:36:04 +0800
-Message-Id: <20220421063606.39772-1-andy.chi@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Apr 2022 02:42:23 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 521F3E0A9;
+        Wed, 20 Apr 2022 23:39:33 -0700 (PDT)
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 089D01C810D0;
+        Thu, 21 Apr 2022 14:39:31 +0800 (CST)
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 21
+ Apr 2022 14:39:30 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Thu, 21 Apr 2022 14:39:30 +0800
+Message-ID: <caf4867f-7f71-9262-f190-463325eb13ab@nuvoton.com>
+Date:   Thu, 21 Apr 2022 14:39:30 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 5/5] dt-bindings: arm: Add initial bindings for Nuvoton
+ Platform
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <ychuang570808@gmail.com>
+CC:     <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
+        <arnd@arndb.de>, <olof@lixom.net>, <will@kernel.org>,
+        <soc@kernel.org>, <cfli0@nuvoton.com>
+References: <20220418082738.11301-1-ychuang3@nuvoton.com>
+ <20220418082738.11301-6-ychuang3@nuvoton.com>
+ <fd9316a6-7df6-e1fa-50dc-ff50934afb5c@linaro.org>
+From:   Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <fd9316a6-7df6-e1fa-50dc-ff50934afb5c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On HP EliteBook 845 G9 and EliteBook 865 G9, the audio LEDs can be enabled by
-ALC285_FIXUP_HP_MUTE_LED. So use it accordingly.
 
-Signed-off-by: Andy Chi <andy.chi@canonical.com>
----
- sound/pci/hda/patch_realtek.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 62fbf3772b41..0cba2f19a772 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -7006,6 +7006,7 @@ enum {
- 	ALC285_FIXUP_LEGION_Y9000X_AUTOMUTE,
- 	ALC287_FIXUP_LEGION_16ACHG6,
- 	ALC287_FIXUP_CS35L41_I2C_2,
-+	ALC287_FIXUP_CS35L41_I2C_2_HP_GPIO_LED,
- 	ALC245_FIXUP_CS35L41_SPI_2,
- 	ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED,
- 	ALC245_FIXUP_CS35L41_SPI_4,
-@@ -8769,6 +8770,12 @@ static const struct hda_fixup alc269_fixups[] = {
- 		.type = HDA_FIXUP_FUNC,
- 		.v.func = cs35l41_fixup_i2c_two,
- 	},
-+	[ALC287_FIXUP_CS35L41_I2C_2_HP_GPIO_LED] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = cs35l41_fixup_i2c_two,
-+		.chained = true,
-+		.chain_id = ALC285_FIXUP_HP_MUTE_LED,
-+	},
- 	[ALC245_FIXUP_CS35L41_SPI_2] = {
- 		.type = HDA_FIXUP_FUNC,
- 		.v.func = cs35l41_fixup_spi_two,
-@@ -9025,9 +9032,9 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x103c, 0x8981, "HP Elite Dragonfly G3", ALC245_FIXUP_CS35L41_SPI_4),
- 	SND_PCI_QUIRK(0x103c, 0x898e, "HP EliteBook 835 G9", ALC287_FIXUP_CS35L41_I2C_2),
- 	SND_PCI_QUIRK(0x103c, 0x898f, "HP EliteBook 835 G9", ALC287_FIXUP_CS35L41_I2C_2),
--	SND_PCI_QUIRK(0x103c, 0x8991, "HP EliteBook 845 G9", ALC287_FIXUP_CS35L41_I2C_2),
-+	SND_PCI_QUIRK(0x103c, 0x8991, "HP EliteBook 845 G9", ALC287_FIXUP_CS35L41_I2C_2_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8992, "HP EliteBook 845 G9", ALC287_FIXUP_CS35L41_I2C_2),
--	SND_PCI_QUIRK(0x103c, 0x8994, "HP EliteBook 855 G9", ALC287_FIXUP_CS35L41_I2C_2),
-+	SND_PCI_QUIRK(0x103c, 0x8994, "HP EliteBook 855 G9", ALC287_FIXUP_CS35L41_I2C_2_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8995, "HP EliteBook 855 G9", ALC287_FIXUP_CS35L41_I2C_2),
- 	SND_PCI_QUIRK(0x103c, 0x89a4, "HP ProBook 440 G9", ALC236_FIXUP_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x89a6, "HP ProBook 450 G9", ALC236_FIXUP_HP_GPIO_LED),
--- 
-2.25.1
+On 2022/4/18 下午 08:11, Krzysztof Kozlowski wrote:
+> On 18/04/2022 10:27, Jacky Huang wrote:
+>> +properties:
+>> +  $nodename:
+>> +    const: '/'
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - nuvoton,ma35d1
+>> +          - nuvoton,ma35d1-evb
+>> +          - nuvoton,ma35d1-iot
+>> +          - nuvoton,ma35d1-som512
+>> +          - nuvoton,ma35d1-som1g
+> This does not match your DTS and does not look reasonable (SoC
+> compatible should not be part of this enum). Check some other board
+> bindings for examples.
+>
+>
+> Best regards,
+> Krzysztof
+
+I would like to modify it as follows:
+
+description: |
+   Boards with an ARMv8 based Nuvoton SoC shall have the following
+   properties.
+
+properties:
+   $nodename:
+     const: '/'
+   compatible:
+     oneOf:
+
+       - description: MA35D1 evaluation board
+         items:
+           - const: nuvoton,ma35d1-evb
+           - const: nuvoton,ma35d1
+
+       - description: MA35D1 IoT board
+         items:
+           - const: nuvoton,ma35d1-iot
+           - const: nuvoton,ma35d1
+
+       - description: MA35D1 SOM board with 512MB DDR
+         items:
+           - const: nuvoton,ma35d1-som512
+           - const: nuvoton,ma35d1
+
+       - description: MA35D1 SOM board with 1GB DDR
+         items:
+           - const: nuvoton,ma35d1-som1g
+           - const: nuvoton,ma35d1
+
+additionalProperties: true
+
+
+
+Thank you very much.
+Jacky Huang
 

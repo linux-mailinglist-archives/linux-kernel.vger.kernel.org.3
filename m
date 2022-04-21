@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECD550ABBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B036850ABC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392359AbiDUXCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 19:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        id S1392499AbiDUXGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 19:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239972AbiDUXCR (ORCPT
+        with ESMTP id S230377AbiDUXGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:02:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE1E3DDD9;
-        Thu, 21 Apr 2022 15:59:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B032B618E6;
-        Thu, 21 Apr 2022 22:59:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D61C385A7;
-        Thu, 21 Apr 2022 22:59:24 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ORIcxgQl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650581962;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yrx6LV8BpRq8lvnB552cplMOohmgoFH5hBidu/I1mNk=;
-        b=ORIcxgQluArhHZCQyuk6URe595LFJHkhk6pQjym0f5rSamsu+Yh2s4wdVcpGxaj39ZGnqz
-        juGWb/LEMHwAtSC6wuhpm1vfhLdD5FDr5VO00llWZhkc+ZkGY2ADh+0WVbWQNRh//BDjK1
-        SLlP0pdVHpsYZzPq5sS7T3IA7nFUAg8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 51bda336 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 21 Apr 2022 22:59:22 +0000 (UTC)
-Date:   Fri, 22 Apr 2022 00:59:19 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, Andy Polyakov <appro@cryptogams.org>
-Subject: Re: [PATCH] random: avoid mis-detecting a slow counter as a cycle
- counter
-Message-ID: <YmHhx5IrxDKeqJnc@zx2c4.com>
-References: <20220421192939.250680-1-ebiggers@kernel.org>
- <YmG8k1JrVexBGmJL@zx2c4.com>
- <YmHDctbEAmJhinoz@sol.localdomain>
+        Thu, 21 Apr 2022 19:06:41 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CC2483A9;
+        Thu, 21 Apr 2022 16:03:50 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id d15so6944653pll.10;
+        Thu, 21 Apr 2022 16:03:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6lETE4tLzS4hKJ1u/oePk2fhU7jHe/s3/pNmvXVjZcU=;
+        b=UhzbFZk/OF9avjf1Dw5CvpdHDR7o/YhO54wS+drjkdZVgv+x1Zmf7Vp2/nMFu/vHNQ
+         aB0zvD92+OaAXYCHpSddb8B2J0GGlDIoT1SeXVFjwLBa5DGckLhQAzd7xM7QCwcgHcFX
+         rw6/5k4C9qqA7idqS4r7oLTvtN59UvRAi4xQzBbJW9ea6tOQJlcJVGx8TwnF6kiVd/WV
+         Ymxgf8KMJWr0WebEPvlomFEHHgZ/yaQDjQBqlzo4fdyrV87W/t98TbfjECfH3D0DBEjb
+         WR4B7bDrIJp3j7TAcvmMURrm2rbubhPYxv7ykIISQg+eupAuhBJqd5998L3Cut2YY+n9
+         9nDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6lETE4tLzS4hKJ1u/oePk2fhU7jHe/s3/pNmvXVjZcU=;
+        b=S1+B8TS495LApofUfvuNWxLNZ6Hs82IwPr/eoOkKctuEuLeylgd7qyG8Saexwdk093
+         4276Yq8yGe4d+eHpirJQDrnEJm8jhtvYPNb/gn7ty1uf2NTd1gUUV8wAtc9uED91RkAh
+         Tx4cAWnDsF7F2bUjE+SMECkNdAGRBBjmjOHfxAs+jJxDEHH0wRYY48AagN+z4nIArpOF
+         GwLUuyOBNa9U4YDjgyc4GYts4ItoMTqMSCsjcHF3rjtD8jzELquevhxvFZV5F6kuKqbA
+         UfYqYFscpx7uSNrFl9XfvYoO6A+nwZmkdgvNQMHzDqqj74DtsyI8UdkO941sclqSniWY
+         ahGg==
+X-Gm-Message-State: AOAM532vDhOxPn09R9UTLCNB+0H9Zz1N+nnu/PnyBkMiHqdMgZ4EgVj7
+        mffzTCt+qBnzZsVjQTHabgs=
+X-Google-Smtp-Source: ABdhPJzW+XA9jMQWSiTiZveW2YDJbye/xVxh8r5uT5ngeig1q9drkro5hFvvGcxMHBf+ET2adpzZ8Q==
+X-Received: by 2002:a17:902:f688:b0:15b:45ea:b682 with SMTP id l8-20020a170902f68800b0015b45eab682mr1472088plg.134.1650582230362;
+        Thu, 21 Apr 2022 16:03:50 -0700 (PDT)
+Received: from localhost.localdomain (c-73-241-94-58.hsd1.ca.comcast.net. [73.241.94.58])
+        by smtp.gmail.com with ESMTPSA id t2-20020a17090a448200b001cd4989fee7sm3810238pjg.51.2022.04.21.16.03.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 16:03:49 -0700 (PDT)
+From:   Ryan Lee <ryan.lee.analog@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, perex@perex.cz, tiwai@suse.com,
+        srinivas.kandagatla@linaro.org, ckeepax@opensource.cirrus.com,
+        tanureal@opensource.cirrus.com, cy_huang@richtek.com,
+        pierre-louis.bossart@linux.intel.com,
+        drhodes@opensource.cirrus.com, pbrobinson@gmail.com,
+        hdegoede@redhat.com, lukas.bulwahn@gmail.com, stephan@gerhold.net,
+        arnd@arndb.de, ryan.lee.analog@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ryans.lee@analog.com
+Subject: [PATCH V2 1/2] ASoC: dt-bindings: max98396: add amplifier driver
+Date:   Thu, 21 Apr 2022 16:02:52 -0700
+Message-Id: <20220421230253.823798-1-ryan.lee.analog@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YmHDctbEAmJhinoz@sol.localdomain>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,66 +75,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Eric,
+From: Ryan Lee <ryans.lee@analog.com>
 
-On Thu, Apr 21, 2022 at 01:49:54PM -0700, Eric Biggers wrote:
-> I think we'll need to go there eventually, along with fixing
-> add_timer_randomness() and add_interrupt_randomness() to credit entropy more
-> accurately.  I do not think there is an easy fix, though; this is mostly an open
-> research area.  Looking into research papers and what has been done for other
-> jitter entropy implementations would be useful.
+This patch adds dt-bindings information for Analog Devices MAX98396
+and MAX98397 Smart Amplifier.
 
-Alright, so my feeble attempt at nerd sniping you into working on this
-inside of a mailing list thread didn't catch, alas. :)) But yea, I guess
-this is something we'll have to look at. For add_timer_randomness(), I
-actually wonder whether we could just get rid of all the estimation
-stuff and credit either 1 or 0 bits per event, like all other sources.
-Food for thought.
+Signed-off-by: Ryan Lee <ryans.lee@analog.com>
+---
+  Changes from v1:
+    Fixed yamllint/dtschema/dtc warnings and errors
 
-Anyway, onto your actual patch. I was just looking at this and something
-didn't look right:
+ .../bindings/sound/adi,max98396.yaml          | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/adi,max98396.yaml
 
-> +       for (i = 0; i < 3; i++) {
-> +               if (stack.entropy == random_get_entropy())
-> +                       return;
-> +       }
+diff --git a/Documentation/devicetree/bindings/sound/adi,max98396.yaml b/Documentation/devicetree/bindings/sound/adi,max98396.yaml
+new file mode 100644
+index 000000000000..ec4c10c2598a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/adi,max98396.yaml
+@@ -0,0 +1,79 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/adi,max98396.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices MAX98396 Speaker Amplifier Device Tree Bindings
++
++maintainers:
++  - Ryan Lee <ryans.lee@analog.com>
++
++description:
++  The MAX98396 is a mono Class-DG speaker amplifier with I/V sense.
++  The device provides a PCM interface for audio data and a standard
++  I2C interface for control data communication.
++  The MAX98397 is a variant of MAX98396 with wide input supply range.
++
++properties:
++  compatible:
++    enum:
++      - adi,max98396
++      - adi,max98397
++  reg:
++    maxItems: 1
++    description: I2C address of the device.
++
++  adi,vmon-slot-no:
++    description: slot number of the voltage sense monitor
++    $ref: "/schemas/types.yaml#/definitions/uint32"
++    minimum: 0
++    maximum: 15
++    default: 0
++
++  adi,imon-slot-no:
++    description: slot number of the current sense monitor
++    $ref: "/schemas/types.yaml#/definitions/uint32"
++    minimum: 0
++    maximum: 15
++    default: 0
++
++  adi,spkfb-slot-no:
++    description: slot number of speaker DSP monitor
++    $ref: "/schemas/types.yaml#/definitions/uint32"
++    minimum: 0
++    maximum: 15
++    default: 0
++
++  adi,interleave-mode:
++    description:
++      For cases where a single combined channel for the I/V sense data
++      is not sufficient, the device can also be configured to share
++      a single data output channel on alternating frames.
++      In this configuration, the current and voltage data will be frame
++      interleaved on a single output channel.
++    type: boolean
++
++  reset-gpios:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        max98396: amplifier@39 {
++            compatible = "adi,max98396";
++            reg = <0x39>;
++            adi,vmon-slot-no = <0>;
++            adi,imon-slot-no = <1>;
++            reset-gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
++        };
++    };
+-- 
+2.25.1
 
-So stack.entropy is set once when the function starts. Then we see if it
-becomes equal to a new counter three times in a row. But if it's not
-equal on the first try, it's probably not equal on the second and third,
-right?
-
-I suspect what you actually meant to do here is check adjacent counters,
-the rationale being that on a system with a slow counter, you might be
-[un]lucky and read the counter _just_ before it changes, and then the
-new one differs, even though there's usually quite a large period of
-time in between the two. For example:
-
-| real time | cycle counter |
-| --------- | ------------- |
-| 3         | 5             |
-| 4         | 5             |
-| 5         | 5             |
-| 6         | 5             |
-| 7         | 5             | <--- a
-| 8         | 6             | <--- b
-| 9         | 6             | <--- c
-| 10        | 6             | <--- d
-
-If we read the counter at (a) and compare it to (b), we might be fooled
-into thinking that it's a fast counter, when in reality it is not. The
-solution is to also compare counter (b) to counter (c), on the theory
-that if the counter is _actually_ slow, and (a)!=(b), then certainly
-(b)==(c). And for this we probably only need two comparisons, not three.
-What your code does is compare (a)==(b), (a)==(c), (a)==(d), but I don't
-think that gives us much.
-
-So maybe a different way of writing this is just:
-
-    if (random_get_entropy() == (stack.entropy = random_get_entropy()) ||
-        stack.entropy == (stack.entropy = random_get_entropy()))
-            return;
-
-Or at least something to that extent.
-
-Jason

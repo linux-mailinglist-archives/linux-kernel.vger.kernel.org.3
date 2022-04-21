@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB5150A775
+	by mail.lfdr.de (Postfix) with ESMTP id B67B550A776
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390948AbiDURyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S1390961AbiDURyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390937AbiDURx4 (ORCPT
+        with ESMTP id S1390947AbiDURyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:53:56 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528F24A3E6;
-        Thu, 21 Apr 2022 10:51:06 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id h25so1699470wrc.13;
-        Thu, 21 Apr 2022 10:51:06 -0700 (PDT)
+        Thu, 21 Apr 2022 13:54:02 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D67149CAE;
+        Thu, 21 Apr 2022 10:51:12 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id q20so3660655wmq.1;
+        Thu, 21 Apr 2022 10:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=f92MKRrT0L1P4tPjgNwMxIl4Ha1qwGqzWtpfrFCwgyM=;
-        b=peEQlIDQSf7XxoSaP590zUrldJ/7GeAEaQd4MUJsvP+D8zqxdae/crnwtEz4tgbDBR
-         RIG7gzVZBj/Re256H6eLkFxDST0kJXGer+/LbxYU0QoY7q9OdnbQsePXnbnmazgiSZLy
-         XFz+4KkNTkErt8c/1PjvtZQbBhHIz4PfAA2f+KnNUxDV6L8CicIIo7u6nDv4/D41IcGI
-         M/2HkOqDYMi2e0zo5GHDDll+wn9vWmxqZp7pqPrXqIM0qRqPNp0WMfdlWhUioOJ3Vn3/
-         XkZzlUCo/ETreuh+KFLjkHAMVBPPu4MH0fofWZyaJBJ3Gix5IjRGV/j1XUESr5QeU039
-         nvBA==
+        bh=z9GPD6F+i42nYYTtaO9dbnr7cCMMcY8a2hQOSNdFpjY=;
+        b=J/DVEUpYNkREy8qfWg1OWPB/6EZY7LP+YLW+2V3WIjhwnNwZq/mt2MD7LZ2WzUfVF6
+         zXo3k49TPGOSmVmKDJlBPS/lfbxLWylvRJNqFv/zBthfh4P/58XhqywlHpjwz1VnOoQI
+         y1p+GG5zjAtz5XaUgBHrfVC7uwPq17DeIcpmcIvPutuaJO1mUvhWgw64Qn58UjXxZKUS
+         LpiO04kRQTFbVHnQ/xWVBZRjQ3tgGI1gyGNOyAqt0JlkZG2ZNRobZNbuBESLaZZuuzvk
+         yStJ1pueHtmU9Hj2R8dywIuBnMGbnHm+ed4LLqGP5KfdAfijTtn1IhI7vkk803LciUL4
+         3iTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=f92MKRrT0L1P4tPjgNwMxIl4Ha1qwGqzWtpfrFCwgyM=;
-        b=phVcO0fSRbNt5tCVhpg2qEtCtwNP1/y87MuGTXROUXcUPySKa11LpwKpyrSjFn3pjw
-         vlHQZzYYYQ7Si2G0mrTcsbKyLvZZaMm6YBRORAURnfy99WWeISI8MHH+99aLE+72SypJ
-         kpoYgMd0jOixM2m3KAKCeQMm08IzCohB040qJ5T4VAcRT2a2szyyiTUoyISTJANOs3Lm
-         4E1xLemfHYkQzIKw8cezU0HfIHyUqpAw3jcXgemC6c66ab/N+YX3C59CqcUCacGkja8T
-         l9OVA1Cn4ndZM2UyDzh+Em1FXHqWsgFdHPfMQj36QHMq79wyEZrkWUTV3hZeakXA3kOw
-         chQA==
-X-Gm-Message-State: AOAM533Fgz+yuuO29m8kVjHfCdv4T3ukkTxZu6glD5HnMVNGu3cHxVcB
-        KINCNMc5S+XiKdzEIrsC3hI=
-X-Google-Smtp-Source: ABdhPJwgp5JJZxP5dhvcjxtD7Q4ChmeukcW5sOLr/Hc1cZIGMXlFv/ADkgz6vxvtkK8z0/K/JPO/JA==
-X-Received: by 2002:a05:6000:156a:b0:20a:9c1b:6b1b with SMTP id 10-20020a056000156a00b0020a9c1b6b1bmr620255wrz.683.1650563464855;
-        Thu, 21 Apr 2022 10:51:04 -0700 (PDT)
+        bh=z9GPD6F+i42nYYTtaO9dbnr7cCMMcY8a2hQOSNdFpjY=;
+        b=KdUz3v/HJGQZSH1gKxngjkSdZDDo6Nb5VuHlEDWp/aKfNCJjE/nMjmul7um7qpn128
+         51ky/VjG1+CuK+hQ2uxez9T6Iiv84TOuOGxxySAMAjL5qruDqps5kjZTSgIPj8+4Twlf
+         +CVNojV5VU5mPT4+2ksxF8elwMFitVi7Vyg1Rs1AovSgAmrF+Nl0JeY2ghkS/vXwORkn
+         pkS5iccbJoOVVWadgrxb/hjoz0IfUq88kZSLg38rOLLoSSBfq3vreKdjQnbDfAmnRYrx
+         hitRMx6Mxa9lH5l/PKuxsxuTjwaIeMSGeizqUZhFTYkc6iGe4EtIMNrYYVF3Cuty8HUR
+         wYmQ==
+X-Gm-Message-State: AOAM532drdPW7i/lAasmtb3k7c7Bbj/5TyEQ0+BjWnI9o/Wu03clDs7n
+        AuTSANRRSwVvVwCRNF7zLt0zk5f/CI4=
+X-Google-Smtp-Source: ABdhPJwvgqEiypssd+RliqH52FtCpkOJfC4NqtaaXxYnl3tFg9ove0Gx3PmwEsCpH3FC2CjoB0WCvQ==
+X-Received: by 2002:a05:600c:4044:b0:38e:d2bc:1bc6 with SMTP id j4-20020a05600c404400b0038ed2bc1bc6mr9949186wmm.10.1650563470647;
+        Thu, 21 Apr 2022 10:51:10 -0700 (PDT)
 Received: from localhost.localdomain ([94.73.37.128])
-        by smtp.gmail.com with ESMTPSA id l28-20020a05600c1d1c00b0038ece66f1b0sm2685634wms.8.2022.04.21.10.51.04
+        by smtp.gmail.com with ESMTPSA id l28-20020a05600c1d1c00b0038ece66f1b0sm2685634wms.8.2022.04.21.10.51.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 10:51:04 -0700 (PDT)
+        Thu, 21 Apr 2022 10:51:10 -0700 (PDT)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     jikos@kernel.org
 Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
         linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH for-5.19/uclogic 1/5] HID: uclogic: Clarify params desc_size description
-Date:   Thu, 21 Apr 2022 19:50:48 +0200
-Message-Id: <20220421175052.911446-2-jose.exposito89@gmail.com>
+Subject: [PATCH for-5.19/uclogic 2/5] HID: uclogic: Clarify pen/frame desc_ptr description
+Date:   Thu, 21 Apr 2022 19:50:49 +0200
+Message-Id: <20220421175052.911446-3-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220421175052.911446-1-jose.exposito89@gmail.com>
 References: <20220421175052.911446-1-jose.exposito89@gmail.com>
@@ -79,21 +79,34 @@ Documentation improvements.
 Signed-off-by: Nikolai Kondrashov <spbnick@gmail.com>
 Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- drivers/hid/hid-uclogic-params.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/hid-uclogic-params.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/hid/hid-uclogic-params.h b/drivers/hid/hid-uclogic-params.h
-index e5ccc558abc3..a489c92cee43 100644
+index a489c92cee43..fa75efba3130 100644
 --- a/drivers/hid/hid-uclogic-params.h
 +++ b/drivers/hid/hid-uclogic-params.h
-@@ -189,7 +189,7 @@ struct uclogic_params {
+@@ -62,8 +62,8 @@ struct uclogic_params_pen_subreport {
+  */
+ struct uclogic_params_pen {
+ 	/*
+-	 * Pointer to report descriptor describing the inputs.
+-	 * Allocated with kmalloc.
++	 * Pointer to report descriptor part describing the pen inputs.
++	 * Allocated with kmalloc. NULL if the part is not specified.
+ 	 */
  	__u8 *desc_ptr;
  	/*
- 	 * Size of the common part of the replacement report descriptor.
--	 * Only valid, if "desc_ptr" is not NULL.
-+	 * Only valid, if "desc_ptr" is valid and not NULL.
+@@ -101,8 +101,8 @@ struct uclogic_params_pen {
+  */
+ struct uclogic_params_frame {
+ 	/*
+-	 * Pointer to report descriptor describing the inputs.
+-	 * Allocated with kmalloc.
++	 * Pointer to report descriptor part describing the frame inputs.
++	 * Allocated with kmalloc. NULL if the part is not specified.
  	 */
- 	unsigned int desc_size;
+ 	__u8 *desc_ptr;
  	/*
 -- 
 2.25.1

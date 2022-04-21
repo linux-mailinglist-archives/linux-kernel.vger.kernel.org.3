@@ -2,154 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A549E509D24
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57862509D31
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388108AbiDUKKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
+        id S1388145AbiDUKOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354947AbiDUKKc (ORCPT
+        with ESMTP id S1388143AbiDUKNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:10:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86474286D7;
-        Thu, 21 Apr 2022 03:07:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BA22B8233A;
-        Thu, 21 Apr 2022 10:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 784B0C385A1;
-        Thu, 21 Apr 2022 10:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650535659;
-        bh=4uQ8r3mXhXLd76TxIbpDEIMJezspVHkacQKu5lK2eg8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zgUsSRLpb/S0iggDZD/Wh6rIYeGUazairYpYXKd50h7p7R11HU2s5O9Kz7M33veOi
-         MJUfbz0nA0NRARHhGOvOrQMUM9vBp2OwR9jChZULqGqYgQDWQhixrJmslQ7O2JHrst
-         6OGsW11hBs/vMtqmn91MmlXvJinN8e2/H0hX/bBY=
-Date:   Thu, 21 Apr 2022 12:07:36 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zixuan Fu <r33s3n6@gmail.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-Subject: Re: [PATCH] drivers: usb: host: fix NULL pointer dereferences
- triggered by unhandled errors in xhci_create_rhub_port_array()
-Message-ID: <YmEs6BqcyM7fgLXg@kroah.com>
-References: <20220421094236.1052170-1-r33s3n6@gmail.com>
+        Thu, 21 Apr 2022 06:13:43 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83CFD43
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:10:54 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id bo5so4572688pfb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QJvg5qdwZy92dqfWpy9TlwqA6E9AtPhwiY+V07K0U7s=;
+        b=kSpAaU5M4rU+n8fx4RyNiZ0RYZu2ip2Fiasl/se3avD8VUijKLCLOFHXS7f7c9a3uR
+         vNDGjAbp+1+WN3TYZjX3t+MqnVJuTgSw24mWnxWaBAv20WhywpxTE//onnZAXTCNFwhD
+         leCp2ixUdAivBX+IQaVHNI9R/L8HwJgnb8Xtmwk07DSWBf0xqvwLuJx1rPYtZKtQjjSZ
+         JdZAuzrwvmH+oxBnWuI8EToFFCY7TsvrJQhK8PQpseCF3IHFx+XCNIeJA22pdaq90q5i
+         Kteh+j2LLjE8ImF2TkRSqMz8kXuVVMyQ/RzHjcZA6Prm6UhcQyeHjlcUZ/gquN8qcOAN
+         dx7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QJvg5qdwZy92dqfWpy9TlwqA6E9AtPhwiY+V07K0U7s=;
+        b=nIG2XwZtKnhEjxHNZPh1u4JrQEI7wwZUSNtym5A63tm6YoloqgeG1a25sZG1BjRyLk
+         /CJua7Jc6wdh8bDX7kE9KrDUanJNH3zuhYwYxGR4u/sxqYwQkp+X4Bfrob1k63yImStc
+         20eSJwM/6CyNcZU0g2iEBJrrSwFSjjBkduWlr0UxLSS/buBdLxOp/SNqzE1stQgGZo4c
+         dhJsgL7I0N7C4EEYrvueGYtBtNppkdZtkhD/dFYa8zMBBjp6TTqwBq6nIug6y4PCiZoS
+         l6GePumDxxuk/MOrmxfBA1ln6Dlyy5SOD1FTDXH9rZHaisz8gpKleVYG6pJbjxs1sjoS
+         JEHQ==
+X-Gm-Message-State: AOAM530I6UViRBzMhuy5Qblq06m+Q3K7rKHVJR16//kw2RYyFHi/VMSc
+        Bn7GjGf62oxh/V+PSOkWS+unJ8Ihk8b3jDAS
+X-Google-Smtp-Source: ABdhPJwe179+lHI6oHzPdAOdgkuDSdG81OsnWCMYiyKhwX28MH5t+5t3amVPv9NW4CPmGlu9eDj37A==
+X-Received: by 2002:a05:6a00:2391:b0:50a:3ea9:e84d with SMTP id f17-20020a056a00239100b0050a3ea9e84dmr28323398pfc.21.1650535854186;
+        Thu, 21 Apr 2022 03:10:54 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:df13:3d47:8c92:6576])
+        by smtp.gmail.com with ESMTPSA id w196-20020a6282cd000000b0050ada022940sm2407806pfd.183.2022.04.21.03.10.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 03:10:53 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH v2 00/10] xtensa: support coprocessors on SMP
+Date:   Thu, 21 Apr 2022 03:10:23 -0700
+Message-Id: <20220421101033.216394-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421094236.1052170-1-r33s3n6@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 05:42:36PM +0800, Zixuan Fu wrote:
-> In xhci_create_rhub_port_array(), when rhub->num_ports is zero, 
-> rhub->ports would not be set; when kcalloc_node() fails, rhub->ports
-> would be set to NULL. In these two cases, xhci_create_rhub_port_array()
-> just returns void, and thus its callers are unaware of the error.
-> 
-> Then rhub->ports is dereferenced in xhci_usb3_hub_descriptor() or 
-> xhci_usb2_hub_descriptor().
-> 
-> To fix the bug, xhci_setup_port_arrays() should return an integer to 
-> indicate a possible error, and its callers should handle the error.
-> 
-> Here is the log when this bug occurred in our fault-injection testing:
-> 
-> [   24.001309] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> ...
-> [   24.003992] RIP: 0010:xhci_hub_control+0x3f5/0x60d0 [xhci_hcd]
-> ...
-> [   24.009803] Call Trace:
-> [   24.010014]  <TASK>
-> [   24.011310]  usb_hcd_submit_urb+0x1233/0x1fd0
-> [   24.017071]  usb_start_wait_urb+0x115/0x310
-> [   24.017641]  usb_control_msg+0x28a/0x450
-> [   24.019046]  hub_probe+0xb16/0x2320
-> [   24.019757]  usb_probe_interface+0x4f1/0x930
-> [   24.019765]  really_probe+0x33d/0x970
-> [   24.019768]  __driver_probe_device+0x157/0x210
-> [   24.019772]  driver_probe_device+0x4f/0x340
-> [   24.019775]  __device_attach_driver+0x2ee/0x3a0
-> ...
-> 
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
-> ---
->  drivers/usb/host/xhci-mem.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index bbb27ee2c6a3..024515346c39 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -2235,7 +2235,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
->  	/* FIXME: Should we disable ports not in the Extended Capabilities? */
->  }
->  
-> -static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
-> +static int xhci_create_rhub_port_array(struct xhci_hcd *xhci,
->  					struct xhci_hub *rhub, gfp_t flags)
->  {
->  	int port_index = 0;
-> @@ -2243,11 +2243,11 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
->  	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
->  
->  	if (!rhub->num_ports)
-> -		return;
-> +		return -EINVAL;
->  	rhub->ports = kcalloc_node(rhub->num_ports, sizeof(*rhub->ports),
->  			flags, dev_to_node(dev));
->  	if (!rhub->ports)
-> -		return;
-> +		return -ENOMEM;
->  
->  	for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
->  		if (xhci->hw_ports[i].rhub != rhub ||
-> @@ -2259,6 +2259,7 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
->  		if (port_index == rhub->num_ports)
->  			break;
->  	}
-> +	return 0;
->  }
->  
->  /*
-> @@ -2277,6 +2278,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
->  	int cap_count = 0;
->  	u32 cap_start;
->  	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-> +	int ret;
->  
->  	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
->  	xhci->hw_ports = kcalloc_node(num_ports, sizeof(*xhci->hw_ports),
-> @@ -2367,8 +2369,13 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
->  	 * Not sure how the USB core will handle a hub with no ports...
->  	 */
->  
-> -	xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
-> -	xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
-> +	ret = xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
-> +	if (ret)
-> +		return ret;
+Hello,
 
-What about the memory allocated by the first call to
-xhci_create_rhub_port_array()?  Is that now lost?  Same for everything
-else allocated before these calls, how is that cleaned up properly?
+this series does a bunch of small cleanups around exception and
+coprocessor handling code and adds coprocessors support in SMP
+configurations.
 
-thanks,
+Changes v1->v2:
 
-greg k-h
+- clean up exception handler prototypes
+- merge SAVE_CP_REGS_TAB and LOAD_CP_REGS_TAB
+- get rid of stack frame in coprocessor_flush
+- document rules for coprocessor context management
+- clean up context management from the LKMM point of view, introduce
+  and document barriers
+- support CPU hotplug
+
+Max Filippov (10):
+  xtensa: clean up function declarations in traps.c
+  xtensa: clean up exception handler prototypes
+  xtensa: clean up declarations in coprocessor.h
+  xtensa: clean up excsave1 initialization
+  xtensa: use callx0 opcode in fast_coprocessor
+  xtensa: handle coprocessor exceptions in kernel mode
+  xtensa: add xtensa_xsr macro
+  xtensa: merge SAVE_CP_REGS_TAB and LOAD_CP_REGS_TAB
+  xtensa: get rid of stack frame in coprocessor_flush
+  xtensa: support coprocessors on SMP
+
+ arch/xtensa/include/asm/coprocessor.h |  11 +-
+ arch/xtensa/include/asm/processor.h   |   7 +
+ arch/xtensa/include/asm/thread_info.h |   7 +-
+ arch/xtensa/include/asm/traps.h       |  40 +++--
+ arch/xtensa/kernel/asm-offsets.c      |   8 +-
+ arch/xtensa/kernel/coprocessor.S      | 230 +++++++++++++++-----------
+ arch/xtensa/kernel/entry.S            |  12 +-
+ arch/xtensa/kernel/process.c          | 112 ++++++++++---
+ arch/xtensa/kernel/ptrace.c           |   3 +-
+ arch/xtensa/kernel/s32c1i_selftest.c  |   7 +-
+ arch/xtensa/kernel/signal.c           |   3 +-
+ arch/xtensa/kernel/smp.c              |   7 +
+ arch/xtensa/kernel/traps.c            |  69 ++++----
+ 13 files changed, 334 insertions(+), 182 deletions(-)
+
+-- 
+2.30.2
+

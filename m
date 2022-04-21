@@ -2,107 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8903509D7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C654A509D9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238429AbiDUKVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S1388410AbiDUK1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388294AbiDUKV0 (ORCPT
+        with ESMTP id S1388319AbiDUK00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:21:26 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59202F39E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:17:55 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id p18so712191edr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:17:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=J8Pn8rUD1/67P2tIwIl9jn0IKf5NiUvBQMzixzEqf/Q=;
-        b=B+CHHscwnn2+GacbCaiG+xNaVwl86dTG9X33TRd5Haj/UzFu/OV15iRoZllAENs/fn
-         5XstadFRJB3u1VfDeP+s3zylVwkFvGzVU3svaIoI/BMK831NIwb+J4/jvC2EnJgtYjuE
-         u3RJnmV6ZgpYlM3CDwblSTZnb31nQSo+Zc4t1lb7/h+mWIHZaaY7ICn8yJRS2PuiGcG4
-         tBjaxKYkOyhllGC+0Do+fYZuG0jXcZxdQQUuRl6hQvVKeNdY0rVejVCNvpW1PFpyrvuX
-         CNylqIrGqgLLsfAIdw4NI898sqFykbiuymAcEhsfEYtnf1AgsTVfSyQysnsa7tZhz4Bi
-         4T3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J8Pn8rUD1/67P2tIwIl9jn0IKf5NiUvBQMzixzEqf/Q=;
-        b=T2mBv+jRpPYjLFVM5ObNunwU0wY5Myge92C97+m8CauEMvmcwpEmo1IF+eJ7Q9XPHq
-         xgFzpfylc6XIDTEK2IR7Tpjn5TRN64LMQw9BhebUlU/z2C8yVOIkQWg7p+MXwpwcTwaY
-         mTTvPcUThdKxSmXU5bJSjRmVYmtPfgVsEx7Hx8U5pKO84KA4nsh/FNvFtO3XH3XBeR14
-         l6VcUJCV2TePUOJjuPYPr9ARhoNLae48vijIQi3QH5lh6GyISqhVlgygPjbepBNNqg9v
-         56tv2DlrruWhtwLBKcsKoUjIT+sUe5CNR+1fNPFzg5boYteNJYN3BsdQMGLY3/nGO4bZ
-         jd9Q==
-X-Gm-Message-State: AOAM531VR8lOXxQFO0lXEDgGyIUHeVN0hSZkiySs0/MoWqJl0LhFQ0zh
-        soZLg1GW620Xflskk2cwnOUO+A==
-X-Google-Smtp-Source: ABdhPJxYj9pp3y6xMvUGAE9H+e7IXXi/Z76cQeSVwqvG2gC/kdL6xiYyU7QpLXbffYAK3KRvQEpSTQ==
-X-Received: by 2002:a05:6402:26d1:b0:423:fc04:8e78 with SMTP id x17-20020a05640226d100b00423fc048e78mr14943798edd.133.1650536274027;
-        Thu, 21 Apr 2022 03:17:54 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id s1-20020a056402036100b004240a3fc6b4sm2805757edw.82.2022.04.21.03.17.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 03:17:53 -0700 (PDT)
-Message-ID: <c945ebff-02fe-f2d5-656f-6bdfc46416f1@blackwall.org>
-Date:   Thu, 21 Apr 2022 13:17:51 +0300
+        Thu, 21 Apr 2022 06:26:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED3015710;
+        Thu, 21 Apr 2022 03:23:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B4FBB823EF;
+        Thu, 21 Apr 2022 10:23:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6AE8C385AD;
+        Thu, 21 Apr 2022 10:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650536613;
+        bh=OPcQi8PNLxtf9QqmHXSHr2vOBK8ZZT68KQP3kx1rv+E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qbA6edcrA92ddaDuiDgGIQ8er1FIBNdhw16dpGwwZRTMNAZmAWJ4MjfSCPscdF4BU
+         5qI71065k50tiLpfjRfpHEr1H926epJOCV9jebBB7ROGCIIUbLkFnAbmSVFzH4rbl4
+         maIrJTsdNvzsYVTzKl+ew6rtiqGgHtM+s/mX39cQRVHiaIFibeWk6+X0H7lOzS7f/8
+         c66O4O1FCb0nxGFiGN3YVPpVnYJLyMasC4O5HZe/mrQ2ocitChiZ+y+oTmzUYVVj8Y
+         dxzndsOM+XUXlziAoTjs2F9+CfXj0kTpYtfV+hq2QNxaDMgLudsjOlZi/oULOZ+Fob
+         guX8zs+eUWbsQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1nhTyA-0004Xc-Fq; Thu, 21 Apr 2022 12:23:27 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "Stephen Boyd" <swboyd@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH RFC 0/5] phy: qcom-qmp: add support for pipe clock muxing
+Date:   Thu, 21 Apr 2022 12:20:36 +0200
+Message-Id: <20220421102041.17345-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net-next] net: bridge: switchdev: check br_vlan_group()
- return value
-Content-Language: en-US
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220421101247.121896-1-clement.leger@bootlin.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220421101247.121896-1-clement.leger@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2022 13:12, Clément Léger wrote:
-> br_vlan_group() can return NULL and thus return value must be checked
-> to avoid dereferencing a NULL pointer.
-> 
-> Fixes: 6284c723d9b9 ("net: bridge: mst: Notify switchdev drivers of VLAN MSTI migrations")
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
->  net/bridge/br_switchdev.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
-> index 81400e0b26ac..8f3d76c751dd 100644
-> --- a/net/bridge/br_switchdev.c
-> +++ b/net/bridge/br_switchdev.c
-> @@ -354,6 +354,8 @@ static int br_switchdev_vlan_attr_replay(struct net_device *br_dev,
->  	attr.orig_dev = br_dev;
->  
->  	vg = br_vlan_group(br);
-> +	if (!vg)
-> +		return 0;
->  
->  	list_for_each_entry(v, &vg->vlan_list, vlist) {
->  		if (v->msti) {
+Some QMP PHYs need to remux to their pipe clock input to the pipe clock
+output generated by the PHY before powering on the PHY and restore the
+default source during power down.
+
+         +---------------+
+         |   PHY block   |<<---------------------------------------+
+         |               |                   +-----+               |
+         |   +-------+   |                   | GCC |               |
+   I/P---^-->|  PLL  |---^--->pipe_clksrc--->|-\   |		   |
+    clk  |   +-------+   |                   |  +--|--->pipe_clk---+
+    	 |		 |	       xo--->|-/   |  
+         +---------------+	             +-----|
+
+This series moves the pipe clock mux handling from PCIe controller
+driver into the PHY driver which already manages the pipe clock as the
+PHY is both the producer of the pipe clock as well as its (primary)
+consumer.
+
+This is an alternative to the series posted here
+
+	https://lore.kernel.org/r/20220413233144.275926-1-dmitry.baryshkov@linaro.org
+
+which instead moves the mux handling into the clock drivers and ties
+remuxing to the gating/ungating of the pipe clock in the GCC. That
+approach means that it is still possible to have the pipe clock ungated
+without providing a valid source, somethings which can cause hangs when
+enabling/disabling the GDSC (presumably as some entity is consuming the
+pipe clock).
+
+Implementing this in the clock drivers also means that the
+implementation is spread out over multiple files and makes it harder to
+add support for new SoCs as it may not be clear that every pipe clock
+mux definition needs to be updated with safe and non-safe parent-clock
+indexes and an ad-hoc mux ops implementation.
+
+The custom mux implementation currently also hides the actual topology
+of the clock tree by always reporting the pipe mux source as being
+provided by the PHY (e.g. as reported by debugfs).
+
+This series, by contrast, ties the muxing to when the pipe clock source
+is enabled, that is, when the PHY is powered on, so that the GCC pipe
+clock always has a valid source.
+
+The implementation is more straight-forward, avoids the one-off clock
+mux implementation, and allows for documenting this once and for all in
+the PHY driver.
+
+Note that the devicetree bindings remains to be updated but that this
+was left out of this RFC.
+
+This series depends on the two qcom-qmp fixlets posted here:
+
+	https://lore.kernel.org/all/20220420152331.5527-1-johan+linaro@kernel.org/
+
+Johan
 
 
-Good catch.
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+Dmitry Baryshkov (1):
+  PCI: qcom: Remove unnecessary pipe_clk handling
+
+Johan Hovold (4):
+  phy: qcom-qmp: add support for pipe clock muxing
+  arm64: dts: qcom: sc7280: move pipe mux handling to phy
+  PCI: qcom: Drop pipe clock muxing
+  PCI: qcom: Drop unused post-init callbacks
+
+ arch/arm64/boot/dts/qcom/sc7280.dtsi   | 18 ++---
+ drivers/pci/controller/dwc/pcie-qcom.c | 96 ++------------------------
+ drivers/phy/qualcomm/phy-qcom-qmp.c    | 71 +++++++++++++++++--
+ 3 files changed, 76 insertions(+), 109 deletions(-)
+
+-- 
+2.35.1
+

@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3092D509408
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 01:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38A5509411
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 02:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383355AbiDUAA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 20:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
+        id S1383364AbiDUAJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 20:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376789AbiDUAAX (ORCPT
+        with ESMTP id S1376861AbiDUAJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 20:00:23 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E613B2AC;
-        Wed, 20 Apr 2022 16:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650499056; x=1682035056;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tV9q1FcF378yrdx5+hEGskQjYdOotMDfqbP0qjm2Llo=;
-  b=M84PGDrYyxK/MuYM0NmLJ5bJb/aoUcCy6EYpKhkrwG1NxUmv3SsC8gDQ
-   fKEXgqksn0gORseeAtRzRDgBTPCbb20Pujsi0DYhdra59K/bBJHPAYjb2
-   MTOq+vWiZqUdX2/ArZokot0o1oyNbdCWxngjmkPDnyAxzpGCPZZrObOR3
-   g=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 20 Apr 2022 16:57:35 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 16:57:34 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Apr 2022 16:57:34 -0700
-Received: from [10.110.1.198] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 20 Apr
- 2022 16:57:33 -0700
-Message-ID: <0b92cab4-d46b-a419-43ad-0fa08c8c0e4d@quicinc.com>
-Date:   Wed, 20 Apr 2022 16:57:25 -0700
+        Wed, 20 Apr 2022 20:09:23 -0400
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9396313FB7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:06:35 -0700 (PDT)
+Received: by mail-pg1-f182.google.com with SMTP id g9so3184198pgc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:06:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=IfHap1dlOBr5gDAC0VqPSKp2nHM5B6kQ59uiY70TBVI=;
+        b=pyAdiIQH847Xev3lFbrgJG64tw7GejGY/WfX3oAg312bnNLK4hmpIaqot9kWjxeJhe
+         2jjJtnNAPBqtCVzpQ0xu+7wOG14ld8qf35HMQ53oF/ippK28GiOqjjLFn5kRpFL0c+A9
+         NqbT74EPPobnFYZf20wWfr7XdlUWExPupT6eBZNWr8Jsom6kuYwxB1La5eoqnjgitVLw
+         jNKH9utBxGcBurzt7e6rst1y2df/nOyedwS2kjvVLv8JwnI1Y+R5nUFSUskyk6Dd5v6+
+         eJ6Ht02o3PtVMd3pOQ6vjXKCAza2An1tlXdgnSOd2pZEaPtaBMK/rR3yCp5wOH/ow0IM
+         ysew==
+X-Gm-Message-State: AOAM5328H8/skW/LEJcfpgeQsaOZLEPGXuKYZw7g26//gjopmy8YudlF
+        UqkdBZPFwU0RR//SZeximctArQ==
+X-Google-Smtp-Source: ABdhPJyBccHfNaH1A30eRpDRBC9j4Q7GiILCDsil3xPBkNRkvmISVOA5FX0e7H26MH7xr/3847BX1w==
+X-Received: by 2002:a05:6a00:1ac8:b0:4fa:917f:c1aa with SMTP id f8-20020a056a001ac800b004fa917fc1aamr26016985pfv.2.1650499594990;
+        Wed, 20 Apr 2022 17:06:34 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id u10-20020a62d44a000000b0050ad4053840sm639105pfl.149.2022.04.20.17.06.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 17:06:33 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Subject: Re: [PATCH v24 3/7] soc: mediatek: SVS: introduce MTK SVS engine
+In-Reply-To: <20220420102044.10832-4-roger.lu@mediatek.com>
+References: <20220420102044.10832-1-roger.lu@mediatek.com>
+ <20220420102044.10832-4-roger.lu@mediatek.com>
+Date:   Wed, 20 Apr 2022 17:06:33 -0700
+Message-ID: <7h5yn3s3jq.fsf@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] drm/msm/dp: enhance both connect and disconnect
- pending_timeout handle
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <robdclark@gmail.com>, <sean@poorly.run>, <vkoul@kernel.org>,
-        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <quic_abhinavk@quicinc.com>,
-        <quic_aravindh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1649280493-4393-1-git-send-email-quic_khsieh@quicinc.com>
- <625ce8a0-4e25-5513-5599-c1cdebf5a3a5@linaro.org>
- <09fd563f-4a2c-f670-51c2-0e5ff023816d@quicinc.com>
- <CAA8EJpqzucFGf8ndDi2LZqtKiOt_w=_h1oPAUNVCdmUyh_3+zA@mail.gmail.com>
- <2039ef97-4fdb-bffe-1e02-18ae79c18be4@quicinc.com>
- <27bb2732-b322-75b0-3883-773e6eb4b1b9@linaro.org>
- <02d31565-4ae4-a319-30b0-76a6e4917f6f@quicinc.com>
- <CAE-0n51F+S4a2mQoyWa-TpJcd73hstm2Sh1uO+4T_75UaWQASQ@mail.gmail.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <CAE-0n51F+S4a2mQoyWa-TpJcd73hstm2Sh1uO+4T_75UaWQASQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 4/20/2022 3:58 PM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2022-04-15 17:06:48)
->> On 4/14/2022 4:34 PM, Dmitry Baryshkov wrote:
->>> I'm not sure how should the driver react if the client doesn't disable
->>> the output, but then the sink gets reattached?
->> I do not know that either.
->>
->> But it should not happen as long as framework response to uevent.
-> In talking with seanpaul@ it sounds like we can update the link status
-> to BAD with drm_connector_set_link_status_property() and then put it
-> back to GOOD when the link is re-established. This way userspace will
-> know it needs to retry the modeset. Does that help here?
-
-To setup connection, dp driver have to enable phy and do link training 
-then transfer dp controller to video ready state.
-
-After that, dp driver signal framework to set up frame buffer 
-fetching/layer mixer and start timing engine at final step to have video 
-stream start transmitting to panel.
-
-Do opposite way to tear down connection since dp driver can not reset dp 
-controller and disable phy before timing engine has been stopped. 
-Otherwise vsync timeout or buffer underrun/overrun may happen.
-
-this means user space framework need to stop timing engine (stop frame 
-buffer fetching/layer mixer) first and then stop video ready state of dp 
-controller and then disable phy. (note, there may have something else at 
-drm stack need to be teared down but i do not know details)
-
-In this case, since framework is not response to uevent to stop timing 
-engine,  dp controller still in video ready state and phy still enabled 
-even dongle had been removed already.
-
-At this point, I am not sure what dp driver should do if dongle re 
-plugged back in.
-
-Tear down dp mainlink while timing engine is still running and re setup 
-dp mainlink?
-
-However, I think this scenario most likely will not happen since if 
-framework responses uevent to setup connection earlier it should be 
-there to response uevent to tear down connection.
+Hi Roger,
 
 
+Roger Lu <roger.lu@mediatek.com> writes:
 
+> The Smart Voltage Scaling(SVS) engine is a piece of hardware
+> which calculates suitable SVS bank voltages to OPP voltage table.
+> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+>
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
+Can SVS work with one or the other clusters disabled?  It seems like it
+should still be able to work.  However, if you disable the 2nd cluster
+(e.g. by passing `maxcpus=4` on the kernel command-line, the SVS driver
+will fail to probe.
 
+I dont' think it's a blocker for merging this series, but making the
+probe a bit more robust so it can handle the cluster being disabled
+would be nice additional fix for later.
+
+For example, upstream kernel on mt8183-pumpkin board is very unstable
+with the 2nd cluster enabled (I'm still trying to debug why), but I have
+to boot with `maxcpus=4` on the cmdline, otherwise kernel fails to boot,
+so that's how I noticed this probe failure with SVS.
+
+Kevin

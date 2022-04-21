@@ -2,86 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5551150A6C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE2750A6D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390634AbiDURRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
+        id S1390643AbiDURSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390626AbiDURRR (ORCPT
+        with ESMTP id S232229AbiDURSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:17:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67E8149F2E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650561265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1YMKcSiA0LOgoG4cDHR7os5spSf2HROMrqJ1+238Lww=;
-        b=cj0fzBHYl4qY6eYwpBOee9+Qmka1dtm0noXOISNgxRlSq/aYNsoi2veTYPwZRTLxxmCGRu
-        43ecHb2GUvN5r35njLRQgS571QRJZ3F53RQ/E3NCyjFNnnIxDRmXny9+tMHVzY7r/IiqRv
-        hJJmc0gTEx/eItYe0+w0IzhgGwMteAw=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-662-2-os2hqjM1O64mtrhsg7Yg-1; Thu, 21 Apr 2022 13:14:24 -0400
-X-MC-Unique: 2-os2hqjM1O64mtrhsg7Yg-1
-Received: by mail-ed1-f71.google.com with SMTP id cf15-20020a0564020b8f00b0042599227276so1243972edb.21
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:14:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1YMKcSiA0LOgoG4cDHR7os5spSf2HROMrqJ1+238Lww=;
-        b=awnBspuOACJnNErimu6vLZ9QcHxJeXdmBXjxEFNA8MSfKaCMKy0ZDr415/bohvYNsF
-         7B4Z9m8RNmLwlvT1c/tCK5IM8K9VR+ELUGcIceawJ/8MqR3XPfSGn6SbsVDvB3n12rEh
-         f7fq3JaO4NY7+it6wdUPTPWTsiraupL9zCp8Fg1hMIzGhJtQaP22oCoFw7YQ4rloTo1Y
-         CA+mOT1lLkkbebufkZWMBimdap8LoZBueRicN489zgoCrTOb8DSKofVKLHB71mr/mSUU
-         GaSc46oqh6Q33xu4ztoTILlIO5k3FP98Qqm1GVyNa2kzprSrrgwnEONyLI3jIjrueKdt
-         tnwQ==
-X-Gm-Message-State: AOAM531cKZV5IqJCG7udO8qLETwEjD7jc9Q5+xrMOSsXVYk5aPI6ffmW
-        39AM2vtIbsR3lqCqbikz61qavyDjTG10z6AKcSgOI3sTNw85LqimfFSVPWLtIeuD9msUnGfflnS
-        9gbOoR78ZaOxFlyV2mJzJm9JD
-X-Received: by 2002:a17:907:7815:b0:6ce:5242:1280 with SMTP id la21-20020a170907781500b006ce52421280mr466144ejc.217.1650561263077;
-        Thu, 21 Apr 2022 10:14:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyjpxVRQrq2bmfsUTwiZkkocLi9PluIUEZjPLmqlLk+39bZSgQ5aZ8L7QdX/BJW0PyqWPmlIA==
-X-Received: by 2002:a17:907:7815:b0:6ce:5242:1280 with SMTP id la21-20020a170907781500b006ce52421280mr466118ejc.217.1650561262828;
-        Thu, 21 Apr 2022 10:14:22 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id e12-20020a170906c00c00b006e66eff7584sm8022976ejz.102.2022.04.21.10.14.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 10:14:22 -0700 (PDT)
-Message-ID: <b1b04160-1604-8281-4c82-09b1f84ba86c@redhat.com>
-Date:   Thu, 21 Apr 2022 19:14:20 +0200
+        Thu, 21 Apr 2022 13:18:15 -0400
+Received: from out28-73.mail.aliyun.com (out28-73.mail.aliyun.com [115.124.28.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A9DDFBB;
+        Thu, 21 Apr 2022 10:15:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.4088587|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00781887-0.000144852-0.992036;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047213;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.NVFIb-b_1650561308;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NVFIb-b_1650561308)
+          by smtp.aliyun-inc.com(33.40.31.76);
+          Fri, 22 Apr 2022 01:15:18 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     gregkh@linuxfoundation.org, hminas@synopsys.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+        paul@crapouillou.net
+Cc:     linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Subject: [PATCH v4 0/3] Add OTG support for Ingenic SoCs.
+Date:   Fri, 22 Apr 2022 01:15:05 +0800
+Message-Id: <1650561308-54704-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] KVM: x86: add HC_VMM_CUSTOM hypercall
-Content-Language: en-US
-To:     Peter Oskolkov <posk@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     kvm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Paul Turner <pjt@google.com>, Peter Oskolkov <posk@posk.io>
-References: <20220421165137.306101-1-posk@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220421165137.306101-1-posk@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,22 +45,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/22 18:51, Peter Oskolkov wrote:
-> Allow kvm-based VMMs to request KVM to pass a custom vmcall
-> from the guest to the VMM in the host.
-> 
-> Quite often, operating systems research projects and/or specialized
-> paravirtualized workloads would benefit from a extra-low-overhead,
-> extra-low-latency guest-host communication channel.
+1.Add OTG support for the JZ4775 SoC, the JZ4780 SoC, the X1000
+  SoC, the X1600 SoC, the X1830 SoC, and the X2000 SoC.
+2.Introduce support for disable Ingenic overcurrent detection,
+  once selected it enables GOTGCTL register bits VbvalidOvEn
+  and VbvalidOvVal to disable the VBUS overcurrent detection.
 
-You can use a memory page and an I/O port.  It should be as fast as a 
-hypercall.  You can even change it to use ioeventfd if an asynchronous 
-channel is enough, and then it's going to be less than 1 us latency.
+v1->v2:
+1.Add Rob Herring's Acked-by.
+2.Add Minas Harutyunyan's Acked-by.
+3.Use "activate_ingenic_overcurrent_detection" instead
+  "deactivate_ingenic_overcurrent_detection" as Greg's suggestion.
 
-Paolo
+v2->v3:
+Refresh USB nodes in device tree files, remove "snps,dwc2" since
+it is nolonger needed.
 
-> With cloud-hypervisor modified to handle the new hypercall (simply
-> return the sum of the received arguments), the following function in
-> guest_userspace_  completes, on average, in 2.5 microseconds (walltime)
-> on a relatively modern Intel Xeon processor:
+v3->v4:
+Remove the compatible string of X1700 since it could use the X1600
+string　as the fallback.
+
+周琰杰 (Zhou Yanjie) (3):
+  dt-bindings: dwc2: Add bindings for new Ingenic SoCs.
+  USB: dwc2: Add OTG support for Ingenic SoCs.
+  MIPS: Ingenic: Refresh USB nodes to match driver changes.
+
+ Documentation/devicetree/bindings/usb/dwc2.yaml |  6 +++
+ arch/mips/boot/dts/ingenic/jz4780.dtsi          |  2 +-
+ arch/mips/boot/dts/ingenic/x1000.dtsi           |  2 +-
+ arch/mips/boot/dts/ingenic/x1830.dtsi           |  2 +-
+ drivers/usb/dwc2/core.c                         |  9 +++++
+ drivers/usb/dwc2/core.h                         |  5 +++
+ drivers/usb/dwc2/params.c                       | 49 ++++++++++++++++++++++++-
+ 7 files changed, 71 insertions(+), 4 deletions(-)
+
+-- 
+2.7.4
 

@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E955098E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94215098D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376857AbiDUHKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S1385576AbiDUHK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiDUHKm (ORCPT
+        with ESMTP id S229902AbiDUHKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:10:42 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C92816595;
-        Thu, 21 Apr 2022 00:07:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KkTBt6Cw8z4x7V;
-        Thu, 21 Apr 2022 17:07:50 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650524872;
-        bh=FFVJbC5IdcEfkW8gho2dj5lOtNJGtVZWhAKi4jyzt0Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tjqf3+5IILss+BhDOeVYVyLgXP+tP4hXmNGGhUwlfkqc99of9VzIMPCQb1wb0tZ7S
-         ikctHrp/qMcvYUlouilVzetUzsKopuEYsFup7wqWXyO8Co2+FWQoNnXP5PA2mi86+6
-         hb/L8svf9dzIhKFW5JuRr2gbfLAfN/LsMM8wVI3CB7MTgX644y/gU+4fBiis7NO0yf
-         S1krm+YrmHDeGQC6MTGY2xnCqJsjl55z3PVn7CzZZatLwEv7Hj1rXgG1/YpwX8Ouqo
-         o5cWPPKqi3GnIn9tZi9W3pwzMxo6NPH62v97blTxY6Lp8L8eX6GUK6HvL59h93N7Ux
-         hDpERgOFjKo7Q==
-Date:   Thu, 21 Apr 2022 17:07:49 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Martin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the net-next tree
-Message-ID: <20220421170749.1c0b56db@canb.auug.org.au>
+        Thu, 21 Apr 2022 03:10:54 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64F9165BB
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:08:05 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 3B75532021D6;
+        Thu, 21 Apr 2022 03:08:04 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 21 Apr 2022 03:08:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1650524883; x=
+        1650611283; bh=zhGTdnMvjNdHi/Qi+FIiOX0v5nYystuMU+uYF/3P5yU=; b=B
+        up/ZQGMP83L6AX8iC753ijdFUmJM09LMiKUCSTzv+jKpsKaLVznWGyCr2N/f8lEc
+        zCtqoTcspCVfquvS9gM4pAtVxNlpf8yv5bJhNOht5kCu78hh7yIXW7BfF9M5IS0d
+        cNXagBhT7EhtJln7OSoiEMDwbFzIzhIc9UzUmZeKmM4ZrD48QeUybxhzXhVYhEXq
+        UGdIJa9UdDLr9SimTJkakcINdIVZpGk5lm4zbu8HfpUSSHBl/rDDxzUvo3o3jed1
+        crCVLLkb9dOqDFzarfgk7yLVyXbsp/tY3TIJwBbRbYg1sB3VwnFh+g0xPUn52166
+        0kV8vFVvtoWCZK6SaAkaw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650524883; x=1650611283; bh=zhGTdnMvjNdHi
+        /Qi+FIiOX0v5nYystuMU+uYF/3P5yU=; b=GgI3LTN3TxwYahkVUVGzXbiviNkpn
+        cZykYzSuSc0+Fj9IVxXj7/aaPwTLzeaBNWmHfqAjOCU1EuZHbsIUKEWIX+cc7Ek9
+        4ZSi2/Ez4S/ptgdLMm2QMYjNBf0NRq0sLEzFl027ETAfNzOVvtqVwQJ7lmulVsQ8
+        hTdPLa8rQ/wutpPF9UfRhEoJ65R8cZB07mWg1HiqTrN1yjXZOfJVajlPxQ8iG+fM
+        uOvuDHRveFQOx12TkLpOVjNuyw1jKQR0Zf/K6gCAcK86ONBaMweWGLYSnlJtgNP9
+        K0FJPvNOrx56awGr+oOE6eqnpzfWT4XTQUKAPyqWN5ey/msPF7ekyDOtg==
+X-ME-Sender: <xms:0wJhYlATUauD7u3xytbIjLolYqEDdnEP_996XF2V72szHKicUMd3rw>
+    <xme:0wJhYjg1lT7BuiHXsJ4e8nhPEqfbpVB3lUwlhsdg2xPHy4g1-1W2opqusy8BzlZCQ
+    Ns_otvQDl2gL9iq-E0>
+X-ME-Received: <xmr:0wJhYglRWEpyvF4OeHUuPI2ybq-ysICZTQC-f8hLUQmyBxinNWSO6cJePd9X-or6fYHVCTjv-GrO39UMH_Dw1mxxsDEzFnSgoBKbOvo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtddugdduudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepueeigefghfffffeifeehudeiuedvteegueefffevgfetvdffheehkeff
+    vedufeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:0wJhYvwCmMfl4yqvP0zXellwN96IubMZrKLb3ufHJpcN8bac-ZqaMw>
+    <xmx:0wJhYqRx-xJdQRWD3li8O40QKWMVUHcdmVPEv-g2qMGmp3KmUcZ-Nw>
+    <xmx:0wJhYiZXP3mjLP6-il1_tPgeMabPiq32EMq6q46ifLsC7U_iEVgzjA>
+    <xmx:0wJhYtGN0eBWZBtdhalqd5OZjE0Da2Lw7MI68ne5kdqJBbSCJ-nWuw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 21 Apr 2022 03:08:02 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     emma@anholt.net,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>, mripard@kernel.org,
+        daniel@ffwll.ch, laurent.pinchart@ideasonboard.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        airlied@linux.ie, p.zabel@pengutronix.de
+Subject: Re: (subset) [PATCH v3 1/2] drm/vc4: hdmi: Replace drm_detect_hdmi_monitor() with is_hdmi
+Date:   Thu, 21 Apr 2022 09:07:58 +0200
+Message-Id: <165052487605.604528.10032986476902176653.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220420114500.187664-2-jose.exposito89@gmail.com>
+References: <20220420114500.187664-1-jose.exposito89@gmail.com> <20220420114500.187664-2-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gPSSxANV3piWA3_G/Y.5WA4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/gPSSxANV3piWA3_G/Y.5WA4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 20 Apr 2022 13:44:59 +0200, José Expósito wrote:
+> Once EDID is parsed, the monitor HDMI support information is cached in
+> drm_display_info.is_hdmi by drm_parse_hdmi_vsdb_video().
+> 
+> This driver calls drm_detect_hdmi_monitor() to receive the same
+> information and stores its own cached value in
+> vc4_hdmi_encoder.hdmi_monitor, which is less efficient.
+> 
+> [...]
 
-Hi all,
+Applied to drm/drm-misc (drm-misc-next).
 
-After merging the net-next tree, today's linux-next build (htmldocs)
-produced this warning:
-
-Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst: WARNIN=
-G: document isn't included in any toctree
-
-Introduced by commit
-
-  c3a0addefbde ("docs: ctucanfd: CTU CAN FD open-source IP core documentati=
-on.")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/gPSSxANV3piWA3_G/Y.5WA4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJhAsUACgkQAVBC80lX
-0Gw+ewf/RiYj/MmHPXdohs+xS/yx68oTUzw5WYDX85Mhau2z8Qd3XW/5R56iue1/
-67D5T2vzYyxrTHTAt86/z0/uEzx+nWnVbRzfdovVXCKXd+afL4wM2+U2+iPSkg23
-BdbXY4KbrSvlqou7EU5mN75CAuuLtGoKp/jKk7rD06P1irjhOwRHCJnwAiRyiWuO
-+dB8YWQMzNF0ZEbI7DjeyaH8/HZpeB9vqJSoJhD+2fk83hO7H3YWC3edtGoZLegt
-//8P3T7W7XOTtYvkbAz1aQ4XUEO4j3IUgzxmVcubbYTRM1HwCu9LVQj+Z0NEbibi
-lgiHmjP2izn7hwvwyvjCmYIZQZLCwA==
-=wjZ9
------END PGP SIGNATURE-----
-
---Sig_/gPSSxANV3piWA3_G/Y.5WA4--
+Thanks!
+Maxime

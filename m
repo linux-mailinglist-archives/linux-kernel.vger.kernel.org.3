@@ -2,127 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AD3509D70
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8903509D7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388361AbiDUKUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
+        id S238429AbiDUKVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388252AbiDUKUE (ORCPT
+        with ESMTP id S1388294AbiDUKV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:20:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4365728E27;
-        Thu, 21 Apr 2022 03:17:13 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 25BCC21600;
-        Thu, 21 Apr 2022 10:17:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650536231; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uJilQ8bhQzcKnYlu51Jw3ZNoqJWqrcIlFOvokPNs7P4=;
-        b=0LFDeKlXLqK7riuToQsDBZwBw1UHI1ZSa/PONl16yS69ANd3Vp3DMlN00L5Wi5eA5jRImw
-        yjPQDxx7VC3iYY90sye+4oWBtp5PU/yWPH6j0slFsh2dXjNZVr2hgVp1KKECsZcnqxBdIP
-        RurrsQMVOI7RLEDOlEZzcmJb2mjxu8Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650536231;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uJilQ8bhQzcKnYlu51Jw3ZNoqJWqrcIlFOvokPNs7P4=;
-        b=n/AFf/lVGOsWq6bgMByjw29zU+c47oh6LCyXIIhkBnHj/At25vmmvGtZ0LB8wHKgsN4FeF
-        etPdJEtqWQEzwrDA==
-Received: from localhost.localdomain (unknown [10.100.208.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id F18332C141;
-        Thu, 21 Apr 2022 10:17:10 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 7/7] serial: allow COMPILE_TEST for some drivers
-Date:   Thu, 21 Apr 2022 12:17:08 +0200
-Message-Id: <20220421101708.5640-8-jslaby@suse.cz>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220421101708.5640-1-jslaby@suse.cz>
-References: <20220421101708.5640-1-jslaby@suse.cz>
+        Thu, 21 Apr 2022 06:21:26 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59202F39E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:17:55 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id p18so712191edr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:17:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=J8Pn8rUD1/67P2tIwIl9jn0IKf5NiUvBQMzixzEqf/Q=;
+        b=B+CHHscwnn2+GacbCaiG+xNaVwl86dTG9X33TRd5Haj/UzFu/OV15iRoZllAENs/fn
+         5XstadFRJB3u1VfDeP+s3zylVwkFvGzVU3svaIoI/BMK831NIwb+J4/jvC2EnJgtYjuE
+         u3RJnmV6ZgpYlM3CDwblSTZnb31nQSo+Zc4t1lb7/h+mWIHZaaY7ICn8yJRS2PuiGcG4
+         tBjaxKYkOyhllGC+0Do+fYZuG0jXcZxdQQUuRl6hQvVKeNdY0rVejVCNvpW1PFpyrvuX
+         CNylqIrGqgLLsfAIdw4NI898sqFykbiuymAcEhsfEYtnf1AgsTVfSyQysnsa7tZhz4Bi
+         4T3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=J8Pn8rUD1/67P2tIwIl9jn0IKf5NiUvBQMzixzEqf/Q=;
+        b=T2mBv+jRpPYjLFVM5ObNunwU0wY5Myge92C97+m8CauEMvmcwpEmo1IF+eJ7Q9XPHq
+         xgFzpfylc6XIDTEK2IR7Tpjn5TRN64LMQw9BhebUlU/z2C8yVOIkQWg7p+MXwpwcTwaY
+         mTTvPcUThdKxSmXU5bJSjRmVYmtPfgVsEx7Hx8U5pKO84KA4nsh/FNvFtO3XH3XBeR14
+         l6VcUJCV2TePUOJjuPYPr9ARhoNLae48vijIQi3QH5lh6GyISqhVlgygPjbepBNNqg9v
+         56tv2DlrruWhtwLBKcsKoUjIT+sUe5CNR+1fNPFzg5boYteNJYN3BsdQMGLY3/nGO4bZ
+         jd9Q==
+X-Gm-Message-State: AOAM531VR8lOXxQFO0lXEDgGyIUHeVN0hSZkiySs0/MoWqJl0LhFQ0zh
+        soZLg1GW620Xflskk2cwnOUO+A==
+X-Google-Smtp-Source: ABdhPJxYj9pp3y6xMvUGAE9H+e7IXXi/Z76cQeSVwqvG2gC/kdL6xiYyU7QpLXbffYAK3KRvQEpSTQ==
+X-Received: by 2002:a05:6402:26d1:b0:423:fc04:8e78 with SMTP id x17-20020a05640226d100b00423fc048e78mr14943798edd.133.1650536274027;
+        Thu, 21 Apr 2022 03:17:54 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id s1-20020a056402036100b004240a3fc6b4sm2805757edw.82.2022.04.21.03.17.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 03:17:53 -0700 (PDT)
+Message-ID: <c945ebff-02fe-f2d5-656f-6bdfc46416f1@blackwall.org>
+Date:   Thu, 21 Apr 2022 13:17:51 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net-next] net: bridge: switchdev: check br_vlan_group()
+ return value
+Content-Language: en-US
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220421101247.121896-1-clement.leger@bootlin.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220421101247.121896-1-clement.leger@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some more serial drivers can be compile-tested under certain
-circumstances (when building a specific architecture). So allow for
-that.
+On 21/04/2022 13:12, Clément Léger wrote:
+> br_vlan_group() can return NULL and thus return value must be checked
+> to avoid dereferencing a NULL pointer.
+> 
+> Fixes: 6284c723d9b9 ("net: bridge: mst: Notify switchdev drivers of VLAN MSTI migrations")
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> ---
+>  net/bridge/br_switchdev.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
+> index 81400e0b26ac..8f3d76c751dd 100644
+> --- a/net/bridge/br_switchdev.c
+> +++ b/net/bridge/br_switchdev.c
+> @@ -354,6 +354,8 @@ static int br_switchdev_vlan_attr_replay(struct net_device *br_dev,
+>  	attr.orig_dev = br_dev;
+>  
+>  	vg = br_vlan_group(br);
+> +	if (!vg)
+> +		return 0;
+>  
+>  	list_for_each_entry(v, &vg->vlan_list, vlist) {
+>  		if (v->msti) {
 
-This reduces the need of zillion mach/subarch-specific configs. And
-since the 0day bot has only allmodconfig's for some archs, this
-increases build coverage there too.
 
-Note that cpm needs a minor update in the header, so that it drags in
-at least some defines (CPM2 ones).
-
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/tty/serial/Kconfig             | 6 +++---
- drivers/tty/serial/cpm_uart/cpm_uart.h | 2 ++
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 20cb103972fa..2d3eed53b43e 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -782,7 +782,7 @@ config SERIAL_PMACZILOG_CONSOLE
- 
- config SERIAL_CPM
- 	tristate "CPM SCC/SMC serial port support"
--	depends on CPM2 || CPM1
-+	depends on CPM2 || CPM1 || (PPC32 && COMPILE_TEST)
- 	select SERIAL_CORE
- 	help
- 	  This driver supports the SCC and SMC serial ports on Motorola 
-@@ -806,7 +806,7 @@ config SERIAL_CPM_CONSOLE
- 
- config SERIAL_PIC32
- 	tristate "Microchip PIC32 serial support"
--	depends on MACH_PIC32
-+	depends on MACH_PIC32 || (MIPS && COMPILE_TEST)
- 	select SERIAL_CORE
- 	help
- 	  If you have a PIC32, this driver supports the serial ports.
-@@ -1246,7 +1246,7 @@ config SERIAL_XILINX_PS_UART_CONSOLE
- 
- config SERIAL_AR933X
- 	tristate "AR933X serial port support"
--	depends on HAVE_CLK && ATH79
-+	depends on (HAVE_CLK && ATH79) || (MIPS && COMPILE_TEST)
- 	select SERIAL_CORE
- 	select SERIAL_MCTRL_GPIO if GPIOLIB
- 	help
-diff --git a/drivers/tty/serial/cpm_uart/cpm_uart.h b/drivers/tty/serial/cpm_uart/cpm_uart.h
-index 6113b953ce25..8c582779cf22 100644
---- a/drivers/tty/serial/cpm_uart/cpm_uart.h
-+++ b/drivers/tty/serial/cpm_uart/cpm_uart.h
-@@ -19,6 +19,8 @@ struct gpio_desc;
- #include "cpm_uart_cpm2.h"
- #elif defined(CONFIG_CPM1)
- #include "cpm_uart_cpm1.h"
-+#elif defined(CONFIG_COMPILE_TEST)
-+#include "cpm_uart_cpm2.h"
- #endif
- 
- #define SERIAL_CPM_MAJOR	204
--- 
-2.36.0
-
+Good catch.
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>

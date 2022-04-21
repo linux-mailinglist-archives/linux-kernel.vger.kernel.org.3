@@ -2,84 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D20AF509A92
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CC9509A8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386634AbiDUIZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        id S1386666AbiDUIZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386714AbiDUIY7 (ORCPT
+        with ESMTP id S1386351AbiDUIZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:24:59 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99DA20F71
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:21:41 -0700 (PDT)
-Received: from mail-wm1-f43.google.com ([209.85.128.43]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N8GIa-1nusK33vTU-014C6d for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022
- 10:21:39 +0200
-Received: by mail-wm1-f43.google.com with SMTP id q20so2707195wmq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:21:39 -0700 (PDT)
-X-Gm-Message-State: AOAM531nyyOsY5wyacrPelIRwg/QM9PGZzoNkyzIX2919SuEZXWL59jN
-        tUsaQEb5T72nJDRZnQZ5N4f0g344F8hcg4qbvhs=
-X-Google-Smtp-Source: ABdhPJy9ynKtmGb2Ar39s0Ilk4SRIRNL+imBrjFffev6/gzKGwG0reRCbxVIgiM3Ev1tqDZG2inxaIb2rWiJKcdtcaU=
-X-Received: by 2002:a05:600c:25c5:b0:38f:f0b9:4c8c with SMTP id
- 5-20020a05600c25c500b0038ff0b94c8cmr7708512wml.20.1650529299557; Thu, 21 Apr
- 2022 01:21:39 -0700 (PDT)
+        Thu, 21 Apr 2022 04:25:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6792A24595
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:21:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04D5261BE7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:21:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F5BC385A5;
+        Thu, 21 Apr 2022 08:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650529306;
+        bh=NAqSDobntwkqjwaH/qn/17ndbF/l0boIVwfnhiCCuc4=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=bGfqzJCqbJEw44bWcYwnWRbt+w6g8CkUtrfJwyL2e52pfLYkr0DtOSaOLEtLAn8KC
+         3dagNFleFPJFO0RZ20OcooLXeS0WVS91BGQ0lBaWOVXF0k3fLYpd/G9Rcb1x2GKAIR
+         x7mNdg4DiJfnOr6LkpDAM/U4beTd8Yhnah1KrM+WqGleGMZ1D63hHYkcUBRBHcJ7nJ
+         aUzHXJYcfxIfqBOHrMRQP0ondAnQouU5W/8clBqmBToxduazM4Qz4gesHOL7kWkoRd
+         ECy+X5zLCdCmwbk4Q9fRq1zgD6stN53+hylweY54IVXuZDqTRJQLW2mLkrzo6j1mYU
+         qRn13geZzhX5A==
+Date:   Thu, 21 Apr 2022 10:21:42 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     kernel test robot <lkp@intel.com>,
+        "Daniel J. Ogorchock" <djogorchock@gmail.com>
+cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: drivers/hid/hid-nintendo.c:403:29: warning: unused variable
+ 'JC_RUMBLE_ZERO_AMP_PKT_CNT'
+In-Reply-To: <202204211058.3UoweQuz-lkp@intel.com>
+Message-ID: <nycvar.YFH.7.76.2204211021050.30217@cbobk.fhfr.pm>
+References: <202204211058.3UoweQuz-lkp@intel.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <202204211543.9kdHTsCb-lkp@intel.com>
-In-Reply-To: <202204211543.9kdHTsCb-lkp@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 21 Apr 2022 10:21:23 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0yyMPmsxOCZjooSZ7W+Obs_LXBangE_h8M-p4MgcsP8g@mail.gmail.com>
-Message-ID: <CAK8P3a0yyMPmsxOCZjooSZ7W+Obs_LXBangE_h8M-p4MgcsP8g@mail.gmail.com>
-Subject: Re: [stable:linux-5.10.y 644/5321] drivers/staging/comedi/drivers/comedi_isadma.c:25:17:
- error: implicit declaration of function 'claim_dma_lock'
-To:     kernel test robot <lkp@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Ld82pWttJQHsAuj27I6yeBBGEhrMCsq3zY3rF9WPPc4+gAfvWC4
- hD1V/SEBgQEaoLJYCZNTynqVx5gOKFMX0eZ2q4baGApg16xsoUyNIdi6OU4kNTBkwb838ca
- 5GuImn5035AQBx6VAjY10O25lTRmtAxiaZplSOmAPKBpxhQ/ovctLy3uWkLlkGR7FtToib2
- /thVndIV04vlkjSWd56OQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:s17Y1i4Whv4=:AmNmreXj/R7uvLaCSXTob+
- GTbpgPbybeTSr0HupLKeXHKqc9QQ/miam76JShh5zSnDReQnN96AceqdRQlLG1ee7WSrUVoFV
- mKqwxnKBFbCZ6iRQUvwq3bVUZ6Sc3Fnf9KRTxTbr76pNfRDrljno2bEtQv3jYXySHNVr+igWe
- 1zPHZKOsvWTFRs+juAzIS4eKeM3X8y5RWkwqnIv2ezK2X5RufQRd7Xua0O7xFoJTFCrwBC3fl
- /dvIL2n7/olCTwZ7CoadY2PWToO0RMc8VQcO6cOkAgaruaviJzMi6LFNmWG7xqOUYxNFxWp8w
- lXfR2wg3CFuKG3BeHcDwDuGd46Jd3PLBQh9leZNV6wkyNdlG13ryuHWYXL2QclD8d6WvgHz4w
- Hg3+xm92hg0z1oLnblVxVYBJhVU3SSbEyVic9M9XI0L2+/oTR57sFDGqDmIWeJyyEgA42Sbp4
- 8pZ6DyhyYPV+1DYQgNwhEMqfZTYS9+WtRLXZZ8mDcoul+KlE1JAdKpQ8eJrSwH/Wn0YSor4TP
- h4EqLmidRbk1PvbpbGCYJJzvr7d5/75dOfKRIRmU5iPv8fSqyql9FG4J7I3A9/EVJZBGl3FVo
- wgXb7qzThyfIPnLwx1eoxtB1BodmVeeIPMejrAg4NPVvS3j0G3d7nyyEN+nzBGaEeteTs/5qJ
- A+crgUPMh2SlTehxY4PBM+i1hw7BlNz1PTyMbUxp2Wv0AGgDT11VvMShQzzY/qJoxONFqcseD
- D7JSsFYTC12P3xAQ8+KlZal9X1B6Ue6bFZzd9Nj5oARaFlbiTX1h5hbBcoE3Hyw3JqOwtNrpi
- h0Z893npmxTdOLQCzeUv9GHjivC89o7aAN3N6RWT9Hyw+gzP9o=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:09 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Arnd,
->
-> First bad commit (maybe != root cause):
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-> head:   1052f9bce62982023737a95b7ff1ad26a5149af6
-> commit: 87ae522e467e17a13b796e2cb595f9c3943e4d5e [644/5321] m68knommu: only set CONFIG_ISA_DMA_API for ColdFire sub-arch
+On Thu, 21 Apr 2022, kernel test robot wrote:
 
-I sent v4 of my ISA_DMA_API removal patch for coldfire now, that
-should address it.
+> Hi Daniel,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   b253435746d9a4a701b5f09211b9c14d3370d0da
+> commit: dad74e18f72a852ae40ad7b4246841a1b7e196b5 HID: nintendo: prevent needless queueing of the rumble worker
+> date:   6 months ago
+> config: s390-randconfig-c005-20220420 (https://download.01.org/0day-ci/archive/20220421/202204211058.3UoweQuz-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install s390 cross compiling tool for clang build
+>         # apt-get install binutils-s390x-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dad74e18f72a852ae40ad7b4246841a1b7e196b5
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout dad74e18f72a852ae40ad7b4246841a1b7e196b5
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/amd/display/dc/ drivers/hid/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>                    ^
+>    drivers/hid/hid-nintendo.c:51:17: warning: unused variable 'JC_SUBCMD_STATE' [-Wunused-const-variable]
+>    static const u8 JC_SUBCMD_STATE                 /*= 0x00*/;
 
-     Arnd
+[ ... snip ... ]
+
+Daniel, could you please send a patch that'd comment out the unused ones? 
+(i.e. keep them for documentation purposes, but avoid the warning).
+
+Thanks,
+
+-- 
+Jiri Kosina
+SUSE Labs
+

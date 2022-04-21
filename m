@@ -2,173 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0DF50AB7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 00:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F25D550AB7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 00:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442453AbiDUW3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 18:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
+        id S1442461AbiDUWaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 18:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiDUW3q (ORCPT
+        with ESMTP id S1384054AbiDUWaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 18:29:46 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D784A909
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 15:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650580015; x=1682116015;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iDUNii+0PdRNZrXW0OG7qb8gCoVEuCpUOWSO6u45rFM=;
-  b=JR+Ycs8bD2q3BRNyUpTBjIclwtAb3xLDkTGumFYJ5xbEtp6ePumFTWob
-   pvhXNdBIhMIoE9Wrv3ZvASTYZ2KqG4kyxI7nXIw3m15wzZ9MvTiq/LM6r
-   W6IpLqasqhMOZ1cQVUITyyUPuYrTZIJnL7dluteuGaGdymBBD8xwHy/xX
-   jz5CElT/IVnEPJkK5qrto+CwQ6tMDW2Zg3+owjJMMn+Cf48unT1dc3mnP
-   loDlkvC9pe3sC5B/8yO4KiW8VTdjd8Eha5DrKnEWC1j3t0o4NFpqSPqRZ
-   oHpUlqeGEvnoW1WpU12w6wJ+1AwNCKoiGBoGuQxGUOoNSWVR8UQ0IyYR5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="289614024"
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="289614024"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 15:26:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="671382756"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Apr 2022 15:26:51 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhfGE-0008qY-H0;
-        Thu, 21 Apr 2022 22:26:50 +0000
-Date:   Fri, 22 Apr 2022 06:25:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-5.10.y 499/5321] arch/powerpc/kernel/smp.c:1380:14:
- error: variable 'ret' set but not used
-Message-ID: <202204220615.hpSQ4muZ-lkp@intel.com>
+        Thu, 21 Apr 2022 18:30:03 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E394AE11;
+        Thu, 21 Apr 2022 15:27:10 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id c23so6847260plo.0;
+        Thu, 21 Apr 2022 15:27:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g9wUFSDdd2+1DNFR59TfjyNNqQk5r/GH/A03vywauoc=;
+        b=OF8JsT7VhIsEVkmqS1JOOf5Ukmr0PRzU3NNhBi4XV2pcEhLXU0c5p1w7WeBRNF1Jqs
+         n07Wi9LapJOiEngjYo2sKneMhknNjKzcXksWmk+4OZHNJnSUxgYYlMXWhM6sm3KKm3BP
+         8UteeE0izC2/b5kGCC/yhHQINe0sZ5C2c2/F20QTCLeVLNMDvGPpse4qUx1b09cehAAR
+         ss+ZavBgK63zQsbuu93gFde6Y/FMLjTlnj4I/4VePmPdZp0qy18lb6Rb0yExuV5hQuuW
+         nvRAKR2XHEyYYTt7zBBdj2BRDL+RKV5QMn3hqsAzHtApHJ+xjwPSk6ODp7EKREaxYtea
+         l0ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g9wUFSDdd2+1DNFR59TfjyNNqQk5r/GH/A03vywauoc=;
+        b=QZitqx1L5lBGmEnYWwmqXMPCF7LkHGqBAVINY2geNhlNy5HAJ0IbusrN3MAklF8bzN
+         5AvPO9FZKRb4bAQeIzX8FUF5OZZJGJbuiOFXz9oFAavIliyNlmsFirTa64Cfln8Xxvkq
+         r0C0ZSEC/hUnb78PJ2xoynfIGYBM/HWfvx7+ivp6LUY4zsWs0BgMoqY9+6bcM9U7Yr8B
+         UuMOsqYCff1FK6wYCQv1G+ThKCg6ijJ4InKqKuKudZUVkCPAL7xCTSlN/V0WfJgnFdOq
+         qZoSiRNFxWu+9RKjPaDQBtQ9OP/+ggOfuc3llGpiH65yBxDbBElnIlBgF7tMMlHnk3CI
+         dGXg==
+X-Gm-Message-State: AOAM532CZZ6Q3WtHr3+WgocjnC3eRvcI3g+XSI7jLsGvXZX4huL6tIAS
+        IwrTMNVrabdte9+A/3ghDqCKq0OrdUYQTlfP/BE=
+X-Google-Smtp-Source: ABdhPJxk+9AIKydOzg7DDXuOseBL3eV56i0dbHPQUdgjbp7Sm5O0tIy6XcQo+trh09bapKiIoSuIj6QwCihbzBHFpAo=
+X-Received: by 2002:a17:90b:4c8f:b0:1d2:90e4:26ef with SMTP id
+ my15-20020a17090b4c8f00b001d290e426efmr12522620pjb.120.1650580030358; Thu, 21
+ Apr 2022 15:27:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420004241.2093-1-joao@overdrivepizza.com>
+ <20220420074044.GC2731@worktop.programming.kicks-ass.net> <20220420151714.fderdz4dzea75rvg@treble>
+ <CAKwvOdm6J9TFUWJA2Q7VRjx1CpBme9z_Dp99+7YTjN5Jqp5=Aw@mail.gmail.com>
+ <bf3273120d8d48a79357f229c5890576@overdrivepizza.com> <20220421074920.GK2731@worktop.programming.kicks-ass.net>
+ <643dac8c3ccb0720b4a8e67a472b08de@overdrivepizza.com> <CAMe9rOqG5iAbYm_h3KsUeiToGPAs5SZ3SuWUn+_P-5Ax37=f1A@mail.gmail.com>
+ <20220421221110.nq3e2vje7uvuu5dd@google.com>
+In-Reply-To: <20220421221110.nq3e2vje7uvuu5dd@google.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Thu, 21 Apr 2022 15:26:34 -0700
+Message-ID: <CAMe9rOoHxJixg40r-3mnYeC-GQYj1gqwY9S_iMCdgc-DaajzCQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/11] Kernel FineIBT Support
+To:     Fangrui Song <maskray@google.com>
+Cc:     Joao Moreira <joao@overdrivepizza.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        alyssa.milburn@linux.intel.com, gabriel.gomes@linux.intel.com,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srikar,
+On Thu, Apr 21, 2022 at 3:11 PM Fangrui Song <maskray@google.com> wrote:
+>
+> On 2022-04-21, H.J. Lu wrote:
+> >On Thu, Apr 21, 2022 at 8:23 AM Joao Moreira <joao@overdrivepizza.com> wrote:
+> >>
+> >> On 2022-04-21 00:49, Peter Zijlstra wrote:
+> >> > On Wed, Apr 20, 2022 at 03:40:41PM -0700, Joao Moreira wrote:
+> >> >> > >
+> >> >> > > If FineIBT needs it, I could reconsider.  But I think there's a strong
+> >> >> > > case to be made that the linker should be doing that instead.
+> >> >> >
+> >> >> > That sounds reasonable to me (and reminds me of linker relaxation).
+> >> >> > Joao, can you please work with Fangrui (LLD) and HJ (GNU binutils) to
+> >> >> > determine how feasible this would be? I assume code outside the kernel
+> >> >> > might enjoy such an optimization, too.  When that's the case, then it
+> >> >> > probably makes more sense to "upstream" such "optimizations" from the
+> >> >> > kernel-specific objtool into the toolchains.
+> >> >>
+> >> >> Alright, these are the greenlights I was hoping for.
+> >> >>
+> >> >> I went quickly into this with HJ and he mentioned that it should be
+> >> >> doable
+> >> >> in the linker, and that he has a patch for it in gcc (for local
+> >> >> function,
+> >> >> from what I could see):
+> >> >> https://gcc.gnu.org/pipermail/gcc-patches/2022-February/590832.html
+> >> >>
+> >> >> If @Fangrui is fine with it, I would like to try implementing this
+> >> >> myself in
+> >> >> lld (I'm still learning a lot about lld and having an actual problem
+> >> >> to
+> >> >> solve is the kind of fuel I need). Should take me a while, but I think
+> >> >> this
+> >> >> is not urgent, right? I can also go ahead and replicate HJ's gcc patch
+> >> >> into
+> >> >> clang, so we can also handle the local functions within the compiler
+> >> >> (I
+> >> >> think this makes a lot of sense).
+> >> >>
+> >> >> Once we have these in, I'll revisit FineIBT and extend the features to
+> >> >> handle the FineIBT instrumentation. Hopefully we'll be released from
+> >> >> needing
+> >> >> objtool (famous last words?!).
+> >> >>
+> >> >> This sounds like a plan, but I'm ofc open to suggestions or different
+> >> >> ideas/plans.
+>
+> Thanks for looping me in! (I mean: this is discussed beforehand, instead
+> of GCC/GNU ld taking some steps and pushing LLVM toolchain to follow
+> suite..)
+> Though I think I may not have the full context here...
+>
+> I can see that you have a request to skip the endbr instruction
+> (and potentially more instructions for FineIBT).
+>
+> The GCC patch https://gcc.gnu.org/pipermail/gcc-patches/2022-February/590832.html
+> achieves it. A linker implementation will handle more cases.
+> This is somewhat similar to PowerPC64's global entry vs local entry.
+> The linker can redirect a branch instruction to the local entry in some
+> conditions. My concern is that inspecting the section content goes too far
+> and breaks the spirit of ELF relocation resolving. The proper way is to use
+> a symbol attribute (e.g. st_other).
+>
+> st_other bits are scarce, so any use needs to be prudent.
 
-FYI, the error/warning still remains.
+On the other hand, linker inspection doesn't require changes in object files.
+It is much more user friendly.   X86-64 psABI already allows linker optimization
+based on contents at relocation sites.   This goes one step further to contents
+at relocation targets.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-head:   1052f9bce62982023737a95b7ff1ad26a5149af6
-commit: e91077cf1780108dc586cedf1d19f65b44fa3870 [499/5321] powerpc/smp: Update cpu_core_map on all PowerPc systems
-config: powerpc-iss476-smp_defconfig (https://download.01.org/0day-ci/archive/20220422/202204220615.hpSQ4muZ-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=e91077cf1780108dc586cedf1d19f65b44fa3870
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.10.y
-        git checkout e91077cf1780108dc586cedf1d19f65b44fa3870
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
+> >> > So trivially the plan sounds like: compiler fixes STB_LOCAL because it
+> >> > has the scope, and the linker fixes everything else. However, that
+> >> > seems
+> >> > to assume that !STB_LOCAL will have ENDBR.
+> >> >
+> >> > This latter isn't true; for one there's __attribute__((nocf_check))
+> >> > that
+> >> > can be used to suppress ENDBR generation on a function.
+> >> >
+> >> > Alternatively the linker will need to 'read' the function to determine
+> >> > if it has ENDBR, or we need to augment the ELF format such that we can
+> >> > tell from that.
+> >> >
+> >> > So what exactly is the plan?
+> >>
+> >> I ran into too many broken dreams by trying to infer the presence of
+> >> ENDBRs just by the symbol locality/linkage... not only because of the
+> >> attribute, but also because of ancient assembly.
+> >>
+> >> So, my first thought was to use something similar to the
+> >> __patchable_function_entries section
+> >> (https://man7.org/linux/man-pages/man1/gcc.1.html), where we would have
+> >> a section to mark all the placed ENDBR. But then it occurred to me that
+> >> if we follow that road we'll miss the ENDBR placed in assembly unless we
+> >> mark it manually, so I started thinking that reading the target
+> >> instructions from the ELF object could be a more simplified approach,
+> >> although a little more treacherous.
+> >>
+> >> I didn't decide yet what to try first -- any thoughts?
+> >>
+> >> @Fangrui's and @HJ's thoughts about this could be gold.
+> >
+> >You can't assume ENDBR existence just by symbol visibility.
+> >Compiler knows if there is an ENDBR at function entry since
+> >it is generated by compiler.   Otherwise, you need to check
+> >the first 4 bytes at function entry,
+> >
+> >--
+> >H.J.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
-
-   arch/powerpc/kernel/smp.c:551:6: error: no previous prototype for 'tick_broadcast' [-Werror=missing-prototypes]
-     551 | void tick_broadcast(const struct cpumask *mask)
-         |      ^~~~~~~~~~~~~~
-   arch/powerpc/kernel/smp.c: In function 'add_cpu_to_masks':
->> arch/powerpc/kernel/smp.c:1380:14: error: variable 'ret' set but not used [-Werror=unused-but-set-variable]
-    1380 |         bool ret;
-         |              ^~~
-   cc1: all warnings being treated as errors
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on SMP && (PPC_PSERIES || PPC_PMAC || PPC_POWERNV || FSL_SOC_BOOKE
-   Selected by
-   - PM_SLEEP_SMP && SMP && (ARCH_SUSPEND_POSSIBLE || ARCH_HIBERNATION_POSSIBLE && PM_SLEEP
-
-
-vim +/ret +1380 arch/powerpc/kernel/smp.c
-
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1373  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1374  static void add_cpu_to_masks(int cpu)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1375  {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1376  	struct cpumask *(*submask_fn)(int) = cpu_sibling_mask;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1377  	int first_thread = cpu_first_thread_sibling(cpu);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1378  	int chip_id = cpu_to_chip_id(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1379  	cpumask_var_t mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15 @1380  	bool ret;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1381  	int i;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1382  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1383  	/*
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1384  	 * This CPU will not be in the online mask yet so we need to manually
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1385  	 * add it to it's own thread sibling mask.
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1386  	 */
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1387  	cpumask_set_cpu(cpu, cpu_sibling_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1388  	cpumask_set_cpu(cpu, cpu_core_mask(cpu));
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1389  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1390  	for (i = first_thread; i < first_thread + threads_per_core; i++)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1391  		if (cpu_online(i))
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1392  			set_cpus_related(i, cpu, cpu_sibling_mask);
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1393  
-425752c63b6f3f Gautham R. Shenoy 2018-10-11  1394  	add_cpu_to_smallcore_masks(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1395  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1396  	/* In CPU-hotplug path, hence use GFP_ATOMIC */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1397  	ret = alloc_cpumask_var_node(&mask, GFP_ATOMIC, cpu_to_node(cpu));
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1398  	update_mask_by_l2(cpu, &mask);
-2a636a56d2d396 Oliver O'Halloran 2017-06-29  1399  
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1400  	if (has_coregroup_support())
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1401  		update_coregroup_mask(cpu, &mask);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1402  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1403  	if (shared_caches)
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1404  		submask_fn = cpu_l2_cache_mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1405  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1406  	/* Update core_mask with all the CPUs that are part of submask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1407  	or_cpumasks_related(cpu, cpu, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1408  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1409  	/* Skip all CPUs already part of current CPU core mask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1410  	cpumask_andnot(mask, cpu_online_mask, cpu_core_mask(cpu));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1411  
-e91077cf178010 Srikar Dronamraju 2021-08-26  1412  	/* If chip_id is -1; limit the cpu_core_mask to within DIE*/
-e91077cf178010 Srikar Dronamraju 2021-08-26  1413  	if (chip_id == -1)
-e91077cf178010 Srikar Dronamraju 2021-08-26  1414  		cpumask_and(mask, mask, cpu_cpu_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1415  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1416  	for_each_cpu(i, mask) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1417  		if (chip_id == cpu_to_chip_id(i)) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1418  			or_cpumasks_related(cpu, i, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1419  			cpumask_andnot(mask, mask, submask_fn(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1420  		} else {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1421  			cpumask_andnot(mask, mask, cpu_core_mask(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1422  		}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1423  	}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1424  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1425  	free_cpumask_var(mask);
-a8a5356cd511db Paul Mackerras    2013-08-12  1426  }
-a8a5356cd511db Paul Mackerras    2013-08-12  1427  
-
-:::::: The code at line 1380 was first introduced by commit
-:::::: bf6476152a0a084038b12b9d770e32717f54a6ab powerpc/smp: Reintroduce cpu_core_mask
-
-:::::: TO: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+H.J.

@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D4350A68B
+	by mail.lfdr.de (Postfix) with ESMTP id 35BC850A68A
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390531AbiDURIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        id S1358704AbiDURIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiDURId (ORCPT
+        with ESMTP id S229717AbiDURI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:08:33 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85AA3ED01
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:05:40 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id j8so5433469pll.11
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:05:40 -0700 (PDT)
+        Thu, 21 Apr 2022 13:08:29 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C28B3ED01
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:05:38 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id bg24so5530121pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:05:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
-         :from:to;
-        bh=VAtOPkJ1SY/tzMbGCTKTKv8dG7z23I5mteO8idQRNqw=;
-        b=F03wFIkvH5mHwPm9Vdu97iKnCWlemvMdFvOppF2ZHGD8qtffYcRETG3VtVhIj4qvYx
-         XWmKJ/KsFbZPc1kUl1FxRWXZr5+5Vn5eHGrysqnfIv3aZFgOr4xeSn3fDvZQG9uLzcMQ
-         M/9UffPcFn07CYsjM+L2p5OHf9tHrF5TTki3qW1CH4jL0aF8veH/OpcovTFTbw2NpU3+
-         0w3kbZmQ1MT0WHZoHPveAXxJmj6KLpBbvQvXnpN51UYFdvkEMfI1ozg8XM9sEgA33H1f
-         KB577+f/yUEmDZQCuJmDNEJ/9zZ3H9cfwN3Q/rDUZlUDARsAPSs1PEcRG2meHbtvi8Pg
-         RvWg==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5gmIij74AnDbY6qgr01UCnK6HzZogNxUIMK/+QoMp5g=;
+        b=pM6fVZiauwUEHH9GIOQ7ii10p9f8+vmUKQ3AZQXvSVOyYpmrdeVJXqZ3gVAaXvEWIb
+         qQYl4kET7hzWq+UBVuBLR3NhkTm4nVshvjF3JDmpxICdfecWmGHB04aLJ2sx6rFX6Fpf
+         oc1NeoXWW21u2K5sz1/Xob4hzfcFubhIOtg3rPKyv7o1YyMOMDaJsUXg+NaG4VCDhL+C
+         Mziu8u5sTDqbl2xd71Fh5h+QQCoCYNgmCL9cR4SchNBvU3swo5SdRH6xmPMBCKgQkzUp
+         yvMzci+GHzKLqj0sVn1nf/QT7X6JkWpue6d62p4ilbzEZgZ5O9f7AYXYhuU0JCXP0tKm
+         TbHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=VAtOPkJ1SY/tzMbGCTKTKv8dG7z23I5mteO8idQRNqw=;
-        b=rAkEvp5n25+vX5V4u3xEnn9kxiL2z1i3xx6z/syoGrxYUL2V10wDrGasOoG/GuMIrv
-         Bir2lDb9KgIm7pdk0YvMMVzq+PvoS6Y9eImkdpYng78yMWE2J26/LSdQReBitWi5mCRN
-         tiiefgJaOBUz890BPIJqoeKYlFN4wlYSFNF4Znhc/ddAyrAeShcDxHO4buH6Wzl3BSUl
-         IdisOEQWjIPHXJFD5JBTXWI6IjfBmJIWpkgchIaOjr8SM/f0wL2hUYNmIdCIliQjJ7/g
-         HZYBO0ovHgOdMHGPAyc6jTt/heAg85tuQzKZMWbIxf1emhGBVgai/kIPkiwHDVM4YW5T
-         gM6A==
-X-Gm-Message-State: AOAM531e0FIVMYQgm58TeN789UYBa17AlGL/ckG1O/Z3FbrRzVmbXZP3
-        Qk7uXROOJksVdnJDGFA8RxONAw==
-X-Google-Smtp-Source: ABdhPJyjqlvEcnOu/+Sk4eVZPHB9SHCOwWZKtrj2V0KbAODClpJDnwpOm1MZqxewG78k6bjgkizydQ==
-X-Received: by 2002:a17:90b:384e:b0:1d2:798d:6f42 with SMTP id nl14-20020a17090b384e00b001d2798d6f42mr635645pjb.5.1650560740380;
-        Thu, 21 Apr 2022 10:05:40 -0700 (PDT)
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=5gmIij74AnDbY6qgr01UCnK6HzZogNxUIMK/+QoMp5g=;
+        b=FAbWz5TzwixXxe8/EuUBsyZIWgxTA9WWlG6sfMLPFADvobc4gE4L3QzQqXWOM8jSwX
+         jDz5svorcP9OaorMN0Zx1/5H4sXCRBrt3+ndoWob281bexBJRgxF6IkMl7fLZJnQFZ+S
+         7Bif2B45egNQNwoj9bsoE8+DYsXoC95psrV0CYVongOsVGY2m12wq4V8ASUv+0JRc2Tq
+         tmjcR80CCjsfuesyWyN8HTNrYRFAa5671Iv93GOd7y2bCzsykEMjfD51KVR/nALr06nB
+         hZp+CtRO7aNtPx75AAH/hAaY2SusuC2et3PK7RbQ2CdHUicQQyAWAACcSKbQkNSNzcWZ
+         TW0g==
+X-Gm-Message-State: AOAM533KUFk9n38l7NIpZIDxrx34Qaj5aqdI07AaSjRvF7TpDqvUIX4O
+        Sg38pQW2i9665V2KNkgyANNpquB43TEenw==
+X-Google-Smtp-Source: ABdhPJytsH5waRAiVkAmq21l+Ij9qBhY0E5qN6lPrVZhHH/1g1nDZiZgCJ+6vs/jotE6GkZYBNDK8w==
+X-Received: by 2002:a17:902:9a4c:b0:158:b6f0:4aa2 with SMTP id x12-20020a1709029a4c00b00158b6f04aa2mr354677plv.163.1650560737879;
+        Thu, 21 Apr 2022 10:05:37 -0700 (PDT)
 Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id j6-20020a63b606000000b003808b0ea96fsm23186858pgf.66.2022.04.21.10.05.38
+        by smtp.gmail.com with ESMTPSA id c16-20020a631c50000000b003a39244fe8esm19043710pgm.68.2022.04.21.10.05.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 10:05:39 -0700 (PDT)
-Subject: [PATCH v1] RISC-V: Only default to spinwait on SBI-0.1 and M-mode
-Date:   Thu, 21 Apr 2022 10:03:55 -0700
-Message-Id: <20220421170354.10555-1-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        Thu, 21 Apr 2022 10:05:36 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 10:05:36 -0700 (PDT)
+X-Google-Original-Date: Thu, 21 Apr 2022 09:51:26 PDT (-0700)
+Subject:     Re: [PATCH v4] riscv: mm: Remove the copy operation of pmd
+In-Reply-To: <20220401024320.98510-1-hanchuanhua@oppo.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        alexandre.ghiti@canonical.com, jszhang@kernel.org,
+        mhiramat@kernel.org, akpm@linux-foundation.org,
+        zhengqi.arch@bytedance.com, ebiederm@xmission.com,
+        liushixin2@huawei.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, hanchuanhua@oppo.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     hanchuanhua@oppo.com
+Message-ID: <mhng-2e84f176-f077-4a7a-b1e0-66813b2c0e7d@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        atishp@atishpatra.org, anup@brainfault.org,
-        Will Deacon <will@kernel.org>, mark.rutland@arm.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux@rivosinc.com,
-        Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:         linux-riscv@lists.infradead.org
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -72,52 +73,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+On Thu, 31 Mar 2022 19:43:20 PDT (-0700), hanchuanhua@oppo.com wrote:
+> Since all processes share the kernel address space,
+> we only need to copy pgd in case of a vmalloc page
+> fault exception, the other levels of page tables are
+> shared, so the operation of copying pmd is unnecessary.
+>
+> Signed-off-by: Chuanhua Han <hanchuanhua@oppo.com>
+> ---
+> Changes in v4:
+>   -Modify incorrect author name.
+>
+> Changes in v3:
+>   -Change the real name of signed-off-by.
+>
+> Changes in v2:
+>   -Delete incorrect default signatures.
+>
+>
+>  arch/riscv/mm/fault.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+> index 4e9efbe46d5f..40694f0cab9e 100644
+> --- a/arch/riscv/mm/fault.c
+> +++ b/arch/riscv/mm/fault.c
+> @@ -102,9 +102,9 @@ static inline void bad_area(struct pt_regs *regs, struct mm_struct *mm, int code
+>  static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long addr)
+>  {
+>  	pgd_t *pgd, *pgd_k;
+> -	pud_t *pud, *pud_k;
+> -	p4d_t *p4d, *p4d_k;
+> -	pmd_t *pmd, *pmd_k;
+> +	pud_t *pud_k;
+> +	p4d_t *p4d_k;
+> +	pmd_t *pmd_k;
+>  	pte_t *pte_k;
+>  	int index;
+>  	unsigned long pfn;
+> @@ -132,14 +132,12 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
+>  	}
+>  	set_pgd(pgd, *pgd_k);
+>
+> -	p4d = p4d_offset(pgd, addr);
+>  	p4d_k = p4d_offset(pgd_k, addr);
+>  	if (!p4d_present(*p4d_k)) {
+>  		no_context(regs, addr);
+>  		return;
+>  	}
+>
+> -	pud = pud_offset(p4d, addr);
+>  	pud_k = pud_offset(p4d_k, addr);
+>  	if (!pud_present(*pud_k)) {
+>  		no_context(regs, addr);
+> @@ -150,13 +148,11 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
+>  	 * Since the vmalloc area is global, it is unnecessary
+>  	 * to copy individual PTEs
+>  	 */
+> -	pmd = pmd_offset(pud, addr);
+>  	pmd_k = pmd_offset(pud_k, addr);
+>  	if (!pmd_present(*pmd_k)) {
+>  		no_context(regs, addr);
+>  		return;
+>  	}
+> -	set_pmd(pmd, *pmd_k);
+>
+>  	/*
+>  	 * Make sure the actual PTE exists as well to
 
-The spinwait boot method has been superseeded by the SBI HSM extension
-for some time now, but it still enabled by default.  This causes some
-issues on large hart count systems, which will hang if a physical hart
-exists that is larger than NR_CPUS.
-
-Users on modern SBI implemenation don't need spinwait, and while it's
-probably possible to deal with some of the spinwait issues let's just
-restrict the default to systems that are likely to actually use it.
-
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
-This seems to be the source of many of my new hangs when trying to test
-the NR_CPUS=512 support.  It's not really related, just fallout from
-testing different setups.
----
- arch/riscv/Kconfig | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 00fd9c548f26..dd5e975abe37 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -359,7 +359,7 @@ config RISCV_SBI_V01
- config RISCV_BOOT_SPINWAIT
- 	bool "Spinwait booting method"
- 	depends on SMP
--	default y
-+	default y if RISCV_SBI_V01 || RISCV_M_MODE
- 	help
- 	  This enables support for booting Linux via spinwait method. In the
- 	  spinwait method, all cores randomly jump to Linux. One of the cores
-@@ -370,6 +370,12 @@ config RISCV_BOOT_SPINWAIT
- 	  rely on ordered booting via SBI HSM extension which gets chosen
- 	  dynamically at runtime if the firmware supports it.
- 
-+	  Since spinwait is incompatible with sparse hart IDs, it requires
-+	  NR_CPUS be large enough to contain the physical hart ID of the first
-+	  hart to enter Linux.
-+
-+	  If unsure what to do here, say N.
-+
- config KEXEC
- 	bool "Kexec system call"
- 	select KEXEC_CORE
--- 
-2.34.1
-
+Thanks, this is on for-next (it was last night, but looks like I forgot 
+to send the email).

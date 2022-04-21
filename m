@@ -2,477 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8395B50A187
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9AA50A171
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388952AbiDUOGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
+        id S1387795AbiDUOFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388943AbiDUOGi (ORCPT
+        with ESMTP id S1388799AbiDUOFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:06:38 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE68F39BAA;
-        Thu, 21 Apr 2022 07:03:27 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: shreeya)
-        with ESMTPSA id A61541F45A4B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650549784;
-        bh=5yKz0U94/C7HPRU4rE29jULG4W5PjD4E16GGWENPBY8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ESUCE4EQ2WCbVMp/AgSMiosNGxRNRv92edHfBI8tO72G89Hf7LhQdjg1Pd8fgl9q/
-         H5vSUOr5/dYAUjixkR4n2eDy8Q64nul0oxPiC/8/6FQJhVEEkbLukLy1KvmSFHx2Lk
-         4YCOaXy5cbpWKKOH6fobewS/fl5aSLDykmCICE0EKE1i5z+qGb95R3//s1casn847c
-         yq10XRdp1Nx4DJhHoM848JL3G3cSYc6AvFA/RusTObDWdgBOMBkrny0ZbratEAn2c7
-         9J2e40A2I7T1yI+PFcPbPRSm+ylOQWu+DIK9GxOgtreMl2L3JlIknuA+lGSBZjzEHi
-         mdDqRH52hrA5g==
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        Zhigang.Shi@liteon.com, krzk@kernel.org, krisman@collabora.com
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        alvaro.soliverez@collabora.com,
-        Shreeya Patel <shreeya.patel@collabora.com>
-Subject: [PATCH v2 3/3] iio: light: Add support for ltrf216a sensor
-Date:   Thu, 21 Apr 2022 19:31:33 +0530
-Message-Id: <20220421140133.354498-4-shreeya.patel@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220421140133.354498-1-shreeya.patel@collabora.com>
-References: <20220421140133.354498-1-shreeya.patel@collabora.com>
+        Thu, 21 Apr 2022 10:05:12 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6F33B287;
+        Thu, 21 Apr 2022 07:02:15 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23LCNtng020172;
+        Thu, 21 Apr 2022 14:02:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=aI024WHC/bEMg8nvZ834auRImnWK7kVLOZ4xKww3Qfg=;
+ b=CRiCjvirWXl4MnbJVF7/otV8kD8HghhK81jWpyKyzW6Vw0YyWQCsVc6SWw7CUpVwhTir
+ R1oqH8ayvLY8Jchbmokq95DNYftbhjgiDLD5lFJ2p+7jkFXlyUthR4LlchklkzlXXHcv
+ ANvt+CiK9c6uMngU1TQ917DXmywz55JeDAKTNeBL6KlOfyst9U9Zz0/9cvbkOihVtCkk
+ DVXjAMaKjq5OVdf9QygnF+eRomXZe0iwwqTWe6yPsnOiyu51FNTIM7LgEF//ZkkfqreP
+ DW+ERxN9eX1WggA3NwqwqSkyXRLd0mr5jcMjw8zGEN+cKizqmcu1w8eclF1/Aiui/IwW 9w== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fk1ye94cq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Apr 2022 14:02:13 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23LDrCWM015800;
+        Thu, 21 Apr 2022 14:02:11 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ffne980hp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Apr 2022 14:02:11 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23LE28tQ25362744
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Apr 2022 14:02:08 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3793D11C054;
+        Thu, 21 Apr 2022 14:02:08 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EA16D11C04A;
+        Thu, 21 Apr 2022 14:02:07 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 21 Apr 2022 14:02:07 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        krebbel@linux.ibm.com, iii@linux.ibm.com, hca@linux.ibm.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: -Warray-bounds fun again
+Date:   Thu, 21 Apr 2022 16:02:07 +0200
+Message-ID: <yt9dzgkelelc.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: K4RxM8JLj-DcbUAXNWZRXoVGcuvmMJEe
+X-Proofpoint-GUID: K4RxM8JLj-DcbUAXNWZRXoVGcuvmMJEe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-21_01,2022-04-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ bulkscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 clxscore=1011 adultscore=0
+ mlxlogscore=248 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204210077
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhigang Shi <Zhigang.Shi@liteon.com>
+Hi,
 
-Add initial support for ltrf216a ambient light sensor.
+while compiling the latest upstream kernel on fedora 36 which
+uses gcc-12 by default, i got a lot of -Warray-bounds warnings:
 
-Datasheet: gitlab.steamos.cloud/shreeya/iio/-/blob/main/LTRF216A.pdf
-Co-developed-by: Shreeya Patel <shreeya.patel@collabora.com>
-Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-Signed-off-by: Zhigang Shi <Zhigang.Shi@liteon.com>
----
+(Note that this is on s390 arch)
 
-Changes in v2
-  - Add support for 25ms and 50ms integration time.
-  - Rename some of the macros as per names given in datasheet
-  - Add a comment for the mutex lock
-  - Use read_avail callback instead of attributes and set the
-    appropriate _available bit.
-  - Use FIELD_PREP() at appropriate places.
-  - Add a constant lookup table for integration time and reg val
-  - Use BIT() macro for magic numbers.
-  - Improve error handling at few places.
-  - Use get_unaligned_le24() and div_u64()
-  - Use probe_new() callback and devm functions
-  - Return errors in probe using dev_err_probe()
-  - Use DEFINE_SIMPLE_DEV_PM_OPS()
-  - Correct the formula for lux to use 0.45 instead of 0.8
+In function =E2=80=98preempt_count=E2=80=99,
+inlined from =E2=80=98do_one_initcall=E2=80=99 at init/main.c:1290:14:
+./include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside=
+ array bounds of =E2=80=98const volatile int[0]=E2=80=99 [-Warray-bounds]
+44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)=
+&(x))
+   |        ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   /include/asm-generic/rwonce.h:50:9: note: in expansion of macro =E2=80=
+=98__READ_ONCE=E2=80=99
+50 |         __READ_ONCE(x);
+   |         ^~~~~~~~~~~
+./arch/s390/include/asm/preempt.h:17:16: note: in expansion of macro =E2=80=
+=98READ_ONCE=E2=80=99
+17 |         return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_R=
+ESCHED;
+   |                ^~~~~~~~~
+
+This is because S390_lowcore is defined as follows:
+
+#define S390_lowcore (*((struct lowcore *) 0))
+
+Lowcore is a 8K cpu-local memory region on s390 at fixed address 0.
+
+The obvious 'fix' is to use absolute_pointer():
+
+#define S390_lowcore (*((struct lowcore *)absolute_pointer(0)))
+
+That makes the warning go away, but unfortunately the compiler no longer
+knows that the memory access is fitting into a load/store with a 12 bit
+displacement.
+
+Without absolute_pointer(), reading the preempt count is just a single
+instruction: 'l %r11,936'
+
+static inline int preempt_count(void)
+{
+        return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHE=
+D;
+ 8c4:   58 b0 03 a8             l       %r11,936 <--- load preempt count
+ 8c8:   b9 04 00 92             lgr     %r9,%r2
+        int count =3D preempt_count();
+
+with absolute pointer(), the compiler no longer optimizes the read to
+one instruction and uses an additional base register:
+
+static inline int preempt_count(void)
+{
+        return READ_ONCE(S390_lowcore.preempt_count) & ~PREEMPT_NEED_RESCHE=
+D;
+ 8c4:   a7 19 00 00             lghi    %r1,0             <-- use %r1 as ba=
+se, load with 0
+ 8c8:   b9 04 00 92             lgr     %r9,%r2
+        int count =3D preempt_count();
+        char msgbuf[64];
+ 8cc:   d7 3f f0 a8 f0 a8       xc      168(64,%r15),168(%r15)
+ 8d2:   58 b0 13 a8             l       %r11,936(%r1)    <-- and finally ad=
+d the offset and fetch
+        int ret;
+
+The reason for gcc to not optimize that further is likely the asm
+statement in RELOC_HIDE (located in include/linux/compiler-gcc.h)
+
+#define RELOC_HIDE(ptr, off)                                    \
+({                                                              \
+        unsigned long __ptr;                                    \
+        __asm__ ("" : "=3Dr"(__ptr) : "0"(ptr));                  \
+        (typeof(ptr)) (__ptr + (off));                          \
+})
 
 
- drivers/iio/light/Kconfig    |  10 +
- drivers/iio/light/Makefile   |   1 +
- drivers/iio/light/ltrf216a.c | 349 +++++++++++++++++++++++++++++++++++
- 3 files changed, 360 insertions(+)
- create mode 100644 drivers/iio/light/ltrf216a.c
+For most of the code this wouldn't be a big problem, but we're storing
+information like preempt_count, current thread info, etc in lowcore
+because it is the fastest way. I would like to avoid to use additional
+instructions/registers just to avoid a warning.
 
-diff --git a/drivers/iio/light/Kconfig b/drivers/iio/light/Kconfig
-index a62c7b4b8678..33d2b24ba1da 100644
---- a/drivers/iio/light/Kconfig
-+++ b/drivers/iio/light/Kconfig
-@@ -318,6 +318,16 @@ config SENSORS_LM3533
- 	  changes. The ALS-control output values can be set per zone for the
- 	  three current output channels.
- 
-+config LTRF216A
-+	tristate "Liteon LTRF216A Light Sensor"
-+	depends on I2C
-+	help
-+	  If you say Y or M here, you get support for Liteon LTRF216A
-+	  Ambient Light Sensor.
-+
-+	  If built as a dynamically linked module, it will be called
-+	  ltrf216a.
-+
- config LTR501
- 	tristate "LTR-501ALS-01 light sensor"
- 	depends on I2C
-diff --git a/drivers/iio/light/Makefile b/drivers/iio/light/Makefile
-index d10912faf964..8fa91b9fe5b6 100644
---- a/drivers/iio/light/Makefile
-+++ b/drivers/iio/light/Makefile
-@@ -30,6 +30,7 @@ obj-$(CONFIG_SENSORS_ISL29028)	+= isl29028.o
- obj-$(CONFIG_ISL29125)		+= isl29125.o
- obj-$(CONFIG_JSA1212)		+= jsa1212.o
- obj-$(CONFIG_SENSORS_LM3533)	+= lm3533-als.o
-+obj-$(CONFIG_LTRF216A)		+= ltrf216a.o
- obj-$(CONFIG_LTR501)		+= ltr501.o
- obj-$(CONFIG_LV0104CS)		+= lv0104cs.o
- obj-$(CONFIG_MAX44000)		+= max44000.o
-diff --git a/drivers/iio/light/ltrf216a.c b/drivers/iio/light/ltrf216a.c
-new file mode 100644
-index 000000000000..de6d2e2e7f08
---- /dev/null
-+++ b/drivers/iio/light/ltrf216a.c
-@@ -0,0 +1,349 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * LTRF216A Ambient Light Sensor
-+ *
-+ * Copyright (C) 2021 Lite-On Technology Corp (Singapore)
-+ * Author: Shi Zhigang <Zhigang.Shi@liteon.com>
-+ *
-+ * IIO driver for LTRF216A (7-bit I2C slave address 0x53).
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/i2c.h>
-+#include <linux/mutex.h>
-+#include <linux/iio/iio.h>
-+#include <linux/iio/sysfs.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/bitfield.h>
-+#include <linux/pm.h>
-+#include <linux/delay.h>
-+#include <asm/unaligned.h>
-+
-+#define LTRF216A_DRV_NAME "ltrf216a"
-+
-+#define LTRF216A_MAIN_CTRL		0x00
-+
-+#define LTRF216A_ALS_DATA_STATUS	BIT(3)
-+#define LTRF216A_ALS_ENABLE_MASK	BIT(1)
-+
-+#define LTRF216A_ALS_MEAS_RES		0x04
-+#define LTRF216A_MAIN_STATUS		0x07
-+#define LTRF216A_CLEAR_DATA_0		0x0A
-+
-+#define LTRF216A_ALS_DATA_0		0x0D
-+
-+static const int int_time_mapping[] = { 400000, 200000, 100000, 50000, 25000 };
-+
-+static const int ltrf216a_int_time_available[5][2] = {
-+	{0, 400000},
-+	{0, 200000},
-+	{0, 100000},
-+	{0, 50000},
-+	{0, 25000},
-+};
-+
-+static const int ltrf216a_int_time_reg[5][2] = {
-+	{400, 0x03},
-+	{200, 0x13},
-+	{100, 0x22},
-+	{50, 0x31},
-+	{25, 0x40},
-+};
-+
-+struct ltrf216a_data {
-+	struct i2c_client *client;
-+	u32 int_time;
-+	u8 int_time_fac;
-+	u8 als_gain_fac;
-+	struct mutex mutex; /* Protect read and write operations */
-+};
-+
-+/* open air. need to update based on TP transmission rate. */
-+#define WIN_FAC	1
-+
-+static const struct iio_chan_spec ltrf216a_channels[] = {
-+	{
-+		.type = IIO_LIGHT,
-+		.info_mask_separate =
-+			BIT(IIO_CHAN_INFO_PROCESSED) |
-+			BIT(IIO_CHAN_INFO_INT_TIME),
-+		.info_mask_separate_available =
-+			BIT(IIO_CHAN_INFO_INT_TIME),
-+	}
-+};
-+
-+static int ltrf216a_init(struct iio_dev *indio_dev)
-+{
-+	int ret;
-+	struct ltrf216a_data *data = iio_priv(indio_dev);
-+
-+	ret = i2c_smbus_read_byte_data(data->client, LTRF216A_MAIN_CTRL);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error reading LTRF216A_MAIN_CTRL\n");
-+		return ret;
-+	}
-+
-+	/* enable sensor */
-+	ret |= FIELD_PREP(LTRF216A_ALS_ENABLE_MASK, 1);
-+	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, ret);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error writing LTRF216A_MAIN_CTRL\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ltrf216a_disable(struct iio_dev *indio_dev)
-+{
-+	int ret;
-+	struct ltrf216a_data *data = iio_priv(indio_dev);
-+
-+	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, 0);
-+	if (ret < 0)
-+		dev_err(&data->client->dev, "Error writing LTRF216A_MAIN_CTRL\n");
-+
-+	return ret;
-+}
-+
-+static void als_ltrf216a_disable(void *data)
-+{
-+	struct iio_dev *indio_dev = data;
-+
-+	ltrf216a_disable(indio_dev);
-+}
-+
-+static int ltrf216a_set_int_time(struct ltrf216a_data *data, int itime)
-+{
-+	int i, ret, index = -1;
-+	u8 reg_val;
-+
-+	for (i = 0; i < ARRAY_SIZE(int_time_mapping); i++) {
-+		if (int_time_mapping[i] == itime) {
-+			index = i;
-+			break;
-+		}
-+	}
-+
-+	if (index < 0)
-+		return -EINVAL;
-+
-+	reg_val = ltrf216a_int_time_reg[index][1];
-+	data->int_time_fac = ltrf216a_int_time_reg[index][0];
-+
-+	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_ALS_MEAS_RES, reg_val);
-+	if (ret < 0)
-+		return ret;
-+
-+	data->int_time = itime;
-+
-+	return 0;
-+}
-+
-+static int ltrf216a_get_int_time(struct ltrf216a_data *data, int *val, int *val2)
-+{
-+	*val = 0;
-+	*val2 = data->int_time;
-+	return IIO_VAL_INT_PLUS_MICRO;
-+}
-+
-+static int ltrf216a_read_data(struct ltrf216a_data *data, u8 addr)
-+{
-+	int i, ret = -1, tries = 25;
-+	u8 buf[3];
-+
-+	while (tries--) {
-+		ret = i2c_smbus_read_byte_data(data->client, LTRF216A_MAIN_STATUS);
-+		if (ret < 0)
-+			return ret;
-+		if (ret & LTRF216A_ALS_DATA_STATUS)
-+			break;
-+		msleep(20);
-+	}
-+
-+	for (i = 0; i < 3; i++) {
-+		ret = i2c_smbus_read_byte_data(data->client, addr);
-+		if (ret < 0)
-+			return ret;
-+		buf[i] = ret;
-+		addr++;
-+	}
-+
-+	return get_unaligned_le24(&buf[0]);
-+}
-+
-+static int ltrf216a_get_lux(struct ltrf216a_data *data)
-+{
-+	int greendata, cleardata;
-+	u64 lux, div;
-+
-+	greendata = ltrf216a_read_data(data, LTRF216A_ALS_DATA_0);
-+	cleardata = ltrf216a_read_data(data, LTRF216A_CLEAR_DATA_0);
-+
-+	if (greendata < 0 || cleardata < 0) {
-+		return -EINVAL;
-+
-+	} else {
-+		lux = greendata * 45 * WIN_FAC * 100;
-+		div = data->als_gain_fac * data->int_time_fac * 100;
-+		lux = div_u64(lux, div);
-+	}
-+
-+	return lux;
-+}
-+
-+static int ltrf216a_read_raw(struct iio_dev *indio_dev,
-+			     struct iio_chan_spec const *chan, int *val,
-+			     int *val2, long mask)
-+{
-+	int ret;
-+	struct ltrf216a_data *data = iio_priv(indio_dev);
-+
-+	mutex_lock(&data->mutex);
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_PROCESSED:
-+		ret = ltrf216a_get_lux(data);
-+		if (ret < 0)
-+			return ret;
-+		*val = ret;
-+		ret = IIO_VAL_INT;
-+		break;
-+	case IIO_CHAN_INFO_INT_TIME:
-+		ret = ltrf216a_get_int_time(data, val, val2);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
-+
-+	mutex_unlock(&data->mutex);
-+
-+	return ret;
-+}
-+
-+static int ltrf216a_write_raw(struct iio_dev *indio_dev,
-+			      struct iio_chan_spec const *chan, int val,
-+			      int val2, long mask)
-+{
-+	struct ltrf216a_data *data = iio_priv(indio_dev);
-+	int ret;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_INT_TIME:
-+		if (val != 0)
-+			return -EINVAL;
-+		mutex_lock(&data->mutex);
-+		ret = ltrf216a_set_int_time(data, val2);
-+		mutex_unlock(&data->mutex);
-+		return ret;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ltrf216a_read_available(struct iio_dev *indio_dev,
-+				   struct iio_chan_spec const *chan,
-+				   const int **vals, int *type, int *length,
-+				   long mask)
-+{
-+	switch (mask) {
-+	case IIO_CHAN_INFO_INT_TIME:
-+		*length = ARRAY_SIZE(ltrf216a_int_time_available) * 2;
-+		*vals = (const int *)ltrf216a_int_time_available;
-+		*type = IIO_VAL_INT_PLUS_MICRO;
-+		return IIO_AVAIL_LIST;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static const struct iio_info ltrf216a_info = {
-+	.read_raw	= ltrf216a_read_raw,
-+	.write_raw	= ltrf216a_write_raw,
-+	.read_avail	= ltrf216a_read_available,
-+};
-+
-+static int ltrf216a_probe(struct i2c_client *client)
-+{
-+	struct ltrf216a_data *data;
-+	struct iio_dev *indio_dev;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	data = iio_priv(indio_dev);
-+	i2c_set_clientdata(client, indio_dev);
-+	data->client = client;
-+
-+	mutex_init(&data->mutex);
-+
-+	indio_dev->info = &ltrf216a_info;
-+	indio_dev->name = LTRF216A_DRV_NAME;
-+	indio_dev->channels = ltrf216a_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(ltrf216a_channels);
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+
-+	ret = ltrf216a_init(indio_dev);
-+	if (ret < 0)
-+		return dev_err_probe(&client->dev, ret,
-+				     "ltrf216a chip init failed\n");
-+
-+	data->int_time = 100000;
-+	data->int_time_fac = 100;
-+	data->als_gain_fac = 3;
-+
-+	ret = devm_add_action_or_reset(&client->dev, als_ltrf216a_disable,
-+				       indio_dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	return devm_iio_device_register(&client->dev, indio_dev);
-+}
-+
-+static int ltrf216a_suspend(struct device *dev)
-+{
-+	struct iio_dev *indio_dev = i2c_get_clientdata(to_i2c_client(dev));
-+
-+	return ltrf216a_disable(indio_dev);
-+}
-+
-+static int ltrf216a_resume(struct device *dev)
-+{
-+	struct iio_dev *indio_dev = i2c_get_clientdata(to_i2c_client(dev));
-+
-+	return ltrf216a_init(indio_dev);
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(ltrf216a_pm_ops, ltrf216a_suspend, ltrf216a_resume);
-+
-+static const struct i2c_device_id ltrf216a_id[] = {
-+	{ LTRF216A_DRV_NAME, 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, ltrf216a_id);
-+
-+static const struct of_device_id ltrf216a_of_match[] = {
-+	{ .compatible = "liteon,ltrf216a", },
-+	{ .compatible = "ltr,ltrf216a", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, ltrf216a_of_match);
-+
-+static struct i2c_driver ltrf216a_driver = {
-+	.driver = {
-+		.name = LTRF216A_DRV_NAME,
-+		.pm = pm_sleep_ptr(&ltrf216a_pm_ops),
-+		.of_match_table = ltrf216a_of_match,
-+	},
-+	.probe_new	= ltrf216a_probe,
-+	.id_table	= ltrf216a_id,
-+};
-+
-+module_i2c_driver(ltrf216a_driver);
-+
-+MODULE_AUTHOR("Shi Zhigang <Zhigang.Shi@liteon.com>");
-+MODULE_DESCRIPTION("LTRF216A ambient light sensor driver");
-+MODULE_LICENSE("GPL");
--- 
-2.30.2
+Does anyone have an idea about a different way to make this warning go
+away?
 
+Thanks
+Sven

@@ -2,198 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53985509F31
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4281A509F36
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382750AbiDUMCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
+        id S1382783AbiDUMDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 08:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382783AbiDUMCW (ORCPT
+        with ESMTP id S1383356AbiDUMD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:02:22 -0400
-Received: from out199-3.us.a.mail.aliyun.com (out199-3.us.a.mail.aliyun.com [47.90.199.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFC92F015;
-        Thu, 21 Apr 2022 04:59:31 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VAelXMA_1650542363;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VAelXMA_1650542363)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 21 Apr 2022 19:59:25 +0800
-Date:   Thu, 21 Apr 2022 19:59:22 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
-Subject: Re: [PATCH v9 21/21] erofs: add 'fsid' mount option
-Message-ID: <YmFHGjHkWOT7GoIm@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
-        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
-References: <20220415123614.54024-1-jefflexu@linux.alibaba.com>
- <20220415123614.54024-22-jefflexu@linux.alibaba.com>
+        Thu, 21 Apr 2022 08:03:27 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F772FFE1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=YBvc9avqMiVzUv5zEL0CqCVNyrKHrc8Ik9lljpgTt70=; b=3AtuvrxqSBebVty1LCRVIP0iaB
+        bTDkjVSb8NmMZC5BKmthtpv+pxDcaUEN88ZxAT8x1VtU5M02Kh1Av1bLYTSl/ZD8Ipf35gsrHEwkU
+        jA1ig1Gf3JaXQtvJpwbTZecXYrcLeK7G5TbX4Tu46TiWiq49s7NfQfw2L4E/v10qasp0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nhVU3-00GnOY-2m; Thu, 21 Apr 2022 14:00:27 +0200
+Date:   Thu, 21 Apr 2022 14:00:27 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Nathan Rossi <nathan@nathanrossi.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nathan Rossi <nathan.rossi@digi.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] irqchip/armada-370-xp: Enable MSI affinity configuration
+Message-ID: <YmFHW5joJkxLpU3v@lunn.ch>
+References: <20220421015728.86912-1-nathan@nathanrossi.com>
+ <87mtgfgx7d.wl-maz@kernel.org>
+ <CA+aJhH026fR5p6-JBaoQikZwC1F-iLBQWrqAvagauKjQoOqykQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220415123614.54024-22-jefflexu@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CA+aJhH026fR5p6-JBaoQikZwC1F-iLBQWrqAvagauKjQoOqykQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 08:36:14PM +0800, Jeffle Xu wrote:
-> Introduce 'fsid' mount option to enable on-demand read sementics, in
-> which case, erofs will be mounted from data blobs. Users could specify
-> the name of primary data blob by this mount option.
+> > >  static void armada_370_xp_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+> > >  {
+> > > +#ifdef CONFIG_SMP
+> > > +     unsigned int cpu = cpumask_first(irq_data_get_effective_affinity_mask(data));
+> > > +
+> > > +     msg->data = (1 << (cpu + 8)) | (data->hwirq + PCI_MSI_DOORBELL_START);
+> >
+> > BIT(cpu + 8) | ...
+> >
+> > > +#else
+> > > +     msg->data = 0xf00 | (data->hwirq + PCI_MSI_DOORBELL_START);
+> >
+> > This paints the existing code a bit differently. This seems to target
+> > all 4 CPUs. Why is that? I'd expect only bit 8 to be set, and the
+> > whole #ifdefery to go away.
 > 
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+> I will remove the #ifdef in a v2 patch that addresses your
+> other comments.
 
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Please try to remove all the #ifdef'ery.
 
-Thanks,
-Gao Xiang
+> > >  static int armada_370_xp_msi_set_affinity(struct irq_data *irq_data,
+> > >                                         const struct cpumask *mask, bool force)
+> > >  {
+> > > -      return -EINVAL;
+> > > +#ifdef CONFIG_SMP
+> > > +     unsigned int cpu;
+> > > +
+> > > +     if (!force)
+> > > +             cpu = cpumask_any_and(mask, cpu_online_mask);
+> > > +     else
+> > > +             cpu = cpumask_first(mask);
+> > > +
+> > > +     if (cpu >= nr_cpu_ids)
+> > > +             return -EINVAL;
+> > > +
+> > > +     irq_data_update_effective_affinity(irq_data, cpumask_of(cpu));
+> > > +
+> > > +     return IRQ_SET_MASK_OK;
+> > > +#else
+> > > +     return -EINVAL;
+> > > +#endif
 
-> ---
->  fs/erofs/super.c | 31 ++++++++++++++++++++++++++++++-
->  fs/erofs/sysfs.c |  4 ++--
->  2 files changed, 32 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-> index f68ba929100d..4a623630e1c4 100644
-> --- a/fs/erofs/super.c
-> +++ b/fs/erofs/super.c
-> @@ -371,6 +371,8 @@ static int erofs_read_superblock(struct super_block *sb)
->  
->  	if (erofs_sb_has_ztailpacking(sbi))
->  		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
-> +	if (erofs_is_fscache_mode(sb))
-> +		erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
->  out:
->  	erofs_put_metabuf(&buf);
->  	return ret;
-> @@ -399,6 +401,7 @@ enum {
->  	Opt_dax,
->  	Opt_dax_enum,
->  	Opt_device,
-> +	Opt_fsid,
->  	Opt_err
->  };
->  
-> @@ -423,6 +426,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
->  	fsparam_flag("dax",             Opt_dax),
->  	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
->  	fsparam_string("device",	Opt_device),
-> +	fsparam_string("fsid",		Opt_fsid),
->  	{}
->  };
->  
-> @@ -518,6 +522,16 @@ static int erofs_fc_parse_param(struct fs_context *fc,
->  		}
->  		++ctx->devs->extra_devices;
->  		break;
-> +	case Opt_fsid:
-> +#ifdef CONFIG_EROFS_FS_ONDEMAND
-> +		kfree(ctx->opt.fsid);
-> +		ctx->opt.fsid = kstrdup(param->string, GFP_KERNEL);
-> +		if (!ctx->opt.fsid)
-> +			return -ENOMEM;
-> +#else
-> +		errorfc(fc, "fsid option not supported");
-> +#endif
-> +		break;
->  	default:
->  		return -ENOPARAM;
->  	}
-> @@ -604,6 +618,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
->  
->  	sb->s_fs_info = sbi;
->  	sbi->opt = ctx->opt;
-> +	ctx->opt.fsid = NULL;
->  	sbi->devs = ctx->devs;
->  	ctx->devs = NULL;
->  
-> @@ -690,6 +705,11 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
->  
->  static int erofs_fc_get_tree(struct fs_context *fc)
->  {
-> +	struct erofs_fs_context *ctx = fc->fs_private;
-> +
-> +	if (IS_ENABLED(CONFIG_EROFS_FS_ONDEMAND) && ctx->opt.fsid)
-> +		return get_tree_nodev(fc, erofs_fc_fill_super);
-> +
->  	return get_tree_bdev(fc, erofs_fc_fill_super);
->  }
->  
-> @@ -739,6 +759,7 @@ static void erofs_fc_free(struct fs_context *fc)
->  	struct erofs_fs_context *ctx = fc->fs_private;
->  
->  	erofs_free_dev_context(ctx->devs);
-> +	kfree(ctx->opt.fsid);
->  	kfree(ctx);
->  }
->  
-> @@ -779,7 +800,10 @@ static void erofs_kill_sb(struct super_block *sb)
->  
->  	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
->  
-> -	kill_block_super(sb);
-> +	if (erofs_is_fscache_mode(sb))
-> +		generic_shutdown_super(sb);
-> +	else
-> +		kill_block_super(sb);
->  
->  	sbi = EROFS_SB(sb);
->  	if (!sbi)
-> @@ -789,6 +813,7 @@ static void erofs_kill_sb(struct super_block *sb)
->  	fs_put_dax(sbi->dax_dev);
->  	erofs_fscache_unregister_cookie(&sbi->s_fscache);
->  	erofs_fscache_unregister_fs(sb);
-> +	kfree(sbi->opt.fsid);
->  	kfree(sbi);
->  	sb->s_fs_info = NULL;
->  }
-> @@ -938,6 +963,10 @@ static int erofs_show_options(struct seq_file *seq, struct dentry *root)
->  		seq_puts(seq, ",dax=always");
->  	if (test_opt(opt, DAX_NEVER))
->  		seq_puts(seq, ",dax=never");
-> +#ifdef CONFIG_EROFS_FS_ONDEMAND
-> +	if (opt->fsid)
-> +		seq_printf(seq, ",fsid=%s", opt->fsid);
-> +#endif
->  	return 0;
->  }
->  
-> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-> index f3babf1e6608..c1383e508bbe 100644
-> --- a/fs/erofs/sysfs.c
-> +++ b/fs/erofs/sysfs.c
-> @@ -205,8 +205,8 @@ int erofs_register_sysfs(struct super_block *sb)
->  
->  	sbi->s_kobj.kset = &erofs_root;
->  	init_completion(&sbi->s_kobj_unregister);
-> -	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL,
-> -				   "%s", sb->s_id);
-> +	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s",
-> +			erofs_is_fscache_mode(sb) ? sbi->opt.fsid : sb->s_id);
->  	if (err)
->  		goto put_sb_kobj;
->  	return 0;
-> -- 
-> 2.27.0
+A quick look in cpumask.h suggests that if NR_CPUS == 1, there are
+stub functions which return constant values. So you might not need
+this #ifdef. However, i'm a network guy, not a scheduling guy, so
+don't trust what i say...
+
+     Andrew

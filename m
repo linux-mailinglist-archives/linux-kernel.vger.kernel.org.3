@@ -2,120 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116DB50A0BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB59350A0B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356500AbiDUN0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S232008AbiDUNZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385501AbiDUN0c (ORCPT
+        with ESMTP id S231631AbiDUNZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:26:32 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF8436E1D
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650547416; x=1682083416;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UVSxh8CbXTjBYQT0GwhNnPQhc0FfkGKPcK166DLDR14=;
-  b=KZwig6YuXwCaBYypw4dqw+62fwqSHbJyRdogp320AQInZFa8QkJ0QpX9
-   sBgsVK+mjCF5Okd3W3qEchzzyHXjvar3g6bRrgfEflvvn5sqpcVJx8ago
-   6nYs4UanaQhndpm8qHpupYv4w9FV527rZ8DY4m6qdSVN1jR9yyfxqCOh4
-   LTLGu+pXJuYoF3SYUiNfzTEHFhcq2SjPZYuP87ghMJe5GMZ6GXi6nqpXT
-   zxzTZ1mq4rfNQjNS3hVj21vbU592MbRE6H/Wu8oWLZfMlGnc9Dk2RKFEL
-   W6bzHoCYVym9CCrOGF7zPJcGNW8DMQFa5bSaXQXjLDJPUdZl3VojZlLSw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="350789941"
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="350789941"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 06:23:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="511065067"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Apr 2022 06:23:16 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhWmB-0008Qp-A7;
-        Thu, 21 Apr 2022 13:23:15 +0000
-Date:   Thu, 21 Apr 2022 21:22:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jean-Marc Eurin <jmeurin@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [mtd:mtd/next 10/11] include/linux/kern_levels.h:5:25: warning:
- format '%ld' expects argument of type 'long int', but argument 4 has type
- 'unsigned int'
-Message-ID: <202204212112.2ixFkcQp-lkp@intel.com>
+        Thu, 21 Apr 2022 09:25:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D36B332EDC
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:22:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650547378;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BJojMIzm435XzabOfDtYuG0zr6ejdW43VXmGBccZZNg=;
+        b=DzzPr3kaGVjo5nhRpCRmPFGITEIZK4EAEgCSUVbf3QCneU1a/HcdODnILT3NbwklQTvzND
+        DyEb6GHLpHELBPA1veABtEGUwhFZuoYh/HBNxF+mF4/pjB6MgWtcHIGAvaN/ELfP3hKWrY
+        Lettolki99P7l4iKh49UpqNVHQCa6NA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-453-HP0bPBQINzmn7yloeuPwwg-1; Thu, 21 Apr 2022 09:22:57 -0400
+X-MC-Unique: HP0bPBQINzmn7yloeuPwwg-1
+Received: by mail-wm1-f71.google.com with SMTP id p31-20020a05600c1d9f00b0038ed0964a90so2414459wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:22:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BJojMIzm435XzabOfDtYuG0zr6ejdW43VXmGBccZZNg=;
+        b=ZzcZPJHaMSI2QmqIuAHNGplM1eLNQ52mJm5zHxVlMAry0Zz6HECMlTGohmD/0WF1zd
+         SEfHIyLE0AnvfX7pVxXcmKeCS8fAcTOM4FtHcqkgOHTmcb3N/rjzgkTGeCrwI1jp/I8H
+         EI6cRs3aMzzNkx/r6nsnZEjhQBzwh/f5MeerCVilo21lr4H+05+GJkV9Ndpwjq85iuJI
+         H2xqrxUI5QIz02Ox4qXpGZrwczw2ydXzDXoWkocT7/THVu6qszyrG/wZXGBcbZngSuD6
+         dI5JvC9X1MerVp6MedzWLAUKeoTRi1HurrR4BYnvGWGNcoNCiJqtQlZmTK8sq2mIFhgu
+         zEcA==
+X-Gm-Message-State: AOAM531WWkg53Sm346ioefERbGbknucHD50OB40cvFqTWSxRZQeQriDj
+        xn0TUF6iuj5zd2oHxL5pOblxWt5iMMdKoaqZ7wtunBtcBHoFMLovL/rKWBDyIdxfBqGpRN950dJ
+        ZfCEOzzQYJTPr4AoNLFhDTEvn
+X-Received: by 2002:a1c:e916:0:b0:37c:f44f:573 with SMTP id q22-20020a1ce916000000b0037cf44f0573mr8663743wmc.179.1650547376599;
+        Thu, 21 Apr 2022 06:22:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzn3A3s5KnRy+9aLB72aBChb71Yy22EwcgU2Ux1UhqHDMPpPRcfl9e7aAlABnXQkQlFn6odPw==
+X-Received: by 2002:a1c:e916:0:b0:37c:f44f:573 with SMTP id q22-20020a1ce916000000b0037cf44f0573mr8663714wmc.179.1650547376244;
+        Thu, 21 Apr 2022 06:22:56 -0700 (PDT)
+Received: from [192.168.1.129] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f10-20020a5d64ca000000b0020aa97b0383sm2267705wri.113.2022.04.21.06.22.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 06:22:55 -0700 (PDT)
+Message-ID: <10c81e57-2f09-f4f8-dc2f-6bd05ef819d7@redhat.com>
+Date:   Thu, 21 Apr 2022 15:22:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3] drm/gma500: depend on framebuffer
+Content-Language: en-US
+To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        James Hilliard <james.hilliard1@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+References: <20220409042321.3184493-1-james.hilliard1@gmail.com>
+ <b3f7e288-3341-8c6f-1b95-e553ac5ebc35@suse.de>
+ <CAMeQTsbh-Fy4CORBTX=AfZ+K-fZYUQ=hY=ctLFyu9KcJ5NgFUA@mail.gmail.com>
+ <dce29330-e40c-860e-2c72-7ddebdd96e20@redhat.com>
+ <CAMeQTsYYpw5+uLgmDrbB6PUBotRC4F+_rfK+sxT0CpPHoiOmmw@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CAMeQTsYYpw5+uLgmDrbB6PUBotRC4F+_rfK+sxT0CpPHoiOmmw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next
-head:   f812679fab605b3d5b853ed24a81dabb222ea23a
-commit: 0629fcef16d703d384f76cb2c2c3a119a9149a34 [10/11] mtd: mtdoops: Create a header structure for the saved mtdoops.
-config: arc-randconfig-r023-20220420 (https://download.01.org/0day-ci/archive/20220421/202204212112.2ixFkcQp-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/commit/?id=0629fcef16d703d384f76cb2c2c3a119a9149a34
-        git remote add mtd https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git
-        git fetch --no-tags mtd mtd/next
-        git checkout 0629fcef16d703d384f76cb2c2c3a119a9149a34
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/mtd/
+On 4/21/22 14:54, Patrik Jakobsson wrote:
+> On Thu, Apr 21, 2022 at 2:47 PM Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[snip]
 
-All warnings (new ones prefixed by >>):
+>>>>> diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
+>>>>> index 0cff20265f97..a422fa84d53b 100644
+>>>>> --- a/drivers/gpu/drm/gma500/Kconfig
+>>>>> +++ b/drivers/gpu/drm/gma500/Kconfig
+>>>>> @@ -2,11 +2,13 @@
+>>>>>   config DRM_GMA500
+>>>>>       tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
+>>>>>       depends on DRM && PCI && X86 && MMU
+>>>>> +     depends on FB
+>>>>
+>>>> Why do we need FB here? Framebuffer support should be hidden by DRM's
+>>>> fbdev helpers.
+>>>
+>>> It is not needed but gives him video output since it enables the drm
+>>> fbdev emulation.
+>>>
+>>
+>> I'm not sure to understand this. Shouldn't depend on DRM_FBDEV_EMULATION then?
+> 
+> No, it shouldn't depend on any FBDEV stuff since it's not actually
+> required. It just happens to help in this case since weston + fbdev
+> backend works but not weston with drm backend (or whatever config
+> James have set).
 
-   In file included from include/linux/kernel.h:29,
-                    from drivers/mtd/mtdoops.c:10:
-   drivers/mtd/mtdoops.c: In function 'find_next_position':
->> include/linux/kern_levels.h:5:25: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'unsigned int' [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   drivers/mtd/mtdoops.c:243:25: note: in expansion of macro 'printk'
-     243 |                         printk(KERN_ERR "mtdoops: read failure at %ld (%td of %ld read), err %d\n",
-         |                         ^~~~~~
-   include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
-      11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
-         |                         ^~~~~~~~
-   drivers/mtd/mtdoops.c:243:32: note: in expansion of macro 'KERN_ERR'
-     243 |                         printk(KERN_ERR "mtdoops: read failure at %ld (%td of %ld read), err %d\n",
-         |                                ^~~~~~~~
+I see. Then the correct approach for them would be to just enable CONFIG_FB
+and DRM_FBDEV_EMULATION in their kernel config, rather than making this to
+depend on anything FB related as you said.
 
+> 
+>>
+>>> I looked some more at the logs and it seems weston doesn't work on his
+>>> system without the fbdev backend. So the question is why weston isn't
+>>> working without fbdev? Perhaps this is just a Weston configuration
+>>> issue?
+>>>
+>>
+>> But is weston using the fbdev emulated by DRM or the one registered by
+>> efifb? I thought that the latter from what was mentioned in this thread.
+> 
+> It's using drm fbdev emulation with gma500 so EFIFB has nothing to do
+> with this. I believe it was just simply incorrectly reported. If I'm
+> correct then "depends on FB" is what makes video output work for
+> James.
+> 
 
-vim +5 include/linux/kern_levels.h
-
-314ba3520e513a Joe Perches 2012-07-30  4  
-04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
-04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
-04d2c8c83d0e3a Joe Perches 2012-07-30  7  
-
-:::::: The code at line 5 was first introduced by commit
-:::::: 04d2c8c83d0e3ac5f78aeede51babb3236200112 printk: convert the format for KERN_<LEVEL> to a 2 byte pattern
-
-:::::: TO: Joe Perches <joe@perches.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+Got it. Thanks for the clarification.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

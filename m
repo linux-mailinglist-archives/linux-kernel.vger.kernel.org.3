@@ -2,119 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A82750A3AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC59250A3B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389936AbiDUPMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S1389873AbiDUPNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389916AbiDUPMi (ORCPT
+        with ESMTP id S232354AbiDUPN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:12:38 -0400
-Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2DF018E0F;
-        Thu, 21 Apr 2022 08:09:47 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha.nfschina.com (Postfix) with ESMTP id F09491E80D0B;
-        Thu, 21 Apr 2022 23:07:14 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha.nfschina.com ([127.0.0.1])
-        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BJ2ut5KzTnUR; Thu, 21 Apr 2022 23:07:12 +0800 (CST)
-Received: from ubuntu.localdomain (unknown [101.228.255.56])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by ha.nfschina.com (Postfix) with ESMTPA id 013811E80CF9;
-        Thu, 21 Apr 2022 23:07:11 +0800 (CST)
-From:   Yu Zhe <yuzhe@nfschina.com>
-To:     minyard@acm.org
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        liqiong@nfschina.com, Yu Zhe <yuzhe@nfschina.com>
-Subject: [PATCH] ipmi: remove unnecessary type castings
-Date:   Thu, 21 Apr 2022 08:09:41 -0700
-Message-Id: <20220421150941.7659-1-yuzhe@nfschina.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Apr 2022 11:13:28 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EF213F97
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:10:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650553838; x=1682089838;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6s/Jh5/Nw/2YaODYM5uQMsmu5ex+nw0PjlAspdHlwBU=;
+  b=AO7z6tmCft1L5ijTNWUZ/VB0j4JT4YY57EwX4Y3ThcCc3Ym7AsY5M/Bb
+   8BcnF3Mn0CTEi8k33kNABNPa4SNwXVr4mjVcZROWj05rJF6ln6SzZ36D+
+   wGVyffmmQDUjlBuPKRWnqAWzgMHg4rCDi+sUj6t50YQ5uAHh2tdjlp73h
+   L4KeThmcuTK1fr8ei0gPMJXGGYZuxWqbCWL00vELBHkIGwpMht/I4dujz
+   F3jZZcTXo20tKm/hGDBWjXrodtZy7pj3zAbSqhB3J6rOnvljY6uaQYJdq
+   jhdTrBvPYZwfG9kVF68S3tovk/YdkE+ztPTuAj1lheH0dAY1iTbiCXYsF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="251693232"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="251693232"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 08:10:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="626547444"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Apr 2022 08:10:21 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhYRp-0008Vb-6c;
+        Thu, 21 Apr 2022 15:10:21 +0000
+Date:   Thu, 21 Apr 2022 23:09:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sandor Yu <Sandor.yu@nxp.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm: bridge: dw_hdmi: Audio: fix returnvar.cocci warnings
+Message-ID: <YmFzutFV/iDyEQF2@dd18de969aa6>
+References: <202204212311.TnfpcTGm-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204212311.TnfpcTGm-lkp@intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove unnecessary void* type castings.
+From: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c:80:5-8: Unneeded variable: "ret". Return "0" on line 94
+drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c:105:5-8: Unneeded variable: "ret". Return "0" on line 112
+
+
+ Remove unneeded variable used to store return value.
+
+Generated by: scripts/coccinelle/misc/returnvar.cocci
+
+CC: Sandor Yu <Sandor.yu@nxp.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
- drivers/char/ipmi/ipmi_msghandler.c | 6 +++---
- drivers/char/ipmi/ipmi_ssif.c       | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index c59265146e9c..6e6aee19c39d 100644
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -2296,7 +2296,7 @@ static int i_ipmi_request(struct ipmi_user     *user,
- 	recv_msg->user_msg_data = user_msg_data;
- 
- 	if (supplied_smi)
--		smi_msg = (struct ipmi_smi_msg *) supplied_smi;
-+		smi_msg = supplied_smi;
- 	else {
- 		smi_msg = ipmi_alloc_smi_msg();
- 		if (smi_msg == NULL) {
-@@ -3989,7 +3989,7 @@ static int handle_ipmb_direct_rcv_rsp(struct ipmi_smi *intf,
- 	struct ipmi_recv_msg *recv_msg;
- 	struct ipmi_ipmb_direct_addr *daddr;
- 
--	recv_msg = (struct ipmi_recv_msg *) msg->user_data;
-+	recv_msg = msg->user_data;
- 	if (recv_msg == NULL) {
- 		dev_warn(intf->si_dev,
- 			 "IPMI message received with no owner. This could be because of a malformed message, or because of a hardware error.  Contact your hardware vendor for assistance.\n");
-@@ -4407,7 +4407,7 @@ static int handle_bmc_rsp(struct ipmi_smi *intf,
- 	struct ipmi_recv_msg *recv_msg;
- 	struct ipmi_system_interface_addr *smi_addr;
- 
--	recv_msg = (struct ipmi_recv_msg *) msg->user_data;
-+	recv_msg = msg->user_data;
- 	if (recv_msg == NULL) {
- 		dev_warn(intf->si_dev,
- 			 "IPMI message received with no owner. This could be because of a malformed message, or because of a hardware error.  Contact your hardware vendor for assistance.\n");
-diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
-index f199cc194844..e8ee195a33cf 100644
---- a/drivers/char/ipmi/ipmi_ssif.c
-+++ b/drivers/char/ipmi/ipmi_ssif.c
-@@ -1053,7 +1053,7 @@ static void start_next_msg(struct ssif_info *ssif_info, unsigned long *flags)
- static void sender(void                *send_info,
- 		   struct ipmi_smi_msg *msg)
- {
--	struct ssif_info *ssif_info = (struct ssif_info *) send_info;
-+	struct ssif_info *ssif_info = send_info;
- 	unsigned long oflags, *flags;
- 
- 	BUG_ON(ssif_info->waiting_msg);
-@@ -1090,7 +1090,7 @@ static int get_smi_info(void *send_info, struct ipmi_smi_info *data)
-  */
- static void request_events(void *send_info)
- {
--	struct ssif_info *ssif_info = (struct ssif_info *) send_info;
-+	struct ssif_info *ssif_info = send_info;
- 	unsigned long oflags, *flags;
- 
- 	if (!ssif_info->has_event_buffer)
-@@ -1107,7 +1107,7 @@ static void request_events(void *send_info)
-  */
- static void ssif_set_need_watch(void *send_info, unsigned int watch_mask)
- {
--	struct ssif_info *ssif_info = (struct ssif_info *) send_info;
-+	struct ssif_info *ssif_info = send_info;
- 	unsigned long oflags, *flags;
- 	long timeout = 0;
- 
--- 
-2.25.1
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   65eb92e4c9f0a962656f131521f4fbc0d24c9d4c
+commit: d970ce303ff80ae57bbd3e784f2772dbf3056e0c [4441/5346] drm: bridge: dw_hdmi: Audio: Add General Parallel Audio (GPA) driver
+:::::: branch date: 8 hours ago
+:::::: commit date: 2 days ago
 
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c
+@@ -77,7 +77,6 @@ static int audio_hw_params(struct device
+ 			   struct hdmi_codec_params *params)
+ {
+ 	struct snd_dw_hdmi *dw = dev_get_drvdata(dev);
+-	int ret = 0;
+ 	u8 ca;
+ 
+ 	dw_hdmi_set_sample_rate(dw->data.hdmi, params->sample_rate);
+@@ -91,7 +90,7 @@ static int audio_hw_params(struct device
+ 				   params->iec.status[0] & IEC958_AES0_NONAUDIO);
+ 	dw_hdmi_set_sample_width(dw->data.hdmi, params->sample_width);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static void audio_shutdown(struct device *dev, void *data)
+@@ -102,14 +101,13 @@ static int audio_mute_stream(struct devi
+ 			     bool enable, int direction)
+ {
+ 	struct snd_dw_hdmi *dw = dev_get_drvdata(dev);
+-	int ret = 0;
+ 
+ 	if (!enable)
+ 		dw_hdmi_audio_enable(dw->data.hdmi);
+ 	else
+ 		dw_hdmi_audio_disable(dw->data.hdmi);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static int audio_get_eld(struct device *dev, void *data,

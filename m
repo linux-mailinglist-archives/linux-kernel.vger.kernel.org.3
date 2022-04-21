@@ -2,152 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ACB509F93
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B7E509F9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbiDUM2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35264 "EHLO
+        id S1384428AbiDUM30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 08:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384038AbiDUM2A (ORCPT
+        with ESMTP id S1384629AbiDUM3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:28:00 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E0313F1C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:25:10 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id t12so4685599pll.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DKhg142Wlk6AFjo5SyNKNuZ+EL/BpZej/wWvDH5mY50=;
-        b=KQYDKUEOG7XGEF9CzfRneviC28oNECGV9wp4aaL6EO+HgbCyRazvNKSFAbOT3P3Byi
-         hlSbIYZ3jvc+HU0wFz+UMeUTJrvJ9CsmhF+gAWZU9Zrj7C82UCPP1ug/4U2oFVyDkpJr
-         EnuQMngI1SmLb7LmceYO+/yMj6t5yugx1ealPoYKNV9Zf8cnxf/zRCS3qkYKYcYKHjsi
-         W5tynycj2yVt1Ga8MfNUhR53+S+i1hXYVncuX6A/c6P3azWo3kC5jMi6tjBa0C63HrNd
-         IlTQdDg01AaKjBz79yKG18xannJDGgPdxk5A30kKhVlS+cmk1xPdjRNB3kXAwQZwWfhI
-         Pm6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DKhg142Wlk6AFjo5SyNKNuZ+EL/BpZej/wWvDH5mY50=;
-        b=3FT+0vbL4JiqRT++HLGZlmamO2BXfI/9L5dyAryKx9UEqI/QZBePgw8XXOcOWkHBud
-         DUWxCuc4YtXdYNm+ufCMX0IuqG696diacLxOEfWUSdRkf5tnObftrBhs/IGGZSg1UfXO
-         fhMKV+zf0q9dBlsNAgc9K7r85U1QpIx647LUJP2fZB8lkoELL2iceNxGNjslF7tJ3Tx1
-         qX+porZcQmf+LEhA6F7ffp/ftKW4pwisYLJDjPZNcNwQaZUGHTvKjz0jreDZWF/IBr8t
-         ulWj/Zd68WukktfxIylkBVv9y0n/pbo13IEqbxgSmaASro7+qkf/Xj6AtMS36OTRXM1t
-         Q7Cg==
-X-Gm-Message-State: AOAM5305z3/wp/spaUqX50ZJSG4cu8QgbxEkj6K6aPrW5c72qDe0MvwB
-        OXPFUf5dGOCWWdGr8+MQzAo8cfJTIdHtzjfBIG7rvg==
-X-Google-Smtp-Source: ABdhPJzzylUC2KC2I6WRbmhpdKZNMmOHuFcuihTnLQb/yX1aMnKuJbhRKQxowIfN7z1NZ/z1KaCl7oplC8mRCrBTnRY=
-X-Received: by 2002:a17:90b:124c:b0:1bc:369b:7db5 with SMTP id
- gx12-20020a17090b124c00b001bc369b7db5mr10066726pjb.179.1650543910393; Thu, 21
- Apr 2022 05:25:10 -0700 (PDT)
+        Thu, 21 Apr 2022 08:29:16 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5523431DF8;
+        Thu, 21 Apr 2022 05:26:12 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b581b329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:581b:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C2BB51EC013E;
+        Thu, 21 Apr 2022 14:26:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650543966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=xyKJnAeN7yKmid38WcQJNn0eWYl8gpGj0iKqWc+guSU=;
+        b=eWY+KoZMJAriDXLApTF7jtqT13LYR6DBbS+OI9+ktsNcZGrfoDK97t/4GvoI3jnBJSHUND
+        5QmrHwCIk9Yem4NI9RM8smqSmPMrprfoigMlmwcsXPzrvW7EvtpMF95mvVNpSuOPKp9nmp
+        fTAMVttTaHotKycHa4tGe+XfM9IYWqA=
+Date:   Thu, 21 Apr 2022 14:26:02 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
+Message-ID: <YmFNWnZ91a4n5Il3@zn.tnic>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
+ <Ylnwmvygp796+qcA@zn.tnic>
+ <20220418155545.a567xnxa6elglapl@box.shutemov.name>
+ <Yl2UHOQ4iZJ29k0q@zn.tnic>
+ <20220418202431.whvql4w57c7l5vpw@box.shutemov.name>
+ <Yl3RmPhdZieSr8W2@zn.tnic>
+ <20220418235015.mnujtlmmlyin7y6m@box.shutemov.name>
+ <Yl5nSSC4HpSWqfY7@zn.tnic>
 MIME-Version: 1.0
-References: <202204031935.5SkYsM2M-lkp@intel.com> <20220420011644.25730-1-linmq006@gmail.com>
-In-Reply-To: <20220420011644.25730-1-linmq006@gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Thu, 21 Apr 2022 14:24:59 +0200
-Message-ID: <CAG3jFyt5EG=OBk+pVwwHeeh_XgsCV82p-KiLcnL_yv8L1wUZ8Q@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/bridge: Fix error handling in analogix_dp_probe
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>, Lyude Paul <lyude@redhat.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Yakir Yang <kuankuan.y@gmail.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yl5nSSC4HpSWqfY7@zn.tnic>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 at 03:16, Miaoqian Lin <linmq006@gmail.com> wrote:
->
-> In the error handling path, the clk_prepare_enable() function
-> call should be balanced by a corresponding 'clk_disable_unprepare()'
-> call , as already done in the remove function.
->
-> Fixes: 3424e3a4f844 ("drm: bridge: analogix/dp: split exynos dp driver to bridge directory")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-> changes in v2:
-> - remove the wrong return statement.
-> ---
->  .../gpu/drm/bridge/analogix/analogix_dp_core.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-> index eb590fb8e8d0..474ef88015ae 100644
-> --- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-> +++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-> @@ -1698,8 +1698,10 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
->         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->
->         dp->reg_base = devm_ioremap_resource(&pdev->dev, res);
-> -       if (IS_ERR(dp->reg_base))
-> -               return ERR_CAST(dp->reg_base);
-> +       if (IS_ERR(dp->reg_base)) {
-> +               ret = PTR_ERR(dp->reg_base);
-> +               goto err_disable_clk;
-> +       }
->
->         dp->force_hpd = of_property_read_bool(dev->of_node, "force-hpd");
->
-> @@ -1711,7 +1713,8 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
->         if (IS_ERR(dp->hpd_gpiod)) {
->                 dev_err(dev, "error getting HDP GPIO: %ld\n",
->                         PTR_ERR(dp->hpd_gpiod));
-> -               return ERR_CAST(dp->hpd_gpiod);
-> +               ret = PTR_ERR(dp->hpd_gpiod);
-> +               goto err_disable_clk;
->         }
->
->         if (dp->hpd_gpiod) {
-> @@ -1731,7 +1734,8 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
->
->         if (dp->irq == -ENXIO) {
->                 dev_err(&pdev->dev, "failed to get irq\n");
-> -               return ERR_PTR(-ENODEV);
-> +               ret = -ENODEV;
-> +               goto err_disable_clk;
->         }
->
->         ret = devm_request_threaded_irq(&pdev->dev, dp->irq,
-> @@ -1740,11 +1744,15 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
->                                         irq_flags, "analogix-dp", dp);
->         if (ret) {
->                 dev_err(&pdev->dev, "failed to request irq\n");
-> -               return ERR_PTR(ret);
-> +               goto err_disable_clk;
->         }
->         disable_irq(dp->irq);
->
->         return dp;
-> +
-> +err_disable_clk:
-> +       clk_disable_unprepare(dp->clock);
-> +       return ERR_PTR(ret);
->  }
->  EXPORT_SYMBOL_GPL(analogix_dp_probe);
->
+On Tue, Apr 19, 2022 at 09:39:53AM +0200, Borislav Petkov wrote:
+> I find it really weird that you feel so strongly about it. If I would
+> have been asked to do it, I would've done it without even considering
+> it. But ok, since you feel so strongly about it, I've asked what the
+> other maintainers think.
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Ok, Dave thinks separate files are better so let's leave it at that. We
+can always change things later.
 
-Applied to drm-misc-next.
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

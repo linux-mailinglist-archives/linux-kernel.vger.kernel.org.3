@@ -2,94 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7D7509999
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617FD5099B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386028AbiDUHlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S1385979AbiDUHnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385996AbiDUHlC (ORCPT
+        with ESMTP id S1386067AbiDUHmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:41:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884581E3EB;
-        Thu, 21 Apr 2022 00:37:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2459A61A7B;
-        Thu, 21 Apr 2022 07:37:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C824CC385A5;
-        Thu, 21 Apr 2022 07:37:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650526662;
-        bh=b4j2Og9/SHRS5yriha4XC4sLIfkB0bYffFlnNixYDWw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZZ6HUp3wvTEaNG7Mw8epF95SxeJikxuAkdqStSkmLHepPkDsSFRLbQKroGifJWfnR
-         VvNuaw5N4TpA9s0fPLMAQ29qEyJpItOibp8aYlZsrzzIuhSEm3zhDOzlHklGox2Yli
-         a20fwHjqp1Kmdw9w6Jl9r2QBIObBhpU35K7Gvf5aH06Or223GhOwSzKKgRW2Aq8emx
-         rNgM59shHOV6fuIAutcp/OsKZjOY5akFJIZ5kxO0UaIGiJC2aFTWYvA2FDg9NVtpYD
-         VL/kLawYoGx+BbFG9RXh0ApvS9d1dJzU8gJThsF63WngBGBoH/iSkKMNisG1Wa+VTm
-         KlSeWvl2NbQ1A==
-Message-ID: <af9a8506-7c8e-d76c-c14f-1bf1c913a18c@kernel.org>
-Date:   Thu, 21 Apr 2022 09:37:35 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] arm: dts: Add device tree for bosch acc board
-Content-Language: en-US
-To:     Philip Oberfichtner <pro@denx.de>, devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Thu, 21 Apr 2022 03:42:21 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183DD1B78B;
+        Thu, 21 Apr 2022 00:39:28 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8C43DC0006;
+        Thu, 21 Apr 2022 07:39:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650526767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qYEuMKcRPLE7kv8cT5u0HPUdYyTsqKBj+98EErK/TJ0=;
+        b=cB4C5DPCEOYqaVr9TDlENrzgBO5YhoarBWOEZgIWnUCbvvjTlFrP03L1s5ToSBdMOUPO8m
+        dnq1jUaH8UIPO3XlNQhX1uCuKQI6QAill+P6dq5dTL5b5u9DFOOUg0b6ju7dUtPNY5+kLy
+        ohRTLazqOvlRjrQCy0V/ZTsCl2HZcvcbwFlDCui7i9IegCqRbHDt87bmhylkc7MVKEBn4w
+        UL80gxiE8d2mxED8UxMeuQtrpINohimKy2k5T5ddfmU2AgUkgcpEL66Kydzt28aowuN7ay
+        RabEWJWw9osi10CVeYQD+jyv4aYzANUS8n0jOOw2PCuNxCqLj9c7VHTQXyFIHg==
+Date:   Thu, 21 Apr 2022 09:38:03 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Winker Matthias <Matthias.Winker@de.bosch.com>
-References: <20220412101905.514310-1-pro@denx.de>
- <20220412101905.514310-3-pro@denx.de>
- <f2b1359d-a003-ae38-e8af-ab6aa1d0fe72@kernel.org>
- <cd7546a341d475eca99a446b6c8a5141056b3bc8.camel@denx.de>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <cd7546a341d475eca99a446b6c8a5141056b3bc8.camel@denx.de>
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 08/12] net: dsa: rzn1-a5psw: add FDB support
+Message-ID: <20220421093803.64ad7cc8@fixe.home>
+In-Reply-To: <20220420195214.dnekbfhha53trbke@skbuf>
+References: <20220414122250.158113-1-clement.leger@bootlin.com>
+        <20220414122250.158113-9-clement.leger@bootlin.com>
+        <20220414175140.p2vyy7f7yk6vlomi@skbuf>
+        <20220420101648.7aa973b2@fixe.home>
+        <20220420195214.dnekbfhha53trbke@skbuf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2022 09:06, Philip Oberfichtner wrote:
-> 
-> The "operating-points" and "fsl,soc-operating-points" properties are
-> defined in imx6q.dtsi. We are just overwriting them here.     
+Le Wed, 20 Apr 2022 22:52:14 +0300,
+Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
 
-OK, thanks for explanation.
+> > >=20
+> > > Shouldn't this contain something along the lines of a VID, FID, somet=
+hing? =20
+> >=20
+> > This is extracted directly from the datasheet [1]. The switch FDB table
+> > does not seems to store the VID with the entries (See page 300).
+> >=20
+> > [1]
+> > https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1=
+l-group-users-manual-r-engine-and-ethernet-peripherals =20
+>=20
+> Thanks for the link. I see that the switch has a non-partitionable
+> lookup table, not even by VLAN. A shame.
+>=20
+> This is also in contrast with the software bridge driver, where FDB and
+> MDB entries can have independent destinations per VID.
+>=20
+> So there's nothing you can do beyond limiting to a single offloaded
+> bridge and hoping for the best w.r.t. per-VLAN forwarding destinations.
+>=20
+> Note that if you limit to a single bridge does not mean that you can
+> declare ds->fdb_isolation =3D true. Declaring that would opt you into
+> unicast and multicast filtering towards the CPU, i.o.w. a method for
+> software to only receive the addresses it has expressed an interest in,
+> rather than all packets received on standalone ports. The way that is
+> implemented in DSA is by adding FDB and MDB entries on the management
+> port, and it would break a lot of things without a partitioning scheme
+> for the lookup table.
 
-(...)
+Thanks Vladimir, it confirms what I thought.
 
->> Please run `make dtbs_check` (see Docs for this) and fix the
->> warnings.
->> Please fix automated check warnings before using reviewers time.
-> 
-> I built with W=1 and used checkpatch.pl. But I'm having trouble using
-> make dtbs_check. Seems like I get all warnings for all possible dts. Is
-> there a way to get warnings for a single dt only?
-
-I think no, it is not possible at the moment. I understand it's a pain
-and already someone proposed to have a ability to check only subset of
-DTS files.
-
-Workaround is to build imx defconfig, run dtbs_check, touch your files
-and run dtbs_check again looking for results.
-
-Best regards,
-Krzysztof
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

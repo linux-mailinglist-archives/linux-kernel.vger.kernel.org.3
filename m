@@ -2,652 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603BB5098DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5385098CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385560AbiDUHJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
+        id S1385681AbiDUHW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiDUHJ0 (ORCPT
+        with ESMTP id S1385726AbiDUHWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:09:26 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6B916585;
-        Thu, 21 Apr 2022 00:06:36 -0700 (PDT)
-Received: from philip-t440p.fritz.box (dynamic-077-004-052-073.77.4.pool.telefonica.de [77.4.52.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: pro@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 176D3833EC;
-        Thu, 21 Apr 2022 09:06:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1650524794;
-        bh=Ei/QxoHsTpLBorI44lNRKXjS/yyeJn3fAVsuoOCLizg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=qwmJSfRG/nuFyOwSvQf1TFYgOi4+Up3HEdhMiScyRidloZmvnTIERhkkAgTgSfmNG
-         Z+9Os2rWZNnPSOAWRaboA0nAsPJ81qBJSFBqW/Ij99OIbKPOxvemvGWEAkWc5qcGeB
-         qajmkgf6uc34TgrEZpGKEzgH8IMN2eJmfXBIAXmXTy3AHitqTRSebk2+Iqkle34ARm
-         J3Kkpw4f9awNq3WRFl3L+cdGKHMt621RCdx5XtqgWlJgKmm/7wtx0iS6l1Kft7QW0P
-         eRkP68cr2GqnRBCmXoZxwloSLx9BUYsLm8YiIBDTJQ3ZSEP1i71blO2r7NVDj3llHm
-         giQwYlEKQpXQg==
-Message-ID: <cd7546a341d475eca99a446b6c8a5141056b3bc8.camel@denx.de>
-Subject: Re: [PATCH 2/2] arm: dts: Add device tree for bosch acc board
-From:   Philip Oberfichtner <pro@denx.de>
-To:     Krzysztof Kozlowski <krzk@kernel.org>, devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Winker Matthias <Matthias.Winker@de.bosch.com>
-Date:   Thu, 21 Apr 2022 09:06:33 +0200
-In-Reply-To: <f2b1359d-a003-ae38-e8af-ab6aa1d0fe72@kernel.org>
-References: <20220412101905.514310-1-pro@denx.de>
-         <20220412101905.514310-3-pro@denx.de>
-         <f2b1359d-a003-ae38-e8af-ab6aa1d0fe72@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 21 Apr 2022 03:22:47 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7802199
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:19:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mDMc0zNFuJgXVN7CIM8ui3Y5sPMkPpxMz/qVsPpV3VqvKkCdWHSo8io+ta//3KesaEJq+0x9N2WJsLkPtOr0MZi+3go/BlUSdWIS8fkqiFfmjaT/FGiUGXeOSn5Ae6P8EIZnQpyVKCGlxV61u19ou8wgmvNjT8TiAy3fBjuNSFhLGYcnDerG8VvVkZ6YzhxYPjnxMNqbYIjnUCvhceR67pQj0gKVUriN7JC5TSWXw6CoMNGwPVcoL5VI5RDmFPOVrWf1mvy5fMM3DvlT40XUF/Kw6m22kq4+iC5Z+uqvJPGYHDtUSO25bEH8QmelMgyFLwlz7h13mp8OPeYnokjH1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jNgmkw6BvvILz7S4OO/i0ala9FenQs1eMcE7y/R+p6w=;
+ b=V1c8bkNAFgNagRI3/EP3YEkn1zPaVSWtbYQBB12ioOMjs3AqQsMSJ1NGnDwe2FZR/jzA95eQAr+eZ3L4ayZ5jlAlHVA2eOq2jNww+7BqDbCJuNf2TWvYL5yrRbtqOsfN641A6uxqbcs8pOQBtkIMx45VWB315TnMyV7JiOWMYdzrbpH86iSgGVA8CfyaNZDQ8/Ub6chXzWgwsjziIrhFOA4ErNxRLjZT6w5ca9N6BPiM2fG6p7sUuD2cJyazGSsb0mUvDtQqxGYg8o32Ho5/YkCTzj/5xuxCWKYYjoqA/zL7aNNsI4YL+F8yvME6YvDjPLih3DKaViTbyzJph583qA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jNgmkw6BvvILz7S4OO/i0ala9FenQs1eMcE7y/R+p6w=;
+ b=rtDNK+L0u5KprNHkyvgBPa9pfcsWpwk8cu9SAcJDYgVtHgNPU+oTz/iFPn2XBIeM3TMZ7cvdWekqrt7Du3VQCwO5oM4TRfTHMhky8oB8G7vdgH8Y+2fBVGnwwB+cvodI2bABFdtrErc2o901EzIeyyrT1oV/fbJlDLEYdTIjeYP3CjQzTqDYXqA7K/PhOQl3/qR/k4GcQxucNeXPcATxkdQqwYwRlw6lW+vZ25axxb+QrNBi6afyhrJuWrjJlQy49Vl/KCB4dwQQg0Ftyy0lviLw5D+L3StqUoui5aEWJU0qPSSfczUp1pYYSFMj5VGlU6YdR3cTxeJ18IvUCCLyjw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by DM6PR12MB4912.namprd12.prod.outlook.com (2603:10b6:5:20b::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Thu, 21 Apr
+ 2022 07:19:56 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::2d17:b68a:e101:4c18]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::2d17:b68a:e101:4c18%6]) with mapi id 15.20.5164.026; Thu, 21 Apr 2022
+ 07:19:56 +0000
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        christian.koenig@amd.com, jhubbard@nvidia.com,
+        rcampbell@nvidia.com, Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v2] mm/mmu_notifier.c: Fix race in
+ mmu_interval_notifier_remove()
+Date:   Thu, 21 Apr 2022 17:06:52 +1000
+References: <20220420043734.476348-1-apopple@nvidia.com>
+ <20220420151142.f60307e749033a24ef0c68d5@linux-foundation.org>
+ <87ee1rxrn1.fsf@nvdebian.thelocal>
+ <20220420163516.ab713a22af375788a541f045@linux-foundation.org>
+User-agent: mu4e 1.6.9; emacs 27.1
+In-reply-to: <20220420163516.ab713a22af375788a541f045@linux-foundation.org>
+Message-ID: <87bkwuykbr.fsf@nvdebian.thelocal>
+Content-Type: multipart/mixed; boundary="=-=-="
+X-ClientProxiedBy: SJ0P220CA0014.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:a03:41b::22) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 06b5af26-9e9e-4310-0954-08da23675650
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4912:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB49122494675BF93D61D77CBCDFF49@DM6PR12MB4912.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QXCAVSdsW+0MG4CJMS2IOUh5kJlBtLU1jdYV2Sz5A069WmTEpKRSuQ+9Swl/8LCh9TPCTC4e8VO9+8F7u44/+PHVObmI4t1oMX6xF+HMHIaonH03aclh8wgmVmGDSt79v8kGoiy5aeiQ/x/FmCJYA8w1HU8pdXU99wskTrB1hyeiPe8K4Xb+KHMZvGgT/i4XZm3F84kuLcUpk7HH3U8zlLcBiYxO/hsBkOl+lNELCrDhjg75mUJfNpD3thvf3fINv8DQ0eOma2c8RC/HaHBHXn1NwaWWOyWi4eugfNtKfDKZ/Nz7uKvD5Lgsgxj4JYO8NrD6Lj+FNz390MGaohE/NWMH7lVk7accCqi/oW3ItRMRDrsWHovQj3RWWZYf699Wzd+R4n+ec5ql82DVjSbhR3vB2xlOYfMSz8XThw1II18zWGbLdOJKcxTFjcOlElhET8UxcYqe2F+I1obc8UNbu9q3m9xX3mGCua9jJNz9N1ySrawkcinysd9HmqnWMeEG17wkrp+87DpCqR1sVMEwDZs4dM1RXMkUCDjsfqPYKbbEEZW0fQ312MaQH/k+3jU7vCtc4knK/YckgJlST9o9DR0W1ee90YnGNErJNKZk8lFsiUW91p7sqw7cZ6W/0oQR1ZzTdGg/pWFn64hnvKo4oA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(83380400001)(508600001)(5660300002)(316002)(38100700002)(6486002)(44144004)(6666004)(6512007)(9686003)(26005)(6916009)(2906002)(107886003)(8936002)(66556008)(66476007)(186003)(66946007)(4326008)(8676002)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e25cyG/NS7ti8lvYgyn19XUaLMeFzG0gg0PKhy5fG7VM0QzkmQVtiju2gH5z?=
+ =?us-ascii?Q?YLWxJvqpU2efyzhcpA8rBV/CVIO5aUXQW4t32l7URTrINMONEDEYIM9bbXhZ?=
+ =?us-ascii?Q?SkIBJsPtpudc1oEkPFCNO5nrALgE4+ZdKXAVoX3SL0WeJJYWTtTilyZZusbA?=
+ =?us-ascii?Q?NPxPBXE3sWleP0N8IeaAQ8Ib4jogRl91+oZVl7HqX5B5aoQaH4YgmU3eQ1fv?=
+ =?us-ascii?Q?l7+wi1hWdpBq4pNgX03dOGZpv1fV14bXzrmkVuzmd6X59OzDYRngDeSXQsoI?=
+ =?us-ascii?Q?NIZy1cvzDIE40RoJcXaUx+RTBNEUHKXiekJJJ/56NDJDa6f1MAdkTPCNfSJT?=
+ =?us-ascii?Q?iViTmtCBtYPesWoIxHbu4EHCQJPQQXKpU4vaFz0hhQjdr5stclloM6wOwuUD?=
+ =?us-ascii?Q?vuyDkh3/vSkpDX/r9WVCep6Gj41+6zTzWVz8WIXbEsoqLDcZvuUR6C+zIGXy?=
+ =?us-ascii?Q?/HVM80q2iTJMR9H3osWV7OhOTeSKGRyN0VoiYlg3jAhlN+vrc2SDnUgC8mro?=
+ =?us-ascii?Q?mNCmCD+qFNlmPQg1ng1W11PCruiE67OFEqL1Sg7movcYPBqc6T7K4ERN9EyG?=
+ =?us-ascii?Q?cjbIUbherIb5PszUrH0aVOfiIUl82PnDerYzYhEvoNc9aDmwjRgiqsZ0AG5+?=
+ =?us-ascii?Q?lEFrMHyrNzxA3o50TtDO0yAz0UC9luSZlQrX1Up7TVZl5A8dulCf2tzNCl2h?=
+ =?us-ascii?Q?pVWzywjrlEJn3C2W36d1mauT7DKGcPS0mpEQUJCxiHBQv0hPE9qnr9vngGRX?=
+ =?us-ascii?Q?W5yr2svbQfLUsfy0lH/RUaixxYXpLBAUe9PVAwxPmbA8XxctmV697ExR9LPU?=
+ =?us-ascii?Q?y0E4lYp+5rk8YGxaDDnHbVRYO2ZDszVYv062/XETlIzSq0VA5kp87FxWQsC3?=
+ =?us-ascii?Q?JBTBBAKiFoeJ4OJSdLsKQrK6SIHZcZHJ1FtQhJDUjpNIAQYtJW7hRTY6RqHQ?=
+ =?us-ascii?Q?rx8cHoQDUnLl5D0wn+mpbZBnBABPS9dkvbPDEj00KZ9qPOqWEr9haGAI5TmT?=
+ =?us-ascii?Q?hvEqB5SA0IjzJOuNYLc+tGxO22xo/rpx/0BVwhqZAivg/tz/9bgfF4Uqnd8L?=
+ =?us-ascii?Q?Of4YZC1ykQq4Ea0HlPfcU89x1sRFCYxp1ASZB35XPROErJYO2qLbFea3e+nM?=
+ =?us-ascii?Q?Vwm9C+Cu0wJibwcZo9soPhi2MI6MNTmvW+oWUT59yaOV4psfAcOamqLUpKTh?=
+ =?us-ascii?Q?L6v4Y6NZ5j/GlUAMecpiZOxvinmNt1MwYsV/tUgBzfoMoERQJ0/DhslK7wYd?=
+ =?us-ascii?Q?HzjJlUxVNU+0iz7nEQORK64gktf1h4yl13WMQoH5pMwfVGVbQiVdJrwx4CSE?=
+ =?us-ascii?Q?RvsDcAl56YKLvWsT817XodV0x2sFzn0OkMioUcpxr4tv5vcrAZANsW21CA15?=
+ =?us-ascii?Q?KeMySynV2RfOsCeIy2akqJCDlkE5jNVFSN4lq4Ym0DVLjdf4K4dISzIAYitN?=
+ =?us-ascii?Q?YYXsGpF8lFy0T0pIbWsxd9m4sJDmy7oGbZ4kUEgm9OrAjPZxv7ZLJRRMeHXr?=
+ =?us-ascii?Q?qHi1ooY646yKdXDvKt0hhXQWl49hlWINdN5/6zQMp+syspwUB7tSar6SZ5iJ?=
+ =?us-ascii?Q?WM5vzGljmDgvgiY6t2tq/KU8iNX8PrTx4PrlqzTOQvU1FkI1GpzehA7AmvlE?=
+ =?us-ascii?Q?QB5YD/IP53QGiBh/KDpaej0L1xnaQbATa7Cb67Iwu7tbbL66ZUo1KkNKO/i5?=
+ =?us-ascii?Q?PEzFqL4sHXfacLSWiboXpfE7ghTPbqh980J/BfeWi2dHSYdR9QWw/x3Ge14b?=
+ =?us-ascii?Q?lf1O3zLOlQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06b5af26-9e9e-4310-0954-08da23675650
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2022 07:19:56.5379
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EOQNSD3El42gHP1kYMOowlxbg8IhIGUpA+f09H0busB0SK2DNHdgJ3T2Q/QRMuLumevgvQJTYcZKKQgL2TtDnA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4912
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-12 at 13:10 +0200, Krzysztof Kozlowski wrote:
-> On 12/04/2022 12:19, Philip Oberfichtner wrote:
-> > Add device tree for the Bosch ACC board, based on i.MX6 Dual.
-> > 
-> 
-> Thank you for your patch. There is something to discuss/improve.
+--=-=-=
+Content-Type: text/plain
+Content-Disposition: inline
 
-Hi Krzysztof,
+Andrew Morton <akpm@linux-foundation.org> writes:
 
-thank you for the feedback. I will fix most of your comments in V2, but
-there are open questions left:
+> On Thu, 21 Apr 2022 09:21:06 +1000 Alistair Popple <apopple@nvidia.com> wrote:
+>
+>> >> As the wait_event() condition is true it will return immediately. This
+>> >> can lead to use-after-free type errors if the caller frees the data
+>> >> structure containing the interval notifier subscription while it is
+>> >> still on a deferred list. Fix this by taking the appropriate lock when
+>> >> reading invalidate_seq to ensure proper synchronisation.
+>> >>
+>> >> ...
+>> >>
+>> >> Fixes: 99cb252f5e68 ("mm/mmu_notifier: add an interval tree notifier")
+>> >
+>> > Do you think fix this should be backported into older kernels?
+>>
+>> Yes, I forgot to cc stable sorry.
+>
+> So we have actually seen these use-after-free errors?
 
-> 
-> > +	};
-> > +
-> > +	backlight {
-> > +		status = "okay";
-> 
-> Are you overriding any node? Looks like not, so status is not needed.
-> 
-> > +
-> > +		compatible = "pwm-backlight";
-> > +		/* The last value is the PWM period in nano-seconds!
-> > +		 * -> 5 kHz = 200 µS = 200.000 ns
-> > +		 */
-> > +		pwms = <&pwm1 0 200000>;
-> > +		brightness-levels = <0 61 499 1706 4079 8022 13938
-> > 22237 33328 47623 65535>;
-> > +		num-interpolated-steps = <10>;
-> > +		default-brightness-level = <60>;
-> > +		power-supply = <&reg_lcd0_pwr>;
-> > +	};
-> > +
-> > +	usb3503_refclk: usb3503_refclk {
-> 
-> hyphens in node names, not underscores. Node names should be generic,
-> but if you need a specific prefix, it's ok.
-> 
-> > +		compatible = "fixed-factor-clock";
-> > +		#clock-cells = <0>;
-> > +
-> > +		clocks = <&clks IMX6QDL_CLK_CKO2>;
-> > +		clock-div = <1>;
-> > +		clock-mult = <1>;
-> > +		clock-output-names = "12mhz_refclk";
-> > +
-> > +		assigned-clocks = <&clks IMX6QDL_CLK_CKO>,
-> > +				  <&clks IMX6QDL_CLK_CKO2>,
-> > +				  <&clks IMX6QDL_CLK_CKO2_SEL>;
-> > +		assigned-clock-parents = <&clks IMX6QDL_CLK_CKO2>,
-> > +					 <&clks IMX6QDL_CLK_CKO2_PODF>,
-> > +					 <&clks IMX6QDL_CLK_OSC>;
-> > +		assigned-clock-rates = <0>, <12000000>, <0>;
-> > +	};
-> > +
-> > +	cpus {
-> > +		/* Override operating points with board-specific values
-> > */
-> > +		cpu0: cpu@0 {
-> > +			operating-points = <
-> 
-> Anything blocking from using OPP v2 bindings?
-> 
-> > +				/* kHz    uV */
-> > +				1200000 1275000
-> > +				996000  1225000
-> > +				852000  1225000
-> > +				792000  1150000
-> > +				396000  950000
-> > +			>;
-> > +			fsl,soc-operating-points = <
-> 
-> This seems undocumented and actually - why do you need it if you have
-> generic operating points?
+I observed them whilst running stress testing during some development. You do
+have to be pretty unlucky, but it lead to the usual problems of use-after-free
+(memory corruption, kernel crash, difficult to diagnose WARN_ON, etc) so I think
+it's worth backporting.
 
-The "operating-points" and "fsl,soc-operating-points" properties are
-defined in imx6q.dtsi. We are just overwriting them here.              
-                                          
+> Some description of the end-user visible impact is always helpful when
+> deciding which trees need a patch.
+>
+>> Do you want me to resend with
+>> 'Cc: stable@vger.kernel.org'?
+>
+> Thanks, I added that.
 
-> 
-> > +				/* ARM kHz  SOC-PU uV */
-> > +				1200000 1225000
-> > +				996000	1175000
-> > +				852000	1175000
-> > +				792000	1150000
-> > +				396000	1150000
-> > +			>;
-> > +		};
-> > +
-> > +		cpu1: cpu@1 {
-> > +			operating-points = <
-> > +				/* kHz    uV */
-> > +				1200000 1275000
-> > +				996000  1225000
-> > +				852000  1225000
-> > +				792000  1150000
-> > +				396000  950000
-> > +			>;
-> > +			fsl,soc-operating-points = <
-> > +				/* ARM kHz  SOC-PU uV */
-> > +				1200000 1225000
-> > +				996000	1175000
-> > +				852000	1175000
-> > +				792000	1150000
-> > +				396000	1150000
-> > +			>;
-> > +		};
-> > +	};
-> > +
-> > +	leds {
-> > +		compatible = "pwm-leds";
-> > +
-> > +		led_red: red {
-> 
-> Generic node names, so led-0.
-> 
-> Add common properties for color and function.
-> 
-> > +			label = "red";
-> > +			max-brightness = <248>;
-> > +			default-state = "off";
-> > +			pwms = <&pwm2 0 500000>;
-> > +		};
-> > +
-> > +		led_white: white {
-> 
-> The same.
-> 
-> > +			label = "white";
-> > +			max-brightness = <248>;
-> > +			default-state = "off";
-> > +			pwms = <&pwm3 0 500000>;
-> > +			linux,default-trigger = "heartbeat";
-> > +		};
-> > +	};
-> > +
-> > +	memory {
-> > +		reg = <0x10000000 0x40000000>;
-> > +	};
-> > +
-> > +	regulators: regulators {
-> > +		compatible = "simple-bus";
-> > +		#address-cells = <1>;
-> > +		#size-cells = <0>;
-> 
-> This should not be a bus. Instead "regulator-0" and so on.
-> 
-> > +
-> > +		supply_5P0: regulator@0 {
-> > +			compatible = "regulator-fixed";
-> > +			reg = <0>;
-> 
-> Please run `make dtbs_check` (see Docs for this) and fix the
-> warnings.
-> Please fix automated check warnings before using reviewers time.
+Thanks.
 
-I built with W=1 and used checkpatch.pl. But I'm having trouble using
-make dtbs_check. Seems like I get all warnings for all possible dts. Is
-there a way to get warnings for a single dt only?
-
-Best regards,
-Philip Oberfichtner                                                
-
-> 
-> > +			regulator-name = "5P0";
-> > +			regulator-min-microvolt = <5000000>;
-> > +			regulator-max-microvolt = <5000000>;
-> > +			regulator-always-on;
-> 
-> Why do you need it? There is no control here, it's only used as a
-> supply
-> for other uncontrollable regulators (unless I missed something).
-> 
-> > +		};
-> > +
-> > +		supply_VIN: regulator@1 {
-> > +			compatible = "regulator-fixed";
-> > +			reg = <1>;
-> > +			regulator-name = "VIN";
-> > +			regulator-min-microvolt = <4500000>;
-> > +			regulator-max-microvolt = <4500000>;
-> > +			regulator-always-on;
-> > +			vin-supply = <&supply_5P0>;
-> > +		};
-> > +
-> > +		reg_usb_otg_vbus: regulator@2 {
-> > +			compatible = "regulator-fixed";
-> > +			reg = <2>;
-> > +			regulator-name = "usb_otg_vbus";
-> > +			regulator-min-microvolt = <5000000>;
-> > +			regulator-max-microvolt = <5000000>;
-> > +		};
-> > +
-> > +		reg_usb_h1_vbus: regulator@3 {
-> > +			compatible = "regulator-fixed";
-> > +			reg = <3>;
-> > +			regulator-name = "usb_h1_vbus";
-> > +			regulator-min-microvolt = <5000000>;
-> > +			regulator-max-microvolt = <5000000>;
-> > +			regulator-always-on;
-> > +			vin-supply = <&supply_5P0>;
-> > +		};
-> > +
-> > +		supply_VSNVS_3V0: regulator@4 {
-> > +			compatible = "regulator-fixed";
-> > +			reg = <4>;
-> > +			regulator-name = "VSNVS_3V0";
-> > +			regulator-min-microvolt = <3000000>;
-> > +			regulator-max-microvolt = <3000000>;
-> > +			regulator-always-on;
-> > +			vin-supply = <&supply_5P0>;
-> > +		};
-> > +
-> > +		reg_lcd0_pwr: regulator-lcd0-pwr {
-> > +			compatible = "regulator-fixed";
-> > +			regulator-name = "LCD0 POWER";
-> > +			regulator-min-microvolt = <5000000>;
-> > +			regulator-max-microvolt = <5000000>;
-> > +			pinctrl-names = "default";
-> > +			pinctrl-0 = <&pinctrl_lcd_enable>;
-> > +			gpio = <&gpio3 23 GPIO_ACTIVE_HIGH>;
-> > +			enable-active-high;
-> > +			regulator-boot-on;
-> > +		};
-> > +
-> > +		reg_usb_h2_vbus: regulator@6 {
-> > +			compatible = "regulator-fixed";
-> > +			reg = <6>;
-> > +			regulator-name = "usb_h2_vbus";
-> > +			regulator-min-microvolt = <5000000>;
-> > +			regulator-max-microvolt = <5000000>;
-> > +			vin-supply = <&supply_5P0> ;
-> > +			regulator-always-on;
-> > +		};
-> > +
-> > +		supply_vref_dac: vref_dac {
-> 
-> 1. No underscores in node names.
-> 2. Did you compile dts with W=1 and fixed warnings?
-> 
-> 
-> > +			compatible = "regulator-fixed";
-> > +			regulator-name = "vref_dac";
-> > +			regulator-min-microvolt = <20000>;
-> > +			regulator-max-microvolt = <20000>;
-> > +			vin-supply = <&supply_5P0> ;
-> > +			regulator-boot-on;
-> > +		};
-> > +	};
-> > +
-> > +	reset_gpio_led {
-> > +		compatible = "gpio-leds";
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&pinctrl_reset_gpio_led>;
-> > +
-> > +		reset {
-> > +			label = "red_reset";
-> > +			gpios = <&gpio5 18 0>;
-> > +			default-state = "off";
-> > +		};
-> > +	};
-> > +
-> > +	soc {
-> > +		aips1: bus@2000000 {};
-> > +	};
-> > +};
-> > +
-> > +&reg_arm {
-> > +	vin-supply = <&pmic_sw2>;
-> > +};
-> > +
-> > +&reg_soc {
-> > +	vin-supply = <&pmic_sw1abc>;
-> > +};
-> > +
-> > +&reg_vdd1p1 {
-> > +	vin-supply = <&supply_VSNVS_3V0>;
-> > +};
-> > +
-> > +&reg_vdd2p5 {
-> > +	vin-supply = <&supply_VSNVS_3V0>;
-> > +};
-> > +
-> > +&reg_vdd3p0 {
-> > +	vin-supply = <&supply_VSNVS_3V0>;
-> > +};
-> > +
-> > +&audmux {
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&pinctrl_audmux>;
-> > +	status = "okay";
-> > +};
-> > +
-> > +&fec {
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&pinctrl_enet>;
-> > +	status = "okay";
-> > +
-> > +	clocks = <&clks IMX6QDL_CLK_ENET>,
-> > +		<&clks IMX6QDL_CLK_ENET>,
-> > +		<&clks IMX6QDL_CLK_ENET>,
-> > +		<&clks IMX6QDL_CLK_ENET_REF>;
-> > +	clock-names = "ipg", "ahb", "ptp", "enet_out";
-> > +	phy-mode = "rmii";
-> > +	phy-supply = <&supply_sw4_3V3>;
-> > +	phy-handle = <&ethphy>;
-> > +
-> > +	mdio {
-> > +		#address-cells = <1>;
-> > +		#size-cells = <0>;
-> > +		ethphy: ethernet-phy@0 {
-> > +			compatible = "ethernet-phy-ieee802.3-c22";
-> > +			reg = <0>;
-> > +			interrupt-parent = <&gpio1>;
-> > +			interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
-> > +			smsc,disable-energy-detect;
-> > +		};
-> > +	};
-> > +};
-> > +
-> > +
-> 
-> No need for two blank lines.
-> 
-> > +&gpu_vg {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&gpu_2d {
-> > +	status = "disabled";
-> > +};
-> > +
-> > +&i2c1 {
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&pinctrl_i2c1>;
-> > +	clock-frequency = <400000>;
-> > +	status = "okay";
-> > +
-> > +	eeprom: eeprom@50 {
-> > +		compatible = "atmel,24c32";
-> > +		reg = <0x50>;
-> > +		pagesize = <32>;
-> > +		bytelen = <4096>;
-> > +		bus-id = <0>;
-> > +		flags = <0x80>;		/* AT24_FLAG_ADDR16 */
-> > +	};
-> > +
-> > +	lm75: lm75@49 {
-> 
-> Generic node name.
-> 
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&pinctrl_lm75>;
-> > +
-> > +		compatible = "national,lm75b";
-> > +		reg = <0x49>;
-> > +
-> > +		interrupts = <7 0x4>;
-> > +		interrupt-parent = <&gpio4>;
-> > +	};
-> > +
-> > +	pmic: pfuze100@8 {
-> 
-> pmic, not pfuze
-> 
-> > +		compatible = "fsl,pfuze100";
-> > +		reg = <0x08>;
-> > +		uboot,bootcounter;
-> 
-> Do not add undocumented properties. Please check all entire DTS for
-> such
-> undocumented stuff.
-> 
-> > +
-> > +		VGEN1-supply = <&supply_AUX_3V15>;
-> > +		VGEN2-supply = <&supply_AUX_3V15>;
-> > +		VGEN3-supply = <&supply_sw4_3V3>;
-> > +		VGEN4-supply = <&supply_sw4_3V3>;
-> > +		VGEN5-supply = <&supply_SYS_4V2>;
-> > +		VGEN6-supply = <&supply_SYS_4V2>;
-> > +
-> > +		VREFDDR-supply = <&supply_DDR_1V5>;
-> > +
-> > +		SW1AB-supply = <&supply_SYS_4V2>;
-> > +		SW1C-supply = <&supply_SYS_4V2>;
-> > +		SW2-supply = <&supply_SYS_4V2>;
-> > +		SW3A-supply = <&supply_SYS_4V2>;
-> > +		SW3B-supply = <&supply_SYS_4V2>;
-> > +		SW4-supply = <&supply_SYS_4V2>;
-> > +
-> > +		regulators {
-> > +			/*
-> > +			 * VDD_CORE is connected to SW1 ABC
-> > +			 * We need to define sw1ab and sw1c, but later
-> > it is controlled solely with
-> > +			 * sw1c and therefore only this is named
-> > "VDD_SOC".
-> > +			 * See PMIC datasheet Rev. 18, chapter
-> > 6.4.4.3.1: "The feedback and all
-> > +			 * other controls are accomplished by use of
-> > pin SW1CFB and SW1C control
-> > +			 * registers, respectively."
-> > +			 * Setting min and max according to SOC
-> > datasheet
-> > +			 */
-> > +			pmic_sw1abc: sw1c {
-> > +				regulator-name = "VDD_SOC (sw1abc)";
-> > +				regulator-min-microvolt = <1275000>;
-> > +				regulator-max-microvolt = <1500000>;
-> > +				regulator-boot-on;
-> > +				regulator-always-on;
-> > +				regulator-ramp-delay = <6250>;
-> > +
-> > +				default-voltage = <1300000>;
-> > +			};
-> > +
-> > +			pmic_sw2: sw2{
-> 
-> Missing space.
-> 
-> > +				regulator-name = "VDD_ARM (sw2)";
-> > +
-> 
-> Why blank line here and not in other places?
-> 
-> > +				regulator-min-microvolt = <1050000>;
-> > +				regulator-max-microvolt = <1500000>;
-> > +				regulator-boot-on;
-> > +				regulator-always-on;
-> > +				regulator-ramp-delay = <6250>;
-> > +
-> > +				default-voltage = <1300000>;
-> > +			};
-> > +
-> > +			pmic_sw3a: sw3a {
-> > +				/* U-Boot sets correct voltage, shall
-> > not be touched by the OS */
-> > +				compatible = "regulator-fixed";
-> > +				regulator-name = "DDR_1V5a";
-> > +				regulator-boot-on;
-> > +				regulator-always-on;
-> > +
-> > +			};
-> > +
-> > +			supply_DDR_1V5: sw3b {
-> > +				/* U-Boot sets correct voltage, shall
-> > not be touched by the OS */
-> > +				compatible = "regulator-fixed";
-> > +				regulator-name = "DDR_1V5b";
-> > +				regulator-boot-on;
-> > +				regulator-always-on;
-> > +
-> > +			};
-> > +
-> > +			supply_AUX_3V15: sw4 {
-> > +				regulator-name = "AUX 3V15 (sw4)";
-> > +				regulator-min-microvolt = <800000>;
-> > +				regulator-max-microvolt = <3300000>;
-> > +
-> > +				default-voltage = <3150000>;
-> > +
-> > +			};
-> > +
-> > +			swbst_reg: swbst {
-> > +				status = "disabled";
-> > +				regulator-min-microvolt = <5000000>;
-> > +				regulator-max-microvolt = <5150000>;
-> > +				regulator-boot-on;
-> > +				regulator-always-on;
-> > +
-> > +			};
-> > +
-> > +			snvs_reg: vsnvs {
-> > +				regulator-min-microvolt = <1200000>;
-> > +				regulator-max-microvolt = <3000000>;
-> > +				regulator-boot-on;
-> > +				regulator-always-on;
-> > +
-> > +				default-voltage = <3000000>;
-> > +			};
-> > +
-> > +			vref_reg: vrefddr {
-> > +				regulator-boot-on;
-> > +				regulator-always-on;
-> > +
-> > +				default-voltage = <675000>;
-> > +			};
-> > +
-> > +			vgen1_reg: vgen1 {
-> > +				regulator-min-microvolt = <800000>;
-> > +				regulator-max-microvolt = <1550000>;
-> > +				regulator-always-on;
-> > +
-> > +				default-voltage = <1500000>;
-> > +			};
-> > +
-> > +			vgen2_reg: vgen2 {
-> > +				regulator-min-microvolt = <800000>;
-> > +				regulator-max-microvolt = <1550000>;
-> > +				regulator-always-on;
-> > +
-> > +				default-voltage = <1200000>;
-> > +			};
-> > +
-> > +			vgen3_reg: vgen3 {
-> > +				regulator-min-microvolt = <1800000>;
-> > +				regulator-max-microvolt = <3300000>;
-> > +				regulator-always-on;
-> > +
-> > +				default-voltage = <2500000>;
-> > +			};
-> > +
-> > +			vgen4_reg: vgen4 {
-> > +				regulator-min-microvolt = <1800000>;
-> > +				regulator-max-microvolt = <3300000>;
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +
-> > +				default-voltage = <1800000>;
-> > +			};
-> > +
-> > +			vgen5_reg: vgen5 {
-> > +				regulator-min-microvolt = <1800000>;
-> > +				regulator-max-microvolt = <3300000>;
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +
-> > +				default-voltage = <2800000>;
-> > +			};
-> > +
-> > +			vgen6_reg: vgen6 {
-> > +				regulator-min-microvolt = <1800000>;
-> > +				regulator-max-microvolt = <3300000>;
-> > +				regulator-always-on;
-> > +
-> > +				default-voltage = <2800000>;
-> > +			};
-> > +
-> > +		};
-> > +	};
-> > +
-> > +	rtc: rtcpcf8563@51 {
-> 
-> Generic node names.
-> 
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&pinctrl_rtc>;
-> > +
-> > +		compatible = "nxp,pcf8563";
-> > +		reg = <0x51>;
-> > +	};
-> > +};
-> > +
-> > +&i2c2 {
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&pinctrl_i2c2>;
-> > +	clock-frequency = <100000>;
-> > +	status = "okay";
-> > +
-> > +	adc101c: ac101c@54 {
-> 
-> Ugh...
-> 
-> > +		compatible = "ti,adc101c";
-> > +		reg = <0x54>;
-> > +		status = "okay";
-> > +		vref-supply = <&supply_vref_dac>;
-> > +		vcc-supply = <&supply_vref_dac>;
-> > +	};
-> > +
-> > +	ad5602: ad5602@c {
-> > +		compatible = "adi,ad5602";
-> > +		reg = <0x0c>;
-> > +		status = "okay";
-> > +		vcc-supply = <&supply_vref_dac>;
-> > +	};
-> > +
-> > +	eeprom_ext: eeprom_ext@50 {
-> 
-> Generic node names, no underscores in node names.
-> 
-> OK, I'll stop for now. :)
-> 
-> 
-> Best regards,
-> Krzysztof
-
+--=-=-=--

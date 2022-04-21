@@ -2,70 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB82C509F3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44B8509F45
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382948AbiDUMFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
+        id S1382981AbiDUMI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 08:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382859AbiDUMFZ (ORCPT
+        with ESMTP id S1382836AbiDUMI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:05:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A21FD0;
-        Thu, 21 Apr 2022 05:02:35 -0700 (PDT)
+        Thu, 21 Apr 2022 08:08:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F4EB7DE;
+        Thu, 21 Apr 2022 05:06:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16556B821B8;
-        Thu, 21 Apr 2022 12:02:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CB4BC385A5;
-        Thu, 21 Apr 2022 12:02:27 +0000 (UTC)
-Message-ID: <7d576466-0004-f644-7973-844c997a1503@linux-m68k.org>
-Date:   Thu, 21 Apr 2022 22:02:24 +1000
+        by sin.source.kernel.org (Postfix) with ESMTPS id 02E44CE2173;
+        Thu, 21 Apr 2022 12:06:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF6C5C385A5;
+        Thu, 21 Apr 2022 12:06:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650542763;
+        bh=E/KD3S9r1NY3AgCUpJ82Xa/0zscB5adhyxMkTD24z3A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r2rskzI6gJ6hRu5OaS/sBRwhqp5o7RS7tvo7HCYMy66D2iYh4ci/7c98ABMWXWOVT
+         NjnmGsaIdSLkbLNWlgzR6AOcesx+llDTJegDMKQeFxyK+5FsnlcL2R81gFkVVavErS
+         EQK7JNBrkfJ44UIg05FYxduekli+vEdP/v33ScB8=
+Date:   Thu, 21 Apr 2022 14:06:00 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Fu Zixuan <r33s3n6@gmail.com>
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: Re: [PATCH] drivers: usb: host: fix NULL pointer dereferences
+ triggered by unhandled errors in xhci_create_rhub_port_array()
+Message-ID: <YmFIqPeGQYKl33vh@kroah.com>
+References: <20220421094236.1052170-1-r33s3n6@gmail.com>
+ <YmEs6BqcyM7fgLXg@kroah.com>
+ <CAMvdLANp4jHnySOmpjXZdFwruLdvN9qR-B_Ew9_zeCiKYiLZSA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Regression with v5.18-rc1 tag on STM32F7 and STM32H7 based boards
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Lukas Czerner <lczerner@redhat.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, zkabelac@redhat.com,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Borislav Petkov <bp@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexandre TORGUE - foss <alexandre.torgue@foss.st.com>,
-        Valentin CARON - foss <valentin.caron@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Russell King <linux@armlinux.org.uk>
-References: <481a13f8-d339-f726-0418-ab4258228e91@foss.st.com>
- <95a0d1dd-bcce-76c7-97b9-8374c9913321@google.com>
- <7f2993a9-adc5-2b90-9218-c4ca8239c3e@google.com>
- <3695dc2a-7518-dee4-a647-821c7cda4a0f@foss.st.com>
- <2a462b23-5b8e-bbf4-ec7d-778434a3b9d7@google.com>
- <6f56d0d6-6d0d-f0c9-87df-f3ff25b26fc5@linux-m68k.org>
- <CAMuHMdWA7n588XUKy2yondnZpAw_afFBz8DHxH0Q3Tt53HHsHg@mail.gmail.com>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-In-Reply-To: <CAMuHMdWA7n588XUKy2yondnZpAw_afFBz8DHxH0Q3Tt53HHsHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMvdLANp4jHnySOmpjXZdFwruLdvN9qR-B_Ew9_zeCiKYiLZSA@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,90 +54,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
-
-On 21/4/22 00:44, Geert Uytterhoeven wrote:
-> On Wed, Apr 20, 2022 at 3:53 PM Greg Ungerer <gerg@linux-m68k.org> wrote:
->> On 16/4/22 10:58, Hugh Dickins wrote:
->>> Just to wrap up this thread: the tentative arch/ patches below did not
->>> go into 5.18-rc2, but 5.18-rc3 will contain
->>> 1bdec44b1eee ("tmpfs: fix regressions from wider use of ZERO_PAGE")
->>> which fixes a further issue, and deletes the line which gave you trouble.
->>>
->>> With arch/h8300 removed from linux-next, and arch/arm losing a page by
->>> the patch below, I don't think it's worth my arguing for those changes.
->>> I'd still prefer arch/m68k to expose its empty_zero_page in ZERO_PAGE(),
->>> or else not allocate it; but I won't be pursuing this further.
->>
->> Thanks for pointing this out. It certainly does look wrong to me for
->> the m68k nommu case. I am not aware of any existing issues caused by
->> this - but there is no good reason not to fix it.
->>
->> So I propose this change. Build and run tested on my m68knommu targets.
->>
->> Regards
->> Greg
->>
->>
->>   From f809fb8fbca9e5e637b8fda380955bd799bb3926 Mon Sep 17 00:00:00 2001
->> From: Greg Ungerer <gerg@linux-m68k.org>
->> Date: Wed, 20 Apr 2022 23:27:47 +1000
->> Subject: [PATCH] m68knommu: set ZERO_PAGE() allocated zeroed page
->>
->> The non-MMU m68k pagetable ZERO_PAGE() macro is being set to the
->> somewhat non-sensical value of "virt_to_page(0)". The zeroth page
->> is not in any way guaranteed to be a page full of "0". So the result
->> is that ZERO_PAGE() will almost certainly contain random values.
->>
->> We already allocate a real "empty_zero_page" in the mm setup code shared
->> between MMU m68k and non-MMU m68k. It is just not hooked up to the
->> ZERO_PAGE() macro for the non-MMU m68k case.
->>
->> Fix ZERO_PAGE() to use the allocated "empty_zero_page" pointer.
->>
->> I am not aware of any specific issues caused by the old code.
->>
->> Link: https://lore.kernel.org/linux-m68k/2a462b23-5b8e-bbf4-ec7d-778434a3b9d7@google.com/T/#t
->> Reported-by: Hugh Dickens <hughd@google.com>
->> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
->> ---
->>    arch/m68k/include/asm/pgtable_no.h | 3 ++-
->>    1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/m68k/include/asm/pgtable_no.h b/arch/m68k/include/asm/pgtable_no.h
->> index 87151d67d91e..bce5ca56c388 100644
->> --- a/arch/m68k/include/asm/pgtable_no.h
->> +++ b/arch/m68k/include/asm/pgtable_no.h
->> @@ -42,7 +42,8 @@ extern void paging_init(void);
->>     * ZERO_PAGE is a global shared page that is always zero: used
->>     * for zero-mapped memory areas etc..
->>     */
->> -#define ZERO_PAGE(vaddr)       (virt_to_page(0))
->> +extern void *empty_zero_page;
->> +#define ZERO_PAGE(vaddr)       (virt_to_page(empty_zero_page))
->>
->>    /*
->>     * All 32bit addresses are effectively valid for vmalloc...
+On Thu, Apr 21, 2022 at 07:55:28PM +0800, Fu Zixuan wrote:
+> On Thu, 21 Apr 2022 at 18:07, Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Apr 21, 2022 at 05:42:36PM +0800, Zixuan Fu wrote:
+> > > In xhci_create_rhub_port_array(), when rhub->num_ports is zero,
+> > > rhub->ports would not be set; when kcalloc_node() fails, rhub->ports
+> > > would be set to NULL. In these two cases, xhci_create_rhub_port_array()
+> > > just returns void, and thus its callers are unaware of the error.
+> > >
+> > > Then rhub->ports is dereferenced in xhci_usb3_hub_descriptor() or
+> > > xhci_usb2_hub_descriptor().
+> > >
+> > > To fix the bug, xhci_setup_port_arrays() should return an integer to
+> > > indicate a possible error, and its callers should handle the error.
+> > >
+> > > Here is the log when this bug occurred in our fault-injection testing:
+> > >
+> > > [   24.001309] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> > > ...
+> > > [   24.003992] RIP: 0010:xhci_hub_control+0x3f5/0x60d0 [xhci_hcd]
+> > > ...
+> > > [   24.009803] Call Trace:
+> > > [   24.010014]  <TASK>
+> > > [   24.011310]  usb_hcd_submit_urb+0x1233/0x1fd0
+> > > [   24.017071]  usb_start_wait_urb+0x115/0x310
+> > > [   24.017641]  usb_control_msg+0x28a/0x450
+> > > [   24.019046]  hub_probe+0xb16/0x2320
+> > > [   24.019757]  usb_probe_interface+0x4f1/0x930
+> > > [   24.019765]  really_probe+0x33d/0x970
+> > > [   24.019768]  __driver_probe_device+0x157/0x210
+> > > [   24.019772]  driver_probe_device+0x4f/0x340
+> > > [   24.019775]  __device_attach_driver+0x2ee/0x3a0
+> > > ...
+> > >
+> > > Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+> > > Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+> > > ---
+> > >  drivers/usb/host/xhci-mem.c | 17 ++++++++++++-----
+> > >  1 file changed, 12 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> > > index bbb27ee2c6a3..024515346c39 100644
+> > > --- a/drivers/usb/host/xhci-mem.c
+> > > +++ b/drivers/usb/host/xhci-mem.c
+> > > @@ -2235,7 +2235,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+> > >       /* FIXME: Should we disable ports not in the Extended Capabilities? */
+> > >  }
+> > >
+> > > -static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+> > > +static int xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+> > >                                       struct xhci_hub *rhub, gfp_t flags)
+> > >  {
+> > >       int port_index = 0;
+> > > @@ -2243,11 +2243,11 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+> > >       struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+> > >
+> > >       if (!rhub->num_ports)
+> > > -             return;
+> > > +             return -EINVAL;
+> > >       rhub->ports = kcalloc_node(rhub->num_ports, sizeof(*rhub->ports),
+> > >                       flags, dev_to_node(dev));
+> > >       if (!rhub->ports)
+> > > -             return;
+> > > +             return -ENOMEM;
+> > >
+> > >       for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
+> > >               if (xhci->hw_ports[i].rhub != rhub ||
+> > > @@ -2259,6 +2259,7 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+> > >               if (port_index == rhub->num_ports)
+> > >                       break;
+> > >       }
+> > > +     return 0;
+> > >  }
+> > >
+> > >  /*
+> > > @@ -2277,6 +2278,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+> > >       int cap_count = 0;
+> > >       u32 cap_start;
+> > >       struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+> > > +     int ret;
+> > >
+> > >       num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
+> > >       xhci->hw_ports = kcalloc_node(num_ports, sizeof(*xhci->hw_ports),
+> > > @@ -2367,8 +2369,13 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+> > >        * Not sure how the USB core will handle a hub with no ports...
+> > >        */
+> > >
+> > > -     xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
+> > > -     xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
+> > > +     ret = xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     ret = xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
+> > > +     if (ret)
+> > > +             return ret;
+> >
+> > What about the memory allocated by the first call to
+> > xhci_create_rhub_port_array()?  Is that now lost?  Same for everything
+> > else allocated before these calls, how is that cleaned up properly?
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> And after that (or combined with this?), this can be factored
-> out from arch/m68k/include/asm/pgtable_{mm,no}.h into
-> arch/m68k/include/asm/pgtable.h.
+> Thanks for your swift reply. We understand your concern. In fact, we have
+> checked the related code carefully and found that xhci_create_rhub_port_array()
+> is only used in xhci_setup_port_arrays(). Moreover, only xhci_mem_init() calls
+> xhci_setup_port_arrays() and does all cleanup work when it fails. Specifically,
+> xhci_mem_init() calls xhci_mem_cleanup(), which eventually called
+> kfree(xhci->usb2_rhub.ports) and kfree(xhci->usb3_rhub.ports).
 
-I think a new patch to do that work on top of this one would be best.
-I will work on that.
+Great, can you mention this in the changelog text to show that you have
+thought this through and it can be documented as such?
 
-Regards
-Greg
+thanks,
 
-
-
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
+greg k-h

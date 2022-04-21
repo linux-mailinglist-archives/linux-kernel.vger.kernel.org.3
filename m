@@ -2,150 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567A150987F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CA950984F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385318AbiDUGrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47300 "EHLO
+        id S1385205AbiDUGu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 02:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385187AbiDUGp7 (ORCPT
+        with ESMTP id S1385170AbiDUGrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:45:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E6615817
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 23:42:52 -0700 (PDT)
+        Thu, 21 Apr 2022 02:47:21 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6C715722
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 23:43:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523372; x=1682059372;
+  t=1650523435; x=1682059435;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5x/GaOdy39Ig7Apy9+wqMzr77VRml13pyAZosPYaShY=;
-  b=bm3AYcplvp7fVD/US08gz5+atk6IVpgywLflo9XFzCIoQIYQ6pT9RIiW
-   UCzhXpQYirdsx1n1rTTp0I+ni6pVMIfHgYPzhkH1Esp6CKF0zVHdzQs4w
-   lq8FiOSMi1tpvql81ImReOOcYEs90fSHqC9k8yRjPJ6e7zWYs0xpwSpYD
-   F5evbzMtXgCGrMc0JNFUADVGoPWRAzfwkx4VQG+d1jaePAJpoOLSP2OWP
-   hAf26htd5lCUmCJ6LEbB5wRHtX3Prt8ET5PzhDY6vcFEpzbLVXxU8Qj8y
-   l/U9lLhPea7i2KjtDe/OlcZjU1NucUyVRGZxng7vsGn/0BUL5AmL5FcxL
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264429184"
+  bh=tGDwsRSfzzAl2tPyM5e0CqzjFlQNTdW0Hf+Zc8ssoIU=;
+  b=ZklVmwRxf4BFRd2FwU/ltfWUB0yYa4xY2SnCvee8wDNwxZLD04qDNt7W
+   ZHpr2iR0Z1m6R5ShvDq0qcoo/bFPrzlMgY3JWH9mSceAOHu3R5RBXc/0/
+   nZMjqqUwfjYXU7ufHCB/8YfytN8SYpverboHtE0bSpw0C4YTNrITdES1C
+   q/0Q5Q/N4tDhj0XM2hZ6WZsmbfnNbZpaZL61zw0TBDUZ6Vmf1XRPis6sP
+   jlwzCbi1lArq5CimDxrD62yN5pH8Tnaj/QB3smj7mn9/AQoRVVe9EFo+L
+   cM17+WkWmYZ4SIfPXlVRy8rrFgk0CGSCah+fGFmvHJhhIy1OrDjkhMXOL
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="289369461"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="264429184"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:42:52 -0700
+   d="scan'208";a="289369461"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:43:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="530131476"
+   d="scan'208";a="670049057"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Apr 2022 23:42:50 -0700
+  by orsmga004.jf.intel.com with ESMTP; 20 Apr 2022 23:43:51 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nhQWg-0007zZ-9h;
-        Thu, 21 Apr 2022 06:42:50 +0000
-Date:   Thu, 21 Apr 2022 14:42:32 +0800
+        id 1nhQXf-00080v-3y;
+        Thu, 21 Apr 2022 06:43:51 +0000
+Date:   Thu, 21 Apr 2022 14:42:59 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1760/2579] fs/ceph/cache.h:130:16: error:
- implicit declaration of function 'filemap_dirty_folio'; did you mean
- 'filemap_get_folio'?
-Message-ID: <202204210519.7NXwmnKd-lkp@intel.com>
+To:     Sven Schnelle <svens@stackframe.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Helge Deller <deller@gmx.de>
+Subject: arch/parisc/kernel/traps.c:806:14: warning: variable 'hpmcp' set but
+ not used
+Message-ID: <202204210504.e7yvq7aa-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: 5906052f724ace8783a32193d743f4db58a3bfee [1760/2579] headers/deps: writeback: Remove the <linux/writeback_api.h> header from <linux/writeback.h>
-config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220421/202204210519.7NXwmnKd-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+Hi Sven,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b253435746d9a4a701b5f09211b9c14d3370d0da
+commit: c70919bd9d0782a6078ccd37d7f861d514f5481e parisc: Fix IVT checksum calculation wrt HPMC
+date:   1 year, 2 months ago
+config: parisc-randconfig-r031-20220420 (https://download.01.org/0day-ci/archive/20220421/202204210504.e7yvq7aa-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=5906052f724ace8783a32193d743f4db58a3bfee
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 5906052f724ace8783a32193d743f4db58a3bfee
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c70919bd9d0782a6078ccd37d7f861d514f5481e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c70919bd9d0782a6078ccd37d7f861d514f5481e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from fs/ceph/super.c:31:
-   fs/ceph/cache.h: In function 'ceph_fscache_dirty_folio':
->> fs/ceph/cache.h:130:16: error: implicit declaration of function 'filemap_dirty_folio'; did you mean 'filemap_get_folio'? [-Werror=implicit-function-declaration]
-     130 |         return filemap_dirty_folio(mapping, folio);
-         |                ^~~~~~~~~~~~~~~~~~~
-         |                filemap_get_folio
-   cc1: some warnings being treated as errors
---
-   In file included from include/net/sock.h:49,
-                    from fs/afs/internal.h:29,
-                    from fs/afs/file.c:31:
-   include/linux/netdevice.h:171:9: error: unknown type name 'local_t'
-     171 |         local_t         rx_dropped;
-         |         ^~~~~~~
-   include/linux/netdevice.h:172:9: error: unknown type name 'local_t'
-     172 |         local_t         tx_dropped;
-         |         ^~~~~~~
-   include/linux/netdevice.h:173:9: error: unknown type name 'local_t'
-     173 |         local_t         rx_nohandler;
-         |         ^~~~~~~
-   In file included from include/linux/compiler_types.h:73,
-                    from <command-line>:
-   include/linux/netdevice.h:174:24: error: 'local_t' undeclared here (not in a function)
-     174 | } __aligned(4 * sizeof(local_t));
-         |                        ^~~~~~~
-   include/linux/compiler_attributes.h:33:68: note: in definition of macro '__aligned'
-      33 | #define __aligned(x)                    __attribute__((__aligned__(x)))
-         |                                                                    ^
-   In file included from include/net/neighbour.h:7,
-                    from include/net/dst.h:21,
-                    from include/net/sock.h:66,
-                    from fs/afs/internal.h:29,
-                    from fs/afs/file.c:31:
-   include/linux/netdevice_api.h: In function 'dev_core_stats_rx_dropped_inc':
-   include/linux/netdevice_api.h:1807:17: error: implicit declaration of function 'local_inc'; did you mean 'local_lock'? [-Werror=implicit-function-declaration]
-    1807 |                 local_inc(&p->FIELD);                                           \
-         |                 ^~~~~~~~~
-   include/linux/netdevice_api.h:1810:1: note: in expansion of macro 'DEV_CORE_STATS_INC'
-    1810 | DEV_CORE_STATS_INC(rx_dropped)
-         | ^~~~~~~~~~~~~~~~~~
-   In file included from fs/afs/file.c:31:
-   fs/afs/file.c: At top level:
->> fs/afs/internal.h:1540:25: error: 'filemap_dirty_folio' undeclared here (not in a function); did you mean 'filemap_get_folio'?
-    1540 | #define afs_dirty_folio filemap_dirty_folio
-         |                         ^~~~~~~~~~~~~~~~~~~
-   fs/afs/file.c:67:27: note: in expansion of macro 'afs_dirty_folio'
-      67 |         .dirty_folio    = afs_dirty_folio,
-         |                           ^~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+   arch/parisc/kernel/traps.c: In function 'initialize_ivt':
+>> arch/parisc/kernel/traps.c:806:14: warning: variable 'hpmcp' set but not used [-Wunused-but-set-variable]
+     806 |         u32 *hpmcp;
+         |              ^~~~~
 
 
-vim +130 fs/ceph/cache.h
+vim +/hpmcp +806 arch/parisc/kernel/traps.c
 
-400e1286c0ec3f Jeff Layton             2021-12-07  126  
-8fb72b4a76933a Matthew Wilcox (Oracle  2022-02-09  127) static inline int ceph_fscache_dirty_folio(struct address_space *mapping,
-8fb72b4a76933a Matthew Wilcox (Oracle  2022-02-09  128) 		struct folio *folio)
-400e1286c0ec3f Jeff Layton             2021-12-07  129  {
-8fb72b4a76933a Matthew Wilcox (Oracle  2022-02-09 @130) 	return filemap_dirty_folio(mapping, folio);
-400e1286c0ec3f Jeff Layton             2021-12-07  131  }
-400e1286c0ec3f Jeff Layton             2021-12-07  132  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  797  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  798  
+4182d0cdf853fb0 Helge Deller      2015-11-20  799  void __init initialize_ivt(const void *iva)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  800  {
+c3d4ed4e3e5aa8d Kyle McMartin     2007-06-04  801  	extern const u32 os_hpmc[];
+c3d4ed4e3e5aa8d Kyle McMartin     2007-06-04  802  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  803  	int i;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  804  	u32 check = 0;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  805  	u32 *ivap;
+^1da177e4c3f415 Linus Torvalds    2005-04-16 @806  	u32 *hpmcp;
+c70919bd9d0782a Sven Schnelle     2020-10-02  807  	u32 instr;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  808  
+4182d0cdf853fb0 Helge Deller      2015-11-20  809  	if (strcmp((const char *)iva, "cows can fly"))
+4182d0cdf853fb0 Helge Deller      2015-11-20  810  		panic("IVT invalid");
+^1da177e4c3f415 Linus Torvalds    2005-04-16  811  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  812  	ivap = (u32 *)iva;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  813  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  814  	for (i = 0; i < 8; i++)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  815  	    *ivap++ = 0;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  816  
+8d771b143fe2e39 Helge Deller      2017-09-17  817  	/*
+8d771b143fe2e39 Helge Deller      2017-09-17  818  	 * Use PDC_INSTR firmware function to get instruction that invokes
+8d771b143fe2e39 Helge Deller      2017-09-17  819  	 * PDCE_CHECK in HPMC handler.  See programming note at page 1-31 of
+8d771b143fe2e39 Helge Deller      2017-09-17  820  	 * the PA 1.1 Firmware Architecture document.
+8d771b143fe2e39 Helge Deller      2017-09-17  821  	 */
+8d771b143fe2e39 Helge Deller      2017-09-17  822  	if (pdc_instr(&instr) == PDC_OK)
+8d771b143fe2e39 Helge Deller      2017-09-17  823  		ivap[0] = instr;
+8d771b143fe2e39 Helge Deller      2017-09-17  824  
+41dbee81c875300 Helge Deller      2018-04-18  825  	/*
+41dbee81c875300 Helge Deller      2018-04-18  826  	 * Rules for the checksum of the HPMC handler:
+41dbee81c875300 Helge Deller      2018-04-18  827  	 * 1. The IVA does not point to PDC/PDH space (ie: the OS has installed
+41dbee81c875300 Helge Deller      2018-04-18  828  	 *    its own IVA).
+41dbee81c875300 Helge Deller      2018-04-18  829  	 * 2. The word at IVA + 32 is nonzero.
+41dbee81c875300 Helge Deller      2018-04-18  830  	 * 3. If Length (IVA + 60) is not zero, then Length (IVA + 60) and
+41dbee81c875300 Helge Deller      2018-04-18  831  	 *    Address (IVA + 56) are word-aligned.
+41dbee81c875300 Helge Deller      2018-04-18  832  	 * 4. The checksum of the 8 words starting at IVA + 32 plus the sum of
+41dbee81c875300 Helge Deller      2018-04-18  833  	 *    the Length/4 words starting at Address is zero.
+41dbee81c875300 Helge Deller      2018-04-18  834  	 */
+41dbee81c875300 Helge Deller      2018-04-18  835  
+1138b6718ff74d2 John David Anglin 2018-10-06  836  	/* Setup IVA and compute checksum for HPMC handler */
+1138b6718ff74d2 John David Anglin 2018-10-06  837  	ivap[6] = (u32)__pa(os_hpmc);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  838  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  839  	hpmcp = (u32 *)os_hpmc;
+^1da177e4c3f415 Linus Torvalds    2005-04-16  840  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  841  	for (i=0; i<8; i++)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  842  	    check += ivap[i];
+^1da177e4c3f415 Linus Torvalds    2005-04-16  843  
+^1da177e4c3f415 Linus Torvalds    2005-04-16  844  	ivap[5] = -check;
+c70919bd9d0782a Sven Schnelle     2020-10-02  845  	pr_debug("initialize_ivt: IVA[6] = 0x%08x\n", ivap[6]);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  846  }
+^1da177e4c3f415 Linus Torvalds    2005-04-16  847  	
+4182d0cdf853fb0 Helge Deller      2015-11-20  848  
 
-:::::: The code at line 130 was first introduced by commit
-:::::: 8fb72b4a76933ae6f86725cc8e4a8190ba84d755 fscache: Convert fscache_set_page_dirty() to fscache_dirty_folio()
+:::::: The code at line 806 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
-:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
-:::::: CC: Matthew Wilcox (Oracle) <willy@infradead.org>
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 -- 
 0-DAY CI Kernel Test Service

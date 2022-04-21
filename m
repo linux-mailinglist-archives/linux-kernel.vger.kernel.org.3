@@ -2,106 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D6D50AAE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A065350AAEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387461AbiDUVnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 17:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S1442208AbiDUVqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 17:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343498AbiDUVnR (ORCPT
+        with ESMTP id S1343498AbiDUVqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 17:43:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1432648E5E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 14:40:26 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650577224;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pYxzdD4XVgq6CKbbQ3EP31o4JbRYZewfaps5uRZG8Gs=;
-        b=CxfDV2ehT2ndpG0Oo2rV7BA70XPvAY9l7pgAhYQCv0gtPjcq7BbcJWQDaDXUXDYT73jGYc
-        0V4gNz7nZVCZBYyxCh4ZX5qUSlw067PbTcMT8f4BvE9JIPzDPeiR9ehPHU0iB08MA/VZCF
-        USaEaFfCkGeOqeW94hBB6QD9iFTh6xMkdAQ4Ee8YNmnsdeSMWYYPt/MKRnfpl40M9CmJzX
-        yW0BiOJcZ34Vg3jlZbsKyOopSJW01kbh6t8GJlEuvhCn0F2Uu1HGRxUhJL3Yrp4dsSW1KV
-        9zeKovdIHHh+x5jJzrbeC4Q2b0hw4ao0W3uJ9oju5VnshaKdL4ZG6VqbbqWgeg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650577224;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pYxzdD4XVgq6CKbbQ3EP31o4JbRYZewfaps5uRZG8Gs=;
-        b=VsmUOaA87jRVZjsNriBwh5H5KqcvUBJwer+E2z8pzth9ybMyNopSQYAIqef5ZtDvFejQe8
-        YfhfcJ7MR3IvUAAw==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v4 14/15] printk: extend console_lock for proper
- kthread support
-In-Reply-To: <20220421212250.565456-15-john.ogness@linutronix.de>
-References: <20220421212250.565456-1-john.ogness@linutronix.de>
- <20220421212250.565456-15-john.ogness@linutronix.de>
-Date:   Thu, 21 Apr 2022 23:46:24 +0206
-Message-ID: <87wnfiyv1z.fsf@jogness.linutronix.de>
+        Thu, 21 Apr 2022 17:46:38 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A124E3BD;
+        Thu, 21 Apr 2022 14:43:39 -0700 (PDT)
+Received: from g550jk.arnhem.chello.nl (a246182.upc-a.chello.nl [62.163.246.182])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id C76B5CC10C;
+        Thu, 21 Apr 2022 21:43:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1650577387; bh=2Hlmv3hxYGQtorTzm2FTGISpw7EMEoWJ0bemUHHve7U=;
+        h=From:To:Cc:Subject:Date;
+        b=KBa5XWHVsFAtQ801Vou6rRucnYY4LyS32bVHYsnnYLKleuCwi545v/jP+mazJWR1N
+         hP2Yb4e2tPbxuvldTAFNutuaWkap1Psbn9wl8y/YtdUo1v+++2ETpIvybqYCQB8N83
+         6oYVZaczCP8MNcISb8taI8Eq0E73IX0fS6t6CJak=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] ARM: dts: msm8974-FP2: Add support for touchscreen
+Date:   Thu, 21 Apr 2022 23:42:41 +0200
+Message-Id: <20220421214243.352469-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Petr,
+Configure the touchscreen found on the new display module of the FP2.
+To add some detail, FP2 has two different screen/touchscreen variants
+("display module"), the old module has Synaptics touchscreen, the new
+one this Ilitek touchscreen.
 
-If v4 ends up being acceptable for linux-next, I would request you fold
-a couple cosmetic changes into this patch.
+We're only supporting the new display module for now.
 
-On 2022-04-21, John Ogness <john.ogness@linutronix.de> wrote:
-> +/*
-> + * Since the kthread printers do not acquire the console_lock but do need to
-> + * access @flags, they could experience races because other tasks
-> + * (synchronizing using the console_lock) can modify @flags. These macros are
-> + * available to at least provide atomic variable updates so that the kthread
-> + * printers can see consistent values.
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ .../boot/dts/qcom-msm8974pro-fairphone-fp2.dts    | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-This last sentence is bad. It should not use the words "atomic" and
-"updates". Please change it to:
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
+index 96427d75ea82..8f07d8e363aa 100644
+--- a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
++++ b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
+@@ -57,6 +57,21 @@ vibrator {
+ 	};
+ };
+ 
++&blsp1_i2c2 {
++	status = "okay";
++
++	touchscreen@41 {
++		compatible = "ilitek,ili2120";
++		reg = <0x41>;
++		interrupt-parent = <&tlmm>;
++		interrupts = <28 IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&tlmm 55 GPIO_ACTIVE_LOW>;
++
++		touchscreen-size-x = <1080>;
++		touchscreen-size-y = <1920>;
++	};
++};
++
+ &blsp1_uart2 {
+ 	status = "okay";
+ };
+-- 
+2.36.0
 
-    These macros are available to store the new value in a way that will
-    provide consistent load values for kthread printers. Tasks using
-    these macros must still do so under the console_lock.
-
-[...]
-
->  EXPORT_SYMBOL(console_stop);
->  
-> +
-
-Please remove this accidental blank line.
-
->  void console_start(struct console *console)
->  {
->  	console_lock();
-> -	console->flags |= CON_ENABLED;
-> -	console_unlock();
->  
-> -	/* Wake the newly enabled kthread printer. */
-> -	wake_up_klogd();
-> +	/* Can cause races for printk_kthread_func(). */
-> +	console_flags_set(console->flags, CON_ENABLED);
->  
-> +	console_unlock();
->  	__pr_flush(console, 1000, true);
->  }
->  EXPORT_SYMBOL(console_start);
-
-John

@@ -2,91 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F66E50A219
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AB650A317
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389147AbiDUOZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        id S1389368AbiDUOty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377277AbiDUOZB (ORCPT
+        with ESMTP id S1389625AbiDUOtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:25:01 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA2D3CA61
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:22:11 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id x12so3309866qtp.9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xZMCVPcYFV3B+SKd3NEIMAMCeRNJPyaeLFKLuEeo51c=;
-        b=q3lCCATKuv+Uf5ChmHextg+VIYRg7sglu2vtz03zUPGFsDXhO7asAMZtk1H9E/JnDr
-         YibqlpDokwcpSiIdJL8QeVip38kYFCQ2xBWbysfUDwU2V/NRfUkI9/PsfsKYxDZpQ1mb
-         r5AXLmwCXYxLFzrCecn/0Y6Au873M0CBj+0vEC9orZ/LT+dE/GvFDYw3rgIA8Op4LCHN
-         X0zzweG7A0C3beYpMXbFFw6IKQHaInfwnSTOD6NPwJN7YTK+tGVujdGsHuUJ2H+myjpT
-         S6/znAKKqrEvzcWQ1qKqblw6q/aLFBRAYuB9f3t7HhAqRizq4t2KEezpyBvq6OLqFbzI
-         JAfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xZMCVPcYFV3B+SKd3NEIMAMCeRNJPyaeLFKLuEeo51c=;
-        b=h3/AKirPxtDDsQpWICRoiwgxChZWa04ERK1RhYMsMhLdFsLfqvHL4paP9jgr+/2FWi
-         ajk2P/Vg0R4ysebI3VOX9OFCB9yqeVurDDUoBV/slOJ/lvdtZ6V5duP4sAC76b7a5lMi
-         AQR/LntOwMv4Og5iA2PWwd2ELWg/dnb8+/+yt3m8WkrSL+2UxTrjHxWAeh4tjc8IL6Ig
-         X5IrsWUGq1XPREwEXojFZ/LfsUsNyHHdqzXnUfw5GFJ/4hKgiwzASIlq6q9NFmMg2OuJ
-         zjjVWHaqnQkdP0hqv9JRaXSFeJknZbiSWuTFLd/dmL8ATLySDe8yK79YiXzMdvZhyr2S
-         VB1g==
-X-Gm-Message-State: AOAM531dHCIJ0FmrvPhNUla5HbHEsRzCtm67QLSYkMFEsgG1Z4xY6geU
-        Vbaad+SJLekGGarSluneSLw3rezCJXmxAA==
-X-Google-Smtp-Source: ABdhPJyZap0TOdrBgRkuajd9I7vdEoxGIlxp0WQHjmdek10/dK3YxB4ChxtlTFV7Gj5bn6hewrWGEA==
-X-Received: by 2002:ac8:5905:0:b0:2f2:480:ef2e with SMTP id 5-20020ac85905000000b002f20480ef2emr11909254qty.272.1650550930673;
-        Thu, 21 Apr 2022 07:22:10 -0700 (PDT)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id n11-20020a05622a11cb00b002f344f11849sm2096485qtk.71.2022.04.21.07.22.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 07:22:10 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 10:22:09 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Lu Jialin <lujialin4@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH -next] mm/memcontrol.c: make cgroup_memory_noswap static
-Message-ID: <YmFokXAWjp35yIFS@cmpxchg.org>
-References: <20220421124736.62180-1-lujialin4@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421124736.62180-1-lujialin4@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 21 Apr 2022 10:49:50 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4291240A5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:46:58 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.48:52588.517396403
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.38 (unknown [172.18.0.48])
+        by chinatelecom.cn (HERMES) with SMTP id 1C49728009B;
+        Thu, 21 Apr 2022 22:46:49 +0800 (CST)
+X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
+Received: from  ([172.18.0.48])
+        by app0024 with ESMTP id 858e0d6bc8d647be9ed84338be167c44 for wim@linux-watchdog.org;
+        Thu, 21 Apr 2022 22:46:55 CST
+X-Transaction-ID: 858e0d6bc8d647be9ed84338be167c44
+X-Real-From: liuxp11@chinatelecom.cn
+X-Receive-IP: 172.18.0.48
+X-MEDUSA-Status: 0
+Sender: liuxp11@chinatelecom.cn
+From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liu Xinpeng <liuxp11@chinatelecom.cn>
+Subject: [PATCH] Watchdog: Checking timeout invalid if hardware heartbeat range is configured
+Date:   Thu, 21 Apr 2022 22:22:18 +0800
+Message-Id: <1650550938-24608-1-git-send-email-liuxp11@chinatelecom.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 08:47:36PM +0800, Lu Jialin wrote:
-> cgroup_memory_noswap is only used in mm/memcontrol.c, therefore just make
-> it static, and remove export in include/linux/memcontrol.h
-> 
-> Signed-off-by: Lu Jialin <lujialin4@huawei.com>
+The timeout should be invalid when it is out of the hardware
+timeout range.
 
-Nice. Unused since 2d1c498072de ("mm: memcontrol: make swap tracking
-an integral part of memory control"), which removed the two instances
-from mm/swap_cgroup.c.
+ACPI watchdog: Using watchdog_timeout_invalid to check parameter
+timeout invalid
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+---
+ drivers/watchdog/wdat_wdt.c |  3 +--
+ include/linux/watchdog.h    | 17 ++++++++++++-----
+ 2 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
+index 195c8c004b69..d166d33ce7ae 100644
+--- a/drivers/watchdog/wdat_wdt.c
++++ b/drivers/watchdog/wdat_wdt.c
+@@ -450,8 +450,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+ 	 * watchdog properly after it has opened the device. In some cases
+ 	 * the BIOS default is too short and causes immediate reboot.
+ 	 */
+-	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
+-	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
++	if (watchdog_timeout_invalid(&wdat->wdd, timeout)) {
+ 		dev_warn(dev, "Invalid timeout %d given, using %d\n",
+ 			 timeout, WDAT_DEFAULT_TIMEOUT);
+ 		timeout = WDAT_DEFAULT_TIMEOUT;
+diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
+index 99660197a36c..e82daeef0b26 100644
+--- a/include/linux/watchdog.h
++++ b/include/linux/watchdog.h
+@@ -167,6 +167,15 @@ static inline void watchdog_stop_ping_on_suspend(struct watchdog_device *wdd)
+ /* Use the following function to check if a timeout value is invalid */
+ static inline bool watchdog_timeout_invalid(struct watchdog_device *wdd, unsigned int t)
+ {
++	/*
++	 * If a maximum/minimum hardware timeout is configured,
++	 * the timeout is invalid when it is out of the range.
++	 */
++	if (wdd->max_hw_heartbeat_ms)
++		return t * 1000 > wdd->max_hw_heartbeat_ms;
++	if (wdd->min_hw_heartbeat_ms)
++		return t * 1000 < wdd->min_hw_heartbeat_ms;
++
+ 	/*
+ 	 * The timeout is invalid if
+ 	 * - the requested value is larger than UINT_MAX / 1000
+@@ -174,13 +183,11 @@ static inline bool watchdog_timeout_invalid(struct watchdog_device *wdd, unsigne
+ 	 * or
+ 	 * - the requested value is smaller than the configured minimum timeout,
+ 	 * or
+-	 * - a maximum hardware timeout is not configured, a maximum timeout
+-	 *   is configured, and the requested value is larger than the
+-	 *   configured maximum timeout.
++	 * - maximum timeout is configured, and the requested value is larger than
++	 * the configured maximum timeout.
+ 	 */
+ 	return t > UINT_MAX / 1000 || t < wdd->min_timeout ||
+-		(!wdd->max_hw_heartbeat_ms && wdd->max_timeout &&
+-		 t > wdd->max_timeout);
++		(wdd->max_timeout && t > wdd->max_timeout);
+ }
+ 
+ /* Use the following function to check if a pretimeout value is invalid */
+-- 
+2.23.0
+

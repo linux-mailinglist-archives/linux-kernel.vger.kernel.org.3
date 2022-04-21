@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F4550943E
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 02:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6276550946B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 02:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383504AbiDUAtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 20:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S1383524AbiDUAxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 20:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347647AbiDUAta (ORCPT
+        with ESMTP id S1347647AbiDUAxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 20:49:30 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09E218E;
-        Wed, 20 Apr 2022 17:46:41 -0700 (PDT)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KkJdx6jkYzCrbY;
-        Thu, 21 Apr 2022 08:42:13 +0800 (CST)
-Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 08:46:39 +0800
-Received: from [127.0.0.1] (10.67.111.83) by dggpeml500008.china.huawei.com
- (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 21 Apr
- 2022 08:46:39 +0800
-Message-ID: <90205fce-05aa-c8d5-4e39-9529194723aa@huawei.com>
-Date:   Thu, 21 Apr 2022 08:46:39 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next] usb: typec: rt1719: Fix build error without
- CONFIG_POWER_SUPPLY
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <cy_huang@richtek.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220418082425.41566-1-renzhijie2@huawei.com>
-From:   Ren Zhijie <renzhijie2@huawei.com>
-In-Reply-To: <20220418082425.41566-1-renzhijie2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.83]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500008.china.huawei.com (7.185.36.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 20:53:15 -0400
+Received: from mail-vs1-xe64.google.com (mail-vs1-xe64.google.com [IPv6:2607:f8b0:4864:20::e64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6994815A3B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:50:28 -0700 (PDT)
+Received: by mail-vs1-xe64.google.com with SMTP id r1so3128972vsi.12
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:50:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:dkim-signature:date:to:subject:user-agent
+         :content-transfer-encoding:message-id:from;
+        bh=LWwI/BH/zs2PRw3S4cSl2rzpqJDY2RDYVUt6dkvsFts=;
+        b=wnaqr9pwZuNaePcRDhyA2lZ8VclUb0EBODoG0TmvqZyzK2Ut6DKO9XEaiyFKIefKos
+         AgAfkGrD9zDvbmDto58Bu1xquLx78iiOD4fDSE6CXr56zvs9Q9BSdWpicNKl9BeVltqS
+         pk9hLqyNFrNOhwzNjbQ8/0rq/Ho++cFpo0veazysVDIajAOYkyPns+XhHCz6XNWL4zDd
+         eWUMvme4bKsA2ozzWh85qYG2CkOzAe3TwdxPhcJCw2GgCjegyh4/RDBLCvRSVX/2IL8w
+         A9ZP1U+ilQ3I+GihPjw6PvGo8IVXfLj1bcJr1PIIOv+zr0Mj73k89ieZt5r1mJ+Y6qKE
+         pxqw==
+X-Gm-Message-State: AOAM530kJF/9P/dlJLwUlpCxFuoZ4fTYqqm/Vyda/cZgEfcIBcyHj6rG
+        /Q1P23akl9YTJenp2ZnbtxtB5YRIlGp+gwyss6OylJQYcoKb
+X-Google-Smtp-Source: ABdhPJyx6JAyhWnwk8dFTXuMp9aOxl0jWB4NUgPircADTj8bfDwnEJh0lEtqyaEjDlkH/FqSpr9mgZ+oqwCp
+X-Received: by 2002:a67:c894:0:b0:324:c5da:a9b5 with SMTP id v20-20020a67c894000000b00324c5daa9b5mr7816833vsk.33.1650502227526;
+        Wed, 20 Apr 2022 17:50:27 -0700 (PDT)
+Received: from smtp.aristanetworks.com (mx.aristanetworks.com. [162.210.129.12])
+        by smtp-relay.gmail.com with ESMTPS id x15-20020ab036ef000000b0035d3d7f148asm404575uau.12.2022.04.20.17.50.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 20 Apr 2022 17:50:27 -0700 (PDT)
+X-Relaying-Domain: arista.com
+Received: from us226.sjc.aristanetworks.com (us226.sjc.aristanetworks.com [10.243.208.9])
+        by smtp.aristanetworks.com (Postfix) with ESMTP id 8A460509630;
+        Wed, 20 Apr 2022 17:50:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
+        s=Arista-A; t=1650502226;
+        bh=LWwI/BH/zs2PRw3S4cSl2rzpqJDY2RDYVUt6dkvsFts=;
+        h=Date:To:Subject:From:From;
+        b=dlEfqT+bunv39xlhI4BWZj3ZFE2fBZRwOljFenOnq0kVMO5dgZUvvoqpPNUpt3j27
+         3MwqQJdRXQ+5uBrapZF3vwa7f88Y0gKgk1dTbRHIZ2EC4vWdgKr+ohlqCb2XdAHr8M
+         feM/14h0lZe8PpqWOlaYO0MZOuGiTaekvbO6aNG2AXrDO6DQqyiEvJphKtp9CH9Te/
+         aBEFQNSAYCPKNMnoOMDF3hK5uRwi3b/9P6p7vt71AWwUwG+a5ljbq05Oj3xGpZrWad
+         HMVEaR/BglSTorvNgSoe+fItLi9YiiNx/hYOsvPQWl3+sDOMaAZ3/H0DLxAvfd0EA3
+         qgrh5v1ko5hWg==
+Received: by us226.sjc.aristanetworks.com (Postfix, from userid 10189)
+        id 686A45EC01F2; Wed, 20 Apr 2022 17:50:26 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 17:50:26 -0700
+To:     pabeni@redhat.com, kuba@kernel.org, dsahern@kernel.org,
+        yoshfuji@linux-ipv6.org, davem@davemloft.net, edumazet@google.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        fruggeri@arista.com
+Subject: [PATCH v2 net] tcp: md5: incorrect tcp_header_len for incoming
+ connections
+User-Agent: Heirloom mailx 12.5 7/5/10
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-Id: <20220421005026.686A45EC01F2@us226.sjc.aristanetworks.com>
+From:   fruggeri@arista.com (Francesco Ruggeri)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping...
+In tcp_create_openreq_child we adjust tcp_header_len for md5 using the
+remote address in newsk. But that address is still 0 in newsk at this
+point, and it is only set later by the callers (tcp_v[46]_syn_recv_sock).
+Use the address from the request socket instead.
 
-在 2022/4/18 16:24, Ren Zhijie 写道:
-> Building without CONFIG_POWER_SUPPLY will fail:
->
-> drivers/usb/typec/rt1719.o: In function `rt1719_psy_set_property':
-> rt1719.c:(.text+0x10a): undefined reference to `power_supply_get_drvdata'
-> drivers/usb/typec/rt1719.o: In function `rt1719_psy_get_property':
-> rt1719.c:(.text+0x2c8): undefined reference to `power_supply_get_drvdata'
-> drivers/usb/typec/rt1719.o: In function `devm_rt1719_psy_register':
-> rt1719.c:(.text+0x3e9): undefined reference to `devm_power_supply_register'
-> drivers/usb/typec/rt1719.o: In function `rt1719_irq_handler':
-> rt1719.c:(.text+0xf9f): undefined reference to `power_supply_changed'
-> drivers/usb/typec/rt1719.o: In function `rt1719_update_pwr_opmode.part.9':
-> rt1719.c:(.text+0x657): undefined reference to `power_supply_changed'
-> drivers/usb/typec/rt1719.o: In function `rt1719_attach':
-> rt1719.c:(.text+0x83e): undefined reference to `power_supply_changed'
->
-> Add POWER_SUPPLY dependency to Kconfig.
->
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: 25d29b980912 ("usb: typec: rt1719: Add support for Richtek RT1719")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-> ---
->   drivers/usb/typec/Kconfig | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> index 8f921213b17d..ba24847fb245 100644
-> --- a/drivers/usb/typec/Kconfig
-> +++ b/drivers/usb/typec/Kconfig
-> @@ -56,6 +56,7 @@ config TYPEC_RT1719
->   	tristate "Richtek RT1719 Sink Only Type-C controller driver"
->   	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
->   	depends on I2C
-> +	depends on POWER_SUPPLY
->   	select REGMAP_I2C
->   	help
->   	  Say Y or M here if your system has Richtek RT1719 sink only
+v2: Added "Fixes:" line.
+
+Fixes: cfb6eeb4c860 ("[TCP]: MD5 Signature Option (RFC2385) support.")
+Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
+---
+ net/ipv4/tcp_minisocks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+index 6366df7aaf2a..6854bb1fb32b 100644
+--- a/net/ipv4/tcp_minisocks.c
++++ b/net/ipv4/tcp_minisocks.c
+@@ -531,7 +531,7 @@ struct sock *tcp_create_openreq_child(const struct sock *sk,
+ 	newtp->tsoffset = treq->ts_off;
+ #ifdef CONFIG_TCP_MD5SIG
+ 	newtp->md5sig_info = NULL;	/*XXX*/
+-	if (newtp->af_specific->md5_lookup(sk, newsk))
++	if (treq->af_specific->req_md5_lookup(sk, req_to_sk(req)))
+ 		newtp->tcp_header_len += TCPOLEN_MD5SIG_ALIGNED;
+ #endif
+ 	if (skb->len >= TCP_MSS_DEFAULT + newtp->tcp_header_len)
+-- 
+2.28.0
+
 

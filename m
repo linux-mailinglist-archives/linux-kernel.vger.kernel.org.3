@@ -2,147 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBC550A6AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518F350A6B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390602AbiDURM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S1352707AbiDUROB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390607AbiDURMn (ORCPT
+        with ESMTP id S231312AbiDURN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:12:43 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EBF325
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:09:52 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id f5so6547007ljp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:09:52 -0700 (PDT)
+        Thu, 21 Apr 2022 13:13:56 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8331B49F06
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:11:06 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id ga4-20020a17090b038400b001d4b33c74ccso4416026pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:11:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0IqQ6+qBUviTbm525jpNP9rFFjEP17/Uq4yu2pgmklg=;
-        b=h0AVqXEZDnoKpki6s6mvGXaq/qVhk9PLSMD+KC2kB/6zAm9WZ0/TOIR8jL431bIerZ
-         7RJOezuZFJkSKXrVWiCiNh2VtITqKNiaXmqD1p7DnmDoWTRufGVc5rcdwItl1OU/NUUm
-         /obosCnwvUIpl5bIMmP+YPXBXCAjBYScWaF/U=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=b7HyC84YWaJi+rFPuVcTNleREIonvKxhwkU7uOpi5IA=;
+        b=SK7jNRDR4Faawnn1rRV1m39m9ZMGdD9pQ6fLRLba7dWPyOzfrZHcGu6vCox7BixDVH
+         hzWH97436KUkp5rH4s+5vhRvUSu76Qg/0hEt6Vb3BQAaCCuI8/x2Sr+D3168/mv5cdk7
+         wzUZVe2GtEPzPIGK1ZQ75HS1g0c1vQBEFRF2M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0IqQ6+qBUviTbm525jpNP9rFFjEP17/Uq4yu2pgmklg=;
-        b=jwmrpSYXx3b3bqw9/UkevNRr4ny3wh/BXILVcQtxiiPEBNhV22Q2Wk51MrFLmLs5ro
-         EGxi/e3I2qCLJGzNX7y9ReK8LAg9P6gUbJIMs74Fyq2VHHoXEyBKPnPxOqH1bvl6MkM4
-         x4eV8NHi60UEQDPDxulcJpKdrmKE46rFxnWia4E2JuE2uwTLWn9NZ5BDNCTO0SNdukIQ
-         nbHWFIQkj0KY7j/u0GAFYIJn9mFzHw7rIMa7JrefrFfxJP9ojKjcCa/uemAVtxNJQ+R4
-         1QnA8wtoyBVmx/RH6FJSwyh9k0YhL+oTie3tAOpON4JfbU3BvBu+qEbRIbftG+5sw8y5
-         SLBg==
-X-Gm-Message-State: AOAM532IWcy/9hOoNYuzW5DDUGa+dFB31DNYsi457tBa9GvdcVhgm81P
-        /E4sQzyY9vFdyyywA+LjatNnAPDq7J0GyPh/usI=
-X-Google-Smtp-Source: ABdhPJwMYEpl9YV94DgSzOFJ3Lf7HS7MueuZqbRGkFUZJ9xwKkG2wQH3H1A2ATCDtedhdZ0qbAarMQ==
-X-Received: by 2002:a2e:9c02:0:b0:24d:bcbd:1c77 with SMTP id s2-20020a2e9c02000000b0024dbcbd1c77mr406999lji.19.1650560990226;
-        Thu, 21 Apr 2022 10:09:50 -0700 (PDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id o9-20020a056512052900b0047192443b14sm1354148lfc.85.2022.04.21.10.09.44
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=b7HyC84YWaJi+rFPuVcTNleREIonvKxhwkU7uOpi5IA=;
+        b=hdQsYFz9NwRKZOR7XeeBBR62seZ50gGZ0SIN7voZQEsDOT80nQVDy6W8sCiPJKVlP8
+         m+O8hLmv76OZPf7sKZNLawPuZbDS92WYGYUBNlaFTykd5CQWghQtnR2z0PcBmQevAaMw
+         KmYWL+sU7Ahh0GnbNxl/7w2uCFtm4eByQ4vJRm9QRD4KvhnUQ/pqNfC6fW6H66kGf6MF
+         qPobDETtVtmT7oXk5nYJJkExi/1bPJd9n1W9ZCLHeq0bAKP2GEAP1NPFJAzUO0SqzoSe
+         wYZe+nb1/7Vv5vVhRpS5zRHKwzHtu6nMlfFMqrMFZYcxmtQyc9O/u6OQ/U1p4gtAxWjr
+         9bcw==
+X-Gm-Message-State: AOAM531TRGczBwv1o2BBidy0kmjLK7xobvcvd+CMA5pErJIXAHy/hoT0
+        YaxOlikhtXXvq3vdUerc3RNalg==
+X-Google-Smtp-Source: ABdhPJzpa34oFn2IWGqz+K+ssfPq9d/6lYrTylDwIjezAJ6Tc35d0NdLgGzlFyU+LIMwrX/VDY7XGA==
+X-Received: by 2002:a17:90a:a593:b0:1c9:b837:e77d with SMTP id b19-20020a17090aa59300b001c9b837e77dmr626226pjq.205.1650561066073;
+        Thu, 21 Apr 2022 10:11:06 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:d426:5807:a72:7b27])
+        by smtp.gmail.com with UTF8SMTPSA id y17-20020a17090a8b1100b001cd4989fee5sm3370709pjn.49.2022.04.21.10.11.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 10:09:44 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id bf11so6554574ljb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:09:44 -0700 (PDT)
-X-Received: by 2002:a2e:b8d2:0:b0:24e:e19c:5375 with SMTP id
- s18-20020a2eb8d2000000b0024ee19c5375mr413269ljp.176.1650560983746; Thu, 21
- Apr 2022 10:09:43 -0700 (PDT)
+        Thu, 21 Apr 2022 10:11:05 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 10:11:04 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v9 07/12] arm64: dts: qcom: sc7280: Add max98360a codec
+ node for CRD 3.0/3.1
+Message-ID: <YmGQKKYfkrwmxmf8@google.com>
+References: <1650552459-21077-1-git-send-email-quic_srivasam@quicinc.com>
+ <1650552459-21077-8-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-References: <20220421072212.608884-1-song@kernel.org>
-In-Reply-To: <20220421072212.608884-1-song@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 21 Apr 2022 10:09:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi3eu8mdKmXOCSPeTxABVbstbDg1q5Fkak+A9kVwF+fVw@mail.gmail.com>
-Message-ID: <CAHk-=wi3eu8mdKmXOCSPeTxABVbstbDg1q5Fkak+A9kVwF+fVw@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: invalidate unused part of bpf_prog_pack
-To:     Song Liu <song@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1650552459-21077-8-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 12:27 AM Song Liu <song@kernel.org> wrote:
->
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -228,6 +228,28 @@ static void jit_fill_hole(void *area, unsigned int size)
->         memset(area, 0xcc, size);
->  }
->
-> +#define INVALID_BUF_SIZE PAGE_SIZE
-> +static char invalid_insn_buf[INVALID_BUF_SIZE];
+On Thu, Apr 21, 2022 at 08:17:34PM +0530, Srinivasa Rao Mandadapu wrote:
+
+> Subject: arm64: dts: qcom: sc7280: Add max98360a codec node for CRD 3.0/3.1
+
+This isn´t limited to the CRD 3.x, but applies to all herobrine boards,
+so it should be something like "arm64: dts: qcom: sc7280: herobrine:
+Add max98360a codec".
+
+> Add max98360a codec node for audio use case on CRD rev5
+> (aka CRD 3.0/3.1) boards.
+
+ditto
+
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> index d58045d..f247403 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> @@ -20,6 +20,14 @@
+>  #include "sc7280-chrome-common.dtsi"
+>  
+>  / {
+> +	max98360a: audio-codec-0 {
+> +		compatible = "maxim,max98360a";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&amp_en>;
+> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
+> +		#sound-dai-cells = <0>;
+> +	};
 > +
-> +static int __init bpf_init_invalid_insn_buf(void)
-> +{
-> +       jit_fill_hole(invalid_insn_buf, INVALID_BUF_SIZE);
-> +       return 0;
-> +}
-> +pure_initcall(bpf_init_invalid_insn_buf);
-> +
-> +void bpf_arch_invalidate_text(void *dst, size_t len)
-> +{
-> +       size_t i = 0;
-> +
-> +       while (i < len) {
-> +               size_t s = min_t(size_t, len - i, INVALID_BUF_SIZE);
-> +
-> +               bpf_arch_text_copy(dst + i, invalid_insn_buf, s);
-> +               i += s;
-> +       }
-> +}
 
-Why do we need this new infrastructure?
+This node should be added before 'pwmleds' (alphabetical order
+within the board-specific top level nodes).
 
-Why bpf_arch_invalidate_text()?
-
-Why not jit_fill_hole() unconditionally?
-
-It seems a bit pointless to have page buffer for containing this data,
-when we already have a (trivial) function to fill an area with invalid
-instructions.
-
-On x86, it's literally just "memset(0xcc)" (ie all 'int3' instructions).
-
-And on most RISC architectures, it would be some variation of
-"memset32(TRAP_INSN)".
-
-And all bpf targets should already have that nicely as that
-jit_fill_hole() function, no?
-
-The pack-allocator bpf code already *does* that, and is already passed
-that function.
-
-But it's just that it does it too late. Instead of doing it when
-allocating a new pack, it does it in the sub-allocator.
-
-Afaik the code in bpf/core.c already has all the information it needs,
-and already has that jit_fill_hole() function pointer, but is applying
-it at the wrong point.
-
-So I think the fix should be to just pass in that 'bpf_fill_ill_insns'
-function pointer all the way to alloc_new_pack(), instead of using it
-in bpf_jit_binary_alloc().
-
-NOTE! Once again, I'm not actually all that familiar with the code.
-Maybe I'm missing something.
-
-             Linus
+>  	chosen {
+>  		stdout-path = "serial0:115200n8";
+>  	};
+> -- 
+> 2.7.4
+> 

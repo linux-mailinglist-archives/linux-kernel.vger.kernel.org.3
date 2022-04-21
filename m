@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C262550A494
+	by mail.lfdr.de (Postfix) with ESMTP id 76B9350A493
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390246AbiDUPq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        id S1390250AbiDUPrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241885AbiDUPqy (ORCPT
+        with ESMTP id S241885AbiDUPrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:46:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 941374830F
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650555843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4gc2M0v0er8UCG8V53Vh3iWVHg/oNsB78Q63SvOvkq8=;
-        b=IacfNhJ0ej4n8WfEO/+R8ZQHWpmBgdeiakzPRr+9SufLwPfu9y3shUqJNcp2i2lzf5zu0e
-        WzQsyDSwBb6R8cB1MEEy/W0b5TVqpBT53ZEIpYix7Fx0+En7soWXWCFao/7ywrgQJYSM0N
-        i/xxcjjhgLMyg15IpcMsebUYPCtKdRA=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-EWlSdXKMPRiH0cfzoha_VA-1; Thu, 21 Apr 2022 11:43:11 -0400
-X-MC-Unique: EWlSdXKMPRiH0cfzoha_VA-1
-Received: by mail-io1-f71.google.com with SMTP id x8-20020a056602160800b00654b3a46b66so3512966iow.19
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:43:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=4gc2M0v0er8UCG8V53Vh3iWVHg/oNsB78Q63SvOvkq8=;
-        b=Qd+dH9FBThQAci0LJQ/jRYWx9RpgA85iLUnyD9TVJ7cWULsTl3BVY+WNdhgjdgIKUx
-         Da/VmoTtJveMZB8uR/vqO7FD8veipGTFjL6vWQsLA0s12FqW7wOruCfp0K2dMk1WTYsY
-         p1uEXwhQDbbSFl+zo3TYCMPmqLJTHJgPY8H4INgBJTCNehK2jd2i1mIyYaca/A4A564u
-         pNVf0i4UaDj2UIz2/COMJawgz/wV/U8IQrym1dWI5CEqaZuQPGSvRe/QOgXYiUMxWvEg
-         5PYaNG9lXMKgBbrw9exOcsAIYZLgqzSv3nCxObX9HJYuyfkG0+28uVFfo8itxUT2A9rH
-         4R/w==
-X-Gm-Message-State: AOAM532Rpf9nCTHYNOkRc1SiXSREPnOHDYeOXHRoZdUueZWXfFHX6NKo
-        FOkOZc0SoysdCKnwTJeRIYehnG1/8fP59+PPZkQObz9u0mwa557h4zBnjm/I0RzhfKmouuBJ/yB
-        Ub1/gSOKWhy0EKD/0kj8QCig7
-X-Received: by 2002:a05:6638:279:b0:328:5fae:8913 with SMTP id x25-20020a056638027900b003285fae8913mr94717jaq.157.1650555790607;
-        Thu, 21 Apr 2022 08:43:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxjsXov89LqgRKDG8j9vehDNDyPDT79M93ZWcRO17dZH1LAZ7SUOnOLcrWeWsNkDz+RMjwZSw==
-X-Received: by 2002:a05:6638:279:b0:328:5fae:8913 with SMTP id x25-20020a056638027900b003285fae8913mr94711jaq.157.1650555790400;
-        Thu, 21 Apr 2022 08:43:10 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id c2-20020a92dc82000000b002c9b0f25e62sm12341111iln.60.2022.04.21.08.43.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 08:43:10 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 11:43:09 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH -mmotm] hugetlb: use mm.h instead of mm_types.h
-Message-ID: <YmF7jTjaku6PNoZt@xz-m1.local>
-References: <20220421014723.5802-1-rdunlap@infradead.org>
+        Thu, 21 Apr 2022 11:47:15 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039B64830F
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:44:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650555865; x=1682091865;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ufRPfKF5jt4TF7zDaqnZ+J7Q8GBnzvU5he8jEm62DKg=;
+  b=iQdynh1xVOmWfi4fRSOlIWvLqc3BTm0Xqolw9Tfhc9Jp8CiwMKrUsPPg
+   xFhptAlQmCGWDwu/YqqQ/va1ISFUhXQ+MAjmHBSBYv7NojCvzRx150HYf
+   IhzOBPI2kOrw5w9qc25Y3tvW4H6RT2wBY0XItjuzw/Tm0nXSeMJ6MjE7E
+   VAlijsfU+bUAuwR9T6CYqaFSNDHdAl6d03GSe1YEtZdxCdYoybjrcdtAv
+   s7VSbQW1C3CjZVTUZ4zsTvtl1jJukogy4AgSyNzdevyuJ2eBWYWWX7gGd
+   XFxxOApTN6cCwMD98jyOT+Cm6OtecrgaugCOsMqDyw1eaLvhtByRyOwl/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="261994562"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="261994562"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 08:44:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="593714573"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 21 Apr 2022 08:44:23 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhYyk-0008Wx-Fq;
+        Thu, 21 Apr 2022 15:44:22 +0000
+Date:   Thu, 21 Apr 2022 23:43:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <treding@nvidia.com>
+Subject: drivers/gpu/drm/tegra/dc.c:2223:38: warning: variable 'old_state'
+ set but not used
+Message-ID: <202204212356.rwOZkf1l-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220421014723.5802-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,49 +61,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 06:47:23PM -0700, Randy Dunlap wrote:
-> mm_types.h does not have zap_flags_t in it so use mm.h instead
-> in hugetlb.h.
-> 
-> Fixes this build error:
-> 
-> In file included from ../drivers/virt/nitro_enclaves/ne_misc_dev.c:16:0:
-> ../include/linux/hugetlb.h:414:4: error: unknown type name ‘zap_flags_t’; did you mean ‘vm_flags_t’?
->     zap_flags_t zap_flags)
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Signed-off-by: Peter Xu <peterx@redhat.com>
-      ~~~~~~~~~~~~~~~
-            ^
-            |
-            +-------- could drop these..
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b253435746d9a4a701b5f09211b9c14d3370d0da
+commit: 04d5d5df9df79f9045e76404775fc8a084aac23d drm/tegra: dc: Support memory bandwidth management
+date:   8 months ago
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220421/202204212356.rwOZkf1l-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04d5d5df9df79f9045e76404775fc8a084aac23d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 04d5d5df9df79f9045e76404775fc8a084aac23d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/tegra/
 
-> Cc: Mike Kravetz <mike.kravetz@oracle.com>
-> Cc: linux-mm@kvack.org
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> ---
-> Fixes: mm-hugetlb-only-drop-uffd-wp-special-pte-if-required-fix.patch
-> 
->  include/linux/hugetlb.h |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -2,7 +2,7 @@
->  #ifndef _LINUX_HUGETLB_H
->  #define _LINUX_HUGETLB_H
->  
-> -#include <linux/mm_types.h>
-> +#include <linux/mm.h>
->  #include <linux/mmdebug.h>
->  #include <linux/fs.h>
->  #include <linux/hugetlb_inline.h>
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Thanks for fixing it,
+   drivers/gpu/drm/tegra/dc.c: In function 'tegra_crtc_update_memory_bandwidth':
+   drivers/gpu/drm/tegra/dc.c:1843:53: warning: variable 'new_dc_state' set but not used [-Wunused-but-set-variable]
+    1843 |         const struct tegra_dc_state *old_dc_state, *new_dc_state;
+         |                                                     ^~~~~~~~~~~~
+   drivers/gpu/drm/tegra/dc.c:1843:38: warning: variable 'old_dc_state' set but not used [-Wunused-but-set-variable]
+    1843 |         const struct tegra_dc_state *old_dc_state, *new_dc_state;
+         |                                      ^~~~~~~~~~~~
+   drivers/gpu/drm/tegra/dc.c: In function 'tegra_crtc_calculate_memory_bandwidth':
+>> drivers/gpu/drm/tegra/dc.c:2223:38: warning: variable 'old_state' set but not used [-Wunused-but-set-variable]
+    2223 |         const struct drm_crtc_state *old_state;
+         |                                      ^~~~~~~~~
+
+
+vim +/old_state +2223 drivers/gpu/drm/tegra/dc.c
+
+  2213	
+  2214	static int tegra_crtc_calculate_memory_bandwidth(struct drm_crtc *crtc,
+  2215							 struct drm_atomic_state *state)
+  2216	{
+  2217		ulong overlap_mask[TEGRA_DC_LEGACY_PLANES_NUM] = {}, mask;
+  2218		u32 plane_peak_bw[TEGRA_DC_LEGACY_PLANES_NUM] = {};
+  2219		bool all_planes_overlap_simultaneously = true;
+  2220		const struct tegra_plane_state *tegra_state;
+  2221		const struct drm_plane_state *plane_state;
+  2222		struct tegra_dc *dc = to_tegra_dc(crtc);
+> 2223		const struct drm_crtc_state *old_state;
+  2224		struct drm_crtc_state *new_state;
+  2225		struct tegra_plane *tegra;
+  2226		struct drm_plane *plane;
+  2227	
+  2228		/*
+  2229		 * The nv-display uses shared planes.  The algorithm below assumes
+  2230		 * maximum 3 planes per-CRTC, this assumption isn't applicable to
+  2231		 * the nv-display.  Note that T124 support has additional windows,
+  2232		 * but currently they aren't supported by the driver.
+  2233		 */
+  2234		if (dc->soc->has_nvdisplay)
+  2235			return 0;
+  2236	
+  2237		new_state = drm_atomic_get_new_crtc_state(state, crtc);
+  2238		old_state = drm_atomic_get_old_crtc_state(state, crtc);
+  2239	
+  2240		/*
+  2241		 * For overlapping planes pixel's data is fetched for each plane at
+  2242		 * the same time, hence bandwidths are accumulated in this case.
+  2243		 * This needs to be taken into account for calculating total bandwidth
+  2244		 * consumed by all planes.
+  2245		 *
+  2246		 * Here we get the overlapping state of each plane, which is a
+  2247		 * bitmask of plane indices telling with what planes there is an
+  2248		 * overlap. Note that bitmask[plane] includes BIT(plane) in order
+  2249		 * to make further code nicer and simpler.
+  2250		 */
+  2251		drm_atomic_crtc_state_for_each_plane_state(plane, plane_state, new_state) {
+  2252			tegra_state = to_const_tegra_plane_state(plane_state);
+  2253			tegra = to_tegra_plane(plane);
+  2254	
+  2255			if (WARN_ON_ONCE(tegra->index >= TEGRA_DC_LEGACY_PLANES_NUM))
+  2256				return -EINVAL;
+  2257	
+  2258			plane_peak_bw[tegra->index] = tegra_state->peak_memory_bandwidth;
+  2259			mask = tegra_plane_overlap_mask(new_state, plane_state);
+  2260			overlap_mask[tegra->index] = mask;
+  2261	
+  2262			if (hweight_long(mask) != 3)
+  2263				all_planes_overlap_simultaneously = false;
+  2264		}
+  2265	
+  2266		/*
+  2267		 * Then we calculate maximum bandwidth of each plane state.
+  2268		 * The bandwidth includes the plane BW + BW of the "simultaneously"
+  2269		 * overlapping planes, where "simultaneously" means areas where DC
+  2270		 * fetches from the planes simultaneously during of scan-out process.
+  2271		 *
+  2272		 * For example, if plane A overlaps with planes B and C, but B and C
+  2273		 * don't overlap, then the peak bandwidth will be either in area where
+  2274		 * A-and-B or A-and-C planes overlap.
+  2275		 *
+  2276		 * The plane_peak_bw[] contains peak memory bandwidth values of
+  2277		 * each plane, this information is needed by interconnect provider
+  2278		 * in order to set up latency allowance based on the peak BW, see
+  2279		 * tegra_crtc_update_memory_bandwidth().
+  2280		 */
+  2281		drm_atomic_crtc_state_for_each_plane_state(plane, plane_state, new_state) {
+  2282			u32 i, old_peak_bw, new_peak_bw, overlap_bw = 0;
+  2283	
+  2284			/*
+  2285			 * Note that plane's atomic check doesn't touch the
+  2286			 * total_peak_memory_bandwidth of enabled plane, hence the
+  2287			 * current state contains the old bandwidth state from the
+  2288			 * previous CRTC commit.
+  2289			 */
+  2290			tegra_state = to_const_tegra_plane_state(plane_state);
+  2291			tegra = to_tegra_plane(plane);
+  2292	
+  2293			for_each_set_bit(i, &overlap_mask[tegra->index], 3) {
+  2294				if (i == tegra->index)
+  2295					continue;
+  2296	
+  2297				if (all_planes_overlap_simultaneously)
+  2298					overlap_bw += plane_peak_bw[i];
+  2299				else
+  2300					overlap_bw = max(overlap_bw, plane_peak_bw[i]);
+  2301			}
+  2302	
+  2303			new_peak_bw = plane_peak_bw[tegra->index] + overlap_bw;
+  2304			old_peak_bw = tegra_state->total_peak_memory_bandwidth;
+  2305	
+  2306			/*
+  2307			 * If plane's peak bandwidth changed (for example plane isn't
+  2308			 * overlapped anymore) and plane isn't in the atomic state,
+  2309			 * then add plane to the state in order to have the bandwidth
+  2310			 * updated.
+  2311			 */
+  2312			if (old_peak_bw != new_peak_bw) {
+  2313				struct tegra_plane_state *new_tegra_state;
+  2314				struct drm_plane_state *new_plane_state;
+  2315	
+  2316				new_plane_state = drm_atomic_get_plane_state(state, plane);
+  2317				if (IS_ERR(new_plane_state))
+  2318					return PTR_ERR(new_plane_state);
+  2319	
+  2320				new_tegra_state = to_tegra_plane_state(new_plane_state);
+  2321				new_tegra_state->total_peak_memory_bandwidth = new_peak_bw;
+  2322			}
+  2323		}
+  2324	
+  2325		return 0;
+  2326	}
+  2327	
 
 -- 
-Peter Xu
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

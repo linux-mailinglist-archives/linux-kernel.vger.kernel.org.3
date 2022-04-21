@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A3E50AB82
+	by mail.lfdr.de (Postfix) with ESMTP id 0494950AB80
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 00:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442467AbiDUWbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 18:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
+        id S1442474AbiDUWbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 18:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiDUWa7 (ORCPT
+        with ESMTP id S1344390AbiDUWbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 18:30:59 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9294B1DE;
-        Thu, 21 Apr 2022 15:28:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=ceerddFcOflxFWACROVtDGMz1WNv7h63zUgRdG7WKco=; b=X/QcnW8vDcLAGOfhH7oEwYo90q
-        bEIdkSmRUAmqM0WwaaLxYb0V5zunfL4ECMJMld5MbE+o2SX5rraRJ39am4eqRwp3oNZuuJzTjM1RX
-        aHNkY3Pj633qVQSo8wyniCjenvwwl2pIfCn8iVqaGSasx8EcjIU8qMt3XmfWzjO+yByltsrdE7Xf7
-        2tpdeCHsYtTGZxyvecVwwzGaqy9ehkx/ZTxrFyEtjQAGlmrJFF+jmJL5KDDKXljhbHeTYXH1B7lEI
-        9I1WVlckEus4tp6JtOV7Jm27ONm0nFA6erW6x3Sc5BW6+98CJ37wmykOnFnUzOofGPBatXgAds2Wu
-        deZGwRog==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhfHN-005V5N-BC; Thu, 21 Apr 2022 22:28:02 +0000
-Message-ID: <c86e540f-6611-4ef9-9439-8285fee61831@infradead.org>
-Date:   Thu, 21 Apr 2022 15:27:55 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
- reduce to an integer constant
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-usb@vger.kernel.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        heikki.krogerus@linux.intel.com
-References: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
- <15b38d01-702c-b39e-7053-54c3905a0794@roeck-us.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <15b38d01-702c-b39e-7053-54c3905a0794@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+        Thu, 21 Apr 2022 18:31:19 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9A44B1DE
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 15:28:27 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id s137so5817460pgs.5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 15:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z/WL4sEfilsdTNMCzpQ4AUYKUU/6fA7UgWxPOldA7e0=;
+        b=DCXNDtgEIbQlslJM2sme6aHreWG5byjxFkM19clb/BPTLe3LO+1bN8luGxz7gcFLH2
+         V8TxBt5zvjxtLWo6QtqGc5jeNy0BsSR5R0xNy7AKvReXzahuYaLSPkLjTf+Ue/17I5wx
+         81dsfmAdQFC3P71z0Hb0cx1qBab0qVQ1xwNEVrEENevqHC9SLaPohX4yodxTix65LSOl
+         7yS8Ug1GH6K7lJA9I6nbv9VQ3sst2BzrsWmk6t61DZfbBJaKHohxxlxgehgkJfsXuvCo
+         nytHu38tVwNI+SN18mZjCgcA3niWmlGT1Ly3o9boYquSP/NMt820jyG6cGjK8q6VheRE
+         vdug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Z/WL4sEfilsdTNMCzpQ4AUYKUU/6fA7UgWxPOldA7e0=;
+        b=21M1RBZhW9iaPNZztMNokP2Z7aeX8G958I/ylAD/nNSI6y0pZR5x8S7xowkQJoI+N+
+         wTJITn/3ivpDx8PR4ZcsQVwnMNDRZgJ32FZsjBmfkQQhyxeP69HFJAdUUKg79VggcnJK
+         bNZBEuBupbNBxQY3S8EAO/sxRhI9BehQH53XxKo3124Mn43LWmwEOMEA/GVd/KfCfI20
+         sVm7OHRvMhGHBqEne0ReguAQhLEm2prwdc4cjx8Z6yf9HY2B0Zxh1zmf5FMgzp1+buwI
+         6+KRh/xLLHKNrS6nrnGJkkdzVeJ77YossuajiHUwxdMfMqRE96XOJ6CIigu+ZSKtIZ73
+         CP3Q==
+X-Gm-Message-State: AOAM5322lsJrBBjnclHx6Zc4Q+zlDR4BAcVIQkfHrqIIY2Z8/Ez1nJQT
+        FUGJ3EWuPsIkT4tu3oBDewkhj3toZrJuhg==
+X-Google-Smtp-Source: ABdhPJx+f1tHcxxGqTCOCPo1VxA+zauf4INXX/UghwWOO8s1oRB78YRFQkcmGmPLG7UJfs2EKJR2JA==
+X-Received: by 2002:a05:6a00:2343:b0:50a:7852:902f with SMTP id j3-20020a056a00234300b0050a7852902fmr1657232pfj.5.1650580106441;
+        Thu, 21 Apr 2022 15:28:26 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004fae885424dsm131962pfx.72.2022.04.21.15.28.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 15:28:25 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 15:28:25 -0700 (PDT)
+X-Google-Original-Date: Thu, 21 Apr 2022 15:28:23 PDT (-0700)
+Subject:     Re: [PATCH] RISC-V: cpuidle: fix Kconfig select for RISCV_SBI_CPUIDLE
+In-Reply-To: <20220409225317.14332-1-rdunlap@infradead.org>
+CC:     linux-kernel@vger.kernel.org, rdunlap@infradead.org, lkp@intel.com,
+        anup@brainfault.org, apatel@ventanamicro.com, anup@brainfault.org,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     rdunlap@infradead.org
+Message-ID: <mhng-2811736b-27d0-4312-ba68-ef99947a9372@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Sat, 09 Apr 2022 15:53:17 PDT (-0700), rdunlap@infradead.org wrote:
+> There can be lots of build errors when building cpuidle-riscv-sbi.o.
+> They are all caused by a kconfig problem with this warning:
+>
+> WARNING: unmet direct dependencies detected for RISCV_SBI_CPUIDLE
+>   Depends on [n]: CPU_IDLE [=y] && RISCV [=y] && RISCV_SBI [=n]
+>   Selected by [y]:
+>   - SOC_VIRT [=y] && CPU_IDLE [=y]
+>
+> so make the 'select' of RISCV_SBI_CPUIDLE also depend on RISCV_SBI.
+>
+> Fixes: c5179ef1ca0c ("RISC-V: Enable RISC-V SBI CPU Idle driver for QEMU virt machine")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Anup Patel <anup.patel@wdc.com>
+> Cc: Anup Patel <apatel@ventanamicro.com>
+> Cc: Anup Patel <anup@brainfault.org>
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> ---
+>  arch/riscv/Kconfig.socs |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> --- a/arch/riscv/Kconfig.socs
+> +++ b/arch/riscv/Kconfig.socs
+> @@ -38,7 +38,7 @@ config SOC_VIRT
+>  	select SIFIVE_PLIC
+>  	select PM_GENERIC_DOMAINS if PM
+>  	select PM_GENERIC_DOMAINS_OF if PM && OF
+> -	select RISCV_SBI_CPUIDLE if CPU_IDLE
+> +	select RISCV_SBI_CPUIDLE if CPU_IDLE && RISCV_SBI
+>  	help
+>  	  This enables support for QEMU Virt Machine.
 
-On 4/21/22 13:36, Guenter Roeck wrote:
-> On 4/21/22 12:03, Naresh Kamboju wrote:
->> Linux mainline and linux next arm64 builds failed with gcc-7.3.x.
->>
->> drivers/usb/typec/tcpm/tcpm.c: In function 'run_state_machine':
->> drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
->> reduce to an integer constant
->>     case BDO_MODE_TESTDATA:
->>     ^~~~
->> make[4]: *** [scripts/Makefile.build:288: drivers/usb/typec/tcpm/tcpm.o] Error 1
->>                                        ^
->> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>
->> -- 
-> 
-> That code is several years old, the define is a constant, and I don't see
-> a recent change in the code. What am I missing ?
+Sorry to be slow here, I seem to remember having written this before but 
+I must have just gotted pulled into something else.
 
-See a recent patch for the same problem in a different area:
+IMO the real bug here is that Kconfig.socs is poorly designed: I 
+misunderstood how select works at the time, we should really clean all 
+this up (or maybe just remove it entirely?) so we don't have to 
+duplicate all these dependencies.
 
-commit 1ef8715975de
-Author: Borislav Petkov <bp@suse.de>
-Date:   Tue Apr 5 17:15:08 2022 +0200
+That's a bigger project, though so this is on fixes -- it's way better 
+to have the build work.
 
-    ALSA: usb-audio: Fix undefined behavior due to shift overflowing the constant
-
-so those constants probably need to be cast to unsigned int.
-(I guess)
-
--- 
-~Randy
+Thanks!

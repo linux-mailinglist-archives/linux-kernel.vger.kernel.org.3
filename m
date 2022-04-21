@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200C55098FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935BC509907
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385709AbiDUHZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
+        id S1385714AbiDUH0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344524AbiDUHZr (ORCPT
+        with ESMTP id S229843AbiDUH0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:25:47 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94411835D
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:22:58 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id m14-20020a17090a34ce00b001d5fe250e23so1055478pjf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Cmd0E8Et4Aqh5aFcilCHXMmJJLWu1Jtl7bjaRVoAghc=;
-        b=wlpnfsZ16kVfFPfp0k7Xj0f/aywbiZeLM4giSo7yBwG9EWkqD7nzRgzQ8sF933Mir5
-         5J5YxRb1Sn613WSHJZqpEO1cao98as3MMx1p/h1VIRoV1NPKbuXITZTdwCBtB4w0Hvhv
-         NzGU7bgDiaG0QTcoVX2PdwFTW0ISrwv8eCeKnOknh5CzqMN8fNsJnKqrH7Qbi/ATlAn9
-         mc+ajMM1PLJX0m84nWKrxEhe11zMs3WDUqOwac9nZZyhtqOAZp/phrX55gcTelgupd9V
-         L6Luf/Qt9k4lTI/FcV5s090CQk9HwX5H+l7eFF2QhizHRLp7sv23a5GpyZMNONzkqP1w
-         mkJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cmd0E8Et4Aqh5aFcilCHXMmJJLWu1Jtl7bjaRVoAghc=;
-        b=hCV+xx1gKEqO9nk2PILh785i7afI6egtJz0tyzhVU0YguSzr4qYXJa7SuJzdfUd4Au
-         s0PTXAJLsLQaW89zuxvb9TrB3JNh+slYt1Ah0BZyxPrV6eV4tm7+FqUpAyj0EImF/je8
-         gAaW1oBEcjBI6ac93x6uUOfzpv/IRiOzA6ObCa+4SWROdLjywX4IquN8PoYGPwx7MQKR
-         ds91OwFup+eiFx3O3W96jHTlDu7G7PpQyqH+yZKwRg0GowJV4dXrW0Lyb4F6yJPHpzpH
-         SgLrog/JlCjHEH8XV4otBUTp87U0V8k6asD4v//EgJw/aCy+/i3F1i79E1PWNoB9bWPz
-         3csw==
-X-Gm-Message-State: AOAM533NH495O+qp4nm2q/bdlXq6GBJi/s3gtkp78ejXxwHWlcwG1SMY
-        avTb5fP0vKhQ6X+HA1L9jPXQcyS9JXGSDL4wPnfELivfrgQ=
-X-Google-Smtp-Source: ABdhPJwJ+eJ+vATRB/XjaodcI4GTsx+t0J1D+9WNX9bPTfhZ/WJLHVyG2MdACY15rk8788iGZEzyO+B/x7DhWAjNAjI=
-X-Received: by 2002:a17:902:e881:b0:158:fd34:7b28 with SMTP id
- w1-20020a170902e88100b00158fd347b28mr18501645plg.95.1650525778165; Thu, 21
- Apr 2022 00:22:58 -0700 (PDT)
+        Thu, 21 Apr 2022 03:26:15 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C71518369;
+        Thu, 21 Apr 2022 00:23:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 44CC3CE20D2;
+        Thu, 21 Apr 2022 07:23:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D120C385A1;
+        Thu, 21 Apr 2022 07:23:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650525800;
+        bh=WBrrVLe9xDjGjs0TLd562+RhfrgkR1wAqV4ClV9hpjc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M1gdqogT46Ms5AqxWDNnmouNEeO6XyVKQItc2f7E0pDsGL/w4bbIPvQrbmfNcCnwV
+         Fn1eVXuGNpS3ly2QUtsL/ZBiT80Se3xxJ1GP5YRAyt+tw7IngcCXU6uFkBSxfjPDfa
+         jcrG+NRDXLbMG7B0A8hnxJcdmrp+s/IqnDPOia8w0U5zGzSc4z1+TuF7IJr6FDLwio
+         2FkfacY+Ke8xhmq38NC73FwXichDkSzsrXlemTxcrzeZcX3+y0srenKNF/82/QsS9i
+         xrXSbaWrPNYAjHIuWwA6nC4ID53thSDoPduZkqupkOQMCwEwLN5cW0nvg9fboymN1C
+         egkp2FuS3Csgg==
+Date:   Thu, 21 Apr 2022 12:53:16 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>
+Subject: Re: [PATCH v2] arm64: dts: qcom: db845c: Add support for MCP2517FD
+Message-ID: <YmEGZML8qIOjRT/s@matsya>
+References: <20220419043348.1483625-1-vkoul@kernel.org>
+ <f3a159b5-ebca-ce00-88dc-ddde353c9031@linaro.org>
 MIME-Version: 1.0
-References: <20220420102811.3157-1-slark_xiao@163.com> <CAMZdPi9WJsz5nyzQB39q=Jhy8_q2=N8VAucYMUYKUf_faL5csQ@mail.gmail.com>
- <55f0b74e.25a7.1804aeeedb4.Coremail.slark_xiao@163.com>
-In-Reply-To: <55f0b74e.25a7.1804aeeedb4.Coremail.slark_xiao@163.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Thu, 21 Apr 2022 09:22:22 +0200
-Message-ID: <CAMZdPi93zxGmb-ns0bNk6itcUck1=Hsh5Y9-FFCNBU2qNg248A@mail.gmail.com>
-Subject: Re: Re: [PATCH] bus: mhi: host: Add support for Cinterion MV32-WA/MV32-WB
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     mani@kernel.org, quic_hemantk@quicinc.com,
-        gregkh@linuxfoundation.org, bbhatt@codeaurora.org,
-        christophe.jaillet@wanadoo.fr, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f3a159b5-ebca-ce00-88dc-ddde353c9031@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,45 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Apr 2022 at 09:04, Slark Xiao <slark_xiao@163.com> wrote:
->
->
->
-> At 2022-04-20 20:00:23, "Loic Poulain" <loic.poulain@linaro.org> wrote:
-> >Hi Slark,
-> >
-> >On Wed, 20 Apr 2022 at 12:28, Slark Xiao <slark_xiao@163.com> wrote:
-> >>
-> >> MV32-WA is designed based on Qualcomm SDX62, and
-> >> MV32-WB is designed based on QUalcomm SDX65. Both
-> >> products' enumeration would align with previous
-> >> product MV31-W.
-> >> Add some new items for mv32 to separate it from
-> >> mv31-w, in case we need to do any changes in
-> >> future.
-> >
-> >On the contrary, do not overly clone the structures, and re-use the
-> >mv31 ones if they apply. You can rename them to mv3x if you really
-> >want to.
-> >
-> >Regards,
-> >Loic
-> >
-> Hi Loic,
->   Thanks for your suggestion.
->    Actually, for different chip(like previous SDX24 and SDX55), they may
-> have difference behavior. For example, the item of 'sideband_wake'
-> of SDX24 is true but the rest is false. It's hard to say SDX65 would
-> align with SDX55 until now.
+On 19-04-22, 09:37, Krzysztof Kozlowski wrote:
+> On 19/04/2022 06:33, Vinod Koul wrote:
+> > Add support for onboard MCP2517FD SPI CAN transceiver attached to
+> > SPI0 of RB3.
+> > 
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> > Changes in v2:
+> >  - add cs and pinctrl config
+> >  - remove misleading comment
+> > 
+> >  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 33 ++++++++++++++++++++++
+> >  1 file changed, 33 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> > index 28fe45c5d516..4f4d45be93e3 100644
+> > --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> > @@ -28,6 +28,13 @@ chosen {
+> >  		stdout-path = "serial0:115200n8";
+> >  	};
+> >  
+> > +	/* Fixed crystal oscillator dedicated to MCP2517FD */
+> > +	clk40M: can_clock {
+> 
+> No underscores in node names.
 
-I agree, but as long as the structure's fields are the same there is
-no point in duplicating them.
+right, will patch up the original source as well :D
 
->    Maybe I can re-use the same item '.config' for all MV3X products and separate
-> them from device info(mhi_pci_dev_info).
->    Do you agree this?
+> 
+> > +		compatible = "fixed-clock";
+> > +		#clock-cells = <0>;
+> > +		clock-frequency = <40000000>;
+> > +	};
+> > +
+> >  	dc12v: dc12v-regulator {
+> >  		compatible = "regulator-fixed";
+> >  		regulator-name = "DC12V";
+> > @@ -746,6 +753,24 @@ codec {
+> >  	};
+> >  };
+> >  
+> > +&spi0 {
+> > +	status = "okay";
+> > +	pinctrl-names = "default";
+> > +	pinctrl-0 = <&qup_spi0_default>;
+> > +	cs-gpios = <&tlmm 3 GPIO_ACTIVE_LOW>;
+> > +
+> > +	can@0 {
+> > +		compatible = "microchip,mcp2517fd";
+> > +		reg = <0>;
+> > +		clocks = <&clk40M>;
+> > +		interrupts-extended = <&tlmm 104 IRQ_TYPE_LEVEL_LOW>;
+> > +		spi-max-frequency = <10000000>;
+> > +		vdd-supply = <&vdc_5v>;
+> > +		xceiver-supply = <&vdc_5v>;
+> > +		status = "okay";
+> 
+> No need for status for new nodes (unless it is an extension of existing
+> node?), it is okay by default.
 
-Yes.
+Yep
 
-
-Loic
+-- 
+~Vinod

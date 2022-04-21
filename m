@@ -2,47 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EBA50985B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42703509882
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385555AbiDUHHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+        id S1385546AbiDUHHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385559AbiDUHHe (ORCPT
+        with ESMTP id S1385571AbiDUHHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:07:34 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4181115704;
-        Thu, 21 Apr 2022 00:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=zBXWLNnXpk4rildATDLl07tkcfHH7qx/rs6eJc2jVvY=; b=QR0Xe8VEKwSitBZoLjmLhc8fq8
-        Lr97HHHJhJPho3My5cPAj3WFl0XUehAS9E+qEfCT/Lq6WDrFnYeWYcShZdet8No9amJuD3NdnhpXg
-        A2WH2R3rSaIEsCxFrj4AW4IgVwsRmuLSHamhv5gA1JmwuKLVy4Zwc1fRRbXymaAOFUWY/Fo25jO/Y
-        Rv07h3ZFVNmYVZsAr2+KfR9itkDS/IPJLGd4Zit2F7zasrKi43a339FOQVRyOyxnkylnHwxU0xPsw
-        c+T5CEboHhoU2XsgyUtATcYfhWl+O7Eg4aZlYpZqDsNyqmG71+b+KUGXTz4CsIQO92nqN/AR8/lSc
-        vuSIbYrQ==;
-Received: from [2001:4bb8:191:364b:7b50:153f:5622:82f7] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhQrr-00BwId-CM; Thu, 21 Apr 2022 07:04:43 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     akpm@linux-foundation.org
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH] net: unexport csum_and_copy_{from,to}_user
-Date:   Thu, 21 Apr 2022 09:04:40 +0200
-Message-Id: <20220421070440.1282704-1-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
+        Thu, 21 Apr 2022 03:07:36 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE4D15704;
+        Thu, 21 Apr 2022 00:04:48 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso4336968pjj.2;
+        Thu, 21 Apr 2022 00:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ckZb8HQa6B+H6t9pofeOOWMFEAGtcGaN614SCDhVQYA=;
+        b=SHDfVa3FMmxgIMWcn+Q/V5BXKCMqc6gupBa491JtUf1YiJXt+jMBITI1+IndLPAiIv
+         qD3FcIJbcu4Z7orWyaJDi7S/qhIErBQTYGkWKwxUlUJ2vMf+DsGzkb0kk9s3xYo/3k0Q
+         q/9kDDn1jaPKUZneasma7uFV0PCTz3gm6cl0XD7cUOAbhJilfDoai2do+GjxN34nx897
+         W2ff5yPbIFfPf8l1ovxQlBqjo0jBNRi8Lu65nc+tYdDHkL6ab8PVF4pkwqLl8bIoBbkB
+         6l5CxHzI/LentyJLL/pPGx8po3avHC9IScIBKDV/A1u12xhU8rFhiCHPGCJf/meaz7yd
+         7d9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ckZb8HQa6B+H6t9pofeOOWMFEAGtcGaN614SCDhVQYA=;
+        b=kF99Lb+uWG+J7oEnYZsZypTaFKqDUvQxFnd0OAKW6DIzpMvzYLIK4srMVyh2Z58BbL
+         mCG76lBDu5RqQ13HRLTnSeL4xfkibx0MmYHXD5nahIhBmFIlp5+hZEXW8vI/PSzRKowt
+         s8ysI+Z8bhIqY/IqR23bNsvxyKUSNTieirl0dDjD0EU09CfZH8rFKQYmZfyGGHRoY8jO
+         VggFSlQd7ke1xvhZ7xTOvG8l/4bp6XewY2l/n6xUPs9RhaWMwYWrmnwIcElj4AsXfRDe
+         fuwjbUokzzWbkoF6dDKw0myd3fOpogZZpZO+2M0NeXpCBSEfl42lPxauPNYYpVUlAeFF
+         QGBA==
+X-Gm-Message-State: AOAM531XkUBWZQOjVRGTLsthYme3InjsrnPIQHJZ7B9VHaIDDXSUQCon
+        VBE5VrpghFpTAvq6A6LgWX8=
+X-Google-Smtp-Source: ABdhPJwvc2lunSrpC+kueBLFryH5B7Be+qQXCmSIgefygKENy10PWbdlNKjZ/L9Cw3ZyArJ2KKboJg==
+X-Received: by 2002:a17:902:8f81:b0:154:be2d:1948 with SMTP id z1-20020a1709028f8100b00154be2d1948mr24109757plo.110.1650524687783;
+        Thu, 21 Apr 2022 00:04:47 -0700 (PDT)
+Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
+        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004f72acd4dadsm22961885pfx.81.2022.04.21.00.04.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 00:04:47 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 00:04:44 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+Message-ID: <20220421070444.GB1423762@private.email.ne.jp>
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220420012032.GA2224031@ls.amr.corp.intel.com>
+ <dd4a2b16-397e-8866-0fd5-b5c5dfd453ab@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dd4a2b16-397e-8866-0fd5-b5c5dfd453ab@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,80 +85,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-csum_and_copy_from_user and csum_and_copy_to_user are exported by
-a few architectures, but not actually used in modular code.  Drop
-the exports.
+On Tue, Apr 19, 2022 at 06:26:43PM -0700,
+Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/alpha/lib/csum_partial_copy.c   | 1 -
- arch/m68k/lib/checksum.c             | 2 --
- arch/powerpc/lib/checksum_wrappers.c | 2 --
- arch/x86/lib/csum-wrappers_64.c      | 2 --
- 4 files changed, 7 deletions(-)
+> On 4/19/22 6:20 PM, Isaku Yamahata wrote:
+> > If timeout occurs, the state of adev->tdquote_buf is unknown.  It's not safe
+> > to continue to using adev->tdquote_buf.  VMM would continue to processing
+> > getquote request with this buffer.  What if TDX_CMD_GEN_QUOTE is issued again,
+> > and tdquote_buf is re-used?
+> 
+> This part is not clearly discussed in the specification. May be spec
+> should define some reasonable timeout and teardown details.
+> 
+> Regarding not using this buffer again, what happens if we de-allocate
+> it on timeout and the host still updates it?
 
-diff --git a/arch/alpha/lib/csum_partial_copy.c b/arch/alpha/lib/csum_partial_copy.c
-index 1931a04af85a2..4d180d96f09e4 100644
---- a/arch/alpha/lib/csum_partial_copy.c
-+++ b/arch/alpha/lib/csum_partial_copy.c
-@@ -353,7 +353,6 @@ csum_and_copy_from_user(const void __user *src, void *dst, int len)
- 		return 0;
- 	return __csum_and_copy(src, dst, len);
- }
--EXPORT_SYMBOL(csum_and_copy_from_user);
- 
- __wsum
- csum_partial_copy_nocheck(const void *src, void *dst, int len)
-diff --git a/arch/m68k/lib/checksum.c b/arch/m68k/lib/checksum.c
-index 7e6afeae62177..5acb821849d30 100644
---- a/arch/m68k/lib/checksum.c
-+++ b/arch/m68k/lib/checksum.c
-@@ -265,8 +265,6 @@ csum_and_copy_from_user(const void __user *src, void *dst, int len)
- 	return sum;
- }
- 
--EXPORT_SYMBOL(csum_and_copy_from_user);
--
- 
- /*
-  * copy from kernel space while checksumming, otherwise like csum_partial
-diff --git a/arch/powerpc/lib/checksum_wrappers.c b/arch/powerpc/lib/checksum_wrappers.c
-index f3999cbb2fcc4..1a14c8780278c 100644
---- a/arch/powerpc/lib/checksum_wrappers.c
-+++ b/arch/powerpc/lib/checksum_wrappers.c
-@@ -24,7 +24,6 @@ __wsum csum_and_copy_from_user(const void __user *src, void *dst,
- 	user_read_access_end();
- 	return csum;
- }
--EXPORT_SYMBOL(csum_and_copy_from_user);
- 
- __wsum csum_and_copy_to_user(const void *src, void __user *dst, int len)
- {
-@@ -38,4 +37,3 @@ __wsum csum_and_copy_to_user(const void *src, void __user *dst, int len)
- 	user_write_access_end();
- 	return csum;
- }
--EXPORT_SYMBOL(csum_and_copy_to_user);
-diff --git a/arch/x86/lib/csum-wrappers_64.c b/arch/x86/lib/csum-wrappers_64.c
-index 189344924a2be..145f9a0bde29a 100644
---- a/arch/x86/lib/csum-wrappers_64.c
-+++ b/arch/x86/lib/csum-wrappers_64.c
-@@ -32,7 +32,6 @@ csum_and_copy_from_user(const void __user *src, void *dst, int len)
- 	user_access_end();
- 	return sum;
- }
--EXPORT_SYMBOL(csum_and_copy_from_user);
- 
- /**
-  * csum_and_copy_to_user - Copy and checksum to user space.
-@@ -57,7 +56,6 @@ csum_and_copy_to_user(const void *src, void __user *dst, int len)
- 	user_access_end();
- 	return sum;
- }
--EXPORT_SYMBOL(csum_and_copy_to_user);
- 
- /**
-  * csum_partial_copy_nocheck - Copy and checksum.
+Until GET_QUOTE_IN_FLIGHT is cleared, the shared page is owned by VMM, TD
+attestation driver shouldn't reuse/free the pages.
+
+In the case of this driver, I think of two options
+- don't timeout. wait for interrupt to arrive and check the shared GPA state.
+- allow timeout. When the next request comes, check the shared GPA state.
+  If it's still GET_QUOTE_IN_FLIGHT, return EBUSY.
+
+It's possible for VMM to keep the shared GPA forever maliciously(DoS) or
+unintentionally due to bug.  TD can't do much about it.
 -- 
-2.30.2
-
+Isaku Yamahata <isaku.yamahata@gmail.com>

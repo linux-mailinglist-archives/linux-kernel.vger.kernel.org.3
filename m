@@ -2,149 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D65F50A224
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAD350A22B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389193AbiDUO15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
+        id S1389204AbiDUO2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388932AbiDUO1z (ORCPT
+        with ESMTP id S1388932AbiDUO2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:27:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B96A6417
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:25:05 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D162D219C0;
-        Thu, 21 Apr 2022 14:25:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650551103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n/eDd2H2eMfs8iv2QJAcrWjYCvi80KMXhSt779nfBRI=;
-        b=MtXep0i/lMVQAg9XE9xdwqvQOPPJ+CkoX4zn4z7Cs7YH94yIRXxWdp1KS1pb0kcbW9MvRZ
-        W/yoFMnNWAPoMOC6StCCvuLcajD4sKl44zxZztjc7+AzsCClOmkBPAyy0B13FWt6aiWSQk
-        JsXNgXFBpAHg7BLJuUPFDg8baxoJqRY=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A8D502C146;
-        Thu, 21 Apr 2022 14:25:03 +0000 (UTC)
-Date:   Thu, 21 Apr 2022 16:25:03 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH printk v3 13/15] printk: add kthread console printers
-Message-ID: <20220421141921.GD11747@pathway.suse.cz>
-References: <20220419234637.357112-1-john.ogness@linutronix.de>
- <20220419234637.357112-14-john.ogness@linutronix.de>
- <YmBIr1mkmIN1Zkb+@alley>
- <87h76nwmjk.fsf@jogness.linutronix.de>
+        Thu, 21 Apr 2022 10:28:47 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AA619C0D;
+        Thu, 21 Apr 2022 07:25:57 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id md4so5086297pjb.4;
+        Thu, 21 Apr 2022 07:25:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z6eYZr81Vczs86aN15rFzTwzc9qxYGexlog897TKVyE=;
+        b=IQaUg6A+aLlgCaxRhtVOL8RghI3FL66eFvPnrsOcyT9YgmFCh3Nb5zFdd5MKh54Fhw
+         fw9ZAY/6ViwUnF5WxHac1kphjdmGGbUsrEK22uzWlq11OeULp1CjKj6KoCqxPTXcSmT2
+         eKNm5KwrRve1kFHvRFdVIeQe0AftpOnCRA75TZ42cNXwFjjppfY8JxlmbY0Rx1uGrQQw
+         LYRNGeZiChDNzTfFF2V6AQi3OJrX7cHrnId0GaAmHDtOo6iDDVpw/6me1VvO2BrB/AH8
+         3MT78WR0J6hBDQ7xTWpyFV4YsWBSTmyNsTs55k5svXR+rZP09J7TbgjtCrln+Yhymyrf
+         zeYg==
+X-Gm-Message-State: AOAM531JlCzaGbLcWCJwoWrXdMTpmrylI1z/la8YEHYQomvZcz6vFKI2
+        0Wq055wniDcS9/JH3ZVloq0=
+X-Google-Smtp-Source: ABdhPJydcFcHSk+B+u3MIwIZJcsvb93QzavgusJ2o7qWb4MG6T8PeixWpLh8YgS99c3ZEYVwSsz9Ng==
+X-Received: by 2002:a17:902:9a4c:b0:156:6735:b438 with SMTP id x12-20020a1709029a4c00b001566735b438mr25911941plv.46.1650551156614;
+        Thu, 21 Apr 2022 07:25:56 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:ece1:6248:e226:d2e0:1f33])
+        by smtp.gmail.com with ESMTPSA id f10-20020a056a0022ca00b0050a858e8cc3sm14194974pfj.200.2022.04.21.07.25.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 07:25:56 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 07:25:54 -0700
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, michal.simek@xilinx.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, git@xilinx.com
+Subject: Re: [PATCH v5 0/5]fpga: fix for coding style and kernel-doc issues
+Message-ID: <YmFpciblvR9xnjFX@archbook>
+References: <20220421044744.3777983-1-nava.manne@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87h76nwmjk.fsf@jogness.linutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220421044744.3777983-1-nava.manne@xilinx.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-04-20 22:08:39, John Ogness wrote:
-> On 2022-04-20, Petr Mladek <pmladek@suse.com> wrote:
-> > On Wed 2022-04-20 01:52:35, John Ogness wrote:
-> >> @@ -2280,10 +2295,10 @@ asmlinkage int vprintk_emit(int facility, int level,
-> >>  	printed_len = vprintk_store(facility, level, dev_info, fmt, args);
-> >>  
-> >>  	/* If called from the scheduler, we can not call up(). */
-> >> -	if (!in_sched) {
-> >> +	if (!in_sched && allow_direct_printing()) {
-> >
-> > allow_direct_printing() is racy here. But I think that we could live
-> > with it, see below.
+On Thu, Apr 21, 2022 at 10:17:39AM +0530, Nava kishore Manne wrote:
+> This patch series fixes the coding style and kernel-doc issues
+> exists in the fpga framework, zynq and ZynqMP drivers.
 > 
-> Well, it is not racy for its intended purpose, which is a context that
-> does:
+> Nava kishore Manne (5):
+>   fpga: zynq: Fix incorrect variable type
+>   fpga: fix for coding style issues
+>   fpga: fpga-mgr: fix kernel-doc warnings
+>   fpga: Use tab instead of space indentation
+>   fpga: fpga-region: fix kernel-doc formatting issues
 > 
-> printk_prefer_direct_enter();
-> printk();
-> printk_prefer_direct_exit();
+>  drivers/fpga/Makefile            |  6 +++---
+>  drivers/fpga/fpga-mgr.c          |  8 ++++++--
+>  drivers/fpga/fpga-region.c       |  7 ++++---
+>  drivers/fpga/of-fpga-region.c    | 22 ++++++++++++----------
+>  drivers/fpga/zynq-fpga.c         |  2 +-
+>  include/linux/fpga/fpga-region.h |  7 ++++---
+>  6 files changed, 30 insertions(+), 22 deletions(-)
 > 
-> It is only racy for _other_ contexts that might end up direct
-> printing. But since those other contexts don't have a preference, I see
-> no problem with it.
+> -- 
+> 2.25.1
+> 
+I've applied patches 1-4 to for-next.
 
-Make sense.
+Patch 5 seems to not apply.
 
-Let me think more about it. To be sure that we see all aspects:
-
-There are also other system wide variables checked by
-allow_direct_printing() and can be modified asynchronously:
-
-	+ printk_kthreads_available
-	+ system_state
-	+ oops_in_progress
-
-"oops_in_progress" and "system_state" are similar to
-"printk_prefer_direct". The context that modifies this
-variable will see the right value. The other contexts
-do not care that much and do not need to be strictly
-synchronized. Also the value means that the direct
-mode is preferred but it is never guaranteed and
-never was.
-
-"printk_kthreads_available" is more tricky.
-__printk_fallback_preferred_direct() causes that printk kthreads
-will not be used any longer. It should make sure that the pending
-messages will be printed directly. And it works because
-it is called under console_lock and the pending messages
-will be printed by the console_unlock().
-
-Everything looks fine after all. I wonder if we could somehow
-document it somewhere. I think about adding a comment
-above allow_direct_printing() definition:
-
-/*
- * printk() always wakes printk kthreads so that they could
- * flush the new message to the consoles. Also it tries
- * the flush the messages directly when it is allowed.
- *
- * The direct priting is allowed in situations when the kthreads
- * are not available or the system is in a problematic state.
- *
- * See the implementation about possible races.
- */
-static inline bool allow_direct_printing(void)
-{
-	/*
-	 * The kthreads are disabled under console_lock.
-	 * Any pending messages will be handled by
-	 * console_unlock().
-	 */
-	if (!printk_kthreads_available)
-		return false;
-
-	/*
-	 * Prefer direct printing when the system is in a problematic
-	 * state. The context that sets this state will always see
-	 * the updated value. The other contexts do not care that
-	 * much. Anyway, it is just a best effort. The direct output
-	 * is possible only when console_lock is not already taken.
-	 */
-	return (system_state > SYSTEM_RUNNING ||
-		oops_in_progress ||
-		atomic_read(&printk_prefer_direct));
-}
-
-Best Regards,
-Petr
+- Moritz

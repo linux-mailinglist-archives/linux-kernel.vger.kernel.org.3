@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBBD450A6C9
+	by mail.lfdr.de (Postfix) with ESMTP id A092050A6C8
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390669AbiDURSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
+        id S1390675AbiDURSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390650AbiDURSW (ORCPT
+        with ESMTP id S1390649AbiDURSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 21 Apr 2022 13:18:22 -0400
-Received: from out28-125.mail.aliyun.com (out28-125.mail.aliyun.com [115.124.28.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FD617064;
+Received: from out28-98.mail.aliyun.com (out28-98.mail.aliyun.com [115.124.28.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4B318342;
         Thu, 21 Apr 2022 10:15:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08302546|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0133573-0.000673897-0.985969;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047212;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=17;RT=17;SR=0;TI=SMTPD_---.NVFIbBb_1650561320;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NVFIbBb_1650561320)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1381933|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0344537-0.000618227-0.964928;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047208;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.NVFIbDf_1650561322;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NVFIbDf_1650561322)
           by smtp.aliyun-inc.com(33.40.31.76);
-          Fri, 22 Apr 2022 01:15:22 +0800
+          Fri, 22 Apr 2022 01:15:24 +0800
 From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>
 To:     gregkh@linuxfoundation.org, hminas@synopsys.com,
@@ -28,11 +28,10 @@ Cc:     linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
         rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com,
-        =?UTF-8?q?Dragan=20=C4=8Ce=C4=8Davac?= <dragancecavac@yahoo.com>
-Subject: [PATCH v4 2/3] USB: dwc2: Add OTG support for Ingenic SoCs.
-Date:   Fri, 22 Apr 2022 01:15:07 +0800
-Message-Id: <1650561308-54704-3-git-send-email-zhouyanjie@wanyeetech.com>
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Subject: [PATCH v4 3/3] MIPS: Ingenic: Refresh USB nodes to match driver changes.
+Date:   Fri, 22 Apr 2022 01:15:08 +0800
+Message-Id: <1650561308-54704-4-git-send-email-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1650561308-54704-1-git-send-email-zhouyanjie@wanyeetech.com>
 References: <1650561308-54704-1-git-send-email-zhouyanjie@wanyeetech.com>
@@ -48,159 +47,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add OTG support for the JZ4775 SoC, the JZ4780 SoC, the X1000 SoC,
-the X1600 SoC, the X1830 SoC, and the X2000 SoC from Ingenic.
+Refresh USB nodes in the jz4780.dtsi, x1000.dtsi, and x1830.dtsi files.
 
-Introduce support for disable Ingenic overcurrent detection, once
-selected, it enables the GOTGCTL register bits VbvalidOvEn and
-VbvalidOvVal to disable the VBUS overcurrent detection.
-
-This patch is derived from Dragan Čečavac (in the kernel 3.18.3
-tree of CI20). It is very useful for the MIPS Creator CI20 (r1).
-Without this patch, OTG port of CI20 has a great probability to
-face overcurrent warning, which breaks the OTG functionality.
-
-Signed-off-by: Dragan Čečavac <dragancecavac@yahoo.com>
 Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
 ---
 
 Notes:
-    v1->v2:
-    1.Add Minas Harutyunyan's Acked-by.
-    2.Use "activate_ingenic_overcurrent_detection" instead
-      "deactivate_ingenic_overcurrent_detection" as Greg's
-      suggestion.
-    
-    v2->v3:
-    No change.
+    v3:
+    New patch.
     
     v3->v4:
-    Remove the compatible string of X1700 since it could use
-    the X1600 string　as the fallback.
+    No change.
 
- drivers/usb/dwc2/core.c   |  9 +++++++++
- drivers/usb/dwc2/core.h   |  5 +++++
- drivers/usb/dwc2/params.c | 49 ++++++++++++++++++++++++++++++++++++++++++++++-
- 3 files changed, 62 insertions(+), 1 deletion(-)
+ arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
+ arch/mips/boot/dts/ingenic/x1000.dtsi  | 2 +-
+ arch/mips/boot/dts/ingenic/x1830.dtsi  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
-index cf0bcd0..dc4fc72 100644
---- a/drivers/usb/dwc2/core.c
-+++ b/drivers/usb/dwc2/core.c
-@@ -1153,6 +1153,7 @@ static void dwc2_set_turnaround_time(struct dwc2_hsotg *hsotg)
- int dwc2_phy_init(struct dwc2_hsotg *hsotg, bool select_phy)
- {
- 	u32 usbcfg;
-+	u32 otgctl;
- 	int retval = 0;
+diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+index b998301..c182a65 100644
+--- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+@@ -577,7 +577,7 @@
+ 	};
  
- 	if ((hsotg->params.speed == DWC2_SPEED_PARAM_FULL ||
-@@ -1187,6 +1188,14 @@ int dwc2_phy_init(struct dwc2_hsotg *hsotg, bool select_phy)
- 		dwc2_writel(hsotg, usbcfg, GUSBCFG);
- 	}
+ 	otg: usb@13500000 {
+-		compatible = "ingenic,jz4780-otg", "snps,dwc2";
++		compatible = "ingenic,jz4780-otg";
+ 		reg = <0x13500000 0x40000>;
  
-+	if (!hsotg->params.activate_ingenic_overcurrent_detection) {
-+		if (dwc2_is_host_mode(hsotg)) {
-+			otgctl = readl(hsotg->regs + GOTGCTL);
-+			otgctl |= GOTGCTL_VBVALOEN | GOTGCTL_VBVALOVAL;
-+			writel(otgctl, hsotg->regs + GOTGCTL);
-+		}
-+	}
-+
- 	return retval;
- }
+ 		interrupt-parent = <&intc>;
+diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
+index 8bd27ede..343818a2 100644
+--- a/arch/mips/boot/dts/ingenic/x1000.dtsi
++++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+@@ -366,7 +366,7 @@
+ 	};
  
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 88c337b..0683852 100644
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -426,6 +426,10 @@ enum dwc2_ep0_state {
-  *			detection using GGPIO register.
-  *			0 - Deactivate the external level detection (default)
-  *			1 - Activate the external level detection
-+ * @activate_ingenic_overcurrent_detection: Activate Ingenic overcurrent
-+ *			detection.
-+ *			0 - Deactivate the overcurrent detection
-+ *			1 - Activate the overcurrent detection (default)
-  * @g_dma:              Enables gadget dma usage (default: autodetect).
-  * @g_dma_desc:         Enables gadget descriptor DMA (default: autodetect).
-  * @g_rx_fifo_size:	The periodic rx fifo size for the device, in
-@@ -494,6 +498,7 @@ struct dwc2_core_params {
- 	u8 hird_threshold;
- 	bool activate_stm_fs_transceiver;
- 	bool activate_stm_id_vb_detection;
-+	bool activate_ingenic_overcurrent_detection;
- 	bool ipg_isoc_en;
- 	u16 max_packet_count;
- 	u32 max_transfer_size;
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 1306f4e..626eadc 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -73,6 +73,47 @@ static void dwc2_set_his_params(struct dwc2_hsotg *hsotg)
- 	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
- }
+ 	otg: usb@13500000 {
+-		compatible = "ingenic,x1000-otg", "snps,dwc2";
++		compatible = "ingenic,x1000-otg";
+ 		reg = <0x13500000 0x40000>;
  
-+static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
-+{
-+	struct dwc2_core_params *p = &hsotg->params;
-+
-+	p->otg_caps.hnp_support = false;
-+	p->speed = DWC2_SPEED_PARAM_HIGH;
-+	p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
-+	p->phy_utmi_width = 16;
-+	p->activate_ingenic_overcurrent_detection =
-+		!device_property_read_bool(hsotg->dev, "disable-over-current");
-+}
-+
-+static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
-+{
-+	struct dwc2_core_params *p = &hsotg->params;
-+
-+	p->otg_caps.hnp_support = false;
-+	p->speed = DWC2_SPEED_PARAM_HIGH;
-+	p->host_channels = 16;
-+	p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
-+	p->phy_utmi_width = 16;
-+	p->activate_ingenic_overcurrent_detection =
-+		!device_property_read_bool(hsotg->dev, "disable-over-current");
-+}
-+
-+static void dwc2_set_x2000_params(struct dwc2_hsotg *hsotg)
-+{
-+	struct dwc2_core_params *p = &hsotg->params;
-+
-+	p->otg_caps.hnp_support = false;
-+	p->speed = DWC2_SPEED_PARAM_HIGH;
-+	p->host_rx_fifo_size = 1024;
-+	p->host_nperio_tx_fifo_size = 1024;
-+	p->host_perio_tx_fifo_size = 1024;
-+	p->host_channels = 16;
-+	p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
-+	p->phy_utmi_width = 16;
-+	p->activate_ingenic_overcurrent_detection =
-+		!device_property_read_bool(hsotg->dev, "disable-over-current");
-+}
-+
- static void dwc2_set_s3c6400_params(struct dwc2_hsotg *hsotg)
- {
- 	struct dwc2_core_params *p = &hsotg->params;
-@@ -221,7 +262,13 @@ static void dwc2_set_stm32mp15_hsotg_params(struct dwc2_hsotg *hsotg)
+ 		interrupt-parent = <&intc>;
+diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi b/arch/mips/boot/dts/ingenic/x1830.dtsi
+index 2595df8..6aff19f 100644
+--- a/arch/mips/boot/dts/ingenic/x1830.dtsi
++++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+@@ -355,7 +355,7 @@
+ 	};
  
- const struct of_device_id dwc2_of_match_table[] = {
- 	{ .compatible = "brcm,bcm2835-usb", .data = dwc2_set_bcm_params },
--	{ .compatible = "hisilicon,hi6220-usb", .data = dwc2_set_his_params  },
-+	{ .compatible = "hisilicon,hi6220-usb", .data = dwc2_set_his_params },
-+	{ .compatible = "ingenic,jz4775-otg", .data = dwc2_set_jz4775_params },
-+	{ .compatible = "ingenic,jz4780-otg", .data = dwc2_set_jz4775_params },
-+	{ .compatible = "ingenic,x1000-otg", .data = dwc2_set_jz4775_params },
-+	{ .compatible = "ingenic,x1600-otg", .data = dwc2_set_x1600_params },
-+	{ .compatible = "ingenic,x1830-otg", .data = dwc2_set_x1600_params },
-+	{ .compatible = "ingenic,x2000-otg", .data = dwc2_set_x2000_params },
- 	{ .compatible = "rockchip,rk3066-usb", .data = dwc2_set_rk_params },
- 	{ .compatible = "lantiq,arx100-usb", .data = dwc2_set_ltq_params },
- 	{ .compatible = "lantiq,xrx200-usb", .data = dwc2_set_ltq_params },
+ 	otg: usb@13500000 {
+-		compatible = "ingenic,x1830-otg", "snps,dwc2";
++		compatible = "ingenic,x1830-otg";
+ 		reg = <0x13500000 0x40000>;
+ 
+ 		interrupt-parent = <&intc>;
 -- 
 2.7.4
 

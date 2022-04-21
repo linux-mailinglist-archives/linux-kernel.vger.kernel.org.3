@@ -2,173 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C959509E16
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1AF509E19
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388601AbiDUK4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
+        id S231545AbiDUK6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388575AbiDUK4e (ORCPT
+        with ESMTP id S231478AbiDUK6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:56:34 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2B326120
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:53:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1650538423; x=1682074423;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=0nT52HKSD5XypZFB6WpRQMozkp5u7xkY6Ho5vUtY7Z4=;
-  b=Gs9tX0xHpPLUsnqUcrshC7uNT4q4LNVGAWENMfCOuYGAGtnyPPdNBEL+
-   QbuWTPrhBN0mq0V1334Aivp91ABJ3pi7gFnbHHece/UuuErcSMUD/Pv35
-   Ze9oYsk0oXkmsSFc5OHz9w4JtnIziRbTqiVDkD9qXMOWvgQDUz36nfYFT
-   I9KMPK40OCFrXsQKgCYInEQ96EALHdN1G6o+FIPmiRQICs5sNgsE8PFuS
-   GXafi1loZTng+KSxjAAPnCFOzU4i3+1i6Fch0zwAeIxRpJMzcEqDPB8Lh
-   DbyXroVDCnnrYhK13hrsk2SzIIzbXf+5+cP1Z24vCY7ozeZS8/Hy4Rtd6
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,278,1643644800"; 
-   d="scan'208";a="203326034"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Apr 2022 18:53:42 +0800
-IronPort-SDR: HqtdZ8A9iiaP9/LN+LREO2zvcCWuKB1+SXgmKRzUa2Ibks+uaqWpN0KUoTjXovBGQFxCR+3OTl
- uvLjAadFwcVHFxdgUXGsDoM/Kq/4DT6ne6apWmoZlfS+n0IRZPvvudNNQeqTYk1gbPIv1aHy77
- teusf+Mx0ekdwEn31rIXQNOvS/Rdvxzln+UMH/VQtqjUDakJDdCF+EerpVL6eBsY/8ez1ZPaLs
- HmSr3fr2kLqQbKjLLrvcp6IbjItYZ3pflo7EbLFMtQsHpx0Rp7m5v5xbneHjsD/qtKf+yEuQuO
- nx1R0y3JXJF2Wj/DqORyqMdt
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Apr 2022 03:24:46 -0700
-IronPort-SDR: kvv/E00mRuyhNNa/D+W2Fcs3vTLKuh0qLFC8m5WvMRQ0ZM/WksGqhtUah+1AW4t9N0MD2YXf3U
- bxZSS0S866qSIEPWU7NPQKVZ2KceDejvhyy+dvDqgkUlQ4TrDgXuA1uc2UHsbZ29uGHeSNo5Ra
- Mnh4WUlJuM/SUh/bVxCsopSzlz5R2ta8BQ1j580N4knYUFzweykAu4wDrckR0ZItUzhKFTju3N
- krKDeAoeOPus74f93LD1Dlao0WFWwQZL6FxEyitur842g6dIWILbCh7bi8zg5r5A3cqUqafDMh
- ynQ=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Apr 2022 03:53:44 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KkZCW1Tj2z1Rwrw
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:53:43 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1650538422; x=1653130423; bh=0nT52HKSD5XypZFB6WpRQMozkp5u7xkY6Ho
-        5vUtY7Z4=; b=PJSAJ94Sidw8yMw9AuQXjz9svpVAhgbuIURjHykJUKORTQuUXW0
-        4Du2esjM+fEzXnqLN52ZKoLR+44B44DApc8dypMvTK1IVKo1NWy5DAkMdWu+MbMV
-        4vMbMYg7RjAx0ckv6GkgOSdbzBecn8RtD8k+SOuFE65mfuyWmT3ok/cTV3TQu8UN
-        5glzKGmmcL3qixBGPUBJmlAk002ZirptET3M9g+6wab8O8k3NUjzA+Y8Yd1vSSex
-        b8eLpiE1Js8fLOWCWG4kVb7cw01qNiwxQRwrAyL0OWL/0UnfllZcl1pBsCc7lwEJ
-        u5icw1GsjPHbLJIdkR03jV2Ao3KotktgHFA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WPbVtd-JX9nj for <linux-kernel@vger.kernel.org>;
-        Thu, 21 Apr 2022 03:53:42 -0700 (PDT)
-Received: from [10.225.163.19] (unknown [10.225.163.19])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KkZCV28tHz1Rvlx;
-        Thu, 21 Apr 2022 03:53:42 -0700 (PDT)
-Message-ID: <2a91c02d-4f7c-535b-e047-889df87ebebd@opensource.wdc.com>
-Date:   Thu, 21 Apr 2022 19:53:40 +0900
+        Thu, 21 Apr 2022 06:58:46 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3572728983
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650538557; x=1682074557;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PV4tJ0i0veYmhrb3mmizx5BsOMkUILxgALAnUGbTF6s=;
+  b=Hawu/2JtVPP3ywfaBmeCq/nPctDYpY4TyFyCk+7nXz5/UvYbeTAWvmE5
+   q0gm5jAmhmumcNwkSJIfZH4T5poDEHFuac3R942ELL9K7FCEkwpY8HIYP
+   MxHYg8taJgjhGTLTZxXQeXOI7PaFyJ/b1SZlVbusfOR6a67oJq0Pxn6/b
+   mPm8IfAOhM6pLO6HUID2/ax/9pNKihz5ebZo/lBKanOxxEDuq5Zl8WmKW
+   yZr+p9+UE+KUQCsmajAIGwT5VqbxtBWyEi6HMAO/y3JGNnVXrPr05TfnK
+   L6cH7DEfcHHeGpWsXNpiwEBLldzgNwEWUHNjdS3Elw/IvQbLBK+N5OuL9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="324756583"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="324756583"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 03:55:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="562524346"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Apr 2022 03:55:55 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhUTa-0008Fa-OC;
+        Thu, 21 Apr 2022 10:55:54 +0000
+Date:   Thu, 21 Apr 2022 18:55:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ 7e510e661ea5f90cf0a5a1618af362dd115017b2
+Message-ID: <6261382f.pVfcQfsu9SM+VhLE%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 2/2] ahci: Add PxSCTL.IPM control on actual LPM capability
-Content-Language: en-US
-To:     Runa Guo-oc <RunaGuo-oc@zhaoxin.com>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1650534217-14052-1-git-send-email-RunaGuo-oc@zhaoxin.com>
- <1650534217-14052-3-git-send-email-RunaGuo-oc@zhaoxin.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1650534217-14052-3-git-send-email-RunaGuo-oc@zhaoxin.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/22 18:43, Runa Guo-oc wrote:
-> On some platform, when OS enables LPM by default (eg, min_power),
-> then, DIPM slumber request cannot be disallowed if ahci's CAP.PSC
-> is set to '1' and CAP.SSC is cleared to '0', which may cause ahci
-> to be an uncertain state (same for Partial).
-> 
-> In ahci spec, when CAP.PSC/SSC is cleared to '0', the PxSCTL.IPM
-> field must be programmed to disallow device initiated Partial/
-> Slumber request.
-> 
-> Adds support to control this case on actual LPM capability.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: 7e510e661ea5f90cf0a5a1618af362dd115017b2  rcu-tasks: Drive synchronous grace periods from calling task
 
-s/Adds/Add
+elapsed time: 2100m
 
-Overall, I need to reread the specs to confirm all this.
+configs tested: 149
+configs skipped: 4
 
-> 
-> Signed-off-by: Runa Guo-oc <RunaGuo-oc@zhaoxin.com>
-> ---
->  drivers/ata/libata-sata.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
-> index 7a5fe41..e6195cf 100644
-> --- a/drivers/ata/libata-sata.c
-> +++ b/drivers/ata/libata-sata.c
-> @@ -394,9 +394,19 @@ int sata_link_scr_lpm(struct ata_link *link, enum ata_lpm_policy policy,
->  	case ATA_LPM_MED_POWER_WITH_DIPM:
->  	case ATA_LPM_MIN_POWER_WITH_PARTIAL:
->  	case ATA_LPM_MIN_POWER:
-> -		if (ata_link_nr_enabled(link) > 0)
-> +		if (ata_link_nr_enabled(link) > 0) {
->  			/* no restrictions on LPM transitions */>  			scontrol &= ~(0x7 << 8);
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Given that the added code below adds restrictions, this comment is
-strange. Better change it to something like:
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+powerpc64                           defconfig
+arm                       imx_v6_v7_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                 mpc85xx_cds_defconfig
+powerpc                      pcm030_defconfig
+mips                     loongson1b_defconfig
+arm                          lpd270_defconfig
+arm                         lpc18xx_defconfig
+powerpc                 canyonlands_defconfig
+mips                       bmips_be_defconfig
+arm                      jornada720_defconfig
+powerpc                        cell_defconfig
+powerpc                     mpc83xx_defconfig
+arm                         nhk8815_defconfig
+xtensa                         virt_defconfig
+powerpc                      chrp32_defconfig
+ia64                      gensparse_defconfig
+sh                             espt_defconfig
+openrisc                 simple_smp_defconfig
+sh                        apsh4ad0a_defconfig
+mips                         cobalt_defconfig
+arm                            qcom_defconfig
+m68k                         amcore_defconfig
+s390                                defconfig
+powerpc                      makalu_defconfig
+ia64                        generic_defconfig
+mips                            ar7_defconfig
+xtensa                    xip_kc705_defconfig
+um                           x86_64_defconfig
+mips                    maltaup_xpa_defconfig
+powerpc                  iss476-smp_defconfig
+m68k                                defconfig
+s390                          debug_defconfig
+arm                            xcep_defconfig
+powerpc                    amigaone_defconfig
+arm                        mvebu_v7_defconfig
+i386                                defconfig
+xtensa                           allyesconfig
+powerpc                 mpc8540_ads_defconfig
+powerpc                 mpc837x_rdb_defconfig
+mips                      loongson3_defconfig
+arc                        nsimosci_defconfig
+sh                            hp6xx_defconfig
+arm                          pxa3xx_defconfig
+sparc                       sparc32_defconfig
+sh                          sdk7780_defconfig
+powerpc                 mpc834x_itx_defconfig
+m68k                       bvme6000_defconfig
+powerpc                     stx_gp3_defconfig
+arm                           u8500_defconfig
+sh                           sh2007_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220420
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                        randconfig-a011
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220420
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+x86_64                              defconfig
 
-			/* Assume no restrictions on LPM transitions */
-
-> +
-> +			/* if controller does not support partial, then disallows it,
-> +			 * the same for slumber
-> +			 */
-
-Please correctly format the comment and check the grammar. Some like below
-is easier to read.
-
-			/*
-			 * If the controller does not support partial or
-			 * slumber then disallow these transitions.
-			 */
-
-> +			if (!(link->ap->host->flags & ATA_HOST_PART))
-> +				scontrol |= (0x1 << 8);
-> +
-> +			if (!(link->ap->host->flags & ATA_HOST_SSC))
-> +				scontrol |= (0x2 << 8);
-> +		}
->  		else {
-
-Please do not leave this else here. Put it on the same line as the closing
-bracket and enclose the below statements in brackets too.
-
->  			/* empty port, power off */
->  			scontrol &= ~0xf;
-
-		} else {
-			/* empty port, power off */
- 			scontrol &= ~0xf;
-		}
-
+clang tested configs:
+riscv                randconfig-c006-20220420
+mips                 randconfig-c004-20220420
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+arm                  randconfig-c002-20220420
+powerpc              randconfig-c003-20220420
+arm                       mainstone_defconfig
+arm                    vt8500_v6_v7_defconfig
+mips                        qi_lb60_defconfig
+arm                         s3c2410_defconfig
+mips                        bcm63xx_defconfig
+arm                         orion5x_defconfig
+arm                           omap1_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                     pseries_defconfig
+powerpc                     skiroot_defconfig
+arm                          ep93xx_defconfig
+powerpc                    gamecube_defconfig
+arm                        neponset_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+hexagon              randconfig-r041-20220420
+riscv                randconfig-r042-20220420
+hexagon              randconfig-r045-20220420
+s390                 randconfig-r044-20220420
 
 -- 
-Damien Le Moal
-Western Digital Research
+0-DAY CI Kernel Test Service
+https://01.org/lkp

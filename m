@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F8250AA67
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5716F50AA66
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392621AbiDUU5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 16:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
+        id S1392612AbiDUU5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 16:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356581AbiDUU5i (ORCPT
+        with ESMTP id S1392607AbiDUU5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 16:57:38 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0A24EA27
+        Thu, 21 Apr 2022 16:57:37 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809DE4EA20
         for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:54:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1650574487; x=1682110487;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Lw6hC19E0serumFzQ2gBeufPShi1ToHepTnv5q3Ayz4=;
-  b=SZjeEB/dMN7KXEt9TQrYPV5s5f8b2Qkjl9sLvtS3aSYz5y8BugITUZqa
-   jbnHQDG4cKQH8bfC40yyfHHK+1aJ/+fzdD/kYbaClzpTFNZP1asDKrgib
-   4ZzFaoHb9Yh1UUwI+MhwtNyojiia3Y/fQ/T4MvjwLTn7ZYIL2W2PTrrKC
-   hR4dsQUUBCDNWPOt2Spv4Us/BYi0uCGOGaW8P7re7U+/PCKrk1x1mOcDZ
-   fcC5BFoEoh5MkmHSns3AUrzjX86179NKYdcMa+Cr9IGyYMheTtAKAyHhP
-   QGocTnKVqUNTblmWF8CGpFD4QhzjwAS4GNGel7uWa1PjbYanUMQRqAlOX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="246380375"
+  bh=gaVn/25jgrMwzaFXLGnssnKEM3HuBCFYsCdGnJ71o2U=;
+  b=n4mTFAfzHE/xCnjj5/8oAdBPcBA1/eBxVBqD6ZKEdFTtK7VKqTX39/Rn
+   VGdvB8/QQIV84GnaDObPuO5x9QrVo8acscvg1DRzEtTYdBVbuAPPicAEb
+   ef9PhKZPRTMN29vsQcFLCuYayMY9AshkCxhWE/+eHtwXy8lGMQJbvMbvj
+   U3JWEHiagpMlIeAiQnnelBlqGYzMfw72AtmVKTfdJCIWP1FeLTnVK32TZ
+   8PHglTvWuEkGBN2wycvou3DLvM12o+bhqYQQrfDttX5OWqqfVeKP83h0C
+   7HSeESae+/pnBto1/Oo+CcriAVB9myUL1zoC6KCimQpR/L9tAQU8qSYoP
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="324927033"
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="246380375"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 13:54:47 -0700
+   d="scan'208";a="324927033"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 13:54:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="658694917"
+   d="scan'208";a="703244931"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Apr 2022 13:54:45 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 13:54:45 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nhdp7-0008mt-At;
+        id 1nhdp7-0008mm-6t;
         Thu, 21 Apr 2022 20:54:45 +0000
-Date:   Fri, 22 Apr 2022 04:54:04 +0800
+Date:   Fri, 22 Apr 2022 04:54:28 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: [intel-tdx:guest-rebased 5/83] ./usr/include/misc/tdx.h:38:19:
- error: expected ':', ',', ';', '}' or '__attribute__' before '__user'
-Message-ID: <202204220424.OtE3RBb1-lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 40/70] drivers/tty/serial/amba-pl011.c:45:10: fatal
+ error: 'amba-pl011.h' file not found
+Message-ID: <202204220445.8rhFIlg0-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kuppuswamy,
-
-FYI, the error/warning still remains.
-
-tree:   https://github.com/intel/tdx.git guest-rebased
-head:   4c095660b91dbdd18042456e395af0deeef93485
-commit: a7b0255d5b64842244f1957e33eb514d8f82866f [5/83] platform/x86: intel_tdx_attest: Add TDX Guest attestation interface driver
-config: x86_64-randconfig-a004 (https://download.01.org/0day-ci/archive/20220422/202204220424.OtE3RBb1-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   c73cb9009b8d130305afba38bbd407a58bf8f2c8
+commit: 01ba379ed8413be7b65a53ab02f0d044233857f3 [40/70] serial: amba-pl011: move header content to .c
+config: arm-randconfig-r013-20220421 (https://download.01.org/0day-ci/archive/20220422/202204220445.8rhFIlg0-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/a7b0255d5b64842244f1957e33eb514d8f82866f
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-rebased
-        git checkout a7b0255d5b64842244f1957e33eb514d8f82866f
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=01ba379ed8413be7b65a53ab02f0d044233857f3
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout 01ba379ed8413be7b65a53ab02f0d044233857f3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from <command-line>:
->> ./usr/include/misc/tdx.h:38:19: error: expected ':', ',', ';', '}' or '__attribute__' before '__user'
-      38 |         void *buf __user;
-         |                   ^~~~~~
+>> drivers/tty/serial/amba-pl011.c:45:10: fatal error: 'amba-pl011.h' file not found
+   #include "amba-pl011.h"
+            ^~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +45 drivers/tty/serial/amba-pl011.c
+
+^1da177e4c3f41 drivers/serial/amba-pl011.c     Linus Torvalds 2005-04-16  44  
+9f25bc510e960c drivers/tty/serial/amba-pl011.c Russell King   2015-11-03 @45  #include "amba-pl011.h"
+9f25bc510e960c drivers/tty/serial/amba-pl011.c Russell King   2015-11-03  46  
+
+:::::: The code at line 45 was first introduced by commit
+:::::: 9f25bc510e960c551dc295c2d1d60e3da334590c tty: amba-pl011: prepare REG_* register indexes
+
+:::::: TO: Russell King <rmk+kernel@arm.linux.org.uk>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service

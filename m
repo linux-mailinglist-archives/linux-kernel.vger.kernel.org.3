@@ -2,157 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F326D50AC01
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C71C50AC09
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442579AbiDUXgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 19:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S1442601AbiDUXkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 19:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442570AbiDUXgd (ORCPT
+        with ESMTP id S1442595AbiDUXkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:36:33 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F30B3BFA4;
-        Thu, 21 Apr 2022 16:33:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kkv4N0mXwz4xL5;
-        Fri, 22 Apr 2022 09:33:40 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650584021;
-        bh=4h+c91ugqyhBJaJnLRrWCkiZzXbh5wCVoMk4zWdxUWk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=f9UZAR7Z5tBZrkeSs7klRyExEh9iz4s07y846nMB/VCAa5sDrM8zEtfSMng7xnXFq
-         FB+mwx3ZJOQpTJbGLJSy59T3QkftiHd+KmfT0QS4dTWgdxAD8PX6osZKulBeAcdcTm
-         6RIhiTNMSJocC+Dcfw2HgDiNU7h7+lTXztoD44BTX2CImFgQXSvO8Fr+NuoUaIuERK
-         GILRObJEtl+pXrxpvS0fcxg3TEI1MyLDFwaqXv+v/JN5yM5ZXPkuFFFM/OeOyTXxlF
-         0ym3ROlG3MiDg5XyUHypUb1rh1JTO5VHRwwuOnbokCD07xM/vU1B+gaK7W99WaT97K
-         Mmfp4Ey79xSTQ==
-Date:   Fri, 22 Apr 2022 09:33:39 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Pablo Ceballos <pceballos@google.com>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: linux-next: manual merge of the hid tree with Linus' tree
-Message-ID: <20220422093339.1e0b8033@canb.auug.org.au>
+        Thu, 21 Apr 2022 19:40:18 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF704704D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:37:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650584247; x=1682120247;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hsiue63RkpFpSZcg8+e7rbdQ7Pu2T4IlMfL6usHCTU8=;
+  b=CTic8GnU/PFPDkfpGSzOtM1RZwnLVgeyLq+fJePhAW3Lr770MjhtuAom
+   JDo1p8wEd6z5KicppWy8uPeYre1aMFo4FQSlrRBSbQdnz690XQQLG06Px
+   j8BD3EN7n0D/iYh7zIlRN5ovVEhOrfMlTHIabxYHv9n/6hoP0jgH2KsFV
+   Apr3mlrCf8OoVjRV2nasMDT2RepLxjNRP+G0+oJD6mzjdf6veP+O+5XL6
+   wDYVk6CDuyKu/pBMp00kWEcfL50PCGzXr+TVIYk+VKouyuSmKeXwUA8dx
+   KjC99faCwmVBvAz7159T4bv9OmUKWpBYEhiBRRYvzjD8cNaJeQ4iYVjYu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245088313"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="245088313"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:37:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="615150212"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Apr 2022 16:37:24 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhgMV-0008v8-SY;
+        Thu, 21 Apr 2022 23:37:23 +0000
+Date:   Fri, 22 Apr 2022 07:37:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: [stable:linux-5.10.y 2705/5321] WARNING: modpost:
+ vmlinux.o(.text+0x8cc4): Section mismatch in reference from the function
+ __arm_ioremap_pfn_caller() to the function
+ .meminit.text:memblock_is_map_memory()
+Message-ID: <202204220723.zOZ7gZGT-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Tc1MfmY+dPwqvrJmDqEwtXa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Tc1MfmY+dPwqvrJmDqEwtXa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Mike,
 
-Hi all,
+FYI, the error/warning still remains.
 
-Today's linux-next merge of the hid tree got conflicts in:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+head:   1052f9bce62982023737a95b7ff1ad26a5149af6
+commit: 8dd559d53b3b2de960ca1ec1359f5a9b4a12e181 [2705/5321] arm: ioremap: don't abuse pfn_valid() to check if pfn is in RAM
+config: arm-hackkit_defconfig (https://download.01.org/0day-ci/archive/20220422/202204220723.zOZ7gZGT-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=8dd559d53b3b2de960ca1ec1359f5a9b4a12e181
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.10.y
+        git checkout 8dd559d53b3b2de960ca1ec1359f5a9b4a12e181
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-  drivers/hid/Kconfig
-  drivers/hid/Makefile
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-between commit:
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-  33bbe04a15f2 ("HID: google: extract Vivaldi hid feature mapping for use i=
-n hid-hammer")
+>> WARNING: modpost: vmlinux.o(.text+0x8cc4): Section mismatch in reference from the function __arm_ioremap_pfn_caller() to the function .meminit.text:memblock_is_map_memory()
+The function __arm_ioremap_pfn_caller() references
+the function __meminit memblock_is_map_memory().
+This is often because __arm_ioremap_pfn_caller lacks a __meminit
+annotation or the annotation of memblock_is_map_memory is wrong.
 
-from Linus' tree and commit:
-
-  e9c8c7c43b51 ("HID: Driver for Google Hangouts Meet Speakermic")
-
-from the hid tree.
-
-I have to wonder why these new VIVALDI bits were not put next to the
-old VIVALDI bits ...
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/hid/Kconfig
-index a95a7cbc4a59,ef58b5c03780..000000000000
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@@ -405,17 -405,20 +405,29 @@@ config HOLTEK_F
-  	  Say Y here if you have a Holtek On Line Grip based game controller
-  	  and want to have force feedback support for it.
- =20
- +config HID_VIVALDI_COMMON
- +	tristate
- +	help
- +	  ChromeOS Vivaldi HID parsing support library. This is a hidden
- +	  option so that drivers can use common code to parse the HID
- +	  descriptors for vivaldi function row keymap.
- +
-+ config HID_GOOGLE_ATRUS
-+ 	tristate "Google Hangouts Meet Speakermic"
-+ 	depends on USB_HID
-+ 	help
-+ 	This selects a driver for the Google Hangouts Meet Speakermic.
-+=20
-+ 	This driver works around a problem with the HID usage sent by this
-+ 	device for the mute button. It prevents key events from being generated
-+ 	for that HID usage since they would be incorrect.
-+=20
-+ 	Say Y here if you have a Google Hangouts Meet Speakermic.
-+=20
-  config HID_GOOGLE_HAMMER
-  	tristate "Google Hammer Keyboard"
- +	select HID_VIVALDI_COMMON
- +	select INPUT_VIVALDIFMAP
-  	depends on USB_HID && LEDS_CLASS && CROS_EC
-  	help
-  	Say Y here if you have a Google Hammer device.
-diff --cc drivers/hid/Makefile
-index 345ac5581bd8,495e67ec5d9e..000000000000
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@@ -50,7 -50,7 +50,8 @@@ obj-$(CONFIG_HID_FT260)		+=3D hid-ft260.
-  obj-$(CONFIG_HID_GEMBIRD)	+=3D hid-gembird.o
-  obj-$(CONFIG_HID_GFRM)		+=3D hid-gfrm.o
-  obj-$(CONFIG_HID_GLORIOUS)  +=3D hid-glorious.o
- +obj-$(CONFIG_HID_VIVALDI_COMMON) +=3D hid-vivaldi-common.o
-+ obj-$(CONFIG_HID_GOOGLE_ATRUS)  +=3D hid-google-atrus.o
-  obj-$(CONFIG_HID_GOOGLE_HAMMER)	+=3D hid-google-hammer.o
-  obj-$(CONFIG_HID_VIVALDI)	+=3D hid-vivaldi.o
-  obj-$(CONFIG_HID_GT683R)	+=3D hid-gt683r.o
-
---Sig_/Tc1MfmY+dPwqvrJmDqEwtXa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJh6dMACgkQAVBC80lX
-0GyQJQf/VENeTdlykfyMuOne2ITmCStmvPlbNfu2TivvBhboryKeFzkTAWa/MkNA
-bz+gOIZKZQ3Op4VXnthvX1lwfS4zrH/W5FPNKuL4NlaWQLEzkzOMBEqlF4wVNDQI
-vIxN2eiRuhItQh3gBPYLlHYVNRLzS2SftsLMrNLNAKLr31+cYN+GuyHFSGUYYGW2
-87aIQs2DjoBVcnScyMjXkRacHZFuJd5EbpcCNwu7Q93sGQWTVsFy0hgu1UMwgY6P
-IxfkEfFs5EaLZsu6cuXQ+0P7NW7bTYbybFAgB2HldaXV78tEVr5qrQW33g/EJRx2
-c0bFwLciR1r/lODt2aHrHNfN1GK3ng==
-=/e32
------END PGP SIGNATURE-----
-
---Sig_/Tc1MfmY+dPwqvrJmDqEwtXa--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

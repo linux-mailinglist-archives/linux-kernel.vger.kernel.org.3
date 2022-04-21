@@ -2,233 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1AF509E19
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4337509E1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbiDUK6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
+        id S1388609AbiDULAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 07:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbiDUK6q (ORCPT
+        with ESMTP id S231478AbiDULA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:58:46 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3572728983
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:55:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650538557; x=1682074557;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PV4tJ0i0veYmhrb3mmizx5BsOMkUILxgALAnUGbTF6s=;
-  b=Hawu/2JtVPP3ywfaBmeCq/nPctDYpY4TyFyCk+7nXz5/UvYbeTAWvmE5
-   q0gm5jAmhmumcNwkSJIfZH4T5poDEHFuac3R942ELL9K7FCEkwpY8HIYP
-   MxHYg8taJgjhGTLTZxXQeXOI7PaFyJ/b1SZlVbusfOR6a67oJq0Pxn6/b
-   mPm8IfAOhM6pLO6HUID2/ax/9pNKihz5ebZo/lBKanOxxEDuq5Zl8WmKW
-   yZr+p9+UE+KUQCsmajAIGwT5VqbxtBWyEi6HMAO/y3JGNnVXrPr05TfnK
-   L6cH7DEfcHHeGpWsXNpiwEBLldzgNwEWUHNjdS3Elw/IvQbLBK+N5OuL9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="324756583"
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="324756583"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 03:55:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="562524346"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Apr 2022 03:55:55 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhUTa-0008Fa-OC;
-        Thu, 21 Apr 2022 10:55:54 +0000
-Date:   Thu, 21 Apr 2022 18:55:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 7e510e661ea5f90cf0a5a1618af362dd115017b2
-Message-ID: <6261382f.pVfcQfsu9SM+VhLE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 21 Apr 2022 07:00:29 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A20F2A72A
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:57:40 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id i20so8035352ybj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:57:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WaU28uoBYkLX26Ko4EQyVaVQ6hf9KwSDqrKkB30ZWx0=;
+        b=Vg7jjtzfb6/aWLtkbVfHT+Cqr+JwxIqpUzwqO3TTVFtIQVoKUh66fMs3/OPzbkVIdk
+         BQ/+7v0w9BNBKE/cQBJMHPqfWYVH2/Xf1cCXIe6iulCFEJjzK4rkiVz0A+XioBOlqjjX
+         evbszGZIYKm20kWQFDPT7En1alPeaajUxyfgJJ7ZzjvmUoJ5jCKZ8A2QKuIkNxZBrTtp
+         NCePS+S2Se1lRXg6MIQWYqLqJKm2QMKUo9V1Sd14mmm/CLucfRM5uWWR2WbbcixAAt2w
+         13G5+f28FmOzrh7/t+0I/U56foklWCzj0U5BJBVLchkf/GVrzwikiFZoijIdJRQnNf40
+         vjOg==
+X-Gm-Message-State: AOAM533WzhqSaWj2Ceoojmuno/ZU3Rtnp7OLwT7pneka3MYDBB1GWGbS
+        XOnGqVsmFmtLtkwDbLYFw1/GkA8x12EPrmu97gybAtq42kU=
+X-Google-Smtp-Source: ABdhPJz/XEH7QiNLiwzqXD8HBZ53MKUxByaoFTTi2ZRB+SyIfAkNJY69K2Rn0p0mGOi8QfvOxl1ZqMr0EV6nSuVwkpU=
+X-Received: by 2002:a25:230d:0:b0:641:375c:b5ad with SMTP id
+ j13-20020a25230d000000b00641375cb5admr23835503ybj.137.1650538659505; Thu, 21
+ Apr 2022 03:57:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220420140521.45361-1-kernelfans@gmail.com> <20220420140521.45361-7-kernelfans@gmail.com>
+ <CAJZ5v0h2SWN-=-5=OsMGm1amMJrYELqM6BC+J=98EAxSUmxMqg@mail.gmail.com> <YmDP93yLJw5gsjtQ@piliu.users.ipa.redhat.com>
+In-Reply-To: <YmDP93yLJw5gsjtQ@piliu.users.ipa.redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 21 Apr 2022 12:57:28 +0200
+Message-ID: <CAJZ5v0g9DZax-U4WnVcUCc0zAD0uwZZ7E6wsGXmVCB6MeebWxw@mail.gmail.com>
+Subject: Re: [PATCH 6/9] pm/irq: make for_each_irq_desc() safe of irq_desc release
+To:     Pingfan Liu <kernelfans@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 7e510e661ea5f90cf0a5a1618af362dd115017b2  rcu-tasks: Drive synchronous grace periods from calling task
+On Thu, Apr 21, 2022 at 5:31 AM Pingfan Liu <kernelfans@gmail.com> wrote:
+>
+> On Wed, Apr 20, 2022 at 06:23:48PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Apr 20, 2022 at 4:06 PM Pingfan Liu <kernelfans@gmail.com> wrote:
+> > >
+> > > The invloved context is no a RCU read section. Furthermore there may be
+> > > more than one task at this point. Hence it demands a measure to prevent
+> > > irq_desc from freeing. Use irq_lock_sparse to serve the protection
+> > > purpose.
+> >
+> > Can you please describe an example scenario in which the added locking
+> > will prevent a failure from occurring?
+> >
+>
+> Sorry to forget mentioning that this is based on the code analysis.
+>
+> Suppose the following scenario:
+> Two threads invloved
+>   threadA "hibernate" runs suspend_device_irqs()
+>   threadB "rcu_cpu_kthread" runs rcu_core()->rcu_do_batch(), which releases
+>   object, let's say irq_desc
+>
+> Zoom in:
+>   threadA                                               threadB
+>   for_each_irq_desc(irq, desc) {
+>       get irq_descA which is under freeing
+>                                                     --->preempted by rcu_core()->rcu_do_batch()  which releases irq_descA
+>       raw_spin_lock_irqsave(&desc->lock, flags);
+>       //Oops
+>
+> And since in the involved code piece, threadA runs in a preemptible
+> context, and there may be more than one thread at this stage. So the
+> preempted can happen.
 
-elapsed time: 2100m
+Well, I'm still not sure that this can ever trigger in practice, but I
+guess the locking can be added for extra safety.
 
-configs tested: 149
-configs skipped: 4
+Anyway, the above information should go into the changelog IMO.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+That said ->
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc64                           defconfig
-arm                       imx_v6_v7_defconfig
-sh                  sh7785lcr_32bit_defconfig
-powerpc                 mpc85xx_cds_defconfig
-powerpc                      pcm030_defconfig
-mips                     loongson1b_defconfig
-arm                          lpd270_defconfig
-arm                         lpc18xx_defconfig
-powerpc                 canyonlands_defconfig
-mips                       bmips_be_defconfig
-arm                      jornada720_defconfig
-powerpc                        cell_defconfig
-powerpc                     mpc83xx_defconfig
-arm                         nhk8815_defconfig
-xtensa                         virt_defconfig
-powerpc                      chrp32_defconfig
-ia64                      gensparse_defconfig
-sh                             espt_defconfig
-openrisc                 simple_smp_defconfig
-sh                        apsh4ad0a_defconfig
-mips                         cobalt_defconfig
-arm                            qcom_defconfig
-m68k                         amcore_defconfig
-s390                                defconfig
-powerpc                      makalu_defconfig
-ia64                        generic_defconfig
-mips                            ar7_defconfig
-xtensa                    xip_kc705_defconfig
-um                           x86_64_defconfig
-mips                    maltaup_xpa_defconfig
-powerpc                  iss476-smp_defconfig
-m68k                                defconfig
-s390                          debug_defconfig
-arm                            xcep_defconfig
-powerpc                    amigaone_defconfig
-arm                        mvebu_v7_defconfig
-i386                                defconfig
-xtensa                           allyesconfig
-powerpc                 mpc8540_ads_defconfig
-powerpc                 mpc837x_rdb_defconfig
-mips                      loongson3_defconfig
-arc                        nsimosci_defconfig
-sh                            hp6xx_defconfig
-arm                          pxa3xx_defconfig
-sparc                       sparc32_defconfig
-sh                          sdk7780_defconfig
-powerpc                 mpc834x_itx_defconfig
-m68k                       bvme6000_defconfig
-powerpc                     stx_gp3_defconfig
-arm                           u8500_defconfig
-sh                           sh2007_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220420
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-x86_64                        randconfig-a011
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220420
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-x86_64                              defconfig
+> > > Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > To: linux-kernel@vger.kernel.org
+> > > ---
+> > >  kernel/irq/pm.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > >
+> > > diff --git a/kernel/irq/pm.c b/kernel/irq/pm.c
+> > > index ca71123a6130..4b67a4c7de3c 100644
+> > > --- a/kernel/irq/pm.c
+> > > +++ b/kernel/irq/pm.c
+> > > @@ -133,6 +133,7 @@ void suspend_device_irqs(void)
+> > >         struct irq_desc *desc;
+> > >         int irq;
+> > >
+> > > +       irq_lock_sparse();
+> > >         for_each_irq_desc(irq, desc) {
+> > >                 unsigned long flags;
+> > >                 bool sync;
+> > > @@ -146,6 +147,7 @@ void suspend_device_irqs(void)
+> > >                 if (sync)
+> > >                         synchronize_irq(irq);
 
-clang tested configs:
-riscv                randconfig-c006-20220420
-mips                 randconfig-c004-20220420
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-arm                  randconfig-c002-20220420
-powerpc              randconfig-c003-20220420
-arm                       mainstone_defconfig
-arm                    vt8500_v6_v7_defconfig
-mips                        qi_lb60_defconfig
-arm                         s3c2410_defconfig
-mips                        bcm63xx_defconfig
-arm                         orion5x_defconfig
-arm                           omap1_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                     pseries_defconfig
-powerpc                     skiroot_defconfig
-arm                          ep93xx_defconfig
-powerpc                    gamecube_defconfig
-arm                        neponset_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r041-20220420
-riscv                randconfig-r042-20220420
-hexagon              randconfig-r045-20220420
-s390                 randconfig-r044-20220420
+-> is it entirely safe to call synchronize_irq() under irq_lock_sparse?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > >         }
+> > > +       irq_unlock_sparse();
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(suspend_device_irqs);
+> > >
+> > > @@ -186,6 +188,7 @@ static void resume_irqs(bool want_early)
+> > >         struct irq_desc *desc;
+> > >         int irq;
+> > >
+> > > +       /* The early resume stage is free of irq_desc release */
+> > >         for_each_irq_desc(irq, desc) {
+> > >                 unsigned long flags;
+> > >                 bool is_early = desc->action &&
+> > > --
+> > > 2.31.1
+> > >

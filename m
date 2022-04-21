@@ -2,143 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1B950A7B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 618BE50A7BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391160AbiDUSFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S1391149AbiDUSGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391155AbiDUSF2 (ORCPT
+        with ESMTP id S1391202AbiDUSGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:05:28 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A587A4B1E8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:02:32 -0700 (PDT)
+        Thu, 21 Apr 2022 14:06:45 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5794B84D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:03:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650564152; x=1682100152;
+  t=1650564216; x=1682100216;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+AdcSDTJ9BqO5L8K2PefeVi7JU8dKRkGs1Rx00xlAw4=;
-  b=iWQUavdEBTcHzLVyQDCZSa0DUBo6CNfNiFyjWp66gcc01R5+Y9jk3pe/
-   ZVCVUdOugyTmuL2ME+VFqGdpjeoaGrmUpPv2rCC1eO5h0QZv99SfVeiFB
-   n720yULx/fo4CKyssyNcpB4KE0z6HkokbjIbFbJgRArFe69sc0OOsBA+Y
-   /el6v+f9PBn43KnIB+srgb1e+L+bNWdMbvKfWTjeQEF3H3/2JjnMT9LDr
-   4Qrx1UU9NvZ7GlGq0kOuseEAAXQA/hIT1ldI1NMRAJP6Or0CnaM/x2GAW
-   OrEGIj5ZNivZTJsDsqtq43dGHpoflEAMGsIwu4znVVAW+WgtOIl31/3k9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="350876604"
+  bh=bQ+rneEE1x3jrND7Y9Wv3LGa2VxvPuk/c+WG8SdyEzQ=;
+  b=VI0lCMtpgyRWIR2MVpdVS39pWila2FnjFkisYts7EclQbKaB2jEBi7PF
+   DHJjqy5f6BRgFjWhIW+GVywioknnL7DP6I+GjVRMWm3UBJKL1rKcskKm0
+   yh5LO9oZKbJWyctYZGBrm+GDB5e6KrbSwvI2PrZTQqhPdSlTU5XKMuGAY
+   XAfayIuKjRn42OdC5cxY9+FY6lK3RAaNNoWnWGvv/P6kJ9dYCf50VJmgM
+   E/f9eS3pRE20w2wxxNk5zfxkrflLir118fJ2du6Ng6fbJQo69qmjbW71f
+   018e0FYAElEzV0dgOhnHuTNdgyuZ+chlUowoddJgzzkD5Azo/q1TkAwzb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="246335278"
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="350876604"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 11:02:32 -0700
+   d="scan'208";a="246335278"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 11:03:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="648241915"
+   d="scan'208";a="728116051"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Apr 2022 11:02:30 -0700
+  by orsmga005.jf.intel.com with ESMTP; 21 Apr 2022 11:03:30 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nhb8P-0008dt-Io;
-        Thu, 21 Apr 2022 18:02:29 +0000
-Date:   Fri, 22 Apr 2022 02:02:28 +0800
+        id 1nhb9N-0008e7-O6;
+        Thu, 21 Apr 2022 18:03:29 +0000
+Date:   Fri, 22 Apr 2022 02:02:30 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Maxime Ripard <maxime@cerno.tech>
+To:     David Howells <dhowells@redhat.com>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-5.10.y 3076/5321] drivers/clk/bcm/clk-bcm2835.c:943:6:
- warning: variable 'rem' set but not used
-Message-ID: <202204220101.mldVB7z8-lkp@intel.com>
+        linux-kernel@vger.kernel.org
+Subject: [dhowells-fs:netfs-lib 2/18] fs/netfs/objects.c:48:2: error: call to
+ undeclared function 'netfs_proc_add_writeback'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202204220100.5rFjj0Qv-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-head:   1052f9bce62982023737a95b7ff1ad26a5149af6
-commit: b9c2343373f6bf19358db4e50197f5b3a17831db [3076/5321] clk: bcm-2835: Remove rounding up the dividers
-config: arm-bcm2835_defconfig (https://download.01.org/0day-ci/archive/20220422/202204220101.mldVB7z8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-lib
+head:   5b166ee5742c8a13e2958bad90e4b3a5d9bb0426
+commit: d2183d7d55ccea0042532727e540a4835aa0a266 [2/18] netfs: Add a procfile to list in-progress requests
+config: hexagon-randconfig-r045-20220421 (https://download.01.org/0day-ci/archive/20220422/202204220100.5rFjj0Qv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=b9c2343373f6bf19358db4e50197f5b3a17831db
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.10.y
-        git checkout b9c2343373f6bf19358db4e50197f5b3a17831db
+        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=d2183d7d55ccea0042532727e540a4835aa0a266
+        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
+        git fetch --no-tags dhowells-fs netfs-lib
+        git checkout d2183d7d55ccea0042532727e540a4835aa0a266
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/bcm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/clk/bcm/clk-bcm2835.c:943:6: warning: variable 'rem' set but not used [-Wunused-but-set-variable]
-           u64 rem;
-               ^
-   1 warning generated.
+>> fs/netfs/objects.c:48:2: error: call to undeclared function 'netfs_proc_add_writeback'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           netfs_proc_add_writeback(rreq);
+           ^
+   fs/netfs/objects.c:48:2: note: did you mean 'netfs_proc_add_rreq'?
+   fs/netfs/internal.h:51:20: note: 'netfs_proc_add_rreq' declared here
+   static inline void netfs_proc_add_rreq(struct netfs_io_request *rreq) {}
+                      ^
+>> fs/netfs/objects.c:80:2: error: call to undeclared function 'netfs_proc_del_writeback'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           netfs_proc_del_writeback(rreq);
+           ^
+   fs/netfs/objects.c:80:2: note: did you mean 'netfs_proc_del_rreq'?
+   fs/netfs/internal.h:52:20: note: 'netfs_proc_del_rreq' declared here
+   static inline void netfs_proc_del_rreq(struct netfs_io_request *rreq) {}
+                      ^
+   2 errors generated.
 
 
-vim +/rem +943 drivers/clk/bcm/clk-bcm2835.c
+vim +/netfs_proc_add_writeback +48 fs/netfs/objects.c
 
-41691b8862e2a3 Eric Anholt   2015-10-08  933  
-41691b8862e2a3 Eric Anholt   2015-10-08  934  static u32 bcm2835_clock_choose_div(struct clk_hw *hw,
-41691b8862e2a3 Eric Anholt   2015-10-08  935  				    unsigned long rate,
-b9c2343373f6bf Maxime Ripard 2021-09-22  936  				    unsigned long parent_rate)
-41691b8862e2a3 Eric Anholt   2015-10-08  937  {
-41691b8862e2a3 Eric Anholt   2015-10-08  938  	struct bcm2835_clock *clock = bcm2835_clock_from_hw(hw);
-41691b8862e2a3 Eric Anholt   2015-10-08  939  	const struct bcm2835_clock_data *data = clock->data;
-9c95b32ca09364 Remi Pommarel 2015-12-06  940  	u32 unused_frac_mask =
-9c95b32ca09364 Remi Pommarel 2015-12-06  941  		GENMASK(CM_DIV_FRAC_BITS - data->frac_bits, 0) >> 1;
-41691b8862e2a3 Eric Anholt   2015-10-08  942  	u64 temp = (u64)parent_rate << CM_DIV_FRAC_BITS;
-9c95b32ca09364 Remi Pommarel 2015-12-06 @943  	u64 rem;
-959ca92a3235fc Martin Sperl  2016-02-29  944  	u32 div, mindiv, maxdiv;
-41691b8862e2a3 Eric Anholt   2015-10-08  945  
-9c95b32ca09364 Remi Pommarel 2015-12-06  946  	rem = do_div(temp, rate);
-41691b8862e2a3 Eric Anholt   2015-10-08  947  	div = temp;
-41691b8862e2a3 Eric Anholt   2015-10-08  948  	div &= ~unused_frac_mask;
-41691b8862e2a3 Eric Anholt   2015-10-08  949  
-959ca92a3235fc Martin Sperl  2016-02-29  950  	/* different clamping limits apply for a mash clock */
-959ca92a3235fc Martin Sperl  2016-02-29  951  	if (data->is_mash_clock) {
-959ca92a3235fc Martin Sperl  2016-02-29  952  		/* clamp to min divider of 2 */
-959ca92a3235fc Martin Sperl  2016-02-29  953  		mindiv = 2 << CM_DIV_FRAC_BITS;
-959ca92a3235fc Martin Sperl  2016-02-29  954  		/* clamp to the highest possible integer divider */
-959ca92a3235fc Martin Sperl  2016-02-29  955  		maxdiv = (BIT(data->int_bits) - 1) << CM_DIV_FRAC_BITS;
-959ca92a3235fc Martin Sperl  2016-02-29  956  	} else {
-997f16bd5d2e9b Martin Sperl  2016-02-29  957  		/* clamp to min divider of 1 */
-959ca92a3235fc Martin Sperl  2016-02-29  958  		mindiv = 1 << CM_DIV_FRAC_BITS;
-997f16bd5d2e9b Martin Sperl  2016-02-29  959  		/* clamp to the highest possible fractional divider */
-959ca92a3235fc Martin Sperl  2016-02-29  960  		maxdiv = GENMASK(data->int_bits + CM_DIV_FRAC_BITS - 1,
-959ca92a3235fc Martin Sperl  2016-02-29  961  				 CM_DIV_FRAC_BITS - data->frac_bits);
-959ca92a3235fc Martin Sperl  2016-02-29  962  	}
-959ca92a3235fc Martin Sperl  2016-02-29  963  
-959ca92a3235fc Martin Sperl  2016-02-29  964  	/* apply the clamping  limits */
-959ca92a3235fc Martin Sperl  2016-02-29  965  	div = max_t(u32, div, mindiv);
-959ca92a3235fc Martin Sperl  2016-02-29  966  	div = min_t(u32, div, maxdiv);
-41691b8862e2a3 Eric Anholt   2015-10-08  967  
-41691b8862e2a3 Eric Anholt   2015-10-08  968  	return div;
-41691b8862e2a3 Eric Anholt   2015-10-08  969  }
-41691b8862e2a3 Eric Anholt   2015-10-08  970  
-
-:::::: The code at line 943 was first introduced by commit
-:::::: 9c95b32ca09364e4687b72c4e17b78dc1c420026 clk: bcm2835: add a round up ability to the clock divisor
-
-:::::: TO: Remi Pommarel <repk@triplefau.lt>
-:::::: CC: Michael Turquette <mturquette@baylibre.com>
+    10	
+    11	/*
+    12	 * Allocate an I/O request and initialise it.
+    13	 */
+    14	struct netfs_io_request *netfs_alloc_request(struct address_space *mapping,
+    15						     struct file *file,
+    16						     loff_t start, size_t len,
+    17						     enum netfs_io_origin origin)
+    18	{
+    19		static atomic_t debug_ids;
+    20		struct inode *inode = file ? file_inode(file) : mapping->host;
+    21		struct netfs_i_context *ctx = netfs_i_context(inode);
+    22		struct netfs_io_request *rreq;
+    23		int ret;
+    24	
+    25		rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
+    26		if (!rreq)
+    27			return ERR_PTR(-ENOMEM);
+    28	
+    29		rreq->start	= start;
+    30		rreq->len	= len;
+    31		rreq->origin	= origin;
+    32		rreq->netfs_ops	= ctx->ops;
+    33		rreq->mapping	= mapping;
+    34		rreq->inode	= inode;
+    35		rreq->i_size	= i_size_read(inode);
+    36		rreq->debug_id	= atomic_inc_return(&debug_ids);
+    37		INIT_LIST_HEAD(&rreq->subrequests);
+    38		refcount_set(&rreq->ref, 1);
+    39		__set_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
+    40		if (rreq->netfs_ops->init_request) {
+    41			ret = rreq->netfs_ops->init_request(rreq, file);
+    42			if (ret < 0) {
+    43				kfree(rreq);
+    44				return ERR_PTR(ret);
+    45			}
+    46		}
+    47	
+  > 48		netfs_proc_add_writeback(rreq);
+    49		netfs_stat(&netfs_n_rh_rreq);
+    50		return rreq;
+    51	}
+    52	
+    53	void netfs_get_request(struct netfs_io_request *rreq, enum netfs_rreq_ref_trace what)
+    54	{
+    55		int r;
+    56	
+    57		__refcount_inc(&rreq->ref, &r);
+    58		trace_netfs_rreq_ref(rreq->debug_id, r + 1, what);
+    59	}
+    60	
+    61	void netfs_clear_subrequests(struct netfs_io_request *rreq, bool was_async)
+    62	{
+    63		struct netfs_io_subrequest *subreq;
+    64	
+    65		while (!list_empty(&rreq->subrequests)) {
+    66			subreq = list_first_entry(&rreq->subrequests,
+    67						  struct netfs_io_subrequest, rreq_link);
+    68			list_del(&subreq->rreq_link);
+    69			netfs_put_subrequest(subreq, was_async,
+    70					     netfs_sreq_trace_put_clear);
+    71		}
+    72	}
+    73	
+    74	static void netfs_free_request(struct work_struct *work)
+    75	{
+    76		struct netfs_io_request *rreq =
+    77			container_of(work, struct netfs_io_request, work);
+    78	
+    79		trace_netfs_rreq(rreq, netfs_rreq_trace_free);
+  > 80		netfs_proc_del_writeback(rreq);
+    81		netfs_clear_subrequests(rreq, false);
+    82		if (rreq->netfs_ops->free_request)
+    83			rreq->netfs_ops->free_request(rreq);
+    84		if (rreq->cache_resources.ops)
+    85			rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
+    86		kfree_rcu(rreq, rcu);
+    87		netfs_stat_d(&netfs_n_rh_rreq);
+    88	}
+    89	
 
 -- 
 0-DAY CI Kernel Test Service

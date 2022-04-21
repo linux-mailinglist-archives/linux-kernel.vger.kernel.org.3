@@ -2,82 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641DB50AC44
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C2F50AC46
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442749AbiDUXrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 19:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
+        id S1442693AbiDUXrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 19:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442750AbiDUXrk (ORCPT
+        with ESMTP id S1442741AbiDUXri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:47:40 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958F74888B
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:44:49 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id bj12-20020a170902850c00b0015adf30aaccso1429588plb.15
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:44:49 -0700 (PDT)
+        Thu, 21 Apr 2022 19:47:38 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D044142EC7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:44:46 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id b7so7130142plh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:44:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=soZcA9y3PeE+zbNMS5WF05IaFn1Ub9nCQnWDGl/9EM4=;
-        b=AMOxrzCggH4xAXjA65k6jRVjeYiHvCQ4JBuinSbQFuHWjpOZVImwxNzZ4vHPZohQTB
-         aXciCJTbhyQ9+Fe7fHynuCvh/GMWKc3btZ9Y358IdMT3cFDnaS8nhl8U83WMeiZ8Ithp
-         MPQW59CsoBRg/kR2IuaK+bMzzTxWWtYyKW/Dy7he+lQj4bZ/W17RnhFraPRXsfm66/d7
-         5UbhQH01hqjEcs/bA2iTiTpfx8hnyPldqhb6oZiRPAgE1LWc9rycFDzbTK1wLpo4gCLg
-         /eJv/edTk29F2NU8C8gWTD76IZam53QbHxr/hDRN522g8VA/T1AOWy7SPpB7vGrVABsz
-         FexA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Xb/o1YoXSro4rOpc/9fDNjy0WQI2db6K4zofA5onjWE=;
+        b=fbBS9qslB4mC4FEqVvu+uErZXwLjKCng4BXLZFBxGTgyHo+5Ou/a86ZV88oAlcJHxF
+         CGakfLnXzRRf+QVcu0f/HUje5/q4SFlRtm2gMQj9xAJaHiYl4JowiwyTHu+TAfnd1MRH
+         yFq4vCLGWren79EmvXzHAt+n+vzo6N3jK4oeHxucBQ3x5Lj/F3qs8RIDFQIkQom1mGUq
+         dSbxu6S/rNdBNe9ZqRlWRAteTTlGbGnWxtgzmehIixwRuOrineCykxEF9ohdLi2C5M60
+         2hBbQPvnSFFv9XLx2LAp89CTxDVu54ZmDCUj2vGpJi28+nlNCLO13SOdGRhjS6k4PvtO
+         34HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=soZcA9y3PeE+zbNMS5WF05IaFn1Ub9nCQnWDGl/9EM4=;
-        b=q8dY1uhZbRuoz9Bs4c0AsUp+xm70YnAkMrkLga52q4B+kBWZINKbHcRkWxuqargEi0
-         YpkNLVUbjLdhO9wdWUm+LWiBDcJ195MtF/8OSEVtpxTGOza4osC+7pXfnWyTYvsa1pPD
-         MqrIJzvGXHF5b/1DOksA5ZKWKQ96C3Omrrr7b4MQDLu5t8RX7XKqbtS/ey7rBnxsKvaZ
-         CH/EBdhnbjPrlbrQ/zdC0QzUL6sWgCUGg5+kMpFSm6trW4PndmUkFrAZqVOVYge1TPYl
-         zVDnOwof5TeaUlV/ntNrPYaPcP8lyGXa0+t2tu520b9tObwqVloMHyjgovAYG2GnfppF
-         TraA==
-X-Gm-Message-State: AOAM532VpocqzikDeK1lB9jBoZoU2m4vHa7aq1DUGjAKVO2pQoMaUmI1
-        DgdjlbUUQecJzf6BE3D4qZ9Lt/BwcmFZcoRJ
-X-Google-Smtp-Source: ABdhPJz2CcjMs+n1pq6zI6202/dU8xhtLt6Efq3KS5h9gllRzFGCi7i+ft39wZ54kqGMAmjNN828QLIvEM5o94Aq
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:90b:2384:b0:1cb:5223:9dc4 with SMTP
- id mr4-20020a17090b238400b001cb52239dc4mr191635pjb.1.1650584688532; Thu, 21
- Apr 2022 16:44:48 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 23:44:26 +0000
-In-Reply-To: <20220421234426.3494842-1-yosryahmed@google.com>
-Message-Id: <20220421234426.3494842-5-yosryahmed@google.com>
-Mime-Version: 1.0
-References: <20220421234426.3494842-1-yosryahmed@google.com>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v4 4/4] selftests: cgroup: add a selftest for memory.reclaim
-From:   Yosry Ahmed <yosryahmed@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Dan Schatzberg <schatzberg.dan@gmail.com>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Xb/o1YoXSro4rOpc/9fDNjy0WQI2db6K4zofA5onjWE=;
+        b=j4oIA9OfXd/W59a8D0dIbdlJhrcnJEQPMtaxlcW79xsVAV/vsVymG/NzrsqimYQTs7
+         /xQ6nql7vYufWiMlfdG8Pl1SpjaK62IGMCbi06DE+tcURkd61NmS/oHLXPbdalCWvDxm
+         HhC/61T1fIDJE9LAudZIb75pjpUw3XqQ98eQhlunYxbOlrfULdKggt/jHL2wAE6G/4iT
+         x1iAuoKPUKpd68BvKXLN+2Fzj8vISxiI73Ix9nxiWe2UaDpl+zF9R+7z3iSQqwSC9u41
+         STHVixZN51eNUAQPO5h0o5DDfWFueJkPpCaFKAoaAiECZ34hzv5B+c/3JUknYFYU/+wH
+         8SoQ==
+X-Gm-Message-State: AOAM532VJQ+Cfo0FirdCFOVVnPUu8zXE/qiPyTsHAOZuh+jbyV/vy+Y6
+        PNIXjuhD6hyIfG8puShTFqc=
+X-Google-Smtp-Source: ABdhPJxkwDxhATvNMv4TbI7vaKOXz9suZHw82pJjsBVJzLyfCEoi+E2Wd576UIhZCC6VrS7cmeGYYg==
+X-Received: by 2002:a17:902:c613:b0:159:9f9:85ec with SMTP id r19-20020a170902c61300b0015909f985ecmr1856237plr.67.1650584686188;
+        Thu, 21 Apr 2022 16:44:46 -0700 (PDT)
+Received: from ArchDesktop ([14.100.36.163])
+        by smtp.gmail.com with ESMTPSA id y190-20020a62cec7000000b0050adbfee09asm212056pfg.187.2022.04.21.16.44.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 16:44:45 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 07:44:42 +0800
+From:   Solomon Tan <wjsota@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk
+Subject: Re: [PATCH] staging: r8188eu: use in-kernel ieee channel
+Message-ID: <YmHsannu/vcKX9Kk@ArchDesktop>
+References: <20220421015811.2745-1-wjsota@gmail.com>
+ <20220421170010.GD2462@kadam>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421170010.GD2462@kadam>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,119 +72,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new test for memory.reclaim that verifies that the interface
-correctly reclaims memory as intended, from both anon and file pages.
+On Thu, Apr 21, 2022 at 08:00:10PM +0300, Dan Carpenter wrote:
+> On Thu, Apr 21, 2022 at 09:58:12AM +0800, Solomon Tan wrote:
+> > The rtw_ieee80211_channel structure just duplicates the in-kernel
+> > ieee80211_channel structure
+> 
+> When you say that they are duplicates, I expected them to be the same
+> but they're not at all.  ieee80211_channel has a bunch more struct
+> members.
+> 
+> I don't really have a problem with the change necessarily but the commit
+> message should not have mislead me.
 
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
----
- .../selftests/cgroup/test_memcontrol.c        | 86 +++++++++++++++++++
- 1 file changed, 86 insertions(+)
+Sorry about that. I will amend the commit message and send it as v2.
+Thank you for the review.
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index f2ffb3a30194..5f7c20de2426 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -760,6 +760,91 @@ static int test_memcg_max(const char *root)
- 	return ret;
- }
- 
-+/*
-+ * This test checks that memory.reclaim reclaims the given
-+ * amount of memory (from both anon and file).
-+ */
-+static int test_memcg_reclaim(const char *root)
-+{
-+	int ret = KSFT_FAIL, fd, retries;
-+	char *memcg;
-+	long current, to_reclaim;
-+	char buf[64];
-+
-+	memcg = cg_name(root, "memcg_test");
-+	if (!memcg)
-+		goto cleanup;
-+
-+	if (cg_create(memcg))
-+		goto cleanup;
-+
-+	current = cg_read_long(memcg, "memory.current");
-+	if (current != 0)
-+		goto cleanup;
-+
-+	cg_run_nowait(memcg, alloc_anon_noexit, (void *) MB(50));
-+	sleep(1);
-+
-+	fd = get_temp_fd();
-+	if (fd < 0)
-+		goto cleanup;
-+
-+	cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
-+	sleep(1);
-+
-+	current = cg_read_long(memcg, "memory.current");
-+	if (!values_close(current, MB(100), 10))
-+		goto cleanup;
-+
-+	/*
-+	 * Reclaim until current reaches 30M, make sure to reclaim over 50M to
-+	 * hit both anon and file.
-+	 */
-+	retries = 5;
-+	while (true) {
-+		int err;
-+
-+		current = cg_read_long(memcg, "memory.current");
-+		to_reclaim = current - MB(30);
-+
-+		/*
-+		 * We only keep looping if we get EAGAIN, which means we could
-+		 * not reclaim the full amount.
-+		 */
-+		if (to_reclaim <= 0)
-+			goto cleanup;
-+
-+
-+		snprintf(buf, sizeof(buf), "%ld", to_reclaim);
-+		err = cg_write(memcg, "memory.reclaim", buf);
-+		if (!err) {
-+			/*
-+			 * If writing succeeds, then the written amount should have been
-+			 * fully reclaimed (and maybe more).
-+			 */
-+			current = cg_read_long(memcg, "memory.current");
-+			if (!values_close(current, MB(30), 3) && current > MB(30))
-+				goto cleanup;
-+			break;
-+		}
-+
-+		/* The kernel could not reclaim the full amount, try again. */
-+		if (err == -EAGAIN && retries--)
-+			continue;
-+
-+		/* We got an unexpected error or ran out of retries. */
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+cleanup:
-+	cg_destroy(memcg);
-+	free(memcg);
-+	close(fd);
-+
-+	return ret;
-+}
-+
- static int alloc_anon_50M_check_swap(const char *cgroup, void *arg)
- {
- 	long mem_max = (long)arg;
-@@ -1263,6 +1348,7 @@ struct memcg_test {
- 	T(test_memcg_high),
- 	T(test_memcg_high_sync),
- 	T(test_memcg_max),
-+	T(test_memcg_reclaim),
- 	T(test_memcg_oom_events),
- 	T(test_memcg_swap_max),
- 	T(test_memcg_sock),
--- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
+> 
+> regards,
+> dan carpenter
+> 
 
+Cheers,
+Solomon

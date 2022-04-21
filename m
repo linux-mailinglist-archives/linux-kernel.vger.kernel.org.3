@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA64509C55
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A0E509C4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387643AbiDUJbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
+        id S1387642AbiDUJbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387641AbiDUJbD (ORCPT
+        with ESMTP id S236204AbiDUJbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:31:03 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B09D27FEB;
-        Thu, 21 Apr 2022 02:28:11 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 66BAD1F452EB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650533289;
-        bh=ptoZj0zFpkieEBVYbfFm80mk/GACzh8P4FCP7u5kt4I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fa955ng5ILBujIu9QV+HvXfpVRPDu1cS/wFEB1NxzivoDE4BnbdHuV7SkHwQDJ1Uu
-         a7IgttMNFlHVWXZ4qKCPNi2ux5Ib0L71DkrkBZvV2I4hQXc/NofCZjGP8UNkW9Alpa
-         d2G11zp5LiU5Gb8S5k6MqUDGqQTVeN/q+3ijkbHnSKyTEdvp6T2dM790UIRIBT5X5i
-         OcsYbvK4EAAgEOli0MGB2Td9o/R0gCMt+WbutSscykrcjSbcdemQKMqvI0Qev765rq
-         TrBrqcL9Zw61lH6ybvft+/VBQTuxqPANg76Qyb7u/wmZHHpvNj5KowdDCPp1KrkMLr
-         rtKWppH6lf42Q==
-Message-ID: <e7ce1509-4680-6f3a-8e60-76b361e0ed33@collabora.com>
-Date:   Thu, 21 Apr 2022 11:28:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v13 1/3] dt-binding: mt8183: add Mediatek MDP3 dt-bindings
-Content-Language: en-US
-To:     "moudy.ho" <moudy.ho@mediatek.com>, Rob Herring <robh@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thu, 21 Apr 2022 05:31:32 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20EC27FED;
+        Thu, 21 Apr 2022 02:28:42 -0700 (PDT)
+X-UUID: cf98e13ca3e946fe8a34fd1b5d5f830e-20220421
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:fc5ddcd6-c240-4824-9a46-f3a202e054c3,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:8
+X-CID-META: VersionHash:faefae9,CLOUDID:188379f0-da02-41b4-b6df-58f4ccd36682,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: cf98e13ca3e946fe8a34fd1b5d5f830e-20220421
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1368554041; Thu, 21 Apr 2022 17:28:37 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 21 Apr 2022 17:28:35 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 21 Apr 2022 17:28:35 +0800
+Message-ID: <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
+Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Kevin Hilman <khilman@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
-        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        allen-kh.cheng@mediatek.com, xiandong.wang@mediatek.com,
-        randy.wu@mediatek.com, jason-jh.lin@mediatek.com,
-        roy-cw.yeh@mediatek.com, river.cheng@mediatek.com,
-        srv_heupstream@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220418022213.23826-1-moudy.ho@mediatek.com>
- <20220418022213.23826-2-moudy.ho@mediatek.com>
- <YmAyrzjtWGrk5pNn@robh.at.kernel.org>
- <b78fd7595fe66e774e3a707884ed9828964cbde8.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <b78fd7595fe66e774e3a707884ed9828964cbde8.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Date:   Thu, 21 Apr 2022 17:28:35 +0800
+In-Reply-To: <7hczhbe3wn.fsf@baylibre.com>
+References: <20220420102044.10832-1-roger.lu@mediatek.com>
+         <7hczhbe3wn.fsf@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,97 +75,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/04/22 04:46, moudy.ho ha scritto:
-> On Wed, 2022-04-20 at 11:19 -0500, Rob Herring wrote:
->> On Mon, Apr 18, 2022 at 10:22:11AM +0800, Moudy Ho wrote:
->>> This patch adds DT binding documents for Media Data Path 3 (MDP3)
->>> a unit in multimedia system combined with several components and
->>> used for scaling and color format convert.
->>>
->>> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
->>> ---
->>>   .../bindings/media/mediatek,mdp3-rdma.yaml    | 166
->>> ++++++++++++++++++
->>>   .../bindings/media/mediatek,mdp3-rsz.yaml     |  54 ++++++
->>>   .../bindings/media/mediatek,mdp3-wrot.yaml    |  57 ++++++
->>>   .../bindings/soc/mediatek/mediatek,ccorr.yaml |  47 +++++
->>>   .../bindings/soc/mediatek/mediatek,wdma.yaml  |  58 ++++++
->>>   5 files changed, 382 insertions(+)
->>>   create mode 100644
->>> Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
->>>   create mode 100644
->>> Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
->>>   create mode 100644
->>> Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
->>>   create mode 100644
->>> Documentation/devicetree/bindings/soc/mediatek/mediatek,ccorr.yaml
->>>   create mode 100644
->>> Documentation/devicetree/bindings/soc/mediatek/mediatek,wdma.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-
->>> rdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-
->>> rdma.yaml
->>> new file mode 100644
->>> index 000000000000..45b7c075ebf5
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-
->>> rdma.yaml
->>> @@ -0,0 +1,166 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id:
->>> https://urldefense.com/v3/__http://devicetree.org/schemas/media/mediatek,mdp3-rdma.yaml*__;Iw!!CTRNKA9wMg0ARbw!3LSlozK4Ddsy4vjMI70PtpvvS39MTVvDGVME_eBDGj7hhW-DSZsoGdwR90ItVI6F$
->>>   
->>> +$schema:
->>> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!3LSlozK4Ddsy4vjMI70PtpvvS39MTVvDGVME_eBDGj7hhW-DSZsoGdwR96lcJIFE$
->>>   
->>> +
->>> +title: Mediatek Read Direct Memory Access
->>> +
->>> +maintainers:
->>> +  - Matthias Brugger <matthias.bgg@gmail.com>
->>> +
->>> +description: |
->>> +  Mediatek Read Direct Memory Access(RDMA) component used to do
->>> read DMA.
->>> +  It contains one line buffer to store the sufficient pixel data,
->>> and
->>> +  must be siblings to the central MMSYS_CONFIG node.
->>> +  For a description of the MMSYS_CONFIG binding, see
->>> +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.ya
->>> ml
->>> +  for details.
->>> +  The 1st RDMA is also used to be a controller node in Media Data
->>> Path 3(MDP3)
->>> +  that containing MMSYS, MUTEX, GCE and SCP settings.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    items:
->>> +      # MDP3 controller node
->>> +      - const: mediatek,mt8183-mdp3
->>> +      - const: mediatek,mt8183-mdp3-rdma
->>
->> This *still* makes no sense. I'm not looking at this further.
->>
->> Rob
-> 
-> Hi Rob,
-> 
-> Apologize for the misunderstanding with your comments in version 12, I
-> will recheck and delete the SW related information.
-> 
-> Thanks,
-> Moudy
-> 
+Hi Kevin,
 
-Hello Moudy,
-As an afterthought, I think that a commit title like
+On Wed, 2022-04-20 at 16:22 -0700, Kevin Hilman wrote:
+> Hi Roger,
+> 
+> 
+> Roger Lu <roger.lu@mediatek.com> writes:
+> 
+> > The Smart Voltage Scaling(SVS) engine is a piece of hardware
+> > which calculates suitable SVS bank voltages to OPP voltage table.
+> > Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+> > when receiving OPP_EVENT_ADJUST_VOLTAGE.
+> > 
+> > 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+> > 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by
+> > get_cpu_device().
+> > After retrieving subsys device, SVS driver calls device_link_add() to make
+> > sure probe/suspend callback priority.
+> > 
+> > [1] 
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp*linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5__;Lw!!CTRNKA9wMg0ARbw!3gWsdVuiyF0iafrmVINP9FVz7fjGB1UqTPLfMNWEhsl96RDPB-Se6Q-g3F8daK-u$
+> >  
+> > [2] 
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp*linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87__;Lw!!CTRNKA9wMg0ARbw!3gWsdVuiyF0iafrmVINP9FVz7fjGB1UqTPLfMNWEhsl96RDPB-Se6Q-g3Lel3h4j$
+> >  
+> > [3] 
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next*dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2__;Lw!!CTRNKA9wMg0ARbw!3gWsdVuiyF0iafrmVINP9FVz7fjGB1UqTPLfMNWEhsl96RDPB-Se6Q-g3KhMdm00$
+> >  
+> > 
+> > Change since v23:
+> > - Change wording from "Mediatek" to "MediaTek" (uppercase T) in mtk-
+> > svs.yaml.
+> > - Use cpuidle_pause_and_lock() to prevent system from entering cpuidle
+> > instead of applying pm_qos APIs.
+> > - Add kfree() at the end of svs_probe() when encountering probe fail.
+> > - Change MODULE_LICENSE from "GPL v2" to "GPL".
+> > - Add nvmem_cell_put() in error handling when nvmem_cell_read() encounters
+> > fail.
+> 
+> I also gave you a reviewed-by on v23, but here it is again:
+> 
+> Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+> 
+> 
+> That being said, it would be really nice to see an integration tree
+> where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
+> 
+> For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
+> board, it fails to probe[1] because there is no CCI node in the upstream
+> mt8183.dtsi.
+> 
+> I'm assuming this series is also not very useful without the CPUfreq
+> series from Rex, so being able to test this, CCI and CPUfreq together on
+> MT8183 on a mainline kernel would be very helpful.
+> 
+> Kevin
+> 
+> [1]
+> [    0.573332] mtk-svs 1100b000.svs: cannot find cci node
+> [    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe fail
 
-dt-bindings: mediatek: Add bindings for MediaTek MDP3 components
+Just share. I've tested this series on below two platforms and it works as
+expected.
+- mt8183-Krane (kernel-v5.10)
+- mt8192-Hayato (kernel-v5.4)
 
-would be explaining what you're doing in a more concise manner.
+Sincerely,
+Roger Lu.
 
-Regards,
-Angelo

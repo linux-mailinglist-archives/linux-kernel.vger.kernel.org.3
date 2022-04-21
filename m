@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BEB50A8BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93AD850A8C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391764AbiDUTJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
+        id S1391771AbiDUTJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391759AbiDUTI6 (ORCPT
+        with ESMTP id S1380740AbiDUTJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:08:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B6354C792
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:06:03 -0700 (PDT)
+        Thu, 21 Apr 2022 15:09:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8264E4C7B0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:07:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650567962;
+        s=mimecast20190719; t=1650568021;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=rCckTxEGpZ1EVMsAo2ha3TZ2uY37q9vb0mlqr9I+LWs=;
-        b=FB5Tb6boPNqXUKYuHnZpGLu6z8cC9qudBf/Tkg0Y6aGpO2nXuIZ1rCcAUgN5e1DNOyyHSg
-        OMvbdETlAnKmuI0OszGBMAB9AEk8eZfpUSwFEHyQ6N3ksH2Ua8XE4WaEWJE4+mG7iAO2ec
-        3V5BKxKkI0J0FmH66+HpMwSYaGz+n+U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=J83rTwmfAjYlO7wUTZvmzVTeTlogsXahqrayjJ+BC7w=;
+        b=fd583CzT5wYEiF66hdqWDTnHutp1cwhWriuoOTEazqNa9HLG4M+icSTrMEyPZSRnSBSSO+
+        DS1Cvf9DrllCrTmKrK4NQZAd4e1ztWz7dw3jL08jQEoB8vpYDaMDj4e3Yx7rZrbuMSqZte
+        5NabeT43jpR6T+1bNO4DGhxtdzPjc2o=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-133-RCwAzGfcNrObe1TDu-_vuA-1; Thu, 21 Apr 2022 15:05:53 -0400
-X-MC-Unique: RCwAzGfcNrObe1TDu-_vuA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61D49811E9B;
-        Thu, 21 Apr 2022 19:05:50 +0000 (UTC)
-Received: from localhost.localdomain.com (unknown [10.22.16.253])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 04D7EC27E81;
-        Thu, 21 Apr 2022 19:05:48 +0000 (UTC)
-From:   Nico Pache <npache@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: [RFC 3/3] exit: Check for MMF_OOM_SKIP in exit_mmap
-Date:   Thu, 21 Apr 2022 15:05:33 -0400
-Message-Id: <20220421190533.1601879-4-npache@redhat.com>
-In-Reply-To: <20220421190533.1601879-1-npache@redhat.com>
-References: <20220421190533.1601879-1-npache@redhat.com>
+ us-mta-30-Pjbe8XNrONeZx8tCg-RtTg-1; Thu, 21 Apr 2022 15:06:59 -0400
+X-MC-Unique: Pjbe8XNrONeZx8tCg-RtTg-1
+Received: by mail-io1-f71.google.com with SMTP id y20-20020a5e8714000000b0065494b96af2so3909589ioj.10
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:06:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=J83rTwmfAjYlO7wUTZvmzVTeTlogsXahqrayjJ+BC7w=;
+        b=QZ1FplU80k4+dhiOv6Raz73FhgAuMvN9p77cbJ8f2S3/s53zpj0pr4RTenJb1O+YBb
+         uBCN4RwkQxgtLIuyY176PUNSeGbs4HZmGKMMHa++Gu9dfuXPKqLJ9vH2f8W278hrjNmI
+         /B6nIIXxig1i0ngdGYiJ1GujfYOs+19cuhhvweg7uGbozslp82uN3kRPSgko37Us+KhO
+         r97VryGZiLBlD7l4I+u5AnB8Hd+xWaTGPdxDLAVR7DSCWiPs1hOyAq+m9+ARZhY2iCWS
+         89dKJMohTV53apKuMgNGwBC4Y/4UnPSMofkP5FPYSfGob8aRrVpAr5KApfC0SkhVEmnw
+         TQaQ==
+X-Gm-Message-State: AOAM530EcIUSn2wQH8aqAPjGHcuaVFE+96WgigHAc9hrNFSaPUz+SG1q
+        EimnU2DHZcxUW8xQ69nsgmrBTEDDawc+R3iz8ztCnZ1dP09lgAJ2DV5oXIv2vFi0RoID9SYLPju
+        U869ZrZS9rGDAO61AGEwUPDnd
+X-Received: by 2002:a05:6e02:1a0f:b0:2c9:a83b:b69e with SMTP id s15-20020a056e021a0f00b002c9a83bb69emr531677ild.4.1650568018620;
+        Thu, 21 Apr 2022 12:06:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx63YiYj7I8DXD/H5H3iF/QzWB0gDKjqesUTLmJLmy9zG3eUSh7SdyFF0W6OI+0M5nRllha2Q==
+X-Received: by 2002:a05:6e02:1a0f:b0:2c9:a83b:b69e with SMTP id s15-20020a056e021a0f00b002c9a83bb69emr531668ild.4.1650568018408;
+        Thu, 21 Apr 2022 12:06:58 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id m6-20020a923f06000000b002ca74f4fab2sm12692154ila.14.2022.04.21.12.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 12:06:58 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 15:06:56 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v6 08/10] KVM: x86/MMU: Allow NX huge pages to be
+ disabled on a per-vm basis
+Message-ID: <YmGrUE0QgzRpCJxU@xz-m1.local>
+References: <20220420173513.1217360-1-bgardon@google.com>
+ <20220420173513.1217360-9-bgardon@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220420173513.1217360-9-bgardon@google.com>
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MMF_OOM_SKIP bit is used to indicate weather a mm_struct can not be
-invalided or has already been invalided. exit_mmap currently calls
-__oom_reap_task_mm unconditionally despite the fact that the oom reaper
-may have already called this.
+On Wed, Apr 20, 2022 at 10:35:11AM -0700, Ben Gardon wrote:
+> +8.36 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
+> +---------------------------
+> +
+> +:Capability KVM_CAP_PMU_CAPABILITY
 
-Add a check for the MMF_OOM_SKIP bit being set in exit_mmap to avoid
-unnessary calls to the invalidate code.
+s/PMU_CAPABILITY/VM_DISABLE_NX_HUGE_PAGES/?
 
-A slight race can occur on the MMF_OOM_SKIP bit that will still allow
-this to run twice. My testing has shown an ~66% decrease in double calls
-to _oom_reap_task_mm.
+With that fixed:
 
-Fixes: 27ae357fa82b ("mm, oom: fix concurrent munlock and oom reaper unmap, v3")
-Cc: David Rientjes <rientjes@google.com>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Signed-off-by: Nico Pache <npache@redhat.com>
----
- mm/mmap.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Reviewed-by: Peter Xu <peterx@redhat.com>
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index a2968669fd4e..b867f408dacd 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -3113,7 +3113,8 @@ void exit_mmap(struct mm_struct *mm)
- 	/* mm's last user has gone, and its about to be pulled down */
- 	mmu_notifier_release(mm);
- 
--	if (unlikely(mm_is_oom_victim(mm))) {
-+	if (unlikely(mm_is_oom_victim(mm)) &&
-+			!test_bit(MMF_OOM_SKIP, &mm->flags)) {
- 		/*
- 		 * Manually reap the mm to free as much memory as possible.
- 		 * Then, as the oom reaper does, set MMF_OOM_SKIP to disregard
 -- 
-2.35.1
+Peter Xu
 

@@ -2,138 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455B7509C30
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB51E509C0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387584AbiDUJZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
+        id S1387554AbiDUJYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387575AbiDUJZW (ORCPT
+        with ESMTP id S1357478AbiDUJYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:25:22 -0400
-X-Greylist: delayed 82401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Apr 2022 02:22:32 PDT
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 630DA27145;
-        Thu, 21 Apr 2022 02:22:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=aiyjT
-        wKr2WrCCCy47eXa+PFgD09doEJV9YGfIs9RReM=; b=FR9+Ia5Ppk1WIAJQ/fowA
-        eRvsqxGkQG/YHAF5CPfIfJzyYTZr1oaWNEgnDICUIcoMY64t3fWFTEL0EedR5iBO
-        aEQqefVxoZNgj1WialM4M2fgdbLjf74R2gOXZy5xuaTthqEh0CD8lEszEKJC0c3q
-        1Myz0iYIUprxsuSIHGc+Xw=
-Received: from localhost.localdomain (unknown [112.97.55.38])
-        by smtp1 (Coremail) with SMTP id GdxpCgBnYN8yImFiFnrxCA--.411S2;
-        Thu, 21 Apr 2022 17:22:00 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     mani@kernel.org, hemantk@codeaurora.org
-Cc:     gregkh@linuxfoundation.org, loic.poulain@linaro.org,
-        slark_xiao@163.com, bbhatt@codeaurora.org,
-        christophe.jaillet@wanadoo.fr, thomas.ulrich@thalesgroup.com,
-        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] bus: mhi: host: Add support for Cinterion MV32-WA/MV32-WB
-Date:   Thu, 21 Apr 2022 17:21:41 +0800
-Message-Id: <20220421092141.3984-1-slark_xiao@163.com>
+        Thu, 21 Apr 2022 05:24:50 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA4C26559;
+        Thu, 21 Apr 2022 02:22:00 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 71A5244E78;
+        Thu, 21 Apr 2022 09:21:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1650532918; x=
+        1652347319; bh=rOJ0XVAQ/xdObrmr4EZjjsd3fyHJyaGnzJz9olY/nj8=; b=B
+        LOW7iLCyXXf4kW08cBsOrLbITN4KIaWXm09TtJlf9jfcrxM9xV1jkFVFh9+QfTi5
+        AAM8mdyAA+rbpvCzA+zi21h/4N2qI+Fxg4/362jdwcswxUncFb4jgj69Y4GYvDpw
+        zOBDa//OMCVSLvcQrJFrz7r3mNtmv8e3KKXEKVVb0Q=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0h_BWXo10m-n; Thu, 21 Apr 2022 12:21:58 +0300 (MSK)
+Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id D4BD644E3C;
+        Thu, 21 Apr 2022 12:21:50 +0300 (MSK)
+Received: from ubuntu.yadro.com (10.199.0.136) by T-EXCH-04.corp.yadro.com
+ (172.17.100.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Thu, 21
+ Apr 2022 12:21:50 +0300
+From:   <i.m.novikov@yadro.com>
+To:     <vkoul@kernel.org>
+CC:     <i.m.novikov@yadro.com>, <sanju.mehta@amd.com>,
+        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux@yadro.com>, kernel test robot <lkp@intel.com>
+Subject: [PATCH] dmaengine: PTDMA: statify pt_tx_status
+Date:   Thu, 21 Apr 2022 12:21:43 +0300
+Message-ID: <20220421092143.18281-1-i.m.novikov@yadro.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgBnYN8yImFiFnrxCA--.411S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGw48JrWDCr1kAF17tr1xGrg_yoW5Aw4DpF
-        WxZrWayF48tFWaqa1vka4v9as8Gws7G3s8KrnrK3W2ywn8C34DXF1kG34SyF1Yy397Xrsr
-        tr4FqFW7W3WDtFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEYL9DUUUUU=
-X-Originating-IP: [112.97.55.38]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBDRjpZFaEIUY8WQAAsI
+Content-Type: text/plain
+X-Originating-IP: [10.199.0.136]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-04.corp.yadro.com (172.17.100.104)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MV32-WA is designed based on Qualcomm SDX62, and
-MV32-WB is designed based on QUalcomm SDX65. Both
-products' enumeration would align with previous
-product MV31-W.So we merge MV31 and MV32 to MV3X
-for some common settings.
+From: Ilya Novikov <i.m.novikov@yadro.com>
 
-Fixes: 87693e092bd0 ("bus: mhi: pci_generic: Add Cinterion MV31-W PCIe to MHI")
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
+LKP bot reports a new warning:
+Warning:
+drivers/dma/ptdma/ptdma-dmaengine.c:262:1: warning: no previous
+prototype for 'pt_tx_status' [-Wmissing-prototypes]
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Ilya Novikov <i.m.novikov@yadro.com>
 ---
- drivers/bus/mhi/host/pci_generic.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+ drivers/dma/ptdma/ptdma-dmaengine.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index 9527b7d63840..ef8c16746b76 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -371,7 +371,7 @@ static const struct mhi_pci_dev_info mhi_foxconn_sdx55_info = {
- 	.sideband_wake = false,
- };
+diff --git a/drivers/dma/ptdma/ptdma-dmaengine.c b/drivers/dma/ptdma/ptdma-dmaengine.c
+index ea07cc42f4d0..cc22d162ce25 100644
+--- a/drivers/dma/ptdma/ptdma-dmaengine.c
++++ b/drivers/dma/ptdma/ptdma-dmaengine.c
+@@ -258,7 +258,7 @@ static void pt_issue_pending(struct dma_chan *dma_chan)
+ 		pt_cmd_callback(desc, 0);
+ }
  
--static const struct mhi_channel_config mhi_mv31_channels[] = {
-+static const struct mhi_channel_config mhi_mv3x_channels[] = {
- 	MHI_CHANNEL_CONFIG_UL(0, "LOOPBACK", 64, 0),
- 	MHI_CHANNEL_CONFIG_DL(1, "LOOPBACK", 64, 0),
- 	/* MBIM Control Channel */
-@@ -382,25 +382,33 @@ static const struct mhi_channel_config mhi_mv31_channels[] = {
- 	MHI_CHANNEL_CONFIG_HW_DL(101, "IP_HW0_MBIM", 512, 3),
- };
- 
--static struct mhi_event_config mhi_mv31_events[] = {
-+static struct mhi_event_config mhi_mv3x_events[] = {
- 	MHI_EVENT_CONFIG_CTRL(0, 256),
- 	MHI_EVENT_CONFIG_DATA(1, 256),
- 	MHI_EVENT_CONFIG_HW_DATA(2, 1024, 100),
- 	MHI_EVENT_CONFIG_HW_DATA(3, 1024, 101),
- };
- 
--static const struct mhi_controller_config modem_mv31_config = {
-+static const struct mhi_controller_config modem_mv3x_config = {
- 	.max_channels = 128,
- 	.timeout_ms = 20000,
--	.num_channels = ARRAY_SIZE(mhi_mv31_channels),
--	.ch_cfg = mhi_mv31_channels,
--	.num_events = ARRAY_SIZE(mhi_mv31_events),
--	.event_cfg = mhi_mv31_events,
-+	.num_channels = ARRAY_SIZE(mhi_mv3x_channels),
-+	.ch_cfg = mhi_mv3x_channels,
-+	.num_events = ARRAY_SIZE(mhi_mv3x_events),
-+	.event_cfg = mhi_mv3x_events,
- };
- 
- static const struct mhi_pci_dev_info mhi_mv31_info = {
- 	.name = "cinterion-mv31",
--	.config = &modem_mv31_config,
-+	.config = &modem_mv3x_config,
-+	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
-+	.dma_data_width = 32,
-+	.mru_default = 32768,
-+};
-+
-+static const struct mhi_pci_dev_info mhi_mv32_info = {
-+	.name = "cinterion-mv32",
-+	.config = &modem_mv3x_config,
- 	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
- 	.dma_data_width = 32,
- 	.mru_default = 32768,
-@@ -475,6 +483,12 @@ static const struct pci_device_id mhi_pci_id_table[] = {
- 	/* MV31-W (Cinterion) */
- 	{ PCI_DEVICE(0x1269, 0x00b3),
- 		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
-+	/* MV32-WA (Cinterion) */
-+	{ PCI_DEVICE(0x1269, 0x00ba),
-+		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
-+	/* MV32-WB (Cinterion) */
-+	{ PCI_DEVICE(0x1269, 0x00bb),
-+		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
- 	{  }
- };
- MODULE_DEVICE_TABLE(pci, mhi_pci_id_table);
+-enum dma_status
++static enum dma_status
+ pt_tx_status(struct dma_chan *c, dma_cookie_t cookie,
+ 		struct dma_tx_state *txstate)
+ {
 -- 
 2.25.1
 

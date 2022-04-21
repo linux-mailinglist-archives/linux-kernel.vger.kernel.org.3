@@ -2,327 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B57650A75D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7105B50A75F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390900AbiDURvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        id S1390913AbiDURv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244233AbiDURvM (ORCPT
+        with ESMTP id S1390904AbiDURvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:51:12 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D0D4925A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:48:21 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-e5e8523fcbso6092693fac.10
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nnT+9zQhlxZpssH8xS3TdEShYSeyrk4S1c/Lr7Zh1iU=;
-        b=mSv5AFOV5Bmjr6MYcQzRb2pvhMX5hxY/BIuBTVnjOahaH+AMbODpGjnfFrA36eUA99
-         p/W769dGb8i0Xg1MC7uLWeFw+DD6XdCatwx2tPw86ueviS1p8yq91RD12XLWgWQWjbeN
-         Xw9+LiLRu67HH5/McqSvabCo+P1O2WNmo++n8kwExDENZ2GqkwW4hMCm4LG3JywWuFZE
-         +hu9ZypasAWUwihqgN/z7pqbOVzHnUVZUnqUsPKzV2qN6BeubGkIdxun/kfHJNqYrIGt
-         wm9Fv4F7v6j4YPZgQuSjyyR2mvMXgx88+o+GimyUQKDKTSliJNWt9jjbRZc6n6f4fCnd
-         Z3gQ==
+        Thu, 21 Apr 2022 13:51:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DB604A3C1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650563309;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UaleRKtw0CvWp7uQEJvzfTdk7vmzg67w+yNSLXIT5VQ=;
+        b=FBScBaDQiMsvlSaDK33prmopTdMwgSK4FO6JaE1qzdsdU9Vi6LLM7AmNA+TKnkfzsRoHDh
+        zDPXqns/jmMABXVo/AXaR0kU7DTcjpNV5EdxX75PkS9Oek5EGMyiv4A9921A4G4rU2dkX2
+        gp7Tzko2DYo1uaW+UhqyjFD5Qfbk84E=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-290-0MkyPj29MOmL8hxwLdgQrw-1; Thu, 21 Apr 2022 13:48:28 -0400
+X-MC-Unique: 0MkyPj29MOmL8hxwLdgQrw-1
+Received: by mail-io1-f70.google.com with SMTP id o9-20020a0566022e0900b00654b599b1eeso3762774iow.21
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:48:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nnT+9zQhlxZpssH8xS3TdEShYSeyrk4S1c/Lr7Zh1iU=;
-        b=KwYTPJw3JaWjqbGoyDN0nA0OrmtKg2Q0E1WjcRwjPCnal5C7qnPVR9WhTwXcg8LG+l
-         vA7YsMUG5Ei8tBdTvhEwILgnGhR6mmAiQOGTf8VL6Llp53H7T4YFk3dDp45NjdVz98x4
-         ImLi1CbnNy/jNnYCum0PZyDa+S5NLGS/jLc9f628q7IOQA3hIJu9oO+iflBpgeWYEzM/
-         N99kj3Q5tJT25I5nI2qkMH/hBmi0h+G6IoxAUWbHu7fClAZPmcR3ZFD0n13scQ0t3Uo3
-         srETSpQFyaTqDYujGbLzSWefQ7P5E9TV1MF7rR3qQte0Q4s9XRA9TlgBE8qN2jgHX1zs
-         KmYw==
-X-Gm-Message-State: AOAM5304bv4h2GtsAxTe6+T3h+gIx41SYvZgO1lTJNcnbf6jctbCAOMO
-        8oIPAXw5G0H17dcmVJpV8XjTo5z2yTZUKUoiIT4=
-X-Google-Smtp-Source: ABdhPJxLFaTpyWsCjUO2lMvefZ6sgiFtAjOaAcy9rf0ydAjz9oBbuWfQPQwRfFmAPia4zEL+wlC03xEJ7zMgLrnRDe4=
-X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
- v29-20020a056870311d00b000de9b6c362bmr4190133oaa.200.1650563300641; Thu, 21
- Apr 2022 10:48:20 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UaleRKtw0CvWp7uQEJvzfTdk7vmzg67w+yNSLXIT5VQ=;
+        b=OoAibZull1qhOc4speBLXfvPZ5wqqK7qLMBkUFRUMj/x/HJfZ30rIOh79BKQzvPjXo
+         MnF/rEbCtdGabD6e+F9crDRQ8gHfplpuFDMvm9NiTs6HyYjFUZbLYQHkuv/+o3ZO+SNc
+         dyaIdqbKs5UlOXN2D5vRnay9XzA9emQMKOQGGNZkPEeA1bN3STy3gz+LpyE5JpCjBdaB
+         QOzWRo5LLXkboXpW17nG3AcA1xrTQCikevTZ0Nmwc+sYJHmJ6S9H47W4O7uHvnsBehWR
+         JnlJdsyf277r32J2rK8muuBrycjk07hcZrrInBEBFBtyUTi6Ulg3KzDOngSR6ZXWzyHm
+         pGAA==
+X-Gm-Message-State: AOAM531P2ejKWyteGiRBZ4d/GWR0NFoJYzelUUhk9mdJlNyc8l9g0rYP
+        DZSLhNoae/fHlM/lXDvtPxRNFaubDBt15EeCLaeTa7u5/GgLyfVXm6L3gob/EmAe/S22MSB8crD
+        wJP7a8+QhUc1qli3E/Cwmj7Gp
+X-Received: by 2002:a05:6602:1510:b0:657:277e:8096 with SMTP id g16-20020a056602151000b00657277e8096mr438112iow.152.1650563307488;
+        Thu, 21 Apr 2022 10:48:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy5vCKW+ck3Q+nGQNnYnBqI/+x27HmSTjNDsNLAV2dTFr6Ln0KKO7Q1Dpy7I982Jp7ovQLnXg==
+X-Received: by 2002:a05:6602:1510:b0:657:277e:8096 with SMTP id g16-20020a056602151000b00657277e8096mr438096iow.152.1650563307265;
+        Thu, 21 Apr 2022 10:48:27 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id b21-20020a056602331500b006572790ed8dsm3268006ioz.40.2022.04.21.10.48.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 10:48:26 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 13:48:24 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v6 05/10] KVM: selftests: Read binary stat data in lib
+Message-ID: <YmGY6EXvw6tW+kPg@xz-m1.local>
+References: <20220420173513.1217360-1-bgardon@google.com>
+ <20220420173513.1217360-6-bgardon@google.com>
 MIME-Version: 1.0
-References: <20220409042321.3184493-1-james.hilliard1@gmail.com>
- <b3f7e288-3341-8c6f-1b95-e553ac5ebc35@suse.de> <CAMeQTsbh-Fy4CORBTX=AfZ+K-fZYUQ=hY=ctLFyu9KcJ5NgFUA@mail.gmail.com>
- <dce29330-e40c-860e-2c72-7ddebdd96e20@redhat.com> <CAMeQTsYYpw5+uLgmDrbB6PUBotRC4F+_rfK+sxT0CpPHoiOmmw@mail.gmail.com>
- <09cc1d94-d25e-4fbd-bb95-03d0135cf818@suse.de>
-In-Reply-To: <09cc1d94-d25e-4fbd-bb95-03d0135cf818@suse.de>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Thu, 21 Apr 2022 12:48:09 -0500
-Message-ID: <CADvTj4rvxA3p5858LpQv9NNgxVDNH=_NN=d4+Rce8TiUsgpFsw@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/gma500: depend on framebuffer
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220420173513.1217360-6-bgardon@google.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 8:20 AM Thomas Zimmermann <tzimmermann@suse.de> wro=
-te:
->
-> Hi
->
-> Am 21.04.22 um 14:54 schrieb Patrik Jakobsson:
-> > On Thu, Apr 21, 2022 at 2:47 PM Javier Martinez Canillas
-> > <javierm@redhat.com> wrote:
-> >>
-> >> Hello Patrik,
-> >>
-> >> On 4/21/22 14:39, Patrik Jakobsson wrote:
-> >>> On Thu, Apr 21, 2022 at 1:49 PM Thomas Zimmermann <tzimmermann@suse.d=
-e> wrote:
-> >>>>
-> >>>> Hi
-> >>>>
-> >>>> Am 09.04.22 um 06:23 schrieb James Hilliard:
-> >>>>> Select the efi framebuffer if efi is enabled.
-> >>>>>
-> >>>>> This appears to be needed for video output to function correctly.
-> >>>>>
-> >>>>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> >>>>> ---
-> >>>>> Changes v2 -> v3:
-> >>>>>     - select EFI_FB instead of depending on it
-> >>>>> Changes v1 -> v2:
-> >>>>>     - use depends instead of select
-> >>>>> ---
-> >>>>>    drivers/gpu/drm/gma500/Kconfig | 2 ++
-> >>>>>    1 file changed, 2 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma50=
-0/Kconfig
-> >>>>> index 0cff20265f97..a422fa84d53b 100644
-> >>>>> --- a/drivers/gpu/drm/gma500/Kconfig
-> >>>>> +++ b/drivers/gpu/drm/gma500/Kconfig
-> >>>>> @@ -2,11 +2,13 @@
-> >>>>>    config DRM_GMA500
-> >>>>>        tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
-> >>>>>        depends on DRM && PCI && X86 && MMU
-> >>>>> +     depends on FB
-> >>>>
-> >>>> Why do we need FB here? Framebuffer support should be hidden by DRM'=
-s
-> >>>> fbdev helpers.
-> >>>
-> >>> It is not needed but gives him video output since it enables the drm
-> >>> fbdev emulation.
-> >>>
-> >>
-> >> I'm not sure to understand this. Shouldn't depend on DRM_FBDEV_EMULATI=
-ON then?
->
-> It has to be selected separately in .config.
->
-> James, make sure you have DRM_FBDEV_EMULATION enabled in your kernel's
-> .config file if you want a console. however, Weston should work without
-> it.  How do you start weston without a console?
+On Wed, Apr 20, 2022 at 10:35:08AM -0700, Ben Gardon wrote:
+> Move the code to read the binary stats data to the KVM selftests
+> library. It will be re-used by other tests to check KVM behavior.
+> 
+> No functional change intended.
 
-Well it seems to be needed for weston to work over HDMI, I'm running
-weston as a systemd service.
+I think there's a very trivial functional change...
 
->
-> >
-> > No, it shouldn't depend on any FBDEV stuff since it's not actually
-> > required. It just happens to help in this case since weston + fbdev
-> > backend works but not weston with drm backend (or whatever config
-> > James have set).
-> >
-> >>
-> >>> I looked some more at the logs and it seems weston doesn't work on hi=
-s
-> >>> system without the fbdev backend. So the question is why weston isn't
-> >>> working without fbdev? Perhaps this is just a Weston configuration
-> >>> issue?
-> >>>
-> >>
-> >> But is weston using the fbdev emulated by DRM or the one registered by
-> >> efifb? I thought that the latter from what was mentioned in this threa=
-d.
-> >
-> > It's using drm fbdev emulation with gma500 so EFIFB has nothing to do
-> > with this. I believe it was just simply incorrectly reported. If I'm
-> > correct then "depends on FB" is what makes video output work for
-> > James.
->
-> There's an fbdev backend for weston, but the provided logs don't look as
-> if it's using this.  Maybe the connector's modes are never probed
-> correctly without fbdev.
->
-> James, could you provide a logfile for weston? (i.e., 'weston
-> --log=3Dweston.txt').
+> 
+> Reviewed-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h     |  3 ++
+>  .../selftests/kvm/kvm_binary_stats_test.c     |  7 ++--
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 36 +++++++++++++++++++
+>  3 files changed, 41 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index fabe46ddc1b2..2a3a4d9ed8e3 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -403,6 +403,9 @@ int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
+>  void read_stats_header(int stats_fd, struct kvm_stats_header *header);
+>  struct kvm_stats_desc *read_stats_desc(int stats_fd,
+>  				       struct kvm_stats_header *header);
+> +int read_stat_data(int stats_fd, struct kvm_stats_header *header,
+> +		   struct kvm_stats_desc *desc, uint64_t *data,
+> +		   ssize_t max_elements);
+>  
+>  uint32_t guest_get_vcpuid(void);
+>  
+> diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> index 8b31f8fc7e08..59677fae26e5 100644
+> --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> @@ -160,11 +160,8 @@ static void stats_test(int stats_fd)
+>  	size_data = 0;
+>  	for (i = 0; i < header.num_desc; ++i) {
+>  		pdesc = (void *)stats_desc + i * size_desc;
+> -		ret = pread(stats_fd, stats_data,
+> -				pdesc->size * sizeof(*stats_data),
+> -				header.data_offset + size_data);
+> -		TEST_ASSERT(ret == pdesc->size * sizeof(*stats_data),
+> -				"Read data of KVM stats: %s", pdesc->name);
+> +		read_stat_data(stats_fd, &header, pdesc, stats_data,
+> +			       pdesc->size);
+>  		size_data += pdesc->size * sizeof(*stats_data);
+>  	}
+>  
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 12fa8cc88043..ea4ab64e5997 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -2615,3 +2615,39 @@ struct kvm_stats_desc *read_stats_desc(int stats_fd,
+>  
+>  	return stats_desc;
+>  }
+> +
+> +/*
+> + * Read stat data for a particular stat
+> + *
+> + * Input Args:
+> + *   stats_fd - the file descriptor for the binary stats file from which to read
+> + *   header - the binary stats metadata header corresponding to the given FD
+> + *   desc - the binary stat metadata for the particular stat to be read
+> + *   max_elements - the maximum number of 8-byte values to read into data
+> + *
+> + * Output Args:
+> + *   data - the buffer into which stat data should be read
+> + *
+> + * Return:
+> + *   The number of data elements read into data or -ERRNO on error.
+> + *
+> + * Read the data values of a specified stat from the binary stats interface.
+> + */
+> +int read_stat_data(int stats_fd, struct kvm_stats_header *header,
+> +		   struct kvm_stats_desc *desc, uint64_t *data,
+> +		   ssize_t max_elements)
+> +{
+> +	ssize_t size = min_t(ssize_t, desc->size, max_elements);
+> +	ssize_t ret;
+> +
+> +	ret = pread(stats_fd, data, size * sizeof(*data),
+> +		    header->data_offset + desc->offset);
+> +
+> +	/* ret from pread is in bytes. */
+> +	ret = ret / sizeof(*data);
+> +
+> +	TEST_ASSERT(ret == size,
+> +		    "Read data of KVM stats: %s", desc->name);
 
-Here's the log with output working over HDMI(DVI-D-1):
-Date: 2022-04-21 UTC
-[17:43:11.726] weston 10.0.0
-               https://wayland.freedesktop.org
-               Bug reports to:
-https://gitlab.freedesktop.org/wayland/weston/issues/
-               Build: 10.0.0
-[17:43:11.727] Command line: /bin/weston
---config=3D/etc/xdg/weston/weston.ini --log=3D/srv/weston.txt -Swayland-1
-[17:43:11.727] OS: Linux, 5.17.3, #5 SMP PREEMPT Thu Apr 21 11:20:47
-MDT 2022, x86_64
-[17:43:11.727] Flight recorder: enabled
-[17:43:11.727] Using config file '/etc/xdg/weston/weston.ini'
-[17:43:11.727] Output repaint window is 7 ms maximum.
-[17:43:11.727] Loading module '/usr/lib/libweston-10/drm-backend.so'
-[17:43:11.743] initializing drm backend
-[17:43:11.743] Trying logind launcher...
-[17:43:11.743] logind: cannot find systemd session for uid: 0 -61
-[17:43:11.743] logind: cannot setup systemd-logind helper error: (No
-data available), using legacy fallback
-[17:43:11.744] Trying weston_launch launcher...
-[17:43:11.744] could not get launcher fd from env
-[17:43:11.744] Trying direct launcher...
-[17:43:11.748] using /dev/dri/card0
-[17:43:11.748] DRM: does not support atomic modesetting
-[17:43:11.748] DRM: does not support GBM modifiers
-[17:43:11.748] DRM: supports picture aspect ratio
-[17:43:11.765] event2  - Power Button: is tagged by udev as: Keyboard
-[17:43:11.765] event2  - Power Button: device is a keyboard
-[17:43:11.771] event3  - Video Bus: is tagged by udev as: Keyboard
-[17:43:11.772] event3  - Video Bus: device is a keyboard
-[17:43:11.777] event0  - Power Button: is tagged by udev as: Keyboard
-[17:43:11.778] event0  - Power Button: device is a keyboard
-[17:43:11.785] event1  - Sleep Button: is tagged by udev as: Keyboard
-[17:43:11.787] event1  - Sleep Button: device is a keyboard
-[17:43:11.799] event4  - PiKVM Composite KVM Device: is tagged by udev
-as: Keyboard
-[17:43:11.799] event4  - PiKVM Composite KVM Device: device is a keyboard
-[17:43:11.859] event5  - PiKVM Composite KVM Device: is tagged by udev as: =
-Mouse
-[17:43:11.861] event5  - PiKVM Composite KVM Device: device is a pointer
-[17:43:11.891] libinput: configuring device "Power Button".
-[17:43:11.891] libinput: configuring device "Video Bus".
-[17:43:11.891] libinput: configuring device "Power Button".
-[17:43:11.892] libinput: configuring device "Sleep Button".
-[17:43:11.892] libinput: configuring device "PiKVM Composite KVM Device".
-[17:43:11.892] libinput: configuring device "PiKVM Composite KVM Device".
-[17:43:11.892] input device event5 has no enabled output associated
-(none named), skipping calibration for now.
-[17:43:11.907] DRM: head 'VGA-1' updated, connector 37 is disconnected.
-[17:43:11.907] DRM: head 'VGA-1' found, connector 37 is disconnected.
-[17:43:11.912] DRM: head 'LVDS-1' updated, connector 39 is connected,
-EDID make 'unknown', model 'unknown', serial 'unknown'
-[17:43:11.912] DRM: head 'LVDS-1' found, connector 39 is connected,
-EDID make 'unknown', model 'unknown', serial 'unknown'
-[17:43:12.336] DRM: head 'DVI-D-1' updated, connector 41 is connected,
-EDID make 'TSB', model 'Toshiba-H2C', serial '2290649088'
-[17:43:12.336] DRM: head 'DVI-D-1' found, connector 41 is connected,
-EDID make 'TSB', model 'Toshiba-H2C', serial '2290649088'
-[17:43:12.337] DRM: head 'DP-1' updated, connector 43 is disconnected.
-[17:43:12.337] DRM: head 'DP-1' found, connector 43 is disconnected.
-[17:43:12.369] DRM: head 'DVI-D-2' updated, connector 47 is disconnected.
-[17:43:12.369] DRM: head 'DVI-D-2' found, connector 47 is disconnected.
-[17:43:12.425] DRM: head 'DP-2' updated, connector 49 is connected,
-EDID make 'CHR', model '1024x768', serial '880'
-[17:43:12.425] DRM: head 'DP-2' found, connector 49 is connected, EDID
-make 'CHR', model '1024x768', serial '880'
-[17:43:12.426] Registered plugin API 'weston_drm_output_api_v1' of size 24
-[17:43:12.426] Registered plugin API
-'weston_drm_virtual_output_api_v1' of size 48
-[17:43:12.426] Color manager: no-op
-[17:43:12.426] Output 'DVI-D-1' using color profile: built-in default
-sRGB SDR profile
-[17:43:12.426] DRM: output DVI-D-1 uses shadow framebuffer.
-[17:43:12.426] Output DVI-D-1 (crtc 32) video modes:
-               1280x720@60.0, preferred, current, 74.2 MHz
-               1920x1080@50.0 16:9, 148.5 MHz
-               1920x1080@30.0 16:9, 74.2 MHz
-               1920x1080@25.0 16:9, 74.2 MHz
-               1920x1080@24.0 16:9, 74.2 MHz
-               1280x1024@75.0, 135.0 MHz
-               1440x900@59.9, 106.5 MHz
-               1280x720@60.0 16:9, 74.2 MHz
-               1280x720@59.9 16:9, 74.2 MHz
-               1280x720@50.0 16:9, 74.2 MHz
-               1280x720@30.0 16:9, 74.2 MHz
-               1280x720@25.0 16:9, 74.2 MHz
-               1280x720@24.0 16:9, 59.4 MHz
-               1024x768@70.1, 75.0 MHz
-               1024x768@60.0, 65.0 MHz
-               800x600@75.0, 49.5 MHz
-               800x600@72.2, 50.0 MHz
-               800x600@60.3, 40.0 MHz
-               800x600@56.2, 36.0 MHz
-               720x576@50.0 16:9, 27.0 MHz
-               720x576@50.0 4:3, 27.0 MHz
-               720x480@60.0 4:3, 27.0 MHz
-               720x480@60.0 16:9, 27.0 MHz
-               720x480@59.9, 27.0 MHz
-               720x480@59.9, 27.0 MHz
-               720x480@59.9 16:9, 27.0 MHz
-               720x480@59.9 4:3, 27.0 MHz
-               640x480@75.0, 31.5 MHz
-               640x480@72.8, 31.5 MHz
-               640x480@66.7, 30.2 MHz
-               640x480@60.0 4:3, 25.2 MHz
-               640x480@59.9, 25.2 MHz
-               640x480@59.9 4:3, 25.2 MHz
-[17:43:12.427] associating input device event2 with output DVI-D-1
-(none by udev)
-[17:43:12.427] associating input device event3 with output DVI-D-1
-(none by udev)
-[17:43:12.427] associating input device event0 with output DVI-D-1
-(none by udev)
-[17:43:12.427] associating input device event1 with output DVI-D-1
-(none by udev)
-[17:43:12.427] associating input device event4 with output DVI-D-1
-(none by udev)
-[17:43:12.427] associating input device event5 with output DVI-D-1
-(none by udev)
-[17:43:12.428] Output 'DVI-D-1' enabled with head(s) DVI-D-1
-[17:43:12.428] Compositor capabilities:
-               arbitrary surface rotation: yes
-               screen capture uses y-flip: no
-               cursor planes: yes
-               arbitrary resolutions: no
-               view mask clipping: yes
-               explicit sync: no
-               color operations: no
-               presentation clock: CLOCK_MONOTONIC, id 1
-               presentation clock resolution: 0.000000001 s
-[17:43:12.428] Loading module '/usr/lib/weston/kiosk-shell.so'
-[17:43:12.429] Note: support for the deprecated wl_shell interface is
-disabled. If a legacy client still needs it, it can be re-enabled by
-passing -Ddeprecated-wl-shell=3Dtrue to Meson when building Weston.
-[17:43:12.429] Loading module '/usr/lib/weston/systemd-notify.so'
+... where we do the check with 8-bytes aligned now, so we'll stop failing
+the case e.g. when pread() didn't get multiples of 8 bytes.
 
->
-> Best regards
-> Thomas
->
-> >
-> >>
-> >> --
-> >> Best regards,
-> >>
-> >> Javier Martinez Canillas
-> >> Linux Engineering
-> >> Red Hat
-> >>
->
-> --
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-> (HRB 36809, AG N=C3=BCrnberg)
-> Gesch=C3=A4ftsf=C3=BChrer: Ivo Totev
+But not a big deal I guess.
+
+Reviewed-by: Peter Xu <peterx@redhat.com>
+
+Thanks,
+
+-- 
+Peter Xu
+

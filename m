@@ -2,96 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4021D509E3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 13:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2537509E3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 13:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388690AbiDULGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 07:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
+        id S1388702AbiDULJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 07:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354649AbiDULGn (ORCPT
+        with ESMTP id S1388612AbiDULJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 07:06:43 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230DE2CE3A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 04:03:54 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id q12so4319520pgj.13
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 04:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=b5cKgnHy5yIWx7IkuUyQsnSmFcYWr+B7twcbgmrD1pA=;
-        b=obvkjUMexbjkc1qj09DfdFfiI7G7jgdbCm5eqjNe5hceKeW3SJk5IVv5dMWanBegdI
-         X6Vg9585ErIRwvA80R7dx/hV2W2UMBriM6ncwqmUfHM/cwrNi8lau2sDMurX0LlfkDH1
-         HMPR7megoF95tf+lL7wMYRcCDXs5yagS3e5bFYfMuSnmbDUPKPm/gjEZ0GpAdTIE+KeN
-         RBpu2CtLHxwAZMrnZLGlbvJRYeJCimD3dwtlPQ/kZZQet1Z1g9/9K3kxVBviX+0Qa//W
-         dO460VGTqbiM9wkrWJybohcQMcPO6BPDXV7OfqVmzZXka+agjeIJvtBRN85YoudByZIc
-         KDdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=b5cKgnHy5yIWx7IkuUyQsnSmFcYWr+B7twcbgmrD1pA=;
-        b=agdTHxma8A7L2fLCGhLo2tlQNIQB3wIdTDIzbVsG5ieZ1hrR+3p6KMHTzTzQezxh9R
-         r+7qffMXpGCkkffkGu9p8+NSwhw1Cie7j75HDEqiljTiP2rrTK4FEflkAGpjYsrKDeJ9
-         kRPHmTPx4wr6fu+HeTd7VcTws6khBimLvduTkhtmnhxi+NPvtYAdKZHHMmXftRFS4c4g
-         ndZ+W3YBnI4slbMfTSRI4ESLXT6p/aU9YQyHyr7cGM3f/LXVnWeHVjO+EbQI/P2ry0zS
-         +rlBQNQKwVnGeOHLb8gYR+A15YFSMTud/0XoCmn7xIUfOiidwqJKKzQzhqF79fZXu21J
-         3BTg==
-X-Gm-Message-State: AOAM533pzJhXbKouRe3s0V4W6JaoviaTtP75aFpHm/5pD8XGYNbBwJt6
-        ShYu4cvoT3A9v40nsRcLpjc=
-X-Google-Smtp-Source: ABdhPJyYZCtFhdhMOk0AYGm3maxZ92nO7efmlTmc2GCYMV8UNCv698p1A6ja1HAXBQTX5iSeqJz19A==
-X-Received: by 2002:a62:170b:0:b0:50a:6901:b633 with SMTP id 11-20020a62170b000000b0050a6901b633mr23204994pfx.34.1650539033603;
-        Thu, 21 Apr 2022 04:03:53 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id q5-20020a056a00084500b0050ace4a699dsm5657964pfk.95.2022.04.21.04.03.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 04:03:53 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: imx35: Fix refcount leak in mx35_read_cpu_rev
-Date:   Thu, 21 Apr 2022 19:03:44 +0800
-Message-Id: <20220421110347.4304-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 21 Apr 2022 07:09:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C801036
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 04:07:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20A9A61B04
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:07:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FDB7C385A5;
+        Thu, 21 Apr 2022 11:07:01 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 12:06:58 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YmE60ufokRCYOj8W@arm.com>
+References: <YlvQTci7RP5evtTy@arm.com>
+ <YlvRbvWSWMTtBJiN@gondor.apana.org.au>
+ <YlvU6ou14okbAbgW@arm.com>
+ <YlvWtc/dJ6luXzZf@gondor.apana.org.au>
+ <YlxAo5BAy+ARlvqj@arm.com>
+ <Yl0jPdfdUkaStDN5@gondor.apana.org.au>
+ <Yl2Vda/8S7qAvMjC@arm.com>
+ <CAMj1kXEGdPageO3tb2=eLnGAR9-nZtmTGXcGf5CiTQFC4JiXOg@mail.gmail.com>
+ <CAK8P3a1+GqbO5Kgf70nmR8rQg5OaLBsFZJWaOLuS7JRqXb-ZNA@mail.gmail.com>
+ <YmEFttLxGbyJx8LK@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmEFttLxGbyJx8LK@infradead.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The of_find_compatible_node() function returns a node pointer with
-refcount incremented, We should use of_node_put() on it when done
-Add the missing of_node_put() to release the refcount.
+On Thu, Apr 21, 2022 at 12:20:22AM -0700, Christoph Hellwig wrote:
+> Btw, there is another option:  Most real systems already require having
+> swiotlb to bounce buffer in some cases.  We could simply force bounce
+> buffering in the dma mapping code for too small or not properly aligned
+> transfers and just decrease the dma alignment.
 
-Fixes: f68ea682d1da ("ARM: imx35: Retrieve the IIM base address from devicetree")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- arch/arm/mach-imx/cpu-imx35.c | 1 +
- 1 file changed, 1 insertion(+)
+We can force bounce if size is small but checking the alignment is
+trickier. Normally the beginning of the buffer is aligned but the end is
+at some sizeof() distance. We need to know whether the end is in a
+kmalloc-128 cache and that requires reaching out to the slab internals.
+That's doable and not expensive but it needs to be done for every small
+size getting to the DMA API, something like (for mm/slub.c):
 
-diff --git a/arch/arm/mach-imx/cpu-imx35.c b/arch/arm/mach-imx/cpu-imx35.c
-index 80e7d8ab9f1b..3ae4a3dc44fb 100644
---- a/arch/arm/mach-imx/cpu-imx35.c
-+++ b/arch/arm/mach-imx/cpu-imx35.c
-@@ -22,6 +22,7 @@ static int mx35_read_cpu_rev(void)
- 	np = of_find_compatible_node(NULL, NULL, "fsl,imx35-iim");
- 	iim_base = of_iomap(np, 0);
- 	BUG_ON(!iim_base);
-+	of_node_put(np);
- 
- 	rev = imx_readl(iim_base + MXC_IIMSREV);
- 	switch (rev) {
+	folio = virt_to_folio(x);
+	slab = folio_slab(folio);
+	if (slab->slab_cache->align < ARCH_DMA_MINALIGN)
+		... bounce ...
+
+(and a bit different for mm/slab.c)
+
+If we scrap ARCH_DMA_MINALIGN altogether from arm64, we can check the
+alignment against cache_line_size(), though I'd rather keep it for code
+that wants to avoid bouncing and goes for this compile-time alignment.
+
+I think we are down to four options (1 and 2 can be combined):
+
+1. ARCH_DMA_MINALIGN == 128, dynamic arch_kmalloc_minalign() to reduce
+   kmalloc() alignment to 64 on most arm64 SoC - this series.
+
+2. ARCH_DMA_MINALIGN == 128, ARCH_KMALLOC_MINALIGN == 128, add explicit
+   __GFP_PACKED for small allocations. It can be combined with (1) so
+   that allocations without __GFP_PACKED can still get 64-byte
+   alignment.
+
+3. ARCH_DMA_MINALIGN == 128, ARCH_KMALLOC_MINALIGN == 8, swiotlb bounce.
+
+4. undef ARCH_DMA_MINALIGN, ARCH_KMALLOC_MINALIGN == 8, swiotlb bounce.
+
+(3) and (4) don't require histogram analysis. Between them, I have a
+preference for (3) as it gives drivers a chance to avoid the bounce.
+
+If (2) is feasible, we don't need to bother with any bouncing or
+structure alignments, it's an opt-in by the driver/subsystem. However,
+it may be tedious to analyse the hot spots. While there are a few
+obvious places (kstrdup), I don't have access to a multitude of devices
+that may exercise the drivers and subsystems.
+
+With (3) the risk is someone complaining about performance or even
+running out of swiotlb space on some SoCs (I guess the fall-back can be
+another kmalloc() with an appropriate size).
+
+I guess we can limit the choice to either (2) or (3). I have (2) already
+(needs some more testing). I can attempt (3) and try to run it on some
+real hardware to see the perf impact.
+
 -- 
-2.17.1
-
+Catalin

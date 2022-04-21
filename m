@@ -2,86 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B7950AB30
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 00:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E432950AB34
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 00:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442346AbiDUWKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 18:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S1442355AbiDUWLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 18:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442340AbiDUWKl (ORCPT
+        with ESMTP id S1442351AbiDUWLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 18:10:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FB44D63F
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 15:07:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5E348CE265F
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61277C385A7;
-        Thu, 21 Apr 2022 22:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650578867;
-        bh=I/y6oOj7Cgwu++f5BI+q+wJEZ/y1EIcrQV1iyYFhfgM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fAHKB5NS6TUUgG/fPwvW64fCyMd7wN06IX2YWbRZ/UY5SxFYkb+NuC981FjzhnP5k
-         pSOYiO8c14AzHfRbwFrOI9xSnFeXYrm+h8kWwHkZXgkv24/NraOAZfX3A9v3NdkQtW
-         bHR6tkRGCLRko7/s+7RaHW0A0g6WlAoVzNx+71yw=
-Date:   Thu, 21 Apr 2022 15:07:46 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     ryabinin.a.a@gmail.com, dvyukov@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Subject: Re: [PATCH] kasan: Prevent cpu_quarantine corruption when CPU
- offline and cache shrink occur at same time
-Message-Id: <20220421150746.627e0f62363485d65c857010@linux-foundation.org>
-In-Reply-To: <20220414025925.2423818-1-qiang1.zhang@intel.com>
-References: <20220414025925.2423818-1-qiang1.zhang@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Apr 2022 18:11:04 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA234EDDD;
+        Thu, 21 Apr 2022 15:08:13 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id d9so4723648qvm.4;
+        Thu, 21 Apr 2022 15:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6gYFSoVcpwLd28VgNWwfiPjbVU28eosEw1LDKSZ8KQc=;
+        b=ZJDNoA9FyoglICDWyPkyyPe9AqQzHNUZSXcw2ST/ZWMMRff+/7FUB2XngF5Gad1Xax
+         756WjkDh9c+tZBn2MKByXXylogEPCrIgdkFXvWbxNocv2EpK8I7JbxENgwhvcf72qDNr
+         WoIoCxeHdzlLfUvVZz+BWTTscphkXG8wWf2BjLRYfXnD64NxQsXv1sI/5h7ZHEYnNArW
+         CnHcpoYEi9DsmlPnI0q9HeT5xo+tPZzr1Y65b2+424+m3w3TGGlIuIZh7eon4MEVnQAz
+         QLjwm6yPntWJ6MuHZrF70BwHvB/h/N/FIiIYHO7cxvkLVgeKg7RfGfSWfluM6e9mQnJc
+         d/UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6gYFSoVcpwLd28VgNWwfiPjbVU28eosEw1LDKSZ8KQc=;
+        b=TOLuLvmu3ctT1ZDcI8BJbJAR2y5zD2BEAIlMqUQWCGsx25Nl8Sfm3PQ065R6qYXFmc
+         4Dg0ieWjCizAsqtTgN+y6vS9yGy2xdyO4dqAbTbAwyX3fs0JEu08PIvpa9kVjdOyYMrn
+         H51OMJcbJQdP3aplzz6UvJ6crBD3rn3yZq+RHzoafVlR1xnvGnQHhuvayzYTPrYz9a+c
+         B8DUchF+AKKKTIiuWVLr8U8CN5XPqPFIKKevZo0Im92DP2s0w0JVYFbsJAK6XEkfs1FF
+         w5+e//1kjJjzJoiD23tGjba0eHDY4YPNdUFV7gUIKSQDE3zcOshW8Q2HkTxFwTjEezmP
+         80iQ==
+X-Gm-Message-State: AOAM531NuWxIP1bNBQ1GTPdxeFIpczEkR54WFVpt4XEm7TK/5uqCJ0/J
+        3wzimtHgdOkuzbQVnJsF3Ls49aPdoQ==
+X-Google-Smtp-Source: ABdhPJzLoETi2+sYSibFwua+LrkvqKACoyLJUhtbvOHHyfuCf5ADpsXYHj4JeNsBsKTC/gMi+c4MwQ==
+X-Received: by 2002:a05:6214:5284:b0:444:10c8:ee59 with SMTP id kj4-20020a056214528400b0044410c8ee59mr1525618qvb.68.1650578892675;
+        Thu, 21 Apr 2022 15:08:12 -0700 (PDT)
+Received: from bytedance.attlocal.net (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
+        by smtp.gmail.com with ESMTPSA id h18-20020ac85e12000000b002f341c6d20esm182178qtx.80.2022.04.21.15.08.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 15:08:12 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>, "xeb@mail.ru" <xeb@mail.ru>,
+        William Tu <u9012063@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH net 1/3] ip_gre: Make o_seqno start from 0 in native mode
+Date:   Thu, 21 Apr 2022 15:07:57 -0700
+Message-Id: <dd63f881729052aa4e08a5c7cb9732724c557dfd.1650575919.git.peilin.ye@bytedance.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1650575919.git.peilin.ye@bytedance.com>
+References: <cover.1650575919.git.peilin.ye@bytedance.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 10:59:25 +0800 Zqiang <qiang1.zhang@intel.com> wrote:
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-> The kasan_quarantine_remove_cache() is called in kmem_cache_shrink()/
-> destroy(), the kasan_quarantine_remove_cache() call is protected by
-> cpuslock in kmem_cache_destroy(), can ensure serialization with
-> kasan_cpu_offline(). however the kasan_quarantine_remove_cache() call
-> is not protected by cpuslock in kmem_cache_shrink(), when CPU going
-> offline and cache shrink occur at same time, the cpu_quarantine may be
-> corrupted by interrupt(per_cpu_remove_cache operation). so add
-> cpu_quarantine offline flags check in per_cpu_remove_cache().
-> 
-> ...
->
+For GRE and GRETAP devices, currently o_seqno starts from 1 in native
+mode.  According to RFC 2890 2.2., "The first datagram is sent with a
+sequence number of 0."  Fix it.
 
-Could we please have some reviewer input here?
+It is worth mentioning that o_seqno already starts from 0 in collect_md
+mode, see gre_fb_xmit(), where tunnel->o_seqno is passed to
+gre_build_header() before getting incremented.
 
-> --- a/mm/kasan/quarantine.c
-> +++ b/mm/kasan/quarantine.c
-> @@ -330,6 +330,8 @@ static void per_cpu_remove_cache(void *arg)
->  	struct cpu_shrink_qlist *sq;
->  #endif
->  	q = this_cpu_ptr(&cpu_quarantine);
-> +	if (READ_ONCE(q->offline))
-> +		return;
->  #ifndef CONFIG_PREEMPT_RT
->  	qlist_move_cache(q, &to_free, cache);
->  	qlist_free_all(&to_free, cache);
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
+ net/ipv4/ip_gre.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-It might be helpful to have a little comment which explains why we're
-doing this?
+diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
+index 99db2e41ed10..ca70b92e80d9 100644
+--- a/net/ipv4/ip_gre.c
++++ b/net/ipv4/ip_gre.c
+@@ -459,14 +459,12 @@ static void __gre_xmit(struct sk_buff *skb, struct net_device *dev,
+ 		       __be16 proto)
+ {
+ 	struct ip_tunnel *tunnel = netdev_priv(dev);
+-
+-	if (tunnel->parms.o_flags & TUNNEL_SEQ)
+-		tunnel->o_seqno++;
++	__be16 flags = tunnel->parms.o_flags;
+ 
+ 	/* Push GRE header. */
+ 	gre_build_header(skb, tunnel->tun_hlen,
+-			 tunnel->parms.o_flags, proto, tunnel->parms.o_key,
+-			 htonl(tunnel->o_seqno));
++			 flags, proto, tunnel->parms.o_key,
++			 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++) : 0);
+ 
+ 	ip_tunnel_xmit(skb, dev, tnl_params, tnl_params->protocol);
+ }
+-- 
+2.20.1
+

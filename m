@@ -2,89 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD71650AA6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC4B50AA3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392631AbiDUVC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 17:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S1384219AbiDUUpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 16:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244830AbiDUVCz (ORCPT
+        with ESMTP id S245040AbiDUUpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 17:02:55 -0400
-X-Greylist: delayed 1184 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Apr 2022 14:00:03 PDT
-Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782E76178;
-        Thu, 21 Apr 2022 14:00:01 -0700 (PDT)
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-        by l2mail1.panix.com (Postfix) with ESMTPS id 4KkqDL0Jm5zDQD;
-        Thu, 21 Apr 2022 16:40:18 -0400 (EDT)
-Received: from [192.168.125.3] (ip98-164-213-246.oc.oc.cox.net [98.164.213.246])
-        by mailbackend.panix.com (Postfix) with ESMTPSA id 4KkqD52yctz18CR;
-        Thu, 21 Apr 2022 16:40:05 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-        t=1650573616; bh=3DLk127xG6VmBI2lKNf3p0IKGAxhZ0S9OZakATsgpqs=;
-        h=Date:From:Reply-To:To:cc:Subject:In-Reply-To:References;
-        b=j7RQKhZN/XZTnUPLR9x7uHijW3ePTAXL2PVcl0tnQxrNO+5FexNvT+UJa3k3nTW5V
-         nU00sTmYdbkH720jliREH/mq6ycYwHiXmS7o4+fyGZtnInVPkpjUIYDfPrP6iDHKdJ
-         SqqP4nAgxKSCuqqbmTO1r6kNbGoGlkCu3QXoMgfs=
-Date:   Thu, 21 Apr 2022 13:40:02 -0700 (PDT)
-From:   "Kenneth R. Crudup" <kenny@panix.com>
-Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, hkallweit1@gmail.com,
-        wangxiongfeng2@huawei.com, mika.westerberg@linux.intel.com,
-        chris.packham@alliedtelesis.co.nz, yangyicong@hisilicon.com,
-        treding@nvidia.com, jonathanh@nvidia.com, abhsahu@nvidia.com,
-        sagupta@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Ricky Wu <ricky_wu@realtek.com>,
-        Rajat Jain <rajatja@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Victor Ding <victording@google.com>,
-        "Kenneth R. Crudup" <kenny@panix.com>
-Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for
- suspend/resume
-In-Reply-To: <CAAd53p6jh7Jx3pzg9TzrSrW8+3pzLN6EBAFjFv+7T4tMODmX+g@mail.gmail.com>
-Message-ID: <42f9a28-e67-ec2a-f6-9a8b58edd84d@panix.com>
-References: <CAAd53p6DX2C7KVRV=uu_mmPTTjE7=RsXfNPxjbOBLRbf-pXi5A@mail.gmail.com> <20220415212533.GA844147@bhelgaas> <CAAd53p6jh7Jx3pzg9TzrSrW8+3pzLN6EBAFjFv+7T4tMODmX+g@mail.gmail.com>
+        Thu, 21 Apr 2022 16:45:02 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C14A4D268
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:42:11 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id y19-20020a056e02119300b002c2d3ef05bfso3250847ili.18
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:42:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=QTaJFCvihcUmHDlw/ICH6QwXqyikackCR6G4w+KbOPs=;
+        b=qeSJ+yLvxVzb4Pp8DxNyRPgldUHn2ovEVZf/46sZmQ83JhQ/jhDRLUlKnZW/aa1td+
+         UY0yoyCGPl6ogs8QIXI3wmGiRb6kSRiS2yVw/AxZDXMcs1owvww/iWhDpC0aiW3PcCM5
+         +w/knHQuZqnHYk/OwqV0HOlyxCe3xTkeBKWNCytAzzBDY4bzEeqMhnKv/gUztyXlTBCc
+         ijTJnnJmyPxENb9ZsIZqFqXh+vCJQbh43qjVuU9qjVYHbpluv47xvkFg2xIoWTT4DvGN
+         u0EKKYJj9/jzY7fY9rDtC+YAVvlacNGJBo3mT7x3qEXIOc3j0m4LbP/8Adm++TsFmkSe
+         xmsw==
+X-Gm-Message-State: AOAM5315ZMMvcQ9hli0y0sASIuuCiXCqH7/4QdIUzyzT9c3LQzvSAxTQ
+        lz6ISLzNSebD7nOtuqjvoEDMcr96okUfNVVEbrFA+3/hK6pp
+X-Google-Smtp-Source: ABdhPJxeuoyMPdfv0cavfLIcjxEa18/sMT287zLocnJIrQ8M+pc3e5eXNK/A7/Agt+HpAbdAM8QtmHFfrvF1ro0LqjWafQzEoQNJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1bc1:b0:2cd:5db6:d9e8 with SMTP id
+ x1-20020a056e021bc100b002cd5db6d9e8mr689285ilv.276.1650573730916; Thu, 21 Apr
+ 2022 13:42:10 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 13:42:10 -0700
+In-Reply-To: <83061bda-5a91-6123-a006-aaeb5458d5d7@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e8321c05dd30241a@google.com>
+Subject: Re: [syzbot] general protection fault in ntfs_update_mftmirr
+From:   syzbot <syzbot+c95173762127ad76a824@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
+        paskripkin@gmail.com, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On Thu, 21 Apr 2022, Kai-Heng Feng wrote:
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> I went through the whole discussion again, maybe Kenneth's case is
-> also the result of pcie_aspm_pm_state_change()?
+Reported-and-tested-by: syzbot+c95173762127ad76a824@syzkaller.appspotmail.com
 
-> Since Kenneth is using TLP to switch ASPM between performance and
-> powersaving/powersupersaving, that means 'aspm_disabled' is false.
-> Hence the KOXIA NVMe stops working post suspend and Realtek card
-> reader toggles L1ss post hibernation.
+Tested on:
 
-> Kenneth, can you please see if removing pcie_aspm_pm_state_change()
-> from pci_raw_set_power_state() helps?
-> Anyway, this can be easier to spot if dmesg was attached.
+commit:         b2534357 Merge tag 'xtensa-20220416' of https://github..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4cdc9619f45633df
+dashboard link: https://syzkaller.appspot.com/bug?extid=c95173762127ad76a824
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1778ee1cf00000
 
-Well, I haven't had an issue with resume/return from hibernate for quite some
-time, and the patch I'd reported a long time ago is now in the Linus' master
-I've been running. I believe a BIOS change from Dell fixed it up for me.
-
-But if you're looking for information in any case, I could still do this and
-get back to the topic re: the results.
-
-	-Kenny
-
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange County CA
+Note: testing is done by a robot and is best-effort only.

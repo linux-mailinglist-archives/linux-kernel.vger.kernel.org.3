@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F729509885
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713E6509847
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385347AbiDUGyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
+        id S229835AbiDUGzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 02:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386019AbiDUGxv (ORCPT
+        with ESMTP id S1386045AbiDUGxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:53:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4991836B;
-        Wed, 20 Apr 2022 23:49:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B948FB821B0;
-        Thu, 21 Apr 2022 06:49:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4907C385A5;
-        Thu, 21 Apr 2022 06:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650523780;
-        bh=JuzxgADo0HR49i0JgmCb45QoqigVSVD5kw+mijrOit4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mWm5xHWzgN0YrSZGeKqDtc2fgkKQxwu4bRiXF3nT9Q6ZySTiiARojnCzzCKtjc9Xm
-         pLbBtKNoRnReGhjCM1sJ0fP9xlR6AtlVnCRDfgqNYdZlezC4rc2f6crqOl5vpoa0pO
-         13B9qlZSAJkQypB6b884G63QVcEYwH9Qyebi5uQw=
-Date:   Thu, 21 Apr 2022 08:49:37 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Tony Luck <tony.luck@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the driver-core.current
- tree
-Message-ID: <YmD+geU9CmjoVnN9@kroah.com>
-References: <20220421152645.3a849198@canb.auug.org.au>
+        Thu, 21 Apr 2022 02:53:55 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE43E11A21;
+        Wed, 20 Apr 2022 23:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=xIQ4+cKb0jI15c9feynfrvB8SD
+        n3VRownO+qLC3mcxOyePGnmADH5PAM8LWvtGusg1uq1sM5uP57WiYl/fD2IKJHIzl7kVIzST62/VA
+        gby+H5HwXNPnTpZ9/FzG5eMvUnTv/yBf7ynjDH318eknHlsUn4qjLYEqW+ixS7Mbq6mC69b+R5tpG
+        1ciFH6LG72HOiGjQZBDdKWGR+3oOAeluqwuGF3No46q0xbOJX2kDbch8dl3//S0tB7kpceriWBZSE
+        kr5zjd/cL3A/n3l4N2PvDX42onKn5ZUgdQmWKXpWaTaaGZAV9sjoTdvCKSweDBiFKB4caAc48sjLE
+        0tiQM6Ow==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nhQeU-00Brh3-6L; Thu, 21 Apr 2022 06:50:54 +0000
+Date:   Wed, 20 Apr 2022 23:50:54 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     dan.j.williams@intel.com, bp@alien8.de, hch@infradead.org,
+        dave.hansen@intel.com, peterz@infradead.org, luto@kernel.org,
+        david@fromorbit.com, djwong@kernel.org,
+        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        vishal.l.verma@intel.com, dave.jiang@intel.com, agk@redhat.com,
+        snitzer@redhat.com, dm-devel@redhat.com, ira.weiny@intel.com,
+        willy@infradead.org, vgoyal@redhat.com
+Subject: Re: [PATCH v8 2/7] x86/mce: relocate set{clear}_mce_nospec()
+ functions
+Message-ID: <YmD+zgFf9Vih52gZ@infradead.org>
+References: <20220420020435.90326-1-jane.chu@oracle.com>
+ <20220420020435.90326-3-jane.chu@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421152645.3a849198@canb.auug.org.au>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220420020435.90326-3-jane.chu@oracle.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 03:26:45PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the driver-core.current tree, today's linux-next build
-> (x86_64 allnoconfig) produced this warning:
-> 
-> drivers/base/topology.c: In function 'topology_is_visible':
-> drivers/base/topology.c:158:24: warning: unused variable 'dev' [-Wunused-variable]
->   158 |         struct device *dev = kobj_to_dev(kobj);
->       |                        ^~~
-> 
-> Introduced by commit
-> 
->   aa63a74d4535 ("topology/sysfs: Hide PPIN on systems that do not support it.")
+Looks good:
 
-Tony, can you please send a fixup patch for this, or should I just
-revert this commit for now?
-
-thanks,
-
-greg k-h
+Reviewed-by: Christoph Hellwig <hch@lst.de>

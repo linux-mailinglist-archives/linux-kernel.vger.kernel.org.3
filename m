@@ -2,87 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FB550A408
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FDC50A40F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390060AbiDUP22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
+        id S1390045AbiDUP3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390018AbiDUP21 (ORCPT
+        with ESMTP id S239131AbiDUP3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:28:27 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A67F1A3BD
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:25:37 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id t12so5182532pll.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3X/olzZyiEOTaDnSyvUQfJTotSJF//8MOqgCU8Vd1Hk=;
-        b=EY3vQ8aQYxoLMh83TYT+sWZvvXQ5Q00X8s+8TVct4w2bwn28LSqEbXyWHMkfT764BX
-         X7kAMRbROJdVuSuhy0oW4ukxJYDi9452CKht+efnYSRj+5mnACYOmLbXO3H4g7DqdGwQ
-         TItWlo987dF8taxXxRwH1XTOjLsHO1rrWiCpLZB33gx7+iMoCqZsfhw1DCiayNGZUQFz
-         LRJCnjLv63jX+dsQrIA/F+cVj3MRpm+zKCrObpwM2GZksgRphVhFiwVQMSULFFFFAxiG
-         77MBLO77H7Ck9de/bqGmfgdY4aHJs3CZYx78B5HWsmwJv0Ejy0OkGYbfeyEOOcEidDjt
-         El9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3X/olzZyiEOTaDnSyvUQfJTotSJF//8MOqgCU8Vd1Hk=;
-        b=V8YbBOUcvAcvQ1iGn4J2GuSJujCMHZeV434Lwdhv/RwAPSaPAbCf+rfLBai2sfX8SY
-         FoZ++ORMJn06yVxHOV7bpApwcvym9uPEK6HbhQeUkcrK/VsKTZCsh3dNirMHWY+VHwWF
-         Fi6kW/KAY3MaJz11oUSz2fAS0MtFnOriOfWlWnsjLzY2hMH86llXFf31Md77+EqSIK3A
-         plH84xtLd5HR/YGNoVZnTgGo0EBAXP2gtD2YeEijBrwK4jv9reLDkuO1tSKi3E7LhrA3
-         JURLGgUCG33+ZKA8a+GK/qQHzB83Bb/McowSC7cyghHm2CJCi3Y+kMKo9lGCyuC9dGGV
-         aHVA==
-X-Gm-Message-State: AOAM5322IGvYufkJGea44jFqQbVW9j3dIu1/TQZ0dzwLwQjdQHIMBB5y
-        6L+IjfGKOIdOrgDsuIJTr6yUHhWMXOjQOGZjemjH7A==
-X-Google-Smtp-Source: ABdhPJxhUlkzsVifLeex0uye6BzHOsePBN4vsPwvKF0JB6gGtGu9+0yzrhAcyhs2TPLbVDSSbAfyFtWMs88v92ospfc=
-X-Received: by 2002:a17:90b:3b8c:b0:1d4:cd93:ffe7 with SMTP id
- pc12-20020a17090b3b8c00b001d4cd93ffe7mr157473pjb.237.1650554736855; Thu, 21
- Apr 2022 08:25:36 -0700 (PDT)
+        Thu, 21 Apr 2022 11:29:48 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DD833A32;
+        Thu, 21 Apr 2022 08:26:57 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23LDvd08019975;
+        Thu, 21 Apr 2022 17:26:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=bnf5gVjGaaUSSavfXeijykz7SrAnxDKyVAT7Cz7u7sw=;
+ b=7/MWr2I6tQ4W5fApMYlAhsleylVxrIeY2fwLEn1AxJhbRVZP6arCNDuYpKeJqj0kCzyl
+ 6gGS1b5G3yf9/rgKQ10fEny82gZSByubeVQ+nGKQ+Q/mdgt63zrKDaFtP3aPiJPzJg6Q
+ pTdG9Fcc1d/v8uYiHOz0ABM7roxz8tIibWZL+MA8sSVrGUjYMOXSvVoVFJQIbAI6Hiwl
+ r4YuRYTyf7tKpcJ9QVNnysK7w9Npxz0ltJccC6wgyX15IQam52+pzEir2Lt+80tM4knX
+ zMeqN9CJy517IIU8p6SX6aIQVoQafU9E1/t/5k/k8HoLLaTYWah2vkGSkaxUeUpkQnP1 EQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fh09m5m8q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Apr 2022 17:26:34 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9C18710002A;
+        Thu, 21 Apr 2022 17:26:33 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9403B22ECEC;
+        Thu, 21 Apr 2022 17:26:33 +0200 (CEST)
+Received: from [10.48.0.142] (10.75.127.46) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 21 Apr
+ 2022 17:26:32 +0200
+Message-ID: <d4ec8c8b-9c2a-3556-9c33-2a1769a4ad80@foss.st.com>
+Date:   Thu, 21 Apr 2022 17:26:31 +0200
 MIME-Version: 1.0
-References: <20220421124736.62180-1-lujialin4@huawei.com>
-In-Reply-To: <20220421124736.62180-1-lujialin4@huawei.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 21 Apr 2022 08:25:25 -0700
-Message-ID: <CALvZod6zbOG_fBCYGufm=fJrA-yZH4AWrThapFb3Gm_4ACQoeA@mail.gmail.com>
-Subject: Re: [PATCH -next] mm/memcontrol.c: make cgroup_memory_noswap static
-To:     Lu Jialin <lujialin4@huawei.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH RESEND v3 13/13] ARM: dts: stm32: add RCC on STM32MP13x
+ SoC family
+Content-Language: en-US
+To:     <gabriel.fernandez@foss.st.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220316131000.9874-1-gabriel.fernandez@foss.st.com>
+ <20220316131000.9874-14-gabriel.fernandez@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20220316131000.9874-14-gabriel.fernandez@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-21_02,2022-04-21_01,2022-02-23_01
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 5:48 AM Lu Jialin <lujialin4@huawei.com> wrote:
->
-> cgroup_memory_noswap is only used in mm/memcontrol.c, therefore just make
-> it static, and remove export in include/linux/memcontrol.h
->
-> Signed-off-by: Lu Jialin <lujialin4@huawei.com>
+On 3/16/22 14:10, gabriel.fernandez@foss.st.com wrote:
+> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> 
+> Enables Reset and Clocks Controller on STM32MP13
+> 
+> Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> ---
+>   arch/arm/boot/dts/stm32mp131.dtsi  | 107 +++++++++++------------------
+>   arch/arm/boot/dts/stm32mp133.dtsi  |   4 +-
+>   arch/arm/boot/dts/stm32mp13xf.dtsi |   3 +-
+>   3 files changed, 46 insertions(+), 68 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+> index 78eac53224d4..d7300b00ec19 100644
+> --- a/arch/arm/boot/dts/stm32mp131.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp131.dtsi
+> @@ -4,6 +4,8 @@
+>    * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+>    */
+>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/clock/stm32mp13-clks.h>
+> +#include <dt-bindings/reset/stm32mp13-resets.h>
+>   
+>   / {
+>   	#address-cells = <1>;
+> @@ -64,54 +66,8 @@ scmi_reset: protocol@16 {
+>   			};
+>   		};
+>   	};
+> -	clocks {
+> -		clk_axi: clk-axi {
+> -			#clock-cells = <0>;
+> -			compatible = "fixed-clock";
+> -			clock-frequency = <266500000>;
+> -		};
+> -
+> -		clk_hse: clk-hse {
+> -			#clock-cells = <0>;
+> -			compatible = "fixed-clock";
+> -			clock-frequency = <24000000>;
+> -		};
+> -
+> -		clk_hsi: clk-hsi {
+> -			#clock-cells = <0>;
+> -			compatible = "fixed-clock";
+> -			clock-frequency = <64000000>;
+> -		};
+> -
+> -		clk_lsi: clk-lsi {
+> -			#clock-cells = <0>;
+> -			compatible = "fixed-clock";
+> -			clock-frequency = <32000>;
+> -		};
+> -
+> -		clk_pclk3: clk-pclk3 {
+> -			#clock-cells = <0>;
+> -			compatible = "fixed-clock";
+> -			clock-frequency = <104438965>;
+> -		};
+>   
+> -		clk_pclk4: clk-pclk4 {
+> -			#clock-cells = <0>;
+> -			compatible = "fixed-clock";
+> -			clock-frequency = <133250000>;
+> -		};
+> -
+> -		clk_pll4_p: clk-pll4_p {
+> -			#clock-cells = <0>;
+> -			compatible = "fixed-clock";
+> -			clock-frequency = <50000000>;
+> -		};
+> -
+> -		clk_pll4_r: clk-pll4_r {
+> -			#clock-cells = <0>;
+> -			compatible = "fixed-clock";
+> -			clock-frequency = <99000000>;
+> -		};
+> +	clocks {
+>   	};
+>   
+>   	intc: interrupt-controller@a0021000 {
+> @@ -148,7 +104,8 @@ uart4: serial@40010000 {
+>   			compatible = "st,stm32h7-uart";
+>   			reg = <0x40010000 0x400>;
+>   			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
+> -			clocks = <&clk_hsi>;
+> +			clocks = <&rcc UART4_K>;
+> +			resets = <&rcc UART4_R>;
+>   			status = "disabled";
+>   		};
+>   
+> @@ -163,7 +120,8 @@ dma1: dma-controller@48000000 {
+>   				     <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
+> -			clocks = <&clk_pclk4>;
+> +			clocks = <&rcc DMA1>;
+> +			resets = <&rcc DMA1_R>;
+>   			#dma-cells = <4>;
+>   			st,mem2mem;
+>   			dma-requests = <8>;
+> @@ -180,7 +138,8 @@ dma2: dma-controller@48001000 {
+>   				     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+> -			clocks = <&clk_pclk4>;
+> +			clocks = <&rcc DMA2>;
+> +			resets = <&rcc DMA2_R>;
+>   			#dma-cells = <4>;
+>   			st,mem2mem;
+>   			dma-requests = <8>;
+> @@ -189,13 +148,29 @@ dma2: dma-controller@48001000 {
+>   		dmamux1: dma-router@48002000 {
+>   			compatible = "st,stm32h7-dmamux";
+>   			reg = <0x48002000 0x40>;
+> -			clocks = <&clk_pclk4>;
+> +			clocks = <&rcc DMAMUX1>;
+> +			resets = <&rcc DMAMUX1_R>;
+>   			#dma-cells = <3>;
+>   			dma-masters = <&dma1 &dma2>;
+>   			dma-requests = <128>;
+>   			dma-channels = <16>;
+>   		};
+>   
+> +		rcc: rcc@50000000 {
+> +			compatible = "st,stm32mp13-rcc", "syscon";
+> +			reg = <0x50000000 0x1000>;
+> +			#clock-cells = <1>;
+> +			#reset-cells = <1>;
+> +
+> +			clock-names = "hse", "hsi", "csi", "lse", "lsi";
+> +
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+It doesn't match with current yaml description. I'm preparing a patch to 
+update rcc yaml file. You will have to check that it matches with this node.
+
+> +			clocks = <&scmi_clk CK_SCMI_HSE>,
+> +				 <&scmi_clk CK_SCMI_HSI>,
+> +				 <&scmi_clk CK_SCMI_CSI>,
+> +				 <&scmi_clk CK_SCMI_LSE>,
+> +				 <&scmi_clk CK_SCMI_LSI>;
+> +		};
+> +
+>   		exti: interrupt-controller@5000d000 {
+>   			compatible = "st,stm32mp13-exti", "syscon";
+>   			interrupt-controller;
+> @@ -206,14 +181,14 @@ exti: interrupt-controller@5000d000 {
+>   		syscfg: syscon@50020000 {
+>   			compatible = "st,stm32mp157-syscfg", "syscon";
+>   			reg = <0x50020000 0x400>;
+> -			clocks = <&clk_pclk3>;
+> +			clocks = <&rcc SYSCFG>;
+>   		};
+>   
+>   		mdma: dma-controller@58000000 {
+>   			compatible = "st,stm32h7-mdma";
+>   			reg = <0x58000000 0x1000>;
+>   			interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
+> -			clocks = <&clk_pclk4>;
+> +			clocks = <&rcc MDMA>;
+>   			#dma-cells = <5>;
+>   			dma-channels = <32>;
+>   			dma-requests = <48>;
+> @@ -225,8 +200,9 @@ sdmmc1: mmc@58005000 {
+>   			reg = <0x58005000 0x1000>, <0x58006000 0x1000>;
+>   			interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
+>   			interrupt-names = "cmd_irq";
+> -			clocks = <&clk_pll4_p>;
+> +			clocks = <&rcc SDMMC1_K>;
+>   			clock-names = "apb_pclk";
+> +			resets = <&rcc SDMMC1_R>;
+>   			cap-sd-highspeed;
+>   			cap-mmc-highspeed;
+>   			max-frequency = <130000000>;
+> @@ -239,8 +215,9 @@ sdmmc2: mmc@58007000 {
+>   			reg = <0x58007000 0x1000>, <0x58008000 0x1000>;
+>   			interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
+>   			interrupt-names = "cmd_irq";
+> -			clocks = <&clk_pll4_p>;
+> +			clocks = <&rcc SDMMC2_K>;
+>   			clock-names = "apb_pclk";
+> +			resets = <&rcc SDMMC2_R>;
+>   			cap-sd-highspeed;
+>   			cap-mmc-highspeed;
+>   			max-frequency = <130000000>;
+> @@ -250,7 +227,7 @@ sdmmc2: mmc@58007000 {
+>   		iwdg2: watchdog@5a002000 {
+>   			compatible = "st,stm32mp1-iwdg";
+>   			reg = <0x5a002000 0x400>;
+> -			clocks = <&clk_pclk4>, <&clk_lsi>;
+> +			clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
+>   			clock-names = "pclk", "lsi";
+>   			status = "disabled";
+>   		};
+> @@ -289,7 +266,7 @@ gpioa: gpio@50002000 {
+>   				interrupt-controller;
+>   				#interrupt-cells = <2>;
+>   				reg = <0x0 0x400>;
+> -				clocks = <&clk_pclk4>;
+> +				clocks = <&rcc GPIOA>;
+>   				st,bank-name = "GPIOA";
+>   				ngpios = <16>;
+>   				gpio-ranges = <&pinctrl 0 0 16>;
+> @@ -301,7 +278,7 @@ gpiob: gpio@50003000 {
+>   				interrupt-controller;
+>   				#interrupt-cells = <2>;
+>   				reg = <0x1000 0x400>;
+> -				clocks = <&clk_pclk4>;
+> +				clocks = <&rcc GPIOB>;
+>   				st,bank-name = "GPIOB";
+>   				ngpios = <16>;
+>   				gpio-ranges = <&pinctrl 0 16 16>;
+> @@ -313,7 +290,7 @@ gpioc: gpio@50004000 {
+>   				interrupt-controller;
+>   				#interrupt-cells = <2>;
+>   				reg = <0x2000 0x400>;
+> -				clocks = <&clk_pclk4>;
+> +				clocks = <&rcc GPIOC>;
+>   				st,bank-name = "GPIOC";
+>   				ngpios = <16>;
+>   				gpio-ranges = <&pinctrl 0 32 16>;
+> @@ -325,7 +302,7 @@ gpiod: gpio@50005000 {
+>   				interrupt-controller;
+>   				#interrupt-cells = <2>;
+>   				reg = <0x3000 0x400>;
+> -				clocks = <&clk_pclk4>;
+> +				clocks = <&rcc GPIOD>;
+>   				st,bank-name = "GPIOD";
+>   				ngpios = <16>;
+>   				gpio-ranges = <&pinctrl 0 48 16>;
+> @@ -337,7 +314,7 @@ gpioe: gpio@50006000 {
+>   				interrupt-controller;
+>   				#interrupt-cells = <2>;
+>   				reg = <0x4000 0x400>;
+> -				clocks = <&clk_pclk4>;
+> +				clocks = <&rcc GPIOE>;
+>   				st,bank-name = "GPIOE";
+>   				ngpios = <16>;
+>   				gpio-ranges = <&pinctrl 0 64 16>;
+> @@ -349,7 +326,7 @@ gpiof: gpio@50007000 {
+>   				interrupt-controller;
+>   				#interrupt-cells = <2>;
+>   				reg = <0x5000 0x400>;
+> -				clocks = <&clk_pclk4>;
+> +				clocks = <&rcc GPIOF>;
+>   				st,bank-name = "GPIOF";
+>   				ngpios = <16>;
+>   				gpio-ranges = <&pinctrl 0 80 16>;
+> @@ -361,7 +338,7 @@ gpiog: gpio@50008000 {
+>   				interrupt-controller;
+>   				#interrupt-cells = <2>;
+>   				reg = <0x6000 0x400>;
+> -				clocks = <&clk_pclk4>;
+> +				clocks = <&rcc GPIOG>;
+>   				st,bank-name = "GPIOG";
+>   				ngpios = <16>;
+>   				gpio-ranges = <&pinctrl 0 96 16>;
+> @@ -373,7 +350,7 @@ gpioh: gpio@50009000 {
+>   				interrupt-controller;
+>   				#interrupt-cells = <2>;
+>   				reg = <0x7000 0x400>;
+> -				clocks = <&clk_pclk4>;
+> +				clocks = <&rcc GPIOH>;
+>   				st,bank-name = "GPIOH";
+>   				ngpios = <15>;
+>   				gpio-ranges = <&pinctrl 0 112 15>;
+> @@ -385,7 +362,7 @@ gpioi: gpio@5000a000 {
+>   				interrupt-controller;
+>   				#interrupt-cells = <2>;
+>   				reg = <0x8000 0x400>;
+> -				clocks = <&clk_pclk4>;
+> +				clocks = <&rcc GPIOI>;
+>   				st,bank-name = "GPIOI";
+>   				ngpios = <8>;
+>   				gpio-ranges = <&pinctrl 0 128 8>;
+> diff --git a/arch/arm/boot/dts/stm32mp133.dtsi b/arch/arm/boot/dts/stm32mp133.dtsi
+> index 0fb1386257cf..531c263c9f46 100644
+> --- a/arch/arm/boot/dts/stm32mp133.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp133.dtsi
+> @@ -15,7 +15,7 @@ m_can1: can@4400e000 {
+>   			interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
+>   			interrupt-names = "int0", "int1";
+> -			clocks = <&clk_hse>, <&clk_pll4_r>;
+> +			clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
+>   			clock-names = "hclk", "cclk";
+>   			bosch,mram-cfg = <0x0 0 0 32 0 0 2 2>;
+>   			status = "disabled";
+> @@ -28,7 +28,7 @@ m_can2: can@4400f000 {
+>   			interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
+>   			interrupt-names = "int0", "int1";
+> -			clocks = <&clk_hse>, <&clk_pll4_r>;
+> +			clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
+>   			clock-names = "hclk", "cclk";
+>   			bosch,mram-cfg = <0x1400 0 0 32 0 0 2 2>;
+>   			status = "disabled";
+> diff --git a/arch/arm/boot/dts/stm32mp13xf.dtsi b/arch/arm/boot/dts/stm32mp13xf.dtsi
+> index fa6889e30591..4d00e7592882 100644
+> --- a/arch/arm/boot/dts/stm32mp13xf.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp13xf.dtsi
+> @@ -10,7 +10,8 @@ cryp: crypto@54002000 {
+>   			compatible = "st,stm32mp1-cryp";
+>   			reg = <0x54002000 0x400>;
+>   			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
+> -			clocks = <&clk_axi>;
+> +			clocks = <&rcc CRYP1>;
+> +			resets = <&rcc CRYP1_R>;
+>   			status = "disabled";
+>   		};
+>   	};
+

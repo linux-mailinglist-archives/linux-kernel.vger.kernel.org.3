@@ -2,232 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAE95098CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E7D5098D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385626AbiDUHO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        id S1385646AbiDUHP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385621AbiDUHO5 (ORCPT
+        with ESMTP id S235802AbiDUHP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:14:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AAF617079
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:12:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650525127;
+        Thu, 21 Apr 2022 03:15:56 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9C517A9E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:13:06 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 70E8CE0015;
+        Thu, 21 Apr 2022 07:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650525185;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BlhjlslVFi77Wl+CHcuoCUnkjOxb+lqiVmEFLuwRx6E=;
-        b=QGYXMS9TXVC8Lx2N2Xuk0h6fmltrzIJWE1hU+8jrtW3KIYq2a4m5PySmSPnASgQSrUKlgi
-        A7tazBgP7fFLSbH4Oe4P3kBimKsMSKm7sP3IKcZqiSFRA6I9QS73VyPlcQZjbXHIRvYcd7
-        cMqdBS4l+vL5D4eo6ECNV99B9RStMoU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-I7366-w3PIak0IUBQam9Xg-1; Thu, 21 Apr 2022 03:12:06 -0400
-X-MC-Unique: I7366-w3PIak0IUBQam9Xg-1
-Received: by mail-wm1-f72.google.com with SMTP id r204-20020a1c44d5000000b0038eaca2b8c9so4102810wma.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:12:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=BlhjlslVFi77Wl+CHcuoCUnkjOxb+lqiVmEFLuwRx6E=;
-        b=Bj51f0kCn5bdHtbUcTG9sFyG82+fCj7UWz+5kmsHqeTvCmNPKLK4kFEydbMyS9hE5Z
-         1VQukojNwxq7Ljzpn0gVTm8osKr8OQhjxDemn5a6C5XUqvqOLrZeMdVc8enandzLNEiJ
-         ZJO7TmcbeteUqonrs9Bx67PwXdy5HTdULspf60VhjuWT2TZ98DPxIC6oH/mrhiuPJvYS
-         VLZMlFimGpQPxTw6y4fRtCKsR5oIQzbx034XX43lCyOHYmo+exGFe28DmcjWYaI7/dGz
-         o0TaztyeD0u0m2Pr0uQgbVDsnFUTp/PfTJpt0u95+EB2rmrdUuWzvfWIzKe9fhAFbu3U
-         PBLw==
-X-Gm-Message-State: AOAM533LfDzISRt1YvQI6m9SGCNJxV4e8Ka0mlk/iqcHluhASVMhxA7s
-        PEiur74YdehZIm1N7G882UHEiyANwyEsCuEE7QZlgvU/tHXRww/Dact7oVJQF04VkOn4VbhgOH8
-        wMbp6xW6nkXMZwCbkinV6lH4H
-X-Received: by 2002:a7b:c844:0:b0:38e:7c92:a9e3 with SMTP id c4-20020a7bc844000000b0038e7c92a9e3mr6989435wml.140.1650525124645;
-        Thu, 21 Apr 2022 00:12:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzVz/JO9dKqLMzH3gy16bSB1ht5ndgDDU51K5hj3E+i5/NAaixgHvKDLeexRrqvs7GX3Odxog==
-X-Received: by 2002:a7b:c844:0:b0:38e:7c92:a9e3 with SMTP id c4-20020a7bc844000000b0038e7c92a9e3mr6989397wml.140.1650525124310;
-        Thu, 21 Apr 2022 00:12:04 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:de00:711b:76af:b335:9b70? (p200300cbc702de00711b76afb3359b70.dip0.t-ipconnect.de. [2003:cb:c702:de00:711b:76af:b335:9b70])
-        by smtp.gmail.com with ESMTPSA id o10-20020a5d47ca000000b0020a992ce36esm1710046wrc.1.2022.04.21.00.12.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 00:12:03 -0700 (PDT)
-Message-ID: <436b1fd0-16a6-0f77-7ff4-a68252d6b117@redhat.com>
-Date:   Thu, 21 Apr 2022 09:12:02 +0200
+        bh=+JgFQ/ghz1TKZ1w7NZeEv/Dwh5WxIT/MjgY8evlIpp0=;
+        b=g9nPdTKaH2a9QWcFiNyvmqVbdY/7Y1I66letN16pG1lS8EX6ptDvfWRqZPry4WTNGsX+Bi
+        1MBpHQwWxLPq3tnXpy2YpdxP0+NBFz6Pe9OEAjbZdQrYB66I4dGXxkHAJifiLeExKCWHiR
+        XVaIUZAIFhe7TxeBegxu5rhZk4ao1sI0UNjgwIYDfD5yyyoY97j8qeJWXZBSwWGgWVFKPv
+        /jyUz0GvOafVOZpLXly8yI83mYwSTy/uY+NHnsQKAtoi+scTAG30BphcLnHaMNGk31WO1p
+        TgG5KTyjvPYaXV1FyLulHNDS/DS3oq6Y9hTfpJInoZFxVV2Xc+D4qRo1iGqcxg==
+Date:   Thu, 21 Apr 2022 09:13:02 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] Revert "drm: of: Properly try all possible cases for
+ bridge/panel detection"
+Message-ID: <YmED/vYsrjoc4OjC@aptenodytes>
+References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+ <YmCU7YLx/+ILPptK@ripper>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 1/3] memblock tests: update style of comments for
- memblock_add_*() functions
-Content-Language: en-US
-To:     Rebecca Mckeever <remckee0@gmail.com>, outreachy@lists.linux.dev
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1650452552.git.remckee0@gmail.com>
- <0004a1a720c5c15ba16cb9f2fb226f57276de2c0.1650452552.git.remckee0@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <0004a1a720c5c15ba16cb9f2fb226f57276de2c0.1650452552.git.remckee0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="rQJlfPZo3TRAh/MC"
+Content-Disposition: inline
+In-Reply-To: <YmCU7YLx/+ILPptK@ripper>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.04.22 13:19, Rebecca Mckeever wrote:
-> Update comments in memblock_add_*() functions to match the style used
-> in tests/alloc_*.c by rewording to make the expected outcome more apparent
-> and, if more than one memblock is involved, adding a visual of the
-> memory blocks.
-> 
-> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> ---
->  tools/testing/memblock/tests/basic_api.c | 75 +++++++++++++++++-------
->  1 file changed, 54 insertions(+), 21 deletions(-)
-> 
-> diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
-> index fbc1ce160303..cdf112d25343 100644
-> --- a/tools/testing/memblock/tests/basic_api.c
-> +++ b/tools/testing/memblock/tests/basic_api.c
-> @@ -26,8 +26,8 @@ static int memblock_initialization_check(void)
->  /*
->   * A simple test that adds a memory block of a specified base address
->   * and size to the collection of available memory regions (memblock.memory).
-> - * It checks if a new entry was created and if region counter and total memory
-> - * were correctly updated.
-> + * Expect to create a new entry. The region counter and total memory get
-> + * updated.
->   */
->  static int memblock_add_simple_check(void)
->  {
-> @@ -55,8 +55,8 @@ static int memblock_add_simple_check(void)
->  /*
->   * A simple test that adds a memory block of a specified base address, size
->   * NUMA node and memory flags to the collection of available memory regions.
-> - * It checks if the new entry, region counter and total memory size have
-> - * expected values.
-> + * Expect to create a new entry. The region counter and total memory get
-> + * updated.
->   */
->  static int memblock_add_node_simple_check(void)
->  {
-> @@ -87,9 +87,15 @@ static int memblock_add_node_simple_check(void)
->  
->  /*
->   * A test that tries to add two memory blocks that don't overlap with one
-> - * another. It checks if two correctly initialized entries were added to the
-> - * collection of available memory regions (memblock.memory) and if this
-> - * change was reflected in memblock.memory's total size and region counter.
-> + * another:
-> + *
-> + *  |        +--------+        +--------+  |
-> + *  |        |   r1   |        |   r2   |  |
-> + *  +--------+--------+--------+--------+--+
-> + *
-> + * Expect to add two correctly initialized entries to the collection of
-> + * available memory regions (memblock.memory). The total size and
-> + * region counter fields get updated.
->   */
->  static int memblock_add_disjoint_check(void)
->  {
-> @@ -125,10 +131,20 @@ static int memblock_add_disjoint_check(void)
->  
->  /*
->   * A test that tries to add two memory blocks, where the second one overlaps
-> - * with the beginning of the first entry (that is r1.base < r2.base + r2.size).
-> - * After this, it checks if two entries are merged into one region that starts
-> - * at r2.base and has size of two regions minus their intersection. It also
-> - * verifies the reported total size of the available memory and region counter.
-> + * with the beginning of the first entry (that is r1.base < r2.base + r2.size):
-> + *
-> + *  |    +----+----+------------+          |
-> + *  |    |   r|2   |   r1       |          |
-> + *  +----+----+----+------------+----------+
-> + *       ^    ^
-> + *       |    |
-> + *       |    r1.base
-> + *       |
-> + *       r2.base
-> + *
-> + * Expect to merge the two entries into one region that starts at r2.base
-> + * and has size of two regions minus their intersection. The total size of
-> + * the available memory is updated, and the region counter stays the same.
->   */
->  static int memblock_add_overlap_top_check(void)
->  {
-> @@ -163,11 +179,20 @@ static int memblock_add_overlap_top_check(void)
->  
->  /*
->   * A test that tries to add two memory blocks, where the second one overlaps
-> - * with the end of the first entry (that is r2.base < r1.base + r1.size).
-> - * After this, it checks if two entries are merged into one region that starts
-> - * at r1.base and has size of two regions minus their intersection. It verifies
-> - * that memblock can still see only one entry and has a correct total size of
-> - * the available memory.
-> + * with the end of the first entry (that is r2.base < r1.base + r1.size):
-> + *
-> + *  |  +--+------+----------+              |
-> + *  |  |  | r1   | r2       |              |
-> + *  +--+--+------+----------+--------------+
-> + *     ^  ^
-> + *     |  |
-> + *     |  r2.base
-> + *     |
-> + *     r1.base
-> + *
-> + * Expect to merge the two entries into one region that starts at r1.base
-> + * and has size of two regions minus their intersection. The total size of
-> + * the available memory is updated, and the region counter stays the same.
->   */
->  static int memblock_add_overlap_bottom_check(void)
->  {
-> @@ -203,9 +228,17 @@ static int memblock_add_overlap_bottom_check(void)
->  /*
->   * A test that tries to add two memory blocks, where the second one is
->   * within the range of the first entry (that is r1.base < r2.base &&
-> - * r2.base + r2.size < r1.base + r1.size). It checks if two entries are merged
-> - * into one region that stays the same. The counter and total size of available
-> - * memory are expected to not be updated.
-> + * r2.base + r2.size < r1.base + r1.size).
-> + *
-> + *  |   +-------+--+-----------------------+
-> + *  |   |       |r2|      r1               |
-> + *  +---+-------+--+-----------------------+
-> + *      ^
-> + *      |
-> + *      r1.base
-> + *
-> + * Expect to merge two entries into one region that stays the same.
-> + * The counter and total size of available memory are not updated.
->   */
->  static int memblock_add_within_check(void)
->  {
-> @@ -236,8 +269,8 @@ static int memblock_add_within_check(void)
->  }
->  
->  /*
-> - * A simple test that tries to add the same memory block twice. The counter
-> - * and total size of available memory are expected to not be updated.
-> + * A simple test that tries to add the same memory block twice. Expect
-> + * the counter and total size of available memory to not be updated.
->   */
->  static int memblock_add_twice_check(void)
->  {
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+--rQJlfPZo3TRAh/MC
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Thanks,
+Hi,
 
-David / dhildenb
+On Wed 20 Apr 22, 16:19, Bjorn Andersson wrote:
+> On Wed 20 Apr 16:12 PDT 2022, Bjorn Andersson wrote:
+>=20
+> Sorry, I missed Jagan and Linus, author and reviewer of the reverted
+> patch 2, among the recipients.
 
+I'd be curious to have Jagan's feedback on why the change was needed in the
+first place and whether an accepted dt binding relies on it.
+
+We might be able to just keep the whole thing reverted (forever).
+
+Paul
+
+> Regards,
+> Bjorn
+>=20
+> > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
+> > bridge")' introduced the ability to describe a panel under a display
+> > controller without having to use a graph to connect the controller to
+> > its single child panel (or bridge).
+> >=20
+> > The implementation of this would find the first non-graph node and
+> > attempt to acquire the related panel or bridge. This prevents cases
+> > where any other child node, such as a aux bus for a DisplayPort
+> > controller, or an opp-table to find the referenced panel.
+> >=20
+> > Commit '67bae5f28c89 ("drm: of: Properly try all possible cases for
+> > bridge/panel detection")' attempted to solve this problem by not
+> > bypassing the graph reference lookup before attempting to find the panel
+> > or bridge.
+> >=20
+> > While this does solve the case where a proper graph reference is
+> > present, it does not allow the caller to distinguish between a
+> > yet-to-be-probed panel or bridge and the absence of a reference to a
+> > panel.
+> >=20
+> > One such case is a DisplayPort controller that on some boards have an
+> > explicitly described reference to a panel, but on others have a
+> > discoverable DisplayPort display attached (which doesn't need to be
+> > expressed in DeviceTree).
+> >=20
+> > This reverts commit '67bae5f28c89 ("drm: of: Properly try all possible
+> > cases for bridge/panel detection")', as a step towards reverting commit
+> > '80253168dbfd ("drm: of: Lookup if child node has panel or bridge")'.
+> >=20
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> >  drivers/gpu/drm/drm_of.c | 99 ++++++++++++++++++++--------------------
+> >  1 file changed, 49 insertions(+), 50 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+> > index f4df344509a8..026e4e29a0f3 100644
+> > --- a/drivers/gpu/drm/drm_of.c
+> > +++ b/drivers/gpu/drm/drm_of.c
+> > @@ -214,29 +214,6 @@ int drm_of_encoder_active_endpoint(struct device_n=
+ode *node,
+> >  }
+> >  EXPORT_SYMBOL_GPL(drm_of_encoder_active_endpoint);
+> > =20
+> > -static int find_panel_or_bridge(struct device_node *node,
+> > -				struct drm_panel **panel,
+> > -				struct drm_bridge **bridge)
+> > -{
+> > -	if (panel) {
+> > -		*panel =3D of_drm_find_panel(node);
+> > -		if (!IS_ERR(*panel))
+> > -			return 0;
+> > -
+> > -		/* Clear the panel pointer in case of error. */
+> > -		*panel =3D NULL;
+> > -	}
+> > -
+> > -	/* No panel found yet, check for a bridge next. */
+> > -	if (bridge) {
+> > -		*bridge =3D of_drm_find_bridge(node);
+> > -		if (*bridge)
+> > -			return 0;
+> > -	}
+> > -
+> > -	return -EPROBE_DEFER;
+> > -}
+> > -
+> >  /**
+> >   * drm_of_find_panel_or_bridge - return connected panel or bridge devi=
+ce
+> >   * @np: device tree node containing encoder output ports
+> > @@ -259,44 +236,66 @@ int drm_of_find_panel_or_bridge(const struct devi=
+ce_node *np,
+> >  				struct drm_panel **panel,
+> >  				struct drm_bridge **bridge)
+> >  {
+> > -	struct device_node *node;
+> > -	int ret;
+> > +	int ret =3D -EPROBE_DEFER;
+> > +	struct device_node *remote;
+> > =20
+> >  	if (!panel && !bridge)
+> >  		return -EINVAL;
+> > -
+> >  	if (panel)
+> >  		*panel =3D NULL;
+> > -	if (bridge)
+> > -		*bridge =3D NULL;
+> > -
+> > -	/* Check for a graph on the device node first. */
+> > -	if (of_graph_is_present(np)) {
+> > -		node =3D of_graph_get_remote_node(np, port, endpoint);
+> > -		if (node) {
+> > -			ret =3D find_panel_or_bridge(node, panel, bridge);
+> > -			of_node_put(node);
+> > -
+> > -			if (!ret)
+> > -				return 0;
+> > -		}
+> > -	}
+> > =20
+> > -	/* Otherwise check for any child node other than port/ports. */
+> > -	for_each_available_child_of_node(np, node) {
+> > -		if (of_node_name_eq(node, "port") ||
+> > -		    of_node_name_eq(node, "ports"))
+> > +	/**
+> > +	 * Devices can also be child nodes when we also control that device
+> > +	 * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
+> > +	 *
+> > +	 * Lookup for a child node of the given parent that isn't either port
+> > +	 * or ports.
+> > +	 */
+> > +	for_each_available_child_of_node(np, remote) {
+> > +		if (of_node_name_eq(remote, "port") ||
+> > +		    of_node_name_eq(remote, "ports"))
+> >  			continue;
+> > =20
+> > -		ret =3D find_panel_or_bridge(node, panel, bridge);
+> > -		of_node_put(node);
+> > +		goto of_find_panel_or_bridge;
+> > +	}
+> > +
+> > +	/*
+> > +	 * of_graph_get_remote_node() produces a noisy error message if port
+> > +	 * node isn't found and the absence of the port is a legit case here,
+> > +	 * so at first we silently check whether graph presents in the
+> > +	 * device-tree node.
+> > +	 */
+> > +	if (!of_graph_is_present(np))
+> > +		return -ENODEV;
+> > +
+> > +	remote =3D of_graph_get_remote_node(np, port, endpoint);
+> > +
+> > +of_find_panel_or_bridge:
+> > +	if (!remote)
+> > +		return -ENODEV;
+> > +
+> > +	if (panel) {
+> > +		*panel =3D of_drm_find_panel(remote);
+> > +		if (!IS_ERR(*panel))
+> > +			ret =3D 0;
+> > +		else
+> > +			*panel =3D NULL;
+> > +	}
+> > +
+> > +	/* No panel found yet, check for a bridge next. */
+> > +	if (bridge) {
+> > +		if (ret) {
+> > +			*bridge =3D of_drm_find_bridge(remote);
+> > +			if (*bridge)
+> > +				ret =3D 0;
+> > +		} else {
+> > +			*bridge =3D NULL;
+> > +		}
+> > =20
+> > -		/* Stop at the first found occurrence. */
+> > -		if (!ret)
+> > -			return 0;
+> >  	}
+> > =20
+> > -	return -EPROBE_DEFER;
+> > +	of_node_put(remote);
+> > +	return ret;
+> >  }
+> >  EXPORT_SYMBOL_GPL(drm_of_find_panel_or_bridge);
+> > =20
+> > --=20
+> > 2.35.1
+> >=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--rQJlfPZo3TRAh/MC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJhA/4ACgkQ3cLmz3+f
+v9Fb4ggAoQHofTAqH10pIlWgzYQipKbh4LenR5tOYkDXVrT3LCNyd3aUH4+2hhpK
+eR/ALGdTtLMA9K37kzXHbCWBs9u00RFN+qpdK5jvz/v7igM0SF1pzu9Rh/nmYEPl
+qmFQ0M2EOGVmQoWEqIPqUzLiBgYJ6Eun5zQBo+S8+V8egMGcyppee1yKgemRwJbW
+9IihDebBMQUsdQD2A0GjkJuseGfZ8Qr9OVQ6X99yXKQrYOA6Nc7K/CLGapE8+T78
+9X5QkncE4g9hYaP13SL6pgJ/JBD5wqld1PVwHQAQ+UFlWLgJqC7aibW857KCgpE3
+3Hgw6spyBe1pOq/+VtNcOiL5bzOeDw==
+=tRVX
+-----END PGP SIGNATURE-----
+
+--rQJlfPZo3TRAh/MC--

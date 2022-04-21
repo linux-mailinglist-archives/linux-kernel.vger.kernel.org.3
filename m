@@ -2,164 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847BD509BF3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C04509C13
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387385AbiDUJPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
+        id S1387390AbiDUJP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387377AbiDUJPO (ORCPT
+        with ESMTP id S1387389AbiDUJPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:15:14 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637411A80E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:12:25 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id s25so850766wrb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:12:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wrZJAQCvZMNBHOHFxhe/p/8wX8+3w7RNtn7JZy9xcqM=;
-        b=HmW83QhkXJPKoQKy3XuO/cRmsKgkVnGWnfYpDhgW61A+z6dWs87PL0jlz8iLGGOec1
-         vaI7tJF73I0UQIuIUbdbsTK/fTZe+8GqriBAJftiOrXby9f6TWciCB9Y4B/o+AQO1Poh
-         yHxj1b8Dg9m54GlyOmNZotHpQpV0q+vY//48J78vMTl55TwWrkJ3SNrnH6VZSzKxjv+N
-         GY82em7XcnAAI1t/rr50dBtIBx+YEZS2REedTF+nIKEXLWu4pkirMAndljTz0jJioQRN
-         RraP84hXc91Fo6NElKnSBc7W9MW9akOTu6KjwVzynNc/yMnLCAaQ6oqc6otClWXmRVpJ
-         Yhdg==
+        Thu, 21 Apr 2022 05:15:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A8431A80E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:12:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650532353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LAsf8msNhJZ+Lu/+Q6XQcyKfvNctUwvpskdLMNyqlx0=;
+        b=b9QOGNa4KwXxQNndUCLnK7yOeI94MfBWwCcX5u8BHsvVpQVREEmkwCJ5xIy9+Gdk4Babaf
+        P+LC8nCffArBryXoml/1tUt7QcC7eOIvkCOFozmn7FbZlSlYYFJ0/F3Xzb3i2V1uwKt8ze
+        KxRUIRdORgFv4zyNXnP/tyoNFluVRxY=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-662-UGZ7L7BNNPKFjNIK6rAVDA-1; Thu, 21 Apr 2022 05:12:32 -0400
+X-MC-Unique: UGZ7L7BNNPKFjNIK6rAVDA-1
+Received: by mail-pj1-f71.google.com with SMTP id j24-20020a17090aeb1800b001d17733a1a6so4741525pjz.6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:12:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wrZJAQCvZMNBHOHFxhe/p/8wX8+3w7RNtn7JZy9xcqM=;
-        b=epbD+lNEJsPJcm7XlGFg/Napp4q07ZyTaT8Feas5ljK9+oPnwOaw+pw7pbrqMoPZhL
-         v+5POTw7NflY3MokHoQnYIdjTgqzDIvqRPwngo/WTTYTp04XWZWBuhiclV9QwQN0f08R
-         jKIEV0v/n8IVbD27PWfKfk8G5zwRvkK4hN8/W6KhbOq3hz1h+4hsv/5A9Afzjp04VQbD
-         0aMAEbx5JrOzYpXFcIPugSme7qXaehzmbyG3RkWIVzqheVHzMVP/7DeDU0aHpN2+dSTE
-         F1OHwDAyStZe/4RvwoTZ2DstTCmJwdWc7/TaznbtC0ylHHL9EvqIVKWuKYTp9ZW9by1o
-         GdsQ==
-X-Gm-Message-State: AOAM530IxOzsiQbM+NZJqjzs/ebn6Wcc3tB1QiA6CjC8Sbrm42gTQDHx
-        KpY4A24pO6ducS6vsf5cpDDdPA==
-X-Google-Smtp-Source: ABdhPJxks+wfjBbznedGdcWD7ga84MKGrM5RyoyIYFaULkAyq8/j7ugW0uCuM1i3RfukAYXWa0F+Pg==
-X-Received: by 2002:a05:6000:1864:b0:20a:9ac6:b166 with SMTP id d4-20020a056000186400b0020a9ac6b166mr13332622wri.354.1650532343767;
-        Thu, 21 Apr 2022 02:12:23 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:64a4:39d5:81cc:c8fd])
-        by smtp.gmail.com with ESMTPSA id bi26-20020a05600c3d9a00b0038ed39dbf00sm1543151wmb.0.2022.04.21.02.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 02:12:22 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 11:12:17 +0200
-From:   Marco Elver <elver@google.com>
-To:     syzbot <syzbot+ffe71f1ff7f8061bcc98@syzkaller.appspotmail.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     akpm@linux-foundation.org, dvyukov@google.com, glider@google.com,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        cgroups@vger.kernel.org
-Subject: Re: [syzbot] WARNING in __kfence_free
-Message-ID: <YmEf8dpSXJeZ2813@elver.google.com>
-References: <000000000000f46c6305dd264f30@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LAsf8msNhJZ+Lu/+Q6XQcyKfvNctUwvpskdLMNyqlx0=;
+        b=YpaY1IWds9GxriS+RvQceCvmgU5t/Ym4wwR9tHYRWIu6NQNy/E9kywWnjBJz4y5zq0
+         +2JJj929cYyW346SGLlqGXYTp7aHnGfA3YYJpZwpSig3zyCWPAwbttHEijgfu6i2CEvB
+         UM5bbCNIgRoW9/ckhc1DLBnsTb/TQmUw4UK3Emq/ArLzglwulcVn9krefuPwCUy23vOP
+         qrAwcnCi1xvH5Xi98hgc0cAKMpM7twbblzyc7nVogme2Luc4gzsph/bkIvMNMGu2H531
+         0rOEi054Ao5iNgtHFVBZpxVOfW2t95Lyb8HRbIrEnz08W0GuFX3Xmu+oah9b/YtEpToK
+         +sRA==
+X-Gm-Message-State: AOAM530mKzdKwwzWBiX+qlRCBo97SzhFDjbJ2gb48UwtaXVFmNBqps6o
+        pwt3fhHv+v/DevQN+i6ELQ9abKOf2Fqs4GT1iWb/PePMjgiA9+TkEL5ro6sNP6etLa1DMYT1h9A
+        LBa4He450zPpuTNrYVw1htJ/3wsCF7xSbfWeP40Jq
+X-Received: by 2002:aa7:9041:0:b0:4fe:3d6c:1739 with SMTP id n1-20020aa79041000000b004fe3d6c1739mr28068961pfo.13.1650532351067;
+        Thu, 21 Apr 2022 02:12:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwuons8gIITLhtlNtqZrNYaR/yq6c34TGv1r2bEdYVG5ShaBdCJfi/lU9poZ3LkVz4EbVYTXhjGbNwayoI14m8=
+X-Received: by 2002:aa7:9041:0:b0:4fe:3d6c:1739 with SMTP id
+ n1-20020aa79041000000b004fe3d6c1739mr28068941pfo.13.1650532350839; Thu, 21
+ Apr 2022 02:12:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000f46c6305dd264f30@google.com>
-User-Agent: Mutt/2.1.4 (2021-12-11)
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,GB_FAKE_RF_SHORT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CO6PR03MB62418A2C022A8E9EDC11A633E1F39@CO6PR03MB6241.namprd03.prod.outlook.com>
+In-Reply-To: <CO6PR03MB62418A2C022A8E9EDC11A633E1F39@CO6PR03MB6241.namprd03.prod.outlook.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 21 Apr 2022 11:12:20 +0200
+Message-ID: <CAO-hwJJE_RAMXQA1kgpxVJWgGOsn64GxbN4fQVq8Dt2xepnYog@mail.gmail.com>
+Subject: Re: [PATCH] hid: multitouch: new device class fix Lenovo X12 trackpad sticky
+To:     Tao Jin <tao-j@outlook.com>
+Cc:     linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 01:58AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    559089e0a93d vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLO..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10853220f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2e1f9b9947966f42
-> dashboard link: https://syzkaller.appspot.com/bug?extid=ffe71f1ff7f8061bcc98
-> compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: arm64
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+ffe71f1ff7f8061bcc98@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 2216 at mm/kfence/core.c:1022 __kfence_free+0x84/0xc0 mm/kfence/core.c:1022
+On Mon, Apr 18, 2022 at 5:16 AM Tao Jin <tao-j@outlook.com> wrote:
+>
+> The trackpad of the given device sends continuous report of pointers
+> status as per wxn8 spec. However, the spec did not clarify when the
+> fingers are lifted so fast that between the interval of two report
+> frames fingers on pad reduced from >=2 to 0. The second last report
+> contains >=2 fingers with tip state 1 and the last report contains only
+> 1 finger with tip state 0. Although this can happen unfrequently, a
+>   quick fix will be improve the consistency to 100%. A quick fix is to
+> disable MT_QUIRK_ALWAYS_VALID and enable MT_QUIRK_NOT_SEEN_MEANS_UP.
+> Since it always send reports when fingers on pad
+> MT_QUIRK_STICKY_FINGERS is also not needed.
 
-That's this warning in __kfence_free:
+I would really like to see tests for this device added to hid-tools[0].
 
-	#ifdef CONFIG_MEMCG
-		KFENCE_WARN_ON(meta->objcg);
-	#endif
+This would allow me to better understand the issue and also ensure we
+are not regressing in the future.
 
-introduced in 8f0b36497303 ("mm: kfence: fix objcgs vector allocation").
+Cheers,
+Benjamin
 
-Muchun, are there any circumstances where the assumption may be broken?
-Or a new bug elsewhere?
 
-> Modules linked in:
-> CPU: 0 PID: 2216 Comm: syz-executor.0 Not tainted 5.18.0-rc3-syzkaller-00007-g559089e0a93d #0
-> Hardware name: linux,dummy-virt (DT)
-> pstate: 80400009 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : __kfence_free+0x84/0xc0 mm/kfence/core.c:1022
-> lr : kfence_free include/linux/kfence.h:186 [inline]
-> lr : __slab_free+0x2e4/0x4d4 mm/slub.c:3315
-> sp : ffff80000a9fb980
-> x29: ffff80000a9fb980 x28: ffff80000a280040 x27: f2ff000002c01c00
-> x26: ffff00007b694040 x25: ffff00007b694000 x24: 0000000000000001
-> x23: ffff00007b694000 x22: ffff00007b694000 x21: f2ff000002c01c00
-> x20: ffff80000821accc x19: fffffc0001eda500 x18: 0000000000000002
-> x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-> x14: 0000000000000001 x13: 000000000005eb7f x12: f7ff000007a08024
-> x11: f7ff000007a08000 x10: 0000000000000000 x9 : 0000000000000014
-> x8 : 0000000000000001 x7 : 0000000000094000 x6 : ffff80000a280000
-> x5 : ffff80000821accc x4 : ffff80000a50e078 x3 : ffff80000a280348
-> x2 : f0ff00001e325c00 x1 : ffff80000a522b40 x0 : ffff00007b694000
-> Call trace:
->  __kfence_free+0x84/0xc0 mm/kfence/core.c:1022
->  kfence_free include/linux/kfence.h:186 [inline]
->  __slab_free+0x2e4/0x4d4 mm/slub.c:3315
->  do_slab_free mm/slub.c:3498 [inline]
->  slab_free mm/slub.c:3511 [inline]
->  kfree+0x320/0x37c mm/slub.c:4552
->  kvfree+0x3c/0x50 mm/util.c:615
->  xt_free_table_info+0x78/0x90 net/netfilter/x_tables.c:1212
->  __do_replace+0x240/0x330 net/ipv6/netfilter/ip6_tables.c:1104
->  do_replace net/ipv6/netfilter/ip6_tables.c:1157 [inline]
->  do_ip6t_set_ctl+0x374/0x4e0 net/ipv6/netfilter/ip6_tables.c:1639
->  nf_setsockopt+0x68/0x94 net/netfilter/nf_sockopt.c:101
->  ipv6_setsockopt+0xa8/0x220 net/ipv6/ipv6_sockglue.c:1026
->  tcp_setsockopt+0x38/0xdb4 net/ipv4/tcp.c:3696
->  sock_common_setsockopt+0x1c/0x30 net/core/sock.c:3505
->  __sys_setsockopt+0xa0/0x1c0 net/socket.c:2180
->  __do_sys_setsockopt net/socket.c:2191 [inline]
->  __se_sys_setsockopt net/socket.c:2188 [inline]
->  __arm64_sys_setsockopt+0x2c/0x40 net/socket.c:2188
->  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
->  invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
->  el0_svc_common.constprop.0+0x44/0xec arch/arm64/kernel/syscall.c:142
->  do_el0_svc+0x6c/0x84 arch/arm64/kernel/syscall.c:181
->  el0_svc+0x44/0xb0 arch/arm64/kernel/entry-common.c:616
->  el0t_64_sync_handler+0x1a4/0x1b0 arch/arm64/kernel/entry-common.c:634
->  el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
-> ---[ end trace 0000000000000000 ]---
-> 
-> 
+[0] https://gitlab.freedesktop.org/libevdev/hid-tools
+
+>
+> In addition to this, I2C device 04CA:00B1 may also need similar class
+> but with MT_QUIRK_FORCE_MULTI_INPUT disabled (but it does not harm to
+>  enable it on non-multi-input device either). The respective owner has
+> been notified and a patch may coming soon after test.
+>
+> Signed-off-by: Tao Jin <tao-j@outlook.com>
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>  drivers/hid/hid-multitouch.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+> index 0dece60..3ea57f3 100644
+> --- a/drivers/hid/hid-multitouch.c
+> +++ b/drivers/hid/hid-multitouch.c
+> @@ -194,6 +194,7 @@ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
+>  #define MT_CLS_WIN_8_FORCE_MULTI_INPUT         0x0015
+>  #define MT_CLS_WIN_8_DISABLE_WAKEUP            0x0016
+>  #define MT_CLS_WIN_8_NO_STICKY_FINGERS         0x0017
+> +#define MT_CLS_WIN_8_FORCE_MULTI_INPUT_NSMU    0x0018
+>
+>  /* vendor specific classes */
+>  #define MT_CLS_3M                              0x0101
+> @@ -286,6 +287,14 @@ static const struct mt_class mt_classes[] = {
+>                         MT_QUIRK_WIN8_PTP_BUTTONS |
+>                         MT_QUIRK_FORCE_MULTI_INPUT,
+>                 .export_all_inputs = true },
+> +       { .name = MT_CLS_WIN_8_FORCE_MULTI_INPUT_NSMU,
+> +               .quirks = MT_QUIRK_IGNORE_DUPLICATES |
+> +                       MT_QUIRK_HOVERING |
+> +                       MT_QUIRK_CONTACT_CNT_ACCURATE |
+> +                       MT_QUIRK_WIN8_PTP_BUTTONS |
+> +                       MT_QUIRK_FORCE_MULTI_INPUT |
+> +                       MT_QUIRK_NOT_SEEN_MEANS_UP,
+> +               .export_all_inputs = true },
+>         { .name = MT_CLS_WIN_8_DISABLE_WAKEUP,
+>                 .quirks = MT_QUIRK_ALWAYS_VALID |
+>                         MT_QUIRK_IGNORE_DUPLICATES |
+> @@ -783,6 +792,7 @@ static int mt_touch_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+>                 case HID_DG_CONFIDENCE:
+>                         if ((cls->name == MT_CLS_WIN_8 ||
+>                              cls->name == MT_CLS_WIN_8_FORCE_MULTI_INPUT ||
+> +                            cls->name == MT_CLS_WIN_8_FORCE_MULTI_INPUT_NSMU ||
+>                              cls->name == MT_CLS_WIN_8_DISABLE_WAKEUP) &&
+>                                 (field->application == HID_DG_TOUCHPAD ||
+>                                  field->application == HID_DG_TOUCHSCREEN))
+> @@ -2035,7 +2045,7 @@ static const struct hid_device_id mt_devices[] = {
+>                            USB_DEVICE_ID_LENOVO_X1_TAB3) },
+>
+>         /* Lenovo X12 TAB Gen 1 */
+> -       { .driver_data = MT_CLS_WIN_8_FORCE_MULTI_INPUT,
+> +       { .driver_data = MT_CLS_WIN_8_FORCE_MULTI_INPUT_NSMU,
+>                 HID_DEVICE(BUS_USB, HID_GROUP_MULTITOUCH_WIN_8,
+>                            USB_VENDOR_ID_LENOVO,
+>                            USB_DEVICE_ID_LENOVO_X12_TAB) },
+> --
+> 2.35.1
+>
+

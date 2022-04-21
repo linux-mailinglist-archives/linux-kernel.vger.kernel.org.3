@@ -2,120 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AC550A648
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7E550A657
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382861AbiDUQ43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 12:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S231679AbiDUQ6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 12:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbiDUQ41 (ORCPT
+        with ESMTP id S1390530AbiDUQ55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 12:56:27 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE37A49930;
-        Thu, 21 Apr 2022 09:53:37 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id a15so5512726pfv.11;
-        Thu, 21 Apr 2022 09:53:37 -0700 (PDT)
+        Thu, 21 Apr 2022 12:57:57 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBD9B1F5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:55:07 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id r83so5161319pgr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:55:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PlsYbqQmf2Zsys0Fm1nEB5XbzF76fQveH/UoQhbEwwk=;
-        b=gmeYuuM+qQf6VJ+nLapBtr0AmigVa0jZQHl0e/FBjYitnsCfTmGPdMvldE7qtaY5w2
-         maPVqqD4saMVXYO0WiwShFnlnv4imjxiUfdPBY8pxTZzlrjQzTCx8rMHHRA+Q5JhQuTV
-         TJsDfXKm0MK4pQO//phfN+UXs0Ea3ENoyQLt0BSFyMEC1YF8DS6K8Ln2edhmFetOlOBf
-         h3zQR3HfitsoQLhcZJMzypNfatL+8CsXcaOBDQoeE4JvqZhQUTpEwzkROv8gaS+tNPhB
-         FaA487P6t3ozSOZZ98u45EhArSf0dF3HI54oWZ897QbZz9FAfL/1VtmxlXOKCbTNZVXN
-         cgmQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lWrMBaaG06Rl/KqlbUnN7jouLwLObU2X9LsSayAdIEY=;
+        b=RG6zXViEotCrIPi+aqyunCe71vbxFhC/cyC2pcLO6Nnd/L7hctNT+nu9Wd/37midx4
+         CBEdx7XQHXKUvhBVjHCgDXDtj03gb0gA/FT28uXFAZtrF6FxQCdcvqGjFgu2goVERUa1
+         aBLVjrQlm+M+HHOBlhi69kBAheJbgTj97x2Ws=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PlsYbqQmf2Zsys0Fm1nEB5XbzF76fQveH/UoQhbEwwk=;
-        b=cbfwNk+KxXBsKtRyggkkeeVnjRWrQoyXlovfmRXK/ipQ5mt6rMkw/r2hmejQNIOGiZ
-         t1PXCEc6UzKgp1fud1FvPkwmfUSssLjIZR5JDn+uQBn8w8pS6VJ0ENbH2m+B17owYmVk
-         HHPqMi/tl9KDxSPiiSQZUhwRcEE9ZrKaJ+hmYxtaltu9dqoxEZncxaxF4Y+bq8gvZwcZ
-         bx8KGBqpVT/Z3ViK9pWncAOSPyBLgEriA7sfCUAweF/W4DNo8IzWbxmHogUq9+X7l06x
-         Jx1zj7J9qz1M0/wfjXn6SvigmAQG6PBSvKMl5sBgim/SGBBZMFhs1Lubht0obYXEK7aC
-         mbjA==
-X-Gm-Message-State: AOAM531t6DTrHaxKHsTHgKvI9MbdXtzYOkLB9+mejn4JCgexsoLgYGKf
-        p3mbZs0w2Lf0GnF1SOyAIek=
-X-Google-Smtp-Source: ABdhPJwOWadoG5Yuz0OW3JOA91GG7ddvLLPxagS1bTXiU32a7NvWAsv9jA+IPFlspkEI24sq/aOA/Q==
-X-Received: by 2002:a65:6216:0:b0:39d:5e6c:7578 with SMTP id d22-20020a656216000000b0039d5e6c7578mr328653pgv.114.1650560017228;
-        Thu, 21 Apr 2022 09:53:37 -0700 (PDT)
-Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
-        by smtp.gmail.com with ESMTPSA id p1-20020a056a000a0100b0050ac9c31b7esm7974515pfh.180.2022.04.21.09.53.34
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lWrMBaaG06Rl/KqlbUnN7jouLwLObU2X9LsSayAdIEY=;
+        b=EJX8t7gv1eYuq4xSrL11gS/tztxwf/QJfbyIztyIo/YPTAbngL+Q7gx9Dew6qeKCIn
+         Nlet8vkgyBcX5eaK3T5L8zPp17/CH3ByOyNY8Ccn/DSAKWxQi9kNeoHKfE2pel3d9Pvd
+         t1lZFniRsksSqLLMTZVQfapr37rdMvsosnDkq6Zb5xvMNJBXyUc/oHE4KMdwiPkWTdJV
+         Au6Eap6EX4zBrupGUK6iG9YMwOseblcOKiGPGJJ+FTbjByj5Dex5uIhdHnCa3AQekQol
+         FF0ewNw5B/k5POPOL7btPLU6UULrfZaQTcDncPtiIPufSV9LjOqrY5UnDGdKcDaROPS3
+         ccLQ==
+X-Gm-Message-State: AOAM532uWPj6wANSoxUDv+LpqAB0OY4iB1p//ZASaYDYLc0alMuj/WMD
+        1Ume+t+4FDprNvWxBxSV0ZBLsw==
+X-Google-Smtp-Source: ABdhPJybFqT9+qbX/fmptKtwh1MKt6C6LFPPlumJnR7fijXXj4514Ft/yXS+m+y8hK+j9Rd4HJauww==
+X-Received: by 2002:a05:6a00:298e:b0:50c:e384:3a16 with SMTP id cj14-20020a056a00298e00b0050ce3843a16mr610980pfb.71.1650560106692;
+        Thu, 21 Apr 2022 09:55:06 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u3-20020a626003000000b00505a38fc90bsm24888533pfb.173.2022.04.21.09.55.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 09:53:36 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 09:53:31 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
- attestation interface driver
-Message-ID: <20220421165331.GA1451512@private.email.ne.jp>
-References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
- <b209ee09b74394ab7aed85e0244e2191ee3d4171.camel@intel.com>
- <e0e2e399-2cac-cf75-2a64-9d017e6d7189@linux.intel.com>
- <420a4d689f73f9f7dc1ef71c61da75b7c9777a3f.camel@intel.com>
- <1e184b44-8024-b8ae-98a8-cf2b6f78df61@linux.intel.com>
- <20220421065707.GA1423762@private.email.ne.jp>
- <a2c2b7f5-0af0-18a3-062b-c6c9f78daaad@linux.intel.com>
+        Thu, 21 Apr 2022 09:55:06 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        linux-pm@vger.kernel.org, Joao Moreira <joao@overdrivepizza.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Chuansheng Liu <chuansheng.liu@intel.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Matthew Garrett <mjg59@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] thermal: int340x: Fix attr.show callback prototype
+Date:   Thu, 21 Apr 2022 09:55:04 -0700
+Message-Id: <20220421165504.3173244-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a2c2b7f5-0af0-18a3-062b-c6c9f78daaad@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1946; h=from:subject; bh=luGT7I33b2VPSU/hRTp4Bzm5YaRlLxElO2D/HiBCrCI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiYYxnp8ng8BLmn3BJUCmqYDM28VV2nCxsOVm2zLy+ LJp8UgqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYmGMZwAKCRCJcvTf3G3AJlOCD/ 9lztboo9y2dy0mnMoOXHcJOcK/kpeyZf11lTux/iSdVIVqNAWXfmfzQBifo15Bq4PZa9jlNoHJIvpj 2/4/xqH0Wfyr9dMmzYCdUD/tXJMQN9xW61hBX1O+Fn6obddy6jvOEsbFKIlV6W2PmmYn2j3ph0JAvb BAhgnXMb7eLsLGarKzjO55yjay/yDwM176Q4VpOaAAc4+RFYUvZIGhW010OBdwM0ut+WQ4YKdbnest uY5+p44FLL35FwQPREFU1tfg0j0gfJStm6cKA9KnO1uamR7Ds6HSqM4OPzsuAz1MUTBQWgihe0JINA +yarzxWBPEP3/d3SueddXMFyle/JYx6g/NwXYfBTvZr1Amyqmt3hsXDQB+KXuR8JsAqxahrTKDc2pu f+y8bmT60daXrqKckbnxMBQ5HPxmIok8WWWfWw3aVGfoQjxqb2UFYbkPn6f9lWSm3ixb113DSXdNvU 5JF7v8Mm7xFlnb2IYCwTNQ7eojS1+ewl20o/vNJ5xXH7r3g9HVXIXIC08Rkoc0HayOEL+pDqLVQm1m 1hiTd32fHiIPownlJp0LdE+0YhyAJHYa9X2VFnlgsTc8WA87O43yGy2Q0nkD9SiAbaLmR1IAK/6sRv ciQKq7l3+RJse92bmT3I8A4kLndMMZlzjy8c+wTpTW6zKM7wJFMSpu0USUiw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 07:53:39AM -0700,
-Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+Control Flow Integrity (CFI) instrumentation of the kernel noticed that
+the caller, dev_attr_show(), and the callback, odvp_show(), did not have
+matching function prototypes, which would cause a CFI exception to be
+raised. Correct the prototype by using struct device_attribute instead
+of struct kobj_attribute.
 
-> On 4/20/22 11:57 PM, Isaku Yamahata wrote:
-> > On Wed, Apr 20, 2022 at 07:42:06PM -0700,
-> > Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
-> > 
-> >    TDG.VP.VMCALL<GetQuote> API allows one TD to issue multiple requests. It's
-> >    implementation specific that how many concurrent requests are allowed. The TD
-> >    should be able to handle TDG.VP.VMCALL_RETRY if it chooses to issue multiple
-> >    requests simultaneously
-> 
-> Do you know why we should handle VMCALL_RETRY case? IIUC, as per
-> above spec, if each request we send uses different GPA buffer, then we
-> should not even worry about checking for IN_FLIGHT status. right?
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: linux-pm@vger.kernel.org
+Reported-and-tested-by: Joao Moreira <joao@overdrivepizza.com>
+Link: https://lore.kernel.org/lkml/067ce8bd4c3968054509831fa2347f4f@overdrivepizza.com/
+Fixes: 006f006f1e5c ("thermal/int340x_thermal: Export OEM vendor variables")
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Not correct.  User space  VMM, e.g. qemu, may return RETRY error for various
-reasons even if different GPAs are used or even if only single request is issued
-at the same time.  Other user space VMM (there are severals alternatives to qemu)
-would support TDX in future. They would choose different way to implement.
-
-
-Attestation driver should check IN_FLIGHT always before processing shared GPA.
-Interrupt notifies only that it needs attention from attestation driver.  It
-doesn't guarantee that IN_FLIGHT is cleared. Interrupt indicates only that the
-state may be changed.  It may not be changed.  VMM inject the iterrupt
-spuriously.
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index 4954800b9850..d97f496bab9b 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -68,7 +68,7 @@ static int evaluate_odvp(struct int3400_thermal_priv *priv);
+ struct odvp_attr {
+ 	int odvp;
+ 	struct int3400_thermal_priv *priv;
+-	struct kobj_attribute attr;
++	struct device_attribute attr;
+ };
+ 
+ static ssize_t data_vault_read(struct file *file, struct kobject *kobj,
+@@ -311,7 +311,7 @@ static int int3400_thermal_get_uuids(struct int3400_thermal_priv *priv)
+ 	return result;
+ }
+ 
+-static ssize_t odvp_show(struct kobject *kobj, struct kobj_attribute *attr,
++static ssize_t odvp_show(struct device *dev, struct device_attribute *attr,
+ 			 char *buf)
+ {
+ 	struct odvp_attr *odvp_attr;
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+2.32.0
+

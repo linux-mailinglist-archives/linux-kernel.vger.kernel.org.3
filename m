@@ -2,129 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9775350A31B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E57050A30E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389632AbiDUOtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
+        id S1389626AbiDUOtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350611AbiDUOth (ORCPT
+        with ESMTP id S1389341AbiDUOtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:49:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141B6427D7;
-        Thu, 21 Apr 2022 07:46:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A049B61A36;
-        Thu, 21 Apr 2022 14:46:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F2FC385A5;
-        Thu, 21 Apr 2022 14:46:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650552395;
-        bh=i0HMWq1JRa0F0CeO2hnG9SF3TuKwCFJPlYUxv+11vSY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KYNnxH1/6h4JHSpiitspdSKkTEwWa1tJBCwmto9ZMzu31V+JKmKgI743LDv+s34bq
-         QmSRKC+hHoCyn8rQMCoQYbCY9I4u1HRgIOm+Pz2OmA5gNIE7rXJyrAZQqUv9oA3TUQ
-         CVuRa/VFqB7epVLHtpWWZFuEw4IysfFmBo/cCYj+4wtcdzx74jW2LjnvsN+imBPGkx
-         NUHT9J1SbF8LbbqYNTV0fbd7NyddYgpQP9JQyBAmIQiZB0mHJDNoZgZMT3gNF6FO91
-         4nSd3Odf/kHuZoRH+pZi1kgbPYDKmWC6TMUEyESfHfKmh/QjbWYzrE2aZ/dN2sYGsU
-         NUgA5p8ikcvFQ==
-Received: by mail-wr1-f53.google.com with SMTP id p18so7030851wru.5;
-        Thu, 21 Apr 2022 07:46:34 -0700 (PDT)
-X-Gm-Message-State: AOAM532BY6WQ1dd6NyA20bzG0oGGSF6u3tYHeSPdcCHhlRa2PoQP/9tt
-        ZPLKxgM81JEfLwIb76smpKGFlV78Vct8FjsHnuI=
-X-Google-Smtp-Source: ABdhPJwYkraliZNB9aswBiexBZv/yC4YtGe2R9rvi1KW9m/P8YE/IbH0HzS9xhCUm+8mp8SN41/aSdFZNG1cTJqd71I=
-X-Received: by 2002:a5d:6da5:0:b0:20a:8805:6988 with SMTP id
- u5-20020a5d6da5000000b0020a88056988mr48774wrs.317.1650552393282; Thu, 21 Apr
- 2022 07:46:33 -0700 (PDT)
+        Thu, 21 Apr 2022 10:49:17 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76712253A
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:46:27 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id iq10so1396572pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:46:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=T0eW8wslz84hb8l3ajVs1uODly7DzBA5g8vw9TiMQg4=;
+        b=ZVX7th7rXfoSR88e3u33hPEHJaDKG4gE74opdCHLOgw+uCLlTVbNrQR2bXeEyR9koK
+         d+r86oC6+ZR59Qk/byJXsUN/PoB4mnPj/kWl8tgHByJsc2OW5u+CNAq4KK67D6izQmpV
+         oxZa/kc/zZLws8p5RpxH91ix6tQet3mEGUi97SpXqTleQ9cVRPCHBZ2OnnopaVslf+yp
+         uzR1eMh8iqwkuGuhSeDtkNkGdeia3fYbOpalNiX74xejuK8LPXhyVPNe9RGS+HSs8y0v
+         k4siBh4AZa+FJ2A4jzCqXatD3bFvg7haaIkEwGz4tXbQunAdVAOGA8L5nijjQ+sXQo6w
+         11gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T0eW8wslz84hb8l3ajVs1uODly7DzBA5g8vw9TiMQg4=;
+        b=DgzkmqslxffBErWu/o71pJsa46Uz/ca3es6cKv/MWl9mfkp73+KLhrIgY6vdgJ6j/T
+         9PxiWITMuR/Fe7ABbvv5ievxbnPL4506IukyKMQgThv91nylk1yBAHFZxXaKWKRuWgMd
+         3RVg5Tma2c2yKn7Bg0lhGjqrKPza/MYXJBE31FfOJ9Tz7sNgO6nIRVccUYcl5f17sXYi
+         iytdOIBPZlP63hFuOu9+Rwzzy6K72LRTtZnArBompNz0jJy19TKF3tD99hk13peS+t1J
+         A6D3UFNV81Int0HFZheFumlgdUS+xH/tU/8IPa7i5nawDIVhgW8W9c/fcc4LWG9FQjKP
+         eHiA==
+X-Gm-Message-State: AOAM531e22txkZesT5rCiGeJw9QHu+tFKe7lrMGumPP3yMjGLiNMEtIV
+        HdrzPfPWUGj7yQYpD9LX+apBjw==
+X-Google-Smtp-Source: ABdhPJyyC4XWzMYGFBSp0eyOLoQthv2TCc+r+u6ANhTWcBsnL3cHjy8j0Ol0Az1JSYiJXscCNNQgOw==
+X-Received: by 2002:a17:90b:4f44:b0:1d2:c5f4:1a8d with SMTP id pj4-20020a17090b4f4400b001d2c5f41a8dmr38780pjb.4.1650552387145;
+        Thu, 21 Apr 2022 07:46:27 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j19-20020a056a00235300b0050a858af58fsm14007109pfj.145.2022.04.21.07.46.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 07:46:26 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 14:46:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     Mingwei Zhang <mizhang@google.com>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KVM: SEV: Add cond_resched() to loop in
+ sev_clflush_pages()
+Message-ID: <YmFuP/J01eVJ4/8+@google.com>
+References: <20220330164306.2376085-1-pgonda@google.com>
+ <CAL715W+S-SJwXBhYO=_T-9uAPLt6cQ-Hn+_+ehefAh6+kQ_zOA@mail.gmail.com>
+ <YkYdlfYM/FWlMqMg@google.com>
+ <CAL715WLhy7EkJCyO7vzak3O8iw8GDRHkPF8aRtDedPXO1vx_Qw@mail.gmail.com>
+ <Yk3bSmQTspjZHUZf@google.com>
+ <CAMkAt6obVDW_LFvQzUYw6v7okiNq1KAbUOMoM3bN6zeJUGg6Xw@mail.gmail.com>
+ <Yl2IN6CHQzkts4XE@google.com>
+ <CAMkAt6qEazsM1qMbg3EaKHD3BD_xrUrqORqg4XmNu-aqGmK0iQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220419133723.1394715-1-arnd@kernel.org> <20220420170836.GB1947@darkstar.musicnaut.iki.fi>
- <CAK8P3a1+sOrn8BWPVc7f+QFZ5=7fE6=MLsMYV9t+HJcG2aRCXA@mail.gmail.com> <20220421133431.GE1947@darkstar.musicnaut.iki.fi>
-In-Reply-To: <20220421133431.GE1947@darkstar.musicnaut.iki.fi>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 21 Apr 2022 16:46:17 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0LkJ5EvJ13xtAhWzCKnnvYhYgKpPsphr1T-FGg6bzDuw@mail.gmail.com>
-Message-ID: <CAK8P3a0LkJ5EvJ13xtAhWzCKnnvYhYgKpPsphr1T-FGg6bzDuw@mail.gmail.com>
-Subject: Re: [PATCH 00/41] OMAP1 full multiplatform conversion
-To:     Aaro Koskinen <aaro.koskinen@iki.fi>
-Cc:     linux-omap <linux-omap@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Walmsley <paul@pwsan.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Mark Brown <broonie@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        dmaengine@vger.kernel.org,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMkAt6qEazsM1qMbg3EaKHD3BD_xrUrqORqg4XmNu-aqGmK0iQ@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 3:34 PM Aaro Koskinen <aaro.koskinen@iki.fi> wrote:
->
-> Hi,
->
-> On Wed, Apr 20, 2022 at 10:00:13PM +0200, Arnd Bergmann wrote:
-> > On Wed, Apr 20, 2022 at 7:08 PM Aaro Koskinen <aaro.koskinen@iki.fi> wrote:
-> > > On Tue, Apr 19, 2022 at 03:36:42PM +0200, Arnd Bergmann wrote:
-> > > > From: Arnd Bergmann <arnd@arndb.de>
-> > > >
-> > > > This is the full series for converting OMAP1 to multiplatform, rebased
-> > > > from my 2019 attempt to do the same thing. The soc tree contains simpler
-> > > > patches to do the same for iop32x, ixp4xx, ep93xx and s3c24xx, which
-> > > > means we are getting closer to completing this for all ARMv5 platforms
-> > > > (I have patches for PXA, which is the last one remaining).
-> > > >
-> > > > Janusz already tested the branch separately and did the missing work
-> > > > for the common-clk conversion after my previous approach was broken.
-> > >
-> > > I tested the full series on the following OMAP1 boards: ams-delta,
-> > > nokia770, osk, palmte and sx1 (QEMU only).
-> > >
-> > > Apart from the earlyprintk breakage, everything seemed to work OK.
+On Thu, Apr 21, 2022, Peter Gonda wrote:
+> On Mon, Apr 18, 2022 at 9:48 AM Sean Christopherson <seanjc@google.com> wrote:
 > >
-> > Nice, thanks a lot for testing!
->
-> With the updated patch 26 also earlyprintk now works, so if you still
-> update the patches, feel free to add for the whole series:
->
-> Tested-by: Aaro Koskinen <aaro.koskinen@iki.fi>
+> > On Wed, Apr 06, 2022, Peter Gonda wrote:
+> > > On Wed, Apr 6, 2022 at 12:26 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > >
+> > > > On Wed, Apr 06, 2022, Mingwei Zhang wrote:
+> > > > > Hi Sean,
+> > > > >
+> > > > > > > > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> > > > > > > > index 75fa6dd268f0..c2fe89ecdb2d 100644
+> > > > > > > > --- a/arch/x86/kvm/svm/sev.c
+> > > > > > > > +++ b/arch/x86/kvm/svm/sev.c
+> > > > > > > > @@ -465,6 +465,7 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
+> > > > > > > >                 page_virtual = kmap_atomic(pages[i]);
+> > > > > > > >                 clflush_cache_range(page_virtual, PAGE_SIZE);
+> > > > > > > >                 kunmap_atomic(page_virtual);
+> > > > > > > > +               cond_resched();
+> > > > > > >
+> > > > > > > If you add cond_resched() here, the frequency (once per 4K) might be
+> > > > > > > too high. You may want to do it once per X pages, where X could be
+> > > > > > > something like 1G/4K?
+> > > > > >
+> > > > > > No, every iteration is perfectly ok.  The "cond"itional part means that this will
+> > > > > > reschedule if and only if it actually needs to be rescheduled, e.g. if the task's
+> > > > > > timeslice as expired.  The check for a needed reschedule is cheap, using
+> > > > > > cond_resched() in tight-ish loops is ok and intended, e.g. KVM does a reched
+> > > > > > check prior to enterring the guest.
+> > > > >
+> > > > > Double check on the code again. I think the point is not about flag
+> > > > > checking. Obviously branch prediction could really help. The point I
+> > > > > think is the 'call' to cond_resched(). Depending on the kernel
+> > > > > configuration, cond_resched() may not always be inlined, at least this
+> > > > > is my understanding so far? So if that is true, then it still might
+> > > > > not always be the best to call cond_resched() that often.
+> > > >
+> > > > Eh, compared to the cost of 64 back-to-back CLFLUSHOPTs, the cost of __cond_resched()
+> > > > is peanuts.  Even accounting for the rcu_all_qs() work, it's still dwarfed by the
+> > > > cost of flushing data from the cache.  E.g. based on Agner Fog's wonderful uop
+> > > > latencies[*], the actual flush time for a single page is going to be upwards of
+> > > > 10k cycles, whereas __cond_resched() is going to well under 100 cycles in the happy
+> > > > case of no work.  Even if those throughput numbers are off by an order of magnitude,
+> > > > e.g. CLFLUSHOPT can complete in 15 cycles, that's still ~1k cycles.
+> > > >
+> > > > Peter, don't we also theoretically need cond_resched() in the loops in
+> > > > sev_launch_update_data()?  AFAICT, there's no articifical restriction on the size
+> > > > of the payload, i.e. the kernel is effectively relying on userspace to not update
+> > > > large swaths of memory.
+> > >
+> > > Yea we probably do want to cond_resched() in the for loop inside of
+> > > sev_launch_update_data(). Ithink in  sev_dbg_crypt() userspace could
+> > > request a large number of pages to be decrypted/encrypted for
+> > > debugging but se have a call to sev_pin_memory() in the loop so that
+> > > will have a cond_resded() inside of __get_users_pages(). Or should we
+> > > have a cond_resded() inside of the loop in sev_dbg_crypt() too?
+> >
+> > I believe sev_dbg_crypt() needs a cond_resched() of its own, sev_pin_memory()
+> > isn't guaranteed to get into the slow path of internal_get_user_pages_fast().
+> 
+> Ah, understood thanks. I'll send out patches for those two paths. I
+> personally haven't seen any warning logs from them though.
 
-I was just doing the merge, so I added the tag to the commit now.
-
-There is now an "omap1/multiplatform-prep" branch that is part of
-arm/multiplatform, and I hope to not have to rebase that. I also
-have an arm/multiplatform-late branch with the remaining contents.
-
-       Arnd
+Do you have test cases that deliberately attempt to decrypt+read pages upon pages
+of guest memory at a time?  Unless someone has wired up a VMM to do a full dump
+of guest memory, I highly doubt a "real" VMM will do more than read a handful of
+bytes at a time.

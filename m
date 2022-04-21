@@ -2,154 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6FB50A08A
+	by mail.lfdr.de (Postfix) with ESMTP id 50AC050A089
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiDUNRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
+        id S231352AbiDUNSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbiDUNRt (ORCPT
+        with ESMTP id S231272AbiDUNSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:17:49 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2044.outbound.protection.outlook.com [40.107.92.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511862BF3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:14:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n7QwiIPI2e+Cycic6NR+/ndf2/tvO5BK+iDcaM51Zrtrn7WcBQNeYFpFABthbmNAOuF5q4oXzX2mVrK9tCiE1XeLLRtEFd/fGy6U6t9xlCFlu+RiVoFsFe48JZNm0zfs5ouR5hifR1Gj+Oa1G7KURjr2++Lm6eNiCOEOQ/rEQ96uaweTT5nfSy7+IiO6k1jLImFZhXkV9Pi1OZrS6/g4oXDLhwqQtRCKsg8cYZZzZB4zcTLn1ENTVVKQ8cTgxHwoUjw+V3gINzCpVjAcms02JGNqKPebJD8/w2gQDWtvNrF2OJTiiockT5hXao8MzzBl69LvH2dN/e9L2//8rlZcsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HRQn0dgBP5sM1QNKK1D+MOvlpEqxFiAjTN7Dx3EFuM8=;
- b=Y0JI94c7H2JP/CEQpRc4TL3vjvO+eabOk4Lu9DeUPrkz9zt1h0Tt6TkNpjwa41id0fX6xDFAj/yxJ4vuzdmI/8WdFAqwJidGz/xHHDic9gSaipXSWHhwnuvmcXTJ6wzZ1MXvVAJqVksiZvtVY05+2nxiH8XDaW71XkJYg4wRUlyGNHl1ahpR7K+dELjiujvnpj2oREVSFzUKNOH6fYiPGjjQloJ9un6Qs4aTww1DiVY6ToP1zteSCdD/aGSrogc1Hhh4IwK26arKKC1NJtoMLMQGS8BfjOZxJludfHfEqhdmDHMr6lJlbzSf9bGjpi7mLguuB5JOYRNqcu6+JYcPxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HRQn0dgBP5sM1QNKK1D+MOvlpEqxFiAjTN7Dx3EFuM8=;
- b=S/Izomt1bpLcREStPoKeGBq63IoT+5MxXL385r6bUWLaxGfiCeQGSko0R7+T4g44TpaZYJcrsIv9I+TJ3Z5t0OPfH31A3P/j3R2XnYCIqPyoPEDQ4KV5UkJCS2yjXv58Q/9xwcMBlpb4iB4N1fVEVIgdD+WVfcLlBNfjfUO56r4H7T0XF98fM8pSaJ08RQLpbruGKjBhDY438qhXotWM6I71Cf4arSBHa30KQOMW8zs+xYjzrKM20aU/zUE6z+p0agdgJAS/kMYXwHXlfdECXnMLeYCak4eAxzDYlERXvjqZiYUtS62R+08FvMJASWc8J9+zfF7iDXysokHlnDbAzg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM5PR1201MB0057.namprd12.prod.outlook.com (2603:10b6:4:5b::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Thu, 21 Apr
- 2022 13:14:56 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%6]) with mapi id 15.20.5186.015; Thu, 21 Apr 2022
- 13:14:56 +0000
-Date:   Thu, 21 Apr 2022 10:14:54 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, christian.koenig@amd.com,
-        jhubbard@nvidia.com, rcampbell@nvidia.com
-Subject: Re: [PATCH v2] mm/mmu_notifier.c: Fix race in
- mmu_interval_notifier_remove()
-Message-ID: <20220421131454.GG2120790@nvidia.com>
-References: <20220420043734.476348-1-apopple@nvidia.com>
- <20220420151142.f60307e749033a24ef0c68d5@linux-foundation.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420151142.f60307e749033a24ef0c68d5@linux-foundation.org>
-X-ClientProxiedBy: BLAPR03CA0126.namprd03.prod.outlook.com
- (2603:10b6:208:32e::11) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 21 Apr 2022 09:18:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 531576394
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:15:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650546922;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XJ+q4BlTQtZT3BUqYMUruPECm6TJtmAxu5VYqnXrhVE=;
+        b=D8F/v7+FKJcFga7jm+hIhK0MyMAM1Vct1RgjH/BvFqIK/hvDH9xPoXv5iAyKBup3OSKbcg
+        KUzghd3Z58i6qbcC9cL6qblVBWk/AaE5xtB4nEaCSaxUBjQ+QwtuoMKyA+xubRaoqzVlW1
+        H5HoUpd6wUWnk8YZ6y9OC2B02/yuhrA=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-227-WGQlI761MymHaco9woVT2A-1; Thu, 21 Apr 2022 09:15:21 -0400
+X-MC-Unique: WGQlI761MymHaco9woVT2A-1
+Received: by mail-qv1-f72.google.com with SMTP id o12-20020a0562140e4c00b0044a67ef728dso3520460qvc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:15:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XJ+q4BlTQtZT3BUqYMUruPECm6TJtmAxu5VYqnXrhVE=;
+        b=YVO1jF7K1mc1IP1fOpNoBQjTnPyI04oV9/jTE3jWnOdONiYaeskdL1EWOno99Q8dI4
+         RdKTPxgNWpFJu1XczcivDXEUchic5lEmbFBZS7LEMrXXVGV0cadSP+zbSfI0WVOiSI9l
+         09U8N2LSS1j4oxGcTPIFTDQSL0a/DMlSzigPGe7EhODlij9W9K26KM/8zKxC2C+BL309
+         lBA6pZvw4sMHNgV0BFIzTfYcYTp6rGv76G51udi1LmJi/UGUAFmSvPsYEyTifP7n/imx
+         rzorYKr2nY2XzXBL6KixjHAzQFPXIjzKNbbzOrYwVmklWQr28ACp5MqFWhxLFomXEVif
+         sFpQ==
+X-Gm-Message-State: AOAM531s39z0NAQaQeINRlvLfBTxOp6uh4lw8dmCFiRQEYgPuWNuIQhz
+        LIMbeXT6k9DT3syN/EuMV6LE1qCxvSKn+N5GqAtvD77vjXfAiLTSRWa7xR4g7QjLkL4pzJuWWlN
+        YP7XhIloMPUr55FlRoapcnuk+
+X-Received: by 2002:a05:620a:4093:b0:69c:fda:3cf2 with SMTP id f19-20020a05620a409300b0069c0fda3cf2mr15404143qko.245.1650546920743;
+        Thu, 21 Apr 2022 06:15:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx1p460pSQsriY5we0lc7aVE2SA3Un1gDznPdW1XSStmWduRojaJ0UnG57Ylk7u7lLp/dyJdg==
+X-Received: by 2002:a05:620a:4093:b0:69c:fda:3cf2 with SMTP id f19-20020a05620a409300b0069c0fda3cf2mr15404128qko.245.1650546920553;
+        Thu, 21 Apr 2022 06:15:20 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id v3-20020a05622a014300b002e1dcd4cfa9sm3868302qtw.64.2022.04.21.06.15.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 06:15:19 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     robdclark@gmail.com, sean@poorly.run, quic_abhinavk@quicinc.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/msm: change msm_sched_ops from global to static
+Date:   Thu, 21 Apr 2022 09:15:07 -0400
+Message-Id: <20220421131507.1557667-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f6ede226-091f-4cff-0088-08da2398edce
-X-MS-TrafficTypeDiagnostic: DM5PR1201MB0057:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR1201MB0057E27EE953820F327BC222C2F49@DM5PR1201MB0057.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3v9ODD9wOB8mGoNWzclZUcut1XjrirCk/rzALuJ4TJv8yiws2RbJ+oVG/YuKMjYY5fXfCFjMD7Fbgq2z5tLPcwpzkTwb9qHJ+3xyJz0hzgpjnBT9FFuoLaFeKUrqieeBxi/OvLINqgI9je17LG01dzHSH3KX/1usACKtRcSOUjX3bqDUQYIdsBqcRpxYe65woHO9eJJpqU2ehvwj5qx2tIcYnXb9LKCeqNNkkDPbRQXIKYnnjo7CF0NW9ck4cHwjwL4zITdUYzPoW3v8LdorQRMymmfSBz11jph2tFLJniZ0ehGaS2Pt+SjiWy3ni5FKQfAt+uowzZBZ7GGjjstcGRhbjNHnussaKjH+a7GZdjsBNYh6gAjMEKvjfJWJbFRmEsBNhPfMLOnEHVEmcKndfVm/Z1W5rMwW0E1NK6mQYwmck1mwxeaua6kZnSkd6Rb3YzrVERJJmbfVoij7quj2mSfhQvQYrMd8AhKowq6hdyptqAh2MgjDqtXIy77JaS+19j/ClDFl9tWE/6WZyjdwHxlbrV2lGSqbiE5jsdXyCNAOdaPtN91VGVsZiyUJUUoMpxK8B8qL92dI6HZ6fE3A+Sp2UMLIANNNo05SU0Z0fv9fCxPL8+HzBuKW/ajbp3mBVR2ytybrRcDzSdLwcE21tA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(2616005)(6486002)(186003)(107886003)(508600001)(26005)(1076003)(66556008)(66476007)(86362001)(66946007)(8676002)(4326008)(6512007)(6916009)(2906002)(316002)(38100700002)(33656002)(5660300002)(36756003)(83380400001)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uKjiTAoGvn+0QNKyI2GVfA0mod5ks4Z+ABMKX0zUZVBTQ6EWbCLuo+7Hg16Z?=
- =?us-ascii?Q?iLj2A4dk/2FJkloxDVbZUbVhj/P/nibn/WuTaEuDi0jD8z3l21cyi8EKDQOO?=
- =?us-ascii?Q?CgvCpwIL62fcIE3tGQ+nuhZFA7njqUeJu5JsKzz8OVQOKGdfX6tyVL4TS9aa?=
- =?us-ascii?Q?B5jwEGv2ZlRJuefHXHGmaj2Po05V1wzG2CDJq7aj43qFc0rVt38JKnFlFoSh?=
- =?us-ascii?Q?jox5/IA7BmlGjC4wNITDEGWt33XS5VeOeDd259sBeq6sfuM3ZVaP+S4jWIOl?=
- =?us-ascii?Q?JSYGDUu6eMjgFaDSfS5CHwTD9KbpDIK7tuzodkTN2qp/XEDGxefDa23VEnPz?=
- =?us-ascii?Q?llw9mJTBxUukYe1Oxyc2ySnUJXirxvvNFQkdfjDTjgEbASRNuuxHF8TFpnBK?=
- =?us-ascii?Q?Qo/VNFLt43qga3l4G2g/SCsh62P4PQulONWOCt7xO3+1WaS2aSKML1zVfrwV?=
- =?us-ascii?Q?4XqlVC2S7hZyYUGe1YAEJXXD0so8okVl8ZMqFG37VWLcmzCzV056MVZcKAgV?=
- =?us-ascii?Q?U9U2wYHNaSUuN0KewQnYa6T/JkFC68ZZHVJ7VIOMlBtq88AnAprC+NyGPGmr?=
- =?us-ascii?Q?ihXQsVPHAMxCWBjMfAdhedbfag2klAK2vi7+2YIpyRozjGglrRy5Px3DCYZP?=
- =?us-ascii?Q?CU+jAKWd92Dbp9fSQIbyj3msyNE0+jVImwAsb5ByqG/Hw1+hhSNy6mlmjA2E?=
- =?us-ascii?Q?icgVTME8vzbIrjkb28hJ8dov+ZiEd3FIJrCnu19nOZ/DwPR7LJW1Q9TLX71K?=
- =?us-ascii?Q?/gN/xlmSDNoMjdq/qnuJJBicFHJtoR14d5odEa4HhKy/vGDXdLuu7rHDUCNM?=
- =?us-ascii?Q?2qJRlsK00H5FEKDIsr5uK4Wx0WpwAeKwT5KLjDryLAqSxC3Gd95mHVPlI4Yb?=
- =?us-ascii?Q?TEO4PSqc1/A4rJbgTHE6WNmUC8ABEnubFfEDWErepL9pvwuwibkxKL7PzrWC?=
- =?us-ascii?Q?NJN/LpZ3pzSL/faqvGRjbEkyc9HWCg6yQjp+ughSTk6VlCOStfwmG3gWhw27?=
- =?us-ascii?Q?FeL15Z7/o9OOWv5Jo7AVhr8qJBDFvLwmja9aqKTNbxwGgODJPjJ7z17kArNk?=
- =?us-ascii?Q?Q7HiyiYKsNQotWkt+bIeAUyynIoX3uuzBgY2wDIva4YQoFD60KvgGzgxon7m?=
- =?us-ascii?Q?zAbikMnZ5VnNCAD7p+HgrM4YQ0+1UShZZpOia0zJ312ay9nd+YKviAPa42JL?=
- =?us-ascii?Q?cyWz8gUc+PTa4mjmioVGWbp5HOWEk+t0ja90KmY+O3VteLowlXkLaI81r6WU?=
- =?us-ascii?Q?TGtcPelevGIi7Ckplm5OJUrNlhWv2NJ9iSYokpXI39gclzr54o0g4fI/nk9A?=
- =?us-ascii?Q?o9diMNwfVeyBEZm4tkyPXexX7nasTFX2BktUblToqKBNjtVyT/reBdKDE9AM?=
- =?us-ascii?Q?sBi2V+tgxcRiPv3uKI30+YAyQLZV0Qru7Ncn2Vpj9nUnp8smYUWhEy1Peepm?=
- =?us-ascii?Q?oSnvKMuN+Q7wxXJ10ruJCWogfLLkRGP12g2FXAobQ1vxIACMEysN4wpKaz8n?=
- =?us-ascii?Q?g0F1nQjouN4eqUUVRBYtBtjg7K73pV9Orsrw07CxPkTzhEU2n6mnlnNd73h3?=
- =?us-ascii?Q?dTUQ1QcyEsb2aZ05XGNKG4Kjfo2BX5/dXsCYDKMLsHtH57UyZGGP4us0Rr07?=
- =?us-ascii?Q?FSS0vpEE6knd5OchPKLHTH7Ez8kd/8+kf1QfsdCwsFN5fycNOHGZetgJBqrE?=
- =?us-ascii?Q?HaVjhrj0ljjVFYYjievIVFayzzC8Dtf76NaQbzpEPhS5vanRH1vmB0uB7UAO?=
- =?us-ascii?Q?H85TCFIzkQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6ede226-091f-4cff-0088-08da2398edce
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2022 13:14:56.1172
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tufWCMuSBCm0T3xuux+KkXdM+8fAjtX7EpdV3ZnAZn0MR+keD/16AZuNBt0ckL8f
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0057
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 03:11:42PM -0700, Andrew Morton wrote:
-> On Wed, 20 Apr 2022 14:37:34 +1000 Alistair Popple <apopple@nvidia.com> wrote:
-> 
-> > In some cases it is possible for mmu_interval_notifier_remove() to race
-> > with mn_tree_inv_end() allowing it to return while the notifier data
-> > structure is still in use. Consider the following sequence:
-> > 
-> > CPU0 - mn_tree_inv_end()            CPU1 - mmu_interval_notifier_remove()
-> >                                     spin_lock(subscriptions->lock);
-> >                                     seq = subscriptions->invalidate_seq;
-> > spin_lock(subscriptions->lock);     spin_unlock(subscriptions->lock);
-> > subscriptions->invalidate_seq++;
-> >                                     wait_event(invalidate_seq != seq);
-> >                                     return;
-> > interval_tree_remove(interval_sub); kfree(interval_sub);
-> > spin_unlock(subscriptions->lock);
-> > wake_up_all();
-> > 
-> > As the wait_event() condition is true it will return immediately. This
-> > can lead to use-after-free type errors if the caller frees the data
-> > structure containing the interval notifier subscription while it is
-> > still on a deferred list. Fix this by taking the appropriate lock when
-> > reading invalidate_seq to ensure proper synchronisation.
-> > 
-> > ...
-> >
-> > Fixes: 99cb252f5e68 ("mm/mmu_notifier: add an interval tree notifier")
-> 
-> Do you think fix this should be backported into older kernels?
+Smatch reports this issue
+msm_ringbuffer.c:43:36: warning: symbol 'msm_sched_ops' was not declared. Should it be static?
 
-I think it should be tagged stable, yes
+msm_sched_ops is only used in msm_ringbuffer.c so change its
+storage-class specifier to static.
 
-Jason
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/msm/msm_ringbuffer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.c b/drivers/gpu/drm/msm/msm_ringbuffer.c
+index 367a6aaa3a20..66f4ec09ef67 100644
+--- a/drivers/gpu/drm/msm/msm_ringbuffer.c
++++ b/drivers/gpu/drm/msm/msm_ringbuffer.c
+@@ -40,7 +40,7 @@ static void msm_job_free(struct drm_sched_job *job)
+ 	msm_gem_submit_put(submit);
+ }
+ 
+-const struct drm_sched_backend_ops msm_sched_ops = {
++static const struct drm_sched_backend_ops msm_sched_ops = {
+ 	.run_job = msm_job_run,
+ 	.free_job = msm_job_free
+ };
+-- 
+2.27.0
+

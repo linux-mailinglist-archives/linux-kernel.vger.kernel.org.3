@@ -2,106 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997FA509CBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F46B509CBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387866AbiDUJuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S1349320AbiDUJur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387823AbiDUJu1 (ORCPT
+        with ESMTP id S1387854AbiDUJun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:50:27 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF13245BE;
-        Thu, 21 Apr 2022 02:47:37 -0700 (PDT)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Thu, 21 Apr
- 2022 17:47:34 +0800
-Message-ID: <3c7e9ce4-4c01-4289-2ccd-7050774990fb@amlogic.com>
-Date:   Thu, 21 Apr 2022 17:47:34 +0800
+        Thu, 21 Apr 2022 05:50:43 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC17275E5;
+        Thu, 21 Apr 2022 02:47:53 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id k29so4177693pgm.12;
+        Thu, 21 Apr 2022 02:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=lyWO8pI/iZL3pBCIc8iGOQ7+JToyR5F2j32rII4xAew=;
+        b=c0gv7Cnxk0OHBkuP2DwEJeHnHhMtv7rbNbQXxDkgpxcDcsqHJpeP6cnivE4wL82xVn
+         HRVrWF+J98+ATJf3b6C9CFtxsbBThsPTi0gMkBoaVMfMMqQvNFGHBTCJrbJbrUtiOGrQ
+         WFU1ey9FhcQ4iLkh/b/KNXtEEEPYhbIWmuHengFh49Rz+RMvO/qe929Kw1S3DUoG/UGm
+         BfUXn3i7FxU6wJXTPH2NKEU8b7ngLILY52TFemea2Q/7/UgaBDjdli1u99pKVXpnKpna
+         pbvOsnPcL9/R57sW4YO8RI52ip7+1Pk3GyQwf+s+1MS5QPG37dqI6YkVlVAV0+xY5fSE
+         ueQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=lyWO8pI/iZL3pBCIc8iGOQ7+JToyR5F2j32rII4xAew=;
+        b=uPSdFynWxoddQEuGIPuqYliW5yTd0kI/7BaVtsCQEyQBX8OTZra06+2pqvB8ZSUT2y
+         uq1E78Z3Wy+GyFPTU3MlcIgkzP02g87vv68jRnFRMZvIefZtG/Eo7PU4iNiTSaCbGG8A
+         NnQucPRRyt+q1NuFDY1tM6qmuR7MVOL+U+B2GLgTTwOv2vfl7Egw1/U1iacLnAvwi0cX
+         bxSNurhsF47Nt4xqRb0j6U75z/g+9WCTD1dcIK8Nn/1hBgzY7mE3gqMH0Uocl+pMINww
+         FZjfttte76iJu33cpJNQGb3/SFFQSPp9YtPR9CXaCUSWAIVdEVAKih/PptJlqAyjBgUq
+         yM7w==
+X-Gm-Message-State: AOAM533J9cJu5mU5svllH+gpddvGOVgPVNAuQNPepvqtWhKhbvd34Hh1
+        WQTeUaBfq4TsW9qwnLFchAc=
+X-Google-Smtp-Source: ABdhPJwqQVk0NLfWe71VgxEX8jGq+J8cb/1K6tUorOoMgwYIFLGuD4VSp0pC02lD9Oy9JEg9hTb9yA==
+X-Received: by 2002:a05:6a00:2444:b0:4fd:db81:cbdd with SMTP id d4-20020a056a00244400b004fddb81cbddmr27840130pfj.32.1650534472608;
+        Thu, 21 Apr 2022 02:47:52 -0700 (PDT)
+Received: from localhost (193-116-116-20.tpgi.com.au. [193.116.116.20])
+        by smtp.gmail.com with ESMTPSA id t18-20020a17090ae51200b001cd4989fec6sm2044542pjy.18.2022.04.21.02.47.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 02:47:52 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 19:47:47 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "ast@kernel.org" <ast@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "dborkman@redhat.com" <dborkman@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "song@kernel.org" <song@kernel.org>,
+        Song Liu <songliubraving@fb.com>
+References: <20220415164413.2727220-1-song@kernel.org>
+        <YlnCBqNWxSm3M3xB@bombadil.infradead.org> <YlpPW9SdCbZnLVog@infradead.org>
+        <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
+        <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
+        <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com> <Yl04LO/PfB3GocvU@kernel.org>
+        <Yl4F4w5NY3v0icfx@bombadil.infradead.org>
+        <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
+        <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com> <Yl8CicJGHpTrOK8m@kernel.org>
+        <CAHk-=wh6um5AFR6TObsYY0v+jUSZxReiZM_5Kh4gAMU8Z8-jVw@mail.gmail.com>
+        <1650511496.iys9nxdueb.astroid@bobo.none>
+        <CAHk-=wiQ5=S3m2+xRbm-1H8fuQwWfQxnO7tHhKg8FjegxzdVaQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wiQ5=S3m2+xRbm-1H8fuQwWfQxnO7tHhKg8FjegxzdVaQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V2 2/2] tty: serial: meson: Added S4 SOC compatibility
-Content-Language: en-US
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-CC:     Jiri Slaby <jirislaby@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220418053202.24528-1-yu.tu@amlogic.com>
- <20220418053202.24528-3-yu.tu@amlogic.com>
- <3f5df9df-7699-7210-6253-4dd03f4444a0@baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <3f5df9df-7699-7210-6253-4dd03f4444a0@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <1650533246.j8team32e9.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/4/21 16:49, Neil Armstrong wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On 18/04/2022 07:32, Yu Tu wrote:
->> Make UART driver compatible with S4 SOC UART. Meanwhile, the S4 SOC
->> UART uses 12MHz as the clock source for baud rate calculations.
+Excerpts from Linus Torvalds's message of April 21, 2022 3:48 pm:
+> On Wed, Apr 20, 2022 at 8:25 PM Nicholas Piggin <npiggin@gmail.com> wrote=
+:
 >>
->> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->> ---
->>   drivers/tty/serial/meson_uart.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/tty/serial/meson_uart.c 
->> b/drivers/tty/serial/meson_uart.c
->> index 58bd2723c004..43941f21735f 100644
->> --- a/drivers/tty/serial/meson_uart.c
->> +++ b/drivers/tty/serial/meson_uart.c
->> @@ -790,11 +790,19 @@ static int meson_uart_remove(struct 
->> platform_device *pdev)
->>       return 0;
->>   }
->> +static struct meson_uart_data s4_uart_date = {
-> 
-> Should be s4_uart_data instead of s4_uart_date
-> 
-I will prepare the next version and  correct it.
->> +    .has_xtal_div2 = true,
->> +};
->> +
->>   static const struct of_device_id meson_uart_dt_match[] = {
->>       { .compatible = "amlogic,meson6-uart" },
->>       { .compatible = "amlogic,meson8-uart" },
->>       { .compatible = "amlogic,meson8b-uart" },
->>       { .compatible = "amlogic,meson-gx-uart" },
->> +    {
->> +        .compatible = "amlogic,meson-s4-uart",
->> +        .data = (void *)&s4_uart_date,
-> 
-> Here same
-> 
->> +    },
->>       { /* sentinel */ },
->>   };
->>   MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
-> With this change, it's fine for me.
-> 
-> Neil
-> 
-> .
+>> Why not just revert fac54e2bfb5b ?
+>=20
+> That would be stupid, with no sane way forward.
+
+Oh I missed this comment. Now I'm completely confused. Reverting the
+patch which caused the breakage *is* the sane way forward. Your tree
+is not broken after that so you're done.
+
+And if x86 wanted to select HUGE_VMALLOC in future then it can do so
+after fixing the issues it has with it, so that's that the sane way
+forward for that.
+
+What you have now is what's insane. HAVE_ARCH_HUGE_VMALLOC now means
+"you can ask for huge pages but it might crash in undocumented=20
+arch-specific circumstances so good luck".
+
+Thanks,
+Nick

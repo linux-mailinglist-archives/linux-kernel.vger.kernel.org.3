@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74B7509633
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 07:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084B350962A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 07:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384168AbiDUFEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 01:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
+        id S1384196AbiDUFEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 01:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384167AbiDUFEf (ORCPT
+        with ESMTP id S1384175AbiDUFEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 01:04:35 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C40B86C;
-        Wed, 20 Apr 2022 22:01:47 -0700 (PDT)
+        Thu, 21 Apr 2022 01:04:42 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D619B12774;
+        Wed, 20 Apr 2022 22:01:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650517307; x=1682053307;
+  t=1650517313; x=1682053313;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=atAaLcNi8LQwDpGmuQ1HkXYw/QZJ0xMo9WdOs01AvDY=;
-  b=wJUBW8azTCvWPrw9RezEH8XXm/4l9oOvVXcQEtz0r9IeQebuYUNOdX39
-   b2al4c+RahXytCryxAstUH1RLsOyZomlmoxOSQN3M9jnosPS9JQDtWz6b
-   ErqTT0DMo4rFeBUh2E9dOS+Zo31IyoHhjJ93HOMHJunwtIU471DyDPBt4
-   0=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Apr 2022 22:01:46 -0700
+  bh=BCRZxfN5u5JLU9Zt+mjsZ9L8T/2RoTAfKmMcjDuvmm0=;
+  b=imp7AhXgCGASsPNP+c3iM+SyNhBATW9MLvUvXHtWv53eUA9ygE4YvXMh
+   G9nGHEB/PpIUZaVwO1/sZppnHDCXEURxzJH7Bg6S6//jlCUnRnqDn0Kq8
+   o33ghGKrmsUBArBBH6RLd55JbYlZnOoLp+3fIRtoe5KPy+zVVqB19Ezal
+   Q=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 20 Apr 2022 22:01:52 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 22:01:46 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 22:01:51 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Apr 2022 22:01:45 -0700
+ 15.2.986.22; Wed, 20 Apr 2022 22:01:51 -0700
 Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Apr 2022 22:01:40 -0700
+ 15.2.986.22; Wed, 20 Apr 2022 22:01:45 -0700
 From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -52,9 +52,9 @@ CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
         <quic_kriskura@quicinc.com>, <quic_vpulyala@quicinc.com>,
         Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v4 1/3] dt-bindings: usb: usb-xhci: Add bindings for usb-skip-phy-init property
-Date:   Thu, 21 Apr 2022 10:30:53 +0530
-Message-ID: <1650517255-4871-2-git-send-email-quic_c_sanm@quicinc.com>
+Subject: [PATCH v4 2/3] usb: host: xhci-plat: Add device property to set XHCI_SKIP_PHY_INIT quirk
+Date:   Thu, 21 Apr 2022 10:30:54 +0530
+Message-ID: <1650517255-4871-3-git-send-email-quic_c_sanm@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1650517255-4871-1-git-send-email-quic_c_sanm@quicinc.com>
 References: <1650517255-4871-1-git-send-email-quic_c_sanm@quicinc.com>
@@ -63,16 +63,17 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding bindings for usb-skip-phy-init property.
+Add device property usb-skip-phy-init to check and set XHCI_SKIP_PHY_INIT
+quirk.
 Runtime suspend of phy drivers was failing from DWC3 driver as
 runtime usage value is 2 because the phy is initialized from
 DWC3 core and HCD core.
@@ -81,24 +82,23 @@ This property can be set to avoid phy initialization in HCD core.
 
 Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 ---
- Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/usb/host/xhci-plat.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.yaml b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
-index 965f87f..a64d29f 100644
---- a/Documentation/devicetree/bindings/usb/usb-xhci.yaml
-+++ b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
-@@ -25,6 +25,10 @@ properties:
-     description: Set if the controller has broken port disable mechanism
-     type: boolean
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 649ffd8..7624ed9 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -305,6 +305,9 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
+ 			xhci->quirks |= XHCI_BROKEN_PORT_PED;
  
-+  usb-skip-phy-init:
-+    description: Set if the phy initialization is managed by controller
-+    type: boolean
++		if (device_property_read_bool(tmpdev, "usb-skip-phy-init"))
++			xhci->quirks |= XHCI_SKIP_PHY_INIT;
 +
-   imod-interval-ns:
-     description: Interrupt moderation interval
-     default: 5000
+ 		device_property_read_u32(tmpdev, "imod-interval-ns",
+ 					 &xhci->imod_interval);
+ 	}
 -- 
 2.7.4
 

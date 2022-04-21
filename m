@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C1150A2F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E51050A2F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389588AbiDUOrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
+        id S1389586AbiDUOrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389579AbiDUOrH (ORCPT
+        with ESMTP id S1389582AbiDUOrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:47:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A27341F8B
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:44:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46157B825B6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 14:44:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB93C385A5;
-        Thu, 21 Apr 2022 14:44:12 +0000 (UTC)
-Date:   Thu, 21 Apr 2022 15:44:08 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <YmFtuJmdMZcsoWnO@arm.com>
-References: <YlxAo5BAy+ARlvqj@arm.com>
- <Yl0jPdfdUkaStDN5@gondor.apana.org.au>
- <Yl2Vda/8S7qAvMjC@arm.com>
- <CAMj1kXEGdPageO3tb2=eLnGAR9-nZtmTGXcGf5CiTQFC4JiXOg@mail.gmail.com>
- <CAK8P3a1+GqbO5Kgf70nmR8rQg5OaLBsFZJWaOLuS7JRqXb-ZNA@mail.gmail.com>
- <YmEFttLxGbyJx8LK@infradead.org>
- <YmE60ufokRCYOj8W@arm.com>
- <CAK8P3a34UTmJ5Tn2vbFaJjQrvO-G5LJOqe_6oQwR6zp+PJ8fjA@mail.gmail.com>
- <YmFbQiSFyQ+W85Zx@arm.com>
- <CAK8P3a28NuZE628f1Bga_-gGSpHnPFx=2cBW0oDW4MFAzCSb+w@mail.gmail.com>
+        Thu, 21 Apr 2022 10:47:14 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C8742488;
+        Thu, 21 Apr 2022 07:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650552263; x=1682088263;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8nROONmBaEtt0RwaLOJXl6s8nLCzEBixvAjQNvvsvHE=;
+  b=EhghRW3dbujf4YwyJxcd+vYecJ+iRh/2lYh8rOhnWI2yTiYzPks8CLMN
+   ApzHq1gU1N1qw1zMBFgQCDlyigtzQff33e4S7HWcyX2lO8BUM3h0cHV5Z
+   88Ct1XLEtShImi7aqpArkcJ4AEuEWBedickrOfW0EeafkNZscxqO6YeZz
+   AX3dhhiw+clEkZMSK8XSDkNGItCNZXFCHSScr5KfMHTWNv3xBa7OaDzgQ
+   XuYjciPrxvWZtx1gBido3j3E96VtPQ1Q0rcqk17cWJR/AETLwur544QTk
+   1FP+l4awRPY9ksTsgfymhMxBWf9aoXmlMHbuvW0Wg7keeztNWWJnmY10o
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263216560"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="263216560"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 07:44:20 -0700
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="511093185"
+Received: from testes-mobl1.amr.corp.intel.com (HELO [10.212.210.35]) ([10.212.210.35])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 07:44:19 -0700
+Message-ID: <70436892-0b4f-30c5-051b-2c86f7387101@linux.intel.com>
+Date:   Thu, 21 Apr 2022 07:44:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a28NuZE628f1Bga_-gGSpHnPFx=2cBW0oDW4MFAzCSb+w@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+Content-Language: en-US
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220420012032.GA2224031@ls.amr.corp.intel.com>
+ <dd4a2b16-397e-8866-0fd5-b5c5dfd453ab@linux.intel.com>
+ <20220421070444.GB1423762@private.email.ne.jp>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220421070444.GB1423762@private.email.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 03:47:30PM +0200, Arnd Bergmann wrote:
-> On Thu, Apr 21, 2022 at 3:25 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > On Thu, Apr 21, 2022 at 02:28:45PM +0200, Arnd Bergmann wrote:
-> > > We also know that larger slabs are all cacheline aligned, so simply
-> > > comparing the transfer size is enough to rule out most, in this case
-> > > any transfer larger than 96 bytes must come from the kmalloc-128
-> > > or larger cache, so that works like before.
-> >
-> > There's also the case with 128-byte cache lines and kmalloc-192.
-> 
-> Sure, but that's much less common, as the few machines with 128 byte
-> cache lines tend to also have cache coherent devices IIRC, so we'd
-> skip the bounce buffer entirely.
 
-Do you know which machines still have 128-byte cache lines _and_
-non-coherent DMA? If there isn't any that matters, I'd reduce
-ARCH_DMA_MINALIGN to 64 now (while trying to get to even smaller kmalloc
-caches).
 
-> > > For transfers <=96 bytes, the possibilities are:
-> > >
-> > > 1.kmalloc-32 or smaller, always needs to bounce
-> > > 2. kmalloc-96, but at least one byte in partial cache line,
-> > >     need to bounce
-> > > 3. kmalloc-64, may skip the bounce.
-> > > 4. kmalloc-128 or larger, or not a slab cache but a partial
-> > >     transfer, may skip the bounce.
-> > >
-> > > I would guess that the first case is the most common here,
-> > > so unless bouncing one or two cache lines is extremely
-> > > expensive, I don't expect it to be worth optimizing for the latter
-> > > two cases.
-> >
-> > I think so. If someone complains of a performance regression, we can
-> > look at optimising the bounce. I have a suspicion the cost of copying
-> > two cache lines is small compared to swiotlb_find_slots() etc.
+On 4/21/22 12:04 AM, Isaku Yamahata wrote:
+> On Tue, Apr 19, 2022 at 06:26:43PM -0700,
+> Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
 > 
-> That is possible, and we'd definitely have to watch out for
-> performance regressions, I'm just skeptical that the cases that
-> suffer from the extra bouncer buffering on 33..64 byte allocations
-> benefit much from having a special case if the 1...32 and 65..96
-> byte allocations are still slow.
+>> On 4/19/22 6:20 PM, Isaku Yamahata wrote:
+>>> If timeout occurs, the state of adev->tdquote_buf is unknown.  It's not safe
+>>> to continue to using adev->tdquote_buf.  VMM would continue to processing
+>>> getquote request with this buffer.  What if TDX_CMD_GEN_QUOTE is issued again,
+>>> and tdquote_buf is re-used?
+>>
+>> This part is not clearly discussed in the specification. May be spec
+>> should define some reasonable timeout and teardown details.
+>>
+>> Regarding not using this buffer again, what happens if we de-allocate
+>> it on timeout and the host still updates it?
 > 
-> Another simpler way to do this might be to just not create the
-> kmalloc-96 (or kmalloc-192) caches, and assuming that any
-> transfer >=33 (or 65) bytes is safe.
+> Until GET_QUOTE_IN_FLIGHT is cleared, the shared page is owned by VMM, TD
+> attestation driver shouldn't reuse/free the pages.
+> 
+> In the case of this driver, I think of two options
+> - don't timeout. wait for interrupt to arrive and check the shared GPA state.
+> - allow timeout. When the next request comes, check the shared GPA state.
+>    If it's still GET_QUOTE_IN_FLIGHT, return EBUSY.
 
-I'll give the dma bounce idea a go next week, see how it looks.
+Out of the above two options, I think option 1 is better. It is simpler
+to serialize them using mutex compared to checking the shared buffer of
+previous request.
+
+> 
+> It's possible for VMM to keep the shared GPA forever maliciously(DoS) or
+> unintentionally due to bug.  TD can't do much about it.
+
+I will add a note about it in commit log.
 
 -- 
-Catalin
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

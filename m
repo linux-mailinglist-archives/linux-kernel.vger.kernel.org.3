@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECC6509C14
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0E3509BEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387487AbiDUJUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        id S1387445AbiDUJSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387212AbiDUJTv (ORCPT
+        with ESMTP id S1387477AbiDUJRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:19:51 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258C023BE0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:17:03 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23L73eUt022788
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:17:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=o+BEJzHk53Z2SWPQnNBmJJX4g5pdl6FD6EzyM6ejeDU=;
- b=FCTyzZzxkRgUdu2CKkT1lqxM385q8rqANFfI2jCSJy1xA5kx568x83wPiHoDW2uUdRu8
- e0pNL4XY/uIQIany6u78wOXzqJxoebmgu/aCCiEnIPUR9I0OoDacclvMDyhXPalqb+c4
- iUp2ht/xgy7XqbQc4pshCQZ1y6Sdva/Caf8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fjhgxy3q2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:17:02 -0700
-Received: from twshared41237.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 02:17:01 -0700
-Received: by devbig039.lla1.facebook.com (Postfix, from userid 572232)
-        id 19B7F7CA7604; Thu, 21 Apr 2022 02:14:02 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     <io-uring@vger.kernel.org>
-CC:     <axboe@kernel.dk>, <asml.silence@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
-        Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH 6/6] io_uring: allow NOP opcode in IOPOLL mode
-Date:   Thu, 21 Apr 2022 02:13:45 -0700
-Message-ID: <20220421091345.2115755-7-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220421091345.2115755-1-dylany@fb.com>
-References: <20220421091345.2115755-1-dylany@fb.com>
+        Thu, 21 Apr 2022 05:17:44 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9A4EB3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:14:55 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ec04a2ebadso45126067b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V1uWVuZ6+A0BASrhtcS2ivTUwFpVOwbpQq4d16gjWgQ=;
+        b=KfviBbNUxTMiBSnCXE3OrnaDK39G+p2hghIMD25j0KUp7ZLrh+Bw0OZCCeC1hIrSfM
+         pTwQMys9R1SkEgZPN+U1YplF3DXwzr61jkkU3Mwwa78nUXpDeRMWrFKrBUAfDTLhyPsM
+         ciErq4lfgYuxNGVDSG40Gj/QRvjJLmtgAGJLU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V1uWVuZ6+A0BASrhtcS2ivTUwFpVOwbpQq4d16gjWgQ=;
+        b=Ta2So1GZ+R4XdCu1JOFZKTSnd991kAp3MCAfiD98AgO2V8XOF6qBKxOrEM/2aGp6zv
+         k/Wa9BQ+CvnB91Dy9CM+VduU0oWzCrbAn6KCZBoAjGxuJeba8HJgBmH++NLiOfnpVDKX
+         jo2+0tomTaeqZC7sDP15Zn1iPWJbAbLui19jy9OVtApA1AHXvWAQUpljM30+j0ObV+qr
+         5Dzyp7CJ0g72rs5r2UlTvEbudT32OpTc8WpmcfQl6mOW0Ly0AMBY+vXNeptjNME0Uxno
+         m7KSVQOjMCrrNpj+ZMmtUeX2OzukOEZ05WmwUtMYvSreubh1xUPtcJxxuIiXyB/g4+qN
+         kOtw==
+X-Gm-Message-State: AOAM5318PMYu5lkFCE5KtMssr42CB4pd9Gr35Zmaymtpb8HjRKpEg6+J
+        mQAK82vTBiwWvYysgcf4wfm+2NqKPldbx69VOlUuMA==
+X-Google-Smtp-Source: ABdhPJy9nYqH8i9c1NYzIrrrk2RUAbZ7bXTS0+WD7NPVL44tYER6HZDSPvwCms4t/XCM0TjMDZvIAjxJ9Py7xiUDcss=
+X-Received: by 2002:a0d:eb46:0:b0:2ef:4946:544 with SMTP id
+ u67-20020a0deb46000000b002ef49460544mr25008925ywe.286.1650532494832; Thu, 21
+ Apr 2022 02:14:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: GKIBp6dQTQwht9uJfIwKe6ctwUQmaijC
-X-Proofpoint-GUID: GKIBp6dQTQwht9uJfIwKe6ctwUQmaijC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-20_06,2022-04-20_01,2022-02-23_01
+References: <20220420130527.23200-1-rex-bc.chen@mediatek.com>
+ <20220420130527.23200-6-rex-bc.chen@mediatek.com> <90ad46a5-8b67-e9ca-25df-2a7cc6110bff@collabora.com>
+In-Reply-To: <90ad46a5-8b67-e9ca-25df-2a7cc6110bff@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 21 Apr 2022 17:14:43 +0800
+Message-ID: <CAGXv+5FL=YdjonwBWV9ZkRf3jstCsxCEonmH02g2+1PAopObYg@mail.gmail.com>
+Subject: Re: [PATCH V2 05/12] clk: mediatek: reset: Add reset.h
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>, mturquette@baylibre.com,
+        sboyd@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        chun-jie.chen@mediatek.com, runyang.chen@mediatek.com,
+        linux-kernel@vger.kernel.org, allen-kh.cheng@mediatek.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is useful for tests so that IOPOLL can be tested without requiring
-files. NOP is acceptable in IOPOLL as it always completes immediately.
+On Thu, Apr 21, 2022 at 5:07 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 20/04/22 15:05, Rex-BC Chen ha scritto:
+> > Add a new file "reset.h" to place some definitions for clock reset.
+> >
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+>
+> Right now, you're adding the enum mtk_reset_version and *then* you're
+> moving it to the new reset.h header, but does that really make sense?
+>
+> I think that this series would be cleaner if you add this header from
+> the start, so that you place the aforementioned enumeration directly
+> in here...
+>
+> ...so we would have a commit that moves the mtk_clk_register_rst_ctrl()
+> function from clk-mtk.h to a newly created reset.h, mentioning in the
+> commit description that it's all about preparing for a coming cleanup,
+> then the addition of enum mtk_reset_version would be in
+> `clk: mediatek: reset: Merge and revise reset register function` directly
+> into reset.h.
 
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- fs/io_uring.c | 5 -----
- 1 file changed, 5 deletions(-)
+And probably name it mtk-reset.h ? 'reset.h' is a bit too generic, and
+I'm sure there are multiple files with the same name throughout the
+kernel source tree.
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index e46dc67c917c..a4e42ba708b4 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -4526,11 +4526,6 @@ static int io_splice(struct io_kiocb *req, unsigne=
-d int issue_flags)
-  */
- static int io_nop(struct io_kiocb *req, unsigned int issue_flags)
- {
--	struct io_ring_ctx *ctx =3D req->ctx;
--
--	if (unlikely(ctx->flags & IORING_SETUP_IOPOLL))
--		return -EINVAL;
--
- 	__io_req_complete(req, issue_flags, 0, 0);
- 	return 0;
- }
---=20
-2.30.2
-
+ChenYu

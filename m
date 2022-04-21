@@ -2,105 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6555098FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFB0509900
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385695AbiDUHYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S1385702AbiDUHYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiDUHYU (ORCPT
+        with ESMTP id S229922AbiDUHYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:24:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4CA17079
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:21:30 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KkTVR2F88zhXZq;
-        Thu, 21 Apr 2022 15:21:19 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 15:21:28 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 21 Apr
- 2022 15:21:28 +0800
-Message-ID: <9f4a058d-1f6d-69ab-3c31-5817db7d1f90@huawei.com>
-Date:   Thu, 21 Apr 2022 15:21:25 +0800
+        Thu, 21 Apr 2022 03:24:53 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A12318340;
+        Thu, 21 Apr 2022 00:22:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/C9+3qUeBS+g+il8GEFlGStsowiK3WH4YnoDjaHKK9Y=; b=YLcyMQWUra46az+F4lcpWwI+sy
+        eiorDaQRwdnLR8EGGH9CeRC0dm8tq7Bbb4LIOEAs6YnBFI1rm0GJm9B4czOUq0DRrfK3UrJhI1+80
+        ADSBtoeflXov2wCyDW/EqrNL/5kHlFh5eMYwFMr4XwXzNAx9ZjTRVeYIMhRiBRVbYSftPCw1fBWNs
+        u15E5Q3cz4Q8td4QA8yPJcW5ljsjTnLo2xEbbzECvpjRxyahORyGFGtBTxwVrufUXo3fOdNBKZ1+t
+        gqtBv+1/ogeup/gu8AIi+W+fqrOgHH/SWyqQqR4IFQN1TId6shT1+baGm5RwvFprfNmv4i2VJYfmz
+        yBdGRn4Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nhR8I-004rKD-04; Thu, 21 Apr 2022 07:21:42 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5C08E9861A4; Thu, 21 Apr 2022 09:21:38 +0200 (CEST)
+Date:   Thu, 21 Apr 2022 09:21:38 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>, rjw@rjwysocki.net,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [RFC][PATCH] ptrace: Don't change __state
+Message-ID: <20220421072138.GI2731@worktop.programming.kicks-ass.net>
+References: <20220414115410.GA32752@redhat.com>
+ <20220414183433.GC32752@redhat.com>
+ <YlikBjA3kL3XEQP5@hirez.programming.kicks-ass.net>
+ <20220415101644.GA10421@redhat.com>
+ <20220415105755.GA15217@redhat.com>
+ <Yllep6B8eva2VURJ@hirez.programming.kicks-ass.net>
+ <20220418170104.GA16199@redhat.com>
+ <20220420131731.GF2731@worktop.programming.kicks-ass.net>
+ <20220420180323.GA14947@redhat.com>
+ <875yn3zdag.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.10] fix csdlock_debug cause arm64 boot panic
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <peterz@infradead.org>, <gor@linux.ibm.com>, <tglx@linutronix.de>,
-        <axboe@kernel.dk>, <arnd@arndb.de>
-References: <20220421033914.217622-1-chenzhongjin@huawei.com>
- <461fa8ba-82c1-73b0-b900-7fa1ffb774f9@infradead.org>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <461fa8ba-82c1-73b0-b900-7fa1ffb774f9@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <875yn3zdag.fsf_-_@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2022/4/21 12:08, Randy Dunlap wrote:
-> Hi--
+On Wed, Apr 20, 2022 at 03:54:15PM -0500, Eric W. Biederman wrote:
 > 
-> On 4/20/22 20:39, Chen Zhongjin wrote:
->> ---
->>  kernel/smp.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/kernel/smp.c b/kernel/smp.c
->> index 65a630f62363..1ce64de460d0 100644
->> --- a/kernel/smp.c
->> +++ b/kernel/smp.c
->> @@ -176,7 +176,7 @@ static int __init csdlock_debug(char *str)
->>  
->>  	return 0;
+> I was thinking about this and I have an approach from a different
+> direction.  In particular it removes the need for ptrace_freeze_attach
+> and ptrace_unfreeze_attach to change __state.  Instead a jobctl
+> bit is used to suppress waking up a process with TASK_WAKEKILL.
 > 
-> ^^^ This should be
-> 	return 1;
+> I think this would be a good technique to completely decouple
+> PREEMPT_RT from the work that ptrace_freeze_attach does.
 > 
-> since __setup() functions return 1 on success -- opposite of
-> early_param() return values.
-> 
+> Comments?
 
-Fixed in v2.
+On first read-through, I like it! A few comments down below..
 
-By the way, below patch forced to open CONFIG_SPARSEMEM_VMEMMAP on arm64
-from 5.12-rc3. By this __page_to_pfn won't call __nr_to_section and
-causes this bug.
+> @@ -216,13 +217,11 @@ static void ptrace_unfreeze_traced(struct task_struct *task)
+>  	 * PTRACE_LISTEN can allow ptrace_trap_notify to wake us up remotely.
+>  	 * Recheck state under the lock to close this race.
+>  	 */
+> -	spin_lock_irq(&task->sighand->siglock);
+> -	if (READ_ONCE(task->__state) == __TASK_TRACED) {
+> -		if (__fatal_signal_pending(task))
+> -			wake_up_state(task, __TASK_TRACED);
+> -		else
+> -			WRITE_ONCE(task->__state, TASK_TRACED);
+> -	}
+> +	spin_unlock_irq(&task->sighand->siglock);
 
-https://lore.kernel.org/all/20210420093559.23168-1-catalin.marinas@arm.com/
+  ^^^^ this should be spin_lock_irq(...)
 
-So this patch is only applied to 5.10-LTS.
+> +	WARN_ON(!(task->jobctl & JOBCTL_DELAY_WAKEKILL));
+> +	task->jobctl &= ~JOBCTL_DELAY_WAKEKILL;
+> +	if (fatal_signal_pending(task))
+> +		wake_up_state(task, TASK_WAKEKILL);
+>  	spin_unlock_irq(&task->sighand->siglock);
+>  }
+>  
+> @@ -256,7 +255,7 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
+>  	 */
+>  	read_lock(&tasklist_lock);
+>  	if (child->ptrace && child->parent == current) {
+> -		WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
+> +		WARN_ON(child->jobctl & JOBCTL_DELAY_WAKEKILL);
+>  		/*
+>  		 * child->sighand can't be NULL, release_task()
+>  		 * does ptrace_unlink() before __exit_signal().
+> @@ -267,13 +266,13 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
+>  	read_unlock(&tasklist_lock);
+>  
+>  	if (!ret && !ignore_state) {
+> -		if (!wait_task_inactive(child, __TASK_TRACED)) {
+> +		if (!wait_task_inactive(child, TASK_TRACED)) {
 
->>  }
->> -early_param("csdlock_debug", csdlock_debug);
->> +__setup("csdlock_debug=", csdlock_debug);
->>  
->>  static DEFINE_PER_CPU(call_single_data_t *, cur_csd);
->>  static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
-> 
-> Thanks.
-> 
+This is still very dubious, there are spinlocks between
+set_current_state(TASK_TRACED) and schedule(), so wait_task_inactive()
+can fail where we don't want it to due to TASK_TRACED being temporarily
+held in ->saved_state.
 
-Thanks!
-
+>  			/*
+>  			 * This can only happen if may_ptrace_stop() fails and
+>  			 * ptrace_stop() changes ->state back to TASK_RUNNING,
+> -			 * so we should not worry about leaking __TASK_TRACED.
+> +			 * so we should not worry about leaking JOBCTL_DELAY_WAKEKILL.
+>  			 */
+> +			WARN_ON(!(child->jobctl & JOBCTL_DELAY_WAKEKILL));
+>  			ret = -ESRCH;
+>  		}
+>  	}

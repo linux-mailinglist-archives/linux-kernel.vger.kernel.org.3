@@ -2,141 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF49E50A0C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81B650A0C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346415AbiDUN2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S1352992AbiDUN2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiDUN2E (ORCPT
+        with ESMTP id S1348045AbiDUN2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:28:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A22E6616B
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650547512;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sqs+pKWJ10kORv4PfMRp36XoGqspoxIr45iV+Tc3Iao=;
-        b=XNBHReA54eBPuIZWUJJBcY5sngM5WrkZhuar/kz18CJQBXb8ZVI5zOGidq+xiZOT9Xt9Di
-        Wg3X20HgPCXtT4Dh2V3xlAXjHyYNd0tLfiF0hnD63Ez1NL039URvFRMnli/QYM3B+J+OIy
-        Cg21Y4IWc8njEEvhlr+T2T+RHhnoQV4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-371-eYtj8fl1Mn-f3tvT1ojVMA-1; Thu, 21 Apr 2022 09:25:11 -0400
-X-MC-Unique: eYtj8fl1Mn-f3tvT1ojVMA-1
-Received: by mail-ed1-f71.google.com with SMTP id cf15-20020a0564020b8f00b0042599227276so897991edb.21
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:25:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Sqs+pKWJ10kORv4PfMRp36XoGqspoxIr45iV+Tc3Iao=;
-        b=0BODqgNnSsFNiAaVRbAdUG38hAcpGrferoPO45UKWGn8HhDQAPlSTnsbSm8jPJZRlk
-         kUTwF4AM+qYJTEJ86qzyKDz8PFyb3s8v5xkn2NHWN/dGUD+sWcw56th5u72Hiq9pxYJq
-         UTOIu303Qu6V95nldSq/msbFJrJIigAoc5E6F5rU4qXxYNs5Er5bi1fq/SZUmWkunak/
-         EZgGtlLtb15cTApEgPNuaCAz+l9yAcAJ4i6et3CVrXuE2bUmY9woI4AafKnIXEKF1pQO
-         3rOIsQoUHjoeGFKZHe7MbPRR98H4Jje5RH74uH/kfx2L8Mvlq25LSo5QbREi4gVImm9O
-         GkYw==
-X-Gm-Message-State: AOAM5328QA5noBrVaVlQ0t1MdDUUEAql0F0B8LTEXZW3iDF5EjYTjIT2
-        8sXnd8BNUvihCFoeQtc7YgiHNrQPjIKGg43Xvxt6KxeCYQpFiAKuISn05avo34rO2plpQepFUK8
-        HtlLMHIK+3vcE5YQJHTBUWMUq
-X-Received: by 2002:a05:6402:2741:b0:41f:69dc:9bcd with SMTP id z1-20020a056402274100b0041f69dc9bcdmr29065428edd.239.1650547510441;
-        Thu, 21 Apr 2022 06:25:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzOYQlwE/xAK5IgaYMJSwt/0FIwT404JWn54QFCv1zJDU9TwSYuM5h/cDIsi8nNEUfPm0Vonw==
-X-Received: by 2002:a05:6402:2741:b0:41f:69dc:9bcd with SMTP id z1-20020a056402274100b0041f69dc9bcdmr29065404edd.239.1650547510203;
-        Thu, 21 Apr 2022 06:25:10 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:de00:711b:76af:b335:9b70? (p200300cbc702de00711b76afb3359b70.dip0.t-ipconnect.de. [2003:cb:c702:de00:711b:76af:b335:9b70])
-        by smtp.gmail.com with ESMTPSA id mp8-20020a1709071b0800b006efc915e1ccsm3548152ejc.118.2022.04.21.06.25.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 06:25:08 -0700 (PDT)
-Message-ID: <0a793d7c-0591-28bc-5c36-a908c9d4900d@redhat.com>
-Date:   Thu, 21 Apr 2022 15:25:07 +0200
+        Thu, 21 Apr 2022 09:28:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4C0E016
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:25:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8CCDEB82488
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:25:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6746C385A5;
+        Thu, 21 Apr 2022 13:25:25 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 14:25:22 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YmFbQiSFyQ+W85Zx@arm.com>
+References: <YlvU6ou14okbAbgW@arm.com>
+ <YlvWtc/dJ6luXzZf@gondor.apana.org.au>
+ <YlxAo5BAy+ARlvqj@arm.com>
+ <Yl0jPdfdUkaStDN5@gondor.apana.org.au>
+ <Yl2Vda/8S7qAvMjC@arm.com>
+ <CAMj1kXEGdPageO3tb2=eLnGAR9-nZtmTGXcGf5CiTQFC4JiXOg@mail.gmail.com>
+ <CAK8P3a1+GqbO5Kgf70nmR8rQg5OaLBsFZJWaOLuS7JRqXb-ZNA@mail.gmail.com>
+ <YmEFttLxGbyJx8LK@infradead.org>
+ <YmE60ufokRCYOj8W@arm.com>
+ <CAK8P3a34UTmJ5Tn2vbFaJjQrvO-G5LJOqe_6oQwR6zp+PJ8fjA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 3/3] mm/madvise: free hwpoison and swapin error entry
- in madvise_free_pte_range
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
-        neilb@suse.de, apopple@nvidia.com, surenb@google.com,
-        minchan@kernel.org, peterx@redhat.com, sfr@canb.auug.org.au,
-        naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220421125348.62483-1-linmiaohe@huawei.com>
- <20220421125348.62483-4-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220421125348.62483-4-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a34UTmJ5Tn2vbFaJjQrvO-G5LJOqe_6oQwR6zp+PJ8fjA@mail.gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.04.22 14:53, Miaohe Lin wrote:
-> Once the MADV_FREE operation has succeeded, callers can expect they might
-> get zero-fill pages if accessing the memory again. Therefore it should be
-> safe to delete the hwpoison entry and swapin error entry. There is no
-> reason to kill the process if it has called MADV_FREE on the range.
+On Thu, Apr 21, 2022 at 02:28:45PM +0200, Arnd Bergmann wrote:
+> On Thu, Apr 21, 2022 at 1:06 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Thu, Apr 21, 2022 at 12:20:22AM -0700, Christoph Hellwig wrote:
+> > > Btw, there is another option:  Most real systems already require having
+> > > swiotlb to bounce buffer in some cases.  We could simply force bounce
+> > > buffering in the dma mapping code for too small or not properly aligned
+> > > transfers and just decrease the dma alignment.
+> >
+> > We can force bounce if size is small but checking the alignment is
+> > trickier. Normally the beginning of the buffer is aligned but the end is
+> > at some sizeof() distance. We need to know whether the end is in a
+> > kmalloc-128 cache and that requires reaching out to the slab internals.
+> > That's doable and not expensive but it needs to be done for every small
+> > size getting to the DMA API, something like (for mm/slub.c):
+> >
+> >         folio = virt_to_folio(x);
+> >         slab = folio_slab(folio);
+> >         if (slab->slab_cache->align < ARCH_DMA_MINALIGN)
+> >                 ... bounce ...
+> >
+> > (and a bit different for mm/slab.c)
 > 
-> Suggested-by: Alistair Popple <apopple@nvidia.com>
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/madvise.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+> I think the decision to bounce or not can be based on the actual
+> cache line size at runtime, so most commonly 64 bytes on arm64,
+> even though the compile-time limit is 128 bytes.
 > 
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index 4d6592488b51..5f4537511532 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -624,11 +624,14 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
->  			swp_entry_t entry;
->  
->  			entry = pte_to_swp_entry(ptent);
-> -			if (non_swap_entry(entry))
-> -				continue;
-> -			nr_swap--;
-> -			free_swap_and_cache(entry);
-> -			pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
-> +			if (!non_swap_entry(entry)) {
-> +				nr_swap--;
-> +				free_swap_and_cache(entry);
-> +				pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
-> +			} else if (is_hwpoison_entry(entry) ||
-> +				   is_swapin_error_entry(entry)) {
-> +				pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
-> +			}
->  			continue;
->  		}
->  
+> We also know that larger slabs are all cacheline aligned, so simply
+> comparing the transfer size is enough to rule out most, in this case
+> any transfer larger than 96 bytes must come from the kmalloc-128
+> or larger cache, so that works like before.
 
-Reading the man page that should be fine, but might not be required.
+There's also the case with 128-byte cache lines and kmalloc-192.
 
-"[...] the kernel can free the pages at any time. Once pages in the
-range have been freed, the caller will see zero-fill-on-demand pages
-upon subsequent page references."
+> For transfers <=96 bytes, the possibilities are:
+> 
+> 1.kmalloc-32 or smaller, always needs to bounce
+> 2. kmalloc-96, but at least one byte in partial cache line,
+>     need to bounce
+> 3. kmalloc-64, may skip the bounce.
+> 4. kmalloc-128 or larger, or not a slab cache but a partial
+>     transfer, may skip the bounce.
+> 
+> I would guess that the first case is the most common here,
+> so unless bouncing one or two cache lines is extremely
+> expensive, I don't expect it to be worth optimizing for the latter
+> two cases.
 
-
-LGTM
-
-Acked-by: David Hildenbrand <david@redhat.com>
+I think so. If someone complains of a performance regression, we can
+look at optimising the bounce. I have a suspicion the cost of copying
+two cache lines is small compared to swiotlb_find_slots() etc.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Catalin

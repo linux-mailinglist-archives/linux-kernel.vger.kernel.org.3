@@ -2,105 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6276550946B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 02:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A620A509479
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 03:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383524AbiDUAxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 20:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        id S1383567AbiDUBDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 21:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347647AbiDUAxP (ORCPT
+        with ESMTP id S1383539AbiDUBD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 20:53:15 -0400
-Received: from mail-vs1-xe64.google.com (mail-vs1-xe64.google.com [IPv6:2607:f8b0:4864:20::e64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6994815A3B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:50:28 -0700 (PDT)
-Received: by mail-vs1-xe64.google.com with SMTP id r1so3128972vsi.12
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:50:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:dkim-signature:date:to:subject:user-agent
-         :content-transfer-encoding:message-id:from;
-        bh=LWwI/BH/zs2PRw3S4cSl2rzpqJDY2RDYVUt6dkvsFts=;
-        b=wnaqr9pwZuNaePcRDhyA2lZ8VclUb0EBODoG0TmvqZyzK2Ut6DKO9XEaiyFKIefKos
-         AgAfkGrD9zDvbmDto58Bu1xquLx78iiOD4fDSE6CXr56zvs9Q9BSdWpicNKl9BeVltqS
-         pk9hLqyNFrNOhwzNjbQ8/0rq/Ho++cFpo0veazysVDIajAOYkyPns+XhHCz6XNWL4zDd
-         eWUMvme4bKsA2ozzWh85qYG2CkOzAe3TwdxPhcJCw2GgCjegyh4/RDBLCvRSVX/2IL8w
-         A9ZP1U+ilQ3I+GihPjw6PvGo8IVXfLj1bcJr1PIIOv+zr0Mj73k89ieZt5r1mJ+Y6qKE
-         pxqw==
-X-Gm-Message-State: AOAM530kJF/9P/dlJLwUlpCxFuoZ4fTYqqm/Vyda/cZgEfcIBcyHj6rG
-        /Q1P23akl9YTJenp2ZnbtxtB5YRIlGp+gwyss6OylJQYcoKb
-X-Google-Smtp-Source: ABdhPJyx6JAyhWnwk8dFTXuMp9aOxl0jWB4NUgPircADTj8bfDwnEJh0lEtqyaEjDlkH/FqSpr9mgZ+oqwCp
-X-Received: by 2002:a67:c894:0:b0:324:c5da:a9b5 with SMTP id v20-20020a67c894000000b00324c5daa9b5mr7816833vsk.33.1650502227526;
-        Wed, 20 Apr 2022 17:50:27 -0700 (PDT)
-Received: from smtp.aristanetworks.com (mx.aristanetworks.com. [162.210.129.12])
-        by smtp-relay.gmail.com with ESMTPS id x15-20020ab036ef000000b0035d3d7f148asm404575uau.12.2022.04.20.17.50.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Apr 2022 17:50:27 -0700 (PDT)
-X-Relaying-Domain: arista.com
-Received: from us226.sjc.aristanetworks.com (us226.sjc.aristanetworks.com [10.243.208.9])
-        by smtp.aristanetworks.com (Postfix) with ESMTP id 8A460509630;
-        Wed, 20 Apr 2022 17:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
-        s=Arista-A; t=1650502226;
-        bh=LWwI/BH/zs2PRw3S4cSl2rzpqJDY2RDYVUt6dkvsFts=;
-        h=Date:To:Subject:From:From;
-        b=dlEfqT+bunv39xlhI4BWZj3ZFE2fBZRwOljFenOnq0kVMO5dgZUvvoqpPNUpt3j27
-         3MwqQJdRXQ+5uBrapZF3vwa7f88Y0gKgk1dTbRHIZ2EC4vWdgKr+ohlqCb2XdAHr8M
-         feM/14h0lZe8PpqWOlaYO0MZOuGiTaekvbO6aNG2AXrDO6DQqyiEvJphKtp9CH9Te/
-         aBEFQNSAYCPKNMnoOMDF3hK5uRwi3b/9P6p7vt71AWwUwG+a5ljbq05Oj3xGpZrWad
-         HMVEaR/BglSTorvNgSoe+fItLi9YiiNx/hYOsvPQWl3+sDOMaAZ3/H0DLxAvfd0EA3
-         qgrh5v1ko5hWg==
-Received: by us226.sjc.aristanetworks.com (Postfix, from userid 10189)
-        id 686A45EC01F2; Wed, 20 Apr 2022 17:50:26 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 17:50:26 -0700
-To:     pabeni@redhat.com, kuba@kernel.org, dsahern@kernel.org,
-        yoshfuji@linux-ipv6.org, davem@davemloft.net, edumazet@google.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        fruggeri@arista.com
-Subject: [PATCH v2 net] tcp: md5: incorrect tcp_header_len for incoming
- connections
-User-Agent: Heirloom mailx 12.5 7/5/10
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-Id: <20220421005026.686A45EC01F2@us226.sjc.aristanetworks.com>
-From:   fruggeri@arista.com (Francesco Ruggeri)
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 21:03:28 -0400
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56206635A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 18:00:37 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.47
+        by mg.richtek.com with MailGates ESMTP Server V5.0(26448:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Thu, 21 Apr 2022 09:00:30 +0800 (CST)
+Received: from ex3.rt.l (192.168.10.46) by ex4.rt.l (192.168.10.47) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 21 Apr
+ 2022 09:00:29 +0800
+Received: from ex3.rt.l ([fe80::ede0:40a5:8f78:963e]) by ex3.rt.l
+ ([fe80::ede0:40a5:8f78:963e%2]) with mapi id 15.02.0986.022; Thu, 21 Apr 2022
+ 09:00:29 +0800
+From:   =?utf-8?B?Y3lfaHVhbmco6buD5ZWf5Y6fKQ==?= <cy_huang@richtek.com>
+To:     "renzhijie2@huawei.com" <renzhijie2@huawei.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH -next] usb: typec: rt1719: Fix build error without
+ CONFIG_POWER_SUPPLY
+Thread-Topic: [PATCH -next] usb: typec: rt1719: Fix build error without
+ CONFIG_POWER_SUPPLY
+Thread-Index: AQHYUv3jFuNUpuVhu0m8/3w4zMWNwaz3/8cAgAEKg4A=
+Date:   Thu, 21 Apr 2022 01:00:29 +0000
+Message-ID: <1650502829.3170.4.camel@richtek.com>
+References: <20220418082425.41566-1-renzhijie2@huawei.com>
+         <Yl/NHAaXFh1UzFdI@kuha.fi.intel.com>
+In-Reply-To: <Yl/NHAaXFh1UzFdI@kuha.fi.intel.com>
+Accept-Language: zh-TW, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.18.5.2-0ubuntu3.2 
+x-originating-ip: [192.168.18.182]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5B109A5E77EE694C943C1D31BADFFCCC@rt.l>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In tcp_create_openreq_child we adjust tcp_header_len for md5 using the
-remote address in newsk. But that address is still 0 in newsk at this
-point, and it is only set later by the callers (tcp_v[46]_syn_recv_sock).
-Use the address from the request socket instead.
-
-v2: Added "Fixes:" line.
-
-Fixes: cfb6eeb4c860 ("[TCP]: MD5 Signature Option (RFC2385) support.")
-Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
----
- net/ipv4/tcp_minisocks.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index 6366df7aaf2a..6854bb1fb32b 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -531,7 +531,7 @@ struct sock *tcp_create_openreq_child(const struct sock *sk,
- 	newtp->tsoffset = treq->ts_off;
- #ifdef CONFIG_TCP_MD5SIG
- 	newtp->md5sig_info = NULL;	/*XXX*/
--	if (newtp->af_specific->md5_lookup(sk, newsk))
-+	if (treq->af_specific->req_md5_lookup(sk, req_to_sk(req)))
- 		newtp->tcp_header_len += TCPOLEN_MD5SIG_ALIGNED;
- #endif
- 	if (skb->len >= TCP_MSS_DEFAULT + newtp->tcp_header_len)
--- 
-2.28.0
-
-
+5pa8IOS4ie+8jDIwMjItMDQtMjAg5pa8IDEyOjA2ICswMzAw77yMSGVpa2tpIEtyb2dlcnVzIOaP
+kOWIsO+8mg0KPiBNb24sIEFwciAxOCwgMjAyMiBhdCAwNDoyNDoyNVBNICswODAwLCBSZW4gWmhp
+amllIGtpcmpvaXR0aToNCj4gPg0KPiA+IEJ1aWxkaW5nIHdpdGhvdXQgQ09ORklHX1BPV0VSX1NV
+UFBMWSB3aWxsIGZhaWw6DQo+ID4NCj4gPiBkcml2ZXJzL3VzYi90eXBlYy9ydDE3MTkubzogSW4g
+ZnVuY3Rpb24gYHJ0MTcxOV9wc3lfc2V0X3Byb3BlcnR5JzoNCj4gPiBydDE3MTkuYzooLnRleHQr
+MHgxMGEpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBwb3dlcl9zdXBwbHlfZ2V0X2RydmRhdGEn
+DQo+ID4gZHJpdmVycy91c2IvdHlwZWMvcnQxNzE5Lm86IEluIGZ1bmN0aW9uIGBydDE3MTlfcHN5
+X2dldF9wcm9wZXJ0eSc6DQo+ID4gcnQxNzE5LmM6KC50ZXh0KzB4MmM4KTogdW5kZWZpbmVkIHJl
+ZmVyZW5jZSB0byBgcG93ZXJfc3VwcGx5X2dldF9kcnZkYXRhJw0KPiA+IGRyaXZlcnMvdXNiL3R5
+cGVjL3J0MTcxOS5vOiBJbiBmdW5jdGlvbiBgZGV2bV9ydDE3MTlfcHN5X3JlZ2lzdGVyJzoNCj4g
+PiBydDE3MTkuYzooLnRleHQrMHgzZTkpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBkZXZtX3Bv
+d2VyX3N1cHBseV9yZWdpc3RlcicNCj4gPiBkcml2ZXJzL3VzYi90eXBlYy9ydDE3MTkubzogSW4g
+ZnVuY3Rpb24gYHJ0MTcxOV9pcnFfaGFuZGxlcic6DQo+ID4gcnQxNzE5LmM6KC50ZXh0KzB4Zjlm
+KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgcG93ZXJfc3VwcGx5X2NoYW5nZWQnDQo+ID4gZHJp
+dmVycy91c2IvdHlwZWMvcnQxNzE5Lm86IEluIGZ1bmN0aW9uIGBydDE3MTlfdXBkYXRlX3B3cl9v
+cG1vZGUucGFydC45JzoNCj4gPiBydDE3MTkuYzooLnRleHQrMHg2NTcpOiB1bmRlZmluZWQgcmVm
+ZXJlbmNlIHRvIGBwb3dlcl9zdXBwbHlfY2hhbmdlZCcNCj4gPiBkcml2ZXJzL3VzYi90eXBlYy9y
+dDE3MTkubzogSW4gZnVuY3Rpb24gYHJ0MTcxOV9hdHRhY2gnOg0KPiA+IHJ0MTcxOS5jOigudGV4
+dCsweDgzZSk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHBvd2VyX3N1cHBseV9jaGFuZ2VkJw0K
+PiA+DQo+ID4gQWRkIFBPV0VSX1NVUFBMWSBkZXBlbmRlbmN5IHRvIEtjb25maWcuDQpUaGFua3Mu
+DQo+ID4NCj4gPiBSZXBvcnRlZC1ieTogSHVsayBSb2JvdCA8aHVsa2NpQGh1YXdlaS5jb20+DQo+
+ID4gRml4ZXM6IDI1ZDI5Yjk4MDkxMiAoInVzYjogdHlwZWM6IHJ0MTcxOTogQWRkIHN1cHBvcnQg
+Zm9yIFJpY2h0ZWsgUlQxNzE5IikNCj4gPiBTaWduZWQtb2ZmLWJ5OiBSZW4gWmhpamllIDxyZW56
+aGlqaWUyQGh1YXdlaS5jb20+DQo+IFJldmlld2VkLWJ5OiBIZWlra2kgS3JvZ2VydXMgPGhlaWtr
+aS5rcm9nZXJ1c0BsaW51eC5pbnRlbC5jb20+DQpSZXZpZXdlZC1ieTogQ2hpWXVhbiBIdWFuZyA8
+Y3lfaHVhbmdAcmljaHRlay5jb20+DQoNCg0KLS0tDQogZHJpdmVycy91c2IvdHlwZWMvS2NvbmZp
+ZyB8IDEgKw0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KDQpkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy91c2IvdHlwZWMvS2NvbmZpZyBiL2RyaXZlcnMvdXNiL3R5cGVjL0tjb25maWcNCmlu
+ZGV4IDhmOTIxMjEzYjE3ZC4uYmEyNDg0N2ZiMjQ1IDEwMDY0NA0KLS0tIGEvZHJpdmVycy91c2Iv
+dHlwZWMvS2NvbmZpZw0KKysrIGIvZHJpdmVycy91c2IvdHlwZWMvS2NvbmZpZw0KQEAgLTU2LDYg
+KzU2LDcgQEAgY29uZmlnIFRZUEVDX1JUMTcxOQ0KIHRyaXN0YXRlICJSaWNodGVrIFJUMTcxOSBT
+aW5rIE9ubHkgVHlwZS1DIGNvbnRyb2xsZXIgZHJpdmVyIg0KIGRlcGVuZHMgb24gVVNCX1JPTEVf
+U1dJVENIIHx8ICFVU0JfUk9MRV9TV0lUQ0gNCiBkZXBlbmRzIG9uIEkyQw0KK2RlcGVuZHMgb24g
+UE9XRVJfU1VQUExZDQogc2VsZWN0IFJFR01BUF9JMkMNCiBoZWxwDQogICBTYXkgWSBvciBNIGhl
+cmUgaWYgeW91ciBzeXN0ZW0gaGFzIFJpY2h0ZWsgUlQxNzE5IHNpbmsgb25seQ0KLS0NCjIuMTcu
+MQ0KDQoNCg0KDQoqKioqKioqKioqKioqIEVtYWlsIENvbmZpZGVudGlhbGl0eSBOb3RpY2UgKioq
+KioqKioqKioqKioqKioqKioNCg0KVGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBpbiB0aGlzIGUt
+bWFpbCBtZXNzYWdlIChpbmNsdWRpbmcgYW55IGF0dGFjaG1lbnRzKSBtYXkgYmUgY29uZmlkZW50
+aWFsLCBwcm9wcmlldGFyeSwgcHJpdmlsZWdlZCwgb3Igb3RoZXJ3aXNlIGV4ZW1wdCBmcm9tIGRp
+c2Nsb3N1cmUgdW5kZXIgYXBwbGljYWJsZSBsYXdzLiBJdCBpcyBpbnRlbmRlZCB0byBiZSBjb252
+ZXllZCBvbmx5IHRvIHRoZSBkZXNpZ25hdGVkIHJlY2lwaWVudChzKS4gQW55IHVzZSwgZGlzc2Vt
+aW5hdGlvbiwgZGlzdHJpYnV0aW9uLCBwcmludGluZywgcmV0YWluaW5nIG9yIGNvcHlpbmcgb2Yg
+dGhpcyBlLW1haWwgKGluY2x1ZGluZyBpdHMgYXR0YWNobWVudHMpIGJ5IHVuaW50ZW5kZWQgcmVj
+aXBpZW50KHMpIGlzIHN0cmljdGx5IHByb2hpYml0ZWQgYW5kIG1heSBiZSB1bmxhd2Z1bC4gSWYg
+eW91IGFyZSBub3QgYW4gaW50ZW5kZWQgcmVjaXBpZW50IG9mIHRoaXMgZS1tYWlsLCBvciBiZWxp
+ZXZlIHRoYXQgeW91IGhhdmUgcmVjZWl2ZWQgdGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFzZSBu
+b3RpZnkgdGhlIHNlbmRlciBpbW1lZGlhdGVseSAoYnkgcmVwbHlpbmcgdG8gdGhpcyBlLW1haWwp
+LCBkZWxldGUgYW55IGFuZCBhbGwgY29waWVzIG9mIHRoaXMgZS1tYWlsIChpbmNsdWRpbmcgYW55
+IGF0dGFjaG1lbnRzKSBmcm9tIHlvdXIgc3lzdGVtLCBhbmQgZG8gbm90IGRpc2Nsb3NlIHRoZSBj
+b250ZW50IG9mIHRoaXMgZS1tYWlsIHRvIGFueSBvdGhlciBwZXJzb24uIFRoYW5rIHlvdSENCg==

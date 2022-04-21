@@ -2,84 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DB150A895
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B442C50A89E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391658AbiDUTCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S1391665AbiDUTCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbiDUTCB (ORCPT
+        with ESMTP id S233912AbiDUTCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:02:01 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8177125C0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:59:10 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ebf3746f87so62359177b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:59:10 -0700 (PDT)
+        Thu, 21 Apr 2022 15:02:19 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEB92194
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:59:28 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id d6so10313703lfv.9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:59:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=KzZsSXn7FlULeV03LQ3NYKJHdvNHM67q0UAA8k1Tlfo=;
-        b=nyTikQ+tLP0DYj0Iy6qstWgr08Lu33BuKay2G0mvorNyFwwqtf2ENCgv+greH3kRiN
-         ugEmk1vt7sXZ7S1FicMpyUNppXpZ008HLFyk69RUTXpIkdm6jfRxfvl5LyqqFCOyBmr7
-         YQT5IDFCJfm8nBMZoso+oXSxDYxzkwpKfTJ9Wvd+Nd1Qv1VCk3XEe8z2xy6aCWLQdjNz
-         x4G2jNQneKxTGY5EHE5XPIdiJNn/PypCv8U6SQHEttcusKAWwMlE+Sv9I7eBtuAX1qet
-         Cim/QVoI/gbsUmwATDaBqBOgRGlsJacP898el+tgZc9OmjGUVeXhIYQPQkyi07dmbQz0
-         jjJA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ak9lVWwM+coDmUHY61U+ZihyKQCtIFN8nTMg/HLgunQ=;
+        b=dUTQSAcJXhEgH56325FZO9cBwpb+y6gnzAUNugFkBCF6CGx9PFgIG3mnV3YjioVs3b
+         TH2pvqbF8RHSX8PsvM64v1T/aseBE32JhDyWgSL5UjmKA/JIDWQwH9YFuRBx6QqXcBTo
+         oZJFMw/LprgNr7LDtNxdhVWuHnyeBLs3xkMBI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=KzZsSXn7FlULeV03LQ3NYKJHdvNHM67q0UAA8k1Tlfo=;
-        b=dma8e+gZNC2HiqA5d2oOgSC5RG3e1mR9+gOd8IBKGVsdZvn5NNVOhTHTYAvjVtYpT9
-         EAK0pnp6rxCcfZqGKSz1wkIPryGY02JZohc/fHtrkGDVkVBnda3KlBPM7vIdf8AcxEdj
-         8fTEo4iQKgwJaToa3NXZZl+ahosHSIbz/PwvI9c34pPX9g6cDVNYnQGXxmk67cAmo4Io
-         8lIHdKQxWABxVwxvwF7ht5ctPNAd8CbTrI/tGwnlCj/0skAmQrd+hJLA9kbAaSaqtw7l
-         g6nW0IbsY147tcahqqM2ofoBB1XnkMbRgMncodAbdzgv7VL8QNrKr28/oLU5igtyC/7u
-         d/vA==
-X-Gm-Message-State: AOAM530Bl98LOydrP193JoRO3vKcS6/uiDS3JUm8GzELYvxTkbO60S+U
-        Sgc5XvsQ3fZiyXoZE6m16fe4EBTbGlo4mJn7OCu8ks+xRSq772Ce
-X-Google-Smtp-Source: ABdhPJxe1Mx8FVwju0PAzvx4JPW9Y8I82lsnHam/y1BiR9LsvcCTNTquCUds19m/50KX20dmG2FlDXDIRW/Pmwl7+YQ=
-X-Received: by 2002:a81:6dc7:0:b0:2f1:c5bf:8f64 with SMTP id
- i190-20020a816dc7000000b002f1c5bf8f64mr1259969ywc.120.1650567549657; Thu, 21
- Apr 2022 11:59:09 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ak9lVWwM+coDmUHY61U+ZihyKQCtIFN8nTMg/HLgunQ=;
+        b=AiIw96W72YPPbQd/VhoH6RS0SzsIXEUWYT3cPzQljoBZntjXwfz7iNhUfzkkwj13gX
+         TPE73CZgeqVL5jWUJrzibmJHzX/Te2ZgWYBTiYYDhM4+WqoJvBPjYp5yZ1cQR3dncxsq
+         envb7M8aXr9faz8daxWbg0J3AAttKt2TLBaixVHzXEOkbCsGDb3UDmQAFtPvJYjaNThW
+         dXoDF45q5MkR/qXVRPu1vZ8CeZ8BmfSxZz9sE8vUZ6319/gkF9Q4MnRvrZLc2yQOhdSU
+         c0x81b9G2mUk9ptSP73Zkn7kjaoOcM/EUTOpkM8jayaL3EyAa5JMoVwg9b+vZyh/ld/U
+         MPKA==
+X-Gm-Message-State: AOAM533NwMMJWnqFkSZVIgeGtTpglydcJ61A9WFqYELelGmh1VupjS7k
+        lavdVUWZYswxxIADqGMr4IkYjHhcYbvUR8LxdF8=
+X-Google-Smtp-Source: ABdhPJx5HVEMHoDuCVOYUlFNh/PGxruTiZNd0iAjEtOFLyUeij5FNZHaK3OsdYqxa73/d/iINHJdFA==
+X-Received: by 2002:ac2:5923:0:b0:46f:aeef:f269 with SMTP id v3-20020ac25923000000b0046faeeff269mr573124lfi.221.1650567566383;
+        Thu, 21 Apr 2022 11:59:26 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id n4-20020a196f44000000b0047195a0fd47sm1303583lfk.5.2022.04.21.11.59.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 11:59:23 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id x33so10351010lfu.1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:59:22 -0700 (PDT)
+X-Received: by 2002:a05:6512:3c93:b0:44b:4ba:c334 with SMTP id
+ h19-20020a0565123c9300b0044b04bac334mr582580lfv.27.1650567562684; Thu, 21 Apr
+ 2022 11:59:22 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 22 Apr 2022 00:28:58 +0530
-Message-ID: <CA+G9fYsqcfs12PH+bykYUmEAmW3K3ONTX8ac0u1ffYhnNCPMXA@mail.gmail.com>
-Subject: include/linux/compiler_types.h:352:38: error: call to
- '__compiletime_assert_483' declared with attribute error: FIELD_PREP: mask is
- not constant
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421072212.608884-1-song@kernel.org> <CAHk-=wi3eu8mdKmXOCSPeTxABVbstbDg1q5Fkak+A9kVwF+fVw@mail.gmail.com>
+ <CAADnVQKyDwXUMCfmdabbVE0vSGxdpqmWAwHRBqbPLW=LdCnHBQ@mail.gmail.com>
+In-Reply-To: <CAADnVQKyDwXUMCfmdabbVE0vSGxdpqmWAwHRBqbPLW=LdCnHBQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 21 Apr 2022 11:59:06 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whFeBezdSrPy31iYv-UZNnNavymrhqrwCptE4uW8aeaHw@mail.gmail.com>
+Message-ID: <CAHk-=whFeBezdSrPy31iYv-UZNnNavymrhqrwCptE4uW8aeaHw@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: invalidate unused part of bpf_prog_pack
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: multipart/mixed; boundary="0000000000004099a605dd2eb54d"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux mainline x86 and i386 builds failed with gcc-7.3.x on jenkins build.
-I do have noticed on Linux next builds.
+--0000000000004099a605dd2eb54d
+Content-Type: text/plain; charset="UTF-8"
 
-drivers/gpu/drm/i915/gt/uc/intel_guc.c: In function 'intel_guc_send_mmio':
-include/linux/compiler_types.h:352:38: error: call to
-'__compiletime_assert_483' declared with attribute error: FIELD_PREP:
-mask is not constant
-  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                                      ^
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Thu, Apr 21, 2022 at 11:24 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> Let's not complicate the logic by dragging jit_fill_hole
+> further into generic allocation.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+I agree that just zeroing the page is probably perfectly fine in
+practice on x86, but I'm also not really seeing the "complication" of
+just doing things right.
 
-[1] https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-mainline/DISTRO=lkft,MACHINE=intel-corei7-64,label=docker-buster-lkft/4259/consoleText
+> The existing bpf_prog_pack code still does memset(0xcc)
+> a random range of bytes before and after jit-ed bpf code.
+
+That is actually wishful thinking, and not based on reality.
+
+From what I can tell, the end of the jit'ed bpf code is actually the
+exception table entries, so we have that data being marked executable.
+
+Honestly, what is wrong with this trivial patch?
+
+I've not *tested* it, but it looks really really simple to me. Take it
+as a "something like this" rather than anything else.
+
+And yes, it would be better if bpf_jit_binary_pack_free did it too, so
+that you don't have random old JIT'ed code lying around (and possibly
+still in CPU branch history caches or whatever).
+
+And it would be lovely if the exception table entries would be part of
+another allocation and not marked executable.
+
+But I certainly don't see the _downside_ (or complexity) of just doing
+this, instead of zeroing things.
+
+So this is by no means perfect, but it seems at least incrementally
+_better_ than just zeroing. No?
+
+                    Linus
+
+--0000000000004099a605dd2eb54d
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l29ck8xn0>
+X-Attachment-Id: f_l29ck8xn0
+
+IGtlcm5lbC9icGYvY29yZS5jIHwgMTAgKysrKysrLS0tLQogMSBmaWxlIGNoYW5nZWQsIDYgaW5z
+ZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9rZXJuZWwvYnBmL2NvcmUu
+YyBiL2tlcm5lbC9icGYvY29yZS5jCmluZGV4IDEzZTlkYmVlZWRmMy4uYTRjZmMzNTNhNTJkIDEw
+MDY0NAotLS0gYS9rZXJuZWwvYnBmL2NvcmUuYworKysgYi9rZXJuZWwvYnBmL2NvcmUuYwpAQCAt
+ODczLDcgKzg3Myw3IEBAIHN0YXRpYyBzaXplX3Qgc2VsZWN0X2JwZl9wcm9nX3BhY2tfc2l6ZSh2
+b2lkKQogCXJldHVybiBzaXplOwogfQogCi1zdGF0aWMgc3RydWN0IGJwZl9wcm9nX3BhY2sgKmFs
+bG9jX25ld19wYWNrKHZvaWQpCitzdGF0aWMgc3RydWN0IGJwZl9wcm9nX3BhY2sgKmFsbG9jX25l
+d19wYWNrKGJwZl9qaXRfZmlsbF9ob2xlX3QgYnBmX2ZpbGxfaWxsX2luc25zKQogewogCXN0cnVj
+dCBicGZfcHJvZ19wYWNrICpwYWNrOwogCkBAIC04ODksMTMgKzg4OSwxNCBAQCBzdGF0aWMgc3Ry
+dWN0IGJwZl9wcm9nX3BhY2sgKmFsbG9jX25ld19wYWNrKHZvaWQpCiAJYml0bWFwX3plcm8ocGFj
+ay0+Yml0bWFwLCBicGZfcHJvZ19wYWNrX3NpemUgLyBCUEZfUFJPR19DSFVOS19TSVpFKTsKIAls
+aXN0X2FkZF90YWlsKCZwYWNrLT5saXN0LCAmcGFja19saXN0KTsKIAorCWJwZl9maWxsX2lsbF9p
+bnNucyhwYWNrLT5wdHIsIGJwZl9wcm9nX3BhY2tfc2l6ZSk7CiAJc2V0X3ZtX2ZsdXNoX3Jlc2V0
+X3Blcm1zKHBhY2stPnB0cik7CiAJc2V0X21lbW9yeV9ybygodW5zaWduZWQgbG9uZylwYWNrLT5w
+dHIsIGJwZl9wcm9nX3BhY2tfc2l6ZSAvIFBBR0VfU0laRSk7CiAJc2V0X21lbW9yeV94KCh1bnNp
+Z25lZCBsb25nKXBhY2stPnB0ciwgYnBmX3Byb2dfcGFja19zaXplIC8gUEFHRV9TSVpFKTsKIAly
+ZXR1cm4gcGFjazsKIH0KIAotc3RhdGljIHZvaWQgKmJwZl9wcm9nX3BhY2tfYWxsb2ModTMyIHNp
+emUpCitzdGF0aWMgdm9pZCAqYnBmX3Byb2dfcGFja19hbGxvYyh1MzIgc2l6ZSwgYnBmX2ppdF9m
+aWxsX2hvbGVfdCBicGZfZmlsbF9pbGxfaW5zbnMpCiB7CiAJdW5zaWduZWQgaW50IG5iaXRzID0g
+QlBGX1BST0dfU0laRV9UT19OQklUUyhzaXplKTsKIAlzdHJ1Y3QgYnBmX3Byb2dfcGFjayAqcGFj
+azsKQEAgLTkxMCw2ICs5MTEsNyBAQCBzdGF0aWMgdm9pZCAqYnBmX3Byb2dfcGFja19hbGxvYyh1
+MzIgc2l6ZSkKIAkJc2l6ZSA9IHJvdW5kX3VwKHNpemUsIFBBR0VfU0laRSk7CiAJCXB0ciA9IG1v
+ZHVsZV9hbGxvYyhzaXplKTsKIAkJaWYgKHB0cikgeworCQkJYnBmX2ZpbGxfaWxsX2luc25zKHB0
+ciwgc2l6ZSk7CiAJCQlzZXRfdm1fZmx1c2hfcmVzZXRfcGVybXMocHRyKTsKIAkJCXNldF9tZW1v
+cnlfcm8oKHVuc2lnbmVkIGxvbmcpcHRyLCBzaXplIC8gUEFHRV9TSVpFKTsKIAkJCXNldF9tZW1v
+cnlfeCgodW5zaWduZWQgbG9uZylwdHIsIHNpemUgLyBQQUdFX1NJWkUpOwpAQCAtOTIzLDcgKzky
+NSw3IEBAIHN0YXRpYyB2b2lkICpicGZfcHJvZ19wYWNrX2FsbG9jKHUzMiBzaXplKQogCQkJZ290
+byBmb3VuZF9mcmVlX2FyZWE7CiAJfQogCi0JcGFjayA9IGFsbG9jX25ld19wYWNrKCk7CisJcGFj
+ayA9IGFsbG9jX25ld19wYWNrKGJwZl9maWxsX2lsbF9pbnNucyk7CiAJaWYgKCFwYWNrKQogCQln
+b3RvIG91dDsKIApAQCAtMTEwMiw3ICsxMTA0LDcgQEAgYnBmX2ppdF9iaW5hcnlfcGFja19hbGxv
+Yyh1bnNpZ25lZCBpbnQgcHJvZ2xlbiwgdTggKippbWFnZV9wdHIsCiAKIAlpZiAoYnBmX2ppdF9j
+aGFyZ2VfbW9kbWVtKHNpemUpKQogCQlyZXR1cm4gTlVMTDsKLQlyb19oZWFkZXIgPSBicGZfcHJv
+Z19wYWNrX2FsbG9jKHNpemUpOworCXJvX2hlYWRlciA9IGJwZl9wcm9nX3BhY2tfYWxsb2Moc2l6
+ZSwgYnBmX2ZpbGxfaWxsX2luc25zKTsKIAlpZiAoIXJvX2hlYWRlcikgewogCQlicGZfaml0X3Vu
+Y2hhcmdlX21vZG1lbShzaXplKTsKIAkJcmV0dXJuIE5VTEw7Cg==
+--0000000000004099a605dd2eb54d--

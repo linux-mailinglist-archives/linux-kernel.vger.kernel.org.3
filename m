@@ -2,51 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B55D509A2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5462C509A24
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386329AbiDUIDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
+        id S1386338AbiDUIEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344890AbiDUIDq (ORCPT
+        with ESMTP id S1344890AbiDUIEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:03:46 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B0E1B7A1;
-        Thu, 21 Apr 2022 01:00:57 -0700 (PDT)
+        Thu, 21 Apr 2022 04:04:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06C11A811;
+        Thu, 21 Apr 2022 01:01:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F0D4FCE20F3;
-        Thu, 21 Apr 2022 08:00:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA691C385A9;
-        Thu, 21 Apr 2022 08:00:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8130CB822BC;
+        Thu, 21 Apr 2022 08:01:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA28C385AA;
+        Thu, 21 Apr 2022 08:01:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650528054;
-        bh=kzI7cNCI/MQ41Ygqo1vpDlykJ1QbTxbXNmI8WhhimmQ=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=uvCakPe7gzWAmGB5n5HdstoT10rszEeh29X9NW6qZM1gttVKRTdRkLBYkf6Xkg8DK
-         G1Xv+90XoOPqnpwponuDHH9V55BsaNasckVr/22M8AnYwCmoZueNSeL/h/mpb/b0nF
-         vi04EMG8Rzt1Z3AVTrCpOxxGj/z9wn+m/YnJhXmfOqvfHXS0fppthn8qm3ZxIe+D9N
-         B/OVJsGgwiCT0rVD2Gse8Hfe47nEq4iCLHZ0+mITw7ppmtGknb+CneBRRQ6o6XqwEw
-         MKG5u7O/aqZglPpEHdUQFn9dn8xf9HYvJH4ogfQO4YRDP0ANDJWs1qNuXzQXLN0B1L
-         6CuEj6R4Rj8ng==
-Date:   Thu, 21 Apr 2022 10:00:50 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Bastien Nocera <hadess@hadess.net>
-cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Ping Cheng <ping.cheng@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>
-Subject: Re: [PATCH] HID: wacom: Correct power_supply type
-In-Reply-To: <892475a2d458aa1e8f5027f13d6582f0f6b4b05e.camel@hadess.net>
-Message-ID: <nycvar.YFH.7.76.2204211000150.30217@cbobk.fhfr.pm>
-References: <20220407115406.115112-1-hadess@hadess.net>  <nycvar.YFH.7.76.2204111708230.30217@cbobk.fhfr.pm> <892475a2d458aa1e8f5027f13d6582f0f6b4b05e.camel@hadess.net>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        s=k20201202; t=1650528073;
+        bh=ifEFSZv1UM5fIRCyiaGc43+OrGh0I0CVrDw1Pe824tk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Jxw9n3090AL4dD2aIROf5ZASfrb4qGnMntHn9OV0MR3E9rF8iS1w32M8y0P+QTcQB
+         f8BJooistAMxQF1cKz6Xn8LnCNe5de8pFPCR2vro3T9tVXXcTHTSuO+o6QvnooXcCy
+         e07OjhCpum5gCdaLxthe0DzzgxJlv3WJHKinRs5rQTvVXPndDQiS2Q7r5qlxrMnSZk
+         7mVLL6AT8WNyDR10Aj9stFSpOIP1GHwnoTZS+ZJK2cPkljol0G9qi9JKM1ufXjjXPp
+         gilVv7PAj5XWmpwXB8kTWVl9OZyxhM8EbxZ27wzwbyb4wKnqArq5ti9OGnuiWd9fTY
+         EJpYiYBngAQfA==
+Received: by mail-wm1-f50.google.com with SMTP id u17-20020a05600c211100b0038eaf4cdaaeso5306699wml.1;
+        Thu, 21 Apr 2022 01:01:12 -0700 (PDT)
+X-Gm-Message-State: AOAM530WW0qI86a6L0HLOK/KkpZ6YM2gmfnmP7to8TBgP5eOkjJcAIiE
+        c287eNqISruoq32nWnFU7jb5cjqE6GjclfO4qD8=
+X-Google-Smtp-Source: ABdhPJzqgi7L5ALaCLdUcSpoT2Nq18aUkuxmUof0UjJFR0/s3eAKaJPqD7JeGsY3967XuokcLCyC0mVbOg8OIiR57g4=
+X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
+ s25-20020a1cf219000000b0038c782c03bbmr7185525wmc.94.1650528071363; Thu, 21
+ Apr 2022 01:01:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-5-hch@lst.de>
+In-Reply-To: <20220421074204.1284072-5-hch@lst.de>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 21 Apr 2022 10:00:55 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2zSZsiq_FFHJMHex6uLc_7sUfvns8W8-mE52yzxOqhKw@mail.gmail.com>
+Message-ID: <CAK8P3a2zSZsiq_FFHJMHex6uLc_7sUfvns8W8-mE52yzxOqhKw@mail.gmail.com>
+Subject: Re: [PATCH 4/7] ARM: remove the unused virt_to_dma helper
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,60 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022, Bastien Nocera wrote:
+On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-> > > POWER_SUPPLY_TYPE_USB seems to only ever be used by USB ports that
-> > > are
-> > > used to charge the machine itself (so a "system" scope), like the
-> > > single USB port on a phone, rather than devices.
-> > > 
-> > > The wacom_sys driver is the only driver that sets its device
-> > > battery as
-> > > being a USB type, which doesn't seem correct based on its usage, so
-> > > switch it to be a battery type like all the other USB-connected
-> > > devices.
-> > > 
-> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > > ---
-> > >  drivers/hid/wacom_sys.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
-> > > index 066c567dbaa2..620fe74f5676 100644
-> > > --- a/drivers/hid/wacom_sys.c
-> > > +++ b/drivers/hid/wacom_sys.c
-> > > @@ -1777,7 +1777,7 @@ static int __wacom_initialize_battery(struct
-> > > wacom *wacom,
-> > >         bat_desc->get_property = wacom_battery_get_property;
-> > >         sprintf(battery->bat_name, "wacom_battery_%ld", n);
-> > >         bat_desc->name = battery->bat_name;
-> > > -       bat_desc->type = POWER_SUPPLY_TYPE_USB;
-> > > +       bat_desc->type = POWER_SUPPLY_TYPE_BATTERY;
-> > >         bat_desc->use_for_apm = 0;
-> > >  
-> > >         ps_bat = devm_power_supply_register(dev, bat_desc,
-> > > &psy_cfg);
-> > 
-> > Thanks Bastien, makes sense. CCing Jason and Ping (the Wacom driver 
-> > maintainers) to get their Ack.
-> 
-> Hey,
-> 
-> I know both Jason and Ping, but their name didn't show up when running
-> get_maintainers.pl and neither of their names are in the MAINTAINERS
-> file.
-> 
-> This probably needs fixing.
+I generally prefer to have at least something useful in the description, e.g.
+why it's now unused and what it was used for before.
 
-Agreed. Wacom driver is by itself substantial enough in order to have 
-MAINTAINERS entry.
+> -static inline dma_addr_t virt_to_dma(struct device *dev, void *addr)
+> -{
+> -       if (dev)
+> -               return pfn_to_dma(dev, virt_to_pfn(addr));
+> -
+> -       return (dma_addr_t)__virt_to_bus((unsigned long)(addr));
+> -}
 
-Jason, Ping, could you please send me a patch adding yourself as 
-maintainers?
+I think __virt_to_bus() is now unused as well and could be removed
+in the same step.
 
-Thanks,
+It looks like __bus_to_virt() is still used in the ISA DMA API, but
+as that is only used on footbridge and rpc, the generic version of
+that could be moved into rpc (footbridge already has a custom
+version).
 
--- 
-Jiri Kosina
-SUSE Labs
-
+    Arnd

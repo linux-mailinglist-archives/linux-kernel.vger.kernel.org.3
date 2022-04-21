@@ -2,98 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9A650AA41
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED26750AA43
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392533AbiDUUqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 16:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
+        id S1392541AbiDUUrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 16:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349411AbiDUUqB (ORCPT
+        with ESMTP id S1349411AbiDUUrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 16:46:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55104E391
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:43:10 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650573788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3UrvlJKlRiA3m0EXXHhSv7iD9kIffu4f0EGmLxSXPIk=;
-        b=ztR2NfvZSvxu/uagLed4yJhw6bpakHq6GeSfdN4jwD/F2tFpS55DzkGnegRCl8hWSShKMq
-        /+5bvzRBuQVdDp2G/3XnZCLH5dZLzs6u/4Mi1UkcWhxC/qWyJ2yJk7KoFIsgSeiWfnszHL
-        5VMnzIvK+dDYit12PAjzrTsLZZdQTEDUgbIvlDLpVBoUTwYZ0Cn01p8PBM2JgOVotCC5Xf
-        Ldg4v0V1RW2YrHU2gFhj3AJrkN3C8J3lzBkN10m33tGumKbk9XX3AYLmpvUJADviYH67ve
-        aFEQP5OZvWjgMeCdbKVwtHdfE63a1xXlxbwhZJOgqsiPFU4DJuRyRCm+XOu49Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650573788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3UrvlJKlRiA3m0EXXHhSv7iD9kIffu4f0EGmLxSXPIk=;
-        b=/85QIqA89yp1qYgcrfqmxPZVhd77+bk+Hs6XBh5HWyg9iW645ZxNS9WK/IXxqsSwHwBiQA
-        NN0/MJYQs3ZHoqAA==
-To:     Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Darren Hart <dvhart@infradead.org>, stable@kernel.org
-Subject: Re: [PATCH v9] oom_kill.c: futex: Delay the OOM reaper to allow
- time for proper futex cleanup
-In-Reply-To: <5653e751-f81d-f64e-b4b5-b251949d13d9@redhat.com>
-References: <20220414144042.677008-1-npache@redhat.com>
- <874k2mts8p.ffs@tglx> <5653e751-f81d-f64e-b4b5-b251949d13d9@redhat.com>
-Date:   Thu, 21 Apr 2022 22:43:07 +0200
-Message-ID: <87tuamrwv8.ffs@tglx>
+        Thu, 21 Apr 2022 16:47:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A234E391;
+        Thu, 21 Apr 2022 13:44:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 082E1B828D8;
+        Thu, 21 Apr 2022 20:44:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A652DC385A7;
+        Thu, 21 Apr 2022 20:44:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650573851;
+        bh=8xH5wV1KvrkMTwGdQxQZPmkY2ffhRKacNykV31qXzQA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ll979oUoHbSxXuVHKN9EkSPu3NI0XxkU+Xe2izKWxGiK6wBGtmrtZA8ncRq8kIuJ0
+         u7gXJh+q/F88e4uAwPEiJKrDm1jy4tT8iH20ArGHJNFC4DYpRwYHEkUzYSXNWPKKgQ
+         RRtZ74nI1LStL9ozF3v/tG77EEp2XEjGYgfV1SPU3dRmzzUbDGCGwTPl66RD7z8SJi
+         k6+i1Er7adPa015OAr2wRzO/WTikDK6zO6zm6FLxbr/3qH5tUTF8UP9bjr2DfTZh/T
+         n/WippRsMYbWH/HkzfV3XIgCbZWiTIGDfxIOpVOhmFX80VgFjNIMxteE26O9KK53/k
+         wCI8RYjAP2YPg==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A . Donenfeld " <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: [PATCH] siphash: update the HalfSipHash documentation
+Date:   Thu, 21 Apr 2022 13:43:20 -0700
+Message-Id: <20220421204320.258010-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21 2022 at 12:25, Nico Pache wrote:
-> On 4/21/22 10:40, Thomas Gleixner wrote:
->>> Reproducer: https://gitlab.com/jsavitz/oom_futex_reproducer
->>>
->>> [1] https://elixir.bootlin.com/glibc/latest/source/nptl/allocatestack.c#L370
->> 
->> A link to the original discussion about this would be more useful than a
->> code reference which is stale tomorrow. The above explanation is good
->> enough to describe the problem.
->
-> Hi Andrew,
->
-> can you please update the link when you add the ACKs.
->
-> Here is a more stable link:
-> [1] https://elixir.bootlin.com/glibc/glibc-2.35/source/nptl/allocatestack.c#L370
+From: Eric Biggers <ebiggers@google.com>
 
-That link is still uninteresting and has nothing to do with what I was
-asking for, i.e. replacing it with a link to the original discussion
-which led to this patch.
+Update the documentation for HalfSipHash to correctly explain that the
+kernel actually implements either HalfSipHash-1-3 or SipHash-1-3, and
+that HalfSipHash-1-3 is not entirely limited to hashtable functions,
+with it now being used in the interrupt entropy accumulator.
 
-Thanks,
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+ Documentation/security/siphash.rst | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-        tglx
+diff --git a/Documentation/security/siphash.rst b/Documentation/security/siphash.rst
+index bd9363025fcbc..9b079b2ac2a1a 100644
+--- a/Documentation/security/siphash.rst
++++ b/Documentation/security/siphash.rst
+@@ -121,15 +121,23 @@ even scarier, uses an easily brute-forcable 64-bit key (with a 32-bit output)
+ instead of SipHash's 128-bit key. However, this may appeal to some
+ high-performance `jhash` users.
+ 
+-Danger!
++**Danger!** HalfSipHash should only be used in a very limited set of use cases
++where nothing better is possible, namely:
+ 
+-Do not ever use HalfSipHash except for as a hashtable key function, and only
+-then when you can be absolutely certain that the outputs will never be
+-transmitted out of the kernel. This is only remotely useful over `jhash` as a
+-means of mitigating hashtable flooding denial of service attacks.
++- Hashtable key functions, where the outputs will never be transmitted out of
++  the kernel. This is only remotely useful over `jhash` as a means of mitigating
++  hashtable flooding denial of service attacks.
+ 
+-Generating a HalfSipHash key
+-============================
++- The interrupt entropy accumulator in ``drivers/char/random.c``. This is a very
++  special case; do *not* use this as example code for anything else.
++
++Note, 64-bit kernels actually implement SipHash-1-3 instead of HalfSipHash-1-3;
++the "hsiphash" functions redirect to either algorithm. This is done for
++performance reasons; it does *not* mean that the hsiphash functions are
++cryptographically secure on 64-bit platforms.
++
++Generating a hsiphash key
++=========================
+ 
+ Keys should always be generated from a cryptographically secure source of
+ random numbers, either using get_random_bytes or get_random_once:
+@@ -139,8 +147,8 @@ get_random_bytes(&key, sizeof(key));
+ 
+ If you're not deriving your key from here, you're doing it wrong.
+ 
+-Using the HalfSipHash functions
+-===============================
++Using the hsiphash functions
++============================
+ 
+ There are two variants of the function, one that takes a list of integers, and
+ one that takes a buffer::
+-- 
+2.35.2
+

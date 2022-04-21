@@ -2,128 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2C350A76B
+	by mail.lfdr.de (Postfix) with ESMTP id 1407150A76A
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390983AbiDURyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        id S1390992AbiDURzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383260AbiDURy3 (ORCPT
+        with ESMTP id S1348173AbiDURzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:54:29 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9875D4A90F;
-        Thu, 21 Apr 2022 10:51:39 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id x18so7771873wrc.0;
-        Thu, 21 Apr 2022 10:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=7lWJD4Cehmg0sq4G4syNiHxZE4IXa2IBfkB5ulYDQ9g=;
-        b=Y/Bfgwcks3FeuHavXLrNU9YgsQnYmdJug3PPRV1aNbqMkqPY/N1XJeqVJ0K1Z6qWXU
-         X+ZLl9Kx7FRJ7Ed+BACJeZQAZHurG358B3ap61neI8yCKiGL+5XT+lXKIg4GSYi8f8nx
-         JcPYutFKjjZWYSrC0ZPxBSs1wWcw7P5YY0ATa6RX50uIMmI61viWXGfeTT++mc0Vde6e
-         grfflOGhjPtQrs1OiDinFtoJOglagYzaNAl1kV+OZri28nNqQKNNfIL4iIVN1w/lcT/0
-         fJnkG9RLU1OS7ECJaefX6yMm7XdNXFTtfMCjWmV3dauPdNr6Xm4jBYBHbQ9uoPunCsuC
-         w5mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7lWJD4Cehmg0sq4G4syNiHxZE4IXa2IBfkB5ulYDQ9g=;
-        b=J64A7gkFKDnf3Ul8xE3ln0EUUgBvTR6slUsBg0tqhFIeBaI/KHsq/lkZFwONDr/RQD
-         X22tGmRSn8fyfNE7cc+meUBnWIg7ZaEkfcpaw9+3pEloYxHSqyggN2FOJ4hEoIIfiETH
-         PVG/qbgzTjPVEQvXSyFvsPRkyC0y6s7L9QAOdY4NxbswDagZiniaXfuOpmhNKwUjH+J4
-         SyrQgQi9wUD8gKn12JJ9IGoqVYCfKifUBiWn0+YjfPn1Cc7rNac2MgW1JW2sOtPikh2z
-         /QbIKvtM4TifJaXpJg4YEjxB9QgVkD6AsrilvozTxXO/YAxfczG4IVOrq074Uau90cxl
-         RhvA==
-X-Gm-Message-State: AOAM5322UtgY1N7YtnS70g4es+8liAc93RBVV0zlc0jsotmxM6zcdXfE
-        70ijgDsoSNY45dAvzApyuI8=
-X-Google-Smtp-Source: ABdhPJwvv3EYK2rogJiUsH2tIFVInFv0qLt1cMsaHQcuicUtecwSnDJgWj7vT+U46Dic3Eu6zvR3+g==
-X-Received: by 2002:adf:e586:0:b0:20a:c729:dfc6 with SMTP id l6-20020adfe586000000b0020ac729dfc6mr359739wrm.686.1650563498233;
-        Thu, 21 Apr 2022 10:51:38 -0700 (PDT)
-Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id ay41-20020a05600c1e2900b0038e75fda4edsm2569764wmb.47.2022.04.21.10.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 10:51:36 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        SeongJae Park <sj@kernel.org>,
-        Jiajian Ye <yejiajian2018@email.szu.edu.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        outreachy@lists.linux.dev, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Documentation/vm: Rework and extend highmem.rst
-Date:   Thu, 21 Apr 2022 19:51:35 +0200
-Message-ID: <1938696.zToM8qfIzz@leap>
-In-Reply-To: <20220415231917.25962-1-fmdefrancesco@gmail.com>
-References: <20220415231917.25962-1-fmdefrancesco@gmail.com>
+        Thu, 21 Apr 2022 13:55:35 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F88C4A905;
+        Thu, 21 Apr 2022 10:52:45 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23LHjJex015002;
+        Thu, 21 Apr 2022 17:52:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=gnHqcVl14TlQ27AwNqWXg/Smd/Wsov5xzewf3DuKwhk=;
+ b=tDLXq31y5zk/K80mRbLylCJQGSkoRKXWtimRzUvEkiRRaHjtWgCFXH8lRa15f6HAk5gd
+ jvY2NOqq41See7mZ38IQzc9zdp1Lwu4Fh2l4v7rdUgfEB9gUFqF4JnrJ6wwfpMkBGjB2
+ tejxUAz1khE/kl29penlVthFx70XIDZw1oEjMWSuSVem+NOsEQVE24GhQBDidqu5hsLt
+ 4Yo6VUqUCiNtfPpHBZj4wcKDNTkl0oDZrBP0kRtsjMNdz2iwQP3pMo/0Fp+n1vmkh2Pw
+ qQxn7SELHfrLf71QP6i1K8ATIRaqjJH5FeFOVFg7tK8BD1bVxAaYGa/hWr5b0Jnd87AK EA== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fkbxug3sf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Apr 2022 17:52:43 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23LHn7fj030972;
+        Thu, 21 Apr 2022 17:52:43 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma01dal.us.ibm.com with ESMTP id 3ffneb6pp9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Apr 2022 17:52:43 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23LHqgLi28049880
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Apr 2022 17:52:42 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 22301124054;
+        Thu, 21 Apr 2022 17:52:42 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1527C124052;
+        Thu, 21 Apr 2022 17:52:42 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 21 Apr 2022 17:52:42 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH] integrity: Fix sparse warnings in keyring_handler
+Date:   Thu, 21 Apr 2022 13:52:05 -0400
+Message-Id: <20220421175205.798974-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3oKpnBtKbyC-w9Vm6rYPA1jQBQZq4CHc
+X-Proofpoint-ORIG-GUID: 3oKpnBtKbyC-w9Vm6rYPA1jQBQZq4CHc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-21_03,2022-04-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 bulkscore=0 phishscore=0 malwarescore=0
+ impostorscore=0 adultscore=0 priorityscore=1501 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204210092
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On sabato 16 aprile 2022 01:19:15 CEST Fabio M. De Francesco wrote:
-> Extend and rework the "Temporary Virtual Mappings" section of the 
-highmem.rst
-> documentation.
-> 
-> Do a partial rework of the paragraph related to kmap() and add a new 
-paragraph
-> in order to document the set of kmap_local_*() functions. Re-order 
-paragraphs
-> in decreasing order of preference of usage.
-> 
-> Include kerneldoc comments from include/linux/highmem.h and remove
-> redundant and obsolete section about kmap_atomic().
-> 
-> v1-v2:
-> 	1/2 - According to comments on v1 by Matthew Wilcox and Ira 
-Weiny,
-> 	      correct a mistake in text, format paragraphs to stay within 
-> 	      the 75 characters limit, re-order the flow of the same 
-> 	      paragraphs in decreasing order of preference of usage.
-> 	2/2 - No patch.
-> 
-> v2->v3:
-> 	1/2 - No changes.
-> 	2/2 - Added patch to include kernel-doc to highmem.rst and
-> 	      remove the now redundant section about kmap_atomic().
-> 
-> Fabio M. De Francesco (2):
->   Documentation/vm: Extend "Temporary Virtual Mappings" section in
->     highmem.rst
->   Documentation/vm: Include kernel-doc to highmem.rst
-> 
->  Documentation/vm/highmem.rst | 96 +++++++++++++++++++++---------------
->  1 file changed, 56 insertions(+), 40 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
-Dear Maintainers,
+Fix the following sparse warnings:
 
-Please drop this patch because it has been reworked and inserted as part of 
-a new series whose subject is "Extend and reorganize Highmem's 
-documentation" and which is about to be submitted.
+  CHECK   security/integrity/platform_certs/keyring_handler.c
+security/integrity/platform_certs/keyring_handler.c:76:16: warning: Using plain integer as NULL pointer
+security/integrity/platform_certs/keyring_handler.c:91:16: warning: Using plain integer as NULL pointer
+security/integrity/platform_certs/keyring_handler.c:106:16: warning: Using plain integer as NULL pointer
 
-Thanks,
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+---
+ security/integrity/platform_certs/keyring_handler.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Fabio M. De Francesco
-
-
-
+diff --git a/security/integrity/platform_certs/keyring_handler.c b/security/integrity/platform_certs/keyring_handler.c
+index 1db4d3b4356d..6cc90ce0056d 100644
+--- a/security/integrity/platform_certs/keyring_handler.c
++++ b/security/integrity/platform_certs/keyring_handler.c
+@@ -73,7 +73,7 @@ __init efi_element_handler_t get_handler_for_db(const efi_guid_t *sig_type)
+ {
+ 	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) == 0)
+ 		return add_to_platform_keyring;
+-	return 0;
++	return NULL;
+ }
+ 
+ /*
+@@ -88,7 +88,7 @@ __init efi_element_handler_t get_handler_for_mok(const efi_guid_t *sig_type)
+ 		else
+ 			return add_to_platform_keyring;
+ 	}
+-	return 0;
++	return NULL;
+ }
+ 
+ /*
+@@ -103,5 +103,5 @@ __init efi_element_handler_t get_handler_for_dbx(const efi_guid_t *sig_type)
+ 		return uefi_blacklist_binary;
+ 	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) == 0)
+ 		return uefi_revocation_list_x509;
+-	return 0;
++	return NULL;
+ }
+-- 
+2.34.1
 

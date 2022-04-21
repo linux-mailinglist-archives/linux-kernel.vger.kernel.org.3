@@ -2,115 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B6D50A3D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCE450A3D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389965AbiDUPSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
+        id S1389973AbiDUPTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiDUPSd (ORCPT
+        with ESMTP id S1384968AbiDUPTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:18:33 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCF535A86;
-        Thu, 21 Apr 2022 08:15:43 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23LFFekn096130;
-        Thu, 21 Apr 2022 10:15:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650554140;
-        bh=BSmVKrWhv52kLUAhA2dwa8QvQEt8yIyAabglUhHYYvc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=X+i6UeSQVuzFnhmu/Jyx1BNXESg04Pe0GryT/tpDDAg1D4jMpMcN4Xs57IWhOp64r
-         kkJNqG2GDLfJCNj3cve4oRDhImsqgVPVzcGTy/JOqMN9ZTrTKEONio7G/uvTVW8JXY
-         PfH5Vyz97SGY2lh/VdMyxEn7HTqK8I7S74Z7tb0U=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23LFFeSn013596
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 21 Apr 2022 10:15:40 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 21
- Apr 2022 10:15:39 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 21 Apr 2022 10:15:39 -0500
-Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23LFFaQl121385;
-        Thu, 21 Apr 2022 10:15:37 -0500
-Message-ID: <7993bc10-fff1-bacb-d0c5-929b14f35244@ti.com>
-Date:   Thu, 21 Apr 2022 20:45:36 +0530
+        Thu, 21 Apr 2022 11:19:33 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94CB36E1D;
+        Thu, 21 Apr 2022 08:16:42 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id AEC7E221D4;
+        Thu, 21 Apr 2022 17:16:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1650554200;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=odKtWziO2WG/lqEMmbPEUMEcrAn1teMSt8jVk5MPZY8=;
+        b=EJS8v/SJvQW/cid+n5Ivz1rgMJEjaoOyH1ZMDe0L+cfpbecS+YBXTqL64X660RmcRNXU0f
+        +Ycsy0L/nyTddJT1877XYmyZsJVQpamG4p9go5FuyKtAqYcN/zzOvX7Y1jNXtiU1S1ukux
+        2XDZj2k5b2Ml5wrYzYi3COTdPJyLMh0=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] dmaengine: ti: k3-psil-am62: Update PSIL thread for saul.
-Content-Language: en-US
-To:     Jayesh Choudhary <j-choudhary@ti.com>, <dmaengine@vger.kernel.org>
-CC:     <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220421065323.16378-1-j-choudhary@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20220421065323.16378-1-j-choudhary@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Thu, 21 Apr 2022 17:16:40 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh@kernel.org>
+Cc:     krzysztof.kozlowski@linaro.org, broonie@kernel.org,
+        devicetree@vger.kernel.org, jerry.huang@nxp.com,
+        krzysztof.kozlowski+dt@linaro.org, leoyang.li@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, shawnguo@kernel.org,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [EXT] Re: [PATCH 1/2 v4] dt-bindings: dspi: added for semtech
+ sx1301
+In-Reply-To: <YmFo+EntwxIsco/t@robh.at.kernel.org>
+References: <f6086989-a4c1-4223-fad0-79bd5719432e@linaro.org>
+ <20220421094421.288672-1-michael@walle.cc>
+ <YmFo+EntwxIsco/t@robh.at.kernel.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <30f2f62406bab8225cc88013b414016d@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jayesh,
+Am 2022-04-21 16:23, schrieb Rob Herring:
 
-On 21/04/22 12:23 pm, Jayesh Choudhary wrote:
-> Correct the RX PSIL thread for sa3ul.
+> What's needed here is a connector node (and driver) for the mikrobus
+> socket. The connector node's purpose is to decouple the host DT from
+> add-on board overlay DT. Something like this:
+
+Funny I had a similar idea to have a connector with all the
+properties, but I failed to see how that would be of any help.
+
+Do you mind an example of such an overlay? Judging by the spi
+and i2c subnode, I guess it will amend the connector node and
+fill in it's devices?
+
+And all the child device properties will reference the connector,
+correct?
+
+> connector {
+> 	// And a more specific compatible if pins can have alt funcs?
+> 	// Spec version needed?
+> 	compatible = "mikrobus-socket";
 > 
-
-Commit message needs more info:
-Threads are not wrong but, the first 4 threads are reserved
-for secure side usage and the rest is available to be paired with main pktdma.
-
-Also, add fixes tag:
-
-Fixes: 5ac6bfb587772 ("dmaengine: ti: k3-psil: Add AM62x PSIL and PDMA data")
-
-
-> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-> ---
+> 	// Will need regulators defined if child devices expect
+> 	// regulators
+> 	vcc-33-supply = <&reg33>;
+> 	vcc-5-supply = <&reg5v>;
 > 
-> The new updated PSIL threads have been tested on local am62x board.
-> Log is available here:
-> <https://gist.github.com/Jayesh2000/b0316190de3d9dbb8e98337106ebe24a>
-> 
->  drivers/dma/ti/k3-psil-am62.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/dma/ti/k3-psil-am62.c b/drivers/dma/ti/k3-psil-am62.c
-> index d431e2033237..2b6fd6e37c61 100644
-> --- a/drivers/dma/ti/k3-psil-am62.c
-> +++ b/drivers/dma/ti/k3-psil-am62.c
-> @@ -70,10 +70,10 @@
->  /* PSI-L source thread IDs, used for RX (DMA_DEV_TO_MEM) */
->  static struct psil_ep am62_src_ep_map[] = {
->  	/* SAUL */
-> -	PSIL_SAUL(0x7500, 20, 35, 8, 35, 0),
-> -	PSIL_SAUL(0x7501, 21, 35, 8, 36, 0),
-> -	PSIL_SAUL(0x7502, 22, 43, 8, 43, 0),
-> -	PSIL_SAUL(0x7503, 23, 43, 8, 44, 0),
-> +	PSIL_SAUL(0x7504, 20, 35, 8, 35, 0),
-> +	PSIL_SAUL(0x7505, 21, 35, 8, 36, 0),
-> +	PSIL_SAUL(0x7506, 22, 43, 8, 43, 0),
-> +	PSIL_SAUL(0x7507, 23, 43, 8, 44, 0),
->  	/* PDMA_MAIN0 - SPI0-3 */
->  	PSIL_PDMA_XY_PKT(0x4302),
->  	PSIL_PDMA_XY_PKT(0x4303),
+> 	i2c-parent = <&i2c1>; // Already a defined property
+> 	spi-parent = <&spi0>; // New
 
+uart/serial needed too?
 
-Regards
-Vignesh
+> 
+> 	// RST pin
+> 	reset-gpios = <&gpio 4 0>;
+> 
+> 	// remap 'INT' (index 0) to host interrupt
+> 	#interrupt-cells = <2>;
+> 	#address-cells = <0>;
+> 	interrupt-map = <0 0 &gpio 3 0>;
+> 
+> 	spi {
+
+For example:
+
+my-device@0 {
+   reg = <0>;  // really needed? there is only one SPI CS line
+   compatible = "my-device";
+   reset-gpios = // may be left unset if it's optional, but what
+                 // what if it is a required property and in hardware
+                 // its connected to the RST pin of the module?
+   other-gpios = <&connector 2>;
+   vdd-supply = // what comes here? <&connector VCC_33>?
+   interrupts-extended = <&connector 0 ..>;
+}
+
+-michael
+
+> 		//devices
+> 	};
+> 
+> 	i2c {
+> 
+> 	};
+> };
+> 
+> The DT spec defines 'foo-map' properties extending interrupt-map.
+> Currently only GPIO is defined. We might want to do the same thing for
+> PWM. Or we make the connector node both a PWM consumer and provider.
+> 
+> Rob

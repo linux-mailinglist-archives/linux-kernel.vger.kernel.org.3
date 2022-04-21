@@ -2,102 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72C450A214
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BC550A21C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389137AbiDUOYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
+        id S1389155AbiDUOZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377277AbiDUOX5 (ORCPT
+        with ESMTP id S1377277AbiDUOZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:23:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9A013B54E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650550866;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=H5k1rgXE1P7IbK6cMqND8jHr8Tf+eEFak/sZ9mPOKJY=;
-        b=XnHKpQdEXkj8ZazcxeVavhPMFNJYF9xNggM9ZTKcavrsWLHdWRvWFPAkujCELGrrCYZeyq
-        GHlP+n/R+cT+c7YVocEoqIZbk9/Wvvz/jXiZWOh4PSFFUiS1qYVgZ1JjjPHHeimfbcEzw5
-        xaM8c3pr5T9LPZQj5VQDXC6iuSfmmW0=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-Z9VWvBWrMk66fPw5j7arhw-1; Thu, 21 Apr 2022 10:21:05 -0400
-X-MC-Unique: Z9VWvBWrMk66fPw5j7arhw-1
-Received: by mail-qv1-f71.google.com with SMTP id kd13-20020a056214400d00b0044c066d97dbso2273855qvb.22
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:21:05 -0700 (PDT)
+        Thu, 21 Apr 2022 10:25:04 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFAD3CA61
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:22:13 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e5c42b6e31so5491477fac.12
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZA1nLvyjkEKFlKU13Ct8Zcggn9No1V/TQja+nO/faEQ=;
+        b=ktL17Cj6uxm1d8rlfHQmBEZKLnaSLLe5PpUY2ZqhnghpGiiTh+2K1s49i0J27IO6OP
+         bNH73ajK8s32WdPHv4rQDkve1ZTTzunyr07WVpeunELbQajFXtZKjUOMh0vQeKogJV3X
+         QmRE0CBsSIy1krXFTtFDOwJIYX9tqBmJYnEISGPOaj98kJz1AGPtWL8pHLx7nxKmTAXE
+         StOoQZhEeq1h4Cir209U0ekOW81ntYRvcd3+kcQvhVOrnKsm+fqhG8VqVzsFal0syjzG
+         kCtPnwa7aa7Rxoq672eRyaC7lYMRhDoN1XoZeMkua/VPICh3BB3iC/ea5qFG492kuzgF
+         a7Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H5k1rgXE1P7IbK6cMqND8jHr8Tf+eEFak/sZ9mPOKJY=;
-        b=EPjr6R1u1153nfsS8aqbIeY3rNwTDEyfVEtK86+0VAzShO4MBHO/47sGRQW3BFpLr1
-         W8Gw/GDRF5DbUlxhNHmI7yvGP9e4PM54fTTmg6rh+BS6lNWMxNLrXUSYok+Tn0uJXqJu
-         LOYmYBROmKByFjQ8d5Q1xuzN/syJluw+ddpxW+FG4OIF+tihE1jGTjAs4p3PnY2S0rAQ
-         yxWoL0+SL0yYfGbe0kj7zHVdJLYyIIbtRTsyPQs51qjzJYybrNnUFoD5UML9EhYy4hAH
-         e60DYu/eNi28wY+2UIawJxZPpqcGiAwrR1SLuE1TvZWhAaCi7m/QmAEANq7Jths0AqtJ
-         LJHg==
-X-Gm-Message-State: AOAM532UsONTELcbKiJ8kQwsByLAZpYpD75IUoN+YUiQyJ7fSIZfj9Aw
-        GfYm/0/iD5de/aaNDFWodSZ5RNLWr0+6WkPs46E0Q8VUu9LgBALkiushjy5D31T4vocgr2XW4+U
-        C5D+h81QJmX0jkqBizGyQ6vQ6
-X-Received: by 2002:ac8:7088:0:b0:2f1:e898:2971 with SMTP id y8-20020ac87088000000b002f1e8982971mr17388772qto.152.1650550864999;
-        Thu, 21 Apr 2022 07:21:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzxT8nLASqLzLkqUhCnNzC+DSX/0wzDIp2IM7/27GwXj/kq8GhqiNKzl6Dba3zy6dUouhyaww==
-X-Received: by 2002:ac8:7088:0:b0:2f1:e898:2971 with SMTP id y8-20020ac87088000000b002f1e8982971mr17388760qto.152.1650550864784;
-        Thu, 21 Apr 2022 07:21:04 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j131-20020a37a089000000b0069e7ebc625bsm2881419qke.78.2022.04.21.07.21.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 07:21:04 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     airlied@redhat.com, kraxel@redhat.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/qxl: remove qxl_log_level global
-Date:   Thu, 21 Apr 2022 10:20:54 -0400
-Message-Id: <20220421142054.3751507-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZA1nLvyjkEKFlKU13Ct8Zcggn9No1V/TQja+nO/faEQ=;
+        b=mxVvAohRUPsjnDYAA2A0yHq9oPawygw1Nuj5ZtcF7YJcKX2SaOpmYmklj0CmHtC1Tm
+         d3T6o3J2AJV4FcqWlGtXypYviYRyCRDPXW4hK7zoeL/E6lqepcDKd5MKcpuunz7yylNg
+         +KZw7VoM0BCPlQZXFJvpSxbRB17gB4rLjqzQAJ5GGL2e8bakPb7vJSwxz8Zm2A1j9xzl
+         fe/6LA+gjvSykHqGa7TLdOu79PikchCMYYcXM/+x1NuTPnJooMUfhQQd+XUoR1/0sQ+8
+         nljgHbtlIhBjpb59ty+D3U4m5S5qZ0s7N6lAdl5biI0OSwW4ySWuSOLBonu59pY7nxs7
+         ieNw==
+X-Gm-Message-State: AOAM532lwOApHchhr8fQwKJRoNWjVWDXp1Ogw04ve1mb2frg59BoIUpg
+        trxNGO06pR6CSCLKZIDHCxTpClr7ROFBIPPO6Hg=
+X-Google-Smtp-Source: ABdhPJwdcFUTy302SbkU43iy2JjACHiNzRqpLMiYsjwPQr1h9uPJjSSl4frEETdF6Ei3oxMo+vV1SrEPpLOJHi9L4ao=
+X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
+ v29-20020a056870311d00b000de9b6c362bmr3772925oaa.200.1650550933142; Thu, 21
+ Apr 2022 07:22:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421090313.24864-1-linmq006@gmail.com>
+In-Reply-To: <20220421090313.24864-1-linmq006@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 21 Apr 2022 10:22:02 -0400
+Message-ID: <CADnq5_PawNQThkhwMW4=GY4TOn1DLsvG_zUONYwf0WtGx0i8GA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: Fix memory leak in dcn21_clock_source_create
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laktyushkin Dmytro <dmytro.laktyushkin@amd.com>,
+        Solomon Chiu <solomon.chiu@amd.com>,
+        Stylon Wang <stylon.wang@amd.com>,
+        Victor Lu <victorchengchi.lu@amd.com>,
+        Ilya Bakoulin <Ilya.Bakoulin@amd.com>,
+        Melissa Wen <mwen@igalia.com>, Angus Wang <angus.wang@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports this issue
-qxl_kms.c:36:5: warning: symbol 'qxl_log_level' was not declared. Should it be static?
+Applied.  Thanks!
 
-qxl_log_level is defined qxl_kms.c but unused, so remove.
+Alex
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/qxl/qxl_kms.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/qxl/qxl_kms.c b/drivers/gpu/drm/qxl/qxl_kms.c
-index a054e4a00fe8..9bf6d4cc98d4 100644
---- a/drivers/gpu/drm/qxl/qxl_kms.c
-+++ b/drivers/gpu/drm/qxl/qxl_kms.c
-@@ -33,8 +33,6 @@
- #include "qxl_drv.h"
- #include "qxl_object.h"
- 
--int qxl_log_level;
--
- static bool qxl_check_device(struct qxl_device *qdev)
- {
- 	struct qxl_rom *rom = qdev->rom;
--- 
-2.27.0
-
+On Thu, Apr 21, 2022 at 5:03 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+>
+> When dcn20_clk_src_construct() fails, we need to release clk_src.
+>
+> Fixes: 6f4e6361c3ff ("drm/amd/display: Add Renoir resource (v2)")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
+> index 3fe4bfbb98a0..faab59508d82 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
+> @@ -997,6 +997,7 @@ static struct clock_source *dcn21_clock_source_create(
+>                 return &clk_src->base;
+>         }
+>
+> +       kfree(clk_src);
+>         BREAK_TO_DEBUGGER();
+>         return NULL;
+>  }
+> --
+> 2.17.1
+>

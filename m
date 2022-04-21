@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2C250A401
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FB550A408
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390053AbiDUP2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S1390060AbiDUP22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbiDUP2L (ORCPT
+        with ESMTP id S1390018AbiDUP21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:28:11 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01ED1AF09
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:25:21 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so8023072pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:25:21 -0700 (PDT)
+        Thu, 21 Apr 2022 11:28:27 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A67F1A3BD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:25:37 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id t12so5182532pll.7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:25:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rALYp+if0darmPSdMoPhbeuPNfcV/0b9+KgF06gqnp4=;
-        b=h7SF1jQML2/ahIwe/O5GKTiG1aB/cO1z10lLaoo8KEftSnI4VQ5FBhy94oUwIjTBW2
-         BcCgTJQ/jNiDqPMzA6h2bCtOz3M0I8FX/lohbyxUhjZ9Y6pYJCEAr7YcGJbgqoacaaXC
-         LeGWRXBd3JsWl6IGB5NdMuj7HumqzA7fJHF6u65mtphSD/g2NdC+stP76m7SKbA06EVX
-         RCeMhwroBR+SHz9WBoSR83dwz6cpJ3nCeNzC77W6WRvBPIJdgGCjJtLo2Ks01HHBAVEL
-         n1ekSleAKYEk0PI3CKgKCdaMSLiKQ+B5P5VuDIAOBWugNxiv5r9Ts6BQweYZjVp7TmYa
-         Xiwg==
+        bh=3X/olzZyiEOTaDnSyvUQfJTotSJF//8MOqgCU8Vd1Hk=;
+        b=EY3vQ8aQYxoLMh83TYT+sWZvvXQ5Q00X8s+8TVct4w2bwn28LSqEbXyWHMkfT764BX
+         X7kAMRbROJdVuSuhy0oW4ukxJYDi9452CKht+efnYSRj+5mnACYOmLbXO3H4g7DqdGwQ
+         TItWlo987dF8taxXxRwH1XTOjLsHO1rrWiCpLZB33gx7+iMoCqZsfhw1DCiayNGZUQFz
+         LRJCnjLv63jX+dsQrIA/F+cVj3MRpm+zKCrObpwM2GZksgRphVhFiwVQMSULFFFFAxiG
+         77MBLO77H7Ck9de/bqGmfgdY4aHJs3CZYx78B5HWsmwJv0Ejy0OkGYbfeyEOOcEidDjt
+         El9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rALYp+if0darmPSdMoPhbeuPNfcV/0b9+KgF06gqnp4=;
-        b=jir9vVi2Iema79UzwhwiCBZhfhadZMPHzbLmuqYTvCqxUIuut+liscyybEfxywRuQ+
-         ekJ8UvDPmrViEoKVbmyMGrnIULhppLqDHSHWjLtKBBtIhmd0jBbqPnj0HDZT0oJcmMIU
-         jQ8waKDsmrSoClSy131CwhB6Z+03KD8YZ8ZvdBYfkLSYxDPjt1LxMGPiLlc/1GJvU36W
-         rYklUwenXJN6B+C2lgNHjy28JgGcCbTuVRUXSNgFZsQcTryQVBD8Ro6EdWWy0uI4K1k2
-         1T8GX3K3sC29CwdNiXmkBbcgjkEp159/Xv67zOh2DuloNV7vDtrWBfY3YiYDtqmcROW6
-         XH4w==
-X-Gm-Message-State: AOAM532v4kSJCOpGfVpeTk3ft69EuCYKjkwqUMpd5WNNSqf/rF+EEZPT
-        583OkwHm1F4c0p7Kw+G6gMxYVtQw5N6SERq4bRH25A==
-X-Google-Smtp-Source: ABdhPJzei8RMyizdgrA2/zDKiToND2LY5mvmrdcY+8zXFXr02sd9BtT9jUzObvgwn7YeB0MY8ghxMe9uTGY/DiiJMoM=
-X-Received: by 2002:a17:90a:558a:b0:1ca:a819:d2d1 with SMTP id
- c10-20020a17090a558a00b001caa819d2d1mr11058959pji.126.1650554721083; Thu, 21
- Apr 2022 08:25:21 -0700 (PDT)
+        bh=3X/olzZyiEOTaDnSyvUQfJTotSJF//8MOqgCU8Vd1Hk=;
+        b=V8YbBOUcvAcvQ1iGn4J2GuSJujCMHZeV434Lwdhv/RwAPSaPAbCf+rfLBai2sfX8SY
+         FoZ++ORMJn06yVxHOV7bpApwcvym9uPEK6HbhQeUkcrK/VsKTZCsh3dNirMHWY+VHwWF
+         Fi6kW/KAY3MaJz11oUSz2fAS0MtFnOriOfWlWnsjLzY2hMH86llXFf31Md77+EqSIK3A
+         plH84xtLd5HR/YGNoVZnTgGo0EBAXP2gtD2YeEijBrwK4jv9reLDkuO1tSKi3E7LhrA3
+         JURLGgUCG33+ZKA8a+GK/qQHzB83Bb/McowSC7cyghHm2CJCi3Y+kMKo9lGCyuC9dGGV
+         aHVA==
+X-Gm-Message-State: AOAM5322IGvYufkJGea44jFqQbVW9j3dIu1/TQZ0dzwLwQjdQHIMBB5y
+        6L+IjfGKOIdOrgDsuIJTr6yUHhWMXOjQOGZjemjH7A==
+X-Google-Smtp-Source: ABdhPJxhUlkzsVifLeex0uye6BzHOsePBN4vsPwvKF0JB6gGtGu9+0yzrhAcyhs2TPLbVDSSbAfyFtWMs88v92ospfc=
+X-Received: by 2002:a17:90b:3b8c:b0:1d4:cd93:ffe7 with SMTP id
+ pc12-20020a17090b3b8c00b001d4cd93ffe7mr157473pjb.237.1650554736855; Thu, 21
+ Apr 2022 08:25:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220421122755.40899-1-lujialin4@huawei.com>
-In-Reply-To: <20220421122755.40899-1-lujialin4@huawei.com>
+References: <20220421124736.62180-1-lujialin4@huawei.com>
+In-Reply-To: <20220421124736.62180-1-lujialin4@huawei.com>
 From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 21 Apr 2022 08:25:09 -0700
-Message-ID: <CALvZod7pHY590zt8Dq14Fn+VB+p7bfHdpFf39M9dSn8mtzU_+A@mail.gmail.com>
-Subject: Re: [PATCH -next] mm/memcontrol.c: remove unused private flag of memory.oom_control
+Date:   Thu, 21 Apr 2022 08:25:25 -0700
+Message-ID: <CALvZod6zbOG_fBCYGufm=fJrA-yZH4AWrThapFb3Gm_4ACQoeA@mail.gmail.com>
+Subject: Re: [PATCH -next] mm/memcontrol.c: make cgroup_memory_noswap static
 To:     Lu Jialin <lujialin4@huawei.com>
 Cc:     Johannes Weiner <hannes@cmpxchg.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Michal Hocko <mhocko@kernel.org>,
         Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
         Wang Weiyang <wangweiyang2@huawei.com>,
         Cgroups <cgroups@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -73,10 +78,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 5:29 AM Lu Jialin <lujialin4@huawei.com> wrote:
+On Thu, Apr 21, 2022 at 5:48 AM Lu Jialin <lujialin4@huawei.com> wrote:
 >
-> There is no use for the private value, __OOM_TYPE and OOM notifier
-> OOM_CONTROL. Therefore remove them to make the code clean.
+> cgroup_memory_noswap is only used in mm/memcontrol.c, therefore just make
+> it static, and remove export in include/linux/memcontrol.h
 >
 > Signed-off-by: Lu Jialin <lujialin4@huawei.com>
 

@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D5F50ABFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A2D50ABFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442555AbiDUXfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 19:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S1442564AbiDUXgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 19:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349332AbiDUXfg (ORCPT
+        with ESMTP id S243601AbiDUXf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:35:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4243BBC1;
-        Thu, 21 Apr 2022 16:32:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5080B82936;
-        Thu, 21 Apr 2022 23:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7294BC385A7;
-        Thu, 21 Apr 2022 23:32:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650583962;
-        bh=N4PWRNQyzJhdBLpeVkHT5hgPnH2wpLBteBcwAUC81uE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=f8YS12Zp7oN2fmrppBL6o2uUJlnajln7s1JQIlCTwf9dCQ5/Agk23KsKyH0YQ6Dd9
-         WKRFXTdtIhrmrF/faG+0TlsWpsZAgJIoI3OTeogEISAQVe+LKb0tk86yMccaiWf968
-         9lX+Uo56dK/d+xhVZzi6xAmGBfeUhwiuxbs5ZUncttLaMOmw1ztDAuASWfPwf+LCre
-         hl/LPuipt9dWg6RxGKyfURGGjonUOPuUKuWGVi8K277vX9iX051fGkJvrnYY58ccGy
-         gWgcoKgFqX0gz0iJZhHlh1ZUCfL1Fvdw7KOfwpoOkvzkogfyqcYzznCd9Xt6qvmtn5
-         P7D1xQ0fWWCaA==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A . Donenfeld " <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: [PATCH v2] random: avoid mis-detecting a slow counter as a cycle counter
-Date:   Thu, 21 Apr 2022 16:31:52 -0700
-Message-Id: <20220421233152.58522-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.35.2
+        Thu, 21 Apr 2022 19:35:58 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2A43D4AB
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:33:07 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id z16so6370952pfh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=8PUlXciI2A9evvTWD64wT0yzak9WMui2iFOCoQYp1Qo=;
+        b=M644v8gEFmCO5jX3JuVj80cOKUPZYNigSrWDmIKTxN4iBYN7RRx17H/WXIKtybkzOs
+         gHuGCuUb5/2Y4q0PAwBhVwIAH7NEdJUAXNk0R3bvWjKaauknVSIE+osK6C31khyWSGqV
+         +/MIN30NvG/1bL/x64Ej4XKH14WrlwlOEbvkequaDw82s5dagxGthjJHsa3E36Vzd2um
+         1RGwRHC37VQU52cdbBupVxlkWqO0+6u0VHlVAgx4qg31wljljZeki2AIAmXbQu2T6NCh
+         GAFSLCJw84pZSfkw2JFKYn4dgW5RciQPm368mB4wGdkuDVFjwKuw/rAhmlCbLu+HnBiq
+         iGcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=8PUlXciI2A9evvTWD64wT0yzak9WMui2iFOCoQYp1Qo=;
+        b=Flv5gmnY1fFyfIvyWtvqmWGI7XnRMXNqe1jdrhv5PQziNZSzhUeHlND5ZcjnOhy87/
+         iOgB1+SdD/v+0xhEbL7raewe7E207jKsZj0u/0ApIjNoI/j5ZG+AYBsNRd8qEbdfeZsU
+         2p46zcoIAYLEv1xDvwmsWjsR78LLrhHlEIA1CqOGqG64AYTO4HbqIRLhODvZjRYvrk6D
+         wAPL79rTlRXRrBFuxNax/cekGUs6pFHiGGZ4rTNod08FtMq7Xgla3/I3Qo1pmCJzW7gV
+         DxJetxdWCZa8bQVetdIm3PH8430R5Z+rvlsh0zoXpnmLhwE+Zur22uY6n0sHEsjC1C1X
+         Sehw==
+X-Gm-Message-State: AOAM530UUylJB6NQIKWjufxfG80INCl9WMZeaSWaogYxfdouyb0zxwZZ
+        L4OR31RGBu5GVLIF3ayvYdbgqA==
+X-Google-Smtp-Source: ABdhPJzuZYv0sW9q8OZoDmmfbOPX+UHh3VAIdTDWRpkMgZKFtpJVJq2u5sEBYNthTN9h5ACG9jDyYQ==
+X-Received: by 2002:a65:60c1:0:b0:39d:9c28:909a with SMTP id r1-20020a6560c1000000b0039d9c28909amr1552046pgv.352.1650583986827;
+        Thu, 21 Apr 2022 16:33:06 -0700 (PDT)
+Received: from ?IPV6:2600:380:4927:368a:ac15:d192:1695:2335? ([2600:380:4927:368a:ac15:d192:1695:2335])
+        by smtp.gmail.com with ESMTPSA id w7-20020aa79547000000b0050ad0e82e6dsm194749pfq.215.2022.04.21.16.33.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 16:33:06 -0700 (PDT)
+Message-ID: <b32cf3e2-a68c-b1b0-f3da-72e5f0b9d86c@kernel.dk>
+Date:   Thu, 21 Apr 2022 17:33:04 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 6/6] io_uring: allow NOP opcode in IOPOLL mode
+To:     Dylan Yudaken <dylany@fb.com>
+Cc:     io-uring <io-uring@vger.kernel.org>,
+        "Pavel Begunkov (Silence)" <asml.silence@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        FB Kernel Team <kernel-team@fb.com>,
+        Dylan Yudaken <dylany@fb.com>
+References: <20220421091345.2115755-1-dylany@fb.com>
+ <20220421091345.2115755-7-dylany@fb.com>
+Content-Language: en-US
+In-Reply-To: <20220421091345.2115755-7-dylany@fb.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+On Thu, Apr 21, 2022 at 3:17 AM Dylan Yudaken <dylany@fb.com> wrote:
+>
+> This is useful for tests so that IOPOLL can be tested without requiring
+> files. NOP is acceptable in IOPOLL as it always completes immediately.
 
-The method that try_to_generate_entropy() uses to detect a cycle counter
-is to check whether two calls to random_get_entropy() return different
-values.  This is uncomfortably prone to false positives if
-random_get_entropy() is a slow counter, as the two calls could return
-different values if the counter happens to be on the cusp of a change.
-Making things worse, the task can be preempted between the calls.
+This one actually breaks two liburing test cases (link and defer) that
+assume NOP on IOPOLL will return -EINVAL. Not a huge deal, but we do
+need to figure out how to make them reliably -EINVAL in a different
+way then.
 
-This is problematic because try_to_generate_entropy() doesn't do any
-real entropy estimation later; it always credits 1 bit per loop
-iteration.  To avoid crediting garbage, it relies entirely on the
-preceding check for whether a cycle counter is present.
+Maybe add a nop_flags to the usual flags spot in the sqe, and define
+a flag that says NOP_IOPOLL or something. Require this flag set for
+allowing NOP on iopoll. That'd allow testing, but still retain the
+-EINVAL behavior if not set.
 
-Therefore, increase the number of counter comparisons from 1 to 3, to
-greatly reduce the rate of false positive cycle counter detections.
+Alternatively, modify test cases...
 
-Fixes: 50ee7529ec45 ("random: try to actively add entropy rather than passively wait for it")
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
+I'll drop this one for now, just because it fails the regression
+tests.
 
-v2: compare with previous value rather than first one.
-
- drivers/char/random.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index bf89c6f27a192..18d2d1f959683 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1382,12 +1382,22 @@ static void try_to_generate_entropy(void)
- 		unsigned long entropy;
- 		struct timer_list timer;
- 	} stack;
-+	int i;
- 
-+	/*
-+	 * We must not proceed if we don't actually have a cycle counter.  To
-+	 * detect a cycle counter, check whether random_get_entropy() returns a
-+	 * new value each time.  Check this multiple times to avoid false
-+	 * positives where a slow counter could be just on the cusp of a change.
-+	 */
- 	stack.entropy = random_get_entropy();
-+	for (i = 0; i < 3; i++) {
-+		unsigned long entropy = random_get_entropy();
- 
--	/* Slow counter - or none. Don't even bother */
--	if (stack.entropy == random_get_entropy())
--		return;
-+		if (stack.entropy == entropy)
-+			return;
-+		stack.entropy = entropy;
-+	}
- 
- 	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
- 	while (!crng_ready() && !signal_pending(current)) {
-
-base-commit: 939ee380b17589d026e132a1be91199409c3c934
 -- 
-2.35.2
+Jens Axboe
 

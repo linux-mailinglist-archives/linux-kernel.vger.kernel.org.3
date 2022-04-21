@@ -2,172 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D3E50A976
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE6850A973
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392076AbiDUTsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        id S1392068AbiDUTsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392059AbiDUTsi (ORCPT
+        with ESMTP id S1392057AbiDUTr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:48:38 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10E64D25D
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650570347; x=1682106347;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qUbnApxe0ifMuycVX45OPy6G9l25JluiNKetU6KZUyg=;
-  b=G0sGHg+xRqRjQQudF5nN+WlCJPhhBkMYPE+Ps0SkBM21iwRlgTTfAf6h
-   WK/ieQ4S0j2tiCZNTK8dpLikRhbHxRlreTETtr0ziQ2knAA/3pD7NSUdF
-   tHqiqO0W2FK+CQLXnF3T8TGhBnbal5stSe0BrGJ4pQEB225BA3xIMUkBj
-   9jSXSG1XaU58mzf5roR74eUyAGNb2dBseXLDIwhpcuVY2Zf0ej/gGFl4z
-   FoN3Ts2R31Ao+i9WiHwJL4IofFRfLVrBCXEntRrJ6laZ5mDozPXcaM5pv
-   cM4l9xuEf4uq41IJXvFeYoq1w/LMhkA+77b6eiueu5TkfhRIKoUK5gjHs
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264630241"
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="264630241"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 12:45:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="533569869"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 21 Apr 2022 12:45:36 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhckB-0008j5-RU;
-        Thu, 21 Apr 2022 19:45:35 +0000
-Date:   Fri, 22 Apr 2022 03:44:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa-dev@sang-engineering.com>
-Subject: drivers/i2c/busses/i2c-mxs.c:802:18: warning: cast to smaller
- integer type 'enum mxs_i2c_devtype' from 'const void *'
-Message-ID: <202204220355.TdCb2zsz-lkp@intel.com>
+        Thu, 21 Apr 2022 15:47:59 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422B9140F9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:45:08 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id q22so6467922iod.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:45:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=1tgz+X24f6XnX4f1yXTxoEYQUjnBY33NG2UKa/wMACk=;
+        b=rfKqO1m+RUvn+rJMgR7Xk6wcQBoywjMk4RP/njbPPdsig4lYlb7gHyIDwktnpEBIiC
+         U+GpNV25/elY5gDks9t3mgjdkykIrlpzvzr6SFQYmYbWwVCHfe3u0+tJHnE6gRZwXgVe
+         xWmvaXHPpH4OFMDVHHjqFhZ80+TWUbEihGCReMIxAlloOoVAUWw4pilRllile6vNoguJ
+         zwUkUdBrpPf0OiupMaiDcuKkNMTsTIJnE0nCi8ncYulFEpayJTO9OV5or3gOEk1exOiK
+         JmnEIqhOuTUdr3w9OuKOCyesCopz0Y7RQjX0Kp/sc7w2scwxXE507YgGrmQEXQBlrBqe
+         5nzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=1tgz+X24f6XnX4f1yXTxoEYQUjnBY33NG2UKa/wMACk=;
+        b=iRA0eI2+Kjk9zJ2IhUw5HqP8Kzwejg9hTaQtWLsVZq+WMQf7PGHHaVbhaYJINyBEfU
+         93rh/VY9wkTMd/Itl52OfZLYV+bjuLkLq0JieiJheFJt770dA0lLElko9rFMQt7hbdrc
+         orjM1IOWpnzDna/0RtgdT4xBQBDV3ZOfyMdWcovCulI8zduXhThcfoNbvb2JsO3wfV2Y
+         iTE+GbY+86+Npy7TjJaNY4Ht7XL3fZuz3rv0J40DQSatgXbjFCyFr427PfK6dOJY9+Nu
+         PE3yzQewO9lT/5cNZVwoNH5v0WRwVM/gFMXu0k8EOrFdUUI+29YyM7jzegoCjHeIFhBD
+         K9ow==
+X-Gm-Message-State: AOAM533sSDd5uuwXQaCtvoOOcf+A7lb6/jY+cA7RtA/nVOoPfyyz8xUt
+        IWSqQke5RH4Llh+izn3CCLuYFg==
+X-Google-Smtp-Source: ABdhPJxnmjYyEBvl3tBa4XmCQ75rxDL2W5WvAVzWXw/AvNBhlAe7CyRBsApwpMMayd0C/pfomXn15Q==
+X-Received: by 2002:a05:6602:2dcf:b0:656:d2f8:9dee with SMTP id l15-20020a0566022dcf00b00656d2f89deemr576107iow.29.1650570307512;
+        Thu, 21 Apr 2022 12:45:07 -0700 (PDT)
+Received: from [127.0.1.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id z18-20020a05660229d200b0064c719946a8sm15215671ioq.34.2022.04.21.12.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 12:45:06 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     dylany@fb.com, io-uring@vger.kernel.org
+Cc:     asml.silence@gmail.com, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+In-Reply-To: <20220421091345.2115755-1-dylany@fb.com>
+References: <20220421091345.2115755-1-dylany@fb.com>
+Subject: Re: [PATCH 0/6] return an error when cqe is dropped
+Message-Id: <165057030672.167153.10167028049673775527.b4-ty@kernel.dk>
+Date:   Thu, 21 Apr 2022 13:45:06 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabio,
+On Thu, 21 Apr 2022 02:13:39 -0700, Dylan Yudaken wrote:
+> This series addresses a rare but real error condition when a CQE is
+> dropped. Many applications rely on 1 SQE resulting in 1 CQE and may even
+> block waiting for the CQE. In overflow conditions if the GFP_ATOMIC
+> allocation fails, the CQE is dropped and a counter is incremented. However
+> the application is not actively signalled that something bad has
+> happened. We would like to indicate this error condition to the
+> application but in a way that does not rely on the application doing
+> invasive changes such as checking a flag before each wait.
+> 
+> [...]
 
-FYI, the error/warning still remains.
+Applied, thanks!
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b253435746d9a4a701b5f09211b9c14d3370d0da
-commit: c32abd8b569144b20c9c9b6dd7232828c612452f i2c: mxs: Remove unneeded platform_device_id
-date:   1 year, 5 months ago
-config: arm64-randconfig-r034-20220421 (https://download.01.org/0day-ci/archive/20220422/202204220355.TdCb2zsz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c32abd8b569144b20c9c9b6dd7232828c612452f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c32abd8b569144b20c9c9b6dd7232828c612452f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/i2c/busses/
+[1/6] io_uring: add trace support for CQE overflow
+      commit: f457ab8deb017140aef05be3027a00a18a7d16b7
+[2/6] io_uring: trace cqe overflows
+      commit: 2a847e6faf76810ae68a6e81bd9ac3a7c81534d0
+[3/6] io_uring: rework io_uring_enter to simplify return value
+      commit: db9bb58b391c9e62da68bc139598e8470d892c77
+[4/6] io_uring: use constants for cq_overflow bitfield
+      commit: b293240e2634b2100196d7314aeeb84299ce6d5b
+[5/6] io_uring: return an error when cqe is dropped
+      commit: 34a7ee8a42c8496632465f3f0b444b3a7b908c46
+[6/6] io_uring: allow NOP opcode in IOPOLL mode
+      commit: ebbe59f49556822b9bcc7b0d4d96bae31f522905
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/i2c/busses/i2c-mxs.c:802:18: warning: cast to smaller integer type 'enum mxs_i2c_devtype' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-           i2c->dev_type = (enum mxs_i2c_devtype)of_device_get_match_data(&pdev->dev);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +802 drivers/i2c/busses/i2c-mxs.c
-
-   790	
-   791	static int mxs_i2c_probe(struct platform_device *pdev)
-   792	{
-   793		struct device *dev = &pdev->dev;
-   794		struct mxs_i2c_dev *i2c;
-   795		struct i2c_adapter *adap;
-   796		int err, irq;
-   797	
-   798		i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
-   799		if (!i2c)
-   800			return -ENOMEM;
-   801	
- > 802		i2c->dev_type = (enum mxs_i2c_devtype)of_device_get_match_data(&pdev->dev);
-   803	
-   804		i2c->regs = devm_platform_ioremap_resource(pdev, 0);
-   805		if (IS_ERR(i2c->regs))
-   806			return PTR_ERR(i2c->regs);
-   807	
-   808		irq = platform_get_irq(pdev, 0);
-   809		if (irq < 0)
-   810			return irq;
-   811	
-   812		err = devm_request_irq(dev, irq, mxs_i2c_isr, 0, dev_name(dev), i2c);
-   813		if (err)
-   814			return err;
-   815	
-   816		i2c->dev = dev;
-   817	
-   818		init_completion(&i2c->cmd_complete);
-   819	
-   820		if (dev->of_node) {
-   821			err = mxs_i2c_get_ofdata(i2c);
-   822			if (err)
-   823				return err;
-   824		}
-   825	
-   826		/* Setup the DMA */
-   827		i2c->dmach = dma_request_chan(dev, "rx-tx");
-   828		if (IS_ERR(i2c->dmach)) {
-   829			dev_err(dev, "Failed to request dma\n");
-   830			return PTR_ERR(i2c->dmach);
-   831		}
-   832	
-   833		platform_set_drvdata(pdev, i2c);
-   834	
-   835		/* Do reset to enforce correct startup after pinmuxing */
-   836		err = mxs_i2c_reset(i2c);
-   837		if (err)
-   838			return err;
-   839	
-   840		adap = &i2c->adapter;
-   841		strlcpy(adap->name, "MXS I2C adapter", sizeof(adap->name));
-   842		adap->owner = THIS_MODULE;
-   843		adap->algo = &mxs_i2c_algo;
-   844		adap->quirks = &mxs_i2c_quirks;
-   845		adap->dev.parent = dev;
-   846		adap->nr = pdev->id;
-   847		adap->dev.of_node = pdev->dev.of_node;
-   848		i2c_set_adapdata(adap, i2c);
-   849		err = i2c_add_numbered_adapter(adap);
-   850		if (err) {
-   851			writel(MXS_I2C_CTRL0_SFTRST,
-   852					i2c->regs + MXS_I2C_CTRL0_SET);
-   853			return err;
-   854		}
-   855	
-   856		return 0;
-   857	}
-   858	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jens Axboe
+
+

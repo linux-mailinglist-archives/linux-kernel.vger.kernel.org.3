@@ -2,76 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CAF509C04
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB548509BF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387364AbiDUJLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        id S1387349AbiDUJNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387349AbiDUJK7 (ORCPT
+        with ESMTP id S1387434AbiDUJNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:10:59 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED1E23174;
-        Thu, 21 Apr 2022 02:08:10 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id F338D1F45275
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650532089;
-        bh=sBf44Cesk54kZ/DtmuF8wUK6DJExLvoWBxhHa0QYby4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Rmepv4LWshLzGNdMslSSq3jLZP7KVxaV1jNda+cStLeVpqk8DIlaG9Bu6jkgM9Gna
-         dtil2YN1R8+ISwp3XG1rj+vKs460GuXyPBBOeEMJH58bFKbjVL0bMB9OWX2VQCLVXR
-         3eQBljnjBwSb1BrOmMmbu4feRnNT9cGWkmsYdN/qksBw9KQARDNDKYSv2WdNH1jP4U
-         Fkyg1EZitsdQx5fXOQe4vOtloAc6UjUVBn6AA9Qozai2uLjA9fARPBVHB2j68WjboH
-         r1YkLmYI09szVeGlItTtpN33xLDrv90BRI6WWwSjoWw7Fmh5MvpZPoiCRT+Mv+iZpw
-         NwK2vharQJdXg==
-Message-ID: <d5b05fa3-a1c4-d2da-482b-a9235d9cc382@collabora.com>
-Date:   Thu, 21 Apr 2022 11:08:05 +0200
+        Thu, 21 Apr 2022 05:13:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF726B1E5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5325CB82241
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC654C385A1;
+        Thu, 21 Apr 2022 09:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650532218;
+        bh=wWg+TqUndPGPiHos3howNQj+fH1A1hLH3CX7tyZnjDo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vx9XAvVe9eJPUylgV21gOM9CWMeYk6NW2jxKf/lucwmXYqwzcu+7fEahRDgixLeAR
+         1Jhld4cGG+1fAgZd79HEyxWNjrTmibJ9u3nPaT1LnVtMPR2vzuScfBDv33LEnc+TII
+         hfs1W6ratt0h1j7x32P3/Pj2XtX+xjzn81hJ3cKb00+US+SA80Fyep26+5fi2RVJEz
+         pp3t6gMgfamhR9MNafZbGQrFHfP7isnmnHym3HQrOh9Fze+x709jx8saAAaOzmK7u4
+         h7u2btndjZJtc7uFD6e55EfM3upP3GxvQA5i/leziUlzL3DZaTXqUwo0FhzuoEBee0
+         aLwXWBw03RZ7Q==
+Date:   Thu, 21 Apr 2022 10:10:11 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Elliot Berman <quic_eberman@quicinc.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        virtualization@lists.linux-foundation.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Murali Nalajala <quic_mnalajal@quicinc.com>
+Subject: Re: [PATCH] arm64: paravirt: Disable IRQs during
+ stolen_time_cpu_down_prepare
+Message-ID: <20220421091011.GB8303@willie-the-truck>
+References: <20220420204417.155194-1-quic_eberman@quicinc.com>
+ <0737998d-3006-5866-5ea1-dcfef0cfeb32@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V2 01/12] clk: mediatek: reset: Fix written reset bit
- offset
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, mturquette@baylibre.com,
-        sboyd@kernel.org
-Cc:     matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        chun-jie.chen@mediatek.com, wenst@chromium.org,
-        runyang.chen@mediatek.com, linux-kernel@vger.kernel.org,
-        allen-kh.cheng@mediatek.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220420130527.23200-1-rex-bc.chen@mediatek.com>
- <20220420130527.23200-2-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220420130527.23200-2-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0737998d-3006-5866-5ea1-dcfef0cfeb32@suse.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/04/22 15:05, Rex-BC Chen ha scritto:
-> Original assert/deassert bit is BIT(0), but it's more resonable to modify
-> them to BIT(id % 32) which is based on id.
+On Thu, Apr 21, 2022 at 09:44:28AM +0200, Juergen Gross wrote:
+> On 20.04.22 22:44, Elliot Berman wrote:
+> > From: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> > 
+> > During hotplug, the stolen time data structure is unmapped and memset.
+> > There is a possibility of the timer IRQ being triggered before memset
+> > and stolen time is getting updated as part of this timer IRQ handler. This
+> > causes the below crash in timer handler -
+> > 
+> >    [ 3457.473139][    C5] Unable to handle kernel paging request at virtual address ffffffc03df05148
+> >    ...
+> >    [ 3458.154398][    C5] Call trace:
+> >    [ 3458.157648][    C5]  para_steal_clock+0x30/0x50
+> >    [ 3458.162319][    C5]  irqtime_account_process_tick+0x30/0x194
+> >    [ 3458.168148][    C5]  account_process_tick+0x3c/0x280
+> >    [ 3458.173274][    C5]  update_process_times+0x5c/0xf4
+> >    [ 3458.178311][    C5]  tick_sched_timer+0x180/0x384
+> >    [ 3458.183164][    C5]  __run_hrtimer+0x160/0x57c
+> >    [ 3458.187744][    C5]  hrtimer_interrupt+0x258/0x684
+> >    [ 3458.192698][    C5]  arch_timer_handler_virt+0x5c/0xa0
+> >    [ 3458.198002][    C5]  handle_percpu_devid_irq+0xdc/0x414
+> >    [ 3458.203385][    C5]  handle_domain_irq+0xa8/0x168
+> >    [ 3458.208241][    C5]  gic_handle_irq.34493+0x54/0x244
+> >    [ 3458.213359][    C5]  call_on_irq_stack+0x40/0x70
+> >    [ 3458.218125][    C5]  do_interrupt_handler+0x60/0x9c
+> >    [ 3458.223156][    C5]  el1_interrupt+0x34/0x64
+> >    [ 3458.227560][    C5]  el1h_64_irq_handler+0x1c/0x2c
+> >    [ 3458.232503][    C5]  el1h_64_irq+0x7c/0x80
+> >    [ 3458.236736][    C5]  free_vmap_area_noflush+0x108/0x39c
+> >    [ 3458.242126][    C5]  remove_vm_area+0xbc/0x118
+> >    [ 3458.246714][    C5]  vm_remove_mappings+0x48/0x2a4
+> >    [ 3458.251656][    C5]  __vunmap+0x154/0x278
+> >    [ 3458.255796][    C5]  stolen_time_cpu_down_prepare+0xc0/0xd8
+> >    [ 3458.261542][    C5]  cpuhp_invoke_callback+0x248/0xc34
+> >    [ 3458.266842][    C5]  cpuhp_thread_fun+0x1c4/0x248
+> >    [ 3458.271696][    C5]  smpboot_thread_fn+0x1b0/0x400
+> >    [ 3458.276638][    C5]  kthread+0x17c/0x1e0
+> >    [ 3458.280691][    C5]  ret_from_fork+0x10/0x20
+> > 
+> > As a fix, disable the IRQs during hotplug until we unmap and memset the
+> > stolen time structure.
 > 
-> This patch will not influence any previous driver because the reset is
-> only used for thermal. The id (MT8183_INFRACFG_AO_THERM_SW_RST) is 0.
+> This will work for the call chain of your observed crash, but are
+> you sure that para_steal_clock() can't be called from another cpu
+> concurrently?
+
+Agreed, this needs checking as update_rq_clock() is called from all over the
+place.
+
+> In case you verified this can't happen, you can add my:
 > 
-> Fixes: 64ebb57a3df6 ("clk: reset: Modify reset-controller driver")
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> Reviewed-by: Juergen Gross <jgross@suse.com>
+> 
+> Otherwise you either need to use RCU for doing the memunmap(), or a
+> lock to protect stolen_time_region.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Yes, I think RCU would make a lot of sense here, deferring the memunmap
+until there are no longer any readers. The reader is currently doing:
 
+	if (!reg->kaddr)
+		return 0;
+
+	return le64_to_cpu(READ_ONCE(reg->kaddr->stolen_time));
+
+so we'd also want an rcu_dereference() on reg->kaddr to avoid reading it
+twice.
+
+Will

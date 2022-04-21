@@ -2,234 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE4D509881
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECCD509856
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385480AbiDUHAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
+        id S236371AbiDUHAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385539AbiDUHAG (ORCPT
+        with ESMTP id S1385541AbiDUHAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:00:06 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266E615820;
-        Wed, 20 Apr 2022 23:57:10 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 16E2F320224F;
-        Thu, 21 Apr 2022 02:57:08 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 21 Apr 2022 02:57:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1650524228; x=1650610628; bh=Zf2B3llxl7G60fYTjQuglARaaSIr/kGBYE8
-        scs0PYVI=; b=Jh5rPdjQKX55R5fZF5dNwbKnmiEUbPzmQppXv4ew7pb2Ogwpy34
-        Gu8bwQcpM0xnrhzNOBYpism/9UFPorUt6VKUpQFEiKZMyPW3ABuVwEM27tNfqUFT
-        AdEL8p+5yp8wmzeGzKPp+AfLrbqsZ5hpyq2n7SMYUHKHEu/GFGxKyrCqtYSRIEhN
-        1DDULMu9c5qR2pkbO0vAeQAk2VvFh+PrB5vBAZpddPpgREa1yyF2VaOJ1emuulVk
-        F0lcFn3H5TlSnH/vzEnn8bEMMYf016yT55LZhbVOgFRYkIpg0vgiYawq567L/3BC
-        8eyt8sgGIL4/xnlk/FD/Ymat6TcQ1LgabaA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650524228; x=1650610628; bh=Zf2B3llxl7G60
-        fYTjQuglARaaSIr/kGBYE8scs0PYVI=; b=NOi56ZhY/8GCcINCFRZS7QSdef6C5
-        +uT9UTS+detk/eMudny/6l264jYWO75l2OYMpXYbkAA1rbu4Vur4tb8JCruXtv8m
-        Wc1Csd5I9n4/3gO+S6LaUJCuzH/bSuor2/XcXh2Vuos/5be534+a8g4Qpzl9308P
-        L82IlXQY7/FzjUx2XUa2KTyryBqAWJ0ULFgs3PV7FkqJzFrlfjHPzqP7EP4ZO426
-        61gzS6Khw/ryutErPA+agnWaNbsD0wYhzQWEJnDMUa++h6YtqwEOHjKcx9YSI3Ok
-        p7vWRWb3d1LEi4/4JQAUB3VTFEmnva1EhTS3Th48GC2vkwT07eOnGi5FA==
-X-ME-Sender: <xms:RABhYgZ6WfbpzwNO2n-1y0J-0pJzqcrV4SLaqTY7FcPEsbvhcIWeLQ>
-    <xme:RABhYrZ0OEFzc6Ky7kerx3CZ9YTWvX7XYAztqOGM4RSCWXW7uRUPd9ZSQEDBM6I8I
-    nXI1nTO850DZZuqQL4>
-X-ME-Received: <xmr:RABhYq-NDeF1nQKiOejGygm3QGzmSTNmjUd8iy23JVZWfQIWAVaO23n_yVES7PzhLp3ZESaldb5-rUougdVyB2Q0EpE0PqBM4g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtddugdduudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkgggtugesthdtredttddtvdenucfhrhhomheprfgvthgvrhcu
-    jfhuthhtvghrvghruceophgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvghtqe
-    enucggtffrrghtthgvrhhnpeffgeelhfejgedtleelvefhvdeggeehgfekudfhueeludfg
-    gedvheffteevgfekueenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepphgvthgvrhdrhhhuthht
-    vghrvghrseifhhhoqdhtrdhnvght
-X-ME-Proxy: <xmx:RABhYqr5R6RjwGxTgO7XiiEx_Q-MAzOqrjM59BKuwO6t6W-03m1zcA>
-    <xmx:RABhYrrN721VKasq_vHy5TexMhHve834vF21klLnSloGb3RF6yPM0g>
-    <xmx:RABhYoRQTrbqgZh2YDEk2dapnXt--E7yz3PmqOb2DfARwn8f2zAWUg>
-    <xmx:RABhYi0YXRs3ZahITco38ehX3KQxU4nQzIh50wsKrS9e8q-dGjK6pQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 21 Apr 2022 02:57:06 -0400 (EDT)
-Date:   Thu, 21 Apr 2022 16:57:01 +1000
-From:   Peter Hutterer <peter.hutterer@who-t.net>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] HID: hidraw - add HIDIOCREVOKE ioctl
-Message-ID: <YmEAPZKDisM2HAsG@quokka>
+        Thu, 21 Apr 2022 03:00:07 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F55715A32;
+        Wed, 20 Apr 2022 23:57:14 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id j17so4140112pfi.9;
+        Wed, 20 Apr 2022 23:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=o/ozdBc2EnetQZby0Dq0arg/wM1fGuqmYXDc/fS+iKE=;
+        b=kV3mEYMRZCjIuz1tsNE+1ob8/s/kL83lxOJG9DUy5xJj7JL8SVYhJlojfHvx7cFwgO
+         Oecl0Og28SvzCiEO5O3tg+l140mcjhtOvaFlX5ejJAfASMTfOiZmkohDsST14SSqKTEy
+         gI2GGj/oWKSKr5npPdFAZBnYpUTo9GLjj0PdDECjOCpVV68FfWTZu5C1oIR0hMWest8g
+         3dN6/AVkelgrY5keUOwkUfsipojB7+oqi0p/5Jm9DQpIIqaK5qhBIRhCHVv6ivg3N8Ir
+         L3sZC8phJt62v36rKBc8nRqMxar5oOSE2ldBHTBOl7fPx7R6wb4gMXCQJXO/iHzH7bJV
+         jsMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=o/ozdBc2EnetQZby0Dq0arg/wM1fGuqmYXDc/fS+iKE=;
+        b=NbTdxWec8lkvG29gxif/esdCZ+1kWnkZrBaXlDGiMu92fSrArC78JGpx9SGv7m7aFL
+         3p0WBpemBFlDUEgtyTMjAvrBc+8rtVwkeNbDAcMZzeRkSHjQOFtJAM2KEksbSdMun3ZI
+         D976hL1rkltmRo7i0OnP3hQhvjDoTIDWYY7fzj8AaD3DfwoWJyA/ADjZ7S3AQg+NBfum
+         EGHBPhWjM62fEJIZtVMywDIQ92AA689T0iSIpEQIUBgbSQ1iZARoLLa7gZ2pBvZlfDXd
+         uzm4dqDUR3amZKW3faw+pYZSnqE//j8lxma+Vjpws3674livCAccVR6NV46N3NTtzjcx
+         e1Kg==
+X-Gm-Message-State: AOAM53387yIckTrdB21EfmK2QonJRP2U/JCVfcaJvKmXlFlk++ItiHOs
+        Jm1pQre8WK8ktAD2r+ayxYU=
+X-Google-Smtp-Source: ABdhPJyu4eRa97cpqRY5VQJTojJ3owbuG+DINpRNZFO51Z8kHWTLQLLQZmiw9Bsm+h1qVnlcGXWeWg==
+X-Received: by 2002:a05:6a00:2883:b0:509:322f:685f with SMTP id ch3-20020a056a00288300b00509322f685fmr27259825pfb.60.1650524233790;
+        Wed, 20 Apr 2022 23:57:13 -0700 (PDT)
+Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
+        by smtp.gmail.com with ESMTPSA id w7-20020aa79547000000b0050ad0e82e6dsm2847893pfq.215.2022.04.20.23.57.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 23:57:13 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 23:57:07 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, isaku.yamahata@gmail.com
+Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+Message-ID: <20220421065707.GA1423762@private.email.ne.jp>
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <b209ee09b74394ab7aed85e0244e2191ee3d4171.camel@intel.com>
+ <e0e2e399-2cac-cf75-2a64-9d017e6d7189@linux.intel.com>
+ <420a4d689f73f9f7dc1ef71c61da75b7c9777a3f.camel@intel.com>
+ <1e184b44-8024-b8ae-98a8-cf2b6f78df61@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1e184b44-8024-b8ae-98a8-cf2b6f78df61@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a need for userspace applications to open HID devices directly.
-Use-cases include configuration of gaming mice or direct access to
-joystick devices. The latter is currently handled by the uaccess tag in
-systemd, other devices include more custom/local configurations or just
-sudo.
+On Wed, Apr 20, 2022 at 07:42:06PM -0700,
+Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
 
-A better approach is what we already have for evdev devices: give the
-application a file descriptor and revoke it when it may no longer access
-that device.
+> 
+> 
+> On 4/20/22 5:11 PM, Kai Huang wrote:
+> > On Wed, 2022-04-20 at 16:45 -0700, Sathyanarayanan Kuppuswamy wrote:
+> > > If we want to support multiple GetQuote requests in parallel, then we
+> > > need some way to uniquely identify the GetQuote requests. So that when
+> > > we get completion notification, we can understand which request is
+> > > completed. This part is not mentioned/discussed in ABI spec. So we want
+> > > to serialize the requests for now.
+> > > 
+> > 
+> > Yes it's unfortunate that this part (whether concurrent GetQuote requests are
+> > supported by TDX architecture) is not explicitly mentioned in GHCI spec.  I am
+> > fine with only supporting GetQuote requests one by one.  AFAICT there's no
+> > request to support concurrent GetQuote requests anyway.  What concerns me is
+> > exactly how explain this.
+> > 
+> > As I said, we have GET_QUOTE_IN_FLIGHT flag now.  Theoretically, you can queue
+> > multiple GetQuote requests, and when you receive the interrupt, you check which
+> > buffer has GET_QUOTE_IN_FLIGHT cleared.  That buffer is the one with Quote
+> > ready.  However I am not 100% sure whether above will always work.  Interrupt
+> > can get lost when there are multiple Quotes ready in multiple buffer in very
+> > short time period, etc?  Perhaps Isaku can provide more input here.
+> 
+> Either supported or not, it should be mentioned in the GHCI spec. Currently,
+> there are no details related to it. If it is supported, the specification
+> should include the protocol to use.
+> 
+> I will check with Isaku about it.
 
-This patch is the hidraw equivalent to the EVIOCREVOKE ioctl, see
-commit c7dc65737c9a607d3e6f8478659876074ad129b8 for full details.
+The spec says that TD can call multiple GetQuote requests in parallel.
 
-A draft MR for systemd-logind has been filed here:
-https://github.com/systemd/systemd/pull/23140
+  TDG.VP.VMCALL<GetQuote> API allows one TD to issue multiple requests. It's
+  implementation specific that how many concurrent requests are allowed. The TD
+  should be able to handle TDG.VP.VMCALL_RETRY if it chooses to issue multiple
+  requests simultaneously
 
-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
----
-Maybe noteworthy: even with logind support this is only the first step of
-many. logind only hands the fd to whoever controls the session and the fd will
-then have to be passed forward through portals to the application.
+As Kai said, there is no requirement for multiple GetQuote in parallel, it's
+okay to support only single request at the same time.
 
- drivers/hid/hidraw.c        | 34 ++++++++++++++++++++++++++++++----
- include/linux/hidraw.h      |  1 +
- include/uapi/linux/hidraw.h |  1 +
- 3 files changed, 32 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hid/hidraw.c b/drivers/hid/hidraw.c
-index 681614a8302a..3449fe856090 100644
---- a/drivers/hid/hidraw.c
-+++ b/drivers/hid/hidraw.c
-@@ -42,6 +42,9 @@ static ssize_t hidraw_read(struct file *file, char __user *buffer, size_t count,
- 	int ret = 0, len;
- 	DECLARE_WAITQUEUE(wait, current);
- 
-+	if (list->revoked)
-+		return -ENODEV;
-+
- 	mutex_lock(&list->read_mutex);
- 
- 	while (ret == 0) {
-@@ -159,9 +162,13 @@ static ssize_t hidraw_send_report(struct file *file, const char __user *buffer,
- 
- static ssize_t hidraw_write(struct file *file, const char __user *buffer, size_t count, loff_t *ppos)
- {
-+	struct hidraw_list *list = file->private_data;
- 	ssize_t ret;
- 	down_read(&minors_rwsem);
--	ret = hidraw_send_report(file, buffer, count, HID_OUTPUT_REPORT);
-+	if (list->revoked)
-+		ret = -ENODEV;
-+	else
-+		ret = hidraw_send_report(file, buffer, count, HID_OUTPUT_REPORT);
- 	up_read(&minors_rwsem);
- 	return ret;
- }
-@@ -254,7 +261,7 @@ static __poll_t hidraw_poll(struct file *file, poll_table *wait)
- 	poll_wait(file, &list->hidraw->wait, wait);
- 	if (list->head != list->tail)
- 		mask |= EPOLLIN | EPOLLRDNORM;
--	if (!list->hidraw->exist)
-+	if (!list->hidraw->exist || list->revoked)
- 		mask |= EPOLLERR | EPOLLHUP;
- 	return mask;
- }
-@@ -313,6 +320,9 @@ static int hidraw_fasync(int fd, struct file *file, int on)
- {
- 	struct hidraw_list *list = file->private_data;
- 
-+	if (list->revoked)
-+		return -ENODEV;
-+
- 	return fasync_helper(fd, file, on, &list->fasync);
- }
- 
-@@ -360,6 +370,13 @@ static int hidraw_release(struct inode * inode, struct file * file)
- 	return 0;
- }
- 
-+static int hidraw_revoke(struct hidraw_list *list, struct file *file)
-+{
-+	list->revoked = true;
-+
-+	return 0;
-+}
-+
- static long hidraw_ioctl(struct file *file, unsigned int cmd,
- 							unsigned long arg)
- {
-@@ -367,11 +384,12 @@ static long hidraw_ioctl(struct file *file, unsigned int cmd,
- 	unsigned int minor = iminor(inode);
- 	long ret = 0;
- 	struct hidraw *dev;
-+	struct hidraw_list *list = file->private_data;
- 	void __user *user_arg = (void __user*) arg;
- 
- 	down_read(&minors_rwsem);
- 	dev = hidraw_table[minor];
--	if (!dev || !dev->exist) {
-+	if (!dev || !dev->exist || list->revoked) {
- 		ret = -ENODEV;
- 		goto out;
- 	}
-@@ -409,6 +427,14 @@ static long hidraw_ioctl(struct file *file, unsigned int cmd,
- 					ret = -EFAULT;
- 				break;
- 			}
-+		case HIDIOCREVOKE:
-+			{
-+				if (user_arg)
-+					ret = -EINVAL;
-+				else
-+					ret = hidraw_revoke(list, file);
-+				break;
-+			}
- 		default:
- 			{
- 				struct hid_device *hid = dev->hid;
-@@ -515,7 +541,7 @@ int hidraw_report_event(struct hid_device *hid, u8 *data, int len)
- 	list_for_each_entry(list, &dev->list, node) {
- 		int new_head = (list->head + 1) & (HIDRAW_BUFFER_SIZE - 1);
- 
--		if (new_head == list->tail)
-+		if (list->revoked || new_head == list->tail)
- 			continue;
- 
- 		if (!(list->buffer[list->head].value = kmemdup(data, len, GFP_ATOMIC))) {
-diff --git a/include/linux/hidraw.h b/include/linux/hidraw.h
-index cd67f4ca5599..18fd30a288de 100644
---- a/include/linux/hidraw.h
-+++ b/include/linux/hidraw.h
-@@ -32,6 +32,7 @@ struct hidraw_list {
- 	struct hidraw *hidraw;
- 	struct list_head node;
- 	struct mutex read_mutex;
-+	bool revoked;
- };
- 
- #ifdef CONFIG_HIDRAW
-diff --git a/include/uapi/linux/hidraw.h b/include/uapi/linux/hidraw.h
-index 33ebad81720a..d0563f251da5 100644
---- a/include/uapi/linux/hidraw.h
-+++ b/include/uapi/linux/hidraw.h
-@@ -46,6 +46,7 @@ struct hidraw_devinfo {
- /* The first byte of SOUTPUT and GOUTPUT is the report number */
- #define HIDIOCSOUTPUT(len)    _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x0B, len)
- #define HIDIOCGOUTPUT(len)    _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x0C, len)
-+#define HIDIOCREVOKE	_IOW('H', 0x0D, int) /* Revoke device access */
- 
- #define HIDRAW_FIRST_MINOR 0
- #define HIDRAW_MAX_DEVICES 64
+While the status is GET_QUOTE_IN_FLIGHT, VMM owns the shared GPA.  The
+attestation driver should wait for GET_QUOTE_IN_FLIGHT to be cleared before
+sending next request.
 -- 
-2.36.0
-
+Isaku Yamahata <isaku.yamahata@gmail.com>

@@ -2,118 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9E750AA54
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754DC50AA5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392558AbiDUUxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 16:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
+        id S1392573AbiDUUye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 16:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392592AbiDUUwu (ORCPT
+        with ESMTP id S1392565AbiDUUyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 16:52:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09462DEF;
-        Thu, 21 Apr 2022 13:49:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0C92B828D8;
-        Thu, 21 Apr 2022 20:49:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F176C385A7;
-        Thu, 21 Apr 2022 20:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650574196;
-        bh=J55gWEdyZI84vCX5T8ZM2ZIVMQXFYIyDtR8Uq8FyZRI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WnRwW7zR+8V3SzpJqk3LWNBW5IaUeqHC/7kVIE+s+yvdtq9pZn4nbadjnOnewY+ig
-         CQsq1XmQRmsx67R3ngUswLM7NJMJLSqKxYdFIvetp6+jzhd5j3WqOw+WbBubV8qopV
-         UIUpLjOighiwKmUOm05uqsJ4SSHFh1SafdlvnHvW75n1TkGSh1S7l8uI5+R75c1mGK
-         Wjy8nDL1vX9FyzunTAf14qoP+eQ4trKm5riZrU31xl+cEF0f4SvbBkiWT8EMqvkGjJ
-         58CRVNapFhxkMBbRns5LF7ehp7r8l9h9emyzVwnAStZKTeB3tqlUHkrcP+WXBjSj1a
-         TDqoJiMndeuhw==
-Date:   Thu, 21 Apr 2022 13:49:54 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, Andy Polyakov <appro@cryptogams.org>
-Subject: Re: [PATCH] random: avoid mis-detecting a slow counter as a cycle
- counter
-Message-ID: <YmHDctbEAmJhinoz@sol.localdomain>
-References: <20220421192939.250680-1-ebiggers@kernel.org>
- <YmG8k1JrVexBGmJL@zx2c4.com>
+        Thu, 21 Apr 2022 16:54:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B8CF4D26F;
+        Thu, 21 Apr 2022 13:51:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CDBE31477;
+        Thu, 21 Apr 2022 13:51:41 -0700 (PDT)
+Received: from [10.57.80.98] (unknown [10.57.80.98])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B30B3F5A1;
+        Thu, 21 Apr 2022 13:51:38 -0700 (PDT)
+Message-ID: <f238af77-be5e-43cc-6a8c-338408c1667e@arm.com>
+Date:   Thu, 21 Apr 2022 21:51:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmG8k1JrVexBGmJL@zx2c4.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 03/25] dma-direct: take dma-ranges/offsets into account in
+ resource mapping
+Content-Language: en-GB
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Rob Herring <robh@kernel.org>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        dmaengine@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-4-Sergey.Semin@baikalelectronics.ru>
+ <0baff803-b0ea-529f-095a-897398b4f63f@arm.com>
+ <20220417224427.drwy3rchwplthelh@mobilestation>
+ <20220420071217.GA5152@lst.de>
+ <20220420083207.pd3hxbwezrm2ud6x@mobilestation>
+ <20220420084746.GA11606@lst.de>
+ <20220420085538.imgibqcyupvvjpaj@mobilestation>
+ <20220421144536.GA23289@lst.de>
+ <20220421173523.ig62jtvj7qbno6q7@mobilestation>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220421173523.ig62jtvj7qbno6q7@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:20:35PM +0200, Jason A. Donenfeld wrote:
-> Hi Eric,
+On 2022-04-21 18:35, Serge Semin wrote:
+> On Thu, Apr 21, 2022 at 04:45:36PM +0200, Christoph Hellwig wrote:
+>> On Wed, Apr 20, 2022 at 11:55:38AM +0300, Serge Semin wrote:
+>>> On Wed, Apr 20, 2022 at 10:47:46AM +0200, Christoph Hellwig wrote:
+>>>> I can't really comment on the dma-ranges exlcusion for P2P mappings,
+>>>> as that predates my involvedment, however:
+>>>
+>>> My example wasn't specific to the PCIe P2P transfers, but about PCIe
+>>> devices reaching some platform devices over the system interconnect
+>>> bus.
+>>
+>> So strike PCIe, but this our definition of Peer to Peer accesses.
+>>
+>>> What if I get to have a physical address of a platform device and want
+>>> have that device being accessed by a PCIe peripheral device? The
+>>> dma_map_resource() seemed very much suitable for that. But considering
+>>> what you say it isn't.
+>>
 > 
-> On Thu, Apr 21, 2022 at 9:30 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> > The method that try_to_generate_entropy() uses to detect a cycle counter
-> > is to check whether two calls to random_get_entropy() return different
-> > values.  This is uncomfortably prone to false positives if
-> > random_get_entropy() is a slow counter, as the two calls could return
-> > different values if the counter happens to be on the cusp of a change.
-> > Making things worse, the task can be preempted between the calls.
-> >
-> > This is problematic because try_to_generate_entropy() doesn't do any
-> > real entropy estimation later; it always credits 1 bit per loop
-> > iteration.  To avoid crediting garbage, it relies entirely on the
-> > preceding check for whether a cycle counter is present.
-> >
-> > Therefore, increase the number of counter comparisons from 1 to 3, to
-> > greatly reduce the rate of false positive cycle counter detections.
+>> dma_map_resource is the right thing for that.  But the physical address
+>> of MMIO ranges in the platform device should not have struct pages
+>> allocated for it, and thus the other dma_map_* APIs should not work on
+>> it to start with.
 > 
-> Thanks for the patch. It seems like this at least is not worse than
-> before. But before I commit this and we forget about the problem for a
-> while, I was also wondering if we can do much, much better than before,
-> and actually make this "work" with slow counters. Right now, the core
-> algorithm is:
+> The problem is that the dma_map_resource() won't work for that, but
+> presumably the dma_map_sg()-like methods will (after some hacking with
+> the phys address, but anyway). Consider the system diagram in my
+> previous email. Here is what I would do to initialize a DMA
+> transaction between a platform device and a PCIe peripheral device:
 > 
->     while (!crng_ready()) {
->         if (no timer) mod_timer(jiffies + 1);
-> 	mix(sample);
-> 	schedule();    // <---- calls the timer, which does credit_entry_bits(1)
-> 	sample = rdtsc;
->     }
+> 1) struct resource *rsc = platform_get_resource(plat_dev, IORESOURCE_MEM, 0);
 > 
-> So we credit 1 bit every time that timer fires. What if the timer
-> instead did this:
+> 2) dma_addr_t dar = dma_map_resource(&pci_dev->dev, rsc->start, rsc->end - rsc->start + 1,
+>                                        DMA_FROM_DEVICE, 0);
 > 
->     static void entropy_timer(struct timer_list *t)
->     {
->         struct timer_state *s = container_of(...t...);
->         if (++s->samples == s->samples_per_bit) {
->             credit_entropy_bits(1);
->             s->samples = 0;
->         }
->     }
+> 3) dma_addr_t sar;
+>     void *tmp = dma_alloc_coherent(&pci_dev->dev, PAGE_SIZE, &sar, GFP_KERNEL);
+>     memset(tmp, 0xaa, PAGE_SIZE);
 > 
-> Currently, samples_per_bit is 1. What if we make it >1 on systems with
-> slow cycle counters? The question then is: how do we relate some
-> information about cycle counter samples to the samples_per_bit estimate?
-> The jitter stuff in crypto/ does something. Andy (CC'd) mentioned to me
-> last week that he did something some time ago computing FFTs on the fly
-> or something like that. And maybe there are other ideas still. I wonder
-> if we can find something appropriate for the kernel here.
+> 4) PCIe device: DMA.DAR=dar, DMA.SAR=sar. RUN.
 > 
-> Any thoughts on that direction?
+> If there is no dma-ranges specified in the PCIe Host controller
+> DT-node, the PCIe peripheral devices will see the rest of the system
+> memory as is (no offsets and remappings). But if there is dma-ranges
+> with some specific system settings it may affect the PCIe MRd/MWr TLPs
+> address translation including the addresses targeted to the MMIO
+> space. In that case the mapping performed on step 2) will return a
+> wrong DMA-address since the corresponding dma_direct_map_resource()
+> just returns the passed physical address missing the
+> 'pci_dev->dma_range_map'-based mapping performed in
+> translate_phys_to_dma().
 > 
+> Note the mapping on step 3) works correctly because it calls the
+> translate_phys_to_dma() of the direct DMA interface thus taking the
+> PCie dma-ranges into account.
+> 
+> To sum up as I see it either restricting dma_map_resource() to map
+> just the intra-bus addresses was wrong or there must be some
+> additional mapping infrastructure for the denoted systems. Though I
+> don't see a way the dma_map_resource() could be fixed to be suitable
+> for each considered cases.
 
-I think we'll need to go there eventually, along with fixing
-add_timer_randomness() and add_interrupt_randomness() to credit entropy more
-accurately.  I do not think there is an easy fix, though; this is mostly an open
-research area.  Looking into research papers and what has been done for other
-jitter entropy implementations would be useful.
+FWIW the current semantics of dma_map_resource() are basically just to 
+insert IOMMU awareness where dmaengine drivers were previously just 
+casting phys_addr_t to dma_addr_t (or u32, or whatever else they put 
+into their descriptor/register/etc.) IIRC there was a bit of a question 
+whether it really belonged in the DMA API at all, since it's not really 
+a "DMA" operation in the conventional sense, and convenience was the 
+only real deciding argument. The relevant drivers at the time were not 
+taking dma_pfn_offset into account when consuming physical addresses 
+directly, so the new API didn't either.
 
-- Eric
+That's just how things got to where they are today. Once again, I'm not 
+saying that what we have now is necessarily right, or that your change 
+is necessarily wrong, I just really want to understand specifically 
+*why* you need to make it, so we can evaluate the risk of possible 
+breakage either way. Theoretical "if"s aren't really enough.
+
+Robin.

@@ -2,135 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB8D509635
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 07:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8893850963D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 07:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347772AbiDUFGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 01:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S1378292AbiDUFKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 01:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237190AbiDUFGc (ORCPT
+        with ESMTP id S238158AbiDUFKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 01:06:32 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A6DE08F;
-        Wed, 20 Apr 2022 22:03:44 -0700 (PDT)
+        Thu, 21 Apr 2022 01:10:16 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8337120AE
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 22:07:27 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id fu34so2524841qtb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 22:07:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650517424; x=1682053424;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eU7QDjI4vyI81/XW/z3kwNXUIF5FPDflWs0YKsUKWWk=;
-  b=VeId9NL4Hs68D7a2KqGLLh9LhkiOJx+XLJz+GEOiC7CfTfdkt7PXSVOr
-   zHyKtP5hl8k+ZcuCoidG3W+FDCLLuGztuVI6lWOWCjbNTLY6aZNt97tnn
-   KDDaDPgYMbuNAyyxsVqDfXRmRfAX53ruFxzPl4t4oVs+vofV/qIXq0kAu
-   8=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 20 Apr 2022 22:03:44 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 22:03:43 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Apr 2022 22:03:08 -0700
-Received: from [10.216.45.250] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 20 Apr
- 2022 22:03:03 -0700
-Message-ID: <fb6480f6-f004-c02d-09fe-92a64785a0c5@quicinc.com>
-Date:   Thu, 21 Apr 2022 10:32:57 +0530
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=fpB6qSK6He8nmDtW3/jQ3g5RtQpSiSeXerc3l836tv8=;
+        b=P/////9Z93XBvvT0Mn/dBtHqvaNWx+H+IVT2ZELxYxNokeVeXeuxW7DnjaeWMTcdwi
+         Tq9nY1tv/IWav6lEgMw4xLXGshp1XMYmlp5jDVX5liZu823EjYY88TXmsXnF5xLeNdwY
+         3HnQa7rBy0O3plQdUuCqQtAnPCccyed0yVrxyiQuzJKSj2DyXU+ioInKuQ9f8v1AAPKT
+         vjXUMlYf3yyKtLGXuEzKtOnWXnDZcp7zgun3MkfTjaSKgL3+g+mSTkbS6hhJDcjYUpvH
+         zjdq2iAj+HZJM2lkKXTQ1fREuo9wJntd/VnMZMysagfw4L04H06lXQSMAyalOkkezf4n
+         enZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=fpB6qSK6He8nmDtW3/jQ3g5RtQpSiSeXerc3l836tv8=;
+        b=ofc6wubco5U8PNlnIGJ23A3rDbejsl0BPk+5Gye6gMDzS5jhEeGtAvTULne3y2EOGF
+         ZMgZ+9aQpYTvUQ6vawKShKexi3R+Qss8VGIiDDlKXevIU+QenYL/7xQAT2sSvxn1X9Ul
+         88kJh7OwdTadYp2RrTKyUkIlJ14rd5miGqk/H+KDoImyGxMqVhTHiKE1wUAV71/MJ2zR
+         N03fIL1XBNmT7hQKq0OL/RE5O/JG9aTsxG1oYGfNT/oUDmic3hQpohkqEW0+ndOMsCul
+         h3mNeFY86P/U3XnGXTQ6wg7BAS/xzN2Ptm08wD3MgW4ulRvkJJ3L5103KuW1U3JUMf7q
+         uk/g==
+X-Gm-Message-State: AOAM530o+GhwbYmk8wxcF4CbX0vdr0AYcdoRDlshX/jhPKJV8L4Stvaf
+        exp1AG1tzvNRKxoK7BfI5zJbe9YvzUm0G9z4Q1LJ07HMM4qD3Mef
+X-Google-Smtp-Source: ABdhPJz3JtNKVecEdJ3xzjfJlqkeEmRs9uWltySmWgPtk/bji0Y9u/ZiMsoaBrnU0Gx3WfLG/CwUl+kR8Yjah1AoOUQ=
+X-Received: by 2002:a05:622a:1904:b0:2f3:41d8:84e2 with SMTP id
+ w4-20020a05622a190400b002f341d884e2mr3812505qtc.429.1650517646756; Wed, 20
+ Apr 2022 22:07:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH V4] mmc: sdhci-msm: Reset GCC_SDCC_BCR register for SDHC
-Content-Language: en-US
-To:     Philipp Zabel <p.zabel@pengutronix.de>, <adrian.hunter@intel.com>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <ulf.hansson@linaro.org>, <chris@printf.net>,
-        <venkatg@codeaurora.org>, <gdjakov@mm-sol.com>,
-        <quic_asutoshd@quicinc.com>
-CC:     <linux-mmc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_rampraka@quicinc.com>,
-        <quic_pragalla@quicinc.com>, <quic_sartgarg@quicinc.com>,
-        <quic_nitirawa@quicinc.com>, <quic_sayalil@quicinc.com>
-References: <1649759983-22035-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1ee3b0619ee976eaf88e7207318770d441418c94.camel@pengutronix.de>
- <1943a5fb-cf6c-f358-9e27-408792a458ce@quicinc.com>
- <dc2252f03db5881dbb17006c910dfca54c7d2fee.camel@pengutronix.de>
-From:   "Sajida Bhanu (Temp)" <quic_c_sbhanu@quicinc.com>
-In-Reply-To: <dc2252f03db5881dbb17006c910dfca54c7d2fee.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Atul Khare <atulkhare@rivosinc.com>
+Date:   Wed, 20 Apr 2022 22:07:15 -0700
+Message-ID: <CABMhjYrheOjEYfH7WjmdUj4X=aSbQuUADQ7NNpk0hAjE0LpSxw@mail.gmail.com>
+Subject: [PATCH 0/4] dt-bindings: sifive: fix dt-schema errors
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The patch series fixes dt-schema validation errors that can be reproduced
+using the following: make ARCH=riscv defconfig; make ARCH=riscv
+dt_binding_check dtbs_check
 
-Thanks for the review.
 
-Please find the inline comments.
+Atul Khare (4):
+  dt-bindings: sifive: Support 1024 hart contexts
+  dt-bindings: sifive: add cache-set value of 2048
+  dt-bindings: sifive: delete 'clock' / 'status'
+  dt-bindings: sifive: add gpio-line-names
 
-Thanks,
+ Documentation/devicetree/bindings/gpio/sifive,gpio.yaml      | 3 +++
+ Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml | 4 +++-
+ Documentation/devicetree/bindings/timer/sifive,clint.yaml    | 2 ++
+ arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts  | 4 ----
+ 4 files changed, 8 insertions(+), 5 deletions(-)
 
-Sajida
-
-On 4/19/2022 12:52 PM, Philipp Zabel wrote:
-> Hi Sajida,
->
-> On Di, 2022-04-19 at 11:46 +0530, Sajida Bhanu (Temp) wrote:
-> [...]
->>>> +static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
->>>> +{
->>>> +	struct reset_control *reset;
->>>> +	int ret = 0;
->>> No need to initialize ret.
->>>
->>>> +
->>>> +	reset = reset_control_get_optional_exclusive(dev, NULL);
->>>> +	if (IS_ERR(reset))
->>>> +		return dev_err_probe(dev, PTR_ERR(reset),
->>>> +				"unable to acquire core_reset\n");
->>>> +
->>>> +	if (!reset)
->>>> +		return ret;
->> Here we are returning ret directly if reset is NULL , so ret
->> initialization is required.
-> You are right. I would just "return 0;" here, but this is correct as
-> is.
-Ok
->>>> +
->>>> +	ret = reset_control_assert(reset);
->>>> +	if (ret)
->>>> +		return dev_err_probe(dev, ret, "core_reset assert failed\n");
->>> Missing reset_control_put(reset) in the error path.
->> Sure will add
->>>> +
->>>> +	/*
->>>> +	 * The hardware requirement for delay between assert/deassert
->>>> +	 * is at least 3-4 sleep clock (32.7KHz) cycles, which comes to
->>>> +	 * ~125us (4/32768). To be on the safe side add 200us delay.
->>>> +	 */
->>>> +	usleep_range(200, 210);
->>>> +
->>>> +	ret = reset_control_deassert(reset);
->>>> +	if (ret)
->>>> +		return dev_err_probe(dev, ret, "core_reset deassert failed\n");
->>> Same as above. Maybe make both ret = dev_err_probe() and goto ...
->> In both cases error message is different so I think goto not good idea here.
-> You could goto after the error message. Either way is fine.
-
-Sorry didn't get this ..can  you please help
-
->
-> regards
-> Philipp
+--
+2.35.1

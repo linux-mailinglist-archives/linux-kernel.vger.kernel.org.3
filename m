@@ -2,156 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8C75099E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A7F5099BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386237AbiDUHyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
+        id S1386232AbiDUHzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386313AbiDUHyM (ORCPT
+        with ESMTP id S1356531AbiDUHzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:54:12 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD791DA40
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:51:20 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23L780YU008515;
-        Thu, 21 Apr 2022 07:51:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=wdSvHv9baqpuxngn9D4RPIwFMM8eVE2OZpbXOHRZAJ4=;
- b=m73OyGDyxe28vaQZi3CvsMFP9NQYH+NZoepaTvRPrsaU72/MtX8QwoJrn6VvaMrQWhTo
- y9zB4Chy6jAoi+WM8N9XjjecrdbG3wrvcbMGyZa29K/pUgvj4KB59eXRdYzON0jsGix2
- 3usCxNdiIKaNEZkcuFDeX3jrnRC0M/2AHV9bGyH7Knpst2M3LZn4RjGXi1HuP2TcPZMv
- DyLcujMAd5Oho9Bg7tlUV+8Jqkv7F3NSWj+4S2xuFqE1bgPRncQQYM1yVbBblpaCaFB7
- XBLN021CAQU7V5Y/IvSF/rJl/OdwsEeOLBfRjJdMrBPhfhXo0uMdxFsLELHz30FDgYVj TQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjn0xfj1c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Apr 2022 07:51:09 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23L7ogAX007872;
-        Thu, 21 Apr 2022 07:51:09 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjn0xfj0s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Apr 2022 07:51:09 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23L7mCBl013154;
-        Thu, 21 Apr 2022 07:51:07 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 3ffvt9dh57-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Apr 2022 07:51:06 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23L7p4QI43909380
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Apr 2022 07:51:04 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5837F5204F;
-        Thu, 21 Apr 2022 07:51:04 +0000 (GMT)
-Received: from [9.145.22.248] (unknown [9.145.22.248])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id DB89A52052;
-        Thu, 21 Apr 2022 07:51:03 +0000 (GMT)
-Message-ID: <f76454e3-843d-93b4-e30c-bf374d41802b@linux.ibm.com>
-Date:   Thu, 21 Apr 2022 09:51:03 +0200
+        Thu, 21 Apr 2022 03:55:22 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1775DE01F
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:52:33 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id f38so7289522ybi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0TSxfaRJixCAUsy/W0YnBm1Z96qqxM5YEF3UUxdXL0A=;
+        b=O0bAOrR/OPesc12k+60IKnlLJE0jrSTcj0YLI1lgEdQzMVoPfHycKJksCpEzUre3Zh
+         /InYBrd5hhV6xPePuu2QRdt8JwSAbKQsDgrrFYwrEHp8xDaO7wwMfOx6nHbTCF3jOu3p
+         1Znq/Unn8vgjnxqPqjWNrjk4NA8O1q5xMbI4Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0TSxfaRJixCAUsy/W0YnBm1Z96qqxM5YEF3UUxdXL0A=;
+        b=PWJ+sAuKq7crBzKte+jUlUhkqRw33kwLOqbvLrwRSat16YfK06Aq9jB8s+tHnSpBHh
+         xKYKMnQ+aWMlIEAucVPz4NNFecLA99gld8oheDtQXEzFROkpTn2Jbl9HcqyBJYoNrfdb
+         lc+YRiRHj4tKR8BmkJTQRP6E/Te+nJh0mH76E4pYwKrN3mZ8pM+yyi8gMafXi4wR0eor
+         MsRAH4fNnFLV2o53xovWbsNGCdFTqwaScDO75cb16fKDU7nH1nAMX3DT3rdOrUW1Kr7j
+         8BYF/qti1xy76L/21NF5Ufb4fuhQ4xLM6pLVDJf5CuS0o+/Ub3SlY9Jife7KjlnEJwCV
+         kZIA==
+X-Gm-Message-State: AOAM532U6LAz2qdsLo4ldGJI11fW+8C+fQvJX0HHKxqkEsEsvWh9pwEQ
+        QyH11cjaVfbqc+ZNN+tQmHRQvTlDiORYb7OamRu3qw==
+X-Google-Smtp-Source: ABdhPJyqt6Fgg3AF7Jbew907+pTxsU4C3o4jAvQcqeSLeYvWEOQ70ahpJmDA890Baw5jr3SxUODlQxxwEQAVCXygbdw=
+X-Received: by 2002:a25:30d:0:b0:640:df7f:74c4 with SMTP id
+ 13-20020a25030d000000b00640df7f74c4mr23042769ybd.278.1650527552381; Thu, 21
+ Apr 2022 00:52:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] misc: ocxl: fix possible double free in
- ocxl_file_register_afu
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Hangyu Hua <hbh25y@gmail.com>, ajd@linux.ibm.com,
-        arnd@arndb.de, gregkh@linuxfoundation.org, alastair@d-silva.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220418085758.38145-1-hbh25y@gmail.com>
- <87czhbfjsj.fsf@mpe.ellerman.id.au>
-From:   Frederic Barrat <fbarrat@linux.ibm.com>
-In-Reply-To: <87czhbfjsj.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: dMdAqTLeMZ7cMz8_CW_Kn8hSQVVy7d0m
-X-Proofpoint-ORIG-GUID: jyGlfNOo7lS97HVn6SjRIWMcW8LCpPMc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-20_06,2022-04-20_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
- impostorscore=0 suspectscore=0 mlxscore=0 spamscore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204210042
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220420130527.23200-1-rex-bc.chen@mediatek.com> <20220420130527.23200-3-rex-bc.chen@mediatek.com>
+In-Reply-To: <20220420130527.23200-3-rex-bc.chen@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 21 Apr 2022 15:52:21 +0800
+Message-ID: <CAGXv+5FJBKYoEuazH9broYSM4uOy=e_3O-86tOOQrsp0xH=4wQ@mail.gmail.com>
+Subject: Re: [PATCH V2 02/12] clk: mediatek: reset: Use simple reset operations
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
+        chun-jie.chen@mediatek.com, runyang.chen@mediatek.com,
+        linux-kernel@vger.kernel.org, allen-kh.cheng@mediatek.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 20, 2022 at 9:05 PM Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
+>
+> There are two version for clock reset register control of MediaTek SoCs.
+> The reset operations before MT8183 can use simple reset to cover.
+
+I would go slightly into more detail, i.e.
+
+    The old hardware is one bit per reset control, and does not have
+    separate registers for bit set, clear and read-back operations. This
+    matches the scheme supported by the simple reset driver. ...
+
+> Therefore, we replace mtk_reset_ops with reset_simple_ops.
+
+   ... to remove redundant code.
+
+The "why" is more important than "what" in commit logs. "What" you did
+is already visible in the diff.
+
+> In addition, we also rename mtk_register_reset_controller to
+> mtk_register_reset_controller_simple.
+>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/clk/mediatek/Kconfig          |  1 +
+>  drivers/clk/mediatek/clk-mt2701-eth.c |  2 +-
+>  drivers/clk/mediatek/clk-mt2701-g3d.c |  2 +-
+>  drivers/clk/mediatek/clk-mt2701-hif.c |  2 +-
+>  drivers/clk/mediatek/clk-mt2701.c     |  4 +--
+>  drivers/clk/mediatek/clk-mt2712.c     |  4 +--
+>  drivers/clk/mediatek/clk-mt7622-eth.c |  2 +-
+>  drivers/clk/mediatek/clk-mt7622-hif.c |  4 +--
+>  drivers/clk/mediatek/clk-mt7622.c     |  4 +--
+>  drivers/clk/mediatek/clk-mt7629-eth.c |  2 +-
+>  drivers/clk/mediatek/clk-mt7629-hif.c |  4 +--
+>  drivers/clk/mediatek/clk-mt8135.c     |  4 +--
+>  drivers/clk/mediatek/clk-mt8173.c     |  4 +--
+>  drivers/clk/mediatek/clk-mtk.h        |  6 ++--
+>  drivers/clk/mediatek/reset.c          | 43 +++------------------------
+>  15 files changed, 27 insertions(+), 61 deletions(-)
+
+[...]
+
+>  void mtk_register_reset_controller_set_clr(struct device_node *np,
+>         unsigned int num_regs, int regofs)
+>  {
+>         mtk_register_reset_controller_common(np, num_regs, regofs,
+> -               &mtk_reset_ops_set_clr);
+> +                                            &mtk_reset_ops_set_clr);
+
+This change is unrelated and should not be included.
+
+ChenYu
 
 
-On 21/04/2022 00:54, Michael Ellerman wrote:
-> Hangyu Hua <hbh25y@gmail.com> writes:
->> info_release() will be called in device_unregister() when info->dev's
->> reference count is 0. So there is no need to call ocxl_afu_put() and
->> kfree() again.
-> 
-> Double frees are often exploitable. But it looks to me like this error
-> path is not easily reachable by an attacker.
-> 
-> ocxl_file_register_afu() is only called from ocxl_probe(), and we only
-> go to err_unregister if the sysfs or cdev initialisation fails, which
-> should only happen if we hit ENOMEM, or we have a duplicate device which
-> would be a device-tree/hardware error. But maybe Fred can check more
-> closely, I don't know the driver that well.
-
-
-The linux devices built here are based on what is parsed on the physical 
-devices. Those could be FPGAs but updating the FPGA image requires root 
-privilege. In any case, duplicate AFU names are possible, that's why the 
-driver adds an index (the afu->config.idx part of the name) to the linux 
-device name. So we would need to mess that up in the driver as well to 
-have a duplicate device name.
-So I would agree the double free is hard to hit.
-
-mpe: I think this patch can be taken as is. The "beautification" I 
-talked about is just that and I don't intend to work on it except if 
-something else shows up.
-
-   Fred
-
-
-
-> cheers
-> 
-> 
->> Fix this by adding free_minor() and return to err_unregister error path.
->>
->> Fixes: 75ca758adbaf ("ocxl: Create a clear delineation between ocxl backend & frontend")
->> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->> ---
->>   drivers/misc/ocxl/file.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/misc/ocxl/file.c b/drivers/misc/ocxl/file.c
->> index d881f5e40ad9..6777c419a8da 100644
->> --- a/drivers/misc/ocxl/file.c
->> +++ b/drivers/misc/ocxl/file.c
->> @@ -556,7 +556,9 @@ int ocxl_file_register_afu(struct ocxl_afu *afu)
->>   
->>   err_unregister:
->>   	ocxl_sysfs_unregister_afu(info); // safe to call even if register failed
->> +	free_minor(info);
->>   	device_unregister(&info->dev);
->> +	return rc;
->>   err_put:
->>   	ocxl_afu_put(afu);
->>   	free_minor(info);
->> -- 
->> 2.25.1
+>  }
+>
+>  MODULE_LICENSE("GPL");
+> --
+> 2.18.0
+>

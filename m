@@ -2,102 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C8850A47A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5572750A489
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390235AbiDUPm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S1390343AbiDUPqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348309AbiDUPmy (ORCPT
+        with ESMTP id S1390317AbiDUPpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:42:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B37E2FE4A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:40:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650555602;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=S9DMw1QVObZXzp5ejmL5d1FwtHhPc8XTYmN4X9Dq3O0=;
-        b=hXZGlethubjqRAQ5wj2M1pNDeC2VLDAJrH2rdhP5MNi2VWBMAEgp4kUF1bhZbkk5agWcIf
-        bwYjsJ1FG/qL21C2/6kNCg9pwLjwx7Io0pAjT7IrNo7zaeGA4gVUxY3kGox6o5uCNTWeQd
-        pjrBJjt8Uct72BajonfdQGl7ge3mnOU=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-539-ELeyo7YsNF-usjRsY-i0Cg-1; Thu, 21 Apr 2022 11:40:01 -0400
-X-MC-Unique: ELeyo7YsNF-usjRsY-i0Cg-1
-Received: by mail-qv1-f72.google.com with SMTP id gy6-20020a056214242600b0044656c198b0so4209018qvb.20
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:39:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S9DMw1QVObZXzp5ejmL5d1FwtHhPc8XTYmN4X9Dq3O0=;
-        b=NvEN46t/WaoLBzLNVaw+0yNQqem490V26Vd0YReJZ8q5ik6PV6i/8majfXuxyrunye
-         0QETpcyKgYPG/SLe8dBfK/z4DsY4Fxy+bLCrP4SnsLYjDdPAWqEk4ERSB2dwqaTot1Lm
-         G+QXvt6SszhTS2PWe4puJ9xxmaZ3aItR3svhQfOenMjeZfabuttSzMeDrsW9uf76XOEk
-         q2GDEMbpt/m3zNsro6cBR7FkayZQ9P6pInt/cyv/p8NiVf1EJio/uaNvWxNh8CUvbnph
-         ZjEWzjuqWd+9O4yJxLZjzCmFnmBhEQN0dPjNv+THfhIsfeJxhahh+Olih+USYxA6y8Ii
-         GkvA==
-X-Gm-Message-State: AOAM533KL+mKJEsJT8PojhkyPxqBDGTy0+ggDOscH29CyTmn9JoJyJbY
-        p5YIu2RzcKkeVFtvRfIR19EMMcih9Fy6KdwkGXk38PiwRP1YAWAzJ+G8rCcoU13HvcTxC121PVU
-        4+2mBJLhGve1a2SCJQR3FoBrJ
-X-Received: by 2002:a05:620a:2489:b0:69e:996d:7940 with SMTP id i9-20020a05620a248900b0069e996d7940mr12470766qkn.553.1650555599182;
-        Thu, 21 Apr 2022 08:39:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwCwL51TZHhleKjAOtyVvVuDn5ubOOLwr4iM0Tlnqh/J1qgACgnab0k7LSIjuU6d2UPFyXdzA==
-X-Received: by 2002:a05:620a:2489:b0:69e:996d:7940 with SMTP id i9-20020a05620a248900b0069e996d7940mr12470746qkn.553.1650555598818;
-        Thu, 21 Apr 2022 08:39:58 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id k14-20020ac85fce000000b002f344fc0e0bsm2401950qta.38.2022.04.21.08.39.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 08:39:58 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     dan.j.williams@intel.com, vishal.l.verma@intel.com,
-        dave.jiang@intel.com, ira.weiny@intel.com
-Cc:     nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] libnvdimm/security: change __nvdimm_security_overwrite_query from global to static
-Date:   Thu, 21 Apr 2022 11:39:51 -0400
-Message-Id: <20220421153951.35792-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 21 Apr 2022 11:45:42 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484794927A;
+        Thu, 21 Apr 2022 08:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1650555699;
+        bh=qO7WWncsu8pqavraYehTZbqYkoK5x7r8ZxY5T97XoXw=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=b+ULn39b+bj0QXQCBw1ebteDuTea9undETS0F3wjN4eLKsi4JB2YQXogVfc83LBez
+         yKNmLOcb21RK7yGdjB5m6CjS2/vj+M6UcAbEkV7RpYjgtYRIZWuVVONj+tsRzKG1F3
+         prFeyU+w5t492/e8TZXuRN8Tb0BY4Vy5259dV3Uc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [80.245.79.123] ([80.245.79.123]) by web-mail.gmx.net
+ (3c-app-gmx-bap38.server.lan [172.19.172.108]) (via HTTP); Thu, 21 Apr 2022
+ 17:41:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <trinity-1c858470-8354-4ecd-ace7-a6e437cb5923-1650555699148@3c-app-gmx-bap38>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Wunderlich <linux@fw-web.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        PCI <linux-pci@vger.kernel.org>
+Subject: Aw: Re: Re: [RFC/RFT 4/6] PCI: rockchip-dwc: add pcie bifurcation
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 21 Apr 2022 17:41:39 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <CAMdYzYpydGyQZT2n9Tf+ccQMLHzfhOgoyamMgspQDcjzm3Umdg@mail.gmail.com>
+References: <trinity-a220fd81-2ee9-474d-bd65-505b9ed904b2-1650186482865@3c-app-gmx-bs58>
+ <20220418155313.GA1101563@bhelgaas>
+ <CAMdYzYpydGyQZT2n9Tf+ccQMLHzfhOgoyamMgspQDcjzm3Umdg@mail.gmail.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:fMhCkXFkWk6jz1YC+ACHfChGGaYlwtUgwWcAnA0jyPbYw+1++3n2PWOoruUedVEe3O/nQ
+ hDXeXjlmBChv+exHvKh31aXoT2WMSGUsSsGWqskuolAgm32mb16s6bTyLBSYtyP5Sg25cf0JPmXJ
+ 1pePEo7O+SI/2Uh8PWKiMger7oxtNy0YJJqYI+mBRs1lneD0he6ep57APIq3Euail8eSb3oQ1N1t
+ QJ0n5Muonbp6RS4DYQMXP774RwDlOzQRQsjzLD/mjxpPK7b1IV/OtbmUTj8gaCQgDDN5tUv+dMym
+ H4=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2nkMVzuz8fg=:WjCZA2rE/qwwh+MU3sEN/r
+ je5+6b+/RRLEZWWlafKstjYHv9f42eqbK6znP181CwuscNFSZjPl+ZR0HKMM7EydWaRcZe/ll
+ BCl+krEEXdZUBXvWxN7pl11y0YtJRF/i6dPA75W2WcZOp3+4A65+kN9+ny41jIuUEDMs74lhH
+ mlr1cKsf35glpeo45jO6pK6jJcuXVlctuuf0NAvA2rMuAzjHtYFAbYULFQ4NMMKgwDzge1yo8
+ j4Lyb7g1uK+V0PwRFsRsWTFrrgK7r3KeHAoy0yjxVTw10wa9hQaRqyS6AYEBnA9MKhCECi6BF
+ IooRgAAog8qUceYmla24ULXMV52boFDwi50i7zQFDUn2JUCVw2wJIli0TtSDY76YvVfG16Rqe
+ kRZ7vXEtrSLD0eBvjy9o1qoZ+XuRbzMvLC2uxvGwG4uKTT6R1jd59YbrosallEcZqsmO5+Kr5
+ xi3NoAXZsdYMYVWQoOFYguVwJlJ05EaBIgoUYtmUx1SDO4JLZhypXT2uoKccQlEIwOS4KlvZO
+ 9HfdqR+WKJAllWAbVUtSrhGjQ+yaNXPWNmSv8K+1dqKdbXF65ccZxnET97oWwubt3p67rR0jQ
+ affk8sssrapLyMlQ6zJ5CA2iC7h6xRXYxkwV0nYiaobtjCYLLwMOSvupflLa4xyk9lrgEXZt4
+ aHim3uq8km4fyBx7FG4mygswCimCKLaiNJWINxGFUzliPO1i23YRcWaZKKUA7LGnEBdO0lazI
+ V+/cc0pXMdiZYEG0k/hxV4sGCzUUphJ4RWxS+GvuKGrOQCGk+otFOoyS2Ncv4BdrqvmOOdXuh
+ ALV1zmu
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports this issue
-security.c:416:6: warning: symbol '__nvdimm_security_overwrite_query' was not declared. Should it be static?
+> Gesendet: Montag, 18. April 2022 um 18:17 Uhr
+> Von: "Peter Geis" <pgwipeout@gmail.com>
+> > On Sun, Apr 17, 2022 at 11:08:02AM +0200, Frank Wunderlich wrote:
+> > > > On Sat, Apr 16, 2022 at 03:54:56PM +0200, Frank Wunderlich wrote:
+> > > > > From: Frank Wunderlich <frank-w@public-files.de>
+> > > > >
+> > > > > PCIe Lanes can be split to 2 slots with bifurcation.
+> > > > > Add support for this in existing pcie driver.
+> >
+> > > > Is the "rockchip,bifurcation" DT property something that should be
+> > > > generalized so it's not rockchip-specific?  Other controllers are
+> > > > likely to support similar functionality.
+> > >
+> > > I do not know if other controllers support similar functionality,
+> > > but i ack a property without vendor prefix is better. Should i use
+> > > "bifurcation" as name or do you think about a different name which
+> > > is more generic?
+> >
+> > Really a question for Rob about what name would be good and where it
+> > should go.
+>
+> It might be good to define this as a lane map.
+> In the Rockchip implementation it's only 2+0 or 1+1, but that isn't
+> guaranteed if this is made into a standard definition.
+> So perhaps:
+> pcie-bifurcation-map =3D <0>, <1>;
+> pcie-bifurcation-map =3D <1>;
+> pcie-bifurcation-map =3D <4>, <5>, <6>, <7>;
 
-__nvdimm_security_overwrite_query is only used in security.c so change
-its storage-class specifier to static
+how about a lane-map like this (from controllers point of view):
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/nvdimm/security.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+rockchip with only 2 lanes (like rk3568):
 
-diff --git a/drivers/nvdimm/security.c b/drivers/nvdimm/security.c
-index 4b80150e4afa..d3e782662bf4 100644
---- a/drivers/nvdimm/security.c
-+++ b/drivers/nvdimm/security.c
-@@ -413,7 +413,7 @@ static int security_overwrite(struct nvdimm *nvdimm, unsigned int keyid)
- 	return rc;
- }
- 
--void __nvdimm_security_overwrite_query(struct nvdimm *nvdimm)
-+static void __nvdimm_security_overwrite_query(struct nvdimm *nvdimm)
- {
- 	struct nvdimm_bus *nvdimm_bus = walk_to_nvdimm_bus(&nvdimm->dev);
- 	int rc;
--- 
-2.27.0
+controller 1:
+lane-map =3D <1 0>;
 
+controller 2:
+lane-map =3D <0 1>;
+
+here bifurcation is set if a controller does not aquire all lanes.Afaik rk=
+3568 cannot select specific lanes so i end up with bifurcation =3D true/fa=
+lse (an aggregation-mode on phy) again. but it makes dts-property more usa=
+ble for other devices/SoC.
+
+this contains the maximum of lanes and as mask the lanes to take by the cu=
+rrent controller. It is scalable to support more pcie-lanes (x2 x4 x8)
+
+example for 2 controllers with PCIe x4 (with 8 lanes available):
+
+lane-map=3D<0 0 0 0 1 1 1 1>;
+lane-map=3D<1 1 1 1 0 0 0 0>;
+
+of course they can be mixed, if driver supports this.
+
+lane-map=3D<0 1 0 1 0 1 0 1>;
+lane-map=3D<1 0 1 0 1 0 1 0>;
+
+such lane-map is more flexible
+
+regards Frank

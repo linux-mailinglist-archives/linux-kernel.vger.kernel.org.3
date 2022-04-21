@@ -2,50 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75660509956
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2F5509963
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385952AbiDUHjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
+        id S1385916AbiDUHl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385889AbiDUHj3 (ORCPT
+        with ESMTP id S1385953AbiDUHkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:39:29 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BAD1B7A1;
-        Thu, 21 Apr 2022 00:36:06 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 048121BF20A;
-        Thu, 21 Apr 2022 07:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650526565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QwbuwKVBOef3FVZDFj8PDSdkA6YXrwYauV0H1YXv1+4=;
-        b=ThdalBss+7bFsH6ZCSivg0aPGe4tb0Nur0cjeUbhNYr4Aqof2cnb+2ilfRDnhrD4SfaD9S
-        mf67j5HCJcXNn6DfP1Dj2qtadbnNd+cAoxr7MMD0OXF4aucdJdIz3fcNCepQmYPtXShlAF
-        aOKfoal3AOY8l9OoycGf9OQHUL3nIFj3Nb+YW6JCQLz7iGObNIW/591ndHOYcF/JHPgIL9
-        lkVpL3TEV0nrbIuVRtLUC6C/NOoMcACA+V7arp73apfALDOU8xrSqba2vR6z9P8MdbCSTh
-        cAYQvQlaQ94OZyxoUVmiJx3DzDmuqzUMDwO5fg+rGN9ewnHXJh4OHZVX8QCm5A==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>, vigneshr@ti.com,
-        richard@nod.at, miquel.raynal@bootlin.com, joern@lazybastard.org
-Cc:     kernel@axis.com, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        frowand.list@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] mtd: phram: Allow probing via reserved-memory
-Date:   Thu, 21 Apr 2022 09:36:03 +0200
-Message-Id: <20220421073603.72148-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220412135302.1682890-4-vincent.whitchurch@axis.com>
-References: 
+        Thu, 21 Apr 2022 03:40:53 -0400
+Received: from mail.coredeal.pl (mail.coredeal.pl [51.75.73.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103FD1D302
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:37:20 -0700 (PDT)
+Received: by mail.coredeal.pl (Postfix, from userid 1002)
+        id D1148A2935; Thu, 21 Apr 2022 07:36:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=coredeal.pl; s=mail;
+        t=1650526605; bh=9KGuIG62LgzC9aYmjKxzocuYLRCVghXg6v9Q1q2LHec=;
+        h=Date:From:To:Subject:From;
+        b=U0BKJShAInm3wUnSILGvUN1nJV6gx1OLBHydjqpjHl+bj8TUNMSeThVmvnr4yd/d4
+         trpiIlBlH9yZdfWWFcfZI134lELSlIwMzoOZMBhgyGD8bc683WocMfJLu5kIic/950
+         gAsEJiuUJ+4AtIb/AfkJ2/ssiDJL6Tg3t/rA+jblMq1OBL+umZCwkRuKq9yRfL/8Mc
+         BMVzF7QDg+VnqrgHaTKNyG5sBbsiL3Thr3mnuRyMUB1b4N5omgC2jKxmZagTf7MJTs
+         2MVIVjrSBm1m9ROBAf2QEpdKLA3hciPT7rkTzb7Hv29R41DiyBzX086iEf0J3xRAuw
+         Dsg21VB1oNhaA==
+Received: by mail.coredeal.pl for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:36:06 GMT
+Message-ID: <20220421064500-0.1.2o.h714.0.3tajefweez@coredeal.pl>
+Date:   Thu, 21 Apr 2022 07:36:06 GMT
+From:   "Krzysztof Maj" <krzysztof.maj@coredeal.pl>
+To:     <linux-kernel@vger.kernel.org>
+Subject: Biznesowy angielski
+X-Mailer: mail.coredeal.pl
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'd55e5d8931a8b7a3ae11e6c8b031e1900bbbe90d'
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -55,14 +45,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-12 at 13:53:01 UTC, Vincent Whitchurch wrote:
-> Allow phram to be probed from the devicetree.  It expects to be in a
-> reserved-memory node as documented by the bindings.  This allows things
-> like partitioning to be specified via the devicetree.
-> 
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+Dzie=C5=84 dobry,=20
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
+czy rozwa=C5=BCali Pa=C5=84stwo rozw=C3=B3j kwalifikacji j=C4=99zykowych =
+swoich pracownik=C3=B3w?
 
-Miquel
+Opracowali=C5=9Bmy kursy j=C4=99zykowe dla r=C3=B3=C5=BCnych bran=C5=BC, =
+w kt=C3=B3rych koncentrujemy si=C4=99 na podniesieniu poziomu s=C5=82owni=
+ctwa i jako=C5=9Bci komunikacji wykorzystuj=C4=85c autorsk=C4=85 metod=C4=
+=99, stworzon=C4=85 specjalnie dla wymagaj=C4=85cego biznesu.=20
+
+Niestandardowy kurs on-line, dopasowany do profilu firmy i obszar=C3=B3w =
+=C5=9Bwiadczonych us=C5=82ug, w szybkim czasie przyniesie efekty, kt=C3=B3=
+re zwi=C4=99ksz=C4=85 komfort i jako=C5=9B=C4=87 pracy, rozwijaj=C4=85c m=
+o=C5=BCliwo=C5=9Bci biznesowe.=20
+
+Zdalne szkolenie j=C4=99zykowe to m.in. zaj=C4=99cia z native speakerami,=
+ kt=C3=B3re w szybkim czasie naucz=C4=85 pracownik=C3=B3w rozmawia=C4=87 =
+za pomoc=C4=85 jasnego i zwi=C4=99z=C5=82ego j=C4=99zyka Business English=
+=2E
+
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3=
+w i opowiedzie=C4=87 jak dzia=C5=82amy?=20
+
+
+Pozdrawiam
+Krzysztof Maj

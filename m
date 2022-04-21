@@ -2,147 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5CC50A3DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD0650A3E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389970AbiDUPXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
+        id S1389985AbiDUPXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbiDUPXR (ORCPT
+        with ESMTP id S232403AbiDUPXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:23:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D350E008
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:20:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11E1EB82611
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 15:20:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9BEC385A5;
-        Thu, 21 Apr 2022 15:20:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650554424;
-        bh=VnXaPMca60V4eTXoLoQFkxHQy+dhTrGV+ZwQQzPOiT4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XysGKFpao6X07LvtILT7MllAwXBLd5xWnzh76hpxd1VwqyvhtzCoodLy0v6Ac127h
-         CNG7wi/4+At50gD1HtRlgEKwlZVvvyAXl5JbM2FzGOtE/p8fsmuOwv+WwQds7FHl7d
-         nbGZ58O9qxYubWxvW6cLLvyQpLHdfqQcMq6lTKdtp+yoz8gQj6CgiQmUdyB65dUWUS
-         I7CWrbkDYJS3sDuO7UrTB7EEU/ulZFSlsSTwBwEFZheezrfvkkojfIvVBSqIuH68On
-         IknbDp33ZTlzhX332SMo3qYYx0LBjkYdYLIeNukQl9EEvdHztgOp/Qomfbjm8hLZ/C
-         sJpwcvCjWf8Kg==
-Date:   Thu, 21 Apr 2022 08:20:22 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [PATCH] f2fs: use flush command instead of FUA for zoned device
-Message-ID: <YmF2Nqu8Rtc4cx52@google.com>
-References: <20220419215703.1271395-1-jaegeuk@kernel.org>
- <42e10758-e50a-7aaa-dfa9-dcf6338ebaff@opensource.wdc.com>
+        Thu, 21 Apr 2022 11:23:23 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE23439BBD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:20:33 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id i63so4889323pge.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Iud4fOAzWyfKnps8mbbXMcHFSwOzQ8oquSRtMdXbWM0=;
+        b=RVlUnhRPDVleloKx3GonNS9W3wbfR4nOfN1Qi4MwjZsFPBgZifrs0G0aLJXD+dBgDm
+         O8h6kOxXShzBMRgduy+ihXePIjnCPoC3SrMLONvOPjG9PbDF64JmLutk+PTc6Tx57o5u
+         9gwZvChwpxPJmzhWcWXrt4CHvBL1m091O+ujbgrrnCy0XC5smCLpFGhC7/xWrwDb++ZT
+         9vFIZ/Skq8uL/j2x91awlfLVM86RXUXILISx7R+BHxKsZqgvyNf+s09Z4jRTmSuZtzgk
+         eSMKlZAeakixDDKHnRRgJ5+Tqyqwkk7ef02W+IFc7uMb7ZOMkiQ53zNKz5X9+/DMX73I
+         FZwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Iud4fOAzWyfKnps8mbbXMcHFSwOzQ8oquSRtMdXbWM0=;
+        b=7ZkxSYvD3Tgr0DwDUqMPVNDFIYgEVNjXsLFtOYCCxTN7/5wtnDCIyxmjS/Eeas6dQv
+         z7K8w54BtyvUjpp3ZijFtvQyQx/EbPtVztVBTZ3IMuf+DSF//MKOYEMDH8laC/fvJSlf
+         WPmUMcaMzKXDbWJcmMXaT2yRjt/VyDtcLNLVfYviV4yLbDO4HciLd4phMtjHOo8mBtiE
+         rdHfQVsBBjMNaxvR8qN/TCJ/EUPOZujT1pTae4OzIBE9j3LMgmBaxp6oZkZTSoYAWFLH
+         Sh3t1AB6x0u7Gt4sDNcM2X2O6Y8NCgoeyde4LZrNVZQnySbuWAqdNPq9ibcoeLdrQV61
+         No4A==
+X-Gm-Message-State: AOAM531V3R2aVM/OGdS5Xw0z3TvTUES3oct7gCVXh8bmHsAbyRVzYTgj
+        pZX5fMpt5V/0AIh4wS5QJWpA2A==
+X-Google-Smtp-Source: ABdhPJyUzVcFfpUNGpi8Xh0hVPgueNV87Co6K1e5CotdwUKyd6tE3Okm73hzs3/OVHoKfvNzeLmk2A==
+X-Received: by 2002:a05:6a00:894:b0:4fe:25d7:f59e with SMTP id q20-20020a056a00089400b004fe25d7f59emr172514pfj.58.1650554432948;
+        Thu, 21 Apr 2022 08:20:32 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id b6-20020a17090a550600b001cd4989ff48sm3060760pji.15.2022.04.21.08.20.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 08:20:32 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 15:20:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Balbir Singh <sblbir@amazon.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v2] x86/speculation, KVM: only IBPB for
+ switch_mm_always_ibpb on vCPU load
+Message-ID: <YmF2PRDi12KPsFOC@google.com>
+References: <20220419020011.65995-1-jon@nutanix.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <42e10758-e50a-7aaa-dfa9-dcf6338ebaff@opensource.wdc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220419020011.65995-1-jon@nutanix.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/21, Damien Le Moal wrote:
-> On 4/20/22 06:57, Jaegeuk Kim wrote:
-> > The block layer for zoned disk can reorder the FUA'ed IOs. Let's use flush
-> > command to keep the write order.
+On Mon, Apr 18, 2022, Jon Kohler wrote:
+> On vmx_vcpu_load_vmcs and svm_vcpu_load, respect user controlled
+> configuration for conditional IBPB and only attempt IBPB MSR when
+> switching between different guest vCPUs IFF switch_mm_always_ibpb,
+> which fixes a situation where the kernel will issue IBPB
+> unconditionally even when conditional IBPB is enabled.
 > 
-> Stricktly speaking, for a request that has data, the problem is triggered
-> by REQ_PREFLUSH since in this case the request does not go through the
-> scheduler and is processed through the blk-flush machinery. REQ_FUA on its
-> own should not matter if the device supports it. If the device does not
-> support FUA, then the same problem can happen due to POSTFLUSH (again no
-> scheduler).
+> If a user has spectre_v2_user mitigation enabled, in any
+> configuration, and the underlying processor supports X86_FEATURE_IBPB,
+> X86_FEATURE_USE_IBPB is set and any calls to
+> indirect_branch_prediction_barrier() will issue IBPB MSR.
+> 
+> Depending on the spectre_v2_user configuration, either
+> switch_mm_always_ibpb key or switch_mm_cond_ibpb key will be set.
+> 
+> Both switch_mm_always_ibpb and switch_mm_cond_ibpb are handled by
+> switch_mm() -> cond_mitigation(), which works well in cases where
+> switching vCPUs (i.e. switching tasks) also switches mm_struct;
+> however, this misses a paranoid case where user space may be running
+> multiple guests in a single process (i.e. single mm_struct).
+> 
+> This paranoid case is already covered by vmx_vcpu_load_vmcs and
+> svm_vcpu_load; however, this is done by calling
+> indirect_branch_prediction_barrier() and thus the kernel
+> unconditionally issues IBPB if X86_FEATURE_USE_IBPB is set.
 
-I think the problem is a piggy-backed data along with flush or fua whatever,
-but this made me use a separate flush command.
+The changelog should call out that switch_mm_cond_ibpb is intentionally "ignored"
+for the virt case, and explain why it's nonsensical to emit IBPB in that scenario.
 
-> 
-> Bypassing the scheduler leads to the write not write-locking the zone,
-> which leads to reordering... Completely overlooked that case when the zone
-> write locking was implemented.
-> 
-> Ideally, the FS should not have to care about this. blk-flush machinery
-> should be a little more intelligent and process the write phase of the
-> request using the scheduler. Need to look into that.
+> Fix by using intermediary call to x86_virt_guest_switch_ibpb(), which
+> gates IBPB MSR IFF switch_mm_always_ibpb is true. This is useful for
+> security paranoid VMMs in either single process or multi-process VMM
+> configurations.
 
-Please. I'm okay to revert this, once the block layer supports.
+Multi-process VMM?  KVM doesn't allow "sharing" a VM across processes.  Userspace
+can share guest memory across processes, but that's not relevant to an IBPB on
+guest switch.  I suspect you're loosely referring to all of userspace as a single
+VMM.  That's inaccurate, or at least unnecessarily confusing, from a kernel
+perspective.  I am not aware of a VMM that runs as a monolithic "daemon" and forks
+a new process for every VM.  And even in such a case, I would argue that most
+people would refer to each process as a separate VMM.
 
-> 
-> > 
-> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > ---
-> >  fs/f2fs/file.c | 4 +++-
-> >  fs/f2fs/node.c | 2 +-
-> >  2 files changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> > index f08e6208e183..2aef0632f35b 100644
-> > --- a/fs/f2fs/file.c
-> > +++ b/fs/f2fs/file.c
-> > @@ -372,7 +372,9 @@ static int f2fs_do_sync_file(struct file *file, loff_t start, loff_t end,
-> >  	f2fs_remove_ino_entry(sbi, ino, APPEND_INO);
-> >  	clear_inode_flag(inode, FI_APPEND_WRITE);
-> >  flush_out:
-> > -	if (!atomic && F2FS_OPTION(sbi).fsync_mode != FSYNC_MODE_NOBARRIER)
-> > +	if ((!atomic && F2FS_OPTION(sbi).fsync_mode != FSYNC_MODE_NOBARRIER) ||
-> > +			(atomic && !test_opt(sbi, NOBARRIER) &&
-> > +					f2fs_sb_has_blkzoned(sbi)))
-> 
-> Aligning the conditions and not breaking the second line would make this a
-> lot easier to read...
+If there's a blurb about the switch_mm_cond_ibpb case being nonsensical, there's
+probably a good segue into stating the new behavior.
 
-Sure.
+> switch_mm_always_ibpb key is user controlled via spectre_v2_user and
+> will be true for the following configurations:
+>   spectre_v2_user=on
+>   spectre_v2_user=prctl,ibpb
+>   spectre_v2_user=seccomp,ibpb
+> 
+> Signed-off-by: Jon Kohler <jon@nutanix.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+> Cc: Waiman Long <longman@redhat.com>
+> ---
+> v1 -> v2:
+>  - Addressed comments on approach from Sean.
+> 
+>  arch/x86/include/asm/spec-ctrl.h | 15 +++++++++++++++
+>  arch/x86/kernel/cpu/bugs.c       |  6 +++++-
+>  arch/x86/kvm/svm/svm.c           |  2 +-
+>  arch/x86/kvm/vmx/vmx.c           |  2 +-
+>  4 files changed, 22 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/spec-ctrl.h b/arch/x86/include/asm/spec-ctrl.h
+> index 5393babc0598..1ad140b17ad7 100644
+> --- a/arch/x86/include/asm/spec-ctrl.h
+> +++ b/arch/x86/include/asm/spec-ctrl.h
+> @@ -85,4 +85,19 @@ static inline void speculative_store_bypass_ht_init(void) { }
+>  extern void speculation_ctrl_update(unsigned long tif);
+>  extern void speculation_ctrl_update_current(void);
+> 
+> +/*
+> + * Issue IBPB when switching guest vCPUs IFF if switch_mm_always_ibpb.
 
-> 
-> >  		ret = f2fs_issue_flush(sbi, inode->i_ino);
-> >  	if (!ret) {
-> >  		f2fs_remove_ino_entry(sbi, ino, UPDATE_INO);
-> > diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
-> > index c280f482c741..7224a980056f 100644
-> > --- a/fs/f2fs/node.c
-> > +++ b/fs/f2fs/node.c
-> > @@ -1633,7 +1633,7 @@ static int __write_node_page(struct page *page, bool atomic, bool *submitted,
-> >  		goto redirty_out;
-> >  	}
-> >  
-> > -	if (atomic && !test_opt(sbi, NOBARRIER))
-> > +	if (atomic && !test_opt(sbi, NOBARRIER) && !f2fs_sb_has_blkzoned(sbi))
-> >  		fio.op_flags |= REQ_PREFLUSH | REQ_FUA;
-> 
-> Is this really OK to do ? flush + write as different operations may not
-> lead to the same result as a preflush+fua write.
-> 
-> Until the block layer is fixed to properly handle this, a simpler fix for
-> f2fs would be to force enable the NOBARRIER option for zoned drives ? That
-> would avoid these changes no ?
+Extra "if" there.
 
-No, it will hurt the stability of FS metadata consistency.
+> + * Primarily useful for security paranoid (or naive) user space VMMs
+> + * that may run multiple VMs within a single process.
+> + * For multi-process VMMs, switching vCPUs, i.e. switching tasks,
 
-> 
-> Also, with all the testing we do on SMR disks and f2fs (smaller, older SMR
-> disks due to the 16TB limit), we never have triggered this problem. How
-> did you trigger it ?
+As above, "multi-process VMMs" is very confusing, they're really just separate VMMs.
+Something like this?
 
-This happens in Android only, since atomic_write for sqlite is taking this path.
+ * For the more common case of running VMs in their own dedicated process,
+ * switching vCPUs that belong to different VMs, i.e. switching tasks, will also
+ * ...
 
-> 
-> >  
-> >  	/* should add to global list before clearing PAGECACHE status */
-> 
-> 
-> -- 
-> Damien Le Moal
-> Western Digital Research
+> + * will also switch mm_structs and thus do IPBP via cond_mitigation();
+> + * however, in the always_ibpb case, take a paranoid approach and issue
+> + * IBPB on both switch_mm() and vCPU switch.
+> + */
+> +static inline void x86_virt_guest_switch_ibpb(void)
+> +{
+> +	if (static_branch_unlikely(&switch_mm_always_ibpb))
+> +		indirect_branch_prediction_barrier();
+> +}
+> +
+>  #endif
+> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> index 6296e1ebed1d..6aafb0279cbc 100644

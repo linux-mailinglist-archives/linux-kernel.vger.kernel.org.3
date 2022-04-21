@@ -2,375 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184B950AAB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2179050AAB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441985AbiDUVZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 17:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
+        id S1442011AbiDUVZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 17:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441950AbiDUVZI (ORCPT
+        with ESMTP id S1442003AbiDUVZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 17:25:08 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9B44D638
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 14:22:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650576136; x=1682112136;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EmmHXYijTppqdweAqHFO0Rj5EUmT7b5AnxEE6B8/lIs=;
-  b=XCXungWQh4+prMXF1JdWQ+esCVeXi44Ic6eIQTXKtIrVeHImcXT8D6Gq
-   xqDBYEc2vO/sMm4TjjjGPWgH0n4hEtbEz3ZfaFosJXxsSldIh732rL+53
-   QzvXFoOo+gQXQ87mMIpU029QBGahi5LRCBn1T61WdFOsbZrXYGFgNcciq
-   ycw7RG6foH/hLhYVIwFsIgiLcQHAR/oeSlY0HIt76enMCwD2iRDsO1Zpx
-   lmR/7O5DKtF2DClRqqVe2D0HwFoSEhYnSuZhp0WoUGeYiFYA51KbOHsV+
-   hy/8X+kvaNNeEu1JgThZlzqYJQpnRho8sJECGOq80aQd6cNhEgGfcYHo6
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="350925011"
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="350925011"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 14:22:14 -0700
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="658704114"
-Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.209.56.239])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 14:22:13 -0700
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     mcgrof@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
-        yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v5 8/8] selftests: firmware: Add firmware upload selftests
-Date:   Thu, 21 Apr 2022 14:22:04 -0700
-Message-Id: <20220421212204.36052-9-russell.h.weight@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220421212204.36052-1-russell.h.weight@intel.com>
-References: <20220421212204.36052-1-russell.h.weight@intel.com>
+        Thu, 21 Apr 2022 17:25:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F2B4D26A;
+        Thu, 21 Apr 2022 14:22:53 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650576172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8gmUY81SNptAD3CDWEkaKXdJ4XucqcW0xuaGxHRqtCU=;
+        b=c36rgdaqxz38sULcWqwk3G6Udz0kBy50qYRBTRtoM8I/fOmlM22mbp6jNkpjPmyJsZqM5u
+        8UATj844pKGOcMPFOjM6LwB5qW21aQXTKS1mzXk9cXvVOq8L/P3uDfIqJMnD5womNCbitb
+        Yh3OXqPsR4BAKda9QMDNA44HC5oxMR0GVFEHv7XR2j1MDLvxCNVdHgpBh5BmH7Lwk5q5Hu
+        4G/vr/p808w1iXprTBHUx27Vp7MJELTH0qQ7Gy2OnqsYtDJYn8zGjsZGvy/FYEp9wQUljd
+        sdejP2qyLfk5jLgUzYtVyq2zK55pzFuwYxHm6+IMsSNhzZ31XE8Jz7L8t/+NcQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650576172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8gmUY81SNptAD3CDWEkaKXdJ4XucqcW0xuaGxHRqtCU=;
+        b=zjx+60fy1lZASOZeylFWmhy5sOK7lgqz1gFHpNTmAKajfPizmMOGNRzn72bsneg1gMoG22
+        Hv8Y9msrGtbpzCAA==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Marco Elver <elver@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Alexander Potapenko <glider@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Corey Minyard <cminyard@mvista.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Wang Qing <wangqing@vivo.com>, rcu@vger.kernel.org
+Subject: [PATCH printk v4 00/15] implement threaded console printing
+Date:   Thu, 21 Apr 2022 23:28:35 +0206
+Message-Id: <20220421212250.565456-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add selftests to verify the firmware upload mechanism. These test
-include simple firmware uploads as well as upload cancellation and
-error injection. The test creates three firmware devices and verifies
-that they all work correctly and independently.
+This is v4 of a series to implement a kthread for each registered
+console. v3 is here [0]. The kthreads locklessly retrieve the
+records from the printk ringbuffer and also do not cause any lock
+contention between each other. This allows consoles to run at full
+speed. For example, a netconsole is able to dump records much
+faster than a serial or vt console. Also, during normal operation,
+printk() callers are completely decoupled from console printing.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Reviewed-by: Tianfei zhang <tianfei.zhang@intel.com>
-Tested-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
----
-v2:
-  - No changes from v1
-v3:
-  - Added Reviewed-by tag
-v4:
-  - Added Reviewed-by tag
-v5:
-  - Added Tested-by tag
----
- tools/testing/selftests/firmware/Makefile     |   2 +-
- tools/testing/selftests/firmware/config       |   1 +
- tools/testing/selftests/firmware/fw_lib.sh    |   7 +
- .../selftests/firmware/fw_run_tests.sh        |   4 +
- tools/testing/selftests/firmware/fw_upload.sh | 214 ++++++++++++++++++
- 5 files changed, 227 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/firmware/fw_upload.sh
+There are situations where kthread printing is not sufficient. For
+example, during panic situations, where the kthreads may not get a
+chance to schedule. In such cases, the current method of attempting
+to print directly within the printk() caller context is used. New
+functions printk_prefer_direct_enter() and
+printk_prefer_direct_exit() are made available to mark areas of the
+kernel where direct printing is preferred. (These should only be
+areas that do not occur during normal operation.)
 
-diff --git a/tools/testing/selftests/firmware/Makefile b/tools/testing/selftests/firmware/Makefile
-index 40211cd8f0e6..7992969deaa2 100644
---- a/tools/testing/selftests/firmware/Makefile
-+++ b/tools/testing/selftests/firmware/Makefile
-@@ -4,7 +4,7 @@ CFLAGS = -Wall \
-          -O2
- 
- TEST_PROGS := fw_run_tests.sh
--TEST_FILES := fw_fallback.sh fw_filesystem.sh fw_lib.sh
-+TEST_FILES := fw_fallback.sh fw_filesystem.sh fw_upload.sh fw_lib.sh
- TEST_GEN_FILES := fw_namespace
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/firmware/config b/tools/testing/selftests/firmware/config
-index bf634dda0720..6e402519b117 100644
---- a/tools/testing/selftests/firmware/config
-+++ b/tools/testing/selftests/firmware/config
-@@ -3,3 +3,4 @@ CONFIG_FW_LOADER=y
- CONFIG_FW_LOADER_USER_HELPER=y
- CONFIG_IKCONFIG=y
- CONFIG_IKCONFIG_PROC=y
-+CONFIG_FW_UPLOAD=y
-diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
-index 5b8c0fedee76..fe8d34dbe7ca 100755
---- a/tools/testing/selftests/firmware/fw_lib.sh
-+++ b/tools/testing/selftests/firmware/fw_lib.sh
-@@ -63,6 +63,7 @@ check_setup()
- 	HAS_FW_LOADER_USER_HELPER="$(kconfig_has CONFIG_FW_LOADER_USER_HELPER=y)"
- 	HAS_FW_LOADER_USER_HELPER_FALLBACK="$(kconfig_has CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y)"
- 	HAS_FW_LOADER_COMPRESS="$(kconfig_has CONFIG_FW_LOADER_COMPRESS=y)"
-+	HAS_FW_UPLOAD="$(kconfig_has CONFIG_FW_UPLOAD=y)"
- 	PROC_FW_IGNORE_SYSFS_FALLBACK="0"
- 	PROC_FW_FORCE_SYSFS_FALLBACK="0"
- 
-@@ -113,6 +114,12 @@ verify_reqs()
- 			exit 0
- 		fi
- 	fi
-+	if [ "$TEST_REQS_FW_UPLOAD" = "yes" ]; then
-+		if [ ! "$HAS_FW_UPLOAD" = "yes" ]; then
-+			echo "firmware upload disabled so ignoring test"
-+			exit 0
-+		fi
-+	fi
- }
- 
- setup_tmp_file()
-diff --git a/tools/testing/selftests/firmware/fw_run_tests.sh b/tools/testing/selftests/firmware/fw_run_tests.sh
-index 777377078d5e..f6d95a2d5124 100755
---- a/tools/testing/selftests/firmware/fw_run_tests.sh
-+++ b/tools/testing/selftests/firmware/fw_run_tests.sh
-@@ -22,6 +22,10 @@ run_tests()
- 	proc_set_force_sysfs_fallback $1
- 	proc_set_ignore_sysfs_fallback $2
- 	$TEST_DIR/fw_fallback.sh
-+
-+	proc_set_force_sysfs_fallback $1
-+	proc_set_ignore_sysfs_fallback $2
-+	$TEST_DIR/fw_upload.sh
- }
- 
- run_test_config_0001()
-diff --git a/tools/testing/selftests/firmware/fw_upload.sh b/tools/testing/selftests/firmware/fw_upload.sh
-new file mode 100755
-index 000000000000..c7a6f06c9adb
---- /dev/null
-+++ b/tools/testing/selftests/firmware/fw_upload.sh
-@@ -0,0 +1,214 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# This validates the user-initiated fw upload mechanism of the firmware
-+# loader. It verifies that one or more firmware devices can be created
-+# for a device driver. It also verifies the data transfer, the
-+# cancellation support, and the error flows.
-+set -e
-+
-+TEST_REQS_FW_UPLOAD="yes"
-+TEST_DIR=$(dirname $0)
-+
-+progress_states="preparing transferring  programming"
-+errors="hw-error
-+	timeout
-+	device-busy
-+	invalid-file-size
-+	read-write-error
-+	flash-wearout"
-+error_abort="user-abort"
-+fwname1=fw1
-+fwname2=fw2
-+fwname3=fw3
-+
-+source $TEST_DIR/fw_lib.sh
-+
-+check_mods
-+check_setup
-+verify_reqs
-+
-+trap "upload_finish" EXIT
-+
-+upload_finish() {
-+	local fwdevs="$fwname1 $fwname2 $fwname3"
-+
-+	for name in $fwdevs; do
-+		if [ -e "$DIR/$name" ]; then
-+			echo -n "$name" > "$DIR"/upload_unregister
-+		fi
-+	done
-+}
-+
-+upload_fw() {
-+	local name="$1"
-+	local file="$2"
-+
-+	echo 1 > "$DIR"/"$name"/loading
-+	cat "$file" > "$DIR"/"$name"/data
-+	echo 0 > "$DIR"/"$name"/loading
-+}
-+
-+verify_fw() {
-+	local name="$1"
-+	local file="$2"
-+
-+	echo -n "$name" > "$DIR"/config_upload_name
-+	if ! cmp "$file" "$DIR"/upload_read > /dev/null 2>&1; then
-+		echo "$0: firmware compare for $name did not match" >&2
-+		exit 1
-+	fi
-+
-+	echo "$0: firmware upload for $name works" >&2
-+	return 0
-+}
-+
-+inject_error() {
-+	local name="$1"
-+	local status="$2"
-+	local error="$3"
-+
-+	echo 1 > "$DIR"/"$name"/loading
-+	echo -n "inject":"$status":"$error" > "$DIR"/"$name"/data
-+	echo 0 > "$DIR"/"$name"/loading
-+}
-+
-+await_status() {
-+	local name="$1"
-+	local expected="$2"
-+	local status
-+	local i
-+
-+	let i=0
-+	while [ $i -lt 50 ]; do
-+		status=$(cat "$DIR"/"$name"/status)
-+		if [ "$status" = "$expected" ]; then
-+			return 0;
-+		fi
-+		sleep 1e-03
-+		let i=$i+1
-+	done
-+
-+	echo "$0: Invalid status: Expected $expected, Actual $status" >&2
-+	return 1;
-+}
-+
-+await_idle() {
-+	local name="$1"
-+
-+	await_status "$name" "idle"
-+	return $?
-+}
-+
-+expect_error() {
-+	local name="$1"
-+	local expected="$2"
-+	local error=$(cat "$DIR"/"$name"/error)
-+
-+	if [ "$error" != "$expected" ]; then
-+		echo "Invalid error: Expected $expected, Actual $error" >&2
-+		return 1
-+	fi
-+
-+	return 0
-+}
-+
-+random_firmware() {
-+	local bs="$1"
-+	local count="$2"
-+	local file=$(mktemp -p /tmp uploadfwXXX.bin)
-+
-+	dd if=/dev/urandom of="$file" bs="$bs" count="$count" > /dev/null 2>&1
-+	echo "$file"
-+}
-+
-+test_upload_cancel() {
-+	local name="$1"
-+	local status
-+
-+	for status in $progress_states; do
-+		inject_error $name $status $error_abort
-+		if ! await_status $name $status; then
-+			exit 1
-+		fi
-+
-+		echo 1 > "$DIR"/"$name"/cancel
-+
-+		if ! await_idle $name; then
-+			exit 1
-+		fi
-+
-+		if ! expect_error $name "$status":"$error_abort"; then
-+			exit 1
-+		fi
-+	done
-+
-+	echo "$0: firmware upload cancellation works"
-+	return 0
-+}
-+
-+test_error_handling() {
-+	local name=$1
-+	local status
-+	local error
-+
-+	for status in $progress_states; do
-+		for error in $errors; do
-+			inject_error $name $status $error
-+
-+			if ! await_idle $name; then
-+				exit 1
-+			fi
-+
-+			if ! expect_error $name "$status":"$error"; then
-+				exit 1
-+			fi
-+
-+		done
-+	done
-+	echo "$0: firmware upload error handling works"
-+}
-+
-+test_fw_too_big() {
-+	local name=$1
-+	local fw_too_big=`random_firmware 512 5`
-+	local expected="preparing:invalid-file-size"
-+
-+	upload_fw $name $fw_too_big
-+	rm -f $fw_too_big
-+
-+	if ! await_idle $name; then
-+		exit 1
-+	fi
-+
-+	if ! expect_error $name $expected; then
-+		exit 1
-+	fi
-+
-+	echo "$0: oversized firmware error handling works"
-+}
-+
-+echo -n "$fwname1" > "$DIR"/upload_register
-+echo -n "$fwname2" > "$DIR"/upload_register
-+echo -n "$fwname3" > "$DIR"/upload_register
-+
-+test_upload_cancel $fwname1
-+test_error_handling $fwname1
-+test_fw_too_big $fwname1
-+
-+fw_file1=`random_firmware 512 4`
-+fw_file2=`random_firmware 512 3`
-+fw_file3=`random_firmware 512 2`
-+
-+upload_fw $fwname1 $fw_file1
-+upload_fw $fwname2 $fw_file2
-+upload_fw $fwname3 $fw_file3
-+
-+verify_fw ${fwname1} ${fw_file1}
-+verify_fw ${fwname2} ${fw_file2}
-+verify_fw ${fwname3} ${fw_file3}
-+
-+echo -n "$fwname1" > "$DIR"/upload_unregister
-+echo -n "$fwname2" > "$DIR"/upload_unregister
-+echo -n "$fwname3" > "$DIR"/upload_unregister
-+
-+exit 0
+This series also introduces pr_flush(): a might_sleep() function
+that will block until all active printing threads have caught up
+to the latest record at the time of the pr_flush() call. This
+function is useful, for example, to wait until pending records
+are flushed to consoles before suspending.
+
+Note that this series does *not* increase the reliability of console
+printing. Rather it focuses on the non-interference aspect of
+printk() by decoupling printk() callers from printing (during normal
+operation). Nonetheless, the reliability aspect should not worsen
+due to this series.
+
+John Ogness
+
+[0] https://lore.kernel.org/lkml/20220419234637.357112-1-john.ogness@linutronix.de
+
+Changes since v3:
+
+- For defer_console_output(), call allow_direct_printing() instead
+  of only checking @printk_prefer_direct.
+
+- Remove console_lock_single_hold() and
+  console_unlock_single_release() functions. Use the console_lock
+  for console_stop(), console_start(), unregister_console(),
+  printk_kthread_func().
+
+- Introduce macros console_flags_set() and console_flags_clear() to
+  adjust con->flags using READ_ONCE()/WRITE_ONCE() in order to
+  guarantee consistent values for the variable. (This does not make
+  the RMW operations atomic, but the console_lock and con->lock are
+  still used to synchronize between tasks that modify con->flags.)
+
+- Add and/or expand comments for allow_direct_printing(),
+  console_cpu_notify(), __console_unlock(), console_stop(),
+  console_start(), unregister_console(), printk_kthread_func(),
+  defer_console_output().
+
+John Ogness (15):
+  printk: rename cpulock functions
+  printk: cpu sync always disable interrupts
+  printk: add missing memory barrier to wake_up_klogd()
+  printk: wake up all waiters
+  printk: wake waiters for safe and NMI contexts
+  printk: get caller_id/timestamp after migration disable
+  printk: call boot_delay_msec() in printk_delay()
+  printk: add con_printk() macro for console details
+  printk: refactor and rework printing logic
+  printk: move buffer definitions into console_emit_next_record() caller
+  printk: add pr_flush()
+  printk: add functions to prefer direct printing
+  printk: add kthread console printers
+  printk: extend console_lock for proper kthread support
+  printk: remove @console_locked
+
+ drivers/tty/sysrq.c     |    2 +
+ include/linux/console.h |   19 +
+ include/linux/printk.h  |   82 ++-
+ kernel/hung_task.c      |   11 +-
+ kernel/panic.c          |    4 +
+ kernel/printk/printk.c  | 1234 +++++++++++++++++++++++++++++----------
+ kernel/rcu/tree_stall.h |    2 +
+ kernel/reboot.c         |   14 +-
+ kernel/watchdog.c       |    4 +
+ kernel/watchdog_hld.c   |    4 +
+ lib/dump_stack.c        |    4 +-
+ lib/nmi_backtrace.c     |    4 +-
+ 12 files changed, 1059 insertions(+), 325 deletions(-)
+
+
+base-commit: 84d7df104dbab9c3dda8f2c5b46f9a6fc256fe02
 -- 
-2.25.1
+2.30.2
 

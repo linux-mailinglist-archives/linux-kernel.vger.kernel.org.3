@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFCB50A174
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E41250A184
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388657AbiDUOFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        id S1388792AbiDUOG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386439AbiDUOF1 (ORCPT
+        with ESMTP id S1388527AbiDUOGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:05:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99C053A5D4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650549745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aPltoNX3v1MHdmgBq0oIkCAldNZyXJBcZt6C3pWO+9Q=;
-        b=Ae16fq2DK+53wxe9VFpG3bbRhVpp297Ke8U9CahCGrGQBisLegYK5WKyXtjaNEJMBStx8v
-        1wRTmecqhOT+xr6GmpiFJsssp+Bht2VcD3I2AKqoztsIs4vhiUXxstzZZ8SgLs9asy4d13
-        5kteeiL3izVAtUPujnmEpYDnW2TvCcA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-318-VGILzSB1Pqmxx7WgsHszIg-1; Thu, 21 Apr 2022 10:02:24 -0400
-X-MC-Unique: VGILzSB1Pqmxx7WgsHszIg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0503F811E76;
-        Thu, 21 Apr 2022 14:02:22 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B44340CFD22;
-        Thu, 21 Apr 2022 14:02:19 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220415123614.54024-4-jefflexu@linux.alibaba.com>
-References: <20220415123614.54024-4-jefflexu@linux.alibaba.com> <20220415123614.54024-1-jefflexu@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
-Subject: Re: [PATCH v9 03/21] cachefiles: unbind cachefiles gracefully in on-demand mode
+        Thu, 21 Apr 2022 10:06:17 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1AE3A701
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:03:11 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id h25so814811wrc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:03:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wQKtX8WQCvG5ejnoi5Tx3qqomca9PHBF2mLes/stX7M=;
+        b=AgEJXmMrcJiYHb/zC+7om2oCRjpYUw8xNsSKSQV9uECuRMPTThufzJ1NJY+df/hfKK
+         XV9IBzJaoUikKzxvhHEXHe7kK+RqS6k4BEZ6Vyq3uQySxeXxYfJO9sgcVe5o2Xx6G4tt
+         vFjNsdML7fETc24SqP/5MXFeTEpuRO5k+/4dC65zh312CKWKi2DgDWFQxeruHy4fmuOG
+         jmhD9RwDHKfa4qmANxzECjdjQeC2h1IavNVWNTyDvuKztgwbmIfc9OMRPfFYV82O+9Ma
+         wUyY6IxNyvlJtIxV1WW3gW9lseMJcOwoLKSuuBDd2FfImpLXdYUjm1o9Uw+kFrwC2ms4
+         1m1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wQKtX8WQCvG5ejnoi5Tx3qqomca9PHBF2mLes/stX7M=;
+        b=zerFiJNpjpAYPOfvLdAS4JhpSPgA0Ogys0oklcspzEHtmFpYRJhUVNzFkfx+zc4Bo4
+         hTyuSamg12W+UqlrsP62UsPepYK5OlGC5yDbanTTRdlB6JyWQeIPTij5N0505jZTxgLs
+         bRN8VGIhxIH37bunr1V7jOUBhq6tqG7IdukUL3nzik79xo9r2wifvN8rzoRWP3z2BC12
+         7Cw0Rap2cHLVeUB2XvUtPqGRSky0T0kNes090NH0vzUTgmAg7PNNk/2z8kyxkzw57UY6
+         aKnm7N9SfoO0yL7nCJp3760tL5YoTbSPITd7O7ZOxbRFWJ2TkbYyOdOEdJgndSSqf4MC
+         0xWg==
+X-Gm-Message-State: AOAM532rw4vowy9LK0/DKEIhWhka68JZ10evAWfBJSElMeqCEhOjE2j/
+        0i2WxG4qzW8f3aL7Q1GH6yQ3jw==
+X-Google-Smtp-Source: ABdhPJwNBbP3ZT3FPSvScQRH2EbIoBe4I+WYo8GwVldT54PatPc9ePoTluWLxh6Mkgyejmraj+GshA==
+X-Received: by 2002:a5d:53cb:0:b0:207:ab75:3ce7 with SMTP id a11-20020a5d53cb000000b00207ab753ce7mr20360816wrw.171.1650549788683;
+        Thu, 21 Apr 2022 07:03:08 -0700 (PDT)
+Received: from groot.home ([2a01:cb19:85e6:1900:e19f:c42c:d783:89c1])
+        by smtp.gmail.com with ESMTPSA id g5-20020adfd1e5000000b0020a97e7ba9fsm2899192wrd.92.2022.04.21.07.03.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 07:03:08 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fengping Yu <fengping.yu@mediatek.com>
+Cc:     Kevin Hilman <khilman@baylibre.com>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Subject: [PATCH] dt-bindings: input: mediatek,mt6779-keypad: update maintainer
+Date:   Thu, 21 Apr 2022 16:02:55 +0200
+Message-Id: <20220421140255.2781505-1-mkorpershoek@baylibre.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1444915.1650549738.1@warthog.procyon.org.uk>
-Date:   Thu, 21 Apr 2022 15:02:18 +0100
-Message-ID: <1444916.1650549738@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+Fengping has no longer interest and time to maintain this driver so he
+agreed to transfer maintainership over to me.
 
-> +	struct kref			unbind_pincount;/* refcount to do daemon unbind */
+Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+---
+ .../devicetree/bindings/input/mediatek,mt6779-keypad.yaml       | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please use refcount_t or atomic_t, especially as this isn't the refcount for
-the structure.
-
-> -	cachefiles_daemon_unbind(cache);
-> -
->  	/* clean up the control file interface */
->  	cache->cachefilesd = NULL;
->  	file->private_data = NULL;
->  	cachefiles_open = 0;
-
-Please call cachefiles_daemon_unbind() before the cleanup.
-
-David
+diff --git a/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml b/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
+index b1770640f94b..03ebd2665d07 100644
+--- a/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
++++ b/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Mediatek's Keypad Controller device tree bindings
+ 
+ maintainers:
+-  - Fengping Yu <fengping.yu@mediatek.com>
++  - Mattijs Korpershoek <mkorpershoek@baylibre.com>
+ 
+ allOf:
+   - $ref: "/schemas/input/matrix-keymap.yaml#"
+-- 
+2.32.0
 

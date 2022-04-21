@@ -2,126 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA3050A164
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE9650A167
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357186AbiDUOAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S1386615AbiDUOBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbiDUOAD (ORCPT
+        with ESMTP id S244840AbiDUOBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:00:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCBDD377FF
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:57:13 -0700 (PDT)
+        Thu, 21 Apr 2022 10:01:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD25C37BD9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:58:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650549432;
+        s=mimecast20190719; t=1650549527;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=wyJ48PjrvsX9JqxBm3IYuFdA5jrIuvJQc3ntFnd644o=;
-        b=U4fWgB6uS8j6fbcy3S2V8g+s0oHgFxrO/QWZPKIvbbWGbbl5uWuP7z099NTI2v7Wq4sP3t
-        ohPisje4nQAcIpnnoyssghi42/+OSAKP1Dhfq4n3/VjfoKQMnpw7iew2zYI1BIDfJXu2c0
-        IxLJgNXZvRWa6GnuQ4nuIbhO2j6odjk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=FCDdTtfh+cTEbBhGHl6TDA/w0vVS1GSM5e8sY5ZehTw=;
+        b=dFsW2VqZ8e8caxzOPPndF7Ftv1Zo+Zm63zFtoCYvGUyM6AvJnZaTDiRdh8mCFFWyG2NlOQ
+        YiQvZVLLR+hk6DlNcjD+Su2+G0Fbtu6oi2JTIOr3MSucdHsDIc0du0bQcnuh5q0gIpQQyZ
+        lsN7KVukZyTCusivYnpzTK3hc4ZIFiw=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-647-xSh8CwBaOWON3J9evyzuiA-1; Thu, 21 Apr 2022 09:57:07 -0400
-X-MC-Unique: xSh8CwBaOWON3J9evyzuiA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF20D80A0AD;
-        Thu, 21 Apr 2022 13:57:06 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 62F2C145BA52;
-        Thu, 21 Apr 2022 13:57:04 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220415123614.54024-3-jefflexu@linux.alibaba.com>
-References: <20220415123614.54024-3-jefflexu@linux.alibaba.com> <20220415123614.54024-1-jefflexu@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
-Subject: Re: [PATCH v9 02/21] cachefiles: notify user daemon when looking up cookie
+ us-mta-380-uQnD5DjTNR2RuxE_BaAWRA-1; Thu, 21 Apr 2022 09:58:46 -0400
+X-MC-Unique: uQnD5DjTNR2RuxE_BaAWRA-1
+Received: by mail-ej1-f71.google.com with SMTP id x2-20020a1709065ac200b006d9b316257fso2549700ejs.12
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:58:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FCDdTtfh+cTEbBhGHl6TDA/w0vVS1GSM5e8sY5ZehTw=;
+        b=w3vElLmgo9G9QtgsSl6yqHU/5KTxWBvb2dBFrYoVrkOjAiQ4jV2wVB5F4f+0YalaCN
+         Yp4DoYVRdujTtp+GCvktmmLJ/QLW4zXFD7tE5UorN4tJGxE9IqNz+npFrIzv/5MN/Nw3
+         jQc8SIpmpI6ia1rjAqFYRnkeyj56D6eKQXe+7LFeTAWncnh+EwcdbGH+VNvEeOXEPwXN
+         UesQocmGaJJ33/11dXJS2ox1b5VxZlfSaO0gxzzSr2gWFN27i9SP/AuW2hChNdjZcsTQ
+         djthCYZHv7dey+EG2zNND2GaBvfDGfP+oZHm6sYIWt4zmQf4SAXBaGJCVe0jvBy1uW/p
+         pp2g==
+X-Gm-Message-State: AOAM531sw2axzNe7NkwB1Fvms0teri2tBM/H/U0bzE0vWnDdiTkLPQ2V
+        RugKwhCmZb8fetoYlqpSEARR1at5w34npyzwSB9vHP9zj1hnvOu4uHO9e1Kv8zP9JNM0mg2ys02
+        uqtYPCAhZLVHGxreeYZ17sD/v
+X-Received: by 2002:a05:6402:50d1:b0:423:f4a2:95c7 with SMTP id h17-20020a05640250d100b00423f4a295c7mr18677814edb.91.1650549525253;
+        Thu, 21 Apr 2022 06:58:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx4JGn8p7OAUTHSbJC7sBsOiSljB3wcQ48NL5S76jPutkqPECOtv4rN6ZvZhqHRw9AZzzPQ5Q==
+X-Received: by 2002:a05:6402:50d1:b0:423:f4a2:95c7 with SMTP id h17-20020a05640250d100b00423f4a295c7mr18677794edb.91.1650549525081;
+        Thu, 21 Apr 2022 06:58:45 -0700 (PDT)
+Received: from sgarzare-redhat ([217.171.75.76])
+        by smtp.gmail.com with ESMTPSA id s1-20020a056402036100b004240a3fc6b4sm3043298edw.82.2022.04.21.06.58.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 06:58:44 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 15:58:39 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] hv_sock: Copy packets sent by Hyper-V out of the
+ ring buffer
+Message-ID: <20220421135839.2fj6fk6bvlrau73o@sgarzare-redhat>
+References: <20220420200720.434717-1-parri.andrea@gmail.com>
+ <20220420200720.434717-3-parri.andrea@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1444649.1650549423.1@warthog.procyon.org.uk>
-Date:   Thu, 21 Apr 2022 14:57:03 +0100
-Message-ID: <1444650.1650549423@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220420200720.434717-3-parri.andrea@gmail.com>
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+On Wed, Apr 20, 2022 at 10:07:17PM +0200, Andrea Parri (Microsoft) wrote:
+>Pointers to VMbus packets sent by Hyper-V are used by the hv_sock driver
+>within the guest VM.  Hyper-V can send packets with erroneous values or
+>modify packet fields after they are processed by the guest.  To defend
+>against these scenarios, copy the incoming packet after validating its
+>length and offset fields using hv_pkt_iter_{first,next}().  In this way,
+>the packet can no longer be modified by the host.
+>
+>Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+>---
+> net/vmw_vsock/hyperv_transport.c | 9 +++++++--
+> 1 file changed, 7 insertions(+), 2 deletions(-)
+>
+>diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
+>index 943352530936e..8c37d07017fc4 100644
+>--- a/net/vmw_vsock/hyperv_transport.c
+>+++ b/net/vmw_vsock/hyperv_transport.c
+>@@ -78,6 +78,9 @@ struct hvs_send_buf {
+> 					 ALIGN((payload_len), 8) + \
+> 					 VMBUS_PKT_TRAILER_SIZE)
+>
+>+/* Upper bound on the size of a VMbus packet for hv_sock */
+>+#define HVS_MAX_PKT_SIZE	HVS_PKT_LEN(HVS_MTU_SIZE)
+>+
+> union hvs_service_id {
+> 	guid_t	srv_id;
+>
+>@@ -378,6 +381,8 @@ static void hvs_open_connection(struct vmbus_channel *chan)
+> 		rcvbuf = ALIGN(rcvbuf, HV_HYP_PAGE_SIZE);
+> 	}
+>
+>+	chan->max_pkt_size = HVS_MAX_PKT_SIZE;
+>+
 
-> +	help
-> +	  This permits on-demand read mode of cachefiles.  In this mode, when
-> +	  cache miss, the cachefiles backend instead of netfs, is responsible
-> +	  for fetching data, e.g. through user daemon.
+premise, I don't know HyperV channels :-(
 
-How about:
+Is this change necessary to use hv_pkt_iter_first() instead of 
+hv_pkt_iter_first_raw()?
 
-	help
-	  This permits userspace to enable the cachefiles on-demand read mode.
-	  In this mode, when a cache miss occurs, responsibility for fetching
-	  the data lies with the cachefiles backend instead of with the netfs
-	  and is delegated to userspace.
+If yes, then please mention that you set this value in the commit 
+message, otherwise maybe better to have a separate patch.
 
-> +	/*
-> +	 * 1) Cache has been marked as dead state, and then 2) flush all
-> +	 * pending requests in @reqs xarray. The barrier inside set_bit()
-> +	 * will ensure that above two ops won't be reordered.
-> +	 */
+Thanks,
+Stefano
 
-What set_bit()?  What "above two ops"?  And that's not how barriers work; they
-provide a partial ordering relative to another pair of barriered ops.
-
-Also, set_bit() can't be relied upon to imply a barrier - see
-Documentation/memory-barriers.txt.
-
-> +	if (IS_ENABLED(CONFIG_CACHEFILES_ONDEMAND) &&
-> +	    test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags)) {
-
-It might be worth abstracting this into an inline function in internal.h:
-
-	static inline bool cachefiles_in_ondemand_mode(cache)
-	{
-		return IS_ENABLED(CONFIG_CACHEFILES_ONDEMAND) &&
-			test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags)
-	}
-
-> +#ifdef CONFIG_CACHEFILES_ONDEMAND
-
-This looks like it ought to be superfluous, given the preceding test - though
-I can see why you need it:
-
-> +#ifdef CONFIG_CACHEFILES_ONDEMAND
-> +	struct xarray			reqs;		/* xarray of pending on-demand requests */
-> +	struct xarray			ondemand_ids;	/* xarray for ondemand_id allocation */
-> +	u32				ondemand_id_next;
-> +#endif
-
-I'm tempted to say that you should just make them non-conditional.  It's not
-like there's likely to be more than one or two cachefiles_cache structs on a
-system.
-
-David
+> 	ret = vmbus_open(chan, sndbuf, rcvbuf, NULL, 0, hvs_channel_cb,
+> 			 conn_from_host ? new : sk);
+> 	if (ret != 0) {
+>@@ -602,7 +607,7 @@ static ssize_t hvs_stream_dequeue(struct vsock_sock *vsk, struct msghdr *msg,
+> 		return -EOPNOTSUPP;
+>
+> 	if (need_refill) {
+>-		hvs->recv_desc = hv_pkt_iter_first_raw(hvs->chan);
+>+		hvs->recv_desc = hv_pkt_iter_first(hvs->chan);
+> 		if (!hvs->recv_desc)
+> 			return -ENOBUFS;
+> 		ret = hvs_update_recv_data(hvs);
+>@@ -618,7 +623,7 @@ static ssize_t hvs_stream_dequeue(struct vsock_sock *vsk, struct msghdr *msg,
+>
+> 	hvs->recv_data_len -= to_read;
+> 	if (hvs->recv_data_len == 0) {
+>-		hvs->recv_desc = hv_pkt_iter_next_raw(hvs->chan, hvs->recv_desc);
+>+		hvs->recv_desc = hv_pkt_iter_next(hvs->chan, hvs->recv_desc);
+> 		if (hvs->recv_desc) {
+> 			ret = hvs_update_recv_data(hvs);
+> 			if (ret)
+>-- 
+>2.25.1
+>
 

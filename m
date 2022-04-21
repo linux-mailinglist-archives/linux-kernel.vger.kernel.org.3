@@ -2,121 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BD8509B07
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EB9509B00
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386888AbiDUIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
+        id S1386915AbiDUIui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386872AbiDUIuJ (ORCPT
+        with ESMTP id S1386909AbiDUIu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:50:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7C2F140C0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650530839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cmuFO35zQUp1s4VhyCud3srWXPlk5AJzSrlDvha5upI=;
-        b=ZI1d3mTwo3AKBjUbqtJhR3SD2AIzw6ppBes3+gnMnPoAlHrztCfAhf3x4PjuPPY8brrtnC
-        Im/AYttT/5ufwIHQU/UAa9Qmm/To+gSOmxMOLsCJKdNmvjRxle1cS4tzVFFqzlDF+mJNxM
-        woBuLxcy9//LVtBO7thaSn2HV3gigL4=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-284-cc5BfymsPYGML0bIXIjCNg-1; Thu, 21 Apr 2022 04:47:18 -0400
-X-MC-Unique: cc5BfymsPYGML0bIXIjCNg-1
-Received: by mail-qv1-f72.google.com with SMTP id ke23-20020a056214301700b0044bba34469eso2302467qvb.17
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:47:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=cmuFO35zQUp1s4VhyCud3srWXPlk5AJzSrlDvha5upI=;
-        b=Kz5P/LxkPSV9WFY24DbdmLS+M6T4z+ZXgbxaBZBh9Rg8vFlzx4F+e3gx2abribWuB6
-         qKxYx3xaNUohutDZIgu2Xk3wwInPW2W1CcBFtER9HVCYozSlIB2Lp8BUdnSfEC6Pu/ri
-         YBwoqai7ARBGA6b8bry5qILlOKlAyfFlZ2vefq4PJ/9GY1mzuy9t4Tvi1/joYUIvVcPS
-         7xlJ5KGdmLBUNMIUiX06ApjSAaqgbAqCSMiU4gFiX13zKS5CSG+VPgbnC5zMhQDfSsWs
-         83xjiDUmyJKp1mIHB5s0w6WBOYe2CtAhYqAZn2dDRrezfo18G/XRwPrhRSHzYhiemq10
-         kFsw==
-X-Gm-Message-State: AOAM531u6ruYEIC6ZxXDrx1ffk2cVJDLRzt3yaSY8fkbS08172OF4Tvr
-        b8w7RhdTaYg0U/OdZUXmjWzo3AI9jOD++Obyvv6NddA16dd+l9HBUFINqaBZvblP0K3VFk58G9w
-        ytu0F6OZks/6ZUaQsBxKiODzJ
-X-Received: by 2002:a05:6214:2a8d:b0:446:5a52:47f5 with SMTP id jr13-20020a0562142a8d00b004465a5247f5mr14666502qvb.131.1650530838155;
-        Thu, 21 Apr 2022 01:47:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx2GJ8m4EUIE8m8G2Vb5sGhuPqmE97xodK09lR4BsEnMPjsLVXYZ96WzI2QTuXoVzXWb0tD1w==
-X-Received: by 2002:a05:6214:2a8d:b0:446:5a52:47f5 with SMTP id jr13-20020a0562142a8d00b004465a5247f5mr14666492qvb.131.1650530837957;
-        Thu, 21 Apr 2022 01:47:17 -0700 (PDT)
-Received: from gerbillo.redhat.com (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.gmail.com with ESMTPSA id e13-20020a05620a12cd00b0069e908ab48dsm2559403qkl.106.2022.04.21.01.47.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 01:47:17 -0700 (PDT)
-Message-ID: <84310b72be223d736c8ac9fc58eb4936a98aa839.camel@redhat.com>
-Subject: Re: [PATCH] openvswitch: meter: Remove unnecessary int
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Solomon Tan <solomonbstoner@protonmail.ch>, pshelar@ovn.org,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        dev@openvswitch.org, linux-kernel@vger.kernel.org
-Date:   Thu, 21 Apr 2022 10:47:14 +0200
-In-Reply-To: <Yly1t/mE6QAGPS0e@ArchDesktop>
-References: <Yly1t/mE6QAGPS0e@ArchDesktop>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 21 Apr 2022 04:50:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C801220F63;
+        Thu, 21 Apr 2022 01:47:31 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KkWPk528TzhXyZ;
+        Thu, 21 Apr 2022 16:47:22 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 21 Apr 2022 16:47:29 +0800
+Subject: Re: [PATCH v13 5/7] mm: Introduce mf_dax_kill_procs() for fsdax case
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, <linux-kernel@vger.kernel.org>,
+        <linux-xfs@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>
+References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
+ <20220419045045.1664996-6-ruansy.fnst@fujitsu.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <68579c32-268f-0431-72e9-d3d104bc10bf@huawei.com>
+Date:   Thu, 21 Apr 2022 16:47:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <20220419045045.1664996-6-ruansy.fnst@fujitsu.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-18 at 00:50 +0000, Solomon Tan wrote:
-> This patch addresses the checkpatch.pl warning that long long is
-> preferred over long long int.
-
-Please don't do that. This kind of changes cause e.g. backporting issue
-for any later relevant bugfix touching the same area, for no real
-benefit. 
-
-Documentation/process/2.Process.rst
-
-explicltly states to avoid this kind of patches.
+On 2022/4/19 12:50, Shiyang Ruan wrote:
+> This new function is a variant of mf_generic_kill_procs that accepts a
+> file, offset pair instead of a struct to support multiple files sharing
+> a DAX mapping.  It is intended to be called by the file systems as part
+> of the memory_failure handler after the file system performed a reverse
+> mapping from the storage address to the file and file offset.
 > 
-> Signed-off-by: Solomon Tan <solomonbstoner@protonmail.ch>
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 > ---
->  net/openvswitch/meter.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+...
+>  
+> +#ifdef CONFIG_FS_DAX
+> +/**
+> + * mf_dax_kill_procs - Collect and kill processes who are using this file range
+> + * @mapping:	the file in use
+> + * @index:	start pgoff of the range within the file
+
+Might replacing 'file' with 'mapping' or 'address_space within file' will be better?
+
+> + * @count:	length of the range, in unit of PAGE_SIZE
+> + * @mf_flags:	memory failure flags
+> + */
+> +int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+> +		unsigned long count, int mf_flags)
+> +{
+> +	LIST_HEAD(to_kill);
+> +	dax_entry_t cookie;
+> +	struct page *page;
+> +	size_t end = index + count;
+> +
+> +	mf_flags |= MF_ACTION_REQUIRED | MF_MUST_KILL;
+> +
+> +	for (; index < end; index++) {
+> +		page = NULL;
+> +		cookie = dax_lock_mapping_entry(mapping, index, &page);
+> +		if (!cookie)
+> +			return -EBUSY;
+> +		if (!page)
+> +			goto unlock;
+> +
+
+Should we do hwpoison_filter here?
+
+> +		SetPageHWPoison(page);
+> +
+> +		collect_procs_fsdax(page, mapping, index, &to_kill);
+> +		unmap_and_kill(&to_kill, page_to_pfn(page), mapping,
+> +				index, mf_flags);
+> +unlock:
+> +		dax_unlock_mapping_entry(mapping, index, cookie);
+> +	}
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(mf_dax_kill_procs);
+> +#endif /* CONFIG_FS_DAX */
+> +
+>  /*
+>   * Called from hugetlb code with hugetlb_lock held.
+>   *
 > 
-> diff --git a/net/openvswitch/meter.c b/net/openvswitch/meter.c
-> index 04a060ac7fdf..a790920c11d6 100644
-> --- a/net/openvswitch/meter.c
-> +++ b/net/openvswitch/meter.c
-> @@ -592,8 +592,8 @@ static int ovs_meter_cmd_del(struct sk_buff *skb, struct genl_info *info)
->  bool ovs_meter_execute(struct datapath *dp, struct sk_buff *skb,
->  		       struct sw_flow_key *key, u32 meter_id)
->  {
-> -	long long int now_ms = div_u64(ktime_get_ns(), 1000 * 1000);
-> -	long long int long_delta_ms;
-> +	long long now_ms = div_u64(ktime_get_ns(), 1000 * 1000);
-> +	long long long_delta_ms;
->  	struct dp_meter_band *band;
->  	struct dp_meter *meter;
->  	int i, band_exceeded_max = -1;
 
-Additionally the patch is mangled by non plain-text encoding.
+Except from the above nit, this patch looks good to me. Thanks!
 
-For any later submissions (regarding some other different topic) please
-ensure that your client/mailer send purely plain-text messages,
-
-Thanks,
-
-Paolo
-
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>

@@ -2,68 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E490509E02
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A92509E00
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381234AbiDUKuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S1388532AbiDUKub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiDUKuD (ORCPT
+        with ESMTP id S240995AbiDUKu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:50:03 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76F8B2BC9;
-        Thu, 21 Apr 2022 03:47:14 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 31C8B8106;
-        Thu, 21 Apr 2022 10:44:22 +0000 (UTC)
-Date:   Thu, 21 Apr 2022 13:47:12 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>, kernel@pengutronix.de,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v5 7/9] ARM: dts: omap3/4/5: fix ethernet node name for
- different OMAP boards
-Message-ID: <YmE2MJfvMHH7BKCD@atomide.com>
-References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
- <20220216074927.3619425-8-o.rempel@pengutronix.de>
+        Thu, 21 Apr 2022 06:50:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204285FE1;
+        Thu, 21 Apr 2022 03:47:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6EF461A7C;
+        Thu, 21 Apr 2022 10:47:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF673C385A5;
+        Thu, 21 Apr 2022 10:47:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650538057;
+        bh=UB/wj7Q5GrgKrtaTY9oAg++NK8E5bgXvVO35tjMchH8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bUdwbHoj/T4pxwvFzDFT9UDg+MNNMxcQchGoaIti9d6F23eznnuruZ9yJqn72Je09
+         iap9idw8HdZF2t3rzsclNEvtv/qcx9IPOjNIkjTHw8Sf/A9O+vvwJjusSq8FrpNeNR
+         Xrz5pema0o6p8gATJuMK587da1Lp0K1dAxHix7w+QN9WMWPhgEsVCYnrTF20H+3Jc6
+         NAKPCY38mblBzSyR5kywBBgi/f85no4oUsZ8LI8QUPEv5ccouvTTRo1JmgsBx6zwfN
+         Yn0XZ2g5uDYa1E2xr0Zh5bmNrvEgRSSa5nTbRSiPSSeAkHGkqX/SRDRW/HYm30h4M/
+         Vc2jj5MEMfoQg==
+Date:   Thu, 21 Apr 2022 11:47:33 +0100
+From:   Filipe Manana <fdmanana@kernel.org>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] btrfs: Fix a memory leak in btrfs_ioctl_balance()
+Message-ID: <YmE2RV6yqDeghFJn@debian9.Home>
+References: <1650534677-31554-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216074927.3619425-8-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1650534677-31554-1-git-send-email-baihaowen@meizu.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Oleksij Rempel <o.rempel@pengutronix.de> [220216 09:49]:
-> The node name of Ethernet controller should be "ethernet" instead of
-> "usbether" as required by Ethernet controller devicetree schema:
->  Documentation/devicetree/bindings/net/ethernet-controller.yaml
+On Thu, Apr 21, 2022 at 05:51:17PM +0800, Haowen Bai wrote:
+> Free "bargs" before return.
 > 
-> This patch can potentially affect boot loaders patching against full
-> node path instead of using device aliases.
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>  fs/btrfs/ioctl.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+> index f08233c2b0b2..d4c8bea914b7 100644
+> --- a/fs/btrfs/ioctl.c
+> +++ b/fs/btrfs/ioctl.c
+> @@ -4389,13 +4389,13 @@ static long btrfs_ioctl_balance(struct file *file, void __user *arg)
+>  			/* this is (2) */
+>  			mutex_unlock(&fs_info->balance_mutex);
+>  			ret = -EINPROGRESS;
+> -			goto out;
+> +			goto out_bargs;
+>  		}
+>  	} else {
+>  		/* this is (1) */
+>  		mutex_unlock(&fs_info->balance_mutex);
+>  		ret = BTRFS_ERROR_DEV_EXCL_RUN_IN_PROGRESS;
+> -		goto out;
+> +		goto out_bargs;
 
-Picking up this patch into omap-for-v5.19/dt branch.
+In addition to Qu's comment about the double unlock, this is also a fix
+for a recent patch that is not yet on Linus' tree:
 
-Thanks,
+    btrfs: simplify codeflow in btrfs_ioctl_balance
 
-Tony
+    (https://lore.kernel.org/linux-btrfs/20220330091407.1319454-4-nborisov@suse.com/)
+
+Something usually worth mentioning, as we can't add a Fixes tag in this
+case.
+
+Thanks.
+
+>  	}
+>  
+>  locked:
+> -- 
+> 2.7.4
+> 

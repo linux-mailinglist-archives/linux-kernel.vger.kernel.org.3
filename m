@@ -2,59 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1301550AADB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D6D50AAE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442160AbiDUVlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 17:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S1387461AbiDUVnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 17:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442141AbiDUVlD (ORCPT
+        with ESMTP id S1343498AbiDUVnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 17:41:03 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D3414BFE0;
-        Thu, 21 Apr 2022 14:38:12 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 1C5F992009C; Thu, 21 Apr 2022 23:38:11 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 1626E92009B;
-        Thu, 21 Apr 2022 22:38:11 +0100 (BST)
-Date:   Thu, 21 Apr 2022 22:38:10 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND][PATCH v3 1/2] serial: 8250: Fold EndRun device support
- into OxSemi Tornado code
-In-Reply-To: <YmAdTDkZzdiQNKab@kroah.com>
-Message-ID: <alpine.DEB.2.21.2204212234350.9383@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2203310114210.44113@angie.orcam.me.uk> <alpine.DEB.2.21.2203310121211.44113@angie.orcam.me.uk> <Ylk3HNZqnBLMMQCm@kroah.com> <alpine.DEB.2.21.2204172339300.9383@angie.orcam.me.uk> <YmAdTDkZzdiQNKab@kroah.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Thu, 21 Apr 2022 17:43:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1432648E5E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 14:40:26 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650577224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pYxzdD4XVgq6CKbbQ3EP31o4JbRYZewfaps5uRZG8Gs=;
+        b=CxfDV2ehT2ndpG0Oo2rV7BA70XPvAY9l7pgAhYQCv0gtPjcq7BbcJWQDaDXUXDYT73jGYc
+        0V4gNz7nZVCZBYyxCh4ZX5qUSlw067PbTcMT8f4BvE9JIPzDPeiR9ehPHU0iB08MA/VZCF
+        USaEaFfCkGeOqeW94hBB6QD9iFTh6xMkdAQ4Ee8YNmnsdeSMWYYPt/MKRnfpl40M9CmJzX
+        yW0BiOJcZ34Vg3jlZbsKyOopSJW01kbh6t8GJlEuvhCn0F2Uu1HGRxUhJL3Yrp4dsSW1KV
+        9zeKovdIHHh+x5jJzrbeC4Q2b0hw4ao0W3uJ9oju5VnshaKdL4ZG6VqbbqWgeg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650577224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pYxzdD4XVgq6CKbbQ3EP31o4JbRYZewfaps5uRZG8Gs=;
+        b=VsmUOaA87jRVZjsNriBwh5H5KqcvUBJwer+E2z8pzth9ybMyNopSQYAIqef5ZtDvFejQe8
+        YfhfcJ7MR3IvUAAw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v4 14/15] printk: extend console_lock for proper
+ kthread support
+In-Reply-To: <20220421212250.565456-15-john.ogness@linutronix.de>
+References: <20220421212250.565456-1-john.ogness@linutronix.de>
+ <20220421212250.565456-15-john.ogness@linutronix.de>
+Date:   Thu, 21 Apr 2022 23:46:24 +0206
+Message-ID: <87wnfiyv1z.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022, Greg Kroah-Hartman wrote:
+Hi Petr,
 
-> > > As per the top of this file, this should not be needed here as you are
-> > > only using it in one file.  Please leave it as-is.
-> > 
-> >  I find this requirement silly, but here it's not the place to discuss it, 
-> 
-> You have not had to deal with merge issues in this file before.  Think
-> about every single PCI driver author updating this single file.  That
-> just does not work at the scale we run at, sorry.  I put this rule into
-> place 15+ years ago for that reason.
+If v4 ends up being acceptable for linux-next, I would request you fold
+a couple cosmetic changes into this patch.
 
- Fair enough, I missed this practical aspect.  Thanks for straightening me 
-out.
+On 2022-04-21, John Ogness <john.ogness@linutronix.de> wrote:
+> +/*
+> + * Since the kthread printers do not acquire the console_lock but do need to
+> + * access @flags, they could experience races because other tasks
+> + * (synchronizing using the console_lock) can modify @flags. These macros are
+> + * available to at least provide atomic variable updates so that the kthread
+> + * printers can see consistent values.
 
-  Maciej
+This last sentence is bad. It should not use the words "atomic" and
+"updates". Please change it to:
+
+    These macros are available to store the new value in a way that will
+    provide consistent load values for kthread printers. Tasks using
+    these macros must still do so under the console_lock.
+
+[...]
+
+>  EXPORT_SYMBOL(console_stop);
+>  
+> +
+
+Please remove this accidental blank line.
+
+>  void console_start(struct console *console)
+>  {
+>  	console_lock();
+> -	console->flags |= CON_ENABLED;
+> -	console_unlock();
+>  
+> -	/* Wake the newly enabled kthread printer. */
+> -	wake_up_klogd();
+> +	/* Can cause races for printk_kthread_func(). */
+> +	console_flags_set(console->flags, CON_ENABLED);
+>  
+> +	console_unlock();
+>  	__pr_flush(console, 1000, true);
+>  }
+>  EXPORT_SYMBOL(console_start);
+
+John

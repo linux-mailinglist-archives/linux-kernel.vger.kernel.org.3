@@ -2,206 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CC350A5CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3DB50A5B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiDUQ3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 12:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
+        id S230440AbiDUQ2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 12:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbiDUQSI (ORCPT
+        with ESMTP id S1390639AbiDUQSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 12:18:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 539AD101C7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:15:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D885153B;
-        Thu, 21 Apr 2022 09:15:16 -0700 (PDT)
-Received: from airbuntu (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 728203F73B;
-        Thu, 21 Apr 2022 09:15:14 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 17:15:09 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
-        lukasz.luba@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        di.shen@unisoc.com
-Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
- rt fits capacity
-Message-ID: <20220421161509.asz25zmh25eurgrk@airbuntu>
-References: <20220407051932.4071-1-xuewen.yan@unisoc.com>
- <20220420135127.o7ttm5tddwvwrp2a@airbuntu>
- <CAB8ipk-tWjkeAbV=BDhNy04Yq6rdLf80x_7twuLV=HqT4nc1+w@mail.gmail.com>
+        Thu, 21 Apr 2022 12:18:38 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945423B2AC
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:15:47 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id b19so7363055wrh.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FiFPVEZ/890BOXHBWTr8Id5xWtU3CWG0g0Rj3LfZsEw=;
+        b=I3Xk5E68FZ0l1QV2yAN+r9zykHAnVbQhzvC5rfpMlNUkdiKdYhEjy8Kl+xrFsAATRJ
+         YLn7LWbwcKQ5kfNr524MjNa5Hpdcyl/S5UCC7kKiIyAsdk2p7SHvInDw/dBgbX5jpCL6
+         iYNoPAWiwSdkZ/9cjlNBIm+e/g7IU743QrL3ouvOvelnXZ6aqv3Ft6kUxKLf3eM9tJAS
+         z0bcUNcgTYaYhzAMIXHM+smMjjZ0a79g5mwbAxz1BhwEFcfyyHDRURdidSjV9DyY9TjI
+         xOR2o1EoJXbhzaidGfjAilEbahG3OUtCfvYkUUOhE1ZXRBc/LNHfblgbFgFLA7/emle8
+         2/xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FiFPVEZ/890BOXHBWTr8Id5xWtU3CWG0g0Rj3LfZsEw=;
+        b=grJ4B5YVYSa1eODFLuLrQflRGglvSfX9yGf0/V+yghCLYpuSek5xdiSJptBLFfk5x6
+         36I1Nzj24GPu3vuUUnl43rUldWMPpNYCcfsdDOpWqtLHhRJdOPd3YvHaw3azuQ3mg2H1
+         rrdnntJxFFOop8jCaux8x8YkAhXhTQv83MUDqzAC+lQ30Vl5pFEcuDJsB1a2vSdJe4eR
+         3g+CSt5+ZgB25Q92bcmQWBVyZfyBDMkTyF8zoDRUEFz+jkpKkk/1XVri/Dl0noeyIda2
+         Nj7KaNL6aR1HiFKoMNmk3MzUPBhVYheRy6fKxSwOLY5BhukeLjCoYZQ/o4o+viTumUak
+         H59w==
+X-Gm-Message-State: AOAM531AHL8TpEVJONmJMicRKQs+y7b+YU5X4YOTzn/eETOUpahtkbBF
+        3lPgNJoyyHDfF1D0O6t7xSr92g==
+X-Google-Smtp-Source: ABdhPJwx38jxjjyoCbEDJI6s8Wwm3ARUG66bz7F/8861ht83YrP6P64Q5Ohy+DYQ6ywhuQBUZApdfQ==
+X-Received: by 2002:a5d:45c5:0:b0:20a:be8f:aca6 with SMTP id b5-20020a5d45c5000000b0020abe8faca6mr355261wrs.493.1650557746113;
+        Thu, 21 Apr 2022 09:15:46 -0700 (PDT)
+Received: from tsr-vdi-mbaerts.nix.tessares.net (static.23.216.130.94.clients.your-server.de. [94.130.216.23])
+        by smtp.gmail.com with ESMTPSA id i11-20020a5d584b000000b0020a8d859e5fsm2865667wrf.10.2022.04.21.09.15.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 09:15:45 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>
+Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH mptcp-next] x86/pm: fix false positive kmemleak report in msr_build_context()
+Date:   Thu, 21 Apr 2022 18:15:20 +0200
+Message-Id: <20220421161520.401946-1-matthieu.baerts@tessares.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAB8ipk-tWjkeAbV=BDhNy04Yq6rdLf80x_7twuLV=HqT4nc1+w@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/21/22 16:07, Xuewen Yan wrote:
-> Hi Qais
-> 
-> On Wed, Apr 20, 2022 at 9:51 PM Qais Yousef <qais.yousef@arm.com> wrote:
-> >
-> > Hi Xuewen
-> >
-> > Thanks for sending the patch. RT relationship with thermal pressure is an
-> > interesting topic :)
-> >
-> > On 04/07/22 13:19, Xuewen Yan wrote:
-> > > There are cases when the cpu max capacity might be reduced due to thermal.
-> > > Take into the thermal pressure into account when judge whether the rt task
-> > > fits the cpu. And when schedutil govnor get cpu util, the thermal pressure
-> > > also should be considered.
-> >
-> > It would help to explain the mode of failure you're seeing here. What are you
-> > seeing?
-> 
-> I used in Android scenario, there are many RT processes in the
-> Android. I do not want to set the sched_uclamp_util_min_rt_default to
-> 1024, it would make the power consumption very high.
-> I used a compromise method, setting the value of
-> sysctl_sched_uclamp_util_min_rt_default to be bigger than the small
-> core capacity but not so that the frequency of the big core becomes
-> very high.
-> But when there are there clusters on the soc, the big core's capacity
-> often become smaller than the middle core, when this happens, I want
-> the RT can run on the middle cores instead of the on the big core
-> always.
-> When consider the thermal pressure, it could relieve this phenomenon.
+Since commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume"),
+kmemleak reports this issue:
 
-Thanks for the explanation. It's worth putting some of this in the changelog in
-the next versions.
+  unreferenced object 0xffff888009cedc00 (size 256):
+    comm "swapper/0", pid 1, jiffies 4294693823 (age 73.764s)
+    hex dump (first 32 bytes):
+      00 00 00 00 00 00 00 00 48 00 00 00 00 00 00 00  ........H.......
+      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    backtrace:
+      msr_build_context (include/linux/slab.h:621)
+      pm_check_save_msr (arch/x86/power/cpu.c:520)
+      do_one_initcall (init/main.c:1298)
+      kernel_init_freeable (init/main.c:1370)
+      kernel_init (init/main.c:1504)
+      ret_from_fork (arch/x86/entry/entry_64.S:304)
 
-So the problem is as I suspected, but capacity inversion is the major cause of
-grief.
+It is easy to reproduce it on my side:
 
-Is it okay to share what the capacities of the littles, mediums and bigs on
-your system? And how they change under worst case scenario thermal pressure?
-Only IF you have these numbers handy :-)
+  - boot the VM with a debug kernel config [1]
+  - wait ~1 minute
+  - start a kmemleak scan
 
-Is it actually an indication of a potential other problem if you swing into
-capacity inversion in the bigs that often? I've seen a lot of systems where the
-difference between the meds and bigs is small. But frequent inversion could be
-suspicious still.
+It seems kmemleak has an issue with the array allocated in
+msr_build_context() and assigned to a pointer in a static structure
+(saved_context.saved_msrs->array): there is no leak then.
 
-Do the littles and the mediums experience any significant thermal pressure too?
+It looks like this is a limitation from kmemleak but that's alright,
+kmemleak_no_leak() can be used to avoid complaining about that.
 
-> >
-> > >
-> > > Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> > > ---
-> > >  kernel/sched/cpufreq_schedutil.c | 1 +
-> > >  kernel/sched/rt.c                | 1 +
-> > >  2 files changed, 2 insertions(+)
-> > >
-> > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > > index 3dbf351d12d5..285ad51caf0f 100644
-> > > --- a/kernel/sched/cpufreq_schedutil.c
-> > > +++ b/kernel/sched/cpufreq_schedutil.c
-> > > @@ -159,6 +159,7 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
-> > >       struct rq *rq = cpu_rq(sg_cpu->cpu);
-> > >       unsigned long max = arch_scale_cpu_capacity(sg_cpu->cpu);
-> > >
-> > > +     max -= arch_scale_thermal_pressure(sg_cpu->cpu);
-> >
-> > Wouldn't this break the call to irq_scale_capacity() in effective_cpu_util()?
-> >
-> > >       sg_cpu->max = max;
-> > >       sg_cpu->bw_dl = cpu_bw_dl(rq);
-> > >       sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu), max,
-> 
-> It would destory the irq_scale_capacity, but indeed the cpu max
-> capacity has changed, is it better to use the real cpu caopacity?
-> 
->                           max - irq
->             U' = irq + --------- * U
->                            max
-> I can't imagine how much of an impact this will have at the moment.
+Please note that it looks like this issue is not new, e.g.
 
-It doesn't seem it'll cause a significant error, but still it seems to me this
-function wants the original capacity passed to it.
+  https://lore.kernel.org/all/9f1bb619-c4ee-21c4-a251-870bd4db04fa@lwfinger.net/
+  https://lore.kernel.org/all/94e48fcd-1dbd-ebd2-4c91-f39941735909@molgen.mpg.de/
 
-There are similar questions to be asked since you modify sg_cpu->max. Every
-user needs to be audited if they're fine with this change or not.
+But on my side, msr_build_context() is only used since:
 
-I'm not sure still what we are achieving here. You want to force schedutil not
-to request higher frequencies if thermal pressure is high? Should schedutil
-actually care? Shouldn't the cpufreq driver reject this request and pick the
-next best thing if it can't satisfy it? I could be missing something, I haven't
-looked that hard tbh :-)
+  commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume").
 
-> 
-> > > diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> > > index a32c46889af8..d9982ebd4821 100644
-> > > --- a/kernel/sched/rt.c
-> > > +++ b/kernel/sched/rt.c
-> > > @@ -466,6 +466,7 @@ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
-> > >       max_cap = uclamp_eff_value(p, UCLAMP_MAX);
-> > >
-> > >       cpu_cap = capacity_orig_of(cpu);
-> > > +     cpu_cap -= arch_scale_thermal_pressure(cpu);
-> >
-> > Hmm I'm not a fan of this. By default all RT tasks have uclamp_min = 1024 to
-> > keep the default behavior of the system running at max performance point.
-> >
-> > With this change, any tiny thermal pressure means all RT tasks will fail to fit
-> > on the biggest CPU. While this hint is not meant to be bullet proof, but it
-> > shouldn't break that easily either. The highest performance point will still be
-> > on this CPU. The only exception is capacity inversion where the bigs
-> > performance goes below the mediums' under severe thermal circumstances. But
-> > then there are 2 issues.
-> >
-> >         1. This patch doesn't help with this case. It simply reverts to putting
-> >            tasks 'randomly' and  might still end up on this CPU. I can't see
-> >            how this is better.
-> >         2. If we are under such severe thermal pressure, then things must be
-> >            falling over badly anyway and I'm not sure we can still satisfy the
-> >            perf requirements these tasks want anyway. Unless you're trying to
-> >            keep these CPUs less busy to alleviate thermal pressure? This patch
-> >            will not help achieving that either. Or I'm unable to see it if it
-> >            does.
-> 
-> Yes，It is the problem that would lead to, maybe it need more
-> consideration just like select the cpus which have min overutil.
+Depending on their CPUs, others have probably the same issue since:
 
-It depends on the severity of the problem. The simplest thing I can suggest is
-to check if the cpu is in capacity inversion state, and if it is, then make
-rt_task_fits_capacity() return false always.
+  commit 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume"),
 
-If we need a generic solution to handle thermal pressure omitting OPPs, then
-the search needs to become more complex. The proposal in this patch is not
-adequate because tasks that want to run at capacity_orig_of(cpu) will wrongly
-omit some cpus because of any tiny thermal pressure. For example if the
-capacity_orig_of(medium_cpu) = 700, and uclamp_min for RT is set to 700, then
-any small thermal pressure on mediums will cause these tasks to run on big cpus
-only, which is not what we want. Especially if these big cpus can end up in
-capacity inversion later ;-)
+hence the 'Fixes' tag here below to help with the backports. But I
+understand if someone says the origin of this issue is more on
+kmemleak's side. What is unclear to me is why this issue was not seen by
+other people and CIs. Maybe the kernel config [1]?
 
-So if we want to handle this case, then we need to ensure the search returns
-false only if
+[1] https://github.com/multipath-tcp/mptcp_net-next/files/8531660/kmemleak-cpu-sched-bisect.kconfig.txt
 
-	1. Thermal pressure results in real OPP to be omitted.
-	2. Another CPU that can provide this performance level is available.
+Fixes: 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume")
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/268
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+ arch/x86/power/cpu.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Otherwise we should still fit it on this CPU because it'll give us the closest
-thing to what was requested.
+diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
+index 3822666fb73d..1467c6d1a966 100644
+--- a/arch/x86/power/cpu.c
++++ b/arch/x86/power/cpu.c
+@@ -14,6 +14,7 @@
+ #include <linux/tboot.h>
+ #include <linux/dmi.h>
+ #include <linux/pgtable.h>
++#include <linux/kmemleak.h>
+ 
+ #include <asm/proto.h>
+ #include <asm/mtrr.h>
+@@ -413,6 +414,9 @@ static int msr_build_context(const u32 *msr_id, const int num)
+ 		return -ENOMEM;
+ 	}
+ 
++	/* The pointer is going to be stored in static struct (saved_context) */
++	kmemleak_not_leak(msr_array);
++
+ 	if (saved_msrs->array) {
+ 		/*
+ 		 * Multiple callbacks can invoke this function, so copy any
+-- 
+2.34.1
 
-I can think of 2 ways to implement this, but none of them seem particularly
-pretty :-/
-
-
-Thanks
-
---
-Qais Yousef

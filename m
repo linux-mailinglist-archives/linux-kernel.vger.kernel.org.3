@@ -2,90 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6695150A7ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12DC50A7F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391190AbiDUSTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
+        id S1391197AbiDUSV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377142AbiDUSTe (ORCPT
+        with ESMTP id S1377142AbiDUSVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:19:34 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBF53E0D5;
-        Thu, 21 Apr 2022 11:16:42 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VAh.Br2_1650564996;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VAh.Br2_1650564996)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 22 Apr 2022 02:16:38 +0800
-Date:   Fri, 22 Apr 2022 02:16:36 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     JeffleXu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
-        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
-Subject: Re: EMFILE/ENFILE mitigation needed in erofs?
-Message-ID: <YmGfhFQshWOkAqNG@B-P7TQMD6M-0146.local>
-Mail-Followup-To: David Howells <dhowells@redhat.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
-        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
-References: <2067a5c7-4e24-f449-4676-811d12e9ab72@linux.alibaba.com>
- <20220415123614.54024-3-jefflexu@linux.alibaba.com>
- <20220415123614.54024-1-jefflexu@linux.alibaba.com>
- <1447543.1650552898@warthog.procyon.org.uk>
- <1484181.1650563860@warthog.procyon.org.uk>
+        Thu, 21 Apr 2022 14:21:23 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04613EAA9;
+        Thu, 21 Apr 2022 11:18:32 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 04C0A221D4;
+        Thu, 21 Apr 2022 20:18:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1650565111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8F6CN53BzDZd0GMZX26lmOXkDER5jODrK2Ga60c0CVk=;
+        b=haspqQR+8nkQNrGwTx3EQqnDmd+2SRdz5JmOPZnrMg9CndqZ59zzbpPiNTZL6wjwAPniyT
+        e1SvFJtellWwqCE4XhM2lYr9s4VvZeZpHqDyGIrU2VyDO80VX/rhp3qIJJL6GCCOzBCNHl
+        fKTZk5iIPsrEIIWXD1+BjQAdNISJoro=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1484181.1650563860@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 21 Apr 2022 20:18:30 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH 4/8] dt-bindings: nvmem: sfp: Add compatible binding for
+ TA 2.1 SFPs
+In-Reply-To: <20220421175657.1259024-5-sean.anderson@seco.com>
+References: <20220421175657.1259024-1-sean.anderson@seco.com>
+ <20220421175657.1259024-5-sean.anderson@seco.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <816dad4a1fd6869d89fc143030dd4ff9@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-
-On Thu, Apr 21, 2022 at 06:57:40PM +0100, David Howells wrote:
-> JeffleXu <jefflexu@linux.alibaba.com> wrote:
+Am 2022-04-21 19:56, schrieb Sean Anderson:
+> Trust Architecture (TA) 2.1 devices include the LS1012A, LS1021A,
+> LS1043A, and LS1046A. The SFP device on TA 2.1 devices is very similar
+> to the SFP on TA 3.0 devices. The primary difference is a few fields in
+> the control register. Add a compatible string.
 > 
-> > 2. Our user daemon will configure rlimit-nofile to a reasonably large
-> > (e.g. 1 million) value, so that it won't fail when trying to allocate fds.
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
 > 
-> There's a system-wide limit also; simply increasing the rlimit won't override
-> that.
-
-Yes, I suggest that we should add some words to document this
-to system administrators to take care of `/proc/sys/fs/file-max',
-but I think it's typically not a problem about our on-demand cases.
-
-Since each cookie equals to an erofs device, so not too many erofs
-devices (much like docker layers) for one erofs images and they
-are all handled when mounting (which needs privilege permissions.)
-
-And due to this, fscache dir can be easily backed up, restored, and
-transfered since they are really golden erofs image files.
-
-Thanks,
-Gao Xiang
-
+>  .../devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml    | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 > 
-> David
+> diff --git
+> a/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+> b/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+> index e7d1232fcd41..aa277f1eee7e 100644
+> --- a/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+> @@ -18,8 +18,13 @@ allOf:
+> 
+>  properties:
+>    compatible:
+> -    enum:
+> -      - fsl,ls1028a-sfp
+> +    oneOf:
+> +      - description: Trust architecture 2.1 SFP
+> +        items:
+> +          - const: fsl,ls1021a-sfp
+> +      - description: Trust architecture 3.0 SFP
+> +        items:
+> +          - const: fsl,ls1028a-sfp
+
+I'm unsure about this one. Esp. if you reuse the fsl,ls1028a-sfp
+compatible on other SoCs, there were some endianess issues with
+other IP blocks on the ls1028a. So it might be that on the LS1028A
+the IP has to accessed in little endian order and for other devices
+in big endian. I think we should add one compatible per SoC unless
+we know better.
+
+-michael

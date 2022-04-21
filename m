@@ -2,157 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C787509F6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1738E509F7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383453AbiDUMP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
+        id S1380295AbiDUMVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 08:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358962AbiDUMP1 (ORCPT
+        with ESMTP id S1358962AbiDUMU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:15:27 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737AABE2B
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:12:37 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d6so8323246lfv.9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:12:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gASVhU/crs6sXEphNU/hZV9BV2Qz02aD86zFkSz7dK0=;
-        b=AL/cU7XSsTVHVXBOy9gNNsGbwO4XtEb7qDxziknT+GhSzSOKw/nGhJ8bkG0b4pBEC8
-         RqagWYyY1PfSUlcsMEUQx9vbiqwQmJz3vOw6tv5J+IaMRvALQbqTRetz9AU0Fx5a2RwT
-         RgGUeKNArgHrzrgo/H4ztslTetgHDX5j4mmGliQzF7mu3Q5tkKFo9NW2joKRrcGKq466
-         YUIlPloRjds1l+4UbO5eS3DKvZ7IbBLDJjL7ExyfWkejPkerLoYyocgS1kg38sY8qkDI
-         Db/AHnTSn7lwLSq4zH4gxqSIWpr/FCAAEvzHH0btOALKV204L6qTr2Jk+Bkvl+6raUFf
-         /T6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gASVhU/crs6sXEphNU/hZV9BV2Qz02aD86zFkSz7dK0=;
-        b=ongWWxaComrmTKQt4zImVHUGyJrx4XAoUEJkEYH6NxinO65NQ4/PEoPEs29lIVau5Z
-         PBpjQOr6cTUTOXVYOHfRDXmCIUFTrqk0aTjEE/HJrkPy3TlrQDhMRXCe6MPK3CVqhLBj
-         qVdCGybtQZ1EoMzCtmdUX7rHq95JJGbRK5QRx0AXOedfTERX9E79i35spGaw+OxzGEDm
-         FAzXYT3/Xhy18Ht5KsOVXCokOb2X5OHZH4jfhaX7RDEd2uS0UR95NVjO1r5kBurMt4Cw
-         FJjSstfjGvQ9HYmQKZKyTQ7/vQxYFPLVbvKVcOCoM552mzGSWR33v5/R9wDZPsqhZ5Yv
-         1s9w==
-X-Gm-Message-State: AOAM532k/Z+y1oGD536kRmkKb+qU5WAq4M0d1Mz3eFePqCugPKlxU5Bz
-        XC4gc+SvM8UT7lSWULjpEZ4191OnH82PP2VaZD6aYg==
-X-Google-Smtp-Source: ABdhPJzzmEIowJToWOzSJDQuwgmSD6gBEbeEuLfo7t2ZABJXLNCi5A40sLZ5f4IPRbUM1f5J+33uzMoTexb64mmtoVs=
-X-Received: by 2002:a19:505d:0:b0:46d:167e:b9df with SMTP id
- z29-20020a19505d000000b0046d167eb9dfmr18438699lfj.184.1650543155741; Thu, 21
- Apr 2022 05:12:35 -0700 (PDT)
+        Thu, 21 Apr 2022 08:20:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986C12D1DC
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:18:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34B5B61C16
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:18:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D9FC385A5;
+        Thu, 21 Apr 2022 12:18:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650543487;
+        bh=Ec9S8myFSolmnoL4R8AOM4Tbz32Q4M+aYL0/deFs8LA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PtVfVhDmzTvIvnk4HIabBQDxQzLbZTGctfqYkJxpL97E3BoUsILGPTk8aKVyBQrin
+         EgTXxEmEmkXz4GOgtuYKvw+fY4uUz6awAOL1ZlyorrE77iGWS4qyhoW1x3Rn7Q17lW
+         JU43/RvsDvMc0xNPPNtDKGj1r7jq1Y+GkDPBDdoD1Qxnj2VVT+Fw1zSVVnsgPwEhAL
+         Cm3Ca70oD4VHhIM9p996Et+cM+6dw2fu/OGmbxac5m5GRs8ILpfNs+QLRaVtjQYOvF
+         k0NRIW/if8RLFV8B3UbCCElQ2hppZHRpzFbT99BvcQK/FBssRrr+LCX9eB3x1mH8T4
+         Ti1viXhLTwL8w==
+Message-ID: <f34695eb-4390-07bb-055b-6d47580d748b@kernel.org>
+Date:   Thu, 21 Apr 2022 14:18:00 +0200
 MIME-Version: 1.0
-References: <20220418102040.4993-1-a-govindraju@ti.com> <20220418102040.4993-3-a-govindraju@ti.com>
-In-Reply-To: <20220418102040.4993-3-a-govindraju@ti.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 21 Apr 2022 14:11:59 +0200
-Message-ID: <CAPDyKFreftOExcZ9hgxpDGtdHhniB847vGAGpoO-McTy5_ao1w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drivers: mmc: sdhci_am654: Add the quirk to set
- TESTCD bit
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] arm64: defconfig: Enable modules for arm displays
+Content-Language: en-US
+To:     Carsten Haitzler <carsten.haitzler@foss.arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        biju.das.jz@bp.renesas.com, enric.balletbo@collabora.com,
+        agx@sigxcpu.org, spujar@nvidia.com,
+        alexander.stein@ew.tq-group.com, yuzenghui@huawei.com,
+        festevam@gmail.com, linux-kernel@vger.kernel.org
+References: <20220128100720.87803-1-carsten.haitzler@foss.arm.com>
+ <15ceea01-20c3-0fd1-f045-ffa1dd4fb6c3@foss.arm.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <15ceea01-20c3-0fd1-f045-ffa1dd4fb6c3@foss.arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 at 12:21, Aswath Govindraju <a-govindraju@ti.com> wrote:
->
-> From: Vignesh Raghavendra <vigneshr@ti.com>
->
-> The ARASAN MMC controller on Keystone 3 class of devices need the SDCD
-> line to be connected for proper functioning. Similar to the issue pointed
-> out in sdhci-of-arasan.c driver, commit 3794c542641f ("mmc:
-> sdhci-of-arasan: Set controller to test mode when no CD bit").
->
-> In cases where this can't be connected, add a quirk to force the
-> controller into test mode and set the TESTCD bit. Use the flag
-> "ti,fails-without-test-cd", to implement this above quirk when required.
->
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
->  drivers/mmc/host/sdhci_am654.c | 23 ++++++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
-> index e54fe24d47e7..c36b969ed1b6 100644
-> --- a/drivers/mmc/host/sdhci_am654.c
-> +++ b/drivers/mmc/host/sdhci_am654.c
-> @@ -147,6 +147,9 @@ struct sdhci_am654_data {
->         int drv_strength;
->         int strb_sel;
->         u32 flags;
-> +       u32 quirks;
-> +
-> +#define SDHCI_AM654_QUIRK_FORCE_CDTEST BIT(0)
->  };
->
->  struct sdhci_am654_driver_data {
-> @@ -369,6 +372,21 @@ static void sdhci_am654_write_b(struct sdhci_host *host, u8 val, int reg)
->         }
->  }
->
-> +void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
+On 21/04/2022 14:09, Carsten Haitzler wrote:
+> Ping - has anyone looked at this?
 
-This should be a static function.
+Hi,
 
-> +{
-> +       u8 ctrl;
-> +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +       struct sdhci_am654_data *sdhci_am654 = sdhci_pltfm_priv(pltfm_host);
-> +
-> +       sdhci_reset(host, mask);
-> +
-> +       if (sdhci_am654->quirks & SDHCI_AM654_QUIRK_FORCE_CDTEST) {
-> +               ctrl = sdhci_readb(host, SDHCI_HOST_CONTROL);
-> +               ctrl |= SDHCI_CTRL_CDTEST_INS | SDHCI_CTRL_CDTEST_EN;
-> +               sdhci_writeb(host, ctrl, SDHCI_HOST_CONTROL);
-> +       }
-> +}
-> +
->  static int sdhci_am654_execute_tuning(struct mmc_host *mmc, u32 opcode)
->  {
->         struct sdhci_host *host = mmc_priv(mmc);
-> @@ -500,7 +518,7 @@ static struct sdhci_ops sdhci_j721e_4bit_ops = {
->         .set_clock = sdhci_j721e_4bit_set_clock,
->         .write_b = sdhci_am654_write_b,
->         .irq = sdhci_am654_cqhci_irq,
-> -       .reset = sdhci_reset,
-> +       .reset = sdhci_am654_reset,
->  };
->
->  static const struct sdhci_pltfm_data sdhci_j721e_4bit_pdata = {
-> @@ -719,6 +737,9 @@ static int sdhci_am654_get_of_property(struct platform_device *pdev,
->         device_property_read_u32(dev, "ti,clkbuf-sel",
->                                  &sdhci_am654->clkbuf_sel);
->
-> +       if (device_property_read_bool(dev, "ti,fails-without-test-cd"))
-> +               sdhci_am654->quirks |= SDHCI_AM654_QUIRK_FORCE_CDTEST;
-> +
->         sdhci_get_of_property(pdev);
->
->         return 0;
-> --
-> 2.17.1
->
+defconfig changes are going via SoC platform maintainers, so judging by
+title (arm displays) this will be someone from ARM?
 
-Other than the minor thing above, this looks good to me.
-
-Kind regards
-Uffe
+Best regards,
+Krzysztof

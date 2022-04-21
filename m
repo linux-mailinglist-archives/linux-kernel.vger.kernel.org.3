@@ -2,295 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F4850A00E
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA7350A006
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385864AbiDUMzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
+        id S1386348AbiDUMxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 08:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356778AbiDUMzS (ORCPT
+        with ESMTP id S231990AbiDUMxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:55:18 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E869431DE6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:52:28 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id s12-20020a056602168c00b00654ae9e6963so3237558iow.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:52:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=0wOpHcYRyTy1gHbHRKwr8jrNSS5AepkjjIwI89NNgBY=;
-        b=cBhkAqj6wk+ZaQORSBGNgFe2Sx/Dg8r2qpCf1W2N4o8ACbUoMMvJZgbq6mBTtKvMvv
-         sk15+hSJmBvTZLqfUT2UKilwUZkRYFnaR0QbbGT2bkRULp1GaH5jHo9stsQHX6nxUUPy
-         sEynBhihfZl2COHTneQf2sI6RX7pgDyp20SS6rHaQkLuKey5Dy3HwxXJDCRNOEMzLnD1
-         zskD8B9rqJ2pi7E1Qqxu2M22Pab5HoBCWhyWXDfO+oeRI0uOkVtmICY9Kut9fkHUFs/o
-         HP6MWYuTIKqL4jqGARHKa/5Ykm1hjb6pCzTjXteTzEcWgkWTqdFgNE0URDI9yNzRK3PE
-         rA3Q==
-X-Gm-Message-State: AOAM532DDRrHe0edcSd2Le4VERE86Gznd0ca+BKhGL3mNgUoRqs9csEB
-        AqaOdV07IWHH/mdDxNUUv5MkN9/OzC6lZn1ForHLp1t54pO9
-X-Google-Smtp-Source: ABdhPJxTo+QtKWZ1OIb4VWf752AOKkoFIBH6frJ4VOrtv/GHVPKJgxlHaoXxnjoDwgjGI3jT0QFaiyrWD4/EpvSbVCPld88bpX0s
+        Thu, 21 Apr 2022 08:53:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED6F30546;
+        Thu, 21 Apr 2022 05:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650545445; x=1682081445;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=VVBTgO0W+NZQl+SAWHBxlhGh3CArp3Fp4QzdBVp+zhk=;
+  b=LMILmCOBvYRHTQnLSYjK/mpEMOLdKTs3Q4ZQc7joXodUZMghOG8W+bCc
+   1dt6q3sNwb/qaDIvNfW3jUDpBIEV/JuMQT++eKbtKV3N+Q6xnGecmvnbE
+   Zf8TeL96/94uUlpsY8cn84d5LQIxF/1LrewDpNYBzYFvqzBwKwQjvz90Z
+   vmXl8kbkhfMCHW4PyaOXJkUJ0LwjDoDl9fTWtm58uzGZxjVoTqbcNseM+
+   mVRUdlKmGSGZ4P4dnQHqF00bI1eu0K+iuoESg5qJOeYQNEOp/QLK1JY25
+   N8AKWyyEg6rWezK32Y6m5nPGo6juu9owuWx88/KcCW2/S+broG/iNI9HA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264506797"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="264506797"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 05:50:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="866074328"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Apr 2022 05:50:43 -0700
+To:     Fu Zixuan <r33s3n6@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+References: <20220421094236.1052170-1-r33s3n6@gmail.com>
+ <YmEs6BqcyM7fgLXg@kroah.com>
+ <CAMvdLANp4jHnySOmpjXZdFwruLdvN9qR-B_Ew9_zeCiKYiLZSA@mail.gmail.com>
+ <YmFIqPeGQYKl33vh@kroah.com>
+ <CAMvdLANGW35m0-mg_00wM2FPivmk-wVfqE379iNjE=gFL3u-5A@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] drivers: usb: host: fix NULL pointer dereferences
+ triggered by unhandled errors in xhci_create_rhub_port_array()
+Message-ID: <fb656254-bfc5-5930-3e7c-be84382d88f8@linux.intel.com>
+Date:   Thu, 21 Apr 2022 15:52:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20e1:b0:2cc:2ea5:6c98 with SMTP id
- q1-20020a056e0220e100b002cc2ea56c98mr7428759ilv.29.1650545548331; Thu, 21 Apr
- 2022 05:52:28 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 05:52:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000018117c05dd29952c@google.com>
-Subject: [syzbot] possible deadlock in evict (2)
-From:   syzbot <syzbot+e0fda9a3d66127dea5c2@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAMvdLANGW35m0-mg_00wM2FPivmk-wVfqE379iNjE=gFL3u-5A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 21.4.2022 15.21, Fu Zixuan wrote:
+> On Thu, 21 Apr 2022 at 20:06, Greg KH <gregkh@linuxfoundation.org> wrote:
+>>
+>> On Thu, Apr 21, 2022 at 07:55:28PM +0800, Fu Zixuan wrote:
+>>> On Thu, 21 Apr 2022 at 18:07, Greg KH <gregkh@linuxfoundation.org> wrote:
+>>>>
+>>>> On Thu, Apr 21, 2022 at 05:42:36PM +0800, Zixuan Fu wrote:
+>>>>> In xhci_create_rhub_port_array(), when rhub->num_ports is zero,
+>>>>> rhub->ports would not be set; when kcalloc_node() fails, rhub->ports
+>>>>> would be set to NULL. In these two cases, xhci_create_rhub_port_array()
+>>>>> just returns void, and thus its callers are unaware of the error.
+>>>>>
+>>>>> Then rhub->ports is dereferenced in xhci_usb3_hub_descriptor() or
+>>>>> xhci_usb2_hub_descriptor().
+>>>>>
+>>>>> To fix the bug, xhci_setup_port_arrays() should return an integer to
+>>>>> indicate a possible error, and its callers should handle the error.
+>>>>>
+>>>>> Here is the log when this bug occurred in our fault-injection testing:
+>>>>>
+>>>>> [   24.001309] BUG: kernel NULL pointer dereference, address: 0000000000000000
+>>>>> ...
+>>>>> [   24.003992] RIP: 0010:xhci_hub_control+0x3f5/0x60d0 [xhci_hcd]
+>>>>> ...
+>>>>> [   24.009803] Call Trace:
+>>>>> [   24.010014]  <TASK>
+>>>>> [   24.011310]  usb_hcd_submit_urb+0x1233/0x1fd0
+>>>>> [   24.017071]  usb_start_wait_urb+0x115/0x310
+>>>>> [   24.017641]  usb_control_msg+0x28a/0x450
+>>>>> [   24.019046]  hub_probe+0xb16/0x2320
+>>>>> [   24.019757]  usb_probe_interface+0x4f1/0x930
+>>>>> [   24.019765]  really_probe+0x33d/0x970
+>>>>> [   24.019768]  __driver_probe_device+0x157/0x210
+>>>>> [   24.019772]  driver_probe_device+0x4f/0x340
+>>>>> [   24.019775]  __device_attach_driver+0x2ee/0x3a0
+>>>>> ...
+>>>>>
+>>>>> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+>>>>> Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+>>>>> ---
+>>>>>  drivers/usb/host/xhci-mem.c | 17 ++++++++++++-----
+>>>>>  1 file changed, 12 insertions(+), 5 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+>>>>> index bbb27ee2c6a3..024515346c39 100644
+>>>>> --- a/drivers/usb/host/xhci-mem.c
+>>>>> +++ b/drivers/usb/host/xhci-mem.c
+>>>>> @@ -2235,7 +2235,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+>>>>>       /* FIXME: Should we disable ports not in the Extended Capabilities? */
+>>>>>  }
+>>>>>
+>>>>> -static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+>>>>> +static int xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+>>>>>                                       struct xhci_hub *rhub, gfp_t flags)
+>>>>>  {
+>>>>>       int port_index = 0;
+>>>>> @@ -2243,11 +2243,11 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+>>>>>       struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+>>>>>
+>>>>>       if (!rhub->num_ports)
+>>>>> -             return;
+>>>>> +             return -EINVAL;
+>>>>>       rhub->ports = kcalloc_node(rhub->num_ports, sizeof(*rhub->ports),
+>>>>>                       flags, dev_to_node(dev));
+>>>>>       if (!rhub->ports)
+>>>>> -             return;
+>>>>> +             return -ENOMEM;
+>>>>>
+>>>>>       for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
+>>>>>               if (xhci->hw_ports[i].rhub != rhub ||
+>>>>> @@ -2259,6 +2259,7 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+>>>>>               if (port_index == rhub->num_ports)
+>>>>>                       break;
+>>>>>       }
+>>>>> +     return 0;
+>>>>>  }
+>>>>>
+>>>>>  /*
+>>>>> @@ -2277,6 +2278,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+>>>>>       int cap_count = 0;
+>>>>>       u32 cap_start;
+>>>>>       struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+>>>>> +     int ret;
+>>>>>
+>>>>>       num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
+>>>>>       xhci->hw_ports = kcalloc_node(num_ports, sizeof(*xhci->hw_ports),
+>>>>> @@ -2367,8 +2369,13 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+>>>>>        * Not sure how the USB core will handle a hub with no ports...
+>>>>>        */
+>>>>>
+>>>>> -     xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
+>>>>> -     xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
+>>>>> +     ret = xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
+>>>>> +     if (ret)
+>>>>> +             return ret;
+>>>>> +
+>>>>> +     ret = xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
+>>>>> +     if (ret)
+>>>>> +             return ret;
+>>>>
+>>>> What about the memory allocated by the first call to
+>>>> xhci_create_rhub_port_array()?  Is that now lost?  Same for everything
+>>>> else allocated before these calls, how is that cleaned up properly?
+>>>>
+>>>> thanks,
+>>>>
+>>>> greg k-h
+>>>
+>>> Thanks for your swift reply. We understand your concern. In fact, we have
+>>> checked the related code carefully and found that xhci_create_rhub_port_array()
+>>> is only used in xhci_setup_port_arrays(). Moreover, only xhci_mem_init() calls
+>>> xhci_setup_port_arrays() and does all cleanup work when it fails. Specifically,
+>>> xhci_mem_init() calls xhci_mem_cleanup(), which eventually called
+>>> kfree(xhci->usb2_rhub.ports) and kfree(xhci->usb3_rhub.ports).
+>>
+>> Great, can you mention this in the changelog text to show that you have
+>> thought this through and it can be documented as such?
+>>
+>> thanks,
+>>
+>> greg k-h
+> 
+> Thanks for your reply! We will do that and submit the patch v2 soon.
+> 
 
-syzbot found the following issue on:
+Good to get this fixed, but there's a series by Heiner Kallweit that adds support
+for xHC controllers with just one roothub [1].
+It will conflict with this.  
 
-HEAD commit:    a2c29ccd9477 Merge tag 'devicetree-fixes-for-5.18-2' of gi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13508568f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ac042ae170e2c50f
-dashboard link: https://syzkaller.appspot.com/bug?extid=e0fda9a3d66127dea5c2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+We might need to change this a bit so that this can go to stable alone, but still
+being being able to somewhat neatly apply that new series on top of this.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+1. https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=for-usb-next
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e0fda9a3d66127dea5c2@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-5.18.0-rc2-syzkaller-00351-ga2c29ccd9477 #0 Not tainted
-------------------------------------------------------
-khugepaged/49 is trying to acquire lock:
-ffff88801ca7a650 (sb_internal){.+.+}-{0:0}, at: evict+0x2ed/0x6b0 fs/inode.c:664
-
-but task is already holding lock:
-ffffffff8beac660 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim mm/page_alloc.c:4621 [inline]
-ffffffff8beac660 (fs_reclaim){+.+.}-{0:0}, at: __alloc_pages_direct_reclaim mm/page_alloc.c:4646 [inline]
-ffffffff8beac660 (fs_reclaim){+.+.}-{0:0}, at: __alloc_pages_slowpath.constprop.0+0xa1e/0x20e0 mm/page_alloc.c:5046
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (fs_reclaim){+.+.}-{0:0}:
-       __fs_reclaim_acquire mm/page_alloc.c:4572 [inline]
-       fs_reclaim_acquire+0x115/0x160 mm/page_alloc.c:4586
-       might_alloc include/linux/sched/mm.h:254 [inline]
-       slab_pre_alloc_hook mm/slab.h:722 [inline]
-       slab_alloc_node mm/slab.c:3214 [inline]
-       kmem_cache_alloc_node_trace+0x48/0x5b0 mm/slab.c:3625
-       kmalloc_node include/linux/slab.h:599 [inline]
-       kzalloc_node include/linux/slab.h:725 [inline]
-       mempool_create_node mm/mempool.c:266 [inline]
-       mempool_create+0x4e/0xc0 mm/mempool.c:255
-       mempool_create_page_pool include/linux/mempool.h:107 [inline]
-       fscrypt_initialize+0x86/0xa0 fs/crypto/crypto.c:330
-       fscrypt_setup_encryption_info+0xef/0xf00 fs/crypto/keysetup.c:545
-       fscrypt_get_encryption_info+0x34a/0x3f0 fs/crypto/keysetup.c:654
-       fscrypt_setup_filename+0x238/0xec0 fs/crypto/fname.c:426
-       __fscrypt_prepare_lookup+0x28/0xf0 fs/crypto/hooks.c:102
-       fscrypt_prepare_lookup include/linux/fscrypt.h:898 [inline]
-       ext4_fname_prepare_lookup+0x2b1/0x330 fs/ext4/ext4.h:2770
-       ext4_lookup_entry fs/ext4/namei.c:1694 [inline]
-       ext4_lookup fs/ext4/namei.c:1769 [inline]
-       ext4_lookup+0x12d/0x730 fs/ext4/namei.c:1760
-       lookup_open.isra.0+0x9aa/0x1690 fs/namei.c:3308
-       open_last_lookups fs/namei.c:3400 [inline]
-       path_openat+0x9a2/0x2910 fs/namei.c:3606
-       do_filp_open+0x1aa/0x400 fs/namei.c:3636
-       do_sys_openat2+0x16d/0x4c0 fs/open.c:1213
-       do_sys_open fs/open.c:1229 [inline]
-       __do_sys_openat fs/open.c:1245 [inline]
-       __se_sys_openat fs/open.c:1240 [inline]
-       __x64_sys_openat+0x13f/0x1f0 fs/open.c:1240
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #2 (fscrypt_init_mutex){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
-       fscrypt_initialize+0x3c/0xa0 fs/crypto/crypto.c:324
-       fscrypt_setup_encryption_info+0xef/0xf00 fs/crypto/keysetup.c:545
-       fscrypt_get_encryption_info+0x34a/0x3f0 fs/crypto/keysetup.c:654
-       fscrypt_setup_filename+0x238/0xec0 fs/crypto/fname.c:426
-       ext4_fname_setup_filename+0x8d/0x240 fs/ext4/ext4.h:2751
-       ext4_find_entry+0x8c/0x170 fs/ext4/namei.c:1674
-       __ext4_unlink+0x92/0x920 fs/ext4/namei.c:3155
-       ext4_unlink+0x346/0x9e0 fs/ext4/namei.c:3231
-       vfs_unlink+0x351/0x920 fs/namei.c:4148
-       do_unlinkat+0x3c9/0x650 fs/namei.c:4216
-       __do_sys_unlink fs/namei.c:4264 [inline]
-       __se_sys_unlink fs/namei.c:4262 [inline]
-       __x64_sys_unlink+0xc6/0x110 fs/namei.c:4262
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #1 (jbd2_handle){++++}-{0:0}:
-       start_this_handle+0xfe7/0x14a0 fs/jbd2/transaction.c:463
-       jbd2__journal_start+0x399/0x930 fs/jbd2/transaction.c:520
-       __ext4_journal_start_sb+0x3a8/0x4a0 fs/ext4/ext4_jbd2.c:105
-       ext4_sample_last_mounted fs/ext4/file.c:820 [inline]
-       ext4_file_open+0x5e7/0xb50 fs/ext4/file.c:849
-       do_dentry_open+0x4a1/0x11e0 fs/open.c:824
-       do_open fs/namei.c:3476 [inline]
-       path_openat+0x1c71/0x2910 fs/namei.c:3609
-       do_filp_open+0x1aa/0x400 fs/namei.c:3636
-       do_sys_openat2+0x16d/0x4c0 fs/open.c:1213
-       do_sys_open fs/open.c:1229 [inline]
-       __do_sys_openat fs/open.c:1245 [inline]
-       __se_sys_openat fs/open.c:1240 [inline]
-       __x64_sys_openat+0x13f/0x1f0 fs/open.c:1240
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #0 (sb_internal){.+.+}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3065 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3188 [inline]
-       validate_chain kernel/locking/lockdep.c:3803 [inline]
-       __lock_acquire+0x2ac6/0x56c0 kernel/locking/lockdep.c:5029
-       lock_acquire kernel/locking/lockdep.c:5641 [inline]
-       lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1698 [inline]
-       sb_start_intwrite include/linux/fs.h:1815 [inline]
-       ext4_evict_inode+0xe81/0x1960 fs/ext4/inode.c:240
-       evict+0x2ed/0x6b0 fs/inode.c:664
-       iput_final fs/inode.c:1744 [inline]
-       iput.part.0+0x562/0x820 fs/inode.c:1770
-       iput+0x58/0x70 fs/inode.c:1760
-       dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
-       __dentry_kill+0x3c0/0x640 fs/dcache.c:607
-       dentry_kill fs/dcache.c:745 [inline]
-       dput+0x64d/0xdb0 fs/dcache.c:913
-       ovl_entry_stack_free fs/overlayfs/super.c:61 [inline]
-       ovl_dentry_release+0xca/0x130 fs/overlayfs/super.c:74
-       __dentry_kill+0x42b/0x640 fs/dcache.c:612
-       shrink_dentry_list+0x23c/0x800 fs/dcache.c:1201
-       prune_dcache_sb+0xe7/0x140 fs/dcache.c:1282
-       super_cache_scan+0x336/0x590 fs/super.c:104
-       do_shrink_slab+0x42d/0xbd0 mm/vmscan.c:774
-       shrink_slab_memcg mm/vmscan.c:843 [inline]
-       shrink_slab+0x3ee/0x6f0 mm/vmscan.c:922
-       shrink_node_memcgs mm/vmscan.c:3100 [inline]
-       shrink_node+0x8b3/0x1df0 mm/vmscan.c:3221
-       shrink_zones mm/vmscan.c:3458 [inline]
-       do_try_to_free_pages+0x3b5/0x1700 mm/vmscan.c:3516
-       try_to_free_pages+0x2ac/0x840 mm/vmscan.c:3751
-       __perform_reclaim mm/page_alloc.c:4624 [inline]
-       __alloc_pages_direct_reclaim mm/page_alloc.c:4646 [inline]
-       __alloc_pages_slowpath.constprop.0+0xac7/0x20e0 mm/page_alloc.c:5046
-       __alloc_pages+0x412/0x500 mm/page_alloc.c:5421
-       __alloc_pages_node include/linux/gfp.h:587 [inline]
-       khugepaged_alloc_page+0xa0/0x170 mm/khugepaged.c:868
-       collapse_huge_page mm/khugepaged.c:1071 [inline]
-       khugepaged_scan_pmd mm/khugepaged.c:1357 [inline]
-       khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
-       khugepaged_do_scan mm/khugepaged.c:2248 [inline]
-       khugepaged+0x3474/0x66e0 mm/khugepaged.c:2293
-       kthread+0x2e9/0x3a0 kernel/kthread.c:376
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-
-other info that might help us debug this:
-
-Chain exists of:
-  sb_internal --> fscrypt_init_mutex --> fs_reclaim
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(fs_reclaim);
-                               lock(fscrypt_init_mutex);
-                               lock(fs_reclaim);
-  lock(sb_internal);
-
- *** DEADLOCK ***
-
-3 locks held by khugepaged/49:
- #0: ffffffff8beac660 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim mm/page_alloc.c:4621 [inline]
- #0: ffffffff8beac660 (fs_reclaim){+.+.}-{0:0}, at: __alloc_pages_direct_reclaim mm/page_alloc.c:4646 [inline]
- #0: ffffffff8beac660 (fs_reclaim){+.+.}-{0:0}, at: __alloc_pages_slowpath.constprop.0+0xa1e/0x20e0 mm/page_alloc.c:5046
- #1: ffffffff8be6e310 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab_memcg mm/vmscan.c:816 [inline]
- #1: ffffffff8be6e310 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab+0x2b4/0x6f0 mm/vmscan.c:922
- #2: ffff8880241a40e0 (&type->s_umount_key#75){++++}-{3:3}, at: trylock_super fs/super.c:415 [inline]
- #2: ffff8880241a40e0 (&type->s_umount_key#75){++++}-{3:3}, at: super_cache_scan+0x6c/0x590 fs/super.c:79
-
-stack backtrace:
-CPU: 2 PID: 49 Comm: khugepaged Not tainted 5.18.0-rc2-syzkaller-00351-ga2c29ccd9477 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2145
- check_prev_add kernel/locking/lockdep.c:3065 [inline]
- check_prevs_add kernel/locking/lockdep.c:3188 [inline]
- validate_chain kernel/locking/lockdep.c:3803 [inline]
- __lock_acquire+0x2ac6/0x56c0 kernel/locking/lockdep.c:5029
- lock_acquire kernel/locking/lockdep.c:5641 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
- percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
- __sb_start_write include/linux/fs.h:1698 [inline]
- sb_start_intwrite include/linux/fs.h:1815 [inline]
- ext4_evict_inode+0xe81/0x1960 fs/ext4/inode.c:240
- evict+0x2ed/0x6b0 fs/inode.c:664
- iput_final fs/inode.c:1744 [inline]
- iput.part.0+0x562/0x820 fs/inode.c:1770
- iput+0x58/0x70 fs/inode.c:1760
- dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
- __dentry_kill+0x3c0/0x640 fs/dcache.c:607
- dentry_kill fs/dcache.c:745 [inline]
- dput+0x64d/0xdb0 fs/dcache.c:913
- ovl_entry_stack_free fs/overlayfs/super.c:61 [inline]
- ovl_dentry_release+0xca/0x130 fs/overlayfs/super.c:74
- __dentry_kill+0x42b/0x640 fs/dcache.c:612
- shrink_dentry_list+0x23c/0x800 fs/dcache.c:1201
- prune_dcache_sb+0xe7/0x140 fs/dcache.c:1282
- super_cache_scan+0x336/0x590 fs/super.c:104
- do_shrink_slab+0x42d/0xbd0 mm/vmscan.c:774
- shrink_slab_memcg mm/vmscan.c:843 [inline]
- shrink_slab+0x3ee/0x6f0 mm/vmscan.c:922
- shrink_node_memcgs mm/vmscan.c:3100 [inline]
- shrink_node+0x8b3/0x1df0 mm/vmscan.c:3221
- shrink_zones mm/vmscan.c:3458 [inline]
- do_try_to_free_pages+0x3b5/0x1700 mm/vmscan.c:3516
- try_to_free_pages+0x2ac/0x840 mm/vmscan.c:3751
- __perform_reclaim mm/page_alloc.c:4624 [inline]
- __alloc_pages_direct_reclaim mm/page_alloc.c:4646 [inline]
- __alloc_pages_slowpath.constprop.0+0xac7/0x20e0 mm/page_alloc.c:5046
- __alloc_pages+0x412/0x500 mm/page_alloc.c:5421
- __alloc_pages_node include/linux/gfp.h:587 [inline]
- khugepaged_alloc_page+0xa0/0x170 mm/khugepaged.c:868
- collapse_huge_page mm/khugepaged.c:1071 [inline]
- khugepaged_scan_pmd mm/khugepaged.c:1357 [inline]
- khugepaged_scan_mm_slot mm/khugepaged.c:2167 [inline]
- khugepaged_do_scan mm/khugepaged.c:2248 [inline]
- khugepaged+0x3474/0x66e0 mm/khugepaged.c:2293
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks
+-Mathias

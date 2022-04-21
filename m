@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB435097C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BAE5097E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384960AbiDUGmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S1385015AbiDUGnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 02:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384922AbiDUGmX (ORCPT
+        with ESMTP id S1384979AbiDUGnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:42:23 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 521F3E0A9;
-        Wed, 20 Apr 2022 23:39:33 -0700 (PDT)
-Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 089D01C810D0;
-        Thu, 21 Apr 2022 14:39:31 +0800 (CST)
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS04.nuvoton.com
- (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 21
- Apr 2022 14:39:30 +0800
-Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Thu, 21 Apr 2022 14:39:30 +0800
-Message-ID: <caf4867f-7f71-9262-f190-463325eb13ab@nuvoton.com>
-Date:   Thu, 21 Apr 2022 14:39:30 +0800
+        Thu, 21 Apr 2022 02:43:43 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B0313F83
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 23:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650523254; x=1682059254;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JGKy3LwrYUP8nBdiYmLzWVVTv4IVXQdqUssTDV9d1/I=;
+  b=IAYUg1vDH04xrTJuHkNCpIXaIS1V+QQWzjaxRCII32emgg4SKJtgDadZ
+   f9oWC5viJcMvnuScO3qitD2Xeu5lpqkWJzd3jeDagg9FPrJFxogPok8zM
+   C10pQxtQGIdDJwPP43xF8elYjzwcmBqjBEvrvijnBra4NDEYIPZ9sEfDu
+   d61pFa+fCK/3HMNG1sqz/e3zX2JlDp09f6ewBp7a53wIX8iTThjfrG2o9
+   aWGITR6RNqfFDSV841rmJJPQ+LNxfBxlsOqq6s7bcS3vjRzXKL4FPF6i6
+   kkSEQBs+N9N4VAbXd5M3FiuijpkX5ryMB4wMq/TLJv00QoOlIWWW9tL4o
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="327160558"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="327160558"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:40:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="532790128"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 20 Apr 2022 23:40:50 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhQUj-0007xh-AK;
+        Thu, 21 Apr 2022 06:40:49 +0000
+Date:   Thu, 21 Apr 2022 14:40:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2110/2579] include/linux/fscrypt.h:757:22:
+ warning: incompatible integer to pointer conversion initializing 'const
+ struct inode *' with an expression of type 'int'
+Message-ID: <202204202041.6zH9eoQ9-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 5/5] dt-bindings: arm: Add initial bindings for Nuvoton
- Platform
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <ychuang570808@gmail.com>
-CC:     <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
-        <arnd@arndb.de>, <olof@lixom.net>, <will@kernel.org>,
-        <soc@kernel.org>, <cfli0@nuvoton.com>
-References: <20220418082738.11301-1-ychuang3@nuvoton.com>
- <20220418082738.11301-6-ychuang3@nuvoton.com>
- <fd9316a6-7df6-e1fa-50dc-ff50934afb5c@linaro.org>
-From:   Jacky Huang <ychuang3@nuvoton.com>
-In-Reply-To: <fd9316a6-7df6-e1fa-50dc-ff50934afb5c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 1cb1e496fc95fd250b11d4ae7bd593cbe22bb5f6 [2110/2579] headers/deps: fs: Optimize <linux/fs.h> dependencies, remove <linux/fs_api.h> inclusion
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220420/202204202041.6zH9eoQ9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=1cb1e496fc95fd250b11d4ae7bd593cbe22bb5f6
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 1cb1e496fc95fd250b11d4ae7bd593cbe22bb5f6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/cpu/mtrr/ fs/crypto/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/crypto/fname.c:23:
+   In file included from fs/crypto/fscrypt_private.h:14:
+   include/linux/fscrypt.h:757:30: error: implicit declaration of function 'file_inode' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           const struct inode *inode = file_inode(iocb->ki_filp);
+                                       ^
+>> include/linux/fscrypt.h:757:22: warning: incompatible integer to pointer conversion initializing 'const struct inode *' with an expression of type 'int' [-Wint-conversion]
+           const struct inode *inode = file_inode(iocb->ki_filp);
+                               ^       ~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-On 2022/4/18 下午 08:11, Krzysztof Kozlowski wrote:
-> On 18/04/2022 10:27, Jacky Huang wrote:
->> +properties:
->> +  $nodename:
->> +    const: '/'
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - nuvoton,ma35d1
->> +          - nuvoton,ma35d1-evb
->> +          - nuvoton,ma35d1-iot
->> +          - nuvoton,ma35d1-som512
->> +          - nuvoton,ma35d1-som1g
-> This does not match your DTS and does not look reasonable (SoC
-> compatible should not be part of this enum). Check some other board
-> bindings for examples.
->
->
-> Best regards,
-> Krzysztof
+vim +757 include/linux/fscrypt.h
 
-I would like to modify it as follows:
+c6c89783eba05a Eric Biggers 2022-01-28  753  
+c6c89783eba05a Eric Biggers 2022-01-28  754  static inline bool fscrypt_dio_supported(struct kiocb *iocb,
+c6c89783eba05a Eric Biggers 2022-01-28  755  					 struct iov_iter *iter)
+c6c89783eba05a Eric Biggers 2022-01-28  756  {
+c6c89783eba05a Eric Biggers 2022-01-28 @757  	const struct inode *inode = file_inode(iocb->ki_filp);
+c6c89783eba05a Eric Biggers 2022-01-28  758  
+c6c89783eba05a Eric Biggers 2022-01-28  759  	return !fscrypt_needs_contents_encryption(inode);
+c6c89783eba05a Eric Biggers 2022-01-28  760  }
+c6c89783eba05a Eric Biggers 2022-01-28  761  
 
-description: |
-   Boards with an ARMv8 based Nuvoton SoC shall have the following
-   properties.
+:::::: The code at line 757 was first introduced by commit
+:::::: c6c89783eba05a5e159b07cfd8c68d841cc5de42 fscrypt: add functions for direct I/O support
 
-properties:
-   $nodename:
-     const: '/'
-   compatible:
-     oneOf:
+:::::: TO: Eric Biggers <ebiggers@google.com>
+:::::: CC: Eric Biggers <ebiggers@google.com>
 
-       - description: MA35D1 evaluation board
-         items:
-           - const: nuvoton,ma35d1-evb
-           - const: nuvoton,ma35d1
-
-       - description: MA35D1 IoT board
-         items:
-           - const: nuvoton,ma35d1-iot
-           - const: nuvoton,ma35d1
-
-       - description: MA35D1 SOM board with 512MB DDR
-         items:
-           - const: nuvoton,ma35d1-som512
-           - const: nuvoton,ma35d1
-
-       - description: MA35D1 SOM board with 1GB DDR
-         items:
-           - const: nuvoton,ma35d1-som1g
-           - const: nuvoton,ma35d1
-
-additionalProperties: true
-
-
-
-Thank you very much.
-Jacky Huang
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

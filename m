@@ -2,93 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2989A509A93
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C18509A9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386631AbiDUI05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
+        id S1386646AbiDUI1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiDUI04 (ORCPT
+        with ESMTP id S230391AbiDUI1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:26:56 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EF21DA5C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:24:06 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 4DE3D3202254;
-        Thu, 21 Apr 2022 04:24:02 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 21 Apr 2022 04:24:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1650529441; x=1650615841; bh=mr6/yNysRK
-        Gd8H9fz/3NmMqTPBzrj57CSccM86kcPME=; b=VIma+8f/jMnVxvmpJBjeZS3wsE
-        7WNCTDwHEgZOkcwzk2cs5sZDXVJbQ3OL/shhRoP9mDf+Mmm653jY3ztiTsyCjaCI
-        OwchGtkQHzIcdvJx7k838oCmecexdkT4gfaSBkzGOWCSEHuFrc+T6OhgbjvxCjWo
-        28sp4PAr8n5qwF/t/zqFRZZ3XPQYwrcUVZInviX6QtGKvwxCEiUFMXjUDk5Hbsms
-        uT7qzOKdihSrkErhENc93iVajGjrhsJHpeq801SUQDArHHx1zm6Vf76EUin/Qmex
-        z11krGVs0GYUPCujVlbfIRWeTKeKD/hf0/LcbODwbCpap9V3JxPmNuVwCF0w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1650529441; x=
-        1650615841; bh=mr6/yNysRKGd8H9fz/3NmMqTPBzrj57CSccM86kcPME=; b=V
-        YhUyeVImMDA1/5wVioG4M0Ip73hxGqOIR9HuXTpozM4wwsgo5I2K7RBLQXjuwiOc
-        BvsOWUkjxxMmlfuMdJiSMLagNAS8Pup6ywJaqJ8MGY7H5r1+KG6UEX9YUHXtdiWh
-        rqDOCpBLYnMaIJ0RUPaLqShwfdsq7/lv5soqpJrETzaB59bI8oR11i+uPlSh98m2
-        urMsO855cv7vAz/8kaLk0xEUYhwOXL4FRgBTHXp7TlZmrLDLWLiyiCt5C/r4JC3C
-        QJ8IfuMOTXFGztMgKmExbcuVNelPxD0o8Hh/F9FYTN0a8WJRD89EqKo/KRoLz16f
-        sjzlE9GkvzlkNMEcmAr/Q==
-X-ME-Sender: <xms:oRRhYrmnx6DbTxsGbIBrGungjD1IDW7X6yTgmv7WT1GHwClU8TCwxA>
-    <xme:oRRhYu27NCpsHiskldqDd_ymYM6JBD8YkNvGcZmIPOWLpffmArezYQMzwPIfd8hYo
-    Zo-jgccW_F0XarD4qU>
-X-ME-Received: <xmr:oRRhYhpKJxXdNvxcupDa_WayLRZsenqqjmV9oNoqErpmXNrY8xrrdGR2v6JIYvMLakW5rfITBGBpUNogryxQH8s1ppt05v95WoIybko>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtddvgddtfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:oRRhYjlVKW8GIvD2MSSHdcPJYtLugQkhUcv1-IAygHTYCyryvepghg>
-    <xmx:oRRhYp1D-rGd7-KK1SnjDz7YesPlA4Q-7YuYkenQ4SAtWmcdI_LBUQ>
-    <xmx:oRRhYit08JuUeMP2ETa5TEzYk5OmhBd_spiZlMkcTracCV62cF9sZQ>
-    <xmx:oRRhYo2Te-9IFb1XMn3gUfzqRUlxngGshtXVgGWqkVetPKyW0YT5VA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 21 Apr 2022 04:24:00 -0400 (EDT)
-Date:   Thu, 21 Apr 2022 10:23:58 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Robert Foss <robert.foss@linaro.org>
-Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or
- bridge"
-Message-ID: <20220421082358.ivpmtak3ednvddrc@houat>
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
- <20220420231230.58499-2-bjorn.andersson@linaro.org>
- <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
+        Thu, 21 Apr 2022 04:27:16 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C581DA5C;
+        Thu, 21 Apr 2022 01:24:25 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KkVtK5wCFzfYtX;
+        Thu, 21 Apr 2022 16:23:37 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 21 Apr 2022 16:24:23 +0800
+Subject: Re: [PATCH v13 3/7] pagemap,pmem: Introduce ->memory_failure()
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, <linux-kernel@vger.kernel.org>,
+        <linux-xfs@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>
+References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
+ <20220419045045.1664996-4-ruansy.fnst@fujitsu.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <f173f091-d5ca-b049-a8ed-6616032ca83e@huawei.com>
+Date:   Thu, 21 Apr 2022 16:24:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nuuowyjtkv725it4"
-Content-Disposition: inline
-In-Reply-To: <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+In-Reply-To: <20220419045045.1664996-4-ruansy.fnst@fujitsu.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,55 +54,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/4/19 12:50, Shiyang Ruan wrote:
+> When memory-failure occurs, we call this function which is implemented
+> by each kind of devices.  For the fsdax case, pmem device driver
+> implements it.  Pmem device driver will find out the filesystem in which
+> the corrupted page located in.
+> 
+> With dax_holder notify support, we are able to notify the memory failure
+> from pmem driver to upper layers.  If there is something not support in
+> the notify routine, memory_failure will fall back to the generic hanlder.
+> 
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> ---
+>  drivers/nvdimm/pmem.c    | 17 +++++++++++++++++
+>  include/linux/memremap.h | 12 ++++++++++++
+>  mm/memory-failure.c      | 14 ++++++++++++++
+>  3 files changed, 43 insertions(+)
+> 
+> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+> index 58d95242a836..bd502957cfdf 100644
+> --- a/drivers/nvdimm/pmem.c
+> +++ b/drivers/nvdimm/pmem.c
+> @@ -366,6 +366,21 @@ static void pmem_release_disk(void *__pmem)
+>  	blk_cleanup_disk(pmem->disk);
+>  }
+>  
+> +static int pmem_pagemap_memory_failure(struct dev_pagemap *pgmap,
+> +		unsigned long pfn, unsigned long nr_pages, int mf_flags)
+> +{
+> +	struct pmem_device *pmem =
+> +			container_of(pgmap, struct pmem_device, pgmap);
+> +	u64 offset = PFN_PHYS(pfn) - pmem->phys_addr - pmem->data_offset;
+> +	u64 len = nr_pages << PAGE_SHIFT;
+> +
+> +	return dax_holder_notify_failure(pmem->dax_dev, offset, len, mf_flags);
+> +}
+> +
+> +static const struct dev_pagemap_ops fsdax_pagemap_ops = {
+> +	.memory_failure		= pmem_pagemap_memory_failure,
+> +};
+> +
+>  static int pmem_attach_disk(struct device *dev,
+>  		struct nd_namespace_common *ndns)
+>  {
+> @@ -427,6 +442,7 @@ static int pmem_attach_disk(struct device *dev,
+>  	pmem->pfn_flags = PFN_DEV;
+>  	if (is_nd_pfn(dev)) {
+>  		pmem->pgmap.type = MEMORY_DEVICE_FS_DAX;
+> +		pmem->pgmap.ops = &fsdax_pagemap_ops;
+>  		addr = devm_memremap_pages(dev, &pmem->pgmap);
+>  		pfn_sb = nd_pfn->pfn_sb;
+>  		pmem->data_offset = le64_to_cpu(pfn_sb->dataoff);
+> @@ -440,6 +456,7 @@ static int pmem_attach_disk(struct device *dev,
+>  		pmem->pgmap.range.end = res->end;
+>  		pmem->pgmap.nr_range = 1;
+>  		pmem->pgmap.type = MEMORY_DEVICE_FS_DAX;
+> +		pmem->pgmap.ops = &fsdax_pagemap_ops;
+>  		addr = devm_memremap_pages(dev, &pmem->pgmap);
+>  		pmem->pfn_flags |= PFN_MAP;
+>  		bb_range = pmem->pgmap.range;
+> diff --git a/include/linux/memremap.h b/include/linux/memremap.h
+> index ad6062d736cd..bcfb6bf4ce5a 100644
+> --- a/include/linux/memremap.h
+> +++ b/include/linux/memremap.h
+> @@ -79,6 +79,18 @@ struct dev_pagemap_ops {
+>  	 * the page back to a CPU accessible page.
+>  	 */
+>  	vm_fault_t (*migrate_to_ram)(struct vm_fault *vmf);
+> +
+> +	/*
+> +	 * Handle the memory failure happens on a range of pfns.  Notify the
+> +	 * processes who are using these pfns, and try to recover the data on
+> +	 * them if necessary.  The mf_flags is finally passed to the recover
+> +	 * function through the whole notify routine.
+> +	 *
+> +	 * When this is not implemented, or it returns -EOPNOTSUPP, the caller
+> +	 * will fall back to a common handler called mf_generic_kill_procs().
+> +	 */
+> +	int (*memory_failure)(struct dev_pagemap *pgmap, unsigned long pfn,
+> +			      unsigned long nr_pages, int mf_flags);
+>  };
+>  
+>  #define PGMAP_ALTMAP_VALID	(1 << 0)
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 7c8c047bfdc8..a40e79e634a4 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1741,6 +1741,20 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
+>  	if (!pgmap_pfn_valid(pgmap, pfn))
+>  		goto out;
+>  
+> +	/*
+> +	 * Call driver's implementation to handle the memory failure, otherwise
+> +	 * fall back to generic handler.
+> +	 */
+> +	if (pgmap->ops->memory_failure) {
+> +		rc = pgmap->ops->memory_failure(pgmap, pfn, 1, flags);
+> +		/*
+> +		 * Fall back to generic handler too if operation is not
+> +		 * supported inside the driver/device/filesystem.
+> +		 */
+> +		if (rc != -EOPNOTSUPP)
+> +			goto out;
+> +	}
+> +
 
---nuuowyjtkv725it4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for your patch. There are two questions:
 
-On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
-> + Linus
-> + Marek
-> + Laurent
-> + Robert
->=20
-> On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-> > bridge")' attempted to simplify the case of expressing a simple panel
-> > under a DSI controller, by assuming that the first non-graph child node
-> > was a panel or bridge.
-> >
-> > Unfortunately for non-trivial cases the first child node might not be a
-> > panel or bridge.  Examples of this can be a aux-bus in the case of
-> > DisplayPort, or an opp-table represented before the panel node.
-> >
-> > In these cases the reverted commit prevents the caller from ever finding
-> > a reference to the panel.
-> >
-> > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
-> > panel or bridge")', in favor of using an explicit graph reference to the
-> > panel in the trivial case as well.
->=20
-> This eventually breaks many child-based devm_drm_of_get_bridge
-> switched drivers.  Do you have any suggestions on how to proceed to
-> succeed in those use cases as well?
+1.Is dax_lock_page + dax_unlock_page pair needed here?
+2.hwpoison_filter and SetPageHWPoison will be handled by the callback or they're just ignored deliberately?
 
-I guess we could create a new helper for those, like
-devm_drm_of_get_bridge_with_panel, or something.
+Thanks!
 
-Maxime
+>  	rc = mf_generic_kill_procs(pfn, flags, pgmap);
+>  out:
+>  	/* drop pgmap ref acquired in caller */
+> 
 
---nuuowyjtkv725it4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYmEUngAKCRDj7w1vZxhR
-xcyNAQCQWG0wPTFJTHNnCb79v3w/0oq3K8NWFjJQdfhmMTMd0gEAluKjETuOog8r
-01deImfsj34FpREypMQIqkuLR7Y8igw=
-=cGpF
------END PGP SIGNATURE-----
-
---nuuowyjtkv725it4--

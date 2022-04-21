@@ -2,72 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD20509C49
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F7E509C3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387613AbiDUJ20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
+        id S231194AbiDUJ2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387656AbiDUJ1s (ORCPT
+        with ESMTP id S230168AbiDUJ2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:27:48 -0400
-Received: from mail.meizu.com (unknown [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296F0DB5;
-        Thu, 21 Apr 2022 02:24:54 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 21 Apr
- 2022 17:24:56 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 21 Apr
- 2022 17:24:52 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     Haowen Bai <baihaowen@meizu.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] scsi: qla4xxx: Drop redundant memset
-Date:   Thu, 21 Apr 2022 17:24:50 +0800
-Message-ID: <1650533091-28815-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 21 Apr 2022 05:28:45 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B470E28
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:25:56 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b58ed329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58ed:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D82E31EC0494;
+        Thu, 21 Apr 2022 11:25:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650533150;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PdMsW/f4pVpJ1A70NmnyABfT0PPmrPEhWaYHSLIwP28=;
+        b=KhDa/m/qxorKIuqk+yN9KoNoeUwSKfInh/f7+NCwEp78225ANmnvFmBE2WBVHRZCsqAuTd
+        d8XjJg6yZxZ29eYAjo+nPQ0tkYfgmUC4DWC7GWlUqbfErz71sB+D0eIz/DgsGzFqeRM56E
+        dgdLRo1N9y5C+6Y0EAbmNTCcVa2eNFU=
+Date:   Thu, 21 Apr 2022 11:25:46 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     bugzilla-daemon@kernel.org, kernel@dolney.com,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [Bug 215867] New: tboot suspend broken
+Message-ID: <YmEjGl2RzYARUHK2@zn.tnic>
+References: <bug-215867-6385@https.bugzilla.kernel.org/>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bug-215867-6385@https.bugzilla.kernel.org/>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The region set by the call to memset is immediately overwritten by the
-subsequent call to memcpy. So we drop redundant memset.
+Switching to mail because I can't CC the patch author on bugzilla.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/scsi/qla4xxx/ql4_os.c | 1 -
- 1 file changed, 1 deletion(-)
+Vincent, see below. It points to your commit:
 
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 3f6cb2a5c2c2..9e849f6b0d0f 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -671,7 +671,6 @@ static void qla4xxx_create_chap_list(struct scsi_qla_host *ha)
- 		goto exit_chap_list;
- 	}
- 
--	memset(ha->chap_list, 0, chap_size);
- 	memcpy(ha->chap_list, chap_flash_data, chap_size);
- 
- exit_chap_list:
+453e41085183 ("cpu/hotplug: Add cpuhp_invoke_callback_range()")
+
+@Derek, just to make sure: you're seeing this with the latest 5.17
+kernel too, correct?
+
+Thx.
+
+On Thu, Apr 21, 2022 at 02:07:42AM +0000, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=215867
+> 
+>             Bug ID: 215867
+>            Summary: tboot suspend broken
+>            Product: Platform Specific/Hardware
+>            Version: 2.5
+>     Kernel Version: 5.12.0
+>           Hardware: All
+>                 OS: Linux
+>               Tree: Mainline
+>             Status: NEW
+>           Severity: normal
+>           Priority: P1
+>          Component: x86-64
+>           Assignee: platform_x86_64@kernel-bugs.osdl.org
+>           Reporter: kernel@dolney.com
+>         Regression: Yes
+> 
+> I am using tboot (v1.10.5) to make use of intel-txt and all was working fine
+> with the Linux kernel 5.10 series. However later in 5.12 release candidates, I
+> have  proper booting however suspend is broken. I am using a Lenovo T460p.
+> Usually when suspending on this machine the power button LED will blink 8 times
+> and then it goes into a sleep state. With newer kernels I get power LED and
+> caps lock LED blinking, cpu fan runs fast, and can't get out of that state
+> without hard powerdown.
+> 
+> I did a git bisect on and found that commit
+> 453e41085183980087f8a80dada523caf1131c3c is the one that breaks tboot+suspend
+> to ram. It is part of a series of some cpu hotplug commits.
+> 
+> Just to be clear: if I build a kernel from the commit just before this one, I
+> can suspend and resume, but if I build with this commit I can not suspend,
+> laptop gets stuck on blinking power LED. Let me also mention that, given the
+> above commit, if I do not use tboot, I can suspend and resume ok. It is only
+> within the tboot boot context that I have suspend&resume problems.
+> 
+> -- 
+> You may reply to this email to add a comment.
+> 
+> You are receiving this mail because:
+> You are watching the assignee of the bug.
+
 -- 
-2.7.4
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

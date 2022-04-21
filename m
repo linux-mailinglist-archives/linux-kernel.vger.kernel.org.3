@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34DC509FCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5618A509FD2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385258AbiDUMnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S1385317AbiDUMnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 08:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382296AbiDUMnA (ORCPT
+        with ESMTP id S1385061AbiDUMnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:43:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD3E1CFEA
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:40:10 -0700 (PDT)
+        Thu, 21 Apr 2022 08:43:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4BD1CFEA;
+        Thu, 21 Apr 2022 05:40:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27609B82432
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43012C385A5;
-        Thu, 21 Apr 2022 12:40:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49A2B61C5A;
+        Thu, 21 Apr 2022 12:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A79B4C385A1;
+        Thu, 21 Apr 2022 12:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650544807;
-        bh=N+SIwZ0UuUxQQB5H6i3Z3OO3AfrOpLCRcQOSKUT+BbE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cNxS2F0N2AHCBsL9qB9upPfD+5Jb9RemaEfcfcCx/ACYP1voLXqhLblk1/eSmuEaj
-         62ELB4N19iOzBRKDEnWAGYmiEpokYU8cvtyQ0iYTJ0j462ALu7Gu7kJqKMUwZBzeM7
-         An46Br6/p3gZXfT/sIrwb3Sgf5cVoMrJSRJRYGDyWdCa8dlsBPbX8MfL0QYDNyxKqA
-         EX0u/m4zhOw4dIW5CeQhtw0OGvDV3LXvUfKMD9BtG3SINV0pMtD8BZwLo/CW1s9nIe
-         29/CxmvXnx5TuMgYJW9f1aRbCfg1m2QeLZ/yjjTKAGyxpUvuVHKewUgMIEERSZc5DQ
-         YXxu2k5/8Wk8w==
-Date:   Thu, 21 Apr 2022 18:10:02 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Linux Phy <linux-phy@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL]: Generic phy fixes for v5.18
-Message-ID: <YmFQonkAlGNUx+OY@matsya>
+        s=k20201202; t=1650544811;
+        bh=W830rsXdVoz6lGkLr6jz/XzdBaWMYcxDel5ra7LJO3I=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=np8KbkB0CuWJSnDyEtWq9lIDu9iGdDihH9vlphk/9CiKjmUBY07helW6DRA4DTiht
+         6ft88xPDrmjvSuJYSMHuhEvtxw6kOzAxWZ05vbnc4MtGPNNAhhk0Rsc+B1kEzlBvDk
+         +lQo259F0CJ8vgYyffcUe/eyQWJm42da85stthOAxEUO1oIwEEErYv2LIVJ2Ia4fyj
+         jkCeHdrcbAIRLHFsczGlU+38OIQ1D+QY3vT4zQkAxoSomKnWhOllDb4HucfdoXbUO/
+         CvZn5FudSKhCsBOQMum2bOTcOaS6Pk4F6laLcArvOrFc87rCb4GN18b/UAe/0gk+oa
+         VyKG52+Ma4iTw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 86F04EAC09C;
+        Thu, 21 Apr 2022 12:40:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9QoCqM/YrPWkvT1q"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] drivers: net: davinci_mdio: using pm_runtime_resume_and_get
+ instead of pm_runtime_get_sync
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165054481154.27620.9902312033676025709.git-patchwork-notify@kernel.org>
+Date:   Thu, 21 Apr 2022 12:40:11 +0000
+References: <20220418062921.2557884-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220418062921.2557884-1-chi.minghao@zte.com.cn>
+To:     Lv Ruyi <cgel.zte@gmail.com>
+Cc:     grygorii.strashko@ti.com, davem@davemloft.net, kuba@kernel.org,
+        linux-omap@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chi.minghao@zte.com.cn,
+        zealci@zte.com.cn
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,94 +59,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---9QoCqM/YrPWkvT1q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Hello Greg,
+On Mon, 18 Apr 2022 06:29:21 +0000 you wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Using pm_runtime_resume_and_get is more appropriate
+> for simplifing code
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> [...]
 
-Please consider pull to receive the generic phy fixes for v5.18 which
-contains bunch of driver fixes for error patch handling, missing
-device/of_node_put etc.
+Here is the summary with links:
+  - drivers: net: davinci_mdio: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+    https://git.kernel.org/netdev/net-next/c/4facbe3d4426
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git tags/phy-=
-fixes-5.18
-
-for you to fetch changes up to 2c8045d48dee703ad8eab2be7d6547765a89c069:
-
-  phy: amlogic: fix error path in phy_g12a_usb3_pcie_probe() (2022-04-20 14=
-:42:44 +0530)
-
-----------------------------------------------------------------
-phy: fixes for 5.18
-
-Fixes for bunch of drivers:
- - TI fixes for runtime disable, missing of_node_put and error handling
- - Samsung fixes for device_put and of_node_put
- - Amlogic error path handling
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      phy: ti: tusb1210: Fix an error handling path in tusb1210_probe()
-
-Hans de Goede (1):
-      phy: ti: tusb1210: Make tusb1210_chg_det_states static
-
-Heiner Kallweit (1):
-      phy: amlogic: fix error path in phy_g12a_usb3_pcie_probe()
-
-Krzysztof Kozlowski (1):
-      phy: samsung: exynos5250-sata: fix missing device put in probe error =
-paths
-
-Lv Ruyi (1):
-      phy: ti: Fix missing of_node_put in ti_pipe3_get_sysctrl()
-
-Miaoqian Lin (4):
-      phy: samsung: Fix missing of_node_put() in exynos_sata_phy_probe
-      phy: ti: omap-usb2: Fix error handling in omap_usb2_enable_clocks
-      phy: mapphone-mdm6600: Fix PM error handling in phy_mdm6600_probe
-      phy: ti: Add missing pm_runtime_disable() in serdes_am654_probe
-
- drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.c | 20 ++++++++++++--------
- drivers/phy/motorola/phy-mapphone-mdm6600.c    |  3 ++-
- drivers/phy/samsung/phy-exynos5250-sata.c      | 21 +++++++++++++++------
- drivers/phy/ti/phy-am654-serdes.c              |  2 +-
- drivers/phy/ti/phy-omap-usb2.c                 |  2 +-
- drivers/phy/ti/phy-ti-pipe3.c                  |  1 +
- drivers/phy/ti/phy-tusb1210.c                  | 12 +++++++++---
- 7 files changed, 41 insertions(+), 20 deletions(-)
-
-Thanks
---=20
-~Vinod
-
---9QoCqM/YrPWkvT1q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmJhUKIACgkQfBQHDyUj
-g0e+XA/9F2ZRM/RV+EuYRG+dEh8DkVyrhbu3ICR5GArrQ7XH6DUWdi3lBSBssh4m
-qUgxd14+rOeR0KYp64S7F400vSTWTca6awPbFiss7NN0LC5bCECiPkRNPw2/U7So
-Jrfey2OWFRx6oSJnCujng1+owNePyd1Z+WqeUwdvLkfihELtEAq1OE93HM9lEtrT
-udRAg3N/VVqdryZBm73c8JLjAL7CHfvzVRg6UPOkgv/ypbC2pwXbfnMEwnJj2JuO
-W2UZcFOpUATZXJa9ghkvff4xSeI8m/YaOWTy2MfEGik1D7lv6SSQEVBQAASFVr0R
-UnylTw2oVDOeAXadnkLUrsDslqfUJKd0Wy07SZ0Lp/3z55xv6+VE/+2798CTU3Hq
-XvC80R1VuRCQ8SnoXfE+3+qA0sI2SdCHPYNa2A81W7nZYGJgghzvLrNZJdtIr0tV
-Ek3oUkA0laNmXOfZYA8y73wN4UWGiAq5tywXm36azJDwcCPbVkJiVV1/Uq5fez4a
-E7wBXOrkavxaFr+1bsS1GgH3pzMUid0YrVj0Tcc8xICIjv7W9s8LZBhpiVG58dMC
-Xd/ULbwKFEhBk0NwbcaB6A2eYi1Jbor44nS4y+epj3EhIMLbO2tMWg3/jIj0htAw
-+/ZoxVKiKnytSzF2I0DP0bsA8jf2I3L3tbQiftk209S+7WQXbmo=
-=jmaS
------END PGP SIGNATURE-----
-
---9QoCqM/YrPWkvT1q--

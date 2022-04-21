@@ -2,129 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE1150A702
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCF250A705
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232694AbiDUR10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S1390746AbiDUR1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390577AbiDUR1U (ORCPT
+        with ESMTP id S1390580AbiDUR1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:27:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411C32B251;
-        Thu, 21 Apr 2022 10:24:29 -0700 (PDT)
+        Thu, 21 Apr 2022 13:27:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F10A48885;
+        Thu, 21 Apr 2022 10:24:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C90BA61DFA;
-        Thu, 21 Apr 2022 17:24:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE85AC385A5;
-        Thu, 21 Apr 2022 17:24:24 +0000 (UTC)
-Date:   Thu, 21 Apr 2022 18:24:21 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Topi Miettinen <toiwoton@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lennart Poettering <lennart@poettering.net>,
-        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-abi-devel@lists.sourceforge.net,
-        linux-hardening@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Salvatore Mesoraca <s.mesoraca16@gmail.com>,
-        Igor Zhbanov <izh1979@gmail.com>
-Subject: Re: [PATCH RFC 0/4] mm, arm64: In-kernel support for
- memory-deny-write-execute (MDWE)
-Message-ID: <YmGTRQA74n/ZF7Vl@arm.com>
-References: <20220413134946.2732468-1-catalin.marinas@arm.com>
- <202204141028.0482B08@keescook>
- <YmAEDsGtxhim46UI@arm.com>
- <c62170c6-5993-2417-4143-5a37a98b227c@gmail.com>
- <202204201610.093C9D5FE8@keescook>
- <YmF5s4KqT5WL4O0G@arm.com>
- <202204210941.4318DE6E8@keescook>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 440E1B82874;
+        Thu, 21 Apr 2022 17:24:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82287C385A5;
+        Thu, 21 Apr 2022 17:24:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650561888;
+        bh=5INB3gN/SAkPNZQ5UM6mylptmqZsyfxjKbIbVC01LrI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=WPluND3RRWmNFYki8i0haBuoDbhRSwkLhpi0SBbKFVTEbEGu8TDF5smKJ1O+R3De1
+         kbA3y25fHEhnDkgjIfmIq5FqmQI8M8qf4eHLS6dxI7uVkPMvd5PPoIKRpBUKKJTKLb
+         1G/a+rgqbrfME/0gluBI6SOMgxacAEBmM2F8WuotRi+ZsK5q2QI3QM38dpXMEMlAdv
+         /6KAe2IVvjW4LOCgsZR2AV9bAPJCJLLOA7e+VWYxhAv3I3W3h1H5M6O0D3kFsFAnad
+         vgnm/zHnj2GnDwMASKt1ShZn77gqEHH6yx7YU820rRUuOWm8/iSl3BSILjUMy8AJNa
+         1Pb4mYK/78eJg==
+From:   Mark Brown <broonie@kernel.org>
+To:     robh+dt@kernel.org, steve.lee.analog@gmail.com, lgirdwood@gmail.com
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        ryans.lee@maximintegrated.com, linux-kernel@vger.kernel.org
+In-Reply-To: <20220311132906.32292-1-steve.lee.analog@gmail.com>
+References: <20220311132906.32292-1-steve.lee.analog@gmail.com>
+Subject: Re: [V2 1/2] ASoC: max98390: Add reset gpio control
+Message-Id: <165056188725.376935.1518021217219450490.b4-ty@kernel.org>
+Date:   Thu, 21 Apr 2022 18:24:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202204210941.4318DE6E8@keescook>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 09:42:23AM -0700, Kees Cook wrote:
-> On Thu, Apr 21, 2022 at 04:35:15PM +0100, Catalin Marinas wrote:
-> > Do we want the "was PROT_WRITE" or we just reject mprotect(PROT_EXEC) if
-> > the vma is not already PROT_EXEC? The latter is closer to the current
-> > systemd approach. The former allows an mprotect(PROT_EXEC) if the
-> > mapping was PROT_READ only for example.
-> > 
-> > I'd drop the "was PROT_WRITE" for now if the aim is a drop-in
-> > replacement for BPF MDWE.
+On Fri, 11 Mar 2022 22:29:05 +0900, Steve Lee wrote:
+>  Add reset gpio control to support RESET PIN connected to gpio.
 > 
-> I think "was PROT_WRITE" is an important part of the defense that
-> couldn't be done with a simple seccomp filter (which is why the filter
-> ended up being a problem in the first place).
+> 
 
-I would say "was PROT_WRITE" is slightly more relaxed than "is not
-already PROT_EXEC". The seccomp filter can't do "is not already
-PROT_EXEC" either since it only checks the mprotect() arguments, not the
-current vma flags.
+Applied to
 
-So we have (with sub-cases):
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-1. Current BPF filter:
+Thanks!
 
-   a)	mmap(PROT_READ|PROT_WRITE|PROT_EXEC);	// fails
+[1/2] ASoC: max98390: Add reset gpio control
+      commit: 397ff024960634962af93e9e2775fc0e4fe7de92
+[2/2] ASoC: dt-bindings: max98390: add reset gpio bindings
+      commit: 68514c9f6aa676f98328844336fc4400244a8479
 
-   b)	mmap(PROT_READ|PROT_EXEC);
-	mprotect(PROT_READ|PROT_EXEC|PROT_BTI);	// fails
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-2. "is not already PROT_EXEC":
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-   a)	mmap(PROT_READ|PROT_WRITE|PROT_EXEC);	// fails
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-   b)	mmap(PROT_READ|PROT_EXEC);
-	mmap(PROT_READ|PROT_EXEC|PROT_BTI);	// passes
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-   c)	mmap(PROT_READ);
-	mprotect(PROT_READ|PROT_EXEC);		// fails
-
-3. "is or was not PROT_WRITE":
-
-   a)	mmap(PROT_READ|PROT_WRITE|PROT_EXEC);	// fails
-
-   b)	mmap(PROT_READ|PROT_EXEC);
-	mmap(PROT_READ|PROT_EXEC|PROT_BTI);	// passes
-
-   c)	mmap(PROT_READ);
-	mprotect(PROT_READ|PROT_EXEC);		// passes
-
-   d)	mmap(PROT_READ|PROT_WRITE);
-	mprotect(PROT_READ);
-	mprotect(PROT_READ|PROT_EXEC);		// fails (was write)
-
-The current seccomp filter is the strictest. If we go for (2), it allows
-PROT_BTI as in 2.b but prevents 2.c (as would the current seccomp
-filter). (3) relaxes 2.c as in 3.c while still preventing 3.d. Both (1)
-and (2) prevent 3.d by simply rejecting mprotect(PROT_EXEC).
-
-If we don't care about 3.c, we might as well go for (2). I don't mind,
-already went for (3) in this series. I think either of them would not be
-a regression on MDWE, unless there is some test that attempts 3.c and
-expects it to fail.
-
--- 
-Catalin
+Thanks,
+Mark

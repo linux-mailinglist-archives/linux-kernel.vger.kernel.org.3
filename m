@@ -2,145 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2CB50A01F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD47650A022
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbiDUM6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S229564AbiDUNAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386447AbiDUM5n (ORCPT
+        with ESMTP id S229517AbiDUNAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:57:43 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66F133885
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:54:49 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id h12so1092351plf.12
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pbT0ufs8hhFUmGFXmvk8EHCBgVcwB+SywVbegWDB+bs=;
-        b=HkSXIHtS+C43UypZg4urQxLWl81TI5WPaZcpcHogdhzQ1qIwaFTq0hVztAYUoI6C+0
-         kVxg/tBsW2Yazj5CCvgeE4QHtnoRBRAM3IJ9Bgw8NyBxDfgf+oHDRAWT2R0ptK4KEoer
-         xlQHrdNivGcRlsYe+v473ZA/qNcTDBkjJvG6ghQvIjsI6AtvMR2XpHniouJlQOXL+bjM
-         Cp7ljott8sZXx5JVGSvZJbtqsINKGNpbxsIFciv7oLxxUOk+rYId3ON2A3qpLOkCus9B
-         a/gYyu2cKp+wqRe5giSE9WqqtU0rI6I+jDpwdPK/o/uIVisOArAmUzBXVHmprkXeNLV4
-         xIzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pbT0ufs8hhFUmGFXmvk8EHCBgVcwB+SywVbegWDB+bs=;
-        b=OTOBVyYTmbh4XXu/rzMzgEm92alKJktivbZMiGxNR7OgGrjEd35y0QhOz4hXEG4Cde
-         oXZa8MnOrIvMo9KSFm6elGnGs0V76jN3T2Kdf+W4pbxRNZlhJmnsQSNUAdOCbrPwfoZr
-         xi0qZObXKfRqvbzWj6Smr9fV2tYclvK5Ng0OjwZsgSIgUr+EGbjQ+f26WEu5ZhJCOk6q
-         fW9MXZF9iNW1aWB2lC0dTlugFywokhlOlXUDArpwo2OydicDUetbEL1EltOjgsD3PZhm
-         4sa00B+ztSSvGal8ye1S3oKSHVbzzp+vvn0ZpPlUVp5PAbmY5IjiYgAA9Pw2VdRK2XH4
-         G4Ow==
-X-Gm-Message-State: AOAM530NrENqJxrBADW7ktjtdZmS7zUpxqYJoP+QJyp1I4gB9ISrStkK
-        mOLaG+O7In/TkkcWY/Rsoust8Qw6Xb/1LRCOpl8=
-X-Google-Smtp-Source: ABdhPJx+8395YqausJ5yKUEqAmsX6qaS7KThwCRy2ZPLMLA3pGeKRsSBn+8saoZhtpNw6BfhbSsSGsDTgWnX84jOevA=
-X-Received: by 2002:a17:902:7e0d:b0:156:47a4:a7c4 with SMTP id
- b13-20020a1709027e0d00b0015647a4a7c4mr25977133plm.141.1650545689357; Thu, 21
- Apr 2022 05:54:49 -0700 (PDT)
+        Thu, 21 Apr 2022 09:00:40 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4E031201;
+        Thu, 21 Apr 2022 05:57:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=2BsecxFaWO+6hY04Blnscj25pg5IT+XD6dNTKQ9lWJI=; b=k/LuANzaW0rc0DneIOMPjHLS/w
+        VPa4TP7Nyvqyhn27E+eSkn+c28FI+MC25A/Zoyd4F7j5bNgObcxyqWAStj+G0TzOxdj3evxBr0gBZ
+        d16R2BEo775oAsjykjzjwtYjMZLhcX18jLbU9RKWB7EWuaWpSBEXi2AE6PRwpf2Pvaok=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nhWNN-00GnoN-Pi; Thu, 21 Apr 2022 14:57:37 +0200
+Date:   Thu, 21 Apr 2022 14:57:37 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] net: phy: marvell: Add LED accessors for Marvell
+ 88E1510
+Message-ID: <YmFUwXLDIW5ouDCd@lunn.ch>
+References: <20220420124053.853891-1-kai.heng.feng@canonical.com>
+ <20220420124053.853891-5-kai.heng.feng@canonical.com>
+ <YmAgq1pm37Glw2v+@lunn.ch>
+ <CAAd53p6UAhDC2mGkz3_HgVs7kFgCwjfu2R+9FfROhToH2R6CjA@mail.gmail.com>
+ <YmFFWd42Nol7Lrlm@lunn.ch>
+ <CAAd53p6vUcUu=H=cDMh07zcUUDM8WTp+F_L+jiJSWKqd37+MDg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220409042321.3184493-1-james.hilliard1@gmail.com>
- <b3f7e288-3341-8c6f-1b95-e553ac5ebc35@suse.de> <CAMeQTsbh-Fy4CORBTX=AfZ+K-fZYUQ=hY=ctLFyu9KcJ5NgFUA@mail.gmail.com>
- <dce29330-e40c-860e-2c72-7ddebdd96e20@redhat.com>
-In-Reply-To: <dce29330-e40c-860e-2c72-7ddebdd96e20@redhat.com>
-From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Date:   Thu, 21 Apr 2022 14:54:37 +0200
-Message-ID: <CAMeQTsYYpw5+uLgmDrbB6PUBotRC4F+_rfK+sxT0CpPHoiOmmw@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/gma500: depend on framebuffer
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        James Hilliard <james.hilliard1@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p6vUcUu=H=cDMh07zcUUDM8WTp+F_L+jiJSWKqd37+MDg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 2:47 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> Hello Patrik,
->
-> On 4/21/22 14:39, Patrik Jakobsson wrote:
-> > On Thu, Apr 21, 2022 at 1:49 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >>
-> >> Hi
-> >>
-> >> Am 09.04.22 um 06:23 schrieb James Hilliard:
-> >>> Select the efi framebuffer if efi is enabled.
-> >>>
-> >>> This appears to be needed for video output to function correctly.
-> >>>
-> >>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> >>> ---
-> >>> Changes v2 -> v3:
-> >>>    - select EFI_FB instead of depending on it
-> >>> Changes v1 -> v2:
-> >>>    - use depends instead of select
-> >>> ---
-> >>>   drivers/gpu/drm/gma500/Kconfig | 2 ++
-> >>>   1 file changed, 2 insertions(+)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
-> >>> index 0cff20265f97..a422fa84d53b 100644
-> >>> --- a/drivers/gpu/drm/gma500/Kconfig
-> >>> +++ b/drivers/gpu/drm/gma500/Kconfig
-> >>> @@ -2,11 +2,13 @@
-> >>>   config DRM_GMA500
-> >>>       tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
-> >>>       depends on DRM && PCI && X86 && MMU
-> >>> +     depends on FB
-> >>
-> >> Why do we need FB here? Framebuffer support should be hidden by DRM's
-> >> fbdev helpers.
+On Thu, Apr 21, 2022 at 08:24:00PM +0800, Kai-Heng Feng wrote:
+> On Thu, Apr 21, 2022 at 7:51 PM Andrew Lunn <andrew@lunn.ch> wrote:
 > >
-> > It is not needed but gives him video output since it enables the drm
-> > fbdev emulation.
+> > > This is not feasible.
+> > > If BIOS can define a method and restore the LED by itself, it can put
+> > > the method inside its S3 method and I don't have to work on this at
+> > > the first place.
 > >
->
-> I'm not sure to understand this. Shouldn't depend on DRM_FBDEV_EMULATION then?
-
-No, it shouldn't depend on any FBDEV stuff since it's not actually
-required. It just happens to help in this case since weston + fbdev
-backend works but not weston with drm backend (or whatever config
-James have set).
-
->
-> > I looked some more at the logs and it seems weston doesn't work on his
-> > system without the fbdev backend. So the question is why weston isn't
-> > working without fbdev? Perhaps this is just a Weston configuration
-> > issue?
+> > So maybe just declare the BIOS as FUBAR and move on to the next issue
+> > assigned to you.
 > >
->
-> But is weston using the fbdev emulated by DRM or the one registered by
-> efifb? I thought that the latter from what was mentioned in this thread.
+> > Do we really want the maintenance burden of this code for one machines
+> > BIOS?
+> 
+> Wasn't this the "set precedence" we discussed earlier for? Someone has
+> to be the first, and more users will leverage the new property we
+> added.
 
-It's using drm fbdev emulation with gma500 so EFIFB has nothing to do
-with this. I believe it was just simply incorrectly reported. If I'm
-correct then "depends on FB" is what makes video output work for
-James.
+I both agree and disagree. I'm trying to make this feature generic,
+unlike you who seem to be doing the minimal, only saving one of three
+LED configuration registers. But on the other hand, i'm not sure there
+will be more users. Do you have a list of machines where the BIOS is
+FUBAR? Is it one machine? A range of machines from one vendor, or
+multiple vendors with multiple machines. I would feel better about the
+maintenance burden if i knew that this was going to be used a lot.
+ 
+> > Maybe the better solution is to push back on the vendor and its
+> > BIOS, tell them how they should of done this, if the BIOS wants to be
+> > in control of the LEDs it needs to offer the methods to control the
+> > LEDs. And then hopefully the next machine the vendor produces will
+> > have working BIOS.
+> 
+> The BIOS doesn't want to control the LED. It just provides a default
+> LED setting suitable for this platform, so the driver can use this
+> value over the hardcoded one in marvell phy driver.
 
->
-> --
-> Best regards,
->
-> Javier Martinez Canillas
-> Linux Engineering
-> Red Hat
->
+Exactly, it wants to control the LED, and tell the OS not to touch it
+ever.
+
+> So this really has nothing to do with with any ACPI method.
+> I believe the new property can be useful for DT world too.
+
+DT generally never trusts the bootloader to do anything. So i doubt
+such a DT property would ever be used. Also, DT is about describing
+the hardware, not how to configure the hardware. So you could list
+there is a PHY LED, what colour it is, etc. But in general, you would
+not describe how it is configured, that something else is configuring
+it and it should be left alone.
+
+> > Your other option is to take part in the effort to add control of the
+> > LEDs via the standard Linux LED subsystem. The Marvel PHY driver is
+> > likely to be one of the first to gain support this for. So you can
+> > then totally take control of the LED from the BIOS and put it in the
+> > users hands. And such a solution will be applicable to many machines,
+> > not just one.
+> 
+> This series just wants to use the default value platform firmware provides.
+> Create a sysfs to let user meddle with LED value doesn't really help
+> the case here.
+
+I would disagree. You can add a systemd service to configure it at
+boot however you want. It opens up the possibility to implement
+ethtool --identify in a generic way, etc. It is a much more powerful
+and useful feature than saying 'don't touch', and also it justify the
+maintenance burden.
+
+     Andrew

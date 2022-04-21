@@ -2,316 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764C35099AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 055D35099A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386060AbiDUHoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
+        id S1386035AbiDUHpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380551AbiDUHn5 (ORCPT
+        with ESMTP id S1386037AbiDUHpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:43:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7E4812748
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650526867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6d1cJgc8rn8rUx/T015zl3aC+4yWaRkYHUYN3x2agUI=;
-        b=J2+bnVyqMVLRW5JTeIcvfwdmF5+GA3ZX0Ez9asZ/bfp50WRN9EGh5GOuEnaJ9wkmDXWiNP
-        Jnk9vfUeuiandkp1vj34osdsHW65XUhFtv8OgqtAumqFoe2S6Bvgaff9Ise0b+0uYxjcjz
-        u7hugvUQUhsu2D+g95G1LIaZhSj/mEQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-195-l2z_CmavNGa9jOoLTsDfyQ-1; Thu, 21 Apr 2022 03:41:04 -0400
-X-MC-Unique: l2z_CmavNGa9jOoLTsDfyQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 14BCF2805334;
-        Thu, 21 Apr 2022 07:41:04 +0000 (UTC)
-Received: from [10.39.194.205] (unknown [10.39.194.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4ACB22166B48;
-        Thu, 21 Apr 2022 07:41:03 +0000 (UTC)
-Message-ID: <99f54616-5464-be0d-9454-638352bc39eb@redhat.com>
-Date:   Thu, 21 Apr 2022 09:41:02 +0200
+        Thu, 21 Apr 2022 03:45:07 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2069.outbound.protection.outlook.com [40.107.236.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F751ADAF;
+        Thu, 21 Apr 2022 00:42:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eUwwFVq66I3ru2zftLPCXpYRh5jqnSjFNE7SG0Y3wNrws0Wv+ZzKETeXFVesff3OH4DWVyZU+TF8w4dIJqIevz9Pd8iA0Ark9lb1MO16oK8sbS3DwqcTiooAzZYB7n3wrsfQpvod1/t0KvAQi1x9YETR8MTbDWah0OUUFvpQKdJGgrh74ivwqZaXyTey4puOTX5Qtsvr1off8wZA8FM707SYLZmO/JS+wTeUEZTPM/zME29g3Hk4MijpzDNrBNUUmZKZfWHuGlHZzuwgeqRsCkPwCUDPxrlMUHg3gUpQ+BTNn4bL2Hpzr7vz14aHXAAxoDZVBjk8Mo/NV8kfJ9VWoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/gPQswBCeVqq5iJtd9jDv96rdeBiTe7RrvBY9I7eCpc=;
+ b=CH20M/7ydv9A/WC/Bf+KWYvUOPnHJ0RQ9pqFsUIxmtwsA2Zur3c7r18Wd8NmUy7/ehkihzdLN5/7PYg2Oyoox5UMbw3dOUAS1bNXxjUszpiQDRczI9y44j8/TkK3SRLXQ/o8c/NHa/OR+LkiU3jEm/OkQz9iRya1Son7uDcYKm3S8okP/JjUdGtlblSNkQzIWePNYyxX7bL3udNKv2wFmhcPz50Kp3mNfTXwel7rSEDqfmaLdrcyiAGQJCJEhaRUP9qt8cEXL9+xOBMWlvTIFK0LQbdrG9fGjK1Z7nevW4LPO2mVF6cEHQjd6BdVFLKg4UrPl/a2OIlt1kBDYCjQ1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/gPQswBCeVqq5iJtd9jDv96rdeBiTe7RrvBY9I7eCpc=;
+ b=3j/IHKXAQSZJ/pYde1ZukAfpF57fTYzx3+Ab27LvGzHBu6oQpH/QXkOBB9fl4Di9IXWmDQOLg62EXERRls+JDiqgMtDUCLXSog4+RpW0szMFb1BhLEHTFjupIMFVao69S7Y80lptiP+LgxPoXqt+dVayA0yJZ8SPv7AIdYJloEg=
+Received: from BN8PR03CA0019.namprd03.prod.outlook.com (2603:10b6:408:94::32)
+ by CH0PR12MB5172.namprd12.prod.outlook.com (2603:10b6:610:bb::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Thu, 21 Apr
+ 2022 07:42:14 +0000
+Received: from BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:94:cafe::c4) by BN8PR03CA0019.outlook.office365.com
+ (2603:10b6:408:94::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14 via Frontend
+ Transport; Thu, 21 Apr 2022 07:42:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT034.mail.protection.outlook.com (10.13.176.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5186.14 via Frontend Transport; Thu, 21 Apr 2022 07:42:14 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 21 Apr
+ 2022 02:42:09 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
+CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
+        Meng Li <li.meng@amd.com>
+Subject: [PATCH V3 0/3] Add unit test module for AMD P-State driver
+Date:   Thu, 21 Apr 2022 15:41:49 +0800
+Message-ID: <20220421074152.599419-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [PATCH] HID: hidraw - add HIDIOCREVOKE ioctl
-To:     Peter Hutterer <peter.hutterer@who-t.net>
-Cc:     Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <YmEAPZKDisM2HAsG@quokka>
-Content-Language: en-US
-In-Reply-To: <YmEAPZKDisM2HAsG@quokka>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0965ade6-9c6b-49e3-8c73-08da236a73b2
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5172:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB517266E4D0573BEABC10430DF7F49@CH0PR12MB5172.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zOzKsh7ZJw6w1pjfgzjx9hY6mv671VfBOdzfIZRDAUdmNtrOKchf93YfAPJ4xD6yG2M+5aN3U46gJBPR5WUNrd06G6fiWmDlT2EUsiJkuBn67wUwmLJagk+17vGBk5qu2GhfsdbwLVoipvBpuRujv0JPATHWFEAn/qx2bLgX/vpdpSTJkxCMT2ZHVWovU3ktnEnh4IU1VhEJ7zQhgO94752RKsB9v3AjB6NSv6djKiEyC8o5cb8hNJ+3uJZjJgqRwvf0gxBZDoX8pQ898plVkCvJ1Eg8H3k7rN5DVG/+zZtyQJItDHKtVcGBoi7zuphxGpPdxm2U/+c6LGxCf1KAIm4c5EagfouvpqW29HGzX5KPjXCpXuhdAk5rKziX2bkeFTIRVebB0Hqr43PG2oCb4JTy3n3x0aZls6dMBhNQB/mll2Ej0eqQWBUpL0WLBtTHO1EjUANjAne7xcJCMf7K3NhIs8eZPh83ln4ASWNCIsBm34vpR2yXPK3Z/aw78Fkn3/46SZ0wD5xEAhTa1c7dmUHvuzMXkMSn5mU55oWiZeVusuWh8Qduv12FhphTsT0Tx7aILTaAisi91PQf40FvHa7O84/f9QvMqyXN926RlPQrtX7kiwOQPX4RWmLEy90YMvKiIrUnL1ikLrgdK7Tr/NYM4IzeXLrnilJk3f1j8IrsqBwe03PEtS1UJpbWsc9bN85uM4zIUwgPXHbPKDuCuk41ydT2uNK6oFxcts4o0KNaKIbD2aBtLHZPhwJ93PV9aeWSHtYsIc5DCazjh7Q0VCwcAa4cBP3deM6Ni62lr4NpS2oyikGk+EaR16cx2HzL/+kry/s+3x+zTGqSfNdXZg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(2906002)(966005)(26005)(70206006)(36756003)(186003)(5660300002)(81166007)(70586007)(508600001)(8936002)(16526019)(2616005)(47076005)(336012)(426003)(83380400001)(86362001)(6666004)(7696005)(36860700001)(8676002)(82310400005)(110136005)(356005)(54906003)(1076003)(4326008)(316002)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2022 07:42:14.0152
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0965ade6-9c6b-49e3-8c73-08da236a73b2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5172
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all:
 
+AMD P-State unit test(amd_pstate_testmod) is a kernel module for testing
+the functions of amd-pstate driver.
+It could import as a module to launch some test tasks.
+1) It can help all users to verify their processor support (SBIOS/Firmware
+or Hardware).
+2) Kernel can have a basic function test to avoid the kernel regression
+during the update.
+3) We can introduce more functional or performance tests to align the
+together, it will benefit power and performance scale optimization.
 
-On Thu, Apr 21, 2022 at 8:57 AM Peter Hutterer <peter.hutterer@who-t.net> wrote:
->
-> There is a need for userspace applications to open HID devices directly.
-> Use-cases include configuration of gaming mice or direct access to
-> joystick devices. The latter is currently handled by the uaccess tag in
-> systemd, other devices include more custom/local configurations or just
-> sudo.
->
-> A better approach is what we already have for evdev devices: give the
-> application a file descriptor and revoke it when it may no longer access
-> that device.
->
-> This patch is the hidraw equivalent to the EVIOCREVOKE ioctl, see
-> commit c7dc65737c9a607d3e6f8478659876074ad129b8 for full details.
->
-> A draft MR for systemd-logind has been filed here:
-> https://github.com/systemd/systemd/pull/23140
->
-> Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
-> ---
-> Maybe noteworthy: even with logind support this is only the first step of
-> many. logind only hands the fd to whoever controls the session and the fd will
-> then have to be passed forward through portals to the application.
->
->  drivers/hid/hidraw.c        | 34 ++++++++++++++++++++++++++++++----
->  include/linux/hidraw.h      |  1 +
->  include/uapi/linux/hidraw.h |  1 +
->  3 files changed, 32 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/hid/hidraw.c b/drivers/hid/hidraw.c
-> index 681614a8302a..3449fe856090 100644
-> --- a/drivers/hid/hidraw.c
-> +++ b/drivers/hid/hidraw.c
-> @@ -42,6 +42,9 @@ static ssize_t hidraw_read(struct file *file, char __user *buffer, size_t count,
->         int ret = 0, len;
->         DECLARE_WAITQUEUE(wait, current);
->
-> +       if (list->revoked)
-> +               return -ENODEV;
-> +
->         mutex_lock(&list->read_mutex);
->
->         while (ret == 0) {
-> @@ -159,9 +162,13 @@ static ssize_t hidraw_send_report(struct file *file, const char __user *buffer,
->
->  static ssize_t hidraw_write(struct file *file, const char __user *buffer, size_t count, loff_t *ppos)
->  {
-> +       struct hidraw_list *list = file->private_data;
->         ssize_t ret;
->         down_read(&minors_rwsem);
-> -       ret = hidraw_send_report(file, buffer, count, HID_OUTPUT_REPORT);
-> +       if (list->revoked)
-> +               ret = -ENODEV;
-> +       else
-> +               ret = hidraw_send_report(file, buffer, count, HID_OUTPUT_REPORT);
->         up_read(&minors_rwsem);
->         return ret;
->  }
-> @@ -254,7 +261,7 @@ static __poll_t hidraw_poll(struct file *file, poll_table *wait)
->         poll_wait(file, &list->hidraw->wait, wait);
->         if (list->head != list->tail)
->                 mask |= EPOLLIN | EPOLLRDNORM;
-> -       if (!list->hidraw->exist)
-> +       if (!list->hidraw->exist || list->revoked)
->                 mask |= EPOLLERR | EPOLLHUP;
->         return mask;
->  }
-> @@ -313,6 +320,9 @@ static int hidraw_fasync(int fd, struct file *file, int on)
->  {
->         struct hidraw_list *list = file->private_data;
->
-> +       if (list->revoked)
-> +               return -ENODEV;
-> +
->         return fasync_helper(fd, file, on, &list->fasync);
->  }
->
-> @@ -360,6 +370,13 @@ static int hidraw_release(struct inode * inode, struct file * file)
->         return 0;
->  }
->
-> +static int hidraw_revoke(struct hidraw_list *list, struct file *file)
+We upstream out AMD P-state driver into Linux kernel and use this unit
+test module to verify the required conditions and basic functions of
+amd-pstate before integration test.
 
-There is no use of *file here, we can drop the argument.
+We use test module in the kselftest frameworks to implement it.
+We create amd_pstate_testmod module and tie it into kselftest.
 
-> +{
-> +       list->revoked = true;
-> +
-> +       return 0;
-> +}
-> +
->  static long hidraw_ioctl(struct file *file, unsigned int cmd,
->                                                         unsigned long arg)
->  {
-> @@ -367,11 +384,12 @@ static long hidraw_ioctl(struct file *file, unsigned int cmd,
->         unsigned int minor = iminor(inode);
->         long ret = 0;
->         struct hidraw *dev;
-> +       struct hidraw_list *list = file->private_data;
->         void __user *user_arg = (void __user*) arg;
->
->         down_read(&minors_rwsem);
->         dev = hidraw_table[minor];
-> -       if (!dev || !dev->exist) {
-> +       if (!dev || !dev->exist || list->revoked) {
->                 ret = -ENODEV;
->                 goto out;
->         }
-> @@ -409,6 +427,14 @@ static long hidraw_ioctl(struct file *file, unsigned int cmd,
->                                         ret = -EFAULT;
->                                 break;
->                         }
-> +               case HIDIOCREVOKE:
-> +                       {
-> +                               if (user_arg)
-> +                                       ret = -EINVAL;
-> +                               else
-> +                                       ret = hidraw_revoke(list, file);
-> +                               break;
-> +                       }
->                 default:
->                         {
->                                 struct hid_device *hid = dev->hid;
-> @@ -515,7 +541,7 @@ int hidraw_report_event(struct hid_device *hid, u8 *data, int len)
->         list_for_each_entry(list, &dev->list, node) {
->                 int new_head = (list->head + 1) & (HIDRAW_BUFFER_SIZE - 1);
->
-> -               if (new_head == list->tail)
-> +               if (list->revoked || new_head == list->tail)
+For example: The test case aput_acpi_cpc is used to check whether the
+_CPC object is exist in SBIOS.
+The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
+existed at the detected processor, so it is a necessary condition.
 
-We had quite some discussions offline about that, and I wonder if you
-should not squash the following patch into this one:
+At present, it only implements the basic framework and some simple test
+cases.
 
----
-diff --git a/drivers/hid/hidraw.c b/drivers/hid/hidraw.c
-index 3449fe856090..ee5e6fe33a4d 100644
---- a/drivers/hid/hidraw.c
-+++ b/drivers/hid/hidraw.c
-@@ -36,13 +36,19 @@ static struct class *hidraw_class;
-  static struct hidraw *hidraw_table[HIDRAW_MAX_DEVICES];
-  static DECLARE_RWSEM(minors_rwsem);
-  
-+__weak noinline bool hidraw_is_revoked(struct hidraw_list *list)
-+{
-+	return list->revoked;
-+}
-+ALLOW_ERROR_INJECTION(hidraw_is_revoked, TRUE);
-+
-  static ssize_t hidraw_read(struct file *file, char __user *buffer, size_t count, loff_t *ppos)
-  {
-  	struct hidraw_list *list = file->private_data;
-  	int ret = 0, len;
-  	DECLARE_WAITQUEUE(wait, current);
-  
--	if (list->revoked)
-+	if (hidraw_is_revoked(list))
-  		return -ENODEV;
-  
-  	mutex_lock(&list->read_mutex);
-@@ -165,7 +171,7 @@ static ssize_t hidraw_write(struct file *file, const char __user *buffer, size_t
-  	struct hidraw_list *list = file->private_data;
-  	ssize_t ret;
-  	down_read(&minors_rwsem);
--	if (list->revoked)
-+	if (hidraw_is_revoked(list))
-  		ret = -ENODEV;
-  	else
-  		ret = hidraw_send_report(file, buffer, count, HID_OUTPUT_REPORT);
-@@ -261,7 +267,7 @@ static __poll_t hidraw_poll(struct file *file, poll_table *wait)
-  	poll_wait(file, &list->hidraw->wait, wait);
-  	if (list->head != list->tail)
-  		mask |= EPOLLIN | EPOLLRDNORM;
--	if (!list->hidraw->exist || list->revoked)
-+	if (!list->hidraw->exist || hidraw_is_revoked(list))
-  		mask |= EPOLLERR | EPOLLHUP;
-  	return mask;
-  }
-@@ -320,7 +326,7 @@ static int hidraw_fasync(int fd, struct file *file, int on)
-  {
-  	struct hidraw_list *list = file->private_data;
-  
--	if (list->revoked)
-+	if (hidraw_is_revoked(list))
-  		return -ENODEV;
-  
-  	return fasync_helper(fd, file, on, &list->fasync);
-@@ -389,7 +395,7 @@ static long hidraw_ioctl(struct file *file, unsigned int cmd,
-  
-  	down_read(&minors_rwsem);
-  	dev = hidraw_table[minor];
--	if (!dev || !dev->exist || list->revoked) {
-+	if (!dev || !dev->exist || hidraw_is_revoked(list)) {
-  		ret = -ENODEV;
-  		goto out;
-  	}
-@@ -541,7 +547,8 @@ int hidraw_report_event(struct hid_device *hid, u8 *data, int len)
-  	list_for_each_entry(list, &dev->list, node) {
-  		int new_head = (list->head + 1) & (HIDRAW_BUFFER_SIZE - 1);
-  
--		if (list->revoked || new_head == list->tail)
-+		if (hidraw_is_revoked(list) ||
-+		    new_head == list->tail)
-  			continue;
-  
-  		if (!(list->buffer[list->head].value = kmemdup(data, len, GFP_ATOMIC))) {
----
+TODO : 1) we will add a rst document.
+2) we will add more test cases to improve the depth and coverage of
+the test.
 
-The reasons are:
-- we get one common helper for revoked
-- we can then emulate with BPF the ioctl even if logind is not the owner
-of the fd. This way, we can have the functionality without having to
-change a single line in the client applications.
+See patch series in below git repo:
+V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/ 
 
-For an example such BPF program, see https://gitlab.freedesktop.org/bentiss/logind-hidraw
+Changes from V1 -> V2:
+- cpufreq: amd-pstate:
+- - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER.
+- selftests: cpufreq:
+- - add a wrapper shell script for the amd_pstate_testmod module.
+- selftests: cpufreq:
+- - remove amd_pstate_testmod kernel module to .../cpufreq/amd_pstate_testmod.
+- Documentation: amd-pstate:
+- - amd_pstate_testmod rst document is not provided at present.
 
-Cheers,
-Benjamin
+Changes from V2 -> V3:
+- cpufreq: amd-pstate:
+- - adjust the order of add amd-pstate.h in MAINTAINERS.
+- selftests: cpufreq:
+- - remove the call of amd_pstate_testmod.sh from cpufreq Makefile to main.sh.
+- selftests: cpufreq:
+- - add explain the goal or intention of the AMD P-State Unit Test module.
+- - modify comments.
+- - use the checkpatch.pl to check my patches.
+- - add conditions judgment before formal test.
+- - delete some unnecessary test cases.
+- - modify test cases about perf and performance etc.
 
->                         continue;
->
->                 if (!(list->buffer[list->head].value = kmemdup(data, len, GFP_ATOMIC))) {
-> diff --git a/include/linux/hidraw.h b/include/linux/hidraw.h
-> index cd67f4ca5599..18fd30a288de 100644
-> --- a/include/linux/hidraw.h
-> +++ b/include/linux/hidraw.h
-> @@ -32,6 +32,7 @@ struct hidraw_list {
->         struct hidraw *hidraw;
->         struct list_head node;
->         struct mutex read_mutex;
-> +       bool revoked;
->  };
->
->  #ifdef CONFIG_HIDRAW
-> diff --git a/include/uapi/linux/hidraw.h b/include/uapi/linux/hidraw.h
-> index 33ebad81720a..d0563f251da5 100644
-> --- a/include/uapi/linux/hidraw.h
-> +++ b/include/uapi/linux/hidraw.h
-> @@ -46,6 +46,7 @@ struct hidraw_devinfo {
->  /* The first byte of SOUTPUT and GOUTPUT is the report number */
->  #define HIDIOCSOUTPUT(len)    _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x0B, len)
->  #define HIDIOCGOUTPUT(len)    _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x0C, len)
-> +#define HIDIOCREVOKE   _IOW('H', 0x0D, int) /* Revoke device access */
->
->  #define HIDRAW_FIRST_MINOR 0
->  #define HIDRAW_MAX_DEVICES 64
-> --
-> 2.36.0
->
+Thanks,
+Jasmine
+
+Meng Li (3):
+  cpufreq: amd-pstate: Expose struct amd_cpudata
+  selftests: cpufreq: Add wapper script for test AMD P-State
+  selftests: cpufreq: Add amd_pstate_testmod kernel module for testing
+
+ MAINTAINERS                                   |   1 +
+ drivers/cpufreq/amd-pstate.c                  |  60 +---
+ include/linux/amd-pstate.h                    |  77 ++++
+ .../selftests/cpufreq/amd_pstate_testmod.sh   |   4 +
+ .../cpufreq/amd_pstate_testmod/Makefile       |  20 ++
+ .../amd_pstate_testmod/amd_pstate_testmod.c   | 329 ++++++++++++++++++
+ tools/testing/selftests/cpufreq/config        |   1 +
+ tools/testing/selftests/cpufreq/main.sh       |   1 +
+ 8 files changed, 434 insertions(+), 59 deletions(-)
+ create mode 100644 include/linux/amd-pstate.h
+ create mode 100755 tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
+ create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/Makefile
+ create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/amd_pstate_testmod.c
+
+-- 
+2.25.1
 

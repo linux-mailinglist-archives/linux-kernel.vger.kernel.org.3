@@ -2,225 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444765099FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AF65099E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386129AbiDUHs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
+        id S1386137AbiDUHtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386481AbiDUHsS (ORCPT
+        with ESMTP id S1386560AbiDUHsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:48:18 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CDD2127E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:44:31 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C44C01F752;
-        Thu, 21 Apr 2022 07:44:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650527069; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dh2F+Vwxf+hsifUhcR02dLqCCZPXfLcmNwS/TLzgkqA=;
-        b=rdH1YhtxbIUi1DkrudbNFO7ydapweGXXIEgXgnaDqpAn19ifa2IE/0F6BRc2R9ukXn8IGZ
-        1TyNWL9Tl8e7StrqdsMOFn0B+GgFhu+3al/TN3zUVxvVZ0k5YerIphyNVRIJ1P96u6EWCx
-        lu5pfUN/yOwG2L9/6nF3NtzU6nLGoBk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F70D13A84;
-        Thu, 21 Apr 2022 07:44:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7SeXGV0LYWIEFgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 21 Apr 2022 07:44:29 +0000
-Message-ID: <0737998d-3006-5866-5ea1-dcfef0cfeb32@suse.com>
-Date:   Thu, 21 Apr 2022 09:44:28 +0200
+        Thu, 21 Apr 2022 03:48:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9071ADA2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:45:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650527123; x=1682063123;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=b56aoKCrzKM8RqGIpbw673dKwb4v9WCU0N1LWZiekV8=;
+  b=CGi/P3jAvslO7RomR0tmuluDqOKnrd/tDmzeRcNf2w6A6WNUDPbM9MhG
+   cvh7Y3GAsUVw8Own02MBBkzuTPvW7gfKE88inpxlrv9/VCkQQqrS7LYwj
+   2Ug6e/ljBlZchaySy+3s4s6ZH3Ee+l0cuswow7C8rAJRGhIIirBPgMMlv
+   F60Z4gzsJJR7b7iJPBHtjbrz95m9Y0N+skU5RoPXJkTCRExjNZdv0jWB8
+   4nPLMX8sWvq3jbiGoCaMefp4bgvXZKjFWFnlv1qEI28AqGy3AdfzK+30p
+   I69nD1mb4KL0hAQ3WFlOIetVMIe2SD/su7gmvFft/WVzqgE1NlDpRThgJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="350717895"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="350717895"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 00:45:17 -0700
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="555635312"
+Received: from hanyulon-mobl1.ccr.corp.intel.com ([10.254.214.143])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 00:45:13 -0700
+Message-ID: <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
+Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
+ N_DEMOTION_TARGETS
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Thelen <gthelen@google.com>
+Date:   Thu, 21 Apr 2022 15:45:10 +0800
+In-Reply-To: <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
+References: <20220413092206.73974-1-jvgediya@linux.ibm.com>
+         <6365983a8fbd8c325bb18959c51e9417fd821c91.camel@intel.com>
+         <CAHbLzkpGzEaSDfM=GBzBxw=dZTBy12vgDDhMG+q4dbG+bCgR6A@mail.gmail.com>
+         <CAAPL-u9=-OHuUk=ZkNRDf3Dm_+3cBd2APL5MQpQr3_sVk_voJg@mail.gmail.com>
+         <de1bc3647c8696fd931a37d314ccd60a2c8cc0db.camel@intel.com>
+         <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
+         <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
+         <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Murali Nalajala <quic_mnalajal@quicinc.com>
-References: <20220420204417.155194-1-quic_eberman@quicinc.com>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH] arm64: paravirt: Disable IRQs during
- stolen_time_cpu_down_prepare
-In-Reply-To: <20220420204417.155194-1-quic_eberman@quicinc.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------7aEmFWIe6tv5DKOKFo7EYOGI"
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------7aEmFWIe6tv5DKOKFo7EYOGI
-Content-Type: multipart/mixed; boundary="------------qKfA015FQnKvuS8o0VgFbD8Z";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Elliot Berman <quic_eberman@quicinc.com>,
- "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
- Alexey Makhalov <amakhalov@vmware.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
- virtualization@lists.linux-foundation.org, x86@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Murali Nalajala <quic_mnalajal@quicinc.com>
-Message-ID: <0737998d-3006-5866-5ea1-dcfef0cfeb32@suse.com>
-Subject: Re: [PATCH] arm64: paravirt: Disable IRQs during
- stolen_time_cpu_down_prepare
-References: <20220420204417.155194-1-quic_eberman@quicinc.com>
-In-Reply-To: <20220420204417.155194-1-quic_eberman@quicinc.com>
+On Thu, 2022-04-21 at 00:29 -0700, Wei Xu wrote:
+> On Thu, Apr 21, 2022 at 12:08 AM ying.huang@intel.com
+> <ying.huang@intel.com> wrote:
+> > 
+> > On Wed, 2022-04-20 at 23:49 -0700, Wei Xu wrote:
+> > > On Wed, Apr 20, 2022 at 11:24 PM ying.huang@intel.com
+> > > <ying.huang@intel.com> wrote:
+> > > > 
+> > > > On Wed, 2022-04-20 at 22:41 -0700, Wei Xu wrote:
+> > > > > On Wed, Apr 20, 2022 at 8:12 PM Yang Shi <shy828301@gmail.com> wrote:
+> > > > > > 
+> > > > > > On Thu, Apr 14, 2022 at 12:00 AM ying.huang@intel.com
+> > > > > > <ying.huang@intel.com> wrote:
+> > > > > > > 
+> > > > > > > On Wed, 2022-04-13 at 14:52 +0530, Jagdish Gediya wrote:
+> > > > > > > > Current implementation to find the demotion targets works
+> > > > > > > > based on node state N_MEMORY, however some systems may have
+> > > > > > > > dram only memory numa node which are N_MEMORY but not the
+> > > > > > > > right choices as demotion targets.
+> > > > > > > > 
+> > > > > > > > This patch series introduces the new node state
+> > > > > > > > N_DEMOTION_TARGETS, which is used to distinguish the nodes which
+> > > > > > > > can be used as demotion targets, node_states[N_DEMOTION_TARGETS]
+> > > > > > > > is used to hold the list of nodes which can be used as demotion
+> > > > > > > > targets, support is also added to set the demotion target
+> > > > > > > > list from user space so that default behavior can be overridden.
+> > > > > > > 
+> > > > > > > It appears that your proposed user space interface cannot solve all
+> > > > > > > problems.  For example, for system as follows,
+> > > > > > > 
+> > > > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow memory node near
+> > > > > > > node 0,
+> > > > > > > 
+> > > > > > > available: 3 nodes (0-2)
+> > > > > > > node 0 cpus: 0 1
+> > > > > > > node 0 size: n MB
+> > > > > > > node 0 free: n MB
+> > > > > > > node 1 cpus:
+> > > > > > > node 1 size: n MB
+> > > > > > > node 1 free: n MB
+> > > > > > > node 2 cpus: 2 3
+> > > > > > > node 2 size: n MB
+> > > > > > > node 2 free: n MB
+> > > > > > > node distances:
+> > > > > > > node   0   1   2
+> > > > > > >   0:  10  40  20
+> > > > > > >   1:  40  10  80
+> > > > > > >   2:  20  80  10
+> > > > > > > 
+> > > > > > > Demotion order 1:
+> > > > > > > 
+> > > > > > > node    demotion_target
+> > > > > > >  0              1
+> > > > > > >  1              X
+> > > > > > >  2              X
+> > > > > > > 
+> > > > > > > Demotion order 2:
+> > > > > > > 
+> > > > > > > node    demotion_target
+> > > > > > >  0              1
+> > > > > > >  1              X
+> > > > > > >  2              1
+> > > > > > > 
+> > > > > > > The demotion order 1 is preferred if we want to reduce cross-socket
+> > > > > > > traffic.  While the demotion order 2 is preferred if we want to take
+> > > > > > > full advantage of the slow memory node.  We can take any choice as
+> > > > > > > automatic-generated order, while make the other choice possible via user
+> > > > > > > space overridden.
+> > > > > > > 
+> > > > > > > I don't know how to implement this via your proposed user space
+> > > > > > > interface.  How about the following user space interface?
+> > > > > > > 
+> > > > > > > 1. Add a file "demotion_order_override" in
+> > > > > > >         /sys/devices/system/node/
+> > > > > > > 
+> > > > > > > 2. When read, "1" is output if the demotion order of the system has been
+> > > > > > > overridden; "0" is output if not.
+> > > > > > > 
+> > > > > > > 3. When write "1", the demotion order of the system will become the
+> > > > > > > overridden mode.  When write "0", the demotion order of the system will
+> > > > > > > become the automatic mode and the demotion order will be re-generated.
+> > > > > > > 
+> > > > > > > 4. Add a file "demotion_targets" for each node in
+> > > > > > >         /sys/devices/system/node/nodeX/
+> > > > > > > 
+> > > > > > > 5. When read, the demotion targets of nodeX will be output.
+> > > > > > > 
+> > > > > > > 6. When write a node list to the file, the demotion targets of nodeX
+> > > > > > > will be set to the written nodes.  And the demotion order of the system
+> > > > > > > will become the overridden mode.
+> > > > > > 
+> > > > > > TBH I don't think having override demotion targets in userspace is
+> > > > > > quite useful in real life for now (it might become useful in the
+> > > > > > future, I can't tell). Imagine you manage hundred thousands of
+> > > > > > machines, which may come from different vendors, have different
+> > > > > > generations of hardware, have different versions of firmware, it would
+> > > > > > be a nightmare for the users to configure the demotion targets
+> > > > > > properly. So it would be great to have the kernel properly configure
+> > > > > > it *without* intervening from the users.
+> > > > > > 
+> > > > > > So we should pick up a proper default policy and stick with that
+> > > > > > policy unless it doesn't work well for the most workloads. I do
+> > > > > > understand it is hard to make everyone happy. My proposal is having
+> > > > > > every node in the fast tier has a demotion target (at least one) if
+> > > > > > the slow tier exists sounds like a reasonable default policy. I think
+> > > > > > this is also the current implementation.
+> > > > > > 
+> > > > > 
+> > > > > This is reasonable.  I agree that with a decent default policy,
+> > > > > 
+> > > > 
+> > > > I agree that a decent default policy is important.  As that was enhanced
+> > > > in [1/5] of this patchset.
+> > > > 
+> > > > > the
+> > > > > overriding of per-node demotion targets can be deferred.  The most
+> > > > > important problem here is that we should allow the configurations
+> > > > > where memory-only nodes are not used as demotion targets, which this
+> > > > > patch set has already addressed.
+> > > > 
+> > > > Do you mean the user space interface proposed by [3/5] of this patchset?
+> > > 
+> > > Yes.
+> > > 
+> > > > IMHO, if we want to add a user space interface, I think that it should
+> > > > be powerful enough to address all existing issues and some potential
+> > > > future issues, so that it can be stable.  I don't think it's a good idea
+> > > > to define a partial user space interface that works only for a specific
+> > > > use case and cannot be extended for other use cases.
+> > > 
+> > > I actually think that they can be viewed as two separate problems: one
+> > > is to define which nodes can be used as demotion targets (this patch
+> > > set), and the other is how to initialize the per-node demotion path
+> > > (node_demotion[]).  We don't have to solve both problems at the same
+> > > time.
+> > > 
+> > > If we decide to go with a per-node demotion path customization
+> > > interface to indirectly set N_DEMOTION_TARGETS, I'd prefer that there
+> > > is a single global control to turn off all demotion targets (for the
+> > > machines that don't use memory-only nodes for demotion).
+> > > 
+> > 
+> > There's one already.  In commit 20b51af15e01 ("mm/migrate: add sysfs
+> > interface to enable reclaim migration"), a sysfs interface
+> > 
+> >         /sys/kernel/mm/numa/demotion_enabled
+> > 
+> > is added to turn off all demotion targets.
+> 
+> IIUC, this sysfs interface only turns off demotion-in-reclaim.  It
+> will be even cleaner if we have an easy way to clear node_demotion[]
+> and N_DEMOTION_TARGETS so that the userspace (post-boot agent, not
+> init scripts) can know that the machine doesn't even have memory
+> tiering hardware enabled.
+> 
 
---------------qKfA015FQnKvuS8o0VgFbD8Z
-Content-Type: multipart/mixed; boundary="------------tMgOFIIt5XmTj75OSWHDTEip"
+What is the difference?  Now we have no interface to show demotion
+targets of a node.  That is in-kernel only.  What is memory tiering
+hardware?  The Optane PMEM?  Some information for it is available via
+ACPI HMAT table.
 
---------------tMgOFIIt5XmTj75OSWHDTEip
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Except demotion-in-reclaim, what else do you care about?
 
-T24gMjAuMDQuMjIgMjI6NDQsIEVsbGlvdCBCZXJtYW4gd3JvdGU6DQo+IEZyb206IFByYWty
-dXRoaSBEZWVwYWsgSGVyYWd1IDxxdWljX3BoZXJhZ3VAcXVpY2luYy5jb20+DQo+IA0KPiBE
-dXJpbmcgaG90cGx1ZywgdGhlIHN0b2xlbiB0aW1lIGRhdGEgc3RydWN0dXJlIGlzIHVubWFw
-cGVkIGFuZCBtZW1zZXQuDQo+IFRoZXJlIGlzIGEgcG9zc2liaWxpdHkgb2YgdGhlIHRpbWVy
-IElSUSBiZWluZyB0cmlnZ2VyZWQgYmVmb3JlIG1lbXNldA0KPiBhbmQgc3RvbGVuIHRpbWUg
-aXMgZ2V0dGluZyB1cGRhdGVkIGFzIHBhcnQgb2YgdGhpcyB0aW1lciBJUlEgaGFuZGxlci4g
-VGhpcw0KPiBjYXVzZXMgdGhlIGJlbG93IGNyYXNoIGluIHRpbWVyIGhhbmRsZXIgLQ0KPiAN
-Cj4gICAgWyAzNDU3LjQ3MzEzOV1bICAgIEM1XSBVbmFibGUgdG8gaGFuZGxlIGtlcm5lbCBw
-YWdpbmcgcmVxdWVzdCBhdCB2aXJ0dWFsIGFkZHJlc3MgZmZmZmZmYzAzZGYwNTE0OA0KPiAg
-ICAuLi4NCj4gICAgWyAzNDU4LjE1NDM5OF1bICAgIEM1XSBDYWxsIHRyYWNlOg0KPiAgICBb
-IDM0NTguMTU3NjQ4XVsgICAgQzVdICBwYXJhX3N0ZWFsX2Nsb2NrKzB4MzAvMHg1MA0KPiAg
-ICBbIDM0NTguMTYyMzE5XVsgICAgQzVdICBpcnF0aW1lX2FjY291bnRfcHJvY2Vzc190aWNr
-KzB4MzAvMHgxOTQNCj4gICAgWyAzNDU4LjE2ODE0OF1bICAgIEM1XSAgYWNjb3VudF9wcm9j
-ZXNzX3RpY2srMHgzYy8weDI4MA0KPiAgICBbIDM0NTguMTczMjc0XVsgICAgQzVdICB1cGRh
-dGVfcHJvY2Vzc190aW1lcysweDVjLzB4ZjQNCj4gICAgWyAzNDU4LjE3ODMxMV1bICAgIEM1
-XSAgdGlja19zY2hlZF90aW1lcisweDE4MC8weDM4NA0KPiAgICBbIDM0NTguMTgzMTY0XVsg
-ICAgQzVdICBfX3J1bl9ocnRpbWVyKzB4MTYwLzB4NTdjDQo+ICAgIFsgMzQ1OC4xODc3NDRd
-WyAgICBDNV0gIGhydGltZXJfaW50ZXJydXB0KzB4MjU4LzB4Njg0DQo+ICAgIFsgMzQ1OC4x
-OTI2OThdWyAgICBDNV0gIGFyY2hfdGltZXJfaGFuZGxlcl92aXJ0KzB4NWMvMHhhMA0KPiAg
-ICBbIDM0NTguMTk4MDAyXVsgICAgQzVdICBoYW5kbGVfcGVyY3B1X2RldmlkX2lycSsweGRj
-LzB4NDE0DQo+ICAgIFsgMzQ1OC4yMDMzODVdWyAgICBDNV0gIGhhbmRsZV9kb21haW5faXJx
-KzB4YTgvMHgxNjgNCj4gICAgWyAzNDU4LjIwODI0MV1bICAgIEM1XSAgZ2ljX2hhbmRsZV9p
-cnEuMzQ0OTMrMHg1NC8weDI0NA0KPiAgICBbIDM0NTguMjEzMzU5XVsgICAgQzVdICBjYWxs
-X29uX2lycV9zdGFjaysweDQwLzB4NzANCj4gICAgWyAzNDU4LjIxODEyNV1bICAgIEM1XSAg
-ZG9faW50ZXJydXB0X2hhbmRsZXIrMHg2MC8weDljDQo+ICAgIFsgMzQ1OC4yMjMxNTZdWyAg
-ICBDNV0gIGVsMV9pbnRlcnJ1cHQrMHgzNC8weDY0DQo+ICAgIFsgMzQ1OC4yMjc1NjBdWyAg
-ICBDNV0gIGVsMWhfNjRfaXJxX2hhbmRsZXIrMHgxYy8weDJjDQo+ICAgIFsgMzQ1OC4yMzI1
-MDNdWyAgICBDNV0gIGVsMWhfNjRfaXJxKzB4N2MvMHg4MA0KPiAgICBbIDM0NTguMjM2NzM2
-XVsgICAgQzVdICBmcmVlX3ZtYXBfYXJlYV9ub2ZsdXNoKzB4MTA4LzB4MzljDQo+ICAgIFsg
-MzQ1OC4yNDIxMjZdWyAgICBDNV0gIHJlbW92ZV92bV9hcmVhKzB4YmMvMHgxMTgNCj4gICAg
-WyAzNDU4LjI0NjcxNF1bICAgIEM1XSAgdm1fcmVtb3ZlX21hcHBpbmdzKzB4NDgvMHgyYTQN
-Cj4gICAgWyAzNDU4LjI1MTY1Nl1bICAgIEM1XSAgX192dW5tYXArMHgxNTQvMHgyNzgNCj4g
-ICAgWyAzNDU4LjI1NTc5Nl1bICAgIEM1XSAgc3RvbGVuX3RpbWVfY3B1X2Rvd25fcHJlcGFy
-ZSsweGMwLzB4ZDgNCj4gICAgWyAzNDU4LjI2MTU0Ml1bICAgIEM1XSAgY3B1aHBfaW52b2tl
-X2NhbGxiYWNrKzB4MjQ4LzB4YzM0DQo+ICAgIFsgMzQ1OC4yNjY4NDJdWyAgICBDNV0gIGNw
-dWhwX3RocmVhZF9mdW4rMHgxYzQvMHgyNDgNCj4gICAgWyAzNDU4LjI3MTY5Nl1bICAgIEM1
-XSAgc21wYm9vdF90aHJlYWRfZm4rMHgxYjAvMHg0MDANCj4gICAgWyAzNDU4LjI3NjYzOF1b
-ICAgIEM1XSAga3RocmVhZCsweDE3Yy8weDFlMA0KPiAgICBbIDM0NTguMjgwNjkxXVsgICAg
-QzVdICByZXRfZnJvbV9mb3JrKzB4MTAvMHgyMA0KPiANCj4gQXMgYSBmaXgsIGRpc2FibGUg
-dGhlIElSUXMgZHVyaW5nIGhvdHBsdWcgdW50aWwgd2UgdW5tYXAgYW5kIG1lbXNldCB0aGUN
-Cj4gc3RvbGVuIHRpbWUgc3RydWN0dXJlLg0KDQpUaGlzIHdpbGwgd29yayBmb3IgdGhlIGNh
-bGwgY2hhaW4gb2YgeW91ciBvYnNlcnZlZCBjcmFzaCwgYnV0IGFyZQ0KeW91IHN1cmUgdGhh
-dCBwYXJhX3N0ZWFsX2Nsb2NrKCkgY2FuJ3QgYmUgY2FsbGVkIGZyb20gYW5vdGhlciBjcHUN
-CmNvbmN1cnJlbnRseT8NCg0KSW4gY2FzZSB5b3UgdmVyaWZpZWQgdGhpcyBjYW4ndCBoYXBw
-ZW4sIHlvdSBjYW4gYWRkIG15Og0KDQpSZXZpZXdlZC1ieTogSnVlcmdlbiBHcm9zcyA8amdy
-b3NzQHN1c2UuY29tPg0KDQpPdGhlcndpc2UgeW91IGVpdGhlciBuZWVkIHRvIHVzZSBSQ1Ug
-Zm9yIGRvaW5nIHRoZSBtZW11bm1hcCgpLCBvciBhDQpsb2NrIHRvIHByb3RlY3Qgc3RvbGVu
-X3RpbWVfcmVnaW9uLg0KDQoNCkp1ZXJnZW4NCg==
---------------tMgOFIIt5XmTj75OSWHDTEip
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Best Regards,
+Huang, Ying
 
------BEGIN PGP PUBLIC KEY BLOCK-----
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------tMgOFIIt5XmTj75OSWHDTEip--
-
---------------qKfA015FQnKvuS8o0VgFbD8Z--
-
---------------7aEmFWIe6tv5DKOKFo7EYOGI
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJhC10FAwAAAAAACgkQsN6d1ii/Ey+h
-wggAmCL55Mzc0nEMs5HctJWJTeCtFYOtL4lowDkPWeDlKQS1UXITvc1Ql9mEcBgtP/aa7s0aAbmp
-twgmzohJgr6yjx9IyORysYq5hRI6VOfGXExCXDoPdobusfUqHPdLrciKtKlJaBT5ZBnfc4rIucdG
-6GRqg5hnlpC9+/bjPsphRieLKfNxmxSO2LhsVeN9uc6oQspQ00AyUq/DSgK8nr1H8ZBa7p5355KR
-EwCvLRvcviAwrv2RVmnVZ3ZCOqDliyi+a7/t48HJBV0RfCx7g8umpFFIxU23VKXrX4ZUi7P8QP5j
-HPuHHJaTRsQT687kp9NDNzb8Dx7D1sSljMDLLC1Yzw==
-=Ytw4
------END PGP SIGNATURE-----
-
---------------7aEmFWIe6tv5DKOKFo7EYOGI--

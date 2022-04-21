@@ -2,131 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E4E50A880
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFA750A889
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391603AbiDUS4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S1391612AbiDUS5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355560AbiDUS42 (ORCPT
+        with ESMTP id S1380232AbiDUS5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:56:28 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E284C415
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:53:38 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id y16so3633407ilc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bbyMWcmSGXgNIxqKnDx18acQ+HwDjhU9tvhj4WCYFZ8=;
-        b=LUJpE0LvS6NNvu6GsYe9z/rRdBpPH8XLbYGjHkLYeg2Zpqz/kjcA498RzQKi/uVosJ
-         5suup8I/gHaT8iKnfb4/d4w7FmcAesDQGDOxtKYgEvCcIo8y9yRyDjU0eVofhKAWwYZH
-         XxNDj4T1CMx6r2GT163PhVC4aOt0zwT+ls3q/5KklxvsU7FOr771cIy3jkMAs9JQLWj4
-         sSZHV8cC+28IEOFfYGqTyv4xbvQ7qdx9opWJz1kQCYTcGELulvcJQF3IV+Tyxx4k2vAm
-         M4hoQAq+DejCcERjZ1+1v71n/K5unHy5K2sIn7SeUqybnNmnqSFsAh0jJY4gqbrfzD+0
-         X1rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bbyMWcmSGXgNIxqKnDx18acQ+HwDjhU9tvhj4WCYFZ8=;
-        b=OoawRleA+t05K/J6/tos6EpnaW8lNw5dg9UlCJ7TbJma1TKDQ5Q0PZ6JyQLBerAfA6
-         46gjeGkZC6KRd7yK8FbNXs7qFGnxu16FkTKVnbLImYBxkOLUnoVvjZxauzY1asA2DIdW
-         xTmtiLMMGb8HR1Ylt8olzHQMX+nwSkqOCDCOlosLjKBFA6R8SJIx91qvtr8+/nHnCYiO
-         UFskp2f566bGjXcL4DxHHwCh3JTxEYZGzgeZnJejLve5VieY8mnsXFW7nSnfCWOzz2n/
-         9CWGnEhaZM41iWZ5h3fUDexQYvFPJNf1CwtAFmAEjSMnW7ttN8DKKJ8XMYDrZIKGnpIV
-         HWvg==
-X-Gm-Message-State: AOAM532cj6ktR2LVNjQmB1w/Gc8/Rr6t7vrM8iCgghLLuhdrNEWeSc4n
-        0AyJa5Dh2actcKg0gbe8efqNKA==
-X-Google-Smtp-Source: ABdhPJx4apFQHHAkJrvtgtLFm2zkEs6gniOhYfLa58nYwuzqg/vyWzgeBhEQ6U1F5u4P8TAk/HlbJw==
-X-Received: by 2002:a05:6e02:20c4:b0:2cc:4490:cb85 with SMTP id 4-20020a056e0220c400b002cc4490cb85mr452906ilq.73.1650567217715;
-        Thu, 21 Apr 2022 11:53:37 -0700 (PDT)
-Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id k11-20020a926f0b000000b002c2756f7e90sm12253320ilc.17.2022.04.21.11.53.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 11:53:36 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
-        cpratapa@codeaurora.org, avuyyuru@codeaurora.org,
-        jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Thu, 21 Apr 2022 14:57:40 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0299E4C7BA
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650567281; x=1682103281;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rnJ8AOQ+F107nQufb8ck2W0XHYKcNKoRr+IZqyjKpwg=;
+  b=MT0dhvE+FBbTyj4c8xafwBsN8cUDEMbKQz6sk0zhxj28Oeefq3WVz5MD
+   s1Ls9cj8TlI9ixnYpqvuMoCr1km8mvw1rJOUxEiqhmgPAxyg6S2TkRF84
+   Xju72U81fgxoOKEydZ3x5SOGKL/b67HfHc8N/L1bWmTW5cWiiwm5kLJ3z
+   UDDVNILOntx+a7I2L8bY1U7jT847OOdit10Y2+/rQ2ZvR9JGU0NwHOHM6
+   bc2eJlx9b4cr6CflY+m9fq9wNTcSe+jFh5Knc7SVQnsiNk92Z7g0ESwQL
+   wO3n6fCGTyqrDGHZgS9oqcTFnQKigz4v4F8uIj1c3zKVbV3dsBCyzmzsh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="262049276"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="262049276"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 11:54:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="615041508"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Apr 2022 11:54:33 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhbwm-0008gD-Uh;
+        Thu, 21 Apr 2022 18:54:32 +0000
+Date:   Fri, 22 Apr 2022 02:53:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: ipa: compute proper aggregation limit
-Date:   Thu, 21 Apr 2022 13:53:33 -0500
-Message-Id: <20220421185333.1371632-1-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
+Subject: [dhowells-fs:rxrpc-ringless 17/21] ld.lld: error: undefined symbol:
+ udpv6_sendmsg
+Message-ID: <202204220240.iPx7FQgd-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The aggregation byte limit for an endpoint is currently computed
-based on the endpoint's receive buffer size.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git rxrpc-ringless
+head:   c388a8388ad238ffbe0cd204c3eacaf200055751
+commit: d24f75894c69b625aaa8f2b937072e750a5787df [17/21] rxrpc: Call udp_sendmsg() directly
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220422/202204220240.iPx7FQgd-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=d24f75894c69b625aaa8f2b937072e750a5787df
+        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
+        git fetch --no-tags dhowells-fs rxrpc-ringless
+        git checkout d24f75894c69b625aaa8f2b937072e750a5787df
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-However, some bytes at the front of each receive buffer are reserved
-on the assumption that--as with SKBs--it might be useful to insert
-data (such as headers) before what lands in the buffer.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The aggregation byte limit currently doesn't take into account that
-reserved space, and as a result, aggregation could require space
-past that which is available in the buffer.
+All errors (new ones prefixed by >>):
 
-Fix this by reducing the size used to compute the aggregation byte
-limit by the NET_SKB_PAD offset reserved for each receive buffer.
+>> ld.lld: error: undefined symbol: udpv6_sendmsg
+   >>> referenced by output.c
+   >>>               rxrpc/output.o:(rxrpc_send_abort_packet) in archive net/built-in.a
+   >>> referenced by output.c
+   >>>               rxrpc/output.o:(rxrpc_reject_packets) in archive net/built-in.a
+   >>> referenced by output.c
+   >>>               rxrpc/output.o:(rxrpc_send_keepalive) in archive net/built-in.a
+   >>> referenced 3 more times
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
-Note:  This is a bug, but it won't apply cleanly to older kernels,
-       so I will be posting back-ports separately.
-
- drivers/net/ipa/ipa_endpoint.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-index 888e94278a84f..e133eb2bebcfb 100644
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -130,9 +130,10 @@ static bool ipa_endpoint_data_valid_one(struct ipa *ipa, u32 count,
- 		 */
- 		if (data->endpoint.config.aggregation) {
- 			limit += SZ_1K * aggr_byte_limit_max(ipa->version);
--			if (buffer_size > limit) {
-+			if (buffer_size - NET_SKB_PAD > limit) {
- 				dev_err(dev, "RX buffer size too large for aggregated RX endpoint %u (%u > %u)\n",
--					data->endpoint_id, buffer_size, limit);
-+					data->endpoint_id,
-+					buffer_size - NET_SKB_PAD, limit);
- 
- 				return false;
- 			}
-@@ -739,6 +740,7 @@ static void ipa_endpoint_init_aggr(struct ipa_endpoint *endpoint)
- 	if (endpoint->data->aggregation) {
- 		if (!endpoint->toward_ipa) {
- 			const struct ipa_endpoint_rx_data *rx_data;
-+			u32 buffer_size;
- 			bool close_eof;
- 			u32 limit;
- 
-@@ -746,7 +748,8 @@ static void ipa_endpoint_init_aggr(struct ipa_endpoint *endpoint)
- 			val |= u32_encode_bits(IPA_ENABLE_AGGR, AGGR_EN_FMASK);
- 			val |= u32_encode_bits(IPA_GENERIC, AGGR_TYPE_FMASK);
- 
--			limit = ipa_aggr_size_kb(rx_data->buffer_size);
-+			buffer_size = rx_data->buffer_size;
-+			limit = ipa_aggr_size_kb(buffer_size - NET_SKB_PAD);
- 			val |= aggr_byte_limit_encoded(version, limit);
- 
- 			limit = IPA_AGGR_TIME_LIMIT;
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

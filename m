@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82755509D51
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B74509D3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388194AbiDUKOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S1388115AbiDUKO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388126AbiDUKNv (ORCPT
+        with ESMTP id S1388130AbiDUKNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:13:51 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2294CC27
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:11:02 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso7320605pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:11:02 -0700 (PDT)
+        Thu, 21 Apr 2022 06:13:52 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF003BB9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:11:03 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id g3so3621634pgg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:11:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8Y9Xga+Vf57beXiQKhYl2BdatYUIL77DBx/0ziFkle0=;
-        b=JAZkFfJ7+0JGkIeYyVaeB4LmiW1XmZaU1cmKe9i/k7EtpF4WNVWAe+hmsZtaqwDuuJ
-         cQPTRZ9jeBGZs4CE9oC/1fUOZ1YmuMXCY2KuUaSwPrEK8ogBw27qVe/kMNx6Z0pU8tXE
-         qp+opEdKWZu84NT+UiVddz0MQa8WRKrFDx8pguYw6eC33C64paxkTleeLgmLQpNrOOgV
-         VesmXJwKStxbpeGvktVyD4k10LP2nGwzbMjQc2Z4XRUwooUIjHKQuqfYsHWykeWEdn6W
-         DF2MqLmkcjuiD74Z73OaVUp2vzH/cqxv1o3eEcP5+WocHhYbQ+vR+nQ5MOrN0I8l39eJ
-         NbEA==
+        bh=krfRbYYatyCGds2MwYdKefUqds1k1xeRA08PwuSXA4Y=;
+        b=g87LhKva3LFgGX9NzZNpu/79BTanc1X8wjAfdpx8ze2wxI6KheWccpSr/JjNXhgQ3m
+         haQZJaZSSMXSNfLMhnij0+sYUqYkXOnVqJa2BJAoASVy9J+rLKdeFlA3qkobCVyMjCi0
+         /8m8m79kJaG71xW5rCO7Ze+WHgUB8Pt9WFPG2FQ5i4cymN29l/pMS8Vz7KFiYhn63Gk8
+         BU4+mQ2wVz5e3dkopJTRhf/QYE0m05gPc1A5krHnIbbZK/Z9AGbLvxqweM70NYfayDqS
+         8t6bN7WpBYuqVbjfucMgVNsnd7OpiZ0yM3DfqomwHZjTlyMVlqIncQm2xQKU2O5Z3T6n
+         9gsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8Y9Xga+Vf57beXiQKhYl2BdatYUIL77DBx/0ziFkle0=;
-        b=472h9yx5xlju0QnXL42YU3v0KLknNtbwg09XiOe3LkM+U6QU08CfCDIl3Zj2V2SOWI
-         +vk+dW0ZfvWroU4+bv1n+XbfpaRVMBkc8j/+u3FYpKgKVgQsCQWUuvoh6JW98wHCq13l
-         R3a6FyZBD3765DWY+JMo+q46QYgXE8N3tUhy+B7V2TmNqPr55NR5OxXD8rzF7bTRXPe1
-         B2qHOWTKP4mARMyHcRADoZ6Eu83OcRwgbaRyH/doJ32W0+Rge0sRzPjGWCmJ1wmpLtv1
-         CganNAk4wy6abLv+rP/IzAHqd3kRidoh0ttahQIrD5L5FWbozNrHwtboNkk5mIrFpsMa
-         Uq4g==
-X-Gm-Message-State: AOAM531R7URzv2MpGZP2f/8OeXT1JiCJ2EjdZ/k0AAsWDbiIhJaF9cFN
-        +4EjsMuXd6lVI55tEqbX2rE=
-X-Google-Smtp-Source: ABdhPJzDlEFinDzLXl/+1GHFwxgQ1sobpE8CWAYcP+aW02BO7FA1aci6p8DesCOcdNqYD9ybZuEBJA==
-X-Received: by 2002:a17:903:2302:b0:158:cef1:79b9 with SMTP id d2-20020a170903230200b00158cef179b9mr25232476plh.64.1650535861665;
-        Thu, 21 Apr 2022 03:11:01 -0700 (PDT)
+        bh=krfRbYYatyCGds2MwYdKefUqds1k1xeRA08PwuSXA4Y=;
+        b=sCy8kMr5o5RQFKS318tlw8I8dGRnypjMxOz8eh1KNKCWbVHJ53seMk4wPXA18hswxX
+         n8i9e0pgcZiCaVA4jKMWN2E+UsT7CbVAg8Tm4jSTrUvkZ7R6Fon7LVAXpQsLfxjHIqXv
+         WsJHhHB3bEbmcsLCJ8HGHDvtE3bbXQ3rF0NkjfzxHbBBLFhL9kv9x5pKsdMQnERCSTM9
+         pT39f5qhSqp1m5mwfys5aYRxkTk1IztEO3jLGK45YleFnATyrFCdZ611axKRwdY4taYk
+         HT+w0p1G3yeRuNsZPUWdvhv4AQEhXWn7MmKBor4BBsAztbnx8z5Vk83Ej7xSGThddGbQ
+         nFhw==
+X-Gm-Message-State: AOAM532bWsM0OSAYnqykPTRnSKgmBhm6T+IWz786D4FxBdbA+5Wj82Di
+        uCigizODoFHnWQESxqDHSV8=
+X-Google-Smtp-Source: ABdhPJxyBQQGFDZ7GssPAhYSdL7AH2vid3Vy++/p2C4coonfRUHCAfORR16KjakCfPZv4j4jDb5ayg==
+X-Received: by 2002:a63:ad45:0:b0:382:2459:5bc6 with SMTP id y5-20020a63ad45000000b0038224595bc6mr23929315pgo.474.1650535863302;
+        Thu, 21 Apr 2022 03:11:03 -0700 (PDT)
 Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:df13:3d47:8c92:6576])
-        by smtp.gmail.com with ESMTPSA id w196-20020a6282cd000000b0050ada022940sm2407806pfd.183.2022.04.21.03.11.00
+        by smtp.gmail.com with ESMTPSA id w196-20020a6282cd000000b0050ada022940sm2407806pfd.183.2022.04.21.03.11.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 03:11:00 -0700 (PDT)
+        Thu, 21 Apr 2022 03:11:02 -0700 (PDT)
 From:   Max Filippov <jcmvbkbc@gmail.com>
 To:     linux-xtensa@linux-xtensa.org
 Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
         Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH v2 05/10] xtensa: use callx0 opcode in fast_coprocessor
-Date:   Thu, 21 Apr 2022 03:10:28 -0700
-Message-Id: <20220421101033.216394-6-jcmvbkbc@gmail.com>
+Subject: [PATCH v2 06/10] xtensa: handle coprocessor exceptions in kernel mode
+Date:   Thu, 21 Apr 2022 03:10:29 -0700
+Message-Id: <20220421101033.216394-7-jcmvbkbc@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220421101033.216394-1-jcmvbkbc@gmail.com>
 References: <20220421101033.216394-1-jcmvbkbc@gmail.com>
@@ -70,84 +70,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of emulating call0 in fast_coprocessor use that opcode directly.
-Use 'ret' instead of 'jx a0'.
+In order to let drivers use xtensa coprocessors on behalf of the calling
+process the kernel must handle coprocessor exceptions from the kernel
+mode the same way as from the user mode.
+
+This is not sufficient to allow using coprocessors transparently in IRQ
+or softirq context. Should such users exist they must be aware of the
+context and do the right thing, e.g. preserve the coprocessor state and
+resore it after use.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- arch/xtensa/kernel/coprocessor.S | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+ arch/xtensa/kernel/traps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/xtensa/kernel/coprocessor.S b/arch/xtensa/kernel/coprocessor.S
-index c7b9f12896f2..8bcbabbff38a 100644
---- a/arch/xtensa/kernel/coprocessor.S
-+++ b/arch/xtensa/kernel/coprocessor.S
-@@ -30,7 +30,7 @@
- 		.align 4;						\
- 	.Lsave_cp_regs_cp##x:						\
- 		xchal_cp##x##_store a2 a3 a4 a5 a6;			\
--		jx	a0;						\
-+		ret;							\
- 	.endif
+diff --git a/arch/xtensa/kernel/traps.c b/arch/xtensa/kernel/traps.c
+index 95903f25e523..62c497605128 100644
+--- a/arch/xtensa/kernel/traps.c
++++ b/arch/xtensa/kernel/traps.c
+@@ -69,7 +69,7 @@ static void do_debug(struct pt_regs *regs);
+ #define USER		0x02
  
- #define SAVE_CP_REGS_TAB(x)						\
-@@ -47,7 +47,7 @@
- 		.align 4;						\
- 	.Lload_cp_regs_cp##x:						\
- 		xchal_cp##x##_load a2 a3 a4 a5 a6;			\
--		jx	a0;						\
-+		ret;							\
- 	.endif
+ #define COPROCESSOR(x)							\
+-{ EXCCAUSE_COPROCESSOR ## x ## _DISABLED, USER, fast_coprocessor }
++{ EXCCAUSE_COPROCESSOR ## x ## _DISABLED, USER|KRNL, fast_coprocessor }
  
- #define LOAD_CP_REGS_TAB(x)						\
-@@ -163,21 +163,20 @@ ENTRY(fast_coprocessor)
- 	s32i	a5, a4, THREAD_CPENABLE
- 
- 	/*
--	 * Get context save area and 'call' save routine. 
-+	 * Get context save area and call save routine.
- 	 * (a4 still holds previous owner (thread_info), a3 CP number)
- 	 */
- 
- 	movi	a5, .Lsave_cp_regs_jump_table
--	movi	a0, 2f			# a0: 'return' address
- 	addx8	a3, a3, a5		# a3: coprocessor number
- 	l32i	a2, a3, 4		# a2: xtregs offset
- 	l32i	a3, a3, 0		# a3: jump address
- 	add	a2, a2, a4
--	jx	a3
-+	callx0	a3
- 
- 	/* Note that only a0 and a1 were preserved. */
- 
--2:	rsr	a3, exccause
-+	rsr	a3, exccause
- 	addi	a3, a3, -EXCCAUSE_COPROCESSOR0_DISABLED
- 	movi	a0, coprocessor_owner
- 	addx4	a0, a3, a0
-@@ -187,19 +186,18 @@ ENTRY(fast_coprocessor)
- 1:	GET_THREAD_INFO (a4, a1)
- 	s32i	a4, a0, 0
- 
--	/* Get context save area and 'call' load routine. */
-+	/* Get context save area and call load routine. */
- 
- 	movi	a5, .Lload_cp_regs_jump_table
--	movi	a0, 1f
- 	addx8	a3, a3, a5
- 	l32i	a2, a3, 4		# a2: xtregs offset
- 	l32i	a3, a3, 0		# a3: jump address
- 	add	a2, a2, a4
--	jx	a3
-+	callx0	a3
- 
- 	/* Restore all registers and return from exception handler. */
- 
--1:	l32i	a6, a1, PT_AREG6
-+	l32i	a6, a1, PT_AREG6
- 	l32i	a5, a1, PT_AREG5
- 	l32i	a4, a1, PT_AREG4
- 
+ typedef struct {
+ 	int cause;
 -- 
 2.30.2
 

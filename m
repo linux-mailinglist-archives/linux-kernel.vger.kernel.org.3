@@ -2,110 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AEE50A3CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B6D50A3D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389945AbiDUPRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
+        id S1389965AbiDUPSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiDUPRH (ORCPT
+        with ESMTP id S230247AbiDUPSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:17:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93D6743EC5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:14:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 505791515;
-        Thu, 21 Apr 2022 08:14:17 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9F963F73B;
-        Thu, 21 Apr 2022 08:14:15 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 16:14:13 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Wang ShaoBo <bobo.shaobowang@huawei.com>, cj.chengjian@huawei.com,
-        huawei.libin@huawei.com, xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-ID: <YmF0xYpTMoWOIl00@lakrids>
-References: <20220316100132.244849-1-bobo.shaobowang@huawei.com>
- <20220316100132.244849-4-bobo.shaobowang@huawei.com>
- <YmFXrBG5AmX3+4f8@lakrids>
- <20220421100639.03c0d123@gandalf.local.home>
+        Thu, 21 Apr 2022 11:18:33 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCF535A86;
+        Thu, 21 Apr 2022 08:15:43 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23LFFekn096130;
+        Thu, 21 Apr 2022 10:15:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650554140;
+        bh=BSmVKrWhv52kLUAhA2dwa8QvQEt8yIyAabglUhHYYvc=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=X+i6UeSQVuzFnhmu/Jyx1BNXESg04Pe0GryT/tpDDAg1D4jMpMcN4Xs57IWhOp64r
+         kkJNqG2GDLfJCNj3cve4oRDhImsqgVPVzcGTy/JOqMN9ZTrTKEONio7G/uvTVW8JXY
+         PfH5Vyz97SGY2lh/VdMyxEn7HTqK8I7S74Z7tb0U=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23LFFeSn013596
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 21 Apr 2022 10:15:40 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 21
+ Apr 2022 10:15:39 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 21 Apr 2022 10:15:39 -0500
+Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23LFFaQl121385;
+        Thu, 21 Apr 2022 10:15:37 -0500
+Message-ID: <7993bc10-fff1-bacb-d0c5-929b14f35244@ti.com>
+Date:   Thu, 21 Apr 2022 20:45:36 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421100639.03c0d123@gandalf.local.home>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] dmaengine: ti: k3-psil-am62: Update PSIL thread for saul.
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>, <dmaengine@vger.kernel.org>
+CC:     <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220421065323.16378-1-j-choudhary@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20220421065323.16378-1-j-choudhary@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:06:39AM -0400, Steven Rostedt wrote:
-> On Thu, 21 Apr 2022 14:10:04 +0100
-> Mark Rutland <mark.rutland@arm.com> wrote:
+Hi Jayesh,
+
+On 21/04/22 12:23 pm, Jayesh Choudhary wrote:
+> Correct the RX PSIL thread for sa3ul.
 > 
-> > On Wed, Mar 16, 2022 at 06:01:31PM +0800, Wang ShaoBo wrote:
-> > > From: Cheng Jian <cj.chengjian@huawei.com>
-> > > 
-> > > When tracing multiple functions customly, a list function is called
-> > > in ftrace_(regs)_caller, which makes all the other traced functions
-> > > recheck the hash of the ftrace_ops when tracing happend, apparently
-> > > it is inefficient.  
-> > 
-> > ... and when does that actually matter? Who does this and why?
+
+Commit message needs more info:
+Threads are not wrong but, the first 4 threads are reserved
+for secure side usage and the rest is available to be paired with main pktdma.
+
+Also, add fixes tag:
+
+Fixes: 5ac6bfb587772 ("dmaengine: ti: k3-psil: Add AM62x PSIL and PDMA data")
+
+
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> ---
 > 
-> I don't think it was explained properly. What dynamically allocated
-> trampolines give you is this.
-
-Thanks for the, explanation, btw!
-
-> Let's say you have 10 ftrace_ops registered (with bpf and kprobes this can
-> be quite common). But each of these ftrace_ops traces a function (or
-> functions) that are not being traced by the other ftrace_ops. That is, each
-> ftrace_ops has its own unique function(s) that they are tracing. One could
-> be tracing schedule, the other could be tracing ksoftirqd_should_run
-> (whatever).
-
-Ok, so that's when messing around with bpf or kprobes, and not generally
-when using plain old ftrace functionality under /sys/kernel/tracing/
-(unless that's concurrent with one of the former, as per your other
-reply) ?
-
-> Without this change, because the arch does not support dynamically
-> allocated trampolines, it means that all these ftrace_ops will be
-> registered to the same trampoline. That means, for every function that is
-> traced, it will loop through all 10 of theses ftrace_ops and check their
-> hashes to see if their callback should be called or not.
-
-Sure; I can see how that can be quite expensive.
-
-What I'm trying to figure out is who this matters to and when, since the
-implementation is going to come with a bunch of subtle/fractal
-complexities, and likely a substantial overhead too when enabling or
-disabling tracing of a patch-site. I'd like to understand the trade-offs
-better.
-
-> With dynamically allocated trampolines, each ftrace_ops will have their own
-> trampoline, and that trampoline will be called directly if the function
-> is only being traced by the one ftrace_ops. This is much more efficient.
+> The new updated PSIL threads have been tested on local am62x board.
+> Log is available here:
+> <https://gist.github.com/Jayesh2000/b0316190de3d9dbb8e98337106ebe24a>
 > 
-> If a function is traced by more than one ftrace_ops, then it falls back to
-> the loop.
+>  drivers/dma/ti/k3-psil-am62.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/dma/ti/k3-psil-am62.c b/drivers/dma/ti/k3-psil-am62.c
+> index d431e2033237..2b6fd6e37c61 100644
+> --- a/drivers/dma/ti/k3-psil-am62.c
+> +++ b/drivers/dma/ti/k3-psil-am62.c
+> @@ -70,10 +70,10 @@
+>  /* PSI-L source thread IDs, used for RX (DMA_DEV_TO_MEM) */
+>  static struct psil_ep am62_src_ep_map[] = {
+>  	/* SAUL */
+> -	PSIL_SAUL(0x7500, 20, 35, 8, 35, 0),
+> -	PSIL_SAUL(0x7501, 21, 35, 8, 36, 0),
+> -	PSIL_SAUL(0x7502, 22, 43, 8, 43, 0),
+> -	PSIL_SAUL(0x7503, 23, 43, 8, 44, 0),
+> +	PSIL_SAUL(0x7504, 20, 35, 8, 35, 0),
+> +	PSIL_SAUL(0x7505, 21, 35, 8, 36, 0),
+> +	PSIL_SAUL(0x7506, 22, 43, 8, 43, 0),
+> +	PSIL_SAUL(0x7507, 23, 43, 8, 44, 0),
+>  	/* PDMA_MAIN0 - SPI0-3 */
+>  	PSIL_PDMA_XY_PKT(0x4302),
+>  	PSIL_PDMA_XY_PKT(0x4303),
 
-I see -- so the dynamic trampoline is just to get the ops? Or is that
-doing additional things?
 
-There might be a middle-ground here where we patch the ftrace_ops
-pointer into a literal pool at the patch-site, which would allow us to
-handle this atomically, and would avoid the issues with out-of-range
-trampolines.
-
-Thanks,
-Mark.
+Regards
+Vignesh

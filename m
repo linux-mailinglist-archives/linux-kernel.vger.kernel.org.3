@@ -2,115 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBEE2509768
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AFD509769
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384789AbiDUGXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        id S1384793AbiDUG0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 02:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiDUGXB (ORCPT
+        with ESMTP id S229726AbiDUG0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:23:01 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618E313DE1;
-        Wed, 20 Apr 2022 23:20:12 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23L6K1w3085688;
-        Thu, 21 Apr 2022 01:20:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650522001;
-        bh=Zb6hy1mU9VhZmpYtG3YtsYUZK/kNtHDTPxAdvz7jqO0=;
-        h=From:To:CC:Subject:Date;
-        b=LQ7dQ+RqMDkm6op1V6CEhKVNIGZ/N+civS72m140my55ZOrpha7rwTf5pdRMe3IK/
-         oNUrPV6iW2++MfXvrfsc17wW0ZrneVN/PSFUXdjyePJGPAdMVwSXZEZHOczr+m3Qrg
-         NdWT3ayUhKXRYMR0bf0Nb3ZsehwWnovi6kwmgyEg=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23L6K0LG128019
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 21 Apr 2022 01:20:00 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 21
- Apr 2022 01:20:00 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 21 Apr 2022 01:20:00 -0500
-Received: from ula0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23L6JuoJ022048;
-        Thu, 21 Apr 2022 01:19:56 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thu, 21 Apr 2022 02:26:19 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A0613EB5;
+        Wed, 20 Apr 2022 23:23:26 -0700 (PDT)
+X-UUID: 2b3dd1b70e574701b82cdee100969f99-20220421
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:f394c3dd-92b6-4aa6-b650-d66cc163b093,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.4,REQID:f394c3dd-92b6-4aa6-b650-d66cc163b093,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:faefae9,CLOUDID:775372f0-da02-41b4-b6df-58f4ccd36682,C
+        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
+        l,QS:0,BEC:nil
+X-UUID: 2b3dd1b70e574701b82cdee100969f99-20220421
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1665368436; Thu, 21 Apr 2022 14:23:21 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 21 Apr 2022 14:23:20 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 21 Apr 2022 14:23:20 +0800
+Message-ID: <02d4b85ae2595f4bf08ec7ddb2ec4dfb35a45f2a.camel@mediatek.com>
+Subject: Re: [PATCH v3 2/2] remoteproc: mediatek: allow reading
+ firmware-name from DT
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-am62-mcu: Enable MCU GPIO module
-Date:   Thu, 21 Apr 2022 11:49:38 +0530
-Message-ID: <20220421061938.122317-1-vigneshr@ti.com>
-X-Mailer: git-send-email 2.36.0
+        <linux-remoteproc@vger.kernel.org>
+Date:   Thu, 21 Apr 2022 14:23:19 +0800
+In-Reply-To: <20220419123331.14377-3-allen-kh.cheng@mediatek.com>
+References: <20220419123331.14377-1-allen-kh.cheng@mediatek.com>
+         <20220419123331.14377-3-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AM62 has x1 GPIO module and associated interrupt router in MCU Domain.
-Add DT nodes for the same.
+On Tue, 2022-04-19 at 20:33 +0800, Allen-KH Cheng wrote:
+> The SCP firmware blob differs between platforms and SoCs. We add
+> support in the SCP driver for reading the path of firmware file from
+> DT in order to allow these files to live in a generic file system
+> (or linux-firmware).
+> 
+> The firmware-name property is optional and the code falls back to the
+> old filename if the property isn't present.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi | 28 +++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-index d103824c963f..45343381ad0b 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-@@ -53,4 +53,32 @@ mcu_spi1: spi@4b10000 {
- 		power-domains = <&k3_pds 148 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 148 0>;
- 	};
-+
-+	mcu_gpio_intr: interrupt-controller@4210000 {
-+		compatible = "ti,sci-intr";
-+		reg = <0x00 0x04210000 0x00 0x200>;
-+		ti,intr-trigger-type = <1>;
-+		interrupt-controller;
-+		interrupt-parent = <&gic500>;
-+		#interrupt-cells = <1>;
-+		ti,sci = <&dmsc>;
-+		ti,sci-dev-id = <5>;
-+		ti,interrupt-ranges = <0 104 4>;
-+	};
-+
-+	mcu_gpio0: gpio@4201000 {
-+		compatible = "ti,am64-gpio", "ti,keystone-gpio";
-+		reg = <0x0 0x4201000 0x0 0x100>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+		interrupt-parent = <&mcu_gpio_intr>;
-+		interrupts = <30>, <31>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+		ti,ngpio = <24>;
-+		ti,davinci-gpio-unbanked = <0>;
-+		power-domains = <&k3_pds 79 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 79 0>;
-+		clock-names = "gpio";
-+	};
- };
--- 
-2.36.0
+Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 

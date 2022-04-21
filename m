@@ -2,160 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE67C50A7C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A5850A7CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391252AbiDUSHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        id S1391173AbiDUSIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391224AbiDUSHk (ORCPT
+        with ESMTP id S1391211AbiDUSII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:07:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0D6F4B1CB
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650564288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RmDy0KiOypH0ED0Pq5HN43KAHX+Fo77jYIn7zRippJk=;
-        b=OZUFsMinAR/PePZn7+NGJfp2ATWJluc/+QX0I6BanFv0wjlqVJxudurucvwEkR9b0OGupm
-        Rlu+PNWerOE4NKb0DAc70n2QpB0DvDO6eqB9i3yL9FnJZ36m1J2cce5kATOSYREn0hcBwC
-        hf2Z5RbSOqNVFnGVYDtnMoXAof0/W4A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-618-7Kl_lm7ZNimdk-Y0n1Mn8Q-1; Thu, 21 Apr 2022 14:04:45 -0400
-X-MC-Unique: 7Kl_lm7ZNimdk-Y0n1Mn8Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA1FE101AA42;
-        Thu, 21 Apr 2022 18:04:44 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A555940E80F5;
-        Thu, 21 Apr 2022 18:04:44 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     will@kernel.org, maz@kernel.org, apatel@ventanamicro.com,
-        atishp@rivosinc.com, seanjc@google.com, pgonda@google.com
-Subject: [PATCH 4/4] KVM: tell userspace that system_event.ndata is valid
-Date:   Thu, 21 Apr 2022 14:04:43 -0400
-Message-Id: <20220421180443.1465634-5-pbonzini@redhat.com>
-In-Reply-To: <20220421180443.1465634-1-pbonzini@redhat.com>
-References: <20220421180443.1465634-1-pbonzini@redhat.com>
+        Thu, 21 Apr 2022 14:08:08 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA14A13DC4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:05:13 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.94]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1M1pk0-1njn2M0Qm0-002H3L; Thu, 21 Apr 2022 20:05:10 +0200
+Message-ID: <7be89f17-8993-c0e9-3965-4ca5db3c4b57@i2se.com>
+Date:   Thu, 21 Apr 2022 20:05:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: linux-next: build warning after merge of the pinctrl tree
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220421171116.6dbe87cb@canb.auug.org.au>
+ <CACRpkdYW81iLveJoNu2RDEpySqRcXWqq4XGhGFMYdLvBzhRsUw@mail.gmail.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <CACRpkdYW81iLveJoNu2RDEpySqRcXWqq4XGhGFMYdLvBzhRsUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:EVtiik8/dSmwP3H2lw0tuXN//9pN2Fsr+moOQlE9wMzlbK6EuzT
+ 9nf5OwVSCP1J8JA9lr/Rc0Ln8/3HFyIWJK3NooRSblS+uWSg8LQ/6N1hqvu34QkLEb2FFFf
+ mGOhGK9Cwnt0nzJ8OAxXqpgAoBQ9g8GkdkgvBRy2xzYzf/gXYoPZIZFg3DHGkUTRUT/6yGJ
+ bcWWcwhUydvEgi3qc3IQg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fd9QVqU1P1I=:jGO4Bn+H2VFYkTGkuqNQN1
+ Z5zrqQPDYRHvgi2bxghgnovyX1b3g3ucyVWKocGZePrtZmn7AwbyNCke/hMr/fXxlKhUjIi4N
+ 9KA/H9louOSJq4mu6F/9H0UqcS7v2Qla4ddSet63AY2DMnRSUXq5JK0blD2eFTgt+S9kOPgPM
+ 6bTXZ3dZhohdlBOuRBw6jCmM8TF1r8+Z2HytVbWgKd7XSaQjvq2+lw6A+Fhw2HzAl8jx1c4Ly
+ sPU2iqI5J//0q/IhRiNXvLOVaqZKXKuBNSoO4HKV44S5G1gKWZVjDPJluviF2sd79/VLhYbnF
+ rQNJ4f5xwYluM33PqJfnD4gqZJS85Moiw6zOM8tHsdg3Pocbp/Qf6gQFF1zenoKKvHml1Ilgr
+ J4vIYBL+v3KTsuKQ+mlz6m4dGqMwEDzMW8v2vbn19FL6WICw2Wd6OfjRA2h72PYjFvtUhVlP8
+ WI2pwxesu/87J9tk5QTFyxL/C4aH4W1O7yiCJcR4e76+9XZeNtb3m5IGj6NdOmdt1IRbfK2dO
+ H0AwFbXd6XYd8LNyEA9VZ8BPMGWbEAXROIOgvcT8HhYiqo9XZDjihIszJWLkSGi+vnPQB0vVy
+ pSw72ivtcLFJRJqyKSh2Hf/jipdBBdLEpRpPsKA5/Y5Qa2FM/uY0AwBpzTPXrjbUAS0+RoJTA
+ kiIuJKtRFV/4WwwLV7F1K+HjgwyNH308lhrKNiFgiubXgeDUNGeTJEnEXdvsEdSXvLlpQ8NaD
+ Dw/P28FdVjL9KMEp
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that all architectures are fixed, introduce a new capability
-so that userspace knows that it can look at the ndata and data[]
-members of run->system_event.  Adjust the documentation.
-
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- Documentation/virt/kvm/api.rst | 29 ++++++++++++++++-------------
- include/uapi/linux/kvm.h       |  1 +
- virt/kvm/kvm_main.c            |  1 +
- 3 files changed, 18 insertions(+), 13 deletions(-)
-
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 72183ae628f7..fe5805ab0d75 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -6089,21 +6089,18 @@ should put the acknowledged interrupt vector into the 'epr' field.
-   #define KVM_SYSTEM_EVENT_RESET          2
-   #define KVM_SYSTEM_EVENT_CRASH          3
-   #define KVM_SYSTEM_EVENT_SEV_TERM       4
--  #define KVM_SYSTEM_EVENT_NDATA_VALID    (1u << 31)
- 			__u32 type;
-                         __u32 ndata;
--			__u64 flags;
-                         __u64 data[16];
- 		} system_event;
- 
- If exit_reason is KVM_EXIT_SYSTEM_EVENT then the vcpu has triggered
- a system-level event using some architecture specific mechanism (hypercall
- or some special instruction). In case of ARM64, this is triggered using
--HVC instruction based PSCI call from the vcpu. The 'type' field describes
--the system-level event type. The 'flags' field describes architecture
--specific flags for the system-level event.
-+HVC instruction based PSCI call from the vcpu.
- 
--Valid values for bits 30:0 of 'type' are:
-+The 'type' field describes the system-level event type.
-+Valid values for 'type' are:
- 
-  - KVM_SYSTEM_EVENT_SHUTDOWN -- the guest has requested a shutdown of the
-    VM. Userspace is not obliged to honour this, and if it does honour
-@@ -6117,16 +6114,23 @@ Valid values for bits 30:0 of 'type' are:
-    to ignore the request, or to gather VM memory core dump and/or
-    reset/shutdown of the VM.
-  - KVM_SYSTEM_EVENT_SEV_TERM -- an AMD SEV guest requested termination.
--   The guest physical address of the guest's GHCB is stored in `data[0]`.
- 
--Valid flags are:
-+If KVM_CAP_SYSTEM_EVENT_DATA is present, the 'data' field can contain
-+architecture specific information for the system-level event.  Only
-+the first `ndata` items (possibly zero) of the data array are valid.
-+
-+ - for arm64, data[0] is set to KVM_SYSTEM_EVENT_RESET_FLAG_PSCI_RESET2 if
-+   the guest issued a SYSTEM_RESET2 call according to v1.1 of the PSCI
-+   specification.
-+
-+ - for RISC-V, data[0] is set to the value of the second argument of the
-+   ``sbi_system_reset`` call.
- 
-- - KVM_SYSTEM_EVENT_RESET_FLAG_PSCI_RESET2 (arm64 only) -- the guest issued
--   a SYSTEM_RESET2 call according to v1.1 of the PSCI specification.
-+ - for x86, KVM_SYSTEM_EVENT_SEV_TERM stores the guest physical address of the
-+   guest's GHCB in `data[0]`.
- 
--Extra data for this event is stored in the `data[]` array, up to index
--`ndata-1` included, if bit 31 is set in `type`.  The data depends on the
--`type` field.  There is no extra data if bit 31 is clear or `ndata` is zero.
-+Previous versions of Linux defined a `flags` member in this struct.  The
-+field however was never written.
- 
- ::
- 
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 5a57f74b4903..f76ffecda38a 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1147,6 +1147,7 @@ struct kvm_ppc_resize_hpt {
- #define KVM_CAP_PMU_CAPABILITY 212
- #define KVM_CAP_DISABLE_QUIRKS2 213
- #define KVM_CAP_VM_TSC_CONTROL 214
-+#define KVM_CAP_SYSTEM_EVENT_DATA 215
- 
- #ifdef KVM_CAP_IRQ_ROUTING
- 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index dfb7dabdbc63..ac57fc2c935f 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -4333,6 +4333,7 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
- 		return 0;
- #endif
- 	case KVM_CAP_BINARY_STATS_FD:
-+	case KVM_CAP_SYSTEM_EVENT_DATA:
- 		return 1;
- 	default:
- 		break;
--- 
-2.31.1
-
+Am 21.04.22 um 16:12 schrieb Linus Walleij:
+> On Thu, Apr 21, 2022 at 9:11 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+>> After merging the pinctrl tree, today's linux-next build (htmldocs)
+>> produced this warning:
+>>
+>> include/linux/gpio/driver.h:507: warning: Incorrect use of kernel-doc format:          * @of_gpio_ranges_fallback
+>> include/linux/gpio/driver.h:518: warning: Function parameter or member 'of_gpio_ranges_fallback' not described in 'gpio_chip'
+>>
+>> Introduced by commit
+>>
+>>    a9491df0c4ae ("gpiolib: of: Introduce hook for missing gpio-ranges")
+> Thanks, I just folded in a quick fix into the offending commit, a
+> single missing colon.
+Thanks
+>
+> Yours,
+> Linus Walleij

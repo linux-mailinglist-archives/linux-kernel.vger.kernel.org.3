@@ -2,79 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B54509DB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538B8509DB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383919AbiDUKby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
+        id S1388399AbiDUKey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245088AbiDUKbw (ORCPT
+        with ESMTP id S235786AbiDUKev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:31:52 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B7C1113
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:29:02 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 21 Apr
- 2022 18:29:02 +0800
+        Thu, 21 Apr 2022 06:34:51 -0400
+Received: from mail.meizu.com (unknown [14.29.68.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3641E2AE1;
+        Thu, 21 Apr 2022 03:32:01 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
+ (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 21 Apr
+ 2022 18:32:03 +0800
 Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
  (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 21 Apr
- 2022 18:29:00 +0800
+ 2022 18:31:59 +0800
 From:   Haowen Bai <baihaowen@meizu.com>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Haowen Bai <baihaowen@meizu.com>, <amd-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <UNGLinuxDriver@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Haowen Bai <baihaowen@meizu.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
 Subject: [PATCH] drm/amd/display: Remove useless code
-Date:   Thu, 21 Apr 2022 18:28:58 +0800
-Message-ID: <1650536939-13778-1-git-send-email-baihaowen@meizu.com>
+Date:   Thu, 21 Apr 2022 18:31:57 +0800
+Message-ID: <1650537117-14450-1-git-send-email-baihaowen@meizu.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [172.16.137.70]
 X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
  IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-aux_rep only memset but no use at all, so we drop it.
+payload only memset but no use at all, so we drop them.
 
 Signed-off-by: Haowen Bai <baihaowen@meizu.com>
 ---
- drivers/gpu/drm/amd/display/dc/dce/dce_aux.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/net/ethernet/mscc/ocelot_vcap.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_aux.c b/drivers/gpu/drm/amd/display/dc/dce/dce_aux.c
-index 8e814000db62..29e20d92b0bb 100644
---- a/drivers/gpu/drm/amd/display/dc/dce/dce_aux.c
-+++ b/drivers/gpu/drm/amd/display/dc/dce/dce_aux.c
-@@ -565,13 +565,11 @@ int dce_aux_transfer_raw(struct ddc_service *ddc,
- 	struct ddc *ddc_pin = ddc->ddc_pin;
- 	struct dce_aux *aux_engine;
- 	struct aux_request_transaction_data aux_req;
--	struct aux_reply_transaction_data aux_rep;
- 	uint8_t returned_bytes = 0;
- 	int res = -1;
- 	uint32_t status;
+diff --git a/drivers/net/ethernet/mscc/ocelot_vcap.c b/drivers/net/ethernet/mscc/ocelot_vcap.c
+index c8701ac955a8..1e74bdb215ec 100644
+--- a/drivers/net/ethernet/mscc/ocelot_vcap.c
++++ b/drivers/net/ethernet/mscc/ocelot_vcap.c
+@@ -672,12 +672,10 @@ static void is1_entry_set(struct ocelot *ocelot, int ix,
+ {
+ 	const struct vcap_props *vcap = &ocelot->vcap[VCAP_IS1];
+ 	struct ocelot_vcap_key_vlan *tag = &filter->vlan;
+-	struct ocelot_vcap_u64 payload;
+ 	struct vcap_data data;
+ 	int row = ix / 2;
+ 	u32 type;
  
- 	memset(&aux_req, 0, sizeof(aux_req));
--	memset(&aux_rep, 0, sizeof(aux_rep));
+-	memset(&payload, 0, sizeof(payload));
+ 	memset(&data, 0, sizeof(data));
  
- 	aux_engine = ddc->ctx->dc->res_pool->engines[ddc_pin->pin_data->en];
- 	if (!acquire(aux_engine, ddc_pin)) {
+ 	/* Read row */
+@@ -813,11 +811,9 @@ static void es0_entry_set(struct ocelot *ocelot, int ix,
+ {
+ 	const struct vcap_props *vcap = &ocelot->vcap[VCAP_ES0];
+ 	struct ocelot_vcap_key_vlan *tag = &filter->vlan;
+-	struct ocelot_vcap_u64 payload;
+ 	struct vcap_data data;
+ 	int row = ix;
+ 
+-	memset(&payload, 0, sizeof(payload));
+ 	memset(&data, 0, sizeof(data));
+ 
+ 	/* Read row */
 -- 
 2.7.4
 

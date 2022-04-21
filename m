@@ -2,132 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF758509AEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2063509AE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386829AbiDUIrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S1386838AbiDUIso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386833AbiDUIr0 (ORCPT
+        with ESMTP id S1385732AbiDUIsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:47:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CAF2E088
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:44:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650530676;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BjQSABeMSCNqX6QeqXkLKcmoGWtgGGp59tDCHP5J+Ac=;
-        b=U9fts13R7ndn+mM5WltAWP9vGtX8uPqwzN4qe28XhLpKToe0z9S2RxHcIYoggIIadZUceo
-        sXDFpsohsexiQPZ+C7G1NQEFNa3uNjUzhTSg1N8FH3rVBiUoCb03sK/iy8ku/4hT9Kt9od
-        4zAoOAwL2cfmpOjO0mDp42WXCgy/uhw=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-0J7M2KjINFGZRo_4p2zHfQ-1; Thu, 21 Apr 2022 04:44:35 -0400
-X-MC-Unique: 0J7M2KjINFGZRo_4p2zHfQ-1
-Received: by mail-oo1-f72.google.com with SMTP id w3-20020a4a3543000000b003247262c123so2173551oog.12
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:44:35 -0700 (PDT)
+        Thu, 21 Apr 2022 04:48:38 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5D6B1F8;
+        Thu, 21 Apr 2022 01:45:50 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id j6so3072803qkp.9;
+        Thu, 21 Apr 2022 01:45:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vEFTLGDtfWVDHuldQRqU5lfCf1pN2Vgy21hTY3jHvgQ=;
+        b=QhpKmsYZOuFIkN4tj3pzITIfRmGL2Vw7l/+c8exFfYc6R07W66oKCSEfVx2uaiEotL
+         oMxreb9mw2xifvpnos2nFc3Y2+pdADJx2Mzr33z93JKDagA8B8gZ9M3RJmE/ZsUVBywj
+         6NhWmo/mn8Hailgt9VnTYmHQr8KdQLM3r7NM+f9mZYcbuA1IASqlV+ieBLPerESqtg+N
+         NnfHz6vOjwdViQaT6M6I0k1ZUuk8kYlViRnDQhJqf5nIpRDaGdrtG02MRkYw7umTQsbl
+         lPLjKRJ5bJUlzzEaxEWpz3NpIyokwG7NKEcnvJvD+TYn16T+Hhh1VEjwRCLAR5Txf8JU
+         pQQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BjQSABeMSCNqX6QeqXkLKcmoGWtgGGp59tDCHP5J+Ac=;
-        b=wEtVJBGHFg2kJvBsi68WZR8FQDMkU/CgSCvbgm/7+WchR6tkPjM1WQd+CsxAC86nwJ
-         PsucUAVEiQjxO+AwNqBU58/P/Z1HfjS0QkUmsCf3/cNbl8TZ39hh8AB9f2LH13mUb2hC
-         oc+4ui3Fh1OMvArl4bKH5zDyyM4RGXkTcYKI0LLRCQAk1VKVDZOFtpwkI+ZLQP6gYxvf
-         DGig3MIXdv0cd1EWvGpeaBsWrFdpIITas5IPT/1BX8M8LutiMY37fRl6hRTK67a7oD7t
-         5gYfJfk5Dv8Tvq2q4FEviAOCWtWa1ZLSYeeidjaJLQXabDnCvkf++M4Jj4GdMrS5axnj
-         UU9w==
-X-Gm-Message-State: AOAM532a4tlobADCm99xMNvDBfQiNSCUW1PSojPyGa8vb4RqplofUI0P
-        N5+B0x/fCup0wbqphBPYLAMiXlTeaShqOHFDg5rz6vpvmk7j8vzN9XnVo7YiiNi8FEG4eS8gZ6t
-        d21egQDt+zxzpj3nCpMIOIUAIhjHIgTJveuqxgP0u
-X-Received: by 2002:a05:6870:2425:b0:de:2fb0:1caa with SMTP id n37-20020a056870242500b000de2fb01caamr3414757oap.115.1650530674561;
-        Thu, 21 Apr 2022 01:44:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxdqtMEDqqtdXHubsX3CoXNlFqsCvKkohk+MVa9R3FD88YtrXojSCIPXizce5GQSkfV5YslLb64htiFdppcjRU=
-X-Received: by 2002:a05:6870:2425:b0:de:2fb0:1caa with SMTP id
- n37-20020a056870242500b000de2fb01caamr3414749oap.115.1650530674370; Thu, 21
- Apr 2022 01:44:34 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vEFTLGDtfWVDHuldQRqU5lfCf1pN2Vgy21hTY3jHvgQ=;
+        b=LoAlNiZy/NhYaSF2L3cnPqzxmTkZo06m6HvdOeKSu+it7lNW9rw6mxADeXiluSTvYD
+         JonkmjVxAyb+IUtPWZTvi/hP7U8HgTA9owwWwzeXvb1tFw8RRRR84eh4oxAeHhXLU4ut
+         ZLjvVgDlXqpfhawbcy99QsjQ8ZgFaChuagGd4h9UP1VcP9FJCfG+Cy5B68hC4RuuXg25
+         DYdJASTSrhurCQn3Ed5IKiaHgcGRHvjifxwkQZkX1oW6FixWvL9ZqX3gs5GIbJJNdp00
+         PUg+/D8U+bF1Vguw/miDnvjp2vkFcKQPjsuQ3HBZkZHYC8EhurZdb10ut60lVxjkRuZm
+         DnEQ==
+X-Gm-Message-State: AOAM5315yxjUKICRYas4l6D8vzAgHM7Xp5ZIoY2u69KCemrNXSFB8gYR
+        8B2ToDyIBojtqgG3v7kM+p4=
+X-Google-Smtp-Source: ABdhPJy4CvLhO4p7WBjhapwu+eeHntufKSaitDCKftgQbXnaIlO7ZsLftW46MkYtHfvXRPLF2+8TbQ==
+X-Received: by 2002:a05:620a:4014:b0:69e:c20c:5064 with SMTP id h20-20020a05620a401400b0069ec20c5064mr7479298qko.111.1650530749339;
+        Thu, 21 Apr 2022 01:45:49 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id t17-20020a05620a035100b0069ea7219390sm2528245qkm.55.2022.04.21.01.45.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 01:45:49 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     thierry.reding@gmail.com, airlied@linux.ie
+Cc:     daniel@ffwll.ch, jonathanh@nvidia.com,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drm/tegra: Make use of the helper function devm_platform_ioremap_resource()
+Date:   Thu, 21 Apr 2022 08:45:42 +0000
+Message-Id: <20220421084542.2615381-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220420195425.34911-1-logang@deltatee.com>
-In-Reply-To: <20220420195425.34911-1-logang@deltatee.com>
-From:   Xiao Ni <xni@redhat.com>
-Date:   Thu, 21 Apr 2022 16:45:20 +0800
-Message-ID: <CALTww28fwNpm0O_jc7-2Xr0JSX9i6F1kgoUQ8m_k6ZgPa1XxXw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] Improve Raid5 Lock Contention
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        Song Liu <song@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 3:55 AM Logan Gunthorpe <logang@deltatee.com> wrote:
->
-> Hi,
->
-> This is v2 of this series which addresses Christoph's feedback and
-> fixes some bugs. The first posting is at [1]. A git branch is
-> available at [2].
->
-> --
->
-> I've been doing some work trying to improve the bulk write performance
-> of raid5 on large systems with fast NVMe drives. The bottleneck appears
-> largely to be lock contention on the hash_lock and device_lock. This
-> series improves the situation slightly by addressing a couple of low
-> hanging fruit ways to take the lock fewer times in the request path.
->
-> Patch 9 adjusts how batching works by keeping a reference to the
-> previous stripe_head in raid5_make_request(). Under most situtations,
-> this removes the need to take the hash_lock in stripe_add_to_batch_list()
-> which should reduce the number of times the lock is taken by a factor of
-> about 2.
->
-> Patch 12 pivots the way raid5_make_request() works. Before the patch, the
-> code must find the stripe_head for every 4KB page in the request, so each
-> stripe head must be found once for every data disk. The patch changes this
-> so that all the data disks can be added to a stripe_head at once and the
-> number of times the stripe_head must be found (and thus the number of
-> times the hash_lock is taken) should be reduced by a factor roughly equal
-> to the number of data disks.
->
-> The remaining patches are just cleanup and prep patches for those two
-> patches.
->
-> Doing apples to apples testing this series on a small VM with 5 ram
-> disks, I saw a bandwidth increase of roughly 14% and lock contentions
-> on the hash_lock (as reported by lock stat) reduced by more than a factor
-> of 5 (though it is still significantly contended).
->
-> Testing on larger systems with NVMe drives saw similar small bandwidth
-> increases from 3% to 20% depending on the parameters. Oddly small arrays
-> had larger gains, likely due to them having lower starting bandwidths; I
-> would have expected larger gains with larger arrays (seeing there
-> should have been even fewer locks taken in raid5_make_request()).
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
+Use the devm_platform_ioremap_resource() helper instead of calling
+platform_get_resource() and devm_ioremap_resource() separately.Make the
+code simpler without functional changes.
 
-Hi Logan
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/gpu/drm/tegra/vic.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-Could you share the commands to get the test result (lock contention
-and performance)?
+diff --git a/drivers/gpu/drm/tegra/vic.c b/drivers/gpu/drm/tegra/vic.c
+index 1e342fa3d27b..daba4f6cc328 100644
+--- a/drivers/gpu/drm/tegra/vic.c
++++ b/drivers/gpu/drm/tegra/vic.c
+@@ -409,7 +409,6 @@ static int vic_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct host1x_syncpt **syncpts;
+-	struct resource *regs;
+ 	struct vic *vic;
+ 	int err;
+ 
+@@ -430,13 +429,7 @@ static int vic_probe(struct platform_device *pdev)
+ 	if (!syncpts)
+ 		return -ENOMEM;
+ 
+-	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!regs) {
+-		dev_err(&pdev->dev, "failed to get registers\n");
+-		return -ENXIO;
+-	}
+-
+-	vic->regs = devm_ioremap_resource(dev, regs);
++	vic->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(vic->regs))
+ 		return PTR_ERR(vic->regs);
+ 
+-- 
+2.25.1
 
-Regards
-Xiao
 

@@ -2,125 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D58C509BB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819A0509B86
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387267AbiDUJJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S1387275AbiDUJJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387248AbiDUJJt (ORCPT
+        with ESMTP id S1387266AbiDUJJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:09:49 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6483A13F80;
-        Thu, 21 Apr 2022 02:07:00 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b58ed329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58ed:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 21 Apr 2022 05:09:52 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F8A13F80;
+        Thu, 21 Apr 2022 02:07:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 138A01EC0494;
-        Thu, 21 Apr 2022 11:06:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1650532015;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=/XNPrYZHxTg+fJqCxP6Bu5DzD0BsDwIuIH78Wom1XZY=;
-        b=AUcf2kulEbN6ePzzyV96IrdVGG53S2xSGV9y58AngYuKlOIU08DGcA8w8q6hvACWeV2gDE
-        5ei/j/rft3vQUBLkUxvIOXcSWEs4wnXAQCVDT/q01f/e2BqhePMfaBgAsZff60KtQ4wQ6H
-        Gi/X88ki37E5nEldEUEACr/0VRVPGx4=
-Date:   Thu, 21 Apr 2022 11:06:54 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     michal.simek@xilinx.com, Shubhrajyoti.datta@xilinx.com,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com
-Subject: Re: [PATCH V2 2/2] EDAC: synopsys: re-enable the interrupts in
- intr_handler for V3.X Synopsys EDAC DDR
-Message-ID: <YmEerhSXM0L8cUuj@zn.tnic>
-References: <20220421015313.5747-1-sherry.sun@nxp.com>
- <20220421015313.5747-3-sherry.sun@nxp.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CBC07210DC;
+        Thu, 21 Apr 2022 09:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650532021; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OS/VR6GfiJTG1H0XoC9LyXhebkbunusT7zHO9RtN9+I=;
+        b=rLh0CVu1uCteslNToqZszYYDKk+ShASvH6rvGUUHGR7Id2C4xyuOcX/Fy/5489qC3I10HZ
+        4gqZkWcAXoLgqZx6lG9inHgidJAZZLbLz33QdOJxA8SpzQGh+JCsuTP3Lc9W+2B4CpIkqn
+        vxntCvTajZ+AB0BwKheP46IPwCpqU0M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650532021;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OS/VR6GfiJTG1H0XoC9LyXhebkbunusT7zHO9RtN9+I=;
+        b=WSTVJK4hXe0Ok1qNJO3hGZ2dZ6AeFTe85w9kOm21TMs6SJJEQvY1kDqDgvdRrgu6Dqnlxz
+        PCcC6LYmCCQfJOBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 93E6113446;
+        Thu, 21 Apr 2022 09:07:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JNIfI7UeYWKFOwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 21 Apr 2022 09:07:01 +0000
+Message-ID: <ab2d7181-b125-e6fc-fc48-427c0d94ade9@suse.de>
+Date:   Thu, 21 Apr 2022 11:07:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220421015313.5747-3-sherry.sun@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] drm/nvdla: Add driver support for NVDLA
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+References: <20220419135908.39606-1-cai.huoqing@linux.dev>
+ <20220419135908.39606-3-cai.huoqing@linux.dev>
+ <2aeee5a2-b5a5-348e-ccf7-04f49e1119da@suse.de>
+ <b34fa2a5-58b4-6270-2d19-2ad591e3e250@amd.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <b34fa2a5-58b4-6270-2d19-2ad591e3e250@amd.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------N2T6yIUS8Dcm4LrvKJgazcgZ"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 09:53:13AM +0800, Sherry Sun wrote:
-> Since zynqmp_get_error_info() is called during CE/UE interrupt, at the
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------N2T6yIUS8Dcm4LrvKJgazcgZ
+Content-Type: multipart/mixed; boundary="------------MW6Apu97NdqqZiSyxMK7yKiV";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ Cai Huoqing <cai.huoqing@linux.dev>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Message-ID: <ab2d7181-b125-e6fc-fc48-427c0d94ade9@suse.de>
+Subject: Re: [PATCH 2/2] drm/nvdla: Add driver support for NVDLA
+References: <20220419135908.39606-1-cai.huoqing@linux.dev>
+ <20220419135908.39606-3-cai.huoqing@linux.dev>
+ <2aeee5a2-b5a5-348e-ccf7-04f49e1119da@suse.de>
+ <b34fa2a5-58b4-6270-2d19-2ad591e3e250@amd.com>
+In-Reply-To: <b34fa2a5-58b4-6270-2d19-2ad591e3e250@amd.com>
 
-This also needs to be made human-readable: for example,
-"zynqmp_get_error_info() reads the error information from the registers
-when an interrupt for a {un-,}correctable error is raised."
+--------------MW6Apu97NdqqZiSyxMK7yKiV
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> end of zynqmp_get_error_info(), it wirtes 0 to ECC_CLR_OFST, which cause
+DQoNCkFtIDIxLjA0LjIyIHVtIDEwOjM0IHNjaHJpZWIgQ2hyaXN0aWFuIEvDtm5pZzoNCj4g
+QW0gMjEuMDQuMjIgdW0gMTA6MzAgc2NocmllYiBUaG9tYXMgWmltbWVybWFubjoNCj4+IChS
+ZXNlbmRpbmcsIGFzIHNvbWUgTUxzIGRpZG4ndCBsaWtlIHRoZSBzaXplIG9mIHRoZSBvcmln
+bmluYWwgbWFpbC4pDQo+Pg0KPj4gSGksDQo+Pg0KPj4gdGhhbmtzIGZvciB5b3VyIHN1Ym1p
+c3Npb24uIFNvbWUgZ2VuZXJhbCBjb21tZW50czoNCj4+DQo+PiDCoCAqIHNvbWUgZnVuY3Rp
+b25zIGFyZSBwcmVmaXhlZCB3aXRoIGRsYV8sIG90aGVycyB1c2UgbnZkbGFfLiBJdCBzZWVt
+cyANCj4+IGFyYml0cmFyeSB0byBtZS4gUGxlYXNlIHVzZSBudmRsYV8gY29uc2lzdGVudGx5
+IHRocm91Z2hvdXQgdGhlIHNvdXJjZSANCj4+IGNvZGUuDQo+Pg0KPj4gwqAgKiBGb3IgcmVw
+b3J0aW5nIGVycm9ycywgcGxlYXNlIHVzZSBkcm1fZXJyKCksIGRybV93YXJuKCksIGV0Yy4g
+SSANCj4+IHN1Z2dlc3QgdG8gcmVhcnJhbmdlIHRoZSBlcnJvciBtZXNzYWdlcyB0byBub3Qg
+YmUgbG9jYXRlZCBpbiB0aGUgDQo+PiBpbm5lcm1vc3QgZnVuY3Rpb25zLg0KPiANCj4gSWYg
+eW91IHBsYW4gdG8gaGF2ZSBtdWx0aXBsZSBpbnN0YW5jZXMgb2YgdGhlIGRyaXZlciBsb2Fk
+ZWQgYXQgdGhlIHNhbWUgDQo+IHRpbWUsIHVzaW5nIGRybV9kZXZfZXJyKCksIGRybV9kZXZf
+d2FybigpIGV0Yy4uIHdvdWxkIGJlIGV2ZW4gYmV0dGVyLg0KPiANCj4gQlRXOiBJJ20gc3Rp
+bGwgYWJzb2x1dGVseSBub3Qga2VlbiB0byBlbmZvcmNpbmcgZHJtXyogbG9nIGZ1bmN0aW9u
+cy4gU28gDQo+IGlmIHlvdSBwcmVmZXIgdG8gc3RpY2sgd2l0aCBwcl9lcnIoKSBhbmQgZGV2
+X2VycigpIHdlIGNvdWxkIGRpc2N1c3MgdGhhdCANCj4gb25jZSBtb3JlLg0KDQpJIG9mdGVu
+IGRvICdkbWVzZyB8IGdyZXAgZHJtJyB0byBxdWlja2x5IGxvb2sgZm9yIGVycm9ycy4gTm90
+IHVzaW5nIGRybSANCmxvZ2dpbmcgaGVscGVycyBtYWtlcyB0aGlzIGxlc3MgdXNlZnVsLg0K
+DQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiBSZWdhcmRzLA0KPiBDaHJpc3RpYW4u
+DQo+IA0KPj4NCj4+IMKgICogQ291bGQgeW91IHBsZWFzZSBzcGxpdCB0aGlzIHBhdGNoIGlu
+dG8gc21hbGxlciBwaWVjZXM/IEl0IA0KPj4gY3VycmVudGx5IGhpdHMgc2l6ZSBsaW1pdHMg
+b2Ygc29tZSBtYWlsaW5nIGxpc3RzLiBNYXliZSBhZGQgdGhlIA0KPj4gcmVnaXN0ZXIgY29u
+c3RhbnRzIHNlcGFyYXRlbHkuDQo+Pg0KPj4gUGxlYXNlIGZpbmQgbW9yZSByZXZpZXcgY29t
+bWVudHMgYmVsb3cuIEl0J3Mgbm90IGEgZnVsbCByZXZpZXcsIGJ1dCBhdCANCj4+IGxlYXN0
+IHNvbWV0aGluZyB0byBzdGFydCB3aXRoLg0KPj4NCj4+IEJlc3QgcmVnYXJkcw0KPj4gVGhv
+bWFzDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2
+ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRz
+dHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5i
+ZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-Unknown word [wirtes] in commit message.
-Suggestions: ['writes',
+--------------MW6Apu97NdqqZiSyxMK7yKiV--
 
-Please introduce a spellchecker into your patch creation workflow.
+--------------N2T6yIUS8Dcm4LrvKJgazcgZ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> the CE/UE interrupts of V3.X Synopsys EDAC DDR been disabled, then the
+-----BEGIN PGP SIGNATURE-----
 
-"which disables the error interrupts" - make it simple - no need for the
-V3.X marketing bla.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJhHrUFAwAAAAAACgkQlh/E3EQov+A9
+EA/+M1CDH5IqOym52dk60W3n2FvRPzLvtn0OR5TOR8WauG2VLkPvFiZnPBKSXdGaQOzGiO0sO13/
+OZTb+AWD7o3o1ZMHYxUVO4XC//41efhqkB5NIa2nKV9hePmLRLdjeqDHUSPjXVoafD/vrn++gCaV
+hbaLk+wmWQb6GFoBde1p8n+vcqg5YNNLRs8gftSWq4dmTUD7XnCfQ2KOuIlmBynJ9RNd9NOrRTBz
+O1FxSwSQ38pT1D4dtpytjqm3txc0mS5VbYMZvp9laams/rsDEcCCmk8evCX3nq4HGCFUOHYA35w0
+xHws+GTN9ImvKKbApdhyvYYKSmqQRcEfGPHxDQsvn2yyKE/aVjyPeDgz589XbaH9RfvfHL8NumUy
+s4Hia6oW1xf+pR8z1NLy1t/Bl0xn5iydAPhm/9VFfD7MqTokiwhZaFriMcpp5l9r5EUGlW2gxpzR
+HeSibmwWzbdh4/YB3Xv8MZhVXbURU/YHw+XwHIXyJsMjQnPP43QCvtxtrhrnOSTSYMDFlCPsbFM8
+f8B+tQdjTbON9Cev0dA07I5dKIkRWKWuh3N04C+THNTAL8zesnWDq8Sz2zeVJYSO4UXoM+s51CLX
+CYwwnFpnYq+ayYetpSIkbDy2gT5yfm6kqJgpXFH+GWCofwWn7f5y9BGXD/dx/DNAq6nHH3QelsPi
+kUM=
+=jsEe
+-----END PGP SIGNATURE-----
 
-> interrupt handler will be called only once, so need to re-enable the
-
-"Therefore, reenable the error interrupt line ..."
-
-> interrupts at the end of intr_handler for V3.X Synopsys EDAC DDR.
-
-I think you're catching my drift: our commit messages need to be
-understandable and when read months, years from now, still to make
-sense.
-
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> Reviewed-by: Shubhrajyoti Datta <Shubhrajyoti.datta@xilinx.com>
-> Acked-by: Michal Simek <michal.simek@xilinx.com>
-> ---
-> Changes in V2:
-> 1. Add the Reviewed-by and Acked-by tag.
-> 2. Add the newline as suggested by Michal.
-> ---
->  drivers/edac/synopsys_edac.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-> index 88a481043d4c..ae1cf02a92f5 100644
-> --- a/drivers/edac/synopsys_edac.c
-> +++ b/drivers/edac/synopsys_edac.c
-> @@ -527,6 +527,8 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
->  	memset(p, 0, sizeof(*p));
->  }
->  
-> +static void enable_intr(struct synps_edac_priv *priv);
-
-Why the forward declaration?
-
-Why not simply move {enable,disable}_intr() upwards in that file?
-
-Also, for both fixes: do you want them backported in stable kernels?
-
-I think you do because they look like you'd want that v3.x support to
-work with older kernels too.
-
-If so, read the section about "Fixes:" in
-Documentation/process/submitting-patches.rst
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+--------------N2T6yIUS8Dcm4LrvKJgazcgZ--

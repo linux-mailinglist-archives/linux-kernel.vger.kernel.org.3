@@ -2,73 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B990450958B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 05:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAB2509591
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 05:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384004AbiDUDuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 23:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
+        id S1384015AbiDUDve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 23:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242476AbiDUDuC (ORCPT
+        with ESMTP id S242476AbiDUDvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 23:50:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2E03AE7A
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 20:47:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88C2B1477;
-        Wed, 20 Apr 2022 20:47:14 -0700 (PDT)
-Received: from [192.168.225.231] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CCDB3F73B;
-        Wed, 20 Apr 2022 20:47:12 -0700 (PDT)
-Message-ID: <9859ad1d-9520-f026-328a-e0c29fd3b960@arm.com>
-Date:   Thu, 21 Apr 2022 09:17:50 +0530
+        Wed, 20 Apr 2022 23:51:32 -0400
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FC2AE74;
+        Wed, 20 Apr 2022 20:48:44 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id s17so3633294plg.9;
+        Wed, 20 Apr 2022 20:48:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OUAbMOKMp5owJVOPtlSKuDgkloZWwnX8sHS+jtpwsi4=;
+        b=0KiGV3VHLJ0AbetI3njD67YKXlNZdYImfWMIjJft87cDV9OONPlfJihXMUbP2rHTsm
+         NCL6k997/NiCTFQi2pXUzMBge+oZUyqsLoXc70+Hv0OUtAjY/cztYem6vYu5Jm1lJvTt
+         w5ve5oJTPFUsjMtrhImoa12dRLVSfgsDTsIUuYZ+gtIEtJ4h3t6PDKh35/EXb9Kv6MO9
+         a8X31or2U7xYgFqmIBisKlwikaim5YSXJqmII7ljkYEgEFCzVqDcqOZh6Msirm7wqH7a
+         68RcpNtwHg/BGvwSQQbYDgLhfchsl3ix2AHDC0clgx2bHdFt2xYjUYHTXqTBF9QEAGR/
+         no4Q==
+X-Gm-Message-State: AOAM532ZWGgtzyZZBqjmEm3qRmC807FXXNbjVtRqaH6HZmBxr24AfbH6
+        983eJ3Wvwl2jpy3DfV9PcBs=
+X-Google-Smtp-Source: ABdhPJwWAeOID9sQFTF9M5n47crYltU3I8lINZEJBhedJrYeNUdgVQT4ecFYiWY7ukglav/wlZdfZQ==
+X-Received: by 2002:a17:90a:e7c3:b0:1d4:9d67:4938 with SMTP id kb3-20020a17090ae7c300b001d49d674938mr6154488pjb.10.1650512923317;
+        Wed, 20 Apr 2022 20:48:43 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id b16-20020a056a00115000b004f6ff260c9esm21774731pfm.207.2022.04.20.20.48.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 20:48:42 -0700 (PDT)
+Message-ID: <f66f17bd-67a1-b888-01a6-4c1a02f1e21b@acm.org>
+Date:   Wed, 20 Apr 2022 20:48:39 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mm/page_table_check: Drop all redundant EXPORT_SYMBOL()
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/5] scsi: ufshpb: Merge ufshpb_reset() and
+ ufshpb_reset_host()
 Content-Language: en-US
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220420060221.1107736-1-anshuman.khandual@arm.com>
- <CA+CK2bARgsgBAgawfAD8-xzDN6+_sg4zrPQnoTFy4b=ZMx_u1g@mail.gmail.com>
- <YmDOKJCZteqrKr61@casper.infradead.org>
- <CA+CK2bCYp3+VLLFwrQpC8su1C-NvjdiKs39TFcFh=BTDgB92fQ@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <CA+CK2bCYp3+VLLFwrQpC8su1C-NvjdiKs39TFcFh=BTDgB92fQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Bean Huo <huobean@gmail.com>, keosung.park@samsung.com,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "powen.kao@mediatek.com" <powen.kao@mediatek.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        cpgsproxy3 <cpgsproxy3@samsung.com>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220419183044.789065-2-huobean@gmail.com>
+ <20220419183044.789065-1-huobean@gmail.com>
+ <CGME20220419183926epcas2p4f529c4cc6bed9ba4b6536f3a5977c3f2@epcms2p8>
+ <1891546521.01650433981606.JavaMail.epsvc@epcpadp4>
+ <db1551628c191c8efdc2e7bec1313c58636c995e.camel@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <db1551628c191c8efdc2e7bec1313c58636c995e.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/21/22 09:02, Pasha Tatashin wrote:
-> On Wed, Apr 20, 2022 at 11:23 PM Matthew Wilcox <willy@infradead.org> wrote:
+On 4/20/22 05:48, Bean Huo wrote:
+> On Wed, 2022-04-20 at 11:47 +0900, Keoseong Park wrote:
+>>> +void ufshpb_toggle(struct ufs_hba *hba, enum UFSHPB_STATE src,
+>>> enum UFSHPB_STATE dest)
+>> How about changing it to something like ufshpb_state_toggle()?
 >>
->> On Wed, Apr 20, 2022 at 12:54:08PM -0400, Pasha Tatashin wrote:
->>> The rest of EXPORTs were added to be symmetric, and allow other
->>> drivers to use set_*p**()/clear_p** calls.
->>
->> EXPORT_SYMBOLs actually have a real cost.  We don't add them "for
->> symmetry".
+>> Best Regards,
+>> Keoseong Park
 > 
-> Sure, the rest of exports can be removed, but:
-> 
->> -EXPORT_SYMBOL(__page_table_check_pte_set);
-> 
-> must stay because of
-> 
-> ERROR: modpost: "__page_table_check_pte_set"
-> [drivers/gpu/drm/i915/i915.ko] undefined!
+> ufshpb_state_toggle() is much better, I will change it in the next
+> version. Thanks.
 
-Sure, will resend.
+How about ufshbp_toggle_state() such that the word order is correct?
+
+Thanks,
+
+Bart.
+

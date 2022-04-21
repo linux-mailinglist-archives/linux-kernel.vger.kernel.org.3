@@ -2,79 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581CB509C3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83F4509C48
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387660AbiDUJbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S1387706AbiDUJdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387657AbiDUJbk (ORCPT
+        with ESMTP id S1386167AbiDUJdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:31:40 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F769286D7;
-        Thu, 21 Apr 2022 02:28:50 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 21 Apr
- 2022 17:28:50 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 21 Apr
- 2022 17:28:48 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     Haowen Bai <baihaowen@meizu.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] scsi: bfa: Drop redundant memset
-Date:   Thu, 21 Apr 2022 17:28:47 +0800
-Message-ID: <1650533327-29396-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 21 Apr 2022 05:33:09 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391BCDED5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:30:20 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id p12so2068231lfs.5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=67sfB0IzHVXeR5A8puxseus3O+X5kUTFhlECjiPj6x4=;
+        b=fmIPbE1IBLcf3qYXbw+olE1xUMN93LGj1KaoeCohxNiXqe/IYmOR+GNMCYDO9BV3c5
+         v8VrA2RrG9XLDbSN1FgCSuioGJ5TOoSErvJmCZpZsunnR+EtJv70QquoeihauNHuR0UP
+         RirMlujj/Ha9r1dj1uUgIFTR3YrP1u/zjmXzkYSgv1J68uNJPbBu/73B2Sh2kwRKqugs
+         inRGGd2FlV103fq8wddg04I7qf3rcM2wr7PTd0UYBkj36CXEV4Uf5QfdjYvDFLwyOON2
+         aj5KJBCk1OJIDEVhC5GjAywZQAa/N1Xi6UfsgqhbtrtTWIeyitADL3C3l2X1Syi4OyB2
+         9VCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=67sfB0IzHVXeR5A8puxseus3O+X5kUTFhlECjiPj6x4=;
+        b=tPY+wRsdttJGQYUOlLZEZQXsvrybSuhrSnloYs2VmZGJ5RPMOxbvmnialjQKUKlajv
+         hGrVLk84x9YLo3tXdOOzDTyokl7ZoFWmLrhCpORQ3nPkhoSzGHPxcpJ53Ur7dFtriLT8
+         +aeu61Hafd/er9HLTuXY9JCqdxc57yDr8MxKc/9c8tqPvuauXqCH6uRSw5J0RcXTMhGx
+         Itf784j9kO368HLinnqQ3OhlQmcgm+D1wxTShzTOeZqhMtTLH84HW5QONNDCNL58v4AC
+         cq9+y2muxmyQkRAJXgp175um3hr0EEN7EEdd2Mgxq/oaSzQLAnlqoBgXKrWLt94qd8r2
+         qJ/A==
+X-Gm-Message-State: AOAM533LMsWYqruqsOaxfAd3VmIQdByGn+vnKYCHh3K8LuWMgYB9Po6B
+        wBbTbsYUwWh5Ky3xjZhCpaBPZbju02oH02FOF0jt/w==
+X-Google-Smtp-Source: ABdhPJzoFpYEMBId0vI8slCjJdfA2UOYmWG5jdk+Km/dMYqYelRd2ehVOg2cAmAYllGKHBeStzko5XCzXa5i312zsiw=
+X-Received: by 2002:ac2:5ddc:0:b0:46b:85a3:9c3 with SMTP id
+ x28-20020ac25ddc000000b0046b85a309c3mr18314110lfq.130.1650533418465; Thu, 21
+ Apr 2022 02:30:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220412033335.1384230-1-apatel@ventanamicro.com>
+In-Reply-To: <20220412033335.1384230-1-apatel@ventanamicro.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Thu, 21 Apr 2022 15:00:05 +0530
+Message-ID: <CAK9=C2UB-SKcb2Lf=m9VQZnOmkoY1W=kNeSJ40VcVXfr5WuPZQ@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: mm: Fix set_satp_mode() for platform not having Sv57
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The region set by the call to memset is immediately overwritten by the
-subsequent call to memcpy. So we drop redundant memset.
+Hi Palmer,
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/scsi/bfa/bfa_ioc.c | 2 --
- 1 file changed, 2 deletions(-)
+On Tue, Apr 12, 2022 at 9:04 AM Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> When Sv57 is not available the satp.MODE test in set_satp_mode() will
+> fail and lead to pgdir re-programming for Sv48. The pgdir re-programming
+> will fail as well due to pre-existing pgdir entry used for Sv57 and as
+> a result kernel fails to boot on RISC-V platform not having Sv57.
+>
+> To fix above issue, we should clear the pgdir memory in set_satp_mode()
+> before re-programming.
+>
+> Fixes: 011f09d12052 ("riscv: mm: Set sv57 on defaultly")
+> Reported-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 
-diff --git a/drivers/scsi/bfa/bfa_ioc.c b/drivers/scsi/bfa/bfa_ioc.c
-index 5740302d83ac..2227e46a4813 100644
---- a/drivers/scsi/bfa/bfa_ioc.c
-+++ b/drivers/scsi/bfa/bfa_ioc.c
-@@ -2748,7 +2748,6 @@ bfa_ioc_get_type(struct bfa_ioc_s *ioc)
- void
- bfa_ioc_get_adapter_serial_num(struct bfa_ioc_s *ioc, char *serial_num)
- {
--	memset((void *)serial_num, 0, BFA_ADAPTER_SERIAL_NUM_LEN);
- 	memcpy((void *)serial_num,
- 			(void *)ioc->attr->brcd_serialnum,
- 			BFA_ADAPTER_SERIAL_NUM_LEN);
-@@ -2757,7 +2756,6 @@ bfa_ioc_get_adapter_serial_num(struct bfa_ioc_s *ioc, char *serial_num)
- void
- bfa_ioc_get_adapter_fw_ver(struct bfa_ioc_s *ioc, char *fw_ver)
- {
--	memset((void *)fw_ver, 0, BFA_VERSION_LEN);
- 	memcpy(fw_ver, ioc->attr->fw_version, BFA_VERSION_LEN);
- }
- 
--- 
-2.7.4
+Can this be considered for 5.18-rcX ?
 
+Regards,
+Anup
+
+> ---
+>  arch/riscv/mm/init.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 9535bea8688c..b0793dc0c291 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -718,6 +718,7 @@ static __init void set_satp_mode(void)
+>                 if (!check_l4) {
+>                         disable_pgtable_l5();
+>                         check_l4 = true;
+> +                       memset(early_pg_dir, 0, PAGE_SIZE);
+>                         goto retry;
+>                 }
+>                 disable_pgtable_l4();
+> --
+> 2.25.1
+>

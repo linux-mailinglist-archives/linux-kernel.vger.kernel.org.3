@@ -2,131 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C5F50A4A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A676E50A4EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390313AbiDUPv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S1390444AbiDUQC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 12:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiDUPv2 (ORCPT
+        with ESMTP id S1390432AbiDUQCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:51:28 -0400
-Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AA164738D;
-        Thu, 21 Apr 2022 08:48:35 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha.nfschina.com (Postfix) with ESMTP id 71E1D1E80D0B;
-        Thu, 21 Apr 2022 23:46:02 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha.nfschina.com ([127.0.0.1])
-        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5oMn8UwNA64M; Thu, 21 Apr 2022 23:45:59 +0800 (CST)
-Received: from ubuntu.localdomain (unknown [101.228.255.56])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by ha.nfschina.com (Postfix) with ESMTPA id EA9491E80CF9;
-        Thu, 21 Apr 2022 23:45:58 +0800 (CST)
-From:   Yu Zhe <yuzhe@nfschina.com>
-To:     mareklindner@neomailbox.ch, sw@simonwunderlich.de, a@unstable.cc,
-        sven@narfation.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        kernel-janitors@vger.kernel.org, Yu Zhe <yuzhe@nfschina.com>
-Subject: [PATCH] batman-adv: remove unnecessary type castings
-Date:   Thu, 21 Apr 2022 08:48:29 -0700
-Message-Id: <20220421154829.9775-1-yuzhe@nfschina.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Apr 2022 12:02:54 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627D310FF9;
+        Thu, 21 Apr 2022 09:00:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650556804; x=1682092804;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Km40a1E7MdBXZjMmkalg5GAvHR3jO7GjMsaP0SncP9Q=;
+  b=kiqeBEAEMShJWEJrHTZ5Oe8IPWtB0e+oWKUWYiLVd+yYn9rX8tCfIJ9A
+   8k5Y37f22Ie221ORenGHR0PVzve2leYPJKSI68pQQNGiSNR4o7gKixwhe
+   kd/zu6dPVYXd2qe5tc6l8l321Ie84SsukEqB1C1b330TqNJuGh/rRaQ/H
+   EYEHFsoec0v2yUsIreD1kWxFVwoMRZXBN4OlHervEWWmeMMIyEnGVT7/3
+   O2tnwOMRX/jIpnj5pvUpraneaZT7sD7UWmIZpdNkQgKDmnmUxwteBodvo
+   vuTPu7Y7w8KuGxPFVmeSi9QQnu/ho0YqXU6PXeCLdgfoM5O4pYdqbnJBU
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264567203"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="264567203"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 09:00:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="577313641"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga008.jf.intel.com with ESMTP; 21 Apr 2022 09:00:00 -0700
+Date:   Thu, 21 Apr 2022 23:52:23 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        git@xilinx.com
+Subject: Re: [PATCH v5 1/5] fpga: zynq: Fix incorrect variable type
+Message-ID: <20220421155223.GB347460@yilunxu-OptiPlex-7050>
+References: <20220421044744.3777983-1-nava.manne@xilinx.com>
+ <20220421044744.3777983-2-nava.manne@xilinx.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421044744.3777983-2-nava.manne@xilinx.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove unnecessary void* type castings.
+On Thu, Apr 21, 2022 at 10:17:40AM +0530, Nava kishore Manne wrote:
+> zynq_fpga_has_sync () API is expecting "u8 *" but the
+> formal parameter that was passed is of type "const char *".
+> fixes this issue by changing the buf type to "const char *"
 
-Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
----
- net/batman-adv/bridge_loop_avoidance.c |  4 ++--
- net/batman-adv/translation-table.c     | 10 +++++-----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+  Fix this issue by ...
 
-diff --git a/net/batman-adv/bridge_loop_avoidance.c b/net/batman-adv/bridge_loop_avoidance.c
-index 7f8a14d99cdb..38cc21370eda 100644
---- a/net/batman-adv/bridge_loop_avoidance.c
-+++ b/net/batman-adv/bridge_loop_avoidance.c
-@@ -65,7 +65,7 @@ batadv_bla_send_announce(struct batadv_priv *bat_priv,
-  */
- static inline u32 batadv_choose_claim(const void *data, u32 size)
- {
--	struct batadv_bla_claim *claim = (struct batadv_bla_claim *)data;
-+	struct batadv_bla_claim *claim = data;
- 	u32 hash = 0;
- 
- 	hash = jhash(&claim->addr, sizeof(claim->addr), hash);
-@@ -86,7 +86,7 @@ static inline u32 batadv_choose_backbone_gw(const void *data, u32 size)
- 	const struct batadv_bla_backbone_gw *gw;
- 	u32 hash = 0;
- 
--	gw = (struct batadv_bla_backbone_gw *)data;
-+	gw = data;
- 	hash = jhash(&gw->orig, sizeof(gw->orig), hash);
- 	hash = jhash(&gw->vid, sizeof(gw->vid), hash);
- 
-diff --git a/net/batman-adv/translation-table.c b/net/batman-adv/translation-table.c
-index 8478034d3abf..f579060aa503 100644
---- a/net/batman-adv/translation-table.c
-+++ b/net/batman-adv/translation-table.c
-@@ -106,7 +106,7 @@ static inline u32 batadv_choose_tt(const void *data, u32 size)
- 	struct batadv_tt_common_entry *tt;
- 	u32 hash = 0;
- 
--	tt = (struct batadv_tt_common_entry *)data;
-+	tt = data;
- 	hash = jhash(&tt->addr, ETH_ALEN, hash);
- 	hash = jhash(&tt->vid, sizeof(tt->vid), hash);
- 
-@@ -2766,7 +2766,7 @@ static void batadv_tt_tvlv_generate(struct batadv_priv *bat_priv,
- 	u32 i;
- 
- 	tt_tot = batadv_tt_entries(tt_len);
--	tt_change = (struct batadv_tvlv_tt_change *)tvlv_buff;
-+	tt_change = tvlv_buff;
- 
- 	if (!valid_cb)
- 		return;
-@@ -3994,7 +3994,7 @@ static void batadv_tt_tvlv_ogm_handler_v1(struct batadv_priv *bat_priv,
- 	if (tvlv_value_len < sizeof(*tt_data))
- 		return;
- 
--	tt_data = (struct batadv_tvlv_tt_data *)tvlv_value;
-+	tt_data = tvlv_value;
- 	tvlv_value_len -= sizeof(*tt_data);
- 
- 	num_vlan = ntohs(tt_data->num_vlan);
-@@ -4037,7 +4037,7 @@ static int batadv_tt_tvlv_unicast_handler_v1(struct batadv_priv *bat_priv,
- 	if (tvlv_value_len < sizeof(*tt_data))
- 		return NET_RX_SUCCESS;
- 
--	tt_data = (struct batadv_tvlv_tt_data *)tvlv_value;
-+	tt_data = tvlv_value;
- 	tvlv_value_len -= sizeof(*tt_data);
- 
- 	tt_vlan_len = sizeof(struct batadv_tvlv_tt_vlan_data);
-@@ -4129,7 +4129,7 @@ static int batadv_roam_tvlv_unicast_handler_v1(struct batadv_priv *bat_priv,
- 		goto out;
- 
- 	batadv_inc_counter(bat_priv, BATADV_CNT_TT_ROAM_ADV_RX);
--	roaming_adv = (struct batadv_tvlv_roam_adv *)tvlv_value;
-+	roaming_adv = tvlv_value;
- 
- 	batadv_dbg(BATADV_DBG_TT, bat_priv,
- 		   "Received ROAMING_ADV from %pM (client %pM)\n",
--- 
-2.25.1
+> 
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
 
+With the minor fix, Acked-by: Xu Yilun <yilun.xu@intel.com>
+
+> ---
+> Changes for v2:
+>                 -None.
+> Changes for v3:
+>                - Changed arg buf type to "const char *" as suggested by Tom.
+>                - update zynq_fpga_has_sync () API description to align with API
+>                  functionality.
+> Changes for v4:
+>                - None.
+> 
+> Changes for v5:
+>                - Dropped the irrelevant doc update changes.
+> 
+>  drivers/fpga/zynq-fpga.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+> index 426aa34c6a0d..6beaba9dfe97 100644
+> --- a/drivers/fpga/zynq-fpga.c
+> +++ b/drivers/fpga/zynq-fpga.c
+> @@ -239,7 +239,7 @@ static irqreturn_t zynq_fpga_isr(int irq, void *data)
+>   * the correct byte order, and be dword aligned. The input is a Xilinx .bin
+>   * file with every 32 bit quantity swapped.
+>   */
+> -static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
+> +static bool zynq_fpga_has_sync(const char *buf, size_t count)
+>  {
+>  	for (; count >= 4; buf += 4, count -= 4)
+>  		if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
+> -- 
+> 2.25.1

@@ -2,128 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5E050946F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 02:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F4550943E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 02:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352074AbiDUAr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 20:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S1383504AbiDUAtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 20:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbiDUAr1 (ORCPT
+        with ESMTP id S1347647AbiDUAta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 20:47:27 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED39329813
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:44:39 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id s14so3322443plk.8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ESUxm4cSJyIm60549ToiEcMf0F7V0X1uPD4V4iCHr1g=;
-        b=iCLZwnUrJlXXS94NHeOiMqZdbp79cqEIAIkcxS3f1QhYmIU4Rn72icr+yGFMXL7sJq
-         wgPHBQcOdAxXOBEeXSWFmZ5+2+zhjQ3yYKyOCdd+LxjNIetmHSlz804tJPwbjm2t3CVd
-         i0t77FIu70AC9aRHobJ3ZLFq5TlHMCcTw2lxEXzjLpQ15yj7ycOSvanS6K0fwndiEz0m
-         fSlFP1OiPDmc80jD/DnJ4kPukwewQQPrzxhPUvTYAn+nTvjAwv6Sn/2ylRCR90Hn7gD3
-         FkxAg8MQH+lKjgDSJjoGIuqOfCZdVn7DMkDD9l2BZCVW6MgZZuzAX2gBwXuMwb1mNkau
-         LLow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ESUxm4cSJyIm60549ToiEcMf0F7V0X1uPD4V4iCHr1g=;
-        b=fa2nZpHgSDujhfyLvr7fdwwcwEL/AOzzXHr+ly9XuH6xzDKd2Z9M5w1GKEh1Lq7EPs
-         MbCFHqZcoFGhbv6Qnf129REFU1elmo0b+Zyb4KTkMLAHs3yWf7WQTd9u5hieKJd1aDIo
-         4I8H1ehuiGcFzR0Yuswu6i1sIyxNnFMczLDX7FQC232soXngUT67c++9/LQT1D0UqBSr
-         MzQ4JFYcA54GmT05abBepSC8wkDu3OZQHCgEHcdL+c9RZefgtU7CMK9nRMCq+FYbxHdU
-         g+VTiasd+P6joLLDKjAIYp9tNTNShjCpLeaZZqmmCFbhgtRlrNjvDecDeIprKQcSobNE
-         PWAg==
-X-Gm-Message-State: AOAM532zlHLkk0UJpgQKlG4G5NcMUYX/iUYkh5oKaN62v4p90pd/HvSR
-        YmuBstlRxWZWD10Z2oV07PI2PacNV84M3J2wr74OF3tV
-X-Google-Smtp-Source: ABdhPJziSwrhCSrYNTJmBFaWn3ITBCiVgMnq0qlf+ROQeo46KkFucBE9DDNvi7wGYLxJk3HuGVoiZKZmDBQxznThA90=
-X-Received: by 2002:a17:90b:4b10:b0:1d2:c235:6c8e with SMTP id
- lx16-20020a17090b4b1000b001d2c2356c8emr7292583pjb.21.1650501879483; Wed, 20
- Apr 2022 17:44:39 -0700 (PDT)
+        Wed, 20 Apr 2022 20:49:30 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09E218E;
+        Wed, 20 Apr 2022 17:46:41 -0700 (PDT)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KkJdx6jkYzCrbY;
+        Thu, 21 Apr 2022 08:42:13 +0800 (CST)
+Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 21 Apr 2022 08:46:39 +0800
+Received: from [127.0.0.1] (10.67.111.83) by dggpeml500008.china.huawei.com
+ (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 21 Apr
+ 2022 08:46:39 +0800
+Message-ID: <90205fce-05aa-c8d5-4e39-9529194723aa@huawei.com>
+Date:   Thu, 21 Apr 2022 08:46:39 +0800
 MIME-Version: 1.0
-References: <20220419122234.45083-1-linmiaohe@huawei.com>
-In-Reply-To: <20220419122234.45083-1-linmiaohe@huawei.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 20 Apr 2022 17:44:27 -0700
-Message-ID: <CAHbLzkp0Ok0ZKZvKXGaAEVGCQ3gU9zXxAV1eudpPaCZqqpcdpQ@mail.gmail.com>
-Subject: Re: [PATCH] mm/mempolicy: clean up the code logic in queue_pages_pte_range
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next] usb: typec: rt1719: Fix build error without
+ CONFIG_POWER_SUPPLY
+To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <cy_huang@richtek.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220418082425.41566-1-renzhijie2@huawei.com>
+From:   Ren Zhijie <renzhijie2@huawei.com>
+In-Reply-To: <20220418082425.41566-1-renzhijie2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.83]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500008.china.huawei.com (7.185.36.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 5:22 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+ping...
+
+在 2022/4/18 16:24, Ren Zhijie 写道:
+> Building without CONFIG_POWER_SUPPLY will fail:
 >
-> Since commit e5947d23edd8 ("mm: mempolicy: don't have to split pmd for
-> huge zero page"), THP is never splited in queue_pages_pmd. Thus 2 is
-> never returned now. We can remove such unnecessary ret != 2 check and
-> clean up the relevant comment. Minor improvements in readability.
-
-Nice catch. Yeah, it was missed when I worked on that commit.
-
-Reviewed-by: Yang Shi <shy828301@gmail.com>
-
+> drivers/usb/typec/rt1719.o: In function `rt1719_psy_set_property':
+> rt1719.c:(.text+0x10a): undefined reference to `power_supply_get_drvdata'
+> drivers/usb/typec/rt1719.o: In function `rt1719_psy_get_property':
+> rt1719.c:(.text+0x2c8): undefined reference to `power_supply_get_drvdata'
+> drivers/usb/typec/rt1719.o: In function `devm_rt1719_psy_register':
+> rt1719.c:(.text+0x3e9): undefined reference to `devm_power_supply_register'
+> drivers/usb/typec/rt1719.o: In function `rt1719_irq_handler':
+> rt1719.c:(.text+0xf9f): undefined reference to `power_supply_changed'
+> drivers/usb/typec/rt1719.o: In function `rt1719_update_pwr_opmode.part.9':
+> rt1719.c:(.text+0x657): undefined reference to `power_supply_changed'
+> drivers/usb/typec/rt1719.o: In function `rt1719_attach':
+> rt1719.c:(.text+0x83e): undefined reference to `power_supply_changed'
 >
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> Add POWER_SUPPLY dependency to Kconfig.
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes: 25d29b980912 ("usb: typec: rt1719: Add support for Richtek RT1719")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
 > ---
->  mm/mempolicy.c | 12 +++---------
->  1 file changed, 3 insertions(+), 9 deletions(-)
+>   drivers/usb/typec/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
 >
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index 75a8b247f631..3934476fb708 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -441,12 +441,11 @@ static inline bool queue_pages_required(struct page *page,
->  }
->
->  /*
-> - * queue_pages_pmd() has four possible return values:
-> + * queue_pages_pmd() has three possible return values:
->   * 0 - pages are placed on the right node or queued successfully, or
->   *     special page is met, i.e. huge zero page.
->   * 1 - there is unmovable page, and MPOL_MF_MOVE* & MPOL_MF_STRICT were
->   *     specified.
-> - * 2 - THP was split.
->   * -EIO - is migration entry or only MPOL_MF_STRICT was specified and an
->   *        existing page was already on a node that does not follow the
->   *        policy.
-> @@ -508,18 +507,13 @@ static int queue_pages_pte_range(pmd_t *pmd, unsigned long addr,
->         struct page *page;
->         struct queue_pages *qp = walk->private;
->         unsigned long flags = qp->flags;
-> -       int ret;
->         bool has_unmovable = false;
->         pte_t *pte, *mapped_pte;
->         spinlock_t *ptl;
->
->         ptl = pmd_trans_huge_lock(pmd, vma);
-> -       if (ptl) {
-> -               ret = queue_pages_pmd(pmd, ptl, addr, end, walk);
-> -               if (ret != 2)
-> -                       return ret;
-> -       }
-> -       /* THP was split, fall through to pte walk */
-> +       if (ptl)
-> +               return queue_pages_pmd(pmd, ptl, addr, end, walk);
->
->         if (pmd_trans_unstable(pmd))
->                 return 0;
-> --
-> 2.23.0
->
->
+> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
+> index 8f921213b17d..ba24847fb245 100644
+> --- a/drivers/usb/typec/Kconfig
+> +++ b/drivers/usb/typec/Kconfig
+> @@ -56,6 +56,7 @@ config TYPEC_RT1719
+>   	tristate "Richtek RT1719 Sink Only Type-C controller driver"
+>   	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
+>   	depends on I2C
+> +	depends on POWER_SUPPLY
+>   	select REGMAP_I2C
+>   	help
+>   	  Say Y or M here if your system has Richtek RT1719 sink only
+

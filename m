@@ -2,117 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D58250A0EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F1050A0EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387039AbiDUNi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
+        id S1386954AbiDUNjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiDUNiZ (ORCPT
+        with ESMTP id S1387094AbiDUNiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:38:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6EB1A075
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:35:35 -0700 (PDT)
+        Thu, 21 Apr 2022 09:38:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E943703C;
+        Thu, 21 Apr 2022 06:35:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE2B561D25
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5236EC385A1;
-        Thu, 21 Apr 2022 13:35:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650548134;
-        bh=eLGAa2cd0FkC9XToUCSQLD37aQE0c11yNXzIpng6tjM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=KC50i3AB3+M3gqZu26Uvv11CrsKFmCic2ZNFcGmUW6A282WK0fu5JIG2o6lKXwlO6
-         3G4rdr9Pt1IgO2mpM0Mzfvlb0OX+/mt4Ze+n+0b+aW4Sfjyu0d/l3ddCDfCV9eOc7O
-         lA7qayx0MXagGU3AaBLknJCyVXHyxqmncsGNMTdnH4cCG7tz9ClFqvFHI/EdNry7ZB
-         Dpd808zZ+2FLZadWWWBVeC5IXz1a9eoSxmzsPXNbNzm2RhD+QDFUkPfMB+dCMwY1xJ
-         Jtomv2LbEBv6DH8eXHXoqORNFFBwpgC54NIcLAjRa9q0DjJLi9WcpD34jiGtNWeOt7
-         lUkDRleTnPeXg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DF2C55C0143; Thu, 21 Apr 2022 06:35:33 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 06:35:33 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dev.2022.04.18a 22/22]
- kernel/rcu/tree_nocb.h:1162:14: error: 'rcu_nocb_is_setup' undeclared; did
- you mean 'rcu_nocb_setup'?
-Message-ID: <20220421133533.GQ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202204210054.ZtsFVPYs-lkp@intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35F0C61CD7;
+        Thu, 21 Apr 2022 13:35:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C004EC385A5;
+        Thu, 21 Apr 2022 13:35:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GoqJAm4C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650548156;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fBF8XmsRCiIUYjI80Gf8USuRO0jyBLOQW0ghuIzMUfs=;
+        b=GoqJAm4Cu0KTquqP5gqWtOhdH6rMAGoykUEHa4E3FJVRieAjwJsYSQLGrNH/OPTdgQ712G
+        wibc9dDaaTdJWUhf/4vWAtNO0Fj31CIvGnoEi6D0jy151tSLvZXy507joUUvU0FOvzIPqW
+        IF507Sg3e50aFwVGBF1oZ8tnC6jHztk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2e7f28a6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 21 Apr 2022 13:35:55 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Alexander Graf <graf@amazon.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>, Jann Horn <jannh@google.com>
+Subject: [PATCH v2] random: add fork_event sysctl for polling VM forks
+Date:   Thu, 21 Apr 2022 15:35:42 +0200
+Message-Id: <20220421133542.277768-1-Jason@zx2c4.com>
+In-Reply-To: <20220419160407.1740458-1-Jason@zx2c4.com>
+References: <20220419160407.1740458-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202204210054.ZtsFVPYs-lkp@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 02:41:04PM +0800, kernel test robot wrote:
-> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev.2022.04.18a
-> head:   d6932dca19b1a7cbccad9d4acede8229e61cf97a
-> commit: d6932dca19b1a7cbccad9d4acede8229e61cf97a [22/22] rcu/nocb: Add an option to offload all CPUs on boot
-> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220421/202204210054.ZtsFVPYs-lkp@intel.com/config)
-> compiler: mips-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/ammarfaizi2/linux-block/commit/d6932dca19b1a7cbccad9d4acede8229e61cf97a
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev.2022.04.18a
->         git checkout d6932dca19b1a7cbccad9d4acede8229e61cf97a
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+In order to inform userspace of virtual machine forks, this commit adds
+a "fork_event" sysctl, which does not return any data, but allows
+userspace processes to poll() on it for notification of VM forks.
 
-This one is no longer in tree, but a replacement should be on its way,
-with attribution.
+It avoids exposing the actual vmgenid from the hypervisor to userspace,
+in case there is any randomness value in keeping it secret. Rather,
+userspace is expected to simply use getrandom() if it wants a fresh
+value.
 
-							Thanx, Paul
+For example, the following snippet can be used to print a message every
+time a VM forks, after the RNG has been reseeded:
 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from kernel/rcu/tree.c:5031:
->    kernel/rcu/tree_nocb.h: In function 'rcu_init_nohz':
-> >> kernel/rcu/tree_nocb.h:1162:14: error: 'rcu_nocb_is_setup' undeclared (first use in this function); did you mean 'rcu_nocb_setup'?
->     1162 |         if (!rcu_nocb_is_setup) {
->          |              ^~~~~~~~~~~~~~~~~
->          |              rcu_nocb_setup
->    kernel/rcu/tree_nocb.h:1162:14: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> 
-> vim +1162 kernel/rcu/tree_nocb.h
-> 
->   1153	
->   1154	void __init rcu_init_nohz(void)
->   1155	{
->   1156		int cpu;
->   1157		bool need_rcu_nocb_mask = false;
->   1158		bool offload_all = false;
->   1159		struct rcu_data *rdp;
->   1160	
->   1161	#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
-> > 1162		if (!rcu_nocb_is_setup) {
->   1163			need_rcu_nocb_mask = true;
->   1164			offload_all = true;
->   1165		}
->   1166	#endif
->   1167	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+  struct pollfd fd = { .fd = open("/proc/sys/kernel/random/fork_event", O_RDONLY)  };
+  assert(fd.fd >= 0);
+  for (;;) {
+    assert(poll(&fd, 1, -1) > 0);
+    puts("vm fork detected");
+  }
+
+Various programs and libraries that utilize cryptographic operations
+depending on fresh randomness can invalidate old keys or take other
+appropriate actions when receiving that event. While this is racier than
+allowing userspace to mmap/vDSO the vmgenid itself, it's an incremental
+step forward that's not as heavyweight.
+
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Alexander Graf <graf@amazon.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Colm MacCarthaigh <colmmacc@amazon.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Alex/Colm - Could you guys let me know if this satisfies what you'd need
+it for at Amazon?
+
+Changes v1->v2:
+- Some small fixes with the CONFIG_SYSCTL ifdef.
+
+ Documentation/admin-guide/sysctl/kernel.rst |  6 ++++--
+ drivers/char/random.c                       | 24 +++++++++++++++++++++
+ 2 files changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index 1144ea3229a3..ddbd603f0be7 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -1001,7 +1001,7 @@ This is a directory, with the following entries:
+ * ``urandom_min_reseed_secs``: obsolete (used to determine the minimum
+   number of seconds between urandom pool reseeding). This file is
+   writable for compatibility purposes, but writing to it has no effect
+-  on any RNG behavior.
++  on any RNG behavior;
+ 
+ * ``uuid``: a UUID generated every time this is retrieved (this can
+   thus be used to generate UUIDs at will);
+@@ -1009,8 +1009,10 @@ This is a directory, with the following entries:
+ * ``write_wakeup_threshold``: when the entropy count drops below this
+   (as a number of bits), processes waiting to write to ``/dev/random``
+   are woken up. This file is writable for compatibility purposes, but
+-  writing to it has no effect on any RNG behavior.
++  writing to it has no effect on any RNG behavior;
+ 
++* ``fork_event``: unreadable, but can be poll()'d on for notifications
++  delivered after the RNG reseeds following a virtual machine fork.
+ 
+ randomize_va_space
+ ==================
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index bf89c6f27a19..36196e463b90 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1187,6 +1187,9 @@ EXPORT_SYMBOL_GPL(add_bootloader_randomness);
+ 
+ #if IS_ENABLED(CONFIG_VMGENID)
+ static BLOCKING_NOTIFIER_HEAD(vmfork_chain);
++#ifdef CONFIG_SYSCTL
++static DEFINE_CTL_TABLE_POLL(sysctl_fork_event_poll);
++#endif
+ 
+ /*
+  * Handle a new unique VM ID, which is unique, not secret, so we
+@@ -1201,6 +1204,9 @@ void add_vmfork_randomness(const void *unique_vm_id, size_t size)
+ 		pr_notice("crng reseeded due to virtual machine fork\n");
+ 	}
+ 	blocking_notifier_call_chain(&vmfork_chain, 0, NULL);
++#ifdef CONFIG_SYSCTL
++	proc_sys_poll_notify(&sysctl_fork_event_poll);
++#endif
+ }
+ #if IS_MODULE(CONFIG_VMGENID)
+ EXPORT_SYMBOL_GPL(add_vmfork_randomness);
+@@ -1655,6 +1661,8 @@ const struct file_operations urandom_fops = {
+  *   It is writable to avoid breaking old userspaces, but writing
+  *   to it does not change any behavior of the RNG.
+  *
++ * - fork_event - an unreadable file that can be poll()'d on for VM forks.
++ *
+  ********************************************************************/
+ 
+ #ifdef CONFIG_SYSCTL
+@@ -1708,6 +1716,14 @@ static int proc_do_rointvec(struct ctl_table *table, int write, void *buffer,
+ 	return write ? 0 : proc_dointvec(table, 0, buffer, lenp, ppos);
+ }
+ 
++#if IS_ENABLED(CONFIG_VMGENID)
++static int proc_do_nodata(struct ctl_table *table, int write, void *buffer,
++			  size_t *lenp, loff_t *ppos)
++{
++	return -ENODATA;
++}
++#endif
++
+ static struct ctl_table random_table[] = {
+ 	{
+ 		.procname	= "poolsize",
+@@ -1748,6 +1764,14 @@ static struct ctl_table random_table[] = {
+ 		.mode		= 0444,
+ 		.proc_handler	= proc_do_uuid,
+ 	},
++#if IS_ENABLED(CONFIG_VMGENID)
++	{
++		.procname	= "fork_event",
++		.mode		= 0444,
++		.poll		= &sysctl_fork_event_poll,
++		.proc_handler	= proc_do_nodata,
++	},
++#endif
+ 	{ }
+ };
+ 
+-- 
+2.35.1
+

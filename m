@@ -2,70 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BB650A856
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA7450A85A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391515AbiDUStD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
+        id S1391524AbiDUSti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386752AbiDUStA (ORCPT
+        with ESMTP id S1386752AbiDUStg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:49:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAFA74925C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650566767;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i+DEirf4SQwPuVLQDTt9OPbRrmwnWl+I/vXtf9aJnpM=;
-        b=FoNWtc1pakWI2jMDI1r7KP6P0y1mR2JhOWoDXOv3RL8Sd791Z83HOmWFtpl8o+aYepjO0l
-        H5vXl01pguBR4+X5XhSOqEAdKEdZOBQhTD7V/kJd8YrbODUKbryRn2io2ltr+Sgx7oKfZc
-        NEmRBzKUgDGfDy+PSNtB920Es71fAks=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-ZRYZ-50dOI62Q9efZ_o2Ow-1; Thu, 21 Apr 2022 14:46:03 -0400
-X-MC-Unique: ZRYZ-50dOI62Q9efZ_o2Ow-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5841F1E10B44;
-        Thu, 21 Apr 2022 18:46:01 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB0E6416156;
-        Thu, 21 Apr 2022 18:46:00 +0000 (UTC)
-Message-ID: <58c41f14-356e-88dd-54aa-dc6873bf80ff@redhat.com>
-Date:   Thu, 21 Apr 2022 14:46:00 -0400
+        Thu, 21 Apr 2022 14:49:36 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6234BFF2;
+        Thu, 21 Apr 2022 11:46:46 -0700 (PDT)
+Received: from g550jk.localnet (a246182.upc-a.chello.nl [62.163.246.182])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id AA167CEA67;
+        Thu, 21 Apr 2022 18:46:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1650566803; bh=xeUnZPF4UDer0MAwbuQnbTGsgs4bU482TfcXY10CNSk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=bvsyhu9jdtJZ6WJcL6x0eJMTBX/oTwBUviVVONYox3J8aUtKKotpVIuKOv80j6Drh
+         LYbm+uQi1UfCutRr8qJwBbL/lwPqA+qjxTq4YVOACDjiDusDM1b3f7XWldrOuplV/V
+         VREULos66IW8s7kV3U4H2N1HFXWx7tT+2r8XlEQ0=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Brian Norris <briannorris@chromium.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexeymin@postmarketos.org
+Subject: Re: [PATCH v3] mmc: core: Set HS clock speed before sending HS CMD13
+Date:   Thu, 21 Apr 2022 20:46:42 +0200
+Message-ID: <11962455.O9o76ZdvQC@g550jk>
+In-Reply-To: <CAPDyKFpQGR3ughi+6rCLUiK07Jxd5y20oK9HBjYiO-+TE8-o=Q@mail.gmail.com>
+References: <20220330132946.v3.1.I484f4ee35609f78b932bd50feed639c29e64997e@changeid> <CAPDyKFpQGR3ughi+6rCLUiK07Jxd5y20oK9HBjYiO-+TE8-o=Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mm/memcg: Free percpu stats memory of dying memcg's
-Content-Language: en-US
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Muchun Song <songmuchun@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-References: <20220421145845.1044652-1-longman@redhat.com>
- <YmGHYNuAp8957ouq@carbon> <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
- <YmGbmrH/Hg1VJlUc@carbon>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YmGbmrH/Hg1VJlUc@carbon>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,94 +51,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/22 13:59, Roman Gushchin wrote:
-> On Thu, Apr 21, 2022 at 01:28:20PM -0400, Waiman Long wrote:
->> On 4/21/22 12:33, Roman Gushchin wrote:
->>> On Thu, Apr 21, 2022 at 10:58:45AM -0400, Waiman Long wrote:
->>>> For systems with large number of CPUs, the majority of the memory
->>>> consumed by the mem_cgroup structure is actually the percpu stats
->>>> memory. When a large number of memory cgroups are continuously created
->>>> and destroyed (like in a container host), it is possible that more
->>>> and more mem_cgroup structures remained in the dying state holding up
->>>> increasing amount of percpu memory.
->>>>
->>>> We can't free up the memory of the dying mem_cgroup structure due to
->>>> active references in some other places. However, the percpu stats memory
->>>> allocated to that mem_cgroup is a different story.
->>>>
->>>> This patch adds a new percpu_stats_disabled variable to keep track of
->>>> the state of the percpu stats memory. If the variable is set, percpu
->>>> stats update will be disabled for that particular memcg. All the stats
->>>> update will be forward to its parent instead. Reading of the its percpu
->>>> stats will return 0.
->>>>
->>>> The flushing and freeing of the percpu stats memory is a multi-step
->>>> process. The percpu_stats_disabled variable is set when the memcg is
->>>> being set to offline state. After a grace period with the help of RCU,
->>>> the percpu stats data are flushed and then freed.
->>>>
->>>> This will greatly reduce the amount of memory held up by dying memory
->>>> cgroups.
->>>>
->>>> By running a simple management tool for container 2000 times per test
->>>> run, below are the results of increases of percpu memory (as reported
->>>> in /proc/meminfo) and nr_dying_descendants in root's cgroup.stat.
->>> Hi Waiman!
->>>
->>> I've been proposing the same idea some time ago:
->>> https://lore.kernel.org/all/20190312223404.28665-7-guro@fb.com/T/ .
->>>
->>> However I dropped it with the thinking that with many other fixes
->>> preventing the accumulation of the dying cgroups it's not worth the added
->>> complexity and a potential cpu overhead.
->>>
->>> I think it ultimately comes to the number of dying cgroups. If it's low,
->>> memory savings are not worth the cpu overhead. If it's high, they are.
->>> I hope long-term to drive it down significantly (with lru-pages reparenting
->>> being the first major milestone), but it might take a while.
->>>
->>> I don't have a strong opinion either way, just want to dump my thoughts
->>> on this.
->> I have quite a number of customer cases complaining about increasing percpu
->> memory usages. The number of dying memcg's can go to tens of thousands. From
->> my own investigation, I believe that those dying memcg's are not freed
->> because they are pinned down by references in the page structure. I am aware
->> that we support the use of objcg in the page structure which will allow easy
->> reparenting, but most pages don't do that and it is not easy to do this
->> conversion and it may take quite a while to do that.
-> The big question is whether there is a memory pressure on those systems.
-> If yes, and the number of dying cgroups is growing, it's worth investigating.
-> It might be due to the sharing of pagecache pages and this will be ultimately
-> fixed with implementing of the pagecache reparenting. But it also might be due
-> to other bugs, which are fixable, so it would be great to understand.
+Hi Brian and Ulf,
+
+On Mittwoch, 6. April 2022 16:55:40 CEST Ulf Hansson wrote:
+> On Wed, 30 Mar 2022 at 22:30, Brian Norris <briannorris@chromium.org> wrote:
+> > Way back in commit 4f25580fb84d ("mmc: core: changes frequency to
+> > hs_max_dtr when selecting hs400es"), Rockchip engineers noticed that
+> > some eMMC don't respond to SEND_STATUS commands very reliably if they're
+> > still running at a low initial frequency. As mentioned in that commit,
+> > JESD84-B51 P49 suggests a sequence in which the host:
+> > 1. sets HS_TIMING
+> > 2. bumps the clock ("<= 52 MHz")
+> > 3. sends further commands
+> > 
+> > It doesn't exactly require that we don't use a lower-than-52MHz
+> > frequency, but in practice, these eMMC don't like it.
+> > 
+> > The aforementioned commit tried to get that right for HS400ES, although
+> > it's unclear whether this ever truly worked as committed into mainline,
+> > as other changes/refactoring adjusted the sequence in conflicting ways:
+> > 
+> > 08573eaf1a70 ("mmc: mmc: do not use CMD13 to get status after speed mode
+> > switch")
+> > 
+> > 53e60650f74e ("mmc: core: Allow CMD13 polling when switching to HS mode
+> > for mmc")
+> > 
+> > In any case, today we do step 3 before step 2. Let's fix that, and also
+> > apply the same logic to HS200/400, where this eMMC has problems too.
+> > 
+> > Resolves errors like this seen when booting some RK3399 Gru/Scarlet
+> > systems:
+> > 
+> > [    2.058881] mmc1: CQHCI version 5.10
+> > [    2.097545] mmc1: SDHCI controller on fe330000.mmc [fe330000.mmc] using
+> > ADMA [    2.209804] mmc1: mmc_select_hs400es failed, error -84
+> > [    2.215597] mmc1: error -84 whilst initialising MMC card
+> > [    2.417514] mmc1: mmc_select_hs400es failed, error -110
+> > [    2.423373] mmc1: error -110 whilst initialising MMC card
+> > [    2.605052] mmc1: mmc_select_hs400es failed, error -110
+> > [    2.617944] mmc1: error -110 whilst initialising MMC card
+> > [    2.835884] mmc1: mmc_select_hs400es failed, error -110
+> > [    2.841751] mmc1: error -110 whilst initialising MMC card
+> > 
+> > Fixes: 08573eaf1a70 ("mmc: mmc: do not use CMD13 to get status after speed
+> > mode switch") Fixes: 53e60650f74e ("mmc: core: Allow CMD13 polling when
+> > switching to HS mode for mmc") Fixes: 4f25580fb84d ("mmc: core: changes
+> > frequency to hs_max_dtr when selecting hs400es") Cc: Shawn Lin
+> > <shawn.lin@rock-chips.com>
+> > Signed-off-by: Brian Norris <briannorris@chromium.org>
+> 
+> To get this thoroughly tested, I have applied it to my next branch, for now.
+> 
+> If it turns out that there are no regressions being reported, I think
+> we should move the patch to the fixes branch (to get it included for
+> v5.18) and then also tag it for stable. So, I will get back to this in
+> a couple of weeks.
+
+Unfortunately this patch breaks internal storage on qcom-msm8974-fairphone-fp2
+
+With this patch (included in linux-next-20220421) it fails to initialize:
+
+[    1.868608] mmc0: SDHCI controller on f9824900.sdhci [f9824900.sdhci] using 
+ADMA 64-bit
+[    1.925220] mmc0: mmc_select_hs200 failed, error -110
+[    1.925285] mmc0: error -110 whilst initialising MMC card
+
+After reverting this patch, it works fine again.
+
+[    1.908835] mmc0: SDHCI controller on f9824900.sdhci [f9824900.sdhci] using 
+ADMA 64-bit
+[    1.964700] mmc0: new HS200 MMC card at address 0001
+[    1.965388] mmcblk0: mmc0:0001 BWBC3R 29.1 GiB 
+[    1.975106]  mmcblk0: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15 
+p16 p17 p18 p19 p20
+[    1.982545] mmcblk0boot0: mmc0:0001 BWBC3R 4.00 MiB 
+[    1.988247] mmcblk0boot1: mmc0:0001 BWBC3R 4.00 MiB 
+[    1.993287] mmcblk0rpmb: mmc0:0001 BWBC3R 4.00 MiB, chardev (242:0)
 
 
-Pagecache reparenting will probably fix the problem that I have seen. Is 
-someone working on this?
+Regards
+Luca
 
-
-> So if there is a memory pressure and dying cgroups are still accumulating,
-> we need to investigate and fix it.
->
-> If there is (almost) no memory pressure, it's a proactive reclaim question.
-> There are several discussions and projects going on in this area.
-
-
-As more and more memory are pinned down by dying memcg's, there is just 
-less memory available for other useful works. So it is an issue from the 
-user point of view. I am not sure how much memory pressure the customers 
-have, but they certainly are not happy about that.
-
-
-> Releasing percpu memory is more a workaround of the problem rather than fix.
-> In the end, if we're accumulating dying cgroups, we're still leaking memory,
-> just at a smaller pace (which is good, of course).
-
-I agree that it is a workaround. However, without pagecache reparenting, 
-userspace applications may need to be modified to minimize the chance of 
-leaving behind dying memcg's. It is not easy either.
-
-Cheers,
-Longman
 
 

@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E1250A91F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A207450A923
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358121AbiDUT2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
+        id S1391927AbiDUT2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiDUT2E (ORCPT
+        with ESMTP id S1391610AbiDUT2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:28:04 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F18D192B7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:25:12 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id j8so5905877pll.11
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:25:12 -0700 (PDT)
+        Thu, 21 Apr 2022 15:28:46 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9832B4D270;
+        Thu, 21 Apr 2022 12:25:55 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id p8so5883581pfh.8;
+        Thu, 21 Apr 2022 12:25:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qeRjKSXDeJIH0+CQwoCMl5922pNFNUxTvF5aowm8rco=;
-        b=n99NELoggPuhcsqKws/Ci4cGpg5aTBJYtQnAe9JU8tBA1qr9ygYOAR+1bDIsNVLV5p
-         PzgfBQxai1TPXPdvVFGh9O1CcYKegnrlAPTNYxwYYt07W/JnhKPeV2EssXa5URw7o0Ag
-         SbxCXwUC9VpajRWpPiZp096BFjq0Fjh6o1gRqvsaf0QS+Sdy/HmIRHNhWGUZRtzVg3E0
-         0z9GCsn/tiJHXCCHr7NILgGmwG4cakwPAGUyQGFLATwnHLGp7l43bBirgfe1702YLJfw
-         VHRKT35JWViWbCpUyZM0Orq2vsD7GoyOqWqol0/N/ekRJwk1FNnIIjq8s4maGk+0/XGT
-         dCvQ==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cBrbiWDBHEqVzD/h6n2uk0w0Vf7EqWqgPo3W9iAFxx0=;
+        b=HTZ57TThs2gZgtm09J297EO0M3RO62RHz/zVoetmYhSGSzXIWjGtQNVlcT/am6ElqW
+         +cTLNQXaPDGTicHPztmAQxL3KOlCa0xow9uOS0FV7+JXKwDeZShuUEbBQiE0Rvus2mm5
+         eLMesI2o5ptZFTctQwjDDGBVhqCeowgcfZNMhAiMxUibIPc0sbqguwSOhdL28aF/wAhR
+         OZ5HsLcodEdCdqfjUtovF9t5paSvEko+HnTNyqgzeng1bpWq/xgmjewQjuDsQDeCZo73
+         Hqyj9I01JfoH0aaOvVNTvMQISmhsF50hwZGJaZUherneAHdfPc/CDIR4kCzKfbNxpgrg
+         5ujQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qeRjKSXDeJIH0+CQwoCMl5922pNFNUxTvF5aowm8rco=;
-        b=oS9wWx7FCiCUsNYZmitZGpG3HF5qZplezc862NksZlK0HmEPuw1Zj4zo16J2v5oAlx
-         v5qPkKCYHVjHWIIu04n/7N2m5BYWSvvVz8VCBr7rZoccsr/Om+BRG201vFAt7fFVPWl3
-         bXYR7ODE9KnlMT+e/BR1rSjcf6gyH2pkEnd2UmSgndr7AK5AbPSwhyjmoZC2iqQCFYe+
-         guLkP80LiyMv7zUaix33y2FMzrDv97eBlPYF8VI5nbxYU2bmyYXtUUb4uQZrR4jB1xHD
-         rMjEZdZRDQjQb+Gk3rZE1jFoxBXAMU8L15ttgGKoU1SIjHH5CeAnXoPxTkXSmNqzk7l2
-         6zkQ==
-X-Gm-Message-State: AOAM5324dEHQblyoZx9r2Eu5X5zLwSDGMi85gD6oHE5X+3+Lp5OgABKG
-        OGR2Me3Qr4/a2BycoAxB4fWylPlbP0CN2dch5P2G9Q==
-X-Google-Smtp-Source: ABdhPJyqf0QRE4ybiwrpA4CL2rjYdR9Dfz1kuf/M+oV726c8/KeCCX7M1xEsBCAx988EvXNGhdhdyy5S+lFBAanpVRU=
-X-Received: by 2002:a17:90b:4c84:b0:1d2:cadc:4e4d with SMTP id
- my4-20020a17090b4c8400b001d2cadc4e4dmr12075384pjb.8.1650569111988; Thu, 21
- Apr 2022 12:25:11 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=cBrbiWDBHEqVzD/h6n2uk0w0Vf7EqWqgPo3W9iAFxx0=;
+        b=0+EBFbQC2kVJpggDuSgsKAxBIWswb38o0V17mfZymlkzF0K4qG1CZbjxEZF7lN+A3V
+         TQaeREQxT4u4RIxHYzCtZm1pnrkrFdUkWV5m3lsgSWA7RsTzNOasHw0+FE4dld/IVxPX
+         VaIuDlfKHWxFNhQovx8Yyi2huNX7O4vLtjamslfodyXN+vgGvT/P+KIW5MUKy8yB3mDS
+         W2jWAPb86n3+ICPFdNEwpptnbtAhLsMfgEK5+oY2zQTolsCf6+pthIdOwQDXkFumpb8W
+         W7qXsVr1FgI4bj7/+/5p5GpsWXUWIZBGGd72xb9b/zbebu8NFeQ8+RjQ3yTXkNWQudv6
+         rQWg==
+X-Gm-Message-State: AOAM531isdSk7DvXdRzUWgOKV06jLS5J5qpJuuRAjOzhXsupfccU7IR4
+        M8vzNGzC4DzruAb41nFIOZM=
+X-Google-Smtp-Source: ABdhPJydgd/xmb2yR2CCAMjNeInbLx5JdrgHVbwNiCA8VKBZYu2tb2FGgUU1dxdUfy8WyP5TnL9L3A==
+X-Received: by 2002:aa7:9522:0:b0:4e1:d277:ce8 with SMTP id c2-20020aa79522000000b004e1d2770ce8mr1170604pfp.16.1650569154975;
+        Thu, 21 Apr 2022 12:25:54 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:2c86])
+        by smtp.gmail.com with ESMTPSA id t63-20020a625f42000000b0050a7eaff8c9sm14868920pfb.189.2022.04.21.12.25.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 12:25:54 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 21 Apr 2022 09:25:52 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Vernet <void@manifault.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>
+Subject: Re: [PATCH 3/4] MAINTAINERS: add corresponding kselftests to cgroup
+ entry
+Message-ID: <YmGvwPIAA1LqCcku@slm.duckdns.org>
+References: <20220415000133.3955987-1-roman.gushchin@linux.dev>
+ <20220415000133.3955987-4-roman.gushchin@linux.dev>
 MIME-Version: 1.0
-References: <20220420020435.90326-1-jane.chu@oracle.com> <20220420020435.90326-2-jane.chu@oracle.com>
-In-Reply-To: <20220420020435.90326-2-jane.chu@oracle.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 21 Apr 2022 12:25:00 -0700
-Message-ID: <CAPcyv4jMNvgWrh5WMY1gFN3-vKLU4eccXW3CDRrn1+=FY7D5jw@mail.gmail.com>
-Subject: Re: [PATCH v8 1/7] acpi/nfit: rely on mce->misc to determine poison granularity
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, david <david@fromorbit.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        device-mapper development <dm-devel@redhat.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vivek Goyal <vgoyal@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220415000133.3955987-4-roman.gushchin@linux.dev>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 7:05 PM Jane Chu <jane.chu@oracle.com> wrote:
->
-> nfit_handle_mec() hardcode poison granularity at L1_CACHE_BYTES.
-> Instead, let the driver rely on mce->misc register to determine
-> the poison granularity.
->
-> Suggested-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Jane Chu <jane.chu@oracle.com>
+On Thu, Apr 14, 2022 at 05:01:32PM -0700, Roman Gushchin wrote:
+> List cgroup kselftests in the cgroup MAINTAINERS entry.
+> These are tests covering core, freezer and cgroup.kill
+> functionality.
+> 
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Zefan Li <lizefan.x@bytedance.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: cgroups@vger.kernel.org
 
-Looks good,
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+I suppose this can go with the rest through -mm? Please let me know if I
+should pick it up.
 
-...I'll add the Fixes: line when applying this.
+Thanks.
+
+-- 
+tejun

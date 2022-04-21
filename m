@@ -2,229 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF4350A73C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B0450A73D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390820AbiDURj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
+        id S1390810AbiDURjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345437AbiDURjZ (ORCPT
+        with ESMTP id S1345437AbiDURjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:39:25 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0714969A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:36:34 -0700 (PDT)
+        Thu, 21 Apr 2022 13:39:21 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBD14927E;
+        Thu, 21 Apr 2022 10:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650562594; x=1682098594;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8LiXGEF4iaLH68tK0QEOMlFWqbyHkwJkbMI1AziSLvE=;
-  b=BQilhaCyEhwTMn+GKByD0FzEiKJpAr67R8TNYmcIGi1oAv40AL6Itc1E
-   gxqTZqcZsXGFAwtEOELv5h5OUbjufU8Z9Ou6I5SxUiog60KrC1Nmw4vc5
-   XT1J40IffkFSdP4MOD30idFmQm/2+ujcqxWlIzjOGLZmW71eiCLIpGYBh
-   SE7Q/91GIiOUhcqeHksZHdMtbnq9WV1XR069msa96hsA9VBOmkn+smYDn
-   mbNAdOudAbayPQ4DGEa4Sjm/fO942xZ70gQ9a/j1RMqx4NeELFD2reGvc
-   bLUhPJn3Wdj2StrsJUl5L5P6Zd6M7Igi960Gsf2JXJdWg+6TbkvpLUo/Q
+  t=1650562591; x=1682098591;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IaH/Q0uLjbSzyYuYCFdaJrJyTkwHmv+BQlUtkUbRdWA=;
+  b=nJa2DnICHVEB8YMWRbK4kc6nGzE49IsGsR5kkaVISgUjA9IzLz/cptug
+   IuZmVonD0FzMaSa3F/VSYyO4+2Z23TzBzCbZdOEI2pRBKe2lkMRDtwYGe
+   Kvu9RPJCYlnICqJqiI95vjo15YoLv/gDwiOgnjs9co8KACj+8CQlFG4Yc
+   QQiDXXrXw6pzWo3n4aD0BNv4/5Ih7hALX9yQbYyahFbL91/8//jWDZB7N
+   cLHPrRbSgNQJ60Ayr6Jd4SBDEfB31k2yHQWeApRFQzhCkI8jrAMEhRY++
+   B62/D/Co88op8giCP4JkL9Xu2jRr2QC8DrfNHopY6pP4gQnGk6AhSjZcZ
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264597165"
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244353529"
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="264597165"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 10:36:29 -0700
+   d="scan'208";a="244353529"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 10:36:30 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="703179772"
+   d="scan'208";a="593761713"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 10:36:28 -0700
+  by orsmga001.jf.intel.com with ESMTP; 21 Apr 2022 10:36:28 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nhajD-0008cj-LU;
+        id 1nhajD-0008ch-Kb;
         Thu, 21 Apr 2022 17:36:27 +0000
-Date:   Fri, 22 Apr 2022 01:35:47 +0800
+Date:   Fri, 22 Apr 2022 01:35:50 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
+To:     Haowen Bai <baihaowen@meizu.com>,
+        Chris Mason <chris.mason@fusionio.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Haowen Bai <baihaowen@meizu.com>, linux-btrfs@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [dhowells-fs:rxrpc-ringless 16/21] net/rxrpc/recvmsg.c:358:17:
- warning: variable 'serial' set but not used
-Message-ID: <202204220147.aPvpcmQ8-lkp@intel.com>
+Subject: Re: [PATCH] btrfs: Fix a memory leak in btrfs_ioctl_balance()
+Message-ID: <202204220132.EBMTHukr-lkp@intel.com>
+References: <1650534677-31554-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1650534677-31554-1-git-send-email-baihaowen@meizu.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git rxrpc-ringless
-head:   c388a8388ad238ffbe0cd204c3eacaf200055751
-commit: 58c2a63aa0c47fdeb5fbdab61785fc43cf212fa0 [16/21] changes
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220422/202204220147.aPvpcmQ8-lkp@intel.com/config)
+Hi Haowen,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on kdave/for-next]
+[also build test WARNING on v5.18-rc3 next-20220421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Haowen-Bai/btrfs-Fix-a-memory-leak-in-btrfs_ioctl_balance/20220421-175644
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220422/202204220132.EBMTHukr-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=58c2a63aa0c47fdeb5fbdab61785fc43cf212fa0
-        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
-        git fetch --no-tags dhowells-fs rxrpc-ringless
-        git checkout 58c2a63aa0c47fdeb5fbdab61785fc43cf212fa0
+        # https://github.com/intel-lab-lkp/linux/commit/9e36507b94d20118a936198b321a3544931217f0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Haowen-Bai/btrfs-Fix-a-memory-leak-in-btrfs_ioctl_balance/20220421-175644
+        git checkout 9e36507b94d20118a936198b321a3544931217f0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/rxrpc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/btrfs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/rxrpc/recvmsg.c:358:17: warning: variable 'serial' set but not used [-Wunused-but-set-variable]
-           rxrpc_serial_t serial;
-                          ^
-   1 warning generated.
+>> fs/btrfs/ioctl.c:4375:7: warning: variable 'need_unlock' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (!test_bit(BTRFS_FS_BALANCE_RUNNING, &fs_info->flags)) {
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/btrfs/ioctl.c:4463:6: note: uninitialized use occurs here
+           if (need_unlock)
+               ^~~~~~~~~~~
+   fs/btrfs/ioctl.c:4375:3: note: remove the 'if' if its condition is always true
+                   if (!test_bit(BTRFS_FS_BALANCE_RUNNING, &fs_info->flags)) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/btrfs/ioctl.c:4373:6: warning: variable 'need_unlock' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (fs_info->balance_ctl) {
+               ^~~~~~~~~~~~~~~~~~~~
+   fs/btrfs/ioctl.c:4463:6: note: uninitialized use occurs here
+           if (need_unlock)
+               ^~~~~~~~~~~
+   fs/btrfs/ioctl.c:4373:2: note: remove the 'if' if its condition is always true
+           if (fs_info->balance_ctl) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/btrfs/ioctl.c:4343:18: note: initialize the variable 'need_unlock' to silence this warning
+           bool need_unlock; /* for mut. excl. ops lock */
+                           ^
+                            = 0
+   2 warnings generated.
 
 
-vim +/serial +358 net/rxrpc/recvmsg.c
+vim +4375 fs/btrfs/ioctl.c
 
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  346  
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  347  /*
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  348   * Deliver messages to a call.  This keeps processing packets until the buffer
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  349   * is filled and we find either more DATA (returns 0) or the end of the DATA
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  350   * (returns 1).  If more packets are required, it returns -EAGAIN.
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  351   */
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  352  static int rxrpc_recvmsg_data(struct socket *sock, struct rxrpc_call *call,
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  353  			      struct msghdr *msg, struct iov_iter *iter,
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  354  			      size_t len, int flags, size_t *_offset)
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  355  {
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  356  	struct rxrpc_skb_priv *sp;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  357  	struct sk_buff *skb;
-e2de6c40489890 net/rxrpc/recvmsg.c    David Howells 2019-08-27 @358  	rxrpc_serial_t serial;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  359  	rxrpc_seq_t hard_ack, top, seq;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  360  	size_t remain;
-f9c32435ab7221 net/rxrpc/recvmsg.c    David Howells 2019-10-31  361  	bool rx_pkt_last;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  362  	unsigned int rx_pkt_offset, rx_pkt_len;
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  363  	int ix, copy, ret = -EAGAIN, ret2;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  364  
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  365  	rx_pkt_offset = call->rx_pkt_offset;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  366  	rx_pkt_len = call->rx_pkt_len;
-f9c32435ab7221 net/rxrpc/recvmsg.c    David Howells 2019-10-31  367  	rx_pkt_last = call->rx_pkt_last;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  368  
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  369  	if (call->state >= RXRPC_CALL_SERVER_ACK_REQUEST) {
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  370  		seq = call->rx_hard_ack;
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  371  		ret = 1;
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  372  		goto done;
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  373  	}
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  374  
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  375  	/* Barriers against rxrpc_input_data(). */
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  376  	hard_ack = call->rx_hard_ack;
-d7e15835ab2784 net/rxrpc/recvmsg.c    David Howells 2017-02-24  377  	seq = hard_ack + 1;
-f9c32435ab7221 net/rxrpc/recvmsg.c    David Howells 2019-10-31  378  
-d7e15835ab2784 net/rxrpc/recvmsg.c    David Howells 2017-02-24  379  	while (top = smp_load_acquire(&call->rx_top),
-d7e15835ab2784 net/rxrpc/recvmsg.c    David Howells 2017-02-24  380  	       before_eq(seq, top)
-d7e15835ab2784 net/rxrpc/recvmsg.c    David Howells 2017-02-24  381  	       ) {
-3f63ce6fffedc9 net/rxrpc/recvmsg.c    David Howells 2022-03-31  382  		ix = seq & RXRPC_RX_BUFF_MASK;
-3f63ce6fffedc9 net/rxrpc/recvmsg.c    David Howells 2022-03-31  383  		skb = call->rx_buffer[ix];
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  384  		if (!skb) {
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  385  			trace_rxrpc_recvmsg(call, rxrpc_recvmsg_hole, seq,
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  386  					    rx_pkt_offset, rx_pkt_len, 0);
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  387  			break;
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  388  		}
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  389  		smp_rmb();
-987db9f7cd1e77 net/rxrpc/recvmsg.c    David Howells 2019-08-19  390  		rxrpc_see_skb(skb, rxrpc_skb_seen);
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  391  		sp = rxrpc_skb(skb);
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  392  
-e2de6c40489890 net/rxrpc/recvmsg.c    David Howells 2019-08-27  393  		if (!(flags & MSG_PEEK)) {
-e2de6c40489890 net/rxrpc/recvmsg.c    David Howells 2019-08-27  394  			serial = sp->hdr.serial;
-3f63ce6fffedc9 net/rxrpc/recvmsg.c    David Howells 2022-03-31  395  			serial += call->rx_annotations[ix] & RXRPC_RX_ANNO_SUBPACKET;
-58c2a63aa0c47f net/rxrpc/recvmsg.c    David Howells 2022-04-06  396  			//trace_rxrpc_receive(call, rxrpc_receive_front,
-58c2a63aa0c47f net/rxrpc/recvmsg.c    David Howells 2022-04-06  397  			//		    serial, seq);
-e2de6c40489890 net/rxrpc/recvmsg.c    David Howells 2019-08-27  398  		}
-58dc63c998ea3c net/rxrpc/recvmsg.c    David Howells 2016-09-17  399  
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  400  		if (msg)
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  401  			sock_recv_timestamp(msg, sock->sk, skb);
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  402  
-2e2ea51dec2ab6 net/rxrpc/recvmsg.c    David Howells 2016-09-17  403  		if (rx_pkt_offset == 0) {
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  404  			ret2 = rxrpc_locate_data(call, skb,
-3f63ce6fffedc9 net/rxrpc/recvmsg.c    David Howells 2022-03-31  405  						 &call->rx_annotations[ix],
-f9c32435ab7221 net/rxrpc/recvmsg.c    David Howells 2019-10-31  406  						 &rx_pkt_offset, &rx_pkt_len,
-f9c32435ab7221 net/rxrpc/recvmsg.c    David Howells 2019-10-31  407  						 &rx_pkt_last);
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  408  			trace_rxrpc_recvmsg(call, rxrpc_recvmsg_next, seq,
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  409  					    rx_pkt_offset, rx_pkt_len, ret2);
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  410  			if (ret2 < 0) {
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  411  				ret = ret2;
-2e2ea51dec2ab6 net/rxrpc/recvmsg.c    David Howells 2016-09-17  412  				goto out;
-2e2ea51dec2ab6 net/rxrpc/recvmsg.c    David Howells 2016-09-17  413  			}
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  414  		} else {
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  415  			trace_rxrpc_recvmsg(call, rxrpc_recvmsg_cont, seq,
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  416  					    rx_pkt_offset, rx_pkt_len, 0);
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  417  		}
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  418  
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  419  		/* We have to handle short, empty and used-up DATA packets. */
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  420  		remain = len - *_offset;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  421  		copy = rx_pkt_len;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  422  		if (copy > remain)
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  423  			copy = remain;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  424  		if (copy > 0) {
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  425  			ret2 = skb_copy_datagram_iter(skb, rx_pkt_offset, iter,
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  426  						      copy);
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  427  			if (ret2 < 0) {
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  428  				ret = ret2;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  429  				goto out;
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  430  			}
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  431  
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  432  			/* handle piecemeal consumption of data packets */
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  433  			rx_pkt_offset += copy;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  434  			rx_pkt_len -= copy;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  435  			*_offset += copy;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  436  		}
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  437  
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  438  		if (rx_pkt_len > 0) {
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  439  			trace_rxrpc_recvmsg(call, rxrpc_recvmsg_full, seq,
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  440  					    rx_pkt_offset, rx_pkt_len, 0);
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  441  			ASSERTCMP(*_offset, ==, len);
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  442  			ret = 0;
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  443  			break;
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  444  		}
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  445  
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  446  		/* The whole packet has been transferred. */
-372ee16386bbf6 net/rxrpc/recvmsg.c    David Howells 2016-08-03  447  		if (!(flags & MSG_PEEK))
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  448  			rxrpc_rotate_rx_window(call);
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  449  		rx_pkt_offset = 0;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  450  		rx_pkt_len = 0;
-372ee16386bbf6 net/rxrpc/recvmsg.c    David Howells 2016-08-03  451  
-f9c32435ab7221 net/rxrpc/recvmsg.c    David Howells 2019-10-31  452  		if (rx_pkt_last) {
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  453  			ASSERTCMP(seq, ==, READ_ONCE(call->rx_top));
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  454  			ret = 1;
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  455  			goto out;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  456  		}
-d7e15835ab2784 net/rxrpc/recvmsg.c    David Howells 2017-02-24  457  
-d7e15835ab2784 net/rxrpc/recvmsg.c    David Howells 2017-02-24  458  		seq++;
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  459  	}
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  460  
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  461  out:
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  462  	if (!(flags & MSG_PEEK)) {
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  463  		call->rx_pkt_offset = rx_pkt_offset;
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  464  		call->rx_pkt_len = rx_pkt_len;
-f9c32435ab7221 net/rxrpc/recvmsg.c    David Howells 2019-10-31  465  		call->rx_pkt_last = rx_pkt_last;
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  466  	}
-816c9fce12f374 net/rxrpc/recvmsg.c    David Howells 2016-09-17  467  done:
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  468  	trace_rxrpc_recvmsg(call, rxrpc_recvmsg_data_return, seq,
-849979051cbc93 net/rxrpc/recvmsg.c    David Howells 2016-09-17  469  			    rx_pkt_offset, rx_pkt_len, ret);
-d0b35a42031a31 net/rxrpc/recvmsg.c    David Howells 2018-07-23  470  	if (ret == -EAGAIN)
-d0b35a42031a31 net/rxrpc/recvmsg.c    David Howells 2018-07-23  471  		set_bit(RXRPC_CALL_RX_UNDERRUN, &call->flags);
-248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  472  	return ret;
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  473  }
-17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  474  
-
-:::::: The code at line 358 was first introduced by commit
-:::::: e2de6c4048989007b353164b19d6b7d5be4fa9e3 rxrpc: Use info in skbuff instead of reparsing a jumbo packet
-
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4336  
+9ba1f6e44ed7a1 Liu Bo               2012-05-11  4337  static long btrfs_ioctl_balance(struct file *file, void __user *arg)
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4338  {
+496ad9aa8ef448 Al Viro              2013-01-23  4339  	struct btrfs_root *root = BTRFS_I(file_inode(file))->root;
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4340  	struct btrfs_fs_info *fs_info = root->fs_info;
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4341  	struct btrfs_ioctl_balance_args *bargs;
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4342  	struct btrfs_balance_control *bctl;
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4343  	bool need_unlock; /* for mut. excl. ops lock */
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4344  	int ret;
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4345  
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4346  	if (!capable(CAP_SYS_ADMIN))
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4347  		return -EPERM;
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4348  
+e54bfa31044d60 Liu Bo               2012-06-29  4349  	ret = mnt_want_write_file(file);
+9ba1f6e44ed7a1 Liu Bo               2012-05-11  4350  	if (ret)
+9ba1f6e44ed7a1 Liu Bo               2012-05-11  4351  		return ret;
+9ba1f6e44ed7a1 Liu Bo               2012-05-11  4352  
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4353  	bargs = memdup_user(arg, sizeof(*bargs));
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4354  	if (IS_ERR(bargs)) {
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4355  		ret = PTR_ERR(bargs);
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4356  		goto out;
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4357  	}
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4358  
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4359  again:
+c3e1f96c37d0f8 Goldwyn Rodrigues    2020-08-25  4360  	if (btrfs_exclop_start(fs_info, BTRFS_EXCLOP_BALANCE)) {
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4361  		mutex_lock(&fs_info->balance_mutex);
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4362  		need_unlock = true;
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4363  		goto locked;
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4364  	}
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4365  
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4366  	/*
+0132761017e012 Nicholas D Steeves   2016-05-19  4367  	 * mut. excl. ops lock is locked.  Three possibilities:
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4368  	 *   (1) some other op is running
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4369  	 *   (2) balance is running
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4370  	 *   (3) balance is paused -- special case (think resume)
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4371  	 */
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4372  	mutex_lock(&fs_info->balance_mutex);
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4373  	if (fs_info->balance_ctl) {
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4374  		/* this is either (2) or (3) */
+3009a62f3b1823 David Sterba         2018-03-21 @4375  		if (!test_bit(BTRFS_FS_BALANCE_RUNNING, &fs_info->flags)) {
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4376  			mutex_unlock(&fs_info->balance_mutex);
+dccdb07bc996e9 David Sterba         2018-03-21  4377  			/*
+dccdb07bc996e9 David Sterba         2018-03-21  4378  			 * Lock released to allow other waiters to continue,
+dccdb07bc996e9 David Sterba         2018-03-21  4379  			 * we'll reexamine the status again.
+dccdb07bc996e9 David Sterba         2018-03-21  4380  			 */
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4381  			mutex_lock(&fs_info->balance_mutex);
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4382  
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4383  			if (fs_info->balance_ctl &&
+3009a62f3b1823 David Sterba         2018-03-21  4384  			    !test_bit(BTRFS_FS_BALANCE_RUNNING, &fs_info->flags)) {
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4385  				/* this is (3) */
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4386  				need_unlock = false;
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4387  				goto locked;
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4388  			}
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4389  
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4390  			mutex_unlock(&fs_info->balance_mutex);
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4391  			goto again;
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4392  		} else {
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4393  			/* this is (2) */
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4394  			mutex_unlock(&fs_info->balance_mutex);
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4395  			ret = -EINPROGRESS;
+9e36507b94d201 Haowen Bai           2022-04-21  4396  			goto out_bargs;
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4397  		}
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4398  	} else {
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4399  		/* this is (1) */
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4400  		mutex_unlock(&fs_info->balance_mutex);
+e57138b3e96e45 Anand Jain           2013-08-21  4401  		ret = BTRFS_ERROR_DEV_EXCL_RUN_IN_PROGRESS;
+9e36507b94d201 Haowen Bai           2022-04-21  4402  		goto out_bargs;
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4403  	}
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4404  
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4405  locked:
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4406  	if (bargs->flags & BTRFS_BALANCE_RESUME) {
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4407  		if (!fs_info->balance_ctl) {
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4408  			ret = -ENOTCONN;
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4409  			goto out_bargs;
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4410  		}
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4411  
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4412  		bctl = fs_info->balance_ctl;
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4413  		spin_lock(&fs_info->balance_lock);
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4414  		bctl->flags |= BTRFS_BALANCE_RESUME;
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4415  		spin_unlock(&fs_info->balance_lock);
+efc0e69c2feab8 Nikolay Borisov      2021-11-25  4416  		btrfs_exclop_balance(fs_info, BTRFS_EXCLOP_BALANCE);
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4417  
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4418  		goto do_balance;
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4419  	}
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4420  
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4421  	if (bargs->flags & ~(BTRFS_BALANCE_ARGS_MASK | BTRFS_BALANCE_TYPE_MASK)) {
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4422  		ret = -EINVAL;
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4423  		goto out_bargs;
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4424  	}
+0cb53767e6f475 Nikolay Borisov      2022-03-30  4425  
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4426  	if (fs_info->balance_ctl) {
+837d5b6e46d1a4 Ilya Dryomov         2012-01-16  4427  		ret = -EINPROGRESS;
+837d5b6e46d1a4 Ilya Dryomov         2012-01-16  4428  		goto out_bargs;
+837d5b6e46d1a4 Ilya Dryomov         2012-01-16  4429  	}
+837d5b6e46d1a4 Ilya Dryomov         2012-01-16  4430  
+8d2db7855e7b65 David Sterba         2015-11-04  4431  	bctl = kzalloc(sizeof(*bctl), GFP_KERNEL);
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4432  	if (!bctl) {
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4433  		ret = -ENOMEM;
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4434  		goto out_bargs;
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4435  	}
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4436  
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4437  	memcpy(&bctl->data, &bargs->data, sizeof(bctl->data));
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4438  	memcpy(&bctl->meta, &bargs->meta, sizeof(bctl->meta));
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4439  	memcpy(&bctl->sys, &bargs->sys, sizeof(bctl->sys));
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4440  
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4441  	bctl->flags = bargs->flags;
+de322263d3a6d4 Ilya Dryomov         2012-01-16  4442  do_balance:
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4443  	/*
+c3e1f96c37d0f8 Goldwyn Rodrigues    2020-08-25  4444  	 * Ownership of bctl and exclusive operation goes to btrfs_balance.
+c3e1f96c37d0f8 Goldwyn Rodrigues    2020-08-25  4445  	 * bctl is freed in reset_balance_state, or, if restriper was paused
+c3e1f96c37d0f8 Goldwyn Rodrigues    2020-08-25  4446  	 * all the way until unmount, in free_fs_info.  The flag should be
+c3e1f96c37d0f8 Goldwyn Rodrigues    2020-08-25  4447  	 * cleared after reset_balance_state.
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4448  	 */
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4449  	need_unlock = false;
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4450  
+6fcf6e2bffb6cf David Sterba         2018-05-07  4451  	ret = btrfs_balance(fs_info, bctl, bargs);
+0f89abf56abbd0 Christian Engelmayer 2015-10-21  4452  	bctl = NULL;
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4453  
+6ad365fd1bfcde Nikolay Borisov      2022-03-30  4454  	if (ret == 0 || ret == -ECANCELED) {
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4455  		if (copy_to_user(arg, bargs, sizeof(*bargs)))
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4456  			ret = -EFAULT;
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4457  	}
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4458  
+0f89abf56abbd0 Christian Engelmayer 2015-10-21  4459  	kfree(bctl);
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4460  out_bargs:
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4461  	kfree(bargs);
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4462  	mutex_unlock(&fs_info->balance_mutex);
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4463  	if (need_unlock)
+c3e1f96c37d0f8 Goldwyn Rodrigues    2020-08-25  4464  		btrfs_exclop_finish(fs_info);
+ed0fb78fb6aa29 Ilya Dryomov         2013-01-20  4465  out:
+e54bfa31044d60 Liu Bo               2012-06-29  4466  	mnt_drop_write_file(file);
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4467  	return ret;
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4468  }
+c9e9f97bdfb64d Ilya Dryomov         2012-01-16  4469  
 
 -- 
 0-DAY CI Kernel Test Service

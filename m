@@ -2,85 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CE950A682
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3890D50A686
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390509AbiDURDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
+        id S1390520AbiDURDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbiDURDG (ORCPT
+        with ESMTP id S1390505AbiDURDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:03:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBAD49259;
-        Thu, 21 Apr 2022 10:00:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5D67B82779;
-        Thu, 21 Apr 2022 17:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E31FC385AE;
-        Thu, 21 Apr 2022 17:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650560413;
-        bh=CoLsn958x3fiMjs8GjcOOZ+6XqtOgBdC9BJVZp5WP/I=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TXW08gVXbWfdX4lpa2AvJjjmk5Pz3ioALOE52oDs0v+Kf7R+T1llkXz5CHvLQdkhL
-         sSjsQZWfrjJcSWOW6jkzpGarloo1F3MRgbtYPmNinLL9LeY8Swh+Qx+xbZ5gBSKRbF
-         ucppNxK4WtLS/CFHM34IeQFyQIffwDl347MXVSC78i/4jygbc33sy9KupNCEv2KOXP
-         e6wk2ti3O1vOszonWMPOO2MY4HZ0K2faVgCu8qzutulwGeMBWr1PlGz8fG7MuGsOjm
-         qkThU0C7iuOOAdTREMPfUEM0PLYGFrUFTl8xHdD3t+IM4vOgUq0m8BxBZwDfdzjVUG
-         Wwz7b7vUL9KXw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7EF14E8DBDA;
-        Thu, 21 Apr 2022 17:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 21 Apr 2022 13:03:18 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B27F4991B
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:00:21 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id r83so5173426pgr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:00:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g/8FEaYQkq+lxLgr6M4Us6Wu0VOlD5eJM4zQXwRwI4E=;
+        b=JiMXiHFZnKzBdTsBMid8YTRBmOEvAzI/BORgqxA26W196NeybHwSYWuz0UGNfXq8pl
+         N0E3v+z0KkXtN9pfg7PCcpLbjtt/wEjN8Fne/ZPLeqFk5nHUD5OqDAqSjJbTQ/LXkUjU
+         ojPw9HaBCB6rDMYE7N6WR/EslIzl0IN7DrVzo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g/8FEaYQkq+lxLgr6M4Us6Wu0VOlD5eJM4zQXwRwI4E=;
+        b=VL/ojyT82OM1WcEQS8tXCDWPBnDXipjQuX+mEcBNj3u1kXnSQj+o9cjmyNojM0TRsV
+         7ONT9Em+z56z6D9t6R227kUTLIVnP5PYiCrnZvaTrefyn8hgB1RkrBH2xKLEtpmKB9pp
+         1cdiroYaP545A6GtzZGrYFqOcaCQsXKjD76aktl3WbO1n1Fy71K/ABO98pYfrlTxzaed
+         O9pl06VNZrkdZAcjfodBDUQFooGPBECByIcj0dW2ZWkkJminq6Ci2Jjw6XiDRIKOQSrm
+         KNQ1Pf7YDkCZ/GbmaqZdgdpGO5izKO5uvafopsfzsUTxxKvQi5IzjioO6BtDXUdShKkN
+         71iA==
+X-Gm-Message-State: AOAM5327qh9SWMAPY3q2q67Du1hn+h2dN+Er+kmL1SzKLTe4OQju4ZHB
+        IrEQvoWXhkX5+nEKhVPmxIgCmQ==
+X-Google-Smtp-Source: ABdhPJw0hzxN+V/lqZosNUDtXUopMEv4BHmL12lNcPx9EiYPpoczfL2OPi65/DtDMd/5VGqWaP1qeA==
+X-Received: by 2002:a62:3083:0:b0:505:f7ac:c4a6 with SMTP id w125-20020a623083000000b00505f7acc4a6mr577520pfw.66.1650560420685;
+        Thu, 21 Apr 2022 10:00:20 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:d426:5807:a72:7b27])
+        by smtp.gmail.com with UTF8SMTPSA id 3-20020a17090a190300b001cd4989ff60sm3389695pjg.39.2022.04.21.10.00.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 10:00:20 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 10:00:18 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v9 06/12] arm64: dts: qcom: sc7280: Add max98360a codec
+ for CRD 1.0 and 2.0
+Message-ID: <YmGNoifz9k7msMKu@google.com>
+References: <1650552459-21077-1-git-send-email-quic_srivasam@quicinc.com>
+ <1650552459-21077-7-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix prog_tests/uprobe_autoattach
- compilation error
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165056041351.10585.8509341938702940506.git-patchwork-notify@kernel.org>
-Date:   Thu, 21 Apr 2022 17:00:13 +0000
-References: <20220421132317.1583867-1-asavkov@redhat.com>
-In-Reply-To: <20220421132317.1583867-1-asavkov@redhat.com>
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     alan.maguire@oracle.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1650552459-21077-7-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Apr 21, 2022 at 08:17:33PM +0530, Srinivasa Rao Mandadapu wrote:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+> Subject: arm64: dts: qcom: sc7280: Add max98360a codec for CRD 1.0 and 2.0
 
-On Thu, 21 Apr 2022 15:23:17 +0200 you wrote:
-> I am getting the following compilation error for prog_tests/uprobe_autoattach.c
+nit: and the IDP boards?
+
+> Add max98360a codec node for audio use case on revision 3 and
+> 4 (aka CRD 1.0 and 2.0) boards.
+> Add amp_en node for max98360a codec pin control.
 > 
-> tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c: In function ‘test_uprobe_autoattach’:
-> ./test_progs.h:209:26: error: pointer ‘mem’ may be used after ‘free’ [-Werror=use-after-free]
-> 
-> mem variable is now used in one of the asserts so it shouldn't be freed right
-> away. Move free(mem) after the assert block.
-> 
-> [...]
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: fix prog_tests/uprobe_autoattach compilation error
-    https://git.kernel.org/bpf/bpf-next/c/6a12b8e20d7e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

@@ -2,117 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9B350AA46
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9E750AA54
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392553AbiDUUuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 16:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        id S1392558AbiDUUxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 16:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392548AbiDUUuK (ORCPT
+        with ESMTP id S1392592AbiDUUwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 16:50:10 -0400
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C2E4DF75
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:47:17 -0700 (PDT)
-Received: (wp-smtpd smtp.tlen.pl 20653 invoked from network); 21 Apr 2022 22:47:12 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1650574032; bh=uOC1fW/0uuSbuGCETmD2nbnOBndFlT09OLOf26HRiaM=;
-          h=To:From:Subject:Cc;
-          b=Iv/G25/v63Q81fWXkDU2p/sFBgBPmyoblHSgbQHfXvSNNJOWtatD8hgKUR8jpPtkG
-           2uahVMDf9nKYTsIbKpW44RjV6zssoUTwqw+7Odi9cEkM7ThKOeiPz9mVWfWYXM5+eI
-           1CdkDmzCzEwonlRqL/N+ET80S6MoCisc0dRKLLE0=
-Received: from aafl13.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.141.13])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <netdev@vger.kernel.org>; 21 Apr 2022 22:47:12 +0200
-Message-ID: <dbd203b1-3988-4c9c-909c-2d1f7f173a0d@o2.pl>
-Date:   Thu, 21 Apr 2022 22:47:01 +0200
+        Thu, 21 Apr 2022 16:52:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09462DEF;
+        Thu, 21 Apr 2022 13:49:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0C92B828D8;
+        Thu, 21 Apr 2022 20:49:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F176C385A7;
+        Thu, 21 Apr 2022 20:49:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650574196;
+        bh=J55gWEdyZI84vCX5T8ZM2ZIVMQXFYIyDtR8Uq8FyZRI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WnRwW7zR+8V3SzpJqk3LWNBW5IaUeqHC/7kVIE+s+yvdtq9pZn4nbadjnOnewY+ig
+         CQsq1XmQRmsx67R3ngUswLM7NJMJLSqKxYdFIvetp6+jzhd5j3WqOw+WbBubV8qopV
+         UIUpLjOighiwKmUOm05uqsJ4SSHFh1SafdlvnHvW75n1TkGSh1S7l8uI5+R75c1mGK
+         Wjy8nDL1vX9FyzunTAf14qoP+eQ4trKm5riZrU31xl+cEF0f4SvbBkiWT8EMqvkGjJ
+         58CRVNapFhxkMBbRns5LF7ehp7r8l9h9emyzVwnAStZKTeB3tqlUHkrcP+WXBjSj1a
+         TDqoJiMndeuhw==
+Date:   Thu, 21 Apr 2022 13:49:54 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, Andy Polyakov <appro@cryptogams.org>
+Subject: Re: [PATCH] random: avoid mis-detecting a slow counter as a cycle
+ counter
+Message-ID: <YmHDctbEAmJhinoz@sol.localdomain>
+References: <20220421192939.250680-1-ebiggers@kernel.org>
+ <YmG8k1JrVexBGmJL@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-GB
-To:     netdev@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-Subject: "mm: uninline copy_overflow()" breaks i386 build in Mellanox MLX4
-Cc:     David Laight <David.Laight@ACULAB.COM>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-rdma@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 15cac2a73e996b392246ccbfd184ccf8
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [8RPE]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmG8k1JrVexBGmJL@zx2c4.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Apr 21, 2022 at 10:20:35PM +0200, Jason A. Donenfeld wrote:
+> Hi Eric,
+> 
+> On Thu, Apr 21, 2022 at 9:30 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> > The method that try_to_generate_entropy() uses to detect a cycle counter
+> > is to check whether two calls to random_get_entropy() return different
+> > values.  This is uncomfortably prone to false positives if
+> > random_get_entropy() is a slow counter, as the two calls could return
+> > different values if the counter happens to be on the cusp of a change.
+> > Making things worse, the task can be preempted between the calls.
+> >
+> > This is problematic because try_to_generate_entropy() doesn't do any
+> > real entropy estimation later; it always credits 1 bit per loop
+> > iteration.  To avoid crediting garbage, it relies entirely on the
+> > preceding check for whether a cycle counter is present.
+> >
+> > Therefore, increase the number of counter comparisons from 1 to 3, to
+> > greatly reduce the rate of false positive cycle counter detections.
+> 
+> Thanks for the patch. It seems like this at least is not worse than
+> before. But before I commit this and we forget about the problem for a
+> while, I was also wondering if we can do much, much better than before,
+> and actually make this "work" with slow counters. Right now, the core
+> algorithm is:
+> 
+>     while (!crng_ready()) {
+>         if (no timer) mod_timer(jiffies + 1);
+> 	mix(sample);
+> 	schedule();    // <---- calls the timer, which does credit_entry_bits(1)
+> 	sample = rdtsc;
+>     }
+> 
+> So we credit 1 bit every time that timer fires. What if the timer
+> instead did this:
+> 
+>     static void entropy_timer(struct timer_list *t)
+>     {
+>         struct timer_state *s = container_of(...t...);
+>         if (++s->samples == s->samples_per_bit) {
+>             credit_entropy_bits(1);
+>             s->samples = 0;
+>         }
+>     }
+> 
+> Currently, samples_per_bit is 1. What if we make it >1 on systems with
+> slow cycle counters? The question then is: how do we relate some
+> information about cycle counter samples to the samples_per_bit estimate?
+> The jitter stuff in crypto/ does something. Andy (CC'd) mentioned to me
+> last week that he did something some time ago computing FFTs on the fly
+> or something like that. And maybe there are other ideas still. I wonder
+> if we can find something appropriate for the kernel here.
+> 
+> Any thoughts on that direction?
+> 
 
-commit ad7489d5262d ("mm: uninline copy_overflow()")
+I think we'll need to go there eventually, along with fixing
+add_timer_randomness() and add_interrupt_randomness() to credit entropy more
+accurately.  I do not think there is an easy fix, though; this is mostly an open
+research area.  Looking into research papers and what has been done for other
+jitter entropy implementations would be useful.
 
-breaks for me a build for i386 in the Mellanox MLX4 driver:
-
-        In file included from ./arch/x86/include/asm/preempt.h:7,
-                         from ./include/linux/preempt.h:78,
-                         from ./include/linux/percpu.h:6,
-                         from ./include/linux/context_tracking_state.h:5,
-                         from ./include/linux/hardirq.h:5,
-                         from drivers/net/ethernet/mellanox/mlx4/cq.c:37:
-        In function ‘check_copy_size’,
-            inlined from ‘copy_to_user’ at ./include/linux/uaccess.h:159:6,
-            inlined from ‘mlx4_init_user_cqes’ at drivers/net/ethernet/mellanox/mlx4/cq.c:317:9,
-            inlined from ‘mlx4_cq_alloc’ at drivers/net/ethernet/mellanox/mlx4/cq.c:394:10:
-        ./include/linux/thread_info.h:228:4: error: call to ‘__bad_copy_from’ declared with attribute error: copy source size is too small
-          228 |    __bad_copy_from();
-              |    ^~~~~~~~~~~~~~~~~
-        make[5]: *** [scripts/Makefile.build:288: drivers/net/ethernet/mellanox/mlx4/cq.o] Błąd 1
-        make[4]: *** [scripts/Makefile.build:550: drivers/net/ethernet/mellanox/mlx4] Błąd 2
-        make[3]: *** [scripts/Makefile.build:550: drivers/net/ethernet/mellanox] Błąd 2
-        make[2]: *** [scripts/Makefile.build:550: drivers/net/ethernet] Błąd 2
-        make[1]: *** [scripts/Makefile.build:550: drivers/net] Błąd 2
-
-Reverting this commit fixes the build. Disabling Mellanox Ethernet drivers
-in Kconfig (tested only with also disabling of all Infiniband support) also fixes the build.
-
-It appears that uninlining of copy_overflow() causes GCC to analyze the code deeper.
-
-The code in mlx4_init_user_cqes, for reference:
-
-        static int mlx4_init_user_cqes(void *buf, int entries, int cqe_size)
-        {
-                int entries_per_copy = PAGE_SIZE / cqe_size;
-                void *init_ents;
-                int err = 0;
-                int i;
-
-                init_ents = kmalloc(PAGE_SIZE, GFP_KERNEL);
-                // ...
-                if (entries_per_copy < entries) {
-                        // ...
-                } else {
-                        // BUG here
-                        err = copy_to_user((void __user *)buf, init_ents,
-                                        array_size(entries, cqe_size)) ?
-                                -EFAULT : 0;
-                }
-
-                // ...
-        }
-
-My setup: Ubuntu 20.04, gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)
-
-I was using lightly modified Kconfig from Debian i386 Linux packages.
-
-Greetings,
-
-Mateusz Jończyk
-
+- Eric

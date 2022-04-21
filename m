@@ -2,115 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E51050A2F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695AB50A306
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389586AbiDUOrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
+        id S1389576AbiDUOsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389582AbiDUOrO (ORCPT
+        with ESMTP id S1356573AbiDUOsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:47:14 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C8742488;
-        Thu, 21 Apr 2022 07:44:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650552263; x=1682088263;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8nROONmBaEtt0RwaLOJXl6s8nLCzEBixvAjQNvvsvHE=;
-  b=EhghRW3dbujf4YwyJxcd+vYecJ+iRh/2lYh8rOhnWI2yTiYzPks8CLMN
-   ApzHq1gU1N1qw1zMBFgQCDlyigtzQff33e4S7HWcyX2lO8BUM3h0cHV5Z
-   88Ct1XLEtShImi7aqpArkcJ4AEuEWBedickrOfW0EeafkNZscxqO6YeZz
-   AX3dhhiw+clEkZMSK8XSDkNGItCNZXFCHSScr5KfMHTWNv3xBa7OaDzgQ
-   XuYjciPrxvWZtx1gBido3j3E96VtPQ1Q0rcqk17cWJR/AETLwur544QTk
-   1FP+l4awRPY9ksTsgfymhMxBWf9aoXmlMHbuvW0Wg7keeztNWWJnmY10o
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263216560"
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="263216560"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 07:44:20 -0700
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="511093185"
-Received: from testes-mobl1.amr.corp.intel.com (HELO [10.212.210.35]) ([10.212.210.35])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 07:44:19 -0700
-Message-ID: <70436892-0b4f-30c5-051b-2c86f7387101@linux.intel.com>
-Date:   Thu, 21 Apr 2022 07:44:19 -0700
+        Thu, 21 Apr 2022 10:48:30 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0560AE0C5;
+        Thu, 21 Apr 2022 07:45:41 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 48D5068B05; Thu, 21 Apr 2022 16:45:37 +0200 (CEST)
+Date:   Thu, 21 Apr 2022 16:45:36 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Subject: Re: [PATCH 03/25] dma-direct: take dma-ranges/offsets into account
+ in resource mapping
+Message-ID: <20220421144536.GA23289@lst.de>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru> <20220324014836.19149-4-Sergey.Semin@baikalelectronics.ru> <0baff803-b0ea-529f-095a-897398b4f63f@arm.com> <20220417224427.drwy3rchwplthelh@mobilestation> <20220420071217.GA5152@lst.de> <20220420083207.pd3hxbwezrm2ud6x@mobilestation> <20220420084746.GA11606@lst.de> <20220420085538.imgibqcyupvvjpaj@mobilestation>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
- attestation interface driver
-Content-Language: en-US
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220420012032.GA2224031@ls.amr.corp.intel.com>
- <dd4a2b16-397e-8866-0fd5-b5c5dfd453ab@linux.intel.com>
- <20220421070444.GB1423762@private.email.ne.jp>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20220421070444.GB1423762@private.email.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420085538.imgibqcyupvvjpaj@mobilestation>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/21/22 12:04 AM, Isaku Yamahata wrote:
-> On Tue, Apr 19, 2022 at 06:26:43PM -0700,
-> Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+On Wed, Apr 20, 2022 at 11:55:38AM +0300, Serge Semin wrote:
+> On Wed, Apr 20, 2022 at 10:47:46AM +0200, Christoph Hellwig wrote:
+> > I can't really comment on the dma-ranges exlcusion for P2P mappings,
+> > as that predates my involvedment, however:
 > 
->> On 4/19/22 6:20 PM, Isaku Yamahata wrote:
->>> If timeout occurs, the state of adev->tdquote_buf is unknown.  It's not safe
->>> to continue to using adev->tdquote_buf.  VMM would continue to processing
->>> getquote request with this buffer.  What if TDX_CMD_GEN_QUOTE is issued again,
->>> and tdquote_buf is re-used?
->>
->> This part is not clearly discussed in the specification. May be spec
->> should define some reasonable timeout and teardown details.
->>
->> Regarding not using this buffer again, what happens if we de-allocate
->> it on timeout and the host still updates it?
-> 
-> Until GET_QUOTE_IN_FLIGHT is cleared, the shared page is owned by VMM, TD
-> attestation driver shouldn't reuse/free the pages.
-> 
-> In the case of this driver, I think of two options
-> - don't timeout. wait for interrupt to arrive and check the shared GPA state.
-> - allow timeout. When the next request comes, check the shared GPA state.
->    If it's still GET_QUOTE_IN_FLIGHT, return EBUSY.
+> My example wasn't specific to the PCIe P2P transfers, but about PCIe
+> devices reaching some platform devices over the system interconnect
+> bus.
 
-Out of the above two options, I think option 1 is better. It is simpler
-to serialize them using mutex compared to checking the shared buffer of
-previous request.
+So strike PCIe, but this our definition of Peer to Peer accesses.
 
-> 
-> It's possible for VMM to keep the shared GPA forever maliciously(DoS) or
-> unintentionally due to bug.  TD can't do much about it.
+> What if I get to have a physical address of a platform device and want
+> have that device being accessed by a PCIe peripheral device? The
+> dma_map_resource() seemed very much suitable for that. But considering
+> what you say it isn't.
 
-I will add a note about it in commit log.
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+dma_map_resource is the right thing for that.  But the physical address
+of MMIO ranges in the platform device should not have struct pages
+allocated for it, and thus the other dma_map_* APIs should not work on
+it to start with.

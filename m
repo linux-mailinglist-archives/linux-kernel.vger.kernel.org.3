@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E37509D11
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F83509D0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388075AbiDUKGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388067AbiDUKGm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1388068AbiDUKGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 21 Apr 2022 06:06:42 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0BF27B36
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349121AbiDUKGk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 21 Apr 2022 06:06:40 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142E827B25
         for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1650535432; x=1682071432;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OMzQtmCQFnmtn5Rs2jNRiC4gUmVh9lme1wrqau20DQs=;
-  b=Sv13zTOAmsV2JXs7keHw2Of2M3fKJXO7vkoJVJKwNQopD2XszDgQWRq7
-   EJPyFpVrn7uOplXRP2WOxher0PeXhAYltrH5vO5IROkZs6fwis9U8CZ/4
-   nqW+eAOhmvgO+oC1AlKkpR6IS9Le843vksKuQTVQtDphWr1N7TJ5vkkBz
-   lMAgrKAwOIvRNJRTt67WcR3sz8LpcvMzteL2hTWZPfVayY+b+HtEZMKas
-   kndtTdAuXX3/Q3/w1+z5giqco2v/XSobhdyKpy03TnNyl4wI5MhzK8VGY
-   v0ZSymftZ7yI2n0nC8nepSUslISG6IAs7YHd6d/JcR6jeHIvndkkbtG7u
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="263153421"
+  bh=m+iabvTTK/fqCwg3tbBUcihgtcYmP51Oyr0Pm+DwX2k=;
+  b=DmbghU7DrTk073ylxkVY19xadVgvJYMLHI2K4LUY2LjILWFypG5jODxj
+   KBZGJ4Xg0EhSuFVUZBycEwayDDN6WoHvKIe+ZAnjrkyVTg4Nb9TVKmQIv
+   qAj5F06oPfYL6lF2mUb4fUwdTU2XOP2F9ya8DdPpxrg3htLnNTQpYiyK+
+   lJG8fD0FIgWdRvB6egmQAHArMHWnpzLHxVZqVL908I8yxQ0CMWFC2Qajw
+   wPnUB49kajdhAIkOqPEtzZz3wPUKZq7cBTpZHNCsFQ+g+U6V05FAQI3mj
+   Ko9xuv1o4/0PJislfk4cVjru9nVl2AimAI0vDv6G4xZw5sv1ZM7fJ98JA
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="261905303"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="263153421"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 03:03:51 -0700
+   d="scan'208";a="261905303"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 03:03:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="805444187"
+   d="scan'208";a="703024554"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Apr 2022 03:03:50 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 03:03:50 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nhTfC-0008CH-Au;
+        id 1nhTfC-0008CB-7n;
         Thu, 21 Apr 2022 10:03:50 +0000
-Date:   Thu, 21 Apr 2022 18:03:32 +0800
+Date:   Thu, 21 Apr 2022 18:03:33 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Ingo Molnar <mingo@kernel.org>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2110/2579] include/linux/fscrypt.h:757:37:
- error: implicit declaration of function 'file_inode'; did you mean
- 'd_inode'?
-Message-ID: <202204211758.YJrVhXva-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 1673/2579]
+ ./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h:
+ No such file or directory
+Message-ID: <202204211809.Nim6Okt4-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,14 +63,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: 1cb1e496fc95fd250b11d4ae7bd593cbe22bb5f6 [2110/2579] headers/deps: fs: Optimize <linux/fs.h> dependencies, remove <linux/fs_api.h> inclusion
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220421/202204211758.YJrVhXva-lkp@intel.com/config)
+commit: 700c335789263a7a7021dad9bbb7accdd5834357 [1673/2579] headers/deps: net: Split <linux/socket_types.h> out of <linux/socket.h>
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220421/202204211809.Nim6Okt4-lkp@intel.com/config)
 compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=1cb1e496fc95fd250b11d4ae7bd593cbe22bb5f6
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=700c335789263a7a7021dad9bbb7accdd5834357
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 1cb1e496fc95fd250b11d4ae7bd593cbe22bb5f6
+        git checkout 700c335789263a7a7021dad9bbb7accdd5834357
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
@@ -80,34 +80,13 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/crypto/fscrypt_private.h:14,
-                    from fs/crypto/fname.c:23:
-   include/linux/fscrypt.h: In function 'fscrypt_dio_supported':
->> include/linux/fscrypt.h:757:37: error: implicit declaration of function 'file_inode'; did you mean 'd_inode'? [-Werror=implicit-function-declaration]
-     757 |         const struct inode *inode = file_inode(iocb->ki_filp);
-         |                                     ^~~~~~~~~~
-         |                                     d_inode
-   include/linux/fscrypt.h:757:37: warning: initialization of 'const struct inode *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-   cc1: some warnings being treated as errors
-
-
-vim +757 include/linux/fscrypt.h
-
-c6c89783eba05a Eric Biggers 2022-01-28  753  
-c6c89783eba05a Eric Biggers 2022-01-28  754  static inline bool fscrypt_dio_supported(struct kiocb *iocb,
-c6c89783eba05a Eric Biggers 2022-01-28  755  					 struct iov_iter *iter)
-c6c89783eba05a Eric Biggers 2022-01-28  756  {
-c6c89783eba05a Eric Biggers 2022-01-28 @757  	const struct inode *inode = file_inode(iocb->ki_filp);
-c6c89783eba05a Eric Biggers 2022-01-28  758  
-c6c89783eba05a Eric Biggers 2022-01-28  759  	return !fscrypt_needs_contents_encryption(inode);
-c6c89783eba05a Eric Biggers 2022-01-28  760  }
-c6c89783eba05a Eric Biggers 2022-01-28  761  
-
-:::::: The code at line 757 was first introduced by commit
-:::::: c6c89783eba05a5e159b07cfd8c68d841cc5de42 fscrypt: add functions for direct I/O support
-
-:::::: TO: Eric Biggers <ebiggers@google.com>
-:::::: CC: Eric Biggers <ebiggers@google.com>
+   In file included from ./usr/include/linux/ax25.h:10,
+                    from ./usr/include/linux/netrom.h:11,
+                    from <command-line>:
+>> ./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
+       5 | #include <uapi/linux/socket_types.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
 -- 
 0-DAY CI Kernel Test Service

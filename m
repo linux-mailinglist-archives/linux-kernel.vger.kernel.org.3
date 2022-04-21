@@ -2,100 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AD850A8C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657D750A8C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391771AbiDUTJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
+        id S1391779AbiDUTL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380740AbiDUTJz (ORCPT
+        with ESMTP id S1378558AbiDUTL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:09:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8264E4C7B0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650568021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J83rTwmfAjYlO7wUTZvmzVTeTlogsXahqrayjJ+BC7w=;
-        b=fd583CzT5wYEiF66hdqWDTnHutp1cwhWriuoOTEazqNa9HLG4M+icSTrMEyPZSRnSBSSO+
-        DS1Cvf9DrllCrTmKrK4NQZAd4e1ztWz7dw3jL08jQEoB8vpYDaMDj4e3Yx7rZrbuMSqZte
-        5NabeT43jpR6T+1bNO4DGhxtdzPjc2o=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-30-Pjbe8XNrONeZx8tCg-RtTg-1; Thu, 21 Apr 2022 15:06:59 -0400
-X-MC-Unique: Pjbe8XNrONeZx8tCg-RtTg-1
-Received: by mail-io1-f71.google.com with SMTP id y20-20020a5e8714000000b0065494b96af2so3909589ioj.10
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:06:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=J83rTwmfAjYlO7wUTZvmzVTeTlogsXahqrayjJ+BC7w=;
-        b=QZ1FplU80k4+dhiOv6Raz73FhgAuMvN9p77cbJ8f2S3/s53zpj0pr4RTenJb1O+YBb
-         uBCN4RwkQxgtLIuyY176PUNSeGbs4HZmGKMMHa++Gu9dfuXPKqLJ9vH2f8W278hrjNmI
-         /B6nIIXxig1i0ngdGYiJ1GujfYOs+19cuhhvweg7uGbozslp82uN3kRPSgko37Us+KhO
-         r97VryGZiLBlD7l4I+u5AnB8Hd+xWaTGPdxDLAVR7DSCWiPs1hOyAq+m9+ARZhY2iCWS
-         89dKJMohTV53apKuMgNGwBC4Y/4UnPSMofkP5FPYSfGob8aRrVpAr5KApfC0SkhVEmnw
-         TQaQ==
-X-Gm-Message-State: AOAM530EcIUSn2wQH8aqAPjGHcuaVFE+96WgigHAc9hrNFSaPUz+SG1q
-        EimnU2DHZcxUW8xQ69nsgmrBTEDDawc+R3iz8ztCnZ1dP09lgAJ2DV5oXIv2vFi0RoID9SYLPju
-        U869ZrZS9rGDAO61AGEwUPDnd
-X-Received: by 2002:a05:6e02:1a0f:b0:2c9:a83b:b69e with SMTP id s15-20020a056e021a0f00b002c9a83bb69emr531677ild.4.1650568018620;
-        Thu, 21 Apr 2022 12:06:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx63YiYj7I8DXD/H5H3iF/QzWB0gDKjqesUTLmJLmy9zG3eUSh7SdyFF0W6OI+0M5nRllha2Q==
-X-Received: by 2002:a05:6e02:1a0f:b0:2c9:a83b:b69e with SMTP id s15-20020a056e021a0f00b002c9a83bb69emr531668ild.4.1650568018408;
-        Thu, 21 Apr 2022 12:06:58 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id m6-20020a923f06000000b002ca74f4fab2sm12692154ila.14.2022.04.21.12.06.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 12:06:58 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 15:06:56 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v6 08/10] KVM: x86/MMU: Allow NX huge pages to be
- disabled on a per-vm basis
-Message-ID: <YmGrUE0QgzRpCJxU@xz-m1.local>
-References: <20220420173513.1217360-1-bgardon@google.com>
- <20220420173513.1217360-9-bgardon@google.com>
+        Thu, 21 Apr 2022 15:11:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458624CD49;
+        Thu, 21 Apr 2022 12:08:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA259B828CD;
+        Thu, 21 Apr 2022 19:08:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CEDCC385A1;
+        Thu, 21 Apr 2022 19:08:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650568113;
+        bh=pEYDq1Q4e5rDzN3eRyGF3xFFJcxwOp83q2iiOlT0aSY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TGhrCQam+BzI8AblkY9oJC5GBIJvanyAPz+qTOneMa7ZXEkJd0ybqeh7WpQ+iYAgk
+         4eHrDvon85rWmiDFwa142SjfqfGihwK8beAXTWWnN0KPbf9pe6wCuhEU8Oatv6ZMOz
+         HhYTuF4oVgUeReR8Cx4b8p9897zD7cGevATUxdhUMDgwZQaj1pMFrp2saUfNqm67aK
+         lAsoOOhK23C79Kkj7ZiuoKnojUV33ZZaCobm8yJADOKqbpJFrjRAKscdVPS+SLB2am
+         LJ31ENmBc/jmfe2MvEk4jlS95eeLuq4edHC4xC9CxdoPlMBcQ3cKg0x1QQgN8VvrFo
+         b3ZIPlxe0Yvqg==
+Received: by mail-pl1-f172.google.com with SMTP id d15so5825022pll.10;
+        Thu, 21 Apr 2022 12:08:33 -0700 (PDT)
+X-Gm-Message-State: AOAM530g0RZKoVWj6k/0+OjJKyvOGwmvB1t1447Hi6VKbg1AmcGo4OVq
+        /tb3ZjrMba1ucf9pjzcc1OXLP+tugxUbwxnXAw==
+X-Google-Smtp-Source: ABdhPJx2/vfWAJgwxYJ1KQbeNopS2+xzJdE+dbc/rOWErLiBExZaizfaFLAsh3z3f2E0CAdu5U/TeCXH+YWQgDptf/E=
+X-Received: by 2002:a17:902:eb8c:b0:158:4cc9:6998 with SMTP id
+ q12-20020a170902eb8c00b001584cc96998mr925604plg.35.1650568112939; Thu, 21 Apr
+ 2022 12:08:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220420173513.1217360-9-bgardon@google.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <f6086989-a4c1-4223-fad0-79bd5719432e@linaro.org>
+ <20220421094421.288672-1-michael@walle.cc> <YmFo+EntwxIsco/t@robh.at.kernel.org>
+ <30f2f62406bab8225cc88013b414016d@walle.cc>
+In-Reply-To: <30f2f62406bab8225cc88013b414016d@walle.cc>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 21 Apr 2022 14:08:21 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJr0fvqL_6CL__Q6aY0AVD+gL4=g46Y=j2r=fJy9jDwGg@mail.gmail.com>
+Message-ID: <CAL_JsqJr0fvqL_6CL__Q6aY0AVD+gL4=g46Y=j2r=fJy9jDwGg@mail.gmail.com>
+Subject: Re: [EXT] Re: [PATCH 1/2 v4] dt-bindings: dspi: added for semtech sx1301
+To:     Michael Walle <michael@walle.cc>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        Changming Huang <jerry.huang@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Yang-Leo Li <leoyang.li@nxp.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Vladimir Oltean <olteanv@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:35:11AM -0700, Ben Gardon wrote:
-> +8.36 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
-> +---------------------------
-> +
-> +:Capability KVM_CAP_PMU_CAPABILITY
+On Thu, Apr 21, 2022 at 10:16 AM Michael Walle <michael@walle.cc> wrote:
+>
+> Am 2022-04-21 16:23, schrieb Rob Herring:
+>
+> > What's needed here is a connector node (and driver) for the mikrobus
+> > socket. The connector node's purpose is to decouple the host DT from
+> > add-on board overlay DT. Something like this:
+>
+> Funny I had a similar idea to have a connector with all the
+> properties, but I failed to see how that would be of any help.
+>
+> Do you mind an example of such an overlay? Judging by the spi
+> and i2c subnode, I guess it will amend the connector node and
+> fill in it's devices?
 
-s/PMU_CAPABILITY/VM_DISABLE_NX_HUGE_PAGES/?
+Right.
 
-With that fixed:
+>
+> And all the child device properties will reference the connector,
+> correct?
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
+Right.
 
--- 
-Peter Xu
+>
+> > connector {
+> >       // And a more specific compatible if pins can have alt funcs?
+> >       // Spec version needed?
+> >       compatible = "mikrobus-socket";
+> >
+> >       // Will need regulators defined if child devices expect
+> >       // regulators
+> >       vcc-33-supply = <&reg33>;
+> >       vcc-5-supply = <&reg5v>;
+> >
+> >       i2c-parent = <&i2c1>; // Already a defined property
+> >       spi-parent = <&spi0>; // New
+>
+> uart/serial needed too?
 
+Yes. Serial has the extra issue in the kernel that tty vs. serdev are
+mutually exclusive and decided by presence or not of a child node for
+the UART. That would need some work to dynamically switch. I think I
+have some old patches doing that, but they probably break some aspects
+of TTY expectations.
+
+>
+> >
+> >       // RST pin
+> >       reset-gpios = <&gpio 4 0>;
+> >
+> >       // remap 'INT' (index 0) to host interrupt
+> >       #interrupt-cells = <2>;
+> >       #address-cells = <0>;
+> >       interrupt-map = <0 0 &gpio 3 0>;
+> >
+> >       spi {
+>
+> For example:
+>
+> my-device@0 {
+>    reg = <0>;  // really needed? there is only one SPI CS line
+
+Yes, needed.
+
+>    compatible = "my-device";
+>    reset-gpios = // may be left unset if it's optional, but what
+>                  // what if it is a required property and in hardware
+>                  // its connected to the RST pin of the module?
+
+Probably should not be required and the connector driver manages it.
+
+>    other-gpios = <&connector 2>;
+>    vdd-supply = // what comes here? <&connector VCC_33>?
+
+That has to be figured out, but *-supply doesn't take arg cells
+currently. Probably the connector needs to define its own regulator
+nodes.
+
+>    interrupts-extended = <&connector 0 ..>;
+> }
+
+Rob

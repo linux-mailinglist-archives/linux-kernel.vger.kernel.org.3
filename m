@@ -2,180 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB2550A745
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4EA550A744
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390841AbiDURmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S1390849AbiDURm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238923AbiDURmD (ORCPT
+        with ESMTP id S1390843AbiDURm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:42:03 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6D649F91
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:39:12 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-e67799d278so2259981fac.11
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:39:12 -0700 (PDT)
+        Thu, 21 Apr 2022 13:42:26 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048F64A3E3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:39:36 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id h1so5627375pfv.12
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rd1UX9GwU1UbKATOeeYflGhns40gVcjdRs94Rp50K6c=;
-        b=ILILE0CBHmLrsx1gA8mBceAuRT9Vwau5GzEqNXp+KSDhWEUOTRMm91JQ7Prn4nqo2p
-         pjuqqXyQRwv0tsidil81T/T2l02QBioWszxelY/LwDGvbojb0DARMjb2d3spcUs2u044
-         qenPfAG/wDIZktD7emJve70unzwaq+OKAvUuFyBYragmcHAY/+8a6aKWbq3lz7Lm2zHK
-         pmpN0l32/2uPvejYwnRP6guv3ntHIJ65S9ZoFzHdcy3zz926hyFxFrtLGvUN6Ya/dcb2
-         LbneX1yS/28OBhU9LClvkTPqxUR+BYoMmf73Jp1SD5EP3/TrNOA1HI1JFeZzBzGJAuht
-         fQ6A==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2W86hA+LROK4jXyAwIAee+7wV7n8SY+P+C85vkOxOkk=;
+        b=PwqFrdQW45IykVUIooF0BHYuznkhoonDtQsAl5/TMeoUb65Eu9dQrRZCWddA1SAaSS
+         K0JML/y1/XmlT0u/KJadtZo/uBP8L0BxkcfmoUIZMyWEyPI/+R8JNi+T4tvM5gf5mF+5
+         w6A0ULi40eLs4YzsA61rZhS1RVfnNgDekzewQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rd1UX9GwU1UbKATOeeYflGhns40gVcjdRs94Rp50K6c=;
-        b=n0JB3qSPRSv2dV45rvnQnEGLT24zO+ss39YCRjhSQlwCCkPEHRN7xpqaUzo2lHfa4u
-         6oziMJarJN7qk/d2W/9EvgbND7xM3/kxkC6M6gTFIV0UWdqtPbLUdDxWjNiMCJEBpahG
-         vzMBpW1BzfcX0BULbqQ3p7Z4SID0aouZP26XwiYdqy+DNOg3EwJKP4SagIaRNdkZqw/b
-         JZGwMdxXkwc5Tyd5mrPSwuGJNPdcepfx03otH5wzOIYNQKic/THPh3r34oBVitfv2gW/
-         us/QY4Yso/j6b4w3c2lt7LM0LK76IE6Auw0L+wKmf3kNp+AR4RF9LsJSQz6yUghxOR8c
-         T+SQ==
-X-Gm-Message-State: AOAM531JvUaz3CACH58m2rc6o1BMiTn9OItX5NaERMNbYJfhRID/n2TT
-        J1ccHYhzKs3oeykBuxotseNgmLFS3hVx/kvRyD0=
-X-Google-Smtp-Source: ABdhPJyvgYAEQbb7MBc++PWNoLsV1Ey1bVvwcov5O8XOEtS5Hv7oQM4YH0GQnaKtpuNRcOc3a6adUar26sW4/3ZKZA4=
-X-Received: by 2002:a05:6870:a40d:b0:e5:ea09:df91 with SMTP id
- m13-20020a056870a40d00b000e5ea09df91mr272460oal.99.1650562751735; Thu, 21 Apr
- 2022 10:39:11 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2W86hA+LROK4jXyAwIAee+7wV7n8SY+P+C85vkOxOkk=;
+        b=tWa34XAA3Fbwqnk2OwAkbZqC/6kv35xPgAyZopoycEv8Mzm2DdfqIiP+0ZCxpgOSZB
+         J8SgY2KjAulEQlFi3EM0m4GPerytPJhtQv0cMH+uhEwE1zM7o0NNYvb9ymun5cLpsD8i
+         I0PzsaWZUUUD/5DPNSGL/XZ/ZqCTWmfhHLXLZwJteImRKKPQJXzqoDGxL6GCP9mj5ouG
+         3iMkOIL6III0vYFAxqDRgZ2ApUgD/RQKdWkZ2RdaNe7tZyOehlx5uwAJo6vtogr7Ipr6
+         2yWtSbveL8zHK1UUzjzz8XCyonhgF8VeIvUC2xYr3U54Gw8rZKUzghJgcUpWqkMd4Pvo
+         w/9w==
+X-Gm-Message-State: AOAM530kGQLQzRGT8sX7m8wNE+Xj7pADW+HANfeO7MOIqnNd4m6/TT8d
+        gaPf4qGj/Z250j4Xuj7oGA8Mwg==
+X-Google-Smtp-Source: ABdhPJySBSTp91/OgeIOGpK8fn81MoLnBA0bonLyz1T2bDEio80I8jMyu6TA4zf3a5ISBGmWaE751Q==
+X-Received: by 2002:a05:6a00:c8d:b0:50a:62e5:6d30 with SMTP id a13-20020a056a000c8d00b0050a62e56d30mr579533pfv.47.1650562775534;
+        Thu, 21 Apr 2022 10:39:35 -0700 (PDT)
+Received: from evgreen-glaptop.lan ([98.47.98.87])
+        by smtp.gmail.com with ESMTPSA id j6-20020a63b606000000b003808b0ea96fsm23237023pgf.66.2022.04.21.10.39.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 10:39:35 -0700 (PDT)
+From:   Evan Green <evgreen@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rajat Jain <rajatja@chromium.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Evan Green <evgreen@chromium.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Razvan Heghedus <heghedus.razvan@gmail.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v3 0/2] USB: Quiesce interrupts across pm freeze
+Date:   Thu, 21 Apr 2022 10:39:25 -0700
+Message-Id: <20220421173927.2845967-1-evgreen@chromium.org>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-References: <20220409042321.3184493-1-james.hilliard1@gmail.com>
- <b3f7e288-3341-8c6f-1b95-e553ac5ebc35@suse.de> <CAMeQTsbh-Fy4CORBTX=AfZ+K-fZYUQ=hY=ctLFyu9KcJ5NgFUA@mail.gmail.com>
- <dce29330-e40c-860e-2c72-7ddebdd96e20@redhat.com> <CAMeQTsYYpw5+uLgmDrbB6PUBotRC4F+_rfK+sxT0CpPHoiOmmw@mail.gmail.com>
- <10c81e57-2f09-f4f8-dc2f-6bd05ef819d7@redhat.com>
-In-Reply-To: <10c81e57-2f09-f4f8-dc2f-6bd05ef819d7@redhat.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Thu, 21 Apr 2022 12:39:00 -0500
-Message-ID: <CADvTj4oms8R1fhFpyZ+juU=4Eozie6f-3fzz4+jtptj3M9VCbw@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/gma500: depend on framebuffer
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 8:22 AM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> On 4/21/22 14:54, Patrik Jakobsson wrote:
-> > On Thu, Apr 21, 2022 at 2:47 PM Javier Martinez Canillas
-> > <javierm@redhat.com> wrote:
->
-> [snip]
->
-> >>>>> diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
-> >>>>> index 0cff20265f97..a422fa84d53b 100644
-> >>>>> --- a/drivers/gpu/drm/gma500/Kconfig
-> >>>>> +++ b/drivers/gpu/drm/gma500/Kconfig
-> >>>>> @@ -2,11 +2,13 @@
-> >>>>>   config DRM_GMA500
-> >>>>>       tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
-> >>>>>       depends on DRM && PCI && X86 && MMU
-> >>>>> +     depends on FB
-> >>>>
-> >>>> Why do we need FB here? Framebuffer support should be hidden by DRM's
-> >>>> fbdev helpers.
-> >>>
-> >>> It is not needed but gives him video output since it enables the drm
-> >>> fbdev emulation.
-> >>>
-> >>
-> >> I'm not sure to understand this. Shouldn't depend on DRM_FBDEV_EMULATION then?
-> >
-> > No, it shouldn't depend on any FBDEV stuff since it's not actually
-> > required. It just happens to help in this case since weston + fbdev
-> > backend works but not weston with drm backend (or whatever config
-> > James have set).
->
-> I see. Then the correct approach for them would be to just enable CONFIG_FB
-> and DRM_FBDEV_EMULATION in their kernel config, rather than making this to
-> depend on anything FB related as you said.
+The documentation for the freeze() method says that it "should quiesce
+the device so that it doesn't generate IRQs or DMA". The unspoken
+consequence of not doing this is that MSIs aimed at non-boot CPUs may
+get fully lost if they're sent during the period where the target CPU is
+offline.
 
-Yeah, so it looks like CONFIG_FB_EFI is not needed but
-CONFIG_DRM_FBDEV_EMULATION is, I think I just assumed efifb
-was what was needed based on the kernel logs.
+The current behavior of the USB subsystem still allows interrupts to
+come in after freeze, both in terms of remote wakeups and HC events
+related to things like root plug port activity. This can get controllers
+like XHCI, which is very sensitive to lost interrupts, in a wedged
+state. This series attempts to fully quiesce interrupts coming from USB
+across in a freeze or quiescent state.
 
-This does not work:
-CONFIG_FB enabled
-CONFIG_DRM_FBDEV_EMULATION disabled
+These patches are grouped together because they serve a united purpose,
+but are actually independent. They could be merged or reverted
+individually.
 
-This works:
-CONFIG_FB enabled
-CONFIG_DRM_FBDEV_EMULATION enabled
+You may be able to reproduce this issue on your own machine via the
+following:
+1. Disable runtime PM on your XHCI controller
+2. Aim your XHCI IRQ at a non-boot CPU (replace 174): echo 2 >
+   /proc/irq/174/smp_affinity
+3. Attempt to hibernate (no need to actually go all the way down).
 
->
-> >
-> >>
-> >>> I looked some more at the logs and it seems weston doesn't work on his
-> >>> system without the fbdev backend. So the question is why weston isn't
-> >>> working without fbdev? Perhaps this is just a Weston configuration
-> >>> issue?
-> >>>
-> >>
-> >> But is weston using the fbdev emulated by DRM or the one registered by
-> >> efifb? I thought that the latter from what was mentioned in this thread.
-> >
-> > It's using drm fbdev emulation with gma500 so EFIFB has nothing to do
-> > with this. I believe it was just simply incorrectly reported. If I'm
-> > correct then "depends on FB" is what makes video output work for
-> > James.
-> >
->
-> Got it. Thanks for the clarification.
+I run 2 and 3 in a loop, and can usually hit a hang or dead XHCI
+controller within 1-2 iterations. I happened to notice this on an
+Alderlake system where runtime PM is accidentally disabled for one of
+the XHCI controllers. Some more discussion and debugging can be found at
+[1].
 
-Here's my weston.ini:
-[core]
-shell=kiosk-shell.so
-modules=systemd-notify.so
-backend=drm-backend.so
-idle-time=0
-require-input=false
-use-pixman=true
+[1] https://lore.kernel.org/linux-pci/CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com/T/#u
 
-[shell]
-locking=false
-cursor-theme=Obsidian
-panel-position=none
+Changes in v3:
+ - Fix comment formatting and line wrap
 
-[output]
-name=DVI-D-1
-transform=rotate-270
+Changes in v2:
+ - Introduced the patch to always disable remote wakeups
+ - Removed the change to freeze_noirq/thaw_noirq
 
-[output]
-name=DP-2
-mode=off
+Evan Green (2):
+  USB: core: Disable remote wakeup for freeze/quiesce
+  USB: hcd-pci: Fully suspend across freeze/thaw cycle
 
-[output]
-name=LVDS-1
-mode=off
+ drivers/usb/core/driver.c  | 25 +++++++++++++------------
+ drivers/usb/core/hcd-pci.c |  4 ++--
+ 2 files changed, 15 insertions(+), 14 deletions(-)
 
-[libinput]
-touchscreen_calibrator=true
+-- 
+2.31.0
 
->
-> --
-> Best regards,
->
-> Javier Martinez Canillas
-> Linux Engineering
-> Red Hat
->

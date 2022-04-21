@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5B2509FB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE3F509FBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384629AbiDUMey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S1384868AbiDUMiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 08:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353159AbiDUMew (ORCPT
+        with ESMTP id S1385124AbiDUMhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:34:52 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB4920BE3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650544323; x=1682080323;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PMqVe53Hbsg7k9hFURsqKFTi+ZF+K3jn57xT2aqbFkg=;
-  b=LRuq/8GqOv8KNGtgoIQWQPQVioZMEoL+kDvpDV+jEbvTE+PJXrS9jK8C
-   flzt+xfjv89vpPamUSPMTZZ7rwcFhDuWmWpNdIVQc73/DRws4VzXYRZqw
-   NUn+rMiyuIRjdHoO9ktudTRCjyewsgS0rXRqLOW47vyf0kywOqtXnkR90
-   wo87xHCuxTqJrBeB9I8I+hGnTzmaWH/My4kr3CtjOBk1cFvPtT/N1i6Sr
-   9r1jPgSa2pkcguaysvmPOURzyTqqGP2vZjK35JXPvQfojAI7sgDOSPnld
-   t0vOb9K+NKTdzhA5SFlk8Vml1gZXn8D7OeOLPWgSy2UeQLsAzEo5ZOU0e
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264503467"
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="264503467"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 05:32:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="626497600"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Apr 2022 05:32:02 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhVyb-0008OF-HX;
-        Thu, 21 Apr 2022 12:32:01 +0000
-Date:   Thu, 21 Apr 2022 20:31:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 102/2579]
- ./usr/include/asm-generic/shmbuf.h:9:10: fatal error:
- 'uapi/asm-generic/ipcbuf.h' file not found
-Message-ID: <202204212023.dIkUxbJS-lkp@intel.com>
+        Thu, 21 Apr 2022 08:37:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4112F01F;
+        Thu, 21 Apr 2022 05:34:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D907E61C17;
+        Thu, 21 Apr 2022 12:34:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38513C385AA;
+        Thu, 21 Apr 2022 12:34:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650544490;
+        bh=nwEgRIc2DkjEOq+aHIKgb93W0tmpmkVrijOMlhjM+2c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kOcXb1lv/nzkVVo5+e+G7lB6G9q+Ds4gTUHOEz/mS+NRZiCo1cPMizp43AaZ/OJaf
+         6bmQrVibO21ey4Rx+3aEG5jTUMUgNRhavYc6YIjXtYurJmbNXP6AAxXXueZZ5bZo6g
+         YN51K3lqzjbNVUP77kKjHrm45TDIpc/pizXBKccj68lwtS+ILgIZlPPNIgVfnTijI4
+         lo2l2c/irPGCVcZunI5bIGJ5vcxNkLmCynsRilQHm5gWsdXXYLxbmRRwaCu8Rz3eJU
+         gFM7eA0lk4aAJfUnTT75o+Ov/kyZRhu9s38xzj1RLBmgymFhv/kiXB4b32Bk8R6o/s
+         2bitBY6TL3egA==
+Received: by mail-pl1-f175.google.com with SMTP id b7so4728503plh.2;
+        Thu, 21 Apr 2022 05:34:50 -0700 (PDT)
+X-Gm-Message-State: AOAM533iAcoXVp51eYWM+bDyRQRlWHbYRZIpCPfm/PpnAggQEAycB3qo
+        z1mhy1XXSdHUtBLBYHVzV4AtMbw+0+6ExoeJkQ==
+X-Google-Smtp-Source: ABdhPJwLEPk9OLMoJ9JMm2KtY59U1i0zQMGi1rF12qY8DyKg5Gv81xjxidpwgTMkqj9+231fmtFHFdon2zwGKBXhxtM=
+X-Received: by 2002:a17:902:eb8c:b0:158:4cc9:6998 with SMTP id
+ q12-20020a170902eb8c00b001584cc96998mr25730080plg.35.1650544489734; Thu, 21
+ Apr 2022 05:34:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220421122303.111766-1-wanjiabing@vivo.com>
+In-Reply-To: <20220421122303.111766-1-wanjiabing@vivo.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 21 Apr 2022 07:34:37 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+Ess2=+r+=+QdqkF3pQw9CS=3so86FCM8Mn_XaKBTgLA@mail.gmail.com>
+Message-ID: <CAL_Jsq+Ess2=+r+=+QdqkF3pQw9CS=3so86FCM8Mn_XaKBTgLA@mail.gmail.com>
+Subject: Re: [PATCH] of: Add missing of_node_put() before return
+To:     Wan Jiabing <wanjiabing@vivo.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kael_w@yeah.net
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: 303c55f2ed6ecc81b7b19a796a9d3562e99b350c [102/2579] headers/deps: Remove <linux/sem.h> from <linux/sched.h>
-config: x86_64-randconfig-a013-20220418 (https://download.01.org/0day-ci/archive/20220421/202204212023.dIkUxbJS-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=303c55f2ed6ecc81b7b19a796a9d3562e99b350c
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 303c55f2ed6ecc81b7b19a796a9d3562e99b350c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
++Thomas
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Apr 21, 2022 at 7:23 AM Wan Jiabing <wanjiabing@vivo.com> wrote:
+>
+> Fix the following coccicheck error:
+> drivers/of/platform.c:554:2-23: WARNING: Function "for_each_node_by_type"
+> should have of_node_put() before return around line 560.
 
-Note: the mingo-tip/sched/headers HEAD 49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe builds fine.
-      It only hurts bisectability.
+Especially since the code this fixes just landed, you should Cc the
+author and reference the commit.
 
-All errors (new ones prefixed by >>):
+> Early exits from for_each_node_by_type() should decrement the node
+> reference counter.
+>
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  drivers/of/platform.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/shm.h:26:
-   In file included from ./usr/include/asm/shmbuf.h:6:
->> ./usr/include/asm-generic/shmbuf.h:9:10: fatal error: 'uapi/asm-generic/ipcbuf.h' file not found
-   #include <uapi/asm-generic/ipcbuf.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+This has to go via the DRM tree.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Fixes: 52b1b46c39ae ("of: Create platform devices for OF framebuffers")
+Acked-by: Rob Herring <robh@kernel.org>

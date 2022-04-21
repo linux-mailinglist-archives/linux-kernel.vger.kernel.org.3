@@ -2,96 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A910A50A6FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE1150A702
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390725AbiDURXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S232694AbiDUR10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390505AbiDURXx (ORCPT
+        with ESMTP id S1390577AbiDUR1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:23:53 -0400
+        Thu, 21 Apr 2022 13:27:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744542B1B6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:21:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411C32B251;
+        Thu, 21 Apr 2022 10:24:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1035861DF2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1DE7C385A1;
-        Thu, 21 Apr 2022 17:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650561662;
-        bh=WuG3mEg/8lhQCajKRUfY5lcdr1UBJIgbvl5qAQTm+EY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QgU9T0yPDN+B9ndtK6XGBtJz7BOCT2pQGzZtRilym1TB1fF1H4OfAvk8ixGMBldhD
-         86IQupGzW9mQTW+UVdMOlzVM7RmIPhHD0b6dv+3KPDS40b9sfIjHGVbzKSzJ9EdANb
-         fLYYUIP0IaXf/QvH2/ldBkPA5M0Gs5/d8L5iuiSArtxtls3b0yrQFhAOzFk68CFvLl
-         Dk3+HdS8UhgbFXkXTmrlo6etqzcQw/WWk9PmRKH34oE0inbVTSJpxCSJ38tPxsmvDO
-         d/jiuaRtBv5NGu31Cb2qpMvODgvEE/uhTA5++8pGrHhoAKqytXxixnsX8z4l/lrqGi
-         p9huEZboOlSLQ==
-Date:   Thu, 21 Apr 2022 18:20:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     jbrunet@baylibre.com, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dmitry Shmidt <dimitrysh@google.com>
-Subject: Re: [PATCH 1/2] Revert "ASoC: meson: axg-tdm-interface: manage
- formatters in trigger"
-Message-ID: <YmGSeVbwWtyHP/Tz@sirena.org.uk>
-References: <20220421155725.2589089-1-narmstrong@baylibre.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C90BA61DFA;
+        Thu, 21 Apr 2022 17:24:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE85AC385A5;
+        Thu, 21 Apr 2022 17:24:24 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 18:24:21 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Topi Miettinen <toiwoton@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net,
+        linux-hardening@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Salvatore Mesoraca <s.mesoraca16@gmail.com>,
+        Igor Zhbanov <izh1979@gmail.com>
+Subject: Re: [PATCH RFC 0/4] mm, arm64: In-kernel support for
+ memory-deny-write-execute (MDWE)
+Message-ID: <YmGTRQA74n/ZF7Vl@arm.com>
+References: <20220413134946.2732468-1-catalin.marinas@arm.com>
+ <202204141028.0482B08@keescook>
+ <YmAEDsGtxhim46UI@arm.com>
+ <c62170c6-5993-2417-4143-5a37a98b227c@gmail.com>
+ <202204201610.093C9D5FE8@keescook>
+ <YmF5s4KqT5WL4O0G@arm.com>
+ <202204210941.4318DE6E8@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IrsbsSdYKQuD+rKo"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421155725.2589089-1-narmstrong@baylibre.com>
-X-Cookie: Two percent of zero is almost nothing.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202204210941.4318DE6E8@keescook>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 21, 2022 at 09:42:23AM -0700, Kees Cook wrote:
+> On Thu, Apr 21, 2022 at 04:35:15PM +0100, Catalin Marinas wrote:
+> > Do we want the "was PROT_WRITE" or we just reject mprotect(PROT_EXEC) if
+> > the vma is not already PROT_EXEC? The latter is closer to the current
+> > systemd approach. The former allows an mprotect(PROT_EXEC) if the
+> > mapping was PROT_READ only for example.
+> > 
+> > I'd drop the "was PROT_WRITE" for now if the aim is a drop-in
+> > replacement for BPF MDWE.
+> 
+> I think "was PROT_WRITE" is an important part of the defense that
+> couldn't be done with a simple seccomp filter (which is why the filter
+> ended up being a problem in the first place).
 
---IrsbsSdYKQuD+rKo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I would say "was PROT_WRITE" is slightly more relaxed than "is not
+already PROT_EXEC". The seccomp filter can't do "is not already
+PROT_EXEC" either since it only checks the mprotect() arguments, not the
+current vma flags.
 
-On Thu, Apr 21, 2022 at 05:57:24PM +0200, Neil Armstrong wrote:
-> This reverts commit bf5e4887eeddb48480568466536aa08ec7f179a5 because
-> the following and required commit e138233e56e9829e65b6293887063a1a3ccb2d68
+So we have (with sub-cases):
 
-One other thing - these should be Fixes: tags, that helps tooling figure
-out things like backports.
+1. Current BPF filter:
 
-Also:
+   a)	mmap(PROT_READ|PROT_WRITE|PROT_EXEC);	// fails
 
-Please include human readable descriptions of things like commits and
-issues being discussed in e-mail in your mails, this makes them much
-easier for humans to read especially when they have no internet access.
-I do frequently catch up on my mail on flights or while otherwise
-travelling so this is even more pressing for me than just being about
-making things a bit easier to read.
+   b)	mmap(PROT_READ|PROT_EXEC);
+	mprotect(PROT_READ|PROT_EXEC|PROT_BTI);	// fails
 
---IrsbsSdYKQuD+rKo
-Content-Type: application/pgp-signature; name="signature.asc"
+2. "is not already PROT_EXEC":
 
------BEGIN PGP SIGNATURE-----
+   a)	mmap(PROT_READ|PROT_WRITE|PROT_EXEC);	// fails
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJhkngACgkQJNaLcl1U
-h9C8Fgf/VidmSJ2cMNCtprev2dZXNKdvl5hp5ru5Oetxz+eMGSCdPjKGw4OW35Dc
-mj7OuaoYqZ6+1sHDdYhwtY5rpDGBpxXsRrLLun3ddBp6SrgFIFVZH4hUWAljayN4
-eLXEOdvmlTixcnKoGgvEnl7FxldrV3Ojvi6VixOhXWTpDPo3dlj1BoJvHKvU5rsr
-A3Iip2GOibnZvUxLfzblfBzGs6jg7kAdUF19GflvFDoSNtCMJ2O/lAULE6QUA8CC
-+dkIBIWWJCHsGgwtaRPfridNv0z1gHS+gWQOxb1F8MM7zWcoVqHg3FQBNm+pRVIX
-DL2OPncZcm5/LpBtB0O7NM88PFr70Q==
-=JmF7
------END PGP SIGNATURE-----
+   b)	mmap(PROT_READ|PROT_EXEC);
+	mmap(PROT_READ|PROT_EXEC|PROT_BTI);	// passes
 
---IrsbsSdYKQuD+rKo--
+   c)	mmap(PROT_READ);
+	mprotect(PROT_READ|PROT_EXEC);		// fails
+
+3. "is or was not PROT_WRITE":
+
+   a)	mmap(PROT_READ|PROT_WRITE|PROT_EXEC);	// fails
+
+   b)	mmap(PROT_READ|PROT_EXEC);
+	mmap(PROT_READ|PROT_EXEC|PROT_BTI);	// passes
+
+   c)	mmap(PROT_READ);
+	mprotect(PROT_READ|PROT_EXEC);		// passes
+
+   d)	mmap(PROT_READ|PROT_WRITE);
+	mprotect(PROT_READ);
+	mprotect(PROT_READ|PROT_EXEC);		// fails (was write)
+
+The current seccomp filter is the strictest. If we go for (2), it allows
+PROT_BTI as in 2.b but prevents 2.c (as would the current seccomp
+filter). (3) relaxes 2.c as in 3.c while still preventing 3.d. Both (1)
+and (2) prevent 3.d by simply rejecting mprotect(PROT_EXEC).
+
+If we don't care about 3.c, we might as well go for (2). I don't mind,
+already went for (3) in this series. I think either of them would not be
+a regression on MDWE, unless there is some test that attempts 3.c and
+expects it to fail.
+
+-- 
+Catalin

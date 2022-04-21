@@ -2,83 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F9E50A352
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDE550A365
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389653AbiDUOxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        id S1389668AbiDUO4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390047AbiDUOxX (ORCPT
+        with ESMTP id S244846AbiDUO4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:53:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632181BE94;
-        Thu, 21 Apr 2022 07:50:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A906E61A90;
-        Thu, 21 Apr 2022 14:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A648C385AA;
-        Thu, 21 Apr 2022 14:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650552612;
-        bh=hi1BHCF9UrqgrKaE8tKFI8d1XD0rxWot5QXbcog6rhU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=vAta382Hs2CpbnAFkAMlXdGd/FCND3QVA3inG3bcNJNmV5a66iVYDFJSpS088fxw9
-         SU/R4v8G8qPZ6jDglNeUwKoUQdWRfu9eDyscOs/1dYCAn5hLZ9I6DXRkLJIXiM3S+g
-         p1sO4eF4jvBz0eOxEd/ZP2Quv1g1BpznzJxVJqQu15CBef68Zb6cvVHNSeh8GpD6ey
-         C6/CDitsxKJBeSELkrMoJMnuifX1N4l78EKiTnCU18bh0hEFtj7ZHllHDPLDHneHhA
-         iliHXPvSv/g5KHsrn5M4ao+wT9tIuqMTblK51ELSRg/SUqxg5yXxRZbwtg2Hb1E4D0
-         DppWlxHXPgSYg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E3D0BE8DD85;
-        Thu, 21 Apr 2022 14:50:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 21 Apr 2022 10:56:41 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6F265F2;
+        Thu, 21 Apr 2022 07:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650552831; x=1682088831;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Q334Y3bRjAYyNyCQa2C9eINciS6WLB37pPfz+kWVNHo=;
+  b=b1CCgIxvMs2VCkD+bzfH3ZrydR91lzq7x1sGdje83uRyvrc4Q3XVZGt1
+   SZL/d3XJnV3nO641++RfF5+M5LX44nqvyWqL0Vky46QcbfNth0GAiDcon
+   DmQF2u/OHTKF97UZqElSTDuAoEhAEhHgDYRvIVaXfENmEAhwfW+3y7uMz
+   drJB8FzEg/lFb84o8L5tKGKjTCOIHVBzE9/Cr7uoA6dUCDK08O9aUHo07
+   2IfIwE2QAiYHAtBgJnECoiRrzwEqvjn6eqj2ZScCOwBV0eFbwiHo8XQEr
+   fJEd/5iMKD1N6kzO75Fb4S47KJwEBn474Gi3M9K59/KkrLG5YL8KaLktH
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="350810848"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="350810848"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 07:53:41 -0700
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="511098190"
+Received: from testes-mobl1.amr.corp.intel.com (HELO [10.212.210.35]) ([10.212.210.35])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 07:53:40 -0700
+Message-ID: <a2c2b7f5-0af0-18a3-062b-c6c9f78daaad@linux.intel.com>
+Date:   Thu, 21 Apr 2022 07:53:39 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix attach tests retcode checks
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165055261192.3130.12571525492244740722.git-patchwork-notify@kernel.org>
-Date:   Thu, 21 Apr 2022 14:50:11 +0000
-References: <20220421130104.1582053-1-asavkov@redhat.com>
-In-Reply-To: <20220421130104.1582053-1-asavkov@redhat.com>
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     laoar.shao@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+Content-Language: en-US
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <b209ee09b74394ab7aed85e0244e2191ee3d4171.camel@intel.com>
+ <e0e2e399-2cac-cf75-2a64-9d017e6d7189@linux.intel.com>
+ <420a4d689f73f9f7dc1ef71c61da75b7c9777a3f.camel@intel.com>
+ <1e184b44-8024-b8ae-98a8-cf2b6f78df61@linux.intel.com>
+ <20220421065707.GA1423762@private.email.ne.jp>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220421065707.GA1423762@private.email.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Thu, 21 Apr 2022 15:01:04 +0200 you wrote:
-> Switching to libbpf 1.0 API broke test_sock and test_sysctl as they
-> check for return of bpf_prog_attach to be exactly -1. Switch the check
-> to '< 0' instead.
+On 4/20/22 11:57 PM, Isaku Yamahata wrote:
+> On Wed, Apr 20, 2022 at 07:42:06PM -0700,
+> Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
 > 
-> Fixes: b858ba8c52b6 ("selftests/bpf: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK")
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
+>>
+>>
+>> On 4/20/22 5:11 PM, Kai Huang wrote:
+>>> On Wed, 2022-04-20 at 16:45 -0700, Sathyanarayanan Kuppuswamy wrote:
+>>>> If we want to support multiple GetQuote requests in parallel, then we
+>>>> need some way to uniquely identify the GetQuote requests. So that when
+>>>> we get completion notification, we can understand which request is
+>>>> completed. This part is not mentioned/discussed in ABI spec. So we want
+>>>> to serialize the requests for now.
+>>>>
+>>>
+>>> Yes it's unfortunate that this part (whether concurrent GetQuote requests are
+>>> supported by TDX architecture) is not explicitly mentioned in GHCI spec.  I am
+>>> fine with only supporting GetQuote requests one by one.  AFAICT there's no
+>>> request to support concurrent GetQuote requests anyway.  What concerns me is
+>>> exactly how explain this.
+>>>
+>>> As I said, we have GET_QUOTE_IN_FLIGHT flag now.  Theoretically, you can queue
+>>> multiple GetQuote requests, and when you receive the interrupt, you check which
+>>> buffer has GET_QUOTE_IN_FLIGHT cleared.  That buffer is the one with Quote
+>>> ready.  However I am not 100% sure whether above will always work.  Interrupt
+>>> can get lost when there are multiple Quotes ready in multiple buffer in very
+>>> short time period, etc?  Perhaps Isaku can provide more input here.
+>>
+>> Either supported or not, it should be mentioned in the GHCI spec. Currently,
+>> there are no details related to it. If it is supported, the specification
+>> should include the protocol to use.
+>>
+>> I will check with Isaku about it.
 > 
-> [...]
+> The spec says that TD can call multiple GetQuote requests in parallel.
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: fix attach tests retcode checks
-    https://git.kernel.org/bpf/bpf-next/c/920fd5e1771d
+Sorry, I missed the above content. Thanks for pointing out.
 
-You are awesome, thank you!
+> 
+>    TDG.VP.VMCALL<GetQuote> API allows one TD to issue multiple requests. It's
+>    implementation specific that how many concurrent requests are allowed. The TD
+>    should be able to handle TDG.VP.VMCALL_RETRY if it chooses to issue multiple
+>    requests simultaneously
+
+Do you know why we should handle VMCALL_RETRY case? IIUC, as per
+above spec, if each request we send uses different GPA buffer, then we
+should not even worry about checking for IN_FLIGHT status. right?
+
+> 
+> As Kai said, there is no requirement for multiple GetQuote in parallel, it's
+> okay to support only single request at the same time.
+
+For now I will leave it as single request at a time.
+
+> 
+> While the status is GET_QUOTE_IN_FLIGHT, VMM owns the shared GPA.  The
+> attestation driver should wait for GET_QUOTE_IN_FLIGHT to be cleared before
+> sending next request.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

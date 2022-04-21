@@ -2,148 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C042650A534
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8116B50A5BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbiDUQ1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 12:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S230127AbiDUQ3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 12:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbiDUQRw (ORCPT
+        with ESMTP id S231679AbiDUQRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 12:17:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8F07667;
-        Thu, 21 Apr 2022 09:15:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27A40B826D1;
-        Thu, 21 Apr 2022 16:15:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71BA5C385A1;
-        Thu, 21 Apr 2022 16:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650557698;
-        bh=ObbyMeoCn2LGfnvNQoDbe2Hrh+qjeznyCeUp6gdYWKo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c5D0IJ+60MGceny05FXAdUMn26Dp3bNMshnUHl0SBhZMF1Q2K0NpL4maAYVqeLaUH
-         SJrMZkSONSb9M/aSoHCwb/UUkGyEOXL57126BDPLHZlgT9cN9G8tPmfw3TOL6D5dvw
-         PSt7EC3rkV/SlSZ5+ipGFKwdOE8454aTIlxZyg3/122R03AbUG8ry1Za6K+YOg6vUF
-         BVJ4CCV8NwLs4ORvgoUblBBg3eKPBHiTPmkgweT5R6OFl8iV0R/pr0ZDBTuuNAGSy3
-         QXWWvlMHCTncYjf5ZDvw4ghIzmsgPdsVhEDQwQcrTFv6fkW4aGRYmNdnfJSme3fUve
-         KnH0P54LJPLUQ==
-Date:   Thu, 21 Apr 2022 19:13:43 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Jes Klinke <jbk@google.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Jes B. Klinke" <jbk@chromium.org>,
-        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: cr50: Add new device/vendor ID 0x504a6666
-Message-ID: <YmGCt7CiK6kqshYp@kernel.org>
-References: <20220419163749.1.Ica39bd8d1494f750a70a668e5929f6e5e63241f2@changeid>
- <c8f5ada2-c5cc-fe1b-bdeb-8b7d134250ee@molgen.mpg.de>
- <CANMTAZRp5GPwrJNO4RY1KpvABgiuOMYEtwm+jdYfX5JRH8FpSA@mail.gmail.com>
+        Thu, 21 Apr 2022 12:17:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85F3F2B24E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:14:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650557673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1ngZ3ZDY9ywW927Z5RN+MQNpAIO8k9NmG/nkTnk+1Gs=;
+        b=RQV6R/OB43yQqrkm5oggp9zm3OQVzwmouCHF2z78ixodK8OWZ+73QtiVn5v5sLXs/47n/e
+        LBEFsbpvqxHeeZj870spCCxizcQfMiXe9l8nIRG/ZqVnUtZVauDPYTWM8n3jqP48B57MtD
+        I1PDHote2fMra8vv+o1SdBPcIs4Yu+I=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-282-C-KLB3WxNg2XuWs8uBQeAg-1; Thu, 21 Apr 2022 12:14:32 -0400
+X-MC-Unique: C-KLB3WxNg2XuWs8uBQeAg-1
+Received: by mail-lj1-f199.google.com with SMTP id e3-20020a2e9303000000b00249765c005cso1689192ljh.17
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:14:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1ngZ3ZDY9ywW927Z5RN+MQNpAIO8k9NmG/nkTnk+1Gs=;
+        b=nKUVr3nlGjaIv3HWWZo07VB5F3lYJLp1HgfhCw7soKawSlkLni6GsJ8ncbY0FC0z9i
+         nuH73gGyQz0HgoXJwn/BPU12PkMWpcOALBrsJ21zwcQy+moTW/hVygpDGFX93VxO+dcW
+         jbOi2eJ3pVMob5POUA9532b0Xu1PhuHrZx9XoXK041yEDKlc95295zw6JQMHkZqsFJtt
+         XQt+i5JxU+A3gf0L2lq5l3Hr+gtno6X4La22/oUYkyAb6Je6YPhv/jpIpha9OKZnfTgu
+         /Ufp0EG4v7NOhxv7KmUet49f5ythQuU5e/BWSRq7HukkT3zr9w4QyFxq8cWDoJnmMwfY
+         D7rw==
+X-Gm-Message-State: AOAM5325AJi1G5O0iLrHj9P/GvpMwaDnms4vrLTaPPrWyYLtsRaWQA+3
+        LxTlSdJ/VwU8k6Ea8udPV7nIwkfNgaTKnRI5hm+y180YQ/I64DtPiRiTSeSad3Xmpx2iaHKOcyQ
+        YLTtUm8/VkfKK6et0j+YvWtxHLKmy15lVuBDJ70uu
+X-Received: by 2002:a05:6512:68b:b0:471:d466:979b with SMTP id t11-20020a056512068b00b00471d466979bmr145638lfe.519.1650557671047;
+        Thu, 21 Apr 2022 09:14:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyH8/DjjuvvyMkckIHc+m1v/FBNR0YvL8JTrt6ayXJd/rtn7oBKbgJ1GEaT0nlskTay3z63zTKH5i8fe1g198I=
+X-Received: by 2002:a05:6512:68b:b0:471:d466:979b with SMTP id
+ t11-20020a056512068b00b00471d466979bmr145622lfe.519.1650557670855; Thu, 21
+ Apr 2022 09:14:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANMTAZRp5GPwrJNO4RY1KpvABgiuOMYEtwm+jdYfX5JRH8FpSA@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420200720.434717-1-parri.andrea@gmail.com>
+ <20220420200720.434717-4-parri.andrea@gmail.com> <20220421140805.qg4cwqhsq5vuqkut@sgarzare-redhat>
+ <20220421152827.GB4679@anparri>
+In-Reply-To: <20220421152827.GB4679@anparri>
+From:   Stefano Garzarella <sgarzare@redhat.com>
+Date:   Thu, 21 Apr 2022 18:14:19 +0200
+Message-ID: <CAGxU2F6UCiFQrXu4Nn=jNPbuE8i5hYe=Hkwak43kTMQoCQQy2A@mail.gmail.com>
+Subject: Re: [PATCH 3/5] hv_sock: Add validation for untrusted Hyper-V values
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hyperv@vger.kernel.org,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 09:07:21AM -0700, Jes Klinke wrote:
-> Dear Paul,
-> 
-> On Wed, Apr 20, 2022 at 3:52 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+On Thu, Apr 21, 2022 at 5:30 PM Andrea Parri <parri.andrea@gmail.com> wrote:
+>
+> > > @@ -577,12 +577,19 @@ static bool hvs_dgram_allow(u32 cid, u32 port)
+> > > static int hvs_update_recv_data(struct hvsock *hvs)
+> > > {
+> > >     struct hvs_recv_buf *recv_buf;
+> > > -   u32 payload_len;
+> > > +   u32 pkt_len, payload_len;
+> > > +
+> > > +   pkt_len = hv_pkt_len(hvs->recv_desc);
+> > > +
+> > > +   /* Ensure the packet is big enough to read its header */
+> > > +   if (pkt_len < HVS_HEADER_LEN)
+> > > +           return -EIO;
+> > >
+> > >     recv_buf = (struct hvs_recv_buf *)(hvs->recv_desc + 1);
+> > >     payload_len = recv_buf->hdr.data_size;
+> > >
+> > > -   if (payload_len > HVS_MTU_SIZE)
+> > > +   /* Ensure the packet is big enough to read its payload */
+> > > +   if (payload_len > pkt_len - HVS_HEADER_LEN || payload_len > HVS_MTU_SIZE)
 > >
-> > Dear Jes,
-> >
-> >
-> > Am 20.04.22 um 01:37 schrieb Jes B. Klinke:
-> > > Accept one additional numerical value of DID:VID for next generation
-> > > Google TPM with new firmware, to be used in future Chromebooks.
-> > >
-> > > The TPM with the new firmware has the code name TI50, and is going to
-> > > use the same interfaces.
-> > >
-> > > Signed-off-by: Jes B. Klinke <jbk@chromium.org>
-> > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > ---
-> > >
-> > >   drivers/char/tpm/tpm_tis_i2c_cr50.c | 7 ++++---
-> > >   1 file changed, 4 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> > > index f6c0affbb4567..4ddb8ff3a8569 100644
-> > > --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> > > +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> > > @@ -31,6 +31,7 @@
-> > >   #define TPM_CR50_TIMEOUT_SHORT_MS   2               /* Short timeout during transactions */
-> > >   #define TPM_CR50_TIMEOUT_NOIRQ_MS   20              /* Timeout for TPM ready without IRQ */
-> > >   #define TPM_CR50_I2C_DID_VID                0x00281ae0L     /* Device and vendor ID reg value */
-> > > +#define TPM_TI50_I2C_DID_VID         0x504a6666L     /* Device and vendor ID reg value */
-> > >   #define TPM_CR50_I2C_MAX_RETRIES    3               /* Max retries due to I2C errors */
-> > >   #define TPM_CR50_I2C_RETRY_DELAY_LO 55              /* Min usecs between retries on I2C */
-> > >   #define TPM_CR50_I2C_RETRY_DELAY_HI 65              /* Max usecs between retries on I2C */
-> > > @@ -742,15 +743,15 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
-> > >       }
-> > >
-> > >       vendor = le32_to_cpup((__le32 *)buf);
-> > > -     if (vendor != TPM_CR50_I2C_DID_VID) {
-> > > +     if (vendor != TPM_CR50_I2C_DID_VID && vendor != TPM_TI50_I2C_DID_VID) {
-> > >               dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
-> > >               tpm_cr50_release_locality(chip, true);
-> > >               return -ENODEV;
-> > >       }
-> > >
-> > > -     dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
-> > > +     dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
-> > > +              vendor == TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
-> > >                client->addr, client->irq, vendor >> 16);
-> > > -
-> >
-> > Remove this blank line wasn’t needed, I gues.
-> 
-> You are right, I should probably have left the blank line untouched.
-> It does not hurt the readability of the code much to remove it,
-> though.
+> > checkpatch warns that we exceed 80 characters, I do not have a strong
+> > opinion on this, but if you have to resend better break the condition into 2
+> > lines.
+>
+> Will break if preferred.  (but does it really warn??  I understand that
+> the warning was deprecated and the "limit" increased to 100 chars...)
 
-I don't mind removing it.
+I see the warn here:
+https://patchwork.kernel.org/project/netdevbpf/patch/20220420200720.434717-4-parri.andrea@gmail.com/
 
-> 
-> > >       return tpm_chip_register(chip);
-> > >   }
-> > >
-> >
-> > Thank for addressing the other comments, and congratulations on getting
-> > your first commit into the Linux kernel.
-> 
-> When I think about it, I did propose a kernel patch in 2002, to
-> introduce /proc/sys/kernel/core_pattern, so this is my second patch.
-> All the mailing lists, and formal review process this time seemed
-> daunting at first, though, so thank you for guiding me through the
-> process.
+in the kernel doc [1] we still say we prefer 80 columns, so I try to
+follow, especially when it doesn't make things worse.
 
-It gets easier over time when your patch count increases.
+[1] https://docs.kernel.org/process/coding-style.html#breaking-long-lines-and-strings
 
-Compared to many Github projects, I find actually contributing to kernel
-easier than many of those, because form is so rigid, but this of course
-happens over time. I.e. over time you can estimate a lot how likely is
-patch get to be accepted.
+>
+>
+> > Maybe even update or remove the comment? (it only describes the first
+> > condition, but the conditions are pretty clear, so I don't think it adds
+> > much).
+>
+> Works for me.  (taking it as this applies to the previous comment too.)
 
-Also it is good to remember that kernel maintainers might sound a bit
-impolite, not because they want to be, but when you review dozens of
-patches in a day, you have to be somewhat mechanic how you response,
-and simply do not have time to be "verbosely polite".
+Yep.
 
-> Regards
-> Jes
+Thanks,
+Stefano
 
-BR, Jarkko

@@ -2,113 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED26750AA43
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9B350AA46
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392541AbiDUUrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 16:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
+        id S1392553AbiDUUuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 16:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349411AbiDUUrF (ORCPT
+        with ESMTP id S1392548AbiDUUuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 16:47:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A234E391;
-        Thu, 21 Apr 2022 13:44:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 082E1B828D8;
-        Thu, 21 Apr 2022 20:44:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A652DC385A7;
-        Thu, 21 Apr 2022 20:44:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650573851;
-        bh=8xH5wV1KvrkMTwGdQxQZPmkY2ffhRKacNykV31qXzQA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ll979oUoHbSxXuVHKN9EkSPu3NI0XxkU+Xe2izKWxGiK6wBGtmrtZA8ncRq8kIuJ0
-         u7gXJh+q/F88e4uAwPEiJKrDm1jy4tT8iH20ArGHJNFC4DYpRwYHEkUzYSXNWPKKgQ
-         RRtZ74nI1LStL9ozF3v/tG77EEp2XEjGYgfV1SPU3dRmzzUbDGCGwTPl66RD7z8SJi
-         k6+i1Er7adPa015OAr2wRzO/WTikDK6zO6zm6FLxbr/3qH5tUTF8UP9bjr2DfTZh/T
-         n/WippRsMYbWH/HkzfV3XIgCbZWiTIGDfxIOpVOhmFX80VgFjNIMxteE26O9KK53/k
-         wCI8RYjAP2YPg==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A . Donenfeld " <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH] siphash: update the HalfSipHash documentation
-Date:   Thu, 21 Apr 2022 13:43:20 -0700
-Message-Id: <20220421204320.258010-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.35.2
+        Thu, 21 Apr 2022 16:50:10 -0400
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C2E4DF75
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:47:17 -0700 (PDT)
+Received: (wp-smtpd smtp.tlen.pl 20653 invoked from network); 21 Apr 2022 22:47:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1650574032; bh=uOC1fW/0uuSbuGCETmD2nbnOBndFlT09OLOf26HRiaM=;
+          h=To:From:Subject:Cc;
+          b=Iv/G25/v63Q81fWXkDU2p/sFBgBPmyoblHSgbQHfXvSNNJOWtatD8hgKUR8jpPtkG
+           2uahVMDf9nKYTsIbKpW44RjV6zssoUTwqw+7Odi9cEkM7ThKOeiPz9mVWfWYXM5+eI
+           1CdkDmzCzEwonlRqL/N+ET80S6MoCisc0dRKLLE0=
+Received: from aafl13.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.141.13])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <netdev@vger.kernel.org>; 21 Apr 2022 22:47:12 +0200
+Message-ID: <dbd203b1-3988-4c9c-909c-2d1f7f173a0d@o2.pl>
+Date:   Thu, 21 Apr 2022 22:47:01 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-GB
+To:     netdev@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
+Subject: "mm: uninline copy_overflow()" breaks i386 build in Mellanox MLX4
+Cc:     David Laight <David.Laight@ACULAB.COM>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-rdma@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-WP-MailID: 15cac2a73e996b392246ccbfd184ccf8
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [8RPE]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+Hello,
 
-Update the documentation for HalfSipHash to correctly explain that the
-kernel actually implements either HalfSipHash-1-3 or SipHash-1-3, and
-that HalfSipHash-1-3 is not entirely limited to hashtable functions,
-with it now being used in the interrupt entropy accumulator.
+commit ad7489d5262d ("mm: uninline copy_overflow()")
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- Documentation/security/siphash.rst | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+breaks for me a build for i386 in the Mellanox MLX4 driver:
 
-diff --git a/Documentation/security/siphash.rst b/Documentation/security/siphash.rst
-index bd9363025fcbc..9b079b2ac2a1a 100644
---- a/Documentation/security/siphash.rst
-+++ b/Documentation/security/siphash.rst
-@@ -121,15 +121,23 @@ even scarier, uses an easily brute-forcable 64-bit key (with a 32-bit output)
- instead of SipHash's 128-bit key. However, this may appeal to some
- high-performance `jhash` users.
- 
--Danger!
-+**Danger!** HalfSipHash should only be used in a very limited set of use cases
-+where nothing better is possible, namely:
- 
--Do not ever use HalfSipHash except for as a hashtable key function, and only
--then when you can be absolutely certain that the outputs will never be
--transmitted out of the kernel. This is only remotely useful over `jhash` as a
--means of mitigating hashtable flooding denial of service attacks.
-+- Hashtable key functions, where the outputs will never be transmitted out of
-+  the kernel. This is only remotely useful over `jhash` as a means of mitigating
-+  hashtable flooding denial of service attacks.
- 
--Generating a HalfSipHash key
--============================
-+- The interrupt entropy accumulator in ``drivers/char/random.c``. This is a very
-+  special case; do *not* use this as example code for anything else.
-+
-+Note, 64-bit kernels actually implement SipHash-1-3 instead of HalfSipHash-1-3;
-+the "hsiphash" functions redirect to either algorithm. This is done for
-+performance reasons; it does *not* mean that the hsiphash functions are
-+cryptographically secure on 64-bit platforms.
-+
-+Generating a hsiphash key
-+=========================
- 
- Keys should always be generated from a cryptographically secure source of
- random numbers, either using get_random_bytes or get_random_once:
-@@ -139,8 +147,8 @@ get_random_bytes(&key, sizeof(key));
- 
- If you're not deriving your key from here, you're doing it wrong.
- 
--Using the HalfSipHash functions
--===============================
-+Using the hsiphash functions
-+============================
- 
- There are two variants of the function, one that takes a list of integers, and
- one that takes a buffer::
--- 
-2.35.2
+        In file included from ./arch/x86/include/asm/preempt.h:7,
+                         from ./include/linux/preempt.h:78,
+                         from ./include/linux/percpu.h:6,
+                         from ./include/linux/context_tracking_state.h:5,
+                         from ./include/linux/hardirq.h:5,
+                         from drivers/net/ethernet/mellanox/mlx4/cq.c:37:
+        In function ‘check_copy_size’,
+            inlined from ‘copy_to_user’ at ./include/linux/uaccess.h:159:6,
+            inlined from ‘mlx4_init_user_cqes’ at drivers/net/ethernet/mellanox/mlx4/cq.c:317:9,
+            inlined from ‘mlx4_cq_alloc’ at drivers/net/ethernet/mellanox/mlx4/cq.c:394:10:
+        ./include/linux/thread_info.h:228:4: error: call to ‘__bad_copy_from’ declared with attribute error: copy source size is too small
+          228 |    __bad_copy_from();
+              |    ^~~~~~~~~~~~~~~~~
+        make[5]: *** [scripts/Makefile.build:288: drivers/net/ethernet/mellanox/mlx4/cq.o] Błąd 1
+        make[4]: *** [scripts/Makefile.build:550: drivers/net/ethernet/mellanox/mlx4] Błąd 2
+        make[3]: *** [scripts/Makefile.build:550: drivers/net/ethernet/mellanox] Błąd 2
+        make[2]: *** [scripts/Makefile.build:550: drivers/net/ethernet] Błąd 2
+        make[1]: *** [scripts/Makefile.build:550: drivers/net] Błąd 2
+
+Reverting this commit fixes the build. Disabling Mellanox Ethernet drivers
+in Kconfig (tested only with also disabling of all Infiniband support) also fixes the build.
+
+It appears that uninlining of copy_overflow() causes GCC to analyze the code deeper.
+
+The code in mlx4_init_user_cqes, for reference:
+
+        static int mlx4_init_user_cqes(void *buf, int entries, int cqe_size)
+        {
+                int entries_per_copy = PAGE_SIZE / cqe_size;
+                void *init_ents;
+                int err = 0;
+                int i;
+
+                init_ents = kmalloc(PAGE_SIZE, GFP_KERNEL);
+                // ...
+                if (entries_per_copy < entries) {
+                        // ...
+                } else {
+                        // BUG here
+                        err = copy_to_user((void __user *)buf, init_ents,
+                                        array_size(entries, cqe_size)) ?
+                                -EFAULT : 0;
+                }
+
+                // ...
+        }
+
+My setup: Ubuntu 20.04, gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)
+
+I was using lightly modified Kconfig from Debian i386 Linux packages.
+
+Greetings,
+
+Mateusz Jończyk
 

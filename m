@@ -2,178 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C42150A8CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A406450A8D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391799AbiDUTM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
+        id S1391802AbiDUTNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbiDUTMz (ORCPT
+        with ESMTP id S1391814AbiDUTND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:12:55 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA090BC81
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:10:04 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id i20so10434372ybj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YgTBv49RcPLCS1V/hwfIKdZLdC/q/JL1hjJ+DfP94jw=;
-        b=BfWo9WwRl81yef5UaOxA2TXICz6ubMdq+UDQF7kEKe1Q9A88ggvFz0Xt6pGSukGmxB
-         5fwpOKWJYWusyW5QGH6gB93GfsEGMhszLtohZCMPCbufS97v9BI9z3XRl5mcX/alInjf
-         zQSs/eyTO7BO0/nF/29TBwjqu0vLA6RAJ+9ANDB9FZZ7L2xYrgzfiZUmGxJBcnE6v7Ha
-         Phwo/L0+ciuIgyTLrcFOdQ8Gy981nfgeEEMOtNmza/2iN7qGnLijGnYQg4XJjTMsTe+5
-         4CQTqL4JS0KXL4Od+kCsGCA8BnCtnes5PQ05Cc9rbLAa2Vi80iKLBvsLdzs6UM4qdx3j
-         zocw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YgTBv49RcPLCS1V/hwfIKdZLdC/q/JL1hjJ+DfP94jw=;
-        b=KhCCT9zOwoDGYBbjvD9KDR50MOwkJO0MvowdclJt8/W3+pYjhLNhlsjL+KcvRZUovf
-         P3DIMhhTywaE+7PQ4LQGTc4QSrOpS3it0VR1al7z8DWWIycY4JvDhWyo08zpIWX4XbJe
-         X6Fe+l8OnqdaW5hVdRFOua8Ow+mmlkzVt9sjMnR+9dJ95Dn+zZs+hgzQ6RJWW4rThoxP
-         MhE9jk16V2Nv6UpCGYgRaqhyVLtuGMp2+CK+cZtPuYsWt5YpsC6PYpMkXFYdvYZQONS/
-         l7OXnzHfPjdGy6hcNgi2pSacUiXqAwgEs34IR432vVs6lZuixE/J4FdbXMbWz6nXIGFf
-         ywkw==
-X-Gm-Message-State: AOAM530Hdf4i0LPQoRhtfLnIl2F0aVI3gXDsRoxaO78W2RBpwr8noovO
-        j3oSH6FPjXYJcwDxBbuhvneR2QMofI6mZsr/TRtbLg==
-X-Google-Smtp-Source: ABdhPJzjrVSLG8FkT5vzwRS9XbgRhkhcbH7he7pxURtyn+uR+Ln78OOW1c0ZuRVUOAAvdjmU18At7r1/tcAKQIbiTvs=
-X-Received: by 2002:a25:8546:0:b0:61e:1d34:ec71 with SMTP id
- f6-20020a258546000000b0061e1d34ec71mr1105656ybn.259.1650568203918; Thu, 21
- Apr 2022 12:10:03 -0700 (PDT)
+        Thu, 21 Apr 2022 15:13:03 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2082.outbound.protection.outlook.com [40.107.102.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E500DBC81;
+        Thu, 21 Apr 2022 12:10:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OAwtYEAko/qI2RvxF52twdp9vUcTCOHzRN8NQGJa+47Zv2ecgETeMh3bAoUpI8lLwJ3DTHE58idu1S4U0QRus+0iZL3XKvkCeRAkRzKhn4fzqlSB8knCwPflho4Ya+nESep233ZEmkjAkvZ3djtSFanjxNOWwmn8aB5me9v4wTGmBh6dsXJbVy4Q8hqlZIItY/0/izZbdJGQE3iF+8C7Flnncr4+HMpvZCo/DHSg3vepsMf6cBtYDuUvlvXsL6UJDjSCoI3/zh5u3/Cwy1/j6hWfxXBIOFZa3BSpmn4irhznd94jhO8IMWioFDm59x+k8doNdji078H1Lh4NzhhlcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CxiclIPNrWnzBCQ/t3ZsAyX7xSObTph6aATm7iQOmyU=;
+ b=kU1dmEIH/LZCLe4FBFlcEiv6GqYRabOlYoTptLr2NtnrG6Yi/sbz+VycqDCdScd9jr4i7S877nA1KF2jj0qf7nnaFzf24hag4uCBSq9Az3blP6fPrUL0IUcnUXdp0Xcjh0zvQtxJtH9XdKPyfAEj3/EuAAY95iqrOmt8cR2vNaGQaAE2nCxSS5WECtJ2YBF+Bs0CFpStwMeCmsV6s4UCMglrk2Hrxl3Ius4VJL/Vyxo2xuNThRq+8ke/rF+EPryIoPR4BCTyHqwFSIYN1Rh3Xv1Q1gDmAPf3ffAgJHdy0JmKAVNBnTna909ez2QYX6M2p3AGIWIkkgSOqkEhbUxMzA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CxiclIPNrWnzBCQ/t3ZsAyX7xSObTph6aATm7iQOmyU=;
+ b=IbDGDyi1hV8EaQS06NRE6F4fkoUgbvVHUCaYQkr8Menrs2HCkoJV9t1Fz4H0MYoKsac+oSyKXKju9pxV5kKkGLNvFdWEVHUI907ciejk3spZV3H/l97aco7WiSTENshoYVEuuJi2xxoQePbmj2IZhf60yuQ5q/TP53P0gWtsxNg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB2869.namprd12.prod.outlook.com (2603:10b6:a03:132::30)
+ by BN6PR12MB1588.namprd12.prod.outlook.com (2603:10b6:405:7::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Thu, 21 Apr
+ 2022 19:10:09 +0000
+Received: from BYAPR12MB2869.namprd12.prod.outlook.com
+ ([fe80::482f:9ad2:91d9:ddf4]) by BYAPR12MB2869.namprd12.prod.outlook.com
+ ([fe80::482f:9ad2:91d9:ddf4%7]) with mapi id 15.20.5164.025; Thu, 21 Apr 2022
+ 19:10:09 +0000
+Message-ID: <5512261e-085b-65fa-605b-38692769f89c@amd.com>
+Date:   Thu, 21 Apr 2022 12:10:07 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 1/2] x86/mce: Check for writes ignored in MCA_STATUS
+ register
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+References: <20220214233640.70510-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220214233640.70510-2-Smita.KoralahalliChannabasappa@amd.com>
+ <Yk267A1MKOo2AlXQ@zn.tnic> <6cda2827-af75-589d-3e43-a287d6683e7a@amd.com>
+ <Yl/PupT3bAfc4IBW@zn.tnic>
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+In-Reply-To: <Yl/PupT3bAfc4IBW@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0227.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::22) To BYAPR12MB2869.namprd12.prod.outlook.com
+ (2603:10b6:a03:132::30)
 MIME-Version: 1.0
-References: <20220321224358.1305530-1-bgardon@google.com> <20220321224358.1305530-6-bgardon@google.com>
- <YlWe6bwQX9V4Oc5S@google.com> <CANgfPd8a3opGRKqzgWj9bAUx42wXG9Wc2HrsgtP6PoTBttQ3+w@mail.gmail.com>
-In-Reply-To: <CANgfPd8a3opGRKqzgWj9bAUx42wXG9Wc2HrsgtP6PoTBttQ3+w@mail.gmail.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Thu, 21 Apr 2022 12:09:52 -0700
-Message-ID: <CANgfPd-fmYHACProScyd+gzopgC0sqVJTpjHXMgkTDSu1H17DQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/9] KVM: x86/mmu: Factor out the meat of reset_tdp_shadow_zero_bits_mask
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7172998d-e79a-4e56-3f28-08da23ca8d5c
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1588:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR12MB1588440C27061EE90B9141CD90F49@BN6PR12MB1588.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KMwjA3fLV/eYkn11P0nzO5SHpOrude+QEkSEXHmsMD/kqEKV3Uy7GmUdmBs8pj9pY+ocZQgcCA9d3D1qsWDR/fjv/SrXxeEtChdMFFX2OUHN47+HZVI2XUamzq3YnNO4EGi7zBTL85XKbPGt5iMoRZLHdTVzlZqFCAX+R+E0BVVF9Z+rvXgaw3GC2lV22fNZBwr4eqzt6cNQ6P3IhwrNXgIrQk6AsoY/CYHXWG/wrG+2OujiCmwc3x7Dw8xtQwD8jLmwzZV7G+OoMwqAYI9yAVKDJeR53pgHzErLrrEiVgmW2puDqks0/LnL1vfh369g50WZAihRbb3IvKQjQXIEFBx6sOXW9jUA8Kcmg7rDZEd5EZvGb8UhAjjmk/uAO/8yAPVXryuvdJwI/p0HqV+XRKfelV4e5YfzoeIQzZu3kLBvOw5EK+KrYQSLMCZBs0sJrPWB5z3zuBvzuzdRxh8FsEB+QICShYMsZRlX9PgdgxvnxnVsDZMxqgz2ZSTTggV0JkLIczx+PpjENFio5ZV5HksegMU9GLdr25LJrGrlPibzneQDC82jAEM7lxRCSflvB3IS5xwpDNg69MWzZVx0uki+ylU9dCAs5N2sJc8Ua5Q6SM+nV23W4CIk5UlvYagVJujvanHoNYCSWvhtf5crRwkKh63LJ4FaXPSb6Mee1iBnfTirdmHjYHS9iyPJtsMvY4IlhaaKPtYHaBUSRmSxvV0IqDqEaWO+WiLxG3CzdxM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(6916009)(54906003)(26005)(38100700002)(316002)(86362001)(31696002)(66556008)(66476007)(66946007)(5660300002)(36756003)(508600001)(6512007)(8936002)(4326008)(8676002)(6506007)(53546011)(83380400001)(31686004)(6486002)(2616005)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?amhRZE5aYzExZ1I2UEFNL3RySHlzSEVXMnU4MGwzQUkzK1RweGpoUVcvYmlx?=
+ =?utf-8?B?RXdEdWJrdFhtbjF5c28zYzlXckFxNDU3bm5wWUFndlRzSm5wKzI3SE5CbXhG?=
+ =?utf-8?B?Mm5GU3FIaHNWVEtqU3ZFU21FaTIyK3ozQmdaR2VjR1hCMitGQ1RIQjVpbUts?=
+ =?utf-8?B?MWpPSmF5TkNaTnBuSUxtak9leWQ1Q1lQaTFCRnc4N0RBK0ZQZW11Zlp4VnUw?=
+ =?utf-8?B?MjdvMkFqdElvMWRrVit2MGU2eERLbjNieGR6SUhWTUNKU0tjaktqc0hsNVdr?=
+ =?utf-8?B?endoS2R6OElzWnRtVUNHSWd2eEJSTTJpUGRPTWg4ck5yb090NWV1MUdCYllt?=
+ =?utf-8?B?SXcxcTlsaUV3d1NxVDYvSG5GVmdsaFE2YVZUTFhhR1g2UHlYWSs5UkdUcmxj?=
+ =?utf-8?B?R0ZFMXFkQmhYTE1xUkVCV0FlK0NvcHNRdlRMQkpDQzk3YlRzVTNmWGVHT1hk?=
+ =?utf-8?B?eUoyNTY0UmUrakQ0RlpkNCs3V1lqSk1lTzA2VUtJNUlSemVHTVlWY0tZaHRS?=
+ =?utf-8?B?WmlCMjMycmhoTnZKUUMrNlBhVnh0bkdYME1vWmtGdmQreStBeXozZWtoanE2?=
+ =?utf-8?B?Q01wUWFSUS9ic2swQjZjVjdGZEJCMjVVRTM3aGdSbWU2Rkc5SkdRT08xYUE2?=
+ =?utf-8?B?ZUh6aTAxY0QvUEJLdFRFV3FOUjBwbnBwaUgwZGl1dlJTV3VwSHVnVHF3dVpq?=
+ =?utf-8?B?MHJ4T0FoMGxyakpUQjFWQ1FMOFJpMlhaaXg0dTJtOUJheUZhUkozTGFxL2Y0?=
+ =?utf-8?B?OER1Qi9wL0hicHhCYUlOMXJhS2hqeVBoRys4a3FWOHJrZzNiaStFbEgwKzBJ?=
+ =?utf-8?B?Uk0xdDUwTTY5cm5waGFUZXBKS3R1eHBKNC9uNURKcXRGdUw0NjNmRDBWT2s2?=
+ =?utf-8?B?Z2dhUFVNdk1oSXVveW96R3BwSnVjRDBDQTBCeGJmTzBRN1dibTA3WTBjdSsx?=
+ =?utf-8?B?UlpRY0ZRQ3ZQeEpwMHBoNEJHdXhVZmpBdXZGd2tVNjQyVmdqVE84ZjJQQUV0?=
+ =?utf-8?B?dTMxOUhURE5zV3drMXJHaWZnUVZRM0RDUmIrQmxUUmw1aGt5dGpGWW05L0J4?=
+ =?utf-8?B?VTVZZ3hRbGZyeVAybDd2SDhwKytQNlhBUlhQa1Z0SXZOZXlZNVRma1N3Zzhn?=
+ =?utf-8?B?V1pSL0NMcS9CK0RPQkdTdzF1OEdFRW1ML0cybkk1QmpRVldzMzMxcFVLajRj?=
+ =?utf-8?B?NGtpOWp0SFdhajhtajRCWHlUT2N1Z25WcTdxKysvM0tTYmYyQXQ1a05qOXFH?=
+ =?utf-8?B?Q0ZoYkNWaWkyT2JkN0duTGpEcjA5cjVDd0FBbisrcVRhc29xRUVCb3YxVVF0?=
+ =?utf-8?B?Vit5R2lVS3Fpd0dKWnd1YlZLY1BpWVFoMDBLMVlrOG85QUpqRGI1Y0NaK250?=
+ =?utf-8?B?VFVmN1o0QkE5bkQySFNLTnF2K1doS3lWN21NV1hBbDQzUkxCc1ViQVgydEhi?=
+ =?utf-8?B?dG1IZlhKRncyR2VnbUx6Z3NEQmFiMWYvSmxFOGVNRnVYc2x3S1JsRTNERi8z?=
+ =?utf-8?B?cEVvTjBHSklRY2JpWlhIaDdFSXZtNElXYk9idFhhRDdFcVg5TzRtbUR1RS8x?=
+ =?utf-8?B?bk8wcUU4ckpVN2pxdkVoYXIvc2JPQ1F6eGFqbzFlNGVBYzdqb2M4MEswTTlI?=
+ =?utf-8?B?RjM3OWg0TTd4RUI5a004K1N5UWdLOVNUbjhmZWlORkltWWFzajdackNXWUFN?=
+ =?utf-8?B?cU5mS1JsempockFZR3VRK1h4RlAwVlh3cXQ2RmF6eGlKb25WdnhIdWcwNzNV?=
+ =?utf-8?B?Y1AzNlc1YWZLUzBpdldlMkg0MVFZOWpwSmVlRFlDcndYd3JWdjFucW9vYUxT?=
+ =?utf-8?B?ZnV3Ny90cVR3Nk44MDJ0dUtqWEI4aWZUck5yaThtQjNPQ082QlNwdFIwWUV1?=
+ =?utf-8?B?WWw3QkxxcFZuNkQ2YWdBa1JQeGNnR2ZLMFJReDY0YTJBZUcyN29oTTQ4alBZ?=
+ =?utf-8?B?V1JlY3FYN1I4UzF3THZ0MGw0eW1nQit0VHhtS2Z0RDlRbDFabVIxbWNlZmJq?=
+ =?utf-8?B?TGpIYkNmY1NOWXk2ZnFqVTEvWHZCa3ZmbjcraWhLMmRodUJyUkg1WVdDVEVE?=
+ =?utf-8?B?QTBFeS9paU1ZY1BRcFpMTXBXTG1WYm1jLzQ5WjFQSWhzL2xZUUgwMHVuSzEv?=
+ =?utf-8?B?TmdRZ0FIUzJHZmw2RGhteGcwWURMR204c21QYkxtQUJnZG0xSXdJVWo3elJx?=
+ =?utf-8?B?bmZOYldyOWY5ZVJFazlkN3kyc3EzMzBoa0xMcVQ5N2Z4YlU0Y1ZqSkZlYUFG?=
+ =?utf-8?B?dUIzZ2VHUThZNjNOQldOQVpjZHJ1bVJZQlJrOTBiaWxTRVBlTUs3SnViNDFY?=
+ =?utf-8?B?ZC8rdEFTQ0VWZStVaWc5ejQzeWt0Mm9kS3F0QnQ2dGN2a1hwc0V4dz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7172998d-e79a-4e56-3f28-08da23ca8d5c
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2022 19:10:09.0220
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7Uqz84Pq7MashTJRa50iCCa8wfPMaqf8vprCxXs85ke2qSDRyRHppmT+l9WT5MlB6KNEFR9XiahfC2qC3BwaVA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1588
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:50 AM Ben Gardon <bgardon@google.com> wrote:
+On 4/20/2022 2:17 AM, Borislav Petkov wrote:
+> On Mon, Apr 18, 2022 at 08:24:35PM -0700, Smita Koralahalli wrote:
+>> Why are we checking this here? This flag (hw_injection_possible)
+>> is set to false inside prepare_msrs() called from
+>> smp_call_function_single().
+>> Should this check be done after the call to smp_call_function_single()?
+> Why would you do that then?
 >
-> On Tue, Apr 12, 2022 at 8:46 AM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Mon, Mar 21, 2022, Ben Gardon wrote:
-> > > Factor out the implementation of reset_tdp_shadow_zero_bits_mask to a
-> > > helper function which does not require a vCPU pointer. The only element
-> > > of the struct kvm_mmu context used by the function is the shadow root
-> > > level, so pass that in too instead of the mmu context.
-> > >
-> > > No functional change intended.
-> > >
-> > > Signed-off-by: Ben Gardon <bgardon@google.com>
-> > > ---
-> > >  arch/x86/kvm/mmu/mmu.c | 17 +++++++++++------
-> > >  1 file changed, 11 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 3b8da8b0745e..6f98111f8f8b 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -4487,16 +4487,14 @@ static inline bool boot_cpu_is_amd(void)
-> > >   * possible, however, kvm currently does not do execution-protection.
-> > >   */
-> > >  static void
-> >
-> > Strongly prefer the newline here get dropped (see below).
-> >
-> > > -reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
-> > > +build_tdp_shadow_zero_bits_mask(struct rsvd_bits_validate *shadow_zero_check,
-> >
-> > Kind of a nit, but KVM uses "calc" for this sort of thing.  There are no other
-> > instances of "build_" to describe this behavior.
-> >
-> > Am I alone in think that shadow_zero_check is an awful, awful name?  E.g. the EPT
-> > memtype case has legal non-zero values.  Anyone object to opportunistically
-> > renaming the function and the local shadow_zero_check to "rsvd_bits" to shorten
-> > line lengths and move KVM one step closer to consistent naming?
+> Is any of the code after
 >
-> That makes sense to me. I'm happy to add a commit to this series to
-> standardize on rsvd_bits.
+>          if (inj_type == SW_INJ) {
+>                  mce_log(m);
+>                  return 0;
+>          }
+>
+> worth running if hardware injection is not possible?
 
-Actually rsvd_bits is already a function name so I'm going to
-standardize on spte_rsvd_bits, if that works for everyone.
+Okay I got the gist of this now. This will be mainly useful for subsequent
+hardware error injections.
+
+Also, should we move this slightly before? In inj_bank_set() after we check
+for sw injection and before reading IPID value?
 
 >
-> >
-> > > +                             int shadow_root_level)
-> > >  {
-> > > -     struct rsvd_bits_validate *shadow_zero_check;
-> > >       int i;
-> > >
-> > > -     shadow_zero_check = &context->shadow_zero_check;
-> > > -
-> > >       if (boot_cpu_is_amd())
-> > >               __reset_rsvds_bits_mask(shadow_zero_check, reserved_hpa_bits(),
-> > > -                                     context->shadow_root_level, false,
-> > > +                                     shadow_root_level, false,
-> > >                                       boot_cpu_has(X86_FEATURE_GBPAGES),
-> > >                                       false, true);
-> > >       else
-> > > @@ -4507,12 +4505,19 @@ reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
-> > >       if (!shadow_me_mask)
-> > >               return;
-> > >
-> > > -     for (i = context->shadow_root_level; --i >= 0;) {
-> > > +     for (i = shadow_root_level; --i >= 0;) {
-> > >               shadow_zero_check->rsvd_bits_mask[0][i] &= ~shadow_me_mask;
-> > >               shadow_zero_check->rsvd_bits_mask[1][i] &= ~shadow_me_mask;
-> > >       }
-> > >  }
-> > >
-> > > +static void
-> > > +reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
-> >
-> > One line!  Aside from being against the One True Style[*], there is zero reason
-> > for a newline here.
-> >
-> > And I vote to drop the "mask", because (a) it's not a singular mask and (b) it's
-> > not even a mask in all cases.
-> >
-> > And while I'm on a naming consistency rant, s/context/mmu.
-> >
-> > I.e. end up with:
-> >
-> > static void calc_tdp_shadow_rsvd_bits(struct rsvd_bits_validate *rsvd_bits,
-> >                                       int shadow_root_level)
-> >
-> > static void reset_tdp_shadow_rsvd_bits(struct kvm_mmu *mmu)
-> >
-> > [*] https://lore.kernel.org/mm-commits/CAHk-=wjS-Jg7sGMwUPpDsjv392nDOOs0CtUtVkp=S6Q7JzFJRw@mail.gmail.com
-> >
-> > > +{
-> > > +     build_tdp_shadow_zero_bits_mask(&context->shadow_zero_check,
-> > > +                                     context->shadow_root_level);
-> > > +}
-> > > +
-> > >  /*
-> > >   * as the comments in reset_shadow_zero_bits_mask() except it
-> > >   * is the shadow page table for intel nested guest.
-> > > --
-> > > 2.35.1.894.gb6a874cedc-goog
-> > >
+>> Also, we already have inj_desc.err which returns error code to userspace
+>> when WRIG in status registers. Why is this flag needed?
+> To not do unnecessary work when you *know* hardware injection won't
+> work.
+>
+> :-)
+
+Okay.
+
+>
+> Btw, please trim your mails when you reply, just like I did.
+
+I'm sorry. Noted for my next replies!
+
+Thanks,
+Smita
+>
+> Thx.
+>
+

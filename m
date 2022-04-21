@@ -2,112 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83F4509C48
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E0D509C4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387706AbiDUJdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
+        id S1387672AbiDUJeF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 21 Apr 2022 05:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386167AbiDUJdJ (ORCPT
+        with ESMTP id S1387075AbiDUJeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:33:09 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391BCDED5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:30:20 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id p12so2068231lfs.5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=67sfB0IzHVXeR5A8puxseus3O+X5kUTFhlECjiPj6x4=;
-        b=fmIPbE1IBLcf3qYXbw+olE1xUMN93LGj1KaoeCohxNiXqe/IYmOR+GNMCYDO9BV3c5
-         v8VrA2RrG9XLDbSN1FgCSuioGJ5TOoSErvJmCZpZsunnR+EtJv70QquoeihauNHuR0UP
-         RirMlujj/Ha9r1dj1uUgIFTR3YrP1u/zjmXzkYSgv1J68uNJPbBu/73B2Sh2kwRKqugs
-         inRGGd2FlV103fq8wddg04I7qf3rcM2wr7PTd0UYBkj36CXEV4Uf5QfdjYvDFLwyOON2
-         aj5KJBCk1OJIDEVhC5GjAywZQAa/N1Xi6UfsgqhbtrtTWIeyitADL3C3l2X1Syi4OyB2
-         9VCQ==
+        Thu, 21 Apr 2022 05:34:04 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A909C1572E;
+        Thu, 21 Apr 2022 02:31:14 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id x12so2813230qtp.9;
+        Thu, 21 Apr 2022 02:31:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=67sfB0IzHVXeR5A8puxseus3O+X5kUTFhlECjiPj6x4=;
-        b=tPY+wRsdttJGQYUOlLZEZQXsvrybSuhrSnloYs2VmZGJ5RPMOxbvmnialjQKUKlajv
-         hGrVLk84x9YLo3tXdOOzDTyokl7ZoFWmLrhCpORQ3nPkhoSzGHPxcpJ53Ur7dFtriLT8
-         +aeu61Hafd/er9HLTuXY9JCqdxc57yDr8MxKc/9c8tqPvuauXqCH6uRSw5J0RcXTMhGx
-         Itf784j9kO368HLinnqQ3OhlQmcgm+D1wxTShzTOeZqhMtTLH84HW5QONNDCNL58v4AC
-         cq9+y2muxmyQkRAJXgp175um3hr0EEN7EEdd2Mgxq/oaSzQLAnlqoBgXKrWLt94qd8r2
-         qJ/A==
-X-Gm-Message-State: AOAM533LMsWYqruqsOaxfAd3VmIQdByGn+vnKYCHh3K8LuWMgYB9Po6B
-        wBbTbsYUwWh5Ky3xjZhCpaBPZbju02oH02FOF0jt/w==
-X-Google-Smtp-Source: ABdhPJzoFpYEMBId0vI8slCjJdfA2UOYmWG5jdk+Km/dMYqYelRd2ehVOg2cAmAYllGKHBeStzko5XCzXa5i312zsiw=
-X-Received: by 2002:ac2:5ddc:0:b0:46b:85a3:9c3 with SMTP id
- x28-20020ac25ddc000000b0046b85a309c3mr18314110lfq.130.1650533418465; Thu, 21
- Apr 2022 02:30:18 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JwCuSdNSLXEV9phfYC6AwyspdGojdlT32rEj1GMZCB4=;
+        b=YFwkbZrAj+VdGfiCseZczgL+5tRMwhOWuYpxrEfcWnPfNzZSOK4CFtUeCOne21Noeu
+         Ev16ZgyFQcxhkyfVv96hDpdq7e3F3tSyMC36OFOU4NPsF6WwYNsq79hU/AngQx1HoEMX
+         1qgVecZoMWf6klmZHeGp7nHSBxwV0LyVV2t4nCTVgdJVXvItvN1Mb0bANapMHcg69jbP
+         swyl5UwsZZJUa3XuFozLxyk1owtelbPqqPx6mjwDLTGcPQzNT/CyCnYAdMI8doHoixuw
+         VZYob2Brmi0PYt0HcXOq165RFLDoR5EdpakcrD7won1nHwHhxR4DD5hX1s1gb/8T1syV
+         cCzA==
+X-Gm-Message-State: AOAM531sO/dF4sJ+C6kPAiJyHGD0/jChUwq+jhV8wg9Glscn8XuWqs14
+        b+3f6s2EM79ztaaegma80XjtkOmb42sDXwJ/
+X-Google-Smtp-Source: ABdhPJwWjPp6Owo2+4AsGu0yJlnOuXSdk8KjJ4zCKIQ22oGCbx7S7168jTqnFEZtfEgSpi6oJv9cjQ==
+X-Received: by 2002:ac8:7fd4:0:b0:2f3:4323:7f91 with SMTP id b20-20020ac87fd4000000b002f343237f91mr3990120qtk.354.1650533473485;
+        Thu, 21 Apr 2022 02:31:13 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id n3-20020a05620a152300b0069ec409e679sm2651317qkk.48.2022.04.21.02.31.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 02:31:12 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2eafabbc80aso45557967b3.11;
+        Thu, 21 Apr 2022 02:31:12 -0700 (PDT)
+X-Received: by 2002:a81:c703:0:b0:2d0:cc6b:3092 with SMTP id
+ m3-20020a81c703000000b002d0cc6b3092mr24791356ywi.449.1650533472388; Thu, 21
+ Apr 2022 02:31:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220412033335.1384230-1-apatel@ventanamicro.com>
-In-Reply-To: <20220412033335.1384230-1-apatel@ventanamicro.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Thu, 21 Apr 2022 15:00:05 +0530
-Message-ID: <CAK9=C2UB-SKcb2Lf=m9VQZnOmkoY1W=kNeSJ40VcVXfr5WuPZQ@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: mm: Fix set_satp_mode() for platform not having Sv57
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>
+References: <20220414122250.158113-1-clement.leger@bootlin.com> <20220414122250.158113-11-clement.leger@bootlin.com>
+In-Reply-To: <20220414122250.158113-11-clement.leger@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 21 Apr 2022 11:31:01 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU6TQbXusC7R1UmJ0TBkRCG3W54JgduLpDzUrNUzC0eWA@mail.gmail.com>
+Message-ID: <CAMuHMdU6TQbXusC7R1UmJ0TBkRCG3W54JgduLpDzUrNUzC0eWA@mail.gmail.com>
+Subject: Re: [PATCH net-next 10/12] ARM: dts: r9a06g032: describe GMAC2
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+Hi Clément,
 
-On Tue, Apr 12, 2022 at 9:04 AM Anup Patel <apatel@ventanamicro.com> wrote:
+On Thu, Apr 14, 2022 at 2:24 PM Clément Léger <clement.leger@bootlin.com> wrote:
+> RZ/N1 SoC includes two MAC named GMACx that are compatible with the
+> "snps,dwmac" driver. GMAC1 is connected directly to the MII converter
+> port 1. GMAC2 however can be used as the MAC for the switch CPU
+> management port or can be muxed to be connected directly to the MII
+> converter port 2. This commit add description for the GMAC2 which will
+> be used by the switch description.
 >
-> When Sv57 is not available the satp.MODE test in set_satp_mode() will
-> fail and lead to pgdir re-programming for Sv48. The pgdir re-programming
-> will fail as well due to pre-existing pgdir entry used for Sv57 and as
-> a result kernel fails to boot on RISC-V platform not having Sv57.
->
-> To fix above issue, we should clear the pgdir memory in set_satp_mode()
-> before re-programming.
->
-> Fixes: 011f09d12052 ("riscv: mm: Set sv57 on defaultly")
-> Reported-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 
-Can this be considered for 5.18-rcX ?
+Thanks for your patch!
 
-Regards,
-Anup
+> --- a/arch/arm/boot/dts/r9a06g032.dtsi
+> +++ b/arch/arm/boot/dts/r9a06g032.dtsi
+> @@ -200,6 +200,23 @@ nand_controller: nand-controller@40102000 {
+>                         status = "disabled";
+>                 };
+>
+> +               gmac2: ethernet@44002000 {
+> +                       compatible = "snps,dwmac-3.72a", "snps,dwmac";
 
-> ---
->  arch/riscv/mm/init.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 9535bea8688c..b0793dc0c291 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -718,6 +718,7 @@ static __init void set_satp_mode(void)
->                 if (!check_l4) {
->                         disable_pgtable_l5();
->                         check_l4 = true;
-> +                       memset(early_pg_dir, 0, PAGE_SIZE);
->                         goto retry;
->                 }
->                 disable_pgtable_l4();
-> --
-> 2.25.1
->
+"make dtbs_check":
+arch/arm/boot/dts/r9a06g032-rzn1d400-db.dtb:0:0:
+/soc/ethernet@44002000: failed to match any schema with compatible:
+['snps,dwmac-3.72a', 'snps,dwmac']
+
+> +                       reg = <0x44002000 0x2000>;
+> +                       interrupt-parent = <&gic>;
+> +                       interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>,
+> +                                    <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>,
+> +                                    <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-names = "macirq", "eth_lpi", "eth_wake_irq";
+
+arch/arm/boot/dts/r9a06g032-rzn1d400-db.dtb: ethernet@44002000:
+interrupt-names:1: 'eth_wake_irq' was expected
+arch/arm/boot/dts/r9a06g032-rzn1d400-db.dtb: ethernet@44002000:
+interrupt-names:2: 'eth_lpi' was expected
+        From schema: Documentation/devicetree/bindings/net/snps,dwmac.yaml
+
+> +                       clock-names = "stmmaceth";
+> +                       clocks = <&sysctrl R9A06G032_HCLK_GMAC1>;
+> +                       snps,multicast-filter-bins = <256>;
+> +                       snps,perfect-filter-entries = <128>;
+> +                       tx-fifo-depth = <2048>;
+> +                       rx-fifo-depth = <4096>;
+> +                       status = "disabled";
+> +               };
+> +
+>                 eth_miic: eth-miic@44030000 {
+>                         compatible = "renesas,rzn1-miic";
+>                         #address-cells = <1>;
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4C750AAAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9231850AAB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441911AbiDUVX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 17:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
+        id S1441918AbiDUVX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 17:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382346AbiDUVXT (ORCPT
+        with ESMTP id S1382911AbiDUVXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 17:23:19 -0400
+        Thu, 21 Apr 2022 17:23:20 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC90749F2B;
-        Thu, 21 Apr 2022 14:20:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675B149F8C;
+        Thu, 21 Apr 2022 14:20:29 -0700 (PDT)
 Received: from g550jk.arnhem.chello.nl (a246182.upc-a.chello.nl [62.163.246.182])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 8864CCDE54;
-        Thu, 21 Apr 2022 21:19:57 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 0A270CEA6C;
+        Thu, 21 Apr 2022 21:19:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1650575997; bh=vh2MH7zJGRV4zHtBhgIEo9vG9GwiuVBWVXSamH70+rc=;
+        t=1650575998; bh=Izkcwt3YBt89cT8YErCxy5POdcKGAd3b1m2UZ4U0r0I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=xNEQhDwYkAdAdZzQ1UdP8T8FVswpIQ2MpkatDtQtCrLBhqb6hB6q+W18eBaBA0KCQ
-         Zmv06BCMfchccxdVJSnYhp39PApqsqHtXAQVm17WbEje3HPvyqj4aIMZ4a9jb/uIPW
-         thJSo4fbtwOoFF+3xe7AxVD8njf8N9UZ3ZTPaB+w=
+        b=f6O4aEx1KftmRrDvYEvELwpoge6DNiDSOy0dj8C/UlMaNNe+k/oZ2/8Y3uWgf0QJi
+         L1uBQ6YBPnClN4YkGD0IohHM9/FwEMhfpHKOtHWhMiVwh7xPNGIwPCSTn7zyruUFjm
+         pgN1MaJrg2Wc7AcUzTDNFHZPFz5o3Bm6FY7xxXaQ=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -32,9 +32,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] ARM: dts: msm8974-FP2: Add mmc* aliases
-Date:   Thu, 21 Apr 2022 23:19:34 +0200
-Message-Id: <20220421211936.345168-2-luca@z3ntu.xyz>
+Subject: [PATCH 3/3] ARM: dts: qcom: msm8974: Add missing license headers
+Date:   Thu, 21 Apr 2022 23:19:35 +0200
+Message-Id: <20220421211936.345168-3-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220421211936.345168-1-luca@z3ntu.xyz>
 References: <20220421211936.345168-1-luca@z3ntu.xyz>
@@ -50,27 +50,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add aliases for internal storage and SD card so they don't randomly
-switch around.
+All other msm8974 dts files are licensed as GPL-2.0 so add the same
+header to the files where it's missing.
 
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts              | 1 +
+ arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts | 1 +
+ arch/arm/boot/dts/qcom-msm8974pro.dtsi                           | 1 +
+ 3 files changed, 3 insertions(+)
 
 diff --git a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-index 08e723f2bdfc..5a00a4f9fbe4 100644
+index 5a00a4f9fbe4..96427d75ea82 100644
 --- a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
 +++ b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-@@ -9,6 +9,8 @@ / {
- 	compatible = "fairphone,fp2", "qcom,msm8974";
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0
+ #include "qcom-msm8974pro.dtsi"
+ #include "qcom-pm8841.dtsi"
+ #include "qcom-pm8941.dtsi"
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+index 34aed41856a6..9bd8faea61a5 100644
+--- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
++++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0
+ #include "qcom-msm8974pro.dtsi"
+ #include "qcom-pm8841.dtsi"
+ #include "qcom-pm8941.dtsi"
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro.dtsi b/arch/arm/boot/dts/qcom-msm8974pro.dtsi
+index 973bd1dafbfe..1e882e16a221 100644
+--- a/arch/arm/boot/dts/qcom-msm8974pro.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8974pro.dtsi
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0
+ #include "qcom-msm8974.dtsi"
  
- 	aliases {
-+		mmc0 = &sdhc_1;
-+		mmc1 = &sdhc_2;
- 		serial0 = &blsp1_uart2;
- 	};
- 
+ &gcc {
 -- 
 2.36.0
 

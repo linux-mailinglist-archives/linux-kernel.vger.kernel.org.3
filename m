@@ -2,124 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F83509B45
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B786509B3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386923AbiDUIw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S1386966AbiDUIw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386901AbiDUIwP (ORCPT
+        with ESMTP id S1386980AbiDUIwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:52:15 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDAB15712
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:49:25 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id r19so2756944wmq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:49:25 -0700 (PDT)
+        Thu, 21 Apr 2022 04:52:54 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0832BF70
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:50:05 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id r189so7519771ybr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=aqSPW9x18iap7VEqnzBaFCwvwC9XWVLp+mVcr+cF4XU=;
-        b=sVQrimJBLCXmLbM375kfAud906Dx8MUr3UWI3gePbVIosyLCjwJ+wV3rGV4lFcJXo1
-         1lSq9f8z1TFWEw9edZllTJ3NOhv5VycjBt43cAcM/TrPwgvUl9+7uc+eYFc1Hkk+TDPr
-         bMjavqPKtpYICG8KvxnSjVbCYkovadQH6N3rCQXk7EBh4V15hzAzWV3Or9vDkOvtEP5g
-         KJw/4nsk6vEFEA9WddRyyRnXnI1Clue8JLCQcHiWsoEBQC+LUwuFq8lyVLslq9lU9Mhx
-         /ZRDg87iM64NODjWq9JGGVgVmSEDpmAMikiVoxWhcw9OBsSFX3nt59A7FyESVJjNTLdi
-         OlRw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C1t5mUF1ebuEHByKOPa7jvd5uPJ4IKlhTRldMrpukDU=;
+        b=X7X1O9iZdMtSeshylJiakmEOV4UCGYmtQG5/k2PnUtQR35LhOowY9T0zT0TZ7chMfw
+         PfGEjARNnp5i4aK9OW15d4E4lmkPv0Vfa2+oFSvEzlbOUzewFHAWSTPyjUYccbN26eKB
+         YEtp4B+p7iKbdk4d2wq3m84k/DDtbU/vgWpSc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=aqSPW9x18iap7VEqnzBaFCwvwC9XWVLp+mVcr+cF4XU=;
-        b=0m10FpYe93XG3LgVQHDjI8Elzj7XUD5NAljBZE6IXwEzPZ8X0LlVCpXgbgBTFZJjoO
-         SsgegcnTLuDVP6eJsudAuFzU4wjJuAhl7N7FrLELvQfqAuJ3D4Zm0Db/6uc5a4I6lPqF
-         T25X/hfUKcOTIffAH3rl2kD6bEg53VAcEav7TGnk/6ZWxDPjfFLfUMG4GS3EcFr6aVBY
-         GhR2VeniaVEB5xHPhzg0FAFfRxxdaqTzlBuYquIvlsv2eyA1kEPYSwo0G6G4LWW7Q/cv
-         AOnkv61KkX6NNu3PJOVSLyvSlvDdwehZK+3LEG+BxniVm2t+wRxxL9ADhK0JZI4TuH4h
-         MYDA==
-X-Gm-Message-State: AOAM530h6n6QU1snJZFZ85T0VNv7YLO3tlVYwE+Z4M0hGHguPAVYX6KY
-        L6EI/5HX8EUY8f5pUhSitRboHA==
-X-Google-Smtp-Source: ABdhPJzriyI1Ddu4GZCWUIbVECnu8piDZLNnSlQ/iUsewg5ps2kg0Tk6ePdstsZTppKMCwkIC+JBSA==
-X-Received: by 2002:a05:600c:1c9b:b0:391:6287:b7a3 with SMTP id k27-20020a05600c1c9b00b003916287b7a3mr7507911wms.188.1650530964122;
-        Thu, 21 Apr 2022 01:49:24 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:35ba:2677:956:980d? ([2001:861:44c0:66c0:35ba:2677:956:980d])
-        by smtp.gmail.com with ESMTPSA id g8-20020a5d4888000000b00207a49fa6a1sm2028679wrq.81.2022.04.21.01.49.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 01:49:23 -0700 (PDT)
-Message-ID: <3f5df9df-7699-7210-6253-4dd03f4444a0@baylibre.com>
-Date:   Thu, 21 Apr 2022 10:49:31 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C1t5mUF1ebuEHByKOPa7jvd5uPJ4IKlhTRldMrpukDU=;
+        b=gYV0CGNPPgjCnmDxo2amZrOulyOkWZUbvpd+TXjsmIxKXUmkURK5FJ7hdmQjXfHYW/
+         xJF5eu5al3/iDsXf49Q4lmBa8J1qxOzi5X5UIjWANmuKTjN1igCdjM7swSt/pxPUrHlr
+         k1uNkPCYZPZ+l27QFF7RjkqnG+2FgOzLBbkN8dR0x1TmqQQ7C0gxMZufclP/OsJCgXA6
+         AC8EMQ1b7O0wt6pYYTbv0zKd7hrdJKoeRnfhMqHSgOGX/LUnWX0fYRNJ8wxpV3uGO7bP
+         ejYzTqwN4qAggdiVC7WtbGYnvRWiyujWTjIIRU6BdSKI1dpyTFFjXn7gvEEkdnGoMCJn
+         53Ww==
+X-Gm-Message-State: AOAM530rlFL1xF9p2NEn29OhL3aCJGd/Ty5KL0qQ966VP6wn9CXBGl9X
+        1/9ry40h0jIA8jWVDVLDzfjH75tyG32fJooDX7HanA==
+X-Google-Smtp-Source: ABdhPJyp/x2iHg2u/UbKD2umcDkFiw3TdbXVeOp6mmt8vzeFktbi6PtrjNtBzfFq1Myl4QMjaHUyxzECRA36CLqzFgs=
+X-Received: by 2002:a25:2ac3:0:b0:645:36f4:2db3 with SMTP id
+ q186-20020a252ac3000000b0064536f42db3mr12076194ybq.189.1650531004985; Thu, 21
+ Apr 2022 01:50:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V2 2/2] tty: serial: meson: Added S4 SOC compatibility
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220418053202.24528-1-yu.tu@amlogic.com>
- <20220418053202.24528-3-yu.tu@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220418053202.24528-3-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220414025023.11516-1-Nick.Fan@mediatek.com> <ee2f0819-8c9e-4160-c4ae-fb4ad0da3f3b@collabora.com>
+ <b6509465-b7c7-0e66-071a-be85793cce58@arm.com>
+In-Reply-To: <b6509465-b7c7-0e66-071a-be85793cce58@arm.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 21 Apr 2022 16:49:54 +0800
+Message-ID: <CAGXv+5EhBB2LiQ_XL_ya7aceE7SBqZpjrbXe-gf81ed8qbeKBw@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: Add DT schema for Arm Mali Valhall GPU
+To:     Steven Price <steven.price@arm.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Nick Fan <nick.fan@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, srv_heupstream@mediatek.com,
+        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        alyssa.rosenzweig@collabora.com,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2022 07:32, Yu Tu wrote:
-> Make UART driver compatible with S4 SOC UART. Meanwhile, the S4 SOC
-> UART uses 12MHz as the clock source for baud rate calculations.
-> 
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> ---
->   drivers/tty/serial/meson_uart.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index 58bd2723c004..43941f21735f 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -790,11 +790,19 @@ static int meson_uart_remove(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> +static struct meson_uart_data s4_uart_date = {
+On Thu, Apr 14, 2022 at 8:47 PM Steven Price <steven.price@arm.com> wrote:
+>
+> On 14/04/2022 12:51, AngeloGioacchino Del Regno wrote:
+> > Il 14/04/22 04:50, Nick Fan ha scritto:
+> >> Add devicetree schema for Arm Mali Valhall GPU
+> >>
+> >> Define a compatible string for the Mali Valhall GPU
+> >> for MediaTek's SoC platform.
+> >>
+> >> Signed-off-by: Nick Fan <Nick.Fan@mediatek.com>
+> >
+> > Hello Nick,
+> > Unfortunately, this binding is completely wrong.
+>
+> I think that's unfair, although there is room for improvement.
+>
+> > First of all, there's no arm,mali-valhall driver upstream - this will be
+> > managed
+> > by panfrost later, yes, but right now there's no support.
+>
+> We need a binding agreed upon before support can be added.
 
-Should be s4_uart_data instead of s4_uart_date
++1. I asked them to send an updated binding for their hardware so that
+we could have a discussion about it and converge on something.
 
-> +	.has_xtal_div2 = true,
-> +};
-> +
->   static const struct of_device_id meson_uart_dt_match[] = {
->   	{ .compatible = "amlogic,meson6-uart" },
->   	{ .compatible = "amlogic,meson8-uart" },
->   	{ .compatible = "amlogic,meson8b-uart" },
->   	{ .compatible = "amlogic,meson-gx-uart" },
-> +	{
-> +		.compatible = "amlogic,meson-s4-uart",
-> +		.data = (void *)&s4_uart_date,
+> > Then, you're also setting opp-microvolt in a way that will never (or, at
+> > least,
+> > not anytime soon) be supported by the upstream driver, as it manages
+> > only one
+> > supply for devfreq scaling.
+>
+> The mt8183 binding (already in tree) is very similar. The binding also
+> should be describing the hardware not what the driver supports. There
+> are indeed limitations in Panfrost for supporting multiple supplies, but
+> that's something that needs improving in the driver not a reason to
+> block a (presumably correct) description of the hardware. I can't
+> comments on whether the specifics of the mt8192 are correct.
 
-Here same
+Having an agreed upon binding also means that we can bring our downstream
+driver into alignment, instead of having to maintain a device tree fork.
 
-> +	},
->   	{ /* sentinel */ },
->   };
->   MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
-With this change, it's fine for me.
+And +1 to being able to handle just one supply is a limitation of the
+driver. Panfrost in its current state would just not enable devfreq
+if more than supply is given [1]. Looking deeper, the OPP core currently
+doesn't support more than one regulator for a given device.
 
-Neil
+> > Besides, please don't push bindings that have no upstream driver,
+> > especially if
+> > these are for downstream drivers requiring proprietary components, while a
+> > completely open source implementation is in the works.
+>
+> More constructively, Alyssa has already posted a patch (as part of the
+> series adding driver support) which would extend the existing Bifrost
+> bindings to (pre-CSF) Valhall:
+>
+> https://lore.kernel.org/dri-devel/20220211202728.6146-2-alyssa.rosenzweig@collabora.com/
+>
+> I'm not sure I see the point of having a separate binding document for
+> Valhall considering the (pre-CSF) hardware is the same from the kernel
+> perspective.
+
+So I suppose the next step should be to move the required MediaTek
+specific changes into the existing binding instead of having a new
+one?
+
+Separately I think we would need a new binding to spell out the
+requirements of MediaTek's two supply OPP table? Or maybe this could
+be in the description of the Mali binding?
+
+
+Thanks
+ChenYu
+
+[1] https://patchwork.freedesktop.org/patch/429782/

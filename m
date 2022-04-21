@@ -2,131 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308E5509C46
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45223509C53
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387696AbiDUJff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
+        id S1387690AbiDUJe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387692AbiDUJf1 (ORCPT
+        with ESMTP id S1387677AbiDUJey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:35:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6B915817
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:32:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650533558; x=1682069558;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wynBT3GsNc8N0T1pIpKq8OjfBbxpA23I2Tu5/2/HG7k=;
-  b=k/Ou4n+EwH2ltadWXMSO8JJqPxcYldtHKJVgC2lTuS9DiXUJLg4A9MFP
-   iJJlrRNvifJpHFXFKq8UJ/1AD6OiShrDTyREHIF63bgJQblhxU7vchvdR
-   kNsXzn/3vUqX8JPxaQABrR7d3v2oN0ulab+cD0APvVuzKy0wZ2aTjziFp
-   qKJRnjEZ4uvwbH6i5yh3VEn6y2DjtbJ0KfexrvlH6FLZ1tFf+DCySXH6/
-   WQtI4NpyDZJLnLR8GbGJIxCU7nsytlGRTIL47RFlBeNi45lUgSTjtim/O
-   r4s4XhyQIumP217PJ07Rg/o5Ki+ax+Rgl4E6C993oDix9HeeAhTizo+7N
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="327198393"
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="327198393"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 02:32:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="593573923"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 21 Apr 2022 02:32:36 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhTAy-0008Af-3N;
-        Thu, 21 Apr 2022 09:32:36 +0000
-Date:   Thu, 21 Apr 2022 17:31:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Koba Ko <koba.ko@canonical.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:18:
- error: invalid use of undefined type 'struct cpuinfo_x86'
-Message-ID: <202204211734.hHKaiLoZ-lkp@intel.com>
+        Thu, 21 Apr 2022 05:34:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B4E1572F;
+        Thu, 21 Apr 2022 02:32:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6916AB823A7;
+        Thu, 21 Apr 2022 09:32:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B45BC385A1;
+        Thu, 21 Apr 2022 09:32:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650533522;
+        bh=5tCYODYe4IUZwtg/8f/XY3fbdkY0KtrDaNGpzi8qFUc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yfswzQHoys+STXSwb/IAa5il79nk+s0bn4xbXaq3LJUY4T+natHRxo3gFMZnnHrbr
+         qWtKCmV/Tu/jUBHnKejgruocGkKwQ0AY/s+DLkOHXVgjQPhCrkzNF0uLywNsqc1x/4
+         z88Hhlly+u+82ml4UqP+bBAjzPnflGgUiB3akSNY=
+Date:   Thu, 21 Apr 2022 11:31:59 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        "Sandeep Maheswaram (Temp) (QUIC)" <quic_c_sanm@quicinc.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Pavan Kumar Kondeti (QUIC)" <quic_pkondeti@quicinc.com>,
+        "Pratham Pratap (QUIC)" <quic_ppratap@quicinc.com>,
+        "Krishna Kurapati PSSNV (QUIC)" <quic_kriskura@quicinc.com>,
+        "Vidya Sagar Pulyala (Temp) (QUIC)" <quic_vpulyala@quicinc.com>
+Subject: Re: [PATCH v3 0/2] Skip phy initialization for DWC3 USB Controllers
+Message-ID: <YmEkj3/6+9gvgqAx@kroah.com>
+References: <1649323888-12420-1-git-send-email-quic_c_sanm@quicinc.com>
+ <DM6PR02MB4857A0ADCDA1558DE58E103ADFF29@DM6PR02MB4857.namprd02.prod.outlook.com>
+ <4b34735f-8e1f-bf37-398f-9b4a8aa2e939@linux.intel.com>
+ <YmEL3WnyM7sa8VP9@kuha.fi.intel.com>
+ <YmEXqe5IEAzZezU5@kroah.com>
+ <YmEYvYA0uXatStZg@kuha.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YmEYvYA0uXatStZg@kuha.fi.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Koba,
+On Thu, Apr 21, 2022 at 11:41:33AM +0300, Heikki Krogerus wrote:
+> On Thu, Apr 21, 2022 at 10:36:57AM +0200, Greg Kroah-Hartman wrote:
+> > On Thu, Apr 21, 2022 at 10:46:37AM +0300, Heikki Krogerus wrote:
+> > > On Wed, Apr 20, 2022 at 04:20:52PM +0300, Mathias Nyman wrote:
+> > > > On 19.4.2022 13.17, Sandeep Maheswaram (Temp) (QUIC) wrote:
+> > > > > Hi Mathias, Felipe,
+> > > > > 
+> > > > >> -----Original Message-----
+> > > > >> From: Sandeep Maheswaram (Temp) (QUIC) <quic_c_sanm@quicinc.com>
+> > > > >> Sent: Thursday, April 7, 2022 3:01 PM
+> > > > >> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Felipe Balbi
+> > > > >> <balbi@kernel.org>; Stephen Boyd <swboyd@chromium.org>; Doug
+> > > > >> Anderson <dianders@chromium.org>; Matthias Kaehlcke
+> > > > >> <mka@chromium.org>; Mathias Nyman <mathias.nyman@intel.com>
+> > > > >> Cc: linux-arm-msm@vger.kernel.org; linux-usb@vger.kernel.org; linux-
+> > > > >> kernel@vger.kernel.org; Pavan Kumar Kondeti (QUIC)
+> > > > >> <quic_pkondeti@quicinc.com>; Pratham Pratap (QUIC)
+> > > > >> <quic_ppratap@quicinc.com>; Krishna Kurapati PSSNV (QUIC)
+> > > > >> <quic_kriskura@quicinc.com>; Vidya Sagar Pulyala (Temp) (QUIC)
+> > > > >> <quic_vpulyala@quicinc.com>; Sandeep Maheswaram (Temp) (QUIC)
+> > > > >> <quic_c_sanm@quicinc.com>
+> > > > >> Subject: [PATCH v3 0/2] Skip phy initialization for DWC3 USB Controllers
+> > > > >>
+> > > > >> Runtime suspend of phy drivers was failing from DWC3 driver as runtime
+> > > > >> usage value is 2 because the phy is initialized from
+> > > > >> DWC3 core and HCD core.
+> > > > >> Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
+> > > > >> This property can be set to avoid phy initialization in HCD core.
+> > > > >>
+> > > > >> v3:
+> > > > >> Coming back to this series based on discussion at below thread
+> > > > >> https://patchwork.kernel.org/project/linux-arm-msm/patch/1648103831-
+> > > > >> 12347-4-git-send-email-quic_c_sanm@quicinc.com/
+> > > > >> Dropped the dt bindings PATCH 1/3 in v2
+> > > > >> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-
+> > > > >> 25582-1-git-send-email-quic_c_sanm@quicinc.com/
+> > > > >>
+> > > > >> v2:
+> > > > >> Updated the commit descriptions.
+> > > > >> Changed subject prefix from dwc to dwc3.
+> > > > >> Increased props array size.
+> > > > >>
+> > > > >> Sandeep Maheswaram (2):
+> > > > >>   usb: host: xhci-plat: Add device property to set XHCI_SKIP_PHY_INIT
+> > > > >>     quirk
+> > > > >>   usb: dwc3: host: Set the property usb-skip-phy-init
+> > > > >>
+> > > > >>  drivers/usb/dwc3/host.c      | 4 +++-
+> > > > >>  drivers/usb/host/xhci-plat.c | 3 +++
+> > > > >>  2 files changed, 6 insertions(+), 1 deletion(-)
+> > > > >>
+> > > > >> --
+> > > > >> 2.7.4
+> > > > > 
+> > > > > Please let me know your opinion about this series.
+> > > > 
+> > > > Otherwise looks good but wondering if we should document that new device
+> > > > property somewhere. 
+> > > > 
+> > > > Couldn't find a standard way how those device properties excluded from
+> > > > Documentation/devicetree/binding are documented
+> > > 
+> > > Couldn't it be just documented in drivers/usb/host/xhci-plat.c for now?
+> > 
+> > That's not where DT properties are documented.
+> 
+> It's not a DT property.
 
-FYI, the error/warning still remains.
+Then what is it and why are the other properties documented?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b253435746d9a4a701b5f09211b9c14d3370d0da
-commit: b3dc549986eb7b38eba4a144e979dc93f386751f drm/amdgpu: Disable PCIE_DPM on Intel RKL Platform
-date:   8 months ago
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20220421/202204211734.hHKaiLoZ-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b3dc549986eb7b38eba4a144e979dc93f386751f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b3dc549986eb7b38eba4a144e979dc93f386751f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/um/asm/processor.h:41,
-                    from include/linux/spinlock_up.h:8,
-                    from include/linux/spinlock.h:92,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/slab.h:15,
-                    from drivers/gpu/drm/amd/amdgpu/../pm/inc/pp_debug.h:35,
-                    from drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:23:
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c: In function 'intel_core_rkl_chk':
-   arch/um/include/asm/processor-generic.h:104:19: error: called object is not a function or function pointer
-     104 | #define cpu_data (&boot_cpu_data)
-         |                  ~^~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1742:34: note: in expansion of macro 'cpu_data'
-    1742 |         struct cpuinfo_x86 *c = &cpu_data(0);
-         |                                  ^~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:18: error: invalid use of undefined type 'struct cpuinfo_x86'
-    1744 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
-         |                  ^~
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:33: error: invalid use of undefined type 'struct cpuinfo_x86'
-    1744 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
-         |                                 ^~
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1748:1: error: control reaches end of non-void function [-Werror=return-type]
-    1748 | }
-         | ^
-   cc1: some warnings being treated as errors
-
-
-vim +1744 drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c
-
-  1738	
-  1739	static bool intel_core_rkl_chk(void)
-  1740	{
-  1741	#if IS_ENABLED(CONFIG_X86_64)
-  1742		struct cpuinfo_x86 *c = &cpu_data(0);
-  1743	
-> 1744		return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
-  1745	#else
-  1746		return false;
-  1747	#endif
-  1748	}
-  1749	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Anyway, a new series has been submitted that does document this so I
+don't think it's an argument anymore :)

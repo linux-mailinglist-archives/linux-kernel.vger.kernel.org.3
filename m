@@ -2,150 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E0D509C4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90AED509C54
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387672AbiDUJeF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 21 Apr 2022 05:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
+        id S1387685AbiDUJeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387075AbiDUJeE (ORCPT
+        with ESMTP id S1387684AbiDUJeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:34:04 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A909C1572E;
-        Thu, 21 Apr 2022 02:31:14 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id x12so2813230qtp.9;
-        Thu, 21 Apr 2022 02:31:14 -0700 (PDT)
+        Thu, 21 Apr 2022 05:34:19 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8427B1A80E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:31:26 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso5441393wme.5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NpVbGkWT0mxI2z+QAaSeB8XReImeuL8/00d31gyn1MM=;
+        b=NY9XSGico1KIM7Fqq1EwGMyOn23m25iSrqopxZzF4wmajHZm5QZcwf++tU2uNOffNB
+         UeVQd/I1bq4JozXtv6evYNUmcNwYfU/KfNtBG7MDWdWVG2JUYJIFJJHAM0H15lRuEZKa
+         R9S3PYlmM9lI7sako+G/6+A4F4ltAbThft8OH+6SbmAVH38hR1PdfkQvBJOGJz5OSt1B
+         oRx1boWIrxsw5sr7IU6KGuPsr1cOnaZuvL0KyAF8dmMrwqhEs803oPzeNQB8MlrYOMGT
+         cbVboZi+ArEXiI1u2DpaENkXwf7cCecA0XbX8tQTiI38P52z3Gws4A5MFjd9jVeSaXlF
+         HoEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JwCuSdNSLXEV9phfYC6AwyspdGojdlT32rEj1GMZCB4=;
-        b=YFwkbZrAj+VdGfiCseZczgL+5tRMwhOWuYpxrEfcWnPfNzZSOK4CFtUeCOne21Noeu
-         Ev16ZgyFQcxhkyfVv96hDpdq7e3F3tSyMC36OFOU4NPsF6WwYNsq79hU/AngQx1HoEMX
-         1qgVecZoMWf6klmZHeGp7nHSBxwV0LyVV2t4nCTVgdJVXvItvN1Mb0bANapMHcg69jbP
-         swyl5UwsZZJUa3XuFozLxyk1owtelbPqqPx6mjwDLTGcPQzNT/CyCnYAdMI8doHoixuw
-         VZYob2Brmi0PYt0HcXOq165RFLDoR5EdpakcrD7won1nHwHhxR4DD5hX1s1gb/8T1syV
-         cCzA==
-X-Gm-Message-State: AOAM531sO/dF4sJ+C6kPAiJyHGD0/jChUwq+jhV8wg9Glscn8XuWqs14
-        b+3f6s2EM79ztaaegma80XjtkOmb42sDXwJ/
-X-Google-Smtp-Source: ABdhPJwWjPp6Owo2+4AsGu0yJlnOuXSdk8KjJ4zCKIQ22oGCbx7S7168jTqnFEZtfEgSpi6oJv9cjQ==
-X-Received: by 2002:ac8:7fd4:0:b0:2f3:4323:7f91 with SMTP id b20-20020ac87fd4000000b002f343237f91mr3990120qtk.354.1650533473485;
-        Thu, 21 Apr 2022 02:31:13 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id n3-20020a05620a152300b0069ec409e679sm2651317qkk.48.2022.04.21.02.31.12
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NpVbGkWT0mxI2z+QAaSeB8XReImeuL8/00d31gyn1MM=;
+        b=msS3eNajVxsN+ZTtLGQJlULSlK+aMu6GonKLHhKGjJwJzh9PIuHHECj9bhj+PU/776
+         A+oLVKOW9Rpa3V/1SgZmMK4/kquvxE4ZFtLZAKwrF93dVjNU3m1LJvDSAmI2A3Zs2DE9
+         m9x+8qX4Bx4VhlOM79V1wmhLHl+gqo6WFqTuDzCC6CQfw8mdD2ew8mTz0BckWuOJnq3a
+         kkU+UO1eMeU7vJ1xWU9jpLY3H6a6NqBTVIgF+G97WPs+l+ozlkOY+/3EuXoI4MEqYBQM
+         WA2krxN3+rm+fvwX/gnbywQHjK27UhzR9r77Mbtm8TlJErBDfZy7Upx5W0M+Fl5jsLq1
+         Nvrg==
+X-Gm-Message-State: AOAM530qD8/W49575xRdsQaSJEJuIHbTMvaTPJviGTrPQsMGRgS/d8Ei
+        b6teacHc9QvNbHyGmGDftr44aQ==
+X-Google-Smtp-Source: ABdhPJxaoLhiuIhW9HJh8IcFoEychIb2KfG7PIpMWfHCfoHwz8QnTOir1Vnoo5J6Q0KLFVR7ZlZwjw==
+X-Received: by 2002:a05:600c:a06:b0:392:a4f2:2097 with SMTP id z6-20020a05600c0a0600b00392a4f22097mr7718250wmp.97.1650533485120;
+        Thu, 21 Apr 2022 02:31:25 -0700 (PDT)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id v13-20020a5d4b0d000000b00207a8815063sm1795043wrq.2.2022.04.21.02.31.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 02:31:12 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2eafabbc80aso45557967b3.11;
-        Thu, 21 Apr 2022 02:31:12 -0700 (PDT)
-X-Received: by 2002:a81:c703:0:b0:2d0:cc6b:3092 with SMTP id
- m3-20020a81c703000000b002d0cc6b3092mr24791356ywi.449.1650533472388; Thu, 21
- Apr 2022 02:31:12 -0700 (PDT)
+        Thu, 21 Apr 2022 02:31:24 -0700 (PDT)
+Message-ID: <8a91822c-d68a-a2d8-6865-3985f2f85c0b@linaro.org>
+Date:   Thu, 21 Apr 2022 10:31:23 +0100
 MIME-Version: 1.0
-References: <20220414122250.158113-1-clement.leger@bootlin.com> <20220414122250.158113-11-clement.leger@bootlin.com>
-In-Reply-To: <20220414122250.158113-11-clement.leger@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Apr 2022 11:31:01 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU6TQbXusC7R1UmJ0TBkRCG3W54JgduLpDzUrNUzC0eWA@mail.gmail.com>
-Message-ID: <CAMuHMdU6TQbXusC7R1UmJ0TBkRCG3W54JgduLpDzUrNUzC0eWA@mail.gmail.com>
-Subject: Re: [PATCH net-next 10/12] ARM: dts: r9a06g032: describe GMAC2
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4] ASoC: codecs: wsa881x: add runtime pm support
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, tiwai@suse.com,
+        quic_srivasam@quicinc.com
+References: <20220228144235.24208-1-srinivas.kandagatla@linaro.org>
+ <b1b0a8b9-5fc2-bfe1-dfde-692a0a7ac34a@linux.intel.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <b1b0a8b9-5fc2-bfe1-dfde-692a0a7ac34a@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Clément,
 
-On Thu, Apr 14, 2022 at 2:24 PM Clément Léger <clement.leger@bootlin.com> wrote:
-> RZ/N1 SoC includes two MAC named GMACx that are compatible with the
-> "snps,dwmac" driver. GMAC1 is connected directly to the MII converter
-> port 1. GMAC2 however can be used as the MAC for the switch CPU
-> management port or can be muxed to be connected directly to the MII
-> converter port 2. This commit add description for the GMAC2 which will
-> be used by the switch description.
->
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 
-Thanks for your patch!
+On 20/04/2022 18:59, Pierre-Louis Bossart wrote:
+> Hi Srini,
+> 
+>> +static int __maybe_unused wsa881x_runtime_resume(struct device *dev)
+>> +{
+>> +	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+>> +	struct regmap *regmap = dev_get_regmap(dev, NULL);
+>> +	struct wsa881x_priv *wsa881x = dev_get_drvdata(dev);
+>> +
+>> +	gpiod_direction_output(wsa881x->sd_n, 1);
+>> +
+>> +	wait_for_completion_timeout(&slave->initialization_complete,
+>> +				    msecs_to_jiffies(WSA881X_PROBE_TIMEOUT));
+> 
+> while I was revisiting pm_runtime support, I also saw that this codec driver is the only one that doesn't check for errors
+> 
+> max98373-sdw.c: time = wait_for_completion_timeout(&slave->initialization_complete,
+> 
+> rt1308-sdw.c:   time = wait_for_completion_timeout(&slave->initialization_complete,
+> 
+> rt1316-sdw.c:   time = wait_for_completion_timeout(&slave->initialization_complete,
+> 
+> rt5682-sdw.c:   time = wait_for_completion_timeout(&slave->initialization_complete,
+> 
+> rt5682.c:                       &slave->initialization_complete,
+> 
+> rt700-sdw.c:    time = wait_for_completion_timeout(&slave->initialization_complete,
+> 
+> rt711-sdca-sdw.c:       time = wait_for_completion_timeout(&slave->initialization_complete,
+> 
+> rt711-sdw.c:    time = wait_for_completion_timeout(&slave->initialization_complete,
+> 
+> rt715-sdw.c:    time = wait_for_completion_timeout(&slave->initialization_complete,
+> 
+> wsa881x.c:      wait_for_completion_timeout(&slave->initialization_complete,
+> 
+> 
+> If the attachment fails for some reason, you probably want to avoid starting regmap syncs that will fail by construction, no?
 
-> --- a/arch/arm/boot/dts/r9a06g032.dtsi
-> +++ b/arch/arm/boot/dts/r9a06g032.dtsi
-> @@ -200,6 +200,23 @@ nand_controller: nand-controller@40102000 {
->                         status = "disabled";
->                 };
->
-> +               gmac2: ethernet@44002000 {
-> +                       compatible = "snps,dwmac-3.72a", "snps,dwmac";
+Thanks Pierre for auditing the calls.
 
-"make dtbs_check":
-arch/arm/boot/dts/r9a06g032-rzn1d400-db.dtb:0:0:
-/soc/ethernet@44002000: failed to match any schema with compatible:
-['snps,dwmac-3.72a', 'snps,dwmac']
+Yes syncs would fail on reg writes if initialization timeout.
+Do you already have fix patch to this or do you want me to send one?
 
-> +                       reg = <0x44002000 0x2000>;
-> +                       interrupt-parent = <&gic>;
-> +                       interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>,
-> +                                    <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>,
-> +                                    <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> +                       interrupt-names = "macirq", "eth_lpi", "eth_wake_irq";
+Am also trying to understand what is the expected behavior in the resume 
+failure cases, should pm attempt to resume the codec after some time, if 
+so returning -ETIMEOUT is the right error code?
 
-arch/arm/boot/dts/r9a06g032-rzn1d400-db.dtb: ethernet@44002000:
-interrupt-names:1: 'eth_wake_irq' was expected
-arch/arm/boot/dts/r9a06g032-rzn1d400-db.dtb: ethernet@44002000:
-interrupt-names:2: 'eth_lpi' was expected
-        From schema: Documentation/devicetree/bindings/net/snps,dwmac.yaml
 
-> +                       clock-names = "stmmaceth";
-> +                       clocks = <&sysctrl R9A06G032_HCLK_GMAC1>;
-> +                       snps,multicast-filter-bins = <256>;
-> +                       snps,perfect-filter-entries = <128>;
-> +                       tx-fifo-depth = <2048>;
-> +                       rx-fifo-depth = <4096>;
-> +                       status = "disabled";
-> +               };
-> +
->                 eth_miic: eth-miic@44030000 {
->                         compatible = "renesas,rzn1-miic";
->                         #address-cells = <1>;
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--srini
+> 
+>> +
+>> +	regcache_cache_only(regmap, false);
+>> +	regcache_sync(regmap);
+>> +
+>> +	return 0;
+>> +}

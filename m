@@ -2,134 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C618250ABE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684F650ABEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442400AbiDUXVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 19:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S1442406AbiDUXXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 19:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442211AbiDUXVK (ORCPT
+        with ESMTP id S236452AbiDUXX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:21:10 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEA03CFE1;
-        Thu, 21 Apr 2022 16:18:19 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id f13-20020a4aa68d000000b0033a2c53d0baso1115118oom.0;
-        Thu, 21 Apr 2022 16:18:19 -0700 (PDT)
+        Thu, 21 Apr 2022 19:23:27 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E32F45AE8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:20:35 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id g23so1389324edy.13
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:20:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=JFf9HGRfI7n3fI8XEiNo8PZc23LhVhvqXPq545IqGrk=;
-        b=RaC8c5l2W0v6pOhCLkSP16q9FHjg+l0G3iYKDely13x1JVKHmucrVVnTpZruCzrJjH
-         hYno2p3vlJZB/WhHursCUn2CkDySEOSbrbsiBbZ8L2pqDJmACqifeMDiQ38Y7smtTd+h
-         Df8Gg7ZLSSac3T8Ps7+MM1EGz5920Zacnp1rXewEenu9knTvUeUhauIBNTZiUKiRGyeO
-         VB5sxHQASILk3dTB9Ce0MRrNx9xZEXcMMuW8w9Hhn3n0BqG7BVj4mjjd1LrLagW80ZID
-         /rURGVYiALfd2ihD5k/gdBGVEJAp+xn46xwEo5Eil35PoCBfA1HNZ2EizSFjbmaNUM2z
-         MWPg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=mtzzvTX2FZWpYfASrGmIBlMmWHZXe5gxLBO6bskoUbk=;
+        b=Ea3mKJ1ynIyGjGgcZPbYaa07HFzGBunGsG9Z3uPHY5830yNYhIsLBolYPgzx/8wlX8
+         KdGabqf5lr9XvB7btXqspjrg5QmzRF7pipi1mdtJT120KvMfCaR5nes/dLJxJ7tpk32J
+         HmPDFUndhT9e3YE5GuUirmLo+KhITjeMidDQbAMgDU2qWZyDdA4aeb5Af6YOUo6igbZa
+         GmKzBmh8AaJNcYH7ZCnvSClGbp/HLVIFafPRPzwUv28VW37tqdSOB75FR1Giq5fo0m/k
+         Bc2Q5blxsgQREXmHjkcntLIhEBZ1STWR1wFUJCIQrf0ICT/4JDKyr7YB0dzesW/2spk7
+         sgHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=JFf9HGRfI7n3fI8XEiNo8PZc23LhVhvqXPq545IqGrk=;
-        b=h4md51jYpja4wY6BxC3SN/6q1N4f+Yilj7IFAatQcKYmK0qhKsXWSr98z1Lm2acUk7
-         rJ4ga8MZQWMExZpYI78UhnhrzVDWyUuM1jBnECzkGF0RUhUF8rrPDDupyzX7+xtGepCF
-         2xsmvdEMkL096j+T8NGm9YPKDlnvP1KkBe8HZyEcZteZ6H8fw/ykyc44CdHbmO8iXhyM
-         XAuFx+gItPNBr0/2EAFJVw1L/P2z34Gwo6ukwdWy7RVJVeRl1rFfMZlcTl8j/z+kTyiG
-         4RWic/kv4cLzNVv8HMdcPmVtOd9Z4XhZjNBIbixvqJNzbq9SsHyJbjxZUMFPAGFSUMMG
-         tm9A==
-X-Gm-Message-State: AOAM533jB1ZjyboMI15oMSPMIe/yhCV7s+uAROJHiBCrgqie0wKuiPvL
-        xE4x7ujQ6u1q8BqCj9CLdoM=
-X-Google-Smtp-Source: ABdhPJyc7CMa4UiuKdFaBzmxG/s0H7m7+CGfOZYs14tcZ9eyvfD1+Ot82CHaXWq6/Q14ARFgoH+trA==
-X-Received: by 2002:a05:6820:151b:b0:33a:6aa4:2d6e with SMTP id ay27-20020a056820151b00b0033a6aa42d6emr689786oob.54.1650583097794;
-        Thu, 21 Apr 2022 16:18:17 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d3-20020a9d2903000000b005cda765f578sm139439otb.0.2022.04.21.16.18.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 16:18:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0d9aff44-d41b-dabd-4d49-dd80631a4361@roeck-us.net>
-Date:   Thu, 21 Apr 2022 16:18:14 -0700
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=mtzzvTX2FZWpYfASrGmIBlMmWHZXe5gxLBO6bskoUbk=;
+        b=k964E5FRPWVqwCaoyuzg4G+JUTSGP5COmFzXyDDgXz0s2/8OFONV03c9EyZ5f4aNxs
+         gfGCt4u4mGq6bNMBieXksOnCTh0BnepnNmTea8sidrodYBOo4uUkmzG1cGmQAE//W7zb
+         MHl3S7UipfWm/eTCdjIwBqaF4uYGeZpwn21+87HaZIF4Y5Am4XWoVpJy6uAypOM3OHaX
+         WJg3faX80kP8Vgps6T9H390dZ/C9K6LW20bI0BNyv/EVbgbkMDzm19QllJZ9c3bOsuJ9
+         22WNBmERRoZSTb4aGPyelsbFnee0R/bfYELD6dsnv7IA7GBXuETC1UOS5F17YCi5Fgiu
+         g3eA==
+X-Gm-Message-State: AOAM531JGr8sSrTvG6iksJxmPKMGtFvW44oM6aHy8BSk30PSHIfkkMT8
+        eetChPOuNZzcUliBIGzMoNxnYnUtMWA=
+X-Google-Smtp-Source: ABdhPJyLJraznTTMFich4fGcVX7wFl4eLg7/n7BVsXkq1eMOcWRT/q8zG5C/ZU0FtXAbiQ5bnfxhvA==
+X-Received: by 2002:a50:8d09:0:b0:41c:b898:19a6 with SMTP id s9-20020a508d09000000b0041cb89819a6mr2041330eds.30.1650583233620;
+        Thu, 21 Apr 2022 16:20:33 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id br14-20020a170906d14e00b006e88db05620sm141227ejb.146.2022.04.21.16.20.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 16:20:31 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jaehee Park <jhpark1013@gmail.com>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev,
+        jhpark1013@gmail.com
+Subject: Re: [PATCH v4 1/7] staging: r8188eu: remove unnecessary braces in single statement block
+Date:   Fri, 22 Apr 2022 01:20:29 +0200
+Message-ID: <3485895.R56niFO833@leap>
+In-Reply-To: <16185752.0ZKypZ73Fx@leap>
+References: <cover.1650568579.git.jhpark1013@gmail.com> <b96ae957e2ddc519e56813a1c56e770168f67a2d.1650568579.git.jhpark1013@gmail.com> <16185752.0ZKypZ73Fx@leap>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-usb@vger.kernel.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        heikki.krogerus@linux.intel.com
-References: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
- <15b38d01-702c-b39e-7053-54c3905a0794@roeck-us.net>
- <c86e540f-6611-4ef9-9439-8285fee61831@infradead.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
- reduce to an integer constant
-In-Reply-To: <c86e540f-6611-4ef9-9439-8285fee61831@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/22 15:27, Randy Dunlap wrote:
-> Hi--
-> 
-> On 4/21/22 13:36, Guenter Roeck wrote:
->> On 4/21/22 12:03, Naresh Kamboju wrote:
->>> Linux mainline and linux next arm64 builds failed with gcc-7.3.x.
->>>
->>> drivers/usb/typec/tcpm/tcpm.c: In function 'run_state_machine':
->>> drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
->>> reduce to an integer constant
->>>      case BDO_MODE_TESTDATA:
->>>      ^~~~
->>> make[4]: *** [scripts/Makefile.build:288: drivers/usb/typec/tcpm/tcpm.o] Error 1
->>>                                         ^
->>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>>
->>> -- 
->>
->> That code is several years old, the define is a constant, and I don't see
->> a recent change in the code. What am I missing ?
-> 
-> See a recent patch for the same problem in a different area:
-> 
-> commit 1ef8715975de
-> Author: Borislav Petkov <bp@suse.de>
-> Date:   Tue Apr 5 17:15:08 2022 +0200
-> 
->      ALSA: usb-audio: Fix undefined behavior due to shift overflowing the constant
-> 
-> so those constants probably need to be cast to unsigned int.
-> (I guess)
-> 
+On gioved=C3=AC 21 aprile 2022 21:52:14 CEST Fabio M. De Francesco wrote:
+> On gioved=C3=AC 21 aprile 2022 21:20:26 CEST Jaehee Park wrote:
+> > Remove braces for single statement block to minimize the number of
+> > empty lines, without loss of readability. Issue found with checkpatch.
+> > WARNING: braces {} are not necessary for single statement blocks
+> >=20
+> > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+> > ---
+> >  drivers/staging/r8188eu/core/rtw_mlme.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/
+> r8188eu/core/rtw_mlme.c
+> > index 3e9882f89f76..d3f4d7cdfa08 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_mlme.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+> > @@ -112,9 +112,8 @@ void _rtw_free_mlme_priv(struct mlme_priv=20
+*pmlmepriv)
+> > =20
+> >  	rtw_free_mlme_priv_ie_data(pmlmepriv);
+> > =20
+> > -	if (pmlmepriv) {
+> > +	if (pmlmepriv)
+> >  		vfree(pmlmepriv->free_bss_buf);
+> > -	}
+> > =20
+> >  }
+> > =20
+> > --=20
+> > 2.25.1
+> >=20
+>=20
+> Hi Jaehee,
+>=20
+> If you just want to remove the braces, your patch is good.
+>=20
+> But... Did you ask yourself why this code needs to test if "pmlmepriv" is=
+=20
+> valid before calling vfree() on it? Actually, the code doesn't need this=
+=20
+> test, it just needs to call "vfree(pmlmepriv)" unconditionally.
 
-Turns out other versions of gcc are "affected" as well.
+When copy-pasting I overlooked a couple of things... However the argument=20
+is the same: the code doesn't need that 'if' statement before vfree().
 
-$ cc -Wall -std=c11 -pedantic -pedantic-errors testc.c
-testc.c: In function ‘main’:
-testc.c:16:2: error: case label is not an integer constant expression [-Wpedantic]
-    16 |  case BDO_MODE_TESTDATA:
-       |  ^~~~
+I wanted to write "[] it just needs to call "vfree(pmlmepriv-
+>free_bss_buf)" unconditionally".
 
-... but _only_ with "-std=c11 -pedantic -pedantic-errors" or with "-fsanitize=shift".
+I apologize for not reading twice before sending my email too soon after=20
+writing and moving sentences around.
 
-It wants
-	#define BDO_MODE_TESTDATA	(8u << 28)
+> OK, I know that this is not directly related to your patch or any other=20
+> that is explicitly made just for removing unnecessary braces...=20
 
-Pedantic indeed ...
+"pmlmepriv" is valid because we know it from the previous call to=20
+rtw_free_mlme_priv_ie_data(). Therefore the code can dereference=20
+"pmlmepriv".
 
-Guenter
+=46urthermore, even if "free_bss_buf" were NULL it wouldn't matter because=
+=20
+"vfree(pmlmepriv->free_bss_buf)" would be a no-op.
+
+Sorry if this inaccurate wording might have confused you about what I was=20
+trying to say.
+
+Thanks,
+
+=46abio=20
+
+

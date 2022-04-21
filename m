@@ -2,375 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6FA50A822
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6F850A82D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391364AbiDUSbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S1391374AbiDUSgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391354AbiDUSbg (ORCPT
+        with ESMTP id S1389065AbiDUSgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:31:36 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CB22BCC
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:28:45 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id g9so5323518pgc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Sqioiy8FTVIwwfgTrHoYKbgJrbPNKg5lpVy2JdR4EHU=;
-        b=gX6IxUwKDSgUOrXLTiECcpA3Rp48wGxfgveQhWleNt2G3dILaJc7TVhv8vFGVxEaVi
-         wfheNUizycAF5wCMRaBvqgTP3V27a1ohLtxvHpRlhbQDLXoE4BT1zxOmVKVhlvggvxD8
-         xBKKCYXGGarCUjyHuEo39d2CON29e1o3eIsp/F33Pk8UOvQlPrrVxrJ19w7FqJzHsyBq
-         aA6F2c+bBR9zHjvgNNjT4A6mNFBu2jia5hbCy32kvSIkc+As4VWEhQemAqWBBVdBNled
-         r8iHp9BpG8kcfHIzDk1y0ELM0+HKHZvTjASj9vKr6JrzOXK14OHdpvwzUTP3LOun+0sy
-         4ijg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Sqioiy8FTVIwwfgTrHoYKbgJrbPNKg5lpVy2JdR4EHU=;
-        b=NMbwuxxdAeECPRhrEToJ53DuJvZ8Ai8hVoeJhO07c3ziIwaZSCVNuEjS3BE6J/6TRq
-         4wyYVXQpPDi/WtoWyAn7LAgDpOT9ErjW5r3PmR8rJUZv7gpVVvY7xu086DHtyqGh4R1w
-         3kR8ackJfXxMcl7LcyQ3fNEPbz7vZd1Wdas2z0Mzu71YdGa92S07/theqNuAI9Zcfffs
-         8HOex5BGl8P4P3GRRSe8ux/t7P4EnlD9V3FD3aPXEkdgVpP5T0mQQSrK4L0quIAPJDhG
-         iveR7a33bo+5LWiR0bH8LB0JC+MrF5gaqMsVFcBqjIVphFo/UbzIaVpo6VFbKGzdrluL
-         24jw==
-X-Gm-Message-State: AOAM531bSNTg8gT8G8pJP3zJea9eD6KXmt00CGcFc895DvGuvD7OcLFk
-        c1AywZYoE5o4eLSWJB7kZ9M6yA==
-X-Google-Smtp-Source: ABdhPJxepqVRb/L/wsoSRAnZEmxspQCHxD1CdYluXSymWq1W4Cyc26xyjzczEUvd8gXIIPzMw4rFqA==
-X-Received: by 2002:a05:6a00:b87:b0:50a:5ff2:bb2d with SMTP id g7-20020a056a000b8700b0050a5ff2bb2dmr944441pfj.68.1650565724550;
-        Thu, 21 Apr 2022 11:28:44 -0700 (PDT)
-Received: from google.com (201.59.83.34.bc.googleusercontent.com. [34.83.59.201])
-        by smtp.gmail.com with ESMTPSA id fv9-20020a17090b0e8900b001cd4989febcsm3506238pjb.8.2022.04.21.11.28.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 11:28:44 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 18:28:40 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     daniel@ffwll.ch, tj@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        jstultz@google.com, kaleshsingh@google.com, Kenny.Ho@amd.com,
-        mkoutny@suse.com, skhan@linuxfoundation.org,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [RFC v5 5/6] binder: Add flags to relinquish ownership of fds
-Message-ID: <YmGiNh0DDIcwcnVl@google.com>
-References: <20220420235228.2767816-1-tjmercier@google.com>
- <20220420235228.2767816-6-tjmercier@google.com>
+        Thu, 21 Apr 2022 14:36:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE3E4BB80;
+        Thu, 21 Apr 2022 11:33:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 429FB60CA5;
+        Thu, 21 Apr 2022 18:33:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3E6C385A9;
+        Thu, 21 Apr 2022 18:33:09 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 19:33:05 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Topi Miettinen <toiwoton@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net,
+        linux-hardening@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Salvatore Mesoraca <s.mesoraca16@gmail.com>,
+        Igor Zhbanov <izh1979@gmail.com>
+Subject: Re: [PATCH RFC 0/4] mm, arm64: In-kernel support for
+ memory-deny-write-execute (MDWE)
+Message-ID: <YmGjYYlcSVz38rOe@arm.com>
+References: <20220413134946.2732468-1-catalin.marinas@arm.com>
+ <202204141028.0482B08@keescook>
+ <YmAEDsGtxhim46UI@arm.com>
+ <c62170c6-5993-2417-4143-5a37a98b227c@gmail.com>
+ <202204201610.093C9D5FE8@keescook>
+ <YmF5s4KqT5WL4O0G@arm.com>
+ <202204210941.4318DE6E8@keescook>
+ <YmGTRQA74n/ZF7Vl@arm.com>
+ <202204211030.B0093CC14@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220420235228.2767816-6-tjmercier@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202204211030.B0093CC14@keescook>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 11:52:23PM +0000, T.J. Mercier wrote:
-> From: Hridya Valsaraju <hridya@google.com>
+On Thu, Apr 21, 2022 at 10:41:43AM -0700, Kees Cook wrote:
+> On Thu, Apr 21, 2022 at 06:24:21PM +0100, Catalin Marinas wrote:
+> > On Thu, Apr 21, 2022 at 09:42:23AM -0700, Kees Cook wrote:
+> > > On Thu, Apr 21, 2022 at 04:35:15PM +0100, Catalin Marinas wrote:
+> > > > Do we want the "was PROT_WRITE" or we just reject mprotect(PROT_EXEC) if
+> > > > the vma is not already PROT_EXEC? The latter is closer to the current
+> > > > systemd approach. The former allows an mprotect(PROT_EXEC) if the
+> > > > mapping was PROT_READ only for example.
+> > > > 
+> > > > I'd drop the "was PROT_WRITE" for now if the aim is a drop-in
+> > > > replacement for BPF MDWE.
+> > > 
+> > > I think "was PROT_WRITE" is an important part of the defense that
+> > > couldn't be done with a simple seccomp filter (which is why the filter
+> > > ended up being a problem in the first place).
+> > 
+> > I would say "was PROT_WRITE" is slightly more relaxed than "is not
+> > already PROT_EXEC". The seccomp filter can't do "is not already
+> > PROT_EXEC" either since it only checks the mprotect() arguments, not the
+> > current vma flags.
+> > 
+> > So we have (with sub-cases):
+> > 
+> > 1. Current BPF filter:
+> > 
+> >    a)	mmap(PROT_READ|PROT_WRITE|PROT_EXEC);	// fails
+> > 
+> >    b)	mmap(PROT_READ|PROT_EXEC);
+> >		mprotect(PROT_READ|PROT_EXEC|PROT_BTI);	// fails
+> >
+> >    c)	mmap(PROT_READ);
+> >		mprotect(PROT_READ|PROT_EXEC);		// fails
+> >
+> >    d)	mmap(PROT_READ|PROT_WRITE);
+> >		mprotect(PROT_READ);
+> >		mprotect(PROT_READ|PROT_EXEC);		// fails
+> > 
+> > 2. "is not already PROT_EXEC":
+> > 
+> >    a)	mmap(PROT_READ|PROT_WRITE|PROT_EXEC);	// fails
+> > 
+> >    b)	mmap(PROT_READ|PROT_EXEC);
+> >		mprotect(PROT_READ|PROT_EXEC|PROT_BTI);	// passes
+> > 
+> >    c)	mmap(PROT_READ);
+> >		mprotect(PROT_READ|PROT_EXEC);		// fails
+> >
+> >    d)	mmap(PROT_READ|PROT_WRITE);
+> >		mprotect(PROT_READ);
+> >		mprotect(PROT_READ|PROT_EXEC);		// fails
+> > 
+> > 3. "is or was not PROT_WRITE":
+> > 
+> >    a)	mmap(PROT_READ|PROT_WRITE|PROT_EXEC);	// fails
+> > 
+> >    b)	mmap(PROT_READ|PROT_EXEC);
+> >		mprotect(PROT_READ|PROT_EXEC|PROT_BTI);	// passes
+> > 
+> >    c)	mmap(PROT_READ);
+> >		mprotect(PROT_READ|PROT_EXEC);		// passes
+> > 
+> >    d)	mmap(PROT_READ|PROT_WRITE);
+> >		mprotect(PROT_READ);
+> >	 	mprotect(PROT_READ|PROT_EXEC);		// fails
 > 
-> This patch introduces flags BINDER_FD_FLAG_SENDER_NO_NEED, and
-> BINDER_FDA_FLAG_SENDER_NO_NEED that a process sending an individual
-> fd or fd array to another process over binder IPC can set to relinquish
-> ownership of the fds being sent for memory accounting purposes. If the
-> flag is found to be set during the fd or fd array translation and the
-> fd is for a DMA-BUF, the buffer is uncharged from the sender's cgroup
-> and charged to the receiving process's cgroup instead.
-> 
-> It is up to the sending process to ensure that it closes the fds
-> regardless of whether the transfer failed or succeeded.
-> 
-> Most graphics shared memory allocations in Android are done by the
-> graphics allocator HAL process. On requests from clients, the HAL process
-> allocates memory and sends the fds to the clients over binder IPC.
-> The graphics allocator HAL will not retain any references to the
-> buffers. When the HAL sets *_FLAG_SENDER_NO_NEED for fd arrays holding
-> DMA-BUF fds, or individual fd objects, the gpu cgroup controller will
-> be able to correctly charge the buffers to the client processes instead
-> of the graphics allocator HAL.
-> 
-> Since this is a new feature exposed to userspace, the kernel and userspace
-> must be compatible for the accounting to work for transfers. In all cases
-> the allocation and transport of DMA buffers via binder will succeed, but
-> only when both the kernel supports, and userspace depends on this feature
-> will the transfer accounting work. The possible scenarios are detailed
-> below:
+> [edited above to show each case]
 
-New binder driver features which require userspace coordination can be
-"advertised" by the kernel via binderfs. You can see an example of how
-oneway_spam_detection is exposed in commit fc470abf54b2 ("binderfs: add
-support for feature files"). This is just an option to consider if it
-makes things easier in userspace. Although it seems that for the second
-scenario (old kernel + new userpsace) the flags would just be ignored.
+Thanks, I was in a rush to get home ;).
 
+> restated what was already summarized:
+> Problem is 1.b. 2 and 3 solve it. 3 is more relaxed (c passes).
 > 
-> 1. new kernel + old userspace
-> The kernel supports the feature but userspace does not use it. The old
-> userspace won't mount the new cgroup controller, accounting is not
-> performed, charge is not transferred.
+> > If we don't care about 3.c, we might as well go for (2). I don't mind,
+> > already went for (3) in this series. I think either of them would not be
+> > a regression on MDWE, unless there is some test that attempts 3.c and
+> > expects it to fail.
 > 
-> 2. old kernel + new userspace
-> The new cgroup controller is not supported by the kernel, accounting is
-> not performed, charge is not transferred.
-> 
-> 3. old kernel + old userspace
-> Same as #2
-> 
-> 4. new kernel + new userspace
-> Cgroup is mounted, feature is supported and used.
-> 
-> Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> 
-> ---
-> v5 changes
-> Support both binder_fd_array_object and binder_fd_object. This is
-> necessary because new versions of Android will use binder_fd_object
-> instead of binder_fd_array_object, and we need to support both.
-> 
-> Use the new, simpler dma_buf_transfer_charge API.
-> 
-> v3 changes
-> Remove android from title per Todd Kjos.
-> 
-> Use more common dual author commit message format per John Stultz.
-> 
-> Include details on behavior for all combinations of kernel/userspace
-> versions in changelog (thanks Suren Baghdasaryan) per Greg Kroah-Hartman.
-> 
-> v2 changes
-> Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
-> heap to a single dma-buf function for all heaps per Daniel Vetter and
-> Christian König.
-> ---
->  drivers/android/binder.c            | 27 +++++++++++++++++++++++----
->  drivers/dma-buf/dma-buf.c           |  4 ++--
->  include/linux/dma-buf.h             |  2 +-
->  include/uapi/linux/android/binder.h | 23 +++++++++++++++++++----
->  4 files changed, 45 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index 8351c5638880..b07d50fe1c80 100644
-> --- a/drivers/android/binder.c
-> +++ b/drivers/android/binder.c
-> @@ -42,6 +42,7 @@
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->  
-> +#include <linux/dma-buf.h>
->  #include <linux/fdtable.h>
->  #include <linux/file.h>
->  #include <linux/freezer.h>
-> @@ -2170,7 +2171,7 @@ static int binder_translate_handle(struct flat_binder_object *fp,
->  	return ret;
->  }
->  
-> -static int binder_translate_fd(u32 fd, binder_size_t fd_offset,
-> +static int binder_translate_fd(u32 fd, binder_size_t fd_offset, __u32 flags,
->  			       struct binder_transaction *t,
->  			       struct binder_thread *thread,
->  			       struct binder_transaction *in_reply_to)
-> @@ -2208,6 +2209,23 @@ static int binder_translate_fd(u32 fd, binder_size_t fd_offset,
->  		goto err_security;
->  	}
->  
-> +	if (IS_ENABLED(CONFIG_CGROUP_GPU) && (flags & BINDER_FD_FLAG_SENDER_NO_NEED)) {
-> +		if (is_dma_buf_file(file)) {
-> +			struct dma_buf *dmabuf = file->private_data;
-> +
-> +			ret = dma_buf_transfer_charge(dmabuf, target_proc->tsk);
-> +			if (ret)
-> +				pr_warn("%d:%d Unable to transfer DMA-BUF fd charge to %d\n",
-> +					proc->pid, thread->pid, target_proc->pid);
+> I should stop arguing for a less restrictive mode. ;) It just feels weird
+> that the combinations are API-mediated, rather than logically defined:
+> I can do PROT_READ|PROT_EXEC with mmap but not mprotect under 2. As
+> opposed to saying "the vma cannot be executable if it is or ever was
+> writable". I find the latter much easier to reason about as far as the
+> expectations of system state.
 
-If we fail to transfer the charge, it seems we continue with the fixup
-allocation and then propagate the error. Shouldn't the translation be
-aborted at this point instead? Or is this supposed to be handled?
+I had the same reasoning, hence option 3 in this series. I prefer to
+treat mmap(PROT_READ|PROT_EXEC) and mprotect(PROT_READ|PROT_EXEC) in a
+similar way.
 
-> +		} else {
-
-nit: negating is_dma_buf_file() check eliminates the "else" here.
-
-> +			binder_user_error(
-> +				"%d:%d got transaction with SENDER_NO_NEED for non-dmabuf fd, %d\n",
-> +				proc->pid, thread->pid, fd);
-> +			ret = -EINVAL;
-> +			goto err_noneed;
-> +		}
-> +	}
-> +
->  	/*
->  	 * Add fixup record for this transaction. The allocation
->  	 * of the fd in the target needs to be done from a
-> @@ -2226,6 +2244,7 @@ static int binder_translate_fd(u32 fd, binder_size_t fd_offset,
->  	return ret;
->  
->  err_alloc:
-> +err_noneed:
->  err_security:
->  	fput(file);
->  err_fget:
-> @@ -2528,7 +2547,7 @@ static int binder_translate_fd_array(struct list_head *pf_head,
->  
->  		ret = copy_from_user(&fd, sender_ufda_base + sender_uoffset, sizeof(fd));
->  		if (!ret)
-> -			ret = binder_translate_fd(fd, offset, t, thread,
-> +			ret = binder_translate_fd(fd, offset, fda->flags, t, thread,
->  						  in_reply_to);
->  		if (ret)
->  			return ret > 0 ? -EINVAL : ret;
-> @@ -3179,8 +3198,8 @@ static void binder_transaction(struct binder_proc *proc,
->  			struct binder_fd_object *fp = to_binder_fd_object(hdr);
->  			binder_size_t fd_offset = object_offset +
->  				(uintptr_t)&fp->fd - (uintptr_t)fp;
-> -			int ret = binder_translate_fd(fp->fd, fd_offset, t,
-> -						      thread, in_reply_to);
-> +			int ret = binder_translate_fd(fp->fd, fd_offset, fp->flags,
-> +						      t, thread, in_reply_to);
->  
->  			fp->pad_binder = 0;
->  			if (ret < 0 ||
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index f3fb844925e2..36ed6cd4ddcc 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -31,7 +31,6 @@
->  
->  #include "dma-buf-sysfs-stats.h"
->  
-> -static inline int is_dma_buf_file(struct file *);
->  
->  struct dma_buf_list {
->  	struct list_head head;
-> @@ -400,10 +399,11 @@ static const struct file_operations dma_buf_fops = {
->  /*
->   * is_dma_buf_file - Check if struct file* is associated with dma_buf
->   */
-> -static inline int is_dma_buf_file(struct file *file)
-> +int is_dma_buf_file(struct file *file)
->  {
->  	return file->f_op == &dma_buf_fops;
->  }
-> +EXPORT_SYMBOL_NS_GPL(is_dma_buf_file, DMA_BUF);
->  
->  static struct file *dma_buf_getfile(struct dma_buf *dmabuf, int flags)
->  {
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index 438ad8577b76..2b9812758fee 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -614,7 +614,7 @@ dma_buf_attachment_is_dynamic(struct dma_buf_attachment *attach)
->  {
->  	return !!attach->importer_ops;
->  }
-> -
-> +int is_dma_buf_file(struct file *file);
->  struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
->  					  struct device *dev);
->  struct dma_buf_attachment *
-> diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
-> index 11157fae8a8e..b263cbb603ea 100644
-> --- a/include/uapi/linux/android/binder.h
-> +++ b/include/uapi/linux/android/binder.h
-> @@ -91,14 +91,14 @@ struct flat_binder_object {
->  /**
->   * struct binder_fd_object - describes a filedescriptor to be fixed up.
->   * @hdr:	common header structure
-> - * @pad_flags:	padding to remain compatible with old userspace code
-
-Does this mean we no longer need to keep the compatibility with the "old
-userspace code"? Maybe these old flags are all less than 0x2000?
-
-> + * @flags:	One or more BINDER_FD_FLAG_* flags
->   * @pad_binder:	padding to remain compatible with old userspace code
->   * @fd:		file descriptor
->   * @cookie:	opaque data, used by user-space
->   */
->  struct binder_fd_object {
->  	struct binder_object_header	hdr;
-> -	__u32				pad_flags;
-> +	__u32				flags;
->  	union {
->  		binder_uintptr_t	pad_binder;
->  		__u32			fd;
-> @@ -107,6 +107,17 @@ struct binder_fd_object {
->  	binder_uintptr_t		cookie;
->  };
->  
-> +enum {
-> +	/**
-> +	 * @BINDER_FD_FLAG_SENDER_NO_NEED
-> +	 *
-> +	 * When set, the sender of a binder_fd_object wishes to relinquish ownership of the fd for
-> +	 * memory accounting purposes. If the fd is for a DMA-BUF, the buffer is uncharged from the
-> +	 * sender's cgroup and charged to the receiving process's cgroup instead.
-> +	 */
-> +	BINDER_FD_FLAG_SENDER_NO_NEED = 0x2000,
-
-SENDER_NO_NEED wasn't straight-forward for me. Perhaps RELINQUISH or
-XFER_{OWNER|CHARGE|CGROUP} could be some other options to consider.
-
-> +};
-> +
->  /* struct binder_buffer_object - object describing a userspace buffer
->   * @hdr:		common header structure
->   * @flags:		one or more BINDER_BUFFER_* flags
-> @@ -141,7 +152,7 @@ enum {
->  
->  /* struct binder_fd_array_object - object describing an array of fds in a buffer
->   * @hdr:		common header structure
-> - * @pad:		padding to ensure correct alignment
-> + * flags:		One or more BINDER_FDA_FLAG_* flags
->   * @num_fds:		number of file descriptors in the buffer
->   * @parent:		index in offset array to buffer holding the fd array
->   * @parent_offset:	start offset of fd array in the buffer
-> @@ -162,12 +173,16 @@ enum {
->   */
->  struct binder_fd_array_object {
->  	struct binder_object_header	hdr;
-> -	__u32				pad;
-> +	__u32				flags;
->  	binder_size_t			num_fds;
->  	binder_size_t			parent;
->  	binder_size_t			parent_offset;
->  };
->  
-> +enum {
-> +	BINDER_FDA_FLAG_SENDER_NO_NEED = BINDER_FD_FLAG_SENDER_NO_NEED,
-> +};
-> +
->  /*
->   * On 64-bit platforms where user code may run in 32-bits the driver must
->   * translate the buffer (and local binder) addresses appropriately.
-> -- 
-> 2.36.0.rc0.470.gd361397f0d-goog
-> 
-
-Other than included minor comments:
-
-Reviewed-by: Carlos Llamas <cmllamas@google.com>
-
---
-Carlos Llamas
+-- 
+Catalin

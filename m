@@ -2,249 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E505650A159
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA3050A164
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388397AbiDUN6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S1357186AbiDUOAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388321AbiDUN6M (ORCPT
+        with ESMTP id S231367AbiDUOAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:58:12 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51C22BB1B;
-        Thu, 21 Apr 2022 06:55:20 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id A07805FD06;
-        Thu, 21 Apr 2022 16:55:17 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1650549317;
-        bh=Vx0fQIL15yRo1tQ1B3ku9JZaBjnreUllysZQgmgiL3Q=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=Q0rv00JCvcd+EQczEOKRA9bRPlKgNKE7Y1QjVasvOVqwcM20f11lnPZtgBzKGYUKw
-         XRZT2hEcgLxEqmJNay40LOOvvGJis8d3a7eIccZc70NtSaQsmud2HnJxL7DR4cTQsA
-         5PtemGvEjCdN1U9FYdz4I1L3GIAykjayuMPmBvsRXlLFBIRCpW1ZVA1yaPwBpsFclp
-         temG3CF9lCjfb5C8zBUU7EJJSvFWFMnX15lZKQ91nDVJfXri5dNFaovsvtX1HCf55C
-         /bvljLoHkLpjIqVcekG9oQq5I4mOE6EB63WlBnWlvg04zmVQDqRk7kkDR+Yw1FOvmd
-         RowmP1v2/KFfA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 21 Apr 2022 16:55:14 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 3/3] dt-bindings: iio: accel: add dt-binding schema for
- msa311 accel driver
-Thread-Topic: [PATCH v1 3/3] dt-bindings: iio: accel: add dt-binding schema
- for msa311 accel driver
-Thread-Index: AQHYVASQQZC393Ji1keuDd+e+35bUqz4TVCAgAHnLgA=
-Date:   Thu, 21 Apr 2022 13:55:07 +0000
-Message-ID: <20220421135457.ldtsff6ii4nhjkh5@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220419154555.24191-1-ddrokosov@sberdevices.ru>
- <20220419154555.24191-4-ddrokosov@sberdevices.ru>
- <20220420095127.000059d4@Huawei.com>
-In-Reply-To: <20220420095127.000059d4@Huawei.com>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9F4944C50A2B3F4CB31F52FCB5B5F289@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 21 Apr 2022 10:00:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCBDD377FF
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:57:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650549432;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wyJ48PjrvsX9JqxBm3IYuFdA5jrIuvJQc3ntFnd644o=;
+        b=U4fWgB6uS8j6fbcy3S2V8g+s0oHgFxrO/QWZPKIvbbWGbbl5uWuP7z099NTI2v7Wq4sP3t
+        ohPisje4nQAcIpnnoyssghi42/+OSAKP1Dhfq4n3/VjfoKQMnpw7iew2zYI1BIDfJXu2c0
+        IxLJgNXZvRWa6GnuQ4nuIbhO2j6odjk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-xSh8CwBaOWON3J9evyzuiA-1; Thu, 21 Apr 2022 09:57:07 -0400
+X-MC-Unique: xSh8CwBaOWON3J9evyzuiA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF20D80A0AD;
+        Thu, 21 Apr 2022 13:57:06 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 62F2C145BA52;
+        Thu, 21 Apr 2022 13:57:04 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220415123614.54024-3-jefflexu@linux.alibaba.com>
+References: <20220415123614.54024-3-jefflexu@linux.alibaba.com> <20220415123614.54024-1-jefflexu@linux.alibaba.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
+Subject: Re: [PATCH v9 02/21] cachefiles: notify user daemon when looking up cookie
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/04/21 06:36:00 #19322218
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1444649.1650549423.1@warthog.procyon.org.uk>
+Date:   Thu, 21 Apr 2022 14:57:03 +0100
+Message-ID: <1444650.1650549423@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jonathan,
+Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
 
-Thank you for the quick feedback.
-I completely agree with all of your comments. Please find my notes below.
+> +	help
+> +	  This permits on-demand read mode of cachefiles.  In this mode, when
+> +	  cache miss, the cachefiles backend instead of netfs, is responsible
+> +	  for fetching data, e.g. through user daemon.
 
-On Wed, Apr 20, 2022 at 09:51:27AM +0100, Jonathan Cameron wrote:
-> On Tue, 19 Apr 2022 15:45:58 +0000
-> Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru> wrote:
->=20
-> > Introduce devicetree binding json-schema for MSA311 tri-axial,
-> > low-g accelerometer driver.
-> >=20
-> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> Hi Dmitry and welcome to IIO.
->=20
-> Sign off generally matches the From: of the email.
-> Makes it easier for scripts to check than having different name forms.
->=20
+How about:
 
-Yes, looks like this problem is located on the corporative Exchange server =
-side.
-I use DavMail local proxy to send emails, so server changes From: statement=
-.
-I have already discussed it with our IT guys, it should be fixed starting f=
-rom current email.
+	help
+	  This permits userspace to enable the cachefiles on-demand read mode.
+	  In this mode, when a cache miss occurs, responsibility for fetching
+	  the data lies with the cachefiles backend instead of with the netfs
+	  and is delegated to userspace.
 
-> > ---
-> >  .../bindings/iio/accel/memsensing,msa311.yaml      | 64 ++++++++++++++=
-++++++++
-> >  MAINTAINERS                                        |  1 +
-> >  2 files changed, 65 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/iio/accel/memsens=
-ing,msa311.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/iio/accel/memsensing,msa=
-311.yaml b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.ya=
-ml
-> > new file mode 100644
-> > index 00000000..3e4660f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yam=
-l
-> > @@ -0,0 +1,64 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +
-> > +%YAML 1.2
-> > +---
-> > +$id: "http://devicetree.org/schemas/iio/accel/memsensing,msa311.yaml#"
-> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > +
-> > +title: MEMSensing digital 3-Axis accelerometer
-> > +
-> > +maintainers:
-> > +  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> > +
-> > +description: |
-> > +  MSA311 is a tri-axial, low-g accelerometer with I2C digital output f=
-or
-> > +  sensitivity consumer applications. It has dynamical user selectable =
-full
-> > +  scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measure=
-ments
-> > +  with output data rates from 1Hz to 1000Hz.
-> > +  Datasheet can be found at following URL
-> > +  https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: memsensing,msa311
-> > +
-> > +  "#address-cells":
-> > +    const: 1
-> > +
-> > +  "#size-cells":
-> > +    const: 0
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +    description: I2C registers address
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +    description: optional I2C int pin can be freely mapped to specific=
- func
-> > +
-> > +  interrupt-names:
-> > +    const: irq
->=20
-> For a single IRQ giving it a name isn't that useful so I would drop this.
->=20
->=20
+> +	/*
+> +	 * 1) Cache has been marked as dead state, and then 2) flush all
+> +	 * pending requests in @reqs xarray. The barrier inside set_bit()
+> +	 * will ensure that above two ops won't be reordered.
+> +	 */
 
-Based on Documentation/devicetree/bindings/example-schema.yaml I thought
-interrupt-names must contain irq name regardless of interrupt count,
-because it helps to understand right property name.
-I'll delete it for v2.
+What set_bit()?  What "above two ops"?  And that's not how barriers work; they
+provide a partial ordering relative to another pair of barriered ops.
 
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/gpio/gpio.h>
->=20
-> Why have this?
->=20
+Also, set_bit() can't be relied upon to imply a barrier - see
+Documentation/memory-barriers.txt.
 
-I agree, this header is needed for GPIO constant values, which is not used =
-here.
-I'll remove it for the v2 then.
+> +	if (IS_ENABLED(CONFIG_CACHEFILES_ONDEMAND) &&
+> +	    test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags)) {
 
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +    i2c0 {
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        msa311: msa311@62 {
-> Generic naming required.
->            accelerometer@62 {
->=20
+It might be worth abstracting this into an inline function in internal.h:
 
-Okay, I will change it in the next version.
+	static inline bool cachefiles_in_ondemand_mode(cache)
+	{
+		return IS_ENABLED(CONFIG_CACHEFILES_ONDEMAND) &&
+			test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags)
+	}
 
-> > +            compatible =3D "memsensing,msa311";
-> > +            reg =3D <0x62>;
-> > +            interrupt-parent =3D <&gpio_intc>;
-> > +            interrupts =3D <29 IRQ_TYPE_LEVEL_HIGH>;
-> > +            interrupt-names =3D "irq";
-> > +            status =3D "okay";
->=20
-> We don't often have status in the examples.=20
->=20
+> +#ifdef CONFIG_CACHEFILES_ONDEMAND
 
-Sure, status is useful for real dts declarations.
-It's there because I copied this declaration from by tested real board dts =
-:-)
+This looks like it ought to be superfluous, given the preceding test - though
+I can see why you need it:
 
->=20
-> Otherwise looks good to me.
->=20
-> Thanks,
->=20
-> Jonathan
->=20
-> > +        };
-> > +    };
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index c75be17..4227914 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -12482,6 +12482,7 @@ MEMSENSING MICROSYSTEMS MSA311 ACCELEROMETER DR=
-IVER
-> >  M:	Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> >  L:	linux-iio@vger.kernel.org
-> >  S:	Maintained
-> > +F:	Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
-> >  F:	drivers/iio/accel/msa311.c
-> > =20
-> >  MEN A21 WATCHDOG DRIVER
->=20
+> +#ifdef CONFIG_CACHEFILES_ONDEMAND
+> +	struct xarray			reqs;		/* xarray of pending on-demand requests */
+> +	struct xarray			ondemand_ids;	/* xarray for ondemand_id allocation */
+> +	u32				ondemand_id_next;
+> +#endif
 
---=20
-Thank you,
-Dmitry=
+I'm tempted to say that you should just make them non-conditional.  It's not
+like there's likely to be more than one or two cachefiles_cache structs on a
+system.
+
+David
+

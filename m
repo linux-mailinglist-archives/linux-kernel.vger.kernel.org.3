@@ -2,75 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC4B50AA3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC6E50AA3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384219AbiDUUpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 16:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
+        id S1392521AbiDUUpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 16:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245040AbiDUUpC (ORCPT
+        with ESMTP id S1392470AbiDUUpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 16:45:02 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C14A4D268
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:42:11 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id y19-20020a056e02119300b002c2d3ef05bfso3250847ili.18
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:42:11 -0700 (PDT)
+        Thu, 21 Apr 2022 16:45:36 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664954D617
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:42:45 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id r189so10852662ybr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:42:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1b/BKquYiwOKFwAeMh2hNCCGUogn86K0gaqOcP9rSF4=;
+        b=CjZtID8rzyqb2HE8iu3Rq+8rwTq3zUZDZgqyOdy6/kE4rjSrc0uw41BybDBNIPKrE4
+         QoSH6zhTTRGyc48UznXmQ5/fUSfoOFHFOCMF/g+kiQ2Yi8eCdFBwghbAoX+j0rcI9iSZ
+         yGpfwif4BqCtStoMyZl7rrrVJeM5521z8zKK2jegBHRxZjPISs6U2q1gEt1bMfdrl852
+         K0TuFyQq3pvIetISRRYJnL784OXeYs+TiCK7LkGTvePGsONlVrAOfvmEs5zz+YKmWHlC
+         JKAM48qWyov4loqHnLJ56xwM6UCfzk4oHGb4BzsDPPRE/bHcvmG7NvZGJADn9hmwOjK1
+         2esw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=QTaJFCvihcUmHDlw/ICH6QwXqyikackCR6G4w+KbOPs=;
-        b=qeSJ+yLvxVzb4Pp8DxNyRPgldUHn2ovEVZf/46sZmQ83JhQ/jhDRLUlKnZW/aa1td+
-         UY0yoyCGPl6ogs8QIXI3wmGiRb6kSRiS2yVw/AxZDXMcs1owvww/iWhDpC0aiW3PcCM5
-         +w/knHQuZqnHYk/OwqV0HOlyxCe3xTkeBKWNCytAzzBDY4bzEeqMhnKv/gUztyXlTBCc
-         ijTJnnJmyPxENb9ZsIZqFqXh+vCJQbh43qjVuU9qjVYHbpluv47xvkFg2xIoWTT4DvGN
-         u0EKKYJj9/jzY7fY9rDtC+YAVvlacNGJBo3mT7x3qEXIOc3j0m4LbP/8Adm++TsFmkSe
-         xmsw==
-X-Gm-Message-State: AOAM5315ZMMvcQ9hli0y0sASIuuCiXCqH7/4QdIUzyzT9c3LQzvSAxTQ
-        lz6ISLzNSebD7nOtuqjvoEDMcr96okUfNVVEbrFA+3/hK6pp
-X-Google-Smtp-Source: ABdhPJxeuoyMPdfv0cavfLIcjxEa18/sMT287zLocnJIrQ8M+pc3e5eXNK/A7/Agt+HpAbdAM8QtmHFfrvF1ro0LqjWafQzEoQNJ
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1b/BKquYiwOKFwAeMh2hNCCGUogn86K0gaqOcP9rSF4=;
+        b=N8szEW+87I/CiAivj/MYY7CFfN79rhI3CRTw6XtfqR3tq7yDua9c5d1c9FOluqBoLB
+         +Nl2xKVV73yxp9pO2YPYymrzeedFyvLQwcskjzCs7M0Ce7rH1CF339gzrgOm1+7E0Svw
+         ZrmYLiyTOdh+PpCL5cX2Bgdxh61Ni/kxWxphpT3RVXbyuPx/yYDW2nB7MUfMURSDHt0U
+         jLHdK7KoTQ0+UcK/GFuQ/94/kfFsUuAz7RmaXdMdfzHyLkQ+0QL/im3zpEF+/kECIUQD
+         6832cUspT5fZs70kOdSYY4NTbz7UETFEeRoNW4vDPuwQ4E24aibKhV5fFgt7ycrjd/uV
+         yEtg==
+X-Gm-Message-State: AOAM532YN/I4lJv44IzXRb0LbGhxo9oz/vBbTqk1yX8yHoO2dBpVhHOE
+        rpJJJhuA6FgdzXmZGPZGjC7nMCAvfjopwSxzezQvBQ==
+X-Google-Smtp-Source: ABdhPJzqdMV4NXfT0dm1w0jMpm6c09lLobEXVuimJSgXhcD/2XVRcL4YIEwQbKnb1VL+qltH9j3eNX8mRl8JGqKLIco=
+X-Received: by 2002:a25:a12a:0:b0:644:e94e:5844 with SMTP id
+ z39-20020a25a12a000000b00644e94e5844mr1519306ybh.492.1650573764641; Thu, 21
+ Apr 2022 13:42:44 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1bc1:b0:2cd:5db6:d9e8 with SMTP id
- x1-20020a056e021bc100b002cd5db6d9e8mr689285ilv.276.1650573730916; Thu, 21 Apr
- 2022 13:42:10 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 13:42:10 -0700
-In-Reply-To: <83061bda-5a91-6123-a006-aaeb5458d5d7@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e8321c05dd30241a@google.com>
-Subject: Re: [syzbot] general protection fault in ntfs_update_mftmirr
-From:   syzbot <syzbot+c95173762127ad76a824@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
-        paskripkin@gmail.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com
+References: <20220419071503.1596423-1-patrick.rudolph@9elements.com> <20220419071503.1596423-2-patrick.rudolph@9elements.com>
+In-Reply-To: <20220419071503.1596423-2-patrick.rudolph@9elements.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 21 Apr 2022 22:42:33 +0200
+Message-ID: <CACRpkda+yScM20uibGXk3e0fQeG6OBBMQDqSDzNzU5OMPx3zWw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-binding: Add cypress,cy8c95x0 binding
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Patrick,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+thanks for your patch!
 
-Reported-and-tested-by: syzbot+c95173762127ad76a824@syzkaller.appspotmail.com
+On Tue, Apr 19, 2022 at 9:17 AM Patrick Rudolph
+<patrick.rudolph@9elements.com> wrote:
 
-Tested on:
+> Added device tree binding documentation for
+> Cypress CY8C95x0 I2C pin-controller.
+>
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-commit:         b2534357 Merge tag 'xtensa-20220416' of https://github..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4cdc9619f45633df
-dashboard link: https://syzkaller.appspot.com/bug?extid=c95173762127ad76a824
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1778ee1cf00000
+> +  '#gpio-cells':
+> +    description:
+> +      The first cell is the pin number and the second cell is used
+> +      to specify optional parameters.
+> +    const: 2
 
-Note: testing is done by a robot and is best-effort only.
+Maybe specify that the second cell uses the standard GPIO
+parameters in <dt-bindings/gpio/gpio.h>?
+
+The driver is quite elaborate, you can probably list which
+parameters you support on this hardware even if the
+driver don't even implement them yet: it's just a binding
+after all.
+
+> +  ngpios:
+> +    minimum: 1
+> +    maximum: 60
+
+Why? Isn't it obvious from the compatible how many pins
+the GPIO chip has? Then use that instead.
+Write under the compatible as description: for each chip
+how many gpios it has.
+
+> +patternProperties:
+> +  '-pins$':
+> +    type: object
+> +    description:
+> +      Pinctrl node's client devices use subnodes for desired pin configuration.
+> +      Client device subnodes use below standard properties.
+> +    $ref: "/schemas/pinctrl/pincfg-node.yaml"
+
+This is impressive. It's quite advanced to use the pin config props
+for elaborate pin config control.
+
+Yours,
+LInus Walleij

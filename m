@@ -2,125 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D412650A3F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9FC50A3FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390017AbiDUP0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
+        id S1390032AbiDUP0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389997AbiDUP0D (ORCPT
+        with ESMTP id S232403AbiDUP0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:26:03 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA033F31A;
-        Thu, 21 Apr 2022 08:23:13 -0700 (PDT)
-Received: (Authenticated sender: joao@overdrivepizza.com)
-        by mail.gandi.net (Postfix) with ESMTPA id A4749100002;
-        Thu, 21 Apr 2022 15:23:08 +0000 (UTC)
+        Thu, 21 Apr 2022 11:26:42 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE1141316;
+        Thu, 21 Apr 2022 08:23:52 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23LAfLVF028198;
+        Thu, 21 Apr 2022 17:23:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=DplC3BzhyblI5Lxwm3NDiSXDYLPoE+n3uwb7Qwcogf0=;
+ b=Pr9UPBN43blI3MNuBC4q4QuEx+wjppGjNYhPZqQYk/1eq6g/vma3OR/vcrxy2Te+1ZBS
+ ABJ91MHl8SK5OqbLd2FHybIoXbms1DOCAFPJAfeB37ByfARyB4bSdFZCzL1Nzc0MLrjx
+ gDbwizdZjpVr+YwnNItyW86rOMvuZBd7Oky6SurFkkswm9rGR1LWHfOTrX55uAvh7AS/
+ kXcSq+gdVqXdWX63VApZGvwk8PI11iPvC+QwuENM8ciYUFahPVyxb4XfZ3mEf9KDAAOj
+ RraVpB3D/tdGVA7hslZl+bobogT/06SMO+FMEvQrK7YdLuf9fVlCLUOus4Kuo1vnPxUy 7A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ffpqh3tk2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Apr 2022 17:23:29 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8F66E10002A;
+        Thu, 21 Apr 2022 17:23:28 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7A5D322ECF6;
+        Thu, 21 Apr 2022 17:23:28 +0200 (CEST)
+Received: from [10.48.0.142] (10.75.127.45) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 21 Apr
+ 2022 17:23:27 +0200
+Message-ID: <31f5d4af-5a4f-e683-c50e-d59b63135a99@foss.st.com>
+Date:   Thu, 21 Apr 2022 17:23:26 +0200
 MIME-Version: 1.0
-Date:   Thu, 21 Apr 2022 08:23:08 -0700
-From:   Joao Moreira <joao@overdrivepizza.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, hjl.tools@gmail.com,
-        Fangrui Song <maskray@google.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        andrew.cooper3@citrix.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@linux.intel.com, gabriel.gomes@linux.intel.com,
-        rick.p.edgecombe@intel.com
-Subject: Re: [RFC PATCH 00/11] Kernel FineIBT Support
-In-Reply-To: <20220421074920.GK2731@worktop.programming.kicks-ass.net>
-References: <20220420004241.2093-1-joao@overdrivepizza.com>
- <20220420074044.GC2731@worktop.programming.kicks-ass.net>
- <20220420151714.fderdz4dzea75rvg@treble>
- <CAKwvOdm6J9TFUWJA2Q7VRjx1CpBme9z_Dp99+7YTjN5Jqp5=Aw@mail.gmail.com>
- <bf3273120d8d48a79357f229c5890576@overdrivepizza.com>
- <20220421074920.GK2731@worktop.programming.kicks-ass.net>
-Message-ID: <643dac8c3ccb0720b4a8e67a472b08de@overdrivepizza.com>
-X-Sender: joao@overdrivepizza.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH RESEND v3 12/13] ARM: dts: stm32: enable optee firmware
+ and SCMI support on STM32MP13
+Content-Language: en-US
+To:     <gabriel.fernandez@foss.st.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220316131000.9874-1-gabriel.fernandez@foss.st.com>
+ <20220316131000.9874-13-gabriel.fernandez@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20220316131000.9874-13-gabriel.fernandez@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-21_02,2022-04-21_01,2022-02-23_01
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-21 00:49, Peter Zijlstra wrote:
-> On Wed, Apr 20, 2022 at 03:40:41PM -0700, Joao Moreira wrote:
->> > >
->> > > If FineIBT needs it, I could reconsider.  But I think there's a strong
->> > > case to be made that the linker should be doing that instead.
->> >
->> > That sounds reasonable to me (and reminds me of linker relaxation).
->> > Joao, can you please work with Fangrui (LLD) and HJ (GNU binutils) to
->> > determine how feasible this would be? I assume code outside the kernel
->> > might enjoy such an optimization, too.  When that's the case, then it
->> > probably makes more sense to "upstream" such "optimizations" from the
->> > kernel-specific objtool into the toolchains.
->> 
->> Alright, these are the greenlights I was hoping for.
->> 
->> I went quickly into this with HJ and he mentioned that it should be 
->> doable
->> in the linker, and that he has a patch for it in gcc (for local 
->> function,
->> from what I could see):
->> https://gcc.gnu.org/pipermail/gcc-patches/2022-February/590832.html
->> 
->> If @Fangrui is fine with it, I would like to try implementing this 
->> myself in
->> lld (I'm still learning a lot about lld and having an actual problem 
->> to
->> solve is the kind of fuel I need). Should take me a while, but I think 
->> this
->> is not urgent, right? I can also go ahead and replicate HJ's gcc patch 
->> into
->> clang, so we can also handle the local functions within the compiler 
->> (I
->> think this makes a lot of sense).
->> 
->> Once we have these in, I'll revisit FineIBT and extend the features to
->> handle the FineIBT instrumentation. Hopefully we'll be released from 
->> needing
->> objtool (famous last words?!).
->> 
->> This sounds like a plan, but I'm ofc open to suggestions or different
->> ideas/plans.
-> 
-> So trivially the plan sounds like: compiler fixes STB_LOCAL because it
-> has the scope, and the linker fixes everything else. However, that 
-> seems
-> to assume that !STB_LOCAL will have ENDBR.
-> 
-> This latter isn't true; for one there's __attribute__((nocf_check)) 
-> that
-> can be used to suppress ENDBR generation on a function.
-> 
-> Alternatively the linker will need to 'read' the function to determine
-> if it has ENDBR, or we need to augment the ELF format such that we can
-> tell from that.
-> 
-> So what exactly is the plan?
+Hi Gabriel
 
-I ran into too many broken dreams by trying to infer the presence of 
-ENDBRs just by the symbol locality/linkage... not only because of the 
-attribute, but also because of ancient assembly.
+On 3/16/22 14:09, gabriel.fernandez@foss.st.com wrote:
+> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> 
+> Enable optee and SCMI clocks support.
+> 
+> Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> ---
+>   arch/arm/boot/dts/stm32mp131.dtsi | 37 +++++++++++++++++++++++++++++++
+>   1 file changed, 37 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+> index 262de4eeb4ed..78eac53224d4 100644
+> --- a/arch/arm/boot/dts/stm32mp131.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp131.dtsi
+> @@ -27,6 +27,43 @@ arm-pmu {
+>   		interrupt-parent = <&intc>;
+>   	};
+>   
+> +	scmi_sram: sram@2ffff000 {
+> +		compatible = "mmio-sram";
+> +		reg = <0x2ffff000 0x1000>;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0 0x2ffff000 0x1000>;
+> +
+> +		scmi_shm: scmi_shm@0 {
 
-So, my first thought was to use something similar to the 
-__patchable_function_entries section 
-(https://man7.org/linux/man-pages/man1/gcc.1.html), where we would have 
-a section to mark all the placed ENDBR. But then it occurred to me that 
-if we follow that road we'll miss the ENDBR placed in assembly unless we 
-mark it manually, so I started thinking that reading the target 
-instructions from the ELF object could be a more simplified approach, 
-although a little more treacherous.
+rename to scmi-sram@0 to match with yaml description
 
-I didn't decide yet what to try first -- any thoughts?
+> +			compatible = "arm,scmi-shmem";
+> +			reg = <0 0x80>;
+> +		};
+> +	};
 
-@Fangrui's and @HJ's thoughts about this could be gold.
+Can you move this sram node in Soc{ please?
+
+> +
+> +	firmware {
+> +		optee {
+> +			method = "smc";
+> +			compatible = "linaro,optee-tz";
+> +		};
+> +
+> +		scmi: scmi {
+> +			compatible = "linaro,scmi-optee";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			linaro,optee-channel-id = <0>;
+> +			shmem = <&scmi_shm>;
+> +
+> +			scmi_clk: protocol@14 {
+> +				reg = <0x14>;
+> +				#clock-cells = <1>;
+> +			};
+> +
+> +			scmi_reset: protocol@16 {
+> +				reg = <0x16>;
+> +				#reset-cells = <1>;
+> +			};
+> +		};
+> +	};
+>   	clocks {
+>   		clk_axi: clk-axi {
+>   			#clock-cells = <0>;
+

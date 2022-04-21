@@ -2,114 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE96509C01
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0F1509C25
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387561AbiDUJVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S1387541AbiDUJXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387527AbiDUJVO (ORCPT
+        with ESMTP id S1343976AbiDUJWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:21:14 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DE911A09;
-        Thu, 21 Apr 2022 02:18:22 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7EFF6212CA;
-        Thu, 21 Apr 2022 09:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650532701; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 21 Apr 2022 05:22:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AF8626559
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:19:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650532780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=7eBoeABIzrU59GFjZQI069cJ6HARDP5/TtRlOQloOBo=;
-        b=uaw03MuI4ElUFpe3+neihwPi2+k6evr5KXmuhswf5kzgAb7peR8yZVMpHk6W4JDml/wqfv
-        OQy50xqoDcKdkuXbbPVjilWVuLL1LWLNfTjXThTiIJsWf5ewyRMAXvdIeFyAaGp2aGefmk
-        lwKSi0+unRir7cS0PMk7z0kGCxX1YAg=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id F24C02C1AB;
-        Thu, 21 Apr 2022 09:18:20 +0000 (UTC)
-Date:   Thu, 21 Apr 2022 11:18:20 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, roman.gushchin@linux.dev,
-        hannes@cmpxchg.org
-Subject: Re: [PATCH 3/4] mm: Centralize & improve oom reporting in show_mem.c
-Message-ID: <YmEhXG8C7msGvhqL@dhcp22.suse.cz>
-References: <20220419203202.2670193-1-kent.overstreet@gmail.com>
- <20220419203202.2670193-4-kent.overstreet@gmail.com>
- <Yl+vHJ3lSLn5ZkWN@dhcp22.suse.cz>
- <20220420165805.lg4k2iipnpyt4nuu@moria.home.lan>
+        bh=/TJk/xKo1kq7ak8BVp62xin2thZhlKy1dRvBxYp9me0=;
+        b=bUlXDuJHJX0ntwFP7JK6AI1DKDe4lD8KvKKDbt4la9vIssYEw97NoSSl6Ho2pEvUZ3m7PQ
+        lHaKAzCnDgcjU6+BQ8uqJmgGcTLqBZMu10HaF9JJfWBh6iCeFnKRazsBYj+0dX8vZLAyHL
+        vVHFE0lKLnEtqVwgDDUhGEkKPjM8ajw=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-dQ2V461BPQyi0LyeDdJcnA-1; Thu, 21 Apr 2022 05:19:39 -0400
+X-MC-Unique: dQ2V461BPQyi0LyeDdJcnA-1
+Received: by mail-pf1-f200.google.com with SMTP id b12-20020aa7870c000000b0050c7c7f0245so31281pfo.15
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:19:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/TJk/xKo1kq7ak8BVp62xin2thZhlKy1dRvBxYp9me0=;
+        b=3l4j46jXOLBxFza1O42BJ32c3dNZhCj6yLhSMa9SRM2eet6/5SN2y/6neoW1t2kxF2
+         BWoN9rg0vwkDkV/GpKD27wVh79H5EwY9cOjgN/X+Fz7JTywkioQboXjVPxyI4Whca0iV
+         G38oZRPq9E5zfngsTIxVd5nG5pz/ksj2UOP7Zqamz5Uc8uU20q5IV280HVxJ5YPo63Z3
+         vrXUnjASMPcBr4qOewZSxWVT3WTJ+N4ZYNRXCitmmbH5vVS8EBDM7tAyYeSp784s0gbd
+         Qb6kz1VKI4RfORcfz0fn3lUvpZLZZ2vcJwkXepxWtezzdf39nzbGSMq3+aZrfBPZZe0W
+         YH3A==
+X-Gm-Message-State: AOAM533jZEHxvcia3u+r4i1NKN3hZ3YISwiuEQbCKTObumUlD9W4JFWO
+        FQzjJcwbFpWEULLjVvnGoE5iD4x4gXLvj6fSkSAUto5y38S19wcwvPhbt32M59H4Q2HeHaM8yBX
+        aBz+nVU7Pdm2y841dIoPaSESindE076m9o6vPeA8x
+X-Received: by 2002:a17:903:1251:b0:156:9d8e:1077 with SMTP id u17-20020a170903125100b001569d8e1077mr24534540plh.116.1650532778071;
+        Thu, 21 Apr 2022 02:19:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwtFk0lzPyhaWtpqdHbSOYTsMX/Y11SPzuLozuWeHnn2yu/8zpYueh1jNMDia2LBoWH+T9MFJPKptLXX3Tv9z4=
+X-Received: by 2002:a17:903:1251:b0:156:9d8e:1077 with SMTP id
+ u17-20020a170903125100b001569d8e1077mr24534531plh.116.1650532777848; Thu, 21
+ Apr 2022 02:19:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420165805.lg4k2iipnpyt4nuu@moria.home.lan>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220416073721.3954-1-linmq006@gmail.com>
+In-Reply-To: <20220416073721.3954-1-linmq006@gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 21 Apr 2022 11:19:27 +0200
+Message-ID: <CAO-hwJJyrPUdOm6JuzbE4Hi4pYi6hZDhf8zkJoczeOwj5jeaaA@mail.gmail.com>
+Subject: Re: [PATCH] HID: elan: Fix potential double free in elan_input_configured
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Alexandrov Stansilav <neko@nya.ai>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 20-04-22 12:58:05, Kent Overstreet wrote:
-> On Wed, Apr 20, 2022 at 08:58:36AM +0200, Michal Hocko wrote:
-> > On Tue 19-04-22 16:32:01, Kent Overstreet wrote:
-> > > This patch:
-> > >  - Moves lib/show_mem.c to mm/show_mem.c
-> > 
-> > Sure, why not. Should be a separate patch.
-> > 
-> > >  - Changes show_mem() to always report on slab usage
-> > >  - Instead of reporting on all slabs, we only report on top 10 slabs,
-> > >    and in sorted order
-> > >  - Also reports on shrinkers, with the new shrinkers_to_text().
-> > 
-> > Why do we need/want this? It would be also great to provide an example
-> > of why the new output is better (in which cases) than the existing one.
-> 
-> Did you read the cover letter to the patch series?
+On Sat, Apr 16, 2022 at 9:37 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+>
+> 'input' is a managed resource allocated with devm_input_allocate_device(),
+> so there is no need to call input_free_device() explicitly or
+> there will be a double free.
+>
+> According to the doc of devm_input_allocate_device():
+>  * Managed input devices do not need to be explicitly unregistered or
+>  * freed as it will be done automatically when owner device unbinds from
+>  * its driver (or binding fails).
+>
+> Fixes: b7429ea53d6c ("HID: elan: Fix memleak in elan_input_configured")
+> Fixes: 9a6a4193d65b ("HID: Add driver for USB ELAN Touchpad")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-Nope, only this one made it into my inbox based on my filters. I usually
-try to fish out other parts of the thread but I didn't this time.
-Besides it is always better to have a full patch description explain not
-only what has been changed but why as well.
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-> But sure, I can give you an example of the new output:
+Thanks for the patch!
 
-Calling out the changes would be really helpful, but I guess the crux 
-is here.
+Cheers,
+Benjamin
 
-> 00177 16644 pages reserved
-> 00177 Unreclaimable slab info:
-> 00177 9p-fcall-cache    total: 8.25 MiB active: 8.25 MiB
-> 00177 kernfs_node_cache total: 2.15 MiB active: 2.15 MiB
-> 00177 kmalloc-64        total: 2.08 MiB active: 2.07 MiB
-> 00177 task_struct       total: 1.95 MiB active: 1.95 MiB
-> 00177 kmalloc-4k        total: 1.50 MiB active: 1.50 MiB
-> 00177 signal_cache      total: 1.34 MiB active: 1.34 MiB
-> 00177 kmalloc-2k        total: 1.16 MiB active: 1.16 MiB
-> 00177 bch_inode_info    total: 1.02 MiB active: 922 KiB
-> 00177 perf_event        total: 1.02 MiB active: 1.02 MiB
-> 00177 biovec-max        total: 992 KiB active: 960 KiB
-> 00177 Shrinkers:
-> 00177 super_cache_scan: objects: 127
-> 00177 super_cache_scan: objects: 106
-> 00177 jbd2_journal_shrink_scan: objects: 32
-> 00177 ext4_es_scan: objects: 32
-> 00177 bch2_btree_cache_scan: objects: 8
-> 00177   nr nodes:          24
-> 00177   nr dirty:          0
-> 00177   cannibalize lock:  0000000000000000
-> 00177 
-> 00177 super_cache_scan: objects: 8
-> 00177 super_cache_scan: objects: 1
+> ---
+>  drivers/hid/hid-elan.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/hid/hid-elan.c b/drivers/hid/hid-elan.c
+> index 3091355d48df..8e4a5528e25d 100644
+> --- a/drivers/hid/hid-elan.c
+> +++ b/drivers/hid/hid-elan.c
+> @@ -188,7 +188,6 @@ static int elan_input_configured(struct hid_device *hdev, struct hid_input *hi)
+>         ret = input_mt_init_slots(input, ELAN_MAX_FINGERS, INPUT_MT_POINTER);
+>         if (ret) {
+>                 hid_err(hdev, "Failed to init elan MT slots: %d\n", ret);
+> -               input_free_device(input);
+>                 return ret;
+>         }
+>
+> @@ -200,7 +199,6 @@ static int elan_input_configured(struct hid_device *hdev, struct hid_input *hi)
+>                 hid_err(hdev, "Failed to register elan input device: %d\n",
+>                         ret);
+>                 input_mt_destroy_slots(input);
+> -               input_free_device(input);
+>                 return ret;
+>         }
+>
+> --
+> 2.17.1
+>
 
-How does this help to analyze this allocation failure?
--- 
-Michal Hocko
-SUSE Labs

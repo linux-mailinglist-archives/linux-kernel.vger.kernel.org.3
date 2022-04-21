@@ -2,73 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B4B5099C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93775099DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386009AbiDUHoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S1386027AbiDUHor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385889AbiDUHmQ (ORCPT
+        with ESMTP id S1386013AbiDUHnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:42:16 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDD6E006
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:39:03 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id g13so8253847ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=61zWdSoSfwdGyGU44PP+1guwlHy3W/BFUYlSNhQpCK0=;
-        b=CBU7olitGiLQzzEx9iv6wPvEsjbkpfrTdaLx9MIyj5KLa35zGrbCLuN1J6hL5gfybY
-         L8nh5fo2YrgNW1FDKdtBOWGmBWIpeii0ODyz9vm9uEQeOeJzvDCJqQXOCsUut3tgw1N6
-         1k4Cc0RE8ojHMIc2RO7RQC9orFAuvMYGJe4MNfAiD+1xkt1F0rMXsXPy9pd9ff4OkOcE
-         7iGBAY+H4mo+sygXKBEqcRMxV4HdzrtytPUbRRoPHP1KYc9D82rdNwL66WIgFMX2p5eq
-         jEmYVFntcMnAxxevgaEv2kusq82D/1Ap0R/mrEW68VYqdCmt8xjwD0yUDsVV0iqaBwwa
-         7FUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=61zWdSoSfwdGyGU44PP+1guwlHy3W/BFUYlSNhQpCK0=;
-        b=nhYhuG6PNTkcIMnPKk8zEnBdnQA1Ieut+8Thlvn4qUj0nEbLOn1I4VOYLyifPzipTW
-         4e9vu6VhdlQewwmp9dxV19ZsP2AB8qJDBDBvGrrkd2mYrbt78/cS23ehJKFYePY4ASa2
-         J6zYerPmJm7idJq6Vo08t1dAg0NYVLjS38KoxDJOJCxXCoJn4X22SynDEoVpSq/JQD1m
-         vx2sZ1L0lq887an7zBHuQVVCwPbxbgIb6YDln2ErS5MOHxx3alwaPSYHijHi375DQTXl
-         fpwJvwp+mZooud0QYgy7mUdEutlbOVRB7uSBzXmgr7jenzDVNpvj+y1x+ItPh3jg/Uwp
-         +YNw==
-X-Gm-Message-State: AOAM531RE/iZVDnGYdzMuB01oL43PjYN6canYLaLkJulVd9owSdrh224
-        RtzlMl8Qa05WOcczo7MZgDjdNx+n7qRulA==
-X-Google-Smtp-Source: ABdhPJxaRfyAn8cs1xVngJOMFpWPzz5LlyNq2PV6KZNKfmogE+zYMSfsE/xO6jPk9Gbll6tTtRLyuQ==
-X-Received: by 2002:a17:906:2646:b0:6d5:d889:c92b with SMTP id i6-20020a170906264600b006d5d889c92bmr22061179ejc.696.1650526741998;
-        Thu, 21 Apr 2022 00:39:01 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id 25-20020a170906311900b006e87e5dd529sm7496681ejx.70.2022.04.21.00.39.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 00:39:01 -0700 (PDT)
-Message-ID: <ff80981a-54e8-9163-ed62-bbb4e81bdb92@linaro.org>
-Date:   Thu, 21 Apr 2022 09:39:00 +0200
+        Thu, 21 Apr 2022 03:43:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14D315A20
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:40:13 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nhRQ0-0000ar-Le; Thu, 21 Apr 2022 09:40:00 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-6754-95df-0276-ee1b.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6754:95df:276:ee1b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D488767FF4;
+        Thu, 21 Apr 2022 07:39:56 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 09:39:56 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Martin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the net-next tree
+Message-ID: <20220421073956.uin74ejmt6okxly7@pengutronix.de>
+References: <20220421170749.1c0b56db@canb.auug.org.au>
+ <202204210929.46477.pisa@cmp.felk.cvut.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] arm64: dts: qcom: qrb5165-rb5: Fix can-clock node name
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>
-References: <20220421073502.1824089-1-vkoul@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220421073502.1824089-1-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sak2e7zagjnn2h7n"
+Content-Disposition: inline
+In-Reply-To: <202204210929.46477.pisa@cmp.felk.cvut.cz>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,19 +58,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2022 09:35, Vinod Koul wrote:
-> Per DT spec node names should not have underscores (_) in them, so
-> change can_clock to can-clock.
-> 
-> Fixes: 5c44c564e449 ("arm64: dts: qcom: qrb5165-rb5: Add support for MCP2518FD")
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
+--sak2e7zagjnn2h7n
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 21.04.2022 09:29:46, Pavel Pisa wrote:
+> On Thursday 21 of April 2022 09:07:49 Stephen Rothwell wrote:
+> > After merging the net-next tree, today's linux-next build (htmldocs)
+> > produced this warning:
+> >
+> > Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst:
+> > WARNING: document isn't included in any toctree
+> >
+> > Introduced by commit
+> >
+> >   c3a0addefbde ("docs: ctucanfd: CTU CAN FD open-source IP core
+> > documentation.")
+>=20
+> I would be happy for suggestion for reference location.
+>=20
+> Is the next file right location=20
+>=20
+>   Documentation/networking/device_drivers/can/index.rst
+>=20
+> for reference to
+>=20
+>   Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
 
+Feel free to send a patch. I'm happy to take it.
 
-Best regards,
-Krzysztof
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--sak2e7zagjnn2h7n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJhCkkACgkQrX5LkNig
+010qMwf/dypxeuTZEC6vQRlb1ngYhbb7US1donTW/CjSBuCOs1px084X/jcKr5aO
+Dbgr6dMvcou4OV6OIrYmd0kWBBv4bjh1lZbm2eJEVZJPVlA2MzAs5D/xZNtQRKcf
+bo3v49Yi57f+99IBHKcOA1NazqBxBHe38U1cUFufxLgvKvCjN396aeKIKtPzngCW
+aOXx/+4oOiGqbAabsIG7CXGhayE+/474OA21JuMRzjV7HJJonG0a2xc9rU16tmyi
+79muP/gdkXYf26ECB5U2rfYuv6D5Q3i0/B18Prr1/xJqmWKUuTDsWa0z5Acbbvm8
+w62k0M/zuKO98p03bs3nQMT2FgFOYw==
+=5rUs
+-----END PGP SIGNATURE-----
+
+--sak2e7zagjnn2h7n--

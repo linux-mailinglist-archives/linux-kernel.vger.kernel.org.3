@@ -2,394 +2,494 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DFC509AB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D10509AB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386669AbiDUIdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
+        id S1386661AbiDUIdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiDUIc2 (ORCPT
+        with ESMTP id S1386688AbiDUIdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:32:28 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E528C13EB0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:29:37 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ef4a241cc5so44276117b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5DsAwiLdIzm2TrVJ0U2gFbJkr1AO6nQ1MwuMxT9Gufk=;
-        b=JFP/eenSEeqTuECaWL0dZKMDNqCJw3jNgLUk2NBSzBqSGQgws1VPfDGnI67js8+Gj/
-         ToGOVRF9nWzAnZxnpTKp+7LvDbO2AhHXyc+SHPgc9gmD3esmm7vaNSKlAFQPcIy7vbWb
-         mDfPjZ/sEKcu3wlURN7VHnEBhGA4zm+KSNSBCwdCWtRxj3LfOsrJ2Gd0myLLy0VRBr9Q
-         93DLv4mEwExjRdQNGLnKeQzcTxioJPmc9+0CCo6HpJpJguxkR2+pdpKuSxcnkBXvqBXo
-         Jnq4kBL5FvgsuyGrxhRI3cQzRZ2Fp2/OpJfesGFXf5r6qKiIrGsoLbWCb+jdvu3Qm1vb
-         e+vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5DsAwiLdIzm2TrVJ0U2gFbJkr1AO6nQ1MwuMxT9Gufk=;
-        b=kpfKWzeoD1urSa+ipCkGWzIs//sjCvNwWLyf8Sk7wp5vVUjBmQimHpeW7NpjclEh/1
-         l+mDxBSMjoX9LIeyLsFUDnrmvuKMmpSeDNJ028y2HxrqGyeCcqsh3UjINGnATQdyI7++
-         6Tgd0S/NWv/spZJNkOWiWns/3vAGIm12x8IwucfZsugwsuvoHJD+mSMgoX3K1a0JyE4I
-         oZHepKySFaiwOLQakmKgVJ7yK2oLs/iBv9xBDz4ZNZaKvFCybiB8WC3g2u8r4xpO5HNd
-         fPzGglmKl8DmiMHOc4f5t8z3yKfoDujWtg3gKKqJ3z+zVVAeGoJSwi0mFyg8RlpEgg8z
-         /Hbw==
-X-Gm-Message-State: AOAM530XXZInXp1npDm8iq9VlVfozWXGvRt64hA4tSL+2oS7/nQe3yrS
-        cNWhaFpBIlwbsvdCL4dwQneO3NkCxGxHndeL6M2NVg==
-X-Google-Smtp-Source: ABdhPJzoFHPTXfVPQ8gal6T0wp2v6pRDE4EUla+k200AjOTtBOu2t7377CqvR1YjbCj3YIrIB3Vqeot0wsKOQHHQ/OE=
-X-Received: by 2002:a0d:fa01:0:b0:2d6:595d:81d4 with SMTP id
- k1-20020a0dfa01000000b002d6595d81d4mr24676462ywf.86.1650529776959; Thu, 21
- Apr 2022 01:29:36 -0700 (PDT)
+        Thu, 21 Apr 2022 04:33:40 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C9515A2E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650529849; x=1682065849;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=J1iTK1sF9DIPdtVIZTjvgPEdTLrQYrbwFKJSRRh7LOo=;
+  b=iU+1vyffEWUJLgd0R5bIB8cpKtjirwL0lly2T+dbaa/LLQAxhQlQn5fb
+   MtR/WzYM44inDrj/lqaI3xWtF3ObQhoSKCMOYQr/EIqv9pfBz6uhSuRlM
+   DiO7l4JKbcVh4QlwaxmBHLWjSkzJ8c0L35E9qgyAsmqFMq5MkeVlJXQQc
+   FBoktSTCQRPn/rr5NQ6NVjQEbPcQdT1RONeomNwTbr0zmhE5611nWwGAQ
+   JKxEiRXLZXGi+Hjian4EDsKHcGBBLNqZvP/z+joA2ubfqHL61/jVemuh4
+   fvTx1qu1cTI18yBEeKoqAorv1CfeEegP0qnbaSHQuUVtb8O2SWgHXmqgb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264452286"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="264452286"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 01:30:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="555653306"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga007.jf.intel.com with ESMTP; 21 Apr 2022 01:30:31 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 21 Apr 2022 01:30:30 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 21 Apr 2022 01:30:30 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.49) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 21 Apr 2022 01:30:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c+I8i7JSR6DrG+Ac4Sq464HwN21NPXOhdbg5G2/2CWTwoaAT+O2+OOl3PQVeI4YX7cKnoRpD9LGTrciSOTl3iPZN0XlC/WIqMP9ZmU0X69rLTApFNekSfSj3zkUjLFJMGtc00yy1VafAJKSJ7yiWMKFL3jyBGUbZh/eSGwi/yUFmpD4cA85WUozf2+qxJ8mcKrWNgYxIB+o755S0sncDDsLYqDFW8E5ZE0UOKbwDJeqbdOlV+Ojzs8IEQTnwSOfURuRwMZn76DZHXG+9cmiIwoZW4Ea87yOLqpeA5jPHB+yw7qDFyp/J/JdO1vMe5uG2QLMnEMQg9ary6dHeDWvNhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v698WFgfPLnP5d+fA9fS7cnrO1ZOXkxCEUcrbLRJmGM=;
+ b=HrUdJKFeveUEKHQAuZj6BfwWJLEaE4TnF2c1EWxaqDwmDPXJpACKYF4MjAKbAhvjSV0l2VANGzuwQv7fIwzjj9mMV6jij+Rllvj6u4rK6fhUf6DJMa6sUXj0btMMYFomSXbtOIt18me1VzGKhO95oLW77wami6+/FpypnWBBSfNxj7mhjfzj49nGM4wlm+SDr/iNK2EdF/tQ8sXP6YoCcwtv0zIvxCpqtnpwiowwZL+ZnhRx2PKtGw2v1QiOl8TE/dz9YVmgAnw904sEALrcr/p4IkggbunaAQaQP2TedRNQGsPJ4GLzAYRxZ8cAoRKp8Xl5SHtVPtrtpsyRWqjNhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
+ by DM6PR11MB4578.namprd11.prod.outlook.com (2603:10b6:5:2a7::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Thu, 21 Apr
+ 2022 08:30:28 +0000
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::30f5:ac84:8cae:c977]) by BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::30f5:ac84:8cae:c977%6]) with mapi id 15.20.5164.025; Thu, 21 Apr 2022
+ 08:30:28 +0000
+Date:   Thu, 21 Apr 2022 16:30:20 +0800
+From:   Aaron Lu <aaron.lu@intel.com>
+To:     "ying.huang@intel.com" <ying.huang@intel.com>
+CC:     Yang Shi <shy828301@gmail.com>, Michal Hocko <mhocko@suse.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: swap: determine swap device by using page nid
+Message-ID: <YmEWHBp3JMyakE/V@ziqianlu-desk1>
+References: <20220407020953.475626-1-shy828301@gmail.com>
+ <Yk6cutNf5sOuYbDl@ziqianlu-nuc9qn>
+ <CAHbLzkq+eKcKCsxXDTiOcBxk8FjMdWBqOxwi4N_NG7PZWbAAkA@mail.gmail.com>
+ <Yl/FS9enAD4V8jG3@ziqianlu-nuc9qn>
+ <f27ec36beb3cf1dbbfc3b8835e586d5d6fe7f561.camel@intel.com>
+ <YmETEHnK/FiNbLO7@ziqianlu-desk1>
+Content-Type: multipart/mixed; boundary="l9flZffgL3dp6D2R"
+Content-Disposition: inline
+In-Reply-To: <YmETEHnK/FiNbLO7@ziqianlu-desk1>
+X-ClientProxiedBy: HK2PR06CA0004.apcprd06.prod.outlook.com
+ (2603:1096:202:2e::16) To BYAPR11MB3062.namprd11.prod.outlook.com
+ (2603:10b6:a03:92::18)
 MIME-Version: 1.0
-References: <20220407051932.4071-1-xuewen.yan@unisoc.com> <02350916-aa36-ea53-2c98-91b97f49d27e@arm.com>
- <CAB8ipk-KenZaVWQwWqVMksQXLP5r19BQ1OGAdmwHRbjwv3qFHg@mail.gmail.com>
- <9bb00bcb-f984-1cf6-39aa-c11dcf7f07cb@arm.com> <f100bd49-7a1d-5265-29ce-1092195bb2dd@arm.com>
- <CAB8ipk8v1-jyU0Q0k-EXCArsS6Sh=U+fW6NutW+6m+kQ=LKrJA@mail.gmail.com>
- <CAKfTPtDsNSW0JH4phAtZB7ackJFKuJfAGkhQ7JjWG_C2tzQYSw@mail.gmail.com>
- <24631a27-42d9-229f-d9b0-040ac993b749@arm.com> <CAKfTPtAnHmm0T+FKF251YcjM3Nw66Wqs2a16yU9Ptiip+jyNLA@mail.gmail.com>
- <e536ef07-4dd3-affd-0e27-6ff89a7f647f@arm.com>
-In-Reply-To: <e536ef07-4dd3-affd-0e27-6ff89a7f647f@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 21 Apr 2022 10:29:25 +0200
-Message-ID: <CAKfTPtBfjnWoiTbhRBj4Ve65ukRdm90ri84dNivKuLDBMWhUAQ@mail.gmail.com>
-Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
- rt fits capacity
-To:     Lukasz Luba <Lukasz.Luba@arm.com>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        di.shen@unisoc.com, Xuewen Yan <xuewen.yan94@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 694fa69e-45df-4531-f8fb-08da237130a3
+X-MS-TrafficTypeDiagnostic: DM6PR11MB4578:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <DM6PR11MB45781CEDA64C751130D326AA8BF49@DM6PR11MB4578.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: L9ojY4l2mwiLBrKjPpJ1/vIuhZqXYZumckdQCp2xRuMztqv8eJCTVJGtV9cMV9nQyqKzeHZ1D1by55x8gZQ2pjP0DVAMS2NlmErdPm0nWNTdmDLBFE/Fg9C2FNjxe2Irt+xnVY+tgV5nzMRXlvEHuvsxcCI7yewb5fMdIX1rWCLe59TdGqjzEyZQQOknRiNAqb/ihsv4bpn38jVTLKdMPq6eSUIbTbAWiLAziyruEKci+pwTD243x6aWAJ+pHCY8QbVRNQEmc3jnqVpok6g13cZJ8XrRKd7udFhLja8WoTeXzflYkX2H+DeBdp7dWjQHEdPBb6oHM1/aiUZucK9AO10FxRFzQgdouQ9nxQB+Qpa4Ft9hschyHgjQwl8E9S1eOntOdNN1UFuuW6H2lEZ7IzmT+5wJyzRGht/K+HsXUACJYSX08c43q5xQfhppMwAeBq7L5muJxAKs0ZIHsEvlQQ5k+/FzHUehAXRw6CoRDirm2lEIQs/VDeFe8GlEJO5TcnnMgvHVjHN60tWna0LdKjJQH1pXsgRagMv5qapyVfXoLU78q5LhQZ+FJ5v0OrnIr4bG+2s6ojNC3+QOLYvHKQdZ/mucXOKzj1cE0QZ/tWTeLmj3BV/WxAv/WadYTD7rK1WHV4kEfo02XoKj3edIH/CMT5RNz5m7FxxWRUgoyXyzCCYHHvZ9Gu/SaTnQhzP9CoLjoyj5KMb0F3RtQZcqIA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(6486002)(6506007)(5660300002)(186003)(508600001)(6666004)(44144004)(8936002)(2906002)(26005)(6512007)(9686003)(44832011)(33716001)(38100700002)(235185007)(8676002)(4326008)(6862004)(82960400001)(86362001)(316002)(66556008)(66946007)(66476007)(564344004)(54906003)(6636002)(2700100001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Js5cAer13YSuUfjXicLw5DYaiiClYTVjDg7kPQCWw42W3tqIjprNGstVDuYm?=
+ =?us-ascii?Q?TuU9RNp2xtS+Hns1tVCQT1o5lhdUGp8c5j7Avnwuf7j4B4+yKitVzyc1MAKa?=
+ =?us-ascii?Q?9O3mVTwMAQ6yYKOHsBJoNAFHf18csWmn5cVwuyQbHqa8wqOTRTiI+J9KLSle?=
+ =?us-ascii?Q?it86n29/PVJ2AQQIpol/9yKrxY+/GuOmA1V8BmF6Q3laqwO5wUF6wuEkmJTO?=
+ =?us-ascii?Q?e77QWvH2k53rJ+SKEqblMSwtUYSy23BdceJEi0Ds+lHBuXW378i10QMEG2gd?=
+ =?us-ascii?Q?zfFFYpSfIo27b/mgE4c2cN4Vq2i20w/cKzMohlWf/gLB3/1W3qoNBxn69JpH?=
+ =?us-ascii?Q?6p3wYPgiEPhXtrqMwQhY+Dm/5J1f76XTYMflmz/EQ+xtesXoALxzbXzoDqbe?=
+ =?us-ascii?Q?1bJ5eMVhwtbH5X6PFrU5fKEBVJL22HmZRbdaGZMRG1ZJm0sC+t5peceHVIWl?=
+ =?us-ascii?Q?9YD1KXRwIlO45rN6FdoJwyF5ohP4VrU7DffgaU8kiECieZzhCZtbJL0RGlLL?=
+ =?us-ascii?Q?bloGccuFZHQaeBkPr973tdxT7l/S3zcitmwps6Q0lBFFGKcCWThMWNAh37jr?=
+ =?us-ascii?Q?kho7di+wJof92q7yRXmksdqfH9ct6kW5zlFA4Ux02AAr2p8i9yG4AJAVJmw8?=
+ =?us-ascii?Q?zKxc6nlVoxnA2Ch1XDILCVtvpm4MXcY/5MoZ/yvbC3nKDnSybmsAJvNCYYaS?=
+ =?us-ascii?Q?FkHI2WlqrD2TAIQY/54BJOUKVS4SN/mFRVTHBGzst8AQBkseWGlNONrUknKD?=
+ =?us-ascii?Q?f4GX9IbwucxYLOlH96LmSo+RG/vgeBI8ZQApxXZ4Hk8RcujMKB2ev/3X4Ray?=
+ =?us-ascii?Q?e1d6JXv48O73uggoESVWDDuB9QC8JyQtoIdPeGK228AxXvYJ96YXI7QLt6S6?=
+ =?us-ascii?Q?Frf7m2Qgh1294l/f2uG8ForLYUMw9XCZ0nd+IVuvXhG3slBD+VNcoIH8nHjz?=
+ =?us-ascii?Q?TDBE9nWGNvT4w80vENKJGtGibHHMjaJ1rl6gLDh7MHcK9E7NC+MsPJJjhs1z?=
+ =?us-ascii?Q?8tj36s8oWhFx1nd4SI07rApJ8YfT1zPWmXpXAkcWbR+LJdefIf07HKjrJX4L?=
+ =?us-ascii?Q?EneGkR4J91Y+XB0i0DdA9OsvwPhJ+m2oC6sx1y41b4v5gEyDntlMpoxutTMp?=
+ =?us-ascii?Q?EaHhf4YaDIV7UNH4Eja1aSa7gRNTbWKJqA6j2HhW3Y1b3BKfA7+g0i1wpS6X?=
+ =?us-ascii?Q?sThAvgOvrC/F8uCEVYqUoJisD7YijdOd64SF7hhHhEFLwSOw82TusGrAulhi?=
+ =?us-ascii?Q?19zjdhYeZ9GxZVIc+mbwanWk4ob5poZIN6yLwbmfSgh2xBuJu4LjrD7+O/DA?=
+ =?us-ascii?Q?wjmWCwQkDU/GLNgO6FlqwTJYz6GoDH2PYep8ARo0UA1qrJs6OdjAWsZARSzM?=
+ =?us-ascii?Q?xN1c8LCdxMa8XnWtK8NuD3IDhmKgijVCAjKpjgD+IVbSw0av6GhIlKr0sd2w?=
+ =?us-ascii?Q?hkUmGOi2Vx4WnFhvAhO+3h9PghTa/SMNoDD3sTI7nFMqDkiB3gE1W+nevGcz?=
+ =?us-ascii?Q?+jYypD5yTg3mUsfM3cA1SDJsgxxl8ECbNGS1tPWl/kC1a2cvUmVPPPS97sjs?=
+ =?us-ascii?Q?BDpj0su8oZUyuyEYx8dyNHVZ/pKOx8lt//8J+xhOGhMmRaDkvTZcZXBDd35Q?=
+ =?us-ascii?Q?K/xNoY3q/QehbysTUNyrQ48MFN8CAGLP2kK1qjKb1ATPVRKvYTgSKljtFLpU?=
+ =?us-ascii?Q?P5L479BePPx+nBZT9B1884Iz10FK5IgzBatTrpt0rySGIKFeNCQwqqdnheZN?=
+ =?us-ascii?Q?z65GATgihQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 694fa69e-45df-4531-f8fb-08da237130a3
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2022 08:30:28.3956
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kEBSSBC7onUuGmlBzEk8vY7IpNeBfs2wvE4Y6XMh3hNHEj2zGyhuL5LiTcG3KQtJXcekwH8iPw+mhgrouLBrKw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4578
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Apr 2022 at 16:13, Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 4/19/22 13:51, Vincent Guittot wrote:
-> > On Tue, 19 Apr 2022 at 14:01, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>
-> >>
-> >>
-> >> On 4/19/22 08:14, Vincent Guittot wrote:
-> >>> On Sat, 16 Apr 2022 at 04:47, Xuewen Yan <xuewen.yan94@gmail.com> wrote:
-> >>>>
-> >>>> Hi Luba  / Dietmar
-> >>>>
-> >>>> On Wed, Apr 13, 2022 at 9:26 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>> On 4/11/22 15:07, Dietmar Eggemann wrote:
-> >>>>>> On 11/04/2022 10:52, Xuewen Yan wrote:
-> >>>>>>> HI Dietmar
-> >>>>>>>
-> >>>>>>> On Mon, Apr 11, 2022 at 4:21 PM Dietmar Eggemann
-> >>>>>>> <dietmar.eggemann@arm.com> wrote:
-> >>>>>>>>
-> >>>>>>>> On 07/04/2022 07:19, Xuewen Yan wrote:
-> >>>>>>>>> There are cases when the cpu max capacity might be reduced due to thermal.
-> >>>>>>>>> Take into the thermal pressure into account when judge whether the rt task
-> >>>>>>>>> fits the cpu. And when schedutil govnor get cpu util, the thermal pressure
-> >>>>>>>>> also should be considered.
-> >>>>>>>>>
-> >>>>>>>>> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> >>>>>>>>> ---
-> >>>>>>>>>     kernel/sched/cpufreq_schedutil.c | 1 +
-> >>>>>>>>>     kernel/sched/rt.c                | 1 +
-> >>>>>>>>>     2 files changed, 2 insertions(+)
-> >>>>>>>>>
-> >>>>>>>>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> >>>>>>>>> index 3dbf351d12d5..285ad51caf0f 100644
-> >>>>>>>>> --- a/kernel/sched/cpufreq_schedutil.c
-> >>>>>>>>> +++ b/kernel/sched/cpufreq_schedutil.c
-> >>>>>>>>> @@ -159,6 +159,7 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
-> >>>>>>>>>          struct rq *rq = cpu_rq(sg_cpu->cpu);
-> >>>>>>>>>          unsigned long max = arch_scale_cpu_capacity(sg_cpu->cpu);
-> >>>>>>>>>
-> >>>>>>>>> +     max -= arch_scale_thermal_pressure(sg_cpu->cpu);
-> >>>>>>>>
-> >>>>>>>> max' = arch_scale_cpu_capacity() - arch_scale_thermal_pressure()
-> >>>>>>>>
-> >>>>>>>> For the energy part (A) we use max' in compute_energy() to cap sum_util
-> >>>>>>>> and max_util at max' and to call em_cpu_energy(..., max_util, sum_util,
-> >>>>>>>> max'). This was done to match (B)'s `policy->max` capping.
-> >>>>>>>>
-> >>>>>>>> For the frequency part (B) we have freq_qos_update_request() in:
-> >>>>>>>>
-> >>>>>>>> power_actor_set_power()
-> >>>>>>>>      ...
-> >>>>>>>>      cdev->ops->set_cur_state()
-> >>>>>>>>
-> >>>>>>>>        cpufreq_set_cur_state()
-> >>>>>>>>          freq_qos_update_request()      <-- !
-> >>>>>>>>          arch_update_thermal_pressure()
-> >>>>>>>>
-> >>>>>>>> restricting `policy->max` which then clamps `target_freq` in:
-> >>>>>>>>
-> >>>>>>>>      cpufreq_update_util()
-> >>>>>>>>        ...
-> >>>>>>>>        get_next_freq()
-> >>>>>>>>          cpufreq_driver_resolve_freq()
-> >>>>>>>>            __resolve_freq()
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> Do you mean that the "max" here will not affect the frequency
-> >>>>>>> conversion, so there is no need to change it?
-> >>>>>>> But is it better to reflect the influence of thermal here?
-> >>>>>>
-> >>>>>> I guess your point is that even though max' has no effect on frequency
-> >>>>>> since QOS caps policy->max anyway, it is still easier to understand the
-> >>>>>> dependency between schedutil and EAS/EM when it comes to the use of
-> >>>>>> thermal pressure.
-> >>>>>>
-> >>>>>> I agree. The way how the "hidden" policy->max capping guarantees that
-> >>>>>> schedutil and EAS/EM are doing the same even when only the latter uses
-> >>>>>> max' is not obvious.
-> >>>>>
-> >>>>> +1 here, IMO we shouldn't rely on hidden stuff. There are two which set
-> >>>>> the thermal pressure, but one is not setting the freq_qos which causes
-> >>>>> the update of the 'policy->max'. So the schedutil will send that high
-> >>>>> frequency but that driver would just ignore and clamp internally. In the
-> >>>>> end we might argue it still works, but is it clean and visible from the
-> >>>>> code? Funny thing might start to happen then the driver, which might be
-> >>>>> the last safety net cannot capture this.
-> >>>
-> >>> schedutil reflects what scheduler wants not what HW can do. If you
-> >>> start to cap the freq with arch_scale_thermal_pressure() in schedutil,
-> >>
-> >> s/freq/util ?
-> >
-> > Isn't it the same at the end if you cap util to orig capacity -
-> > arch_scale_thermal_pressure ?
->
-> No, as I have showed you in the example calculation the 'max_freq'
-> is always taken as a start then scaled by current 'util/max'.
-> If the 'max' was 1024 in both cases, then you might claim that
-> we made a mistake and end up with obviously too low frequency.
->
-> That's why I asked you to be precised with your statements in the
-> description while mentioning variables and signals.
->
-> >
-> >>
-> >> To be precised and maybe fix some potential design issues. We are
-> >> talking here about utilization and set max capacity in function:
-> >> sugov_get_util()
-> >> so fields:
-> >>
-> >> sugov_cpu::util
-> >> sugov_cpu::max /* max capacity */
-> >
-> > Yes. With this patch ,util will be lower than current thermal
-> > mitigation whereas util normally reflects what we need  not what can
-> > be provided
->
-> This is a different requirements: util has to be max capacity and
-> max capacity has to be original max CPU capacity - for the SchedUtil.
-> OK, why? What this requirement adds in the design and final values?
+--l9flZffgL3dp6D2R
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-Because the calculation you are proposing is wrong and doesn't make
-sense. Util is the average utilization of the cpu that has to be
-compared with its original capacity max in order to get the freq that
-matches with this utilization.
+On Thu, Apr 21, 2022 at 04:17:20PM +0800, Aaron Lu wrote:
+ 
+> The full vmstat is attached.
 
-We have freq = util / max * max_freq and cpufreq will then capp freq
-if mitigation is applied. Once the mitigation disappear, the request
-will be back to targeted freq.
+Now really attach it.
 
-If you replace max by max' = max - arch_scale_thermal_pressure then :
+--l9flZffgL3dp6D2R
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: attachment; filename="vmstat"
 
-- by the time you do the calculation, arch_scale_thermal_pressure can
-have changed and the result is meaningless. This is true whatever the
-pace of updating arch_scale_thermal_pressure
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu----- -----timestamp-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st                 UTC
+20  0      0 259772032      8 2428796    0    0     2     0  365   74  1  1 98  0  0 2022-04-19 11:44:37
+ 4  0      0 259149824      8 2439084    0    0     0     0 148536 22298  1  3 96  0  0 2022-04-19 11:44:38
+35  0      0 236926192   1052 2572000    0    0  2163  2048 392940 3690  1 24 75  0  0 2022-04-19 11:44:39
+32  0      0 205170832   1052 2572280    0    0     0     0 193095 1280  2 33 65  0  0 2022-04-19 11:44:40
+40  0 136448 192211008   1052 2439412  268 133760     0     0 532052 3571  0 40 59  0  0 2022-04-19 11:44:43
+33  0 4224000 192182464   1052 2450936 130636 4211460     0     0 1145644 15600  1 33 65  0  0 2022-04-19 11:44:44
+32  0 6908708 192179408   1052 2460836 239456 2924392     0     0 863325 10731  1 34 65  0  0 2022-04-19 11:44:45
+33  0 9005036 192163936   1052 2469112 279200 2371924     0     0 739330 9635  1 34 65  0  0 2022-04-19 11:44:46
+32  0 10769408 192154864   1052 2476172 305516 2071440     0     0 673619 9044  1 34 65  0  0 2022-04-19 11:44:47
+32  0 12318720 192149344   1052 2482708 324312 1875224     0     0 627868 9404  1 35 65  0  0 2022-04-19 11:44:48
+33  0 13735796 192146752   1052 2488520 340684 1756308     0     0 601933 11815  1 35 65  0  0 2022-04-19 11:44:49
+32  0 14987008 192136848   1052 2493692 338980 1590408     0     0 563875 9375  0 35 65  0  0 2022-04-19 11:44:50
+32  0 16168012 192133232   1052 2497264 356736 1537696     0     0 550767 8588  0 35 65  0  0 2022-04-19 11:44:51
+38  0 17286860 192132976   1052 2500684 367600 1484368     0     0 539362 8312  0 35 64  0  0 2022-04-19 11:44:52
+32  0 18316660 192128032   1052 2503832 371648 1402320     0     0 519531 7857  0 35 64  0  0 2022-04-19 11:44:53
+32  0 19272448 192129216   1052 2506756 371268 1328540     0     0 503122 7764  0 35 64  0  0 2022-04-19 11:44:54
+32  0 20186880 192130432   1052 2509720 378588 1291684     0     0 493909 8058  0 35 64  0  0 2022-04-19 11:44:55
+32  0 21039076 192117904   1052 2512484 374920 1227208     0     0 479430 7614  0 35 64  0  0 2022-04-19 11:44:56
+32  0 21858304 192117088   1052 2515292 382228 1202388     0     0 471800 7280  0 35 64  0  0 2022-04-19 11:44:57
+32  0 22643200 192124736   1052 2517928 387796 1172604     0     0 466398 7560  0 35 65  0  0 2022-04-19 11:44:58
+33  0 23398400 192121600   1052 2520604 390640 1145040     0     0 460020 7418  0 35 64  0  0 2022-04-19 11:44:59
+32  0 24123904 192112128   1052 2523012 395544 1121908     0     0 454250 8995  0 35 64  0  0 2022-04-19 11:45:00
+32  0 24812544 192110688   1052 2525400 391548 1080432     0     0 444148 7033  0 35 64  0  0 2022-04-19 11:45:01
+32  0 25488384 192117024   1052 2527692 400572 1075560     0     0 442662 6579  0 35 64  0  0 2022-04-19 11:45:02
+32  0 26136832 192110320   1052 2530144 400304 1048956     0     0 436651 6948  0 35 64  0  0 2022-04-19 11:45:03
+33  0 26739968 192101152   1052 2532308 387808 991508     0     0 424139 6472  0 35 64  0  0 2022-04-19 11:45:04
+33  0 27336960 192101264   1052 2534664 399084 994436     0     0 424789 5971  0 35 65  0  0 2022-04-19 11:45:05
+32  0 27913984 192097264   1052 2536828 405424 984452     0     0 422030 7022  0 35 65  0  0 2022-04-19 11:45:06
+32  0 28471320 192096368   1052 2538992 400360 956228     0     0 415233 6218  0 35 65  0  0 2022-04-19 11:45:07
+32  0 29014996 192098080   1052 2541156 405664 949256     0     0 413223 5887  0 35 65  0  0 2022-04-19 11:45:08
+32  0 29552008 192101648   1052 2543160 411052 947328     0     0 412808 6380  0 35 65  0  0 2022-04-19 11:45:09
+32  0 30064896 192088528   1052 2545420 407592 921552     0     0 406967 6345  0 35 65  0  0 2022-04-19 11:45:10
+32  0 30552576 192095616   1052 2547456 401472 889236     0     0 399464 8367  0 35 64  0  0 2022-04-19 11:45:11
+32  0 31047240 192089856   1052 2549468 410644 905400     0     0 402550 5844  0 35 64  0  0 2022-04-19 11:45:12
+33  0 31517184 192085856   1052 2551408 404460 874228     0     0 396451 5421  0 35 65  0  0 2022-04-19 11:45:13
+34  0 31978240 192083072   1052 2553416 409600 869384     0     0 394614 5446  0 35 65  0  0 2022-04-19 11:45:14
+32  0 32425736 192085152   1052 2555392 409288 857792     0     0 391189 5814  0 35 65  0  0 2022-04-19 11:45:15
+33  0 32862464 192084688   1052 2557220 408200 846504     0     0 389040 5559  0 35 65  0  0 2022-04-19 11:45:16
+33  0 33294336 192081376   1052 2559160 411612 842348     0     0 387955 5365  0 35 65  0  0 2022-04-19 11:45:17
+35  0 33543936 192083728   1052 2560164 243240 492000     0     0 303579 4348  0 36 64  0  0 2022-04-19 11:45:18
+33  0 33664000 192076384   1052 2557780 123344 245628     0     0 248236 7239  0 35 65  0  0 2022-04-19 11:45:19
+32  0 33903616 192073632   1052 2558656 238444 476044     0     0 298068 10021  0 35 65  0  0 2022-04-19 11:45:20
+32  0 34211840 192074656   1052 2559936 312412 621668     0     0 328435 11145  0 35 65  0  0 2022-04-19 11:45:21
+32  0 34591232 192076096   1052 2561372 394416 773060     0     0 361995 17880  0 35 65  0  0 2022-04-19 11:45:22
+32  0 34982892 192078448   1052 2563084 415324 806380     0     0 364197 9191  0 35 65  0  0 2022-04-19 11:45:23
+32  0 35336192 192070560   1052 2564896 387108 740976     0     0 347194 6913  1 35 64  0  0 2022-04-19 11:45:24
+32  0 35684292 192063200   1052 2566456 388180 737152     0     0 344533 6515  1 35 65  0  0 2022-04-19 11:45:25
+32  0 36022272 192069504   1052 2568124 387496 724860     0     0 345241 6748  1 35 64  0  0 2022-04-19 11:45:26
+32  0 36363260 192065792   1052 2569616 395840 736144     0     0 345187 6788  1 35 64  0  0 2022-04-19 11:45:27
+33  0 36706040 192066336   1052 2571396 400132 742736     0     0 346808 6949  1 35 65  0  0 2022-04-19 11:45:28
+33  0 37038336 192070896   1052 2573024 398784 731400     0     0 345257 6885  1 35 65  0  0 2022-04-19 11:45:29
+32  0 37359060 192057488   1052 2574692 391968 712276     0     0 341340 7042  1 35 64  0  0 2022-04-19 11:45:30
+33  0 37682984 192062400   1052 2576288 402508 726868     0     0 345344 6322  1 35 64  0  0 2022-04-19 11:45:31
+33  0 38000480 192061392   1052 2578008 406472 724020     0     0 345762 6101  1 35 65  0  0 2022-04-19 11:45:32
+32  0 38314240 192057920   1052 2579628 404624 719564     0     0 346545 9113  1 35 64  0  0 2022-04-19 11:45:33
+32  0 38620848 192056288   1052 2581060 400092 705276     0     0 342857 6286  1 35 65  0  0 2022-04-19 11:45:34
+33  0 38924100 192048960   1052 2582872 407892 711728     0     0 344675 5944  1 35 65  0  0 2022-04-19 11:45:35
+34  0 39227136 192049040   1052 2584328 414916 718080     0     0 346432 5876  0 35 65  0  0 2022-04-19 11:45:36
+33  0 39524352 192054880   1052 2585864 414464 711448     0     0 345906 5617  1 35 65  0  0 2022-04-19 11:45:37
+32  0 39814656 192051152   1052 2587584 413760 704364     0     0 345164 5721  1 35 64  0  0 2022-04-19 11:45:38
+32  0 40102912 192048160   1052 2589192 419172 707624     0     0 345399 5958  1 35 64  0  0 2022-04-19 11:45:39
+32  0 40385024 192053840   1052 2590736 413372 694996     0     0 343269 5693  1 35 65  0  0 2022-04-19 11:45:40
+33  0 40660992 192048464   1052 2592256 410276 685828     0     0 341024 5834  1 35 64  0  0 2022-04-19 11:45:41
+32  0 40934824 192047104   1052 2594056 415724 690372     0     0 342278 5610  1 35 65  0  0 2022-04-19 11:45:42
+33  0 41202688 192039152   1052 2595500 415360 683608     0     0 340834 5364  1 35 64  0  0 2022-04-19 11:45:43
+33  0 41468672 192036176   1052 2596960 414772 681164     0     0 340613 7086  1 35 65  0  0 2022-04-19 11:45:44
+32  0 41731300 192044352   1052 2598548 418424 680864     0     0 340310 4869  0 35 65  0  0 2022-04-19 11:45:45
+34  0 41985536 192045344   1052 2599936 410740 664820     0     0 337015 5269  0 35 64  0  0 2022-04-19 11:45:46
+34  0 42247168 192039040   1052 2601564 421728 682512     0     0 340811 5084  1 35 64  0  0 2022-04-19 11:45:47
+33  0 42494464 192033776   1052 2602992 415476 663552     0     0 337414 5131  1 35 65  0  0 2022-04-19 11:45:48
+32  0 42743208 192041968   1052 2604440 418868 667060     0     0 338061 5412  1 35 65  0  0 2022-04-19 11:45:49
+33  0 42988028 192031264   1052 2605988 419984 664648     0     0 338247 5071  1 35 64  0  0 2022-04-19 11:45:50
+32  0 43228672 192025952   1052 2607448 420752 661024     0     0 336313 5023  1 35 65  0  0 2022-04-19 11:45:51
+32  0 43465472 192029056   1052 2609036 422256 658448     0     0 337030 4755  1 35 65  0  0 2022-04-19 11:45:52
+36  0 43698612 192035056   1052 2610400 419936 652968     0     0 335086 4965  1 35 65  0  0 2022-04-19 11:45:53
+32  0 43927040 192025616   1052 2611780 423080 652236     0     0 334524 4916  1 35 65  0  0 2022-04-19 11:45:54
+32  0 44154296 192031552   1052 2613336 424208 652244     0     0 335620 7246  1 35 65  0  0 2022-04-19 11:45:55
+33  0 44382400 192032768   1052 2614744 424424 651764     0     0 334836 4910  1 35 65  0  0 2022-04-19 11:45:56
+32  0 44603572 192024896   1052 2616300 424524 646812     0     0 333817 4746  1 35 65  0  0 2022-04-19 11:45:57
+34  0 44824536 192017776   1052 2617824 424004 645208     0     0 333903 4849  0 35 65  0  0 2022-04-19 11:45:58
+33  0 45042408 192013952   1052 2619220 425432 641608     0     0 333238 4385  1 35 65  0  0 2022-04-19 11:45:59
+32  0 45256192 192025280   1052 2620744 427912 642272     0     0 332972 4623  1 35 65  0  0 2022-04-19 11:46:00
+33  0 45469092 192016832   1052 2622140 430300 643596     0     0 332949 4404  0 35 65  0  0 2022-04-19 11:46:01
+32  0 45678592 192020832   1052 2623476 430020 638260     0     0 331800 4702  0 35 65  0  0 2022-04-19 11:46:02
+32  0 45885064 192018848   1052 2624920 433280 641444     0     0 332904 4472  1 35 65  0  0 2022-04-19 11:46:03
+32  0 46088420 192015056   1052 2626328 427348 629260     0     0 330343 4283  1 35 65  0  0 2022-04-19 11:46:04
+32  0 46291200 192016544   1052 2627884 434952 638604     0     0 332063 4095  1 35 65  0  0 2022-04-19 11:46:05
+32  0 46491268 192017408   1052 2629328 432096 630900     0     0 331614 6342  1 35 64  0  0 2022-04-19 11:46:06
+32  0 46686208 192012064   1052 2630664 432152 627820     0     0 329774 4026  1 35 65  0  0 2022-04-19 11:46:07
+34  0 46883320 192007696   1052 2632060 436388 632728     0     0 330649 3777  1 35 65  0  0 2022-04-19 11:46:08
+33  0 47075840 192002688   1052 2633584 444144 637528     0     0 331857 4110  0 35 65  0  0 2022-04-19 11:46:09
+32  0 47269368 192008160   1052 2635012 442700 636132     0     0 331605 4237  0 35 65  0  0 2022-04-19 11:46:10
+32  0 47465984 192000400   1052 2636472 456228 652756     0     0 335570 4359  0 35 65  0  0 2022-04-19 11:46:11
+33  0 47652352 191996784   1052 2637932 437368 622652     0     0 328532 3627  1 35 65  0  0 2022-04-19 11:46:12
+33  0 47830272 191998800   1052 2639296 428224 607516     0     0 325651 3847  1 35 65  0  0 2022-04-19 11:46:13
+34  0 48014492 192001504   1052 2640596 441592 625308     0     0 329752 4199  1 35 65  0  0 2022-04-19 11:46:14
+32  0 48200960 191996240   1052 2642148 458724 645744     0     0 333806 3988  0 35 65  0  0 2022-04-19 11:46:15
+45  0 48379904 191991904   1052 2643576 442948 621268     0     0 329070 4529  0 35 65  0  0 2022-04-19 11:46:16
+33  0 48557504 191996960   1052 2644812 444420 621948     0     0 328916 7249  1 35 64  0  0 2022-04-19 11:46:17
+33  0 48729564 191995744   1052 2646272 447396 619376     0     0 329126 4565  0 35 65  0  0 2022-04-19 11:46:18
+32  0 48959268 191989024   1052 2647828 595888 825480     0     0 368714 8096  0 35 65  0  0 2022-04-19 11:46:19
+32  0 49242368 191990304   1052 2650036 746212 1028524     0     0 411140 10949  0 34 65  0  0 2022-04-19 11:46:20
+32  0 49520792 191984080   1052 2652372 758208 1037236     0     0 415505 10094  0 34 65  0  0 2022-04-19 11:46:21
+32  0 49799168 191994240   1052 2654724 767236 1046964     0     0 418405 10726  0 35 65  0  0 2022-04-19 11:46:22
+32  0 50067712 191989104   1052 2657092 759192 1028600     0     0 415356 10173  0 35 65  0  0 2022-04-19 11:46:23
+33  0 50333440 191980320   1052 2659332 750764 1014732     0     0 412144 9197  0 34 65  0  0 2022-04-19 11:46:24
+32  0 50584052 191973824   1052 2661576 737720 988964     0     0 406620 8752  0 35 65  0  0 2022-04-19 11:46:25
+32  0 50816000 191976080   1052 2663660 689248 921108     0     0 391782 8517  0 34 65  0  0 2022-04-19 11:46:26
+32  0 51036416 191970464   1052 2665612 668004 888220     0     0 385112 7310  1 34 65  0  0 2022-04-19 11:46:27
+32  0 51256576 191962224   1052 2667536 678464 897872     0     0 388494 12547  0 35 65  0  0 2022-04-19 11:46:28
+33  0 51464680 191966304   1052 2669472 654540 862720     0     0 380869 7069  1 34 65  0  0 2022-04-19 11:46:29
+32  0 51597232 191971840   1052 2670848 419772 552324     0     0 314325 4029  1 35 65  0  0 2022-04-19 11:46:30
+33  0 51722448 191969456   1052 2672072 409300 535892     0     0 310720 4014  1 35 65  0  0 2022-04-19 11:46:31
+32  0 51850496 191963472   1052 2673236 413160 541076     0     0 311652 3583  1 35 65  0  0 2022-04-19 11:46:32
+32  0 51978872 191968208   1052 2674452 415844 543464     0     0 312411 3579  1 35 65  0  0 2022-04-19 11:46:33
+32  0 52105724 191974640   1052 2675616 418104 545728     0     0 312731 4183  1 35 65  0  0 2022-04-19 11:46:34
+34  0 52232928 191964336   1052 2676964 426200 552956     0     0 314230 3834  1 35 64  0  0 2022-04-19 11:46:35
+32  0 52357120 191966016   1052 2678068 423264 548348     0     0 313803 3715  1 35 65  0  0 2022-04-19 11:46:36
+32  0 52480000 191964416   1052 2679416 416128 538092     0     0 311067 3685  1 35 65  0  0 2022-04-19 11:46:37
+32  0 52605616 191958880   1052 2680628 437608 563284     0     0 317485 4630  1 35 64  0  0 2022-04-19 11:46:38
+33  0 52727808 191960976   1052 2681848 429192 552412     0     0 314454 6385  1 35 64  0  0 2022-04-19 11:46:39
+33  0 52848384 191961280   1052 2683152 429448 550060     0     0 313430 3628  1 35 65  0  0 2022-04-19 11:46:40
+33  0 52974848 191958400   1052 2684336 438688 562580     0     0 316278 3847  1 35 65  0  0 2022-04-19 11:46:41
+34  0 53092340 191956512   1052 2685556 432780 551080     0     0 314084 3851  1 35 65  0  0 2022-04-19 11:46:42
+35  0 53213544 191956800   1052 2686828 436968 557028     0     0 315585 4126  1 35 65  0  0 2022-04-19 11:46:43
+34  0 53329860 191951392   1052 2688020 432704 548412     0     0 313339 3632  1 35 65  0  0 2022-04-19 11:46:44
+32  0 53447936 191949632   1052 2689128 444180 563836     0     0 318195 3536  1 35 65  0  0 2022-04-19 11:46:45
+33  0 53564160 191950816   1052 2690376 442124 558876     0     0 315715 4082  1 35 65  0  0 2022-04-19 11:46:46
+32  0 53679224 191950992   1052 2691708 441260 556820     0     0 315667 3954  1 35 65  0  0 2022-04-19 11:46:47
+32  0 53797116 191938592   1052 2693000 450788 567540     0     0 317665 3829  1 35 65  0  0 2022-04-19 11:46:48
+32  0 53912832 191947792   1052 2694152 449472 565396     0     0 317678 4118  1 35 65  0  0 2022-04-19 11:46:49
+32  0 54030456 191939680   1052 2695608 467288 585312     0     0 321126 5453  1 35 65  0  0 2022-04-19 11:46:50
+35  0 54141632 191938944   1052 2696852 450124 561748     0     0 316831 3704  1 35 65  0  0 2022-04-19 11:46:51
+32  0 54254592 191942000   1052 2698068 454148 566852     0     0 317321 3844  1 35 65  0  0 2022-04-19 11:46:52
+32  0 54365692 191936912   1052 2699256 455204 565628     0     0 317220 3913  1 35 65  0  0 2022-04-19 11:46:53
+32  0 54475620 191937120   1052 2700540 461644 573284     0     0 319328 3940  1 35 65  0  0 2022-04-19 11:46:54
+33  0 54586568 191937568   1052 2701760 462000 573528     0     0 320352 4047  1 35 65  0  0 2022-04-19 11:46:55
+33  0 54697728 191929904   1052 2702980 461904 571872     0     0 318957 3672  1 35 65  0  0 2022-04-19 11:46:56
+33  0 54804480 191930528   1052 2704304 455672 562912     0     0 316782 3897  1 35 65  0  0 2022-04-19 11:46:57
+32  0 54914816 191937440   1052 2705684 470056 579664     0     0 320349 4244  1 35 65  0  0 2022-04-19 11:46:58
+32  0 55022712 191932704   1052 2706840 465760 572212     0     0 318664 3987  1 35 65  0  0 2022-04-19 11:46:59
+32  0 55127296 191929632   1052 2708112 461364 566492     0     0 317456 4153  1 35 65  0  0 2022-04-19 11:47:00
+34  0 55230288 191926416   1052 2709332 462920 565840     0     0 318217 6997  1 35 65  0  0 2022-04-19 11:47:01
+35  0 55332752 191926096   1052 2710608 462300 565332     0     0 317071 4076  1 35 65  0  0 2022-04-19 11:47:02
+32  0 55434748 191924736   1052 2711984 459936 561164     0     0 316499 3919  1 35 65  0  0 2022-04-19 11:47:03
+32  0 55536896 191921376   1052 2713184 468912 572304     0     0 318619 4379  1 35 65  0  0 2022-04-19 11:47:04
+34  0 55637304 191924000   1052 2714432 467428 567004     0     0 317671 3681  1 35 65  0  0 2022-04-19 11:47:05
+33  0 55739392 191925216   1052 2715616 478372 581340     0     0 322587 4306  1 35 65  0  0 2022-04-19 11:47:06
+32  0 55838940 191926048   1052 2717016 471368 570720     0     0 318479 4010  1 35 65  0  0 2022-04-19 11:47:07
+33  0 55936368 191922352   1052 2718284 464848 562040     0     0 316348 4148  1 35 65  0  0 2022-04-19 11:47:08
+34  0 56032256 191919664   1052 2719488 464940 561024     0     0 316491 3988  1 35 65  0  0 2022-04-19 11:47:09
+32  0 56130472 191919776   1052 2720692 470516 568080     0     0 317941 4509  1 35 65  0  0 2022-04-19 11:47:10
+32  0 56224660 191906512   1052 2722080 466248 560824     0     0 316174 3856  1 35 65  0  0 2022-04-19 11:47:11
+33  0 56317184 191915360   1052 2723340 470300 564260     0     0 317098 5068  1 35 65  0  0 2022-04-19 11:47:12
+33  0 56417112 191917520   1052 2724656 487256 585532     0     0 321494 4297  1 35 65  0  0 2022-04-19 11:47:13
+32  0 56510720 191909536   1052 2725988 476336 570728     0     0 318844 4523  1 35 65  0  0 2022-04-19 11:47:14
+32  0 56606040 191907616   1052 2727160 477428 571028     0     0 318839 4175  1 35 65  0  0 2022-04-19 11:47:15
+32  0 56697088 191912000   1052 2728684 466932 559020     0     0 315928 4161  1 35 65  0  0 2022-04-19 11:47:16
+34  0 56787712 191907696   1052 2729860 472976 563732     0     0 316453 3950  1 35 65  0  0 2022-04-19 11:47:17
+33  0 56877056 191903568   1052 2731144 468084 557924     0     0 315621 4013  1 35 65  0  0 2022-04-19 11:47:18
+32  0 56965116 191896656   1052 2732380 464372 551336     0     0 314322 4152  1 35 65  0  0 2022-04-19 11:47:19
+32  0 57052628 191904688   1052 2733548 477452 565748     0     0 317334 4061  1 35 65  0  0 2022-04-19 11:47:20
+32  0 57142528 191914208   1052 2734816 482532 572592     0     0 318933 4272  1 35 65  0  0 2022-04-19 11:47:21
+33  0 57230448 191904480   1052 2736148 479984 568060     0     0 317916 4387  1 35 65  0  0 2022-04-19 11:47:22
+32  0 57318656 191904816   1052 2737416 484772 573868     0     0 319135 6673  1 35 65  0  0 2022-04-19 11:47:23
+32  0 57404672 191900544   1052 2738620 489276 573784     0     0 319596 3916  1 35 65  0  0 2022-04-19 11:47:24
+32  0 57489152 191899904   1052 2739888 478328 562884     0     0 317116 4208  1 35 65  0  0 2022-04-19 11:47:25
+33  0 57603840 191891552   1052 2741420 640576 754120     0     0 358337 6747  0 35 65  0  0 2022-04-19 11:47:26
+32  0 57713664 191896000   1052 2743184 647392 758688     0     0 359435 6227  1 35 65  0  0 2022-04-19 11:47:27
+32  0 57821556 191891936   1052 2744704 635524 742832     0     0 355728 6148  1 35 65  0  0 2022-04-19 11:47:28
+33  0 57925120 191897648   1052 2746600 615860 719748     0     0 350765 5732  1 35 65  0  0 2022-04-19 11:47:29
+33  0 58027008 191890368   1052 2748048 615712 716600     0     0 350724 6101  1 34 65  0  0 2022-04-19 11:47:30
+32  0 58126444 191885216   1052 2749596 607536 707176     0     0 348194 5085  1 35 65  0  0 2022-04-19 11:47:31
+32  0 58222592 191887360   1052 2751344 600540 697816     0     0 345880 5490  1 34 65  0  0 2022-04-19 11:47:32
+33  0 58320504 191886432   1052 2753188 603128 699792     0     0 346573 5464  1 34 65  0  0 2022-04-19 11:47:33
+32  0 58413312 191880352   1052 2754792 598632 692808     0     0 345649 9207  1 35 65  0  0 2022-04-19 11:47:34
+34  0 58507008 191891488   1052 2756788 609060 703476     0     0 347418 5584  1 35 65  0  0 2022-04-19 11:47:35
+35  0 58598656 191884608   1052 2758404 595716 685588     0     0 343268 5203  1 34 65  0  0 2022-04-19 11:47:36
+33  0 58687228 191881088   1052 2760176 589804 679596     0     0 341791 5229  1 34 65  0  0 2022-04-19 11:47:37
+39  0 58786644 191876080   1052 2773580 585944 685572     0     0 343209 5902  1 35 64  0  0 2022-04-19 11:47:38
+32  0 58871972 191867536   1052 2775512 581884 668300     0     0 339806 5101  1 34 65  0  0 2022-04-19 11:47:39
+32  0 58955828 191866160   1052 2777280 566568 649184     0     0 335661 4936  1 35 65  0  0 2022-04-19 11:47:40
+32  0 59040000 191869520   1052 2778848 576932 661460     0     0 338098 5150  1 34 65  0  0 2022-04-19 11:47:41
+32  0 59127296 191865792   1052 2780688 595728 681228     0     0 343116 5640  1 35 65  0  0 2022-04-19 11:47:42
+33  0 59240764 191861552   1052 2812080 584924 698736     0     0 346368 5982  1 36 64  0  0 2022-04-19 11:47:43
+33  0 59350784 191864896   1052 2848552 557016 668704     0     0 338713 5310  1 36 64  0  0 2022-04-19 11:47:44
+34  0 59467464 191864336   1052 2886880 567064 681652     0     0 342514 7503  1 36 64  0  0 2022-04-19 11:47:45
+33  0 59559872 191864256   1052 2902648 576064 668796     0     0 339551 5498  1 35 65  0  0 2022-04-19 11:47:46
+33  0 59654956 191859072   1052 2920248 579652 674992     0     0 341334 5458  1 35 64  0  0 2022-04-19 11:47:47
+34  0 59739616 191855872   1052 2930128 573296 659060     0     0 337334 5991  1 35 64  0  0 2022-04-19 11:47:48
+33  0 59836128 191860256   1052 2932236 570876 666192     0     0 339142 5845  1 35 64  0  0 2022-04-19 11:47:49
+33  0 59916032 191856160   1052 2933836 549732 630988     0     0 331232 5294  1 35 64  0  0 2022-04-19 11:47:50
+33  0 59984580 191864432   1052 2935316 469696 536568     0     0 310775 3927  2 35 64  0  0 2022-04-19 11:47:51
+34  0 60044544 191861888   1052 2936544 459708 519548     0     0 307439 3639  2 35 64  0  0 2022-04-19 11:47:52
+33  0 60100836 191855216   1052 2937860 443508 499904     0     0 302794 3567  2 35 63  0  0 2022-04-19 11:47:53
+35  0 60164624 191852752   1052 2940244 474076 538824     0     0 311434 4171  2 35 63  0  0 2022-04-19 11:47:54
+37  0 60217600 191897456   1052 2941936 459244 512648     0     0 305915 3861  2 34 64  0  0 2022-04-19 11:47:55
+34  0 60278660 192299520   1052 2943212 475432 535428     0     0 316175 5911  1 35 64  0  0 2022-04-19 11:47:56
+34  0 60298684 192311632   1052 2944424 502300 528524     0     0 311650 3770  1 35 64  0  0 2022-04-19 11:47:57
+33  0 60218112 192309504   1052 2796064 586680 507856     0     0 305252 4444  1 35 64  0  0 2022-04-19 11:47:58
+37  0 60278508 192305376   1052 2796960 488344 546888     0     0 315321 4236  1 35 65  0  0 2022-04-19 11:47:59
+32  0 60338944 192301776   1052 2798080 489152 549504     0     0 314014 3466  1 34 65  0  0 2022-04-19 11:48:00
+33  0 60397160 192300352   1052 2799292 489172 547972     0     0 313256 3819  1 35 65  0  0 2022-04-19 11:48:01
+33  0 60455916 192294144   1052 2800600 489732 548700     0     0 313496 4186  1 35 65  0  0 2022-04-19 11:48:02
+32  0 60513792 192298784   1052 2801780 479196 536752     0     0 310719 3561  1 35 65  0  0 2022-04-19 11:48:03
+32  0 60571892 192299072   1052 2802932 494308 551784     0     0 313913 3810  1 35 65  0  0 2022-04-19 11:48:04
+32  0 60628480 192295728   1052 2804116 496196 553860     0     0 314546 3935  1 35 65  0  0 2022-04-19 11:48:05
+32  0 60683816 192296960   1052 2805352 486952 542444     0     0 312103 4099  1 35 65  0  0 2022-04-19 11:48:06
+34  0 60739208 192291936   1052 2806660 484324 540436     0     0 311552 4432  1 35 65  0  0 2022-04-19 11:48:07
+35  0 60795972 192284768   1052 2807792 492956 547732     0     0 314027 6508  1 35 65  0  0 2022-04-19 11:48:08
+33  0 60847872 192290848   1052 2808992 489656 543676     0     0 312158 3829  1 34 65  0  0 2022-04-19 11:48:09
+32  0 60902400 192299504   1052 2810196 486744 540604     0     0 312211 4386  1 35 65  0  0 2022-04-19 11:48:10
+33  0 60955904 192293344   1052 2811400 487512 540688     0     0 312193 4135  1 35 65  0  0 2022-04-19 11:48:11
+41  0 61008640 192287456   1052 2812636 484648 537540     0     0 311435 3734  1 35 65  0  0 2022-04-19 11:48:12
+32  0 61061304 192289824   1052 2813872 501632 555256     0     0 314495 3876  1 35 65  0  0 2022-04-19 11:48:13
+32  0 61116160 192294800   1052 2815120 497996 550700     0     0 313638 3882  1 35 65  0  0 2022-04-19 11:48:14
+32  0 61167432 192284768   1052 2816368 489036 540932     0     0 311803 3839  1 35 65  0  0 2022-04-19 11:48:15
+32  0 61219376 192283712   1052 2817584 491776 542744     0     0 312423 4299  1 35 65  0  0 2022-04-19 11:48:16
+32  0 61272320 192295248   1052 2818656 501956 555260     0     0 315076 3976  1 35 65  0  0 2022-04-19 11:48:17
+34  0 61322752 192286080   1052 2820024 488840 539240     0     0 311653 3856  1 35 65  0  0 2022-04-19 11:48:18
+33  0 61372996 192282624   1052 2821132 501804 552984     0     0 314628 5787  1 34 65  0  0 2022-04-19 11:48:19
+32  0 61422496 192281536   1052 2822348 479440 526896     0     0 308704 3968  1 35 65  0  0 2022-04-19 11:48:20
+34  0 61468424 192270848   1052 2823436 490952 539872     0     0 311674 4014  1 35 65  0  0 2022-04-19 11:48:21
+32  0 61520384 192284560   1052 2824844 498232 548180     0     0 314325 3992  1 35 65  0  0 2022-04-19 11:48:22
+33  0 61567888 192276848   1052 2825996 491732 539792     0     0 312189 3861  1 35 65  0  0 2022-04-19 11:48:23
+34  0 61614080 192281648   1052 2827080 497280 545980     0     0 312658 3876  1 35 65  0  0 2022-04-19 11:48:24
+33  0 61663488 192279520   1052 2828252 490216 536964     0     0 311192 3803  1 35 65  0  0 2022-04-19 11:48:25
+32  0 61710960 192275664   1052 2829424 489848 537324     0     0 311042 3709  1 35 65  0  0 2022-04-19 11:48:26
+39  0 61757184 192268528   1052 2830676 490224 537460     0     0 311295 3764  1 35 65  0  0 2022-04-19 11:48:27
+32  0 61801892 192268400   1052 2831880 489044 534368     0     0 310452 3993  1 35 65  0  0 2022-04-19 11:48:28
+33  0 61850624 192271024   1052 2832980 496976 543256     0     0 312781 3875  1 35 65  0  0 2022-04-19 11:48:29
+32  0 61896960 192272896   1052 2834248 500816 547220     0     0 314017 6846  1 35 65  0  0 2022-04-19 11:48:30
+32  0 61942016 192264544   1052 2835416 504964 551264     0     0 314468 3845  1 35 65  0  0 2022-04-19 11:48:31
+32  0 61987852 192266128   1052 2836684 491416 536948     0     0 311305 4077  1 35 65  0  0 2022-04-19 11:48:32
+32  0 62030480 192261872   1052 2837900 493044 537092     0     0 311528 4065  1 35 65  0  0 2022-04-19 11:48:33
+32  0 62073220 192270400   1052 2839044 487060 530204     0     0 309776 3606  1 35 65  0  0 2022-04-19 11:48:34
+32  0 62118656 192271840   1052 2840276 493928 538428     0     0 311079 3850  1 35 65  0  0 2022-04-19 11:48:35
+32  0 62163196 192269504   1052 2841432 490928 535392     0     0 310949 4165  1 35 65  0  0 2022-04-19 11:48:36
+34  0 62209104 192267808   1052 2842632 500124 543960     0     0 313037 4160  1 35 65  0  0 2022-04-19 11:48:37
+33  0 62251188 192260064   1052 2844024 511756 556448     0     0 315170 4118  1 34 65  0  0 2022-04-19 11:48:38
+32  0 62295296 192257216   1052 2845320 501036 543804     0     0 312836 3961  1 35 65  0  0 2022-04-19 11:48:39
+32  0 62337280 192256096   1052 2846428 492636 534648     0     0 310901 4120  1 35 65  0  0 2022-04-19 11:48:40
+35  0 62381808 192254352   1052 2847612 500060 543168     0     0 312995 6369  1 35 65  0  0 2022-04-19 11:48:41
+34  0 62421448 192252080   1052 2848816 495780 537168     0     0 310822 3679  1 34 65  0  0 2022-04-19 11:48:42
+34  0 62464316 192254832   1052 2849936 516248 558580     0     0 316400 3753  1 35 65  0  0 2022-04-19 11:48:43
+32  0 62510964 192250848   1052 2851304 579476 626888     0     0 330616 4698  1 35 65  0  0 2022-04-19 11:48:44
+32  0 62557440 192247168   1052 2852712 582480 629676     0     0 331016 5219  1 34 65  0  0 2022-04-19 11:48:45
+32  0 62607104 192247840   1052 2854076 595568 644328     0     0 334494 4980  1 35 65  0  0 2022-04-19 11:48:46
+33  0 62653696 192252960   1052 2855384 585184 631288     0     0 331689 5091  1 35 65  0  0 2022-04-19 11:48:47
+32  0 62699264 192247056   1052 2856924 589048 634808     0     0 333290 5319  1 35 65  0  0 2022-04-19 11:48:48
+33  0 62742720 192245024   1052 2858264 571348 615500     0     0 328032 4545  1 34 65  0  0 2022-04-19 11:48:49
+32  0 62787736 192247792   1052 2859712 577792 623332     0     0 330051 4655  1 35 65  0  0 2022-04-19 11:48:50
+32  0 62832004 192245600   1052 2861044 585552 628388     0     0 331364 4666  1 34 65  0  0 2022-04-19 11:48:51
+32  0 62875392 192244640   1052 2862356 565624 608764     0     0 326799 7393  1 35 65  0  0 2022-04-19 11:48:52
+32  0 62917120 192238080   1052 2863796 582128 625224     0     0 330953 4872  1 35 65  0  0 2022-04-19 11:48:53
+33  0 62960532 192234272   1052 2865280 590584 633648     0     0 332031 4689  1 34 65  0  0 2022-04-19 11:48:54
+33  0 63004160 192235824   1052 2866680 588252 631856     0     0 331745 5039  1 35 65  0  0 2022-04-19 11:48:55
+33  0 63047320 192232240   1052 2867956 586980 629588     0     0 331267 4998  1 34 65  0  0 2022-04-19 11:48:56
+32  0 63087640 192245424   1052 2869348 585604 628012     0     0 330493 4927  1 35 65  0  0 2022-04-19 11:48:57
+33  0 63129344 192232512   1052 2870756 574012 614840     0     0 328778 5278  1 35 65  0  0 2022-04-19 11:48:58
+32  0 63171072 192237856   1052 2872228 580340 620776     0     0 329111 4859  1 34 65  0  0 2022-04-19 11:48:59
+34  0 63210752 192227328   1052 2873460 578876 619924     0     0 329304 4684  1 34 65  0  0 2022-04-19 11:49:00
+33  0 63251200 192220288   1052 2874784 582144 622148     0     0 329560 5017  1 34 65  0  0 2022-04-19 11:49:01
+33  0 63291264 192222320   1052 2876112 580536 619900     0     0 329110 4704  1 35 65  0  0 2022-04-19 11:49:02
+33  0 63328908 192219296   1052 2877620 575060 613620     0     0 327696 7029  1 35 65  0  0 2022-04-19 11:49:03
+36  0 63368640 192227904   1052 2878872 589916 629468     0     0 331230 4735  1 35 65  0  0 2022-04-19 11:49:04
+32  0 63407616 192226368   1052 2880100 580092 618964     0     0 329353 5036  1 35 65  0  0 2022-04-19 11:49:05
+32  0 63447296 192227856   1052 2881400 573924 612468     0     0 327395 4885  1 35 65  0  0 2022-04-19 11:49:06
+32  0 63483964 192220768   1052 2882800 583504 620684     0     0 329453 5140  1 35 65  0  0 2022-04-19 11:49:07
+34  0 63522304 192219616   1052 2884120 570324 607480     0     0 326198 4823  1 35 65  0  0 2022-04-19 11:49:08
+33  0 63558912 192211888   1052 2885476 580888 617940     0     0 328666 5086  1 34 65  0  0 2022-04-19 11:49:09
+33  0 63595492 192213584   1052 2886736 584960 622084     0     0 329748 4562  1 34 65  0  0 2022-04-19 11:49:10
+32  0 63632896 192210512   1052 2888120 595924 632104     0     0 331874 4517  1 35 65  0  0 2022-04-19 11:49:11
+33  0 63666936 192212976   1052 2889380 577004 612232     0     0 327461 5115  1 35 65  0  0 2022-04-19 11:49:12
+32  0 63701724 192218064   1052 2890824 567624 602100     0     0 325847 5177  1 35 65  0  0 2022-04-19 11:49:13
+32  0 63736880 192215200   1052 2892060 584428 619836     0     0 329777 8221  1 35 65  0  0 2022-04-19 11:49:14
+33  0 63770620 192215968   1052 2893280 570576 604300     0     0 326097 4686  1 35 65  0  0 2022-04-19 11:49:15
+32  0 63803904 192221184   1052 2894768 568808 602056     0     0 325556 5006  1 35 65  0  0 2022-04-19 11:49:16
+33  0 63833344 192212400   1052 2895944 495136 525744     0     0 309029 4239  1 35 65  0  0 2022-04-19 11:49:17
+35  0 63860480 192211232   1052 2897000 507576 535204     0     0 310415 3845  1 34 65  0  0 2022-04-19 11:49:18
+32  0 63892152 192207936   1052 2898188 512756 543144     0     0 312950 3642  1 35 65  0  0 2022-04-19 11:49:19
+32  0 63922616 192207072   1052 2899488 510120 539604     0     0 312348 4206  1 35 65  0  0 2022-04-19 11:49:20
+33  0 63950080 192208064   1052 2900680 506412 534544     0     0 310675 4162  1 35 65  0  0 2022-04-19 11:49:21
+32  0 63978240 192206960   1052 2901788 508240 537108     0     0 311111 3764  1 34 65  0  0 2022-04-19 11:49:22
+33  0 64005888 192204640   1052 2903032 500888 529304     0     0 310700 3802  1 35 65  0  0 2022-04-19 11:49:23
+33  0 64034560 192202464   1052 2904196 512840 540380     0     0 312276 4026  1 35 65  0  0 2022-04-19 11:49:24
+33  0 64062048 192201616   1052 2905220 513532 541616     0     0 312356 7302  1 35 64  0  0 2022-04-19 11:49:25
+32  0 64090076 192203456   1052 2906356 518444 546404     0     0 312988 3962  1 35 65  0  0 2022-04-19 11:49:26
+32  0 64120708 192204320   1052 2907596 524924 554096     0     0 314768 4291  1 35 65  0  0 2022-04-19 11:49:27
+32  0 64148056 192200080   1052 2908728 498560 524804     0     0 308205 3725  1 35 65  0  0 2022-04-19 11:49:28
+32  0 64174080 192194736   1052 2909892 520536 549348     0     0 313727 4293  1 35 65  0  0 2022-04-19 11:49:29
+34  0 64204480 192192832   1052 2911172 516376 544820     0     0 313570 4206  1 35 65  0  0 2022-04-19 11:49:30
+33  0 64230260 192203168   1052 2912248 520184 546248     0     0 313189 4025  1 34 65  0  0 2022-04-19 11:49:31
+33  0 64255744 192195008   1052 2913472 507776 534924     0     0 310523 3664  1 35 65  0  0 2022-04-19 11:49:32
+39  0 64282112 192193392   1052 2914516 506548 532440     0     0 310750 4296  1 35 65  0  0 2022-04-19 11:49:33
+33  0 64308448 192195024   1052 2915568 506908 533216     0     0 310358 3855  1 35 65  0  0 2022-04-19 11:49:34
+32  0 64334336 192196576   1052 2916784 512948 539000     0     0 312050 4143  1 35 65  0  0 2022-04-19 11:49:35
+34  0 64359168 192193344   1052 2917904 502020 527060     0     0 309305 6556  1 35 65  0  0 2022-04-19 11:49:36
+32  0 64386536 192196768   1052 2919116 514568 539672     0     0 312168 4291  1 35 64  0  0 2022-04-19 11:49:37
+32  0 64409832 192186992   1052 2920240 506992 532228     0     0 310007 4146  1 34 65  0  0 2022-04-19 11:49:38
+33  0 64435064 192191056   1052 2921456 512904 537976     0     0 311752 4276  1 35 65  0  0 2022-04-19 11:49:39
+32  0 64220548 192222656   1052 2922740 615844 558524     0     0 314887 3799  1 34 65  0  0 2022-04-19 11:49:40
+32  0 61157316 193033728   1052 2923724 1153000 258600     0     0 220678 2613  0 29 71  0  0 2022-04-19 11:49:41
+33  0 57311092 196936640   1052 2924208 22192    0     0     0 147122 1051  0 22 78  0  0 2022-04-19 11:49:42
+32  0 53440768 201176032   1052 2924228    4    0     0     0 147248 1072  0 22 78  0  0 2022-04-19 11:49:43
+32  0 49573004 205453872   1052 2924244    0    0     0     0 147236 1109  0 22 78  0  0 2022-04-19 11:49:44
+32  0 45707948 209583488   1052 2924264    0    0     0     0 147302 1378  0 22 78  0  0 2022-04-19 11:49:45
+32  0 41845172 213813296   1052 2924284    0    0     0     0 147352 1106  0 22 78  0  0 2022-04-19 11:49:46
+32  0 37993952 218130528   1052 2924304    4    0     0     0 147483 6516  0 22 78  0  0 2022-04-19 11:49:47
+32  0 34145780 222392800   1052 2924344    0    0     0     0 147514 1130  0 22 78  0  0 2022-04-19 11:49:48
+32  0 30304064 226625232   1052 2924344    0    0     0     0 147475 1273  0 22 78  0  0 2022-04-19 11:49:49
+32  0 26478704 230731184   1052 2924368    0    0     0     0 147277 1089  0 22 78  0  0 2022-04-19 11:49:50
+33  0 22660460 234876992   1052 2924408    0    0     0     0 147335 1061  0 22 78  0  0 2022-04-19 11:49:51
+33  0 18857820 238900208   1052 2924408    0    0     0     0 147254 1069  0 22 78  0  0 2022-04-19 11:49:52
+32  0 15092356 242988288   1052 2924428    0    0     0     0 147223 1474  0 22 78  0  0 2022-04-19 11:49:53
+32  0 11356260 246985888   1052 2924448    0    0     0     0 147062 1481  0 22 78  0  0 2022-04-19 11:49:54
+32  0 7660836 250787008   1052 2924472    0    0     0     0 146898 1473  0 22 78  0  0 2022-04-19 11:49:55
+28  0 4077124 254481360   1052 2924516   24    0     0     0 149089 1682  0 21 79  0  0 2022-04-19 11:49:56
+ 8  0 732064 258519760   1052 2924516   80    0     0     0 166011 2145  0 18 82  0  0 2022-04-19 11:49:57
+ 0  0  29184 259706272      8 2535484  428    0     0     2 191790 6698  0  3 97  0  0 2022-04-19 11:49:58
+ 0  0  18688 259724480      8 2517016 2568    0     0     0 134255 10131  0  2 98  0  0 2022-04-19 11:49:59
 
-- you change the range of capacity to max'= max -
-arch_scale_thermal_pressure and you scale it to max_freq. if util >
-max', then you will ask for max_freq whatever the util being really
-close to max or not. Also you will ask for max freq even if util is
-close but below max' whereas the mitigation doesn't impact utilization
-
->
-> >
-> >>
-> >>> you will loose some opportunity to run at higher frequency because
-> >>> arch_scale_thermal_pressure() is transient and might change just after
-> >>> using it. This means that you will stay at lower freq after mitigation
-> >>> stops until a new cpufreq_update_util() happens. ANd I don't vene
-> >>> mentioned when thermal mitigation is managed by HW at a much higher
-> >>> frequency than what Linux can handle
-> >>>
-> >>> arch_scale_thermal_pressure() must not be used but thermal_load_avg()
-> >>> like scale_rt_capacity() what Dietmar suggested
-> >>>
-> >>
-> >> First, I would like to see your view to this topic and why you are
-> >> making such strong statements. I have slightly different view and
-> >> made dozen of experiments with this thermal pressure in last ~2-3y.
-> >>
-> >> The code flow is like this and operates on those fields from above:
-> >>
-> >> util, max <--- sugov_get_util()
-> >> util <--- sugov_iowait_apply()  <--- util, max /* ignore this now */
-> >>
-> >> get_next_freq():
-> >> util <--- map_util_perf() <--- util (1)
-> >> freq <--- map_util_freq() <--- util, max, max_freq (2)
-> >>
-> >>
-> >> At (1) we add +25% util, at (2) we do the conversion to frequency:
-> >> freq = max_freq * util / max
-> >>
-> >> As you can see with the patch we would still end up with bigger
-> >> frequency than max_freq (since it can happen: max < util).
-> >> It's also true currently in mainline, when
-> >> max=1024 and util=1024+256=1280
-> >> I would be similar if we cap max capacity:
-> >> max=800 and util=800+200=1000
-> >
-> > It's not because you end up with a similar value that it's ok. You
-> > can't use one side to compensate for the other one. 1.25 is there to
-> > provide spare cycles to a change in the cpu load (load meaning what is
-> > running on the cpu not load_avg)
->
-> It's different. You've made a hard statement that we are going to break
-> this frequency selected value, while IMO we aren't. It would behave
-> the same. I don't compensate anything, the divider ('max') has changed
-> as well. The patch sets 'sg_cpu->max' not just uses 'max' locally, so
-> it produces lower 'util' but then might have 'max=1024'. It's not the
-> case.
->
-> >
-> >> but then in both cases are multiplied by 'max_freq' in (2)
-> >>
-> >> As you can see this is not the situation that you have described, is it?
-> >> And the transient or non-transient is minor here IMO.
-> >
-> > If max is 512 then util = 640 which is much lower than 1024.
->
-> What scenario is this?
-> Is 1024 the utilization that we might have from the CPU rq?
-> What is the original CPU capacity, 1024?
->
-> >
-> >>
-> >> Secondly, you have mentioned the mitigation in HW and issue between
-> >> instantaneous vs. PELT-one thermal pressure information. This is
-> >> something that I'm stretching my head for long. I'm trying to
-> >> develop this for new Arm FW thermal. You have mentioned:
-> >> 'thermal mitigation is managed by HW at a much higher
-> >> frequency than what Linux can handle' - I would be also more
-> >> precised here: HW or FW? How often the HW can change max freq or
-> >> how often FW can change that? If we don't have those numbers
-> >> than statement: 'a much higher' doesn't help in solving this
-> >
-> > By much higher means that Linux can't react fast enough and should not
-> > try to sync because it's a lost game
->
-> As I said, 'much higher' is not a number to base a design on it.
-
-But that gives you the constraint that you can't expect to be always
-synced with up to date value which is the most important here. This
-means that  cpu_cap -= arch_scale_thermal_pressure(cpu) can be wrong
-just after you computed it and your decision is wrong.
-
-
-> We need real numbers from real platforms. Currently we have two
-> places where the thermal pressure is set:
-> 1) cpufreq_cooling.c [1]
-> 2) Qcom driver [2]
-> (we might have 3rd soon for Arm SCMI+FW)
-
-I don't have details but i have khz in mind
-
->
-> For the 2nd I would like to see numbers. For the 1st one when
-> kernel thermal is used (which supports higher number of platforms
-> comparing to Qcom driver) as it's by design kernel tries to control
-> thermal, so changes are not that frequent.
->
-> As for now, I can see in experiments the 1st is suffering long decay
-> delays and also corner cases with long idle CPUs.
->
-> >
-> >> problem that Xuewen (and others) faces. IMO it's not technical
-> >> argument for blocking the patch and incremental development.
-> >>
-> >> It's about timing, when we talk about thermal pressure signals and
-> >> those two information. For the PELT-one there are also two use cases:
-> >> raising time and decay time (where we're actually increasing the
-> >> visible capacity of the CPU). The decay period is quite long,
-> >> e.g.
-> >> Thermal pressure of 140 is removed, signal should converge to 0 from 140
-> >> in 130ms (90% decayed),
-> >> in 230ms (fully decayed).
-> >> The default kernel code allows to slow down the decay period, which is
-> >> a derivative from current global PELT default setting.
-> >> We can slow it down, but we cannot make it to react faster (BTW I made
-> >> such change to compare experiments). It's not always good to have
-> >> such long delays.
-> >>
-> >> For asymmetric CPUs that I was describing and also Xuewen, where mid
-> >> core might be faster than big, we need this information in RT class.
-> >> Android is such system, so the situation is real (DL is not used there).
-> >> You have questioned this that:
-> >> 'arch_scale_thermal_pressure() must not be used'
-> >> I wouldn't be so sure for the RT change.
-> >> Are you sure about that? Do you have experiments for it? I would
-> >> like to see them. I have run dozen of experiments and measurements
-> >> for this thermal pressure information on a few platforms. How
-> >> they behave on those task placements and what are the thermal
-> >> signal decay delay impacts. I'm still not sure which one is
-> >> best and thus not proposed any changes. But I'll refactor my
-> >> test code and send a patch with trace event for the new
-> >> topology_update_thermal_pressure(), which then allows to compare
-> >> those two designs and nasty timings issues. We would than see
-> >> how often (if 'much higher' is true) platforms set this value.
-> >> Currently, in mainline there are two clients which set this
-> >> value.
-> >>
-> >> I've been investigating this PELT signal ~1-2 year ago and found
-> >> an issue when it's actually updated with delays for the long idle CPU.
-> >> When one CPU was running fast and thermal throttling kicked in, while
-> >> the other was idle, the idle one didn't have recent thermal information,
-> >> but could be picked as a candidate because visible capacity was ~max
-> >> possible - which is wrong because they both share the clock.
-> >> Check the function others_have_blocked() and the design around it.
-> >>
-> >> That's why I'm a bit more careful with statements that one type of
-> >> information is better that other.
-> >>
-> >> Furthermore, check the code in rt_task_fits_capacity(), there is no
-> >> PELT signal from the RT task. There is only uclamp_eff_value() from
-> >> task 'p', which is not PELT information. So all involved variables
-> >> are not PELT, why you recommend the PELT thermal pressure here?
-> >>
-> >> As I said, this patch for the RT class is an incremental step into the
-> >> right direction.
-> >>
-> >>
->
-> You haven't answered my questions, which are about technical details of
-> your recommendations and statements.
->
-> I'm trying to help Xuewen to solve his/her issues with the RT class
-> incrementally. I don't want to push him/her into a deep dark water
-> of PELT signals, to what variable compare them, corner cases when they
-> are (or not) updated or completely not implemented. I'm not even sure
-> if those extra complexities make sense for the RT/DL (since they
-> make some difference on big.mid.little specific platforms but not for
-> the rest).
+--l9flZffgL3dp6D2R--

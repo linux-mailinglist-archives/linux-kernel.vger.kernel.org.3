@@ -2,95 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8409150A714
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5921C50A718
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390760AbiDURaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
+        id S1390764AbiDURbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352322AbiDURaF (ORCPT
+        with ESMTP id S230494AbiDURbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:30:05 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D4B42A33
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:27:14 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:38236)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nhaaG-0075j1-0N; Thu, 21 Apr 2022 11:27:12 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35224 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nhaaE-00CsQK-DO; Thu, 21 Apr 2022 11:27:11 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-References: <20220421150248.667412396@infradead.org>
-        <20220421150655.001952823@infradead.org>
-Date:   Thu, 21 Apr 2022 12:26:44 -0500
-In-Reply-To: <20220421150655.001952823@infradead.org> (Peter Zijlstra's
-        message of "Thu, 21 Apr 2022 17:02:53 +0200")
-Message-ID: <878rrys5yj.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 21 Apr 2022 13:31:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9F0C443CB
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:28:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650562107;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C2uOipi3GKnpM62yNx2qLO8Kw4BDhZHaF3HCYYZ6xuI=;
+        b=OIdPswRC36WWPIzCIPr5AtdFYC4T8/w+g2KXunJhSvUd9kA8fOigUv9jjZSn4mzwFk9O/i
+        Fy4KDwsBDlordBv9DzxiXwh8jovrULaZkTOOSbzZxafpOIRF9K9tIl/6uCtyRT87gbtFrS
+        i5K8obDIBhz9B8ViwQOCjj3jBtbCOa8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-424-osLykL0TPRmq8Lq9ucUMbQ-1; Thu, 21 Apr 2022 13:28:22 -0400
+X-MC-Unique: osLykL0TPRmq8Lq9ucUMbQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B68981C07386;
+        Thu, 21 Apr 2022 17:28:21 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B788C28126;
+        Thu, 21 Apr 2022 17:28:21 +0000 (UTC)
+Message-ID: <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
+Date:   Thu, 21 Apr 2022 13:28:20 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nhaaE-00CsQK-DO;;;mid=<878rrys5yj.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/eM4M3vABt0zGjlkIS7dSJhVL77s2rIZ4=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] mm/memcg: Free percpu stats memory of dying memcg's
+Content-Language: en-US
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Muchun Song <songmuchun@bytedance.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <20220421145845.1044652-1-longman@redhat.com>
+ <YmGHYNuAp8957ouq@carbon>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YmGHYNuAp8957ouq@carbon>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Peter Zijlstra <peterz@infradead.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 354 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (3.1%), b_tie_ro: 9 (2.7%), parse: 0.78 (0.2%),
-         extract_message_metadata: 11 (3.0%), get_uri_detail_list: 0.68 (0.2%),
-         tests_pri_-1000: 11 (3.0%), tests_pri_-950: 1.24 (0.4%),
-        tests_pri_-900: 1.00 (0.3%), tests_pri_-90: 116 (32.9%), check_bayes:
-        113 (31.8%), b_tokenize: 5.0 (1.4%), b_tok_get_all: 4.9 (1.4%),
-        b_comp_prob: 1.77 (0.5%), b_tok_touch_all: 98 (27.5%), b_finish: 0.86
-        (0.2%), tests_pri_0: 190 (53.7%), check_dkim_signature: 0.48 (0.1%),
-        check_dkim_adsp: 2.8 (0.8%), poll_dns_idle: 0.46 (0.1%), tests_pri_10:
-        2.0 (0.6%), tests_pri_500: 7 (2.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 5/5] freezer,sched: Rewrite core freezer logic
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
 
-> --- a/kernel/ptrace.c
-> +++ b/kernel/ptrace.c
-> @@ -288,7 +288,7 @@ static int ptrace_check_attach(struct ta
->  	}
->  	__set_current_state(TASK_RUNNING);
->  
-> -	if (!wait_task_inactive(child, TASK_TRACED) ||
-> +	if (!wait_task_inactive(child, TASK_TRACED|TASK_FREEZABLE) ||
->  	    !ptrace_freeze_traced(child))
->  		return -ESRCH;
+On 4/21/22 12:33, Roman Gushchin wrote:
+> On Thu, Apr 21, 2022 at 10:58:45AM -0400, Waiman Long wrote:
+>> For systems with large number of CPUs, the majority of the memory
+>> consumed by the mem_cgroup structure is actually the percpu stats
+>> memory. When a large number of memory cgroups are continuously created
+>> and destroyed (like in a container host), it is possible that more
+>> and more mem_cgroup structures remained in the dying state holding up
+>> increasing amount of percpu memory.
+>>
+>> We can't free up the memory of the dying mem_cgroup structure due to
+>> active references in some other places. However, the percpu stats memory
+>> allocated to that mem_cgroup is a different story.
+>>
+>> This patch adds a new percpu_stats_disabled variable to keep track of
+>> the state of the percpu stats memory. If the variable is set, percpu
+>> stats update will be disabled for that particular memcg. All the stats
+>> update will be forward to its parent instead. Reading of the its percpu
+>> stats will return 0.
+>>
+>> The flushing and freeing of the percpu stats memory is a multi-step
+>> process. The percpu_stats_disabled variable is set when the memcg is
+>> being set to offline state. After a grace period with the help of RCU,
+>> the percpu stats data are flushed and then freed.
+>>
+>> This will greatly reduce the amount of memory held up by dying memory
+>> cgroups.
+>>
+>> By running a simple management tool for container 2000 times per test
+>> run, below are the results of increases of percpu memory (as reported
+>> in /proc/meminfo) and nr_dying_descendants in root's cgroup.stat.
+> Hi Waiman!
+>
+> I've been proposing the same idea some time ago:
+> https://lore.kernel.org/all/20190312223404.28665-7-guro@fb.com/T/ .
+>
+> However I dropped it with the thinking that with many other fixes
+> preventing the accumulation of the dying cgroups it's not worth the added
+> complexity and a potential cpu overhead.
+>
+> I think it ultimately comes to the number of dying cgroups. If it's low,
+> memory savings are not worth the cpu overhead. If it's high, they are.
+> I hope long-term to drive it down significantly (with lru-pages reparenting
+> being the first major milestone), but it might take a while.
+>
+> I don't have a strong opinion either way, just want to dump my thoughts
+> on this.
 
-Do we mind that this is going to fail if the child is frozen
-during ptrace_check_attach?
+I have quite a number of customer cases complaining about increasing 
+percpu memory usages. The number of dying memcg's can go to tens of 
+thousands. From my own investigation, I believe that those dying memcg's 
+are not freed because they are pinned down by references in the page 
+structure. I am aware that we support the use of objcg in the page 
+structure which will allow easy reparenting, but most pages don't do 
+that and it is not easy to do this conversion and it may take quite a 
+while to do that.
 
-I think to avoid that we need to safely get this to
-wait_task_inactive(child, 0), like the coredump code uses.
+In term of overhead, it is mostly one more memory read from the 
+mem_cgroup structure in the update path. I don't expect there will be 
+that many updates when the memcg is in an offline state as updates will 
+be slower in this case. Freeing the dying memcg will take a bit longer 
+though, but its impact on the overall system performance should still be 
+negligible.
 
-I would like to say that we can do without the wait_task_inactive,
-but it looks like it is necessary to ensure that all of the userspace
-registers are saved where the tracer can get at them.
+I am also thinking about using a static_key for turning it on only for 
+systems with more than, say, 20 cpus as the percpu memory overhead 
+increases linearly with the number of possible cpus.
 
-Eric
+Any other suggestions and improvements are welcome.
+
+Cheers,
+Longman
+

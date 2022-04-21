@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4454550A4C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D75C350A4D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390335AbiDUP7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
+        id S1390388AbiDUP7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232456AbiDUP7O (ORCPT
+        with ESMTP id S1390355AbiDUP71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:59:14 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78DB40E70
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:56:23 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id x80so5407178pfc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:56:23 -0700 (PDT)
+        Thu, 21 Apr 2022 11:59:27 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA3B41339
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:56:28 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id bg25so2763806wmb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:56:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Tb6I/vNw4MkH6cXJACmThyQFIFSwo0v3WzOA2XSKmSs=;
-        b=hkeImdbTeSMXSMeckvO9JBqgK+ypyTZt/okKK7TMyp+Jj42kGAhZ/7QBcpqgOpnqZj
-         gGCX5b138SAqJNu67mSEPBS6HjBSc3NUwwii2N9q3VIj1j6hfggpfT0NzCG9RSRX5XzX
-         nem4EvlLHjThukcbQCBeuQSpwwkuANGAiKT4jdpMxO+QaID+CZCjyfdsqCFNkXN894SL
-         ibNTaINtlSpFjl1GBaz7n+xDgttL7ngW7o2eXndy6RqXfSveGmsHbAN72F463+yh9jhQ
-         LwpxF/i4bpdWG8LRcg6N36V32wZxeba+ZnbpooMdNjNU398VMLDoMlcqVKTjzjuxKwPh
-         7KWg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=hg5+t1tI5/VExu379t4FoAPQBxLcwwkKr34fdizzuVw=;
+        b=VzskJkCcDCQbeuv/k5llpkz4MigKpI5bifyH/1Z3VnG7fM1Qi3Ou/M3Okn85+05OnL
+         u/Osp0MQGZ9KhfU4ZrfCJ8/FW9W0Vw3Erk41E5XcOvTxnVJ+x9zpAwYdG2kSveNKHp9V
+         kuzIAQ1eRoGPj4JWwccHQ8SaL08bwgBtbCjkXbMI1UgaGxzL/SWoDwD6aUKJbBuQoD9v
+         vMD/mUg8CoZse6tkH/vG4Z6vBFQfKnMzYC0PKbRFWV7sEO2jRDui1/VFxUv64SOzH8Mz
+         KLKOzwHlJ3r4bGoxiPmXzH8lqqUZnq9Rsyp0Mh9mFDY0NHl+bB7IP/diNoHndg2LyY0w
+         /zdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Tb6I/vNw4MkH6cXJACmThyQFIFSwo0v3WzOA2XSKmSs=;
-        b=I88Q4OZJyBG/zmQZ7NN63Nu/WO98hG5VYTXWYC7lUn4CXrwRT3X3582y2WmQ2OJr69
-         +rFD7qsFXbcOw1i2FledxWKB1pXkLVV+TxMztTdRLdnCEQc7QosUi08cXycgxnnfBiYa
-         D/AY25pBk5F/aJuszYjREfnKxOaW9R+JSv5EsgICYTUMne5FwYAC5y3cdBeZONZ0RUFm
-         0Wgf7a4rJA+NXAC6YX5iipQbGShdWKEHjqNonkXBO03UzxxujmmcmFuUvfujR7GoKEL4
-         Xe7aC8arfbvJv4vJNiHuRjOdHj4ZCJA+0a6Ip2PYRtOlzSuMj8i1qq1m6GG4ERWeeVz0
-         YA7w==
-X-Gm-Message-State: AOAM531gv5QocmvjLkumWcVs/Ik/wgq7iPOXWdgMY7WaVw+1GNVOKHp9
-        8Xaf2+tLMrHBaafcsyIV2mtLREw3mHHe06wHFM+Giw==
-X-Google-Smtp-Source: ABdhPJzl3m2COqyb0vmSqE7CigU3O3oCUJAkex/AAQkQPfRDhlCItCldOZZiRmn4K+gJ/4u1hsqVXRz0RihG4QjuGGM=
-X-Received: by 2002:a63:9502:0:b0:386:3916:ca8e with SMTP id
- p2-20020a639502000000b003863916ca8emr78805pgd.357.1650556582965; Thu, 21 Apr
- 2022 08:56:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=hg5+t1tI5/VExu379t4FoAPQBxLcwwkKr34fdizzuVw=;
+        b=Ez8PUIjtIfNyuhfdKQ6XQEpw6peHc6FvVN1XCBOYNcmm3oDIitiWt1TgPcxLIeayQs
+         t2Vn+LfTlmuuMUmaR18HUmwLOXijxDdf4YVIArtHq0oV4T5UJaAr7q8NKTwE0RRDvDPz
+         xEErTL0/jO4/M21DUnoVu7YY/SK7RqJuJgS7kkDcc9Fnn/1SGp56wCr2p3QmV+cGxKvz
+         tIOkUWwdc2tukMkG5kNOlZhyGAwG2LKeOWHxDtE8E9Fl4GmrhJ0GqS3ka2YuKiK5xfLW
+         6M1l2e4OeGjS0xViQv/GzDHeOowjhUO8sTBwaE/llF2zzwwmv1L5sFzTSUjrulUPH+29
+         01qA==
+X-Gm-Message-State: AOAM532WMdouKyfULG097M5TEB4AIL7UCqOJnuOADtNpx5dPVHAv02VA
+        XENCaSQomo/d0JjgRZ4DUQIeDw==
+X-Google-Smtp-Source: ABdhPJxfH6CtSqSm5CaL6PkezTdrkLgN3B7QyDME5WxDMEF1GYNxMeqXUldfWl7CVfsIIILdrWSOQQ==
+X-Received: by 2002:a05:600c:1d08:b0:38f:fb9d:5758 with SMTP id l8-20020a05600c1d0800b0038ffb9d5758mr24852wms.89.1650556587103;
+        Thu, 21 Apr 2022 08:56:27 -0700 (PDT)
+Received: from localhost ([2a01:cb19:85e6:1900:e19f:c42c:d783:89c1])
+        by smtp.gmail.com with ESMTPSA id o10-20020a5d47ca000000b0020a992ce354sm3020151wrc.76.2022.04.21.08.56.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 08:56:26 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Fabien Parent <fparent@baylibre.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Fabien Parent <fparent@baylibre.com>, linux-input@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] Input: mtk-pmic-keys: rename platform data struct
+In-Reply-To: <20220415153629.1817202-5-fparent@baylibre.com>
+References: <20220415153629.1817202-1-fparent@baylibre.com>
+ <20220415153629.1817202-5-fparent@baylibre.com>
+Date:   Thu, 21 Apr 2022 17:56:25 +0200
+Message-ID: <87ilr2zaza.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <46c1c59e-1368-620d-e57a-f35c2c82084d@linux.dev> <55605876-d05a-8be3-a6ae-ec26de9ee178@openvz.org>
-In-Reply-To: <55605876-d05a-8be3-a6ae-ec26de9ee178@openvz.org>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 21 Apr 2022 08:56:12 -0700
-Message-ID: <CALvZod47PARcupR4P41p5XJRfCaTqSuy-cfXs7Ky9=-aJQuoFA@mail.gmail.com>
-Subject: Re: [PATCH memcg RFC] net: set proper memcg for net_init hooks allocations
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,63 +72,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 16, 2022 at 11:39 PM Vasily Averin <vvs@openvz.org> wrote:
->
-> __register_pernet_operations() executes init hook of registered
-> pernet_operation structure in all existing net namespaces.
->
-> Typically, these hooks are called by a process associated with
-> the specified net namespace, and all __GFP_ACCOUNTING marked
-> allocation are accounted for corresponding container/memcg.
->
-> However __register_pernet_operations() calls the hooks in the same
-> context, and as a result all marked allocations are accounted
-> to one memcg for all processed net namespaces.
->
-> This patch adjusts active memcg for each net namespace and helps
-> to account memory allocated inside ops_init() into the proper memcg.
->
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
-> ---
-> Dear Vlastimil, Roman,
-> I'm not sure that memcg is used correctly here,
-> is it perhaps some additional locking required?
-> ---
->  net/core/net_namespace.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
-> index a5b5bb99c644..171c6e0b2337 100644
-> --- a/net/core/net_namespace.c
-> +++ b/net/core/net_namespace.c
-> @@ -26,6 +26,7 @@
->  #include <net/net_namespace.h>
->  #include <net/netns/generic.h>
->
-> +#include <linux/sched/mm.h>
->  /*
->   *     Our network namespace constructor/destructor lists
->   */
-> @@ -1147,7 +1148,13 @@ static int __register_pernet_operations(struct list_head *list,
->                  * setup_net() and cleanup_net() are not possible.
->                  */
->                 for_each_net(net) {
-> +                       struct mem_cgroup *old, *memcg = NULL;
-> +#ifdef CONFIG_MEMCG
-> +                       memcg = (net == &init_net) ? root_mem_cgroup : mem_cgroup_from_obj(net);
+On ven., avril 15, 2022 at 17:36, Fabien Parent <fparent@baylibre.com> wrote:
 
-memcg from obj is unstable, so you need a reference on memcg. You can
-introduce get_mem_cgroup_from_kmem() which works for both
-MEMCG_DATA_OBJCGS and MEMCG_DATA_KMEM. For uncharged objects (like
-init_net) it should return NULL.
-
-> +#endif
-> +                       old = set_active_memcg(memcg);
->                         error = ops_init(ops, net);
-> +                       set_active_memcg(old);
->                         if (error)
->                                 goto out_undo;
->                         list_add_tail(&net->exit_list, &net_exit_list);
-> --
-> 2.31.1
+> Rename the struct that is given to the .data field of the of_device_id
+> entries to reflect that this structure will not only contain register
+> definitions but also other platform data.
 >
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+
+Tested-by: Mattijs Korpershoek <mkorpershoek@baylibre.com> # on mt8183-pumpkin 
+
+> ---
+>  drivers/input/keyboard/mtk-pmic-keys.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
+> index c31ab4368388..a0da644fe93d 100644
+> --- a/drivers/input/keyboard/mtk-pmic-keys.c
+> +++ b/drivers/input/keyboard/mtk-pmic-keys.c
+> @@ -50,12 +50,12 @@ struct mtk_pmic_keys_regs {
+>  	.intsel_mask		= _intsel_mask,		\
+>  }
+>  
+> -struct mtk_pmic_regs {
+> +struct mtk_pmic_keys_pdata {
+>  	const struct mtk_pmic_keys_regs keys_regs[MTK_PMIC_MAX_KEY_COUNT];
+>  	u32 pmic_rst_reg;
+>  };
+>  
+> -static const struct mtk_pmic_regs mt6397_regs = {
+> +static const struct mtk_pmic_keys_pdata mt6397_pdata = {
+>  	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
+>  		MTK_PMIC_KEYS_REGS(MT6397_CHRSTATUS,
+>  		0x8, MT6397_INT_RSV, 0x10),
+> @@ -65,7 +65,7 @@ static const struct mtk_pmic_regs mt6397_regs = {
+>  	.pmic_rst_reg = MT6397_TOP_RST_MISC,
+>  };
+>  
+> -static const struct mtk_pmic_regs mt6323_regs = {
+> +static const struct mtk_pmic_keys_pdata mt6323_pdata = {
+>  	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
+>  		MTK_PMIC_KEYS_REGS(MT6323_CHRSTATUS,
+>  		0x2, MT6323_INT_MISC_CON, 0x10),
+> @@ -75,7 +75,7 @@ static const struct mtk_pmic_regs mt6323_regs = {
+>  	.pmic_rst_reg = MT6323_TOP_RST_MISC,
+>  };
+>  
+> -static const struct mtk_pmic_regs mt6358_regs = {
+> +static const struct mtk_pmic_keys_pdata mt6358_pdata = {
+>  	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
+>  		MTK_PMIC_KEYS_REGS(MT6358_TOPSTATUS,
+>  				   0x2, MT6358_PSC_TOP_INT_CON0, 0x5),
+> @@ -255,13 +255,13 @@ static SIMPLE_DEV_PM_OPS(mtk_pmic_keys_pm_ops, mtk_pmic_keys_suspend,
+>  static const struct of_device_id of_mtk_pmic_keys_match_tbl[] = {
+>  	{
+>  		.compatible = "mediatek,mt6397-keys",
+> -		.data = &mt6397_regs,
+> +		.data = &mt6397_pdata,
+>  	}, {
+>  		.compatible = "mediatek,mt6323-keys",
+> -		.data = &mt6323_regs,
+> +		.data = &mt6323_pdata,
+>  	}, {
+>  		.compatible = "mediatek,mt6358-keys",
+> -		.data = &mt6358_regs,
+> +		.data = &mt6358_pdata,
+>  	}, {
+>  		/* sentinel */
+>  	}
+> @@ -277,7 +277,7 @@ static int mtk_pmic_keys_probe(struct platform_device *pdev)
+>  	static const char *const irqnames[] = { "powerkey", "homekey" };
+>  	static const char *const irqnames_r[] = { "powerkey_r", "homekey_r" };
+>  	struct mtk_pmic_keys *keys;
+> -	const struct mtk_pmic_regs *mtk_pmic_regs;
+> +	const struct mtk_pmic_keys_pdata *mtk_pmic_keys_pdata;
+>  	struct input_dev *input_dev;
+>  	const struct of_device_id *of_id =
+>  		of_match_device(of_mtk_pmic_keys_match_tbl, &pdev->dev);
+> @@ -288,7 +288,7 @@ static int mtk_pmic_keys_probe(struct platform_device *pdev)
+>  
+>  	keys->dev = &pdev->dev;
+>  	keys->regmap = pmic_chip->regmap;
+> -	mtk_pmic_regs = of_id->data;
+> +	mtk_pmic_keys_pdata = of_id->data;
+>  
+>  	keys->input_dev = input_dev = devm_input_allocate_device(keys->dev);
+>  	if (!input_dev) {
+> @@ -310,7 +310,7 @@ static int mtk_pmic_keys_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	for_each_child_of_node(node, child) {
+> -		keys->keys[index].regs = &mtk_pmic_regs->keys_regs[index];
+> +		keys->keys[index].regs = &mtk_pmic_keys_pdata->keys_regs[index];
+>  
+>  		keys->keys[index].irq =
+>  			platform_get_irq_byname(pdev, irqnames[index]);
+> @@ -358,7 +358,7 @@ static int mtk_pmic_keys_probe(struct platform_device *pdev)
+>  		return error;
+>  	}
+>  
+> -	mtk_pmic_keys_lp_reset_setup(keys, mtk_pmic_regs->pmic_rst_reg);
+> +	mtk_pmic_keys_lp_reset_setup(keys, mtk_pmic_keys_pdata->pmic_rst_reg);
+>  
+>  	platform_set_drvdata(pdev, keys);
+>  
+> -- 
+> 2.35.2

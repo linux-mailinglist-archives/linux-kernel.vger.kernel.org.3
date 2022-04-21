@@ -2,54 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713E6509847
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26FC509896
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiDUGzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S1385297AbiDUGyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 02:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386045AbiDUGxz (ORCPT
+        with ESMTP id S1386059AbiDUGyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:53:55 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE43E11A21;
-        Wed, 20 Apr 2022 23:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=xIQ4+cKb0jI15c9feynfrvB8SD
-        n3VRownO+qLC3mcxOyePGnmADH5PAM8LWvtGusg1uq1sM5uP57WiYl/fD2IKJHIzl7kVIzST62/VA
-        gby+H5HwXNPnTpZ9/FzG5eMvUnTv/yBf7ynjDH318eknHlsUn4qjLYEqW+ixS7Mbq6mC69b+R5tpG
-        1ciFH6LG72HOiGjQZBDdKWGR+3oOAeluqwuGF3No46q0xbOJX2kDbch8dl3//S0tB7kpceriWBZSE
-        kr5zjd/cL3A/n3l4N2PvDX42onKn5ZUgdQmWKXpWaTaaGZAV9sjoTdvCKSweDBiFKB4caAc48sjLE
-        0tiQM6Ow==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhQeU-00Brh3-6L; Thu, 21 Apr 2022 06:50:54 +0000
-Date:   Wed, 20 Apr 2022 23:50:54 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     dan.j.williams@intel.com, bp@alien8.de, hch@infradead.org,
-        dave.hansen@intel.com, peterz@infradead.org, luto@kernel.org,
-        david@fromorbit.com, djwong@kernel.org,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        vishal.l.verma@intel.com, dave.jiang@intel.com, agk@redhat.com,
-        snitzer@redhat.com, dm-devel@redhat.com, ira.weiny@intel.com,
-        willy@infradead.org, vgoyal@redhat.com
-Subject: Re: [PATCH v8 2/7] x86/mce: relocate set{clear}_mce_nospec()
- functions
-Message-ID: <YmD+zgFf9Vih52gZ@infradead.org>
-References: <20220420020435.90326-1-jane.chu@oracle.com>
- <20220420020435.90326-3-jane.chu@oracle.com>
+        Thu, 21 Apr 2022 02:54:00 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1ED8EB37;
+        Wed, 20 Apr 2022 23:51:12 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 704FC8106;
+        Thu, 21 Apr 2022 06:48:20 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 09:51:10 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Puranjay Mohan <p-mohan@ti.com>
+Cc:     linux-kernel@vger.kernel.org, nm@ti.com,
+        devicetree@vger.kernel.org, grygorii.strashko@ti.com,
+        vigneshr@ti.com, mathieu.poirier@linaro.org, kishon@ti.com,
+        linux-remoteproc@vger.kernel.org, bjorn.andersson@linaro.org,
+        rogerq@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        ssantosh@kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 5/6] soc: ti: pruss: Add helper function to enable OCP
+ master ports
+Message-ID: <YmD+3svXUIHiX6DJ@atomide.com>
+References: <20220418123004.9332-1-p-mohan@ti.com>
+ <20220418123004.9332-6-p-mohan@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420020435.90326-3-jane.chu@oracle.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20220418123004.9332-6-p-mohan@ti.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,6 +44,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+* Puranjay Mohan <p-mohan@ti.com> [220418 12:35]:
+> From: Suman Anna <s-anna@ti.com>
+> +/**
+> + * pruss_cfg_ocp_master_ports() - configure PRUSS OCP master ports
+> + * @pruss: the pruss instance handle
+> + * @enable: set to true for enabling or false for disabling the OCP master ports
+> + *
+> + * This function programs the PRUSS_SYSCFG.STANDBY_INIT bit either to enable or
+> + * disable the OCP master ports (applicable only on SoCs using OCP interconnect
+> + * like the OMAP family). Clearing the bit achieves dual functionalities - one
+> + * is to deassert the MStandby signal to the device PRCM, and the other is to
+> + * enable OCP master ports to allow accesses outside of the PRU-ICSS. The
+> + * function has to wait for the PRCM to acknowledge through the monitoring of
+> + * the PRUSS_SYSCFG.SUB_MWAIT bit when enabling master ports. Setting the bit
+> + * disables the master access, and also signals the PRCM that the PRUSS is ready
+> + * for Standby.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Looks OK to me, some comments regarding runtime PM though for future patching
+though.
+
+Eventually we may want to handle this in drivers/bus/ti-sysc.c so it gets toggled
+based on runtime PM. The PRUSS sysc register seems to be just a new variant of
+sysc_regbits_omap4_simple with the standby and status bits added.
+
+If using runtime PM for the PRUSS instance is not suitable for managing the
+standby and status bits, then some comments should be added describing why
+finer grained control is needed for these bits beyond runtime PM.
+
+As far as I'm concerned, these can be done in separate changes, no need to update
+this patch.
+
+Regards,
+
+Tony

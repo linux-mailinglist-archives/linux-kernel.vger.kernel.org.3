@@ -2,127 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA895098C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4445098BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385630AbiDUHMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S1385638AbiDUHNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385605AbiDUHMx (ORCPT
+        with ESMTP id S1385605AbiDUHNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:12:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A957E13F31
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:10:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650525002;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=63ViWfLlmaj/DhjRP9oFB/1KLHxLMeQrGcqkKvT3aeA=;
-        b=QcxqVShYQymURTOj3Hw/XPcWdNd3zsKfvzCfVN7fZA6cf5LBfoieZ9DsVjMf5JHZoq+Ozr
-        CRsLRk/pU+wtzp1PL+3RFBhtagBHOdhGYu+v50nlQU7ShWlUp7fev2Jq/MlulPpnE0zVUl
-        vDrB6JWpeUqj5EPTR3iaow9zNVqoJUM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-368-l4XnEuEXOKCO4ZpfkwJbVg-1; Thu, 21 Apr 2022 03:10:01 -0400
-X-MC-Unique: l4XnEuEXOKCO4ZpfkwJbVg-1
-Received: by mail-wr1-f71.google.com with SMTP id i64-20020adf90c6000000b00203f2b5e090so824471wri.9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:10:00 -0700 (PDT)
+        Thu, 21 Apr 2022 03:13:07 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A30164D3;
+        Thu, 21 Apr 2022 00:10:18 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 21so5314315edv.1;
+        Thu, 21 Apr 2022 00:10:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nbjLblII7Z2uoGDQq4GfVdmFvR2bagmypp3+70OIo8I=;
+        b=P6UpypImljS5OSfnMO9hdrzhulrB9Of8rz9z+jnrnUrobOmeQNpmMMtZIbS8XGleeC
+         KanXbo8DdrB/5L5BYPR4FkBv9hSe3y81W9vKpxP4hUwxP1H+SsZO7e4E/taDSSs6AJw3
+         NUp9eI5zLVOWaYtsZd7a6jShDZKODICVUm82gOzUKKgDdi8OKYJEWireg+gmLrEKoVko
+         3Qx6A/V5Ewcv9tIsihoVIynQFQHMhkbLmhu7T7p93DIVy4htGM3Q1sJLkMcuQLT8D3L1
+         xlxUPPZQgxnX7opM8A60mRBREcfxBgKfgcWMb7Rj7coziz0JY0ldoIwNVS4WlLhncyBl
+         rt7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=63ViWfLlmaj/DhjRP9oFB/1KLHxLMeQrGcqkKvT3aeA=;
-        b=XeUuiwgOE4SBpn7vQWuHhoO17OUaFAODQwvm5qSlDSm8d2Ayb93PylBwh2C3lmgnvX
-         BrG9OG90JDfM5jsmHZFqYYKpJFbv/KyNIAkDhgugIAeeQP3f9vGqw04QVQ9kLCR10j+X
-         pLABQ/HgvwSvRV3b/IUrX/pGBdcA+2jQyq/cbcL0I4xhsPQ0l/GFzZ6D3BccghueL8ur
-         TDd7K/azqFiWylTI43cOOIV52v5xyAqNqDti70yikM9NKYl7vYjiRDkTjMmqj0mWBWf2
-         tfcs6AKrfiGnrW88sDy2Q4EpvqI2QT+eGnR/XKeHQUPaOdTjGbRjqGXhc6JnPalo9ueL
-         uWBA==
-X-Gm-Message-State: AOAM5305BM0lWine7Um6OQZ58+nLWO6GYZwAejP+v+GrGRyOfU83DwVH
-        6A+m2r4M8OErhNYwT8B8EdQc/skklbu0zT9cv2ars/9A3YL+aeJTX1eh54IpqcpdKmA5oRmOe12
-        IH+T/5MxvFZnvQKV4bKfglqXD
-X-Received: by 2002:a05:600c:34c5:b0:38f:fbcb:e4d with SMTP id d5-20020a05600c34c500b0038ffbcb0e4dmr7147572wmq.174.1650524999947;
-        Thu, 21 Apr 2022 00:09:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxXav5e1L/ckc2V1R7UYJ+Xe1T+TSkgXnebYAZ2ub09jZihdAfDOzhB8LCRP40IxAf8HiDmag==
-X-Received: by 2002:a05:600c:34c5:b0:38f:fbcb:e4d with SMTP id d5-20020a05600c34c500b0038ffbcb0e4dmr7147555wmq.174.1650524999717;
-        Thu, 21 Apr 2022 00:09:59 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:de00:711b:76af:b335:9b70? (p200300cbc702de00711b76afb3359b70.dip0.t-ipconnect.de. [2003:cb:c702:de00:711b:76af:b335:9b70])
-        by smtp.gmail.com with ESMTPSA id v2-20020adf8b42000000b0020aa790a258sm1628401wra.8.2022.04.21.00.09.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 00:09:59 -0700 (PDT)
-Message-ID: <d46accec-28f7-d678-b475-c4402bba8211@redhat.com>
-Date:   Thu, 21 Apr 2022 09:09:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 3/3] memblock tests: remove extra column of spaces in
- block comment
-Content-Language: en-US
-To:     Rebecca Mckeever <remckee0@gmail.com>, outreachy@lists.linux.dev
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nbjLblII7Z2uoGDQq4GfVdmFvR2bagmypp3+70OIo8I=;
+        b=d3YeorkaxuIJ5xK1lZKbR0qy7m0uNEZTFCzVe9PSD7i4DwcnOyOynp47ks9xA8czSr
+         SKk2uKki5NaTCDb6pTbjZy3Eqvyt/9jB4CEC+gXv6lahhM9LtFUr0rPUAVmnjfDONz0n
+         O+lmg1Y9AKBp6r4/MEpHPEbz1EjMM0HTBH6CxwQgW7U9wBhTe4SyASUD5b9EFC4ZwOj+
+         4m24uHcSajipRX9oUMdZ4C918ATJoR/M/vU4YbInsgMhz+m1E+WVTgM0+j8BdOs9rZfs
+         P/fAtxd5Qx87swlg5Zvbfwnv81mZ5KpnNlF+GtyFfGg4agUplwUK+CqA1fLP3mruS7La
+         b7Cg==
+X-Gm-Message-State: AOAM532oDeCPxTd88hCKv5T5K/2tiiPApeV++Iq2H1245enR4+DAZ+gN
+        gl2w6I5HtJG3bS4Fd99l8kE=
+X-Google-Smtp-Source: ABdhPJzr84nRJtm+qBzUEfqcugaiD6jjrathMDD2cdUzX0mdEOEFkYF92L6clSwrVyD+XYRwdQG7kA==
+X-Received: by 2002:a05:6402:3592:b0:423:d71e:41dc with SMTP id y18-20020a056402359200b00423d71e41dcmr25069151edc.402.1650525017140;
+        Thu, 21 Apr 2022 00:10:17 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id n25-20020a1709062bd900b006e8766b7907sm7499660ejg.223.2022.04.21.00.10.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 00:10:16 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>,
+        Andreas Kemnade <andreas@kemnade.info>
+Cc:     Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Sandy Huang <hjc@rock-chips.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org,
+        Alistair Francis <alistair@alistair23.me>,
+        =?utf-8?B?T25kxZllag==?= Jirman <x@xff.cz>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Liang Chen <cl@rock-chips.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-References: <cover.1650452552.git.remckee0@gmail.com>
- <663c930475c3c0a32965024c1094d3288629a3af.1650452552.git.remckee0@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <663c930475c3c0a32965024c1094d3288629a3af.1650452552.git.remckee0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [RFC PATCH 00/16] drm/rockchip: Rockchip EBC ("E-Book Controller") display driver
+Date:   Thu, 21 Apr 2022 09:10:15 +0200
+Message-ID: <1790161.aHo8FjPgqx@archbook>
+In-Reply-To: <20220421084338.084c4d6e@aktux>
+References: <20220413221916.50995-1-samuel@sholland.org> <20220421084338.084c4d6e@aktux>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.04.22 13:19, Rebecca Mckeever wrote:
-> Remove extra space at the beginning of each line in block comment
-> for consistency and to conform to Linux kernel coding style.
+On Donnerstag, 21. April 2022 08:43:38 CEST Andreas Kemnade wrote:
+> On Wed, 13 Apr 2022 17:19:00 -0500
+> Samuel Holland <samuel@sholland.org> wrote:
+> > Blitting/Blending in Software
+> > =============================
+> > There are multiple layers to this topic (pun slightly intended):
+> >  1) Today's userspace does not expect a grayscale framebuffer.
+> >     Currently, the driver advertises XRGB8888 and converts to Y4
+> >     in software. This seems to match other drivers (e.g. repaper).
+> > 
+> >  2) Ignoring what userspace "wants", the closest existing format is
+> >     DRM_FORMAT_R8. Geert sent a series[4] adding DRM_FORMAT_R1 through
+> >     DRM_FORMAT_R4 (patch 9), which I believe are the "correct" formats
+> >     to use.
+> >
+> hmm R=red? That sounds strange. I am unsure whether doing things with
+> lower bit depths actually really helps. 
+
+Hi,
+
+for single-component formats, the name of the component plays
+practically no role. Even if said component was really red,
+it makes little difference to either side.
+
+For example, the OpenGL straight up refers to all single component
+image formats as only using the red component:
+
+	OpenGL only allows "R", "RG", "RGB", or "RGBA"; other
+	combinations are not allowed as internal image formats.
+
+from https://www.khronos.org/opengl/wiki/Image_Format
+
+In truth it would of course be nice if the world agreed on
+not making the name of data structures imply some way they
+are to be processed, but humanity hasn't gotten there yet.
+
 > 
-> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> ---
->  tools/testing/memblock/tests/basic_api.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+> Regards,
+> Andreas
 > 
-> diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
-> index 834d8705ff8a..05448a25f1f9 100644
-> --- a/tools/testing/memblock/tests/basic_api.c
-> +++ b/tools/testing/memblock/tests/basic_api.c
-> @@ -303,12 +303,12 @@ static int memblock_add_checks(void)
->  	return 0;
->  }
->  
-> - /*
-> -  * A simple test that marks a memory block of a specified base address
-> -  * and size as reserved and to the collection of reserved memory regions
-> -  * (memblock.reserved). Expect to create a new entry. The region counter
-> -  * and total memory size are updated.
-> -  */
-> +/*
-> + * A simple test that marks a memory block of a specified base address
-> + * and size as reserved and to the collection of reserved memory regions
-> + * (memblock.reserved). Expect to create a new entry. The region counter
-> + * and total memory size are updated.
-> + */
->  static int memblock_reserve_simple_check(void)
->  {
->  	struct memblock_region *rgn;
 
-I'd pull this patch to the front, so you don't end up modifying a wrong
-style in patch #2. You could also just squash this patch into patch #2
-and mention it in the patch description.
+Regards,
+Nicolas Frattaroli
 
--- 
-Thanks,
-
-David / dhildenb
 

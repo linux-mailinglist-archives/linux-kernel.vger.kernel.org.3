@@ -2,65 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D149350AB8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 00:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA14550AB92
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 00:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442507AbiDUWgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 18:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S1442521AbiDUWkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 18:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241336AbiDUWgo (ORCPT
+        with ESMTP id S241336AbiDUWkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 18:36:44 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4665043495
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 15:33:53 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id s14so6825634plk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 15:33:53 -0700 (PDT)
+        Thu, 21 Apr 2022 18:40:40 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8493D43EE4;
+        Thu, 21 Apr 2022 15:37:49 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id s14so6842346plk.8;
+        Thu, 21 Apr 2022 15:37:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=5Ny4/EAYbX3qfaEmGZfS7iv79Oo6Wb3O6/res/i66KY=;
-        b=mE0kCLZI0kFLBx8c/g9czQlmgWMFzkI8+4qgcblshEBoOrmfi6zBF5aj5oZ88D2g6I
-         huvFmSZ9lGsNnnVgf1tJLKEfiucz47ZEQ+/QY4LxUNej5TFqQU9nrN+ZL2lUC7GimbCo
-         0hD4G3OecR4Msu1Y3skUPGYm5I6+sMtpIoVpmh5kCt/N1nszRHyh2vn/VgyuZl8gV6RU
-         Uv3lEEh27DXWc+45UqQAmo0tdgM1uHHjB4N5mN5gupSHOjxT0rXs5/mo5mS2Xbb/inSM
-         +ypnxr7LN0a+3sG6fxctC/jOr9sV32b5yAUIXx9XfejN+DiGt2bcoR0xCmkSEnEWu1V7
-         H7Rw==
+        bh=TGnA1HghBHzaSRRxb3yDXY7uSkV0l4dlxYm07Mzp3eI=;
+        b=dFLWUJYXH3dFISAztAecv3Yf1mdemauc2q2OxHs3xuKtNlSr8LppwaIILxfTl/CNyR
+         kr3THRthZfoHqEj/5OGLdycki5BRTSoCriRigD1l0TtUqzKqN6uI3LzFSDvVctO3E1RE
+         NCAtYPJ4GhVtCp3b/XFDm4PNopKSQONjpmTayoBiOEG7uwfZm/v745lmKWTdqS0mmKGO
+         t58jj8zjJLgWKNup0fbSpaSCt5i1Ec+cPtsCYrHiVS3VT5hRArzMIlfGmVnBBqpGcYCJ
+         iMwDqG7VnTYEDh46pkMd9Lk8zPW49PsPzUD5sN9IxcfZCtjbqN7VbItpzPg0+jwGmXnc
+         PYMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=5Ny4/EAYbX3qfaEmGZfS7iv79Oo6Wb3O6/res/i66KY=;
-        b=l/GAkDos1QEfiC1dbN3kX2F7vkUC8MHCDb7AXkqt/HCQVGui2dMNPjTunUpE/pqByF
-         7oKwLnobbUQWw6jECZGuUIZHnMNms80SlvXyHTCOOdAMJxfralolSUCsM2jQANmabGPi
-         JlDaPuLdIv8im3H3knE7LioBK1rZkR0Zya4UaLIU34COguYVxQ59ceTf6cbAcSmakLLE
-         D2DiUtBaUHtJ0UGUZpqGJEzbB9NM7uDA7fH6DmfcOpdqR32fBjiFYPxyQM/VgFjTvu2N
-         y9i9x4+CpErFhuYrjos3Z2EyBNNsy5w7qk+D4Anv2I3vqJmLl8/PUi5u3udug1Zhn5+t
-         k0oQ==
-X-Gm-Message-State: AOAM530AoCls3BaTJZxjvz2b+w0kfxll7klfH/M/gtXwdl880gtGuL9m
-        b84JH6XY3zeWBaec2PQpY2M=
-X-Google-Smtp-Source: ABdhPJy86c5CvDcMpbiTJTIT8W8DhzHQeW9BmTR7qWhV8rK770x8n89/kQzYyLnTMi8th8EA306pNA==
-X-Received: by 2002:a17:903:248:b0:155:ecb7:dfaf with SMTP id j8-20020a170903024800b00155ecb7dfafmr1652173plh.84.1650580432698;
-        Thu, 21 Apr 2022 15:33:52 -0700 (PDT)
+        bh=TGnA1HghBHzaSRRxb3yDXY7uSkV0l4dlxYm07Mzp3eI=;
+        b=bBv45CFsheNbKCWBxLWUX7fevJ1HpvNDF0xtl1Qf8PpR//dzL3/AUl3RMRrVpT6oEH
+         bxM2aq0bNBE4InSQYX6Ir5HKBNYhRZPPftX3YYWX2O+iWxC5NxomPc5TlpLvY2M8J7YR
+         NJikwukYBF6HpT9Ak6vgWLIe48Q8trudnxAn/fbZYa4m+ZllTxtKwlMegHtAm+O100Zl
+         Is2IrYe3ZQRaHG1ZNGQHcU/T2H/n2gpuEB6xgv72om4k2HaEg0oZYbgZoDyPLJy9F57z
+         mf9p4IZqiaAuh2wAJv0+fPPE2aXkzVZovLTAPszLyYY57yMIeoem83NFxA5Hr0Wvp5Xy
+         Faww==
+X-Gm-Message-State: AOAM533oJDeHuzZakzs86R+xkbnV/3TR2dKfg9+i6BThUptOMqjZPpM6
+        0vKnuMebVd1nP6P96iSSjtQ=
+X-Google-Smtp-Source: ABdhPJyNyMh4f9ttsXoUCQvgvV3/EczKj7xpB1seRJ+GIVxpp3qneANx5XSejTG4GOcpcOVRgP+Mfg==
+X-Received: by 2002:a17:90a:1d0e:b0:1cb:50ec:27f with SMTP id c14-20020a17090a1d0e00b001cb50ec027fmr12881829pjd.195.1650580668980;
+        Thu, 21 Apr 2022 15:37:48 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:400::5:15fa])
-        by smtp.gmail.com with ESMTPSA id y4-20020a056a00190400b004fac0896e35sm145005pfi.42.2022.04.21.15.33.51
+        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm143768pfc.98.2022.04.21.15.37.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 15:33:52 -0700 (PDT)
+        Thu, 21 Apr 2022 15:37:48 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 21 Apr 2022 12:33:50 -1000
+Date:   Thu, 21 Apr 2022 12:37:46 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] workqueue: Restrict kworker in the offline CPU pool
- running on housekeeping CPUs
-Message-ID: <YmHbzrkWHbcv2CEK@slm.duckdns.org>
-References: <20220331055717.2659428-1-qiang1.zhang@intel.com>
+To:     Bui Quang Minh <minhquangbui99@gmail.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        cgroups@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2] cgroup: Kill the parent controller when its last
+ child is killed
+Message-ID: <YmHcuuhKYfjI8nXA@slm.duckdns.org>
+References: <20220404142535.145975-1-minhquangbui99@gmail.com>
+ <Ykss1N/VYX7femqw@slm.duckdns.org>
+ <20220405091158.GA13806@blackbody.suse.cz>
+ <bdd4104d-390e-74c7-0de1-a275044831a5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220331055717.2659428-1-qiang1.zhang@intel.com>
+In-Reply-To: <bdd4104d-390e-74c7-0de1-a275044831a5@gmail.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -71,15 +85,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 01:57:17PM +0800, Zqiang wrote:
-> When CPU going offline, all workers in this CPU pool will lose
-> affinity to this CPU, and may run to isolated CPU. like kworker
-> in unbound pool, set CPU affinity of these kworker is
-> wq_unbound_cpumask.
+On Tue, Apr 05, 2022 at 09:58:01PM +0700, Bui Quang Minh wrote:
+> @@ -5152,12 +5153,28 @@ static void css_release_work_fn(struct work_struct
+> *work)
+>                 container_of(work, struct cgroup_subsys_state,
+> destroy_work);
+>         struct cgroup_subsys *ss = css->ss;
+>         struct cgroup *cgrp = css->cgroup;
+> +       struct cgroup *parent = cgroup_parent(cgrp);
 > 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+>         mutex_lock(&cgroup_mutex);
+> 
+>         css->flags |= CSS_RELEASED;
+>         list_del_rcu(&css->sibling);
+> 
+> +       /*
+> +        * If parent doesn't have any children, start killing it.
+> +        * And don't kill the default root.
+> +        */
+> +       if (parent && list_empty(&parent->self.children) &&
+> +           parent->flags & CGRP_UMOUNT &&
+> +           parent != &cgrp_dfl_root.cgrp &&
+> +           !percpu_ref_is_dying(&parent->self.refcnt)) {
+> +#ifdef CONFIG_CGROUP_BPF
+> +               if (!percpu_ref_is_dying(&cgrp->bpf.refcnt))
+> +                       cgroup_bpf_offline(parent);
+> +#endif
+> +               percpu_ref_kill(&parent->self.refcnt);
+> +       }
+> +
+>         if (ss) {
+>                 /* css release path */
+>                 if (!list_empty(&css->rstat_css_node)) {
+> 
+> The idea is to set a flag in the umount path, in the rmdir it will destroy
+> the css in case its direct parent is umounted, no recursive here. This is
+> just an incomplete example, we may need to reset that flag when remounting.
 
-Applied to wq/for-5.18-fixes w/ patch description updated for clarity.
+I'm generally against adding complexities for this given that it's never
+gonna be actually reliable. If adding one liner flush_workqueue makes life
+easier in some cases, why not? But the root cause is something which can't
+be solved from messing with release / umount paths and something we decided
+against supporting.
 
 Thanks.
 

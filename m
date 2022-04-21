@@ -2,91 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3671A50A58C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDCA50A5C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiDUQ2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 12:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
+        id S229839AbiDUQ2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 12:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390477AbiDUQKE (ORCPT
+        with ESMTP id S1390499AbiDUQKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 12:10:04 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B204739D;
-        Thu, 21 Apr 2022 09:07:14 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nhZKp-0004EH-PB; Thu, 21 Apr 2022 18:07:11 +0200
-Message-ID: <de25abef-c071-9f71-36dd-8f2f0b77dc28@leemhuis.info>
-Date:   Thu, 21 Apr 2022 18:07:10 +0200
+        Thu, 21 Apr 2022 12:10:24 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAA14739D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:07:34 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 17-20020a05600c021100b00393a19f8f98so708346wmi.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:07:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=W/2Za70C1RHKqi8XDzjUDlZrNvCkjmOJSSy94nVWdeo=;
+        b=V6zMP4bR03OtSHzQnhQ8C07/7liPhzxks7VIQDG9UyNJlBm3gL9cl4qycYdZpw/6/8
+         gnRZzPoPbAm6EteTZIlMDohqau4tlXHabCZVBb8CNbV34fkBdNicaT8J7KVwITEkZ202
+         MF+Jc+m5W5Nd6ChFOK7ImjudxfaZq5yp7KfW4iFKia9NQ2gtarCUKeCP1t3Ij7iJphyq
+         bxp3IJ8k2nd9DtzjAWA/30ru4FTtDp8Cfli7RMLYwxFFZynSMhKH+hYRChs7nfdIceq7
+         gc3SzrGQ7nDluILkLngZeZYVy8TBLepLx6mbM/bq0f9FBLKpE9t00Ah4un9atburVfsZ
+         nBOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=W/2Za70C1RHKqi8XDzjUDlZrNvCkjmOJSSy94nVWdeo=;
+        b=NI1WuebuGKkwoVC1n7BqUE4Tav7yXj0fSFuWnMdLvNVOH5IvNvgNASRogJWvJik6ie
+         Lb73ktDll3m7yldg9oIdLIURD4w3BjMg5M9bbEzoeer+LHW9PTb/hovcsKspr9kU+N24
+         EI6epcgXOkP12TsUptqGuylLRUQvgsmXTSZqxaDpq2jk2wk68AwRpqIOkFoaOGzD8Eca
+         6oLwupsOKAnPXyPc1Mf+rM/TsHOy/+ENiaoaaiPcDyzZYq090pjs+Dq6KCC+ArSLnSp1
+         if2Hjqj1qpI+Rh4lYYe+Y+W6/+/6I+ECwzi5xLP3mOdVzp7FI9f5VBRhDV8kvgfOKxqy
+         JAxw==
+X-Gm-Message-State: AOAM532fsXtZswL3pYnP6spH2QLi4jHLWS/XoV0oU8cn8D4RRPCIWh/N
+        6suWeAtO9oApYkn1UYJxmDvE+YnDwe80n0mM4WH+Cw==
+X-Google-Smtp-Source: ABdhPJxqUYobkFKPsjnyNIvJy+aGvbRCq3IvWHSrRSfKqva8aaJVNAP6j8VnjdlZbx3EmrWdD1hpjE86W6KLq8k0p9U=
+X-Received: by 2002:a05:600c:1990:b0:392:7119:b55d with SMTP id
+ t16-20020a05600c199000b003927119b55dmr75078wmq.49.1650557252813; Thu, 21 Apr
+ 2022 09:07:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] gpio: Request interrupts after IRQ is initialized
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Cc:     firew4lker <firew4lker@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Basavaraj.Natikar@amd.com, Richard.Gong@amd.com,
-        stable@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <20220414025705.598-1-mario.limonciello@amd.com>
- <20966c6b-9045-9f8b-ba35-bf44091ce380@gmail.com>
- <67df4178-5943-69d8-0d61-f533671a1248@amd.com>
- <CACRpkdbvN0ZJnn+N=Vt2n_aO4CnM=E4qpe_3dmu-c8_Ufp8ZzQ@mail.gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CACRpkdbvN0ZJnn+N=Vt2n_aO4CnM=E4qpe_3dmu-c8_Ufp8ZzQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1650557234;1cd7b2c7;
-X-HE-SMSGID: 1nhZKp-0004EH-PB
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220419163749.1.Ica39bd8d1494f750a70a668e5929f6e5e63241f2@changeid>
+ <c8f5ada2-c5cc-fe1b-bdeb-8b7d134250ee@molgen.mpg.de>
+In-Reply-To: <c8f5ada2-c5cc-fe1b-bdeb-8b7d134250ee@molgen.mpg.de>
+From:   Jes Klinke <jbk@google.com>
+Date:   Thu, 21 Apr 2022 09:07:21 -0700
+Message-ID: <CANMTAZRp5GPwrJNO4RY1KpvABgiuOMYEtwm+jdYfX5JRH8FpSA@mail.gmail.com>
+Subject: Re: [PATCH v2] tpm: cr50: Add new device/vendor ID 0x504a6666
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     "Jes B. Klinke" <jbk@chromium.org>,
+        linux-integrity@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.04.22 00:02, Linus Walleij wrote:
-> On Mon, Apr 18, 2022 at 6:34 AM Mario Limonciello
-> <mario.limonciello@amd.com> wrote:
-> 
->> Linus Walleij,
->>
->> As this is backported to 5.15.y, 5.16.y, 5.17.y and those all had point
->> releases a bunch of people are hitting it now.  If you choose to adopt
->> this patch instead of revert the broken one, you can add to the commit
->> message too:
->>
->> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1976
-> 
-> I am on parental leave kind of, but Bartosz knows what to do,
-> in this case, since it is ACPI-related, Andy knows best what
-> to do, and I see he also replied.
+Dear Paul,
 
-Bartosz, Andy, what's the status here? It looks like the patch didn't
-make any progress in the past few days (or did I miss it?). I'd really
-like to see this patch or a revert of 5467801f1fcb ("gpio: Restrict
-usage of GPIO chip irq members before initialization") mainlined by rc4,
-so Greg (CCed) can fix it in the next round of stable updates, as it
-seems quite a few people are affected by the problem.
+On Wed, Apr 20, 2022 at 3:52 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+>
+> Dear Jes,
+>
+>
+> Am 20.04.22 um 01:37 schrieb Jes B. Klinke:
+> > Accept one additional numerical value of DID:VID for next generation
+> > Google TPM with new firmware, to be used in future Chromebooks.
+> >
+> > The TPM with the new firmware has the code name TI50, and is going to
+> > use the same interfaces.
+> >
+> > Signed-off-by: Jes B. Klinke <jbk@chromium.org>
+> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> >
+> >   drivers/char/tpm/tpm_tis_i2c_cr50.c | 7 ++++---
+> >   1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm=
+_tis_i2c_cr50.c
+> > index f6c0affbb4567..4ddb8ff3a8569 100644
+> > --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > @@ -31,6 +31,7 @@
+> >   #define TPM_CR50_TIMEOUT_SHORT_MS   2               /* Short timeout =
+during transactions */
+> >   #define TPM_CR50_TIMEOUT_NOIRQ_MS   20              /* Timeout for TP=
+M ready without IRQ */
+> >   #define TPM_CR50_I2C_DID_VID                0x00281ae0L     /* Device=
+ and vendor ID reg value */
+> > +#define TPM_TI50_I2C_DID_VID         0x504a6666L     /* Device and ven=
+dor ID reg value */
+> >   #define TPM_CR50_I2C_MAX_RETRIES    3               /* Max retries du=
+e to I2C errors */
+> >   #define TPM_CR50_I2C_RETRY_DELAY_LO 55              /* Min usecs betw=
+een retries on I2C */
+> >   #define TPM_CR50_I2C_RETRY_DELAY_HI 65              /* Max usecs betw=
+een retries on I2C */
+> > @@ -742,15 +743,15 @@ static int tpm_cr50_i2c_probe(struct i2c_client *=
+client)
+> >       }
+> >
+> >       vendor =3D le32_to_cpup((__le32 *)buf);
+> > -     if (vendor !=3D TPM_CR50_I2C_DID_VID) {
+> > +     if (vendor !=3D TPM_CR50_I2C_DID_VID && vendor !=3D TPM_TI50_I2C_=
+DID_VID) {
+> >               dev_err(dev, "Vendor ID did not match! ID was %08x\n", ve=
+ndor);
+> >               tpm_cr50_release_locality(chip, true);
+> >               return -ENODEV;
+> >       }
+> >
+> > -     dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> > +     dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> > +              vendor =3D=3D TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
+> >                client->addr, client->irq, vendor >> 16);
+> > -
+>
+> Remove this blank line wasn=E2=80=99t needed, I gues.
 
-Reminder: this is one of those issue that we IMHO really should fix
-quickly, as explained by a text recently added to the documentation:
+You are right, I should probably have left the blank line untouched.
+It does not hurt the readability of the code much to remove it,
+though.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/handling-regressions.rst#n131
+> >       return tpm_chip_register(chip);
+> >   }
+> >
+>
+> Thank for addressing the other comments, and congratulations on getting
+> your first commit into the Linux kernel.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+When I think about it, I did propose a kernel patch in 2002, to
+introduce /proc/sys/kernel/core_pattern, so this is my second patch.
+All the mailing lists, and formal review process this time seemed
+daunting at first, though, so thank you for guiding me through the
+process.
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
-
+Regards
+Jes

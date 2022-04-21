@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC194509446
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 02:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE035509461
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 02:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357996AbiDUAXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 20:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
+        id S1383406AbiDUA0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 20:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbiDUAXf (ORCPT
+        with ESMTP id S232084AbiDUA0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 20:23:35 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD20C1A078
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:20:47 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id p65so5825156ybp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:20:47 -0700 (PDT)
+        Wed, 20 Apr 2022 20:26:31 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550901AD94;
+        Wed, 20 Apr 2022 17:23:44 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ec05db3dfbso35888427b3.7;
+        Wed, 20 Apr 2022 17:23:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OXocRW4Fcy3ODLwlLZMAvoG6TfyjzPBLt8Rv4un+YTQ=;
-        b=nImhtQPJaOzP6XFyaGqECd5mDgHxWmDJRHdRNv+vEPa5JrDA9N7SPydqUH64Gq+hQV
-         NtKuBALzWwwJkFIUXcbefjATqKncxCcqE2gX6X1+ZCEZp3/XoRyFVN3C+Ql4w+nDRuew
-         q6TLmIqM0Dxfyp8AT8r4nBE3K28zycciwtrU9VM57sjM9jTtjOhzemgs1/LE7uhaTLj2
-         NpaCFLd0cB6ZAvRcmI1b3nMSA5ulnNKoCmrGmxz11LR8/9BTE6vVDc9Y6RCpAcN8qZvl
-         pAleeywzdXr1/wUhp8ubkefmyj0HuspW7uuqu7SdBu71UNDDY249sR3lJuwbxG1GMs/P
-         PlYw==
+        bh=/6tjTikelc+DvD6SuOPR5OX/KDETCZdTqib8WzVGM6k=;
+        b=J9+P2QcdFxTdNjI+911dj+CfKlzokjSU3cXmZi9MWP8ijq02O5okdNsan8eheLZyZH
+         UVOCM4IO+PwLszE1eSTfQeqy3Y2FJdNypyCFQRyzhNLA6BmHvVFrmk3nRJY4QnH7vsxl
+         BbQl0eKDpfEIiWxbckp5d21fN1iplmCAwGxF6XPq9HzfA7Mr/QDhxCKrkaV+Rw0vE8fv
+         N6B8AM3+cLBWNbi/j/jXbMhajM5Mkzk7FZd6cC/C9bWf5Ls9ZNkWDvy73bYK0nSGFDrr
+         xUU4zTSgGUQoEcXpc/HWeVT3D0cwDwfFbxnBGwFLNrgRE1likQDbWQW4gvzovcQLjQlX
+         6k/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OXocRW4Fcy3ODLwlLZMAvoG6TfyjzPBLt8Rv4un+YTQ=;
-        b=5qEyE/lAvCqVsf3rbQS40aihDfAPWGYgW6eqoH1EC44GeOebhcFJWN6DDS4BGSWKqK
-         E5TlzsC6rf15ljDSs1qDpCxeKLRUVzVr8Aq6HcrBrqSR4z0F5d8UbnbNb+2wVvhjS4VN
-         FA1JcWgV3Jg71AMG7BakQPHTG4oMJY+euEleCl05BmRWINIxj+qIPvnFa6LinQEUjbNc
-         9OBAffWT/GlAYiuLZ3PKgjkYh2rMhfdC2At1C5VhoEPPHEKk29SzOeDMpSBQLDlNmxm5
-         KQZJgi/20f0FuadB/70K9loFkvr9rK408QnLHSeQgmB9Qcgr96EtkNqacaJxkuHeOyU+
-         OwNw==
-X-Gm-Message-State: AOAM532kkeM0+GpPgZaeA+NShTq3/+FKKNlkdMerKRRjp38vbDg8Nb0Q
-        MWhaseK0mRq5M59aNHGghMLZI5JjqCQF24sWi7p6NLy7zTzJaRyt
-X-Google-Smtp-Source: ABdhPJyY7IxMb9HzNn/D6HXins/F226memrjVTU9idaaExMqGEnSVuhTv/NpqoqY7E/6DLIx3N5uyai+7UzTD8B5MxM=
-X-Received: by 2002:a05:6902:1109:b0:645:58e:a373 with SMTP id
- o9-20020a056902110900b00645058ea373mr18145423ybu.231.1650500446691; Wed, 20
- Apr 2022 17:20:46 -0700 (PDT)
+        bh=/6tjTikelc+DvD6SuOPR5OX/KDETCZdTqib8WzVGM6k=;
+        b=uvr0NXsbtic2HXDNDuH1JBGjDQqBCzjkFsFJJECE3kyaMUSHb3iQRDJROtsHG3Tkq4
+         KbY8UpgTkYislRVOkWHedi8mMEmkAOURPznMqY0Abfzfh3xmt74igauM9EsesHWUXbQG
+         458uZe8K+UwmJpMYcTYID2UhR6pe2ZY7TXrk4USUmnaq19dL6EEnwxUQNHjSSb7l9iXa
+         xMSA78V6uGZnjftbydTcdc623+BM8gDKClmAekc2yerEyO4nzn82XSlkChnX0WJjZOS3
+         QQwHHSgWF7XisrBtMi3L2S4OiqHo36sohRr5DN8YpF9pS4/I7l2JU2RZXPqHkIwyBQ8t
+         Fotw==
+X-Gm-Message-State: AOAM5310Qt/wMyw7h17OpRwfqCZB3635lptNgIuUBZfI9GAKcMlHlc0w
+        ggzCVOtePKoiEVc2ZkWt94lhBhloUMlu9GF4IwM=
+X-Google-Smtp-Source: ABdhPJxh4FIiwkC8UnFlBKLEY0wBQ9HXsKx09lA/608Freh+1YGN0z1iMdCE2drd101Ja4/ElvJtb40Pd+fncXlrROM=
+X-Received: by 2002:a81:1e86:0:b0:2eb:66b9:3a93 with SMTP id
+ e128-20020a811e86000000b002eb66b93a93mr22693995ywe.411.1650500623592; Wed, 20
+ Apr 2022 17:23:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220420235659.830155EC021C@us226.sjc.aristanetworks.com>
-In-Reply-To: <20220420235659.830155EC021C@us226.sjc.aristanetworks.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 20 Apr 2022 17:20:35 -0700
-Message-ID: <CANn89iJjwV2gAKMc4iydUt_MqtnB-4_EKdVrqQO9q4Dt17Lf9w@mail.gmail.com>
-Subject: Re: [PATCH] tcp: md5: incorrect tcp_header_len for incoming connections
-To:     Francesco Ruggeri <fruggeri@arista.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Miller <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
+References: <20220420131204.2850-1-jiangshanlai@gmail.com> <20220420131204.2850-3-jiangshanlai@gmail.com>
+ <3e6018ad-06b7-f465-7b74-aeb20bca9489@redhat.com>
+In-Reply-To: <3e6018ad-06b7-f465-7b74-aeb20bca9489@redhat.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 21 Apr 2022 08:23:32 +0800
+Message-ID: <CAJhGHyARz6rPZ+yJfkGPCbtZJnnMnODSD8szs7YYNVceCXhbSQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: X86/MMU: Introduce role.passthrough for
+ shadowing 5-level NPT for 4-level NPT L1 guest
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,43 +79,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 4:57 PM Francesco Ruggeri <fruggeri@arista.com> wrote:
+On Thu, Apr 21, 2022 at 1:15 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+
 >
-> In tcp_create_openreq_child we adjust tcp_header_len for md5 using the
-> remote address in newsk. But that address is still 0 in newsk at this
-> point, and it is only set later by the callers (tcp_v[46]_syn_recv_sock).
-> Use the address from the request socket instead.
+> Looks good, and is easy to backport; thanks.
+>
+> However, once we have also your series "KVM: X86/MMU: Use one-off
+> special shadow page for special roots", perhaps the passthrough sp can
+> be converted to a special root (but now with a shadow_page) as well?
 >
 
-Nice catch.
+It will be much more complicated.
 
-This seems like a day-0 bug, right ?
+The current code allows fast_pgd_switch() for shadowing 5-level NPT
+for 4-level NPT L1 guests because both the host and the guest are
+64 bit. Using a special shadow page will disallow fast_pgd_switch().
 
-Do you agree on adding
+And it will make using_special_root_page() more complicated.
 
-Fixes: cfb6eeb4c860 ("[TCP]: MD5 Signature Option (RFC2385) support.")
-
-Thanks.
-
-> Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
-> ---
->  net/ipv4/tcp_minisocks.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-> index 6366df7aaf2a..6854bb1fb32b 100644
-> --- a/net/ipv4/tcp_minisocks.c
-> +++ b/net/ipv4/tcp_minisocks.c
-> @@ -531,7 +531,7 @@ struct sock *tcp_create_openreq_child(const struct sock *sk,
->         newtp->tsoffset = treq->ts_off;
->  #ifdef CONFIG_TCP_MD5SIG
->         newtp->md5sig_info = NULL;      /*XXX*/
-> -       if (newtp->af_specific->md5_lookup(sk, newsk))
-> +       if (treq->af_specific->req_md5_lookup(sk, req_to_sk(req)))
->                 newtp->tcp_header_len += TCPOLEN_MD5SIG_ALIGNED;
->  #endif
->         if (skb->len >= TCP_MSS_DEFAULT + newtp->tcp_header_len)
-> --
-> 2.28.0
->
->
+It will require a different kind of special shadow page to make it
+able to do fast switch.

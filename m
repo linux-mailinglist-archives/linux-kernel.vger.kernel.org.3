@@ -2,92 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F5650A400
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244BA50A402
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385790AbiDUP1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S1390061AbiDUP2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbiDUP1a (ORCPT
+        with ESMTP id S1390046AbiDUP2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:27:30 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0B643AC0;
-        Thu, 21 Apr 2022 08:24:39 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Kkh6y2WlDzCrQS;
-        Thu, 21 Apr 2022 23:20:10 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 23:24:36 +0800
-Received: from [10.174.178.220] (10.174.178.220) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 23:24:36 +0800
-Message-ID: <b6777ef0-629c-0bb6-da5a-6aef096b6079@huawei.com>
-Date:   Thu, 21 Apr 2022 23:24:36 +0800
+        Thu, 21 Apr 2022 11:28:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09B011E3D5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650554721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6ttMoGFApcsmXuI/gPwewnQASmEx+6ID1JuIYA9uETo=;
+        b=Az1azc9Ec8egqUGBfkp9cESE7IOEMxuIlBXQhL3vhfy33vBnuI4e2fUaHeVGuYXgRS1MqI
+        Ds+WpYtKxPPrVWSt0pI95qD72yBX1qxVbtwhZANUsM4yz0UODFvOxsc9uEVdoa4lHktkfx
+        Y5Bgm9CIq8lgb7CgEiPB2SYDEkmp9BQ=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-127--l_-DhqjN5aa_m-wYeEjeQ-1; Thu, 21 Apr 2022 11:25:12 -0400
+X-MC-Unique: -l_-DhqjN5aa_m-wYeEjeQ-1
+Received: by mail-qk1-f199.google.com with SMTP id o79-20020a374152000000b0069ee7515f53so2812949qka.14
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:25:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6ttMoGFApcsmXuI/gPwewnQASmEx+6ID1JuIYA9uETo=;
+        b=5VsVf+kmxWwP43gUL2VxWfFgmJvTAlZDa6iwDE1b38R0dFw9Ix5OzU0M48byG07SD9
+         FmPDEJ+NZAUw/2rl4awjj/PmMSKj2zqtH/2kYucAl86Tr/W5lUkEnPBnpMc6B9dXmnES
+         F6jB07UAnBxyKcG/1qk3zKSH9VRPo2ldbmWKPzlR87mtv3VzpFiyx7wscqrlUw0jRH5y
+         V0Icn9FlaCTIaaSqwLoYpsB2ElFbMQn8mwCkiY7TDNLsFIV+SgyAFbPIi6+aGn+RmOWG
+         ombLqd9MKzsyMjGj36c5w4PUGcXzHkmlGnySbnbFX0z3Nu1cnhh9ii7zyyoIDK88rhvG
+         xzUg==
+X-Gm-Message-State: AOAM533kOilxnKh6cNmazXTaMIBWXgah4I24unMDQM9NVxY5OhXbXto6
+        x5AcUEe3HRenmLMEgFXbkkL+kFXUoRGVBAQPiOxz2oIOVkveAjJPn66jebKq2YSnIHHbdbeY0rm
+        QeIKj7jaMOykXSRa82x6KYHcA
+X-Received: by 2002:ac8:5e54:0:b0:2f1:f60d:2b3c with SMTP id i20-20020ac85e54000000b002f1f60d2b3cmr16625086qtx.667.1650554711416;
+        Thu, 21 Apr 2022 08:25:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz+P77pjFBwONc0Em0QpWeGubtnUdjANuIPyYLPcq0pQgRQocDp9HsSHlVtQWkAJm4cqwGVrA==
+X-Received: by 2002:ac8:5e54:0:b0:2f1:f60d:2b3c with SMTP id i20-20020ac85e54000000b002f1f60d2b3cmr16625068qtx.667.1650554711225;
+        Thu, 21 Apr 2022 08:25:11 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 135-20020a37078d000000b0069ea3c7513bsm3109620qkh.121.2022.04.21.08.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 08:25:10 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     hammerh0314@gmail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] serial: sunplus-uart: change sunplus_console_ports from global to static
+Date:   Thu, 21 Apr 2022 11:25:05 -0400
+Message-Id: <20220421152505.1531507-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [Question] SCSI_EH: How does EH guarantee there is no UAF of
- scsi_cmnd if host reset failed
-Content-Language: en-US
-To:     Hannes Reinecke <hare@suse.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Feilong Lin <linfeilong@huawei.com>
-References: <6301e87f-15f6-4c1f-41f5-d2f1aa4eedd7@huawei.com>
- <da087e9b-bd07-e5fd-421d-242e6adce22b@suse.de>
-From:   Wenchao Hao <haowenchao@huawei.com>
-In-Reply-To: <da087e9b-bd07-e5fd-421d-242e6adce22b@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.220]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Smatch reports this issue
+sunplus-uart.c:501:26: warning: symbol 'sunplus_console_ports' was not declared. Should it be static?
 
-On 2022/4/19 22:56, Hannes Reinecke wrote:
-> On 4/19/22 16:28, Wenchao Hao wrote:
->> Hi all, I am wondered how does SCSI EH guarantee there is no UAF of scsi_cmnd
->> if host reset failed. If host reset failed and eh_cmd_q of shost is not empty,
->> these command in eh_cmd_q would be added to done_q in scsi_eh_offline_sdevs()
->> and finished by scsi_eh_flush_done_q(). So these scsi_cmnd and it's related
->> request would be freed.
->>
-> Yes.
-> 
->> While since host reset failed, we can not guarantee the LLDDs has cleared all
->> references to these commands in eh_cmd_q. Is there any possibility that the
->> LLDDs reference to these commands? If this happened, then a using after free
->> issue would occur.
->>
-> If host reset has failed there are _no_ assumptions we can make about commands, and not even about the PCI device itself.
-> So in effect, once host_reset failed the system is hosed.
-> 
-> We _might_ be able to resurrect the system by doing PCI EEH, but not many systems nor drivers implement that.
-> 
-> Cheers,
-> 
-> Hannes
-> 
-> .
+sunplus_console_ports is only used in sunplus-uart.c so change
+its storage-class specifier to static
 
-Thanks a lot for your reply. I am writing single LUN reset EH flow which discussed in previous mail
-and testing it, if the test result is good I would post it.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/tty/serial/sunplus-uart.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-By the way, you said you would make EH rework, are you doing it? Could you tell us your plan
-if it's not secret.
+diff --git a/drivers/tty/serial/sunplus-uart.c b/drivers/tty/serial/sunplus-uart.c
+index 9f15922e681b..60c73662f955 100644
+--- a/drivers/tty/serial/sunplus-uart.c
++++ b/drivers/tty/serial/sunplus-uart.c
+@@ -498,7 +498,7 @@ static const struct uart_ops sunplus_uart_ops = {
+ };
+ 
+ #ifdef CONFIG_SERIAL_SUNPLUS_CONSOLE
+-struct sunplus_uart_port *sunplus_console_ports[SUP_UART_NR];
++static struct sunplus_uart_port *sunplus_console_ports[SUP_UART_NR];
+ 
+ static void sunplus_uart_console_putchar(struct uart_port *port,
+ 					 unsigned char ch)
+-- 
+2.27.0
+

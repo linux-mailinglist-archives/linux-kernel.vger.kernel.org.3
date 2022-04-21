@@ -2,138 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679D550A0EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D58250A0EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386963AbiDUNho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S1387039AbiDUNi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiDUNhb (ORCPT
+        with ESMTP id S231186AbiDUNiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:37:31 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFD12ED69;
-        Thu, 21 Apr 2022 06:34:41 -0700 (PDT)
-Received: from darkstar.musicnaut.iki.fi (85-76-47-192-nat.elisa-mobile.fi [85.76.47.192])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 21 Apr 2022 09:38:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6EB1A075
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:35:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 047811B00252;
-        Thu, 21 Apr 2022 16:34:32 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1650548074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oVFIWam2OH5Kq5QzsfblzUEMIMiatzAi7D5irCcCglk=;
-        b=Xk3qyrppSMBB4y+4boXcQF3oQ0tJICSyEousvelDBkd8/PVx55tQbJieAi/Q0KQa0aNG+G
-        Gh88Z+pM8E36JmzxlWSVvjXm3PFhBwLXYL2LZOWOsctt2/ybfngzEzXevKqVRqqsk+dHOX
-        5L1WRR3RN0Tc57TLDGaoxQzs/vTRLS73kqV8NQ7Pr+rYaKPhEVw6YpbHAi1CUcgHmT/iJb
-        sSsFTNRKlLJoxWjnYPJUSCoDtMuNfYAqp6Y4933cAcgTAbeGBst/0aU+ZHi8x118KnYG/L
-        TTEMpWSI21eBdlKccjScwxNSRB5ywON2ldVT1bI/+m9vyrFPnxxWxtiiOfNC6w==
-Date:   Thu, 21 Apr 2022 16:34:31 +0300
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-omap <linux-omap@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Walmsley <paul@pwsan.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Mark Brown <broonie@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        dmaengine@vger.kernel.org,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH 00/41] OMAP1 full multiplatform conversion
-Message-ID: <20220421133431.GE1947@darkstar.musicnaut.iki.fi>
-References: <20220419133723.1394715-1-arnd@kernel.org>
- <20220420170836.GB1947@darkstar.musicnaut.iki.fi>
- <CAK8P3a1+sOrn8BWPVc7f+QFZ5=7fE6=MLsMYV9t+HJcG2aRCXA@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE2B561D25
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:35:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5236EC385A1;
+        Thu, 21 Apr 2022 13:35:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650548134;
+        bh=eLGAa2cd0FkC9XToUCSQLD37aQE0c11yNXzIpng6tjM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=KC50i3AB3+M3gqZu26Uvv11CrsKFmCic2ZNFcGmUW6A282WK0fu5JIG2o6lKXwlO6
+         3G4rdr9Pt1IgO2mpM0Mzfvlb0OX+/mt4Ze+n+0b+aW4Sfjyu0d/l3ddCDfCV9eOc7O
+         lA7qayx0MXagGU3AaBLknJCyVXHyxqmncsGNMTdnH4cCG7tz9ClFqvFHI/EdNry7ZB
+         Dpd808zZ+2FLZadWWWBVeC5IXz1a9eoSxmzsPXNbNzm2RhD+QDFUkPfMB+dCMwY1xJ
+         Jtomv2LbEBv6DH8eXHXoqORNFFBwpgC54NIcLAjRa9q0DjJLi9WcpD34jiGtNWeOt7
+         lUkDRleTnPeXg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id DF2C55C0143; Thu, 21 Apr 2022 06:35:33 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 06:35:33 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dev.2022.04.18a 22/22]
+ kernel/rcu/tree_nocb.h:1162:14: error: 'rcu_nocb_is_setup' undeclared; did
+ you mean 'rcu_nocb_setup'?
+Message-ID: <20220421133533.GQ4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202204210054.ZtsFVPYs-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a1+sOrn8BWPVc7f+QFZ5=7fE6=MLsMYV9t+HJcG2aRCXA@mail.gmail.com>
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1650548074; a=rsa-sha256;
-        cv=none;
-        b=ENXGTtwbaVogGy0K8rD23cjHmjO1KDBpZYPSWyAXiJ0/g3DluUJMMqXizYyXV1sh/1O56S
-        hChw4SwQwbKFg4HYlY2SOiU8koj4G0UA6uGgTWSMxSwgySv+tbXfSR2Tt70pNgc6FN/vqj
-        fDExRVdSPenGd/ZTQhfjmyvSX3P7pooRbwh0WQDjEhItMOJyG5yZgN9teFQT3NBHXEEZkO
-        lTJHNaVgxdVFvqiak5FfjdiYOvwW5qr/IFspdks2sOUviaT7JpvKaacUapRAwuXFYtOguN
-        JXEZ3bM5xviSbbt9Tw3xErBDkB9cnwUXXzqGZHNp79d0+eb+sY0cVMOQI8ss7A==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1650548074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oVFIWam2OH5Kq5QzsfblzUEMIMiatzAi7D5irCcCglk=;
-        b=Eu1uUO0EKvbhrdQZfCpIhRELzJA5jQZA+tye8R+aaTvgG9DkVEsXKYWX2Sby3kmhYmBCFx
-        570Cbs63dCqUFZqQdnWOK5t2vzZfwXPpwZynEikAKA3hi3QfuIi/BoBmae0xNSLey+fMmB
-        6AN1xF39YRJln008whjTgBohIBALbd/JXyh+rxwe1mx9rmT55Z+64rbOepQpAj7WZ0ttFr
-        jnTgxti7i7/9Pg4jNgskYWOOvKpXwrgTWzEQwA6H3TD1Jh0kJTMK2AunGS+FmvtC90A9Rp
-        r/9gYERVC+5BvSqEpSaGtYy+3htyiKaREqUWXaB7dxpxJqJYBA33p4txWzgVSw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202204210054.ZtsFVPYs-lkp@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, Apr 20, 2022 at 10:00:13PM +0200, Arnd Bergmann wrote:
-> On Wed, Apr 20, 2022 at 7:08 PM Aaro Koskinen <aaro.koskinen@iki.fi> wrote:
-> > On Tue, Apr 19, 2022 at 03:36:42PM +0200, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > This is the full series for converting OMAP1 to multiplatform, rebased
-> > > from my 2019 attempt to do the same thing. The soc tree contains simpler
-> > > patches to do the same for iop32x, ixp4xx, ep93xx and s3c24xx, which
-> > > means we are getting closer to completing this for all ARMv5 platforms
-> > > (I have patches for PXA, which is the last one remaining).
-> > >
-> > > Janusz already tested the branch separately and did the missing work
-> > > for the common-clk conversion after my previous approach was broken.
-> >
-> > I tested the full series on the following OMAP1 boards: ams-delta,
-> > nokia770, osk, palmte and sx1 (QEMU only).
-> >
-> > Apart from the earlyprintk breakage, everything seemed to work OK.
+On Thu, Apr 21, 2022 at 02:41:04PM +0800, kernel test robot wrote:
+> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev.2022.04.18a
+> head:   d6932dca19b1a7cbccad9d4acede8229e61cf97a
+> commit: d6932dca19b1a7cbccad9d4acede8229e61cf97a [22/22] rcu/nocb: Add an option to offload all CPUs on boot
+> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220421/202204210054.ZtsFVPYs-lkp@intel.com/config)
+> compiler: mips-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/ammarfaizi2/linux-block/commit/d6932dca19b1a7cbccad9d4acede8229e61cf97a
+>         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev.2022.04.18a
+>         git checkout d6932dca19b1a7cbccad9d4acede8229e61cf97a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 > 
-> Nice, thanks a lot for testing!
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 
-With the updated patch 26 also earlyprintk now works, so if you still
-update the patches, feel free to add for the whole series:
+This one is no longer in tree, but a replacement should be on its way,
+with attribution.
 
-Tested-by: Aaro Koskinen <aaro.koskinen@iki.fi>
+							Thanx, Paul
 
-Thanks,
-
-A.
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from kernel/rcu/tree.c:5031:
+>    kernel/rcu/tree_nocb.h: In function 'rcu_init_nohz':
+> >> kernel/rcu/tree_nocb.h:1162:14: error: 'rcu_nocb_is_setup' undeclared (first use in this function); did you mean 'rcu_nocb_setup'?
+>     1162 |         if (!rcu_nocb_is_setup) {
+>          |              ^~~~~~~~~~~~~~~~~
+>          |              rcu_nocb_setup
+>    kernel/rcu/tree_nocb.h:1162:14: note: each undeclared identifier is reported only once for each function it appears in
+> 
+> 
+> vim +1162 kernel/rcu/tree_nocb.h
+> 
+>   1153	
+>   1154	void __init rcu_init_nohz(void)
+>   1155	{
+>   1156		int cpu;
+>   1157		bool need_rcu_nocb_mask = false;
+>   1158		bool offload_all = false;
+>   1159		struct rcu_data *rdp;
+>   1160	
+>   1161	#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
+> > 1162		if (!rcu_nocb_is_setup) {
+>   1163			need_rcu_nocb_mask = true;
+>   1164			offload_all = true;
+>   1165		}
+>   1166	#endif
+>   1167	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp

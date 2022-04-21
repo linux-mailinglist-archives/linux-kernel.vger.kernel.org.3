@@ -2,73 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13750509CEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26766509CF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387979AbiDUJ6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        id S1387964AbiDUJ7N convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 21 Apr 2022 05:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387448AbiDUJ6f (ORCPT
+        with ESMTP id S1358094AbiDUJ7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:58:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D105252A5;
-        Thu, 21 Apr 2022 02:55:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF281B82394;
-        Thu, 21 Apr 2022 09:55:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF3AC385A1;
-        Thu, 21 Apr 2022 09:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650534943;
-        bh=Y2O1G2M/9QmAOGqr5GeEsbWJbSBwW3If9ToqHnGH7cQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M5vYEouuZXaTCdAwr7LF8/CcBmqsdYLOseV3BjxmixCeFYErSxE0cntjTCF9LqA7N
-         jnvithYWVttEa7zUs8cwLNd2nwIwwDptlxftrOgu6E22G7QtW7xGUACwlMC1flXoNM
-         tef2cbLZ4d+f3JuACCtFoPo9nRIvMKBXqo1/btgs=
-Date:   Thu, 21 Apr 2022 11:55:40 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dragos-Marian Panait <dragos.panait@windriver.com>
-Cc:     stable@vger.kernel.org, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net, paskripkin@gmail.com, hbh25y@gmail.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4.14 0/1] can: usb_8dev: backport fix for CVE-2022-28388
-Message-ID: <YmEqHBFXsprvaTsh@kroah.com>
-References: <20220419113834.3116927-1-dragos.panait@windriver.com>
+        Thu, 21 Apr 2022 05:59:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4743D21250
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:56:19 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nhTXh-0003ZT-V5; Thu, 21 Apr 2022 11:56:06 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nhTXf-004KoC-Qh; Thu, 21 Apr 2022 11:56:02 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nhTXd-0006Qn-Nd; Thu, 21 Apr 2022 11:56:01 +0200
+Message-ID: <9b2b9460e46d8544867589ce61d380265f42cd04.camel@pengutronix.de>
+Subject: Re: [PATCH V4] mmc: sdhci-msm: Reset GCC_SDCC_BCR register for SDHC
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     "Sajida Bhanu (Temp)" <quic_c_sbhanu@quicinc.com>,
+        adrian.hunter@intel.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
+        chris@printf.net, venkatg@codeaurora.org, gdjakov@mm-sol.com,
+        quic_asutoshd@quicinc.com
+Cc:     linux-mmc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rampraka@quicinc.com,
+        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com
+Date:   Thu, 21 Apr 2022 11:56:01 +0200
+In-Reply-To: <fb6480f6-f004-c02d-09fe-92a64785a0c5@quicinc.com>
+References: <1649759983-22035-1-git-send-email-quic_c_sbhanu@quicinc.com>
+         <1ee3b0619ee976eaf88e7207318770d441418c94.camel@pengutronix.de>
+         <1943a5fb-cf6c-f358-9e27-408792a458ce@quicinc.com>
+         <dc2252f03db5881dbb17006c910dfca54c7d2fee.camel@pengutronix.de>
+         <fb6480f6-f004-c02d-09fe-92a64785a0c5@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419113834.3116927-1-dragos.panait@windriver.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 02:38:33PM +0300, Dragos-Marian Panait wrote:
-> The following commit is needed to fix CVE-2022-28388:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3d3925ff6433f98992685a9679613a2cc97f3ce2
+On Do, 2022-04-21 at 10:32 +0530, Sajida Bhanu (Temp) wrote:
+> Hi,
 > 
-> Hangyu Hua (1):
->   can: usb_8dev: usb_8dev_start_xmit(): fix double dev_kfree_skb() in
->     error path
+> Thanks for the review.
 > 
->  drivers/net/can/usb/usb_8dev.c | 30 ++++++++++++++----------------
->  1 file changed, 14 insertions(+), 16 deletions(-)
+> Please find the inline comments.
 > 
+> Thanks,
 > 
-> base-commit: 74766a973637a02c32c04c1c6496e114e4855239
-> -- 
-> 2.17.1
+> Sajida
 > 
+> On 4/19/2022 12:52 PM, Philipp Zabel wrote:
+> > Hi Sajida,
+> > 
+> > On Di, 2022-04-19 at 11:46 +0530, Sajida Bhanu (Temp) wrote:
+> > [...]
+> > > > > +static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
+> > > > > +{
+> > > > > +	struct reset_control *reset;
+> > > > > +	int ret = 0;
+> > > > No need to initialize ret.
+> > > > 
+> > > > > +
+> > > > > +	reset = reset_control_get_optional_exclusive(dev, NULL);
+> > > > > +	if (IS_ERR(reset))
+> > > > > +		return dev_err_probe(dev, PTR_ERR(reset),
+> > > > > +				"unable to acquire core_reset\n");
+> > > > > +
+> > > > > +	if (!reset)
+> > > > > +		return ret;
+> > > Here we are returning ret directly if reset is NULL , so ret
+> > > initialization is required.
+> > You are right. I would just "return 0;" here, but this is correct as
+> > is.
+> Ok
+> > > > > +
+> > > > > +	ret = reset_control_assert(reset);
+> > > > > +	if (ret)
+> > > > > +		return dev_err_probe(dev, ret, "core_reset assert failed\n");
+> > > > Missing reset_control_put(reset) in the error path.
+> > > Sure will add
+> > > > > +
+> > > > > +	/*
+> > > > > +	 * The hardware requirement for delay between assert/deassert
+> > > > > +	 * is at least 3-4 sleep clock (32.7KHz) cycles, which comes to
+> > > > > +	 * ~125us (4/32768). To be on the safe side add 200us delay.
+> > > > > +	 */
+> > > > > +	usleep_range(200, 210);
+> > > > > +
+> > > > > +	ret = reset_control_deassert(reset);
+> > > > > +	if (ret)
+> > > > > +		return dev_err_probe(dev, ret, "core_reset deassert failed\n");
+> > > > Same as above. Maybe make both ret = dev_err_probe() and goto ...
+> > > In both cases error message is different so I think goto not good idea here.
+> > You could goto after the error message. Either way is fine.
+> 
+> Sorry didn't get this ..can  you please help
 
-All now queued up, thanks.
+I meant you could either use goto after the error messages:
 
-greg k-h
++static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
++{
+[...]
++	ret = reset_control_assert(reset);
++	if (ret) {
++		dev_err_probe(dev, ret, "core_reset assert failed\n");
++		goto out_reset_put;
++	}
+[...]
++	ret = reset_control_deassert(reset);
++	if (ret) {
++		dev_err_probe(dev, ret, "core_reset deassert failed\n");
++		goto out_reset_put;
++	}
++
++	usleep_range(200, 210);
++
++out_reset_put:
++	reset_control_put(reset);
++
++	return ret;
++}
+
+Or not use goto and copy the reset_control_put() into each error path:
+
++static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
++{
+[...]
++	ret = reset_control_assert(reset);
++	if (ret) {
++		reset_control_put(reset);
++		return dev_err_probe(dev, ret, "core_reset assert failed\n");
++	}
+[...]
++	ret = reset_control_deassert(reset);
++	if (ret) {
++		reset_control_put(reset);
++		return dev_err_probe(dev, ret, "core_reset deassert failed\n");
++	}
++
++	usleep_range(200, 210);
++	reset_control_put(reset);
++
++	return 0;
++}
+
+regards
+Philipp
+> 

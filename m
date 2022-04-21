@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E861B5099CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2B15099B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386262AbiDUHxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        id S230256AbiDUHxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386293AbiDUHxD (ORCPT
+        with ESMTP id S1386290AbiDUHxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:53:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAC76325;
-        Thu, 21 Apr 2022 00:50:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED79361B83;
-        Thu, 21 Apr 2022 07:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA37C385C1;
-        Thu, 21 Apr 2022 07:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650527410;
-        bh=scrBCeJL1OsZjxal/hOOJR8xrKpdhNNc3BiRG6d2EkQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=I53ZD6Ob3R8QcG8tmbBFOshAoeh0KWTCN+0xytPix2nry7uRQ548WOA6mgeTA8b60
-         xqcd8bPRZq0d9NGREbKcENA/6rrZ++7viLpgU63REWPzgO8q9prVkcA/bzV7MqTM58
-         sUmxO6IoWO0a7H1x5VJkkaFc4lpZjiYA6noI7uY3mGaa0VeH955HVnMBGSpEbC8CAP
-         RSs7zWjx/m1FtilWmdqSWcPG8debp7PnluxDXjtK3iWbHqmoQNSc7t0ehoBzQTENv0
-         9QatR/d4pEc4EkMNyUjBndFN83NNoQCS6otBb5tlBjEwZo7+fypytHRD8fIwU/Q/4/
-         PgYcCLLU9pZKg==
-Received: by mail-wr1-f51.google.com with SMTP id s25so547584wrb.8;
-        Thu, 21 Apr 2022 00:50:10 -0700 (PDT)
-X-Gm-Message-State: AOAM530FfqQfrAh5WqtgnBcKDmL7d8U1P59eapo92IbHGxJmLudy8S4M
-        QWF4Eyy07Y8oD586OwQO9nBQOJ0gntH1UG0RyUE=
-X-Google-Smtp-Source: ABdhPJzRVJ/OmeGnrqJE761/+0TPqsFFrrS+icRdgf4Xe42e9Mrpm76xuvHw8bwt5K0xWAFGMv08ylmpsjeKAOckTf8=
-X-Received: by 2002:adf:e106:0:b0:20a:b31b:213d with SMTP id
- t6-20020adfe106000000b0020ab31b213dmr3918734wrz.219.1650527408610; Thu, 21
- Apr 2022 00:50:08 -0700 (PDT)
+        Thu, 21 Apr 2022 03:53:31 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38614E0AE;
+        Thu, 21 Apr 2022 00:50:30 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id md4so4219362pjb.4;
+        Thu, 21 Apr 2022 00:50:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oicvIY0y5wccZhVe6ivP5Xo5+MG/BvSEb+nQiz7dyjQ=;
+        b=V1Xglz2oLjrxpQkc5GBIiz3GzvJqg4IKyNDPTkuaNdo4ZTsHidcRaaXp8v6ztS2vFU
+         dSwb+J/F2qw0xowspA0tDT3ckvYlt7X3LUJLAygGypOAgcHsClWlcELVg35ampaeDLe7
+         QBmXh0Mg72WN948teJpSUp8xRL2vLrujoQcXPIjSMVx7iFmgJuss3pL3Szc6klaE6C1N
+         uxvshLcSU78Lhtd9JFOt9D19h9mn0HS3AyPat1jTPOIy3EVf1gpE0O9jmeHj8BpGXwKr
+         HrqOV42rLg7Zd0a05S2/z1ztPvnuIoNx0OFT8sud0d2vLiCN1rZS5skYqa/RhlJRqatY
+         aOKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oicvIY0y5wccZhVe6ivP5Xo5+MG/BvSEb+nQiz7dyjQ=;
+        b=QSMc/3qOuwgQqzcOtUHgZu1x2xd5WH93oxsho2YnXWzJUFvkqMps/9LuEQjlAHt6Nu
+         rCMdRTdn2UekfJa8zF1IGW3cH+pw02gzwLk0O77LQwROQeDcc2+khf4C0iJl1t9oCbAB
+         RreL4/Hwbhv9GRTe4mMmy4H4bHYHAPakDte92rb/0JU1C2onw+2X+qtWFShrJVt1TbT2
+         lvwm6GLkLu83Av1FA/6MVeW6IBvw9H4trowVvNLvHlNBoZKBtjd7JCuEoBjAIYrW31hT
+         NxdBHoMwEHIT6TQDCVPP6PXalqBk3Hjw5vV5rON5dc7Wt4N+qkIY/oumvPKrxZljUwqF
+         LuVQ==
+X-Gm-Message-State: AOAM530pe6S9U116DtHLGLCwhKYuw2SFxTCiYQ+WQK6106znmEC8rDFW
+        fmZ66To6v7nuVYQg4ibj9Hw=
+X-Google-Smtp-Source: ABdhPJwPwrHN/kgtMeCVvBZbTGWh+qmRSFtqroD5tz6rMKKos9VyqUt8UyA/ufcoacKmw/+uSOTJww==
+X-Received: by 2002:a17:902:b193:b0:158:c040:5cf8 with SMTP id s19-20020a170902b19300b00158c0405cf8mr24676272plr.146.1650527429609;
+        Thu, 21 Apr 2022 00:50:29 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-15.three.co.id. [180.214.233.15])
+        by smtp.gmail.com with ESMTPSA id o5-20020a62f905000000b0050b5b5efa47sm799738pfh.191.2022.04.21.00.50.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 00:50:28 -0700 (PDT)
+Message-ID: <2f4c72d2-4669-4217-f322-9d4f34c3053e@gmail.com>
+Date:   Thu, 21 Apr 2022 14:50:24 +0700
 MIME-Version: 1.0
-References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-4-hch@lst.de>
-In-Reply-To: <20220421074204.1284072-4-hch@lst.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 21 Apr 2022 09:49:52 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Mv++CCGf2BuC-wS4VGb+ZhfnJqVwJkK-VcYAqfiPi8A@mail.gmail.com>
-Message-ID: <CAK8P3a2Mv++CCGf2BuC-wS4VGb+ZhfnJqVwJkK-VcYAqfiPi8A@mail.gmail.com>
-Subject: Re: [PATCH 3/7] ARM: mark various dma-mapping routines static in dma-mapping.c
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 0/2] Docs: Update information at changes.rst
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Bruno Moreira-Guedes <codeagain@codeagain.dev>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
+References: <cover.1650376049.git.codeagain@codeagain.dev>
+ <8735i83xo1.fsf@meer.lwn.net> <20220420172731.ru7kfrdkmprybtu7@AN5Bruno>
+ <878rrz30d9.fsf@meer.lwn.net>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <878rrz30d9.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> With the dmabounce removal these aren't used outside of dma-mapping.c,
-> so mark them static.  Move the dma_map_ops declarations down a bit
-> to avoid lots of forward declarations.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+On 4/21/22 04:34, Jonathan Corbet wrote:
+>> Thanks, Jon! I have also been thinking whether this filename
+>> ('changes.rst') is a good description of the file contents. Do you think
+>> renaming it to something like 'requirements.rst' and updating its
+>> references would be a good patch?
+> 
+> It's best not to rename things unnecessarily, especially relatively
+> well-known files that a lot of people expect to find in a specific
+> place.  We've done a lot of renaming over the last few years, but this
+> is one I might let slide for now.
+> 
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Did you mean the rename will be benefical?
+
+-- 
+An old man doll... just what I always wanted! - Clara

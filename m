@@ -2,134 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569A4509AF8
+	by mail.lfdr.de (Postfix) with ESMTP id A2C3A509AF9
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386856AbiDUItn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S1386866AbiDUIuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386852AbiDUItl (ORCPT
+        with ESMTP id S1386859AbiDUIuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:49:41 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC47B1F8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:46:52 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id bv16so5610101wrb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:46:52 -0700 (PDT)
+        Thu, 21 Apr 2022 04:50:03 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D0813F17
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:47:13 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id d9so3204034qvm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:47:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Z1R8XAgRO1RY9ptbheHK+UH29R2eRMz8Ro595MvYVes=;
-        b=aOom/33qqLb3Lfu2zcsAjrk7UdXHJJVRy0kJNKJDjgPslzoTYHMMljkC085jJpJYR4
-         EegA7KKwIkF+/1WfHa3PQDt8NPu1ipsKPgiV9Avgu/YlXoYfX3R3pVRdtMLK0PAE95+G
-         UHsar2YSfO7sL93bYGnai0RpaCTbEzQAbufLW2NgH5woKN7/5vWtjkeIg6qBaVFU9VPh
-         Er2VeFX0ErcmUSIvBehlMeYXwv74Smim+58XkpaLUxJJBJDykvoLxNjR1g9kU7+ERwWU
-         wOq/Kfa6Rk9IbqfWUUDvnYA5BPRNIkFSag2Qr75UmCf3pYTGplwMsiLgofgIOxNEtMbH
-         LLww==
+        bh=y5nc8nEZWjuBQmTaRa0LMr0t/dGnjEISw3ovW17pvKY=;
+        b=ewWIfGejas1qU53cAWyN3JLVuSRhRhpDF5m6uTIoiCncukxiMdRrDXRfTOM3PsV/Nr
+         XNlYhiyt3AnswvJskg0hh/XqvYg2KeN5ZbuQXg9vzJVIw5R6mjTFyeAYz8KnbLRV/y3W
+         ngs5Hl5k0Nir3Jyi04BGLLjIYSqId7jOY3+QyJE8swa/H6pmX5ru3n/Gpn9y9OsMIn+j
+         g0MZrdgPvbYmilSKXQhe+5zwgT9gvL+ntD4JWpxmqcNuzS05Z9UxIRq9FhRK4Zq2kxL/
+         h55+3hHldL0NY5ua9PGGY85jqKSVHBZPQKOEuvTBO0xqFZXigUCJmTwJ0p1F5U8GLONc
+         eIJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Z1R8XAgRO1RY9ptbheHK+UH29R2eRMz8Ro595MvYVes=;
-        b=o/hE6IPPMxVduEM0TJDCXTEKeXUaX9k2NENfTQpng0cHpYRWiTUqYs6HhakATperkh
-         k376Vm//XaIIL3EjNLbGnnlebCQ5XI+JkXWTyoW128vMdqwau5kgmvBEuIypm788V2h9
-         6JVirDb3jgptvLD1tE7WFSFWzV7V3K/+a61SSqCdJLgJrNLQKuCPN+PBWN8xX95HgcAg
-         wYoFQe2DL30bGkzu1SqXxqEKwFVuvBoLc0zRsagKMUHCe7eUSc7KlU8XzxIwoF7TVHoe
-         EEfoE5ug69XY43YsdqbLygXFTRRMCOx14eViI62/6rLSuCWWeWNzKZpIyzg5oED+DAt7
-         94kA==
-X-Gm-Message-State: AOAM531v0ieDNYT1dmzZTLJm0Zxb6E1g6DK5PCNEmUX7jYp+8OMCrzDG
-        P352alx+dCTGU3MMXpEb6ULZ8w==
-X-Google-Smtp-Source: ABdhPJzkRWJgbzkZ114xvkXhqIqlkVxz401XfIJZslOH3Cuuu/rWZ1ncxnciYetQhmsi7vVlYYPT2w==
-X-Received: by 2002:a05:6000:c4:b0:20a:bfeb:68dc with SMTP id q4-20020a05600000c400b0020abfeb68dcmr1261741wrx.488.1650530810597;
-        Thu, 21 Apr 2022 01:46:50 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:35ba:2677:956:980d? ([2001:861:44c0:66c0:35ba:2677:956:980d])
-        by smtp.gmail.com with ESMTPSA id b14-20020a7bc24e000000b003899c8053e1sm1675671wmj.41.2022.04.21.01.46.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 01:46:50 -0700 (PDT)
-Message-ID: <ea86eee0-409c-2d19-3669-35a8eaded53e@baylibre.com>
-Date:   Thu, 21 Apr 2022 10:46:57 +0200
+        bh=y5nc8nEZWjuBQmTaRa0LMr0t/dGnjEISw3ovW17pvKY=;
+        b=vFTSdAi7CO98nqKQJVr80OUYGsLsTdEzYpbYh8tL5UuLpYr4+Uu1Itr03hVcUAd5Rg
+         p3OiK25l54wJ95bULApG4dheduep3E2EoWqbvsN0GHibyvUvUzt0hCEnyjyH/UdldnSR
+         VnKMefhYNdXmarJqytPiBUfMie4XczJkL3vCl2hxMPbqxOhDmsYzRCqcExKb/06flJyR
+         14YldPe2rEPI1OXXUCG7h2DNzALMHI4Xw15f1YAe14gkyXDGKh4+YnuVx0yx8R5BM0jo
+         qdR6myUHj+ydwPnuf4rKixAaDla1nEZXeaOaqKfbUqqkWqSbPtn3EXfdvXDl943YSvgT
+         8YqQ==
+X-Gm-Message-State: AOAM532rPvts3vO9ysCI7B6oLlswlV+SUiZ6zDm42E53bc+VjzmwwQkj
+        E+I1o1GUz5GjQSQWQloAaD8=
+X-Google-Smtp-Source: ABdhPJziNI68RSJ40w4UaVeVAWvv7CxloEJNZHggZC/k1TmmyWaENGynAluXJSiPcZDRQD8N7DNrJA==
+X-Received: by 2002:a05:6214:21a7:b0:441:1434:eafd with SMTP id t7-20020a05621421a700b004411434eafdmr18267353qvc.77.1650530832232;
+        Thu, 21 Apr 2022 01:47:12 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 135-20020a37078d000000b0069ea3c7513bsm2724793qkh.121.2022.04.21.01.47.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 01:47:11 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     khalasa@piap.pl
+Cc:     linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] soc: ixp4xx: qmgr: Make use of the helper function devm_platform_ioremap_resource()
+Date:   Thu, 21 Apr 2022 08:47:06 +0000
+Message-Id: <20220421084706.2615657-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V2 1/2] tty: serial: meson: Add a 12MHz internal clock
- rate to calculate baud rate in order to meet the baud rate requirements of
- special BT modules
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Yu Tu <yu.tu@amlogic.com>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220418053202.24528-1-yu.tu@amlogic.com>
- <20220418053202.24528-2-yu.tu@amlogic.com>
- <CAHp75VeW65dV9jJu8-yUWME+XKnaxZBu5Zv8iEJxP2dizA=HUg@mail.gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <CAHp75VeW65dV9jJu8-yUWME+XKnaxZBu5Zv8iEJxP2dizA=HUg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-On 18/04/2022 14:09, Andy Shevchenko wrote:
-> On Mon, Apr 18, 2022 at 8:50 AM Yu Tu <yu.tu@amlogic.com> wrote:
->>
->> A /2 divider over XTAL was introduced since G12A, and is preferred
->> to be used over the still present /3 divider since it provides much
->> closer frequencies vs the request baudrate.Especially the BT module
-> 
-> 'e. E' (mind the space)
-> 
->> uses 3Mhz baud rate. 8Mhz calculations can lead to baud rate bias,
->> causing some problems.
-> 
-> ...
-> 
->> +struct meson_uart_data {
->> +       bool has_xtal_div2;
-> 
-> I would prefer to see this as an unsigned int and with a less
-> particular name, e.g. xtal_div would suffice.
-> 
->> +};
-> 
-> ...
-> 
->> +               unsigned int xtal_div = 3;
-> 
->> +               if (private_data && private_data->has_xtal_div2) {
->> +                       xtal_div = 2;
-> 
-> Better to define privata data always
+Use the devm_platform_ioremap_resource() helper instead of calling
+platform_get_resource() and devm_ioremap_resource() separately.Make the
+code simpler without functional changes.
 
-While I'm in favor of defining private data, here 3 and 2 are actually the values
-2 and 3 used to divide.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/soc/ixp4xx/ixp4xx-qmgr.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-The code is easy to read and we quickly understand this value is the clock divider.
+diff --git a/drivers/soc/ixp4xx/ixp4xx-qmgr.c b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
+index 9154c7029b05..72b5a10e3104 100644
+--- a/drivers/soc/ixp4xx/ixp4xx-qmgr.c
++++ b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
+@@ -377,13 +377,9 @@ static int ixp4xx_qmgr_probe(struct platform_device *pdev)
+ 	int i, err;
+ 	irq_handler_t handler1, handler2;
+ 	struct device *dev = &pdev->dev;
+-	struct resource *res;
+ 	int irq1, irq2;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res)
+-		return -ENODEV;
+-	qmgr_regs = devm_ioremap_resource(dev, res);
++	qmgr_regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(qmgr_regs))
+ 		return PTR_ERR(qmgr_regs);
+ 
+-- 
+2.25.1
 
-> 
-> 
->> +                       val |= AML_UART_BAUD_XTAL_DIV2;
->> +               }
->> +               val |= DIV_ROUND_CLOSEST(port->uartclk / xtal_div, baud) - 1;
-> 
-> 
 

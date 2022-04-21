@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCC850A2E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333B650A2E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389537AbiDUOpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
+        id S1389552AbiDUOqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235484AbiDUOpk (ORCPT
+        with ESMTP id S235484AbiDUOqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:45:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C68B3F31A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:42:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30DF8B824BD
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 14:42:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F5DC385A5;
-        Thu, 21 Apr 2022 14:42:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650552167;
-        bh=faSSihUeKhEgOMFaEeqtYEPXOtu+2j1tbYQhSIYwjKI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tmxnEZe//McI2jrtHQ1WKUam5+59DxYfZH8iiXgGkeee97pJqIEP+rFcV8DAt6Qzl
-         yz3NuZQ+0xtBLq5Y/lnl2ONiFT5cRbrk+1H56LpABvJR4AA71a6MWz4FCtaEaZRjgH
-         fxmAwJ1AZWtQFLEx3aUGyA+XnQrr93o+tdJHwoiOFTR41fvxBvtCiYs44/ORq+Giji
-         r8CeVosEeNLjj7kFi5sIRkwCviM3YpupmRCgNOQNjMUTRLGoYTMfbTMtJG8BBWI67m
-         wBodIke1jnufbZZYoN6s3x2Y9gRVASOCoVXa02uF4vfuSCyZuPH80wGWEodBcmmb9x
-         gaA8N/RVW99ag==
-Date:   Thu, 21 Apr 2022 17:42:40 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Rebecca Mckeever <remckee0@gmail.com>, outreachy@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] memblock tests: remove extra column of spaces in
- block comment
-Message-ID: <YmFtYPlrJtv7iKh3@kernel.org>
-References: <cover.1650452552.git.remckee0@gmail.com>
- <663c930475c3c0a32965024c1094d3288629a3af.1650452552.git.remckee0@gmail.com>
- <d46accec-28f7-d678-b475-c4402bba8211@redhat.com>
+        Thu, 21 Apr 2022 10:46:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7077C4092D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650552196;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ePPTKrCMwADglYVO5peeQ4QQVf5OFLO0wZ8LDZ1O6g8=;
+        b=dfecRGW+qXw79jTVfA4P6Ly8jKHi3YMiG+u1y4yVPoIsGX9Ni822ZM6sxtBvUj6aMUl5kp
+        XLP/2NJ3Zx54kRfQr0Ey1aMJ3i+73wrNwnXOq6EHgaDqLomp17gHtW1oYabkYACSZI833d
+        j9w6oX3PfbHptCTCPXfqU9R3Odx/WZE=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-389-6L1E9lw0PIeH0uQx5A2P4A-1; Thu, 21 Apr 2022 10:43:15 -0400
+X-MC-Unique: 6L1E9lw0PIeH0uQx5A2P4A-1
+Received: by mail-qv1-f69.google.com with SMTP id f18-20020ad442d2000000b0044642dd1d7eso4095013qvr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:43:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ePPTKrCMwADglYVO5peeQ4QQVf5OFLO0wZ8LDZ1O6g8=;
+        b=N9wB6epof7XfxffTiRoB2jSchPAOvcvSvP68Z0/C61sZeVkyq9cK40bWnZNuYP3wdX
+         UcfQwKX8zvVNjvhyPoo0cpVEMWM7QspQynd7yIjyfJWMVxLJ7NuAySUFpd0YBgVCcV44
+         albqKfESU60M6UMKqBNcaOHxIIR6ZWq83heOfnPqRJgFB5eCJ4aXNCUljX3yrZifQoQt
+         pFb9ub5iUgzMdh/rN4ce3hnbYtPdse7k1hmmDp0c3kVeu9HBX0khY6qfOMhVFHnunwPR
+         zQTDimbC2ssgYEKETsAGi1bhARmTG2DwutVWn2gCuTAhdf9tG0xLXtWXwj1xYm1okNA0
+         Cr/g==
+X-Gm-Message-State: AOAM532P3p/VarDo6E49SNqqwJGfsCH2smNtWC3xfRDSr0MTeBMy8uev
+        fAACzHsrV+S3U5RaeMnRgIw58O0rIc3rrYvDwAhIFSk/mUCVb3yWrHy1rx69AlmVt6TX7WQFqwp
+        eXZXy0xEumXIsGdDZ+a0Xk+rh
+X-Received: by 2002:ad4:5bc1:0:b0:42d:758c:f694 with SMTP id t1-20020ad45bc1000000b0042d758cf694mr19026789qvt.99.1650552194915;
+        Thu, 21 Apr 2022 07:43:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx2jn3q9z234SvBuh9QXKIyb+5gtFlLQqL5BZmnHLuyhZev75JSd04yeLJ/gjoODjM5Sghq+Q==
+X-Received: by 2002:ad4:5bc1:0:b0:42d:758c:f694 with SMTP id t1-20020ad45bc1000000b0042d758cf694mr19026774qvt.99.1650552194715;
+        Thu, 21 Apr 2022 07:43:14 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id o14-20020a05622a138e00b002f335c3dbf2sm3538660qtk.37.2022.04.21.07.43.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 07:43:14 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     hjc@rock-chips.com, heiko@sntech.de, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/rockchip: cdn-dp: change rk3399_cdn_dp from global to static
+Date:   Thu, 21 Apr 2022 10:43:04 -0400
+Message-Id: <20220421144304.586396-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d46accec-28f7-d678-b475-c4402bba8211@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 09:09:58AM +0200, David Hildenbrand wrote:
-> On 20.04.22 13:19, Rebecca Mckeever wrote:
-> > Remove extra space at the beginning of each line in block comment
-> > for consistency and to conform to Linux kernel coding style.
-> > 
-> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> > ---
-> >  tools/testing/memblock/tests/basic_api.c | 12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
-> > index 834d8705ff8a..05448a25f1f9 100644
-> > --- a/tools/testing/memblock/tests/basic_api.c
-> > +++ b/tools/testing/memblock/tests/basic_api.c
-> > @@ -303,12 +303,12 @@ static int memblock_add_checks(void)
-> >  	return 0;
-> >  }
-> >  
-> > - /*
-> > -  * A simple test that marks a memory block of a specified base address
-> > -  * and size as reserved and to the collection of reserved memory regions
-> > -  * (memblock.reserved). Expect to create a new entry. The region counter
-> > -  * and total memory size are updated.
-> > -  */
-> > +/*
-> > + * A simple test that marks a memory block of a specified base address
-> > + * and size as reserved and to the collection of reserved memory regions
-> > + * (memblock.reserved). Expect to create a new entry. The region counter
-> > + * and total memory size are updated.
-> > + */
-> >  static int memblock_reserve_simple_check(void)
-> >  {
-> >  	struct memblock_region *rgn;
-> 
-> I'd pull this patch to the front, so you don't end up modifying a wrong
-> style in patch #2. You could also just squash this patch into patch #2
-> and mention it in the patch description.
+Smatch reports this issue
+cdn-dp-core.c:51:20: warning: symbol 'rk3399_cdn_dp' was not declared. Should it be static?
 
-Let's squash this into patch 2.
+rk3399_cdn_dp is only used in cdn-dp-core.c so change
+its storge-class specifier to static.
 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
-> 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/rockchip/cdn-dp-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
+index d3e6c93739bf..ce67c9daa2b1 100644
+--- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
++++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
+@@ -48,7 +48,7 @@ struct cdn_dp_data {
+ 	u8 max_phy;
+ };
+ 
+-struct cdn_dp_data rk3399_cdn_dp = {
++static struct cdn_dp_data rk3399_cdn_dp = {
+ 	.max_phy = 2,
+ };
+ 
 -- 
-Sincerely yours,
-Mike.
+2.27.0
+

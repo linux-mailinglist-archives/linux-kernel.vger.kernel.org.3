@@ -2,133 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8116B50A5BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F6950A52D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiDUQ3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 12:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S229848AbiDUQ1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 12:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbiDUQRY (ORCPT
+        with ESMTP id S230113AbiDUQR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 12:17:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85F3F2B24E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:14:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650557673;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1ngZ3ZDY9ywW927Z5RN+MQNpAIO8k9NmG/nkTnk+1Gs=;
-        b=RQV6R/OB43yQqrkm5oggp9zm3OQVzwmouCHF2z78ixodK8OWZ+73QtiVn5v5sLXs/47n/e
-        LBEFsbpvqxHeeZj870spCCxizcQfMiXe9l8nIRG/ZqVnUtZVauDPYTWM8n3jqP48B57MtD
-        I1PDHote2fMra8vv+o1SdBPcIs4Yu+I=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-282-C-KLB3WxNg2XuWs8uBQeAg-1; Thu, 21 Apr 2022 12:14:32 -0400
-X-MC-Unique: C-KLB3WxNg2XuWs8uBQeAg-1
-Received: by mail-lj1-f199.google.com with SMTP id e3-20020a2e9303000000b00249765c005cso1689192ljh.17
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:14:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1ngZ3ZDY9ywW927Z5RN+MQNpAIO8k9NmG/nkTnk+1Gs=;
-        b=nKUVr3nlGjaIv3HWWZo07VB5F3lYJLp1HgfhCw7soKawSlkLni6GsJ8ncbY0FC0z9i
-         nuH73gGyQz0HgoXJwn/BPU12PkMWpcOALBrsJ21zwcQy+moTW/hVygpDGFX93VxO+dcW
-         jbOi2eJ3pVMob5POUA9532b0Xu1PhuHrZx9XoXK041yEDKlc95295zw6JQMHkZqsFJtt
-         XQt+i5JxU+A3gf0L2lq5l3Hr+gtno6X4La22/oUYkyAb6Je6YPhv/jpIpha9OKZnfTgu
-         /Ufp0EG4v7NOhxv7KmUet49f5ythQuU5e/BWSRq7HukkT3zr9w4QyFxq8cWDoJnmMwfY
-         D7rw==
-X-Gm-Message-State: AOAM5325AJi1G5O0iLrHj9P/GvpMwaDnms4vrLTaPPrWyYLtsRaWQA+3
-        LxTlSdJ/VwU8k6Ea8udPV7nIwkfNgaTKnRI5hm+y180YQ/I64DtPiRiTSeSad3Xmpx2iaHKOcyQ
-        YLTtUm8/VkfKK6et0j+YvWtxHLKmy15lVuBDJ70uu
-X-Received: by 2002:a05:6512:68b:b0:471:d466:979b with SMTP id t11-20020a056512068b00b00471d466979bmr145638lfe.519.1650557671047;
-        Thu, 21 Apr 2022 09:14:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyH8/DjjuvvyMkckIHc+m1v/FBNR0YvL8JTrt6ayXJd/rtn7oBKbgJ1GEaT0nlskTay3z63zTKH5i8fe1g198I=
-X-Received: by 2002:a05:6512:68b:b0:471:d466:979b with SMTP id
- t11-20020a056512068b00b00471d466979bmr145622lfe.519.1650557670855; Thu, 21
- Apr 2022 09:14:30 -0700 (PDT)
+        Thu, 21 Apr 2022 12:17:26 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519462B241;
+        Thu, 21 Apr 2022 09:14:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R821e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VAgYtNo_1650557669;
+Received: from 30.15.235.48(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VAgYtNo_1650557669)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 22 Apr 2022 00:14:31 +0800
+Message-ID: <2067a5c7-4e24-f449-4676-811d12e9ab72@linux.alibaba.com>
+Date:   Fri, 22 Apr 2022 00:14:29 +0800
 MIME-Version: 1.0
-References: <20220420200720.434717-1-parri.andrea@gmail.com>
- <20220420200720.434717-4-parri.andrea@gmail.com> <20220421140805.qg4cwqhsq5vuqkut@sgarzare-redhat>
- <20220421152827.GB4679@anparri>
-In-Reply-To: <20220421152827.GB4679@anparri>
-From:   Stefano Garzarella <sgarzare@redhat.com>
-Date:   Thu, 21 Apr 2022 18:14:19 +0200
-Message-ID: <CAGxU2F6UCiFQrXu4Nn=jNPbuE8i5hYe=Hkwak43kTMQoCQQy2A@mail.gmail.com>
-Subject: Re: [PATCH 3/5] hv_sock: Add validation for untrusted Hyper-V values
-To:     Andrea Parri <parri.andrea@gmail.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hyperv@vger.kernel.org,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: EMFILE/ENFILE mitigation needed in erofs?
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, willy@infradead.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com,
+        tianzichen@kuaishou.com, fannaihao@baidu.com,
+        zhangjiachen.jaycee@bytedance.com
+References: <20220415123614.54024-3-jefflexu@linux.alibaba.com>
+ <20220415123614.54024-1-jefflexu@linux.alibaba.com>
+ <1447543.1650552898@warthog.procyon.org.uk>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <1447543.1650552898@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 5:30 PM Andrea Parri <parri.andrea@gmail.com> wrote:
->
-> > > @@ -577,12 +577,19 @@ static bool hvs_dgram_allow(u32 cid, u32 port)
-> > > static int hvs_update_recv_data(struct hvsock *hvs)
-> > > {
-> > >     struct hvs_recv_buf *recv_buf;
-> > > -   u32 payload_len;
-> > > +   u32 pkt_len, payload_len;
-> > > +
-> > > +   pkt_len = hv_pkt_len(hvs->recv_desc);
-> > > +
-> > > +   /* Ensure the packet is big enough to read its header */
-> > > +   if (pkt_len < HVS_HEADER_LEN)
-> > > +           return -EIO;
-> > >
-> > >     recv_buf = (struct hvs_recv_buf *)(hvs->recv_desc + 1);
-> > >     payload_len = recv_buf->hdr.data_size;
-> > >
-> > > -   if (payload_len > HVS_MTU_SIZE)
-> > > +   /* Ensure the packet is big enough to read its payload */
-> > > +   if (payload_len > pkt_len - HVS_HEADER_LEN || payload_len > HVS_MTU_SIZE)
-> >
-> > checkpatch warns that we exceed 80 characters, I do not have a strong
-> > opinion on this, but if you have to resend better break the condition into 2
-> > lines.
->
-> Will break if preferred.  (but does it really warn??  I understand that
-> the warning was deprecated and the "limit" increased to 100 chars...)
 
-I see the warn here:
-https://patchwork.kernel.org/project/netdevbpf/patch/20220420200720.434717-4-parri.andrea@gmail.com/
 
-in the kernel doc [1] we still say we prefer 80 columns, so I try to
-follow, especially when it doesn't make things worse.
+On 4/21/22 10:54 PM, David Howells wrote:
+> Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+> 
+>> +	fd_install(fd, file);
+> 
+> Do you need to mitigate potential EMFILE/ENFILE problems?  You're potentially
+> trebling up the number of accounted systemwide fds: one for erofs itself, one
+> anonfd per cache object file to communicate with the daemon and one in the
+> daemon to talk to the server.  Cachefiles has a fourth internally, but it's
+> kept off the books - further, cachefiles closes them fairly quickly after a
+> period of nonuse.
+> 
 
-[1] https://docs.kernel.org/process/coding-style.html#breaking-long-lines-and-strings
+Hi, thanks for pointing it out.
 
->
->
-> > Maybe even update or remove the comment? (it only describes the first
-> > condition, but the conditions are pretty clear, so I don't think it adds
-> > much).
->
-> Works for me.  (taking it as this applies to the previous comment too.)
+1. Actually in our using scenarios, one erofs filesystem is formed of
+several chunk-deduplicated blobs (which are really cached by
+Cachefiles), while each blob can contain many files of erofs. For
+example, one container image for node.js will correspond to ~20 blob
+files in total. Only these blob files are cached by Cachefiles. In
+densely employed environment, there could be hundreds of containers and
+thus thousands of backing files on one machine. That is, only tens of
+thousands of fds/files is needed in this case.
 
-Yep.
+2. Our user daemon will configure rlimit-nofile to a reasonably large
+(e.g. 1 million) value, so that it won't fail when trying to allocate fds.
 
+https://github.com/dragonflyoss/image-service/blob/master/src/bin/nydusd/main.rs#L152
+
+3. Our user daemon will close the anonymous fd once the corresponding
+backing file has fully downloaded, to free the fd resources.
+
+4. Even if fd/file allocation fails (in cachefiles_ondemand_get_fd()),
+the INIT request will fail, and thus the erofs mount will fail then.
+That is, it won't break the upper erofs in this case.
+
+5. If later we find that the number of fds/files is indeed an issue,
+then we also plan to make the user daemon close some fds to spare some
+free resources. And then the Cachefiles kernel module needs to
+reallocate an anonymous fd for the backing file when cache miss. But it
+remains to be done later if it's really needed.
+
+
+-- 
 Thanks,
-Stefano
-
+Jeffle

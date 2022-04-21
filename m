@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E562250A1A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3B750A1CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389078AbiDUONt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S1389004AbiDUOOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389020AbiDUONd (ORCPT
+        with ESMTP id S1389093AbiDUOOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:13:33 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BDF3B022
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:10:44 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id q3so4991045plg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:10:44 -0700 (PDT)
+        Thu, 21 Apr 2022 10:14:01 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C88A3BBD1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:10:51 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id g9so4725900pgc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:10:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VgGgMxYprzA3l/xL3EqCp11c0RZBUqA2IVp2y5zwqwA=;
-        b=M36LrAYWtb8/DoIhQ7z4mrZyLrYcU/P5mDTC8OcvJeJwkp5xp8E/y7f+cIJhpcGd44
-         BvYLzOew7P4Py83ksLyx9FX0mCGqSP21YfUc2Xfl6rmzBp1aUhIVu/j78Dc/jB/GZZZ2
-         TXv4Ga/iBpaNrPhhnBx2hzVkSlaplNMGKTGoiMmPDASV/GIYouSrciYUG+Ib0o7vPX/Z
-         L0jhhEgeZg5A26zJpfarDt3zFdgCvdoa+xpBQYrp1tC5Yx74frA+Sl9zD6BSujs74orn
-         o9b3aiZEzdyXuKfgb2lHXit0Ts6B8S1iE0vbUiVMmxucEUkeNphg4hfpPtuQqD+LBXz1
-         hdDg==
+        bh=GvPI5O7bc6LGIykxFdqKLQ/TYyAeta3g92krnAeVAuA=;
+        b=LGWfT3TK3DeviWkajBNJhZgzCGZRdpR9GaR5Ev83VxnJ1tfR2Qyz7mR7k5z2oc0zVa
+         GnGuboKEr02q4LBg3uVHhR4DKUxzg3km6pQwsxSBVcXoSOtpWoBGX0t4UC9EVly3sq+H
+         NYqHZjM2V7KYQNFZRRP0CWoMra3J89piNMsZycSpIB2SeQfMjw3iuI3Zl6Bhcdx0oeKn
+         nEGg2LwDCA5hm2M9TP5hrgda7lIKs4nJtf1MGrXljvwg14l15ecRLG6Bw5GODjduKFAM
+         8I4a+J5e+Y6TkZuFOzJ0xEn1aVZzsS6fsVgEvrb2HdmSn9n2rXedntnihkB1cWsSYpOY
+         nGfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VgGgMxYprzA3l/xL3EqCp11c0RZBUqA2IVp2y5zwqwA=;
-        b=F1eft448SYSPSc1fuMWRBnRary0434hV/QQ0AVRFwmfrHSQq/2/05KC5+B2Tf20/Ge
-         Lnsygs6BYc4+FWiyaghLBxKNLWJHyKDgf4kH+JlZ3yRhsxatN2kiAQMKz+bQkU1GBVHv
-         OEJkCuZvNbJBKUCchGarVjYFdmBh1HRxfG2HW0Az8z9pNwoku3MqisNaJ2HMRLIth3Ks
-         gEfP/iacFAUsHO/TPL7HgJ1FeRjhVt8r2AJQkrbAJGqhb0nVyczjheo83IHgXWgL+t2O
-         oYJ6OSUPxK7jUmFkhJD//g1HF3VvaHpBhnZ0pNKbMy9hBW8tOIs8YWKwOXhGhx6JkD/Q
-         clsQ==
-X-Gm-Message-State: AOAM530013Mh/fvixeUPnEXUJISv8yAvlY7JCFao4gc6xBO4lJ26VSL3
-        nVtkKpCTfkBSmEHYu0BbXd8iODb9+CQ=
-X-Google-Smtp-Source: ABdhPJxX/H8qICvWj3ZVLuik1LZmVooJXj2X2VrvAd6Bo8EThbQNUg/GImEzOpiauwj5/xCyYdKGXQ==
-X-Received: by 2002:a17:90b:3c47:b0:1cb:8121:dcc8 with SMTP id pm7-20020a17090b3c4700b001cb8121dcc8mr10800735pjb.35.1650550243502;
-        Thu, 21 Apr 2022 07:10:43 -0700 (PDT)
+        bh=GvPI5O7bc6LGIykxFdqKLQ/TYyAeta3g92krnAeVAuA=;
+        b=QvfuuSrklimmbhIvvF4UcqayiH1LI41XxhEjByk3D0fH32jeBuaRwicDdBpKyPhytS
+         QL92m3T2zMxZG27y+BXo5P47JnZ0+AKNjPs57LwVg1JbaRMy6aKxOq+bzvXhKN7KP3d9
+         P8cbNydkJm7zil5ETQuZ8YV2TDq3L9z+QVjDxsqIHHidETzoRT0+/G5QspUxshRYifL3
+         oZO7JESR9OV0VwsagC/gJGLFO5F0kizTE4euU1u1qkDGEODuZfCyQthDSHM+JX4ql/ZI
+         CsD670pWBq9ut0+tTWAjRtwgTAqJMfiEqPqO6YGGhneIexZ7YrYsGPl2DPZyH0X94Nua
+         YPpg==
+X-Gm-Message-State: AOAM531TXB61IqYUUzYZHlE6uLTiaka37CHiSxIPY5ZWt2g+AX4VNmtO
+        z98qh8ess7vf/KaZHSovYqYSbQv/y4Q=
+X-Google-Smtp-Source: ABdhPJzG4wScVdh4bCGcVi1HfKVqMqladVHf9o0jjUXDi545xRY+BTS4LT+OQP8eymwuLM9hinXoCg==
+X-Received: by 2002:a63:2a45:0:b0:3a9:f71e:a63d with SMTP id q66-20020a632a45000000b003a9f71ea63dmr18379206pgq.69.1650550250943;
+        Thu, 21 Apr 2022 07:10:50 -0700 (PDT)
 Received: from localhost ([47.251.4.198])
-        by smtp.gmail.com with ESMTPSA id m1-20020a17090ade0100b001cb3feaddfcsm2672000pjv.2.2022.04.21.07.10.42
+        by smtp.gmail.com with ESMTPSA id h10-20020a056a001a4a00b004f7c76f29c3sm24462527pfv.24.2022.04.21.07.10.49
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Apr 2022 07:10:43 -0700 (PDT)
+        Thu, 21 Apr 2022 07:10:50 -0700 (PDT)
 From:   Lai Jiangshan <jiangshanlai@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Borislav Petkov <bp@alien8.de>,
@@ -59,10 +59,11 @@ Cc:     Borislav Petkov <bp@alien8.de>,
         Lai Jiangshan <jiangshan.ljs@antgroup.com>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH V6 5/8] x86/entry: Don't call error_entry() for XENPV
-Date:   Thu, 21 Apr 2022 22:10:52 +0800
-Message-Id: <20220421141055.316239-6-jiangshanlai@gmail.com>
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Subject: [PATCH V6 6/8] x86/entry: Convert SWAPGS to swapgs and remove the definition of SWAPGS
+Date:   Thu, 21 Apr 2022 22:10:53 +0800
+Message-Id: <20220421141055.316239-7-jiangshanlai@gmail.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20220421141055.316239-1-jiangshanlai@gmail.com>
 References: <20220421141055.316239-1-jiangshanlai@gmail.com>
@@ -80,42 +81,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-When in XENPV, it is already in the task stack, and it can't fault for
-native_iret() nor native_load_gs_index() since XENPV uses its own pvops
-for IRET and load_gs_index().  And it doesn't need to switch the CR3.
+XENPV doesn't use swapgs_restore_regs_and_return_to_usermode(),
+error_entry() and entry_SYSENTER_compat().
 
-So there is no reason to call error_entry() in XENPV.
+Change the PV-compatible SWAPGS to the ASM instruction swapgs in these
+functions.
 
-Cc: Juergen Gross <jgross@suse.com>
+Also remove the definition of SWAPGS since there is no user of the
+SWAPGS anymore.
+
+Reviewed-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 ---
- arch/x86/entry/entry_64.S | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ arch/x86/entry/entry_64.S        | 6 +++---
+ arch/x86/entry/entry_64_compat.S | 2 +-
+ arch/x86/include/asm/irqflags.h  | 8 --------
+ 3 files changed, 4 insertions(+), 12 deletions(-)
 
 diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index ab6ab6d3dab5..062aa9d95961 100644
+index 062aa9d95961..312186612f4e 100644
 --- a/arch/x86/entry/entry_64.S
 +++ b/arch/x86/entry/entry_64.S
-@@ -336,8 +336,17 @@ SYM_CODE_END(push_and_clear_regs)
- 	call push_and_clear_regs
- 	UNWIND_HINT_REGS
+@@ -1019,7 +1019,7 @@ SYM_CODE_START_LOCAL(error_entry)
+ 	 * We entered from user mode or we're pretending to have entered
+ 	 * from user mode due to an IRET fault.
+ 	 */
+-	SWAPGS
++	swapgs
+ 	FENCE_SWAPGS_USER_ENTRY
+ 	/* We have user CR3.  Change to kernel CR3. */
+ 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
+@@ -1051,7 +1051,7 @@ SYM_CODE_START_LOCAL(error_entry)
+ 	 * gsbase and proceed.  We'll fix up the exception and land in
+ 	 * .Lgs_change's error handler with kernel gsbase.
+ 	 */
+-	SWAPGS
++	swapgs
  
--	call	error_entry
--	movq	%rax, %rsp			/* switch to the task stack if from userspace */
-+	/*
-+	 * Call error_entry() and switch to the task stack if from userspace.
-+	 *
-+	 * When in XENPV, it is already in the task stack, and it can't fault
-+	 * for native_iret() nor native_load_gs_index() since XENPV uses its
-+	 * own pvops for IRET and load_gs_index().  And it doesn't need to
-+	 * switch the CR3.  So it can skip invoking error_entry().
-+	 */
-+	ALTERNATIVE "call error_entry; movq %rax, %rsp", \
-+		"", X86_FEATURE_XENPV
-+
- 	ENCODE_FRAME_POINTER
- 	UNWIND_HINT_REGS
+ 	/*
+ 	 * Issue an LFENCE to prevent GS speculation, regardless of whether it is a
+@@ -1072,7 +1072,7 @@ SYM_CODE_START_LOCAL(error_entry)
+ 	 * We came from an IRET to user mode, so we have user
+ 	 * gsbase and CR3.  Switch to kernel gsbase and CR3:
+ 	 */
+-	SWAPGS
++	swapgs
+ 	FENCE_SWAPGS_USER_ENTRY
+ 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
  
+diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
+index 4fdb007cddbd..c5aeb0819707 100644
+--- a/arch/x86/entry/entry_64_compat.S
++++ b/arch/x86/entry/entry_64_compat.S
+@@ -50,7 +50,7 @@ SYM_CODE_START(entry_SYSENTER_compat)
+ 	UNWIND_HINT_EMPTY
+ 	ENDBR
+ 	/* Interrupts are off on entry. */
+-	SWAPGS
++	swapgs
+ 
+ 	pushq	%rax
+ 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
+diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+index 111104d1c2cd..7793e52d6237 100644
+--- a/arch/x86/include/asm/irqflags.h
++++ b/arch/x86/include/asm/irqflags.h
+@@ -137,14 +137,6 @@ static __always_inline void arch_local_irq_restore(unsigned long flags)
+ 	if (!arch_irqs_disabled_flags(flags))
+ 		arch_local_irq_enable();
+ }
+-#else
+-#ifdef CONFIG_X86_64
+-#ifdef CONFIG_XEN_PV
+-#define SWAPGS	ALTERNATIVE "swapgs", "", X86_FEATURE_XENPV
+-#else
+-#define SWAPGS	swapgs
+-#endif
+-#endif
+ #endif /* !__ASSEMBLY__ */
+ 
+ #endif
 -- 
 2.19.1.6.gb485710b
 

@@ -2,124 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EAB509A15
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B55D509A2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386319AbiDUIDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S1386329AbiDUIDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiDUIDi (ORCPT
+        with ESMTP id S1344890AbiDUIDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:03:38 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA2926F5;
-        Thu, 21 Apr 2022 01:00:49 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id ks6so8381139ejb.1;
-        Thu, 21 Apr 2022 01:00:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IvbH4EZL+5AN5QzEHqEkY2O3ivfSAm4vpHw9+hhvBhg=;
-        b=l9A2zxVr+iaQxUxYrdl2Ms8QPgKKprVPWu836jDS1a9kDgOF87eiKg/WQ2Pp7p0uU5
-         2yNRXou7K8UFGozJ+zY/Z4nvAWfNQL2rfMjP+xXVlPOuM9uOjKLpuuReXJ/1yNQdQwuh
-         j0rwMLAJikQsK++NSTkjAZZIpdlqPGGrisobY6AkDBUSn+EF1pPZ26RV1iYw2+CmyG9Z
-         D2LmcczIZ72xeD8VaXUH0mDdLEb2aoTOXjcPu5w7P06BXPfBaOVOvqtrL86fe03Il6B4
-         EOW8KU+HycFTbAN4tLYJDkZ3tbTG01Z6v9mMOvBRakLpz/3LsxFq95QSfevhyaAXz0Qd
-         bVTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IvbH4EZL+5AN5QzEHqEkY2O3ivfSAm4vpHw9+hhvBhg=;
-        b=mMPZHqY1pPIrpZpVe91YkXlWi42EV943ExfwYrB94+eLM+JHhgYYiLUWa6wjXQg8Al
-         iEdywdl0d4/O85cxNP9CrMfgunEr0so5FPn9VsMvihlhaXyIyGav2w3Pz8hKIdLofSGP
-         sqDCo49Cdf+BMHN2HPtr97VVyWbBbqPEJ51vjmqNa5nTEJyoDhHK7oVQIjqfgp8YpOS0
-         LjJDFKdb8qC3TPE1ilQsx7xAk6LAWhCVcrvUNOiTVfgGcdBraWzidRBKmqFpwbirl858
-         dGp206r/ZOscDjBrkHknCvp2iE/lhcx2aDA8S1VQjjmbrXg6u+78a6wIx0xciaoV+8l0
-         JdHw==
-X-Gm-Message-State: AOAM533SzGKV58ctiNpXlv1n0+2cwj9xTh4jrMlCnFkSrH+dT2JiUB/6
-        RCDpVcjScpNVJ8RUvsWJXTffBt0W0YJz/JJvArI=
-X-Google-Smtp-Source: ABdhPJwZVRm8KFRbk9B79qovRjYyl5U7m19/ioAtyBVJMdSRPYNtjRxgrnX2fTY7SlA9nxFEZPk7MVR3ZDEQhaVY+/E=
-X-Received: by 2002:a17:906:5e17:b0:6e8:b6b8:2b09 with SMTP id
- n23-20020a1709065e1700b006e8b6b82b09mr20915528eju.477.1650528047664; Thu, 21
- Apr 2022 01:00:47 -0700 (PDT)
+        Thu, 21 Apr 2022 04:03:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B0E1B7A1;
+        Thu, 21 Apr 2022 01:00:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F0D4FCE20F3;
+        Thu, 21 Apr 2022 08:00:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA691C385A9;
+        Thu, 21 Apr 2022 08:00:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650528054;
+        bh=kzI7cNCI/MQ41Ygqo1vpDlykJ1QbTxbXNmI8WhhimmQ=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=uvCakPe7gzWAmGB5n5HdstoT10rszEeh29X9NW6qZM1gttVKRTdRkLBYkf6Xkg8DK
+         G1Xv+90XoOPqnpwponuDHH9V55BsaNasckVr/22M8AnYwCmoZueNSeL/h/mpb/b0nF
+         vi04EMG8Rzt1Z3AVTrCpOxxGj/z9wn+m/YnJhXmfOqvfHXS0fppthn8qm3ZxIe+D9N
+         B/OVJsGgwiCT0rVD2Gse8Hfe47nEq4iCLHZ0+mITw7ppmtGknb+CneBRRQ6o6XqwEw
+         MKG5u7O/aqZglPpEHdUQFn9dn8xf9HYvJH4ogfQO4YRDP0ANDJWs1qNuXzQXLN0B1L
+         6CuEj6R4Rj8ng==
+Date:   Thu, 21 Apr 2022 10:00:50 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Bastien Nocera <hadess@hadess.net>
+cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Ping Cheng <ping.cheng@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>
+Subject: Re: [PATCH] HID: wacom: Correct power_supply type
+In-Reply-To: <892475a2d458aa1e8f5027f13d6582f0f6b4b05e.camel@hadess.net>
+Message-ID: <nycvar.YFH.7.76.2204211000150.30217@cbobk.fhfr.pm>
+References: <20220407115406.115112-1-hadess@hadess.net>  <nycvar.YFH.7.76.2204111708230.30217@cbobk.fhfr.pm> <892475a2d458aa1e8f5027f13d6582f0f6b4b05e.camel@hadess.net>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <20220419111650.1582274-1-Jason@zx2c4.com> <20220419111650.1582274-11-Jason@zx2c4.com>
-In-Reply-To: <20220419111650.1582274-11-Jason@zx2c4.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Thu, 21 Apr 2022 01:00:36 -0700
-Message-ID: <CAMo8Bf+ox2MQRkqsTaOOXOchOWpb+7P8GQ1c-TjwSpDgttXoFA@mail.gmail.com>
-Subject: Re: [PATCH v5 10/11] xtensa: use fallback for random_get_entropy()
- instead of zero
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:SPARC + UltraSPAR..." <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE..." <x86@kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 4:18 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> In the event that random_get_entropy() can't access a cycle counter or
-> similar, falling back to returning 0 is really not the best we can do.
-> Instead, at least calling random_get_entropy_fallback() would be
-> preferable, because that always needs to return _something_, even
-> falling back to jiffies eventually. It's not as though
-> random_get_entropy_fallback() is super high precision or guaranteed to
-> be entropic, but basically anything that's not zero all the time is
-> better than returning zero all the time.
->
-> This is accomplished by just including the asm-generic code like on
-> other architectures, which means we can get rid of the empty stub
-> function here.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  arch/xtensa/include/asm/timex.h | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+On Wed, 20 Apr 2022, Bastien Nocera wrote:
 
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+> > > POWER_SUPPLY_TYPE_USB seems to only ever be used by USB ports that
+> > > are
+> > > used to charge the machine itself (so a "system" scope), like the
+> > > single USB port on a phone, rather than devices.
+> > > 
+> > > The wacom_sys driver is the only driver that sets its device
+> > > battery as
+> > > being a USB type, which doesn't seem correct based on its usage, so
+> > > switch it to be a battery type like all the other USB-connected
+> > > devices.
+> > > 
+> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> > > ---
+> > >  drivers/hid/wacom_sys.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
+> > > index 066c567dbaa2..620fe74f5676 100644
+> > > --- a/drivers/hid/wacom_sys.c
+> > > +++ b/drivers/hid/wacom_sys.c
+> > > @@ -1777,7 +1777,7 @@ static int __wacom_initialize_battery(struct
+> > > wacom *wacom,
+> > >         bat_desc->get_property = wacom_battery_get_property;
+> > >         sprintf(battery->bat_name, "wacom_battery_%ld", n);
+> > >         bat_desc->name = battery->bat_name;
+> > > -       bat_desc->type = POWER_SUPPLY_TYPE_USB;
+> > > +       bat_desc->type = POWER_SUPPLY_TYPE_BATTERY;
+> > >         bat_desc->use_for_apm = 0;
+> > >  
+> > >         ps_bat = devm_power_supply_register(dev, bat_desc,
+> > > &psy_cfg);
+> > 
+> > Thanks Bastien, makes sense. CCing Jason and Ping (the Wacom driver 
+> > maintainers) to get their Ack.
+> 
+> Hey,
+> 
+> I know both Jason and Ping, but their name didn't show up when running
+> get_maintainers.pl and neither of their names are in the MAINTAINERS
+> file.
+> 
+> This probably needs fixing.
+
+Agreed. Wacom driver is by itself substantial enough in order to have 
+MAINTAINERS entry.
+
+Jason, Ping, could you please send me a patch adding yourself as 
+maintainers?
+
+Thanks,
 
 -- 
-Thanks.
--- Max
+Jiri Kosina
+SUSE Labs
+

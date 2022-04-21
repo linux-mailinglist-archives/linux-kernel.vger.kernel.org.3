@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE71509503
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 04:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45ACD509506
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 04:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiDUCXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 22:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
+        id S237355AbiDUC1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 22:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiDUCXG (ORCPT
+        with ESMTP id S229462AbiDUC1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 22:23:06 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C250338A8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 19:20:18 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so6497805pjn.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 19:20:18 -0700 (PDT)
+        Wed, 20 Apr 2022 22:27:17 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA36614E;
+        Wed, 20 Apr 2022 19:24:29 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q19so3428196pgm.6;
+        Wed, 20 Apr 2022 19:24:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kQqxPFkBgwTTXmjwogf+rVXv18PbhFLAuuZBC/yrNE8=;
-        b=gAbcEDXLXf1cJAOuQcMz7KFmTi65M0OI1L+R+LrFk1NUI5eLmqLTlOn4vgPrp6nUY/
-         dQ8EWp0H2qkMBdjvMBYO2wzIIvsjpy1iaePWXigztNdFtdY4LjushgcYLJ6wLueUQzot
-         +RTTlMBVrTFQaSuWyKg+rIkYVajru6hHk0/PWkn6Rwqdm6vMiEKgtp+6Fz8196U+b17H
-         fLrovoP/NJEM3D+FfmWiLY9b98NXC3/IQGMrd8WFDXu+foGy5FbJiYgmZGYgDlw9+TBZ
-         J2IJXxjM35dgR6Lar9GJuiBhtnJAlH2enb2vdZWofi4fdk+FwKypjUep97zBA+AIoRjN
-         +R+g==
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=/wI3QVM59jnzfvExzc3w5EEsA2aIl90/0QKeHl4f9CM=;
+        b=W3vGZl7r3ZjtXymMnPLZs5bQLNRgN/w94RrpyGN0BiGqZ5/HMtlyoXuKEe2veSgDbc
+         7jvuwhGTRhJAjkDdxdRKtskBgJ+8zMjavyTI8JPcGzkzSWiYFjGDbTYwVIGAWZUQpLtr
+         U+a/66SpkNFIqkr7wuFYVq0v3r/az7rzZYmsXoZ/O3Dnil67+CrNGO4GCnRxfkfthtnc
+         9dGxPyx08v3A1sSHgBbT4JKqn5Dtvpue+VOmaw7kq+hmkR7oiYeF4CLgv7ZI9JUTVhMZ
+         qoAswAephXy9v6+53kncpD2JN+nhMom9NPD5QtdHGYtxydXUmbBYvhmNgAeIMur8SHVp
+         /eow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kQqxPFkBgwTTXmjwogf+rVXv18PbhFLAuuZBC/yrNE8=;
-        b=UwuZoi+eL4oFvT4M5y05WhN/Qx6w2a6l8x3cheLiBYVMTZYxzvlGLTQHb8tCqG1irI
-         VPs2C5nU1mWNW5MIcG/2AAfs2v+Scc4MNIbyRIGa2GGQGXd/vdbFa1cU1EmdqJBzEF5l
-         qPbxPgKiCwLGwF4IgkBztRYr/5JRnVVnS8dRd/gMCx63wDl9ITWUscC/qjtdS7mgzJAM
-         JqYZ5o2jYLOANknfx7yQpQTsh24R2+4pRzAB+H0vE7RsEwJspU6rndjSUOLyI2Q+zq+G
-         vjbZV4fOHCVv30eZg23P900+kWstjaiWWw+8criWxzCLHW5kVtYwd32Lh0Yew0JJd5bk
-         o+Fg==
-X-Gm-Message-State: AOAM532L8e9VjdEQTGkdySqFbJqJsnWs7IdQzrsFP2WgcoQz7BsROF1V
-        2t3HvoVTYrMPm27T2OI4gHQUQUmOEI9dHlMbChTFmQ==
-X-Google-Smtp-Source: ABdhPJxALQ7XKx0NqGhsKF79EfC7DnemDTaSi9ZA4BMtPhmpe2U+v+sShPr+O2cHd+WfhRLhxANO+I6PBVY9QBU08gY=
-X-Received: by 2002:a17:902:ea57:b0:15a:6173:87dd with SMTP id
- r23-20020a170902ea5700b0015a617387ddmr1322664plg.147.1650507618157; Wed, 20
- Apr 2022 19:20:18 -0700 (PDT)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=/wI3QVM59jnzfvExzc3w5EEsA2aIl90/0QKeHl4f9CM=;
+        b=kjswNyDW99D2jk2puuXcQqK/ybs3LygOABefm63sLWO2d1+Fh4/Azf0BN+USG9FAvc
+         7A8O9JZz2JPMDRH4GUqmIatc8XmXINJUd+1uqHP8VIEP0CsdaI9Ey7rrJZPbbrK89LuM
+         Lewkinin83gCJbKDHyAamkTRQu0rJXiB+JCdKxyYutm75ePgQx2e4dnopUQhXSgk6guj
+         ZrvingiiCxT7b09dGGx1yXpd2fGNOhK7KjaE3/PW9o5TYiXP20Y82LqZkiysTwxCZUnO
+         AOEaxiBu+DpWpuvBGqvcaJhofmdwZiE/Qqt1LsHRImYklDRk96bnp2TZPqrEdX7T5C88
+         pQaA==
+X-Gm-Message-State: AOAM531rqmBpCLqL9k2016fNeM9FPG6qJNu2eYgD28/O1tIvG72c50YQ
+        hDhHLSTcGYEiIY28OtZr3JI=
+X-Google-Smtp-Source: ABdhPJwDreTNr9TQGQiEgLFd2JcwXp5IZ6wi0i625PLqgWPFG0mu3wBzk9UyJ4/IDgqaPL3UnCgyyw==
+X-Received: by 2002:aa7:88cd:0:b0:50a:9579:a1b with SMTP id k13-20020aa788cd000000b0050a95790a1bmr11381732pff.25.1650507868641;
+        Wed, 20 Apr 2022 19:24:28 -0700 (PDT)
+Received: from localhost ([203.221.203.144])
+        by smtp.gmail.com with ESMTPSA id hi21-20020a17090b30d500b001cd4989ff4csm532182pjb.19.2022.04.20.19.24.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 19:24:28 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 12:24:22 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2 bpf 1/3] vmalloc: replace VM_NO_HUGE_VMAP with
+ VM_ALLOW_HUGE_VMAP
+To:     Christoph Hellwig <hch@infradead.org>, Song Liu <song@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, imbrenda@linux.ibm.com,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        rick.p.edgecombe@intel.com
+References: <20220411233549.740157-1-song@kernel.org>
+        <20220411233549.740157-2-song@kernel.org> <YlT9i9DFvwDx9+AD@infradead.org>
+        <CAPhsuW7XJHa3OaTT-4=33c70gUjCaWFrVe8h8J-hZetjxXeeog@mail.gmail.com>
+In-Reply-To: <CAPhsuW7XJHa3OaTT-4=33c70gUjCaWFrVe8h8J-hZetjxXeeog@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
- <20220421012045.GR1544202@dread.disaster.area> <86cb0ada-208c-02de-dbc9-53c6014892c3@fujitsu.com>
-In-Reply-To: <86cb0ada-208c-02de-dbc9-53c6014892c3@fujitsu.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Wed, 20 Apr 2022 19:20:07 -0700
-Message-ID: <CAPcyv4i0Noum8hqHtCpdM5HMVdmNHm3Aj2JCnZ+KZLgceiXYaA@mail.gmail.com>
-Subject: Re: [PATCH v13 0/7] fsdax: introduce fs query to support reflink
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1650507506.z839xl6pvt.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,58 +79,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ add Andrew and Naoya ]
+Excerpts from Song Liu's message of April 12, 2022 4:00 pm:
+> On Mon, Apr 11, 2022 at 9:18 PM Christoph Hellwig <hch@infradead.org> wro=
+te:
+>>
+>> On Mon, Apr 11, 2022 at 04:35:46PM -0700, Song Liu wrote:
+>> > Huge page backed vmalloc memory could benefit performance in many case=
+s.
+>> > Since some users of vmalloc may not be ready to handle huge pages,
+>> > VM_NO_HUGE_VMAP was introduced to allow vmalloc users to opt-out huge
+>> > pages. However, it is not easy to add VM_NO_HUGE_VMAP to all the users
+>> > that may try to allocate >=3D PMD_SIZE pages, but are not ready to han=
+dle
+>> > huge pages properly.
+>>
+>> This is a good place to document what the problems are, and how they are
+>> hard to track down (e.g. because the allocations are passed down I/O
+>> stacks)
+>=20
+> Will add it in v3.
+>=20
+>>
+>> >
+>> > Replace VM_NO_HUGE_VMAP with an opt-in flag, VM_ALLOW_HUGE_VMAP, so th=
+at
+>> > users that benefit from huge pages could ask specificially.
+>> >
+>> > Also, replace vmalloc_no_huge() with opt-in helper vmalloc_huge().
+>>
+>> We still need to find out what the primary users of the large vmalloc
+>> hashes was and convert them.
+>=20
+> @ Claudio and Nicholas,
+>=20
+> Could you please help identify users of large vmalloc? So far, I found
+> alloc_large_system_hash(), and something like the following seems to
+> work:
 
+The large system hashes were the main ones I was interested in. IIRC=20
+there was a few more in some drivers or tracing things depending on
+config but those are less important (to me at least).
 
-On Wed, Apr 20, 2022 at 6:48 PM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrot=
-e:
->
-> Hi Dave,
->
-> =E5=9C=A8 2022/4/21 9:20, Dave Chinner =E5=86=99=E9=81=93:
-> > Hi Ruan,
-> >
-> > On Tue, Apr 19, 2022 at 12:50:38PM +0800, Shiyang Ruan wrote:
-> >> This patchset is aimed to support shared pages tracking for fsdax.
-> >
-> > Now that this is largely reviewed, it's time to work out the
-> > logistics of merging it.
->
-> Thanks!
->
-> >
-> >> Changes since V12:
-> >>    - Rebased onto next-20220414
-> >
-> > What does this depend on that is in the linux-next kernel?
-> >
-> > i.e. can this be applied successfully to a v5.18-rc2 kernel without
-> > needing to drag in any other patchsets/commits/trees?
->
-> Firstly, I tried to apply to v5.18-rc2 but it failed.
->
-> There are some changes in memory-failure.c, which besides my Patch-02
->    "mm/hwpoison: fix race between hugetlb free/demotion and
-> memory_failure_hugetlb()"
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
-t/?id=3D423228ce93c6a283132be38d442120c8e4cdb061
->
-> Then, why it is on linux-next is: I was told[1] there is a better fix
-> about "pgoff_address()" in linux-next:
->    "mm: rmap: introduce pfn_mkclean_range() to cleans PTEs"
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
-t/?id=3D65c9605009f8317bb3983519874d755a0b2ca746
-> so I rebased my patches to it and dropped one of mine.
->
-> [1] https://lore.kernel.org/linux-xfs/YkPuooGD139Wpg1v@infradead.org/
+Curious what the problem is though. powerpc so far has not required
+any special case outside arch/powerpc/ for this so I would much
+prefer x86 to fix itself rather than add APIs which non-arch code
+really shouldn't need to know about.
 
-From my perspective, once something has -mm dependencies it needs to
-go through Andrew's tree, and if it's going through Andrew's tree I
-think that means the reflink side of this needs to wait a cycle as
-there is no stable point that the XFS tree could merge to build on top
-of.
-
-The last reviewed-by this wants before going through there is Naoya's
-on the memory-failure.c changes.
+Thanks,
+Nick

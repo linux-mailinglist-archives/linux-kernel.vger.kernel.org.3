@@ -2,72 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279E750975F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2E050976A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384773AbiDUGVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S1384779AbiDUGVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 02:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352817AbiDUGVn (ORCPT
+        with ESMTP id S1351437AbiDUGVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:21:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7416BC2B;
-        Wed, 20 Apr 2022 23:18:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xlBQ6DVKGvFJX+Ldx3rdWv/HFspbxlibkRveNNlmLbM=; b=ug8j40B6lWGt+wzhUTXj7e353L
-        gJ4Bo/pvrUNY75psm5ERq71079ac/QEKwfkQZXEc0dKCAXNuoiTkVplW+XfWLyd3Kcbn4NLeTFk8/
-        CWYYY8/aQFy6J1s+IE6OtE9TVksfH751fx0T0NRQzIoi4PCXQOvPwsiS1bFnTYYwbBCl6lvfevuto
-        j1xnoqWAKx1mjzB4N1sTzM2E5FkoM3yyBgja95DbZhY/znKbEN7krEt753Oo2qMjefVGALyBTm+4v
-        YvQoxX+U2FNxDaZ3+lapRetBuRcdlTUGd2mPRaXmZ8UxxgoZKxVQmwYbTTD7lGhYUYCHW3uSr4pOm
-        hy1M7Ruw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhQ9X-00Bfqb-83; Thu, 21 Apr 2022 06:18:55 +0000
-Date:   Wed, 20 Apr 2022 23:18:55 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
-Subject: Re: [PATCH v2 11/12] md/raid5: Check all disks in a stripe_head for
- reshape progress
-Message-ID: <YmD3T8KcmSm0e0bS@infradead.org>
-References: <20220420195425.34911-1-logang@deltatee.com>
- <20220420195425.34911-12-logang@deltatee.com>
+        Thu, 21 Apr 2022 02:21:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D73913DEA
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 23:19:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3504CB82144
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:19:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E5D8C385A8;
+        Thu, 21 Apr 2022 06:19:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650521940;
+        bh=A35b6aKRsL1WwiGliC0xhlYgiek83WbVQ2sMW6EUJFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kwQSKgz9wmmf3NTHwQ7BL7vY4Kq7wavgmKcqaRF5TrXK7jaUHnRNToOOspvdy6hlo
+         6to0dKDvh2nbK8PmOE6osbSae/us5OnLriUJdcuZTLw2J5ErH//2rN7Zmkg2gQw1p2
+         4wM1kL4ld6nl+N3yFcLFSsrrpekQ+2h/M3FwRU2I=
+Date:   Thu, 21 Apr 2022 08:18:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fenghua.yu@intel.com, reinette.chatre@intel.com
+Subject: Re: [PATCH v3 1/9] drivers: base: Add hardware prefetch control core
+ driver
+Message-ID: <YmD3UX6aTvUXlYF5@kroah.com>
+References: <20220420030223.689259-1-tarumizu.kohei@fujitsu.com>
+ <20220420030223.689259-2-tarumizu.kohei@fujitsu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420195425.34911-12-logang@deltatee.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220420030223.689259-2-tarumizu.kohei@fujitsu.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 01:54:24PM -0600, Logan Gunthorpe wrote:
-> +static bool range_ahead_of_reshape(struct mddev *mddev, sector_t min,
-> +				   sector_t max, sector_t reshape_sector)
-> +{
-> +	if (mddev->reshape_backwards)
-> +		return max < reshape_sector;
-> +	else
-> +		return min >= reshape_sector;
-> +}
+On Wed, Apr 20, 2022 at 12:02:15PM +0900, Kohei Tarumizu wrote:
+> This driver adds the register/unregister function to create the
+> "prefetch_control" directory and some attribute files. Attributes are
+> only present if the particular cache implements the relevant
+> prefetcher controls
+> 
+> If the architecture has control of the CPU's hardware prefetcher
+> behavior, use this function to create sysfs. When registering, it is
+> necessary to provide what type of hardware prefetcher is supported
+> and how to read/write to the register.
+> 
+> Following patches add support for A64FX and x86.
+> 
+> Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+> ---
+>  drivers/base/pfctl.c  | 458 ++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/pfctl.h |  49 +++++
+>  2 files changed, 507 insertions(+)
+>  create mode 100644 drivers/base/pfctl.c
+>  create mode 100644 include/linux/pfctl.h
 
-Nit: no need for the return.
+Thanks to Thomas for pointing this change out to me.
 
-Otherwise looks good:
+Why did you not use get_maintainer.pl on your patch?  You are adding
+files here that you want _me_ to maintain for the next 25+ years, yet
+not asking for my review?  That's not nice, and for that reason alone I
+would not accept this change.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Also, this is very hardware-specific, which is not a good thing for code
+in drivers/base/  See the mess we have in the topology driver core code
+for examples of that mess :(
+
+greg k-h

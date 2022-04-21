@@ -2,40 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2F5509963
+	by mail.lfdr.de (Postfix) with ESMTP id 25692509961
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385916AbiDUHl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        id S1385922AbiDUHjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385953AbiDUHkx (ORCPT
+        with ESMTP id S1385972AbiDUHjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:40:53 -0400
-Received: from mail.coredeal.pl (mail.coredeal.pl [51.75.73.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103FD1D302
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:37:20 -0700 (PDT)
-Received: by mail.coredeal.pl (Postfix, from userid 1002)
-        id D1148A2935; Thu, 21 Apr 2022 07:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=coredeal.pl; s=mail;
-        t=1650526605; bh=9KGuIG62LgzC9aYmjKxzocuYLRCVghXg6v9Q1q2LHec=;
-        h=Date:From:To:Subject:From;
-        b=U0BKJShAInm3wUnSILGvUN1nJV6gx1OLBHydjqpjHl+bj8TUNMSeThVmvnr4yd/d4
-         trpiIlBlH9yZdfWWFcfZI134lELSlIwMzoOZMBhgyGD8bc683WocMfJLu5kIic/950
-         gAsEJiuUJ+4AtIb/AfkJ2/ssiDJL6Tg3t/rA+jblMq1OBL+umZCwkRuKq9yRfL/8Mc
-         BMVzF7QDg+VnqrgHaTKNyG5sBbsiL3Thr3mnuRyMUB1b4N5omgC2jKxmZagTf7MJTs
-         2MVIVjrSBm1m9ROBAf2QEpdKLA3hciPT7rkTzb7Hv29R41DiyBzX086iEf0J3xRAuw
-         Dsg21VB1oNhaA==
-Received: by mail.coredeal.pl for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:36:06 GMT
-Message-ID: <20220421064500-0.1.2o.h714.0.3tajefweez@coredeal.pl>
-Date:   Thu, 21 Apr 2022 07:36:06 GMT
-From:   "Krzysztof Maj" <krzysztof.maj@coredeal.pl>
-To:     <linux-kernel@vger.kernel.org>
-Subject: Biznesowy angielski
-X-Mailer: mail.coredeal.pl
+        Thu, 21 Apr 2022 03:39:31 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A691BEBA;
+        Thu, 21 Apr 2022 00:36:11 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 21EA01BF20C;
+        Thu, 21 Apr 2022 07:36:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650526570;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mcb4fNSQYUR6OWiIdyOzCplJ/DTcA5AU/+7wwXW0E90=;
+        b=MOj5ny+Vw2r4F0LVZL6WM582GYT413UwNGIAbPUvPMklTVkYFZxLDyO8GI6bBnEKy4V5gB
+        KkTpR1CgsUYoCCW/7vddUpcSjOrE9v1vC3CgbuPs/25jtHG76naJyO6MFmc2EfRMiWIFVb
+        8EQR2OMOagscs25K9yq524dllQKWR9TEPIPkrtLUiwG+v5cvE9bems/c37Vg1uILhE/MN/
+        binECpa7A928AsFGVx/9dDeycf6cGVHAs6no7X/CfFiW7ThM3wuXnYDrRXvj8NGkkSU0IJ
+        bROhCPozgNknDeNQI/oCQfugBawiIUVTS7GukWGTMJMrL+wnfl5+yvsfQEl+RA==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>, vigneshr@ti.com,
+        richard@nod.at, miquel.raynal@bootlin.com, joern@lazybastard.org
+Cc:     kernel@axis.com, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        frowand.list@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] dt-bindings: reserved-memory: Support MTD/block device
+Date:   Thu, 21 Apr 2022 09:36:08 +0200
+Message-Id: <20220421073608.72216-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220412135302.1682890-3-vincent.whitchurch@axis.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'9638e151eeeaeabcad4341ba20f63fe80916cd7a'
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -45,29 +55,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
+On Tue, 2022-04-12 at 13:53:00 UTC, Vincent Whitchurch wrote:
+> Add bindings to allow MTD/block devices to be used in reserved-memory
+> regions using the "phram" (MTD in PHysical RAM) driver.
+> 
+> This allows things like partitioning to be specified via the existing
+> devicetree bindings.
+> 
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-czy rozwa=C5=BCali Pa=C5=84stwo rozw=C3=B3j kwalifikacji j=C4=99zykowych =
-swoich pracownik=C3=B3w?
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-Opracowali=C5=9Bmy kursy j=C4=99zykowe dla r=C3=B3=C5=BCnych bran=C5=BC, =
-w kt=C3=B3rych koncentrujemy si=C4=99 na podniesieniu poziomu s=C5=82owni=
-ctwa i jako=C5=9Bci komunikacji wykorzystuj=C4=85c autorsk=C4=85 metod=C4=
-=99, stworzon=C4=85 specjalnie dla wymagaj=C4=85cego biznesu.=20
-
-Niestandardowy kurs on-line, dopasowany do profilu firmy i obszar=C3=B3w =
-=C5=9Bwiadczonych us=C5=82ug, w szybkim czasie przyniesie efekty, kt=C3=B3=
-re zwi=C4=99ksz=C4=85 komfort i jako=C5=9B=C4=87 pracy, rozwijaj=C4=85c m=
-o=C5=BCliwo=C5=9Bci biznesowe.=20
-
-Zdalne szkolenie j=C4=99zykowe to m.in. zaj=C4=99cia z native speakerami,=
- kt=C3=B3re w szybkim czasie naucz=C4=85 pracownik=C3=B3w rozmawia=C4=87 =
-za pomoc=C4=85 jasnego i zwi=C4=99z=C5=82ego j=C4=99zyka Business English=
-=2E
-
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3=
-w i opowiedzie=C4=87 jak dzia=C5=82amy?=20
-
-
-Pozdrawiam
-Krzysztof Maj
+Miquel

@@ -2,147 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB17509602
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 06:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B49F50960E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 06:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382388AbiDUEh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 00:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
+        id S1384119AbiDUEur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 00:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiDUEh4 (ORCPT
+        with ESMTP id S229988AbiDUEuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 00:37:56 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B57D11164;
-        Wed, 20 Apr 2022 21:35:08 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-115-138.pa.nsw.optusnet.com.au [49.181.115.138])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id EB00153454A;
-        Thu, 21 Apr 2022 14:35:04 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nhOX0-002eRf-Fr; Thu, 21 Apr 2022 14:35:02 +1000
-Date:   Thu, 21 Apr 2022 14:35:02 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-Subject: Re: [PATCH v13 0/7] fsdax: introduce fs query to support reflink
-Message-ID: <20220421043502.GS1544202@dread.disaster.area>
-References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
- <20220421012045.GR1544202@dread.disaster.area>
- <86cb0ada-208c-02de-dbc9-53c6014892c3@fujitsu.com>
- <CAPcyv4i0Noum8hqHtCpdM5HMVdmNHm3Aj2JCnZ+KZLgceiXYaA@mail.gmail.com>
+        Thu, 21 Apr 2022 00:50:44 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2069.outbound.protection.outlook.com [40.107.220.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D69B1C7;
+        Wed, 20 Apr 2022 21:47:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UIhrnkjPybLUJxstuMNs0kOZ25RdOUdqCFJjS1m9/VxfxHy5/Z1rDMMgv4/azM7Gk0E7dI/9ODpc9tPubGLJvdI8qHIYHLeef+58YBq98lux9EsslkG3bqbCogU3rvsCpmZswk6DPdSI3KZaX2Do6HVRa0J081oO4R3pVnXqRiTYlj7sZJPPqMjR9Nefgs7bHdCh/EELlJUsRFMUFmxzys/Yw0T0BIsy1p9RTVRRxCicVRGU+i7HdzvIA3FUYsoBJ5kCO9OofvmXM1FbBfYSTdt507/FzbhaUKQv2FrFSQTroeJChdMq2fsHJZkJo0eFtKxg2SodZhFwDocpd9qzDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2i+SsGdgsccQ/uN8ZWDouvxeI3awoFGAk3jO+2GXae4=;
+ b=TzaPTCT7KkOIRSSRkyp2P9MT5Tdn3NkQZncywPwg6r+EkI6waHC4/uWw0qRAeHkrSZdERBCY0FdCNuYPBqUxPLRJJRrAcxhpaRcj8wZZYE/NWPo9/G15FNJgObnnnf0RW5jnvW0mXw4uAiU5y733Y22K228soUtlSLgwREBjy3bJ4vY0+NBCV/4BCsC4/xhOacfRzr0u+buhK1aE3RdBY9K3CkHyRlzfl9prshmUYN/qwmI3Xewrpng96DoVf0YwTraEq689B0vuudhRYxBWY9E7MG0ltAkpE6Uuj/Wrcbqn2LR/gJu56HjoTVnpUU3KngLQtaFI/CgCeV7fU7f3kA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2i+SsGdgsccQ/uN8ZWDouvxeI3awoFGAk3jO+2GXae4=;
+ b=JLorzw2IrZZ7qHnnSdj8jb1F9eYZ3eiZ+82zT4ZYUN+P1QbcKe/VbbYqdPh8YJG7SfnXrUiBj5xjeobDzB0sSwAJE/yCztwE/7qTQCkw4ZhoZQo06MPqj2PdN1Xf4lTH392o1dIMMtqC2OxDP3r45HfAvrfhB4SV86GJ4FHQMpQ=
+Received: from BN9PR03CA0442.namprd03.prod.outlook.com (2603:10b6:408:113::27)
+ by CH2PR02MB6773.namprd02.prod.outlook.com (2603:10b6:610:7a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Thu, 21 Apr
+ 2022 04:47:53 +0000
+Received: from BN1NAM02FT021.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:113:cafe::a) by BN9PR03CA0442.outlook.office365.com
+ (2603:10b6:408:113::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14 via Frontend
+ Transport; Thu, 21 Apr 2022 04:47:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT021.mail.protection.outlook.com (10.13.2.73) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5186.14 via Frontend Transport; Thu, 21 Apr 2022 04:47:53 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 20 Apr 2022 21:47:50 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Wed, 20 Apr 2022 21:47:50 -0700
+Envelope-to: git@xilinx.com,
+ mdf@kernel.org,
+ hao.wu@intel.com,
+ yilun.xu@intel.com,
+ trix@redhat.com,
+ linux-fpga@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Received: from [10.140.6.60] (port=35750 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1nhOjO-0002Sb-6t; Wed, 20 Apr 2022 21:47:50 -0700
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <michal.simek@xilinx.com>,
+        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <git@xilinx.com>
+CC:     Nava kishore Manne <nava.manne@xilinx.com>
+Subject: [PATCH v5 0/5]fpga: fix for coding style and kernel-doc issues
+Date:   Thu, 21 Apr 2022 10:17:39 +0530
+Message-ID: <20220421044744.3777983-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPcyv4i0Noum8hqHtCpdM5HMVdmNHm3Aj2JCnZ+KZLgceiXYaA@mail.gmail.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=6260defb
-        a=/kVtbFzwtM2bJgxRVb+eeA==:117 a=/kVtbFzwtM2bJgxRVb+eeA==:17
-        a=IkcTkHD0fZMA:10 a=z0gMJWrwH1QA:10 a=omOdbC7AAAAA:8 a=VwQbUJbxAAAA:8
-        a=JfrnYn6hAAAA:8 a=7-415B0cAAAA:8 a=4wxXsGBeZjQiNu9EbwgA:9
-        a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=1CNFftbPRP8L7MoqJWF3:22
-        a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5813104b-d6bc-44cf-a3b3-08da2352187d
+X-MS-TrafficTypeDiagnostic: CH2PR02MB6773:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR02MB6773758A17E10D01A37FECC1C2F49@CH2PR02MB6773.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iaf2Odqi4sj3zxr38QHr6CsxMYSLyfK97AxJesu7njRkZdr/B0Ul809Dq0pTySFQAsfCsTQq495qjMYsl9ZQRU9fmBQjDeAsRpgqL0p59DnNBMCGzNlqtIxGbQ68Ar3pq+Id60imG2gspO3GF4NScgq0eiasyadp8LesyVD35W9v0a02wcZSFQMo0Hv0dp4v3BGQye725k262t84HNWa7RmuJMovru/3D9V2n4/IM8ar++aHRTbb6wSiQtEl3vx3F2e09Oslon6EflIsKmmVpSCEeWVc9ChYeHRZFc8NbWyzLxfus6kOkGqeX6iXtSpjZseqt4Y2GFQDnhaXDEF6NA0JEykUvnjKROe6ZI6qOHwh0Ae9vHR73V1tworsXM5+A3Ja214CqYDOm4pl8VLLWfkt/wrWYrJzinqMyFoNJgOm/DX3XpK+mCo3TariE9NkIY7HBn3CTdx/uJichCxqjKuJ4/lZ14M23dheT50EP0ZOPCPZQZ6r1nrgNumjdA9YgkoN9nVYitjppW6Er8CTZoHwdRDJWcMFscU+dXDR+A0tBvNaWsiGOqDx6fHxbYNioMWTEZGEmTDkV8x4DmTRMYSsnctQ9jP+Zdr5TBrOTPc4Rr5CFDFAj/qrWcEVnvNzSSEPXhoDL4npILbjA7eHq5lknquhkProP4z2JwUYTI3kbquvs3SKcV6ekR4pQj6uYj5vuZgc4GOLX/0C/CbUk8bv3f9rvDO3H8u2kECJAx8=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(110136005)(82310400005)(6636002)(336012)(36860700001)(7636003)(426003)(356005)(316002)(36756003)(40460700003)(70206006)(83380400001)(70586007)(2906002)(508600001)(186003)(26005)(5660300002)(9786002)(47076005)(7696005)(6666004)(1076003)(4744005)(4326008)(8676002)(107886003)(8936002)(2616005)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2022 04:47:53.0117
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5813104b-d6bc-44cf-a3b3-08da2352187d
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT021.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6773
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 07:20:07PM -0700, Dan Williams wrote:
-> [ add Andrew and Naoya ]
-> 
-> On Wed, Apr 20, 2022 at 6:48 PM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
-> >
-> > Hi Dave,
-> >
-> > 在 2022/4/21 9:20, Dave Chinner 写道:
-> > > Hi Ruan,
-> > >
-> > > On Tue, Apr 19, 2022 at 12:50:38PM +0800, Shiyang Ruan wrote:
-> > >> This patchset is aimed to support shared pages tracking for fsdax.
-> > >
-> > > Now that this is largely reviewed, it's time to work out the
-> > > logistics of merging it.
-> >
-> > Thanks!
-> >
-> > >
-> > >> Changes since V12:
-> > >>    - Rebased onto next-20220414
-> > >
-> > > What does this depend on that is in the linux-next kernel?
-> > >
-> > > i.e. can this be applied successfully to a v5.18-rc2 kernel without
-> > > needing to drag in any other patchsets/commits/trees?
-> >
-> > Firstly, I tried to apply to v5.18-rc2 but it failed.
-> >
-> > There are some changes in memory-failure.c, which besides my Patch-02
-> >    "mm/hwpoison: fix race between hugetlb free/demotion and
-> > memory_failure_hugetlb()"
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=423228ce93c6a283132be38d442120c8e4cdb061
-> >
-> > Then, why it is on linux-next is: I was told[1] there is a better fix
-> > about "pgoff_address()" in linux-next:
-> >    "mm: rmap: introduce pfn_mkclean_range() to cleans PTEs"
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=65c9605009f8317bb3983519874d755a0b2ca746
-> > so I rebased my patches to it and dropped one of mine.
-> >
-> > [1] https://lore.kernel.org/linux-xfs/YkPuooGD139Wpg1v@infradead.org/
-> 
-> From my perspective, once something has -mm dependencies it needs to
-> go through Andrew's tree, and if it's going through Andrew's tree I
-> think that means the reflink side of this needs to wait a cycle as
-> there is no stable point that the XFS tree could merge to build on top
-> of.
+This patch series fixes the coding style and kernel-doc issues
+exists in the fpga framework, zynq and ZynqMP drivers.
 
-Ngggh. Still? Really?
+Nava kishore Manne (5):
+  fpga: zynq: Fix incorrect variable type
+  fpga: fix for coding style issues
+  fpga: fpga-mgr: fix kernel-doc warnings
+  fpga: Use tab instead of space indentation
+  fpga: fpga-region: fix kernel-doc formatting issues
 
-Sure, I'm not a maintainer and just the stand-in patch shepherd for
-a single release. However, being unable to cleanly merge code we
-need integrated into our local subsystem tree for integration
-testing because a patch dependency with another subsystem won't gain
-a stable commit ID until the next merge window is .... distinctly
-suboptimal.
+ drivers/fpga/Makefile            |  6 +++---
+ drivers/fpga/fpga-mgr.c          |  8 ++++++--
+ drivers/fpga/fpga-region.c       |  7 ++++---
+ drivers/fpga/of-fpga-region.c    | 22 ++++++++++++----------
+ drivers/fpga/zynq-fpga.c         |  2 +-
+ include/linux/fpga/fpga-region.h |  7 ++++---
+ 6 files changed, 30 insertions(+), 22 deletions(-)
 
-We know how to do this cleanly, quickly and efficiently - we've been
-doing cross-subsystem shared git branch co-ordination for
-VFS/fs/block stuff when needed for many, many years. It's pretty
-easy to do, just requires clear communication to decide where the
-source branch will be kept. It doesn't even matter what order Linus
-then merges the trees - they are self contained and git sorts out
-the duplicated commits without an issue.
-
-I mean, we've been using git for *17 years* now - this stuff should
-be second nature to maintainers by now. So how is it still
-considered acceptible for a core kernel subsystem not to have the
-ability to provide other subsystems with stable commits/branches
-so we can cleanly develop cross-subsystem functionality quickly and
-efficiently?
-
-> The last reviewed-by this wants before going through there is Naoya's
-> on the memory-failure.c changes.
-
-Naoya? 
-
-Cheers,
-
-Dave.
 -- 
-Dave Chinner
-david@fromorbit.com
+2.25.1
+

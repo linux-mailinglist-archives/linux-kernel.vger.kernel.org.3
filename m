@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F8A509DBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C246B509DC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388438AbiDUKie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S242288AbiDUKjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348260AbiDUKic (ORCPT
+        with ESMTP id S244756AbiDUKjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:38:32 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C250226D9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:35:43 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so4837386pjf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:35:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=4vfQyttDdobHbBrio36ZO852PxT9+1cO/BhU8vf48uk=;
-        b=DuzY7rUHRzXoGFGfhE5pxkY0ntp+rTJLUsPtfGEvnjo/5lO4p6XBT4zfMfum6MNlLv
-         W1WpqwncMTZ4NSHeB9n0KzoyxOGpEYbY7wzyPSc9H6TlpX5rHzMG/3VK0/5jGwWj0Cub
-         P58MaqmRmI0H9M2ExfHFdm5CDoYboJKUfcL8YUNhsg83GLstj04ApVZjymIQutnBk/HK
-         JkVrzRlvZk8XfVMKAh0oHQQPv9f+NznFL8JkS+IQiN3lNA0w5F2Es5rhzTnRvOo1YxAu
-         Au5/Z91FNuyKt0hH4i9U0PS8Gvbnbo+Bm0eyG6xscBesz5uBhcucAUe4b8Cgh5fCvIIO
-         Kg+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=4vfQyttDdobHbBrio36ZO852PxT9+1cO/BhU8vf48uk=;
-        b=CZvMOLDLiTKmvkTg93dGg7czktg6F/YOq6ueGIN9zn1BIsa9bRNMesOMQ7iit0vpJ5
-         5Mga4G4lUCZHQ0ZBEsGxdkg8Y3UXmFycDbJMfNP2kgsoP7RAVDXZ3RF99cc5HW8ZNsOH
-         My2TINHAXvYQwTUzOWHi5WkbRIsPUV8/FrcSqld2tbCoa+jOeFEl20pnGeLNCuGKZF9r
-         l1EYoCb4EbxC7UJ0u3o53bh530zUBteO0sjU/rowMVoWLx+U6HDO7bB+O5sWZqOR6SGL
-         fETuPP1ArifbxEDfupBqKJ/z0zglQ+xKObpxnBbL5VMlLsj+IIynT11oiGq5gtLX/Trv
-         fDvw==
-X-Gm-Message-State: AOAM531bdF5C7+UPM0ueBwE2nb5azPx1XLmzQUpruMSJldgTPIdk6ZKs
-        9cAQ51ka29kjR8Avxv8q2JAAN3cVVUP8eeBQ+uY=
-X-Google-Smtp-Source: ABdhPJwd7wo1+saee0v/ztCSzf6gbJfz32plAbQWDq/WoyRuaNeufzFpy5DI8xX05ADz0KoWboKfmE7/mHOb60rlg0o=
-X-Received: by 2002:a17:902:f787:b0:152:157:eb7 with SMTP id
- q7-20020a170902f78700b0015201570eb7mr24050901pln.109.1650537343388; Thu, 21
- Apr 2022 03:35:43 -0700 (PDT)
+        Thu, 21 Apr 2022 06:39:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58DE725580
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650537379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CUudNcrJ1xRNDS1+KVl4Z0t857WYmRRKh3nXvmEZfk0=;
+        b=EguN0E/EbwfdszCC6SzUtof3DhIDDfeQ0fGSqUoWnaVUizu0fsIY4Po9SK/aPrDMpFWqL/
+        KBKil11FijMlwz+RJoM6UmeE4IwozGyvzOw2YwJfLJmkGode/BoGU7n43p/EBXusH3+uIn
+        fo0bjqRfv/G3uVLzueC6d3kclVT3/bg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-626-nLlxoeJ0O0OU8ItYH0q6RA-1; Thu, 21 Apr 2022 06:36:16 -0400
+X-MC-Unique: nLlxoeJ0O0OU8ItYH0q6RA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DF5D29DD992;
+        Thu, 21 Apr 2022 10:36:15 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C67C140F4940;
+        Thu, 21 Apr 2022 10:36:13 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <YlySEa6QGmIHlrdG@codewreck.org>
+References: <YlySEa6QGmIHlrdG@codewreck.org> <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com> <2551609.RCmPuZc3Qn@silver> <YlwOdqVCBZKFTIfC@codewreck.org> <8420857.9FB56xACZ5@silver> <YlyFEuTY7tASl8aY@codewreck.org>
+To:     asmadeus@codewreck.org
+Cc:     dhowells@redhat.com,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
+        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        lucho@ionkov.net, netdev@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, Greg Kurz <groug@kaod.org>
+Subject: Re: 9p EBADF with cache enabled (Was: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie detected))
 MIME-Version: 1.0
-Sender: ndubuisio992@gmail.com
-Received: by 2002:a05:7300:1482:b0:5e:412:aee6 with HTTP; Thu, 21 Apr 2022
- 03:35:42 -0700 (PDT)
-From:   Hannah Johnson <hannahjohnson8856@gmail.com>
-Date:   Thu, 21 Apr 2022 10:35:42 +0000
-X-Google-Sender-Auth: LR0vnZXJAVofE9ix5298pvrpqII
-Message-ID: <CAO7YTNnkiPMkRR0oaib4B1PakzLdgk5M3KWhsVcsVNiNKcSqQQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1050015.1650537372.1@warthog.procyon.org.uk>
+Date:   Thu, 21 Apr 2022 11:36:12 +0100
+Message-ID: <1050016.1650537372@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello
-Nice to meet you
-my name is Hannah Johnson i will be glad if we get to know each other
-more better and share pictures i am  expecting your reply
-thank you
+asmadeus@codewreck.org wrote:
+
+> 	int fd = open(argv[1], O_WRONLY|O_APPEND);
+> 	if (fd < 0)
+> 		return 1;
+> 	if (write(fd, "test\n", 5) < 0)
+
+I think I need to implement the ability to store writes in non-uptodate pages
+without needing to read from the server as NFS does.  This may fix the
+performance drop also.
+
+David
+

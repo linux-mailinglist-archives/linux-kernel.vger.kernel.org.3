@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A48250A98C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0DA50A990
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392104AbiDUTzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S1392111AbiDUT4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241640AbiDUTzI (ORCPT
+        with ESMTP id S241640AbiDUT4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:55:08 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C994C7B5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:52:18 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id v12so1311888wrv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:52:18 -0700 (PDT)
+        Thu, 21 Apr 2022 15:56:24 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7514D4D9CE
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:53:33 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id d4so3737869iln.6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:53:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BQ5dyd6fs/bmeT8pS5RVio7sbjG930KgOScg6ZzdPYo=;
-        b=BbVajbWzTI9iuTT8JJXqugzc+jYRncQ2CahBLrh1s0jY529GXxKHFiDclAFH4xjuv1
-         5fMoB1rGe4LhMTtHVm01nDiM4LVubcEJKNUij/1P+Cm8oSIDB92SAJac8BryUCWv1ZCh
-         9DoIuvyNbSaxE42uLvVyUpAoEv6ufGe+ijlGiYKknamH0//ETKR9nVWmyP7N0dR/qNoY
-         ESciveBBXx8JIKKr7vEQQ7mu88IpvCZ8vz/HJUP7U2gv2bAELU1ql3thEQd7Dy2Vj7VW
-         XGaJDBWbWWWIpEGbzKleZ9vB+oWrwQacCQefiqtwztcPjK96SD+WkDSQq7OY1gvu4ISl
-         GOgQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4Fp8I2teBvC2LPg6RF/V9ydJf/9piC7RkC1O1f16Dt8=;
+        b=EiQ7b3lZ3OWSwuxcqo952gjjmRgTBoeyntgQI/ebdhKMrYIkf6YLGQamXtzh7xp7cf
+         Yxd9oN7eIjfMzRNhOsAT6kIxjJFbk7DrUA5Se6gmoxVpra51PH+IeghUi+kI50W6P7D+
+         AhL8r2v0Xmjh8JBB1JT5+WLPiMX0ssQxonFSE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BQ5dyd6fs/bmeT8pS5RVio7sbjG930KgOScg6ZzdPYo=;
-        b=sS67Ns/IdQy+J4DFqsKbMtyq2I5OQr/IRqOlvFbibpk6NzTqh9zfOzzuh8weeoLPue
-         ThGiqZzgWf471ZVShLE0yKJurWpA+Vwkr6mNCltOhQeH7zS+L1FqhwjGrbJxb8yqJ+9Y
-         htlT1mGBwa5pJ98dVBnOZTECA2hOYmmaZwg9sjbwlmxwvWEO9i5WfPwwWx1biKLA7zPv
-         dyXd9DHGVkXZZ07+lNLVVQ8V1gCo1dhIMBJsqmlE/Od3NqunLEIJoedDJr0yo3BLaIFj
-         O1YsVY3/NsEza846zVL4BQCZHP5tyT9zd66+cayQZK4jk5oqX1CJ3xiPcGSUJtIpJyrc
-         OXUg==
-X-Gm-Message-State: AOAM531Ej6Q637Bgk7m5psce1TdadrTVeKtkBuT6a4EtEH7t/SmG8kzv
-        oUZ53XSMb2thTrRYnntprhRvX8DcFLA=
-X-Google-Smtp-Source: ABdhPJzN6SNNtwOoCtQDCY9KQ49Aeegx8MoX9dTJFyJTMUvteQbKMvaqYB6aDL49STrkEKq4lk9FAA==
-X-Received: by 2002:a05:6000:111:b0:207:ac77:3d07 with SMTP id o17-20020a056000011100b00207ac773d07mr977069wrx.136.1650570736840;
-        Thu, 21 Apr 2022 12:52:16 -0700 (PDT)
-Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id z3-20020a1cf403000000b0037d1f4a2201sm2776214wma.21.2022.04.21.12.52.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 12:52:15 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Larry.Finger@lwfinger.net, Jaehee Park <jhpark1013@gmail.com>
-Cc:     phil@philpotter.co.uk, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev, jhpark1013@gmail.com
-Subject: Re: [PATCH v4 1/7] staging: r8188eu: remove unnecessary braces in single statement block
-Date:   Thu, 21 Apr 2022 21:52:14 +0200
-Message-ID: <16185752.0ZKypZ73Fx@leap>
-In-Reply-To: <b96ae957e2ddc519e56813a1c56e770168f67a2d.1650568579.git.jhpark1013@gmail.com>
-References: <cover.1650568579.git.jhpark1013@gmail.com> <b96ae957e2ddc519e56813a1c56e770168f67a2d.1650568579.git.jhpark1013@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4Fp8I2teBvC2LPg6RF/V9ydJf/9piC7RkC1O1f16Dt8=;
+        b=E/tHFGDD7k+N575PVaK1NWo4UikTR6/x9JsQFsujANnDkNylxB9WcaP9BMOuii5D/H
+         n1ZV+N2d//qZg/On4mHVyX4JFwtlAAeOk51N1UCfie3B+6HYgPIwrtqhD5PnPLxE5aaP
+         DoDJsVH1dXs27sYt2JijUCsMwMusZIvUB0U6jQmAoe3fZIP9o6gJVJo3giipv/q4QzvY
+         2dn9PQZGA2iTI8BPPurgmxMbrD2093eJA87qs2yOmpIm9+gMfgCVvjrZC26vLBKMuaem
+         2HwhMrjUvJrl4CjolgTcLJzZXerpZAoqMk2y+dxTA/k9gMZ5zf4bis/Q73QNY0N1Mpmz
+         ZCZg==
+X-Gm-Message-State: AOAM5325vJM1IZpLz/riJZvhEmA8yZYJdZ7IiVvcaRX9xQKGAktqmefU
+        ua4eVgIfVgmVkvwBMVLxCPerCY/4fy9Fc6P+/utNrKj72SE=
+X-Google-Smtp-Source: ABdhPJz/vbMC6EQBuL+cwufIsiRm5Sq9qShZyqMFEJQfkpAkkJFjGcqcgvTrNwiR3f42gDv04B6ZxJrQPydbI9eEk9Q=
+X-Received: by 2002:a05:6e02:1a01:b0:2cc:5497:3ded with SMTP id
+ s1-20020a056e021a0100b002cc54973dedmr624769ild.322.1650570812678; Thu, 21 Apr
+ 2022 12:53:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220418231746.2464800-1-grundler@chromium.org>
+In-Reply-To: <20220418231746.2464800-1-grundler@chromium.org>
+From:   Grant Grundler <grundler@chromium.org>
+Date:   Thu, 21 Apr 2022 12:53:21 -0700
+Message-ID: <CANEJEGtaFCRhVBaVtHrQiJvwsuBk3f_4RNTg87CWERHt+453KA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] net: atlantic: more fuzzing fixes
+To:     Grant Grundler <grundler@chromium.org>
+Cc:     Igor Russkikh <irusskikh@marvell.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Aashay Shringarpure <aashay@google.com>,
+        Yi Chou <yich@google.com>,
+        Shervin Oloumi <enlightened@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=C3=AC 21 aprile 2022 21:20:26 CEST Jaehee Park wrote:
-> Remove braces for single statement block to minimize the number of
-> empty lines, without loss of readability. Issue found with checkpatch.
-> WARNING: braces {} are not necessary for single statement blocks
->=20
-> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-> ---
->  drivers/staging/r8188eu/core/rtw_mlme.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/
-r8188eu/core/rtw_mlme.c
-> index 3e9882f89f76..d3f4d7cdfa08 100644
-> --- a/drivers/staging/r8188eu/core/rtw_mlme.c
-> +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-> @@ -112,9 +112,8 @@ void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
-> =20
->  	rtw_free_mlme_priv_ie_data(pmlmepriv);
-> =20
-> -	if (pmlmepriv) {
-> +	if (pmlmepriv)
->  		vfree(pmlmepriv->free_bss_buf);
-> -	}
-> =20
->  }
-> =20
-> --=20
-> 2.25.1
->=20
+Igor,
+Will you have a chance to comment on this in the near future?
+Should someone else review/integrate these patches?
 
-Hi Jaehee,
+I'm asking since I've seen no comments in the past three days.
 
-If you just want to remove the braces, your patch is good.
-
-But... Did you ask yourself why this code needs to test if "pmlmepriv" is=20
-valid before calling vfree() on it? Actually, the code doesn't need this=20
-test, it just needs to call "vfree(pmlmepriv)" unconditionally.
-
-OK, I know that this is not directly related to your patch or any other=20
-that is explicitly made just for removing unnecessary braces...=20
-
-vfree() behaves as a no-op function on NULL pointers, therefore there is no=
-=20
-need to test whether or not "pmlmepriv" is valid.
-
-Thanks,
-
-=46abio M. De Francesco
+cheers,
+grant
 
 
-
+On Mon, Apr 18, 2022 at 4:17 PM Grant Grundler <grundler@chromium.org> wrote:
+>
+> The Chrome OS fuzzing team posted a "Fuzzing" report for atlantic driver
+> in Q4 2021 using Chrome OS v5.4 kernel and "Cable Matters
+> Thunderbolt 3 to 10 Gb Ethernet" (b0 version):
+>     https://docs.google.com/document/d/e/2PACX-1vT4oCGNhhy_AuUqpu6NGnW0N9HF_jxf2kS7raOpOlNRqJNiTHAtjiHRthXYSeXIRTgfeVvsEt0qK9qK/pub
+>
+> It essentially describes four problems:
+> 1) validate rxd_wb->next_desc_ptr before populating buff->next
+> 2) "frag[0] not initialized" case in aq_ring_rx_clean()
+> 3) limit iterations handling fragments in aq_ring_rx_clean()
+> 4) validate hw_head_ in hw_atl_b0_hw_ring_tx_head_update()
+>
+> I've added one "clean up" contribution:
+>     "net: atlantic: reduce scope of is_rsc_complete"
+>
+> I tested the "original" patches using chromeos-v5.4 kernel branch:
+>     https://chromium-review.googlesource.com/q/hashtag:pcinet-atlantic-2022q1+(status:open%20OR%20status:merged)
+>
+> The fuzzing team will retest using the chromeos-v5.4 patches and the b0 HW.
+>
+> I've forward ported those patches to 5.18-rc2 and compiled them but am
+> currently unable to test them on 5.18-rc2 kernel (logistics problems).
+>
+> I'm confident in all but the last patch:
+>    "net: atlantic: verify hw_head_ is reasonable"
+>
+> Please verify I'm not confusing how ring->sw_head and ring->sw_tail
+> are used in hw_atl_b0_hw_ring_tx_head_update().
+>
+> Credit largely goes to Chrome OS Fuzzing team members:
+>     Aashay Shringarpure, Yi Chou, Shervin Oloumi
+>
+> cheers,
+> grant

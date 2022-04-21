@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FA750A8FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54BC50A8FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391833AbiDUTXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S1391831AbiDUTXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388406AbiDUTWk (ORCPT
+        with ESMTP id S1388462AbiDUTWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 21 Apr 2022 15:22:40 -0400
 Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30814C792
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:19:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB904C7B5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:19:49 -0700 (PDT)
 Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23LEupRW006862;
-        Thu, 21 Apr 2022 19:19:37 GMT
+        by mx0a-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23LEuwPg006984;
+        Thu, 21 Apr 2022 19:19:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id; s=pps0720;
- bh=uW4SyuiVw9PU+qPXtI1Whs651+gnq6HBqlXy5wzry7Q=;
- b=FxwvkB3HfcBg+F+Rx1j52gBdSYiMMeaZfn5XMKCTGUB5C2zGn/uc2WYPTZCMXu1KCV5B
- SZG4jP7kL2nXyq3wlm5ltaGRsF6qd/vD0HsryOz24xPMPLDnPdFbI1w0p6TIH43mf4lt
- fFS10w4PAdBzLbqV9/r9pgEq44tPlfR37HJeDSL9Mj6PvyDcxpglqO1cH9c9JGrUuWJT
- xKnNL+Aos7443VfTblT3OKlzmUHXAmil0LdSAPk65YyQ3NDUe1nr0UpUqBZ2r5306FoA
- zT5VdE13NTIxa8tO1LzQF09z5e59W6YC2P++d5UBbxrCeQ8kbSvhPC8/I3FsoVy9Kltr aw== 
-Received: from g9t5008.houston.hpe.com (g9t5008.houston.hpe.com [15.241.48.72])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3fk9fkt6aj-1
+ : date : message-id : in-reply-to : references; s=pps0720;
+ bh=j1Y1DzH9ISSnb7M2FODHcYgjjsOSuiyXwwbYPdBFFig=;
+ b=fop+5BHCOuYdjJpHtJ/i/rO16nFlQSqimlSc41YArl3Z7zUIDwhDaYVo1+o8HiGwpio0
+ 1npFKtJfDsIr6Blquc3PBmK4/W2YMkaIHMI+KB01PqNRljjcjNjSy+0+FQWD01+z842A
+ jpZ0AIo26lWU0HJdm2kLJC/JNmLUkhLnm+fUFsuslOh2rvhOC6fZPeOxk5P1tOiqtpfZ
+ UDMeCwWHSvsjoR3WEwgEGpWuvXmfqG2q0U3m/wCLQwfzN8GQgSi6xi14A8h9i9OsU67u
+ ViGvmJIOdsL7JRd+hJEvouFIU81lx/Y0ZXRJYJBe1etE8/yRjAR79POSebjIS5cq2vSl 2g== 
+Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3fk9fkt6aq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 21 Apr 2022 19:19:37 +0000
 Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
-        by g9t5008.houston.hpe.com (Postfix) with ESMTP id 4454C56;
+        by g4t3427.houston.hpe.com (Postfix) with ESMTP id DA95E66;
         Thu, 21 Apr 2022 19:19:36 +0000 (UTC)
 Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
-        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id 0AE494A;
+        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id A193251;
         Thu, 21 Apr 2022 19:19:36 +0000 (UTC)
 From:   nick.hawkins@hpe.com
 To:     verdun@hpe.com, nick.hawkins@hpe.com, joel@jms.id.au,
         arnd@arndb.de, openbmc@lists.ozlabs.org
 Cc:     Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 01/11] aach: arm: mach-hpe: Introduce the HPE GXP architecture
-Date:   Thu, 21 Apr 2022 14:21:21 -0500
-Message-Id: <20220421192132.109954-1-nick.hawkins@hpe.com>
+Subject: [PATCH v5 01/11] archh: arm: mach-hpe: Introduce the HPE GXP architecture
+Date:   Thu, 21 Apr 2022 14:21:22 -0500
+Message-Id: <20220421192132.109954-2-nick.hawkins@hpe.com>
 X-Mailer: git-send-email 2.17.1
-X-Proofpoint-GUID: Wsf7jUZk-JyPHzYZ0DFjRYcQZI3cyhvL
-X-Proofpoint-ORIG-GUID: Wsf7jUZk-JyPHzYZ0DFjRYcQZI3cyhvL
+In-Reply-To: <20220421192132.109954-1-nick.hawkins@hpe.com>
+References: <20220421192132.109954-1-nick.hawkins@hpe.com>
+X-Proofpoint-GUID: 55cde3jEdUM_3h5vFMH8EDFoU8rlSWyo
+X-Proofpoint-ORIG-GUID: 55cde3jEdUM_3h5vFMH8EDFoU8rlSWyo
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
@@ -70,7 +72,6 @@ From: Nick Hawkins <nick.hawkins@hpe.com>
 The GXP is the HPE BMC SoC that is used in the majority
 of HPE Generation 10 servers. Traditionally the asic will
 last multiple generations of server before being replaced.
-In gxp.c we reset the EHCI controller early to boot the asic.
 
 Info about SoC:
 
@@ -89,6 +90,7 @@ Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 ---
 v5:
 * Fixed version log
+* Removed incorrect statement about reset.
 v4:
 * Removed unecessary code: restart, iomap, init_machine
 * Reordered Kconfig depends

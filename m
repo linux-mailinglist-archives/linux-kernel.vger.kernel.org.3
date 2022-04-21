@@ -2,265 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A29B50A810
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28ACD50A842
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241351AbiDUS3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
+        id S1391487AbiDUSo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236568AbiDUS3g (ORCPT
+        with ESMTP id S1391466AbiDUSoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:29:36 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA18DFD8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:26:45 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id q2so5315278vsp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:26:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KhEaHbd+wJpcWxz8VM7mbHJptEA+3HB8wD2I3b4SrkY=;
-        b=fkFL5exyZ91AnDqB83BBGOCVnCMf4xQeuTGAT4wNu9OEQjiChM3SE5gca5PAckc2Qu
-         unDlhtUws1r4HEJspA2cr4xrKyE7O1uumHwcKHQ9bPedl9Etooj+LfEVHAzy5ymmk2Wl
-         t0B92SY9BL6eWwr9eDwkrZS5yUYvjh1ShwDzNxHKVHBukKAu2HUr63zgxhB1jh0rT9UA
-         W4B7URBxIaILpQve34uKearh6lpr4w8gkMauyK4vdCeLqCNDTep0gYEL+xdFF7idgWeA
-         UFo08o3yUSl1Bg/SOLtdEqUXUevCjXVlsWM6kdzjIBIM+kcgoeCwn4xVuoYBq45Q2FH5
-         dDPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KhEaHbd+wJpcWxz8VM7mbHJptEA+3HB8wD2I3b4SrkY=;
-        b=zRZ2Rkx02qd9oGoLHebrzI1unFOotcpe7nduaLWYooDOTZw2EbjIoLDsIrp5uLWl1R
-         jjNft+l4l8AVKF/yugZkE+E9wrHpZ4wUUFPxuCSk6ZKyln0JKKF8/K1zy02pNWidqFb+
-         WBVtl4Uan9I6WutWwyW3lp0InPPMt2hpF+N9hAmCsNEXqhXeLPjOn98p3Ekg4jzA3t/k
-         Uqw4R3ed88fiI+6HIlQXrp5crDxsCtkCUN9TEMOZPLPD1MQUEBHmOuGnT5LsSFHFAtuL
-         cgYO/duSPYJu5Xvi+H6nIHlqDIMsk1VKVzHVplLW+Qd4TRDeghhT/gJ5Of/HYTLvTDjs
-         lTtg==
-X-Gm-Message-State: AOAM531qsq01WqC29LF2zujIRWP8RKs3vXXAHjo8T1eDfSHCO38NuLSp
-        c6M9/FuHR+3NkyGSl3MeQp9SFz/suIM0oNUG3tvrmpdhkQ0=
-X-Google-Smtp-Source: ABdhPJzMt+UkafzybZqBgQO5WnfOfTtzQIQfYjdIYz4P8HU5mk850x/53uuMnfauxIX8AozTwNeJIGIHG/IbkVyFuZY=
-X-Received: by 2002:a05:6102:3106:b0:32a:18c8:1633 with SMTP id
- e6-20020a056102310600b0032a18c81633mr243530vsh.51.1650565604762; Thu, 21 Apr
- 2022 11:26:44 -0700 (PDT)
+        Thu, 21 Apr 2022 14:44:24 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-cusazon11020019.outbound.protection.outlook.com [52.101.61.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404494BBA8;
+        Thu, 21 Apr 2022 11:41:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bY/8TQvS1vXN3a9FsAC4/a8yOAGiz3Q09gQvhFKMVCtfqS38nW6xgCD5ewqEm7EhKgqgmQqoIMKVMbiaGUs3cTD/5BHhmtAbh609TqRZEwrkJoLbCFMLDDMC1rFU3eX1vfHdWs3qAnZtamEVFxyurHMogaa7M7DES/+jywjwddf+R2Z1YAltZzzC14Zs5u5UtVC0Os9TYYlsnmKIfsBafV4/gL3A73soDr0aoWay9qiyEGsygzQBtv2xS0VwOr8a2ONhvsfiR+Ec6CTb20AOBqt72121w/wdkGZe2pgJYpeNwrestZsaYECxjS5KvpXkWrDwhKdRCPwSRYWODC3dwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZtuhHSuQTa8oR36tOnuc/uVanO90hIq3eCQyewocLhg=;
+ b=ijAzby2SfFO6icAuTgkj4FoYTcG18f/sd8V6LMWquO/R6kC1H1VNQkLrvXClpXQAFxNjf4IYeiC8Sp+BPSi9maZ4YJisRVAVSCZxILDhD9MWS0dpVzmM26Zntgj+F/c2Yz7dtUyCkZIUGal1Vft2iWEPhJOkj65wj0ejR1gA2Z5y11pKKbTyfWE/5wvCv2bvUFYXC808Fq060vjfVXgmg/9xrBCVAq45s63y1lkfxtL00OGr8Xu+LVP5WKtl48VU4e5CiDay+ByygD3CX1VKfgB7Icm5RPOC8B1jWzCaVnMjnLP9W8H5IPyzdECqqe4c3pcjeTV2fnzxqw0gtWvsgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZtuhHSuQTa8oR36tOnuc/uVanO90hIq3eCQyewocLhg=;
+ b=SNaKYzWnOmbYtzSsjwOC1TLe7k2iyR4GEH9pOqmgwGJ2XdD6wFgPVVCtBc1dqS2Bp7KiqvIuhElkW555XY3YIKxObhuMvPO/mqTgetr1HW0Du20X9QM1+FxEW+PUahdleHNcF2J/G8BGjW7p31DjIPRksU70xkMrbLVhpQNKk9s=
+Received: from BYAPR21MB1270.namprd21.prod.outlook.com (2603:10b6:a03:105::15)
+ by PH0PR21MB1861.namprd21.prod.outlook.com (2603:10b6:510:17::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.7; Thu, 21 Apr
+ 2022 18:26:36 +0000
+Received: from BYAPR21MB1270.namprd21.prod.outlook.com
+ ([fe80::645b:25b9:a49d:3e13]) by BYAPR21MB1270.namprd21.prod.outlook.com
+ ([fe80::645b:25b9:a49d:3e13%7]) with mapi id 15.20.5206.006; Thu, 21 Apr 2022
+ 18:26:36 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Jake Oshins <jakeo@microsoft.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+CC:     "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: Re: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce VM boot
+ time
+Thread-Topic: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce VM boot
+ time
+Thread-Index: AdhVrRvIeWjuo4jbQkC6t/9QZsLcgw==
+Date:   Thu, 21 Apr 2022 18:26:36 +0000
+Message-ID: <BYAPR21MB12705103ED8F2B7024A22438BFF49@BYAPR21MB1270.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=6460241e-8dbf-49dd-a21f-614e3dcc5447;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-04-20T15:53:18Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 02583fae-f607-45b1-54e1-08da23c47856
+x-ms-traffictypediagnostic: PH0PR21MB1861:EE_
+x-ms-exchange-atpmessageproperties: SA|SL
+x-microsoft-antispam-prvs: <PH0PR21MB1861AFA5AE8D0ECDDA53BC2EBFF49@PH0PR21MB1861.namprd21.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iZ7kiRHnzsyeKHpUlxml2Nxt/VdChO5ScSqZrm9EYoSysvQNtQdrBhFD1QqVlLfwd1nR7mwOeMk9GoWR30c2fve69LOQbiCxytIpfNnQQGfEE1GBwyZyOo+LlljBxrSJ8fZXJiouVG4FV0oyqUEXLvLhQ+l+YHJgI+PCVERW87M78WWRBiaBeyCGx0puoIyKAIa7VcOv3jxPtX3A07/R8W0D6aTc95LPwS3c3Yoex8t/5tVh8O4yA4kIukXPxZXMvnJFocQG4/nxVz4Kzx1WHdb/ozhUAh5sD74ydZ/c9BqV2MipaFrCMJWNrLvmbeLs3R5p7JSbxibM9DpVIqFdc2Uub10nG9ouQjanfM7P8IpCefDA6qnh5XdHYQVq1980IWebX2QqYQl5SOhV7jqfdUdSMVn5ISPN669cNRjRCmpJ5x1X3z1/sGmBI3ra14Nyc8SFYvG9JaPgMcApaD6BmsujOfWMznkCmyPQDl3x6J1vRqpP3ANpuRdOShAW9rbH0d+66RA8rrpJxSEcrx7dzf0u/gs2rZrmIKYirP7tLaSlLhwZbvUcZAdv08LHzTgA6bEm+N9rtu7kHyMbxMTwhg2WbvYE8dmMVKqDpoC+DR/dPq7x2gOdzlQpJTDw3CCqcKw6QTqr4sHWGapvRsbaB0ymgD/K6ffgfzBSbedbq6OPkDlJy2PsP2/SRvxEPHbBvkqK+1/kDTJP6vXFlgxjmobAVS0zjFBZVTu0vE55lSzvYu8Wg0/Dhin+rAkU7tOl7je8HCIdzijomYR0JHYGUOmBktMeSzNksRUWYhnLLt1SmHN4NLTPwf104GWyz1WF3R55IbKncFdkEYcJZPglqA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1270.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(7696005)(9686003)(966005)(6506007)(53546011)(26005)(71200400001)(10290500003)(508600001)(122000001)(186003)(38070700005)(82960400001)(82950400001)(2906002)(66946007)(33656002)(76116006)(83380400001)(8990500004)(64756008)(7416002)(52536014)(5660300002)(86362001)(8936002)(4326008)(8676002)(66446008)(66476007)(38100700002)(316002)(110136005)(66556008)(55016003)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fD8/ZsFbqh6Rb42WwGkpyjUA2a3ICGeW655DWU1TtHuvm9xWM9i4NtC51wgn?=
+ =?us-ascii?Q?U0dkiiu3BSCVkVuL+2N97RbGrsyB+zAt7tfBInwGn1WV22KDWnf3sOFq5O4+?=
+ =?us-ascii?Q?HCPp+65OIu3jFIM9wEFtfPK6n2bTdrqJ02N1tPG1mbOAeI5DT8Qu35zC2Fvg?=
+ =?us-ascii?Q?LuT9eCZxJ1uyxzOeK3v3KbzKoRcEccIyIretN2tCoqPC4up+d6J0MJmcY9/R?=
+ =?us-ascii?Q?wUuAfDQrscAawrmzqzI94fWcYuLbZWuqZYpy6wfVLAhgg0HLejSUZzJlr1L7?=
+ =?us-ascii?Q?XP/yDifyUwihU88KnJdgQGAeOFg4pGUFPSfhuABfGKCtrtN9WjcFJT9xYwfF?=
+ =?us-ascii?Q?RmLPOXX2RsUakoj8ErNgHyR5/AVnQ6qUSzxETYyqunWC4OHmYM1lxF+GeGNg?=
+ =?us-ascii?Q?fb6hSXdHTp7to1NCFGk7vA4mBemdiwMXFpxUThitYRx+ZL3370yyMW/62k+T?=
+ =?us-ascii?Q?ua5oN5cw4FlmactwYyiFUQ6DPg+QHidO1kyD4L7E4+GrGnoIWsv16bqLpGEi?=
+ =?us-ascii?Q?fxEPXtWkamMLYAcJOgpvHIqzTbejG++iqwCiAIHe10ZBKV7NYTypFMmcOyRG?=
+ =?us-ascii?Q?npgEaRraMjrDR/AMQ2S0KJPWSNkxgtKvU/LXy2ZpUue8iFYYOm17QOSHRhiI?=
+ =?us-ascii?Q?ZZY8XeQyn1bVOHm6kYc5cITINVmV1yYKnAMIuAfyRtc8ZSVRTYVGC4fKi+1y?=
+ =?us-ascii?Q?4guElRJ5ZBisfXdTVvKBwZMus7CT4WteDsW0yEQOotm+YTG8pSsO5fOhBiTf?=
+ =?us-ascii?Q?R8NxyAm3CmUYcTIEltVOA4O4siFrGgxWLuS83JuG8LWbBXU8x3L7aj+0gkZa?=
+ =?us-ascii?Q?3xDdnrH2rrx4pH8B1ujpVr6XIGElxNQNoWDfUi/SmF1Qe1a5nlwxhRmSoK+C?=
+ =?us-ascii?Q?kmXplMWD2g/RMUGRnHg9Am6gsfeFoCVXRM23dpShJc+BPZrCAPgaO5+iJLnL?=
+ =?us-ascii?Q?YRJXsUww5pdxUSmaW8E49qVFUaQCYB2BK/lY0ZMERgMJkLhNt0a8Re+Dw2v5?=
+ =?us-ascii?Q?CHynYEHrFLiYXmeYeRTs/ul7WZ5UnpzouKeln5VDn7Vpab3ibJ2tuj9+1CQf?=
+ =?us-ascii?Q?EV5QB3W2zOUeC2vF2a43f72QVtEb8lAEb/u9fTJIyOQAXRf4AiDzF1BjyBR3?=
+ =?us-ascii?Q?0XJCakEE3rxLqvkZ0PYQG+GP1wwa2Ma7m3yRWMtnnGVqMonelpDBfOyHgLGO?=
+ =?us-ascii?Q?BSGcu32t+SyGfQHB1kn3oJW67wmtTAXgI67WqX6gkCugqFwLAoytbCX+SO69?=
+ =?us-ascii?Q?2jrQFDwtqen4m3u7FmfRbg4p6hSIz89V+o6aFEfQX1lDmbDITfjqFc1Zvx+u?=
+ =?us-ascii?Q?kHhYzTGaYO9JAHvvV/SGTVx7DPwsziMoqRMriYbJbvV4Q9y/8K0VJFxGHDbX?=
+ =?us-ascii?Q?iq1jsIWh+m+MhZOJ+tQCbmgwIc3bEgerxsj53c21Ms0p2mpUszXityB2Ky5D?=
+ =?us-ascii?Q?HA7jh5vssge8Wh3YXwyzMTdVKKF7R9j3aeMQKOLLlWNkS4zpTZUhVa7nVIxt?=
+ =?us-ascii?Q?pjm7XOWW3F/GFaJ+mKeqsNqBIHXxTcgYRycy/W97+b7w7iekjKTNTh0vHbPQ?=
+ =?us-ascii?Q?IvDeKGTP230tpixr8ZjTJnyWm0n/L7bkWxIkSourqFCdpDSHCMWxhoUBQtsW?=
+ =?us-ascii?Q?2eTtggY2dIkq1ajutYStUokaFrYxfT7Uv9cuhDEBILP28guYzGne60A5Tgi+?=
+ =?us-ascii?Q?bFSC7IcocaVRETM9JIfh8gbDOWN4VPw565gt2KZzQA3SQyFS8mIaVTdQkLM8?=
+ =?us-ascii?Q?457NeEg7PA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220413092206.73974-1-jvgediya@linux.ibm.com>
- <6365983a8fbd8c325bb18959c51e9417fd821c91.camel@intel.com>
- <CAHbLzkpGzEaSDfM=GBzBxw=dZTBy12vgDDhMG+q4dbG+bCgR6A@mail.gmail.com>
- <CAAPL-u9=-OHuUk=ZkNRDf3Dm_+3cBd2APL5MQpQr3_sVk_voJg@mail.gmail.com>
- <de1bc3647c8696fd931a37d314ccd60a2c8cc0db.camel@intel.com>
- <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
- <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
- <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com> <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
-In-Reply-To: <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Thu, 21 Apr 2022 11:26:33 -0700
-Message-ID: <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state N_DEMOTION_TARGETS
-To:     "ying.huang@intel.com" <ying.huang@intel.com>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1270.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02583fae-f607-45b1-54e1-08da23c47856
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Apr 2022 18:26:36.5032
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Dk9PMFbEfOpMIvhC7RDaVG9fBiSk6gBf2aNXG965KUd+i46t94bGBy9LcbGsh0L/xH9O5Tq7qLrD+I8qPg9yNQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1861
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 12:45 AM ying.huang@intel.com
-<ying.huang@intel.com> wrote:
->
-> On Thu, 2022-04-21 at 00:29 -0700, Wei Xu wrote:
-> > On Thu, Apr 21, 2022 at 12:08 AM ying.huang@intel.com
-> > <ying.huang@intel.com> wrote:
-> > >
-> > > On Wed, 2022-04-20 at 23:49 -0700, Wei Xu wrote:
-> > > > On Wed, Apr 20, 2022 at 11:24 PM ying.huang@intel.com
-> > > > <ying.huang@intel.com> wrote:
-> > > > >
-> > > > > On Wed, 2022-04-20 at 22:41 -0700, Wei Xu wrote:
-> > > > > > On Wed, Apr 20, 2022 at 8:12 PM Yang Shi <shy828301@gmail.com> wrote:
-> > > > > > >
-> > > > > > > On Thu, Apr 14, 2022 at 12:00 AM ying.huang@intel.com
-> > > > > > > <ying.huang@intel.com> wrote:
-> > > > > > > >
-> > > > > > > > On Wed, 2022-04-13 at 14:52 +0530, Jagdish Gediya wrote:
-> > > > > > > > > Current implementation to find the demotion targets works
-> > > > > > > > > based on node state N_MEMORY, however some systems may have
-> > > > > > > > > dram only memory numa node which are N_MEMORY but not the
-> > > > > > > > > right choices as demotion targets.
-> > > > > > > > >
-> > > > > > > > > This patch series introduces the new node state
-> > > > > > > > > N_DEMOTION_TARGETS, which is used to distinguish the nodes which
-> > > > > > > > > can be used as demotion targets, node_states[N_DEMOTION_TARGETS]
-> > > > > > > > > is used to hold the list of nodes which can be used as demotion
-> > > > > > > > > targets, support is also added to set the demotion target
-> > > > > > > > > list from user space so that default behavior can be overridden.
-> > > > > > > >
-> > > > > > > > It appears that your proposed user space interface cannot solve all
-> > > > > > > > problems.  For example, for system as follows,
-> > > > > > > >
-> > > > > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow memory node near
-> > > > > > > > node 0,
-> > > > > > > >
-> > > > > > > > available: 3 nodes (0-2)
-> > > > > > > > node 0 cpus: 0 1
-> > > > > > > > node 0 size: n MB
-> > > > > > > > node 0 free: n MB
-> > > > > > > > node 1 cpus:
-> > > > > > > > node 1 size: n MB
-> > > > > > > > node 1 free: n MB
-> > > > > > > > node 2 cpus: 2 3
-> > > > > > > > node 2 size: n MB
-> > > > > > > > node 2 free: n MB
-> > > > > > > > node distances:
-> > > > > > > > node   0   1   2
-> > > > > > > >   0:  10  40  20
-> > > > > > > >   1:  40  10  80
-> > > > > > > >   2:  20  80  10
-> > > > > > > >
-> > > > > > > > Demotion order 1:
-> > > > > > > >
-> > > > > > > > node    demotion_target
-> > > > > > > >  0              1
-> > > > > > > >  1              X
-> > > > > > > >  2              X
-> > > > > > > >
-> > > > > > > > Demotion order 2:
-> > > > > > > >
-> > > > > > > > node    demotion_target
-> > > > > > > >  0              1
-> > > > > > > >  1              X
-> > > > > > > >  2              1
-> > > > > > > >
-> > > > > > > > The demotion order 1 is preferred if we want to reduce cross-socket
-> > > > > > > > traffic.  While the demotion order 2 is preferred if we want to take
-> > > > > > > > full advantage of the slow memory node.  We can take any choice as
-> > > > > > > > automatic-generated order, while make the other choice possible via user
-> > > > > > > > space overridden.
-> > > > > > > >
-> > > > > > > > I don't know how to implement this via your proposed user space
-> > > > > > > > interface.  How about the following user space interface?
-> > > > > > > >
-> > > > > > > > 1. Add a file "demotion_order_override" in
-> > > > > > > >         /sys/devices/system/node/
-> > > > > > > >
-> > > > > > > > 2. When read, "1" is output if the demotion order of the system has been
-> > > > > > > > overridden; "0" is output if not.
-> > > > > > > >
-> > > > > > > > 3. When write "1", the demotion order of the system will become the
-> > > > > > > > overridden mode.  When write "0", the demotion order of the system will
-> > > > > > > > become the automatic mode and the demotion order will be re-generated.
-> > > > > > > >
-> > > > > > > > 4. Add a file "demotion_targets" for each node in
-> > > > > > > >         /sys/devices/system/node/nodeX/
-> > > > > > > >
-> > > > > > > > 5. When read, the demotion targets of nodeX will be output.
-> > > > > > > >
-> > > > > > > > 6. When write a node list to the file, the demotion targets of nodeX
-> > > > > > > > will be set to the written nodes.  And the demotion order of the system
-> > > > > > > > will become the overridden mode.
-> > > > > > >
-> > > > > > > TBH I don't think having override demotion targets in userspace is
-> > > > > > > quite useful in real life for now (it might become useful in the
-> > > > > > > future, I can't tell). Imagine you manage hundred thousands of
-> > > > > > > machines, which may come from different vendors, have different
-> > > > > > > generations of hardware, have different versions of firmware, it would
-> > > > > > > be a nightmare for the users to configure the demotion targets
-> > > > > > > properly. So it would be great to have the kernel properly configure
-> > > > > > > it *without* intervening from the users.
-> > > > > > >
-> > > > > > > So we should pick up a proper default policy and stick with that
-> > > > > > > policy unless it doesn't work well for the most workloads. I do
-> > > > > > > understand it is hard to make everyone happy. My proposal is having
-> > > > > > > every node in the fast tier has a demotion target (at least one) if
-> > > > > > > the slow tier exists sounds like a reasonable default policy. I think
-> > > > > > > this is also the current implementation.
-> > > > > > >
-> > > > > >
-> > > > > > This is reasonable.  I agree that with a decent default policy,
-> > > > > >
-> > > > >
-> > > > > I agree that a decent default policy is important.  As that was enhanced
-> > > > > in [1/5] of this patchset.
-> > > > >
-> > > > > > the
-> > > > > > overriding of per-node demotion targets can be deferred.  The most
-> > > > > > important problem here is that we should allow the configurations
-> > > > > > where memory-only nodes are not used as demotion targets, which this
-> > > > > > patch set has already addressed.
-> > > > >
-> > > > > Do you mean the user space interface proposed by [3/5] of this patchset?
-> > > >
-> > > > Yes.
-> > > >
-> > > > > IMHO, if we want to add a user space interface, I think that it should
-> > > > > be powerful enough to address all existing issues and some potential
-> > > > > future issues, so that it can be stable.  I don't think it's a good idea
-> > > > > to define a partial user space interface that works only for a specific
-> > > > > use case and cannot be extended for other use cases.
-> > > >
-> > > > I actually think that they can be viewed as two separate problems: one
-> > > > is to define which nodes can be used as demotion targets (this patch
-> > > > set), and the other is how to initialize the per-node demotion path
-> > > > (node_demotion[]).  We don't have to solve both problems at the same
-> > > > time.
-> > > >
-> > > > If we decide to go with a per-node demotion path customization
-> > > > interface to indirectly set N_DEMOTION_TARGETS, I'd prefer that there
-> > > > is a single global control to turn off all demotion targets (for the
-> > > > machines that don't use memory-only nodes for demotion).
-> > > >
-> > >
-> > > There's one already.  In commit 20b51af15e01 ("mm/migrate: add sysfs
-> > > interface to enable reclaim migration"), a sysfs interface
-> > >
-> > >         /sys/kernel/mm/numa/demotion_enabled
-> > >
-> > > is added to turn off all demotion targets.
-> >
-> > IIUC, this sysfs interface only turns off demotion-in-reclaim.  It
-> > will be even cleaner if we have an easy way to clear node_demotion[]
-> > and N_DEMOTION_TARGETS so that the userspace (post-boot agent, not
-> > init scripts) can know that the machine doesn't even have memory
-> > tiering hardware enabled.
-> >
->
-> What is the difference?  Now we have no interface to show demotion
-> targets of a node.  That is in-kernel only.  What is memory tiering
-> hardware?  The Optane PMEM?  Some information for it is available via
-> ACPI HMAT table.
->
-> Except demotion-in-reclaim, what else do you care about?
+> From: Jake Oshins <jakeo@microsoft.com>
+> Sent: Wednesday, April 20, 2022 9:01 AM
+> To: Bjorn Helgaas <helgaas@kernel.org>; Dexuan Cui <decui@microsoft.com>
+> Cc: wei.liu@kernel.org; KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
+> <haiyangz@microsoft.com>; Stephen Hemminger <sthemmin@microsoft.com>;
+> lorenzo.pieralisi@arm.com; bhelgaas@google.com;
+> linux-hyperv@vger.kernel.org; linux-pci@vger.kernel.org;
+> linux-kernel@vger.kernel.org; Michael Kelley (LINUX)
+> <mikelley@microsoft.com>; robh@kernel.org; kw@linux.com; Alex Williamson
+> <alex.williamson@redhat.com>; .kvm@vger.kernel.org
+> Subject: RE: [EXTERNAL] Re: [PATCH] PCI: hv: Do not set
+> PCI_COMMAND_MEMORY to reduce VM boot time
 
-There is a difference: one is to indicate the availability of the
-memory tiering hardware and the other is to indicate whether
-transparent kernel-driven demotion from the reclaim path is activated.
-With /sys/devices/system/node/demote_targets or the per-node demotion
-target interface, the userspace can figure out the memory tiering
-topology abstracted by the kernel.  It is possible to use
-application-guided demotion without having to enable reclaim-based
-demotion in the kernel.  Logically it is also cleaner to me to
-decouple the tiering node representation from the actual demotion
-mechanism enablement.
+I removed the "[EXTERNAL]" tag as it looks like that prevents the email fro=
+m being
+archived properly. See this link for the archived email thread:
+https://lwn.net/ml/linux-kernel/20220419220007.26550-1-decui%40microsoft.co=
+m/
 
-> Best Regards,
-> Huang, Ying
->
->
->
+> > -----Original Message-----
+> > From: Bjorn Helgaas <helgaas@kernel.org>
+> > Sent: Wednesday, April 20, 2022 8:36 AM
+> > To: Dexuan Cui <decui@microsoft.com>
+> > Cc: wei.liu@kernel.org; KY Srinivasan <kys@microsoft.com>; Haiyang Zhan=
+g
+> > <haiyangz@microsoft.com>; Stephen Hemminger
+> <sthemmin@microsoft.com>;
+> > lorenzo.pieralisi@arm.com; bhelgaas@google.com; linux-
+> > hyperv@vger.kernel.org; linux-pci@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; Michael Kelley (LINUX) <mikelley@microsoft.com>=
+;
+> > robh@kernel.org; kw@linux.com; Jake Oshins <jakeo@microsoft.com>; Alex
+> > Williamson <alex.williamson@redhat.com>; .kvm@vger.kernel.org
+
+I removed the period from ".kvm@" so the KVM list is correctly Cc'd.
+
+> > Subject: [EXTERNAL] Re: [PATCH] PCI: hv: Do not set
+> PCI_COMMAND_MEMORY
+> > to reduce VM boot time
+> >
+> > [+cc Alex, kvm in case this idea is applicable for more than just Hyper=
+-V]
+
+Alex, your comments are welcome!
+
+> > On Tue, Apr 19, 2022 at 03:00:07PM -0700, Dexuan Cui wrote:
+> > > A VM on Azure can have 14 GPUs, and each GPU may have a huge MMIO
+> > BAR,
+> > > e.g. 128 GB. Currently the boot time of such a VM can be 4+ minutes,
+> > > and most of the time is used by the host to unmap/map the vBAR from/t=
+o
+> > > pBAR when the VM clears and sets the PCI_COMMAND_MEMORY bit: each
+> > > unmap/map operation for a 128GB BAR needs about 1.8 seconds, and the
+> > > pci-hyperv driver and the Linux PCI subsystem flip the
+> > > PCI_COMMAND_MEMORY bit eight times (see pci_setup_device() ->
+> > > pci_read_bases() and pci_std_update_resource()), increasing the boot
+> > > time by 1.8 * 8 =3D 14.4 seconds per GPU, i.e. 14.4 * 14 =3D 201.6 se=
+conds in
+> total.
+> > >
+> > > Fix the slowness by not turning on the PCI_COMMAND_MEMORY in
+> > > pci-hyperv.c, so the bit stays in the off state before the PCI device
+> > > driver calls
+> > > pci_enable_device(): when the bit is off, pci_read_bases() and
+> > > pci_std_update_resource() don't cause Hyper-V to unmap/map the vBARs.
+> > > With this change, the boot time of such a VM is reduced by
+> > > 1.8 * (8-1) * 14 =3D 176.4 seconds.
+> > >
+> > > Tested-by: Boqun Feng (Microsoft) <boqun.feng@gmail.com>
+> > > Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> > > Cc: Jake Oshins <jakeo@microsoft.com>
+> > > ---
+> > >  drivers/pci/controller/pci-hyperv.c | 17 +++++++++++------
+> > >  1 file changed, 11 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/controller/pci-hyperv.c
+> > > b/drivers/pci/controller/pci-hyperv.c
+> > > index d270a204324e..f9fbbd8d94db 100644
+> > > --- a/drivers/pci/controller/pci-hyperv.c
+> > > +++ b/drivers/pci/controller/pci-hyperv.c
+> > > @@ -2082,12 +2082,17 @@ static void prepopulate_bars(struct
+> > hv_pcibus_device *hbus)
+> > >  				}
+> > >  			}
+> > >  			if (high_size <=3D 1 && low_size <=3D 1) {
+> > > -				/* Set the memory enable bit. */
+> > > -				_hv_pcifront_read_config(hpdev,
+> > PCI_COMMAND, 2,
+> > > -							 &command);
+> > > -				command |=3D PCI_COMMAND_MEMORY;
+> > > -				_hv_pcifront_write_config(hpdev,
+> > PCI_COMMAND, 2,
+> > > -							  command);
+> > > +				/*
+> > > +				 * No need to set the
+> > PCI_COMMAND_MEMORY bit as
+> > > +				 * the core PCI driver doesn't require the bit
+> > > +				 * to be pre-set. Actually here we intentionally
+> > > +				 * keep the bit off so that the PCI BAR probing
+> > > +				 * in the core PCI driver doesn't cause Hyper-V
+> > > +				 * to unnecessarily unmap/map the virtual
+> > BARs
+> > > +				 * from/to the physical BARs multiple times.
+> > > +				 * This reduces the VM boot time significantly
+> > > +				 * if the BAR sizes are huge.
+> > > +				 */
+> > >  				break;
+> > >  			}
+> > >  		}
+> > > --
+> > > 2.17.1
+> > >
+>=20
+> My question about this, directed at the people who know a lot more about =
+the
+> PCI subsystem in Linux than I do (Bjorn, Alex, etc.), is whether this cha=
+nge can
+> create a problem.
+
+Bjorn, Lorenzo, Alex, it would be nice to have your insights!
+
+> In a physical computer, you might sometimes want to move
+> a device from one part of address space to another, typically when anothe=
+r
+> device is being hot-added to the system.  Imagine a scenario where you ha=
+ve,
+> in this case a VM, and there are perhaps 15 NVMe SSDs passed through to t=
+he
+> VM.  One of them dies and so it is removed.  The replacement SSD has a
+> larger BAR than the one that was removed (because it's a different SKU) a=
+nd
+> now it doesn't fit neatly into the hole that was vacated by the previous =
+SSD.
+>=20
+> In this case, will the kernel ever attempt to move some of the existing S=
+SDs to
+> make room for the new one?  And if so, does this come with the requiremen=
+t
+> that they actually get mapped out of the address space while they are bei=
+ng
+> moved?  (This was the scenario that prompted me to write the code above a=
+s
+> it was, originally.)
+>=20
+> Thanks,
+> Jake Oshins
+
+Sorry I don't quite follow. pci-hyperv allocates MMIO for the bridge window
+in hv_pci_allocate_bridge_windows() and registers the MMIO ranges to the co=
+re
+PCI driver via pci_add_resource(), and later the core PCI driver probes the
+bus/device(s), validates the BAR sizes and the pre-initialized BAR values, =
+and
+uses the BAR configuration. IMO the whole process doesn't require the bit
+PCI_COMMAND_MEMORY to be pre-set, and there should be no issue to
+delay setting the bit to a PCI device device's .probe() -> pci_enable_devic=
+e().
+
+When a device is removed, hv_eject_device_work() ->=20
+pci_stop_and_remove_bus_device() triggers the PCI device driver's .remove()=
+,
+which calls pci_disable_device(), which instructs the hypervisor to unmap
+the vBAR from the pBAR, so there should not be any issue when a new device
+is added later.=20
+
+With the patch, if no PCI device driver is loaded, the PCI_COMMAND_MEMORY
+bit stays in the off state, and the hypervisor doesn't map the vBAR to the =
+pBAR.
+I don't see any issue with this.
+
+hv_pci_allocate_bridge_windows() -> vmbus_allocate_mmio() makes sure
+that there is enough MMIO space for the devices on the bus, so the core
+PCI driver doesn't have to worry about any MMIO conflict issue.
+
+Please let me know if I understood and answered the questions.
+
+Thanks,
+-- Dexuan
+

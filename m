@@ -2,87 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C5550A4C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA8650A4D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390403AbiDUP57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        id S1390375AbiDUP7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390372AbiDUP5p (ORCPT
+        with ESMTP id S1390351AbiDUP7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:57:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D5D1C4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:54:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 308A9B826FC
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 15:54:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0071EC385A1;
-        Thu, 21 Apr 2022 15:54:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650556492;
-        bh=T7XiAVUL8sheYGksXxGj8K3qqxrrGtPhdkaiEqHTACs=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=hw6L89O6MpP3wzh2EfqLuSEEQUQ3kSKg9s5AIz20lIp4m3r4SFiG6/Q4yIqG9BUlZ
-         mxkTiIM70TKbUhbk0djQsGo2IpTXnl3HLEzgabxRjzn8rjgAR956gyGOWR8CCn3Dxb
-         NoLa69P0rT1ZfDWXULE7OMt4QLpOfabpnVfsjvkSc95ghl1AqxGc41sb6ln7BbEdPf
-         CEptoaPUBp78imbbuSYzq5rTtrEBAV9PE0BU32xbknaxaXygz3C1AN49CCwx6SdqCK
-         9ERQxGCt+BdEWTB/I7ewUIvvdo7pvjeR/9uUYCHaEa4xMw94PIsj6GIrnbofk8Twas
-         N7X5D5+3K3taQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     briannorris@chromium.org, lgirdwood@gmail.com
-Cc:     linux-kernel@vger.kernel.org, mka@chromium.org
-In-Reply-To: <20220420141511.v2.1.I31ef0014c9597d53722ab513890f839f357fdfb3@changeid>
-References: <20220420141511.v2.1.I31ef0014c9597d53722ab513890f839f357fdfb3@changeid>
-Subject: Re: [PATCH v2 1/2] regulator: core: Rename _regulator_enable_delay()
-Message-Id: <165055649173.364578.18238924275518976830.b4-ty@kernel.org>
-Date:   Thu, 21 Apr 2022 16:54:51 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Apr 2022 11:59:18 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684E440E76;
+        Thu, 21 Apr 2022 08:56:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650556588; x=1682092588;
+  h=from:to:cc:subject:date:message-id;
+  bh=yAuVAqWxYWEe5NqjErVFK/4t+1iFYT/C7MQ8E9+btfM=;
+  b=LZ9hXAnqLnERd82S/y6+/QrxxkLi+Seo+CbZ1fsc3geGGw5E2ZTSYNua
+   9+7AsiQ6hfO1wV9LUrSiu2caD9vMk5Hl6Jo9rEdEMAbt4EPKqM5zzvqFo
+   Aj4vqJFAzq44vjkgv6ppVjnSw1wVRM4QY8UrH2Il0yLtBneIs+YOqy4bs
+   g=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 21 Apr 2022 08:56:28 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Apr 2022 08:56:27 -0700
+X-QCInternal: smtphost
+Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 21 Apr 2022 21:26:12 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 9DC983C77; Thu, 21 Apr 2022 21:26:10 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [V6 0/2] arm64: dts: qcom: Configure CTS pin to bias-bus-hold for bluetooth
+Date:   Thu, 21 Apr 2022 21:26:05 +0530
+Message-Id: <1650556567-4995-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 14:22:12 -0700, Brian Norris wrote:
-> I want to use it in other contexts besides _regulator_do_enable().
-> 
-> 
+WLAN rail was leaking power during RBSC/sleep even after turning BT off.
+Change pinctrl configuration to handle same.
 
-Applied to
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+v6: add code comments about how bias-bus-hold could save power
+v5: modify subject to include bluetooth
+v4: modify subject of each patch to indicate what it is applying to
+v3: apply same change to active state and other sc7280*.dts* as well
+v2: used bias-bus-hold as per review comments
+v1: intial patch used bias-disable for sleep pinctrl in sc7280-idp only
+---
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+Vijaya Krishna Nivarthi (2):
+  arm64: dts: qcom: sc7280-idp: Configure CTS pin to bias-bus-hold for
+    bluetooth
+  arm64: dts: qcom: sc7280-qcard: Configure CTS pin to bias-bus-hold for
+    bluetooth
 
-Thanks!
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi   | 18 ++++++++++++------
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 19 ++++++++++++++-----
+ 2 files changed, 26 insertions(+), 11 deletions(-)
 
-[1/2] regulator: core: Rename _regulator_enable_delay()
-      commit: a38dce4cb1f1bcc4f6ef7f11e54b6507a4043ebe
-[2/2] regulator: core: Sleep (not delay) in set_voltage()
-      commit: 062920d2464715ef5cbba52a8573ba12cc882b8f
+-- 
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

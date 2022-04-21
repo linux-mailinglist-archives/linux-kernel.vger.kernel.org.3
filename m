@@ -2,86 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B60509BF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3E8509C0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387421AbiDUJQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
+        id S1387492AbiDUJUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351267AbiDUJQV (ORCPT
+        with ESMTP id S1387437AbiDUJTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:16:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443B424BE5;
-        Thu, 21 Apr 2022 02:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650532412; x=1682068412;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Zm6JKw9VGZgvPFi4mGcScGWwfeg01jOHMUUy+Un0/Q8=;
-  b=iNycPMnxOQ/QM+Dx+qIGiNrBx1YoPW0jXnJeFjuoyBM6vmODCzgy/gQk
-   yjYbTNJg17RMJ8GKxRU4BJS9Zg7Gy9QE2oTwy2EnFCG6ny9FrrrYIAsql
-   SGhO8bs2I2931DxiEqfGGuI+Htts0U4w1QUywR3FdHr5kyLKolQxOwkWp
-   GknG4XR/CbOvVdFBFgtcDkv0hxa/Fi29glqiDpsv8kb30Skl072sKrPY/
-   MGvNcFerAL/29fWuDG9VUtpV/r0yb6zF6mtcJHQOGFOI98zJeFkS5rIID
-   S/XmEa2MNFxFhvn8lNlYmgxjN0Ds4yrtLE1Zf/9xnERoV49JtWb7qZr4Y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="327193515"
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="327193515"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 02:13:31 -0700
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="532953305"
-Received: from 984fee00be24.jf.intel.com ([10.165.54.246])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 02:13:31 -0700
-From:   Lei Wang <lei4.wang@intel.com>
-To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Cc:     lei4.wang@intel.com, chenyi.qiang@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: VMX: Read BNDCFGS if not from_vmentry
-Date:   Thu, 21 Apr 2022 02:13:31 -0700
-Message-Id: <20220421091331.11196-1-lei4.wang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Apr 2022 05:19:49 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FBA2316F
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:17:00 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23L7Wr5r001897
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:17:00 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=gbTkmP4OC3+yQ08kGFbROr+SigHxueVMyVvJ18BOaGc=;
+ b=AqFjd4BcS7L37OpSYyEDJpQrEoQO61lMqAPq3hXub5ihjhDx/GWOWoEgWl44crzz7LIe
+ Sr3U8UJ/UygSBtU7AVoBnCJoXw7Y1/HKdGrlbP/QOXZ30vqoVQjZ+N3tBruNdaj7iBzb
+ 2/ov/q4FvP3SGdBjg5Kyn5VzgpTe7CxsosM= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fhub7eq38-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:17:00 -0700
+Received: from twshared14141.02.ash7.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 21 Apr 2022 02:16:59 -0700
+Received: by devbig039.lla1.facebook.com (Postfix, from userid 572232)
+        id DD73F7CA75F8; Thu, 21 Apr 2022 02:14:01 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     <io-uring@vger.kernel.org>
+CC:     <axboe@kernel.dk>, <asml.silence@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
+        Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH 0/6] return an error when cqe is dropped
+Date:   Thu, 21 Apr 2022 02:13:39 -0700
+Message-ID: <20220421091345.2115755-1-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: ZQRMd3ptUJ2W7OXfNb5Y6SxJgAnjOIF2
+X-Proofpoint-ORIG-GUID: ZQRMd3ptUJ2W7OXfNb5Y6SxJgAnjOIF2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-20_06,2022-04-20_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the migration case, if nested state is set after MSR state, the value
-needs to come from the current MSR value.
+This series addresses a rare but real error condition when a CQE is
+dropped. Many applications rely on 1 SQE resulting in 1 CQE and may even
+block waiting for the CQE. In overflow conditions if the GFP_ATOMIC
+allocation fails, the CQE is dropped and a counter is incremented. Howeve=
+r
+the application is not actively signalled that something bad has
+happened. We would like to indicate this error condition to the
+application but in a way that does not rely on the application doing
+invasive changes such as checking a flag before each wait.
 
-Signed-off-by: Lei Wang <lei4.wang@intel.com>
-Reported-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/nested.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This series returns an error code to the application when the error hits,
+and then resets the error condition. If the application is ok with this
+error it can continue as is, or more likely it can clean up sanely.
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index f18744f7ff82..58a1fa7defc9 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -3381,7 +3381,8 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
- 	if (!(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_DEBUG_CONTROLS))
- 		vmx->nested.vmcs01_debugctl = vmcs_read64(GUEST_IA32_DEBUGCTL);
- 	if (kvm_mpx_supported() &&
--		!(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS))
-+	    (!from_vmentry ||
-+	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
- 		vmx->nested.vmcs01_guest_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
- 
- 	/*
--- 
-2.25.1
+Patches 1&2 add tracing for overflows
+Patches 3&4 prep for adding this error
+Patch 5 is the main one returning an error
+Patch 6 allows liburing to test these conditions more easily with IOPOLL
+
+Dylan Yudaken (6):
+  io_uring: add trace support for CQE overflow
+  io_uring: trace cqe overflows
+  io_uring: rework io_uring_enter to simplify return value
+  io_uring: use constants for cq_overflow bitfield
+  io_uring: return an error when cqe is dropped
+  io_uring: allow NOP opcode in IOPOLL mode
+
+ fs/io_uring.c                   | 89 ++++++++++++++++++++++-----------
+ include/trace/events/io_uring.h | 42 +++++++++++++++-
+ 2 files changed, 102 insertions(+), 29 deletions(-)
+
+
+base-commit: 7c648b7d6186c59ed3a0e0ae4b774aaf4b415ef2
+--=20
+2.30.2
 

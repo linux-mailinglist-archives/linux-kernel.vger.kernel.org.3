@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D53D509CCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71EFE509D6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387948AbiDUJ4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
+        id S1388385AbiDUKWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387935AbiDUJ4a (ORCPT
+        with ESMTP id S1387249AbiDUKVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:56:30 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A7825C47
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:53:38 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KkXsG3Xphz1J9xb;
-        Thu, 21 Apr 2022 17:52:50 +0800 (CST)
-Received: from localhost.localdomain (10.175.102.38) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 17:53:36 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Corey Minyard <minyard@acm.org>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>,
-        <openipmi-developer@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH] ipmi: ipmi_ipmb: Fix null-ptr-deref in ipmi_unregister_smi()
-Date:   Thu, 21 Apr 2022 10:08:35 +0000
-Message-ID: <20220421100835.1942677-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Apr 2022 06:21:34 -0400
+X-Greylist: delayed 1080 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Apr 2022 03:18:06 PDT
+Received: from corp-front09-corp.i.nease.net (corp-front09-corp.i.nease.net [59.111.134.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418C22CC8A
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:18:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
+        Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=YFvbv
+        yq+VCvdHQqmn2kiqnIUVvbxcDPO7+3LCOe1kPc=; b=JTBf6cQKutfbKxV9WeMpX
+        bzNcqNn+jBBL1UrIYAOwoQiLKnWYAAXZOrsIVDrZucCfJ7c938asvNlMxLE4FPXq
+        SKeB7da7YIBg/LuNDVJS7CTKa5RazLM9yFtfM+42Qnx2ifjNum/VJSCpJvSxPIO6
+        9J2o04xJkLz8KJds44ADLU=
+Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
+        by corp-front09-corp.i.nease.net (Coremail) with SMTP id nxDICgCHjGGMJmFiMCBSAA--.46336S2;
+        Thu, 21 Apr 2022 17:40:29 +0800 (HKT)
+From:   liuyacan@corp.netease.com
+To:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liuyacan <liuyacan@corp.netease.com>,
+        Tony Lu <tonylu@linux.alibaba.com>
+Subject: [PATCH net] net/smc: sync err code when tcp connection was refused
+Date:   Thu, 21 Apr 2022 17:40:27 +0800
+Message-Id: <20220421094027.683992-1-liuyacan@corp.netease.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.102.38]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: nxDICgCHjGGMJmFiMCBSAA--.46336S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr48CF15CFy5KF1rtFWkZwb_yoWkuFbEkF
+        1Ig3WxGa1jvr1rC3y7ZrsxZwsYqa48CrWrWrnIyrWkt3409w45ZFs5urn8Gwn7Cr4a9Fnx
+        Jw45Kas5C34IyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbXAYjxAI6xCIbckI1I0E57IF64kEYxAxM7AC8VAFwI0_Gr0_Xr1l
+        1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0I
+        I2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0
+        Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
+        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAawVAFpfBj4fn0lVCYm3Zqqf926ryUJw1UKr1v
+        6r18M2kK6xCIbVAIwIAEc20F6c8GOVW8Jr15Jr4le2I262IYc4CY6c8Ij28IcVAaY2xG8w
+        AqjxCE34x0Y48IcwAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lw4CEc2x0rVAKj4xxMx02cVAKzwCY0x0Ix7I2
+        Y4AK64vIr41l42xK82IYc2Ij64vIr41l4x8a64kIII0Yj41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1l4IxY624lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+        zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+        CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
+        VFxhVjvjDU0xZFpf9x0pRp6wAUUUUU=
+X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQADCVt76hFlaAABsY
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN report null-ptr-deref as follows:
+From: liuyacan <liuyacan@corp.netease.com>
 
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:ipmi_unregister_smi+0x7d/0xd50 drivers/char/ipmi/ipmi_msghandler.c:3680
-Call Trace:
- ipmi_ipmb_remove+0x138/0x1a0 drivers/char/ipmi/ipmi_ipmb.c:443
- ipmi_ipmb_probe+0x409/0xda1 drivers/char/ipmi/ipmi_ipmb.c:548
- i2c_device_probe+0x959/0xac0 drivers/i2c/i2c-core-base.c:563
- really_probe+0x3f3/0xa70 drivers/base/dd.c:541
+In the current implementation, when TCP initiates a connection
+to an unavailable [ip,port], ECONNREFUSED will be stored in the
+TCP socket, but SMC will not. However, some apps (like curl) use
+getsockopt(,,SO_ERROR,,) to get the error information, which makes
+them miss the error message and behave strangely.
 
-In ipmi_ipmb_probe(), 'iidev->intf' is not set before ipmi_register_smi() success.
-And in the error handling case, ipmi_ipmb_remove() is called to release resources,
-ipmi_unregister_smi() is called without check 'iidev->intf', this will cause KASAN
-null-ptr-deref issue.
-
-Fix by adding NULL check prior to calling ipmi_unregister_smi().
-
-Fixes: 57c9e3c9a374 ("ipmi:ipmi_ipmb: Unregister the SMI on remove")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Fixes: 50717a37db03 ("net/smc: nonblocking connect rework")
+Signed-off-by: liuyacan <liuyacan@corp.netease.com>
+Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
 ---
- drivers/char/ipmi/ipmi_ipmb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/smc/af_smc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/char/ipmi/ipmi_ipmb.c b/drivers/char/ipmi/ipmi_ipmb.c
-index b81b862532fb..ea8fdb5ecfc9 100644
---- a/drivers/char/ipmi/ipmi_ipmb.c
-+++ b/drivers/char/ipmi/ipmi_ipmb.c
-@@ -437,7 +437,8 @@ static int ipmi_ipmb_remove(struct i2c_client *client)
- 	iidev->client = NULL;
- 	ipmi_ipmb_stop_thread(iidev);
- 
--	ipmi_unregister_smi(iidev->intf);
-+	if (iidev->intf)
-+		ipmi_unregister_smi(iidev->intf);
- 
- 	return 0;
- }
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index fc7b6eb22..bbb1a4ce5 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -1475,6 +1475,8 @@ static void smc_connect_work(struct work_struct *work)
+ 		smc->sk.sk_state = SMC_CLOSED;
+ 		if (rc == -EPIPE || rc == -EAGAIN)
+ 			smc->sk.sk_err = EPIPE;
++		else if (rc == -ECONNREFUSED)
++			smc->sk.sk_err = ECONNREFUSED;
+ 		else if (signal_pending(current))
+ 			smc->sk.sk_err = -sock_intr_errno(timeo);
+ 		sock_put(&smc->sk); /* passive closing */
 -- 
-2.25.1
+2.20.1
 

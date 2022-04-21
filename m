@@ -2,161 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0288509C08
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B60509BF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387411AbiDUJQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        id S1387421AbiDUJQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351267AbiDUJQJ (ORCPT
+        with ESMTP id S1351267AbiDUJQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:16:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892D7245A8;
-        Thu, 21 Apr 2022 02:13:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3C88C1F753;
-        Thu, 21 Apr 2022 09:13:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650532399; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3HAfPGJ8FGW+PIQe19iW2k1VoU2XisqwLSHRwJUfxQw=;
-        b=VrHESd1gFH6ddp4+PdS53IFB2GUri2YmtgnBtEh05mWni5l8NVdovhs1WDGRBoQlXwWcoN
-        goliUpTYV0GxD/H1cGFftI6YjUUJKWNLAot7Jx1oSx/B8Jx2/EsTnLp++pwkT7QwnHsoXh
-        QQaMEtVc7TxHHQgkjL9ncoNrZtHs170=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650532399;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3HAfPGJ8FGW+PIQe19iW2k1VoU2XisqwLSHRwJUfxQw=;
-        b=IOAdiIk7idHZEJN8wB5+9GmKgL2SgAvaJuiGmWLNcykw0mjOtqjNYlV6LrnL7HCJt9KUUn
-        xriDel3JZkjAbpCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0290613446;
-        Thu, 21 Apr 2022 09:13:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9cMrOy4gYWIyPgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 21 Apr 2022 09:13:18 +0000
-Message-ID: <dec16771-03da-2c49-ae53-9cb49d64c761@suse.de>
-Date:   Thu, 21 Apr 2022 11:13:18 +0200
+        Thu, 21 Apr 2022 05:16:21 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443B424BE5;
+        Thu, 21 Apr 2022 02:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650532412; x=1682068412;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Zm6JKw9VGZgvPFi4mGcScGWwfeg01jOHMUUy+Un0/Q8=;
+  b=iNycPMnxOQ/QM+Dx+qIGiNrBx1YoPW0jXnJeFjuoyBM6vmODCzgy/gQk
+   yjYbTNJg17RMJ8GKxRU4BJS9Zg7Gy9QE2oTwy2EnFCG6ny9FrrrYIAsql
+   SGhO8bs2I2931DxiEqfGGuI+Htts0U4w1QUywR3FdHr5kyLKolQxOwkWp
+   GknG4XR/CbOvVdFBFgtcDkv0hxa/Fi29glqiDpsv8kb30Skl072sKrPY/
+   MGvNcFerAL/29fWuDG9VUtpV/r0yb6zF6mtcJHQOGFOI98zJeFkS5rIID
+   S/XmEa2MNFxFhvn8lNlYmgxjN0Ds4yrtLE1Zf/9xnERoV49JtWb7qZr4Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="327193515"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="327193515"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 02:13:31 -0700
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="532953305"
+Received: from 984fee00be24.jf.intel.com ([10.165.54.246])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 02:13:31 -0700
+From:   Lei Wang <lei4.wang@intel.com>
+To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Cc:     lei4.wang@intel.com, chenyi.qiang@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: VMX: Read BNDCFGS if not from_vmentry
+Date:   Thu, 21 Apr 2022 02:13:31 -0700
+Message-Id: <20220421091331.11196-1-lei4.wang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] drm/nvdla: Add driver support for NVDLA
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <20220419135908.39606-1-cai.huoqing@linux.dev>
- <20220419135908.39606-3-cai.huoqing@linux.dev>
- <2aeee5a2-b5a5-348e-ccf7-04f49e1119da@suse.de>
- <b34fa2a5-58b4-6270-2d19-2ad591e3e250@amd.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <b34fa2a5-58b4-6270-2d19-2ad591e3e250@amd.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------em5EsxMlkAyKG1ppeutUVrsD"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------em5EsxMlkAyKG1ppeutUVrsD
-Content-Type: multipart/mixed; boundary="------------2Q0oj1gwr0coM6wk00Pm9YF0";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Cai Huoqing <cai.huoqing@linux.dev>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Message-ID: <dec16771-03da-2c49-ae53-9cb49d64c761@suse.de>
-Subject: Re: [PATCH 2/2] drm/nvdla: Add driver support for NVDLA
-References: <20220419135908.39606-1-cai.huoqing@linux.dev>
- <20220419135908.39606-3-cai.huoqing@linux.dev>
- <2aeee5a2-b5a5-348e-ccf7-04f49e1119da@suse.de>
- <b34fa2a5-58b4-6270-2d19-2ad591e3e250@amd.com>
-In-Reply-To: <b34fa2a5-58b4-6270-2d19-2ad591e3e250@amd.com>
+In the migration case, if nested state is set after MSR state, the value
+needs to come from the current MSR value.
 
---------------2Q0oj1gwr0coM6wk00Pm9YF0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Signed-off-by: Lei Wang <lei4.wang@intel.com>
+Reported-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/vmx/nested.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-SGkNCg0KQW0gMjEuMDQuMjIgdW0gMTA6MzQgc2NocmllYiBDaHJpc3RpYW4gS8O2bmlnOg0K
-PiBBbSAyMS4wNC4yMiB1bSAxMDozMCBzY2hyaWViIFRob21hcyBaaW1tZXJtYW5uOg0KPj4g
-KFJlc2VuZGluZywgYXMgc29tZSBNTHMgZGlkbid0IGxpa2UgdGhlIHNpemUgb2YgdGhlIG9y
-aWduaW5hbCBtYWlsLikNCj4+DQo+PiBIaSwNCj4+DQo+PiB0aGFua3MgZm9yIHlvdXIgc3Vi
-bWlzc2lvbi4gU29tZSBnZW5lcmFsIGNvbW1lbnRzOg0KPj4NCj4+IMKgICogc29tZSBmdW5j
-dGlvbnMgYXJlIHByZWZpeGVkIHdpdGggZGxhXywgb3RoZXJzIHVzZSBudmRsYV8uIEl0IHNl
-ZW1zIA0KPj4gYXJiaXRyYXJ5IHRvIG1lLiBQbGVhc2UgdXNlIG52ZGxhXyBjb25zaXN0ZW50
-bHkgdGhyb3VnaG91dCB0aGUgc291cmNlIA0KPj4gY29kZS4NCj4+DQo+PiDCoCAqIEZvciBy
-ZXBvcnRpbmcgZXJyb3JzLCBwbGVhc2UgdXNlIGRybV9lcnIoKSwgZHJtX3dhcm4oKSwgZXRj
-LiBJIA0KPj4gc3VnZ2VzdCB0byByZWFycmFuZ2UgdGhlIGVycm9yIG1lc3NhZ2VzIHRvIG5v
-dCBiZSBsb2NhdGVkIGluIHRoZSANCj4+IGlubmVybW9zdCBmdW5jdGlvbnMuDQo+IA0KPiBJ
-ZiB5b3UgcGxhbiB0byBoYXZlIG11bHRpcGxlIGluc3RhbmNlcyBvZiB0aGUgZHJpdmVyIGxv
-YWRlZCBhdCB0aGUgc2FtZSANCj4gdGltZSwgdXNpbmcgZHJtX2Rldl9lcnIoKSwgZHJtX2Rl
-dl93YXJuKCkgZXRjLi4gd291bGQgYmUgZXZlbiBiZXR0ZXIuDQoNCkkgdGhvdWdodCB0aGF0
-IHRoZXNlIGZ1bmN0aW9ucyBleGlzdCwgYnV0IGxvb2tpbmcgZm9yIHRoZW0gbm93IEkgY2Fu
-bm90IA0KZmluZCB0aGVtLiBUaGUgbWFjcm9zIERSTV9ERVZfRVJSKCksIGV0YyBhcmUgZGVw
-cmVjYXRlZC4NCg0KPiANCj4gQlRXOiBJJ20gc3RpbGwgYWJzb2x1dGVseSBub3Qga2VlbiB0
-byBlbmZvcmNpbmcgZHJtXyogbG9nIGZ1bmN0aW9ucy4gU28gDQo+IGlmIHlvdSBwcmVmZXIg
-dG8gc3RpY2sgd2l0aCBwcl9lcnIoKSBhbmQgZGV2X2VycigpIHdlIGNvdWxkIGRpc2N1c3Mg
-dGhhdCANCj4gb25jZSBtb3JlLg0KPiANCj4gUmVnYXJkcywNCj4gQ2hyaXN0aWFuLg0KPiAN
-Cj4+DQo+PiDCoCAqIENvdWxkIHlvdSBwbGVhc2Ugc3BsaXQgdGhpcyBwYXRjaCBpbnRvIHNt
-YWxsZXIgcGllY2VzPyBJdCANCj4+IGN1cnJlbnRseSBoaXRzIHNpemUgbGltaXRzIG9mIHNv
-bWUgbWFpbGluZyBsaXN0cy4gTWF5YmUgYWRkIHRoZSANCj4+IHJlZ2lzdGVyIGNvbnN0YW50
-cyBzZXBhcmF0ZWx5Lg0KPj4NCj4+IFBsZWFzZSBmaW5kIG1vcmUgcmV2aWV3IGNvbW1lbnRz
-IGJlbG93LiBJdCdzIG5vdCBhIGZ1bGwgcmV2aWV3LCBidXQgYXQgDQo+PiBsZWFzdCBzb21l
-dGhpbmcgdG8gc3RhcnQgd2l0aC4NCj4+DQo+PiBCZXN0IHJlZ2FyZHMNCj4+IFRob21hcw0K
-PiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Bl
-cg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1
-LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykN
-Ckdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index f18744f7ff82..58a1fa7defc9 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -3381,7 +3381,8 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+ 	if (!(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_DEBUG_CONTROLS))
+ 		vmx->nested.vmcs01_debugctl = vmcs_read64(GUEST_IA32_DEBUGCTL);
+ 	if (kvm_mpx_supported() &&
+-		!(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS))
++	    (!from_vmentry ||
++	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
+ 		vmx->nested.vmcs01_guest_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
+ 
+ 	/*
+-- 
+2.25.1
 
---------------2Q0oj1gwr0coM6wk00Pm9YF0--
-
---------------em5EsxMlkAyKG1ppeutUVrsD
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJhIC4FAwAAAAAACgkQlh/E3EQov+Dr
-6Q/+PSFd8QFsLqjfmSsjy/518keTcjlAeHgL0M3HiDB7W4rEYKTwcWRqcSSddOgVJXI42aVvnL8z
-lCeQoB7FR0e/hOscAuBoOJa3WiKe9bBuB5f+r+OQITe0NGQiQd4twjDrwDtiSJMOQMN83YzkXMBN
-Q4uZfUIMU5/0H/wLV+jc6bLhCe3lfnXl/aReisOoRZLNqJwC9xL3uG4V1nKOIsZM+z2VI37lqCs0
-rHSO9MWGB7mlk8CklJt+ArRRgaRkXREkHSMbR/mQHEA1MyTC8HlKb1uLJamclMgiYJhysttqSduv
-7xPR3aSCe3TFJDImvK5sgAM/8rAlt/CoeumusjA51Ukhaj6MkukQoPRBLT/in7HqiPvKR5tUrjgD
-jgvICOSzmocQ8MCnQ4cH6Dofs6wMEwGyxnA5fZ7/ZmtfeN9hHe9nm+CM+x+vIdG8A2SLbFUy1+S2
-OtZOVjfKt7znDOciEbzeozU5SyqLCINPKbTJwqwCn/k3vsDF1dVNB21jyU4RCXhpMMnPBjmgw6d1
-UyV/2pcnQEFoZy8quF3gvNEDlZZ9xyIL0KyO88ZcNUtJj9U3TOc/N5Lj9vHFtfvttcB6M/+XAyV9
-LLU6DUEX2e5SsT8aLsLSaUlE8Ew1DYAQPuqAwGx6foH6tnIqZB8yCdA7CgzEXSi5TLaDIogoaYR0
-Fww=
-=Xvmf
------END PGP SIGNATURE-----
-
---------------em5EsxMlkAyKG1ppeutUVrsD--

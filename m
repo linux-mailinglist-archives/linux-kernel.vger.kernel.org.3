@@ -2,122 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6CE509715
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9861C50970F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 07:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384628AbiDUGAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S1384599AbiDUF6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 01:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237590AbiDUGAn (ORCPT
+        with ESMTP id S1384587AbiDUF56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:00:43 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796B612ADD;
-        Wed, 20 Apr 2022 22:57:54 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KkRdG3fCrz1J9vy;
-        Thu, 21 Apr 2022 13:57:06 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by dggpeml500023.china.huawei.com
- (7.185.36.114) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 21 Apr
- 2022 13:57:52 +0800
-From:   Peng Wu <wupeng58@huawei.com>
-To:     <j.neuschaefer@gmx.net>, <linus.walleij@linaro.org>
-CC:     <openbmc@lists.ozlabs.org>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wupeng58@huawei.com>,
-        <liwei391@huawei.com>
-Subject: [PATCH] pinctrl: nuvoton: Add missing fwnode_handle_put in wpcm450_gpio_register
-Date:   Thu, 21 Apr 2022 05:53:56 +0000
-Message-ID: <20220421055356.8163-1-wupeng58@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 21 Apr 2022 01:57:58 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2CE64F3;
+        Wed, 20 Apr 2022 22:55:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PDPyNefwFTnQFkVxZr1As8+DuLwtBUhU/XlRcJQNYMI=; b=siphIxP1DS6IkuiurROIaxgmqo
+        ZAYdv2E2MCNs3VA4IZqPLE71MYsZcFkGn4AswSfXtohbHKXNjqhoPa5H6JzuPWdyvMKPzokOK+tr8
+        oPmRk+clL9ITZGvjyjHhGFIYongd4N9S/6rxbdjSA4rlb0fOK+arIA4ihDMXQPmGPNFmV7RG6bqbN
+        h9ivQ1Q/fifUrosUuR+KI0mhmasZyWh79wAqYrhOXKwp3ehpdIyL6mI0oINHn0G2riNFJYurJZF8E
+        3SG0uGeREez8uPIFfFpWl3sudYe+ZFztfp9w0gDTz54HR2PmDW4TLgXnc7roxp+VYiacwEqIwmCio
+        CH58+arw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nhPmN-00BcFk-Rs; Thu, 21 Apr 2022 05:54:59 +0000
+Date:   Wed, 20 Apr 2022 22:54:59 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jane Chu <jane.chu@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+Subject: Re: [PATCH v13 0/7] fsdax: introduce fs query to support reflink
+Message-ID: <YmDxs1Hj4H/cu2sd@infradead.org>
+References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
+ <20220421012045.GR1544202@dread.disaster.area>
+ <86cb0ada-208c-02de-dbc9-53c6014892c3@fujitsu.com>
+ <CAPcyv4i0Noum8hqHtCpdM5HMVdmNHm3Aj2JCnZ+KZLgceiXYaA@mail.gmail.com>
+ <20220421043502.GS1544202@dread.disaster.area>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421043502.GS1544202@dread.disaster.area>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In one of the error paths of the device_for_each_child_node() loop
-in wpcm450_gpio_register, add missing call to fwnode_handle_put.
+On Thu, Apr 21, 2022 at 02:35:02PM +1000, Dave Chinner wrote:
+> Sure, I'm not a maintainer and just the stand-in patch shepherd for
+> a single release. However, being unable to cleanly merge code we
+> need integrated into our local subsystem tree for integration
+> testing because a patch dependency with another subsystem won't gain
+> a stable commit ID until the next merge window is .... distinctly
+> suboptimal.
 
-Signed-off-by: Peng Wu <wupeng58@huawei.com>
----
- drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-index 0dbeb91f0bf2..de4388b512d7 100644
---- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-+++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-@@ -1038,15 +1038,19 @@ static int wpcm450_gpio_register(struct platform_device *pdev,
- 			continue;
- 
- 		ret = fwnode_property_read_u32(child, "reg", &reg);
--		if (ret < 0)
-+		if (ret < 0) {
-+			fwnode_handle_put(child);
- 			return ret;
-+		}
- 
- 		gpio = &pctrl->gpio_bank[reg];
- 		gpio->pctrl = pctrl;
- 
--		if (reg >= WPCM450_NUM_BANKS)
-+		if (reg >= WPCM450_NUM_BANKS) {
-+			fwnode_handle_put(child);
- 			return dev_err_probe(dev, -EINVAL,
--					     "GPIO index %d out of range!\n", reg);
-+					"GPIO index %d out of range!\n", reg);
-+		}
- 
- 		bank = &wpcm450_banks[reg];
- 		gpio->bank = bank;
-@@ -1060,8 +1064,10 @@ static int wpcm450_gpio_register(struct platform_device *pdev,
- 		}
- 		ret = bgpio_init(&gpio->gc, dev, 4,
- 				 dat, set, NULL, dirout, NULL, flags);
--		if (ret < 0)
-+		if (ret < 0) {
-+			fwnode_handle_put(child);
- 			return dev_err_probe(dev, ret, "GPIO initialization failed\n");
-+		}
- 
- 		gpio->gc.ngpio = bank->length;
- 		gpio->gc.set_config = wpcm450_gpio_set_config;
-@@ -1074,8 +1080,11 @@ static int wpcm450_gpio_register(struct platform_device *pdev,
- 		girq->parent_handler = wpcm450_gpio_irqhandler;
- 		girq->parents = devm_kcalloc(dev, WPCM450_NUM_GPIO_IRQS,
- 					     sizeof(*girq->parents), GFP_KERNEL);
--		if (!girq->parents)
-+		if (!girq->parents) {
-+			fwnode_handle_put(child);
- 			return -ENOMEM;
-+		}
-+
- 		girq->default_type = IRQ_TYPE_NONE;
- 		girq->handler = handle_bad_irq;
- 
-@@ -1091,8 +1100,10 @@ static int wpcm450_gpio_register(struct platform_device *pdev,
- 		}
- 
- 		ret = devm_gpiochip_add_data(dev, &gpio->gc, gpio);
--		if (ret)
-+		if (ret) {
-+			fwnode_handle_put(child);
- 			return dev_err_probe(dev, ret, "Failed to add GPIO chip\n");
-+		}
- 	}
- 
- 	return 0;
--- 
-2.17.1
-
+Yes.  Which is why we've taken a lot of mm patchs through other trees,
+sometimes specilly crafted for that.  So I guess in this case we'll
+just need to take non-trivial dependencies into the XFS tree, and just
+deal with small merge conflicts for the trivial ones.

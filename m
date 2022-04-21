@@ -2,87 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE3F509FBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1327509FC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384868AbiDUMiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
+        id S1384931AbiDUMkx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 21 Apr 2022 08:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385124AbiDUMhm (ORCPT
+        with ESMTP id S241611AbiDUMkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:37:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4112F01F;
-        Thu, 21 Apr 2022 05:34:51 -0700 (PDT)
+        Thu, 21 Apr 2022 08:40:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCADF21839
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:38:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D907E61C17;
-        Thu, 21 Apr 2022 12:34:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38513C385AA;
-        Thu, 21 Apr 2022 12:34:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650544490;
-        bh=nwEgRIc2DkjEOq+aHIKgb93W0tmpmkVrijOMlhjM+2c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kOcXb1lv/nzkVVo5+e+G7lB6G9q+Ds4gTUHOEz/mS+NRZiCo1cPMizp43AaZ/OJaf
-         6bmQrVibO21ey4Rx+3aEG5jTUMUgNRhavYc6YIjXtYurJmbNXP6AAxXXueZZ5bZo6g
-         YN51K3lqzjbNVUP77kKjHrm45TDIpc/pizXBKccj68lwtS+ILgIZlPPNIgVfnTijI4
-         lo2l2c/irPGCVcZunI5bIGJ5vcxNkLmCynsRilQHm5gWsdXXYLxbmRRwaCu8Rz3eJU
-         gFM7eA0lk4aAJfUnTT75o+Ov/kyZRhu9s38xzj1RLBmgymFhv/kiXB4b32Bk8R6o/s
-         2bitBY6TL3egA==
-Received: by mail-pl1-f175.google.com with SMTP id b7so4728503plh.2;
-        Thu, 21 Apr 2022 05:34:50 -0700 (PDT)
-X-Gm-Message-State: AOAM533iAcoXVp51eYWM+bDyRQRlWHbYRZIpCPfm/PpnAggQEAycB3qo
-        z1mhy1XXSdHUtBLBYHVzV4AtMbw+0+6ExoeJkQ==
-X-Google-Smtp-Source: ABdhPJwLEPk9OLMoJ9JMm2KtY59U1i0zQMGi1rF12qY8DyKg5Gv81xjxidpwgTMkqj9+231fmtFHFdon2zwGKBXhxtM=
-X-Received: by 2002:a17:902:eb8c:b0:158:4cc9:6998 with SMTP id
- q12-20020a170902eb8c00b001584cc96998mr25730080plg.35.1650544489734; Thu, 21
- Apr 2022 05:34:49 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 706DC61C19
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:38:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A892DC385A5;
+        Thu, 21 Apr 2022 12:37:59 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 08:37:58 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
+Cc:     <cj.chengjian@huawei.com>, <huawei.libin@huawei.com>,
+        <xiexiuqi@huawei.com>, <liwei391@huawei.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>,
+        <zengshun.wu@outlook.com>
+Subject: Re: [RFC PATCH -next v2 0/4] arm64/ftrace: support dynamic
+ trampoline
+Message-ID: <20220421083758.37b239a4@gandalf.local.home>
+In-Reply-To: <5ddc2722-4489-f66d-552d-1f4c755b5d30@huawei.com>
+References: <20220316100132.244849-1-bobo.shaobowang@huawei.com>
+        <20220420141143.23286faa@gandalf.local.home>
+        <5ddc2722-4489-f66d-552d-1f4c755b5d30@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220421122303.111766-1-wanjiabing@vivo.com>
-In-Reply-To: <20220421122303.111766-1-wanjiabing@vivo.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 21 Apr 2022 07:34:37 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+Ess2=+r+=+QdqkF3pQw9CS=3so86FCM8Mn_XaKBTgLA@mail.gmail.com>
-Message-ID: <CAL_Jsq+Ess2=+r+=+QdqkF3pQw9CS=3so86FCM8Mn_XaKBTgLA@mail.gmail.com>
-Subject: Re: [PATCH] of: Add missing of_node_put() before return
-To:     Wan Jiabing <wanjiabing@vivo.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kael_w@yeah.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Thomas
+On Thu, 21 Apr 2022 09:13:01 +0800
+"Wangshaobo (bobo)" <bobo.shaobowang@huawei.com> wrote:
 
-On Thu, Apr 21, 2022 at 7:23 AM Wan Jiabing <wanjiabing@vivo.com> wrote:
->
-> Fix the following coccicheck error:
-> drivers/of/platform.c:554:2-23: WARNING: Function "for_each_node_by_type"
-> should have of_node_put() before return around line 560.
+> Not yet, Steve, ftrace_location() looks has no help to find a right 
+> rec->ip in our case,
+> 
+> ftrace_location() can find a right rec->ip when input ip is in the range 
+> between
+> 
+> sym+0 and sym+$end, but our question is how to  identify rec->ip from 
+> __mcount_loc,
 
-Especially since the code this fixes just landed, you should Cc the
-author and reference the commit.
+Are you saying that the "ftrace location" is not between sym+0 and sym+$end?
 
-> Early exits from for_each_node_by_type() should decrement the node
-> reference counter.
->
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->  drivers/of/platform.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> this changed the patchable entry before bti to after in gcc:
+> 
+>     [1] https://reviews.llvm.org/D73680
+> 
+> gcc tells the place of first nop of the 5 NOPs when using 
+> -fpatchable-function-entry=5,3,
+> 
+> but not tells the first nop after bti, so we don't know how to adjust 
+> our rec->ip for ftrace.
 
-This has to go via the DRM tree.
+OK, so I do not understand how the compiler is injecting bti with mcount
+calls, so I'll just walk away for now ;-)
 
-Fixes: 52b1b46c39ae ("of: Create platform devices for OF framebuffers")
-Acked-by: Rob Herring <robh@kernel.org>
+-- Steve

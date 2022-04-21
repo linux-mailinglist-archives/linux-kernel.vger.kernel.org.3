@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AF7509946
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B09C509943
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357372AbiDUHid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
+        id S1385858AbiDUHim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385887AbiDUHiY (ORCPT
+        with ESMTP id S1385859AbiDUHiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 21 Apr 2022 03:38:24 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B847D13DD3;
-        Thu, 21 Apr 2022 00:35:31 -0700 (PDT)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24386DEA4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:35:35 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 55E7A1C000F;
-        Thu, 21 Apr 2022 07:35:28 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id A62691C0014;
+        Thu, 21 Apr 2022 07:35:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650526529;
+        t=1650526534;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p4QO0moKpEkXz+ulrvSLQo0T9lC8TOEa3gAblMHHWcg=;
-        b=W5tjJw+uF9lptPqXryNnTwotnKABgq9Ic3j79bCDlyH4iFgliXcsv9VSd7n99CplsWqHCq
-        okVua35NKDn/cOEwdtfhzT3+mokU0WhN1lah0wBVHe3nqb6em5PDNp5vJtLwKz6yXV+Zgw
-        vrf9KgFxLeQlocnMMpzXJHdG54xIiL887VIpXmBbT5sw8omtoMXb0CzImEZkf7fQPOs8iz
-        HmgZr3qiTBbVnufIUcXIru9Cy+I0hPCyWbZa4qVPZbVclAW+xG73nDp16a9J9YYzuyj0j3
-        Rd/slS5Gex4c2ycFMo2uZ3M9C51cMLv3LXCpbG7V+b7WX2aJimX71A4eDWNpwQ==
+        bh=5sUaNXOTPfSNutP1Nw7SXQWnMZHzjp1ss3S3Q/iiVUM=;
+        b=DqqHDeRhUgldMcsQYFpqSMHOXjUkSTLj0wpr0kTgrr3W3ou2YcG22IF0xK77bUqWH9paZn
+        WG2Sy5RHNhqVKmjvnkVmnyqtYuFShP1GV99cfNy/Uy73y501M8I5+e+Qi3hR8OithBlC7m
+        7Oeez/NM8/i22HCoyGgHCyT3xD2gJ3cpYPQgwRkJY+4VCAWs0HCsNoh1HsL5AiLSpztvqE
+        u62HdYhqZJRJP1BOSFoPuQHo3SR72pG0KIP7nbixy5ug6HD2rtZfnP/3rzVcg7Th3NQ/du
+        LJohDkDLxaKcTIsFfzfK+sDf3VtZtQqByYbmjYjJLQgD9jej5aL9iuYAPWp2QA==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>, mani@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     konrad.dybcio@somainline.org, quic_srichara@quicinc.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH V5] mtd: rawnand: qcom: fix memory corruption that causes panic
-Date:   Thu, 21 Apr 2022 09:35:27 +0200
-Message-Id: <20220421073527.71690-1-miquel.raynal@bootlin.com>
+To:     Oleksandr Ocheretnyi <oocheret@cisco.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: fix 'part' field data corruption in mtd_info
+Date:   Thu, 21 Apr 2022 09:35:33 +0200
+Message-Id: <20220421073533.71758-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <1650268107-5363-1-git-send-email-quic_mdalam@quicinc.com>
+In-Reply-To: <20220417184649.449289-1-oocheret@cisco.com>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'ba7542eb2dd5dfc75c457198b88986642e602065'
+X-linux-mtd-patch-commit: b'37c5f9e80e015d0df17d0c377c18523002986851'
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -56,58 +55,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-18 at 07:48:27 UTC, Md Sadre Alam wrote:
-> This patch fixes a memory corruption that occurred in the
-> nand_scan() path for Hynix nand device.
+On Sun, 2022-04-17 at 18:46:47 UTC, Oleksandr Ocheretnyi wrote:
+> Commit 46b5889cc2c5 ("mtd: implement proper partition handling")
+> started using "mtd_get_master_ofs()" in mtd callbacks to determine
+> memory offsets by means of 'part' field from mtd_info, what previously
+> was smashed accessing 'master' field in the mtd_set_dev_defaults() method.
+> That provides wrong offset what causes hardware access errors.
 > 
-> On boot, for Hynix nand device will panic at a weird place:
-> | Unable to handle kernel NULL pointer dereference at virtual
->   address 00000070
-> | [00000070] *pgd=00000000
-> | Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-> | Modules linked in:
-> | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
->   #38
-> | Hardware name: Generic DT based system
-> | PC is at nandc_set_reg+0x8/0x1c
-> | LR is at qcom_nandc_command+0x20c/0x5d0
-> | pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
-> | sp : c14adc50  ip : c14ee208  fp : c0cc970c
-> | r10: 000000a3  r9 : 00000000  r8 : 00000040
-> | r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
-> | r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
-> | Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
-> | Control: 10c5387d  Table: 8020406a  DAC: 00000051
-> | Register r0 information: slab kmalloc-2k start c14ee000 pointer offset
->   64 size 2048
-> | Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
-> | nandc_set_reg from qcom_nandc_command+0x20c/0x5d0
-> | qcom_nandc_command from nand_readid_op+0x198/0x1e8
-> | nand_readid_op from hynix_nand_has_valid_jedecid+0x30/0x78
-> | hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
-> | hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
-> | nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
-> | qcom_nandc_probe from platform_probe+0x58/0xac
+> Just make 'part', 'master' as separate fields, rather than using
+> union type to avoid 'part' data corruption when mtd_set_dev_defaults()
+> is called.
 > 
-> The problem is that the nand_scan()'s qcom_nand_attach_chip callback
-> is updating the nandc->max_cwperpage from 1 to 4 or 8 based on page size.
-> This causes the sg_init_table of clear_bam_transaction() in the driver's
-> qcom_nandc_command() to memset much more than what was initially
-> allocated by alloc_bam_transaction().
-> 
-> This patch will update nandc->max_cwperpage 1 to 4 or 8 based on page
-> size in qcom_nand_attach_chip call back after freeing the previously
-> allocated memory for bam txn as per nandc->max_cwperpage = 1 and then
-> again allocating bam txn as per nandc->max_cwperpage = 4 or 8 based on
-> page size in qcom_nand_attach_chip call back itself.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 6a3cec64f18c ("mtd: rawnand: qcom: convert driver to nand_scan()")
-> Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+> Fixes: 46b5889cc2c5 ("mtd: implement proper partition handling")
+> Signed-off-by: Oleksandr Ocheretnyi <oocheret@cisco.com>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
 

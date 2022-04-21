@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAD350A22B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3297650A239
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389204AbiDUO2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S1389215AbiDUOaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388932AbiDUO2r (ORCPT
+        with ESMTP id S1388988AbiDUOaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:28:47 -0400
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AA619C0D;
-        Thu, 21 Apr 2022 07:25:57 -0700 (PDT)
-Received: by mail-pj1-f43.google.com with SMTP id md4so5086297pjb.4;
-        Thu, 21 Apr 2022 07:25:57 -0700 (PDT)
+        Thu, 21 Apr 2022 10:30:01 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2373CA4B
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:27:10 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so5536505fac.7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:27:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dgLvbeMn2iDNegBocEklYCDXrN23lnjAntKQ7pZtu0I=;
+        b=mqxut536y9YX4W3RhwhcaWtdJdPhGnTR19Mm7vxf926tWT25Vs6yt//6m7Pm3pU+E7
+         OzFE8cb8sm2BVpfpoINJ+1ZGyDYv+W6Jg5PDQ4L8LeI5XiQ8j87dhc7ASj8nhAA00RWS
+         8qWjt32itz8IzVu52yEsg3w4//zX1CoPJj6hB5aPCceT0paHRUuhrR+nD8+YLXqPUcm6
+         MPaemLrLtIlvsOf+OcjH2WYEBhu37N/IIWlm/c8nlAUnnONsDeCRQWfL4dgSfpTO9TuP
+         lCg5FlYfJ1A6LUzX1MF5fXZVkvtc3MS3VGq9Vi9cbUxq7RkCku4jOcND5TDnrdMO5H9A
+         L2Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z6eYZr81Vczs86aN15rFzTwzc9qxYGexlog897TKVyE=;
-        b=IQaUg6A+aLlgCaxRhtVOL8RghI3FL66eFvPnrsOcyT9YgmFCh3Nb5zFdd5MKh54Fhw
-         fw9ZAY/6ViwUnF5WxHac1kphjdmGGbUsrEK22uzWlq11OeULp1CjKj6KoCqxPTXcSmT2
-         eKNm5KwrRve1kFHvRFdVIeQe0AftpOnCRA75TZ42cNXwFjjppfY8JxlmbY0Rx1uGrQQw
-         LYRNGeZiChDNzTfFF2V6AQi3OJrX7cHrnId0GaAmHDtOo6iDDVpw/6me1VvO2BrB/AH8
-         3MT78WR0J6hBDQ7xTWpyFV4YsWBSTmyNsTs55k5svXR+rZP09J7TbgjtCrln+Yhymyrf
-         zeYg==
-X-Gm-Message-State: AOAM531JlCzaGbLcWCJwoWrXdMTpmrylI1z/la8YEHYQomvZcz6vFKI2
-        0Wq055wniDcS9/JH3ZVloq0=
-X-Google-Smtp-Source: ABdhPJydcFcHSk+B+u3MIwIZJcsvb93QzavgusJ2o7qWb4MG6T8PeixWpLh8YgS99c3ZEYVwSsz9Ng==
-X-Received: by 2002:a17:902:9a4c:b0:156:6735:b438 with SMTP id x12-20020a1709029a4c00b001566735b438mr25911941plv.46.1650551156614;
-        Thu, 21 Apr 2022 07:25:56 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:ece1:6248:e226:d2e0:1f33])
-        by smtp.gmail.com with ESMTPSA id f10-20020a056a0022ca00b0050a858e8cc3sm14194974pfj.200.2022.04.21.07.25.55
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dgLvbeMn2iDNegBocEklYCDXrN23lnjAntKQ7pZtu0I=;
+        b=QbWtCur3fu0Z+lo5VPMunccCwcmLNEggMcn5xlUz97TTyXvfZUki7ONQSY2FbuRnaz
+         qRmFefN9avPQKd43zmw1fWZISQTYcadDgm8xWy4oMtM7EljVyOQATcpD0TGgbjpyGAjk
+         IQg+neYjAPA/Vblpz1wgVbAzxJ/wOnIiY8fb3rKyXVkxse/NZf8bJyAeoLEz2XyCB0Bg
+         G1kRKQ6uD0AREFpe2Js2K8jlySxutMKmy09LkIivUkFdlh6mAraco0C/+JNvnyDZpKDk
+         KAWDAy1l71A1bspc7P1na4OoJepI2GdCRzFHXh2eKkdzeZbGwMqELxnJMU+GiCAIGvWW
+         HDxQ==
+X-Gm-Message-State: AOAM5324Zrjz7ScbKJt2Abjq0xUBpaS8qH6hHbiXLLT+noHsmYx+8TuM
+        3YNPxuETurrjOp3zhV/at+BKog==
+X-Google-Smtp-Source: ABdhPJyP4ZFs4mDUywPisM57Go2GbRof6cWBdKQGkkjX+0upz8VVSL7Mf4nYeQJQiUNgThzT8wikBw==
+X-Received: by 2002:a05:6870:304e:b0:dd:ed4f:10a6 with SMTP id u14-20020a056870304e00b000dded4f10a6mr4103763oau.28.1650551229597;
+        Thu, 21 Apr 2022 07:27:09 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id s14-20020a0568302a8e00b006054e841915sm4296295otu.73.2022.04.21.07.27.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 07:25:56 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 07:25:54 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, michal.simek@xilinx.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, git@xilinx.com
-Subject: Re: [PATCH v5 0/5]fpga: fix for coding style and kernel-doc issues
-Message-ID: <YmFpciblvR9xnjFX@archbook>
-References: <20220421044744.3777983-1-nava.manne@xilinx.com>
+        Thu, 21 Apr 2022 07:27:08 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/3] arm64: dts: qcom: sm8350: Define GPI DMA engines
+Date:   Thu, 21 Apr 2022 09:26:48 -0500
+Message-Id: <165055095990.2574292.211638944498065102.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220412215137.2385831-1-bjorn.andersson@linaro.org>
+References: <20220412215137.2385831-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421044744.3777983-1-nava.manne@xilinx.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:17:39AM +0530, Nava kishore Manne wrote:
-> This patch series fixes the coding style and kernel-doc issues
-> exists in the fpga framework, zynq and ZynqMP drivers.
+On Tue, 12 Apr 2022 14:51:35 -0700, Bjorn Andersson wrote:
+> The Qualcomm SM8350 has three GPI DMA engines, add definitions for
+> these.
 > 
-> Nava kishore Manne (5):
->   fpga: zynq: Fix incorrect variable type
->   fpga: fix for coding style issues
->   fpga: fpga-mgr: fix kernel-doc warnings
->   fpga: Use tab instead of space indentation
->   fpga: fpga-region: fix kernel-doc formatting issues
 > 
->  drivers/fpga/Makefile            |  6 +++---
->  drivers/fpga/fpga-mgr.c          |  8 ++++++--
->  drivers/fpga/fpga-region.c       |  7 ++++---
->  drivers/fpga/of-fpga-region.c    | 22 ++++++++++++----------
->  drivers/fpga/zynq-fpga.c         |  2 +-
->  include/linux/fpga/fpga-region.h |  7 ++++---
->  6 files changed, 30 insertions(+), 22 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
-I've applied patches 1-4 to for-next.
 
-Patch 5 seems to not apply.
+Applied, thanks!
 
-- Moritz
+[1/3] arm64: dts: qcom: sm8350: Define GPI DMA engines
+      commit: bc08fbf49bc87e7613717e41674303905a9934fc
+[2/3] arm64: dts: qcom: sm8350: Add GENI I2C/SPI DMA channels
+      commit: ddc97e7d1765cb2bf6089e211dae8e0b63cb3892
+[3/3] arm64: dts: qcom: sm8350-hdk: Enable &gpi_dma1
+      commit: 83b8347a858d06f7d070663cc3898215d3d299a0
+
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>

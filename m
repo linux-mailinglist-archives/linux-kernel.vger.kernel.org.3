@@ -2,83 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1ED3509A22
+	by mail.lfdr.de (Postfix) with ESMTP id 66B35509A21
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386394AbiDUIF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S1386411AbiDUIH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386395AbiDUIFX (ORCPT
+        with ESMTP id S1355609AbiDUIHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:05:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872461CFFE;
-        Thu, 21 Apr 2022 01:02:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 232BE61ABA;
-        Thu, 21 Apr 2022 08:02:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C1BC385C5;
-        Thu, 21 Apr 2022 08:02:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650528154;
-        bh=85ztGE8SAOJYsSsE/m/ye56564WWRnDCXfBI1VMh6w8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gx80Hh2cCildDpD/QBFdHR9o5EQI4TZJNxY+M5H7fSxIckh3WEkeA61atMMdcjAs3
-         S1eAqplyh6FpSWhZlnE0zDt0DMoZ8vQJuuaC4Dyt6mtvcJHJGQlslG5tWAyufFpN7U
-         +m0rH/jQNDvZtdE/ERPjRIKmMtCRfEgSCJgh2GuB0cb3cWfOQPdDoOuidIcQKuG0iY
-         Sm9In6QEX7I7ZUBytG03Y7EH+G6pbZrkiy+sLch/OlLXMVfSl9zmTeQMB6R8FT7Xr5
-         vWGQ0s3//ga4gycac/gtSC/F4l8SxARO/sZm4JlDqEsV2KSP7jzaKcflBXrbYPAdoM
-         n/ugXKlhfRznQ==
-Received: by mail-wr1-f53.google.com with SMTP id i20so5451740wrb.13;
-        Thu, 21 Apr 2022 01:02:34 -0700 (PDT)
-X-Gm-Message-State: AOAM5336s/lqLWJqUNhdXZXKtbE1EVKn3nShpPnB/r7QTkBTeoLYM1ET
-        lCvzBB9vXlUTwTgdpgXr3jqQWrak8iOCQkcIclk=
-X-Google-Smtp-Source: ABdhPJwd18r+4oxvbBvNk4Ssn0sgurWbN+G4WyUL66cAw98TCXAYMvuBOOjMpSguCZLqOVEc5MnPUhcs76UVW8oNVSU=
-X-Received: by 2002:a5d:6983:0:b0:207:a226:df4b with SMTP id
- g3-20020a5d6983000000b00207a226df4bmr18349140wru.192.1650528152748; Thu, 21
- Apr 2022 01:02:32 -0700 (PDT)
+        Thu, 21 Apr 2022 04:07:16 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFD91DA42
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:04:27 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-e2afb80550so4658173fac.1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5BVjlGwH06cTyu6muXsNBsyVK6oxj3UYMa0frNggqds=;
+        b=DW5A8NyrPu5kmtG6ZlwJsLfXNpG7VuBOeXgRhetvMBOfIpBJZ74ru8E03tjXxmvd+X
+         aTPl5MB8ba9gBc2hX7NQogMvyWug9swFGeE6el5EXsMuiVASFXiATSgRsneQ7tant1Ny
+         VsMSqP+yIbaMr8wWKqnDkjIRglGy/D6RQRzmmF08jDIB2uxobioRu0OouR6mGKOfmxAx
+         3T7JXsBZoaBjSw70q6iUm5umC9UUyMIY+Rbo5405g77+oTYcx1d62W7AtAWgp2as7pnp
+         htTdHxQt54wmw5KjhS2D6TVan8zS24RfO1Bf5JTZAqX3LhusLoz4k/SaUvktAw7xycvG
+         p0eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5BVjlGwH06cTyu6muXsNBsyVK6oxj3UYMa0frNggqds=;
+        b=BHhE20mKRTEYGTfSnmLlS7LsnWIAozmLPX3LLe+PbaRx49Lj6TO4fTNb9o4mmI+vnE
+         oN3ssrajqVAZOgy8CCFyGbOGNBMI+38U9zJ5L0OCIAD2E000CQrLKZQqeSqMtZgNLn3D
+         +WlDlMXrBfPpFJJhr3E3gIHOOuCWw1cI+Kg75D8g2RVAFCZINZWYNhil2GMa/JjRlBu9
+         TIDgOvcdlQTWT5279RlY7QpuAKcba6GaAm6RVPsAIGqwJftaGaUSN4ruf3kmJ9QYXPOf
+         IUPdyzAvFLS5Lak/VchL8+eDnOwWuzsbt7LqcBE0s5E51ou86LCr6KtnXSCnAFR86InI
+         w4cg==
+X-Gm-Message-State: AOAM533MXlUm4XrEanZ42zzYFSWsuptueQ1dbZebTe+wOBz3zG/kdHIE
+        3ny5EvY5PH3J4OFJF2x7FQvLI6jk5k7xJNgGOfRXSQ==
+X-Google-Smtp-Source: ABdhPJxWY3/xQrMA/LGLDcUbYJsNHYAuaDCQ0ZZwkR5qeQGTshY+L+HBii+8hjXoK0Sn1TiQp41iyOWJUdQus1maen8=
+X-Received: by 2002:a05:6870:d254:b0:db:12b5:da3 with SMTP id
+ h20-20020a056870d25400b000db12b50da3mr3327530oac.211.1650528266235; Thu, 21
+ Apr 2022 01:04:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-6-hch@lst.de>
-In-Reply-To: <20220421074204.1284072-6-hch@lst.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 21 Apr 2022 10:02:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2M-R+S9SFe2ti3j41qy3KCVgc-povo6GwDQn_Dj_AB4A@mail.gmail.com>
-Message-ID: <CAK8P3a2M-R+S9SFe2ti3j41qy3KCVgc-povo6GwDQn_Dj_AB4A@mail.gmail.com>
-Subject: Re: [PATCH 5/7] ARM: use dma_to_phys/phys_to_dma in the dma-mapping code
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
+References: <0000000000004ecea505c28504b9@google.com> <0000000000007b1cbd05dd1cab5a@google.com>
+In-Reply-To: <0000000000007b1cbd05dd1cab5a@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 21 Apr 2022 10:04:15 +0200
+Message-ID: <CACT4Y+ZWAFKBCnj18n8g8KsrQL9bxO7uCMmcQjk8-24G_caZHw@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in pm_qos_update_target
+To:     syzbot <syzbot+f7d9295d2565ee819d21@syzkaller.appspotmail.com>
+Cc:     alsa-devel@alsa-project.org, len.brown@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        pavel@ucw.cz, perex@perex.cz, rjw@rjwysocki.net,
+        syzkaller-bugs@googlegroups.com, tiwai@suse.com, tiwai@suse.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
+On Wed, 20 Apr 2022 at 23:28, syzbot
+<syzbot+f7d9295d2565ee819d21@syzkaller.appspotmail.com> wrote:
 >
-> Use the helpers as expected by the dma-direct code in the old arm
-> dma-mapping code to ease a gradual switch to the common DMA code.
+> syzbot suspects this issue was fixed by commit:
 >
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> commit 3c3201f8c7bb77eb53b08a3ca8d9a4ddc500b4c0
+> Author: Takashi Iwai <tiwai@suse.de>
+> Date:   Tue Mar 22 17:07:19 2022 +0000
+>
+>     ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=104e3034f00000
+> start commit:   dbb5afad100a ptrace: make ptrace() fail if the tracee chan..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=91ff0467ce169bc
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f7d9295d2565ee819d21
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16c75e73d00000
+>
+> If the result looks correct, please mark the issue as fixed by replying with:
+>
+> #syz fix: ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+
+Looks legit, that code is in the stack trace:
+
+#syz fix:
+ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls

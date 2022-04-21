@@ -2,301 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE423509AC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2736509AD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386735AbiDUIhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S1386780AbiDUIkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386720AbiDUIhm (ORCPT
+        with ESMTP id S1386742AbiDUIjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:37:42 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F26CB4C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:34:52 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso2871565wmz.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=phdOiM7v8LB/lNbA1S0oPciDAvxZxH0KL0yn2KUwBMY=;
-        b=VY45yOQlOGgXr/1Y4TGW0AqqCc3qqK0q9UYQAsu5ZIz9AnUrVopYWVfEZqiFQJKMs7
-         05t+jYoKjBq0hndJTR0nDXQktmSSq2Mz5ETc2ox2saEA8lnHvvtq2wIqSH6gkgNYryRJ
-         PDWTqRHc2ZtwBFre4crRcHCaEWLRyDgYRq/m0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=phdOiM7v8LB/lNbA1S0oPciDAvxZxH0KL0yn2KUwBMY=;
-        b=YVgG8MMDYylXzCGg5kN0cHJ3VzSnA00CGtWw1DZBs1pmT0IroeP2bUN9JLlAxjmWxO
-         MUt4LhC1kCkjMPBzrKcWfamSSnK1dW4NgwivaZSBwScALzEsqhGr1CkTM1qEEpACJ3I3
-         j/+CKPSlpDN7CzDj6Zn5+uEcbjeMUpvFBNDF6o0vk8smSOdhznPCj5q08JNGwXdGfCPo
-         cuNWJTX3w5ZC4w/ZPeXbBrageskaSzxtbSqqEjn725SNRVlxCJ6qCAxS5hIE2IBlmlo1
-         T8oz3Bn28PqgLYmmg/RTo9mSMSqsz45dT1Q6SUzRamDyXUoDSpr23Cm1mxOrn1IpAQCr
-         7oYw==
-X-Gm-Message-State: AOAM531loLCKlk82fD9O9M0elWtpLr+O8GHhaAICtvykI1TCyrp4ws5i
-        r6AqzNuvjNTgPUoCGhZmGJw1Sg==
-X-Google-Smtp-Source: ABdhPJwptjLh2nrOScT/jPDL/1tK9y+opZ+TXghxZwYOrudVM8T3KTfAo3kFwjffciWZ4wiSMUV02g==
-X-Received: by 2002:a1c:a101:0:b0:392:942f:3aa with SMTP id k1-20020a1ca101000000b00392942f03aamr7338376wme.1.1650530090853;
-        Thu, 21 Apr 2022 01:34:50 -0700 (PDT)
-Received: from google.com ([37.228.205.1])
-        by smtp.gmail.com with ESMTPSA id b3-20020a05600018a300b0020a8b2341f9sm2473455wri.18.2022.04.21.01.34.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 01:34:50 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 08:34:48 +0000
-From:   Fabio Baltieri <fabiobaltieri@chromium.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        chrome-platform@lists.linux.dev, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: Re: [PATCH v5 2/4] pwm: pwm-cros-ec: add channel type support
-Message-ID: <YmEXKMYMGstCGBZv@google.com>
-References: <20220420141556.681212-1-fabiobaltieri@chromium.org>
- <20220420141556.681212-3-fabiobaltieri@chromium.org>
- <YmBJF2//wGjKA7I9@chromium.org>
+        Thu, 21 Apr 2022 04:39:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2710F5F83;
+        Thu, 21 Apr 2022 01:37:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D425BB82381;
+        Thu, 21 Apr 2022 08:37:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06EBEC385A1;
+        Thu, 21 Apr 2022 08:36:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650530219;
+        bh=ic3tj2ImSUF8bMmyQldQJHE361Zaxett9Y51+DN02T0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gn2BRomWEjEuUfP3wDUqtN4MbLPgoWQmMipQuzNlvBKWo61v1kNzf1eNJpdJNUidG
+         FSrWXIT0XeSlCxLwJQLLYqRxtyjcy84CoWD5vVguoV2M7EKs38USd/XToZ264XAhKq
+         xl1Qya6CHyPSBBCXeRGMDd2VPtygutqhbEqrT7cw=
+Date:   Thu, 21 Apr 2022 10:36:57 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        "Sandeep Maheswaram (Temp) (QUIC)" <quic_c_sanm@quicinc.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Pavan Kumar Kondeti (QUIC)" <quic_pkondeti@quicinc.com>,
+        "Pratham Pratap (QUIC)" <quic_ppratap@quicinc.com>,
+        "Krishna Kurapati PSSNV (QUIC)" <quic_kriskura@quicinc.com>,
+        "Vidya Sagar Pulyala (Temp) (QUIC)" <quic_vpulyala@quicinc.com>
+Subject: Re: [PATCH v3 0/2] Skip phy initialization for DWC3 USB Controllers
+Message-ID: <YmEXqe5IEAzZezU5@kroah.com>
+References: <1649323888-12420-1-git-send-email-quic_c_sanm@quicinc.com>
+ <DM6PR02MB4857A0ADCDA1558DE58E103ADFF29@DM6PR02MB4857.namprd02.prod.outlook.com>
+ <4b34735f-8e1f-bf37-398f-9b4a8aa2e939@linux.intel.com>
+ <YmEL3WnyM7sa8VP9@kuha.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmBJF2//wGjKA7I9@chromium.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YmEL3WnyM7sa8VP9@kuha.fi.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 05:55:35PM +0000, Prashant Malani wrote:
-> On Apr 20 14:15, Fabio Baltieri wrote:
-> > Add support for EC_PWM_TYPE_DISPLAY_LIGHT and EC_PWM_TYPE_KB_LIGHT pwm
-> > types to the PWM cros_ec_pwm driver. This allows specifying one of these
-> > PWM channel by functionality, and let the EC firmware pick the correct
-> > channel, thus abstracting the hardware implementation from the kernel
-> > driver.
+On Thu, Apr 21, 2022 at 10:46:37AM +0300, Heikki Krogerus wrote:
+> On Wed, Apr 20, 2022 at 04:20:52PM +0300, Mathias Nyman wrote:
+> > On 19.4.2022 13.17, Sandeep Maheswaram (Temp) (QUIC) wrote:
+> > > Hi Mathias, Felipe,
+> > > 
+> > >> -----Original Message-----
+> > >> From: Sandeep Maheswaram (Temp) (QUIC) <quic_c_sanm@quicinc.com>
+> > >> Sent: Thursday, April 7, 2022 3:01 PM
+> > >> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Felipe Balbi
+> > >> <balbi@kernel.org>; Stephen Boyd <swboyd@chromium.org>; Doug
+> > >> Anderson <dianders@chromium.org>; Matthias Kaehlcke
+> > >> <mka@chromium.org>; Mathias Nyman <mathias.nyman@intel.com>
+> > >> Cc: linux-arm-msm@vger.kernel.org; linux-usb@vger.kernel.org; linux-
+> > >> kernel@vger.kernel.org; Pavan Kumar Kondeti (QUIC)
+> > >> <quic_pkondeti@quicinc.com>; Pratham Pratap (QUIC)
+> > >> <quic_ppratap@quicinc.com>; Krishna Kurapati PSSNV (QUIC)
+> > >> <quic_kriskura@quicinc.com>; Vidya Sagar Pulyala (Temp) (QUIC)
+> > >> <quic_vpulyala@quicinc.com>; Sandeep Maheswaram (Temp) (QUIC)
+> > >> <quic_c_sanm@quicinc.com>
+> > >> Subject: [PATCH v3 0/2] Skip phy initialization for DWC3 USB Controllers
+> > >>
+> > >> Runtime suspend of phy drivers was failing from DWC3 driver as runtime
+> > >> usage value is 2 because the phy is initialized from
+> > >> DWC3 core and HCD core.
+> > >> Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
+> > >> This property can be set to avoid phy initialization in HCD core.
+> > >>
+> > >> v3:
+> > >> Coming back to this series based on discussion at below thread
+> > >> https://patchwork.kernel.org/project/linux-arm-msm/patch/1648103831-
+> > >> 12347-4-git-send-email-quic_c_sanm@quicinc.com/
+> > >> Dropped the dt bindings PATCH 1/3 in v2
+> > >> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-
+> > >> 25582-1-git-send-email-quic_c_sanm@quicinc.com/
+> > >>
+> > >> v2:
+> > >> Updated the commit descriptions.
+> > >> Changed subject prefix from dwc to dwc3.
+> > >> Increased props array size.
+> > >>
+> > >> Sandeep Maheswaram (2):
+> > >>   usb: host: xhci-plat: Add device property to set XHCI_SKIP_PHY_INIT
+> > >>     quirk
+> > >>   usb: dwc3: host: Set the property usb-skip-phy-init
+> > >>
+> > >>  drivers/usb/dwc3/host.c      | 4 +++-
+> > >>  drivers/usb/host/xhci-plat.c | 3 +++
+> > >>  2 files changed, 6 insertions(+), 1 deletion(-)
+> > >>
+> > >> --
+> > >> 2.7.4
+> > > 
+> > > Please let me know your opinion about this series.
 > > 
-> > To use it, define the node with the "google,cros-ec-pwm-type"
-> > compatible.
+> > Otherwise looks good but wondering if we should document that new device
+> > property somewhere. 
 > > 
-> > Signed-off-by: Fabio Baltieri <fabiobaltieri@chromium.org>
-> > Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> > ---
-> >  drivers/pwm/pwm-cros-ec.c | 82 ++++++++++++++++++++++++++++++++-------
-> >  1 file changed, 67 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/drivers/pwm/pwm-cros-ec.c b/drivers/pwm/pwm-cros-ec.c
-> > index 5e29d9c682c3..7f10f56c3eb6 100644
-> > --- a/drivers/pwm/pwm-cros-ec.c
-> > +++ b/drivers/pwm/pwm-cros-ec.c
-> > @@ -12,17 +12,21 @@
-> >  #include <linux/pwm.h>
-> >  #include <linux/slab.h>
-> >  
-> > +#include <dt-bindings/mfd/cros_ec.h>
-> > +
-> >  /**
-> >   * struct cros_ec_pwm_device - Driver data for EC PWM
-> >   *
-> >   * @dev: Device node
-> >   * @ec: Pointer to EC device
-> >   * @chip: PWM controller chip
-> > + * @use_pwm_type: Use PWM types instead of generic channels
-> >   */
-> >  struct cros_ec_pwm_device {
-> >  	struct device *dev;
-> >  	struct cros_ec_device *ec;
-> >  	struct pwm_chip chip;
-> > +	bool use_pwm_type;
-> >  };
-> >  
-> >  /**
-> > @@ -58,14 +62,31 @@ static void cros_ec_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
-> >  	kfree(channel);
-> >  }
-> >  
-> > -static int cros_ec_pwm_set_duty(struct cros_ec_device *ec, u8 index, u16 duty)
-> > +static int cros_ec_dt_type_to_pwm_type(u8 dt_index, u8 *pwm_type)
-> >  {
-> > +	switch (dt_index) {
-> > +	case CROS_EC_PWM_DT_KB_LIGHT:
-> > +		*pwm_type = EC_PWM_TYPE_KB_LIGHT;
-> > +		return 0;
-> > +	case CROS_EC_PWM_DT_DISPLAY_LIGHT:
-> > +		*pwm_type = EC_PWM_TYPE_DISPLAY_LIGHT;
-> > +		return 0;
-> > +	default:
-> > +		return -EINVAL;
-> > +	}
-> > +}
-> > +
-> > +static int cros_ec_pwm_set_duty(struct cros_ec_pwm_device *ec_pwm, u8 index,
-> > +				u16 duty)
-> > +{
-> > +	struct cros_ec_device *ec = ec_pwm->ec;
-> >  	struct {
-> >  		struct cros_ec_command msg;
-> >  		struct ec_params_pwm_set_duty params;
-> >  	} __packed buf;
-> >  	struct ec_params_pwm_set_duty *params = &buf.params;
-> >  	struct cros_ec_command *msg = &buf.msg;
-> > +	int ret;
-> >  
-> >  	memset(&buf, 0, sizeof(buf));
-> >  
-> > @@ -75,14 +96,25 @@ static int cros_ec_pwm_set_duty(struct cros_ec_device *ec, u8 index, u16 duty)
-> >  	msg->outsize = sizeof(*params);
-> >  
-> >  	params->duty = duty;
-> > -	params->pwm_type = EC_PWM_TYPE_GENERIC;
-> > -	params->index = index;
-> > +
-> > +	if (ec_pwm->use_pwm_type) {
-> > +		ret = cros_ec_dt_type_to_pwm_type(index, &params->pwm_type);
-> > +		if (ret) {
-> > +			dev_err(ec->dev, "Invalid PWM type index: %d\n", index);
-> > +			return ret;
-> > +		}
-> > +		params->index = 0;
-> > +	} else {
-> > +		params->pwm_type = EC_PWM_TYPE_GENERIC;
-> > +		params->index = index;
-> > +	}
-> >  
-> >  	return cros_ec_cmd_xfer_status(ec, msg);
-> >  }
-> >  
-> > -static int cros_ec_pwm_get_duty(struct cros_ec_device *ec, u8 index)
-> > +static int cros_ec_pwm_get_duty(struct cros_ec_pwm_device *ec_pwm, u8 index)
-> >  {
-> > +	struct cros_ec_device *ec = ec_pwm->ec;
-> >  	struct {
-> >  		struct cros_ec_command msg;
-> >  		union {
-> > @@ -102,8 +134,17 @@ static int cros_ec_pwm_get_duty(struct cros_ec_device *ec, u8 index)
-> >  	msg->insize = sizeof(*resp);
-> >  	msg->outsize = sizeof(*params);
-> >  
-> > -	params->pwm_type = EC_PWM_TYPE_GENERIC;
-> > -	params->index = index;
-> > +	if (ec_pwm->use_pwm_type) {
-> > +		ret = cros_ec_dt_type_to_pwm_type(index, &params->pwm_type);
-> > +		if (ret) {
-> > +			dev_err(ec->dev, "Invalid PWM type index: %d\n", index);
-> > +			return ret;
-> > +		}
-> > +		params->index = 0;
-> > +	} else {
-> > +		params->pwm_type = EC_PWM_TYPE_GENERIC;
-> > +		params->index = index;
-> > +	}
-> >  
-> >  	ret = cros_ec_cmd_xfer_status(ec, msg);
-> >  	if (ret < 0)
-> > @@ -133,7 +174,7 @@ static int cros_ec_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-> >  	 */
-> >  	duty_cycle = state->enabled ? state->duty_cycle : 0;
-> >  
-> > -	ret = cros_ec_pwm_set_duty(ec_pwm->ec, pwm->hwpwm, duty_cycle);
-> > +	ret = cros_ec_pwm_set_duty(ec_pwm, pwm->hwpwm, duty_cycle);
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > @@ -149,7 +190,7 @@ static void cros_ec_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
-> >  	struct cros_ec_pwm *channel = pwm_get_chip_data(pwm);
-> >  	int ret;
-> >  
-> > -	ret = cros_ec_pwm_get_duty(ec_pwm->ec, pwm->hwpwm);
-> > +	ret = cros_ec_pwm_get_duty(ec_pwm, pwm->hwpwm);
-> >  	if (ret < 0) {
-> >  		dev_err(chip->dev, "error getting initial duty: %d\n", ret);
-> >  		return;
-> > @@ -204,13 +245,13 @@ static const struct pwm_ops cros_ec_pwm_ops = {
-> >   * of PWMs it supports directly, so we have to read the pwm duty cycle for
-> >   * subsequent channels until we get an error.
-> >   */
-> > -static int cros_ec_num_pwms(struct cros_ec_device *ec)
-> > +static int cros_ec_num_pwms(struct cros_ec_pwm_device *ec_pwm)
-> >  {
-> >  	int i, ret;
-> >  
-> >  	/* The index field is only 8 bits */
-> >  	for (i = 0; i <= U8_MAX; i++) {
-> > -		ret = cros_ec_pwm_get_duty(ec, i);
-> > +		ret = cros_ec_pwm_get_duty(ec_pwm, i);
-> >  		/*
-> >  		 * We look for SUCCESS, INVALID_COMMAND, or INVALID_PARAM
-> >  		 * responses; everything else is treated as an error.
-> > @@ -236,6 +277,7 @@ static int cros_ec_pwm_probe(struct platform_device *pdev)
-> >  {
-> >  	struct cros_ec_device *ec = dev_get_drvdata(pdev->dev.parent);
-> >  	struct device *dev = &pdev->dev;
-> > +	struct device_node *np = pdev->dev.of_node;
-> >  	struct cros_ec_pwm_device *ec_pwm;
-> >  	struct pwm_chip *chip;
-> >  	int ret;
-> > @@ -251,17 +293,26 @@ static int cros_ec_pwm_probe(struct platform_device *pdev)
-> >  	chip = &ec_pwm->chip;
-> >  	ec_pwm->ec = ec;
-> >  
-> > +	if (of_device_is_compatible(np, "google,cros-ec-pwm-type"))
-> > +		ec_pwm->use_pwm_type = true;
+> > Couldn't find a standard way how those device properties excluded from
+> > Documentation/devicetree/binding are documented
 > 
-> Isn't it possible to just use an optional boolean property
-> (for example: "use-pwm-type") instead of defining a new compatible
-> string?
+> Couldn't it be just documented in drivers/usb/host/xhci-plat.c for now?
 
-Yeah that's what I did originally but Rob suggested to use a new
-compatible instead:
-
-https://lore.kernel.org/chrome-platform/Yk20uTE%2FVdm2c6jI@robh.at.kernel.org/
-
-> > +
-> >  	/* PWM chip */
-> >  	chip->dev = dev;
-> >  	chip->ops = &cros_ec_pwm_ops;
-> >  	chip->of_xlate = cros_ec_pwm_xlate;
-> >  	chip->of_pwm_n_cells = 1;
-> > -	ret = cros_ec_num_pwms(ec);
-> > -	if (ret < 0) {
-> > -		dev_err(dev, "Couldn't find PWMs: %d\n", ret);
-> > -		return ret;
-> > +
-> > +	if (ec_pwm->use_pwm_type) {
-> > +		chip->npwm = CROS_EC_PWM_DT_COUNT;
-> > +	} else {
-> > +		ret = cros_ec_num_pwms(ec_pwm);
-> > +		if (ret < 0) {
-> > +			dev_err(dev, "Couldn't find PWMs: %d\n", ret);
-> > +			return ret;
-> > +		}
-> > +		chip->npwm = ret;
-> >  	}
-> > -	chip->npwm = ret;
-> > +
-> >  	dev_dbg(dev, "Probed %u PWMs\n", chip->npwm);
-> >  
-> >  	ret = pwmchip_add(chip);
-> > @@ -288,6 +339,7 @@ static int cros_ec_pwm_remove(struct platform_device *dev)
-> >  #ifdef CONFIG_OF
-> >  static const struct of_device_id cros_ec_pwm_of_match[] = {
-> >  	{ .compatible = "google,cros-ec-pwm" },
-> > +	{ .compatible = "google,cros-ec-pwm-type" },
-> >  	{},
-> >  };
-> >  MODULE_DEVICE_TABLE(of, cros_ec_pwm_of_match);
-> > -- 
-> > 2.36.0.rc0.470.gd361397f0d-goog
-> > 
-> > 
-
--- 
-Fabio Baltieri
+That's not where DT properties are documented.

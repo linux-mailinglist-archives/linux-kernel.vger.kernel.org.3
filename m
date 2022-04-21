@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E49450A6A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C3250A6A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 19:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390576AbiDURKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 13:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
+        id S1390588AbiDURKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 13:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390554AbiDURKg (ORCPT
+        with ESMTP id S1390563AbiDURKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:10:36 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB1149274;
-        Thu, 21 Apr 2022 10:07:46 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id bv16so7559827wrb.9;
-        Thu, 21 Apr 2022 10:07:46 -0700 (PDT)
+        Thu, 21 Apr 2022 13:10:39 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7426549682;
+        Thu, 21 Apr 2022 10:07:47 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id x18so7624894wrc.0;
+        Thu, 21 Apr 2022 10:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dLb9n6Vqs4Ih6Tde/WV0zahdLSPBAQf9NPHM6Jy9hzo=;
-        b=LAevyX/ERqtxF65hYRvst71jOVYt9rxNi2LfjZ3L4IvPvF3WP6C6foYJwdUqmgc9Uz
-         3DIsXUyUOQFeHRz3NsIo4oChjNW1OCy6txnH8L4BbdXswQosN4TMfCACw1LMm3EUoGcW
-         w/YN9U3gZRYMLrDoUzse9t2+NaarYg2H3R4Qb5AEHrQDoBbfX/Umx/8r2KqHv4WnSlDg
-         xGZ0YsuUYnS5tu4PO/M9Ff3iq+eFrJ/BfqjRx59gzmbdDqIj8mpYMkD+euQeJa7DJuOO
-         RGO2VuwabF3TTZDyScm1NSbxJEaTFG8bAbkFTFv3WpVPXJFWGINMOtgCQ5/U2SuQXeLp
-         4d4Q==
+        bh=qu4miKRfTQ5edYvqjwCdNnoZhdelBzzQxfVquTwJYcU=;
+        b=lxA+j4hsGR37CsR5Pcl2akYbQ+9eiuuBp4pFH2LGebfC+LqkKZfG7H6fzk2IvrFcJt
+         XsLiYjdR69D9iGA6qPpMFTk86JChOo/AomlJ2VbMPmsm4kOgP3oXEXft47RFsMJQ57AD
+         Vxq5gk2rZ+BCIbH7Q7mRAYDHCjfpsiXoGDowdX916/ea67KHw9NM4wkxsAh0+bigZfiB
+         BLicaU7MNZmEtp1JQOHY8LTMwHeUEozRWMOg98gmeDh7p47EJ++knKYdojZlFOTASofN
+         bcv+MxJLsTyn75mUnleqvvO4gvsuyQ8jk5VbOFAUlkrj0CqoZJT6BH8WnvYBiYa9HRXU
+         bo6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dLb9n6Vqs4Ih6Tde/WV0zahdLSPBAQf9NPHM6Jy9hzo=;
-        b=imYi3OwSljssiYRN7Kbqrg8KEdf0uLHR0xbDYwPoFekN63J8Iuy+oMvOsLcd7iCf/7
-         0w5mjpv7C1qZ8o+WFhxjXAstpVPaGc62oVwFE4U7hQZmMrrfHmuTgJDGsc/cRu03r+jE
-         T7eJ8M53ADvz3mj4BL26pWEjcTpeB4g2vEQ9+dcD9+oxXhCC9dvjcmzXrbNRpYDNZkKD
-         wXNzBaG+GDX/oEAFtPzAmeZ6L2ubwYBc5/m7/yZ0Yss7RgWtja+nJFlVhMIGU1Zxa6/Y
-         BTRsu2KIQm6+H0Cxd0PR/4XOHBI9qIPBVRHH3sAZUnpO6dgWtae3Zrm7C+BBCQFWLN9X
-         GFpQ==
-X-Gm-Message-State: AOAM532K1jenXl2jRlqixieYM0OfjsFqvq6KlHCbNYIMp/vvSSLFjhQX
-        xDX/LIRg0t7pcj10Rneoaqs=
-X-Google-Smtp-Source: ABdhPJx/kFGrmr6cOw1E9qfYzW98wPDX3Gw0oBcObPlkQWqdzFcmeXcXxIP+Db0E7MqTjK84xMOdHQ==
-X-Received: by 2002:a5d:6488:0:b0:203:b628:70d2 with SMTP id o8-20020a5d6488000000b00203b62870d2mr522020wri.83.1650560864504;
-        Thu, 21 Apr 2022 10:07:44 -0700 (PDT)
+        bh=qu4miKRfTQ5edYvqjwCdNnoZhdelBzzQxfVquTwJYcU=;
+        b=FpTEbvjt+dehKm4/EFW51wqB2OFRd6DwYN2yYYcWeKSfX484e1V4UFzNAi9dWxFvdm
+         4wdot279iVJfQLONLxZFfEyRi1d0SMaOeWVNer+6Zs+BFnYP/Xv3dpv3cES01t3clNSP
+         tyAEX7Gm349moLrpDRnxF6a8C2V6e28FqH822jL0CswF1rVQcThOJZtol6witDsPHZR2
+         0lhyof6kbhoo+vRxJcXNu+kC6SdH/J86PYd6UgpBbV/uH9lQQpTyYD3Su2ghQ/WM9HRn
+         eixeqvJ54kSw8HFk/5Gxh27958V1wCtPVh+SimHIGgNQqt/ugoCaSBqWLnEEHDKFT6WN
+         SSfw==
+X-Gm-Message-State: AOAM531i3yfjZPmre3/GOytXuJ5jGgKe9wbxI2liCIidZjvaDepqHu3W
+        EwrKcxmzJU8uxjxdd5+YA/w=
+X-Google-Smtp-Source: ABdhPJztCBlTtH8qv1VRhJlR2SzX0FcTLm+9xXk+65FTP+M5MyZVogXt4diKZu3QDquG6Bgk4X0BGQ==
+X-Received: by 2002:a5d:6d0f:0:b0:20a:897d:ad95 with SMTP id e15-20020a5d6d0f000000b0020a897dad95mr552084wrq.113.1650560866018;
+        Thu, 21 Apr 2022 10:07:46 -0700 (PDT)
 Received: from localhost.localdomain ([94.73.37.128])
-        by smtp.gmail.com with ESMTPSA id i11-20020a5d584b000000b0020a8d859e5fsm2963849wrf.10.2022.04.21.10.07.43
+        by smtp.gmail.com with ESMTPSA id i11-20020a5d584b000000b0020a8d859e5fsm2963849wrf.10.2022.04.21.10.07.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 10:07:44 -0700 (PDT)
+        Thu, 21 Apr 2022 10:07:45 -0700 (PDT)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     inki.dae@samsung.com
 Cc:     jy0922.shim@samsung.com, sw0312.kim@samsung.com,
@@ -62,9 +62,9 @@ Cc:     jy0922.shim@samsung.com, sw0312.kim@samsung.com,
         jernej.skrabec@gmail.com, samuel@sholland.org,
         linux-sunxi@lists.linux.dev, laurent.pinchart@ideasonboard.com,
         =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH 3/5] drm/rockchip: rk3066_hdmi: Replace drm_detect_hdmi_monitor() with is_hdmi
-Date:   Thu, 21 Apr 2022 19:07:23 +0200
-Message-Id: <20220421170725.903361-4-jose.exposito89@gmail.com>
+Subject: [PATCH 4/5] drm/sti/sti_hdmi: Replace drm_detect_hdmi_monitor() with is_hdmi
+Date:   Thu, 21 Apr 2022 19:07:24 +0200
+Message-Id: <20220421170725.903361-5-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220421170725.903361-1-jose.exposito89@gmail.com>
 References: <20220421170725.903361-1-jose.exposito89@gmail.com>
@@ -88,52 +88,68 @@ This driver calls drm_detect_hdmi_monitor() to receive the same
 information and stores its own cached value, which is less efficient.
 
 Avoid calling drm_detect_hdmi_monitor() and use drm_display_info.is_hdmi
-instead and also remove hdmi_data_info.sink_is_hdmi as it is no longer
+instead and also remove sti_hdmi.hdmi_monitor as it is no longer
 necessary.
 
 Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- drivers/gpu/drm/rockchip/rk3066_hdmi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/sti/sti_hdmi.c | 7 ++++---
+ drivers/gpu/drm/sti/sti_hdmi.h | 2 --
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/rockchip/rk3066_hdmi.c b/drivers/gpu/drm/rockchip/rk3066_hdmi.c
-index 1c546c3a8998..a09dbb7d446a 100644
---- a/drivers/gpu/drm/rockchip/rk3066_hdmi.c
-+++ b/drivers/gpu/drm/rockchip/rk3066_hdmi.c
-@@ -22,7 +22,6 @@
- 
- struct hdmi_data_info {
- 	int vic; /* The CEA Video ID (VIC) of the current drm display mode. */
--	bool sink_is_hdmi;
- 	unsigned int enc_out_format;
- 	unsigned int colorimetry;
- };
-@@ -317,6 +316,8 @@ static void rk3066_hdmi_config_phy(struct rk3066_hdmi *hdmi)
- static int rk3066_hdmi_setup(struct rk3066_hdmi *hdmi,
- 			     struct drm_display_mode *mode)
+diff --git a/drivers/gpu/drm/sti/sti_hdmi.c b/drivers/gpu/drm/sti/sti_hdmi.c
+index f3ace11209dd..93841ba907a8 100644
+--- a/drivers/gpu/drm/sti/sti_hdmi.c
++++ b/drivers/gpu/drm/sti/sti_hdmi.c
+@@ -266,6 +266,7 @@ static void hdmi_active_area(struct sti_hdmi *hdmi)
+ static void hdmi_config(struct sti_hdmi *hdmi)
  {
-+	struct drm_display_info *display = &hdmi->connector.display_info;
-+
- 	hdmi->hdmi_data.vic = drm_match_cea_mode(mode);
- 	hdmi->hdmi_data.enc_out_format = HDMI_COLORSPACE_RGB;
+ 	u32 conf;
++	struct drm_display_info *display = &hdmi->drm_connector->display_info;
  
-@@ -349,7 +350,7 @@ static int rk3066_hdmi_setup(struct rk3066_hdmi *hdmi,
+ 	DRM_DEBUG_DRIVER("\n");
  
- 	rk3066_hdmi_config_video_timing(hdmi, mode);
+@@ -274,7 +275,7 @@ static void hdmi_config(struct sti_hdmi *hdmi)
  
--	if (hdmi->hdmi_data.sink_is_hdmi) {
-+	if (display->is_hdmi) {
- 		hdmi_modb(hdmi, HDMI_HDCP_CTRL, HDMI_VIDEO_MODE_MASK,
- 			  HDMI_VIDEO_MODE_HDMI);
- 		rk3066_hdmi_config_avi(hdmi, mode);
-@@ -472,7 +473,6 @@ static int rk3066_hdmi_connector_get_modes(struct drm_connector *connector)
+ 	/* Select encryption type and the framing mode */
+ 	conf |= HDMI_CFG_ESS_NOT_OESS;
+-	if (hdmi->hdmi_monitor)
++	if (display->is_hdmi)
+ 		conf |= HDMI_CFG_HDMI_NOT_DVI;
  
- 	edid = drm_get_edid(connector, hdmi->ddc);
- 	if (edid) {
--		hdmi->hdmi_data.sink_is_hdmi = drm_detect_hdmi_monitor(edid);
- 		drm_connector_update_edid_property(connector, edid);
- 		ret = drm_add_edid_modes(connector, edid);
- 		kfree(edid);
+ 	/* Set Hsync polarity */
+@@ -984,9 +985,9 @@ static int sti_hdmi_connector_get_modes(struct drm_connector *connector)
+ 	if (!edid)
+ 		goto fail;
+ 
+-	hdmi->hdmi_monitor = drm_detect_hdmi_monitor(edid);
+ 	DRM_DEBUG_KMS("%s : %dx%d cm\n",
+-		      (hdmi->hdmi_monitor ? "hdmi monitor" : "dvi monitor"),
++		      (connector->display_info.is_hdmi ? "hdmi monitor" :
++							 "dvi monitor"),
+ 		      edid->width_cm, edid->height_cm);
+ 	cec_notifier_set_phys_addr_from_edid(hdmi->notifier, edid);
+ 
+diff --git a/drivers/gpu/drm/sti/sti_hdmi.h b/drivers/gpu/drm/sti/sti_hdmi.h
+index 05b2f3d0d48d..6d4c3f57bc46 100644
+--- a/drivers/gpu/drm/sti/sti_hdmi.h
++++ b/drivers/gpu/drm/sti/sti_hdmi.h
+@@ -57,7 +57,6 @@ struct hdmi_audio_params {
+  * @reset: reset control of the hdmi phy
+  * @ddc_adapt: i2c ddc adapter
+  * @colorspace: current colorspace selected
+- * @hdmi_monitor: true if HDMI monitor detected else DVI monitor assumed
+  * @audio_pdev: ASoC hdmi-codec platform device
+  * @audio: hdmi audio parameters.
+  * @drm_connector: hdmi connector
+@@ -83,7 +82,6 @@ struct sti_hdmi {
+ 	struct reset_control *reset;
+ 	struct i2c_adapter *ddc_adapt;
+ 	enum hdmi_colorspace colorspace;
+-	bool hdmi_monitor;
+ 	struct platform_device *audio_pdev;
+ 	struct hdmi_audio_params audio;
+ 	struct drm_connector *drm_connector;
 -- 
 2.25.1
 

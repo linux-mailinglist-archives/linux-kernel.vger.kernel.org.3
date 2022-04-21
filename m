@@ -2,75 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A658509CC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926EF509CBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387917AbiDUJyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S1387924AbiDUJyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387912AbiDUJyK (ORCPT
+        with ESMTP id S1343806AbiDUJyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:54:10 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0BD245BE;
-        Thu, 21 Apr 2022 02:51:21 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 21 Apr
- 2022 17:51:20 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 21 Apr
- 2022 17:51:19 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>
-CC:     Haowen Bai <baihaowen@meizu.com>, <linux-btrfs@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] btrfs: Fix a memory leak in btrfs_ioctl_balance()
-Date:   Thu, 21 Apr 2022 17:51:17 +0800
-Message-ID: <1650534677-31554-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Apr 2022 05:54:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E261124948
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:51:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 729D16188D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:51:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE881C385BC;
+        Thu, 21 Apr 2022 09:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650534692;
+        bh=jMwQwLbuWnaM2uCtDSMfJpp4AWMuWZkYRi9r7x7RXXk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=k76LKDqgJTADOaMELaBdUWOzYi7WdS3SBu4mgf7ZgMN1M+dJldRYbMEkTa4ZzFc8M
+         +m5rB4hSWvQsBvI1UvtUYj7fo4jtolIIRxjCJZ3GVufWn+soiyXOpBP9mQehyKMJqR
+         mZWmqUJN4Na17Xm3F5ftZ25jCBDTyXBW1QcMVv0ESnLOC++RnKfYYbPdqHvqO/eqWN
+         enq9+fb8DsJEDbi2dzt1vELy64nsqYuIlAbOn7SWcEgq4jxykjiPiZxToiXLc485FI
+         2ExNGy52RdqWinqzIgCRFXPCBQXs8WTnXhvMtziXY4RLsZh/SuT4rDRaesZadST4Z5
+         GVQfq6bV6zc9A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nhTTG-005qk7-8G; Thu, 21 Apr 2022 10:51:30 +0100
+Date:   Thu, 21 Apr 2022 10:51:30 +0100
+Message-ID: <87fsm6ahnh.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nathan Rossi <nathan@nathanrossi.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nathan Rossi <nathan.rossi@digi.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] irqchip/armada-370-xp: Enable MSI affinity configuration
+In-Reply-To: <CA+aJhH026fR5p6-JBaoQikZwC1F-iLBQWrqAvagauKjQoOqykQ@mail.gmail.com>
+References: <20220421015728.86912-1-nathan@nathanrossi.com>
+        <87mtgfgx7d.wl-maz@kernel.org>
+        <CA+aJhH026fR5p6-JBaoQikZwC1F-iLBQWrqAvagauKjQoOqykQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nathan@nathanrossi.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, nathan.rossi@digi.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Free "bargs" before return.
+On Thu, 21 Apr 2022 09:32:23 +0100,
+Nathan Rossi <nathan@nathanrossi.com> wrote:
+> 
+> On Thu, 21 Apr 2022 at 16:54, Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > Hi Nathan,
+> >
+> > On Thu, 21 Apr 2022 02:57:28 +0100,
+> > Nathan Rossi <nathan@nathanrossi.com> wrote:
+> > >
+> > > From: Nathan Rossi <nathan.rossi@digi.com>
+> > >
+> > > With multiple devices attached via PCIe to an Armada 385 it is possible
+> > > to overwhelm a single CPU with MSI interrupts. Under certain scenarios
+> > > configuring the interrupts to be handled by more than one CPU would
+> > > prevent the system from being overwhelmed. However the
+> > > irqchip-aramada-370-xp driver is configured to only handle MSIs on the
+> > > boot CPU, and provides no affinity configuration.
+> > >
+> > > This change adds support to the armada-370-xp driver to allow for
+> > > configuring the affinity of specific MSI irqs and to generate the
+> > > interrupts on secondary CPUs. This is done by enabling the private
+> > > doorbell for all online CPUs and configures all CPUs to unmask MSI
+> > > specific private doorbell bits. The CPU affinity selection of the
+> > > interrupt is handled by the target list of the software triggered
+> > > interrupt value, which is provided as the MSI message. The message has
+> > > the associated CPU bit set for the target CPU. For private doorbell
+> > > interrupts only one bit can be set otherwise all CPUs will receive the
+> > > interrupt, so the lowest CPU in the affinity mask is used. This means
+> > > that by default the first CPU will handle all the interrupts as was the
+> > > case before.
+> > >
+> > > Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
+> > > ---
+> > >  drivers/irqchip/irq-armada-370-xp.c | 34 ++++++++++++++++++++++++++++++++--
+> > >  1 file changed, 32 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/irqchip/irq-armada-370-xp.c b/drivers/irqchip/irq-armada-370-xp.c
+> > > index 5b8d571c04..42c257f576 100644
+> > > --- a/drivers/irqchip/irq-armada-370-xp.c
+> > > +++ b/drivers/irqchip/irq-armada-370-xp.c
+> > > @@ -209,15 +209,37 @@ static struct msi_domain_info armada_370_xp_msi_domain_info = {
+> > >
+> > >  static void armada_370_xp_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+> > >  {
+> > > +#ifdef CONFIG_SMP
+> > > +     unsigned int cpu = cpumask_first(irq_data_get_effective_affinity_mask(data));
+> > > +
+> > > +     msg->data = (1 << (cpu + 8)) | (data->hwirq + PCI_MSI_DOORBELL_START);
+> >
+> > BIT(cpu + 8) | ...
+> >
+> > > +#else
+> > > +     msg->data = 0xf00 | (data->hwirq + PCI_MSI_DOORBELL_START);
+> >
+> > This paints the existing code a bit differently. This seems to target
+> > all 4 CPUs. Why is that? I'd expect only bit 8 to be set, and the
+> > whole #ifdefery to go away.
+> 
+> I am not sure why this is targeting 4 CPUs, it will be masked by the
+> percpu doorbell mask register and is effectively BIT(8). At least
+> based on the documentation I have (only for armada 370/38x), which is
+> why I left it as an #ifdef. I was also not able to find any specifics
+> as to why it is targeting all 4 CPUs in git history. However this
+> value was added with the initial driver implementation when only
+> armada 370 was available in the kernel, so it is perhaps an
+> inconsistent value that was never an issue due to the bits being
+> reserved. I will remove the #ifdef in a v2 patch that addresses your
+> other comments.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- fs/btrfs/ioctl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I guess we can get at least some testing from the platform maintainers
+to check that this doesn't regress the UP systems.
 
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index f08233c2b0b2..d4c8bea914b7 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -4389,13 +4389,13 @@ static long btrfs_ioctl_balance(struct file *file, void __user *arg)
- 			/* this is (2) */
- 			mutex_unlock(&fs_info->balance_mutex);
- 			ret = -EINPROGRESS;
--			goto out;
-+			goto out_bargs;
- 		}
- 	} else {
- 		/* this is (1) */
- 		mutex_unlock(&fs_info->balance_mutex);
- 		ret = BTRFS_ERROR_DEV_EXCL_RUN_IN_PROGRESS;
--		goto out;
-+		goto out_bargs;
- 	}
- 
- locked:
+> 
+> >
+> > > +#endif
+> > >       msg->address_lo = lower_32_bits(msi_doorbell_addr);
+> > >       msg->address_hi = upper_32_bits(msi_doorbell_addr);
+> > > -     msg->data = 0xf00 | (data->hwirq + PCI_MSI_DOORBELL_START);
+> > >  }
+> > >
+> > >  static int armada_370_xp_msi_set_affinity(struct irq_data *irq_data,
+> > >                                         const struct cpumask *mask, bool force)
+> > >  {
+> > > -      return -EINVAL;
+> > > +#ifdef CONFIG_SMP
+> > > +     unsigned int cpu;
+> > > +
+> > > +     if (!force)
+> > > +             cpu = cpumask_any_and(mask, cpu_online_mask);
+> > > +     else
+> > > +             cpu = cpumask_first(mask);
+> > > +
+> > > +     if (cpu >= nr_cpu_ids)
+> > > +             return -EINVAL;
+> > > +
+> > > +     irq_data_update_effective_affinity(irq_data, cpumask_of(cpu));
+> > > +
+> > > +     return IRQ_SET_MASK_OK;
+> > > +#else
+> > > +     return -EINVAL;
+> > > +#endif
+> > >  }
+> > >
+> > >  static struct irq_chip armada_370_xp_msi_bottom_irq_chip = {
+> > > @@ -482,6 +504,7 @@ static void armada_xp_mpic_smp_cpu_init(void)
+> > >  static void armada_xp_mpic_reenable_percpu(void)
+> > >  {
+> > >       unsigned int irq;
+> > > +     u32 reg;
+> > >
+> > >       /* Re-enable per-CPU interrupts that were enabled before suspend */
+> > >       for (irq = 0; irq < ARMADA_370_XP_MAX_PER_CPU_IRQS; irq++) {
+> > > @@ -501,6 +524,13 @@ static void armada_xp_mpic_reenable_percpu(void)
+> > >       }
+> > >
+> > >       ipi_resume();
+> > > +
+> > > +     /* Enable MSI doorbell mask and combined cpu local interrupt */
+> > > +     reg = readl(per_cpu_int_base + ARMADA_370_XP_IN_DRBEL_MSK_OFFS)
+> > > +             | PCI_MSI_DOORBELL_MASK;
+> > > +     writel(reg, per_cpu_int_base + ARMADA_370_XP_IN_DRBEL_MSK_OFFS);
+> > > +     /* Unmask local doorbell interrupt */
+> > > +     writel(1, per_cpu_int_base + ARMADA_370_XP_INT_CLEAR_MASK_OFFS);
+> >
+> > This is a duplicate of what is already in armada_370_xp_msi_init().
+> > Please refactor it so that this doesn't happen twice on the first CPU.
+> 
+> It is duplicated, however armada_xp_mpic_reenable_percpu is not called
+> on the boot cpu as the setup is called with cpuhp_setup_state_nocalls.
+
+Ah, right. Make sure we can get rid of the code duplication then.
+
+Thanks,
+
+	M.
+
 -- 
-2.7.4
-
+Without deviation from the norm, progress is not possible.

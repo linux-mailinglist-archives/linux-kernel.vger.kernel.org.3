@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0942850A915
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F036B50A927
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352908AbiDUT1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
+        id S1387788AbiDUT2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiDUT1a (ORCPT
+        with ESMTP id S1347468AbiDUT2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:27:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 433764CD61
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:24:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650569079;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BdBZV+ngSVw/y0jQuJ/Y/qv5uxEaI2SxYjUeyCoWPW4=;
-        b=FxiLloACVjLEMreE+jNM+rd0VMEDwY/vhOAiDm76EdH17FvT8lvTGFkDIYTWFouUMv6AVS
-        ippjMH53YSjAOYXk9xdoq+S5PrPAS+FJ7BfE572CfjcU99qnv9Qitefee/bvgIYPxYthsR
-        Ty8K8fZJJzqabqo4t8tnH0DVb9aNfMQ=
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
- [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-456-3UT2j4UwNDu5PebA33CSEg-1; Thu, 21 Apr 2022 15:24:38 -0400
-X-MC-Unique: 3UT2j4UwNDu5PebA33CSEg-1
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-2d11b6259adso51819117b3.19
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:24:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BdBZV+ngSVw/y0jQuJ/Y/qv5uxEaI2SxYjUeyCoWPW4=;
-        b=RKYbukz6NXI+MJHW6QT08oJ5m9TVvwWpwlWm4nJdyOatMjPe2ExYqKmZ0e7xGlsEeV
-         XeEqMfuYrXnILfg+tlmGsXLoKYrrglkMVBYe32O4Qmz712lqvVWwL2IwFI6rNMx+HG4x
-         J2WbXgOfSuCsqAH+AlF5WpsrdWAdzm5hAYuAdmPFrklmFdPuQ3u5Wxzsgr6l3NCC+o7m
-         dGKFXAqsvy5HQk3A0FlJdn9Vq2PBGFsa8CP7xmmVyQSykb6o4BlCn09jBLuMUTU0LZsD
-         0+1JLlS3tY0kUOVzGZKjQEMhEM8qsp0ZzW9IM9mBkqXtZAcGCZEKpqaPcRzFs9sNkKnY
-         7VeA==
-X-Gm-Message-State: AOAM530NMuIQwDw2aYsv15zweJ8kWMDlvXd+xuW5hMl7yP7HEE2JqFIG
-        ApfrH6OxPAz/ZCVfDXIqQXFfao3+QkLe+ZXhKyo7NjkGEfmBHYqPQCTe09HeZJGrzsv5655V+ZH
-        T2FzL0L8lRoalyHAM5dc/TV0OKl28gjSZZoe5FoED
-X-Received: by 2002:a05:6902:10c1:b0:63c:d3bf:59d2 with SMTP id w1-20020a05690210c100b0063cd3bf59d2mr1250377ybu.99.1650569077607;
-        Thu, 21 Apr 2022 12:24:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxOsExuDCha1wbBqR4cfCN2HW1n3Uup6J8yH1jGtZyFHiw4Lnn9caIjuT68hgRMCPfGln/VBTV3TSV70BukNCw=
-X-Received: by 2002:a05:6902:10c1:b0:63c:d3bf:59d2 with SMTP id
- w1-20020a05690210c100b0063cd3bf59d2mr1250353ybu.99.1650569077406; Thu, 21 Apr
- 2022 12:24:37 -0700 (PDT)
+        Thu, 21 Apr 2022 15:28:15 -0400
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B3922B
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:25:23 -0700 (PDT)
+Received: (wp-smtpd smtp.tlen.pl 7750 invoked from network); 21 Apr 2022 21:25:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1650569118; bh=cL8/ZnaB/KGYG+SGDO68j65XoxyE6Adoj+9820riXYg=;
+          h=From:To:Cc:Subject;
+          b=WUOZGSM87IvSYQsX6ghg9tbHg8LTh/+S6mJfDvNWvxl+Xig4ulmN1iHt5NhSAaZMi
+           7zclYU0m6O/xS+FYd1p1c262yCu7V2vo4ST4575BSsBOK5aQameeVb4yDmkvM3P3HS
+           Fn0D8w9lZ5z8FHmI6e2XxocKjrN6a7KnzfeivuYE=
+Received: from aafl13.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.141.13])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-kernel@vger.kernel.org>; 21 Apr 2022 21:25:18 +0200
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH v2 0/2] x86/rtc: refactoring
+Date:   Thu, 21 Apr 2022 21:24:47 +0200
+Message-Id: <20220421192449.11004-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220324221156.44813-1-jsavitz@redhat.com>
-In-Reply-To: <20220324221156.44813-1-jsavitz@redhat.com>
-From:   Joel Savitz <jsavitz@redhat.com>
-Date:   Thu, 21 Apr 2022 15:24:21 -0400
-Message-ID: <CAL1p7m4drKAz4yocoT7ovhmFC_cGBbAC+jPvsg+exYkwJ72POw@mail.gmail.com>
-Subject: Re: [PATCH] Documentation/sysctl: document max_rcu_stall_to_panic
-To:     linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Rob Herring <robh@kernel.org>, Wang Qing <wangqing@vivo.com>,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,TVD_SPACE_RATIO autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: fcb26315dbc1799316f4225d272121ef
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [gXMk]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping.
+Hello,
 
-Joel
+The first and main patch of this series removes duplicated code in
+mach_get_cmos_time() in arch/x86/kernel/rtc.c . This function performed
+the same thing as mc146818_get_time() - reading the time from the CMOS
+RTC - but used a different algorithm. So modify it to use standard
+mc146818_get_time().
+
+The second patch renames a function in arch/x86/kernel/rtc.c.
+
+Greetings,
+Mateusz
+
+v2:
+  - drop the previously first patch ("rtc-mc146818-lib: reduce RTC_UIP
+    polling period"). Its intent was to make behaviour of
+    mc146818_get_time() more similar to the existing version of
+    mach_get_cmos_time() by decreasing the polling period in
+    mc146818_get_time(). However, I determined that this does not matter
+    for users of mach_get_cmos_time().
+
+  - use pr_err instead of pr_err_ratelimited in the first remaining
+    patch,
+
+  - small patch description modifications.
+
+Tested on 3 computers, and on i386 and amd64 VMs.
+        
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+Mateusz Jończyk (2):
+  x86/rtc: rewrite mach_get_cmos_time to delete duplicated code
+  x86/rtc: rename mach_set_rtc_mmss
+
+ arch/x86/include/asm/mc146818rtc.h |  2 +-
+ arch/x86/kernel/rtc.c              | 63 +++++-------------------------
+ arch/x86/kernel/x86_init.c         |  2 +-
+ 3 files changed, 11 insertions(+), 56 deletions(-)
+
+base-commit: b2d229d4ddb17db541098b83524d901257e93845
+-- 
+2.25.1
 

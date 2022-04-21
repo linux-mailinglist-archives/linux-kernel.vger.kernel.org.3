@@ -2,209 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B3C50A589
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3812D50A5B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbiDUQeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 12:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S231709AbiDUQdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 12:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390599AbiDUQdS (ORCPT
+        with ESMTP id S1390650AbiDUQdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 12:33:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 580F04968C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:28:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650558509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D3OVcmZyD5fQf7XMBGl6jNoW5Atc9YkshU+4HcOs24k=;
-        b=FKr+USxDcPidGpP86Xg3zI2CuNkLnfOxmDiZKKlw3ayIErYdUTTXOAtnNMLicNqx+hrNj6
-        DvJS5sxbk4eoFh36bOZCN2JPpHsB32qCScm+KQBVCusV66eGC8DSnokGieLJDwLMhpbf0c
-        aZ5yQ/3u2MfEyPw7D+o5Nq/OZ/E/qzU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-207-o9QRIk8dPoudnJQi56rPlA-1; Thu, 21 Apr 2022 12:28:26 -0400
-X-MC-Unique: o9QRIk8dPoudnJQi56rPlA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D6DD883395E;
-        Thu, 21 Apr 2022 16:28:25 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B33CA145BA53;
-        Thu, 21 Apr 2022 16:28:25 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     peterx@redhat.com, seanjc@google.com
-Subject: [PATCH 2/2] kvm: selftests: introduce and use more page size-related constants
-Date:   Thu, 21 Apr 2022 12:28:25 -0400
-Message-Id: <20220421162825.1412792-3-pbonzini@redhat.com>
-In-Reply-To: <20220421162825.1412792-1-pbonzini@redhat.com>
-References: <20220421162825.1412792-1-pbonzini@redhat.com>
+        Thu, 21 Apr 2022 12:33:41 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7002D48E4D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:28:53 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id bx5so5414736pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WkdhlTGKvN68SlRLMJdx437G/wIo/jBpfIeJhDG0Jck=;
+        b=g39jc98KyMqzeT74PT79TxjVzfhAFziSDBuq3v+ZuzvRsVporGEnbMVsRQ1b6C3o5X
+         54Vr2jaUQIApND2TCOlwd7uaPlyoPFPRpa5ytuI8OzdU9IqVVanwrl/aFYoyA6qIC44R
+         2rrP+NXlVDCcuyelWumY9NhKgwTvxPswO/qAo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WkdhlTGKvN68SlRLMJdx437G/wIo/jBpfIeJhDG0Jck=;
+        b=bVKkH8MawpiZdTvfrBvuzKMLwKSLdGRZkIn9lab8iDAehegHSXp2X6zuhUWQn+6bxo
+         IBf4FP2QotDRO/XfEAfClYV5eREHqvYy3ysyeJhkfOZ4lQK6sQMLqjXN06jt0hhdLv+E
+         NTGNk1dZLeGSMqccg1jFoswwBdNU0eSlkMSBxpoa0gIL3n6Jn3EK1QFAfDDZyO1I3gKu
+         ZRp2e4vJrpFpg+e395EJqm9W/RaeTFZzKcIffMKO4/0DXVGjNSZLO9Efv/5foW7Ka0FS
+         BqQQJRRLB4pcCkV/0udbV4I1zbO5xMp7HMLoRMaHWMJCqMxU08ymaOQGPTe+xME5GjqY
+         bm1w==
+X-Gm-Message-State: AOAM531iq+Gw/p+orBqD1gAyb4faF4rDJWty8990smBTtQ3q7H9Wmudy
+        bsBHuK6H4NhOouAFHefJHPhPCQ==
+X-Google-Smtp-Source: ABdhPJwwEZAKewcyO4Htm0T4aE9t8nchCjvROAy5B3s0/2c0AxEY8XyA/EVhcuqsUwTSeh7+7XgOtw==
+X-Received: by 2002:a17:902:8306:b0:158:2d58:a36a with SMTP id bd6-20020a170902830600b001582d58a36amr82271plb.55.1650558533004;
+        Thu, 21 Apr 2022 09:28:53 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:d426:5807:a72:7b27])
+        by smtp.gmail.com with UTF8SMTPSA id h13-20020a056a00230d00b004f427ffd485sm26982254pfh.143.2022.04.21.09.28.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 09:28:52 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 09:28:50 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v9 03/12] arm64: dts: qcom: sc7280: Enable digital codecs
+ and soundwire for CRD 3.0/3.1
+Message-ID: <YmGGQiD0L2GipcRt@google.com>
+References: <1650552459-21077-1-git-send-email-quic_srivasam@quicinc.com>
+ <1650552459-21077-4-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1650552459-21077-4-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up code that was hardcoding masks for various fields,
-now that the masks are included in processor.h.
+On Thu, Apr 21, 2022 at 08:17:30PM +0530, Srinivasa Rao Mandadapu wrote:
+> Enable rx, tx and va macro codecs and soundwire nodes for
+> CRD rev5 (aka CRD 3.0/3.1) boards.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 35 +++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> index fd6eadc..d0794f2 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> @@ -69,6 +69,19 @@ ap_ts_pen_1v8: &i2c13 {
+>  	};
+>  };
+>  
+> +&lpass_rx_macro {
+> +	status = "okay";
+> +};
+> +
+> +&lpass_tx_macro {
+> +	status = "okay";
+> +};
+> +
+> +&lpass_va_macro {
+> +	status = "okay";
+> +	vdd-micb-supply = <&vreg_bob>;
+> +};
+> +
+>  /* For nvme */
+>  &pcie1 {
+>  	status = "okay";
+> @@ -89,6 +102,28 @@ ap_ts_pen_1v8: &i2c13 {
+>  	status = "okay";
+>  };
+>  
+> +&swr0 {
+> +	status = "okay";
+> +
+> +	wcd_rx: codec@0,4 {
+> +		compatible = "sdw20217010d00";
+> +		reg = <0 4>;
+> +		#sound-dai-cells = <1>;
+> +		qcom,rx-port-mapping = <1 2 3 4 5>;
+> +	};
+> +};
+> +
+> +&swr1 {
+> +	status = "okay";
+> +
+> +	wcd_tx: codec@0,3 {
+> +		compatible = "sdw20217010d00";
+> +		reg = <0 3>;
+> +		#sound-dai-cells = <1>;
+> +		qcom,tx-port-mapping = <1 2 3 4>;
+> +	};
+> +};
 
-For more cleanup, define PAGE_SIZE and PAGE_MASK just like in Linux.
-PAGE_SIZE in particular was defined by several tests.
-
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- .../testing/selftests/kvm/include/x86_64/processor.h |  2 ++
- tools/testing/selftests/kvm/lib/x86_64/processor.c   | 12 ++++++------
- tools/testing/selftests/kvm/x86_64/amx_test.c        |  1 -
- .../selftests/kvm/x86_64/emulator_error_test.c       |  1 -
- tools/testing/selftests/kvm/x86_64/smm_test.c        |  2 --
- .../selftests/kvm/x86_64/vmx_tsc_adjust_test.c       |  1 -
- tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c |  1 -
- tools/testing/selftests/kvm/x86_64/xen_vmcall_test.c |  1 -
- 8 files changed, 8 insertions(+), 13 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 86e79af64dea..d0d51adec76e 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -71,6 +71,8 @@
- #define PTE_NX_MASK             BIT_ULL(63)
- 
- #define PAGE_SHIFT		12
-+#define PAGE_SIZE		(1ULL << PAGE_SHIFT)
-+#define PAGE_MASK		(~(PAGE_SIZE-1))
- 
- #define PHYSICAL_PAGE_MASK      GENMASK_ULL(51, 12)
- #define PTE_GET_PFN(pte)        (((pte) & PHYSICAL_PAGE_MASK) >> PAGE_SHIFT)
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 0dd442c26015..33ea5e9955d9 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -255,13 +255,13 @@ static uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid,
- 	struct kvm_cpuid_entry2 *entry;
- 	struct kvm_sregs sregs;
- 	int max_phy_addr;
--	/* Set the bottom 52 bits. */
--	uint64_t rsvd_mask = 0x000fffffffffffff;
-+	uint64_t rsvd_mask = 0;
- 
- 	entry = kvm_get_supported_cpuid_index(0x80000008, 0);
- 	max_phy_addr = entry->eax & 0x000000ff;
--	/* Clear the bottom bits of the reserved mask. */
--	rsvd_mask = (rsvd_mask >> max_phy_addr) << max_phy_addr;
-+	/* Set the high bits in the reserved mask. */
-+	if (max_phy_addr < 52)
-+		rsvd_mask = GENMASK_ULL(51, max_phy_addr);
- 
- 	/*
- 	 * SDM vol 3, fig 4-11 "Formats of CR3 and Paging-Structure Entries
-@@ -271,7 +271,7 @@ static uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid,
- 	 */
- 	vcpu_sregs_get(vm, vcpuid, &sregs);
- 	if ((sregs.efer & EFER_NX) == 0) {
--		rsvd_mask |= (1ull << 63);
-+		rsvd_mask |= PTE_NX_MASK;
- 	}
- 
- 	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
-@@ -549,7 +549,7 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
- 	if (!(pte[index[0]] & PTE_PRESENT_MASK))
- 		goto unmapped_gva;
- 
--	return (PTE_GET_PFN(pte[index[0]]) * vm->page_size) + (gva & 0xfffu);
-+	return (PTE_GET_PFN(pte[index[0]]) * vm->page_size) + (gva & ~PAGE_MASK);
- 
- unmapped_gva:
- 	TEST_FAIL("No mapping for vm virtual address, gva: 0x%lx", gva);
-diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
-index 52a3ef6629e8..76f65c22796f 100644
---- a/tools/testing/selftests/kvm/x86_64/amx_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
-@@ -29,7 +29,6 @@
- #define X86_FEATURE_XSAVE		(1 << 26)
- #define X86_FEATURE_OSXSAVE		(1 << 27)
- 
--#define PAGE_SIZE			(1 << 12)
- #define NUM_TILES			8
- #define TILE_SIZE			1024
- #define XSAVE_SIZE			((NUM_TILES * TILE_SIZE) + PAGE_SIZE)
-diff --git a/tools/testing/selftests/kvm/x86_64/emulator_error_test.c b/tools/testing/selftests/kvm/x86_64/emulator_error_test.c
-index f070ff0224fa..aeb3850f81bd 100644
---- a/tools/testing/selftests/kvm/x86_64/emulator_error_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/emulator_error_test.c
-@@ -12,7 +12,6 @@
- #include "vmx.h"
- 
- #define VCPU_ID	   1
--#define PAGE_SIZE  4096
- #define MAXPHYADDR 36
- 
- #define MEM_REGION_GVA	0x0000123456789000
-diff --git a/tools/testing/selftests/kvm/x86_64/smm_test.c b/tools/testing/selftests/kvm/x86_64/smm_test.c
-index a626d40fdb48..b4e0c860769e 100644
---- a/tools/testing/selftests/kvm/x86_64/smm_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/smm_test.c
-@@ -21,8 +21,6 @@
- 
- #define VCPU_ID	      1
- 
--#define PAGE_SIZE  4096
--
- #define SMRAM_SIZE 65536
- #define SMRAM_MEMSLOT ((1 << 16) | 1)
- #define SMRAM_PAGES (SMRAM_SIZE / PAGE_SIZE)
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-index e683d0ac3e45..19b35c607dc6 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-@@ -32,7 +32,6 @@
- #define MSR_IA32_TSC_ADJUST 0x3b
- #endif
- 
--#define PAGE_SIZE	4096
- #define VCPU_ID		5
- 
- #define TSC_ADJUST_VALUE (1ll << 32)
-diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-index 865e17146815..bcd370827859 100644
---- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-@@ -23,7 +23,6 @@
- #define SHINFO_REGION_GVA	0xc0000000ULL
- #define SHINFO_REGION_GPA	0xc0000000ULL
- #define SHINFO_REGION_SLOT	10
--#define PAGE_SIZE		4096
- 
- #define DUMMY_REGION_GPA	(SHINFO_REGION_GPA + (2 * PAGE_SIZE))
- #define DUMMY_REGION_SLOT	11
-diff --git a/tools/testing/selftests/kvm/x86_64/xen_vmcall_test.c b/tools/testing/selftests/kvm/x86_64/xen_vmcall_test.c
-index adc94452b57c..b30fe9de1d4f 100644
---- a/tools/testing/selftests/kvm/x86_64/xen_vmcall_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xen_vmcall_test.c
-@@ -15,7 +15,6 @@
- 
- #define HCALL_REGION_GPA	0xc0000000ULL
- #define HCALL_REGION_SLOT	10
--#define PAGE_SIZE		4096
- 
- static struct kvm_vm *vm;
- 
--- 
-2.31.1
-
+The wcd9385 is on the qcard, so the wcd_tx/rx nodes should probably
+be added to sc7280-qcard.dtsi, and the CRD DT would only set 'status'.

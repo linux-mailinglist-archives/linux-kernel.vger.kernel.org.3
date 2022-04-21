@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A822F50A926
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6630450A933
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391954AbiDUTaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
+        id S1391962AbiDUTbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383185AbiDUT37 (ORCPT
+        with ESMTP id S1391697AbiDUTbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:29:59 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02A94D605
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:27:08 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id n8so5955376plh.1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:27:08 -0700 (PDT)
+        Thu, 21 Apr 2022 15:31:35 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA8E4D623
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:28:44 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id x17so10447652lfa.10
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:28:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zaV6TwHoaRF2Bvq+2WTuhCjDL79fbTHPCG8hZcVU/Ho=;
-        b=atU7F17HXkuGFK9tMVT6wzZ9hlzUWRHodLw6U28IwjaV8babPiSe51nM+yb2m+LvSM
-         E1bmw8LLIJJ6sA4dJEprR4r2SFmTS19Ve7wfAEsBE8fKJEM/93aUeqcCfxDmzw1k6Rxq
-         XC53hozMAn2rrBGTzW+juC0uDOVlTmlxK+8a1H19jJ23OoK3s2CTNdV/2vdnEmh8dF0f
-         iuaRhWKokRZIdGNcorp4Q0aJrDVj3Gdq5Wdb4N9Z8QbU+4uqrcIuyMGkOvtuMS5cFGfH
-         Zjnnty4YVWMVltF0EhwlfXwFl/WPDKJNlXuVrmzfycvqj4GP6kN4if6bw/TuT1Ohjhxd
-         +7bw==
+        bh=aU6fvCqxzFU63StVQlze3aMRu69ypxU3WuTt91+Ehwk=;
+        b=dYiNQn5CkyRiXJAJMllX8T3Mod1ex1Xqfnebb1xDi5rqngCdLBibZWdbAhtADjTYBC
+         A25meNOrLkpAu3lXdHfXaaQF7PsSmQ2xtX3y3yvt7208g3dju/DaJaB43C9EXTnE6WsE
+         LPXzJ7sDNMPzHtvPf09nJNdDrSHgBuMkw7mGc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zaV6TwHoaRF2Bvq+2WTuhCjDL79fbTHPCG8hZcVU/Ho=;
-        b=jZZy0Son1wXl/vtGEXhn9yiIxRGeDCXP0UWI8Ggy2IkDDsHfxVEQ0ztuLgL5kCoxmq
-         1xorPJlHAcxMRoltxWXE6u4qSrPUNc2WvR0n7dm3j3wppjikwB3Ivl6OFHcVOUPpkvMf
-         GuxMYD/cDlCieJGu2cyljXPXEo4Q2/dzyBONteSm+EKLXJiowBC5UC4VHt+Sncz+itL5
-         q9CPGJdJiZdjVtozViySkjGCyiQhWIypbpd8EvbPa7OXvcAKgj9FTDX2cqGKK0PskSNA
-         VUceoduMMj0ZKB/Pyp3pzBCx4vrvjDAb+KI/Cx9JvE4wR2UaxxjPS2CvX/uTbX4mXisv
-         yJPw==
-X-Gm-Message-State: AOAM530m6+rYLdYxHv76DtO95YfE2nXB67mfnHEPfHBiGnbNi4kye/nj
-        MXAD6D4snmlZELUD4XM/i1ph489GyelLtkd01vqsvw==
-X-Google-Smtp-Source: ABdhPJyXos7oPBtcV1piG7yF3VEZhw5TagwlMtPUQslUDMYNQorHWdwBoY+FxLK3sqSOehOUsSOhrrcIKtoCaphSOW4=
-X-Received: by 2002:a17:902:e885:b0:158:e564:8992 with SMTP id
- w5-20020a170902e88500b00158e5648992mr1033088plg.34.1650569228104; Thu, 21 Apr
- 2022 12:27:08 -0700 (PDT)
+        bh=aU6fvCqxzFU63StVQlze3aMRu69ypxU3WuTt91+Ehwk=;
+        b=2GpvJmfsERbVwaWiZMb4UKLxSIJuEUISBVxssuIG06UKg0ezH5EKbdmIPDpOCoyKWz
+         cTjHY9T8/y+pFZFN8JpEdMrIOVQz4Mx9s+Xa+XARbTGiytW2kcEP3J62j0CwFKg8bXF/
+         QsXc1pUb8kwKeu5o7cICb6TE/a1jhbHxg8EO5QKj57wYFoF/Bve48SGZmmVW2lPnvV7l
+         pwh2vp9gHXqD1Qj/Y3+S8N4RS98kdrTlTPKmG+1vHV8/XgoVlebgwDUpwNUW4D5rtJDm
+         S8wlVqnYxcjsZPzMTbEwhJjoOYlFJTDawcc3dL84JwHAFr9rAzcxPSrojdz8qKEqrnU8
+         Y08w==
+X-Gm-Message-State: AOAM532lY2zeJLN1nWcUKPKAFFZ60887p9xAmou4CISGcMU/mgeH6EfS
+        fJUInaNe90X7Wgzo2DbZJSCRQuarThDtBnjPBH4=
+X-Google-Smtp-Source: ABdhPJySMiDbJHCOrBc6j7rXwx17f65po80+G/Y/NNTEuKnMhpqF6EuJw/0PQ+bFYrSK0td1RIouwg==
+X-Received: by 2002:a05:6512:169e:b0:470:2124:63fb with SMTP id bu30-20020a056512169e00b00470212463fbmr667825lfb.616.1650569322592;
+        Thu, 21 Apr 2022 12:28:42 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id j2-20020a196e02000000b00471a5bb39cfsm1010891lfc.170.2022.04.21.12.28.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 12:28:38 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id h3so5744860lfu.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:28:36 -0700 (PDT)
+X-Received: by 2002:a05:6512:6d4:b0:470:f48d:44e2 with SMTP id
+ u20-20020a05651206d400b00470f48d44e2mr667424lff.542.1650569316305; Thu, 21
+ Apr 2022 12:28:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220420020435.90326-1-jane.chu@oracle.com> <20220420020435.90326-4-jane.chu@oracle.com>
-In-Reply-To: <20220420020435.90326-4-jane.chu@oracle.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 21 Apr 2022 12:26:57 -0700
-Message-ID: <CAPcyv4i0eWm9eeNpgZmJTnf+2ivumuKDhF2vj9GNcj2VX-Sfjw@mail.gmail.com>
-Subject: Re: [PATCH v8 3/7] mce: fix set_mce_nospec to always unmap the whole page
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, david <david@fromorbit.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        device-mapper development <dm-devel@redhat.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vivek Goyal <vgoyal@redhat.com>
+References: <20220420073717.GD16310@xsang-OptiPlex-9020> <CAHk-=wi6pJhsWLd7t9wEtq5tWh_2O61cSLk-wCgLwFrjW6+jbw@mail.gmail.com>
+ <CANaxB-yVLCSHAi3QKMYzsSDRYC5Wz05iWx8yrb57cbiJ__5ThA@mail.gmail.com> <CAHk-=wgSW3gB1=rf3atv=3Xvn0pNBtKUKJ2VF81ue-xagS7F4w@mail.gmail.com>
+In-Reply-To: <CAHk-=wgSW3gB1=rf3atv=3Xvn0pNBtKUKJ2VF81ue-xagS7F4w@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 21 Apr 2022 12:28:20 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjdCtgtQPZPTigMMniZaoMA_tHDu3EMBVM3w1GH5X+cOw@mail.gmail.com>
+Message-ID: <CAHk-=wjdCtgtQPZPTigMMniZaoMA_tHDu3EMBVM3w1GH5X+cOw@mail.gmail.com>
+Subject: Re: [fs/pipe] 5a519c8fe4: WARNING:at_mm/page_alloc.c:#__alloc_pages
+To:     Andrei Vagin <avagin@gmail.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        kernel test robot <lkp@intel.com>,
+        Mike Rapoport <rppt@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,186 +79,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 7:05 PM Jane Chu <jane.chu@oracle.com> wrote:
+On Thu, Apr 21, 2022 at 9:30 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> The set_memory_uc() approach doesn't work well in all cases.
-> As Dan pointed out when "The VMM unmapped the bad page from
-> guest physical space and passed the machine check to the guest."
-> "The guest gets virtual #MC on an access to that page. When
-> the guest tries to do set_memory_uc() and instructs cpa_flush()
-> to do clean caches that results in taking another fault / exception
-> perhaps because the VMM unmapped the page from the guest."
+> The pipe part sounds like a horrible hacky thing.
 >
-> Since the driver has special knowledge to handle NP or UC,
-> mark the poisoned page with NP and let driver handle it when
-> it comes down to repair.
+> I also assume you already tried that, and hit some performance issues.
+> But it does sound like the better interface, more directly what you
+> want.
 >
-> Please refer to discussions here for more details.
-> https://lore.kernel.org/all/CAPcyv4hrXPb1tASBZUg-GgdVs0OOFKXMXLiHmktg_kFi7YBMyQ@mail.gmail.com/
->
-> Now since poisoned page is marked as not-present, in order to
-> avoid writing to a not-present page and trigger kernel Oops,
-> also fix pmem_do_write().
->
-> Fixes: 284ce4011ba6 ("x86/memory_failure: Introduce {set, clear}_mce_nospec()")
-> Signed-off-by: Jane Chu <jane.chu@oracle.com>
+> So what are the problems with using process_vm_readv?
 
-Looks good to me:
+Actually, I take that back.
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Don't use pipes.
 
-> ---
->  arch/x86/kernel/cpu/mce/core.c |  6 +++---
->  arch/x86/mm/pat/set_memory.c   | 23 +++++++++++------------
->  drivers/nvdimm/pmem.c          | 30 +++++++-----------------------
->  include/linux/set_memory.h     |  4 ++--
->  4 files changed, 23 insertions(+), 40 deletions(-)
->
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 981496e6bc0e..fa67bb9d1afe 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -579,7 +579,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
->
->         pfn = mce->addr >> PAGE_SHIFT;
->         if (!memory_failure(pfn, 0)) {
-> -               set_mce_nospec(pfn, whole_page(mce));
-> +               set_mce_nospec(pfn);
->                 mce->kflags |= MCE_HANDLED_UC;
->         }
->
-> @@ -1316,7 +1316,7 @@ static void kill_me_maybe(struct callback_head *cb)
->
->         ret = memory_failure(p->mce_addr >> PAGE_SHIFT, flags);
->         if (!ret) {
-> -               set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
-> +               set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
->                 sync_core();
->                 return;
->         }
-> @@ -1342,7 +1342,7 @@ static void kill_me_never(struct callback_head *cb)
->         p->mce_count = 0;
->         pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
->         if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
-> -               set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
-> +               set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
->  }
->
->  static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callback_head *))
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index 978cf5bd2ab6..e3a5e55f3e08 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -1925,13 +1925,8 @@ int set_memory_wb(unsigned long addr, int numpages)
->  }
->  EXPORT_SYMBOL(set_memory_wb);
->
-> -/*
-> - * Prevent speculative access to the page by either unmapping
-> - * it (if we do not require access to any part of the page) or
-> - * marking it uncacheable (if we want to try to retrieve data
-> - * from non-poisoned lines in the page).
-> - */
-> -int set_mce_nospec(unsigned long pfn, bool unmap)
-> +/* Prevent speculative access to a page by marking it not-present */
-> +int set_mce_nospec(unsigned long pfn)
->  {
->         unsigned long decoy_addr;
->         int rc;
-> @@ -1956,19 +1951,23 @@ int set_mce_nospec(unsigned long pfn, bool unmap)
->          */
->         decoy_addr = (pfn << PAGE_SHIFT) + (PAGE_OFFSET ^ BIT(63));
->
-> -       if (unmap)
-> -               rc = set_memory_np(decoy_addr, 1);
-> -       else
-> -               rc = set_memory_uc(decoy_addr, 1);
-> +       rc = set_memory_np(decoy_addr, 1);
->         if (rc)
->                 pr_warn("Could not invalidate pfn=0x%lx from 1:1 map\n", pfn);
->         return rc;
->  }
->
-> +static int set_memory_present(unsigned long *addr, int numpages)
-> +{
-> +       return change_page_attr_set(addr, numpages, __pgprot(_PAGE_PRESENT), 0);
-> +}
-> +
->  /* Restore full speculative operation to the pfn. */
->  int clear_mce_nospec(unsigned long pfn)
->  {
-> -       return set_memory_wb((unsigned long) pfn_to_kaddr(pfn), 1);
-> +       unsigned long addr = (unsigned long) pfn_to_kaddr(pfn);
-> +
-> +       return set_memory_present(&addr, 1);
->  }
->  EXPORT_SYMBOL_GPL(clear_mce_nospec);
->
-> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-> index 58d95242a836..4aa17132a557 100644
-> --- a/drivers/nvdimm/pmem.c
-> +++ b/drivers/nvdimm/pmem.c
-> @@ -158,36 +158,20 @@ static blk_status_t pmem_do_write(struct pmem_device *pmem,
->                         struct page *page, unsigned int page_off,
->                         sector_t sector, unsigned int len)
->  {
-> -       blk_status_t rc = BLK_STS_OK;
-> -       bool bad_pmem = false;
->         phys_addr_t pmem_off = sector * 512 + pmem->data_offset;
->         void *pmem_addr = pmem->virt_addr + pmem_off;
->
-> -       if (unlikely(is_bad_pmem(&pmem->bb, sector, len)))
-> -               bad_pmem = true;
-> +       if (unlikely(is_bad_pmem(&pmem->bb, sector, len))) {
-> +               blk_status_t rc = pmem_clear_poison(pmem, pmem_off, len);
-> +
-> +               if (rc != BLK_STS_OK)
-> +                       return rc;
-> +       }
->
-> -       /*
-> -        * Note that we write the data both before and after
-> -        * clearing poison.  The write before clear poison
-> -        * handles situations where the latest written data is
-> -        * preserved and the clear poison operation simply marks
-> -        * the address range as valid without changing the data.
-> -        * In this case application software can assume that an
-> -        * interrupted write will either return the new good
-> -        * data or an error.
-> -        *
-> -        * However, if pmem_clear_poison() leaves the data in an
-> -        * indeterminate state we need to perform the write
-> -        * after clear poison.
-> -        */
->         flush_dcache_page(page);
->         write_pmem(pmem_addr, page, page_off, len);
-> -       if (unlikely(bad_pmem)) {
-> -               rc = pmem_clear_poison(pmem, pmem_off, len);
-> -               write_pmem(pmem_addr, page, page_off, len);
-> -       }
->
-> -       return rc;
-> +       return BLK_STS_OK;
->  }
->
->  static void pmem_submit_bio(struct bio *bio)
-> diff --git a/include/linux/set_memory.h b/include/linux/set_memory.h
-> index 683a6c3f7179..369769ce7399 100644
-> --- a/include/linux/set_memory.h
-> +++ b/include/linux/set_memory.h
-> @@ -43,10 +43,10 @@ static inline bool can_set_direct_map(void)
->  #endif /* CONFIG_ARCH_HAS_SET_DIRECT_MAP */
->
->  #ifdef CONFIG_X86_64
-> -int set_mce_nospec(unsigned long pfn, bool unmap);
-> +int set_mce_nospec(unsigned long pfn);
->  int clear_mce_nospec(unsigned long pfn);
->  #else
-> -static inline int set_mce_nospec(unsigned long pfn, bool unmap)
-> +static inline int set_mce_nospec(unsigned long pfn)
->  {
->         return 0;
->  }
-> --
-> 2.18.4
->
+Don't use process_vm_readv().
+
+Use the system call we already have for "snapshot the current VM".
+
+It's called "fork()". It's cheap, it's efficient, and it snapshots the
+whole VM in one go. No stupid extra buffers in pipes, no crazy things
+like that.
+
+So just make your pre-dump code do a simple fork(), let the parent
+continue, and then do the dumping in the child at whatever pace you
+want.
+
+In fact, you might just leave the child process alone, and let it _be_
+that pre-dump.
+
+You can create a new snapshot every once in a while, and kill the
+previous snapshot, if you want to keep the snapshot close to the
+target, and then use the memory tracking to track what has changed
+since.
+
+And you might not want to use plain "fork()", but instead some kind of
+"clone()" variant. You might want to use CLONE_PARENT and some
+non-SIGCHLD exit signal to basically hide the snapshot image from the
+thing you are snapshotting.
+
+Anyway, the "use vmsplice to a pipe to create a snapshot" sounds just
+insane when you have a very traditional system call that is all about
+snapshotting the process.
+
+Maybe a new CLONE_xyz flag could be added to make that memory tracking
+integrate better or whatever.
+
+Any showstoppers?
+
+                         Linus

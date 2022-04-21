@@ -2,103 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50AC050A089
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756CF50A08C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbiDUNSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
+        id S231375AbiDUNSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiDUNSM (ORCPT
+        with ESMTP id S231423AbiDUNSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:18:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 531576394
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:15:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650546922;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XJ+q4BlTQtZT3BUqYMUruPECm6TJtmAxu5VYqnXrhVE=;
-        b=D8F/v7+FKJcFga7jm+hIhK0MyMAM1Vct1RgjH/BvFqIK/hvDH9xPoXv5iAyKBup3OSKbcg
-        KUzghd3Z58i6qbcC9cL6qblVBWk/AaE5xtB4nEaCSaxUBjQ+QwtuoMKyA+xubRaoqzVlW1
-        H5HoUpd6wUWnk8YZ6y9OC2B02/yuhrA=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-227-WGQlI761MymHaco9woVT2A-1; Thu, 21 Apr 2022 09:15:21 -0400
-X-MC-Unique: WGQlI761MymHaco9woVT2A-1
-Received: by mail-qv1-f72.google.com with SMTP id o12-20020a0562140e4c00b0044a67ef728dso3520460qvc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:15:21 -0700 (PDT)
+        Thu, 21 Apr 2022 09:18:46 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6191F61F
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:15:55 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id b15so4991690pfm.5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=/mo6cEIGGM5UXozNkU5K0IDKas4ymPcSPC7vql1oO7o=;
+        b=brmFBBl3Pm09JZM8jGd5FC2W5HvnKY5IAltAjG4sQaEA4jOKCnvYP2Igrw0370BHTr
+         pFS8i2BhjH8gqPCNYrvMQDqDZdwNuVEsjRVCLp+xwabx7Aw3qyUWOwWSFnS3N89xxRvX
+         l7FzM0qQFmGVKrhJTmLImGi4Oxx2nPFF0BZoY+UDt/9h8ldIH/vIw90IFsQ3HUqs3VbB
+         VBEQrlRdjsyKxYQMwgF2cEDOW8ZJP5IKGpIpZp3vPmtgCY95sXl2CHNwrtTXDBrYYhZ/
+         sD98y80F1kkoKXfATN2M+O92X9ykMyut/UsxHq9ldIDSeTjLOfxcPSxvusX3vGAccTwk
+         pmUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XJ+q4BlTQtZT3BUqYMUruPECm6TJtmAxu5VYqnXrhVE=;
-        b=YVO1jF7K1mc1IP1fOpNoBQjTnPyI04oV9/jTE3jWnOdONiYaeskdL1EWOno99Q8dI4
-         RdKTPxgNWpFJu1XczcivDXEUchic5lEmbFBZS7LEMrXXVGV0cadSP+zbSfI0WVOiSI9l
-         09U8N2LSS1j4oxGcTPIFTDQSL0a/DMlSzigPGe7EhODlij9W9K26KM/8zKxC2C+BL309
-         lBA6pZvw4sMHNgV0BFIzTfYcYTp6rGv76G51udi1LmJi/UGUAFmSvPsYEyTifP7n/imx
-         rzorYKr2nY2XzXBL6KixjHAzQFPXIjzKNbbzOrYwVmklWQr28ACp5MqFWhxLFomXEVif
-         sFpQ==
-X-Gm-Message-State: AOAM531s39z0NAQaQeINRlvLfBTxOp6uh4lw8dmCFiRQEYgPuWNuIQhz
-        LIMbeXT6k9DT3syN/EuMV6LE1qCxvSKn+N5GqAtvD77vjXfAiLTSRWa7xR4g7QjLkL4pzJuWWlN
-        YP7XhIloMPUr55FlRoapcnuk+
-X-Received: by 2002:a05:620a:4093:b0:69c:fda:3cf2 with SMTP id f19-20020a05620a409300b0069c0fda3cf2mr15404143qko.245.1650546920743;
-        Thu, 21 Apr 2022 06:15:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx1p460pSQsriY5we0lc7aVE2SA3Un1gDznPdW1XSStmWduRojaJ0UnG57Ylk7u7lLp/dyJdg==
-X-Received: by 2002:a05:620a:4093:b0:69c:fda:3cf2 with SMTP id f19-20020a05620a409300b0069c0fda3cf2mr15404128qko.245.1650546920553;
-        Thu, 21 Apr 2022 06:15:20 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id v3-20020a05622a014300b002e1dcd4cfa9sm3868302qtw.64.2022.04.21.06.15.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 06:15:19 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     robdclark@gmail.com, sean@poorly.run, quic_abhinavk@quicinc.com,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/msm: change msm_sched_ops from global to static
-Date:   Thu, 21 Apr 2022 09:15:07 -0400
-Message-Id: <20220421131507.1557667-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/mo6cEIGGM5UXozNkU5K0IDKas4ymPcSPC7vql1oO7o=;
+        b=IdG04uRZb57WScZqSh4wmusMP6vDn4gnPiOBEHZdE7EAdyiYMNeNrqxQ4ujR+TImQF
+         drnU84zd4yKI69vkGCPKWR7RX8LkXfmvDYEM0qfg1+SlGzoYj5UGfloLWQUktCf7NrzK
+         M/aBg2+8po5vwLXo35psHlgTs00t5PLODQ0aUUOuPlkX/lGAJvAKrJl3hEFFKZxTyqQa
+         y9j4r+J0usXVN5BeG/23U7rpHglLhFte0pPrTWU9erLBKcbTxqt/0EeTZiza1pEjDIge
+         mXfnuHRkUzSlAdNuasOIILW7PA5+qU2hoqw0NrEhBGK+3MngtK5w35gkBtaiTHxe4eit
+         PMcA==
+X-Gm-Message-State: AOAM532gfivLLov+XQKnnMPHBjaHkVUfKe+yn0iKisoFCmiJLDuchAAc
+        d1sUA7kuchqSNYF0fm423qg5Wg==
+X-Google-Smtp-Source: ABdhPJzUi93dqhNvRleZow/9V1Z9u/c4KyWFPNwJg8r46k/Zf63VJDMxELIreYaGJh7U2xunTZklHA==
+X-Received: by 2002:a05:6a00:140b:b0:4e1:2cbd:30ba with SMTP id l11-20020a056a00140b00b004e12cbd30bamr28839691pfu.46.1650546955179;
+        Thu, 21 Apr 2022 06:15:55 -0700 (PDT)
+Received: from [10.85.115.102] ([139.177.225.244])
+        by smtp.gmail.com with ESMTPSA id c22-20020a17090ab29600b001d287fd3f79sm2670563pjr.46.2022.04.21.06.15.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 06:15:54 -0700 (PDT)
+Message-ID: <5197dbe9-3b2f-16c5-ff41-2aa7698ffd0b@bytedance.com>
+Date:   Thu, 21 Apr 2022 21:15:48 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [External] Re: [PATCH] sched/core: Avoid obvious double
+ update_rq_clock warning
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20220418090929.54005-1-jiahao.os@bytedance.com>
+ <13b9fa7f-7ac9-5c1e-a0ff-6b57cb38f28c@arm.com>
+From:   Hao Jia <jiahao.os@bytedance.com>
+In-Reply-To: <13b9fa7f-7ac9-5c1e-a0ff-6b57cb38f28c@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports this issue
-msm_ringbuffer.c:43:36: warning: symbol 'msm_sched_ops' was not declared. Should it be static?
 
-msm_sched_ops is only used in msm_ringbuffer.c so change its
-storage-class specifier to static.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/msm/msm_ringbuffer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2022/4/21 Dietmar Eggemann wrote:
+> On 18/04/2022 11:09, Hao Jia wrote:
+> 
+> [...]
+> 
+>> -	/*
+>> -	 * Update the later_rq clock here, because the clock is used
+>> -	 * by the cpufreq_update_util() inside __add_running_bw().
+>> -	 */
+>> -	update_rq_clock(later_rq);
+>> -	activate_task(later_rq, next_task, ENQUEUE_NOCLOCK);
+>> +	activate_task(later_rq, next_task, 0);
+> 
+> IMHO, this change should go in a separate deadline patch.
+> 
 
-diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.c b/drivers/gpu/drm/msm/msm_ringbuffer.c
-index 367a6aaa3a20..66f4ec09ef67 100644
---- a/drivers/gpu/drm/msm/msm_ringbuffer.c
-+++ b/drivers/gpu/drm/msm/msm_ringbuffer.c
-@@ -40,7 +40,7 @@ static void msm_job_free(struct drm_sched_job *job)
- 	msm_gem_submit_put(submit);
- }
- 
--const struct drm_sched_backend_ops msm_sched_ops = {
-+static const struct drm_sched_backend_ops msm_sched_ops = {
- 	.run_job = msm_job_run,
- 	.free_job = msm_job_free
- };
--- 
-2.27.0
+Thanks again for your review.
+I will do it in patch v2.
+Thanks.
 
+> The change to call update_rq_clock() before activate_task()
+> (840d719604b09) is no longer needed since f4904815f97a removed the
+> add_running_bw() before the activate_task().
+> 
+> [...]

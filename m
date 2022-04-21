@@ -2,65 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520EA50A908
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525EB50A916
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391816AbiDUTWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
+        id S243930AbiDUT1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387623AbiDUTWj (ORCPT
+        with ESMTP id S232117AbiDUT11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:22:39 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863594B41F
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:19:48 -0700 (PDT)
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23LG2AMp030368;
-        Thu, 21 Apr 2022 19:19:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version; s=pps0720;
- bh=xsDV8LaUbO+R6lliVibtTySu+HSr7F0IeedwQM0VXts=;
- b=WNyI+E0pVtSZ2FjqKCla/sVIDBE6OkV3nrq53a4nBCgXB6RFdeykGiM9C9opXao526Oz
- 3235LN1JGqJ+JCb6cfclcqv8ZfcIi8CM0xaqXYl6swfeybU918EZMzo9ghdmQJExLiIj
- y7dO29f/1TnDDz0vl9kPK6un0uGM2JDdiX0td4n2lisqj38pE+4ojkUGxcuPnZR+J8H+
- 6BjQfepwQHkQcJ+GuCVuoPbAsQK4HuzJEntuq+wHgQcpX0ppw8bpKXaGuvoSn8Tc4tJk
- fLXlIZhrbW07fm8pPyU3O86YMVDzYd/pVGnHFW6DlTxGnJjap5U0aNiW90UBcnuh/Kjt cw== 
-Received: from g9t5009.houston.hpe.com (g9t5009.houston.hpe.com [15.241.48.73])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fk9c8a8uv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Apr 2022 19:19:42 +0000
-Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
-        by g9t5009.houston.hpe.com (Postfix) with ESMTP id 2AC9B6A;
-        Thu, 21 Apr 2022 19:19:42 +0000 (UTC)
-Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
-        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id DCEF84E;
-        Thu, 21 Apr 2022 19:19:41 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     verdun@hpe.com, nick.hawkins@hpe.com, joel@jms.id.au,
-        arnd@arndb.de, openbmc@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v5 11/11] maintainers: Introduce HPE GXP Architecture
-Date:   Thu, 21 Apr 2022 14:21:32 -0500
-Message-Id: <20220421192132.109954-12-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220421192132.109954-1-nick.hawkins@hpe.com>
-References: <20220421192132.109954-1-nick.hawkins@hpe.com>
-X-Proofpoint-ORIG-GUID: 45ZQ9DyOATDGWZzt8FPHsijedWf8mHuU
-X-Proofpoint-GUID: 45ZQ9DyOATDGWZzt8FPHsijedWf8mHuU
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 21 Apr 2022 15:27:27 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3383D4CD61
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650569077; x=1682105077;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dwpA2y5/Mr4NohdMef1IfUlBRaIig6iVEFzC/QrYRZE=;
+  b=MuqSlY/rTuWxo5U/qOxh14ZatVT7iCrmEbDFE5Ts5Ecp1+YfaPHL7zKT
+   1VhC78UaxFZw7MZoc3IVJRNl05MpAkQ/FDPCrov96U9N8ACRNu+sy7lQl
+   ryZ1MwCI6SZwHbDpdI68SCMhLlRueGPyUmHzJot2IDmoUeAt+uOfh3zzB
+   2kZNfWLV+G4mkFGzhAOEIoAHTEwl9P7ueLXDmVjxR1owg5x+Qe7+i3uGH
+   xcY19iYhD+gNlcSGqn89UjxhrtYhUqBpTyJGm0luq1ptpnIm+TGr2OKR4
+   zgLleRfo+qA1/PSsA7Bbc4q4x17J7CF4ZQR0qwgjd5dm+sdgZ95r7o1gj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="262057544"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="262057544"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 12:24:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="671191934"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 21 Apr 2022 12:24:35 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhcPq-0008hr-Jp;
+        Thu, 21 Apr 2022 19:24:34 +0000
+Date:   Fri, 22 Apr 2022 03:24:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: drivers/base/topology.c:158:45: error: 'boot_cpu_data' undeclared;
+ did you mean 'boot_cpu_init'?
+Message-ID: <202204220317.dri1BV0q-lkp@intel.com>
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-21_04,2022-04-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- impostorscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1015 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204210102
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,57 +61,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220422-002853/Luck-Tony/topology-sysfs-Fix-allnoconfig-build-breakage/20220421-235053
+head:   8aad1c48b8885d9febd55ecbc5915032cfe857bc
+commit: 8aad1c48b8885d9febd55ecbc5915032cfe857bc topology/sysfs: Fix allnoconfig build breakage.
+date:   3 hours ago
+config: microblaze-randconfig-r022-20220421 (https://download.01.org/0day-ci/archive/20220422/202204220317.dri1BV0q-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8aad1c48b8885d9febd55ecbc5915032cfe857bc
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220422-002853/Luck-Tony/topology-sysfs-Fix-allnoconfig-build-breakage/20220421-235053
+        git checkout 8aad1c48b8885d9febd55ecbc5915032cfe857bc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/base/
 
-Create a section in MAINTAINERS for the GXP HPE
-architecture.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+All errors (new ones prefixed by >>):
 
----
-v5:
-* Fixed commit message to list all previous changes
-v4:
-* Added ARM/ before HPE Title
-* Changed MAINTAINED to Maintained
-* Renamed gxp-timer.c to timer-gxp.c
-* Renamed gxp.yaml to hpe,gxp.yaml
+   In file included from include/asm-generic/bug.h:5,
+                    from ./arch/microblaze/include/generated/asm/bug.h:1,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/mm.h:6,
+                    from drivers/base/topology.c:11:
+   drivers/base/topology.c: In function 'topology_is_visible':
+>> drivers/base/topology.c:158:45: error: 'boot_cpu_data' undeclared (first use in this function); did you mean 'boot_cpu_init'?
+     158 |         if (attr == &dev_attr_ppin.attr && !boot_cpu_data.ppin)
+         |                                             ^~~~~~~~~~~~~
+   include/linux/compiler.h:58:52: note: in definition of macro '__trace_if_var'
+      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   drivers/base/topology.c:158:9: note: in expansion of macro 'if'
+     158 |         if (attr == &dev_attr_ppin.attr && !boot_cpu_data.ppin)
+         |         ^~
+   drivers/base/topology.c:158:45: note: each undeclared identifier is reported only once for each function it appears in
+     158 |         if (attr == &dev_attr_ppin.attr && !boot_cpu_data.ppin)
+         |                                             ^~~~~~~~~~~~~
+   include/linux/compiler.h:58:52: note: in definition of macro '__trace_if_var'
+      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   drivers/base/topology.c:158:9: note: in expansion of macro 'if'
+     158 |         if (attr == &dev_attr_ppin.attr && !boot_cpu_data.ppin)
+         |         ^~
 
-v3:
-* Removed uncessary files
-* Used proper patch-set format
 
-v2:
-* Fixed email address
-* Removed multiple entries in favor of one
----
- MAINTAINERS | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+vim +158 drivers/base/topology.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 40fa1955ca3f..b3fdedc07791 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2130,6 +2130,19 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kristoffer/linux-hpc.git
- F:	arch/arm/mach-sa1100/include/mach/jornada720.h
- F:	arch/arm/mach-sa1100/jornada720.c
- 
-+ARM/HPE GXP ARCHITECTURE
-+M:	Jean-Marie Verdun <verdun@hpe.com>
-+M:	Nick Hawkins <nick.hawkins@hpe.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
-+F:	Documentation/devicetree/bindings/wdt/hpe,gxp-wdt.yaml
-+F:	arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-+F:	arch/arm/boot/dts/hpe-gxp.dtsi
-+F:	arch/arm/mach-hpe/gxp.c
-+F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/watchdog/gxp-wdt.c
-+
- ARM/IGEP MACHINE SUPPORT
- M:	Enric Balletbo i Serra <eballetbo@gmail.com>
- M:	Javier Martinez Canillas <javier@dowhile0.org>
+   154	
+   155	static umode_t topology_is_visible(struct kobject *kobj,
+   156					   struct attribute *attr, int unused)
+   157	{
+ > 158		if (attr == &dev_attr_ppin.attr && !boot_cpu_data.ppin)
+   159			return 0;
+   160	
+   161		return attr->mode;
+   162	}
+   163	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

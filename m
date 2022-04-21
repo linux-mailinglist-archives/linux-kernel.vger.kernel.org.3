@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4603450A074
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D51E50A07A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiDUNNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
+        id S231139AbiDUNQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiDUNNq (ORCPT
+        with ESMTP id S230498AbiDUNQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:13:46 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F6538B0;
-        Thu, 21 Apr 2022 06:10:56 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id a1so822764edt.3;
-        Thu, 21 Apr 2022 06:10:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=byuYbupU+zzoYKhSK1YIRVCBardd3OoXErsh2iShfj4=;
-        b=QjDMSHd9m3wWmp51MGGDtXfUc9aNjOZciLaWNqZBwmzkgeZwIn7v8pcsOiDvhF3msV
-         ouAluS+lMut6UDYygRGcCeHVwBNtP8ZbbU3LlOXgQx5V7aR80oE5W0/av9KDJ17NBgX1
-         aZEzMzyUqKZq/qdH9z4RNTGrv0Uroobt5glYMFaCIZHa3yFMTT4yYe9AYeuTlg/jddjm
-         rYxPVAr2BfLbFj9u/C1/W2QaxUKGjM7xSIw8YZOtHC90vQWsO2DjrUsxmpAMbQ13O5dx
-         dIGAtQ9un70GpENmpu5xJIPI8AZsgCKKdsvzP3ZuynAs7ky8FUFsILrDIL3Yoj5OZRSZ
-         46HA==
+        Thu, 21 Apr 2022 09:16:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D7D05FB3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:13:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650546800;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FzWrq6wADG8fls2g3YNi2KBRby6mI91KD1aPFaOuBgg=;
+        b=Cxy08UKum7P9xslT/jElSs2AVTM/pnmJbyyoUnTk9AaIg/K2/kg+c7BtTU0hSAfIaVllUu
+        oN74jA284bKGMQ284bwEtuJsVn9puPOqa6viBWAogc2ONMwqiTY1ohibVl7iqh0Ncc+gsv
+        Sl6BRp0mwVq6xywiNdaZMGiW3N2bA6Y=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-6e6PqXzjNUyVLXyur_wKag-1; Thu, 21 Apr 2022 09:13:16 -0400
+X-MC-Unique: 6e6PqXzjNUyVLXyur_wKag-1
+Received: by mail-wr1-f71.google.com with SMTP id f2-20020a056000036200b00207a14a1f96so1123088wrf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:13:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=byuYbupU+zzoYKhSK1YIRVCBardd3OoXErsh2iShfj4=;
-        b=xHxlxUKlW8J5N5poPsnXCBwTmTVydbKp8eNwOocwcBSg0UhW/3SziQ8zJhwZEQk40Q
-         yL59/OMKiX/hi7DU1aA5e07Hll20LRw/zgjtERrittkyCfL8luwyMT/1UTeTWw2atlLt
-         BuZw3cqfu1huftPmxYTbx6lxz6AvgEga0Q4OnoxcuDEmnuOuGHTrlU3TrAuFeBWjAGk7
-         Tjfhx9CNfuoPPGgykC7SahwYoqYr3En/yWivKvOgVsFrFNZzeniozGdyMnjHsh+JXXBJ
-         RQ2kl57Ib4r8pkFYOtKdLPN/OLYDUOLpzplX2Xd6h0E1aHG0VYFjRv54cVg5O5n2vC79
-         gOQw==
-X-Gm-Message-State: AOAM533NtlHm4h3kHAf8cShPZrbBXrhenaE4caG9cSlKKArl6wubicbP
-        NA1QdNfqo6qkZsYdxDYqSiwYZM/l59YxgkFGYxA=
-X-Google-Smtp-Source: ABdhPJz/BQanrFmdpuaDePyKSY052Mxpq6TZAMo2Nu3HxL2d0iqCcmKdeUgGwD3hGaFWTaji2F63E7RJFZWDSlQjsc4=
-X-Received: by 2002:a05:6402:3298:b0:41d:9477:4eb3 with SMTP id
- f24-20020a056402329800b0041d94774eb3mr29432620eda.326.1650546654748; Thu, 21
- Apr 2022 06:10:54 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=FzWrq6wADG8fls2g3YNi2KBRby6mI91KD1aPFaOuBgg=;
+        b=oC+ejs4POMnshVMefGmXw9fILSm7oiqIesjF7blspzYDXAoWHp9MUHYHSrTEHEOkwx
+         rECoN4YMM6tKaLjyK6JnEFAbAMTQqoH8CFO4pzpc5Oky8noRR7Lze5YNwl++qESVVFQ3
+         /wqamq1uxiuBgNVbLjAVTtr/uKfh7MOEQwlWXNHbTaq20as0VCk9+Q9l+rlmVgoAyAM6
+         lQe/qsVKw3FqVXnPss+VKlXy5Cs9JHLbHg6/Kgl9fYJj4xhOJJN2EoVhYaYaJV9gXiUy
+         NWVJabzTtPVxBi2awOa+QFAemo7comskYKvZjS7S4IW9wvoNLVpA/BUKitNVg000eXOc
+         WKTg==
+X-Gm-Message-State: AOAM533XmGSoGyYHAYE4zZzDAiz4d8HwGBV9BrzwB/95DDR7A75kPhrJ
+        sA011gv6Qj20Sbj47FbVSTAWYRfjKEyFqARoLC2c/kH1lquKFY87g9pFOS17fW0CHN9E2ZEQ27B
+        4o9cfCL6+O8IMZGcZeabFRXRO
+X-Received: by 2002:a5d:604a:0:b0:20a:8145:ad04 with SMTP id j10-20020a5d604a000000b0020a8145ad04mr19085021wrt.255.1650546795372;
+        Thu, 21 Apr 2022 06:13:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyb38/K7fR5vGj0BbR2nbDRw0aq+8b3KsKUW8o45emQVthbAQ8YqAtEFEH0t8BYy5sf4flfXA==
+X-Received: by 2002:a5d:604a:0:b0:20a:8145:ad04 with SMTP id j10-20020a5d604a000000b0020a8145ad04mr19085000wrt.255.1650546795119;
+        Thu, 21 Apr 2022 06:13:15 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:de00:711b:76af:b335:9b70? (p200300cbc702de00711b76afb3359b70.dip0.t-ipconnect.de. [2003:cb:c702:de00:711b:76af:b335:9b70])
+        by smtp.gmail.com with ESMTPSA id m7-20020adfe0c7000000b002060e7bbe49sm2764840wri.45.2022.04.21.06.13.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 06:13:14 -0700 (PDT)
+Message-ID: <67fc9368-0876-b931-14c2-ffa4dac35b6d@redhat.com>
+Date:   Thu, 21 Apr 2022 15:13:13 +0200
 MIME-Version: 1.0
-References: <20220421094236.1052170-1-r33s3n6@gmail.com> <YmEs6BqcyM7fgLXg@kroah.com>
- <CAMvdLANp4jHnySOmpjXZdFwruLdvN9qR-B_Ew9_zeCiKYiLZSA@mail.gmail.com>
- <YmFIqPeGQYKl33vh@kroah.com> <CAMvdLANGW35m0-mg_00wM2FPivmk-wVfqE379iNjE=gFL3u-5A@mail.gmail.com>
- <fb656254-bfc5-5930-3e7c-be84382d88f8@linux.intel.com>
-In-Reply-To: <fb656254-bfc5-5930-3e7c-be84382d88f8@linux.intel.com>
-From:   Fu Zixuan <r33s3n6@gmail.com>
-Date:   Thu, 21 Apr 2022 21:11:56 +0800
-Message-ID: <CAMvdLANbXbiFfiPnwKEr+arNYMoRk0Lv7fngvCngz-mRv8vVZw@mail.gmail.com>
-Subject: Re: [PATCH] drivers: usb: host: fix NULL pointer dereferences
- triggered by unhandled errors in xhci_create_rhub_port_array()
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 2/3] mm/swapfile: Fix lost swap bits in unuse_pte()
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
+        neilb@suse.de, apopple@nvidia.com, surenb@google.com,
+        minchan@kernel.org, peterx@redhat.com, sfr@canb.auug.org.au,
+        naoya.horiguchi@nec.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220421125348.62483-1-linmiaohe@huawei.com>
+ <20220421125348.62483-3-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220421125348.62483-3-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,148 +86,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 8:50 PM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 21.4.2022 15.21, Fu Zixuan wrote:
-> > On Thu, 21 Apr 2022 at 20:06, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >>
-> >> On Thu, Apr 21, 2022 at 07:55:28PM +0800, Fu Zixuan wrote:
-> >>> On Thu, 21 Apr 2022 at 18:07, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >>>>
-> >>>> On Thu, Apr 21, 2022 at 05:42:36PM +0800, Zixuan Fu wrote:
-> >>>>> In xhci_create_rhub_port_array(), when rhub->num_ports is zero,
-> >>>>> rhub->ports would not be set; when kcalloc_node() fails, rhub->ports
-> >>>>> would be set to NULL. In these two cases, xhci_create_rhub_port_array()
-> >>>>> just returns void, and thus its callers are unaware of the error.
-> >>>>>
-> >>>>> Then rhub->ports is dereferenced in xhci_usb3_hub_descriptor() or
-> >>>>> xhci_usb2_hub_descriptor().
-> >>>>>
-> >>>>> To fix the bug, xhci_setup_port_arrays() should return an integer to
-> >>>>> indicate a possible error, and its callers should handle the error.
-> >>>>>
-> >>>>> Here is the log when this bug occurred in our fault-injection testing:
-> >>>>>
-> >>>>> [   24.001309] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> >>>>> ...
-> >>>>> [   24.003992] RIP: 0010:xhci_hub_control+0x3f5/0x60d0 [xhci_hcd]
-> >>>>> ...
-> >>>>> [   24.009803] Call Trace:
-> >>>>> [   24.010014]  <TASK>
-> >>>>> [   24.011310]  usb_hcd_submit_urb+0x1233/0x1fd0
-> >>>>> [   24.017071]  usb_start_wait_urb+0x115/0x310
-> >>>>> [   24.017641]  usb_control_msg+0x28a/0x450
-> >>>>> [   24.019046]  hub_probe+0xb16/0x2320
-> >>>>> [   24.019757]  usb_probe_interface+0x4f1/0x930
-> >>>>> [   24.019765]  really_probe+0x33d/0x970
-> >>>>> [   24.019768]  __driver_probe_device+0x157/0x210
-> >>>>> [   24.019772]  driver_probe_device+0x4f/0x340
-> >>>>> [   24.019775]  __device_attach_driver+0x2ee/0x3a0
-> >>>>> ...
-> >>>>>
-> >>>>> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> >>>>> Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
-> >>>>> ---
-> >>>>>  drivers/usb/host/xhci-mem.c | 17 ++++++++++++-----
-> >>>>>  1 file changed, 12 insertions(+), 5 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> >>>>> index bbb27ee2c6a3..024515346c39 100644
-> >>>>> --- a/drivers/usb/host/xhci-mem.c
-> >>>>> +++ b/drivers/usb/host/xhci-mem.c
-> >>>>> @@ -2235,7 +2235,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
-> >>>>>       /* FIXME: Should we disable ports not in the Extended Capabilities? */
-> >>>>>  }
-> >>>>>
-> >>>>> -static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
-> >>>>> +static int xhci_create_rhub_port_array(struct xhci_hcd *xhci,
-> >>>>>                                       struct xhci_hub *rhub, gfp_t flags)
-> >>>>>  {
-> >>>>>       int port_index = 0;
-> >>>>> @@ -2243,11 +2243,11 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
-> >>>>>       struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-> >>>>>
-> >>>>>       if (!rhub->num_ports)
-> >>>>> -             return;
-> >>>>> +             return -EINVAL;
-> >>>>>       rhub->ports = kcalloc_node(rhub->num_ports, sizeof(*rhub->ports),
-> >>>>>                       flags, dev_to_node(dev));
-> >>>>>       if (!rhub->ports)
-> >>>>> -             return;
-> >>>>> +             return -ENOMEM;
-> >>>>>
-> >>>>>       for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
-> >>>>>               if (xhci->hw_ports[i].rhub != rhub ||
-> >>>>> @@ -2259,6 +2259,7 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
-> >>>>>               if (port_index == rhub->num_ports)
-> >>>>>                       break;
-> >>>>>       }
-> >>>>> +     return 0;
-> >>>>>  }
-> >>>>>
-> >>>>>  /*
-> >>>>> @@ -2277,6 +2278,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
-> >>>>>       int cap_count = 0;
-> >>>>>       u32 cap_start;
-> >>>>>       struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-> >>>>> +     int ret;
-> >>>>>
-> >>>>>       num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
-> >>>>>       xhci->hw_ports = kcalloc_node(num_ports, sizeof(*xhci->hw_ports),
-> >>>>> @@ -2367,8 +2369,13 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
-> >>>>>        * Not sure how the USB core will handle a hub with no ports...
-> >>>>>        */
-> >>>>>
-> >>>>> -     xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
-> >>>>> -     xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
-> >>>>> +     ret = xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
-> >>>>> +     if (ret)
-> >>>>> +             return ret;
-> >>>>> +
-> >>>>> +     ret = xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
-> >>>>> +     if (ret)
-> >>>>> +             return ret;
-> >>>>
-> >>>> What about the memory allocated by the first call to
-> >>>> xhci_create_rhub_port_array()?  Is that now lost?  Same for everything
-> >>>> else allocated before these calls, how is that cleaned up properly?
-> >>>>
-> >>>> thanks,
-> >>>>
-> >>>> greg k-h
-> >>>
-> >>> Thanks for your swift reply. We understand your concern. In fact, we have
-> >>> checked the related code carefully and found that xhci_create_rhub_port_array()
-> >>> is only used in xhci_setup_port_arrays(). Moreover, only xhci_mem_init() calls
-> >>> xhci_setup_port_arrays() and does all cleanup work when it fails. Specifically,
-> >>> xhci_mem_init() calls xhci_mem_cleanup(), which eventually called
-> >>> kfree(xhci->usb2_rhub.ports) and kfree(xhci->usb3_rhub.ports).
-> >>
-> >> Great, can you mention this in the changelog text to show that you have
-> >> thought this through and it can be documented as such?
-> >>
-> >> thanks,
-> >>
-> >> greg k-h
-> >
-> > Thanks for your reply! We will do that and submit the patch v2 soon.
-> >
->
-> Good to get this fixed, but there's a series by Heiner Kallweit that adds support
-> for xHC controllers with just one roothub [1].
-> It will conflict with this.
->
-> We might need to change this a bit so that this can go to stable alone, but still
-> being being able to somewhat neatly apply that new series on top of this.
->
-> 1. https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=for-usb-next
->
-> Thanks
-> -Mathias
+On 21.04.22 14:53, Miaohe Lin wrote:
+> This is observed by code review only but not any real report.
+> 
+> When we turn off swapping we could have lost the bits stored in the swap
+> ptes. The new rmap-exclusive bit is fine since that turned into a page
+> flag, but not for soft-dirty and uffd-wp. Add them.
+> 
+> Suggested-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/swapfile.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index 95b63f69f388..332ccfc76142 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -1783,7 +1783,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+>  {
+>  	struct page *swapcache;
+>  	spinlock_t *ptl;
+> -	pte_t *pte;
+> +	pte_t *pte, new_pte;
+>  	int ret = 1;
+>  
+>  	swapcache = page;
+> @@ -1832,8 +1832,14 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+>  		page_add_new_anon_rmap(page, vma, addr);
+>  		lru_cache_add_inactive_or_unevictable(page, vma);
+>  	}
+> -	set_pte_at(vma->vm_mm, addr, pte,
+> -		   pte_mkold(mk_pte(page, vma->vm_page_prot)));
+> +	new_pte = pte_mkold(mk_pte(page, vma->vm_page_prot));
+> +	if (pte_swp_soft_dirty(*pte))
+> +		new_pte = pte_mksoft_dirty(new_pte);
+> +	if (pte_swp_uffd_wp(*pte)) {
+> +		new_pte = pte_mkuffd_wp(new_pte);
+> +		new_pte = pte_wrprotect(new_pte);
 
-No problem! We will submit our patch on that branch.
+The wrprotect shouldn't be necessary, we don't do a pte_mkwrite(). Note
+that in do_swap_page() we might have done a
+maybe_mkwrite(pte_mkdirty(pte)), which is why the pte_wrprotect() is
+required there.
 
+-- 
 Thanks,
 
-Zixuan Fu
+David / dhildenb
+

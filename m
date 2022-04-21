@@ -2,114 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97DF50AAA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FD750AAAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbiDUVUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 17:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
+        id S1441905AbiDUVXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 17:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441876AbiDUVUb (ORCPT
+        with ESMTP id S231982AbiDUVXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 17:20:31 -0400
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B74F4C436;
-        Thu, 21 Apr 2022 14:17:40 -0700 (PDT)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id E1E6330B2948;
-        Thu, 21 Apr 2022 23:17:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=hbDk3
-        3ZxCTMt1n/ItJN8YwASodp90ZfV7RkeZbyKvBA=; b=JXaYXnh4S5p9PnmzC/iDG
-        8xXu0hfWRsG2RAVXouI0BQG0Vz17pBvgxnZaIeeIUfEaeEV7SJyI2+gPoD3ahI3V
-        VrWa35/is0O/avx9tK/SsB6bd9lHxjtaQSh7LwAlwVtfvAnQStUQegI2mg+V3tvN
-        X7ZoQCTXJXrPfennmi0ooN7FanynE0AYCT5V7wBDXPrICFqS+N4HGsIYV98X2G6g
-        yk75Qn8nIdBCVEpFnu09d2TCJXzeE20Y6pu7DJKbukxjImvUrqvktetlJnB0Kieb
-        ES7LXEBd/231Yhr41jETg4yfMlYJUB4GKWfmW9QTor9huptSu3n8ittWNToskIZe
-        w==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 309B630B2943;
-        Thu, 21 Apr 2022 23:17:08 +0200 (CEST)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 23LLH7TQ026503;
-        Thu, 21 Apr 2022 23:17:07 +0200
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 23LLH7gv026502;
-        Thu, 21 Apr 2022 23:17:07 +0200
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: Re: [PATCH] can: ctucanfd: Remove unused including <linux/version.h>
-Date:   Thu, 21 Apr 2022 23:17:07 +0200
-User-Agent: KMail/1.9.10
-Cc:     ondrej.ille@gmail.com, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220421202852.2693-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20220421202852.2693-1-jiapeng.chong@linux.alibaba.com>
-X-KMail-QuotePrefix: > 
+        Thu, 21 Apr 2022 17:23:19 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B8649917;
+        Thu, 21 Apr 2022 14:20:28 -0700 (PDT)
+Received: from g550jk.arnhem.chello.nl (a246182.upc-a.chello.nl [62.163.246.182])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 24CB2CC10C;
+        Thu, 21 Apr 2022 21:19:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1650575997; bh=5ScSxn4n5ySRopwqFbclap1GFEUkLSSL+DlpBzrrvQk=;
+        h=From:To:Cc:Subject:Date;
+        b=KoUyVqigeI1pJrTPGIqB1K06o9w5tlY0D/m6/YssQKeRf+3HZd29OO5GVU7rVamOG
+         5CsZU/QKsPuUWkM9HaelMXLps0RmexhLMiFRsP4iM8+RzYCL03h6kakQ6sBQve0/cI
+         tBJkd7EC/6KTxy/ZpNIAYQzpddD7FpKRi9Ofx1R4=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] ARM: dts: msm8974-FP2: We're msm8974pro
+Date:   Thu, 21 Apr 2022 23:19:33 +0200
+Message-Id: <20220421211936.345168-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202204212317.07635.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for checking
+Fairphone 2 always uses Snapdragon 801, a.k.a msm8974pro so change the
+include and filename to that.
 
-On Thursday 21 of April 2022 22:28:52 Jiapeng Chong wrote:
-> Eliminate the follow versioncheck warning:
->
-> ./drivers/net/can/ctucanfd/ctucanfd_base.c: 34 linux/version.h not
-> needed.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ arch/arm/boot/dts/Makefile                                      | 2 +-
+ ...8974-fairphone-fp2.dts => qcom-msm8974pro-fairphone-fp2.dts} | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename arch/arm/boot/dts/{qcom-msm8974-fairphone-fp2.dts => qcom-msm8974pro-fairphone-fp2.dts} (99%)
 
-Acked-by: Pave Pisa <pisa@cmp.felk.cvut.cz>
-
-> ---
->  drivers/net/can/ctucanfd/ctucanfd_base.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/net/can/ctucanfd/ctucanfd_base.c
-> b/drivers/net/can/ctucanfd/ctucanfd_base.c index 7a4550f60abb..be90136be442
-> 100644
-> --- a/drivers/net/can/ctucanfd/ctucanfd_base.c
-> +++ b/drivers/net/can/ctucanfd/ctucanfd_base.c
-> @@ -31,7 +31,6 @@
->  #include <linux/can/error.h>
->  #include <linux/can/led.h>
->  #include <linux/pm_runtime.h>
-> -#include <linux/version.h>
->
->  #include "ctucanfd.h"
->  #include "ctucanfd_kregs.h"
-
-
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 3541e5eec611..728bbd0f8c26 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1010,10 +1010,10 @@ dtb-$(CONFIG_ARCH_QCOM) += \
+ 	qcom-msm8660-surf.dtb \
+ 	qcom-msm8916-samsung-serranove.dtb \
+ 	qcom-msm8960-cdp.dtb \
+-	qcom-msm8974-fairphone-fp2.dtb \
+ 	qcom-msm8974-lge-nexus5-hammerhead.dtb \
+ 	qcom-msm8974-sony-xperia-rhine-amami.dtb \
+ 	qcom-msm8974-sony-xperia-rhine-honami.dtb \
++	qcom-msm8974pro-fairphone-fp2.dtb \
+ 	qcom-msm8974pro-samsung-klte.dtb \
+ 	qcom-msm8974pro-sony-xperia-shinano-castor.dtb \
+ 	qcom-mdm9615-wp8548-mangoh-green.dtb \
+diff --git a/arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dts b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
+similarity index 99%
+rename from arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dts
+rename to arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
+index 97d109a5c71d..08e723f2bdfc 100644
+--- a/arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dts
++++ b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
+@@ -1,4 +1,4 @@
+-#include "qcom-msm8974.dtsi"
++#include "qcom-msm8974pro.dtsi"
+ #include "qcom-pm8841.dtsi"
+ #include "qcom-pm8941.dtsi"
+ #include <dt-bindings/input/input.h>
 -- 
-Yours sincerely
-
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
+2.36.0
 

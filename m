@@ -2,150 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5278150A108
+	by mail.lfdr.de (Postfix) with ESMTP id 9D98350A109
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386588AbiDUNqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
+        id S1386655AbiDUNqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347188AbiDUNqH (ORCPT
+        with ESMTP id S1359071AbiDUNqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:46:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2120F36E37
+        Thu, 21 Apr 2022 09:46:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06963703C
         for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:43:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1650548598; x=1682084598;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=v51gmnQnKce+T95j2M1BTL26N2GdLjz9XKnRt5FsbHk=;
-  b=DOw/eLDALIsLz5RhqiV1fwbGvnoa7Ku6E6tDWw7OQnr+SD6w1Lisegd2
-   B6frgFFy5XdenRF3Cg1e1PyiZkTxFlnK2W6JzbKNLVg1+f/PIzroKrByr
-   WhmVeLIGbtWjIthH94EIRoOxUK0cIENlvW2Aw23sRqLT3bEI1TwfLFlgo
-   txZztWMFhZzf9Qt7f4wo0bHtOj+nAscSDRELU2SOgxXElfw3iav/EZ+ib
-   XGYi8p507yGMzgVDOtwJQhqbO3hrLYOMccSdv+nkhVQnIGn4MYZ1GC0DV
-   nnDJhJHbYeDvECh+EOq9WWpyTApdbKNX3YYZIBlsCHpRkhQI26DNeAyja
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263819427"
+  bh=LqxG6CMNpCvDoph0giZ6h8fUSlEMss2zdZD880HZ9G0=;
+  b=Q6Pp0B27szSSimYtx4MTLnFq37RrQJMsV13XuBBPchUOQkq6HE/1KQ98
+   IJwibTjqx+j46kcGXMtUjFip2XxquDcELPO6gTi+Bcdyfw1cKxEoq9Xtl
+   RVemP+/W9HRSldJ0P4IUZb8fcYeSBHCi0lSVR+dgayEtOoJyHlU8cO0vc
+   A9I4RYD7KvAYM82lKb7FY85l+Prp53QPzO2kxzxEuNvRWm5JcsDSZNWhc
+   KqJgO7F55T6yANpF97dEMcnKsAmfY2sEcynSpsHpw7ym5EbTNg/UwuYAZ
+   LX/3bdl/7Ffb0v0mMwPXS1pJk5xzASkL0nJ+UVSu/EyY3TAO/M/4JcjuM
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="261952433"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="263819427"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 06:43:17 -0700
+   d="scan'208";a="261952433"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 06:43:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="614901418"
+   d="scan'208";a="670748383"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Apr 2022 06:43:16 -0700
+  by orsmga004.jf.intel.com with ESMTP; 21 Apr 2022 06:43:16 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nhX5X-0008RV-OP;
+        id 1nhX5X-0008RT-Ng;
         Thu, 21 Apr 2022 13:43:15 +0000
-Date:   Thu, 21 Apr 2022 21:43:12 +0800
+Date:   Thu, 21 Apr 2022 21:43:14 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2326/2579] arch/x86/pci/bus_numa.c:24:5:
- warning: no previous prototype for 'x86_pci_root_bus_node'
-Message-ID: <202204212112.Aee3HDbH-lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.4 1/5]
+ include/linux/string.h:294:33: warning: '__builtin_strncpy' output truncated
+ copying 8 bytes from a string of length 27
+Message-ID: <202204212124.c4Cz1ERW-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: 4701dddeded9a472bd4d8de9719e12c3b9cdb1f0 [2326/2579] headers/deps: pci: Optimize <linux/pci.h> dependencies, remove <linux/topology.h> inclusion
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220421/202204212112.Aee3HDbH-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.4
+head:   e613962787e504da4b594e69c524e003c1267ebd
+commit: 71b7d7ee19a794811e8a70d7407d79197f5b930f [1/5] etherdevice: Adjust ether_addr* prototypes to silence -Wstringop-overead
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220421/202204212124.c4Cz1ERW-lkp@intel.com/config)
 compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=4701dddeded9a472bd4d8de9719e12c3b9cdb1f0
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 4701dddeded9a472bd4d8de9719e12c3b9cdb1f0
+        # https://github.com/ammarfaizi2/linux-block/commit/71b7d7ee19a794811e8a70d7407d79197f5b930f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/5.4
+        git checkout 71b7d7ee19a794811e8a70d7407d79197f5b930f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/target/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/pci/bus_numa.c:24:5: warning: no previous prototype for 'x86_pci_root_bus_node' [-Wmissing-prototypes]
-      24 | int x86_pci_root_bus_node(int bus)
-         |     ^~~~~~~~~~~~~~~~~~~~~
->> arch/x86/pci/bus_numa.c:34:6: warning: no previous prototype for 'x86_pci_root_bus_resources' [-Wmissing-prototypes]
-      34 | void x86_pci_root_bus_resources(int bus, struct list_head *resources)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/bitmap.h:9,
+                    from include/linux/cpumask.h:12,
+                    from arch/x86/include/asm/cpumask.h:5,
+                    from arch/x86/include/asm/msr.h:11,
+                    from arch/x86/include/asm/processor.h:21,
+                    from arch/x86/include/asm/cpufeature.h:5,
+                    from arch/x86/include/asm/thread_info.h:53,
+                    from include/linux/thread_info.h:39,
+                    from arch/x86/include/asm/preempt.h:7,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:51,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from drivers/nvme/target/discovery.c:7:
+   In function 'strncpy',
+       inlined from 'nvmet_execute_identify_disc_ctrl' at drivers/nvme/target/discovery.c:243:2:
+>> include/linux/string.h:294:33: warning: '__builtin_strncpy' output truncated copying 8 bytes from a string of length 27 [-Wstringop-truncation]
+     294 | #define __underlying_strncpy    __builtin_strncpy
+         |                                 ^
+   include/linux/string.h:304:16: note: in expansion of macro '__underlying_strncpy'
+     304 |         return __underlying_strncpy(p, q, size);
+         |                ^~~~~~~~~~~~~~~~~~~~
 
 
-vim +/x86_pci_root_bus_node +24 arch/x86/pci/bus_numa.c
+vim +/__builtin_strncpy +294 include/linux/string.h
 
-67f241f4579651 Yinghai Lu    2009-11-11  23  
-afcf21c2beca66 Bjorn Helgaas 2014-01-24 @24  int x86_pci_root_bus_node(int bus)
-afcf21c2beca66 Bjorn Helgaas 2014-01-24  25  {
-afcf21c2beca66 Bjorn Helgaas 2014-01-24  26  	struct pci_root_info *info = x86_find_pci_root_info(bus);
-afcf21c2beca66 Bjorn Helgaas 2014-01-24  27  
-afcf21c2beca66 Bjorn Helgaas 2014-01-24  28  	if (!info)
-afcf21c2beca66 Bjorn Helgaas 2014-01-24  29  		return NUMA_NO_NODE;
-afcf21c2beca66 Bjorn Helgaas 2014-01-24  30  
-afcf21c2beca66 Bjorn Helgaas 2014-01-24  31  	return info->node;
-afcf21c2beca66 Bjorn Helgaas 2014-01-24  32  }
-afcf21c2beca66 Bjorn Helgaas 2014-01-24  33  
-d28e5ac2a07e27 Yinghai Lu    2012-04-02 @34  void x86_pci_root_bus_resources(int bus, struct list_head *resources)
-d28e5ac2a07e27 Yinghai Lu    2012-04-02  35  {
-d28e5ac2a07e27 Yinghai Lu    2012-04-02  36  	struct pci_root_info *info = x86_find_pci_root_info(bus);
-d28e5ac2a07e27 Yinghai Lu    2012-04-02  37  	struct pci_root_res *root_res;
-14d76b68f2819a Jiang Liu     2015-02-05  38  	struct resource_entry *window;
-a10bb128b64fe0 Yinghai Lu    2012-05-17  39  	bool found = false;
-d28e5ac2a07e27 Yinghai Lu    2012-04-02  40  
-d28e5ac2a07e27 Yinghai Lu    2012-04-02  41  	if (!info)
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  42  		goto default_resources;
-67f241f4579651 Yinghai Lu    2009-11-11  43  
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  44  	printk(KERN_DEBUG "PCI: root bus %02x: hardware-probed resources\n",
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  45  	       bus);
-67f241f4579651 Yinghai Lu    2009-11-11  46  
-a10bb128b64fe0 Yinghai Lu    2012-05-17  47  	/* already added by acpi ? */
-14d76b68f2819a Jiang Liu     2015-02-05  48  	resource_list_for_each_entry(window, resources)
-a10bb128b64fe0 Yinghai Lu    2012-05-17  49  		if (window->res->flags & IORESOURCE_BUS) {
-a10bb128b64fe0 Yinghai Lu    2012-05-17  50  			found = true;
-a10bb128b64fe0 Yinghai Lu    2012-05-17  51  			break;
-a10bb128b64fe0 Yinghai Lu    2012-05-17  52  		}
-a10bb128b64fe0 Yinghai Lu    2012-05-17  53  
-a10bb128b64fe0 Yinghai Lu    2012-05-17  54  	if (!found)
-a10bb128b64fe0 Yinghai Lu    2012-05-17  55  		pci_add_resource(resources, &info->busn);
-a10bb128b64fe0 Yinghai Lu    2012-05-17  56  
-727ae8be30b428 Liu Jiang     2015-11-27  57  	list_for_each_entry(root_res, &info->resources, list)
-727ae8be30b428 Liu Jiang     2015-11-27  58  		pci_add_resource(resources, &root_res->res);
-727ae8be30b428 Liu Jiang     2015-11-27  59  
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  60  	return;
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  61  
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  62  default_resources:
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  63  	/*
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  64  	 * We don't have any host bridge aperture information from the
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  65  	 * "native host bridge drivers," e.g., amd_bus or broadcom_bus,
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  66  	 * so fall back to the defaults historically used by pci_create_bus().
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  67  	 */
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  68  	printk(KERN_DEBUG "PCI: root bus %02x: using default resources\n", bus);
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  69  	pci_add_resource(resources, &ioport_resource);
-2cd6975a4ff92a Bjorn Helgaas 2011-10-28  70  	pci_add_resource(resources, &iomem_resource);
-67f241f4579651 Yinghai Lu    2009-11-11  71  }
-67f241f4579651 Yinghai Lu    2009-11-11  72  
+b008ae4cc74d3a Daniel Axtens 2020-06-03  272  
+b008ae4cc74d3a Daniel Axtens 2020-06-03  273  #ifdef CONFIG_KASAN
+b008ae4cc74d3a Daniel Axtens 2020-06-03  274  extern void *__underlying_memchr(const void *p, int c, __kernel_size_t size) __RENAME(memchr);
+b008ae4cc74d3a Daniel Axtens 2020-06-03  275  extern int __underlying_memcmp(const void *p, const void *q, __kernel_size_t size) __RENAME(memcmp);
+b008ae4cc74d3a Daniel Axtens 2020-06-03  276  extern void *__underlying_memcpy(void *p, const void *q, __kernel_size_t size) __RENAME(memcpy);
+b008ae4cc74d3a Daniel Axtens 2020-06-03  277  extern void *__underlying_memmove(void *p, const void *q, __kernel_size_t size) __RENAME(memmove);
+b008ae4cc74d3a Daniel Axtens 2020-06-03  278  extern void *__underlying_memset(void *p, int c, __kernel_size_t size) __RENAME(memset);
+b008ae4cc74d3a Daniel Axtens 2020-06-03  279  extern char *__underlying_strcat(char *p, const char *q) __RENAME(strcat);
+b008ae4cc74d3a Daniel Axtens 2020-06-03  280  extern char *__underlying_strcpy(char *p, const char *q) __RENAME(strcpy);
+b008ae4cc74d3a Daniel Axtens 2020-06-03  281  extern __kernel_size_t __underlying_strlen(const char *p) __RENAME(strlen);
+b008ae4cc74d3a Daniel Axtens 2020-06-03  282  extern char *__underlying_strncat(char *p, const char *q, __kernel_size_t count) __RENAME(strncat);
+b008ae4cc74d3a Daniel Axtens 2020-06-03  283  extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size) __RENAME(strncpy);
+b008ae4cc74d3a Daniel Axtens 2020-06-03  284  #else
+b008ae4cc74d3a Daniel Axtens 2020-06-03  285  #define __underlying_memchr	__builtin_memchr
+b008ae4cc74d3a Daniel Axtens 2020-06-03  286  #define __underlying_memcmp	__builtin_memcmp
+b008ae4cc74d3a Daniel Axtens 2020-06-03  287  #define __underlying_memcpy	__builtin_memcpy
+b008ae4cc74d3a Daniel Axtens 2020-06-03  288  #define __underlying_memmove	__builtin_memmove
+b008ae4cc74d3a Daniel Axtens 2020-06-03  289  #define __underlying_memset	__builtin_memset
+b008ae4cc74d3a Daniel Axtens 2020-06-03  290  #define __underlying_strcat	__builtin_strcat
+b008ae4cc74d3a Daniel Axtens 2020-06-03  291  #define __underlying_strcpy	__builtin_strcpy
+b008ae4cc74d3a Daniel Axtens 2020-06-03  292  #define __underlying_strlen	__builtin_strlen
+b008ae4cc74d3a Daniel Axtens 2020-06-03  293  #define __underlying_strncat	__builtin_strncat
+b008ae4cc74d3a Daniel Axtens 2020-06-03 @294  #define __underlying_strncpy	__builtin_strncpy
+b008ae4cc74d3a Daniel Axtens 2020-06-03  295  #endif
+b008ae4cc74d3a Daniel Axtens 2020-06-03  296  
 
-:::::: The code at line 24 was first introduced by commit
-:::::: afcf21c2beca6604dbdc24fed1624c2499a85e7d x86/PCI: Add x86_pci_root_bus_node() to look up NUMA node from PCI bus
+:::::: The code at line 294 was first introduced by commit
+:::::: b008ae4cc74d3ab43074099746f6c32d353e01aa string.h: fix incompatibility between FORTIFY_SOURCE and KASAN
 
-:::::: TO: Bjorn Helgaas <bhelgaas@google.com>
-:::::: CC: Bjorn Helgaas <bhelgaas@google.com>
+:::::: TO: Daniel Axtens <dja@axtens.net>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service

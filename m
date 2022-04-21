@@ -2,165 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28590509490
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 03:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9425509498
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 03:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383596AbiDUBPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 21:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S1383608AbiDUBTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 21:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbiDUBPx (ORCPT
+        with ESMTP id S233373AbiDUBTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 21:15:53 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BF513CFA
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 18:13:04 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KkKKK5QPSzhXZd;
-        Thu, 21 Apr 2022 09:12:53 +0800 (CST)
-Received: from dggpemm500015.china.huawei.com (7.185.36.181) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 09:13:02 +0800
-Received: from [10.174.177.133] (10.174.177.133) by
- dggpemm500015.china.huawei.com (7.185.36.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 09:13:01 +0800
-Subject: Re: [RFC PATCH -next v2 0/4] arm64/ftrace: support dynamic trampoline
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     <cj.chengjian@huawei.com>, <huawei.libin@huawei.com>,
-        <xiexiuqi@huawei.com>, <liwei391@huawei.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <mark.rutland@arm.com>,
-        <zengshun.wu@outlook.com>
-References: <20220316100132.244849-1-bobo.shaobowang@huawei.com>
- <20220420141143.23286faa@gandalf.local.home>
-From:   "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
-Message-ID: <5ddc2722-4489-f66d-552d-1f4c755b5d30@huawei.com>
-Date:   Thu, 21 Apr 2022 09:13:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        Wed, 20 Apr 2022 21:19:05 -0400
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9481113D4F
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 18:16:17 -0700 (PDT)
+Received: by mail-qv1-xf44.google.com with SMTP id n11so2693333qvl.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 18:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F77C2q47pYS+RE/OwYeFXyxS3AjhQn7/SR6GHq78D9o=;
+        b=gRwMUG+QIEI2kyRZlqfd4xYQieTFYWtCclx9IVQil7D/l/KhfqL9eHTcDQZrW85RRZ
+         NCOS/gGcvu7QSxwl7bXTd/fMNv/SJ6YSZZHc4vNpFMyZ4lCbneeTQ4EOCXVUANLWiVTG
+         ChFnwtlCYvS0zP6wd1SHhvBGPJ06Uc8pkDDZNAQ6TMubSEtJnZcoFO0+XkWmJh15tqau
+         26iUTw3y+zlXyvVuZ3EMyomS4rDSfkh7ZsD+BDhf1lroX2MYNcVInXnmf26Qn8AiYtn7
+         Dh95FMyps+w05SIvJp1Mxx5/9IQOm85L+lw6L1L5JwINhviclttqhCYxbYMMRDbUvgiZ
+         /zCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F77C2q47pYS+RE/OwYeFXyxS3AjhQn7/SR6GHq78D9o=;
+        b=jwqy2FmOjiTvDSTH9qb7gZ8eNFkQ+cbdN26F+6+KKZxVuSyWAUcfXBFNNYXqugrUyK
+         aLSSvPm3JB+gRWF389H/R7yZCg0KkcDhSPOVyFflC7gWR60NvfhEimJxBNDnM7BRk0nW
+         SGL46usg8+vyfFn8JBaSu+uz+saC1Adp0RvOl96eU5z3kDVdw5sIcre177Blm09efplV
+         0/CG3ZKUzhEdZjKiYvp6P8GKYPhCWyuyXYEXlmUgJwgz8UsEPTd/FYjQeUFN0gtZe5zO
+         NaQDhHDLGpFi+6gb75hhrqB/2nFDYTCj9/6No0+DqOCQ1jFxDu64tONzFPAHJJbAPpjn
+         ehNA==
+X-Gm-Message-State: AOAM532t2Z7WpxM17v83egG43NsYkUTjivwZ1BYI+jKGXjnhDs4pZS10
+        /FjA7RrWKAWHxXBIlt/Qjyvyb/B3lUw=
+X-Google-Smtp-Source: ABdhPJyWFnCPc/QcD8yZDwf04BFpBVFoEELlmPqp8FSOw6wNgqpdGMgMv9RczvWhkI6FT4lzgZduxg==
+X-Received: by 2002:ad4:5bef:0:b0:446:7727:efac with SMTP id k15-20020ad45bef000000b004467727efacmr7778139qvc.44.1650503776396;
+        Wed, 20 Apr 2022 18:16:16 -0700 (PDT)
+Received: from sophie ([45.134.140.168])
+        by smtp.gmail.com with ESMTPSA id s195-20020a37a9cc000000b0069ca29ab6f4sm2403427qke.26.2022.04.20.18.16.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 18:16:15 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 20:16:14 -0500
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8192u: compare strcmp result to zero
+Message-ID: <20220421011614.GA5118@sophie>
+References: <20220416102434.97567-1-remckee0@gmail.com>
+ <20220420094220.GD2951@kadam>
 MIME-Version: 1.0
-In-Reply-To: <20220420141143.23286faa@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.133]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500015.china.huawei.com (7.185.36.181)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420094220.GD2951@kadam>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dan,
 
-在 2022/4/21 2:11, Steven Rostedt 写道:
-> Is this going anywhere?
->
-> -- Steve
+On Wed, Apr 20, 2022 at 12:42:20PM +0300, Dan Carpenter wrote:
+> On Sat, Apr 16, 2022 at 05:24:34AM -0500, Rebecca Mckeever wrote:
+> > Add " == 0" to the condition in both else if branches to address a
+> > possible bug. strcmp returns 0 when its arguments are equal, which
+> > evaluates to false, often leading to errors when used in if statements.
+> > 
+> > Currently, the statement in the first else if branch does not execute
+> > when its arguments are equal, but it does execute when crypt->ops->name
+> > equals any string other than "WEP" or "TKIP".
+> > 
+> > Similarly, the second else if branch does not execute when its arguments
+> > are equal, and it only executes when crypt->ops->name equals "TKIP".
+> > The else branch never executes.
+> > 
+> > It is unlikely that this is working as intended.
+> > 
+> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> > ---
+> 
+> Looks good.  How did you find this bug?
 
-Not yet, Steve, ftrace_location() looks has no help to find a right 
-rec->ip in our case,
+I noticed it when I was trying to understand the surrounding code when
+preparing another patch.
 
-ftrace_location() can find a right rec->ip when input ip is in the range 
-between
+> 
+> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+> 
+> > There is a similiar issue in
+> > drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c
+> > but I'm not sure if it's incorrect. The strcmp on line 2847 isn't
+> > negated, but the ones on lines 2851, 2853, and 2855 are.
+> > 
+> > 2845         /* IPW HW cannot build TKIP MIC, host decryption still needed. */
+> > 2846         if (!(ieee->host_encrypt || ieee->host_decrypt) &&
+> > 2847             strcmp(param->u.crypt.alg, "TKIP"))
+> > 2848                 goto skip_host_crypt;
+> 
+> You're right, but also I suspect this whole if statement is wrong.
+> 
+> The if statement is only triggered if both ->host_encrypt and
+> ->host_decrypt are disabled.  (Too many negatives).  I think both are
+> set in alloc_ieee80211() and rtl8192_init_priv_variable() so both are
+> always true and the if statement is dead code.
+> 
+> How does the code match with the comment?
+> 
+> Fixing this probably requires testing.  Maybe we could add this to the
+> TODO list or maybe add a comment?
 
-sym+0 and sym+$end, but our question is how to  identify rec->ip from 
-__mcount_loc,
+There isn't currently a TODO file for this driver. Adding a TODO file
+would probably be more effective than a comment?
 
-this changed the patchable entry before bti to after in gcc:
+> 
+> regards,
+> dan carpenter
+> 
+> Ps:  When you have a !(foo || bar) then it's often more readable to
+> write it as !foo && !bar, but in this case it doesn't really answer any
+> of the core questions so don't bother.
+ 
+Yeah, I think you're right, !foo && !bar makes more sense to me.
 
-    [1] https://reviews.llvm.org/D73680
-
-gcc tells the place of first nop of the 5 NOPs when using 
--fpatchable-function-entry=5,3,
-
-but not tells the first nop after bti, so we don't know how to adjust 
-our rec->ip for ftrace.
-
->
->
-> On Wed, 16 Mar 2022 18:01:28 +0800
-> Wang ShaoBo <bobo.shaobowang@huawei.com> wrote:
->
->> This implements dynamic trampoline in ARM64, as reference said, we
->> complete whole design of supporting long jump in dynamic trampoline:
->>
->>     .text section:
->>       funcA:         |    funcA():        funcB():|
->>        `->  +-----+  |    |   ...         mov x9  |
->>             | ... |  |    |   adrp   <-   bl  <>  |
->>             | nop |  |    |   mov
->>             | nop |  |    |   br   x16 ---+
->>       funcB | nop |  |                    | ftrace_(regs_)caller_tramp:
->>        `->  +-----+  |                    `--> +---------------------+
->>             | nop |  |                         | ...                 |
->>             | nop |  |       ftrace callsite   +---------------------+
->>             | ... |  |                `----->  | PLT entry:          |
->>             | nop |  |                         |       adrp          |
->>             | nop |  |                         |       add           |
->>      funcC: | nop |  | ftrace graph callsite   |       br   x16      |
->>        `->  +-----+  |                `----->  +---------------------+
->>             | nop |  |                         | ...                 |
->>             | nop |  |                         +---------------------+
->>
->> But there is still a tricky problem that is how to adjust tracing ip,
->> waiting to be solved:
->>
->> For ARM64, somecases there may be extra instructions inserted into the
->> head of tracable functions(but not all) by compiler, for instance BTI[1].
->>
->> This dump vmlinux with CONFIG_BTI=y:
->>
->> (1) function gic_handle_irq has bti in its head, so we adjust rec->ip+=5 to last nop
->>      ffffffc0080100e0:       d53cd042        mrs     x2, tpidr_el2
->>              ...
->>      ffffffc0080100f0:       d503201f        nop     //__mcount_loc tells the rec->ip
->>      ffffffc0080100f4:       d503201f        nop
->>      ffffffc0080100f8:       d503201f        nop
->>
->>      ffffffc0080100fc <gic_handle_irq>:
->>      ffffffc0080100fc:       d503245f        bti     c
->>      ffffffc008010100:       d503201f        nop
->>      ffffffc008010104:       d503201f        nop     //we adjust origin rec->ip+5 to here
->>      ffffffc008010108:       d503233f        paciasp
->> (2) name_to_dev_t.part.0 do not has bti in its head, so we should adjust rec->ip+=4 to last nop
->>      ffff8000080137d4:       d503201f        nop
->>      ffff8000080137d8:       d503201f        nop
->>      ffff8000080137dc:       d503201f        nop
->>      
->>      ffff8000080137e0 <name_to_dev_t.part.0>:
->>      ffff8000080137e0:       d503201f        nop
->>      ffff8000080137e4:       d503201f        nop
->>      ffff8000080137e8:       d503233f        paciasp
->>
->> So at this time we have no idea to identify rec->ip for each tracable function.
->>
->> we are looking forward to follow-up discussions.
->>
->> References:
->> [1] https://developer.arm.com/documentation/100076/0100/a64-instruction-set-reference/a64-general-instructions/bti
->> [2] https://lore.kernel.org/linux-arm-kernel/20200109142736.1122-1-cj.chengjian@huawei.com/
->>
->> Cheng Jian (4):
->>    arm64: introduce aarch64_insn_gen_load_literal
->>    arm64/ftrace: introduce ftrace dynamic trampoline entrances
->>    arm64/ftrace: support dynamically allocated trampolines
->>    arm64/ftrace: implement long jump for dynamic trampolines
->>
->>   arch/arm64/Makefile              |   2 +-
->>   arch/arm64/include/asm/ftrace.h  |  10 +-
->>   arch/arm64/include/asm/insn.h    |   6 +
->>   arch/arm64/include/asm/module.h  |   9 +
->>   arch/arm64/kernel/entry-ftrace.S |  88 ++++++--
->>   arch/arm64/kernel/ftrace.c       | 366 ++++++++++++++++++++++++++++---
->>   arch/arm64/kernel/module-plts.c  |  50 +++++
->>   arch/arm64/lib/insn.c            |  49 +++++
->>   8 files changed, 532 insertions(+), 48 deletions(-)
->>
-> .
+Thanks,
+Rebecca

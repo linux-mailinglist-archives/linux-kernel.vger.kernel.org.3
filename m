@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A207450A923
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9CB50A92B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391927AbiDUT2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S1391940AbiDUT2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391610AbiDUT2q (ORCPT
+        with ESMTP id S1391925AbiDUT2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:28:46 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9832B4D270;
-        Thu, 21 Apr 2022 12:25:55 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id p8so5883581pfh.8;
-        Thu, 21 Apr 2022 12:25:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cBrbiWDBHEqVzD/h6n2uk0w0Vf7EqWqgPo3W9iAFxx0=;
-        b=HTZ57TThs2gZgtm09J297EO0M3RO62RHz/zVoetmYhSGSzXIWjGtQNVlcT/am6ElqW
-         +cTLNQXaPDGTicHPztmAQxL3KOlCa0xow9uOS0FV7+JXKwDeZShuUEbBQiE0Rvus2mm5
-         eLMesI2o5ptZFTctQwjDDGBVhqCeowgcfZNMhAiMxUibIPc0sbqguwSOhdL28aF/wAhR
-         OZ5HsLcodEdCdqfjUtovF9t5paSvEko+HnTNyqgzeng1bpWq/xgmjewQjuDsQDeCZo73
-         Hqyj9I01JfoH0aaOvVNTvMQISmhsF50hwZGJaZUherneAHdfPc/CDIR4kCzKfbNxpgrg
-         5ujQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=cBrbiWDBHEqVzD/h6n2uk0w0Vf7EqWqgPo3W9iAFxx0=;
-        b=0+EBFbQC2kVJpggDuSgsKAxBIWswb38o0V17mfZymlkzF0K4qG1CZbjxEZF7lN+A3V
-         TQaeREQxT4u4RIxHYzCtZm1pnrkrFdUkWV5m3lsgSWA7RsTzNOasHw0+FE4dld/IVxPX
-         VaIuDlfKHWxFNhQovx8Yyi2huNX7O4vLtjamslfodyXN+vgGvT/P+KIW5MUKy8yB3mDS
-         W2jWAPb86n3+ICPFdNEwpptnbtAhLsMfgEK5+oY2zQTolsCf6+pthIdOwQDXkFumpb8W
-         W7qXsVr1FgI4bj7/+/5p5GpsWXUWIZBGGd72xb9b/zbebu8NFeQ8+RjQ3yTXkNWQudv6
-         rQWg==
-X-Gm-Message-State: AOAM531isdSk7DvXdRzUWgOKV06jLS5J5qpJuuRAjOzhXsupfccU7IR4
-        M8vzNGzC4DzruAb41nFIOZM=
-X-Google-Smtp-Source: ABdhPJydgd/xmb2yR2CCAMjNeInbLx5JdrgHVbwNiCA8VKBZYu2tb2FGgUU1dxdUfy8WyP5TnL9L3A==
-X-Received: by 2002:aa7:9522:0:b0:4e1:d277:ce8 with SMTP id c2-20020aa79522000000b004e1d2770ce8mr1170604pfp.16.1650569154975;
-        Thu, 21 Apr 2022 12:25:54 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:2c86])
-        by smtp.gmail.com with ESMTPSA id t63-20020a625f42000000b0050a7eaff8c9sm14868920pfb.189.2022.04.21.12.25.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 12:25:54 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 21 Apr 2022 09:25:52 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Vernet <void@manifault.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Zefan Li <lizefan.x@bytedance.com>
-Subject: Re: [PATCH 3/4] MAINTAINERS: add corresponding kselftests to cgroup
- entry
-Message-ID: <YmGvwPIAA1LqCcku@slm.duckdns.org>
-References: <20220415000133.3955987-1-roman.gushchin@linux.dev>
- <20220415000133.3955987-4-roman.gushchin@linux.dev>
+        Thu, 21 Apr 2022 15:28:47 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A13D4D26C;
+        Thu, 21 Apr 2022 12:25:56 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 1C9CB92009D; Thu, 21 Apr 2022 21:25:53 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 18FDA92009C;
+        Thu, 21 Apr 2022 20:25:53 +0100 (BST)
+Date:   Thu, 21 Apr 2022 20:25:53 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        tglx@linutronix.de, arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v5 04/11] mips: use fallback for random_get_entropy()
+ instead of just c0 random
+In-Reply-To: <20220419111650.1582274-5-Jason@zx2c4.com>
+Message-ID: <alpine.DEB.2.21.2204212018540.9383@angie.orcam.me.uk>
+References: <20220419111650.1582274-1-Jason@zx2c4.com> <20220419111650.1582274-5-Jason@zx2c4.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415000133.3955987-4-roman.gushchin@linux.dev>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 05:01:32PM -0700, Roman Gushchin wrote:
-> List cgroup kselftests in the cgroup MAINTAINERS entry.
-> These are tests covering core, freezer and cgroup.kill
-> functionality.
-> 
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Zefan Li <lizefan.x@bytedance.com>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: cgroups@vger.kernel.org
+On Tue, 19 Apr 2022, Jason A. Donenfeld wrote:
 
-Acked-by: Tejun Heo <tj@kernel.org>
+> For situations in which we don't have a c0 counter register available,
+> we've been falling back to reading the c0 "random" register, which is
+> usually bounded by the amount of TLB entries and changes every other
+> cycle or so. This means it wraps extremely often. We can do better by
+> combining this fast-changing counter with a potentially slower-changing
+> counter from random_get_entropy_fallback() in the more significant bits.
+> This commit combines the two, taking into account that the changing bits
+> are in a different bit position depending on the CPU model. In addition,
+> we previously were falling back to 0 for ancient CPUs that Linux does
+> not support anyway; remove that dead path entirely.
 
-I suppose this can go with the rest through -mm? Please let me know if I
-should pick it up.
+Tested-by: Maciej W. Rozycki <macro@orcam.me.uk>
 
-Thanks.
+ I've pushed the algorithm through testing with a number of suitable 
+systems:
 
--- 
-tejun
+- an R2000A and an R3000A with no timer of any kind, only jiffies,
+
+- an R3400 with a chipset timer only,
+
+- an R4400SC with a usable buggy CP0 counter and a chipset timer,
+
+- a 5Kc with a good CP0 counter only,
+
+with no obvious issues spotted.  Thank you for working on this!
+
+  Maciej

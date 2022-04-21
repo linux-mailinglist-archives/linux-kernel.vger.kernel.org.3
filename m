@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC65650AC42
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AC350AC4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442759AbiDUXsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 19:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
+        id S1442731AbiDUXr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 19:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442735AbiDUXrh (ORCPT
+        with ESMTP id S1442744AbiDUXrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:47:37 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3385E3EBB5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:44:46 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id bj12-20020a056a02018c00b003a9eebaad34so3591298pgb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:44:46 -0700 (PDT)
+        Thu, 21 Apr 2022 19:47:40 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9095247AE9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:44:47 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id b20-20020a62a114000000b0050a6280e374so3858529pff.13
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:44:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=o1jm2ZxrobVfc+EDXZbKA8synQY3urRJFo8ts6M9Cos=;
-        b=XNmIj+vh/zg85pOZ7hddsPc4rZoBWgPyUKppuibPQ8HpozXmQF4+KbncIhebNDLW+A
-         OaXTK2I3Y4FSfd6Gk2xjKvidVm8LAaC0kUVGEo9TUpGjqdno7WSghhitFdSbSpl49CsV
-         tN/y2CDjCmmhUJ5bWM3jDcayzcK/VRUFAN/fq1h0P/eGY5Hy+hXEJyzvjDolAnIyIh8w
-         7uodhfP1m0/4SgHnVku88XUlvSW+55VzyEWrQhAUPNeD6F+CC6uOkZE3RyW5PPK9/T9U
-         kH6ybVBPt6zTUU/GcTYAtffLbYejeX7CoHq85fV8abFrT+jgJziiU3RQIdVNZSFNsFws
-         rRVA==
+        bh=zrjgrKYnU6OpMbvPqxH4AMaOafcQPI/dEJCu4TPzq/A=;
+        b=R5EgEEFiJLJPylJr1GpRvnGVqN1ompyECMnvFf7eJcNcIBFBfprXXAft0A/RmwaXeD
+         sbaE02S2hM0MhJlnoYl4BZ6GwzLLyFeyoaeyfYlebGdZNk2FJqWy0CBTgUDnhS3IZByt
+         vQWqicHWsomUI7gHz2Tvt1gFymu5ka/dsdDO3KlmWLi1mH5fKV33sBgHm0V9J9vTRadg
+         6MpPFs5NAnuJf5761TBNcYgccwJrkDqvgaOAsSc4lC0uYWWC70kYneQqFgmKZ/IoeuvU
+         TVc1vZldKVcLP7xe8H7/pcshpA4uONKuKc7K/n5XrtPuudMkt4mzmX1nR+nSRuafWS5v
+         ptTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=o1jm2ZxrobVfc+EDXZbKA8synQY3urRJFo8ts6M9Cos=;
-        b=GMiKGALrVC4MREUTVbd4Pn8eXNkqdM/zTjvf7MBhbVpxNh9dop/MmeSbcdJSoIPFst
-         3mOSRdCRIM4FYWK6jFgZcnjFZ8IGqN8idfD9MSIi6cfuJLBLEuAKTolR+7GlBb6vbQPh
-         zBfe38wQa3UOqNbwBTf8mOWhLnJFF+K9OGlVG/0VtGK0lpPo5jSQJRtFC3nOMREjNdD+
-         cX290awbDeM2JeWr0wcCPdfGrs6kkbKvD3at69wbVnDgyCnNDkH0amTztimQg3c/+wJl
-         bbHzYQQwyLPgNumPl9t0AsuNtD4doQPPX3EuqJSDMJyZ02L69+k8pON1Z6adRvV0RUwn
-         Osjw==
-X-Gm-Message-State: AOAM5313ZxLzKoBKNX15XyZFSXtdYIUH87S44PnxMyOczN/tLj3mNij4
-        U2RFo25ieKGnHveooGj1//9nUhDeYQRf6eWU
-X-Google-Smtp-Source: ABdhPJxtoageBQNYvSk1VtKpcFUVPUrVFQmq32PJxpSAW3BoTHti1Uz9DhnW0LOQD3FUjL5L64RLR2rvuttIZXXf
+        bh=zrjgrKYnU6OpMbvPqxH4AMaOafcQPI/dEJCu4TPzq/A=;
+        b=E/Ks5YcX2COrVXL2UcKMFyoknKPWGytr6hEAy8jVfZa6RBSpGJinE+fw+rY8Wl2ric
+         fklavbwTJB18Wz00EjeW8wdooYGmeAQUSD3UGjs5qSx3Smihk+7sX0ZMQtZBxW26l1Mj
+         A6XMs7zn7nkMXnmVKWUrd8B9ibeBIHew4tRrM73T4wxMCWaYgUeqUhIrGcvSdDUp1aMs
+         pZjDu0+28BY9iUaYiLj9RUF5OGMghDrMWyTj/TM91AgJm9h7koohXQ27Ivg0F1BhapbG
+         ntZPg8CVcmx7mDl6WzBib/GqZkhWPbWyRupUAwGm6i5Y79LJKP0xcE+IMUPu9d6oaWxy
+         19+w==
+X-Gm-Message-State: AOAM533X4E6PS+G1mRhi0H+zhR0q8hO8dh4aC2UkDwnauNm4ruIJldZB
+        7z4m4b8uzA+4nXHoh2ldwOXJ+zS/xJdH1x84
+X-Google-Smtp-Source: ABdhPJxkyS9552eyRbp5WO6d5madi5NDuaVaOduz7euoUqf8KeXnSqt/NpxhsWB/Uh+lm1g3ddmKZu3hnmlshvfN
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:90b:4c85:b0:1d4:bc0b:90eb with SMTP
- id my5-20020a17090b4c8500b001d4bc0b90ebmr2179433pjb.171.1650584685622; Thu,
- 21 Apr 2022 16:44:45 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 23:44:24 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a17:902:f391:b0:158:f1e6:7233 with SMTP
+ id f17-20020a170902f39100b00158f1e67233mr1863993ple.133.1650584687052; Thu,
+ 21 Apr 2022 16:44:47 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 23:44:25 +0000
 In-Reply-To: <20220421234426.3494842-1-yosryahmed@google.com>
-Message-Id: <20220421234426.3494842-3-yosryahmed@google.com>
+Message-Id: <20220421234426.3494842-4-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20220421234426.3494842-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v4 2/4] selftests: cgroup: return -errno from
- cg_read()/cg_write() on failure
+Subject: [PATCH v4 3/4] selftests: cgroup: fix alloc_anon_noexit() instantly
+ freeing memory
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Johannes Weiner <hannes@cmpxchg.org>,
         Michal Hocko <mhocko@kernel.org>,
@@ -78,7 +78,7 @@ Cc:     David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,123 +86,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, cg_read()/cg_write() returns 0 on success and -1 on failure.
-Modify them to return the -errno on failure.
+Currently, alloc_anon_noexit() calls alloc_anon() which instantly frees
+the allocated memory. alloc_anon_noexit() is usually used with
+cg_run_nowait() to run a process in the background that allocates
+memory. It makes sense for the background process to keep the memory
+allocated and not instantly free it (otherwise there is no point of
+running it in the background).
 
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 ---
- tools/testing/selftests/cgroup/cgroup_util.c | 44 +++++++++-----------
- 1 file changed, 19 insertions(+), 25 deletions(-)
+ tools/testing/selftests/cgroup/test_memcontrol.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-index dbaa7aabbb4a..e6f3679cdcc0 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/cgroup_util.c
-@@ -19,6 +19,7 @@
- #include "cgroup_util.h"
- #include "../clone3/clone3_selftests.h"
- 
-+/* Returns read len on success, or -errno on failure. */
- static ssize_t read_text(const char *path, char *buf, size_t max_len)
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 36ccf2322e21..f2ffb3a30194 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -211,13 +211,17 @@ static int alloc_pagecache_50M_noexit(const char *cgroup, void *arg)
+ static int alloc_anon_noexit(const char *cgroup, void *arg)
  {
- 	ssize_t len;
-@@ -26,35 +27,29 @@ static ssize_t read_text(const char *path, char *buf, size_t max_len)
+ 	int ppid = getppid();
++	size_t size = (unsigned long)arg;
++	char *buf, *ptr;
  
- 	fd = open(path, O_RDONLY);
- 	if (fd < 0)
--		return fd;
-+		return -errno;
+-	if (alloc_anon(cgroup, arg))
+-		return -1;
++	buf = malloc(size);
++	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
++		*ptr = 0;
  
- 	len = read(fd, buf, max_len - 1);
--	if (len < 0)
--		goto out;
+ 	while (getppid() == ppid)
+ 		sleep(1);
  
--	buf[len] = 0;
--out:
-+	if (len >= 0)
-+		buf[len] = 0;
-+
- 	close(fd);
--	return len;
-+	return len < 0 ? -errno : len;
++	free(buf);
+ 	return 0;
  }
  
-+/* Returns written len on success, or -errno on failure. */
- static ssize_t write_text(const char *path, char *buf, ssize_t len)
- {
- 	int fd;
- 
- 	fd = open(path, O_WRONLY | O_APPEND);
- 	if (fd < 0)
--		return fd;
-+		return -errno;
- 
- 	len = write(fd, buf, len);
--	if (len < 0) {
--		close(fd);
--		return len;
--	}
--
- 	close(fd);
--
--	return len;
-+	return len < 0 ? -errno : len;
- }
- 
- char *cg_name(const char *root, const char *name)
-@@ -87,16 +82,16 @@ char *cg_control(const char *cgroup, const char *control)
- 	return ret;
- }
- 
-+/* Returns 0 on success, or -errno on failure. */
- int cg_read(const char *cgroup, const char *control, char *buf, size_t len)
- {
- 	char path[PATH_MAX];
-+	ssize_t ret;
- 
- 	snprintf(path, sizeof(path), "%s/%s", cgroup, control);
- 
--	if (read_text(path, buf, len) >= 0)
--		return 0;
--
--	return -1;
-+	ret = read_text(path, buf, len);
-+	return ret >= 0 ? 0 : ret;
- }
- 
- int cg_read_strcmp(const char *cgroup, const char *control,
-@@ -177,17 +172,15 @@ long cg_read_lc(const char *cgroup, const char *control)
- 	return cnt;
- }
- 
-+/* Returns 0 on success, or -errno on failure. */
- int cg_write(const char *cgroup, const char *control, char *buf)
- {
- 	char path[PATH_MAX];
--	ssize_t len = strlen(buf);
-+	ssize_t len = strlen(buf), ret;
- 
- 	snprintf(path, sizeof(path), "%s/%s", cgroup, control);
--
--	if (write_text(path, buf, len) == len)
--		return 0;
--
--	return -1;
-+	ret = write_text(path, buf, len);
-+	return ret == len ? 0 : ret;
- }
- 
- int cg_find_unified_root(char *root, size_t len)
-@@ -545,7 +538,8 @@ ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t
- 	else
- 		snprintf(path, sizeof(path), "/proc/%d/%s", pid, item);
- 
--	return read_text(path, buf, size);
-+	size = read_text(path, buf, size);
-+	return size < 0 ? -1 : size;
- }
- 
- int proc_read_strstr(int pid, bool thread, const char *item, const char *needle)
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 

@@ -2,107 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23E6509854
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3026509862
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385330AbiDUGuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
+        id S1385136AbiDUGs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 02:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385168AbiDUGrO (ORCPT
+        with ESMTP id S1385195AbiDUGrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:47:14 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C86B15706
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 23:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523433; x=1682059433;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=t6EX66T85u1c5LDaK5D+bJxZGki09xbXVSxRqkTFzEw=;
-  b=U6Qxkat70JdTzKBsbpP7tEV7UHuEyp41gWxBp2gELT1WQCVdcWP8d/Bx
-   z4UVt3G2xXIXX9QpTnV4MiLW8lQxAm9jQPI4IBBgNgHkl0n5Te4/Qpo+7
-   NBdI8qc+xVhhL5BmH3oCBTGe/gL3s87q2rZRMlHHsdEvqU/cBn4M7p8kh
-   nVA8s3A2UoWBlmF33j7+ERG7BlUFyjpqsS4X5quSmSbUOhq6yEI/tynyc
-   PtetstNkKws3bqYX1AqdZ6uodT9B+xjFibGzMmoorShOBZ8IXvX1u6rbf
-   JEfNGgQt1TIqLGmQZsE5zxzZfVbZYQ4CJVIeF2BKTC2TQoHcXdPCZyHxF
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264022261"
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="264022261"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:43:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="532792899"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 20 Apr 2022 23:43:51 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhQXe-00080X-TW;
-        Thu, 21 Apr 2022 06:43:50 +0000
-Date:   Thu, 21 Apr 2022 14:43:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 909/2579] ./usr/include/linux/rds.h:38:10:
- fatal error: uapi/linux/sockios.h: No such file or directory
-Message-ID: <202204210658.9lRMw5Y6-lkp@intel.com>
+        Thu, 21 Apr 2022 02:47:31 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A5D1581C;
+        Wed, 20 Apr 2022 23:44:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xkg/9fBx91D98nGOM7iMUznlEWdi4zGYGgMCknbS6fg=; b=HhAjS2WKe9oB9WWs9KZtnCFVXr
+        C1N/qwuSD8n5GT+YN72L1mkOrQl9ENF0LWI38XgbUSgUXGIQS2kOLp8/3vloH4sZOeLoiUfHWWSNz
+        c+kOjPTQbRAwailjS/Ma3fUu1rRgd6z4ySOdlIUtXvK6yEDscEO8f04w3y/UlZdp0BT4=;
+Received: from p200300ccff1491001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff14:9100:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1nhQXU-0002cN-3m; Thu, 21 Apr 2022 08:43:40 +0200
+Date:   Thu, 21 Apr 2022 08:43:38 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>,
+        Sandy Huang <hjc@rock-chips.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org,
+        Alistair Francis <alistair@alistair23.me>,
+        =?UTF-8?B?T25kxZllag==?= Jirman <x@xff.cz>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Liang Chen <cl@rock-chips.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 00/16] drm/rockchip: Rockchip EBC ("E-Book
+ Controller") display driver
+Message-ID: <20220421084338.084c4d6e@aktux>
+In-Reply-To: <20220413221916.50995-1-samuel@sholland.org>
+References: <20220413221916.50995-1-samuel@sholland.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: 94cfca12ab9e9b8b05b4baec60d6450f80682d91 [909/2579] headers/deps: Add header dependencies to .h files: <uapi/linux/sockios.h>
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220421/202204210658.9lRMw5Y6-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=94cfca12ab9e9b8b05b4baec60d6450f80682d91
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 94cfca12ab9e9b8b05b4baec60d6450f80682d91
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Wed, 13 Apr 2022 17:19:00 -0500
+Samuel Holland <samuel@sholland.org> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[...]
+> Waveform Selection From Userspace
+> =================================
+> EPDs use different waveforms for different purposes: high-quality
+> grayscale vs. monochrome text vs. dithered monochrome video. How can
+> userspace select which waveform to use? Should this be a plane property?
+> 
+Or does userspace rather select a QoS, like low-latency vs. high
+quality. Or this will not change for a longer time: like doing full
+refreshes.
 
-All errors (new ones prefixed by >>):
+> It is also likely that userspace will want to use different waveforms at
+> the same time for different parts of the screen, for example a fast
+> monochrome waveform for the drawing area of a note-taking app, but a
+> grayscale waveform for surrounding UI and window manager.
+> 
 
-   In file included from <command-line>:
->> ./usr/include/linux/rds.h:38:10: fatal error: uapi/linux/sockios.h: No such file or directory
-      38 | #include <uapi/linux/sockios.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
---
-   In file included from <command-line>:
->> ./usr/include/linux/if_tunnel.h:5:10: fatal error: uapi/linux/sockios.h: No such file or directory
-       5 | #include <uapi/linux/sockios.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
---
-   In file included from <command-line>:
->> ./usr/include/linux/kcm.h:18:10: fatal error: uapi/linux/sockios.h: No such file or directory
-      18 | #include <uapi/linux/sockios.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
---
-   In file included from <command-line>:
->> ./usr/include/linux/x25.h:15:10: fatal error: uapi/linux/sockios.h: No such file or directory
-      15 | #include <uapi/linux/sockios.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
+> I believe the i.MX6 EPDC supports multiple planes, each with their own
+> waveform choice. That seems like a good abstraction, but the EBC only
+> supports one plane in hardware. So using this abstraction with the EBC
+> would require blending pixels and doing waveform lookups in software.
+> 
+The iMX6 EPDC has one working buffer containing the old+new state of
+the pixel. That is 16bpp. Then for each update you can specify a
+rectangle in an independant 8bpp buffer as a source. For now I am just
+using a single buffer. But yes, that construction could be used to do
+some multi plane stuff.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Blitting/Blending in Software
+> =============================
+> There are multiple layers to this topic (pun slightly intended):
+>  1) Today's userspace does not expect a grayscale framebuffer.
+>     Currently, the driver advertises XRGB8888 and converts to Y4
+>     in software. This seems to match other drivers (e.g. repaper).
+> 
+>  2) Ignoring what userspace "wants", the closest existing format is
+>     DRM_FORMAT_R8. Geert sent a series[4] adding DRM_FORMAT_R1 through
+>     DRM_FORMAT_R4 (patch 9), which I believe are the "correct" formats
+>     to use.
+>
+hmm R=red? That sounds strange. I am unsure whether doing things with
+lower bit depths actually really helps. 
+
+>  3) The RK356x SoCs have an "RGA" hardware block that can do the
+>     RGB-to-grayscale conversion, and also RGB-to-dithered-monochrome
+>     which is needed for animation/video. Currently this is exposed with
+>     a V4L2 platform driver. Can this be inserted into the pipeline in a
+>     way that is transparent to userspace? Or must some userspace library
+>     be responsible for setting up the RGA => EBC pipeline?
+
+hmm, we have other drivers with some hardware block doing rotation, but
+in that cases it is not exposed as v4l2 mem2mem device.
+
+On IMX6 there is also the PXP doing RGB-to-grayscale and rotation but
+exposed as v4l2 device. But it can also be used to do undocumented
+stuff writing to the 16bpp working buffer. So basically it is similar.
+But I would do thoso things in a second step and just have the basic
+stuff upstreamed
+
+Regards,
+Andreas

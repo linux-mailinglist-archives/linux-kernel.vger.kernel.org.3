@@ -2,132 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19AF50A7A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC3F50A7AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390933AbiDUSDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
+        id S1391035AbiDUSFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391215AbiDUSCx (ORCPT
+        with ESMTP id S1390799AbiDUSE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:02:53 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E39BE29;
-        Thu, 21 Apr 2022 11:00:02 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 10:59:54 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1650564000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k9KJFoROadhQEi217HirEqtdLkXBsecvLOO9CIt2GKE=;
-        b=GU+fP14UtB62v1iOUhU2TiO8Tiqpbg/dnJjCrtcQl6Lp7MGa9EyUFAlQNpj0j1rTfbFAmr
-        ZVJv/GJLYHVIE9+l0NHbkjyOMoQcQZHPDxoCBeMOaIczAgyyq/bilbi/9kSuTEsDEFBj4C
-        foH+6WlVvovyemQkAHrZ6cVl9IVCKWo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
+        Thu, 21 Apr 2022 14:04:59 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB9C4A914;
+        Thu, 21 Apr 2022 11:02:08 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id v15so7488731edb.12;
+        Thu, 21 Apr 2022 11:02:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lOywcq043Yv+FklAUr4QgDF+CZZ8Fm9pvDhYVpjnqBA=;
+        b=eecx/nbIl/qVmAavXVH1QtBMm/WUTeluckxs1qc4tw1Y6vxZ86/xB7ozu/zgCvduHh
+         1h6sr+60PV4OZotP1IkXl6PiEAO6jIBaH8I+wCyUWAVuROGFmk+qqIdqW4LbPAlpZDOd
+         dwTlvsztPjkIOdF+CghH88DMzlav2RgUCJNJstXASPY5+WZjEyPHowy8F3Z0AZjYZA8j
+         eGdVGE4cgYTPUAQ76zyWm/ThY828nVJNDGv6iAnDc19k8syiC7u1OGaCwnbT9ToLVW3V
+         cZS1A8gsXDxltmFaNc7s9AG8ikNO/UkB9u+jaaBX3cCvL4co8zlPFmKAsYp71ZX99+vJ
+         JMwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lOywcq043Yv+FklAUr4QgDF+CZZ8Fm9pvDhYVpjnqBA=;
+        b=zWconP0bdBlcJGlO2f3rvyALrj6mdWKQEzUGNcd0mvyHUDYzcp67y+Uu9SJX0Sr5Jm
+         nokuIKoGMf0eNDmVZIccpByF96m2GCknNSTQzZxv0wF6bv6ErFxG9RXB1Oy+yF+xj1BT
+         Zz8K2jl1PpViLwarX+YRyXT+3bTIxnEIqFKYvQZf8+onM0IXNVXddYa/pHILyzaASCLE
+         TYknclYc1QPmvVNQs1J7xQyWtIkqAc4kwgfeSdSgMLOuICtxdFjhkglLTxZzyoc4T08Q
+         eMa3AaUF925+9Z7tFqf48yTEKP/8D4V11B7Wc9qvsK90MAdUsWcKOstWXRuPlMT7Nkj5
+         hnjQ==
+X-Gm-Message-State: AOAM530thjBv8ZeVAHsGAIlsneJ1f0KIDZAfFU82hEkiU1ltl6z9qiij
+        48/ppwIO7JC+2cegE+unEYs=
+X-Google-Smtp-Source: ABdhPJwauNZg58tpQBk9hzxL0id6LFCJ4zvxpDL6xTFyXaXnoMUP7JB6yC/Zn52v1XcuKBIHi2gK8w==
+X-Received: by 2002:a05:6402:3548:b0:424:2245:8d45 with SMTP id f8-20020a056402354800b0042422458d45mr815045edd.286.1650564127154;
+        Thu, 21 Apr 2022 11:02:07 -0700 (PDT)
+Received: from localhost.localdomain (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id l17-20020a056402231100b0041d98ed7ad8sm11836204eda.46.2022.04.21.11.02.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 11:02:05 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Muchun Song <songmuchun@bytedance.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH] mm/memcg: Free percpu stats memory of dying memcg's
-Message-ID: <YmGbmrH/Hg1VJlUc@carbon>
-References: <20220421145845.1044652-1-longman@redhat.com>
- <YmGHYNuAp8957ouq@carbon>
- <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, outreachy@lists.linux.dev
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH 0/4] Extend and reorganize Highmem's documentation
+Date:   Thu, 21 Apr 2022 20:01:56 +0200
+Message-Id: <20220421180200.16901-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 01:28:20PM -0400, Waiman Long wrote:
-> 
-> On 4/21/22 12:33, Roman Gushchin wrote:
-> > On Thu, Apr 21, 2022 at 10:58:45AM -0400, Waiman Long wrote:
-> > > For systems with large number of CPUs, the majority of the memory
-> > > consumed by the mem_cgroup structure is actually the percpu stats
-> > > memory. When a large number of memory cgroups are continuously created
-> > > and destroyed (like in a container host), it is possible that more
-> > > and more mem_cgroup structures remained in the dying state holding up
-> > > increasing amount of percpu memory.
-> > > 
-> > > We can't free up the memory of the dying mem_cgroup structure due to
-> > > active references in some other places. However, the percpu stats memory
-> > > allocated to that mem_cgroup is a different story.
-> > > 
-> > > This patch adds a new percpu_stats_disabled variable to keep track of
-> > > the state of the percpu stats memory. If the variable is set, percpu
-> > > stats update will be disabled for that particular memcg. All the stats
-> > > update will be forward to its parent instead. Reading of the its percpu
-> > > stats will return 0.
-> > > 
-> > > The flushing and freeing of the percpu stats memory is a multi-step
-> > > process. The percpu_stats_disabled variable is set when the memcg is
-> > > being set to offline state. After a grace period with the help of RCU,
-> > > the percpu stats data are flushed and then freed.
-> > > 
-> > > This will greatly reduce the amount of memory held up by dying memory
-> > > cgroups.
-> > > 
-> > > By running a simple management tool for container 2000 times per test
-> > > run, below are the results of increases of percpu memory (as reported
-> > > in /proc/meminfo) and nr_dying_descendants in root's cgroup.stat.
-> > Hi Waiman!
-> > 
-> > I've been proposing the same idea some time ago:
-> > https://lore.kernel.org/all/20190312223404.28665-7-guro@fb.com/T/ .
-> > 
-> > However I dropped it with the thinking that with many other fixes
-> > preventing the accumulation of the dying cgroups it's not worth the added
-> > complexity and a potential cpu overhead.
-> > 
-> > I think it ultimately comes to the number of dying cgroups. If it's low,
-> > memory savings are not worth the cpu overhead. If it's high, they are.
-> > I hope long-term to drive it down significantly (with lru-pages reparenting
-> > being the first major milestone), but it might take a while.
-> > 
-> > I don't have a strong opinion either way, just want to dump my thoughts
-> > on this.
-> 
-> I have quite a number of customer cases complaining about increasing percpu
-> memory usages. The number of dying memcg's can go to tens of thousands. From
-> my own investigation, I believe that those dying memcg's are not freed
-> because they are pinned down by references in the page structure. I am aware
-> that we support the use of objcg in the page structure which will allow easy
-> reparenting, but most pages don't do that and it is not easy to do this
-> conversion and it may take quite a while to do that.
+This series has the purpose to extend and reorganize Highmem's
+documentation.
 
-The big question is whether there is a memory pressure on those systems.
-If yes, and the number of dying cgroups is growing, it's worth investigating.
-It might be due to the sharing of pagecache pages and this will be ultimately
-fixed with implementing of the pagecache reparenting. But it also might be due
-to other bugs, which are fixable, so it would be great to understand.
+This is still a work in progress, because some information should still be
+moved from highmem.rst to highmem.h and highmem-internal.h. Specifically 
+I'm talking about moving the "how to" information to the relevant headers, 
+as it as been suggested by Ira Weiny (Intel).
 
-So if there is a memory pressure and dying cgroups are still accumulating,
-we need to investigate and fix it.
+This series is composed by four patches gathered from a previous series
+made of two, plus two more single patches. The subject of this cover has
+changed and the layout of the changes across the four patches has
+changed too. For this reason it is very hard to show a valid versions'
+log. Therefore, I decided to start over and drop versions (Maintainers
+of the previous patch have been told to drop them).
 
-If there is (almost) no memory pressure, it's a proactive reclaim question.
-There are several discussions and projects going on in this area.
+Fabio M. De Francesco (4):
+  mm/highmem: Fix kernel-doc warnings in highmem*.h
+  Documentation/vm: Include kdocs from highmem*.h into highmem.rst
+  Documentation/vm: Remove "Using kmap-atomic" from highmem.rst.
+  Documentation/vm: Rework "Temporary Virtual Mappings" section
 
-Releasing percpu memory is more a workaround of the problem rather than fix.
-In the end, if we're accumulating dying cgroups, we're still leaking memory,
-just at a smaller pace (which is good, of course).
+ Documentation/vm/highmem.rst     | 101 +++++++++++++++++++------------
+ include/linux/highmem-internal.h |  14 ++++-
+ include/linux/highmem.h          |  15 +----
+ 3 files changed, 75 insertions(+), 55 deletions(-)
 
-Thanks!
+-- 
+2.34.1
+

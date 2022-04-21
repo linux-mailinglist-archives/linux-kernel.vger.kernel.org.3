@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDB7509F7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90263509F81
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383640AbiDUMVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
+        id S1383754AbiDUMVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 08:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353152AbiDUMVp (ORCPT
+        with ESMTP id S1383743AbiDUMVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:21:45 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E592D1DC
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:18:55 -0700 (PDT)
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C793C3F19D
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1650543533;
-        bh=4bYptzY3YzLmhGBN6lm6r5JMn01LLupyoyy4UGqZLCs=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=XIOIqF06yaluz59cAFULwgdNvxlcIItrk/BhHvZUvGOImJT01A3H064/6Psi508cN
-         XytKNUxESlkgJZss1IYxy2w7LlS5F0IjsQ929xBtMr1x6ESrJC4D9JAkRem8OPC8tM
-         cF4L0mgJWcDtI112Cdfy3e6MBeRRi46jDGeQV28Jn8HWEIOT1S2r6S4xZPcEm9TAbz
-         b8urdc7xUeqZfyQRoUbBTCQAW6RRRmFNgwskC14B2/xEjtG/w9/MrnRGWHKcZPstoL
-         XjlLES2QuEiGG7/XdTMkauMUwKcdM8xsOcoQ+nskzWiIWE058WVRntYCsWsKf7w0PR
-         DlfeL5rwVK1mg==
-Received: by mail-oo1-f71.google.com with SMTP id v67-20020a4a5a46000000b0033331e32ee0so2388166ooa.20
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:18:53 -0700 (PDT)
+        Thu, 21 Apr 2022 08:21:53 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD07D2E09C;
+        Thu, 21 Apr 2022 05:19:02 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-d39f741ba0so5169172fac.13;
+        Thu, 21 Apr 2022 05:19:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4bYptzY3YzLmhGBN6lm6r5JMn01LLupyoyy4UGqZLCs=;
-        b=oE+GB9wRp+yKth3lmCnP1AG6WWhArT7jj4JgkG3xuvGtZc6xJsJF9IOtrsCHEbkFOJ
-         gXfwAj7NENvcWmhbgGLr1/76G6R+Xe3dJH7H5UeIfb4nQ8GWmHOQYQnx9sTI0bPSG032
-         ut5/Wihwsy+043h77BsjXdAKGdpPUCPSwOFw1za54irtMdGV/6VqgghgVST3WsRghNM9
-         EEucH/dYtx9G3KgPnH/fqNqQhbmOztKlT5GkUNAl22sXoHCJgXwukl/KfB1CBcovZcYK
-         KLJNdOuBuC186RHtZoYyb9ra17aZfHRhqFjyhFgyzS6/mKJ88FgJHbA3/+W6XRyQ3Jzu
-         GZKw==
-X-Gm-Message-State: AOAM532ZXw47cHWIvmIvMOA95IovxX1gHl4tmmgBN4vYsCY+mV0uxcy5
-        1bXp07IZ47EukZ0DFludpHwu+Dv7BoZuKlLCS9w6qUpH6mSqA8gJ/zCmbG+l2Q69uPoq+XF7xGS
-        U1ZYYjy6Qj5az8Ed2huUyhj8S2pmWxlNQEIJ4G50lcJTZJhVTfMrsHIT6WQ==
-X-Received: by 2002:a05:6870:a98e:b0:dd:c79d:18a2 with SMTP id ep14-20020a056870a98e00b000ddc79d18a2mr3460013oab.198.1650543532715;
-        Thu, 21 Apr 2022 05:18:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx5OQzv+iidRy4CedEneehsPXtQOwhdGPI+31vMY5vFpqfcuR9Z9penNJAsByljzHp3wKGE/pNbIqbAbO2ZhmM=
-X-Received: by 2002:a05:6870:a98e:b0:dd:c79d:18a2 with SMTP id
- ep14-20020a056870a98e00b000ddc79d18a2mr3460004oab.198.1650543532392; Thu, 21
- Apr 2022 05:18:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220420124053.853891-1-kai.heng.feng@canonical.com>
- <20220420124053.853891-2-kai.heng.feng@canonical.com> <YmAc+dzroa4D1ny2@lunn.ch>
- <CAAd53p5Wwn+HOMm1Z0VWcR_WrTzRvAGZOYg4X_txugSFd+EsDQ@mail.gmail.com> <YmFCxnYdRnnk41QQ@lunn.ch>
-In-Reply-To: <YmFCxnYdRnnk41QQ@lunn.ch>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Thu, 21 Apr 2022 20:18:40 +0800
-Message-ID: <CAAd53p5KjYD9O_HHNdQYYUY9POzUtCe8Zaj1NeweAmy8S9zK1Q@mail.gmail.com>
-Subject: Re: [PATCH 1/5] net: mdio: Mask PHY only when its ACPI node is present
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Bkyl59+yJGYlxOaG8bBfXwq3Mtz9w1jqTJhIUpZWLg0=;
+        b=WyuSLUeZD7PNGDOnQa4d6kLHCpfmyIVHkK20/jddjAOtyEAn17O5oQRxB+vVsQRzhY
+         0RgQbtGVXZKD48a0zpcudkpWOAjKXmG4Kx65FUCpJzJdoSTL+IF1G+C1uUfb7Bf5YCNr
+         HNlbPG5L+aibhDj5/eDQbR2ZIh7SkAA2KgRLzZ+R0VVmw5QeaO97kCwqrORGE/8U7Nb/
+         N5waX8y3w8FGToBLaw0Ng7FKGaKt/Rx1JjoaLPYTItvo8zo/frT+ARqoZAxWt6w1Rozo
+         6mgzAblk+2fLr6ONdt30YJtfLQY3D42z5EntEjuedkGpuKzb8QKFlv66r2bAmZCXtEX8
+         D4pQ==
+X-Gm-Message-State: AOAM533K5WZlm97L7L8fpu28aUxP7jL9exDD8xRYbCPSqUvpIA/opFm+
+        585gR6DoP/GpwGdbyVRPgw==
+X-Google-Smtp-Source: ABdhPJz96N7FmG2EahVdoLhvdwuy+bFDrSdoqpthix7QaE430aGKa4RhnG4KqOPXRu13Qv+Dq6w90g==
+X-Received: by 2002:a05:6870:460f:b0:dd:cd0e:d931 with SMTP id z15-20020a056870460f00b000ddcd0ed931mr3869779oao.196.1650543542181;
+        Thu, 21 Apr 2022 05:19:02 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id fz13-20020a056870ed8d00b000e593f1f26fsm1023756oab.18.2022.04.21.05.19.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 05:19:01 -0700 (PDT)
+Received: (nullmailer pid 3204418 invoked by uid 1000);
+        Thu, 21 Apr 2022 12:19:00 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Medad CChien <medadyoung@gmail.com>
+Cc:     tali.perry1@gmail.com, devicetree@vger.kernel.org,
+        KWLIU@nuvoton.com, james.morse@arm.com, ctcchien@nuvoton.com,
+        rric@kernel.org, avifishman70@gmail.com, openbmc@lists.ozlabs.org,
+        JJLIU0@nuvoton.com, tmaimon77@gmail.com, tony.luck@intel.com,
+        venture@google.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, benjaminfair@google.com, YSCHU@nuvoton.com,
+        bp@alien8.de, linux-edac@vger.kernel.org, KFTING@nuvoton.com,
+        mchehab@kernel.org, yuenn@google.com
+In-Reply-To: <20220421062836.16662-3-ctcchien@nuvoton.com>
+References: <20220421062836.16662-1-ctcchien@nuvoton.com> <20220421062836.16662-3-ctcchien@nuvoton.com>
+Subject: Re: [PATCH v7 2/3] dt-bindings: edac: nuvoton: add NPCM memory controller
+Date:   Thu, 21 Apr 2022 07:19:00 -0500
+Message-Id: <1650543540.622713.3204417.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 7:40 PM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> On Thu, Apr 21, 2022 at 10:58:40AM +0800, Kai-Heng Feng wrote:
-> > On Wed, Apr 20, 2022 at 10:47 PM Andrew Lunn <andrew@lunn.ch> wrote:
-> > >
-> > > On Wed, Apr 20, 2022 at 08:40:48PM +0800, Kai-Heng Feng wrote:
-> > > > Not all PHY has an ACPI node, for those nodes auto probing is still
-> > > > needed.
-> > >
-> > > Why do you need this?
-> > >
-> > > Documentation/firmware-guide/acpi/dsd/phy.rst
-> > >
-> > > There is nothing here about there being PHYs which are not listed in
-> > > ACPI. If you have decided to go the ACPI route, you need to list the
-> > > PHYs.
-> >
-> > This is for backward-compatibility. MAC can have ACPI node but PHY may
-> > not have one.
->
-> And if the PHY does not have an ACPI node, fall back to
-> mdiobus_register(). This is what of_mdiobus_register() does. If
-> np=NULL, it calls mdiobus_register() and skips all the OF stuff.
+On Thu, 21 Apr 2022 14:28:35 +0800, Medad CChien wrote:
+> Document devicetree bindings for the Nuvoton BMC NPCM memory controller.
+> 
+> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Borislav Petkov <bp@alien8.de>
+> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+>  .../edac/nuvoton,npcm-memory-controller.yaml  | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> 
 
-The equivalent to this scenario is that when MAC doesn't have ACPI node.
-But yes it can unmask the PHYs if no ACPI node is found, then call
-mdiobus_register().
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Kai-Heng
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml:61:7: [error] no new line character at the end of file (new-line-at-end-of-file)
 
->
->          Andrew
+dtschema/dtc warnings/errors:
+
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

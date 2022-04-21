@@ -2,115 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E061150A808
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3853550A809
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391274AbiDUS0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S1391230AbiDUS01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377142AbiDUS02 (ORCPT
+        with ESMTP id S1377142AbiDUS0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:26:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 629534AE3A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650565416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LmSyD84kPlvCX1Yut1um26AMAoMt8zYT0gIGD5xoXR4=;
-        b=O8++9tpz5Z7AA9Si8jhV3lKkPMiJuqss7jxXL7eFIjr/rM/QOlAqb8qKhVZ3rHE/Ws9y7O
-        SMY0q6JdIfztV9UmaykSYeivvx0i4FqaCFbZwCjcAKoVKcD2mS7FZ6EfwuUzd36TmwDgbH
-        HemOLWRC3LObHrIUxSYC1bS+1ydTv/0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-nabTa2K5O0mfhKwGKPzhKQ-1; Thu, 21 Apr 2022 14:23:31 -0400
-X-MC-Unique: nabTa2K5O0mfhKwGKPzhKQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 21 Apr 2022 14:26:25 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3FA4AE38
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:23:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50B9B185A7B2;
-        Thu, 21 Apr 2022 18:23:30 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.36])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 3AD19C2812A;
-        Thu, 21 Apr 2022 18:23:27 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 21 Apr 2022 20:23:30 +0200 (CEST)
-Date:   Thu, 21 Apr 2022 20:23:26 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
- PREEMPT_RT
-Message-ID: <20220421182325.GC20402@redhat.com>
-References: <20220421150248.667412396@infradead.org>
- <20220421150654.817117821@infradead.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 30E151F388;
+        Thu, 21 Apr 2022 18:23:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650565414; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GVcyh6fHbxs4D76T9GmSrZZJy98rOBZ0c1BRUhJTQU4=;
+        b=ERPdnv7ufzLynAjk455LRmzVz/vnmduXc3M+iAgDkG4UesS5QzbWmajs8XDvLko92vhl6+
+        23JyZEwU35KpZAlwDrn5hYEcjxaDUxI4QYsILZpNRDAHZ2yuSzj+0whrEqpi3qDQFV2WNT
+        HXn1wJDaozbnwnQ1KjeJVdtv+d7YnAc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650565414;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GVcyh6fHbxs4D76T9GmSrZZJy98rOBZ0c1BRUhJTQU4=;
+        b=mXR+E0ATfKV2luIWXkk6gH7Bp3vJmyKskF8YA3WA54dzhomDtEtYDac3RzD5fJgVeKdsLC
+        8GTLjSDaw5swv4DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D58113446;
+        Thu, 21 Apr 2022 18:23:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BxtFAiahYWKcHAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 21 Apr 2022 18:23:34 +0000
+Message-ID: <c3ed82bc-cc15-7d0d-8968-b71ad3d4003f@suse.de>
+Date:   Thu, 21 Apr 2022 20:23:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421150654.817117821@infradead.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3] drm/gma500: depend on framebuffer
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     James Hilliard <james.hilliard1@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     David Airlie <airlied@linux.ie>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+References: <20220409042321.3184493-1-james.hilliard1@gmail.com>
+ <b3f7e288-3341-8c6f-1b95-e553ac5ebc35@suse.de>
+ <CAMeQTsbh-Fy4CORBTX=AfZ+K-fZYUQ=hY=ctLFyu9KcJ5NgFUA@mail.gmail.com>
+ <dce29330-e40c-860e-2c72-7ddebdd96e20@redhat.com>
+ <CAMeQTsYYpw5+uLgmDrbB6PUBotRC4F+_rfK+sxT0CpPHoiOmmw@mail.gmail.com>
+ <10c81e57-2f09-f4f8-dc2f-6bd05ef819d7@redhat.com>
+ <CADvTj4oms8R1fhFpyZ+juU=4Eozie6f-3fzz4+jtptj3M9VCbw@mail.gmail.com>
+ <ce65d1b0-44ad-54cb-d53f-ed0f7df4d247@suse.de>
+In-Reply-To: <ce65d1b0-44ad-54cb-d53f-ed0f7df4d247@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------R6U7y4YzMHVpZep0Qp7a1eY7"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/21, Peter Zijlstra wrote:
->
-> Rework ptrace_check_attach() / ptrace_unfreeze_traced() to not rely on
-> task->__state as much.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------R6U7y4YzMHVpZep0Qp7a1eY7
+Content-Type: multipart/mixed; boundary="------------Ol2b8gfzFkkT4zmOof6ZA8cm";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: James Hilliard <james.hilliard1@gmail.com>,
+ Javier Martinez Canillas <javierm@redhat.com>
+Cc: David Airlie <airlied@linux.ie>, Randy Dunlap <rdunlap@infradead.org>,
+ linux-kernel <linux-kernel@vger.kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>
+Message-ID: <c3ed82bc-cc15-7d0d-8968-b71ad3d4003f@suse.de>
+Subject: Re: [PATCH v3] drm/gma500: depend on framebuffer
+References: <20220409042321.3184493-1-james.hilliard1@gmail.com>
+ <b3f7e288-3341-8c6f-1b95-e553ac5ebc35@suse.de>
+ <CAMeQTsbh-Fy4CORBTX=AfZ+K-fZYUQ=hY=ctLFyu9KcJ5NgFUA@mail.gmail.com>
+ <dce29330-e40c-860e-2c72-7ddebdd96e20@redhat.com>
+ <CAMeQTsYYpw5+uLgmDrbB6PUBotRC4F+_rfK+sxT0CpPHoiOmmw@mail.gmail.com>
+ <10c81e57-2f09-f4f8-dc2f-6bd05ef819d7@redhat.com>
+ <CADvTj4oms8R1fhFpyZ+juU=4Eozie6f-3fzz4+jtptj3M9VCbw@mail.gmail.com>
+ <ce65d1b0-44ad-54cb-d53f-ed0f7df4d247@suse.de>
+In-Reply-To: <ce65d1b0-44ad-54cb-d53f-ed0f7df4d247@suse.de>
 
-Looks good after the quick glance... but to me honest I got lost and
-I need to apply these patches and read the code carefully.
+--------------Ol2b8gfzFkkT4zmOof6ZA8cm
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-However, I am not able to do this until Monday, sorry.
+SGkNCg0KQW0gMjEuMDQuMjIgdW0gMjA6MjIgc2NocmllYiBUaG9tYXMgWmltbWVybWFubjoN
+Cj4gSGkNCj4gDQo+IEFtIDIxLjA0LjIyIHVtIDE5OjM5IHNjaHJpZWIgSmFtZXMgSGlsbGlh
+cmQ6DQo+PiBPbiBUaHUsIEFwciAyMSwgMjAyMiBhdCA4OjIyIEFNIEphdmllciBNYXJ0aW5l
+eiBDYW5pbGxhcw0KPj4gPGphdmllcm1AcmVkaGF0LmNvbT4gd3JvdGU6DQo+Pj4NCj4+PiBP
+biA0LzIxLzIyIDE0OjU0LCBQYXRyaWsgSmFrb2Jzc29uIHdyb3RlOg0KPj4+PiBPbiBUaHUs
+IEFwciAyMSwgMjAyMiBhdCAyOjQ3IFBNIEphdmllciBNYXJ0aW5leiBDYW5pbGxhcw0KPj4+
+PiA8amF2aWVybUByZWRoYXQuY29tPiB3cm90ZToNCj4+Pg0KPj4+IFtzbmlwXQ0KPj4+DQo+
+Pj4+Pj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2dtYTUwMC9LY29uZmlnIA0K
+Pj4+Pj4+Pj4gYi9kcml2ZXJzL2dwdS9kcm0vZ21hNTAwL0tjb25maWcNCj4+Pj4+Pj4+IGlu
+ZGV4IDBjZmYyMDI2NWY5Ny4uYTQyMmZhODRkNTNiIDEwMDY0NA0KPj4+Pj4+Pj4gLS0tIGEv
+ZHJpdmVycy9ncHUvZHJtL2dtYTUwMC9LY29uZmlnDQo+Pj4+Pj4+PiArKysgYi9kcml2ZXJz
+L2dwdS9kcm0vZ21hNTAwL0tjb25maWcNCj4+Pj4+Pj4+IEBAIC0yLDExICsyLDEzIEBADQo+
+Pj4+Pj4+PiDCoMKgIGNvbmZpZyBEUk1fR01BNTAwDQo+Pj4+Pj4+PiDCoMKgwqDCoMKgwqAg
+dHJpc3RhdGUgIkludGVsIEdNQTUwMC82MDAvMzYwMC8zNjUwIEtNUyBGcmFtZWJ1ZmZlciIN
+Cj4+Pj4+Pj4+IMKgwqDCoMKgwqDCoCBkZXBlbmRzIG9uIERSTSAmJiBQQ0kgJiYgWDg2ICYm
+IE1NVQ0KPj4+Pj4+Pj4gK8KgwqDCoMKgIGRlcGVuZHMgb24gRkINCj4+Pj4+Pj4NCj4+Pj4+
+Pj4gV2h5IGRvIHdlIG5lZWQgRkIgaGVyZT8gRnJhbWVidWZmZXIgc3VwcG9ydCBzaG91bGQg
+YmUgaGlkZGVuIGJ5IA0KPj4+Pj4+PiBEUk0ncw0KPj4+Pj4+PiBmYmRldiBoZWxwZXJzLg0K
+Pj4+Pj4+DQo+Pj4+Pj4gSXQgaXMgbm90IG5lZWRlZCBidXQgZ2l2ZXMgaGltIHZpZGVvIG91
+dHB1dCBzaW5jZSBpdCBlbmFibGVzIHRoZSBkcm0NCj4+Pj4+PiBmYmRldiBlbXVsYXRpb24u
+DQo+Pj4+Pj4NCj4+Pj4+DQo+Pj4+PiBJJ20gbm90IHN1cmUgdG8gdW5kZXJzdGFuZCB0aGlz
+LiBTaG91bGRuJ3QgZGVwZW5kIG9uIA0KPj4+Pj4gRFJNX0ZCREVWX0VNVUxBVElPTiB0aGVu
+Pw0KPj4+Pg0KPj4+PiBObywgaXQgc2hvdWxkbid0IGRlcGVuZCBvbiBhbnkgRkJERVYgc3R1
+ZmYgc2luY2UgaXQncyBub3QgYWN0dWFsbHkNCj4+Pj4gcmVxdWlyZWQuIEl0IGp1c3QgaGFw
+cGVucyB0byBoZWxwIGluIHRoaXMgY2FzZSBzaW5jZSB3ZXN0b24gKyBmYmRldg0KPj4+PiBi
+YWNrZW5kIHdvcmtzIGJ1dCBub3Qgd2VzdG9uIHdpdGggZHJtIGJhY2tlbmQgKG9yIHdoYXRl
+dmVyIGNvbmZpZw0KPj4+PiBKYW1lcyBoYXZlIHNldCkuDQo+Pj4NCj4+PiBJIHNlZS4gVGhl
+biB0aGUgY29ycmVjdCBhcHByb2FjaCBmb3IgdGhlbSB3b3VsZCBiZSB0byBqdXN0IGVuYWJs
+ZSANCj4+PiBDT05GSUdfRkINCj4+PiBhbmQgRFJNX0ZCREVWX0VNVUxBVElPTiBpbiB0aGVp
+ciBrZXJuZWwgY29uZmlnLCByYXRoZXIgdGhhbiBtYWtpbmcgDQo+Pj4gdGhpcyB0bw0KPj4+
+IGRlcGVuZCBvbiBhbnl0aGluZyBGQiByZWxhdGVkIGFzIHlvdSBzYWlkLg0KPj4NCj4+IFll
+YWgsIHNvIGl0IGxvb2tzIGxpa2UgQ09ORklHX0ZCX0VGSSBpcyBub3QgbmVlZGVkIGJ1dA0K
+Pj4gQ09ORklHX0RSTV9GQkRFVl9FTVVMQVRJT04gaXMsIEkgdGhpbmsgSSBqdXN0IGFzc3Vt
+ZWQgZWZpZmINCj4+IHdhcyB3aGF0IHdhcyBuZWVkZWQgYmFzZWQgb24gdGhlIGtlcm5lbCBs
+b2dzLg0KPj4NCj4+IFRoaXMgZG9lcyBub3Qgd29yazoNCj4+IENPTkZJR19GQiBlbmFibGVk
+DQo+PiBDT05GSUdfRFJNX0ZCREVWX0VNVUxBVElPTiBkaXNhYmxlZA0KPj4NCj4+IFRoaXMg
+d29ya3M6DQo+PiBDT05GSUdfRkIgZW5hYmxlZA0KPj4gQ09ORklHX0RSTV9GQkRFVl9FTVVM
+QVRJT04gZW5hYmxlZA0KPj4NCj4+Pg0KPj4+Pg0KPj4+Pj4NCj4+Pj4+PiBJIGxvb2tlZCBz
+b21lIG1vcmUgYXQgdGhlIGxvZ3MgYW5kIGl0IHNlZW1zIHdlc3RvbiBkb2Vzbid0IHdvcmsg
+b24gDQo+Pj4+Pj4gaGlzDQo+Pj4+Pj4gc3lzdGVtIHdpdGhvdXQgdGhlIGZiZGV2IGJhY2tl
+bmQuIFNvIHRoZSBxdWVzdGlvbiBpcyB3aHkgd2VzdG9uIGlzbid0DQo+Pj4+Pj4gd29ya2lu
+ZyB3aXRob3V0IGZiZGV2PyBQZXJoYXBzIHRoaXMgaXMganVzdCBhIFdlc3RvbiBjb25maWd1
+cmF0aW9uDQo+Pj4+Pj4gaXNzdWU/DQo+Pj4+Pj4NCj4+Pj4+DQo+Pj4+PiBCdXQgaXMgd2Vz
+dG9uIHVzaW5nIHRoZSBmYmRldiBlbXVsYXRlZCBieSBEUk0gb3IgdGhlIG9uZSByZWdpc3Rl
+cmVkIGJ5DQo+Pj4+PiBlZmlmYj8gSSB0aG91Z2h0IHRoYXQgdGhlIGxhdHRlciBmcm9tIHdo
+YXQgd2FzIG1lbnRpb25lZCBpbiB0aGlzIA0KPj4+Pj4gdGhyZWFkLg0KPj4+Pg0KPj4+PiBJ
+dCdzIHVzaW5nIGRybSBmYmRldiBlbXVsYXRpb24gd2l0aCBnbWE1MDAgc28gRUZJRkIgaGFz
+IG5vdGhpbmcgdG8gZG8NCj4+Pj4gd2l0aCB0aGlzLiBJIGJlbGlldmUgaXQgd2FzIGp1c3Qg
+c2ltcGx5IGluY29ycmVjdGx5IHJlcG9ydGVkLiBJZiBJJ20NCj4+Pj4gY29ycmVjdCB0aGVu
+ICJkZXBlbmRzIG9uIEZCIiBpcyB3aGF0IG1ha2VzIHZpZGVvIG91dHB1dCB3b3JrIGZvcg0K
+Pj4+PiBKYW1lcy4NCj4+Pj4NCj4+Pg0KPj4+IEdvdCBpdC4gVGhhbmtzIGZvciB0aGUgY2xh
+cmlmaWNhdGlvbi4NCj4+DQo+PiBIZXJlJ3MgbXkgd2VzdG9uLmluaToNCj4+IFtjb3JlXQ0K
+Pj4gc2hlbGw9a2lvc2stc2hlbGwuc28NCj4+IG1vZHVsZXM9c3lzdGVtZC1ub3RpZnkuc28N
+Cj4+IGJhY2tlbmQ9ZHJtLWJhY2tlbmQuc28NCj4+IGlkbGUtdGltZT0wDQo+PiByZXF1aXJl
+LWlucHV0PWZhbHNlDQo+PiB1c2UtcGl4bWFuPXRydWUNCj4+DQo+PiBbc2hlbGxdDQo+PiBs
+b2NraW5nPWZhbHNlDQo+PiBjdXJzb3ItdGhlbWU9T2JzaWRpYW4NCj4+IHBhbmVsLXBvc2l0
+aW9uPW5vbmUNCj4+DQo+PiBbb3V0cHV0XQ0KPj4gbmFtZT1EVkktRC0xDQo+PiB0cmFuc2Zv
+cm09cm90YXRlLTI3MA0KPj4NCj4+IFtvdXRwdXRdDQo+PiBuYW1lPURQLTINCj4+IG1vZGU9
+b2ZmDQo+Pg0KPj4gW291dHB1dF0NCj4+IG5hbWU9TFZEUy0xDQo+PiBtb2RlPW9mZg0KPiAN
+Cj4gWW91IG1lbnRpb25lZCB0aGF0IHlvdSB3YW50IHRvIHVzZSBIRE1JLCBidXQgaXQncyBu
+b3QgY29uZmlndXJlZCBoZXJlLiANCj4gSXMgdGhhdCBpbnRlbnRpb25hbGx5Pw0KDQpOZXZl
+cm1pbmQuIEkganVzdCBzYXcgdGhhdCBEVkktRC0xIGlzIHRoZSBIRE1JIHBvcnQuICh3aHk/
+KQ0KDQo+IA0KPiBCZXN0IHJlZ2FyZHMNCj4gVGhvbWFzDQo+IA0KPj4NCj4+IFtsaWJpbnB1
+dF0NCj4+IHRvdWNoc2NyZWVuX2NhbGlicmF0b3I9dHJ1ZQ0KPj4NCj4+Pg0KPj4+IC0tIA0K
+Pj4+IEJlc3QgcmVnYXJkcywNCj4+Pg0KPj4+IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcw0K
+Pj4+IExpbnV4IEVuZ2luZWVyaW5nDQo+Pj4gUmVkIEhhdA0KPj4+DQo+IA0KDQotLSANClRo
+b21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3
+YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJu
+YmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bD
+vGhyZXI6IEl2byBUb3Rldg0K
 
-Just one nit for now,
+--------------Ol2b8gfzFkkT4zmOof6ZA8cm--
 
->  static void ptrace_unfreeze_traced(struct task_struct *task)
->  {
-> -	if (READ_ONCE(task->__state) != __TASK_TRACED)
-> +	if (!task_is_traced(task))
->  		return;
->  
->  	WARN_ON(!task->ptrace || task->parent != current);
->  
-> -	/*
-> -	 * PTRACE_LISTEN can allow ptrace_trap_notify to wake us up remotely.
-> -	 * Recheck state under the lock to close this race.
-> -	 */
->  	spin_lock_irq(&task->sighand->siglock);
-> -	if (READ_ONCE(task->__state) == __TASK_TRACED) {
-> +	if (task_is_traced(task)) {
+--------------R6U7y4YzMHVpZep0Qp7a1eY7
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-I think ptrace_unfreeze_traced() should not use task_is_traced() at all.
-I think a single lockless
+-----BEGIN PGP SIGNATURE-----
 
-	if (task->jobctl & JOBCTL_DELAY_WAKEKILL)
-		return;
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJhoSUFAwAAAAAACgkQlh/E3EQov+D5
+rA/+PdWlcErjLC6VFv+95BQGc9yQ8R/2MBSfoeqoQJ41/JI22yoFiozZu6Cao2kstO6faLD+UU5M
+Nb3Y1rHBJWXzn9zBiD4Xky67YuIcXxc7HNE7klNlMrdNqDZYRuc9d9+55K9YB8cfiViNJgTYQV7C
+Bf8Et8Q1JesDra4fFBMJ66E1Y3DAUucXsZYifKt0QMp1cC23agL0T8zHDMLlNQFY32xilR4II1X+
+ZF5lBIyfd06jsSiA9Ts4mwTo3j9vy+2WWg4QaMUzP6MLZqMLbXBqT9q4O3T7VlDXsCImJnWiT+ZT
+2ZXdmn7HPO7Dd1onAth0oNk6TAM6DvZk+WHbom6Z64slaE6gQ/z5l5bKf3U7PRZbWyOzdIxRTmmj
+yqDJU0B5NnQGAwqui2yMeHki9yfGD+9GtJcH+PZTwPg52+H1Gq4S80ADppq4Ln2bjDwYt2S85lzb
+Lcsb+eIzTHqATBrb4qEzTsdw2RjIIFK341yTjg3Zetx4PHnkViV/ERXRaOUacZTwKh6XYORjbvHN
+qwa5m6n/L1lHDi/Q6X4HwMu9hmtnl2dTIWfW+WzaTGVFR+JAgKi1fJTNHZBvcjkOAABMgHDA9u4k
+Ilk8MurX4mISx4sygC1CHaEBpBi90j/3oOyanTFg4CAvOb1ApA5Y5U6u9nBSNBbGan26mGfN16Sc
+O48=
+=Anjv
+-----END PGP SIGNATURE-----
 
-at the start should be enough?
-
-Nobody else can set this flag. It can be cleared by the tracee if it was
-woken up, so perhaps we can check it again but afaics this is not strictly
-needed.
-
-> +//		WARN_ON_ONCE(!(task->jobctl & JOBCTL_DELAY_WAKEKILL));
-
-Did you really want to add the commented WARN_ON_ONCE?
-
-Oleg.
-
+--------------R6U7y4YzMHVpZep0Qp7a1eY7--

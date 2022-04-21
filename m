@@ -2,80 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8327650995F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AF7509946
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385837AbiDUHiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
+        id S1357372AbiDUHid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241799AbiDUHiB (ORCPT
+        with ESMTP id S1385887AbiDUHiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:38:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1FC10BE;
-        Thu, 21 Apr 2022 00:35:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE37C61ABC;
-        Thu, 21 Apr 2022 07:35:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E6AC385A1;
-        Thu, 21 Apr 2022 07:35:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650526512;
-        bh=iodwjoJYbXPmx/V6513BVUqEJ60wYeP08zRJ3UhqYuo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cxdRuyc6FKKbQ5sx++8H0dU+ckG/jI1H3qJI2ovV2IysiC8gvMIXAWnxRQoXH43PE
-         sNtgrkPOju1iBu9tceFnu8Er4s33zYmmCL9FOqGLBF0OLMvtjOWD3+0jy/UJ5CbH2O
-         k/+8sqlhAEfHmBf05TCexRJYNa4OJQ5nhkTJQLWPSFt0DvCM+lO8ou/2bGZryc/cxg
-         l1xpri7y0ETETdt4tgpphCyqY2me6pHXetn7xFAMJ1jmDP+eioJi9sLjcwHZL6B1hY
-         uE7RTNQPhdW7bdGJ/ilQ/mD8cl8HJGVIasBFo2T40k6EEUeKcx0x4+8EZs6VLBE77y
-         u+vV4z8YyxZwA==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: [PATCH] arm64: dts: qcom: qrb5165-rb5: Fix can-clock node name
-Date:   Thu, 21 Apr 2022 13:05:02 +0530
-Message-Id: <20220421073502.1824089-1-vkoul@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 21 Apr 2022 03:38:24 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B847D13DD3;
+        Thu, 21 Apr 2022 00:35:31 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 55E7A1C000F;
+        Thu, 21 Apr 2022 07:35:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650526529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p4QO0moKpEkXz+ulrvSLQo0T9lC8TOEa3gAblMHHWcg=;
+        b=W5tjJw+uF9lptPqXryNnTwotnKABgq9Ic3j79bCDlyH4iFgliXcsv9VSd7n99CplsWqHCq
+        okVua35NKDn/cOEwdtfhzT3+mokU0WhN1lah0wBVHe3nqb6em5PDNp5vJtLwKz6yXV+Zgw
+        vrf9KgFxLeQlocnMMpzXJHdG54xIiL887VIpXmBbT5sw8omtoMXb0CzImEZkf7fQPOs8iz
+        HmgZr3qiTBbVnufIUcXIru9Cy+I0hPCyWbZa4qVPZbVclAW+xG73nDp16a9J9YYzuyj0j3
+        Rd/slS5Gex4c2ycFMo2uZ3M9C51cMLv3LXCpbG7V+b7WX2aJimX71A4eDWNpwQ==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Md Sadre Alam <quic_mdalam@quicinc.com>, mani@kernel.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     konrad.dybcio@somainline.org, quic_srichara@quicinc.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH V5] mtd: rawnand: qcom: fix memory corruption that causes panic
+Date:   Thu, 21 Apr 2022 09:35:27 +0200
+Message-Id: <20220421073527.71690-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <1650268107-5363-1-git-send-email-quic_mdalam@quicinc.com>
+References: 
 MIME-Version: 1.0
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'ba7542eb2dd5dfc75c457198b88986642e602065'
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Per DT spec node names should not have underscores (_) in them, so
-change can_clock to can-clock.
+On Mon, 2022-04-18 at 07:48:27 UTC, Md Sadre Alam wrote:
+> This patch fixes a memory corruption that occurred in the
+> nand_scan() path for Hynix nand device.
+> 
+> On boot, for Hynix nand device will panic at a weird place:
+> | Unable to handle kernel NULL pointer dereference at virtual
+>   address 00000070
+> | [00000070] *pgd=00000000
+> | Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+> | Modules linked in:
+> | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
+>   #38
+> | Hardware name: Generic DT based system
+> | PC is at nandc_set_reg+0x8/0x1c
+> | LR is at qcom_nandc_command+0x20c/0x5d0
+> | pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
+> | sp : c14adc50  ip : c14ee208  fp : c0cc970c
+> | r10: 000000a3  r9 : 00000000  r8 : 00000040
+> | r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
+> | r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
+> | Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
+> | Control: 10c5387d  Table: 8020406a  DAC: 00000051
+> | Register r0 information: slab kmalloc-2k start c14ee000 pointer offset
+>   64 size 2048
+> | Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
+> | nandc_set_reg from qcom_nandc_command+0x20c/0x5d0
+> | qcom_nandc_command from nand_readid_op+0x198/0x1e8
+> | nand_readid_op from hynix_nand_has_valid_jedecid+0x30/0x78
+> | hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
+> | hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
+> | nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
+> | qcom_nandc_probe from platform_probe+0x58/0xac
+> 
+> The problem is that the nand_scan()'s qcom_nand_attach_chip callback
+> is updating the nandc->max_cwperpage from 1 to 4 or 8 based on page size.
+> This causes the sg_init_table of clear_bam_transaction() in the driver's
+> qcom_nandc_command() to memset much more than what was initially
+> allocated by alloc_bam_transaction().
+> 
+> This patch will update nandc->max_cwperpage 1 to 4 or 8 based on page
+> size in qcom_nand_attach_chip call back after freeing the previously
+> allocated memory for bam txn as per nandc->max_cwperpage = 1 and then
+> again allocating bam txn as per nandc->max_cwperpage = 4 or 8 based on
+> page size in qcom_nand_attach_chip call back itself.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 6a3cec64f18c ("mtd: rawnand: qcom: convert driver to nand_scan()")
+> Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
+> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 
-Fixes: 5c44c564e449 ("arm64: dts: qcom: qrb5165-rb5: Add support for MCP2518FD")
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-index 845eb7a6bf92..0e63f707b911 100644
---- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-@@ -29,7 +29,7 @@ chosen {
- 	};
- 
- 	/* Fixed crystal oscillator dedicated to MCP2518FD */
--	clk40M: can_clock {
-+	clk40M: can-clock {
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
- 		clock-frequency = <40000000>;
--- 
-2.34.1
-
+Miquel

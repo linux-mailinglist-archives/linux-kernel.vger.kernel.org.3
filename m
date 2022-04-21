@@ -2,105 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF72509B9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C79509BBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387138AbiDUJBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
+        id S1387148AbiDUJBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387061AbiDUJBD (ORCPT
+        with ESMTP id S1387044AbiDUJBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:01:03 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F8E21243;
-        Thu, 21 Apr 2022 01:58:13 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id F19C41F753;
-        Thu, 21 Apr 2022 08:58:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650531491; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+TRr5a8I+35GUTDd8hSglfnLjzJ6edowbn+//3H1oS4=;
-        b=RxIwFwkNkg5JQd/N7EHcYl1jmRjJk+3yyY2I4gYOa+JZy7x7FXJEZLup32UhvjInc+UPCt
-        V8DCfgrQk9O+KlVGcckDU3aWTZ7HCpFb9fU8NBgHLaSc9cLWX7cBC9kbEZ6J9d0f3Ew3OZ
-        LvDuFnacCyzOIL+ihlW7dfBvZOaYKjc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650531491;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+TRr5a8I+35GUTDd8hSglfnLjzJ6edowbn+//3H1oS4=;
-        b=ZwCQNVpFmRkkVCElwSmCgyaROdQDwR9dZiCnTiOjTqzeR/X/Wn7r5zGlLwZXaejDtyFNr5
-        xhkfIxKrosAz52AQ==
-Received: from localhost.localdomain (unknown [10.100.208.98])
+        Thu, 21 Apr 2022 05:01:08 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7C820F75;
+        Thu, 21 Apr 2022 01:58:18 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b58ed329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58ed:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C13542C145;
-        Thu, 21 Apr 2022 08:58:11 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 09/10] serial: icom: delete empty serial hooks
-Date:   Thu, 21 Apr 2022 10:58:07 +0200
-Message-Id: <20220421085808.24152-10-jslaby@suse.cz>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220421085808.24152-1-jslaby@suse.cz>
-References: <20220421085808.24152-1-jslaby@suse.cz>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7C0A81EC0494;
+        Thu, 21 Apr 2022 10:58:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650531493;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=K6LjJUiqWP9JmAH5pCtbEbi7a1uZ4YBTwFyxQHdf9Lg=;
+        b=Tujmid+xug5U5uZ16FWxKvjXm88Ez25HZB78FyF8+JEjZPHMRmRVh85xENutF6BN6j4sD+
+        HZbhBY8cixey6jD/WnGze8qIsSHA1Ic3364igLmUaZeogZKdgBEXUGIRYS30cY+2g7+SOV
+        jMNv1zGhX4M2PbqZiBbiT6FcB/U1Hgs=
+Date:   Thu, 21 Apr 2022 10:58:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sherry Sun <sherry.sun@nxp.com>
+Cc:     michal.simek@xilinx.com, Shubhrajyoti.datta@xilinx.com,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-imx@nxp.com
+Subject: Re: [PATCH V2 1/2] EDAC: synopsys: Add disable_intr support for V3.X
+ Synopsys EDAC DDR
+Message-ID: <YmEcoIj63goth+aU@zn.tnic>
+References: <20220421015313.5747-1-sherry.sun@nxp.com>
+ <20220421015313.5747-2-sherry.sun@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220421015313.5747-2-sherry.sun@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-uart_ops::release_port() and uart_ops::request_port() are not required
-by the serial layer. So no need to define empty ones.
+> Subject: Re: [PATCH V2 1/2] EDAC: synopsys: Add disable_intr support for V3.X Synopsys EDAC DDR
 
-Remove them.
+EDAC tree subject prefixes are of the format:
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/tty/serial/icom.c | 11 -----------
- 1 file changed, 11 deletions(-)
+EDAC/<driver name>: Bla...
 
-diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
-index 8701856e2a2e..e22f37a41764 100644
---- a/drivers/tty/serial/icom.c
-+++ b/drivers/tty/serial/icom.c
-@@ -1532,15 +1532,6 @@ static const char *icom_type(struct uart_port *port)
- 	return "icom";
- }
- 
--static void icom_release_port(struct uart_port *port)
--{
--}
--
--static int icom_request_port(struct uart_port *port)
--{
--	return 0;
--}
--
- static void icom_config_port(struct uart_port *port, int flags)
- {
- 	port->type = PORT_ICOM;
-@@ -1559,8 +1550,6 @@ static const struct uart_ops icom_ops = {
- 	.shutdown = icom_close,
- 	.set_termios = icom_set_termios,
- 	.type = icom_type,
--	.release_port = icom_release_port,
--	.request_port = icom_request_port,
- 	.config_port = icom_config_port,
- };
- 
+where "Bla starts with a capital letter".
+
+What is "disable_intr support"?
+
+I can figure it out when looking at the code but you need to make this
+human-readable. For example
+
+"Disable the error interrupt on Synopsys EDAC v3.x hardware"
+
+Also, is it all caps V3.X or is it simply v3.x?
+
+On Thu, Apr 21, 2022 at 09:53:12AM +0800, Sherry Sun wrote:
+> V3.X Synopsys EDAC DDR doesn't have the QOS Interrupt register, need
+> to change to use the ECC Clear Register to disable the interrupts.
+
+Not "need to change" but "change".
+
+From Documentation/process/submitting-patches.rst:
+
+"Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+to do frotz", as if you are giving orders to the codebase to change
+its behaviour."
+
+Please have a look at that document.
+
+Thx.
+
 -- 
-2.36.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD0650A3E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB0750A3E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389985AbiDUPXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
+        id S1389996AbiDUPYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbiDUPXX (ORCPT
+        with ESMTP id S232403AbiDUPYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:23:23 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE23439BBD
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:20:33 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id i63so4889323pge.11
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:20:33 -0700 (PDT)
+        Thu, 21 Apr 2022 11:24:17 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFD93BBF8;
+        Thu, 21 Apr 2022 08:21:27 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id l7so10797523ejn.2;
+        Thu, 21 Apr 2022 08:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Iud4fOAzWyfKnps8mbbXMcHFSwOzQ8oquSRtMdXbWM0=;
-        b=RVlUnhRPDVleloKx3GonNS9W3wbfR4nOfN1Qi4MwjZsFPBgZifrs0G0aLJXD+dBgDm
-         O8h6kOxXShzBMRgduy+ihXePIjnCPoC3SrMLONvOPjG9PbDF64JmLutk+PTc6Tx57o5u
-         9gwZvChwpxPJmzhWcWXrt4CHvBL1m091O+ujbgrrnCy0XC5smCLpFGhC7/xWrwDb++ZT
-         9vFIZ/Skq8uL/j2x91awlfLVM86RXUXILISx7R+BHxKsZqgvyNf+s09Z4jRTmSuZtzgk
-         eSMKlZAeakixDDKHnRRgJ5+Tqyqwkk7ef02W+IFc7uMb7ZOMkiQ53zNKz5X9+/DMX73I
-         FZwg==
+        bh=ctcaNqnsK/9euwlyEAdPOaYIg/qSLmmC7N58OzhpKVw=;
+        b=E9rP+bSJG/6inY0A49vi66QRg78rzON90dZvX/SL1heSDeZalFx5qJacZL+5b0LwDc
+         Rqtbufwnx3uWumuSca12mqYfn6umHhBhahyiVTO7/fTqbSDJADWJj7sKlcRHZhT+zquq
+         zW3N+GzxRg4DnVHpOjXryeGDovu4ihr8UHiqUFShOKg44yM/HDs+5bCLx6bUbdzJcfI7
+         Iq7w64TAQ2YcZ8VwagSHguCSAHjwtSJvjYRstukcEcTUJBr9bNumy48rTACXIpNVPEBw
+         JdwYNYJPfntnDaqkW0Eox8yoQ+dgLGIQvy/htqtgTmvRbE5uqK/nQC4fLzVt2VcE8WvT
+         Dz6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Iud4fOAzWyfKnps8mbbXMcHFSwOzQ8oquSRtMdXbWM0=;
-        b=7ZkxSYvD3Tgr0DwDUqMPVNDFIYgEVNjXsLFtOYCCxTN7/5wtnDCIyxmjS/Eeas6dQv
-         z7K8w54BtyvUjpp3ZijFtvQyQx/EbPtVztVBTZ3IMuf+DSF//MKOYEMDH8laC/fvJSlf
-         WPmUMcaMzKXDbWJcmMXaT2yRjt/VyDtcLNLVfYviV4yLbDO4HciLd4phMtjHOo8mBtiE
-         rdHfQVsBBjMNaxvR8qN/TCJ/EUPOZujT1pTae4OzIBE9j3LMgmBaxp6oZkZTSoYAWFLH
-         Sh3t1AB6x0u7Gt4sDNcM2X2O6Y8NCgoeyde4LZrNVZQnySbuWAqdNPq9ibcoeLdrQV61
-         No4A==
-X-Gm-Message-State: AOAM531V3R2aVM/OGdS5Xw0z3TvTUES3oct7gCVXh8bmHsAbyRVzYTgj
-        pZX5fMpt5V/0AIh4wS5QJWpA2A==
-X-Google-Smtp-Source: ABdhPJyUzVcFfpUNGpi8Xh0hVPgueNV87Co6K1e5CotdwUKyd6tE3Okm73hzs3/OVHoKfvNzeLmk2A==
-X-Received: by 2002:a05:6a00:894:b0:4fe:25d7:f59e with SMTP id q20-20020a056a00089400b004fe25d7f59emr172514pfj.58.1650554432948;
-        Thu, 21 Apr 2022 08:20:32 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b6-20020a17090a550600b001cd4989ff48sm3060760pji.15.2022.04.21.08.20.32
+        bh=ctcaNqnsK/9euwlyEAdPOaYIg/qSLmmC7N58OzhpKVw=;
+        b=XNXX3wO8y2nkT1xE2h/jjOKp5j8iue2tcxERhcw4SJ/1rSv1eVlyEgSxEjJkrPsyBi
+         NeRhsjxirswfXTiHa5lPjajEycuwiT35KfX8YIh82HsV8n3o8BtnPY7TVKX74KHCQBb8
+         TKArtznimMO5AoXseVDM7I/CqESEblGvjdjWyjJXZRcsIoZypJyFkhkSpZo1WNU6WH+L
+         BX4Sw9LLM9DwS68Bj7VnXflENpyTN8eRViDjbxl+tz/ZqDi10BX3SAp5LNS4VtHF4cGN
+         GK+8YI1lfTpcBJKgjznwlKj0CZ0k9o3MEQxe0gfy81K1prm9syInnYZdzSaPRsuZIZnY
+         6wDg==
+X-Gm-Message-State: AOAM531nOGb5jxjiobpVuhPaKbQomPfAJk4afz1T3Q3PsVTwIoMDekM5
+        MW2NXid9HP/LMyla4spi5PM=
+X-Google-Smtp-Source: ABdhPJyC8ho9tn+IN0nr/rQfbnRaQE4XjxklIRhEfEAnF0pxRd9AQumo4hDR+GsjzPH63rMhf5S3+g==
+X-Received: by 2002:a17:906:a08b:b0:6b9:2e20:f139 with SMTP id q11-20020a170906a08b00b006b92e20f139mr15834ejy.463.1650554485514;
+        Thu, 21 Apr 2022 08:21:25 -0700 (PDT)
+Received: from anparri (host-79-27-69-122.retail.telecomitalia.it. [79.27.69.122])
+        by smtp.gmail.com with ESMTPSA id f5-20020a1709067f8500b006da68bfdfc7sm7956486ejr.12.2022.04.21.08.21.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 08:20:32 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 15:20:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Balbir Singh <sblbir@amazon.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v2] x86/speculation, KVM: only IBPB for
- switch_mm_always_ibpb on vCPU load
-Message-ID: <YmF2PRDi12KPsFOC@google.com>
-References: <20220419020011.65995-1-jon@nutanix.com>
+        Thu, 21 Apr 2022 08:21:24 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 17:21:17 +0200
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] hv_sock: Copy packets sent by Hyper-V out of the
+ ring buffer
+Message-ID: <20220421152117.GA4679@anparri>
+References: <20220420200720.434717-1-parri.andrea@gmail.com>
+ <20220420200720.434717-3-parri.andrea@gmail.com>
+ <20220421135839.2fj6fk6bvlrau73o@sgarzare-redhat>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419020011.65995-1-jon@nutanix.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <20220421135839.2fj6fk6bvlrau73o@sgarzare-redhat>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,107 +81,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022, Jon Kohler wrote:
-> On vmx_vcpu_load_vmcs and svm_vcpu_load, respect user controlled
-> configuration for conditional IBPB and only attempt IBPB MSR when
-> switching between different guest vCPUs IFF switch_mm_always_ibpb,
-> which fixes a situation where the kernel will issue IBPB
-> unconditionally even when conditional IBPB is enabled.
+> > @@ -378,6 +381,8 @@ static void hvs_open_connection(struct vmbus_channel *chan)
+> > 		rcvbuf = ALIGN(rcvbuf, HV_HYP_PAGE_SIZE);
+> > 	}
+> > 
+> > +	chan->max_pkt_size = HVS_MAX_PKT_SIZE;
+> > +
 > 
-> If a user has spectre_v2_user mitigation enabled, in any
-> configuration, and the underlying processor supports X86_FEATURE_IBPB,
-> X86_FEATURE_USE_IBPB is set and any calls to
-> indirect_branch_prediction_barrier() will issue IBPB MSR.
+> premise, I don't know HyperV channels :-(
 > 
-> Depending on the spectre_v2_user configuration, either
-> switch_mm_always_ibpb key or switch_mm_cond_ibpb key will be set.
-> 
-> Both switch_mm_always_ibpb and switch_mm_cond_ibpb are handled by
-> switch_mm() -> cond_mitigation(), which works well in cases where
-> switching vCPUs (i.e. switching tasks) also switches mm_struct;
-> however, this misses a paranoid case where user space may be running
-> multiple guests in a single process (i.e. single mm_struct).
-> 
-> This paranoid case is already covered by vmx_vcpu_load_vmcs and
-> svm_vcpu_load; however, this is done by calling
-> indirect_branch_prediction_barrier() and thus the kernel
-> unconditionally issues IBPB if X86_FEATURE_USE_IBPB is set.
+> Is this change necessary to use hv_pkt_iter_first() instead of
+> hv_pkt_iter_first_raw()?
 
-The changelog should call out that switch_mm_cond_ibpb is intentionally "ignored"
-for the virt case, and explain why it's nonsensical to emit IBPB in that scenario.
+Yes, the change is required to initialize the buffer which holds the
+copies of the incoming packets (in hv_ringbuffer_init()).
 
-> Fix by using intermediary call to x86_virt_guest_switch_ibpb(), which
-> gates IBPB MSR IFF switch_mm_always_ibpb is true. This is useful for
-> security paranoid VMMs in either single process or multi-process VMM
-> configurations.
 
-Multi-process VMM?  KVM doesn't allow "sharing" a VM across processes.  Userspace
-can share guest memory across processes, but that's not relevant to an IBPB on
-guest switch.  I suspect you're loosely referring to all of userspace as a single
-VMM.  That's inaccurate, or at least unnecessarily confusing, from a kernel
-perspective.  I am not aware of a VMM that runs as a monolithic "daemon" and forks
-a new process for every VM.  And even in such a case, I would argue that most
-people would refer to each process as a separate VMM.
+> If yes, then please mention that you set this value in the commit message,
+> otherwise maybe better to have a separate patch.
 
-If there's a blurb about the switch_mm_cond_ibpb case being nonsensical, there's
-probably a good segue into stating the new behavior.
+Sure, will do.
 
-> switch_mm_always_ibpb key is user controlled via spectre_v2_user and
-> will be true for the following configurations:
->   spectre_v2_user=on
->   spectre_v2_user=prctl,ibpb
->   spectre_v2_user=seccomp,ibpb
-> 
-> Signed-off-by: Jon Kohler <jon@nutanix.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-> Cc: Waiman Long <longman@redhat.com>
-> ---
-> v1 -> v2:
->  - Addressed comments on approach from Sean.
-> 
->  arch/x86/include/asm/spec-ctrl.h | 15 +++++++++++++++
->  arch/x86/kernel/cpu/bugs.c       |  6 +++++-
->  arch/x86/kvm/svm/svm.c           |  2 +-
->  arch/x86/kvm/vmx/vmx.c           |  2 +-
->  4 files changed, 22 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/spec-ctrl.h b/arch/x86/include/asm/spec-ctrl.h
-> index 5393babc0598..1ad140b17ad7 100644
-> --- a/arch/x86/include/asm/spec-ctrl.h
-> +++ b/arch/x86/include/asm/spec-ctrl.h
-> @@ -85,4 +85,19 @@ static inline void speculative_store_bypass_ht_init(void) { }
->  extern void speculation_ctrl_update(unsigned long tif);
->  extern void speculation_ctrl_update_current(void);
-> 
-> +/*
-> + * Issue IBPB when switching guest vCPUs IFF if switch_mm_always_ibpb.
-
-Extra "if" there.
-
-> + * Primarily useful for security paranoid (or naive) user space VMMs
-> + * that may run multiple VMs within a single process.
-> + * For multi-process VMMs, switching vCPUs, i.e. switching tasks,
-
-As above, "multi-process VMMs" is very confusing, they're really just separate VMMs.
-Something like this?
-
- * For the more common case of running VMs in their own dedicated process,
- * switching vCPUs that belong to different VMs, i.e. switching tasks, will also
- * ...
-
-> + * will also switch mm_structs and thus do IPBP via cond_mitigation();
-> + * however, in the always_ibpb case, take a paranoid approach and issue
-> + * IBPB on both switch_mm() and vCPU switch.
-> + */
-> +static inline void x86_virt_guest_switch_ibpb(void)
-> +{
-> +	if (static_branch_unlikely(&switch_mm_always_ibpb))
-> +		indirect_branch_prediction_barrier();
-> +}
-> +
->  #endif
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index 6296e1ebed1d..6aafb0279cbc 100644
+Thanks,
+  Andrea

@@ -2,87 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCD150A191
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795E750A1A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388058AbiDUOJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S1388936AbiDUOLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358063AbiDUOJd (ORCPT
+        with ESMTP id S1388967AbiDUOK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:09:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D1F2C3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:06:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A711D61D4D
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 14:06:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D01C385A5;
-        Thu, 21 Apr 2022 14:06:41 +0000 (UTC)
-Date:   Thu, 21 Apr 2022 10:06:39 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Wang ShaoBo <bobo.shaobowang@huawei.com>, cj.chengjian@huawei.com,
-        huawei.libin@huawei.com, xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-ID: <20220421100639.03c0d123@gandalf.local.home>
-In-Reply-To: <YmFXrBG5AmX3+4f8@lakrids>
-References: <20220316100132.244849-1-bobo.shaobowang@huawei.com>
-        <20220316100132.244849-4-bobo.shaobowang@huawei.com>
-        <YmFXrBG5AmX3+4f8@lakrids>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 21 Apr 2022 10:10:57 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6AC3B00C
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:08:07 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bu29so8979698lfb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:08:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zZKj1C/7IWF1iYJGVivOJHvLTfKPwwnbxFO7kqmcYXc=;
+        b=VVH2HU+P5/bdjm7H3wzAdQ7BcWbgJCF7v1P82ysb8AVZD3iccsTHzkFCl8Y/gMyyBl
+         qPbuNS8l4NofUrpKlHZ8maQ+cDnVSeKdOdR57Eujj79fMAkNWAmnuY3kE0AC86rXN3uj
+         eTSAqUDNMsVZoAtc1ZBbeRlRtzOT+2rF/wZlnYOzxRmj/AIQgvBrba3TaAG6t90YVqI/
+         P+rI4f1hCrPlbWZP2vjCOsIxACq1zH/0UT1K8dXDNPHGBGqFC1w1DuiP1icoaXrBNjyS
+         ERYqfURAbUs0JEAKRxF8EMGd5dNnQJcLngybujXSNP9rgYZ4jIudsK8WAbSPXmjjKaWx
+         y9FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zZKj1C/7IWF1iYJGVivOJHvLTfKPwwnbxFO7kqmcYXc=;
+        b=i23wpzHp4c2NGWXNbqbhZQbP1F7Kq2QwzNEKj6ExTo7NqthNELmepGhsppKydqWT8U
+         yRJBSwpAlTBEPnuU8RCKfWDrNAhiCNpWPMhy2LHn8C90yS+4DzrkL/G7rVLf4zCalqZS
+         nOGECcjlHIzWj/k8GTfwasYplg5vOkUj0UPh4if82LHJkksSTUlvhimFISARBZd24lMH
+         0uqwSPWrIv3B/38l6mKvRsO02IUCGgUlH/3x6x+nNq4GxTRbp7IRHg0JnVJzPprk9y9i
+         hpktP4SLFX17pCM6StzdxdD0weZPXFxzoJlfnqCOaZ+6sHUFH4BBDEd3/mJ2uR82g+jU
+         JBWg==
+X-Gm-Message-State: AOAM530Qo1J0qEVGBawOR3PXcKo47YQ24JKju5zvcvW7SoMqwAUAXas2
+        7y7dhuzdtuQYEZbTJPqCybliKIix2zt620+6nNyCEw==
+X-Google-Smtp-Source: ABdhPJw98b2hHI0MkVoCHhTocWu+CF6auK8Paa8Q5ZmRRVEYZylYEkvr/IJyDyAPKTDyS3ZiOItIHGQjaDcjfjEeFHA=
+X-Received: by 2002:a05:6512:c12:b0:471:a932:cfe1 with SMTP id
+ z18-20020a0565120c1200b00471a932cfe1mr9020055lfu.358.1650550085053; Thu, 21
+ Apr 2022 07:08:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220409034849.3717231-1-zheyuma97@gmail.com> <20220410165425.6c2f60e7@jic23-huawei>
+ <CACRpkdaFgB55HHR8a3vyVbZphu5fpguutBYemyVvGz=tcn6j+A@mail.gmail.com>
+In-Reply-To: <CACRpkdaFgB55HHR8a3vyVbZphu5fpguutBYemyVvGz=tcn6j+A@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 21 Apr 2022 16:07:28 +0200
+Message-ID: <CAPDyKFr50QirUvkUy+b665=2prMkGz=EXtbyc+Bty1woT=qO3w@mail.gmail.com>
+Subject: Re: [PATCH] iio: magnetometer: ak8974: Fix the error handling of ak8974_probe()
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Zheyu Ma <zheyuma97@gmail.com>, lars@metafoo.de,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Apr 2022 14:10:04 +0100
-Mark Rutland <mark.rutland@arm.com> wrote:
+On Thu, 21 Apr 2022 at 01:14, Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Sun, Apr 10, 2022 at 5:46 PM Jonathan Cameron <jic23@kernel.org> wrote:
+> > On Sat,  9 Apr 2022 11:48:48 +0800
+> > Zheyu Ma <zheyuma97@gmail.com> wrote:
+> >
+> > > When the driver fail at devm_regmap_init_i2c(), we will get the
+> > > following splat:
+> > >
+> > > [  106.797388] WARNING: CPU: 4 PID: 413 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
+> > > [  106.802183] RIP: 0010:_regulator_put+0x3ec/0x4e0
+> > > [  106.811237] Call Trace:
+> > > [  106.811515]  <TASK>
+> > > [  106.811695]  regulator_bulk_free+0x82/0xe0
+> > > [  106.812032]  devres_release_group+0x319/0x3d0
+> > > [  106.812425]  i2c_device_probe+0x766/0x940
+> > >
+> > > Fix this by disabling the regulators at the error path.
+> > >
+> > > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> > + CC Linus W as it's his driver.
+> >
+> > Fix looks correct to me, though the handling of runtime pm in here is
+> > probably more complex than it needs to be (and hence this odd error
+> > handling for this one place in the probe).
+>
+> At the time I discussed how to do runtime pm with Ulf Hansson a lot
+> and I think it was the state of the art at that time. It might have
+> changed since.
 
-> On Wed, Mar 16, 2022 at 06:01:31PM +0800, Wang ShaoBo wrote:
-> > From: Cheng Jian <cj.chengjian@huawei.com>
-> > 
-> > When tracing multiple functions customly, a list function is called
-> > in ftrace_(regs)_caller, which makes all the other traced functions
-> > recheck the hash of the ftrace_ops when tracing happend, apparently
-> > it is inefficient.  
-> 
-> ... and when does that actually matter? Who does this and why?
+It still looks good to me. One could switch the order of the calls to
+pm_runtime_disable() and pm_runtime_put_noidle(), but it's not a big
+thing.
 
-I don't think it was explained properly. What dynamically allocated
-trampolines give you is this.
+Whether it looks complicated or not, that's a different story. :-)
 
-Let's say you have 10 ftrace_ops registered (with bpf and kprobes this can
-be quite common). But each of these ftrace_ops traces a function (or
-functions) that are not being traced by the other ftrace_ops. That is, each
-ftrace_ops has its own unique function(s) that they are tracing. One could
-be tracing schedule, the other could be tracing ksoftirqd_should_run
-(whatever).
+Note that some drivers are always being built with CONFIG_PM being
+set, which allows some simplifications. Although, I don't think that's
+the case here, right?
 
-Without this change, because the arch does not support dynamically
-allocated trampolines, it means that all these ftrace_ops will be
-registered to the same trampoline. That means, for every function that is
-traced, it will loop through all 10 of theses ftrace_ops and check their
-hashes to see if their callback should be called or not.
+>
+> > > ---
+> > >  drivers/iio/magnetometer/ak8974.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/drivers/iio/magnetometer/ak8974.c b/drivers/iio/magnetometer/ak8974.c
+> > > index e54feacfb980..84bbf7ccc887 100644
+> > > --- a/drivers/iio/magnetometer/ak8974.c
+> > > +++ b/drivers/iio/magnetometer/ak8974.c
+> > > @@ -862,6 +862,7 @@ static int ak8974_probe(struct i2c_client *i2c,
+> > >               dev_err(&i2c->dev, "failed to allocate register map\n");
+> > >               pm_runtime_put_noidle(&i2c->dev);
+> > >               pm_runtime_disable(&i2c->dev);
+> > > +             regulator_bulk_disable(ARRAY_SIZE(ak8974->regs), ak8974->regs);
+>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>
+> Yours,
+> Linus Walleij
 
-With dynamically allocated trampolines, each ftrace_ops will have their own
-trampoline, and that trampoline will be called directly if the function
-is only being traced by the one ftrace_ops. This is much more efficient.
-
-If a function is traced by more than one ftrace_ops, then it falls back to
-the loop.
-
--- Steve
+Kind regards
+Uffe

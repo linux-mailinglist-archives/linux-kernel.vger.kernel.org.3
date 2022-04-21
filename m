@@ -2,240 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918AA50991F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587E65099E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385729AbiDUHdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
+        id S1385944AbiDUHm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385780AbiDUHci (ORCPT
+        with ESMTP id S1386007AbiDUHmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:32:38 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15992B1F7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:29:49 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id v133so3748613vsv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:29:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0Kef+uraHlTS1J8sntjcDuAazHDLlgQ9ZX8fx3bltn4=;
-        b=MJoHzYG/QyhL2BlIJO/TiCWwz52LYDroJq+MKWPLxEwZg9G4VVPzP22pMcbq9h2LXu
-         l0MJ3TFbvLjP6xW0Ksn0FmdKtZ5pSOohjkX8GiOi32S20ZbmRPhpvX7G5OhXRyGzUtlX
-         x3kLRTd8v4nkRqN3I/6/YZ1urnXkgajFJE4wekTmT168NeBFhMHEGfglOa65L9VE1fYZ
-         Lb/kr2bD06LHjq0V5HoZnlmSkLuKMomwW0Ag3Owi1kRwg8wz0luHSgKDH1j0rKV1tJV8
-         16I+v0qL16fEi2sWPF3JUPfbHFwBQVNT7/ssh/N8G3orl2uQYjQ9sLMh9FnYQKlnN0cj
-         KFGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0Kef+uraHlTS1J8sntjcDuAazHDLlgQ9ZX8fx3bltn4=;
-        b=o/0u8FUY1NeoHxi4+8+a0pVwlIwtLChFDf+tNupb/zorgh/i0vErYWQ42Vr1pTu1Gb
-         3nwIVZkFpNAICb2MsSe21jK43ceFdFoCiimG/fFCrHOTqzpS82np8odBmoK3IPjyeYH3
-         DqRX3WC6V5nhfnFCG4la8vuSIktwFIMYDOWlY3LlaBD8bCAw4yd6zxgJHyRwzqieHouG
-         qbx2s52rljGBLsazAKWDRIDVcQSOxw7S79HllGt9Bxh8mUZLqhyD65lNi7tIp5HMe12/
-         gbcPssqvVZMpp2t8ha8dH5FqD1pAB6Qsm75TWJyYo/FCbDNOeQNz20OBSUDF6HDkRC4i
-         +y+w==
-X-Gm-Message-State: AOAM530RqrU7iV2lagtN9IdyGl7C7XUo7m5PvC6lP0uCJ427PijJy8Du
-        AwWnardGEyrsetXygQLIEFYStfqykKOjvBURq2K01w==
-X-Google-Smtp-Source: ABdhPJzkKB+LUQi4523knJPyGMlsVupJhV+Ljr5mwRn69w5lchSOWSy7mTCK/ecP+CFyRnkobtAYI06B7o9keINQepI=
-X-Received: by 2002:a05:6102:3106:b0:32a:18c8:1633 with SMTP id
- e6-20020a056102310600b0032a18c81633mr7733600vsh.51.1650526188028; Thu, 21 Apr
- 2022 00:29:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220413092206.73974-1-jvgediya@linux.ibm.com>
- <6365983a8fbd8c325bb18959c51e9417fd821c91.camel@intel.com>
- <CAHbLzkpGzEaSDfM=GBzBxw=dZTBy12vgDDhMG+q4dbG+bCgR6A@mail.gmail.com>
- <CAAPL-u9=-OHuUk=ZkNRDf3Dm_+3cBd2APL5MQpQr3_sVk_voJg@mail.gmail.com>
- <de1bc3647c8696fd931a37d314ccd60a2c8cc0db.camel@intel.com>
- <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com> <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
-In-Reply-To: <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Thu, 21 Apr 2022 00:29:37 -0700
-Message-ID: <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state N_DEMOTION_TARGETS
-To:     "ying.huang@intel.com" <ying.huang@intel.com>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux MM <linux-mm@kvack.org>,
+        Thu, 21 Apr 2022 03:42:12 -0400
+X-Greylist: delayed 508 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Apr 2022 00:38:49 PDT
+Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3C61D0E8;
+        Thu, 21 Apr 2022 00:38:48 -0700 (PDT)
+Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 1B80030B2943;
+        Thu, 21 Apr 2022 09:29:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
+        :content-type:date:from:from:in-reply-to:message-id:mime-version
+        :references:reply-to:subject:subject:to:to; s=felkmail; bh=KTD9Z
+        V8p2M5RwTqrWZsqKaCS5uVbljw+5gJNNUbPEM8=; b=DLI6+ZJeZCwh3CBG+aKCY
+        RKo7kn450DvBswU2vENANl3ZmvSlq0CiLLP9+T6XTGIIUcI99pP4yKva2S9BSbV0
+        WTAft8SVyWWGJX7dJNgNFf9qzk4negBlxNfHLsjWcmq/q/1wvFIOxeU1RQOkpPka
+        pT0PrtWZUWobo6W4BRqR48jNzGt2Co7Raz0qIeXUsFlvEMFXP44vbkcJ502X/ENq
+        X592uWjcyue7+R+AXoZJ4ZcvWLdJnfOMj0rYytElgBibHVl9Ok8sIJnI1fAP6GnV
+        5XkftzSdIyZXE1ep6LYV0FY0G1DzYXjDwnWn0VaONmO/3D+jJxXg8MUEPn3G6JaX
+        Q==
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 6B3D530AE004;
+        Thu, 21 Apr 2022 09:29:48 +0200 (CEST)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 23L7Tm9c029713;
+        Thu, 21 Apr 2022 09:29:48 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 23L7Tk2S029710;
+        Thu, 21 Apr 2022 09:29:46 +0200
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the net-next tree
+Date:   Thu, 21 Apr 2022 09:29:46 +0200
+User-Agent: KMail/1.9.10
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        "Marc Kleine-Budde" <mkl@pengutronix.de>,
+        Martin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220421170749.1c0b56db@canb.auug.org.au>
+In-Reply-To: <20220421170749.1c0b56db@canb.auug.org.au>
+X-KMail-QuotePrefix: > 
+MIME-Version: 1.0
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202204210929.46477.pisa@cmp.felk.cvut.cz>
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 12:08 AM ying.huang@intel.com
-<ying.huang@intel.com> wrote:
->
-> On Wed, 2022-04-20 at 23:49 -0700, Wei Xu wrote:
-> > On Wed, Apr 20, 2022 at 11:24 PM ying.huang@intel.com
-> > <ying.huang@intel.com> wrote:
-> > >
-> > > On Wed, 2022-04-20 at 22:41 -0700, Wei Xu wrote:
-> > > > On Wed, Apr 20, 2022 at 8:12 PM Yang Shi <shy828301@gmail.com> wrote:
-> > > > >
-> > > > > On Thu, Apr 14, 2022 at 12:00 AM ying.huang@intel.com
-> > > > > <ying.huang@intel.com> wrote:
-> > > > > >
-> > > > > > On Wed, 2022-04-13 at 14:52 +0530, Jagdish Gediya wrote:
-> > > > > > > Current implementation to find the demotion targets works
-> > > > > > > based on node state N_MEMORY, however some systems may have
-> > > > > > > dram only memory numa node which are N_MEMORY but not the
-> > > > > > > right choices as demotion targets.
-> > > > > > >
-> > > > > > > This patch series introduces the new node state
-> > > > > > > N_DEMOTION_TARGETS, which is used to distinguish the nodes which
-> > > > > > > can be used as demotion targets, node_states[N_DEMOTION_TARGETS]
-> > > > > > > is used to hold the list of nodes which can be used as demotion
-> > > > > > > targets, support is also added to set the demotion target
-> > > > > > > list from user space so that default behavior can be overridden.
-> > > > > >
-> > > > > > It appears that your proposed user space interface cannot solve all
-> > > > > > problems.  For example, for system as follows,
-> > > > > >
-> > > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow memory node near
-> > > > > > node 0,
-> > > > > >
-> > > > > > available: 3 nodes (0-2)
-> > > > > > node 0 cpus: 0 1
-> > > > > > node 0 size: n MB
-> > > > > > node 0 free: n MB
-> > > > > > node 1 cpus:
-> > > > > > node 1 size: n MB
-> > > > > > node 1 free: n MB
-> > > > > > node 2 cpus: 2 3
-> > > > > > node 2 size: n MB
-> > > > > > node 2 free: n MB
-> > > > > > node distances:
-> > > > > > node   0   1   2
-> > > > > >   0:  10  40  20
-> > > > > >   1:  40  10  80
-> > > > > >   2:  20  80  10
-> > > > > >
-> > > > > > Demotion order 1:
-> > > > > >
-> > > > > > node    demotion_target
-> > > > > >  0              1
-> > > > > >  1              X
-> > > > > >  2              X
-> > > > > >
-> > > > > > Demotion order 2:
-> > > > > >
-> > > > > > node    demotion_target
-> > > > > >  0              1
-> > > > > >  1              X
-> > > > > >  2              1
-> > > > > >
-> > > > > > The demotion order 1 is preferred if we want to reduce cross-socket
-> > > > > > traffic.  While the demotion order 2 is preferred if we want to take
-> > > > > > full advantage of the slow memory node.  We can take any choice as
-> > > > > > automatic-generated order, while make the other choice possible via user
-> > > > > > space overridden.
-> > > > > >
-> > > > > > I don't know how to implement this via your proposed user space
-> > > > > > interface.  How about the following user space interface?
-> > > > > >
-> > > > > > 1. Add a file "demotion_order_override" in
-> > > > > >         /sys/devices/system/node/
-> > > > > >
-> > > > > > 2. When read, "1" is output if the demotion order of the system has been
-> > > > > > overridden; "0" is output if not.
-> > > > > >
-> > > > > > 3. When write "1", the demotion order of the system will become the
-> > > > > > overridden mode.  When write "0", the demotion order of the system will
-> > > > > > become the automatic mode and the demotion order will be re-generated.
-> > > > > >
-> > > > > > 4. Add a file "demotion_targets" for each node in
-> > > > > >         /sys/devices/system/node/nodeX/
-> > > > > >
-> > > > > > 5. When read, the demotion targets of nodeX will be output.
-> > > > > >
-> > > > > > 6. When write a node list to the file, the demotion targets of nodeX
-> > > > > > will be set to the written nodes.  And the demotion order of the system
-> > > > > > will become the overridden mode.
-> > > > >
-> > > > > TBH I don't think having override demotion targets in userspace is
-> > > > > quite useful in real life for now (it might become useful in the
-> > > > > future, I can't tell). Imagine you manage hundred thousands of
-> > > > > machines, which may come from different vendors, have different
-> > > > > generations of hardware, have different versions of firmware, it would
-> > > > > be a nightmare for the users to configure the demotion targets
-> > > > > properly. So it would be great to have the kernel properly configure
-> > > > > it *without* intervening from the users.
-> > > > >
-> > > > > So we should pick up a proper default policy and stick with that
-> > > > > policy unless it doesn't work well for the most workloads. I do
-> > > > > understand it is hard to make everyone happy. My proposal is having
-> > > > > every node in the fast tier has a demotion target (at least one) if
-> > > > > the slow tier exists sounds like a reasonable default policy. I think
-> > > > > this is also the current implementation.
-> > > > >
-> > > >
-> > > > This is reasonable.  I agree that with a decent default policy,
-> > > >
-> > >
-> > > I agree that a decent default policy is important.  As that was enhanced
-> > > in [1/5] of this patchset.
-> > >
-> > > > the
-> > > > overriding of per-node demotion targets can be deferred.  The most
-> > > > important problem here is that we should allow the configurations
-> > > > where memory-only nodes are not used as demotion targets, which this
-> > > > patch set has already addressed.
-> > >
-> > > Do you mean the user space interface proposed by [3/5] of this patchset?
-> >
-> > Yes.
-> >
-> > > IMHO, if we want to add a user space interface, I think that it should
-> > > be powerful enough to address all existing issues and some potential
-> > > future issues, so that it can be stable.  I don't think it's a good idea
-> > > to define a partial user space interface that works only for a specific
-> > > use case and cannot be extended for other use cases.
-> >
-> > I actually think that they can be viewed as two separate problems: one
-> > is to define which nodes can be used as demotion targets (this patch
-> > set), and the other is how to initialize the per-node demotion path
-> > (node_demotion[]).  We don't have to solve both problems at the same
-> > time.
-> >
-> > If we decide to go with a per-node demotion path customization
-> > interface to indirectly set N_DEMOTION_TARGETS, I'd prefer that there
-> > is a single global control to turn off all demotion targets (for the
-> > machines that don't use memory-only nodes for demotion).
-> >
->
-> There's one already.  In commit 20b51af15e01 ("mm/migrate: add sysfs
-> interface to enable reclaim migration"), a sysfs interface
->
->         /sys/kernel/mm/numa/demotion_enabled
->
-> is added to turn off all demotion targets.
+Hello Stephen,
 
-IIUC, this sysfs interface only turns off demotion-in-reclaim.  It
-will be even cleaner if we have an easy way to clear node_demotion[]
-and N_DEMOTION_TARGETS so that the userspace (post-boot agent, not
-init scripts) can know that the machine doesn't even have memory
-tiering hardware enabled.
+thanks for the notice.
 
-> Best Regards,
-> Huang, Ying
+On Thursday 21 of April 2022 09:07:49 Stephen Rothwell wrote:
+> After merging the net-next tree, today's linux-next build (htmldocs)
+> produced this warning:
 >
+> Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst:
+> WARNING: document isn't included in any toctree
 >
+> Introduced by commit
 >
+>   c3a0addefbde ("docs: ctucanfd: CTU CAN FD open-source IP core
+> documentation.")
+
+I would be happy for suggestion for reference location.
+
+Is the next file right location 
+
+  Documentation/networking/device_drivers/can/index.rst
+
+for reference to
+
+  Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
+
+It is documentation of the driver for CAN FD open-source
+IP core developed by the group formed at Czech Technical University.
+
+I have probably minor updates for the links to the external
+resources, AXI, APB and other documentation because
+it moves from site to site under Intel, ARM, Xilinx
+web sites hierarchies.   
+
+Best wishes,
+                Pavel
+--
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://control.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
+

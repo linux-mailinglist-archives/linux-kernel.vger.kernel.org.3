@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EDE50A0B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6587150A0B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345970AbiDUN0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S244133AbiDUNZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbiDUNZu (ORCPT
+        with ESMTP id S231934AbiDUNZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 21 Apr 2022 09:25:50 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6F332EDC;
-        Thu, 21 Apr 2022 06:23:01 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23LDMiEr065593;
-        Thu, 21 Apr 2022 08:22:44 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E11DEA3;
+        Thu, 21 Apr 2022 06:22:59 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23LDMktV122717;
+        Thu, 21 Apr 2022 08:22:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650547364;
-        bh=+VFNKTAB//MK7xlNT2KoS5a+qBg4nty6a/x60XARYSI=;
-        h=From:To:CC:Subject:Date;
-        b=tHLYUDRh+vWYFzDw9cv/KdLVilVf0Qn4sYDQiIWFtyrJokKJSDZBrOShMlLDiWhCu
-         OWzsIFatrpbncf6ZWc18pOvCzsqcSWehT+ViEDwHh+FLGuFj7q1HC6ZQRUZRiCudxh
-         1Sl/zIuYZOtCfg7CyLNuQXALmCEjLUFFnxRF2w0Y=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23LDMisi072033
+        s=ti-com-17Q1; t=1650547366;
+        bh=b5SLYsYvigmTzUt32J57S1xBqu4+IQmeZP2d1WqYmuU=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=fF2RtWDnax5Sq35Q3MVlr0v10bK4/VSj8u8/QK6gldUd+VDqGA1KS1SLDzEH5o9q0
+         ES9P+K42kKRbedVSKx5sAjO7zm7S0uUYEnjQsNRpocuqp6AVccJ40tr1IsG+Qk5CkW
+         HT3+ld6FPJjBis/t7AzalrThetMe1W+UkiGl3ulE=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23LDMkUc070350
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 21 Apr 2022 08:22:44 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 21 Apr 2022 08:22:46 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 21
- Apr 2022 08:22:43 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2022 08:22:46 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 21 Apr 2022 08:22:44 -0500
+ Frontend Transport; Thu, 21 Apr 2022 08:22:46 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23LDMh27017103;
-        Thu, 21 Apr 2022 08:22:43 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23LDMjWT078699;
+        Thu, 21 Apr 2022 08:22:46 -0500
 From:   Jai Luthra <j-luthra@ti.com>
 To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
         Nishanth Menon <nm@ti.com>,
@@ -50,10 +50,12 @@ To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
 CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, Jai Luthra <j-luthra@ti.com>
-Subject: [PATCH 0/3] Enable audio output on AM62-SK
-Date:   Thu, 21 Apr 2022 18:52:21 +0530
-Message-ID: <20220421132224.8601-1-j-luthra@ti.com>
+Subject: [PATCH 1/3] arm64: dts: ti: k3-am62-main: Add McASP nodes
+Date:   Thu, 21 Apr 2022 18:52:22 +0530
+Message-ID: <20220421132224.8601-2-j-luthra@ti.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220421132224.8601-1-j-luthra@ti.com>
+References: <20220421132224.8601-1-j-luthra@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -66,28 +68,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds support for audio output via headphone jack on the 
-AM62-SK board. The jack is wired to TLV320AIC3106 (codec), which is 
-connected to McASP (serializer).
+From: Jayesh Choudhary <j-choudhary@ti.com>
 
-The same 3.5mm jack can be used for combined playback+recording, but audio 
-input is currently disabled on McASP until further testing and debugging.
+Add the nodes for McASP 0-2.
 
-Please apply this series on top of 
-https://lore.kernel.org/all/20220415131917.431137-1-vigneshr@ti.com/ 
+Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+Signed-off-by: Jai Luthra <j-luthra@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 51 ++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-Jai Luthra (1):
-  arm64: dts: ti: am625-sk: Add audio output support
-
-Jayesh Choudhary (2):
-  arm64: dts: ti: k3-am62-main: Add McASP nodes
-  ASoC: ti: davinci-mcasp: Add dma-type for bcdma
-
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 51 ++++++++++++++
- arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 89 ++++++++++++++++++++++++
- sound/soc/ti/davinci-mcasp.c             |  2 +
- 3 files changed, 142 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+index 4b6ba98dd0a2..2014c0ca599c 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+@@ -530,4 +530,55 @@
+ 		ti,mbox-num-users = <4>;
+ 		ti,mbox-num-fifos = <16>;
+ 	};
++
++	mcasp0: mcasp@2b00000 {
++		compatible = "ti,am33xx-mcasp-audio";
++		reg = <0x00 0x02b00000 0x00 0x2000>,
++		      <0x00 0x02b08000 0x00 0x400>;
++		reg-names = "mpu","dat";
++		interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "tx", "rx";
++
++		dmas = <&main_bcdma 0 0xc500 0>, <&main_bcdma 0 0x4500 0>;
++		dma-names = "tx", "rx";
++
++		clocks = <&k3_clks 190 0>;
++		clock-names = "fck";
++		power-domains = <&k3_pds 190 TI_SCI_PD_EXCLUSIVE>;
++	};
++
++	mcasp1: mcasp@2b10000 {
++		compatible = "ti,am33xx-mcasp-audio";
++		reg = <0x00 0x02b10000 0x00 0x2000>,
++		      <0x00 0x02b18000 0x00 0x400>;
++		reg-names = "mpu","dat";
++		interrupts = <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 237 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "tx", "rx";
++
++		dmas = <&main_bcdma 0 0xc501 0>, <&main_bcdma 0 0x4501 0>;
++		dma-names = "tx", "rx";
++
++		clocks = <&k3_clks 191 0>;
++		clock-names = "fck";
++		power-domains = <&k3_pds 191 TI_SCI_PD_EXCLUSIVE>;
++	};
++
++	mcasp2: mcasp@2b20000 {
++		compatible = "ti,am33xx-mcasp-audio";
++		reg = <0x00 0x02b20000 0x00 0x2000>,
++		      <0x00 0x02b28000 0x00 0x400>;
++		reg-names = "mpu","dat";
++		interrupts = <GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "tx", "rx";
++
++		dmas = <&main_bcdma 0 0xc502 0>, <&main_bcdma 0 0x4502 0>;
++		dma-names = "tx", "rx";
++
++		clocks = <&k3_clks 192 0>;
++		clock-names = "fck";
++		power-domains = <&k3_pds 192 TI_SCI_PD_EXCLUSIVE>;
++	};
+ };
 -- 
 2.17.1
 

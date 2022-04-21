@@ -2,139 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC493509782
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CCB50978A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 08:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384821AbiDUGaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 02:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
+        id S1384851AbiDUGaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 02:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384827AbiDUGaG (ORCPT
+        with ESMTP id S1384828AbiDUGar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:30:06 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FCC13F31
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 23:27:11 -0700 (PDT)
-Received: from kwepemi500017.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KkSH32BTGzfYw0;
-        Thu, 21 Apr 2022 14:26:23 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500017.china.huawei.com (7.221.188.110) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 14:27:09 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 14:27:07 +0800
-Message-ID: <f6f0646d-7acc-0e2e-9aea-3910a5546dd3@huawei.com>
-Date:   Thu, 21 Apr 2022 14:27:07 +0800
+        Thu, 21 Apr 2022 02:30:47 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0938913F10;
+        Wed, 20 Apr 2022 23:27:59 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 592E7811B;
+        Thu, 21 Apr 2022 06:25:07 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 09:27:57 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, linux-omap@vger.kernel.org,
+        aaro.koskinen@iki.fi, jmkrzyszt@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Walmsley <paul@pwsan.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 00/41] OMAP1 full multiplatform conversion
+Message-ID: <YmD5bZ8yVhRdZjdd@atomide.com>
+References: <20220419133723.1394715-1-arnd@kernel.org>
+ <CAPDyKFpNx9xt1xwO-EKAx_qYtfcM5RUC6=Kh9NZ5o+A=H5ut6A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v4 1/4] mm: page_table_check: move
- pxx_user_accessible_page into x86
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220418034444.520928-1-tongtiangen@huawei.com>
- <20220418034444.520928-2-tongtiangen@huawei.com>
- <1671baf7-046e-7c52-183f-fd654125fd67@arm.com>
- <c376877e-53a7-d471-61bc-e7f9dd400d60@huawei.com>
- <CA+CK2bCF=7mADB=rxyHtVEd3oCZ4mxtKf=28L49uQr5oxUwYZQ@mail.gmail.com>
- <eec38afc-4ecc-29f8-9d8a-722661c30314@huawei.com>
- <75f444a6-4f50-4356-9e71-f72c59bf0a52@arm.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <75f444a6-4f50-4356-9e71-f72c59bf0a52@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpNx9xt1xwO-EKAx_qYtfcM5RUC6=Kh9NZ5o+A=H5ut6A@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/4/21 11:44, Anshuman Khandual 写道:
+* Ulf Hansson <ulf.hansson@linaro.org> [220419 14:12]:
+> On Tue, 19 Apr 2022 at 15:37, Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > This is the full series for converting OMAP1 to multiplatform, rebased
+> > from my 2019 attempt to do the same thing. The soc tree contains simpler
+> > patches to do the same for iop32x, ixp4xx, ep93xx and s3c24xx, which
+> > means we are getting closer to completing this for all ARMv5 platforms
+> > (I have patches for PXA, which is the last one remaining).
+> >
+> > Janusz already tested the branch separately and did the missing work
+> > for the common-clk conversion after my previous approach was broken.
+> >
+> > The fbdev, mmc and ASoC portion of Janusz' work already went into the
+> > corresponding maintainer tree, but I include them here for reference.
+> > Unless there are any objections, I would add the entire series to the
+> > for-next branch of the soc tree, but only send the first 36 patches early
+> > in the merge window. After everything else has made it in, I would rebase
+> > the last two patches and send them separately, which may or may not make
+> > it in the merge window.
 > 
-> 
-> On 4/21/22 08:35, Tong Tiangen wrote:
->>
->>
->> 在 2022/4/21 0:44, Pasha Tatashin 写道:
->>> On Wed, Apr 20, 2022 at 2:45 AM Tong Tiangen <tongtiangen@huawei.com> wrote:
->>>>
->>>>
->>>>
->>>> 在 2022/4/19 17:29, Anshuman Khandual 写道:
->>>>>
->>>>>
->>>>> On 4/18/22 09:14, Tong Tiangen wrote:
->>>>>> --- a/mm/page_table_check.c
->>>>>> +++ b/mm/page_table_check.c
->>>>>> @@ -10,6 +10,14 @@
->>>>>>     #undef pr_fmt
->>>>>>     #define pr_fmt(fmt)        "page_table_check: " fmt
->>>>>>
->>>>>> +#ifndef PMD_PAGE_SIZE
->>>>>> +#define PMD_PAGE_SIZE       PMD_SIZE
->>>>>> +#endif
->>>>>> +
->>>>>> +#ifndef PUD_PAGE_SIZE
->>>>>> +#define PUD_PAGE_SIZE       PUD_SIZE
->>>>>> +#endif
->>>>>
->>>>> Why cannot PMD_SIZE/PUD_SIZE be used on every platform instead ? What is the
->>>>> need for using PUD_PAGE_SIZE/PMD_PAGE_SIZE ? Are they different on x86 ?
->>>>> .
->>>>
->>>> Hi, Pasha：
->>>> I checked the definitions of PMD_SIZE/PUD_SIZE and
->>>> PUD_PAGE_SIZE/PMD_PAGE_SIZE in x86 architecture and their use outside
->>>> the architecture(eg: in mm/, all used PMD_SIZE/PUD_SIZE), Would it be
->>>> better to use a unified PMD_SIZE/PUD_SIZE here?
->>>
->>> Hi Tong,
->>>
->>> Yes, it makes sense to use PMD_SIZE/PUD_SIZE instead of
->>> PUD_PAGE_SIZE/PMD_PAGE_SIZE in page_table_check to be inline with the
->>> rest of the mm/
->>>
->>> Pasha
->>>
->> Hi Pasha and Anshuman:
->>
->> OK, Functional correctness is not affected here, i plan to optimize this point after this patchset is merged.
-> 
-> As page table check is now being proposed to be supported on multiple platforms i.e
-> arm64, riscv besides just x86, it should not have any architecture specific macros
-> or functions. Hence please do generalize these PMD/PUD sizes in this series itself.
-> .
+> Sounds like a good plan to me. I usually send the MMC pull-request on
+> Mondays, the first day of the merge window.
 
-OK, will resend.
+Sounds good to me. I tested the current omap1-multiplatform-5.18 branch
+from mach-omap2 point of view, and things seem to work just fine for me.
+I don't currently have any omap1 hardware online to test with.
 
-Thank you.
-Tong.
+For the patches, please feel free to add:
+
+Acked-by: Tony Lindgren <tony@atomide.com>

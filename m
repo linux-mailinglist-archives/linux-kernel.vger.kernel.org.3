@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633E0509A31
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5DC509A25
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386453AbiDUIIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
+        id S1386449AbiDUIIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355609AbiDUIIV (ORCPT
+        with ESMTP id S1386414AbiDUIIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:08:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E3C1401F;
-        Thu, 21 Apr 2022 01:05:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDA1AB82325;
-        Thu, 21 Apr 2022 08:05:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA6DC385AF;
-        Thu, 21 Apr 2022 08:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650528329;
-        bh=pEk2DBnIt9rk2wabkGdOd9ccO0Sp1aN2SsNNj0MBRog=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qWPM0VbCaFTCX7EfkRcA/rtW+syvpvauja9jw25voq6ipQfgeRSOI8QUgToJUNmSz
-         OKn+BpJ7yAh+6LD2DtMs+LSIbUdCRp6H6euZbGvUFYkZwrKj22SIgqER2cZs6XltKG
-         uftD/9TJgk67j0lF3y11+P7IMrq1mDd8xrKUB6u/Y9WwEa3rdBNgqUdZzQma0dy0CI
-         790z77c82J7gC3xpwqTV0fFgHJcAa9+osqbFiqkFNA6wIBW3hjuispqAohUPdowc1D
-         F0hBhNuydvq2NiVaV67w1yhkK86x6ydkV9tieQgzUuz+QBueVLbjesjV06o9inYPpk
-         zk1SrHXiJ36Lg==
-Received: by mail-wr1-f53.google.com with SMTP id i20so5462547wrb.13;
+        Thu, 21 Apr 2022 04:08:19 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DE11A812
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:05:30 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id e30so1939283eda.0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:05:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=q1EKn9j2FtU/5NboQOODHWM3vZN+UjF82zhvbN8nb9k=;
+        b=R6lSh2UFKaO74B3eWJIkVab0BloB6Dhobt1+TrxUz2TUSrZ8aLO3F9hQefyTcjUhlj
+         ckDeFsOklqGcLhkR5sJV0kAOmgoFfG4Q72gGWMd4urFPFKIrCAJC8eLau/K/eQAAcSmS
+         6oXfMhrc5olw+9+HHUb5K2w/rnaARWeTFxrayIQEveEUS2DabrRADVxOqSyNIg7eM5Ic
+         pwiUj3v9IX6l0E1uZRpCiXteqYpyHecVk4hm7LsyDu3Q4TJhlcroPTbwc1677itjAM+M
+         0T5ALxDxQI7gHkcyAnA/I02rW7hxNMkKH3FINIMp3XdYedIh/zquiuSySa4B00pJaJJl
+         cNIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q1EKn9j2FtU/5NboQOODHWM3vZN+UjF82zhvbN8nb9k=;
+        b=iwzpsV++qUqGTx62d0ImYX58k/6E1Lw5/b+89Y4zM7Tpx1UXbwocJSfhaKaJyKCDtr
+         6rG1VU/i7eEKmFnp023S22TQ09biLBZurjP+EpwuVLD0GGvzSW9y0u/ZE5mHvzHZbcmW
+         1NJU3nyLsII9sOKpCVbtVhFRlvELUg1SUYWHhKteWv2x0PtVmd9Ha+tmEEZZO1K8D6uJ
+         zIntjjrZFQI8jaMQcp6aLosA79+XViUuQ+FdGs5dDWzxqmy3ZDx+bHpCnYLULGfn55KP
+         3RuOQ8CqRvmc8vrQfeDmYkKJhiuyvPyVQ+NuMawxoZX5KoT5WyVoXru4qOBvVA5VXEC5
+         0/ng==
+X-Gm-Message-State: AOAM533yCqwdKyk4a9Pf92XIBNbC50BAI/yTzZnBBkoj1bWayovHNpnO
+        bvV9ms88HCkpn1e7gzfE5s6E+g==
+X-Google-Smtp-Source: ABdhPJwPUX9PvxFwTkKf4Gh25rl6Mr51/zal0qNIX0et9fv15KBh9Cdf3j3ybGhi4AATK6awdkZjYg==
+X-Received: by 2002:a05:6402:2813:b0:424:1882:d064 with SMTP id h19-20020a056402281300b004241882d064mr9783221ede.357.1650528329430;
         Thu, 21 Apr 2022 01:05:29 -0700 (PDT)
-X-Gm-Message-State: AOAM533q5Qc79/Cz4WoXgzPtxaOQAVT1PqJZE6eGvRn5ic+e4K6Dsvl3
-        PnJfunVG594h5V6UllLmTKbVRvKFAfm/3/yF0jI=
-X-Google-Smtp-Source: ABdhPJywpA6fOGw9KAZbIcns13/kEE7+YRmRr2P9g6saD61ZSVU9a6gQSpL63u+tG5iSukB8FNVqJ9kAQ9Wk1V6Tp0I=
-X-Received: by 2002:adf:e106:0:b0:20a:b31b:213d with SMTP id
- t6-20020adfe106000000b0020ab31b213dmr3969063wrz.219.1650528327698; Thu, 21
- Apr 2022 01:05:27 -0700 (PDT)
+Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i20-20020aa7c714000000b0041fbd14c34bsm11207571edq.4.2022.04.21.01.05.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 01:05:29 -0700 (PDT)
+Message-ID: <43cb61ac-461f-e6ff-b495-44f8befde79f@linaro.org>
+Date:   Thu, 21 Apr 2022 10:05:28 +0200
 MIME-Version: 1.0
-References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-7-hch@lst.de>
-In-Reply-To: <20220421074204.1284072-7-hch@lst.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 21 Apr 2022 10:05:11 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3BD5zLiXf=Wr0kcJp-k3+vmhBkEP5DNRw_-H=OX9CoGA@mail.gmail.com>
-Message-ID: <CAK8P3a3BD5zLiXf=Wr0kcJp-k3+vmhBkEP5DNRw_-H=OX9CoGA@mail.gmail.com>
-Subject: Re: [PATCH 6/7] ARM: use the common dma_to_phys/phys_to_dma
- implementation where possible
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 5/5] dt-bindings: arm: Add initial bindings for Nuvoton
+ Platform
+Content-Language: en-US
+To:     Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, ychuang570808@gmail.com
+Cc:     robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org,
+        arnd@arndb.de, olof@lixom.net, will@kernel.org, soc@kernel.org,
+        cfli0@nuvoton.com
+References: <20220418082738.11301-1-ychuang3@nuvoton.com>
+ <20220418082738.11301-6-ychuang3@nuvoton.com>
+ <fd9316a6-7df6-e1fa-50dc-ff50934afb5c@linaro.org>
+ <caf4867f-7f71-9262-f190-463325eb13ab@nuvoton.com>
+ <4e9eaede-2208-bd73-35ae-89e128562653@linaro.org>
+ <80994f4b-136f-7669-4674-0c9826e88248@nuvoton.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <80994f4b-136f-7669-4674-0c9826e88248@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,35 +82,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> Only the footbridge platforms provide their own DMA address translation
-> helpers, so switch to the generic version for all other platforms, and
-> consolidate the footbridge implementation to remove two levels of
-> indirection.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+On 21/04/2022 10:04, Jacky Huang wrote:
+> 
+> 
+> On 2022/4/21 下午 02:56, Krzysztof Kozlowski wrote:
+>> On 21/04/2022 08:39, Jacky Huang wrote:
+>>>
+>>> On 2022/4/18 下午 08:11, Krzysztof Kozlowski wrote:
+>>>> On 18/04/2022 10:27, Jacky Huang wrote:
+>>>>> +properties:
+>>>>> +  $nodename:
+>>>>> +    const: '/'
+>>>>> +  compatible:
+>>>>> +    items:
+>>>>> +      - enum:
+>>>>> +          - nuvoton,ma35d1
+>>>>> +          - nuvoton,ma35d1-evb
+>>>>> +          - nuvoton,ma35d1-iot
+>>>>> +          - nuvoton,ma35d1-som512
+>>>>> +          - nuvoton,ma35d1-som1g
+>>>> This does not match your DTS and does not look reasonable (SoC
+>>>> compatible should not be part of this enum). Check some other board
+>>>> bindings for examples.
+>>>>
+>>>>
+>>>> Best regards,
+>>>> Krzysztof
+>>> I would like to modify it as follows:
+>>>
+>>> description: |
+>>>     Boards with an ARMv8 based Nuvoton SoC shall have the following
+>>>     properties.
+>>>
+>>> properties:
+>>>     $nodename:
+>>>       const: '/'
+>>>     compatible:
+>>>       oneOf:
+>>>
+>>>         - description: MA35D1 evaluation board
+>>>           items:
+>>>             - const: nuvoton,ma35d1-evb
+>>>             - const: nuvoton,ma35d1
+>>>
+>>>         - description: MA35D1 IoT board
+>>>           items:
+>>>             - const: nuvoton,ma35d1-iot
+>> Instead just enum with all board compatibles.
+> 
+> How about to modify it as the follows:
+> 
+>    compatible:
+>      oneOf:
+> 
+>        - description: MA35D1 evaluation board
+>          items:
+>            - enum:
+>                - nuvoton,ma35d1-evb
+>            - const: nuvoton,ma35d1
+> 
+>        - description: MA35D1 IoT board
+>          items:
+>            - enum:
+>                - nuvoton,ma35d1-iot
+>            - const: nuvoton,ma35d1
+> 
+>        - description: MA35D1 SOM board
+>          items:
+>            - enum:
+>                - nuvoton,ma35d1-som512
+>                - nuvoton,ma35d1-som1g
+>            - const: nuvoton,ma35d1
+> 
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+It's still almost the same. All boards together. You can add a comment
+next to the compatible if you want some user-friendly name.
 
-> ---
-> @@ -335,17 +336,19 @@ unsigned long __bus_to_virt(unsigned long res)
->         return res;
->  }
->  EXPORT_SYMBOL(__bus_to_virt);
-> -
-> -unsigned long __pfn_to_bus(unsigned long pfn)
-> +#else
-> +static inline unsigned long fb_bus_sdram_offset(void)
->  {
-> -       return __pfn_to_phys(pfn) + (fb_bus_sdram_offset() - PHYS_OFFSET);
-> +       return BUS_OFFSET;
->  }
-> -EXPORT_SYMBOL(__pfn_to_bus);
-> +#endif /* CONFIG_FOOTBRIDGE_ADDIN */
 
-I have an older patch to remove CONFIG_FOOTBRIDGE_ADDIN
-completely, as it does a couple of other nasty things and there are
-apparently no users. Would that help here?
-
-       Arnd
+Best regards,
+Krzysztof

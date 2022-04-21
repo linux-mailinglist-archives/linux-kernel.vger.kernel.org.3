@@ -2,184 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F8C50A454
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C8850A47A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390170AbiDUPip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
+        id S1390235AbiDUPm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390111AbiDUPio (ORCPT
+        with ESMTP id S1348309AbiDUPmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:38:44 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103C546B34
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:35:54 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id c23so5257713plo.0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:35:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YXKkwFuLNe8vNIMsnycJX9DTuR1p8Pvkhbh/7cpTl38=;
-        b=dpvEDkE6wJIs0gkXt51H/VUztfKGIef2hF9OcHWLjE4hYldjWX9uNhcbEVUEKU1MxN
-         Q1amNjZo4gEceFtF/P367hplKLcJud26Ll9h9ok02EGhmIvleUa2PIiFSzfRVyvTq/i+
-         LgY0hgYcCdqKaT6X7JzqJTCYNsB8JRdg2iMDW8b44MwOiQUnqOoOe7qHjnG/79H46yhS
-         VZuCRd1th7HBgYofi2mJ5CI/sNoVepdRFvkmvGKDstR4afpk79J8BPFYgoMf7Fz8sxA2
-         wugzAVV8QA6wFEct82EWjllhAY63G2uHi2Yzcm6fNkrl9uzYRtAFMTXTT2UEBw1WY+xO
-         ZO6g==
+        Thu, 21 Apr 2022 11:42:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B37E2FE4A
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650555602;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=S9DMw1QVObZXzp5ejmL5d1FwtHhPc8XTYmN4X9Dq3O0=;
+        b=hXZGlethubjqRAQ5wj2M1pNDeC2VLDAJrH2rdhP5MNi2VWBMAEgp4kUF1bhZbkk5agWcIf
+        bwYjsJ1FG/qL21C2/6kNCg9pwLjwx7Io0pAjT7IrNo7zaeGA4gVUxY3kGox6o5uCNTWeQd
+        pjrBJjt8Uct72BajonfdQGl7ge3mnOU=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-539-ELeyo7YsNF-usjRsY-i0Cg-1; Thu, 21 Apr 2022 11:40:01 -0400
+X-MC-Unique: ELeyo7YsNF-usjRsY-i0Cg-1
+Received: by mail-qv1-f72.google.com with SMTP id gy6-20020a056214242600b0044656c198b0so4209018qvb.20
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:39:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YXKkwFuLNe8vNIMsnycJX9DTuR1p8Pvkhbh/7cpTl38=;
-        b=VcHxW0m17xllVvYKmyz46hQLLJaZ/XgOke+ttJ28qDgJ5ZoalASXkx6XHHEDRp6143
-         aNBrMGJpN+QiPASTiJIy+fdQG2I8uUMTelT7V+x1uIXFxxHpwzPzEsjD8fLN80WOpLp7
-         HVlg2KwkmUsJHwwcDV0Mw999K1qRVBf3GxS6Yv/txNQ1buUR47PA/fryV8kExcq2hTyy
-         t8QiMfIDoYI8o48fE1TAHVphbxA9wyg0n3rCVMQE8CSrMAzOwyj79okszRI7zzS91H+o
-         AHh8mx3aKK2zPpECjTjiXD3LwxkWbL/u5BiimWe/u26BD2zJxWKJnbNkAoYfMYZch7qn
-         26oQ==
-X-Gm-Message-State: AOAM532VkxH2kB4jDZwzFjJ7YG6Yn/XZNeFH/XkD7AMUpP5BpS1IpcId
-        GgZuYInh9HlepZNKBc509ziXoMT9uh8Kv3hOTXpJ7tMCVa8=
-X-Google-Smtp-Source: ABdhPJxuI6tMvvaUkKwVPk3D1BsHhnik0L43+MUsPxhJ1b3KXb486gEbYvr/3TsYbGXdCxYJLPzUaqH7GbrTSUwyqQ8=
-X-Received: by 2002:a17:90b:3009:b0:1cb:be72:1d4f with SMTP id
- hg9-20020a17090b300900b001cbbe721d4fmr228057pjb.109.1650555353329; Thu, 21
- Apr 2022 08:35:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S9DMw1QVObZXzp5ejmL5d1FwtHhPc8XTYmN4X9Dq3O0=;
+        b=NvEN46t/WaoLBzLNVaw+0yNQqem490V26Vd0YReJZ8q5ik6PV6i/8majfXuxyrunye
+         0QETpcyKgYPG/SLe8dBfK/z4DsY4Fxy+bLCrP4SnsLYjDdPAWqEk4ERSB2dwqaTot1Lm
+         G+QXvt6SszhTS2PWe4puJ9xxmaZ3aItR3svhQfOenMjeZfabuttSzMeDrsW9uf76XOEk
+         q2GDEMbpt/m3zNsro6cBR7FkayZQ9P6pInt/cyv/p8NiVf1EJio/uaNvWxNh8CUvbnph
+         ZjEWzjuqWd+9O4yJxLZjzCmFnmBhEQN0dPjNv+THfhIsfeJxhahh+Olih+USYxA6y8Ii
+         GkvA==
+X-Gm-Message-State: AOAM533KL+mKJEsJT8PojhkyPxqBDGTy0+ggDOscH29CyTmn9JoJyJbY
+        p5YIu2RzcKkeVFtvRfIR19EMMcih9Fy6KdwkGXk38PiwRP1YAWAzJ+G8rCcoU13HvcTxC121PVU
+        4+2mBJLhGve1a2SCJQR3FoBrJ
+X-Received: by 2002:a05:620a:2489:b0:69e:996d:7940 with SMTP id i9-20020a05620a248900b0069e996d7940mr12470766qkn.553.1650555599182;
+        Thu, 21 Apr 2022 08:39:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwCwL51TZHhleKjAOtyVvVuDn5ubOOLwr4iM0Tlnqh/J1qgACgnab0k7LSIjuU6d2UPFyXdzA==
+X-Received: by 2002:a05:620a:2489:b0:69e:996d:7940 with SMTP id i9-20020a05620a248900b0069e996d7940mr12470746qkn.553.1650555598818;
+        Thu, 21 Apr 2022 08:39:58 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id k14-20020ac85fce000000b002f344fc0e0bsm2401950qta.38.2022.04.21.08.39.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 08:39:58 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     dan.j.williams@intel.com, vishal.l.verma@intel.com,
+        dave.jiang@intel.com, ira.weiny@intel.com
+Cc:     nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] libnvdimm/security: change __nvdimm_security_overwrite_query from global to static
+Date:   Thu, 21 Apr 2022 11:39:51 -0400
+Message-Id: <20220421153951.35792-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220420073717.GD16310@xsang-OptiPlex-9020> <CAHk-=wi6pJhsWLd7t9wEtq5tWh_2O61cSLk-wCgLwFrjW6+jbw@mail.gmail.com>
-In-Reply-To: <CAHk-=wi6pJhsWLd7t9wEtq5tWh_2O61cSLk-wCgLwFrjW6+jbw@mail.gmail.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Thu, 21 Apr 2022 08:35:41 -0700
-Message-ID: <CANaxB-yVLCSHAi3QKMYzsSDRYC5Wz05iWx8yrb57cbiJ__5ThA@mail.gmail.com>
-Subject: Re: [fs/pipe] 5a519c8fe4: WARNING:at_mm/page_alloc.c:#__alloc_pages
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        kernel test robot <lkp@intel.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 12:07 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, Apr 20, 2022 at 12:37 AM kernel test robot
-> <oliver.sang@intel.com> wrote:
-> >
-> > commit: 5a519c8fe4d6 ("fs/pipe: use kvcalloc to allocate a pipe_buffer array")
-> >
-> > [   32.170781][ T3729] WARNING: The mand mount option has been deprecated and
-> > [   32.170781][ T3729]          and is ignored by this kernel. Remove the mand
-> > [   32.170781][ T3729]          option from the mount to silence this warning.
->
-> Heh. Not that warning.
->
-> This warning:
->
-> > [ 224.552771][ T3730] WARNING: CPU: 1 PID: 3730 at mm/page_alloc.c:5364 __alloc_pages (mm/page_alloc.c:5364)
->
-> That's just the
->
->   5363          if (unlikely(order >= MAX_ORDER)) {
->   5364                  WARN_ON_ONCE(!(gfp & __GFP_NOWARN));
->   5365                  return NULL;
->   5366          }
->
-> so somebody is doing a big allocation that will fail, and doesn't use
-> __GFP_NOWARN.
->
-> That someone being iter_file_splice_write():
->
-> > [ 224.567299][ T3730] kmalloc_order (include/linux/gfp.h:572 include/linux/gfp.h:595 include/linux/gfp.h:609 mm/slab_common.c:944)
-> > [ 224.567707][ T3730] kmalloc_order_trace (mm/slab_common.c:960)
-> > [ 224.568173][ T3730] __kmalloc (include/linux/slab.h:510 mm/slub.c:4413)
-> > [ 224.568571][ T3730] iter_file_splice_write (include/linux/slab.h:? include/linux/slab.h:652 fs/splice.c:628)
-> > [ 224.570060][ T3730] do_splice (fs/splice.c:767 fs/splice.c:1079)
-> > [ 224.572386][ T3730] __ia32_sys_splice (fs/splice.c:1144 fs/splice.c:1350 fs/splice.c:1332 fs/splice.c:1332)
->
-> and that's the
->
->         int nbufs = pipe->max_usage;
->         struct bio_vec *array = kcalloc(nbufs, sizeof(struct bio_vec),
->                                         GFP_KERNEL);
->
-> thing, and no, using __GFP_NOWARN here isn't what we'd want to do,
-> because the code in question has no fallback (it will just return
-> -ENOMEM).
->
-> Now, technically, returning -ENOMEM is a "fallback", but not really.
-> It just means the kernel won't crash, it doesn't mean that this is
-> acceptable behavior.
->
-> Basically, that commit 5a519c8fe4d6 made it possible to create a pipe
-> that is effectively "too large to be used". It used to be that such a
-> pipe could never be created before, because the 'pipe->bufs' resizing
-> allocation used to be
->
->         bufs = kcalloc(nr_slots, sizeof(*bufs),
->                        GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
->
-> and 'sizeof(struct pipe_buffer)' is bigger than 'sizeof(struct
-> bio_vec)', so if the resizing was successful, then the pipe buffer
-> count was guaranteed to be smaller than what that file_splice code
-> would use.
->
-> So it really does look like this whole "allow the pipe size to grow
-> almost unlimited" change was a fundamental mistake. It has these kinds
-> of subtle issues.
->
-> I'm inclined to revert commit 5a519c8fe4d6 - doing multiple iterations
-> really shouldn't be so expensive, and this shows that the whole "try
-> to do it in one big go" is fundamentally broken.
->
-> Could 'iter_file_splice_write()' be changed to limit it some way? Yes.
->
-> Could it be changed to use kvcalloc() too? Yes again.
->
-> But I'm not convinced that some odd corner-case CRIU optimization is
-> worth this kind of pain.
+Smatch reports this issue
+security.c:416:6: warning: symbol '__nvdimm_security_overwrite_query' was not declared. Should it be static?
 
-Sorry for the inconvenience. This change is critical for the live
-(iterative) migration scenario. For this case, we have the pre-dump
-operation that dumps processes memory without freezing processes. The
-memory tracker is used to detect what pages have been changed from the
-previous iterations. The pre-dump operation requires being able to grub
-process pages with minimal process downtime. We use pipes for that. CRIU
-injects a parasite code to a target process, vmsplice-s memory to pipes,
-resumes the process, and dumps pages from pipes while the process
-continues doing its job. Right now, we can do reliably pipes with the 3MB
-capacity (1 << PAGE_ALLOC_COSTLY_ORDER) * PAGE_SIZE / sizeof(struct
-kernel_pipe_buffer).
-It means that 1000 pipes allow us to dump only 3GB of memory.
-The operation of injecting/curing parasite code from the
-process is expensive and requires freezing a process. This is why we
-want to maximize the load that we can carry on for each iteration. And I
-am not sure that we can solve this problem without any kernel changes.
-For us, it is the optimization of the often used code path. I know CRIU itself
-is an odd corner case, but anyway it would be good if we can find a solution.
+__nvdimm_security_overwrite_query is only used in security.c so change
+its storage-class specifier to static
 
-We made another attempt to solve the problem by introducing
-process_vmsplice https://lkml.org/lkml/2018/1/9/32. It is stuck with a
-very similar explanation:
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/nvdimm/security.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> All seems fairly straightforward.  The big question is: do we know
-> that people will actually use this, and get sufficient value from it
-> to justify its addition?
+diff --git a/drivers/nvdimm/security.c b/drivers/nvdimm/security.c
+index 4b80150e4afa..d3e782662bf4 100644
+--- a/drivers/nvdimm/security.c
++++ b/drivers/nvdimm/security.c
+@@ -413,7 +413,7 @@ static int security_overwrite(struct nvdimm *nvdimm, unsigned int keyid)
+ 	return rc;
+ }
+ 
+-void __nvdimm_security_overwrite_query(struct nvdimm *nvdimm)
++static void __nvdimm_security_overwrite_query(struct nvdimm *nvdimm)
+ {
+ 	struct nvdimm_bus *nvdimm_bus = walk_to_nvdimm_bus(&nvdimm->dev);
+ 	int rc;
+-- 
+2.27.0
 
-Thanks,
-Andrei
-
-
->
->                       Linus

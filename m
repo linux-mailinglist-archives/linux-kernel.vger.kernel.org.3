@@ -2,167 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B442C50A89E
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E5750A8A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391665AbiDUTCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S1391678AbiDUTDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbiDUTCT (ORCPT
+        with ESMTP id S1391675AbiDUTDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:02:19 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEB92194
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:59:28 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id d6so10313703lfv.9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:59:28 -0700 (PDT)
+        Thu, 21 Apr 2022 15:03:19 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4317312AE9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:00:28 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id y20so11890417eju.7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ak9lVWwM+coDmUHY61U+ZihyKQCtIFN8nTMg/HLgunQ=;
-        b=dUTQSAcJXhEgH56325FZO9cBwpb+y6gnzAUNugFkBCF6CGx9PFgIG3mnV3YjioVs3b
-         TH2pvqbF8RHSX8PsvM64v1T/aseBE32JhDyWgSL5UjmKA/JIDWQwH9YFuRBx6QqXcBTo
-         oZJFMw/LprgNr7LDtNxdhVWuHnyeBLs3xkMBI=
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fjBt4PhnxyvpQZHwHALGbz1X5a0xwh6G7fjizoTyXiA=;
+        b=i6U2/yAjMOkdBidWAmcSgVDLyabaiJJu7U+VStkEjtxawmMvvbGvWob5cDMHUo7yFt
+         VuPfS8hf9Dcyp2vS7vEOqX8O2ufGAPHpMRoKv3PEHyJZzLZVy+VlKS9uTNLRjbGpkvUe
+         fV4PXqEFEMiu0AOTe1MLUCb4GrUVkVwFNUlxk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ak9lVWwM+coDmUHY61U+ZihyKQCtIFN8nTMg/HLgunQ=;
-        b=AiIw96W72YPPbQd/VhoH6RS0SzsIXEUWYT3cPzQljoBZntjXwfz7iNhUfzkkwj13gX
-         TPE73CZgeqVL5jWUJrzibmJHzX/Te2ZgWYBTiYYDhM4+WqoJvBPjYp5yZ1cQR3dncxsq
-         envb7M8aXr9faz8daxWbg0J3AAttKt2TLBaixVHzXEOkbCsGDb3UDmQAFtPvJYjaNThW
-         dXoDF45q5MkR/qXVRPu1vZ8CeZ8BmfSxZz9sE8vUZ6319/gkF9Q4MnRvrZLc2yQOhdSU
-         c0x81b9G2mUk9ptSP73Zkn7kjaoOcM/EUTOpkM8jayaL3EyAa5JMoVwg9b+vZyh/ld/U
-         MPKA==
-X-Gm-Message-State: AOAM533NwMMJWnqFkSZVIgeGtTpglydcJ61A9WFqYELelGmh1VupjS7k
-        lavdVUWZYswxxIADqGMr4IkYjHhcYbvUR8LxdF8=
-X-Google-Smtp-Source: ABdhPJx5HVEMHoDuCVOYUlFNh/PGxruTiZNd0iAjEtOFLyUeij5FNZHaK3OsdYqxa73/d/iINHJdFA==
-X-Received: by 2002:ac2:5923:0:b0:46f:aeef:f269 with SMTP id v3-20020ac25923000000b0046faeeff269mr573124lfi.221.1650567566383;
-        Thu, 21 Apr 2022 11:59:26 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id n4-20020a196f44000000b0047195a0fd47sm1303583lfk.5.2022.04.21.11.59.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 11:59:23 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id x33so10351010lfu.1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:59:22 -0700 (PDT)
-X-Received: by 2002:a05:6512:3c93:b0:44b:4ba:c334 with SMTP id
- h19-20020a0565123c9300b0044b04bac334mr582580lfv.27.1650567562684; Thu, 21 Apr
- 2022 11:59:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fjBt4PhnxyvpQZHwHALGbz1X5a0xwh6G7fjizoTyXiA=;
+        b=0Z3/ni5QIhv9r3zlvoS05nr9rambUjb2FJL+zH+ZfIwYycbBxquYqd+7/sZamFTSHs
+         OjO1P8ycnCd1gYz9WPg3/bhOX5YEzkX+KRUqObs726qEG5ve+62weRYbC/alJSs4Zphi
+         CBo4VmMUW43xxNSH0IpjcKWDsxVRcM95IpjOnbr7N5BqZ7SwtPhRaMvUpPtseQJdTqhg
+         WSBtSjGkI8U8eYsp9aMQUueG/bS64KIW3SNE9BrcXOz0U+I/ys1GkuADeyLRunej/QmT
+         p3kveZCcn9SM+OR8b98P/Tvlw3UlUTDYjkIURKYrieBGPVIOxYdjaUyNwozs4/nLzL9W
+         t3QA==
+X-Gm-Message-State: AOAM5322vvvXoBZ8dTsnl4nf0YVXQThqBq8UGSUSdkyfH+nMRjFvBhwx
+        IcXAl8ec4ULEl1vk5FtjJglSMz+jB9K2Eg==
+X-Google-Smtp-Source: ABdhPJwk7UF//4rit6xV+W/Nlh2a/A65+mGGNIXZIATOnnKEDUzGWzxNkS/uJ9H2oxPTGMBkIRvXSQ==
+X-Received: by 2002:a17:907:8a0c:b0:6f0:180b:df13 with SMTP id sc12-20020a1709078a0c00b006f0180bdf13mr868191ejc.110.1650567626383;
+        Thu, 21 Apr 2022 12:00:26 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com (host-87-0-15-73.retail.telecomitalia.it. [87.0.15.73])
+        by smtp.gmail.com with ESMTPSA id s11-20020a170906284b00b006e108693850sm7975142ejc.28.2022.04.21.12.00.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 12:00:15 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [RESEND PATCH v4 0/6] Input: edt-ft5x06 - Improve configuration
+Date:   Thu, 21 Apr 2022 20:59:57 +0200
+Message-Id: <20220421190003.3228699-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220421072212.608884-1-song@kernel.org> <CAHk-=wi3eu8mdKmXOCSPeTxABVbstbDg1q5Fkak+A9kVwF+fVw@mail.gmail.com>
- <CAADnVQKyDwXUMCfmdabbVE0vSGxdpqmWAwHRBqbPLW=LdCnHBQ@mail.gmail.com>
-In-Reply-To: <CAADnVQKyDwXUMCfmdabbVE0vSGxdpqmWAwHRBqbPLW=LdCnHBQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 21 Apr 2022 11:59:06 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whFeBezdSrPy31iYv-UZNnNavymrhqrwCptE4uW8aeaHw@mail.gmail.com>
-Message-ID: <CAHk-=whFeBezdSrPy31iYv-UZNnNavymrhqrwCptE4uW8aeaHw@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: invalidate unused part of bpf_prog_pack
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: multipart/mixed; boundary="0000000000004099a605dd2eb54d"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000004099a605dd2eb54d
-Content-Type: text/plain; charset="UTF-8"
+The series was born from the analysis and mitigation of a crc problem
+raised by an M06 type device. The added sysfs attributes were helpful
+in debugging the problem. Patches that change the report rate on driver
+probing, mitigated crc errors on kernel bootup. The patch to get/set
+report rate by sysfs for an M12 device, has been tested.
 
-On Thu, Apr 21, 2022 at 11:24 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> Let's not complicate the logic by dragging jit_fill_hole
-> further into generic allocation.
+Changes in v4:
+- Add Rob Herring 'Acked-by' tag.
 
-I agree that just zeroing the page is probably perfectly fine in
-practice on x86, but I'm also not really seeing the "complication" of
-just doing things right.
+Changes in v3:
+- Add hz unit suffix.
+- Add '|' to description.
+- Check the lower and upper limits of the report-rate-hz value
+- Convert the M06 report-rate-hz value
 
-> The existing bpf_prog_pack code still does memset(0xcc)
-> a random range of bytes before and after jit-ed bpf code.
+Changes in v2:
+- Add Oliver Graute's 'Acked-by' tag to:
+  * Input: edt-ft5x06 - show model name by sysfs
+  * Input: edt-ft5x06 - show firmware version by sysfs
+- Fix yaml file. Tested with `make DT_CHECKER_FLAGS=-m dt_binding_check'.
 
-That is actually wishful thinking, and not based on reality.
+Dario Binacchi (6):
+  dt-bindings: input: touchscreen: edt-ft5x06: add report-rate-hz
+  Input: edt-ft5x06 - get/set M12 report rate by sysfs
+  Input: edt-ft5x06 - set report rate by dts property
+  Input: edt-ft5x06 - show model name by sysfs
+  Input: edt-ft5x06 - show firmware version by sysfs
+  Input: edt-ft5x06 - show crc and header errors by sysfs
 
-From what I can tell, the end of the jit'ed bpf code is actually the
-exception table entries, so we have that data being marked executable.
+ .../input/touchscreen/edt-ft5x06.yaml         |   8 ++
+ drivers/input/touchscreen/edt-ft5x06.c        | 103 ++++++++++++++++--
+ 2 files changed, 103 insertions(+), 8 deletions(-)
 
-Honestly, what is wrong with this trivial patch?
+-- 
+2.32.0
 
-I've not *tested* it, but it looks really really simple to me. Take it
-as a "something like this" rather than anything else.
-
-And yes, it would be better if bpf_jit_binary_pack_free did it too, so
-that you don't have random old JIT'ed code lying around (and possibly
-still in CPU branch history caches or whatever).
-
-And it would be lovely if the exception table entries would be part of
-another allocation and not marked executable.
-
-But I certainly don't see the _downside_ (or complexity) of just doing
-this, instead of zeroing things.
-
-So this is by no means perfect, but it seems at least incrementally
-_better_ than just zeroing. No?
-
-                    Linus
-
---0000000000004099a605dd2eb54d
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l29ck8xn0>
-X-Attachment-Id: f_l29ck8xn0
-
-IGtlcm5lbC9icGYvY29yZS5jIHwgMTAgKysrKysrLS0tLQogMSBmaWxlIGNoYW5nZWQsIDYgaW5z
-ZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9rZXJuZWwvYnBmL2NvcmUu
-YyBiL2tlcm5lbC9icGYvY29yZS5jCmluZGV4IDEzZTlkYmVlZWRmMy4uYTRjZmMzNTNhNTJkIDEw
-MDY0NAotLS0gYS9rZXJuZWwvYnBmL2NvcmUuYworKysgYi9rZXJuZWwvYnBmL2NvcmUuYwpAQCAt
-ODczLDcgKzg3Myw3IEBAIHN0YXRpYyBzaXplX3Qgc2VsZWN0X2JwZl9wcm9nX3BhY2tfc2l6ZSh2
-b2lkKQogCXJldHVybiBzaXplOwogfQogCi1zdGF0aWMgc3RydWN0IGJwZl9wcm9nX3BhY2sgKmFs
-bG9jX25ld19wYWNrKHZvaWQpCitzdGF0aWMgc3RydWN0IGJwZl9wcm9nX3BhY2sgKmFsbG9jX25l
-d19wYWNrKGJwZl9qaXRfZmlsbF9ob2xlX3QgYnBmX2ZpbGxfaWxsX2luc25zKQogewogCXN0cnVj
-dCBicGZfcHJvZ19wYWNrICpwYWNrOwogCkBAIC04ODksMTMgKzg4OSwxNCBAQCBzdGF0aWMgc3Ry
-dWN0IGJwZl9wcm9nX3BhY2sgKmFsbG9jX25ld19wYWNrKHZvaWQpCiAJYml0bWFwX3plcm8ocGFj
-ay0+Yml0bWFwLCBicGZfcHJvZ19wYWNrX3NpemUgLyBCUEZfUFJPR19DSFVOS19TSVpFKTsKIAls
-aXN0X2FkZF90YWlsKCZwYWNrLT5saXN0LCAmcGFja19saXN0KTsKIAorCWJwZl9maWxsX2lsbF9p
-bnNucyhwYWNrLT5wdHIsIGJwZl9wcm9nX3BhY2tfc2l6ZSk7CiAJc2V0X3ZtX2ZsdXNoX3Jlc2V0
-X3Blcm1zKHBhY2stPnB0cik7CiAJc2V0X21lbW9yeV9ybygodW5zaWduZWQgbG9uZylwYWNrLT5w
-dHIsIGJwZl9wcm9nX3BhY2tfc2l6ZSAvIFBBR0VfU0laRSk7CiAJc2V0X21lbW9yeV94KCh1bnNp
-Z25lZCBsb25nKXBhY2stPnB0ciwgYnBmX3Byb2dfcGFja19zaXplIC8gUEFHRV9TSVpFKTsKIAly
-ZXR1cm4gcGFjazsKIH0KIAotc3RhdGljIHZvaWQgKmJwZl9wcm9nX3BhY2tfYWxsb2ModTMyIHNp
-emUpCitzdGF0aWMgdm9pZCAqYnBmX3Byb2dfcGFja19hbGxvYyh1MzIgc2l6ZSwgYnBmX2ppdF9m
-aWxsX2hvbGVfdCBicGZfZmlsbF9pbGxfaW5zbnMpCiB7CiAJdW5zaWduZWQgaW50IG5iaXRzID0g
-QlBGX1BST0dfU0laRV9UT19OQklUUyhzaXplKTsKIAlzdHJ1Y3QgYnBmX3Byb2dfcGFjayAqcGFj
-azsKQEAgLTkxMCw2ICs5MTEsNyBAQCBzdGF0aWMgdm9pZCAqYnBmX3Byb2dfcGFja19hbGxvYyh1
-MzIgc2l6ZSkKIAkJc2l6ZSA9IHJvdW5kX3VwKHNpemUsIFBBR0VfU0laRSk7CiAJCXB0ciA9IG1v
-ZHVsZV9hbGxvYyhzaXplKTsKIAkJaWYgKHB0cikgeworCQkJYnBmX2ZpbGxfaWxsX2luc25zKHB0
-ciwgc2l6ZSk7CiAJCQlzZXRfdm1fZmx1c2hfcmVzZXRfcGVybXMocHRyKTsKIAkJCXNldF9tZW1v
-cnlfcm8oKHVuc2lnbmVkIGxvbmcpcHRyLCBzaXplIC8gUEFHRV9TSVpFKTsKIAkJCXNldF9tZW1v
-cnlfeCgodW5zaWduZWQgbG9uZylwdHIsIHNpemUgLyBQQUdFX1NJWkUpOwpAQCAtOTIzLDcgKzky
-NSw3IEBAIHN0YXRpYyB2b2lkICpicGZfcHJvZ19wYWNrX2FsbG9jKHUzMiBzaXplKQogCQkJZ290
-byBmb3VuZF9mcmVlX2FyZWE7CiAJfQogCi0JcGFjayA9IGFsbG9jX25ld19wYWNrKCk7CisJcGFj
-ayA9IGFsbG9jX25ld19wYWNrKGJwZl9maWxsX2lsbF9pbnNucyk7CiAJaWYgKCFwYWNrKQogCQln
-b3RvIG91dDsKIApAQCAtMTEwMiw3ICsxMTA0LDcgQEAgYnBmX2ppdF9iaW5hcnlfcGFja19hbGxv
-Yyh1bnNpZ25lZCBpbnQgcHJvZ2xlbiwgdTggKippbWFnZV9wdHIsCiAKIAlpZiAoYnBmX2ppdF9j
-aGFyZ2VfbW9kbWVtKHNpemUpKQogCQlyZXR1cm4gTlVMTDsKLQlyb19oZWFkZXIgPSBicGZfcHJv
-Z19wYWNrX2FsbG9jKHNpemUpOworCXJvX2hlYWRlciA9IGJwZl9wcm9nX3BhY2tfYWxsb2Moc2l6
-ZSwgYnBmX2ZpbGxfaWxsX2luc25zKTsKIAlpZiAoIXJvX2hlYWRlcikgewogCQlicGZfaml0X3Vu
-Y2hhcmdlX21vZG1lbShzaXplKTsKIAkJcmV0dXJuIE5VTEw7Cg==
---0000000000004099a605dd2eb54d--

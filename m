@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9FE50ABE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8825150ABE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442310AbiDUXU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 19:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S1442165AbiDUXUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 19:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442211AbiDUXU5 (ORCPT
+        with ESMTP id S1392628AbiDUXUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:20:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415163CFE1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650583086; x=1682119086;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3HDiJ8oX4H1fort48Tf+jIRSNYLDP5q421WmnpUv1+0=;
-  b=bT/m3clYtb57EOtssr7DX7whS3grn9hDreraqVRMy5rp6ZDZaj0h3QWk
-   jvaeTHl9IzwZlAg1VmbIbRCet1o43dy7cm4the8RdbzMP478EHIYPGPw0
-   1Sr9AzhoDRmefERAqbtmoFdKTyRHx89s8WlXo1B23zLq5D9BhoLWb3mXL
-   zmgAr/jEJP2riI6tFVYUK5F/WNktQRMNKFGZMPBpuRi46u4vAOaTMYif0
-   p6eFgkbX4j837NX0jPmk2R9nXqzTjcRcnXHqjlGIWa7GKaWcMZ1ekFLCr
-   7XMmPHrkxtrTfrS14jInStnRNhVgyua+zNMTxpZFrmwd8+ZZ4L2fvB59r
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263357995"
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="263357995"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:18:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="626726823"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Apr 2022 16:18:04 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhg3n-0008sY-S1;
-        Thu, 21 Apr 2022 23:18:03 +0000
-Date:   Fri, 22 Apr 2022 07:16:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: drivers/watchdog/pic32-wdt.c:159:34: warning: unused variable
- 'pic32_wdt_dt_ids'
-Message-ID: <202204220754.nuORtA1j-lkp@intel.com>
+        Thu, 21 Apr 2022 19:20:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00ADA30F7C;
+        Thu, 21 Apr 2022 16:17:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C05A6B82978;
+        Thu, 21 Apr 2022 23:17:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D4DC385A7;
+        Thu, 21 Apr 2022 23:17:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650583041;
+        bh=7ZTWzXdUo5/Xd7sMk8LeC/OokYQbt6jUM/9BzNl6nzE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=RztVbP8GpwM+JTXX3VkA9TnF2nqs3mHWbjmq1xYgvV7mVOOuSqtIru9fsvUp3Q7TA
+         joWQqv0XEJi5aD8/R091tZWrZCz/aUdIJN3aw/Vl64QSBk6LwtN3wgTeWbH6U1sX6T
+         TMz6B95UNhhO9CxtqCx8eylAtXztmpTzfctD3bedwoeNj4mdH2LY5gj2DwOV9eDleX
+         KEQlJQ3VWYZamtEZ0PCDH5SL12AfyvZGREelL5+6aMhbeuJ+Ph/F3aw7Qsk8pJx7IE
+         rbg8ke58jGo7Zh6EzLU1YystwtWkkuuk8cLnqoWi3pUqi0tTSraFw5La+7x1g48PAJ
+         UhO+B6nhYKBAQ==
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 45F562D1E68; Fri, 22 Apr 2022 01:17:18 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
+To:     Alexander Lobakin <alobakin@pm.me>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Song Liu <songliubraving@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 bpf 00/11] bpf: random unpopular userspace fixes (32
+ bit et al)
+In-Reply-To: <20220421223201.322686-1-alobakin@pm.me>
+References: <20220421003152.339542-1-alobakin@pm.me>
+ <CAADnVQJJiBO5T3dvYaifhu3crmce7CH9b5ioc1u4=Y25SUxVRA@mail.gmail.com>
+ <20220421223201.322686-1-alobakin@pm.me>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 22 Apr 2022 01:17:18 +0200
+Message-ID: <871qxqgh6p.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b253435746d9a4a701b5f09211b9c14d3370d0da
-commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
-date:   1 year, 7 months ago
-config: mips-randconfig-r005-20220422 (https://download.01.org/0day-ci/archive/20220422/202204220754.nuORtA1j-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/staging/media/hantro/ drivers/watchdog/
+Alexander Lobakin <alobakin@pm.me> writes:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Date: Wed, 20 Apr 2022 17:40:34 -0700
+>
+>> On Wed, Apr 20, 2022 at 5:38 PM Alexander Lobakin <alobakin@pm.me> wrote:
+>>
+>> Again?
+>>
+>> -----BEGIN PGP MESSAGE-----
+>> Version: ProtonMail
+>>
+>> wcFMA165ASBBe6s8AQ/8C9y4TqXgASA5xBT7UIf2GyTQRjKWcy/6kT1dkjkF
+>> FldAOhehhgLYjLJzNAIkecOQfz/XNapW3GdrQDq11pq9Bzs1SJJekGXlHVIW
+>>
+>> Sorry I'm tossing the series out of patchwork.
+>
+> Oh sorry, I was hoping upgrading Bridge would help >_<
+>
+> Let me know if you're reading this particular message in your inbox
+> finely. Toke guessed it precisely regarding the per-recipient lists
+> -- Proton by default saves every address I've ever sent mails to to
+> Contacts and then tries to fetch PGP public keys for each contact.
+> Again, for some reason, for a couple addresses, including
+> ast@kernel.org, it managed to fetch something, but that something
+> was sorta broken. So at the end I've been having broken PGP for
+> the address I've never manually set or ev
+> en wanted PGP.
+> If it's still messed, I'll contact support then. Sorry again for
+> this.
 
-All warnings (new ones prefixed by >>):
+Heh, yeah, now that I was in the direct Cc list, I got your message in
+encrypted form as well. So, erm, I'm reading it "fine" now that I
+figured out how to get my MUA to decrypt it. Probably not what you want
+for patch submissions, though... :P
 
->> drivers/watchdog/pic32-wdt.c:159:34: warning: unused variable 'pic32_wdt_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id pic32_wdt_dt_ids[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/pic32_wdt_dt_ids +159 drivers/watchdog/pic32-wdt.c
-
-8f91fc56bc439a Joshua Henderson 2016-02-26  158  
-8f91fc56bc439a Joshua Henderson 2016-02-26 @159  static const struct of_device_id pic32_wdt_dt_ids[] = {
-8f91fc56bc439a Joshua Henderson 2016-02-26  160  	{ .compatible = "microchip,pic32mzda-wdt", },
-8f91fc56bc439a Joshua Henderson 2016-02-26  161  	{ /* sentinel */ }
-8f91fc56bc439a Joshua Henderson 2016-02-26  162  };
-8f91fc56bc439a Joshua Henderson 2016-02-26  163  MODULE_DEVICE_TABLE(of, pic32_wdt_dt_ids);
-8f91fc56bc439a Joshua Henderson 2016-02-26  164  
-
-:::::: The code at line 159 was first introduced by commit
-:::::: 8f91fc56bc439a5baefae598040d263f48526596 watchdog: pic32-wdt: Add PIC32 watchdog driver
-
-:::::: TO: Joshua Henderson <joshua.henderson@microchip.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-Toke

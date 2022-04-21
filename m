@@ -2,101 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A2D50ABFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A6A50ABFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442564AbiDUXgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 19:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S1442572AbiDUXge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 19:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243601AbiDUXf6 (ORCPT
+        with ESMTP id S243601AbiDUXgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:35:58 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2A43D4AB
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:33:07 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id z16so6370952pfh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:33:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=8PUlXciI2A9evvTWD64wT0yzak9WMui2iFOCoQYp1Qo=;
-        b=M644v8gEFmCO5jX3JuVj80cOKUPZYNigSrWDmIKTxN4iBYN7RRx17H/WXIKtybkzOs
-         gHuGCuUb5/2Y4q0PAwBhVwIAH7NEdJUAXNk0R3bvWjKaauknVSIE+osK6C31khyWSGqV
-         +/MIN30NvG/1bL/x64Ej4XKH14WrlwlOEbvkequaDw82s5dagxGthjJHsa3E36Vzd2um
-         1RGwRHC37VQU52cdbBupVxlkWqO0+6u0VHlVAgx4qg31wljljZeki2AIAmXbQu2T6NCh
-         GAFSLCJw84pZSfkw2JFKYn4dgW5RciQPm368mB4wGdkuDVFjwKuw/rAhmlCbLu+HnBiq
-         iGcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=8PUlXciI2A9evvTWD64wT0yzak9WMui2iFOCoQYp1Qo=;
-        b=Flv5gmnY1fFyfIvyWtvqmWGI7XnRMXNqe1jdrhv5PQziNZSzhUeHlND5ZcjnOhy87/
-         iOgB1+SdD/v+0xhEbL7raewe7E207jKsZj0u/0ApIjNoI/j5ZG+AYBsNRd8qEbdfeZsU
-         2p46zcoIAYLEv1xDvwmsWjsR78LLrhHlEIA1CqOGqG64AYTO4HbqIRLhODvZjRYvrk6D
-         wAPL79rTlRXRrBFuxNax/cekGUs6pFHiGGZ4rTNod08FtMq7Xgla3/I3Qo1pmCJzW7gV
-         DxJetxdWCZa8bQVetdIm3PH8430R5Z+rvlsh0zoXpnmLhwE+Zur22uY6n0sHEsjC1C1X
-         Sehw==
-X-Gm-Message-State: AOAM530UUylJB6NQIKWjufxfG80INCl9WMZeaSWaogYxfdouyb0zxwZZ
-        L4OR31RGBu5GVLIF3ayvYdbgqA==
-X-Google-Smtp-Source: ABdhPJzuZYv0sW9q8OZoDmmfbOPX+UHh3VAIdTDWRpkMgZKFtpJVJq2u5sEBYNthTN9h5ACG9jDyYQ==
-X-Received: by 2002:a65:60c1:0:b0:39d:9c28:909a with SMTP id r1-20020a6560c1000000b0039d9c28909amr1552046pgv.352.1650583986827;
-        Thu, 21 Apr 2022 16:33:06 -0700 (PDT)
-Received: from ?IPV6:2600:380:4927:368a:ac15:d192:1695:2335? ([2600:380:4927:368a:ac15:d192:1695:2335])
-        by smtp.gmail.com with ESMTPSA id w7-20020aa79547000000b0050ad0e82e6dsm194749pfq.215.2022.04.21.16.33.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 16:33:06 -0700 (PDT)
-Message-ID: <b32cf3e2-a68c-b1b0-f3da-72e5f0b9d86c@kernel.dk>
-Date:   Thu, 21 Apr 2022 17:33:04 -0600
+        Thu, 21 Apr 2022 19:36:32 -0400
+Received: from smtp.hosts.co.uk (smtp.hosts.co.uk [85.233.160.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6043FBCA;
+        Thu, 21 Apr 2022 16:33:39 -0700 (PDT)
+Received: from host86-155-180-61.range86-155.btcentralplus.com ([86.155.180.61] helo=[192.168.1.65])
+        by smtp.hosts.co.uk with esmtpa (Exim)
+        (envelope-from <antlists@youngman.org.uk>)
+        id 1nhgIs-0004mn-6l;
+        Fri, 22 Apr 2022 00:33:38 +0100
+Message-ID: <4cabddcc-c83c-483d-89db-996862f1f49c@youngman.org.uk>
+Date:   Fri, 22 Apr 2022 00:33:34 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 6/6] io_uring: allow NOP opcode in IOPOLL mode
-To:     Dylan Yudaken <dylany@fb.com>
-Cc:     io-uring <io-uring@vger.kernel.org>,
-        "Pavel Begunkov (Silence)" <asml.silence@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        FB Kernel Team <kernel-team@fb.com>,
-        Dylan Yudaken <dylany@fb.com>
-References: <20220421091345.2115755-1-dylany@fb.com>
- <20220421091345.2115755-7-dylany@fb.com>
-Content-Language: en-US
-In-Reply-To: <20220421091345.2115755-7-dylany@fb.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 01/12] md/raid5: Factor out ahead_of_reshape() function
+Content-Language: en-GB
+To:     Logan Gunthorpe <logang@deltatee.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <20220420195425.34911-1-logang@deltatee.com>
+ <20220420195425.34911-2-logang@deltatee.com>
+ <b0bd9204-1f76-aba3-b754-464e28763f59@molgen.mpg.de>
+ <3252df44-5856-c1ed-174e-18748387cdd2@deltatee.com>
+From:   Wol <antlists@youngman.org.uk>
+In-Reply-To: <3252df44-5856-c1ed-174e-18748387cdd2@deltatee.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 3:17 AM Dylan Yudaken <dylany@fb.com> wrote:
->
-> This is useful for tests so that IOPOLL can be tested without requiring
-> files. NOP is acceptable in IOPOLL as it always completes immediately.
+On 21/04/2022 17:05, Logan Gunthorpe wrote:
+>> I like the ternary operator.;-)
+>>
+>>      return mddev->reshape_backwards ? (return sector < reshape_sector) :
+>> (sector >= reshape_sector)
+>>
+>> Sorry, does not matter.
+> Yeah, I think plenty of people do not, though; it's harder to read with
+> the long line and awkward to wrap.
+> 
+I like the ternary too, but is there a superfluous return in there? That 
+would shorten the line. Or break it on the question mark - condition, 
+true, false all on their own lines.
 
-This one actually breaks two liburing test cases (link and defer) that
-assume NOP on IOPOLL will return -EINVAL. Not a huge deal, but we do
-need to figure out how to make them reliably -EINVAL in a different
-way then.
-
-Maybe add a nop_flags to the usual flags spot in the sqe, and define
-a flag that says NOP_IOPOLL or something. Require this flag set for
-allowing NOP on iopoll. That'd allow testing, but still retain the
--EINVAL behavior if not set.
-
-Alternatively, modify test cases...
-
-I'll drop this one for now, just because it fails the regression
-tests.
-
--- 
-Jens Axboe
-
+Cheers,
+Wol

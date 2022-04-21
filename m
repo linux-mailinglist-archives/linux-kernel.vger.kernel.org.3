@@ -2,107 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F7050A968
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40B650A96B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350292AbiDUToG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
+        id S232838AbiDUTos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiDUToB (ORCPT
+        with ESMTP id S231993AbiDUTop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:44:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE984B87F;
-        Thu, 21 Apr 2022 12:41:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66FA6B823F3;
-        Thu, 21 Apr 2022 19:41:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A644C385A5;
-        Thu, 21 Apr 2022 19:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650570068;
-        bh=ntFE53p9Qvm/OfNU4+7MbHF6ffpndaoZRWXP15X8/44=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=U6A8w2kIaR4rJ1fCtXKRialGvxNMKx7SOP2BThd7NjCisYDwRYtM/EmpLmDc5I1kE
-         y83SO568wSzu51M5vYPxitcCX5rxQiT5ZkS+M8Ux0Dtb6gzy8ZMiOci0uD588JdopU
-         VtcdMmpp9ML+B6fo268mIPOxuUBkiaLqr1u82TdS7ne/pP3grdIvSe+3lbefGZyV02
-         AhhLePzwv0c+8gL6jFyC2/4XZHdpnN43ZlYjkXv0YFUo4kvpamX4/Ty0WYmHh0MyuW
-         L/rXhPxovhlws+6aax+2fO7BG+r2iuY1NcLNHkiD9GpbdeP0RNR2EYBWnP+Y71js9F
-         6CsOGmjxTVgDQ==
-Received: by mail-yb1-f178.google.com with SMTP id b26so4950255ybj.13;
-        Thu, 21 Apr 2022 12:41:08 -0700 (PDT)
-X-Gm-Message-State: AOAM5334hw/e1llg32ZFu50OCuUXiYwc+QWDGJ08LReu21ySGXukIrpN
-        uzYVvjkC4HLaxx9R1SF9kAPQ6n4i8xeamGADgdw=
-X-Google-Smtp-Source: ABdhPJwiyImZimNqRZqXCUsmgQavJEPUZ7SAYyM2AhZ42Hk0FpySohvV8lD5LNrh+33hAbGhLLJsR3LnGiQAF6o0Ric=
-X-Received: by 2002:a05:6902:114c:b0:641:87a7:da90 with SMTP id
- p12-20020a056902114c00b0064187a7da90mr1356895ybu.561.1650570067256; Thu, 21
- Apr 2022 12:41:07 -0700 (PDT)
+        Thu, 21 Apr 2022 15:44:45 -0400
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5AE4B87B
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:41:54 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id j8so5994918pll.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:41:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=ICt5XunHqsELIdqZvSPeKFkS3NdL0ipmf4jJkro4jDI=;
+        b=bPVCUHYgiFTsRFDjkSN9Wir7iTk2Lrk+/qPV44ewQiZA/21E2gvgx+7C60y9BUIGC6
+         MyHbIdQI5Mi1iowaWVNrPa5PDdMJXdXEwe6RM8oMxJmfLhoP8VPzZBqht0ui6+8KqTHX
+         zqzHDjtfcCKYsx9nup0pIjxdlrrOu3ioNlYUjwUq+dKSXt6DqOFqTTdVwikeOFxJTemm
+         8HmtlCo1ds70ckXvIKadaniUKzShIDkOIc2tG7yyCg/BD7Q62lp0wagwbNYBRBRxablj
+         5vmMKJqKe+QHUIvsS+dNee5i7s5IEoX8o2Pe2jqkhjLkACzR96JoAqyBCnRwHBmbuJgZ
+         dm1A==
+X-Gm-Message-State: AOAM531X8qOi64uiHH9RsitGuWrMP6WbtFUYDccHxB6c1Ljb6vGbOqQ4
+        ha34WKwSq5qfKSOTCRgpaXWTnw==
+X-Google-Smtp-Source: ABdhPJxpOKBLlWVUs2NzoRXMdBxSn5hTiUFvJaFcN6Sw89Ynkamt2rs5a60P62l9RvRwU+EuGV/FjQ==
+X-Received: by 2002:a17:902:b596:b0:158:f23a:c789 with SMTP id a22-20020a170902b59600b00158f23ac789mr927819pls.57.1650570113700;
+        Thu, 21 Apr 2022 12:41:53 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id v14-20020a17090a6b0e00b001d2bff34228sm3703433pjj.9.2022.04.21.12.41.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 12:41:53 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
+In-Reply-To: <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
+References: <20220420102044.10832-1-roger.lu@mediatek.com>
+ <7hczhbe3wn.fsf@baylibre.com>
+ <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
+Date:   Thu, 21 Apr 2022 12:41:52 -0700
+Message-ID: <7hsfq6ql4v.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <20220421072212.608884-1-song@kernel.org> <CAHk-=wi3eu8mdKmXOCSPeTxABVbstbDg1q5Fkak+A9kVwF+fVw@mail.gmail.com>
- <CAADnVQKyDwXUMCfmdabbVE0vSGxdpqmWAwHRBqbPLW=LdCnHBQ@mail.gmail.com> <CAHk-=whFeBezdSrPy31iYv-UZNnNavymrhqrwCptE4uW8aeaHw@mail.gmail.com>
-In-Reply-To: <CAHk-=whFeBezdSrPy31iYv-UZNnNavymrhqrwCptE4uW8aeaHw@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 21 Apr 2022 12:40:56 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7M6exGD3C1cPBGjhU0Y5efxtJ3=0BWNnbuH87TgQMzdg@mail.gmail.com>
-Message-ID: <CAPhsuW7M6exGD3C1cPBGjhU0Y5efxtJ3=0BWNnbuH87TgQMzdg@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: invalidate unused part of bpf_prog_pack
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Roger,
 
-On Thu, Apr 21, 2022 at 11:59 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Apr 21, 2022 at 11:24 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > Let's not complicate the logic by dragging jit_fill_hole
-> > further into generic allocation.
->
-> I agree that just zeroing the page is probably perfectly fine in
-> practice on x86, but I'm also not really seeing the "complication" of
-> just doing things right.
->
-> > The existing bpf_prog_pack code still does memset(0xcc)
-> > a random range of bytes before and after jit-ed bpf code.
->
-> That is actually wishful thinking, and not based on reality.
->
-> From what I can tell, the end of the jit'ed bpf code is actually the
-> exception table entries, so we have that data being marked executable.
->
-> Honestly, what is wrong with this trivial patch?
+Roger Lu <roger.lu@mediatek.com> writes:
 
-This version would fill the memory with illegal instruction when we
-allocate the bpf_prog_pack.
+> On Wed, 2022-04-20 at 16:22 -0700, Kevin Hilman wrote:
 
-The extra logic I had in the original patch was to erase the memory
-when a BPF program is freed. In this case, the memory will be
-returned to the bpf_prog_pack, and stays as RO+X. Actually, I
-am not quite sure whether we need this logic. If not, we only need
-the much simpler version.
+[...]
+
+>> That being said, it would be really nice to see an integration tree
+>> where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
+>> 
+>> For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
+>> board, it fails to probe[1] because there is no CCI node in the upstream
+>> mt8183.dtsi.
+>> 
+>> I'm assuming this series is also not very useful without the CPUfreq
+>> series from Rex, so being able to test this, CCI and CPUfreq together on
+>> MT8183 on a mainline kernel would be very helpful.
+>> 
+>> Kevin
+>> 
+>> [1]
+>> [    0.573332] mtk-svs 1100b000.svs: cannot find cci node
+>> [    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe fail
+>
+> Just share. I've tested this series on below two platforms and it works as
+> expected.
+> - mt8183-Krane (kernel-v5.10)
+> - mt8192-Hayato (kernel-v5.4)
+
+Unfortunately testing on v5.4 and v5.10 with lots of other additional
+out-of-tree patches does not give much confidence that this series works
+with upstream, especially when I've given a few reasons why it will not
+work uptream.
+
+The examples I gave above for CCI and CPUs/cluster disable are good
+examples, but another one I forgot to mention is the dependency on Mali.
+The SVS driver will never probe because it also depens on a "mali" node,
+which doesn't exist upstream either (but panfrost does, and acutually
+loads/probes fine on v5.17/v5.18) so this should be fixed to work with
+upstream panfrost.
+
+IMO, in order for this to be merged upstream, it should at least have
+some basic validation with upstream, and so far I have not even been
+able to make it successfuly probe.  To do that, you will need to either
+provide a list of the dependencies for testing this with mainline
+(e.g. CCI series, CPUfreq series, any DT changes), or even better, an
+integration tree based on recent mainline (e.g. v5.17 stable, or
+v5.18-rc) which shows all the patches (in addition to this series) used
+to validate this on mainline.
 
 Thanks,
-Song
+
+Kevin
+
+
+

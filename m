@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42703509882
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399EE509863
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385546AbiDUHHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
+        id S236684AbiDUHH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385571AbiDUHHg (ORCPT
+        with ESMTP id S1385553AbiDUHHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:07:36 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE4D15704;
-        Thu, 21 Apr 2022 00:04:48 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso4336968pjj.2;
-        Thu, 21 Apr 2022 00:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ckZb8HQa6B+H6t9pofeOOWMFEAGtcGaN614SCDhVQYA=;
-        b=SHDfVa3FMmxgIMWcn+Q/V5BXKCMqc6gupBa491JtUf1YiJXt+jMBITI1+IndLPAiIv
-         qD3FcIJbcu4Z7orWyaJDi7S/qhIErBQTYGkWKwxUlUJ2vMf+DsGzkb0kk9s3xYo/3k0Q
-         q/9kDDn1jaPKUZneasma7uFV0PCTz3gm6cl0XD7cUOAbhJilfDoai2do+GjxN34nx897
-         W2ff5yPbIFfPf8l1ovxQlBqjo0jBNRi8Lu65nc+tYdDHkL6ab8PVF4pkwqLl8bIoBbkB
-         6l5CxHzI/LentyJLL/pPGx8po3avHC9IScIBKDV/A1u12xhU8rFhiCHPGCJf/meaz7yd
-         7d9Q==
+        Thu, 21 Apr 2022 03:07:47 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5FB2AF3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:04:58 -0700 (PDT)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A4BEA3F1AE
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:04:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1650524697;
+        bh=6HdSC5MBPOMufV6HBiKEeWBhFc9GPRC0t6FN09g0Ni0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Cw2hKVUc6XGwBB+Gjih/0VWVNIVc7Dp0qKge0i9JpzERau/+WbW88f6qq58S2RJlD
+         3qjXktxUjy4B2y60soDW/Kkm1I8bU2kHWTAYO0F69gAIN3Mk44KWa/kF5CVwulr1Et
+         FJfPUQ/jqGSBAqCj8ClZAzT9Ln3uI8qBQ8JMRWCIrKOY6q3aw0VNcnWOI7mwC767/J
+         JdnC0xjrZxEgeQedGIW3bEULykCJBPFYsPSxCeJ0Y/MdUg0RcKSit9bSuufsNWSh4H
+         jl9EtmHZKmzej+6HXTvx6dW8k3iDYXkOIIsYltEM2o8RBXqKjgCBsoHyGyuvtltfaA
+         p6krUlgwd9e5w==
+Received: by mail-ej1-f72.google.com with SMTP id gn13-20020a1709070d0d00b006efe23342c7so304941ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:04:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ckZb8HQa6B+H6t9pofeOOWMFEAGtcGaN614SCDhVQYA=;
-        b=kF99Lb+uWG+J7oEnYZsZypTaFKqDUvQxFnd0OAKW6DIzpMvzYLIK4srMVyh2Z58BbL
-         mCG76lBDu5RqQ13HRLTnSeL4xfkibx0MmYHXD5nahIhBmFIlp5+hZEXW8vI/PSzRKowt
-         s8ysI+Z8bhIqY/IqR23bNsvxyKUSNTieirl0dDjD0EU09CfZH8rFKQYmZfyGGHRoY8jO
-         VggFSlQd7ke1xvhZ7xTOvG8l/4bp6XewY2l/n6xUPs9RhaWMwYWrmnwIcElj4AsXfRDe
-         fuwjbUokzzWbkoF6dDKw0myd3fOpogZZpZO+2M0NeXpCBSEfl42lPxauPNYYpVUlAeFF
-         QGBA==
-X-Gm-Message-State: AOAM531XkUBWZQOjVRGTLsthYme3InjsrnPIQHJZ7B9VHaIDDXSUQCon
-        VBE5VrpghFpTAvq6A6LgWX8=
-X-Google-Smtp-Source: ABdhPJwvc2lunSrpC+kueBLFryH5B7Be+qQXCmSIgefygKENy10PWbdlNKjZ/L9Cw3ZyArJ2KKboJg==
-X-Received: by 2002:a17:902:8f81:b0:154:be2d:1948 with SMTP id z1-20020a1709028f8100b00154be2d1948mr24109757plo.110.1650524687783;
-        Thu, 21 Apr 2022 00:04:47 -0700 (PDT)
-Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
-        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004f72acd4dadsm22961885pfx.81.2022.04.21.00.04.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 00:04:47 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 00:04:44 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
- attestation interface driver
-Message-ID: <20220421070444.GB1423762@private.email.ne.jp>
-References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220420012032.GA2224031@ls.amr.corp.intel.com>
- <dd4a2b16-397e-8866-0fd5-b5c5dfd453ab@linux.intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6HdSC5MBPOMufV6HBiKEeWBhFc9GPRC0t6FN09g0Ni0=;
+        b=MvX+qNYVEGIP5lZPYPkXArVKjB9yJoH56q0/JCp6ES873JLosTJ5iAD6SMimYzXm1e
+         X1wdVVjl1nGxVIOo7Zk3l+MZ4odTC23e8MSqI9AujPBsOoI6FXZNXq57rAmuxHVlF+YP
+         fHg5PYq1/FH388/2tL4WaDu6tNGLpy3vNmINI7NL+TlKkOibU+JI3WQ2NWGPMG+X9mjb
+         NIOS3RlrIn1tH1Za4LgFfPKVS1o7liifD2Uc2+LYGS/Bw935VQa11wB/qcKM8oWpqddQ
+         u42ESeue8i/hydY4xHgoiA9ADh8cWtFU+T0ttt2w9JCHD66ge3zmNe0LYNthwDZfZyct
+         wnvg==
+X-Gm-Message-State: AOAM532T5rI0w8ny1Lp2TmkRM007EqlW2WvSoEYH/JJzpIEg0KBMZC+9
+        BbAPJ+GDqMED/K6AFP28VjiiK2yqgnUSv4pEkacI968aa+za4M7gh1yATxZvVmdV40lDnh2imPd
+        ekRpc3fqZLtbC4eTnatSCxpOsa37wI3OZMq3sDVCIFQ==
+X-Received: by 2002:a17:906:5d04:b0:6db:7262:570e with SMTP id g4-20020a1709065d0400b006db7262570emr21773808ejt.8.1650524697233;
+        Thu, 21 Apr 2022 00:04:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJynJjrtS0hF16SVmG5l/ZQENi4TBpgJyFKjQc4HjrAuWcJ+5tpAdnARz6DxwRaPkxDgvSHyjw==
+X-Received: by 2002:a17:906:5d04:b0:6db:7262:570e with SMTP id g4-20020a1709065d0400b006db7262570emr21773783ejt.8.1650524697000;
+        Thu, 21 Apr 2022 00:04:57 -0700 (PDT)
+Received: from [192.168.123.94] (ip-088-152-144-107.um26.pools.vodafone-ip.de. [88.152.144.107])
+        by smtp.gmail.com with ESMTPSA id kb28-20020a1709070f9c00b006d5d8bf1b72sm7465162ejc.78.2022.04.21.00.04.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 00:04:56 -0700 (PDT)
+Message-ID: <3fa5215b-84c3-5e4c-cb53-6c05d05e4350@canonical.com>
+Date:   Thu, 21 Apr 2022 09:04:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dd4a2b16-397e-8866-0fd5-b5c5dfd453ab@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3] RISC-V: Increase range and default value of NR_CPUS
+Content-Language: en-US
+To:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220420112408.155561-1-apatel@ventanamicro.com>
+From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+In-Reply-To: <20220420112408.155561-1-apatel@ventanamicro.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,30 +87,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 06:26:43PM -0700,
-Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
 
-> On 4/19/22 6:20 PM, Isaku Yamahata wrote:
-> > If timeout occurs, the state of adev->tdquote_buf is unknown.  It's not safe
-> > to continue to using adev->tdquote_buf.  VMM would continue to processing
-> > getquote request with this buffer.  What if TDX_CMD_GEN_QUOTE is issued again,
-> > and tdquote_buf is re-used?
+
+On 4/20/22 13:24, Anup Patel wrote:
+> Currently, the range and default value of NR_CPUS is too restrictive
+> for high-end RISC-V systems with large number of HARTs. The latest
+> QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
+> restrictive for QEMU as well. Other major architectures (such as
+> ARM64, x86_64, MIPS, etc) have a much higher range and default
+> value of NR_CPUS.
 > 
-> This part is not clearly discussed in the specification. May be spec
-> should define some reasonable timeout and teardown details.
+> This patch increases NR_CPUS range to 2-512 and default value to
+> XLEN (i.e. 32 for RV32 and 64 for RV64).
 > 
-> Regarding not using this buffer again, what happens if we de-allocate
-> it on timeout and the host still updates it?
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 
-Until GET_QUOTE_IN_FLIGHT is cleared, the shared page is owned by VMM, TD
-attestation driver shouldn't reuse/free the pages.
+Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
 
-In the case of this driver, I think of two options
-- don't timeout. wait for interrupt to arrive and check the shared GPA state.
-- allow timeout. When the next request comes, check the shared GPA state.
-  If it's still GET_QUOTE_IN_FLIGHT, return EBUSY.
-
-It's possible for VMM to keep the shared GPA forever maliciously(DoS) or
-unintentionally due to bug.  TD can't do much about it.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+> ---
+> Changes since v2:
+>   - Rebased on Linux-5.18-rc3
+>   - Use a different range when SBI v0.1 is enabled
+> Changes since v1:
+>   - Updated NR_CPUS range to 2-512 which reflects maximum number of
+>     CPUs supported by QEMU virt machine.
+> ---
+>   arch/riscv/Kconfig | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 00fd9c548f26..1823f281069f 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -275,10 +275,13 @@ config SMP
+>   	  If you don't know what to do here, say N.
+>   
+>   config NR_CPUS
+> -	int "Maximum number of CPUs (2-32)"
+> -	range 2 32
+> +	int "Maximum number of CPUs (2-512)"
+>   	depends on SMP
+> -	default "8"
+> +	range 2 512 if !SBI_V01
+> +	range 2 32 if SBI_V01 && 32BIT
+> +	range 2 64 if SBI_V01 && 64BIT
+> +	default "32" if 32BIT
+> +	default "64" if 64BIT
+>   
+>   config HOTPLUG_CPU
+>   	bool "Support for hot-pluggable CPUs"

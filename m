@@ -2,157 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE9650A167
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3680350A17B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386615AbiDUOBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
+        id S1387768AbiDUOGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244840AbiDUOBi (ORCPT
+        with ESMTP id S1386591AbiDUOGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:01:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD25C37BD9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:58:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650549527;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FCDdTtfh+cTEbBhGHl6TDA/w0vVS1GSM5e8sY5ZehTw=;
-        b=dFsW2VqZ8e8caxzOPPndF7Ftv1Zo+Zm63zFtoCYvGUyM6AvJnZaTDiRdh8mCFFWyG2NlOQ
-        YiQvZVLLR+hk6DlNcjD+Su2+G0Fbtu6oi2JTIOr3MSucdHsDIc0du0bQcnuh5q0gIpQQyZ
-        lsN7KVukZyTCusivYnpzTK3hc4ZIFiw=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-380-uQnD5DjTNR2RuxE_BaAWRA-1; Thu, 21 Apr 2022 09:58:46 -0400
-X-MC-Unique: uQnD5DjTNR2RuxE_BaAWRA-1
-Received: by mail-ej1-f71.google.com with SMTP id x2-20020a1709065ac200b006d9b316257fso2549700ejs.12
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:58:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FCDdTtfh+cTEbBhGHl6TDA/w0vVS1GSM5e8sY5ZehTw=;
-        b=w3vElLmgo9G9QtgsSl6yqHU/5KTxWBvb2dBFrYoVrkOjAiQ4jV2wVB5F4f+0YalaCN
-         Yp4DoYVRdujTtp+GCvktmmLJ/QLW4zXFD7tE5UorN4tJGxE9IqNz+npFrIzv/5MN/Nw3
-         jQc8SIpmpI6ia1rjAqFYRnkeyj56D6eKQXe+7LFeTAWncnh+EwcdbGH+VNvEeOXEPwXN
-         UesQocmGaJJ33/11dXJS2ox1b5VxZlfSaO0gxzzSr2gWFN27i9SP/AuW2hChNdjZcsTQ
-         djthCYZHv7dey+EG2zNND2GaBvfDGfP+oZHm6sYIWt4zmQf4SAXBaGJCVe0jvBy1uW/p
-         pp2g==
-X-Gm-Message-State: AOAM531sw2axzNe7NkwB1Fvms0teri2tBM/H/U0bzE0vWnDdiTkLPQ2V
-        RugKwhCmZb8fetoYlqpSEARR1at5w34npyzwSB9vHP9zj1hnvOu4uHO9e1Kv8zP9JNM0mg2ys02
-        uqtYPCAhZLVHGxreeYZ17sD/v
-X-Received: by 2002:a05:6402:50d1:b0:423:f4a2:95c7 with SMTP id h17-20020a05640250d100b00423f4a295c7mr18677814edb.91.1650549525253;
-        Thu, 21 Apr 2022 06:58:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx4JGn8p7OAUTHSbJC7sBsOiSljB3wcQ48NL5S76jPutkqPECOtv4rN6ZvZhqHRw9AZzzPQ5Q==
-X-Received: by 2002:a05:6402:50d1:b0:423:f4a2:95c7 with SMTP id h17-20020a05640250d100b00423f4a295c7mr18677794edb.91.1650549525081;
-        Thu, 21 Apr 2022 06:58:45 -0700 (PDT)
-Received: from sgarzare-redhat ([217.171.75.76])
-        by smtp.gmail.com with ESMTPSA id s1-20020a056402036100b004240a3fc6b4sm3043298edw.82.2022.04.21.06.58.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 06:58:44 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 15:58:39 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] hv_sock: Copy packets sent by Hyper-V out of the
- ring buffer
-Message-ID: <20220421135839.2fj6fk6bvlrau73o@sgarzare-redhat>
-References: <20220420200720.434717-1-parri.andrea@gmail.com>
- <20220420200720.434717-3-parri.andrea@gmail.com>
+        Thu, 21 Apr 2022 10:06:13 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F843981E;
+        Thu, 21 Apr 2022 07:03:03 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: shreeya)
+        with ESMTPSA id 3E3E51F44D87
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650549761;
+        bh=ArSK0XPQphXlFdSa1AUStb79K0fJdl464mogrdyEK+I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Cw5mO+y272o8w7brCUpjWVzuzJG6QunIgxNqk3DODnjXlHopNT9mRolToPZ0NaXbO
+         jQGbBbIbCuOmSDQTtQ46QvqDYY9BIKNcmSzYCzR/WkHyE3gFArsQLRTZEsEswo2Ykg
+         7XhECACuJzwXOtkEsway3v0dPOM+nIRU4mkjF88/kqJjYG7oSUUHWGzt1P3/SwAUOa
+         GSaIncfyTTueJWhN0P8CBT7JPoT1ZG2wfTrEtzyaoqw4O0Q2TisvSZgDltmvXgKhz8
+         iRQldRyNVv3zaH5aAtkbIoGQIP/uBF12oEFqfAdPRf2S8l7qbhkDUmQp+JpfXOSdYm
+         1oW9u8GFBrgTg==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
+        Zhigang.Shi@liteon.com, krzk@kernel.org, krisman@collabora.com
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        alvaro.soliverez@collabora.com,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH v2 0/3] Add LTRF216A Driver
+Date:   Thu, 21 Apr 2022 19:31:30 +0530
+Message-Id: <20220421140133.354498-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220420200720.434717-3-parri.andrea@gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:07:17PM +0200, Andrea Parri (Microsoft) wrote:
->Pointers to VMbus packets sent by Hyper-V are used by the hv_sock driver
->within the guest VM.  Hyper-V can send packets with erroneous values or
->modify packet fields after they are processed by the guest.  To defend
->against these scenarios, copy the incoming packet after validating its
->length and offset fields using hv_pkt_iter_{first,next}().  In this way,
->the packet can no longer be modified by the host.
->
->Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
->---
-> net/vmw_vsock/hyperv_transport.c | 9 +++++++--
-> 1 file changed, 7 insertions(+), 2 deletions(-)
->
->diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
->index 943352530936e..8c37d07017fc4 100644
->--- a/net/vmw_vsock/hyperv_transport.c
->+++ b/net/vmw_vsock/hyperv_transport.c
->@@ -78,6 +78,9 @@ struct hvs_send_buf {
-> 					 ALIGN((payload_len), 8) + \
-> 					 VMBUS_PKT_TRAILER_SIZE)
->
->+/* Upper bound on the size of a VMbus packet for hv_sock */
->+#define HVS_MAX_PKT_SIZE	HVS_PKT_LEN(HVS_MTU_SIZE)
->+
-> union hvs_service_id {
-> 	guid_t	srv_id;
->
->@@ -378,6 +381,8 @@ static void hvs_open_connection(struct vmbus_channel *chan)
-> 		rcvbuf = ALIGN(rcvbuf, HV_HYP_PAGE_SIZE);
-> 	}
->
->+	chan->max_pkt_size = HVS_MAX_PKT_SIZE;
->+
+This patchset adds support for ltrf216a Ambient Light Sensor
+and documents the DT bindings for the same.
 
-premise, I don't know HyperV channels :-(
+Changes in v2
+  - Add support for 25ms and 50ms integration time.
+  - Rename some of the macros as per names given in datasheet
+  - Add a comment for the mutex lock
+  - Use read_avail callback instead of attributes and set the
+    appropriate _available bit.
+  - Use FIELD_PREP() at appropriate places.
+  - Add a constant lookup table for integration time and reg val
+  - Use BIT() macro for magic numbers.
+  - Improve error handling at few places.
+  - Use get_unaligned_le24() and div_u64()
+  - Use probe_new() callback and devm functions
+  - Return errors in probe using dev_err_probe()
+  - Use DEFINE_SIMPLE_DEV_PM_OPS()
+  - Correct the formula for lux to use 0.45 instead of 0.8
+  - Add interrupt and power supply property in DT bindings
+  - Add vendor prefix name as per the alphabetical order.
 
-Is this change necessary to use hv_pkt_iter_first() instead of 
-hv_pkt_iter_first_raw()?
+Shreeya Patel (3):
+  dt-bindings: vendor-prefixes: Add 'ltr' as deprecated vendor prefix
+  dt-bindings: Document ltrf216a light sensor bindings
+  iio: light: Add support for ltrf216a sensor
 
-If yes, then please mention that you set this value in the commit 
-message, otherwise maybe better to have a separate patch.
+ .../bindings/iio/light/liteon,ltrf216a.yaml   |  52 +++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   3 +
+ drivers/iio/light/Kconfig                     |  10 +
+ drivers/iio/light/Makefile                    |   1 +
+ drivers/iio/light/ltrf216a.c                  | 349 ++++++++++++++++++
+ 5 files changed, 415 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+ create mode 100644 drivers/iio/light/ltrf216a.c
 
-Thanks,
-Stefano
-
-> 	ret = vmbus_open(chan, sndbuf, rcvbuf, NULL, 0, hvs_channel_cb,
-> 			 conn_from_host ? new : sk);
-> 	if (ret != 0) {
->@@ -602,7 +607,7 @@ static ssize_t hvs_stream_dequeue(struct vsock_sock *vsk, struct msghdr *msg,
-> 		return -EOPNOTSUPP;
->
-> 	if (need_refill) {
->-		hvs->recv_desc = hv_pkt_iter_first_raw(hvs->chan);
->+		hvs->recv_desc = hv_pkt_iter_first(hvs->chan);
-> 		if (!hvs->recv_desc)
-> 			return -ENOBUFS;
-> 		ret = hvs_update_recv_data(hvs);
->@@ -618,7 +623,7 @@ static ssize_t hvs_stream_dequeue(struct vsock_sock *vsk, struct msghdr *msg,
->
-> 	hvs->recv_data_len -= to_read;
-> 	if (hvs->recv_data_len == 0) {
->-		hvs->recv_desc = hv_pkt_iter_next_raw(hvs->chan, hvs->recv_desc);
->+		hvs->recv_desc = hv_pkt_iter_next(hvs->chan, hvs->recv_desc);
-> 		if (hvs->recv_desc) {
-> 			ret = hvs_update_recv_data(hvs);
-> 			if (ret)
->-- 
->2.25.1
->
+-- 
+2.30.2
 

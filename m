@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E255350A3C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E45650A3CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385331AbiDUPP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
+        id S1389937AbiDUPRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiDUPP5 (ORCPT
+        with ESMTP id S1355292AbiDUPRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:15:57 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A553ED2E;
-        Thu, 21 Apr 2022 08:13:07 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ec05db3dfbso55402057b3.7;
-        Thu, 21 Apr 2022 08:13:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vf+iGZ57jnQDVvhI59R62sL2DbiAyfAIvUJBun6tDe8=;
-        b=7+4h+ERESFBYXOQtPS3dGHBMiH8D6iWhrBUV7q7ZeNINWDyTf7UOKVYDycSlsTNAwf
-         8PEdzLjdeg6BNE8PHqPi937MdMgS7dFbSf7VU1lp+2/rOlYtanC4uIU0VxwP1bdji0g1
-         O3lovjODzY69GSexqbP5vVCIJRnxZ0irGHrnlTup23EaeLa+FALhaqrB60P5rcoV38R7
-         96ifAXIRWRXExUrq+MwnNWQSdKxJ4t6SFKxgjUDcTXt3hwkF6DIBR6MatiD9MFUySzBR
-         nvkErVE4LGKikfi/9hGlFHVYddiA3hLKcZLrJa+DyzvFQn4ipN2RthLTfu45/eiRRk8l
-         tJTQ==
-X-Gm-Message-State: AOAM533IgXSDCq/Bs3/DqWxD64pQJ96VlXtipl0th7x453IXuivHke0i
-        tOPwLaky9aCpFZo3BY1X5bFGC4Zx1LVLJ70KUM0RXD5K
-X-Google-Smtp-Source: ABdhPJxlk7VnMmw29Chuv0omBuFlXfuRTl6ImAWXMCv5HENJWbjh7C7eQHJsDrVQWkJhnLdni6Bg5XCD+p5Y8cyeivQ=
-X-Received: by 2002:a81:4b8e:0:b0:2ef:5240:69fc with SMTP id
- y136-20020a814b8e000000b002ef524069fcmr115437ywa.19.1650553986334; Thu, 21
- Apr 2022 08:13:06 -0700 (PDT)
+        Thu, 21 Apr 2022 11:17:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05921433AA;
+        Thu, 21 Apr 2022 08:14:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9506661AC3;
+        Thu, 21 Apr 2022 15:14:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99E1C385A5;
+        Thu, 21 Apr 2022 15:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650554052;
+        bh=I0zUItcOxFNNsLtXno+sh+nNc68LyirhSdAYTIDEIE4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dtfFZhaT2VSG7B3vpDVhu7DPaIcToxTO1AtvXVDAGmpgAmGXqG9futEtSoU1F0n6K
+         G/BN+b9TTS/Ei9x6W3lEDVMn5SKQTkrDyDapLXHGsTlaBxcLBROJTp0knNpj+KjeB6
+         LSqyFbhB4mNlZ3vLZCM8Re2ziShdCIQJmNJBV+/ajSjXCAnHAYyQCIupScTK9hGwBg
+         nE3qt0w/WH/64L0SHsy2jfnoQ7wS6TjwBj3BDBaMpI/KK8gvV5spcs7y1FPO5cfrnh
+         9ePR+JUJosdgR3tNrQwaIGUX/tpr6Mtd9ABj7ktTp1WPI7VVYXR2AKHQNf2Hby2qaJ
+         8cqWqzvjJTP3Q==
+Date:   Thu, 21 Apr 2022 18:12:56 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     =?us-ascii?B?PT9VVEYtOD9xP01pY2thPUMzPUFCbD0yMFNhbGE9QzM9QkNuPz0=?= 
+        <mic@digikod.net>, David Woodhouse <dwmw2@infradead.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?us-ascii?B?PT9VVEYtOD9xP01pY2thPUMzPUFCbD0yMFNhbGE9QzM9QkNuPz0=?= 
+        <mic@linux.microsoft.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v7 3/5] certs: Make blacklist_vet_description() more
+ strict
+Message-ID: <YmF0eAh7dYmtLDVx@kernel.org>
+References: <20210312171232.2681989-4-mic@digikod.net>
+ <20210312171232.2681989-1-mic@digikod.net>
+ <648218.1650450548@warthog.procyon.org.uk>
 MIME-Version: 1.0
-References: <20220420160933.347088-1-daniel.lezcano@linaro.org>
- <8610206dac7bf538eaf8fa81569741a91e4b8dc7.camel@linux.intel.com> <e10b3f13-75b6-c19b-9a27-d75e2e80054a@linaro.org>
-In-Reply-To: <e10b3f13-75b6-c19b-9a27-d75e2e80054a@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 21 Apr 2022 17:12:55 +0200
-Message-ID: <CAJZ5v0j8iTNv2KXYx6M7Y-4iDLTfzStig9kSg8vr2WidYEkDYg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] tools/thermal: thermal library and tools
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <648218.1650450548@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 5:05 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 21/04/2022 05:59, srinivas pandruvada wrote:
-> > On Wed, 2022-04-20 at 18:09 +0200, Daniel Lezcano wrote:
->
-> [ ... ]
->
-> > But I still see these errors in applying patches:
-> >
-> > Applying: tools/lib/thermal: Add a thermal library
-> > Applying: tools/thermal: Add util library
-> > Applying: tools/thermal: Add a temperature capture tool
-> > .git/rebase-apply/patch:809: space before tab in indent.
-> >               polling = 100; }
-> > .git/rebase-apply/patch:90: new blank line at EOF.
-> > +
-> > .git/rebase-apply/patch:221: new blank line at EOF.
-> > +
-> > warning: 3 lines add whitespace errors.
-> > Applying: tools/thermal: Add thermal daemon skeleton
-> > .git/rebase-apply/patch:86: new blank line at EOF.
-> > +
-> > warning: 1 line adds whitespace errors.
->
-> Ok, I'll apply it with --whitespace=fix
->
-> I did a try and it fixes the trailing whitespace
->
-> Is ok for you Rafael ?
+On Wed, Apr 20, 2022 at 11:29:08AM +0100, David Howells wrote:
+> Mickaël Salaün <mic@digikod.net> wrote:
+> 
+> > +	/* The following algorithm only works if prefix lengths match. */
+> > +	BUILD_BUG_ON(sizeof(tbs_prefix) != sizeof(bin_prefix));
+> > +	prefix_len = sizeof(tbs_prefix) - 1;
+> > +	for (i = 0; *desc; desc++, i++) {
+> > +		if (*desc == ':') {
+> > +			if (tbs_step == prefix_len)
+> > +				goto found_colon;
+> > +			if (bin_step == prefix_len)
+> > +				goto found_colon;
+> > +			return -EINVAL;
+> > +		}
+> > +		if (i >= prefix_len)
+> > +			return -EINVAL;
+> > +		if (*desc == tbs_prefix[i])
+> > +			tbs_step++;
+> > +		if (*desc == bin_prefix[i])
+> > +			bin_step++;
+> > +	}
+> 
+> I wonder if:
+> 
+> 	static const char tbs_prefix[] = "tbs:";
+> 	static const char bin_prefix[] = "bin:";
+> 
+> 	if (strncmp(desc, tbs_prefix, sizeof(tbs_prefix) - 1) == 0 ||
+> 	    strncmp(desc, bin_prefix, sizeof(bin_prefix) - 1) == 0)
+> 		goto found_colon;
+> 
+> might be better.
+> 
+> David
 
-Sounds good.
+I think it'd be. 
+
+BR, Jarkko

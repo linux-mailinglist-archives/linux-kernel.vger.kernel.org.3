@@ -2,128 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B69050A975
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D3E50A976
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392060AbiDUTrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S1392076AbiDUTsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392057AbiDUTrd (ORCPT
+        with ESMTP id S1392059AbiDUTsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:47:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9746E4CD6E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:44:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11ACF153B;
-        Thu, 21 Apr 2022 12:44:42 -0700 (PDT)
-Received: from [10.57.80.98] (unknown [10.57.80.98])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A64E3F5A1;
-        Thu, 21 Apr 2022 12:44:39 -0700 (PDT)
-Message-ID: <9c6819ec-9189-c6dd-b9ba-3687beebc538@arm.com>
-Date:   Thu, 21 Apr 2022 20:44:33 +0100
+        Thu, 21 Apr 2022 15:48:38 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10E64D25D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650570347; x=1682106347;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qUbnApxe0ifMuycVX45OPy6G9l25JluiNKetU6KZUyg=;
+  b=G0sGHg+xRqRjQQudF5nN+WlCJPhhBkMYPE+Ps0SkBM21iwRlgTTfAf6h
+   WK/ieQ4S0j2tiCZNTK8dpLikRhbHxRlreTETtr0ziQ2knAA/3pD7NSUdF
+   tHqiqO0W2FK+CQLXnF3T8TGhBnbal5stSe0BrGJ4pQEB225BA3xIMUkBj
+   9jSXSG1XaU58mzf5roR74eUyAGNb2dBseXLDIwhpcuVY2Zf0ej/gGFl4z
+   FoN3Ts2R31Ao+i9WiHwJL4IofFRfLVrBCXEntRrJ6laZ5mDozPXcaM5pv
+   cM4l9xuEf4uq41IJXvFeYoq1w/LMhkA+77b6eiueu5TkfhRIKoUK5gjHs
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264630241"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="264630241"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 12:45:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="533569869"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 21 Apr 2022 12:45:36 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhckB-0008j5-RU;
+        Thu, 21 Apr 2022 19:45:35 +0000
+Date:   Fri, 22 Apr 2022 03:44:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa-dev@sang-engineering.com>
+Subject: drivers/i2c/busses/i2c-mxs.c:802:18: warning: cast to smaller
+ integer type 'enum mxs_i2c_devtype' from 'const void *'
+Message-ID: <202204220355.TdCb2zsz-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 12/13] iommu/virtio: Clean up bus_set_iommu()
-Content-Language: en-GB
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     joro@8bytes.org, will@kernel.org, iommu@lists.linux-foundation.org,
-        sven@svenpeter.dev, robdclark@gmail.com, m.szyprowski@samsung.com,
-        baolu.lu@linux.intel.com, yong.wu@mediatek.com,
-        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <cover.1649935679.git.robin.murphy@arm.com>
- <4db34a35e07f3741a658465045b78c96a569c591.1649935679.git.robin.murphy@arm.com>
- <YmGQjYZMtaqSf87a@myrica>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YmGQjYZMtaqSf87a@myrica>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-21 18:12, Jean-Philippe Brucker wrote:
-> On Thu, Apr 14, 2022 at 01:42:41PM +0100, Robin Murphy wrote:
->> Stop calling bus_set_iommu() since it's now unnecessary, and simplify
->> the probe failure path accordingly.
->>
->> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
->> ---
->>   drivers/iommu/virtio-iommu.c | 24 ------------------------
->>   1 file changed, 24 deletions(-)
->>
->> diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
->> index 25be4b822aa0..371f8657c0ce 100644
->> --- a/drivers/iommu/virtio-iommu.c
->> +++ b/drivers/iommu/virtio-iommu.c
->> @@ -7,7 +7,6 @@
->>   
->>   #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->>   
->> -#include <linux/amba/bus.h>
->>   #include <linux/delay.h>
->>   #include <linux/dma-iommu.h>
->>   #include <linux/dma-map-ops.h>
-> 
-> <linux/platform_device.h> isn't needed anymore either. In any case it
-> looks great, thanks
+Hi Fabio,
 
-Ha, it totally passed me by that this one *isn't* a platform driver, derp :)
+FYI, the error/warning still remains.
 
-> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> 
-> and tested on QEMU (so only PCI for now)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b253435746d9a4a701b5f09211b9c14d3370d0da
+commit: c32abd8b569144b20c9c9b6dd7232828c612452f i2c: mxs: Remove unneeded platform_device_id
+date:   1 year, 5 months ago
+config: arm64-randconfig-r034-20220421 (https://download.01.org/0day-ci/archive/20220422/202204220355.TdCb2zsz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c32abd8b569144b20c9c9b6dd7232828c612452f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c32abd8b569144b20c9c9b6dd7232828c612452f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/i2c/busses/
 
-Thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Robin.
+All warnings (new ones prefixed by >>):
 
->> @@ -1146,26 +1145,6 @@ static int viommu_probe(struct virtio_device *vdev)
->>   
->>   	iommu_device_register(&viommu->iommu, &viommu_ops, parent_dev);
->>   
->> -#ifdef CONFIG_PCI
->> -	if (pci_bus_type.iommu_ops != &viommu_ops) {
->> -		ret = bus_set_iommu(&pci_bus_type, &viommu_ops);
->> -		if (ret)
->> -			goto err_unregister;
->> -	}
->> -#endif
->> -#ifdef CONFIG_ARM_AMBA
->> -	if (amba_bustype.iommu_ops != &viommu_ops) {
->> -		ret = bus_set_iommu(&amba_bustype, &viommu_ops);
->> -		if (ret)
->> -			goto err_unregister;
->> -	}
->> -#endif
->> -	if (platform_bus_type.iommu_ops != &viommu_ops) {
->> -		ret = bus_set_iommu(&platform_bus_type, &viommu_ops);
->> -		if (ret)
->> -			goto err_unregister;
->> -	}
->> -
->>   	vdev->priv = viommu;
->>   
->>   	dev_info(dev, "input address: %u bits\n",
->> @@ -1174,9 +1153,6 @@ static int viommu_probe(struct virtio_device *vdev)
->>   
->>   	return 0;
->>   
->> -err_unregister:
->> -	iommu_device_sysfs_remove(&viommu->iommu);
->> -	iommu_device_unregister(&viommu->iommu);
->>   err_free_vqs:
->>   	vdev->config->del_vqs(vdev);
->>   
->> -- 
->> 2.28.0.dirty
->>
+>> drivers/i2c/busses/i2c-mxs.c:802:18: warning: cast to smaller integer type 'enum mxs_i2c_devtype' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           i2c->dev_type = (enum mxs_i2c_devtype)of_device_get_match_data(&pdev->dev);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +802 drivers/i2c/busses/i2c-mxs.c
+
+   790	
+   791	static int mxs_i2c_probe(struct platform_device *pdev)
+   792	{
+   793		struct device *dev = &pdev->dev;
+   794		struct mxs_i2c_dev *i2c;
+   795		struct i2c_adapter *adap;
+   796		int err, irq;
+   797	
+   798		i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
+   799		if (!i2c)
+   800			return -ENOMEM;
+   801	
+ > 802		i2c->dev_type = (enum mxs_i2c_devtype)of_device_get_match_data(&pdev->dev);
+   803	
+   804		i2c->regs = devm_platform_ioremap_resource(pdev, 0);
+   805		if (IS_ERR(i2c->regs))
+   806			return PTR_ERR(i2c->regs);
+   807	
+   808		irq = platform_get_irq(pdev, 0);
+   809		if (irq < 0)
+   810			return irq;
+   811	
+   812		err = devm_request_irq(dev, irq, mxs_i2c_isr, 0, dev_name(dev), i2c);
+   813		if (err)
+   814			return err;
+   815	
+   816		i2c->dev = dev;
+   817	
+   818		init_completion(&i2c->cmd_complete);
+   819	
+   820		if (dev->of_node) {
+   821			err = mxs_i2c_get_ofdata(i2c);
+   822			if (err)
+   823				return err;
+   824		}
+   825	
+   826		/* Setup the DMA */
+   827		i2c->dmach = dma_request_chan(dev, "rx-tx");
+   828		if (IS_ERR(i2c->dmach)) {
+   829			dev_err(dev, "Failed to request dma\n");
+   830			return PTR_ERR(i2c->dmach);
+   831		}
+   832	
+   833		platform_set_drvdata(pdev, i2c);
+   834	
+   835		/* Do reset to enforce correct startup after pinmuxing */
+   836		err = mxs_i2c_reset(i2c);
+   837		if (err)
+   838			return err;
+   839	
+   840		adap = &i2c->adapter;
+   841		strlcpy(adap->name, "MXS I2C adapter", sizeof(adap->name));
+   842		adap->owner = THIS_MODULE;
+   843		adap->algo = &mxs_i2c_algo;
+   844		adap->quirks = &mxs_i2c_quirks;
+   845		adap->dev.parent = dev;
+   846		adap->nr = pdev->id;
+   847		adap->dev.of_node = pdev->dev.of_node;
+   848		i2c_set_adapdata(adap, i2c);
+   849		err = i2c_add_numbered_adapter(adap);
+   850		if (err) {
+   851			writel(MXS_I2C_CTRL0_SFTRST,
+   852					i2c->regs + MXS_I2C_CTRL0_SET);
+   853			return err;
+   854		}
+   855	
+   856		return 0;
+   857	}
+   858	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

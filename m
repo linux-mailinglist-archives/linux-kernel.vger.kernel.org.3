@@ -2,82 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D7F50A7A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A180A50A7A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391097AbiDUSAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S1391154AbiDUSBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391035AbiDUSAs (ORCPT
+        with ESMTP id S1391152AbiDUSB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:00:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D79146B14
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650563877;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a4va1/Lq36cMvwBfvf9W3jL50NhUZUHTTW2j9bp+3cE=;
-        b=dzzV8x3XrqO5l+YuRW0cr14vKlSDjgOso5bkbyEibynUAYGDtsrvvalfbUWF6wiCd5/F+N
-        +TrXQU4Hq66AGHC8duoct6GodhtB0qw4tiNkBJo30y/GpegyeewSK03m85Nnq+gIx/YVa3
-        EfK8NRAetqOh/pZUrTEytEGgqRc8XgA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-1-ryYKA82UMta93HSRiWfXaQ-1; Thu, 21 Apr 2022 13:57:51 -0400
-X-MC-Unique: ryYKA82UMta93HSRiWfXaQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1198F1014A64;
-        Thu, 21 Apr 2022 17:57:51 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9088240CFD22;
-        Thu, 21 Apr 2022 17:57:43 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <2067a5c7-4e24-f449-4676-811d12e9ab72@linux.alibaba.com>
-References: <2067a5c7-4e24-f449-4676-811d12e9ab72@linux.alibaba.com> <20220415123614.54024-3-jefflexu@linux.alibaba.com> <20220415123614.54024-1-jefflexu@linux.alibaba.com> <1447543.1650552898@warthog.procyon.org.uk>
-To:     JeffleXu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
-Subject: Re: EMFILE/ENFILE mitigation needed in erofs?
+        Thu, 21 Apr 2022 14:01:27 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAE44B40D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 10:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650563914; x=1682099914;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EiJrpObUFh20LOT5nrmOYLiEoVE9LosThQ1DYPD1x30=;
+  b=SyrsoPSf3sU0TAV0ShqxrBPmhEsYEh04ZgFHB1wx4UOUiGreXNmFBKDx
+   7lKk7SOp94+jvkFmICKq87fQ5MsRdnDufHg8Kv1GpbHkUldbqG9cyU/WG
+   c0kDqY0NRC24BFXzPx4kfJG/MMJOvZzOTO30EcSHihzgDo10gfmeyZT0A
+   zUazyOqVtMDHg8lG/itTZVbjE0yTjTuvMosajH8x6Li/+c+MsQJBq4HHC
+   90NNTkycpL1LnfrdlBjQ1Tu93UwIja9TUMY7iUpGiX21MXKAIVwOca7U9
+   qVAmj/yN1aO+FlgEBM2Hw3BPLe/DqrevODHORBOG69y+IzwdaeMkJ3KKf
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="350875474"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="350875474"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 10:58:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="671155815"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 21 Apr 2022 10:58:30 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhb4X-0008dd-D1;
+        Thu, 21 Apr 2022 17:58:29 +0000
+Date:   Fri, 22 Apr 2022 01:57:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.04.19a] BUILD SUCCESS
+ 7e8b5f16a9577ed3b7c2b9b06686de578b98032b
+Message-ID: <62619b17.L0re67OuKL9mi6C7%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1484180.1650563860.1@warthog.procyon.org.uk>
-Date:   Thu, 21 Apr 2022 18:57:40 +0100
-Message-ID: <1484181.1650563860@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-JeffleXu <jefflexu@linux.alibaba.com> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.04.19a
+branch HEAD: 7e8b5f16a9577ed3b7c2b9b06686de578b98032b  doc: Document the rcutree.rcu_divisor kernel boot parameter
 
-> 2. Our user daemon will configure rlimit-nofile to a reasonably large
-> (e.g. 1 million) value, so that it won't fail when trying to allocate fds.
+elapsed time: 1066m
 
-There's a system-wide limit also; simply increasing the rlimit won't override
-that.
+configs tested: 136
+configs skipped: 4
 
-David
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+sh                   secureedge5410_defconfig
+arm                             ezx_defconfig
+sh                          r7780mp_defconfig
+powerpc                        cell_defconfig
+powerpc                     mpc83xx_defconfig
+arm                         nhk8815_defconfig
+powerpc                      makalu_defconfig
+arm                        mvebu_v7_defconfig
+sparc                            allyesconfig
+parisc64                            defconfig
+arm                        cerfcube_defconfig
+mips                           ip32_defconfig
+sh                         ecovec24_defconfig
+arm                        mini2440_defconfig
+parisc                generic-32bit_defconfig
+m68k                        mvme16x_defconfig
+mips                         cobalt_defconfig
+ia64                          tiger_defconfig
+arm                        keystone_defconfig
+sh                           se7619_defconfig
+arm                          pxa3xx_defconfig
+sparc                       sparc32_defconfig
+sh                          sdk7780_defconfig
+m68k                          amiga_defconfig
+alpha                            alldefconfig
+powerpc                 canyonlands_defconfig
+arm                     eseries_pxa_defconfig
+arm                           sunxi_defconfig
+powerpc                    sam440ep_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                        edosk7705_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220421
+arm                  randconfig-c002-20220420
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220420
+arc                  randconfig-r043-20220421
+s390                 randconfig-r044-20220421
+riscv                randconfig-r042-20220421
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+riscv                randconfig-c006-20220420
+mips                 randconfig-c004-20220420
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+arm                  randconfig-c002-20220420
+powerpc              randconfig-c003-20220420
+mips                        bcm63xx_defconfig
+arm                         orion5x_defconfig
+arm                          pxa168_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arm                           omap1_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                     pseries_defconfig
+s390                       zfcpdump_defconfig
+arm                          pxa910_defconfig
+powerpc                    gamecube_defconfig
+arm                          pcm027_defconfig
+x86_64                           allyesconfig
+powerpc                     tqm5200_defconfig
+mips                malta_qemu_32r6_defconfig
+mips                      bmips_stb_defconfig
+hexagon                          alldefconfig
+arm                     davinci_all_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220420
+riscv                randconfig-r042-20220420
+hexagon              randconfig-r045-20220420
+s390                 randconfig-r044-20220420
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

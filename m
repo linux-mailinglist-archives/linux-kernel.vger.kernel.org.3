@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9986A509E46
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 13:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBC3509E49
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 13:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388719AbiDULL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 07:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S1388725AbiDULLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 07:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388706AbiDULLU (ORCPT
+        with ESMTP id S1388710AbiDULLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 07:11:20 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B20713E39
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 04:08:30 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w1so8051923lfa.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 04:08:30 -0700 (PDT)
+        Thu, 21 Apr 2022 07:11:22 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C33A18E0F
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 04:08:32 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id el3so1238714edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 04:08:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lQpM5TBDz77TdM7yk6XHt2oHp2HL+z/14qpcwF/pmG0=;
-        b=IJ2ystDfkpqLxJeN0WS3y5iTnrQAMSQAPqsRxS8dn1pCQGtvLWiqKUcTErC6y310sh
-         Ugp+RGYieXrFPtyXAlCE2rRWE5VzcHRGvsrhvYVbv9V6ZWgCuwq7BWXazXKD5HNtFENN
-         Ur63VwYS9qzXk5uL7vwLNy7BMS6/khH/keiBj1Xul8khnoiU8MAZ9MXAT0E3P6O3FqpE
-         AmYg6Q7fdtrA8HTLQmArjnw21IgEk+TRXf4pkVsjwjUWCyE+2q8NUeQsH+FoIcDYiZQf
-         uGJi2MIbjTPQD5vt4WCtr3lCZU32Yjx6NJ6A1xY5Zbe7swaMN0EFekIN8wSi/CEU7dkO
-         iPww==
+        bh=GSok/vFHwV72WAw96IE5vtv5p/qzm+ga1Qb4JW55xnY=;
+        b=F+tHNPGpxSD0dIGvmViPIkv5RyHAY7qtAY2pS6j042XrpT/t3iCMbeJw9ouzV/JkP5
+         ZLJ2hpxZPcs7e6aHhkNvRzTEU9EnzYYKJkqjIwyyCtwpsUgz2/fPqoVyZBbR0Qa+x5XU
+         HJqbfZR3nQM+V9yCnK44kryiQi2W90U4+GYn1sK7PNvm5R8x16Na3Ef2sZ2IlO8XaXtz
+         XePsgDX7eDKXfBM8pobFJ05WCFw4SmenlLlZPh3uw+0lsfH9wmVLJbveTzG2BQ10LIgw
+         cUfSuhbcmTmImCJE1t0Pj6YQAvijL3O22rhR0aLY3qROqDdwgypBqyQ3acnm3R7Xgf8a
+         sxkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=lQpM5TBDz77TdM7yk6XHt2oHp2HL+z/14qpcwF/pmG0=;
-        b=HTXjSQhYHpmZyxZPpEm468T0yGXmoottCZnvOvaBrg0oz4IIX9iwalIrgfwvJS1QOU
-         KaMjes7z9JKydjOfgdOE9ImVJ2lxIt9yk79YdxDgHAoGwYbpaIvXpxjLUv2kQtlj5eiC
-         aBWzrB2y0oZVRJArQ0qa+8RFKn1gpqTGlk22tOCGxAP6jO5Mv8/Qdu/xzyINPzj04FuX
-         A+1U7cCmgby5jxBS47plum5HyhiKN7nBIP5x9WZbn0f/cRHmVLRyT1/Dr1eIsRZboUIa
-         O9DCe3dIlAkmMbFj+4p8fbuITteqOrcimACMYW/fqG/AQ2PFVsJtR+yUKXK5h58cEYtB
-         f/1A==
-X-Gm-Message-State: AOAM533HjXTlrRSdk4xTes9/UcOj7Djp/LgYq9fVqqjcmUnAUFuh5w/A
-        RpnV94AkQlgiW6OmBsmagw0m1A==
-X-Google-Smtp-Source: ABdhPJxV+GssN0hDSnuW3Ph3Wjyua4dePmUV+iy2gwS6Wvvy4HbR159vt36fH/7kulO3OzhWARNoxQ==
-X-Received: by 2002:a05:6512:12c6:b0:44a:650f:3b86 with SMTP id p6-20020a05651212c600b0044a650f3b86mr18708668lfg.79.1650539308358;
-        Thu, 21 Apr 2022 04:08:28 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id l11-20020a2e834b000000b00246308690e2sm2015005ljh.85.2022.04.21.04.08.27
+        bh=GSok/vFHwV72WAw96IE5vtv5p/qzm+ga1Qb4JW55xnY=;
+        b=Ncr3FoLvm6Ll3syT6GdsRh5HQmxEsIHe3fSFilNA8egGO7bsleR3Tp692vtdEGWkPH
+         RP/UeodUAb0GyRlGwpcDpt7uYeMKepusaDoUx6ofD8d4/k4m4xm09n029QmKx5Xmq7tA
+         i7k0LuG+jAS2thVWCgRXNqLOW8vvOb7Ia7qDaqE+aoX1ZUW4+h3TzoKUe6VSzyVXHZRX
+         GnFYoO2pbO+OBSid66XQP+w5hnZavskzgDUMIT8R5LJ5b82DEa1Pz5ypuIYIitSRu29n
+         oxhwJ4jPyPnz1zpiMLvWLRQy9DGCbEZP9zej0orI90qN/HxP12EMKrT7ZZN31ARrB6iB
+         LviQ==
+X-Gm-Message-State: AOAM532aPtFo/tkoebISdSHTt87JNUjsTNKa61kBiYsPWl85SuRA+cTl
+        jBnEg8f7IITWqO8n2xMPdmTzSA==
+X-Google-Smtp-Source: ABdhPJxIjYAFyO0rlyseB0/5jZQHRn+DpdsPcfs/S7QuWfO1YLPX8nI/Ep08uFLDGqlS5IxVsxhoow==
+X-Received: by 2002:a05:6402:2213:b0:425:8a5c:4b44 with SMTP id cq19-20020a056402221300b004258a5c4b44mr2785059edb.200.1650539310584;
+        Thu, 21 Apr 2022 04:08:30 -0700 (PDT)
+Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id lx17-20020a170906af1100b006e873dd9228sm7632859ejb.52.2022.04.21.04.08.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 04:08:28 -0700 (PDT)
-Message-ID: <de4f9514-5132-f208-d43f-4c50afcda203@linaro.org>
-Date:   Thu, 21 Apr 2022 14:08:27 +0300
+        Thu, 21 Apr 2022 04:08:29 -0700 (PDT)
+Message-ID: <663d9e81-9036-6986-f52a-3846b4b5c673@linaro.org>
+Date:   Thu, 21 Apr 2022 13:08:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH RFC 1/5] phy: qcom-qmp: add support for pipe clock muxing
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <20220421102041.17345-1-johan+linaro@kernel.org>
- <20220421102041.17345-2-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220421102041.17345-2-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/91.7.0
+Subject: Re: [EXT] Re: [PATCH 1/2 v4] dt-bindings: dspi: added for semtech
+ sx1301
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+Cc:     broonie@kernel.org, devicetree@vger.kernel.org,
+        jerry.huang@nxp.com, krzysztof.kozlowski+dt@linaro.org,
+        leoyang.li@nxp.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        robh+dt@kernel.org, shawnguo@kernel.org,
+        Vladimir Oltean <olteanv@gmail.com>
+References: <f6086989-a4c1-4223-fad0-79bd5719432e@linaro.org>
+ <20220421094421.288672-1-michael@walle.cc>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220421094421.288672-1-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -88,180 +80,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2022 13:20, Johan Hovold wrote:
-> Some QMP PHYs need to remux to their pipe clock input to the pipe clock
-> output generated by the PHY before powering on the PHY and restore the
-> default source during power down.
+On 21/04/2022 11:44, Michael Walle wrote:
+> On 21/04/2022 11:11, Jerry Huang wrote:
+>>> Please also answer Michael's comments.
+>>>
+>>> [Jerry Huang] I double checked the MikroBus devices, we used two MikcroBus devices:
+>>> BLE P click: https://www.mikroe.com/ble-p-click
+>>> BEE click: https://www.mikroe.com/bee-click 
+>>> Both of them are SPI interface connect to ls1028ardb through MiKcroBus interface.
+>>> So the name "semtech sx1301" is not correct for this node.
+>>
+>> I asked to remove the words "Devicetree bindings" and this was not finished.
+>>
+>> Now you mention that entire name of device is wrong... It's confusing. I
+>> don't know what device you are describing here. I expect you know. :)
+>>
+>> What is this binding about exactly?
 > 
-> Add support for an optional pipe clock mux which will be reparented to
-> the generated pipe clock before powering on the PHY and restored to the
-> default reference source on power off.
+> I *think* it's just exposing the mikrobus connector as an spidev device.
+> There was a former attempt by Vladimir here [1]. 
+
+That explains a lot, thanks! It's a pity it was not described here.
+
+> Now as it the nature
+> of such a connector that you can connect a myriad of devices there, it
+> doesn't really make sense to have a just particular one described. What
+> happens if that one will switch from spidev to a real driver in the
+> kernel? So using "spidev" for the compatible would be the first reflex.
+> But as described in the spidev driver this is plain wrong (and also causes
+> a warning/info message it) because it should describe the actual hardware.
+
+spidev device nodes are in general allowed, using the specific
+compatible for a real device attached to the SPI.
+
+Here it seems clearly that it's not the case. Using roghm,dh2228fv as a
+"spidev" compatible for something else was wrong.
+
+Adding another device - sx1301 - also does not look correct, if it is
+not there.
+
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp.c | 71 ++++++++++++++++++++++++++---
->   1 file changed, 65 insertions(+), 6 deletions(-)
+> Thus I proposed to use DT overlays which are loaded according to what
+> is actually attached to the header, so a real driver could be loaded.
 > 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> index 7d2d1ab061f7..bc6db9670291 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> @@ -3292,6 +3292,8 @@ struct qmp_phy_combo_cfg {
->    * @rx2: iomapped memory space for second lane's rx (in dual lane PHYs)
->    * @pcs_misc: iomapped memory space for lane's pcs_misc
->    * @pipe_clk: pipe clock
-> + * @pipemux_clk: pipe clock source mux
-> + * @piperef_clk: pipe clock default reference source
->    * @index: lane index
->    * @qmp: QMP phy to which this lane belongs
->    * @lane_rst: lane's reset controller
-> @@ -3311,6 +3313,8 @@ struct qmp_phy {
->   	void __iomem *rx2;
->   	void __iomem *pcs_misc;
->   	struct clk *pipe_clk;
-> +	struct clk *pipemux_clk;
-> +	struct clk *piperef_clk;
->   	unsigned int index;
->   	struct qcom_qmp *qmp;
->   	struct reset_control *lane_rst;
-> @@ -3346,6 +3350,7 @@ struct qcom_qmp {
->   	void __iomem *dp_com;
->   
->   	struct clk_bulk_data *clks;
-> +	struct clk *pipe_clksrc;
+> But there *could* be a sane default which then could be replaced in
+> an DT overlay. Like "mirkobus-socket" or similar, which might expose
+> spidev. Actually it is more than just SPI, there is GPIO and resets and
+> I2C. Maybe it should be an MFD? I don't know. But that is something for
+> the DT maintainers to decide if they'll allow such "generic" devices.
 
-Please move this to qmp_phy too.
+I think if you have DT overlay, you can add device node and there is no
+need for placeholder, right?
 
->   	struct reset_control **resets;
->   	struct regulator_bulk_data *vregs;
->   
-> @@ -5355,6 +5360,42 @@ static int qcom_qmp_phy_init(struct phy *phy)
->   	return 0;
->   }
->   
-> +static int qcom_qmp_phy_pipe_clk_enable(struct qmp_phy *qphy)
-> +{
-> +	struct qcom_qmp *qmp = qphy->qmp;
-> +	int ret;
-> +
-> +	ret = clk_set_parent(qphy->pipemux_clk, qmp->pipe_clksrc);
-> +	if (ret)
-> +		dev_err(qmp->dev, "failed to reparent pipe clock: %d\n", ret);
-> +
-> +
-> +	ret = clk_prepare_enable(qphy->pipe_clk);
-> +	if (ret) {
-> +		dev_err(qmp->dev, "failed to enable pipe clock: %d\n", ret);
-> +		goto err_restore_parent;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_restore_parent:
-> +	clk_set_parent(qphy->pipemux_clk, qphy->piperef_clk);
-> +
-> +	return ret;
-> +}
-> +
-> +static void qcom_qmp_phy_pipe_clk_disable(struct qmp_phy *qphy)
-> +{
-> +	struct qcom_qmp *qmp = qphy->qmp;
-> +	int ret;
-> +
-> +	clk_disable_unprepare(qphy->pipe_clk);
-> +
-> +	ret = clk_set_parent(qphy->pipemux_clk, qphy->piperef_clk);
-> +	if (ret)
-> +		dev_err(qmp->dev, "failed to reparent pipe clock: %d\n", ret);
-> +}
-> +
->   static int qcom_qmp_phy_power_on(struct phy *phy)
->   {
->   	struct qmp_phy *qphy = phy_get_drvdata(phy);
-> @@ -5379,11 +5420,9 @@ static int qcom_qmp_phy_power_on(struct phy *phy)
->   		}
->   	}
->   
-> -	ret = clk_prepare_enable(qphy->pipe_clk);
-> -	if (ret) {
-> -		dev_err(qmp->dev, "pipe_clk enable failed err=%d\n", ret);
-> +	ret = qcom_qmp_phy_pipe_clk_enable(qphy);
-> +	if (ret)
->   		goto err_reset_lane;
-> -	}
->   
->   	/* Tx, Rx, and PCS configurations */
->   	qcom_qmp_phy_configure_lane(tx, cfg->regs,
-> @@ -5478,7 +5517,7 @@ static int qcom_qmp_phy_power_on(struct phy *phy)
->   	return 0;
->   
->   err_disable_pipe_clk:
-> -	clk_disable_unprepare(qphy->pipe_clk);
-> +	qcom_qmp_phy_pipe_clk_disable(qphy);
->   err_reset_lane:
->   	if (cfg->has_lane_rst)
->   		reset_control_assert(qphy->lane_rst);
-> @@ -5491,7 +5530,7 @@ static int qcom_qmp_phy_power_off(struct phy *phy)
->   	struct qmp_phy *qphy = phy_get_drvdata(phy);
->   	const struct qmp_phy_cfg *cfg = qphy->cfg;
->   
-> -	clk_disable_unprepare(qphy->pipe_clk);
-> +	qcom_qmp_phy_pipe_clk_disable(qphy);
->   
->   	if (cfg->type == PHY_TYPE_DP) {
->   		/* Assert DP PHY power down */
-> @@ -5777,6 +5816,8 @@ static int phy_pipe_clk_register(struct qcom_qmp *qmp, struct device_node *np)
->   	if (ret)
->   		return ret;
->   
-> +	qmp->pipe_clksrc = fixed->hw.clk;
-> +
->   	ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, &fixed->hw);
->   	if (ret)
->   		return ret;
-> @@ -6091,6 +6132,24 @@ int qcom_qmp_phy_create(struct device *dev, struct device_node *np, int id,
->   		qphy->pipe_clk = NULL;
->   	}
->   
-> +	/* Get optional pipe clock mux and default reference source clock. */
-> +	qphy->pipemux_clk = of_clk_get_by_name(np, "mux");
-> +	if (IS_ERR(qphy->pipemux_clk)) {
-> +		ret = PTR_ERR(qphy->pipemux_clk);
-> +		if (ret == -EPROBE_DEFER)
-> +			return ret;
-> +
-> +		qphy->pipemux_clk = NULL;
-
-This makes the driver ignore every possible erorr except -EPROBE_DEFER. 
-However the driver should behave in quite the oppposite way. Please use 
-devm_clk_get_optional() instead. It would do that in better way.
-
-Not to mention that this code leaks a refcount on the clock.
-
-> +	} else {
-> +		qphy->piperef_clk = of_clk_get_by_name(np, "ref");
-> +		if (IS_ERR(qphy->piperef_clk)) {
-> +			ret = PTR_ERR(qphy->piperef_clk);
-> +			return dev_err_probe(dev, ret,
-> +					     "failed to get lane%d piperef_clk\n",
-> +					     id);
-> +		}
-> +	}
-> +
-
-As a second thought.
-This needs to be more explicit. If the chipset requires the pipe clock 
-remuxing, we must fail if the clocks were not provided. So depending on 
-the qmp instance/property the driver should either use devm_clk_get() 
-(instead of _optional) or skip this block completely.
-
-But this will not work with earlier DTS files.
-
->   	/* Get lane reset, if any */
->   	if (cfg->has_lane_rst) {
->   		snprintf(prop_name, sizeof(prop_name), "lane%d", id);
-
-
--- 
-With best wishes
-Dmitry
+Best regards,
+Krzysztof

@@ -2,170 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59D5509F07
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 13:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B716509F09
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 13:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382634AbiDULyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 07:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S1359424AbiDULy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 07:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiDULyu (ORCPT
+        with ESMTP id S1382612AbiDULyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 07:54:50 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5592C656;
-        Thu, 21 Apr 2022 04:51:59 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VAf1GfK_1650541911;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VAf1GfK_1650541911)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 21 Apr 2022 19:51:54 +0800
-Date:   Thu, 21 Apr 2022 19:51:51 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
-Subject: Re: [PATCH v9 20/21] erofs: implement fscache-based data readahead
-Message-ID: <YmFFV8kiYhBC3JZL@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
-        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
-References: <20220415123614.54024-1-jefflexu@linux.alibaba.com>
- <20220415123614.54024-21-jefflexu@linux.alibaba.com>
+        Thu, 21 Apr 2022 07:54:53 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A8C2C656;
+        Thu, 21 Apr 2022 04:52:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=FkRpbQL2kh2V0VErCDvPMcemB1ZOU18oNdPFn0wD/bY=; b=2vdKGntIznOxZVVgWps6/JiBxl
+        YiumyZnB/ml5xDjwSg5y3xafCRuLjUmb59qqIbiT1gfgIm4FpMUszcfBtYVCeVnU59PUQDbvBK2ws
+        Y7tThOOclE2g/zUmUzuS/JJk3xoEzuuLJMO2R7wEjxe5OWhOJk43PNPlm4z/1U4oKnIM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nhVLl-00GnKX-Lh; Thu, 21 Apr 2022 13:51:53 +0200
+Date:   Thu, 21 Apr 2022 13:51:53 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] net: phy: marvell: Add LED accessors for Marvell
+ 88E1510
+Message-ID: <YmFFWd42Nol7Lrlm@lunn.ch>
+References: <20220420124053.853891-1-kai.heng.feng@canonical.com>
+ <20220420124053.853891-5-kai.heng.feng@canonical.com>
+ <YmAgq1pm37Glw2v+@lunn.ch>
+ <CAAd53p6UAhDC2mGkz3_HgVs7kFgCwjfu2R+9FfROhToH2R6CjA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220415123614.54024-21-jefflexu@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAAd53p6UAhDC2mGkz3_HgVs7kFgCwjfu2R+9FfROhToH2R6CjA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 08:36:13PM +0800, Jeffle Xu wrote:
-> Implement fscache-based data readahead. Also registers an individual
-> bdi for each erofs instance to enable readahead.
-> 
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-> ---
->  fs/erofs/fscache.c | 86 ++++++++++++++++++++++++++++++++++++++++++++++
->  fs/erofs/super.c   |  4 +++
->  2 files changed, 90 insertions(+)
-> 
-> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-> index 08849c15500f..eaa50692ddba 100644
-> --- a/fs/erofs/fscache.c
-> +++ b/fs/erofs/fscache.c
-> @@ -163,12 +163,98 @@ static int erofs_fscache_readpage(struct file *file, struct page *page)
->  	return ret;
->  }
->  
-> +static void erofs_fscache_unlock_folios(struct readahead_control *rac,
-> +					size_t len)
-> +{
-> +	while (len) {
-> +		struct folio *folio = readahead_folio(rac);
-> +
-> +		len -= folio_size(folio);
-> +		folio_mark_uptodate(folio);
-> +		folio_unlock(folio);
-> +	}
-> +}
-> +
-> +static void erofs_fscache_readahead(struct readahead_control *rac)
-> +{
-> +	struct inode *inode = rac->mapping->host;
-> +	struct super_block *sb = inode->i_sb;
-> +	size_t len, count, done = 0;
-> +	erofs_off_t pos;
-> +	loff_t start, offset;
-> +	int ret;
-> +
-> +	if (!readahead_count(rac))
-> +		return;
-> +
-> +	start = readahead_pos(rac);
-> +	len = readahead_length(rac);
-> +
-> +	do {
-> +		struct erofs_map_blocks map;
-> +		struct erofs_map_dev mdev;
-> +
-> +		pos = start + done;
-> +		map.m_la = pos;
-> +
-> +		ret = erofs_map_blocks(inode, &map, EROFS_GET_BLOCKS_RAW);
-> +		if (ret)
-> +			return;
-> +
-> +		offset = start + done;
-> +		count = min_t(size_t, map.m_llen - (pos - map.m_la),
-> +			      len - done);
-> +
-> +		if (!(map.m_flags & EROFS_MAP_MAPPED)) {
-> +			struct iov_iter iter;
-> +
-> +			iov_iter_xarray(&iter, READ, &rac->mapping->i_pages,
-> +					offset, count);
-> +			iov_iter_zero(count, &iter);
-> +
-> +			erofs_fscache_unlock_folios(rac, count);
-> +			ret = count;
-> +			continue;
-> +		}
-> +
-> +		if (map.m_flags & EROFS_MAP_META) {
-> +			struct folio *folio = readahead_folio(rac);
-> +
-> +			ret = erofs_fscache_readpage_inline(folio, &map);
-> +			if (!ret) {
-> +				folio_mark_uptodate(folio);
-> +				ret = folio_size(folio);
-> +			}
-> +
-> +			folio_unlock(folio);
-> +			continue;
-> +		}
-> +
-> +		mdev = (struct erofs_map_dev) {
-> +			.m_deviceid = map.m_deviceid,
-> +			.m_pa = map.m_pa,
-> +		};
-> +		ret = erofs_map_dev(sb, &mdev);
-> +		if (ret)
-> +			return;
-> +
-> +		ret = erofs_fscache_read_folios(mdev.m_fscache->cookie,
-> +				rac->mapping, offset, count,
-> +				mdev.m_pa + (pos - map.m_la));
-> +		if (!ret) {
-> +			erofs_fscache_unlock_folios(rac, count);
-> +			ret = count;
-> +		}
+> This is not feasible.
+> If BIOS can define a method and restore the LED by itself, it can put
+> the method inside its S3 method and I don't have to work on this at
+> the first place.
 
-I think this really needs a comment why we don't need to unlock folios
-for the error cases.
+So maybe just declare the BIOS as FUBAR and move on to the next issue
+assigned to you.
 
-Thanks,
-Gao Xiang
+Do we really want the maintenance burden of this code for one machines
+BIOS? Maybe the better solution is to push back on the vendor and its
+BIOS, tell them how they should of done this, if the BIOS wants to be
+in control of the LEDs it needs to offer the methods to control the
+LEDs. And then hopefully the next machine the vendor produces will
+have working BIOS.
 
-> +	} while (ret > 0 && ((done += ret) < len));
-> +}
-> +
+Your other option is to take part in the effort to add control of the
+LEDs via the standard Linux LED subsystem. The Marvel PHY driver is
+likely to be one of the first to gain support this for. So you can
+then totally take control of the LED from the BIOS and put it in the
+users hands. And such a solution will be applicable to many machines,
+not just one.
+
+       Andrew

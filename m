@@ -2,129 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D916E50953B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 05:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5669509540
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 05:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383878AbiDUDIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 23:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
+        id S229907AbiDUDPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 23:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356624AbiDUDIt (ORCPT
+        with ESMTP id S229598AbiDUDO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 23:08:49 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C898F10F3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 20:06:01 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KkMpx4VcFzfYpj;
-        Thu, 21 Apr 2022 11:05:13 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 11:05:59 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 11:05:58 +0800
-Message-ID: <eec38afc-4ecc-29f8-9d8a-722661c30314@huawei.com>
-Date:   Thu, 21 Apr 2022 11:05:57 +0800
+        Wed, 20 Apr 2022 23:14:59 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9AAFD1F
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 20:12:11 -0700 (PDT)
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1B0C73F21C
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1650510730;
+        bh=wwu6B8MS2wDUs4lBsnpGSszAj+Chk/M9OpzPrcRqBmk=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=uaasZUq21TkkZS7xSvAjMI7lHjDOi3COHi2LCwXaZdl2VXQu4DvKdvKZpoYAkDdJ9
+         NXNQUXofhu+g3DYiblK34HNguheAfXBIeqiA5FXwl1V0Pg0Sq4jYa6+rTUK8MIJ62D
+         /tvtWJqAdsEMxA6ZqUYjRlkziupVdibCO6VP1xXG2JpScNw396pPM5ydvnhKKZ9MuP
+         1gAM7I96+Od9jwKdvVzEo/JaVao9twfj2wReJnymrowY95V9l0gbBmAVhbDpQqu2eN
+         5uFcEoyYNXKyU32eSGA4q7C/aj2bOrnDRHrwppgcAmboAjJz8WbHgha78kBM5rZWwE
+         PVZUqfqpSl99A==
+Received: by mail-oi1-f200.google.com with SMTP id k25-20020a544699000000b002fa69ba89b6so1790231oic.19
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 20:12:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wwu6B8MS2wDUs4lBsnpGSszAj+Chk/M9OpzPrcRqBmk=;
+        b=QLQ202dhope6da3yAfW22mUIJBuKUDAmsPM5Yez5ffgf53Wkx9zhDtT170WnTMapbQ
+         W0z0TT3ytKCO+RHTlSWuY0r36FcaW520+knk59v0nkLi7DidunizfCYhynZfFioJIdOB
+         jGFX6slpAel2sp1XaesV62qF3TVxe2ZDL6eFYwcVDAeaELQ0DTL6P9lEXBQmnXQfYDSS
+         UvOeV4aRdoZ30GMJ9J6od3jcf737BQYf+zwCDzf9/nEbKY13IX5wwlopbmcDEYZcmxfh
+         gsCOgq9BgO7Sorr4iAtHHnqTn0gYkjJpR1mZytvE1P2+taVc1HjRu65H5e/oPtLp9uuF
+         fOQQ==
+X-Gm-Message-State: AOAM532anbFbRaisu5fG2ORbg9tUYGlr8eOj/9LUn34Zh+fe1KnT70WU
+        o9P6/q4br74JX7KlpbH1CyRINcGY5ndAhsnjVD/WPOEWafauy3OwX5BHP0ZgcOOnN7I8ZTX/UKg
+        8+10CFkt/imvax93/+y3phzVlE2m3A5ymvJC6RVlg+Ri53P8BFbrm+cunUw==
+X-Received: by 2002:a05:6808:124c:b0:2f9:c7cf:146 with SMTP id o12-20020a056808124c00b002f9c7cf0146mr3183338oiv.54.1650510728862;
+        Wed, 20 Apr 2022 20:12:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzSmKZq8aKNnAYbiEmYZ9gt56/wHQgKIpbSzAsyF3hgg3Y9+Az3U65ZdpogzViIa4BZLEYDlcdjr8JYTWJuUkM=
+X-Received: by 2002:a05:6808:124c:b0:2f9:c7cf:146 with SMTP id
+ o12-20020a056808124c00b002f9c7cf0146mr3183325oiv.54.1650510728625; Wed, 20
+ Apr 2022 20:12:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v4 1/4] mm: page_table_check: move
- pxx_user_accessible_page into x86
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-CC:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220418034444.520928-1-tongtiangen@huawei.com>
- <20220418034444.520928-2-tongtiangen@huawei.com>
- <1671baf7-046e-7c52-183f-fd654125fd67@arm.com>
- <c376877e-53a7-d471-61bc-e7f9dd400d60@huawei.com>
- <CA+CK2bCF=7mADB=rxyHtVEd3oCZ4mxtKf=28L49uQr5oxUwYZQ@mail.gmail.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <CA+CK2bCF=7mADB=rxyHtVEd3oCZ4mxtKf=28L49uQr5oxUwYZQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420124053.853891-1-kai.heng.feng@canonical.com>
+ <20220420124053.853891-5-kai.heng.feng@canonical.com> <YmAgq1pm37Glw2v+@lunn.ch>
+In-Reply-To: <YmAgq1pm37Glw2v+@lunn.ch>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 21 Apr 2022 11:11:55 +0800
+Message-ID: <CAAd53p6UAhDC2mGkz3_HgVs7kFgCwjfu2R+9FfROhToH2R6CjA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] net: phy: marvell: Add LED accessors for Marvell 88E1510
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 20, 2022 at 11:03 PM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> On Wed, Apr 20, 2022 at 08:40:51PM +0800, Kai-Heng Feng wrote:
+> > Implement get_led_config() and set_led_config() callbacks so phy core
+> > can use firmware LED as platform requested.
+> >
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> >  drivers/net/phy/marvell.c | 26 ++++++++++++++++++++++++++
+> >  1 file changed, 26 insertions(+)
+> >
+> > diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+> > index 2702faf7b0f60..c5f13e09b0692 100644
+> > --- a/drivers/net/phy/marvell.c
+> > +++ b/drivers/net/phy/marvell.c
+> > @@ -750,6 +750,30 @@ static int m88e1510_config_aneg(struct phy_device *phydev)
+> >       return err;
+> >  }
+> >
+> > +static int marvell_get_led_config(struct phy_device *phydev)
+> > +{
+> > +     int led;
+> > +
+> > +     led = phy_read_paged(phydev, MII_MARVELL_LED_PAGE, MII_PHY_LED_CTRL);
+> > +     if (led < 0) {
+> > +             phydev_warn(phydev, "Fail to get marvell phy LED.\n");
+> > +             led = 0;
+> > +     }
+>
+> I've said this multiple times, there are three LED registers, The
+> Function Control register, the Priority Control register and the Timer
+> control register. It is the combination of all three that defines how
+> the LEDs work. You need to save all of them.
 
+OK, will do.
 
-在 2022/4/21 0:44, Pasha Tatashin 写道:
-> On Wed, Apr 20, 2022 at 2:45 AM Tong Tiangen <tongtiangen@huawei.com> wrote:
->>
->>
->>
->> 在 2022/4/19 17:29, Anshuman Khandual 写道:
->>>
->>>
->>> On 4/18/22 09:14, Tong Tiangen wrote:
->>>> --- a/mm/page_table_check.c
->>>> +++ b/mm/page_table_check.c
->>>> @@ -10,6 +10,14 @@
->>>>    #undef pr_fmt
->>>>    #define pr_fmt(fmt)        "page_table_check: " fmt
->>>>
->>>> +#ifndef PMD_PAGE_SIZE
->>>> +#define PMD_PAGE_SIZE       PMD_SIZE
->>>> +#endif
->>>> +
->>>> +#ifndef PUD_PAGE_SIZE
->>>> +#define PUD_PAGE_SIZE       PUD_SIZE
->>>> +#endif
->>>
->>> Why cannot PMD_SIZE/PUD_SIZE be used on every platform instead ? What is the
->>> need for using PUD_PAGE_SIZE/PMD_PAGE_SIZE ? Are they different on x86 ?
->>> .
->>
->> Hi, Pasha：
->> I checked the definitions of PMD_SIZE/PUD_SIZE and
->> PUD_PAGE_SIZE/PMD_PAGE_SIZE in x86 architecture and their use outside
->> the architecture(eg: in mm/, all used PMD_SIZE/PUD_SIZE), Would it be
->> better to use a unified PMD_SIZE/PUD_SIZE here?
-> 
-> Hi Tong,
-> 
-> Yes, it makes sense to use PMD_SIZE/PUD_SIZE instead of
-> PUD_PAGE_SIZE/PMD_PAGE_SIZE in page_table_check to be inline with the
-> rest of the mm/
-> 
-> Pasha
-> 
-Hi Pasha and Anshuman:
+>
+> And you need to make your API generic enough that the PHY driver can
+> save anywhere from 1 bit to 42 bytes of configuration.
 
-OK, Functional correctness is not affected here, i plan to optimize this 
-point after this patchset is merged.
+OK, I guess I'll let the implementation stays within driver callback,
+so each driver can decide how many bits need to be saved.
 
-Tong.
+>
+> I don't know ACPI, but i'm pretty sure this is not the ACPI way of
+> doing this. I think you should be defining an ACPI method, which
+> phylib can call after initialising the hardware to allow the firmware
+> to configure the LED.
 
->>
->> Thanks,
->> Tong.
-> .
+This is not feasible.
+If BIOS can define a method and restore the LED by itself, it can put
+the method inside its S3 method and I don't have to work on this at
+the first place.
+
+Kai-Heng
+
+>
+>      Andrew

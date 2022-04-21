@@ -2,238 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78860509521
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 04:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB9950951F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 04:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383804AbiDUCqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 22:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45454 "EHLO
+        id S1383794AbiDUCpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 22:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiDUCqn (ORCPT
+        with ESMTP id S229462AbiDUCo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 22:46:43 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AD31009;
-        Wed, 20 Apr 2022 19:43:53 -0700 (PDT)
-Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 1922DC5711;
-        Thu, 21 Apr 2022 02:40:53 +0000 (UTC)
-Received: (Authenticated sender: frank@zago.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7279FE0006;
-        Thu, 21 Apr 2022 02:40:47 +0000 (UTC)
-From:   frank zago <frank@zago.net>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        frank zago <frank@zago.net>
-Subject: [PATCH v2] HID: Add support for Mega World controller force feedback
-Date:   Wed, 20 Apr 2022 21:40:41 -0500
-Message-Id: <20220421024041.98786-1-frank@zago.net>
-X-Mailer: git-send-email 2.32.0
+        Wed, 20 Apr 2022 22:44:59 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35F3B3E;
+        Wed, 20 Apr 2022 19:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650508930; x=1682044930;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QvTMlm8zkmv6XEevm736zdXwgrbOlcTEqT+gBwIB7y4=;
+  b=caKcb+/QUTyH4FNxoZQxr+8dwFpzmMnRMR/C0971aMoF+8dyRUlM2UYD
+   kH2ZbPVQQI5v9ezlgqD7nlugtMf2favJunhWHJXrmjBGh+GeSATZ61ZNg
+   5shjaKRjQ60q3hA+K8niJB/kBXD29IBNGMM8Md2wpHyvID8dFozEey5eD
+   Zsp3roEB80MGp8zgyIWdwXf5hOjuZ8HdLsvuZ1hGysJRJ59paaDVQvLYv
+   XYQjSV1RNSkcjwpxr6Z+SqHvX8ePLzxTfXLWgiczwjskIcuNkzNAuVzPB
+   t00DH0IYd7BtK0I8l3kE09IEZ3VgGtbh0h6hhMEwro0YGpPaJKe05l5ht
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="244798148"
+X-IronPort-AV: E=Sophos;i="5.90,277,1643702400"; 
+   d="scan'208";a="244798148"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 19:42:10 -0700
+X-IronPort-AV: E=Sophos;i="5.90,277,1643702400"; 
+   d="scan'208";a="555520403"
+Received: from dmertma-mobl4.amr.corp.intel.com (HELO [10.209.83.57]) ([10.209.83.57])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 19:42:09 -0700
+Message-ID: <1e184b44-8024-b8ae-98a8-cf2b6f78df61@linux.intel.com>
+Date:   Wed, 20 Apr 2022 19:42:06 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, isaku.yamahata@gmail.com
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <b209ee09b74394ab7aed85e0244e2191ee3d4171.camel@intel.com>
+ <e0e2e399-2cac-cf75-2a64-9d017e6d7189@linux.intel.com>
+ <420a4d689f73f9f7dc1ef71c61da75b7c9777a3f.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <420a4d689f73f9f7dc1ef71c61da75b7c9777a3f.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for one of the several Mega World USB game
-controller with integrated force feedback. It is a HID based
-memory-less game controller, with a weak motor on the left, and a
-strong one on the right.
 
-Signed-off-by: frank zago <frank@zago.net>
----
 
-Changes from v1:
-  - Removed one superfluous config option which reduced the code size a little
+On 4/20/22 5:11 PM, Kai Huang wrote:
+> On Wed, 2022-04-20 at 16:45 -0700, Sathyanarayanan Kuppuswamy wrote:
+>> If we want to support multiple GetQuote requests in parallel, then we
+>> need some way to uniquely identify the GetQuote requests. So that when
+>> we get completion notification, we can understand which request is
+>> completed. This part is not mentioned/discussed in ABI spec. So we want
+>> to serialize the requests for now.
+>>
+> 
+> Yes it's unfortunate that this part (whether concurrent GetQuote requests are
+> supported by TDX architecture) is not explicitly mentioned in GHCI spec.  I am
+> fine with only supporting GetQuote requests one by one.  AFAICT there's no
+> request to support concurrent GetQuote requests anyway.  What concerns me is
+> exactly how explain this.
+> 
+> As I said, we have GET_QUOTE_IN_FLIGHT flag now.  Theoretically, you can queue
+> multiple GetQuote requests, and when you receive the interrupt, you check which
+> buffer has GET_QUOTE_IN_FLIGHT cleared.  That buffer is the one with Quote
+> ready.  However I am not 100% sure whether above will always work.  Interrupt
+> can get lost when there are multiple Quotes ready in multiple buffer in very
+> short time period, etc?  Perhaps Isaku can provide more input here.
 
- drivers/hid/Kconfig         |   8 +++
- drivers/hid/Makefile        |   1 +
- drivers/hid/hid-ids.h       |   3 +
- drivers/hid/hid-megaworld.c | 125 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 137 insertions(+)
- create mode 100644 drivers/hid/hid-megaworld.c
+Either supported or not, it should be mentioned in the GHCI spec. 
+Currently, there are no details related to it. If it is supported, the 
+specification should include the protocol to use.
 
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index a95a7cbc4a59..70da5931082f 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -697,6 +697,14 @@ config HID_MAYFLASH
- 	Say Y here if you have HJZ Mayflash PS3 game controller adapters
- 	and want to enable force feedback support.
+I will check with Isaku about it.
 
-+config HID_MEGAWORLD_FF
-+	tristate "Mega World based game controller force feedback support"
-+	depends on USB_HID
-+	select INPUT_FF_MEMLESS
-+	help
-+	Say Y here if you have a Mega World based game controller and want
-+	to have force feedback support for it.
-+
- config HID_REDRAGON
- 	tristate "Redragon keyboards"
- 	depends on HID
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 345ac5581bd8..cac2cbe26d11 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -77,6 +77,7 @@ obj-$(CONFIG_HID_MAGICMOUSE)	+= hid-magicmouse.o
- obj-$(CONFIG_HID_MALTRON)	+= hid-maltron.o
- obj-$(CONFIG_HID_MCP2221)	+= hid-mcp2221.o
- obj-$(CONFIG_HID_MAYFLASH)	+= hid-mf.o
-+obj-$(CONFIG_HID_MEGAWORLD_FF)	+= hid-megaworld.o
- obj-$(CONFIG_HID_MICROSOFT)	+= hid-microsoft.o
- obj-$(CONFIG_HID_MONTEREY)	+= hid-monterey.o
- obj-$(CONFIG_HID_MULTITOUCH)	+= hid-multitouch.o
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 053853a891c5..b9e0f3deb080 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -868,6 +868,9 @@
- #define USB_VENDOR_ID_MCS		0x16d0
- #define USB_DEVICE_ID_MCS_GAMEPADBLOCK	0x0bcc
+> 
+> Anyway, how about explaining in this way:
+> 
+> "The GHCI spec doesn't clearly say whether TDX can support or how to support
+> multiple GetQuote requests in parallel.  Attestation request is not supposed to
+> be frequent and should not be in performance critical path.  Only support
+> GetQuote requests in serialized way for now."
 
-+#define USB_VENDOR_MEGAWORLD		0x07b5
-+#define USB_DEVICE_ID_MEGAWORLD_GAMEPAD	0x0312
-+
- #define USB_VENDOR_ID_MGE		0x0463
- #define USB_DEVICE_ID_MGE_UPS		0xffff
- #define USB_DEVICE_ID_MGE_UPS1		0x0001
-diff --git a/drivers/hid/hid-megaworld.c b/drivers/hid/hid-megaworld.c
-new file mode 100644
-index 000000000000..599657863cb9
---- /dev/null
-+++ b/drivers/hid/hid-megaworld.c
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Vibration support for Mega World controllers
-+ *
-+ * Copyright 2022 Frank Zago
-+ *
-+ * Derived from hid-zpff.c:
-+ *   Copyright (c) 2005, 2006 Anssi Hannula <anssi.hannula@gmail.com>
-+ */
-+
-+#include <linux/hid.h>
-+#include <linux/input.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+
-+#include "hid-ids.h"
-+
-+struct mwctrl_device {
-+	struct hid_report *report;
-+	s32 *weak;
-+	s32 *strong;
-+};
-+
-+static int mwctrl_play(struct input_dev *dev, void *data,
-+		       struct ff_effect *effect)
-+{
-+	struct hid_device *hid = input_get_drvdata(dev);
-+	struct mwctrl_device *mwctrl = data;
-+
-+	*mwctrl->strong = effect->u.rumble.strong_magnitude >> 8;
-+	*mwctrl->weak = effect->u.rumble.weak_magnitude >> 8;
-+
-+	hid_hw_request(hid, mwctrl->report, HID_REQ_SET_REPORT);
-+
-+	return 0;
-+}
-+
-+static int mwctrl_init(struct hid_device *hid)
-+{
-+	struct mwctrl_device *mwctrl;
-+	struct hid_report *report;
-+	struct hid_input *hidinput;
-+	struct input_dev *dev;
-+	int error;
-+	int i;
-+
-+	if (list_empty(&hid->inputs)) {
-+		hid_err(hid, "no inputs found\n");
-+		return -ENODEV;
-+	}
-+	hidinput = list_entry(hid->inputs.next, struct hid_input, list);
-+	dev = hidinput->input;
-+
-+	for (i = 0; i < 4; i++) {
-+		report = hid_validate_values(hid, HID_OUTPUT_REPORT, 0, i, 1);
-+		if (!report)
-+			return -ENODEV;
-+	}
-+
-+	mwctrl = kzalloc(sizeof(struct mwctrl_device), GFP_KERNEL);
-+	if (!mwctrl)
-+		return -ENOMEM;
-+
-+	set_bit(FF_RUMBLE, dev->ffbit);
-+
-+	error = input_ff_create_memless(dev, mwctrl, mwctrl_play);
-+	if (error) {
-+		kfree(mwctrl);
-+		return error;
-+	}
-+
-+	mwctrl->report = report;
-+
-+	/* Field 0 is always 2, and field 1 is always 0. The original
-+	 * windows driver has a 5 bytes command, where the 5th byte is
-+	 * a repeat of the 3rd byte, however the device has only 4
-+	 * fields. It could be a bug in the driver, or there is a
-+	 * different device that needs it.
-+	 */
-+	report->field[0]->value[0] = 0x02;
-+
-+	mwctrl->strong = &report->field[2]->value[0];
-+	mwctrl->weak = &report->field[3]->value[0];
-+
-+	return 0;
-+}
-+
-+static int mwctrl_probe(struct hid_device *hdev, const struct hid_device_id *id)
-+{
-+	int ret;
-+
-+	ret = hid_parse(hdev);
-+	if (ret) {
-+		hid_err(hdev, "parse failed\n");
-+		return ret;
-+	}
-+
-+	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_FF);
-+	if (ret) {
-+		hid_err(hdev, "hw start failed\n");
-+		return ret;
-+	}
-+
-+	ret = mwctrl_init(hdev);
-+	if (ret)
-+		hid_hw_stop(hdev);
-+
-+	return ret;
-+}
-+
-+static const struct hid_device_id mwctrl_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_MEGAWORLD,
-+			 USB_DEVICE_ID_MEGAWORLD_GAMEPAD) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(hid, mwctrl_devices);
-+
-+static struct hid_driver mwctrl_driver = {
-+	.name = "megaworld",
-+	.id_table = mwctrl_devices,
-+	.probe = mwctrl_probe,
-+};
-+module_hid_driver(mwctrl_driver);
-+
-+MODULE_LICENSE("GPL");
---
-2.32.0
+It seems good enough. I will use it.
+
+> 
+> 
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

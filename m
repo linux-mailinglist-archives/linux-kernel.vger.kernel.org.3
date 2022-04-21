@@ -2,186 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301E7509C66
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA260509C7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387718AbiDUJiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S1387740AbiDUJmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384833AbiDUJiU (ORCPT
+        with ESMTP id S231734AbiDUJmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:38:20 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80058.outbound.protection.outlook.com [40.107.8.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DF711A0C;
-        Thu, 21 Apr 2022 02:35:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TXetZm/hgWu1Gor2sk7wNqgNRGePNihwcZQedsX+HgWQ6QwLq2I3OY795yDCAJNtg2Yv3/17Uw+1vuq0306zc9bpg/+B7RatgLJcGu7QtxerprKSYfbkbrEggEcWRQMxohhkkImSzBz9aTGaWMBCCZeyij5EnkKsoqV1zLvK3yf7w00oMkGLL37n6fMmw/5Dk4tyTyM24LcamUg0bEL+pKiXGBhKYf77W3EqQPLRJOOaLrJta/hF3MXAjO/0xfXz1f62sMCIj+NPMJMGatyNME4vZwcosaZpxeRB76AelWtwtlaGjmzxsYmwS1qOds/WosRRAMImLDl8AFVL/mp/gw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/EVF8qmt3HlUkL1JvypzaIPpmNrLwZORKTuDFSJKZLo=;
- b=FdyM0eb+BaCYaKQqnk5nslRa0UaA0g/oHVUgcTB7zCgVvp4KjLkf7n534IcFnvChllCnUoXFUi+EkfaCP6/Q/YPTWg/FcBpIaU8nUjKC5GOshHpm+gKMDbkoDO8Sgr4nR9yZt+y+xjD8cxPo5UO/Ghj7neFkyOBtFe835uWG25NJMV/VWcxCHpfhZfI76L6adpRoZifJYqy6i7989Qjw/DkJ6LZ7CmXTg+bVg8TbbAQX3JlOmbkjLZEHdeulaiXkeeBVTksnXphndYjiVveGuI5IcGmoIAFVPcvfV9lVVGP+43XyhogFt8sE7jsWXCtMHOlBjK5j9CaRkwDDt6vEuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/EVF8qmt3HlUkL1JvypzaIPpmNrLwZORKTuDFSJKZLo=;
- b=SevcREHG0D3DEI3ytRNeE9iHV3EQ1oNcjfI23Hoj4G38JcGovDQ0kv375l88Z9ZyrdpjMeVMJVNababHMQ6et0QWlm8+J+i0Q9CnoWtxYjloo7rYn91cl2enu1astTaGrD8FLUdVC7vtc6+jf3KNeB5+EnBekpdhs+D0+0rD3TA=
-Received: from VE1PR04MB6477.eurprd04.prod.outlook.com (2603:10a6:803:11e::14)
- by AM7PR04MB6840.eurprd04.prod.outlook.com (2603:10a6:20b:10f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Thu, 21 Apr
- 2022 09:35:28 +0000
-Received: from VE1PR04MB6477.eurprd04.prod.outlook.com
- ([fe80::60ad:e5ec:cdfd:1b01]) by VE1PR04MB6477.eurprd04.prod.outlook.com
- ([fe80::60ad:e5ec:cdfd:1b01%3]) with mapi id 15.20.5186.015; Thu, 21 Apr 2022
- 09:35:28 +0000
-From:   Jerry Huang <jerry.huang@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Leo Li <leoyang.li@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [EXT] Re: [PATCH 1/2 v4] dt-bindings: dspi: added for semtech
- sx1301
-Thread-Topic: [EXT] Re: [PATCH 1/2 v4] dt-bindings: dspi: added for semtech
- sx1301
-Thread-Index: AQHYVIiygEZn3a5TtE+wxprjnFe3kqz4tPoAgAFfCfCAAARPAIAAAWVA
-Date:   Thu, 21 Apr 2022 09:35:28 +0000
-Message-ID: <VE1PR04MB647759CE6388FC6182FA0514FEF49@VE1PR04MB6477.eurprd04.prod.outlook.com>
-References: <20220420073146.38086-1-jerry.huang@nxp.com>
- <d74f62d7-7aea-b31f-1c2f-540c54df289c@linaro.org>
- <VE1PR04MB6477553510B6EB35D7C22C13FEF49@VE1PR04MB6477.eurprd04.prod.outlook.com>
- <f6086989-a4c1-4223-fad0-79bd5719432e@linaro.org>
-In-Reply-To: <f6086989-a4c1-4223-fad0-79bd5719432e@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 683dc83d-54a3-47eb-8801-08da237a45b1
-x-ms-traffictypediagnostic: AM7PR04MB6840:EE_
-x-microsoft-antispam-prvs: <AM7PR04MB6840B33F13FF51B5B233168DFEF49@AM7PR04MB6840.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qHplcgbap02BxF/dQS8bgTj2kuuFlNEyyXcOmyGBVwidmfoOKiT6xg7WLtxZDtxzbvWKkmv6OgVt/ynC/Ak5stpF+LorwHP809CGybaOLtMdTwnHvqIiGwS9T0f8+osq6croIE59vyqmJ7INKnfydU6enB26uVJ1zk+/OhIUNHPg3o95dWqhNZxcrxYjtbj7UJqcyTgIDGayJ4FJubuyk9gw2zREM2N2KuTOQD2us8g+VvWzTEgN5MLw+HwW0VU2iIkWWBtVK0QZs6CkoDJs7u3MfT7kbsuG3Vnp8NLSyG9VEonkAFYEWnuzLh+yfjJJjxiTbOJ/FuBtzPvtntiUjqfjWKxvmQ/w4ab29ShvUDpZV64jMR80moI7ilJwHZVAqQlJE27+Z6fADkkRvbzjQ7YzhsBaIvhWTRu4IGq8R8SMkqQtGf2N4yH5TUCoGK9eJQkiK1YNPxsXWfMQX8+5cdi/u67xs5sdueI+rjvAUtVuej9FtqJXdtseSKt/QnlliE3PgN8haB5H+rALtRNvGwiD+CjthvN/P3RrIEotJEtJ7K0McX6kEOW3E5mc6Nco426ERNcLPVVof4s03CZvbKRcgghrd2m5dy8RDfWLKqCKzWh6/I3bLukdp/cq3/BdyETVao3xuF5sQ0HInU7LC1i7AUQoKODt9B8X6LwzAula4nvgAVeoBWM59kDCVDupHeTYZEfJBo/h09XMRaNA9s31O3w6BM8sUCkUNjfCFfXSLufXnyJGqtAQssRsv4VP0tUgnzpaJd/Iz5zs9GohP9at9trnO3TilCveusKxgcoUXPA2QnIp+cACcuCYpvsC
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6477.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(83380400001)(64756008)(508600001)(76116006)(66556008)(52536014)(8676002)(53546011)(66446008)(66476007)(44832011)(8936002)(9686003)(66946007)(86362001)(5660300002)(26005)(186003)(33656002)(7696005)(6506007)(966005)(110136005)(38070700005)(38100700002)(55016003)(316002)(122000001)(71200400001)(45080400002)(921005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?bUxSS3ZrSnFWcVFhdUY0amlZV3JGd1JvWWkxVG5OZTBnRWN0TDQ5S0Q3MU41?=
- =?gb2312?B?SVdpWEdKelRKd2FHT3FZQmxxR0I3QWlteVdEdDJhZ0prUHZPU1pZZVVacEVI?=
- =?gb2312?B?eCtnd0xzRHYxU1hvTDk4NCtvdXlDdUo4MWY5WlR2eklnL2w3Q3UxcGlOcmll?=
- =?gb2312?B?MGl2bDQwbUtBcm1OMk9wSnBUR0pLd3E2ME01WWRKM2RCbGFiL2hYS0tSSTlw?=
- =?gb2312?B?dXA2ZU5XOThMeFNXdFV0dWZvcnpqamU2U2NRWlhXOHJ0Ykd2MERFQ2ZkSzRz?=
- =?gb2312?B?V1FZMEs5Q2F2aG5KdFFVUFp5REcvdE9ZMHB4blhVWVowNDZ2ZzFaTGJIMXpk?=
- =?gb2312?B?cW1JK0JESmh3VDFzUVNPRmVvWmwzUjJuUStoWXlNeUJtTFFaa1FiM3hiejRK?=
- =?gb2312?B?VHJ5NCt0MHhJTG1qNnlsMFE2L3M5WTFXdzdXVnF6d3ZabFN2V1gxalZ4anVP?=
- =?gb2312?B?blRZMUlrOWNHYmt6NnJ4U0dyQ3hEWGorUk91M0NXamd3MXJLNndFV1dXUWJL?=
- =?gb2312?B?N0NuVzRvYUwza09nN3ZGS2hxVzVQVGtlMlBkTUR6dktpalRpZDdycms2TWF5?=
- =?gb2312?B?SmRpVUhMWmRuTWRObFBGd1l1YXI3UHBNUmQyZWFtL001aGJ6eHBpYnMyTjZW?=
- =?gb2312?B?VS9mNGJkMTdra0xwa3F2ZVFMM1AxYk8vaHY0OUUrYU13S3hPbGwvNElXREcr?=
- =?gb2312?B?NVFYSExDWStvbFJLV2RMeXNRSWpRelNpdnQ0Vk0vQXM1YXV5VlJSYUhnK2tY?=
- =?gb2312?B?dGJtZmxwRmVWQmNrVWZIbU92Z0hqMHhlS0hBR1VSVmVqN0xrZlJmNmI2L0My?=
- =?gb2312?B?SnN1UzgyU3Q2RVFITVNrdG04UjkralhFalFNazZjT2ZMYUdTaXRLZHd6aGhV?=
- =?gb2312?B?aXlhekVIVXhNWVk0KzRERWhrVmVlWFQra1ZwallhTHpqMGRJVjlOL2YvV3ky?=
- =?gb2312?B?KzQvZS9xaUc2dHl0Qk5iUVdLdHVScFAzalpVKy9SZ2VjMFFNOHZBZk9NcFVq?=
- =?gb2312?B?NGNGVkRCekxyMkM4Ky9Fcnd6VnpQenEzMnRveUYrbmJpTmZrRllIeFNDY2ZC?=
- =?gb2312?B?cFhVQlBoUUJhRVlmSDV4bldJeENhZW1EN3lDY2hxLzlnYzdUeENXdHNIa3NV?=
- =?gb2312?B?VytPVDRqMW1TKzdic2oxVzVMS3MySE9LQUVZRENwVzIrM2Z2T0l4Q0VmTDlB?=
- =?gb2312?B?Zi96QTRtMGVsN3plWGwxQmMyc2xyNFBESThrZHZCQVRXNmlRcUQ3L3dodHVp?=
- =?gb2312?B?ODFacVVKYTVRTFl2a0xVWm5MeHlOQ0F5VStiM3JtWVRCRzBSM09KZWlTb0FC?=
- =?gb2312?B?dGpueUdFdFBSS0x4cmlRa25hVGVEdHlXZ01obEI1Yjc5ZGVsd2lXVWtjQTBi?=
- =?gb2312?B?MHV5WGxGNnNiNzgwQzF2NllnUFQrbGFoWjM0ZnJySFNObmloTWFyU2t0bDJj?=
- =?gb2312?B?NkRLbCtOdzhNRUkyYi9WbnBnMGxYbjVLQXQxR2dSQnEwUENhcCtjNHlDNWx4?=
- =?gb2312?B?UVFCZWR3ZWFsMldkVU55eElNN3daS0VNZnpTcjNXRFcvOCswUXFTekxtNDZh?=
- =?gb2312?B?dVBNRTBYdVBMWEkzbWs5cER2TFBvV0dQRmJtSkZKSkg5NGdZdkM3UU1DN3B1?=
- =?gb2312?B?bWNGTGdOQjUxMmhCUnNjb3JVaEF4c2IvUlhueXNYV1pJRHBOYWxzcGs4K3lL?=
- =?gb2312?B?QkIvTW5DaFhNZ0czZm84ZkxRK1lmbUp4aVdnTHViZlpzQXFBZDM2azBGR1M0?=
- =?gb2312?B?VUVrZGFmbjF2RHlzdm9keWJycG0xMHoxT1NEUVhuWmQ2UjNDU2E0eWlybVQ3?=
- =?gb2312?B?QVhlLzV3WkRpOGp3dnY2WkVzQVFTNU42RjZNZTNTVmpZdC9oY0Y3T2lNRWVW?=
- =?gb2312?B?YTdoNUIrbXVNM0M0a2tTdWl5L0lIOWhMVEozUnYyRWJ6MDNkUklMMCttWTE5?=
- =?gb2312?B?RGVmLy8zRVRkbU5nWGx5UkJEVFRuY3U2UFVtVnFDZzNucTZYRm9MY21YVVUz?=
- =?gb2312?B?YjlIelZRbzJJcUF6Si9pa0g3WjIxZ0RNMFJ3WGdaMzRNWVdEUitkZUtveUxP?=
- =?gb2312?B?SmlXSzJxaFNHZnRxc29qVTV3OEhZSU02dVRBVVFIdFYxWWU1QTFiNjdLVjhq?=
- =?gb2312?B?RTdKMk51bUNvYkRhVmdMeTdjZ1JjSzhlQlE1TkRaOFkxbW9WVmdjMEFsRVQ5?=
- =?gb2312?B?aU5idlozRmV6eGkvK2FCaDB4OFQrMk9Db0JpZG10a2dyeTBEYk1OZ2JyZXI1?=
- =?gb2312?B?Rzk1ZTZQbld6OXJGTDl5NTV0U3UvOUZkbWNuOGpJQnBUODRmWG9SVUo1WGM3?=
- =?gb2312?B?SmVwNEVwdjhqQWhDaUIwOE1kQjhWVFdtVGlxUEZ5a0JJajlYdXljQT09?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Thu, 21 Apr 2022 05:42:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2852C1AF37;
+        Thu, 21 Apr 2022 02:39:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABB2CB823AB;
+        Thu, 21 Apr 2022 09:39:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4AAC385AC;
+        Thu, 21 Apr 2022 09:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650533962;
+        bh=TKu/sxCbrXinnTKyGp1ARSw/I9VGSbCrBPL3G9CHtqg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=upB6LaoAQE85lW1nWPieV/TdsTSpRqq+P1Fn76wgxiipt6xVer7//n/E2rCLJjPAA
+         BEG9dU7hoT0LfsIyt4HOHQI0rcUD2Jxizj2mbhrQGM+yMGFOJm2tadXVuht/qZAFW+
+         IbTmoqEatshFQru1Nv0WOHWd3PXACzEw7/fZDeIJlXqvt2Y5qcFNiUp+GZ3F2oh9F8
+         QIeCvlSdwVTs7hsEvDdW3OO+nzGzoPd/Xp/eChOXJK2wCL+jA21b5YbzrgfeG8ytGt
+         4C+7l9iylJufQA/QWHla2rw5EEhW4He9lD3kW4hwjR0wRyCEu7lBWIEnoUJYhJxi55
+         HxkzQWTTt95kg==
+Received: by mail-ua1-f51.google.com with SMTP id o10so1622730uar.0;
+        Thu, 21 Apr 2022 02:39:22 -0700 (PDT)
+X-Gm-Message-State: AOAM5307arkpwK2DBLZCE/1hWIRj2yRf5/qVs56agEsP6equQQPPJLek
+        xmfDn8MN7IoIKVkmwvR/84iR3t/P8SX095Nbcw4=
+X-Google-Smtp-Source: ABdhPJyj5ZaPcasAU7Kyks+YWcmMk/mOYXYoPD/J7hr6Rn8n2cDQpD9mPbZxb65rTgSAovcpuH0Q1EPSHT/FDI+yQVM=
+X-Received: by 2002:ab0:2703:0:b0:35a:78c:f23a with SMTP id
+ s3-20020ab02703000000b0035a078cf23amr7359846uao.114.1650533961152; Thu, 21
+ Apr 2022 02:39:21 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6477.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 683dc83d-54a3-47eb-8801-08da237a45b1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Apr 2022 09:35:28.8435
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: to2lLNYrAyXHnplA3ShmcLbgYhuZs7Dt6rxlIBooOHZr4XE+q+bp//p7xx8CRMhWR6aiqeazALMk8QqxNzCV2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6840
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220412034957.1481088-1-guoren@kernel.org> <YlbwOG46mCR8Q5tJ@tardis>
+ <CAJF2gTRws6RqKmJHBdKsycWSkFgYna_MocJ+qp3Z9r1v7mQzsg@mail.gmail.com>
+ <Ylt6zqPgimmKpJzg@tardis> <CAJF2gTTZnBh_z31VK81cYiBrTt5NRVpSahoPh35Zo4Ns5hCv7A@mail.gmail.com>
+ <3f7dd397-2ccd-dfa3-a0ec-dcce6cbc0476@nvidia.com> <CAJF2gTQzPsM0X-gib3V0EYYU=weMFXMQZCEbru9y+dDbV+9eXQ@mail.gmail.com>
+ <41e01514-74ca-84f2-f5cc-2645c444fd8e@nvidia.com>
+In-Reply-To: <41e01514-74ca-84f2-f5cc-2645c444fd8e@nvidia.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 21 Apr 2022 17:39:09 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSD1CsMf2uFXbv4qekh72r6iY-0BVaBwA8Ntu0L6WcEPA@mail.gmail.com>
+Message-ID: <CAJF2gTSD1CsMf2uFXbv4qekh72r6iY-0BVaBwA8Ntu0L6WcEPA@mail.gmail.com>
+Subject: Re: [PATCH V2 0/3] riscv: atomic: Optimize AMO instructions usage
+To:     Dan Lustig <dlustig@nvidia.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCg0KQmVzdCBSZWdhcmRzDQpKZXJyeSBIdWFuZw0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2Ut
-LS0tLQ0KRnJvbTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5h
-cm8ub3JnPiANClNlbnQ6IDIwMjLE6jTUwjIxyNUgMTc6MTgNClRvOiBKZXJyeSBIdWFuZyA8amVy
-cnkuaHVhbmdAbnhwLmNvbT47IGJyb29uaWVAa2VybmVsLm9yZzsgcm9iaCtkdEBrZXJuZWwub3Jn
-OyBrcnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc7IGxpbnV4LXNwaUB2Z2VyLmtlcm5l
-bC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJu
-ZWwub3JnOyBzaGF3bmd1b0BrZXJuZWwub3JnOyBMZW8gTGkgPGxlb3lhbmcubGlAbnhwLmNvbT47
-IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZw0KU3ViamVjdDogUmU6IFtFWFRd
-IFJlOiBbUEFUQ0ggMS8yIHY0XSBkdC1iaW5kaW5nczogZHNwaTogYWRkZWQgZm9yIHNlbXRlY2gg
-c3gxMzAxDQoNCkNhdXRpb246IEVYVCBFbWFpbA0KDQpPbiAyMS8wNC8yMDIyIDExOjExLCBKZXJy
-eSBIdWFuZyB3cm90ZToNCj4gUGxlYXNlIGFsc28gYW5zd2VyIE1pY2hhZWwncyBjb21tZW50cy4N
-Cj4NCj4gW0plcnJ5IEh1YW5nXSBJIGRvdWJsZSBjaGVja2VkIHRoZSBNaWtyb0J1cyBkZXZpY2Vz
-LCB3ZSB1c2VkIHR3byBNaWtjcm9CdXMgZGV2aWNlczoNCj4gQkxFIFAgY2xpY2s6IA0KPiBodHRw
-czovL2V1cjAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMlM0El
-MkYlMkZ3d3cuDQo+IG1pa3JvZS5jb20lMkZibGUtcC1jbGljayZhbXA7ZGF0YT0wNSU3QzAxJTdD
-amVycnkuaHVhbmclNDBueHAuY29tJTdDMGENCj4gMTg2OWUxNDBhNzRiZGZkYWQxMDhkYTIzNzdk
-NjM2JTdDNjg2ZWExZDNiYzJiNGM2ZmE5MmNkOTljNWMzMDE2MzUlN0MwJQ0KPiA3QzAlN0M2Mzc4
-NjEyOTQ4NjI3NTM1MTklN0NVbmtub3duJTdDVFdGcGJHWnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01E
-QWlMDQo+IENKUUlqb2lWMmx1TXpJaUxDSkJUaUk2SWsxaGFXd2lMQ0pYVkNJNk1uMCUzRCU3QzMw
-MDAlN0MlN0MlN0MmYW1wO3NkYXQNCj4gYT0lMkZ3c3dLSlp4dWIzN3Z4aGp1REoxaWlnc3BTUHBi
-MVUwa1VRRHhTYXo1WXclM0QmYW1wO3Jlc2VydmVkPTANCj4gQkVFIGNsaWNrOiANCj4gaHR0cHM6
-Ly9ldXIwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHBzJTNBJTJG
-JTJGd3d3Lg0KPiBtaWtyb2UuY29tJTJGYmVlLWNsaWNrJmFtcDtkYXRhPTA1JTdDMDElN0NqZXJy
-eS5odWFuZyU0MG54cC5jb20lN0MwYTE4DQo+IDY5ZTE0MGE3NGJkZmRhZDEwOGRhMjM3N2Q2MzYl
-N0M2ODZlYTFkM2JjMmI0YzZmYTkyY2Q5OWM1YzMwMTYzNSU3QzAlN0MNCj4gMCU3QzYzNzg2MTI5
-NDg2Mjc1MzUxOSU3Q1Vua25vd24lN0NUV0ZwYkdac2IzZDhleUpXSWpvaU1DNHdMakF3TURBaUxD
-Sg0KPiBRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wJTNEJTdDMzAwMCU3
-QyU3QyU3QyZhbXA7c2RhdGE9DQo+IGJFN2twQ3NOQnhvRXVtQ0pEYldpZiUyRlg2WWE5cHglMkJH
-eldBcVBUSjkxOFFJJTNEJmFtcDtyZXNlcnZlZD0wDQo+IEJvdGggb2YgdGhlbSBhcmUgU1BJIGlu
-dGVyZmFjZSBjb25uZWN0IHRvIGxzMTAyOGFyZGIgdGhyb3VnaCBNaUtjcm9CdXMgaW50ZXJmYWNl
-Lg0KPiBTbyB0aGUgbmFtZSAic2VtdGVjaCBzeDEzMDEiIGlzIG5vdCBjb3JyZWN0IGZvciB0aGlz
-IG5vZGUuDQoNCkkgYXNrZWQgdG8gcmVtb3ZlIHRoZSB3b3JkcyAiRGV2aWNldHJlZSBiaW5kaW5n
-cyIgYW5kIHRoaXMgd2FzIG5vdCBmaW5pc2hlZC4NCg0KTm93IHlvdSBtZW50aW9uIHRoYXQgZW50
-aXJlIG5hbWUgb2YgZGV2aWNlIGlzIHdyb25nLi4uIEl0J3MgY29uZnVzaW5nLiBJIGRvbid0IGtu
-b3cgd2hhdCBkZXZpY2UgeW91IGFyZSBkZXNjcmliaW5nIGhlcmUuIEkgZXhwZWN0IHlvdSBrbm93
-LiA6KQ0KDQpXaGF0IGlzIHRoaXMgYmluZGluZyBhYm91dCBleGFjdGx5Pw0KW0plcnJ5IEh1YW5n
-XSANCkkgZG91YmxlIGNoZWNrZWQgdGhlIFNQSSBkZXZpY2UgdXNlZCBvbiBNaWtjcm9CdXMsIHdo
-aWNoIGlzIG5vdCBzeDEzMDEuDQpOb3cgd2UgaGF2ZSB0d28gTWlrY3JvQnVzIGNsaWNrIGJvYXJk
-cywgQkVFIGNsaWNrIGFuZCBCTEUgUCBjbGljaywgYm90aCBvZiB0aGVtIGhhdmUgdGhlIFNQSSBp
-bnRlcmZhY2UgdGhyb3VnaCBNaWtjcm9CdXMuDQpTbyBJIGNhbid0IHVzZSB0aGUgcHJldmlvdXMg
-bmFtZSAic2VtdGVjaCwgc3gxMzAxIi4NCg0KPiBIb3cgYWJvdXQgIm1pa3JvZSwgc3BpLWRldiIg
-b3IgYW55IHN1Z2dlc3Rpb24gYWJvdXQgaXQ/DQoNCg0KQmVzdCByZWdhcmRzLA0KS3J6eXN6dG9m
-DQo=
+Hi Dan,
+
+On Thu, Apr 21, 2022 at 1:03 AM Dan Lustig <dlustig@nvidia.com> wrote:
+>
+> On 4/20/2022 1:33 AM, Guo Ren wrote:
+> > Thx Dan,
+> >
+> > On Wed, Apr 20, 2022 at 1:12 AM Dan Lustig <dlustig@nvidia.com> wrote:
+> >>
+> >> On 4/17/2022 12:51 AM, Guo Ren wrote:
+> >>> Hi Boqun & Andrea,
+> >>>
+> >>> On Sun, Apr 17, 2022 at 10:26 AM Boqun Feng <boqun.feng@gmail.com> wrote:
+> >>>>
+> >>>> On Sun, Apr 17, 2022 at 12:49:44AM +0800, Guo Ren wrote:
+> >>>> [...]
+> >>>>>
+> >>>>> If both the aq and rl bits are set, the atomic memory operation is
+> >>>>> sequentially consistent and cannot be observed to happen before any
+> >>>>> earlier memory operations or after any later memory operations in the
+> >>>>> same RISC-V hart and to the same address domain.
+> >>>>>                 "0:     lr.w     %[p],  %[c]\n"
+> >>>>>                 "       sub      %[rc], %[p], %[o]\n"
+> >>>>>                 "       bltz     %[rc], 1f\n".
+> >>>>> -               "       sc.w.rl  %[rc], %[rc], %[c]\n"
+> >>>>> +               "       sc.w.aqrl %[rc], %[rc], %[c]\n"
+> >>>>>                 "       bnez     %[rc], 0b\n"
+> >>>>> -               "       fence    rw, rw\n"
+> >>>>>                 "1:\n"
+> >>>>> So .rl + fence rw, rw is over constraints, only using sc.w.aqrl is more proper.
+> >>>>>
+> >>>>
+> >>>> Can .aqrl order memory accesses before and after it (not against itself,
+> >>>> against each other), i.e. act as a full memory barrier? For example, can
+> >>> From the RVWMO spec description, the .aqrl annotation appends the same
+> >>> effect with "fence rw, rw" to the AMO instruction, so it's RCsc.
+> >>>
+> >>> Not only .aqrl, and I think the below also could be an RCsc when
+> >>> sc.w.aq is executed:
+> >>> A: Pre-Access
+> >>> B: lr.w.rl ADDR-0
+> >>> ...
+> >>> C: sc.w.aq ADDR-0
+> >>> D: Post-Acess
+> >>> Because sc.w.aq has overlap address & data dependency on lr.w.rl, the
+> >>> global memory order should be A->B->C->D when sc.w.aq is executed. For
+> >>> the amoswap
+> >>
+> >> These opcodes aren't actually meaningful, unfortunately.
+> >>
+> >> Quoting the ISA manual chapter 10.2: "Software should not set the rl bit
+> >> on an LR instruction unless the aq bit is also set, nor should software
+> >> set the aq bit on an SC instruction unless the rl bit is also set."
+> > 1. Oh, I've missed the behind half of the ISA manual. But why can't we
+> > utilize lr.rl & sc.aq in software programming to guarantee the
+> > sequence?
+>
+> lr.aq and sc.rl map more naturally to hardware than lr.rl and sc.aq.
+> Plus, they just aren't common operations to begin with, e.g., there
+> is no smp_store_acquire() or smp_load_release(), nor are there
+> equivalents in C/C++ atomics.
+First, thx for pointing out that my patch violates the rules defined
+in the ISA manual. I've abandoned these parts in v3.
+
+It's easy to let hw support lr.rl & sc.aq (eg: our hardware supports
+them). I agree there are no equivalents in C/C++ atomics. But they are
+useful for LR/SC pairs to implement atomic_acqurie/release semantics.
+Compare below:
+A): fence rw, r; lr
+B): lr.rl
+The A has another "fence ,r" effect in semantics, it's over commit
+from a software design view.
+
+ps: Current definition has problems:
+#define RISCV_ACQUIRE_BARRIER           "\tfence r , rw\n"
+#define RISCV_RELEASE_BARRIER           "\tfence rw,  w\n"
+
+#define __cmpxchg_release(ptr, old, new, size)                          \
+...
+                __asm__ __volatile__ (                                  \
+                        RISCV_RELEASE_BARRIER                           \
+                        "0:     lr.w %0, %2\n"                          \
+
+That means "fence rw, w" can't prevent lr.w beyond the fence, we need
+a "fence.rw. r" here. Here is the Fixup patch which I'm preparing:
+
+From 14c93aca0c3b10cf134791cf491b459972a36ec4 Mon Sep 17 00:00:00 2001
+From: Guo Ren <guoren@linux.alibaba.com>
+Date: Thu, 21 Apr 2022 16:44:48 +0800
+Subject: [PATCH] riscv: atomic: Fixup wrong __atomic_acquire/release_fence
+ implementation
+
+Current RISCV_ACQUIRE/RELEASE_BARRIER is for spin_lock not atomic.
+
+__cmpxchg_release(ptr, old, new, size)
+...
+        __asm__ __volatile__ (
+                        RISCV_RELEASE_BARRIER
+                        "0:     lr.w %0, %2\n"
+
+The "fence rw, w -> lr.w" is invalid and lr would beyond fence, so
+we need "fence rw, r -> lr.w" here. Atomic acquire is the same.
+
+Fixes: 0123f4d76ca6 ("riscv/spinlock: Strengthen implementations with fences")
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Andrea Parri <parri.andrea@gmail.com>
+Cc: Dan Lustig <dlustig@nvidia.com>
+Cc: stable@vger.kernel.org
+---
+ arch/riscv/include/asm/atomic.h  | 4 ++--
+ arch/riscv/include/asm/cmpxchg.h | 8 ++++----
+ arch/riscv/include/asm/fence.h   | 4 ++++
+ 3 files changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+index aef8aa9ac4f4..7cd66eba6ec3 100644
+--- a/arch/riscv/include/asm/atomic.h
++++ b/arch/riscv/include/asm/atomic.h
+@@ -20,10 +20,10 @@
+ #include <asm/barrier.h>
+
+ #define __atomic_acquire_fence()                                       \
+-       __asm__ __volatile__(RISCV_ACQUIRE_BARRIER "" ::: "memory")
++       __asm__ __volatile__(RISCV_ATOMIC_ACQUIRE_BARRIER "":::"memory")
+
+ #define __atomic_release_fence()                                       \
+-       __asm__ __volatile__(RISCV_RELEASE_BARRIER "" ::: "memory");
++       __asm__ __volatile__(RISCV_ATOMIC_RELEASE_BARRIER"" ::: "memory");
+
+ static __always_inline int arch_atomic_read(const atomic_t *v)
+ {
+diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+index 9269fceb86e0..605edc2fca3b 100644
+--- a/arch/riscv/include/asm/cmpxchg.h
++++ b/arch/riscv/include/asm/cmpxchg.h
+@@ -217,7 +217,7 @@
+                        "       bne  %0, %z3, 1f\n"                     \
+                        "       sc.w %1, %z4, %2\n"                     \
+                        "       bnez %1, 0b\n"                          \
+-                       RISCV_ACQUIRE_BARRIER                           \
++                       RISCV_ATOMIC_ACQUIRE_BARRIER                    \
+                        "1:\n"                                          \
+                        : "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)    \
+                        : "rJ" ((long)__old), "rJ" (__new)              \
+@@ -229,7 +229,7 @@
+                        "       bne %0, %z3, 1f\n"                      \
+                        "       sc.d %1, %z4, %2\n"                     \
+                        "       bnez %1, 0b\n"                          \
+-                       RISCV_ACQUIRE_BARRIER                           \
++                       RISCV_ATOMIC_ACQUIRE_BARRIER                    \
+                        "1:\n"                                          \
+                        : "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)    \
+                        : "rJ" (__old), "rJ" (__new)                    \
+@@ -259,7 +259,7 @@
+        switch (size) {                                                 \
+        case 4:                                                         \
+                __asm__ __volatile__ (                                  \
+-                       RISCV_RELEASE_BARRIER                           \
++                       RISCV_ATOMIC_RELEASE_BARRIER                    \
+                        "0:     lr.w %0, %2\n"                          \
+                        "       bne  %0, %z3, 1f\n"                     \
+                        "       sc.w %1, %z4, %2\n"                     \
+@@ -271,7 +271,7 @@
+                break;                                                  \
+        case 8:                                                         \
+                __asm__ __volatile__ (                                  \
+-                       RISCV_RELEASE_BARRIER                           \
++                       RISCV_ATOMIC_RELEASE_BARRIER                    \
+                        "0:     lr.d %0, %2\n"                          \
+                        "       bne %0, %z3, 1f\n"                      \
+                        "       sc.d %1, %z4, %2\n"                     \
+diff --git a/arch/riscv/include/asm/fence.h b/arch/riscv/include/asm/fence.h
+index 2b443a3a487f..4e446d64f04f 100644
+--- a/arch/riscv/include/asm/fence.h
++++ b/arch/riscv/include/asm/fence.h
+@@ -4,9 +4,13 @@
+ #ifdef CONFIG_SMP
+ #define RISCV_ACQUIRE_BARRIER          "\tfence r , rw\n"
+ #define RISCV_RELEASE_BARRIER          "\tfence rw,  w\n"
++#define RISCV_ATOMIC_ACQUIRE_BARRIER   "\tfence w , rw\n"
++#define RISCV_ATOMIC_RELEASE_BARRIER   "\tfence rw,  r\n"
+ #else
+ #define RISCV_ACQUIRE_BARRIER
+ #define RISCV_RELEASE_BARRIER
++#define RISCV_ATOMIC_ACQUIRE_BARRIER
++#define RISCV_ATOMIC_RELEASE_BARRIER
+ #endif
+
+ #endif /* _ASM_RISCV_FENCE_H */
+
+
+>
+> > 2. Using .aqrl to replace the fence rw, rw is okay to ISA manual,
+> > right? And reducing a fence instruction to gain better performance:
+> >                 "0:     lr.w     %[p],  %[c]\n"
+> >                  "       sub      %[rc], %[p], %[o]\n"
+> >                  "       bltz     %[rc], 1f\n".
+> >  -               "       sc.w.rl  %[rc], %[rc], %[c]\n"
+> >  +              "       sc.w.aqrl %[rc], %[rc], %[c]\n"
+> >                  "       bnez     %[rc], 0b\n"
+> >  -               "       fence    rw, rw\n"
+>
+> Yes, using .aqrl is valid.
+Thx and I think the below is also valid, right?
+
+-                       RISCV_RELEASE_BARRIER                           \
+-                       "       amoswap.w %0, %2, %1\n"                 \
++                       "       amoswap.w.rl %0, %2, %1\n"              \
+
+-                       "       amoswap.d %0, %2, %1\n"                 \
+-                       RISCV_ACQUIRE_BARRIER                           \
++                       "       amoswap.d.aq %0, %2, %1\n"              \
+
+>
+> Dan
+>
+> >>
+> >> Dan
+> >>
+> >>> The purpose of the whole patchset is to reduce the usage of
+> >>> independent fence rw, rw instructions, and maximize the usage of the
+> >>> .aq/.rl/.aqrl aonntation of RISC-V.
+> >>>
+> >>>                 __asm__ __volatile__ (                                  \
+> >>>                         "0:     lr.w %0, %2\n"                          \
+> >>>                         "       bne  %0, %z3, 1f\n"                     \
+> >>>                         "       sc.w.rl %1, %z4, %2\n"                  \
+> >>>                         "       bnez %1, 0b\n"                          \
+> >>>                         "       fence rw, rw\n"                         \
+> >>>                         "1:\n"                                          \
+> >>>
+> >>>> we end up with u == 1, v == 1, r1 on P0 is 0 and r1 on P1 is 0, for the
+> >>>> following litmus test?
+> >>>>
+> >>>>     C lr-sc-aqrl-pair-vs-full-barrier
+> >>>>
+> >>>>     {}
+> >>>>
+> >>>>     P0(int *x, int *y, atomic_t *u)
+> >>>>     {
+> >>>>             int r0;
+> >>>>             int r1;
+> >>>>
+> >>>>             WRITE_ONCE(*x, 1);
+> >>>>             r0 = atomic_cmpxchg(u, 0, 1);
+> >>>>             r1 = READ_ONCE(*y);
+> >>>>     }
+> >>>>
+> >>>>     P1(int *x, int *y, atomic_t *v)
+> >>>>     {
+> >>>>             int r0;
+> >>>>             int r1;
+> >>>>
+> >>>>             WRITE_ONCE(*y, 1);
+> >>>>             r0 = atomic_cmpxchg(v, 0, 1);
+> >>>>             r1 = READ_ONCE(*x);
+> >>>>     }
+> >>>>
+> >>>>     exists (u=1 /\ v=1 /\ 0:r1=0 /\ 1:r1=0)
+> >>> I think my patchset won't affect the above sequence guarantee. Current
+> >>> RISC-V implementation only gives RCsc when the original value is the
+> >>> same at least once. So I prefer RISC-V cmpxchg should be:
+> >>>
+> >>>
+> >>> -                       "0:     lr.w %0, %2\n"                          \
+> >>> +                      "0:     lr.w.rl %0, %2\n"                          \
+> >>>                         "       bne  %0, %z3, 1f\n"                     \
+> >>>                         "       sc.w.rl %1, %z4, %2\n"                  \
+> >>>                         "       bnez %1, 0b\n"                          \
+> >>> -                       "       fence rw, rw\n"                         \
+> >>>                         "1:\n"                                          \
+> >>> +                        "       fence w, rw\n"                    \
+> >>>
+> >>> To give an unconditional RSsc for atomic_cmpxchg.
+> >>>
+> >>>>
+> >>>> Regards,
+> >>>> Boqun
+> >>>
+> >>>
+> >>>
+> >
+> >
+> >
+
+
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

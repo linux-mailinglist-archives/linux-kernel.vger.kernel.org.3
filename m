@@ -2,109 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F364750A598
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6904150A5C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 18:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiDUQ3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 12:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
+        id S230245AbiDUQ3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 12:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390684AbiDUQWv (ORCPT
+        with ESMTP id S1390687AbiDUQXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 12:22:51 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B4D63AE;
-        Thu, 21 Apr 2022 09:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650558001; x=1682094001;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3A6zp59+CXbCtLUTRaBcmCTCcB/VbVNvDqbxb0ss9Wc=;
-  b=EXBZbzjA8WH51v04aZqdN5UKuxK4m6PYPdE/m8yHJW7GWvbnEH6ZRFkU
-   hZlPoEfcy17KlEndu/BcvP/WbZnePNXk3W6OoPhu/w3JkCm0cBJ/yCe1z
-   svLevC5OoKVT8gFSKa8xhBdWUpb+2zt1wXh2up365rxasgTGCqTXVCHj2
-   zO3bwZ0R2MzSD+vH4MdBaHd61rBPX7DIG6m0+ZA4Nch0y/7Y6kgpwEFK4
-   u4ycv0EO8qfJxNmOVj8pz+F1+GS2IrB+N+AuUCQ883HKL4af2A/9MDvvE
-   jcgdDjvkVwP91fDqaBltrhks9zUqyY1suGWOUMCgNpKpmRsmiWiMTDCSk
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263872592"
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="263872592"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 09:20:00 -0700
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="648200010"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 09:20:00 -0700
-Date:   Thu, 21 Apr 2022 09:19:59 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH v2] topology/sysfs: Fix allnoconfig build breakage.
-Message-ID: <YmGEL2klp4S97UiH@agluck-desk3.sc.intel.com>
-References: <20220421152645.3a849198@canb.auug.org.au>
- <YmD+geU9CmjoVnN9@kroah.com>
- <YmF8Hrq5kgDdfvtS@agluck-desk3.sc.intel.com>
- <YmF+FTxgu2U4/oPA@kroah.com>
+        Thu, 21 Apr 2022 12:23:14 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BDE21E39
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:20:24 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id y16so3359425ilc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:20:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jTmusAwV684aMFKs/ZUE0USXjWO4fp53UX1om3MGtII=;
+        b=Nrnvl0OWGMELGK7BoERttSSU3k9U6KUVq6m6cjxcpQAup5ZK+dm2scxx+z9XbHF+uJ
+         6W1kI6Fy8lOkCpoiQw8vSjLeEfD1yUtZys7Vy0amFGpgH/Xw8I3npCSLHXN8tOLVp462
+         YlBxXXRt4ZYhilcS3X+45XAwxVTrloIy28gkc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jTmusAwV684aMFKs/ZUE0USXjWO4fp53UX1om3MGtII=;
+        b=end6gvogdBD073x+A3Ppl6hMTi5xqzDMS5kuWoZz3y1Ai9/sQgbIRfw/ATguWDPvX6
+         5fhg3RbpWkCdTXCVyGhp87ieBL4SEXxwwo52zTYyiC4dGrGMuNmQU/JmMhZt/xSnDaWj
+         vdlfJLtbJDx1ZY0HZiJIIxX3+hYktc4A8EmJrwxijWgdh31IXBpX5L1hxmWaudSWkUwI
+         +8+bm9BKSLut0qDC8OfDJw/gxUUCf74bp8yiyuwTNFtRjAHWmapz8baGyP+xS5ANE5bG
+         liNt79Hj79zasQfQokFJMOc9eqfQQrWfSmKrgEgfSz2yRK3W4LQPnmNLFL4CdxIsaLCT
+         bU4Q==
+X-Gm-Message-State: AOAM532MHr1FA5wqN4lJgYw5wdSmXSKvAFP1zdkJmPyDIhPLN7Dh/5HX
+        y4B2UfVi5+mUzALI76vvpzttIfdBHaVbAie+pMY=
+X-Google-Smtp-Source: ABdhPJy+JcESsbPmhPjVyau+ivTeYUZ3hr2mX1DTNGSgJIWZwMmlFmt4W5Dx+mLftiv56EmqVLe00w==
+X-Received: by 2002:a05:6e02:170d:b0:2cc:11df:39f5 with SMTP id u13-20020a056e02170d00b002cc11df39f5mr222513ill.12.1650558023873;
+        Thu, 21 Apr 2022 09:20:23 -0700 (PDT)
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com. [209.85.166.49])
+        by smtp.gmail.com with ESMTPSA id t5-20020a92ca85000000b002cbfcdd1183sm10185776ilo.42.2022.04.21.09.20.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 09:20:22 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id h83so5818256iof.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 09:20:21 -0700 (PDT)
+X-Received: by 2002:a05:6638:2607:b0:323:c9c9:e219 with SMTP id
+ m7-20020a056638260700b00323c9c9e219mr200203jat.229.1650558021381; Thu, 21 Apr
+ 2022 09:20:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmF+FTxgu2U4/oPA@kroah.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1650550779-8133-1-git-send-email-quic_srivasam@quicinc.com>
+In-Reply-To: <1650550779-8133-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 21 Apr 2022 09:20:06 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VODaTxu+c8cXWyy8Mw1Qm145vwt-UspirE6k-XL-MZdg@mail.gmail.com>
+Message-ID: <CAD=FV=VODaTxu+c8cXWyy8Mw1Qm145vwt-UspirE6k-XL-MZdg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Add ldo_l17b regulator node
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        quic_rohkumar@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/base/topology.c: In function 'topology_is_visible':
-drivers/base/topology.c:158:24: warning: unused variable 'dev' [-Wunused-variable]
-  158 |         struct device *dev = kobj_to_dev(kobj);
+Hi,
 
-This is because the topology_ppin(dev->id) macro expands to:
+On Thu, Apr 21, 2022 at 7:20 AM Srinivasa Rao Mandadapu
+<quic_srivasam@quicinc.com> wrote:
+>
+> Add ldo_l17b in pm7325 regulator, which is required for
+> wcd codec vdd buck supply.
+>
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-	(cpu_data(dev->id).ppin)
+The ${SUBJECT} should probably mention qcard somehow? Right now your
+patch subject makes it sound like this applies to all sc7280 boards,
+but this only affects those including the qcard dtsi file.
 
-and with CONFIG_SMP=n the cpu_data() macro expands to boot_cpu_data
-(ignoring its argument) with the end result:
 
-	boot_cpu_data.ppin
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+> index b833ba1..17d0c05 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+> @@ -113,6 +113,11 @@
+>                         regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>                 };
+>
+> +               vreg_l17b_1p8: ldo17 {
+> +                       regulator-min-microvolt = <1700000>;
+> +                       regulator-max-microvolt = <1900000>;
 
-Fix by just checking whether the boot_cpu has a PPIN instead of whether
-this specific CPU has one.
+All the other regulators in this file specify:
 
-Fixes: c3702a746ff5 ("topology/sysfs: Hide PPIN on systems that do not support it.")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
+regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
 
----
-I don't believe it will ever be possible to have no PPIN on the boot CPU,
-but somehow have PPINs on other CPUs (or vice versa)
-
- drivers/base/topology.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/base/topology.c b/drivers/base/topology.c
-index 706dbf8bf249..11a56a10188d 100644
---- a/drivers/base/topology.c
-+++ b/drivers/base/topology.c
-@@ -155,9 +155,7 @@ static struct attribute *default_attrs[] = {
- static umode_t topology_is_visible(struct kobject *kobj,
- 				   struct attribute *attr, int unused)
- {
--	struct device *dev = kobj_to_dev(kobj);
--
--	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
-+	if (attr == &dev_attr_ppin.attr && !boot_cpu_data.ppin)
- 		return 0;
- 
- 	return attr->mode;
--- 
-2.35.1
-
+Why doesn't yours?

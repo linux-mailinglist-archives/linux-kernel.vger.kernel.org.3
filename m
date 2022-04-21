@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16348509D56
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D25509D39
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350974AbiDUKPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S1388290AbiDUKRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388272AbiDUKPY (ORCPT
+        with ESMTP id S1388288AbiDUKRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:15:24 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F4D2FE4A;
-        Thu, 21 Apr 2022 03:12:08 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 8AA9D1F45483
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650535927;
-        bh=HPOrpLDJ/NYqVSsQ+sZ4XQLCeAYBNHE6ulTq2mIsJDc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=W98B6+rtp16cuw3lgkpd6JA8YrUWyrDUDS+Mj/UxJ4GP+7oFd1sUbklJ1QDBiTAzm
-         m2ci2dmyJYPHDvtIi6kMUq1Yy/BbCjMFaw65IRUHQftiQg/CRO1TOmFumOWsSScKbc
-         fRJ9MfHo8bUZVC6NYFcWTgJbL+1frzxj/7wSgPSwob60ulGk1S1a8gzf2lzuh0jbzm
-         ve+52G2dyd8CeD0qfv2zlWcbbhoZimNrS9C3a7In65nuGZetHNhf/oOBSl2dzw3Ji/
-         5/omW4tgdBxeR/U6ccdShnlc8/RaYJpJ9WgKpkfYgEac1zD7PAKEB5ANIEKhfYBKSB
-         Dwj2BuYcCicqg==
-Message-ID: <2703f3de-1ee9-36ca-4866-89398c501244@collabora.com>
-Date:   Thu, 21 Apr 2022 12:12:03 +0200
+        Thu, 21 Apr 2022 06:17:17 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7A92CCA6;
+        Thu, 21 Apr 2022 03:14:17 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 544DEE000C;
+        Thu, 21 Apr 2022 10:14:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650536055;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=an69hgvRkZo4fDphZoWRjZyAXfGzKRGmPZzwE3TFtww=;
+        b=UVU1MzSboPYmjJnNfcM3Qk71BBGbWaDl9mydrmQzASqiNP//6Bi6Fu7YwJTbLVt6SLIql3
+        2hUt6A5FNi+3wHF/DKZC3lnjDm378xiXMZKwensfWYZ7kwrQY1tBsq5+o1M0bNXD+WOp0l
+        0NKFeqwrqVqtEbBAcMb+LrMHJ7mb2mjJqnKBFspRVFslA63voqp+i1j0sS5AxTeGQWVolD
+        S3OMLJ5aW690aZdHUX2lgVPqt20ErhXno7ixftgee6PvkgoWMEAj+rz6NbczFSA+n5f7/A
+        3gD59XFMH3ld/VwWT4vyP8YjlG3rdn4sdY2RvHOcQC88fE90XMBL+LBbzWNMGQ==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+Subject: [PATCH net-next] net: bridge: switchdev: check br_vlan_group() return value
+Date:   Thu, 21 Apr 2022 12:12:47 +0200
+Message-Id: <20220421101247.121896-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 2/2] remoteproc: mediatek: allow reading firmware-name
- from DT
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org
-References: <20220419123331.14377-1-allen-kh.cheng@mediatek.com>
- <20220419123331.14377-3-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220419123331.14377-3-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/04/22 14:33, Allen-KH Cheng ha scritto:
-> The SCP firmware blob differs between platforms and SoCs. We add
-> support in the SCP driver for reading the path of firmware file from
-> DT in order to allow these files to live in a generic file system
-> (or linux-firmware).
-> 
-> The firmware-name property is optional and the code falls back to the
-> old filename if the property isn't present.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+br_vlan_group() can return NULL and thus return value must be checked
+to avoid dereferencing a NULL pointer.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Fixes: 6284c723d9b9 ("net: bridge: mst: Notify switchdev drivers of VLAN MSTI migrations")
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+---
+ net/bridge/br_switchdev.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
+index 81400e0b26ac..8f3d76c751dd 100644
+--- a/net/bridge/br_switchdev.c
++++ b/net/bridge/br_switchdev.c
+@@ -354,6 +354,8 @@ static int br_switchdev_vlan_attr_replay(struct net_device *br_dev,
+ 	attr.orig_dev = br_dev;
+ 
+ 	vg = br_vlan_group(br);
++	if (!vg)
++		return 0;
+ 
+ 	list_for_each_entry(v, &vg->vlan_list, vlist) {
+ 		if (v->msti) {
+-- 
+2.34.1
 

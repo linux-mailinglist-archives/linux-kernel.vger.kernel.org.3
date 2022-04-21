@@ -2,149 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5572750A489
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A49150A48C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390343AbiDUPqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
+        id S1390288AbiDUPp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390317AbiDUPpm (ORCPT
+        with ESMTP id S1390347AbiDUPpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:45:42 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484794927A;
-        Thu, 21 Apr 2022 08:42:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1650555699;
-        bh=qO7WWncsu8pqavraYehTZbqYkoK5x7r8ZxY5T97XoXw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=b+ULn39b+bj0QXQCBw1ebteDuTea9undETS0F3wjN4eLKsi4JB2YQXogVfc83LBez
-         yKNmLOcb21RK7yGdjB5m6CjS2/vj+M6UcAbEkV7RpYjgtYRIZWuVVONj+tsRzKG1F3
-         prFeyU+w5t492/e8TZXuRN8Tb0BY4Vy5259dV3Uc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.79.123] ([80.245.79.123]) by web-mail.gmx.net
- (3c-app-gmx-bap38.server.lan [172.19.172.108]) (via HTTP); Thu, 21 Apr 2022
- 17:41:39 +0200
+        Thu, 21 Apr 2022 11:45:36 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09BE49250
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:42:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4D6E5CE2420
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 15:42:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE24C385A5;
+        Thu, 21 Apr 2022 15:42:03 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 11:42:01 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Wang ShaoBo <bobo.shaobowang@huawei.com>, cj.chengjian@huawei.com,
+        huawei.libin@huawei.com, xiexiuqi@huawei.com, liwei391@huawei.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com
+Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
+ allocated trampolines
+Message-ID: <20220421114201.21228eeb@gandalf.local.home>
+In-Reply-To: <YmF0xYpTMoWOIl00@lakrids>
+References: <20220316100132.244849-1-bobo.shaobowang@huawei.com>
+        <20220316100132.244849-4-bobo.shaobowang@huawei.com>
+        <YmFXrBG5AmX3+4f8@lakrids>
+        <20220421100639.03c0d123@gandalf.local.home>
+        <YmF0xYpTMoWOIl00@lakrids>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <trinity-1c858470-8354-4ecd-ace7-a6e437cb5923-1650555699148@3c-app-gmx-bap38>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Wunderlich <linux@fw-web.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>
-Subject: Aw: Re: Re: [RFC/RFT 4/6] PCI: rockchip-dwc: add pcie bifurcation
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 21 Apr 2022 17:41:39 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <CAMdYzYpydGyQZT2n9Tf+ccQMLHzfhOgoyamMgspQDcjzm3Umdg@mail.gmail.com>
-References: <trinity-a220fd81-2ee9-474d-bd65-505b9ed904b2-1650186482865@3c-app-gmx-bs58>
- <20220418155313.GA1101563@bhelgaas>
- <CAMdYzYpydGyQZT2n9Tf+ccQMLHzfhOgoyamMgspQDcjzm3Umdg@mail.gmail.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:fMhCkXFkWk6jz1YC+ACHfChGGaYlwtUgwWcAnA0jyPbYw+1++3n2PWOoruUedVEe3O/nQ
- hDXeXjlmBChv+exHvKh31aXoT2WMSGUsSsGWqskuolAgm32mb16s6bTyLBSYtyP5Sg25cf0JPmXJ
- 1pePEo7O+SI/2Uh8PWKiMger7oxtNy0YJJqYI+mBRs1lneD0he6ep57APIq3Euail8eSb3oQ1N1t
- QJ0n5Muonbp6RS4DYQMXP774RwDlOzQRQsjzLD/mjxpPK7b1IV/OtbmUTj8gaCQgDDN5tUv+dMym
- H4=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2nkMVzuz8fg=:WjCZA2rE/qwwh+MU3sEN/r
- je5+6b+/RRLEZWWlafKstjYHv9f42eqbK6znP181CwuscNFSZjPl+ZR0HKMM7EydWaRcZe/ll
- BCl+krEEXdZUBXvWxN7pl11y0YtJRF/i6dPA75W2WcZOp3+4A65+kN9+ny41jIuUEDMs74lhH
- mlr1cKsf35glpeo45jO6pK6jJcuXVlctuuf0NAvA2rMuAzjHtYFAbYULFQ4NMMKgwDzge1yo8
- j4Lyb7g1uK+V0PwRFsRsWTFrrgK7r3KeHAoy0yjxVTw10wa9hQaRqyS6AYEBnA9MKhCECi6BF
- IooRgAAog8qUceYmla24ULXMV52boFDwi50i7zQFDUn2JUCVw2wJIli0TtSDY76YvVfG16Rqe
- kRZ7vXEtrSLD0eBvjy9o1qoZ+XuRbzMvLC2uxvGwG4uKTT6R1jd59YbrosallEcZqsmO5+Kr5
- xi3NoAXZsdYMYVWQoOFYguVwJlJ05EaBIgoUYtmUx1SDO4JLZhypXT2uoKccQlEIwOS4KlvZO
- 9HfdqR+WKJAllWAbVUtSrhGjQ+yaNXPWNmSv8K+1dqKdbXF65ccZxnET97oWwubt3p67rR0jQ
- affk8sssrapLyMlQ6zJ5CA2iC7h6xRXYxkwV0nYiaobtjCYLLwMOSvupflLa4xyk9lrgEXZt4
- aHim3uq8km4fyBx7FG4mygswCimCKLaiNJWINxGFUzliPO1i23YRcWaZKKUA7LGnEBdO0lazI
- V+/cc0pXMdiZYEG0k/hxV4sGCzUUphJ4RWxS+GvuKGrOQCGk+otFOoyS2Ncv4BdrqvmOOdXuh
- ALV1zmu
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Montag, 18. April 2022 um 18:17 Uhr
-> Von: "Peter Geis" <pgwipeout@gmail.com>
-> > On Sun, Apr 17, 2022 at 11:08:02AM +0200, Frank Wunderlich wrote:
-> > > > On Sat, Apr 16, 2022 at 03:54:56PM +0200, Frank Wunderlich wrote:
-> > > > > From: Frank Wunderlich <frank-w@public-files.de>
-> > > > >
-> > > > > PCIe Lanes can be split to 2 slots with bifurcation.
-> > > > > Add support for this in existing pcie driver.
-> >
-> > > > Is the "rockchip,bifurcation" DT property something that should be
-> > > > generalized so it's not rockchip-specific?  Other controllers are
-> > > > likely to support similar functionality.
-> > >
-> > > I do not know if other controllers support similar functionality,
-> > > but i ack a property without vendor prefix is better. Should i use
-> > > "bifurcation" as name or do you think about a different name which
-> > > is more generic?
-> >
-> > Really a question for Rob about what name would be good and where it
-> > should go.
->
-> It might be good to define this as a lane map.
-> In the Rockchip implementation it's only 2+0 or 1+1, but that isn't
-> guaranteed if this is made into a standard definition.
-> So perhaps:
-> pcie-bifurcation-map =3D <0>, <1>;
-> pcie-bifurcation-map =3D <1>;
-> pcie-bifurcation-map =3D <4>, <5>, <6>, <7>;
+On Thu, 21 Apr 2022 16:14:13 +0100
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-how about a lane-map like this (from controllers point of view):
+> > Let's say you have 10 ftrace_ops registered (with bpf and kprobes this can
+> > be quite common). But each of these ftrace_ops traces a function (or
+> > functions) that are not being traced by the other ftrace_ops. That is, each
+> > ftrace_ops has its own unique function(s) that they are tracing. One could
+> > be tracing schedule, the other could be tracing ksoftirqd_should_run
+> > (whatever).  
+> 
+> Ok, so that's when messing around with bpf or kprobes, and not generally
+> when using plain old ftrace functionality under /sys/kernel/tracing/
+> (unless that's concurrent with one of the former, as per your other
+> reply) ?
 
-rockchip with only 2 lanes (like rk3568):
+It's any user of the ftrace infrastructure, which includes kprobes, bpf,
+perf, function tracing, function graph tracing, and also affects instances.
 
-controller 1:
-lane-map =3D <1 0>;
+> 
+> > Without this change, because the arch does not support dynamically
+> > allocated trampolines, it means that all these ftrace_ops will be
+> > registered to the same trampoline. That means, for every function that is
+> > traced, it will loop through all 10 of theses ftrace_ops and check their
+> > hashes to see if their callback should be called or not.  
+> 
+> Sure; I can see how that can be quite expensive.
+> 
+> What I'm trying to figure out is who this matters to and when, since the
+> implementation is going to come with a bunch of subtle/fractal
+> complexities, and likely a substantial overhead too when enabling or
+> disabling tracing of a patch-site. I'd like to understand the trade-offs
+> better.
+> 
+> > With dynamically allocated trampolines, each ftrace_ops will have their own
+> > trampoline, and that trampoline will be called directly if the function
+> > is only being traced by the one ftrace_ops. This is much more efficient.
+> > 
+> > If a function is traced by more than one ftrace_ops, then it falls back to
+> > the loop.  
+> 
+> I see -- so the dynamic trampoline is just to get the ops? Or is that
+> doing additional things?
 
-controller 2:
-lane-map =3D <0 1>;
+It's to get both the ftrace_ops (as that's one of the parameters) as well
+as to call the callback directly. Not sure if arm is affected by spectre,
+but the "loop" function is filled with indirect function calls, where as
+the dynamic trampolines call the callback directly.
 
-here bifurcation is set if a controller does not aquire all lanes.Afaik rk=
-3568 cannot select specific lanes so i end up with bifurcation =3D true/fa=
-lse (an aggregation-mode on phy) again. but it makes dts-property more usa=
-ble for other devices/SoC.
+Instead of:
 
-this contains the maximum of lanes and as mask the lanes to take by the cu=
-rrent controller. It is scalable to support more pcie-lanes (x2 x4 x8)
+  bl ftrace_caller
 
-example for 2 controllers with PCIe x4 (with 8 lanes available):
+ftrace_caller:
+  [..]
+  bl ftrace_ops_list_func
+  [..]
 
-lane-map=3D<0 0 0 0 1 1 1 1>;
-lane-map=3D<1 1 1 1 0 0 0 0>;
 
-of course they can be mixed, if driver supports this.
+void ftrace_ops_list_func(...)
+{
+	__do_for_each_ftrace_ops(op, ftrace_ops_list) {
+		if (ftrace_ops_test(op, ip)) // test the hash to see if it
+					     //	should trace this
+					     //	function.
+			op->func(...);
+	}
+}
 
-lane-map=3D<0 1 0 1 0 1 0 1>;
-lane-map=3D<1 0 1 0 1 0 1 0>;
+It does:
 
-such lane-map is more flexible
+  bl dyanmic_tramp
 
-regards Frank
+dynamic_tramp:
+  [..]
+  bl func  // call the op->func directly!
+
+
+Much more efficient!
+
+
+> 
+> There might be a middle-ground here where we patch the ftrace_ops
+> pointer into a literal pool at the patch-site, which would allow us to
+> handle this atomically, and would avoid the issues with out-of-range
+> trampolines.
+
+Have an example of what you are suggesting?
+
+-- Steve

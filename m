@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77967509DE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96433509DD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 12:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388541AbiDUKr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 06:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        id S1388490AbiDUKoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 06:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388523AbiDUKrN (ORCPT
+        with ESMTP id S231422AbiDUKoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 06:47:13 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE892D1FC
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:44:23 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id x1so4660889pfj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 03:44:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Vgyphshva4+1MoZbiUZHYBed15/dj2PxkqwfRwCNPpE=;
-        b=EfTBFRclrg2OJBpUoWZLcqlhoTqhRPEqclktYCgbN7WckD+ipu67xVjpp/KgX7S3df
-         0IajjdCl6lQ4JqNYZ2giw2+aoayfss17DKxqHwh6fCOCKA+6vJXZux5rCgrI/FvsvgZW
-         6maMRybm/GRxdmiP7SY1PPpQYHJ3wabRoo8f+BHWM0ec9Z8SSDXgW5f4txOhg+0YNp9e
-         igR+AHPtL0BXLeX/E03XpjTxJnzt+JoQtKDa/lJErvLuZ7Mnh2Vs9vvIAggOKq9U4eSY
-         xmdDLBRPP7BdgUm0SkYvRhfiNAkFaZkxy2rIWHF7ahWI1j//YJPqwXC44BuF6XA7i7kQ
-         FeHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Vgyphshva4+1MoZbiUZHYBed15/dj2PxkqwfRwCNPpE=;
-        b=1ALtdC085fzrZadYARLGkqrmBMnQFNWvVyWQpVWSH3aBBWSBBswv+suiV8qXig+TQG
-         UyzC67sNXJNhExPjo+5/5qVc8pqf6lu0UpiwB6/SZWypAYSNdQ/vJm79wtby9y8qUKLO
-         C1T83GbySswWdfe3/bK9pd9EEL/lkG6trCzL2tTi1Rf0wY4rmUJ/jtNSRm91UkGOi/hK
-         lBI0WKTzOJmgE7rlfbStplsIAEkM/Pc4G6lEgs8XTLXYZf3lQm8rjo/Gbi4ZYgFBoftx
-         Oeqaj/b3yeMPqrL7goX1PYb5KHHiESsOxY2ioHVDrl7qd9r/arIcgXA9PE4ajhrXV68r
-         e9Mw==
-X-Gm-Message-State: AOAM53370orcWDj7yWm09ntt0IacdAMuQpGceBSgw5B1nlnK7bfW63GN
-        aEIWO5FLYg2rH/4umYp09YvNjg==
-X-Google-Smtp-Source: ABdhPJyJLS3mZ53Vu2R9I+Mt2sPcqwMG8V444JCZXnqM/k/gHuRh+50aLFK0VyGbedV642Rj9fvPKg==
-X-Received: by 2002:a65:6e9a:0:b0:382:1804:35c8 with SMTP id bm26-20020a656e9a000000b00382180435c8mr23664506pgb.584.1650537863265;
-        Thu, 21 Apr 2022 03:44:23 -0700 (PDT)
-Received: from always-x1.bytedance.net ([61.120.150.69])
-        by smtp.gmail.com with ESMTPSA id w7-20020aa79547000000b0050ad0e82e6dsm3772485pfq.215.2022.04.21.03.44.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 03:44:22 -0700 (PDT)
-From:   zhenwei pi <pizhenwei@bytedance.com>
-To:     arei.gonglei@huawei.com, mst@redhat.com
-Cc:     jasowang@redhat.com, herbert@gondor.apana.org.au,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, helei.sig11@bytedance.com,
-        davem@davemloft.net, zhenwei pi <pizhenwei@bytedance.com>
-Subject: [PATCH v3 5/5] virtio-crypto: enable retry for virtio-crypto-dev
-Date:   Thu, 21 Apr 2022 18:40:16 +0800
-Message-Id: <20220421104016.453458-6-pizhenwei@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220421104016.453458-1-pizhenwei@bytedance.com>
-References: <20220421104016.453458-1-pizhenwei@bytedance.com>
+        Thu, 21 Apr 2022 06:44:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DA3E2611E;
+        Thu, 21 Apr 2022 03:41:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B4941FB;
+        Thu, 21 Apr 2022 03:41:12 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 54ABA3F5A1;
+        Thu, 21 Apr 2022 03:41:10 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 11:41:05 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: fully convert arm to use dma-direct
+Message-ID: <20220421114105.4bb06db7@donnerap.cambridge.arm.com>
+In-Reply-To: <20220421074204.1284072-1-hch@lst.de>
+References: <20220421074204.1284072-1-hch@lst.de>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: lei he <helei.sig11@bytedance.com>
+On Thu, 21 Apr 2022 09:41:57 +0200
+Christoph Hellwig <hch@lst.de> wrote:
 
-Enable retry for virtio-crypto-dev, so that crypto-engine
-can process cipher-requests parallelly.
+Hi,
 
-Cc: Michael S. Tsirkin <mst@redhat.com>
-Cc: Jason Wang <jasowang@redhat.com>
-Cc: Gonglei <arei.gonglei@huawei.com>
-Signed-off-by: lei he <helei.sig11@bytedance.com>
-Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
----
- drivers/crypto/virtio/virtio_crypto_core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> arm is the last platform not using the dma-direct code for directly
+> mapped DMA.  With the dmaboune removal from Arnd we can easily switch
+> arm to always use dma-direct now (it already does for LPAE configs
+> and nommu).  I'd love to merge this series through the dma-mapping tree
+> as it gives us the opportunity for additional core dma-mapping
+> improvements.
+> 
+> Diffstat:
+>  arch/arm/common/dmabounce.c                          |  582 -------------------
+>  arch/arm/include/asm/dma-mapping.h                   |  128 ----
+>  b/arch/arm/Kconfig                                   |    5 
+>  b/arch/arm/common/Kconfig                            |    6 
+>  b/arch/arm/common/Makefile                           |    1 
+>  b/arch/arm/common/sa1111.c                           |   64 --
+>  b/arch/arm/include/asm/device.h                      |    3 
+>  b/arch/arm/include/asm/dma-direct.h                  |   49 -
+>  b/arch/arm/include/asm/memory.h                      |    2 
+>  b/arch/arm/mach-footbridge/Kconfig                   |    1 
+>  b/arch/arm/mach-footbridge/common.c                  |   19 
+>  b/arch/arm/mach-footbridge/include/mach/dma-direct.h |    8 
+>  b/arch/arm/mach-footbridge/include/mach/memory.h     |    4 
+>  b/arch/arm/mach-highbank/highbank.c                  |    2 
 
-diff --git a/drivers/crypto/virtio/virtio_crypto_core.c b/drivers/crypto/virtio/virtio_crypto_core.c
-index d8edefcb966c..5c0d68c9e894 100644
---- a/drivers/crypto/virtio/virtio_crypto_core.c
-+++ b/drivers/crypto/virtio/virtio_crypto_core.c
-@@ -62,7 +62,8 @@ static int virtcrypto_find_vqs(struct virtio_crypto *vi)
- 		spin_lock_init(&vi->data_vq[i].lock);
- 		vi->data_vq[i].vq = vqs[i];
- 		/* Initialize crypto engine */
--		vi->data_vq[i].engine = crypto_engine_alloc_init(dev, 1);
-+		vi->data_vq[i].engine = crypto_engine_alloc_init_and_set(dev, true, NULL, 1,
-+						virtqueue_get_vring_size(vqs[i]));
- 		if (!vi->data_vq[i].engine) {
- 			ret = -ENOMEM;
- 			goto err_engine;
--- 
-2.20.1
+FWIW, I applied this on top of 5.18-rc3 and pushed my Midway (the Highbank
+successor) a bit with it (scp-ing GBs forth and back to a SATA SSD). Not a
+really conclusive test, but so far it looks all fine.
+
+So for the Highbank part:
+Acked-by: Andre Przywara <andre.przywara@arm.com>
+
+Cheers,
+Andre
+
+
+>  b/arch/arm/mach-mvebu/coherency.c                    |    2 
+>  b/arch/arm/mm/dma-mapping.c                          |  381 ------------
+>  b/drivers/usb/core/hcd.c                             |   17 
+>  b/drivers/usb/host/ohci-sa1111.c                     |   25 
+>  18 files changed, 84 insertions(+), 1215 deletions(-)
 

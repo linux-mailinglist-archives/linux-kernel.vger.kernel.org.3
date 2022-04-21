@@ -2,107 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61FB509BFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE96509C01
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 11:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387521AbiDUJVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 05:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        id S1387561AbiDUJVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 05:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387528AbiDUJVA (ORCPT
+        with ESMTP id S1387527AbiDUJVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:21:00 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAEB26576
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:18:03 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id s25so5650730edi.13
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 02:18:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=kmhiaQxqxxrEcAZhh+yNwzq2hOuXQMjlbA6lx4ca8i0=;
-        b=IcQKPWd4riTif+Hkl53cvMC/y3Es1tpcy0ux7OPeHVIBPrPeMPSbTGLaXNP2+0wWlN
-         h+UqaAyiEKobQ0zCFAf1CQhYLZ878c4adHG5sLZQjJ3d8a/zNuAsS9NXFhmSiaD+BIXF
-         QHGT2yhopG4WFnAA5YXTEkSJKhUZwUiUzWST/PHAXDNsjLa7DIm5ZrXL9QUWwtZhsUum
-         XwR6ctDB654XYDDM7GiX5Rg7NFHm0vEMR5HRWbsUjOQswodk+nQytrZn3Jg6aXDXVkox
-         MynQ9Cq2NBddnOMXJTtfOwuN4JZUfIatPFJHA067Z0zcNvzsnN7yOb1lmzAHo2T/9ERd
-         gAeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kmhiaQxqxxrEcAZhh+yNwzq2hOuXQMjlbA6lx4ca8i0=;
-        b=x9BxkUXZwygXTFa/IjT/UpO6iuKuLaf5VzfsiyLlHspwN4KOE5/zia8gBvwzBocCDE
-         F387e/nBaNSkxDIPh4yDjZWiQgvPQH2vVeHsbiDbSQyJyAIbCBhHAMy1UN2wK35E49JS
-         iPjHRf8nRPw/PWYpKJyp1kiJWcFK60EBwZqFTPupU800T2Hq31eQzL0JjVJMV7zpyk5E
-         ou9qNhZPWf5HKAqgXJcJujWJycMfR4wRzFHEb5gWfCa74xQaGuvRZ3rCblJeW8tT7eXV
-         VFqRMFy2Wn9M4V3pJWnYyi9UmKHJi7rVP19myyU2L/DvGS3OIZnRkpV8nZf3dE4KojKo
-         qLsQ==
-X-Gm-Message-State: AOAM530lY7LetVRq6Ij9XUBSzmoN0Z5eWw1Im+D2BBG/Xu+JP5zNOV97
-        /GVYXLpjdjSe+FJ5njgsMCPcBQ==
-X-Google-Smtp-Source: ABdhPJw2V1NhrUtFTzpR84KL+ElSdaPSU1YX7RYN6P9D3rfgMA87iITUYQqOqv2WSfaGGeIpItks3Q==
-X-Received: by 2002:a05:6402:4414:b0:408:4dc0:3ee9 with SMTP id y20-20020a056402441400b004084dc03ee9mr28169156eda.203.1650532682167;
-        Thu, 21 Apr 2022 02:18:02 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e22-20020a170906505600b006da7d71f25csm7612093ejk.41.2022.04.21.02.18.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 02:18:01 -0700 (PDT)
-Message-ID: <f6086989-a4c1-4223-fad0-79bd5719432e@linaro.org>
-Date:   Thu, 21 Apr 2022 11:18:00 +0200
+        Thu, 21 Apr 2022 05:21:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DE911A09;
+        Thu, 21 Apr 2022 02:18:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7EFF6212CA;
+        Thu, 21 Apr 2022 09:18:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1650532701; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7eBoeABIzrU59GFjZQI069cJ6HARDP5/TtRlOQloOBo=;
+        b=uaw03MuI4ElUFpe3+neihwPi2+k6evr5KXmuhswf5kzgAb7peR8yZVMpHk6W4JDml/wqfv
+        OQy50xqoDcKdkuXbbPVjilWVuLL1LWLNfTjXThTiIJsWf5ewyRMAXvdIeFyAaGp2aGefmk
+        lwKSi0+unRir7cS0PMk7z0kGCxX1YAg=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id F24C02C1AB;
+        Thu, 21 Apr 2022 09:18:20 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 11:18:20 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, roman.gushchin@linux.dev,
+        hannes@cmpxchg.org
+Subject: Re: [PATCH 3/4] mm: Centralize & improve oom reporting in show_mem.c
+Message-ID: <YmEhXG8C7msGvhqL@dhcp22.suse.cz>
+References: <20220419203202.2670193-1-kent.overstreet@gmail.com>
+ <20220419203202.2670193-4-kent.overstreet@gmail.com>
+ <Yl+vHJ3lSLn5ZkWN@dhcp22.suse.cz>
+ <20220420165805.lg4k2iipnpyt4nuu@moria.home.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [EXT] Re: [PATCH 1/2 v4] dt-bindings: dspi: added for semtech
- sx1301
-Content-Language: en-US
-To:     Jerry Huang <jerry.huang@nxp.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Leo Li <leoyang.li@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220420073146.38086-1-jerry.huang@nxp.com>
- <d74f62d7-7aea-b31f-1c2f-540c54df289c@linaro.org>
- <VE1PR04MB6477553510B6EB35D7C22C13FEF49@VE1PR04MB6477.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <VE1PR04MB6477553510B6EB35D7C22C13FEF49@VE1PR04MB6477.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420165805.lg4k2iipnpyt4nuu@moria.home.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2022 11:11, Jerry Huang wrote:
-> Please also answer Michael's comments.
+On Wed 20-04-22 12:58:05, Kent Overstreet wrote:
+> On Wed, Apr 20, 2022 at 08:58:36AM +0200, Michal Hocko wrote:
+> > On Tue 19-04-22 16:32:01, Kent Overstreet wrote:
+> > > This patch:
+> > >  - Moves lib/show_mem.c to mm/show_mem.c
+> > 
+> > Sure, why not. Should be a separate patch.
+> > 
+> > >  - Changes show_mem() to always report on slab usage
+> > >  - Instead of reporting on all slabs, we only report on top 10 slabs,
+> > >    and in sorted order
+> > >  - Also reports on shrinkers, with the new shrinkers_to_text().
+> > 
+> > Why do we need/want this? It would be also great to provide an example
+> > of why the new output is better (in which cases) than the existing one.
 > 
-> [Jerry Huang] I double checked the MikroBus devices, we used two MikcroBus devices:
-> BLE P click: https://www.mikroe.com/ble-p-click
-> BEE click: https://www.mikroe.com/bee-click 
-> Both of them are SPI interface connect to ls1028ardb through MiKcroBus interface.
-> So the name "semtech sx1301" is not correct for this node.
+> Did you read the cover letter to the patch series?
 
-I asked to remove the words "Devicetree bindings" and this was not finished.
+Nope, only this one made it into my inbox based on my filters. I usually
+try to fish out other parts of the thread but I didn't this time.
+Besides it is always better to have a full patch description explain not
+only what has been changed but why as well.
 
-Now you mention that entire name of device is wrong... It's confusing. I
-don't know what device you are describing here. I expect you know. :)
+> But sure, I can give you an example of the new output:
 
-What is this binding about exactly?
+Calling out the changes would be really helpful, but I guess the crux 
+is here.
 
-> How about "mikroe, spi-dev" or any suggestion about it?
+> 00177 16644 pages reserved
+> 00177 Unreclaimable slab info:
+> 00177 9p-fcall-cache    total: 8.25 MiB active: 8.25 MiB
+> 00177 kernfs_node_cache total: 2.15 MiB active: 2.15 MiB
+> 00177 kmalloc-64        total: 2.08 MiB active: 2.07 MiB
+> 00177 task_struct       total: 1.95 MiB active: 1.95 MiB
+> 00177 kmalloc-4k        total: 1.50 MiB active: 1.50 MiB
+> 00177 signal_cache      total: 1.34 MiB active: 1.34 MiB
+> 00177 kmalloc-2k        total: 1.16 MiB active: 1.16 MiB
+> 00177 bch_inode_info    total: 1.02 MiB active: 922 KiB
+> 00177 perf_event        total: 1.02 MiB active: 1.02 MiB
+> 00177 biovec-max        total: 992 KiB active: 960 KiB
+> 00177 Shrinkers:
+> 00177 super_cache_scan: objects: 127
+> 00177 super_cache_scan: objects: 106
+> 00177 jbd2_journal_shrink_scan: objects: 32
+> 00177 ext4_es_scan: objects: 32
+> 00177 bch2_btree_cache_scan: objects: 8
+> 00177   nr nodes:          24
+> 00177   nr dirty:          0
+> 00177   cannibalize lock:  0000000000000000
+> 00177 
+> 00177 super_cache_scan: objects: 8
+> 00177 super_cache_scan: objects: 1
 
-
-Best regards,
-Krzysztof
+How does this help to analyze this allocation failure?
+-- 
+Michal Hocko
+SUSE Labs

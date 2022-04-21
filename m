@@ -2,107 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F2250A139
+	by mail.lfdr.de (Postfix) with ESMTP id 58DA050A138
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387605AbiDUNxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
+        id S1387751AbiDUNx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384863AbiDUNxd (ORCPT
+        with ESMTP id S1387635AbiDUNx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:53:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1804413CF7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:50:41 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kkf6m2QR4zdZPG;
-        Thu, 21 Apr 2022 21:49:52 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 21:50:38 +0800
-Subject: Re: [PATCH v2 2/3] mm/swapfile: Fix lost swap bits in unuse_pte()
-To:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>
-CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
-        <neilb@suse.de>, <apopple@nvidia.com>, <surenb@google.com>,
-        <minchan@kernel.org>, <peterx@redhat.com>, <sfr@canb.auug.org.au>,
-        <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220421125348.62483-1-linmiaohe@huawei.com>
- <20220421125348.62483-3-linmiaohe@huawei.com>
- <67fc9368-0876-b931-14c2-ffa4dac35b6d@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <58980370-f1b6-afa9-9abb-1335bf369155@huawei.com>
-Date:   Thu, 21 Apr 2022 21:50:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 21 Apr 2022 09:53:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D3E113FAE
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650549065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9X5WXrysF88Ouj/slnEAN9ILrlD7gwjjZO9fEL4BbEQ=;
+        b=GTSRfaAYaznYDSI/X9hE5BSC/oHMz9Mb02073TIcuR9Kk+ZHZ396fbTW+h1qW+BXJE+h1+
+        QOk7JvSD0z0aLKEq1lvlJhq+9dzHjMoyGNHlkAru5thKNOL8YzOOKQJtHeqaqc4deDRwjs
+        ogyr/tkr6PWKMoqyeHWbe6FRgYFYTyY=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-489-o3C5JAX8MUKiF57CETMuVg-1; Thu, 21 Apr 2022 09:51:04 -0400
+X-MC-Unique: o3C5JAX8MUKiF57CETMuVg-1
+Received: by mail-ej1-f69.google.com with SMTP id mp18-20020a1709071b1200b006e7f314ecb3so2528015ejc.23
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:51:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9X5WXrysF88Ouj/slnEAN9ILrlD7gwjjZO9fEL4BbEQ=;
+        b=cAIqeRqZ7xqFQnuXwZGsbsfHBKGKjPrmTPe8fornM1xoCvKdGDHbDKBjUyJ+6eQaO5
+         WPor7/62LW7cF32NZDwizJfvSf/mu/k8aOC0mj/9L7tZsJMvsqxwUkEuNiUzZgMkUK5S
+         1H7bXIjZs0Nc8dY00uZV/RagVeXdNM7l7WwqH4iI2JLKPBTBJQjUMnFxhVJw5d9/w+Nz
+         u3Q8g35p7jlBzFtILv9yyxv8Pl8nC77o0q87gCpfjDUV6K+ktSG9HJNqn8TE1IAIJ4Ce
+         GO/YlROXPQ6D+0IjN3PvpIgo73f1KIUamXCX74xeq9V7mN1iP6Wus84bcWPD+etTbUvx
+         UMzA==
+X-Gm-Message-State: AOAM532m47SjMZVyk+QBi2wSF20TBmb/TTrYnTcIJCz5Eee2zGGIUL1y
+        MLOR9bI+WOiAbjMGsNpKDXdopy3DkagPVCo2DHhZKVQDrTJFrSaLC/StHVOgZn3Qehf+lkXADWX
+        HcZe852M3fw7I/e4dFO2KjO5I
+X-Received: by 2002:a05:6402:26cd:b0:423:b43d:8b09 with SMTP id x13-20020a05640226cd00b00423b43d8b09mr28005746edd.400.1650549062687;
+        Thu, 21 Apr 2022 06:51:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyTS+Y4ILLrJT3QP2BpwpnOM5BPXge8ufksj1+vy8uCme6m2CyXJ309d3wnCuvShf6eaPoQKg==
+X-Received: by 2002:a05:6402:26cd:b0:423:b43d:8b09 with SMTP id x13-20020a05640226cd00b00423b43d8b09mr28005722edd.400.1650549062455;
+        Thu, 21 Apr 2022 06:51:02 -0700 (PDT)
+Received: from sgarzare-redhat ([217.171.75.76])
+        by smtp.gmail.com with ESMTPSA id d7-20020a170906174700b006e80a7e3111sm8096281eje.17.2022.04.21.06.51.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 06:51:01 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 15:50:57 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] hv_sock: Check hv_pkt_iter_first_raw()'s return value
+Message-ID: <20220421135057.57whrntjdv25jqpl@sgarzare-redhat>
+References: <20220420200720.434717-1-parri.andrea@gmail.com>
+ <20220420200720.434717-2-parri.andrea@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <67fc9368-0876-b931-14c2-ffa4dac35b6d@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220420200720.434717-2-parri.andrea@gmail.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/21 21:13, David Hildenbrand wrote:
-> On 21.04.22 14:53, Miaohe Lin wrote:
->> This is observed by code review only but not any real report.
->>
->> When we turn off swapping we could have lost the bits stored in the swap
->> ptes. The new rmap-exclusive bit is fine since that turned into a page
->> flag, but not for soft-dirty and uffd-wp. Add them.
->>
->> Suggested-by: Peter Xu <peterx@redhat.com>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/swapfile.c | 12 +++++++++---
->>  1 file changed, 9 insertions(+), 3 deletions(-)
->>
->> diff --git a/mm/swapfile.c b/mm/swapfile.c
->> index 95b63f69f388..332ccfc76142 100644
->> --- a/mm/swapfile.c
->> +++ b/mm/swapfile.c
->> @@ -1783,7 +1783,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->>  {
->>  	struct page *swapcache;
->>  	spinlock_t *ptl;
->> -	pte_t *pte;
->> +	pte_t *pte, new_pte;
->>  	int ret = 1;
->>  
->>  	swapcache = page;
->> @@ -1832,8 +1832,14 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->>  		page_add_new_anon_rmap(page, vma, addr);
->>  		lru_cache_add_inactive_or_unevictable(page, vma);
->>  	}
->> -	set_pte_at(vma->vm_mm, addr, pte,
->> -		   pte_mkold(mk_pte(page, vma->vm_page_prot)));
->> +	new_pte = pte_mkold(mk_pte(page, vma->vm_page_prot));
->> +	if (pte_swp_soft_dirty(*pte))
->> +		new_pte = pte_mksoft_dirty(new_pte);
->> +	if (pte_swp_uffd_wp(*pte)) {
->> +		new_pte = pte_mkuffd_wp(new_pte);
->> +		new_pte = pte_wrprotect(new_pte);
-> 
-> The wrprotect shouldn't be necessary, we don't do a pte_mkwrite(). Note
-> that in do_swap_page() we might have done a
-> maybe_mkwrite(pte_mkdirty(pte)), which is why the pte_wrprotect() is
-> required there.
+On Wed, Apr 20, 2022 at 10:07:16PM +0200, Andrea Parri (Microsoft) wrote:
+>The function returns NULL if the ring buffer doesn't contain enough
+>readable bytes to constitute a packet descriptor.  The ring buffer's
+>write_index is in memory which is shared with the Hyper-V host, an
+>erroneous or malicious host could thus change its value and overturn
+>the result of hvs_stream_has_data().
+>
+>Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+>---
+> net/vmw_vsock/hyperv_transport.c | 2 ++
+> 1 file changed, 2 insertions(+)
+>
+>diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
+>index e111e13b66604..943352530936e 100644
+>--- a/net/vmw_vsock/hyperv_transport.c
+>+++ b/net/vmw_vsock/hyperv_transport.c
+>@@ -603,6 +603,8 @@ static ssize_t hvs_stream_dequeue(struct vsock_sock *vsk, struct msghdr *msg,
+>
+> 	if (need_refill) {
+> 		hvs->recv_desc = hv_pkt_iter_first_raw(hvs->chan);
+>+		if (!hvs->recv_desc)
+>+			return -ENOBUFS;
+> 		ret = hvs_update_recv_data(hvs);
+> 		if (ret)
+> 			return ret;
+>-- 
+>2.25.1
+>
 
-You're so smart. I happened to be referring to the code in do_swap_page. ;)
-Now I see why pte_wrprotect() is only required there. Will remove it in the
-next verison when there is enough feedback. Many thanks!
-
-> 
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 

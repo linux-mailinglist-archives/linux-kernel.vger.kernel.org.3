@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0228150AA16
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1455350AA26
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392458AbiDUUjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 16:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
+        id S1392498AbiDUUlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 16:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392435AbiDUUjZ (ORCPT
+        with ESMTP id S1392464AbiDUUkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 16:39:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407F84DF6B;
-        Thu, 21 Apr 2022 13:36:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52019B82915;
-        Thu, 21 Apr 2022 20:36:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C07B9C385AA;
-        Thu, 21 Apr 2022 20:36:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650573391;
-        bh=TotSHD6NiH+c/cQs+3AC5P1AE81U2W4GDZDFViL3gQg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=nGmyJ77Cqt/Q+5c39e+8bqydS7/XQ7dXYwE9S/28uX/Nk0rZ5inItdEFGnYn0CuAQ
-         11ii8h7BKfOQAOABimpOfT80cwFpowkOPgqRsP//AliF6KOOJ8wjvb9q90M9Yz0CMg
-         CLLRZEEJwQWXEuoMHPMufQvygvhYDehNu3wjN6JA1C9yzdUnV1IdCn9AGqqFQe7iwa
-         H5/sL0LyK3wqYp38H0CANRIC7hPL1FyUT8/ysqGNbB+99ONJVfrIbNALzBz2UUA1RQ
-         LX30I1CtpJ8UXr3uk1XhxIB34iv1V9vCS6TmDYSoY4NcRTWfa3kNWJekyYCTMuc/Nc
-         /m3/c6WOA5d9g==
-Date:   Thu, 21 Apr 2022 15:36:29 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Vidya Sagar <vidyas@nvidia.com>,
-        "Kenneth R. Crudup" <kenny@panix.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, hkallweit1@gmail.com,
-        wangxiongfeng2@huawei.com, mika.westerberg@linux.intel.com,
-        chris.packham@alliedtelesis.co.nz, yangyicong@hisilicon.com,
-        treding@nvidia.com, jonathanh@nvidia.com, abhsahu@nvidia.com,
-        sagupta@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Ricky Wu <ricky_wu@realtek.com>,
-        Rajat Jain <rajatja@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Victor Ding <victording@google.com>
-Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for
- suspend/resume
-Message-ID: <20220421203629.GA1424868@bhelgaas>
+        Thu, 21 Apr 2022 16:40:51 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A076F4DF7B;
+        Thu, 21 Apr 2022 13:37:58 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23LKbl9D086295;
+        Thu, 21 Apr 2022 15:37:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650573467;
+        bh=fiIGiZ2hCyION5BKmzCgCDBVNqXIdGRylYKYLQZ5tjg=;
+        h=From:To:CC:Subject:Date;
+        b=tdQQwhBMXubbrpNpRi5aup6zXYw77wXf43qAwE1c62V00dPpRsZoww+ETAF8FRRXZ
+         c0z5iNuW9a1W3molTOqcKvFn/h4F3w8O8+rOdNuIFa1iSqmoc57zctuXDGPZv0IMqO
+         tR2PeBYSfDtYkGZdX0n2a9zRaxiEc5UtqC2gisU8=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23LKblZC003126
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 21 Apr 2022 15:37:47 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 21
+ Apr 2022 15:37:46 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 21 Apr 2022 15:37:46 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23LKbka2012875;
+        Thu, 21 Apr 2022 15:37:46 -0500
+From:   Dave Gerlach <d-gerlach@ti.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Dave Gerlach <d-gerlach@ti.com>
+Subject: [PATCH 0/6] firmware: ti_sci: Introduce system suspend support
+Date:   Thu, 21 Apr 2022 15:36:53 -0500
+Message-ID: <20220421203659.27853-1-d-gerlach@ti.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p6jh7Jx3pzg9TzrSrW8+3pzLN6EBAFjFv+7T4tMODmX+g@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,37 +66,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 02:16:29PM +0800, Kai-Heng Feng wrote:
-> On Sat, Apr 16, 2022 at 5:25 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Fri, Apr 15, 2022 at 10:26:19PM +0800, Kai-Heng Feng wrote:
-> > ...
+Hi,
 
-> > > So I forced the pcie_aspm_pm_state_change() calling path to eventually
-> > > call aspm_calc_l1ss_info() which solved the problem for me.
-> >
-> > This would update T_PwrOn and LTR1.2_Threshold, so I guess it makes
-> > sense that this would help.  But I think we need to figure out the
-> > reason why pcie_aspm_pm_state_change() exists and get rid of it or at
-> > least better integrate it with pci_restore_state().
-> >
-> > If we call pcie_aspm_pm_state_change() after D3cold or reset, things
-> > still aren't going to work because the LTR cap isn't restored or
-> > programmed.
-> 
-> More than that, the ASPM sysfs won't be restored correctly after
-> resume [1] because of it.
-> So I'd like to post a patch to drop pcie_aspm_pm_state_change() if
-> there's no objection.
+This series introduces necessary ti_sci driver functionality in
+preparation of supporting DeepSleep mode for suspend to mem on TI K3
+AM62 [1]. This series applies on top of [2], which is also required for
+proper system suspend operation.
 
-Please do :)  Obviously somebody thought we needed
-pcie_aspm_pm_state_change() for some reason or it wouldn't have been
-added.  But I didn't figure out since it was included in the very
-first ASPM support: 6c723d5bd89f ("PCI: PCIE ASPM support").
+Deep Sleep mode is described in section "5.2.4.4 DeepSleep" of the AM62
+Technical Reference Manual: https://www.ti.com/lit/pdf/spruiv7
 
-Maybe the comment that "devices changed PM state, we should recheck if
-latency meets all functions' requirement" is a clue but I haven't
-followed up.
+The kernel triggers entry to Deep Sleep mode through the mem suspend
+transition with the following:
 
-> [1] https://lore.kernel.org/linux-pci/20211021035159.1117456-2-kai.heng.feng@canonical.com/
-> 
-> Kai-Heng
+* Use a TF-A binary that supports PSCI_SYSTEM_SUSPEND call, which is
+  enabled by the pending patches here [3]. This causes system to use
+  PSCI system suspend as last step of mem sleep.
+
+* The firmware requires that the OS sends a TISCI_MSG_PREPARE_SLEEP
+  message in order to provide details about suspend, so we must add the
+  ability to send this message. (Patch 3)
+
+* A memory carveout address must be provided to the firmware using
+  the above message, which is passed through device tree to the
+  driver. (Patches 1 and 4)
+
+* System must load firmware to a specific location before Deep Sleep is
+  entered, and this is accomplished using an lpm memory region in device
+  tree to indicate where this firmware should be loaded, and also a
+  "ti,lpm-firmware-name" property to indicate the name of the firmware
+  to load. The ti_sci driver checks in its suspend handler to see if
+  the firmware has been loaded and if not, loads it. (Patches 2 and 5)
+
+* Finally, the ti_sci driver must actually send TISCI_MSG_PREPARE_SLEEP
+  message to firmware with the above information included, which it
+  does during the driver suspend handler when PM_MEM_SUSPEND is the
+  determined state being entered. (Patch 6)
+
+This is tested on am625-sk using a ramdisk with all devices disabled
+apart from cpu0, main_uart0, dmsc, and secure_proxy_main.
+
+Regards,
+Dave
+
+[1] https://lore.kernel.org/lkml/20220225120239.1303821-1-vigneshr@ti.com/
+[2] https://lore.kernel.org/lkml/20220412192138.31189-1-d-gerlach@ti.com/
+[3] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/14714/3
+
+Dave Gerlach (6):
+  dt-bindings: ti,sci: Add ti,ctx-memory-region property
+  dt-bindings: ti,sci: Add lpm region and ti,lpm-firmware-name
+  firmware: ti_sci: Introduce Power Management Ops
+  firmware: ti_sci: Introduce ti,ctx-memory-region for reserved LPM
+    memory
+  firmware: ti_sci: Use dt provided fw name and address to load at
+    suspend time
+  firmware: ti_sci: Introduce prepare system suspend call
+
+ .../bindings/arm/keystone/ti,sci.yaml         |  30 ++-
+ drivers/firmware/ti_sci.c                     | 207 +++++++++++++++++-
+ drivers/firmware/ti_sci.h                     |  32 ++-
+ include/linux/soc/ti/ti_sci_protocol.h        |   6 +
+ 4 files changed, 269 insertions(+), 6 deletions(-)
+
+-- 
+2.35.0
+

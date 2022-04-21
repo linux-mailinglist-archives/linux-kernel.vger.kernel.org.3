@@ -2,132 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F69A50AAD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB74F50AAD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 23:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442103AbiDUViA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 17:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S1442095AbiDUVgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 17:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiDUVh7 (ORCPT
+        with ESMTP id S231443AbiDUVgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 17:37:59 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E0B3EA85
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 14:35:08 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 21so8161182edv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 14:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nl/sxTqX3tPVuNmSVZ0W9Oabdpfd0rG/HOuhpDMx8IU=;
-        b=SGD9XjL10rEx9mfSetxfZDlzHyWhah/RqUC1yuJDs6G0kwXr3WaCGrlxPbDhZrektk
-         vMEv5vROGWM1yTs+l7MxtDylQphutpR87FxU5d1udkQrNd3uJmHojGgHG1MGJot8wiAh
-         JNzYAMieKMZP8RTasxN1p6T3tb37MEirFAfFE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nl/sxTqX3tPVuNmSVZ0W9Oabdpfd0rG/HOuhpDMx8IU=;
-        b=Aep8XzOw8F0cVQuJcJe7pBtv4wD136Oz/57fQgRp9psglvhlqmMBUcwNr6XrVzFgqk
-         k+4ygmg9N7VASkabP8XImqVu8SnGHsjbjGChTVVLEhxfbhLGn0AFxkux0+I1LpS8LzlZ
-         b+0ditF9bYxR8GIYQkeu/MTGBcuBVURwFuGmct4A0qbIO+ZL3Yc5NTeHMUyU6OoNcg3I
-         x/kRRBlsmisC9fSFSiU38PPU7/OUlx5IrWmrzJOIVM29PDOnrMB8kk0l8elO45Smn75W
-         u5g2kdjF3rsgsiBxWvSsu7MF5jG16tNE0vwkkdWqfKAAEFFUq6DRjCVNVpK9ft2bIEPY
-         cImA==
-X-Gm-Message-State: AOAM531TLp7IDdyv+yMzd6g9MRh6WMOleuMywojR/gFlHXwSBmJO3NYs
-        3ec3zlP04o/QytsdDCmtFjI/Xkf/zQrEMaIZwZU=
-X-Google-Smtp-Source: ABdhPJwgXDcxWpzhkmAvdiUdszGBKF+Gc9VbVmMPuyndwwbFVQxJ2z0Nw5qYUTafIOpOShK/SXJbXQ==
-X-Received: by 2002:aa7:d311:0:b0:423:e539:8581 with SMTP id p17-20020aa7d311000000b00423e5398581mr1576439edq.111.1650576906446;
-        Thu, 21 Apr 2022 14:35:06 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id t4-20020a1709067c0400b006ef810aab6fsm69301ejo.213.2022.04.21.14.34.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 14:34:51 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id u3so8414913wrg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 14:34:50 -0700 (PDT)
-X-Received: by 2002:a05:6512:108b:b0:470:90b9:fb51 with SMTP id
- j11-20020a056512108b00b0047090b9fb51mr927158lfg.52.1650576516819; Thu, 21 Apr
- 2022 14:28:36 -0700 (PDT)
+        Thu, 21 Apr 2022 17:36:45 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD544A901;
+        Thu, 21 Apr 2022 14:33:53 -0700 (PDT)
+Received: from melee.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id A93E760004;
+        Thu, 21 Apr 2022 21:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650576830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=H1SCxsyir0yk12O74c3/slnu+DY/q/kHFuNIUrrfPek=;
+        b=llanma7UwoiWXapTlRDnbMcAwLIiConDmuSs+6G2cs7QkoRu+9RoLDI1H5nFuuUG2fqm89
+        j2RVWDIIwQqPOoxWN+wpWlgJIfMKBgHZ+RnbcGDoBi26WGrgC5tw/1km48rbzFGxqXAvVX
+        5fCIIJ+EXKIPiulUfuomVxw8MJsVdCZbBqOfmNcC0AzN4Lwqw/Ppao7CGdkz6j+G9bbf8r
+        JX678bAwQ9T5C18Gd4pV89DKf+3iTPV4nf1mhv8nveuZZhCHE7zTvKBPQGWaAxGX2gaN/T
+        C26/bx0Q1TBb9oq9WL7+D9gMVnVHAMnR5d3CsI5TkPg8Vt5l093unA6EtiaO5A==
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Chris Ruehl <chris.ruehl@gtsys.com.hk>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: rockchip: fix missing error on unsupported SPI_CS_HIGH
+Date:   Thu, 21 Apr 2022 23:32:51 +0200
+Message-Id: <20220421213251.1077899-1-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220421072212.608884-1-song@kernel.org> <CAHk-=wi3eu8mdKmXOCSPeTxABVbstbDg1q5Fkak+A9kVwF+fVw@mail.gmail.com>
- <CAADnVQKyDwXUMCfmdabbVE0vSGxdpqmWAwHRBqbPLW=LdCnHBQ@mail.gmail.com>
- <CAHk-=whFeBezdSrPy31iYv-UZNnNavymrhqrwCptE4uW8aeaHw@mail.gmail.com> <CAPhsuW7M6exGD3C1cPBGjhU0Y5efxtJ3=0BWNnbuH87TgQMzdg@mail.gmail.com>
-In-Reply-To: <CAPhsuW7M6exGD3C1cPBGjhU0Y5efxtJ3=0BWNnbuH87TgQMzdg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 21 Apr 2022 14:28:20 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh1mO5HdrOMTq68WHM51-=jdmQS=KipVYxS+5u3uRc5rg@mail.gmail.com>
-Message-ID: <CAHk-=wh1mO5HdrOMTq68WHM51-=jdmQS=KipVYxS+5u3uRc5rg@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: invalidate unused part of bpf_prog_pack
-To:     Song Liu <song@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 12:41 PM Song Liu <song@kernel.org> wrote:
->
-> The extra logic I had in the original patch was to erase the memory
-> when a BPF program is freed. In this case, the memory will be
-> returned to the bpf_prog_pack, and stays as RO+X. Actually, I
-> am not quite sure whether we need this logic. If not, we only need
-> the much simpler version.
+The hardware (except for the ROCKCHIP_SPI_VER2_TYPE2 version) does not
+support active-high native chip selects. However if such a CS is configured
+the core does not error as it normally should, because the
+'ctlr->use_gpio_descriptors = true' line in rockchip_spi_probe() makes the
+core set SPI_CS_HIGH in ctlr->mode_bits.
 
-Oh, I think it would be good to do at free time too.
+In such a case the spi-rockchip driver operates normally but produces an
+active-low chip select signal without notice.
 
-I just would want that to use the same function we already have for
-the allocation-time thing, instead of introducing completely new
-infrastructure. That was what looked very odd to me.
+There is no provision in the current core code to handle this
+situation. Fix by adding a check in the ctlr->setup function (similarly to
+what spi-atmel.c does).
 
-Now, the _smallest_ patch would likely be to just save away that
-'bpf_fill_ill_insns' function pointer in the 'struct bpf_prog_pack'
-thing.
+This cannot be done reading the SPI_CS_HIGH but in ctlr->mode_bits because
+that bit gets always set by the core for master mode (see above).
 
-It's admittedly kind of silly to do, but it matches that whole silly
-"let's pass around a function pointer to a fixed function" model at
-allocation time.
+Fixes: eb1262e3cc8b ("spi: spi-rockchip: use num-cs property and ctlr->enable_gpiods")
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+ drivers/spi/spi-rockchip.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-I say that's silly, because it's a fixed architecture function and we
-could just call it directly. The only valid function there is
-jit_fill_hole(), and the only reason it uses that function pointer
-seems to be that it's never been exposed as a real function.
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index cdc16eecaf6b..a08215eb9e14 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -196,6 +196,8 @@ struct rockchip_spi {
+ 
+ 	bool slave_abort;
+ 	bool cs_inactive; /* spi slave tansmition stop when cs inactive */
++	bool cs_high_supported; /* native CS supports active-high polarity */
++
+ 	struct spi_transfer *xfer; /* Store xfer temporarily */
+ };
+ 
+@@ -719,6 +721,11 @@ static int rockchip_spi_setup(struct spi_device *spi)
+ 	struct rockchip_spi *rs = spi_controller_get_devdata(spi->controller);
+ 	u32 cr0;
+ 
++	if (!spi->cs_gpiod && (spi->mode & SPI_CS_HIGH) && !rs->cs_high_supported) {
++		dev_warn(&spi->dev, "setup: non GPIO CS can't be active-high\n");
++		return -EINVAL;
++	}
++
+ 	pm_runtime_get_sync(rs->dev);
+ 
+ 	cr0 = readl_relaxed(rs->regs + ROCKCHIP_SPI_CTRLR0);
+@@ -899,6 +906,7 @@ static int rockchip_spi_probe(struct platform_device *pdev)
+ 
+ 	switch (readl_relaxed(rs->regs + ROCKCHIP_SPI_VERSION)) {
+ 	case ROCKCHIP_SPI_VER2_TYPE2:
++		rs->cs_high_supported = true;
+ 		ctlr->mode_bits |= SPI_CS_HIGH;
+ 		if (ctlr->can_dma && slave_mode)
+ 			rs->cs_inactive = true;
+-- 
+2.25.1
 
-So passing it along as a function seems to be _purely_ for the silly
-reason that people haven't agreed on a name, and different
-architectures use different names (ie power uses
-'bpf_jit_fill_ill_insns()', RISC-V calls it 'bpf_fill_ill_insns()',
-and everybody else seems to use 'jit_fill_hole'.
-
-I don't know why that decision was made. It looks like a bad one to
-me, honestly.
-
-Why not just agree on a name - I suggest 'bpf_jit_fill_hole()' - and
-just get rid of that stupid 'bpf_jit_fill_hole_t' type name that only
-exists because of this thing?
-
-The bpf headers seem to literally have agreed on a name for that
-function -type- only in order to be able to disagree on the name of
-the function -name-, and then pass it along as a function pointer
-argument instead of just calling it directly.
-
-Very counter-productive.
-
-                 Linus

@@ -2,108 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047F05098DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113565098DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385692AbiDUHXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        id S1385689AbiDUHXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385689AbiDUHXG (ORCPT
+        with ESMTP id S229843AbiDUHXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:23:06 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CB525E9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:20:17 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id CFAC83202232;
-        Thu, 21 Apr 2022 03:20:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 21 Apr 2022 03:20:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1650525615; x=
-        1650612015; bh=1QXCu/fF6Tw4Hup1ppGCGo749Dtz4mOpnGlClTt0tQs=; b=E
-        N8DYp4I9ESqufshYsUTA3BTrggbTd0X/Q+cOf5/cLTFU3kdtO0lR2vb/pqBSV0m8
-        KgpVhpB/huG2qBS3BEwJ5/+id2Wh4iUFpEe7hqKRKwZJSXrO1gJLbLjzC7RW1qBQ
-        pW7e1Rb86vJA19GLNUZsXa4PBk+e0YVdSYjLkFx+4acRqv5zXBL4muENeVz8fXF5
-        MdV6AGhSnMf0ziyLAkLEjFlCdNw3gIGO3TvGOioRMhmk1CSqSJvqePU4U53k0Gjf
-        zkbkYT0u7ckvjZuknxhgJiH/uCKmfazOFrliBjEe1/IVUouKzy+jSeJumWLzbOx+
-        2sGjKBw2lShHq0Ph812UQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650525615; x=1650612015; bh=1QXCu/fF6Tw4H
-        up1ppGCGo749Dtz4mOpnGlClTt0tQs=; b=TKLd9vtByEv7H7kykfEsiwfMEBrgL
-        GafFRgenfihQU9eXRZea0Oei2nexUNITfagAT9+H1B0tQq15lAXQLuiYIfQurrpV
-        nX74p5OT1iPpXawDdPJnKXknM92lDkBkS8/unZaF7321yMApsI7JhoIik5VV/SVL
-        ux23Rkwxdqth3aQN7VVEXyLy0MHRvFqzlQekIKD6BLajuaFCjh3ToGtak7g3IQf2
-        1xF/S6Q/9uQIyPWSyEhri73QKtNaRSaPbBo8Bppq6jFMqVtzVapYJJW9u8GG5bO4
-        mEiQB81jyIeuLX8/swJgste1tDSjI+4B8Q1huL3NSlDUVzloatYwEdZIg==
-X-ME-Sender: <xms:rgVhYnuGBJL0L_l2fGRSpNjHvcKELfIO4OLBUE_M47chDLwjeEfssQ>
-    <xme:rgVhYofgGShPNFzYJsxgsGfljrzaa-p_VTHuHFVGfy47yUigd0ABb175tmDK_uq25
-    xipv8JhvvlQt2OdXs8>
-X-ME-Received: <xmr:rgVhYqw7kljXuvPACBGVuwuX9Aw9VJzGT_sJtdCJ4bE6IhkTmddOg3JEm3DVVTO0yg9Zo4E7O1W4YZn0SE1uHWV0k1o45kvnnFAbTXw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtddugdduudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepueeigefghfffffeifeehudeiuedvteegueefffevgfetvdffheehkeff
-    vedufeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:rgVhYmNcU4dtXbK08tnFhbrhR4sCsviS0_08QgG_7bX232Efwi5hXw>
-    <xmx:rgVhYn8MB8Wnw2CamLwmQhRmagGKAseNKh9yU9rKm8A_wW85hTS0pg>
-    <xmx:rgVhYmUINWH-RKnTTeOqb-85FEMcMYOnrtKnhHprkzl-SfkZRHv7GA>
-    <xmx:rwVhYo281e7g0QlC1iqCVxQLui27trBJZaevW0daD7VAx2LCXWpstw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 21 Apr 2022 03:20:14 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: (subset) [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or bridge"
-Date:   Thu, 21 Apr 2022 09:20:08 +0200
-Message-Id: <165052560307.696645.12112489752622485846.b4-ty@cerno.tech>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220420231230.58499-2-bjorn.andersson@linaro.org>
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org> <20220420231230.58499-2-bjorn.andersson@linaro.org>
+        Thu, 21 Apr 2022 03:23:19 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7741704D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:20:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/mufPbfAEtzUYo8UQOy8hexQf7LldlE9QXVFf6oUjPA=; b=HTNLBs6dkv2NvylAHe4Bh0YUqm
+        uXFaWw4zqDK7jQM7qe0Ct22VA2CWJzxg6tTsQrB1kPkjCsz1rPoiYIuNLEGnymCibZD+DEEe/IYMc
+        ILrrbXwnVBGBWfIck1L57DSQBbkHbXRlhEc0diL/aBdV5pRJepYHJD8qb0lyt6Uug3DKHCbrSSFaV
+        DiQq4Rd+x31FtAOBQZ/Z43Il9+mEErkUsWxwbrqMZ99jKlZDJhldeXZQjNBhzBYPX+c/o/kgmfp3q
+        vyDlw8f72OErfibwPtCp0ttb0FQC+qcPmdZq29oYem4Qz6+/JCcPv4FhXJjqmOHE5Y5D28gqrgBAr
+        5OUyWYKw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nhR70-00Bzjm-64; Thu, 21 Apr 2022 07:20:22 +0000
+Date:   Thu, 21 Apr 2022 00:20:22 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YmEFttLxGbyJx8LK@infradead.org>
+References: <YlvK9iefUECy361O@gondor.apana.org.au>
+ <YlvQTci7RP5evtTy@arm.com>
+ <YlvRbvWSWMTtBJiN@gondor.apana.org.au>
+ <YlvU6ou14okbAbgW@arm.com>
+ <YlvWtc/dJ6luXzZf@gondor.apana.org.au>
+ <YlxAo5BAy+ARlvqj@arm.com>
+ <Yl0jPdfdUkaStDN5@gondor.apana.org.au>
+ <Yl2Vda/8S7qAvMjC@arm.com>
+ <CAMj1kXEGdPageO3tb2=eLnGAR9-nZtmTGXcGf5CiTQFC4JiXOg@mail.gmail.com>
+ <CAK8P3a1+GqbO5Kgf70nmR8rQg5OaLBsFZJWaOLuS7JRqXb-ZNA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1+GqbO5Kgf70nmR8rQg5OaLBsFZJWaOLuS7JRqXb-ZNA@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 16:12:30 -0700, Bjorn Andersson wrote:
-> Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-> bridge")' attempted to simplify the case of expressing a simple panel
-> under a DSI controller, by assuming that the first non-graph child node
-> was a panel or bridge.
-> 
-> Unfortunately for non-trivial cases the first child node might not be a
-> panel or bridge.  Examples of this can be a aux-bus in the case of
-> DisplayPort, or an opp-table represented before the panel node.
-> 
-> [...]
-
-Applied to drm/drm-misc (drm-misc-fixes).
-
-Thanks!
-Maxime
+Btw, there is another option:  Most real systems already require having
+swiotlb to bounce buffer in some cases.  We could simply force bounce
+buffering in the dma mapping code for too small or not properly aligned
+transfers and just decrease the dma alignment.

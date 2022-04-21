@@ -2,87 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2211050A9B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B099050A9B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 22:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392188AbiDUUIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 16:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
+        id S1392196AbiDUUKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 16:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387130AbiDUUI2 (ORCPT
+        with ESMTP id S230301AbiDUUK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 16:08:28 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8FE4C795
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 13:05:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650571538; x=1682107538;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w2ybIKuJWhV4JC31zdCZy12Bc7kl5NsB8RnG0A9ORzY=;
-  b=i7gw8aORf/bliHbTzHHGJVh7ji/fohcTWZ0tArYnNkjPasLvSVDpij9x
-   gulKIbclFY7ZI4l9CxyCxYkT+8gZa8ulgftOoHDGBongtHYW6guQW4kdU
-   CWqtt00nI89ISKOBR1ehOpyU7d0AU6CMS1SUh1KoT9ZF3qMddNaf7npL5
-   usKptw1MkC+FQhzhab5Wiyb1UppFUBKXJL9DwvF9OdzrAec95NkKRuf0v
-   jlrrNRnqdeGx0rAOcfF0M7JDWY72n0l9Z2nwLt20Hxw+1pR0AvO1Z7BgZ
-   HqdK7Rh1tqCgxf+J1EVFIaUqr7vB/dXgwvhI+EMgoccpbMKSYpH37xiX4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244390199"
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="244390199"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 13:05:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="530469195"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 21 Apr 2022 13:05:37 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhd3Y-0008jv-D3;
-        Thu, 21 Apr 2022 20:05:36 +0000
-Date:   Fri, 22 Apr 2022 04:05:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [intel-tdx:guest-rebased 77/83] arch/x86/kernel/head_64.o: warning:
- objtool: verify_cpu()+0x4d: unreachable instruction
-Message-ID: <202204220440.BCSQowTi-lkp@intel.com>
+        Thu, 21 Apr 2022 16:10:28 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8034C78E;
+        Thu, 21 Apr 2022 13:07:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NdfLnn05R7fjDEiBPK6Cu9YpjR96BrxFTg+OBZR4cMU=; b=VyGfhH7nwhulIRPAAYz6O2eC8T
+        zomZ21Q665Y4fWYko1XBovWfs9G4rmXmxxIZu4wEanYOz1XKrfB2oGdCI9VIOy6oo+L7ORTzJp34l
+        LGL6IDsUPq/5oW57AJ+anM0/G4541Z68t/kWkroeXOPmj+dFAYQgQIXEXb6CDwu9B3BbpSG41ydCb
+        BJcf5m6JxtR9xG+bZCAyAzeja81a7itfYyQPT6MEXwNTdqEB4vm6YZkC/fTd/6Jz6jafIY3ZHjr+Q
+        1wXZSNVItxlWTOvwNjrUG8IcrkVP+NaNOXUnRmbPUnnGnD0uEyK79SbZz86oPKxO2tYv8Co2rT7Fd
+        JfsJfM3A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nhd5F-007VjJ-T1; Thu, 21 Apr 2022 20:07:22 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 68CB79861C1; Thu, 21 Apr 2022 22:07:21 +0200 (CEST)
+Date:   Thu, 21 Apr 2022 22:07:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] freezer,sched: Rewrite core freezer logic
+Message-ID: <20220421200721.GF2762@worktop.programming.kicks-ass.net>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150655.001952823@infradead.org>
+ <878rrys5yj.fsf@email.froward.int.ebiederm.org>
+ <20220421195551.GO2731@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220421195551.GO2731@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest-rebased
-head:   4c095660b91dbdd18042456e395af0deeef93485
-commit: 557120ad3fe964723adac78b3cbf4193c4327d78 [77/83] [REVERTME] x86/tdx: Add CONFIG option for KVM SDV workarounds
-config: x86_64-randconfig-a002 (https://download.01.org/0day-ci/archive/20220422/202204220440.BCSQowTi-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/557120ad3fe964723adac78b3cbf4193c4327d78
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-rebased
-        git checkout 557120ad3fe964723adac78b3cbf4193c4327d78
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+On Thu, Apr 21, 2022 at 09:55:51PM +0200, Peter Zijlstra wrote:
+> On Thu, Apr 21, 2022 at 12:26:44PM -0500, Eric W. Biederman wrote:
+> > Peter Zijlstra <peterz@infradead.org> writes:
+> > 
+> > > --- a/kernel/ptrace.c
+> > > +++ b/kernel/ptrace.c
+> > > @@ -288,7 +288,7 @@ static int ptrace_check_attach(struct ta
+> > >  	}
+> > >  	__set_current_state(TASK_RUNNING);
+> > >  
+> > > -	if (!wait_task_inactive(child, TASK_TRACED) ||
+> > > +	if (!wait_task_inactive(child, TASK_TRACED|TASK_FREEZABLE) ||
+> > >  	    !ptrace_freeze_traced(child))
+> > >  		return -ESRCH;
+> > 
+> > Do we mind that this is going to fail if the child is frozen
+> > during ptrace_check_attach?
+> 
+> Why should this fail? wait_task_inactive() will in fact succeed if it is
+> frozen due to the added TASK_FREEZABLE and some wait_task_inactive()
+> changes elsewhere in this patch.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+These:
 
-All warnings (new ones prefixed by >>):
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3260,6 +3260,19 @@ int migrate_swap(struct task_struct *cur
+ }
+ #endif /* CONFIG_NUMA_BALANCING */
+ 
++static inline bool __wti_match(struct task_struct *p, unsigned int match_state)
++{
++	unsigned int state = READ_ONCE(p->__state);
++
++	if ((match_state & TASK_FREEZABLE) && state == TASK_FROZEN)
++		return true;
++
++	if (state == (match_state & ~TASK_FREEZABLE))
++		return true;
++
++	return false;
++}
++
+ /*
+  * wait_task_inactive - wait for a thread to unschedule.
+  *
+@@ -3304,7 +3317,7 @@ unsigned long wait_task_inactive(struct
+ 		 * is actually now running somewhere else!
+ 		 */
+ 		while (task_running(rq, p)) {
+-			if (match_state && unlikely(READ_ONCE(p->__state) != match_state))
++			if (match_state && !__wti_match(p, match_state))
+ 				return 0;
+ 			cpu_relax();
+ 		}
+@@ -3319,7 +3332,7 @@ unsigned long wait_task_inactive(struct
+ 		running = task_running(rq, p);
+ 		queued = task_on_rq_queued(p);
+ 		ncsw = 0;
+-		if (!match_state || READ_ONCE(p->__state) == match_state)
++		if (!match_state || __wti_match(p, match_state))
+ 			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
+ 		task_rq_unlock(rq, p, &rf);
+ 
 
->> arch/x86/kernel/head_64.o: warning: objtool: verify_cpu()+0x4d: unreachable instruction
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> And I don't see why ptrace_freeze_traced() should fail. It'll warn
+> though, I should extend/remove that WARN_ON_ONCE() looking at __state,
+> but it should work.
+
+And that looks like (after removal of the one WARN):
+
+static bool ptrace_freeze_traced(struct task_struct *task)
+{
+	unsigned long flags;
+	bool ret = false;
+
+	/* Lockless, nobody but us can set this flag */
+	if (task->jobctl & JOBCTL_LISTENING)
+		return ret;
+
+	if (!lock_task_sighand(task, &flags))
+		return ret;
+
+	if (task_is_traced(task) &&
+	    !looks_like_a_spurious_pid(task) &&
+	    !__fatal_signal_pending(task)) {
+		WARN_ON_ONCE(task->jobctl & JOBCTL_DELAY_WAKEKILL);
+		task->jobctl |= JOBCTL_DELAY_WAKEKILL;
+		ret = true;
+	}
+	unlock_task_sighand(task, &flags);
+
+	return ret;
+}
+
+And nothing there cares about ->__state.

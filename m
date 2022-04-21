@@ -2,105 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38A5509411
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 02:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22758509418
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 02:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383364AbiDUAJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 20:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S1383373AbiDUAOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 20:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376861AbiDUAJX (ORCPT
+        with ESMTP id S1348283AbiDUAOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 20:09:23 -0400
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9396313FB7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:06:35 -0700 (PDT)
-Received: by mail-pg1-f182.google.com with SMTP id g9so3184198pgc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Apr 2022 17:06:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=IfHap1dlOBr5gDAC0VqPSKp2nHM5B6kQ59uiY70TBVI=;
-        b=pyAdiIQH847Xev3lFbrgJG64tw7GejGY/WfX3oAg312bnNLK4hmpIaqot9kWjxeJhe
-         2jjJtnNAPBqtCVzpQ0xu+7wOG14ld8qf35HMQ53oF/ippK28GiOqjjLFn5kRpFL0c+A9
-         NqbT74EPPobnFYZf20wWfr7XdlUWExPupT6eBZNWr8Jsom6kuYwxB1La5eoqnjgitVLw
-         jNKH9utBxGcBurzt7e6rst1y2df/nOyedwS2kjvVLv8JwnI1Y+R5nUFSUskyk6Dd5v6+
-         eJ6Ht02o3PtVMd3pOQ6vjXKCAza2An1tlXdgnSOd2pZEaPtaBMK/rR3yCp5wOH/ow0IM
-         ysew==
-X-Gm-Message-State: AOAM5328H8/skW/LEJcfpgeQsaOZLEPGXuKYZw7g26//gjopmy8YudlF
-        UqkdBZPFwU0RR//SZeximctArQ==
-X-Google-Smtp-Source: ABdhPJyBccHfNaH1A30eRpDRBC9j4Q7GiILCDsil3xPBkNRkvmISVOA5FX0e7H26MH7xr/3847BX1w==
-X-Received: by 2002:a05:6a00:1ac8:b0:4fa:917f:c1aa with SMTP id f8-20020a056a001ac800b004fa917fc1aamr26016985pfv.2.1650499594990;
-        Wed, 20 Apr 2022 17:06:34 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id u10-20020a62d44a000000b0050ad4053840sm639105pfl.149.2022.04.20.17.06.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 17:06:33 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>
-Subject: Re: [PATCH v24 3/7] soc: mediatek: SVS: introduce MTK SVS engine
-In-Reply-To: <20220420102044.10832-4-roger.lu@mediatek.com>
-References: <20220420102044.10832-1-roger.lu@mediatek.com>
- <20220420102044.10832-4-roger.lu@mediatek.com>
-Date:   Wed, 20 Apr 2022 17:06:33 -0700
-Message-ID: <7h5yn3s3jq.fsf@baylibre.com>
+        Wed, 20 Apr 2022 20:14:14 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AB2192A6;
+        Wed, 20 Apr 2022 17:11:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650499887; x=1682035887;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DO8u08CYrrpFU9VtVrhYb0LJ+ph2/wh1S84s2b8igPE=;
+  b=baORlmcRtjFPhbjxeMGeyz4YkHKHJay5aSji5jRILfyHEPjKWWKYhHOb
+   KQu96wFN6xFEa3/izkSzRPokXzKaz9GKYbgiC6W94v04h/UvJoXXpgnuk
+   USjQiKC9inbmj4ljziDtxmAoLaSoLoqONcT2VeNDvHdqQRsmvu7pLn+aL
+   LBHLdHmKYr+gePEUNH41KKNHRQ8DohYh0Py5H5fS15jgK+n8knzHlGvoo
+   XO6jIPXPMt4KNkebywUKbITMEmYCV15HmzBzb8QJqdhxJKVqd23TF1aBl
+   JuB0J+6QRbey24sD8v0V4wOKiOibXeV+/2Umxgsj5xmetF8qyZdUjbKuU
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="350634791"
+X-IronPort-AV: E=Sophos;i="5.90,277,1643702400"; 
+   d="scan'208";a="350634791"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 17:11:27 -0700
+X-IronPort-AV: E=Sophos;i="5.90,277,1643702400"; 
+   d="scan'208";a="555463463"
+Received: from ssharm9-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.30.148])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 17:11:23 -0700
+Message-ID: <420a4d689f73f9f7dc1ef71c61da75b7c9777a3f.camel@intel.com>
+Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, isaku.yamahata@gmail.com
+Date:   Thu, 21 Apr 2022 12:11:21 +1200
+In-Reply-To: <e0e2e399-2cac-cf75-2a64-9d017e6d7189@linux.intel.com>
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <b209ee09b74394ab7aed85e0244e2191ee3d4171.camel@intel.com>
+         <e0e2e399-2cac-cf75-2a64-9d017e6d7189@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
+On Wed, 2022-04-20 at 16:45 -0700, Sathyanarayanan Kuppuswamy wrote:
+> If we want to support multiple GetQuote requests in parallel, then we
+> need some way to uniquely identify the GetQuote requests. So that when
+> we get completion notification, we can understand which request is
+> completed. This part is not mentioned/discussed in ABI spec. So we want 
+> to serialize the requests for now.
+> 
+
+Yes it's unfortunate that this part (whether concurrent GetQuote requests are
+supported by TDX architecture) is not explicitly mentioned in GHCI spec.  I am
+fine with only supporting GetQuote requests one by one.  AFAICT there's no
+request to support concurrent GetQuote requests anyway.  What concerns me is
+exactly how explain this.
+
+As I said, we have GET_QUOTE_IN_FLIGHT flag now.  Theoretically, you can queue
+multiple GetQuote requests, and when you receive the interrupt, you check which
+buffer has GET_QUOTE_IN_FLIGHT cleared.  That buffer is the one with Quote
+ready.  However I am not 100% sure whether above will always work.  Interrupt
+can get lost when there are multiple Quotes ready in multiple buffer in very
+short time period, etc?  Perhaps Isaku can provide more input here.
+
+Anyway, how about explaining in this way:
+
+"The GHCI spec doesn't clearly say whether TDX can support or how to support
+multiple GetQuote requests in parallel.  Attestation request is not supposed to
+be frequent and should not be in performance critical path.  Only support
+GetQuote requests in serialized way for now." 
 
 
-Roger Lu <roger.lu@mediatek.com> writes:
+-- 
+Thanks,
+-Kai
 
-> The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> which calculates suitable SVS bank voltages to OPP voltage table.
-> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
-> when receiving OPP_EVENT_ADJUST_VOLTAGE.
->
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Can SVS work with one or the other clusters disabled?  It seems like it
-should still be able to work.  However, if you disable the 2nd cluster
-(e.g. by passing `maxcpus=4` on the kernel command-line, the SVS driver
-will fail to probe.
-
-I dont' think it's a blocker for merging this series, but making the
-probe a bit more robust so it can handle the cluster being disabled
-would be nice additional fix for later.
-
-For example, upstream kernel on mt8183-pumpkin board is very unstable
-with the 2nd cluster enabled (I'm still trying to debug why), but I have
-to boot with `maxcpus=4` on the cmdline, otherwise kernel fails to boot,
-so that's how I noticed this probe failure with SVS.
-
-Kevin

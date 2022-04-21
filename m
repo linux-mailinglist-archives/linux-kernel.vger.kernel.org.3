@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E685150A93F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A36450A940
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 21:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391991AbiDUTeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
+        id S1392005AbiDUTex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbiDUTes (ORCPT
+        with ESMTP id S1391987AbiDUTet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:34:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 016434D623
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:31:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650569516;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oirHxJeseSpQ4iOStNI8q8HxIkoCquebwBwbPngeeuA=;
-        b=C2YpfXS4DJpqUHmRu22zF3Xga0Nz+gY7+9Rt4J/7uAYU4hl7DTdsSRYx0+UNPn/HQQpcKL
-        2XHXeLZ9qTHoyjaANc93rCk8Z7C1SplGDuioc2L0R+iEy8jHXegHneKjV13M8HcbJMHmHR
-        9PE9FOMeuaJsHnJXzvDV1oEUqsDW39I=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-3MXkdkeYPES8j3tMuFsKkA-1; Thu, 21 Apr 2022 15:31:55 -0400
-X-MC-Unique: 3MXkdkeYPES8j3tMuFsKkA-1
-Received: by mail-il1-f197.google.com with SMTP id h1-20020a056e021b8100b002cbec2c4261so3159436ili.16
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:31:55 -0700 (PDT)
+        Thu, 21 Apr 2022 15:34:49 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679934D638
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:31:58 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id r12so6409562iod.6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:31:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ChcaOOdn/M8suYxqXQ+PGCxHuw+mTiMXMZ+jM9GrefI=;
+        b=UjIQ1FFdFQrrSszpwO6Bhhjj/JRqJyhC5nfRIA8HWCyoWI/OEn12Xgn7aDVeMn5K3a
+         bNMVs2tMT/tHb2COd9Fjf3B1Y8ZSNjRq+YGqn97BzNYHWuuKmQRNwszD1dxk39JL0J7b
+         eiAvhDnwmTe0cpc9OhOFhuQoJiGlF3mSDL85w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oirHxJeseSpQ4iOStNI8q8HxIkoCquebwBwbPngeeuA=;
-        b=yQuQ5ucxi5crUNfC4aCKOY9jYg9/Ozb5Z7l8t7z+2SItQz0oNRAFaJEX2t0CmU+ko5
-         hsUmvvMYcSXYQsynkssKe/U3RIMjHEeu6gzM5f/bJWhjhMGsV9GMCJ3nW5xTyu4WnbDf
-         0S4vLR1viuX5LLAkLrsDfjwbVWqbJa7onQ4iXNlDcNYXHgr1FyaDweD3SPFxuheoayz4
-         rVGKnhE7PSptB9s9TbJyJ61TbThgQXUVe9QtIm7Dr72GYtvt6rO/ah60wfjCK9Kf58FO
-         6tAfHtkh0u0WKycA5wsIeR+wLIjLeg7V1f6Z7zucVhkQD+OdFsGNplwUArbzUpxRKOWQ
-         K6aA==
-X-Gm-Message-State: AOAM531HlkBd8ukEri0Ytx5k88YFlTfjo+aLCFLf1gTWLdlO/0lsLqq4
-        D0UT5U2ftDFQjMr4cE5ECwEnlIEUBAYP34UnbCZweXtCpB/gxEx2clq21xwCEXnf20uM5xok29a
-        P+NlTb/ut5VIM2/IBm2YPi00B
-X-Received: by 2002:a05:6638:1611:b0:326:3406:f985 with SMTP id x17-20020a056638161100b003263406f985mr551456jas.59.1650569514948;
-        Thu, 21 Apr 2022 12:31:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwaoiG6Kxj7ErKitZqg/3JBzs4TupIDZ0lr19pOgKu/zn0W4U2N6Sl8x/7zKiVkv9tnJt6ggw==
-X-Received: by 2002:a05:6638:1611:b0:326:3406:f985 with SMTP id x17-20020a056638161100b003263406f985mr551449jas.59.1650569514745;
-        Thu, 21 Apr 2022 12:31:54 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id z5-20020a92cec5000000b002cbe5a870dfsm12676992ilq.36.2022.04.21.12.31.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 12:31:54 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 15:31:53 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v6 09/10] KVM: selftests: Factor out calculation of pages
- needed for a VM
-Message-ID: <YmGxKSM/r2V0tr3d@xz-m1.local>
-References: <20220420173513.1217360-1-bgardon@google.com>
- <20220420173513.1217360-10-bgardon@google.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ChcaOOdn/M8suYxqXQ+PGCxHuw+mTiMXMZ+jM9GrefI=;
+        b=CACpIyOT5jTQqDk9XXYFzmuXtf/LxkOWxW+pHZKwRhHJ0FziZ8JkaMXgIkukR+DrvD
+         OCVyZhgiZkBjprHXC4kYwx5GIHloEXs+M6WIKSgfGtcsdPg1Nl5bXirtGgea+ejDQz8u
+         0Ndr9s4gsWl1aaV1J/vAr6QmF0AJcyrhgttxb/DAWQFXCaGPXCZrSj2kmsl7Cz8x6jdS
+         fU+HqJ2pykCj246Fy2hi7oYrepWhX/pXcNMo602k9voaQxsx+gOiOZQFICspz/jaEiPR
+         +fU0dyWcimjvAyvWV2zT9jcGctpCrrWNDQHuATWvTKST7pxwPLvfTPsqFsw8Fq8laEGu
+         PlLg==
+X-Gm-Message-State: AOAM533skhvlnH1ywieeVAjaFZljYmBSwZPceCbxLFgOtRX2UypZn81e
+        7lDciXgrZV71xus26kSdZ/1lgg==
+X-Google-Smtp-Source: ABdhPJxBpKoQk/2G24NzJGB83sHvZtecYc3iCN32hGuCxXQOqjgfgf51gXtjUs4//o4vh/1ogzFY4Q==
+X-Received: by 2002:a05:6638:2586:b0:32a:9e25:d5d6 with SMTP id s6-20020a056638258600b0032a9e25d5d6mr639819jat.191.1650569517485;
+        Thu, 21 Apr 2022 12:31:57 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id x9-20020a6b6a09000000b006549545c9d5sm8429268iog.42.2022.04.21.12.31.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 12:31:57 -0700 (PDT)
+Subject: Re: [PATCH v2 2/4] selftest/vm: verify remap destination address in
+ mremap_test
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>, shuah@kernel.org,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220420215721.4868-1-sidhartha.kumar@oracle.com>
+ <20220420215721.4868-2-sidhartha.kumar@oracle.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <76cd8347-a8d0-3b56-a202-17ba2a73503d@linuxfoundation.org>
+Date:   Thu, 21 Apr 2022 13:31:56 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220420173513.1217360-10-bgardon@google.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220420215721.4868-2-sidhartha.kumar@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:35:12AM -0700, Ben Gardon wrote:
-> Factor out the calculation of the number of pages needed for a VM to
-> make it easier to separate creating the VM and adding vCPUs.
+On 4/20/22 3:57 PM, Sidhartha Kumar wrote:
+> Because mremap does not have a MAP_FIXED_NOREPLACE flag, it can destroy
+> existing mappings. This causes a segfault when regions such as text are
+> remapped and the permissions are changed.
 > 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Ben Gardon <bgardon@google.com>
+> Verify the requested mremap destination address does not overlap any
+> existing mappings by using mmap's MAP_FIXED_NOREPLACE flag. Keep
+> incrementing the destination address until a valid mapping is found or
+> fail the current test once the max address is reached.
+> 
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+> ---
+> v2:
+> -rename remap_region_valid() to is_remap_region_valid().
+> -change return value of is_remap_region_valid() to bool.
+> -take out overflow check from is_remap_region_valid() to
+>   inside caller.
+> -fail just the current test on overflow rather than existing
+>   the program
+> -fix alignment of mmap calls
+> -change "can't" to "couldn't" in error message
+> -increment mremap destination address by dest_alignment
+>   rather than src_alignment
+> 
+Thank you.
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
--- 
-Peter Xu
-
+Andrew, please let me know if you would like me to take this
+through kselftest tree.

@@ -2,137 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399EE509863
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D095098C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236684AbiDUHH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
+        id S1385566AbiDUHJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385553AbiDUHHr (ORCPT
+        with ESMTP id S229902AbiDUHJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:07:47 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5FB2AF3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:04:58 -0700 (PDT)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A4BEA3F1AE
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:04:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1650524697;
-        bh=6HdSC5MBPOMufV6HBiKEeWBhFc9GPRC0t6FN09g0Ni0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=Cw2hKVUc6XGwBB+Gjih/0VWVNIVc7Dp0qKge0i9JpzERau/+WbW88f6qq58S2RJlD
-         3qjXktxUjy4B2y60soDW/Kkm1I8bU2kHWTAYO0F69gAIN3Mk44KWa/kF5CVwulr1Et
-         FJfPUQ/jqGSBAqCj8ClZAzT9Ln3uI8qBQ8JMRWCIrKOY6q3aw0VNcnWOI7mwC767/J
-         JdnC0xjrZxEgeQedGIW3bEULykCJBPFYsPSxCeJ0Y/MdUg0RcKSit9bSuufsNWSh4H
-         jl9EtmHZKmzej+6HXTvx6dW8k3iDYXkOIIsYltEM2o8RBXqKjgCBsoHyGyuvtltfaA
-         p6krUlgwd9e5w==
-Received: by mail-ej1-f72.google.com with SMTP id gn13-20020a1709070d0d00b006efe23342c7so304941ejc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:04:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6HdSC5MBPOMufV6HBiKEeWBhFc9GPRC0t6FN09g0Ni0=;
-        b=MvX+qNYVEGIP5lZPYPkXArVKjB9yJoH56q0/JCp6ES873JLosTJ5iAD6SMimYzXm1e
-         X1wdVVjl1nGxVIOo7Zk3l+MZ4odTC23e8MSqI9AujPBsOoI6FXZNXq57rAmuxHVlF+YP
-         fHg5PYq1/FH388/2tL4WaDu6tNGLpy3vNmINI7NL+TlKkOibU+JI3WQ2NWGPMG+X9mjb
-         NIOS3RlrIn1tH1Za4LgFfPKVS1o7liifD2Uc2+LYGS/Bw935VQa11wB/qcKM8oWpqddQ
-         u42ESeue8i/hydY4xHgoiA9ADh8cWtFU+T0ttt2w9JCHD66ge3zmNe0LYNthwDZfZyct
-         wnvg==
-X-Gm-Message-State: AOAM532T5rI0w8ny1Lp2TmkRM007EqlW2WvSoEYH/JJzpIEg0KBMZC+9
-        BbAPJ+GDqMED/K6AFP28VjiiK2yqgnUSv4pEkacI968aa+za4M7gh1yATxZvVmdV40lDnh2imPd
-        ekRpc3fqZLtbC4eTnatSCxpOsa37wI3OZMq3sDVCIFQ==
-X-Received: by 2002:a17:906:5d04:b0:6db:7262:570e with SMTP id g4-20020a1709065d0400b006db7262570emr21773808ejt.8.1650524697233;
-        Thu, 21 Apr 2022 00:04:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJynJjrtS0hF16SVmG5l/ZQENi4TBpgJyFKjQc4HjrAuWcJ+5tpAdnARz6DxwRaPkxDgvSHyjw==
-X-Received: by 2002:a17:906:5d04:b0:6db:7262:570e with SMTP id g4-20020a1709065d0400b006db7262570emr21773783ejt.8.1650524697000;
-        Thu, 21 Apr 2022 00:04:57 -0700 (PDT)
-Received: from [192.168.123.94] (ip-088-152-144-107.um26.pools.vodafone-ip.de. [88.152.144.107])
-        by smtp.gmail.com with ESMTPSA id kb28-20020a1709070f9c00b006d5d8bf1b72sm7465162ejc.78.2022.04.21.00.04.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 00:04:56 -0700 (PDT)
-Message-ID: <3fa5215b-84c3-5e4c-cb53-6c05d05e4350@canonical.com>
-Date:   Thu, 21 Apr 2022 09:04:55 +0200
+        Thu, 21 Apr 2022 03:09:44 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F21A16585
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:06:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650524815; x=1682060815;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WYxovo6fYu6pP21wbxbUzNXnneCANdbhHpH49GnDGis=;
+  b=BLGHEacNoBGHTAPEQElTqGfDtiF2/c+ONYlZKNwZqEVBt+72JZv2UUd4
+   8w3ILCo8C1GbpyalcYm4dyPsTUOlbRSb+KL61x/VYjfGRq8hQHtSvToFY
+   hGII8v/K7bQeJoABZGZWOtXXWm8pPvtCdgkY66AvR7N8tKpiy9xYroNI/
+   WwbrwY4742w6wEQlQ+of3JYznLOv+2mOY2/yMwy6mOySi7P1cltSHFtUs
+   vMr8gT7XSyLETq2JKmEdgBF4rotjDq4ueL5Arfz9CI3Fr7UjGEWVkLU0D
+   A9EMSgKhPxXnIgKK5l54+IbsbiA4FQkoMwsjiI7kr81fKzZf3H0UurlMo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="251575635"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="251575635"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 00:06:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="510926204"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Apr 2022 00:06:53 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhQtw-00084H-Vk;
+        Thu, 21 Apr 2022 07:06:52 +0000
+Date:   Thu, 21 Apr 2022 15:05:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1822/2579] kernel/signal.c:2990:2: error:
+ implicit declaration of function 'cgroup_threadgroup_change_begin' is
+ invalid in C99
+Message-ID: <202204211446.ajV6GlxA-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3] RISC-V: Increase range and default value of NR_CPUS
-Content-Language: en-US
-To:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220420112408.155561-1-apatel@ventanamicro.com>
-From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-In-Reply-To: <20220420112408.155561-1-apatel@ventanamicro.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 5256e0b3a0d316629bf14a3e23258fc69496eee1 [1822/2579] headers/deps: cgroup: Move the cgroup_threadgroup_*() inline functions from <linux/cgroup_types.h> to <linux/cgroup_api.h>
+config: mips-randconfig-r026-20220419 (https://download.01.org/0day-ci/archive/20220421/202204211446.ajV6GlxA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=5256e0b3a0d316629bf14a3e23258fc69496eee1
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 5256e0b3a0d316629bf14a3e23258fc69496eee1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   kernel/signal.c:190:6: error: implicit declaration of function 'cgroup_task_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+               cgroup_task_frozen(t)) {
+               ^
+   kernel/signal.c:2325:3: error: implicit declaration of function 'cgroup_enter_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_enter_frozen();
+                   ^
+   kernel/signal.c:2328:3: error: implicit declaration of function 'cgroup_leave_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_leave_frozen(true);
+                   ^
+   kernel/signal.c:2328:3: note: did you mean 'cgroup_enter_frozen'?
+   kernel/signal.c:2325:3: note: 'cgroup_enter_frozen' declared here
+                   cgroup_enter_frozen();
+                   ^
+   kernel/signal.c:2516:3: error: implicit declaration of function 'cgroup_enter_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_enter_frozen();
+                   ^
+   kernel/signal.c:2595:2: error: implicit declaration of function 'cgroup_enter_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           cgroup_enter_frozen();
+           ^
+   kernel/signal.c:2763:16: error: implicit declaration of function 'cgroup_task_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   if (unlikely(cgroup_task_frozen(current))) {
+                                ^
+   kernel/signal.c:2765:4: error: implicit declaration of function 'cgroup_leave_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           cgroup_leave_frozen(false);
+                           ^
+   kernel/signal.c:2865:4: error: implicit declaration of function 'cgroup_leave_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           cgroup_leave_frozen(true);
+                           ^
+>> kernel/signal.c:2990:2: error: implicit declaration of function 'cgroup_threadgroup_change_begin' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           cgroup_threadgroup_change_begin(tsk);
+           ^
+>> kernel/signal.c:2994:3: error: implicit declaration of function 'cgroup_threadgroup_change_end' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_threadgroup_change_end(tsk);
+                   ^
+   kernel/signal.c:2994:3: note: did you mean 'cgroup_threadgroup_change_begin'?
+   kernel/signal.c:2990:2: note: 'cgroup_threadgroup_change_begin' declared here
+           cgroup_threadgroup_change_begin(tsk);
+           ^
+   kernel/signal.c:3005:2: error: implicit declaration of function 'cgroup_threadgroup_change_end' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           cgroup_threadgroup_change_end(tsk);
+           ^
+   11 errors generated.
 
 
-On 4/20/22 13:24, Anup Patel wrote:
-> Currently, the range and default value of NR_CPUS is too restrictive
-> for high-end RISC-V systems with large number of HARTs. The latest
-> QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
-> restrictive for QEMU as well. Other major architectures (such as
-> ARM64, x86_64, MIPS, etc) have a much higher range and default
-> value of NR_CPUS.
-> 
-> This patch increases NR_CPUS range to 2-512 and default value to
-> XLEN (i.e. 32 for RV32 and 64 for RV64).
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+vim +/cgroup_threadgroup_change_begin +2990 kernel/signal.c
 
-Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+0edceb7bcd82802 Oleg Nesterov     2011-04-27  2980  
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2981  void exit_signals(struct task_struct *tsk)
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2982  {
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2983  	int group_stop = 0;
+f646e227b88a164 Oleg Nesterov     2011-04-27  2984  	sigset_t unblocked;
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2985  
+77e4ef99d1c596a Tejun Heo         2011-12-12  2986  	/*
+77e4ef99d1c596a Tejun Heo         2011-12-12  2987  	 * @tsk is about to have PF_EXITING set - lock out users which
+77e4ef99d1c596a Tejun Heo         2011-12-12  2988  	 * expect stable threadgroup.
+77e4ef99d1c596a Tejun Heo         2011-12-12  2989  	 */
+780de9dd2720deb Ingo Molnar       2017-02-02 @2990  	cgroup_threadgroup_change_begin(tsk);
+77e4ef99d1c596a Tejun Heo         2011-12-12  2991  
+49697335e0b441b Eric W. Biederman 2021-06-24  2992  	if (thread_group_empty(tsk) || (tsk->signal->flags & SIGNAL_GROUP_EXIT)) {
+b5b5c995e31d80e Ingo Molnar       2022-04-14  2993  		task_flags(tsk) |= PF_EXITING;
+780de9dd2720deb Ingo Molnar       2017-02-02 @2994  		cgroup_threadgroup_change_end(tsk);
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  2995  		return;
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2996  	}
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2997  
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  2998  	spin_lock_irq(&tsk->sighand->siglock);
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2999  	/*
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3000  	 * From now this task is not visible for group-wide signals,
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3001  	 * see wants_signal(), do_signal_stop().
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3002  	 */
+b5b5c995e31d80e Ingo Molnar       2022-04-14  3003  	task_flags(tsk) |= PF_EXITING;
+77e4ef99d1c596a Tejun Heo         2011-12-12  3004  
+780de9dd2720deb Ingo Molnar       2017-02-02  3005  	cgroup_threadgroup_change_end(tsk);
+77e4ef99d1c596a Tejun Heo         2011-12-12  3006  
+5c251e9dc0e127b Jens Axboe        2020-10-26  3007  	if (!task_sigpending(tsk))
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  3008  		goto out;
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  3009  
+ec2f4babb822f72 Ingo Molnar       2022-01-28  3010  	unblocked = per_task(tsk, blocked);
+f646e227b88a164 Oleg Nesterov     2011-04-27  3011  	signotset(&unblocked);
+f646e227b88a164 Oleg Nesterov     2011-04-27  3012  	retarget_shared_pending(tsk, &unblocked);
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  3013  
+a8f072c1d624a62 Tejun Heo         2011-06-02  3014  	if (unlikely(tsk->jobctl & JOBCTL_STOP_PENDING) &&
+e5c1902e9260a00 Tejun Heo         2011-03-23  3015  	    task_participate_group_stop(tsk))
+edf2ed153bcae52 Tejun Heo         2011-03-23  3016  		group_stop = CLD_STOPPED;
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  3017  out:
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3018  	spin_unlock_irq(&tsk->sighand->siglock);
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3019  
+62bcf9d992ecc19 Tejun Heo         2011-03-23  3020  	/*
+62bcf9d992ecc19 Tejun Heo         2011-03-23  3021  	 * If group stop has completed, deliver the notification.  This
+62bcf9d992ecc19 Tejun Heo         2011-03-23  3022  	 * should always go to the real parent of the group leader.
+62bcf9d992ecc19 Tejun Heo         2011-03-23  3023  	 */
+ae6d2ed7bb3877f Roland McGrath    2009-09-23  3024  	if (unlikely(group_stop)) {
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3025  		read_lock(&tasklist_lock);
+62bcf9d992ecc19 Tejun Heo         2011-03-23  3026  		do_notify_parent_cldstop(tsk, false, group_stop);
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3027  		read_unlock(&tasklist_lock);
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3028  	}
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3029  }
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3030  
 
-> ---
-> Changes since v2:
->   - Rebased on Linux-5.18-rc3
->   - Use a different range when SBI v0.1 is enabled
-> Changes since v1:
->   - Updated NR_CPUS range to 2-512 which reflects maximum number of
->     CPUs supported by QEMU virt machine.
-> ---
->   arch/riscv/Kconfig | 9 ++++++---
->   1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 00fd9c548f26..1823f281069f 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -275,10 +275,13 @@ config SMP
->   	  If you don't know what to do here, say N.
->   
->   config NR_CPUS
-> -	int "Maximum number of CPUs (2-32)"
-> -	range 2 32
-> +	int "Maximum number of CPUs (2-512)"
->   	depends on SMP
-> -	default "8"
-> +	range 2 512 if !SBI_V01
-> +	range 2 32 if SBI_V01 && 32BIT
-> +	range 2 64 if SBI_V01 && 64BIT
-> +	default "32" if 32BIT
-> +	default "64" if 64BIT
->   
->   config HOTPLUG_CPU
->   	bool "Support for hot-pluggable CPUs"
+:::::: The code at line 2990 was first introduced by commit
+:::::: 780de9dd2720debc14c501dab4dc80d1f75ad50e sched/headers, cgroups: Remove the threadgroup_change_*() wrappery
+
+:::::: TO: Ingo Molnar <mingo@kernel.org>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

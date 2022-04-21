@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E7C50AC82
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D9950AC8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387034AbiDUXxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 19:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
+        id S1442886AbiDUX41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 19:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442861AbiDUXwW (ORCPT
+        with ESMTP id S1382034AbiDUX4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:52:22 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363F947AE9;
-        Thu, 21 Apr 2022 16:49:05 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id q75so4758029qke.6;
-        Thu, 21 Apr 2022 16:49:05 -0700 (PDT)
+        Thu, 21 Apr 2022 19:56:23 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86912C647
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:53:31 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id s14so7142759plk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:53:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aaKcIjNjF3IwQgxs7vyEXb42UUHeDaL+RKW940GYuHE=;
-        b=a0tjhmKMatzGt0SztAxbHSgi9tkuoq0b0Avq27VcC+kWC+951h6K4afxy78BlImIme
-         8hwewDxQUByXhjBpdf3GRogZFMXghbYddWPYGObWHaKwar6ZutgSnbKNT7F3FZLqk7wN
-         iZppyKJc9qP3jlBDtQPTyi/5r/om31TNT0840qZqtz+vuCG6AlUZg0IcBuGtOpb3ubGg
-         NNKJgJqrfumSUdnk3c04fo5WdiHypYP0u2zJ040DG42b0Ps/eBSB7PE57jCggeofy1rQ
-         bctqg3CeHEwk/dvoUnReNkmfYLTGm+Cqm1k45E9NSblGTm2QEP4vBQwsNvO+VemICgy1
-         gcCQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5FvZqIly0MqhR6NzevS5ekyPjOQj5Xg3pXSl2WXGAog=;
+        b=Ogg18t2rICAhRyRa+1/Ctr+uZB0ahi8Ixw+q8a+lWa56Jmo8mkR9D42AYlBMIVCuoC
+         kHT2PiySv87HxkRxuKAy03xfE5y5bakuV0MKkVtqerf78IqnIr+7+ZLiR/YHwe3SKIhE
+         B1Jhu+MlTA+oSZ7sBN56agL0d5dkNoyBop+ss8x5lWaqOBqPpkbW4f6qzzZT6Xs82cu2
+         IfnpryhLlHIpS/fX607dwqAF6231mjdgZNBzBZzsF/SPvGENwbt3GP/CpIF6xxZek01p
+         zKDsFkTweVo3RVxHqL/wU03987efQgDWQ0fY5LWpWYQalEeMHU3UqYrRbP+Ezd82jhwC
+         P0+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aaKcIjNjF3IwQgxs7vyEXb42UUHeDaL+RKW940GYuHE=;
-        b=dYZl1j8JBv8yxudvoLOWi6OljcuD7nl/yvdxg/qHKI9RY8GDlNmHt9wFbn9Xgw9U3C
-         /xWkVll8r730WR+10+14ABANnANpqhZJ246diEe6DqJl/1c01mg3POSvM1PVwT0/AsyQ
-         9iMEYw+9vZVEc58zYbFh/qCrRsApn9BTWCmlUlJtWUT/fmpqSR2onKxrtUZSK0+E0UR8
-         LwUeOfogJTNvGdFbgjm36h64qISwpkwXjYBZh6ZOW5vnbQQUNpGao6i2dEY157m0+rbK
-         NrXaF2ph0XooiBen763ZP6xzify+2Q4EKGRnM2eYSMqIQExAtfATCmyC1T59XoO+oR05
-         UqBQ==
-X-Gm-Message-State: AOAM532NdbS+QfEKz26gVlhymAL70KGPTANwuAhsYcfV/+oR+8/35kKE
-        1hBKT6cE2ugIaZXOSk/zReM6kd7iHL7J
-X-Google-Smtp-Source: ABdhPJwtXpdd8XMsi8NfAgNi48EgWOzVYdEawLNA8H89/n1HqY3g/ULD/amWov5SbJzrqfz2xmZ8eQ==
-X-Received: by 2002:a05:620a:bd5:b0:67d:15ed:2fcd with SMTP id s21-20020a05620a0bd500b0067d15ed2fcdmr1185692qki.81.1650584943898;
-        Thu, 21 Apr 2022 16:49:03 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id a1-20020a05622a02c100b002f342ccc1c5sm287372qtx.72.2022.04.21.16.49.02
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5FvZqIly0MqhR6NzevS5ekyPjOQj5Xg3pXSl2WXGAog=;
+        b=PWPtGDWOVGpJe/nfBui/i2iRTW5l7zh3/lR7IZs6WWM7iDIvkMHUw4u/Ip+jY2chYS
+         ARaw9UcwJm4RPt2FxhwSEBnoEG+UPzlnGkKGlJkTVhQqhrdwAQHs+hRxOAl14dc7DSy6
+         E12CdPPFt1nMlczbtyw2V0zqmzp7AUIsBsXGdhUnmm/tDKYclr+ZuLkh78fe2h4Qo+Yi
+         /BZlhc1ybn1p0tb5r7f/MN7dllHB17x9rZ44BHMl6lCIRLa5mUPwUcKrKnTYeq9Zfntm
+         EGgqq+QwSjnlgTk51mxcRTbso/sU9TBZexoOzJY4c6OMEmVhrdJm/huBGOw1cbSb5Qdr
+         LVPg==
+X-Gm-Message-State: AOAM531MZ6bLDTlrRZvJ++kkJgZl1aR0nWVkI9QwYZeUO6B8iwDtXCnT
+        c/9Hze8cFyERGsEXt86IkrE=
+X-Google-Smtp-Source: ABdhPJyC2FzBaOCosZX0rucADzwGysiHj3insxyptmDX1ZvMS6w2yTuqTvFqfGGbiHvKqXUzNBgpZA==
+X-Received: by 2002:a17:902:d5c3:b0:154:c472:de80 with SMTP id g3-20020a170902d5c300b00154c472de80mr1832018plh.87.1650585211355;
+        Thu, 21 Apr 2022 16:53:31 -0700 (PDT)
+Received: from localhost.localdomain ([14.100.36.163])
+        by smtp.gmail.com with ESMTPSA id w137-20020a62828f000000b0050adb63c6d5sm222972pfd.220.2022.04.21.16.53.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 16:49:03 -0700 (PDT)
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>, hch@lst.de,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-input@vger.kernel.org, roman.gushchin@linux.dev
-Subject: [PATCH v2 8/8] mm: Centralize & improve oom reporting in show_mem.c
-Date:   Thu, 21 Apr 2022 19:48:37 -0400
-Message-Id: <20220421234837.3629927-14-kent.overstreet@gmail.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220421234837.3629927-1-kent.overstreet@gmail.com>
-References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
+        Thu, 21 Apr 2022 16:53:30 -0700 (PDT)
+From:   Solomon Tan <wjsota@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        dan.carpenter@oracle.com
+Subject: [PATCH v2] staging: r8188eu: use in-kernel ieee channel
+Date:   Fri, 22 Apr 2022 07:52:38 +0800
+Message-Id: <20220421235237.4218-1-wjsota@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,262 +69,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch:
- - Changes show_mem() to always report on slab usage
- - Instead of reporting on all slabs, we only report on top 10 slabs,
-   and in sorted order
- - Also reports on shrinkers, with the new shrinkers_to_text().
-   Shrinkers need to be included in OOM/allocation failure reporting
-   because they're responsible for memory reclaim - if a shrinker isn't
-   giving up its memory, we need to know which one and why.
+Use the in-kernel structure and flags instead of defining a separate
+one. The rtw_ieee80211_channel structure and flags can be replaced by
+the ieee80211_channel defined in include/net/cfg80211.h since the flags
+serve the same purpose and the ieee80211_channel struct includes the
+elements used in the rtw_ieee80211_channel struct.
 
-More OOM reporting can be moved to show_mem.c and improved, this patch
-is only a start.
-
-New example output on OOM/memory allocation failure:
-
-00177 Mem-Info:
-00177 active_anon:13706 inactive_anon:32266 isolated_anon:16
-00177  active_file:1653 inactive_file:1822 isolated_file:0
-00177  unevictable:0 dirty:0 writeback:0
-00177  slab_reclaimable:6242 slab_unreclaimable:11168
-00177  mapped:3824 shmem:3 pagetables:1266 bounce:0
-00177  kernel_misc_reclaimable:0
-00177  free:4362 free_pcp:35 free_cma:0
-00177 Node 0 active_anon:54824kB inactive_anon:129064kB active_file:6612kB inactive_file:7288kB unevictable:0kB isolated(anon):64kB isolated(file):0kB mapped:15296kB dirty:0kB writeback:0kB shmem:12kB writeback_tmp:0kB kernel_stack:3392kB pagetables:5064kB all_unreclaimable? no
-00177 DMA free:2232kB boost:0kB min:88kB low:108kB high:128kB reserved_highatomic:0KB active_anon:2924kB inactive_anon:6596kB active_file:428kB inactive_file:384kB unevictable:0kB writepending:0kB present:15992kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
-00177 lowmem_reserve[]: 0 426 426 426
-00177 DMA32 free:15092kB boost:5836kB min:8432kB low:9080kB high:9728kB reserved_highatomic:0KB active_anon:52196kB inactive_anon:122392kB active_file:6176kB inactive_file:7068kB unevictable:0kB writepending:0kB present:507760kB managed:441816kB mlocked:0kB bounce:0kB free_pcp:72kB local_pcp:0kB free_cma:0kB
-00177 lowmem_reserve[]: 0 0 0 0
-00177 DMA: 284*4kB (UM) 53*8kB (UM) 21*16kB (U) 11*32kB (U) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 2248kB
-00177 DMA32: 2765*4kB (UME) 375*8kB (UME) 57*16kB (UM) 5*32kB (U) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 15132kB
-00177 4656 total pagecache pages
-00177 1031 pages in swap cache
-00177 Swap cache stats: add 6572399, delete 6572173, find 488603/3286476
-00177 Free swap  = 509112kB
-00177 Total swap = 2097148kB
-00177 130938 pages RAM
-00177 0 pages HighMem/MovableOnly
-00177 16644 pages reserved
-00177 Unreclaimable slab info:
-00177 9p-fcall-cache    total: 8.25 MiB active: 8.25 MiB
-00177 kernfs_node_cache total: 2.15 MiB active: 2.15 MiB
-00177 kmalloc-64        total: 2.08 MiB active: 2.07 MiB
-00177 task_struct       total: 1.95 MiB active: 1.95 MiB
-00177 kmalloc-4k        total: 1.50 MiB active: 1.50 MiB
-00177 signal_cache      total: 1.34 MiB active: 1.34 MiB
-00177 kmalloc-2k        total: 1.16 MiB active: 1.16 MiB
-00177 bch_inode_info    total: 1.02 MiB active: 922 KiB
-00177 perf_event        total: 1.02 MiB active: 1.02 MiB
-00177 biovec-max        total: 992 KiB active: 960 KiB
-00177 Shrinkers:
-00177 super_cache_scan: objects: 127
-00177 super_cache_scan: objects: 106
-00177 jbd2_journal_shrink_scan: objects: 32
-00177 ext4_es_scan: objects: 32
-00177 bch2_btree_cache_scan: objects: 8
-00177   nr nodes:          24
-00177   nr dirty:          0
-00177   cannibalize lock:  0000000000000000
-00177
-00177 super_cache_scan: objects: 8
-00177 super_cache_scan: objects: 1
-
-Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+Signed-off-by: Solomon Tan <wjsota@gmail.com>
 ---
- mm/oom_kill.c    | 23 ---------------------
- mm/show_mem.c    | 14 +++++++++++++
- mm/slab.h        |  6 ++++--
- mm/slab_common.c | 53 ++++++++++++++++++++++++++++++++++++++++--------
- 4 files changed, 63 insertions(+), 33 deletions(-)
+V1 -> V2: Rephrased the commit message to not mislead.
+---
+ drivers/staging/r8188eu/core/rtw_cmd.c        |  6 ++--
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 18 +++++-----
+ drivers/staging/r8188eu/include/ieee80211.h   | 34 +------------------
+ drivers/staging/r8188eu/include/rtw_cmd.h     |  4 +--
+ .../staging/r8188eu/include/rtw_mlme_ext.h    |  2 +-
+ 5 files changed, 16 insertions(+), 48 deletions(-)
 
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 832fb33037..659c7d6376 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -171,27 +171,6 @@ static bool oom_unkillable_task(struct task_struct *p)
- 	return false;
- }
- 
--/*
-- * Check whether unreclaimable slab amount is greater than
-- * all user memory(LRU pages).
-- * dump_unreclaimable_slab() could help in the case that
-- * oom due to too much unreclaimable slab used by kernel.
--*/
--static bool should_dump_unreclaim_slab(void)
--{
--	unsigned long nr_lru;
--
--	nr_lru = global_node_page_state(NR_ACTIVE_ANON) +
--		 global_node_page_state(NR_INACTIVE_ANON) +
--		 global_node_page_state(NR_ACTIVE_FILE) +
--		 global_node_page_state(NR_INACTIVE_FILE) +
--		 global_node_page_state(NR_ISOLATED_ANON) +
--		 global_node_page_state(NR_ISOLATED_FILE) +
--		 global_node_page_state(NR_UNEVICTABLE);
--
--	return (global_node_page_state_pages(NR_SLAB_UNRECLAIMABLE_B) > nr_lru);
--}
--
- /**
-  * oom_badness - heuristic function to determine which candidate task to kill
-  * @p: task struct of which task we should calculate
-@@ -465,8 +444,6 @@ static void dump_header(struct oom_control *oc, struct task_struct *p)
- 		mem_cgroup_print_oom_meminfo(oc->memcg);
- 	else {
- 		show_mem(SHOW_MEM_FILTER_NODES, oc->nodemask);
--		if (should_dump_unreclaim_slab())
--			dump_unreclaimable_slab();
- 	}
- 	if (sysctl_oom_dump_tasks)
- 		dump_tasks(oc);
-diff --git a/mm/show_mem.c b/mm/show_mem.c
-index 1c26c14ffb..24b662f64d 100644
---- a/mm/show_mem.c
-+++ b/mm/show_mem.c
-@@ -7,11 +7,15 @@
- 
- #include <linux/mm.h>
- #include <linux/cma.h>
-+#include <linux/printbuf.h>
-+
-+#include "slab.h"
- 
- void show_mem(unsigned int filter, nodemask_t *nodemask)
+diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+index f036a980ec1a..ebe2479d1402 100644
+--- a/drivers/staging/r8188eu/core/rtw_cmd.c
++++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+@@ -320,7 +320,7 @@ int rtw_cmd_thread(void *context)
+  *	MUST TAKE CARE THAT BEFORE CALLING THIS FUNC, YOU SHOULD HAVE LOCKED pmlmepriv->lock
+  */
+ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid, int ssid_num,
+-	struct rtw_ieee80211_channel *ch, int ch_num)
++	struct ieee80211_channel *ch, int ch_num)
  {
- 	pg_data_t *pgdat;
- 	unsigned long total = 0, reserved = 0, highmem = 0;
-+	struct printbuf buf = PRINTBUF;
- 
- 	printk("Mem-Info:\n");
- 	show_free_areas(filter, nodemask);
-@@ -41,4 +45,14 @@ void show_mem(unsigned int filter, nodemask_t *nodemask)
- #ifdef CONFIG_MEMORY_FAILURE
- 	printk("%lu pages hwpoisoned\n", atomic_long_read(&num_poisoned_pages));
- #endif
-+
-+	pr_info("Unreclaimable slab info:\n");
-+	dump_unreclaimable_slab(&buf);
-+	printk("%s", printbuf_str(&buf));
-+	printbuf_reset(&buf);
-+
-+	printk("Shrinkers:\n");
-+	shrinkers_to_text(&buf);
-+	printk("%s", printbuf_str(&buf));
-+	printbuf_exit(&buf);
- }
-diff --git a/mm/slab.h b/mm/slab.h
-index c7f2abc2b1..abefbf7674 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -788,10 +788,12 @@ static inline struct kmem_cache_node *get_node(struct kmem_cache *s, int node)
- 
- #endif
- 
-+struct printbuf;
-+
- #if defined(CONFIG_SLAB) || defined(CONFIG_SLUB_DEBUG)
--void dump_unreclaimable_slab(void);
-+void dump_unreclaimable_slab(struct printbuf *);
- #else
--static inline void dump_unreclaimable_slab(void)
-+static inline void dump_unreclaimable_slab(struct printbuf *out)
- {
- }
- #endif
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 23f2ab0713..1209480797 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -24,6 +24,7 @@
- #include <asm/tlbflush.h>
- #include <asm/page.h>
- #include <linux/memcontrol.h>
-+#include <linux/printbuf.h>
- 
- #define CREATE_TRACE_POINTS
- #include <trace/events/kmem.h>
-@@ -1084,10 +1085,15 @@ static int slab_show(struct seq_file *m, void *p)
- 	return 0;
- }
- 
--void dump_unreclaimable_slab(void)
-+void dump_unreclaimable_slab(struct printbuf *out)
- {
- 	struct kmem_cache *s;
- 	struct slabinfo sinfo;
-+	struct slab_by_mem {
-+		struct kmem_cache *s;
-+		size_t total, active;
-+	} slabs_by_mem[10], n;
-+	int i, nr = 0;
- 
- 	/*
- 	 * Here acquiring slab_mutex is risky since we don't prefer to get
-@@ -1097,12 +1103,11 @@ void dump_unreclaimable_slab(void)
- 	 * without acquiring the mutex.
- 	 */
- 	if (!mutex_trylock(&slab_mutex)) {
--		pr_warn("excessive unreclaimable slab but cannot dump stats\n");
-+		pr_buf(out, "excessive unreclaimable slab but cannot dump stats\n");
- 		return;
+ 	u8 res = _FAIL;
+ 	struct cmd_obj		*ph2c;
+@@ -366,8 +366,8 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
+ 	if (ch) {
+ 		int i;
+ 		for (i = 0; i < ch_num && i < RTW_CHANNEL_SCAN_AMOUNT; i++) {
+-			if (ch[i].hw_value && !(ch[i].flags & RTW_IEEE80211_CHAN_DISABLED)) {
+-				memcpy(&psurveyPara->ch[i], &ch[i], sizeof(struct rtw_ieee80211_channel));
++			if (ch[i].hw_value && !(ch[i].flags & IEEE80211_CHAN_DISABLED)) {
++				memcpy(&psurveyPara->ch[i], &ch[i], sizeof(struct ieee80211_channel));
+ 				psurveyPara->ch_num++;
+ 			}
+ 		}
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+index db61acc914d1..bc7cf54e1c6a 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+@@ -5811,11 +5811,11 @@ void site_survey(struct adapter *padapter)
+ 		else
+ 			ScanType = SCAN_ACTIVE;
+ 	} else {
+-		struct rtw_ieee80211_channel *ch;
++		struct ieee80211_channel *ch;
+ 		if (pmlmeext->sitesurvey_res.channel_idx < pmlmeext->sitesurvey_res.ch_num) {
+ 			ch = &pmlmeext->sitesurvey_res.ch[pmlmeext->sitesurvey_res.channel_idx];
+ 			survey_channel = ch->hw_value;
+-			ScanType = (ch->flags & RTW_IEEE80211_CHAN_PASSIVE_SCAN) ? SCAN_PASSIVE : SCAN_ACTIVE;
++			ScanType = (ch->flags & IEEE80211_CHAN_NO_IR) ? SCAN_PASSIVE : SCAN_ACTIVE;
+ 		}
  	}
  
--	pr_info("Unreclaimable slab info:\n");
--	pr_info("Name                      Used          Total\n");
-+	printbuf_atomic_inc(out);
- 
- 	list_for_each_entry(s, &slab_caches, list) {
- 		if (s->flags & SLAB_RECLAIM_ACCOUNT)
-@@ -1110,11 +1115,43 @@ void dump_unreclaimable_slab(void)
- 
- 		get_slabinfo(s, &sinfo);
- 
--		if (sinfo.num_objs > 0)
--			pr_info("%-17s %10luKB %10luKB\n", s->name,
--				(sinfo.active_objs * s->size) / 1024,
--				(sinfo.num_objs * s->size) / 1024);
-+		if (!sinfo.num_objs)
-+			continue;
-+
-+		n.s = s;
-+		n.total = sinfo.num_objs * s->size;
-+		n.active = sinfo.active_objs * s->size;
-+
-+		for (i = 0; i < nr; i++)
-+			if (n.total < slabs_by_mem[i].total)
-+				break;
-+
-+		if (nr < ARRAY_SIZE(slabs_by_mem)) {
-+			memmove(&slabs_by_mem[i + 1],
-+				&slabs_by_mem[i],
-+				sizeof(slabs_by_mem[0]) * (nr - i));
-+			nr++;
-+		} else if (i) {
-+			i--;
-+			memmove(&slabs_by_mem[0],
-+				&slabs_by_mem[1],
-+				sizeof(slabs_by_mem[0]) * i);
-+		} else {
-+			continue;
-+		}
-+
-+		slabs_by_mem[i] = n;
-+	}
-+
-+	for (i = nr - 1; i >= 0; --i) {
-+		pr_buf(out, "%-17s total: ", slabs_by_mem[i].s->name);
-+		pr_human_readable_u64(out, slabs_by_mem[i].total);
-+		pr_buf(out, " active: ");
-+		pr_human_readable_u64(out, slabs_by_mem[i].active);
-+		pr_newline(out);
- 	}
-+
-+	printbuf_atomic_dec(out);
- 	mutex_unlock(&slab_mutex);
+@@ -7342,26 +7342,26 @@ u8 disconnect_hdl(struct adapter *padapter, unsigned char *pbuf)
+ 	return	H2C_SUCCESS;
  }
  
+-static int rtw_scan_ch_decision(struct adapter *padapter, struct rtw_ieee80211_channel *out,
+-	u32 out_num, struct rtw_ieee80211_channel *in, u32 in_num)
++static int rtw_scan_ch_decision(struct adapter *padapter, struct ieee80211_channel *out,
++	u32 out_num, struct ieee80211_channel *in, u32 in_num)
+ {
+ 	int i, j;
+ 	int set_idx;
+ 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+ 
+ 	/* clear out first */
+-	memset(out, 0, sizeof(struct rtw_ieee80211_channel) * out_num);
++	memset(out, 0, sizeof(struct ieee80211_channel) * out_num);
+ 
+ 	/* acquire channels from in */
+ 	j = 0;
+ 	for (i = 0; i < in_num; i++) {
+ 		set_idx = rtw_ch_set_search_ch(pmlmeext->channel_set, in[i].hw_value);
+-		if (in[i].hw_value && !(in[i].flags & RTW_IEEE80211_CHAN_DISABLED) &&
++		if (in[i].hw_value && !(in[i].flags & IEEE80211_CHAN_DISABLED) &&
+ 		    set_idx >= 0) {
+-			memcpy(&out[j], &in[i], sizeof(struct rtw_ieee80211_channel));
++			memcpy(&out[j], &in[i], sizeof(struct ieee80211_channel));
+ 
+ 			if (pmlmeext->channel_set[set_idx].ScanType == SCAN_PASSIVE)
+-				out[j].flags &= RTW_IEEE80211_CHAN_PASSIVE_SCAN;
++				out[j].flags &= IEEE80211_CHAN_NO_IR;
+ 
+ 			j++;
+ 		}
+@@ -7375,7 +7375,7 @@ static int rtw_scan_ch_decision(struct adapter *padapter, struct rtw_ieee80211_c
+ 			out[i].hw_value = pmlmeext->channel_set[i].ChannelNum;
+ 
+ 			if (pmlmeext->channel_set[i].ScanType == SCAN_PASSIVE)
+-				out[i].flags &= RTW_IEEE80211_CHAN_PASSIVE_SCAN;
++				out[i].flags &= IEEE80211_CHAN_NO_IR;
+ 
+ 			j++;
+ 		}
+diff --git a/drivers/staging/r8188eu/include/ieee80211.h b/drivers/staging/r8188eu/include/ieee80211.h
+index 0e37cd8974b5..c67d81409c78 100644
+--- a/drivers/staging/r8188eu/include/ieee80211.h
++++ b/drivers/staging/r8188eu/include/ieee80211.h
+@@ -8,6 +8,7 @@
+ #include "drv_types.h"
+ #include "wifi.h"
+ #include <linux/wireless.h>
++#include <net/cfg80211.h>
+ 
+ #define MGMT_QUEUE_NUM 5
+ 
+@@ -671,39 +672,6 @@ enum rtw_ieee80211_back_actioncode {
+ 
+ #define VENDOR_HT_CAPAB_OUI_TYPE 0x33 /* 00-90-4c:0x33 */
+ 
+-/**
+- * enum rtw_ieee80211_channel_flags - channel flags
+- *
+- * Channel flags set by the regulatory control code.
+- *
+- * @RTW_IEEE80211_CHAN_DISABLED: This channel is disabled.
+- * @RTW_IEEE80211_CHAN_PASSIVE_SCAN: Only passive scanning is permitted
+- *      on this channel.
+- * @RTW_IEEE80211_CHAN_NO_IBSS: IBSS is not allowed on this channel.
+- * @RTW_IEEE80211_CHAN_RADAR: Radar detection is required on this channel.
+- * @RTW_IEEE80211_CHAN_NO_HT40PLUS: extension channel above this channel
+- *      is not permitted.
+- * @RTW_IEEE80211_CHAN_NO_HT40MINUS: extension channel below this channel
+- *      is not permitted.
+- */
+-enum rtw_ieee80211_channel_flags {
+-	RTW_IEEE80211_CHAN_DISABLED	 = 1<<0,
+-	RTW_IEEE80211_CHAN_PASSIVE_SCAN     = 1<<1,
+-	RTW_IEEE80211_CHAN_NO_IBSS	  = 1<<2,
+-	RTW_IEEE80211_CHAN_RADAR	    = 1<<3,
+-	RTW_IEEE80211_CHAN_NO_HT40PLUS      = 1<<4,
+-	RTW_IEEE80211_CHAN_NO_HT40MINUS     = 1<<5,
+-};
+-
+-#define RTW_IEEE80211_CHAN_NO_HT40 \
+-	  (RTW_IEEE80211_CHAN_NO_HT40PLUS | RTW_IEEE80211_CHAN_NO_HT40MINUS)
+-
+-/* Represent channel details, subset of ieee80211_channel */
+-struct rtw_ieee80211_channel {
+-	u16 hw_value;
+-	u32 flags;
+-};
+-
+ #define CHAN_FMT \
+ 	"hw_value:%u, " \
+ 	"flags:0x%08x" \
+diff --git a/drivers/staging/r8188eu/include/rtw_cmd.h b/drivers/staging/r8188eu/include/rtw_cmd.h
+index 6b6d560d7143..ee15f93a5477 100644
+--- a/drivers/staging/r8188eu/include/rtw_cmd.h
++++ b/drivers/staging/r8188eu/include/rtw_cmd.h
+@@ -187,7 +187,7 @@ struct sitesurvey_parm {
+ 	u8 ssid_num;
+ 	u8 ch_num;
+ 	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
+-	struct rtw_ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
++	struct ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
+ };
+ 
+ /*
+@@ -731,7 +731,7 @@ struct TDLSoption_param
+ #define H2C_RESERVED		0x07
+ 
+ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
+-		      int ssid_num, struct rtw_ieee80211_channel *ch,
++		      int ssid_num, struct ieee80211_channel *ch,
+ 		      int ch_num);
+ u8 rtw_createbss_cmd(struct adapter  *padapter);
+ u8 rtw_setstakey_cmd(struct adapter *padapter, u8 *psta, u8 unicast_key);
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+index dcf91e7894a5..fed8e77e512b 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+@@ -200,7 +200,7 @@ struct	ss_res {
+ 	u8 ssid_num;
+ 	u8 ch_num;
+ 	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
+-	struct rtw_ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
++	struct ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
+ };
+ 
+ /* define AP_MODE				0x0C */
 -- 
-2.35.2
+2.36.0
 

@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CEB5094CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 03:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31645094D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 03:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383700AbiDUBus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Apr 2022 21:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
+        id S1383710AbiDUBu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Apr 2022 21:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243240AbiDUBuq (ORCPT
+        with ESMTP id S1383702AbiDUBuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Apr 2022 21:50:46 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6CF1005;
-        Wed, 20 Apr 2022 18:47:58 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so6453184pjb.2;
-        Wed, 20 Apr 2022 18:47:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bawkkxUueWZhTJBAyzDirN0JxadLzFnsY+fabm9PJ/k=;
-        b=WwiiiwizFYpMvxRzBfGQwVwY9/SLYA8/H5FOancrwj0xpRTkH6ys0a+U44ySnaHZ/v
-         nifx4zlzE3K+3buH+nVfp3EEgG7RKQiKi6hmit8qBunb0YqtnJnOVe4UzQfWrJJu/KgA
-         FmkJMRtFS24vHsEPjZdO6c3MkqqHReLT0wTvXsYUN3bp4bBFXJDuhyc5DrzA3vwomlms
-         qvA5wJJj7uxTB2og8MRdLlxKdT3Gf5MUb2s5I0FMCcbsMAZTE08K6wlYfSdcctyt8zon
-         UTqK1oK8OqeOcF05JQ2G/qpRM25L9BtSkh8MW68KdktqE9pKBq/BR/eEnwk2N3fXQQyg
-         h7nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bawkkxUueWZhTJBAyzDirN0JxadLzFnsY+fabm9PJ/k=;
-        b=Tw1usIpmIt2Xk72t+ZY/qCJzEg+FsmhFn2T5KLZvtsbENyLvvD3xXhBMd23w07uzP+
-         D3zxrBony496GSqQq46zSQ66WciKg0gAbnTs3Lu1mtrkCQvBmiPsy5IUU8cnXZhtEau4
-         /6mlPY1RCE1pn79dSJSDhvdaajbX6hAzuh4AUqFFTvoOSJ1uQ1NwXgVzV55SeG7t3NVQ
-         YkXAPA8reTBBKmVYwQQe73ghUx25X7LeHNruchGbTsMYLjPedbmrNmQrWnMdKLeyjioz
-         pgE/xkMC6Z88vNbpQ7b6tfc2+SgTqGSv5kf7bvtBkxJ4TXYDHxRKrI4++ZvHcbB4WgcH
-         Q2nw==
-X-Gm-Message-State: AOAM531oemZBVMmDvRjYzDVTLYeNz0pcqwgl1gWualsEVzLZDL07Ad0y
-        xDCPjmq8LJ9/bcPvszUP4eA=
-X-Google-Smtp-Source: ABdhPJwTcSpVaiP2sKa+yRk09oSKLvTHkG7lGpeLttjvFrLKzBdw/AowFmslkLKzc7VVe4Uq42jEaQ==
-X-Received: by 2002:a17:902:c451:b0:158:7729:f240 with SMTP id m17-20020a170902c45100b001587729f240mr23541055plm.17.1650505677561;
-        Wed, 20 Apr 2022 18:47:57 -0700 (PDT)
-Received: from cyhuang-hp-elitebook-840-g3.rt ([2402:7500:477:11a5:c0c0:d920:4378:bdeb])
-        by smtp.gmail.com with ESMTPSA id p13-20020a056a000b4d00b004faecee6e89sm21755964pfo.208.2022.04.20.18.47.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Apr 2022 18:47:56 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 09:47:28 +0800
-From:   ChiYuan Huang <u0084500@gmail.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Ren Zhijie <renzhijie2@huawei.com>, gregkh@linuxfoundation.org,
-        cy_huang@richtek.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, u0084500@gmail.com
-Subject: Re: [PATCH -next] usb: typec: rt1719: Fix build error without
- CONFIG_POWER_SUPPLY
-Message-ID: <20220421014727.GB29256@cyhuang-hp-elitebook-840-g3.rt>
-References: <20220418082425.41566-1-renzhijie2@huawei.com>
- <Yl/NHAaXFh1UzFdI@kuha.fi.intel.com>
+        Wed, 20 Apr 2022 21:50:55 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9F6063E0;
+        Wed, 20 Apr 2022 18:48:04 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3AYxJFiK5MLoE8rJvEOpSj9wxRtFPGchMFZxGqfqr?=
+ =?us-ascii?q?LsXjdYENS1zABxzEfWGjTOKnYNGWmKdt/PIy1phkH7JLUmNYyTFE5pCpnJ55og?=
+ =?us-ascii?q?ZCbXIzGdC8cHM8zwvXrFRsht4NHAjX5BJhcokT0+1H9YtANkVEmjfvSHuCkUba?=
+ =?us-ascii?q?dUsxMbVQMpBkJ2EsLd9ER0tYAbeiRW2thiPuqyyHtEAbNNw1cbgr435m+RCZH5?=
+ =?us-ascii?q?5wejt+3UmsWPpintHeG/5Uc4Ql2yauZdxMUSaEMdgK2qnqq8V23wo/Z109F5tK?=
+ =?us-ascii?q?NmbC9fFAIQ6LJIE6FjX8+t6qK20AE/3JtlP1gcqd0hUR/0l1lm/hr1dxLro32R?=
+ =?us-ascii?q?wEyIoXCheYcTwJFVSp5OMWq/ZeeeyPg6JzIkROun3zEhq8G4FsNFYER5Od7KW9?=
+ =?us-ascii?q?U8vkfMjoMclaIgOfe6LKwSsFtgMo5JcXmNY9ZvWtvpRnVBPBgQ9bcQqHO5NZdx?=
+ =?us-ascii?q?x8xgNxDGbDVYM9xQTZtcxPGbDVMN00RBZZ4m/2n7lH7cjtFuBeQoII0/WHYz0p?=
+ =?us-ascii?q?2yreFGNzLdt2PQO1Rn12EvSTC/mLkElcWOcL34TiM9H/qje/StSThUYkWGfuz8?=
+ =?us-ascii?q?fsCqFmSwHEDTRMNWValrP2RlEGzQZRcJlYS9y5oqrI9nGSvT9/gT1i7rWSCsxo?=
+ =?us-ascii?q?0RdVdCas55RuLx66S5ByWbkAATzhceJk2utQeWzMnzBmKksnvCDgpt6eaIU9xX?=
+ =?us-ascii?q?J/8QSiaYHBTdDFdI3RfC1Zt3jUqm6lr5jqnczqpOPfdYgXJJAzN?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AYU9x3KosP4hr3ye9/0JzzcoaV5rPeYIsimQD?=
+ =?us-ascii?q?101hICG8cqSj5qKTdZMgpGbJYVcqKRcdcL+7V5VoLUmskaKdpLNhWotKPzOJhI?=
+ =?us-ascii?q?LLFu1fBOLZqlWKcUDDH6xmpMJdmsNFaOEYY2IK7voSrDPYLz8/+qj7zImYwffZ?=
+ =?us-ascii?q?02x2TRxnL4Vp7wJCAA6dFUFsLTM2fqYRJd6N4NZdvTq8dTAyZsS/PHMMWO/OvJ?=
+ =?us-ascii?q?nlj5TjCCR2fSIP2U2fiy+y8r7mH1y91hcaaTlGxrAv6izkvmXCl92ej80=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="123718366"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 21 Apr 2022 09:48:03 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id C89D94D68A22;
+        Thu, 21 Apr 2022 09:48:00 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 21 Apr 2022 09:47:58 +0800
+Received: from [192.168.22.28] (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Thu, 21 Apr 2022 09:47:58 +0800
+Message-ID: <86cb0ada-208c-02de-dbc9-53c6014892c3@fujitsu.com>
+Date:   Thu, 21 Apr 2022 09:48:00 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl/NHAaXFh1UzFdI@kuha.fi.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v13 0/7] fsdax: introduce fs query to support reflink
+To:     Dave Chinner <david@fromorbit.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>, <djwong@kernel.org>,
+        <dan.j.williams@intel.com>, <hch@infradead.org>,
+        <jane.chu@oracle.com>
+References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
+ <20220421012045.GR1544202@dread.disaster.area>
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+In-Reply-To: <20220421012045.GR1544202@dread.disaster.area>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-ID: C89D94D68A22.A0BAE
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,51 +76,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 12:06:36PM +0300, Heikki Krogerus wrote:
-> Mon, Apr 18, 2022 at 04:24:25PM +0800, Ren Zhijie kirjoitti:
-> > Building without CONFIG_POWER_SUPPLY will fail:
-> > 
-> > drivers/usb/typec/rt1719.o: In function `rt1719_psy_set_property':
-> > rt1719.c:(.text+0x10a): undefined reference to `power_supply_get_drvdata'
-> > drivers/usb/typec/rt1719.o: In function `rt1719_psy_get_property':
-> > rt1719.c:(.text+0x2c8): undefined reference to `power_supply_get_drvdata'
-> > drivers/usb/typec/rt1719.o: In function `devm_rt1719_psy_register':
-> > rt1719.c:(.text+0x3e9): undefined reference to `devm_power_supply_register'
-> > drivers/usb/typec/rt1719.o: In function `rt1719_irq_handler':
-> > rt1719.c:(.text+0xf9f): undefined reference to `power_supply_changed'
-> > drivers/usb/typec/rt1719.o: In function `rt1719_update_pwr_opmode.part.9':
-> > rt1719.c:(.text+0x657): undefined reference to `power_supply_changed'
-> > drivers/usb/typec/rt1719.o: In function `rt1719_attach':
-> > rt1719.c:(.text+0x83e): undefined reference to `power_supply_changed'
-> > 
-> > Add POWER_SUPPLY dependency to Kconfig.
-> > 
-Thanks.
-> > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > Fixes: 25d29b980912 ("usb: typec: rt1719: Add support for Richtek RT1719")
-> > Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+Hi Dave,
+
+在 2022/4/21 9:20, Dave Chinner 写道:
+> Hi Ruan,
 > 
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> On Tue, Apr 19, 2022 at 12:50:38PM +0800, Shiyang Ruan wrote:
+>> This patchset is aimed to support shared pages tracking for fsdax.
 > 
-Reviewed-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> >  drivers/usb/typec/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> > index 8f921213b17d..ba24847fb245 100644
-> > --- a/drivers/usb/typec/Kconfig
-> > +++ b/drivers/usb/typec/Kconfig
-> > @@ -56,6 +56,7 @@ config TYPEC_RT1719
-> >  	tristate "Richtek RT1719 Sink Only Type-C controller driver"
-> >  	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
-> >  	depends on I2C
-> > +	depends on POWER_SUPPLY
-> >  	select REGMAP_I2C
-> >  	help
-> >  	  Say Y or M here if your system has Richtek RT1719 sink only
-> > -- 
-> > 2.17.1
+> Now that this is largely reviewed, it's time to work out the
+> logistics of merging it.
+
+Thanks!
+
 > 
-> -- 
-> heikki
+>> Changes since V12:
+>>    - Rebased onto next-20220414
+> 
+> What does this depend on that is in the linux-next kernel?
+> 
+> i.e. can this be applied successfully to a v5.18-rc2 kernel without
+> needing to drag in any other patchsets/commits/trees?
+
+Firstly, I tried to apply to v5.18-rc2 but it failed.
+
+There are some changes in memory-failure.c, which besides my Patch-02
+   "mm/hwpoison: fix race between hugetlb free/demotion and 
+memory_failure_hugetlb()"
+ 
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=423228ce93c6a283132be38d442120c8e4cdb061
+
+Then, why it is on linux-next is: I was told[1] there is a better fix 
+about "pgoff_address()" in linux-next:
+   "mm: rmap: introduce pfn_mkclean_range() to cleans PTEs"
+ 
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=65c9605009f8317bb3983519874d755a0b2ca746
+so I rebased my patches to it and dropped one of mine.
+
+[1] https://lore.kernel.org/linux-xfs/YkPuooGD139Wpg1v@infradead.org/
+
+> 
+> What are your plans for the followup patches that enable
+> reflink+fsdax in XFS? AFAICT that patchset hasn't been posted for
+> while so I don't know what it's status is. Is that patchset anywhere
+> near ready for merge in this cycle?
+> 
+> If that patchset is not a candidate for this cycle, then it largely
+> doesn't matter what tree this is merged through as there shouldn't
+> be any major XFS or dax dependencies being built on top of it during
+> this cycle. The filesystem side changes are isolated and won't
+> conflict with other work in XFS, either, so this could easily go
+> through Dan's tree.
+> 
+> However, if the reflink enablement is ready to go, then this all
+> needs to be in the XFS tree so that we can run it through filesystem
+> level DAX+reflink testing. That will mean we need this in a stable
+> shared topic branch and tighter co-ordination between the trees.
+> 
+> So before we go any further we need to know if the dax+reflink
+> enablement patchset is near being ready to merge....
+
+The "reflink+fsdax" patchset is here:
+ 
+https://lore.kernel.org/linux-xfs/20210928062311.4012070-1-ruansy.fnst@fujitsu.com/
+
+It was based on v5.15-rc3, I think I should do a rebase.
+
+
+--
+Thanks,
+Ruan.
+
+> 
+> Cheers,
+> 
+> Dave.
+
+

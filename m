@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C3850A25C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6046050A255
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 16:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389252AbiDUOa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 10:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
+        id S1389288AbiDUOae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 10:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389235AbiDUOaQ (ORCPT
+        with ESMTP id S1389296AbiDUOaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:30:16 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2433ED05
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:27:25 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-e5c42b6e31so5507570fac.12
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:27:25 -0700 (PDT)
+        Thu, 21 Apr 2022 10:30:17 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AB53EA93
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:27:26 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id e4so5799593oif.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 07:27:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=/B502ChT3poZts8YCPYz5xDZwyr0p5zHV9IaQgtAduM=;
-        b=YJokhvHYtwCU4lkXd2dwDyWVceLbY39kVkkrn66Vfhbf6cmg2d66bPLwAU/vV00T7Z
-         tCDVKCODBT67ycLr4MIrYtmuIsElypgl2yu02weO0myy4VElaSyONt9UuwDqHImxWSHN
-         lNNacm2mMBd5eWlRY0NR3heA9qqiUcQUQymA4VbT07MCZNGnLKWXtt/ZMeodexe1SFX8
-         0AQ3DlohQCWRrL4G8qPDJ1rWqpPgWpt0YKafBimHRXcnTdXr3C1zA7IgiQA6bEhjPF8+
-         mSpUCpcWdJysUlKQdQtqnk5tRvjIe0+xLzjh6zozrt1mCnnmnxJGf/pYNa2n3O9vOiUE
-         a++Q==
+        bh=wBmsFVzEWJfGZC3JHUok0FZewd7QYZ1lS1g/dkDHsM8=;
+        b=m4nQDoRRgo1EGi3vObPuMc9P6s1GI4+JfoLzVLmBoQ/srs+fDrLvKMpL3JHhgvnlGW
+         VuTI33JYOKagO7UWTrPdUycIUx+mWf+v68ytJUr6HT6LFGUxa3h3eXt/IYn+fAi3bDn7
+         p4CVVNE7qw6d83k23OQCg+UGiQObstsWScPIEEnjNPv7DEqOVFP7lVF9A9PesIdLp592
+         1s9hIhWsizRQRTK2PG+ywNwYAfo4D/kj7BiEx13JYCcLNnvC7JHLMvHW6iAP5m3Xxx2n
+         Np7yJZAmX9MHURqzkxRZ3010V57ayDlVC9aJvw4f7UCkuGDX7NKWUR1JK5DE1NjztlUX
+         LIBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/B502ChT3poZts8YCPYz5xDZwyr0p5zHV9IaQgtAduM=;
-        b=XzRsqlX5lRJ8ohj9mHJ5E2rly9LmHkKg355z+AvyyJylYg2XPVMbkgOeZ8WfabqrZO
-         Isn133qAEov2Ct1IjYakvUKuL52gpXFW01eki8Lan1/IhgpvduG26+4L9wON6VWI2a7D
-         AkTink5I/bmo0al3ZHBV7+wmucqG0RuMRH2MiEpgPyiGggSQmv1egeV4TJYqV7aviNdM
-         CYywxaY3yN9d3msPAYzIwwWe+YIprDVi9/dGtj7xycarRMvjRNg0Emdzu4S0N8aFRIJX
-         LIwgkMaGoRFSt2vvbCZG0zcEGdIoyhihpVNej4xavB/384MOaE56gP8hFBhbNc17PfSy
-         nFkg==
-X-Gm-Message-State: AOAM530e+yN3kT8of6ZUXtQ+lTHBDT2Mdzwcdub3L+Z4wT6A23aLoNrE
-        kZk7v2uUZDNKBXkZc9/FWAyOTw==
-X-Google-Smtp-Source: ABdhPJx5I93/gr/TtuBIYsuENa6bHuPnLnkAB0V0/GpdtFvLnZFeDlt/vLW1daZgSOemg9l8OmxABQ==
-X-Received: by 2002:a05:6870:b152:b0:e6:77a6:7ee0 with SMTP id a18-20020a056870b15200b000e677a67ee0mr1193970oal.78.1650551244431;
-        Thu, 21 Apr 2022 07:27:24 -0700 (PDT)
+        bh=wBmsFVzEWJfGZC3JHUok0FZewd7QYZ1lS1g/dkDHsM8=;
+        b=iuFNLEsDeJK0ShWDE7g49wtGlaSTUotBHXqJ6f6KL6kSLkruPh/JgK4sFIcY3oW16l
+         CidO4y57pf8G/znAj7Na+dTWvzJxogCqr5OWqyidwHuR7Tar0yrHznk3Ldd1Ywk7hVOx
+         8h/wdfWQeoVpY7PixED7Qj0f5LP+WykJS/RW+u1wYFiwzlKGGhLSNyStEr+sSY2EFmp6
+         dKgwJFeVu/HLrHu1GXo3nWSFumXcaATWuZGFZARq6ZPTz23a9TBteF3gM4FLhLIgB6xv
+         9tELkn/MsH0qbz8pJBx5cPAeDWr7Kj75KXfSzkDi2mYsf2YIjEntDdGe2jUpb3os6iW7
+         Ps3g==
+X-Gm-Message-State: AOAM533SKFr/wOUZQjHa3S4VKs19ALaJGdLYBqG281p3csG3Du2IB7FG
+        fjzdooRsni6DW3WuvULXOZVsZQ==
+X-Google-Smtp-Source: ABdhPJypE9dR4sblVTuBxzilcegBNIX9pacHy/1gcpgiP8HxFJHk6RD3TPfpYfzjrT/3t37cVEBphw==
+X-Received: by 2002:a05:6808:1144:b0:2ec:b290:80e7 with SMTP id u4-20020a056808114400b002ecb29080e7mr22237oiu.26.1650551245383;
+        Thu, 21 Apr 2022 07:27:25 -0700 (PDT)
 Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id s14-20020a0568302a8e00b006054e841915sm4296295otu.73.2022.04.21.07.27.23
+        by smtp.gmail.com with ESMTPSA id s14-20020a0568302a8e00b006054e841915sm4296295otu.73.2022.04.21.07.27.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 07:27:23 -0700 (PDT)
+        Thu, 21 Apr 2022 07:27:24 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     linux-pm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vamsi krishna Lanka <quic_vamslank@quicinc.com>
-Subject: Re: (subset) [PATCH 4/4] dt-bindings: soc: qcom,rpmh-rsc: convert to dtschema
-Date:   Thu, 21 Apr 2022 09:27:00 -0500
-Message-Id: <165055095990.2574292.13140723180984898600.b4-ty@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH v2] dt-bindings: soc: qcom,smp2p: convert to dtschema
+Date:   Thu, 21 Apr 2022 09:27:01 -0500
+Message-Id: <165055095990.2574292.17902569355793925836.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220411085935.130072-4-krzysztof.kozlowski@linaro.org>
-References: <20220411085935.130072-1-krzysztof.kozlowski@linaro.org> <20220411085935.130072-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220411155528.502889-1-krzysztof.kozlowski@linaro.org>
+References: <20220411155528.502889-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -76,22 +73,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Apr 2022 10:59:35 +0200, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm RPMH RSC bindings to DT Schema.
+On Mon, 11 Apr 2022 17:55:28 +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm Shared Memory Point 2 Point bindings to DT Schema.
 > 
-> Changes against original bindings:
-> 1. Add qcom,tcs-offset as a property instead of one of reg (not used
->    that way).
-> 2. Add limits to interrupts.
-> 3. Add child nodes (bcm-voter, clock-controller, power-controller).
-> 4. Extend the example with more complex one.
+> Changes against original bindings: enforce only specific names of child
+> nodes, instead of any names.
 > 
-> [...]
+> 
 
 Applied, thanks!
 
-[4/4] dt-bindings: soc: qcom,rpmh-rsc: convert to dtschema
-      commit: 38d46b0f41ec57c734f1a647055644c2131c3d8f
+[1/1] dt-bindings: soc: qcom,smp2p: convert to dtschema
+      commit: 5f9e72a4025b232ef0ddd5b6e4189e81091322fe
 
 Best regards,
 -- 

@@ -2,105 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C3A509AF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BD8509B07
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386866AbiDUIuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S1386888AbiDUIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386859AbiDUIuD (ORCPT
+        with ESMTP id S1386872AbiDUIuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:50:03 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D0813F17
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:47:13 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id d9so3204034qvm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=y5nc8nEZWjuBQmTaRa0LMr0t/dGnjEISw3ovW17pvKY=;
-        b=ewWIfGejas1qU53cAWyN3JLVuSRhRhpDF5m6uTIoiCncukxiMdRrDXRfTOM3PsV/Nr
-         XNlYhiyt3AnswvJskg0hh/XqvYg2KeN5ZbuQXg9vzJVIw5R6mjTFyeAYz8KnbLRV/y3W
-         ngs5Hl5k0Nir3Jyi04BGLLjIYSqId7jOY3+QyJE8swa/H6pmX5ru3n/Gpn9y9OsMIn+j
-         g0MZrdgPvbYmilSKXQhe+5zwgT9gvL+ntD4JWpxmqcNuzS05Z9UxIRq9FhRK4Zq2kxL/
-         h55+3hHldL0NY5ua9PGGY85jqKSVHBZPQKOEuvTBO0xqFZXigUCJmTwJ0p1F5U8GLONc
-         eIJA==
+        Thu, 21 Apr 2022 04:50:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7C2F140C0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650530839;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cmuFO35zQUp1s4VhyCud3srWXPlk5AJzSrlDvha5upI=;
+        b=ZI1d3mTwo3AKBjUbqtJhR3SD2AIzw6ppBes3+gnMnPoAlHrztCfAhf3x4PjuPPY8brrtnC
+        Im/AYttT/5ufwIHQU/UAa9Qmm/To+gSOmxMOLsCJKdNmvjRxle1cS4tzVFFqzlDF+mJNxM
+        woBuLxcy9//LVtBO7thaSn2HV3gigL4=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-284-cc5BfymsPYGML0bIXIjCNg-1; Thu, 21 Apr 2022 04:47:18 -0400
+X-MC-Unique: cc5BfymsPYGML0bIXIjCNg-1
+Received: by mail-qv1-f72.google.com with SMTP id ke23-20020a056214301700b0044bba34469eso2302467qvb.17
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:47:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=y5nc8nEZWjuBQmTaRa0LMr0t/dGnjEISw3ovW17pvKY=;
-        b=vFTSdAi7CO98nqKQJVr80OUYGsLsTdEzYpbYh8tL5UuLpYr4+Uu1Itr03hVcUAd5Rg
-         p3OiK25l54wJ95bULApG4dheduep3E2EoWqbvsN0GHibyvUvUzt0hCEnyjyH/UdldnSR
-         VnKMefhYNdXmarJqytPiBUfMie4XczJkL3vCl2hxMPbqxOhDmsYzRCqcExKb/06flJyR
-         14YldPe2rEPI1OXXUCG7h2DNzALMHI4Xw15f1YAe14gkyXDGKh4+YnuVx0yx8R5BM0jo
-         qdR6myUHj+ydwPnuf4rKixAaDla1nEZXeaOaqKfbUqqkWqSbPtn3EXfdvXDl943YSvgT
-         8YqQ==
-X-Gm-Message-State: AOAM532rPvts3vO9ysCI7B6oLlswlV+SUiZ6zDm42E53bc+VjzmwwQkj
-        E+I1o1GUz5GjQSQWQloAaD8=
-X-Google-Smtp-Source: ABdhPJziNI68RSJ40w4UaVeVAWvv7CxloEJNZHggZC/k1TmmyWaENGynAluXJSiPcZDRQD8N7DNrJA==
-X-Received: by 2002:a05:6214:21a7:b0:441:1434:eafd with SMTP id t7-20020a05621421a700b004411434eafdmr18267353qvc.77.1650530832232;
-        Thu, 21 Apr 2022 01:47:12 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 135-20020a37078d000000b0069ea3c7513bsm2724793qkh.121.2022.04.21.01.47.10
+        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=cmuFO35zQUp1s4VhyCud3srWXPlk5AJzSrlDvha5upI=;
+        b=Kz5P/LxkPSV9WFY24DbdmLS+M6T4z+ZXgbxaBZBh9Rg8vFlzx4F+e3gx2abribWuB6
+         qKxYx3xaNUohutDZIgu2Xk3wwInPW2W1CcBFtER9HVCYozSlIB2Lp8BUdnSfEC6Pu/ri
+         YBwoqai7ARBGA6b8bry5qILlOKlAyfFlZ2vefq4PJ/9GY1mzuy9t4Tvi1/joYUIvVcPS
+         7xlJ5KGdmLBUNMIUiX06ApjSAaqgbAqCSMiU4gFiX13zKS5CSG+VPgbnC5zMhQDfSsWs
+         83xjiDUmyJKp1mIHB5s0w6WBOYe2CtAhYqAZn2dDRrezfo18G/XRwPrhRSHzYhiemq10
+         kFsw==
+X-Gm-Message-State: AOAM531u6ruYEIC6ZxXDrx1ffk2cVJDLRzt3yaSY8fkbS08172OF4Tvr
+        b8w7RhdTaYg0U/OdZUXmjWzo3AI9jOD++Obyvv6NddA16dd+l9HBUFINqaBZvblP0K3VFk58G9w
+        ytu0F6OZks/6ZUaQsBxKiODzJ
+X-Received: by 2002:a05:6214:2a8d:b0:446:5a52:47f5 with SMTP id jr13-20020a0562142a8d00b004465a5247f5mr14666502qvb.131.1650530838155;
+        Thu, 21 Apr 2022 01:47:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx2GJ8m4EUIE8m8G2Vb5sGhuPqmE97xodK09lR4BsEnMPjsLVXYZ96WzI2QTuXoVzXWb0tD1w==
+X-Received: by 2002:a05:6214:2a8d:b0:446:5a52:47f5 with SMTP id jr13-20020a0562142a8d00b004465a5247f5mr14666492qvb.131.1650530837957;
+        Thu, 21 Apr 2022 01:47:17 -0700 (PDT)
+Received: from gerbillo.redhat.com (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.gmail.com with ESMTPSA id e13-20020a05620a12cd00b0069e908ab48dsm2559403qkl.106.2022.04.21.01.47.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 01:47:11 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     khalasa@piap.pl
-Cc:     linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] soc: ixp4xx: qmgr: Make use of the helper function devm_platform_ioremap_resource()
-Date:   Thu, 21 Apr 2022 08:47:06 +0000
-Message-Id: <20220421084706.2615657-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Apr 2022 01:47:17 -0700 (PDT)
+Message-ID: <84310b72be223d736c8ac9fc58eb4936a98aa839.camel@redhat.com>
+Subject: Re: [PATCH] openvswitch: meter: Remove unnecessary int
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Solomon Tan <solomonbstoner@protonmail.ch>, pshelar@ovn.org,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org
+Date:   Thu, 21 Apr 2022 10:47:14 +0200
+In-Reply-To: <Yly1t/mE6QAGPS0e@ArchDesktop>
+References: <Yly1t/mE6QAGPS0e@ArchDesktop>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+On Mon, 2022-04-18 at 00:50 +0000, Solomon Tan wrote:
+> This patch addresses the checkpatch.pl warning that long long is
+> preferred over long long int.
 
-Use the devm_platform_ioremap_resource() helper instead of calling
-platform_get_resource() and devm_ioremap_resource() separately.Make the
-code simpler without functional changes.
+Please don't do that. This kind of changes cause e.g. backporting issue
+for any later relevant bugfix touching the same area, for no real
+benefit. 
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- drivers/soc/ixp4xx/ixp4xx-qmgr.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Documentation/process/2.Process.rst
 
-diff --git a/drivers/soc/ixp4xx/ixp4xx-qmgr.c b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-index 9154c7029b05..72b5a10e3104 100644
---- a/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-+++ b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-@@ -377,13 +377,9 @@ static int ixp4xx_qmgr_probe(struct platform_device *pdev)
- 	int i, err;
- 	irq_handler_t handler1, handler2;
- 	struct device *dev = &pdev->dev;
--	struct resource *res;
- 	int irq1, irq2;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -ENODEV;
--	qmgr_regs = devm_ioremap_resource(dev, res);
-+	qmgr_regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(qmgr_regs))
- 		return PTR_ERR(qmgr_regs);
- 
--- 
-2.25.1
+explicltly states to avoid this kind of patches.
+> 
+> Signed-off-by: Solomon Tan <solomonbstoner@protonmail.ch>
+> ---
+>  net/openvswitch/meter.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/net/openvswitch/meter.c b/net/openvswitch/meter.c
+> index 04a060ac7fdf..a790920c11d6 100644
+> --- a/net/openvswitch/meter.c
+> +++ b/net/openvswitch/meter.c
+> @@ -592,8 +592,8 @@ static int ovs_meter_cmd_del(struct sk_buff *skb, struct genl_info *info)
+>  bool ovs_meter_execute(struct datapath *dp, struct sk_buff *skb,
+>  		       struct sw_flow_key *key, u32 meter_id)
+>  {
+> -	long long int now_ms = div_u64(ktime_get_ns(), 1000 * 1000);
+> -	long long int long_delta_ms;
+> +	long long now_ms = div_u64(ktime_get_ns(), 1000 * 1000);
+> +	long long long_delta_ms;
+>  	struct dp_meter_band *band;
+>  	struct dp_meter *meter;
+>  	int i, band_exceeded_max = -1;
 
+Additionally the patch is mangled by non plain-text encoding.
+
+For any later submissions (regarding some other different topic) please
+ensure that your client/mailer send purely plain-text messages,
+
+Thanks,
+
+Paolo
 

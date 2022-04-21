@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C9250A129
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CEC50A133
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387494AbiDUNvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
+        id S1387557AbiDUNw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387457AbiDUNvS (ORCPT
+        with ESMTP id S1387543AbiDUNwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:51:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6110381BE
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:48:28 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nhXAT-0005v7-9y; Thu, 21 Apr 2022 15:48:21 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nhXAS-004N86-2u; Thu, 21 Apr 2022 15:48:18 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nhXAP-004hN3-N3; Thu, 21 Apr 2022 15:48:17 +0200
-Date:   Thu, 21 Apr 2022 15:48:08 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     xinlei.lee@mediatek.com, thierry.reding@gmail.com,
-        lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, rex-bc.chen@mediatek.com,
-        jitao.shi@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v6, 5/5] dt-bindings: pwm: Add interrupts property for
- MediaTek MT8192
-Message-ID: <20220421134808.sqnecvysuzlgdsz5@pengutronix.de>
-References: <1650284456-16407-1-git-send-email-xinlei.lee@mediatek.com>
- <1650284456-16407-6-git-send-email-xinlei.lee@mediatek.com>
- <a92d3b46-ace4-2d19-fef9-c59cd1a596ce@collabora.com>
+        Thu, 21 Apr 2022 09:52:33 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED6C387A8;
+        Thu, 21 Apr 2022 06:49:42 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23LDnPct064964;
+        Thu, 21 Apr 2022 08:49:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650548965;
+        bh=sOz3H5JVFZa8DXo43LjtHrPf7nI/khmshY2meABrkFQ=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=IlKi3DBHGtzAgBYQLAsXVp1JMjJvok3pPIWUXfGXmPonilChCKKCwa0bI8C/hSX0B
+         VRBO8rftr9ZGNLprfjducb/NvIqC8WxohZA793oKR+uuRxdyfpcB2xKnMuLTjPPLzc
+         8dE0XefoWFF377o6OHtFFJqGS0VbEbNR3otANW0c=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23LDnPKu096354
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 21 Apr 2022 08:49:25 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 21
+ Apr 2022 08:49:23 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 21 Apr 2022 08:49:23 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23LDnNEs035425;
+        Thu, 21 Apr 2022 08:49:23 -0500
+Date:   Thu, 21 Apr 2022 08:49:23 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Jai Luthra <j-luthra@ti.com>
+CC:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 0/3] Enable audio output on AM62-SK
+Message-ID: <20220421134923.5n546sckyfugfyp4@matador>
+References: <20220421132224.8601-1-j-luthra@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g74nijuruvmiaccu"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <a92d3b46-ace4-2d19-fef9-c59cd1a596ce@collabora.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220421132224.8601-1-j-luthra@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 18:52-20220421, Jai Luthra wrote:
+> This patch series adds support for audio output via headphone jack on the 
+> AM62-SK board. The jack is wired to TLV320AIC3106 (codec), which is 
+> connected to McASP (serializer).
+> 
+> The same 3.5mm jack can be used for combined playback+recording, but audio 
+> input is currently disabled on McASP until further testing and debugging.
+> 
+> Please apply this series on top of 
+> https://lore.kernel.org/all/20220415131917.431137-1-vigneshr@ti.com/ 
+> 
+> Jai Luthra (1):
+>   arm64: dts: ti: am625-sk: Add audio output support
+> 
+> Jayesh Choudhary (2):
+>   arm64: dts: ti: k3-am62-main: Add McASP nodes
+>   ASoC: ti: davinci-mcasp: Add dma-type for bcdma
+> 
+>  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 51 ++++++++++++++
+>  arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 89 ++++++++++++++++++++++++
+>  sound/soc/ti/davinci-mcasp.c             |  2 +
+>  3 files changed, 142 insertions(+)
+> 
 
---g74nijuruvmiaccu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Please split this series up. Send out the sound/soc/ti/davinci-mcasp.c patch as it's own.
 
-On Thu, Apr 21, 2022 at 12:17:00PM +0200, AngeloGioacchino Del Regno wrote:
-> Il 18/04/22 14:20, xinlei.lee@mediatek.com ha scritto:
-> > From: Xinlei Lee <xinlei.lee@mediatek.com>
-> >=20
-> > Add interrupts property of pwm for MediaTek MT8192 SoC.
-> >=20
-> > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
->=20
-> Hello Xinlei,
-> the pwm-mtk-disp.c driver does not support interrupts.
->=20
-> Please add interrupts support to the driver first, and only then
-> add that in the dt-bindings.
+dts changes are their own series.
 
-in my understanding the linux driver state and the binding documentation
-are somewhat independent. Here I'd say adding the irq information to dt
-without the driver supporting it is fine.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---g74nijuruvmiaccu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJhYJUACgkQwfwUeK3K
-7AmXqgf+MrAe0PFC2xF5YzOIK5R/MGmmmV3pJNlax2M2UkDsWxeavnkcBOQcilzv
-ln6uRHHRETr5tUiBEZBTPVgX8/suEhfhw+/EPtUSH/LUK9cMEAxsSjZItwZCjzUi
-+4SKV+24sivp5jfmsbyrZCKsGDNjDynXf3DBVcJbB4MLWl42NDVTIqqxA0hQe7Of
-pfwrYWjTX0MM3ZHBN3vA7reDg/d+qvoDwxn6dHT0oRvXmhyH7xhQ5N2KxkhGPBpP
-MJv4P3O37I6QygsplJHpJaoDv7zAYSJXx4wk9w1vp9vj3fZxVB9TsP9m9ILZx30U
-9PmDnaULNIt8tZukhdV4M8VDymcQJA==
-=vy1d
------END PGP SIGNATURE-----
-
---g74nijuruvmiaccu--
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

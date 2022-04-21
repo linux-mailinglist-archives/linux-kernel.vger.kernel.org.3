@@ -2,142 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684F650ABEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D5A50ABEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442406AbiDUXXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 19:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
+        id S1442494AbiDUXXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 19:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236452AbiDUXX1 (ORCPT
+        with ESMTP id S1442454AbiDUXXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:23:27 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E32F45AE8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:20:35 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id g23so1389324edy.13
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:20:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mtzzvTX2FZWpYfASrGmIBlMmWHZXe5gxLBO6bskoUbk=;
-        b=Ea3mKJ1ynIyGjGgcZPbYaa07HFzGBunGsG9Z3uPHY5830yNYhIsLBolYPgzx/8wlX8
-         KdGabqf5lr9XvB7btXqspjrg5QmzRF7pipi1mdtJT120KvMfCaR5nes/dLJxJ7tpk32J
-         HmPDFUndhT9e3YE5GuUirmLo+KhITjeMidDQbAMgDU2qWZyDdA4aeb5Af6YOUo6igbZa
-         GmKzBmh8AaJNcYH7ZCnvSClGbp/HLVIFafPRPzwUv28VW37tqdSOB75FR1Giq5fo0m/k
-         Bc2Q5blxsgQREXmHjkcntLIhEBZ1STWR1wFUJCIQrf0ICT/4JDKyr7YB0dzesW/2spk7
-         sgHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mtzzvTX2FZWpYfASrGmIBlMmWHZXe5gxLBO6bskoUbk=;
-        b=k964E5FRPWVqwCaoyuzg4G+JUTSGP5COmFzXyDDgXz0s2/8OFONV03c9EyZ5f4aNxs
-         gfGCt4u4mGq6bNMBieXksOnCTh0BnepnNmTea8sidrodYBOo4uUkmzG1cGmQAE//W7zb
-         MHl3S7UipfWm/eTCdjIwBqaF4uYGeZpwn21+87HaZIF4Y5Am4XWoVpJy6uAypOM3OHaX
-         WJg3faX80kP8Vgps6T9H390dZ/C9K6LW20bI0BNyv/EVbgbkMDzm19QllJZ9c3bOsuJ9
-         22WNBmERRoZSTb4aGPyelsbFnee0R/bfYELD6dsnv7IA7GBXuETC1UOS5F17YCi5Fgiu
-         g3eA==
-X-Gm-Message-State: AOAM531JGr8sSrTvG6iksJxmPKMGtFvW44oM6aHy8BSk30PSHIfkkMT8
-        eetChPOuNZzcUliBIGzMoNxnYnUtMWA=
-X-Google-Smtp-Source: ABdhPJyLJraznTTMFich4fGcVX7wFl4eLg7/n7BVsXkq1eMOcWRT/q8zG5C/ZU0FtXAbiQ5bnfxhvA==
-X-Received: by 2002:a50:8d09:0:b0:41c:b898:19a6 with SMTP id s9-20020a508d09000000b0041cb89819a6mr2041330eds.30.1650583233620;
-        Thu, 21 Apr 2022 16:20:33 -0700 (PDT)
-Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id br14-20020a170906d14e00b006e88db05620sm141227ejb.146.2022.04.21.16.20.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 16:20:31 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jaehee Park <jhpark1013@gmail.com>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev,
-        jhpark1013@gmail.com
-Subject: Re: [PATCH v4 1/7] staging: r8188eu: remove unnecessary braces in single statement block
-Date:   Fri, 22 Apr 2022 01:20:29 +0200
-Message-ID: <3485895.R56niFO833@leap>
-In-Reply-To: <16185752.0ZKypZ73Fx@leap>
-References: <cover.1650568579.git.jhpark1013@gmail.com> <b96ae957e2ddc519e56813a1c56e770168f67a2d.1650568579.git.jhpark1013@gmail.com> <16185752.0ZKypZ73Fx@leap>
+        Thu, 21 Apr 2022 19:23:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9870047047;
+        Thu, 21 Apr 2022 16:20:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650583256; x=1682119256;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=z/kNNN6OUjKT9/1unsTU373a5gQ3Sy9VIFu/I6Q8lsQ=;
+  b=OjAY89nXgUGEksr4eGHp3VpOOxiTNj8zKSYm8VN+bcAoIL+rAjzJOo4T
+   FgXq8CxAtW64zAEBbLmA6GM55ppc3N/Ppd2SIwlQ5NjOaxvkCJI+9Qvd1
+   RQeh0WlEVlvKgqHFxiWg0zcW6rh04KGeK+bb+l3t2pRUgEctWMaXuYvWK
+   QFouPYRhFNhu9KUkGHkERoe/WKLZqkWahkccU3HmxpfO5A4FLviiaO9B3
+   BtNI4gC9VfZluFCvDuFgyGllB+40Q2d2nrFcvW05500Ekf1NUzCCREmZw
+   NTv5fzfF+E13dEeBRhCMuIqcp7mgx8Q1gx4F98lVPPd1M8ro8Gesin0AG
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="327419093"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="327419093"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:20:55 -0700
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="593890908"
+Received: from dolaleye-mobl.amr.corp.intel.com ([10.209.117.155])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:20:54 -0700
+Date:   Thu, 21 Apr 2022 16:20:54 -0700 (PDT)
+From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH mptcp-next] x86/pm: fix false positive kmemleak report
+ in msr_build_context()
+In-Reply-To: <20220421161520.401946-1-matthieu.baerts@tessares.net>
+Message-ID: <99ac4b6-bea7-325e-1ca-cbf78982f5c1@linux.intel.com>
+References: <20220421161520.401946-1-matthieu.baerts@tessares.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=C3=AC 21 aprile 2022 21:52:14 CEST Fabio M. De Francesco wrote:
-> On gioved=C3=AC 21 aprile 2022 21:20:26 CEST Jaehee Park wrote:
-> > Remove braces for single statement block to minimize the number of
-> > empty lines, without loss of readability. Issue found with checkpatch.
-> > WARNING: braces {} are not necessary for single statement blocks
-> >=20
-> > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-> > ---
-> >  drivers/staging/r8188eu/core/rtw_mlme.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/
-> r8188eu/core/rtw_mlme.c
-> > index 3e9882f89f76..d3f4d7cdfa08 100644
-> > --- a/drivers/staging/r8188eu/core/rtw_mlme.c
-> > +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-> > @@ -112,9 +112,8 @@ void _rtw_free_mlme_priv(struct mlme_priv=20
-*pmlmepriv)
-> > =20
-> >  	rtw_free_mlme_priv_ie_data(pmlmepriv);
-> > =20
-> > -	if (pmlmepriv) {
-> > +	if (pmlmepriv)
-> >  		vfree(pmlmepriv->free_bss_buf);
-> > -	}
-> > =20
-> >  }
-> > =20
-> > --=20
-> > 2.25.1
-> >=20
->=20
-> Hi Jaehee,
->=20
-> If you just want to remove the braces, your patch is good.
->=20
-> But... Did you ask yourself why this code needs to test if "pmlmepriv" is=
-=20
-> valid before calling vfree() on it? Actually, the code doesn't need this=
-=20
-> test, it just needs to call "vfree(pmlmepriv)" unconditionally.
+On Thu, 21 Apr 2022, Matthieu Baerts wrote:
 
-When copy-pasting I overlooked a couple of things... However the argument=20
-is the same: the code doesn't need that 'if' statement before vfree().
+> Since commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume"),
+> kmemleak reports this issue:
+>
+>  unreferenced object 0xffff888009cedc00 (size 256):
+>    comm "swapper/0", pid 1, jiffies 4294693823 (age 73.764s)
+>    hex dump (first 32 bytes):
+>      00 00 00 00 00 00 00 00 48 00 00 00 00 00 00 00  ........H.......
+>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>    backtrace:
+>      msr_build_context (include/linux/slab.h:621)
+>      pm_check_save_msr (arch/x86/power/cpu.c:520)
+>      do_one_initcall (init/main.c:1298)
+>      kernel_init_freeable (init/main.c:1370)
+>      kernel_init (init/main.c:1504)
+>      ret_from_fork (arch/x86/entry/entry_64.S:304)
+>
+> It is easy to reproduce it on my side:
+>
+>  - boot the VM with a debug kernel config [1]
+>  - wait ~1 minute
+>  - start a kmemleak scan
+>
+> It seems kmemleak has an issue with the array allocated in
+> msr_build_context() and assigned to a pointer in a static structure
+> (saved_context.saved_msrs->array): there is no leak then.
+>
+> It looks like this is a limitation from kmemleak but that's alright,
+> kmemleak_no_leak() can be used to avoid complaining about that.
+>
+> Please note that it looks like this issue is not new, e.g.
+>
+>  https://lore.kernel.org/all/9f1bb619-c4ee-21c4-a251-870bd4db04fa@lwfinger.net/
+>  https://lore.kernel.org/all/94e48fcd-1dbd-ebd2-4c91-f39941735909@molgen.mpg.de/
+>
+> But on my side, msr_build_context() is only used since:
+>
+>  commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume").
+>
+> Depending on their CPUs, others have probably the same issue since:
+>
+>  commit 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume"),
+>
+> hence the 'Fixes' tag here below to help with the backports. But I
+> understand if someone says the origin of this issue is more on
+> kmemleak's side. What is unclear to me is why this issue was not seen by
+> other people and CIs. Maybe the kernel config [1]?
+>
+> [1] https://github.com/multipath-tcp/mptcp_net-next/files/8531660/kmemleak-cpu-sched-bisect.kconfig.txt
+>
 
-I wanted to write "[] it just needs to call "vfree(pmlmepriv-
->free_bss_buf)" unconditionally".
+Hi Matthieu -
 
-I apologize for not reading twice before sending my email too soon after=20
-writing and moving sentences around.
+It looks like the root cause here is alignment within the packed struct 
+saved_context (from suspend_64.h). Kmemleak only searches for pointers 
+that are aligned, but pahole shows that the saved_msrs struct member and 
+all members after it in the structure are unaligned:
 
-> OK, I know that this is not directly related to your patch or any other=20
-> that is explicitly made just for removing unnecessary braces...=20
+(gcc 11.2.1, x86_64)
 
-"pmlmepriv" is valid because we know it from the previous call to=20
-rtw_free_mlme_priv_ie_data(). Therefore the code can dereference=20
-"pmlmepriv".
+struct saved_context {
+ 	struct pt_regs             regs;                 /*     0   168 */
+ 	/* --- cacheline 2 boundary (128 bytes) was 40 bytes ago --- */
+ 	u16                        ds;                   /*   168     2 */
+ 	u16                        es;                   /*   170     2 */
+ 	u16                        fs;                   /*   172     2 */
+ 	u16                        gs;                   /*   174     2 */
+ 	long unsigned int          kernelmode_gs_base;   /*   176     8 */
+ 	long unsigned int          usermode_gs_base;     /*   184     8 */
+ 	/* --- cacheline 3 boundary (192 bytes) --- */
+ 	long unsigned int          fs_base;              /*   192     8 */
+ 	long unsigned int          cr0;                  /*   200     8 */
+ 	long unsigned int          cr2;                  /*   208     8 */
+ 	long unsigned int          cr3;                  /*   216     8 */
+ 	long unsigned int          cr4;                  /*   224     8 */
+ 	u64                        misc_enable;          /*   232     8 */
+ 	bool                       misc_enable_saved;    /*   240     1 */
 
-=46urthermore, even if "free_bss_buf" were NULL it wouldn't matter because=
-=20
-"vfree(pmlmepriv->free_bss_buf)" would be a no-op.
+/* Note odd offset values for the remainder of this struct    vvv       */
 
-Sorry if this inaccurate wording might have confused you about what I was=20
-trying to say.
+ 	struct saved_msrs          saved_msrs;           /*   241    16 */
+ 	/* --- cacheline 4 boundary (256 bytes) was 1 bytes ago --- */
+ 	long unsigned int          efer;                 /*   257     8 */
+ 	u16                        gdt_pad;              /*   265     2 */
+ 	struct desc_ptr            gdt_desc;             /*   267    10 */
+ 	u16                        idt_pad;              /*   277     2 */
+ 	struct desc_ptr            idt;                  /*   279    10 */
+ 	u16                        ldt;                  /*   289     2 */
+ 	u16                        tss;                  /*   291     2 */
+ 	long unsigned int          tr;                   /*   293     8 */
+ 	long unsigned int          safety;               /*   301     8 */
+ 	long unsigned int          return_address;       /*   309     8 */
 
-Thanks,
+ 	/* size: 317, cachelines: 5, members: 25 */
+ 	/* last cacheline: 61 bytes */
+} __attribute__((__packed__));
 
-=46abio=20
+If I move misc_enable_saved to the end of the struct declaration, 
+saved_msrs fits in before the cacheline 4 boundary and the kmemleak 
+warning goes away. The comment above the saved_context declaration says to 
+check wakeup_64.S and __save/__restore_processor_state() if the struct is 
+modified - looks like it's the members before misc_enable that must be 
+carefully placed.
+
+So far I've only tried this on my local machine, I'll work on getting more 
+thorough validation.
+
+Looks like struct saved_context in suspend_32.h has similar odd alignment.
 
 
+- Mat
+
+
+> Fixes: 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume")
+> Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/268
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> ---
+> arch/x86/power/cpu.c | 4 ++++
+> 1 file changed, 4 insertions(+)
+>
+> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
+> index 3822666fb73d..1467c6d1a966 100644
+> --- a/arch/x86/power/cpu.c
+> +++ b/arch/x86/power/cpu.c
+> @@ -14,6 +14,7 @@
+> #include <linux/tboot.h>
+> #include <linux/dmi.h>
+> #include <linux/pgtable.h>
+> +#include <linux/kmemleak.h>
+>
+> #include <asm/proto.h>
+> #include <asm/mtrr.h>
+> @@ -413,6 +414,9 @@ static int msr_build_context(const u32 *msr_id, const int num)
+> 		return -ENOMEM;
+> 	}
+>
+> +	/* The pointer is going to be stored in static struct (saved_context) */
+> +	kmemleak_not_leak(msr_array);
+> +
+> 	if (saved_msrs->array) {
+> 		/*
+> 		 * Multiple callbacks can invoke this function, so copy any
+> -- 
+> 2.34.1
+>
+>
+
+--
+Mat Martineau
+Intel

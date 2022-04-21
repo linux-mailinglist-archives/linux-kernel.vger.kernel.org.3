@@ -2,136 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D51E50A07A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A9D50A084
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 15:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbiDUNQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 09:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
+        id S231183AbiDUNRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 09:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiDUNQL (ORCPT
+        with ESMTP id S230213AbiDUNRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 09:16:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D7D05FB3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650546800;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FzWrq6wADG8fls2g3YNi2KBRby6mI91KD1aPFaOuBgg=;
-        b=Cxy08UKum7P9xslT/jElSs2AVTM/pnmJbyyoUnTk9AaIg/K2/kg+c7BtTU0hSAfIaVllUu
-        oN74jA284bKGMQ284bwEtuJsVn9puPOqa6viBWAogc2ONMwqiTY1ohibVl7iqh0Ncc+gsv
-        Sl6BRp0mwVq6xywiNdaZMGiW3N2bA6Y=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-6e6PqXzjNUyVLXyur_wKag-1; Thu, 21 Apr 2022 09:13:16 -0400
-X-MC-Unique: 6e6PqXzjNUyVLXyur_wKag-1
-Received: by mail-wr1-f71.google.com with SMTP id f2-20020a056000036200b00207a14a1f96so1123088wrf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:13:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=FzWrq6wADG8fls2g3YNi2KBRby6mI91KD1aPFaOuBgg=;
-        b=oC+ejs4POMnshVMefGmXw9fILSm7oiqIesjF7blspzYDXAoWHp9MUHYHSrTEHEOkwx
-         rECoN4YMM6tKaLjyK6JnEFAbAMTQqoH8CFO4pzpc5Oky8noRR7Lze5YNwl++qESVVFQ3
-         /wqamq1uxiuBgNVbLjAVTtr/uKfh7MOEQwlWXNHbTaq20as0VCk9+Q9l+rlmVgoAyAM6
-         lQe/qsVKw3FqVXnPss+VKlXy5Cs9JHLbHg6/Kgl9fYJj4xhOJJN2EoVhYaYaJV9gXiUy
-         NWVJabzTtPVxBi2awOa+QFAemo7comskYKvZjS7S4IW9wvoNLVpA/BUKitNVg000eXOc
-         WKTg==
-X-Gm-Message-State: AOAM533XmGSoGyYHAYE4zZzDAiz4d8HwGBV9BrzwB/95DDR7A75kPhrJ
-        sA011gv6Qj20Sbj47FbVSTAWYRfjKEyFqARoLC2c/kH1lquKFY87g9pFOS17fW0CHN9E2ZEQ27B
-        4o9cfCL6+O8IMZGcZeabFRXRO
-X-Received: by 2002:a5d:604a:0:b0:20a:8145:ad04 with SMTP id j10-20020a5d604a000000b0020a8145ad04mr19085021wrt.255.1650546795372;
-        Thu, 21 Apr 2022 06:13:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyb38/K7fR5vGj0BbR2nbDRw0aq+8b3KsKUW8o45emQVthbAQ8YqAtEFEH0t8BYy5sf4flfXA==
-X-Received: by 2002:a5d:604a:0:b0:20a:8145:ad04 with SMTP id j10-20020a5d604a000000b0020a8145ad04mr19085000wrt.255.1650546795119;
-        Thu, 21 Apr 2022 06:13:15 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:de00:711b:76af:b335:9b70? (p200300cbc702de00711b76afb3359b70.dip0.t-ipconnect.de. [2003:cb:c702:de00:711b:76af:b335:9b70])
-        by smtp.gmail.com with ESMTPSA id m7-20020adfe0c7000000b002060e7bbe49sm2764840wri.45.2022.04.21.06.13.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 06:13:14 -0700 (PDT)
-Message-ID: <67fc9368-0876-b931-14c2-ffa4dac35b6d@redhat.com>
-Date:   Thu, 21 Apr 2022 15:13:13 +0200
+        Thu, 21 Apr 2022 09:17:00 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8753938B0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 06:14:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z2K+dRHqmHuQtyBQzP/mvZBKy6ugHv2xO/RBkeQ5FbJolz2QFamnouFwcEcmN/YARMIeJu6kOD5a/F0nnnVG9+scqCljH6XWJaue+I0p3NLV9u21QknIQLaqKf10wCBgcjWcQEHJBaYLhTvwDk0AnWj/gBbijC3+IAfGNsA5PZZ5FKx3HGcZ+9bZpEf1bfZba2CFWebVc4J5YXFqv9XDhB89BAvDubb+WCzQTLu1xsUzG/dWzOUcPWviYxzQ+vhi6KrSkqe764Gmpk1Du5MZp7AEP8NyGzRtuJJuHASEXq7+ShPzEpBz53JOQ2sHe8A2OSMKdegEtScirrTO/SToVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7J9bHztLU4YbLTKClkflag3BWdgA/flFYii4N9p+msk=;
+ b=bvOdiE+WihOlfDtzF7+W8twEix/5aBwRexydc6mzEjf5eTPJL9oJ+QgJd3dwQV08H2lNDzFLCvHA8EfQjYaVTFxoSke90QcU/U41+Gi8GoCILAVsrLTMdvcLCtFGhI8NZOWqzamnZ4wexJnLdgWt2bIWRoemvOFugFRCCnxy3JqQQwBkuvYWcZrcru+xtbjXJ0+wHvxLdNcRl78rA3rM5Od+zNi/bIB06f/Mk++Ggc231+60ezGmYffscvo2ddlaN9yyZp/CytmZ4xSZHEyS8Quv/Ou0SwcumekwPj1eKiSEhcw7VG0nDUuKgHxFTlZqqjo2lunzUNmJR6ixBQOPOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7J9bHztLU4YbLTKClkflag3BWdgA/flFYii4N9p+msk=;
+ b=MNMR78nFoKKSw1wK92f6d22C1MKChjLjut2u+XUjRDREHby5WwWJmZux+pemv/NgPd4zj781vSq4HAO2zKUDORtrQJgDc2Ivrr7m6LfQg1clzIRL+tRO40tIOKB9RqTTN4lGaASoU+s4Hf0qw79AmPoDuy4MoE31NawyKdzZUGN96Vp8Zb9yN2LmS9HXpL3y96YkWjx5W+09M9gnz/HMO59wL2uY1tiZk4RIB+JZUlQozFmNS1m1fjlwYI5VZGNPpSUXv33WvF2mpRN8RowU+aQIj/BC+FR78R58Dz7p5na1bwtHqSKF3h2SpH60SQ8npYzIOfmXm43f6x3sPiVBbQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DS7PR12MB5840.namprd12.prod.outlook.com (2603:10b6:8:7b::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.25; Thu, 21 Apr
+ 2022 13:14:05 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%6]) with mapi id 15.20.5186.015; Thu, 21 Apr 2022
+ 13:14:05 +0000
+Date:   Thu, 21 Apr 2022 10:14:03 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc:     "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>
+Subject: Re: [PULL v2] gvt-next
+Message-ID: <20220421131403.GF2120790@nvidia.com>
+References: <5a8b9f48-2c32-8177-1c18-e3bd7bfde558@intel.com>
+ <20220420164351.GC2120790@nvidia.com>
+ <20220420114033.7f8b57c7.alex.williamson@redhat.com>
+ <20220420174600.GD2120790@nvidia.com>
+ <20220420200034.GE2120790@nvidia.com>
+ <55cb46db-754e-e339-178c-0a2cfaf65810@intel.com>
+ <20220421054738.GA20772@lst.de>
+ <165052329083.6597.933445971686511585@jlahtine-mobl.ger.corp.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <165052329083.6597.933445971686511585@jlahtine-mobl.ger.corp.intel.com>
+X-ClientProxiedBy: MN2PR19CA0018.namprd19.prod.outlook.com
+ (2603:10b6:208:178::31) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 2/3] mm/swapfile: Fix lost swap bits in unuse_pte()
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
-        neilb@suse.de, apopple@nvidia.com, surenb@google.com,
-        minchan@kernel.org, peterx@redhat.com, sfr@canb.auug.org.au,
-        naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220421125348.62483-1-linmiaohe@huawei.com>
- <20220421125348.62483-3-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220421125348.62483-3-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a0d2281b-9742-4bbe-8721-08da2398cf3a
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5840:EE_
+X-Microsoft-Antispam-PRVS: <DS7PR12MB5840B33D51E1D1CCF68E9C02C2F49@DS7PR12MB5840.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DpB/bxgn/QKCo814bpYq1aimdG4YlCfNj9JbEAKmlSlCb6STsPQSff5Jq1u+TLEK4PInSF8eF0OwExgdFVQ1B99T3FLuTj9L+5mv2wQNnhMshkzDKrByneax+Nazxnl5PssPGvf1+KxEXb8FNormTdX6Y1/Fe0I0aPt4X+b/xs34buBMLyPZnS3Uf5XbeoeZqG8Z9m8Yb5A5A3cPTgpkscj+5x+5ku75mcyd6qf+YuKwdbyXf5MNU0me2jnWwVqWuGndb4rp87uN2+BvwsCZr1uToOxEp6GSCawRuuBdmknE/tvsyCcER/N60X4Fhpe7hI1mRQjDQPOqbhN1LNZrnN1a9KJT2JH6JhZCKZpQSQ78xukoRwj4N2CQ+q31i1E7uw+8VVs/V8qICaUuFzwj0EJPiR6Me6azJWObHof4VU4HrxO6TPxmYZxU10VMiKGCEwC7LgJVEbUf87WTZbLQdSvOW+jgVi4qXylJZJ9tjqsAQXDedlEHDxmYl/0c/df9bYQB4/Sf25EjfvyAqUAXi3ZqIftOqQRllbiuJ5oxXZPor+qW2dKilEzderDWgRZTLtwi1yBNgaQL0HVz70Dln57qAsVt+1xD4zGMdusT7XJ3ZcPlnTPWE5DHAGkqCVUotVSHQJrHlsvY6nl5tRIfqA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(1076003)(186003)(4744005)(5660300002)(54906003)(8676002)(66556008)(66476007)(66946007)(4326008)(6916009)(7416002)(86362001)(316002)(36756003)(2616005)(6486002)(26005)(6506007)(6512007)(38100700002)(508600001)(2906002)(8936002)(33656002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+DJWBYUwXIxjOT4xhkz40soHxdeladFEdVP39+TZB4WQUUKwikcQX2p7BsoA?=
+ =?us-ascii?Q?9FnFMbmF+VN8E61xc1IuoxC0/GD/mT/6pWXzDT9zXUAwYysZPXsY+2cSpA0w?=
+ =?us-ascii?Q?xcRJ3/i0VGBPI8tkxV+D/kw/ZwbYaZ2PqOqhpOytEHJX/pU+9AiDxDjHMHhd?=
+ =?us-ascii?Q?hn82SkH9FXixWQTCqAwwpQwcKxHYJybqWuNovwvL+3rBpNX5zcNQGKLi5WQH?=
+ =?us-ascii?Q?gFp4FNeAlI9rQY/3YL/N1TXefyR25xJw17gAwrVoj1+gyMPCbXXNofS7EgwH?=
+ =?us-ascii?Q?vBI6Q+OGedCMWN2uQrrG02l6QzjydEo/g7syOSmN4osp0hqzHspxVJCnHQSs?=
+ =?us-ascii?Q?mdv/fXqrbKxRhsb0NY18yX7V2M8YsDSsuP7b8T+8K0JP141qcQmt/FJAcT2z?=
+ =?us-ascii?Q?V6rmbYBWUH0kuq6ICY46/W9WkXQ8o+d59WUwX3xvcA35ixp27jCnpSB7yXgZ?=
+ =?us-ascii?Q?szWX5pMqAOHXZmVqiC0GdmwGkjR0THXNObRe74hMCoBDZQtO2VoJ2TVeUE68?=
+ =?us-ascii?Q?vOaRLqRSXSOi5X7B8YYdqdpF2jCfwZbrS6SX8mfzIvYJ+63xMtz2M9Kt4GrG?=
+ =?us-ascii?Q?f1Sj3LpgW9w8vuFpin8Jg1pR1hDrVWIgZek/ZiQJx/92WUWUBjEAiWH8/tTg?=
+ =?us-ascii?Q?zUC00sjUlQgfCRvc/4F1vcKdPGB/v7Z5zVEgO3NIrDuQe3Flf7ZEhzCvYGec?=
+ =?us-ascii?Q?Yn2moq/MIXE9xCuP05xgbZFqf3tx0N08WZ9USf3OGFYlayhbN0cXxvfPGQcL?=
+ =?us-ascii?Q?IxTU8bfeBZ3cF+fTI6ho7DsPtJkrl2X8beUL0l9grd5EYRyyvYZdmCtuTTun?=
+ =?us-ascii?Q?Nv9enbbbJvzETjuFltmClKrfbyE/4RPQktSMx3u6/pEoduunXEhzUsKhMlGR?=
+ =?us-ascii?Q?IiRy3PrFiaXlbfLdK/f8fad87v0jn6BXaY734qIQSrltilyNSHF1neWDHFdW?=
+ =?us-ascii?Q?NbRs/kb9ipOBCYaAublCqxxdqMsBD8p2ZAwVWTL/bs30McC9tGmHHrC61L3i?=
+ =?us-ascii?Q?V9hRa1TYM+zq3yzA6l6tQ+hRMB2QcipGUc/XxxVpGAppdYYRPDf4Vx43tFg5?=
+ =?us-ascii?Q?aqcFxkwBvSKd7bMIQQy9YRa0jBgaroc/t/D+m+U1yqL/4O93TErzjk/8y3wf?=
+ =?us-ascii?Q?TkjX24k5BMELLYvwuD45s0NWWSswKbmPFa2WrkHWl7O0ArMvWhHXzJ5PnuIc?=
+ =?us-ascii?Q?9JfxscoiR+M4+ZW17DgUtPS86drjlFpsZgOF+UGCmKNoPVHd66rjX3qkkbnh?=
+ =?us-ascii?Q?XOnDjaXO8CdTzvXj6PmTMjWyS+Yb1OyZUgCk9gKZhgXcf849xb1I/uyLIus+?=
+ =?us-ascii?Q?Rcb+87zjuJSz8rNBLggR8gnBX4Ev4fQJtG9IgANBEczx0KnXqEYKKR/t2F2O?=
+ =?us-ascii?Q?bbB+TqZqeI7U0x0Rc7OSAyhA8O1S7/WS55EqjnNwcO1wdZanEbg7r2sGCUWl?=
+ =?us-ascii?Q?AAFytcyppCzxN8vVrXnudSKYjtTdewRYaIvmfNj/YjYVJ7ah/71agGlhxsvE?=
+ =?us-ascii?Q?6t+NZlIbn39G3vuUW1vn9oboaQfOawUUrqTu9AmCVq1V8D1IcpnwZ4r2AGDw?=
+ =?us-ascii?Q?6hIfl4Il9QwoDyw/D7lCdVEyYJbs90vg70Iy9BDhkUjY1YlfcTiZMUzjvKCY?=
+ =?us-ascii?Q?wHxta6efEUU7g3Xbi+Ga2jQe2OJltZEYcc0NPGTT8sgYEgr94SMx7i0NCcqc?=
+ =?us-ascii?Q?jnbJzejM3FV2TfUqkblfShggWRnrm+g+TKg2A2/Mn+M5rPytmwJjBAsBXdAs?=
+ =?us-ascii?Q?Xn574oo2Ng=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0d2281b-9742-4bbe-8721-08da2398cf3a
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2022 13:14:04.9610
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: a9j+ug00veX8URcmHy2Lfue+Vap1jcZx/B1xJECUSAR05eVbuMzUFSmcISBn1dlv
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5840
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.04.22 14:53, Miaohe Lin wrote:
-> This is observed by code review only but not any real report.
+On Thu, Apr 21, 2022 at 09:41:30AM +0300, Joonas Lahtinen wrote:
+> + Tvrtko
 > 
-> When we turn off swapping we could have lost the bits stored in the swap
-> ptes. The new rmap-exclusive bit is fine since that turned into a page
-> flag, but not for soft-dirty and uffd-wp. Add them.
-> 
-> Suggested-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/swapfile.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 95b63f69f388..332ccfc76142 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1783,7 +1783,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->  {
->  	struct page *swapcache;
->  	spinlock_t *ptl;
-> -	pte_t *pte;
-> +	pte_t *pte, new_pte;
->  	int ret = 1;
->  
->  	swapcache = page;
-> @@ -1832,8 +1832,14 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->  		page_add_new_anon_rmap(page, vma, addr);
->  		lru_cache_add_inactive_or_unevictable(page, vma);
->  	}
-> -	set_pte_at(vma->vm_mm, addr, pte,
-> -		   pte_mkold(mk_pte(page, vma->vm_page_prot)));
-> +	new_pte = pte_mkold(mk_pte(page, vma->vm_page_prot));
-> +	if (pte_swp_soft_dirty(*pte))
-> +		new_pte = pte_mksoft_dirty(new_pte);
-> +	if (pte_swp_uffd_wp(*pte)) {
-> +		new_pte = pte_mkuffd_wp(new_pte);
-> +		new_pte = pte_wrprotect(new_pte);
+> Quoting Christoph Hellwig (2022-04-21 08:47:38)
+> > On Thu, Apr 21, 2022 at 04:57:34AM +0000, Wang, Zhi A wrote:
+> > > Is it possible that I can send two different pull based on the same branch?
+> > > I was thinking I can remove this line in the original patch and then add a
+> > > small patch to add this line back on the top. Then make two different tags
+> > > before and after that small patch, send one pull with tag that includes that
+> > > small patch to i915 and the other pull with tag that doesn't includes it to
+> > > VFIO?
+> > 
+> > Yes, you can do that as long as the small fixup commit is the very last
+> > one.
 
-The wrprotect shouldn't be necessary, we don't do a pte_mkwrite(). Note
-that in do_swap_page() we might have done a
-maybe_mkwrite(pte_mkdirty(pte)), which is why the pte_wrprotect() is
-required there.
+Keep in mind when doing this that best practice is for every commit to
+compile.
 
--- 
-Thanks,
+So if you add a commit with a new #include to this topic branch that
+commit will not compile.
 
-David / dhildenb
+Best practice is to fix the compilation breakage in a merge commit,
+either created by you or created by your upstream.
 
+Jason

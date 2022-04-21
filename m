@@ -2,109 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AEC509FC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34DC509FCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 14:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385008AbiDUMmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 08:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
+        id S1385258AbiDUMnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 08:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358695AbiDUMmL (ORCPT
+        with ESMTP id S1382296AbiDUMnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:42:11 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE35623BC4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:39:20 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id bx5so4859913pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:39:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nssjfya3+9VTlrQeOXbk1Fnunfs1cJh58vKzBuqD+5w=;
-        b=pIeQUahUEw73/0XELeSGeveLsVNRSo3mUBldB2hgxa51jomlq8h+OiyitGRnWJ+4BK
-         Bvwc7ENq6ZVhtbzcIxC52/o3UeA3ag5bciQsHqThadcTnSmQFJPT9i5NHauFMmNkMZND
-         27haqYujf2wKniMfksGkGof29htMzGVVzPhNzDu5YhaeO3By25BLa3LZILWbm7Hg8X8z
-         9W1g/5HjhR2uOiRGl2pLNsAOGzQON1T7vHNHiAmGOSOA1Th3j7uZpzCfm6u7zse/hG91
-         D1xLqeRFu1Bfufg+PxXA044rlFO2dp6PsGX/J9yHFtOS7rX06qTnS1b2M9FTyUV2IotV
-         uPJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nssjfya3+9VTlrQeOXbk1Fnunfs1cJh58vKzBuqD+5w=;
-        b=4QJmgon0k7F96C7I0XgqrTPQlScbdDLvErTYLQprQ0ivV3xzocjiNwZuwT+eD6T0c2
-         /SgLYbIZqCawpb7ZfbFBERvC/ViM/9C2/lB5Z/EfWs3KsPjQCNWhHEM1fTSBbvV+6SfM
-         VQOB4U/m8lCu9tgksfiEFkcEWcetv3eSFBYwxFURpuAvAJbiNct0qtYjUeTepxrJN8Lp
-         oGLsVGPXd/YlZPZgG0bXPgEpIQVEp/n23ZXBbh7rmcaK5FT6OGH0M9n4SyyvDvpx+3ds
-         7+sOXdwetUi5vq2i0KbZH5wbHcZiPggNNdiX5+fgQiO1ONoHPe6p1WQH7hdRln7P8ieQ
-         BLfg==
-X-Gm-Message-State: AOAM5309pPhmtg5zpvORQdUGr/stJ17jsildFYnona0alljdthC0HBHd
-        h3t7mw/Rohe9MMjhygkkShqzdDJwK6oQTPnsgtE=
-X-Google-Smtp-Source: ABdhPJydPCqhqGo0Ypkm47vjMGBgOdnq/oMsB6raDz0GdtqLPYfAOOwVPepZ7ZvInejprP2fCo8W0387QvKQTPdm/yc=
-X-Received: by 2002:a17:90b:1a8a:b0:1d2:e93e:6604 with SMTP id
- ng10-20020a17090b1a8a00b001d2e93e6604mr10172088pjb.233.1650544760102; Thu, 21
- Apr 2022 05:39:20 -0700 (PDT)
+        Thu, 21 Apr 2022 08:43:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD3E1CFEA
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 05:40:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27609B82432
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 12:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43012C385A5;
+        Thu, 21 Apr 2022 12:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650544807;
+        bh=N+SIwZ0UuUxQQB5H6i3Z3OO3AfrOpLCRcQOSKUT+BbE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cNxS2F0N2AHCBsL9qB9upPfD+5Jb9RemaEfcfcCx/ACYP1voLXqhLblk1/eSmuEaj
+         62ELB4N19iOzBRKDEnWAGYmiEpokYU8cvtyQ0iYTJ0j462ALu7Gu7kJqKMUwZBzeM7
+         An46Br6/p3gZXfT/sIrwb3Sgf5cVoMrJSRJRYGDyWdCa8dlsBPbX8MfL0QYDNyxKqA
+         EX0u/m4zhOw4dIW5CeQhtw0OGvDV3LXvUfKMD9BtG3SINV0pMtD8BZwLo/CW1s9nIe
+         29/CxmvXnx5TuMgYJW9f1aRbCfg1m2QeLZ/yjjTKAGyxpUvuVHKewUgMIEERSZc5DQ
+         YXxu2k5/8Wk8w==
+Date:   Thu, 21 Apr 2022 18:10:02 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Linux Phy <linux-phy@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL]: Generic phy fixes for v5.18
+Message-ID: <YmFQonkAlGNUx+OY@matsya>
 MIME-Version: 1.0
-References: <20220409042321.3184493-1-james.hilliard1@gmail.com> <b3f7e288-3341-8c6f-1b95-e553ac5ebc35@suse.de>
-In-Reply-To: <b3f7e288-3341-8c6f-1b95-e553ac5ebc35@suse.de>
-From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Date:   Thu, 21 Apr 2022 14:39:08 +0200
-Message-ID: <CAMeQTsbh-Fy4CORBTX=AfZ+K-fZYUQ=hY=ctLFyu9KcJ5NgFUA@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/gma500: depend on framebuffer
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9QoCqM/YrPWkvT1q"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 1:49 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
->
-> Hi
->
-> Am 09.04.22 um 06:23 schrieb James Hilliard:
-> > Select the efi framebuffer if efi is enabled.
-> >
-> > This appears to be needed for video output to function correctly.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> > Changes v2 -> v3:
-> >    - select EFI_FB instead of depending on it
-> > Changes v1 -> v2:
-> >    - use depends instead of select
-> > ---
-> >   drivers/gpu/drm/gma500/Kconfig | 2 ++
-> >   1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
-> > index 0cff20265f97..a422fa84d53b 100644
-> > --- a/drivers/gpu/drm/gma500/Kconfig
-> > +++ b/drivers/gpu/drm/gma500/Kconfig
-> > @@ -2,11 +2,13 @@
-> >   config DRM_GMA500
-> >       tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
-> >       depends on DRM && PCI && X86 && MMU
-> > +     depends on FB
->
-> Why do we need FB here? Framebuffer support should be hidden by DRM's
-> fbdev helpers.
 
-It is not needed but gives him video output since it enables the drm
-fbdev emulation.
+--9QoCqM/YrPWkvT1q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I looked some more at the logs and it seems weston doesn't work on his
-system without the fbdev backend. So the question is why weston isn't
-working without fbdev? Perhaps this is just a Weston configuration
-issue?
+Hello Greg,
+
+Please consider pull to receive the generic phy fixes for v5.18 which
+contains bunch of driver fixes for error patch handling, missing
+device/of_node_put etc.
+
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git tags/phy-=
+fixes-5.18
+
+for you to fetch changes up to 2c8045d48dee703ad8eab2be7d6547765a89c069:
+
+  phy: amlogic: fix error path in phy_g12a_usb3_pcie_probe() (2022-04-20 14=
+:42:44 +0530)
+
+----------------------------------------------------------------
+phy: fixes for 5.18
+
+Fixes for bunch of drivers:
+ - TI fixes for runtime disable, missing of_node_put and error handling
+ - Samsung fixes for device_put and of_node_put
+ - Amlogic error path handling
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      phy: ti: tusb1210: Fix an error handling path in tusb1210_probe()
+
+Hans de Goede (1):
+      phy: ti: tusb1210: Make tusb1210_chg_det_states static
+
+Heiner Kallweit (1):
+      phy: amlogic: fix error path in phy_g12a_usb3_pcie_probe()
+
+Krzysztof Kozlowski (1):
+      phy: samsung: exynos5250-sata: fix missing device put in probe error =
+paths
+
+Lv Ruyi (1):
+      phy: ti: Fix missing of_node_put in ti_pipe3_get_sysctrl()
+
+Miaoqian Lin (4):
+      phy: samsung: Fix missing of_node_put() in exynos_sata_phy_probe
+      phy: ti: omap-usb2: Fix error handling in omap_usb2_enable_clocks
+      phy: mapphone-mdm6600: Fix PM error handling in phy_mdm6600_probe
+      phy: ti: Add missing pm_runtime_disable() in serdes_am654_probe
+
+ drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.c | 20 ++++++++++++--------
+ drivers/phy/motorola/phy-mapphone-mdm6600.c    |  3 ++-
+ drivers/phy/samsung/phy-exynos5250-sata.c      | 21 +++++++++++++++------
+ drivers/phy/ti/phy-am654-serdes.c              |  2 +-
+ drivers/phy/ti/phy-omap-usb2.c                 |  2 +-
+ drivers/phy/ti/phy-ti-pipe3.c                  |  1 +
+ drivers/phy/ti/phy-tusb1210.c                  | 12 +++++++++---
+ 7 files changed, 41 insertions(+), 20 deletions(-)
+
+Thanks
+--=20
+~Vinod
+
+--9QoCqM/YrPWkvT1q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmJhUKIACgkQfBQHDyUj
+g0e+XA/9F2ZRM/RV+EuYRG+dEh8DkVyrhbu3ICR5GArrQ7XH6DUWdi3lBSBssh4m
+qUgxd14+rOeR0KYp64S7F400vSTWTca6awPbFiss7NN0LC5bCECiPkRNPw2/U7So
+Jrfey2OWFRx6oSJnCujng1+owNePyd1Z+WqeUwdvLkfihELtEAq1OE93HM9lEtrT
+udRAg3N/VVqdryZBm73c8JLjAL7CHfvzVRg6UPOkgv/ypbC2pwXbfnMEwnJj2JuO
+W2UZcFOpUATZXJa9ghkvff4xSeI8m/YaOWTy2MfEGik1D7lv6SSQEVBQAASFVr0R
+UnylTw2oVDOeAXadnkLUrsDslqfUJKd0Wy07SZ0Lp/3z55xv6+VE/+2798CTU3Hq
+XvC80R1VuRCQ8SnoXfE+3+qA0sI2SdCHPYNa2A81W7nZYGJgghzvLrNZJdtIr0tV
+Ek3oUkA0laNmXOfZYA8y73wN4UWGiAq5tywXm36azJDwcCPbVkJiVV1/Uq5fez4a
+E7wBXOrkavxaFr+1bsS1GgH3pzMUid0YrVj0Tcc8xICIjv7W9s8LZBhpiVG58dMC
+Xd/ULbwKFEhBk0NwbcaB6A2eYi1Jbor44nS4y+epj3EhIMLbO2tMWg3/jIj0htAw
++/ZoxVKiKnytSzF2I0DP0bsA8jf2I3L3tbQiftk209S+7WQXbmo=
+=jmaS
+-----END PGP SIGNATURE-----
+
+--9QoCqM/YrPWkvT1q--

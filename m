@@ -2,114 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93775099DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906955099ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 09:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386027AbiDUHor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 03:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S1385966AbiDUHo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 03:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386013AbiDUHnV (ORCPT
+        with ESMTP id S1386079AbiDUHnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 03:43:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14D315A20
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:40:13 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nhRQ0-0000ar-Le; Thu, 21 Apr 2022 09:40:00 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-6754-95df-0276-ee1b.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6754:95df:276:ee1b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D488767FF4;
-        Thu, 21 Apr 2022 07:39:56 +0000 (UTC)
-Date:   Thu, 21 Apr 2022 09:39:56 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Martin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the net-next tree
-Message-ID: <20220421073956.uin74ejmt6okxly7@pengutronix.de>
-References: <20220421170749.1c0b56db@canb.auug.org.au>
- <202204210929.46477.pisa@cmp.felk.cvut.cz>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sak2e7zagjnn2h7n"
-Content-Disposition: inline
-In-Reply-To: <202204210929.46477.pisa@cmp.felk.cvut.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Apr 2022 03:43:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4D71B790
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 00:40:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B50EC210EC;
+        Thu, 21 Apr 2022 07:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650526820; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IqEtnjW6418zXdvHj8cc/wsZWDoQ9eJoFWmipwpTJ8g=;
+        b=P00KCYcgFN3f8vsuv1T6iNzE2RLPKSm9zNFHyqMUH2aPgpbIRcPy9f9jnyAsIFMVia3zOd
+        zl0Lex67IbvzUcYw8ZJ/zniDUpDVbWPvVG1Obm6Y0rSLZp811qByYeai1j5V2rlWndLTby
+        XMsx0v2a9LB7X43a/6pJ5z/fxxCRmk0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650526820;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IqEtnjW6418zXdvHj8cc/wsZWDoQ9eJoFWmipwpTJ8g=;
+        b=hJGPFvUp7P7QqRlllkoWqgZKZ8A6NwZIBRDTBUghIdTLKCekTUsybGSSyqDTQ/vVTTKJNz
+        HEerKcRg0o2uDCBQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 3D1952C149;
+        Thu, 21 Apr 2022 07:40:20 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 09:40:20 +0200
+Message-ID: <s5ha6cex4t7.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Andy Chi <andy.chi@canonical.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Enable mute/micmute LEDs and limit mic boost on EliteBook 845/865 G9
+In-Reply-To: <20220421063606.39772-1-andy.chi@canonical.com>
+References: <20220421063606.39772-1-andy.chi@canonical.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 21 Apr 2022 08:36:04 +0200,
+Andy Chi wrote:
+> 
+> On HP EliteBook 845 G9 and EliteBook 865 G9, the audio LEDs can be enabled by
+> ALC285_FIXUP_HP_MUTE_LED. So use it accordingly.
+> 
+> Signed-off-by: Andy Chi <andy.chi@canonical.com>
 
---sak2e7zagjnn2h7n
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks, applied with Fixes tag to commit 07bcab93946c.
 
-On 21.04.2022 09:29:46, Pavel Pisa wrote:
-> On Thursday 21 of April 2022 09:07:49 Stephen Rothwell wrote:
-> > After merging the net-next tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> >
-> > Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst:
-> > WARNING: document isn't included in any toctree
-> >
-> > Introduced by commit
-> >
-> >   c3a0addefbde ("docs: ctucanfd: CTU CAN FD open-source IP core
-> > documentation.")
->=20
-> I would be happy for suggestion for reference location.
->=20
-> Is the next file right location=20
->=20
->   Documentation/networking/device_drivers/can/index.rst
->=20
-> for reference to
->=20
->   Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
 
-Feel free to send a patch. I'm happy to take it.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---sak2e7zagjnn2h7n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJhCkkACgkQrX5LkNig
-010qMwf/dypxeuTZEC6vQRlb1ngYhbb7US1donTW/CjSBuCOs1px084X/jcKr5aO
-Dbgr6dMvcou4OV6OIrYmd0kWBBv4bjh1lZbm2eJEVZJPVlA2MzAs5D/xZNtQRKcf
-bo3v49Yi57f+99IBHKcOA1NazqBxBHe38U1cUFufxLgvKvCjN396aeKIKtPzngCW
-aOXx/+4oOiGqbAabsIG7CXGhayE+/474OA21JuMRzjV7HJJonG0a2xc9rU16tmyi
-79muP/gdkXYf26ECB5U2rfYuv6D5Q3i0/B18Prr1/xJqmWKUuTDsWa0z5Acbbvm8
-w62k0M/zuKO98p03bs3nQMT2FgFOYw==
-=5rUs
------END PGP SIGNATURE-----
-
---sak2e7zagjnn2h7n--
+Takashi

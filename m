@@ -2,109 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEF350A416
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8137A50A419
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 17:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390071AbiDUPac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 11:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
+        id S1389818AbiDUPcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 11:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390063AbiDUPaa (ORCPT
+        with ESMTP id S230024AbiDUPb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 11:30:30 -0400
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D88427D9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:27:39 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KkhHX4tHNzMpnVP;
-        Thu, 21 Apr 2022 17:27:36 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KkhHQ5DB5zlhRVS;
-        Thu, 21 Apr 2022 17:27:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1650554856;
-        bh=wfi/++th9BRPfWoeyhYKE1CzBwUJ6ThyRbpenoGiMFw=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=nNXoGIDoUO+Fk/7rXzk3ywqiM0Y/zb5zm49DgnpRjMToRDRzX7tnOtHKSTulUkDFX
-         yPYpxVXVISMDd4GMp+GwXFbdKrk37+7MvvK38EsCpT+dCx8ue23yRizpGi6a8tL0/Z
-         4UvMTcyOnFbX6lVPaGoTMq5PB6VWErrItIWV6SMQ=
-Message-ID: <01ec2ce7-986d-451a-4a36-f627263ef826@digikod.net>
-Date:   Thu, 21 Apr 2022 17:27:42 +0200
+        Thu, 21 Apr 2022 11:31:56 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BC633A32
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:29:05 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id g13so10826301ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:29:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QrA9XZmQJ3pzwkzftPloH2yboFwnXRie+CWHLphliSk=;
+        b=Goof91mBcka2VgETshL668shaAzHbdRfpyNvrN5YOcp4rhboXwZMtZDVAaWyLyahuQ
+         CdaDmp2jWbyV5OJCLb9mFBtn8VUpNhEqnHvKmW2rmbiU81mufV28MWCU1u7VvAeUZEd9
+         2u4xZXMNL1TOKfntRmdjyFc8vFUQU+K2rPooY6bMN8zqt91QKzhS2BhSAUFJld7m2EPZ
+         SNq/Kb9bmfpSLvL0klMqmIih/kL/HnekghPnIjYHA8OSyGeGTmeuiE0Bbf9JhAQLARJc
+         zOgCs57NF6H9sId258Pbwyy2EVsOsG9tO9VANSYUVqeN94X01agrIHg1uGNe6d7B1uaw
+         /r6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QrA9XZmQJ3pzwkzftPloH2yboFwnXRie+CWHLphliSk=;
+        b=3Hso6HsuJivqde92DQkHjfhPnJ/O2iscZ+2GCaCKs8o/7bMGrYPIQqJILBHh8DOBv0
+         trSr4iswK2nYbQHk8thqlN2Y4aku0rKBdjlONK9E81eBfrXdPZwwATKKogqYkGjmt+tF
+         VpKyx/OCeRpDxLEOIp3vUvB4EYMgki3LJfCWj1978sYccOtjls9JagVRBw8PERHNERs4
+         Mc9fflFjHrt9tME7NtJri1pwKB0npiTuHZrJoK234qJ+dFrXUlYjaSjO5qLczywmqRXc
+         GNX4tdEXYHjJ1cLKstKy+kTQDR6sQFB/Si8VlkJwTxGJ4GryF2gp1DP64PkJnz0n0yQz
+         KxJw==
+X-Gm-Message-State: AOAM532d2ZnpXZREZztFMpVjQhVBziLlWcTIiBAmor1fDfMSQnCRE6Jh
+        nIg3dkFy6ZIClb7rQTRN++o4SmRlls34mZm0qLK4Pw==
+X-Google-Smtp-Source: ABdhPJwdgR44vtT8cq3DFzLTy4Q7GdhPWMlulCx49QBzEtRNAYLnPLMlOP09qRIzOTf6f3uQrAGXR9/c5PPBDTovPvs=
+X-Received: by 2002:a17:907:1c8a:b0:6e9:2a0d:d7b7 with SMTP id
+ nb10-20020a1709071c8a00b006e92a0dd7b7mr85739ejc.572.1650554944449; Thu, 21
+ Apr 2022 08:29:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20210312171232.2681989-4-mic@digikod.net>
- <20210312171232.2681989-1-mic@digikod.net>
- <648218.1650450548@warthog.procyon.org.uk> <YmF0eAh7dYmtLDVx@kernel.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v7 3/5] certs: Make blacklist_vet_description() more
- strict
-In-Reply-To: <YmF0eAh7dYmtLDVx@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220421082042.1167967-1-tongtiangen@huawei.com> <20220421082042.1167967-2-tongtiangen@huawei.com>
+In-Reply-To: <20220421082042.1167967-2-tongtiangen@huawei.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Thu, 21 Apr 2022 11:28:27 -0400
+Message-ID: <CA+CK2bCWRL_vXW1BUhxb-zLiywXTCQdaa+9feEwQytYW=K46-g@mail.gmail.com>
+Subject: Re: [PATCH -next v5 1/5] mm: page_table_check: using PxD_SIZE instead
+ of PxD_PAGE_SIZE
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv@lists.infradead.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 21, 2022 at 4:02 AM Tong Tiangen <tongtiangen@huawei.com> wrote:
+>
+> Macro PUD_SIZE/PMD_SIZE is more general in various architectures. Using
+> PUD_SIZE/PMD_SIZE instead of PUD_PAGE_SIZE/PMD_PAGE_SIZE can better
+> support page table check in architectures other than x86 and it is no
+> functional impact on x86.
+>
+> Suggested-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
 
-On 21/04/2022 17:12, Jarkko Sakkinen wrote:
-> On Wed, Apr 20, 2022 at 11:29:08AM +0100, David Howells wrote:
->> Mickaël Salaün <mic@digikod.net> wrote:
->>
->>> +	/* The following algorithm only works if prefix lengths match. */
->>> +	BUILD_BUG_ON(sizeof(tbs_prefix) != sizeof(bin_prefix));
->>> +	prefix_len = sizeof(tbs_prefix) - 1;
->>> +	for (i = 0; *desc; desc++, i++) {
->>> +		if (*desc == ':') {
->>> +			if (tbs_step == prefix_len)
->>> +				goto found_colon;
->>> +			if (bin_step == prefix_len)
->>> +				goto found_colon;
->>> +			return -EINVAL;
->>> +		}
->>> +		if (i >= prefix_len)
->>> +			return -EINVAL;
->>> +		if (*desc == tbs_prefix[i])
->>> +			tbs_step++;
->>> +		if (*desc == bin_prefix[i])
->>> +			bin_step++;
->>> +	}
->>
->> I wonder if:
->>
->> 	static const char tbs_prefix[] = "tbs:";
->> 	static const char bin_prefix[] = "bin:";
->>
->> 	if (strncmp(desc, tbs_prefix, sizeof(tbs_prefix) - 1) == 0 ||
->> 	    strncmp(desc, bin_prefix, sizeof(bin_prefix) - 1) == 0)
->> 		goto found_colon;
->>
->> might be better.
->>
->> David
-> 
-> I think it'd be.
-> 
-> BR, Jarkko
-
-I'm confused. Didn't you plan to send this patch series before 
-v5.18-rc2? It's been a while since I started working on this.
+Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>

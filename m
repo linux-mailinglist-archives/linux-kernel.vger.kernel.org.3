@@ -2,101 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CC9509A8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2989A509A93
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 10:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386666AbiDUIZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 04:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
+        id S1386631AbiDUI05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 04:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386351AbiDUIZC (ORCPT
+        with ESMTP id S230391AbiDUI04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 04:25:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6792A24595
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:21:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04D5261BE7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 08:21:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F5BC385A5;
-        Thu, 21 Apr 2022 08:21:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650529306;
-        bh=NAqSDobntwkqjwaH/qn/17ndbF/l0boIVwfnhiCCuc4=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=bGfqzJCqbJEw44bWcYwnWRbt+w6g8CkUtrfJwyL2e52pfLYkr0DtOSaOLEtLAn8KC
-         3dagNFleFPJFO0RZ20OcooLXeS0WVS91BGQ0lBaWOVXF0k3fLYpd/G9Rcb1x2GKAIR
-         x7mNdg4DiJfnOr6LkpDAM/U4beTd8Yhnah1KrM+WqGleGMZ1D63hHYkcUBRBHcJ7nJ
-         aUzHXJYcfxIfqBOHrMRQP0ondAnQouU5W/8clBqmBToxduazM4Qz4gesHOL7kWkoRd
-         ECy+X5zLCdCmwbk4Q9fRq1zgD6stN53+hylweY54IVXuZDqTRJQLW2mLkrzo6j1mYU
-         qRn13geZzhX5A==
-Date:   Thu, 21 Apr 2022 10:21:42 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     kernel test robot <lkp@intel.com>,
-        "Daniel J. Ogorchock" <djogorchock@gmail.com>
-cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: drivers/hid/hid-nintendo.c:403:29: warning: unused variable
- 'JC_RUMBLE_ZERO_AMP_PKT_CNT'
-In-Reply-To: <202204211058.3UoweQuz-lkp@intel.com>
-Message-ID: <nycvar.YFH.7.76.2204211021050.30217@cbobk.fhfr.pm>
-References: <202204211058.3UoweQuz-lkp@intel.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Thu, 21 Apr 2022 04:26:56 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EF21DA5C
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 01:24:06 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 4DE3D3202254;
+        Thu, 21 Apr 2022 04:24:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 21 Apr 2022 04:24:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1650529441; x=1650615841; bh=mr6/yNysRK
+        Gd8H9fz/3NmMqTPBzrj57CSccM86kcPME=; b=VIma+8f/jMnVxvmpJBjeZS3wsE
+        7WNCTDwHEgZOkcwzk2cs5sZDXVJbQ3OL/shhRoP9mDf+Mmm653jY3ztiTsyCjaCI
+        OwchGtkQHzIcdvJx7k838oCmecexdkT4gfaSBkzGOWCSEHuFrc+T6OhgbjvxCjWo
+        28sp4PAr8n5qwF/t/zqFRZZ3XPQYwrcUVZInviX6QtGKvwxCEiUFMXjUDk5Hbsms
+        uT7qzOKdihSrkErhENc93iVajGjrhsJHpeq801SUQDArHHx1zm6Vf76EUin/Qmex
+        z11krGVs0GYUPCujVlbfIRWeTKeKD/hf0/LcbODwbCpap9V3JxPmNuVwCF0w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1650529441; x=
+        1650615841; bh=mr6/yNysRKGd8H9fz/3NmMqTPBzrj57CSccM86kcPME=; b=V
+        YhUyeVImMDA1/5wVioG4M0Ip73hxGqOIR9HuXTpozM4wwsgo5I2K7RBLQXjuwiOc
+        BvsOWUkjxxMmlfuMdJiSMLagNAS8Pup6ywJaqJ8MGY7H5r1+KG6UEX9YUHXtdiWh
+        rqDOCpBLYnMaIJ0RUPaLqShwfdsq7/lv5soqpJrETzaB59bI8oR11i+uPlSh98m2
+        urMsO855cv7vAz/8kaLk0xEUYhwOXL4FRgBTHXp7TlZmrLDLWLiyiCt5C/r4JC3C
+        QJ8IfuMOTXFGztMgKmExbcuVNelPxD0o8Hh/F9FYTN0a8WJRD89EqKo/KRoLz16f
+        sjzlE9GkvzlkNMEcmAr/Q==
+X-ME-Sender: <xms:oRRhYrmnx6DbTxsGbIBrGungjD1IDW7X6yTgmv7WT1GHwClU8TCwxA>
+    <xme:oRRhYu27NCpsHiskldqDd_ymYM6JBD8YkNvGcZmIPOWLpffmArezYQMzwPIfd8hYo
+    Zo-jgccW_F0XarD4qU>
+X-ME-Received: <xmr:oRRhYhpKJxXdNvxcupDa_WayLRZsenqqjmV9oNoqErpmXNrY8xrrdGR2v6JIYvMLakW5rfITBGBpUNogryxQH8s1ppt05v95WoIybko>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtddvgddtfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:oRRhYjlVKW8GIvD2MSSHdcPJYtLugQkhUcv1-IAygHTYCyryvepghg>
+    <xmx:oRRhYp1D-rGd7-KK1SnjDz7YesPlA4Q-7YuYkenQ4SAtWmcdI_LBUQ>
+    <xmx:oRRhYit08JuUeMP2ETa5TEzYk5OmhBd_spiZlMkcTracCV62cF9sZQ>
+    <xmx:oRRhYo2Te-9IFb1XMn3gUfzqRUlxngGshtXVgGWqkVetPKyW0YT5VA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 21 Apr 2022 04:24:00 -0400 (EDT)
+Date:   Thu, 21 Apr 2022 10:23:58 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Robert Foss <robert.foss@linaro.org>
+Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or
+ bridge"
+Message-ID: <20220421082358.ivpmtak3ednvddrc@houat>
+References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+ <20220420231230.58499-2-bjorn.andersson@linaro.org>
+ <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nuuowyjtkv725it4"
+Content-Disposition: inline
+In-Reply-To: <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Apr 2022, kernel test robot wrote:
 
-> Hi Daniel,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   b253435746d9a4a701b5f09211b9c14d3370d0da
-> commit: dad74e18f72a852ae40ad7b4246841a1b7e196b5 HID: nintendo: prevent needless queueing of the rumble worker
-> date:   6 months ago
-> config: s390-randconfig-c005-20220420 (https://download.01.org/0day-ci/archive/20220421/202204211058.3UoweQuz-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install s390 cross compiling tool for clang build
->         # apt-get install binutils-s390x-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dad74e18f72a852ae40ad7b4246841a1b7e196b5
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout dad74e18f72a852ae40ad7b4246841a1b7e196b5
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/amd/display/dc/ drivers/hid/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->                    ^
->    drivers/hid/hid-nintendo.c:51:17: warning: unused variable 'JC_SUBCMD_STATE' [-Wunused-const-variable]
->    static const u8 JC_SUBCMD_STATE                 /*= 0x00*/;
+--nuuowyjtkv725it4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[ ... snip ... ]
+On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
+> + Linus
+> + Marek
+> + Laurent
+> + Robert
+>=20
+> On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
+> >
+> > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
+> > bridge")' attempted to simplify the case of expressing a simple panel
+> > under a DSI controller, by assuming that the first non-graph child node
+> > was a panel or bridge.
+> >
+> > Unfortunately for non-trivial cases the first child node might not be a
+> > panel or bridge.  Examples of this can be a aux-bus in the case of
+> > DisplayPort, or an opp-table represented before the panel node.
+> >
+> > In these cases the reverted commit prevents the caller from ever finding
+> > a reference to the panel.
+> >
+> > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
+> > panel or bridge")', in favor of using an explicit graph reference to the
+> > panel in the trivial case as well.
+>=20
+> This eventually breaks many child-based devm_drm_of_get_bridge
+> switched drivers.  Do you have any suggestions on how to proceed to
+> succeed in those use cases as well?
 
-Daniel, could you please send a patch that'd comment out the unused ones? 
-(i.e. keep them for documentation purposes, but avoid the warning).
+I guess we could create a new helper for those, like
+devm_drm_of_get_bridge_with_panel, or something.
 
-Thanks,
+Maxime
 
--- 
-Jiri Kosina
-SUSE Labs
+--nuuowyjtkv725it4
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYmEUngAKCRDj7w1vZxhR
+xcyNAQCQWG0wPTFJTHNnCb79v3w/0oq3K8NWFjJQdfhmMTMd0gEAluKjETuOog8r
+01deImfsj34FpREypMQIqkuLR7Y8igw=
+=cGpF
+-----END PGP SIGNATURE-----
+
+--nuuowyjtkv725it4--

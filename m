@@ -2,46 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ED350A896
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F2F50A897
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391643AbiDUTAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 15:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S1391650AbiDUTAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 15:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391632AbiDUTAF (ORCPT
+        with ESMTP id S1351440AbiDUTAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 15:00:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A611171
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=7GHKFnbj3QVvMVmD5+xSq/YafPBrluK6Cd8roIkA8zs=; b=Dz2MqSeh7ovHxEfejHz4J5gTG7
-        /6fJtO9omLvMzbPglH+V8GwzBX1v+4Xa/QD/6EYVT3wHY+IYiD6vBoxyri1vRbcbeyiP6emn/FMMa
-        j/DYcrfPckvApvmMytsQLWAqIxnbNXUe7fdQeaXr42bscxgdJ98q1i7z0znWm+av7140+egbpceNB
-        a68kXQaJlSMmkrH5D+CDFgEdEfBcK8R8lItGhBDvLij83ugWBNbMAW2zlUK+9sz748sm/8SLeNVRL
-        YyPHcuHQ0bUogr9k4kiOoDU+yYjvX5KZS3BghqDaz3h8LpDLoFUAs34PaaCn7n6QxslcL0FdqZoOd
-        io03t7WQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhbzB-00EifQ-LQ; Thu, 21 Apr 2022 18:57:01 +0000
-Date:   Thu, 21 Apr 2022 11:57:01 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mingo@redhat.com, YueHaibing <yuehaibing@huawei.com>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        mcgrof@kernel.org
-Subject: [PATCH] ftrace: fix building with SYSCTL=y but DYNAMIC_FTRACE=n
-Message-ID: <YmGo/TcNVzOK4Bjn@bombadil.infradead.org>
+        Thu, 21 Apr 2022 15:00:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3651D2194;
+        Thu, 21 Apr 2022 11:57:48 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23LINT1q004811;
+        Thu, 21 Apr 2022 18:57:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=yH3e3O+rZ2tn1EqO8Imom1AG6duRE+lhELtbT/HFyQQ=;
+ b=HoRT8AfGNws3DCRe8JbbeZdb47cRPtTdbowwNQ89lQ811a8pm4EeZHQIHWJAjuXDEJk8
+ AgxSoDB9yBO7rd0o0QJiG7MaxkoAzLQ/gfKgGzTOTiNU+0Nmbd4yuP13gYUxT+9DeMRo
+ lxau7Ymh1XOIt6jRKtd9IlASWqDi9/4diZ5YW0fdoA59w0KV/INByjP1LpBSg0Ju49Hp
+ YHyGF/Z8+l55c4Y0E0tyuVto0s2gdDCnwZeNZQA5bMAIqVYzpfybbStmPxmpzzKr6uQS
+ rbgbnig5qsXDLs9pbhc1F49VyMZ27a37Zbn1R2qUHc+1kp0JICPkRfUL4sMIhzV1RJF3 Zw== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fjer8xke8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Apr 2022 18:57:43 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23LIr0kx027257;
+        Thu, 21 Apr 2022 18:57:42 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma04wdc.us.ibm.com with ESMTP id 3ffneantn8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Apr 2022 18:57:42 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23LIvggD61342052
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Apr 2022 18:57:42 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D78E124053;
+        Thu, 21 Apr 2022 18:57:42 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 15F89124052;
+        Thu, 21 Apr 2022 18:57:42 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 21 Apr 2022 18:57:42 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-crypto@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>, stable@vger.kernel.org
+Subject: [PATCH] ecdsa: Fix incorrect usage of vli_cmp
+Date:   Thu, 21 Apr 2022 14:57:40 -0400
+Message-Id: <20220421185740.799271-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7VZxFIY05jd0-f9UHPCO1iLIfXjU5szl
+X-Proofpoint-ORIG-GUID: 7VZxFIY05jd0-f9UHPCO1iLIfXjU5szl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-21_04,2022-04-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ mlxscore=0 priorityscore=1501 phishscore=0 malwarescore=0 mlxlogscore=999
+ lowpriorityscore=0 spamscore=0 adultscore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204210098
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,44 +81,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ok so hopefully this is the last of it. 0day picked up a build
-failure [0] when SYSCTL=y but DYNAMIC_FTRACE=n. This can be fixed
-by just declaring an empty routine for the calls moved just
-recently.
+Fix incorrect usage of vli_cmp when calculating the value of res.x. For
+signature verification to succeed, res.x must be the same as the r
+component of the signature which is in the range of [1..n-1] with 'n'
+being the order of the curve. Therefore, when res.x equals n calculate
+res.x = res.x - n as well. Signature verification could have previously
+unnecessarily failed in extremely rare cases.
 
-[0] https://lkml.kernel.org/r/202204161203.6dSlgKJX-lkp@intel.com
-
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: f8b7d2b4c192 ("ftrace: fix building with SYSCTL=n but DYNAMIC_FTRACE=y")
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Fixes: 4e6602916bc6 ("crypto: ecdsa - Add support for ECDSA signature verification")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- kernel/trace/ftrace.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ crypto/ecdsa.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index d9424fd9a183..1f89039f0feb 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -7873,6 +7873,8 @@ int unregister_ftrace_function(struct ftrace_ops *ops)
- EXPORT_SYMBOL_GPL(unregister_ftrace_function);
+diff --git a/crypto/ecdsa.c b/crypto/ecdsa.c
+index b3a8a6b572ba..674ab9275366 100644
+--- a/crypto/ecdsa.c
++++ b/crypto/ecdsa.c
+@@ -120,8 +120,8 @@ static int _ecdsa_verify(struct ecc_ctx *ctx, const u64 *hash, const u64 *r, con
+ 	/* res = u1*G + u2 * pub_key */
+ 	ecc_point_mult_shamir(&res, u1, &curve->g, u2, &ctx->pub_key, curve);
  
- #ifdef CONFIG_SYSCTL
-+
-+#ifdef CONFIG_DYNAMIC_FTRACE
- static void ftrace_startup_sysctl(void)
- {
- 	int command;
-@@ -7906,6 +7908,10 @@ static void ftrace_shutdown_sysctl(void)
- 		ftrace_run_update_code(command);
- 	}
- }
-+#else
-+# define ftrace_startup_sysctl()       do { } while (0)
-+# define ftrace_shutdown_sysctl()      do { } while (0)
-+#endif /* CONFIG_DYNAMIC_FTRACE */
+-	/* res.x = res.x mod n (if res.x > order) */
+-	if (unlikely(vli_cmp(res.x, curve->n, ndigits) == 1))
++	/* res.x = res.x mod n (if res.x >= order) */
++	if (unlikely(vli_cmp(res.x, curve->n, ndigits) >= 0))
+ 		/* faster alternative for NIST p384, p256 & p192 */
+ 		vli_sub(res.x, res.x, curve->n, ndigits);
  
- static bool is_permanent_ops_registered(void)
- {
 -- 
-2.35.1
+2.34.1
 

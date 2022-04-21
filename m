@@ -2,90 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349AF50AB99
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 00:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D5350AB9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 00:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384392AbiDUWmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 18:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
+        id S1355363AbiDUWqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 18:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354009AbiDUWmP (ORCPT
+        with ESMTP id S232169AbiDUWqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 18:42:15 -0400
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C72488B0;
-        Thu, 21 Apr 2022 15:39:23 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 22:39:12 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1650580761;
-        bh=Yhil5SnZy5w0YFI1CyB509cNQ0BZWHi5ErmFYmrsw9Q=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=eamBUXUYBoTqnQ+ht9RBNFqzzwjqfosV6T5SX/5ajS52XHKblPybywY+xVmD8BoWK
-         SB6jrS7WDFnLJtaPZe6MTOFhaFJW0A13KCvxaWiPyizuWh+8fwO/aKq0UlhfMicqQe
-         T+Dc9namZOgCb0fDotip028nghFhQlEZxDHlLa7cseD6HgK2jye+UKUSF6iymJbGFy
-         x2wwl/qzfjdVcJ4LOMa5dNzcho5b3AhqWVwYrIbA8gLtGBPt0/8A3mRKyHVUfIrYG3
-         50hXg/UYe224tWuLi2sN5M9Frb//sGcwM2MtmaRlVpWzPez9DwZ7vI09bt1B/iasPt
-         3i9dmvbSxAoHA==
-To:     Alexei Starovoitov <ast@kernel.org>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        =?utf-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH v2 bpf 00/11] bpf: random unpopular userspace fixes (32 bit et al)
-Message-ID: <20220421223201.322686-1-alobakin@pm.me>
-In-Reply-To: <CAADnVQJJiBO5T3dvYaifhu3crmce7CH9b5ioc1u4=Y25SUxVRA@mail.gmail.com>
-References: <20220421003152.339542-1-alobakin@pm.me> <CAADnVQJJiBO5T3dvYaifhu3crmce7CH9b5ioc1u4=Y25SUxVRA@mail.gmail.com>
-Feedback-ID: 22809121:user:proton
+        Thu, 21 Apr 2022 18:46:48 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECB4433B9;
+        Thu, 21 Apr 2022 15:43:57 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id hf18so4389949qtb.0;
+        Thu, 21 Apr 2022 15:43:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LKbOn0YJ4vJqmUSVPvssmzjdrWGZSY2aXU7cKreyOHk=;
+        b=I5uSKy0NaXPwn+W2xZrk5fXTafC6PQQ7J/x1gkP/NgZvDWmrehyVXuhOrdkiHYx7OO
+         8hCySmwQSmjCOdNwlfGRyVW2TeNHPM9xMzdbI7JoeJJsfYGD1P2mq0UNWi7xKCCjXCZZ
+         DHeVV8wwKuN6oyl8r8XWBOsShFcmJsefMKCs/nFJFwOpCZ/Yzpi9ux2ApoXzp33S+S/A
+         90c/Zt44QZMeJ01AIQZ6HZJ743eVHfIhffi7PVCs0/uHNhnl8kuCGS7ioday3nzEiisl
+         c3lr3SOYQIJmz6epva4tToRmwwuepbZ/itNo4/DbQG7U7u09DGgJ+/Ym52RUprl1SMPd
+         /mZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LKbOn0YJ4vJqmUSVPvssmzjdrWGZSY2aXU7cKreyOHk=;
+        b=cvMX258Aewq2ocO5X37uUma75crg+Zt00jJUbiZTPSwhFL2yP04nu7MYFwNmVvywLv
+         V8/CfUg0sUWZnH6KerFN3KBCaAR7jBWlZzYbmxY7BXxnQ6++CSgpPLN0mW8+8fWzj2No
+         gpyFMbEarXxm9Q+4KxB8QLDW+dRLxb4uK1cYU/gh73e0sKzxr/Vfx3TdLwem7rA0HnjA
+         YQwzsqrstUvBfBGvMdYuwOpphTWgsHlKDgdjdoUBhJbPYjHKPxM/IIBIjFycuN6OqF49
+         jLiVJgEADIoQg+95uMa3EU/DjwpgGUIO7JECYtN/7IBEEX4GGagYVgZlGKAQV+4mBLc9
+         YdZg==
+X-Gm-Message-State: AOAM532bZn/e5F5+c8G1IH96saDxy7sMk4xYRPbXQqHf5SVtYxr8Ufs3
+        IckEkj+BS2+Ll17HkxFQqaHlmiKtoQ==
+X-Google-Smtp-Source: ABdhPJyL1uZHcx5KVkP2cl8HZUZe+b5c79e/DtJGD4neNhid5cnnOl5VllvTFkIrKJ95h2NieUi4DQ==
+X-Received: by 2002:a05:622a:15cb:b0:2f2:681:7d06 with SMTP id d11-20020a05622a15cb00b002f206817d06mr1276679qty.386.1650581036685;
+        Thu, 21 Apr 2022 15:43:56 -0700 (PDT)
+Received: from bytedance.attlocal.net (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
+        by smtp.gmail.com with ESMTPSA id j188-20020a3755c5000000b0067d1c76a09fsm150069qkb.74.2022.04.21.15.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 15:43:55 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH net-next 0/2] Make [IP6]GRE[TAP] devices always NETIF_F_LLTX
+Date:   Thu, 21 Apr 2022 15:43:42 -0700
+Message-Id: <cover.1650580763.git.peilin.ye@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 20 Apr 2022 17:40:34 -0700
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-> On Wed, Apr 20, 2022 at 5:38 PM Alexander Lobakin <alobakin@pm.me> wrote:
->
-> Again?
->
-> -----BEGIN PGP MESSAGE-----
-> Version: ProtonMail
->
-> wcFMA165ASBBe6s8AQ/8C9y4TqXgASA5xBT7UIf2GyTQRjKWcy/6kT1dkjkF
-> FldAOhehhgLYjLJzNAIkecOQfz/XNapW3GdrQDq11pq9Bzs1SJJekGXlHVIW
->
-> Sorry I'm tossing the series out of patchwork.
+Hi all,
 
-Oh sorry, I was hoping upgrading Bridge would help >_<
+This patchset depends on these fixes [1].  Since o_seqno is now atomic_t,
+we can always turn on NETIF_F_LLTX for [IP6]GRE[TAP] devices, since we no
+longer need the TX lock (&txq->_xmit_lock).
 
-Let me know if you're reading this particular message in your inbox
-finely. Toke guessed it precisely regarding the per-recipient lists
--- Proton by default saves every address I've ever sent mails to to
-Contacts and then tries to fetch PGP public keys for each contact.
-Again, for some reason, for a couple addresses, including
-ast@kernel.org, it managed to fetch something, but that something
-was sorta broken. So at the end I've been having broken PGP for
-the address I've never manually set or even wanted PGP.
-If it's still messed, I'll contact support then. Sorry again for
-this.
+We could probably do the same thing to [IP6]ERSPAN devices as well, but
+I'm not familiar with them yet.  For example, ERSPAN devices are
+initialized as |= GRE_FEATURES in erspan_tunnel_init(), but I don't see
+IP6ERSPAN devices being initialized as |= GRE6_FEATURES.  Please suggest
+if I'm missing something, thanks!
+
+[1] https://lore.kernel.org/netdev/cover.1650575919.git.peilin.ye@bytedance.com/
 
 Thanks,
-Al
+Peilin Ye (2):
+  ip_gre: Make GRE and GRETAP devices always NETIF_F_LLTX
+  ip6_gre: Make IP6GRE and IP6GRETAP devices always NETIF_F_LLTX
+
+ net/ipv4/ip_gre.c  | 50 ++++++++++++++++++++--------------------------
+ net/ipv6/ip6_gre.c | 34 ++++++++++++-------------------
+ 2 files changed, 35 insertions(+), 49 deletions(-)
+
+-- 
+2.20.1
 

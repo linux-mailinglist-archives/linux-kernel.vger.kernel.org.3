@@ -2,79 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A5850A7CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2453F50A7CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Apr 2022 20:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391173AbiDUSIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 14:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S1391168AbiDUSJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 14:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391211AbiDUSII (ORCPT
+        with ESMTP id S237554AbiDUSJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 14:08:08 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA14A13DC4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:05:13 -0700 (PDT)
-Received: from [192.168.1.107] ([37.4.249.94]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1M1pk0-1njn2M0Qm0-002H3L; Thu, 21 Apr 2022 20:05:10 +0200
-Message-ID: <7be89f17-8993-c0e9-3965-4ca5db3c4b57@i2se.com>
-Date:   Thu, 21 Apr 2022 20:05:08 +0200
+        Thu, 21 Apr 2022 14:09:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE94F24088
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650564376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P4HhsPKolmLzyXIAPmiV7kISwst2cNULrzQjVoJrkBM=;
+        b=NdQRaxSJKFLXEc71cyN0Ax5yd0GWFC7NLJr6ppyCXfehRf6P9pPnFNwplxqazN1eRV3EwO
+        FK3iOQ1lP2c2aV2EieJ9WYc9kKBZsITLzZLr+w+XyKJ6Fuj9owpCXX+NVMXPNgt62HzeOk
+        MRRsLhNlZOzcYo2XJkWmpLAAV3TaAx4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-338-96-SZo51MqC7ulnue_0MfQ-1; Thu, 21 Apr 2022 14:06:15 -0400
+X-MC-Unique: 96-SZo51MqC7ulnue_0MfQ-1
+Received: by mail-wm1-f71.google.com with SMTP id az19-20020a05600c601300b003914ac8efb8so2720125wmb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 11:06:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=P4HhsPKolmLzyXIAPmiV7kISwst2cNULrzQjVoJrkBM=;
+        b=cLdV7xmMNkcC2ZYLeqyIb7k6NaOCglP3mLRzjRlvEZnZDchWYSByl4LoQxrdCn8mHL
+         URL4vOxp4qpcohwlKwSIcm1KUZ3OtPNrl05HvjJfNxeg7LKruw3iwBqhPFm0lV7GcSxK
+         L7VMbusbZJJCFUq1EQzWqpf3KP3AtJAlD0LaG/Lyvui38t1TAJA08VJGPqB8guaADmjO
+         ESg9eUA1lOS89JGLmQ6DojhuTWWBeDaccbms8PeVb3rnL8ji2DQBK/QfZHXbfiSzFJnB
+         ViZ5TOxqjLQmlPQp8Q9CVqCKIJ/3IHefV0lirvKTEdlv4icwlSgaP8SqCFPq9v9v3vPb
+         OW0g==
+X-Gm-Message-State: AOAM530UCEgZf83Bu2oUoagCLGHJYwZAd+no6CcdfkQ4EWRf6o+ta1/h
+        Y4BqgutY6PUAxAA0aPuonVbl3Zkr56yvn7ACTPP30r8ryZ2Bany13B9dlwce8q1Ps5MOTdjcCSp
+        H8v+ZpgtIissgl07MynSG1GU2
+X-Received: by 2002:adf:c547:0:b0:207:9abc:cfa1 with SMTP id s7-20020adfc547000000b002079abccfa1mr685901wrf.390.1650564374204;
+        Thu, 21 Apr 2022 11:06:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzpj0yPuDnWazYb01yXoAAQ/3svcqqwyjpGpys9U+6aoIt5zXweO/RmwFo4BxAOOvuaPQ/iSg==
+X-Received: by 2002:adf:c547:0:b0:207:9abc:cfa1 with SMTP id s7-20020adfc547000000b002079abccfa1mr685888wrf.390.1650564374014;
+        Thu, 21 Apr 2022 11:06:14 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id y11-20020a056000168b00b0020a919422ccsm3463856wrd.109.2022.04.21.11.06.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 11:06:13 -0700 (PDT)
+Message-ID: <b87bc46c-36ba-f428-1e91-6315f3534fa4@redhat.com>
+Date:   Thu, 21 Apr 2022 20:06:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: linux-next: build warning after merge of the pinctrl tree
+ Thunderbird/91.8.0
+Subject: Re: linux-next: build failure after merge of the kvm tree
 Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
+To:     Sean Christopherson <seanjc@google.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     KVM <kvm@vger.kernel.org>, Peter Gonda <pgonda@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220421171116.6dbe87cb@canb.auug.org.au>
- <CACRpkdYW81iLveJoNu2RDEpySqRcXWqq4XGhGFMYdLvBzhRsUw@mail.gmail.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <CACRpkdYW81iLveJoNu2RDEpySqRcXWqq4XGhGFMYdLvBzhRsUw@mail.gmail.com>
+References: <20220419153423.644c0fa1@canb.auug.org.au>
+ <Yl7c06VX5Pf4ZKsa@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yl7c06VX5Pf4ZKsa@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:EVtiik8/dSmwP3H2lw0tuXN//9pN2Fsr+moOQlE9wMzlbK6EuzT
- 9nf5OwVSCP1J8JA9lr/Rc0Ln8/3HFyIWJK3NooRSblS+uWSg8LQ/6N1hqvu34QkLEb2FFFf
- mGOhGK9Cwnt0nzJ8OAxXqpgAoBQ9g8GkdkgvBRy2xzYzf/gXYoPZIZFg3DHGkUTRUT/6yGJ
- bcWWcwhUydvEgi3qc3IQg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fd9QVqU1P1I=:jGO4Bn+H2VFYkTGkuqNQN1
- Z5zrqQPDYRHvgi2bxghgnovyX1b3g3ucyVWKocGZePrtZmn7AwbyNCke/hMr/fXxlKhUjIi4N
- 9KA/H9louOSJq4mu6F/9H0UqcS7v2Qla4ddSet63AY2DMnRSUXq5JK0blD2eFTgt+S9kOPgPM
- 6bTXZ3dZhohdlBOuRBw6jCmM8TF1r8+Z2HytVbWgKd7XSaQjvq2+lw6A+Fhw2HzAl8jx1c4Ly
- sPU2iqI5J//0q/IhRiNXvLOVaqZKXKuBNSoO4HKV44S5G1gKWZVjDPJluviF2sd79/VLhYbnF
- rQNJ4f5xwYluM33PqJfnD4gqZJS85Moiw6zOM8tHsdg3Pocbp/Qf6gQFF1zenoKKvHml1Ilgr
- J4vIYBL+v3KTsuKQ+mlz6m4dGqMwEDzMW8v2vbn19FL6WICw2Wd6OfjRA2h72PYjFvtUhVlP8
- WI2pwxesu/87J9tk5QTFyxL/C4aH4W1O7yiCJcR4e76+9XZeNtb3m5IGj6NdOmdt1IRbfK2dO
- H0AwFbXd6XYd8LNyEA9VZ8BPMGWbEAXROIOgvcT8HhYiqo9XZDjihIszJWLkSGi+vnPQB0vVy
- pSw72ivtcLFJRJqyKSh2Hf/jipdBBdLEpRpPsKA5/Y5Qa2FM/uY0AwBpzTPXrjbUAS0+RoJTA
- kiIuJKtRFV/4WwwLV7F1K+HjgwyNH308lhrKNiFgiubXgeDUNGeTJEnEXdvsEdSXvLlpQ8NaD
- Dw/P28FdVjL9KMEp
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 21.04.22 um 16:12 schrieb Linus Walleij:
-> On Thu, Apr 21, 2022 at 9:11 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
->> After merging the pinctrl tree, today's linux-next build (htmldocs)
->> produced this warning:
->>
->> include/linux/gpio/driver.h:507: warning: Incorrect use of kernel-doc format:          * @of_gpio_ranges_fallback
->> include/linux/gpio/driver.h:518: warning: Function parameter or member 'of_gpio_ranges_fallback' not described in 'gpio_chip'
->>
->> Introduced by commit
->>
->>    a9491df0c4ae ("gpiolib: of: Introduce hook for missing gpio-ranges")
-> Thanks, I just folded in a quick fix into the offending commit, a
-> single missing colon.
-Thanks
->
-> Yours,
-> Linus Walleij
+On 4/19/22 18:01, Sean Christopherson wrote:
+> Yeah, it's a bit of mess.  I believe we have a way out, waiting on Paolo to weigh in.
+> 
+> https://lore.kernel.org/all/YlisiF4BU6Uxe+iU@google.com
+
+Sent out my proposal.  For ARM, it is also binary backwards-compatible 
+for 64-bit userspace.
+
+Paolo
+

@@ -2,157 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7469250B466
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E063150B462
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446027AbiDVJvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
+        id S1446249AbiDVJvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387288AbiDVJvL (ORCPT
+        with ESMTP id S1446235AbiDVJvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:51:11 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6B6101DC;
-        Fri, 22 Apr 2022 02:48:18 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id c12so9710694plr.6;
-        Fri, 22 Apr 2022 02:48:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=UgfEhZ8+0guBOJEB+LTVzDck5+orSXs7YLCmPKl/+a8=;
-        b=MR2tzT3jkl8yDrm9X9xI11YMz7iWT4zt50glV/lxhyzah3WfjSHGC5ke9zLIxJ+qFh
-         0IrbrndYo+hMgjE9wLqnkA19AjUavzncOZrLZ1MDYUFYr/u8f5k0TltsihjLQy5/FvOH
-         USatLJhB+v1VPeTyG8FA8yI/YkhzGcwQ/eeZ9w3K4VSs0GUU/j11IV4+N3aK68ghCqih
-         Cbrki7S95gAJcTDGY77CXw80U/wwiZXjQHSOCDij4ESZNyVYVrELaeAOuNr5qO1wWrO9
-         53cPHcwwiL+aBu0pqWnO+US9pjJSmBdszFFH2gCeHvSba6u3QJKZ/UAs0ZPinayBMnfn
-         DArw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=UgfEhZ8+0guBOJEB+LTVzDck5+orSXs7YLCmPKl/+a8=;
-        b=NHSldvw94UlK9auvjMX/duYrwy2USx1LSLBHbNR0tiNihRI2WDG6vNRaQ7z1BleL2L
-         gx6yFiHGBB1nM9W8kbBNH5xrQL4UMMLY4WsBkXaV5zUsdzHAbx8LPqQPprb/RMWyq2aM
-         6QgIIrEsJZQVOxg3n3m3ADGBGn9mBb2+Ynx6VRiNhouXtinbI0wFJ+wqdCYDIDrkzZM2
-         +eCQMBMIW5IMdUWzwwyamZPOCrDRokS5coYU+HIqK1kNBaFP4zuyVxr3Z9HtMvK4wuM7
-         mlcpSOBaELPpiJT5t0EvopmFWje0cRZbY/wmQzszDW/0KGPxLHv1EK+G9783+zAuNsqE
-         UiKQ==
-X-Gm-Message-State: AOAM533NApGYjlJh2kKWR2EKaADYpAsaNY6T0ZS/k5sfn9uwqTXnMDtJ
-        wfeTVZ2FT9jZDpBCl/f8eRwFCPns7fc=
-X-Google-Smtp-Source: ABdhPJwCDbYkZRgiIKnvoI0V+j2m8JLvkWAhPEkF5WV6KqGvx6NqAcj6S5MMCqEuDyoA3sQ+Yf2OUg==
-X-Received: by 2002:a17:90b:1d0e:b0:1c9:b74e:494 with SMTP id on14-20020a17090b1d0e00b001c9b74e0494mr4362366pjb.238.1650620898216;
-        Fri, 22 Apr 2022 02:48:18 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.119])
-        by smtp.googlemail.com with ESMTPSA id 80-20020a630453000000b003aa6779ff5asm1702172pge.16.2022.04.22.02.48.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Apr 2022 02:48:17 -0700 (PDT)
-From:   Wanpeng Li <kernellwp@gmail.com>
-X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: [PATCH] x86/kvm: handle the failure of __pv_cpu_mask allocation
-Date:   Fri, 22 Apr 2022 02:47:26 -0700
-Message-Id: <1650620846-12092-1-git-send-email-wanpengli@tencent.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 05:51:38 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B581B51E74;
+        Fri, 22 Apr 2022 02:48:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650620925; x=1682156925;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vma2JAAflaYLfOe4eF4oOn15MNm91+/GB/OVlVEPwLg=;
+  b=e5aTgxiWv1d5liAyBirA/ouqn73RVaOaI8mr3B9dSHy98lLkKMuAC1cS
+   2/rK2ZjgqKLUViK1zEncmgAp9iwJL0qqIYzZAfvJO5vYy9SdKqOVHmdjx
+   o1oCumFGXCJDNmLtkyBx7V01lF5YOxkA2rB+068fOBkE5s61aA8JoWXS0
+   2q/eRtpiC376VZf2+Akq/m5gSQ1Q1hhGmK3VSsxEfGZ0YqZk6VjYiY/gu
+   dIW53CrSgZBKjUyAanxgrzhcQRfdCr9r5arqNqpnGUXGwDhZdWz5VOH9a
+   9MFHpsecIrydCtXuAhcb3yOaCls0IBLC8UvTdlRINK9zrhgqmVV0hgCfW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="246538795"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="246538795"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 02:48:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="562986197"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Apr 2022 02:48:42 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhpu5-0009zt-G7;
+        Fri, 22 Apr 2022 09:48:41 +0000
+Date:   Fri, 22 Apr 2022 17:48:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, akpm@linux-foundation.org,
+        rick.p.edgecombe@intel.com, hch@infradead.org,
+        imbrenda@linux.ibm.com, mcgrof@kernel.org,
+        Song Liu <song@kernel.org>
+Subject: Re: [PATCH bpf 3/4] module: introduce module_alloc_huge
+Message-ID: <202204221700.93ehQrzU-lkp@intel.com>
+References: <20220422051813.1989257-4-song@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422051813.1989257-4-song@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+Hi Song,
 
-Fallback to native ipis/tlb flush if fails to allocate __pv_cpu_mask.
+I love your patch! Yet something to improve:
 
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
----
- arch/x86/kernel/kvm.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+[auto build test ERROR on bpf/master]
 
-diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-index a22deb58f86d..29d79d760996 100644
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@ -46,6 +46,7 @@
- 
- DEFINE_STATIC_KEY_FALSE(kvm_async_pf_enabled);
- 
-+static struct apic orig_apic;
- static int kvmapf = 1;
- 
- static int __init parse_no_kvmapf(char *arg)
-@@ -542,6 +543,11 @@ static void __send_ipi_mask(const struct cpumask *mask, int vector)
- 
- static void kvm_send_ipi_mask(const struct cpumask *mask, int vector)
- {
-+	if (unlikely(!this_cpu_cpumask_var_ptr(__pv_cpu_mask))) {
-+		orig_apic.send_IPI_mask(mask, vector);
-+		return;
-+	}
-+
- 	__send_ipi_mask(mask, vector);
- }
- 
-@@ -551,6 +557,11 @@ static void kvm_send_ipi_mask_allbutself(const struct cpumask *mask, int vector)
- 	struct cpumask *new_mask = this_cpu_cpumask_var_ptr(__pv_cpu_mask);
- 	const struct cpumask *local_mask;
- 
-+	if (unlikely(!new_mask)) {
-+		orig_apic.send_IPI_mask_allbutself(mask, vector);
-+		return;
-+	}
-+
- 	cpumask_copy(new_mask, mask);
- 	cpumask_clear_cpu(this_cpu, new_mask);
- 	local_mask = new_mask;
-@@ -611,6 +622,7 @@ late_initcall(setup_efi_kvm_sev_migration);
-  */
- static void kvm_setup_pv_ipi(void)
- {
-+	orig_apic = *apic;
- 	apic->send_IPI_mask = kvm_send_ipi_mask;
- 	apic->send_IPI_mask_allbutself = kvm_send_ipi_mask_allbutself;
- 	pr_info("setup PV IPIs\n");
-@@ -639,6 +651,11 @@ static void kvm_flush_tlb_multi(const struct cpumask *cpumask,
- 	struct kvm_steal_time *src;
- 	struct cpumask *flushmask = this_cpu_cpumask_var_ptr(__pv_cpu_mask);
- 
-+	if (unlikely(!flushmask)) {
-+		native_flush_tlb_multi(cpumask, info);
-+		return;
-+	}
-+
- 	cpumask_copy(flushmask, cpumask);
- 	/*
- 	 * We have to call flush only on online vCPUs. And
-@@ -671,11 +688,16 @@ static __init int kvm_alloc_cpumask(void)
- 
- 	if (pv_tlb_flush_supported() || pv_ipi_supported())
- 		for_each_possible_cpu(cpu) {
--			zalloc_cpumask_var_node(per_cpu_ptr(&__pv_cpu_mask, cpu),
--				GFP_KERNEL, cpu_to_node(cpu));
-+			if (!zalloc_cpumask_var_node(&per_cpu(__pv_cpu_mask, cpu),
-+				GFP_KERNEL, cpu_to_node(cpu)))
-+				goto err_out;
- 		}
- 
- 	return 0;
-+err_out:
-+	for_each_possible_cpu(cpu)
-+		free_cpumask_var(per_cpu(__pv_cpu_mask, cpu));
-+	return -ENOMEM;
- }
- arch_initcall(kvm_alloc_cpumask);
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/bpf_prog_pack-and-vmalloc-on-huge-page-fixes/20220422-133605
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+config: x86_64-randconfig-a004 (https://download.01.org/0day-ci/archive/20220422/202204221700.93ehQrzU-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/8a0dfde5aef7e95487be2f6e3ff9487d79a30714
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Song-Liu/bpf_prog_pack-and-vmalloc-on-huge-page-fixes/20220422-133605
+        git checkout 8a0dfde5aef7e95487be2f6e3ff9487d79a30714
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/x86/kernel/module.c: In function 'module_alloc_huge':
+>> arch/x86/kernel/module.c:100:54: error: 'VM_ALLOW_HUGE_VMAP' undeclared (first use in this function); did you mean 'VM_NO_HUGE_VMAP'?
+     100 |                                  VM_DEFER_KMEMLEAK | VM_ALLOW_HUGE_VMAP,
+         |                                                      ^~~~~~~~~~~~~~~~~~
+         |                                                      VM_NO_HUGE_VMAP
+   arch/x86/kernel/module.c:100:54: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +100 arch/x86/kernel/module.c
+
+    88	
+    89	void *module_alloc_huge(unsigned long size)
+    90	{
+    91		gfp_t gfp_mask = GFP_KERNEL;
+    92		void *p;
+    93	
+    94		if (PAGE_ALIGN(size) > MODULES_LEN)
+    95			return NULL;
+    96	
+    97		p = __vmalloc_node_range(size, MODULE_ALIGN,
+    98					 MODULES_VADDR + get_module_load_offset(),
+    99					 MODULES_END, gfp_mask, PAGE_KERNEL,
+ > 100					 VM_DEFER_KMEMLEAK | VM_ALLOW_HUGE_VMAP,
+   101					 NUMA_NO_NODE, __builtin_return_address(0));
+   102		if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+   103			vfree(p);
+   104			return NULL;
+   105		}
+   106	
+   107		return p;
+   108	}
+   109	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

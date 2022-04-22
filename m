@@ -2,99 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FFE50B3C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0A550B3B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445772AbiDVJJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S233176AbiDVJRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356741AbiDVJJB (ORCPT
+        with ESMTP id S1445853AbiDVJKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:09:01 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CD451E6F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:06:04 -0700 (PDT)
-Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N1gac-1nsqjS1Ud6-0122Ki for <linux-kernel@vger.kernel.org>; Fri, 22 Apr
- 2022 11:06:02 +0200
-Received: by mail-wm1-f49.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso7508456wme.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:06:02 -0700 (PDT)
-X-Gm-Message-State: AOAM532LFtIDIdVx+YIwRvHce/9bdOE1JicttUh8UOdob6HWiy0sWPK9
-        8xC4/XMebIbitilN0+gaJtXlbfpM+TICk5fVchY=
-X-Google-Smtp-Source: ABdhPJyBJy68LeWxoCtkZpxUNMy01/6v++E4fqe+8tuCDM/CbPdYU7ohbVixofosAP/W+Pe5EImxDo7fKgPauiW5gWg=
-X-Received: by 2002:a7b:ce15:0:b0:38e:b7b0:79be with SMTP id
- m21-20020a7bce15000000b0038eb7b079bemr3153470wmc.71.1650618361979; Fri, 22
- Apr 2022 02:06:01 -0700 (PDT)
+        Fri, 22 Apr 2022 05:10:36 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B4051E6E;
+        Fri, 22 Apr 2022 02:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650618464; x=1682154464;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jaQBEI9gtWcbNllBCZ+EzKEbzFVZLPK+E0m9hNofpRY=;
+  b=YR2X6rt1AQnleu6VY5mvgmY1lLrj7CKiDbwEguf4eqPq3zQjVXlGh/u4
+   6UUXAZoyTnLCtaD+fp8jEkc9P96jlM+uPTSa3lxbbV6RLmurP5tmHrYfG
+   PrWM/JupFv3dJRU6R7dM4WHK7rtIbCDi4ejcC8IeLu7cqXyuliD2H3Fr1
+   XeMV0CmeZRim28OEjk1A5bYOLi8981gm80uRVqy3/0ulB7EoIvRESd6hy
+   eYbBbsgE23SVox3E8tY/n2RtwIM8+Kn1cxnwI9VxYbWhgr1UbH1BIOv3g
+   UlBWnTXrWYIsDJlVAKzup8IBAt97md8IbB/BgoawJppqNE8Y+rx2mXTx/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="251953460"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="251953460"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 02:07:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="867315839"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Apr 2022 02:07:38 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhpGL-0009xW-LC;
+        Fri, 22 Apr 2022 09:07:37 +0000
+Date:   Fri, 22 Apr 2022 17:06:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, akpm@linux-foundation.org,
+        rick.p.edgecombe@intel.com, hch@infradead.org,
+        imbrenda@linux.ibm.com, mcgrof@kernel.org,
+        Song Liu <song@kernel.org>, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH bpf 2/4] page_alloc: use vmalloc_huge for large system
+ hash
+Message-ID: <202204221628.82Qczjsq-lkp@intel.com>
+References: <20220422051813.1989257-3-song@kernel.org>
 MIME-Version: 1.0
-References: <20220204072234.304543-1-joel@jms.id.au> <20220204072234.304543-2-joel@jms.id.au>
- <YmJPRPhfA4Cki85S@kroah.com>
-In-Reply-To: <YmJPRPhfA4Cki85S@kroah.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 22 Apr 2022 11:05:46 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0G_xNQ6b2e71VXPVi+-j5L--SU37gFErwGYuh1QPrr1A@mail.gmail.com>
-Message-ID: <CAK8P3a0G_xNQ6b2e71VXPVi+-j5L--SU37gFErwGYuh1QPrr1A@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] firmware: Add boot information to sysfs
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:0NVKVjl/TQk0UtjI91jMgAun+WwfT1DDqE/TxRS4h2d4QQ1MpmQ
- GmWm5FrJXZ0wK43Pz2mfjim4nPccoAMv64WmBasQO60DUuk+1aM6wu+Mxz9lmBlOiDmOTAv
- W7/nkhmryjwBvnDJspjiemL/KTooyGeFcwcPPkN5cfnqsWdPoQF1K6FvSEpw/LjWiG/Hr9l
- qi01RKfbxJhJpOTiaBYjw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:AfU11mqt1Jo=:Z+5KKHD1eVOKYgWMLTlHq6
- pc3TIhIDl8pgFn6UFRad0zQ+kWFRZK8tMGCBh9eB0K/7amQBjPpeqi565U6jg68PYQ6qRDGpG
- LMaPrdTAS8EvwNvMt5c6F3tuMv2uAhFOBDvyhu19cpIjIj9cN7P8v1UqNAGCwSkL8kHpfm2gc
- +g08sQMl70GRVvWHDDFTnRRIUHfaqcZzyc2gWYI9zvE8elyJIxjtmd8xW4ApoJHFVf4vLyBo/
- AS4N93Uf/4TTWlzalAuZRScKNLiZqQGNBK8/v7ifLsmseT3mxLPqc9cs7JqHQH9qr9GyBAqf0
- rBcH0TKQuFuKMIxa1QSXRkMuhqFTedrDFjhqDWSleqUku9G1ZxjefZzL5oI0I2a6PTd4zvp6R
- GaLjZ9dNSqNF++YEE/OKEITUK4nOhmH62eM7KGmIKqDBBP7nVwZIo50rMR/MvHJlV0ePxTLnD
- geU8aWD4LGlmCBzULL1SQw2jZYXeDusshE3ddDoGmTmGLBb/kL35RDd3ycG5F8dkDVkFZcHXi
- edozaRPm3xTOBGHP7U9d/lL3PZhbE7LRuLIjzQ1ujujvPdTdKP4B7XYtTZQQzjDPlvtvDm3MP
- mIF2jhrD5bTQBCbabK2SUDkavbl1Qiwx481Htywqt+N3dJFmLAyQjlPrsfUudce3XNkf555v3
- g4u5yuxL/VNaUx/COQwXHqHDyLsT3N9S0m9PNztjgP92ht9oSUubba4cVAI5ZKxqXw/ERIgQV
- +4ERbufVgj2WtskkIAltE4c85+q/nCv3NQL4YSfvrJaH3XjU9J6Iab3yg6yh2/5byHclEPoDs
- 0yZPltDDap9mTKzwcxhzBPGqDM/ICQG79Pxp/7E+O6qyge4CNY=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422051813.1989257-3-song@kernel.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 8:46 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Fri, Feb 04, 2022 at 05:52:32PM +1030, Joel Stanley wrote:
-> > +What:                /sys/firmware/bootinfo/*
-> > +Date:                Jan 2022
->
-> It isn't January anymore :)
+Hi Song,
 
-The patch was sent on Feb 4, I would expect that to be close enough. Does this
-need to be the month of the kernel release it is merged into instead?
+I love your patch! Yet something to improve:
 
-> > +Description:
-> > +             A system can expose information about how it was started in
-> > +             this directory.
->
-> I do not understand what you mean by "how it was started".
->
-> > +             This information is agnostic as to the firmware implementation.
->
-> How?  This should be very firmware specific.
+[auto build test ERROR on bpf/master]
 
-The original patch was specific to a particular SoC vendor. Since the
-information provided here is fairly generic in the end, I asked for
-the interface
-to be generalized to the point that it can be reused across multiple
-vendors and architectures.
+url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/bpf_prog_pack-and-vmalloc-on-huge-page-fixes/20220422-133605
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220422/202204221628.82Qczjsq-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/239fb9ca743cf33db8d56df7957726e19aea87d5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Song-Liu/bpf_prog_pack-and-vmalloc-on-huge-page-fixes/20220422-133605
+        git checkout 239fb9ca743cf33db8d56df7957726e19aea87d5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-      Arnd
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   mm/page_alloc.c: In function 'alloc_large_system_hash':
+>> mm/page_alloc.c:8921:33: error: implicit declaration of function 'vmalloc_huge'; did you mean 'vmalloc_no_huge'? [-Werror=implicit-function-declaration]
+    8921 |                         table = vmalloc_huge(size, gfp_flags);
+         |                                 ^~~~~~~~~~~~
+         |                                 vmalloc_no_huge
+>> mm/page_alloc.c:8921:31: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    8921 |                         table = vmalloc_huge(size, gfp_flags);
+         |                               ^
+   cc1: some warnings being treated as errors
+
+
+vim +8921 mm/page_alloc.c
+
+  8876	
+  8877			/* limit to 1 bucket per 2^scale bytes of low memory */
+  8878			if (scale > PAGE_SHIFT)
+  8879				numentries >>= (scale - PAGE_SHIFT);
+  8880			else
+  8881				numentries <<= (PAGE_SHIFT - scale);
+  8882	
+  8883			/* Make sure we've got at least a 0-order allocation.. */
+  8884			if (unlikely(flags & HASH_SMALL)) {
+  8885				/* Makes no sense without HASH_EARLY */
+  8886				WARN_ON(!(flags & HASH_EARLY));
+  8887				if (!(numentries >> *_hash_shift)) {
+  8888					numentries = 1UL << *_hash_shift;
+  8889					BUG_ON(!numentries);
+  8890				}
+  8891			} else if (unlikely((numentries * bucketsize) < PAGE_SIZE))
+  8892				numentries = PAGE_SIZE / bucketsize;
+  8893		}
+  8894		numentries = roundup_pow_of_two(numentries);
+  8895	
+  8896		/* limit allocation size to 1/16 total memory by default */
+  8897		if (max == 0) {
+  8898			max = ((unsigned long long)nr_all_pages << PAGE_SHIFT) >> 4;
+  8899			do_div(max, bucketsize);
+  8900		}
+  8901		max = min(max, 0x80000000ULL);
+  8902	
+  8903		if (numentries < low_limit)
+  8904			numentries = low_limit;
+  8905		if (numentries > max)
+  8906			numentries = max;
+  8907	
+  8908		log2qty = ilog2(numentries);
+  8909	
+  8910		gfp_flags = (flags & HASH_ZERO) ? GFP_ATOMIC | __GFP_ZERO : GFP_ATOMIC;
+  8911		do {
+  8912			virt = false;
+  8913			size = bucketsize << log2qty;
+  8914			if (flags & HASH_EARLY) {
+  8915				if (flags & HASH_ZERO)
+  8916					table = memblock_alloc(size, SMP_CACHE_BYTES);
+  8917				else
+  8918					table = memblock_alloc_raw(size,
+  8919								   SMP_CACHE_BYTES);
+  8920			} else if (get_order(size) >= MAX_ORDER || hashdist) {
+> 8921				table = vmalloc_huge(size, gfp_flags);
+  8922				virt = true;
+  8923				if (table)
+  8924					huge = is_vm_area_hugepages(table);
+  8925			} else {
+  8926				/*
+  8927				 * If bucketsize is not a power-of-two, we may free
+  8928				 * some pages at the end of hash table which
+  8929				 * alloc_pages_exact() automatically does
+  8930				 */
+  8931				table = alloc_pages_exact(size, gfp_flags);
+  8932				kmemleak_alloc(table, size, 1, gfp_flags);
+  8933			}
+  8934		} while (!table && size > PAGE_SIZE && --log2qty);
+  8935	
+  8936		if (!table)
+  8937			panic("Failed to allocate %s hash table\n", tablename);
+  8938	
+  8939		pr_info("%s hash table entries: %ld (order: %d, %lu bytes, %s)\n",
+  8940			tablename, 1UL << log2qty, ilog2(size) - PAGE_SHIFT, size,
+  8941			virt ? (huge ? "vmalloc hugepage" : "vmalloc") : "linear");
+  8942	
+  8943		if (_hash_shift)
+  8944			*_hash_shift = log2qty;
+  8945		if (_hash_mask)
+  8946			*_hash_mask = (1 << log2qty) - 1;
+  8947	
+  8948		return table;
+  8949	}
+  8950	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,116 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5A350C552
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C554E50C569
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiDVXvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S230103AbiDVXxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiDVXvS (ORCPT
+        with ESMTP id S231176AbiDVXww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:51:18 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155D5C6EE4;
-        Fri, 22 Apr 2022 16:48:24 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id s4so6973603qkh.0;
-        Fri, 22 Apr 2022 16:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9/2xDFh9dl7zEQ1Wno66tlhOklc1X6CUbTpyUD0JYSo=;
-        b=GtSJCfb/kFq8IZZVn9cYuEpNofTiZEMRAjQfrkDfZ4MxVTKJPumEe82wv9zvlt1wdb
-         YPGc+4HLi52g83DegnPV7Cj6RXbdrJo1Y8wo6s7UGnFDsKKta8q8Xx7jhgcCz4eU/a97
-         EuGLMkt0mIDNF29xe2qkJ7myJO7L0xrLSIgSa2r4Vc6xT0g/QfSYOVhK2iwYqw+/etOT
-         /dd1n5RN3+QgA3B4tO1wy/se9l6wzI2XF9hwKP/ROBHn2/XvwNpvLSo0fRujXQimJSOG
-         /oOMxhB+vD8N5gztL5XgScwovH24Y2a0EiUZ0e9mvHM+2ugwjmviB7CVAH6ON/Z9F+CU
-         q0oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9/2xDFh9dl7zEQ1Wno66tlhOklc1X6CUbTpyUD0JYSo=;
-        b=J2XoiKh6bQLMjETvAB7yCMB1W5Lw4r21U4/QlrqkYZ2qtebTYVErge6OvKvi9fZcjx
-         nyu+Bwj6Utut31si1NVw8hZtdGhu6SeD0q9G7dWv6I/yTRNHkPMbTsqEF2UTQU2l/XC9
-         otsaHh8J1cZkDPZrNITXfjE13ilL1EFbQZg2faIMyTuYHpbd896x9PIfPD4juZ44A9KN
-         8t9q0PyjGx1c3GrMFvkHlA0hEggs2J8RirIXn553885fEp57wJjL4Hfvi8ycmNcqgUTj
-         TfYyfWE9jNBhSUnourQi9NWcPuFuC1hyJ7qtrN5aPR/zc6kHJaNfvItq1U4CqAt7Ixte
-         PDaw==
-X-Gm-Message-State: AOAM533ZRt2cXLPwRB6Id10dgYctQAexvEa7LWFEFNm5yarYgyAwb3F4
-        JdEcuTE4/bSnJJoW3DNA4lWqour++Jw6
-X-Google-Smtp-Source: ABdhPJyw5vkKW6b5EOOq344HLslU2RWAyR40NLeFfnTi3FFpV26KMen487nIt7tPNpC9/77RvhcVxg==
-X-Received: by 2002:a37:a247:0:b0:69d:5e7d:42b7 with SMTP id l68-20020a37a247000000b0069d5e7d42b7mr4281597qke.320.1650671303234;
-        Fri, 22 Apr 2022 16:48:23 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id b2-20020a37b202000000b0069c7ad47221sm1543720qkf.38.2022.04.22.16.48.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 16:48:22 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 19:48:20 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, hch@lst.de,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-input@vger.kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v2 8/8] mm: Centralize & improve oom reporting in
- show_mem.c
-Message-ID: <20220422234820.plusgyixgybebfmi@moria.home.lan>
-References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
- <20220421234837.3629927-14-kent.overstreet@gmail.com>
- <YmKma/1WUvjjbcO4@dhcp22.suse.cz>
- <YmLFPJTyoE4GYWp4@carbon>
+        Fri, 22 Apr 2022 19:52:52 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98CEBE1B;
+        Fri, 22 Apr 2022 16:49:57 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 200063201F73;
+        Fri, 22 Apr 2022 19:49:56 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 22 Apr 2022 19:49:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650671395; x=
+        1650757795; bh=vKy+K0ni749aGVp+1oUC/yUMfQ0rzndD82fCAttAbls=; b=I
+        QUFboe/5AQmRcwyaB4Nb8DjhXr3/OX+EGDDjQEJS5FEGvBf9iRDPfM/GQ+rb2eLv
+        QUsxcPKTECFn4w47l6xFooMRparSFqIh4NCG4rhT6+zT+oV9D6fpj/ZbJAv+8e5t
+        OEI0Skw+gP9+KdKL+1u1Qr556bNkPm6v0rCoOgqN3x3yTYEvGPGLdpO4J58JXfoy
+        omQbr4AOz2IJni+uGdRL1Sg/6CQDcp3hehvOQeOTF3tLVf4qrIOj2d8dw0eXN3XZ
+        Dt4LYK58KfCekA8amlZfZkQwZ5yerRQO0smpzxoBk/3ngc64AqWpbzlP28KKtgVn
+        BqFUlWrmGeNxHpQSzoUEw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650671395; x=1650757795; bh=vKy+K0ni749aG
+        Vp+1oUC/yUMfQ0rzndD82fCAttAbls=; b=T9ewHHHZEsqAyTYuiyjezBFUP39vE
+        gkyPYoombSoCnbFKeGbM+06AiZXm0Nz9XWrhDNLYQvXvXW/lnAxgEYg6bAPdnkb/
+        v3OroeCELRX5gbOcF1AjJytWbiuIT+EH1jQVV0xqhUE5gzEZWwIXcikxUQb/B2x8
+        JiA7DlzwEtscmeuyX9ziXICMsZZcNv9Y8ZGH+vLsjZ0FBXCxw8FimZrrtuYDEpp9
+        +BnSLOxwaaqWFDYrGDZIXL0qWbK8sliWjeREKliNasgZRR3UWz1NdMeUfw8EckhT
+        XGzmS8SNDp7Bp1YBEPqwOUpMDuleNGbA28wGyCuGd3mOyuMIw2q+m6SMA==
+X-ME-Sender: <xms:Iz9jYpVHAElTXT1A04lzN_2IAyaIrdg6vAjuggnSo78INErm_nSJRg>
+    <xme:Iz9jYpl0wNCKI6zZ-7ceQ7XD0qJKrVX9TjYcP6hprLNCOGmMOAff8HqPgGWJyjs1s
+    PfbASJN6mBYASdMpQ>
+X-ME-Received: <xmr:Iz9jYlZzH-13ZBlo8zJjOk5utsmyXxku-bSuoTAMHrp1vGJnXQkqGGZ-3QuYClamA-8aymO0KpLtN1Tl7BcRrGxsblmBIA7JCKYSyImxETYsYbwe9Geb5Cnh2Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdehgddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfhiedt
+    heduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:Iz9jYsXLLmQ3lKYPeeGB2AceYi-2C_hxLtiSZknptl96WTp3ji6j2w>
+    <xmx:Iz9jYjmF3565fz7a2MPubOYPkVdycAn-J1gOcr01J0ZxAEdZFs1keQ>
+    <xmx:Iz9jYpeLTzYPRyEpDwN-19gMEgp1OsJ63eUNZUxusR_1H-XjEHaRYg>
+    <xmx:Iz9jYshn0h9669BfJZkrI9fFw5wSGCcd24HPTgWgZrtJYnV21C2ihA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 22 Apr 2022 19:49:54 -0400 (EDT)
+Subject: Re: [PATCH 1/4] dt-bindings: spi: sun6i: add DT bindings for
+ Allwinner R329 SPI
+To:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>
+References: <20220422155639.1071645-1-icenowy@outlook.com>
+ <BYAPR20MB2472E8B10BFEF75E7950BBC0BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <9ae7d1ee-4e2d-f3c1-f55f-e96b0e449b63@sholland.org>
+Date:   Fri, 22 Apr 2022 18:49:53 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmLFPJTyoE4GYWp4@carbon>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <BYAPR20MB2472E8B10BFEF75E7950BBC0BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 08:09:48AM -0700, Roman Gushchin wrote:
-> To add a concern: largest shrinkers are usually memcg-aware. Scanning
-> over the whole cgroup tree (with potentially hundreds or thousands of cgroups)
-> and over all shrinkers from the oom context sounds like a bad idea to me.
-
-Why would we be scanning over the whole cgroup tree? We don't do that in the
-vmscan code, nor the new report. If the OOM is for a specific cgroup, we should
-probably only be reporting on memory usage for that cgroup (show_mem() is not
-currently cgroup aware, but perhaps it should be).
-
-> IMO it's more appropriate to do from userspace by oomd or a similar daemon,
-> well before the in-kernel OOM kicks in.
-
-The reason I've been introducing printbufs and the .to_text() method was
-specifically to make this code general enough to be available from
-sysfs/debugfs - so I see no reasons why a userspace oomd couldn't make use of it
-as well.
-
-> > Last but not least let me echo the concern from the other reply. Memory
-> > allocations are not really reasonable to be done from the oom context so
-> > the pr_buf doesn't sound like a good tool here.
+On 4/22/22 10:56 AM, icenowy@outlook.com wrote:
+> From: Icenowy Zheng <icenowy@aosc.io>
 > 
-> +1
+> Allwinner R329 SPI has two controllers, and the second one has helper
+> functions for MIPI-DBI Type C.
+> 
+> Add compatible strings for these controllers
+> 
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> ---
+>  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml        | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> index ca4c95345a49..6354635241fc 100644
+> --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> @@ -21,6 +21,8 @@ properties:
+>      oneOf:
+>        - const: allwinner,sun6i-a31-spi
+>        - const: allwinner,sun8i-h3-spi
+> +      - const: allwinner,sun50i-r329-spi
+> +      - const: allwinner,sun50i-r329-spi-dbi
 
-In my experience, it's rare to be _so_ out of memory that small kmalloc
-allocations are failing - we'll be triggering the show_mem() report before that
-happens.
+As far as I'm aware, the SPI portion of the DBI controller is
+register-compatible with the regular SPI controller. So I would expect using
+that as a fallback compatible for the DBI variant.
 
-However, if this turns out not to be the case in practice, or if there's a
-consensus now that we really want to guard against this, I have some thoughts.
-We could either:
+Regards,
+Samuel
 
- - mempool-ify printbufs as a whole
+>        - items:
+>            - enum:
+>                - allwinner,sun8i-r40-spi
+> 
 
- - reserve some memory just for the show_mem() report, which would mean either
-   adding support to printbuf for external buffers (subsuming what seq_buf
-   does), or shrinker .to_text() methods would have to output to seq_buf instead
-   of printbuf (ew, API fragmentation).

@@ -2,126 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5A250C3A8
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03FD50C3AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbiDVWUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
+        id S233683AbiDVWtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbiDVWSo (ORCPT
+        with ESMTP id S234589AbiDVWsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:18:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A044705E;
-        Fri, 22 Apr 2022 15:04:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EC42B83272;
-        Fri, 22 Apr 2022 22:04:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 502FFC385AB;
-        Fri, 22 Apr 2022 22:04:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650665089;
-        bh=zuNw6j1TShfoNbLYYIZxrZxreBGq9IdbmgqrCDzwCoE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GJHnYGm7kS7OYKfkAu61QcQIzQsPpKgiX8ZwFOEZB2cc8bdXfKuICeePb/LdLDWns
-         VNg0u6qUYqau/LeOFrayBulaQJxkihHPe/A2FqLymKPNdePaoUDSIGdGevpo7L/zJM
-         aFPhStRd09KzzfNR1joe6PwVDpjMzpbeziX7fgPmvokEvCi/0oFrjnwBTaaGfP/BOU
-         IUNNTQDtVNPw7mpJSpA99kiRdBDjanYdKye5l82yB0eqq3zLotqrujW7fvCIf2Ejkd
-         dAqJEF/tV2gwSfcpwtPVTrB+Lh9rnVah9UvWO9BhrH9MflpU1vh20qiOa/U8KRRaYH
-         giaZNTf1zCHIw==
-Received: by mail-wm1-f47.google.com with SMTP id q20so5841606wmq.1;
-        Fri, 22 Apr 2022 15:04:49 -0700 (PDT)
-X-Gm-Message-State: AOAM5316G1Qpk56Wu+UcOt6hj2nx1VfttOXlwvZpmLGd7jHRHONmsW3f
-        STOnEHKSTHIV4MExAz+NGq4VoEiQvcmEOpiQ/uQ=
-X-Google-Smtp-Source: ABdhPJxxyzPCyBaxXq4e/OKv6ds/3UgnpcR0jFo6uX7QoEAMCxGf0GP6zkRcnylbgWRsSBmj2Bdv9puvN/pDeVMDIcQ=
-X-Received: by 2002:a05:600c:4ed4:b0:392:90a5:b7e6 with SMTP id
- g20-20020a05600c4ed400b0039290a5b7e6mr15508304wmq.33.1650665087477; Fri, 22
- Apr 2022 15:04:47 -0700 (PDT)
+        Fri, 22 Apr 2022 18:48:17 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1433E392116
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:07:46 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id 125so9998198iov.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:07:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YNHylfXe0yuI3nWPKEVPbWc3jAVoQ9y+hq0D/Seu+wY=;
+        b=lZeOnkWJfpNbpL47S03ry8Z3kSVOMOveo/jk2nJZUCVzPXBnjFkIA5qcm5wo/j9wal
+         dToQD7czP+VDPM078c7el16Q1aZe6nbNwzGDLS1XDXYwpVkpsNJqwJypOn7+to3xdWR8
+         3oKX/drZ7bmJalyV/wnad3jVhzCaQtJWOxf3Bm0ia6JFeq+CqiBT5j8Fw1M2JQ+4ETxm
+         QXwZMqup8qvcM15nXfDB1he5rvr4FY7BMBGzR2W4HvnyM4XtqFs6HzlCI7+q84UnMcKm
+         6XhvjRcKaCUidgoN7Z7ZOSeAKGYbwmIvKM8UEM2menTjD9cXKxT3sYopxGDu0HM62RIb
+         sEPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YNHylfXe0yuI3nWPKEVPbWc3jAVoQ9y+hq0D/Seu+wY=;
+        b=nqRxGYr+h5b6WVNDDHco9Sz1/oiOnqEiOWd+hedoyLXgmD1zZ5TI06NxtLej7W5bhx
+         7VwZtnWyLeTjIPlK9PDVnGUW1TlOTGqEk5pB3LiqWodPBFgp5E2+o4BV5BLHFoXdqJwJ
+         0DQRlgDzP9BYCr1mXPdw/4eRNq64SQwHgYnyQ9+rdVLDii3pkHhI0tB/4RMk+cg8ZOn+
+         QK2zMZV/BVuPSjkHOGvA9KaneZ6coigZRUr0g1wdZGc/Cx3s8Uomx6rqHXy7uGOgjKFa
+         JO+E1uOsRmlhUPrnfuD38Da8xWlFXC/BY2rYGqpNBD3jNSy5nNl/YG3avkUnSozAK6Lc
+         +lPA==
+X-Gm-Message-State: AOAM532NHiHlqNZOGdBC1C6xVUTINJn7e3/CkMbB+076ZbUbecKqKlQ+
+        pvZrAgi2SmZemajQKLneBHg2PhKmHXwGFernRghQAw==
+X-Google-Smtp-Source: ABdhPJwo+ze5pPYHakIgsi/peB9ZO2hJVC0Rs6hOgkZCZ+dBJmbZPicpRp+7K8Orccv9dtaFx0imB8ejZX4fb+fg/c8=
+X-Received: by 2002:a05:6638:12cb:b0:323:da89:2caa with SMTP id
+ v11-20020a05663812cb00b00323da892caamr2971436jas.314.1650665246174; Fri, 22
+ Apr 2022 15:07:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com> <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
-In-Reply-To: <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sat, 23 Apr 2022 00:04:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
-Message-ID: <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220421224928.1848230-1-axelrasmussen@google.com> <20220422145456.1e9f22220b1ad502aa56628d@linux-foundation.org>
+In-Reply-To: <20220422145456.1e9f22220b1ad502aa56628d@linux-foundation.org>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Fri, 22 Apr 2022 15:06:49 -0700
+Message-ID: <CAJHvVciPBM7vRnruDZ3iuYMgwqapB2U6TBtD74s1P-40ZNRy6Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests: vm: refactor run_vmtests.sh to reduce boilerplate
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 10:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 4/22/22 12:16, Arnd Bergmann wrote:
-> > On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
+Since this is a revert, I guess the diff is "backwards" -- meaning,
+others were proposing *adding* $ksft_skip handling to some tests?
+
+if that's the case, then I agree none of those diffs are needed, my
+change should properly handle $ksft_skip for all tests now and in the
+future.
+
+On Fri, Apr 22, 2022 at 2:55 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Thu, 21 Apr 2022 15:49:27 -0700 Axel Rasmussen <axelrasmussen@google.com> wrote:
+>
+> > Previously, each test printed out its own header, dealt with its own
+> > return code, etc. By just putting this standard stuff in a function, we
+> > can delete > 300 lines from the script.
 > >
-> > Which machine did you hit this on? Is this on hardware or in qemu?
+> > This also makes adding future tests easier. And, it gets rid of various
+> > inconsistencies that already exist:
 > >
-> qemu, as always. borzoi, spitz, terrier, tosa, z2, and sx1 fail.
-> Also, I just noticed that the failure is not always the same.
-> z2 fails to boot from initrd, and sx1 fails to boot completely.
-
-That's a lot of machines failing, I hope at least we got the same bugs more
-than once here.
-
-For the I/O space, I found now that PXA was not using the standard
-virtual I/O address yet, but instead used a NULL-based offset.
-
-I'm not entirely happy with this patch, but this is an outline of what
-I think we need to fix that: https://pastebin.com/3nVgQsEw
-This one is probably incomplete, at least it breaks sa1100 for now,
-and it adds a bogus CONFIG_PCI dependency. I'm also not sure
-in what way the last patch in the series triggers it, rather than the
-one that removed mach/io.h.
-
-I had sx1 booting in qemu at least, with the omap1 multiplatform series only.
-If you have a custom config for this one, make sure you get the right
-DEBUG_LL address.
-
-> I'll do another round of bisects.
-
-Thanks!
-
-       Arnd
+> > - Some tests correctly deal with ksft_skip, but others don't.
+> > - Some tests just print the executable name, others print arguments, and
+> >   yet others print some comment in the header.
+> > - Most tests print out a header with two separator lines, but not the
+> >   HMM smoke test or the memfd_secret test, which only print one.
+> > - We had a redundant "exit" at the end, with all the boilerplate it's an
+> >   easy oversight.
+> >
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >  tools/testing/selftests/vm/run_vmtests.sh | 459 +++-------------------
+> >  1 file changed, 64 insertions(+), 395 deletions(-)
+>
+> Well that's nice.
+>
+> There were a bunch of changes already pending in this file but I think
+> with this patch, they become unneeded.  So I just reverted them all.
+> please double check?
+>
+>
+> --- a/tools/testing/selftests/vm/run_vmtests.sh~revert-1
+> +++ a/tools/testing/selftests/vm/run_vmtests.sh
+> @@ -162,32 +162,22 @@ echo "----------------------------------
+>  echo "running: gup_test -u # get_user_pages_fast() benchmark"
+>  echo "------------------------------------------------------"
+>  ./gup_test -u
+> -ret_val=$?
+> -
+> -if [ $ret_val -eq 0 ]; then
+> -       echo "[PASS]"
+> -elif [ $ret_val -eq $ksft_skip ]; then
+> -        echo "[SKIP]"
+> -        exitcode=$ksft_skip
+> -else
+> +if [ $? -ne 0 ]; then
+>         echo "[FAIL]"
+>         exitcode=1
+> +else
+> +       echo "[PASS]"
+>  fi
+>
+>  echo "------------------------------------------------------"
+>  echo "running: gup_test -a # pin_user_pages_fast() benchmark"
+>  echo "------------------------------------------------------"
+>  ./gup_test -a
+> -ret_val=$?
+> -
+> -if [ $ret_val -eq 0 ]; then
+> -       echo "[PASS]"
+> -elif [ $ret_val -eq $ksft_skip ]; then
+> -        echo "[SKIP]"
+> -        exitcode=$ksft_skip
+> -else
+> +if [ $? -ne 0 ]; then
+>         echo "[FAIL]"
+>         exitcode=1
+> +else
+> +       echo "[PASS]"
+>  fi
+>
+>  echo "------------------------------------------------------------"
+> @@ -195,16 +185,11 @@ echo "# Dump pages 0, 19, and 4096, usin
+>  echo "running: gup_test -ct -F 0x1 0 19 0x1000 # dump_page() test"
+>  echo "------------------------------------------------------------"
+>  ./gup_test -ct -F 0x1 0 19 0x1000
+> -ret_val=$?
+> -
+> -if [ $ret_val -eq 0 ]; then
+> -       echo "[PASS]"
+> -elif [ $ret_val -eq $ksft_skip ]; then
+> -        echo "[SKIP]"
+> -        exitcode=$ksft_skip
+> -else
+> +if [ $? -ne 0 ]; then
+>         echo "[FAIL]"
+>         exitcode=1
+> +else
+> +       echo "[PASS]"
+>  fi
+>
+>  echo "-------------------"
+> @@ -306,16 +291,11 @@ echo "-------------------"
+>  echo "running mremap_test"
+>  echo "-------------------"
+>  ./mremap_test
+> -ret_val=$?
+> -
+> -if [ $ret_val -eq 0 ]; then
+> -       echo "[PASS]"
+> -elif [ $ret_val -eq $ksft_skip ]; then
+> -        echo "[SKIP]"
+> -        exitcode=$ksft_skip
+> -else
+> +if [ $? -ne 0 ]; then
+>         echo "[FAIL]"
+>         exitcode=1
+> +else
+> +       echo "[PASS]"
+>  fi
+>
+>  echo "-----------------"
+> _
+>

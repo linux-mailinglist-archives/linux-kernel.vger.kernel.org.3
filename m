@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C7F50B710
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F85950B714
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447291AbiDVMOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
+        id S1378730AbiDVMQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445865AbiDVMO2 (ORCPT
+        with ESMTP id S237402AbiDVMQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 08:14:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C621117E;
-        Fri, 22 Apr 2022 05:11:35 -0700 (PDT)
+        Fri, 22 Apr 2022 08:16:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDEB1117E
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:13:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 788DD61FC0;
-        Fri, 22 Apr 2022 12:11:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61A49C385A4;
-        Fri, 22 Apr 2022 12:11:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B99561FE3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CA3C385A0;
+        Fri, 22 Apr 2022 12:13:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650629494;
-        bh=H3Qej2YHR+TlaLMizz7+0fGPZ3Mtnj1GowHYNjqgcNQ=;
+        s=korg; t=1650629630;
+        bh=j/lVI1HAP2t9wbTnL3WGWXv6TkG3VkokTfeFPNhHL5s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YA0QT/RZtRQe3Fz37wzFITM8RhMzmyY0o4QKfeFMYl/dMhe2o5ULX1sqm2E3DWM34
-         vkp633FqTdwW+cyxW8qJ5gld7X0nyy2LTpJP3AErBnC33NJnNKf16z7ReeEDEabr2+
-         Ecx5Ph4AWW4epwvoZTQUIZA+dmXGgbVP6sDJUZzI=
-Date:   Fri, 22 Apr 2022 14:11:31 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lungash <denizlungash@gmail.com>
-Cc:     Manish Chopra <manishc@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
-        Coiby Xu <coiby.xu@gmail.com>, netdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: qlge: Fix line wrapping
-Message-ID: <YmKbc9Ib9vXgDnBg@kroah.com>
-References: <YmJseHLyoAJWOGpc@kali-h6>
+        b=fSGSQoY+iOVPARNf1I8eswh5y4nOs1nqwaN0gMqn2IfM82G8MuJ1MC2H9P3eT8zeY
+         +4MGf/XNubekvgveiVQw/aqyn2xNXGJF09OJKS8GKNu9aJiYiQRP3D13+aZaQ0B3NZ
+         /O+4m4GbV/e6Mii84LxT0f75OharNsScFqExngbs=
+Date:   Fri, 22 Apr 2022 14:13:47 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de, sboyd@kernel.org,
+        rafael@kernel.org, johannes@sipsolutions.net
+Subject: Re: [PATCH] devcoredump : Serialize devcd_del work
+Message-ID: <YmKb+xWkfNGiYBHD@kroah.com>
+References: <1650364077-22694-1-git-send-email-quic_mojha@quicinc.com>
+ <11ff242b-195c-de75-d3d2-3e7b17a2ef3c@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmJseHLyoAJWOGpc@kali-h6>
+In-Reply-To: <11ff242b-195c-de75-d3d2-3e7b17a2ef3c@quicinc.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,69 +51,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 11:51:04AM +0300, Lungash wrote:
-> This patch fixes line wrapping following kernel coding style.
+
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
+
+A: No.
+Q: Should I include quotations after my reply?
+
+http://daringfireball.net/2007/07/on_top
+
+On Fri, Apr 22, 2022 at 03:33:08PM +0530, Mukesh Ojha wrote:
 > 
-> Task on TODO list
+> Hi All,
 > 
-> * fix weird line wrapping (all over, ex. the ql_set_routing_reg() calls in
->   qlge_set_multicast_list()).
+> Request you all the review comments on the fix of the described problem?
 > 
-> Signed-off-by: Lungash <denzlungash@gmail.com>
-
-We need a "full" name here, whatever you sign legal documents with.
-
-> ---
->  drivers/staging/qlge/qlge_main.c | 235 ++++++++++++++-----------------
->  1 file changed, 107 insertions(+), 128 deletions(-)
+> -Mukesh
 > 
-> diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
-> index 113a3efd12e9..309db00e0b22 100644
-> --- a/drivers/staging/qlge/qlge_main.c
-> +++ b/drivers/staging/qlge/qlge_main.c
-> @@ -499,77 +499,57 @@ static int qlge_set_routing_reg(struct qlge_adapter *qdev, u32 index, u32 mask,
->  
->  	switch (mask) {
->  	case RT_IDX_CAM_HIT:
-> -		{
-> -			value = RT_IDX_DST_CAM_Q |	/* dest */
-> -			    RT_IDX_TYPE_NICQ |	/* type */
-> -			    (RT_IDX_CAM_HIT_SLOT << RT_IDX_IDX_SHIFT);/* index */
-> -			break;
-> -		}
-> +		value = RT_IDX_DST_CAM_Q |	/* dest */
-> +			RT_IDX_TYPE_NICQ |	/* type */
-> +			(RT_IDX_CAM_HIT_SLOT << RT_IDX_IDX_SHIFT);/* index */
-> +		break;
+> 
+> On 4/19/2022 3:57 PM, Mukesh Ojha wrote:
 
-The original was fine, but yes, the {} can be removed, but that does not
-have to do with the TODO item here.  Please only do one type of fixup at
-a time.
+You sent this 3 days ago, please be realistic.
 
->  
-> -static int qlge_validate_flash(struct qlge_adapter *qdev, u32 size, const char *str)
-> +static int qlge_validate_flash(struct qlge_adapter *qdev, u32 size,
-> +			       const char *str)
-
-You just made this look worse, why?
-
-> -static int qlge_read_flash_word(struct qlge_adapter *qdev, int offset, __le32 *data)
-> +static int qlge_read_flash_word(struct qlge_adapter *qdev, int offset,
-> +				__le32 *data)
-
-Same here, why change the original?
-
-> @@ -2952,8 +2936,8 @@ static int qlge_start_rx_ring(struct qlge_adapter *qdev, struct rx_ring *rx_ring
->  		(rx_ring->cq_id * RX_RING_SHADOW_SPACE);
->  	u64 shadow_reg_dma = qdev->rx_ring_shadow_reg_dma +
->  		(rx_ring->cq_id * RX_RING_SHADOW_SPACE);
-> -	void __iomem *doorbell_area =
-> -		qdev->doorbell_area + (DB_PAGE_SIZE * (128 + rx_ring->cq_id));
-> +	void __iomem *doorbell_area = qdev->doorbell_area +
-> +		(DB_PAGE_SIZE * (128 + rx_ring->cq_id));
-
-This does not look better, why not put it all on one line?
-
+If you are concerned about the delay in patch reviews, please help us
+out and review patches sent to the list.  Otherwise, don't start to
+worry until at least after 2 weeks.
 
 thanks,
 

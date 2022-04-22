@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D98150C355
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8261750C2AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbiDVWTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S232345AbiDVWT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiDVWRB (ORCPT
+        with ESMTP id S233939AbiDVWTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:17:01 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394DA325835;
-        Fri, 22 Apr 2022 14:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650661719; x=1682197719;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=mnJlzMRuA2xcyrsUtKJwoToHi8lzCbaFKElkF30JqEg=;
-  b=H/Z0pzoPofmOjKpkUa8959IiuKO2bZjLxIzXQk9iyviy9e5N8EszG9QV
-   PQNBezj7tGLczxCn0spoW4s/QmdqhafSqJLi/0EjHydksgM1tD3e44UDK
-   vQPj3ZI9ZtZ/GW0zrY4ySw9Fk0eUdB6QmpuX+If4vU/Jc4vX/VAEREbfo
-   PIahefXkLVChPJReIitEzLz/EH5yRSYkIDBKj+cNuQyDfg4EjoglDTswK
-   /Vo6ns7Ow2h31eNLQAFLH9DrMpBkJlmYkTYWe15k6sUYfU8S+DvVVNpVc
-   PE5eCsVmKYcxwGTVQqguIu0S6oyGWKNDKcRLMBfeXGlFtarg3+k5wFy6G
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351236493"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="351236493"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 14:08:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="703707316"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Apr 2022 14:08:38 -0700
-Received: from [10.212.135.29] (kliang2-MOBL.ccr.corp.intel.com [10.212.135.29])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id C9B2C580A85;
-        Fri, 22 Apr 2022 14:08:35 -0700 (PDT)
-Message-ID: <c17dedde-6ba8-db9b-4827-32477f039764@linux.intel.com>
-Date:   Fri, 22 Apr 2022 17:08:34 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 2/5] perf: Add SNOOP_PEER flag to perf mem data struct
-Content-Language: en-US
-To:     Ali Saidi <alisaidi@amazon.com>
-Cc:     Nick.Forrington@arm.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
-        benh@kernel.crashing.org, german.gomez@arm.com,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        kjain@linux.ibm.com, leo.yan@linaro.org, lihuafei1@huawei.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org,
-        Andi Kleen <ak@linux.intel.com>
-References: <a96681b5-5532-470e-17d1-afe4c8d195ad@linux.intel.com>
- <20220422184934.29270-1-alisaidi@amazon.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220422184934.29270-1-alisaidi@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 18:19:00 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8F319F40A;
+        Fri, 22 Apr 2022 14:10:55 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e2afb80550so9927047fac.1;
+        Fri, 22 Apr 2022 14:10:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=TRqLMDnSfOMMJvwbNg5ERReNlJdUDaY3MArVueheMwI=;
+        b=GhYHRpqBvKKO9sr47sI+pTi77FehE9JxaYfyE+nY+wkkIBiiaGJYndwZn6XVLPyIGx
+         3RM8ASxcoZk6LGSw6OOI9z6pFToV9OJ+IOA+TAVMyJ6DO2DpCexJxCXtetgHGjgG/P/P
+         ZPw/a59OIdcf9K6BDyamVGSImjbzk3CZrBNFXx9pkamXFwEKAFNBIf40x8Va/34gOlzw
+         VrBCvQ0G4+V+VZJYCHaezLR09DCHmHNBhdI6NO+Bbu5mXqVK6DxfHblbPDIzw5hckn9P
+         dFlzguZErABcuryRHr5ws7cYDNv0uWpwzhHKW0NP2kcb0o881Xttz9YjjgreVm4TtKQH
+         HgUw==
+X-Gm-Message-State: AOAM530HqPZqGxoAUpuVc7SY9HBPFaxvLs/EeUULLB5KOTT+3Rqd3oJb
+        GVbdO6DsobKLBAoLUWj+gg==
+X-Google-Smtp-Source: ABdhPJwCauAsquMdMwIxtueLYrwWVUnabgWI6OXGiVbx2Y27f+yF57TQi+4z5TpOQRa/HCe7vuQsXw==
+X-Received: by 2002:a05:6870:79a:b0:e9:109a:1391 with SMTP id en26-20020a056870079a00b000e9109a1391mr800216oab.105.1650661855024;
+        Fri, 22 Apr 2022 14:10:55 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bf26-20020a056808191a00b00324f4d15aa1sm667603oib.12.2022.04.22.14.10.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 14:10:54 -0700 (PDT)
+Received: (nullmailer pid 2784286 invoked by uid 1000);
+        Fri, 22 Apr 2022 21:10:47 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     icenowy@outlook.com
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-input@vger.kernel.org, Icenowy Zheng <icenowy@sipeed.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org
+In-Reply-To:  <BYAPR20MB2472D625C876D97E95CB6078BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+References:  <BYAPR20MB2472D625C876D97E95CB6078BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+Subject: Re: [PATCH 1/2] dt-bindings: input: sun4i-lradc-keys: add R329 LRADC binding
+Date:   Fri, 22 Apr 2022 16:10:47 -0500
+Message-Id: <1650661847.262817.2784285.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/22/2022 2:49 PM, Ali Saidi wrote:
-> On Wed, 20 Apr 2022 18:43:28, Kan Liang wrote:
->> On 4/8/2022 3:53 PM, Ali Saidi wrote:
->>> Add a flag to the perf mem data struct to signal that a request caused a
->>> cache-to-cache transfer of a line from a peer of the requestor and
->>> wasn't sourced from a lower cache level.
->>
->> It sounds similar to the Forward state. Why can't the
->> PERF_MEM_SNOOPX_FWD be reused?
+On Sat, 23 Apr 2022 00:07:43 +0800, icenowy@outlook.com wrote:
+> From: Icenowy Zheng <icenowy@sipeed.com>
 > 
-> Is there a definition of SNOOPX_FWD i can refer to? Happy to use this instead if
-> the semantics align between architectures.
+> R329 has similar LRADC with previous Allwinner SoCs, but with bus clock
+> and reset.
+> 
+> Add binding for it.
+> 
+> Signed-off-by: Icenowy Zheng <icenowy@sipeed.com>
+> ---
+>  .../input/allwinner,sun4i-a10-lradc-keys.yaml | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
 
-+ Andi
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-As my understanding, the SNOOPX_FWD means the Forward state, which is a 
-non-modified (clean) cache-to-cache copy.
-https://en.wikipedia.org/wiki/MESIF_protocol
+yamllint warnings/errors:
 
-Thanks,
-Kan
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml: then:properties:required: ['clocks', 'resets'] is not of type 'object', 'boolean'
+	from schema $id: http://json-schema.org/draft-07/schema#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml: ignoring, error in schema: then: properties: required
+Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.example.dtb:0:0: /example-0/lradc@1c22800: failed to match any schema with compatible: ['allwinner,sun4i-a10-lradc-keys']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

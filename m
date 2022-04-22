@@ -2,118 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8302050BFAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B9B50BF88
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237775AbiDVSH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 14:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        id S233537AbiDVSIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 14:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235673AbiDVSCh (ORCPT
+        with ESMTP id S236328AbiDVSGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 14:02:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F6FF111142;
-        Fri, 22 Apr 2022 10:59:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E78851FB;
-        Fri, 22 Apr 2022 10:59:13 -0700 (PDT)
-Received: from bogus (unknown [10.57.11.83])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F04AE3F73B;
-        Fri, 22 Apr 2022 10:59:11 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 18:59:07 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] dt-bindings: xen: Add xen,scmi-devid property
- description for SCMI
-Message-ID: <20220422175907.5i5ic443nqdaqtxx@bogus>
-References: <cover.1646639462.git.oleksii_moisieiev@epam.com>
- <5859bb58c8caf87985deb84d7f6bfc8182bd6a59.1646639462.git.oleksii_moisieiev@epam.com>
- <Yie47a4lqXjVzgxI@robh.at.kernel.org>
- <20220316164619.GA3489934@EPUAKYIW015D>
- <YjIzeyNoWhVAY5HK@bogus>
- <alpine.DEB.2.22.394.2203181644560.2910984@ubuntu-linux-20-04-desktop>
- <YjmvFZOqAcnoBcR+@bogus>
- <20220322192146.GA145617@EPUAKYIW015D>
- <20220323105422.2t726d5wbr5h2ksl@bogus>
- <20220328085202.GA1192834@EPUAKYIW015D>
+        Fri, 22 Apr 2022 14:06:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED4811838B
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:03:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 731D6B831F6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 18:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F166FC385A0;
+        Fri, 22 Apr 2022 18:03:01 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 19:02:58 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        vbabka@suse.cz, penberg@kernel.org, roman.gushchin@linux.dev,
+        iamjoonsoo.kim@lge.com, rientjes@google.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v2] mm: make minimum slab alignment a runtime property
+Message-ID: <YmLt0s/KdSJlSSPk@arm.com>
+References: <20220421211549.3884453-1-pcc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220328085202.GA1192834@EPUAKYIW015D>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220421211549.3884453-1-pcc@google.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 08:52:04AM +0000, Oleksii Moisieiev wrote:
+On Thu, Apr 21, 2022 at 02:15:48PM -0700, Peter Collingbourne wrote:
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 373b3ef99f4e..80e517593372 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -201,21 +201,33 @@ void kmem_dump_obj(void *object);
+>  #endif
+>  
+>  /*
+> - * Setting ARCH_SLAB_MINALIGN in arch headers allows a different alignment.
+> + * Setting ARCH_SLAB_MIN_MINALIGN in arch headers allows a different alignment.
+>   * Intended for arches that get misalignment faults even for 64 bit integer
+>   * aligned buffers.
+>   */
+> -#ifndef ARCH_SLAB_MINALIGN
+> -#define ARCH_SLAB_MINALIGN __alignof__(unsigned long long)
+> +#ifndef ARCH_SLAB_MIN_MINALIGN
+> +#define ARCH_SLAB_MIN_MINALIGN __alignof__(unsigned long long)
+> +#endif
 
-[...]
+Sorry, only a drive-by comment, I'll look at the arm64 parts next week.
+I've seen it mentioned in the first version, what's the point of MIN_MIN
+and not just MIN?
 
->
-> Based on what Sudeep have suggested, I think we may think about the approach
-> of the Generic Linux device-id, which can be used for SCMI needs as the
-> device id.
->
-> I have some ideas, how the generic device_id can be implemented.
-> From my understanding - the Generic Device Id is the unique identifier, which
-> can be set for the Device node in the Device-tree. This identifier is
-> already set for each node by DTC and called phandle.
->
-
-IIUC phandle is used as reference to the device node in the device tree
-and it is generated by DTC. I assume we can't use that for the "device ID"
-being discussed under the $subject.
-
-> I've tried setting phandle for the device-nodes, such as:
->
-> &usb0 {
->     /* .... */
-> 	phandle = <0x10>;
-> }
->
-> DTC seems to work properly with this constant phandle. All links works
-> for usb0 and all nodes, which doesn't have constant phandle receives
-> calculated phandle during device-tree compilation.
->
-
-Indeed.
-
-> Also DTC will fail if I set 2 same phandle values in different
-> device nodes. So we can rely on phandle as on the unique device id.
->
-> What do you think about using phandle to set the device_id?
->
-> The alternative way I see for now is to itroduce additional property to SCMI
-> node, which includes list of the device-ids, such as:
->
-
-I don't like this idea as this means every user of the "device ID" property
-will now have to add such a list which sounds like a duplication to me.
-
-> scmi {
-> 	compatible = "arm,scmi-smc";
-> 	/* ... */
-> 	device-ids = <&usb0 17,
-> 				  &usb1 42,
-> 				  ....
-> 				>;
-> }
->
-> Looking forward for your opinion.
-> Maybe you can share some ideas about how the device-id can be
-> implemented?
-
---
-Regards,
-Sudeep
+-- 
+Catalin

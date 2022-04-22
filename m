@@ -2,145 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557AB50BD8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CC550BD9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449853AbiDVQyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S1449922AbiDVQyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444743AbiDVQyD (ORCPT
+        with ESMTP id S1449871AbiDVQyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:54:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E3755F276
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:51:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650646267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RP65Uj7WP6EZyZBfeufvI+9bp/deJnrcdnu1tws0K2A=;
-        b=Sh+RI4qzipwvz36dpAQno5dGL6bHP5Q/1mVC/ZfMmAmGmFFbVM+TwpMa6S3KHgapEzTWt/
-        U5hnDs1CJWiJn/34X0jmA+GDFugOUrqST+39vRBnlAVea3TvdvXPN+buD8jdfEuqvCyGG2
-        mil2XxTZQ6Fak5AS5fxOFkF6vWJSHuo=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-VIR_kJDlMziqi_bD4qr2Lg-1; Fri, 22 Apr 2022 12:51:06 -0400
-X-MC-Unique: VIR_kJDlMziqi_bD4qr2Lg-1
-Received: by mail-qt1-f200.google.com with SMTP id r16-20020ac87950000000b002f34f162c75so3067048qtt.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:51:06 -0700 (PDT)
+        Fri, 22 Apr 2022 12:54:20 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0512D5F8DE;
+        Fri, 22 Apr 2022 09:51:26 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id y32so15294134lfa.6;
+        Fri, 22 Apr 2022 09:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=99hspxuLODhQpov2wjpLVe38h5x1eJYakvWm7x8e6iI=;
+        b=F23kF0eGH2ZVB+UGEjmW9/zKmFnzoAMLghAwzApvwMCcMhtBG9yJPpY4U1QzTxgJqh
+         dlRXZHbEg3zZ7nY0RRV+8fUOu1XkZkXeqKyrW16n02fiZBATqOd2CzVkTaqbBEsKlX+6
+         r6aK5PoP5QLM42PK/aLq8s/VUKQChEmq/ezbmXtxZxY1a/RDaoMGUVuns/+Ft+exgVHV
+         qbfu1h52HdfRiNt9rNvFnhuiPOsYt6N8H7gak3I0DBjmtU3G2m7PdaKAunzdkWOdWVMV
+         ovHh6R/nKxeNIZ67iu83BqdSWGokrQ3h7RK4/vcpMr2+xi4nqmoXe2TQmCa8LS8q13oq
+         2CTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RP65Uj7WP6EZyZBfeufvI+9bp/deJnrcdnu1tws0K2A=;
-        b=UfuyrPRWxePWrShY1Ax3UJdMaL6BOiGZkk222PQQv7Mtb0T6VtCu0hIeQLd1BIHEsv
-         dAdrlZTB3HpbqadObBLiV6kVnhkYK3MEVe4uFMxWBKF31i0jzwAp43ZUUL/oAwNRyjIJ
-         WTGbUPdOJZLL21laizsu9Re6mQD+s7hy3rrkfckHuNZEq9YzYyIhLUXhu+xCVpyJsvxQ
-         8vDVcdJ9u2FqkyZ0vO92D9zSAPQOHZx/+DzDPX78rdttUK8ut0JQWCe4YIBHMm9SQjoe
-         uXH9Jb4ol7H5yaihUeIDfjOVqdStbPD7RHsRhbas80UAHttaR2dXdtgSrVatGsbz+Ba2
-         CS3A==
-X-Gm-Message-State: AOAM531gK04+RprRIyYhlaHWAsXSr6hDCOQSYPoDPeKNL8nxF2RZO9Rs
-        qdE8BlXwcz3lAwgz98Nz/cAJIHKGsPwx5GaT0hVqXA56bGWiYyheUlvld3iE2qb7ceX5sNCEnJ5
-        GcbzeTePXzp85aYNjUoI3jtnX
-X-Received: by 2002:a37:6181:0:b0:69e:7b8a:e72c with SMTP id v123-20020a376181000000b0069e7b8ae72cmr3255238qkb.388.1650646265968;
-        Fri, 22 Apr 2022 09:51:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzGjpvtzYiKxHawYsICXnZfMhkhwABbqQn0p9KPy6KU0/ydqClvRwXk3Olfd1QtTvoihYpO3g==
-X-Received: by 2002:a37:6181:0:b0:69e:7b8a:e72c with SMTP id v123-20020a376181000000b0069e7b8ae72cmr3255217qkb.388.1650646265599;
-        Fri, 22 Apr 2022 09:51:05 -0700 (PDT)
-Received: from halaneylaptop (068-184-200-203.res.spectrum.com. [68.184.200.203])
-        by smtp.gmail.com with ESMTPSA id e16-20020ac85990000000b002f33eb4523asm1542421qte.18.2022.04.22.09.51.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 09:51:04 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 11:51:01 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        avri.altman@wdc.com, alim.akhtar@samsung.com,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] scsi: ufs: qcom: Simplify handling of devm_phy_get()
-Message-ID: <20220422165101.uy23jf3conuxr2iw@halaneylaptop>
-References: <20220422132140.313390-1-manivannan.sadhasivam@linaro.org>
- <20220422132140.313390-3-manivannan.sadhasivam@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422132140.313390-3-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=99hspxuLODhQpov2wjpLVe38h5x1eJYakvWm7x8e6iI=;
+        b=6FY5FYnS1St3K6vtckp1HCF1HGA1h0gC6c3GI822TaqBEt8EaDzH3TVjK0adfUOrpU
+         N9Kl6EK/7nsZ3YV2J5O3ILtHk6KP21R1wP5DPrIBejLHmVAPHeRm028ZWM2SmLED3sh+
+         x572An9S5Il2udEBGz35WI6rg9KB/j/3Y269m8uEcRFcOwq6/ywtYCpj5/mH3Mc1z6Qx
+         1Ebr/EecZXzsa8wE38ZAj2BV6FTa6GoRZGOCzGhaCO8mkMsnoEz+S2VrdWV+Wxi90rhy
+         Uywi66LCGs7PFxsfKmfwet8vJZYoXajEoyrLjydT2pVw9AtuavFuql2IchOH3PoEY7/e
+         5XHA==
+X-Gm-Message-State: AOAM530eKJjkjhIWXv10iTEK+8ecxWsWc/DPqGLjkcs/91PzgSgPLIRK
+        dlqmigfP0qJpRAMUCGezkn0=
+X-Google-Smtp-Source: ABdhPJxHzbye4XRLnSvBlQObswNpXjTS3XrDqE1jJLqg0maTMcfec1EnyxM49kxDQRnXmTUAz/llKg==
+X-Received: by 2002:a05:6512:499:b0:46f:d419:a19b with SMTP id v25-20020a056512049900b0046fd419a19bmr3576799lfq.654.1650646284247;
+        Fri, 22 Apr 2022 09:51:24 -0700 (PDT)
+Received: from otyshchenko.router ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id n2-20020a056512310200b0046e2f507a3asm279742lfb.167.2022.04.22.09.51.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Apr 2022 09:51:23 -0700 (PDT)
+From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
+To:     xen-devel@lists.xenproject.org,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: [PATCH V1 4/6] dt-bindings: Add xen,dev-domid property description for xen-grant DMA ops
+Date:   Fri, 22 Apr 2022 19:51:01 +0300
+Message-Id: <1650646263-22047-5-git-send-email-olekstysh@gmail.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
+References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 06:51:37PM +0530, Manivannan Sadhasivam wrote:
-> There is no need to call devm_phy_get() if ACPI is used, so skip it.
-> The "host->generic_phy" pointer should already be NULL due to the kzalloc,
-> so no need to set it NULL again.
-> 
-> Also, don't print the error message in case of -EPROBE_DEFER and return
-> the error code directly.
-> 
-> While at it, also remove the comment that has no relationship with
-> devm_phy_get().
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/scsi/ufs/ufs-qcom.c | 26 +++++---------------------
->  1 file changed, 5 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-> index 5db0fd922062..5f0a8f646eb5 100644
-> --- a/drivers/scsi/ufs/ufs-qcom.c
-> +++ b/drivers/scsi/ufs/ufs-qcom.c
-> @@ -1022,28 +1022,12 @@ static int ufs_qcom_init(struct ufs_hba *hba)
->  		err = 0;
->  	}
->  
-> -	/*
-> -	 * voting/devoting device ref_clk source is time consuming hence
-> -	 * skip devoting it during aggressive clock gating. This clock
-> -	 * will still be gated off during runtime suspend.
-> -	 */
-> -	host->generic_phy = devm_phy_get(dev, "ufsphy");
-> -
-> -	if (host->generic_phy == ERR_PTR(-EPROBE_DEFER)) {
-> -		/*
-> -		 * UFS driver might be probed before the phy driver does.
-> -		 * In that case we would like to return EPROBE_DEFER code.
-> -		 */
-> -		err = -EPROBE_DEFER;
-> -		dev_warn(dev, "%s: required phy device. hasn't probed yet. err = %d\n",
-> -			__func__, err);
-> -		goto out_variant_clear;
-> -	} else if (IS_ERR(host->generic_phy)) {
-> -		if (has_acpi_companion(dev)) {
-> -			host->generic_phy = NULL;
-> -		} else {
-> +	if (!has_acpi_companion(dev)) {
-> +		host->generic_phy = devm_phy_get(dev, "ufsphy");
-> +		if (IS_ERR(host->generic_phy)) {
->  			err = PTR_ERR(host->generic_phy);
-> -			dev_err(dev, "%s: PHY get failed %d\n", __func__, err);
-> +			if (err != -EPROBE_DEFER)
-> +				dev_err(dev, "Failed to get PHY: %d\n", err);
+From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-Risking sounding like a bad broken record, but I think this too could
-use dev_err_probe().
+Introduce Xen specific binding for the virtualized device (e.g. virtio)
+to be used by Xen grant DMA-mapping layer in the subsequent commit.
 
-Looks good to me otherwise!
+This binding indicates that Xen grant mappings scheme needs to be
+enabled for the device which DT node contains that property and specifies
+the ID of Xen domain where the corresponding backend resides. The ID
+(domid) is used as an argument to the grant mapping APIs.
 
->  			goto out_variant_clear;
->  		}
->  	}
-> -- 
-> 2.25.1
-> 
+This is needed for the option to restrict memory access using Xen grant
+mappings to work which primary goal is to enable using virtio devices
+in Xen guests.
+
+Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+---
+Changes RFC -> V1:
+   - update commit subject/description and text in description
+   - move to devicetree/bindings/arm/
+---
+ .../devicetree/bindings/arm/xen,dev-domid.yaml     | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
+
+diff --git a/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
+new file mode 100644
+index 00000000..ef0f747
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
+@@ -0,0 +1,37 @@
++# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/xen,dev-domid.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Xen specific binding for the virtualized device (e.g. virtio)
++
++maintainers:
++  - Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
++
++select: true
++
++description:
++  This binding indicates that Xen grant mappings scheme needs to be enabled
++  for that device and specifies the ID of Xen domain where the corresponding
++  device (backend) resides. This is needed for the option to restrict memory
++  access using Xen grant mappings to work.
++
++properties:
++  xen,dev-domid:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      The domid (domain ID) of the domain where the device (backend) is running.
++
++additionalProperties: true
++
++examples:
++  - |
++    virtio_block@3000 {
++            compatible = "virtio,mmio";
++            reg = <0x3000 0x100>;
++            interrupts = <41>;
++
++            /* The device is located in Xen domain with ID 1 */
++            xen,dev-domid = <1>;
++    };
+-- 
+2.7.4
 

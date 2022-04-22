@@ -2,37 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEE050BA06
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D464F50BA04
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448593AbiDVO0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
+        id S1448623AbiDVO0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358070AbiDVO0i (ORCPT
+        with ESMTP id S1448616AbiDVO0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:26:38 -0400
+        Fri, 22 Apr 2022 10:26:41 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A231D57B13;
-        Fri, 22 Apr 2022 07:23:40 -0700 (PDT)
-X-UUID: b4f22b128d5b48559cad4c259a8fd1b4-20220422
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6163D5AA49;
+        Fri, 22 Apr 2022 07:23:44 -0700 (PDT)
+X-UUID: 8a785d6043ce4fb3898401f7f37d1ff4-20220422
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:287b2567-2a8d-4441-84a7-6d974afe7739,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-META: VersionHash:faefae9,CLOUDID:50e3a1f0-da02-41b4-b6df-58f4ccd36682,C
+X-CID-O-INFO: VERSION:1.1.4,REQID:ab7e02b9-fa07-4d8a-a3a1-9f9f26707acc,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:5
+X-CID-META: VersionHash:faefae9,CLOUDID:67e3a1f0-da02-41b4-b6df-58f4ccd36682,C
         OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: b4f22b128d5b48559cad4c259a8fd1b4-20220422
+X-UUID: 8a785d6043ce4fb3898401f7f37d1ff4-20220422
 Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
         (envelope-from <jianjun.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2036729730; Fri, 22 Apr 2022 22:23:35 +0800
+        with ESMTP id 759061426; Fri, 22 Apr 2022 22:23:37 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 22 Apr 2022 22:23:34 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 22 Apr 2022 22:23:35 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Apr 2022 22:23:33 +0800
+ Transport; Fri, 22 Apr 2022 22:23:34 +0800
 From:   Jianjun Wang <jianjun.wang@mediatek.com>
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
@@ -52,61 +53,116 @@ CC:     Wei-Shun Chang <weishunc@google.com>,
         <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
         <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
         <jian.yang@mediatek.com>
-Subject: [PATCH v7 0/2] phy: mediatek: Add PCIe PHY driver
-Date:   Fri, 22 Apr 2022 22:23:29 +0800
-Message-ID: <20220422142331.17173-1-jianjun.wang@mediatek.com>
+Subject: [PATCH v7 1/2] dt-bindings: phy: mediatek: Add YAML schema for PCIe PHY
+Date:   Fri, 22 Apr 2022 22:23:30 +0800
+Message-ID: <20220422142331.17173-2-jianjun.wang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220422142331.17173-1-jianjun.wang@mediatek.com>
+References: <20220422142331.17173-1-jianjun.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These series patches add support for PCIe PHY driver on MediaTek chipsets.
+Add YAML schema documentation for PCIe PHY on MediaTek chipsets.
 
-Changes in v7:
-1. Add bitfield.h header to fix the build error on non-arm64 platforms.
-
-Changes in v6:
-1. Remove unnecessary header files;
-2. Use FILELD_PREP in bitfield.h to set value.
-
-Changes in v5:
-1. Fix typo in kerneldoc: "eFues" => "eFuse".
-
-Changes in v4:
-1. Fix no return when calling dev_err_probe.
-
-Changes in v3:
-1. Add introductions for structure members;
-2. Add SoC dependent data;
-3. Dynamically allocate efuse data;
-4. Check return value if it's an -EPROBE_DEFER.
-
-Changes in v2:
-1. Add specific compatible name;
-2. Read NVMEM data at probe time;
-3. Fix typos.
-
-Jianjun Wang (2):
-  dt-bindings: phy: mediatek: Add YAML schema for PCIe PHY
-  phy: mediatek: Add PCIe PHY driver
-
- .../bindings/phy/mediatek,pcie-phy.yaml       |  75 +++++
- drivers/phy/mediatek/Kconfig                  |  11 +
- drivers/phy/mediatek/Makefile                 |   1 +
- drivers/phy/mediatek/phy-mtk-pcie.c           | 267 ++++++++++++++++++
- 4 files changed, 354 insertions(+)
+Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../bindings/phy/mediatek,pcie-phy.yaml       | 75 +++++++++++++++++++
+ 1 file changed, 75 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
- create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
 
+diff --git a/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+new file mode 100644
+index 000000000000..422750cc4121
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+@@ -0,0 +1,75 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/mediatek,pcie-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek PCIe PHY
++
++maintainers:
++  - Jianjun Wang <jianjun.wang@mediatek.com>
++
++description: |
++  The PCIe PHY supports physical layer functionality for PCIe Gen3 port.
++
++properties:
++  compatible:
++    const: mediatek,mt8195-pcie-phy
++
++  reg:
++    maxItems: 1
++
++  reg-names:
++    items:
++      - const: sif
++
++  "#phy-cells":
++    const: 0
++
++  nvmem-cells:
++    maxItems: 7
++    description:
++      Phandles to nvmem cell that contains the efuse data, if unspecified,
++      default value is used.
++
++  nvmem-cell-names:
++    items:
++      - const: glb_intr
++      - const: tx_ln0_pmos
++      - const: tx_ln0_nmos
++      - const: rx_ln0
++      - const: tx_ln1_pmos
++      - const: tx_ln1_nmos
++      - const: rx_ln1
++
++  power-domains:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - "#phy-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    phy@11e80000 {
++        compatible = "mediatek,mt8195-pcie-phy";
++        #phy-cells = <0>;
++        reg = <0x11e80000 0x10000>;
++        reg-names = "sif";
++        nvmem-cells = <&pciephy_glb_intr>,
++                      <&pciephy_tx_ln0_pmos>,
++                      <&pciephy_tx_ln0_nmos>,
++                      <&pciephy_rx_ln0>,
++                      <&pciephy_tx_ln1_pmos>,
++                      <&pciephy_tx_ln1_nmos>,
++                      <&pciephy_rx_ln1>;
++        nvmem-cell-names = "glb_intr", "tx_ln0_pmos",
++                           "tx_ln0_nmos", "rx_ln0",
++                           "tx_ln1_pmos", "tx_ln1_nmos",
++                           "rx_ln1";
++        power-domains = <&spm 2>;
++    };
 -- 
 2.18.0
 

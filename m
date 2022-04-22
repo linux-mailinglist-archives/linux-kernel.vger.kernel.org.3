@@ -2,74 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823A950B13D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FAAD50B13A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444721AbiDVHQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
+        id S1444719AbiDVHSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444672AbiDVHQ2 (ORCPT
+        with ESMTP id S1444611AbiDVHST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:16:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CAF51328;
-        Fri, 22 Apr 2022 00:13:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BD5DB82A97;
-        Fri, 22 Apr 2022 07:13:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0732C385A0;
-        Fri, 22 Apr 2022 07:13:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650611610;
-        bh=2eP5N2am4/TObX0OiEiogWXKWvfr8XKlaOBXPQ079Jg=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=ZKi7veBzeQJLN31agqjva9zjBCjEydINToeZWCJvlJZ1ivwGPyMAhDztg8spzo+iO
-         kI4s9RHZuEqg4FceSlNiEnfh0sT8jFX8FgLDYsQbLks5Pp+VTBAN/mY5sbxXQaibwy
-         diTKXcZxTM5Tc+Y2ohQG3O7LDwEQhMVJ4A5VN03Gspm8zEGHWQe4Fzx1Cd3QZMEz3c
-         VwvPq77RwGFkRDgvbrf1+/ZbUdYQG0MKyvNWEIUZBCkxwGGoZTQFHrrUwoaUvmQz+g
-         cT2A4a/KAegxLhPkN6QdUiJfuFL0/I0RZgJrZ+JnYMRc/Sigc/637GAF4mkYj7ItNG
-         yvtnf+XY4cAog==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     yunbo yu <yuyunbo519@gmail.com>
-Cc:     nbd@nbd.name, lorenzo@kernel.org, ryder.lee@mediatek.com,
-        shayne.chen@mediatek.com, sean.wang@mediatek.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        matthias.bgg@gmail.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] =?utf-8?B?bXQ3Nu+8mm10NzYwM++8mg==?= move
- spin_lock_bh() to spin_lock()
-References: <20220422060723.424862-1-yuyunbo519@gmail.com>
-        <87y1zxmysz.fsf@kernel.org>
-        <CAD55h6Z0GfEMu25_1PXavRA9SGJ2zZC4-y=6Bo5+Fz=99J6_mg@mail.gmail.com>
-Date:   Fri, 22 Apr 2022 10:13:24 +0300
-In-Reply-To: <CAD55h6Z0GfEMu25_1PXavRA9SGJ2zZC4-y=6Bo5+Fz=99J6_mg@mail.gmail.com>
-        (yunbo yu's message of "Fri, 22 Apr 2022 14:27:22 +0800")
-Message-ID: <87o80tmvzf.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 22 Apr 2022 03:18:19 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E7250450
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:15:26 -0700 (PDT)
+Received: from pop-os.home ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id hnVin0NUEYnCyhnVjn2j0K; Fri, 22 Apr 2022 09:15:25 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 22 Apr 2022 09:15:25 +0200
+X-ME-IP: 86.243.180.246
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Scott Cheloha <cheloha@linux.vnet.ibm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] drivers/base/memory: Fix a reference counting issue in __add_memory_block()
+Date:   Fri, 22 Apr 2022 09:15:21 +0200
+Message-Id: <d44c63d78aafe844f920dc02ad6af25acc448fcf.1650611702.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-yunbo yu <yuyunbo519@gmail.com> writes:
+There is no point in doing put_device()/device_unregister() on a
+device that has just been registered a few lines above. This will lead to
+a double reference decrement.
 
-> Thanks for the tip! I will make the patch v2
+I guess that this put_device()/device_unregister() is a cut'n'paste from
+remove_memory_block() (i.e. unregister_memory() at the time being) which
+does need it.
 
-Another tip for you, please don't use HTML :)
+Fixes: 4fb6eabf1037 ("drivers/base/memory.c: cache memory blocks in xarray to accelerate lookup")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/base/memory.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches#do_not_send_html_mail
-
+diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+index 7222ff9b5e05..084d67fd55cc 100644
+--- a/drivers/base/memory.c
++++ b/drivers/base/memory.c
+@@ -636,10 +636,9 @@ static int __add_memory_block(struct memory_block *memory)
+ 	}
+ 	ret = xa_err(xa_store(&memory_blocks, memory->dev.id, memory,
+ 			      GFP_KERNEL));
+-	if (ret) {
+-		put_device(&memory->dev);
++	if (ret)
+ 		device_unregister(&memory->dev);
+-	}
++
+ 	return ret;
+ }
+ 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.32.0
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

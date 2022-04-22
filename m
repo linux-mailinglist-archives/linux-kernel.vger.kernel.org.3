@@ -2,426 +2,396 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07FA050BA34
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EB550BA3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448716AbiDVOj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
+        id S1448728AbiDVOjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245041AbiDVOjV (ORCPT
+        with ESMTP id S1448508AbiDVOjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:39:21 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280605BD1D;
-        Fri, 22 Apr 2022 07:36:27 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23MEYp7Q004664;
-        Fri, 22 Apr 2022 16:36:18 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=3E2c39yb1aGbUTxvLFXeT2bxlC2OY8EbvTcWhBmFb/Q=;
- b=ONG31MPr6xmPIGOCiwmLsIgdEPkWMIX170wNkG5tkbD0or2f4L1fb0zHGznnjkPK7dYy
- zuYR8qXrCbQ/IjgY5UpvlxeVzfLCF+MtdGQKvegqGtHx0mmO6VSp2EWzc5lIqR3vb7is
- qdKNwXxirmw2zTwcbIvY6Zj9/KXC0g0FNHc8ilO1ye9FoMGnPGYoxuFapoGZZ2/upxDg
- pPWcyHie2iE/pIwsACjwSbg7Cq2y9sB3kdyWbdmM5Qlgo6DIOZxS9wXyPecmu/a8a6qB
- CjbbMTjHYHtSNVMmk85dVgIOeDMh0w9Y1BS0ot3Ix3ujgcauAhtkLIhxLg/BkCCDmf93 xA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ffpqe9qkt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 16:36:18 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2C3DC10002A;
-        Fri, 22 Apr 2022 16:36:18 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2309E22D172;
-        Fri, 22 Apr 2022 16:36:18 +0200 (CEST)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 22 Apr 2022 16:36:17
- +0200
-From:   Fabien Dessenne <fabien.dessenne@foss.st.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>
-CC:     Fabien Dessenne <fabien.dessenne@foss.st.com>
-Subject: [PATCH] pinctrl: stm32: improve bank clocks management
-Date:   Fri, 22 Apr 2022 16:36:08 +0200
-Message-ID: <20220422143608.226580-1-fabien.dessenne@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Apr 2022 10:39:48 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F368B5BD14
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:36:53 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id c23so11299673plo.0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rF/C3AMO9J9Xcm0GDkakDkZ6D9mvu8tIygaqpNdvpMU=;
+        b=guyS8Iw2jNo3NG/fqFX/2t3DskAnRGI89PzemXKM9OIkNum3FWKypc6gOar9BzusRO
+         BC9cfMrY7u8QAc3BRRpsvtdXuSyLihUliWYKmfqSSrbgLB6VX/+K3a6Z8bEfsYE3WtKA
+         b9Q1utlzoiGyt7MOVXJN1pdnMXvHNVM4aCDDUVwwYJ/MzIHFKS81PvNS881Q1syj1ybp
+         YnsRkp5j3MzbAnX9oeME9lNM/ogjMkUzxwkGH3GtZJWxO1+324Y+bZd3EkT1fRqp1JPp
+         7ebPoEp7dqQkAhfpsle9S+goqQbY5m6hON75jlHhT/fQUVQY9nAkVjl+GkrytzlxBKDo
+         Txug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rF/C3AMO9J9Xcm0GDkakDkZ6D9mvu8tIygaqpNdvpMU=;
+        b=K4m66gVcGZC5XHxxGkso+2Hmjku6qwUitlASbD+ekIbxyWbZ5cu/XNFnp9D7PUlHOw
+         BZEIMYosktyZX3RvUBK8MtenmcgrW0eeg7Kjb1bq3s6aG2zsPV2aSsuAcidOeAAcKLH6
+         5Zr0TFKh42qQVOmFPIBD1w3i7k+RzmJV+f9/N23+CYqfJovn9rO9SBnB8v0MTira6eA9
+         K5zJ/pCKjJ6LpzGpjp0qAq+GDs2aJB+iIcOfWIF8Qxoh0Uq4Df3Eh4lSQd/E6RuBJXFa
+         dHCNksTCMToiGKr4u5HBGsJ+SaTOKOpN/LOFUlul8Lr/0cYytRJZfj+2MljLRyEUJQGQ
+         r6VQ==
+X-Gm-Message-State: AOAM5339O9D9AOzqCdEqikA2Bqe5Ur9TlJtor1xpBSti3wO+pdi3lZEz
+        ZkfzanPTv285DtltVAD0fHoWM9+nKDGgSQf8lb4AgQ==
+X-Google-Smtp-Source: ABdhPJx+8awO7N+ykm6cx8j9n6uD/I784MCgtzeksoaz1FhjzdeJ7TXPoru3pfF1uMyrXsf4vRQf1SiSrI7SDFDpyW8=
+X-Received: by 2002:a17:90a:6501:b0:1ca:a7df:695c with SMTP id
+ i1-20020a17090a650100b001caa7df695cmr5785713pjj.152.1650638213282; Fri, 22
+ Apr 2022 07:36:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-22_04,2022-04-22_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220319151016.983348-1-alvin@pqrs.dk> <20220319151016.983348-3-alvin@pqrs.dk>
+In-Reply-To: <20220319151016.983348-3-alvin@pqrs.dk>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Fri, 22 Apr 2022 16:36:42 +0200
+Message-ID: <CAG3jFyu64Hq=8Jh0Gj=H+tojBmERcjCZ-tq6PoYb9yrfar7iFw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] drm: bridge: adv7511: use non-legacy mode for CEC RX
+To:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of enabling/disabling the clock at each IO configuration update,
-just keep the clock enabled from the probe.
-This makes things simpler and more efficient (e.g. the time required to
-toggle an output IO is drastically decreased) without significantly
-increasing the power consumption.
+On Sat, 19 Mar 2022 at 16:10, Alvin =C5=A0ipraga <alvin@pqrs.dk> wrote:
+>
+> From: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+>
+> The ADV7511 family of bridges supports two modes for CEC RX: legacy and
+> non-legacy mode. The only difference is whether the chip uses a single
+> CEC RX buffer, or uses all three available RX buffers. Currently the
+> adv7511 driver uses legacy mode.
+>
+> While debugging a stall in CEC RX on an ADV7535, we reached out to
+> Analog Devices, who suggested to use non-legacy mode instead.  According
+> to the programming guide for the ADV7511 [1], and the register control
+> manual of the ADV7535 [2], this is the default behaviour on reset. As
+> previously stated, the adv7511 driver currently overrides this to legacy
+> mode.
+>
+> This patch updates the adv7511 driver to instead use non-legacy mode
+> with all three CEC RX buffers. As a result of this change, we no longer
+> experience any stalling of CEC RX with the ADV7535. It is not known why
+> non-legacy mode solves this particular issue, but besides this, no
+> functional change is to be expected by this patch. Please note that this
+> has only been tested on an ADV7535.
+>
+> What follows is a brief description of the non-legacy mode interrupt
+> handling behaviour. The programming guide in [1] gives a more detailed
+> explanation.
+>
+> With three RX buffers, the interrupt handler checks the CEC_RX_STATUS
+> register (renamed from CEC_RX_ENABLE in this patch), which contains
+> 2-bit psuedo-timestamps for each of the RX buffers. The RX timestamps
+> for each buffer represent the time of arrival for the CEC frame held in
+> a given buffer, with lower timestamp values indicating chronologically
+> older frames. A special value of 0 indicates that the given RX buffer
+> is inactive and should be skipped. The interrupt handler parses these
+> timestamps and then reads the active RX buffers in the prescribed order
+> using the same logic as before. Changes have been made to ensure that
+> the correct RX buffer is cleared after processing. This clearing
+> procesure also sets the timestamp of the given RX buffer to 0 to mark it
+> as inactive.
+>
+> [1] https://www.analog.com/media/en/technical-documentation/user-guides/A=
+DV7511_Programming_Guide.pdf
+>     cf. CEC Map, register 0x4A, bit 3, default value 1:
+>     0 =3D Use only buffer 0 to store CEC frames (Legacy mode)
+>     1 =3D Use all 3 buffers to stores the CEC frames (Non-legacy mode)
+>
+> [2] The ADV7535 register control manual is under NDA, but trust me when
+>     I say that non-legacy CEC RX mode is the default here too. Here the
+>     register is offset by 0x70 and has an address of 0xBA in the DSI_CEC
+>     regiser map.
+>
+> Signed-off-by: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+> ---
+>  drivers/gpu/drm/bridge/adv7511/adv7511.h     | 26 +++++-
+>  drivers/gpu/drm/bridge/adv7511/adv7511_cec.c | 98 +++++++++++++++-----
+>  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 17 +++-
+>  3 files changed, 109 insertions(+), 32 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511.h b/drivers/gpu/drm/b=
+ridge/adv7511/adv7511.h
+> index da6d8ee2cd84..9e3bb8a8ee40 100644
+> --- a/drivers/gpu/drm/bridge/adv7511/adv7511.h
+> +++ b/drivers/gpu/drm/bridge/adv7511/adv7511.h
+> @@ -209,10 +209,16 @@
+>  #define ADV7511_REG_CEC_TX_ENABLE      0x11
+>  #define ADV7511_REG_CEC_TX_RETRY       0x12
+>  #define ADV7511_REG_CEC_TX_LOW_DRV_CNT 0x14
+> -#define ADV7511_REG_CEC_RX_FRAME_HDR   0x15
+> -#define ADV7511_REG_CEC_RX_FRAME_DATA0 0x16
+> -#define ADV7511_REG_CEC_RX_FRAME_LEN   0x25
+> -#define ADV7511_REG_CEC_RX_ENABLE      0x26
+> +#define ADV7511_REG_CEC_RX1_FRAME_HDR  0x15
+> +#define ADV7511_REG_CEC_RX1_FRAME_DATA0        0x16
+> +#define ADV7511_REG_CEC_RX1_FRAME_LEN  0x25
+> +#define ADV7511_REG_CEC_RX_STATUS      0x26
+> +#define ADV7511_REG_CEC_RX2_FRAME_HDR  0x27
+> +#define ADV7511_REG_CEC_RX2_FRAME_DATA0        0x28
+> +#define ADV7511_REG_CEC_RX2_FRAME_LEN  0x37
+> +#define ADV7511_REG_CEC_RX3_FRAME_HDR  0x38
+> +#define ADV7511_REG_CEC_RX3_FRAME_DATA0        0x39
+> +#define ADV7511_REG_CEC_RX3_FRAME_LEN  0x48
+>  #define ADV7511_REG_CEC_RX_BUFFERS     0x4a
+>  #define ADV7511_REG_CEC_LOG_ADDR_MASK  0x4b
+>  #define ADV7511_REG_CEC_LOG_ADDR_0_1   0x4c
+> @@ -220,6 +226,18 @@
+>  #define ADV7511_REG_CEC_CLK_DIV                0x4e
+>  #define ADV7511_REG_CEC_SOFT_RESET     0x50
+>
+> +static const u8 ADV7511_REG_CEC_RX_FRAME_HDR[] =3D {
+> +       ADV7511_REG_CEC_RX1_FRAME_HDR,
+> +       ADV7511_REG_CEC_RX2_FRAME_HDR,
+> +       ADV7511_REG_CEC_RX3_FRAME_HDR,
+> +};
+> +
+> +static const u8 ADV7511_REG_CEC_RX_FRAME_LEN[] =3D {
+> +       ADV7511_REG_CEC_RX1_FRAME_LEN,
+> +       ADV7511_REG_CEC_RX2_FRAME_LEN,
+> +       ADV7511_REG_CEC_RX3_FRAME_LEN,
+> +};
+> +
+>  #define ADV7533_REG_CEC_OFFSET         0x70
+>
+>  enum adv7511_input_clock {
+> diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c b/drivers/gpu/d=
+rm/bridge/adv7511/adv7511_cec.c
+> index 1f619389e201..399f625a50c8 100644
+> --- a/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
+> +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
+> @@ -17,7 +17,8 @@
+>
+>  #define ADV7511_INT1_CEC_MASK \
+>         (ADV7511_INT1_CEC_TX_READY | ADV7511_INT1_CEC_TX_ARBIT_LOST | \
+> -        ADV7511_INT1_CEC_TX_RETRY_TIMEOUT | ADV7511_INT1_CEC_RX_READY1)
+> +        ADV7511_INT1_CEC_TX_RETRY_TIMEOUT | ADV7511_INT1_CEC_RX_READY1 |=
+ \
+> +        ADV7511_INT1_CEC_RX_READY2 | ADV7511_INT1_CEC_RX_READY3)
+>
+>  static void adv_cec_tx_raw_status(struct adv7511 *adv7511, u8 tx_raw_sta=
+tus)
+>  {
+> @@ -70,25 +71,16 @@ static void adv_cec_tx_raw_status(struct adv7511 *adv=
+7511, u8 tx_raw_status)
+>         }
+>  }
+>
+> -void adv7511_cec_irq_process(struct adv7511 *adv7511, unsigned int irq1)
+> +static void adv7511_cec_rx(struct adv7511 *adv7511, int rx_buf)
+>  {
+>         unsigned int offset =3D adv7511->reg_cec_offset;
+> -       const u32 irq_tx_mask =3D ADV7511_INT1_CEC_TX_READY |
+> -                               ADV7511_INT1_CEC_TX_ARBIT_LOST |
+> -                               ADV7511_INT1_CEC_TX_RETRY_TIMEOUT;
+>         struct cec_msg msg =3D {};
+>         unsigned int len;
+>         unsigned int val;
+>         u8 i;
+>
+> -       if (irq1 & irq_tx_mask)
+> -               adv_cec_tx_raw_status(adv7511, irq1);
+> -
+> -       if (!(irq1 & ADV7511_INT1_CEC_RX_READY1))
+> -               return;
+> -
+>         if (regmap_read(adv7511->regmap_cec,
+> -                       ADV7511_REG_CEC_RX_FRAME_LEN + offset, &len))
+> +                       ADV7511_REG_CEC_RX_FRAME_LEN[rx_buf] + offset, &l=
+en))
+>                 return;
+>
+>         msg.len =3D len & 0x1f;
+> @@ -101,18 +93,76 @@ void adv7511_cec_irq_process(struct adv7511 *adv7511=
+, unsigned int irq1)
+>
+>         for (i =3D 0; i < msg.len; i++) {
+>                 regmap_read(adv7511->regmap_cec,
+> -                           i + ADV7511_REG_CEC_RX_FRAME_HDR + offset, &v=
+al);
+> +                           i + ADV7511_REG_CEC_RX_FRAME_HDR[rx_buf] + of=
+fset,
+> +                           &val);
+>                 msg.msg[i] =3D val;
+>         }
+>
+> -       /* toggle to re-enable rx 1 */
+> -       regmap_write(adv7511->regmap_cec,
+> -                    ADV7511_REG_CEC_RX_BUFFERS + offset, 1);
+> -       regmap_write(adv7511->regmap_cec,
+> -                    ADV7511_REG_CEC_RX_BUFFERS + offset, 0);
+> +       /* Toggle RX Ready Clear bit to re-enable this RX buffer */
+> +       regmap_update_bits(adv7511->regmap_cec,
+> +                          ADV7511_REG_CEC_RX_BUFFERS + offset, BIT(rx_bu=
+f),
+> +                          BIT(rx_buf));
+> +       regmap_update_bits(adv7511->regmap_cec,
+> +                          ADV7511_REG_CEC_RX_BUFFERS + offset, BIT(rx_bu=
+f), 0);
+> +
+>         cec_received_msg(adv7511->cec_adap, &msg);
+>  }
+>
+> +void adv7511_cec_irq_process(struct adv7511 *adv7511, unsigned int irq1)
+> +{
+> +       unsigned int offset =3D adv7511->reg_cec_offset;
+> +       const u32 irq_tx_mask =3D ADV7511_INT1_CEC_TX_READY |
+> +                               ADV7511_INT1_CEC_TX_ARBIT_LOST |
+> +                               ADV7511_INT1_CEC_TX_RETRY_TIMEOUT;
+> +       const u32 irq_rx_mask =3D ADV7511_INT1_CEC_RX_READY1 |
+> +                               ADV7511_INT1_CEC_RX_READY2 |
+> +                               ADV7511_INT1_CEC_RX_READY3;
+> +       unsigned int rx_status;
+> +       int rx_order[3] =3D { -1, -1, -1 };
+> +       int i;
+> +
+> +       if (irq1 & irq_tx_mask)
+> +               adv_cec_tx_raw_status(adv7511, irq1);
+> +
+> +       if (!(irq1 & irq_rx_mask))
+> +               return;
+> +
+> +       if (regmap_read(adv7511->regmap_cec,
+> +                       ADV7511_REG_CEC_RX_STATUS + offset, &rx_status))
+> +               return;
+> +
+> +       /*
+> +        * ADV7511_REG_CEC_RX_STATUS[5:0] contains the reception order of=
+ RX
+> +        * buffers 0, 1, and 2 in bits [1:0], [3:2], and [5:4] respective=
+ly.
+> +        * The values are to be interpreted as follows:
+> +        *
+> +        *   0 =3D buffer unused
+> +        *   1 =3D buffer contains oldest received frame (if applicable)
+> +        *   2 =3D buffer contains second oldest received frame (if appli=
+cable)
+> +        *   3 =3D buffer contains third oldest received frame (if applic=
+able)
+> +        *
+> +        * Fill rx_order with the sequence of RX buffer indices to
+> +        * read from in order, where -1 indicates that there are no
+> +        * more buffers to process.
+> +        */
+> +       for (i =3D 0; i < 3; i++) {
+> +               unsigned int timestamp =3D (rx_status >> (2 * i)) & 0x3;
+> +
+> +               if (timestamp)
+> +                       rx_order[timestamp - 1] =3D i;
+> +       }
+> +
+> +       /* Read CEC RX buffers in the appropriate order as prescribed abo=
+ve */
+> +       for (i =3D 0; i < 3; i++) {
+> +               int rx_buf =3D rx_order[i];
+> +
+> +               if (rx_buf < 0)
+> +                       break;
+> +
+> +               adv7511_cec_rx(adv7511, rx_buf);
+> +       }
+> +}
+> +
+>  static int adv7511_cec_adap_enable(struct cec_adapter *adap, bool enable=
+)
+>  {
+>         struct adv7511 *adv7511 =3D cec_get_drvdata(adap);
+> @@ -126,11 +176,11 @@ static int adv7511_cec_adap_enable(struct cec_adapt=
+er *adap, bool enable)
+>                 regmap_update_bits(adv7511->regmap_cec,
+>                                    ADV7511_REG_CEC_CLK_DIV + offset,
+>                                    0x03, 0x01);
+> -               /* legacy mode and clear all rx buffers */
+> +               /* non-legacy mode and clear all rx buffers */
+>                 regmap_write(adv7511->regmap_cec,
+> -                            ADV7511_REG_CEC_RX_BUFFERS + offset, 0x07);
+> +                            ADV7511_REG_CEC_RX_BUFFERS + offset, 0x0f);
+>                 regmap_write(adv7511->regmap_cec,
+> -                            ADV7511_REG_CEC_RX_BUFFERS + offset, 0);
+> +                            ADV7511_REG_CEC_RX_BUFFERS + offset, 0x08);
+>                 /* initially disable tx */
+>                 regmap_update_bits(adv7511->regmap_cec,
+>                                    ADV7511_REG_CEC_TX_ENABLE + offset, 1,=
+ 0);
+> @@ -138,7 +188,7 @@ static int adv7511_cec_adap_enable(struct cec_adapter=
+ *adap, bool enable)
+>                 /* tx: ready */
+>                 /* tx: arbitration lost */
+>                 /* tx: retry timeout */
+> -               /* rx: ready 1 */
+> +               /* rx: ready 1-3 */
+>                 regmap_update_bits(adv7511->regmap,
+>                                    ADV7511_REG_INT_ENABLE(1), 0x3f,
+>                                    ADV7511_INT1_CEC_MASK);
+> @@ -304,9 +354,9 @@ int adv7511_cec_init(struct device *dev, struct adv75=
+11 *adv7511)
+>         regmap_write(adv7511->regmap_cec,
+>                      ADV7511_REG_CEC_SOFT_RESET + offset, 0x00);
+>
+> -       /* legacy mode */
+> +       /* non-legacy mode - use all three RX buffers */
+>         regmap_write(adv7511->regmap_cec,
+> -                    ADV7511_REG_CEC_RX_BUFFERS + offset, 0x00);
+> +                    ADV7511_REG_CEC_RX_BUFFERS + offset, 0x08);
+>
+>         regmap_write(adv7511->regmap_cec,
+>                      ADV7511_REG_CEC_CLK_DIV + offset,
+> diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/d=
+rm/bridge/adv7511/adv7511_drv.c
+> index 0be65a1ffc47..ffb034daee45 100644
+> --- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> @@ -1030,10 +1030,19 @@ static bool adv7511_cec_register_volatile(struct =
+device *dev, unsigned int reg)
+>         reg -=3D adv7511->reg_cec_offset;
+>
+>         switch (reg) {
+> -       case ADV7511_REG_CEC_RX_FRAME_HDR:
+> -       case ADV7511_REG_CEC_RX_FRAME_DATA0...
+> -               ADV7511_REG_CEC_RX_FRAME_DATA0 + 14:
+> -       case ADV7511_REG_CEC_RX_FRAME_LEN:
+> +       case ADV7511_REG_CEC_RX1_FRAME_HDR:
+> +       case ADV7511_REG_CEC_RX1_FRAME_DATA0...
+> +               ADV7511_REG_CEC_RX1_FRAME_DATA0 + 14:
+> +       case ADV7511_REG_CEC_RX1_FRAME_LEN:
+> +       case ADV7511_REG_CEC_RX2_FRAME_HDR:
+> +       case ADV7511_REG_CEC_RX2_FRAME_DATA0...
+> +               ADV7511_REG_CEC_RX2_FRAME_DATA0 + 14:
+> +       case ADV7511_REG_CEC_RX2_FRAME_LEN:
+> +       case ADV7511_REG_CEC_RX3_FRAME_HDR:
+> +       case ADV7511_REG_CEC_RX3_FRAME_DATA0...
+> +               ADV7511_REG_CEC_RX3_FRAME_DATA0 + 14:
+> +       case ADV7511_REG_CEC_RX3_FRAME_LEN:
+> +       case ADV7511_REG_CEC_RX_STATUS:
+>         case ADV7511_REG_CEC_RX_BUFFERS:
+>         case ADV7511_REG_CEC_TX_LOW_DRV_CNT:
+>                 return true;
 
-Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
----
- drivers/pinctrl/stm32/pinctrl-stm32.c      | 82 ++++++++--------------
- drivers/pinctrl/stm32/pinctrl-stm32.h      |  1 +
- drivers/pinctrl/stm32/pinctrl-stm32mp135.c |  2 +-
- drivers/pinctrl/stm32/pinctrl-stm32mp157.c |  2 +-
- 4 files changed, 34 insertions(+), 53 deletions(-)
+This is a bit of a nitpick, but the syntax of these "case X...Y"
+statements was kind of hard to parse, do you mind putting them on one
+line?
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index f7c9459f6628..b308e7bb7487 100644
---- a/drivers/pinctrl/stm32/pinctrl-stm32.c
-+++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -197,11 +197,7 @@ static inline void __stm32_gpio_set(struct stm32_gpio_bank *bank,
- 	if (!value)
- 		offset += STM32_GPIO_PINS_PER_BANK;
- 
--	clk_enable(bank->clk);
--
- 	writel_relaxed(BIT(offset), bank->base + STM32_GPIO_BSRR);
--
--	clk_disable(bank->clk);
- }
- 
- static int stm32_gpio_request(struct gpio_chip *chip, unsigned offset)
-@@ -225,25 +221,11 @@ static void stm32_gpio_free(struct gpio_chip *chip, unsigned offset)
- 	pinctrl_gpio_free(chip->base + offset);
- }
- 
--static int stm32_gpio_get_noclk(struct gpio_chip *chip, unsigned int offset)
--{
--	struct stm32_gpio_bank *bank = gpiochip_get_data(chip);
--
--	return !!(readl_relaxed(bank->base + STM32_GPIO_IDR) & BIT(offset));
--}
--
- static int stm32_gpio_get(struct gpio_chip *chip, unsigned offset)
- {
- 	struct stm32_gpio_bank *bank = gpiochip_get_data(chip);
--	int ret;
- 
--	clk_enable(bank->clk);
--
--	ret = stm32_gpio_get_noclk(chip, offset);
--
--	clk_disable(bank->clk);
--
--	return ret;
-+	return !!(readl_relaxed(bank->base + STM32_GPIO_IDR) & BIT(offset));
- }
- 
- static void stm32_gpio_set(struct gpio_chip *chip, unsigned offset, int value)
-@@ -323,7 +305,7 @@ static void stm32_gpio_irq_trigger(struct irq_data *d)
- 		return;
- 
- 	/* If level interrupt type then retrig */
--	level = stm32_gpio_get_noclk(&bank->gpio_chip, d->hwirq);
-+	level = stm32_gpio_get(&bank->gpio_chip, d->hwirq);
- 	if ((level == 0 && bank->irq_type[d->hwirq] == IRQ_TYPE_LEVEL_LOW) ||
- 	    (level == 1 && bank->irq_type[d->hwirq] == IRQ_TYPE_LEVEL_HIGH))
- 		irq_chip_retrigger_hierarchy(d);
-@@ -365,7 +347,6 @@ static int stm32_gpio_irq_request_resources(struct irq_data *irq_data)
- {
- 	struct stm32_gpio_bank *bank = irq_data->domain->host_data;
- 	struct stm32_pinctrl *pctl = dev_get_drvdata(bank->gpio_chip.parent);
--	unsigned long flags;
- 	int ret;
- 
- 	ret = stm32_gpio_direction_input(&bank->gpio_chip, irq_data->hwirq);
-@@ -379,10 +360,6 @@ static int stm32_gpio_irq_request_resources(struct irq_data *irq_data)
- 		return ret;
- 	}
- 
--	flags = irqd_get_trigger_type(irq_data);
--	if (flags & IRQ_TYPE_LEVEL_MASK)
--		clk_enable(bank->clk);
--
- 	return 0;
- }
- 
-@@ -390,9 +367,6 @@ static void stm32_gpio_irq_release_resources(struct irq_data *irq_data)
- {
- 	struct stm32_gpio_bank *bank = irq_data->domain->host_data;
- 
--	if (bank->irq_type[irq_data->hwirq] & IRQ_TYPE_LEVEL_MASK)
--		clk_disable(bank->clk);
--
- 	gpiochip_unlock_as_irq(&bank->gpio_chip, irq_data->hwirq);
- }
- 
-@@ -769,7 +743,6 @@ static int stm32_pmx_set_mode(struct stm32_gpio_bank *bank,
- 	unsigned long flags;
- 	int err = 0;
- 
--	clk_enable(bank->clk);
- 	spin_lock_irqsave(&bank->lock, flags);
- 
- 	if (pctl->hwlock) {
-@@ -798,7 +771,6 @@ static int stm32_pmx_set_mode(struct stm32_gpio_bank *bank,
- 
- unlock:
- 	spin_unlock_irqrestore(&bank->lock, flags);
--	clk_disable(bank->clk);
- 
- 	return err;
- }
-@@ -811,7 +783,6 @@ void stm32_pmx_get_mode(struct stm32_gpio_bank *bank, int pin, u32 *mode,
- 	int alt_offset = STM32_GPIO_AFRL + (pin / 8) * 4;
- 	unsigned long flags;
- 
--	clk_enable(bank->clk);
- 	spin_lock_irqsave(&bank->lock, flags);
- 
- 	val = readl_relaxed(bank->base + alt_offset);
-@@ -823,7 +794,6 @@ void stm32_pmx_get_mode(struct stm32_gpio_bank *bank, int pin, u32 *mode,
- 	*mode = val >> (pin * 2);
- 
- 	spin_unlock_irqrestore(&bank->lock, flags);
--	clk_disable(bank->clk);
- }
- 
- static int stm32_pmx_set_mux(struct pinctrl_dev *pctldev,
-@@ -886,7 +856,6 @@ static int stm32_pconf_set_driving(struct stm32_gpio_bank *bank,
- 	u32 val;
- 	int err = 0;
- 
--	clk_enable(bank->clk);
- 	spin_lock_irqsave(&bank->lock, flags);
- 
- 	if (pctl->hwlock) {
-@@ -910,7 +879,6 @@ static int stm32_pconf_set_driving(struct stm32_gpio_bank *bank,
- 
- unlock:
- 	spin_unlock_irqrestore(&bank->lock, flags);
--	clk_disable(bank->clk);
- 
- 	return err;
- }
-@@ -921,14 +889,12 @@ static u32 stm32_pconf_get_driving(struct stm32_gpio_bank *bank,
- 	unsigned long flags;
- 	u32 val;
- 
--	clk_enable(bank->clk);
- 	spin_lock_irqsave(&bank->lock, flags);
- 
- 	val = readl_relaxed(bank->base + STM32_GPIO_TYPER);
- 	val &= BIT(offset);
- 
- 	spin_unlock_irqrestore(&bank->lock, flags);
--	clk_disable(bank->clk);
- 
- 	return (val >> offset);
- }
-@@ -941,7 +907,6 @@ static int stm32_pconf_set_speed(struct stm32_gpio_bank *bank,
- 	u32 val;
- 	int err = 0;
- 
--	clk_enable(bank->clk);
- 	spin_lock_irqsave(&bank->lock, flags);
- 
- 	if (pctl->hwlock) {
-@@ -965,7 +930,6 @@ static int stm32_pconf_set_speed(struct stm32_gpio_bank *bank,
- 
- unlock:
- 	spin_unlock_irqrestore(&bank->lock, flags);
--	clk_disable(bank->clk);
- 
- 	return err;
- }
-@@ -976,14 +940,12 @@ static u32 stm32_pconf_get_speed(struct stm32_gpio_bank *bank,
- 	unsigned long flags;
- 	u32 val;
- 
--	clk_enable(bank->clk);
- 	spin_lock_irqsave(&bank->lock, flags);
- 
- 	val = readl_relaxed(bank->base + STM32_GPIO_SPEEDR);
- 	val &= GENMASK(offset * 2 + 1, offset * 2);
- 
- 	spin_unlock_irqrestore(&bank->lock, flags);
--	clk_disable(bank->clk);
- 
- 	return (val >> (offset * 2));
- }
-@@ -996,7 +958,6 @@ static int stm32_pconf_set_bias(struct stm32_gpio_bank *bank,
- 	u32 val;
- 	int err = 0;
- 
--	clk_enable(bank->clk);
- 	spin_lock_irqsave(&bank->lock, flags);
- 
- 	if (pctl->hwlock) {
-@@ -1020,7 +981,6 @@ static int stm32_pconf_set_bias(struct stm32_gpio_bank *bank,
- 
- unlock:
- 	spin_unlock_irqrestore(&bank->lock, flags);
--	clk_disable(bank->clk);
- 
- 	return err;
- }
-@@ -1031,14 +991,12 @@ static u32 stm32_pconf_get_bias(struct stm32_gpio_bank *bank,
- 	unsigned long flags;
- 	u32 val;
- 
--	clk_enable(bank->clk);
- 	spin_lock_irqsave(&bank->lock, flags);
- 
- 	val = readl_relaxed(bank->base + STM32_GPIO_PUPDR);
- 	val &= GENMASK(offset * 2 + 1, offset * 2);
- 
- 	spin_unlock_irqrestore(&bank->lock, flags);
--	clk_disable(bank->clk);
- 
- 	return (val >> (offset * 2));
- }
-@@ -1049,7 +1007,6 @@ static bool stm32_pconf_get(struct stm32_gpio_bank *bank,
- 	unsigned long flags;
- 	u32 val;
- 
--	clk_enable(bank->clk);
- 	spin_lock_irqsave(&bank->lock, flags);
- 
- 	if (dir)
-@@ -1060,7 +1017,6 @@ static bool stm32_pconf_get(struct stm32_gpio_bank *bank,
- 			 BIT(offset));
- 
- 	spin_unlock_irqrestore(&bank->lock, flags);
--	clk_disable(bank->clk);
- 
- 	return val;
- }
-@@ -1256,9 +1212,9 @@ static int stm32_gpiolib_register_bank(struct stm32_pinctrl *pctl,
- 	if (IS_ERR(bank->base))
- 		return PTR_ERR(bank->base);
- 
--	err = clk_prepare(bank->clk);
-+	err = clk_prepare_enable(bank->clk);
- 	if (err) {
--		dev_err(dev, "failed to prepare clk (%d)\n", err);
-+		dev_err(dev, "failed to prepare_enable clk (%d)\n", err);
- 		return err;
- 	}
- 
-@@ -1306,17 +1262,23 @@ static int stm32_gpiolib_register_bank(struct stm32_pinctrl *pctl,
- 					STM32_GPIO_IRQ_LINE, bank->fwnode,
- 					&stm32_gpio_domain_ops, bank);
- 
--	if (!bank->domain)
--		return -ENODEV;
-+	if (!bank->domain) {
-+		err = -ENODEV;
-+		goto err_clk;
-+	}
- 
- 	err = gpiochip_add_data(&bank->gpio_chip, bank);
- 	if (err) {
- 		dev_err(dev, "Failed to add gpiochip(%d)!\n", bank_nr);
--		return err;
-+		goto err_clk;
- 	}
- 
- 	dev_info(dev, "%s bank added\n", bank->gpio_chip.label);
- 	return 0;
-+
-+err_clk:
-+	clk_disable_unprepare(bank->clk);
-+	return err;
- }
- 
- static struct irq_domain *stm32_pctrl_get_irq_domain(struct device_node *np)
-@@ -1575,6 +1537,10 @@ int stm32_pctl_probe(struct platform_device *pdev)
- 			ret = stm32_gpiolib_register_bank(pctl, child);
- 			if (ret) {
- 				of_node_put(child);
-+
-+				for (i = 0; i < pctl->nbanks; i++)
-+					clk_disable_unprepare(pctl->banks[i].clk);
-+
- 				return ret;
- 			}
- 
-@@ -1647,12 +1613,26 @@ static int __maybe_unused stm32_pinctrl_restore_gpio_regs(
- 	return 0;
- }
- 
-+int __maybe_unused stm32_pinctrl_suspend(struct device *dev)
-+{
-+	struct stm32_pinctrl *pctl = dev_get_drvdata(dev);
-+	int i;
-+
-+	for (i = 0; i < pctl->nbanks; i++)
-+		clk_disable(pctl->banks[i].clk);
-+
-+	return 0;
-+}
-+
- int __maybe_unused stm32_pinctrl_resume(struct device *dev)
- {
- 	struct stm32_pinctrl *pctl = dev_get_drvdata(dev);
- 	struct stm32_pinctrl_group *g = pctl->groups;
- 	int i;
- 
-+	for (i = 0; i < pctl->nbanks; i++)
-+		clk_enable(pctl->banks[i].clk);
-+
- 	for (i = 0; i < pctl->ngroups; i++, g++)
- 		stm32_pinctrl_restore_gpio_regs(pctl, g->pin);
- 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.h b/drivers/pinctrl/stm32/pinctrl-stm32.h
-index b0882d120765..b9584039cdf5 100644
---- a/drivers/pinctrl/stm32/pinctrl-stm32.h
-+++ b/drivers/pinctrl/stm32/pinctrl-stm32.h
-@@ -65,6 +65,7 @@ struct stm32_gpio_bank;
- int stm32_pctl_probe(struct platform_device *pdev);
- void stm32_pmx_get_mode(struct stm32_gpio_bank *bank,
- 			int pin, u32 *mode, u32 *alt);
-+int stm32_pinctrl_suspend(struct device *dev);
- int stm32_pinctrl_resume(struct device *dev);
- 
- #endif /* __PINCTRL_STM32_H */
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32mp135.c b/drivers/pinctrl/stm32/pinctrl-stm32mp135.c
-index 4ab03520c407..f98717fe23ed 100644
---- a/drivers/pinctrl/stm32/pinctrl-stm32mp135.c
-+++ b/drivers/pinctrl/stm32/pinctrl-stm32mp135.c
-@@ -1660,7 +1660,7 @@ static const struct of_device_id stm32mp135_pctrl_match[] = {
- };
- 
- static const struct dev_pm_ops stm32_pinctrl_dev_pm_ops = {
--	 SET_LATE_SYSTEM_SLEEP_PM_OPS(NULL, stm32_pinctrl_resume)
-+	 SET_LATE_SYSTEM_SLEEP_PM_OPS(stm32_pinctrl_suspend, stm32_pinctrl_resume)
- };
- 
- static struct platform_driver stm32mp135_pinctrl_driver = {
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32mp157.c b/drivers/pinctrl/stm32/pinctrl-stm32mp157.c
-index 2ccb99d64df8..91b2fc8ddbdb 100644
---- a/drivers/pinctrl/stm32/pinctrl-stm32mp157.c
-+++ b/drivers/pinctrl/stm32/pinctrl-stm32mp157.c
-@@ -2343,7 +2343,7 @@ static const struct of_device_id stm32mp157_pctrl_match[] = {
- };
- 
- static const struct dev_pm_ops stm32_pinctrl_dev_pm_ops = {
--	 SET_LATE_SYSTEM_SLEEP_PM_OPS(NULL, stm32_pinctrl_resume)
-+	 SET_LATE_SYSTEM_SLEEP_PM_OPS(stm32_pinctrl_suspend, stm32_pinctrl_resume)
- };
- 
- static struct platform_driver stm32mp157_pinctrl_driver = {
--- 
-2.25.1
+With or without the above suggestion fixed, r-b.
 
+Reviewed-by: Robert Foss <robert.foss@linaro.org>

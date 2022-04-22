@@ -2,71 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3435550B4FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9BD50B4FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446520AbiDVK3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S1446532AbiDVKaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446519AbiDVK3c (ORCPT
+        with ESMTP id S1351711AbiDVKaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:29:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27D654BEE
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:26:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 43739CE289F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:26:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44AD8C385A0;
-        Fri, 22 Apr 2022 10:26:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650623195;
-        bh=O6cnWZomKWY0R3n0zfJ/w697Hqcc5JnGdrY9secTFIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WOsa4fvgmILacdoHTy7wQU5JBRlbfJ4Qi+BpKSP63mY5BTDwYLHFftdPxKUo4QmPx
-         VBDl68Z0zGAxoFD9RxgMIdacRZ7yRs2n1sex6P8jpE3xb0Ghth9IC4J77dZHHqB5Ut
-         CpCWsXUXSR9lOmZBNfU69E5GMlCPOTNDleVrATIixQ01HC5GZmqFKYNeZ7A5+qvCIQ
-         cIhMd6tzaccgD2cafFxv6KhfG7hZ5aZPbatFwoOwgcm2oj7sZwj3e6Zc71XXwIctvJ
-         Hvg+vWqubDaa9oqGZ7AX1AUKa6VDEZ/uHFME1lb5djMq+gJCh7GBKNDc2weYsuL6gB
-         g6yDpEoacivfQ==
-Date:   Fri, 22 Apr 2022 11:26:30 +0100
-From:   Will Deacon <will@kernel.org>
-To:     =?utf-8?B?546L5pOO?= <wangqing@vivo.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH] arm64: make SCHED_CLUSTER depend on ACPI
-Message-ID: <20220422102629.GA9315@willie-the-truck>
-References: <1650006268-3782-1-git-send-email-wangqing@vivo.com>
- <SL2PR06MB3082B7CCDC47E2E9CAF64F08BDF79@SL2PR06MB3082.apcprd06.prod.outlook.com>
+        Fri, 22 Apr 2022 06:30:21 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C467D54BDA
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:27:27 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id k29so6979728pgm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QiB2o+WdMsJeAeDDSCARTXP2m3be3V0si7VrlcKUU9o=;
+        b=EpVOrHjPnfUPosjTlIQ1i2uTS3VaVjSTEsn9fvxTlMiqlmD5AwJQeVwCDiQcArIIKN
+         G0U4XrIyJIN3CfVCUIrKzrqmbxecuVOE+Ns+XyT6sLIQq3Sz+vUfV3qF4jkcNVStV+HD
+         ohqFPfNeLvtVze2xs3540Uag578+Sa0Tio3U23Oj9fuHVhxC10HtbglTic+F4nkj+rnJ
+         uNZ4AmDYyFqaAMKue+LnbfyyCvEFjw3OFO08wu8B27tOJZSsok3aK5Esq1bRVszqWR8L
+         yJ2z08rjpeL6YiYDefHLoElqOMY1TQYX5c4B0SjdTEwSs9+LPZm8GPtYD9zlA2w7ZbTc
+         jLKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QiB2o+WdMsJeAeDDSCARTXP2m3be3V0si7VrlcKUU9o=;
+        b=Fq5H5mZfldbO2aMezKQp3DJnMPx+d41uA0bO2E8Aldw25P8qhJd245bmhr/DuSijJ3
+         l5sAc7sE7FBjSU7nrvi5WVEfi1QHWWQ/rgyFVip6pRWM5X0sM7X7a1ZmGR4KkbSsjH9L
+         fhSznu2Wu3MB5L4O1uMMsVij02yeme1PXHR5b8o2QXm8Xiq7jW8CDavMBxzke6Key5y3
+         IOfKzdRFEDkAYoUDapw5ZoPAN2M5HowwdXqSQAWiELxKFNl6TpgRV+MRGzv4WmB1AE2c
+         QekJauvdLQ+1DM4/v70a721YJzFWezXoyu8ec2Q5wgGtCmjmWtr5yTaijBlcUzwuDSF4
+         deOQ==
+X-Gm-Message-State: AOAM530SzbizoZJFnukf9uXPv3UexWjD7AqdIA5DSnr09T63Ei+bNe6n
+        TiQ36tMYr3+ot7dpTblFejxzAQ==
+X-Google-Smtp-Source: ABdhPJyRBTQkRNOtq7recuzplNVvWzLVDPh5nxa7aDJJb65yhisHdXfThgq+7iw7chP2H9Ska312SA==
+X-Received: by 2002:a05:6a02:206:b0:399:3c9:f465 with SMTP id bh6-20020a056a02020600b0039903c9f465mr3409854pgb.388.1650623247325;
+        Fri, 22 Apr 2022 03:27:27 -0700 (PDT)
+Received: from localhost ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id t38-20020a634626000000b0039cc30b7c93sm1779592pga.82.2022.04.22.03.27.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 03:27:27 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 18:27:22 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Waiman Long <longman@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH] mm/memcg: Free percpu stats memory of dying memcg's
+Message-ID: <YmKDCjJFYMmfa8sG@FVFYT0MHHV2J.usts.net>
+References: <20220421145845.1044652-1-longman@redhat.com>
+ <YmGHYNuAp8957ouq@carbon>
+ <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
+ <YmGbmrH/Hg1VJlUc@carbon>
+ <58c41f14-356e-88dd-54aa-dc6873bf80ff@redhat.com>
+ <YmIZ9Lpvx5pY3oTV@carbon>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <SL2PR06MB3082B7CCDC47E2E9CAF64F08BDF79@SL2PR06MB3082.apcprd06.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YmIZ9Lpvx5pY3oTV@carbon>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 01:58:00AM +0000, 王擎 wrote:
-> What's your opinion on this patch, and I sent another patch 
-> "Add complex scheduler level for arm64" yesterday,
+On Thu, Apr 21, 2022 at 07:59:00PM -0700, Roman Gushchin wrote:
+> On Thu, Apr 21, 2022 at 02:46:00PM -0400, Waiman Long wrote:
+> > On 4/21/22 13:59, Roman Gushchin wrote:
+> > > On Thu, Apr 21, 2022 at 01:28:20PM -0400, Waiman Long wrote:
+> > > > On 4/21/22 12:33, Roman Gushchin wrote:
+> > > > > On Thu, Apr 21, 2022 at 10:58:45AM -0400, Waiman Long wrote:
+> > > > > > For systems with large number of CPUs, the majority of the memory
+> > > > > > consumed by the mem_cgroup structure is actually the percpu stats
+> > > > > > memory. When a large number of memory cgroups are continuously created
+> > > > > > and destroyed (like in a container host), it is possible that more
+> > > > > > and more mem_cgroup structures remained in the dying state holding up
+> > > > > > increasing amount of percpu memory.
+> > > > > > 
+> > > > > > We can't free up the memory of the dying mem_cgroup structure due to
+> > > > > > active references in some other places. However, the percpu stats memory
+> > > > > > allocated to that mem_cgroup is a different story.
+> > > > > > 
+> > > > > > This patch adds a new percpu_stats_disabled variable to keep track of
+> > > > > > the state of the percpu stats memory. If the variable is set, percpu
+> > > > > > stats update will be disabled for that particular memcg. All the stats
+> > > > > > update will be forward to its parent instead. Reading of the its percpu
+> > > > > > stats will return 0.
+> > > > > > 
+> > > > > > The flushing and freeing of the percpu stats memory is a multi-step
+> > > > > > process. The percpu_stats_disabled variable is set when the memcg is
+> > > > > > being set to offline state. After a grace period with the help of RCU,
+> > > > > > the percpu stats data are flushed and then freed.
+> > > > > > 
+> > > > > > This will greatly reduce the amount of memory held up by dying memory
+> > > > > > cgroups.
+> > > > > > 
+> > > > > > By running a simple management tool for container 2000 times per test
+> > > > > > run, below are the results of increases of percpu memory (as reported
+> > > > > > in /proc/meminfo) and nr_dying_descendants in root's cgroup.stat.
+> > > > > Hi Waiman!
+> > > > > 
+> > > > > I've been proposing the same idea some time ago:
+> > > > > https://lore.kernel.org/all/20190312223404.28665-7-guro@fb.com/T/ .
+> > > > > 
+> > > > > However I dropped it with the thinking that with many other fixes
+> > > > > preventing the accumulation of the dying cgroups it's not worth the added
+> > > > > complexity and a potential cpu overhead.
+> > > > > 
+> > > > > I think it ultimately comes to the number of dying cgroups. If it's low,
+> > > > > memory savings are not worth the cpu overhead. If it's high, they are.
+> > > > > I hope long-term to drive it down significantly (with lru-pages reparenting
+> > > > > being the first major milestone), but it might take a while.
+> > > > > 
+> > > > > I don't have a strong opinion either way, just want to dump my thoughts
+> > > > > on this.
+> > > > I have quite a number of customer cases complaining about increasing percpu
+> > > > memory usages. The number of dying memcg's can go to tens of thousands. From
+> > > > my own investigation, I believe that those dying memcg's are not freed
+> > > > because they are pinned down by references in the page structure. I am aware
+> > > > that we support the use of objcg in the page structure which will allow easy
+> > > > reparenting, but most pages don't do that and it is not easy to do this
+> > > > conversion and it may take quite a while to do that.
+> > > The big question is whether there is a memory pressure on those systems.
+> > > If yes, and the number of dying cgroups is growing, it's worth investigating.
+> > > It might be due to the sharing of pagecache pages and this will be ultimately
+> > > fixed with implementing of the pagecache reparenting. But it also might be due
+> > > to other bugs, which are fixable, so it would be great to understand.
+> > 
+> > 
+> > Pagecache reparenting will probably fix the problem that I have seen. Is
+> > someone working on this?
 > 
-> Can someone make some comments so things can move forward.
+> Some time ago Muchun posted patches based on the reusing of the obj_cgroup API.
 >
-> >cls is made up of sd through cluster_sibling, which is set by cluster_id,
-> >cluster_id is only provided by ACPI, DT just provide package_id.
 
-I don't understand the commit message at all, I'm afraid.
+Yep. It is here:
 
-Will
+https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/.
+ 
+> I'm not strictly against this approach, but in my opinion it's not the best.
+> I suggested to use lru vectors as an intermediate objects. In theory, it might
+
+I remember this.
+
+> allow to avoid bumping reference counters for all charged pages at all: live
+> cgroups will be protected by being live, dying cgroups will only need
+> a temporarily protection while lru vectors and associated pages are reparenting.
+> 
+> There are pros and cons:
+> + cgroup reference counting becomes simpler and more debuggable
+> + potential perf wins from fewer operations with live cgroups css refcounters
+> = I hope to see code simplifications (but not guaranteed)
+> - deleting cgroups becomes more expensive, but the cost can be spread to
+>   asynchronous workers
+> 
+> Idk if Muchun tried to implement it. If not, I might try myself.
+>
+
+Yep. I have implemented a initial version recently. I'll do some stability tests
+and send it out ASAP.
+
+Thanks Roman.
+

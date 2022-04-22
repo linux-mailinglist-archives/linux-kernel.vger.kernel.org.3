@@ -2,45 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8766E50BA1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FE750BA20
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448663AbiDVOcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
+        id S1448689AbiDVOdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445426AbiDVOcS (ORCPT
+        with ESMTP id S1378396AbiDVOdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:32:18 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273ED5BD21;
-        Fri, 22 Apr 2022 07:29:25 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nhuHj-0000bB-DF; Fri, 22 Apr 2022 16:29:23 +0200
-Message-ID: <2ce27899-684f-4fe2-4401-a66649b35d60@leemhuis.info>
-Date:   Fri, 22 Apr 2022 16:29:22 +0200
+        Fri, 22 Apr 2022 10:33:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1383533897;
+        Fri, 22 Apr 2022 07:30:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A519CB82ED8;
+        Fri, 22 Apr 2022 14:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8DFFC385A4;
+        Fri, 22 Apr 2022 14:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650637818;
+        bh=yahbdoWlqHWHArEz9FYsLhjfCwUS5AlwO6ecbof4pGo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nQ9j6JoSQvx155lNlUs0nMAeUFOVIYq6XBgVzRouD4jQjZA3TeODJbPyzuDZpsvgk
+         2lQn8cw89dVEtwNdDduKc7DFxBQ8iq5blKn59UB2fvltrwRvoiuaqz0woKWDD1J64c
+         Ux2q0bga4dOuCCqlHEo1Lkm6sINFWyo8ERVqzrjk=
+Date:   Fri, 22 Apr 2022 16:30:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Gilles Buloz <gilles.buloz@kontron.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v3 2/5] tty: Simplify receive flow control char logic
+Message-ID: <YmK796AkXmoSb5fZ@kroah.com>
+References: <20220411094859.10894-1-ilpo.jarvinen@linux.intel.com>
+ <20220411094859.10894-3-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [REGRESSION] Missing IRQ via amd_gpio
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-References: <s5ha6cdtglj.wl-tiwai@suse.de>
- <e4c9bb60-210d-243a-e225-6b3546c0b42b@leemhuis.info>
-In-Reply-To: <e4c9bb60-210d-243a-e225-6b3546c0b42b@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1650637765;661b59ac;
-X-HE-SMSGID: 1nhuHj-0000bB-DF
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220411094859.10894-3-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,84 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 11, 2022 at 12:48:56PM +0300, Ilpo Järvinen wrote:
+> Add a helper to check if the character is a flow control one.
+> Reorder return places, add else for the case where START_CHAR
+> and STOP_CHAR are the same, w/o else both would match.
+> 
+> This seems cleanest approach once skipping due to lookahead
+> is added by the next patch. Its downside is the duplicated
+> START_CHAR and STOP_CHAR checks.
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/tty/n_tty.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
+> index c7edfc001fd0..90b3e06cbeb1 100644
+> --- a/drivers/tty/n_tty.c
+> +++ b/drivers/tty/n_tty.c
+> @@ -1220,20 +1220,25 @@ n_tty_receive_signal_char(struct tty_struct *tty, int signal, unsigned char c)
+>  		process_echoes(tty);
+>  }
+>  
+> +static bool n_tty_is_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
+> +{
+> +	return c == START_CHAR(tty) || c == STOP_CHAR(tty);
+> +}
+> +
+>  /* Returns true if c is consumed as flow-control character */
+>  static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
+>  {
+> +	if (!n_tty_is_char_flow_ctrl(tty, c))
+> +		return false;
+> +
+>  	if (c == START_CHAR(tty)) {
+>  		start_tty(tty);
+>  		process_echoes(tty);
+> -		return true;
+> -	}
+> -	if (c == STOP_CHAR(tty)) {
+> +	} else if (c == STOP_CHAR(tty)) {
 
+The else is always true here now so why check it again?
 
-On 22.04.22 16:17, Thorsten Leemhuis wrote:
-> Hi Takashi! Thx for CCing the regression list.
-> 
-> On 22.04.22 15:03, Takashi Iwai wrote:
->> Hi,
->>
->> we received a bug report for 5.17.3 kernel showing a new error:
->>
->>  amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
->>
->> Not only an error message but in practice this leads to a missing IRQ
->> assignment; the IRQ 27 is no longer assigned to amd_gpio driver.
->>
->> As the error number (EPROBE_DEFER) indicates, this seems to be the
->> side-effect of the recent fix, the upstream commit 5467801f1fcb
->> ("gpio: Restrict usage of GPIO chip irq members before
->> initialization").  As far as I understand, the problem is in
->> acpi_gpiochip_request_interrupts() call that is called from
->> gpiochip_add_irqchip() itself.  Since it's called before the
->> initialized flag set, it always fails now.
->>
->> Below is a temporary quick fix and it seems working.  But I'm not sure
->> whether I overlooked something obvious...
-> 
-> A patch that afaics will fix this hopefully should get merged really
-> soon now:
-> 
-> https://lore.kernel.org/all/20220422131452.20757-1-mario.limonciello@amd.com/
-> 
-> See also v1:
-> 
-> https://lore.kernel.org/all/20220414025705.598-1-mario.limonciello@amd.com/
+Just return in the above if statement and then call stop_tty().
 
-Sorry, I shouldn't have stripped the rest of the message, mario might be
-interested in at least the link, so here it is:
+thanks,
 
->> -- 8< --
->> From: Takashi Iwai <tiwai@suse.de>
->> Subject: [PATCH] gpio: Fix missing IRQ assginment for ACPI gpiochip
->> 
->> The recent fix for gpiolib caused an error like:
->>   amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
->> It indicates -EPROBE_DEFER, and since the function
->> acpi_gpiochip_request_interrupts() doesn't handle the deferred probe,
->> this leads to the missing IRQs. 
->> 
->> The problem is that acpi_gpiochip_request_interrupts() itself is
->> called from gpiochip_add_irqchip() but before gc->irq.initialized flag
->> is set.  For fixing the regression, let's move the call of
->> acpi_gpiochip_request_interrupts() after the initialized flag setup.
->> 
->> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before initialization")
->> BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1198697
->> Signed-off-by: Takashi Iwai <tiwai@suse.de>
->> ---
->>  drivers/gpio/gpiolib.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->> 
->> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
->> index 085348e08986..b7694171655c 100644
->> --- a/drivers/gpio/gpiolib.c
->> +++ b/drivers/gpio/gpiolib.c
->> @@ -1601,8 +1601,6 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
->>  
->>  	gpiochip_set_irq_hooks(gc);
->>  
->> -	acpi_gpiochip_request_interrupts(gc);
->> -
->>  	/*
->>  	 * Using barrier() here to prevent compiler from reordering
->>  	 * gc->irq.initialized before initialization of above
->> @@ -1612,6 +1610,8 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
->>  
->>  	gc->irq.initialized = true;
->>  
->> +	acpi_gpiochip_request_interrupts(gc);
->> +
->>  	return 0;
->>  }
+greg k-h

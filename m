@@ -2,139 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE8B50BF9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A312750BFA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232292AbiDVSII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 14:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        id S237958AbiDVSIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 14:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235710AbiDVSGL (ORCPT
+        with ESMTP id S234265AbiDVSF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 14:06:11 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75E71183B2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:03:11 -0700 (PDT)
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 7522D1220AA;
-        Fri, 22 Apr 2022 17:50:25 +0000 (UTC)
-Received: from pdx1-sub0-mail-a254.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id A0737122051;
-        Fri, 22 Apr 2022 17:50:24 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650649825; a=rsa-sha256;
-        cv=none;
-        b=8I9cGt7utp0qYudqtrlv3l7xktwIfc6yyOB2IV/h872022P2XqRJrTQOLbaAWzKLBPIUOw
-        UoeicfTChG7xeH/dEsZB1cY0nLKvvXvrn9C+x0IXTWjP+vhZNvKWykk3T3xosa8GMO2bUi
-        KVvApk1JvDwhIresFQEt7lFaEIwNdv4UeEl8aZTsDmo5MzHM1hjmlAsML1FHgn/E8hDJtD
-        ur2mkzHcc+P51KoVmtrbBGvCwxLZ6OTxXVNqMl73G1DNP7Se94iAv5oIk64DqMm1/QPRNs
-        R7HUGvFynvuCAzmhnA5OdrLms8WoldXXDHAycnFxX5SccdDZ8TG4/FN4nrlkgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1650649825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=RHwqhjzw9kY1izQs5LW3PnhhQu2A406gGRiwnqGFZvs=;
-        b=rHi3lHfrKtkw0lZ2onlfsuDrW5tVUPfMfBZHKx2D9XzdUurDtTdTUWb5UvTNbqueip+0D8
-        fv3pEqggv4JGFoqQnLAW70LNB2lA8tnPfxgQ4vTCHJXs3lC92LnA223DDqA4H1yYvzWnoe
-        i/irepkK/xd4xbNIXl4IZAp6U/m9EKI2sIlfjTDKHeak9B6IABlqDjKikOmJs0ux2+VqjF
-        sNLzm+M58e/KuXej+6deEASYDxkywcsVMJA2vrnhd6eyL8zprGX9KQ0nK3MeJtT6M/BYiP
-        Zp3S75BtHtlFqivn6qlwNfdz8tOCdgcni+35zp/iSIZLX8sqw5CDCv1EF6Hgpw==
-ARC-Authentication-Results: i=1;
-        rspamd-67b64f579b-z8ctt;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Shelf-Gusty: 25050b6960b79646_1650649825247_3516390020
-X-MC-Loop-Signature: 1650649825247:984435976
-X-MC-Ingress-Time: 1650649825247
-Received: from pdx1-sub0-mail-a254.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.38.149 (trex/6.7.1);
-        Fri, 22 Apr 2022 17:50:25 +0000
-Received: from offworld (unknown [104.36.29.107])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a254.dreamhost.com (Postfix) with ESMTPSA id 4KlMPp6fCCz29;
-        Fri, 22 Apr 2022 10:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1650649824;
-        bh=RHwqhjzw9kY1izQs5LW3PnhhQu2A406gGRiwnqGFZvs=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=YaHDEWSULS/cT2SSarbSX8MPl2aqFaMXnfW6jCS8H4GsOmyJ2d0zeuPoe5L3mDSsM
-         c3/1IgCORa1jHkINI2jRKgt5HPnedwWQRNEfTyWkzav2DDY1Uqmo49msmd1nZkrQr0
-         +TniIOUhbLqPYUJmurz7U5lNZ/B6v4w5987yfPsHltKfntXecYHw7DZb+x3rCfWcz3
-         gdKkXd9/NS0F4lJ2bPk0J0vrIJNUu4NvEUPAZ/vXN+W8Eui7nU5eqU4pdRO4oNtglV
-         lyv/Y1RwM3mMON3bBHwbpWMD3VYXNITNaOsf7aMlkKCPpfCu0AoaZ0vnicCbfz9CMx
-         8f4nnS18GZPKg==
-Date:   Fri, 22 Apr 2022 10:50:20 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     jvgediya@linux.ibm.com, ying.huang@intel.com, weixugc@google.com,
-        linux-mm@kvack.org, mhocko@kernel.org, akpm@linux-foundation.org,
-        rientjes@google.com, yosryahmed@google.com, hannes@cmpxchg.org,
-        shakeelb@google.com, dave.hansen@linux.intel.com,
-        tim.c.chen@linux.intel.com, roman.gushchin@linux.dev,
-        gthelen@google.com, a.manzanares@samsung.com,
-        heekwon.p@samsung.com, gim.jongmin@samsung.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] mm/migration: export demotion_path of a node via
- sysfs
-Message-ID: <20220422175020.lm2xqbg7lm2tr25r@offworld>
-Mail-Followup-To: Yang Shi <shy828301@gmail.com>, jvgediya@linux.ibm.com,
-        ying.huang@intel.com, weixugc@google.com, linux-mm@kvack.org,
-        mhocko@kernel.org, akpm@linux-foundation.org, rientjes@google.com,
-        yosryahmed@google.com, hannes@cmpxchg.org, shakeelb@google.com,
-        dave.hansen@linux.intel.com, tim.c.chen@linux.intel.com,
-        roman.gushchin@linux.dev, gthelen@google.com,
-        a.manzanares@samsung.com, heekwon.p@samsung.com,
-        gim.jongmin@samsung.com, linux-kernel@vger.kernel.org
-References: <20220416053902.68517-1-dave@stgolabs.net>
- <20220416053902.68517-6-dave@stgolabs.net>
- <CAHbLzkruFaKF_92w2qsZz4sH24C-TARXaL-byT6doVVe6VQ4Zg@mail.gmail.com>
- <CAHbLzkr4w-20H11uNrf-9ZJd=oHGTXTatd5OJ0JAO1KwojySdA@mail.gmail.com>
+        Fri, 22 Apr 2022 14:05:59 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A921183B0;
+        Fri, 22 Apr 2022 11:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1650650029; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=36SBTaNp7dcTwurtvjqe7McQ+kB/vBW59yh6tlX/7i8=;
+        b=BPNDxQt/o50fWYfoDGVkwMu81csPM+9pmWJwPV3spGu9npSLkECl3pJuHungufYWLRFOC7
+        5Nrr0lLYcWZUeG4e+7vJR9j1YAGDLBrQ9UG1WEGQiiMjBhUN7BGGOEV/cwIpPYvSAXhIZV
+        CQWPYwr4aCSh1qE2gE3q4eszxbJPM8Y=
+Date:   Fri, 22 Apr 2022 18:53:39 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 2/2] mips: dts: ingenic: x1000: Add PWM device tree
+ node
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Message-Id: <FP5RAR.CXCRD56PL7G72@crapouillou.net>
+In-Reply-To: <YmLT1VA8ZL57CQkO@orome>
+References: <20220224234133.15708-1-aidanmacdonald.0x0@gmail.com>
+        <20220224234133.15708-2-aidanmacdonald.0x0@gmail.com>
+        <YmLT1VA8ZL57CQkO@orome>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAHbLzkr4w-20H11uNrf-9ZJd=oHGTXTatd5OJ0JAO1KwojySdA@mail.gmail.com>
-User-Agent: NeoMutt/20201120
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022, Yang Shi wrote:
+Hi Thierry,
 
->On Fri, Apr 22, 2022 at 10:31 AM Yang Shi <shy828301@gmail.com> wrote:
->>
->> On Fri, Apr 15, 2022 at 10:39 PM Davidlohr Bueso <dave@stgolabs.net> wrote:
->> >
->> > Add a /sys/devices/system/node/nodeX/demotion_path file
->> > to export the possible target(s) in node_demotion[node].
->>
->> I'm not sure if you noticed that Jagdish Gediya is working on the
->> similar patch, please see
->> https://lore.kernel.org/linux-mm/20220413092206.73974-1-jvgediya@linux.ibm.com/
->
->Loop in Jagdish Gediya, Ying Huang and Wei Xu.
->
+Le ven., avril 22 2022 at 18:12:05 +0200, Thierry Reding=20
+<thierry.reding@gmail.com> a =E9crit :
+> On Thu, Feb 24, 2022 at 11:41:34PM +0000, Aidan MacDonald wrote:
+>>  Copied from the jz4740 devicetree and trimmed to 5 timers, which
+>>  is what the hardware supports.
+>>=20
+>>  Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>>  ---
+>>   arch/mips/boot/dts/ingenic/x1000.dtsi | 13 +++++++++++++
+>>   1 file changed, 13 insertions(+)
+>=20
+> However I don't see this upstream yet, neither in Linus' tree nor in
+> linux-next. Paul, do you still have this on your radar?
 
-Hmm I had missed this thread, I'll go have a look.
+I don't have a tree so that would be a patch for Thomas (Cc'd) to go=20
+through the linux-mips tree.
+(Note to Thomas: patch 1 is already applied in the pwm tree)
 
->>
->> It would be better to combine the two to avoid duplicate effort.
+The changes look good though, so:
 
-Indeed - and even more reason for lsfmm discussions defining the
-future ABI for tiering.
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
-Thanks,
-Davidlohr
+Cheers,
+-Paul
+
+>=20
+> Thierry
+>=20
+>>=20
+>>  diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
+>> b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>  index 8bd27edef216..0dcf37527c8e 100644
+>>  --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>  +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>  @@ -127,6 +127,19 @@ wdt: watchdog@0 {
+>>   			clocks =3D <&tcu TCU_CLK_WDT>;
+>>   			clock-names =3D "wdt";
+>>   		};
+>>  +
+>>  +		pwm: pwm@40 {
+>>  +			compatible =3D "ingenic,x1000-pwm";
+>>  +			reg =3D <0x40 0x80>;
+>>  +
+>>  +			#pwm-cells =3D <3>;
+>>  +
+>>  +			clocks =3D <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
+>>  +				 <&tcu TCU_CLK_TIMER2>, <&tcu TCU_CLK_TIMER3>,
+>>  +				 <&tcu TCU_CLK_TIMER4>;
+>>  +			clock-names =3D "timer0", "timer1", "timer2",
+>>  +				      "timer3", "timer4";
+>>  +		};
+>>   	};
+>>=20
+>>   	rtc: rtc@10003000 {
+>>  --
+>>  2.34.1
+>>=20
+
+

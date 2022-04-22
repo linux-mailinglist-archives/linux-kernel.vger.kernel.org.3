@@ -2,51 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D3650B97C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FC450B980
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448332AbiDVOJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
+        id S1448337AbiDVOJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448327AbiDVOJD (ORCPT
+        with ESMTP id S1448222AbiDVOJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:09:03 -0400
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06D85A178;
-        Fri, 22 Apr 2022 07:06:08 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1650636366; bh=ORZSwNwJzdGAfaoDUNcAQX21DFUv58T6uCJA7N2SVTc=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=AbzuRb2nCEb9tGr4A98sKwHCclqpfoPJ+JEHYNK5dLFftUJJVezy5owr1B+8cKlGs
-         EB0kVx7hseoi7KhAq2vlaQ7VQTODoxwXzu3P5q2zC+JUDbdSULSZs5pfByRmgVh+RG
-         00qNWyMt9UIzQnEd2gszyAChExbuYCQ9Q7gSyqNw=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC PATCH 3/5] HACK: ASoC: Tolerate N-cpus-to-M-codecs links
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
-In-Reply-To: <YkrkbBNYULLgeS5w@sirena.org.uk>
-Date:   Fri, 22 Apr 2022 16:06:06 +0200
-Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        Fri, 22 Apr 2022 10:09:56 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6861FA48;
+        Fri, 22 Apr 2022 07:07:02 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e68392d626so3642414fac.4;
+        Fri, 22 Apr 2022 07:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3V7/FkjgPIImwE7vieGYRnxFo4xm+FPjV5H1CZWqMaI=;
+        b=RjQQZasrIq59WD1uHnAp2UmSfFySylFa8OTx7/1Z1+ZImPZ89ndttGKkXFpckhx/Bk
+         yS5aG0OklHvD1OxkRhc1KQ0pfHuUsxJVeNn0EIjR/ezEM4UWrcQVi8m0X9mhDhmyk2/V
+         obTBkAEM/Gse/y53TipttERUGI3o91AGFcfBLpD7ATqq4v/iRT/avCUTKiVBqNIGcCWJ
+         HVDFJQV4SqiKj6PPevjznWTiS2E4TbyWD1ygRPdUQ6oTWSqla0yOurbHZj2PTLuHVbut
+         mHde9GCVMDUGU0t7tRhoi9jLG6aYKEAR96dPrY4Ryvzi8CMYwppDUqunWil+XkilijxK
+         bbLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3V7/FkjgPIImwE7vieGYRnxFo4xm+FPjV5H1CZWqMaI=;
+        b=yfviwoPW8P6JPsrH1YycDLSYkS2G+ZXr1l/YmssKcw/4afy2MQk3WKKLi/ChJzb0N6
+         Xigr/v9uV5IMRGAKReZrD8fvVTSIXZyY7D+Cw+Z/0l+JI26XFN+aD2CLBEtdtTYyB7lT
+         hhYOK3+YW1xhsfYnW6Bx+tXxwUZNq6k7HcJB17Vl/DgdpcgCuy6ro8kZEVwztswzlupl
+         CegMCsS7/s4ag9hlipvs1HxHZGB10MpNhLnUvmpHNvpBAKIWuUi+PUoSe7JZhm8YvhzG
+         mflLINz1+SSfhsk1YJLUYJ5yJDUCtjkn+9cxpLTwgNLVpPbFtBLOmBYfJxE9bVSj8xuc
+         EFAA==
+X-Gm-Message-State: AOAM532vPZXcLJb7Kze8mf3aq4W3fnV8WRb5Cy5Gk8DV3WoWy5cA8dhn
+        bv9tmhesly+q7UWntpAMmx8=
+X-Google-Smtp-Source: ABdhPJzCQ/gkh1glXSZsTTs2riuKFOrVud0Csh7Rl0iPN7oYbY27y6gk7hPGyxdC7M5eXtYemSt4Uw==
+X-Received: by 2002:a05:6870:c222:b0:e5:b047:5a03 with SMTP id z34-20020a056870c22200b000e5b0475a03mr6111660oae.219.1650636421788;
+        Fri, 22 Apr 2022 07:07:01 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id o16-20020a4a3850000000b0033a3c291f3esm839301oof.40.2022.04.22.07.06.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 07:07:01 -0700 (PDT)
+Message-ID: <ced3772a-a965-23b1-83b0-f4f8a634450c@gmail.com>
+Date:   Fri, 22 Apr 2022 16:06:57 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: arm: Add compatible for Mediatek MT8192
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <904EB8A1-5561-4555-8030-B85703E24F2E@cutebit.org>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <20220331000449.41062-4-povik+lin@cutebit.org>
- <YkrkbBNYULLgeS5w@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>
+References: <20220419092030.30519-1-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220419092030.30519-1-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,38 +81,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-> On 4. 4. 2022, at 14:28, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Thu, Mar 31, 2022 at 02:04:47AM +0200, Martin Povi=C5=A1er wrote:
->=20
->> +#if 0
->> 				dev_err(rtd->card->dev,
->> 					"N cpus to M codecs link is not =
-supported yet\n");
->> 				return -EINVAL;
->> +#endif
->> +				cpu_dai =3D asoc_rtd_to_cpu(rtd, 0);
->=20
-> We need to figure out an interface for describing which CODEC/CPU
-> combinations are connected to each other.  I'm not seeing a great way =
-to
-> do that right now, probably some side data table is going to be =
-needed,
-> or perhaps the CPU DAI drivers can be persuaded to only have one DAI
-> actually register and claim to support more channels?  I'm not sure =
-how
-> a configuraiton like this is going to work at userspace level if the
-> multiple CPU DAIs end up being visible...
 
-To understand the issue better: How could the multiple CPU DAIs be
-visible from userspace?
+On 19/04/2022 11:20, Allen-KH Cheng wrote:
+> This commit adds dt-binding documentation for the Mediatek MT8192
+> reference board.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 
-What about this interim solution: In case of N-to-M links we put in
-the most restrictive condition for checking capture/playback stream
-validity: we check all of the CPU DAIs. Whatever ends up being the
-proper solution later can only be less restrictive than this.
+Applied, thanks!
 
-As a reminder what happens on the Macs: the platform driver drives
-all the CPU-side I2S ports that belong to the link with the same data,
-so the particular CPU/CODEC wiring doesn=E2=80=99t matter.
-
+> ---
+>   Documentation/devicetree/bindings/arm/mediatek.yaml | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+> index ab0593c77321..3a9b92ee915b 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
+> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+> @@ -131,6 +131,10 @@ properties:
+>             - enum:
+>                 - mediatek,mt8183-evb
+>             - const: mediatek,mt8183
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt8192-evb
+> +          - const: mediatek,mt8192
+>         - items:
+>             - enum:
+>                 - mediatek,mt8195-evb

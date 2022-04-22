@@ -2,56 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4C750B4B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E28E50B4BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446421AbiDVKMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S1378664AbiDVKOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352684AbiDVKMX (ORCPT
+        with ESMTP id S1377723AbiDVKOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:12:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C164E53E28;
-        Fri, 22 Apr 2022 03:09:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85A341477;
-        Fri, 22 Apr 2022 03:09:30 -0700 (PDT)
-Received: from [10.57.11.218] (unknown [10.57.11.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2942F3F766;
-        Fri, 22 Apr 2022 03:09:28 -0700 (PDT)
-Message-ID: <4f4c5140-6631-a364-0ae3-4f9ba05f8fa9@arm.com>
-Date:   Fri, 22 Apr 2022 11:09:26 +0100
+        Fri, 22 Apr 2022 06:14:30 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7D5506E7;
+        Fri, 22 Apr 2022 03:11:37 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id r13so15429152ejd.5;
+        Fri, 22 Apr 2022 03:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/5jFIllHJ5gNhVb9UGODyKx/Qa32vuqS5VMBQo+3n8s=;
+        b=cU5sTb2IGwQuvzP/JShkIB3U7TZ3eteKDNGGlPUluCEbu5FoP95ibrNSC4SNWpKvHv
+         onI6hGSIyTdveM/RFpT0xSVMIAbUOfBvgIWLPoyyfmo8v1jnb3vk1X4USaDRRAsN0/1N
+         A1R4VBo3T6kcXEYu5XHyTLnM9Bsu7n7eva/+8Lhmfeqh0tpvQzGrBVR6LZp7GUvYk55x
+         1lX0qvSoh4yX5aJa7Ktk4VVubRFVUs51gdzzy9Txr3E+lZvHP2dG3ylK9sUvxok679I5
+         LHMXpqqwJFjT+6XSINmkRDR3OQjrI5XbWuIVlIyQxhtUiSRFxySjHldkbmeoy4JDKxJ9
+         JY7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/5jFIllHJ5gNhVb9UGODyKx/Qa32vuqS5VMBQo+3n8s=;
+        b=UuZ+90tqO6qvHr1vJKD6XurhAFLQgcOCIUyhzU2HFEX4s8J1X2k/Afs30cqXIoMwkL
+         re+0wZBkmSnXHKFrwq98xfMbRyadKZYDDlZp0EE/ANBcHJzVOIGqoxyjzPDUBtrLI2Sf
+         7nD3BneKQZ2dhVYd8O5kEKqVtnNfzx/ljG/DVoGaC6o89TblfGVDHRp1GeHXLk/g4FPP
+         //Zt2EEuI18KnMeWkf+S+Sg812KOGuG5uHA515Ml1hjHpDerKgZWwBs395Z80zidAb0p
+         0y8TjjAHvd9fzMaAeAj8Ctt0sy/PumDrOxZjxmFwHxQ4VKh2XwjGTu1EVffBIWKpGuQz
+         Ak9A==
+X-Gm-Message-State: AOAM533prTGt5/HkWogc1ZpD3l7m5M+KBz0hDYJn3WlNZV2wi3XpKAjt
+        jTKTMJbZ98QYFlZQGjifCg0=
+X-Google-Smtp-Source: ABdhPJxVCmYEiDhhqtAiMHUNIsfX58xYW7NI7ILUW2z5cMlN76p7A6glGcq+J/WvvCTtsFxlIfCzvA==
+X-Received: by 2002:a17:906:7304:b0:6da:9243:865 with SMTP id di4-20020a170906730400b006da92430865mr3317761ejc.665.1650622295880;
+        Fri, 22 Apr 2022 03:11:35 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id y19-20020a056402359300b00423e51be1cesm707069edc.64.2022.04.22.03.11.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 03:11:35 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 12:11:32 +0200
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Blake Jones <blakejones@google.com>
+Subject: Re: [RFC 0/4] perf record: Implement off-cpu profiling with BPF (v1)
+Message-ID: <YmJ/VAt2yblZC9HN@krava>
+References: <20220422053401.208207-1-namhyung@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/6] coresight: Fail to open with return stacks if they
- are unavailable
-Content-Language: en-US
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        mathieu.poirier@linaro.org, coresight@lists.linaro.org,
-        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20220113091056.1297982-1-james.clark@arm.com>
- <20220113091056.1297982-3-james.clark@arm.com>
- <50e5ff63-ae00-f04b-fc5b-f294742cb13a@arm.com>
- <292386ee-cfa8-d849-57ce-156c76680e12@arm.com>
- <CAJ9a7VjiYrnQKUBkcQPs-iJomxFUAJ9Wmq0A+JwN4O_bbqhX1A@mail.gmail.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <CAJ9a7VjiYrnQKUBkcQPs-iJomxFUAJ9Wmq0A+JwN4O_bbqhX1A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422053401.208207-1-namhyung@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,169 +77,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 21, 2022 at 10:33:57PM -0700, Namhyung Kim wrote:
 
+SNIP
 
-On 11/03/2022 15:53, Mike Leach wrote:
-> Hi,
+> The perf bench sched messaging created 400 processes to send/receive
+> messages through unix sockets.  It spent a large portion of cpu cycles
+> for audit filter and read/copy the messages while most of the
+> offcpu-time was in read and write calls.
 > 
+> You can get the code from 'perf/offcpu-v1' branch in my tree at
 > 
-> On Fri, 11 Mar 2022 at 14:52, James Clark <james.clark@arm.com> wrote:
->>
->>
->>
->> On 28/01/2022 11:24, Suzuki K Poulose wrote:
->>> Hi James
->>>
->>> On 13/01/2022 09:10, James Clark wrote:
->>>> Maintain consistency with the other options by failing to open when they
->>>> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
->>>> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
->>>> requested but not supported by hardware.
->>>
->>> Looking at this again (with similar comment to the Branch Broadcast),
->>> won't it disable using retstack on all CPUs, even when some of them
->>> support it ?
->>>
->>> i.e., CPU0 - supports retstack, CPU1 - doesn't
->>>
->>> A perf run with retstack will fail, as CPU1 doesn't support it (even
->>> though we advertise it, unconditionally).
->>>
->>> So, if we ignore the failure, this would still allow CPU0 to use
->>> the feature and as long as the OpenCSD is able to decode the trace
->>> we should ignore the failure ?
->>>
->>> I think we may also need to tune the etm4x_enable_hw() to skip
->>> updating the TRCCONFIGR with features not supported by the ETM
->>>
->>
->> Hi Suzuki,
->>
->> I'm picking up this branch broadcast change again after the haitus.
->>
->> For this point, do you think it would be worth distinguishing between "no
->> known CPUs that support the feature" vs "not currently running on a
->> CPU that supports it but there are others that do"?
->>
->> Also would we want to distinguish between per-CPU or per-process events?
->> For the former it actually is possible to fail to open because all of
->> the information is known.
->>
->> I'm just thinking of the case where someone asks for a load of flags
->> and thinks that they're getting them but get no feedback that they won't.
->> But I understand having some complicated solution like I'm suggesting
->> might be even more surprising to users.
->>
->> Maybe the cleanest solution is to ask users to supply a config that
->> can work on anywhere the event could possibly be scheduled. It doesn't
->> really make sense to have retstack on a per-process event on big-little
->> and then getting half of one type of data and half of another. It would
->> make more sense to fail to open in that case and they have the choice of
->> either doing per-CPU events or disabling retstacks altogether.
->>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 > 
-> return stack has no effect on the decoder output whatsoever. The only
-> effect is to reduce the amount of traced addresses at the input
-> (leaving more space for other trace),
-> so it is irrelevant if CPU0 supports it but CPU1 doesn't.
-> 
-> sequence:
-> 
-> BL r0 (return stack is used only on link instructions)
-> ...
-> RET
-> 
-> will output trace:-
-> ATOM E (BL r0)
-> ...
-> ADDR_ELEM <ret addr>
-> ATOM E (RET)
-> 
-> for no return stack,
-> 
-> ATOM E (BL r0)
-> ...
-> ATOM E (RET)
-> 
-> fior return stack.
-> 
-> In both cases the decoder will push the address after BL r0 onto its
-> return stack.
-> 
-> In the first case the decoder will use the supplied address, in the
-> second will pop the top of its return stack.
-> 
-> The decode output in both cases will be "branched to r0, ran code,
-> returned via link register"
-> 
-> The outcome is identical for the client. So the case for not tracing
-> on a core that does not have return stack if specified is weak.
-> 
-> Perhaps a warning will be sufficient?
-> 
-> Mike
-> 
-> 
-> 
->> This seems like a similar problem to the issue causing the Coresight self
->> test failure where a certain sink was picked that couldn't be reached and
->> the test failed.
->>
->> In that case the change we made doesn't quite match up to my suggestion here:
->>
->>  * Per-cpu but an unreachable sink -> fail
->>  * Per-process and potentially reachable sink in the future -> pass
->>
->> Maybe it would have been better to say that the sink always has to be
->> reachable otherwise is the outcome predicatable?
+> Enjoy! :)
 
-Hi Mike,
+  CC      builtin-record.o
+builtin-record.c:52:10: fatal error: util/off_cpu.h: No such file or directory
+   52 | #include "util/off_cpu.h"
 
-If it has no effect on the output then it makes sense to me to just drop this
-patch. I think even a warning would not add much and as far as I know they are
-discouraged.
+forgot to add util/off_cpu.h ?
 
-James
+jirka
 
->>
->> James
->>
->>> Suzuki
->>>
->>>
->>>>
->>>> The consequence of not doing this is that the user may not be
->>>> aware that they are not enabling the feature as it is silently disabled.
->>>>
->>>> Signed-off-by: James Clark <james.clark@arm.com>
->>>> ---
->>>>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
->>>>   1 file changed, 9 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> index 04669ecc0efa..a93c1a5fe045 100644
->>>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
->>>>       }
->>>>         /* return stack - enable if selected and supported */
->>>> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
->>>> -        /* bit[12], Return stack enable bit */
->>>> -        config->cfg |= BIT(12);
->>>> -
->>>> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
->>>> +        if (!drvdata->retstack) {
->>>> +            ret = -EINVAL;
->>>> +            goto out;
->>>> +        } else {
->>>> +            /* bit[12], Return stack enable bit */
->>>> +            config->cfg |= BIT(12);
->>>> +        }
->>>> +    }
->>>>       /*
->>>>        * Set any selected configuration and preset.
->>>>        *
->>>
+> 
+> Thanks,
+> Namhyung
 > 
 > 
+> Namhyung Kim (4):
+>   perf report: Do not extend sample type of bpf-output event
+>   perf record: Enable off-cpu analysis with BPF
+>   perf record: Implement basic filtering for off-cpu
+>   perf record: Handle argument change in sched_switch
+> 
+>  tools/perf/Makefile.perf               |   1 +
+>  tools/perf/builtin-record.c            |  21 ++
+>  tools/perf/util/Build                  |   1 +
+>  tools/perf/util/bpf_off_cpu.c          | 301 +++++++++++++++++++++++++
+>  tools/perf/util/bpf_skel/off_cpu.bpf.c | 214 ++++++++++++++++++
+>  tools/perf/util/evsel.c                |   4 +-
+>  6 files changed, 540 insertions(+), 2 deletions(-)
+>  create mode 100644 tools/perf/util/bpf_off_cpu.c
+>  create mode 100644 tools/perf/util/bpf_skel/off_cpu.bpf.c
+> 
+> 
+> base-commit: 41204da4c16071be9090940b18f566832d46becc
+> -- 
+> 2.36.0.rc2.479.g8af0fa9b8e-goog
 > 

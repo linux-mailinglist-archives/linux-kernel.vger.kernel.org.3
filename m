@@ -2,80 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABC650B442
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F58350B448
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446149AbiDVJof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S1446156AbiDVJpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353303AbiDVJod (ORCPT
+        with ESMTP id S1445893AbiDVJpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:44:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A84DF44A12
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650620499;
+        Fri, 22 Apr 2022 05:45:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D54D53B43;
+        Fri, 22 Apr 2022 02:42:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 91C70CE2815;
+        Fri, 22 Apr 2022 09:42:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440B6C385A0;
+        Fri, 22 Apr 2022 09:42:08 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Jgc6f0iq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650620526;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=htBc+tkv2t0KCV7NxZPr1OZ70wCiPUIfu1Kk+i4HfxA=;
-        b=fMJL1lNI/C3bZ+8ObPJoJ9isV5/17AB2tkIUZ6yJTP/syiE6BZlRrZKRzSegpdYdS7X55K
-        XpgqDPy9Gw41JarhiJnK+QX81R5uzwctbZMFF7+czoI9OcR1yrbfQTQ9H8qhzz3tV32phT
-        ZNludOnsRQtBOR6rLGOO6yh5YaAl/t0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-532-b0iCcLdSOxKtT36-UOAccg-1; Fri, 22 Apr 2022 05:41:38 -0400
-X-MC-Unique: b0iCcLdSOxKtT36-UOAccg-1
-Received: by mail-ed1-f69.google.com with SMTP id cb11-20020a0564020b6b00b0041d870f7b3aso4683894edb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:41:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=htBc+tkv2t0KCV7NxZPr1OZ70wCiPUIfu1Kk+i4HfxA=;
-        b=REhQ6IcNKgtBRO8GN1CaKSoW2N0PSnLxO2+YpQ0k2nZKjQwQ5Z80iUI25NmzX43s1l
-         4R2iO9ZqYQtMMzE3kOk4vyskgzy4KO6KuctQvaBZOtqhWOIv3jibj3DkT7cv0ml5a6DG
-         oGwjdemhF0b2/OCzIf5GFQ4nsJWpJpRyY2A0exSxnmnfvZmYka/E41+Lqlidtj4ue16W
-         Rhuh6Yha93kj2S0hknQye+AmMAIDHanLoSS/GDsvHrtuZuy4P+IZKi+7LwLccxKr6G3t
-         n80lc7ZCSrwpxrbGl4Cx39nFsfS6F+Kx+YVmyYUC808TPj3kIWsxrgz2Ej/tQgpVOHat
-         uYEg==
-X-Gm-Message-State: AOAM531uUIkwGof2jwxUbuvm3BNe7M+do8ZKaWxzZ09YEahf4IC/Yluj
-        Dhs7t9XVKyWnqhzqCi/WT1f3exf/rSZ22GFjhWX1IOMbvX04UX+B9W8fKe6LNOL1uCuIsRtv4oa
-        xGrt2FnX0d+uDuc0PJm8wpfMr
-X-Received: by 2002:a05:6402:330a:b0:41d:9477:4ee4 with SMTP id e10-20020a056402330a00b0041d94774ee4mr3858046eda.41.1650620497310;
-        Fri, 22 Apr 2022 02:41:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy3+W8XeooBv/xYG8vXSPaTlAAiTLR9U3UtE31iprIJBj9s/wuC7xpO4ci6HkA1+ALchq0hCw==
-X-Received: by 2002:a05:6402:330a:b0:41d:9477:4ee4 with SMTP id e10-20020a056402330a00b0041d94774ee4mr3858034eda.41.1650620497057;
-        Fri, 22 Apr 2022 02:41:37 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id y14-20020a056402440e00b00416046b623csm727084eda.2.2022.04.22.02.41.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 02:41:36 -0700 (PDT)
-Message-ID: <ef5c6c5b-2ed1-7d4c-e757-ed8bcead5d18@redhat.com>
-Date:   Fri, 22 Apr 2022 11:41:34 +0200
+        bh=zHIIdX6sGvzIEKEIWo44H1IVABXHkB0EQjFQOYhzuVs=;
+        b=Jgc6f0iqAzdn0TORE7BQt/lXm1/UJlNT8kDLcTg84Y9u1kKVPvmw+NA3Vl+D4VbEZ2oIFt
+        vuX6fgO4/WfKNoCNO6nRTeL5SsUlm2NIhTBShUR2cXC35AXOXXWMt8nPXbLWgkV6DIQg8R
+        eWIkdOoNLN7Z/44G0sxDJSu8Rel2Az4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5833aa0f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 22 Apr 2022 09:42:06 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 11:42:04 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>
+Subject: Re: [PATCH v2] random: avoid mis-detecting a slow counter as a cycle
+ counter
+Message-ID: <YmJ4bJjet/QhkXZS@zx2c4.com>
+References: <20220421233152.58522-1-ebiggers@kernel.org>
+ <YmHraZcGnY3stnp9@zx2c4.com>
+ <YmH4Mgbo9gs4tOp7@sol.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 0/4] KVM: fix KVM_EXIT_SYSTEM_EVENT mess
-Content-Language: en-US
-To:     Oliver Upton <oupton@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, will@kernel.org,
-        maz@kernel.org, apatel@ventanamicro.com, atishp@rivosinc.com,
-        seanjc@google.com, pgonda@google.com
-References: <20220421180443.1465634-1-pbonzini@redhat.com>
- <YmJgIQe+5zGbrxoF@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YmJgIQe+5zGbrxoF@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YmH4Mgbo9gs4tOp7@sol.localdomain>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,41 +61,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 09:58, Oliver Upton wrote:
-> Is there any way we could clean this up in 5.18 and leave the whole
-> ndata/data pattern for 5.19?
-> 
-> IOW, for 5.18 go back and fix the padding:
-> 
-> 	struct {
-> 		__u32 type;
-> 		__u32 pad;
-> 		__u64 flags;
-> 	} system_event;
-> 
-> Then for 5.19 circle back on the data business, except use a flag bit
-> for it:
-> 
-> 	struct {
-> 		__u32 type;
-> 		__u32 pad;
-> 	#define KVM_SYSTEM_EVENT_NDATA_VALID	(1u << 63)
-> 		__u64 flags;
-> 		__u64 ndata;
-> 		__u64 data[16];
-> 	} system_event;
-> 
-> Where we apply that bit to system_event::flags this time instead of
-> ::type. Could also go the CAP route.
+Hi Eric,
 
-These patches are against kvm/next, so that is already what I did. :)
+On Thu, Apr 21, 2022 at 05:34:58PM -0700, Eric Biggers wrote:
+> On Fri, Apr 22, 2022 at 01:40:25AM +0200, Jason A. Donenfeld wrote:
+> > Hi Eric,
+> > 
+> > Thanks. This looks better.
+> > 
+> > On Thu, Apr 21, 2022 at 04:31:52PM -0700, Eric Biggers wrote:
+> > > Therefore, increase the number of counter comparisons from 1 to 3, to
+> > > greatly reduce the rate of false positive cycle counter detections.
+> > > +	for (i = 0; i < 3; i++) {
+> > > +		unsigned long entropy = random_get_entropy();
+> >  
+> > Wondering: why do you do 3 comparisons rather than 2? What does 3 get
+> > you that 2 doesn't already? I thought the only real requirement was that
+> > in the event where (a)!=(b), (b) is read as meaningfully close as
+> > possible to when the counter changes.
+> > 
+> 
+> On CONFIG_PREEMPT kernels this code usually runs with preemption enabled, so I
+> don't think it's guaranteed that any particular number of comparisons will be
+> sufficient, since the task could get preempted for a long time between each call
+> to random_get_entropy().  However, the chance of a false positive should
+> decrease exponentially, and should be pretty small in the first place, so 3
+> comparisons seems like a good number.
 
-On the other hand right now the ARM and RISC-V flags are unusable with 
-32-bit userspace, so we need to fix _something_ in 5.18 as well.  For 
-your proposal, all that's missing is a 5.18 patch to add the padding. 
-But since the flags UAPI was completely unused before 5.18 and there's 
-no reason to inflict the different naming of fields to userspace.  So I 
-think we want to apply this UAPI change in 5.18 too.
+Ahh, I see. So you check three times instead of disabling
+preemption/irqs, which would be awfully heavy weight. Seems like a
+reasonable compromise.
 
-Paolo
+By the way, I was thinking about the assumptions we're making with this
+comparison ("two adjacent counters shouldn't be the same") in the
+context of this idea from my first reply to you:
+
+    static void entropy_timer(struct timer_list *t)
+    {
+        struct timer_state *s = container_of(...t...);
+        if (++s->samples == s->samples_per_bit) {
+            credit_entropy_bits(1);
+            s->samples = 0;
+        }
+    }
+
+A naive approach that strikes me as strictly _no worse_ than what we
+currently have would be to say that right now we require every counter
+to be different in order to credit everytime. If every other counter is
+different, then we should credit every other time. If every third
+counter is different, we should credit every third time. And so forth.
+While that simple logic isn't some sort of fancy realtime FFT thing, it
+also doesn't appear on its surface to be relying on assumptions that
+we're not already making. I think? It has flaws -- it doesn't account
+for the possibility that while the counter changes, it's way too uniform
+in how it changes -- but neither does the current technique. So while
+it's not the end goal of actually looking at this through some
+statistical lens, it feels like an improvement on what we have now with
+little complication.
+
+If that seems convincing, what do you make of the below snippet?
+
+Jason
+
+------------8<--------------------------------------------------------------
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index bf89c6f27a19..cabba031cbaf 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1354,6 +1354,12 @@ void add_interrupt_randomness(int irq)
+ }
+ EXPORT_SYMBOL_GPL(add_interrupt_randomness);
+ 
++struct entropy_timer_state {
++	unsigned long entropy;
++	struct timer_list timer;
++	unsigned int samples, samples_per_bit;
++};
++
+ /*
+  * Each time the timer fires, we expect that we got an unpredictable
+  * jump in the cycle counter. Even if the timer is running on another
+@@ -1367,9 +1373,14 @@ EXPORT_SYMBOL_GPL(add_interrupt_randomness);
+  *
+  * So the re-arming always happens in the entropy loop itself.
+  */
+-static void entropy_timer(struct timer_list *t)
++static void entropy_timer(struct timer_list *timer)
+ {
+-	credit_entropy_bits(1);
++	struct entropy_timer_state *state = container_of(timer, struct entropy_timer_state, timer);
++
++	if (++state->samples == state->samples_per_bit) {
++		credit_entropy_bits(1);
++		state->samples = 0;
++	}
+ }
+ 
+ /*
+@@ -1378,16 +1389,26 @@ static void entropy_timer(struct timer_list *t)
+  */
+ static void try_to_generate_entropy(void)
+ {
+-	struct {
+-		unsigned long entropy;
+-		struct timer_list timer;
+-	} stack;
++	enum { NUM_TRIALS = 2048, MAX_BITS_PER_SAMPLE = 256 };
++	struct entropy_timer_state stack;
++	unsigned int i, num_different = 1;
+ 
+-	stack.entropy = random_get_entropy();
+-
+-	/* Slow counter - or none. Don't even bother */
+-	if (stack.entropy == random_get_entropy())
++	unsigned long *trials = kmalloc_array(NUM_TRIALS, sizeof(*trials), GFP_KERNEL);
++	if (!trials)
+ 		return;
++	for (i = 0; i < NUM_TRIALS; ++i)
++		trials[i] = random_get_entropy();
++	for (i = 0; i < NUM_TRIALS - 1; ++i) {
++		if (trials[i] != trials[i + 1])
++			++num_different;
++	}
++	mix_pool_bytes(trials, NUM_TRIALS * sizeof(*trials));
++	kfree(trials);
++	stack.samples_per_bit = DIV_ROUND_UP(NUM_TRIALS, num_different);
++	if (stack.samples > MAX_BITS_PER_SAMPLE)
++		return;
++	stack.samples = 0;
++	stack.entropy = random_get_entropy();
+ 
+ 	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
+ 	while (!crng_ready() && !signal_pending(current)) {
 

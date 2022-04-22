@@ -2,187 +2,419 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AC050BA2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D831A50BA2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448702AbiDVOgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52108 "EHLO
+        id S1448705AbiDVOhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233899AbiDVOgV (ORCPT
+        with ESMTP id S243004AbiDVOhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:36:21 -0400
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20051.outbound.protection.outlook.com [40.107.2.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8035B3DA;
-        Fri, 22 Apr 2022 07:33:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m5adLJoVNZMXEyfFMt1xVLrXb+w7gpajDvzna9SVXMKcXeVXksgA6RWy6D4cuXl6w8tfy41ECf3srFtCcB5QwJHj+nTJzEhmK0cJ55GLpVBecPR3EZXqLeaq+1tZXODIgMHgfWev/lLx2MeBL/tMvp3GcdHHEDhxOMVVI+l8Utdk/z97fmIKGft/rFk32dcC5NHqrMy36DI3n4qI7OmMkpdQ815EOB/5Y/UODiPfVYKcIGnlhF0f/1MeMRiCpjzxXsS7Sv4ZGJw3s75O+F7uZZMfC8tR9PG+N3OFSD+tTHmROIih0OYCm45O9Vb1JqPw9FBT03JSpsvKrymQaTu/mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NQsauyW3gAEXQtwWBQeJ4/L08VLywotpbkW+9DNS9bI=;
- b=fiwbZR7nY+RBWnJjrGrzqjiaA769YhSv+nko1TTDiDAHpE99NP1GDe1O8Zq2s7yw4x4+eLM5c2lmagjaxlfXn6tgNrcQcWwT7Dhu5+7ESdSENm2JyRouWWKb2LAI5E/ZNWZ2pFaUo1bN069PLuMPViK3iRciahH0qsqsBXKogPciqeO+pXrbG60pQfIHDveHo3qFQHMF72ST1GpyZrG7kOLop66kWorT1MBvuTEfIBnaMeIEQVyLaq1GOsYOMTbo72SnFFvcFjXaZcBbNp5RdBNQKFkUvFCHXZ49Qy5kMlBVSlZj8JPjgD6mrWjhS+S4v6iBPILS/uvalO3jEsHh6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NQsauyW3gAEXQtwWBQeJ4/L08VLywotpbkW+9DNS9bI=;
- b=N1uBrDKBPLY7JdWg/3FznoMh/xgW5wJEElXwoQ1HlGXyrbR2fXftPHN6WVeoBmb23AnHYqxNmQBthby6rSwv5OKlmrsdIgWzK5vrHg7mE+MY7d3k4JVBi4z8/vX18/PfgLJmJz36L+TBeizIoL71TVNcSzwKE1LB8/9wBUzDo4iNRupRZKI52YCM3qqzJIHrkmpZ8ozIaOB3wrC0s2TXZLMbSI7wAi889piSYWFM970FNtDJvtRu56pUIZVqFyZfumkU4luG91dlAvjxoHTCCpTG5h/z3v/i1ZT9EcesZtvgFt3IISjyfK1CrDRZzS0S+W10lMUyUnstdVuKosojMw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by VE1PR03MB5439.eurprd03.prod.outlook.com (2603:10a6:802:b2::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
- 2022 14:33:23 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::714d:2b6:a995:51bd]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::714d:2b6:a995:51bd%4]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 14:33:23 +0000
-Subject: Re: [PATCH 2/8] dt-bindings: nvmem: sfp: Add clock properties
-To:     Rob Herring <robh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>
-References: <20220421175657.1259024-1-sean.anderson@seco.com>
- <20220421175657.1259024-3-sean.anderson@seco.com>
- <1650634580.180348.1895585.nullmailer@robh.at.kernel.org>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <841ce88d-bb45-9868-a205-f6c96fb2cf89@seco.com>
-Date:   Fri, 22 Apr 2022 10:33:19 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <1650634580.180348.1895585.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL0PR02CA0089.namprd02.prod.outlook.com
- (2603:10b6:208:51::30) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Fri, 22 Apr 2022 10:37:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11565B3DA;
+        Fri, 22 Apr 2022 07:34:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E6A261E8D;
+        Fri, 22 Apr 2022 14:34:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0873AC385A0;
+        Fri, 22 Apr 2022 14:34:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650638047;
+        bh=dIXCm0hZI/e6fnvOzi+R+cBoU+Z0Ola80tlgejCw1OE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n64HnYw/760Xua8ymLJgy6F9XFmN0jncLX0/Yt9BzsTj6EzPDmzN4qT30QKKxWM5q
+         VqRlPVpFbpKMTISJ55hcoPd4CugCwVp1pNxpTT+SQ7qXWucmqU3MDssXxmA8jC0ysC
+         O6bb0uEkIafnYGg3iPkz1ej/RmCnhMzh/sWnOQb8=
+Date:   Fri, 22 Apr 2022 16:34:04 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Gilles Buloz <gilles.buloz@kontron.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v3 3/5] tty: Add lookahead param to receive_buf
+Message-ID: <YmK83NfVqEvGg8DW@kroah.com>
+References: <20220411094859.10894-1-ilpo.jarvinen@linux.intel.com>
+ <20220411094859.10894-4-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4463ba09-e964-48f9-fb5d-08da246d0e2c
-X-MS-TrafficTypeDiagnostic: VE1PR03MB5439:EE_
-X-Microsoft-Antispam-PRVS: <VE1PR03MB54392C8BF40835BF34AADB9896F79@VE1PR03MB5439.eurprd03.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4eIHDCthCApBRDXgBV0AA+fV8tY9Q2OW7eTSYOImdfItbOc5Wmnf0WHL8+5GLNP+EDaJjXL8DTRzP1oKgztTs/LTIhLi2+GJdxbJzZhtRMQdBfVDfGiI0qXl/8VGIgQR6oWpHoUPZFelW+sCZTl/xyXyaDhBkWHdhqI3aw7sji1A29+xaZN6H7VwsjnBVTLsnpShZLH2v3phIkoyc4buy12S/xp7T0I7FfyIW9Y3LJjhRTxwXW5s/0lfamlpKRmDwGvwFV7LN1rQSJZntC+tWqCrUUJcrL7un8wVN/rvOc1jChGGT4m/6JgTHjlZzva6Z3fb3PlLhjAAVp8VpIRWaZoXAcE4wkU+t4dd/+wOjrGc7HMHFFmLJcMZHavjSAOurjVf7BL7Z3RCZwgTMF9PHZcxk5uEiRLA2A+MfebqY19LUUWdZsDfZXkyuDG3pPczEgBweB1uqW08TCFxq1m8UmrX1YQV9hrvLvvK9vVVBeDPeb+v8JsDF4faMwmyzH9RwQdrzqg9NlExrdi5NBe5/i9PxP3l5dLFxYPI/p9aQgGmXRgEiZxFebIN6WuBlU83YtoH0UtHc9Fo6NXb1BZaGhJljv1IeZlGRRW5H9/PX6owxXPGTH3AOWo1paLtybjFcjKYGN0u+XfmdoUwMl/sSREklpmsIhp9f33hKcEcamXsVo2pdF2BLVyly79T7xrdbHEVSpOu3ctmZiVpZ+BKIRGC/OVOoo3qWcFP6fkYDkzD2QRnuYlzvyJ8GzH+1KbQ5E0F/G5OS+YmJjXcv+KdMRXPaSKTOz0/n5sb7YhjKFzp2/28SLvbTkQYwvZP/7M1isPkkQL5VDqqMRojN2CG7XeMFou2DyJkVNQOIsdez54=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6486002)(7416002)(966005)(8936002)(6512007)(53546011)(38350700002)(26005)(38100700002)(52116002)(5660300002)(6666004)(2906002)(83380400001)(44832011)(508600001)(86362001)(6506007)(2616005)(186003)(31696002)(31686004)(316002)(66476007)(6916009)(66946007)(36756003)(54906003)(8676002)(66556008)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q1VGWkJtV3NseHQzYU0vc0ZseXRjNVBueklQcmx6dGhUV2dldGpENS9vckkw?=
- =?utf-8?B?cEwyaWRlZUE0aXloWDJRMlg1Zmx2QTBESVE1Tm1XTUdaUzU4SHVmTU1nVVI0?=
- =?utf-8?B?Mmw3UWV4eWh0Z0RNQlZ0emc0VnEwUmRJMHg1eWsrMk1yMUFCOHpLUlBpRDBE?=
- =?utf-8?B?c3UzQ3d6VXExUDF6ajB4eEIxQ2wrcVU0Uis2VXY5WVYwM29mSUF6WTIvMEM5?=
- =?utf-8?B?VFNDN2wvVEtpSEU3L1BpcDdEV1k0TzZXNldrcHEzV3FKMmtKTGtRalI0cTBL?=
- =?utf-8?B?cVU4RXlZUWdtWmVibElpTHF4ZWkvTlhOdXNUcWErTHRIWFdpSHRLOUFrUUNF?=
- =?utf-8?B?NDJqSkpyK1lTWmMxVHhNMzByV1pTV3NBYkwwUUxLTG1OZWRrcEM2VmdTempE?=
- =?utf-8?B?OFFTTTRmY2dnUEFWMzd5ZGZ2RDYyTFc4VTM2Y3A2QnFlWUhycmpHYWJHMWIy?=
- =?utf-8?B?TUUyMlpaYmJqVUZmbVRpSmVwdkZlY29yT05lbi9oRUhxaVRGdi9rQkx4dDBj?=
- =?utf-8?B?MlFDSWRITmcybk4vODNSQnQ1K0w1MlZ2aGUrOGxqcFo2YzQzYUNUbEwvUWNK?=
- =?utf-8?B?WUxFYTAyc29ZdDh6ditUSVlmM2dsK3dpVjVZSHVkWS9ScCs2ZzZxczFhT2Ew?=
- =?utf-8?B?V2RqMTlxQlRqNFZaTHJSWWhMeU1aS1JOTllBWXA2OERhNi80L05BZkl6dWZt?=
- =?utf-8?B?Myt3Z1duc2llWUpLN1lKeTVFQkNYWGw2aG14V25mZlBhZi81VzdPUkZab0JB?=
- =?utf-8?B?UkI1Z3FRTG1GS1UvSk5IRTJyS1lyWFdLcGJWYkFTVVY5eFNpSFN0bHEwWU1S?=
- =?utf-8?B?TGZvaFdmdFEyTExZUHI4Qktrb04vWDhtT2VoaVd4V0c1M29BY2JVVUU1ZjBR?=
- =?utf-8?B?TFNweUhwMU9QS0liNDU0dzlCWnR5b2dVc1o5UmJtMzVyNmEzeVo2YXBmZmtv?=
- =?utf-8?B?aWhKOUJ5ZmhEeis2SDRKQzhaQklXdXVueDhUUlZnMzAwNmFiZFFEaG8xMUVE?=
- =?utf-8?B?N3JCbUlDY21QNVJVcEVGUGhvYzFmSTBoSkpQbS90ZHZqY3phM1J3OHBJMlp3?=
- =?utf-8?B?NmRDMkcvS2MrcTFQckdvak9rN1NDNytYS0p1MkEyN1dabnFBWDNqU1RucU9O?=
- =?utf-8?B?ejg1SU1RaEl3MGlkTkZlZ29nVWh3ZnhMVGgvMmNxdnhIWGh1bmlpSldab2ZO?=
- =?utf-8?B?RTJvRFNpMXBQYU81VDZEcGpLckhKVFJ2d3FGaENSNkxCUGRjQUpxQ2RvcFNq?=
- =?utf-8?B?STNoTW9FRG1KMm9ZandldUZ3S21IMTZDcksyQkM0ZHJWWkVmMlZwSWpLMmhR?=
- =?utf-8?B?UkRhTkQ3NGxqYTBPbHkzYUZSRlpuNk03NjZiYlNFMW9TQTdCQkZkM3dRRFMx?=
- =?utf-8?B?dnBKdlA1US81ZE1odTZVYk9JZU80WTdCa2tEbGR4YlJQV2NEM3ZNaENEa05l?=
- =?utf-8?B?SGk5ZWxMSksvQXY0cVZRdG5xK2l0cUFXWVU3eE16WDNqNEtiR3J0SXFxQWtr?=
- =?utf-8?B?U3dhTUlXU0FWQ2Y4SDdXNHJ4UnVaV1pDcHVPM0IxaFc0R29DY05zWGhYQWR2?=
- =?utf-8?B?WDZBOU9yeW1xL2Y3cWdYSHRUUllBcXNWL29JZ0JEMm5ZTHE4SERCeHFsc0Uv?=
- =?utf-8?B?VkVtNElxTUtBamQwSkFlWlFhcEF5bmp3QVAvTHlVZ1podDRlQTZ3RzlwcG5l?=
- =?utf-8?B?aGJqYzJLUE1wVGp3djR1UnZHaFpDQVhaNnhWWG1RVkFrV0RxdFpCamdiQzh2?=
- =?utf-8?B?TFhwQm5BZGp6VzB0UUYrQWp2L1pNQWE5eWNzcGEwYVA0eGpXL1FEcXcvdG1M?=
- =?utf-8?B?bnVvV1FwUS9xcE5tMTJzcmx1ZVhQSkgxREJaM2NZeFZnNGpvUnZwU3VqUGhy?=
- =?utf-8?B?QUNsTENhLzZVWURIcGhsNTFVbzh6VU9aaWl5RFhheFpPRjV1amF1VGkxY0RJ?=
- =?utf-8?B?cnlZWmgwQmFwNHp4dnhFSERlUklQU2paVS9kK0RPSm80cGtSNzhHb25YZWdC?=
- =?utf-8?B?VVIyWHgrcGExckwzU0cxOG5yYzU1Qk1wWlRMODJPTXo1MlZURzZRVTNYSzkx?=
- =?utf-8?B?MVdkSXF2MFY2OGY4NGcyOFBZeVdxZVFLb2dhbWViT3NCUXRkQjV2Vk5DN0Ji?=
- =?utf-8?B?MGJFWlExcGpFRlBpQUJoYlA1YmJybVNjbGdPOXRML0R0TlcwN2dhWUZOZ0ZC?=
- =?utf-8?B?eUtpYmV0VVdXeDhla2VQWThxR0tKRHBGK2piMGZWUU9HR2Fac2haUEtUY2pN?=
- =?utf-8?B?TTZjQ1FhTTNPNnhJUDR5WTBGaElkak85WndxSjYySzFtZVlKbFNRRUN5OXgw?=
- =?utf-8?B?eWFKb3YxZitOL1AzVWpQTG5rNlpGRkZYYkltNVBmRDZkVk4zd01ZOUY4QXcy?=
- =?utf-8?Q?FYPxeoXPm8S4Txy0=3D?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4463ba09-e964-48f9-fb5d-08da246d0e2c
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 14:33:23.5616
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vEmyaRb4LlQgz0wRoil8gtS2yyHBn8oMNqFFdngwFbFLara4Y7a7Z6X39KAmsC1i5puWTILsidV9BMvUNGW0IQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR03MB5439
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220411094859.10894-4-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 11, 2022 at 12:48:57PM +0300, Ilpo Järvinen wrote:
+> After lookahead for XON/XOFF characters is added by the next
+> patch,
+
+There is no "next" in a series.  This commit needs to be justified here,
+right?
+
+> the receive side needs to ensure the flow-control
+> actions are not retaken later on when those same characters
+> get received by TTY.
+> 
+> Thus, pass lookahead count to receive_buf and skip
+> flow-control character actions if already taken for the
+> character in question. Lookahead count will become live after
+> the next patch.
+
+You have all 72 columns, please use them.
+
+> 
+> The logic in n_tty_receive_char_closing is bit tricky.
+> The lookahead_done checks cannot be combined with the main
+> conditions because doing so would give chance for the part
+> after || in the else if condition to execute when lookahead
+> done is set (rather than just skipping the flow-control
+> character like it should).
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/accessibility/speakup/spk_ttyio.c |  2 +-
+>  drivers/bluetooth/hci_ldisc.c             |  2 +-
+>  drivers/char/pcmcia/synclink_cs.c         |  2 +-
+>  drivers/input/serio/serport.c             |  4 +-
+>  drivers/isdn/capi/capi.c                  |  2 +-
+>  drivers/misc/ti-st/st_core.c              |  2 +-
+>  drivers/net/caif/caif_serial.c            |  4 +-
+>  drivers/net/can/slcan.c                   |  2 +-
+>  drivers/net/hamradio/6pack.c              |  4 +-
+>  drivers/net/hamradio/mkiss.c              |  2 +-
+>  drivers/net/mctp/mctp-serial.c            |  2 +-
+>  drivers/net/ppp/ppp_async.c               |  2 +-
+>  drivers/net/ppp/ppp_synctty.c             |  2 +-
+>  drivers/net/slip/slip.c                   |  2 +-
+>  drivers/tty/n_gsm.c                       |  2 +-
+>  drivers/tty/n_hdlc.c                      |  2 +-
+>  drivers/tty/n_null.c                      |  2 +-
+>  drivers/tty/n_tty.c                       | 53 ++++++++++++++---------
+>  drivers/tty/serdev/serdev-ttyport.c       |  3 +-
+>  drivers/tty/synclink_gt.c                 |  2 +-
+>  drivers/tty/tty_buffer.c                  |  8 ++--
+>  drivers/tty/tty_io.c                      |  2 +-
+>  drivers/tty/tty_port.c                    |  5 ++-
+>  drivers/tty/vt/selection.c                |  2 +-
+>  include/linux/tty_flip.h                  |  2 +-
+>  include/linux/tty_ldisc.h                 | 20 ++++++---
+>  include/linux/tty_port.h                  |  3 +-
+>  net/nfc/nci/uart.c                        |  2 +-
+>  sound/soc/codecs/cx20442.c                |  2 +-
+>  sound/soc/ti/ams-delta.c                  |  2 +-
+>  30 files changed, 83 insertions(+), 63 deletions(-)
+> 
+> diff --git a/drivers/accessibility/speakup/spk_ttyio.c b/drivers/accessibility/speakup/spk_ttyio.c
+> index 08cf8a17754b..b33536eea1d3 100644
+> --- a/drivers/accessibility/speakup/spk_ttyio.c
+> +++ b/drivers/accessibility/speakup/spk_ttyio.c
+> @@ -73,7 +73,7 @@ static void spk_ttyio_ldisc_close(struct tty_struct *tty)
+>  
+>  static int spk_ttyio_receive_buf2(struct tty_struct *tty,
+>  				  const unsigned char *cp,
+> -				  const char *fp, int count)
+> +				  const char *fp, int count, unsigned int lookahead_count)
+
+Ick, adding yet-another-parameter to a function is a mess as it's hard
+to know what to do with this and what it means just by looking at when
+it is called.
 
 
-On 4/22/22 9:36 AM, Rob Herring wrote:
-> On Thu, 21 Apr 2022 13:56:51 -0400, Sean Anderson wrote:
->> To program fuses, it is necessary to set the fuse programming time. This
->> is determined based on the value of the platform clock. Add a clock
->> property.
->> 
->> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
->> ---
->> 
->>  .../bindings/nvmem/fsl,layerscape-sfp.yaml         | 14 ++++++++++++++
->>  1 file changed, 14 insertions(+)
->> 
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
-> 
-> 
-> efuse@1e80000: 'clock-names' is a required property
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dtb
-> 
-> efuse@1e80000: 'clocks' is a required property
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dtb
-> 	arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dtb
-> 
+>  {
+>  	struct spk_ldisc_data *ldisc_data = tty->disc_data;
+>  	struct spk_synth *synth = ldisc_data->synth;
+> diff --git a/drivers/bluetooth/hci_ldisc.c b/drivers/bluetooth/hci_ldisc.c
+> index f537673ede17..08c329a4cdcc 100644
+> --- a/drivers/bluetooth/hci_ldisc.c
+> +++ b/drivers/bluetooth/hci_ldisc.c
+> @@ -596,7 +596,7 @@ static void hci_uart_tty_wakeup(struct tty_struct *tty)
+>   * Return Value:    None
+>   */
+>  static void hci_uart_tty_receive(struct tty_struct *tty, const u8 *data,
+> -				 const char *flags, int count)
+> +				 const char *flags, int count, unsigned int lookahead_count)
+>  {
+>  	struct hci_uart *hu = tty->disc_data;
+>  
+> diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+> index 78baba55a8b5..de9c151cfb12 100644
+> --- a/drivers/char/pcmcia/synclink_cs.c
+> +++ b/drivers/char/pcmcia/synclink_cs.c
+> @@ -501,7 +501,7 @@ static void ldisc_receive_buf(struct tty_struct *tty,
+>  	ld = tty_ldisc_ref(tty);
+>  	if (ld) {
+>  		if (ld->ops->receive_buf)
+> -			ld->ops->receive_buf(tty, data, flags, count);
+> +			ld->ops->receive_buf(tty, data, flags, count, 0);
+>  		tty_ldisc_deref(ld);
+>  	}
+>  }
+> diff --git a/drivers/input/serio/serport.c b/drivers/input/serio/serport.c
+> index 669a728095b8..f0f19b5a2059 100644
+> --- a/drivers/input/serio/serport.c
+> +++ b/drivers/input/serio/serport.c
+> @@ -114,8 +114,8 @@ static void serport_ldisc_close(struct tty_struct *tty)
+>   * 'interrupt' routine.
+>   */
+>  
+> -static void serport_ldisc_receive(struct tty_struct *tty,
+> -		const unsigned char *cp, const char *fp, int count)
+> +static void serport_ldisc_receive(struct tty_struct *tty, const unsigned char *cp,
+> +				  const char *fp, int count, unsigned int lookahead_count)
+>  {
+>  	struct serport *serport = (struct serport*) tty->disc_data;
+>  	unsigned long flags;
+> diff --git a/drivers/isdn/capi/capi.c b/drivers/isdn/capi/capi.c
+> index 0f00be62438d..beb4c78a7219 100644
+> --- a/drivers/isdn/capi/capi.c
+> +++ b/drivers/isdn/capi/capi.c
+> @@ -454,7 +454,7 @@ static int handle_recv_skb(struct capiminor *mp, struct sk_buff *skb)
+>  		skb_pull(skb, CAPIMSG_LEN(skb->data));
+>  		pr_debug("capi: DATA_B3_RESP %u len=%d => ldisc\n",
+>  			 datahandle, skb->len);
+> -		ld->ops->receive_buf(tty, skb->data, NULL, skb->len);
+> +		ld->ops->receive_buf(tty, skb->data, NULL, skb->len, 0);
+>  	} else {
+>  		printk(KERN_ERR "capi: send DATA_B3_RESP failed=%x\n",
+>  		       errcode);
+> diff --git a/drivers/misc/ti-st/st_core.c b/drivers/misc/ti-st/st_core.c
+> index 7f6976a9f508..b2c96d72c0e3 100644
+> --- a/drivers/misc/ti-st/st_core.c
+> +++ b/drivers/misc/ti-st/st_core.c
+> @@ -797,7 +797,7 @@ static void st_tty_close(struct tty_struct *tty)
+>  }
+>  
+>  static void st_tty_receive(struct tty_struct *tty, const unsigned char *data,
+> -			   const char *tty_flags, int count)
+> +			   const char *tty_flags, int count, unsigned int lookahead_count)
+>  {
+>  #ifdef VERBOSE
+>  	print_hex_dump(KERN_DEBUG, ">in>", DUMP_PREFIX_NONE,
+> diff --git a/drivers/net/caif/caif_serial.c b/drivers/net/caif/caif_serial.c
+> index 688075859ae4..cc97c436ec88 100644
+> --- a/drivers/net/caif/caif_serial.c
+> +++ b/drivers/net/caif/caif_serial.c
+> @@ -159,7 +159,7 @@ static inline void debugfs_tx(struct ser_device *ser, const u8 *data, int size)
+>  #endif
+>  
+>  static void ldisc_receive(struct tty_struct *tty, const u8 *data,
+> -			const char *flags, int count)
+> +			  const char *flags, int count, unsigned int lookahead_count)
+>  {
+>  	struct sk_buff *skb = NULL;
+>  	struct ser_device *ser;
+> @@ -237,7 +237,7 @@ static int handle_tx(struct ser_device *ser)
+>  			update_tty_status(ser);
+>  		} else {
+>  			tty_wr = len;
+> -			ldisc_receive(tty, skb->data, NULL, len);
+> +			ldisc_receive(tty, skb->data, NULL, len, 0);
 
-This is fixed in 4/8, but I have ordered dt bindings changes first as
-required by Documentation/devicetree/bindings/submitting-patches.html
+See, what does 0 here mean?  Who knows?  Not a good api :(
 
---Sean
+
+
+>  		}
+>  		ser->dev->stats.tx_packets++;
+>  		ser->dev->stats.tx_bytes += tty_wr;
+> diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+> index ec294d0c5722..5e03e14c2d99 100644
+> --- a/drivers/net/can/slcan.c
+> +++ b/drivers/net/can/slcan.c
+> @@ -471,7 +471,7 @@ static void slc_setup(struct net_device *dev)
+>  
+>  static void slcan_receive_buf(struct tty_struct *tty,
+>  			      const unsigned char *cp, const char *fp,
+> -			      int count)
+> +			      int count, unsigned int lookahead_count)
+>  {
+>  	struct slcan *sl = (struct slcan *) tty->disc_data;
+>  
+> diff --git a/drivers/net/hamradio/6pack.c b/drivers/net/hamradio/6pack.c
+> index 45c3c4a1101b..6ba4b05dff78 100644
+> --- a/drivers/net/hamradio/6pack.c
+> +++ b/drivers/net/hamradio/6pack.c
+> @@ -426,8 +426,8 @@ static void sixpack_write_wakeup(struct tty_struct *tty)
+>   * a block of 6pack data has been received, which can now be decapsulated
+>   * and sent on to some IP layer for further processing.
+>   */
+> -static void sixpack_receive_buf(struct tty_struct *tty,
+> -	const unsigned char *cp, const char *fp, int count)
+> +static void sixpack_receive_buf(struct tty_struct *tty, const unsigned char *cp,
+> +				const char *fp, int count, unsigned int lookahead_count)
+>  {
+>  	struct sixpack *sp;
+>  	int count1;
+> diff --git a/drivers/net/hamradio/mkiss.c b/drivers/net/hamradio/mkiss.c
+> index c251e04ae047..498997ef429a 100644
+> --- a/drivers/net/hamradio/mkiss.c
+> +++ b/drivers/net/hamradio/mkiss.c
+> @@ -875,7 +875,7 @@ static int mkiss_ioctl(struct tty_struct *tty, unsigned int cmd,
+>   * and sent on to the AX.25 layer for further processing.
+>   */
+>  static void mkiss_receive_buf(struct tty_struct *tty, const unsigned char *cp,
+> -	const char *fp, int count)
+> +			      const char *fp, int count, unsigned int lookahead_count)
+>  {
+>  	struct mkiss *ax = mkiss_get(tty);
+>  
+> diff --git a/drivers/net/mctp/mctp-serial.c b/drivers/net/mctp/mctp-serial.c
+> index 7cd103fd34ef..f1dfab4c54cb 100644
+> --- a/drivers/net/mctp/mctp-serial.c
+> +++ b/drivers/net/mctp/mctp-serial.c
+> @@ -390,7 +390,7 @@ static void mctp_serial_push(struct mctp_serial *dev, unsigned char c)
+>  
+>  static void mctp_serial_tty_receive_buf(struct tty_struct *tty,
+>  					const unsigned char *c,
+> -					const char *f, int len)
+> +					const char *f, int len, unsigned int lookahead_count)
+>  {
+>  	struct mctp_serial *dev = tty->disc_data;
+>  	int i;
+> diff --git a/drivers/net/ppp/ppp_async.c b/drivers/net/ppp/ppp_async.c
+> index 15a179631903..87c205a02984 100644
+> --- a/drivers/net/ppp/ppp_async.c
+> +++ b/drivers/net/ppp/ppp_async.c
+> @@ -338,7 +338,7 @@ ppp_asynctty_poll(struct tty_struct *tty, struct file *file, poll_table *wait)
+>  /* May sleep, don't call from interrupt level or with interrupts disabled */
+>  static void
+>  ppp_asynctty_receive(struct tty_struct *tty, const unsigned char *buf,
+> -		  const char *cflags, int count)
+> +		     const char *cflags, int count, unsigned int lookahead_count)
+>  {
+>  	struct asyncppp *ap = ap_get(tty);
+>  	unsigned long flags;
+> diff --git a/drivers/net/ppp/ppp_synctty.c b/drivers/net/ppp/ppp_synctty.c
+> index 18283b7b94bc..b82f4bd82b21 100644
+> --- a/drivers/net/ppp/ppp_synctty.c
+> +++ b/drivers/net/ppp/ppp_synctty.c
+> @@ -331,7 +331,7 @@ ppp_sync_poll(struct tty_struct *tty, struct file *file, poll_table *wait)
+>  /* May sleep, don't call from interrupt level or with interrupts disabled */
+>  static void
+>  ppp_sync_receive(struct tty_struct *tty, const unsigned char *buf,
+> -		  const char *cflags, int count)
+> +		 const char *cflags, int count, unsigned int lookahead_count)
+>  {
+>  	struct syncppp *ap = sp_get(tty);
+>  	unsigned long flags;
+> diff --git a/drivers/net/slip/slip.c b/drivers/net/slip/slip.c
+> index 88396ff99f03..7fccf28256a8 100644
+> --- a/drivers/net/slip/slip.c
+> +++ b/drivers/net/slip/slip.c
+> @@ -686,7 +686,7 @@ static void sl_setup(struct net_device *dev)
+>   */
+>  
+>  static void slip_receive_buf(struct tty_struct *tty, const unsigned char *cp,
+> -		const char *fp, int count)
+> +			     const char *fp, int count, unsigned int lookahead_count)
+>  {
+>  	struct slip *sl = tty->disc_data;
+>  
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index fa92f727fdf8..45f022892b28 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -2500,7 +2500,7 @@ static void gsmld_detach_gsm(struct tty_struct *tty, struct gsm_mux *gsm)
+>  }
+>  
+>  static void gsmld_receive_buf(struct tty_struct *tty, const unsigned char *cp,
+> -			      const char *fp, int count)
+> +			      const char *fp, int count, unsigned int lookahead_count)
+>  {
+>  	struct gsm_mux *gsm = tty->disc_data;
+>  	char flags = TTY_NORMAL;
+> diff --git a/drivers/tty/n_hdlc.c b/drivers/tty/n_hdlc.c
+> index 94c1ec2dd754..2d7c94a38a92 100644
+> --- a/drivers/tty/n_hdlc.c
+> +++ b/drivers/tty/n_hdlc.c
+> @@ -379,7 +379,7 @@ static void n_hdlc_tty_wakeup(struct tty_struct *tty)
+>   * interpreted as one HDLC frame.
+>   */
+>  static void n_hdlc_tty_receive(struct tty_struct *tty, const __u8 *data,
+> -			       const char *flags, int count)
+> +			       const char *flags, int count, unsigned int lookahead_count)
+>  {
+>  	register struct n_hdlc *n_hdlc = tty->disc_data;
+>  	register struct n_hdlc_buf *buf;
+> diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
+> index f913b665af72..6bce76b5bb1c 100644
+> --- a/drivers/tty/n_null.c
+> +++ b/drivers/tty/n_null.c
+> @@ -34,7 +34,7 @@ static ssize_t n_null_write(struct tty_struct *tty, struct file *file,
+>  
+>  static void n_null_receivebuf(struct tty_struct *tty,
+>  				 const unsigned char *cp, const char *fp,
+> -				 int cnt)
+> +				 int cnt, unsigned int lookahead_count)
+>  {
+>  }
+>  
+> diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
+> index 90b3e06cbeb1..708cc85ac43d 100644
+> --- a/drivers/tty/n_tty.c
+> +++ b/drivers/tty/n_tty.c
+> @@ -1226,11 +1226,15 @@ static bool n_tty_is_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
+>  }
+>  
+>  /* Returns true if c is consumed as flow-control character */
+> -static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
+> +static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c,
+> +					 bool lookahead_done)
+>  {
+>  	if (!n_tty_is_char_flow_ctrl(tty, c))
+>  		return false;
+>  
+> +	if (lookahead_done)
+> +		return true;
+
+Why would this function be called if this option was true?
+
+
+
+> +
+>  	if (c == START_CHAR(tty)) {
+>  		start_tty(tty);
+>  		process_echoes(tty);
+> @@ -1241,11 +1245,12 @@ static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c
+>  	return true;
+>  }
+>  
+> -static void n_tty_receive_char_special(struct tty_struct *tty, unsigned char c)
+> +static void n_tty_receive_char_special(struct tty_struct *tty, unsigned char c,
+> +				       bool lookahead_done)
+>  {
+>  	struct n_tty_data *ldata = tty->disc_data;
+>  
+> -	if (I_IXON(tty) && n_tty_receive_char_flow_ctrl(tty, c))
+> +	if (I_IXON(tty) && n_tty_receive_char_flow_ctrl(tty, c, lookahead_done))
+>  		return;
+>  
+>  	if (L_ISIG(tty)) {
+> @@ -1400,7 +1405,8 @@ static void n_tty_receive_char(struct tty_struct *tty, unsigned char c)
+>  	put_tty_queue(c, ldata);
+>  }
+>  
+> -static void n_tty_receive_char_closing(struct tty_struct *tty, unsigned char c)
+> +static void n_tty_receive_char_closing(struct tty_struct *tty, unsigned char c,
+> +				       bool lookahead_done)
+
+bool here, yet characters elsewhere?  That's messy :(
+
+the overall idea is good, this implementation isn't quite there yet.
+
+I did take the first patch in the series, it made sense.
+
+thanks,
+
+greg k-h

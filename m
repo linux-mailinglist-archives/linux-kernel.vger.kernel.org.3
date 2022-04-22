@@ -2,144 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F9F50B46B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEA450B460
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446276AbiDVJvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
+        id S1446225AbiDVJvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446258AbiDVJvq (ORCPT
+        with ESMTP id S1387288AbiDVJvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:51:46 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1158853E1A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650620931; x=1682156931;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=o/2Iy1HevOL4Of1oBhrvO0nmVvIOhZ31l8blZr26R6U=;
-  b=TNdP9J7/iKyYPMo0i5Kb7HjTb1jm4T/uwjk25y7n2WvK4wFskK7Xrr7r
-   NrGj5LTMf2cSUivwUXi23EjbeCceWNXSXEcQQEahMTwLMg//5iNy7hFBA
-   YBiDt+prWiGyF0TIRpPxvLBb3mtUWARqJmiJw2k0TcJr1utDGXt5Ny0lW
-   WA+NuQISFYN/0v4//zho+hn2sTNtKAauHPwdAFBswxn4zLJiP7knZV+v8
-   oLHUhWeddGbVzchLBqcbgpdLDjgGpYZG5OXayHjVBafPyahz5c8Qvjppz
-   X8qF0qkD4ZPMLuGzqfOQJUiljGmKvbhpJEdK7fhrBBYDJs546Vj5MeL/m
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263484131"
-X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="263484131"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 02:48:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="615342767"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Apr 2022 02:48:42 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhpu5-0009zi-AS;
-        Fri, 22 Apr 2022 09:48:41 +0000
-Date:   Fri, 22 Apr 2022 17:48:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [rt-devel:linux-5.18.y-rt-rebase 17/78] kernel/printk/printk.c:3221:
- undefined reference to `console_emit_next_record'
-Message-ID: <202204221737.z626xFJ9-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 05:51:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82D1E01B;
+        Fri, 22 Apr 2022 02:48:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F892B82BB8;
+        Fri, 22 Apr 2022 09:48:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392ADC385AB;
+        Fri, 22 Apr 2022 09:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650620906;
+        bh=GqQteHqQWVMtYRhHCscBLVDrA/2KZmg5bBHyhsfBNrU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ddO8+grNLavLM2U+3CXGXlyC3Uj2lZwKwEBOh0LKmB1zLcCiXPzujY70QeExAXUs0
+         GMxu5vnuARfljdyepP21+wylC+A6xHU2qGNKjNm2dcVq1Ss2W3VOduIfmAEpRRAqt5
+         nKddkMVvWQsgd9zC6BLJJl2v74rbQfOKbaAIJecWLQQkSjy+U+5+N0lKgcZ3I6+7q6
+         dF3qMFou7P/l1xe8IFtFBmnEWxrnrexOLPCsWL4QBsFRqMsVwDCmpa0mflOLfDLhaC
+         RgHGLjLTNVCrSMzqj9GeCNnd8fGVVuwZivw2DtoVtWtZxPhgFcjelzZKeunORRQArr
+         bopcwdpl2XwXw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nhptn-0067k3-OQ; Fri, 22 Apr 2022 10:48:23 +0100
+Date:   Fri, 22 Apr 2022 10:48:23 +0100
+Message-ID: <87bkwta1p4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, will@kernel.org,
+        apatel@ventanamicro.com, atishp@rivosinc.com, seanjc@google.com,
+        pgonda@google.com
+Subject: Re: [PATCH 1/4] KVM: x86: always initialize system_event.ndata
+In-Reply-To: <20220421180443.1465634-2-pbonzini@redhat.com>
+References: <20220421180443.1465634-1-pbonzini@redhat.com>
+        <20220421180443.1465634-2-pbonzini@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pbonzini@redhat.com, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, will@kernel.org, apatel@ventanamicro.com, atishp@rivosinc.com, seanjc@google.com, pgonda@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.18.y-rt-rebase
-head:   03e7725ddbfb0ffd7f3d7b257bfa504c6f795f6b
-commit: 72b5c1227b73b2cde1452cfc58717cff442ed473 [17/78] serial: 8250: implement write_atomic
-config: parisc-randconfig-r033-20220421 (https://download.01.org/0day-ci/archive/20220422/202204221737.z626xFJ9-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=72b5c1227b73b2cde1452cfc58717cff442ed473
-        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
-        git fetch --no-tags rt-devel linux-5.18.y-rt-rebase
-        git checkout 72b5c1227b73b2cde1452cfc58717cff442ed473
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
+On Thu, 21 Apr 2022 19:04:40 +0100,
+Paolo Bonzini <pbonzini@redhat.com> wrote:
+> 
+> The KVM_SYSTEM_EVENT_NDATA_VALID mechanism that was introduced
+> contextually with KVM_SYSTEM_EVENT_SEV_TERM is not a good match
+> for ARM and RISC-V, which want to communicate information even
+> for existing KVM_SYSTEM_EVENT_* constants.  Userspace is not ready
+> to filter out bit 31 of type, and fails to process the
+> KVM_EXIT_SYSTEM_EVENT exit.
+> 
+> Therefore, tie the availability of ndata to a system capability
+> (which will be added once all architectures are on board).
+> Userspace written for released versions of Linux has no reason to
+> check flags, since it was never written, so it is okay to replace
+> it with ndata and data[0] (on 32-bit kernels) or with data[0]
+> (on 64-bit kernels).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+How is it going to work for new userspace on old kernels, for which
+the ndata field is left uninitialised?
 
-All errors (new ones prefixed by >>):
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/svm/sev.c   | 3 +--
+>  arch/x86/kvm/x86.c       | 2 ++
+>  include/uapi/linux/kvm.h | 1 -
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index a93f0d01bb90..51b963ec122b 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2739,8 +2739,7 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+>  			reason_set, reason_code);
+>  
+>  		vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
+> -		vcpu->run->system_event.type = KVM_SYSTEM_EVENT_SEV_TERM |
+> -					       KVM_SYSTEM_EVENT_NDATA_VALID;
+> +		vcpu->run->system_event.type = KVM_SYSTEM_EVENT_SEV_TERM;
+>  		vcpu->run->system_event.ndata = 1;
+>  		vcpu->run->system_event.data[1] = control->ghcb_gpa;
 
-   hppa-linux-ld: kernel/printk/printk.o: in function `atomic_console_flush_all':
->> kernel/printk/printk.c:3221: undefined reference to `console_emit_next_record'
+Isn't this really odd? ndata = 1, and yet you populate data[1]?
 
+>
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 4e7f3a8da16a..517c0228881c 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10056,12 +10056,14 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  		if (kvm_check_request(KVM_REQ_HV_CRASH, vcpu)) {
+>  			vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
+>  			vcpu->run->system_event.type = KVM_SYSTEM_EVENT_CRASH;
+> +			vcpu->run->system_event.ndata = 0;
+>  			r = 0;
+>  			goto out;
+>  		}
+>  		if (kvm_check_request(KVM_REQ_HV_RESET, vcpu)) {
+>  			vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
+>  			vcpu->run->system_event.type = KVM_SYSTEM_EVENT_RESET;
+> +			vcpu->run->system_event.ndata = 0;
+>  			r = 0;
+>  			goto out;
+>  		}
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index dd1d8167e71f..5a57f74b4903 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -445,7 +445,6 @@ struct kvm_run {
+>  #define KVM_SYSTEM_EVENT_RESET          2
+>  #define KVM_SYSTEM_EVENT_CRASH          3
+>  #define KVM_SYSTEM_EVENT_SEV_TERM       4
+> -#define KVM_SYSTEM_EVENT_NDATA_VALID    (1u << 31)
+>  			__u32 type;
+>  			__u32 ndata;
+>  			__u64 data[16];
 
-vim +3221 kernel/printk/printk.c
+Cat we please get a #define that aliases data[0] to flags? At the next
+merge of the KVM headers into their respective trees, all the existing
+VMM are going to break if they have a reference to this field (CrosVM
+definitely does today -- yes, we're ahead of time).
 
-943b66638a0519 John Ogness 2022-02-04  3200  
-943b66638a0519 John Ogness 2022-02-04  3201  	printk_cpu_sync_get_irqsave(flags);
-943b66638a0519 John Ogness 2022-02-04  3202  
-943b66638a0519 John Ogness 2022-02-04  3203  	do {
-943b66638a0519 John Ogness 2022-02-04  3204  		any_progress = false;
-943b66638a0519 John Ogness 2022-02-04  3205  
-943b66638a0519 John Ogness 2022-02-04  3206  		for_each_console(con) {
-943b66638a0519 John Ogness 2022-02-04  3207  			bool progress;
-943b66638a0519 John Ogness 2022-02-04  3208  
-943b66638a0519 John Ogness 2022-02-04  3209  			if (!console_is_usable(con, true))
-943b66638a0519 John Ogness 2022-02-04  3210  				continue;
-943b66638a0519 John Ogness 2022-02-04  3211  			any_usable = true;
-943b66638a0519 John Ogness 2022-02-04  3212  
-943b66638a0519 John Ogness 2022-02-04  3213  			if (con->flags & CON_EXTENDED) {
-943b66638a0519 John Ogness 2022-02-04  3214  				/* Extended consoles do not print "dropped messages". */
-943b66638a0519 John Ogness 2022-02-04  3215  				progress = console_emit_next_record(con,
-943b66638a0519 John Ogness 2022-02-04  3216  							&con->atomic_data->text[index],
-943b66638a0519 John Ogness 2022-02-04  3217  							&con->atomic_data->ext_text[index],
-943b66638a0519 John Ogness 2022-02-04  3218  							NULL,
-943b66638a0519 John Ogness 2022-02-04  3219  							true);
-943b66638a0519 John Ogness 2022-02-04  3220  			} else {
-943b66638a0519 John Ogness 2022-02-04 @3221  				progress = console_emit_next_record(con,
-943b66638a0519 John Ogness 2022-02-04  3222  							&con->atomic_data->text[index],
-943b66638a0519 John Ogness 2022-02-04  3223  							NULL,
-943b66638a0519 John Ogness 2022-02-04  3224  							&con->atomic_data->dropped_text[index],
-943b66638a0519 John Ogness 2022-02-04  3225  							true);
-943b66638a0519 John Ogness 2022-02-04  3226  			}
-943b66638a0519 John Ogness 2022-02-04  3227  
-943b66638a0519 John Ogness 2022-02-04  3228  			if (!progress)
-943b66638a0519 John Ogness 2022-02-04  3229  				continue;
-943b66638a0519 John Ogness 2022-02-04  3230  			any_progress = true;
-943b66638a0519 John Ogness 2022-02-04  3231  
-943b66638a0519 John Ogness 2022-02-04  3232  			touch_softlockup_watchdog_sync();
-943b66638a0519 John Ogness 2022-02-04  3233  			clocksource_touch_watchdog();
-943b66638a0519 John Ogness 2022-02-04  3234  			rcu_cpu_stall_reset();
-943b66638a0519 John Ogness 2022-02-04  3235  			touch_nmi_watchdog();
-943b66638a0519 John Ogness 2022-02-04  3236  		}
-943b66638a0519 John Ogness 2022-02-04  3237  	} while (any_progress);
-943b66638a0519 John Ogness 2022-02-04  3238  
-943b66638a0519 John Ogness 2022-02-04  3239  	printk_cpu_sync_put_irqrestore(flags);
-943b66638a0519 John Ogness 2022-02-04  3240  }
-943b66638a0519 John Ogness 2022-02-04  3241  #else /* CONFIG_HAVE_ATOMIC_CONSOLE */
-943b66638a0519 John Ogness 2022-02-04  3242  #define atomic_console_flush_all()
-943b66638a0519 John Ogness 2022-02-04  3243  #endif
-943b66638a0519 John Ogness 2022-02-04  3244  
+Also, getting a bisectable series would be good.
 
-:::::: The code at line 3221 was first introduced by commit
-:::::: 943b66638a0519612cdc25dcb07f59af89d37407 printk: add infrastucture for atomic consoles
+Thanks,
 
-:::::: TO: John Ogness <john.ogness@linutronix.de>
-:::::: CC: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+	M.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Without deviation from the norm, progress is not possible.

@@ -2,161 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9CA50C1A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B08E50C1CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbiDVWFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S231476AbiDVWFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbiDVWFK (ORCPT
+        with ESMTP id S231432AbiDVWFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:05:10 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D86286A82
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:47:41 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id v15so8549679vsm.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q3kCe45Ef42+zfNVSfY+h/K0JcKt6IAqn76n4Nn+XkE=;
-        b=mb19AejvDfB3ESuJOhiW4BkTKZbbNWaGd6wfu+7MnYw+OLby9IybJFzqpp1odbEem3
-         bMWRaQg1DoP/9Po2wdWK+wANZh4iSKpO1qBrPQWEZ2uVpHuTakZsXCbo2jAi1z+iGhJb
-         daO04fYKaWDNPcINAbXFP8pD9U0yIiXGx4+S73npj26FGgbNmXFLxINHOFVLD3T2/FVf
-         E1bblFt+/lbATrvQlJpWygADsNev+J3Fr0DkzvIXCuB1CCsMqenQ4qXMHstdQhq4Tgbh
-         i8G8WqGnKNz86nnGh1j5U3bJeXCPF70OVfpbZu0Lzemi4rOo0ycNhSS5nrNkG9xFWfh5
-         CqBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q3kCe45Ef42+zfNVSfY+h/K0JcKt6IAqn76n4Nn+XkE=;
-        b=Samn5xrAOiu0YGGSzv/xlEht6WUAR/8j2gdimMizOGBmNEZzGquIShRoxkXp25GacZ
-         pWpxm7wieIaDWV4NVP9KGVapxcBgcYNKKrWSd7n2lIQN07W+rdWTkaGyQH2KUv4R+geb
-         h6dHoHLf1CSHBtL8t8gNBMxkeII4/xQd83hvaW0UP3IDsYuSySK6NHWor7ZXldG2D5K2
-         hP+vZo1cjC/ZTdGrBMEec4hbkBTEBtsseuw1vdK/A3eC32isxJynnITa/gnfgLQbha2k
-         t8rtcNugG+9esnsA/ldVmXV+U2OLgFbdDiakjVE0Rjz3H4aoJmMnT1dgNA9A2+N5PT2y
-         66pw==
-X-Gm-Message-State: AOAM530TQHLkrNHS+DkPh5jnR11Tp3Ly19tVLGkCoImG+yjeuUE1cKVr
-        vssnfTTfu99401zYVlxk+LJFal0FftBGgHuaxyg7Kw==
-X-Google-Smtp-Source: ABdhPJxws6EyQn1ahxRcbVtZjAtqGKCwsfIlfy1WnOdmIBNZ/V4azk+2v4fsGBIuZ7KJ83jUkePqfpf97tf8Z+Pw3I8=
-X-Received: by 2002:a67:ed88:0:b0:328:27d9:1381 with SMTP id
- d8-20020a67ed88000000b0032827d91381mr2135012vsp.12.1650660460274; Fri, 22 Apr
- 2022 13:47:40 -0700 (PDT)
+        Fri, 22 Apr 2022 18:05:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C20541D1F3;
+        Fri, 22 Apr 2022 13:47:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38147B83260;
+        Fri, 22 Apr 2022 20:47:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5EFC385A4;
+        Fri, 22 Apr 2022 20:47:45 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 16:47:44 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-input@vger.kernel.org, roman.gushchin@linux.dev
+Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
+ heap-allocated strings
+Message-ID: <20220422164744.6500ca06@gandalf.local.home>
+In-Reply-To: <20220422203057.iscsmurtrmwkpwnq@moria.home.lan>
+References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
+        <20220421234837.3629927-7-kent.overstreet@gmail.com>
+        <20220422042017.GA9946@lst.de>
+        <YmI5yA1LrYrTg8pB@moria.home.lan>
+        <20220422052208.GA10745@lst.de>
+        <YmI/v35IvxhOZpXJ@moria.home.lan>
+        <20220422113736.460058cc@gandalf.local.home>
+        <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
+        <20220422153916.7ebf20c3@gandalf.local.home>
+        <20220422203057.iscsmurtrmwkpwnq@moria.home.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220422195516.10769-1-jvgediya@linux.ibm.com> <20220422195516.10769-7-jvgediya@linux.ibm.com>
-In-Reply-To: <20220422195516.10769-7-jvgediya@linux.ibm.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Fri, 22 Apr 2022 13:47:29 -0700
-Message-ID: <CAAPL-u-SDjKGZDmksgvTKyjm=3h53QzU7nRQUfcGtm1noCLnPg@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] mm: demotion: expose per-node demotion targets via sysfs
-To:     Jagdish Gediya <jvgediya@linux.ibm.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, baolin.wang@linux.alibaba.com,
-        dave.hansen@linux.intel.com, ying.huang@intel.com,
-        aneesh.kumar@linux.ibm.com, shy828301@gmail.com,
-        gthelen@google.com, dan.j.williams@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 12:55 PM Jagdish Gediya <jvgediya@linux.ibm.com> wrote:
->
-> Kernel prepares per-node demotion target list based on
-> node_states[N_DEMOTION_TARGETS], If enabled through sysfs,
-> demotion kicks in during reclaim, and pages get migrated
-> according to demotion target list prepared by kernel.
->
-> It is helpful to know demotion target list prepared by
-> kernel to understand the demotion behaviour, so add
-> interface /sys/devices/system/node/nodeX/demotion_targets
-> to view per-node demotion targets via sysfs.
->
-> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> ---
->  drivers/base/node.c     | 10 ++++++++++
->  include/linux/migrate.h |  1 +
->  mm/migrate.c            | 17 +++++++++++++++++
->  3 files changed, 28 insertions(+)
->
-> diff --git a/drivers/base/node.c b/drivers/base/node.c
-> index e03eedbc421b..92326219aac2 100644
-> --- a/drivers/base/node.c
-> +++ b/drivers/base/node.c
-> @@ -561,11 +561,21 @@ static ssize_t node_read_distance(struct device *dev,
->  }
->  static DEVICE_ATTR(distance, 0444, node_read_distance, NULL);
->
-> +static ssize_t demotion_targets_show(struct device *dev,
-> +                                    struct device_attribute *attr, char *buf)
-> +{
-> +       nodemask_t demotion_targets = node_get_demotion_targets(dev->id);
-> +
-> +       return sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&demotion_targets));
-> +}
-> +static DEVICE_ATTR_RO(demotion_targets);
-> +
->  static struct attribute *node_dev_attrs[] = {
->         &dev_attr_meminfo.attr,
->         &dev_attr_numastat.attr,
->         &dev_attr_distance.attr,
->         &dev_attr_vmstat.attr,
-> +       &dev_attr_demotion_targets.attr,
->         NULL
->  };
->
-> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-> index 90e75d5a54d6..072019441a24 100644
-> --- a/include/linux/migrate.h
-> +++ b/include/linux/migrate.h
-> @@ -173,6 +173,7 @@ int migrate_vma_setup(struct migrate_vma *args);
->  void migrate_vma_pages(struct migrate_vma *migrate);
->  void migrate_vma_finalize(struct migrate_vma *migrate);
->  int next_demotion_node(int node);
-> +nodemask_t node_get_demotion_targets(int node);
+On Fri, 22 Apr 2022 16:30:57 -0400
+Kent Overstreet <kent.overstreet@gmail.com> wrote:
 
-I think a stub implementation for !CONFIG_MIGRATION is also needed.
+> So here's the story of how I got from where seq_buf is now to where printbuf is
+> now:
+> 
+>  - Printbuf started out as almost an exact duplicate of seq_buf (like I said,
+>    not intentionally), with an external buffer typically allocated on the stack.
 
->  #else /* CONFIG_MIGRATION disabled: */
->
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 5b92a09fbe4a..da864831bc0c 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -2187,6 +2187,23 @@ struct demotion_nodes {
->
->  static struct demotion_nodes *node_demotion __read_mostly;
->
-> +nodemask_t node_get_demotion_targets(int node)
-> +{
-> +       nodemask_t demotion_targets = NODE_MASK_NONE;
-> +       unsigned short target_nr;
-> +
-> +       if (!node_demotion)
-> +               return NODE_MASK_NONE;
-> +
-> +       rcu_read_lock();
-> +       target_nr = READ_ONCE(node_demotion[node].nr);
-> +       for (int i = 0; i < target_nr; i++)
-> +               node_set(READ_ONCE(node_demotion[node].nodes[i]), demotion_targets);
-> +       rcu_read_unlock();
-> +
-> +       return demotion_targets;
-> +}
-> +
->  /**
->   * next_demotion_node() - Get the next node in the demotion path
->   * @node: The starting node to lookup the next node
-> --
-> 2.35.1
->
+Basically seq_buf is designed to be used as an underlining infrastructure.
+That's why it does not allocate any buffer and leaves that to the user
+cases. Hence, trace_seq() allocates a page for use, and I even use seq_buf
+in user space to dynamically allocate when needed.
+
+> 
+>  - As error/log messages got to be bigger and more structured, stack usage
+>    eventually became an issue, so eventually I added the heap allocations. 
+
+Which is something you could do on top of seq_buf. Point being, you do not
+need to re-implement printbuf, and I have not looked at the code, but
+instead, implement printbuf on top of seq_buf, and extend seq_buf where
+needed. Like trace_seq does, and the patches I have for seq_file would do.
+It would leave the string processing and buffer space management to
+seq_buf, as there's ways to see "oh, we need more space, let's allocate
+more" and then increase the heap.
+
+> 
+>  - This made them a lot more convenient to use, and made possible entirely new
+>    ways of using them - so I started using them more, and converting everything
+>    that outputted to strings to them.
+> 
+>  - This lead to the realization that when pretty-printers are easy and
+>    convenient to write, that leads to writing pretty-printers for _more_ stuff,
+>    which makes it easy to stay in the habit of adding anything relevant to
+>    sysfs/debugfs - and log/error messages got a _whole_ lot better when I
+>    realized instead of writing format strings for every basic C type I can just
+>    use the .to_text() methods of the high level objects I'm working with.
+> 
+> Basically, my debugging life has gotten _drastically_ easier because of this
+> change in process and approach - deadlocks that I used to have to attach a
+> debugger for are now trivial because all the relevant state is in debugfs and
+> greppable, and filesystem inconsistencies that used to suck to debug I now just
+> take what's in the error message and grep through the journal for.
+> 
+> I can't understate how invaluable all this stuff has been, and I'm excited to
+> take the lessons I've learned and apply them to the wider kernel and make other
+> people's lives easier too.
+> 
+> The shrinkers-OOM-reporting patch was an obvious starting point because
+>  - shrinkers have internal state that's definitely worth reporting on
+>  - we shouldn't just be logging this on OOM, we should also make this available
+>    in sysfs or debugfs.
+> 
+> Feature wise, printbufs have:
+>  - heap allocation
+>  - extra state for formatting: indent level, tabstops, and a way of specifying
+>    units.
+> 
+> That's basically it. Heap allocation adds very little code and eliminates a
+> _lot_ of headaches in playing the "how much do I need to/can I put on the stack"
+> game, and you'll want the formatting options as soon as you start formatting
+> multi line output and writing pretty printers that call other pretty printers.
+
+I would be more willing to accept a printbuf, if it was built on top of
+seq_buf. That is, you don't need to change all your user cases, you just
+need to make printbuf an extension of seq_buf by using it underneath, like
+trace_seq does. Then it would not be re-inventing the wheel, but just
+building on top of it.
+
+-- Steve
+

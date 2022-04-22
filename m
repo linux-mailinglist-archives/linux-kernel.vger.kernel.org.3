@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8264050B510
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D587450B507
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446612AbiDVKbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S1446586AbiDVKau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446547AbiDVKai (ORCPT
+        with ESMTP id S1446545AbiDVKai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Apr 2022 06:30:38 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDA754BF5;
-        Fri, 22 Apr 2022 03:27:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7113454BF3;
+        Fri, 22 Apr 2022 03:27:44 -0700 (PDT)
 Date:   Fri, 22 Apr 2022 10:27:42 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1650623263;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=P/WkXZ9wsxlcwcfCqQFCezZuWBx+EZXyJRY6J8rqNIQ=;
-        b=Ftdak4OUQThkTfBDs6iPyMm4ibg2iIQBzCbm5Z747s4DFOmWbe+zHaHMz5+jg7oBVExTfJ
-        Ah9eItXE1b8wpd2GAR33BfyFnLCREIsiAql+mOl6ekB2DbqGHyvz9++Hj8A5gwLU7e6G/Q
-        zZxgEFdabp1+ZB9lqgQJhf9cZlKvDoN7tyr0YBK12F0ddfmW7mzWnOgc0lSBXs+Xre6C5z
-        GWQXG/XLrBGGYQTJh9FgBCXCnUH5oYA+HKXppPEREtofuzhBH7CypZRPDnTC9Xlevl6kAC
-        80Jesv8Zn5fmlgRBAuGZy9HmCZXbJ/zUZQOg+scE8z5xkq5Oqb2DQmG3HSgQKg==
+        bh=ys/0N4EPkERPEVQYAUsEp2DEfjpFkxrd5BfrrdOAlj4=;
+        b=FNf1qYeod4KbwDEdcpgiW4KmR/vbt6Q6ncs0ULPFZJ02+TT8nDY4YRqs4BqXNMd0Z5RMCU
+        2Fr6BlAVmuZtLk1Elri1fwmhEtuT4SZuUmeyYgSk7h9Sqafa/Mlaq17fQdc3bVy37ImlLG
+        jZh9mqtiysiqnVJjpsvHq0y78zvaRycg15QNzV0jaLSm0dHPHhGQnLfHv2fNTszQDkBxqo
+        4ko7Z7VSUvll+2eGv/xaG+kyBsa10lFZxmU1R6xtfSMZQIDn1Sb88hAIWdRwv1b8QMniWg
+        89BNXKoePmY01LN/ChMkbZk6iRgeegPhsS8BjkKDjGcLUhw/5DsK6HfgdXUWqw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1650623263;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,23 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=P/WkXZ9wsxlcwcfCqQFCezZuWBx+EZXyJRY6J8rqNIQ=;
-        b=oHORoeEo/+iN5oAwHlld7434DDw4D9NABdBM4Ef0pbnYJxsVUQZsZUEsKLG7VW979OkfOC
-        RZs58+ViCaPnwYBA==
+        bh=ys/0N4EPkERPEVQYAUsEp2DEfjpFkxrd5BfrrdOAlj4=;
+        b=iEDNq5geI05d1SMHaVSrlyuKRZdev/J1sJgCesx5kGv8IL4BfVRhz7dYmm92lv0Fre+qu1
+        LdoGZtnCKcdbxRBQ==
 From:   "tip-bot2 for Chengming Zhou" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Fix cfs_rq_clock_pelt() for throttled cfs_rq
+Subject: [tip: sched/core] sched/fair: Delete useless condition in tg_unthrottle_up()
 Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ben Segall <bsegall@google.com>,
         Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220408115309.81603-1-zhouchengming@bytedance.com>
-References: <20220408115309.81603-1-zhouchengming@bytedance.com>
+In-Reply-To: <20220408115309.81603-2-zhouchengming@bytedance.com>
+References: <20220408115309.81603-2-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-Message-ID: <165062326289.4207.13116115438165020704.tip-bot2@tip-bot2>
+Message-ID: <165062326204.4207.16036597032362236478.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,94 +68,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     64eaf50731ac0a8c76ce2fedd50ef6652aabc5ff
-Gitweb:        https://git.kernel.org/tip/64eaf50731ac0a8c76ce2fedd50ef6652aabc5ff
+Commit-ID:     0a00a354644ee1800d31c47cf5927b9b50272fac
+Gitweb:        https://git.kernel.org/tip/0a00a354644ee1800d31c47cf5927b9b50272fac
 Author:        Chengming Zhou <zhouchengming@bytedance.com>
-AuthorDate:    Fri, 08 Apr 2022 19:53:08 +08:00
+AuthorDate:    Fri, 08 Apr 2022 19:53:09 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 22 Apr 2022 12:14:07 +02:00
 
-sched/fair: Fix cfs_rq_clock_pelt() for throttled cfs_rq
+sched/fair: Delete useless condition in tg_unthrottle_up()
 
-Since commit 23127296889f ("sched/fair: Update scale invariance of PELT")
-change to use rq_clock_pelt() instead of rq_clock_task(), we should also
-use rq_clock_pelt() for throttled_clock_task_time and throttled_clock_task
-accounting to get correct cfs_rq_clock_pelt() of throttled cfs_rq. And
-rename throttled_clock_task(_time) to be clock_pelt rather than clock_task.
+We have tested cfs_rq->load.weight in cfs_rq_is_decayed(),
+the first condition "!cfs_rq_is_decayed(cfs_rq)" is enough
+to cover the second condition "cfs_rq->nr_running".
 
-Fixes: 23127296889f ("sched/fair: Update scale invariance of PELT")
 Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Ben Segall <bsegall@google.com>
 Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20220408115309.81603-1-zhouchengming@bytedance.com
+Link: https://lore.kernel.org/r/20220408115309.81603-2-zhouchengming@bytedance.com
 ---
- kernel/sched/fair.c  | 8 ++++----
- kernel/sched/pelt.h  | 4 ++--
- kernel/sched/sched.h | 4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ kernel/sched/fair.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 601f8bd..f74b340 100644
+index f74b340..3eba0dc 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -4846,8 +4846,8 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
- 
- 	cfs_rq->throttle_count--;
- 	if (!cfs_rq->throttle_count) {
--		cfs_rq->throttled_clock_task_time += rq_clock_task(rq) -
--					     cfs_rq->throttled_clock_task;
-+		cfs_rq->throttled_clock_pelt_time += rq_clock_pelt(rq) -
-+					     cfs_rq->throttled_clock_pelt;
+@@ -4850,7 +4850,7 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
+ 					     cfs_rq->throttled_clock_pelt;
  
  		/* Add cfs_rq with load or one or more already running entities to the list */
- 		if (!cfs_rq_is_decayed(cfs_rq) || cfs_rq->nr_running)
-@@ -4864,7 +4864,7 @@ static int tg_throttle_down(struct task_group *tg, void *data)
- 
- 	/* group is entering throttled state, stop time */
- 	if (!cfs_rq->throttle_count) {
--		cfs_rq->throttled_clock_task = rq_clock_task(rq);
-+		cfs_rq->throttled_clock_pelt = rq_clock_pelt(rq);
- 		list_del_leaf_cfs_rq(cfs_rq);
+-		if (!cfs_rq_is_decayed(cfs_rq) || cfs_rq->nr_running)
++		if (!cfs_rq_is_decayed(cfs_rq))
+ 			list_add_leaf_cfs_rq(cfs_rq);
  	}
- 	cfs_rq->throttle_count++;
-@@ -5308,7 +5308,7 @@ static void sync_throttle(struct task_group *tg, int cpu)
- 	pcfs_rq = tg->parent->cfs_rq[cpu];
  
- 	cfs_rq->throttle_count = pcfs_rq->throttle_count;
--	cfs_rq->throttled_clock_task = rq_clock_task(cpu_rq(cpu));
-+	cfs_rq->throttled_clock_pelt = rq_clock_pelt(cpu_rq(cpu));
- }
- 
- /* conditionally throttle active cfs_rq's from put_prev_entity() */
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index c336f5f..4ff2ed4 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -145,9 +145,9 @@ static inline u64 rq_clock_pelt(struct rq *rq)
- static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- {
- 	if (unlikely(cfs_rq->throttle_count))
--		return cfs_rq->throttled_clock_task - cfs_rq->throttled_clock_task_time;
-+		return cfs_rq->throttled_clock_pelt - cfs_rq->throttled_clock_pelt_time;
- 
--	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_task_time;
-+	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_pelt_time;
- }
- #else
- static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 58263f9..762be73 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -603,8 +603,8 @@ struct cfs_rq {
- 	s64			runtime_remaining;
- 
- 	u64			throttled_clock;
--	u64			throttled_clock_task;
--	u64			throttled_clock_task_time;
-+	u64			throttled_clock_pelt;
-+	u64			throttled_clock_pelt_time;
- 	int			throttled;
- 	int			throttle_count;
- 	struct list_head	throttled_list;

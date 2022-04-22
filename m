@@ -2,85 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5111A50B209
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815F650B24F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445064AbiDVHyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
+        id S1445228AbiDVH63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445055AbiDVHyP (ORCPT
+        with ESMTP id S241901AbiDVH6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:54:15 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED63A17077;
-        Fri, 22 Apr 2022 00:51:22 -0700 (PDT)
+        Fri, 22 Apr 2022 03:58:23 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2D434647;
+        Fri, 22 Apr 2022 00:55:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650613883; x=1682149883;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=+KCrvW2z8lWJkXBe8aezktIGhnAcOO2jOGN6FQ83m3w=;
-  b=kRTcD0YRMTAxeuNpNu+N2El8Lsd1Bo4fee621gg5PaAKr713aPNnWx8k
-   2Cky25i7QdDD3LjhMY95SJA6dYV61QgxWdPQvU0fH9F/qVkRuvpRSMeeR
-   99bEuuPjETldLGtHYWsv9UPJiDusDxDdGYbHeuqcoHaGLf9uZGooMP0BQ
-   H9qQpzmjxYU3RU2c/6Kdkx2cLuDczdyAtRopCImY9VNNP1gtlo4i8cIDZ
-   zyTuINsewAkPWLsuolD9XCPWLcGPCCoi1vHHeGY03R7i5M1GnNIt3SVza
-   upBpWz+9axxskE9UQFf5z7Vyy1bq+GPtXry1jcNoe0Hd7tcMGprKhIVL/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264082084"
+  t=1650614130; x=1682150130;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TTlys0LYzTyNFpi4dCe718cEy03R8baV3CHMRO2CkLw=;
+  b=KKx1ZjNP5/y/JqkF1wYQtlr4UbSxzkNjttmBRsfxj5SgkqGICa2k2I0X
+   9avGzL9CBiKsJxKZStsLoCVAUOhZ+oaAQ585PwvGNST2O2QodRx0mxVIx
+   fYsgSK50LWj2CnnmjbFODuet+zkf//JhF3LQptlKh0mQC99tZpYQAu+xJ
+   17H7fjCrxF3sQXSUix+iVuiHXnumOj0LDE7OkNys0wDklxus86/5/1J/Y
+   P0+KoIU0NmGb4IvWR6IPoofofM1EWV0XbxsXpOuN/vBGVTzstFS/wB+ea
+   U927VZyQI+NQgutTggtFmDEJ8vpLbHxmn8YTTxp0WfJAB/3FWosOx5ZFl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264384822"
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="264082084"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 00:51:22 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="264384822"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 00:55:30 -0700
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="867284575"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Apr 2022 00:51:20 -0700
-To:     surong pang <surong.pang@gmail.com>
-Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Orson.Zhai@unisoc.com, yunguo.wu@unisoc.com
-References: <20220412122524.26966-1-surong.pang@gmail.com>
- <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
- <CAEDbmAT=fZ-kpn13sW4KjB9RuFb_6T4j_eripR54NZ3UciZfqA@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
-Message-ID: <d6df23a0-6539-f955-5241-5cdfcaa4eca4@linux.intel.com>
-Date:   Fri, 22 Apr 2022 10:53:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+   d="scan'208";a="577741312"
+Received: from embargo.jf.intel.com ([10.165.9.183])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 00:55:29 -0700
+From:   Yang Weijiang <weijiang.yang@intel.com>
+To:     pbonzini@redhat.com, jmattson@google.com, seanjc@google.com,
+        like.xu.linux@gmail.com, vkuznets@redhat.com, wei.w.wang@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yang Weijiang <weijiang.yang@intel.com>
+Subject: [PATCH v10 00/16] Introduce Architectural LBR for vPMU
+Date:   Fri, 22 Apr 2022 03:54:53 -0400
+Message-Id: <20220422075509.353942-1-weijiang.yang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <CAEDbmAT=fZ-kpn13sW4KjB9RuFb_6T4j_eripR54NZ3UciZfqA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.4.2022 5.10, surong pang wrote:
-> shared_hcd might be freed already here, but hcd should not be freed
-> here, because "usb_put_hcd(hcd)" is called later.
+Intel CPU model-specific LBR(Legacy LBR) evolved into Architectural
+LBR(Arch LBR[0]), it's the replacement of legacy LBR on new platforms.
+The native support patches were merged into 5.9 kernel tree, and this
+patch series is to enable Arch LBR in vPMU so that guest can benefit
+from the merits of the feature.
 
-To me it still looks like this patch calls usb_phy_shutdown(hcd->usb_phy) _after_
-usb_put_hcd(hcd):
+The main advantages of Arch LBR are [1]:
+- Faster context switching due to XSAVES support and faster reset of
+  LBR MSRs via the new DEPTH MSR
+- Faster LBR read for a non-PEBS event due to XSAVES support, which
+  lowers the overhead of the NMI handler.
+- Linux kernel can support the LBR features without knowing the model
+  number of the current CPU.
 
->>> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device *dev)
->>>       clk_disable_unprepare(clk);
->>>       clk_disable_unprepare(reg_clk);
->>>       usb_put_hcd(hcd);
->>> +     usb_phy_shutdown(hcd->usb_phy);
+From end user's point of view, the usage of Arch LBR is the same as
+the Legacy LBR that has been merged in the mainline.
+
+Note, in this series, we impose one restriction for guest Arch LBR:
+Guest can only set the same LBR record depth as host, this is due to
+the special behavior of MSR_ARCH_LBR_DEPTH: 1) On write to the MSR,
+it'll reset all Arch LBR recording MSRs to 0s. 2) XRSTORS resets all
+record MSRs to 0s if the saved depth mismatches MSR_ARCH_LBR_DEPTH.
+Enforcing the restriction keeps the KVM enabling patch simple and
+straightforward.
+
+[0] https://software.intel.com/sites/default/files/managed/c5/15/architecture-instruction-set-extensions-programming-reference.pdf
+[1] https://lore.kernel.org/lkml/1593780569-62993-1-git-send-email-kan.liang@linux.intel.com/
+
+Qemu patch:
+https://patchwork.ozlabs.org/project/qemu-devel/cover/20220215195258.29149-1-weijiang.yang@intel.com/
+
+Previous version:
+v9: https://lore.kernel.org/all/20220215212544.51666-1-weijiang.yang@intel.com/
+
+Changes in v10:
+1. Refactored XSS related patch due to mainline evolvement.
+2. Removed unnecessary guest fpu load/put helpers when accessing guest LBR MSRs.
+3. Rebase the patch series to 5.18-rc2.
 
 
-shared hcd was freed even earlier, before disabling the clocks.
+Like Xu (6):
+  perf/x86/intel: Fix the comment about guest LBR support on KVM
+  perf/x86/lbr: Simplify the exposure check for the LBR_INFO registers
+  KVM: vmx/pmu: Emulate MSR_ARCH_LBR_DEPTH for guest Arch LBR
+  KVM: vmx/pmu: Emulate MSR_ARCH_LBR_CTL for guest Arch LBR
+  KVM: x86: Refine the matching and clearing logic for supported_xss
+  KVM: x86: Add XSAVE Support for Architectural LBR
 
-Thanks
-Mathias
+Sean Christopherson (1):
+  KVM: x86: Report XSS as an MSR to be saved if there are supported
+    features
+
+Yang Weijiang (9):
+  KVM: x86: Refresh CPUID on writes to MSR_IA32_XSS
+  KVM: x86: Add Arch LBR MSRs to msrs_to_save_all list
+  KVM: x86/pmu: Refactor code to support guest Arch LBR
+  KVM: x86/vmx: Check Arch LBR config when return perf capabilities
+  KVM: nVMX: Add necessary Arch LBR settings for nested VM
+  KVM: x86/vmx: Clear Arch LBREn bit before inject #DB to guest
+  KVM: x86/vmx: Flip Arch LBREn bit on guest state change
+  KVM: x86: Add Arch LBR data MSR access interface
+  KVM: x86/cpuid: Advertise Arch LBR feature in CPUID
+
+ arch/x86/events/intel/core.c     |   3 +-
+ arch/x86/events/intel/lbr.c      |   6 +-
+ arch/x86/include/asm/kvm_host.h  |   3 +
+ arch/x86/include/asm/msr-index.h |   1 +
+ arch/x86/include/asm/vmx.h       |   4 +
+ arch/x86/kvm/cpuid.c             |  49 +++++++++-
+ arch/x86/kvm/vmx/capabilities.h  |   8 ++
+ arch/x86/kvm/vmx/nested.c        |   7 +-
+ arch/x86/kvm/vmx/pmu_intel.c     | 155 ++++++++++++++++++++++++++++---
+ arch/x86/kvm/vmx/vmcs12.c        |   1 +
+ arch/x86/kvm/vmx/vmcs12.h        |   3 +-
+ arch/x86/kvm/vmx/vmx.c           |  65 ++++++++++++-
+ arch/x86/kvm/x86.c               |  23 ++++-
+ 13 files changed, 294 insertions(+), 34 deletions(-)
+
+
+base-commit: ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
+-- 
+2.27.0
+

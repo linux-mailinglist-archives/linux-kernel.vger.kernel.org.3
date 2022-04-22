@@ -2,62 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D67650AFEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEF850AFF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbiDVGEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S233199AbiDVGDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233197AbiDVGEB (ORCPT
+        with ESMTP id S230172AbiDVGDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:04:01 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3B04F473;
-        Thu, 21 Apr 2022 23:01:09 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23M60wwP121003;
-        Fri, 22 Apr 2022 01:00:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650607258;
-        bh=9bUnBTWCXhpkU1twUskkrZzH3INxU1FojkanyreYxNc=;
-        h=From:To:CC:Subject:Date;
-        b=AVgu/NeLYgA3+J/TSRX9kuk0mwEDpN+PLQicY+imhhdVoslbuU2m5D16f+yOHS9eo
-         xmMvos8zzPiAogkThlUzr4+/WR/AWvmYZdcQzHhi2pVgjxQp4Ge0rV/8Aj/VP6MvDH
-         mlkDHCYVq5+HvywkpITSLxCNNCD3ZeF9L938ePC8=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23M60wlm024103
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 Apr 2022 01:00:58 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
- Apr 2022 01:00:57 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 22 Apr 2022 01:00:57 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23M60vCk082867;
-        Fri, 22 Apr 2022 01:00:57 -0500
-From:   Jai Luthra <j-luthra@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Jai Luthra <j-luthra@ti.com>
-Subject: [PATCH v2 0/2] Enable audio output on AM62-SK
-Date:   Fri, 22 Apr 2022 11:30:50 +0530
-Message-ID: <20220422060052.8548-1-j-luthra@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 22 Apr 2022 02:03:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9A74F473;
+        Thu, 21 Apr 2022 23:00:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB45C61DD2;
+        Fri, 22 Apr 2022 06:00:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C478AC385A4;
+        Fri, 22 Apr 2022 06:00:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650607253;
+        bh=v2TxGMZrPNxa8ZwM6tRVDSf6me6r9YRH6FQSwHNBNZY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yTnTZFMzlJcPcamxBmW4YXvA35d6ZSHryqocxu3iwbSRjFQIa9szfGxjzwxAg6Tiv
+         LNtZFtTV1PwJwY2HVZlJi+rmFI7Wy+HMtbwirb+0P6pay7Y8+9YwuXq23necOncFGQ
+         cdjcv1K+1SRpXSzPXaumgP077bHTFR2CLipyA3JA=
+Date:   Fri, 22 Apr 2022 08:00:50 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH v2] topology/sysfs: Fix allnoconfig build breakage.
+Message-ID: <YmJEkoVGCnCXb5Ff@kroah.com>
+References: <20220421152645.3a849198@canb.auug.org.au>
+ <YmD+geU9CmjoVnN9@kroah.com>
+ <YmF8Hrq5kgDdfvtS@agluck-desk3.sc.intel.com>
+ <YmF+FTxgu2U4/oPA@kroah.com>
+ <YmGEL2klp4S97UiH@agluck-desk3.sc.intel.com>
+ <20220422092247.5c638079@canb.auug.org.au>
+ <90d0e2c9b4a74c92bcdd5fc4313a7629@intel.com>
+ <20220422100054.74cadded@canb.auug.org.au>
+ <YmIYFjI/B+33PQn+@agluck-desk3.sc.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmIYFjI/B+33PQn+@agluck-desk3.sc.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,32 +59,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds support for audio output via headphone jack on the 
-AM62-SK board. The jack is wired to TLV320AIC3106 (codec), which is 
-connected to McASP (serializer).
+On Thu, Apr 21, 2022 at 07:51:02PM -0700, Luck, Tony wrote:
+> On Fri, Apr 22, 2022 at 10:00:54AM +1000, Stephen Rothwell wrote:
+> > I assume that there is some good reason that topology_ppin() is not
+> > implemented as a static inline function?
+> 
+> I don't think so. I just cut & pasted how all the other topology_*()
+> things were implemented.
+> 
+> Making it a static inline appears to fix this problem. But before
+> embarrassing myself with a third broken version I'll let zero day
+> crunch on:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/aegl/linux.git hide_ppin
+> 
+> to see if there is some subtle config or arch where the inline trick
+> doesn't work.
+> 
+> Thanks for the idea! :-)
 
-The same 3.5mm jack can be used for combined playback+recording, but audio 
-input is currently disabled on McASP until further testing and debugging.
+Why not just do the following, which passes my build tests here:
 
-For testing, please apply this series on top of 
-https://lore.kernel.org/all/20220415131917.431137-1-vigneshr@ti.com/ and 
-https://lore.kernel.org/alsa-devel/20220422054001.3738-1-j-luthra@ti.com/
 
-Changelog:
-
-V2:
-- Move out the patch for sound/soc/ti/davinci-mcasp.c from this series
-
-Jai Luthra (1):
-  arm64: dts: ti: am625-sk: Add audio output support
-
-Jayesh Choudhary (1):
-  arm64: dts: ti: k3-am62-main: Add McASP nodes
-
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 51 ++++++++++++++
- arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 89 ++++++++++++++++++++++++
- 2 files changed, 140 insertions(+)
-
--- 
-2.17.1
-
+diff --git a/drivers/base/topology.c b/drivers/base/topology.c
+index 706dbf8bf249..ac6ad9ab67f9 100644
+--- a/drivers/base/topology.c
++++ b/drivers/base/topology.c
+@@ -155,9 +155,7 @@ static struct attribute *default_attrs[] = {
+ static umode_t topology_is_visible(struct kobject *kobj,
+ 				   struct attribute *attr, int unused)
+ {
+-	struct device *dev = kobj_to_dev(kobj);
+-
+-	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
++	if (attr == &dev_attr_ppin.attr && !topology_ppin(kobj_to_dev(kobj)->id))
+ 		return 0;
+ 
+ 	return attr->mode;

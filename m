@@ -2,337 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A985E50B9F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814B050BA01
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448594AbiDVOXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S1448610AbiDVOZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448649AbiDVOXL (ORCPT
+        with ESMTP id S1448593AbiDVOZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:23:11 -0400
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C8F48E53
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:20:18 -0700 (PDT)
-Received: by mail-wm1-x34a.google.com with SMTP id y11-20020a7bc18b000000b0038eac019fc0so3795823wmi.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:20:17 -0700 (PDT)
+        Fri, 22 Apr 2022 10:25:31 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5435A16E
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:22:36 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id a10so9182093oif.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:22:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=dog+vroB+oUrwQ0X22Zl8MMNzdFUuRAaUXhtZm0NBNE=;
-        b=LdtzVGqvEisHV6UNxQ4C9u6ty/Ny89cdxZzTrzQiMPZBHGYVuQqRSjb2OIQ4TTL/1E
-         zCEdlPdrLCMGBGOiQQU3/C9Uqb+aD7WskIrAxxW76FWRvLJYg1n3ggyDOeSpMgUoGwxg
-         aHLGzijrbMc9PqQxQZfDbc9xVApLRXikVCd5QyBvkkQ7dNWdYNh+31aIgAaIVosWxTcg
-         vSQXNqYlsimmU5EpbYDUL0rjqT7qHDefnEOXkFhDmtx8TYpw84OvDHxpvnIa+jYRxYhY
-         jqwwtU9xLxL9825A+Og5DCdFO/IEQNrccQadplsInVRZ7nfDUA9wH+DoyOiZEX3T9TWf
-         2VRg==
+        d=linaro.org; s=google;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=Dm1Q3RuZS/84y7al/vWL+CiE8BS1ax90BXjLHlS5WHg=;
+        b=tc5skVD9Ooc0/MV4kUSZ6U6QULZlxjw5oYMH+oPpJQay3KTBdL6Xy91ms4LgRhOCVq
+         ZL948bjr1EozQ2OHYug9UDfA1eyV+ZkcLsHJq54pVHR//PzGmgBe9nnsrow4js5QoTRC
+         rQ+98GrAIu9uUZQzt1sUAetrdBFnl/mnyN+aFdW1bqsxhcbL1IW/aWHNEDdf0S30KWHc
+         aAeKJBHyfPwlt2ozzcD02HNqqo95HCWo/uRyXkQdPOyDGrnQ8iMgKoNKrAbAm5AbThFn
+         8HedfImyBSnGfATVz2g+xECKUJirpmU1Jy9iPgDtk7Tijoy+MN9VlH8paVZrDQxE5LqC
+         vKPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=dog+vroB+oUrwQ0X22Zl8MMNzdFUuRAaUXhtZm0NBNE=;
-        b=NAsFu1oe+LryKa7bki5+1PFGnVnCT02ZXnaocO/XvOyWMleL/kuvT1UPLLTRHFdIVQ
-         jXwr7XBm1GiHGIsbFGdLMPWEEsUI5l8ntRZAnMZIPs5DPWREEvv42Gtxju4qYq7IcLV+
-         ghfK5jEoPLukjRxTNPqKTp6yEn2Fua1aWhs9wI7/lhyPmyeRFN1T/UPtNeSZS/U+6fS8
-         +gH+waDqadJN9dU4UcGJ4rUiTPv/aMDy3rLtDCG2EfaN++rofarnVX99ItynFX0hx2GI
-         O20Fd6e+nmWBY7U6L7yxxi+SNJTvX6P6BQzT6C1SbbOmHa6C1s0OeiCt4pNGq32u4WZP
-         9cdg==
-X-Gm-Message-State: AOAM531DOTZqCQXBnwPdX//46IHDb/5wVxon9eNyJLtjUpareiF8P3Yw
-        CwfUQQqiQiHRrOt1ZzkB3stewQBkGucVfAf++Tg=
-X-Google-Smtp-Source: ABdhPJwlC/Vm1dYtdajJnBr53VZKxrH4isoAT7nYGDkYal+4ZbeoOrzUh9Uw9sGDOwtqpE9Zcx2v160I6lQSjw8v8q8=
-X-Received: from sene.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:27c4])
- (user=sebastianene job=sendgmr) by 2002:a1c:acc4:0:b0:392:9dd4:fbcc with SMTP
- id v187-20020a1cacc4000000b003929dd4fbccmr4313905wme.78.1650637216654; Fri,
- 22 Apr 2022 07:20:16 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 14:19:50 +0000
-In-Reply-To: <20220422141949.3456505-1-sebastianene@google.com>
-Message-Id: <20220422141949.3456505-3-sebastianene@google.com>
-Mime-Version: 1.0
-References: <20220422141949.3456505-1-sebastianene@google.com>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH  v2 2/2] misc: Add a mechanism to detect stalls on guest vCPUs
-From:   Sebastian Ene <sebastianene@google.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        maz@kernel.org, will@kernel.org, qperret@google.com,
-        Sebastian Ene <sebastianene@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version:content-transfer-encoding;
+        bh=Dm1Q3RuZS/84y7al/vWL+CiE8BS1ax90BXjLHlS5WHg=;
+        b=sG24titIVVt7LPJM9JvpzIC3Je8w/auAlVeiMlOgcNJDTni4jLBq2DyMB03DGA7SpP
+         oTfXvZ1xdNZWI9cltfseREp7aWVF2rVXnfwGVeWbE/+5V+QGNKrRKPwqDh9fEFhCQYW8
+         g2b+uk4EhEKfHQEezfx/xpH/2N+wK6uoo7HT64x2TCcpHYjnk73KKTUaV+0Klz7+AQhh
+         fH8NPJfDmlzMB8ackPezvuapRSL62kVs0589HgMPCkuIGI74m2TTIdAyfa+pUlHbOnyB
+         H4qkcNklBY4roDzDB1znbOtoqdM6wNAIygrGOjSrKgf/UE/qgKkwjxuuHxklehro8t8+
+         pAjg==
+X-Gm-Message-State: AOAM5326CmCof3S8fju31O7pUb97Ss1x8o63sljcuunAmveayY9SoHcM
+        X5NGG9JhZDwzwTyyYOxLUQ4s3illldUZ8Q==
+X-Google-Smtp-Source: ABdhPJyWXPHobhLmtwoHxIUDVM8nl4YALwg9uoBKl2RI+Bw26vjUChcDENNVqy8VRrFcuG1GXFA5bQ==
+X-Received: by 2002:a05:6808:124f:b0:321:855d:5b19 with SMTP id o15-20020a056808124f00b00321855d5b19mr2465775oiv.30.1650637355858;
+        Fri, 22 Apr 2022 07:22:35 -0700 (PDT)
+Received: from zen.linaroharston ([51.148.130.216])
+        by smtp.gmail.com with ESMTPSA id q12-20020a4ad54c000000b003245ac0a745sm822098oos.22.2022.04.22.07.22.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 07:22:34 -0700 (PDT)
+Received: from zen (localhost [127.0.0.1])
+        by zen.linaroharston (Postfix) with ESMTP id AEDAD1FFB7;
+        Fri, 22 Apr 2022 15:22:32 +0100 (BST)
+References: <20220405093759.1126835-1-alex.bennee@linaro.org>
+User-agent: mu4e 1.7.13; emacs 28.1.50
+From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     maxim.uvarov@linaro.org, joakim.bech@linaro.org,
+        ulf.hansson@linaro.org, ilias.apalodimas@linaro.org,
+        arnd@linaro.org, ruchika.gupta@linaro.org, tomas.winkler@intel.com,
+        yang.huang@intel.com, bing.zhu@intel.com,
+        Matti.Moell@opensynergy.com, hmo@opensynergy.com,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Alex =?utf-8?Q?Ben?= =?utf-8?Q?n=C3=A9e?= 
+        <alex.bennee@linaro.org>
+Subject: Re: [PATCH  v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
+Date:   Fri, 22 Apr 2022 15:21:10 +0100
+In-reply-to: <20220405093759.1126835-1-alex.bennee@linaro.org>
+Message-ID: <87wnfhtcyf.fsf@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for a virtual watchdog which relies on the
-per-cpu hrtimers to pet at regular intervals.
 
-Signed-off-by: Sebastian Ene <sebastianene@google.com>
----
- drivers/misc/Kconfig  |   8 ++
- drivers/misc/Makefile |   1 +
- drivers/misc/vm-wdt.c | 215 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 224 insertions(+)
- create mode 100644 drivers/misc/vm-wdt.c
+Alex Benn=C3=A9e <alex.bennee@linaro.org> writes:
 
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 2b9572a6d114..0e710149ff95 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -493,6 +493,14 @@ config OPEN_DICE
- 
- 	  If unsure, say N.
- 
-+config VM_WATCHDOG
-+	tristate "Virtual Machine Watchdog"
-+	select LOCKUP_DETECTOR
-+	help
-+	  Detect CPU locks on the virtual machine.
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called vm-wdt.
-+
- source "drivers/misc/c2port/Kconfig"
- source "drivers/misc/eeprom/Kconfig"
- source "drivers/misc/cb710/Kconfig"
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 2ec634354cf5..868e28d01b75 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -59,3 +59,4 @@ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
- obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
- obj-$(CONFIG_UID_SYS_STATS)	+= uid_sys_stats.o
- obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
-+obj-$(CONFIG_VM_WATCHDOG) += vm-wdt.o
-\ No newline at end of file
-diff --git a/drivers/misc/vm-wdt.c b/drivers/misc/vm-wdt.c
-new file mode 100644
-index 000000000000..ea4351754645
---- /dev/null
-+++ b/drivers/misc/vm-wdt.c
-@@ -0,0 +1,215 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+//
-+// Virtual watchdog driver.
-+//  Copyright (C) Google, 2022
-+
-+#define pr_fmt(fmt) "vm-watchdog: " fmt
-+
-+#include <linux/cpu.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+
-+#include <linux/device.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/nmi.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/param.h>
-+#include <linux/percpu.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+
-+#define DRV_NAME			"vm_wdt"
-+#define DRV_VERSION			"1.0"
-+
-+#define VMWDT_REG_STATUS		(0x00)
-+#define VMWDT_REG_LOAD_CNT		(0x04)
-+#define VMWDT_REG_CURRENT_CNT		(0x08)
-+#define VMWDT_REG_CLOCK_FREQ_HZ		(0x0C)
-+#define VMWDT_REG_LEN			(0x10)
-+
-+#define VMWDT_DEFAULT_CLOCK_HZ		(10)
-+#define VMWDT_DEFAULT_TIMEOT_SEC	(8)
-+
-+struct vm_wdt_s {
-+	void __iomem *membase;
-+	u32 clock_freq;
-+	u32 expiration_sec;
-+	u32 ping_timeout_ms;
-+	struct hrtimer per_cpu_hrtimer;
-+	struct platform_device *dev;
-+};
-+
-+#define vmwdt_reg_write(wdt, reg, value)	\
-+	iowrite32((value), (wdt)->membase + (reg))
-+#define vmwdt_reg_read(wdt, reg)		\
-+	io32read((wdt)->membase + (reg))
-+
-+static struct platform_device *virt_dev;
-+
-+static enum hrtimer_restart vmwdt_timer_fn(struct hrtimer *hrtimer)
-+{
-+	struct vm_wdt_s *cpu_wdt;
-+	u32 ticks;
-+
-+	cpu_wdt = container_of(hrtimer, struct vm_wdt_s, per_cpu_hrtimer);
-+	ticks = cpu_wdt->clock_freq * cpu_wdt->expiration_sec;
-+	vmwdt_reg_write(cpu_wdt, VMWDT_REG_LOAD_CNT, ticks);
-+	hrtimer_forward_now(hrtimer, ms_to_ktime(cpu_wdt->ping_timeout_ms));
-+
-+	return HRTIMER_RESTART;
-+}
-+
-+static void vmwdt_start(void *arg)
-+{
-+	u32 ticks;
-+	int cpu = smp_processor_id();
-+	struct vm_wdt_s *cpu_wdt = arg;
-+	struct hrtimer *hrtimer = &cpu_wdt->per_cpu_hrtimer;
-+
-+	pr_info("cpu %u vmwdt start\n", cpu);
-+	vmwdt_reg_write(cpu_wdt, VMWDT_REG_CLOCK_FREQ_HZ,
-+			cpu_wdt->clock_freq);
-+
-+	/* Compute the number of ticks required for the watchdog counter
-+	 * register based on the internal clock frequency and the watchdog
-+	 * timeout given from the device tree.
-+	 */
-+	ticks = cpu_wdt->clock_freq * cpu_wdt->expiration_sec;
-+	vmwdt_reg_write(cpu_wdt, VMWDT_REG_LOAD_CNT, ticks);
-+
-+	/* Enable the internal clock and start the watchdog */
-+	vmwdt_reg_write(cpu_wdt, VMWDT_REG_STATUS, 1);
-+
-+	hrtimer_init(hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-+	hrtimer->function = vmwdt_timer_fn;
-+	hrtimer_start(hrtimer, ms_to_ktime(cpu_wdt->ping_timeout_ms),
-+		      HRTIMER_MODE_REL_PINNED);
-+}
-+
-+static void vmwdt_stop(void *arg)
-+{
-+	int cpu = smp_processor_id();
-+	struct vm_wdt_s *cpu_wdt = arg;
-+	struct hrtimer *hrtimer = &cpu_wdt->per_cpu_hrtimer;
-+
-+	hrtimer_cancel(hrtimer);
-+
-+	/* Disable the watchdog */
-+	vmwdt_reg_write(cpu_wdt, VMWDT_REG_STATUS, 0);
-+	pr_info("cpu %d vmwdt stop\n", cpu);
-+}
-+
-+static int start_watchdog_on_cpu(unsigned int cpu)
-+{
-+	struct vm_wdt_s *vm_wdt = platform_get_drvdata(virt_dev);
-+
-+	vmwdt_start(this_cpu_ptr(vm_wdt));
-+	return 0;
-+}
-+
-+static int stop_watchdog_on_cpu(unsigned int cpu)
-+{
-+	struct vm_wdt_s *vm_wdt = platform_get_drvdata(virt_dev);
-+
-+	vmwdt_stop(this_cpu_ptr(vm_wdt));
-+	return 0;
-+}
-+
-+static int vmwdt_probe(struct platform_device *dev)
-+{
-+	int cpu, ret, err;
-+	void __iomem *membase;
-+	struct resource *r;
-+	struct vm_wdt_s *vm_wdt;
-+	u32 wdt_clock, wdt_timeout_sec = 0;
-+
-+	r = platform_get_resource(dev, IORESOURCE_MEM, 0);
-+	if (r == NULL)
-+		return -ENOENT;
-+
-+	vm_wdt = alloc_percpu(typeof(struct vm_wdt_s));
-+	if (!vm_wdt)
-+		return -ENOMEM;
-+
-+	membase = ioremap(r->start, resource_size(r));
-+	if (!membase) {
-+		ret = -ENXIO;
-+		goto err_withmem;
-+	}
-+
-+	virt_dev = dev;
-+	platform_set_drvdata(dev, vm_wdt);
-+	if (of_property_read_u32(dev->dev.of_node, "clock", &wdt_clock))
-+		wdt_clock = VMWDT_DEFAULT_CLOCK_HZ;
-+
-+	if (of_property_read_u32(dev->dev.of_node, "timeout-sec",
-+				 &wdt_timeout_sec))
-+		wdt_timeout_sec = VMWDT_DEFAULT_TIMEOT_SEC;
-+
-+	for_each_cpu_and(cpu, cpu_online_mask, &watchdog_cpumask) {
-+		struct vm_wdt_s *cpu_wdt = per_cpu_ptr(vm_wdt, cpu);
-+
-+		cpu_wdt->membase = membase + cpu * VMWDT_REG_LEN;
-+		cpu_wdt->clock_freq = wdt_clock;
-+		cpu_wdt->expiration_sec = wdt_timeout_sec;
-+		cpu_wdt->ping_timeout_ms = wdt_timeout_sec * MSEC_PER_SEC / 2;
-+		smp_call_function_single(cpu, vmwdt_start, cpu_wdt, true);
-+	}
-+
-+	err = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-+					"virt/watchdog:online",
-+					start_watchdog_on_cpu,
-+					stop_watchdog_on_cpu);
-+	if (err < 0) {
-+		pr_warn("could not be initialized");
-+		ret = err;
-+		goto err_withmem;
-+	}
-+
-+	return 0;
-+
-+err_withmem:
-+	free_percpu(vm_wdt);
-+	return ret;
-+}
-+
-+static int vmwdt_remove(struct platform_device *dev)
-+{
-+	int cpu;
-+	struct vm_wdt_s *vm_wdt = platform_get_drvdata(dev);
-+
-+	for_each_cpu_and(cpu, cpu_online_mask, &watchdog_cpumask) {
-+		struct vm_wdt_s *cpu_wdt = per_cpu_ptr(vm_wdt, cpu);
-+
-+		smp_call_function_single(cpu, vmwdt_stop, cpu_wdt, true);
-+	}
-+
-+	free_percpu(vm_wdt);
-+	return 0;
-+}
-+
-+static const struct of_device_id vmwdt_of_match[] = {
-+	{ .compatible = "qemu,vm-watchdog", },
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(of, vm_watchdog_of_match);
-+
-+static struct platform_driver vmwdt_driver = {
-+	.probe  = vmwdt_probe,
-+	.remove = vmwdt_remove,
-+	.driver = {
-+		.name           = DRV_NAME,
-+		.of_match_table = vmwdt_of_match,
-+	},
-+};
-+
-+module_platform_driver(vmwdt_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Sebastian Ene <sebastianene@google.com>");
-+MODULE_DESCRIPTION("Virtual watchdog driver");
-+MODULE_VERSION(DRV_VERSION);
--- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
+> Hi,
+>
+> This is another attempt to come up with an RPMB API for the kernel.
+> The last discussion of this was in the thread:
 
+Ping?
+
+Any other comments or reviews? Is there a desire to make other devices
+that provide RPMB functionality visible via a common API?
+
+>
+>   Subject: [RFC PATCH  0/5] RPMB internal and user-space API + WIP virtio=
+-rpmb frontend
+>   Date: Wed,  3 Mar 2021 13:54:55 +0000
+>   Message-Id: <20210303135500.24673-1-alex.bennee@linaro.org>
+>
+> The series provides for the RPMB sub-system, a new chardev API driven
+> by ioctls and a full multi-block capable virtio-rpmb driver. You can
+> find a working vhost-user backend in my QEMU branch here:
+>
+>   https://github.com/stsquad/qemu/commits/virtio/vhost-user-rpmb-v2
+>
+> The branch is a little messy but I'll be posting a cleaned up version
+> in the following weeks. The only real changes to the backend is the
+> multi-block awareness and some tweaks to deal with QEMU internals
+> handling VirtIO config space messages which weren't previously
+> exercised. The test.sh script in tools/rpmb works through the various
+> transactions but isn't comprehensive.
+>
+> Changes since the last posting:
+>
+>   - frame construction is mostly back in userspace
+>
+>   The previous discussion showed there wasn't any appetite for using
+>   the kernels keyctl() interface so userspace yet again takes
+>   responsibility for constructing most* frames. Currently these are
+>   all pure virtio-rpmb frames but the code is written so we can plug
+>   in additional frame types. The virtio-rpmb driver does some
+>   validation and in some cases (* read-blocks) constructs the request
+>   frame in the driver. It would take someone implementing a driver for
+>   another RPMB device type to see if this makes sense.
+>
+>   - user-space interface is still split across several ioctls
+>
+>   Although 3 of the ioctls share the common rpmb_ioc_reqresp_cmd
+>   structure it does mean things like capacity, write_count and
+>   read_blocks can have their own structure associated with the
+>   command.
+>
+> As before I shall follow up with the QEMU based vhost-user backend and
+> hopefully a rust-vmm re-implementation. However I've no direct
+> interest in implementing the interfaces to real hardware. I leave that
+> to people who have access to such things and are willing to take up
+> the maintainer burden if this is merged.
+>
+> Regards,
+>
+> Alex
+>=20=20=20=20=20
+>
+> Alex Benn=C3=A9e (4):
+>   rpmb: add Replay Protected Memory Block (RPMB) subsystem
+>   char: rpmb: provide a user space interface
+>   rpmb: create virtio rpmb frontend driver
+>   tools rpmb: add RPBM access tool
+>
+>  .../userspace-api/ioctl/ioctl-number.rst      |    1 +
+>  MAINTAINERS                                   |    9 +
+>  drivers/Kconfig                               |    2 +
+>  drivers/Makefile                              |    1 +
+>  drivers/rpmb/Kconfig                          |   28 +
+>  drivers/rpmb/Makefile                         |    9 +
+>  drivers/rpmb/cdev.c                           |  309 +++++
+>  drivers/rpmb/core.c                           |  439 +++++++
+>  drivers/rpmb/rpmb-cdev.h                      |   17 +
+>  drivers/rpmb/virtio_rpmb.c                    |  518 ++++++++
+>  include/linux/rpmb.h                          |  182 +++
+>  include/uapi/linux/rpmb.h                     |   99 ++
+>  include/uapi/linux/virtio_rpmb.h              |   54 +
+>  tools/Makefile                                |   16 +-
+>  tools/rpmb/.gitignore                         |    2 +
+>  tools/rpmb/Makefile                           |   41 +
+>  tools/rpmb/key                                |    1 +
+>  tools/rpmb/rpmb.c                             | 1083 +++++++++++++++++
+>  tools/rpmb/test.sh                            |   22 +
+>  19 files changed, 2828 insertions(+), 5 deletions(-)
+>  create mode 100644 drivers/rpmb/Kconfig
+>  create mode 100644 drivers/rpmb/Makefile
+>  create mode 100644 drivers/rpmb/cdev.c
+>  create mode 100644 drivers/rpmb/core.c
+>  create mode 100644 drivers/rpmb/rpmb-cdev.h
+>  create mode 100644 drivers/rpmb/virtio_rpmb.c
+>  create mode 100644 include/linux/rpmb.h
+>  create mode 100644 include/uapi/linux/rpmb.h
+>  create mode 100644 include/uapi/linux/virtio_rpmb.h
+>  create mode 100644 tools/rpmb/.gitignore
+>  create mode 100644 tools/rpmb/Makefile
+>  create mode 100644 tools/rpmb/key
+>  create mode 100644 tools/rpmb/rpmb.c
+>  create mode 100755 tools/rpmb/test.sh
+
+
+--=20
+Alex Benn=C3=A9e

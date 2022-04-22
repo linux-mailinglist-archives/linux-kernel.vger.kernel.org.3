@@ -2,172 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F4A50C4C5
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5103850C4D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiDVX23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S230047AbiDVX2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiDVX1a (ORCPT
+        with ESMTP id S232048AbiDVX1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:27:30 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C6A606F6;
-        Fri, 22 Apr 2022 16:06:44 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 16:06:35 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1650668803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ri4NEas9lbSjiAnr8PAym/AzE+VftrHE7yoNfH/LAm4=;
-        b=LdkihvAFvgmGJkuRJSFvZ0tR5C5W9JQk7UPT7Vi3g9kBw83Agk5s5sugSpdqB2Mot3XgXV
-        V38mWZJ/VkZDbrGHj5ydXhO5pexoi/psWeYyFix0qZR515bKTXVFuhtXB8Z/2IBmvmB4tS
-        YPD+7R9Yhaa2bMt3H2v5OKLQuxeAQuw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     David Vernet <void@manifault.com>
-Cc:     akpm@linux-foundation.org, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
-        shakeelb@google.com, kernel-team@fb.com
-Subject: Re: [PATCH 2/5] cgroup: Account for memory_recursiveprot in
- test_memcg_low()
-Message-ID: <YmM0+/P0ro9pPzMf@carbon>
-References: <20220422155728.3055914-1-void@manifault.com>
- <20220422155728.3055914-3-void@manifault.com>
+        Fri, 22 Apr 2022 19:27:53 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AE46B0AD
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 16:07:20 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q185so2131596ljb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 16:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+omz4SMiA/FNbw95hOPG0uMbW0wRTZgF74DNTyZ1LWc=;
+        b=I/NIktzovazHXTI+cvhlhV9xzuiGibqKWatXMqYxYGOOltJWseZmRAqYso6HzDOS5a
+         ZfUzziSbcLebwm6A60cWOUaOS+dnVp60vY0sOP+fdkV6SZSHdxu27EZhVNwKwDXGp6VX
+         xV25HF9pad5mCDRNhfGfSFDdaeXDbsAPgVy9Ey/lsykb9jZVb45clqD+AUTY9cOxrkKD
+         Uu1JzYUcj3jpoIiOTdXBZpxx+bwaKFIxpGcCNuFzgXTZuF9WOQyjrqW/rkPMISh7LW19
+         vhgb3Ebjk6PaV/tQuiDvw1+9DHlt/DCYl+XoFiu0Mxs+gEIOxqNLCpSqJU32zxVtvA9i
+         sALw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+omz4SMiA/FNbw95hOPG0uMbW0wRTZgF74DNTyZ1LWc=;
+        b=yB/uHPe45MOYp0v6e2xxJFcUafbfGABDgfQzT3v4Rk0cm5h16bnEdrYkcFwzK7RqbX
+         5FoFnbEGBWK7DMuUbSEDHBV5YNANP+93ym9p5BGG5Iq1phIEmJ6oyD92oTrsk8y61M2Z
+         LhWR760elNOulF/J4k3pQWEHNupADTYjiIZgi1uArTuZhZs3bP19Rpg1ThDSomTDrbSw
+         EoL6KTbuhm9dIO3kzDzWzMJEk/LKqxCnlRnfFYzMflTbQi1z3dqx/bQa9LPP9DQEixvY
+         GCmrJqYG6Tks8gLxy/46SE47xJpSjncKrnE3DgXWKtyo1WFqJxt/fCU0n4+bRYsY1nqb
+         BT1Q==
+X-Gm-Message-State: AOAM532h0dLouZQZyE0g0a/WmTHsqh+/t5GoVGdpubWOq9a4nZllLXU1
+        afI7hLAGxcfN0k35vkNNJr9kUA==
+X-Google-Smtp-Source: ABdhPJy4QnX3N7jeqkRWD4a9h4+Eq/px39OkD/kxGlmlJUWO6Ndjf3tT/dOYJHX9KlseiTK3crayEw==
+X-Received: by 2002:a2e:850f:0:b0:24d:bca4:b9ae with SMTP id j15-20020a2e850f000000b0024dbca4b9aemr4020026lji.109.1650668838623;
+        Fri, 22 Apr 2022 16:07:18 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id k16-20020a192d10000000b0046ba99878a6sm385297lfj.17.2022.04.22.16.07.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 16:07:18 -0700 (PDT)
+Message-ID: <11a77fd7-d30b-edf6-3570-64d0c2e1764c@linaro.org>
+Date:   Sat, 23 Apr 2022 02:07:16 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422155728.3055914-3-void@manifault.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 2/2] drm/msm/dp: Implement oob_hotplug_event()
+Content-Language: en-GB
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
+References: <20220422223225.1297434-1-bjorn.andersson@linaro.org>
+ <20220422223225.1297434-2-bjorn.andersson@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220422223225.1297434-2-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 08:57:26AM -0700, David Vernet wrote:
-> The test_memcg_low() testcase in test_memcontrol.c verifies the expected
-> behavior of groups using the memory.low knob. Part of the testcase verifies
-> that a group with memory.low that experiences reclaim due to memory
-> pressure elsewhere in the system, observes memory.events.low events as a
-> result of that reclaim.
+On 23/04/2022 01:32, Bjorn Andersson wrote:
+> The Qualcomm DisplayPort driver contains traces of the necessary
+> plumbing to hook up USB HPD, in the form of the dp_hpd module and the
+> dp_usbpd_cb struct. Use this as basis for implementing the
+> oob_hotplug_event() callback, by amending the dp_hpd module with the
+> missing logic.
 > 
-> In commit 8a931f801340 ("mm: memcontrol: recursive memory.low protection"),
-> the memory controller was updated to propagate memory.low and memory.min
-> protection from a parent group to its children via a configurable
-> memory_recursiveprot mount option. This unfortunately broke the memcg
-> tests, which asserts that a sibling that experienced reclaim but had a
-> memory.low value of 0, would not observe any memory.low events. This patch
-> updates test_memcg_low() to account for the new behavior introduced by
-> memory_recursiveprot.
+> Overall the solution is similar to what's done downstream, but upstream
+> all the code to disect the HPD notification lives on the calling side of
+> drm_connector_oob_hotplug_event().
 > 
-> So as to make the test resilient to multiple configurations, the patch also
-> adds a new proc_mount_contains() helper that checks for a string in
-> /proc/mounts, and is used to toggle behavior based on whether the default
-> memory_recursiveprot was present.
+> drm_connector_oob_hotplug_event() performs the lookup of the
+> drm_connector based on fwnode, hence the need to assign the fwnode in
+> dp_drm_connector_init().
 > 
-> Signed-off-by: David Vernet <void@manifault.com>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > ---
->  tools/testing/selftests/cgroup/cgroup_util.c     | 12 ++++++++++++
->  tools/testing/selftests/cgroup/cgroup_util.h     |  1 +
->  tools/testing/selftests/cgroup/test_memcontrol.c | 16 +++++++++++++---
->  3 files changed, 26 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-> index dbaa7aabbb4a..e5d8d727bdcf 100644
-> --- a/tools/testing/selftests/cgroup/cgroup_util.c
-> +++ b/tools/testing/selftests/cgroup/cgroup_util.c
-> @@ -535,6 +535,18 @@ int set_oom_adj_score(int pid, int score)
->  	return 0;
->  }
->  
-> +int proc_mount_contains(const char *option)
+> Changes since v2:
+> - Rebased patch
+> 
+>   drivers/gpu/drm/msm/dp/dp_display.c |  9 +++++++++
+>   drivers/gpu/drm/msm/dp/dp_display.h |  3 +++
+>   drivers/gpu/drm/msm/dp/dp_drm.c     | 11 +++++++++++
+>   drivers/gpu/drm/msm/dp/dp_hpd.c     | 21 +++++++++++++++++++++
+>   drivers/gpu/drm/msm/dp/dp_hpd.h     |  5 +++++
+>   5 files changed, 49 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index a42732b67349..1019f6d8fd03 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -449,6 +449,14 @@ static int dp_display_usbpd_configure_cb(struct device *dev)
+>   	return dp_display_process_hpd_high(dp);
+>   }
+>   
+> +void dp_display_oob_hotplug_event(struct msm_dp *dp_display,
+> +				  enum drm_connector_hpd_state hpd_state)
 > +{
-> +	char buf[4 * PAGE_SIZE];
-> +	ssize_t read;
+> +	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
 > +
-> +	read = read_text("/proc/mounts", buf, sizeof(buf));
-> +	if (read < 0)
-> +		return read;
-> +
-> +	return strstr(buf, option) != NULL;
+> +	dp->usbpd->oob_event(dp->usbpd, hpd_state);
 > +}
 > +
->  ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size)
->  {
->  	char path[PATH_MAX];
-> diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
-> index 628738532ac9..756f76052b44 100644
-> --- a/tools/testing/selftests/cgroup/cgroup_util.h
-> +++ b/tools/testing/selftests/cgroup/cgroup_util.h
-> @@ -48,6 +48,7 @@ extern int is_swap_enabled(void);
->  extern int set_oom_adj_score(int pid, int score);
->  extern int cg_wait_for_proc_count(const char *cgroup, int count);
->  extern int cg_killall(const char *cgroup);
-> +int proc_mount_contains(const char *option);
->  extern ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size);
->  extern int proc_read_strstr(int pid, bool thread, const char *item, const char *needle);
->  extern pid_t clone_into_cgroup(int cgroup_fd);
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index aa50eaa8b157..ea2fd27e52df 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -21,6 +21,8 @@
->  #include "../kselftest.h"
->  #include "cgroup_util.h"
->  
-> +static bool has_recursiveprot;
+>   static int dp_display_usbpd_disconnect_cb(struct device *dev)
+>   {
+>   	struct dp_display_private *dp = dev_get_dp_display_private(dev);
+> @@ -1302,6 +1310,7 @@ static int dp_display_probe(struct platform_device *pdev)
+>   	dp->pdev = pdev;
+>   	dp->name = "drm_dp";
+>   	dp->dp_display.connector_type = desc->connector_type;
+> +	dp->dp_display.dev = &pdev->dev;
+>   
+>   	rc = dp_init_sub_modules(dp);
+>   	if (rc) {
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+> index 7af2b186d2d9..16658270df2c 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+> @@ -11,6 +11,7 @@
+>   #include "disp/msm_disp_snapshot.h"
+>   
+>   struct msm_dp {
+> +	struct device *dev;
+>   	struct drm_device *drm_dev;
+>   	struct device *codec_dev;
+>   	struct drm_bridge *bridge;
+> @@ -40,5 +41,7 @@ bool dp_display_check_video_test(struct msm_dp *dp_display);
+>   int dp_display_get_test_bpp(struct msm_dp *dp_display);
+>   void dp_display_signal_audio_start(struct msm_dp *dp_display);
+>   void dp_display_signal_audio_complete(struct msm_dp *dp_display);
+> +void dp_display_oob_hotplug_event(struct msm_dp *dp_display,
+> +				  enum drm_connector_hpd_state hpd_state);
+>   
+>   #endif /* _DP_DISPLAY_H_ */
+> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+> index 80f59cf99089..76904b1601b1 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_drm.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+> @@ -123,6 +123,14 @@ static enum drm_mode_status dp_connector_mode_valid(
+>   	return dp_display_validate_mode(dp_disp, mode->clock);
+>   }
+>   
+> +static void dp_oob_hotplug_event(struct drm_connector *connector,
+> +				 enum drm_connector_hpd_state hpd_state)
+> +{
+> +	struct msm_dp *dp_disp = to_dp_connector(connector)->dp_display;
 > +
->  /*
->   * This test creates two nested cgroups with and without enabling
->   * the memory controller.
-> @@ -521,15 +523,18 @@ static int test_memcg_low(const char *root)
->  	}
->  
->  	for (i = 0; i < ARRAY_SIZE(children); i++) {
-> +		int no_low_events_index = has_recursiveprot ? 2 : 1;
+> +	dp_display_oob_hotplug_event(dp_disp, hpd_state);
+> +}
 > +
->  		oom = cg_read_key_long(children[i], "memory.events", "oom ");
->  		low = cg_read_key_long(children[i], "memory.events", "low ");
->  
->  		if (oom)
->  			goto cleanup;
-> -		if (i < 2 && low <= 0)
-> +		if (i <= no_low_events_index && low <= 0)
->  			goto cleanup;
-> -		if (i >= 2 && low)
-> +		if (i > no_low_events_index && low)
->  			goto cleanup;
+>   static const struct drm_connector_funcs dp_connector_funcs = {
+>   	.detect = dp_connector_detect,
+>   	.fill_modes = drm_helper_probe_single_connector_modes,
+> @@ -130,6 +138,7 @@ static const struct drm_connector_funcs dp_connector_funcs = {
+>   	.reset = drm_atomic_helper_connector_reset,
+>   	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
+>   	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
+> +	.oob_hotplug_event = dp_oob_hotplug_event,
+
+We were (are) going to switch dp driver to use drm_bridge_connector (to 
+fix support for bridge chains, eDP panels, etc.
+
+So these changes must be ported to drm_bridge_connector (or we must 
+abandon/defer the idea of using the bridge_connector).
+
+For the oob_hotplug_event() callback proper support might be as simple 
+as calling drm_bridge_connector_hpd_cb().
+
+>   };
+>   
+>   static const struct drm_connector_helper_funcs dp_connector_helper_funcs = {
+> @@ -160,6 +169,8 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+>   	if (ret)
+>   		return ERR_PTR(ret);
+>   
+> +	connector->fwnode = fwnode_handle_get(dev_fwnode(dp_display->dev));
 > +
->  	}
->  
->  	ret = KSFT_PASS;
-> @@ -1272,7 +1277,7 @@ struct memcg_test {
->  int main(int argc, char **argv)
->  {
->  	char root[PATH_MAX];
-> -	int i, ret = EXIT_SUCCESS;
-> +	int i, proc_status, ret = EXIT_SUCCESS;
->  
->  	if (cg_find_unified_root(root, sizeof(root)))
->  		ksft_exit_skip("cgroup v2 isn't mounted\n");
-> @@ -1288,6 +1293,11 @@ int main(int argc, char **argv)
->  		if (cg_write(root, "cgroup.subtree_control", "+memory"))
->  			ksft_exit_skip("Failed to set memory controller\n");
->  
-> +	proc_status = proc_mount_contains("memory_recursiveprot");
-> +	if (proc_status < 0)
-> +		ksft_exit_skip("Failed to query cgroup mount option\n");
 
-Hopefully no one has a mountpoint with the memory_recursiveprot name :)
+This would be much more interesting. Supporting this in a generic way 
+might be tricky. But we can still set the fwnode manually from the dp code.
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+>   	drm_connector_helper_add(connector, &dp_connector_helper_funcs);
+>   
+>   	/*
+> diff --git a/drivers/gpu/drm/msm/dp/dp_hpd.c b/drivers/gpu/drm/msm/dp/dp_hpd.c
+> index db98a1d431eb..cdb1feea5ebf 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_hpd.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_hpd.c
+> @@ -7,6 +7,8 @@
+>   
+>   #include <linux/slab.h>
+>   #include <linux/device.h>
+> +#include <drm/drm_connector.h>
+> +#include <drm/drm_print.h>
+>   
+>   #include "dp_hpd.h"
+>   
+> @@ -45,6 +47,24 @@ int dp_hpd_connect(struct dp_usbpd *dp_usbpd, bool hpd)
+>   	return rc;
+>   }
+>   
+> +static void dp_hpd_oob_event(struct dp_usbpd *dp_usbpd,
+> +			     enum drm_connector_hpd_state hpd_state)
+> +{
+> +	struct dp_hpd_private *hpd_priv = container_of(dp_usbpd, struct dp_hpd_private, dp_usbpd);
+> +
+> +	DRM_DEBUG_DP("hpd_state: %d connected: %d\n", hpd_state, dp_usbpd->connected);
+> +
+> +	if (!dp_usbpd->connected && hpd_state == DRM_CONNECTOR_HPD_HIGH) {
+> +		dp_usbpd->connected = true;
+> +		hpd_priv->dp_cb->configure(hpd_priv->dev);
+> +	} else if (hpd_state == DRM_CONNECTOR_HPD_LOW) {
+> +		dp_usbpd->connected = false;
+> +		hpd_priv->dp_cb->disconnect(hpd_priv->dev);
+> +	} else {
+> +		hpd_priv->dp_cb->attention(hpd_priv->dev);
+> +	}
+> +}
+> +
+>   struct dp_usbpd *dp_hpd_get(struct device *dev, struct dp_usbpd_cb *cb)
+>   {
+>   	struct dp_hpd_private *dp_hpd;
+> @@ -62,6 +82,7 @@ struct dp_usbpd *dp_hpd_get(struct device *dev, struct dp_usbpd_cb *cb)
+>   	dp_hpd->dp_cb = cb;
+>   
+>   	dp_hpd->dp_usbpd.connect = dp_hpd_connect;
+> +	dp_hpd->dp_usbpd.oob_event = dp_hpd_oob_event;
+>   
+>   	return &dp_hpd->dp_usbpd;
+>   }
+> diff --git a/drivers/gpu/drm/msm/dp/dp_hpd.h b/drivers/gpu/drm/msm/dp/dp_hpd.h
+> index 8feec5aa5027..4166e5fd3156 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_hpd.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_hpd.h
+> @@ -29,7 +29,9 @@ enum plug_orientation {
+>    * @hpd_irq: Change in the status since last message
+>    * @alt_mode_cfg_done: bool to specify alt mode status
+>    * @debug_en: bool to specify debug mode
+> + * @connected: cable currently connected
+>    * @connect: simulate disconnect or connect for debug mode
+> + * @oob_event: deliver oob event to the usbpd code
+>    */
+>   struct dp_usbpd {
+>   	enum plug_orientation orientation;
+> @@ -41,8 +43,11 @@ struct dp_usbpd {
+>   	bool hpd_irq;
+>   	bool alt_mode_cfg_done;
+>   	bool debug_en;
+> +	bool connected;
+>   
+>   	int (*connect)(struct dp_usbpd *dp_usbpd, bool hpd);
+> +	void (*oob_event)(struct dp_usbpd *dp_usbpd,
+> +			  enum drm_connector_hpd_state hpd_state);
+>   };
+>   
+>   /**
 
-Thanks!
+
+-- 
+With best wishes
+Dmitry

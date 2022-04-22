@@ -2,97 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AF150AD5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 03:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A388D50AD67
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 03:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443158AbiDVBrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 21:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S1443170AbiDVBxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 21:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244815AbiDVBrD (ORCPT
+        with ESMTP id S1443166AbiDVBx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 21:47:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D98F49FBC;
-        Thu, 21 Apr 2022 18:44:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1FD161A30;
-        Fri, 22 Apr 2022 01:44:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F96BC385A7;
-        Fri, 22 Apr 2022 01:44:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650591851;
-        bh=3dKzo/CNM7o0fMsSPqSjBhW3RlZrFwl/PpvNPNQgmg0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=uF1TrlOKfD1+u/AzyPo4V5FvFcuIOBJAPq346IdP4HmyagaWLOZb83UW0ADV0fA2Y
-         UXyESVCyLrYtTnM+gQ8Cr0SFThinGPF/g6wpagdwT3cxsmiGKWdXt8g+xdcHAHLOx5
-         QUg6K7soeNDKVKepsoUvQd6nYBUXTmhF1l+jRVXFnGfYyr/+vJGwfMbXQmgjQM46Li
-         hwpdkI4f9QYMJdi96FDvs4bbGD9ml6YPmaz1bSnm7Ztjd+D50Ja3O8KeP3IJR+Uc+C
-         GVL/jN4Uv2qWhArfnjaBzB8H9rHbrZ5wGbehrOfWhqyN1ZoMZBvRmnvZqCdv0dsMFD
-         bxuGpLYtBx+/A==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 21 Apr 2022 21:53:29 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C69D49F2E;
+        Thu, 21 Apr 2022 18:50:36 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id j8so7602263pll.11;
+        Thu, 21 Apr 2022 18:50:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jd8Ly/ph96mf7X+NwD7zXOhWISN9bw3fhFaRCxJaylQ=;
+        b=HTZlNHA565L8PrjjxafmaWmKu+60zBekwv5Opg3E/3vK3bmjIJzYkj7lH5eAzNPGag
+         wT5OCcvw/sBCWuD/hXMBIF+wUJptxgFmmtTyVmQl1JCjFyHxwl81as/Wprsx5nHk2ooB
+         J5IUvlN7B/6ZN07MKmgG020GpXb5n8qjvoWtXEV6FW7DDvLimd/xEAjKXTZPdPcIVHHd
+         vO72aUGa9xMUWFGLRM3gQkuGaQhxn0TcDOawisOcr7VfCJmwQWErvMNBLWMjhjTtvyx8
+         AEyZxaHDwrxP67VgZoEdJd0zg5MZjzpGsD847SqqSbdTGIGW987ajt4jborHvHDzuRgh
+         Q5Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jd8Ly/ph96mf7X+NwD7zXOhWISN9bw3fhFaRCxJaylQ=;
+        b=wRMMvez97W+Lvm/7OMgKkQR+LLwsfI8TvTjpvjjiu843P+TkV2URQM4kbQBkgX7W+5
+         DbB1bybGasmsEPpSCDd0wazMgf8Xd7wJ+NTvbAU1lSis6fkIbxDx4J7WebCBBIPgPmIT
+         cCEYLSCGdlCLrQ38PrNkaUdnCnC/x5yjENxh0gyVOjmBGJpXTqflxPqqdGjgJOduY9r5
+         o77YbM+UqoL58TSw61hLfSCe8zNZIm3A2T4pJs5KHBHiC+CErT7Kq/h+nxjUsH+p25Rq
+         gAtofUbP4k0rhpFVF2vpcNVuEgP9r39AKDUJdPfuun8mer7vNbbQmZC0kUlr1xG06Kw1
+         uPgg==
+X-Gm-Message-State: AOAM532gkqL86K5IidB2xBt+G26b86iPsQWzu9730wh9mng/ViT3nfGA
+        E8lMvUTTeCDvfOkg9Q2QSJ2DAw2MRynAS+c40ZCsB2SJfuov
+X-Google-Smtp-Source: ABdhPJzF3tIp3t1iNv1N5Y22Vt5A02uJXxBsiS/K7ujVI90PiOgqsLnKojL1UDMWDPhr1qwQfJkoKgKB8bvtxP4JtJY=
+X-Received: by 2002:a17:90b:1807:b0:1d5:540d:4b6a with SMTP id
+ lw7-20020a17090b180700b001d5540d4b6amr2654482pjb.240.1650592236018; Thu, 21
+ Apr 2022 18:50:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220422013317.30362-1-linmq006@gmail.com>
-References: <20220422012059.52267C385A5@smtp.kernel.org> <20220422013317.30362-1-linmq006@gmail.com>
-Subject: Re: [PATCH v2] clk: imx: scu: Use pm_runtime_resume_and_get to fix pm_runtime_get_sync() usage
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linmq006@gmail.com
-To:     Abel Vesa <abel.vesa@nxp.com>, Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 21 Apr 2022 18:44:09 -0700
-User-Agent: alot/0.10
-Message-Id: <20220422014411.4F96BC385A7@smtp.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421013920.3503034-1-zheyuma97@gmail.com> <e29fd64e-62ea-746e-f0fb-02ce86b4e61e@opensource.wdc.com>
+In-Reply-To: <e29fd64e-62ea-746e-f0fb-02ce86b4e61e@opensource.wdc.com>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Fri, 22 Apr 2022 09:50:24 +0800
+Message-ID: <CAMhUBj=fpQi1uvkSQg7vuefLOsxxEgM5fTfsNu1w2sWmvybO0Q@mail.gmail.com>
+Subject: Re: [PATCH v2] ata: pata_marvell: Check the 'bmdma_addr' beforing reading
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Miaoqian Lin (2022-04-21 18:33:16)
-> If the device is already in a runtime PM enabled state
-> pm_runtime_get_sync() will return 1.
->=20
-> Also, we need to call pm_runtime_put_noidle() when pm_runtime_get_sync()
-> fails, so use pm_runtime_resume_and_get() instead. this function
-> will handle this.
->=20
-> Fixes: 78edeb080330 ("clk: imx: scu: add runtime pm support")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-
-Please don't send patches as replies to previous versions of the patch.
-
->  drivers/clk/imx/clk-scu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
-> index 083da31dc3ea..2044e62980e3 100644
-> --- a/drivers/clk/imx/clk-scu.c
-> +++ b/drivers/clk/imx/clk-scu.c
-> @@ -528,7 +528,7 @@ static int imx_clk_scu_probe(struct platform_device *=
-pdev)
->                 pm_runtime_use_autosuspend(&pdev->dev);
->                 pm_runtime_enable(dev);
-> =20
-> -               ret =3D pm_runtime_get_sync(dev);
-> +               ret =3D pm_runtime_resume_and_get(dev);
->                 if (ret) {
->                         pm_genpd_remove_device(dev);
->                         pm_runtime_disable(dev);
-> --=20
-> 2.17.1
+On Fri, Apr 22, 2022 at 7:48 AM Damien Le Moal
+<damien.lemoal@opensource.wdc.com> wrote:
 >
+> On 4/21/22 10:39, Zheyu Ma wrote:
+> > Before detecting the cable type on the dma bar, the driver should check
+> > whether the 'bmdma_addr' is zero, which means the adapter does not
+> > support DMA, otherwise we will get the following error:
+> >
+> > [    5.146634] Bad IO access at port 0x1 (return inb(port))
+> > [    5.147206] WARNING: CPU: 2 PID: 303 at lib/iomap.c:44 ioread8+0x4a/0x60
+> > [    5.150856] RIP: 0010:ioread8+0x4a/0x60
+> > [    5.160238] Call Trace:
+> > [    5.160470]  <TASK>
+> > [    5.160674]  marvell_cable_detect+0x6e/0xc0 [pata_marvell]
+> > [    5.161728]  ata_eh_recover+0x3520/0x6cc0
+> > [    5.168075]  ata_do_eh+0x49/0x3c0
+> >
+> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> > ---Changes in v2:
+> >      - Delete the useless 'else'
+>
+> Note for future contributions: The change log should be placed *after*
+> the "---" that comes before the "diff" line below. Otherwise, the change
+> log pollutes the commit message.
+
+Thank you for the reminder, I'll pay attention to this problem next time!
+
+Zheyu Ma

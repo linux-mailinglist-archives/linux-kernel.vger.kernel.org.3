@@ -2,201 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F8550B86E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C703650B872
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447964AbiDVN3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S1447973AbiDVNal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbiDVN3o (ORCPT
+        with ESMTP id S1447968AbiDVNaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:29:44 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5855520C;
-        Fri, 22 Apr 2022 06:26:51 -0700 (PDT)
+        Fri, 22 Apr 2022 09:30:39 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57572583B3;
+        Fri, 22 Apr 2022 06:27:45 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id s16so9081805oie.0;
+        Fri, 22 Apr 2022 06:27:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650634012; x=1682170012;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ibCD8n+74D25bQ/6Jrl39b9qR5VPuTVM9OJHM9wXnOk=;
-  b=ydASwxOyfDaiPRJLLS+1ewfPPyzdDWOg2KxbNRObZccS7Z/cqpjfix6M
-   USRLRWmiBPW/Ccf0m4pPaxNlbe5AW5WdiWGu7Mt70CV3TMq60dWuQol3p
-   qTv+Zh40tQL3uFPMMHgVrKLi90prSzldCRCCcrkuxOJq5T2izHrmv2otW
-   k=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 22 Apr 2022 06:26:51 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 06:26:50 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 22 Apr 2022 06:26:50 -0700
-Received: from [10.216.36.2] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 22 Apr
- 2022 06:26:44 -0700
-Message-ID: <fb53452a-0898-407e-5e86-897aeab446bc@quicinc.com>
-Date:   Fri, 22 Apr 2022 18:56:41 +0530
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7wD/67zFN01OLjk/4ayvCobKKh+EpoxVKPJMMkQWRKI=;
+        b=cHmV5J4YqPlLXRoviT4VhtrfOzmgaQtvuq3zeGMbQrXja5Cp481sDGvN5TiVtmve48
+         v8dHMZGXsmi0kLN76djZKrxStvINgxF8l1Z3/cm6Pij73tlg7u966jf57MhMel4hFYJ3
+         sYsXiouAZKYCeyY7ogUNIqmcmcF5K+V4j3au6OkS0o9PC9VArkWISnEXsJ2knO0mAk4m
+         qvFQcRDC1h0vROh/Ya4dDQM7bhKLyH7UkxkWvY9+gMi/JQfuo6kJAUlMD5uYJOWYaGpn
+         kEnrkMpaq0TjGsASQlKH9/0SiHrnq6BdwyqZk0v1zDv6/cT+2kxuVE4E3H4mj3XXiD0z
+         kGww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7wD/67zFN01OLjk/4ayvCobKKh+EpoxVKPJMMkQWRKI=;
+        b=VhVFMWTnhlgsEcn1R1TjsjXxFe0QyJqhiwaji9rYQuQjbGStLvTMTinNcDk+wUO8ix
+         k4OIqJ1JIF0gQd/owhYR1HMYLlEVdfkzG96arNYi/TI12ppHGYFY0kBtya+jLuJaspYS
+         TN5U9CyTndMJRJjVjZT9i6K/qRrqGVOcOq76JBqsy7e+WZgyqYypRKAzf7on+b9g0QSK
+         De0JbqOWjBCC+soqeyRzmO6gLLtwrXLpYTDEh6h8vdiDkW6cAogjuBvY7C08Gbll1Esy
+         KbLUQgPVkzPucGk96WmJBwezXvYYNrPIPKcln+/ZcHabworAS5D7vv3Q/yGbIhjU9zp9
+         TAsA==
+X-Gm-Message-State: AOAM532PHepwFk34EtYLBIBenDMj8SdIVjFrq9p7g2jEVxJve5pZwxT8
+        c65NshihBPhv5opW3zjM5GM=
+X-Google-Smtp-Source: ABdhPJxHjKtY6ERH3y1gOTMOcM1o8bf8FqSjwSMj7qG2kbasaAzJuxduFyyUS72VE+pRqoAjXS6WLw==
+X-Received: by 2002:a05:6808:130f:b0:323:1fd5:f381 with SMTP id y15-20020a056808130f00b003231fd5f381mr2968287oiv.121.1650634065336;
+        Fri, 22 Apr 2022 06:27:45 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a11-20020a056830008b00b0060546411473sm705186oto.75.2022.04.22.06.27.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 06:27:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3896f884-56d9-d0d9-efe6-839c7431e6de@roeck-us.net>
+Date:   Fri, 22 Apr 2022 06:27:41 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v8 2/4] arm64: dts: qcom: sc7280: Add nodes for wcd9385
- and max98360a codec
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 00/20] hwmon: check return value after calling
+ platform_get_resource()
 Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1650291252-30398-1-git-send-email-quic_srivasam@quicinc.com>
- <1650291252-30398-3-git-send-email-quic_srivasam@quicinc.com>
- <Yl2VmW18QAJl9v+m@google.com>
- <5ac149ac-4862-e8c9-185c-524c4b111961@quicinc.com>
- <5d4b7c44-62e1-aaa6-3116-f58e1a1b437b@quicinc.com>
- <YmF7TRlxUWWQ394e@google.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <YmF7TRlxUWWQ394e@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com
+References: <20220422091207.4034406-1-yangyingliang@huawei.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220422091207.4034406-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/22/22 02:11, Yang Yingliang wrote:
+> This patcheset add check after calling platform_get_resource to avoid null-ptr-deref
+> in drivers/hwmon/.
+> 
+> Yang Yingliang (20):
+>    hwmon: (abituguru) check return value after calling
+>      platform_get_resource()
+>    hwmon: (abituguru3) check return value after calling
+>      platform_get_resource()
+>    hwmon: (dme1737) check return value after calling
+>      platform_get_resource()
+>    hwmon: (f71805f) check return value after calling
+>      platform_get_resource()
+>    hwmon: (f71882fg) check return value after calling
+>      platform_get_resource()
+>    hwmon: (it87) check return value after calling platform_get_resource()
+>    hwmon: (lm78) check return value after calling platform_get_resource()
+>    hwmon: (nct6683) check return value after calling
+>      platform_get_resource()
+>    hwmon: (nct6775) check return value after calling
+>      platform_get_resource()
+>    hwmon: (sch5627) check return value after calling
+>      platform_get_resource()
+>    hwmon: (sch5636) check return value after calling
+>      platform_get_resource()
+>    hwmon: (sis5595) check return value after calling
+>      platform_get_resource()
+>    hwmon: (smsc47b397) check return value after calling
+>      platform_get_resource()
+>    hwmon: (smsc47m1) check return value after calling
+>      platform_get_resource()
+>    hwmon: (via686a) check return value after calling
+>      platform_get_resource()
+>    hwmon: (vt1211) check return value after calling
+>      platform_get_resource()
+>    hwmon: (vt8231) check return value after calling
+>      platform_get_resource()
+>    hwmon: (w83627ehf) check return value after calling
+>      platform_get_resource()
+>    hwmon: (w83627hf) check return value after calling
+>      platform_get_resource()
+>    hwmon: (w83781d) check return value after calling
+>      platform_get_resource()
+> 
+>   drivers/hwmon/abituguru.c  | 6 +++++-
+>   drivers/hwmon/abituguru3.c | 6 +++++-
+>   drivers/hwmon/dme1737.c    | 2 ++
+>   drivers/hwmon/f71805f.c    | 2 ++
+>   drivers/hwmon/f71882fg.c   | 6 +++++-
+>   drivers/hwmon/it87.c       | 2 ++
+>   drivers/hwmon/lm78.c       | 2 ++
+>   drivers/hwmon/nct6683.c    | 2 ++
+>   drivers/hwmon/nct6775.c    | 2 ++
+>   drivers/hwmon/sch5627.c    | 6 +++++-
+>   drivers/hwmon/sch5636.c    | 6 +++++-
+>   drivers/hwmon/sis5595.c    | 2 ++
+>   drivers/hwmon/smsc47b397.c | 2 ++
+>   drivers/hwmon/smsc47m1.c   | 2 ++
+>   drivers/hwmon/via686a.c    | 2 ++
+>   drivers/hwmon/vt1211.c     | 2 ++
+>   drivers/hwmon/vt8231.c     | 2 ++
+>   drivers/hwmon/w83627ehf.c  | 2 ++
+>   drivers/hwmon/w83627hf.c   | 2 ++
+>   drivers/hwmon/w83781d.c    | 2 ++
+>   20 files changed, 55 insertions(+), 5 deletions(-)
+> 
 
-On 4/21/2022 9:12 PM, Matthias Kaehlcke wrote:
-Thanks for your time Matthias!!
-> On Thu, Apr 21, 2022 at 12:31:52PM +0530, Srinivasa Rao Mandadapu wrote:
->> On 4/19/2022 4:54 PM, Srinivasa Rao Mandadapu wrote:
->>> On 4/18/2022 10:15 PM, Matthias Kaehlcke wrote:
->>> Thanks for your time and valuable inputs Matthias!!!
->>>> On Mon, Apr 18, 2022 at 07:44:10PM +0530, Srinivasa Rao Mandadapu wrote:
->>>>> Add wcd938x and  max98360a codecs for audio use case on
->>>>> sc7280 based platforms.
->>>>> Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
->>>>> Add amp_en node for  max98360a codec.
->>>> General note: I don't think it's a good practice to add stuff like
->>>> this to
->>>> multiple boards in a single patch. Why?
->>>>
->>>> First the subject of such a patch tends to be vague ("arm64: dts: qcom:
->>>> sc7280: Add nodes for wcd9385 and max98360a codec"), in this case it
->>>> gives
->>>> no hint about the boards. If someone was interested in picking changes
->>>> for a given board they can't easily identify from the subject that the
->>>> change is relevant for them.
->>>>
->>>> Changes touching multiple boards are more likely to cause conflicts when
->>>> being picked (or reverted), both upstream and in downstream trees (which
->>>> unfortunately have to exist for product development). Downstream trees
->>>> might only pick changes for the board(s) they target, patches that touch
->>>> mutiple boards often cause conflicts due to context deltas in the
->>>> 'irrelevant' boards.
->>>>
->>>> Lastly it's usually easier to get a patch reviewed (in the sense of
->>>> getting a 'Reviewed-by' tag) and landed that does a single thing.
->>> Yes, agree to your opinion. In a nutshell, we will include board
->>> name(ex: herobrine)
->>>
->>> in commit message and split the patches per external codec.
->>>
->>> Actually, in Initial herobrine boards, EVT and IDP, has both maxim
->>> speaker and WCD codec,
->>>
->>> hence we included in same patch.
->>>
->>>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->>>>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>>>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>>>> ---
->>>>>    arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts     |  6 ++
->>>>>    arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  8 +++
->>>>>    arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       | 97
->>>>> ++++++++++++++++++++++++++
->>>>>    3 files changed, 111 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
->>>>> b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
->>>>> index 344338a..aa0bf6e2 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
->>>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
->>>>> @@ -87,6 +87,12 @@ ap_ts_pen_1v8: &i2c13 {
->>>>>        pins = "gpio51";
->>>>>    };
->>>>>    +&wcd938x {
->>>>> +    pinctrl-names = "default";
->>>>> +    pinctrl-0 = <&us_euro_hs_sel>;
->>>>> +    us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
->>>>> +};
->>>> Since this is added for the CRD rev3 it probably should also be added to
->>>> sc7280-herobrine-crd.dts
->>> Okay. Will add in corresponding latest herobrine CRD dts file also.
->>>>> +
->>>>>    &tlmm {
->>>>>        tp_int_odl: tp-int-odl {
->>>>>            pins = "gpio7";
->>>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->>>>> b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->>>>> index d58045d..f247403 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->>>>> @@ -20,6 +20,14 @@
->>>>>    #include "sc7280-chrome-common.dtsi"
->>>>>      / {
->>>>> +    max98360a: audio-codec-0 {
->>>>> +        compatible = "maxim,max98360a";
->>>>> +        pinctrl-names = "default";
->>>>> +        pinctrl-0 = <&amp_en>;
->>>>> +        sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
->>>>> +        #sound-dai-cells = <0>;
->>>>> +    };
->>>>> +
->>>>>        chosen {
->>>>>            stdout-path = "serial0:115200n8";
->>>>>        };
->>>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>>>> b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>>>> index 2f863c0..8dad599 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->>>>> @@ -20,6 +20,42 @@
->>>>>            serial1 = &uart7;
->>>>>        };
->>>>>    +    max98360a: audio-codec-0 {
->>>>> +        compatible = "maxim,max98360a";
->>>>> +        pinctrl-names = "default";
->>>>> +        pinctrl-0 = <&amp_en>;
->>>>> +        sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
->>>>> +        #sound-dai-cells = <0>;
->>>>> +    };
->>>>> +
->>>>> +    wcd938x: audio-codec-1 {
->>>> Why 'wcd938x' and not 'wcd9385'?
->>> Actually same driver is used for both wcd9380 and wcd9385. Here we can
->>> use specific name as per board.
->>>
->>> Will change accordingly.
->> At present, dt-bindgs also has wcd938x. So will update the name in bindings
->> and here post this series.
->>
->> is it okay?
-> I don't think it's strictly necessary to update the binding, as
-> 'wcd938x' is only used in the example, and also it's not really
-> wrong. Then again, if the example in the binding uses a
-> specific wcd version it might make it less likely that the
-> wildcard name is used in future board DTs. Up to you :)
-Okay. Will update accordingly.
+This series solves a problem which does not exist in reality and is only theoretic.
+The devices are instantiated from their init functions which always adds the resource.
+Please do not submit such patches.
+
+Guenter

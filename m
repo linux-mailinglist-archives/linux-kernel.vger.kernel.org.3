@@ -2,107 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2840950B758
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FFC50B75D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447532AbiDVMdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S1447541AbiDVMeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447529AbiDVMdk (ORCPT
+        with ESMTP id S1447540AbiDVMeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 08:33:40 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9179E5468E
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:30:47 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id y21so5019076wmi.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:30:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=uYpfhyLIZUoxSaL7aclvytyYyaHl2rC8E7mXVViSyfc=;
-        b=uRlDT3KghQ72J48ecDEdO6TbGuBv79C9de1+zDTZgknkJmgnuE/r1vj8Pz3Rt8qy2R
-         HrMpv6ImE2wqji+7uwsnk6qL3uQlr6zXL8QIjGiKTPnfXN14BI+JUnT0BpBKQTav9Wmv
-         MfU06RpRMiFymu9hXeZCZY8UAdetQOws9cngYkAH9J2Goqd0yJnUVmWUqkw5ut9Htguj
-         gxJmTGiY1eo4el2mxgnzb6RTc/wlYvqM21V/BQfkMg7FC2c7W+I04t/QCnxIVObffiQq
-         Qi5kisx98/GiAN0p27vcH4dV1tn1mPpR2pmdCcMaIiN+sisPBq5r9N/irdTLx3xxh2B7
-         5yfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=uYpfhyLIZUoxSaL7aclvytyYyaHl2rC8E7mXVViSyfc=;
-        b=naMnG8YIkLjOzETrB//qP6t/f7pCSZOYv3aI+2tXsVYMrq5/fVbxxGpY87bZdrMrHl
-         dN6ptWn2xJXq8QXseNSkoB5fhpe7mHpWCmNob2lqoeNw0QvKehyn3RjVX2PAiuuzYi9a
-         +4CpefVF2A9EMxetg+gAcLyfm+MsIzy2vUgN2dUPMBuoV8WJg/2N4zN56KStX+kelvGx
-         nSV9avF3BR0jOWlOGxWgiyfOjzqwMib+n7Kxq/nmAksOQQMEM5eKxAy6bDopXdeE1S/m
-         dND8vGUj5FuSwYqzV3SET5WERzkUJTmR9bezl3pIwSIGBxmlgAMuv4yxfkVwfAkj9Aat
-         k61A==
-X-Gm-Message-State: AOAM530UVpsbuYTg8WBUqo3WzBSza6gyLfSsBKE7vt5KFS1JrxC3iwfC
-        qUFsqBcKHl4ybvOf7fksLZQbIw==
-X-Google-Smtp-Source: ABdhPJz+Jz9pR1hcwEuMnRxUjM1J9wCJDr7UgRKwD7/jIw3O0t/ayEtSDbmDFocJ9N4ZPRpi3INr+A==
-X-Received: by 2002:a05:600c:3ac8:b0:392:a821:7975 with SMTP id d8-20020a05600c3ac800b00392a8217975mr13087552wms.138.1650630645810;
-        Fri, 22 Apr 2022 05:30:45 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:3ce1:1ed1:5e14:cd49? ([2001:861:44c0:66c0:3ce1:1ed1:5e14:cd49])
-        by smtp.gmail.com with ESMTPSA id l10-20020a05600002aa00b0020a7cc29000sm1766232wry.75.2022.04.22.05.30.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 05:30:45 -0700 (PDT)
-Message-ID: <3406cabe-4fac-ce1c-d710-ccd5f628aaaf@baylibre.com>
-Date:   Fri, 22 Apr 2022 14:30:44 +0200
+        Fri, 22 Apr 2022 08:34:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A03254BC3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:31:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7EB8B82CD3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:31:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9C5C385A0;
+        Fri, 22 Apr 2022 12:31:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650630678;
+        bh=B0FfGg08Iiv7pykm+jqHRmeXsu0/oIWa+m7eEXoWwkw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L2nERJK9AIVns/WkGlmLNC2c0DHBsR2l7dmulew/h50tXqj/il0W9O8w3l6g4D8eu
+         rw3FJgrMlX1iTWHTgTi2Rq6ZenQTltxBlddZ1j8kakP4r2acTqS5MzsX4n1sVDiQi0
+         /8bu0EvNgrs1wWyh1Q18lCgHHMWUsEEHiZ0PR40Y=
+Date:   Fri, 22 Apr 2022 14:31:14 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Qing Wang <wangqing@vivo.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com
+Subject: Re: [PATCH V2 2/2] arm64: Add complex scheduler level for arm64
+Message-ID: <YmKgEmna8PNF9xlG@kroah.com>
+References: <1650628289-67716-1-git-send-email-wangqing@vivo.com>
+ <1650628289-67716-3-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 0/2] Add q 12MHz internal clock rate to calculate
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220422111320.19234-1-yu.tu@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220422111320.19234-1-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1650628289-67716-3-git-send-email-wangqing@vivo.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 13:13, Yu Tu wrote:
-> 1.Added 12Mhz as the clock source for calculating baud rate.
+On Fri, Apr 22, 2022 at 04:51:26AM -0700, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
 > 
-> 2.Added S4 SOC compatibility.
+> The DSU-110 DynamIQ™ cluster supports blocks that are called complexes
+> which contain up to two cores of the same type and some shared logic.
+> Sharing some logic between the cores can make a complex area efficient.
 > 
+> This patch adds complex level for complexs and automatically enables
+> the load balance among complexs. It will directly benefit a lot of
+> workload which loves more resources such as memory bandwidth, caches.
 > 
-> Yu Tu (2):
->    tty: serial: meson: Add a 12MHz internal clock rate to calculate baud
->      rate in order to meet the baud rate requirements of special BT
->      modules
->    tty: serial: meson: Added S4 SOC compatibility
+> Testing has been done with Stream benchmark:
+> 8threads stream (2 little cores * 2(complex) + 3 medium cores + 1 big core)
+>                 stream                 stream
+>                 w/o patch              w/ patch
+> MB/sec copy     37579.2 (   0.00%)    39127.3 (   4.12%)
+> MB/sec scale    38261.1 (   0.00%)    39195.4 (   2.44%)
+> MB/sec add      39497.0 (   0.00%)    41101.5 (   4.06%)
+> MB/sec triad    39885.6 (   0.00%)    40772.7 (   2.22%)
 > 
-> V1 -> V2: Change format as discussed in the email.
-> V2 -> V3: Change format as discussed in the email.
+> And in order to support this features, we defined arm64_topology.
 > 
-> Link:https://lore.kernel.org/linux-amlogic/20220418053202.24528-2-yu.tu@amlogic.com/
+> V2:
+> fix commit log and loop more
 > 
->   drivers/tty/serial/meson_uart.c | 25 +++++++++++++++++++++++--
->   1 file changed, 23 insertions(+), 2 deletions(-)
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> ---
+>  arch/arm64/Kconfig      | 13 +++++++++++
+>  arch/arm64/kernel/smp.c | 48 ++++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 60 insertions(+), 1 deletion(-)
 > 
-> 
-> base-commit: 05fe70dd2efd13de700c2dfe5169d3a7a5050bc2
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index edbe035cb0e3..4063de8c6153 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1207,6 +1207,19 @@ config SCHED_CLUSTER
+>  	  by sharing mid-level caches, last-level cache tags or internal
+>  	  busses.
+>  
+> +config SCHED_COMPLEX
+> +	bool "Complex scheduler support"
+> +	help
+> +	  DSU supports blocks that are called complexes which contain up to
+> +	  two cores of the same type and some shared logic. Sharing some logic
+> +	  between the cores can make a complex area efficient.
+> +
+> +	  Complex also can be considered as a shared cache group smaller
+> +	  than cluster.
+> +
+> +	  Complex scheduler support improves the CPU scheduler's decision
+> +	  making when dealing with machines that have complexs of CPUs.
+> +
+>  config SCHED_SMT
+>  	bool "SMT scheduler support"
+>  	help
+> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+> index 3b46041f2b97..526765112146 100644
+> --- a/arch/arm64/kernel/smp.c
+> +++ b/arch/arm64/kernel/smp.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/sched/mm.h>
+>  #include <linux/sched/hotplug.h>
+>  #include <linux/sched/task_stack.h>
+> +#include <linux/sched/topology.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/cache.h>
+>  #include <linux/profile.h>
+> @@ -57,6 +58,10 @@
+>  DEFINE_PER_CPU_READ_MOSTLY(int, cpu_number);
+>  EXPORT_PER_CPU_SYMBOL(cpu_number);
+>  
+> +#ifdef SCHED_COMPLEX
+> +DEFINE_PER_CPU_READ_MOSTLY(cpumask_t, cpu_complex_map);
+> +#endif
 
-Thanks for this v3, all fine for me !
+ifdefs should not be in .c files.
 
-Neil
+
+> +
+>  /*
+>   * as from 2.5, kernels no longer have an init_tasks structure
+>   * so we need some other way of telling a new secondary core
+> @@ -715,6 +720,47 @@ void __init smp_init_cpus(void)
+>  	}
+>  }
+>  
+> +#ifdef SCHED_COMPLEX
+
+same here.
+
+> +static int arm64_complex_flags(void)
+> +{
+> +	return SD_SHARE_PKG_RESOURCES;
+> +}
+> +
+> +const struct cpumask *arm64_complex_mask(int cpu)
+> +{
+> +	const struct cpumask *core_mask = cpu_cpu_mask(cpu);
+> +
+> +	/* Find the smaller shared cache level than clustergroup and coregroup*/
+> +#ifdef CONFIG_SCHED_MC
+> +	core_mask = cpu_coregroup_mask(cpu);
+> +#endif
+> +#ifdef CONFIG_SCHED_CLUSTER
+> +	core_mask = cpu_clustergroup_mask(cpu);
+> +#endif
+
+See, same here.  This is a mess and unmaintainable.
+
+thanks,
+
+greg k-h

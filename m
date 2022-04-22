@@ -2,89 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED59F50B439
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249DC50B454
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446113AbiDVJjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
+        id S1446194AbiDVJsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446109AbiDVJjh (ORCPT
+        with ESMTP id S1446208AbiDVJsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:39:37 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B825372D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:36:45 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kl8SC4PFHz4xXS;
-        Fri, 22 Apr 2022 19:36:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1650620204;
-        bh=v8NPrOoUSmPygCfnqB/rFEsanu07lIk8aZKOXiSsbt4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=DlL98QmmptAtyh/xohLggJENxp9wwXou1VWdZAcucdyXzO1702WBukr6pGy0rQSGO
-         mT66LivgC+ke1qqnkrgu4MLvD6ci5QkR7u0DCDqkv0BxztDdwh5mKf4qXMXJ8LRrrZ
-         fjAOAhjDmLP4k4Os6y+9F4+PijETVEEPXCPD8odTa0vD6rV7D9Ab3aQDX4D+5KRK+D
-         WDvb4mcVQO+B21vv0cMiu9YzYhyj2jyaaEwHGxkD19uQEpoVdMiIxrh7Q2t9hkOR75
-         YbzRFluEjjaZUS3+vNHolMNWKZ+DW3n63ducNzg2fYuoplBI8rYvb34DLAHeMApBYz
-         +XNo4dlWY6Dag==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Frederic Barrat <fbarrat@linux.ibm.com>,
-        Hangyu Hua <hbh25y@gmail.com>, ajd@linux.ibm.com,
-        arnd@arndb.de, gregkh@linuxfoundation.org, alastair@d-silva.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] misc: ocxl: fix possible double free in
- ocxl_file_register_afu
-In-Reply-To: <f76454e3-843d-93b4-e30c-bf374d41802b@linux.ibm.com>
-References: <20220418085758.38145-1-hbh25y@gmail.com>
- <87czhbfjsj.fsf@mpe.ellerman.id.au>
- <f76454e3-843d-93b4-e30c-bf374d41802b@linux.ibm.com>
-Date:   Fri, 22 Apr 2022 19:36:43 +1000
-Message-ID: <87tual8no4.fsf@mpe.ellerman.id.au>
+        Fri, 22 Apr 2022 05:48:09 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 02:45:11 PDT
+Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0433CA4A
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:45:10 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="50466635"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643641200"; 
+   d="scan'208";a="50466635"
+Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
+  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP; 22 Apr 2022 18:44:04 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+        by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 88985D3EAB;
+        Fri, 22 Apr 2022 18:44:03 +0900 (JST)
+Received: from oym-om1.fujitsu.com (oym-om1.o.css.fujitsu.com [10.85.58.161])
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id CB39EE663A;
+        Fri, 22 Apr 2022 18:44:02 +0900 (JST)
+Received: from localhost.localdomain (bakeccha.fct.css.fujitsu.com [10.126.195.136])
+        by oym-om1.fujitsu.com (Postfix) with ESMTP id 7C07940483741;
+        Fri, 22 Apr 2022 18:44:02 +0900 (JST)
+From:   Shunsuke Nakamura <nakamura.shun@fujitsu.com>
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: [PATCH 0/7] libperf: Add interface for overflow check of sampling events
+Date:   Fri, 22 Apr 2022 18:38:26 +0900
+Message-Id: <20220422093833.340873-1-nakamura.shun@fujitsu.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Frederic Barrat <fbarrat@linux.ibm.com> writes:
-> On 21/04/2022 00:54, Michael Ellerman wrote:
->> Hangyu Hua <hbh25y@gmail.com> writes:
->>> info_release() will be called in device_unregister() when info->dev's
->>> reference count is 0. So there is no need to call ocxl_afu_put() and
->>> kfree() again.
->> 
->> Double frees are often exploitable. But it looks to me like this error
->> path is not easily reachable by an attacker.
->> 
->> ocxl_file_register_afu() is only called from ocxl_probe(), and we only
->> go to err_unregister if the sysfs or cdev initialisation fails, which
->> should only happen if we hit ENOMEM, or we have a duplicate device which
->> would be a device-tree/hardware error. But maybe Fred can check more
->> closely, I don't know the driver that well.
->
-> The linux devices built here are based on what is parsed on the physical 
-> devices. Those could be FPGAs but updating the FPGA image requires root 
-> privilege. In any case, duplicate AFU names are possible, that's why the 
-> driver adds an index (the afu->config.idx part of the name) to the linux 
-> device name. So we would need to mess that up in the driver as well to 
-> have a duplicate device name.
-> So I would agree the double free is hard to hit.
+This patch series adds interface for overflow check of sampling events
+to libperf.
 
-Thanks for confirming.
+First patch move 'open_flags' from tools/perf to evsel::open_flags.
 
-> mpe: I think this patch can be taken as is. The "beautification" I 
-> talked about is just that and I don't intend to work on it except if 
-> something else shows up.
+Second patch introduce perf_{evsel, evlist}__open_opt() with extensible
+structure opts.
 
-OK, will pick this up.
+Third patch add support for overflow handling of sampling events.
 
-cheers
+Fourth patch adds a interface to check overflowed events.
+
+Fifth patch adds a interface to perform IOC_REFRESH and IOC_PERIOD.
+
+Sixth and seventh patch adds tests.
+
+
+---
+Previous version at:
+https://lore.kernel.org/linux-perf-users/20220325043829.224045-1-nakamura.shun@fujitsu.com/
+
+Changes in v1:
+ - Move initialization/reference of evsel->open_flags from the first
+   patch to the second patch
+ - Move signal-related handling and related fields of the opts
+   structure from the second patch to the third patch
+ - Move _GNU_SOURCE from test-evlist.c to Makefile
+ - Delete *_cpu() function
+ - Refactor the fourth patch
+ - Fix test to use real-time signals instead of standard signals
+
+Changes in RFC v2:
+ - Delete perf_evsel__set_close_on_exec() function
+ - Introduce perf_{evsel, evlist}__open_opt() with extensible structure
+   opts
+ - Fix perf_evsel__set_signal() to a internal function
+ - Add bool type argument to perf_evsel__check_{fd, fd_cpu}() to indicate
+   overflow results
+
+
+Shunsuke Nakamura (7):
+  libperf: Move 'open_flags' from tools/perf to evsel::open_flags
+  libperf: Introduce perf_{evsel, evlist}__open_opt with extensible
+    struct opts
+  libperf: Add support for overflow handling of sampling events
+  libperf: Add perf_evsel__has_fd() functions
+  libperf: Add perf_evsel__{refresh, period}() functions
+  libperf test: Add test_stat_overflow()
+  libperf test: Add test_stat_overflow_event()
+
+ tools/lib/perf/Documentation/libperf.txt |  17 +++
+ tools/lib/perf/Makefile                  |   1 +
+ tools/lib/perf/evlist.c                  |  20 +++
+ tools/lib/perf/evsel.c                   | 166 ++++++++++++++++++++++-
+ tools/lib/perf/include/internal/evsel.h  |   2 +
+ tools/lib/perf/include/perf/evlist.h     |   3 +
+ tools/lib/perf/include/perf/evsel.h      |  29 ++++
+ tools/lib/perf/internal.h                |  44 ++++++
+ tools/lib/perf/libperf.map               |   5 +
+ tools/lib/perf/tests/test-evlist.c       | 112 ++++++++++++++-
+ tools/lib/perf/tests/test-evsel.c        | 108 +++++++++++++++
+ tools/perf/util/evsel.c                  |  16 ++-
+ tools/perf/util/evsel.h                  |   1 -
+ 13 files changed, 508 insertions(+), 16 deletions(-)
+
+-- 
+2.25.1
+

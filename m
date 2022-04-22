@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5504950B852
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BE550B85D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447930AbiDVNZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        id S1447940AbiDVNZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447914AbiDVNZH (ORCPT
+        with ESMTP id S1447929AbiDVNZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:25:07 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED4457B27
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:22:14 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id g3so6702098pgg.3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:22:14 -0700 (PDT)
+        Fri, 22 Apr 2022 09:25:13 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696D358392
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:22:19 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id h12so7149052plf.12
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:22:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0aTsYn+fbrLEF70DYT+XvQa13+urwQkivcKboFHg6Ao=;
-        b=BOWeG3zHuKTf7IsyuvqRU3jzy2o2wts7viRFugf1Pq0w96/Km8O4Z+eJ2+lyhol87H
-         +nf+ptgdCfyRAaqddYGbtV4kEO+ytbIsmQeEGqiHBne7/jNBDm67O5iYSFNFrjm7RAsw
-         N6C3S2vmvGkMTEPHkduQOV+yLdG5nxhYV2QHDGaU3OH8ebpGH77AEutetm5R9RavxTKU
-         KEU8uLmduxy72vCwY749LFujpiNd7YHncSrAEYOJdveIC8sDklLoyn5svJGrUBY0AVce
-         pwjP1COoZcqz8dArUevYhB2ccY6+/LThiedXZ1zt/hMTaVEMaAGlX0OsBc2l9td7HRxX
-         VBDQ==
+        bh=UmOApO6ixe70PdHEViIKrF0MVsQtQSBHzDTAzdr8K48=;
+        b=RDUmUjJOVCU9Gom6PIQB7Om6auvTkQ8MtrvaaFjuQWx+PPVuYsNATY7Sju+1neEH4U
+         zuFcEHYhQSKPIvjiLdEmRY0wLcoJFpbvpSP+g1JkKek1hjbpsbmDGVm0gDdYMIRC3g1f
+         1fCIld1KjTLpEtyAbXDrx6KjokXhKep17zeHKLgD27bUW1QjWt7vsEKykUWh9s7eTWdk
+         FcTliAuQJ2Y+lX72APhDhiGKToK1D+rn0M8ipUbEhli2dcC8O5j1jKru2wIJD6GjF50D
+         FyYVhTr+q88S6lNC2I0JyJqZb9LoQ+lsepMfJLddTgYSfS6WbrwyaputeM38AcVtYI7l
+         5z+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0aTsYn+fbrLEF70DYT+XvQa13+urwQkivcKboFHg6Ao=;
-        b=Oky44QaPJBs16kmDDP94MOLFkozAz7ycP6r1cDNLAQLxDOaT32+nmXANNaSylai7aQ
-         EpA5HwopIpg+lAnmimnziCyQk1W4Xg3nYpR+DLRlmzpZV7UHRvQ34PHYd5qj4p81CdQQ
-         Y1wL3JVpr3w5TnF8bT2vqfqgbsN5I9uq86ATCvr/9aEqyfOeymCQDps9zZAWcu2w2pfv
-         HiHd4H2SvomC7e7cu/2mCk9p/1ilph+Hmk5mMmUHFzWv2V14cNlZsKye97kK7d4xC/yb
-         uW78TGbM78PG/3gaA9uRUNN7BNsno5UJRdEXIyc/ZuFK1IDV4M9yuXmqDwo3lwUEZlPq
-         qB6Q==
-X-Gm-Message-State: AOAM5322irNDU/ue2jWlQrHW2dtwHLcrt0JqyZXEdnM4XcxB4cZommZh
-        RY7XKJXcavTJzok09VAybzLw
-X-Google-Smtp-Source: ABdhPJzvnw8o1O07FvEJgfNvXBizaKMHbMO8qkm1OWHXlD40i9elG+wZHzzrDZiNB5lhOGu8ebUopg==
-X-Received: by 2002:a63:d855:0:b0:39c:e714:c79f with SMTP id k21-20020a63d855000000b0039ce714c79fmr3830235pgj.570.1650633733833;
-        Fri, 22 Apr 2022 06:22:13 -0700 (PDT)
+        bh=UmOApO6ixe70PdHEViIKrF0MVsQtQSBHzDTAzdr8K48=;
+        b=bZr5ArA+gicHjFqUBWgF7+NAdx+57ODWYQYypbI/Y9ao/ccj7DRIhJfGr8g5G2aljF
+         1kQpGd1EOsiCm7pdx/FSFw4YgWii5GI9MWwTHS3TpKsLWS/BYByqKCYpm0oDjofRikzV
+         TYPYsL4dX+Ptu51nZBfnqOFHjFgKiOdPHf5oHefx8fMNlGMyKfzyDB4nFZKPNUBNkg/9
+         5vwopq83jxL2i+XYOzqZ53HAkd3Xix1pcZC0fRijXnj/g/pCUbpqC7vglRaTgsdgsIp0
+         x0XUtQG0mgmFM1KCifHYVn4zcvUkW/6vvrsY6sDV7Z61HLrIQoEP6CpGV9hzFxeBXsEb
+         hs7w==
+X-Gm-Message-State: AOAM533MfG1fLAKqOU5ZsPLP7EdPrpxDXJWBpfYC+Otn8eMGwFHUuPfX
+        NVZAMVk7WOF3O6M9fb1vYZ55eYob8Jo9
+X-Google-Smtp-Source: ABdhPJyjSvRzPdzCjO9rxGq3kz927rM2kTVx3GjigPQ8cqLCXqTCHKS1iZuURIg4z6JcfYUsv5Hjuw==
+X-Received: by 2002:a17:90b:3b4b:b0:1d2:e3fe:e1a0 with SMTP id ot11-20020a17090b3b4b00b001d2e3fee1a0mr5427666pjb.78.1650633738937;
+        Fri, 22 Apr 2022 06:22:18 -0700 (PDT)
 Received: from localhost.localdomain ([117.207.28.196])
-        by smtp.gmail.com with ESMTPSA id g13-20020a62520d000000b0050a923a7754sm2586840pfb.119.2022.04.22.06.22.07
+        by smtp.gmail.com with ESMTPSA id g13-20020a62520d000000b0050a923a7754sm2586840pfb.119.2022.04.22.06.22.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 06:22:13 -0700 (PDT)
+        Fri, 22 Apr 2022 06:22:18 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     martin.petersen@oracle.com, jejb@linux.ibm.com
 Cc:     avri.altman@wdc.com, alim.akhtar@samsung.com,
         bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
         quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH 3/5] scsi: ufs: qcom: Add a readl() to make sure ref_clk gets enabled
-Date:   Fri, 22 Apr 2022 18:51:38 +0530
-Message-Id: <20220422132140.313390-4-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 4/5] scsi: ufs: core: Remove redundant wmb() in ufshcd_send_command()
+Date:   Fri, 22 Apr 2022 18:51:39 +0530
+Message-Id: <20220422132140.313390-5-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220422132140.313390-1-manivannan.sadhasivam@linaro.org>
 References: <20220422132140.313390-1-manivannan.sadhasivam@linaro.org>
@@ -66,47 +65,50 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ufs_qcom_dev_ref_clk_ctrl(), it was noted that the ref_clk needs to be
-stable for atleast 1us. Eventhough there is wmb() to make sure the write
-gets "completed", there is no guarantee that the write actually reached
-the UFS device. There is a good chance that the write could be stored in
-a Write Buffer (WB). In that case, eventhough the CPU waits for 1us, the
-ref_clk might not be stable for that period.
+The wmb() inside ufshcd_send_command() is added to make sure that the
+doorbell is committed immediately. This leads to couple of expectations:
 
-So lets do a readl() to make sure that the previous write has reached the
-UFS device before udelay().
+1. The doorbell write should complete before the function return.
+2. The doorbell write should not cross the function boundary.
 
-Cc: stable@vger.kernel.org
-Fixes: f06fcc7155dc ("scsi: ufs-qcom: add QUniPro hardware support and power optimizations")
+2nd expectation is fullfilled by the Linux memory model as there is a
+guarantee that the critical section won't cross the unlock (release)
+operation.
+
+1st expectation is not really needed here as there is no following read/
+write that depends on the doorbell to be complete implicitly. Even if the
+doorbell write is in a CPUs Write Buffer (WB), wmb() won't flush it. And
+there is no real need of a WB flush here as well.
+
+So let's get rid of the wmb() that seems redundant.
+
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/scsi/ufs/ufs-qcom.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/scsi/ufs/ufshcd.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index 5f0a8f646eb5..5b9986c63eed 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -690,6 +690,12 @@ static void ufs_qcom_dev_ref_clk_ctrl(struct ufs_qcom_host *host, bool enable)
- 		/* ensure that ref_clk is enabled/disabled before we return */
- 		wmb();
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 9349557b8a01..ec514a6c5393 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -2116,9 +2116,6 @@ void ufshcd_send_command(struct ufs_hba *hba, unsigned int task_tag)
+ 	__set_bit(task_tag, &hba->outstanding_reqs);
+ 	ufshcd_writel(hba, 1 << task_tag, REG_UTP_TRANSFER_REQ_DOOR_BELL);
+ 	spin_unlock_irqrestore(&hba->outstanding_lock, flags);
+-
+-	/* Make sure that doorbell is committed immediately */
+-	wmb();
+ }
  
-+		/*
-+		 * Make sure the write to ref_clk reaches the destination and
-+		 * not stored in a Write Buffer (WB).
-+		 */
-+		readl(host->dev_ref_clk_ctrl_mmio);
-+
- 		/*
- 		 * If we call hibern8 exit after this, we need to make sure that
- 		 * device ref_clk is stable for at least 1us before the hibern8
+ /**
 -- 
 2.25.1
 

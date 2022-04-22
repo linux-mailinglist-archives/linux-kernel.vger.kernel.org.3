@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105B350B385
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C944750B397
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376759AbiDVJEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S1392477AbiDVJFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445919AbiDVJEU (ORCPT
+        with ESMTP id S1384353AbiDVJFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:04:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF52D53739;
-        Fri, 22 Apr 2022 02:01:23 -0700 (PDT)
+        Fri, 22 Apr 2022 05:05:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4B35371B;
+        Fri, 22 Apr 2022 02:02:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A1C3B82B2F;
-        Fri, 22 Apr 2022 09:01:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24EC6C385AF;
-        Fri, 22 Apr 2022 09:01:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650618081;
-        bh=/m9HtiXeSolu5qrg2Hq80k+3cr1LM6XYLdAbp3oTHTc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jBBBgfxNw8Qg5UPzBjmDTjT+E3APsjuWTMVt+hprqOwS6DIxRVDImGrZN7wMEx+rx
-         86vdIpshLw/2xvYq9EXVD6U2UdmQg2jRX0+t8216G1sy5tFLNYTW6io3yJaCI0QPDi
-         +fH/z8A5Z81qWD80aniD3CFr9+DcQ5t/+T4FsFJZDyW+Lf8LBXr2ZWf8iswYK9yKfa
-         i6FRRqnzC3GECksp/PEHUWBaSiEgEAKgocxi6UKsOOgJj2oKl2WyGacfZfbT6muE++
-         R+suLf2CeI5uMPJbWVzOPVsVKgB0U5HrVu/hHPwlJEySlo+e+tm5dGIoX+20rq6n6I
-         1LbvJa+916YEg==
-Received: by mail-wm1-f46.google.com with SMTP id q20so4708636wmq.1;
-        Fri, 22 Apr 2022 02:01:21 -0700 (PDT)
-X-Gm-Message-State: AOAM531iQPKC7tDafbQgrxM8A5fPYLPvNc07bzy+GpC5CUwexNDkFsVc
-        NpS/ULGgNtZkFbWmGBwEzly5Zc6w1iLAge5OLC4=
-X-Google-Smtp-Source: ABdhPJyXx4ILSyW4olBWclzAEyhWJERXMp826335O4ZspD2rq64GVKddYaqSWtWZief/QyASpmBJtJchA9yTbG1sWmU=
-X-Received: by 2002:a7b:ce15:0:b0:38e:b7b0:79be with SMTP id
- m21-20020a7bce15000000b0038eb7b079bemr3134739wmc.71.1650618079284; Fri, 22
- Apr 2022 02:01:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220421082040.2866638-1-arnd@kernel.org> <2d2c0c14-461b-985b-ebf1-3c03fe97f332@gmail.com>
-In-Reply-To: <2d2c0c14-461b-985b-ebf1-3c03fe97f332@gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 22 Apr 2022 11:01:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1PvZUV9MDNqLWUZGT6Bb18SoPEv-j1V6RTEziKV74Z0A@mail.gmail.com>
-Message-ID: <CAK8P3a1PvZUV9MDNqLWUZGT6Bb18SoPEv-j1V6RTEziKV74Z0A@mail.gmail.com>
-Subject: Re: [PATCH] [v4] m68k: coldfire: drop ISA_DMA_API support
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Greg Ungerer <gerg@linux-m68k.org>, Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8747FB82B30;
+        Fri, 22 Apr 2022 09:02:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58570C385A0;
+        Fri, 22 Apr 2022 09:02:38 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="O4/4TS/O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650618156;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y8cZDn3qYd+ueoTZ9NLotfCq+DmwY/broXFpZmnDL2E=;
+        b=O4/4TS/OEcJTT8bRvQ9qp3xWnkpdcxhbS21LiwWZmxEolaZoL9nqJlwGw+ufi3u2vteXge
+        qHJkHE+8PrTksYZ0SM/pQ2UQR8RgNRNOjWXe7+r32aIufY9ZiQf02qGhkYKhcC5dH6fvxD
+        7NY0JEWbPyL6ur6zB0l7irmoTdYDtwQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d6267a74 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 22 Apr 2022 09:02:36 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 11:02:33 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the random tree with the jc_docs tree
+Message-ID: <YmJvKZcYMsypQRZJ@zx2c4.com>
+References: <20220422135927.7fa82fa4@canb.auug.org.au>
+ <YmJMBnBV8wO4aco9@sol.localdomain>
+ <87wnfhzip7.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87wnfhzip7.fsf@meer.lwn.net>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 9:48 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> Am 21.04.2022 um 20:20 schrieb Arnd Bergmann:
-> > From: Arnd Bergmann <arnd@arndb.de>
+Hey Jonathan, Eric,
+
+On Fri, Apr 22, 2022 at 01:21:56AM -0600, Jonathan Corbet wrote:
+> Eric Biggers <ebiggers@kernel.org> writes:
+> 
+> > That's not exactly the correct resolution, since it dropped the change to the
+> > text of this paragraph that my patch made ("HalfSipHash" => "the hsiphash
+> > functions").
 > >
-> > After a build regression report, I took a look at possible users of
-> > CONFIG_ISA_DMA_API on m68k and found none, which Greg confirmed. The
-> > CONFIG_GENERIC_ISA_DMA option in turn is only needed to implement
-> > ISA_DMA_API, and is clearly not used on the platforms with ISA support.
-> >
-> > The CONFIG_ISA support for AMIGA_PCMCIA is probably also unneeded,
-> > but this is less clear. Unlike other PCMCIA implementations, this one
-> > does not use the drivers/pcmcia subsystem at all and just supports
-> > the "apne" network driver. When it was first added, one could use
-> > ISA drivers on it as well, but this probably broke at some point.
->
-> Hoping to clarify some of this:
->
-> For the Amiga PCMCIA "apne" driver, both the definitions of
-> isa_type/isa_sex and the definitions of the low-level accessor and
-> address translation functions are protected by CONFIG_ISA (see
-> arch/m68k/kernel/setup_mm.c and arch/m68k/include/asm/io_mm.h for details).
->
-> This could conceivably be changed (only AMIGA_PCMCIA and Q40 do use
-> these definitions, aside from ATARI_ROM_ISA), but as things are right
-> now, neither Q40 ISA nor Amiga PCMCIA will work without CONFIG_ISA defined.
+> > We should get the updates to this file to go through one tree.  Jason, probably
+> > you'd want it to be yours?
+> 
+> If you want changes to parts of Documentation/ to not go through the
+> docs tree, just say the word and I'll avoid it.  A MAINTAINERS file
+> addition to direct those patches youward would also not be misplaced.
+> 
+> Meanwhile, Jason, if you want to pick up the offending patches directly,
+> I can drop them from docs-next.
 
-Ok, thanks for clarifying that, this makes a lot more sense now. I was wondering
-what ISA devices one can actually use without DMA, but it turns out that a
-lot of the older storage (pata_legacy, pata_isapnp, aha152x) and network
-(3c509, 8390, cs89x0, smc9194) devices work in PIO mode, aside from
-a couple of oddball special-purpose stuff (speech, busmouse, comedi,
-appletalk, wan, ...).
+Ah, I hadn't seen that other patch because it wasn't CC'd to me, but
+that makes sense since it was mostly a docs fix rather than a
+substantive technical change. Since we've now got both going on at once,
+I'll just take the docs one to make the conflict easier, so sure, drop
+it from your tree, and I'll apply it to mine.
 
-> Regarding the Amiga PCMCIA driver's use of the drivers/pcmcia subsystem,
-> I have a patch in limbo at netdev that makes use of the cftable parser
-> code from drivers/pcmcia, but as far as I can recall, none of this
-> depends on CONFIG_ISA.
-
-Yes, Geert mentioned that on IRC already. Note that Dominik Brodowski
-has said in the past that he would plan to eventually drop PCMCIA
-support from the kernel, but I think if that happens, the cftable
-parser can just be moved into the amiga_pcmcia code.
-
-       Arnd
+Jason

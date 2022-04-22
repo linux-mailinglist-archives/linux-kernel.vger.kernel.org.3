@@ -2,75 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C703650B872
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E69850B879
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447973AbiDVNal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
+        id S1447984AbiDVNcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447968AbiDVNaj (ORCPT
+        with ESMTP id S1382090AbiDVNcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:30:39 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57572583B3;
-        Fri, 22 Apr 2022 06:27:45 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id s16so9081805oie.0;
-        Fri, 22 Apr 2022 06:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7wD/67zFN01OLjk/4ayvCobKKh+EpoxVKPJMMkQWRKI=;
-        b=cHmV5J4YqPlLXRoviT4VhtrfOzmgaQtvuq3zeGMbQrXja5Cp481sDGvN5TiVtmve48
-         v8dHMZGXsmi0kLN76djZKrxStvINgxF8l1Z3/cm6Pij73tlg7u966jf57MhMel4hFYJ3
-         sYsXiouAZKYCeyY7ogUNIqmcmcF5K+V4j3au6OkS0o9PC9VArkWISnEXsJ2knO0mAk4m
-         qvFQcRDC1h0vROh/Ya4dDQM7bhKLyH7UkxkWvY9+gMi/JQfuo6kJAUlMD5uYJOWYaGpn
-         kEnrkMpaq0TjGsASQlKH9/0SiHrnq6BdwyqZk0v1zDv6/cT+2kxuVE4E3H4mj3XXiD0z
-         kGww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7wD/67zFN01OLjk/4ayvCobKKh+EpoxVKPJMMkQWRKI=;
-        b=VhVFMWTnhlgsEcn1R1TjsjXxFe0QyJqhiwaji9rYQuQjbGStLvTMTinNcDk+wUO8ix
-         k4OIqJ1JIF0gQd/owhYR1HMYLlEVdfkzG96arNYi/TI12ppHGYFY0kBtya+jLuJaspYS
-         TN5U9CyTndMJRJjVjZT9i6K/qRrqGVOcOq76JBqsy7e+WZgyqYypRKAzf7on+b9g0QSK
-         De0JbqOWjBCC+soqeyRzmO6gLLtwrXLpYTDEh6h8vdiDkW6cAogjuBvY7C08Gbll1Esy
-         KbLUQgPVkzPucGk96WmJBwezXvYYNrPIPKcln+/ZcHabworAS5D7vv3Q/yGbIhjU9zp9
-         TAsA==
-X-Gm-Message-State: AOAM532PHepwFk34EtYLBIBenDMj8SdIVjFrq9p7g2jEVxJve5pZwxT8
-        c65NshihBPhv5opW3zjM5GM=
-X-Google-Smtp-Source: ABdhPJxHjKtY6ERH3y1gOTMOcM1o8bf8FqSjwSMj7qG2kbasaAzJuxduFyyUS72VE+pRqoAjXS6WLw==
-X-Received: by 2002:a05:6808:130f:b0:323:1fd5:f381 with SMTP id y15-20020a056808130f00b003231fd5f381mr2968287oiv.121.1650634065336;
-        Fri, 22 Apr 2022 06:27:45 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a11-20020a056830008b00b0060546411473sm705186oto.75.2022.04.22.06.27.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 06:27:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3896f884-56d9-d0d9-efe6-839c7431e6de@roeck-us.net>
-Date:   Fri, 22 Apr 2022 06:27:41 -0700
+        Fri, 22 Apr 2022 09:32:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902C0583BA;
+        Fri, 22 Apr 2022 06:29:08 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23MD13mr017475;
+        Fri, 22 Apr 2022 13:29:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=6/WQleWzBeacBOxE0QPY0rywH7q5l/js+j2kCDej7vM=;
+ b=KR6Oc94cWxDvef5FSHbXStRL0A6ogA3nYh3PwCgi+qTJOr1WcFIlkpf8EdMzFLWxqfGe
+ AhsiTTh6LJwnbkBE9FL9J3DmbcWRpB01j5eKTxg16XHj5nildV8SB9ZC1IsT0DsxHI6h
+ +lRAJaVIBf2Q7z62h2hKD/Mt79VblGDy6FSoMJytcyEVc+CZflqEdD/ujAdAGEFxkJQk
+ Br1iZiIgozaBXI787p55Sy+T2N5N8te1f3Fy62nyRJxhwrD8wcSCr3koZOSErAURMnGy
+ cArfs4BV2ah1eHX22rRudEkxRza8oEbdEk2t5QSmlxLXONSZS/h+s/twTWEpXkYSDC6b RA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjm2jrp9y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Apr 2022 13:29:04 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23MDQYgs011962;
+        Fri, 22 Apr 2022 13:29:04 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjm2jrp94-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Apr 2022 13:29:04 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MDLxrU004710;
+        Fri, 22 Apr 2022 13:29:02 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3ffn2hyg2k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Apr 2022 13:29:01 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MDSweC47645114
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 22 Apr 2022 13:28:58 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A8CEB4203F;
+        Fri, 22 Apr 2022 13:28:58 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 624A742041;
+        Fri, 22 Apr 2022 13:28:58 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 22 Apr 2022 13:28:58 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-s390@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: [PATCH v4 0/4] PCI: Rework pci_scan_slot() and isolated PCI functions
+Date:   Fri, 22 Apr 2022 15:28:54 +0200
+Message-Id: <20220422132858.1213022-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 00/20] hwmon: check return value after calling
- platform_get_resource()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Cc:     jdelvare@suse.com
-References: <20220422091207.4034406-1-yangyingliang@huawei.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220422091207.4034406-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BiJXaFwkOKe_yRa1zN6quDcUVUuP-_oO
+X-Proofpoint-ORIG-GUID: oo_Spt01SqxbkLM4ZXlTzAPa7-O5nQzc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-22_03,2022-04-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=753 spamscore=0 bulkscore=0 phishscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204220058
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,75 +91,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 02:11, Yang Yingliang wrote:
-> This patcheset add check after calling platform_get_resource to avoid null-ptr-deref
-> in drivers/hwmon/.
-> 
-> Yang Yingliang (20):
->    hwmon: (abituguru) check return value after calling
->      platform_get_resource()
->    hwmon: (abituguru3) check return value after calling
->      platform_get_resource()
->    hwmon: (dme1737) check return value after calling
->      platform_get_resource()
->    hwmon: (f71805f) check return value after calling
->      platform_get_resource()
->    hwmon: (f71882fg) check return value after calling
->      platform_get_resource()
->    hwmon: (it87) check return value after calling platform_get_resource()
->    hwmon: (lm78) check return value after calling platform_get_resource()
->    hwmon: (nct6683) check return value after calling
->      platform_get_resource()
->    hwmon: (nct6775) check return value after calling
->      platform_get_resource()
->    hwmon: (sch5627) check return value after calling
->      platform_get_resource()
->    hwmon: (sch5636) check return value after calling
->      platform_get_resource()
->    hwmon: (sis5595) check return value after calling
->      platform_get_resource()
->    hwmon: (smsc47b397) check return value after calling
->      platform_get_resource()
->    hwmon: (smsc47m1) check return value after calling
->      platform_get_resource()
->    hwmon: (via686a) check return value after calling
->      platform_get_resource()
->    hwmon: (vt1211) check return value after calling
->      platform_get_resource()
->    hwmon: (vt8231) check return value after calling
->      platform_get_resource()
->    hwmon: (w83627ehf) check return value after calling
->      platform_get_resource()
->    hwmon: (w83627hf) check return value after calling
->      platform_get_resource()
->    hwmon: (w83781d) check return value after calling
->      platform_get_resource()
-> 
->   drivers/hwmon/abituguru.c  | 6 +++++-
->   drivers/hwmon/abituguru3.c | 6 +++++-
->   drivers/hwmon/dme1737.c    | 2 ++
->   drivers/hwmon/f71805f.c    | 2 ++
->   drivers/hwmon/f71882fg.c   | 6 +++++-
->   drivers/hwmon/it87.c       | 2 ++
->   drivers/hwmon/lm78.c       | 2 ++
->   drivers/hwmon/nct6683.c    | 2 ++
->   drivers/hwmon/nct6775.c    | 2 ++
->   drivers/hwmon/sch5627.c    | 6 +++++-
->   drivers/hwmon/sch5636.c    | 6 +++++-
->   drivers/hwmon/sis5595.c    | 2 ++
->   drivers/hwmon/smsc47b397.c | 2 ++
->   drivers/hwmon/smsc47m1.c   | 2 ++
->   drivers/hwmon/via686a.c    | 2 ++
->   drivers/hwmon/vt1211.c     | 2 ++
->   drivers/hwmon/vt8231.c     | 2 ++
->   drivers/hwmon/w83627ehf.c  | 2 ++
->   drivers/hwmon/w83627hf.c   | 2 ++
->   drivers/hwmon/w83781d.c    | 2 ++
->   20 files changed, 55 insertions(+), 5 deletions(-)
-> 
+Hi Bjorn, Hi Jan,
 
-This series solves a problem which does not exist in reality and is only theoretic.
-The devices are instantiated from their init functions which always adds the resource.
-Please do not submit such patches.
+In an earlier version[0], I sought to apply the existing jailhouse special case
+for isolated PCI functions to s390. As Bjorn noted in[1] there appears to be
+some potential for cleaning things up and removing duplication though.
 
-Guenter
+This series attempts to do this cleanup (Patches 1 and 2) followed by enabling
+isolated PCI functions for s390 (Patches 3 and 4). If need be I can of course
+split the cleanup off but for now I kept it as one as that's what I have
+been testing.
+
+Testing:
+- On s390 with SR-IOV and a ConnectX NIC with PF 1 but not PF 0 passed throug
+  i.e. the isolated function case. Also of course with just VFs and an NVMe.
+- On x86_64 on a desktop system where ARI is disabled and with an SR-IOV NIC
+  with non-contiguous VFs as well as the usual other PCI devices.
+
+Thanks,
+Niklas
+
+Changes v3 -> v4:
+- Use a do {} while loop in pci_scan_slot() as it is simpler (Bjorn)
+- Explicitly check "fn == 0" as it is not a pointer or bool (Bjorn)
+- Keep the "!dev" check in the ARI branch of next_fn() (Bjorn)
+- Moved the "fn == 0 && !dev" condition out of next_fn() into pci_scan_slot().
+  This allows us to keep the "!dev" case in the ARI branch and means there are
+  no new conditions in next_fn() making it easier to verify that its behavior
+  is equivalent to the existing code.
+- Guard the assignment of dev->multifunction with "fn > 0"
+  instead of "nr > 0". This matches the existing logic more closely and works
+  for the jailhouse case which unconditionally sets dev->multifunction for
+  "fn > 0". This also means fn == 0 is the single "first iteration" test.
+- Remove some unneeded whitespace in patch 2
+Changes v2 -> v3:
+- Removed now unused nr_devs variable (kernel test robot)
+
+Niklas Schnelle (4):
+  PCI: Clean up pci_scan_slot()
+  PCI: Move jailhouse's isolated function handling to pci_scan_slot()
+  PCI: Extend isolated function probing to s390
+  s390/pci: allow zPCI zbus without a function zero
+
+ arch/s390/pci/pci_bus.c    | 82 ++++++++++----------------------------
+ drivers/pci/probe.c        | 65 +++++++++++++-----------------
+ include/linux/hypervisor.h |  8 ++++
+ 3 files changed, 56 insertions(+), 99 deletions(-)
+
+-- 
+2.32.0
+

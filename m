@@ -2,69 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AFC50AF6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B28F50AF6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444120AbiDVFNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 01:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S1444127AbiDVFNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 01:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386384AbiDVFNK (ORCPT
+        with ESMTP id S1386384AbiDVFNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 01:13:10 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1E04B84D;
-        Thu, 21 Apr 2022 22:10:18 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d9so4801191qty.12;
-        Thu, 21 Apr 2022 22:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TWff7qTwFks9/SICsPV5Guj+3/oz5mDxjPoy3+sANMY=;
-        b=GLdZan31fedPnJQvY0HuMvKT28Tq0GME2Oz/mxowpgDRkDRzYy4H1X29/DsXHX74r5
-         cwe/z04i3QcMMTdp6j30C/hzuyLOggvOSCe2dMvNnFZyDLbzCE0bnT3wgKleaNpTXZjY
-         LzONeJHWIM8VEpNO/lhUBwOeqnNt3TKpYMoPrC10Uxdcw1qySo1vn3OwjtmLy/O8avR3
-         QYrxf8axaPENQ0ApJiVhE94wDYy6ABHRbMuN/PCkg1qQ6XQspnMNKX88JY7sxQZUG/e2
-         vkC1vlfXS6qL+ii0z2hYrMQfTezl/0zikNix+b4X1YspXyUTKcP2dBoltgf7jvFtWk9A
-         QzGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TWff7qTwFks9/SICsPV5Guj+3/oz5mDxjPoy3+sANMY=;
-        b=diWPYQkRrbMTKa8xdYC3gIEQpd1Tw7HW7EiMGVpkZPal743wA7821JNKfUepJXgzxF
-         9bmwQ7MJiRetdzL5qNwNLwHvuj7Lw9A+T6SV75tdZbbpMNUhLbcMBPhoBgJtF52v3iAG
-         3XrlrjOmZjgxeR1qw5sXcKX9DMksxzZ7hs5rszMeA/KS+ceAdiryDSyNadRHvPeyOJzL
-         5c5a7VzXFHcapC7LTbNsSAbQo3P9qTvqKry5LvP9ZYslSqKuykG/c4/m4iH0k01LcTE5
-         3hE6jiB/CU5wgTpDKd0HTdAw85NxHKv/dyJz/19mvEi/eSlGBb4/v1NVSZnpdOXQX3G6
-         3Vnw==
-X-Gm-Message-State: AOAM5319RBGgladVwxp77uRUhECIA0lke3a7xFLNNSl0avXaoPxg2cFs
-        Iid1Z1XGhScM3Eq3y72Hv8yw4eBx001nD3qa7D8=
-X-Google-Smtp-Source: ABdhPJxmk+Ep8q2MfVJdlbnq0yjAC6trvGuV/AhxShVlF3NjJDIoK0tW6ZO3Cdh+EXSHioM7h+A2LbnRDSddUXdl3Lo=
-X-Received: by 2002:ac8:5a16:0:b0:2e1:ea00:b4e1 with SMTP id
- n22-20020ac85a16000000b002e1ea00b4e1mr1968564qta.329.1650604217364; Thu, 21
- Apr 2022 22:10:17 -0700 (PDT)
+        Fri, 22 Apr 2022 01:13:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 142CC4BFFE
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:10:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B38E11570;
+        Thu, 21 Apr 2022 22:10:56 -0700 (PDT)
+Received: from [10.163.40.48] (unknown [10.163.40.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AD00C3F5A1;
+        Thu, 21 Apr 2022 22:10:47 -0700 (PDT)
+Message-ID: <905f22d6-0671-21b2-a341-bdc5ba02e59c@arm.com>
+Date:   Fri, 22 Apr 2022 10:41:34 +0530
 MIME-Version: 1.0
-References: <20220422041427.32585-1-soumya.negi97@gmail.com> <0a338104-d7cf-a2e1-7d03-97667aa30537@infradead.org>
-In-Reply-To: <0a338104-d7cf-a2e1-7d03-97667aa30537@infradead.org>
-From:   Soumya Negi <soumya.negi97@gmail.com>
-Date:   Thu, 21 Apr 2022 22:10:06 -0700
-Message-ID: <CAHH-VXfoRX_cgPMPrubrZmrD1DRXaUOfquuFb5G8eSq8Y_eRWw@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: thermal: Include ReST markup standard
- definition file
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH -next v5 2/5] mm: page_table_check: move
+ pxx_user_accessible_page into x86
+Content-Language: en-US
+To:     Tong Tiangen <tongtiangen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+References: <20220421082042.1167967-1-tongtiangen@huawei.com>
+ <20220421082042.1167967-3-tongtiangen@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220421082042.1167967-3-tongtiangen@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,42 +61,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for letting me know.
+Similar to previous commits on the same file, the following subject
+line format, would have been preferred.
 
-On Thu, Apr 21, 2022 at 9:28 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi--
->
-> On 4/21/22 21:14, Soumya Negi wrote:
-> > Fixes the documentation compile error given below:
-> >
-> > ERROR: Undefined substitution referenced: "copy".
-> >
-> > Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
-> > ---
-> >  Documentation/driver-api/thermal/intel_dptf.rst | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
-> > index 96668dca753a..e3c41d96d63a 100644
-> > --- a/Documentation/driver-api/thermal/intel_dptf.rst
-> > +++ b/Documentation/driver-api/thermal/intel_dptf.rst
-> > @@ -1,4 +1,5 @@
-> >  .. SPDX-License-Identifier: GPL-2.0
-> > +.. include:: <isonum.txt>
-> >
-> >  ===============================================================
-> >  Intel(R) Dynamic Platform and Thermal Framework Sysfs Interface
->
-> linux-next and jc_docs git tree already have a patch for this:
->
-> commit 2c2de6f2e2bc
-> Author: Akira Yokosawa <akiyks@gmail.com>
-> Date:   Sat Apr 2 08:19:05 2022 +0900
->
->     docs: driver-api/thermal/intel_dptf: Use copyright symbol
->
->
-> thanks.
-> --
-> ~Randy
+mm/page_table_check: <description>
+
+On 4/21/22 13:50, Tong Tiangen wrote:
+> From: Kefeng Wang <wangkefeng.wang@huawei.com>
+> 
+> The pxx_user_accessible_page() check the PTE bit, it's
+
+s/check/checks			 ^^^^
+
+> architecture-specific code, move them into x86's pgtable.h
+The commit message should have been more clear, atleast complete in
+sentences. I dont want to be bike shedding here but this is definitely
+incomplete. These helpers are being moved out to make the page table
+check framework, platform independent. Hence the commit message should
+mention this.
+
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> ---
+>  arch/x86/include/asm/pgtable.h | 19 +++++++++++++++++++
+>  mm/page_table_check.c          | 17 -----------------
+>  2 files changed, 19 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index b7464f13e416..564abe42b0f7 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -1447,6 +1447,25 @@ static inline bool arch_has_hw_pte_young(void)
+>  	return true;
+>  }
+>  
+> +#ifdef CONFIG_PAGE_TABLE_CHECK
+> +static inline bool pte_user_accessible_page(pte_t pte)
+> +{
+> +	return (pte_val(pte) & _PAGE_PRESENT) && (pte_val(pte) & _PAGE_USER);
+> +}
+> +
+> +static inline bool pmd_user_accessible_page(pmd_t pmd)
+> +{
+> +	return pmd_leaf(pmd) && (pmd_val(pmd) & _PAGE_PRESENT) &&
+> +		(pmd_val(pmd) & _PAGE_USER);
+> +}
+> +
+> +static inline bool pud_user_accessible_page(pud_t pud)
+> +{
+> +	return pud_leaf(pud) && (pud_val(pud) & _PAGE_PRESENT) &&
+> +		(pud_val(pud) & _PAGE_USER);
+
+A line break is not really required here (and above as well). As single
+complete line would still be within 100 characters.
+
+> +}
+> +#endif
+> +
+>  #endif	/* __ASSEMBLY__ */
+>  
+>  #endif /* _ASM_X86_PGTABLE_H */
+> diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+> index eb0d0b71cdf6..3692bea2ea2c 100644
+> --- a/mm/page_table_check.c
+> +++ b/mm/page_table_check.c
+> @@ -52,23 +52,6 @@ static struct page_table_check *get_page_table_check(struct page_ext *page_ext)
+>  	return (void *)(page_ext) + page_table_check_ops.offset;
+>  }
+>  
+> -static inline bool pte_user_accessible_page(pte_t pte)
+> -{
+> -	return (pte_val(pte) & _PAGE_PRESENT) && (pte_val(pte) & _PAGE_USER);
+> -}
+> -
+> -static inline bool pmd_user_accessible_page(pmd_t pmd)
+> -{
+> -	return pmd_leaf(pmd) && (pmd_val(pmd) & _PAGE_PRESENT) &&
+> -		(pmd_val(pmd) & _PAGE_USER);
+> -}
+> -
+> -static inline bool pud_user_accessible_page(pud_t pud)
+> -{
+> -	return pud_leaf(pud) && (pud_val(pud) & _PAGE_PRESENT) &&
+> -		(pud_val(pud) & _PAGE_USER);
+> -}
+> -
+>  /*
+>   * An enty is removed from the page table, decrement the counters for that page
+>   * verify that it is of correct type and counters do not become negative.
+
+With above mentioned code cleanup and commit message changes in place.
+
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>

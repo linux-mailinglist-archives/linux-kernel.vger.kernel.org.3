@@ -2,141 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250D550C093
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D105750C092
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiDVTy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 15:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S229678AbiDVTyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 15:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiDVTyY (ORCPT
+        with ESMTP id S229626AbiDVTyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 15:54:24 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EBA2D8846;
-        Fri, 22 Apr 2022 12:35:10 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id y129so6531867qkb.2;
-        Fri, 22 Apr 2022 12:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uaw3jQI0O7lfuasFDAU1iMGalKK6DqU9oePbaLb6Lpo=;
-        b=jSBuMPPxD+TRF+uvoRePfqLx62akhHX4yKi60akXL8zvbnY79lrrPOv9UdoTTN6G03
-         Z3Z6xJWsC44e2+sH601gYFYQRahbzOlLTXCLTR7DpvXVU7hdwors1gULh5GCqc6Ai1Xp
-         xH2iybM481G86VuD9jW/RRoA7ua81x00JPulz+mRHkD1xdubsNPwLiT4kmVqxX7Rwm0+
-         bWXe1pdPRZ/WrNqxSXBKagepCTNXYFpKudiprDzf06IGDaereV2WJ1I+PhmjNJcvMCER
-         qqEMvrIVug0YQphPqXtbOOyBwQi0iB/t+Dyq8nT6ygBsRs4PscXLhPGC/9Je3uLiCX0R
-         juyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uaw3jQI0O7lfuasFDAU1iMGalKK6DqU9oePbaLb6Lpo=;
-        b=2X8WOImVhKdMo0TGPNY3KZo0A+tqRfF2CF80XBSU+QaGtTd50MKKin3wJ5bb0R1pmg
-         sX21ewhszMCtim9Pa/ZGO0sJNAr2YbxUmT+WWaAszsScwZv9mrgninPMmSUskjo8FMAH
-         eJrtXv8Oy9mQz73k1AMPDOl0We0By9k7hLuBL1KyzwZ1/CHc9QlyPsXe/Z1x3ZWPLUFb
-         dg+6Ft7YDJEQcixLjTsAWi3VfnxtDadzHlLsgIEt4CGE4o+3SkBmqKxL6+wXhnITGRks
-         1ne9NNDZFOXTBeLq8y6rovBpCNJQBqiFwxvCufOLDebLSBWgCQV0Yeq0QGJ9xgIg1ufs
-         8W2A==
-X-Gm-Message-State: AOAM530cs6eX1vqWvq+Z+CD7jARDTcbQsidB6tcDvT49L3e+yGXSkVg5
-        bdenq8RSTO9zn1dUBJyiqzABVP0BKdEi
-X-Google-Smtp-Source: ABdhPJwRNFuGFN5zUpqH2tATD7eZCTHBc5A5LvoxXTRq8ugddn1nAMCTX2JWMw8ITL691waO11UeTQ==
-X-Received: by 2002:a37:6902:0:b0:606:853:fe50 with SMTP id e2-20020a376902000000b006060853fe50mr3597093qkc.751.1650655818042;
-        Fri, 22 Apr 2022 12:30:18 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id bl14-20020a05620a1a8e00b0069e622e593esm1219789qkb.95.2022.04.22.12.30.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 12:30:17 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 15:30:15 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-input@vger.kernel.org, roman.gushchin@linux.dev
-Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
- heap-allocated strings
-Message-ID: <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
-References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
- <20220421234837.3629927-7-kent.overstreet@gmail.com>
- <20220422042017.GA9946@lst.de>
- <YmI5yA1LrYrTg8pB@moria.home.lan>
- <20220422052208.GA10745@lst.de>
- <YmI/v35IvxhOZpXJ@moria.home.lan>
- <20220422113736.460058cc@gandalf.local.home>
+        Fri, 22 Apr 2022 15:54:37 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE991632C0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:35:12 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650655820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=l5c3CLMMqVYhfDtG3GHGcpKgf6+Vvr2oQsy+wAdxJA8=;
+        b=ktbNY0QVYnCK7w5Uwq2rBIPQKzBxNrZHIHCQgzzcV7OZpC2XvrknB/SrHffIBir+NOz35+
+        5k4jihmCCggBqkZ0jq7Rfp5p4s01DjCsUeHqfkwcqJTH/ybdCcaH8BCt5cJ+mVgyuGSHU8
+        yzLknyxOQ8G27x02oPv0+5NF39ZrQmmc4tA20OSXLcXj6rIByjISAQ7OoehrFBhIqKxrya
+        N5/qMLfQf2LPC5WSODTtKiUwXnf3m3plxL6ZwUJ3FElo4Djbl93vQOcuJHgA3jQf8m8KID
+        6+WywhpNaZtrTXzv/j2xGThpqCnuS2Y+zKvUnrcne+8DILYxmV4vcuC9IkFHFw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650655820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=l5c3CLMMqVYhfDtG3GHGcpKgf6+Vvr2oQsy+wAdxJA8=;
+        b=EqXgjvnMaDEsZq01kp11O5F1dGAeDCLJOJLOkiN5qrfGo8e+aRSM1c/L0vqTYdEP1pGApC
+        YVGfHGBegPSTULBg==
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Subject: Re: [patch 3/3] x86/fpu/xsave: Optimize XSAVEC/S when XGETBV1 is
+ supported
+In-Reply-To: <60e5a4d1-df7c-d3bd-2730-e528cd75c351@amd.com>
+References: <20220404103741.809025935@linutronix.de>
+ <20220404104820.713066297@linutronix.de>
+ <a93e6d3f-e8b9-2fab-1139-a8ba3dc4820b@intel.com> <87ee1t9oka.ffs@tglx>
+ <878rs0vkd2.ffs@tglx> <60e5a4d1-df7c-d3bd-2730-e528cd75c351@amd.com>
+Date:   Fri, 22 Apr 2022 21:30:19 +0200
+Message-ID: <87bkws6hmc.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422113736.460058cc@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve!
+On Wed, Apr 20 2022 at 13:15, Tom Lendacky wrote:
+> On 4/19/22 16:22, Thomas Gleixner wrote:
+>>> That was bare metal and I just checked that this was a production config
+>>> and not some weird debug muck which breaks large pages. I'll look deeper
+>>> into that.
+>> 
+>> I can't find any reasonable explanation. The pages are definitely large
+>> pages, so yes the dTLB miss count does not make sense, but it's
+>> consistently faster and it's always the dTLB miss count which makes the
+>> big difference according to perf.
+>> 
+>> For enhanced fun, I ran the lot on a AMD Zen3 machine and with the same
+>> test case (hackbench -l 10000) repeated 10 times by perf stat this is
+>> consistently slower than the non optimized variant. There is at least an
+>> explanation for that. A tight loop of 1 Mio xgetbv(1) invocations takes
+>> 9 Mio cycles on a SKL-X and 50 Mio cycles on a AMD Zen3.
+>
+> I'll take a look into this and see what I find. Might be interesting to 
+> see if the actual XSAVES is slower or quicker, too, based on the input mask.
+>
+> If the performance slowdown shows up in real world benchmarks, we might 
+> want to consider not using the xgetbv() call on AMD.
 
-On Fri, Apr 22, 2022 at 11:37:36AM -0400, Steven Rostedt wrote:
-> On Fri, 22 Apr 2022 01:40:15 -0400
-> Kent Overstreet <kent.overstreet@gmail.com> wrote:
-> 
-> > So I'm honestly not super eager to start modifying tricky arch code that I can't
-> > test, and digging into what looked like non trivial interactions between the way
-> > the traceing code using seq_buf (naturally, given that's where it originates).
-> 
-> Yes, seq_buf came from the tracing system but was to be used in a more
-> broader way. I had originally pushed trace_seq into the lib directory, but
-> Andrew Morton said it was too specific to tracing. Thus, I gutted the
-> generic parts out of it and created seq_buf, which looks to be something
-> that you could use. I had patches to convert seq_file to it, but ran out of
-> time. I probably can pull them out of the closet and start that again.
-> 
-> > 
-> > Now yes, I _could_ do a wholesale conversion of seq_buf to printbuf and delete
-> > that code, but doing that job right, to be confident that I'm not introducing
-> > bugs, is going to take more time than I really want to invest right now. I
-> > really don't like to play fast and loose with that stuff.
-> 
-> I would be happy to work with you to convert to seq_buf. If there's
-> something missing from it, I can help you change it so that it doesn't
-> cause any regressions with the tracing subsystem.
-> 
-> This is how open source programming is suppose to work ;-)
+As things stand now, I'm not going to pursue this further at the moment.
 
-Is it though? :)
+The effect on SKL-X is not explainable especially the dTLB miss count
+decrease does not make any sense. Aside of that I just figured out that
+it is very sensitive to kernel configurations and I have no idea yet
+what exactly is the screw to turn to make the effect come and go.
 
-One of the things I've been meaning to talk more about, that
-came out of a recent Rust discussion, is that we in the kernel community could
-really do a better job with how we interact with the outside world, particularly
-with regards to the sharing of code.
+So I just go and add the XSAVEC support alone as that's actually
+something which _is_ beneficial for guests.
 
-The point was made to me when another long standing kernel dev was complaining
-about Facebook being a large, insular, difficult to work with organization, that
-likes to pretend it is the center of the universe and not bend to the outside
-world, while doing the exact same thing with respect to new concerns brought by
-the Rust community. The irony was illuminating :)
+Thanks,
 
-The reason I bring that up is that in this case, printbuf is the more evolved,
-more widely used implementation, and you're asking me to discard it so the
-kernel can stick with its more primitive, less widely used implementation.
+        tglx
 
-$ git grep -w seq_buf|wc -l
-86
-
-$ git grep -w printbuf|wc -l
-366
-
-So, going to have to push back on that one :)
-
-Printbufs aren't new code; everything in them is there because I've found it
-valuable, which is why I decided to try promoting them to the kernel proper (and
-more importantly, the idea of a standard way to pretty-print anything).
-
-I'm happy to discuss the merits of the code more, and try to convince you why
-you'll like them :)

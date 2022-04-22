@@ -2,97 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7663F50B0BE
+	by mail.lfdr.de (Postfix) with ESMTP id BE9ED50B0BF
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444325AbiDVGnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
+        id S1444495AbiDVGnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444475AbiDVGmd (ORCPT
+        with ESMTP id S1444509AbiDVGmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:42:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4EB50B3E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:39:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E458B82A95
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:39:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 619B2C385A0;
-        Fri, 22 Apr 2022 06:39:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650609578;
-        bh=9yNligLg42qTGCwDgsfnc18X93RVA0YWjVpK6l85LYg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Du/D+WacTmgccwMBXa1I0QgQNaTWCbTMAg/IYkHY6EUmKHShaHzA1J5pdnQJlFuII
-         DBeRKXKEnoCbCczrKk2Dv1lriuLFRNYA8p0y6Rbr1vki1vkVZGgpOpP+nmz9OTgkL7
-         HdnKm/TSe6AGVfKLqx+dNDNEj1MNvwn4j/Sib8ao=
-Date:   Fri, 22 Apr 2022 08:39:36 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Martyn Welch <martyn@welchs.me.uk>
-Cc:     Bruno Moreira-Guedes <codeagain@codeagain.dev>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev,
-        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
-Subject: Re: [PATCH v3 0/3] staging: vme: Cleanup driver tree old structures
-Message-ID: <YmJNqMjXEc4KGrJ8@kroah.com>
-References: <cover.1650321310.git.codeagain@codeagain.dev>
- <YmA4QIRfx2QPhEJi@kroah.com>
- <3e91b72a86294b542acf460657d0fd94adeb252e.camel@welchs.me.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e91b72a86294b542acf460657d0fd94adeb252e.camel@welchs.me.uk>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 02:42:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE121032
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:39:58 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id EBD261F752;
+        Fri, 22 Apr 2022 06:39:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650609596; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=NIHknFyZ1z5HclLOlQubIjh8H867EyLpWb+02lYzfIY=;
+        b=12NALU0oOOQ5/d67pZO0LHc8hX6HGeY8Y+QVp8glfC6hKq57/rx7lHtVLUKp8lMfKHj1u7
+        d5ZoHtJyO42So8ahxCRvgQgc/Yp3+4hHybpu4HBx0wnWYMoQzb9luEAgGm5wKC0Jl49Y71
+        OdDlF9Zjd/YKxuGdWrqHG/E9RJYKyuA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650609596;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=NIHknFyZ1z5HclLOlQubIjh8H867EyLpWb+02lYzfIY=;
+        b=aHEp3MKUnncbKFtT5De3SKAcYh6WExMxH+wm+foact5tqrCkD06pIJYX6cfEgF2YXXB9dl
+        Jw9YuzIb0ekIBkBg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id E34E12C142;
+        Fri, 22 Apr 2022 06:39:56 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 08:39:56 +0200
+Message-ID: <s5hsfq5tydf.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 5.18-rc4
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 08:16:05PM +0100, Martyn Welch wrote:
-> On Wed, 2022-04-20 at 18:43 +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Apr 18, 2022 at 08:29:49PM -0300, Bruno Moreira-Guedes wrote:
-> > > This patch series modify the vme_user driver's place in
-> > > menuconfig (1/3), fixes a missing `depends on` line in a Kconfig
-> > > file
-> > > (2/3), and rearrages the directory tree for the driver allowing a
-> > > more
-> > > straightforward comprehension of its contents (3/3).
-> > > 
-> > > The 'vme_user/' driver is the only remaining vme-family driver in
-> > > the
-> > > 'staging/' tree, but its structure, entry in menuconfig and
-> > > building
-> > > routines are still attached to the 'vme/' subtree now outside
-> > > 'staging/'. The present patchset fixes it.
-> > > 
-> > > Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
-> > 
-> > What about deleting the vme drivers entirely?
-> 
-> I assume you're suggesting deleting the "vme_user" driver from the
-> staging directory?
+Linus,
 
-Yes, at the very least given that no one has tried to fix it up and get
-it out of staging in many years.
+please pull sound fixes for v5.18-rc4 from:
 
-> > Martyn, anyone still using these?
-> > 
-> 
-> I'm fairly sure that the actual VME drivers for the hardware bridges
-> (the bits not in staging) are still being used based on the
-> conversations I've had today. I'm just trying to find out whether the
-> vme_user bit is actively being used.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-5.18-rc4
 
-If the non-staging vme drivers are still being used, that's great.  But
-if not, those too should be dropped.
+The topmost commit is 86222af07abf1f5f07a5873cc399c29ab8a9b8b8
 
-thanks,
+----------------------------------------------------------------
 
-greg k-h
+sound fixes for 5.18-rc4
+
+At this time, the majority of changes are for pending ASoC fixes while
+a few usual HD-audio and USB-audio quirks are found.  Almost all
+patches are small device-specific fixes, and nothing worrisome stands
+out, so far.
+
+----------------------------------------------------------------
+
+Ahmad Fatoum (1):
+      ASoC: fsl_sai: fix 1:1 bclk:mclk ratio support
+
+Ajye Huang (1):
+      ASoC: Intel: sof_rt5682: Add support for max98360a speaker amp on SSP2
+
+Andy Chi (1):
+      ALSA: hda/realtek: Enable mute/micmute LEDs and limit mic boost on EliteBook 845/865 G9
+
+Chao Song (1):
+      ASoC: Intel: soc-acpi: correct device endpoints for max98373
+
+Christophe JAILLET (2):
+      ASoC: soc-pcm: use GFP_KERNEL when the code is sleepable
+      ASoC: codecs: Fix an error handling path in (rx|tx|va)_macro_probe()
+
+Gongjun Song (1):
+      ALSA: hda: intel-dsp-config: Add RaptorLake PCI IDs
+
+Heiner Kallweit (2):
+      ASoC: soc-core: add debugfs_prefix member to snd_soc_component_driver
+      ASoC: meson: aiu: fix duplicate debugfs directory error
+
+Hui Wang (2):
+      ASoC: cs35l41: Add one more variable in the debug log
+      ASoC: cs35l41: Fix a shift-out-of-bounds warning found by UBSAN
+
+Kai Vehmanen (2):
+      ALSA: hda/hdmi: fix warning about PCM count when used with SOF
+      ALSA: hda/hdmi: add HDMI codec VID for Raptorlake-P
+
+Lucas De Marchi (1):
+      ALSA: hda/i915: Fix one too many pci_dev_put()
+
+Mark Brown (1):
+      ASoC: atmel: Remove system clock tree configuration for at91sam9g20ek
+
+Maurizio Avogadro (1):
+      ALSA: usb-audio: add mapping for MSI MAG X570S Torpedo MAX.
+
+Mauro Carvalho Chehab (3):
+      ASoC: Intel: sof_es8336: support a separate gpio to control headphone
+      ASoC: Intel: sof_es8336: add a quirk for headset at mic1 port
+      ASoC: Intel: sof_es8336: Add a quirk for Huawei Matebook D15
+
+Miaoqian Lin (2):
+      ASoC: rk817: Use devm_clk_get() in rk817_platform_probe
+      ASoC: msm8916-wcd-digital: Check failure for devm_snd_soc_register_component
+
+Miles Chen (1):
+      sound/oss/dmasound: fix 'dmasound_setup' defined but not used
+
+Peter Ujfalusi (2):
+      ASoC: topology: Correct error handling in soc_tplg_dapm_widget_create()
+      ASoC: SOF: topology: Fix memory leak of scontrol->name
+
+Pierre-Louis Bossart (3):
+      ASoC: rt711/5682: check if bus is active before deferred jack detection
+      ASoC: SOF: topology: cleanup dailinks on widget unload
+      ASoC: Intel: sof_es8336: simplify speaker gpio naming
+
+Richard Fitzgerald (2):
+      ASoC: simple-card-utils: Avoid NULL deref in asoc_simple_set_tdm()
+      firmware: cs_dsp: Fix overrun of unterminated control name string
+
+Srinivas Kandagatla (1):
+      ASoC: codecs: wcd934x: do not switch off SIDO Buck when codec is in use
+
+Takashi Iwai (1):
+      ALSA: usb-audio: Clear MIDI port active flag after draining
+
+Tim Crawford (1):
+      ALSA: hda/realtek: Add quirk for Clevo NP70PNP
+
+Xiaomeng Tong (3):
+      codecs: rt5682s: fix an incorrect NULL check on list iterator
+      ASoC: soc-dapm: fix two incorrect uses of list iterator
+      ASoC: rt5682: fix an incorrect NULL check on list iterator
+
+Yu Liao (1):
+      ASoC: SOF: topology: Fix memory leak in sof_control_load()
+
+Zheyu Ma (1):
+      ASoC: wm8731: Disable the regulator when probing fails
+
+---
+ drivers/firmware/cirrus/cs_dsp.c                  |   3 +-
+ include/sound/soc-component.h                     |   4 +
+ sound/hda/hdac_i915.c                             |   7 +-
+ sound/hda/intel-dsp-config.c                      |   9 ++
+ sound/oss/dmasound/dmasound_core.c                |   2 +-
+ sound/pci/hda/patch_hdmi.c                        |   7 +-
+ sound/pci/hda/patch_realtek.c                     |  12 ++-
+ sound/soc/atmel/sam9g20_wm8731.c                  |  61 -----------
+ sound/soc/codecs/cs35l41-lib.c                    |  10 +-
+ sound/soc/codecs/lpass-rx-macro.c                 |  14 ++-
+ sound/soc/codecs/lpass-tx-macro.c                 |  14 ++-
+ sound/soc/codecs/lpass-va-macro.c                 |   8 +-
+ sound/soc/codecs/msm8916-wcd-digital.c            |   9 +-
+ sound/soc/codecs/rk817_codec.c                    |   2 +-
+ sound/soc/codecs/rt5682.c                         |  20 ++--
+ sound/soc/codecs/rt5682s.c                        |  11 +-
+ sound/soc/codecs/rt711.c                          |   7 ++
+ sound/soc/codecs/wcd934x.c                        |  26 +----
+ sound/soc/codecs/wm8731.c                         |  19 ++--
+ sound/soc/fsl/fsl_sai.c                           |   2 +-
+ sound/soc/generic/simple-card-utils.c             |   6 +-
+ sound/soc/intel/boards/sof_es8336.c               | 117 ++++++++++++++++------
+ sound/soc/intel/boards/sof_rt5682.c               |  13 +++
+ sound/soc/intel/common/soc-acpi-intel-tgl-match.c |   4 +-
+ sound/soc/meson/aiu-acodec-ctrl.c                 |   3 +
+ sound/soc/meson/aiu-codec-ctrl.c                  |   3 +
+ sound/soc/meson/aiu.c                             |   3 +
+ sound/soc/soc-core.c                              |   5 +
+ sound/soc/soc-dapm.c                              |   6 +-
+ sound/soc/soc-pcm.c                               |   2 +-
+ sound/soc/soc-topology.c                          |   4 +-
+ sound/soc/sof/sof-pci-dev.c                       |   9 +-
+ sound/soc/sof/topology.c                          |  50 ++++++++-
+ sound/usb/midi.c                                  |   1 +
+ sound/usb/mixer_maps.c                            |   4 +
+ 35 files changed, 300 insertions(+), 177 deletions(-)
+

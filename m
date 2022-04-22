@@ -2,203 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B3850B92C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8404050B934
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448230AbiDVNzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
+        id S1448233AbiDVN4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448223AbiDVNzi (ORCPT
+        with ESMTP id S231134AbiDVN4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:55:38 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966965A0AE;
-        Fri, 22 Apr 2022 06:52:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650635565; x=1682171565;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lkhNBPYeLEU29Qy1pnzyHS1LukEckw/2oKYCzK7DnJA=;
-  b=IQvSMTNL3JPXtdzl8/gVE9jPfAgslvKiJ/Igkvyk9vwZPXCG1A9bGffd
-   KwLbcSZ2ZN1v6XRneAj98B57/DsW3Mcm4wyR3sy1ahiRr4PiF4tNApdUi
-   KRpnYG3ZPsFydgWf7jUQ7ELfM3XMrmfMilavJIN3cBSD+Wa0RQ4qmG+0p
-   s=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 22 Apr 2022 06:52:45 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 06:52:45 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 22 Apr 2022 06:52:44 -0700
-Received: from [10.216.36.2] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 22 Apr
- 2022 06:52:39 -0700
-Message-ID: <af688ea2-139f-bb92-1e6a-0090e9bb4906@quicinc.com>
-Date:   Fri, 22 Apr 2022 19:22:36 +0530
+        Fri, 22 Apr 2022 09:56:30 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA0C5A0B1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:53:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=N9g5FPfq8uxs/XPuUy8BU7bUC5HJN88qs0ORLOBFKx8=;
+        t=1650635617; x=1651845217; b=EftaVgC3EVc+9U9M3Fuv0Z6+0+nprkXC/8bSKA6Sm4JmNCr
+        KRgUOloyZR13w/WlygYFKELkdG7tU3JlsIe3sdd4SoO5kIEdy/HYU8/+DqgP1Awcn9eIopSiH9oQF
+        /8201u+Sw6jrCdrVYyhnSz/vlplW+fdd9BBgu8eOMcmZP7q9kUkd6aIKAk5DEJ2rKl6BWWnUljz2E
+        VXxCrQT4kfHw0BJ2IqkMZhRARM50LI2ss+fJqgmK+cvB99puPcrrwgarQL8+dV4z174iIJvYaOHI4
+        ekNPQhye5OoYDJfdR9un+/QjbOsD/JJRUG7HZEbupCECxfgDWfq7WwgUqSplLe2g==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nhtj6-00DXll-2O;
+        Fri, 22 Apr 2022 15:53:36 +0200
+Message-ID: <e59d076bc05ed319732ac3e234e423affae1cafe.camel@sipsolutions.net>
+Subject: Re: [PATCH] devcoredump : Serialize devcd_del work
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, linux-kernel@vger.kernel.org
+Cc:     tglx@linutronix.de, sboyd@kernel.org, rafael@kernel.org
+Date:   Fri, 22 Apr 2022 15:53:35 +0200
+In-Reply-To: <2a14c4f64ff3e029a76c85d064146e6c303c96bb.camel@sipsolutions.net>
+References: <1650364077-22694-1-git-send-email-quic_mojha@quicinc.com>
+         <2a14c4f64ff3e029a76c85d064146e6c303c96bb.camel@sipsolutions.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v9 12/12] arm64: dts: qcom: sc7280: Add sound node for CRD
- 3.0/3.1
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1650552459-21077-1-git-send-email-quic_srivasam@quicinc.com>
- <1650552459-21077-13-git-send-email-quic_srivasam@quicinc.com>
- <YmGcaG3MKIHSQyNi@google.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <YmGcaG3MKIHSQyNi@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-04-22 at 15:41 +0200, Johannes Berg wrote:
+> On Tue, 2022-04-19 at 15:57 +0530, Mukesh Ojha wrote:
+> > In following scenario(diagram), when one thread X running dev_coredumpm() adds devcd
+> > device to the framework which sends uevent notification to userspace
+> > and another thread Y reads this uevent and call to devcd_data_write()
+> > which eventually try to delete the queued timer that is not initialized/queued yet.
+> > 
+> > So, debug object reports some warning and in the meantime, timer is initialized
+> > and queued from X path. and from Y path, it gets reinitialized again and
+> > timer->entry.pprev=NULL and try_to_grab_pending() stucks.
+> > 
+> > To fix this, introduce mutex to serialize the behaviour.
+> > 
+> >  	cpu0(X)			                      cpu1(Y)
+> > 
+> >     dev_coredump() uevent sent to userspace
+> >     device_add()  =========================> userspace process Y reads the uevents
+> >                                              writes to devcd fd which
+> >                                              results into writes to
+> > 
+> >                                             devcd_data_write()
+> >                                               mod_delayed_work()
+> >                                                 try_to_grab_pending()
+> >                                                   del_timer()
+> >                                                     debug_assert_init()
+> >    INIT_DELAYED_WORK
+> >    schedule_delayed_work
+> > 
+> 
+> Wouldn't it be easier to simply schedule this before adding it to sysfs
+> and sending the uevent?
+> 
 
-On 4/21/2022 11:33 PM, Matthias Kaehlcke wrote:
+Hm. I think that would solve this problem, but not all of the problems
+here ...
 
-Thanks for your time Matthias!!!
-> On Thu, Apr 21, 2022 at 08:17:39PM +0530, Srinivasa Rao Mandadapu wrote:
->> Add dt nodes for sound card support on rev5 (aka CRD 3.0/3.1) boards,
->> which is using WCD938x headset playback, capture, I2S speaker playback
->> and DMICs via VA macro.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 98 +++++++++++++++++++++++
->>   1 file changed, 98 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->> index 4033d2a..bc6dbcc 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->> @@ -42,6 +42,104 @@
->>   		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
->>   		#sound-dai-cells = <1>;
->>   	};
->> +
->> +	sound: sound {
->> +		compatible = "google,sc7280-herobrine";
->> +		model = "sc7280-wcd938x-max98360a-1mic";
->> +
->> +		audio-routing =
->> +			"IN1_HPHL", "HPHL_OUT",
->> +			"IN2_HPHR", "HPHR_OUT",
->> +			"AMIC1", "MIC BIAS1",
->> +			"AMIC2", "MIC BIAS2",
->> +			"VA DMIC0", "MIC BIAS1",
->> +			"VA DMIC1", "MIC BIAS1",
->> +			"VA DMIC2", "MIC BIAS3",
->> +			"VA DMIC3", "MIC BIAS3",
->> +			"TX SWR_ADC0", "ADC1_OUTPUT",
->> +			"TX SWR_ADC1", "ADC2_OUTPUT",
->> +			"TX SWR_ADC2", "ADC3_OUTPUT",
->> +			"TX SWR_DMIC0", "DMIC1_OUTPUT",
->> +			"TX SWR_DMIC1", "DMIC2_OUTPUT",
->> +			"TX SWR_DMIC2", "DMIC3_OUTPUT",
->> +			"TX SWR_DMIC3", "DMIC4_OUTPUT",
->> +			"TX SWR_DMIC4", "DMIC5_OUTPUT",
->> +			"TX SWR_DMIC5", "DMIC6_OUTPUT",
->> +			"TX SWR_DMIC6", "DMIC7_OUTPUT",
->> +			"TX SWR_DMIC7", "DMIC8_OUTPUT";
->> +
->> +		qcom,msm-mbhc-hphl-swh = <1>;
->> +		qcom,msm-mbhc-gnd-swh = <1>;
->> +
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +		#sound-dai-cells = <0>;
->> +
->> +		dai-link@0 {
->> +			link-name = "MAX98360A";
->> +			reg = <MI2S_SECONDARY>;
-> same comment as for "arm64: dts: qcom: sc7280: Add sound node for CRD
-> 1.0 and CRD 2.0", i.e. use the link number for 'reg' instead of the lpass
-> DAI id.
-Okay. Will update accordingly.
->
->> +
->> +			cpu {
->> +				sound-dai = <&lpass_cpu MI2S_SECONDARY>;
->> +			};
->> +
->> +			codec {
->> +				sound-dai = <&max98360a>;
->> +			};
->> +		};
->> +
->> +		dai-link@1 {
->> +			link-name = "DisplayPort";
->> +			reg = <LPASS_DP_RX>;
->> +
->> +			cpu {
->> +				sound-dai = <&lpass_cpu LPASS_DP_RX>;
->> +			};
->> +
->> +			codec {
->> +				sound-dai = <&mdss_dp>;
->> +			};
->> +		};
->> +
->> +		dai-link@2 {
->> +			link-name = "WCD9385 Playback";
->> +			reg = <LPASS_CDC_DMA_RX0>;
->> +
->> +			cpu {
->> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_RX0>;
->> +			};
->> +
->> +			codec {
->> +				sound-dai = <&wcd938x 0>, <&swr0 0>, <&lpass_rx_macro 0>;
->> +			};
->> +		};
->> +
->> +		dai-link@3 {
->> +			link-name = "WCD9385 Capture";
->> +			reg = <LPASS_CDC_DMA_TX3>;
->> +
->> +			cpu {
->> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_TX3>;
->> +			};
->> +
->> +			codec {
->> +				sound-dai = <&wcd938x 1>, <&swr1 0>, <&lpass_tx_macro 0>;
->> +			};
->> +		};
->> +
->> +		dai-link@4 {
->> +			link-name = "DMIC";
->> +			reg = <LPASS_CDC_DMA_VA_TX0>;
->> +
->> +			cpu {
->> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_VA_TX0>;
->> +			};
->> +
->> +			codec {
->> +				sound-dai = <&lpass_va_macro 0>;
->> +			};
->> +		};
->> +	};
->>   };
+Even with your change, I believe it's still racy wrt. disabled_store(),
+since that flushes the work but devcd_data_write() remains reachable
+(and might in fact be waiting for the mutex after your change), so I
+think we need an additional flag somewhere (in addition to the mutex) to
+serialize all of these things against each other.
+
+johannes

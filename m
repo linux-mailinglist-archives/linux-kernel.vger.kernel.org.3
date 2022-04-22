@@ -2,141 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D2F50AEF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 06:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB75050AEEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 06:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443953AbiDVEUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 00:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
+        id S1443938AbiDVEUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 00:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443963AbiDVEUi (ORCPT
+        with ESMTP id S1443927AbiDVEUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 00:20:38 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFBB4EF72
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 21:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650601061; x=1682137061;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jGLJ2CtZlVXvaRIPxPwrE1Ya3XHvA51uPt0/y7JUAlQ=;
-  b=WBN9kO89a4eu01xY8O3S0BxP8C4+yoCbs65U9MRHMY2Mu8WKxwi23EGg
-   FQLSnah5gXxwN1LWSPoOiym7dO6CmGZ9/IaDUUZDgzc9R0FLdC3SmyvAc
-   ahtSSR5B3AooDpAp2WdIvawEZ2dCT5m75P7n7VfYTKx/yIo+WnkLGQalW
-   pM73gXe/jPCDjenoCOy1qYJt4Kp7HbUdX8SrYZEi/f6kCOJ7ljQRIFefA
-   PmlKi5waXI/ZznOHTes/dP/G5Ldqc4Vlwxae44YZw5hL0LRggu6Bki6oU
-   2zkoFiIgsnhfg0jBvOjeQB5bwSzddM4xvlhiyD8JgueGj9fJiLNzJQgRB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264733600"
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="264733600"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 21:17:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="593977100"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 21 Apr 2022 21:17:39 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhkji-0009Cc-K8;
-        Fri, 22 Apr 2022 04:17:38 +0000
-Date:   Fri, 22 Apr 2022 12:16:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jonas =?iso-8859-1?Q?Dre=DFler?= <verdre@v0yd.nl>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kalle Valo <kvalo@codeaurora.org>
-Subject: [linux-stable-rc:linux-5.15.y 133/5978]
- drivers/net/wireless/marvell/mwifiex/pcie.c:659:13: warning: variable
- 'retval' set but not used
-Message-ID: <202204221209.wnYEN9S3-lkp@intel.com>
+        Fri, 22 Apr 2022 00:20:07 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2118.outbound.protection.outlook.com [40.107.243.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D1F4EDE8;
+        Thu, 21 Apr 2022 21:17:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FHgA38zSZej/eHXubK2HKhMb2AHgOzYcXNSdtsjdTIa2yqrWWdRWEKXnSlQxncWGgCByth7IdmFNETWIF7yiJpQ00jrVcoqot3y1hsiL+6C1V+kOi8SQD9b8DreqmIKpufGYqv2i+kgKXEALGWhBTAQMGNMySUAkZHjy4FPQFGQacu3wm82h5Sd8Dvglc31eiZHQuQPvfpqdkgczE1v/ljxPcE5q4V/m5jDPI9SND+25xetrixFsUTyLAXS1WDIH0QzwmG5o6cH8yCch159afHXeZELixU51qqnu1Fa9GrIqEeh3rYd/3pAZGbNFTXQnnpBCQCgB22UNxqQaKBiT+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hJB/t3rzHtUbPTWs4mQw50/35OQSQMleb7HVrITupwY=;
+ b=be/bH1NPAlKZRSLfJ+8FZZQxToCtX0e++FE1Puf9ky28RrheeyUtg7DIQqx9d7njhkEUYTsOLrZ/1bSwv/yQynI1pIp6eL58SnK2uxZg3lezwDgv9yB+0wIhKZtjui3P1o8YoPTOvhsFf7YP+aWyox23ZGWMOh+dJBud+KriPCNRtpzT0wVS36L9sLT5prgfjQoFG8aQEGcNXQhKj4nbv/KEw5JcgvHHlKk981EQNmadJJIaPlyC8Af27wJcjGerb737Pz6U06PLwhAVt/twxphFvhsKH5d6xntoajJXBsfDj3abl7X+mhVH8nk47nduk3kSwzisEGy7y5R8qUQ03g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hJB/t3rzHtUbPTWs4mQw50/35OQSQMleb7HVrITupwY=;
+ b=upUPpAdEVPoLZj91+E6FjbGouOgoKOJ6M7Ak57jjFVw9OwOapCC+SK5ZFiHf/HE3qNhADE1i1NHQ0A8cYLVjDYvAN2Fa5ksHU2vkB6WfLekhcH3MxLQN6NEJlZV7n844P6mGXjwSie/L5ArSR12x4WwyDzeZKQp7CZFnRYdhTwM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ BN6PR01MB2644.prod.exchangelabs.com (2603:10b6:404:d0::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.13; Fri, 22 Apr 2022 04:17:11 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::319b:4612:e6f4:f22c]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::319b:4612:e6f4:f22c%3]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 04:17:11 +0000
+Message-ID: <153da61e-dc9d-467e-221c-b48d6f54c6c2@os.amperecomputing.com>
+Date:   Fri, 22 Apr 2022 11:16:59 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH v7 2/3] bindings: ipmi: Add binding for SSIF BMC driver
+Content-Language: en-US
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Corey Minyard <minyard@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
+ <20220422040803.2524940-3-quan@os.amperecomputing.com>
+In-Reply-To: <20220422040803.2524940-3-quan@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR04CA0013.apcprd04.prod.outlook.com
+ (2603:1096:4:197::6) To SJ0PR01MB7282.prod.exchangelabs.com
+ (2603:10b6:a03:3f2::24)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1399738f-0e73-4edc-3aba-08da2416f921
+X-MS-TrafficTypeDiagnostic: BN6PR01MB2644:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR01MB2644F97D85D8DEF4715A8873F2F79@BN6PR01MB2644.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CRavmAsP3CEzrGr6vzSr821ydXDMH2mB6q/Pe37iDjCBb7vhL/xDQyxcozNWQpr0c2WfKoMZGT9qEhMcoIMYiUjGMOd0LzraiHlNo4gAvp7igCDQd0b1whPDB2T0FedEwvTnI8D+O2F4wWiH7NrbIX6CsbdpII4qr+rhbC8gVSz0BX1kJ/XPmGLnM+6Szpibi0QXuEbkJdWhOJr0gTxP7gK79AXQlcwW06VoxHbIgxHaX1XI8IBjTiCM5RvkpjWd/cwd9z3rcG4nn66mYg+B5y2YfeUC4taI0waZ8rLzLXJ6jH1kr+xzYIt4dvK47DVxyBBwNoWpynmUQR0ulBjR7ymXsdj6LKUOjvxd1pCnS77bMUHgHqwwbztRC8bhxN0e3eRO6bskqGmbBgxx20nsdr1OgxL8lFLPUSzx914suMeFg4mb3jGm0GuInrwnZ043zAWVVhHRru5L7lVeGbAJKABUOrIK8sJu9kdFRa2HHWZGO5wZN/g91wWxvtfWawCvnuFDoHR/CPVNdakdi+yHBQM88WZfRufEjf6TEmLU65SFThE2ETWIkvo7skaZdzU5zhwJmRMNA2hYuVQ4N9p/JQNjp6yo+EFfkKax42ZSDT3go3WkND9Wg2SAIeY3YFqIRiBbWpVMqb/RmmR1vdxWT6ejl3p+Q6iXABD1Y9T+oZKiCl6/PtSJXWwb1/rE2kAXgKtVhAqE1KuDrh25LSJQut+2d716RHe/Z3cW+9oCdx6SmMuitCfJ07djU61Co9EPK/D3CJAXkqkzH6iO6uQV/jWD7vwXc8R4T1BttyJzm2LSDRgD4xsktZeH50PASeLKU6IARaFYgDSLaYgt0ZVDPqGwy6AmNcDScMz/G5k8VVvMQLP7laAK/GFRnBkdBFF/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(31696002)(2906002)(86362001)(316002)(6486002)(52116002)(6666004)(8936002)(508600001)(38350700002)(110136005)(6512007)(83380400001)(54906003)(66556008)(966005)(107886003)(4326008)(53546011)(921005)(6506007)(31686004)(5660300002)(186003)(26005)(2616005)(66946007)(38100700002)(8676002)(7416002)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T0hDVTg3Q05uS2hBR2NsY0NkV3FSMTZKRk8vRVFBOTRvSTJVQzl0Y3ViRFlz?=
+ =?utf-8?B?MmYraHRFS3lmdHhVQXVIaGFpMUE3NHJidVFZeG8rS2ttR2E5bjJ6eWxob2h0?=
+ =?utf-8?B?RzVVSXhFTWpkZHFlSXRTSWF1VnEraTBHQlhZOVBySHFBUjNkd3lXdkc5eTls?=
+ =?utf-8?B?MDZLUVBvY3NrVEh3YTd6Q0tJM2hGNklXOHlDYjA3RWc1Q2dMcGNNenZUOC9p?=
+ =?utf-8?B?c2ZabDhwRWcvNnF4aWg4d3NBWE5vUENYa0tqYVVHWUdNOW1ENEc3VkFweUkv?=
+ =?utf-8?B?K2xoSG1QRzgrRjBESmRTZ1VSdFhreGZJMEdqdXYrNlYzVHpYZGswaWY0aXpD?=
+ =?utf-8?B?REd5UlpzNzRxTW4zVGVPZVJWbjFVSGVFMDRHOXEzenpBZTN5NCtZcjNkZFVa?=
+ =?utf-8?B?STd1NG1VQUhyUkYrRG1oSTQzeTVPUHZTYnExQzh5Z1o3R1pkNVlXdG5KQ1Ez?=
+ =?utf-8?B?dWRBNVRqS3FiQkRZY2FUenlTU1N0R1RoZmoyWk1NaEZFOWR2TVdIaTAvQ0Fz?=
+ =?utf-8?B?THZJZWJtd2ltK0ZzYjVSWDRyaWJyNW0vWTVtdCs3K0lxRnh4bVh1OUhaa09r?=
+ =?utf-8?B?UUs5QnYxRFo0ZTNEOCtyeUY3dXFiYUJJSVp2OHRweE8vVXFONEk1UzdhN0dm?=
+ =?utf-8?B?WHRQSDlzb1VZY0l6VHBmaVhBZDN1bVJESzlWUW0yazhJNnp4MkdDOXZGUGZF?=
+ =?utf-8?B?eXhvNnNrRVhJd0VuMHkvdlAzcU9oMGZxdDhtYWJiTDVKY0g3QTdvdmNmTHBW?=
+ =?utf-8?B?bXB1WklraHZMN0kvZjA3YUw5Umo3SUN4YmoyTksyYTF2ZjN0dk1PczBBVTFM?=
+ =?utf-8?B?MWhBR3VCU01WTVZ3NVI0RVdaWU1QRFJlWW5rYzltSk9Gd091QVpGUXpLSGQy?=
+ =?utf-8?B?MmFjVmdURkJsbWVkVEVCNE5RZlAxQ0g5cmppVVpYZXVscDhheElzblFMQm40?=
+ =?utf-8?B?cUFSeUVMd0JFN0pyMTdvNzVLdGpEdzZhdEhJV0ZNT0MvSVpJVDUxQWNsS3Zr?=
+ =?utf-8?B?ZmZUQlFiWklKZHF3VTFTaG5qbWc3Mmh0clFVaTJWRmtGaFNUQWRXNlF0enY0?=
+ =?utf-8?B?VURVTEFqc1VpY2M4QjNJOWlkL3g1TjVkbzVtL2JhQnlNbFZvanZMcXV3Z0Jj?=
+ =?utf-8?B?K1NreW9saXB4MjcwWW1TVG9KU1hUcVdDQWdncjNYem42dnJaeDQ4ci9HV3Qy?=
+ =?utf-8?B?ZExzRDJicmpvL1puTCswamJQVGo4UisvQkw4M011UHAzZjMwUXg1a1VCelNs?=
+ =?utf-8?B?T2tpVWJTMi8xb3c2Q0J6Sjh6NUJIaXFKVjl3YTZoMngrdysxQzEyMWF1YVUv?=
+ =?utf-8?B?RGcvZlV4Mys2ekwxM09QTjUzcXdpMC9vMVZmZnE5M3dnOU1IejViaEd0RDJJ?=
+ =?utf-8?B?MWR0WVRNclNaVlVHcmdIekYzV0R6YTVjamZDSUlDMFlORXNYTnJTV1lPTGtq?=
+ =?utf-8?B?a00ybFk5a3hZcUtCOUR4Q1lOSUkxOUZkWTdCbWtUeXh0cElaSlpPQkIxVzVM?=
+ =?utf-8?B?eHZJNDF5eXVrYTMrZGVOT2xNK3pScFgxNzNNL3F2aW5IRktZVzAwd2VRSGZ4?=
+ =?utf-8?B?SnBWOWpkNXU1MEd0c2dFa1BBYkpZdXMvMEltOFJRM1JSTjhTV1RyTC92SlZk?=
+ =?utf-8?B?WXVBUlZaMWl4Q04rR3VONm9VTzJUT1Z1T0pWQ1o4VXpNZnJZY0lkUnM4Q1NE?=
+ =?utf-8?B?UzdMQjlHNDlNVHY0cHJJdE9WYXBHQ2FGZ3ZEZVpQUGEvVHljeTh0cjZDYURD?=
+ =?utf-8?B?OXhTeUtsUmNTeVdkYUx2ZjQ1Rld5eGIzWHlkSU1FM0d6YVpHaHZLdVUyd0gv?=
+ =?utf-8?B?S0praFNDaTF2TEsvRU9qakdldWVoQWwxdDl3d2Rvc0JSVldFWUxQeERTc2pV?=
+ =?utf-8?B?MVBCdjNLd3hDY2FqVzM1a1hBbjFReFFwY3dOcnBJZU9TSnNFNENxTHoyMkRQ?=
+ =?utf-8?B?QUV5dm5hb0VsMFBoVHQ0K3U2OXI0THdKaXhqdXloR2txQ3Uvcmg4VEJDUXpp?=
+ =?utf-8?B?cTcwQUpzTFVHdUMwN1Y0V1IvUzA5SExWdnNmbzlid1JDL3lVNmY4SmdQR0pm?=
+ =?utf-8?B?UlQrYU1xZzIwd3kwTEFEc3dKMUdvOUc5MzFyRDVyK05xSXR2RG1WN3NGMWNM?=
+ =?utf-8?B?NFA4Y1U5TStha256THpXMmJTMGk1RWJNS3o1ajlFbmM0Wm83Sklkc0I4djM5?=
+ =?utf-8?B?aDhZVHNSRVo4c2MvTEtvczh4azFLUmx5MWZQbGk1SG1zNXRPR0prZ2xyMFRx?=
+ =?utf-8?B?U0k3c3JmaGRPOERaN1o1dHZrQVFDdUw0Y0MrQ0tNSVRtQ1dJTU1EdUE0M3U2?=
+ =?utf-8?B?NTQyalJqWlFmekk2OUc2dlhKdkovOXFBYnFqRXpTci9acEtKVWw5QXNEMDN0?=
+ =?utf-8?Q?ns6bH5V/qsv3VQYqlY7Q8owrWA1h9QJZXyvGR?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1399738f-0e73-4edc-3aba-08da2416f921
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 04:17:11.7351
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GJ911+A0BJ6fS4twTaZ5fKFw9e+Ae4yKhc5Ny/BDQ9pEMCA8szyBXCUDGqSJs0Nv0Ywh0nE0hhhT3dNFqV6NPTknnggmXRab1gLWf1ESrRI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR01MB2644
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   81d8d30c35edf29c5c70186ccb14dac4a5ca38a8
-commit: 023d9d9e74d66182733d9e5bc8bf2e4671890110 [133/5978] mwifiex: Try waking the firmware until we get an interrupt
-config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220422/202204221209.wnYEN9S3-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=023d9d9e74d66182733d9e5bc8bf2e4671890110
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout 023d9d9e74d66182733d9e5bc8bf2e4671890110
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/net/wireless/marvell/mwifiex/
+Added Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+as I'm not aware of the email change
+- Quan
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 22/04/2022 11:08, Quan Nguyen wrote:
+> Add device tree binding document for the SSIF BMC driver.
+> 
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> ---
+> v7:
+>    + Change compatible string from "ampere,ssif-bmc" to "ssif-bmc"  [Jae]
+> 
+> v6:
+>    + None
+> 
+> v5:
+>    + None
+> 
+> v4:
+>    + Fix warning with dt_binding_check [Rob]
+>    + Change aspeed-ssif-bmc.yaml to ssif-bmc.yaml [Quan]
+> 
+> v3:
+>    + Switched to use DT schema format [Rob]
+> 
+> v2:
+>    + None
+> 
+>   .../devicetree/bindings/ipmi/ssif-bmc.yaml    | 38 +++++++++++++++++++
+>   1 file changed, 38 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml b/Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml
+> new file mode 100644
+> index 000000000000..02b662d780bb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/ipmi/ssif-bmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: SSIF IPMI BMC interface
+> +
+> +description: SSIF IPMI BMC device bindings
+> +
+> +maintainers:
+> +  - Quan Nguyen <quan@os.amperecomputing.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ssif-bmc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        ssif-bmc@10 {
+> +            compatible = "ssif-bmc";
+> +            reg = <0x10>;
+> +        };
+> +    };
 
-All warnings (new ones prefixed by >>):
-
-   drivers/net/wireless/marvell/mwifiex/pcie.c: In function 'mwifiex_pm_wakeup_card':
->> drivers/net/wireless/marvell/mwifiex/pcie.c:659:13: warning: variable 'retval' set but not used [-Wunused-but-set-variable]
-     659 |         int retval;
-         |             ^~~~~~
-
-
-vim +/retval +659 drivers/net/wireless/marvell/mwifiex/pcie.c
-
-   653	
-   654	/* This function wakes up the card by reading fw_status register. */
-   655	static int mwifiex_pm_wakeup_card(struct mwifiex_adapter *adapter)
-   656	{
-   657		struct pcie_service_card *card = adapter->card;
-   658		const struct mwifiex_pcie_card_reg *reg = card->pcie.reg;
- > 659		int retval;
-   660	
-   661		mwifiex_dbg(adapter, EVENT,
-   662			    "event: Wakeup device...\n");
-   663	
-   664		if (reg->sleep_cookie)
-   665			mwifiex_pcie_dev_wakeup_delay(adapter);
-   666	
-   667		/* The 88W8897 PCIe+USB firmware (latest version 15.68.19.p21) sometimes
-   668		 * appears to ignore or miss our wakeup request, so we continue trying
-   669		 * until we receive an interrupt from the card.
-   670		 */
-   671		if (read_poll_timeout(mwifiex_write_reg, retval,
-   672				      READ_ONCE(adapter->int_status) != 0,
-   673				      500, 500 * N_WAKEUP_TRIES_SHORT_INTERVAL,
-   674				      false,
-   675				      adapter, reg->fw_status, FIRMWARE_READY_PCIE)) {
-   676			if (read_poll_timeout(mwifiex_write_reg, retval,
-   677					      READ_ONCE(adapter->int_status) != 0,
-   678					      10000, 10000 * N_WAKEUP_TRIES_LONG_INTERVAL,
-   679					      false,
-   680					      adapter, reg->fw_status, FIRMWARE_READY_PCIE)) {
-   681				mwifiex_dbg(adapter, ERROR,
-   682					    "Firmware didn't wake up\n");
-   683				return -EIO;
-   684			}
-   685		}
-   686	
-   687		if (reg->sleep_cookie) {
-   688			mwifiex_pcie_dev_wakeup_delay(adapter);
-   689			mwifiex_dbg(adapter, INFO,
-   690				    "PCIE wakeup: Setting PS_STATE_AWAKE\n");
-   691			adapter->ps_state = PS_STATE_AWAKE;
-   692		}
-   693	
-   694		return 0;
-   695	}
-   696	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

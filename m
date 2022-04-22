@@ -2,85 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6115D50B847
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567D850B84A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbiDVNXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S1447892AbiDVNXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234077AbiDVNXZ (ORCPT
+        with ESMTP id S1447899AbiDVNXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:23:25 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706C55675F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:20:28 -0700 (PDT)
-Received: from mail-wm1-f52.google.com ([209.85.128.52]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MDykM-1na9z52EGS-009w2s for <linux-kernel@vger.kernel.org>; Fri, 22 Apr
- 2022 15:20:27 +0200
-Received: by mail-wm1-f52.google.com with SMTP id 17-20020a05600c021100b00393a19f8f98so2342709wmi.4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:20:27 -0700 (PDT)
-X-Gm-Message-State: AOAM532t0cXsi4jBUQKB+WLq9mN0ZqKTfwHv/4OVRDOecOkG+CVrReig
-        aNGeOmxuSc54arV/SetezmN5i3Dtc2Luek785rg=
-X-Google-Smtp-Source: ABdhPJzf/DWY7IjQmD9EMZpdSip3IO7TepL3hX4HNfMH3eMN5Wr1vB5Co+iKQNZfzMg9VSbLcZ66wrZAMeetcjbrF3c=
-X-Received: by 2002:a05:600c:4ed4:b0:392:90a5:b7e6 with SMTP id
- g20-20020a05600c4ed400b0039290a5b7e6mr13716628wmq.33.1650633627153; Fri, 22
- Apr 2022 06:20:27 -0700 (PDT)
+        Fri, 22 Apr 2022 09:23:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6795676A;
+        Fri, 22 Apr 2022 06:20:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0579C6204E;
+        Fri, 22 Apr 2022 13:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1947C385A4;
+        Fri, 22 Apr 2022 13:20:35 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="nD0Zq1ob"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650633633;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Lec7he2H3n7gY2Exf/DL8S+g8i3DmcB+5UB7pKAzxc0=;
+        b=nD0Zq1objcVxhE19jF6TYy36Wt8EUAfXsKZUWlzK3kQutyWJ2S2VVx1H31BnONpKptnY31
+        JukOcpYoROg/Jbfre0ig3BJFnl7rAM8quXSgDVOkeN5pzobxyDTuDQNnirnbAmCfngNg8L
+        95bWmbaIzJNyRy0fx2Xj6Q27B6oZgI0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id df490c38 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 22 Apr 2022 13:20:33 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] random: vary jitter iterations based on cycle counter speed
+Date:   Fri, 22 Apr 2022 15:20:27 +0200
+Message-Id: <20220422132027.1267060-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220421192132.109954-1-nick.hawkins@hpe.com> <20220421192132.109954-2-nick.hawkins@hpe.com>
-In-Reply-To: <20220421192132.109954-2-nick.hawkins@hpe.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 22 Apr 2022 15:20:11 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0E4=8Drn_x19MkauNL_WC4vEL6wqkDqrafbT-n8cZpDA@mail.gmail.com>
-Message-ID: <CAK8P3a0E4=8Drn_x19MkauNL_WC4vEL6wqkDqrafbT-n8cZpDA@mail.gmail.com>
-Subject: Re: [PATCH v5 01/11] archh: arm: mach-hpe: Introduce the HPE GXP architecture
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:HHZb/dSf2uI0vlbQ6e8ER49qDtomMK8A0heqJ1xj8Mbg3Oe9fpZ
- umAbwrQddJkUHuLUVOyd6v3gs5WxGsfwQNIuJVWsIfZU/z7XTOJfZmzngWnCL+31DrPzOpq
- xUeDzhY8V9Jbgk4IlJNin65q84t/st8l6AP0C7bnbWfa3MkkQanR73NOGG40neKkbcqiJ85
- uCvyzTunC2mwgkq6AkOog==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZfFoGBGji6Q=:5rEyGioGbRetw+KE3HlOqf
- 7593IfLxMaL4Jrn/qHDoJucyEFGdqVmiS8sWDr9BzWNWFGok+Qt1TMMj1sqSSp2URmzxbrwky
- zu7TKoeCbGhMA6htqEzujRp4WqSO9ORbsxsaPNBP3Ms3lFTdhUhiu36pbkqBtIqP6kv7dtdg/
- rt/201dVbSOCr2auhOEkyf0JzUI0gBXBcYLTWvKgJ3eVRTZH16OCnCPXqKSCZSofi2q0BILEu
- ThcpFg0YXf2qQsE5eofJrkynXq+inUImxPthggst1sYBYtbc7nUNGy2YHmPFKaTSaY6HTU1be
- F6H15DHJosyOGQXgxBUFBPhcggGhe1M+wgwTAgZ+/sm/OLHi7K0rlCXwG95xQaGGe74l2nJSi
- 08mZXTQ3KKGyCDn4gMHo7YJ6vlYUa5EC9b9bXHT+LpLUmvOuuq6h6r5ZrTceVNn2EYUi1EykJ
- tC0496DMOXeOuyJvpuGbTQo9V4TNdAAL7v6RoCXNEaJC7ThLPijzQo7f537QDHU3EG/Y/sSNZ
- Q/TAz1QZpl0HnYNhPjhTsgOBXgaoMOYlpc+MQL99cPIX46ogwQCUhFbdC7nuGGeAbPz0FQJYB
- UIpMH058USPoiEAUhsuOGzQwqTWJE9jZN5P/p2uwVfY3sYmSh/pFWd2XPfTXJsglSV09Jy2I0
- ztxWmJs6Qmw+4JnIS7nq4eleyPB6fvrnJhBJQZJwqHSoL6n9+vrXQ/lK1/L/DzKVN+0DkbWsh
- GfBKUDCKvO2gpfLYMKQlQXl+YEGiB2Uc1LlkrR6YwSo9EF3vrZ/7NDUB77B2jMg+k2QlPV6Jw
- 1sBFMYwWRaS+8i9ibUCzf02WsE/NgJqV/gZpHr+eAldLMP5zm0=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 9:21 PM <nick.hawkins@hpe.com> wrote:
-> +
-> +DT_MACHINE_START(GXP_DT, "HPE GXP")
-> +       .dt_compat      = gxp_board_dt_compat,
-> +       .l2c_aux_val = 0,
-> +       .l2c_aux_mask = 0,
-> +MACHINE_END
+Currently, we do the jitter dance if two consecutive reads to the cycle
+counter return different values. If they do, then we consider the cycle
+counter to be fast enough that one trip through the scheduler will yield
+one "bit" of credited entropy. If those two reads return the same value,
+then we assume the cycle counter is too slow to show meaningful
+differences.
 
-Ther l2c initialization looks wrong here, where  you are saying here is
-that all the bits of the aux register must be set to zero.
+This methodology is flawed for a variety of reasons, one of which Eric
+posted a patch to fix in [1]. The issue that patch solves is that on a
+system with a slow counter, you might be [un]lucky and read the counter
+_just_ before it changes, so that the second cycle counter you read
+differs from the first, even though there's usually quite a large period
+of time in between the two. For example:
 
-I also see that you don't have a device node for the cache controller, so
-this is probably not actually used, but in general there should be one with
-the correct properties.
+| real time | cycle counter |
+| --------- | ------------- |
+| 3         | 5             |
+| 4         | 5             |
+| 5         | 5             |
+| 6         | 5             |
+| 7         | 5             | <--- a
+| 8         | 6             | <--- b
+| 9         | 6             | <--- c
 
-        Arnd
+If we read the counter at (a) and compare it to (b), we might be fooled
+into thinking that it's a fast counter, when in reality it is not. The
+solution in [1] is to also compare counter (b) to counter (c), on the
+theory that if the counter is _actually_ slow, and (a)!=(b), then
+certainly (b)==(c).
+
+This helps solve this particular issue, in one sense, but in another
+sense, it mostly functions to disallow jitter entropy on these systems,
+rather than simply taking more samples in that case.
+
+Instead, this patch takes a different approach. Right now we assume that
+a difference in one set of consecutive samples means one "bit" of
+credited entropy per scheduler trip. We can extend this so that a
+difference in two sets of consecutive samples means one "bit" of
+credited entropy per /two/ scheduler trips, and three for three, and
+four for four. In other words, we can increase the amount of jitter
+"work" we require for each "bit", depending on how slow the cycle
+counter is.
+
+So this patch takes whole bunch of samples, sees how many of them are
+different, and divides to find the amount of work required per "bit",
+and also requires that at least some minimum of them are different in
+order to attempt any jitter entropy.
+
+Note that this approach is still far from perfect. It's not a real
+statistical estimate on how much these samples vary; it's not a
+real-time analysis of the relevant input data. That remains a project
+for another time. However, it does the same (partly flawed) assumptions
+as the code that's there now, so it's probably not worse than the status
+quo, and it handles the issue Eric mentioned in [1]. But, again, it's
+probably a far cry from whatever a really robust version of this would
+be.
+
+[1] https://lore.kernel.org/lkml/20220421233152.58522-1-ebiggers@kernel.org/
+    https://lore.kernel.org/lkml/20220421192939.250680-1-ebiggers@kernel.org/
+
+Cc: Eric Biggers <ebiggers@google.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+This is an argument very much centered around the somewhat low bar of
+being "not worse than before". If you can think of ways that it doesn't
+even manage to clear that, please do pipe up.
+
+
+ drivers/char/random.c | 36 ++++++++++++++++++++++++++----------
+ 1 file changed, 26 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index bf89c6f27a19..94a2ddb53662 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1354,6 +1354,12 @@ void add_interrupt_randomness(int irq)
+ }
+ EXPORT_SYMBOL_GPL(add_interrupt_randomness);
+ 
++struct entropy_timer_state {
++	unsigned long entropy;
++	struct timer_list timer;
++	unsigned int samples, samples_per_bit;
++};
++
+ /*
+  * Each time the timer fires, we expect that we got an unpredictable
+  * jump in the cycle counter. Even if the timer is running on another
+@@ -1367,9 +1373,14 @@ EXPORT_SYMBOL_GPL(add_interrupt_randomness);
+  *
+  * So the re-arming always happens in the entropy loop itself.
+  */
+-static void entropy_timer(struct timer_list *t)
++static void entropy_timer(struct timer_list *timer)
+ {
+-	credit_entropy_bits(1);
++	struct entropy_timer_state *state = container_of(timer, struct entropy_timer_state, timer);
++
++	if (++state->samples == state->samples_per_bit) {
++		credit_entropy_bits(1);
++		state->samples = 0;
++	}
+ }
+ 
+ /*
+@@ -1378,17 +1389,22 @@ static void entropy_timer(struct timer_list *t)
+  */
+ static void try_to_generate_entropy(void)
+ {
+-	struct {
+-		unsigned long entropy;
+-		struct timer_list timer;
+-	} stack;
+-
+-	stack.entropy = random_get_entropy();
++	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = 256 };
++	struct entropy_timer_state stack;
++	unsigned int i, num_different = 0;
++	unsigned long last = random_get_entropy();
+ 
+-	/* Slow counter - or none. Don't even bother */
+-	if (stack.entropy == random_get_entropy())
++	for (i = 0; i < NUM_TRIAL_SAMPLES - 1; ++i) {
++		stack.entropy = random_get_entropy();
++		if (stack.entropy != last)
++			++num_different;
++		last = stack.entropy;
++	}
++	stack.samples_per_bit = DIV_ROUND_UP(NUM_TRIAL_SAMPLES, num_different + 1);
++	if (stack.samples_per_bit > MAX_SAMPLES_PER_BIT)
+ 		return;
+ 
++	stack.samples = 0;
+ 	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
+ 	while (!crng_ready() && !signal_pending(current)) {
+ 		if (!timer_pending(&stack.timer))
+-- 
+2.35.1
+

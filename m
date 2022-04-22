@@ -2,59 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B45D50BC7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 233A950BC84
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378303AbiDVQFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        id S1357819AbiDVQFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358809AbiDVQE4 (ORCPT
+        with ESMTP id S229956AbiDVQFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:04:56 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4BD56777
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:02:02 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d15so11772819pll.10
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:02:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:cc:from:to:message-id;
-        bh=GrML/tBTGNY7cLGJx8CIKpBVBkMLPsIgHNXEWz+KIqE=;
-        b=1a6APHrULGYP1dJsN53TaDp7jPPW+CvobVkYof/ar3uvqU0QP32czYFG+RBQOq4dlQ
-         O0+6zuixtrKn96NNzM3PZLT5lij7UR7C9RYTM8s2TiEBSEDfxXp1j09V0S4+abUZmFtr
-         7wZbAs5kYLrSbkYpf3uua/gMd09Hj14WyRCsOXzvrGe7iEZ8hfTNQafxfnDkHYd8kTZU
-         QAGGCt8Cj9Z9kj2JW8SNf5b0a21klhiyklivDgh+0t+2Y1+9dcEikpsdTKshrAUO3/N2
-         E+F0XYWVsdn54IAtrXKStea6tqUewniEH2JZ4Bj/A1tDuI7d6CzlAKDCEQc+yxvUH7Ar
-         FJFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:cc:from:to:message-id;
-        bh=GrML/tBTGNY7cLGJx8CIKpBVBkMLPsIgHNXEWz+KIqE=;
-        b=hxdi1FqlVLEWShTkFcVwMcPiGhv/sOKD/IPVVSTa85wWLy4xS4aA4bBFe+2UpQGrvY
-         Ba40xvpxfKdii4RCddb9tkXdKEc8vYSIa9/9iW6LU1GqpSrnVb/0N3l1z6XBIextyjYX
-         V396vFlVlvz9SduRcJ+zWYvBf51RVbtDWxZr+Pm5HHMKj0qy5T9557tA53z2bIWTw9Tx
-         O14IjedruwzG6EnUTp+C/E8phDQe69ulHVo2RxaS8RFo2tZNycxpcsJf5n5DaORg2GKT
-         XuBRviAEDwsyI1/RCAG/yomOVJFZw8RsBOAih6o2aPMi4lgDPyIuegUk7/5yUkqn5a1i
-         VK5A==
-X-Gm-Message-State: AOAM532LUf7GLEf9txLrHqwmTDU4ENHb7xtt9IMxJNYI0DNvnDexfIrA
-        qZBYuvTYdvM/OyF/emVd/ntfQw==
-X-Google-Smtp-Source: ABdhPJxkiEuskTJie+8vnx3wqlos6BbFtB2ZyVeeKujutXEW9fftctoqJTMU84FgXXrH0NC3z1gypA==
-X-Received: by 2002:a17:902:8f94:b0:151:64c5:7759 with SMTP id z20-20020a1709028f9400b0015164c57759mr5312483plo.4.1650643322202;
-        Fri, 22 Apr 2022 09:02:02 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id z27-20020aa7991b000000b0050a4e43d3ffsm3122813pff.65.2022.04.22.09.02.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 09:02:01 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 09:02:01 -0700 (PDT)
-X-Google-Original-Date: Fri, 22 Apr 2022 08:59:01 PDT (-0700)
-Subject: [GIT PULL] RISC-V Fixes for 5.18-rc4
-CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-650d0eb6-fc62-4859-b713-2a4e6ccd7465@palmer-ri-x1c9>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 22 Apr 2022 12:05:39 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12olkn2087.outbound.protection.outlook.com [40.92.21.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71275DE76;
+        Fri, 22 Apr 2022 09:02:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c0+Yp8Ny9YVpxVnasjO3MgUG/f/ZJMhmQPNYp9o9YLbbK46qQ3wna6xhoH+A3QHbLSuxEIkcyfpTUeVkIaC3W9iwaEZbQ4D15M4yRTMn/9NgDJf4+E7fwA5rma4LH0yPkunXbxoos1dq3WzrV3tWEDYuR+NAuaUa0w3aGigYjSzYOk+0+FBS3BiGbnupIbKB9eaIRx0mcA3kLGksA5LR+K+91djy/ygOl24gdO2h2L6ytQ8eZMrc962YVTW0GOkG4QJgdq3QNt+y0msP2Pl/NZNOJBgcClXBSkbi9RvhvkYDJaM4QYjBuS3aMWkjwtjaLj8kxl6A3xCev56HzeFA6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+lHADMAL0NkfusQGDXcw7p3Nxi7opqnAU8qpxK++s+M=;
+ b=JrxvymA52Q/y/y9juqDLKgzqYRVdn/KRCDoTqaXr/toIvrRFu3iLQf5GsdwOqlfdFlSDzjAMkVymo8YDsxTYbgZaU3EnhV1kzLZcjr+Nc27PwWrH7R7jM8NuSaRgiFt4/+RccBjRbKhQE9qpo31e86WTUpuXHjO6d9eLpFY28BIzf307nWpGx21k8seNN3ab+YZu0YWOf2y0gf8U+CwpaglKEsuEqLRognlPF/pnthgsSGrUAfnmrxyP5k4QVzPU/uRzOOtqa97G2VkeWxPoM9OzJ7SNWvGmsRsDfVM7pwBflZsi0hz6OJ10jsWpdtr1nRj7a82bxFdhZdWUrZ6+8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+lHADMAL0NkfusQGDXcw7p3Nxi7opqnAU8qpxK++s+M=;
+ b=j+NdJsEk4JcPP+Ftc+mlSx1gyQ4Jmv6PCvqiN1nKNpkk+GhfwJinGRHRlAarI7X853UPfSyXYBQBWZ/kOARGDw7LdNjezbZa3Ph9H6R7O5WagjMLcD16gOwhEIA8q6HTV1zlc7bZFuZ1tHiMrdCGXAN6wW9o3lOax4YedqEMQGRZfpjsFnJMSGCD2rNWOdVaJFZlKBbGN/TN0Ls5/N0+AkNTaYmw4AODDOkzteW7WEaTFWbKkiUiDMb1fcNi9i5kuQeLG+Zmhu8k8PbBSxLi1gx4iVHoihor8TAlFUd9VqPNO6vHmeQmSgSmA3O5AeafXxel8XC5E0/J9+Efwhf5TA==
+Received: from BYAPR20MB2472.namprd20.prod.outlook.com (2603:10b6:a03:155::16)
+ by CY4PR2001MB1685.namprd20.prod.outlook.com (2603:10b6:910:68::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
+ 2022 16:02:44 +0000
+Received: from BYAPR20MB2472.namprd20.prod.outlook.com
+ ([fe80::3480:160a:eb92:d6e3]) by BYAPR20MB2472.namprd20.prod.outlook.com
+ ([fe80::3480:160a:eb92:d6e3%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 16:02:44 +0000
+From:   icenowy@outlook.com
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, Icenowy Zheng <icenowy@aosc.io>
+Subject: [PATCH 0/3] btrtl: try to use OF machine compatible as config postfix
+Date:   Sat, 23 Apr 2022 00:02:28 +0800
+Message-ID: <BYAPR20MB2472590CD7F6385C0E002763BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [S9Mp5eyF3vDnUHmlK9ml8yArgbO9NKlj]
+X-ClientProxiedBy: HK2PR04CA0070.apcprd04.prod.outlook.com
+ (2603:1096:202:15::14) To BYAPR20MB2472.namprd20.prod.outlook.com
+ (2603:10b6:a03:155::16)
+X-Microsoft-Original-Message-ID: <20220422160231.1072810-1-icenowy@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b947124e-01ef-45ba-3a7d-08da2479890f
+X-MS-TrafficTypeDiagnostic: CY4PR2001MB1685:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: D+pswPgHCa2AdIhOON7T4/mpAuMbJmtmIvsbh70hurqiCmTKXyvxiHz07VhWSoM6ctIiYY+2JCQczsnryxe3YeqCaLrlHRL06iySXJjsf+JaMsL98QP/sHUF31bkO8dH4ZAwFTz0uw64GcuNMsJ8a+idgiCYomPvgZ9Tv5Jqo/j3mi6tVQ0DByIOxXdS9q6rg7yRUxLAFzaVMn1/YIvWf3n0OMj6GjmWxu553G//Xrf5KSjuCll9zu9MA1w5vj/lE4yntDG+x4AxdKEksrleDW/M66uLhbahD/5yzB7rxgzmLGxOPRf7bnq15TdzA1NXJB+CoFdpU1hXrKgtJUdSElv9Q7DCs6iw0Fe0/wXGRcc0VMPB4ebjc8Hk4WCmR87DI37c8kAPFX+MpXxodyhWHDfzA6Fw2KiDihTbVfpC7iWz9oZyYGkbxHY9jPNwgxHL6xkhvd87ZR6ZocmGkLZ2Ji1ybPXeSiaeswHXq8CPvIoeYaWrMuKu4Pu+X2dG+P4m8jJpuaPKWTs6QfM9y3jwmNzf+Q60pSkG5+zJQ2c+egSyaphwMFHK1MG5WmmNMzOlb8gGj1LbG1VfOf3LdsCDHw==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FrsArwEygSz8sIYG2HCz4QOEbqvB/Hq9xYG09z6nuUNWMSD31E095oZDTgKt?=
+ =?us-ascii?Q?WaKmBRKbn5EcHbsoV/emZHoj+44/tgQ0Q7HjYkENGP/8t0/Zo30DTVw/PtDq?=
+ =?us-ascii?Q?kzYNyq/QcRt209SsK4ebnXo027D3tMQKupub6mzgn4eea7ONKgLzw0q4yLay?=
+ =?us-ascii?Q?6rZuXqHTcG1WdeEfTwjNf/ndn05vZz74v5LEduLqEScKDNgP9cbtKKlUyTNT?=
+ =?us-ascii?Q?DzhSQ/B/Akv7w7Ny5h+sMFTlEz1e5iubUYE9oJGL7qCg04bBC1sdcC0+hS5U?=
+ =?us-ascii?Q?2Sy+DVGSBaBOHYXg48Q0ODrTvQnlni5XZp02JMC8BYEctWIASOQf1H1tmVrb?=
+ =?us-ascii?Q?eB6ugKxJjZ+/UnxYvbLcM+wwSGziCGSJMc4iRIbMFzNSH2h6cHZ8TpPqNitf?=
+ =?us-ascii?Q?Kgj5AhDz0IvqPmGD1gFI4v9MlGxKcDPXNd8CyTDmFE+kw5wXqAhTeabNaSfa?=
+ =?us-ascii?Q?8Vcgiptr4XSmdcf7AfUcL5qyHnAz0yP2uyFbuj5EKqVwrrpY0L8hmMaoij2h?=
+ =?us-ascii?Q?ycgyUjnDpgUiN8C6zOptAXeZMNFmSY2u9faKHxyyBVtJntg5BP2mT2yRWzu1?=
+ =?us-ascii?Q?9Up5SmrlPk3hFdhBDbRHKf6AQJemxiLuzkseAQn3LSijXwaYQr7NBsLXHC08?=
+ =?us-ascii?Q?djXLYnU9mbCPL1iK8Orrj7/dOST+/uk5o1Lb2PqzJAYLU5pLh+lNAO6zK6jk?=
+ =?us-ascii?Q?WhjdhYqesPUzHP1nboxfRgvuLwXk8YSeGwocPKS+O1dQrvYurT9awTvjyKPl?=
+ =?us-ascii?Q?HKJc/Dz7bFvLaRIHCT/HwU8bRqLyqTLUxT25hy92D4cAYmaiExBPcQdASCtE?=
+ =?us-ascii?Q?C23JRfOLtNSEo12B+o19o5Oq4fIEdt3IU+/+twPKnKkvX3TzoD7wu0fdINIo?=
+ =?us-ascii?Q?5mGe4HTLG3d9IdUFa+pFzLPkNTDEXG5ZiuX1uCAVRMB6qd9uaXOBrTwxRVFt?=
+ =?us-ascii?Q?/h2YoyIdLlXyvKtZ4hX6GQZDgRTb7/2WTClujl7obgtnraCm267wlcdnjJdL?=
+ =?us-ascii?Q?YZSDf1u07w+N2cEWBYuA0KTsTLAbtx5fv7i7S1J38291Zm1iqvVD6er6LIqW?=
+ =?us-ascii?Q?aStqeV7SMdm8iEE4je524qqUlPioOo/RjAmTK7rFm7ODIVSshL9qHONqDHL9?=
+ =?us-ascii?Q?w6j/7/2D0eZE1tBmNdAYOLgtxtXZ4l79mWe4aoROtb7XMLcBtGicUkwWuzQY?=
+ =?us-ascii?Q?FNEY0qDD9okAOatbe+O6Ty9wOnVqohJkVjpdAyS0bw4vurcgtO4PaaqnSoR6?=
+ =?us-ascii?Q?YCL/YUkFG5n2JDdib7ZW67EkmhIhRyI/gVZ+m7V1ymCuBsMGdgncmQeRtMxr?=
+ =?us-ascii?Q?t/DiOF4SPcDCZjom+4e1/cwnq/7KXNGaQFxerEhDoTLl+B70Mj9PyJBQkVH0?=
+ =?us-ascii?Q?OjWx3WgBPUTRq6LM4+eEFDtyGYViepQktzWFKgzdbg8yown3UZ9JQnHAZO+X?=
+ =?us-ascii?Q?Jbaf7s1hvJ4=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b947124e-01ef-45ba-3a7d-08da2479890f
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR20MB2472.namprd20.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 16:02:44.2184
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR2001MB1685
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,40 +108,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+From: Icenowy Zheng <icenowy@aosc.io>
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+Currently for OF machines there's no way to specify a machine-specific
+btrtl config file.
 
-are available in the Git repository at:
+Try to use OF machine compatible string as config postfix, in a similar
+manner with brcmfmac driver (which needs machine-specific config files
+too).
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.18-rc4
+Icenowy Zheng (3):
+  Bluetooth: btrtl: try config w/o postfix if postfixed one failed to
+    load
+  Bluetooth: btrtl: use board DT compatible string as config postfix
+  Bluetooth: btrtl: allow longer config file name
 
-for you to fetch changes up to bf9bac40b7635e2ce43ba0051a64c3fd44312405:
+ drivers/bluetooth/btrtl.c  |  8 +++++++-
+ drivers/bluetooth/hci_h5.c | 27 +++++++++++++++++++++++++++
+ 2 files changed, 34 insertions(+), 1 deletion(-)
 
-  RISC-V: cpuidle: fix Kconfig select for RISCV_SBI_CPUIDLE (2022-04-21 15:10:47 -0700)
+-- 
+2.35.1
 
-----------------------------------------------------------------
-RISC-V Fixes for 5.18-rc4
-
-* A pair of build fixes for the recent cpuidle driver.
-* A fix for systems without sv57 that manifests as a crash early in
-  boot.
-
-----------------------------------------------------------------
-I'm not sure if that boot bug was just so bad nobody's found anything else, I'm
-farther behind than usual, or the stricter merge window resulted in less
-fallout.  Maybe just a bit of everything, but I always get worried when things
-aren't broken...
-
-----------------------------------------------------------------
-Anup Patel (1):
-      RISC-V: mm: Fix set_satp_mode() for platform not having Sv57
-
-Randy Dunlap (2):
-      cpuidle: riscv: support non-SMP config
-      RISC-V: cpuidle: fix Kconfig select for RISCV_SBI_CPUIDLE
-
- arch/riscv/Kconfig.socs             | 2 +-
- arch/riscv/mm/init.c                | 1 +
- drivers/cpuidle/cpuidle-riscv-sbi.c | 1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)

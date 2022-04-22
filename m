@@ -2,85 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E1450C2E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FEB50C2ED
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbiDVW4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
+        id S233287AbiDVW5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbiDVW4b (ORCPT
+        with ESMTP id S233891AbiDVW47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:56:31 -0400
+        Fri, 22 Apr 2022 18:56:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0898E1FD4DE;
-        Fri, 22 Apr 2022 15:20:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CBF19ADAD;
+        Fri, 22 Apr 2022 15:20:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16510B83271;
-        Fri, 22 Apr 2022 22:20:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 98723C385A0;
-        Fri, 22 Apr 2022 22:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650666012;
-        bh=zGGEdPIjAESTGghxl2+i/vefsBQOdeJfq4cy+l6eReo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=u15rco15cZ+7+uEEjvLIzCA6R9ZD0Gy4abMM61dxnT6p5dKGjrsLwOzGP4t1jwiM8
-         k6tvIJGuyxGRI+hik7bHBzOvqzjRaMK7as9KDsuEbjcvFJvwOieZpFn+KrhAbURU/P
-         yit2vdFCE/TqQOmPQ1RtxkdmFHbGFcLlIEZI0sU57xkTbTuxXkTlFGLEcbTQY4yjoE
-         UltUKGG7ZQbOdtf2cfBb0VDg8aIzbZi5RRc3npZGoYtOG+nO9EmEDVVBxuquMOfekf
-         hmB0lZ3eRLlEe2F5tZ7vmTvEK/JFJ3AIbVgDCrfOUuetJSlp0BU8BfqH4XIfeOBXhd
-         B7P3d3g1lmTzQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 78A36E8DD61;
-        Fri, 22 Apr 2022 22:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by ams.source.kernel.org (Postfix) with ESMTPS id 595F0B832D5;
+        Fri, 22 Apr 2022 22:20:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16240C385AA;
+        Fri, 22 Apr 2022 22:20:53 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 18:20:52 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-input@vger.kernel.org, roman.gushchin@linux.dev
+Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
+ heap-allocated strings
+Message-ID: <20220422182052.4994525d@gandalf.local.home>
+In-Reply-To: <20220422215146.i663tn6zzn6blzo3@moria.home.lan>
+References: <20220421234837.3629927-7-kent.overstreet@gmail.com>
+        <20220422042017.GA9946@lst.de>
+        <YmI5yA1LrYrTg8pB@moria.home.lan>
+        <20220422052208.GA10745@lst.de>
+        <YmI/v35IvxhOZpXJ@moria.home.lan>
+        <20220422113736.460058cc@gandalf.local.home>
+        <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
+        <20220422153916.7ebf20c3@gandalf.local.home>
+        <20220422203057.iscsmurtrmwkpwnq@moria.home.lan>
+        <20220422164744.6500ca06@gandalf.local.home>
+        <20220422215146.i663tn6zzn6blzo3@moria.home.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: bridge: switchdev: check br_vlan_group() return
- value
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165066601248.17746.1567097686981466441.git-patchwork-notify@kernel.org>
-Date:   Fri, 22 Apr 2022 22:20:12 +0000
-References: <20220421101247.121896-1-clement.leger@bootlin.com>
-In-Reply-To: <20220421101247.121896-1-clement.leger@bootlin.com>
-To:     =?utf-8?b?Q2zDqW1lbnQgTMOpZ2VyIDxjbGVtZW50LmxlZ2VyQGJvb3RsaW4uY29tPg==?=@ci.codeaurora.org
-Cc:     roopa@nvidia.com, razor@blackwall.org, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, tobias@waldekranz.com,
-        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, 22 Apr 2022 17:51:46 -0400
+Kent Overstreet <kent.overstreet@gmail.com> wrote:
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 21 Apr 2022 12:12:47 +0200 you wrote:
-> br_vlan_group() can return NULL and thus return value must be checked
-> to avoid dereferencing a NULL pointer.
 > 
-> Fixes: 6284c723d9b9 ("net: bridge: mst: Notify switchdev drivers of VLAN MSTI migrations")
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
->  net/bridge/br_switchdev.c | 2 ++
->  1 file changed, 2 insertions(+)
+> But it's definitely not an unreasonable idea - I can try it out and see how it
+> turns out. Would you have any objections to making some changes to seq_buf?
 
-Here is the summary with links:
-  - [net-next] net: bridge: switchdev: check br_vlan_group() return value
-    https://git.kernel.org/netdev/net/c/7f40ea2145d9
+No I don't mind, and that's why I want the coupled, as enhancements or bug
+fixes would happen to both.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> 
+>  - You've got size and len as size_t, I've got them as unsigned. Given that we
+>    need to be checking for overflow anyways for correctens, I like having them
+>    as u32s.
+
+I had it as size_t as I had planned (and still plan to) make seq_file use
+seq_buf, and seq_file uses size_t. Who knows, perhaps in the future, we may
+have strings that are more than 4GBs. ;-)
+
+>  - seq_buf->readpos - it looks like this is only used by seq_buf_to_user(), does
+>    it need to be in seq_buf?
+
+Perhaps.
+
+>  - in printbufs, I make sure the buffer is always nul-terminated - seems
+>    simplest, given that we need to make sure there's always room for the
+>    terminating nul anyways.
+
+I'm not against that. It was an optimization, but I never actually
+benchmarked it. But I'm not sure how many fast paths it is used in to
+warrant that kind of optimization over the complexity it can bring for
+users.
 
 
+> 
+> A downside of having printbuf on top of seq_buf is that now we've got two apis
+> that functions can output to - vs. if we modified printbuf by adding a flag for
+> "this is an external buffer, don't reallocate it". That approach would be less
+> code overall, for sure.
+> 
+> Could I get you to look over printbuf and share your thoughts on the different
+> approaches?
+
+Sure, but will have to wait till next week.
+
+-- Steve

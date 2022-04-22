@@ -2,114 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325F150AF64
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AFC50AF6D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444038AbiDVFMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 01:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
+        id S1444120AbiDVFNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 01:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354690AbiDVFMA (ORCPT
+        with ESMTP id S1386384AbiDVFNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 01:12:00 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670AE4F442
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:09:07 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id g9so6447939pgc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:09:07 -0700 (PDT)
+        Fri, 22 Apr 2022 01:13:10 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1E04B84D;
+        Thu, 21 Apr 2022 22:10:18 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d9so4801191qty.12;
+        Thu, 21 Apr 2022 22:10:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IxkWrK2BHkhEkKKlVUNG0OHecJx6kgtTQfmR8oiK8fY=;
-        b=lqpCouB++8hljbNrHceC1Qyuwuw+vCI2Fhh8ZFdRfXxhXpRkv6g2BA/tNxAPsxgvkr
-         u1w04SPrnfVYkE3mFoG48Ti9k/z8UT5WYiln4iNHoRm7Qifnv87ZE8YThHZXSPIBk33s
-         cgEeltKzihF2u7m2Rx9L52X77Ftym+qXjgfxCuWWrIicVaP5Jg2SgwIWdin/gaEyFEzu
-         Ext803WlCRXwXzZsLwuqtVS8NVNTVT8D2RbXIjdgnN1qqvJ94LfZ42ZuTXANLZ0OPeeR
-         uCoDCo74DxXysCvLAG+sDPte7QHEDlbnJ1EX97I3Lp3cztRaLWZL5JySGaZxqqrOs+bj
-         SaVA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TWff7qTwFks9/SICsPV5Guj+3/oz5mDxjPoy3+sANMY=;
+        b=GLdZan31fedPnJQvY0HuMvKT28Tq0GME2Oz/mxowpgDRkDRzYy4H1X29/DsXHX74r5
+         cwe/z04i3QcMMTdp6j30C/hzuyLOggvOSCe2dMvNnFZyDLbzCE0bnT3wgKleaNpTXZjY
+         LzONeJHWIM8VEpNO/lhUBwOeqnNt3TKpYMoPrC10Uxdcw1qySo1vn3OwjtmLy/O8avR3
+         QYrxf8axaPENQ0ApJiVhE94wDYy6ABHRbMuN/PCkg1qQ6XQspnMNKX88JY7sxQZUG/e2
+         vkC1vlfXS6qL+ii0z2hYrMQfTezl/0zikNix+b4X1YspXyUTKcP2dBoltgf7jvFtWk9A
+         QzGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IxkWrK2BHkhEkKKlVUNG0OHecJx6kgtTQfmR8oiK8fY=;
-        b=vmnLC4FoJPqr57J0Ym7BosGUUqhykpHXQn7LTyw6YopwEYNIMO983Ic6xHi4b/GORv
-         wkEDR1DgjDqoC9PIVir+TOxl6eAltGgM5mcUrmHkWv5mIQIxllddXFearyXoVR+1riDI
-         T+rfIA4Xwd7Pk+P4C8hZQCos43Prph0+GxSzInT6UY29GWyUtI/Pnlp5DS85E02/8ODp
-         Y8xsnHaWMyOwzbRjGPfaWHR7SDdGCSnAc6TMmniNCjpqNdN6QG5vFXUYlx/J/uR6wwCx
-         500XIptMtBklvcMkPVjAbI50ymxeLyRqFKT2MsmkdSwELyWbJwsa15L1mdu93Tr9Rvww
-         yE/g==
-X-Gm-Message-State: AOAM533DAWR+ghprmHzm7Av2ZbEC8fRbDVxrTtG0EChTxUzio7CK+D23
-        4wd2S+iR+oGpF3gq7KvNx9ByTQ==
-X-Google-Smtp-Source: ABdhPJzee0DpsxJWDBhWAOgmHW7pXvMAFcHq9PAexcssqN/6IoJ0HKyEyTKjakiAzo82w81k4zugdA==
-X-Received: by 2002:a05:6a00:e0b:b0:4fa:a167:5b35 with SMTP id bq11-20020a056a000e0b00b004faa1675b35mr3121349pfb.69.1650604146814;
-        Thu, 21 Apr 2022 22:09:06 -0700 (PDT)
-Received: from x1 ([2601:1c2:1001:7090:dbb3:3d38:62d2:5de5])
-        by smtp.gmail.com with ESMTPSA id e126-20020a621e84000000b0050567191161sm854912pfe.210.2022.04.21.22.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 22:09:06 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 22:10:06 -0700
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Dave Gerlach <d-gerlach@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] soc: ti: wkup_m3_ipc: Add support for IO Isolation
-Message-ID: <YmI4rjkpX9krZAGn@x1>
-References: <20220414192722.2978837-1-dfustini@baylibre.com>
- <YmEAA7kc4jNHSkGm@atomide.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TWff7qTwFks9/SICsPV5Guj+3/oz5mDxjPoy3+sANMY=;
+        b=diWPYQkRrbMTKa8xdYC3gIEQpd1Tw7HW7EiMGVpkZPal743wA7821JNKfUepJXgzxF
+         9bmwQ7MJiRetdzL5qNwNLwHvuj7Lw9A+T6SV75tdZbbpMNUhLbcMBPhoBgJtF52v3iAG
+         3XrlrjOmZjgxeR1qw5sXcKX9DMksxzZ7hs5rszMeA/KS+ceAdiryDSyNadRHvPeyOJzL
+         5c5a7VzXFHcapC7LTbNsSAbQo3P9qTvqKry5LvP9ZYslSqKuykG/c4/m4iH0k01LcTE5
+         3hE6jiB/CU5wgTpDKd0HTdAw85NxHKv/dyJz/19mvEi/eSlGBb4/v1NVSZnpdOXQX3G6
+         3Vnw==
+X-Gm-Message-State: AOAM5319RBGgladVwxp77uRUhECIA0lke3a7xFLNNSl0avXaoPxg2cFs
+        Iid1Z1XGhScM3Eq3y72Hv8yw4eBx001nD3qa7D8=
+X-Google-Smtp-Source: ABdhPJxmk+Ep8q2MfVJdlbnq0yjAC6trvGuV/AhxShVlF3NjJDIoK0tW6ZO3Cdh+EXSHioM7h+A2LbnRDSddUXdl3Lo=
+X-Received: by 2002:ac8:5a16:0:b0:2e1:ea00:b4e1 with SMTP id
+ n22-20020ac85a16000000b002e1ea00b4e1mr1968564qta.329.1650604217364; Thu, 21
+ Apr 2022 22:10:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmEAA7kc4jNHSkGm@atomide.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220422041427.32585-1-soumya.negi97@gmail.com> <0a338104-d7cf-a2e1-7d03-97667aa30537@infradead.org>
+In-Reply-To: <0a338104-d7cf-a2e1-7d03-97667aa30537@infradead.org>
+From:   Soumya Negi <soumya.negi97@gmail.com>
+Date:   Thu, 21 Apr 2022 22:10:06 -0700
+Message-ID: <CAHH-VXfoRX_cgPMPrubrZmrD1DRXaUOfquuFb5G8eSq8Y_eRWw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: thermal: Include ReST markup standard
+ definition file
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 09:56:03AM +0300, Tony Lindgren wrote:
-> Hi,
-> 
-> * Drew Fustini <dfustini@baylibre.com> [220414 19:24]:
-> > TI AM437x SoCs support isolation of the IOs so that control is taken
-> > from the peripheral they are connected to and overridden by values
-> > present in the control register for that pad. This series documents a
-> > new property 'ti,set-io-isolation' and updates the wkup_m3_ipc driver to
-> > inform the CM3 firmware when that property is set.
-> 
-> Care to list what hardware and board revisions you're able to test deep
-> sleep with?
-> 
-> Seems like my am437x-evm is too old for this where the board layout
-> does not match the schematics for removing a resistor to enable this.
-> 
-> Just wondering if I can still enable tests for this somehow :)
-> 
-> Regards,
-> 
-> Tony
+Thanks for letting me know.
 
-Do you know what revision of the am437x-gp-evm that you have?
-
-The AM437X_GP_EVM_3K0006_SCHEMATIC_REV1_5B schematic [1] for the
-AM437x-GP-EVM shows that the EN pin on the TPS51200 is connected to SoC
-ball N25 which is GPIO5_7.
-
-Unfortunately, the only AM437x board that I have is the AM437x IDK [2]
-which unfortunately does not have the TSP51200 EN pin connected to the
-the SoC. In addition, the am437x-gp-evm is the only board that is
-allowed to enable off mode due to am43xx_check_off_mode_enable() in
-arch/arm/mach-omap2/pm33xx-core.c
-
-Thank you,
-Drew
-
-[1] https://www.ti.com/lit/zip/tidrc79
-[2] https://www.ti.com/lit/zip/sprr396
+On Thu, Apr 21, 2022 at 9:28 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Hi--
+>
+> On 4/21/22 21:14, Soumya Negi wrote:
+> > Fixes the documentation compile error given below:
+> >
+> > ERROR: Undefined substitution referenced: "copy".
+> >
+> > Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
+> > ---
+> >  Documentation/driver-api/thermal/intel_dptf.rst | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
+> > index 96668dca753a..e3c41d96d63a 100644
+> > --- a/Documentation/driver-api/thermal/intel_dptf.rst
+> > +++ b/Documentation/driver-api/thermal/intel_dptf.rst
+> > @@ -1,4 +1,5 @@
+> >  .. SPDX-License-Identifier: GPL-2.0
+> > +.. include:: <isonum.txt>
+> >
+> >  ===============================================================
+> >  Intel(R) Dynamic Platform and Thermal Framework Sysfs Interface
+>
+> linux-next and jc_docs git tree already have a patch for this:
+>
+> commit 2c2de6f2e2bc
+> Author: Akira Yokosawa <akiyks@gmail.com>
+> Date:   Sat Apr 2 08:19:05 2022 +0900
+>
+>     docs: driver-api/thermal/intel_dptf: Use copyright symbol
+>
+>
+> thanks.
+> --
+> ~Randy

@@ -2,353 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5D950C721
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 06:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE66850C7A6
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 07:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbiDWDwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 23:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        id S233396AbiDWFeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 01:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbiDWDvf (ORCPT
+        with ESMTP id S231922AbiDWFeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 23:51:35 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401901C9CCB
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 20:48:32 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id e12-20020a63544c000000b003985d5888a8so6052863pgm.15
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 20:48:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=+2AgNH8Qoc+XZ2aqZVkP0WtczvqEDl4P0Mq70NzABEw=;
-        b=kGItDFS0r10ErwaqYlTjCN0WPBwM2VJ3bMsQ/gqn6/xWsMCkcd1qtw87r9LQHFUTQZ
-         4iSiiuMTS1dFRSRO1CiXuvUyTcW1tePqdKeO+qb0TzC2cgrIeJbnBBZ16ocxeKpjbkZe
-         yH3b0/oz3+9Pruzq0EjTpXpgIPhqltEH5ncCgsom1E5rvwdy0FSM4TQcsk4KsjrMfYqv
-         AXaJRzXdN4rmtxUN4Quq68rxz9IHL7jHstt3uFRUb+ySSfMyjhq/MidNxW4i7z7l7j92
-         TfkXfMSTB6FBkdBlmUcEjCkY3GZr4Uqm7v+PrASnNwWwlsj4scy4PL0nu/7SLw7VibBV
-         T+8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=+2AgNH8Qoc+XZ2aqZVkP0WtczvqEDl4P0Mq70NzABEw=;
-        b=szJ/Z9nnXxw67LOA6Gywslj7iOJfRAH354uDgZXR0lLwTm146AzG9ZkZpy/3Ehh7eW
-         MR/0H+dFnaVrZ800jM0PNDeneQ5MWKrQcgX4nvda1tqH3SoU/WIx6Lqz443e4U4Vt32A
-         7uDEuqy6QvViie8gFEK+HDWHMrAMWRZmVNyvH2nll3iLf0fsBIbZBd8hCdCp+AEsxKPg
-         EB3RMiHBpp7UiYZT+p1AScyI314wjwUDE+FxVTrwNzzBloez72bc3umUTLJz/GuHghdI
-         WVA9gVom16Azot/+p2irceCo23U0slyJaZK5gsBhAANt5xU62dPs/9qJCL7H2LTdzOJn
-         yHyQ==
-X-Gm-Message-State: AOAM530YhXCW859KwaMwrYV376KH9Hdbu8C+bO1jPsCPADjA87ZfrSoF
-        0p2gHCfvs/vBM/dSeQSeNPaaZNUHUgY=
-X-Google-Smtp-Source: ABdhPJxOEEyTteX2y8CRdvIlhV9uOqkCk9U5/ipTsEkE9jxr9rlMcFGOy5YSFLFADMhE9OS8atlo920yY0Y=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:114e:b0:4c8:55f7:faad with SMTP id
- b14-20020a056a00114e00b004c855f7faadmr8312356pfm.86.1650685711773; Fri, 22
- Apr 2022 20:48:31 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat, 23 Apr 2022 03:47:52 +0000
-In-Reply-To: <20220423034752.1161007-1-seanjc@google.com>
-Message-Id: <20220423034752.1161007-13-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220423034752.1161007-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH 12/12] DO NOT MERGE: KVM: selftests: Attempt to detect lost
- dirty bits
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Venkatesh Srinivas <venkateshs@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>
+        Sat, 23 Apr 2022 01:34:20 -0400
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998E72E5;
+        Fri, 22 Apr 2022 22:31:20 -0700 (PDT)
+Received: from relay3.mymailcheap.com (relay3.mymailcheap.com [217.182.119.155])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id 31B84267CE;
+        Sat, 23 Apr 2022 05:31:18 +0000 (UTC)
+Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
+        by relay3.mymailcheap.com (Postfix) with ESMTPS id AED893F15F;
+        Sat, 23 Apr 2022 07:31:15 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by filter1.mymailcheap.com (Postfix) with ESMTP id 0A7472A381;
+        Sat, 23 Apr 2022 05:31:15 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
+Received: from filter1.mymailcheap.com ([127.0.0.1])
+        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Cl0X8p721LZJ; Sat, 23 Apr 2022 05:31:14 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter1.mymailcheap.com (Postfix) with ESMTPS;
+        Sat, 23 Apr 2022 05:31:14 +0000 (UTC)
+Received: from [172.16.34.145] (unknown [121.33.114.136])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 3E0644006D;
+        Sat, 23 Apr 2022 05:31:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+        t=1650691873; bh=w40/85VIv5BQZf+43/3bBfUU3+lju+R6jndNVZ1NoDo=;
+        h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
+        b=s7mWDm4qE8QFgZ5iFz1SuzvyRKqdDicOrOnmOqccLA8xDTGTEUt3kIRvxKpwFnbjZ
+         oUh8/CivdVevTOY6GHkZvwlwHt+nhOqMbmkG3pXasQyqnxix0EbB8TJzi/MFYNhCvS
+         TEgMh7jrTC5+d3yFhjnGnrkepNXpj53Ceu0W3Ebg=
+Message-ID: <9525d336040d2fc89005d2923f0d8ee98597ac86.camel@aosc.io>
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: sun8i-thermal: add binding
+ for R329 THS
+From:   Icenowy Zheng <icenowy@aosc.io>
+To:     Vasily Khoruzhick <anarsoul@gmail.com>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-linux <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+In-Reply-To: <CA+E=qVfMm=8aQOM_HW_3EeqqLi-Fgn1Ex3h6kor89FQ0KfTvRw@mail.gmail.com>
+References: <BYAPR20MB24721F9954252BECBEF486ACBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+         <CA+E=qVfMm=8aQOM_HW_3EeqqLi-Fgn1Ex3h6kor89FQ0KfTvRw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Date:   Sat, 23 Apr 2022 07:51:54 +0800
+User-Agent: Evolution 3.40.4 
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        T_SPF_PERMERROR,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A failed attempt to detect improper dropping of Writable and/or Dirty
-bits.  Doesn't work because the primary MMU write-protects its PTEs when
-file writeback occurs, i.e. KVM's dirty bits are meaningless as far as
-file-backed guest memory is concnered.
+在 2022-04-22星期五的 11:44 -0700，Vasily Khoruzhick写道：
+> On Fri, Apr 22, 2022 at 9:12 AM <icenowy@outlook.com> wrote:
+> > 
+> > From: Icenowy Zheng <icenowy@aosc.io>
+> > 
+> > R329 has a thermal sensor controller that has only one sensor, and
+> > the
+> > structure of it is like the H6 one.
+> > 
+> > Add device tree binding for it.
+> > 
+> > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> > ---
+> >  .../devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml  | 3
+> > +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-
+> > ths.yaml
+> > b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-
+> > ths.yaml
+> > index 6e0b110153b0..87b4103e0a5f 100644
+> > --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-
+> > a83t-ths.yaml
+> > +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-
+> > a83t-ths.yaml
+> > @@ -20,6 +20,7 @@ properties:
+> >        - allwinner,sun50i-a100-ths
+> >        - allwinner,sun50i-h5-ths
+> >        - allwinner,sun50i-h6-ths
+> > +      - allwinner,sun50i-r329-ths
+> > 
+> >    clocks:
+> >      minItems: 1
+> > @@ -63,6 +64,7 @@ allOf:
+> >              enum:
+> >                - allwinner,sun50i-a100-ths
+> >                - allwinner,sun50i-h6-ths
+> > +              - allwinner,sun50i-r329-ths
+> > 
+> >      then:
+> >        properties:
+> > @@ -85,6 +87,7 @@ allOf:
+> >          compatible:
+> >            contains:
+> >              const: allwinner,sun8i-h3-ths
+> > +            const: allwinner,sun8i-r329-ths
+> > 
+> >      then:
+> >        properties:
+> 
+> There's also a check at line #99 that requires clock, clock-names and
+> resets properties for thermal sensors in other Allwinner SoCs. Are
+> these not required for r329?
 
-Not-signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   4 +
- .../selftests/kvm/volatile_spte_test.c        | 208 ++++++++++++++++++
- 3 files changed, 213 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/volatile_spte_test.c
+Thanks for this tip, I will add R329 to this check in the next
+revision.
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 56140068b763..3307444d9fda 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -70,3 +70,4 @@
- /steal_time
- /kvm_binary_stats_test
- /system_counter_offset_test
-+/volatile_spte_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index af582d168621..bc0907de6638 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -103,6 +103,7 @@ TEST_GEN_PROGS_x86_64 += set_memory_region_test
- TEST_GEN_PROGS_x86_64 += steal_time
- TEST_GEN_PROGS_x86_64 += kvm_binary_stats_test
- TEST_GEN_PROGS_x86_64 += system_counter_offset_test
-+TEST_GEN_PROGS_x86_64 += volatile_spte_test
- 
- TEST_GEN_PROGS_aarch64 += aarch64/arch_timer
- TEST_GEN_PROGS_aarch64 += aarch64/debug-exceptions
-@@ -122,6 +123,7 @@ TEST_GEN_PROGS_aarch64 += rseq_test
- TEST_GEN_PROGS_aarch64 += set_memory_region_test
- TEST_GEN_PROGS_aarch64 += steal_time
- TEST_GEN_PROGS_aarch64 += kvm_binary_stats_test
-+TEST_GEN_PROGS_aarch64 += volatile_spte_test
- 
- TEST_GEN_PROGS_s390x = s390x/memop
- TEST_GEN_PROGS_s390x += s390x/resets
-@@ -134,6 +136,7 @@ TEST_GEN_PROGS_s390x += kvm_page_table_test
- TEST_GEN_PROGS_s390x += rseq_test
- TEST_GEN_PROGS_s390x += set_memory_region_test
- TEST_GEN_PROGS_s390x += kvm_binary_stats_test
-+TEST_GEN_PROGS_s390x += volatile_spte_test
- 
- TEST_GEN_PROGS_riscv += demand_paging_test
- TEST_GEN_PROGS_riscv += dirty_log_test
-@@ -141,6 +144,7 @@ TEST_GEN_PROGS_riscv += kvm_create_max_vcpus
- TEST_GEN_PROGS_riscv += kvm_page_table_test
- TEST_GEN_PROGS_riscv += set_memory_region_test
- TEST_GEN_PROGS_riscv += kvm_binary_stats_test
-+TEST_GEN_PROGS_riscv += volatile_spte_test
- 
- TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
- LIBKVM += $(LIBKVM_$(UNAME_M))
-diff --git a/tools/testing/selftests/kvm/volatile_spte_test.c b/tools/testing/selftests/kvm/volatile_spte_test.c
-new file mode 100644
-index 000000000000..a4277216eb3d
---- /dev/null
-+++ b/tools/testing/selftests/kvm/volatile_spte_test.c
-@@ -0,0 +1,208 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <signal.h>
-+#include <syscall.h>
-+#include <sys/ioctl.h>
-+#include <sys/sysinfo.h>
-+#include <asm/barrier.h>
-+#include <linux/atomic.h>
-+#include <linux/rseq.h>
-+#include <linux/unistd.h>
-+
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "test_util.h"
-+
-+#define VCPU_ID 0
-+
-+#define PAGE_SIZE 4096
-+
-+#define NR_ITERATIONS		1000
-+
-+#define MEM_FILE_NAME		"volatile_spte_test_mem"
-+#define MEM_FILE_MEMSLOT	1
-+#define MEM_FILE_DATA_PATTERN	0xa5a5a5a5a5a5a5a5ul
-+
-+static const uint64_t gpa = (4ull * (1 << 30));
-+
-+static uint64_t *hva;
-+
-+static pthread_t mprotect_thread;
-+static atomic_t rendezvous;
-+static bool done;
-+
-+static void guest_code(void)
-+{
-+	uint64_t *gva = (uint64_t *)gpa;
-+
-+	while (!READ_ONCE(done)) {
-+		WRITE_ONCE(*gva, 0);
-+		GUEST_SYNC(0);
-+
-+		WRITE_ONCE(*gva, MEM_FILE_DATA_PATTERN);
-+		GUEST_SYNC(1);
-+	}
-+}
-+
-+static void *mprotect_worker(void *ign)
-+{
-+	int i, r;
-+
-+	i = 0;
-+	while (!READ_ONCE(done)) {
-+		for ( ; atomic_read(&rendezvous) != 1; i++)
-+			cpu_relax();
-+
-+		usleep((i % 10) + 1);
-+
-+		r = mprotect(hva, PAGE_SIZE, PROT_NONE);
-+		TEST_ASSERT(!r, "Failed to mprotect file (hva = %lx), errno = %d (%s)",
-+			    (unsigned long)hva, errno, strerror(errno));
-+
-+		atomic_inc(&rendezvous);
-+	}
-+	return NULL;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	uint64_t bitmap = -1ull, val;
-+	int i, r, fd, nr_writes;
-+	struct kvm_regs regs;
-+	struct ucall ucall;
-+	struct kvm_vm *vm;
-+
-+	vm = vm_create_default(VCPU_ID, 0, guest_code);
-+	vcpu_regs_get(vm, VCPU_ID, &regs);
-+	ucall_init(vm, NULL);
-+
-+	pthread_create(&mprotect_thread, NULL, mprotect_worker, 0);
-+
-+	fd = open(MEM_FILE_NAME, O_RDWR | O_CREAT, 0644);
-+	TEST_ASSERT(fd >= 0, "Failed to open '%s', errno = %d (%s)",
-+		    MEM_FILE_NAME, errno, strerror(errno));
-+
-+	r = ftruncate(fd, PAGE_SIZE);
-+	TEST_ASSERT(fd >= 0, "Failed to ftruncate '%s', errno = %d (%s)",
-+		    MEM_FILE_NAME, errno, strerror(errno));
-+
-+	hva = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	TEST_ASSERT(hva != MAP_FAILED,  "Failed to map file, errno = %d (%s)",
-+		    errno, strerror(errno));
-+
-+	vm_set_user_memory_region(vm, MEM_FILE_MEMSLOT, KVM_MEM_LOG_DIRTY_PAGES,
-+				  gpa, PAGE_SIZE, hva);
-+	virt_pg_map(vm, gpa, gpa);
-+
-+	for (i = 0, nr_writes = 0; i < NR_ITERATIONS; i++) {
-+		fdatasync(fd);
-+
-+		vcpu_run(vm, VCPU_ID);
-+		ASSERT_EQ(*hva, 0);
-+		ASSERT_EQ(get_ucall(vm, VCPU_ID, &ucall), UCALL_SYNC);
-+		ASSERT_EQ(ucall.args[1], 0);
-+
-+		/*
-+		 * The origin hope/intent was to detect dropped Dirty bits by
-+		 * checking for missed file writeback.  Sadly, the kernel is
-+		 * too smart and write-protects the primary MMU's PTEs, which
-+		 * zaps KVM's SPTEs and ultimately causes the folio/page to get
-+		 * marked marked dirty by the primary MMU when KVM re-faults on
-+		 * the page.
-+		 *
-+		 * Triggering swap _might_ be a way to detect failure, as swap
-+		 * is treated differently than "normal" files.
-+		 *
-+		 * RIP: 0010:kvm_unmap_gfn_range+0xf1/0x100 [kvm]
-+		 * Call Trace:
-+		 * <TASK>
-+		 *   kvm_mmu_notifier_invalidate_range_start+0x11c/0x2c0 [kvm]
-+		 *   __mmu_notifier_invalidate_range_start+0x7e/0x190
-+		 *   page_mkclean_one+0x226/0x250
-+		 *   rmap_walk_file+0x213/0x430
-+		 *   folio_mkclean+0x95/0xb0
-+		 *   folio_clear_dirty_for_io+0x5d/0x1c0
-+		 *   mpage_submit_page+0x1f/0x70
-+		 *   mpage_process_page_bufs+0xf8/0x110
-+		 *   mpage_prepare_extent_to_map+0x1e3/0x420
-+		 *   ext4_writepages+0x277/0xca0
-+		 *   do_writepages+0xd1/0x190
-+		 *   filemap_fdatawrite_wbc+0x62/0x90
-+		 *   file_write_and_wait_range+0xa3/0xe0
-+		 *   ext4_sync_file+0xdb/0x340
-+		 *   do_fsync+0x38/0x70
-+		 *   __x64_sys_fdatasync+0x13/0x20
-+		 *   do_syscall_64+0x31/0x50
-+		 *   entry_SYSCALL_64_after_hwframe+0x44/0xae
-+		 * </TASK>
-+		 *
-+		 * RIP: 0010:__folio_mark_dirty+0x266/0x310
-+		 * Call Trace:
-+		 * <TASK>
-+		 *   mark_buffer_dirty+0xe7/0x140
-+		 *   __block_commit_write.isra.0+0x59/0xc0
-+		 *   block_page_mkwrite+0x15a/0x170
-+		 *   ext4_page_mkwrite+0x485/0x620
-+		 *   do_page_mkwrite+0x54/0x150
-+		 *   __handle_mm_fault+0xe2a/0x1600
-+		 *   handle_mm_fault+0xbd/0x280
-+		 *   do_user_addr_fault+0x192/0x600
-+		 *   exc_page_fault+0x6c/0x140
-+		 *   asm_exc_page_fault+0x1e/0x30
-+		 * </TASK>
-+		 */
-+		/* fdatasync(fd); */
-+
-+		/*
-+		 * Clear the dirty log to coerce KVM into write-protecting the
-+		 * SPTE (or into clearing dirty bits when using PML).
-+		 */
-+		kvm_vm_clear_dirty_log(vm, MEM_FILE_MEMSLOT, &bitmap, 0, 1);
-+
-+		atomic_inc(&rendezvous);
-+
-+		usleep(i % 10);
-+
-+		r = _vcpu_run(vm, VCPU_ID);
-+
-+		while (atomic_read(&rendezvous) != 2)
-+			cpu_relax();
-+
-+		atomic_set(&rendezvous, 0);
-+
-+		fdatasync(fd);
-+		mprotect(hva, PAGE_SIZE, PROT_READ | PROT_WRITE);
-+
-+		val = READ_ONCE(*hva);
-+		if (r) {
-+			TEST_ASSERT(!val, "Memory should be zero, write faulted\n");
-+			vcpu_regs_set(vm, VCPU_ID, &regs);
-+			continue;
-+		}
-+		nr_writes++;
-+		TEST_ASSERT(val == MEM_FILE_DATA_PATTERN,
-+			    "Memory doesn't match data pattern, want 0x%lx, got 0x%lx",
-+			    MEM_FILE_DATA_PATTERN, val);
-+		ASSERT_EQ(get_ucall(vm, VCPU_ID, &ucall), UCALL_SYNC);
-+		ASSERT_EQ(ucall.args[1], 1);
-+	}
-+
-+	printf("%d of %d iterations wrote memory\n", nr_writes, NR_ITERATIONS);
-+
-+	atomic_inc(&rendezvous);
-+	WRITE_ONCE(done, true);
-+
-+	pthread_join(mprotect_thread, NULL);
-+
-+	kvm_vm_free(vm);
-+
-+	return 0;
-+}
-+
--- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
+> 
+> Also are you planning to add a node for thermal sensor to r329 dtsi?
+> 
+> 
+> > --
+> > 2.35.1
+> > 
+
 

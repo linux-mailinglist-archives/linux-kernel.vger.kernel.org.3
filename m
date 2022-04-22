@@ -2,87 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5110750BC5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B280C50BC61
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349098AbiDVQBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S1377967AbiDVQCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449622AbiDVQAr (ORCPT
+        with ESMTP id S237777AbiDVQCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:00:47 -0400
-Received: from out28-220.mail.aliyun.com (out28-220.mail.aliyun.com [115.124.28.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4AA5DA7A;
-        Fri, 22 Apr 2022 08:57:51 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2959096|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0197065-0.00421785-0.976076;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047202;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.NVuYnRb_1650643065;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NVuYnRb_1650643065)
-          by smtp.aliyun-inc.com(33.32.41.12);
-          Fri, 22 Apr 2022 23:57:46 +0800
-Subject: Re: [PATCH v4 0/3] Add OTG support for Ingenic SoCs.
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     hminas@synopsys.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        tsbogend@alpha.franken.de, paul@crapouillou.net,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1650561308-54704-1-git-send-email-zhouyanjie@wanyeetech.com>
- <YmJntZ7RYpPVaxhm@kroah.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <8e2472c8-39d1-065f-4cfb-41359af435f2@wanyeetech.com>
-Date:   Fri, 22 Apr 2022 23:57:44 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Fri, 22 Apr 2022 12:02:14 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C3D5DA79;
+        Fri, 22 Apr 2022 08:59:20 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id i20so15248455ybj.7;
+        Fri, 22 Apr 2022 08:59:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wz6qjemFOM+Uepl/wvMm48U+1/J/h3Mt/0mg1L+9Kqc=;
+        b=R3oXRlgjim6/ydd6OtCZQPC7ETHGku9HUDKYkjTzpPSkmfLiM7Fxql3mA9z6jWzhjx
+         4SpjGBfNmi5RJKIG1DNQcpbNQcbYpAHNt2D3BxU830GqRQ7Gk9GWiVT843+e9AS12P2u
+         I1u76YK/A8mpt4PTRppitg1P7Fq1pJs3AzuijtnOIIhGuuMCd+uuDQ6lzTXH7HIfBBB3
+         MoQP5lJpkxLFDq659+QwyYvab1nP8JtDpDKI/Td9ZFAd6v1DKWwazo1yJL0zTeGx21DY
+         k/FG3/vN7eIOHg2t7bWac9PieUkHJbBjrJPY/ljOzkqwcHk4IW80K4kYFNfJXAZW8nk5
+         dVZQ==
+X-Gm-Message-State: AOAM532jZQH/28su0DC6hUilISbgXNEMS6k300eSe5+mwY1PilRfnz1G
+        8QwQq67IJilxdLlISWpBgo69ugbjHr7X7jBiRs8=
+X-Google-Smtp-Source: ABdhPJyu9/vdw+6xAgy8dMeVAXoOzN68Ncb0Z9/JmHIE9mWjvcrUf4BDBJZBFUpXYi5szII85Jly0YM/ZBs5EutRh5E=
+X-Received: by 2002:a05:6902:1543:b0:642:3fd:316c with SMTP id
+ r3-20020a056902154300b0064203fd316cmr5122231ybu.622.1650643160120; Fri, 22
+ Apr 2022 08:59:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YmJntZ7RYpPVaxhm@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420191541.99528-1-schspa@gmail.com> <CAJZ5v0guPiGx-ZnC0RcqVgDEp0bh4DcKC7QYjjO0PF_3kHdVGg@mail.gmail.com>
+ <CAMA88TpEHTEYU3Z_sXFcCXmW+9q=Ks+OSkGNY3N+uAisb+G7Ow@mail.gmail.com>
+In-Reply-To: <CAMA88TpEHTEYU3Z_sXFcCXmW+9q=Ks+OSkGNY3N+uAisb+G7Ow@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 22 Apr 2022 17:59:09 +0200
+Message-ID: <CAJZ5v0hxoU0nWKMVRfiMU_XSQE9n49CjmhmibEVmEo=+E4kBoA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: fix race on cpufreq online
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On 2022/4/22 下午4:30, Greg KH wrote:
-> On Fri, Apr 22, 2022 at 01:15:05AM +0800, 周琰杰 (Zhou Yanjie) wrote:
->> 1.Add OTG support for the JZ4775 SoC, the JZ4780 SoC, the X1000
->>    SoC, the X1600 SoC, the X1830 SoC, and the X2000 SoC.
->> 2.Introduce support for disable Ingenic overcurrent detection,
->>    once selected it enables GOTGCTL register bits VbvalidOvEn
->>    and VbvalidOvVal to disable the VBUS overcurrent detection.
->>
->> v1->v2:
->> 1.Add Rob Herring's Acked-by.
->> 2.Add Minas Harutyunyan's Acked-by.
->> 3.Use "activate_ingenic_overcurrent_detection" instead
->>    "deactivate_ingenic_overcurrent_detection" as Greg's suggestion.
->>
->> v2->v3:
->> Refresh USB nodes in device tree files, remove "snps,dwc2" since
->> it is nolonger needed.
->>
->> v3->v4:
->> Remove the compatible string of X1700 since it could use the X1600
->> string　as the fallback.
-> I already applied v3, so can you just provide a fixup patch for the
-> difference between v3 and v4?
-
-
-Sure.
-
-
-Thanks and best regards!
-
-
+On Fri, Apr 22, 2022 at 5:10 PM Schspa Shi <schspa@gmail.com> wrote:
 >
-> thanks,
+> "Rafael J. Wysocki" <rafael@kernel.org> writes:
 >
-> greg k-h
+> > On Wed, Apr 20, 2022 at 9:16 PM Schspa Shi <schspa@gmail.com> wrote:
+> >>
+> >> When cpufreq online failed, policy->cpus are not empty while
+> >> cpufreq sysfs file available, we may access some data freed.
+> >>
+> >> Take policy->clk as an example:
+> >>
+> >> static int cpufreq_online(unsigned int cpu)
+> >> {
+> >>   ...
+> >>   // policy->cpus != 0 at this time
+> >>   down_write(&policy->rwsem);
+> >>   ret = cpufreq_add_dev_interface(policy);
+> >>   up_write(&policy->rwsem);
+> >>
+> >>   return 0;
+> >>
+> >> out_destroy_policy:
+> >>         for_each_cpu(j, policy->real_cpus)
+> >>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+> >>     up_write(&policy->rwsem);
+> >> ...
+> >> out_exit_policy:
+> >>   if (cpufreq_driver->exit)
+> >>     cpufreq_driver->exit(policy);
+> >>       clk_put(policy->clk);
+> >>       // policy->clk is a wild pointer
+> >> ...
+> >>                                     ^
+> >>                                     |
+> >>                             Another process access
+> >>                             __cpufreq_get
+> >>                               cpufreq_verify_current_freq
+> >>                                 cpufreq_generic_get
+> >>                                   // acces wild pointer of policy->clk;
+> >>                                     |
+> >>                                     |
+> >> out_offline_policy:                 |
+> >>   cpufreq_policy_free(policy);      |
+> >>     // deleted here, and will wait for no body reference
+> >>     cpufreq_policy_put_kobj(policy);
+> >> }
+> >>
+> >> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> >> ---
+> >>  drivers/cpufreq/cpufreq.c | 5 +++--
+> >>  1 file changed, 3 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> >> index 80f535cc8a75..0d58b0f8f3af 100644
+> >> --- a/drivers/cpufreq/cpufreq.c
+> >> +++ b/drivers/cpufreq/cpufreq.c
+> >> @@ -1533,8 +1533,6 @@ static int cpufreq_online(unsigned int cpu)
+> >>         for_each_cpu(j, policy->real_cpus)
+> >>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+> >>
+> >> -       up_write(&policy->rwsem);
+> >> -
+> >>  out_offline_policy:
+> >>         if (cpufreq_driver->offline)
+> >>                 cpufreq_driver->offline(policy);
+> >> @@ -1543,6 +1541,9 @@ static int cpufreq_online(unsigned int cpu)
+> >>         if (cpufreq_driver->exit)
+> >>                 cpufreq_driver->exit(policy);
+> >>
+> >> +       cpumask_clear(policy->cpus);
+> >> +       up_write(&policy->rwsem);
+> >
+> > This change is correct AFAICS, but it doesn't really fix the race,
+> > because show_cpuinfo_cur_freq() uses __cpufreq_get() directly without
+> > locking.
+>
+> There is a lock outside of show_cpuinfo_cur_freq(). Please check about
+> static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
+> {
+>         ......
+>         down_read(&policy->rwsem);
+>         ret = fattr->show(policy, buf);
+>         up_read(&policy->rwsem);
+>
+>     ......
+> }
+
+You are right, my mistake.
+
+OK, I'll queue up the patch, then.

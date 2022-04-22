@@ -2,511 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C613950BB4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563CD50BB53
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245578AbiDVPOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S1444669AbiDVPOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449294AbiDVPOL (ORCPT
+        with ESMTP id S1354558AbiDVPNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:14:11 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA375D661;
-        Fri, 22 Apr 2022 08:11:15 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23MF1q0S028161;
-        Fri, 22 Apr 2022 17:10:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=gos07UT+BBqc579VYg/fvSB/SDbppQIssePXNTd0GbM=;
- b=5NrBe5Yz4VQ7tYgchQT+5CdDWJB91RRFoc6zwlzB8itkPlksQXITmDjsmXUSpBn1sTse
- nmfxS2bfYHzP5dyEVCge1ZUZfPAMgPskcgXMcfS6qu9jvS/vFtfHF2jvSaAaiMXLeZeg
- wFnIUZinPo4ES54Bdz0nwtNuPwHDVdcjNBijR/BkcFPUl1NUwvyiPNNdLWH0gkMDlPol
- I77fgwGK7vPEBMCZQcxtJJFFPxkf3W1zOGY699BYHlakvpW3hMdoYz4fXiKHiOz9MGeP
- y0EIzsUfRa367L0JCTHG8woJQIzGNDGr9781BjXASDMXmKjeO40fI69M8808qqv41/hh IA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fkskgt1wk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 17:10:59 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 34EED100034;
-        Fri, 22 Apr 2022 17:10:59 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2D469233C64;
-        Fri, 22 Apr 2022 17:10:59 +0200 (CEST)
-Received: from localhost (10.75.127.49) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 22 Apr
- 2022 17:10:58 +0200
-From:   Alexandre Torgue <alexandre.torgue@foss.st.com>
-To:     <arnd@arndb.de>, <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>, <soc@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        <etienne.carriere@st.com>
-Subject: [PATCH 8/8] ARM: dts: stm32: Add SCMI version of STM32 boards (DK1/DK2/ED1/EV1)
-Date:   Fri, 22 Apr 2022 17:09:52 +0200
-Message-ID: <20220422150952.20587-9-alexandre.torgue@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
-References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+        Fri, 22 Apr 2022 11:13:48 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88325D5D1;
+        Fri, 22 Apr 2022 08:10:51 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id bc42so3956664vkb.12;
+        Fri, 22 Apr 2022 08:10:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oDJ25/TckqjulH3Kz4Oc6VlKVfCbM4oJIYil6OeGKgs=;
+        b=qf+tYKgkgctIGlv3XQUSJG8kmbBYRFP1CtoIpeLiC3ROiDcWqMZc5fwfeNsHvQaOIv
+         GrttfdFBuJ88iHN/2Cp+jZO1yFJQb4VBt0XkdNBuoO2QLu2GlDK0Pqaa0yGMKlV4D2pI
+         1TuyvXqOg+zlLW1zlju9UgIaZUAFphl6N1RQzBzDbQzoo4c7Vhap80K/NKLPQuRFGD2w
+         Ee8q7f3tiEQU8igesrCEsEWbPPsBQnln8TM1M0E4osrUKR7ANN2eF8Brc1J1U+bM0UBg
+         s4bYXKtR+lHbQ9s3jiEqRR10WLsQdgAY/L4zu/Y7X6tgoRMCFCpR7uSpIg0k3HQCIje9
+         6M8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oDJ25/TckqjulH3Kz4Oc6VlKVfCbM4oJIYil6OeGKgs=;
+        b=RtBJ7lq/8gARipWQj7Ce1LGSxvtKgXUSFKCnXyg6uer8Iefen8NOVOCiArAxuV23ps
+         CP/XlCSFT1pzUbld4igWzkxdW6RR2mRJ3FUsBgo5EcJEx+FhvJf1buoN+cZp3Eff6RZi
+         ohDUCeTxPB3ITtYpoCY/Vk7dG9bS2aY6PAhiesWRPba1buB8n3cv2HMR7jI66AUOwlGq
+         oXd4iBJ8ZzQWYieLVGD+HiRN296AI4lp9Ob7wlIUf6XXWPQRHGPNMoK2kquZkvR7Mhjd
+         OtOjTLT9/Zc7gIFDjCuFimBCJD33uGV+83Z9X0UQVuoWfNiwU2sAYdUDY+5oktZ46gaJ
+         E+zA==
+X-Gm-Message-State: AOAM533CZDhMQF5xLiL2pftRYQmr014GIY0fzITBLd+mLbwp0S3Si0lL
+        S5PH0WzDU9/WAiOyS+aFTlf/gQScDnklYPR4UJrw1abz
+X-Google-Smtp-Source: ABdhPJzkQoGKG2TY6Zox/4S1noDfPT/RID/EUBV3B3Lb692c42FvomcVLfSE/jve7rFcWk2x6WkDE8JAs0t3srD1/CE=
+X-Received: by 2002:a1f:2494:0:b0:348:491:d046 with SMTP id
+ k142-20020a1f2494000000b003480491d046mr1967180vkk.22.1650640250738; Fri, 22
+ Apr 2022 08:10:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-22_04,2022-04-22_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420191541.99528-1-schspa@gmail.com> <CAJZ5v0guPiGx-ZnC0RcqVgDEp0bh4DcKC7QYjjO0PF_3kHdVGg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0guPiGx-ZnC0RcqVgDEp0bh4DcKC7QYjjO0PF_3kHdVGg@mail.gmail.com>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Fri, 22 Apr 2022 23:10:39 +0800
+Message-ID: <CAMA88TpEHTEYU3Z_sXFcCXmW+9q=Ks+OSkGNY3N+uAisb+G7Ow@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: fix race on cpufreq online
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a "secure" version based on SCMI of STM32 boards. Only boards
-provided by STMicroelectronics are concerned:
+"Rafael J. Wysocki" <rafael@kernel.org> writes:
 
--STM32MP157A-DK1
--STM32MP157C-DK2
--STM32MP157C-ED1
--STM32MP157C-EV1
+> On Wed, Apr 20, 2022 at 9:16 PM Schspa Shi <schspa@gmail.com> wrote:
+>>
+>> When cpufreq online failed, policy->cpus are not empty while
+>> cpufreq sysfs file available, we may access some data freed.
+>>
+>> Take policy->clk as an example:
+>>
+>> static int cpufreq_online(unsigned int cpu)
+>> {
+>>   ...
+>>   // policy->cpus != 0 at this time
+>>   down_write(&policy->rwsem);
+>>   ret = cpufreq_add_dev_interface(policy);
+>>   up_write(&policy->rwsem);
+>>
+>>   return 0;
+>>
+>> out_destroy_policy:
+>>         for_each_cpu(j, policy->real_cpus)
+>>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+>>     up_write(&policy->rwsem);
+>> ...
+>> out_exit_policy:
+>>   if (cpufreq_driver->exit)
+>>     cpufreq_driver->exit(policy);
+>>       clk_put(policy->clk);
+>>       // policy->clk is a wild pointer
+>> ...
+>>                                     ^
+>>                                     |
+>>                             Another process access
+>>                             __cpufreq_get
+>>                               cpufreq_verify_current_freq
+>>                                 cpufreq_generic_get
+>>                                   // acces wild pointer of policy->clk;
+>>                                     |
+>>                                     |
+>> out_offline_policy:                 |
+>>   cpufreq_policy_free(policy);      |
+>>     // deleted here, and will wait for no body reference
+>>     cpufreq_policy_put_kobj(policy);
+>> }
+>>
+>> Signed-off-by: Schspa Shi <schspa@gmail.com>
+>> ---
+>>  drivers/cpufreq/cpufreq.c | 5 +++--
+>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> index 80f535cc8a75..0d58b0f8f3af 100644
+>> --- a/drivers/cpufreq/cpufreq.c
+>> +++ b/drivers/cpufreq/cpufreq.c
+>> @@ -1533,8 +1533,6 @@ static int cpufreq_online(unsigned int cpu)
+>>         for_each_cpu(j, policy->real_cpus)
+>>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+>>
+>> -       up_write(&policy->rwsem);
+>> -
+>>  out_offline_policy:
+>>         if (cpufreq_driver->offline)
+>>                 cpufreq_driver->offline(policy);
+>> @@ -1543,6 +1541,9 @@ static int cpufreq_online(unsigned int cpu)
+>>         if (cpufreq_driver->exit)
+>>                 cpufreq_driver->exit(policy);
+>>
+>> +       cpumask_clear(policy->cpus);
+>> +       up_write(&policy->rwsem);
+>
+> This change is correct AFAICS, but it doesn't really fix the race,
+> because show_cpuinfo_cur_freq() uses __cpufreq_get() directly without
+> locking.
 
-Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+There is a lock outside of show_cpuinfo_cur_freq(). Please check about
+static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
+{
+        ......
+        down_read(&policy->rwsem);
+        ret = fattr->show(policy, buf);
+        up_read(&policy->rwsem);
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b738..a98b2c26f80b 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1160,6 +1160,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
- 	stm32mp157a-avenger96.dtb \
- 	stm32mp157a-dhcor-avenger96.dtb \
- 	stm32mp157a-dk1.dtb \
-+	stm32mp157a-dk1-scmi.dtb \
- 	stm32mp157a-iot-box.dtb \
- 	stm32mp157a-microgea-stm32mp1-microdev2.0.dtb \
- 	stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dtb \
-@@ -1170,9 +1171,12 @@ dtb-$(CONFIG_ARCH_STM32) += \
- 	stm32mp157c-dhcom-pdk2.dtb \
- 	stm32mp157c-dhcom-picoitx.dtb \
- 	stm32mp157c-dk2.dtb \
-+	stm32mp157c-dk2-scmi.dtb \
- 	stm32mp157c-ed1.dtb \
-+	stm32mp157c-ed1-scmi.dtb \
- 	stm32mp157c-emsbc-argon.dtb \
- 	stm32mp157c-ev1.dtb \
-+	stm32mp157c-ev1-scmi.dtb \
- 	stm32mp157c-lxa-mc1.dtb \
- 	stm32mp157c-odyssey.dtb
- dtb-$(CONFIG_MACH_SUN4I) += \
-diff --git a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-new file mode 100644
-index 000000000000..e3d3f3f30c7d
---- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
-+ * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
-+ */
-+
-+/dts-v1/;
-+
-+#include "stm32mp157a-dk1.dts"
-+
-+/ {
-+	model = "STMicroelectronics STM32MP157A-DK1 SCMI Discovery Board";
-+	compatible = "st,stm32mp157a-dk1-scmi", "st,stm32mp157a-dk1", "st,stm32mp157";
-+
-+	reserved-memory {
-+		optee@de000000 {
-+			reg = <0xde000000 0x2000000>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&cpu0 {
-+	clocks = <&scmi_clk CK_SCMI_MPU>;
-+};
-+
-+&cpu1 {
-+	clocks = <&scmi_clk CK_SCMI_MPU>;
-+};
-+
-+&gpioz {
-+	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
-+};
-+
-+&hash1 {
-+	clocks = <&scmi_clk CK_SCMI_HASH1>;
-+	resets = <&scmi_reset RST_SCMI_HASH1>;
-+};
-+
-+&i2c4 {
-+	clocks = <&scmi_clk CK_SCMI_I2C4>;
-+	resets = <&scmi_reset RST_SCMI_I2C4>;
-+};
-+
-+&iwdg2 {
-+	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
-+};
-+
-+&mdma1 {
-+	resets = <&scmi_reset RST_SCMI_MDMA>;
-+};
-+
-+&mlahb {
-+	resets = <&scmi_reset RST_SCMI_MCU>;
-+};
-+
-+&optee {
-+	status = "okay";
-+};
-+
-+&rcc {
-+	compatible = "st,stm32mp1-rcc-secure", "syscon";
-+	clock-names = "hse", "hsi", "csi", "lse", "lsi";
-+	clocks = <&scmi_clk CK_SCMI_HSE>,
-+		 <&scmi_clk CK_SCMI_HSI>,
-+		 <&scmi_clk CK_SCMI_CSI>,
-+		 <&scmi_clk CK_SCMI_LSE>,
-+		 <&scmi_clk CK_SCMI_LSI>;
-+};
-+
-+&rng1 {
-+	clocks = <&scmi_clk CK_SCMI_RNG1>;
-+	resets = <&scmi_reset RST_SCMI_RNG1>;
-+};
-+
-+&rtc {
-+	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
-+};
-+
-+&scmi {
-+	status = "okay";
-+};
-+
-+&scmi_shm {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-new file mode 100644
-index 000000000000..45dcd299aa9e
---- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
-+ * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
-+ */
-+
-+/dts-v1/;
-+
-+#include "stm32mp157c-dk2.dts"
-+
-+/ {
-+	model = "STMicroelectronics STM32MP157C-DK2 SCMI Discovery Board";
-+	compatible = "st,stm32mp157c-dk2-scmi", "st,stm32mp157c-dk2", "st,stm32mp157";
-+
-+	reserved-memory {
-+		optee@de000000 {
-+			reg = <0xde000000 0x2000000>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&cpu0 {
-+	clocks = <&scmi_clk CK_SCMI_MPU>;
-+};
-+
-+&cpu1 {
-+	clocks = <&scmi_clk CK_SCMI_MPU>;
-+};
-+
-+&cryp1 {
-+	clocks = <&scmi_clk CK_SCMI_CRYP1>;
-+	resets = <&scmi_reset RST_SCMI_CRYP1>;
-+};
-+
-+&dsi {
-+	clocks = <&rcc DSI_K>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
-+};
-+
-+&gpioz {
-+	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
-+};
-+
-+&hash1 {
-+	clocks = <&scmi_clk CK_SCMI_HASH1>;
-+	resets = <&scmi_reset RST_SCMI_HASH1>;
-+};
-+
-+&i2c4 {
-+	clocks = <&scmi_clk CK_SCMI_I2C4>;
-+	resets = <&scmi_reset RST_SCMI_I2C4>;
-+};
-+
-+&iwdg2 {
-+	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
-+};
-+
-+&mdma1 {
-+	resets = <&scmi_reset RST_SCMI_MDMA>;
-+};
-+
-+&mlahb {
-+	resets = <&scmi_reset RST_SCMI_MCU>;
-+};
-+
-+&optee {
-+	status = "okay";
-+};
-+
-+&rcc {
-+	compatible = "st,stm32mp1-rcc-secure", "syscon";
-+	clock-names = "hse", "hsi", "csi", "lse", "lsi";
-+	clocks = <&scmi_clk CK_SCMI_HSE>,
-+		 <&scmi_clk CK_SCMI_HSI>,
-+		 <&scmi_clk CK_SCMI_CSI>,
-+		 <&scmi_clk CK_SCMI_LSE>,
-+		 <&scmi_clk CK_SCMI_LSI>;
-+};
-+
-+&rng1 {
-+	clocks = <&scmi_clk CK_SCMI_RNG1>;
-+	resets = <&scmi_reset RST_SCMI_RNG1>;
-+};
-+
-+&rtc {
-+	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
-+};
-+
-+&scmi {
-+	status = "okay";
-+};
-+
-+&scmi_shm {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-new file mode 100644
-index 000000000000..458e0ca3cded
---- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-@@ -0,0 +1,91 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
-+ * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
-+ */
-+
-+/dts-v1/;
-+
-+#include "stm32mp157c-ed1.dts"
-+
-+/ {
-+	model = "STMicroelectronics STM32MP157C-ED1 SCMI eval daughter";
-+	compatible = "st,stm32mp157c-ed1-scmi", "st,stm32mp157c-ed1", "st,stm32mp157";
-+
-+	reserved-memory {
-+		optee@fe000000 {
-+			reg = <0xfe000000 0x2000000>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&cpu0 {
-+	clocks = <&scmi_clk CK_SCMI_MPU>;
-+};
-+
-+&cpu1 {
-+	clocks = <&scmi_clk CK_SCMI_MPU>;
-+};
-+
-+&cryp1 {
-+	clocks = <&scmi_clk CK_SCMI_CRYP1>;
-+	resets = <&scmi_reset RST_SCMI_CRYP1>;
-+};
-+
-+&gpioz {
-+	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
-+};
-+
-+&hash1 {
-+	clocks = <&scmi_clk CK_SCMI_HASH1>;
-+	resets = <&scmi_reset RST_SCMI_HASH1>;
-+};
-+
-+&i2c4 {
-+	clocks = <&scmi_clk CK_SCMI_I2C4>;
-+	resets = <&scmi_reset RST_SCMI_I2C4>;
-+};
-+
-+&iwdg2 {
-+	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
-+};
-+
-+&mdma1 {
-+	resets = <&scmi_reset RST_SCMI_MDMA>;
-+};
-+
-+&mlahb {
-+	resets = <&scmi_reset RST_SCMI_MCU>;
-+};
-+
-+&optee {
-+	status = "okay";
-+};
-+
-+&rcc {
-+	compatible = "st,stm32mp1-rcc-secure", "syscon";
-+	clock-names = "hse", "hsi", "csi", "lse", "lsi";
-+	clocks = <&scmi_clk CK_SCMI_HSE>,
-+		 <&scmi_clk CK_SCMI_HSI>,
-+		 <&scmi_clk CK_SCMI_CSI>,
-+		 <&scmi_clk CK_SCMI_LSE>,
-+		 <&scmi_clk CK_SCMI_LSI>;
-+};
-+
-+&rng1 {
-+	clocks = <&scmi_clk CK_SCMI_RNG1>;
-+	resets = <&scmi_reset RST_SCMI_RNG1>;
-+};
-+
-+&rtc {
-+	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
-+};
-+
-+&scmi {
-+	status = "okay";
-+};
-+
-+&scmi_shm {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-new file mode 100644
-index 000000000000..df9c113edb4b
---- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-@@ -0,0 +1,100 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
-+ * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
-+ */
-+
-+/dts-v1/;
-+
-+#include "stm32mp157c-ev1.dts"
-+
-+/ {
-+	model = "STMicroelectronics STM32MP157C-EV1 SCMI eval daughter on eval mother";
-+	compatible = "st,stm32mp157c-ev1-scmi", "st,stm32mp157c-ev1", "st,stm32mp157c-ed1",
-+		     "st,stm32mp157";
-+
-+	reserved-memory {
-+		optee@fe000000 {
-+			reg = <0xfe000000 0x2000000>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&cpu0 {
-+	clocks = <&scmi_clk CK_SCMI_MPU>;
-+};
-+
-+&cpu1 {
-+	clocks = <&scmi_clk CK_SCMI_MPU>;
-+};
-+
-+&cryp1 {
-+	clocks = <&scmi_clk CK_SCMI_CRYP1>;
-+	resets = <&scmi_reset RST_SCMI_CRYP1>;
-+};
-+
-+&dsi {
-+	clocks = <&rcc DSI_K>, <&scmi_clk CK_SCMI_HSE>, <&rcc DSI_PX>;
-+};
-+
-+&gpioz {
-+	clocks = <&scmi_clk CK_SCMI_GPIOZ>;
-+};
-+
-+&hash1 {
-+	clocks = <&scmi_clk CK_SCMI_HASH1>;
-+	resets = <&scmi_reset RST_SCMI_HASH1>;
-+};
-+
-+&i2c4 {
-+	clocks = <&scmi_clk CK_SCMI_I2C4>;
-+	resets = <&scmi_reset RST_SCMI_I2C4>;
-+};
-+
-+&iwdg2 {
-+	clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
-+};
-+
-+&m_can1 {
-+	clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
-+};
-+
-+&mdma1 {
-+	resets = <&scmi_reset RST_SCMI_MDMA>;
-+};
-+
-+&mlahb {
-+	resets = <&scmi_reset RST_SCMI_MCU>;
-+};
-+
-+&optee {
-+	status = "okay";
-+};
-+
-+&rcc {
-+	compatible = "st,stm32mp1-rcc-secure", "syscon";
-+	clock-names = "hse", "hsi", "csi", "lse", "lsi";
-+	clocks = <&scmi_clk CK_SCMI_HSE>,
-+		 <&scmi_clk CK_SCMI_HSI>,
-+		 <&scmi_clk CK_SCMI_CSI>,
-+		 <&scmi_clk CK_SCMI_LSE>,
-+		 <&scmi_clk CK_SCMI_LSI>;
-+};
-+
-+&rng1 {
-+	clocks = <&scmi_clk CK_SCMI_RNG1>;
-+	resets = <&scmi_reset RST_SCMI_RNG1>;
-+};
-+
-+&rtc {
-+	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
-+};
-+
-+&scmi {
-+	status = "okay";
-+};
-+
-+&scmi_shm {
-+	status = "okay";
-+};
--- 
-2.17.1
+    ......
+}
 
+>
+> It should use cpufreq_get() instead.
+>
+>> +
+>>  out_free_policy:
+>>         cpufreq_policy_free(policy);
+>>         return ret;
+>> --
+
+--
+Schspa Shi
+BRs

@@ -2,102 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFEE50B2E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34EE150B2E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445181AbiDVI35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 04:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S1445324AbiDVIaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 04:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352644AbiDVI34 (ORCPT
+        with ESMTP id S1352644AbiDVIaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 04:29:56 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DB352E5D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:27:03 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id bv16so9920346wrb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=u7TUP/Txry1UFuyT1GMH6MxIlNWsEqUWlVQuJ3Ycgo4=;
-        b=2/I5sgtu6yek/DqrCw3fNAG0CyFOv3PlhCCCJ+GXocYogXRpOANpLUGCSLIL6TXXJL
-         ncM/kLDoJ/bNF7oVzLDmvTM1U3qDOvltDLOY94qFOFrVnXCkZfDsjDwyWE2jcRPo5B1P
-         ttxqJ8yX7vcodL42mKjo/d0lRMIGPiXtLb17dpL2lYUuxkj6MobpP5XnR8PmKbChBY0Z
-         7zmq27Ase+2MLiNJ+AreILAY0VwbdAMekeGiuF36tHqnyXwpBeV6cqPt/OeTETRnDqrU
-         +QHBEU1kHUMiZEs4+Xe8l3uwd3L6Dy+ht+n9MPLNoA7z1gb/z+BsoiCI7GOSeiqizJDX
-         7PeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=u7TUP/Txry1UFuyT1GMH6MxIlNWsEqUWlVQuJ3Ycgo4=;
-        b=Fot+HlZpIRLrXgoDr+uH4x7J6iVVsvhRGXWPEv4v/Oz49ac2DN7QO9VU8EIRUanKxZ
-         5+FUfYLxPEQ051oSXjQqp3brpL1dPDJvEFxdsxq2mqwyWYvVLGlWd4kOeJ66JjeBG4rP
-         NAfq3Gandn/SzWOn60F3bY4RgmMErpgVmGwXwafeEPdQhT/6D9HXUKMLOr2+JKVktHLl
-         H2GsevC1MCGBzyUxFLgY/k9Kj0deg/rk7+v4Mtigd7tt+f2Xk8HcXOqY/3pGQctDfVbB
-         Ci9llsmiRMBauDSVkhMmjEkZKn2mjEDjcC8rDZkMpsDE4JudjEPGeS0OCH4WPRd4xLOP
-         Y1TA==
-X-Gm-Message-State: AOAM530dGXR2h5xFIGR55TpUu90saAzACkpzoaPVbcuzBczrMxFBaT75
-        IVJGe2vmO0jnTGc2kgqCXbCq7A==
-X-Google-Smtp-Source: ABdhPJwc7lC7iXT26SYx3VMbx1Xy9+zwh+M/Yt5wvRZ3xffC5nUuF/FW32z69itymsszmlEUC9PuCA==
-X-Received: by 2002:adf:f2cb:0:b0:20a:77c2:3958 with SMTP id d11-20020adff2cb000000b0020a77c23958mr2637147wrp.589.1650616021757;
-        Fri, 22 Apr 2022 01:27:01 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:3ce1:1ed1:5e14:cd49? ([2001:861:44c0:66c0:3ce1:1ed1:5e14:cd49])
-        by smtp.gmail.com with ESMTPSA id e4-20020a5d6d04000000b0020a8bbbb72bsm1335208wrq.97.2022.04.22.01.27.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 01:27:00 -0700 (PDT)
-Message-ID: <b6029a92-04f0-9ae7-291c-621f9871280b@baylibre.com>
-Date:   Fri, 22 Apr 2022 10:26:59 +0200
+        Fri, 22 Apr 2022 04:30:08 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254C352B3B;
+        Fri, 22 Apr 2022 01:27:14 -0700 (PDT)
+X-UUID: ea650a0e53054247b5d5f0fc411a6aa4-20220422
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:172de966-de87-4395-a575-6cf4b6ff827c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:3b9398f0-da02-41b4-b6df-58f4ccd36682,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: ea650a0e53054247b5d5f0fc411a6aa4-20220422
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 970442411; Fri, 22 Apr 2022 16:27:10 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 22 Apr 2022 16:27:08 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 22 Apr 2022 16:27:08 +0800
+Message-ID: <3765ba9fb62cef8fe9279ba5d6ded1c8b5b31a82.camel@mediatek.com>
+Subject: Re: [PATCH v2 1/1] pwrap: mediatek: fix FSM timeout issue
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, <lee.jones@linaro.org>,
+        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <eddie.huang@mediatek.com>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <fshao@chromium.org>
+CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
+        <tinghan.shen@mediatek.com>, <hsin-hsiung.wang@mediatek.com>,
+        <sean.wang@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <wen.su@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Fri, 22 Apr 2022 16:27:08 +0800
+In-Reply-To: <20220422033423.11702-2-zhiyong.tao@mediatek.com>
+References: <20220422033423.11702-1-zhiyong.tao@mediatek.com>
+         <20220422033423.11702-2-zhiyong.tao@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] Revert "ASoC: meson: axg-tdm-interface: manage
- formatters in trigger"
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     jbrunet@baylibre.com, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dmitry Shmidt <dimitrysh@google.com>
-References: <20220421155725.2589089-1-narmstrong@baylibre.com>
- <YmGSeVbwWtyHP/Tz@sirena.org.uk>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <YmGSeVbwWtyHP/Tz@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
-
-On 21/04/2022 19:20, Mark Brown wrote:
-> On Thu, Apr 21, 2022 at 05:57:24PM +0200, Neil Armstrong wrote:
->> This reverts commit bf5e4887eeddb48480568466536aa08ec7f179a5 because
->> the following and required commit e138233e56e9829e65b6293887063a1a3ccb2d68
+On Fri, 2022-04-22 at 11:34 +0800, Zhiyong Tao wrote:
+> From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
 > 
-> One other thing - these should be Fixes: tags, that helps tooling figure
-> out things like backports.
+> Fix pwrap FSM timeout issue which leads the system crash on GFX VSRAM
+> power on.
+> Add a usleep delay to avoid busy read for the H/W status.
+> For avoiding the system behavior(ex. disable interrupt in
+> suspend/resume
+> flow, schedule block task)cause if (time_after()) be turn first,
+> we change it after sleep delay.
 > 
-> Also:
+
+Hello Zhiyong,
+
+if this is a fix patch.
+IMO, you should add Fixes tag:
+
+Fixes: 1f022d84bd19 ("soc: mediatek: Add PMIC wrapper for MT8135 and
+MT8173 SoCs")
+
+> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
+> ---
+>  drivers/soc/mediatek/mtk-pmic-wrap.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>  mode change 100644 => 100755 drivers/soc/mediatek/mtk-pmic-wrap.c
 > 
-> Please include human readable descriptions of things like commits and
-> issues being discussed in e-mail in your mails, this makes them much
-> easier for humans to read especially when they have no internet access.
-> I do frequently catch up on my mail on flights or while otherwise
-> travelling so this is even more pressing for me than just being about
-> making things a bit easier to read.
 
-Thanks, I'll think of this for the next time.
+File mode should be 100644.
 
-Neil
+BRs,
+Rex
+
+> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> old mode 100644
+> new mode 100755
+> index 952bc554f443..ac7139a67e87
+> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/reset.h>
+> +#include <linux/delay.h>
+>  
+>  #define PWRAP_MT8135_BRIDGE_IORD_ARB_EN		0x4
+>  #define PWRAP_MT8135_BRIDGE_WACS3_EN		0x10
+> @@ -1197,10 +1198,13 @@ static int pwrap_wait_for_state(struct
+> pmic_wrapper *wrp,
+>  	timeout = jiffies + usecs_to_jiffies(10000);
+>  
+>  	do {
+> -		if (time_after(jiffies, timeout))
+> -			return fp(wrp) ? 0 : -ETIMEDOUT;
+>  		if (fp(wrp))
+>  			return 0;
+> +
+> +		usleep_range(10, 11);
+> +
+> +		if (time_after(jiffies, timeout))
+> +			return fp(wrp) ? 0 : -ETIMEDOUT;
+>  	} while (1);
+>  }
+>  
+

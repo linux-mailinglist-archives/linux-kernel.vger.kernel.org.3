@@ -2,53 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10FC650BA13
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8766E50BA1A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448473AbiDVObO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        id S1448663AbiDVOcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379955AbiDVObL (ORCPT
+        with ESMTP id S1445426AbiDVOcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:31:11 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6251F5BD1F;
-        Fri, 22 Apr 2022 07:28:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A64F1CE2ADF;
-        Fri, 22 Apr 2022 14:28:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D131C385A8;
-        Fri, 22 Apr 2022 14:28:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650637689;
-        bh=9uMz4H+bO5n8agDgpMHCaPvaOtDr0Sv9Q8n3QusL5FI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qR/JXTzc5joPwWhEQXuC3kCpRIJ/3TRBAn/sabum32P4tl6KbtSBoxG45aQGAj5fh
-         ycrd/mAuAfboYJpX0pwjnqGaEG3b57/QHecGi5L1TecMBR3QjbvLIualaXhFL8QSuT
-         MhtaGf8wFYPvZCtn95oGtERNhp/fkoF5afLScHGo=
-Date:   Fri, 22 Apr 2022 16:28:06 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] serial: Fix support for UPF_SPD_* flags
-Message-ID: <YmK7drS0XgnTQcaf@kroah.com>
-References: <20220321163055.4058-1-pali@kernel.org>
- <CAHp75VddDG-ZJpbAb5ZhKaMpP0L+CMEx2pcYy3FOMiaxNydCWA@mail.gmail.com>
+        Fri, 22 Apr 2022 10:32:18 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273ED5BD21;
+        Fri, 22 Apr 2022 07:29:25 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nhuHj-0000bB-DF; Fri, 22 Apr 2022 16:29:23 +0200
+Message-ID: <2ce27899-684f-4fe2-4401-a66649b35d60@leemhuis.info>
+Date:   Fri, 22 Apr 2022 16:29:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VddDG-ZJpbAb5ZhKaMpP0L+CMEx2pcYy3FOMiaxNydCWA@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [REGRESSION] Missing IRQ via amd_gpio
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+References: <s5ha6cdtglj.wl-tiwai@suse.de>
+ <e4c9bb60-210d-243a-e225-6b3546c0b42b@leemhuis.info>
+In-Reply-To: <e4c9bb60-210d-243a-e225-6b3546c0b42b@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1650637765;661b59ac;
+X-HE-SMSGID: 1nhuHj-0000bB-DF
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,48 +48,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 04:29:08PM +0200, Andy Shevchenko wrote:
-> On Mon, Mar 21, 2022 at 11:07 PM Pali Rohár <pali@kernel.org> wrote:
-> >
-> > Support for UPF_SPD_* flags is currently broken in more drivers for two
-> > reasons. First one is that uart_update_timeout() function does not
-> 
-> the uart_update_timeout()
-> 
-> > calculate timeout for UPF_SPD_CUST flag correctly. Second reason is that
-> > userspace termios structre is modified by most drivers after each
-> 
-> structure
-> 
-> ...
-> 
-> > (error handling was ommited for simplification)
-> 
-> omitted
-> 
-> > After calling set_active_spd_cust_baud() function SPD custom divisor
-> > should be active and therefore is_spd_cust_active() should return true.
-> >
-> > But it is not active (cfgetospeed does not return B38400) and this patch
-> > series should fix it. I have tested it with 8250 driver.
-> 
-> drivers
-> 
-> > Originally Johan Hovold reported that there may be issue with these
-> > ASYNC_SPD_FLAGS in email:
-> > https://lore.kernel.org/linux-serial/20211007133146.28949-1-johan@kernel.org/
-> >
-> >
-> > Johan, Greg, could you please test these patches if there is not any
-> > regression?
-> 
-> I'm wondering why we are still supporting this ugly hack?
-> Doesn't BOTHER work for you?
 
-Yes, I too do not want to add more support for these old flags.  If they
-have not been working, let's not add support for them as obviously no
-one is using them.  Let's try to remove them if at all possible.
 
-thanks,
+On 22.04.22 16:17, Thorsten Leemhuis wrote:
+> Hi Takashi! Thx for CCing the regression list.
+> 
+> On 22.04.22 15:03, Takashi Iwai wrote:
+>> Hi,
+>>
+>> we received a bug report for 5.17.3 kernel showing a new error:
+>>
+>>  amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
+>>
+>> Not only an error message but in practice this leads to a missing IRQ
+>> assignment; the IRQ 27 is no longer assigned to amd_gpio driver.
+>>
+>> As the error number (EPROBE_DEFER) indicates, this seems to be the
+>> side-effect of the recent fix, the upstream commit 5467801f1fcb
+>> ("gpio: Restrict usage of GPIO chip irq members before
+>> initialization").  As far as I understand, the problem is in
+>> acpi_gpiochip_request_interrupts() call that is called from
+>> gpiochip_add_irqchip() itself.  Since it's called before the
+>> initialized flag set, it always fails now.
+>>
+>> Below is a temporary quick fix and it seems working.  But I'm not sure
+>> whether I overlooked something obvious...
+> 
+> A patch that afaics will fix this hopefully should get merged really
+> soon now:
+> 
+> https://lore.kernel.org/all/20220422131452.20757-1-mario.limonciello@amd.com/
+> 
+> See also v1:
+> 
+> https://lore.kernel.org/all/20220414025705.598-1-mario.limonciello@amd.com/
 
-greg k-h
+Sorry, I shouldn't have stripped the rest of the message, mario might be
+interested in at least the link, so here it is:
+
+>> -- 8< --
+>> From: Takashi Iwai <tiwai@suse.de>
+>> Subject: [PATCH] gpio: Fix missing IRQ assginment for ACPI gpiochip
+>> 
+>> The recent fix for gpiolib caused an error like:
+>>   amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
+>> It indicates -EPROBE_DEFER, and since the function
+>> acpi_gpiochip_request_interrupts() doesn't handle the deferred probe,
+>> this leads to the missing IRQs. 
+>> 
+>> The problem is that acpi_gpiochip_request_interrupts() itself is
+>> called from gpiochip_add_irqchip() but before gc->irq.initialized flag
+>> is set.  For fixing the regression, let's move the call of
+>> acpi_gpiochip_request_interrupts() after the initialized flag setup.
+>> 
+>> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before initialization")
+>> BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1198697
+>> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+>> ---
+>>  drivers/gpio/gpiolib.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+>> index 085348e08986..b7694171655c 100644
+>> --- a/drivers/gpio/gpiolib.c
+>> +++ b/drivers/gpio/gpiolib.c
+>> @@ -1601,8 +1601,6 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
+>>  
+>>  	gpiochip_set_irq_hooks(gc);
+>>  
+>> -	acpi_gpiochip_request_interrupts(gc);
+>> -
+>>  	/*
+>>  	 * Using barrier() here to prevent compiler from reordering
+>>  	 * gc->irq.initialized before initialization of above
+>> @@ -1612,6 +1610,8 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
+>>  
+>>  	gc->irq.initialized = true;
+>>  
+>> +	acpi_gpiochip_request_interrupts(gc);
+>> +
+>>  	return 0;
+>>  }

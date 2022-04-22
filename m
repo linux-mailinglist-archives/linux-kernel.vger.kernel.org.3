@@ -2,183 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EDF50C1D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FB350C2D8
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbiDVWGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S231626AbiDVWLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiDVWFw (ORCPT
+        with ESMTP id S231657AbiDVWIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:05:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F89156110
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:49:11 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23MHnjdp025864;
-        Fri, 22 Apr 2022 19:56:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=04STmEqe5u5BMaOs7DSkgySzGj61M92rE1OARfFQvtE=;
- b=G2MGAsS/y0h79mO20XiIlN3WLTv4vYWfnqSXUlZz8xzFAH1ADXqIytGZD1+djCU534DZ
- QlUjl4iVKSc3FneFqHocBmAhA/1qbVov9/GtgYC/G0u2FLQzciupNvMxDfSF3GFvLHma
- vcz9qFXa/5FYiHBlMgQRsyG69zIfWJsa3ERwBsvN8ROSFAqcIqqlyMFiIUDgiwCVFV2w
- sEgrpDh/ee0YXvbmCah4o0XuYoUxz62sG/PxZsVhIBuZMQ5iG3TiWO/5OaSczV/1lxjx
- xnpAo5n/9aHK0zS/g+0fpHpZ3efYt5ocCpmPIVaIiHMadhnhcde8AI3vlp79JZD23urX 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fkm5q9unv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 19:56:02 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23MJZHwP035931;
-        Fri, 22 Apr 2022 19:56:02 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fkm5q9unb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 19:56:01 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MJjMko020138;
-        Fri, 22 Apr 2022 19:55:59 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ffne99tgn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 19:55:59 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MJtuBg37749180
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 Apr 2022 19:55:56 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 28D5F11C04C;
-        Fri, 22 Apr 2022 19:55:56 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F3C0811C04A;
-        Fri, 22 Apr 2022 19:55:52 +0000 (GMT)
-Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com.com (unknown [9.43.112.230])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 22 Apr 2022 19:55:52 +0000 (GMT)
-From:   Jagdish Gediya <jvgediya@linux.ibm.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org
-Cc:     baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
-        ying.huang@intel.com, aneesh.kumar@linux.ibm.com,
-        shy828301@gmail.com, weixugc@google.com, gthelen@google.com,
-        dan.j.williams@intel.com, Jagdish Gediya <jvgediya@linux.ibm.com>
-Subject: [PATCH v3 7/7] docs: numa: Add documentation for demotion
-Date:   Sat, 23 Apr 2022 01:25:16 +0530
-Message-Id: <20220422195516.10769-8-jvgediya@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220422195516.10769-1-jvgediya@linux.ibm.com>
-References: <20220422195516.10769-1-jvgediya@linux.ibm.com>
+        Fri, 22 Apr 2022 18:08:54 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8DB1FB896;
+        Fri, 22 Apr 2022 13:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650660980; x=1682196980;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=khxBa9ANLkANHc/Zo28EzKs8RaABxYVq6PMhf/+H9ok=;
+  b=BL8kJj1ccBFecM9fTJ+DU79Mzha5qMOf1qrhMFICsOLTpz6vacQVN/HS
+   VQsvtjzABCRt7kf8cx9ICK/lSbT+SqVbvq9ayayG2RTp4VD3e0Q0gNgZb
+   UvyIF+M6beG/WWR8Wz9DDEDoIxFJQrVVyUHdLZwKKCpk27CmRRESjP+gM
+   X9erwN/0OWJQ8lqwpl/j2KtW0B5TuaxmeAbNpCKmtPTKaxu2TLCjRyOVW
+   103/XCerF17/5+sVJyMbX7ihFNUiMBu0Ykmquzc/SyjyoAkZyrxP0FioO
+   on0JZWPLytjUAOnIeFnly7u/FdJUVdRcKy7KlkAG+vFkgdx96Yt2v8dYi
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="252102512"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="252102512"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 12:58:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="511718007"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Apr 2022 12:58:11 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhzPu-000AXl-M5;
+        Fri, 22 Apr 2022 19:58:10 +0000
+Date:   Sat, 23 Apr 2022 03:57:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH for-5.18] KVM: fix bad user ABI for KVM_EXIT_SYSTEM_EVENT
+Message-ID: <202204230312.8EOM8DHM-lkp@intel.com>
+References: <20220422103013.34832-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: eLaW0tlhh9_-kMbPEf1AAeNqm613K_JR
-X-Proofpoint-GUID: 8XX4G7vY-17mP6Mx995RZH3Xu56D4qqO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-22_06,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- clxscore=1011 bulkscore=0 phishscore=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 mlxscore=0 suspectscore=0
- mlxlogscore=987 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2204220083
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422103013.34832-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for demotion mentioning about why is it
-required and all the sysfs interfaces available related to
-demotion.
+Hi Paolo,
 
-Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
----
- Documentation/admin-guide/mm/index.rst        |  1 +
- .../admin-guide/mm/numa_demotion.rst          | 57 +++++++++++++++++++
- 2 files changed, 58 insertions(+)
- create mode 100644 Documentation/admin-guide/mm/numa_demotion.rst
+I love your patch! Yet something to improve:
 
-diff --git a/Documentation/admin-guide/mm/index.rst b/Documentation/admin-guide/mm/index.rst
-index c21b5823f126..4bd0ed3de9c5 100644
---- a/Documentation/admin-guide/mm/index.rst
-+++ b/Documentation/admin-guide/mm/index.rst
-@@ -34,6 +34,7 @@ the Linux memory management.
-    memory-hotplug
-    nommu-mmap
-    numa_memory_policy
-+   numa_demotion
-    numaperf
-    pagemap
-    soft-dirty
-diff --git a/Documentation/admin-guide/mm/numa_demotion.rst b/Documentation/admin-guide/mm/numa_demotion.rst
-new file mode 100644
-index 000000000000..252be9dc0517
---- /dev/null
-+++ b/Documentation/admin-guide/mm/numa_demotion.rst
-@@ -0,0 +1,57 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==================
-+NUMA Demotion
-+==================
-+
-+What is demotion required?
-+============================
-+
-+With the advent of various new memory types, Systems have multiple
-+types of memory, e.g. DRAM and PMEM (persistent memory).  The memory
-+subsystem of such systems can be called memory tiering system,
-+because the performance of the different types of memory are usually
-+different.
-+
-+In a  system with some DRAM and some persistent memory, once DRAM
-+fills up, reclaim will start and some of the DRAM contents will be
-+thrown out to swap even if there is space in persistent memory.
-+Allocations will, at some point, start falling over to the slower
-+persistent memory.
-+
-+Instead of page being discarded during reclaim, it can be moved to
-+persistent memory. Allowing page migration during reclaim enables
-+these systems to migrate pages from fast tiers to slow tiers when
-+the fast tier is under pressure.
-+
-+SYSFS interface
-+======================
-+
-+Enable/Disable demotion
-+------------------------
-+
-+By default demotion is disabled, it can be enabled/disabled using below
-+sysfs interface,
-+
-+echo 0/1 or false/true > /sys/kernel/mm/numa/demotion_enabled
-+
-+Read system demotion targets
-+-----------------------------
-+cat /sys/devices/system/node/demotion_targets
-+
-+Kernel shows node_states[N_DEMOTION_TARGETS] when this command
-+is run.
-+
-+Override default demotion targets
-+---------------------------------
-+echo <nodelist> > /sys/devices/system/node/demotion_targets
-+
-+If nodelist is valid and subset of N_MEMORY then
-+node_states[N_DEMOTION_TARGETS] is set to this new nodelist, and
-+kernel builds the new demotion list based on it.
-+
-+Read per node demotion targets
-+-------------------------------
-+cat /sys/devices/system/node/nodeX/demotion_targets
-+
-+It shows per node demotion targets configured by kernel.
+[auto build test ERROR on kvm/master]
+[also build test ERROR on linus/master v5.18-rc3]
+[cannot apply to kvmarm/next mst-vhost/linux-next linux/master next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Paolo-Bonzini/KVM-fix-bad-user-ABI-for-KVM_EXIT_SYSTEM_EVENT/20220422-184535
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git master
+config: riscv-randconfig-r014-20220422 (https://download.01.org/0day-ci/archive/20220423/202204230312.8EOM8DHM-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/71af2c55b700878ad9d73c90c6b75f327f36d0a9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Paolo-Bonzini/KVM-fix-bad-user-ABI-for-KVM_EXIT_SYSTEM_EVENT/20220422-184535
+        git checkout 71af2c55b700878ad9d73c90c6b75f327f36d0a9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/kvm/vcpu_sbi.c:98:30: error: use of undeclared identifier 'reason'
+           run->system_event.data[0] = reason;
+                                       ^
+   1 error generated.
+
+
+vim +/reason +98 arch/riscv/kvm/vcpu_sbi.c
+
+    83	
+    84	void kvm_riscv_vcpu_sbi_system_reset(struct kvm_vcpu *vcpu,
+    85					     struct kvm_run *run,
+    86					     u32 type, u64 flags)
+    87	{
+    88		unsigned long i;
+    89		struct kvm_vcpu *tmp;
+    90	
+    91		kvm_for_each_vcpu(i, tmp, vcpu->kvm)
+    92			tmp->arch.power_off = true;
+    93		kvm_make_all_cpus_request(vcpu->kvm, KVM_REQ_SLEEP);
+    94	
+    95		memset(&run->system_event, 0, sizeof(run->system_event));
+    96		run->system_event.type = type;
+    97		run->system_event.ndata = 1;
+  > 98		run->system_event.data[0] = reason;
+    99		run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
+   100	}
+   101	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

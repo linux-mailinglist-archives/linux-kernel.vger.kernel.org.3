@@ -2,101 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FDB50BCD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD93450BCD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382805AbiDVQ0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S1383939AbiDVQ0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381784AbiDVQ0g (ORCPT
+        with ESMTP id S1383278AbiDVQ0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:26:36 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15F05DE70
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:23:38 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 17so10287475lji.1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MuBFrhJUOONLWXDwFhqBNuCDF96+pp+7LO7m7j6HVnc=;
-        b=aPyjHIH15/ZlqkdljmCtysFMz1fao4RAeRNcVpZ8TybN4Ud2MluMCY5f73fNrXfypM
-         HkZsnBpkUt3gU6bCETZbnfknjtQGlO14szjXMcnQb+BxiWvenyMTWGNt+pidsZwW+hGi
-         QplsAf9EP/tHXtgg4EFNDpnvzNPcKezjH53i4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MuBFrhJUOONLWXDwFhqBNuCDF96+pp+7LO7m7j6HVnc=;
-        b=xxpi4KXTHkZsFqllYiWRgO+VgmKmmswwxu7BG5XS4eSf2RYBzho+ujTyI7RYGXrCcJ
-         c0Id+fL8EzodhFNjywo+kwUIFu8tgiO2ecighcpMRz7feK382+8UOgwxtHKh3vjYtcTL
-         OK7ezV3viSpqT5vz521hO45aph2XcAHKb2xgfxajOGaA71k0ug/3OYAPc+JUAzNdZbYn
-         icSJlmPVxXRaR27HknbW+//0Ya0Ntz02khWk0Dtqh3f99tyAhJcNZjOv4CJiK0RZ6EjN
-         iBcVICOg7HCTVIAuMo/qQ5IyC2bFcutz8ogQnekdGApKsp0/NiaoZF6whdYuUZhtKTcG
-         Xw8w==
-X-Gm-Message-State: AOAM533K9T3kVHyifRzWbbXBnHrYC/SHtc4+kKq01HDymAk8zCbYraaX
-        rLVDTbQBRMN42GJlPaHi1rk6S0x2LyJ6KgxUl4A=
-X-Google-Smtp-Source: ABdhPJwO/kgFGe1NvEkuvX7o9qvFegxEoMDb9oztz3CRuvIBd8s2cNX6bcBmsmDrE9DT+4+Lc4CVtw==
-X-Received: by 2002:a05:651c:1050:b0:24d:cc3c:dd26 with SMTP id x16-20020a05651c105000b0024dcc3cdd26mr3264761ljm.449.1650644617018;
-        Fri, 22 Apr 2022 09:23:37 -0700 (PDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id q17-20020a2e8751000000b00244beaacef1sm266628ljj.18.2022.04.22.09.23.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 09:23:35 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id bj36so10228191ljb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:23:35 -0700 (PDT)
-X-Received: by 2002:a2e:b8d2:0:b0:24e:e19c:5375 with SMTP id
- s18-20020a2eb8d2000000b0024ee19c5375mr3277685ljp.176.1650644614617; Fri, 22
- Apr 2022 09:23:34 -0700 (PDT)
+        Fri, 22 Apr 2022 12:26:44 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461CA5E153;
+        Fri, 22 Apr 2022 09:23:50 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23MEpQ9i028200;
+        Fri, 22 Apr 2022 18:23:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Tz26t0AEffOCF28o5Wo7UmIZsHLJeggiP4B5JFJg+Zg=;
+ b=owHoJCPIopVgvMeN3/8z8Z9eGsj6w1DEtBRojS8tGJMoncZyZ+n1UOMMVfhruvn6KPg8
+ hkf577hLz1C6B+nrVS4jOdQMJ3umiTR7u0NV34UQAtiVX0Helh2c9YelGGlNEZGjAtVf
+ CP0yyXfxfwa8u055Kmwr6Zkyo4za5NEK1F4wLFK0rRA+VefMxFCS8GkEe/vi3XNlcTHt
+ jAhIHTYkTvZSC8CUxugEGtPWl47/3JFXujhjYnU70f9ann6Ul1ubAIhz6zu4oygCorsO
+ K/HVoiYoq7MISMNv3VB7v6DwEYDdOCym0y9HQpG8XIJxyUL1Ocz2Omh5eIJuuhROgKeI ug== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fkskgtdv3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Apr 2022 18:23:27 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9BB8810002A;
+        Fri, 22 Apr 2022 18:23:26 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8F14D23BDF1;
+        Fri, 22 Apr 2022 18:23:26 +0200 (CEST)
+Received: from [10.48.0.142] (10.75.127.46) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 22 Apr
+ 2022 18:23:26 +0200
+Message-ID: <d731e89f-feef-fa7d-d2e7-0d1f9af118cd@foss.st.com>
+Date:   Fri, 22 Apr 2022 18:23:25 +0200
 MIME-Version: 1.0
-References: <20220422060107.781512-1-npiggin@gmail.com> <20220422060107.781512-2-npiggin@gmail.com>
-In-Reply-To: <20220422060107.781512-2-npiggin@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 22 Apr 2022 09:23:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg09h4_-g6Fc1K5UqA==Zfe1gXQhJcZ6J9Mnopp15gptg@mail.gmail.com>
-Message-ID: <CAHk-=wg09h4_-g6Fc1K5UqA==Zfe1gXQhJcZ6J9Mnopp15gptg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mm/vmalloc: huge vmalloc backing pages should be
- split rather than compound
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5/8] ARM: stm32: select OPTEE on MPU family
+Content-Language: en-US
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>, <arnd@arndb.de>,
+        <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        <soc@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
+        <etienne.carriere@st.com>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-6-alexandre.torgue@foss.st.com>
+ <3d5969cc-2210-3c7c-01c8-3f5c3789e54b@pengutronix.de>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <3d5969cc-2210-3c7c-01c8-3f5c3789e54b@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-22_04,2022-04-22_01,2022-02-23_01
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:01 PM Nicholas Piggin <npiggin@gmail.com> wrote:
->
-> Huge vmalloc higher-order backing pages were allocated with __GFP_COMP
-> in order to allow the sub-pages to be refcounted by callers such as
-> "remap_vmalloc_page [sic]" (remap_vmalloc_range).
->
-> However a similar problem exists for other struct page fields callers
-> use, for example fb_deferred_io_fault() takes a vmalloc'ed page and
-> not only refcounts it but uses ->lru, ->mapping, ->index. This is not
-> compatible with compound sub-pages.
->
-> The correct approach is to use split high-order pages for the huge
-> vmalloc backing. These allow callers to treat them in exactly the same
-> way as individually-allocated order-0 pages.
+Hi Ahmad,
 
-This patch looks ObviouslyCorrect(tm), and you even reproduced the
-fbdev  problem.
+On 4/22/22 17:37, Ahmad Fatoum wrote:
+> Hello Alex,
+> 
+> On 22.04.22 17:09, Alexandre Torgue wrote:
+>> Select CONFIG_OPTEE for STM32MP15 and STM32MP13 by default. Final
+>> activation will done thanks to device tree.
+>>
+>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>>
+>> diff --git a/arch/arm/mach-stm32/Kconfig b/arch/arm/mach-stm32/Kconfig
+>> index 98145031586f..b322cf2a136f 100644
+>> --- a/arch/arm/mach-stm32/Kconfig
+>> +++ b/arch/arm/mach-stm32/Kconfig
+>> @@ -6,6 +6,8 @@ menuconfig ARCH_STM32
+>>   	select HAVE_ARM_ARCH_TIMER if ARCH_MULTI_V7
+>>   	select ARM_GIC if ARCH_MULTI_V7
+>>   	select ARM_PSCI if ARCH_MULTI_V7
+>> +	select TEE if ARCH_MULTI_V7
+>> +	select OPTEE if ARCH_MULTI_V7
+> 
+> Users may want to use OPTEE as a module without it being a SCMI provider
+> or not use OPTEE at all. I'd prefer you drop this patch and leave it
+> to users to configure their kernel appropriately.
+> 
 
-Applied.
+Yes, I can understand, I did this one too quickly forgetting that every 
+multi_v7config users will inherit of this config.
 
-              Linus
+thanks
+Alex
+
+> Cheers,
+> Ahmad
+> 
+> 
+>>   	select ARM_AMBA
+>>   	select ARCH_HAS_RESET_CONTROLLER
+>>   	select CLKSRC_STM32
+> 
+> 
+> 
+> 
+

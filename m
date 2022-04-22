@@ -2,54 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4EA950C113
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF26650C11A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiDVV0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S229798AbiDVVhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiDVV0F (ORCPT
+        with ESMTP id S229991AbiDVVhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:26:05 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3444825CA09;
-        Fri, 22 Apr 2022 13:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=IJ9Mu/aUYM3vuD5oQcui/J0/WhPDdyFZPtdQU+Ga/QI=; b=T1tOkSyynfaYwEC/xaB+p6az3Z
-        XtQ2o1NqRu4SayBGALcPLXyZykVvU5An2x8p6KxswgnsA7y9ZqXOckyg10qAdYaxD1v/tTnx308tr
-        3W0frA8HsyBxGGYZJ3dC1060Ed0pognN1wfkuOy5+1/JWKY9TF19h+gO4BQyUbykPAwM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nhzkl-00H2Uf-Si; Fri, 22 Apr 2022 22:19:43 +0200
-Date:   Fri, 22 Apr 2022 22:19:43 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next 1/5] net: ipqess: introduce the Qualcomm IPQESS
- driver
-Message-ID: <YmMN37VjQNwhLDuX@lunn.ch>
-References: <20220422180305.301882-1-maxime.chevallier@bootlin.com>
- <20220422180305.301882-2-maxime.chevallier@bootlin.com>
+        Fri, 22 Apr 2022 17:37:40 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDF6400EDA
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:38:40 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id r85so10313081oie.7
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:38:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2FeuhW6y4os5v9CoDi1x5cL69WTrNP7orQRjD5u2f2Q=;
+        b=SWA5JCifyGGgXC8kg9oqcVEfzGpcJyubvgXISY/tkiQ4LkAnBvdJQ4x+SDJdCcN5r5
+         l/D5Xwmleml/wGOTyuQey0sip6/0Tgoq+rQ7CHZro/fqIgNVa0LsvarIkgGhhvY5j1sF
+         LMm1oOI3X0eDdolQ9LpFcFBcvkgDAo4IEFQp7an7GZ4F5A6E9vw8lZlu+PJZ8/F/XeaE
+         2XrN/+haQevXPxaL9uHcm3fCWmwsIiDq4XpsMffkJ/1dAHzee/+nBWc5FxrRuv2Yv75v
+         ot9Gi+ioqe4rUavjZ2Ml02hMsz+UFQFITKvVGI/dulXXz+ZeW0uqaldMetwuQxNGpPe6
+         t/zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2FeuhW6y4os5v9CoDi1x5cL69WTrNP7orQRjD5u2f2Q=;
+        b=4MlbXWArR+Cz5opcS7HSSeCoGSQj45gUh9z4EzJW5/GXYFRuDmhtJfbZ402RTEc05t
+         i0b6351yxsOWMwyxD5wkySPv9CfaRgMXOOoctl7RUdLnQmUgYw/xhT3jDpJKSsrghD/H
+         5w+UBBT8UyvuCMFUelxWKA4W92W8yH1nFYsGR/Rxu4g5TeUA679jqJGNEjARqOd5iycp
+         5uHBn7KcQU+XBQ8GvZc8qdE1sYMRcVXd2gDIk+2Ws42GXzF4ZNGYH4LuUWSyUBr80gyu
+         lzV2Ovm+ORFWNdw6VozdZrX+TXy9uBH+rl+CzpZBYv//BsdzlZaAwheHwzGLiO1ekxJ5
+         RyyQ==
+X-Gm-Message-State: AOAM531LqcwCdunnjzn1vPzpPhBhFfIFupUIL0mBd0l8F8glU6+Ih2x0
+        2kONGQVbLKO9hZMCVS4y/ZTsRWRApapG5NaDL7cgve41SRg=
+X-Google-Smtp-Source: ABdhPJxCip4JkFs0bch4l1aLRcJlX/rZIBmOxuo46xJlHa8tYFRtgabnDRNRUlP/nwaE4268Bz4NxqEBLVaSJWXdjEQ=
+X-Received: by 2002:a17:90b:1d84:b0:1d0:6472:e0a3 with SMTP id
+ pf4-20020a17090b1d8400b001d06472e0a3mr18058060pjb.207.1650658963307; Fri, 22
+ Apr 2022 13:22:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422180305.301882-2-maxime.chevallier@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+References: <46c1c59e-1368-620d-e57a-f35c2c82084d@linux.dev>
+ <55605876-d05a-8be3-a6ae-ec26de9ee178@openvz.org> <CALvZod47PARcupR4P41p5XJRfCaTqSuy-cfXs7Ky9=-aJQuoFA@mail.gmail.com>
+ <964ae72a-0484-67de-8143-a9a2d492a520@openvz.org> <e9cd84f2-d2e9-33a8-d74e-edcf60d35236@openvz.org>
+In-Reply-To: <e9cd84f2-d2e9-33a8-d74e-edcf60d35236@openvz.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 22 Apr 2022 13:22:32 -0700
+Message-ID: <CALvZod7ys1SNrQhbweCoCKVyfN1itE16jhC97TqjWtHDFh1RpQ@mail.gmail.com>
+Subject: Re: [PATCH memcg RFC] net: set proper memcg for net_init hooks allocations
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,86 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static int ipqess_axi_probe(struct platform_device *pdev)
-> +{
-> +	struct device_node *np = pdev->dev.of_node;
-> +	struct net_device *netdev;
-> +	phy_interface_t phy_mode;
-> +	struct resource *res;
-> +	struct ipqess *ess;
-> +	int i, err = 0;
-> +
-> +	netdev = devm_alloc_etherdev_mqs(&pdev->dev, sizeof(struct ipqess),
-> +					 IPQESS_NETDEV_QUEUES,
-> +					 IPQESS_NETDEV_QUEUES);
-> +	if (!netdev)
-> +		return -ENOMEM;
-> +
-> +	ess = netdev_priv(netdev);
-> +	ess->netdev = netdev;
-> +	ess->pdev = pdev;
-> +	spin_lock_init(&ess->stats_lock);
-> +	SET_NETDEV_DEV(netdev, &pdev->dev);
-> +	platform_set_drvdata(pdev, netdev);
+On Fri, Apr 22, 2022 at 1:09 PM Vasily Averin <vvs@openvz.org> wrote:
+>
+> On 4/22/22 23:01, Vasily Averin wrote:
+> > On 4/21/22 18:56, Shakeel Butt wrote:
+> >> On Sat, Apr 16, 2022 at 11:39 PM Vasily Averin <vvs@openvz.org> wrote:
+> >>> @@ -1147,7 +1148,13 @@ static int __register_pernet_operations(struct list_head *list,
+> >>>                  * setup_net() and cleanup_net() are not possible.
+> >>>                  */
+> >>>                 for_each_net(net) {
+> >>> +                       struct mem_cgroup *old, *memcg = NULL;
+> >>> +#ifdef CONFIG_MEMCG
+> >>> +                       memcg = (net == &init_net) ? root_mem_cgroup : mem_cgroup_from_obj(net);
+> >>
+> >> memcg from obj is unstable, so you need a reference on memcg. You can
+> >> introduce get_mem_cgroup_from_kmem() which works for both
+> >> MEMCG_DATA_OBJCGS and MEMCG_DATA_KMEM. For uncharged objects (like
+> >> init_net) it should return NULL.
+> >
+> > Could you please elaborate with more details?
+> > It seems to me mem_cgroup_from_obj() does everything exactly as you say:
+> > - for slab objects it returns memcg taken from according slab->memcg_data
+> > - for ex-slab objects (i.e. page->memcg_data & MEMCG_DATA_OBJCGS)
+> >     page_memcg_check() returns NULL
+> > - for kmem objects (i.e. page->memcg_data & MEMCG_DATA_KMEM)
+> >     page_memcg_check() returns objcg->memcg
+> > - in another cases
+> >     page_memcg_check() returns page->memcg_data,
+> >     so for uncharged objects like init_net NULL should be returned.
+> >
+> > I can introduce exported get_mem_cgroup_from_kmem(), however it should only
+> > call mem_cgroup_from_obj(), perhaps under read_rcu_lock/unlock.
+>
+> I think I finally got your point:
+> Do you mean I should use css_tryget(&memcg->css) for found memcg,
+> like get_mem_cgroup_from_mm() does?
 
-....
-
-> +
-> +	ipqess_set_ethtool_ops(netdev);
-> +
-> +	err = register_netdev(netdev);
-> +	if (err)
-> +		goto err_out;
-
-Before register_netdev() even returns, your devices can be in use, the
-open callback called and packets sent. This is particularly true for
-NFS root. Which means any setup done after this is probably wrong.
-
-> +
-> +	err = ipqess_hw_init(ess);
-> +	if (err)
-> +		goto err_out;
-> +
-> +	for (i = 0; i < IPQESS_NETDEV_QUEUES; i++) {
-> +		int qid;
-> +
-> +		netif_tx_napi_add(netdev, &ess->tx_ring[i].napi_tx,
-> +				  ipqess_tx_napi, 64);
-> +		netif_napi_add(netdev,
-> +			       &ess->rx_ring[i].napi_rx,
-> +			       ipqess_rx_napi, 64);
-> +
-> +		qid = ess->tx_ring[i].idx;
-> +		err = devm_request_irq(&ess->netdev->dev, ess->tx_irq[qid],
-> +				       ipqess_interrupt_tx, 0,
-> +				       ess->tx_irq_names[qid],
-> +				       &ess->tx_ring[i]);
-> +		if (err)
-> +			goto err_out;
-> +
-> +		qid = ess->rx_ring[i].idx;
-> +		err = devm_request_irq(&ess->netdev->dev, ess->rx_irq[qid],
-> +				       ipqess_interrupt_rx, 0,
-> +				       ess->rx_irq_names[qid],
-> +				       &ess->rx_ring[i]);
-> +		if (err)
-> +			goto err_out;
-> +	}
-
-All this should probably go before netdev_register().
-
-> +static int ipqess_get_strset_count(struct net_device *netdev, int sset)
-> +{
-> +	switch (sset) {
-> +	case ETH_SS_STATS:
-> +		return ARRAY_SIZE(ipqess_stats);
-> +	default:
-> +		netdev_dbg(netdev, "%s: Invalid string set", __func__);
-
-Unsupported would be better than invalid.
-
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-
-  Andrew
+Yes.

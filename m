@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA91850B9DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344CB50B9E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448559AbiDVOTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S1448547AbiDVOTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448529AbiDVOTO (ORCPT
+        with ESMTP id S1448526AbiDVOTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:19:14 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B305AECC
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:16:21 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c23so11177109plo.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mhiX9pOS55YaO3CdrDwpUy6BkzPbq10Xj73NWvQBwAg=;
-        b=vRUi3XTt6AzV9QlheY6fezduSTcEh/sZN3k+dAddNZiw8rhhyhbGXtJLNYs3J/UwD5
-         bRx0NNWnHM1TYIelLSIgCtSpmnbMKDgukzfetN9iXKdtLRwPXB54SYzt6H400lsd3P4D
-         ++PGiqJSRNedibPs1CaxKSPMQyTwkUYyruCII4+3lOh3uWSvP8+idLkPjw5BBA8QJsEi
-         kvO8DlCiTkUMJj9c+3Kb4kPubeS7hxUdkzPshkGtiJXpeZOSSMzbk6sHBs+4HmVJPMRp
-         e9Uz5m7trgk2XIsiSCfl29aZ0LqcmQ7ZWTP8PJh4RgMon1aGFHXpRKjuAUHuYVAvcCcH
-         noKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mhiX9pOS55YaO3CdrDwpUy6BkzPbq10Xj73NWvQBwAg=;
-        b=m5hIAFvszlhsmHPkSBOlgxx9Gco5LQpB3ybbWFUYBYiHQRu76fUHMaGojIBM8BQ9jg
-         MLnUb5UIpSujhjJfG5DVkmouFSZmM8ikR5dv27UM0BFK4lm1u8BizE181wAkL1bXtxqj
-         6/ZRkwX2xkJKVNpo99Ilj/1Nl45Arh0gU/ahrxpXcPJENbMhkfi3d/sxa82Oi2vbJbA8
-         tC16ZFnH/IuvsBkhGPqGUo6yFvm2+Fe0n62r55CUitxsBbLk8NlsB+9k6fZB6duHftTR
-         JbzXnH3C5GtgFVL19IPnpQPOJGeA1Gw3EB7oXdJ4URxjA6qF5SvqZ8WV60hCuLUu+3+j
-         4VBg==
-X-Gm-Message-State: AOAM530c9C2qlrs1XC2E1NETufZ39ermjfNncGXoUW8aZFgWK1fJVQyu
-        8YdkiEvgZ7WAKJE3ss597xWEwm22A5QlQJslIT5UfQ==
-X-Google-Smtp-Source: ABdhPJz8CXOzCAMrumvED5/FUzZpCHykjU/HdiKEagzluI2x9YcnPtdeO8E7Knfq/KSP3T5vLQuff5phq8eDfMmbJXk=
-X-Received: by 2002:a17:903:2352:b0:159:3fa:261 with SMTP id
- c18-20020a170903235200b0015903fa0261mr4632628plh.21.1650636980753; Fri, 22
- Apr 2022 07:16:20 -0700 (PDT)
+        Fri, 22 Apr 2022 10:19:50 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AED75AEDB;
+        Fri, 22 Apr 2022 07:16:56 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23MEGep0020829;
+        Fri, 22 Apr 2022 09:16:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650637000;
+        bh=Btht3bJsm2pNgZ1+h8mMkgg47aM7ac0qLihAqIO4ZCY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=uyxtvlYqS6hJG0InCHJqL6ouH+zvY7ZmLo6L8inFqms7sonKrL+RRH4uicW6/cZUx
+         2cHIDeGTbv26IYYiEwylXnNkMpaH6/aFQvyKMEjYB5H6sYQm+O7HRURo9GYGIv9gjj
+         BNPnykeWst1R3g0DP4wtVwwm+H5Z2sPR8OqdQIAk=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23MEGeeg034900
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 22 Apr 2022 09:16:40 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
+ Apr 2022 09:16:40 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 22 Apr 2022 09:16:40 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23MEGcui026816;
+        Fri, 22 Apr 2022 09:16:39 -0500
+Date:   Fri, 22 Apr 2022 19:46:38 +0530
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <nm@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>
+Subject: Re: [PATCH v3 0/2] DSS: Add support for DisplayPort
+Message-ID: <20220422141637.4hz5nrlpjapmqezw@uda0490373>
+References: <20220406165852.13026-1-r-ravikumar@ti.com>
+ <ed64bf63-95c6-94ae-4c4f-a206250f44a9@ti.com>
 MIME-Version: 1.0
-References: <20220419010852.452169-1-victor.liu@nxp.com> <20220419010852.452169-2-victor.liu@nxp.com>
-In-Reply-To: <20220419010852.452169-2-victor.liu@nxp.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Fri, 22 Apr 2022 16:16:09 +0200
-Message-ID: <CAG3jFyvAjzHaA_BUJYj18Y-FbY5ROd3iXetAJ+BJaoEjZd6vsQ@mail.gmail.com>
-Subject: Re: [PATCH resend v8 1/5] drm/bridge: nwl-dsi: Set PHY mode in nwl_dsi_mode_set()
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
-        vkoul@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, agx@sigxcpu.org,
-        robert.chiras@nxp.com, martin.kepplinger@puri.sm
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ed64bf63-95c6-94ae-4c4f-a206250f44a9@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,76 +68,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Apr 2022 at 03:07, Liu Ying <victor.liu@nxp.com> wrote:
->
-> The Northwest Logic MIPI DSI host controller embedded in i.MX8qxp
-> works with a Mixel MIPI DPHY + LVDS PHY combo to support either
-> a MIPI DSI display or a LVDS display.  So, this patch calls
-> phy_set_mode() from nwl_dsi_mode_set() to set PHY mode to MIPI DPHY
-> explicitly.
->
-> Cc: Guido G=C3=BCnther <agx@sigxcpu.org>
-> Cc: Robert Chiras <robert.chiras@nxp.com>
-> Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> Cc: Jonas Karlman <jonas@kwiboo.se>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
-> v7->v8:
-> * Resend with Andrzej's and Jernej's mail addressed updated.
->
-> v6->v7:
-> * No change.
->
-> v5->v6:
-> * Rebase the series upon v5.17-rc1.
-> * Set PHY mode in ->mode_set() instead of ->pre_enable() in the nwl-dsi
->   bridge driver due to the rebase.
-> * Drop Guido's R-b tag due to the rebase.
->
-> v4->v5:
-> * No change.
->
-> v3->v4:
-> * No change.
->
-> v2->v3:
-> * No change.
->
-> v1->v2:
-> * Add Guido's R-b tag.
->
->  drivers/gpu/drm/bridge/nwl-dsi.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nw=
-l-dsi.c
-> index d5945501a5ee..85bab7372af1 100644
-> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
-> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-> @@ -666,6 +666,12 @@ static int nwl_dsi_mode_set(struct nwl_dsi *dsi)
->                 return ret;
->         }
->
-> +       ret =3D phy_set_mode(dsi->phy, PHY_MODE_MIPI_DPHY);
-> +       if (ret < 0) {
-> +               DRM_DEV_ERROR(dev, "Failed to set DSI phy mode: %d\n", re=
-t);
-> +               goto uninit_phy;
-> +       }
-> +
->         ret =3D phy_configure(dsi->phy, phy_cfg);
->         if (ret < 0) {
->                 DRM_DEV_ERROR(dev, "Failed to configure DSI phy: %d\n", r=
-et);
-> --
-> 2.25.1
->
+On 12:51-20220415, Vignesh Raghavendra wrote:
+> 
+> 
+> On 06/04/22 10:28 pm, Rahul T R wrote:
+> > The following series of patches enables DisplayPort on
+> > j721e-evm
+> > 
+> > Tomi Valkeinen (2):
+> >   arm64: dts: ti: k3-j721e-main: add DP & DP PHY
+> >   arm64: dts: ti: k3-j721e-common-proc-board: add DP to j7 evm
+> > 
+> > v2:
+> >    - use phandle with a parameter to refer clocks insted of
+> >      sub nodes in serdes_wiz node
+> >    - move phy link node to board DTS file
+> > 
+> > v3:
+> >    - Fix the regulator node name as per the DT spec
+> >    - Use Macro for GPIO type
+> > 
+> > boot logs:
+> >    https://gist.githubusercontent.com/ravi-rahul/1bdbc3f77ab381e486c8394650c2e85d/raw/f04584c30181821c4ee83aee7781a9ba143cd3f3/j7_DP_upstream.log
+> > 
+> > kernel patch verify report:
+> >    https://gist.githubusercontent.com/ravi-rahul/a982fef3fae03ec0dbdd5cb475a4cb25/raw/c8230370746e9878daf9527c3aa9d82eed7aa33c/report-kernel-patch-verify.txt
+> 
+> Hmm, With dtbs_check I see (on v5.18-rc1 tag)
+> 
+> +/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: ports: 'port@0' is a required property
+> +/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: ports: 'port@4' is a required property
+> +/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: 'phys' is a required property
+> +/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: 'phy-names' is a required property
+> 
+> This goes away with 2/2 although adds:
+> +<stdout>: Warning (graph_child_address): /bus@100000/dss@4a00000/ports: graph node has single child node 'port@0', #address-cells/#size-cells are not necessary
+> 
+> 
+> Do we need to have empty ports node in j721e-main.dtsi for dp-bridge?   And something similar wrt phys as well?
+> 
+> Regards
+> Vignesh
 
-Acked-by: Robert Foss <robert.foss@linaro.org>
+Hi Vignesh,
+
+Thanks for the review!
+Not sure why kernel patch verify did not catch this
+
+I can fix the warnings for ports by adding empty ports in 1/2
+For "phys" I can move the phy node from 2/2 to 1/2
+But the commit will spill over both dtsi and dts files
+is that okay, can you please give your inputs here
+
+Regards
+Rahul T R
+ 
+> 
+> > 
+> >  .../dts/ti/k3-j721e-common-proc-board.dts     | 78 ++++++++++++++++++-
+> >  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 65 ++++++++++++++++
+> >  2 files changed, 139 insertions(+), 4 deletions(-)
+> > 

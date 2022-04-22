@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9622150C393
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278F650C314
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbiDVWaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S232979AbiDVWbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbiDVW3e (ORCPT
+        with ESMTP id S232944AbiDVWbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:29:34 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739442B361A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:23:22 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id n18so13534160plg.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:23:22 -0700 (PDT)
+        Fri, 22 Apr 2022 18:31:25 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296C326B5AC
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:24:34 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id i20so16720877ybj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:24:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HJWZ/u34Bl8haBfGwNBOqNCCfpYcc1PApGIC4xuaxaU=;
-        b=YOyd4OdQjfB6fptqigB6STVzdpSRaV1mYCpWyYapaYW1KVIy7Adw5LyhmQjpMYtUCN
-         aXRrbEpvr9ndiz14xYVdbPK3BeUKCUWtFLioihWaQ+sNglE9j+EChbbw8fHBRcTY0gYF
-         0Xt/2jB6I+EY4fnUakNX7WONh2MWoCetLyKKU3JC6lus+YwubbJvHj2BUQdLxnkuEHCH
-         gfdv9xYuiKJ+x/nEeRZuYITRD3XJGX1huLRAj5Kah7vIJmwJIdShgmmyo7IN8D9Yrsn1
-         eRLD9JSPEi7TYK+6R7J1zSxCLs/1SiUc19V/KaZCA5Yr8i9qMWECG091E+bNUcrGOQ5W
-         WGUQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SOU4gw2OndPAHlyb0Yx1jIvLcwnBW7WU3bDm4X/+Fi4=;
+        b=YfsZ4tU3PuYgqcdjIDeQeP3YRzUO5ivIGgFF1ltC/6cArnKzaw0zeJWVYikoKwMjOE
+         OdEykxqICO7B5JcdxEsqUmyHPybbUs/wGZaO8WggpZlsChK/8OwwojOgf1BsBMku+PLG
+         MAtb2fgJpkzrfqNAIEezByuUWj1P12+quEESjC9NqSMK3lSlcD47ha1lp12du7h/IiM9
+         FDye+1z8JpkXsYNIIFUjATBQPXD1WBJ6fAmgYdNWG36EvLkWWB5Iqb8FzcwT3TpPcJGv
+         ntzQ1/nuCBAT00gA8Shal5DE+qEmWahWgq3yXj3gk7VaHYOto1+FcB+rijHPlvSV+dM8
+         TjcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HJWZ/u34Bl8haBfGwNBOqNCCfpYcc1PApGIC4xuaxaU=;
-        b=doURaSINx9D5wqqYjnr5b+kEDTtPBU1Mhd1r5144FgcDRPfGsnNKWNlDsNk1JH2/YM
-         1qlXOqgGegrdyZhArRm/AxUiDo5B4xxdaNv29zr/qGMknOr/O/hzb15b99jPYvvyje/8
-         qoM2yQqCsRau6vUmg/rmL6zwc6KVjPtIrxkKZ22Qeev//0C5jZE8xBhXECIk62H5IvuO
-         oq2Mjs2DpZtj35Q4NhofbHn+/nD51lkry5OPVQRPWDk2KLQ+J/yzrC6pzcpxogwRa9U5
-         ZJuLeFli8yNl5OAWTu05yvE0gx0af71Ac9uecarZFMeHs6d9zp/BkmzYSzY0Z29AbFpJ
-         KeQA==
-X-Gm-Message-State: AOAM533F/nmDXfXqmfStdmnZQmYQUMhxV4Sz/U8pXg5I3vPbKCoPTsGd
-        YsBfiDt5i3bjbFPV+LDltyvKVxzfwI0=
-X-Google-Smtp-Source: ABdhPJySICDr8pzXITtZ0oNS16yOQDuWm614TyTRvJ8gGR6tCvbZta4K8GZ0OZRxFfb2kAOaMQK6sQ==
-X-Received: by 2002:a17:90a:ec09:b0:1d5:dd77:d050 with SMTP id l9-20020a17090aec0900b001d5dd77d050mr7331944pjy.53.1650662601805;
-        Fri, 22 Apr 2022 14:23:21 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h18-20020a056a001a5200b0050a43bb7ae6sm3564975pfv.161.2022.04.22.14.23.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 14:23:21 -0700 (PDT)
-Message-ID: <16e9c7ab-5822-a874-51dd-e4a8e2cb2724@gmail.com>
-Date:   Fri, 22 Apr 2022 14:23:19 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SOU4gw2OndPAHlyb0Yx1jIvLcwnBW7WU3bDm4X/+Fi4=;
+        b=dyejMBIeyyPOSpA7Wasf7yRn9AqXUOKs2ADYx7RTk7DK9xR3JEA6nDii26JDk8Yu/n
+         jRiPMjoPj+6igVmjB/dSoB3cikObE4kSBIvS6rbQNs7cRXiu397eliZhak82j/6Vpfvu
+         TzJksjI0FWLPETV0YLcP9aJj2xMKhmcRef0QKRmTYNnc13CYFuRiqFlXM6J0MK1/LCPE
+         SRGrp/NhWqL187GvBEssJT2oKa/o1VbJBS/57+99QQri4HL/n4B+V+GR3ySWNYfptSZb
+         /nhZNS83ZMp0SSIlGGUkALkASoheFTty15HZXMnTcvGfz0BpUDPM3P10T+hJI0p4ntZk
+         4I2g==
+X-Gm-Message-State: AOAM531CmCZAh8j2prbDdVBuKP8hSSIGTBrFUQ9Lrci0GF3gdDy2ZJbS
+        yf2J9DaWUO+WXACjkyr2BSOnD3FFOtIYP/5/GNpfYQ==
+X-Google-Smtp-Source: ABdhPJxsXcP45rrTkuqz2IOlfWfxSn7HO8ecvoT5emKdoiPaqAi9KObKULKewKrgsbOq2XjWVK/mAr4bUvR0dK/u9is=
+X-Received: by 2002:a5b:dc5:0:b0:624:f16d:7069 with SMTP id
+ t5-20020a5b0dc5000000b00624f16d7069mr6530719ybr.295.1650662673435; Fri, 22
+ Apr 2022 14:24:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 4/5] MAINTAINERS: update MAINTAINERS file
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Joel Peshkin <joel.peshkin@broadcom.com>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Dan Beygelman <dan.beygelman@broadcom.com>,
-        linux-kernel@vger.kernel.org
-References: <20220413192645.7067-1-william.zhang@broadcom.com>
- <20220413192645.7067-5-william.zhang@broadcom.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220413192645.7067-5-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220419141846.598305-1-maz@kernel.org>
+In-Reply-To: <20220419141846.598305-1-maz@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 22 Apr 2022 23:24:22 +0200
+Message-ID: <CACRpkda3L_itpqcnPq6xDoJtNHt8NuvE1MZk1bCNR+u2KKUpBA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/10] gpiolib: Handle immutable irq_chip structures
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/13/22 12:26, William Zhang wrote:
-> Add maintainers, SCM tree, files and directories for the new BCMBCA
-> arch. Only add 47622 for this change and will update in the future
-> when more SoCs are supported.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
+On Tue, Apr 19, 2022 at 4:19 PM Marc Zyngier <maz@kernel.org> wrote:
 
-Applied to 
-https://github.com/Broadcom/stblinux/commits/maintainers/next, thanks!
--- 
-Florian
+> This is a followup from [2].
+>
+> I recently realised that the gpiolib play ugly tricks on the
+> unsuspecting irq_chip structures by patching the callbacks.
+>
+> Not only this breaks when an irq_chip structure is made const (which
+> really should be the default case), but it also forces this structure
+> to be copied at nauseam for each instance of the GPIO block, which is
+> a waste of memory.
+>
+> My current approach is to add a new irq_chip flag (IRQCHIP_IMMUTABLE)
+> which does what it says on the tin: don't you dare writing to them.
+> Gpiolib is further updated not to install its own callbacks, and it
+> becomes the responsibility of the driver to call into the gpiolib when
+> required. This is similar to what we do for other subsystems such as
+> PCI-MSI.
+>
+> 5 drivers are updated to this new model: M1, QC, Tegra, pl061 and AMD
+> (as I actively use them) keeping a single irq_chip structure, marking
+> it const, and exposing the new flag.
+>
+> Nothing breaks, the volume of change is small, the memory usage goes
+> down and we have fewer callbacks that can be used as attack vectors.
+> What's not to love?
+>
+> Since there wasn't any objection in the previous round of review, I'm
+> going to take this series into -next to see if anything breaks at
+> scale.
+
+The series:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+Bartosz: if you're happy with this can you apply it to an immutable branch
+from v5.18-rc1 and merge that into the GPIO for-next and then I can also
+pull that into pinctrl?
+
+Yours,
+Linus Walleij

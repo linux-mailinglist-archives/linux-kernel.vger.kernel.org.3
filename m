@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CC550BD9B
+	by mail.lfdr.de (Postfix) with ESMTP id 4904650BD9C
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449922AbiDVQyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S1449899AbiDVQyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449871AbiDVQyU (ORCPT
+        with ESMTP id S1449881AbiDVQyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:54:20 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0512D5F8DE;
-        Fri, 22 Apr 2022 09:51:26 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id y32so15294134lfa.6;
-        Fri, 22 Apr 2022 09:51:25 -0700 (PDT)
+        Fri, 22 Apr 2022 12:54:21 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C85F8E6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:51:27 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id w1so15284325lfa.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:51:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=99hspxuLODhQpov2wjpLVe38h5x1eJYakvWm7x8e6iI=;
-        b=F23kF0eGH2ZVB+UGEjmW9/zKmFnzoAMLghAwzApvwMCcMhtBG9yJPpY4U1QzTxgJqh
-         dlRXZHbEg3zZ7nY0RRV+8fUOu1XkZkXeqKyrW16n02fiZBATqOd2CzVkTaqbBEsKlX+6
-         r6aK5PoP5QLM42PK/aLq8s/VUKQChEmq/ezbmXtxZxY1a/RDaoMGUVuns/+Ft+exgVHV
-         qbfu1h52HdfRiNt9rNvFnhuiPOsYt6N8H7gak3I0DBjmtU3G2m7PdaKAunzdkWOdWVMV
-         ovHh6R/nKxeNIZ67iu83BqdSWGokrQ3h7RK4/vcpMr2+xi4nqmoXe2TQmCa8LS8q13oq
-         2CTg==
+        bh=KhuPWU8Ck/Zqwd8QYGNbplUi9vy17AnQZagSCJ37QGk=;
+        b=NOb0zaTNkpTy3DsQIPg0dlh0OMrNEZEmtlKznw8XqFpcusEUdvVM6zMbTVNhxDwSXb
+         9s37u6+satXYoHdp9aa7oR59besAWm0FyfFiy6XEjvSmmpgqVORyHmPjGB9ycHQDJJWY
+         NhBHK5PmSgHWKDXsrY1o7I3msHW/lE2r8fRLPkm+huQTPVs0JPTel+isPlp+aKY9PECA
+         TgXI2IbEGgOzT7qwLsqu/TyulQid0mXcPa7j9ZtTDusbzC4o3xYvxYVruqLq6WimAnlD
+         NuIvwpd8kt/kRI2bBQnCc3VInK9vHaSdv0v4tgUnpJpgPie2NhI61zNXsHV+nBAVrH8s
+         y7vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=99hspxuLODhQpov2wjpLVe38h5x1eJYakvWm7x8e6iI=;
-        b=6FY5FYnS1St3K6vtckp1HCF1HGA1h0gC6c3GI822TaqBEt8EaDzH3TVjK0adfUOrpU
-         N9Kl6EK/7nsZ3YV2J5O3ILtHk6KP21R1wP5DPrIBejLHmVAPHeRm028ZWM2SmLED3sh+
-         x572An9S5Il2udEBGz35WI6rg9KB/j/3Y269m8uEcRFcOwq6/ywtYCpj5/mH3Mc1z6Qx
-         1Ebr/EecZXzsa8wE38ZAj2BV6FTa6GoRZGOCzGhaCO8mkMsnoEz+S2VrdWV+Wxi90rhy
-         Uywi66LCGs7PFxsfKmfwet8vJZYoXajEoyrLjydT2pVw9AtuavFuql2IchOH3PoEY7/e
-         5XHA==
-X-Gm-Message-State: AOAM530eKJjkjhIWXv10iTEK+8ecxWsWc/DPqGLjkcs/91PzgSgPLIRK
-        dlqmigfP0qJpRAMUCGezkn0=
-X-Google-Smtp-Source: ABdhPJxHzbye4XRLnSvBlQObswNpXjTS3XrDqE1jJLqg0maTMcfec1EnyxM49kxDQRnXmTUAz/llKg==
-X-Received: by 2002:a05:6512:499:b0:46f:d419:a19b with SMTP id v25-20020a056512049900b0046fd419a19bmr3576799lfq.654.1650646284247;
-        Fri, 22 Apr 2022 09:51:24 -0700 (PDT)
+        bh=KhuPWU8Ck/Zqwd8QYGNbplUi9vy17AnQZagSCJ37QGk=;
+        b=hxUz2Fax+Gs4jzDr4mQTcN05Tyxg68Dkrnq1f5JpAIEdVrPuaS23LVpuqCK3u0dfTg
+         D2vu46L1cGCZ35yY27RFh06Pd9DZ59L/s2E8UoEx8kp62EhZ/n/FaM2m839fcw9Wj3GC
+         Pldm1/vxfhdT2zTz4oaDr27gUUyK15T/7ZpqBeF/VJmBb2NwNZxFdOvCI9ZRmC5DOvPt
+         3veGEt1ua3DjbE45L7HcQW+1aQ5sO//hutSZCa9Qpm7LNF6TaF3Gl8mHkqhkyNi53aJb
+         tGMExckg3B2C5HbAlmWqPmLGYE18TlrHXhADGWaA2SXfO5U3bKUIlXh5MRm4dRNeo/9a
+         DzlA==
+X-Gm-Message-State: AOAM5309vJjET6ibWAfb8f44gO+14Y3ZhIQHFOoSppW12WJGwsNaq6Gn
+        GVuF5dnPi/VTYs0SFo4H4r7lFzB69yo=
+X-Google-Smtp-Source: ABdhPJwYOQYW+DLtmEipeBoU8JAOfR2j+jhgl2CJGFYZXuwNwDTvK1p0Ec2CwRYofuAFV0Wcslpcwg==
+X-Received: by 2002:ac2:4e95:0:b0:471:ee3b:6534 with SMTP id o21-20020ac24e95000000b00471ee3b6534mr808665lfr.291.1650646285373;
+        Fri, 22 Apr 2022 09:51:25 -0700 (PDT)
 Received: from otyshchenko.router ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id n2-20020a056512310200b0046e2f507a3asm279742lfb.167.2022.04.22.09.51.23
+        by smtp.gmail.com with ESMTPSA id n2-20020a056512310200b0046e2f507a3asm279742lfb.167.2022.04.22.09.51.24
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Apr 2022 09:51:23 -0700 (PDT)
+        Fri, 22 Apr 2022 09:51:24 -0700 (PDT)
 From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
-To:     xen-devel@lists.xenproject.org,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
         Stefano Stabellini <sstabellini@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Christoph Hellwig <hch@infradead.org>
-Subject: [PATCH V1 4/6] dt-bindings: Add xen,dev-domid property description for xen-grant DMA ops
-Date:   Fri, 22 Apr 2022 19:51:01 +0300
-Message-Id: <1650646263-22047-5-git-send-email-olekstysh@gmail.com>
+Subject: [PATCH V1 5/6] xen/grant-dma-ops: Retrieve the ID of backend's domain for DT devices
+Date:   Fri, 22 Apr 2022 19:51:02 +0300
+Message-Id: <1650646263-22047-6-git-send-email-olekstysh@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
 References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
@@ -78,71 +74,102 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-Introduce Xen specific binding for the virtualized device (e.g. virtio)
-to be used by Xen grant DMA-mapping layer in the subsequent commit.
+Use the presence of recently introduced "xen,dev-domid" property
+in the device node as a clear indicator of enabling Xen grant
+mappings scheme for that device and read the ID of Xen domain where
+the corresponding backend resides. The ID (domid) is used as
+an argument to the Xen grant mapping APIs.
 
-This binding indicates that Xen grant mappings scheme needs to be
-enabled for the device which DT node contains that property and specifies
-the ID of Xen domain where the corresponding backend resides. The ID
-(domid) is used as an argument to the grant mapping APIs.
+Also introduce xen_is_grant_dma_device() to check whether xen-grant
+DMA ops need to be set for a passed device.
 
-This is needed for the option to restrict memory access using Xen grant
-mappings to work which primary goal is to enable using virtio devices
-in Xen guests.
+Remove the hardcoded domid 0 in xen_grant_setup_dma_ops().
 
 Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 ---
 Changes RFC -> V1:
-   - update commit subject/description and text in description
-   - move to devicetree/bindings/arm/
+   - new patch, split required changes from commit:
+    "[PATCH 4/6] virtio: Various updates to xen-virtio DMA ops layer"
+   - update checks in xen_virtio_setup_dma_ops() to only support
+     DT devices for now
+   - remove the "virtio,mmio" check from xen_is_virtio_device()
+   - remane everything according to the new naming scheme:
+     s/virtio/grant_dma
 ---
- .../devicetree/bindings/arm/xen,dev-domid.yaml     | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
+ drivers/xen/grant-dma-ops.c | 25 ++++++++++++++++++-------
+ include/xen/xen-ops.h       |  5 +++++
+ 2 files changed, 23 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
-new file mode 100644
-index 00000000..ef0f747
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
-@@ -0,0 +1,37 @@
-+# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/xen,dev-domid.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+index 0e69aa8..70d5d77 100644
+--- a/drivers/xen/grant-dma-ops.c
++++ b/drivers/xen/grant-dma-ops.c
+@@ -66,11 +66,6 @@ static struct xen_grant_dma_data *find_xen_grant_dma_data(struct device *dev)
+  * Such a DMA address is formed by using the grant reference as a frame
+  * number and setting the highest address bit (this bit is for the backend
+  * to be able to distinguish it from e.g. a mmio address).
+- *
+- * Note that for now we hard wire dom0 to be the backend domain. In order
+- * to support any domain as backend we'd need to add a way to communicate
+- * the domid of this backend, e.g. via Xenstore, via the PCI-device's
+- * config space or DT/ACPI.
+  */
+ static void *xen_grant_dma_alloc(struct device *dev, size_t size,
+ 				 dma_addr_t *dma_handle, gfp_t gfp,
+@@ -277,6 +272,16 @@ static const struct dma_map_ops xen_grant_dma_ops = {
+ 	.dma_supported = xen_grant_dma_supported,
+ };
+ 
++bool xen_is_grant_dma_device(struct device *dev)
++{
++	/* XXX Handle only DT devices for now */
++	if (!dev->of_node)
++		return false;
 +
-+title: Xen specific binding for the virtualized device (e.g. virtio)
++	return of_property_read_bool(dev->of_node, "xen,dev-domid");
++}
++EXPORT_SYMBOL_GPL(xen_is_grant_dma_device);
 +
-+maintainers:
-+  - Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+ void xen_grant_setup_dma_ops(struct device *dev)
+ {
+ 	struct xen_grant_dma_data *data;
+@@ -288,8 +293,14 @@ void xen_grant_setup_dma_ops(struct device *dev)
+ 		return;
+ 	}
+ 
+-	/* XXX The dom0 is hardcoded as the backend domain for now */
+-	dev_domid = 0;
++	/* XXX ACPI and PCI devices unsupported for now */
++	if (dev_is_pci(dev) || !dev->of_node)
++		goto err;
 +
-+select: true
-+
-+description:
-+  This binding indicates that Xen grant mappings scheme needs to be enabled
-+  for that device and specifies the ID of Xen domain where the corresponding
-+  device (backend) resides. This is needed for the option to restrict memory
-+  access using Xen grant mappings to work.
-+
-+properties:
-+  xen,dev-domid:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      The domid (domain ID) of the domain where the device (backend) is running.
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    virtio_block@3000 {
-+            compatible = "virtio,mmio";
-+            reg = <0x3000 0x100>;
-+            interrupts = <41>;
-+
-+            /* The device is located in Xen domain with ID 1 */
-+            xen,dev-domid = <1>;
-+    };
++	if (of_property_read_u32(dev->of_node, "xen,dev-domid", &dev_domid)) {
++		dev_err(dev, "xen,dev-domid property is not present\n");
++		goto err;
++	}
+ 
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data) {
+diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
+index 4f9fad5..62be9dc 100644
+--- a/include/xen/xen-ops.h
++++ b/include/xen/xen-ops.h
+@@ -223,10 +223,15 @@ static inline void xen_preemptible_hcall_end(void) { }
+ 
+ #ifdef CONFIG_XEN_GRANT_DMA_OPS
+ void xen_grant_setup_dma_ops(struct device *dev);
++bool xen_is_grant_dma_device(struct device *dev);
+ #else
+ static inline void xen_grant_setup_dma_ops(struct device *dev)
+ {
+ }
++static inline bool xen_is_grant_dma_device(struct device *dev)
++{
++	return false;
++}
+ #endif /* CONFIG_XEN_GRANT_DMA_OPS */
+ 
+ #endif /* INCLUDE_XEN_OPS_H */
 -- 
 2.7.4
 

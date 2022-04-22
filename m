@@ -2,104 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452C250AC9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 02:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0A250ACA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 02:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442865AbiDVAD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 20:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S1442556AbiDVALZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 20:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441834AbiDVADw (ORCPT
+        with ESMTP id S229892AbiDVALW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 20:03:52 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E460144769;
-        Thu, 21 Apr 2022 17:00:59 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id n8so7203855plh.1;
-        Thu, 21 Apr 2022 17:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=zNM0T6G9nbgHrNZ4fTkXwyWCBaHcehFw/2xC4YUFDsI=;
-        b=EuvVsx4ZgPslFCb7gOV55CeCnLpdDVKzvax8LPd7QTAK+3cU87Nftp2h7LeD7u3x2U
-         PO69KJYfLa71urQQP2eN+4+QzGZOFbUrNStJDozSoWX4l5jGuO1fYDQUPM7oTzQ8wB2U
-         8EIgEV6FSttJlevNQj86csduSGRTjcTwZHEIHMy9jGjOczOnergao1IJkSzCCnshkNPJ
-         Py6NTTy2g3djoSt3B+mT0dIwNsW/H2Eqoy9JrURvzKTT9fe9QNKppdTpHmWnLEPGs5gR
-         mcaxAyyi41329d31VgPJuKePYtKsinZGMVLpeuN/3ZZvqvZv6ZUF8piVfQllRNkVMPdm
-         7ZLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=zNM0T6G9nbgHrNZ4fTkXwyWCBaHcehFw/2xC4YUFDsI=;
-        b=4HnZN7U4hdqGNz2gxOt8cs4uMQhPhHWINIIi229/C8bJf0VHPpeotkrASIZQVu5SD+
-         29/ZmnGL55SEpj4luZPkl9u/IDXg3EEliIXD65sW6l1eRUMCYKpNH9jTTCPR2ro1FP4/
-         Sw7Jy+ZTRWsC1dRz8TjxreC9HHaBYT33kq9tXbcPuUNxd1YHMFkGtObGvXRBH7RpvJe2
-         PAfMxjlNlAlrbnQEhdXBHfMBXGJeWoC/8xxuehwBuAFmdZ+JBmTzKovtq5OeCtwHZJ5F
-         6dBZ9MxRIff1TYTMxUrgnJxBLgacFLc9R9HdN7P+wuMUTzvwfMYSATnRWTzbn+R3kBFb
-         ONHA==
-X-Gm-Message-State: AOAM530i/cMQ54mTDXH5D/Fql11fBRUh4n9+wa4q5ZSfoePjpwt5YESz
-        9wjQigu0C9OugzHUdp7jl3g=
-X-Google-Smtp-Source: ABdhPJxz3NmXXbUUbQ3NvykiAKXEknpp47eUrgOLe/3aWtrn3sSIrFY8IHtbDQGUfcjACG6SN923fA==
-X-Received: by 2002:a17:902:ab56:b0:15a:ccc7:a311 with SMTP id ij22-20020a170902ab5600b0015accc7a311mr1722336plb.22.1650585659276;
-        Thu, 21 Apr 2022 17:00:59 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:15fa])
-        by smtp.gmail.com with ESMTPSA id ck20-20020a17090afe1400b001cd4989ff3dsm4180906pjb.4.2022.04.21.17.00.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 17:00:58 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 21 Apr 2022 14:00:56 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>, cgroups@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
-Subject: Re: [PATCH] cgroup: don't queue css_release_work if one already
- pending
-Message-ID: <YmHwOAdGY2Lwl+M3@slm.duckdns.org>
-References: <20220412192459.227740-1-tadeusz.struk@linaro.org>
- <20220414164409.GA5404@blackbody.suse.cz>
+        Thu, 21 Apr 2022 20:11:22 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DBB36E1D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650586110; x=1682122110;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mBJDtELuPCza0eStAAvEWIGMUaBt11VumJAn0NF+W/Y=;
+  b=gwN6AqQgInVj0DOiAUIQ1FteyR6fVeRnvHk+C7hG3oedkkbedApgfa30
+   XwzJT1FQEdrFgLypbhEC9I06SkLWEAXmYQR6335oZqRsE5Ik0edPVXdrO
+   lBh6G/m8qx12iontqv6kiO/rX5Goboyuo16gEZCz6AWKC5W+iZGKJvr9M
+   T01IZ5+5Qqx7Ag5IhQ+3bGxYFW7GtXUZEl2S9Ua54LSHRgO4h9hwFBezR
+   VgeSBJdASWBBgbiRzYg/VGnCwqVDoBsjESivZ/rsCCRd0RI40GFMbwF27
+   GXJHuvphkIaAEoLR+CxFvNlEEQlvoQKlXCfG7QcRXONkzONNlovqjAjGe
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264294156"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="264294156"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 17:08:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="593905704"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 21 Apr 2022 17:08:28 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhgqZ-0008za-H8;
+        Fri, 22 Apr 2022 00:08:27 +0000
+Date:   Fri, 22 Apr 2022 08:07:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/tdx] BUILD SUCCESS
+ 5af14c29f7a0e6d1fcee44c4ed4a2d12a49c4a43
+Message-ID: <6261f1d8.7X3nEiWBW4Gg0efG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220414164409.GA5404@blackbody.suse.cz>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 06:44:09PM +0200, Michal Koutný wrote:
-> I suspect the double-queuing is a result of the fact that there exists
-> only the single reference to the css->refcnt. I.e. it's
-> percpu_ref_kill_and_confirm()'d and released both at the same time.
-> 
-> (Normally (when not killing the last reference), css->destroy_work reuse
-> is not a problem because of the sequenced chain
-> css_killed_work_fn()->css_put()->css_release().)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/tdx
+branch HEAD: 5af14c29f7a0e6d1fcee44c4ed4a2d12a49c4a43  x86/tdx: Annotate a noreturn function
 
-If this is the case, we need to hold an extra reference to be put by the
-css_killed_work_fn(), right?
+elapsed time: 730m
 
-Thanks.
+configs tested: 101
+configs skipped: 84
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arc                                 defconfig
+powerpc                     asp8347_defconfig
+sh                           se7712_defconfig
+arm                        mini2440_defconfig
+sparc                       sparc32_defconfig
+arm                        keystone_defconfig
+powerpc                  storcenter_defconfig
+mips                           jazz_defconfig
+xtensa                  audio_kc705_defconfig
+powerpc                      tqm8xx_defconfig
+sh                        edosk7705_defconfig
+sparc64                             defconfig
+arm                          iop32x_defconfig
+arm                         assabet_defconfig
+mips                        bcm47xx_defconfig
+microblaze                          defconfig
+xtensa                  cadence_csp_defconfig
+powerpc                      arches_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220421
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+arc                  randconfig-r043-20220421
+s390                 randconfig-r044-20220421
+riscv                randconfig-r042-20220421
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+riscv                randconfig-c006-20220421
+mips                 randconfig-c004-20220421
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+arm                  randconfig-c002-20220421
+powerpc              randconfig-c003-20220421
+powerpc                 mpc8313_rdb_defconfig
+arm                           spitz_defconfig
+hexagon                          alldefconfig
+arm                     davinci_all_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0291150BBA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C65050BBAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449432AbiDVP2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S1449430AbiDVP3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449453AbiDVP2H (ORCPT
+        with ESMTP id S1379791AbiDVP3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:28:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273E79FF9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:25:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9AD4B8311E
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:25:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E1FC385A4;
-        Fri, 22 Apr 2022 15:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650641110;
-        bh=bFBOnSSd8Z3aG2uTe1m7A8Ep/yiRRRcDKmvE7q1lsE4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CeHaUfuiA2aZG9aEA9DCeUFUzp+UxYVb46csOqekR/UVAFuI9S/YOSBI8RicbiuE7
-         SVs5rgrOo58K9ZQ5Rdjyo59KpP1eA0qowgLu0B3r6KkKdWyz+J+Kwr+C7+OP48Y1zT
-         gQnTnV6sbRYBfkKI0pZAIxnLP1rYYP5OyP5gy0io=
-Date:   Fri, 22 Apr 2022 17:25:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Li Li <dualli@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] binder: add BINDER_GET_EXTENDED_ERROR ioctl
-Message-ID: <YmLI03OT6st9fcQD@kroah.com>
-References: <20220421042040.759068-1-cmllamas@google.com>
+        Fri, 22 Apr 2022 11:29:05 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00F037A1C
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:26:10 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ef5380669cso88917787b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=cendmS9M+hafp0sRCCph1x27cQg8ck+RUugsVgjF93A=;
+        b=HPCC0BoCw6ykEbCKdUPsUuhud+Jm8fA9JvYHPoufofQHEikiMGHEce8K5EdVxKgzZM
+         22I4Bt6pTXn6zLaqg9gaYYClTALy34p/wVztFYCelOCw30uw4NtEag8FqiiUpAElH6l1
+         1ujvUe3ZWLTokxjOloGgNWM5PxXCmn2CEwWbopFOGw90+xIHwPtzL52v5a821eWiCDM5
+         zZJYWc6wRTjMEtgoTyLhBsfWA4cLzgxecrH04Ykp93dtLXPoXkxsk56oN0YD7A6U8KPv
+         gQGAs8m5+9CmS0//DfKmYoZMAiyYHDkQViB/oKY8Z0q115JRkVfGSueOCuYvhDTuamyY
+         bKVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=cendmS9M+hafp0sRCCph1x27cQg8ck+RUugsVgjF93A=;
+        b=1Q3n1ozcFcP7M/GNLIDefUjtPVEa3rsbttd3C6I6HEHzamiLZy4g05+WM6cI+/v2nY
+         ku6rkP3HsgCh9IQ7KT7A4dUh2c9V2RGaflUINr7/hLcK733pqfFSzWZXlkZ4NwTtAWG1
+         4Y2DxM5O6gSIed7yaNZTY9o4P4QGUZ6BBSCklyxnUBytdFEhpVb9n8qnTcqIHSRTlfwS
+         XgX3omH04zVTe1fl99NPe9N0c8rAkZi1Uqjnqpl5Tlb659m8WY4NJFLSl61sy9bhmQPy
+         IOJz51QPOOLbEWk7f3u9wNOtbu+xy/eEGvPcLlhkfEKZVDEt/sRndraB2E5Bq4p2M+cw
+         vzbw==
+X-Gm-Message-State: AOAM531s+/CYZ2EEbLq2rKA0zKgf6XcZBFEXj14bLlNuZF/BJE1oqtcN
+        FjmFtD1gPeNKLaA8USh3SgVqJvip2IL5V02xotApNQ==
+X-Google-Smtp-Source: ABdhPJxKDFi4fdtFBUxSSp/n3JUrQcugRePBV3YZJvmejB6Lum1ef3U68ixfHRnQTgqBd5TBZs1hBXbnJLh+d8p3vb0=
+X-Received: by 2002:a81:9210:0:b0:2f4:d8f7:98e9 with SMTP id
+ j16-20020a819210000000b002f4d8f798e9mr5376228ywg.265.1650641169866; Fri, 22
+ Apr 2022 08:26:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421042040.759068-1-cmllamas@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 22 Apr 2022 20:55:58 +0530
+Message-ID: <CA+G9fYu8GoJ1-Tf=-LHFGTvuHdjABLWSGH=pfxTojwEXSjxTbw@mail.gmail.com>
+Subject: OF: ERROR: Bad of_node_put() on /ocp/interconnect@4a000000/segment@0/target-module@8000/cm_core@0/clock@c00/clock@0
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        dev.kurt@vandijck-laurijssen.be,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,223 +69,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 04:20:36AM +0000, Carlos Llamas wrote:
-> Provide a userspace mechanism to pull precise error information upon
-> failed operations. Extending the current error codes returned by the
-> interfaces allows userspace to better determine the course of action.
-> This could be for instance, retrying a failed transaction at a later
-> point and thus offloading the error handling from the driver.
-> 
-> Some of the elements for logging failed transactions and similar are
-> folded into this new logic to avoid duplication. Such is the case for
-> error line numbers, which become irrelevant after assigning individual
-> error messages instead.
-> 
-> This patch also adds BINDER_GET_EXTENDED_ERROR to the binderfs feature
-> list, to help userspace determine if the new ioctl is supported by the
-> driver.
+Linux next-20220412 booting on arm beagle board x15 device found the
+following warnings.
+This is still happening on today's linux next-20220422.
 
-Hint, when you say "also" in a changelog text, that's a hint that this
-should be more than one patch.  The last thing should be a separate
-change, right?
+[    0.000000] Linux version 5.18.0-rc2-next-20220412
+(tuxmake@tuxmake) (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1
+20210110, GNU ld (GNU Binutils for Debian) 2.35.2) #1 SMP @1649744781
+[    0.000000] CPU: ARMv7 Processor [412fc0f2] revision 2 (ARMv7), cr=10c5387d
+[    0.000000] CPU: div instructions available: patching division code
+[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, PIPT instruction cache
+[    0.000000] OF: fdt: Machine model: TI AM5728 BeagleBoard-X15
+[    0.000000] Memory policy: Data cache writealloc
+[    0.000000] efi: UEFI not found.
+[    0.000000] Reserved memory: created CMA memory pool at 0x95800000,
+size 56 MiB
+[    0.000000] OF: reserved mem: initialized node
+ipu2-memory@95800000, compatible id shared-dma-pool
+[    0.000000] Reserved memory: created CMA memory pool at 0x99000000,
+size 64 MiB
+[    0.000000] OF: reserved mem: initialized node
+dsp1-memory@99000000, compatible id shared-dma-pool
+[    0.000000] Reserved memory: created CMA memory pool at 0x9d000000,
+size 32 MiB
+[    0.000000] OF: reserved mem: initialized node
+ipu1-memory@9d000000, compatible id shared-dma-pool
+[    0.000000] Reserved memory: created CMA memory pool at 0x9f000000,
+size 8 MiB
+[    0.000000] OF: reserved mem: initialized node
+dsp2-memory@9f000000, compatible id shared-dma-pool
+[    0.000000] cma: Reserved 64 MiB at 0xfb800000
+[    0.000000] OMAP4: Map 0xafe00000 to (ptrval) for dram barrier
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000080000000-0x00000000afdfffff]
+[    0.000000]   Normal   empty
+[    0.000000]   HighMem  [mem 0x00000000afe00000-0x00000000ffffefff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000afdfffff]
+[    0.000000]   node   0: [mem 0x00000000b0000000-0x00000000ffffefff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000000ffffefff]
+[    0.000000] On node 0, zone HighMem: 512 pages in unavailable ranges
+[    0.000000] DRA752 ES2.0
+[    0.000000] percpu: Embedded 16 pages/cpu s35028 r8192 d22316 u65536
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 522051
+[    0.000000] Kernel command line: console=ttyS2,115200n8
+root=PARTUUID=008ff1a4-d1d9-294a-89cd-d80f952045d9 rw rootfstype=ext4
+rootwait
+[    0.000000] Dentry cache hash table entries: 131072 (order: 7,
+524288 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 65536 (order: 6, 262144
+bytes, linear)
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Memory: 1812440K/2095100K available (16384K kernel
+code, 2662K rwdata, 8720K rodata, 2048K init, 649K bss, 53284K
+reserved, 229376K cma-reserved, 1245180K highmem)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+[    0.000000] ftrace: allocating 59389 entries in 175 pages
+[    0.000000] ftrace: allocated 174 pages with 5 groups
+[    0.000000] trace event string verifier disabled
+[    0.000000] rcu: Hierarchical RCU implementation.
+[    0.000000] rcu: RCU event tracing is enabled.
+[    0.000000] rcu: RCU restricting CPUs from NR_CPUS=16 to nr_cpu_ids=2.
+[    0.000000] Rude variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay
+is 10 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+[    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+[    0.000000] GIC: Using split EOI/Deactivate mode
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] kfence: initialized - using 2097152 bytes for 255
+objects at 0x(ptrval)-0x(ptrval)
+[    0.000000] random: get_random_bytes called from
+start_kernel+0x54c/0x6fc with crng_init=0
+[    0.000000] ------------[ cut here ]------------
+[    0.000000] WARNING: CPU: 0 PID: 0 at lib/refcount.c:25 kobject_get+0x9c/0xa0
+[    0.000000] refcount_t: addition on 0; use-after-free.
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+5.18.0-rc2-next-20220412 #1
+[    0.000000] Hardware name: Generic DRA74X (Flattened Device Tree)
+[    0.000000]  unwind_backtrace from show_stack+0x18/0x1c
+[    0.000000]  show_stack from dump_stack_lvl+0x58/0x70
+[    0.000000]  dump_stack_lvl from __warn+0xd0/0x144
+[    0.000000]  __warn from warn_slowpath_fmt+0x98/0xbc
+[    0.000000]  warn_slowpath_fmt from kobject_get+0x9c/0xa0
+[    0.000000]  kobject_get from of_node_get+0x1c/0x24
+[    0.000000]  of_node_get from of_fwnode_get+0x3c/0x48
+[    0.000000]  of_fwnode_get from fwnode_get_nth_parent+0x34/0x104
+[    0.000000]  fwnode_get_nth_parent from fwnode_full_name_string+0x34/0xa0
+[    0.000000]  fwnode_full_name_string from device_node_string+0x5fc/0x6c8
+[    0.000000]  device_node_string from pointer+0x3c8/0x670
+[    0.000000]  pointer from vsnprintf+0x22c/0x3cc
+[    0.000000]  vsnprintf from vprintk_store+0x114/0x43c
+[    0.000000]  vprintk_store from vprintk_emit+0x78/0x2bc
+[    0.000000]  vprintk_emit from vprintk_default+0x28/0x30
+[    0.000000]  vprintk_default from _printk+0x30/0x54
+[    0.000000]  _printk from of_node_release+0x124/0x12c
+[    0.000000]  of_node_release from kobject_put+0xc4/0x294
+[    0.000000]  kobject_put from ti_dt_clocks_register+0x284/0x32c
+[    0.000000]  ti_dt_clocks_register from dra7xx_dt_clk_init+0x18/0x11c
+[    0.000000]  dra7xx_dt_clk_init from omap5_realtime_timer_init+0x10/0x21c
+[    0.000000]  omap5_realtime_timer_init from start_kernel+0x560/0x6fc
+[    0.000000]  start_kernel from 0x0
+[    0.000000] ---[ end trace 0000000000000000 ]---
+login-action: exception
+#
+[    0.000000] ------------[ cut #
+[login-action] Waiting for messages, (timeout 00:14:33)
+here ]------------
+[    0.000000] WARNING: CPU: 0 PID: 0 at lib/refcount.c:28
+fwnode_get_nth_parent+0x50/0x104
+[    0.000000] refcount_t: underflow; use-after-free.
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W
+  5.18.0-rc2-next-20220412 #1
+[    0.000000] Hardware name: Generic DRA74X (Flattened Device Tree)
+[    0.000000]  unwind_backtrace from show_stack+0x18/0x1c
+[    0.000000]  show_stack from dump_stack_lvl+0x58/0x70
+[    0.000000]  dump_stack_lvl from __warn+0xd0/0x144
+[    0.000000]  __warn from warn_slowpath_fmt+0x98/0xbc
+[    0.000000]  warn_slowpath_fmt from fwnode_get_nth_parent+0x50/0x104
+[    0.000000]  fwnode_get_nth_parent from fwnode_full_name_string+0x34/0xa0
+[    0.000000]  fwnode_full_name_string from device_node_string+0x5fc/0x6c8
+[    0.000000]  device_node_string from pointer+0x3c8/0x670
+[    0.000000]  pointer from vsnprintf+0x22c/0x3cc
+[    0.000000]  vsnprintf from vprintk_store+0x114/0x43c
+[    0.000000]  vprintk_store from vprintk_emit+0x78/0x2bc
+[    0.000000]  vprintk_emit from vprintk_default+0x28/0x30
+[    0.000000]  vprintk_default from _printk+0x30/0x54
+[    0.000000]  _printk from of_node_release+0x124/0x12c
+[    0.000000]  of_node_release from kobject_put+0xc4/0x294
+[    0.000000]  kobject_put from ti_dt_clocks_register+0x284/0x32c
+[    0.000000]  ti_dt_clocks_register from dra7xx_dt_clk_init+0x18/0x11c
+[    0.000000]  dra7xx_dt_clk_init from omap5_realtime_timer_init+0x10/0x21c
+[    0.000000]  omap5_realtime_timer_init from start_kernel+0x560/0x6fc
+[    0.000000]  start_kernel from 0x0
+[    0.000000] ---[ end trace 0000000000000000 ]---
+login-action: exception
+#
+[    0.000000] ------------[ cut here ]--------#
+[login-action] Waiting for messages, (timeout 00:14:33)
+----
+[    0.000000] WARNING: CPU: 0 PID: 0 at lib/refcount.c:22 kobject_get+0x88/0xa0
+[    0.000000] refcount_t: saturated; leaking memory.
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W
+  5.18.0-rc2-next-20220412 #1
+[    0.000000] Hardware name: Generic DRA74X (Flattened Device Tree)
+[    0.000000]  unwind_backtrace from show_stack+0x18/0x1c
+[    0.000000]  show_stack from dump_stack_lvl+0x58/0x70
+[    0.000000]  dump_stack_lvl from __warn+0xd0/0x144
+[    0.000000]  __warn from warn_slowpath_fmt+0x98/0xbc
+[    0.000000]  warn_slowpath_fmt from kobject_get+0x88/0xa0
+[    0.000000]  kobject_get from of_node_get+0x1c/0x24
+[    0.000000]  of_node_get from of_fwnode_get+0x3c/0x48
+[    0.000000]  of_fwnode_get from fwnode_get_nth_parent+0x34/0x104
+[    0.000000]  fwnode_get_nth_parent from fwnode_full_name_string+0x34/0xa0
+[    0.000000]  fwnode_full_name_string from device_node_string+0x5fc/0x6c8
+[    0.000000]  device_node_string from pointer+0x3c8/0x670
+[    0.000000]  pointer from vsnprintf+0x22c/0x3cc
+[    0.000000]  vsnprintf from vprintk_store+0x114/0x43c
+[    0.000000]  vprintk_store from vprintk_emit+0x78/0x2bc
+[    0.000000]  vprintk_emit from vprintk_default+0x28/0x30
+[    0.000000]  vprintk_default from _printk+0x30/0x54
+[    0.000000]  _printk from of_node_release+0x124/0x12c
+[    0.000000]  of_node_release from kobject_put+0xc4/0x294
+[    0.000000]  kobject_put from ti_dt_clocks_register+0x284/0x32c
+[    0.000000]  ti_dt_clocks_register from dra7xx_dt_clk_init+0x18/0x11c
+[    0.000000]  dra7xx_dt_clk_init from omap5_realtime_timer_init+0x10/0x21c
+[    0.000000]  omap5_realtime_timer_init from start_kernel+0x560/0x6fc
+[    0.000000]  start_kernel from 0x0
+[    0.000000] ---[ end trace 0000000000000000 ]---
+login-action: exception
+#
+[    0.000000] OF: ERROR: Bad of_node_put() on
+/ocp/interconnect@4a000000/segment@0/targe#
+[login-action] Waiting for messages, (timeout 00:14:33)
+t-module@8000/cm_core@0/clock@c00/clock@0
+[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W
+  5.18.0-rc2-next-20220412 #1
+[    0.000000] Hardware name: Generic DRA74X (Flattened Device Tree)
+[    0.000000]  unwind_backtrace from show_stack+0x18/0x1c
+[    0.000000]  show_stack from dump_stack_lvl+0x58/0x70
+[    0.000000]  dump_stack_lvl from kobject_put+0xc4/0x294
+[    0.000000]  kobject_put from ti_dt_clocks_register+0x284/0x32c
+[    0.000000]  ti_dt_clocks_register from dra7xx_dt_clk_init+0x18/0x11c
+[    0.000000]  dra7xx_dt_clk_init from omap5_realtime_timer_init+0x10/0x21c
+[    0.000000]  omap5_realtime_timer_init from start_kernel+0x560/0x6fc
+[    0.000000]  start_kernel from 0x0
+[    0.000000] OF: ERROR: Bad of_node_put() on
+/ocp/interconnect@4a000000/segment@0/target-module@8000/cm_core@0/clock@1100/clock@20
+[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W
+  5.18.0-rc2-next-20220412 #1
+[    0.000000] Hardware name: Generic DRA74X (Flattened Device Tree)
+[    0.000000]  unwind_backtrace from show_stack+0x18/0x1c
+[    0.000000]  show_stack from dump_stack_lvl+0x58/0x70
+[    0.000000]  dump_stack_lvl from kobject_put+0xc4/0x294
+[    0.000000]  kobject_put from ti_dt_clocks_register+0x284/0x32c
+[    0.000000]  ti_dt_clocks_register from dra7xx_dt_clk_init+0x18/0x11c
+[    0.000000]  dra7xx_dt_clk_init from omap5_realtime_timer_init+0x10/0x21c
+[    0.000000]  omap5_realtime_timer_init from start_kernel+0x560/0x6fc
+[    0.000000]  start_kernel from 0x0
+[    0.000000] OF: ERROR: Bad of_node_put() on
+/ocp/interconnect@4ae00000/segment@0/target-module@6000/prm@0/clock@1800/clock@20
+[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W
+  5.18.0-rc2-next-20220412 #1
+[    0.000000] Hardware name: Generic DRA74X (Flattened Device Tree)
 
 
-> 
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
-> ---
->  drivers/android/binder.c            | 355 +++++++++++++++-------------
->  drivers/android/binder_internal.h   |   9 +-
->  drivers/android/binderfs.c          |   8 +
->  include/uapi/linux/android/binder.h |  16 ++
->  4 files changed, 219 insertions(+), 169 deletions(-)
-> 
-> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index 8351c5638880..42a324634f25 100644
-> --- a/drivers/android/binder.c
-> +++ b/drivers/android/binder.c
-> @@ -2697,6 +2697,54 @@ static struct binder_node *binder_get_node_refs_for_txn(
->  	return target_node;
->  }
->  
-> +#define binder_txn_error(x...)		binder_transaction_error(0, x)
-> +#define binder_user_txn_error(x...)	binder_transaction_error(1, x)
-> +static __printf(6, 7) void binder_transaction_error(int user,
-> +				struct binder_transaction_log_entry *e,
-> +				struct binder_extended_error *ee,
-> +				uint32_t command, int32_t param,
-> +				const char *format, ...)
-> +{
-> +	struct va_format vaf;
-> +	va_list args;
-> +
-> +	/* don't override previous error */
-> +	if (command != BR_OK && ee->command != BR_OK)
-> +		return;
-> +
-> +	ee->command = command;
-> +	ee->param = param;
-> +
-> +	va_start(args, format);
-> +	vsnprintf(e->strerr, sizeof(e->strerr), format, args);
-> +
-> +	vaf.va = &args;
-> +	vaf.fmt = format;
-> +	if (user)
-> +		binder_user_error("%d:%d %pV\n",
-> +			e->from_proc, e->from_thread, &vaf);
-> +	else
-> +		binder_debug(BINDER_DEBUG_FAILED_TRANSACTION, "%d:%d %pV\n",
-> +			e->from_proc, e->from_thread, &vaf);
-> +	va_end(args);
-> +}
-> +
-> +static void binder_set_txn_from_error(struct binder_transaction *txn,
-> +				      struct binder_extended_error *ee)
-> +{
-> +	struct binder_thread *from = binder_get_txn_from_and_acq_inner(txn);
-> +
-> +	if (!from)
-> +		return;
-> +
-> +	/* don't override previous error */
-> +	if (ee->command != BR_OK && from->ee.command == BR_OK)
-> +		from->ee = *ee;
-> +
-> +	binder_inner_proc_unlock(from->proc);
-> +	binder_thread_dec_tmpref(from);
-> +}
-> +
->  static void binder_transaction(struct binder_proc *proc,
->  			       struct binder_thread *thread,
->  			       struct binder_transaction_data *tr, int reply,
-> @@ -2716,9 +2764,8 @@ static void binder_transaction(struct binder_proc *proc,
->  	struct binder_node *target_node = NULL;
->  	struct binder_transaction *in_reply_to = NULL;
->  	struct binder_transaction_log_entry *e;
-> +	struct binder_extended_error ee;
->  	uint32_t return_error = 0;
-> -	uint32_t return_error_param = 0;
-> -	uint32_t return_error_line = 0;
->  	binder_size_t last_fixup_obj_off = 0;
->  	binder_size_t last_fixup_min_off = 0;
->  	struct binder_context *context = proc->context;
-> @@ -2741,32 +2788,30 @@ static void binder_transaction(struct binder_proc *proc,
->  	e->data_size = tr->data_size;
->  	e->offsets_size = tr->offsets_size;
->  	strscpy(e->context_name, proc->context->name, BINDERFS_MAX_NAME);
-> +	ee.id = t_debug_id;
-> +	ee.command = BR_OK;
-> +	ee.param = 0;
->  
->  	if (reply) {
->  		binder_inner_proc_lock(proc);
->  		in_reply_to = thread->transaction_stack;
->  		if (in_reply_to == NULL) {
->  			binder_inner_proc_unlock(proc);
-> -			binder_user_error("%d:%d got reply transaction with no transaction stack\n",
-> -					  proc->pid, thread->pid);
-> -			return_error = BR_FAILED_REPLY;
-> -			return_error_param = -EPROTO;
-> -			return_error_line = __LINE__;
-> +			binder_user_txn_error(e, &ee, BR_FAILED_REPLY, -EPROTO,
-> +				"reply with no transaction stack");
->  			goto err_empty_call_stack;
->  		}
->  		if (in_reply_to->to_thread != thread) {
->  			spin_lock(&in_reply_to->lock);
-> -			binder_user_error("%d:%d got reply transaction with bad transaction stack, transaction %d has target %d:%d\n",
-> -				proc->pid, thread->pid, in_reply_to->debug_id,
-> +			binder_user_txn_error(e, &ee, BR_FAILED_REPLY, -EPROTO,
-> +				"bad transaction stack in reply to %d %d:%d",
-> +				in_reply_to->debug_id,
->  				in_reply_to->to_proc ?
->  				in_reply_to->to_proc->pid : 0,
->  				in_reply_to->to_thread ?
->  				in_reply_to->to_thread->pid : 0);
->  			spin_unlock(&in_reply_to->lock);
->  			binder_inner_proc_unlock(proc);
-> -			return_error = BR_FAILED_REPLY;
-> -			return_error_param = -EPROTO;
-> -			return_error_line = __LINE__;
->  			in_reply_to = NULL;
->  			goto err_bad_call_stack;
->  		}
-> @@ -2777,20 +2822,17 @@ static void binder_transaction(struct binder_proc *proc,
->  		if (target_thread == NULL) {
->  			/* annotation for sparse */
->  			__release(&target_thread->proc->inner_lock);
-> -			return_error = BR_DEAD_REPLY;
-> -			return_error_line = __LINE__;
-> +			binder_txn_error(e, &ee, BR_DEAD_REPLY, 0,
-> +				"reply target not found");
->  			goto err_dead_binder;
->  		}
->  		if (target_thread->transaction_stack != in_reply_to) {
-> -			binder_user_error("%d:%d got reply transaction with bad target transaction stack %d, expected %d\n",
-> -				proc->pid, thread->pid,
-> +			binder_user_txn_error(e, &ee, BR_FAILED_REPLY, -EPROTO,
-> +				"bad target transaction stack %d vs %d",
->  				target_thread->transaction_stack ?
->  				target_thread->transaction_stack->debug_id : 0,
->  				in_reply_to->debug_id);
->  			binder_inner_proc_unlock(target_thread->proc);
-> -			return_error = BR_FAILED_REPLY;
-> -			return_error_param = -EPROTO;
-> -			return_error_line = __LINE__;
->  			in_reply_to = NULL;
->  			target_thread = NULL;
->  			goto err_dead_binder;
-> @@ -2812,15 +2854,15 @@ static void binder_transaction(struct binder_proc *proc,
->  			binder_proc_lock(proc);
->  			ref = binder_get_ref_olocked(proc, tr->target.handle,
->  						     true);
-> -			if (ref) {
-> +			if (ref)
->  				target_node = binder_get_node_refs_for_txn(
->  						ref->node, &target_proc,
->  						&return_error);
-> -			} else {
-> -				binder_user_error("%d:%d got transaction to invalid handle, %u\n",
-> -						  proc->pid, thread->pid, tr->target.handle);
-> -				return_error = BR_FAILED_REPLY;
-> -			}
-> +			else
-> +				binder_user_txn_error(e, &ee, BR_FAILED_REPLY,
-> +					-EINVAL,
-> +					"invalid transaction handle %u",
-> +					tr->target.handle);
->  			binder_proc_unlock(proc);
->  		} else {
->  			mutex_lock(&context->context_mgr_node_lock);
-> @@ -2833,11 +2875,9 @@ static void binder_transaction(struct binder_proc *proc,
->  				return_error = BR_DEAD_REPLY;
->  			mutex_unlock(&context->context_mgr_node_lock);
->  			if (target_node && target_proc->pid == proc->pid) {
-> -				binder_user_error("%d:%d got transaction to context manager from process owning it\n",
-> -						  proc->pid, thread->pid);
-> -				return_error = BR_FAILED_REPLY;
-> -				return_error_param = -EINVAL;
-> -				return_error_line = __LINE__;
-> +				binder_user_txn_error(e, &ee, BR_FAILED_REPLY,
-> +					-EINVAL,
-> +					"forbidden self transaction by context manager");
->  				goto err_invalid_target_handle;
->  			}
->  		}
-> @@ -2845,22 +2885,20 @@ static void binder_transaction(struct binder_proc *proc,
->  			/*
->  			 * return_error is set above
->  			 */
-> -			return_error_param = -EINVAL;
-> -			return_error_line = __LINE__;
-> +			binder_txn_error(e, &ee, return_error, -EINVAL,
-> +				"cannot find target node");
+link:
+https://lkft.validation.linaro.org/scheduler/job/4882391#L2104
 
-You do this a lot, how about making this one commit (first one), and
-then adding the new "back end" to the error stuff in a second commit.
-That would make it much easier to review, first commit does nothing new,
-second one adds the new functionality, and third adds the feature flag.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-thanks,
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: d0c745e7b2d6ce8bcc768b32361ab8ef520821ee
+  git_describe: next-20220412
+  kernel_version: 5.18.0-rc2
+  kernel-config: https://builds.tuxbuild.com/27gbKLQxkCjWcdfqbhpWsh5Ocq0/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/514668403
+  artifact-location: https://builds.tuxbuild.com/27gbKLQxkCjWcdfqbhpWsh5Ocq0
+  toolchain: gcc-10
 
-greg k-h
+
+--
+Linaro LKFT
+https://lkft.linaro.org

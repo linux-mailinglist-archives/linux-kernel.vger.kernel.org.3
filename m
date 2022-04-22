@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FEB50C2ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5734150C410
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbiDVW5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
+        id S234081AbiDVW6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233891AbiDVW47 (ORCPT
+        with ESMTP id S234191AbiDVW5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:56:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CBF19ADAD;
-        Fri, 22 Apr 2022 15:20:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 595F0B832D5;
-        Fri, 22 Apr 2022 22:20:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16240C385AA;
-        Fri, 22 Apr 2022 22:20:53 +0000 (UTC)
-Date:   Fri, 22 Apr 2022 18:20:52 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-input@vger.kernel.org, roman.gushchin@linux.dev
-Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
- heap-allocated strings
-Message-ID: <20220422182052.4994525d@gandalf.local.home>
-In-Reply-To: <20220422215146.i663tn6zzn6blzo3@moria.home.lan>
-References: <20220421234837.3629927-7-kent.overstreet@gmail.com>
-        <20220422042017.GA9946@lst.de>
-        <YmI5yA1LrYrTg8pB@moria.home.lan>
-        <20220422052208.GA10745@lst.de>
-        <YmI/v35IvxhOZpXJ@moria.home.lan>
-        <20220422113736.460058cc@gandalf.local.home>
-        <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
-        <20220422153916.7ebf20c3@gandalf.local.home>
-        <20220422203057.iscsmurtrmwkpwnq@moria.home.lan>
-        <20220422164744.6500ca06@gandalf.local.home>
-        <20220422215146.i663tn6zzn6blzo3@moria.home.lan>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 22 Apr 2022 18:57:40 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931E23420EF
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:21:51 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id e4so10593107oif.2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zshTmKTlwWpNs+bPCyPg2G4xzDcF+pfyEHctS9lyUmM=;
+        b=p18Ea3C4s1iYRhpjXGv+Q/z6sLN27GiKyszpjW0gjWX20QRsSCMVqd4yA/Lh7GOi9g
+         /NZuoRazntRsAsm7WAgnDef7b9pUyzSbPBgJLpfKe4YaPvU0WJ0QR75I/vUhDq4iF6RT
+         QUQKylKyqoeB5ZCAIKx5U/i6opxvjNvTD9dkTdx4Ut2k/jC9uC6xqzQstUbv9ArUTpU5
+         eylxKDHkC64LZd0jHtQ00UXgy1/AShQ8KDXPe60eVxQwS3eWzG5ASX7cvsgM48zY4w1Q
+         +k+q0r3URNAs8mcCu2n5GkmNiYnEkray5b5LPhbWNoTNHhoOnpg7Ib3g+qRBL5oC5/Xx
+         q97w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zshTmKTlwWpNs+bPCyPg2G4xzDcF+pfyEHctS9lyUmM=;
+        b=PhCatgFXQyzd/nTRSpmg0TJ6sH8hM2NzdWHHkhsvCIvi3wNNIusGLDTLH1LN2+7+eS
+         SMOmDdO9Usc+dFzVgi72CIuLe87wy7cMzui6Dm8TVPnvWmpsT+rOPRw9s8UhyZi6qDcw
+         GDbgbwZeSCdsDpaKp0B8Hh8/3kfTQ6ttz54nTjs5nrd5Uo4cXzQpj0MwCqUqN7LMzbCW
+         c87fUpe2MqEjJuEechm7sVjvdC10yWQq00Azxb2OqZahM7Mkwrz6kjKacHqHadDrIMS+
+         IeMsW7om4TjosLJwVku9toAEe+uAzRdk+X7Qwbp6cudvtbAI9RrqMLerFfUinlZre/Et
+         cWXQ==
+X-Gm-Message-State: AOAM531k6TSC6laqO40CNvDezmJTvUrtXZ4dlXF8TeoTyCqD8TN381IZ
+        A2VyZHJbT3ennwhSpnCERYIyzg==
+X-Google-Smtp-Source: ABdhPJy2wkzUusvXDfhRYywzAm+d4ZCyFMdNt0N57JRQDI6OHyUJyvx5APLKi6X+9Gnrlb3M4ed0/A==
+X-Received: by 2002:a05:6808:1828:b0:322:4891:8832 with SMTP id bh40-20020a056808182800b0032248918832mr7699862oib.172.1650666110356;
+        Fri, 22 Apr 2022 15:21:50 -0700 (PDT)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id js4-20020a056870bac400b000e687cdf5adsm1049224oab.55.2022.04.22.15.21.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 15:21:49 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: [PATCH v5 0/7] typec: mux: Introduce support for multiple USB TypeC muxes
+Date:   Fri, 22 Apr 2022 15:23:44 -0700
+Message-Id: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 17:51:46 -0400
-Kent Overstreet <kent.overstreet@gmail.com> wrote:
+This series introduces a level of indirection between the controller's view of
+a typec_mux/switch and the implementation and then expands that to support
+multiple drivers.
 
-> 
-> But it's definitely not an unreasonable idea - I can try it out and see how it
-> turns out. Would you have any objections to making some changes to seq_buf?
+This is needed in order to support devices such as the Qualcomm Snapdragon 888
+HDK, which does muxing and orientation handling in the QMP (USB+DP) PHY and SBU
+muxing in the external FSA4480 chip.
 
-No I don't mind, and that's why I want the coupled, as enhancements or bug
-fixes would happen to both.
+Bjorn Andersson (7):
+  device property: Add helper to match multiple connections
+  device property: Use multi-connection matchers for single case
+  usb: typec: mux: Check dev_set_name() return value
+  usb: typec: mux: Introduce indirection
+  usb: typec: mux: Allow multiple mux_devs per mux
+  dt-bindings: usb: Add binding for fcs,fsa4480
+  usb: typec: mux: Add On Semi fsa4480 driver
 
-> 
->  - You've got size and len as size_t, I've got them as unsigned. Given that we
->    need to be checking for overflow anyways for correctens, I like having them
->    as u32s.
+ .../devicetree/bindings/usb/fcs,fsa4480.yaml  |  72 +++++
+ drivers/base/property.c                       |  96 +++++--
+ drivers/usb/typec/bus.c                       |   2 +-
+ drivers/usb/typec/mux.c                       | 271 +++++++++++++-----
+ drivers/usb/typec/mux.h                       |  12 +-
+ drivers/usb/typec/mux/Kconfig                 |  10 +
+ drivers/usb/typec/mux/Makefile                |   1 +
+ drivers/usb/typec/mux/fsa4480.c               | 218 ++++++++++++++
+ drivers/usb/typec/mux/intel_pmc_mux.c         |   8 +-
+ drivers/usb/typec/mux/pi3usb30532.c           |   8 +-
+ include/linux/property.h                      |   5 +
+ include/linux/usb/typec_mux.h                 |  22 +-
+ 12 files changed, 614 insertions(+), 111 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+ create mode 100644 drivers/usb/typec/mux/fsa4480.c
 
-I had it as size_t as I had planned (and still plan to) make seq_file use
-seq_buf, and seq_file uses size_t. Who knows, perhaps in the future, we may
-have strings that are more than 4GBs. ;-)
+-- 
+2.35.1
 
->  - seq_buf->readpos - it looks like this is only used by seq_buf_to_user(), does
->    it need to be in seq_buf?
-
-Perhaps.
-
->  - in printbufs, I make sure the buffer is always nul-terminated - seems
->    simplest, given that we need to make sure there's always room for the
->    terminating nul anyways.
-
-I'm not against that. It was an optimization, but I never actually
-benchmarked it. But I'm not sure how many fast paths it is used in to
-warrant that kind of optimization over the complexity it can bring for
-users.
-
-
-> 
-> A downside of having printbuf on top of seq_buf is that now we've got two apis
-> that functions can output to - vs. if we modified printbuf by adding a flag for
-> "this is an external buffer, don't reallocate it". That approach would be less
-> code overall, for sure.
-> 
-> Could I get you to look over printbuf and share your thoughts on the different
-> approaches?
-
-Sure, but will have to wait till next week.
-
--- Steve

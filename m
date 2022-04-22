@@ -2,69 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719F150B85E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A72E50B863
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447953AbiDVNZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
+        id S1447944AbiDVN0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447936AbiDVNZT (ORCPT
+        with ESMTP id S232831AbiDVN0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:25:19 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C8158396
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:22:24 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id k14so7368410pga.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:22:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zSqkX7TcWeywMjVGkDaqt4I0CfnOOWaEQNQoX91yxGM=;
-        b=sBqYuPt0XifDj11KJF2ArYF8kstCldmcCL7PC0qnMZN5P49dGeJEdwY9Il5Nbmigcm
-         vXAl+JKru3xK/8jUDHbzqSn+H80jg3PMAQQdnV4OSgs29xcJ9OVKpENSjCfG8FW5m2+y
-         SWHgrwbdOg/S7h2yLDzoYTK3n6rJGFol1s7zAfLq2BVvCleckLrksxLgFlsqPmiy4sF2
-         UV9J2EiGTccRVkxHKPvnRfRWBQn4iV3r6w20PkMg9+7pkiKuLrDljST+RrR+g/v8b5F9
-         EzPK6kBXX454I+61IhfYh3shai7uT7bWal6WUtObQR0UGnW7MRkJkARV22iYTF8Oypw0
-         njWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zSqkX7TcWeywMjVGkDaqt4I0CfnOOWaEQNQoX91yxGM=;
-        b=6W4weP1OIqw5ushO+c1lS76dOtVvGIWUc1ARKNtNN4uJymb4tG5YopLCR7/IbzXtTi
-         iEPz4K/FqBH1Le7jvqllThxY4hl/GQBgxMREgtLv3gkGyl4qcizmzO0+7BOpFB0s+Xdi
-         3XZ8vsiphBKX8osbmevOjW9ggjLGnSDMiDInbNcLkNqcc5AEZL3XWjdiKGbvMF3SQZPJ
-         1f+/q93ip4bmZNvDBAIjBTKkN7e6PVjzQBoiUtv0Q6jMwYRdI6pN9GGnnRpLukPY5LcU
-         gqbi3UhA/0V33PV/e69BPDB4QKQgWdboollBBxJqrwOEsrpnFuoGmMrJTfhOgtbSBIMi
-         j5Uw==
-X-Gm-Message-State: AOAM533mlchJRR/C7rEVuJIIFK0GuczjSGN2aQnKIaZR4EnVOq4kfVrw
-        /Sw4bxrgoc1cUD8KkgoGgImM
-X-Google-Smtp-Source: ABdhPJx6Yzon0UefzWSg/IXHpu2HKWdTxoUKSHKl6fEweWwXW51KugE7J+akdjD2lSXiqst2VNTOMQ==
-X-Received: by 2002:a62:fb0e:0:b0:505:fd9e:9218 with SMTP id x14-20020a62fb0e000000b00505fd9e9218mr5075359pfm.78.1650633744289;
-        Fri, 22 Apr 2022 06:22:24 -0700 (PDT)
-Received: from localhost.localdomain ([117.207.28.196])
-        by smtp.gmail.com with ESMTPSA id g13-20020a62520d000000b0050a923a7754sm2586840pfb.119.2022.04.22.06.22.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 06:22:23 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     martin.petersen@oracle.com, jejb@linux.ibm.com
-Cc:     avri.altman@wdc.com, alim.akhtar@samsung.com,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 5/5] scsi: ufs: qcom: Enable RPM_AUTOSUSPEND for runtime PM
-Date:   Fri, 22 Apr 2022 18:51:40 +0530
-Message-Id: <20220422132140.313390-6-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220422132140.313390-1-manivannan.sadhasivam@linaro.org>
-References: <20220422132140.313390-1-manivannan.sadhasivam@linaro.org>
+        Fri, 22 Apr 2022 09:26:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9832C583A0;
+        Fri, 22 Apr 2022 06:23:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00D7C620A9;
+        Fri, 22 Apr 2022 13:23:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B7BC385A0;
+        Fri, 22 Apr 2022 13:23:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650633827;
+        bh=0wP0O47cfWb7KPvm1ysuIetJ74QEy9EwsCeai68tPXg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=T+v+4H4mDS8vF4/C8h/544QCxf3S1n2ayJsHufZmPEWWfHpKc2qI2/sQs04VsTu6d
+         U7OKVQw2rwyUlKNG4dbb3vbUG7LEAplGB6kGGPm7V0o4LWByWGd6nf1T2pr1emPCzS
+         +kVDWQeYO+Vk57etpOrAvsKpn0RhkxkIgnO7sStJR18MuQlqjlFW3920LlCMx/Itz/
+         MPQKajvRR85mBofGZAoO7NOU9Kp0LyHGRpm58MgqBFPSQefyUuTnGHcfdiR4s+DyFf
+         odDRM7XztGXiqGmJqCu/nggPAkc9r95SCd/YKxG5zl6wjOaSOeAOek6hSzx7J23pAV
+         S34Xep0I1BNUQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     u0084500@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        cy_huang@richtek.com, lgirdwood@gmail.com, alice_chen@richtek.com
+In-Reply-To: <1650610255-6180-1-git-send-email-u0084500@gmail.com>
+References: <1650610255-6180-1-git-send-email-u0084500@gmail.com>
+Subject: Re: [PATCH] regulator: dt-bindings: Revise the rt5190a buck/ldo description
+Message-Id: <165063382544.419666.7006851480891588487.b4-ty@kernel.org>
+Date:   Fri, 22 Apr 2022 14:23:45 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,30 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to allow the block devices to enter autosuspend mode during
-runtime, thereby allowing the ufshcd host driver to also runtime suspend,
-let's make use of the RPM_AUTOSUSPEND flag.
+On Fri, 22 Apr 2022 14:50:55 +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Revise the rt5190a bucks and ldo property description.
+> 
+> 
 
-Without this flag, userspace needs to enable the autosuspend feature of
-the block devices through sysfs.
+Applied to
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/scsi/ufs/ufs-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index 5b9986c63eed..bbcaefd44699 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -879,6 +879,7 @@ static void ufs_qcom_set_caps(struct ufs_hba *hba)
- 	hba->caps |= UFSHCD_CAP_WB_EN;
- 	hba->caps |= UFSHCD_CAP_CRYPTO;
- 	hba->caps |= UFSHCD_CAP_AGGR_POWER_COLLAPSE;
-+	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
- 
- 	if (host->hw_ver.major >= 0x2) {
- 		host->caps = UFS_QCOM_CAP_QUNIPRO |
--- 
-2.25.1
+Thanks!
 
+[1/1] regulator: dt-bindings: Revise the rt5190a buck/ldo description
+      commit: dfd2b37edf7ef469574ef7f36e3a1905ac9ead62
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

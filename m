@@ -2,249 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1346C50B9DC
+	by mail.lfdr.de (Postfix) with ESMTP id DA91850B9DE
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448606AbiDVOSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S1448559AbiDVOTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448566AbiDVOSw (ORCPT
+        with ESMTP id S1448529AbiDVOTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:18:52 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6A85A590;
-        Fri, 22 Apr 2022 07:15:59 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id e28so1057799wra.8;
-        Fri, 22 Apr 2022 07:15:59 -0700 (PDT)
+        Fri, 22 Apr 2022 10:19:14 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B305AECC
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:16:21 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c23so11177109plo.0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:16:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UYWpWQbW1bcVwNgWTRtNC4aBZe02WCeF/oJCbOk791g=;
-        b=DgoD05H175CPG5T7HupqWGMcrRoo/VhsX9QxDoB2eCa8xm2IpZvYw/accHb/yY1knQ
-         OdHqLR1npnt8dfnxu4+/FNCQu0TvedwH6T2YxB3X3RanECqRp35evfVNFo62jMoERknh
-         HAtJZk0ixt5VmMNAusDJA/U7OJealIERnLzPU3XzqwO44w8jPLiLbytXchQeNFOUDUhG
-         0XPwhTGiMU1kRR6XaM8165ItV8hjkxzEK2gvI/lojOX3A5Mpe94oBwCEmsavCPG8Qug+
-         WryHaHEFVUjDbBB543zhmZqSaRsSxXelGwiARVcN7+ddNvmcll9X+f2Ddjt3HwD7l6oX
-         8RXw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mhiX9pOS55YaO3CdrDwpUy6BkzPbq10Xj73NWvQBwAg=;
+        b=vRUi3XTt6AzV9QlheY6fezduSTcEh/sZN3k+dAddNZiw8rhhyhbGXtJLNYs3J/UwD5
+         bRx0NNWnHM1TYIelLSIgCtSpmnbMKDgukzfetN9iXKdtLRwPXB54SYzt6H400lsd3P4D
+         ++PGiqJSRNedibPs1CaxKSPMQyTwkUYyruCII4+3lOh3uWSvP8+idLkPjw5BBA8QJsEi
+         kvO8DlCiTkUMJj9c+3Kb4kPubeS7hxUdkzPshkGtiJXpeZOSSMzbk6sHBs+4HmVJPMRp
+         e9Uz5m7trgk2XIsiSCfl29aZ0LqcmQ7ZWTP8PJh4RgMon1aGFHXpRKjuAUHuYVAvcCcH
+         noKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UYWpWQbW1bcVwNgWTRtNC4aBZe02WCeF/oJCbOk791g=;
-        b=M85GbgZGF2ixhxBBgm5H4NuESmv43GC3eP9dpqyCYzGuz0FajNlfyva2wwJjjEu32+
-         DhgoA7hWc4nt4YRuiqdRYPyAR73VObRqRRTiY5RpUbyqZfPMrBVTNyYhV/x+VqpvDSYD
-         TyWebjUfNsRQptbjysVbYvE7SZpvqq4FXc1yQ41hU19UlzZgBv96d1sOkzYU0h6LDwco
-         j0tUfXHh0VFa9TturOVZUftObjCev0ntXR3xKGdT8dMEICkuJqoOcQJ4LEh26yCrkTJw
-         2UjMVGpgi18MyjmukChdiXTNuGJrGPSriuXm2RDFXLYIba4+/Faww7qQ6RgaidveDYFw
-         Bd6w==
-X-Gm-Message-State: AOAM530/XOO8kVsuHhxaHrMadyjAu1vwB8759JtljnpJGTi640a+EcFM
-        tzY39DO3TFJi+1oA0EZrAqk=
-X-Google-Smtp-Source: ABdhPJxiWo+XuBszVZ0ihkM9EkhcgThKUJXLmHG7rDjT+bQoRLfkSHF4avPHKyvLtQbs3NfJmFIT2w==
-X-Received: by 2002:a5d:4882:0:b0:207:97dd:111c with SMTP id g2-20020a5d4882000000b0020797dd111cmr4174686wrq.115.1650636957655;
-        Fri, 22 Apr 2022 07:15:57 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id i6-20020a0560001ac600b0020a93f75030sm1855803wry.48.2022.04.22.07.15.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 07:15:57 -0700 (PDT)
-Message-ID: <61073ff6-9af0-aa11-3adf-f4275c185732@gmail.com>
-Date:   Fri, 22 Apr 2022 16:15:56 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mhiX9pOS55YaO3CdrDwpUy6BkzPbq10Xj73NWvQBwAg=;
+        b=m5hIAFvszlhsmHPkSBOlgxx9Gco5LQpB3ybbWFUYBYiHQRu76fUHMaGojIBM8BQ9jg
+         MLnUb5UIpSujhjJfG5DVkmouFSZmM8ikR5dv27UM0BFK4lm1u8BizE181wAkL1bXtxqj
+         6/ZRkwX2xkJKVNpo99Ilj/1Nl45Arh0gU/ahrxpXcPJENbMhkfi3d/sxa82Oi2vbJbA8
+         tC16ZFnH/IuvsBkhGPqGUo6yFvm2+Fe0n62r55CUitxsBbLk8NlsB+9k6fZB6duHftTR
+         JbzXnH3C5GtgFVL19IPnpQPOJGeA1Gw3EB7oXdJ4URxjA6qF5SvqZ8WV60hCuLUu+3+j
+         4VBg==
+X-Gm-Message-State: AOAM530c9C2qlrs1XC2E1NETufZ39ermjfNncGXoUW8aZFgWK1fJVQyu
+        8YdkiEvgZ7WAKJE3ss597xWEwm22A5QlQJslIT5UfQ==
+X-Google-Smtp-Source: ABdhPJz8CXOzCAMrumvED5/FUzZpCHykjU/HdiKEagzluI2x9YcnPtdeO8E7Knfq/KSP3T5vLQuff5phq8eDfMmbJXk=
+X-Received: by 2002:a17:903:2352:b0:159:3fa:261 with SMTP id
+ c18-20020a170903235200b0015903fa0261mr4632628plh.21.1650636980753; Fri, 22
+ Apr 2022 07:16:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] arm64: dts: mt8192: Add audio-related nodes
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220419025557.22262-1-allen-kh.cheng@mediatek.com>
- <20220419025557.22262-3-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220419025557.22262-3-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220419010852.452169-1-victor.liu@nxp.com> <20220419010852.452169-2-victor.liu@nxp.com>
+In-Reply-To: <20220419010852.452169-2-victor.liu@nxp.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Fri, 22 Apr 2022 16:16:09 +0200
+Message-ID: <CAG3jFyvAjzHaA_BUJYj18Y-FbY5ROd3iXetAJ+BJaoEjZd6vsQ@mail.gmail.com>
+Subject: Re: [PATCH resend v8 1/5] drm/bridge: nwl-dsi: Set PHY mode in nwl_dsi_mode_set()
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
+        vkoul@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, agx@sigxcpu.org,
+        robert.chiras@nxp.com, martin.kepplinger@puri.sm
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 19/04/2022 04:55, Allen-KH Cheng wrote:
-> Add audio-related nodes in audsys for mt8192 SoC.
->   - Move audsys node in ascending order.
->   - Increase the address range's length from 0x1000 to 0x2000.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-
-Applied, thanks!
-
+On Tue, 19 Apr 2022 at 03:07, Liu Ying <victor.liu@nxp.com> wrote:
+>
+> The Northwest Logic MIPI DSI host controller embedded in i.MX8qxp
+> works with a Mixel MIPI DPHY + LVDS PHY combo to support either
+> a MIPI DSI display or a LVDS display.  So, this patch calls
+> phy_set_mode() from nwl_dsi_mode_set() to set PHY mode to MIPI DPHY
+> explicitly.
+>
+> Cc: Guido G=C3=BCnther <agx@sigxcpu.org>
+> Cc: Robert Chiras <robert.chiras@nxp.com>
+> Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> Cc: Jonas Karlman <jonas@kwiboo.se>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
 > ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 135 ++++++++++++++++++++++-
->   1 file changed, 129 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index a6da7b04b9d4..13c87d2a391a 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -716,6 +716,135 @@
->   			status = "disabled";
->   		};
->   
-> +		audsys: syscon@11210000 {
-> +			compatible = "mediatek,mt8192-audsys", "syscon";
-> +			reg = <0 0x11210000 0 0x2000>;
-> +			#clock-cells = <1>;
+> v7->v8:
+> * Resend with Andrzej's and Jernej's mail addressed updated.
+>
+> v6->v7:
+> * No change.
+>
+> v5->v6:
+> * Rebase the series upon v5.17-rc1.
+> * Set PHY mode in ->mode_set() instead of ->pre_enable() in the nwl-dsi
+>   bridge driver due to the rebase.
+> * Drop Guido's R-b tag due to the rebase.
+>
+> v4->v5:
+> * No change.
+>
+> v3->v4:
+> * No change.
+>
+> v2->v3:
+> * No change.
+>
+> v1->v2:
+> * Add Guido's R-b tag.
+>
+>  drivers/gpu/drm/bridge/nwl-dsi.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nw=
+l-dsi.c
+> index d5945501a5ee..85bab7372af1 100644
+> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
+> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+> @@ -666,6 +666,12 @@ static int nwl_dsi_mode_set(struct nwl_dsi *dsi)
+>                 return ret;
+>         }
+>
+> +       ret =3D phy_set_mode(dsi->phy, PHY_MODE_MIPI_DPHY);
+> +       if (ret < 0) {
+> +               DRM_DEV_ERROR(dev, "Failed to set DSI phy mode: %d\n", re=
+t);
+> +               goto uninit_phy;
+> +       }
 > +
-> +			afe: mt8192-afe-pcm {
-> +				compatible = "mediatek,mt8192-audio";
-> +				interrupts = <GIC_SPI 202 IRQ_TYPE_LEVEL_HIGH 0>;
-> +				resets = <&watchdog 17>;
-> +				reset-names = "audiosys";
-> +				mediatek,apmixedsys = <&apmixedsys>;
-> +				mediatek,infracfg = <&infracfg>;
-> +				mediatek,topckgen = <&topckgen>;
-> +				power-domains = <&spm MT8192_POWER_DOMAIN_AUDIO>;
-> +				clocks = <&audsys CLK_AUD_AFE>,
-> +					 <&audsys CLK_AUD_DAC>,
-> +					 <&audsys CLK_AUD_DAC_PREDIS>,
-> +					 <&audsys CLK_AUD_ADC>,
-> +					 <&audsys CLK_AUD_ADDA6_ADC>,
-> +					 <&audsys CLK_AUD_22M>,
-> +					 <&audsys CLK_AUD_24M>,
-> +					 <&audsys CLK_AUD_APLL_TUNER>,
-> +					 <&audsys CLK_AUD_APLL2_TUNER>,
-> +					 <&audsys CLK_AUD_TDM>,
-> +					 <&audsys CLK_AUD_TML>,
-> +					 <&audsys CLK_AUD_NLE>,
-> +					 <&audsys CLK_AUD_DAC_HIRES>,
-> +					 <&audsys CLK_AUD_ADC_HIRES>,
-> +					 <&audsys CLK_AUD_ADC_HIRES_TML>,
-> +					 <&audsys CLK_AUD_ADDA6_ADC_HIRES>,
-> +					 <&audsys CLK_AUD_3RD_DAC>,
-> +					 <&audsys CLK_AUD_3RD_DAC_PREDIS>,
-> +					 <&audsys CLK_AUD_3RD_DAC_TML>,
-> +					 <&audsys CLK_AUD_3RD_DAC_HIRES>,
-> +					 <&infracfg CLK_INFRA_AUDIO>,
-> +					 <&infracfg CLK_INFRA_AUDIO_26M_B>,
-> +					 <&topckgen CLK_TOP_AUDIO_SEL>,
-> +					 <&topckgen CLK_TOP_AUD_INTBUS_SEL>,
-> +					 <&topckgen CLK_TOP_MAINPLL_D4_D4>,
-> +					 <&topckgen CLK_TOP_AUD_1_SEL>,
-> +					 <&topckgen CLK_TOP_APLL1>,
-> +					 <&topckgen CLK_TOP_AUD_2_SEL>,
-> +					 <&topckgen CLK_TOP_APLL2>,
-> +					 <&topckgen CLK_TOP_AUD_ENGEN1_SEL>,
-> +					 <&topckgen CLK_TOP_APLL1_D4>,
-> +					 <&topckgen CLK_TOP_AUD_ENGEN2_SEL>,
-> +					 <&topckgen CLK_TOP_APLL2_D4>,
-> +					 <&topckgen CLK_TOP_APLL_I2S0_M_SEL>,
-> +					 <&topckgen CLK_TOP_APLL_I2S1_M_SEL>,
-> +					 <&topckgen CLK_TOP_APLL_I2S2_M_SEL>,
-> +					 <&topckgen CLK_TOP_APLL_I2S3_M_SEL>,
-> +					 <&topckgen CLK_TOP_APLL_I2S4_M_SEL>,
-> +					 <&topckgen CLK_TOP_APLL_I2S5_M_SEL>,
-> +					 <&topckgen CLK_TOP_APLL_I2S6_M_SEL>,
-> +					 <&topckgen CLK_TOP_APLL_I2S7_M_SEL>,
-> +					 <&topckgen CLK_TOP_APLL_I2S8_M_SEL>,
-> +					 <&topckgen CLK_TOP_APLL_I2S9_M_SEL>,
-> +					 <&topckgen CLK_TOP_APLL12_DIV0>,
-> +					 <&topckgen CLK_TOP_APLL12_DIV1>,
-> +					 <&topckgen CLK_TOP_APLL12_DIV2>,
-> +					 <&topckgen CLK_TOP_APLL12_DIV3>,
-> +					 <&topckgen CLK_TOP_APLL12_DIV4>,
-> +					 <&topckgen CLK_TOP_APLL12_DIVB>,
-> +					 <&topckgen CLK_TOP_APLL12_DIV5>,
-> +					 <&topckgen CLK_TOP_APLL12_DIV6>,
-> +					 <&topckgen CLK_TOP_APLL12_DIV7>,
-> +					 <&topckgen CLK_TOP_APLL12_DIV8>,
-> +					 <&topckgen CLK_TOP_APLL12_DIV9>,
-> +					 <&topckgen CLK_TOP_AUDIO_H_SEL>,
-> +					 <&clk26m>;
-> +				clock-names = "aud_afe_clk",
-> +					      "aud_dac_clk",
-> +					      "aud_dac_predis_clk",
-> +					      "aud_adc_clk",
-> +					      "aud_adda6_adc_clk",
-> +					      "aud_apll22m_clk",
-> +					      "aud_apll24m_clk",
-> +					      "aud_apll1_tuner_clk",
-> +					      "aud_apll2_tuner_clk",
-> +					      "aud_tdm_clk",
-> +					      "aud_tml_clk",
-> +					      "aud_nle",
-> +					      "aud_dac_hires_clk",
-> +					      "aud_adc_hires_clk",
-> +					      "aud_adc_hires_tml",
-> +					      "aud_adda6_adc_hires_clk",
-> +					      "aud_3rd_dac_clk",
-> +					      "aud_3rd_dac_predis_clk",
-> +					      "aud_3rd_dac_tml",
-> +					      "aud_3rd_dac_hires_clk",
-> +					      "aud_infra_clk",
-> +					      "aud_infra_26m_clk",
-> +					      "top_mux_audio",
-> +					      "top_mux_audio_int",
-> +					      "top_mainpll_d4_d4",
-> +					      "top_mux_aud_1",
-> +					      "top_apll1_ck",
-> +					      "top_mux_aud_2",
-> +					      "top_apll2_ck",
-> +					      "top_mux_aud_eng1",
-> +					      "top_apll1_d4",
-> +					      "top_mux_aud_eng2",
-> +					      "top_apll2_d4",
-> +					      "top_i2s0_m_sel",
-> +					      "top_i2s1_m_sel",
-> +					      "top_i2s2_m_sel",
-> +					      "top_i2s3_m_sel",
-> +					      "top_i2s4_m_sel",
-> +					      "top_i2s5_m_sel",
-> +					      "top_i2s6_m_sel",
-> +					      "top_i2s7_m_sel",
-> +					      "top_i2s8_m_sel",
-> +					      "top_i2s9_m_sel",
-> +					      "top_apll12_div0",
-> +					      "top_apll12_div1",
-> +					      "top_apll12_div2",
-> +					      "top_apll12_div3",
-> +					      "top_apll12_div4",
-> +					      "top_apll12_divb",
-> +					      "top_apll12_div5",
-> +					      "top_apll12_div6",
-> +					      "top_apll12_div7",
-> +					      "top_apll12_div8",
-> +					      "top_apll12_div9",
-> +					      "top_mux_audio_h",
-> +					      "top_clk26m_clk";
-> +			};
-> +		};
-> +
->   		pcie: pcie@11230000 {
->   			compatible = "mediatek,mt8192-pcie";
->   			device_type = "pci";
-> @@ -766,12 +895,6 @@
->   			status = "disabled";
->   		};
->   
-> -		audsys: clock-controller@11210000 {
-> -			compatible = "mediatek,mt8192-audsys", "syscon";
-> -			reg = <0 0x11210000 0 0x1000>;
-> -			#clock-cells = <1>;
-> -		};
-> -
->   		efuse: efuse@11c10000 {
->   			compatible = "mediatek,efuse";
->   			reg = <0 0x11c10000 0 0x1000>;
+>         ret =3D phy_configure(dsi->phy, phy_cfg);
+>         if (ret < 0) {
+>                 DRM_DEV_ERROR(dev, "Failed to configure DSI phy: %d\n", r=
+et);
+> --
+> 2.25.1
+>
+
+Acked-by: Robert Foss <robert.foss@linaro.org>

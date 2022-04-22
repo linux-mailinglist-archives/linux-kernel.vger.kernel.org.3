@@ -2,124 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DFD50B582
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0698D50B589
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446857AbiDVKsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
+        id S1446679AbiDVKvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446851AbiDVKsx (ORCPT
+        with ESMTP id S1349112AbiDVKvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:48:53 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD0E3FBFA;
-        Fri, 22 Apr 2022 03:45:59 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id w1so13575928lfa.4;
-        Fri, 22 Apr 2022 03:45:59 -0700 (PDT)
+        Fri, 22 Apr 2022 06:51:02 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD005520E
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:48:09 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id p18so4765622edr.7
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wGWQsodsPCEvTet53bPj88p4jYhZ/d++dMltkcbaEYI=;
-        b=mAgORrZD4oGwxnomgnH+TjiwLaKb2n8RwwlVy9gojA6VXZvgpCuQHQFkyqo+L5hSg7
-         P/CfljKHsQEkc4wyZRStj3cokDs5YI3oqJNK1uGWh3hbb2s22dB6WydHn15mu8u7mMO1
-         8xBbXHxbRZmFXP5y3CV4pHpt0MPycn8SbcxahMoLHnhpFRQkLqGn5XzYyhFRC8N8m2Wk
-         KItYYPtNrYMxiSoEyFk/4cxmCOQ0eQoqfllAQBynyv5OpDO4/x98HAzYmVKwcgvFIjPS
-         lV6xZfyH+TW+wVOrnPE+U18irxyThdJTg1usk374FlxJQ/bcWJ3is8Gcp91qT4ffBaXY
-         0Iuw==
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VAsRRop2pV4ZTVr7B5XC8yRu2f0AvXYEM5JlYoO6X9I=;
+        b=URZruV4HFT/3ZB49dataOpdWp/YjepectaxFEsx8rweDlxosoE4tVP+E+rUiVnMdGV
+         i51YYXsxvl88T3vQqFVrxfEx7np289ASHG93+1q/tkkae9AA0GWtHSzh9rP2Ivu/4feq
+         qtPTiHclnsOwxPNged/45qXsprx3VrGebUUfZOYCi2xnjVFsnSEtZXeym7Zzin0rbSz0
+         bsX5z6zIKfOCZG5RydwoeRKdLaVs3r0Z1QeywnIrV7aIHSlAmRqGBx8ROfHMWWp+gJdv
+         o/O5DSFFoCZxLv78xB7jLvOIHXnbQn3iRNgO8AuDN+emK0BwUoyZJiOckSLqNIZ1FmeE
+         y4vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wGWQsodsPCEvTet53bPj88p4jYhZ/d++dMltkcbaEYI=;
-        b=Vnhzk3WCyxhFGKTD2kkKcTd1joc6W3il2yVzQaF+pEF2SjHk+wTKGhEIQkGRMMoMnD
-         bQ57VxswqHvqUgk4I3LnMy9QFhxe0tfsYgTPnaQntknMf4Pxy0UEHaLnKLvHOqQoDXAD
-         7vebOzh2FYtYPxNyWTEVeqm+RThvUTaVK2Uo/riFEHkt9PNN0XNMaN75lB53MUFyeauh
-         CBFb4mN77eozMBCg3jOrGJ+bBTbrzXx/GnMurjNzm+rsrmkyhgaJ3b5x4RqLALy8YBCK
-         0BM8accF8OYGUPzy/KdrT8mGPB6tPrAM/q7aXeg29ES/qekxn8jiNql83cWSo8ObhxeI
-         KWFQ==
-X-Gm-Message-State: AOAM5316VYovy/GI6hcjgVIAxIPY0BNaQlmtN1rvJqtiI65PaUQXQpAE
-        ZL44m9m7IxLYFLcZK/Gtuxng1gLW+6Iudf5GMq8=
-X-Google-Smtp-Source: ABdhPJwDhLfB/RddN8AJO1OXvAzh43JVwTYgu7pKH9N74RGPzr1t5+yHvvDMmvwJ0C1Lq06TJ+kPl88b4hRASryM51Q=
-X-Received: by 2002:a05:6512:31cc:b0:471:d125:162c with SMTP id
- j12-20020a05651231cc00b00471d125162cmr2737873lfe.96.1650624357838; Fri, 22
- Apr 2022 03:45:57 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VAsRRop2pV4ZTVr7B5XC8yRu2f0AvXYEM5JlYoO6X9I=;
+        b=NTNhCuoK4hjg01C/gQCqgk/EmRHXI3nA+UaJRcW0RbdhhZFDuHh02bsB5E1PGpEm9c
+         WPa4kI1r5iDg8ayP+YoItAHZGaIhFp89c1m4QS+rP56kYobLn3vL5heYXg4VQzCUedzZ
+         3p0iPXj4DqU8Err5Zt/SrVYL2alWZBPVTPP0X+Tbxd8tQlyWA5ks+GDcKYX01gWgmXRe
+         2WaWVg3l7RbP83LYWWWla8k5lyteBJ4yH7vFliIG5UlPueew/CdP3IZalEgkgkZlgXkL
+         rkpV4ZTswMBbTIItDK/c478kWR/dgttOMMJdO2LURn5dAYZ+LelL+OLscmjCPB2N7KC1
+         UbBA==
+X-Gm-Message-State: AOAM533rGIdvBWhi6Sp4XyYLNZDnnWQCfY7tmhJUjV39Pu4ZfSFbCD09
+        tjODEIBdbRRdN5Ldh/vIA503JoG0pPNFMg==
+X-Google-Smtp-Source: ABdhPJxsOyTkFpBIBoHx5hMe4weI1kgD/ah4F3MXOPXUb1oNT1HMAUOGq/zMWhbt6QFpoJexxkjJBQ==
+X-Received: by 2002:a05:6402:7d3:b0:41d:9152:cad with SMTP id u19-20020a05640207d300b0041d91520cadmr4226041edy.370.1650624488537;
+        Fri, 22 Apr 2022 03:48:08 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z16-20020a17090665d000b006e8789e8cedsm615266ejn.204.2022.04.22.03.48.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 03:48:08 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vincent Cuissard <cuissard@marvell.com>,
+        Samuel Ortiz <sameo@linux.intel.com>, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] nfc: nfcmrvl: spi: Fix irq_of_parse_and_map() return value
+Date:   Fri, 22 Apr 2022 12:47:58 +0200
+Message-Id: <20220422104758.64039-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220418043735.11441-1-patrick.wang.shcn@gmail.com>
- <20220418143404.55c8fcab@gandalf.local.home> <CAGcnep8bH4Nncbt3t+VRLff35ZyD8JyzHcEgkq-u6TEq47jqzQ@mail.gmail.com>
- <CAGcnep_Gx+3KiUvDVronYKn_divU3OM-RQEOPZakv7MRYh4EJw@mail.gmail.com>
- <20220420114454.69ab108c@gandalf.local.home> <20220420122633.55d4ff6b@gandalf.local.home>
- <CAGcnep86pd2trfTovU8_z1msOstx7gKCdndm=pHLDGTy+_K7=g@mail.gmail.com> <20220421085047.2cb8edf9@gandalf.local.home>
-In-Reply-To: <20220421085047.2cb8edf9@gandalf.local.home>
-From:   patrick wang <patrick.wang.shcn@gmail.com>
-Date:   Fri, 22 Apr 2022 18:45:46 +0800
-Message-ID: <CAGcnep9Ez-S962vukR_a=otzcSxDRo5HUW2vG_YCBanCfURGXw@mail.gmail.com>
-Subject: Re: [PATCH] rcu: ftrace: avoid tracing a few functions executed in multi_cpu_stop()
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 8:50 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Thu, 21 Apr 2022 19:36:06 +0800
-> patrick wang <patrick.wang.shcn@gmail.com> wrote:
->
-> > On Thu, Apr 21, 2022 at 12:26 AM Steven Rostedt <rostedt@goodmis.org> wrote:
-> > >
-> > > On Wed, 20 Apr 2022 11:44:54 -0400
-> > > Steven Rostedt <rostedt@goodmis.org> wrote:
-> > >
-> > >
-> > > Interesting. On x86 when we used stop machine[*] it was not an issue to
-> > > modify the code that is being executed in stop machine. I'm curious to
-> > > exactly what the issue is if something does get traced in the stop machine
-> > > processing. Why does it crash?
-> >
-> > I looked up the commit history. When x86 turned to breakpoints, stop
-> > machine's state machine loop had no calls during waiting. So there
-> > was no function being called during modifying code. Which means
-> > there were no other cpus would load those instructions to be updated
-> > in this period. While the stop machine currently will call other functions
-> > and the call chain is fairly deep. So it may not quite be suitable for ftrace
-> > now because it can not make sure the instructions within its own call
-> > chain are updated atomically.
->
-> Are you saying that the RISC-V stop machine implementation has code being
-> called on the other CPUs while they wait?
->
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Yes, and not just RISC-V. It's arch-independent. It's the internal change of
-stop machine implementation.
+Fixes: caf6e49bf6d0 ("NFC: nfcmrvl: add spi driver")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-----------------------------------------------------------------
-Former stop machine wait loop:
-do {
-    cpu_relax(); => macro
-    ...
-} while (curstate != STOPMACHINE_EXIT);
------------------------------------------------------------------
-Current stop machine wait loop:
-do {
-    stop_machine_yield(cpumask); => function (notraced)
-    ...
-    touch_nmi_watchdog(); => function (notraced, inside calls also notraced)
-    ...
-    rcu_momentary_dyntick_idle(); => function (notraced, inside calls traced)
-} while (curstate != MULTI_STOP_EXIT);
-------------------------------------------------------------------
+---
 
-Thanks,
-Patrick
+This is another issue to https://lore.kernel.org/all/20220422084605.2775542-1-lv.ruyi@zte.com.cn/
+---
+ drivers/nfc/nfcmrvl/spi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/nfc/nfcmrvl/spi.c b/drivers/nfc/nfcmrvl/spi.c
+index a38e2fcdfd39..01f0a08a381c 100644
+--- a/drivers/nfc/nfcmrvl/spi.c
++++ b/drivers/nfc/nfcmrvl/spi.c
+@@ -115,7 +115,7 @@ static int nfcmrvl_spi_parse_dt(struct device_node *node,
+ 	}
+ 
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
++	if (!ret) {
+ 		pr_err("Unable to get irq, error: %d\n", ret);
+ 		return ret;
+ 	}
+-- 
+2.32.0
+

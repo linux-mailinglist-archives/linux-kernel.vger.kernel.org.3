@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB9650B9E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A08550B9EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448588AbiDVOV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
+        id S1448633AbiDVOWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392400AbiDVOUx (ORCPT
+        with ESMTP id S1448601AbiDVOWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:20:53 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5C75AEF6
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:17:50 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id h83so8706816iof.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:17:50 -0700 (PDT)
+        Fri, 22 Apr 2022 10:22:40 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1508E5B3C5;
+        Fri, 22 Apr 2022 07:19:47 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e68392d626so3680834fac.4;
+        Fri, 22 Apr 2022 07:19:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gCYmIndiH4QxBgXp0gYdbitZyC6hIsjEz2mk+1J/x88=;
-        b=Y77Bc1EtquV6mceoyBGGUgk2RZvTpo1zObncU2ykZciej+fymYF3lDlrnPbHYCxlFZ
-         6rjbX/BHyTv9yDf+MwF2jhOOgqT2ISMT8S9ROsGZooIds5gwqz3Bhd4reQFKBoNWash9
-         pzI4tvgbj3Kg+qT7xw9NJx4Dl0fhK0OBIwa77dpx42U4qnU3yPqrR8cx81HtNzD2/kdr
-         2CPAh7xPvKR+KOYkiqonrMDaxgjhRn4as9PaladacmX1h07hAIL3SrM4NZ0Ryg0H+0JG
-         hNLw7DM+tpXSfhb3c1vTpqQWOpDIdBI/I9IpNTWWk0j/sPXCoVLbtvTtZYCTc8ubn0J0
-         lNAQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=X7u3kglhM0VkTW03FStsvrOnIn+Xj3SEcCEn4rSVb2M=;
+        b=doxXGTkzNgr961Vtac0I8Zhl1wa8l2EJNGL/EiZdctp1nfqY1r9tiLc66rTrOW3sEi
+         RM00KIuonmmVfjOozzjwUSfYjHAUfJ7amPN0xWq/HHhvULB5GFvMHxpxNEbuhAlEYCL0
+         6Nf8JzIoaCqKa+yuJ6fWuhCX5BK68o+amMSrl/s+9arho0DStmzkxahga3IuG+Ocn4BR
+         PoOR2jNDY8NCUcyc/VPL7BFtTkGadWnHZhkOTxupp2+jsz2C+D+htRUAK66VY8lCl0TZ
+         BYTnBGEsVFMl4EEb4TVVqEkULyAgxKx3JIT2srrQxoXOaRNhusHjeY9oh7fKTUj8Qw0Q
+         gPYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gCYmIndiH4QxBgXp0gYdbitZyC6hIsjEz2mk+1J/x88=;
-        b=ceWTmiLddGcCRWg4Re35AJMQB+kBlo9kku2UgHDh9MaTj0PKjVD6MCLGZHWyNTQCdV
-         qvlfxGWxJwrrkyrisrCO6SDzcvCHnoqkPfCevhGtK/z/vOw8wUXRSS5HVcvMOO0SKHjo
-         LjHSLhGlJRLS4GmoY9uHIaIiZQCA5OLAY9TGGgSxAH7E14y+o+JmdIlP8CBcHnzynESW
-         MakgLuYiwCIejNTNiUgcZetib2mN4vpZf1KQ/evFr4FoTM9SoY8ppKHh0CEd0mnJ//ip
-         oHm78lUyLZA43zYQIxBBjjqXnOOx+GAkGQXaEd4hE+rE7HtspnMTrN76t+mwLOUGR5WS
-         NNUA==
-X-Gm-Message-State: AOAM532tP9O/pk3eu50/RY6HqEuRBhgToE9oWOySL0Vw8CgkN5oc/j4u
-        1R2Dj6FEcVAbCdM3rWAIt3U6zv5rNTRnlay11t4=
-X-Google-Smtp-Source: ABdhPJyjZv0dxpP1TfDVnbplbLdekOcaH7HP+KZsVInf57gAiqNBECWUMJr212f9vCu+fh6ehZ0A+ZOTxNBSzc0JrY0=
-X-Received: by 2002:a05:6638:dd6:b0:32a:9ba8:22e4 with SMTP id
- m22-20020a0566380dd600b0032a9ba822e4mr2335457jaj.264.1650637069552; Fri, 22
- Apr 2022 07:17:49 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=X7u3kglhM0VkTW03FStsvrOnIn+Xj3SEcCEn4rSVb2M=;
+        b=s2kEAt3+bzufjJM1jyFkvkZd+LNJI1bdFIciJODMSAbue1Qqk0OZvnbIlHM8A5WQW0
+         c0WHgGkpLrFs/oobnhq//DehpvSAxCv7oPB9+djJ7sQrQCgWSS7lSGRWge+nVqHs3tpy
+         WYKtrGXUzU3huF1oanulhYJFySdft9PvnsN4fPxFJOJinps0+OgzlGrQbaL1xFix/v2C
+         BSpSRieuEANAeHv31HJT6+DM90ttFTPPCx97AscSuJnxdnPKcsLiufz7nb3sipWl6lTB
+         rgEAKABphLGgbcTmV8zYqdh/9NNzP2MSTmG2KQk01/9McSBDVOFtZMx+i3PXA+bFqy/0
+         AaHA==
+X-Gm-Message-State: AOAM531JavnePIbMOZaajtsjeaxFiVLKilwY6yJYpHXrloD1yrmb2czD
+        XnBLtG0RELPLEV3DhheYSN8=
+X-Google-Smtp-Source: ABdhPJyRUn+Uq4kLyzdsgMmHE5kkqjywZFQ2SL5fSRXPWW5Su/ofYv0nnbjSTPRCJnLsPK5NNqvn4A==
+X-Received: by 2002:a05:6870:589d:b0:d6:dc7f:6b10 with SMTP id be29-20020a056870589d00b000d6dc7f6b10mr1955692oab.175.1650637181912;
+        Fri, 22 Apr 2022 07:19:41 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id c14-20020a4ad20e000000b0033a371fa815sm806446oos.37.2022.04.22.07.19.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 07:19:41 -0700 (PDT)
+Message-ID: <4373b922-bd07-c02d-e43f-0426690cf47d@gmail.com>
+Date:   Fri, 22 Apr 2022 16:19:37 +0200
 MIME-Version: 1.0
-References: <20220419205158.28088-1-cmirabil@redhat.com>
-In-Reply-To: <20220419205158.28088-1-cmirabil@redhat.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 22 Apr 2022 16:17:38 +0200
-Message-ID: <CANiq72n1gBE+tv3oAF4wjdK2jEJJmU4V=Y1CTZ1PpCEeqLbo9g@mail.gmail.com>
-Subject: Re: [PATCH v9 0/6] Raspberry Pi Sense HAT driver
-To:     Charles Mirabile <cmirabil@redhat.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Serge Schneider <serge@raspberrypi.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Mattias Brugger <mbrugger@suse.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        fedora-rpi@googlegroups.com, Daniel Bauman <dbauman@redhat.com>,
-        Mwesigwa Guma <mguma@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V2 2/3] arm64: dts: mt8183: Update disp_aal node
+ compatible
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@linux.ie,
+        yongqiang.niu@mediatek.com, jason-jh.lin@mediatek.com,
+        nancy.lin@mediatek.com, allen-kh.cheng@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220411035843.19847-1-rex-bc.chen@mediatek.com>
+ <20220411035843.19847-3-rex-bc.chen@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220411035843.19847-3-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,15 +82,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 1:02 AM Charles Mirabile <cmirabil@redhat.com> wrote:
->
-> This patch series adds a set of drivers for operating the Sense HAT
-> peripheral device. This board is an add on for the Raspberry Pi that is
-> designed to connect using the GPIO connector and communicate via I2C.
 
-Is there any feedback left to address? Which tree should take this?
 
-Thanks for your work upstreaming this!
+On 11/04/2022 05:58, Rex-BC Chen wrote:
+> The driver data of MT8183 and MT8173 are different.
+> The value of has_gamma for MT8173 is true while the value of MT8183 is
+> false. Therefore, the compatible of disp_aal for MT8183 is not suitable
+> for the compatible for MT8173.
+> 
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Cheers,
-Miguel
+Applied thanks!
+
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 4b08691ed39e..a3616005d65c 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -1466,8 +1466,7 @@
+>   		};
+>   
+>   		aal0: aal@14010000 {
+> -			compatible = "mediatek,mt8183-disp-aal",
+> -				     "mediatek,mt8173-disp-aal";
+> +			compatible = "mediatek,mt8183-disp-aal";
+>   			reg = <0 0x14010000 0 0x1000>;
+>   			interrupts = <GIC_SPI 233 IRQ_TYPE_LEVEL_LOW>;
+>   			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;

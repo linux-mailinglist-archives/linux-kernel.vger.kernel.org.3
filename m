@@ -2,175 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101B850C2B2
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5A250C3A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbiDVWVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
+        id S232865AbiDVWUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbiDVWVW (ORCPT
+        with ESMTP id S233728AbiDVWSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:21:22 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD03211BE2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:04:13 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id x12so6469942qtp.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:04:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yCHSC34arsQtBqUXmCj99wEfbz8l2mnQAFiJJnf/+tY=;
-        b=qmfdiGivhoyIkipKSQ76fwohGQ0nvXqS1+nsk1poehqsmrff2+K/16UChzb38m3hQj
-         gs1WQKtzgyTq2mMctaVd0Jt2zzr2zG2IqKNCLcM+nEG1TMLoqPiXqLQnEv2Kw/ioeAJK
-         ZmU7plVLbatnN/8IoNWr7J+l5Wy6Zii8lL9NIw45KNmoFUNSf8s9KsWY5DStfUeCGP+f
-         CI/b9EW51ScAA7B8x06oMrq5b/tsAEYP7ITb4x+lGfSbrvnafuwL1l1jIL13rQqu2E5u
-         71ghj+41o4siscitqftFUUVKGxB5KIUTREv6uiiQuexYnJRdpeQnRZcVNkEvG+bQ+Y3D
-         kSjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yCHSC34arsQtBqUXmCj99wEfbz8l2mnQAFiJJnf/+tY=;
-        b=DySeeSLjDYj2uvB/zo0j9siFImkLQzpewCJ+lj8Lber5812s5jcr5366JP0OdtKkoV
-         LTqrA+7fNbP7ATfiXc9ioStHIEiR5txJNIe7wK9TY3Fuq77qrhxDDn6ODgbIFf6eeFTh
-         wJ/xX/OPZMSvOVJJDO328OygpCcAHRp6HwbD1e2tvB2pAhNH877AJkB596PtNeUqDgtI
-         giRvdpXrc6qB3UhFx1NkIIhItZrqxPcZMa2TdnZV1uJHpKDse0MTFw52uZa5wNz80hlA
-         SUDwlCi7HcE6tFoOtg5p38x9pudw+EIBMh4zOf5jhfUyIK+wQTRXpsG7QNaYUKM+StCz
-         c6TQ==
-X-Gm-Message-State: AOAM53209xfrzuIQ0sYij9H1uj+jhqnpKRGkADEfJO2s904cbG5ytpo6
-        +D9BgpIjdJjzDfcOn7OafVc=
-X-Google-Smtp-Source: ABdhPJyz1y2RUabYBwdobyv5hbJm72+B1Hxi8qwHEg8tyJQ5dCwv2+SJtFNrZtoMkdp7DOqnRqQujg==
-X-Received: by 2002:a05:622a:1a86:b0:2f3:4be4:42dd with SMTP id s6-20020a05622a1a8600b002f34be442ddmr4886306qtc.55.1650665052201;
-        Fri, 22 Apr 2022 15:04:12 -0700 (PDT)
-Received: from localhost ([2601:c4:c432:7d0:efbc:f1b5:7b2c:5d4c])
-        by smtp.gmail.com with ESMTPSA id h75-20020a379e4e000000b0069db8210ffbsm1440267qke.12.2022.04.22.15.04.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 15:04:11 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH v3] vmap(): don't allow invalid pages
-Date:   Fri, 22 Apr 2022 15:04:09 -0700
-Message-Id: <20220422220410.1308706-1-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        Fri, 22 Apr 2022 18:18:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A044705E;
+        Fri, 22 Apr 2022 15:04:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EC42B83272;
+        Fri, 22 Apr 2022 22:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 502FFC385AB;
+        Fri, 22 Apr 2022 22:04:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650665089;
+        bh=zuNw6j1TShfoNbLYYIZxrZxreBGq9IdbmgqrCDzwCoE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GJHnYGm7kS7OYKfkAu61QcQIzQsPpKgiX8ZwFOEZB2cc8bdXfKuICeePb/LdLDWns
+         VNg0u6qUYqau/LeOFrayBulaQJxkihHPe/A2FqLymKPNdePaoUDSIGdGevpo7L/zJM
+         aFPhStRd09KzzfNR1joe6PwVDpjMzpbeziX7fgPmvokEvCi/0oFrjnwBTaaGfP/BOU
+         IUNNTQDtVNPw7mpJSpA99kiRdBDjanYdKye5l82yB0eqq3zLotqrujW7fvCIf2Ejkd
+         dAqJEF/tV2gwSfcpwtPVTrB+Lh9rnVah9UvWO9BhrH9MflpU1vh20qiOa/U8KRRaYH
+         giaZNTf1zCHIw==
+Received: by mail-wm1-f47.google.com with SMTP id q20so5841606wmq.1;
+        Fri, 22 Apr 2022 15:04:49 -0700 (PDT)
+X-Gm-Message-State: AOAM5316G1Qpk56Wu+UcOt6hj2nx1VfttOXlwvZpmLGd7jHRHONmsW3f
+        STOnEHKSTHIV4MExAz+NGq4VoEiQvcmEOpiQ/uQ=
+X-Google-Smtp-Source: ABdhPJxxyzPCyBaxXq4e/OKv6ds/3UgnpcR0jFo6uX7QoEAMCxGf0GP6zkRcnylbgWRsSBmj2Bdv9puvN/pDeVMDIcQ=
+X-Received: by 2002:a05:600c:4ed4:b0:392:90a5:b7e6 with SMTP id
+ g20-20020a05600c4ed400b0039290a5b7e6mr15508304wmq.33.1650665087477; Fri, 22
+ Apr 2022 15:04:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com> <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
+In-Reply-To: <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sat, 23 Apr 2022 00:04:31 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+Message-ID: <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vmap() takes struct page *pages as one of arguments, and user may provide
-an invalid pointer which may lead to corrupted translation table.
+On Fri, Apr 22, 2022 at 10:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 4/22/22 12:16, Arnd Bergmann wrote:
+> > On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > Which machine did you hit this on? Is this on hardware or in qemu?
+> >
+> qemu, as always. borzoi, spitz, terrier, tosa, z2, and sx1 fail.
+> Also, I just noticed that the failure is not always the same.
+> z2 fails to boot from initrd, and sx1 fails to boot completely.
 
-An example of such behaviour is erroneous usage of virt_to_page():
+That's a lot of machines failing, I hope at least we got the same bugs more
+than once here.
 
-	vaddr1 = dma_alloc_coherent()
-	page = virt_to_page()	// Wrong here
-	...
-	vaddr2 = vmap(page)
-	memset(vaddr2)		// Faulting here
+For the I/O space, I found now that PXA was not using the standard
+virtual I/O address yet, but instead used a NULL-based offset.
 
-virt_to_page() returns a wrong pointer if vaddr1 is not a linear kernel
-address. The problem is that vmap() populates pte with bad pfn successfully,
-and it's much harder to debug at memory access time. This case should be
-caught by DEBUG_VIRTUAL being that enabled, but it's not enabled in popular
-distros.
+I'm not entirely happy with this patch, but this is an outline of what
+I think we need to fix that: https://pastebin.com/3nVgQsEw
+This one is probably incomplete, at least it breaks sa1100 for now,
+and it adds a bogus CONFIG_PCI dependency. I'm also not sure
+in what way the last patch in the series triggers it, rather than the
+one that removed mach/io.h.
 
-Kernel already checks the pages against NULL. In the case mentioned
-above, however, the address is not NULL, and it's big enough so that the
-hardware generated Address Size Abort on arm64:
+I had sx1 booting in qemu at least, with the omap1 multiplatform series only.
+If you have a custom config for this one, make sure you get the right
+DEBUG_LL address.
 
-	[  665.484101] Unhandled fault at 0xffff8000252cd000
-	[  665.488807] Mem abort info:
-	[  665.491617]   ESR = 0x96000043
-	[  665.494675]   EC = 0x25: DABT (current EL), IL = 32 bits
-	[  665.499985]   SET = 0, FnV = 0
-	[  665.503039]   EA = 0, S1PTW = 0
-	[  665.506167] Data abort info:
-	[  665.509047]   ISV = 0, ISS = 0x00000043
-	[  665.512882]   CM = 0, WnR = 1
-	[  665.515851] swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000000818cb000
-	[  665.522550] [ffff8000252cd000] pgd=000000affcfff003, pud=000000affcffe003, pmd=0000008fad8c3003, pte=00688000a5217713
-	[  665.533160] Internal error: level 3 address size fault: 96000043 [#1] SMP
-	[  665.539936] Modules linked in: [...]
-	[  665.616212] CPU: 178 PID: 13199 Comm: test Tainted: P           OE 5.4.0-84-generic #94~18.04.1-Ubuntu
-	[  665.626806] Hardware name: HPE Apollo 70             /C01_APACHE_MB , BIOS L50_5.13_1.0.6 07/10/2018
-	[  665.636618] pstate: 80400009 (Nzcv daif +PAN -UAO)
-	[  665.641407] pc : __memset+0x38/0x188
-	[  665.645146] lr : test+0xcc/0x3f8
-	[  665.650184] sp : ffff8000359bb840
-	[  665.653486] x29: ffff8000359bb840 x28: 0000000000000000
-	[  665.658785] x27: 0000000000000000 x26: 0000000000231000
-	[  665.664083] x25: ffff00ae660f6110 x24: ffff00ae668cb800
-	[  665.669382] x23: 0000000000000001 x22: ffff00af533e5000
-	[  665.674680] x21: 0000000000001000 x20: 0000000000000000
-	[  665.679978] x19: ffff00ae66950000 x18: ffffffffffffffff
-	[  665.685276] x17: 00000000588636a5 x16: 0000000000000013
-	[  665.690574] x15: ffffffffffffffff x14: 000000000007ffff
-	[  665.695872] x13: 0000000080000000 x12: 0140000000000000
-	[  665.701170] x11: 0000000000000041 x10: ffff8000652cd000
-	[  665.706468] x9 : ffff8000252cf000 x8 : ffff8000252cd000
-	[  665.711767] x7 : 0303030303030303 x6 : 0000000000001000
-	[  665.717065] x5 : ffff8000252cd000 x4 : 0000000000000000
-	[  665.722363] x3 : ffff8000252cdfff x2 : 0000000000000001
-	[  665.727661] x1 : 0000000000000003 x0 : ffff8000252cd000
-	[  665.732960] Call trace:
-	[  665.735395]  __memset+0x38/0x188
-	[...]
+> I'll do another round of bisects.
 
-Interestingly, this abort happens even if copy_from_kernel_nofault() is
-used, which is quite inconvenient for debugging purposes.
+Thanks!
 
-This patch adds a pfn_valid() check into vmap() path, so that invalid
-mapping will not be created; WARN_ON() is used to let client code know
-that something goes wrong, and it's not a regular EINVAL situation.
-
-Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Signed-off-by: Yury Norov (NVIDIA) <yury.norov@gmail.com>
----
-
-RFC: https://lkml.org/lkml/2022/1/18/815
-v1:  https://lkml.org/lkml/2022/1/18/1026
-v2:  https://lore.kernel.org/linux-mm/20220118235244.540103-1-yury.norov@gmail.com/
-v3:  Add more details and example in commit message.
-
- mm/vmalloc.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index e163372d3967..9b51a290d133 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -478,6 +478,9 @@ static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
- 			return -EBUSY;
- 		if (WARN_ON(!page))
- 			return -ENOMEM;
-+		if (WARN_ON(!pfn_valid(page_to_pfn(page))))
-+			return -EINVAL;
-+
- 		set_pte_at(&init_mm, addr, pte, mk_pte(page, prot));
- 		(*nr)++;
- 	} while (pte++, addr += PAGE_SIZE, addr != end);
--- 
-2.32.0
-
+       Arnd

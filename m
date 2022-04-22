@@ -2,99 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B7050B0BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D829350B0B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444470AbiDVGl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
+        id S1444457AbiDVGlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349475AbiDVGlZ (ORCPT
+        with ESMTP id S1349475AbiDVGlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:41:25 -0400
-Received: from m1541.mail.126.com (m1541.mail.126.com [220.181.15.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 602BE3FD9F;
-        Thu, 21 Apr 2022 23:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=yVM+N
-        e5UA83M8xLJzmBVV3Y0VtWxbKAdVuywD6V0vX0=; b=UGDV4TGlRuwu1HMMyiC5C
-        yLfXyf58SamRDI9yHEAyr5erYpGF+2oVl5qouEZLygEyYhO1xLr3v2XeTcYFJnE9
-        0KiLQST7Auxz4uyKYX4GBqBRUfGtTF+6qaPqnXh+AMRZfZXqQGesxyLndUbu7ueA
-        nR3VJ3Op3cOcMlAncuVu7I=
-Received: from zhaojunkui2008$126.com ( [112.80.34.205] ) by
- ajax-webmail-wmsvr41 (Coremail) ; Fri, 22 Apr 2022 14:37:55 +0800 (CST)
-X-Originating-IP: [112.80.34.205]
-Date:   Fri, 22 Apr 2022 14:37:55 +0800 (CST)
-From:   z <zhaojunkui2008@126.com>
-To:     "Kalle Valo" <kvalo@kernel.org>
-Cc:     "Jakub Kicinski" <kubakici@wp.pl>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bernard@vivo.com
-Subject: Re:Re: [PATCH] net/wireless: add debugfs exit function
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <877d7hoe2i.fsf@kernel.org>
-References: <20220422012830.342993-1-zhaojunkui2008@126.com>
- <877d7hoe2i.fsf@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
-MIME-Version: 1.0
-Message-ID: <3c0443f.3b82.1804ffdcdeb.Coremail.zhaojunkui2008@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: KcqowADn9t5ETWJizOERAA--.42288W
-X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiuRrqqlpD8lA2UwACs-
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 02:41:01 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F783FD9F;
+        Thu, 21 Apr 2022 23:38:09 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id DE156212B7;
+        Fri, 22 Apr 2022 06:38:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650609487; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=deZibHs+oOGPUFWQ4kmyf/kEhVDe3bP5mMUDxsnIrK8=;
+        b=0IJm0XX6apPRA9HamWwY+EI0ebrV5rAFMidYmx7C6iA08yr+tYxNn/w5/bvtdKJmTMxYmJ
+        1L7FKxZ9ND2T09nVDEm7Y8okiy7wJOPEUzVd18L55zs9ngE69dGMPwkomjkvdTr+vqIa1p
+        4Qea75cRtGayicWXnhu8GnRBr7/3NKY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650609487;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=deZibHs+oOGPUFWQ4kmyf/kEhVDe3bP5mMUDxsnIrK8=;
+        b=IN3XNUsOJRkFWHecant/4VwsvYuSF+hPA+0gHT2qlfBHBqLl/pyPsgFPc7j/z7I/+naSzI
+        RJVBRYwfWCOIX1CA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id A29AF2C142;
+        Fri, 22 Apr 2022 06:38:07 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 08:38:07 +0200
+Message-ID: <s5hv8v1tygg.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Nick Terrell <terrelln@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/5] Firmware loader support for ZSTD-compressed files
+In-Reply-To: <YmGKxb6XILkRqucZ@bombadil.infradead.org>
+References: <20220421152908.4718-1-tiwai@suse.de>
+        <YmGKxb6XILkRqucZ@bombadil.infradead.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgS2FsbGUgVmFsbzoKCj4tLS0tLdPKvP7Urbz+LS0tLS0KPreivP7IyzogS2FsbGUgVmFsbyA8
-a3ZhbG9Aa2VybmVsLm9yZz4gCj63osvNyrG85DogMjAyMsTqNNTCMjLI1SAxMzo1Nwo+ytW8/sjL
-OiBCZXJuYXJkIFpoYW8gPHpoYW9qdW5rdWkyMDA4QDEyNi5jb20+Cj6zrcvNOiBKYWt1YiBLaWNp
-bnNraSA8a3ViYWtpY2lAd3AucGw+OyBEYXZpZCBTLiBNaWxsZXIgPGRhdmVtQGRhdmVtbG9mdC5u
-ZXQ+OyBQYW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5jb20+OyBNYXR0aGlhcyBCcnVnZ2VyIDxt
-YXR0aGlhcy5iZ2dAZ21haWwuY29tPjsgbGludXgtd2lyZWxlc3NAdmdlci5rZXJuZWwub3JnOyBu
-ZXRkZXZAdmdlci5rZXJuZWwub3JnOyA+bGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQu
-b3JnOyBsaW51eC1tZWRpYXRla0BsaXN0cy5pbmZyYWRlYWQub3JnOyBsaW51eC1rZXJuZWxAdmdl
-ci5rZXJuZWwub3JnOyDV1L78v/wgPGJlcm5hcmRAdml2by5jb20+Cj7W98ziOiBSZTogW1BBVENI
-XSBuZXQvd2lyZWxlc3M6IGFkZCBkZWJ1Z2ZzIGV4aXQgZnVuY3Rpb24KCj5CZXJuYXJkIFpoYW8g
-PHpoYW9qdW5rdWkyMDA4QDEyNi5jb20+IHdyaXRlczoKCj4+IFRoaXMgcGF0Y2ggYWRkIGV4aXQg
-ZGVidWdmcyBmdW5jdGlvbiB0byBtdDc2MDF1Lgo+PiBEZWJ1Z2ZzIG5lZWQgdG8gYmUgY2xlYW51
-cCB3aGVuIG1vZHVsZSBpcyB1bmxvYWRlZCBvciBsb2FkIGZhaWwuCgo+ImxvYWQgZmFpbCI/IFBs
-ZWFzZSBiZSBtb3JlIHNwZWNpZmljLCBhcmUgeW91IHNheWluZyB0aGF0IHRoZSBzZWNvbmQgbW9k
-dWxlIGxvYWQgZmFpbHMgb3Igd2hhdD8KRm9yIHRoaXMgcGFydCwgdGhlcmUgYXJlIHR3byBjYXNl
-czoKRmlyc3Qgd2hlbiBtdDc2MDF1IGlzIGxvYWRlZCwgaW4gZnVuY3Rpb24gbXQ3NjAxdV9wcm9i
-ZSwgaWYgZnVuY3Rpb24gbXQ3NjAxdV9wcm9iZSBydW4gaW50byBlcnJvciBsYWJsZSBlcnJfaHcs
-IG10NzYwMXVfY2xlYW51cCBkaWRuYHQgY2xlYW51cCB0aGUgZGVidWdmcyBub2RlLgpTZWNvbmQg
-d2hlbiB0aGUgbW9kdWxlIGRpc2Nvbm5lY3QsIGluIGZ1bmN0aW9uIG10NzYwMXVfZGlzY29ubmVj
-dCwgbXQ3NjAxdV9jbGVhbnVwIGRpZG5gdCBjbGVhbnVwIHRoZSBkZWJ1Z2ZzIG5vZGUuCkkgdGhp
-bmsgdGhlc2UgYXJlIHRoZSBtdDc2MDF1IHVubG9hZGVkIG9yIGxvYWQgZmFpbCBjYXNlcywgYnV0
-IGJvdGggd2l0aCBubyBkZWJ1Z2ZzIGNsZWFudXAgd29yay4KCj4+ICBkcml2ZXJzL25ldC93aXJl
-bGVzcy9tZWRpYXRlay9tdDc2MDF1L2RlYnVnZnMuYyB8IDkgKysrKysrKy0tCj4+ICBkcml2ZXJz
-L25ldC93aXJlbGVzcy9tZWRpYXRlay9tdDc2MDF1L2luaXQuYyAgICB8IDEgKwo+PiAgZHJpdmVy
-cy9uZXQvd2lyZWxlc3MvbWVkaWF0ZWsvbXQ3NjAxdS9tdDc2MDF1LmggfCAxICsKCj5UaGUgdGl0
-bGUgc2hvdWxkIGJlOgoKPm10NzYwMXU6IGFkZCBkZWJ1Z2ZzIGV4aXQgZnVuY3Rpb24KR290IGl0
-LCB0aGFua3OjoQoKPj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWVkaWF0ZWsvbXQ3NjAx
-dS9kZWJ1Z2ZzLmMKPj4gKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWVkaWF0ZWsvbXQ3NjAx
-dS9kZWJ1Z2ZzLmMKPj4gQEAgLTksNiArOSw4IEBACj4+ICAjaW5jbHVkZSAibXQ3NjAxdS5oIgo+
-PiAgI2luY2x1ZGUgImVlcHJvbS5oIgo+PiAgCj4+ICtzdGF0aWMgc3RydWN0IGRlbnRyeSAqZGly
-OwoKPkhvdyB3aWxsIHRoaXMgd29yayB3aGVuIHRoZXJlIGFyZSBtdWx0aXBsZSBtdDc2MDF1IGRl
-dmljZXM/IEJlY2F1c2Ugb2YgdGhhdCwgYXZvaWQgdXNpbmcgbm9uLWNvbnN0IHN0YXRpYyB2YXJp
-YWJsZXMuClNvcnJ5IGZvciBtaXNzaW5nIHRoaXMgcGFydCwgSSB1bmRlcnN0YW5kIHRoYXQgdGhl
-IGJldHRlciB3YXkgaXMgdG8gbWFuYWdlIGl0IGluIHRoZSBzdHJ1Y3Qgb2YgdGhlIG1hdGNoZWQg
-ZGV2aWNlLCBJIHdvdWxkIGZpeCB0aGlzIGluIHRoZSBuZXh0IHBhdGNoLgpUaGFuayB5b3UgdmVy
-eSBtdWNoIQoKQlIvL0Jlcm5hcmQKCj4tLQo+aHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9w
-cm9qZWN0L2xpbnV4LXdpcmVsZXNzL2xpc3QvCgo+aHR0cHM6Ly93aXJlbGVzcy53aWtpLmtlcm5l
-bC5vcmcvZW4vZGV2ZWxvcGVycy9kb2N1bWVudGF0aW9uL3N1Ym1pdHRpbmdwYXRjaGVzCg==
+On Thu, 21 Apr 2022 18:48:05 +0200,
+Luis Chamberlain wrote:
+> 
+> On Thu, Apr 21, 2022 at 05:29:03PM +0200, Takashi Iwai wrote:
+> > Hi,
+> > 
+> > this is a revised patch set for RFC I posted some time ago (*).
+> > Since the ZSTD usage became much more popular now, it makes sense to
+> > have the consistent (de)compression support in the kernel, also for
+> > the firmware files.  This patch set adds the support for ZSTD-
+> > compressed firmware files as well as the extension of selftests, in
+> > addition to a couple of relevant fixes in selftests.
+> > 
+> > (*) https://lore.kernel.org/r/20210127154939.13288-1-tiwai@suse.de
+> 
+> Russ had posted a set of patches which this likely needs to be
+> rebased on top of. Russ however has to address one kernel splat
+> found by 0day, so I'd expect a new set and then perhaps this can
+> be based on that?
+
+Sure, it should be fine, as the code change there is quite minimal.
+Let me know if the base branch becomes ready.
+
+
+thanks,
+
+Takashi
+
+> 
+> [0] https://lkml.kernel.org/r/20220419231658.664388-1-russell.h.weight@intel.com    
+> 
+>   Luis
+> 

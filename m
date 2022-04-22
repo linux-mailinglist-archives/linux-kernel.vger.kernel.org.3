@@ -2,134 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2126250C3F9
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579F150C2B3
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbiDVWOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S231990AbiDVWNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbiDVWMA (ORCPT
+        with ESMTP id S232409AbiDVWMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:12:00 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A4F18C287
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:58:47 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id d3so5775207ilr.10
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BUpSqOzVYiFBHHL5wyZniliWxqmPr3GRK8w6NgSpN5Y=;
-        b=XcmVK7JwNu54yeoZvUVgRE4ycDDruCjbj+O5/cIqn5LV67XjhrDem/poh9j9WGzYTq
-         LnUDaJvHfOKnKPlTahgjH/qcg22qtd5Ff1o4h3AgL+7IUtNgRfd71+gL6T35uZxuSGE/
-         0cl58yjKwbyagr1pWsEYjmcGKECgKksbTZEzCqO1gUMr8ksXXPPnbQNTSIM3eRUCdtfN
-         /Qb8DAB56KwthFkmyNNza4ZsncLT3Xlal8f6W70u74xt5+hlKR3zpY9dT+FBJOi9/3Oc
-         QvMOpyk26Nc9Q+j17urh7MTZvzuJAbyRiftOILa9thZn7wEV4+ua/tcuTjW+BZYloL5v
-         mKgw==
+        Fri, 22 Apr 2022 18:12:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA7C822BE79
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:59:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650661141;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=u7GJtMbCE34QoOXHn+8Ig2ao8hDA4umJBBrgrTadkEM=;
+        b=FnwwObot881BqPbMK1L+7pd+aSLf/vY8ly3qZ+wUlOw4Dm6ZiqHCyCB5kFH5E1omZMjp1k
+        7dhWBzBMnbjLUEyxGD+l3gNbQdHWXqdoBk3QMOGsJrO117Hd6VnSO8/orVyx5j55MHC2Ur
+        CTiTNsUsXzFeYwJBYNnILGTZwIk7C0Q=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-52-IbE87w3EPDm_1XE2unYpTQ-1; Fri, 22 Apr 2022 15:36:50 -0400
+X-MC-Unique: IbE87w3EPDm_1XE2unYpTQ-1
+Received: by mail-wr1-f72.google.com with SMTP id b10-20020adfc74a000000b0020ab029d5edso2273635wrh.18
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:36:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BUpSqOzVYiFBHHL5wyZniliWxqmPr3GRK8w6NgSpN5Y=;
-        b=2b+ksWnklLhZgwBpN4k4GfPyXC8zhWjULHH9t0atDbY5civ2swMzb4LoCDsAZk//dM
-         cZoZvu7mLolIbjEXxdI16a9kC4KkExb/PfhWEa1p+4ImnPN9ZToq+u+Cl7bVKj1SYE5k
-         49hP0Je3eFkWEuE4p4ewCUEs8K0AN2ZjOoxybZ8uX/euJlfR4IzCJhISEmV0/qhta0PP
-         QnIbPJzO4DcV1R3JpS/5cdRGVgpq0ZhQ33mtG5Bb5lg2M8I2CTDP5mAy+kWUgPXbFsfh
-         eJX7+jHd+H/Ub6qfNM5jo4wi4Cf5jcJzE6Cocw0P48742ynamxoglT2TEgTJMSYJp2YU
-         lObA==
-X-Gm-Message-State: AOAM533Nx7pkXGKxtMJTvuVjO7Z8Dt9g/REJpOpT4dhpKuV9SQtaTsFR
-        VFjMEPf08/V4mguctr4/yUvIjXTaw4M0Tw==
-X-Google-Smtp-Source: ABdhPJzUh4luMNplztXSuP6L7uMw2SWA7GRGbpG/TNQKBppwZ6TtQARW2I6z2+myuIpakDIbUiI0Xw==
-X-Received: by 2002:a63:2c4c:0:b0:398:997d:b5b8 with SMTP id s73-20020a632c4c000000b00398997db5b8mr5303391pgs.86.1650655964090;
-        Fri, 22 Apr 2022 12:32:44 -0700 (PDT)
-Received: from makvihas.localhost.com ([2405:201:202b:15:bfe0:e8c0:bea6:ee63])
-        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm3518932pfh.83.2022.04.22.12.32.41
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u7GJtMbCE34QoOXHn+8Ig2ao8hDA4umJBBrgrTadkEM=;
+        b=bt2vdY5pDcmNdUUk8OR/6i6bdwkV481DPIAmoSiY5OypICYxa55ldGdcKzvlHTzLvd
+         Okk+C0wAXjUL3FCSVqy6hUlGcmvyUZyYHkhr5wcNNiQWLhEyIxpNpRP4Mp5w9BrpGWbd
+         lhlHnftmSakODUn0lb8iggwuWPUvidZ9CbT2zw2SzEOiSIKZJITCCREiKxLxe8aJ8+6M
+         d6O0l+IBNlFP+eEfYKHWYJgWC4TQolQCvkPyfxkC18jct2C2Z3Zjf24cfrc/tz7DNToW
+         GxrMeMQiYLzXF3eiktGCwhMjUTe9hXbOnUuF+mk8zAd+0eFSZeAXGKCjXmOancWAMhVb
+         Mnpw==
+X-Gm-Message-State: AOAM533CH7Up6WyinoSpchJgbrFIBzdvlKEKVChLAN73pRbN55klgQg3
+        Io2Rt97exmDdKo/d9N1BESJhry6TIZPD7wg2+vHLcynoyvnUrDyVMtS+pSf4mnGYg9en2Fj3k83
+        ctoZmB1+PBArt2dkOmmadMRI=
+X-Received: by 2002:a05:6000:1b91:b0:207:9869:1dfe with SMTP id r17-20020a0560001b9100b0020798691dfemr4846318wru.689.1650656209468;
+        Fri, 22 Apr 2022 12:36:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJweTLHKgey8s+MPWjUCZkTfPrfufQ74d31Z3iIQ1HW/4aGVuUQfGjiIuh9S9A0AahFTbvk78Q==
+X-Received: by 2002:a05:6000:1b91:b0:207:9869:1dfe with SMTP id r17-20020a0560001b9100b0020798691dfemr4846306wru.689.1650656209234;
+        Fri, 22 Apr 2022 12:36:49 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id n10-20020a5d598a000000b0020a9493bdddsm2803421wri.40.2022.04.22.12.36.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 12:32:43 -0700 (PDT)
-From:   Vihas Makwana <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH v3 3/7] staging: r8188eu: drop unnecessary wrapper _rtw_init_evt_priv
-Date:   Sat, 23 Apr 2022 01:02:19 +0530
-Message-Id: <20220422193223.11948-4-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220422193223.11948-1-makvihas@gmail.com>
-References: <20220422193223.11948-1-makvihas@gmail.com>
+        Fri, 22 Apr 2022 12:36:48 -0700 (PDT)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     frederic@kernel.org, mtosatti@redhat.com
+Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
+        peterz@infradead.org, pauld@redhat.com, neelx@redhat.com,
+        oleksandr@natalenko.name, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [RFC PATCH v3] tick/sched: Ensure quiet_vmstat() is called when the idle tick was stopped too
+Date:   Fri, 22 Apr 2022 20:36:47 +0100
+Message-Id: <20220422193647.3808657-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        NO_RDNS_DOTCOM_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop unnecessary wrapper _rtw_init_evt_priv and move its logic to
-rtw_init_evt_priv.
+Hi Frederic and Marcelo,
 
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Vihas Makwana <makvihas@gmail.com>
+Oops, please ignore RFC Patch v2 [1] since I forgot to compile test - sorry
+about that! Any feedback would be appreciated. Thanks.
+
+[1]: https://lore.kernel.org/lkml/20220422112053.3695526-1-atomlin@redhat.com/
+
+
+In the context of the idle task and an adaptive-tick mode/or a nohz_full
+CPU, quiet_vmstat() can be called: before stopping the idle tick,
+entering an idle state and on exit. In particular, for the latter case,
+when the idle task is required to reschedule, the idle tick can remain
+stopped and the timer expiration time endless i.e., KTIME_MAX. Now,
+indeed before a nohz_full CPU enters an idle state, CPU-specific vmstat
+counters should be processed to ensure the respective values have been
+reset and folded into the zone specific 'vm_stat[]'. That being said, it
+can only occur when: the idle tick was previously stopped, and
+reprogramming of the timer is not required.
+
+A customer provided some evidence which indicates that the idle tick was
+stopped; albeit, CPU-specific vmstat counters still remained populated.
+Thus one can only assume quiet_vmstat() was not invoked on return to the
+idle loop.
+
+If I understand correctly, I suspect this divergence might erroneously
+prevent a reclaim attempt by kswapd. If the number of zone specific free
+pages are below their per-cpu drift value then
+zone_page_state_snapshot() is used to compute a more accurate view of
+the aforementioned statistic.  Thus any task blocked on the NUMA node
+specific pfmemalloc_wait queue will be unable to make significant
+progress via direct reclaim unless it is killed after being woken up by
+kswapd (see throttle_direct_reclaim()).
+
+Consider the following theoretical scenario:
+
+        1.      CPU Y migrated running task A to CPU X that was
+                in an idle state i.e. waiting for an IRQ - not
+                polling; marked the current task on CPU X to
+                need/or require a reschedule i.e., set
+                TIF_NEED_RESCHED and invoked a reschedule IPI to
+                CPU X (see sched_move_task())
+
+        2.      CPU X acknowledged the reschedule IPI from CPU Y;
+                generic idle loop code noticed the
+                TIF_NEED_RESCHED flag against the idle task and
+                attempts to exit of the loop and calls the main
+                scheduler function i.e. __schedule().
+
+                Since the idle tick was previously stopped no
+                scheduling-clock tick would occur.
+                So, no deferred timers would be handled
+
+        3.      Post transition to kernel execution Task A
+                running on CPU Y, indirectly released a few pages
+                (e.g. see __free_one_page()); CPU Y's
+                'vm_stat_diff[NR_FREE_PAGES]' was updated and zone
+                specific 'vm_stat[]' update was deferred as per the
+                CPU-specific stat threshold
+
+        4.      Task A does invoke exit(2) and the kernel does
+                remove the task from the run-queue; the idle task
+                was selected to execute next since there are no
+                other runnable tasks assigned to the given CPU
+                (see pick_next_task() and pick_next_task_idle())
+
+        5.      On return to the idle loop since the idle tick
+                was already stopped and can remain so (see [1]
+                below) e.g. no pending soft IRQs, no attempt is
+                made to zero and fold CPU Y's vmstat counters
+                since reprogramming of the scheduling-clock tick
+                is not required/or needed (see [2])
+
+		  ...
+		    do_idle
+		    {
+
+		      __current_set_polling()
+		      tick_nohz_idle_enter()
+
+		      while (!need_resched()) {
+
+			local_irq_disable()
+
+			...
+
+			/* No polling or broadcast event */
+			cpuidle_idle_call()
+			{
+
+			  if (cpuidle_not_available(drv, dev)) {
+			    tick_nohz_idle_stop_tick()
+			      __tick_nohz_idle_stop_tick(this_cpu_ptr(&tick_cpu_sched))
+			      {
+				int cpu = smp_processor_id()
+
+				if (ts->timer_expires_base)
+				  expires = ts->timer_expires
+				else if (can_stop_idle_tick(cpu, ts))
+	      (1) ------->        expires = tick_nohz_next_event(ts, cpu)
+				else
+				  return
+
+				ts->idle_calls++
+
+				if (expires > 0LL) {
+
+				  tick_nohz_stop_tick(ts, cpu)
+				  {
+
+				    if (ts->tick_stopped && (expires == ts->next_tick)) {
+	      (2) ------->            if (tick == KTIME_MAX || ts->next_tick ==
+					hrtimer_get_expires(&ts->sched_timer))
+					return
+				    }
+				    ...
+				  }
+
+So the idea of with this patch is to ensure refresh_cpu_vm_stats(false) is
+called, when it is appropriate, on return to the idle loop when the idle
+tick was previously stopped too. Additionally, when the scheduling-tick
+is stopped and a task in kernel-mode, modifies the CPU-specific
+'vm_stat_diff[]' and goes to user-mode for a long time.
+
+Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- drivers/staging/r8188eu/core/rtw_cmd.c | 27 +++++++++-----------------
- 1 file changed, 9 insertions(+), 18 deletions(-)
+ include/linux/tick.h     |  9 ++-------
+ kernel/time/tick-sched.c | 18 +++++++++++++++++-
+ 2 files changed, 19 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index fc955fce2..512896b86 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -17,22 +17,6 @@
+diff --git a/include/linux/tick.h b/include/linux/tick.h
+index bfd571f18cfd..4c576c9ca0a2 100644
+--- a/include/linux/tick.h
++++ b/include/linux/tick.h
+@@ -11,7 +11,6 @@
+ #include <linux/context_tracking_state.h>
+ #include <linux/cpumask.h>
+ #include <linux/sched.h>
+-#include <linux/rcupdate.h>
  
- static void c2h_wk_callback(struct work_struct *work);
+ #ifdef CONFIG_GENERIC_CLOCKEVENTS
+ extern void __init tick_init(void);
+@@ -123,6 +122,8 @@ enum tick_dep_bits {
+ #define TICK_DEP_MASK_RCU		(1 << TICK_DEP_BIT_RCU)
+ #define TICK_DEP_MASK_RCU_EXP		(1 << TICK_DEP_BIT_RCU_EXP)
  
--static int _rtw_init_evt_priv(struct evt_priv *pevtpriv)
++void tick_nohz_user_enter_prepare(void);
++
+ #ifdef CONFIG_NO_HZ_COMMON
+ extern bool tick_nohz_enabled;
+ extern bool tick_nohz_tick_stopped(void);
+@@ -305,10 +306,4 @@ static inline void tick_nohz_task_switch(void)
+ 		__tick_nohz_task_switch();
+ }
+ 
+-static inline void tick_nohz_user_enter_prepare(void)
 -{
--	int res = _SUCCESS;
--
--	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
--	atomic_set(&pevtpriv->event_seq, 0);
--
--	INIT_WORK(&pevtpriv->c2h_wk, c2h_wk_callback);
--	pevtpriv->c2h_wk_alive = false;
--	pevtpriv->c2h_queue = rtw_cbuf_alloc(C2H_QUEUE_MAX_LEN + 1);
--	if (!pevtpriv->c2h_queue)
--		res = _FAIL;
--
--	return res;
+-	if (tick_nohz_full_cpu(smp_processor_id()))
+-		rcu_nocb_flush_deferred_wakeup();
 -}
 -
- void rtw_free_evt_priv(struct	evt_priv *pevtpriv)
- {
- 	cancel_work_sync(&pevtpriv->c2h_wk);
-@@ -133,9 +117,16 @@ u32	rtw_init_cmd_priv(struct cmd_priv *pcmdpriv)
+ #endif
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index d257721c68b8..c6cac2d8e8ed 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -26,6 +26,7 @@
+ #include <linux/posix-timers.h>
+ #include <linux/context_tracking.h>
+ #include <linux/mm.h>
++#include <linux/rcupdate.h>
  
- u32 rtw_init_evt_priv(struct evt_priv *pevtpriv)
- {
--	int	res;
-+	u32 res = _SUCCESS;
-+
-+	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
-+	atomic_set(&pevtpriv->event_seq, 0);
+ #include <asm/irq_regs.h>
  
--	res = _rtw_init_evt_priv(pevtpriv);
-+	INIT_WORK(&pevtpriv->c2h_wk, c2h_wk_callback);
-+	pevtpriv->c2h_wk_alive = false;
-+	pevtpriv->c2h_queue = rtw_cbuf_alloc(C2H_QUEUE_MAX_LEN + 1);
-+	if (!pevtpriv->c2h_queue)
-+		res = _FAIL;
- 
- 	return res;
+@@ -43,6 +44,19 @@ struct tick_sched *tick_get_tick_sched(int cpu)
+ 	return &per_cpu(tick_cpu_sched, cpu);
  }
+ 
++void tick_nohz_user_enter_prepare(void)
++{
++	struct tick_sched *ts;
++
++	if (tick_nohz_full_cpu(smp_processor_id())) {
++		ts = this_cpu_ptr(&tick_cpu_sched);
++
++		if (ts->tick_stopped)
++			quiet_vmstat();
++		rcu_nocb_flush_deferred_wakeup();
++	}
++}
++
+ #if defined(CONFIG_NO_HZ_COMMON) || defined(CONFIG_HIGH_RES_TIMERS)
+ /*
+  * The time, when the last jiffy update happened. Write access must hold
+@@ -891,6 +905,9 @@ static void tick_nohz_stop_tick(struct tick_sched *ts, int cpu)
+ 		ts->do_timer_last = 0;
+ 	}
+ 
++	/* Attempt to fold when the idle tick is stopped or not */
++	quiet_vmstat();
++
+ 	/* Skip reprogram of event if its not changed */
+ 	if (ts->tick_stopped && (expires == ts->next_tick)) {
+ 		/* Sanity check: make sure clockevent is actually programmed */
+@@ -912,7 +929,6 @@ static void tick_nohz_stop_tick(struct tick_sched *ts, int cpu)
+ 	 */
+ 	if (!ts->tick_stopped) {
+ 		calc_load_nohz_start();
+-		quiet_vmstat();
+ 
+ 		ts->last_tick = hrtimer_get_expires(&ts->sched_timer);
+ 		ts->tick_stopped = 1;
 -- 
-2.30.2
+2.34.1
 

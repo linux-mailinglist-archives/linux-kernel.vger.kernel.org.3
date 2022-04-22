@@ -2,169 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381F050C0CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 22:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0421350C0C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 22:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiDVUnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 16:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        id S229494AbiDVUmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 16:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiDVUnf (ORCPT
+        with ESMTP id S229453AbiDVUmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 16:43:35 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03B72F2B0B;
-        Fri, 22 Apr 2022 12:41:06 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id j2so16339667ybu.0;
-        Fri, 22 Apr 2022 12:41:06 -0700 (PDT)
+        Fri, 22 Apr 2022 16:42:49 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D380FC41B;
+        Fri, 22 Apr 2022 12:40:06 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id e189so10124488oia.8;
+        Fri, 22 Apr 2022 12:40:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=IOuZ8W1MJjibB6swPo2RkQCIeQZ1wridYdEDKveCnMw=;
-        b=75QeTDGw2CXuOQiRqR4x9mCo2fipdSQ2FnVmTTDAsV+ycc63HyxQgInkyz1UOUkcFO
-         TJNwp65NQMLbcUjWH9YGwdMzcc1UEvalFVCxlU9cqy4F18erT1Js5XhTM56JeCuwn0S3
-         40Ji+mVAmOQWRkQodiZc4Nf4z1FW9AzIsZ9UTwUV8tv70cHa652xQ1OAkeeGSA4qESsL
-         YqY5TUhEgXRUNLe1A0Z50wildXvhsuLWUinzz+qnDKe+cdRnwE5NdJkn0Jla24PwTgN+
-         y7xbMjDQcY0MhAoi//1J1Co0u5S3Q1UAZR9b6SD8YNnVL88f+bHtE9P7FA3j3bZ7Gb96
-         XaIA==
-X-Gm-Message-State: AOAM533NHaXEw+e1rmg8vLSJ9Q45NoCaXcNFd7lMbeVBS7It79fHpSFQ
-        lpYOZkHyZlme+NvaqQV4LDmLOqXsNA==
-X-Google-Smtp-Source: ABdhPJwYLw7ezcsEnAXRaBNaeuhKHOPAF+WazY3gcKcmVgQTsP9d3MdUusPnK8wJQL/5J1SzRjWOlw==
-X-Received: by 2002:a9d:3624:0:b0:5e9:5778:d0c6 with SMTP id w33-20020a9d3624000000b005e95778d0c6mr2399677otb.367.1650655308747;
-        Fri, 22 Apr 2022 12:21:48 -0700 (PDT)
+        bh=ESSxqxOQpi/fkkAwzK1UrVnLgRLoSXvjLv+Y8gGFxH8=;
+        b=KBSV6/zs/OISGl5rNqgfUwsQpwwM8US73rqNfg8cwsA7s+1WvAYGfca106l63TUgi7
+         vCSTPUZKvCXcFpg63yf+F23S9+fFyIA5pxeEVFxJlFIh0WAhFfV0T/fBl5HAuk5MKWnM
+         d3sPGtmICGbNdP4wAD3WwRGesr2+lrLJqFjSUzxMNWV2kdDdKWOcu3h6UZdI24zvrnq3
+         k/NU2Ca4XRu+MdMieuF/wkFjvG4C+sVI2n0QPX4NS73ThU1yb2VlBXMLMtpwRB1eV8A3
+         D9k3ywDevLc8Ut1Ub6EA8hYlbxooq98+2aa0JJmES87QL5ax1lPsYTl+VcRX55isdI/y
+         5jRA==
+X-Gm-Message-State: AOAM530NTMCvAWbhWeSBqIA5Icx3Q3293D04h8ow9vWsCX4s+kYfdp4h
+        6dP6pDYak5TTxuR+JvYML4WF2T78Cw==
+X-Google-Smtp-Source: ABdhPJzTgaHRHiSVw3JzlGm13jAQRd5uoKS4VQdRiI/I0L2A+6xlR5NxOtX6aFqeBAGEY8uYjV7r1g==
+X-Received: by 2002:a05:6870:2314:b0:e2:a480:eb4d with SMTP id w20-20020a056870231400b000e2a480eb4dmr2580363oao.133.1650655353558;
+        Fri, 22 Apr 2022 12:22:33 -0700 (PDT)
 Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id x24-20020a056870a79800b000e2e53716fbsm1044094oao.31.2022.04.22.12.21.47
+        by smtp.googlemail.com with ESMTPSA id oa9-20020a056870bc0900b000e60e510d5esm928487oab.25.2022.04.22.12.22.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 12:21:48 -0700 (PDT)
+        Fri, 22 Apr 2022 12:22:33 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
+To:     =?UTF-8?q?Przemys=C5=82aw=20Gaj?= <pgaj@cadence.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>
-Cc:     linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: pinctrl: aspeed: Drop referenced nodes in examples
-Date:   Fri, 22 Apr 2022 14:21:38 -0500
-Message-Id: <20220422192139.2592632-1-robh@kernel.org>
+        Boris Brezillon <bbrezillon@kernel.org>
+Cc:     linux-i3c@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: i3c: Convert cdns,i3c-master to DT schema
+Date:   Fri, 22 Apr 2022 14:22:23 -0500
+Message-Id: <20220422192224.2594098-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The additional nodes in the example referenced from the pinctrl node
-'aspeed,external-nodes' properties are either incorrect (aspeed,ast2500-lpc)
-or not documented with a schema (aspeed,ast2500-gfx). There's no need to
-show these nodes as part of the pinctrl example, so just remove them.
+Convert the Cadence I3C master to DT schema format. This fixes a warning
+as it is used in the i3c.yaml example.
+
+The "nintendo,nunchuk" is not documented by a schema, so change the
+example child device to something which is documented.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../pinctrl/aspeed,ast2500-pinctrl.yaml       | 81 ++++---------------
- 1 file changed, 16 insertions(+), 65 deletions(-)
+ .../bindings/i3c/cdns,i3c-master.txt          | 43 -------------
+ .../bindings/i3c/cdns,i3c-master.yaml         | 60 +++++++++++++++++++
+ 2 files changed, 60 insertions(+), 43 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i3c/cdns,i3c-master.txt
+ create mode 100644 Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/aspeed,ast2500-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/aspeed,ast2500-pinctrl.yaml
-index 7c25c8d51116..9db904a528ee 100644
---- a/Documentation/devicetree/bindings/pinctrl/aspeed,ast2500-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/aspeed,ast2500-pinctrl.yaml
-@@ -76,73 +76,24 @@ additionalProperties: false
- examples:
-   - |
-     #include <dt-bindings/clock/aspeed-clock.h>
--    apb {
--        compatible = "simple-bus";
--        #address-cells = <1>;
--        #size-cells = <1>;
--        ranges;
+diff --git a/Documentation/devicetree/bindings/i3c/cdns,i3c-master.txt b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.txt
+deleted file mode 100644
+index 3716589d6999..000000000000
+--- a/Documentation/devicetree/bindings/i3c/cdns,i3c-master.txt
++++ /dev/null
+@@ -1,43 +0,0 @@
+-Bindings for cadence I3C master block
+-=====================================
 -
--        syscon: scu@1e6e2000 {
--            compatible = "aspeed,ast2500-scu", "syscon", "simple-mfd";
--            reg = <0x1e6e2000 0x1a8>;
--            #clock-cells = <1>;
--            #reset-cells = <1>;
+-Required properties:
+---------------------
+-- compatible: shall be "cdns,i3c-master"
+-- clocks: shall reference the pclk and sysclk
+-- clock-names: shall contain "pclk" and "sysclk"
+-- interrupts: the interrupt line connected to this I3C master
+-- reg: I3C master registers
 -
--            pinctrl: pinctrl {
--                compatible = "aspeed,ast2500-pinctrl";
--                aspeed,external-nodes = <&gfx>, <&lhc>;
+-Mandatory properties defined by the generic binding (see
+-Documentation/devicetree/bindings/i3c/i3c.yaml for more details):
 -
--                pinctrl_i2c3_default: i2c3_default {
--                    function = "I2C3";
--                    groups = "I2C3";
--                };
+-- #address-cells: shall be set to 1
+-- #size-cells: shall be set to 0
 -
--                pinctrl_gpioh0_unbiased_default: gpioh0 {
--                    pins = "A18";
--                    bias-disable;
--                };
-+    scu@1e6e2000 {
-+        compatible = "aspeed,ast2500-scu", "syscon", "simple-mfd";
-+        reg = <0x1e6e2000 0x1a8>;
-+        #clock-cells = <1>;
-+        #reset-cells = <1>;
+-Optional properties defined by the generic binding (see
+-Documentation/devicetree/bindings/i3c/i3c.yaml for more details):
+-
+-- i2c-scl-hz
+-- i3c-scl-hz
+-
+-I3C device connected on the bus follow the generic description (see
+-Documentation/devicetree/bindings/i3c/i3c.yaml for more details).
+-
+-Example:
+-
+-	i3c-master@0d040000 {
+-		compatible = "cdns,i3c-master";
+-		clocks = <&coreclock>, <&i3csysclock>;
+-		clock-names = "pclk", "sysclk";
+-		interrupts = <3 0>;
+-		reg = <0x0d040000 0x1000>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		i2c-scl-hz = <100000>;
+-
+-		nunchuk: nunchuk@52 {
+-			compatible = "nintendo,nunchuk";
+-			reg = <0x52 0x0 0x10>;
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
+new file mode 100644
+index 000000000000..cc40d25358ec
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i3c/cdns,i3c-master.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+        pinctrl: pinctrl {
-+            compatible = "aspeed,ast2500-pinctrl";
-+            aspeed,external-nodes = <&gfx>, <&lhc>;
++title: Cadence I3C master block
 +
-+            pinctrl_i2c3_default: i2c3_default {
-+                function = "I2C3";
-+                groups = "I2C3";
-             };
--        };
--
--        gfx: display@1e6e6000 {
--            compatible = "aspeed,ast2500-gfx", "syscon";
--            reg = <0x1e6e6000 0x1000>;
--            reg-io-width = <4>;
--            clocks = <&syscon ASPEED_CLK_GATE_D1CLK>;
--            resets = <&syscon ASPEED_RESET_CRT1>;
--            interrupts = <0x19>;
--            syscon = <&syscon>;
--            memory-region = <&gfx_memory>;
--        };
--    };
--
--    lpc: lpc@1e789000 {
--        compatible = "aspeed,ast2500-lpc", "simple-mfd";
--        reg = <0x1e789000 0x1000>;
--
--        #address-cells = <1>;
--        #size-cells = <1>;
--        ranges = <0x0 0x1e789000 0x1000>;
--
--        lpc_host: lpc-host@80 {
--            compatible = "aspeed,ast2500-lpc-host", "simple-mfd", "syscon";
--            reg = <0x80 0x1e0>;
--            reg-io-width = <4>;
- 
--            #address-cells = <1>;
--            #size-cells = <1>;
--            ranges = <0x0 0x80 0x1e0>;
--
--            lhc: lhc@20 {
--                   compatible = "aspeed,ast2500-lhc";
--                   reg = <0x20 0x24>, <0x48 0x8>;
-+            pinctrl_gpioh0_unbiased_default: gpioh0 {
-+                pins = "A18";
-+                bias-disable;
-             };
-         };
-     };
--
--    gfx_memory: framebuffer {
--        size = <0x01000000>;
--        alignment = <0x01000000>;
--        compatible = "shared-dma-pool";
--        reusable;
--    };
++maintainers:
++  - Boris Brezillon <bbrezillon@kernel.org>
++
++allOf:
++  - $ref: i3c.yaml#
++
++properties:
++  compatible:
++    const: cdns,i3c-master
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: pclk
++      - const: sysclk
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i3c-master@d040000 {
++        compatible = "cdns,i3c-master";
++        clocks = <&coreclock>, <&i3csysclock>;
++        clock-names = "pclk", "sysclk";
++        interrupts = <3 0>;
++        reg = <0x0d040000 0x1000>;
++        #address-cells = <3>;
++        #size-cells = <0>;
++        i2c-scl-hz = <100000>;
++
++        eeprom@57{
++            compatible = "atmel,24c01";
++            reg = <0x57 0x0 0x10>;
++            pagesize = <0x8>;
++        };
++    };
++...
 -- 
 2.32.0
 

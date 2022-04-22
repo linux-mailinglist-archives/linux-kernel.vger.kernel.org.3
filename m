@@ -2,116 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1622050B57B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8254650B583
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446827AbiDVKq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S1343946AbiDVKsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446824AbiDVKqx (ORCPT
+        with ESMTP id S1382456AbiDVKse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:46:53 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFE0BCA2;
-        Fri, 22 Apr 2022 03:44:00 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id r12so8169473iod.6;
-        Fri, 22 Apr 2022 03:44:00 -0700 (PDT)
+        Fri, 22 Apr 2022 06:48:34 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9270D2899F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:45:41 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id g13so15618717ejb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9mOgppXNPhWimJqU72s6fXNPCFcDPkPEDHvzrtAfbic=;
-        b=ENmreVhV8u52bMxntoqrAwWBbM5PCO0r/Nol68a0fAE7eZaW+4ofl96ZmogULhu1zV
-         DNxIaQcf0wmQVDjly5xrv2Mt48m/jTwNjIuwuAckSntilFAysopuuumDYulXX3FHv6mj
-         VhADvhep9wK2tGVynosU+YD5wneIpN8/+Mj+X7se+8JKa2Wv1K7gi3PF2jxFwehZS9F9
-         +yBpmbiBtzkq0V+4qa3KMlScOSfd51XY77gdCMM2ZKppK0x+4ED9imCXzD4J8w3+vpha
-         worW7C6dcCsEiC+eNZQLZ0cTbB2bKQ6tHKO9YLH8QJiD/+/EA1bz0fhh5ie1NtkhqReG
-         DBnw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HE//HcQTXFALh6mE2wSN/v3f/KXxXJCpEOZ5pIZr4hY=;
+        b=e5/VJ4uwjeEhiUDjL6Ro+kDSkXiKb18cIXdxJsgc9MfJ3kSMHDqpOjVws7MfyYMItP
+         l7dfyU48/9yznSA611fHOqCN5jmwFasrttXsMVnHGH3Go2SPSw/NDk38rF6BJJE3PA98
+         Q9aXDR+2Dy0BKEwHsrvGGCCXzDYQutoeQj13k43CJwL4OUox7D+BpQpErL2bzO4Y3RFa
+         VbZlXOY0AGWAMIjskiP3aUih8nWm8F7mJu1CsC7IHTDBAn4O0X+jyEd2jPugwxq0LhSv
+         5XKQp9Ra8YQYIYnfrM5xSjVJ1p60b8uZvw/Lr8Ix0MjhKdOudMEt9tVV1c/zgzLaPBSv
+         5Wdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9mOgppXNPhWimJqU72s6fXNPCFcDPkPEDHvzrtAfbic=;
-        b=vDLLG/GxOkQG/1z1mBCzVzDbQAhSVX8WkboS0ZoWDMSCXdG3pEg0OdZ1c+0PRR7+tq
-         T9J0w+S5ESJslJ94n2M1OlSZ/awlwHbWReQEGabNP1oLVP3i2H6XtZ4dtjyY8XYsAbw9
-         oPl0oGz4unihexwLjdnWV5x5iUUCYT926A2e/WpNy+RO5NLI61dOsHI/dTp2NZGj8oOe
-         bJpwWsQ6YmK+QVmlZg9I7JJZNXSIQMCHtA7aHdky0IgKuv/Erv1fNImkCo3YvJnQlr2m
-         j90XQzCzpys8chwHHArAUuCmCxv5VmidIoKXJuG3jJgLfOz2HolzYaVPqQgUBIRpg3vY
-         vUJQ==
-X-Gm-Message-State: AOAM530Q6PI1z2XA5nRPt0HgA0h4we+eL+AxsT1xWobB3ZsaYsDwm8gS
-        KsPPN1E7SjK6UkzpCNASFHMtu5YMc8BxKJHUdXOgU/U84ERcUWQC
-X-Google-Smtp-Source: ABdhPJxuHA+ovPFyGpEEbXeiptBOygU6YMacm73aSaQQzN5jKfKaI7hqdDVB2vUOkzAAfaoiFekAI7Pm86w4RHS54ng=
-X-Received: by 2002:a05:6638:213:b0:326:5c30:494b with SMTP id
- e19-20020a056638021300b003265c30494bmr1874609jaq.42.1650624240131; Fri, 22
- Apr 2022 03:44:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HE//HcQTXFALh6mE2wSN/v3f/KXxXJCpEOZ5pIZr4hY=;
+        b=5rGYAQ7+uE7pL6JQGEU4WvKZpd6KoKv21oUJJYiNcdLlb/K2JerFxOecB4fDCBgSVZ
+         GMd7ofKGMvONeSacVj0oEP+tcm5snzEIv7Gq6+j7I3e9r1/eXpJW8QnUtNDcOMW7sUUb
+         m5izkVdAJ0QHkBGGmG+LK0riKAY80IkdJH5rEFel1rvHwfdeyh5mhUOiJRsLBkYF5Sim
+         IZ4O5XCWYGvIQfKJeT6ScNquIqbuCVYEi6kf39TtAB6dzcaUjhICaNg87NkE9ky984YX
+         wImZblP0cpbdFqHlSjHJoahc7RavVeT5m/I3pUVYTPB95gZbHd30cHsW15mClwJZmeqr
+         jSIg==
+X-Gm-Message-State: AOAM533MFNf02M7XAbXwIdA5NM86PyfM3kZ70xC5Bx+FDwdKyvYcAgHj
+        T8icdePPIxK3PlfvTim63uF3Gg==
+X-Google-Smtp-Source: ABdhPJx39u9MWyPfP66DFZ7RmPDZDn+dQyvSAT/UY9njPtByzeZizvvoyz2vh1Iv+uTdK1xL8PcpXA==
+X-Received: by 2002:a17:906:2bd4:b0:6e8:7e5:39b6 with SMTP id n20-20020a1709062bd400b006e807e539b6mr3516862ejg.25.1650624340194;
+        Fri, 22 Apr 2022 03:45:40 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id cn27-20020a0564020cbb00b00418b0c7fbbfsm744502edb.32.2022.04.22.03.45.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 03:45:39 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Eddie James <eajames@linux.ibm.com>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] irqchip/aspeed-i2c-ic: Fix irq_of_parse_and_map() return value
+Date:   Fri, 22 Apr 2022 12:45:35 +0200
+Message-Id: <20220422104536.61451-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220412122524.26966-1-surong.pang@gmail.com> <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
- <CAEDbmAT=fZ-kpn13sW4KjB9RuFb_6T4j_eripR54NZ3UciZfqA@mail.gmail.com> <d6df23a0-6539-f955-5241-5cdfcaa4eca4@linux.intel.com>
-In-Reply-To: <d6df23a0-6539-f955-5241-5cdfcaa4eca4@linux.intel.com>
-From:   surong pang <surong.pang@gmail.com>
-Date:   Fri, 22 Apr 2022 18:43:48 +0800
-Message-ID: <CAEDbmAT3SoSsEmTkELSYoykGN+AuPgi2N11V2YwKuaC3nKMEmQ@mail.gmail.com>
-Subject: Re: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Orson.Zhai@unisoc.com, yunguo.wu@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device =
-*dev)
->>>       clk_disable_unprepare(clk);
->>>       clk_disable_unprepare(reg_clk);
->>> +    usb_phy_shutdown(hcd->usb_phy);
->>>       usb_put_hcd(hcd);
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Is it ok to put usb_phy_shutdown before usb_put_hcd(hcd)? hcd is
-released at usb_put_hcd.
+Fixes: f48e699ddf70 ("irqchip/aspeed-i2c-ic: Add I2C IRQ controller for Aspeed")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/irqchip/irq-aspeed-i2c-ic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-UNISOC DWC3 phy is not divided  USB 2.0/3.0 phy clearly.  Yes, it's
-UNISOC's issue.
-It UNISOC's dtsi: phys =3D <&ssphy>, <&ssphy>;
-If to shutdown phy too earlier,  it will cost 10s timeout to do xhci_reset.
-usb_remmove_hcd  --> usb_stop_hcd --> xhci_stop --> xhci_reset  -->
-xhci_handshake(&xhci->op_regs->command, CMD_RESET, 0, 10 * 1000 *1000)
+diff --git a/drivers/irqchip/irq-aspeed-i2c-ic.c b/drivers/irqchip/irq-aspeed-i2c-ic.c
+index a47db16ff960..cef1291ae783 100644
+--- a/drivers/irqchip/irq-aspeed-i2c-ic.c
++++ b/drivers/irqchip/irq-aspeed-i2c-ic.c
+@@ -77,7 +77,7 @@ static int __init aspeed_i2c_ic_of_init(struct device_node *node,
+ 	}
+ 
+ 	i2c_ic->parent_irq = irq_of_parse_and_map(node, 0);
+-	if (i2c_ic->parent_irq < 0) {
++	if (!i2c_ic->parent_irq) {
+ 		ret = i2c_ic->parent_irq;
+ 		goto err_iounmap;
+ 	}
+-- 
+2.32.0
 
-I want to know this change is acceptable or not?
-
-hcd->usb_phy =3D devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
-Why in xhci_plat_remove, just to shutdown "usb-phy"[0], not to
-shutdown "usb-phy"[1] ?
-
-Mathias Nyman <mathias.nyman@linux.intel.com> =E4=BA=8E2022=E5=B9=B44=E6=9C=
-=8822=E6=97=A5=E5=91=A8=E4=BA=94 15:51=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 22.4.2022 5.10, surong pang wrote:
-> > shared_hcd might be freed already here, but hcd should not be freed
-> > here, because "usb_put_hcd(hcd)" is called later.
->
-> To me it still looks like this patch calls usb_phy_shutdown(hcd->usb_phy)=
- _after_
-> usb_put_hcd(hcd):
->
-> >>> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_devic=
-e *dev)
-> >>>       clk_disable_unprepare(clk);
-> >>>       clk_disable_unprepare(reg_clk);
-> >>>       usb_put_hcd(hcd);
-> >>> +     usb_phy_shutdown(hcd->usb_phy);
->
->
-> shared hcd was freed even earlier, before disabling the clocks.
->
-> Thanks
-> Mathias

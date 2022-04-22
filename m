@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFBC50C1C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076CD50C1AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbiDVV5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
+        id S231146AbiDVV6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiDVV5D (ORCPT
+        with ESMTP id S230346AbiDVV5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Apr 2022 17:57:03 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A157169E68;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2251AFF5D;
         Fri, 22 Apr 2022 13:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1650659994; x=1682195994;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=bf6kesfiGQW5FTsQbo0yY/hK5dAOEbAhAQZQcC1Uv1E=;
-  b=EbEYr5fkfhrPtbisIHny/e0c2oCYiHESVOJvzmQH7qXUR+WuFGOTESfA
-   p10snCFGQAN7/3rTZjJ/XKM0yWLBP/oerV0gIgWqGNVoJVk4XPwjxQh3W
-   DtOS7O/puL3hGH1hEy0XTkydMN2Rqt6oVWscqiPx8rfEL/QZ224nkJ+DZ
-   vz/P2QQkq8ZfmrQ8HgakTfGTkb2wNLGPeWLQz5aVnEd7ak0+58XNAuKee
-   Hm26N1v1zC6G7s80I0piLWnhBQ1jhAhPSLVHb2d6el2il8QYtGU/GBQ5I
-   SQxWH7CtE1DedChRzHytlAxE+UkX2WwB9XdWw1PncVJ643gfSgWBhOmhZ
+  bh=UMRs4BhTByG3T0yDZhW94axoO98VgNSgjnfEZMM3/as=;
+  b=lTZxpBoeWfaai/QN924GKvdQdblQhJN+yIquj7iG17bZU9wVF+ZtEATd
+   g4EzUzX2PBNfZxxxhXbdar/MlVdXpCo7G2W5cqIBafWFYEBnbkkBwjHDd
+   gQn3aOhXe9muB8XyTHcjnEDOTZVbiyQrZ32OYozuZwk6mUTB0DJn9wmGY
+   A0UdrnFc1/hLtAi3JLLwIKvnCAMIAGNwUrMmUfvDNDeozsJnFrLgynl7U
+   kAnzMs6BtMA58hC2CEiXWwQB5HFlXFRiGNsmQuEBacqMnfvRc4qRiTfW8
+   arGJCAwsyRRkCJ7ojUxgSXFNpzSj6YKQPFGAS5ajFE/wXTLWzd7hTc+zV
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325200937"
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325202821"
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="325200937"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 11:09:29 -0700
+   d="scan'208";a="325202821"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 11:17:00 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="867993856"
-Received: from hltravis-mobl1.amr.corp.intel.com (HELO localhost) ([10.213.166.215])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 11:09:28 -0700
-Date:   Fri, 22 Apr 2022 11:09:28 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, outreachy@lists.linux.dev,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 2/4] Documentation/vm: Include kdocs from highmem*.h into
- highmem.rst
-Message-ID: <YmLvWE7vUduaXZVY@iweiny-desk3>
-References: <20220421180200.16901-1-fmdefrancesco@gmail.com>
- <20220421180200.16901-3-fmdefrancesco@gmail.com>
+   d="scan'208";a="594251782"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 22 Apr 2022 11:16:57 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhxpx-000ARo-9g;
+        Fri, 22 Apr 2022 18:16:57 +0000
+Date:   Sat, 23 Apr 2022 02:16:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cixi Geng <gengcixi@gmail.com>, sre@kernel.org,
+        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        chenyongzhi811@gmail.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: Add enable the primary charger interface
+Message-ID: <202204230206.9TgyhSb1-lkp@intel.com>
+References: <20220422074109.1709106-1-gengcixi@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421180200.16901-3-fmdefrancesco@gmail.com>
+In-Reply-To: <20220422074109.1709106-1-gengcixi@gmail.com>
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -69,41 +65,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 08:01:58PM +0200, Fabio M. De Francesco wrote:
-> kernel-docs that are in include/linux/highmem.h and in
-> include/linux/highmem-internal.h should be included in highmem.rst.
-> 
-> Use kdocs directives to include the above-mentioned comments into
-> highmem.rst.
-> 
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Hi Cixi,
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Thank you for the patch! Perhaps something to improve:
 
-> ---
->  Documentation/vm/highmem.rst | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/vm/highmem.rst b/Documentation/vm/highmem.rst
-> index 0f69a9fec34d..ccff08a8211d 100644
-> --- a/Documentation/vm/highmem.rst
-> +++ b/Documentation/vm/highmem.rst
-> @@ -145,3 +145,10 @@ The general recommendation is that you don't use more than 8GiB on a 32-bit
->  machine - although more might work for you and your workload, you're pretty
->  much on your own - don't expect kernel developers to really care much if things
->  come apart.
-> +
-> +
-> +Functions
-> +=========
-> +
-> +.. kernel-doc:: include/linux/highmem.h
-> +.. kernel-doc:: include/linux/highmem-internal.h
-> -- 
-> 2.34.1
-> 
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on v5.18-rc3 next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cixi-Geng/power-supply-Add-enable-the-primary-charger-interface/20220422-154432
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+config: riscv-randconfig-r042-20220422 (https://download.01.org/0day-ci/archive/20220423/202204230206.9TgyhSb1-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/a566cf23ffad8453d1e1f611086b6eda3f14515d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Cixi-Geng/power-supply-Add-enable-the-primary-charger-interface/20220422-154432
+        git checkout a566cf23ffad8453d1e1f611086b6eda3f14515d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/power/supply/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/power/supply/sc2731_charger.c:156:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (val && !info->charging) {
+                      ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/power/supply/sc2731_charger.c:164:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/power/supply/sc2731_charger.c:156:9: note: remove the 'if' if its condition is always true
+           } else if (val && !info->charging) {
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/power/supply/sc2731_charger.c:156:13: warning: variable 'ret' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+           } else if (val && !info->charging) {
+                      ^~~
+   drivers/power/supply/sc2731_charger.c:164:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/power/supply/sc2731_charger.c:156:13: note: remove the '&&' if its condition is always true
+           } else if (val && !info->charging) {
+                      ^~~~~~
+>> drivers/power/supply/sc2731_charger.c:153:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!val && info->charging) {
+               ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/power/supply/sc2731_charger.c:164:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/power/supply/sc2731_charger.c:153:2: note: remove the 'if' if its condition is always false
+           if (!val && info->charging) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/power/supply/sc2731_charger.c:151:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   drivers/power/supply/sc2731_charger.c:255:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (val->intval == true) {
+                       ^~~~~~~~~~~~~~~~~~~
+   drivers/power/supply/sc2731_charger.c:268:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/power/supply/sc2731_charger.c:255:3: note: remove the 'if' if its condition is always true
+                   if (val->intval == true) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/power/supply/sc2731_charger.c:225:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   4 warnings generated.
+
+
+vim +156 drivers/power/supply/sc2731_charger.c
+
+   148	
+   149	static int sc2731_charger_set_status(struct sc2731_charger_info *info, int val)
+   150	{
+   151		int ret;
+   152	
+ > 153		if (!val && info->charging) {
+   154			sc2731_charger_stop_charge(info);
+   155			info->charging = false;
+ > 156		} else if (val && !info->charging) {
+   157			ret = sc2731_charger_start_charge(info);
+   158			if (ret)
+   159				dev_err(info->dev, "start charge failed\n");
+   160			else
+   161				info->charging = true;
+   162		}
+   163	
+   164		return ret;
+   165	}
+   166	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

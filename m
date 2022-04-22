@@ -2,92 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FE850C023
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168E050C008
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiDVTFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 15:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
+        id S230049AbiDVSxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 14:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiDVTFo (ORCPT
+        with ESMTP id S230239AbiDVSxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 15:05:44 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7230313A4F3;
-        Fri, 22 Apr 2022 11:55:03 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id kj29so2106971qvb.8;
-        Fri, 22 Apr 2022 11:55:03 -0700 (PDT)
+        Fri, 22 Apr 2022 14:53:21 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A595D1FA51
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:46:20 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bq30so15794357lfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KgLoqACed/YZWsVbHrClZlNdD0m+rkp/BoBwdt4BJaE=;
-        b=jjHDbpnHX6rMI9T8KFgLNp0ENDWYQzw2OnvkKfT9UQOI2yRq8Asp37du911P0uT51a
-         W7bwMqKe5m4asxDiJP8/o2e5ghbCMtpvCswT/CZGdG8P847ssbbl0dQ3CJ0LFxfw47sr
-         rVg/ipMn6ayl+b7lnPIceFAu3Phcsa6npmUORP1tKu0VEVYLu0F3NscVbL9JUQccqpkN
-         UhePV2nn/P6+nKszndoc/eX5WqOSCST9zZsvh34SIzrCvgFeyDSgwO6nAe45qwDNx0Ik
-         BELEuUDiscQ4ITnHg8DqExxZSnFdjjjM1ViRPTwtjGY255O1GtjRGFmUwJdrdAYtB+4J
-         mG1A==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gs1lyGDE7+A7xavqOFG1B5XF/uB9DkKS+4Zz/DRp/RQ=;
+        b=f9blmSpiCrZ4zmBvGGeHGSBZF8lDA69+NXIVkqHeg2EPAQqUP5e2SrYel1SNJ6vkKy
+         vLazn76N9iNNnAv9WWOSz8+OHiQptaq8UdnhYq170F2u6zqQg2U5ElQxjd85O7Nb9gE2
+         SFLmyIFXXkFiNRNJEED8FrI0b5Cn2ToNPw9UU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=KgLoqACed/YZWsVbHrClZlNdD0m+rkp/BoBwdt4BJaE=;
-        b=j7+tkz48NzV/CklJr1Cy0WTe+vHn2VTascitPpVBbgZKJM1Gq5Alh29xvUlZD6jg+i
-         FoWlI4YmDNUiNs8MSQQWmWGwjK48LEmy5sAZSLRcWpd/XJ04cd3GuoAIJRhFVInfzdpQ
-         z29oTKMccmsETNv8e1PhEez8CUYIJiVhgz9RT/L4Ews6hf15uUs1SLLaB9CUdj23VY5y
-         N+7e7s3AjEJUsWulHrL2aS6qmRKKfzfM2gn8ZahxjcpQIGZojUBIhsBuzwUf8o9LAjK5
-         IruAye9t7pQmGh6qJWUk2aANdTmc0ekuZmx/KolF1hwU8HkCgg98i0BnXxDy1+VFjp8d
-         FnMQ==
-X-Gm-Message-State: AOAM533EY5uPvWX+XY6VLbEs8AD4sxNLtlV8dgru0P0rBl6avnDfUgSV
-        d7EEqArtJOx0/XR+vktsV1RT5SMwahI=
-X-Google-Smtp-Source: ABdhPJxWVl2l8DYQzxch81sdEC9TG6v2086Rq07jZXEeUku1wQ7R9u27bewitGRVWxzGn9seNnzwfQ==
-X-Received: by 2002:aa7:888c:0:b0:505:7832:98fc with SMTP id z12-20020aa7888c000000b00505783298fcmr6184078pfe.0.1650652849174;
-        Fri, 22 Apr 2022 11:40:49 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:b5ae])
-        by smtp.gmail.com with ESMTPSA id js14-20020a17090b148e00b001cd4989fedbsm2205392pjb.39.2022.04.22.11.40.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 11:40:48 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 22 Apr 2022 08:40:46 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     David Vernet <void@manifault.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH 0/4] cgroup: Introduce cpu controller test suite
-Message-ID: <YmL2rt7A6qfiv1X4@slm.duckdns.org>
-References: <20220422173349.3394844-1-void@manifault.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gs1lyGDE7+A7xavqOFG1B5XF/uB9DkKS+4Zz/DRp/RQ=;
+        b=TbrGRcyXIBfUxJETEwLWYkRe92Q1/11T+psxP5q9JRF8qVxPYytRAWOFWgQdEelWf2
+         p1XI9NfkFkWpvSKYkBRdeIYxFHI0LZGMLSB9mft5OrtBHZ9IZzM7mje3wzuAz96PKGTt
+         ajmsYDtUefTJ2vNxlWuNBV4gualC9ym/d75QMjFoE5cl9WrxUVuw1/vcEZT2TPM+9HHj
+         P1HH7XtgYlDG9iKy/vG45Sx56huPBbv86apSmsmxzLN1cr6QzRB4ve8lZE8DhgoHeW0t
+         DreWhqnHuSA1sa71Sz2pxF+34VHb+xapA4q+S+pn82QUY/D227k34G30sfCIbYgwWBCs
+         6Ncw==
+X-Gm-Message-State: AOAM5300Th8QKKFXYmRUmWc5nn4G/Tz0ycFH2Yzf7DiCSL71SEfUC457
+        G0Wr+8TZhfBuEylcAvkWhETxXI71oi45wXqrUPA=
+X-Google-Smtp-Source: ABdhPJyucUXXq3XL6Sdx0YACaZcoL+jwg63Y/8ITyKpl9U+1U/ocZ41yJheVF7kaBsEKZ+6KAtIXNA==
+X-Received: by 2002:ac2:52b4:0:b0:445:ba75:7513 with SMTP id r20-20020ac252b4000000b00445ba757513mr4029213lfm.248.1650652917186;
+        Fri, 22 Apr 2022 11:41:57 -0700 (PDT)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id 22-20020a05651c009600b0024db88fff1asm301409ljq.83.2022.04.22.11.41.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 11:41:55 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id bn33so10684110ljb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:41:54 -0700 (PDT)
+X-Received: by 2002:a2e:9d46:0:b0:24c:7f1d:73cc with SMTP id
+ y6-20020a2e9d46000000b0024c7f1d73ccmr3579356ljj.358.1650652914703; Fri, 22
+ Apr 2022 11:41:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422173349.3394844-1-void@manifault.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220422060107.781512-1-npiggin@gmail.com> <20220422060107.781512-3-npiggin@gmail.com>
+ <CAHk-=wgFoWLCV9aPHkHe1Mpu0XqxYWaPkKLpe_hcsTS_Vx3aRA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgFoWLCV9aPHkHe1Mpu0XqxYWaPkKLpe_hcsTS_Vx3aRA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 22 Apr 2022 11:41:38 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whao=iosX1s5Z4SF-ZGa-ebAukJoAdUJFk5SPwnofV+Vg@mail.gmail.com>
+Message-ID: <CAHk-=whao=iosX1s5Z4SF-ZGa-ebAukJoAdUJFk5SPwnofV+Vg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] Revert "vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLOW_HUGE_VMAP"
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Content-Type: multipart/mixed; boundary="000000000000a114e105dd429420"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 10:33:47AM -0700, David Vernet wrote:
-> This patchset introduces a new test_cpu.c test suite as part of
-> tools/testing/selftests/cgroup. test_cpu.c will contain testcases that
-> validate the cgroup v2 cpu controller.
-> 
-> This patchset only contains testcases that validate cpu.stat and
-> cpu.weight, but I'm expecting to send further patchsets after this that
-> also include testcases that validate other knobs such as cpu.max.
-> 
-> Note that checkpatch complains about a missing MAINTAINERS file entry for
-> [PATCH 1/4], but Roman Gushchin added that entry in a separate patchset:
-> https://lore.kernel.org/all/20220415000133.3955987-4-roman.gushchin@linux.dev/.
+--000000000000a114e105dd429420
+Content-Type: text/plain; charset="UTF-8"
 
-Applied to cgroup/for-5.19.
+On Fri, Apr 22, 2022 at 10:08 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Just opt-in with the mappings that matter.
 
-Thanks.
+Actually, we could automatically opt-in a few common cases that we
+know are fundamentally ok, because they already can't play protection
+games.
 
--- 
-tejun
+In particular, kvmalloc().
+
+So I think something like this patch - along with Song's patch to
+enable it for alloc_large_system_hash() - would be fairly safe, and
+avoid any nasty cases.
+
+And probably catch quite a lot of the cases that matter that can grow large.
+
+               Linus
+
+--000000000000a114e105dd429420
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l2ary56k0>
+X-Attachment-Id: f_l2ary56k0
+
+IG1tL3V0aWwuYyB8IDExICsrKysrKysrKy0tCiAxIGZpbGUgY2hhbmdlZCwgOSBpbnNlcnRpb25z
+KCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL21tL3V0aWwuYyBiL21tL3V0aWwuYwpp
+bmRleCA1NGU1ZTc2MWE5YTkuLjM0OTJhOWU4MWFhMyAxMDA2NDQKLS0tIGEvbW0vdXRpbC5jCisr
+KyBiL21tL3V0aWwuYwpAQCAtNTkyLDggKzU5MiwxNSBAQCB2b2lkICprdm1hbGxvY19ub2RlKHNp
+emVfdCBzaXplLCBnZnBfdCBmbGFncywgaW50IG5vZGUpCiAJCXJldHVybiBOVUxMOwogCX0KIAot
+CXJldHVybiBfX3ZtYWxsb2Nfbm9kZShzaXplLCAxLCBmbGFncywgbm9kZSwKLQkJCV9fYnVpbHRp
+bl9yZXR1cm5fYWRkcmVzcygwKSk7CisJLyoKKwkgKiBrdm1hbGxvYygpIGNhbiBhbHdheXMgdXNl
+IFZNX0FMTE9XX0hVR0VfVk1BUCwKKwkgKiBzaW5jZSB0aGUgY2FsbGVycyBhbHJlYWR5IGNhbm5v
+dCBhc3N1bWUgYW55dGhpbmcKKwkgKiBhYm91dCB0aGUgcmVzdWx0aW5nIHBvaW50ZXIsIGFuZCBj
+YW5ub3QgcGxheQorCSAqIHByb3RlY3Rpb24gZ2FtZXMuCisJICovCisJcmV0dXJuIF9fdm1hbGxv
+Y19ub2RlX3JhbmdlKHNpemUsIDEsIFZNQUxMT0NfU1RBUlQsIFZNQUxMT0NfRU5ELAorCQkJZmxh
+Z3MsIFBBR0VfS0VSTkVMLCBWTV9BTExPV19IVUdFX1ZNQVAsCisJCQlub2RlLCBfX2J1aWx0aW5f
+cmV0dXJuX2FkZHJlc3MoMCkpOwogfQogRVhQT1JUX1NZTUJPTChrdm1hbGxvY19ub2RlKTsKIAo=
+--000000000000a114e105dd429420--

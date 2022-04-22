@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B053350B8B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7BD50B8BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448080AbiDVNlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S1448100AbiDVNlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354189AbiDVNlR (ORCPT
+        with ESMTP id S1447790AbiDVNlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:41:17 -0400
+        Fri, 22 Apr 2022 09:41:18 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3208583BD;
-        Fri, 22 Apr 2022 06:38:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39E7583BF;
+        Fri, 22 Apr 2022 06:38:25 -0700 (PDT)
 Received: from obbardc-laptop.home (unknown [IPv6:2a00:23c7:6883:e501:cf51:f3a2:10b5:accf])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: obbardc)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 5A9D81F468AD;
-        Fri, 22 Apr 2022 14:38:23 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 7D8641F468B7;
+        Fri, 22 Apr 2022 14:38:24 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650634703;
-        bh=lG0LG0N9MIhYCL292BSrPyGfr6h7Zn6+FnaySiga34Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=V5I1K3kUcRLc+b1lAryowpEJmIGmIfT/ATOPIGXQvh2LIICCrr9AZkaLLS4CjlVVP
-         vHpsq+sV6YJVok+GmYTMCqVMTfbkQAWimpvdh/Bhp4NeKHL9nNwsHnSIufOroxMCFm
-         797ojzujRiNaTI/JAG9iJNPSBqeFWtfAk5sllWHYpehP9lbij4KdffHLcRSy7u+96O
-         MFOgNHVjYtatEO8XhnWQS0GSMUXU81Jz70rrdigM1+B7hIUWFzmLPzXJR00KkkDpYS
-         /LVfCQK03PBRKawar0iBoONLW50DrmCKYgvvbGiRndtnSJSmhb8GNKqKvPkTCX2IZh
-         egWh32jhhKoJw==
+        s=mail; t=1650634704;
+        bh=9+2KVQa3DMg7UKEVPJhPFKwJCmwX4dRKAtLwy+ze6F8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XnKtwNf3WY0fiPd3LifbCPX1N0sVm2p03RmK4hbJ0a8U5dheIJJt5yvjfVUPi0kRX
+         cRS3VBK5jOQZqc81e4NS+MzrNPCHq5awwoTDKxGAa1JJITeaw+5VoqtzdwFfVjhnPy
+         8muWxfnhx7hnVZxQg8o8KwJ2OsTqSm2J0lmpL4Ac8248prOxTYAPgkKDvWa6iUCa6V
+         KAksFJ8Cbj5BfY1/CZOkgM0DyeFxfnyCA+V7eNRBFb8/yJ+uLZfW3tsIbMYIPcDP/W
+         K8C7OXp09M721cKh61CBfO/OonxkcIz5B8cJMP8ASJ+JelxFA3TsPUVHEjxkfWK99B
+         GQMoTAT+51nqQ==
 From:   Christopher Obbard <chris.obbard@collabora.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -44,10 +44,12 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Christopher Obbard <chris.obbard@collabora.com>
-Subject: [PATCH 0/3] Rockchip RK3328 VDEC support
-Date:   Fri, 22 Apr 2022 14:38:00 +0100
-Message-Id: <20220422133803.989256-1-chris.obbard@collabora.com>
+Subject: [PATCH 1/3] media: dt-bindings: media: rockchip-vdec: Add RK3328 compatible
+Date:   Fri, 22 Apr 2022 14:38:01 +0100
+Message-Id: <20220422133803.989256-2-chris.obbard@collabora.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220422133803.989256-1-chris.obbard@collabora.com>
+References: <20220422133803.989256-1-chris.obbard@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -59,44 +61,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds VDEC support for the Rockchip RK3328 SoC which
-uses the staging rkvdec driver.
+Document the RK3328 compatible for rockchip-vdec.
 
-Testing was performed using both v4l-compliance and (mainline)
-gstreamer using the fluster framework. I can include full test
-results if that would be useful.
+Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
+---
+ Documentation/devicetree/bindings/media/rockchip,vdec.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-    $ v4l2-compliance -m0
-    v4l2-compliance 1.22.1, 64 bits, 64-bit time_t
-    ...
-    Grand Total for rkvdec device /dev/media0: 54, Succeeded: 54, Failed: 0, Warnings: 0
-
-
-    $ python3 fluster.py run -j1 -ts JVT-AVC_V1 -d GStreamer-H.264-V4L2SL-Gst1.0
-    ...
-    Ran 111/135 tests successfully               in 392.885 secs
-
-
-    $ python3 fluster.py run -j1 -ts VP9-TEST-VECTORS -d GStreamer-VP9-V4L2SL-Gst1.0
-    ...
-    Ran 206/303 tests successfully               in 1170.120 secs
-
-
-
-Cheers,
-
-Chris
-
-Christopher Obbard (3):
-  media: dt-bindings: media: rockchip-vdec: Add RK3328 compatible
-  arm64: dts: rockchip: Rename vdec_mmu node for RK3328
-  arm64: dts: rockchip: Add vdec support for RK3328
-
- .../bindings/media/rockchip,vdec.yaml         |  1 +
- arch/arm64/boot/dts/rockchip/rk3328.dtsi      | 27 +++++++++++++++++--
- 2 files changed, 26 insertions(+), 2 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/media/rockchip,vdec.yaml b/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+index 089f11d21b25..23f9687d862c 100644
+--- a/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
++++ b/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+@@ -19,6 +19,7 @@ properties:
+       - const: rockchip,rk3399-vdec
+       - items:
+           - const: rockchip,rk3228-vdec
++          - const: rockchip,rk3328-vdec
+           - const: rockchip,rk3399-vdec
+ 
+   reg:
 -- 
 2.34.1
 

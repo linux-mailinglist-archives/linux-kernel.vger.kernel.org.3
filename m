@@ -2,422 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74AB50BC94
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11EA50BC93
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352255AbiDVQIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S1346869AbiDVQIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378340AbiDVQHx (ORCPT
+        with ESMTP id S1379287AbiDVQH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:07:53 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864BB5FD8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:04:58 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id i8so5327655ila.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:04:58 -0700 (PDT)
+        Fri, 22 Apr 2022 12:07:59 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A5E6462;
+        Fri, 22 Apr 2022 09:05:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KfvcnPXDciGbM0GgFvcrkL5rJogs+wxiu9DmRRZRSNc=;
-        b=GYlVR9EMRrGvpPV7AioYTdDS4rTULcYFa0W4uHeRg98OsxnvWUEP4N+YPh1lEPJ3OL
-         W8Wv8zPGzKvJc4jFlObrRplj7vbeunL6WHYdorQ11hVR6XVFAWMF7w7RNkow7zZxq9Rb
-         jwC/411xde7RqMdFs16CbJWRZM1SSoEXJy3r4ZUIcyl7K5KQUdDDPxp7DPlGYX0NAS/o
-         dd+KzWrieLph+dNnm8NLJ3LlrOC8eTZEL/yb8x9ZHWLsmPgG8BiHBNXhBI5WAISeo8tW
-         m6B5JGFSrLpsJaop4lk2mh+wDb12Sgy5jb662PSJlBX9s74LYh34eqUkFfCgwbBV6rBp
-         8/Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KfvcnPXDciGbM0GgFvcrkL5rJogs+wxiu9DmRRZRSNc=;
-        b=5Sg+ttXmS5Z06/wh871jic2FamEBORzfoHfo80mkIXfd5sBfjZaXbHecYigVi0sIle
-         L4FprYY6sCBs2eAJmuZDP1/+JMwJTOxNftdgCR8AvneAjvImiUd8nBnlPQvFem2APePE
-         ovrXehKzdfgmunjClrCSJpSnIJog2Zcyt5btlBr+CxatpzVXhLH5GtCPAXUibgJS2ymc
-         4alg3GFYKfaSk9MFSWS6xbcPLvZHBdyz0Du3IRdutK/bZk1wM6FNmHb/koIQfonARbhC
-         pWVbhW3N48N/aMhV6bG8f34QTzG7AxoEcHWpAjp0EmnTZjgd73LdYA9TOR4HkSPi8+7S
-         bvTA==
-X-Gm-Message-State: AOAM532JMuPPQTtJV7jl76jn59sYUMaULX7uoVQF5+vuvdIgsrx1YIwC
-        LiY9MBw0ZpCv26K7ScAzMq2rk+psKpk040yFBAc=
-X-Google-Smtp-Source: ABdhPJxI8Qid9SIBe9VJcsIFKSA0yUdc55gEKZGXWdhH307Lp9dQ3P0A20yWcP+OTmL1lieEry6JYaFC+s4+0PTKo5M=
-X-Received: by 2002:a92:c561:0:b0:2cb:d912:bc83 with SMTP id
- b1-20020a92c561000000b002cbd912bc83mr2215506ilj.81.1650643497795; Fri, 22 Apr
- 2022 09:04:57 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650643505; x=1682179505;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/YVh3Fi2yYRT3v0ZIMzJT7OJ10RX1wY1F6v1PfZrDx0=;
+  b=Nc0KJe0YETLy1v4mOfXabfkk/F5Xlc/sthXYCljTYTgAGVPSSk2CUYJo
+   O0lXH2Hj1x/YNYIFaYLn6Y6Izx9ObuxDxcLmwBB5W/PxjNc/1pOtUMpcz
+   tW69zC0v0n7pHzkXPwmXqPuPW8+ixc3YNnZKP8dyten+8fq+qcY23qv1s
+   k=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Apr 2022 09:05:03 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 09:05:03 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 22 Apr 2022 09:05:03 -0700
+Received: from [10.111.175.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 22 Apr
+ 2022 09:04:59 -0700
+Message-ID: <83129bad-44a9-bec7-f931-8067ef1b9d4d@quicinc.com>
+Date:   Fri, 22 Apr 2022 09:04:57 -0700
 MIME-Version: 1.0
-References: <20220421211549.3884453-1-pcc@google.com>
-In-Reply-To: <20220421211549.3884453-1-pcc@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Fri, 22 Apr 2022 18:04:47 +0200
-Message-ID: <CA+fCnZdouu-v1MKndMbeOw96pknGN=77=8B=_K4kedRROrL9pw@mail.gmail.com>
-Subject: Re: [PATCH v2] mm: make minimum slab alignment a runtime property
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Pekka Enberg <penberg@kernel.org>, roman.gushchin@linux.dev,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v9 2/4] drm/msm/dp: Support only IRQ_HPD and REPLUG
+ interrupts for eDP
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+CC:     quic_kalyant <quic_kalyant@quicinc.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sean Paul <sean@poorly.run>, Sean Paul <seanpaul@chromium.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>
+References: <1650618666-15342-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1650618666-15342-3-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=WWa8n0MJB8ks7bgrSj1Qop1Z5hvfEAOWtFcmsz38eR_w@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAD=FV=WWa8n0MJB8ks7bgrSj1Qop1Z5hvfEAOWtFcmsz38eR_w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:16 PM Peter Collingbourne <pcc@google.com> wrote:
->
-> When CONFIG_KASAN_HW_TAGS is enabled we currently increase the minimum
-> slab alignment to 16. This happens even if MTE is not supported in
-> hardware or disabled via kasan=off, which creates an unnecessary
-> memory overhead in those cases. Eliminate this overhead by making
-> the minimum slab alignment a runtime property and only aligning to
-> 16 if KASAN is enabled at runtime.
->
-> On a DragonBoard 845c (non-MTE hardware) with a kernel built with
-> CONFIG_KASAN_HW_TAGS, waiting for quiescence after a full Android
-> boot I see the following Slab measurements in /proc/meminfo (median
-> of 3 reboots):
->
-> Before: 169020 kB
-> After:  167304 kB
+Hi Doug
 
-Thanks for the improvement, Peter!
+For the lockdep error, the splat looks similar to what kuogee fixed 
+recently.
 
-Overall, the patch looks good to me:
+Can you please check if below patch is present in your tree?
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+https://patchwork.freedesktop.org/patch/481396/
 
-While looking at the code, I noticed a couple of issues in the already
-existing comments. Not sure if they are worth fixing, but I'll point
-them out just in case.
+Thanks
 
-> Link: https://linux-review.googlesource.com/id/I752e725179b43b144153f4b6f584ceb646473ead
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
-> ---
-> v2:
-> - use max instead of max_t in flat_stack_align()
->
->  arch/arc/include/asm/cache.h        |  4 ++--
->  arch/arm/include/asm/cache.h        |  2 +-
->  arch/arm64/include/asm/cache.h      | 19 +++++++++++++------
->  arch/microblaze/include/asm/page.h  |  2 +-
->  arch/riscv/include/asm/cache.h      |  2 +-
->  arch/sparc/include/asm/cache.h      |  2 +-
->  arch/xtensa/include/asm/processor.h |  2 +-
->  fs/binfmt_flat.c                    |  9 ++++++---
->  include/crypto/hash.h               |  2 +-
->  include/linux/slab.h                | 22 +++++++++++++++++-----
->  mm/slab.c                           |  7 +++----
->  mm/slab_common.c                    |  3 +--
->  mm/slob.c                           |  6 +++---
->  13 files changed, 51 insertions(+), 31 deletions(-)
->
-> diff --git a/arch/arc/include/asm/cache.h b/arch/arc/include/asm/cache.h
-> index f0f1fc5d62b6..b6a7763fd5d6 100644
-> --- a/arch/arc/include/asm/cache.h
-> +++ b/arch/arc/include/asm/cache.h
-> @@ -55,11 +55,11 @@
->   * Make sure slab-allocated buffers are 64-bit aligned when atomic64_t uses
->   * ARCv2 64-bit atomics (LLOCKD/SCONDD). This guarantess runtime 64-bit
->   * alignment for any atomic64_t embedded in buffer.
-> - * Default ARCH_SLAB_MINALIGN is __alignof__(long long) which has a relaxed
-> + * Default ARCH_SLAB_MIN_MINALIGN is __alignof__(long long) which has a relaxed
->   * value of 4 (and not 8) in ARC ABI.
->   */
->  #if defined(CONFIG_ARC_HAS_LL64) && defined(CONFIG_ARC_HAS_LLSC)
-> -#define ARCH_SLAB_MINALIGN     8
-> +#define ARCH_SLAB_MIN_MINALIGN 8
->  #endif
->
->  extern int ioc_enable;
-> diff --git a/arch/arm/include/asm/cache.h b/arch/arm/include/asm/cache.h
-> index e3ea34558ada..3e1018bb9805 100644
-> --- a/arch/arm/include/asm/cache.h
-> +++ b/arch/arm/include/asm/cache.h
-> @@ -21,7 +21,7 @@
->   * With EABI on ARMv5 and above we must have 64-bit aligned slab pointers.
->   */
->  #if defined(CONFIG_AEABI) && (__LINUX_ARM_ARCH__ >= 5)
-> -#define ARCH_SLAB_MINALIGN 8
-> +#define ARCH_SLAB_MIN_MINALIGN 8
->  #endif
->
->  #define __read_mostly __section(".data..read_mostly")
-> diff --git a/arch/arm64/include/asm/cache.h b/arch/arm64/include/asm/cache.h
-> index a074459f8f2f..38f171591c3f 100644
-> --- a/arch/arm64/include/asm/cache.h
-> +++ b/arch/arm64/include/asm/cache.h
-> @@ -6,6 +6,7 @@
->  #define __ASM_CACHE_H
->
->  #include <asm/cputype.h>
-> +#include <asm/mte-def.h>
->
->  #define CTR_L1IP_SHIFT         14
->  #define CTR_L1IP_MASK          3
-> @@ -49,15 +50,21 @@
->   */
->  #define ARCH_DMA_MINALIGN      (128)
->
-> -#ifdef CONFIG_KASAN_SW_TAGS
-> -#define ARCH_SLAB_MINALIGN     (1ULL << KASAN_SHADOW_SCALE_SHIFT)
-> -#elif defined(CONFIG_KASAN_HW_TAGS)
-> -#define ARCH_SLAB_MINALIGN     MTE_GRANULE_SIZE
-> -#endif
-> -
->  #ifndef __ASSEMBLY__
->
->  #include <linux/bitops.h>
-> +#include <linux/kasan-enabled.h>
-> +
-> +#ifdef CONFIG_KASAN_SW_TAGS
-> +#define ARCH_SLAB_MIN_MINALIGN (1ULL << KASAN_SHADOW_SCALE_SHIFT)
-> +#elif defined(CONFIG_KASAN_HW_TAGS)
-> +static inline size_t arch_slab_minalign(void)
-> +{
-> +       return kasan_hw_tags_enabled() ? MTE_GRANULE_SIZE :
-> +                                        __alignof__(unsigned long long);
-> +}
-> +#define arch_slab_minalign() arch_slab_minalign()
-> +#endif
->
->  #define ICACHEF_ALIASING       0
->  #define ICACHEF_VPIPT          1
-> diff --git a/arch/microblaze/include/asm/page.h b/arch/microblaze/include/asm/page.h
-> index 4b8b2fa78fc5..ccdbc1da3c3e 100644
-> --- a/arch/microblaze/include/asm/page.h
-> +++ b/arch/microblaze/include/asm/page.h
-> @@ -33,7 +33,7 @@
->  /* MS be sure that SLAB allocates aligned objects */
->  #define ARCH_DMA_MINALIGN      L1_CACHE_BYTES
->
-> -#define ARCH_SLAB_MINALIGN     L1_CACHE_BYTES
-> +#define ARCH_SLAB_MIN_MINALIGN L1_CACHE_BYTES
->
->  /*
->   * PAGE_OFFSET -- the first address of the first page of memory. With MMU
-> diff --git a/arch/riscv/include/asm/cache.h b/arch/riscv/include/asm/cache.h
-> index 9b58b104559e..7beb3b5d27c7 100644
-> --- a/arch/riscv/include/asm/cache.h
-> +++ b/arch/riscv/include/asm/cache.h
-> @@ -16,7 +16,7 @@
->   * the flat loader aligns it accordingly.
->   */
->  #ifndef CONFIG_MMU
-> -#define ARCH_SLAB_MINALIGN     16
-> +#define ARCH_SLAB_MIN_MINALIGN 16
->  #endif
->
->  #endif /* _ASM_RISCV_CACHE_H */
-> diff --git a/arch/sparc/include/asm/cache.h b/arch/sparc/include/asm/cache.h
-> index e62fd0e72606..9d8cb4687b7e 100644
-> --- a/arch/sparc/include/asm/cache.h
-> +++ b/arch/sparc/include/asm/cache.h
-> @@ -8,7 +8,7 @@
->  #ifndef _SPARC_CACHE_H
->  #define _SPARC_CACHE_H
->
-> -#define ARCH_SLAB_MINALIGN     __alignof__(unsigned long long)
-> +#define ARCH_SLAB_MIN_MINALIGN __alignof__(unsigned long long)
->
->  #define L1_CACHE_SHIFT 5
->  #define L1_CACHE_BYTES 32
-> diff --git a/arch/xtensa/include/asm/processor.h b/arch/xtensa/include/asm/processor.h
-> index 4489a27d527a..e3ea278e3fcf 100644
-> --- a/arch/xtensa/include/asm/processor.h
-> +++ b/arch/xtensa/include/asm/processor.h
-> @@ -18,7 +18,7 @@
->  #include <asm/types.h>
->  #include <asm/regs.h>
->
-> -#define ARCH_SLAB_MINALIGN XTENSA_STACK_ALIGNMENT
-> +#define ARCH_SLAB_MIN_MINALIGN XTENSA_STACK_ALIGNMENT
->
->  /*
->   * User space process size: 1 GB.
-> diff --git a/fs/binfmt_flat.c b/fs/binfmt_flat.c
-> index 626898150011..23ce3439eafa 100644
-> --- a/fs/binfmt_flat.c
-> +++ b/fs/binfmt_flat.c
-> @@ -64,7 +64,10 @@
->   * Here we can be a bit looser than the data sections since this
->   * needs to only meet arch ABI requirements.
->   */
-> -#define FLAT_STACK_ALIGN       max_t(unsigned long, sizeof(void *), ARCH_SLAB_MINALIGN)
-> +static size_t flat_stack_align(void)
-> +{
-> +       return max(sizeof(void *), arch_slab_minalign());
-> +}
->
->  #define RELOC_FAILED 0xff00ff01                /* Relocation incorrect somewhere */
->  #define UNLOADED_LIB 0x7ff000ff                /* Placeholder for unused library */
-> @@ -148,7 +151,7 @@ static int create_flat_tables(struct linux_binprm *bprm, unsigned long arg_start
->                 sp -= 2; /* argvp + envp */
->         sp -= 1;  /* &argc */
->
-> -       current->mm->start_stack = (unsigned long)sp & -FLAT_STACK_ALIGN;
-> +       current->mm->start_stack = (unsigned long)sp & -flat_stack_align();
->         sp = (unsigned long __user *)current->mm->start_stack;
->
->         if (put_user(bprm->argc, sp++))
-> @@ -966,7 +969,7 @@ static int load_flat_binary(struct linux_binprm *bprm)
->  #endif
->         stack_len += (bprm->argc + 1) * sizeof(char *);   /* the argv array */
->         stack_len += (bprm->envc + 1) * sizeof(char *);   /* the envp array */
-> -       stack_len = ALIGN(stack_len, FLAT_STACK_ALIGN);
-> +       stack_len = ALIGN(stack_len, flat_stack_align());
->
->         res = load_flat_file(bprm, &libinfo, 0, &stack_len);
->         if (res < 0)
-> diff --git a/include/crypto/hash.h b/include/crypto/hash.h
-> index f140e4643949..442c290f458c 100644
-> --- a/include/crypto/hash.h
-> +++ b/include/crypto/hash.h
-> @@ -149,7 +149,7 @@ struct ahash_alg {
->
->  struct shash_desc {
->         struct crypto_shash *tfm;
-> -       void *__ctx[] __aligned(ARCH_SLAB_MINALIGN);
-> +       void *__ctx[] __aligned(ARCH_SLAB_MIN_MINALIGN);
->  };
->
->  #define HASH_MAX_DIGESTSIZE     64
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 373b3ef99f4e..80e517593372 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -201,21 +201,33 @@ void kmem_dump_obj(void *object);
->  #endif
->
->  /*
-> - * Setting ARCH_SLAB_MINALIGN in arch headers allows a different alignment.
-> + * Setting ARCH_SLAB_MIN_MINALIGN in arch headers allows a different alignment.
->   * Intended for arches that get misalignment faults even for 64 bit integer
->   * aligned buffers.
->   */
-> -#ifndef ARCH_SLAB_MINALIGN
-> -#define ARCH_SLAB_MINALIGN __alignof__(unsigned long long)
-> +#ifndef ARCH_SLAB_MIN_MINALIGN
-> +#define ARCH_SLAB_MIN_MINALIGN __alignof__(unsigned long long)
-> +#endif
-> +
-> +/*
-> + * Arches can define this function if they want to decide the minimum slab
-> + * alignment at runtime. The value returned by the function must be
-> + * >= ARCH_SLAB_MIN_MINALIGN.
-> + */
-> +#ifndef arch_slab_minalign
-> +static inline size_t arch_slab_minalign(void)
-> +{
-> +       return ARCH_SLAB_MIN_MINALIGN;
-> +}
->  #endif
->
->  /*
->   * kmalloc and friends return ARCH_KMALLOC_MINALIGN aligned
-> - * pointers. kmem_cache_alloc and friends return ARCH_SLAB_MINALIGN
-> + * pointers. kmem_cache_alloc and friends return ARCH_SLAB_MIN_MINALIGN
->   * aligned pointers.
-
-This comment is not precise: kmalloc relies on kmem_cache_alloc, so
-kmalloc technically returns pointers aligned to
-max(ARCH_KMALLOC_MINALIGN, ARCH_SLAB_MIN_MINALIGN). See
-create_kmalloc_cache()->create_boot_cache()->calculate_alignment() for
-SLAB and SLUB and __do_kmalloc_node() for SLOB. This alignment is
-stronger than the one is specified for __assume_kmalloc_alignment
-below, so the code should be fine. However, the comment is confusing.
-
-Also, the comment next to the ARCH_KMALLOC_MINALIGN definition says
-"Setting ARCH_KMALLOC_MINALIGN in arch headers" while it should say
-"Setting ARCH_DMA_MINALIGN in arch headers".
-
->   */
->  #define __assume_kmalloc_alignment __assume_aligned(ARCH_KMALLOC_MINALIGN)
-> -#define __assume_slab_alignment __assume_aligned(ARCH_SLAB_MINALIGN)
-> +#define __assume_slab_alignment __assume_aligned(ARCH_SLAB_MIN_MINALIGN)
->  #define __assume_page_alignment __assume_aligned(PAGE_SIZE)
->
->  /*
-> diff --git a/mm/slab.c b/mm/slab.c
-> index 0edb474edef1..97b756976c8b 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3009,10 +3009,9 @@ static void *cache_alloc_debugcheck_after(struct kmem_cache *cachep,
->         objp += obj_offset(cachep);
->         if (cachep->ctor && cachep->flags & SLAB_POISON)
->                 cachep->ctor(objp);
-> -       if (ARCH_SLAB_MINALIGN &&
-> -           ((unsigned long)objp & (ARCH_SLAB_MINALIGN-1))) {
-> -               pr_err("0x%px: not aligned to ARCH_SLAB_MINALIGN=%d\n",
-> -                      objp, (int)ARCH_SLAB_MINALIGN);
-> +       if ((unsigned long)objp & (arch_slab_minalign() - 1)) {
-> +               pr_err("0x%px: not aligned to arch_slab_minalign()=%d\n", objp,
-> +                      (int)arch_slab_minalign());
->         }
->         return objp;
->  }
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 2b3206a2c3b5..33cc49810a54 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -154,8 +154,7 @@ static unsigned int calculate_alignment(slab_flags_t flags,
->                 align = max(align, ralign);
->         }
->
-> -       if (align < ARCH_SLAB_MINALIGN)
-> -               align = ARCH_SLAB_MINALIGN;
-> +       align = max_t(size_t, align, arch_slab_minalign());
->
->         return ALIGN(align, sizeof(void *));
->  }
-> diff --git a/mm/slob.c b/mm/slob.c
-> index 40ea6e2d4ccd..3bd2669bd690 100644
-> --- a/mm/slob.c
-> +++ b/mm/slob.c
-> @@ -478,7 +478,7 @@ static __always_inline void *
->  __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
->  {
->         unsigned int *m;
-> -       int minalign = max_t(size_t, ARCH_KMALLOC_MINALIGN, ARCH_SLAB_MINALIGN);
-> +       int minalign = max_t(size_t, ARCH_KMALLOC_MINALIGN, arch_slab_minalign());
->         void *ret;
->
->         gfp &= gfp_allowed_mask;
-> @@ -555,7 +555,7 @@ void kfree(const void *block)
->
->         sp = virt_to_folio(block);
->         if (folio_test_slab(sp)) {
-> -               int align = max_t(size_t, ARCH_KMALLOC_MINALIGN, ARCH_SLAB_MINALIGN);
-> +               int align = max_t(size_t, ARCH_KMALLOC_MINALIGN, arch_slab_minalign());
->                 unsigned int *m = (unsigned int *)(block - align);
->                 slob_free(m, *m + align);
->         } else {
-> @@ -584,7 +584,7 @@ size_t __ksize(const void *block)
->         if (unlikely(!folio_test_slab(folio)))
->                 return folio_size(folio);
->
-> -       align = max_t(size_t, ARCH_KMALLOC_MINALIGN, ARCH_SLAB_MINALIGN);
-> +       align = max_t(size_t, ARCH_KMALLOC_MINALIGN, arch_slab_minalign());
->         m = (unsigned int *)(block - align);
->         return SLOB_UNITS(*m) * SLOB_UNIT;
->  }
-> --
-> 2.36.0.rc2.479.g8af0fa9b8e-goog
->
+Abhinav
+On 4/22/2022 8:55 AM, Doug Anderson wrote:
+> Hi,
+> 
+> On Fri, Apr 22, 2022 at 2:11 AM Sankeerth Billakanti
+> <quic_sbillaka@quicinc.com> wrote:
+>>
+>> The panel-edp enables the eDP panel power during probe, get_modes
+>> and pre-enable. The eDP connect and disconnect interrupts for the eDP/DP
+>> controller are directly dependent on panel power. As eDP display can be
+>> assumed as always connected, the controller driver can skip the eDP
+>> connect and disconnect interrupts. Any disruption in the link status
+>> will be indicated via the IRQ_HPD interrupts.
+>>
+>> So, the eDP controller driver can just enable the IRQ_HPD and replug
+>> interrupts. The DP controller driver still needs to enable all the
+>> interrupts.
+>>
+>> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+>> ---
+>> Changes in v9:
+>>    - add comment explaining the interrupt status register
+>>
+>> Changes in v8:
+>>    - add comment explaining the interrupt status return
+>>
+>> Changes in v7:
+>>    - reordered the patch in the series
+>>    - modified the return statement for isr
+>>    - connector check modified to just check for eDP
+>>
+>>   drivers/gpu/drm/msm/dp/dp_catalog.c | 16 ++++++++++------
+>>   drivers/gpu/drm/msm/dp/dp_display.c | 22 +++++++++++++++++++++-
+>>   2 files changed, 31 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+>> index fac815f..df9670d 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+>> @@ -569,10 +569,6 @@ void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog)
+>>
+>>          u32 reftimer = dp_read_aux(catalog, REG_DP_DP_HPD_REFTIMER);
+>>
+>> -       /* enable HPD plug and unplug interrupts */
+>> -       dp_catalog_hpd_config_intr(dp_catalog,
+>> -               DP_DP_HPD_PLUG_INT_MASK | DP_DP_HPD_UNPLUG_INT_MASK, true);
+>> -
+>>          /* Configure REFTIMER and enable it */
+>>          reftimer |= DP_DP_HPD_REFTIMER_ENABLE;
+>>          dp_write_aux(catalog, REG_DP_DP_HPD_REFTIMER, reftimer);
+>> @@ -599,13 +595,21 @@ u32 dp_catalog_hpd_get_intr_status(struct dp_catalog *dp_catalog)
+>>   {
+>>          struct dp_catalog_private *catalog = container_of(dp_catalog,
+>>                                  struct dp_catalog_private, dp_catalog);
+>> -       int isr = 0;
+>> +       int isr, mask;
+>>
+>>          isr = dp_read_aux(catalog, REG_DP_DP_HPD_INT_STATUS);
+>>          dp_write_aux(catalog, REG_DP_DP_HPD_INT_ACK,
+>>                                   (isr & DP_DP_HPD_INT_MASK));
+>> +       mask = dp_read_aux(catalog, REG_DP_DP_HPD_INT_MASK);
+>>
+>> -       return isr;
+>> +       /*
+>> +        * We only want to return interrupts that are unmasked to the caller.
+>> +        * However, the interrupt status field also contains other
+>> +        * informational bits about the HPD state status, so we only mask
+>> +        * out the part of the register that tells us about which interrupts
+>> +        * are pending.
+>> +        */
+>> +       return isr & (mask | ~DP_DP_HPD_INT_MASK);
+>>   }
+>>
+>>   int dp_catalog_ctrl_get_interrupt(struct dp_catalog *dp_catalog)
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index 055681a..dea4de9 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -683,7 +683,8 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
+>>          dp_display_handle_plugged_change(&dp->dp_display, false);
+>>
+>>          /* enable HDP plug interrupt to prepare for next plugin */
+>> -       dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, true);
+>> +       if (!dp->dp_display.is_edp)
+>> +               dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, true);
+>>
+>>          DRM_DEBUG_DP("After, type=%d hpd_state=%d\n",
+>>                          dp->dp_display.connector_type, state);
+>> @@ -1096,6 +1097,13 @@ static void dp_display_config_hpd(struct dp_display_private *dp)
+>>          dp_display_host_init(dp);
+>>          dp_catalog_ctrl_hpd_config(dp->catalog);
+>>
+>> +       /* Enable plug and unplug interrupts only for external DisplayPort */
+>> +       if (!dp->dp_display.is_edp)
+>> +               dp_catalog_hpd_config_intr(dp->catalog,
+>> +                               DP_DP_HPD_PLUG_INT_MASK |
+>> +                               DP_DP_HPD_UNPLUG_INT_MASK,
+>> +                               true);
+>> +
+>>          /* Enable interrupt first time
+>>           * we are leaving dp clocks on during disconnect
+>>           * and never disable interrupt
+>> @@ -1381,6 +1389,12 @@ static int dp_pm_resume(struct device *dev)
+>>          dp_catalog_ctrl_hpd_config(dp->catalog);
+>>
+>>
+>> +       if (!dp->dp_display.is_edp)
+>> +               dp_catalog_hpd_config_intr(dp->catalog,
+>> +                               DP_DP_HPD_PLUG_INT_MASK |
+>> +                               DP_DP_HPD_UNPLUG_INT_MASK,
+>> +                               true);
+>> +
+>>          if (dp_catalog_link_is_connected(dp->catalog)) {
+>>                  /*
+>>                   * set sink to normal operation mode -- D0
+>> @@ -1659,6 +1673,9 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+>>                  return;
+>>          }
+>>
+>> +       if (dp->is_edp)
+>> +               dp_hpd_plug_handle(dp_display, 0);
+> 
+> So I finally got a chance to test and unfortunately this is getting a
+> lockdep error. :( Here's the crawl with my current set of patches
+> (which, admittedly is on the chromeos-5.15 tree) instead of pure
+> upstream. I avoid the errors with this (sorry for the whitespace
+> damage, but it's really just a one-line change):
+> 
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -582,7 +582,8 @@ static int dp_hpd_plug_handle(struct
+> dp_display_private *dp, u32 data)
+>           * add fail safe mode outside event_mutex scope
+>           * to avoid potiential circular lock with drm thread
+>           */
+> -       dp_panel_add_fail_safe_mode(dp->dp_display.connector);
+> +       if (!dp->dp_display.is_edp)
+> +               dp_panel_add_fail_safe_mode(dp->dp_display.connector);
+> 
+>          /* uevent will complete connection part */
+>          return 0;
+> 
+> That's a bit gross, but at least shows the problem. It's not a
+> _terrible_ fix because the failsafe modes don't make sense for eDP,
+> right? That being said, why are we hacking this in here? Shouldn't
+> this be in the core? ...or at least we should just be providing them
+> in get_modes()?
+> 
+> FWIW: the error was:
+> 
+> ======================================================
+>   WARNING: possible circular locking dependency detected
+>   5.15.35-lockdep #6 Tainted: G        W
+>   ------------------------------------------------------
+>   frecon/429 is trying to acquire lock:
+>   ffffff808dc3c4e8 (&dev->mode_config.mutex){+.+.}-{3:3}, at:
+> dp_panel_add_fail_safe_mode+0x4c/0xa0
+> 
+>   but task is already holding lock:
+>   ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at: lock_crtcs+0xb4/0x124
+> 
+>   which lock already depends on the new lock.
+> 
+> 
+>   the existing dependency chain (in reverse order) is:
+> 
+>   -> #3 (&kms->commit_lock[i]){+.+.}-{3:3}:
+>          __mutex_lock_common+0x174/0x1a64
+>          mutex_lock_nested+0x98/0xac
+>          lock_crtcs+0xb4/0x124
+>          msm_atomic_commit_tail+0x330/0x748
+>          commit_tail+0x19c/0x278
+>          drm_atomic_helper_commit+0x1dc/0x1f0
+>          drm_atomic_commit+0xc0/0xd8
+>          drm_atomic_helper_set_config+0xb4/0x134
+>          drm_mode_setcrtc+0x688/0x1248
+>          drm_ioctl_kernel+0x1e4/0x338
+>          drm_ioctl+0x3a4/0x684
+>          __arm64_sys_ioctl+0x118/0x154
+>          invoke_syscall+0x78/0x224
+>          el0_svc_common+0x178/0x200
+>          do_el0_svc+0x94/0x13c
+>          el0_svc+0x5c/0xec
+>          el0t_64_sync_handler+0x78/0x108
+>          el0t_64_sync+0x1a4/0x1a8
+> 
+>   -> #2 (crtc_ww_class_mutex){+.+.}-{3:3}:
+>          __mutex_lock_common+0x174/0x1a64
+>          ww_mutex_lock+0xb8/0x278
+>          modeset_lock+0x304/0x4ac
+>          drm_modeset_lock+0x4c/0x7c
+>          drmm_mode_config_init+0x4a8/0xc50
+>          msm_drm_init+0x274/0xac0
+>          msm_drm_bind+0x20/0x2c
+>          try_to_bring_up_master+0x3dc/0x470
+>          __component_add+0x18c/0x3c0
+>          component_add+0x1c/0x28
+>          dp_display_probe+0x954/0xa98
+>          platform_probe+0x124/0x15c
+>          really_probe+0x1b0/0x5f8
+>          __driver_probe_device+0x174/0x20c
+>          driver_probe_device+0x70/0x134
+>          __device_attach_driver+0x130/0x1d0
+>          bus_for_each_drv+0xfc/0x14c
+>          __device_attach+0x1bc/0x2bc
+>          device_initial_probe+0x1c/0x28
+>          bus_probe_device+0x94/0x178
+>          deferred_probe_work_func+0x1a4/0x1f0
+>          process_one_work+0x5d4/0x9dc
+>          worker_thread+0x898/0xccc
+>          kthread+0x2d4/0x3d4
+>          ret_from_fork+0x10/0x20
+> 
+>   -> #1 (crtc_ww_class_acquire){+.+.}-{0:0}:
+>          ww_acquire_init+0x1c4/0x2c8
+>          drm_modeset_acquire_init+0x44/0xc8
+>          drm_helper_probe_single_connector_modes+0xb0/0x12dc
+>          drm_mode_getconnector+0x5dc/0xfe8
+>          drm_ioctl_kernel+0x1e4/0x338
+>          drm_ioctl+0x3a4/0x684
+>          __arm64_sys_ioctl+0x118/0x154
+>          invoke_syscall+0x78/0x224
+>          el0_svc_common+0x178/0x200
+>          do_el0_svc+0x94/0x13c
+>          el0_svc+0x5c/0xec
+>          el0t_64_sync_handler+0x78/0x108
+>          el0t_64_sync+0x1a4/0x1a8
+> 
+>   -> #0 (&dev->mode_config.mutex){+.+.}-{3:3}:
+>          __lock_acquire+0x2650/0x672c
+>          lock_acquire+0x1b4/0x4ac
+>          __mutex_lock_common+0x174/0x1a64
+>          mutex_lock_nested+0x98/0xac
+>          dp_panel_add_fail_safe_mode+0x4c/0xa0
+>          dp_hpd_plug_handle+0x1f0/0x280
+>          dp_bridge_enable+0x94/0x2b8
+>          drm_atomic_bridge_chain_enable+0x11c/0x168
+>          drm_atomic_helper_commit_modeset_enables+0x500/0x740
+>          msm_atomic_commit_tail+0x3e4/0x748
+>          commit_tail+0x19c/0x278
+>          drm_atomic_helper_commit+0x1dc/0x1f0
+>          drm_atomic_commit+0xc0/0xd8
+>          drm_atomic_helper_set_config+0xb4/0x134
+>          drm_mode_setcrtc+0x688/0x1248
+>          drm_ioctl_kernel+0x1e4/0x338
+>          drm_ioctl+0x3a4/0x684
+>          __arm64_sys_ioctl+0x118/0x154
+>          invoke_syscall+0x78/0x224
+>          el0_svc_common+0x178/0x200
+>          do_el0_svc+0x94/0x13c
+>          el0_svc+0x5c/0xec
+>          el0t_64_sync_handler+0x78/0x108
+>          el0t_64_sync+0x1a4/0x1a8
+> 
+>   other info that might help us debug this:
+> 
+>   Chain exists of:
+>     &dev->mode_config.mutex --> crtc_ww_class_mutex --> &kms->commit_lock[i]
+> 
+>    Possible unsafe locking scenario:
+> 
+>          CPU0                    CPU1
+>          ----                    ----
+>     lock(&kms->commit_lock[i]);
+>                                  lock(crtc_ww_class_mutex);
+>                                  lock(&kms->commit_lock[i]);
+>     lock(&dev->mode_config.mutex);
+> 
+>    *** DEADLOCK ***
+> 
+>   3 locks held by frecon/429:
+>    #0: ffffffc00e197ab0 (crtc_ww_class_acquire){+.+.}-{0:0}, at:
+> drm_modeset_acquire_init+0x44/0xc8
+>    #1: ffffff808dc3c588 (crtc_ww_class_mutex){+.+.}-{3:3}, at:
+> modeset_lock+0x18c/0x4ac
+>    #2: ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at:
+> lock_crtcs+0xb4/0x124
+> 
+>   stack backtrace:
+>   CPU: 5 PID: 429 Comm: frecon Tainted: G        W
+> 5.15.35-lockdep #6 9ba2ecd8f15354021fe165873da3aaa99f5b6798
+>   Hardware name: Google Herobrine (rev1+) (DT)
+>   Call trace:
+>    dump_backtrace+0x0/0x3c4
+>    show_stack+0x20/0x2c
+>    dump_stack_lvl+0x78/0x9c
+>    dump_stack+0x18/0x44
+>    print_circular_bug+0x17c/0x1a8
+>    check_noncircular+0x260/0x30c
+>    __lock_acquire+0x2650/0x672c
+>    lock_acquire+0x1b4/0x4ac
+>    __mutex_lock_common+0x174/0x1a64
+>    mutex_lock_nested+0x98/0xac
+>    dp_panel_add_fail_safe_mode+0x4c/0xa0
+>    dp_hpd_plug_handle+0x1f0/0x280
+>    dp_bridge_enable+0x94/0x2b8
+>    drm_atomic_bridge_chain_enable+0x11c/0x168
+>    drm_atomic_helper_commit_modeset_enables+0x500/0x740
+>    msm_atomic_commit_tail+0x3e4/0x748
+>    commit_tail+0x19c/0x278
+>    drm_atomic_helper_commit+0x1dc/0x1f0
+>    drm_atomic_commit+0xc0/0xd8
+>    drm_atomic_helper_set_config+0xb4/0x134
+>    drm_mode_setcrtc+0x688/0x1248
+>    drm_ioctl_kernel+0x1e4/0x338
+>    drm_ioctl+0x3a4/0x684
+>    __arm64_sys_ioctl+0x118/0x154
+>    invoke_syscall+0x78/0x224
+>    el0_svc_common+0x178/0x200
+>    do_el0_svc+0x94/0x13c
+>    el0_svc+0x5c/0xec
+>    el0t_64_sync_handler+0x78/0x108
+>    el0t_64_sync+0x1a4/0x1a8

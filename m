@@ -2,201 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE63250B4FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F343A50B4E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446528AbiDVK3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S1446510AbiDVKXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446444AbiDVK3c (ORCPT
+        with ESMTP id S235156AbiDVKXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:29:32 -0400
-X-Greylist: delayed 344 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 03:26:36 PDT
-Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7588F54BC2;
-        Fri, 22 Apr 2022 03:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kdab.com; h=
- content-type:content-type:mime-version:references:in-reply-to
- :organization:message-id:date:date:subject:subject:from:from; s=
- dkim; t=1650622848; x=1651486849; bh=OkZkpmR5Gol2FkN3+/A784ArWqx
- jGL/19jO1i3HaxW8=; b=sRvgkC15wV9E1UMnsQnxc6gv/ckvBRlGnwRkSo8f4GP
- 0iWdpd68o5gH3lM8btJC0zj+NH0ODQ8+beYmmhTzSALE4Un1wesJcuSd1coOs3rG
- 1WnmnGfXvWWm42dtzftb5AFooKPkCKZXZs94gRj3HfkFP9o8cyM+xsFFwNYm/5ms
- =
-X-Virus-Scanned: amavisd-new at kdab.com
-From:   Milian Wolff <milian.wolff@kdab.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Blake Jones <blakejones@google.com>
-Subject: Re: [RFC 0/4] perf record: Implement off-cpu profiling with BPF (v1)
-Date:   Fri, 22 Apr 2022 12:20:45 +0200
-Message-ID: <35121321.B44TWeBT9p@milian-workstation>
-Organization: KDAB
-In-Reply-To: <20220422053401.208207-1-namhyung@kernel.org>
-References: <20220422053401.208207-1-namhyung@kernel.org>
+        Fri, 22 Apr 2022 06:23:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E4C387BB;
+        Fri, 22 Apr 2022 03:20:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26ED061E6E;
+        Fri, 22 Apr 2022 10:20:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78215C385A4;
+        Fri, 22 Apr 2022 10:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650622855;
+        bh=l8DMuJMxhFg3oWj3P06LfAZsH8ZofBIGfJ+Zsxq3M3c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tXz8dnNMqZa1305TV+OZTAXZYU1mQErY7qQwDOrLEGInkAMbEIzqrG3b+N/MezYx+
+         nltOcc4WCszV0jlGsgS1jSmOpfo+zKsVzo3QSZyQ+n4wkjVgoZgzp6Ak5D7/TmmJ2X
+         OqlL4P+FUNqoeKRzqD69pPyT0SP9R1wxn9ZML6uohJbjy12uHgUFabDfUL5BAu+U+I
+         3zZf2YNJh6naLmWslpXXKwp13wozl37QHGEhPsNnvVmppbSUoKH9TTGIzMJMBK5JKR
+         ToquwwGVQQmCB9ufrgASyzefmiULPiVKvutwkGXcCs2etHqxKwQ7ihzemQ8w0C2IDF
+         FgVInoYZe6cag==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nhqPA-0002Om-Fm; Fri, 22 Apr 2022 12:20:49 +0200
+Date:   Fri, 22 Apr 2022 12:20:48 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH RFC 1/5] phy: qcom-qmp: add support for pipe clock muxing
+Message-ID: <YmKBgGHtfDcO1Mkg@hovoldconsulting.com>
+References: <20220421102041.17345-1-johan+linaro@kernel.org>
+ <20220421102041.17345-2-johan+linaro@kernel.org>
+ <de4f9514-5132-f208-d43f-4c50afcda203@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2284705.bJBrSbZOHa";
- micalg="sha256"; protocol="application/pkcs7-signature"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <de4f9514-5132-f208-d43f-4c50afcda203@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart2284705.bJBrSbZOHa
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-
-On Freitag, 22. April 2022 07:33:57 CEST Namhyung Kim wrote:
-> Hello,
+On Thu, Apr 21, 2022 at 02:08:27PM +0300, Dmitry Baryshkov wrote:
+> On 21/04/2022 13:20, Johan Hovold wrote:
+> > Some QMP PHYs need to remux to their pipe clock input to the pipe clock
+> > output generated by the PHY before powering on the PHY and restore the
+> > default source during power down.
+> > 
+> > Add support for an optional pipe clock mux which will be reparented to
+> > the generated pipe clock before powering on the PHY and restored to the
+> > default reference source on power off.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >   drivers/phy/qualcomm/phy-qcom-qmp.c | 71 ++++++++++++++++++++++++++---
+> >   1 file changed, 65 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> > index 7d2d1ab061f7..bc6db9670291 100644
+> > --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
+> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> > @@ -3292,6 +3292,8 @@ struct qmp_phy_combo_cfg {
+> >    * @rx2: iomapped memory space for second lane's rx (in dual lane PHYs)
+> >    * @pcs_misc: iomapped memory space for lane's pcs_misc
+> >    * @pipe_clk: pipe clock
+> > + * @pipemux_clk: pipe clock source mux
+> > + * @piperef_clk: pipe clock default reference source
+> >    * @index: lane index
+> >    * @qmp: QMP phy to which this lane belongs
+> >    * @lane_rst: lane's reset controller
+> > @@ -3311,6 +3313,8 @@ struct qmp_phy {
+> >   	void __iomem *rx2;
+> >   	void __iomem *pcs_misc;
+> >   	struct clk *pipe_clk;
+> > +	struct clk *pipemux_clk;
+> > +	struct clk *piperef_clk;
+> >   	unsigned int index;
+> >   	struct qcom_qmp *qmp;
+> >   	struct reset_control *lane_rst;
+> > @@ -3346,6 +3350,7 @@ struct qcom_qmp {
+> >   	void __iomem *dp_com;
+> >   
+> >   	struct clk_bulk_data *clks;
+> > +	struct clk *pipe_clksrc;
 > 
-> This is the first version of off-cpu profiling support.  Together with
-> (PMU-based) cpu profiling, it can show holistic view of the performance
-> characteristics of your application or system.
+> Please move this to qmp_phy too.
 
-Hey Namhyung,
-
-this is awesome news! In hotspot, I've long done off-cpu profiling manually by 
-looking at the time between --switch-events. The downside is that we also need 
-to track the sched:sched_switch event to get a call stack. But this approach 
-also works with dwarf based unwinding, and also includes kernel stacks.
-
-> With BPF, it can aggregate scheduling stats for interested tasks
-> and/or states and convert the data into a form of perf sample records.
-> I chose the bpf-output event which is a software event supposed to be
-> consumed by BPF programs and renamed it as "offcpu-time".  So it
-> requires no change on the perf report side except for setting sample
-> types of bpf-output event.
+Ok.
+ 
+> > +	/* Get optional pipe clock mux and default reference source clock. */
+> > +	qphy->pipemux_clk = of_clk_get_by_name(np, "mux");
+> > +	if (IS_ERR(qphy->pipemux_clk)) {
+> > +		ret = PTR_ERR(qphy->pipemux_clk);
+> > +		if (ret == -EPROBE_DEFER)
+> > +			return ret;
+> > +
+> > +		qphy->pipemux_clk = NULL;
 > 
-> Basically it collects userspace callstack for tasks as it's what users
-> want mostly.  Maybe we can add support for the kernel stacks but I'm
-> afraid that it'd cause more overhead.  So the offcpu-time event will
-> always have callchains regardless of the command line option, and it
-> enables the children mode in perf report by default.
+> This makes the driver ignore every possible erorr except -EPROBE_DEFER. 
+> However the driver should behave in quite the oppposite way. Please use 
+> devm_clk_get_optional() instead. It would do that in better way.
 
-Has anything changed wrt perf/bpf and user applications not compiled with `-
-fno-omit-frame-pointer`? I.e. does this new utility only work for specially 
-compiled applications, or do we also get backtraces for "normal" binaries that 
-we can install through package managers?
+We'd need to add an optional version of devm_get_clk_from_child() for
+that due to the questionable "lane" child nodes this driver uses.
 
-Thanks
--- 
-Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
-KDAB (Deutschland) GmbH, a KDAB Group company
-Tel: +49-30-521325470
-KDAB - The Qt, C++ and OpenGL Experts
---nextPart2284705.bJBrSbZOHa
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+The above works for an RFC, but testing for -EINVAL and -ENOENT handles
+a few more theoretical errnos until an optional helper is in place.
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEekw
-ggWBMIIEaaADAgECAhA5ckQ6+SK3UdfTbBDdMTWVMA0GCSqGSIb3DQEBDAUAMHsxCzAJBgNVBAYT
-AkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNV
-BAoMEUNvbW9kbyBDQSBMaW1pdGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMw
-HhcNMTkwMzEyMDAwMDAwWhcNMjgxMjMxMjM1OTU5WjCBiDELMAkGA1UEBhMCVVMxEzARBgNVBAgT
-Ck5ldyBKZXJzZXkxFDASBgNVBAcTC0plcnNleSBDaXR5MR4wHAYDVQQKExVUaGUgVVNFUlRSVVNU
-IE5ldHdvcmsxLjAsBgNVBAMTJVVTRVJUcnVzdCBSU0EgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkw
-ggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQCAEmUXNg7D2wiz0KxXDXbtzSfTTK1Qg2Hi
-qiBNCS1kCdzOiZ/MPans9s/B3PHTsdZ7NygRK0faOca8Ohm0X6a9fZ2jY0K2dvKpOyuR+OJv0OwW
-IJAJPuLodMkYtJHUYmTbf6MG8YgYapAiPLz+E/CHFHv25B+O1ORRxhFnRghRy4YUVD+8M/5+bJz/
-Fp0YvVGONaanZshyZ9shZrHUm3gDwFA66Mzw3LyeTP6vBZY1H1dat//O+T23LLb2VN3I5xI6Ta5M
-irdcmrS3ID3KfyI0rn47aGYBROcBTkZTmzNg95S+UzeQc0PzMsNT79uq/nROacdrjGCT3sTHDN/h
-Mq7MkztReJVni+49Vv4M0GkPGw/zJSZrM233bkf6c0Plfg6lZrEpfDKEY1WJxA3Bk1QwGROs0303
-p+tdOmw1XNtB1xLaqUkL39iAigmTYo61Zs8liM2EuLE/pDkP2QKe6xJMlXzzawWpXhaDzLhn4ugT
-ncxbgtNMs+1b/97lc6wjOy0AvzVVdAlJ2ElYGn+SNuZRkg7zJn0cTRe8yexDJtC/QV9AqURE9Jnn
-V4eeUB9XVKg+/XRjL7FQZQnmWEIuQxpMtPAlR1n6BB6T1CZGSlCBst6+eLf8ZxXhyVeEHg9j1uli
-utZfVS7qXMYoCAQlObgOK6nyTJccBz8NUvXt7y+CDwIDAQABo4HyMIHvMB8GA1UdIwQYMBaAFKAR
-CiM+lvEH7OKvKe+CpX/QMKS0MB0GA1UdDgQWBBRTeb9aqitKz1SA4dibwJ3ysgNmyzAOBgNVHQ8B
-Af8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zARBgNVHSAECjAIMAYGBFUdIAAwQwYDVR0fBDwwOjA4
-oDagNIYyaHR0cDovL2NybC5jb21vZG9jYS5jb20vQUFBQ2VydGlmaWNhdGVTZXJ2aWNlcy5jcmww
-NAYIKwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wDQYJ
-KoZIhvcNAQEMBQADggEBABiHUdx0IT2ciuAntzPQLszs8ObLXhHeIm+bdY6ecv7k1v6qH5yWLe8D
-Sn6u9I1vcjxDO8A/67jfXKqpxq7y/Njuo3tD9oY2fBTgzfT3P/7euLSK8JGW/v1DZH79zNIBoX19
-+BkZyUIrE79Yi7qkomYEdoiRTgyJFM6iTckys7roFBq8cfFb8EELmAAKIgMQ5Qyx+c2SNxntO/Hk
-Orb5RRMmda+7qu8/e3c70sQCkT0ZANMXXDnbP3sYDUXNk4WWL13fWRZPP1G91UUYP+1KjugGYXQj
-FrUNUHMnREd/EF2JKmuFMRTE6KlqTIC8anjPuH+OdnKZDJ3+15EIFqGjX5UwggYQMIID+KADAgEC
-AhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQGEwJVUzETMBEGA1UE
-CBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoTFVRoZSBVU0VSVFJV
-U1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0
-eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UE
-CBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdv
-IExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQg
-U2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyjztlApB/975
-Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUfItMltrMaXqcESJuK
-8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeWQcpGEGFUUd0kN+oH
-ox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YBrf24k5Ee1sLTHsLt
-piK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewDch/8kHPo5fZl5u1B
-0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAUU3m/WqorSs9UgOHY
-m8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1UdDwEB/wQEAwIBhjAS
-BgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDARBgNVHSAE
-CjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2VydHJ1c3QuY29tL1VT
-RVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUFBwEBBGowaDA/Bggr
-BgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJTQUFkZFRydXN0Q0Eu
-Y3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0GCSqGSIb3DQEBDAUA
-A4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+xswhh2GqkW5JQrM8
-zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9IHk96VwsacIvBF8J
-fqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7kkmka2RQb9d90nmN
-HdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1eoYV7lNwNBKpeHdN
-uO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4KxaYIhvqPqUMWqRd
-Wyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL1Ygz3SBsyECa0waq
-4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQOZ1YL5ezMTX0ZSLw
-rymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qodx/PL+5jR87myx5uY
-dBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i5ZgtwCLXgAIe5W8m
-ybM2JzCCBkwwggU0oAMCAQICEHR8gsPqhWo7MMOepQh9ypIwDQYJKoZIhvcNAQELBQAwgZYxCzAJ
-BgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQx
-GDAWBgNVBAoTD1NlY3RpZ28gTGltaXRlZDE+MDwGA1UEAxM1U2VjdGlnbyBSU0EgQ2xpZW50IEF1
-dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMjAwNTEyMDAwMDAwWhcNMjMwNTEy
-MjM1OTU5WjCCAVkxCzAJBgNVBAYTAlNFMQ8wDQYDVQQREwY2ODMgMzExEjAQBgNVBAgTCVZhZXJt
-bGFuZDEQMA4GA1UEBxMHSGFnZm9yczEYMBYGA1UECRMPTm9ycmluZ3MgdmFlZyAyMQ8wDQYDVQQS
-EwZCb3ggMzAxJjAkBgNVBAoMHUtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCMR0wGwYDVQQL
-ExRBIEtEQUIgR3JvdXAgQ29tcGFueTFDMEEGA1UECww6SXNzdWVkIHRocm91Z2ggS2xhcsOkbHZk
-YWxlbnMgRGF0YWtvbnN1bHQgQUIgRS1QS0kgTWFuYWdlcjEfMB0GA1UECxMWQ29ycG9yYXRlIFNl
-Y3VyZSBFbWFpbDEVMBMGA1UEAxMMTWlsaWFuIFdvbGZmMSQwIgYJKoZIhvcNAQkBFhVtaWxpYW4u
-d29sZmZAa2RhYi5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC8vdk66W4eo0O1
-1Dh3zPXW/zrkwzzxRR0Air/VRxAIG5q/klE9mF2gsGBPXQpCtDMvkuvSLQ+5mR50Cb+V+4Y9n0W6
-98JoyQHYAo6uswLyTchcF6IVckkkZrm1RD1DXnlIHpCsacO7PDDxMslzFs5XZfRkH4F1SKkiVwup
-/Nsn0z12SGRzxSUUxr4VHZgIqgRGqVSbVJfjtTRigAu+fmXUXHs0bMRv8TonzrDRlN61m1UakrFu
-qvKAgXYfZULZ52IKNK/jq8nPHJDD9oOr5pVi4Yx9GyVeMM0qNPC74fJnGh7lOpJiAcqYBEis73lm
-U+RtH3Bj85Qdqvwxo3bf7s1zAgMBAAGjggHOMIIByjAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+o
-mULPyeCtADAdBgNVHQ4EFgQUMc6p+s2l6xbyh8jLYeP7fQrRiW4wDgYDVR0PAQH/BAQDAgWgMAwG
-A1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYM
-KwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1Ud
-HwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhl
-bnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcw
-AoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25h
-bmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20w
-IAYDVR0RBBkwF4EVbWlsaWFuLndvbGZmQGtkYWIuY29tMA0GCSqGSIb3DQEBCwUAA4IBAQBW3rFX
-47Cnu8JMNm8row/96V8xGwPzir9lEpnasNxi+GhvQjGzvoP5oxMoBJ+hgD8fMk5X15IDuKa9KVHb
-BzBG9kOPGB4h/89voWpzWIVy7Q3k+dPByfghbufR+83TvN20lV9VqXYjPeYypHlD/vJ4Z8iWn3s3
-0iUfYr1CCr8zoje1hijPM9A0wN7K8iCtIc4OAfJpwKsXMCNAv1SdxD196vCKrTnWiEmAw0g8FpDM
-GWIww0+2Qq+Peeoe53+34GetRPIbS5jPlCEy7xgC8c7qoJTNzhCyVENRByoA5dsLzK+Nv0IT1h2C
-gu2w5VxHo0DjlCmYddu46uwpWjKpNuhaMYICbTCCAmkCAQEwgaswgZYxCzAJBgNVBAYTAkdCMRsw
-GQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGDAWBgNVBAoTD1Nl
-Y3RpZ28gTGltaXRlZDE+MDwGA1UEAxM1U2VjdGlnbyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9u
-IGFuZCBTZWN1cmUgRW1haWwgQ0ECEHR8gsPqhWo7MMOepQh9ypIwDQYJYIZIAWUDBAIBBQCggZMw
-GAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIwNDIyMTAyMDQ1WjAo
-BgkqhkiG9w0BCQ8xGzAZMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQg
-HNOzPw+MpVCXcJkYgctvDk4sGDN52ojqLVk3JZIFZLYwDQYJKoZIhvcNAQEBBQAEggEAGlx0ugoH
-PTkQvvOMjsDH9zndgF+rpCmNtdfyyFAj33gjPJguXRdo+uOYxqSJh/so+iet8wo0MjIv4aWm/uLQ
-QzyTodG57rOTpLKDmFDFV1VRt5OM3mbExRxsxtm+fmPPRxdDqE0QdRyO7hzUFjU5701c44GUXtfZ
-yIeU4rkTnoZJGdg08gexeGZfIpC3iu1tXWenpBFlDCVM3h1pLMtq56i14oOTLCoW4iqBiNKWvJ3L
-voRNS5X6vsMM5watPa8ImrE13yIxI3UMQ5WFfMY/cuurbr+iIafdhDh1maYseDXmbk51DEJ2IqnT
-J4rcY3rly3mi5jo74gIlwIlIUzcC6wAAAAAAAA==
+> Not to mention that this code leaks a refcount on the clock.
 
+True, just like the driver has been doing with the pipe clock and lane
+reset since it was merged. I'll fix that up.
 
---nextPart2284705.bJBrSbZOHa--
+> > +	} else {
+> > +		qphy->piperef_clk = of_clk_get_by_name(np, "ref");
+> > +		if (IS_ERR(qphy->piperef_clk)) {
+> > +			ret = PTR_ERR(qphy->piperef_clk);
+> > +			return dev_err_probe(dev, ret,
+> > +					     "failed to get lane%d piperef_clk\n",
+> > +					     id);
+> > +		}
+> > +	}
+> > +
+> 
+> As a second thought.
+> This needs to be more explicit. If the chipset requires the pipe clock 
+> remuxing, we must fail if the clocks were not provided. So depending on 
+> the qmp instance/property the driver should either use devm_clk_get() 
+> (instead of _optional) or skip this block completely.
 
+No, the kernel is not a DT validator (and we have the YAML bindings for
+that now).
 
+> But this will not work with earlier DTS files.
+
+So this is not a problem (but if we really wanted to have the driver
+validate the DT it can be done by updating the compatible strings).
+
+Johan

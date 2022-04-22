@@ -2,122 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043D750C0AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 22:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFF050C100
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiDVUTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 16:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S229820AbiDVVSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiDVUTM (ORCPT
+        with ESMTP id S229747AbiDVVSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 16:19:12 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35921132F4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:13:38 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id w1so16137878lfa.4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:13:38 -0700 (PDT)
+        Fri, 22 Apr 2022 17:18:40 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD64B38AAF2;
+        Fri, 22 Apr 2022 13:13:55 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id h25so6508550wrc.13;
+        Fri, 22 Apr 2022 13:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=B9p0FoMPwzRixWYKVWEjx56sWOvt3enSLFG849SajN4=;
-        b=i1xRqM/AQD7+zHlviCXpKPZZPH+NCey1cLY0YH9FoGiR73p/X6PTLSYWksAgy2XKmM
-         ksiRnL7gx+oyU+FNTO7SF58wlUemyiGD7RFZqO8+RoT1p8NIqoBwjr6bNOASrAsJ1UPa
-         YEjor8or6jM8yb19a+Jv4wMbSUGBGFj1fsk8zUp+BhH4KT4geUPppJf+2cvULcwK594C
-         Ify1KqH7eFxQGny0PELELVDTWBxzSbVh/a4r+fXHN5VQ7XPgWdPBC0veaqgeUbtBqSrI
-         TFb6ms3NcP0CuGTa6PRcEB1utLkbyV3aUe24o+fgprm8x3rB5dwmvLiOnq5fX0atxqYg
-         xUkg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=w+utQDHmts9UPP01phPwUuY21AVZWcPb7bollwyH9Mk=;
+        b=IJNFyE5jk2bGLMjfXZKstoGottY1Ii5MZIiMzWUVd1UhLlu53iiHJ3Ux4NgiXfru1a
+         F7NmldnfmJPUHsQa1MiW0PyQLS8G0ByeNBf1qDkLfO5Din9W5/w5R6sebe9eSPlFNByD
+         2KmzRVWIqsg1ZfpbFCE/aXmmPgLdAPMeBJ/mbUVznC7Bqhu+Zqet0NJhTjqFo5uf5QRM
+         zGgkb7XhSiwkqVLbOscW5t2Rjoiy/ulogBKcZRxQkTGqYug8mZQVi4o5Bh1uyc9+KBj9
+         Xj94IFfEYGLh1R9YjcrgHnEXC5FS+UlGyzVT0Vl4G09OYJsClXBe7oiPUQcPKeYyUy9Y
+         SMTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=B9p0FoMPwzRixWYKVWEjx56sWOvt3enSLFG849SajN4=;
-        b=PWTwnuQZJhXGu87hZhI3ZnvkqQkEIfXG05oJQry0TvR/OXR4hNf8Lx5vnMYXwe9LPz
-         qR3m4WCXZ7RJSMIyhOc1mjKo7VgyjA7LiVjubhUiTE2jcM3Ck9qQq6MM8ZOt6sloLmAm
-         VAS7F0NluTrVYpt654xNb1/wsoOhB2OEvqUMZIWDCn68iqMYnb9tvDMqm2MSUbiHPL0R
-         zhP9LhzPtCCpKtA0LPsliMyONtD6Y7auTN23eImNHg265S04HEg0TMeVb17WEzzgsMC2
-         l0PSDY+t3A6yILmV3bUVIZ7bmfVMmjOpjYtqReHL1zohsNLw2YMSYbNwf3Gsd7en4JwD
-         AnWw==
-X-Gm-Message-State: AOAM532BKTEY8fll3p7LjPwXbsErov6iGtqWmR3GJYCzPEIszSjsmIKU
-        7ZntKoyfvyl0H/WC6HajD7JXvQ==
-X-Google-Smtp-Source: ABdhPJz/mlC+Za21idKmy1zP+GP4v28p+hBhHjrN0L2KdLEv46MDpRrVxcDXms2OUW+ufgEbuzzWAQ==
-X-Received: by 2002:a19:6759:0:b0:46b:b99f:a7ac with SMTP id e25-20020a196759000000b0046bb99fa7acmr4160108lfj.312.1650658143962;
-        Fri, 22 Apr 2022 13:09:03 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id a12-20020a19fc0c000000b00471c63ea0fcsm336510lfi.6.2022.04.22.13.09.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 13:09:03 -0700 (PDT)
-Message-ID: <e9cd84f2-d2e9-33a8-d74e-edcf60d35236@openvz.org>
-Date:   Fri, 22 Apr 2022 23:09:01 +0300
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=w+utQDHmts9UPP01phPwUuY21AVZWcPb7bollwyH9Mk=;
+        b=6IdEzsrsialgQkJ14dNNBgmx0XuHsIZ6YrVP/JldVNr1ymY2wgE1jxBxJRpH4zo3bn
+         W+R5Lm5BMerxJkaTzNO1GgDqsOGes2s3AOVvErYof3EM5GCm0c+44H2KcpprO9ouXvSa
+         UGzdTAuSywFbNTQBKi2BcO1IUOi1cGqUlXCiFcoInhYOgC1qoCE1pRDlVuUSI6Jw/EHk
+         ygSS3g/+ZuYEmtSbNTaWushPsDL3UyyFaXRjv7MJvgQBPY20drJM0CGVLgFXz0sfyRs3
+         wkaWtS0KRt5DTJug3reFIoZj+52n4tWl1WhovfMhSl9If+DFexmAV7WUF5+LDvbfC2zE
+         wkzA==
+X-Gm-Message-State: AOAM532lrzSxfGMfXWXU5bFzGb/YUz2qYmoaYtHz/7obD/9XUxYpGMbu
+        1wZQa84kkLkGqnrthxV7BO8=
+X-Google-Smtp-Source: ABdhPJyjcqBTW7qhlMx8HaQwl43iu5uwxc77fSl7v1wiuG0PZdzEPLENOOiyb9VCz3c5euNoqhh2LA==
+X-Received: by 2002:a05:6000:1f83:b0:207:a4d8:5173 with SMTP id bw3-20020a0560001f8300b00207a4d85173mr5020266wrb.556.1650658146852;
+        Fri, 22 Apr 2022 13:09:06 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id c12-20020a05600c0a4c00b00381141f4967sm2901272wmq.35.2022.04.22.13.09.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 13:09:05 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, outreachy@lists.linux.dev,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 3/4] Documentation/vm: Remove "Using kmap-atomic" from highmem.rst.
+Date:   Fri, 22 Apr 2022 22:09:03 +0200
+Message-ID: <2370538.jE0xQCEvom@leap>
+In-Reply-To: <YmL2EQhfQLMoU1WV@iweiny-desk3>
+References: <20220421180200.16901-1-fmdefrancesco@gmail.com> <20220421180200.16901-4-fmdefrancesco@gmail.com> <YmL2EQhfQLMoU1WV@iweiny-desk3>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH memcg RFC] net: set proper memcg for net_init hooks
- allocations
-Content-Language: en-US
-From:   Vasily Averin <vvs@openvz.org>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-References: <46c1c59e-1368-620d-e57a-f35c2c82084d@linux.dev>
- <55605876-d05a-8be3-a6ae-ec26de9ee178@openvz.org>
- <CALvZod47PARcupR4P41p5XJRfCaTqSuy-cfXs7Ky9=-aJQuoFA@mail.gmail.com>
- <964ae72a-0484-67de-8143-a9a2d492a520@openvz.org>
-In-Reply-To: <964ae72a-0484-67de-8143-a9a2d492a520@openvz.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 23:01, Vasily Averin wrote:
-> On 4/21/22 18:56, Shakeel Butt wrote:
->> On Sat, Apr 16, 2022 at 11:39 PM Vasily Averin <vvs@openvz.org> wrote:
->>> @@ -1147,7 +1148,13 @@ static int __register_pernet_operations(struct list_head *list,
->>>                  * setup_net() and cleanup_net() are not possible.
->>>                  */
->>>                 for_each_net(net) {
->>> +                       struct mem_cgroup *old, *memcg = NULL;
->>> +#ifdef CONFIG_MEMCG
->>> +                       memcg = (net == &init_net) ? root_mem_cgroup : mem_cgroup_from_obj(net);
->>
->> memcg from obj is unstable, so you need a reference on memcg. You can
->> introduce get_mem_cgroup_from_kmem() which works for both
->> MEMCG_DATA_OBJCGS and MEMCG_DATA_KMEM. For uncharged objects (like
->> init_net) it should return NULL.
-> 
-> Could you please elaborate with more details?
-> It seems to me mem_cgroup_from_obj() does everything exactly as you say:
-> - for slab objects it returns memcg taken from according slab->memcg_data
-> - for ex-slab objects (i.e. page->memcg_data & MEMCG_DATA_OBJCGS)
->     page_memcg_check() returns NULL
-> - for kmem objects (i.e. page->memcg_data & MEMCG_DATA_KMEM) 
->     page_memcg_check() returns objcg->memcg
-> - in another cases
->     page_memcg_check() returns page->memcg_data,
->     so for uncharged objects like init_net NULL should be returned.
-> 
-> I can introduce exported get_mem_cgroup_from_kmem(), however it should only
-> call mem_cgroup_from_obj(), perhaps under read_rcu_lock/unlock.
+On venerd=C3=AC 22 aprile 2022 20:38:09 CEST Ira Weiny wrote:
+> On Thu, Apr 21, 2022 at 08:01:59PM +0200, Fabio M. De Francesco wrote:
+> > The use of kmap_atomic() is deprecated in favor of kmap_local_page().
+>=20
+> I'm not sure deprecated is the right word.
 
-I think I finally got your point:
-Do you mean I should use css_tryget(&memcg->css) for found memcg,
-like get_mem_cgroup_from_mm() does?
+OK, in v2 I won't use "deprecated". Instead I'll say something about a=20
+strong preference to avoid its use. The reason why developers should avoid=
+=20
+kmap_atomic() are explained in 4/4 (I've copy-pasted some lines here for=20
+your convenience):
 
-Thank you,
-	Vasily Averin
++  Each call of kmap_atomic() in the kernel creates a non-preemptible=20
+section
++  and disable pagefaults. This could be a source of unwanted latency, so=20
+it
++  should be only used if it is absolutely required, otherwise=20
+kmap_local_page()
++  should be used where it is feasible.
+
+> And I think the fact that this
+> documentation is stale is a better reason for the patch as is.
+>=20
+> This series should end up indicating the desire to stop growing kmap()=20
+and
+> kmap_atomic() call sites and that their deprecation is on the horizon. =20
+I've
+> not read the text in patch 4/4 yet.
+
+I'll wait for your review of 4/4 before sending v2.
+
+>=20
+> > For
+> > this reason the "Using kmap_atomic" section in highmem.rst is obsolete=
+=20
+and
+> > unnecessary.
+>=20
+> A lot of the text is obsolete (and redundant) but the example code might=
+=20
+be
+> useful.
+>=20
+> Why not move the example and relevant bits into the kdoc for=20
+kmap_atomic()
+> which is then automatically picked up via patch 2/4.
+
+Yes, I agree with you. I'll take into account your suggestion for v2.
+
+However, as I said above, I'll hold v2 until you have time to review 4/4=20
+for the purpose to not miss any changes that you might require for that=20
+patch too.
+
+=46urthermore, while working on v2, I think that I'll extend this series wi=
+th=20
+one or two patch more, in order to address other issues I noticed.=20
+
+Thanks,
+
+=46abio=20
+
+

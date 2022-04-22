@@ -2,204 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7985B50AFAF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3603F50AFB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbiDVFpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 01:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S232640AbiDVFxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 01:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbiDVFpc (ORCPT
+        with ESMTP id S231681AbiDVFxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 01:45:32 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21294F46A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:42:39 -0700 (PDT)
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3E5213F19A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:42:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1650606156;
-        bh=hWerQpQZlUf6tJ3oEQBKDh+uBBIZTIztZC7wzThBamE=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=Q7+1a/8gM/eL4iLPaWUCxpzsnrFL5jSxImAp8SvHSOWxlkIyXrnWi3sjXGm8Umnz/
-         rNOLYJN0UTzW+a2jWF847yDPi95fX1wE3bJQ11TBzt6Of40WH3HhLMVRnMcrXMqfXT
-         mP3zkan3kBSZXFWyKaOrqSVDrUowmeJXHuEs1PlpdUa8mAHD7EI+7E/i4pWzLq/uKe
-         NWTc2xDKlO9+OLTDIKuAi79JB1V3l4Kk3otNnVWdDNV63E8fm+NmbGxC7TVjdwir0u
-         016gBmCfOj5rEX+5svRH7fuCZNJz1zKyvjNtOqstWrn+d3KwUJTj6lEvW//KhMjwcT
-         1waKHsMtnRXjA==
-Received: by mail-pf1-f200.google.com with SMTP id n10-20020a056a00212a00b0050aba994ee7so4493837pfj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:42:36 -0700 (PDT)
+        Fri, 22 Apr 2022 01:53:25 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DFB4F466;
+        Thu, 21 Apr 2022 22:50:32 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id b188so7921204oia.13;
+        Thu, 21 Apr 2022 22:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+lv4oW90oOtDBOcazfFT89nppWJrsKFyLcsfC8SczvY=;
+        b=nlv72w6aoG+XbDU0ymR9MPrXw2ncXVW2RxODIDHqztYmhdJp13KynBfB6UFOCpPJ49
+         9BTKfVhbFi1bkYR71AVYqXkVGmMW67bT/6gBGiYsvJozjP/1diySF9ChDtiU+2jSUXns
+         jT1Bz1rbcbUyRTqvAFZKvw//D3kPPdsOPTUF6Rxdx0xSI4fv7LW/pLKM2MF68BykvAOS
+         IZtkbMwxRrHGpWrfMAcM/ym517iAultjlm2qsl8K8+ghSCYXQ1uw3bFU6RThp8g3VpHK
+         yREPrNYgNQKVwCioXOOamhS4VS+3oWIrwU9fidPbMciYbbZm7pCM01C38L3Vx0gMaJ8s
+         byXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=hWerQpQZlUf6tJ3oEQBKDh+uBBIZTIztZC7wzThBamE=;
-        b=KuKywvm8SEkVowdQNWM3aJY0F2p0MPPcqBvLUT95PMEgxAqFnFFVj/gmqRaCZ4bvUm
-         5CQ2xL73h8gnPHvKVHB+WQ4ytBQhYo0qXZiuAjr1gsaMaCVv572FIXUR9gzInbScv0Bp
-         g2MT1QO8lOdhvebLQLepNSV5OBmHNMIzsd4a7P4eqFHoqRobRGevKzMDpXzsUR+Wu9tL
-         ywLCpUSlEKjoY+KbbohFCRyG21mAW6qPMEh9ArsI+jR0gkMNIxgqkEASpBb6p7Bmj98Z
-         t9CfwwnIqKj4cGKtgxlFMgvKKi/7JHb8SkTRK/yyIcHCoxosHaNrW9BXSsnvDF3yzbbZ
-         tFdw==
-X-Gm-Message-State: AOAM5324vj8jpVaXVtDg9HxBLrTsI91TsSJ7V6jYQkkCRI+UB7hY8qTc
-        A0LZf8n3APKaKi5pPhgyTJ2u6NHUN6Q8aNmKOvSZLE2Zo5pZH7gqm+qAOif8EiRbOK/Ww6ktFxk
-        UifB57o1DgBYj5nZzPkp61W00rKyRq01ZHd7kQJjLQg==
-X-Received: by 2002:a63:2ad0:0:b0:3aa:c8d5:c7b9 with SMTP id q199-20020a632ad0000000b003aac8d5c7b9mr521906pgq.306.1650606154926;
-        Thu, 21 Apr 2022 22:42:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyRsYMLjMdP/oCRdsW7JcxBBna5VFVNb2T+2REufL2x1MY+dEqZKv+dVqN/g4A2C83rrU4MUA==
-X-Received: by 2002:a63:2ad0:0:b0:3aa:c8d5:c7b9 with SMTP id q199-20020a632ad0000000b003aac8d5c7b9mr521895pgq.306.1650606154661;
-        Thu, 21 Apr 2022 22:42:34 -0700 (PDT)
-Received: from desktop.. (125-239-17-100-fibre.sparkbb.co.nz. [125.239.17.100])
-        by smtp.gmail.com with ESMTPSA id m13-20020a62a20d000000b004fe0ce6d7a1sm1018633pff.193.2022.04.21.22.42.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 22:42:34 -0700 (PDT)
-From:   Matthew Ruffell <matthew.ruffell@canonical.com>
-To:     josef@toxicpanda.com
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-kernel@vger.kernel.org
-Subject: [PROBLEM] nbd requests become stuck when devices watched by inotify emit udev uevent changes
-Date:   Fri, 22 Apr 2022 17:42:24 +1200
-Message-Id: <20220422054224.19527-1-matthew.ruffell@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        bh=+lv4oW90oOtDBOcazfFT89nppWJrsKFyLcsfC8SczvY=;
+        b=qnH61qMe3VElRTpGPOd6rvbyg31Gdme4ZxfvqMKJIKoavwLGwjyq4YlUkJ6Ktxvwbt
+         8FJIg2ze9wBpJV/gDPdbItLi8LfuH/67IpesP67tzLWFmSlCThA81s2FOfdcpREF3mNb
+         DlCk7dU00Be6YUNhUVeiPITY9HZ0aPWXA2OkvZYPmlBCXNKNiVE1rKd6wu5mmb3R1wLx
+         mNgUu5nCG7ethPBVzVMNurVOglImD3Z9QIQ/asUJ6uNz7xqOp2e9bQsDHUo8BXYWcyDm
+         Kw7IOVn9Q23FdmNFEkFR/zsV+vf6LaMCvgZNGtK1wrW9aJCYKlDtL/WiAtVK3s/cbp5Z
+         OwEA==
+X-Gm-Message-State: AOAM5304Ve4Dq/bkJnFmI8KIoisUqRe0B4u+9V2kpM5IOVyUHJ2vA4pr
+        obGiizs1ubcX3HoS7TRVF6OFk5jo55k=
+X-Google-Smtp-Source: ABdhPJzWO3JaG1383g9idsIvPz0gJ9abPKD9WwkMoALvnS83neYoimUvzNLjgfCds6q/dHWvXD0Pgw==
+X-Received: by 2002:a05:6808:1793:b0:322:4275:b070 with SMTP id bg19-20020a056808179300b003224275b070mr5918095oib.195.1650606631649;
+        Thu, 21 Apr 2022 22:50:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c25-20020a0568301af900b0060579b0abe2sm396997otd.61.2022.04.21.22.50.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 22:50:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d0e2beb8-1bb2-ba9d-f600-aaf435663dcf@roeck-us.net>
+Date:   Thu, 21 Apr 2022 22:50:29 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] Watchdog: Checking timeout invalid if hardware heartbeat
+ range is configured
+Content-Language: en-US
+To:     liuxp11 <liuxp11@chinatelecom.cn>, wim <wim@linux-watchdog.org>
+Cc:     linux-watchdog <linux-watchdog@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <1650550938-24608-1-git-send-email-liuxp11@chinatelecom.cn>
+ <bcb94cc7-b693-b6e5-6adb-d555ad4f543d@roeck-us.net>
+ <6261E966.4050709@chinatelecom.cn>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <6261E966.4050709@chinatelecom.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear maintainers of the nbd subsystem,
+On 4/21/22 16:31, liuxp11 wrote:
+>  > diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
+> 
+>      > index 195c8c004b69..d166d33ce7ae 100644
+>      > --- a/drivers/watchdog/wdat_wdt.c
+>      > +++ b/drivers/watchdog/wdat_wdt.c
+>      > @@ -450,8 +450,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>      >        * watchdog properly after it has opened the device. In some cases
+>      >        * the BIOS default is too short and causes immediate reboot.
+>      >        */
+>      > -    if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
+>      > -        timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
+>      > +    if (watchdog_timeout_invalid(&wdat->wdd, timeout)) {
+>      >           dev_warn(dev, "Invalid timeout %d given, using %d\n",
+>      >                timeout, WDAT_DEFAULT_TIMEOUT);
+>      >           timeout = WDAT_DEFAULT_TIMEOUT;
+>     Thanks your reply, read these code,thinking can put them into watchdog_timeout_invalid.
 
-A user has come across an issue which causes the nbd module to hang after a
-disconnect where a write has been made to a qemu qcow image file, with qemu-nbd
-being the server.
 
-The issue is easily reproducible with the following:
+Again, no. If anything the above code is wrong; there should be no
+upper limit if max_hw_heartbeat_ms is provided. The code should
+probably set min_timeout and just call watchdog_timeout_invalid()
+without any change in that function.
 
-Ubuntu 20.04, 22.04 or Fedora 36
-Linux 5.18-rc2 or earlier (have tested 5.18-rc2, 5.15, 5.4, 4.15)
-QEMU 6.2 or earlier
-
-Instructions to reproduce:
-==========================
-
-$ sudo apt install qemu-nbd
-
-$ cat << EOF >> reproducer.sh
-#!/bin/bash
-
-sudo modprobe nbd
-
-while :
-do
-        qemu-img create -f qcow2 foo.img 500M
-        sudo qemu-nbd --disconnect /dev/nbd15 || true
-        sudo qemu-nbd --connect=/dev/nbd15 --cache=writeback --format=qcow2 foo.img
-        sudo mkfs.ext4 -L root -O "^64bit" -E nodiscard /dev/nbd15
-        sudo qemu-nbd --disconnect /dev/nbd15
-done
-EOF
-
-$ chmod +x reproducer.sh
-$ ./reproducer.sh
-
-On Ubuntu, the terminal will pause within a minute or two, and dmesg will report
-a lot of I/O errors, followed by hung task timeouts. On Fedora, it takes a 
-little longer, but it will break in the same way within 10 minutes.
-
-An example kernel log is below:
-
-https://paste.ubuntu.com/p/5ZjC5b8MR7/
-
-Debugging done:
-===============
-
-Looking at syslog, it seems systemd-udevd gets stuck, and enters D state.
-
-systemd-udevd[419]: nbd15: Worker [2004] processing SEQNUM=5661 is taking a long time
-
-$ ps aux
-...
-419    1194 root     D     0.1 systemd-udevd   -
-
-I rebooted, and disabled systemd-udevd and its sockets, with:
-
-$ sudo systemctl stop systemd-udevd.service
-$ sudo systemctl stop systemd-udevd-control.socket
-$ sudo systemctl stop systemd-udevd-kernel.socket
-
-When running the reproducer again, everything works fine, and nbd subsystem does
-not hang.
-
-Looking at udev rules, I looked at the differences between those in Ubuntu 18.04
-where the issue does not occur, and 20.04, where it does, and came across:
-
-/usr/lib/udev/rules.d/60-block.rules
-
-In 18.04:
-# watch metadata changes, caused by tools closing the device node which was opened for writing
-ACTION!="remove", SUBSYSTEM=="block", KERNEL=="loop*|nvme*|sd*|vd*|xvd*|pmem*|mmcblk*", OPTIONS+="watch"
-
-In 20.04:
-# watch metadata changes, caused by tools closing the device node which was opened for writing
-ACTION!="remove", SUBSYSTEM=="block", \
-  KERNEL=="loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*", \
-  OPTIONS+="watch"
-  
-The difference is the OPTIONS+="watch" being added to nbd* any event not remove.
-
-When I deleted nbd* and retried the reproducer again, everything works smoothly.
-
-Looking at the manpage for udev:
-
-> watch
->   Watch the device node with inotify; when the node is closed after being 
->   opened for writing, a change uevent is synthesized.
->
-> nowatch
->   Disable the watching of a device node with inotify.
-
-It appears that there is some sort of problem where systemd-udevd uses inotify
-to watch for updates to the device metadata, and it blocks a subsequent
-disconnect request, causing it to fail with:
-
-block nbd15: Send disconnect failed -32
-
-After which we start seeing stuck requests:
-
-block nbd15: Possible stuck request 000000007fcf62ba: control (read@523915264,24576B). Runtime 30 seconds
-
-All userspace calls to the nbd module hang, and the system has to be rebooted.
-
-Workaround:
-===========
-
-We can workaround the issue by adding a higher priority udev rule to not watch
-nbd* devices.
-
-$ cat << EOF >> /etc/udev/rules.d/97-nbd-device.rules
-# Disable inotify watching of change events for NBD devices
-ACTION=="add|change", KERNEL=="nbd*", OPTIONS:="nowatch"
-EOF
-
-$ sudo udevadm control --reload-rules
-$ sudo udevadm trigger
-
-Help on debugging the problem:
-==============================
-
-I need some help debugging the problem, as I am not quite sure how to trace
-the interactions between inotify and nbd.
-
-I am happy to help debug the issue, or try any patches that gather debugging
-data or any potential fixes.
-
-Thanks,
-Matthew
+Guenter

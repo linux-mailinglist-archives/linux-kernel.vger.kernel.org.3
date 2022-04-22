@@ -2,154 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE97250B287
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C9450B28E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445454AbiDVIGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 04:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
+        id S1445475AbiDVIJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 04:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445447AbiDVIGc (ORCPT
+        with ESMTP id S1445711AbiDVIIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 04:06:32 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC2F52B27;
-        Fri, 22 Apr 2022 01:03:39 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 5AE171F37F;
-        Fri, 22 Apr 2022 08:03:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650614618; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A3qrTUUWLOvzrr/LvAjd6a8Y59rvn8/Wc+U1lk05QeU=;
-        b=lezFbrP5jGkD5FxlHMoOg8wXgSiLfy/5gq6TTTy2R2TZFRXeXA06xQoqefhXIN8v8styGd
-        SRo633iF8muSmmcxUCxteH2OCl6zeIe/PN1s2b79RXRGoafkBzhXxQfXNJhleU6RcskcW+
-        sKGZ0Lp4ujj/JxbGHWsxTZ4UUnlsN8w=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 146482C145;
-        Fri, 22 Apr 2022 08:03:38 +0000 (UTC)
-Date:   Fri, 22 Apr 2022 10:03:36 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, roman.gushchin@linux.dev,
-        hannes@cmpxchg.org
-Subject: Re: [PATCH 3/4] mm: Centralize & improve oom reporting in show_mem.c
-Message-ID: <YmJhWNIcd5GcmKeo@dhcp22.suse.cz>
-References: <20220419203202.2670193-1-kent.overstreet@gmail.com>
- <20220419203202.2670193-4-kent.overstreet@gmail.com>
- <Yl+vHJ3lSLn5ZkWN@dhcp22.suse.cz>
- <20220420165805.lg4k2iipnpyt4nuu@moria.home.lan>
- <YmEhXG8C7msGvhqL@dhcp22.suse.cz>
- <20220421184213.tbglkeze22xrcmlq@moria.home.lan>
+        Fri, 22 Apr 2022 04:08:50 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B4E527D5;
+        Fri, 22 Apr 2022 01:05:57 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kl6QX0k4Vz1J9m8;
+        Fri, 22 Apr 2022 16:05:08 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 22 Apr 2022 16:05:55 +0800
+From:   Yicong Yang <yangyicong@hisilicon.com>
+To:     <bhelgaas@google.com>, <rafael@kernel.org>,
+        <linux-pci@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <yangyicong@hisilicon.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v4] PCI: Make sure the bus bridge powered on when scanning bus
+Date:   Fri, 22 Apr 2022 16:04:04 +0800
+Message-ID: <20220422080404.27724-1-yangyicong@hisilicon.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421184213.tbglkeze22xrcmlq@moria.home.lan>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 21-04-22 14:42:13, Kent Overstreet wrote:
-> On Thu, Apr 21, 2022 at 11:18:20AM +0200, Michal Hocko wrote:
-[...]
-> > > 00177 16644 pages reserved
-> > > 00177 Unreclaimable slab info:
-> > > 00177 9p-fcall-cache    total: 8.25 MiB active: 8.25 MiB
-> > > 00177 kernfs_node_cache total: 2.15 MiB active: 2.15 MiB
-> > > 00177 kmalloc-64        total: 2.08 MiB active: 2.07 MiB
-> > > 00177 task_struct       total: 1.95 MiB active: 1.95 MiB
-> > > 00177 kmalloc-4k        total: 1.50 MiB active: 1.50 MiB
-> > > 00177 signal_cache      total: 1.34 MiB active: 1.34 MiB
-> > > 00177 kmalloc-2k        total: 1.16 MiB active: 1.16 MiB
-> > > 00177 bch_inode_info    total: 1.02 MiB active: 922 KiB
-> > > 00177 perf_event        total: 1.02 MiB active: 1.02 MiB
-> > > 00177 biovec-max        total: 992 KiB active: 960 KiB
-> > > 00177 Shrinkers:
-> > > 00177 super_cache_scan: objects: 127
-> > > 00177 super_cache_scan: objects: 106
-> > > 00177 jbd2_journal_shrink_scan: objects: 32
-> > > 00177 ext4_es_scan: objects: 32
-> > > 00177 bch2_btree_cache_scan: objects: 8
-> > > 00177   nr nodes:          24
-> > > 00177   nr dirty:          0
-> > > 00177   cannibalize lock:  0000000000000000
-> > > 00177 
-> > > 00177 super_cache_scan: objects: 8
-> > > 00177 super_cache_scan: objects: 1
-> > 
-> > How does this help to analyze this allocation failure?
-> 
-> You asked for an example of the output, which was an entirely reasonable
-> request. Shrinkers weren't responsible for this OOM, so it doesn't help here -
+When the bus bridge is runtime suspended, we'll fail to rescan
+the devices through sysfs as we cannot access the configuration
+space correctly when the bridge is in D3hot.
+It can be reproduced like:
 
-OK, do you have an example where it clearly helps?
+$ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
+$ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
 
-> are you asking me to explain why shrinkers are relevant to OOMs and memory
-> reclaim...?
+0000:80:00.0 is root port and is runtime suspended and we cannot
+get 0000:81:00.1 after rescan.
 
-No, not really, I guess that is quite clear. The thing is that the oom
-report is quite bloated already and we should be rather picky on what to
-dump there. Your above example is a good one here. You have an order-5
-allocation failure and that can be caused by almost anything. Compaction
-not making progress for many reasons - e.g. internal framentation caused
-by pinned pages but also kmalloc allocations. The above output doesn't
-help with any of that. Could shrinkers operation be related? Of course
-it could but how can I tell?
+Make bridge powered on when scanning the child bus, by adding
+pm_runtime_get_sync()/pm_runtime_put() in pci_scan_child_bus_extend().
 
-We already dump slab data when the slab usage is excessive for the oom
-killer report and that was a very useful addition in many cases and it
-is bound to cases where slab consumption could be the primary source of
-the OOM condition.
+Cc: Rafael J. Wysocki <rafael@kernel.org>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+---
+Change since v3:
+- retain the pm_runtime_*() calls in pci_scan_bridge_extend() as Rafael points
+  out that it's necessary when the brigde is in D3cold
+Link: https://lore.kernel.org/linux-pci/20220414123736.34150-1-yangyicong@hisilicon.com/
 
-That being said the additional output should be at least conditional and
-reported when there is a chance that it could help with analysis.
+Change since v2:
+- just rebase it on v5.18-rc2
+Link: https://lore.kernel.org/linux-pci/1601029386-4928-1-git-send-email-yangyicong@hisilicon.com/
 
-> Since shrinkers own and, critically, _are responsible for freeing memory_, a
-> shrinker not giving up memory when asked (or perhaps not being asked to give up
-> memory) can cause an OOM. A starting point - not an end - if we want to improve
-> OOM debugging is at least being able to see how much memory each shrinker owns.
-> Since we don't even have that, number of objects will have to do.
-> 
-> The reason for adding the .to_text() callback is that shrinkers have internal
-> state that affects whether they are able to give up objects when asked - the
-> primary example being object dirtyness.
-> 
-> If your system is using a ton of memory caching inodes, and something's wedged
-> writeback, and they're nearly all dirty - you're going to have a bad day.
-> 
-> The bcachefs btree node node shrinker included as an example of what we can do
-> with this: internally we may have to allocate new btree nodes by reclaiming from
-> our own cache, and we have a lock to prevent multiple threads from doing this at
-> the same time, and this lock also blocks the shrinker from freeing more memory
-> until we're done.
-> 
-> In filesystem land, debugging memory reclaim issues is a rather painful topic
-> that often comes up, this is a starting point...
+Change since v1:
+- use an intermediate variable *bridge as suggested
+- remove the pm_runtime_*() calls in pci_scan_bridge_extend()
+Link: https://lore.kernel.org/linux-pci/1596022223-4765-1-git-send-email-yangyicong@hisilicon.com/
 
-I completely understand the frustration. I've been analyzing oom reports
-for years and I can tell that the existing report is quite good but
-in many cases the information we provide is still insufficient. My
-experience also tells me that those cases are usually very special and
-a specific data dumped for them wouldn't be all that useful in the
-majority of cases.
+ drivers/pci/probe.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-If we are lucky enough the oom is reproducible and additional
-tracepoints (or whatever your prefer to use) tell us more. Far from
-optimal, no question about that but I do not have a good answer on
-where the trashhold should really be. Maybe we can come up with some
-trigger based mechanism (e.g. some shrinkers are failing so they
-register their debugging data which will get dumped on the OOM) which
-would enable certain debugging information or something like that.
-
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 17a969942d37..b108e72b6586 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -2859,11 +2859,20 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+ 	unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
+ 	unsigned int start = bus->busn_res.start;
+ 	unsigned int devfn, fn, cmax, max = start;
++	struct pci_dev *bridge = bus->self;
+ 	struct pci_dev *dev;
+ 	int nr_devs;
+ 
+ 	dev_dbg(&bus->dev, "scanning bus\n");
+ 
++	/*
++	 * Make sure the bus bridge is powered on, otherwise we may not be
++	 * able to scan the devices as we may fail to access the configuration
++	 * space of subordinates.
++	 */
++	if (bridge)
++		pm_runtime_get_sync(&bridge->dev);
++
+ 	/* Go find them, Rover! */
+ 	for (devfn = 0; devfn < 256; devfn += 8) {
+ 		nr_devs = pci_scan_slot(bus, devfn);
+@@ -2976,6 +2985,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+ 		}
+ 	}
+ 
++	if (bridge)
++		pm_runtime_put(&bridge->dev);
++
+ 	/*
+ 	 * We've scanned the bus and so we know all about what's on
+ 	 * the other side of any bridges that may be on this bus plus
 -- 
-Michal Hocko
-SUSE Labs
+2.24.0
+

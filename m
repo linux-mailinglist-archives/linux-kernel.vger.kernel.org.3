@@ -2,227 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DEEC50C560
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C14350C55C
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbiDVX53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S231190AbiDVX5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiDVX5X (ORCPT
+        with ESMTP id S231250AbiDVX5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:57:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFC8187472
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 16:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650671669; x=1682207669;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=F3A1JtEHRXj6a0/SQwcO3YsqTcDyh6BCuA8flO+Pzm8=;
-  b=YVxZB5tQVCc/HWp6HOqQfcvEgC2LuTc5qWPAgsv3GiLnzNhMJo1dApkV
-   izrwotKVquxtI4bSmKy47LXWhoFLGUsA8AGcRCXNB6f65GftcOwSGLFnV
-   PshvYSR0GvTIAGjoYjrI72OV7gnxi694FEeOKS/cVhVvH0xw3YYjDNk07
-   PrZQliOIk+61xskffK0vfaeYVQJiDNp2LcknS6Hba7kzpqMf5zjacnlE1
-   ubpxI1/q6UFE2aTcjl7lwvO6ptw0Nr2h7Eg2VPZZyP4qUgrYHdNyrhcsP
-   yxqBsXXnvjYSYVAhBwWIhXm5MILfqn5FbWrW+FtbXCPxEeIoFPvKmZXI8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="246721823"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="246721823"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:54:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="531085978"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Apr 2022 16:54:27 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ni36Y-000Ah0-KL;
-        Fri, 22 Apr 2022 23:54:26 +0000
-Date:   Sat, 23 Apr 2022 07:53:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/core] BUILD SUCCESS
- 78ed93d72ded679e3caf0758357209887bda885f
-Message-ID: <6263400f.14b49bhBYas7oW7E%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 22 Apr 2022 19:57:44 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5618618CE7A;
+        Fri, 22 Apr 2022 16:54:46 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 9753F3201DB0;
+        Fri, 22 Apr 2022 19:54:44 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 22 Apr 2022 19:54:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650671684; x=
+        1650758084; bh=bIORmVGxF8GzLIS1apB89GoRxus2DX+lmmNkIPvHyl8=; b=T
+        zskOs5mekx97JHksNwUgq9YPhd3xRyFXh3Z9GxQZRrLiEOfT3T2Fza9/C4+bInUh
+        WymLAjC7TVpuETRcX/w0y+bV2voYuHErYUJlv0x+GgS8VoFSdwcgSGvvJoNtDt7b
+        b5u+SDlxEejqiVLTkOFdRBvlJqzL7xTLqlM28g6YrfM1Z6Uu1Mqvfe17hVJuwrun
+        G/ZSsbDiFKpb/mfvdauVAxugfPiwtNV9jxQNT9VjgcgnclVDSYLOHVsUi5DLWecV
+        oL7WEl1GLpZfnFrd+Spq6XBGtGTvpYz43B33kScXSX/pKDMqJiAwbyFPvrOzfnPG
+        c5YKciOFKuqQ8Cw6OZmFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650671684; x=1650758084; bh=bIORmVGxF8GzL
+        IS1apB89GoRxus2DX+lmmNkIPvHyl8=; b=FqPCey5OF7RqXlhREjIa0xaypYger
+        PbWrJJvFPfmyXczd8QkVgUbaWlKBIq/i5Laxte2xv48xgq0gN4LA6ca+k9zP97In
+        noRNcTO7rZOWBzliRs2+jb+Ybpil44mIvL1Xov2PziUMlELx6ubbb5NnlzG9unq2
+        a4fhss4dTWCYXd38/mfxpqjAUVKxRN1JayrBdStv2HLEsOEk6vYsQzrKZom5qypO
+        MyhC9N4+xeb66KM13Yk5W9S2ewR3VMXsPXpWil7qoutC8PIc4h/LWUNB/Z++WLxJ
+        vS1lfAtatzjClVbNul54dkR7KJXocDb6m1G6ZcOwQBpAOXU3hmPbjaAEA==
+X-ME-Sender: <xms:Q0BjYn3I9QnhnJmd10plq-N14trhpmzD7zk-1mss0DSKmKk7XRCX5Q>
+    <xme:Q0BjYmHH-JA59ibPl5AD-IU8jXoOwwz9qA-Np9KTOGe4BcJYtbufbXQ3D3qiajROw
+    rW-mO56IkwCApfFAQ>
+X-ME-Received: <xmr:Q0BjYn5i2h-lMhBK7Z49O3nvHS5TaVtaWNQ7cHWOZiT58UcqnxnoXYYPo1isKElOlJ3aboBPHigTt5tIqg2Ph_Ekp7jNG7r3FJbYYVipsHEtvpg1lQ13wObvtg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdehgddvkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfhiedt
+    heduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:Q0BjYs2PhBkWXXX24KDYjqIkhjecYf_DuFW1mGab9QYNdz-r0CZX3w>
+    <xmx:Q0BjYqEs44nOwbxivKVteXb9eDo2zw3WOQzrZUKfh71vY7RfXb8wVQ>
+    <xmx:Q0BjYt9CJROv94ATQuSSmx-cdbWkpSgh0y4_j-BFGz27SBYO4cTwFg>
+    <xmx:REBjYtA9wanLN-CrrlEmRAKpyZNbDmusyH-8RtqgGRRiaoKbbD2ySw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 22 Apr 2022 19:54:43 -0400 (EDT)
+Subject: Re: [PATCH 3/4] spi: sun6i: add quirk for in-controller clock divider
+To:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>
+References: <20220422155639.1071645-1-icenowy@outlook.com>
+ <BYAPR20MB24728A99C2F7505873A091B5BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <d1c09ca7-dc25-843c-2f64-fbf5111a9118@sholland.org>
+Date:   Fri, 22 Apr 2022 18:54:43 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <BYAPR20MB24728A99C2F7505873A091B5BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
-branch HEAD: 78ed93d72ded679e3caf0758357209887bda885f  signal: Deliver SIGTRAP on perf event asynchronously if blocked
+On 4/22/22 10:56 AM, icenowy@outlook.com wrote:
+> From: Icenowy Zheng <icenowy@aosc.io>
+> 
+> Previously SPI controllers in Allwinner SoCs has a clock divider inside.
+> However now the clock divider is removed and to set the transfer clock
+> rate it's only needed to set the SPI module clock to the target value.
+> 
+> Add a quirk for this kind of SPI controllers.
+> 
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> ---
+>  drivers/spi/spi-sun6i.c | 68 +++++++++++++++++++++++------------------
+>  1 file changed, 38 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
+> index 84c525b08ad0..fc81afc3a963 100644
+> --- a/drivers/spi/spi-sun6i.c
+> +++ b/drivers/spi/spi-sun6i.c
+> @@ -87,6 +87,7 @@
+>  
+>  struct sun6i_spi_cfg {
+>  	unsigned long		fifo_depth;
+> +	bool			has_clk_ctl;
+>  };
+>  
+>  struct sun6i_spi {
+> @@ -260,7 +261,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
+>  				  struct spi_transfer *tfr)
+>  {
+>  	struct sun6i_spi *sspi = spi_master_get_devdata(master);
+> -	unsigned int mclk_rate, div, div_cdr1, div_cdr2, timeout;
+> +	unsigned int div, div_cdr1, div_cdr2, timeout;
+>  	unsigned int start, end, tx_time;
+>  	unsigned int trig_level;
+>  	unsigned int tx_len = 0, rx_len = 0;
+> @@ -350,39 +351,44 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
+>  
+>  	sun6i_spi_write(sspi, SUN6I_TFR_CTL_REG, reg);
+>  
+> -	/* Ensure that we have a parent clock fast enough */
+> -	mclk_rate = clk_get_rate(sspi->mclk);
+> -	if (mclk_rate < (2 * tfr->speed_hz)) {
+> -		clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
+> -		mclk_rate = clk_get_rate(sspi->mclk);
+> -	}
+> +	if (sspi->cfg->has_clk_ctl) {
+> +		unsigned int mclk_rate = clk_get_rate(sspi->mclk);
+> +		/* Ensure that we have a parent clock fast enough */
+> +		if (mclk_rate < (2 * tfr->speed_hz)) {
+> +			clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
+> +			mclk_rate = clk_get_rate(sspi->mclk);
+> +		}
+>  
+> -	/*
+> -	 * Setup clock divider.
+> -	 *
+> -	 * We have two choices there. Either we can use the clock
+> -	 * divide rate 1, which is calculated thanks to this formula:
+> -	 * SPI_CLK = MOD_CLK / (2 ^ cdr)
+> -	 * Or we can use CDR2, which is calculated with the formula:
+> -	 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
+> -	 * Wether we use the former or the latter is set through the
+> -	 * DRS bit.
+> -	 *
+> -	 * First try CDR2, and if we can't reach the expected
+> -	 * frequency, fall back to CDR1.
+> -	 */
+> -	div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
+> -	div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
+> -	if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
+> -		reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
+> -		tfr->effective_speed_hz = mclk_rate / (2 * div_cdr2);
+> +		/*
+> +		 * Setup clock divider.
+> +		 *
+> +		 * We have two choices there. Either we can use the clock
+> +		 * divide rate 1, which is calculated thanks to this formula:
+> +		 * SPI_CLK = MOD_CLK / (2 ^ cdr)
+> +		 * Or we can use CDR2, which is calculated with the formula:
+> +		 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
+> +		 * Wether we use the former or the latter is set through the
+> +		 * DRS bit.
+> +		 *
+> +		 * First try CDR2, and if we can't reach the expected
+> +		 * frequency, fall back to CDR1.
+> +		 */
+> +		div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
+> +		div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
+> +		if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
+> +			reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
+> +			tfr->effective_speed_hz = mclk_rate / (2 * div_cdr2);
+> +		} else {
+> +			div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
+> +			reg = SUN6I_CLK_CTL_CDR1(div);
+> +			tfr->effective_speed_hz = mclk_rate / (1 << div);
+> +		}
+> +
+> +		sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
+>  	} else {
+> -		div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
+> -		reg = SUN6I_CLK_CTL_CDR1(div);
+> -		tfr->effective_speed_hz = mclk_rate / (1 << div);
+> +		clk_set_rate(sspi->mclk, tfr->speed_hz);
 
-elapsed time: 786m
+clk_set_rate() may not set the exact requested rate. Should we set
+tfr->effective_speed_hz based on clk_get_rate() afterward?
 
-configs tested: 144
-configs skipped: 4
+Regards,
+Samuel
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>  	}
+>  
+> -	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
+>  	/* Finally enable the bus - doing so before might raise SCK to HIGH */
+>  	reg = sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG);
+>  	reg |= SUN6I_GBL_CTL_BUS_ENABLE;
+> @@ -702,10 +708,12 @@ static int sun6i_spi_remove(struct platform_device *pdev)
+>  
+>  static const struct sun6i_spi_cfg sun6i_a31_spi_cfg = {
+>  	.fifo_depth	= SUN6I_FIFO_DEPTH,
+> +	.has_clk_ctl	= true,
+>  };
+>  
+>  static const struct sun6i_spi_cfg sun8i_h3_spi_cfg = {
+>  	.fifo_depth	= SUN8I_FIFO_DEPTH,
+> +	.has_clk_ctl	= true,
+>  };
+>  
+>  static const struct of_device_id sun6i_spi_match[] = {
+> 
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-sparc                               defconfig
-arm                       aspeed_g5_defconfig
-sh                          rsk7201_defconfig
-m68k                          hp300_defconfig
-arm                           imxrt_defconfig
-m68k                         apollo_defconfig
-ia64                             allyesconfig
-nios2                         10m50_defconfig
-openrisc                  or1klitex_defconfig
-sh                           se7721_defconfig
-arm                        realview_defconfig
-ia64                      gensparse_defconfig
-m68k                        m5407c3_defconfig
-um                                  defconfig
-arm                          simpad_defconfig
-powerpc                      pcm030_defconfig
-powerpc                   currituck_defconfig
-powerpc                       ppc64_defconfig
-powerpc                        cell_defconfig
-powerpc                    sam440ep_defconfig
-openrisc                 simple_smp_defconfig
-sh                               alldefconfig
-arm                      footbridge_defconfig
-arc                          axs101_defconfig
-sh                          r7785rp_defconfig
-sh                         apsh4a3a_defconfig
-sparc                       sparc64_defconfig
-m68k                       m5275evb_defconfig
-sh                         microdev_defconfig
-mips                        bcm47xx_defconfig
-sparc64                             defconfig
-um                               alldefconfig
-ia64                        generic_defconfig
-arm                           viper_defconfig
-ia64                         bigsur_defconfig
-sh                        apsh4ad0a_defconfig
-arm                           sama5_defconfig
-alpha                            alldefconfig
-m68k                            mac_defconfig
-sh                           se7705_defconfig
-mips                           xway_defconfig
-arm                           stm32_defconfig
-xtensa                          iss_defconfig
-xtensa                    smp_lx200_defconfig
-m68k                       m5475evb_defconfig
-powerpc                 canyonlands_defconfig
-powerpc                       holly_defconfig
-arm                        trizeps4_defconfig
-sh                           se7751_defconfig
-arc                          axs103_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220422
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-riscv                randconfig-c006-20220422
-mips                 randconfig-c004-20220422
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220422
-powerpc              randconfig-c003-20220422
-i386                          randconfig-c001
-powerpc                      acadia_defconfig
-mips                           ip27_defconfig
-mips                          ath25_defconfig
-powerpc                     tqm8540_defconfig
-arm                         orion5x_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                      ppc64e_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                         socfpga_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                       mainstone_defconfig
-powerpc                      walnut_defconfig
-mips                         tb0219_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220422
-s390                 randconfig-r044-20220422
-riscv                randconfig-r042-20220422
-hexagon              randconfig-r045-20220422
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

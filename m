@@ -2,135 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDC450B80E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C50450B81A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447788AbiDVNQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        id S1447811AbiDVNR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447789AbiDVNQd (ORCPT
+        with ESMTP id S1447845AbiDVNRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:16:33 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68348580DA
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:13:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650633220; x=1682169220;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tC39CcHCCAkxRGoLupvWWCwop7YOMFc9XUJ+TwGQPfg=;
-  b=DRS8dm3s5lCUGTfjsvIVHN0LLnFrFrDnWhnO5RJFDhl9ZFa0i6elxZGv
-   Dsw1XyykM49RhKv30EZ9G+N2cq90Y9EFU3xZBjvCnftN6vK+T+49sVQCD
-   i3p773RGIlRKQdOgVU0cojh/BtCIFCij/rKLSg+67+uE/Ds9oOU9FoIJ0
-   6iEraarXqoTgNnPUlMHxMh8NXHqf2GBbR1JMWHRUgkrCROoaEER7wXnrR
-   LZ4+eYMMZ/VrVsN5zBaBYlrJLhZCPosm/iif4SxNHhhqLug0aBybbQpri
-   tMS/EjDyZuIGPB+aG3NHV6IeKOF+rxjE4GGApRSyV/eXaZlkqynSlguup
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351109961"
-X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="351109961"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 06:13:40 -0700
-X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="556374272"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.236]) ([10.254.215.236])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 06:13:37 -0700
-Message-ID: <8440e43b-aa1f-2648-6b64-afc34aa97bc2@linux.intel.com>
-Date:   Fri, 22 Apr 2022 21:13:35 +0800
+        Fri, 22 Apr 2022 09:17:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05C2580CB;
+        Fri, 22 Apr 2022 06:14:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D404B82CC4;
+        Fri, 22 Apr 2022 13:14:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C385C385A0;
+        Fri, 22 Apr 2022 13:14:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650633285;
+        bh=ORwNkiby2RNyL2m/1KS8cO2QComBwAdtXIB1jK0vHTo=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=BaQ4NKv6TDZwLyR7t3vX6hDJSB/p1GExF2pBumfyITdm2Kiv/o2ngfY2Mj3Rqqi2F
+         2bKWHXhwvJRZW85sE14gnU2TQQYEO5MdrsuakCzD+xHbItXdshUykMBqnlHXw/5mco
+         svzTdCfQTwQ2HfXWGHCZoDgH3OuYz3uhZ6pUlDGxwOhrX9jUoW41I1FGrqw5j5+jYM
+         e4rT2InR2TptOavNtxj/EBYZ0lDmUgY+zfNjEcgkuSj8Ay74KowdpLVO56WhJFGz8+
+         +B4/P1jHkfj4SMQcP5vGh0Iog6jct8TSt32w1JjZz/80SVtuPVnmb9gYMHzbMmEzV5
+         QwXMD3d0CW8JQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, zhengyongjun3@huawei.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220422062641.10486-1-zhengyongjun3@huawei.com>
+References: <20220422062641.10486-1-zhengyongjun3@huawei.com>
+Subject: Re: [PATCH] spi: img-spfi: Fix pm_runtime_get_sync() error checking
+Message-Id: <165063328423.414237.5668240958783910154.b4-ty@kernel.org>
+Date:   Fri, 22 Apr 2022 14:14:44 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     baolu.lu@linux.intel.com,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] iommu/vt-d: Set PGSNP bit in pasid table entry for
- SVA binding
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-References: <20220421113558.3504874-1-baolu.lu@linux.intel.com>
- <20220421113558.3504874-3-baolu.lu@linux.intel.com>
- <BN9PR11MB5276EDDABE40B6A6A67A0F4E8CF79@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276EDDABE40B6A6A67A0F4E8CF79@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/22 11:05, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Thursday, April 21, 2022 7:36 PM
->>
->> This field make the requests snoop processor caches irrespective of
->> other attributes in the request or other fields in paging structure
->> entries used to translate the request.
+On Fri, 22 Apr 2022 06:26:41 +0000, Zheng Yongjun wrote:
+> If the device is already in a runtime PM enabled state
+> pm_runtime_get_sync() will return 1, so a test for negative
+> value should be used to check for errors.
 > 
-> I think you want to first point out the fact that SVA wants snoop
-> cache instead of just talking about the effect of PGSNP.
 > 
-> But thinking more I wonder why PGSNP is ever required. This is
-> similar to DMA API case. x86 is already cache coherent for normal
-> DMA (if not setting PCI no-snoop) and if the driver knows no-snoop
-> is incompatible to SVA API then it should avoid triggering no-snoop
-> traffic for SVA usage. In this case it is pointless for IOMMU driver
-> to enable force-snooping. Even in the future certain platform allows
-> no-snoop usage w/ SVA (I'm not sure how it works) this again should
-> be reflected by additional SVA APIs for driver to explicitly manage.
-> 
-> force-snoop should be enabled only in device assignment case IMHO,
-> orthogonal to whether vSVA is actually used.
-> 
-> Did I misunderstand the motivation here?
 
-No, you didn't.
+Applied to
 
-Let's talk with the arch guys for more details before move this patch
-ahead. Thanks for pointing this out.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Best regards,
-baolu
+Thanks!
 
-> 
->>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> ---
->>   drivers/iommu/intel/svm.c | 9 ++++++---
->>   1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
->> index 23a38763c1d1..c720d1be992d 100644
->> --- a/drivers/iommu/intel/svm.c
->> +++ b/drivers/iommu/intel/svm.c
->> @@ -391,9 +391,12 @@ static struct iommu_sva
->> *intel_svm_bind_mm(struct intel_iommu *iommu,
->>   	}
->>
->>   	/* Setup the pasid table: */
->> -	sflags = (flags & SVM_FLAG_SUPERVISOR_MODE) ?
->> -			PASID_FLAG_SUPERVISOR_MODE : 0;
->> -	sflags |= cpu_feature_enabled(X86_FEATURE_LA57) ?
->> PASID_FLAG_FL5LP : 0;
->> +	sflags = PASID_FLAG_PAGE_SNOOP;
->> +	if (flags & SVM_FLAG_SUPERVISOR_MODE)
->> +		sflags |= PASID_FLAG_SUPERVISOR_MODE;
->> +	if (cpu_feature_enabled(X86_FEATURE_LA57))
->> +		sflags |= PASID_FLAG_FL5LP;
->> +
->>   	spin_lock_irqsave(&iommu->lock, iflags);
->>   	ret = intel_pasid_setup_first_level(iommu, dev, mm->pgd, mm-
->>> pasid,
->>   					    FLPT_DEFAULT_DID, sflags);
->> --
->> 2.25.1
-> 
+[1/1] spi: img-spfi: Fix pm_runtime_get_sync() error checking
+      commit: cc470d55343056d6b2a5c32e10e0aad06f324078
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

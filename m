@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB9C50AD9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67D850ADA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443281AbiDVCOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 22:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
+        id S1443300AbiDVCPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 22:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443267AbiDVCOB (ORCPT
+        with ESMTP id S233263AbiDVCPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 22:14:01 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7AD3881;
-        Thu, 21 Apr 2022 19:11:07 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id g21so7249272iom.13;
-        Thu, 21 Apr 2022 19:11:07 -0700 (PDT)
+        Thu, 21 Apr 2022 22:15:50 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DCF4B1C0;
+        Thu, 21 Apr 2022 19:12:58 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d14so4635790qtw.5;
+        Thu, 21 Apr 2022 19:12:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=THB/rCWOGRRIRIhECHZDglj7Vx+NGfgUwYSBViBKwtg=;
-        b=R6gjrq2icFejVNYcXyZKoqk7o7RMq25KWkGjFrJq0n6BTM4CiJY3gI4kLHwlYAOgpN
-         zUuARqL8YHsBS5R5oIc1lcT2G8F5IbyMMxj+z9iiwLXG6azdXEyb8PhrCtgXrTcWVcB6
-         exmEstTVrD1M3G600lKq4nt86MrSO+eo5UMi7xN37AezJoqLG9mxwF+Thbcr3xfgV0h+
-         KdGn7vq3LKLgsuY4Pji6OmOyjs1big7nju4AoYGSb4/lYArlzGEYAf12wSe24nmzO6P7
-         fS1SnxUusDfpPdXMBU9rnadro8eOB8NLd+dzYCKB3/SjW9+d8fJUHunIVjfuQgygQxAA
-         AIQQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Nm+mwceUxcKf/fZ1vVM8wv5jCau21BJLiGeCoTMm/Gk=;
+        b=qdAGwVf7vPb+pu5ZRN/hGrqoktVvGuCfK4ZouJOkeu0qaRNunRm2B60t+w3LLHTc1U
+         Yb3u3gaZ+3gqwzKDP8/dtHxyjeqxj5BmE77X8isv2rukBTogkKrpjMxH8cJwRxMLnI2k
+         XK4LUFC2yb87bGmEsIQBeMAC04WG3lrlGYQptQstHIzqSOPp4I3RB691Ays5ccpo7xVx
+         RpErQlumgDh2mAKQ/tsxZCeVr4PlRvNc+/n3Kr92sgnwIQcvGGz97nAZmRt+p4x7D9aB
+         QQeSavZ0wUq0Evo3eLkTHii/dQvx1O/bf3jUFKPvzFfzgjbxtwhUDSRCdRRWjKBJlWz1
+         o2yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=THB/rCWOGRRIRIhECHZDglj7Vx+NGfgUwYSBViBKwtg=;
-        b=U+JjPIsXiK857R55RX+WCUgjls5oiXv3VQ1CwF2ZO0tubCNQWoMiPR+Ht4kTOcrJsa
-         lTyGz0E3JtYs/VBRgmKiUEhYfhqt0KtZX+rq2n3/Wg/5gGM1SFB4Zsg24Skr5QaHDzR0
-         0oJktE8Z8islNIi+Wo8QAiHL0XRWiG1IeNOB4kUZB2wAcvh38qQ3QQLvE+/SelD64qTz
-         3M7By1MVnbLAe1OWRx5erWeYPNksEu7tGkdxslMJhKjyt9PTb7tUJ7cf8N3tjkbTNnmJ
-         ku8joUVR4FaZ/ZmIhOrLXnsgVE7ZliW93106efTzkedbL6gxy2Dl/aXdmm8is2gZKkT6
-         vbVg==
-X-Gm-Message-State: AOAM5311gD8rBH66BUQ3kO7FXXEC8c/AVpsmAACRhTjDU7jluOYuKnYu
-        7QDI+b3zB9U8QMhbWhRm4mho78/cpdKybwAq9SsQGwdmCuV9A1L6
-X-Google-Smtp-Source: ABdhPJxep6RnbtTNtFPOqoRJAv+wWszzQRdMVGiABj0/cPlaniM4Blm9tZQMnu54F1vQAOLMau/jKbEU4cZfT05x3r8=
-X-Received: by 2002:a05:6602:2f12:b0:654:b304:b016 with SMTP id
- q18-20020a0566022f1200b00654b304b016mr1079035iow.60.1650593466714; Thu, 21
- Apr 2022 19:11:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Nm+mwceUxcKf/fZ1vVM8wv5jCau21BJLiGeCoTMm/Gk=;
+        b=RHk+hK1Fb6YMMCcpaQ0Hm6idldvAb9wOtdGH1BblQIQs9/wCo6UdsnOgymluSZHHTw
+         53i+ja8+fbgYsvuONi52rjDiplu9wm8DN7bs3t4g17Irbo9dCZRVmRNvzCL5NUpItFcS
+         hfOLwlOa2YOD4VHM0MmybLsc8e2p4d3YunR2I3fn/grNo32FDET51VP8ahyAwfZyYN30
+         G/MBfHVHp9w8qR8xRbSTUL1+z3+sDy+zgmQdR0LNYKRl1NAtNVTZRPbeOLd9mqPq0S8a
+         30X72J3e0jzWDxVkS82D+Ng+EB1dKzbgPiVgtzvW9NKUP/7xiqCs18OJ2AOVsJ3MKugm
+         9RFw==
+X-Gm-Message-State: AOAM530LU2G1RgnanhZ3XsKmXgO93jNW+04gY1mTOhlAW5G/Zd6nQxcY
+        rm7kFA1/gFTG6aEIqLaPjco=
+X-Google-Smtp-Source: ABdhPJxojN7D2vVmc8j3S5pj/VvsuFm2OYk8PC6gVi9pubbqqkuPKYNYUtrYtazOWPHVY8cYEdTQTQ==
+X-Received: by 2002:a05:622a:144e:b0:2f3:4da8:6a77 with SMTP id v14-20020a05622a144e00b002f34da86a77mr1686232qtx.574.1650593578153;
+        Thu, 21 Apr 2022 19:12:58 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 67-20020a370b46000000b0069ed3db4b8bsm330814qkl.89.2022.04.21.19.12.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 19:12:57 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     hverkuil-cisco@xs4all.nl
+Cc:     cgel.zte@gmail.com, eagle.zhou@nxp.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        lv.ruyi@zte.com.cn, mchehab@kernel.org, ming.qian@nxp.com,
+        shijie.qin@nxp.com, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH v2] media: amphion: no need to check return value of debugfs_create functions
+Date:   Fri, 22 Apr 2022 02:12:46 +0000
+Message-Id: <20220422021246.2731824-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220412122524.26966-1-surong.pang@gmail.com> <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
-In-Reply-To: <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
-From:   surong pang <surong.pang@gmail.com>
-Date:   Fri, 22 Apr 2022 10:10:55 +0800
-Message-ID: <CAEDbmAT=fZ-kpn13sW4KjB9RuFb_6T4j_eripR54NZ3UciZfqA@mail.gmail.com>
-Subject: Re: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Orson.Zhai@unisoc.com, yunguo.wu@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,51 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-shared_hcd might be freed already here, but hcd should not be freed
-here, because "usb_put_hcd(hcd)" is called later.
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-Mathias Nyman <mathias.nyman@linux.intel.com> =E4=BA=8E2022=E5=B9=B44=E6=9C=
-=8819=E6=97=A5=E5=91=A8=E4=BA=8C 22:43=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 12.4.2022 15.25, Surong Pang wrote:
-> > From: Surong Pang <surong.pang@unisoc.com>
-> >
-> > Let usb phy shutdown later in xhci_plat_remove function.
-> > Some phy driver doesn't divide 3.0/2.0 very clear.
-> > If calls usb_phy_shutdown earlier than usb_remove_hcd(hcd),
-> > It will case 10s cmd timeout issue.
-> >
-> > Call usb phy shutdown later has better compatibility.
-> >
-> > Signed-off-by: Surong Pang <surong.pang@unisoc.com>
-> > ---
-> >  drivers/usb/host/xhci-plat.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.=
-c
-> > index 649ffd861b44..dc73a81cbe9b 100644
-> > --- a/drivers/usb/host/xhci-plat.c
-> > +++ b/drivers/usb/host/xhci-plat.c
-> > @@ -390,7 +390,6 @@ static int xhci_plat_remove(struct platform_device =
-*dev)
-> >
-> >       usb_remove_hcd(shared_hcd);
-> >       xhci->shared_hcd =3D NULL;
-> > -     usb_phy_shutdown(hcd->usb_phy);
-> >
-> >       usb_remove_hcd(hcd);
-> >       usb_put_hcd(shared_hcd);
-> > @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device =
-*dev)
-> >       clk_disable_unprepare(clk);
-> >       clk_disable_unprepare(reg_clk);
-> >       usb_put_hcd(hcd);
-> > +     usb_phy_shutdown(hcd->usb_phy);
->
-> hcd might be freed already here.
-> maybe call usb_phy_shutdown(hcd->usb_phy) before usb_put_hcd(hcd)
->
-> -Mathias
->
->
+When calling debugfs functions, there is no need to ever check the
+return value. The function can work or not, but the code logic should
+never do something different based on this.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+v2: remove all the debugfs checks
+---
+ drivers/media/platform/amphion/vpu_dbg.c | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
+index 376196bea178..da62bd718fb8 100644
+--- a/drivers/media/platform/amphion/vpu_dbg.c
++++ b/drivers/media/platform/amphion/vpu_dbg.c
+@@ -413,10 +413,6 @@ int vpu_inst_create_dbgfs_file(struct vpu_inst *inst)
+ 					    vpu->debugfs,
+ 					    inst,
+ 					    &vpu_dbg_inst_fops);
+-	if (!inst->debugfs) {
+-		dev_err(inst->dev, "vpu create debugfs %s fail\n", name);
+-		return -EINVAL;
+-	}
+ 
+ 	return 0;
+ }
+@@ -451,10 +447,6 @@ int vpu_core_create_dbgfs_file(struct vpu_core *core)
+ 						    vpu->debugfs,
+ 						    core,
+ 						    &vpu_dbg_core_fops);
+-		if (!core->debugfs) {
+-			dev_err(core->dev, "vpu create debugfs %s fail\n", name);
+-			return -EINVAL;
+-		}
+ 	}
+ 	if (!core->debugfs_fwlog) {
+ 		scnprintf(name, sizeof(name), "fwlog.%d", core->id);
+@@ -463,10 +455,6 @@ int vpu_core_create_dbgfs_file(struct vpu_core *core)
+ 							  vpu->debugfs,
+ 							  core,
+ 							  &vpu_dbg_fwlog_fops);
+-		if (!core->debugfs_fwlog) {
+-			dev_err(core->dev, "vpu create debugfs %s fail\n", name);
+-			return -EINVAL;
+-		}
+ 	}
+ 
+ 	return 0;
+-- 
+2.25.1
+

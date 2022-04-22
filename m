@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3815B50AF4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC0A50AF4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444023AbiDVFDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 01:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
+        id S1444031AbiDVFEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 01:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiDVFDg (ORCPT
+        with ESMTP id S233418AbiDVFE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 01:03:36 -0400
+        Fri, 22 Apr 2022 01:04:26 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207EA48E63;
-        Thu, 21 Apr 2022 22:00:43 -0700 (PDT)
-X-UUID: e63f8a270946463b8bee1185845cbf92-20220422
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100848E63;
+        Thu, 21 Apr 2022 22:01:33 -0700 (PDT)
+X-UUID: 3355754f0de6467da89cc1623f69eabb-20220422
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:f266f48a-3a5f-41b1-97e5-8d5c82e14438,OB:0,LO
+X-CID-O-INFO: VERSION:1.1.4,REQID:f6f9202b-312c-4d25-a452-6857833d45db,OB:0,LO
         B:0,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
         ION:release,TS:47
-X-CID-INFO: VERSION:1.1.4,REQID:f266f48a-3a5f-41b1-97e5-8d5c82e14438,OB:0,LOB:
+X-CID-INFO: VERSION:1.1.4,REQID:f6f9202b-312c-4d25-a452-6857833d45db,OB:0,LOB:
         0,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
         N:release,TS:47
-X-CID-META: VersionHash:faefae9,CLOUDID:e78690f0-da02-41b4-b6df-58f4ccd36682,C
+X-CID-META: VersionHash:faefae9,CLOUDID:4c97baef-06b0-4305-bfbf-554bfc9d151a,C
         OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:4,EDM:-3,File:ni
         l,QS:0,BEC:nil
-X-UUID: e63f8a270946463b8bee1185845cbf92-20220422
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+X-UUID: 3355754f0de6467da89cc1623f69eabb-20220422
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1450099664; Fri, 22 Apr 2022 13:00:39 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1672261687; Fri, 22 Apr 2022 13:01:27 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 22 Apr 2022 13:00:38 +0800
+ 15.0.1497.2; Fri, 22 Apr 2022 13:01:25 +0800
 Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Apr 2022 13:00:38 +0800
-Message-ID: <b185812f94da4cef829c7e2a93c6419568196af4.camel@mediatek.com>
-Subject: Re: [PATCH V2 03/12] clk: mediatek: reset: Refine functions of
- set_clr
+ Transport; Fri, 22 Apr 2022 13:01:25 +0800
+Message-ID: <60f3595612dba17e5cb115e468e39b7ca551d027.camel@mediatek.com>
+Subject: Re: [PATCH V2 04/12] clk: mediatek: reset: Merge and revise reset
+ register function
 From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
@@ -51,11 +51,11 @@ CC:     <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 22 Apr 2022 13:00:38 +0800
-In-Reply-To: <d833bb7f-ee48-602d-9793-5d717d3b5582@collabora.com>
+Date:   Fri, 22 Apr 2022 13:01:25 +0800
+In-Reply-To: <a2341eae-3a3a-ca26-8ce7-a4ba9219566c@collabora.com>
 References: <20220420130527.23200-1-rex-bc.chen@mediatek.com>
-         <20220420130527.23200-4-rex-bc.chen@mediatek.com>
-         <d833bb7f-ee48-602d-9793-5d717d3b5582@collabora.com>
+         <20220420130527.23200-5-rex-bc.chen@mediatek.com>
+         <a2341eae-3a3a-ca26-8ce7-a4ba9219566c@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
@@ -72,51 +72,119 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Thu, 2022-04-21 at 11:07 +0200, AngeloGioacchino Del Regno wrote:
 > Il 20/04/22 15:05, Rex-BC Chen ha scritto:
-> > To make driver more readable, revise functions of set_clr.
-> > - Add to_rst_data().
-> > - Extract common code within assert and deassert to
-> >    mtk_reset_update_set_clr().
+> > Merge the reset register function of simple and set_clr into one
+> > function.
+> > - Input the version number to determine which version we will use.
+> > - Rename reset register function to "mtk_clk_register_rst_ctrl"
 > > 
 > > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 > > ---
-> >   drivers/clk/mediatek/reset.c | 32 +++++++++++++++++++++--------
-> > ---
-> >   1 file changed, 21 insertions(+), 11 deletions(-)
+> >   drivers/clk/mediatek/clk-mt2701-eth.c |  2 +-
+> >   drivers/clk/mediatek/clk-mt2701-g3d.c |  2 +-
+> >   drivers/clk/mediatek/clk-mt2701-hif.c |  2 +-
+> >   drivers/clk/mediatek/clk-mt2701.c     |  4 +--
+> >   drivers/clk/mediatek/clk-mt2712.c     |  4 +--
+> >   drivers/clk/mediatek/clk-mt7622-eth.c |  2 +-
+> >   drivers/clk/mediatek/clk-mt7622-hif.c |  4 +--
+> >   drivers/clk/mediatek/clk-mt7622.c     |  4 +--
+> >   drivers/clk/mediatek/clk-mt7629-eth.c |  2 +-
+> >   drivers/clk/mediatek/clk-mt7629-hif.c |  4 +--
+> >   drivers/clk/mediatek/clk-mt8135.c     |  4 +--
+> >   drivers/clk/mediatek/clk-mt8173.c     |  4 +--
+> >   drivers/clk/mediatek/clk-mt8183.c     |  3 ++-
+> >   drivers/clk/mediatek/clk-mtk.h        | 13 ++++++----
+> >   drivers/clk/mediatek/reset.c          | 35 ++++++++++++--------
+> > -------
+> >   15 files changed, 44 insertions(+), 45 deletions(-)
 > > 
+> 
+> ..snip..
+> 
 > > diff --git a/drivers/clk/mediatek/reset.c
 > > b/drivers/clk/mediatek/reset.c
-> > index 9110d0b4229f..6574b19daf0f 100644
+> > index 6574b19daf0f..8e42deee80a3 100644
 > > --- a/drivers/clk/mediatek/reset.c
 > > +++ b/drivers/clk/mediatek/reset.c
-> > @@ -20,26 +20,36 @@ struct mtk_reset {
-> >   	struct reset_controller_dev rcdev;
+> > @@ -65,14 +65,23 @@ static const struct reset_control_ops
+> > mtk_reset_ops_set_clr = {
+> >   	.reset = mtk_reset_set_clr,
 > >   };
 > >   
-> > -static int mtk_reset_assert_set_clr(struct reset_controller_dev
-> > *rcdev,
-> > -	unsigned long id)
-> > +static inline struct mtk_reset *to_rst_data(struct
-> > reset_controller_dev *rcdev)
+> > -static void mtk_register_reset_controller_common(struct
+> > device_node *np,
+> > -			unsigned int num_regs, int regofs,
+> > -			const struct reset_control_ops *reset_ops)
+> > +static const struct reset_control_ops *rst_op[MTK_RST_MAX] = {
+> > +	[MTK_RST_SIMPLE] = &reset_simple_ops,
+> > +	[MTK_RST_SET_CLR] = &mtk_reset_ops_set_clr,
+> > +};
 > 
-> to_mtk_reset() looks more consistent, as many developers are using
-> the naming
-> "to_{struct_name}".
+> I don't think that we really need this to go to .rodata to get an
+> improvement
+> in boot times in the order of nanoseconds....
+> 
+> > +
+> > +void mtk_clk_register_rst_ctrl(struct device_node *np,
+> > +			       u32 reg_num, u16 reg_ofs, u8 version)
+> >   {
+> >   	struct mtk_reset *data;
+> >   	int ret;
+> >   	struct regmap *regmap;
+> >   
+> > +	if (version >= MTK_RST_MAX) {
+> > +		pr_err("Error version number: %d\n", version);
+> > +		return;
+> > +	}
+> > +
+> >   	regmap = device_node_to_regmap(np);
+> >   	if (IS_ERR(regmap)) {
+> >   		pr_err("Cannot find regmap for %pOF: %pe\n", np,
+> > regmap);
+> > @@ -84,10 +93,10 @@ static void
+> > mtk_register_reset_controller_common(struct device_node *np,
+> >   		return;
+> >   
+> >   	data->regmap = regmap;
+> > -	data->regofs = regofs;
+> > +	data->regofs = reg_ofs;
+> >   	data->rcdev.owner = THIS_MODULE;
+> > -	data->rcdev.nr_resets = num_regs * 32;
+> > -	data->rcdev.ops = reset_ops;
+> > +	data->rcdev.nr_resets = reg_num * 32;
+> > +	data->rcdev.ops = rst_op[version];
+> >   	data->rcdev.of_node = np;
+> 
+> ...hence, I would prefer to see something like:
+> 
+> 	switch (version) {
+> 	case MTK_RST_SIMPLE:
+> 		data->rcdev.ops = &reset_simple_ops;
+> 		break;
+> 	case MTK_RST_SET_CLR:
+> 		data->rcdev.ops = &mtk_reset_ops_set_clr;
+> 		break;
+> 	default:
+> 		pr_err("Unknown reset version %d\n", version);
+> 		return;
+> 	}
+> 
+> Like that, you'd also replace that if branch at the beginning where
+> you
+> do the reset version sanity check.
+> If you don't want to allocate a struct mtk_reset before running this
+> switch,
+> you can also declare a `struct reset_control_ops *rcops = NULL;`
+> locally and
+> then assign `data->rcdev.ops = rcops;` later: that would also be
+> acceptable.
+> 
+> Cheers,
+> Angelo
 
 Hello Angelo,
 
-ok, I will fix this in next version.
-
-> 
-> Also, can you please mention the indentation fixes in the commit
-> description?
-> 
-
-I add another refinement patch in next version.
+I will do this in next version.
 
 BRs,
 Rex
-
-> Thanks,
-> Angelo
-> 
 

@@ -2,117 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C523150BBB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEAE50BBAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449450AbiDVPa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
+        id S1449439AbiDVP3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354037AbiDVPaV (ORCPT
+        with ESMTP id S1449433AbiDVP3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:30:21 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821FB5D5C2;
-        Fri, 22 Apr 2022 08:27:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650641247; x=1682177247;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=e11uwC3A+RGrIWC3PPNgkM7p6epgPs6roRgaCbYnPFA=;
-  b=TIHxAMM/gjGQfiaTKF++EngJfK8zLucvnn5wfcvdJPNUELyj8xblte4j
-   XRqfp384GBgMDuviILnOq9SwozLyifDjptiRcUkKHfjXA9yNGpuQykue9
-   hP+JMBxCcQ1Jk9Lxgq3wOsBZLmxfu0OBjixu9+YR2sIfeg9vQm7nKdJpA
-   Qdqhbxx0Ex+gAcl69Nn3LK8eznyF8399qYYluWBsDsFnwKrFVUp9wPnSb
-   cpevJZfASNWa8lUhCv0PCMC6aG7F8RXZJDm9FYrq1Q0dD5nUbQpoH+bkz
-   BXATvqJt9v1jdIkbq/KHeGXWg5ck1XzTlJ2bb491UEzPDmJj7x/Me6pU3
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245272949"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="245272949"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 08:27:27 -0700
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="577948682"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 08:27:24 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 22 Apr 2022 18:26:10 +0300
-Date:   Fri, 22 Apr 2022 18:26:10 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] ACPI: bus: Avoid non-ACPI device objects in walks over
- children
-Message-ID: <YmLJEtDFhc3HFg3/@lahna>
-References: <11974495.O9o76ZdvQC@kreacher>
+        Fri, 22 Apr 2022 11:29:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69E15C85A;
+        Fri, 22 Apr 2022 08:26:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6199161F35;
+        Fri, 22 Apr 2022 15:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D4CC385AB;
+        Fri, 22 Apr 2022 15:26:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650641207;
+        bh=wpcimkpmyXuZWzMsgzk6WTpHEDwsi0hL31+pEsg3qqc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=C3zpGu8MjDMmcc54IAy+8QiCCGeFFQ2Xc7XDe8tj7NphlijuDwXdizBP0uTEgJfwK
+         UHL3tLPnbyyaNTiMoKuOB+33EQ0P5IRNFVqztxGzHQ65Q3zi0GsiUswi0sNDmNLWaM
+         wfwZy0iYxlgUXK0xjg/EwCoyFeEbItlhBqRLDgtdbb+yEnSAp6nXwBz0hVvVYzdgMb
+         gi1l1+2SZCPpZNKlyO+Ybzy5M9yb0tw4iSrfabg4e8ewsGZQwrpQ25kHgJXw77S6ko
+         8KfeEhKz1tCIpheg0l1AciYyE/MAsn3mXAZDQoSrYCUiuBVwDZSZVSXP+7L9dPxhpT
+         w5/XJH4b1Syxg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5E9C35C0460; Fri, 22 Apr 2022 08:26:47 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 08:26:47 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, urezki@gmail.com
+Subject: Re: [PATCH v2] rcu: Dump all rcuc kthreads status for CPUs that not
+ report quiescent state
+Message-ID: <20220422152647.GY4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220419053426.2820350-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <11974495.O9o76ZdvQC@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220419053426.2820350-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
+On Tue, Apr 19, 2022 at 01:34:26PM +0800, Zqiang wrote:
+> If the rcutree.use_softirq is configured, when RCU Stall event
+> happened, dump status of all rcuc kthreads who due to starvation
+> prevented grace period ends on CPUs that not report quiescent
+> state.
 
-On Fri, Apr 22, 2022 at 05:13:48PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> When walking the children of an ACPI device, take extra care to avoid
-> using to_acpi_device() on the ones that are not ACPI devices, because
-> that may lead to out-of-bounds access and memory corruption.
-> 
-> While at it, make the function passed to acpi_dev_for_each_child()
-> take a struct acpi_device pointer argument (instead of a struct device
-> one), so it is more straightforward to use.
-> 
-> Fixes: b7dd6298db81 ("ACPI: PM: Introduce acpi_dev_power_up_children_with_adr()")
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> BugLink: https://lore.kernel.org/lkml/20220420064725.GB16310@xsang-OptiPlex-9020/
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Please accept my apologies for the delay, and please let me try
+again.  ;-)
+
+Your earlier patch added at most one line and one stack backtrace to
+the RCU CPU stall warning text, which is OK.  Sort of, anyway.  I was
+relying on the fact that the people who have (rightly) complained about
+RCU CPU stall-warning verbosity never run with !use_softirq.  But it is
+only a matter of time.  Yes, we could argue that they should use faster
+console serial lines, faster management-console hardware, faster networks,
+faster mass storage, and so on, but I would expect them to in turn ask
+us if we were volunteering to pay for all that.
+
+In contrast, this patch can add one line per stalled CPU on top of the
+existing output.  Which is better than your earlier patch, which could
+add a line plus a stack trace per stalled CPU.  But that can still be
+a lot of added output, and that added output can cause problems.
+
+So, could you please merge this rcuc-stalled information into the
+existing per-CPU line printed by print_cpu_stall_info()?  Right now,
+each such line looks something like this:
+
+rcu: 0-....: (4 ticks this GP) idle=1e6/1/0x4000000000000002 softirq=12470/12470 fqs=2
+
+One approach would be to add the number of jiffies that the rcuc
+task was stalled to this line, maybe something like this:
+
+rcu: 0-....: (4 ticks this GP) idle=1e6/1/0x4000000000000002 softirq=12470/12470 fqs=2 rcuc=15384
+
+Of course, this "rcuc=" string should only ut only if the stall lasted
+for longer than (say) one eighth of the stall timeout.
+
+Any "(false positive?)" needs to remain at the end of the line:
+
+rcu: 0-....: (4 ticks this GP) idle=1e6/1/0x4000000000000002 softirq=12470/12470 fqs=2 rcuc=15384 (false positive?)
+
+Thoughts?
+
+							Thanx, Paul
+
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 > ---
+>  v1->v2:
+>  rework rcuc_kthread_dump function
 > 
-> The commit being fixed is present in linux-next.
+>  kernel/rcu/tree_stall.h | 32 ++++++++++++++++++++++++++------
+>  1 file changed, 26 insertions(+), 6 deletions(-)
 > 
-> ---
->  drivers/acpi/bus.c       |   24 ++++++++++++++++++++++--
->  drivers/acpi/device_pm.c |    5 +----
->  include/acpi/acpi_bus.h  |    2 +-
->  3 files changed, 24 insertions(+), 7 deletions(-)
-> 
-> Index: linux-pm/drivers/acpi/bus.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/bus.c
-> +++ linux-pm/drivers/acpi/bus.c
-> @@ -1070,10 +1070,30 @@ int acpi_bus_for_each_dev(int (*fn)(stru
+> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+> index d7956c03edbd..fcf0b2e1a71c 100644
+> --- a/kernel/rcu/tree_stall.h
+> +++ b/kernel/rcu/tree_stall.h
+> @@ -465,11 +465,13 @@ static void print_cpu_stall_info(int cpu)
+>  	       falsepositive ? " (false positive?)" : "");
 >  }
->  EXPORT_SYMBOL_GPL(acpi_bus_for_each_dev);
 >  
-> +struct acpi_dev_walk_context {
-> +	int (*fn)(struct acpi_device *, void *);
-> +	void *data;
-> +};
+> -static void rcuc_kthread_dump(struct rcu_data *rdp)
+> +static void __rcuc_kthread_dump(int cpu)
+>  {
+> -	int cpu;
+> -	unsigned long j;
+> +	struct rcu_data *rdp;
+>  	struct task_struct *rcuc;
+> +	unsigned long j;
 > +
-> +static int acpi_dev_for_one_check(struct device *dev, void *context)
+> +	rdp = per_cpu_ptr(&rcu_data, cpu);
+>  
+>  	rcuc = rdp->rcu_cpu_kthread_task;
+>  	if (!rcuc)
+> @@ -488,6 +490,21 @@ static void rcuc_kthread_dump(struct rcu_data *rdp)
+>  		dump_cpu_task(cpu);
+>  }
+>  
+> +static void rcuc_kthread_dump(void)
 > +{
-> +	struct acpi_dev_walk_context *adwc = context;
+> +	int cpu;
+> +	struct rcu_node *rnp;
+> +	unsigned long flags;
 > +
-> +	if (dev->bus != &acpi_bus_type)
-> +		return 0;
-
-I wonder if it make sense to add dev_is_acpi() that does the above
-analoguos to dev_is_pci()?
-
-Regardless of that,
-
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> +	rcu_for_each_leaf_node(rnp) {
+> +		raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> +		for_each_leaf_node_possible_cpu(rnp, cpu)
+> +			if (rnp->qsmask & leaf_node_cpu_bit(rnp, cpu))
+> +				__rcuc_kthread_dump(cpu);
+> +		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> +	}
+> +}
+> +
+>  /* Complain about starvation of grace-period kthread.  */
+>  static void rcu_check_gp_kthread_starvation(void)
+>  {
+> @@ -597,6 +614,9 @@ static void print_other_cpu_stall(unsigned long gp_seq, unsigned long gps)
+>  	if (ndetected) {
+>  		rcu_dump_cpu_stacks();
+>  
+> +		if (!use_softirq)
+> +			rcuc_kthread_dump();
+> +
+>  		/* Complain about tasks blocking the grace period. */
+>  		rcu_for_each_leaf_node(rnp)
+>  			rcu_print_detail_task_stall_rnp(rnp);
+> @@ -659,11 +679,11 @@ static void print_cpu_stall(unsigned long gps)
+>  	rcu_check_gp_kthread_expired_fqs_timer();
+>  	rcu_check_gp_kthread_starvation();
+>  
+> -	if (!use_softirq)
+> -		rcuc_kthread_dump(rdp);
+> -
+>  	rcu_dump_cpu_stacks();
+>  
+> +	if (!use_softirq)
+> +		rcuc_kthread_dump();
+> +
+>  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+>  	/* Rewrite if needed in case of slow consoles. */
+>  	if (ULONG_CMP_GE(jiffies, READ_ONCE(rcu_state.jiffies_stall)))
+> -- 
+> 2.25.1
+> 

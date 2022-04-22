@@ -2,102 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1769B50ADE7
+	by mail.lfdr.de (Postfix) with ESMTP id 6331050ADE8
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443465AbiDVCnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 22:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
+        id S1443479AbiDVCof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 22:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390541AbiDVCng (ORCPT
+        with ESMTP id S1443464AbiDVCod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 22:43:36 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF66D46B09;
-        Thu, 21 Apr 2022 19:40:44 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id r12so7316253iod.6;
-        Thu, 21 Apr 2022 19:40:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tA/GN7+c67o1NyF+466DMI+EMeC8sv83fFoRqBT9mgE=;
-        b=iWDj5KrTRCIAze4iAjXfwBmxw+2GGryED8OtbsZfik3uu6ApHgr2YAlKYwx/Oag+LB
-         kYsciKiRfATmgZnuTURK5py1o4FbOj1BtuahGF0Z3fVc52CWP+VGSolM/AufEquSwCJe
-         dTe20Iym4u5BNlgFUL0tb1CiFHYHiWyO13cwwQJZa/pU8V45ZxUZQdkfU2A7mRCDrLiy
-         PV4cCqDWtTdnggsu5N9rM0hBXtKgtAcdviFfGHOdxUn/+pY+Gbi5MIjn/ZTMRIvfGh5A
-         4vmUUgC5P0K0pF4rSerRDbEa0yWMCEPkeFPWoWUChrl8Rh/HLGbJnVT/SJ+GXDn047n4
-         LkSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tA/GN7+c67o1NyF+466DMI+EMeC8sv83fFoRqBT9mgE=;
-        b=jX1dtviR2vXECx6ghMI4D4xfm7U7KUCL4HMAm+bgnSIFBYpd4rEosiifZTrM4rC8F2
-         5Ki0TLtCSAmeawA30Fi9/U0e04ZzMGeBJLmTfSgXQ/cViArdySjt0TjH1k7wTdEqG5do
-         SqIOHom4UbiNRAmVFo0C7ABegAWfVOOVZvXTlTkJ7gWEV19PAAF1dBqOudae6sYonISj
-         XOGVcc0HpU6ER7DsZC3wnVHxCbc+x1XYLXdnvZUzOlB3cn5XwdvQs0PsC0/jRaeuTUeP
-         WXlGexQ30YifRA84szndr7GhGBhNQQoF7BYegShgeDA/AkdXpFCKmX9/lXxF2Vefi/cm
-         L7Ag==
-X-Gm-Message-State: AOAM530TMPoS6kdUeqV/xhu4OxDwf140fGXv3lZG+HDPesze+pkCQxNt
-        mHaFhOfxQIrEVofQptgVnErFjTrZEr2H4iZLLUJEyDRETCt3Cg==
-X-Google-Smtp-Source: ABdhPJxzeptQM9ahlnz6s9Cc/eazWxRkvi16dcAHXk+T4ARzeWuwv1h0OnxsNqswC/tER+iSCbDcFGquCMU4cre58wE=
-X-Received: by 2002:a05:6638:213:b0:326:5c30:494b with SMTP id
- e19-20020a056638021300b003265c30494bmr1251627jaq.42.1650595244330; Thu, 21
- Apr 2022 19:40:44 -0700 (PDT)
+        Thu, 21 Apr 2022 22:44:33 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326DB4C426;
+        Thu, 21 Apr 2022 19:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650595300; x=1682131300;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ziHABANE59wRolQJClZuDMbt1HuNA/mx2V8HeNMrpkM=;
+  b=Ql1FTKJtwodtMO+qh3i4hKx/UeOdNhm2Yfcy6bAVOw64ZaVCmodRx8W/
+   +w/r3pjP02blguIZRDUAnDO040LaHyR0oL0Wuip4CFwGBSNenCPvAHvMB
+   KHODCtT4S66MkUAOxY4O9Rf9GkBiy1H+uOvYt0xjO2OVfCwfCOsP8G5AU
+   DNsm2ZDgRbcA8snWZ//C9GsFU/yx06FCLFKM38RVL4rectiW/UfZ1wnNt
+   m6iOY25vQWALTQd0ESIv/Z0aMtY7gvkL6iWBG7DLQsvJpgku6lFi0kjFX
+   k+iDDXCnK7aDBcnozXrevZjT9pzTDt7PxgIKyy3EgecDKxaU9Cq2s0095
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245122193"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="245122193"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 19:41:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="511375279"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Apr 2022 19:41:35 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhjEl-00097y-7D;
+        Fri, 22 Apr 2022 02:41:35 +0000
+Date:   Fri, 22 Apr 2022 10:41:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yu Zhe <yuzhe@nfschina.com>, mareklindner@neomailbox.ch,
+        sw@simonwunderlich.de, a@unstable.cc, sven@narfation.org,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
+Cc:     kbuild-all@lists.01.org, b.a.t.m.a.n@lists.open-mesh.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, kernel-janitors@vger.kernel.org,
+        Yu Zhe <yuzhe@nfschina.com>
+Subject: Re: [PATCH] batman-adv: remove unnecessary type castings
+Message-ID: <202204221051.PRtLc0f7-lkp@intel.com>
+References: <20220421154829.9775-1-yuzhe@nfschina.com>
 MIME-Version: 1.0
-References: <20220412025952.21062-1-surong.pang@gmail.com> <YmGJOYDdn1T9+lPy@kroah.com>
-In-Reply-To: <YmGJOYDdn1T9+lPy@kroah.com>
-From:   surong pang <surong.pang@gmail.com>
-Date:   Fri, 22 Apr 2022 10:40:33 +0800
-Message-ID: <CAEDbmAQw0t1dXwvBMudBtA8iT_iaXAouv9_q=j0PFhWWRduPug@mail.gmail.com>
-Subject: Re: [PATCH V1 1/1] usb/host: To get "usb3-slow-suspend" property,
- then to set xhci quirks
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Orson.Zhai@unisoc.com,
-        yunguo.wu@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421154829.9775-1-yuzhe@nfschina.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to abandon this patch.
+Hi Yu,
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B44=E6=9C=8822=E6=
-=97=A5=E5=91=A8=E4=BA=94 00:41=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, Apr 12, 2022 at 10:59:52AM +0800, Surong Pang wrote:
-> > From: Surong Pang <surong.pang@unisoc.com>
-> >
-> > To set xhci->quirks value according to "usb3-slow-suspend" property
-> >
-> > Signed-off-by: Surong Pang <surong.pang@unisoc.com>
-> > ---
-> >  drivers/usb/host/xhci-plat.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.=
-c
-> > index 649ffd861b44..6bc456bc6468 100644
-> > --- a/drivers/usb/host/xhci-plat.c
-> > +++ b/drivers/usb/host/xhci-plat.c
-> > @@ -302,6 +302,9 @@ static int xhci_plat_probe(struct platform_device *=
-pdev)
-> >               if (device_property_read_bool(tmpdev, "usb3-lpm-capable")=
-)
-> >                       xhci->quirks |=3D XHCI_LPM_SUPPORT;
-> >
-> > +             if (device_property_read_bool(tmpdev, "usb3-slow-suspend"=
-))
-> > +                     xhci->quirks |=3D XHCI_SLOW_SUSPEND;
->
-> Device properties need to be documented somewhere.
->
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.18-rc3 next-20220421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Zhe/batman-adv-remove-unnecessary-type-castings/20220421-235254
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b253435746d9a4a701b5f09211b9c14d3370d0da
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220422/202204221051.PRtLc0f7-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/2474b41c585e849d3546e0aba8f3c862735a04ff
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yu-Zhe/batman-adv-remove-unnecessary-type-castings/20220421-235254
+        git checkout 2474b41c585e849d3546e0aba8f3c862735a04ff
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/batman-adv/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   net/batman-adv/bridge_loop_avoidance.c: In function 'batadv_choose_claim':
+>> net/batman-adv/bridge_loop_avoidance.c:68:42: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      68 |         struct batadv_bla_claim *claim = data;
+         |                                          ^~~~
+--
+   net/batman-adv/translation-table.c: In function 'batadv_choose_tt':
+>> net/batman-adv/translation-table.c:109:12: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     109 |         tt = data;
+         |            ^
+
+
+vim +/const +68 net/batman-adv/bridge_loop_avoidance.c
+
+    53	
+    54	static void batadv_bla_periodic_work(struct work_struct *work);
+    55	static void
+    56	batadv_bla_send_announce(struct batadv_priv *bat_priv,
+    57				 struct batadv_bla_backbone_gw *backbone_gw);
+    58	
+    59	/**
+    60	 * batadv_choose_claim() - choose the right bucket for a claim.
+    61	 * @data: data to hash
+    62	 * @size: size of the hash table
+    63	 *
+    64	 * Return: the hash index of the claim
+    65	 */
+    66	static inline u32 batadv_choose_claim(const void *data, u32 size)
+    67	{
+  > 68		struct batadv_bla_claim *claim = data;
+    69		u32 hash = 0;
+    70	
+    71		hash = jhash(&claim->addr, sizeof(claim->addr), hash);
+    72		hash = jhash(&claim->vid, sizeof(claim->vid), hash);
+    73	
+    74		return hash % size;
+    75	}
+    76	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

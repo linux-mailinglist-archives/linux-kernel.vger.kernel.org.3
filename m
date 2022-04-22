@@ -2,77 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF8150B3BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED52050B3C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445929AbiDVJSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        id S233574AbiDVJSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445924AbiDVJQ1 (ORCPT
+        with ESMTP id S1445966AbiDVJQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:16:27 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BED51E73;
-        Fri, 22 Apr 2022 02:13:31 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id bv16so10090797wrb.9;
-        Fri, 22 Apr 2022 02:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=MaE3GXyvHmqVxToj1PrhkmxenvkXCbYA8oJuVzgMVWA=;
-        b=kznRNsvQX84099UN4iJsrnjEmeF4UCzhOiY3ZgjjIYOt6CNO2SFACmKweUpT0rN/WP
-         f1jyNSGwObAIlvfQwn3EyMjQwkqVwRZB7q2ODhuBT2mqHTSBlW1PedWWgb+GJUt8HMj4
-         w1wxfi9fkDBpCi38wECyA13iPOr3UJ7JQbx1Z+StsIcpIWsvvcMLPv9eWm2Df9adND1+
-         cCv6T9GtLOOLzqv4Foy54M8BvEyICEa8E+hZFH7byrw2pp5s0CE9OihcyalW5D9x2aQQ
-         QDAJkAOkKAhWUzfm5dZ5Zo6AxeNXafWTuyH3bB9et1g8C4rpxsGcGCaubOYTcuAdgIBi
-         vU6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MaE3GXyvHmqVxToj1PrhkmxenvkXCbYA8oJuVzgMVWA=;
-        b=6Vajg0UJYTntGOTDxHL0XPhm3AoIIAz9tC75SRevr8WnDhgN53lVBM0D66XDOlq08c
-         XMwevPpdE3oqBVsDsyKCMc44G6ZfwdcXDGMn3nSEVOPsenh3D/Xu81KCZBS7NJqajCYK
-         f0C3Vtma4HTZ2ntFWjGjkN7aK/w1KuLti2vQfCAfc7h2ealh/ll9TwyLNpoTjwuzf2p0
-         Yjagvx4fwpoENtRFi4xCZRSLYbY6aX4602X1OliAvlQ5xf0j5KdZR8WmEc0/0+J8wDLh
-         SQON384JofTfk0MQwfKRhu02Sb0mmcoPHLb19nsf8We430y8vFb9hZJaB/cq4J/GyytE
-         iVOw==
-X-Gm-Message-State: AOAM533PVohoEzyoJYL1GA/1qDMe/T0Y4QuZkJgqpeUAxdYhqC/3Xodq
-        y+hKgBuoEidyqo4JMrSlJpI=
-X-Google-Smtp-Source: ABdhPJwjOvr2Z0NMSnDaa6MLjmARYQmBC/rlBknEZ0hCAQB2/hoMy8dQYTuQr3iI9l4fnajMagMZJw==
-X-Received: by 2002:a5d:6211:0:b0:1ef:85dd:c96b with SMTP id y17-20020a5d6211000000b001ef85ddc96bmr2831151wru.456.1650618809425;
-        Fri, 22 Apr 2022 02:13:29 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id l28-20020a05600c1d1c00b0038ece66f1b0sm1238159wms.8.2022.04.22.02.13.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 02:13:28 -0700 (PDT)
-Message-ID: <234d411c-1386-d661-71e3-f1f30f5cbf36@gmail.com>
-Date:   Fri, 22 Apr 2022 11:13:27 +0200
+        Fri, 22 Apr 2022 05:16:47 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D5851E73
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:13:54 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23M64Qfx017497;
+        Fri, 22 Apr 2022 09:13:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=TZgyIPlkGLCdojtSdCQucp73gJGlRtfYthUNqVUThto=;
+ b=n6PpOrzztvLdVthwpQ9ctNgMwvEDcAb9XVg8Zfg5J2Hw7+IvULY4hhCukROrZri+KqOu
+ e1GSOTKV/uEFTGmmvXqMBQk/9Fay9oWGk0UzSFeYGNPVLKJ7he2TTn7HSh2lkm1TMVkx
+ y8vsPLE/S1nW2yPs5PaXcvBsINVH720DpxeJ4Vb6kHYNyHD2kbauASPrUjusaT+wdcaq
+ bcVkPrMjuJiok9X/XrLQWLgsHNoafvvW34N3EX0wdpjgk83Fyz6MRU9M1P3iYtRSMujC
+ q9khM7iwInRnG1PYMcFAZFcnyGs6O0s3OrqP8ecLCFJ1yKOl+nb3Gd5ez2bSk1CojLdc PA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjm2jky2b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Apr 2022 09:13:48 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23M90Wgv007560;
+        Fri, 22 Apr 2022 09:13:47 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjm2jky1p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Apr 2022 09:13:47 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23M9BSUl005902;
+        Fri, 22 Apr 2022 09:13:45 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3ffne8y6vq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Apr 2022 09:13:45 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23M9Dgek20971844
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 22 Apr 2022 09:13:42 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ACC8B42041;
+        Fri, 22 Apr 2022 09:13:42 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D9FEA4203F;
+        Fri, 22 Apr 2022 09:13:38 +0000 (GMT)
+Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com (unknown [9.43.59.166])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 22 Apr 2022 09:13:38 +0000 (GMT)
+Date:   Fri, 22 Apr 2022 14:43:30 +0530
+From:   Jagdish Gediya <jvgediya@linux.ibm.com>
+To:     Wei Xu <weixugc@google.com>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        aneesh.kumar@linux.ibm.com,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>
+Subject: Re: [PATCH v2 3/5] mm: demotion: Add support to set targets from
+ userspace
+Message-ID: <YmJxukA2DYogWA6E@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+References: <20220413092206.73974-1-jvgediya@linux.ibm.com>
+ <20220413092206.73974-4-jvgediya@linux.ibm.com>
+ <CAAPL-u9OHuRWXvc0RAPvEtLQLy0AkLbAwjZtGERhmhn-yFZgrw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] arm64: dts: mt8183-kukui: align SPI NOR node name with
- dtschema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220407142143.293740-1-krzysztof.kozlowski@linaro.org>
- <165044570803.75184.17759035800452933385.b4-ty@linaro.org>
- <38f29c29-e3c2-240a-23a0-509c4febf1ca@gmail.com>
- <f7c5c3f9-0083-c0b0-dc49-e66139268312@linaro.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <f7c5c3f9-0083-c0b0-dc49-e66139268312@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAPL-u9OHuRWXvc0RAPvEtLQLy0AkLbAwjZtGERhmhn-yFZgrw@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ayHiZfLd2lD5ibxomojZVjEQa5HtpCXl
+X-Proofpoint-ORIG-GUID: QaL3ZsXMwHb3HE1SjXvBETvo_I3AzLnm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-22_02,2022-04-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 phishscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204220040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,68 +98,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Wed, Apr 20, 2022 at 09:26:34PM -0700, Wei Xu wrote:
+> On Wed, Apr 13, 2022 at 2:22 AM Jagdish Gediya <jvgediya@linux.ibm.com> wrote:
+> >
+> > Add support to set node_states[N_DEMOTION_TARGETS] from
+> > user space to override the default demotion targets.
+> >
+> > Restrict demotion targets to memory only numa nodes
+> > while setting them from user space.
+> 
+> Why should we restrict demotion targets to memory only nodes if they
+> get set explicitly from user space? For example, if we use NUMA
+> emulation to test demotion without actual hardware, these emulated
+> NUMA nodes can have CPUs, but we still want some of them to serve as
+> demotion targets.
 
-On 21/04/2022 10:01, Krzysztof Kozlowski wrote:
-> On 20/04/2022 14:35, Matthias Brugger wrote:
->>
->>
->> On 20/04/2022 11:10, Krzysztof Kozlowski wrote:
->>> On Thu, 7 Apr 2022 16:21:43 +0200, Krzysztof Kozlowski wrote:
->>>> The node names should be generic and SPI NOR dtschema expects "flash".
->>>>
->>>>
->>>
->>> Looks like no one wants to take this, so let me take care of it.
->>>
->>
->> First thing would have been a ping on the patch, don't you think?
-> 
-> And what does it change? The operating-points clean up [1] was sent in
-> August last year, then in this April, and you responded only when I
-> wrote pick-up. The Google cros-ec clean up was sent in Feb and two weeks
-> later pinged [2].
-> 
+If nodes have memory then it should be possible to use them as demotion
+targets in case user wants to explicitly set them, will correct it in next
+version if we finalize the same approach for demotion target override as
+per discussion on this series.
 
-That I answered to the pick-up is just plain coincidence that I had some time to 
-look into the patches. Sorry for being unresponsive. I'm happy that you care 
-about MediaTek patches. If you think there will more patches in this cycle or 
-future cycles, we can also agree on you taking the patches and send me a pull 
-request later. I only want to avoid any merge conflicts, that's all.
-
-> Pinging and resending apparently does not help. It's okay, happens, we
-> are all extra busy and we all pretty often do it as part of
-> community/hobby/spare time.
+> > Demotion targets can be set from userspace using command,
+> > echo <nodelist> > /sys/kernel/mm/numa/demotion_target
+> >
+> > Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> > ---
+> >  .../ABI/testing/sysfs-kernel-mm-numa          | 12 +++++++
+> >  mm/migrate.c                                  | 35 +++++++++++++++++++
+> >  2 files changed, 47 insertions(+)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-numa b/Documentation/ABI/testing/sysfs-kernel-mm-numa
+> > index 77e559d4ed80..10e9e643845c 100644
+> > --- a/Documentation/ABI/testing/sysfs-kernel-mm-numa
+> > +++ b/Documentation/ABI/testing/sysfs-kernel-mm-numa
+> > @@ -22,3 +22,15 @@ Description: Enable/disable demoting pages during reclaim
+> >                 the guarantees of cpusets.  This should not be enabled
+> >                 on systems which need strict cpuset location
+> >                 guarantees.
+> > +
+> > +What:          /sys/kernel/mm/numa/demotion_target
+> > +Date:          April 2022
+> > +Contact:       Linux memory management mailing list <linux-mm@kvack.org>
+> > +Description:   Configure demotion target nodes
+> > +
+> > +               Page migration during reclaim is intended for systems
+> > +               with tiered memory configurations. Preferred migration target
+> > +               nodes can be configured in a system using this interface, based
+> > +               on which demotion table is prepared in kernel. If demotion is
+> > +               enabled then pages will be migrated to set demotion targets
+> > +               during reclaim.
+> > diff --git a/mm/migrate.c b/mm/migrate.c
+> > index 516f4e1348c1..4d3d80ca0a7f 100644
+> > --- a/mm/migrate.c
+> > +++ b/mm/migrate.c
+> > @@ -2564,12 +2564,47 @@ static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
+> >         return count;
+> >  }
+> >
+> > +
+> > +static ssize_t numa_demotion_target_show(struct kobject *kobj,
+> > +                                         struct kobj_attribute *attr, char *buf)
+> > +{
+> > +       return sysfs_emit(buf, "%*pbl\n",
+> > +                         nodemask_pr_args(&node_states[N_DEMOTION_TARGETS]));
+> > +}
+> > +
+> > +static ssize_t numa_demotion_target_store(struct kobject *kobj,
+> > +                                         struct kobj_attribute *attr,
+> > +                                         const char *nodelist, size_t count)
+> > +{
+> > +       nodemask_t nodes;
+> > +
+> > +       if (nodelist_parse(nodelist, nodes))
+> > +               return -EINVAL;
+> > +
+> > +       if (!nodes_subset(nodes, node_states[N_MEMORY]))
+> > +               return -EINVAL;
+> > +
+> > +       if (nodes_intersects(nodes, node_states[N_CPU]))
+> > +               return -EINVAL;
+> > +
+> > +       node_states[N_DEMOTION_TARGETS] = nodes;
+> > +
+> > +       set_migration_target_nodes();
+> > +
+> > +       return count;
+> > +}
+> > +
+> >  static struct kobj_attribute numa_demotion_enabled_attr =
+> >         __ATTR(demotion_enabled, 0644, numa_demotion_enabled_show,
+> >                numa_demotion_enabled_store);
+> >
+> > +static struct kobj_attribute numa_demotion_target_attr =
+> > +       __ATTR(demotion_target, 0644, numa_demotion_target_show,
+> > +              numa_demotion_target_store);
+> > +
+> >  static struct attribute *numa_attrs[] = {
+> >         &numa_demotion_enabled_attr.attr,
+> > +       &numa_demotion_target_attr.attr,
+> >         NULL,
+> >  };
+> >
+> > --
+> > 2.35.1
+> >
+> >
 > 
->> Anyway as I
->> said the last time, if you take DTS patches for mediatek
-> 
-> I don't want to take the patches for Mediatek. But I also don't want to
-> resend and ping each one of them because it did not work in the past.
-> 
->> , I'd need a stable
->> branch I can merge so that we don't have any merge conflicts in the end.
-> 
-> Can you just pick the patch?
-> 
-
-I pushed it to v5.18-next/dts64 [1]
-
-Let me know if there are other patches that you want me to take.
-
-Regards,
-Matthias
-
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/log/?h=v5.18-next/dts64
-
-> 
-> [1]
-> https://lore.kernel.org/all/?q=%22arm64%3A+dts%3A+mediatek%3A+align+operating-points+table+name+with+dtschema%22
-> 
-> [2]
-> https://lore.kernel.org/all/?q=%22arm64%3A+dts%3A+mt8183%3A+align+Google+CROS+EC+PWM+node+name+with+dtschema%22
-> 
-> Best regards,
-> Krzysztof

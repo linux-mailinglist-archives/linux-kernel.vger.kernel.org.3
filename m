@@ -2,72 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E45750B081
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8D550B07E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444321AbiDVG0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S1444343AbiDVG1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444308AbiDVG0L (ORCPT
+        with ESMTP id S1390268AbiDVG1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:26:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2722A506C3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650608598;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kpiO1BWqUyIoEMWKXbDQvoPMDAtjYvoj7pyt+z9H/U8=;
-        b=Bsh2i2/Fon7YG7zkghx347XrlqMUlcbLsMVU1yIQ5QTN4DScDohfVg/jQq8Lh9yapDkcsD
-        j2KLR5n52DlCwchra2v7yNK6CIV3bahPwuKal6bzCGh5zX8QUKK/zcdEQOcG8ZYET5eIYL
-        U/DAu3dam/1zQNK5LtSZOG9h5m8ILIw=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176--_ZNjDNgPVWmuLXRGIoc1w-1; Fri, 22 Apr 2022 02:23:10 -0400
-X-MC-Unique: -_ZNjDNgPVWmuLXRGIoc1w-1
-Received: by mail-lj1-f198.google.com with SMTP id c12-20020a2ebf0c000000b0024af8f2794bso2050863ljr.12
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:23:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kpiO1BWqUyIoEMWKXbDQvoPMDAtjYvoj7pyt+z9H/U8=;
-        b=Rf1/IKY2+EyTuv+viVwqaoXYbShgqW5v2VBSUrcmwjxnqthOg79SES0DY+5xv/M+id
-         gQNgpvI7qR9VfwZmnjduGPz5ELUENvogsEqB7Yn6X47dABQArUrmLnHw+U6G8dd21L/8
-         UEez8JUZ+aWAkHnNDB44lSF+BFt2YQiBkF4uzjz0WrHX/JgHl3rspnsCUZWSftE2X77B
-         iqaRl4t8L6sE5GacMPTAOVDPlCevC2ydI0XlTo5Drl9jbe+sbrL6sEwj/xPrisD0v00D
-         pggb9tNW9mpoEx57xkEfqh/ZOBYLjv5TOLxSzzuJdmvskzww+E3o2p57gXIKlpTu4e8F
-         iyUQ==
-X-Gm-Message-State: AOAM532baiHMCJTVZ71+q0poXcjCMt8F0STdTbZbqdOJlGc858MjHGhW
-        Pk0KSpEWNJSE5OYePAypiUqW1NcbqdBsQyJ85O436IDPxVRJszOK8Rj1TSvVMrj/hVRoI6/QbBu
-        eqE4XL9/YaboQ9Gc3k73UZXrXeOv6bawbCUGH3ETu
-X-Received: by 2002:a05:651c:892:b0:249:9e23:15 with SMTP id d18-20020a05651c089200b002499e230015mr1916138ljq.492.1650608588809;
-        Thu, 21 Apr 2022 23:23:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwwqKev+t3dwxEksOixf9qhX2r0+MZYnig2BgFOq5A+45aQEs/EnCwKgSO7Te7I2Uzy3IDHGCn7iS75rUnHFBw=
-X-Received: by 2002:a05:651c:892:b0:249:9e23:15 with SMTP id
- d18-20020a05651c089200b002499e230015mr1916125ljq.492.1650608588568; Thu, 21
- Apr 2022 23:23:08 -0700 (PDT)
+        Fri, 22 Apr 2022 02:27:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A04506F2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650608659; x=1682144659;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=a3vnLJKYviKPVU7ERlCQTS90byLzAhepdBVAHb+iu0M=;
+  b=YwZv0qN60ncliOR1w0p1kIswmf91UHGlMmuY2w36B4W66TJCWRiJWs40
+   vtA3HZggqFo05khfKTNgzK1AIjAPfcoub753/7sGb6OvF9aE2cfnYQ6iY
+   2ktAqumNfaQRGtTYfb/gjFVrNkXAE7i/eAskW8wAPEJXLNXli3lMwMBEA
+   kUWj0+tHvyjGKHhH2JxAaeqj064KhlbIxlqAqUsR9Urmq55ggmlgDzL6y
+   +mWjSGfdqWU9/JL8ruf5b9S7Yv0Pg7BwhJBU6zuKa/o+Hdz1GmrW8Rkiv
+   uJF6z/TtzBgSK2/yFI17rK101ZO3sXfXMO104BMu8YMiNMXlVAFFpNOh/
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264756869"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="264756869"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 23:24:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="562919494"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Apr 2022 23:24:18 -0700
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 21 Apr 2022 23:24:18 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 21 Apr 2022 23:24:18 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.106)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 21 Apr 2022 23:24:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TrxkcVY45EvzfxPoPVOYtCSOOJTtOPElEKBn+ri5ZeuH9/fJiWUc+ALBZzNm3x9H4nhRqTrwZD/3OlSBunPnoL2wWwLhWuE07fikF5qazBPPJZcddPSfQt9wxK5UwdRnt5PoMxFEDrmj5xNVqHktVBLURVawh7R9Ta3IAFiFTimmXSH2pKliu67KoVXqbKZWHrmuNvKI+EzCZDosIDDWA2HPNPeG3ibYuNRdCeqRg99eTtpzvjG8/igx+JH2Lw+QRvKDOoHiT6xMHXts0bx4eT3W9Gt5ovtbm082DbMvlwwUeXlChU0b39alUHNHk92zY8SvOWeItLV0UZxX1+WYQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pJT2ZVCo+0CtX6v5bpMJpjbIESB9q7GexBpSg44kMec=;
+ b=BSI3RCXHhvEjfsrZGlMELANsMSMGAFeTWsImUX37xtA1sWpl/SgNYpgE60G4pBfB39YUEBlGuHl3tOdxq+/mLOlMgmzqFbbX9NcwhHjo5fYVWz4BURWSJtNJVmtX+1DVPm9c0A4Z4qQLJ6qM0XoYLusaozGhvWNaJoZgQyjgWUz3bIBFvfsXqo2DZAaoY+CTALLTlmXMCMHtXQhVwoxW+9zsjr74PrLv75QeXrUu3D4nsihUYA3o9FEyrDHFv8lA/nU2EMrNlbTQaj3wYt3Vd/hI+ffMAawnhWnzp7l9r/71DgbPHek5t63o6++N5lkNwVjS1v9DuRd9v4bNtF3rmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
+ by PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Fri, 22 Apr
+ 2022 06:24:14 +0000
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::30f5:ac84:8cae:c977]) by BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::30f5:ac84:8cae:c977%6]) with mapi id 15.20.5164.026; Fri, 22 Apr 2022
+ 06:24:14 +0000
+Date:   Fri, 22 Apr 2022 14:24:05 +0800
+From:   Aaron Lu <aaron.lu@intel.com>
+To:     "ying.huang@intel.com" <ying.huang@intel.com>
+CC:     Yang Shi <shy828301@gmail.com>, Michal Hocko <mhocko@suse.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: swap: determine swap device by using page nid
+Message-ID: <YmJKBaq1yj6/iBJ3@ziqianlu-desk1>
+References: <20220407020953.475626-1-shy828301@gmail.com>
+ <Yk6cutNf5sOuYbDl@ziqianlu-nuc9qn>
+ <CAHbLzkq+eKcKCsxXDTiOcBxk8FjMdWBqOxwi4N_NG7PZWbAAkA@mail.gmail.com>
+ <Yl/FS9enAD4V8jG3@ziqianlu-nuc9qn>
+ <f27ec36beb3cf1dbbfc3b8835e586d5d6fe7f561.camel@intel.com>
+ <YmETEHnK/FiNbLO7@ziqianlu-desk1>
+ <6f7210be7353d1c01dc9f872b2692b83f87f5452.camel@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6f7210be7353d1c01dc9f872b2692b83f87f5452.camel@intel.com>
+X-ClientProxiedBy: HK2PR0401CA0011.apcprd04.prod.outlook.com
+ (2603:1096:202:2::21) To BYAPR11MB3062.namprd11.prod.outlook.com
+ (2603:10b6:a03:92::18)
 MIME-Version: 1.0
-References: <20220419014025.218121-1-lulu@redhat.com> <32c1113d-4991-0ab0-5a85-33fe85295b93@redhat.com>
- <CACLfguUTXD0r3bDYCA3YkYQ8Oe8L0pMU2gaXsemh392WKNjOwA@mail.gmail.com> <CACLfguVubBQ4N6EFZCPC0ksibmso5Yryy0e_oreKMPg==k9f_Q@mail.gmail.com>
-In-Reply-To: <CACLfguVubBQ4N6EFZCPC0ksibmso5Yryy0e_oreKMPg==k9f_Q@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 22 Apr 2022 14:22:57 +0800
-Message-ID: <CACGkMEujYU-qpjEYVKpy41AqyhuHeifV4kO7wAZafi63YpFkrA@mail.gmail.com>
-Subject: Re: [PATCH v1] vdpa/vp_vdpa : add vdpa tool support in vp_vdpa
-To:     Cindy Lu <lulu@redhat.com>
-Cc:     Michael Tsirkin <mst@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f931b2a6-3caa-490e-3606-08da2428b880
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4855:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <PH0PR11MB48558D0259FAC6DA96988E998BF79@PH0PR11MB4855.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0JJQxSmH5R9t+F8QB2HpSsrmFHlgfCRnonAUf85BTn2q3MgINxtUTpb/8zWl2+tvFczg60m9pqdxfH0RaOV6zwdJjlU4+PJOPiitrBpXClYNMWG0AdZLx3Ti8YjVsjHOaeCQpJih2IvnMmkGExCi4wxvDRWnPeiHWE3NCHRSF6Fl68ze2WChGeQdjTu6eK9xsiRVAOwwdT72IrxcRjdKV+t8vyEz6RhS5J8v+ksrXKJR7K0lkcaW6KGwEMmTbnsbRdaWMBVz0fu3lE4OPzKIwbg2v6/YutZaW4lsrM/CIEMkPvO54L1YFrQcrhU+Mfp1RzXzjPE58hDzVY8Hehnr6aMuuj5bg8bpEZ4GvMYWFao4EBxNES461PiUt5yNkoFhMOhfLPaf4+dLohbXethH4XjWjAqA4wFtj+AsYytF3CBopqSdBUt0GFFLSzjTJn5chjd0IDFHkmabD14AamEoOHTB2vsfPYbX7tTrNSbd6tVRWJSO6uHUw288+/T35wTrzAmlcabGiAbtgEaF9x3QuTqNzAU7Ph+HhqlJ9uzhLs3lXX/6g+7GgtEManVDww4GP7MhTyhbXBW/SoLw0it+ypbSHn1xLcciyyN0+Zr4eh0x0eyQXB5vR1o1TKGyqx+d58rzVSjsoF29l9Z5TBFFVa7vWmC7iy4aJk+Yw40Ftz8frs9tQgWsgp7xnFa8hOKlSWrUCn3puoNSyfYq9kecDg2xENvtytOVFkkfgj8AZxQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(66556008)(38100700002)(33716001)(5660300002)(66476007)(66946007)(8676002)(6862004)(316002)(4326008)(6666004)(8936002)(2906002)(186003)(966005)(6486002)(6636002)(6506007)(86362001)(508600001)(83380400001)(44832011)(26005)(9686003)(6512007)(82960400001)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3aHfeClzLR347pvXlFfceg0Gd9Uk3QlrF05qC1Y3Pv/cA4UnoXqwwPrsvam8?=
+ =?us-ascii?Q?vUTg1QQlP8zaNfpOioeX2Vu+z1bblCeSdRb4bMMexZDDoSpOBRwUTo64UVYU?=
+ =?us-ascii?Q?t/2pwNLyAp9MCiE+dx3TQ2CZzbDA4sYzbAKMXfF73FHOaIm6yDSNqPHmHGvR?=
+ =?us-ascii?Q?dudKFWrV/MspuuTx1M2z4YgCo9ItunwVfuA9Ey2G4+N9NbXtyfbrZS3X81qd?=
+ =?us-ascii?Q?CpH1kHUVtQwaU+uGLNZhzbtOyD99D5DTOCQX+wny+9NUiuaFhXGCdNo506VA?=
+ =?us-ascii?Q?mbuGYrz0Pmch05c1r7XNPrjrwKDoGmk+pAuLZOcRJAm5fv0MwS6iMARuEeut?=
+ =?us-ascii?Q?QxERt/pplx9b1VDWf2XWuQ+GlNRro+UONpuSqkj0cnT+Jqh2pJse0e3eZ5Al?=
+ =?us-ascii?Q?jLo0bdpxyoQ9QDoowwh29n0g6pDJGeMm0Sc5IC6EvI7h5Q6ozxaxEi3C9Nml?=
+ =?us-ascii?Q?fu+UwnATU8uwWTE5N1k5+yVsrfVojkpUXSmEOx7p7KRtGQiSVxJqg+0IIjok?=
+ =?us-ascii?Q?+ivn9H49jk8wSVCjtMgKh03+qio553AZWAGqwfIf66qz5539t63OsARSdrOf?=
+ =?us-ascii?Q?BjY0RYQ3rdx6qqUN4RRrbnJX0sY+O53kwr6iNgzTigMe2uoTjn7lWP5JIkp9?=
+ =?us-ascii?Q?x0s+b21xxOW01+YweT0wBKxhORU1ufiRz9xTO4fx9YnSSXPx27rZJgwnaQve?=
+ =?us-ascii?Q?gze9SKnTJsedaXIAU3fioZQv1Ziga6aDxoYPn4r9BEAQM0NzOagW/vxvMrfS?=
+ =?us-ascii?Q?VQhz00npC/5ZaVKtN5iD/VI8fhnYCbLnvlYKiRue+/9dZ6t92ZFzm9uLZEZR?=
+ =?us-ascii?Q?nnyaC7ugs3XMz7k5+xw2WHXL6Ri2zqUoWKGzjM8s7hjtMjnw+EzXgaS6e/7w?=
+ =?us-ascii?Q?Zg7OQhkDR1IE+5HduRdvRsTvlj+ui38zKI4/Dv3JsAGyVHdBYI8lDAKz3k4y?=
+ =?us-ascii?Q?Rh543sxsKJjVMeMK7ysYWqNNkqWd8zvttsT4/3IWoLmoa2en7ara5zCPOc/a?=
+ =?us-ascii?Q?4Pu7p7CWqNuc96QhKgGMgN07mHdtiNyodsVnqqsBNZjzvn3iRkNsLYVlCKFC?=
+ =?us-ascii?Q?vOuJ99sBhyUsYjlGf+nv5zACOtzit5Htu43X+hyGsz9ez0nISV1GE3YyQZvg?=
+ =?us-ascii?Q?xPBtWQYx0hVNy18+PnL+kB2WbVfqVO2lcp7eOX2y8yN7Br6D2RqvxvpRxxg4?=
+ =?us-ascii?Q?IL9hi6h4xn1oSY79Svi+c4H+9CxpLZNL2AZ7xB3K7ahl25As5OWqqcmFL1Er?=
+ =?us-ascii?Q?i5PfBxqJ54LtoJEipBLJXmEkT+qI6Mlt55xCWm6pKcqkZx89PGvvOGfRmonq?=
+ =?us-ascii?Q?ldath/PqMQCZdAfIs7eaepahW0+mN9aqEK5yUfpU/od7wMEhsZ1DAyqOa2KM?=
+ =?us-ascii?Q?D9OPzSv68AkVBOXnS0EYqb0xbgnktX1rT8MnH/0po8JAfWS8v7o2OtygD1WG?=
+ =?us-ascii?Q?KoxGrZQGZ5ZbRpUU9jOQulq5aui0M/G5sVKWsgJleLWB1SAHGBFZd/f2fhg9?=
+ =?us-ascii?Q?hgTJsbaY8mQ1YxyvWViS5JRU14VIUQ8jlF7UfQxDLlHql+n1/LzzHHFz6DFo?=
+ =?us-ascii?Q?vHnXTzjI+sgPoVUktgU7xqAD6XuJTrsVfoDe9ILdeR1lowr8xv9Ic0Auda3+?=
+ =?us-ascii?Q?bb1ek4qe11+mgAGGLmtIkgATIwS0YwSFridylhGG128CGgGUC0uMhq/TSFri?=
+ =?us-ascii?Q?7Re80R2h0k2gQd9XLteqJUrNaxBPTTBjlmdYNT9LVZZJNEoCCcI2leHN91lk?=
+ =?us-ascii?Q?HNNEQ28VZw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f931b2a6-3caa-490e-3606-08da2428b880
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 06:24:14.2798
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yfqDuCDL3gfS4JpWySXKXTQyVMG2oLgVadF73IkYwDltlOO/LaJVQcxi/fR/aNBhvVFWMsohdwJARIUZu7yf2g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4855
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,277 +155,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 1:57 PM Cindy Lu <lulu@redhat.com> wrote:
->
-> On Wed, Apr 20, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
-> >
-> >
-> >
-> > On Wed, Apr 20, 2022 at 11:21 AM Jason Wang <jasowang@redhat.com> wrote=
-:
-> >>
-> >>
-> >> =E5=9C=A8 2022/4/19 09:40, Cindy Lu =E5=86=99=E9=81=93:
-> >> > this patch is to add the support for vdpa tool in vp_vdpa
-> >> > here is the example steps
-> >> > modprobe vp_vdpa
-> >> > modprobe vhost_vdpa
-> >> >
-> >> > echo 0000:00:06.0>/sys/bus/pci/drivers/virtio-pci/unbind
-> >> > echo 1af4 1041 > /sys/bus/pci/drivers/vp-vdpa/new_id
-> >> >
-> >> > vdpa dev add name vdpa1 mgmtdev pci/0000:00:06.0
-> >> >
-> >> > Signed-off-by: Cindy Lu <lulu@redhat.com>
-> >> > ---
-> >> >   drivers/vdpa/virtio_pci/vp_vdpa.c | 86 +++++++++++++++++++++++++++=
-+---
-> >> >   1 file changed, 78 insertions(+), 8 deletions(-)
-> >> >
-> >> > diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio=
-_pci/vp_vdpa.c
-> >> > index cce101e6a940..d8a1d2f8e9bb 100644
-> >> > --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
-> >> > +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
-> >> > @@ -17,6 +17,8 @@
-> >> >   #include <linux/virtio_ring.h>
-> >> >   #include <linux/virtio_pci.h>
-> >> >   #include <linux/virtio_pci_modern.h>
-> >> > +#include <uapi/linux/virtio_net.h>
-> >> > +#include <uapi/linux/vdpa.h>
-> >> >
-> >> >   #define VP_VDPA_QUEUE_MAX 256
-> >> >   #define VP_VDPA_DRIVER_NAME "vp_vdpa"
-> >> > @@ -41,6 +43,18 @@ struct vp_vdpa {
-> >> >       int vectors;
-> >> >   };
-> >> >
-> >> > +struct vp_vdpa_mgmtdev {
-> >> > +     struct vdpa_mgmt_dev mgtdev;
-> >> > +     struct vp_vdpa *vp_vdpa;
-> >> > +     struct pci_dev *pdev;
-> >> > +};
-> >> > +
-> >> > +#define VP_VDPA_NET_FEATURES                                       =
-            \
-> >> > +     ((1ULL << VIRTIO_F_ANY_LAYOUT) | (1ULL << VIRTIO_F_VERSION_1) =
-|        \
-> >> > +      (1ULL << VIRTIO_F_ACCESS_PLATFORM))
-> >> > +
-> >> > +#define VP_VDPA_NET_VQ_NUM 2
-> >>
-> >>
-> >> Let's not go backwards, e.g we've already support any kind of virtio
-> >> device with any kind of features. see the comment in vp_vdpa_probe().
-> >>
-> >>
-> > got it, I will fix this
-> >>
-> >> > +
-> >> >   static struct vp_vdpa *vdpa_to_vp(struct vdpa_device *vdpa)
-> >> >   {
-> >> >       return container_of(vdpa, struct vp_vdpa, vdpa);
-> >> > @@ -454,9 +468,14 @@ static void vp_vdpa_free_irq_vectors(void *data=
-)
-> >> >       pci_free_irq_vectors(data);
-> >> >   }
-> >> >
-> >> > -static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_dev=
-ice_id *id)
-> >> > +static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char=
- *name,
-> >> > +                        const struct vdpa_dev_set_config *add_confi=
-g)
-> >> >   {
-> >> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =3D
-> >> > +             container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev);
-> >> > +
-> >> >       struct virtio_pci_modern_device *mdev;
-> >> > +     struct pci_dev *pdev =3D vp_vdpa_mgtdev->pdev;
-> >> >       struct device *dev =3D &pdev->dev;
-> >> >       struct vp_vdpa *vp_vdpa;
-> >> >       int ret, i;
-> >> > @@ -465,8 +484,9 @@ static int vp_vdpa_probe(struct pci_dev *pdev, c=
-onst struct pci_device_id *id)
-> >> >       if (ret)
-> >> >               return ret;
-> >> >
-> >> > -     vp_vdpa =3D vdpa_alloc_device(struct vp_vdpa, vdpa,
-> >> > -                                 dev, &vp_vdpa_ops, NULL, false);
-> >> > +     vp_vdpa =3D vdpa_alloc_device(struct vp_vdpa, vdpa, dev, &vp_v=
-dpa_ops,
-> >> > +                                 name, false);
-> >>
-> >>
-> >> Nit: let's keep the line of vdpa_alloc_device() unchanged to reduce th=
-e
-> >> changeset.
-> >>
-> >>
-> > will fix this
-> >>
-> >> > +
-> >> >       if (IS_ERR(vp_vdpa)) {
-> >> >               dev_err(dev, "vp_vdpa: Failed to allocate vDPA structu=
-re\n");
-> >> >               return PTR_ERR(vp_vdpa);
-> >> > @@ -480,9 +500,10 @@ static int vp_vdpa_probe(struct pci_dev *pdev, =
-const struct pci_device_id *id)
-> >> >               dev_err(&pdev->dev, "Failed to probe modern PCI device=
-\n");
-> >> >               goto err;
-> >> >       }
-> >> > +     vp_vdpa_mgtdev->vp_vdpa =3D vp_vdpa;
-> >> >
-> >> >       pci_set_master(pdev);
-> >> > -     pci_set_drvdata(pdev, vp_vdpa);
-> >> > +     pci_set_drvdata(pdev, vp_vdpa_mgtdev);
-> >> >
-> >> >       vp_vdpa->vdpa.dma_dev =3D &pdev->dev;
-> >> >       vp_vdpa->queues =3D vp_modern_get_num_queues(mdev);
-> >> > @@ -516,7 +537,8 @@ static int vp_vdpa_probe(struct pci_dev *pdev, c=
-onst struct pci_device_id *id)
-> >> >       }
-> >> >       vp_vdpa->config_irq =3D VIRTIO_MSI_NO_VECTOR;
-> >> >
-> >> > -     ret =3D vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues);
-> >> > +     vp_vdpa->vdpa.mdev =3D &vp_vdpa_mgtdev->mgtdev;
-> >> > +     ret =3D _vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues)=
-;
-> >> >       if (ret) {
-> >> >               dev_err(&pdev->dev, "Failed to register to vdpa bus\n"=
-);
-> >> >               goto err;
-> >> > @@ -529,12 +551,60 @@ static int vp_vdpa_probe(struct pci_dev *pdev,=
- const struct pci_device_id *id)
-> >> >       return ret;
-> >> >   }
-> >> >
-> >> > -static void vp_vdpa_remove(struct pci_dev *pdev)
-> >> > +static void vp_vdpa_dev_del(struct vdpa_mgmt_dev *v_mdev,
-> >> > +                         struct vdpa_device *dev)
-> >> >   {
-> >> > -     struct vp_vdpa *vp_vdpa =3D pci_get_drvdata(pdev);
-> >> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =3D
-> >> > +             container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev);
-> >> > +
-> >> > +     struct vp_vdpa *vp_vdpa =3D vp_vdpa_mgtdev->vp_vdpa;
-> >> >
-> >> >       vp_modern_remove(&vp_vdpa->mdev);
-> >> > -     vdpa_unregister_device(&vp_vdpa->vdpa);
-> >> > +     _vdpa_unregister_device(&vp_vdpa->vdpa);
-> >> > +     vp_vdpa_mgtdev->vp_vdpa =3D NULL;
-> >> > +}
-> >> > +
-> >> > +static const struct vdpa_mgmtdev_ops vp_vdpa_mdev_ops =3D {
-> >> > +     .dev_add =3D vp_vdpa_dev_add,
-> >> > +     .dev_del =3D vp_vdpa_dev_del,
-> >> > +};
-> >> > +
-> >> > +static struct virtio_device_id vp_vdpa_id_table[] =3D {
-> >> > +     { VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID },
-> >> > +     { 0 },
-> >> > +};
-> >>
-> >>
-> >> Let's not limit the vp_vdpa to net, it can support all other virtio de=
-vices.
-> >>
-> >>
-> > sure, will fix this
-> >>
-> >> > +
-> >> > +static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_dev=
-ice_id *id)
-> >> > +{
-> >> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev;
-> >> > +     struct vdpa_mgmt_dev *mgtdev;
-> >> > +     struct device *dev =3D &pdev->dev;
-> >> > +     int err;
-> >> > +
-> >> > +     vp_vdpa_mgtdev =3D kzalloc(sizeof(*vp_vdpa_mgtdev), GFP_KERNEL=
-);
-> >> > +     if (!vp_vdpa_mgtdev)
-> >> > +             return -ENOMEM;
-> >> > +     mgtdev =3D &vp_vdpa_mgtdev->mgtdev;
-> >> > +
-> >> > +     mgtdev->ops =3D &vp_vdpa_mdev_ops;
-> >> > +     mgtdev->device =3D dev;
-> >> > +     mgtdev->id_table =3D vp_vdpa_id_table;
-> >> > +     vp_vdpa_mgtdev->pdev =3D pdev;
-> >> > +
-> >> > +     mgtdev->max_supported_vqs =3D VP_VDPA_NET_VQ_NUM;
-> >>
-> >>
-> >> Let's read this from the device instead of using the hard-coded value.
-> >>
-> >>
-> >> > +     mgtdev->supported_features =3D VP_VDPA_NET_FEATURES;
-> >>
-> >>
-> >> Let's read this from the device.
-> >>
-> > sure will fix this
-> HI Jason, I have check the code, maybe we can't read these
-> informations from device here,
-> because the  virtio_pci_modern_device   was inited in vp_vdpa_dev_add(),
-> if we want to read these information in vp_vdpa_probe(). maybe we need
-> to change the struct in vp_vdpa. and separate the
-> struct virtio_pci_modern_device  from struct vp_vdpa. I'm not sure if
-> this is ok to do?
+On Thu, Apr 21, 2022 at 04:34:09PM +0800, ying.huang@intel.com wrote:
+> On Thu, 2022-04-21 at 16:17 +0800, Aaron Lu wrote:
+> > On Thu, Apr 21, 2022 at 03:49:21PM +0800, ying.huang@intel.com wrote:
 
-Any reason we can't do vdpa_alloc_device() in the vp_vdpa_probe() and
-register it in dev_add?
+... ...
 
-If we can't I'd then decouple virtio_pci_moder_device out of vp_vdpa:
+> > > For swap-in latency, we can use pmbench, which can output latency
+> > > information.
+> > > 
+> > 
+> > OK, I'll give pmbench a run, thanks for the suggestion.
+> 
+> Better to construct a senario with more swapin than swapout.  For
+> example, start a memory eater, then kill it later.
 
-struct vp_vdpa {
-    struct vdpa_device vdpa;
-    struct virtio_pci_modern_device *mdev;
-};
+What about vm-scalability/case-swapin?
+https://git.kernel.org/pub/scm/linux/kernel/git/wfg/vm-scalability.git/tree/case-swapin
 
-Thanks
+I think you are pretty familiar with it but still:
+1) it starts $nr_task processes and each mmaps $size/$nr_task area and
+   then consumes the memory, after this, it waits for a signal;
+2) start another process to consume $size memory to push the memory in
+   step 1) to swap device;
+3) kick processes in step 1) to start accessing their memory, thus
+   trigger swapins. The metric of this testcase is the swapin throughput.
 
->
-> struct vp_vdpa {
-> struct vdpa_device vdpa;
-> struct virtio_pci_modern_device mdev;
-> struct vp_vring *vring;
-> struct vdpa_callback config_cb;
-> char msix_name[VP_VDPA_NAME_SIZE];
-> int config_irq;
-> int queues;
-> int vectors;
-> };
-> Thanks
-> cindy
-> >>
-> >>
-> >> > +
-> >> > +     err =3D vdpa_mgmtdev_register(mgtdev);
-> >>
-> >>
-> >> Do we need to free the vp_vdpa_mgtdev here?
-> >>
-> > will add the this
-> >>
-> >> Thanks
-> >>
-> >>
-> >> > +
-> >> > +     return err;
-> >> > +}
-> >> > +
-> >> > +static void vp_vdpa_remove(struct pci_dev *pdev)
-> >> > +{
-> >> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =3D pci_get_drvdata(pde=
-v);
-> >> > +
-> >> > +     vdpa_mgmtdev_unregister(&vp_vdpa_mgtdev->mgtdev);
-> >> > +     kfree(vp_vdpa_mgtdev);
-> >> >   }
-> >> >
-> >> >   static struct pci_driver vp_vdpa_driver =3D {
-> >>
->
+I plan to restrict the cgroup's limit to $size.
 
+Considering there is only one NVMe drive attached to node 0, I will run
+the test as described before:
+1) bind processes to run on node 0, allocate on node 1 to test the
+   performance when reclaimer's node id is the same as swap device's.
+2) bind processes to run on node 1, allocate on node 0 to test the
+   performance when page's node id is the same as swap device's.
+
+Ying and Yang,
+
+Let me know what you think about the case used and the way the test is
+conducted.

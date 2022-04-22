@@ -2,94 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3252F50B2D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE85C50B2D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445046AbiDVI1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 04:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S1389127AbiDVI1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 04:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352900AbiDVI1P (ORCPT
+        with ESMTP id S1352963AbiDVI1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Apr 2022 04:27:15 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9DA52E5D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:24:22 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id p18so4347601edr.7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RZF7fteh3q3LP6E7WzcUmzKI7oYS0jt30novDY2XRO0=;
-        b=Y0Xvxr9UwrjqmuFJy7vUi66ruoxyGoLIKgLOH+S4eNo1znwJDqmrJ4l2WsOMe4z1ys
-         eS6Z8AHvzip01IZzcmcxA5PFKD7EwTtROkK/lpDEeJHPy6zjj3GapgRGyeDtYvt530EO
-         2kQJ4ZdnanEtFvEd1aQ0aMpiUgGgx0AXzILGHXRTa8KtPMO5N1imF4AyfnoekUFnTd6P
-         VSkLs2cNP8/Q9pozs1CkWMdoUJ9fgtAOaWLwV1L3aVCOeXzs9J+yyq7whVLUkpewUiBQ
-         OMMzheWffJhnVHENKvCOF7a/D48l0jJCzaaKMS/8FR8gTN8W/WIgA/SbZkvorg1xgwcm
-         oI9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RZF7fteh3q3LP6E7WzcUmzKI7oYS0jt30novDY2XRO0=;
-        b=vhbo4UYDwzRQdchcVSjOgkbS0n4a9DSvUvZ7QjnQjur98BwrF3I7M7QSYHs5Kq5Xai
-         zw8z7Ivpauhc22YDA7J1mq20Ljr0WdjlE7Uidj4PS1bpOGsalt/DoUccJWxuKK15umlb
-         WVeRy1+54x1MAJQa9HXm6LH/I/b+iR7mSaIjGUhIhHiuUSNbG9fNyJ/1pmP3OVoiCuBo
-         LzcMGVEZA5kahlJn8YCrKaUn0b2q303/7+dhKg+TZO/lFpNmmwDZeeFHn2LgvihJkaBb
-         RsnI40F4GL+GVjyQ+blkYYB08z5TDZ7Jh9TU1wwTvToTzQ4//DzEExzuI3nx4//aqLW5
-         OcEQ==
-X-Gm-Message-State: AOAM5330OkM6F77pzaN6n5Q7Rz0QzOtpVVhzBazv4SBedN+FGT4KKlez
-        BrjjNuLjdiU4AkY3vfRVjmlLl3CToaT3IVo4Ng4Zo6AuGvkZgw==
-X-Google-Smtp-Source: ABdhPJzXFLJyddsWoNVeno0wBPe4x/nOfcWCsbpOWBsjoPy3RidBDJm0TXSnhvWLyUm3J2dytsVC1Bjl980EsZymiSk=
-X-Received: by 2002:aa7:db0f:0:b0:41d:7b44:2613 with SMTP id
- t15-20020aa7db0f000000b0041d7b442613mr3609611eds.126.1650615861253; Fri, 22
- Apr 2022 01:24:21 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A3F52E64;
+        Fri, 22 Apr 2022 01:24:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 999D161FDE;
+        Fri, 22 Apr 2022 08:24:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B304BC385A4;
+        Fri, 22 Apr 2022 08:24:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650615862;
+        bh=VZe04wi9Ke1WpooTFqZ15tO/MjgK1FO8qd/uJToj3Wc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jwwEHEHm2Ma97jStCDyTuowW/EJpEo2brMRPLwYkscX+vZ0y40ShSuC0xXJrlMZLa
+         xGdHODv60Vr4GH4JG7nMd9bk3D1pTOlXGyEvTFDf1QYD4qL/WAMD9sIc8FN1r+zneJ
+         mrXlAHE4xs7kzBye6xymR8SqS8XyXO8Wz0ZUUBgdHDNFdd8X2BcJu6DJRA9RuuKCnT
+         Nt94O5Y2oHiNFmXK1Ws+cejfKO9o2Hoii14u/I8Rs5nMU0nivYbc5jXXV0F2NZD6RE
+         xth+GpJBj1+wprn5x/k1gZHn0AzWiPa8vx7UAjg39037MaOd+BogTDYYtPD7hPcr3Z
+         1tPd+eydP2kOQ==
+Date:   Fri, 22 Apr 2022 11:24:14 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, outreachy@lists.linux.dev,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH 1/4] mm/highmem: Fix kernel-doc warnings in highmem*.h
+Message-ID: <YmJmLrS3hPR6gOaw@kernel.org>
+References: <20220421180200.16901-1-fmdefrancesco@gmail.com>
+ <20220421180200.16901-2-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-References: <20220415094518.380543-1-cccheng@synology.com> <20220415094518.380543-2-cccheng@synology.com>
- <87czhitr13.fsf@mail.parknet.co.jp>
-In-Reply-To: <87czhitr13.fsf@mail.parknet.co.jp>
-From:   Chung-Chiang Cheng <shepjeng@gmail.com>
-Date:   Fri, 22 Apr 2022 16:24:10 +0800
-Message-ID: <CAHuHWtnL4_HV2yGZJ9qY_cSf9t3ot2bVDPJdkKVGehS9iGMMVg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] fat: make ctime and mtime identical explicitly
-To:     OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-Cc:     Chung-Chiang Cheng <cccheng@synology.com>,
-        linux-kernel@vger.kernel.org, kernel@cccheng.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421180200.16901-2-fmdefrancesco@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 9:28 PM OGAWA Hirofumi
-<hirofumi@mail.parknet.co.jp> wrote:
->
-> Chung-Chiang Cheng <cccheng@synology.com> writes:
->
-> > -     fat_truncate_time(dir, NULL, S_ATIME|S_MTIME);
-> > +     fat_truncate_time(dir, NULL, S_ATIME|S_CTIME|S_MTIME);
->
-> fat_truncate_time() updates i_ctime too. So S_CTIME should not be
-> necessary here. And I think this is better to use only S_MTIME to tell
-> this is the point of mtime update.
->
-> (And, in fat_truncate_time(), I think S_CTIME is not required, because
-> we ignore ctime change, isn't it?)
->
-> >       clear_nlink(inode);
-> > -     fat_truncate_time(inode, NULL, S_CTIME);
-> > +     fat_truncate_time(inode, NULL, S_CTIME|S_MTIME);
->
-> This is the point to update ctime. You want to affect ctime change to
-> mtime? As I said in previous post, I think we are better to ignore ctime
-> change, because it may become yet another incompatible behavior.
->
+On Thu, Apr 21, 2022 at 08:01:57PM +0200, Fabio M. De Francesco wrote:
+> `scripts/kernel-doc -v -none include/linux/highmem*` reports the following
+> warnings:
+> 
+> include/linux/highmem.h:160: warning: expecting prototype for kunmap_atomic(). Prototype was for nr_free_highpages() instead
+> include/linux/highmem.h:204: warning: No description found for return value of 'alloc_zeroed_user_highpage_movable'
+> include/linux/highmem-internal.h:256: warning: Function parameter or member '__addr' not described in 'kunmap_atomic'
+> include/linux/highmem-internal.h:256: warning: Excess function parameter 'addr' description in 'kunmap_atomic'
+> 
+> Fix these warnings by (1) moving the kernel-doc comments from highmem.h to
+> highmem-internal.h (which is the file were the kunmap_atomic() macro is
+> actually defined), (2) extending and merging it with the comment which was
+> already in highmem-internal.h, and (3) using correct parameter names.
+> 
+> Cc: Mike Rapoport <rppt@linux.ibm.com>
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  include/linux/highmem-internal.h | 14 +++++++++++---
+>  include/linux/highmem.h          | 15 +++------------
+>  2 files changed, 14 insertions(+), 15 deletions(-)
+> 
+> diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
+> index a77be5630209..b099a08e29d3 100644
+> --- a/include/linux/highmem-internal.h
+> +++ b/include/linux/highmem-internal.h
+> @@ -236,9 +236,17 @@ static inline unsigned long totalhigh_pages(void) { return 0UL; }
+>  
+>  #endif /* CONFIG_HIGHMEM */
+>  
+> -/*
+> - * Prevent people trying to call kunmap_atomic() as if it were kunmap()
+> - * kunmap_atomic() should get the return value of kmap_atomic, not the page.
+> +/**
+> + * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic()
+> + * @__addr:       Virtual address to be unmapped
+> + *
+> + * Unmap an address previously mapped by kmap_atomic() and re-enables
 
-Thanks for the feedback. I will change the behavior to ignore ctime
-updates in the next version of the patch.
+Unmap ... and re-enable
+
+or 
+
+Unmaps ... and re-enables
+
+Other than that
+
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+
+> + * pagefaults and preemption. Mappings should be unmapped in the reverse
+> + * order that they were mapped. See kmap_local_page() for details.
+> + * @__addr can be any address within the mapped page, so there is no need
+> + * to subtract any offset that has been added. In contrast to kunmap(),
+> + * this function takes the address returned from kmap_atomic(), not the
+> + * page passed to it. The compiler will warn you if you pass the page.
+>   */
+>  #define kunmap_atomic(__addr)					\
+>  do {								\
+> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+> index 39bb9b47fa9c..c3d562b5f0c1 100644
+> --- a/include/linux/highmem.h
+> +++ b/include/linux/highmem.h
+> @@ -37,7 +37,7 @@ static inline void *kmap(struct page *page);
+>  
+>  /**
+>   * kunmap - Unmap the virtual address mapped by kmap()
+> - * @addr:	Virtual address to be unmapped
+> + * @page:	Virtual address to be unmapped
+>   *
+>   * Counterpart to kmap(). A NOOP for CONFIG_HIGHMEM=n and for mappings of
+>   * pages in the low memory area.
+> @@ -145,17 +145,6 @@ static inline void *kmap_local_folio(struct folio *folio, size_t offset);
+>   */
+>  static inline void *kmap_atomic(struct page *page);
+>  
+> -/**
+> - * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic()
+> - * @addr:	Virtual address to be unmapped
+> - *
+> - * Counterpart to kmap_atomic().
+> - *
+> - * Effectively a wrapper around kunmap_local() which additionally undoes
+> - * the side effects of kmap_atomic(), i.e. reenabling pagefaults and
+> - * preemption.
+> - */
+> -
+>  /* Highmem related interfaces for management code */
+>  static inline unsigned int nr_free_highpages(void);
+>  static inline unsigned long totalhigh_pages(void);
+> @@ -191,6 +180,8 @@ static inline void clear_user_highpage(struct page *page, unsigned long vaddr)
+>   * @vma: The VMA the page is to be allocated for
+>   * @vaddr: The virtual address the page will be inserted into
+>   *
+> + * Returns: The allocated and zeroed HIGHMEM page
+> + *
+>   * This function will allocate a page for a VMA that the caller knows will
+>   * be able to migrate in the future using move_pages() or reclaimed
+>   *
+> -- 
+> 2.34.1
+> 
+> 
+
+-- 
+Sincerely yours,
+Mike.

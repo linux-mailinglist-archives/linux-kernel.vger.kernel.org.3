@@ -2,161 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D4350BB0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA45D50BB2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449098AbiDVPE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
+        id S1449213AbiDVPFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449136AbiDVPDp (ORCPT
+        with ESMTP id S1449198AbiDVPE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:03:45 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8135C84C;
-        Fri, 22 Apr 2022 08:00:46 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 08:00:39 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1650639644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=d3IirLrwzfP+t0cf/Qt/pjPqRe913cYQABamRgMemA8=;
-        b=Lm54JO89yEThLSIOPkqiO6LOVwh/7ZwT7BCwz0zLcI/aXxl9HFRy2wt5mfdfSbbE+e+BYB
-        bQyb0q49de7JTreNY6cN9UX4H5WWDQWzNEHLbyyXbGLILRdK/dSOz1lUkEN4UbqazIhnP8
-        3DvXNVVjpOLYzc3+lxM/e73OuXDStK4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH] mm/memcg: Free percpu stats memory of dying memcg's
-Message-ID: <YmLDF58Mz3inl9Ev@carbon>
-References: <20220421145845.1044652-1-longman@redhat.com>
- <YmGHYNuAp8957ouq@carbon>
- <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
- <YmGbmrH/Hg1VJlUc@carbon>
- <58c41f14-356e-88dd-54aa-dc6873bf80ff@redhat.com>
- <YmIZ9Lpvx5pY3oTV@carbon>
- <YmKDCjJFYMmfa8sG@FVFYT0MHHV2J.usts.net>
+        Fri, 22 Apr 2022 11:04:28 -0400
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE3C5D647;
+        Fri, 22 Apr 2022 08:01:28 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id w5so9968134lji.4;
+        Fri, 22 Apr 2022 08:01:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fiWLR17VDpLKbRo+43T1nudbmv7jbS4IG24R19EwcNM=;
+        b=yMo/T1/vhPe4MnWmd37bbXE6AbI/jeWcL7bTy+LHTuq5eNUjFiQrvkgL+W6vbNsHdF
+         vQ93e9ME/4pman1yQ/HS/ySp9FcLlwsXwvr/AaP5Wf9LUb0nA+vBVxhsBzmwB1W3HeAA
+         CpH2pcjKl2+C6x4KTB4dZ+neEUS3eP61Ek3TOwby73/qqlYk5JZRRWl6QMZes64T3gxr
+         tT2T2o2Athoriy2eWWt8wKfO8J3PEO+93ZSlRP1sDGFFGAjeOGY3eWypIm4enbExtIPb
+         /D1l1eHgssnfswiY0JktHn04SB7i014x/iF5Ewupu7NGNGhUTXoNCEzqgNc5FKIQjWPt
+         DuVQ==
+X-Gm-Message-State: AOAM533LSXNAYLEqTp8jDh5zKJhcN70H/9NP+YYYwsfi8lzSwuYszx1G
+        D3Pq19CMqDnRFSG+Kw9hJ8JxpdwKcX1qY4xSfuQ=
+X-Google-Smtp-Source: ABdhPJz0aFWprrOW9PDtR3C4kUFYsFk3pNN4qhgIVvgnXXxHQJJWo1vSVKJNqXx7Qu5hvrI65GmkiPmE444yntBOynA=
+X-Received: by 2002:a2e:a793:0:b0:24e:e3bd:b3a8 with SMTP id
+ c19-20020a2ea793000000b0024ee3bdb3a8mr2949005ljf.457.1650639686346; Fri, 22
+ Apr 2022 08:01:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmKDCjJFYMmfa8sG@FVFYT0MHHV2J.usts.net>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220422053401.208207-1-namhyung@kernel.org> <35121321.B44TWeBT9p@milian-workstation>
+In-Reply-To: <35121321.B44TWeBT9p@milian-workstation>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 22 Apr 2022 08:01:15 -0700
+Message-ID: <CAM9d7cjU6RGMStG4YOW5D50Sx4PRia2dfzcPKxb4JLh5Q668mw@mail.gmail.com>
+Subject: Re: [RFC 0/4] perf record: Implement off-cpu profiling with BPF (v1)
+To:     Milian Wolff <milian.wolff@kdab.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        bpf <bpf@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Blake Jones <blakejones@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 06:27:22PM +0800, Muchun Song wrote:
-> On Thu, Apr 21, 2022 at 07:59:00PM -0700, Roman Gushchin wrote:
-> > On Thu, Apr 21, 2022 at 02:46:00PM -0400, Waiman Long wrote:
-> > > On 4/21/22 13:59, Roman Gushchin wrote:
-> > > > On Thu, Apr 21, 2022 at 01:28:20PM -0400, Waiman Long wrote:
-> > > > > On 4/21/22 12:33, Roman Gushchin wrote:
-> > > > > > On Thu, Apr 21, 2022 at 10:58:45AM -0400, Waiman Long wrote:
-> > > > > > > For systems with large number of CPUs, the majority of the memory
-> > > > > > > consumed by the mem_cgroup structure is actually the percpu stats
-> > > > > > > memory. When a large number of memory cgroups are continuously created
-> > > > > > > and destroyed (like in a container host), it is possible that more
-> > > > > > > and more mem_cgroup structures remained in the dying state holding up
-> > > > > > > increasing amount of percpu memory.
-> > > > > > > 
-> > > > > > > We can't free up the memory of the dying mem_cgroup structure due to
-> > > > > > > active references in some other places. However, the percpu stats memory
-> > > > > > > allocated to that mem_cgroup is a different story.
-> > > > > > > 
-> > > > > > > This patch adds a new percpu_stats_disabled variable to keep track of
-> > > > > > > the state of the percpu stats memory. If the variable is set, percpu
-> > > > > > > stats update will be disabled for that particular memcg. All the stats
-> > > > > > > update will be forward to its parent instead. Reading of the its percpu
-> > > > > > > stats will return 0.
-> > > > > > > 
-> > > > > > > The flushing and freeing of the percpu stats memory is a multi-step
-> > > > > > > process. The percpu_stats_disabled variable is set when the memcg is
-> > > > > > > being set to offline state. After a grace period with the help of RCU,
-> > > > > > > the percpu stats data are flushed and then freed.
-> > > > > > > 
-> > > > > > > This will greatly reduce the amount of memory held up by dying memory
-> > > > > > > cgroups.
-> > > > > > > 
-> > > > > > > By running a simple management tool for container 2000 times per test
-> > > > > > > run, below are the results of increases of percpu memory (as reported
-> > > > > > > in /proc/meminfo) and nr_dying_descendants in root's cgroup.stat.
-> > > > > > Hi Waiman!
-> > > > > > 
-> > > > > > I've been proposing the same idea some time ago:
-> > > > > > https://lore.kernel.org/all/20190312223404.28665-7-guro@fb.com/T/ .
-> > > > > > 
-> > > > > > However I dropped it with the thinking that with many other fixes
-> > > > > > preventing the accumulation of the dying cgroups it's not worth the added
-> > > > > > complexity and a potential cpu overhead.
-> > > > > > 
-> > > > > > I think it ultimately comes to the number of dying cgroups. If it's low,
-> > > > > > memory savings are not worth the cpu overhead. If it's high, they are.
-> > > > > > I hope long-term to drive it down significantly (with lru-pages reparenting
-> > > > > > being the first major milestone), but it might take a while.
-> > > > > > 
-> > > > > > I don't have a strong opinion either way, just want to dump my thoughts
-> > > > > > on this.
-> > > > > I have quite a number of customer cases complaining about increasing percpu
-> > > > > memory usages. The number of dying memcg's can go to tens of thousands. From
-> > > > > my own investigation, I believe that those dying memcg's are not freed
-> > > > > because they are pinned down by references in the page structure. I am aware
-> > > > > that we support the use of objcg in the page structure which will allow easy
-> > > > > reparenting, but most pages don't do that and it is not easy to do this
-> > > > > conversion and it may take quite a while to do that.
-> > > > The big question is whether there is a memory pressure on those systems.
-> > > > If yes, and the number of dying cgroups is growing, it's worth investigating.
-> > > > It might be due to the sharing of pagecache pages and this will be ultimately
-> > > > fixed with implementing of the pagecache reparenting. But it also might be due
-> > > > to other bugs, which are fixable, so it would be great to understand.
-> > > 
-> > > 
-> > > Pagecache reparenting will probably fix the problem that I have seen. Is
-> > > someone working on this?
-> > 
-> > Some time ago Muchun posted patches based on the reusing of the obj_cgroup API.
-> >
-> 
-> Yep. It is here:
-> 
-> https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/.
->  
-> > I'm not strictly against this approach, but in my opinion it's not the best.
-> > I suggested to use lru vectors as an intermediate objects. In theory, it might
-> 
-> I remember this.
-> 
-> > allow to avoid bumping reference counters for all charged pages at all: live
-> > cgroups will be protected by being live, dying cgroups will only need
-> > a temporarily protection while lru vectors and associated pages are reparenting.
-> > 
-> > There are pros and cons:
-> > + cgroup reference counting becomes simpler and more debuggable
-> > + potential perf wins from fewer operations with live cgroups css refcounters
-> > = I hope to see code simplifications (but not guaranteed)
-> > - deleting cgroups becomes more expensive, but the cost can be spread to
-> >   asynchronous workers
-> > 
-> > Idk if Muchun tried to implement it. If not, I might try myself.
-> >
-> 
-> Yep. I have implemented a initial version recently. I'll do some stability tests
-> and send it out ASAP.
+Hi Milian,
 
-Great! Looking forward to see it! And thank you for working on it!
+On Fri, Apr 22, 2022 at 3:21 AM Milian Wolff <milian.wolff@kdab.com> wrote:
+>
+> On Freitag, 22. April 2022 07:33:57 CEST Namhyung Kim wrote:
+> > Hello,
+> >
+> > This is the first version of off-cpu profiling support.  Together with
+> > (PMU-based) cpu profiling, it can show holistic view of the performance
+> > characteristics of your application or system.
+>
+> Hey Namhyung,
+>
+> this is awesome news! In hotspot, I've long done off-cpu profiling manually by
+> looking at the time between --switch-events. The downside is that we also need
+> to track the sched:sched_switch event to get a call stack. But this approach
+> also works with dwarf based unwinding, and also includes kernel stacks.
+
+Thanks, I've also briefly thought about the switch event based off-cpu
+profiling as it doesn't require root.  But collecting call stacks is hard and
+I'd like to do it in kernel/bpf to reduce the overhead.
+
+>
+> > With BPF, it can aggregate scheduling stats for interested tasks
+> > and/or states and convert the data into a form of perf sample records.
+> > I chose the bpf-output event which is a software event supposed to be
+> > consumed by BPF programs and renamed it as "offcpu-time".  So it
+> > requires no change on the perf report side except for setting sample
+> > types of bpf-output event.
+> >
+> > Basically it collects userspace callstack for tasks as it's what users
+> > want mostly.  Maybe we can add support for the kernel stacks but I'm
+> > afraid that it'd cause more overhead.  So the offcpu-time event will
+> > always have callchains regardless of the command line option, and it
+> > enables the children mode in perf report by default.
+>
+> Has anything changed wrt perf/bpf and user applications not compiled with `-
+> fno-omit-frame-pointer`? I.e. does this new utility only work for specially
+> compiled applications, or do we also get backtraces for "normal" binaries that
+> we can install through package managers?
+
+I am not aware of such changes, it still needs a frame pointer to get
+backtraces.
+
+Thanks,
+Namhyung

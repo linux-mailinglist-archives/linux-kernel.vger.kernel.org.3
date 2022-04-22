@@ -2,46 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C8A50B40A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C50A50B3EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446021AbiDVJbu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 22 Apr 2022 05:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
+        id S1379732AbiDVJYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiDVJbr (ORCPT
+        with ESMTP id S234550AbiDVJYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:31:47 -0400
-X-Greylist: delayed 518 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 02:28:54 PDT
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7292A506D3;
-        Fri, 22 Apr 2022 02:28:54 -0700 (PDT)
-Received: from smtpclient.apple (p4fefc32f.dip0.t-ipconnect.de [79.239.195.47])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 25550CECD5;
-        Fri, 22 Apr 2022 11:20:15 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC PATCH] Bluetooth: core: Allow bind HCI socket user channel
- when HCI is UP.
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <20220412120945.28862-1-vasyl.vavrychuk@opensynergy.com>
-Date:   Fri, 22 Apr 2022 11:20:14 +0200
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        BlueZ <linux-bluetooth@vger.kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vasyl Vavrychuk <vasyl.vavrychuk@opensynergy.com>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <9EA1D51C-D316-49CF-A7F8-765C58C18880@holtmann.org>
-References: <20220412120945.28862-1-vasyl.vavrychuk@opensynergy.com>
-To:     Vasyl Vavrychuk <vvavrychuk@gmail.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Fri, 22 Apr 2022 05:24:01 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A45240AF
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:21:07 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5136C21107;
+        Fri, 22 Apr 2022 09:21:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650619266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VcHdzxgim8xExk9i67eoD14TcGca5bRrmp2cE7tgzOc=;
+        b=FqF9W+zam1Rr14dYt3p2IB6x1MIoZ40QsIIVR3PZzEG65UoJMXhh15jWRsBnIG659OnRLL
+        LxHfTw9hoR0UplkhNP4i8HyT7Xc/jgqx4YXB91JAAhqvPHBi+RZUYNyCSXb6OzozoWZT03
+        8dXo5QERI3njLk2GAt4R/ezgy7RSZGw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650619266;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VcHdzxgim8xExk9i67eoD14TcGca5bRrmp2cE7tgzOc=;
+        b=LIV9j79qlV7h2Uatk9u96N36db3bV2B95997OZYk0kRSmUIwORApkR5UOc1g9gAUwGM0qj
+        +PVNzuh7w1BvA5BA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id CC02A2C146;
+        Fri, 22 Apr 2022 09:21:05 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 11:21:05 +0200
+Message-ID: <s5hee1ptqwu.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Andy Chi <andy.chi@canonical.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Enable mute/micmute LEDs support for HP Laptops
+In-Reply-To: <20220422090845.230071-1-andy.chi@canonical.com>
+References: <20220422090845.230071-1-andy.chi@canonical.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,46 +67,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vasyl,
+On Fri, 22 Apr 2022 11:08:43 +0200,
+Andy Chi wrote:
+> 
+> On HP Laptops, requires the same ALC285_FIXUP_HP_GPIO_LED quirk to
+> make its audio LEDs work.
+> 
+> So apply the quirk, and make it the last one since it's an LED quirk.
+> 
+> Signed-off-by: Andy Chi <andy.chi@canonical.com>
 
-> This is needed for user-space to ensure that HCI init scheduled from
-> hci_register_dev is completed.
-> 
-> Function hci_register_dev queues power_on workqueue which will run
-> hci_power_on > hci_dev_do_open. Function hci_dev_do_open sets HCI_INIT
-> for some time.
-> 
-> It is not allowed to bind to HCI socket user channel when HCI_INIT is
-> set. As result, bind might fail when user-space program is run early
-> enough during boot.
-> 
-> Now, user-space program can first issue HCIDEVUP ioctl to ensure HCI
-> init scheduled at hci_register_dev was completed.
-> 
-> Signed-off-by: Vasyl Vavrychuk <vasyl.vavrychuk@opensynergy.com>
-> ---
-> net/bluetooth/hci_sock.c | 4 +---
-> 1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/net/bluetooth/hci_sock.c b/net/bluetooth/hci_sock.c
-> index 33b3c0ffc339..c98de809f856 100644
-> --- a/net/bluetooth/hci_sock.c
-> +++ b/net/bluetooth/hci_sock.c
-> @@ -1194,9 +1194,7 @@ static int hci_sock_bind(struct socket *sock, struct sockaddr *addr,
-> 
-> 		if (test_bit(HCI_INIT, &hdev->flags) ||
-> 		    hci_dev_test_flag(hdev, HCI_SETUP) ||
-> -		    hci_dev_test_flag(hdev, HCI_CONFIG) ||
-> -		    (!hci_dev_test_flag(hdev, HCI_AUTO_OFF) &&
-> -		     test_bit(HCI_UP, &hdev->flags))) {
-> +		    hci_dev_test_flag(hdev, HCI_CONFIG)) {
-> 			err = -EBUSY;
-> 			hci_dev_put(hdev);
-> 			goto done;
+Thanks, applied.
 
-I am not following the reasoning here. It is true that the device has to run init before you can do something with it. From mgmt interface your device will only be announced when it is really ready.
 
-Regards
-
-Marcel
-
+Takashi

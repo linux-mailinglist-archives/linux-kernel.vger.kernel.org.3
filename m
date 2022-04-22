@@ -2,157 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D14850ADC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F4F50ADC7
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443362AbiDVCcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 22:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
+        id S1443359AbiDVCeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 22:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443333AbiDVCcc (ORCPT
+        with ESMTP id S1443337AbiDVCe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 22:32:32 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE1B2180A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 19:29:41 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id g9so6201517pgc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 19:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vnwa2/E4TTvsZNdvRU29uFcAMGoetyFfng2lxAsZyvs=;
-        b=i1aDJ+cBEN/Qi0ifvWu89VN2VtJEAI+sUbVu6CO17eUtch7Lc4hQk6+ROT49jL6OLb
-         m19kGV7c4Ku7RsiVZieFkbNkwoFiYrXk2EbJxTzXlFy+iEqdeSHMzmTrZFtYLZGehrO2
-         78TfXZ93IpSmgjFbprLy1RpRR1/MfIGKvkfleAnU/Y9ASAj+uNjV0FHWwQn3h0Hxguov
-         6uIT34XqSqtOTLHKsHxDYLoX0EfRtHrEdCLBTn4MAQdoHSznb43hyaaTXbZvzZXJjSf5
-         x5augORvT5fWzGVwH/qBPybU6plMoSpSjehao1MPjubdz6MWConLgheFyK9RQOZecART
-         hS3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vnwa2/E4TTvsZNdvRU29uFcAMGoetyFfng2lxAsZyvs=;
-        b=s4KWNXfy4quTGT85754gqoHPqRtPWEY0bPLDNDMdpijhcHXZcvfwSymWToijxE1z0b
-         Gh2DxrM5+JAenCvnQaMfWHNFd7dDgAaWrEc/ixlAvzgZpqd3oHbkXc3r2KH5IjVTQEi9
-         o+rNCMkKym0Ev1+rL8cf1nHZ/leLAv3YeGSQyabvX1XJIn6VYLU6ro4VgpE4dpQJy+vV
-         VK5Kl6yvE1e8LDm4+n1ZSjMsnlY9jy57XSF023n6e6d6e8DtKLopbakbAFEHEnEHhAAT
-         sdLaWvZegqHPgCTmGn/pNlWNSDMG3haNlhzQGxNBq/3twjy7zI67sn8LIl/oOX4T+qhm
-         9sKA==
-X-Gm-Message-State: AOAM5300dM1rrpK1GvJkW4DBew0cKBA6vaxDtGh291Cf9Ub962c4yyqy
-        It4Xzy1hf/vxTVCdzfOPkiYX0A==
-X-Google-Smtp-Source: ABdhPJy1JPBV19Zq+eQCHMebemfhqlw58lFdv0J33srKIMnQ3hu7/xkE7HYk7ATMdQ0s2RkOc08PTQ==
-X-Received: by 2002:a63:6886:0:b0:3aa:9204:d1eb with SMTP id d128-20020a636886000000b003aa9204d1ebmr2070069pgc.63.1650594580714;
-        Thu, 21 Apr 2022 19:29:40 -0700 (PDT)
-Received: from localhost ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id 130-20020a621488000000b00505e6092973sm447810pfu.68.2022.04.21.19.29.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 19:29:40 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 10:29:36 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH] mm/memcg: Free percpu stats memory of dying memcg's
-Message-ID: <YmITEEdEbaKCK3BN@FVFYT0MHHV2J.usts.net>
-References: <20220421145845.1044652-1-longman@redhat.com>
- <YmGHYNuAp8957ouq@carbon>
- <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
- <YmGbmrH/Hg1VJlUc@carbon>
- <58c41f14-356e-88dd-54aa-dc6873bf80ff@redhat.com>
+        Thu, 21 Apr 2022 22:34:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60924B409
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 19:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650594697; x=1682130697;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=78y0yrj0J9t8THX+CNky5t58FoNwsrtgOsmtpg7MFrM=;
+  b=BwYpmF1H3hu5iyvUn2bFn6D9bKSCGM3OoJkSg2Fgy+ovG0k08p9IY8EV
+   LD8EGHQ41jsla6JWhjdZEglBvP0Ht3b63wCAk4csXzvTAbm9t42JUkdUN
+   rYX8dr318FzFPmWuh/YTpCF0xmQ+ZSPFzIS8C/xPcXVjTIzn/7l309Y/5
+   tR8WywiEx1SeGa94VHgR3mPRXP1khPrvTkmLNDit5HdfPAn4e4aXRzSyB
+   a8lM8iWpmnB0mGoodmzoC116OQkX4DBQ+Sm5iRvjJqyV6WLDo+RZmDu5p
+   j5FDITH0wDen8vYRFZMyxLZlF0tX+IhjIi91lzvj+WCWDPIjUh1tlYlHq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264714053"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="264714053"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 19:31:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="562852132"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Apr 2022 19:31:35 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhj54-00097a-Sm;
+        Fri, 22 Apr 2022 02:31:34 +0000
+Date:   Fri, 22 Apr 2022 10:30:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qing Wang <wangqing@vivo.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Wang Qing <wangqing@vivo.com>
+Subject: Re: [PATCH 1/2] arch_topology: support for describing cache topology
+ from DT
+Message-ID: <202204221053.QFSQGEXr-lkp@intel.com>
+References: <1650552960-60165-2-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <58c41f14-356e-88dd-54aa-dc6873bf80ff@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <1650552960-60165-2-git-send-email-wangqing@vivo.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 02:46:00PM -0400, Waiman Long wrote:
-> On 4/21/22 13:59, Roman Gushchin wrote:
-> > On Thu, Apr 21, 2022 at 01:28:20PM -0400, Waiman Long wrote:
-> > > On 4/21/22 12:33, Roman Gushchin wrote:
-> > > > On Thu, Apr 21, 2022 at 10:58:45AM -0400, Waiman Long wrote:
-> > > > > For systems with large number of CPUs, the majority of the memory
-> > > > > consumed by the mem_cgroup structure is actually the percpu stats
-> > > > > memory. When a large number of memory cgroups are continuously created
-> > > > > and destroyed (like in a container host), it is possible that more
-> > > > > and more mem_cgroup structures remained in the dying state holding up
-> > > > > increasing amount of percpu memory.
-> > > > > 
-> > > > > We can't free up the memory of the dying mem_cgroup structure due to
-> > > > > active references in some other places. However, the percpu stats memory
-> > > > > allocated to that mem_cgroup is a different story.
-> > > > > 
-> > > > > This patch adds a new percpu_stats_disabled variable to keep track of
-> > > > > the state of the percpu stats memory. If the variable is set, percpu
-> > > > > stats update will be disabled for that particular memcg. All the stats
-> > > > > update will be forward to its parent instead. Reading of the its percpu
-> > > > > stats will return 0.
-> > > > > 
-> > > > > The flushing and freeing of the percpu stats memory is a multi-step
-> > > > > process. The percpu_stats_disabled variable is set when the memcg is
-> > > > > being set to offline state. After a grace period with the help of RCU,
-> > > > > the percpu stats data are flushed and then freed.
-> > > > > 
-> > > > > This will greatly reduce the amount of memory held up by dying memory
-> > > > > cgroups.
-> > > > > 
-> > > > > By running a simple management tool for container 2000 times per test
-> > > > > run, below are the results of increases of percpu memory (as reported
-> > > > > in /proc/meminfo) and nr_dying_descendants in root's cgroup.stat.
-> > > > Hi Waiman!
-> > > > 
-> > > > I've been proposing the same idea some time ago:
-> > > > https://lore.kernel.org/all/20190312223404.28665-7-guro@fb.com/T/ .
-> > > > 
-> > > > However I dropped it with the thinking that with many other fixes
-> > > > preventing the accumulation of the dying cgroups it's not worth the added
-> > > > complexity and a potential cpu overhead.
-> > > > 
-> > > > I think it ultimately comes to the number of dying cgroups. If it's low,
-> > > > memory savings are not worth the cpu overhead. If it's high, they are.
-> > > > I hope long-term to drive it down significantly (with lru-pages reparenting
-> > > > being the first major milestone), but it might take a while.
-> > > > 
-> > > > I don't have a strong opinion either way, just want to dump my thoughts
-> > > > on this.
-> > > I have quite a number of customer cases complaining about increasing percpu
-> > > memory usages. The number of dying memcg's can go to tens of thousands. From
-> > > my own investigation, I believe that those dying memcg's are not freed
-> > > because they are pinned down by references in the page structure. I am aware
-> > > that we support the use of objcg in the page structure which will allow easy
-> > > reparenting, but most pages don't do that and it is not easy to do this
-> > > conversion and it may take quite a while to do that.
-> > The big question is whether there is a memory pressure on those systems.
-> > If yes, and the number of dying cgroups is growing, it's worth investigating.
-> > It might be due to the sharing of pagecache pages and this will be ultimately
-> > fixed with implementing of the pagecache reparenting. But it also might be due
-> > to other bugs, which are fixable, so it would be great to understand.
-> 
-> 
-> Pagecache reparenting will probably fix the problem that I have seen. Is
-> someone working on this?
->
+Hi Qing,
 
-We also encountered dying cgroup issue on our servers for a long time.
-I have worked on this for a while and proposed a resolution [1] based
-on obj_cgroup APIs to charge the LRU pages.
+Thank you for the patch! Yet something to improve:
 
-[1] https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on driver-core/driver-core-testing linus/master arm-perf/for-next/perf v5.18-rc3 next-20220421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks.
+url:    https://github.com/intel-lab-lkp/linux/commits/Qing-Wang/Add-complex-scheduler-level-for-arm64/20220421-225748
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: arm-keystone_defconfig (https://download.01.org/0day-ci/archive/20220422/202204221053.QFSQGEXr-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/854ee80a8c32ea98203c96ba25cae2e87eeb43b1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Qing-Wang/Add-complex-scheduler-level-for-arm64/20220421-225748
+        git checkout 854ee80a8c32ea98203c96ba25cae2e87eeb43b1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/base/arch_topology.c:617:6: error: expected ';' before 'struct'
+     617 | staic struct device_node *cache_topology[NR_CPUS][MAX_CACHE_LEVEL];
+         |      ^~~~~~~
+         |      ;
+
+
+vim +617 drivers/base/arch_topology.c
+
+   612	
+   613	/*
+   614	 * cpu cache topology table
+   615	 */
+   616	#define MAX_CACHE_LEVEL 7
+ > 617	staic struct device_node *cache_topology[NR_CPUS][MAX_CACHE_LEVEL];
+   618	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

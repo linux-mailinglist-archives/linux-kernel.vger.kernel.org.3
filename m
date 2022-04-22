@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED73E50B338
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EB650B345
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445610AbiDVIvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 04:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
+        id S1445645AbiDVIvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 04:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356251AbiDVIvQ (ORCPT
+        with ESMTP id S1445629AbiDVIvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 04:51:16 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0C2532F5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:48:23 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id hh4so5040727qtb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IGUVx3hgdajCW+976w4lkM3ey7YR4mBSOm5v5Cgd+YI=;
-        b=Rt87t1uaEXp6dP43WH9rOSdXW/DJt3HVbEypwIK8wxvEwNmg9+YFwY3OQWYQ1qZLIW
-         05oQy+OZqSW/Apkh8GwKMxaBYoBNJl3rxegXLo18/Ggr3eiFTBIAPwRSiKdY0TQ4vyZ6
-         0G9HVgV0Dxc+HEg6hkSq7uuLUB3gczox1hntyexXANkioahiZM+JXMxRysPkHxswqwDH
-         RTGaWTzZ0hwHFOYGRtsD6q4I2C324EykgJtnvE2RmlWyncWQxH6ua3CzHMDFzd4w14K/
-         eQsBxft4GB1V4Bzkk1G/V7mui4Bq6Wv/mYHcvLkfGRJYF7Kr9Zzjxgv6cqYK9Znw/afn
-         CPdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IGUVx3hgdajCW+976w4lkM3ey7YR4mBSOm5v5Cgd+YI=;
-        b=qU/8AwNHU2j7JGmkwCaNM9wJpvuNnSHmy/m6nV/DMYAc4AEaIRvpOP8TecQZ5Gglpq
-         eK4WXEt92mXzbR1IzHyB2knFpDeTCcYiBnNOvdYtfBtJM99kFTGmLXMk8m9sarZ5GJXw
-         U3bE02hshBvwYapFnFCAysMoIh3fLaY+e8Q2XwLpnwngyY8TXMr5BXC2cIkImRyh9nUL
-         XqhWQAAgPmtk9STKrGPdpMXf3uSGmuJSTOG3CgkBXDH9Uta2drlms9BdShv0VxGezl7/
-         81Q4NFv/epTrM11+98MBhIgvBbHkdDCQoG7Z2n1yOhS8vBWuRoG3ZpJCI3zuRKhaFDKO
-         1LNQ==
-X-Gm-Message-State: AOAM531yzXSOMIBZTdIDYWELbj3UFaeVWYepXgJ4ihUuewfr6/ob3t7l
-        tqabPerljJL13SUZXWSxfYM=
-X-Google-Smtp-Source: ABdhPJzr7hWYaXU0TBsPXtBLdHJFpRw1vgb1lBzpx4LE93gIKwhC25ta1cHvcJ7LYNlXAssxB6i8GA==
-X-Received: by 2002:ac8:5bcd:0:b0:2f3:5b70:be82 with SMTP id b13-20020ac85bcd000000b002f35b70be82mr450524qtb.227.1650617302651;
-        Fri, 22 Apr 2022 01:48:22 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id l130-20020a37a288000000b0069e8290f28asm646998qke.97.2022.04.22.01.48.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 01:48:22 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     daniel.lezcano@linaro.org, tglx@linutronix.de
-Cc:     narmstrong@baylibre.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] clocksource/drivers/oxnas: fix error check return value of irq_of_parse_and_map()
-Date:   Fri, 22 Apr 2022 08:48:16 +0000
-Message-Id: <20220422084816.2775898-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Apr 2022 04:51:51 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7425F532FA;
+        Fri, 22 Apr 2022 01:48:59 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23M8ml8S066646;
+        Fri, 22 Apr 2022 03:48:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650617327;
+        bh=AX8xjj+2Hm5aS4A8x7AS7MlnqEHVNmBDMU7JvSp5Eys=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=y6WGrvAc30rJYGRbn0DwK5g2Mbk+tx/xJk8HfspB4y2G0XKsP0VEQVNU9Ig/zXS9A
+         sXD4JsYD98i8421qHivEg0YpWr+Swq2g39Pe6Egm8viXIpDXMtgLTa61rlvc1azjYM
+         lIt7kft+D9YXSD2GdthkBM0B7tdPA6/VXlaNTKvM=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23M8mlbh098414
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 22 Apr 2022 03:48:47 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
+ Apr 2022 03:48:46 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 22 Apr 2022 03:48:47 -0500
+Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23M8mhqv008073;
+        Fri, 22 Apr 2022 03:48:44 -0500
+Message-ID: <39358e53-e083-4e2c-a35c-d362e4cd4e5c@ti.com>
+Date:   Fri, 22 Apr 2022 14:18:43 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] arm64: dts: ti: k3-am64-mcu: remove incorrect UART
+ base clock rates
+Content-Language: en-US
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220419075157.189347-1-matthias.schiffer@ew.tq-group.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20220419075157.189347-1-matthias.schiffer@ew.tq-group.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,31 +70,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+Hi,
 
-The irq_of_parse_and_map() function returns 0 on failure, and does not
-return an negative value.
+On 19/04/22 1:21 pm, Matthias Schiffer wrote:
+> We found that (at least some versions of) the sci-fw set the base clock
+> rate for UARTs in the MCU domain to 96 MHz instead of the expected 48 MHz,
+> leading to incorrect baud rates when used from Linux.
+> 
+> As the 8250_omap driver will query the actual clock rate from the clk
+> driver when clock-frequency is unset, removing the incorrect property is
+> sufficient to fix the baud rate.
+> 
+> Fixes: 8abae9389bdb ("arm64: dts: ti: Add support for AM642 SoC")
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> ---
 
-Fixes: 	89355274e1f7 ("clocksource/drivers/oxnas-rps: Add Oxford Semiconductor RPS Dual Timer")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- drivers/clocksource/timer-oxnas-rps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
 
-diff --git a/drivers/clocksource/timer-oxnas-rps.c b/drivers/clocksource/timer-oxnas-rps.c
-index 56c0cc32d0ac..d514b44e67dd 100644
---- a/drivers/clocksource/timer-oxnas-rps.c
-+++ b/drivers/clocksource/timer-oxnas-rps.c
-@@ -236,7 +236,7 @@ static int __init oxnas_rps_timer_init(struct device_node *np)
- 	}
- 
- 	rps->irq = irq_of_parse_and_map(np, 0);
--	if (rps->irq < 0) {
-+	if (!rps->irq) {
- 		ret = -EINVAL;
- 		goto err_iomap;
- 	}
--- 
-2.25.1
 
+> 
+> v2: remove incorrect clock-frequency instead of using
+>     assigned-clock-rates to modify the base clock
+> 
+>  arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
+> index 2bb5c9ff172c..02d4285acbb8 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
+> @@ -10,7 +10,6 @@ mcu_uart0: serial@4a00000 {
+>  		compatible = "ti,am64-uart", "ti,am654-uart";
+>  		reg = <0x00 0x04a00000 0x00 0x100>;
+>  		interrupts = <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>;
+> -		clock-frequency = <48000000>;
+>  		current-speed = <115200>;
+>  		power-domains = <&k3_pds 149 TI_SCI_PD_EXCLUSIVE>;
+>  		clocks = <&k3_clks 149 0>;
+> @@ -21,7 +20,6 @@ mcu_uart1: serial@4a10000 {
+>  		compatible = "ti,am64-uart", "ti,am654-uart";
+>  		reg = <0x00 0x04a10000 0x00 0x100>;
+>  		interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
+> -		clock-frequency = <48000000>;
+>  		current-speed = <115200>;
+>  		power-domains = <&k3_pds 160 TI_SCI_PD_EXCLUSIVE>;
+>  		clocks = <&k3_clks 160 0>;

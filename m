@@ -2,220 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B5950BDEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE6D50BDF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386334AbiDVRIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S236384AbiDVRK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355052AbiDVRI3 (ORCPT
+        with ESMTP id S232597AbiDVRKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:08:29 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED99079387;
-        Fri, 22 Apr 2022 10:05:34 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e5e433d66dso9249190fac.5;
-        Fri, 22 Apr 2022 10:05:34 -0700 (PDT)
+        Fri, 22 Apr 2022 13:10:23 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2091.outbound.protection.outlook.com [40.107.92.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4508688B26;
+        Fri, 22 Apr 2022 10:07:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N8c9lvWahxIY+4Fo8RzvoVvlh+cnpjV/G8W0t6aGUDhOCeHTkJr/XDAXAok+d01IyZPd1713F98cmjKtqp7tQjBChBasDxBOjj/WnwPt387Agxw+/tyBp+sG8nGSt6cXU5FQjGHofAs2eBJ2wFsks0GuulkduoRJI176Tfm2hZYJV3nMXnfzEdjql6uoNA+vlKqTV0JP82B/ANmMcwfysBJAcz8A6qvcd2dIDsVRJbHItxYmFoqwsfDYMg4IKOWaDOb2ybfZhxQp/js3cC+JdHFKKbV+HDSh3h2jcgyYeuhFVyJKBEqlnkpkiYklpwGEKt8YYctPfqQqiFI5fWT6Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JlSbHQCIsuT8jbNKzD5u818C9g+4FJpQfh0QGNp/ZM0=;
+ b=a9+XNfBZ7Y2ovyWPrC0Ym/Rl6/OELOaLu3mVEY/7bgb/2qmtqrjAvP1tTBrPaOVWgncKI7Vx5qfH1X0bdPHeNlCnPFMrC9PfKmcpttJbEN0EWmMYGwna9eEOZCmXIJ9CwVqGbi4kf0EUDnzndgDLkKunXYax2EHDgupJYQpqIOvXMuEpCuFRiegfnFzTaIEniwoZyZLW4ECmuQ0nea5HhNYTIyp9bIPQ4wEZHZd6a4QrAH/8Pr+jNOT7y8GHfaCAyxHeODK8ZxZUSVDKYjt7FXGALa9Es4OGX1ZSLxzv2BJHBelCI6auxIZma17blRJLxvcgy2Se5n4nYfh7QYOB9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mY0tGuFElI+pBCvZypa+uhiwZDGlD+rd5RyfMzCDiwY=;
-        b=WZlDhNUU9Bv3cLd9+2BUj8PQ0W0vdOUPUmbjOUjWVaDfQ++uQetdgsjMFfM5tQA3nH
-         sCDuOGgcoexnVdriYT7wSzZfCJbgMRVjzS/zY0sm9eBjtSMplJnXlCozOQSUZuZt/R/s
-         bd/r4UiG41dF4YE96ThOOaTA0KtRp/dsKV/PzUOQiC8g8n5LxQWGIXxcSy6NwpEaGeZd
-         8B/yftIZJl8x1Gt9EJXz5WpTY43u/pqfRC5abtUKCtKu1leMlOXnw6fNpSNlvPScI5gf
-         mdiun0U49jszbERlNzo3xDzRuqVbk/oT44mXcwf5hBePbqplV9DIZqHZjSAqPA09ahwa
-         M3kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=mY0tGuFElI+pBCvZypa+uhiwZDGlD+rd5RyfMzCDiwY=;
-        b=fAbTxITYL11oPwN049xVLEy0Ti/ZUFMhOBuJUa3k/KMxZhY254oUtzxyAxnnqu3Ujf
-         SmFrGnC7WKYziqCCfB0+YYWV5PcdFTwHLT1SwmawXQCgXUb1KKmwc564QS4TGSudGpBU
-         OY8Zaz/73rB2GdpMMY38r0yuSsDisiQuuzYkC8GlJi99Hxy2ej6ji8fYF3MmawGx2kjz
-         6Z7PwVlRrcvfFsY2sAEA/7EkRxKCHnT85g0BLoIDgsNNEkjyo8N7I/dwW/qwVW4K656c
-         A2CpTZINZJHcdoxnDgAh3kIQqcOYvj8iSlPU2duh8L86RLeHirb6iQvT2N6+I0smq4B5
-         u6iQ==
-X-Gm-Message-State: AOAM530yej6Nm4zuZOoPRTeDNJMpfu2tlv6tIcRAMqT/l6i0rCo1lhrg
-        xt9MzYTAzX0Rfxss0QNd3iI=
-X-Google-Smtp-Source: ABdhPJwyV4g1eWudYtD/hcz6EJxOYDu09EkjJlhrgLVZDzcFDGxflUVQ6LGY40Te5XJPDjVadkCTWg==
-X-Received: by 2002:a05:6870:1607:b0:de:984:496d with SMTP id b7-20020a056870160700b000de0984496dmr6469615oae.253.1650647133866;
-        Fri, 22 Apr 2022 10:05:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056808056900b0032252797ea4sm971770oig.6.2022.04.22.10.05.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 10:05:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 22 Apr 2022 10:05:30 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-Message-ID: <20220422170530.GA2338209@roeck-us.net>
-References: <20220419163810.2118169-1-arnd@kernel.org>
-MIME-Version: 1.0
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JlSbHQCIsuT8jbNKzD5u818C9g+4FJpQfh0QGNp/ZM0=;
+ b=pYn0gsnpQM1LIjYHVezDc9Gevm3lcXmj+6otLZN6M2fNYjCTk+S3ISOLbQHcuTUXjsTBrKLdHZ8TSdynplVywfNLNAG3f9fEdJJ0mqO8Y9s4D5WdL9DA8sXQOBp1N31dFzlfYn0rEOH/jVZ0wKTZO9sIvMGT5AxkIvGJeKhAj/0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SA0PR01MB6329.prod.exchangelabs.com (2603:10b6:806:ee::12) by
+ BL0PR0102MB3554.prod.exchangelabs.com (2603:10b6:207:35::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5164.25; Fri, 22 Apr 2022 17:07:19 +0000
+Received: from SA0PR01MB6329.prod.exchangelabs.com
+ ([fe80::ec31:ecc0:58a6:25b6]) by SA0PR01MB6329.prod.exchangelabs.com
+ ([fe80::ec31:ecc0:58a6:25b6%3]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 17:07:18 +0000
+Date:   Fri, 22 Apr 2022 10:07:15 -0700
+From:   Darren Hart <darren@os.amperecomputing.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Quan Nguyen <quan@os.amperecomputing.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thu Nguyen <thu@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v8 3/9] misc: smpro-errmon: Add Ampere's SMpro error
+ monitor driver
+Message-ID: <YmLgwwbVMFwViYBg@fedora>
+References: <20220422024653.2199489-1-quan@os.amperecomputing.com>
+ <20220422024653.2199489-4-quan@os.amperecomputing.com>
+ <YmJJIb1DAIq5arCw@kroah.com>
+ <82a6452a-965b-7fbe-eba2-919f0a6ed73a@os.amperecomputing.com>
+ <YmLCcFrrobUJtiLI@kroah.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419163810.2118169-1-arnd@kernel.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YmLCcFrrobUJtiLI@kroah.com>
+X-ClientProxiedBy: MW4PR04CA0248.namprd04.prod.outlook.com
+ (2603:10b6:303:88::13) To SA0PR01MB6329.prod.exchangelabs.com
+ (2603:10b6:806:ee::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b4a4d520-622a-49b1-6857-08da24828e23
+X-MS-TrafficTypeDiagnostic: BL0PR0102MB3554:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR0102MB355400857FF0FECF0A328C1DF7F79@BL0PR0102MB3554.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2XAxJrcEqc7RBV0R/Ngq9tw90niSFz906d1YfHStAhdtuWXNuZwrxD1RPt0BODMRMJgSBnvywKGH/G/TQOpZVIWiEn2PdpUVVlYYG1F+bBG41aPbXtlR03ElgsOwef0LswoUQQg9o0MoqlkurIhNIhAeWmfeM9DoSZ8Tl5FauH2zSwUnslacg5UENtpyHWDevMmSVl5X2WM2uax2wegUVKeAf8fnfNBBjHwrWd8UzNYvWPp9HHlmqyQSo4EJ5aeZgrX4Pn2HzkqG/0gUFSVz0Lm02nd4e0Gz3rxlobv4Hj2e6Ms/TRFBiF28wPEEDA8nek9l3VXJ0FZJX740BsGb2DuhkwmOhicbKod/KA9aBawG7Uh+LOpnNWU3oN7H1zNt7uuK49BZ1G2x1XE+SfI0nN56bC/GYhZx3aO/ms0dgZA0D/QwlaIX8LGtEfvXKMUAAJblHYxPOwk7LkP9jOqWbNzZvYeRS4MryE4PXnCth1E9SbO0OKsfMd6Mie2+asrJBpphCrpIuwaY25M5SmkDXRhcAS979F4ePIeBWvzldmfYtYah5L1hS6UyA80r+OYoCbibdNjL7JgFzWc/d9aCS3UQ+n7GpOxbItZht/51XyzCJ3/8Elw6N/wNtJ479WXqV0JWCC+bu1aW0dVwv8LCyubVV3VeYNSSOM+TQWdoddqPFnExLd3Y/aNz3rtoltR6qHGQkHpNDug6XAlHszi+9g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR01MB6329.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(38100700002)(53546011)(86362001)(52116002)(8676002)(5660300002)(38350700002)(7416002)(8936002)(4326008)(33716001)(316002)(54906003)(6486002)(508600001)(66476007)(6916009)(66556008)(66946007)(186003)(6666004)(6512007)(107886003)(26005)(9686003)(6506007)(2906002)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?orwUsD8QBylfjPADMjmkiW5Rf7uecyN1zow4hvMn5AviB2bC4lzC71K7Ki5K?=
+ =?us-ascii?Q?LrHVvn3Dlb2PV5hKS2uWy1S9r2aaYZzoev3cNnaRkePRY24hDmAoZQv8gJXF?=
+ =?us-ascii?Q?VHehHUS3yzcEX3lxVW8T4HSqREorJ1SZ59IUEXWVGqhlzgZWB2ulPUN5jzp7?=
+ =?us-ascii?Q?uhz4IxMNOEZWUttpBoTdciv5CMH5R4qdlAGv+lxkNcPhX3KWonQcpqjfQVKU?=
+ =?us-ascii?Q?UBEBO/spGgcomK8mHsigKKzt+FH4daUDTs/nVUe41QIGncChFzAj1xZbwO5O?=
+ =?us-ascii?Q?w2lqgCgsVhIh9huRVifkO8UhecQiiqHblGV+7zyccUNGiAs0IkGo4k0+Vy/g?=
+ =?us-ascii?Q?wlzemAbh/3S2lHy9mvMcdYerLfRzlVM8Bnp53A7m5HBHoorrfsvYtRQ8fch3?=
+ =?us-ascii?Q?En0YWZsVDEhv38+OlbTqQig3qBATLO4XDl6GStZVdhNfTScfsBQWSSanccov?=
+ =?us-ascii?Q?PQngXxKenKSdfvv5xF3FlahrtGTpfm/9afMZBCH7948075GWhmvppRx2MyiK?=
+ =?us-ascii?Q?N5IQW6D/qh3HT2BaQE3rang5++gO59kaZjnWnWmHHzcT2UCd27377F6ZXwSo?=
+ =?us-ascii?Q?SZGhJHUDnkVnmYK5gpSm5v7bXPVaa2LdRkng1ukgJZ4P1A30xg9jvj/cT2NL?=
+ =?us-ascii?Q?PXegKv9eHm27fTC1oeMMAEumwFc2uRDZeQKEutsIC4MGhe6PIwj2sHFqb3h3?=
+ =?us-ascii?Q?TICdr5r4l3nPia7UEvZUvdeVwjTmuApYwogpAUcW3Fe2j8AQR+TXLRMbraMv?=
+ =?us-ascii?Q?X2mVv7dJZmda0gi37+Rgj5BOQLbOdHLOKbDwdfCGRFhi5ikF5fuz84XC5/Jp?=
+ =?us-ascii?Q?KSjHHCLqqPhJ5NQ+m3V5/tM4End/oCLrrkH5Klk1PTwxsrvLgHJivz4n+8dW?=
+ =?us-ascii?Q?U5WGlk1+bnkFMTzyMM2ZH6Fz6sMzTZp2FopzwsdJNzMFIUkiDcQaDToxrFxA?=
+ =?us-ascii?Q?zhSFEMyGUS/7wAwkzCm+8QHwzG/w+lQayvfnBKUY++ZhrKyoX3A4eI1E0vqe?=
+ =?us-ascii?Q?VJwkVsyc3tN9mVOxsU7hA00vP5cI6GRM337Hoo4kXpFns3w7HI/S1yOSf7xH?=
+ =?us-ascii?Q?HDuQ9gs71m9kxrql3LNOdmlSZ/jtZAGIhK77PAyR0WZZHBV8URaCXroU+7Oo?=
+ =?us-ascii?Q?HAztGDwzUsfdeywcceCBD0IHNZqDvq3G2ZEdyaPz/axZvIHGziWMPY3IkBZJ?=
+ =?us-ascii?Q?mlNuy7Ndyi9eBYNsiWUegzGnsYKdSqEIxrw5OO4VaoIXABxQuHeo0zopy6i2?=
+ =?us-ascii?Q?vQFKSN0vDX40AZAqmJ+zkSXxn3FHd58BfbhiMw8L6ahJzdzbKU+XfM5/sYjn?=
+ =?us-ascii?Q?mR/Jk1YZWb4XFS8wUzOUEZnUvUngXe5RmBwT4dmXfeOV363CZTZPrtb3fQgq?=
+ =?us-ascii?Q?UDfEwb7oLkkEtzBv+Sl1rcO41JPDXoRM7xHEuEto3PDJBjfKteoAg2iW5WRS?=
+ =?us-ascii?Q?iAVyk2hmAQXD0iizRXPTy2UDAj7lWcWgy3u3pIRdpeqXH32uFbYiiDKG7cz/?=
+ =?us-ascii?Q?T9u8isMZj+w5AOdEvn6nwtWQvQA1p7LJ+BuQzir2cbLaYmqIxVsjhHOFW0lo?=
+ =?us-ascii?Q?rBsPnDiGNEBkDOdsbHubcyFpbIAirKqdY7UNoh51Vv+bDbWKYjUn7P76Tio6?=
+ =?us-ascii?Q?OpXHMWRe2DL6Qr0mnZ7msRR0eUBvxgy+4wOY8kJ2gXyuKgx5F9mplBUMVioe?=
+ =?us-ascii?Q?7b0vyj00TQO1LE+70Y52vYsNb4ZVhhECZg4jUYSmSe4orHF1+hgj9WfirDSj?=
+ =?us-ascii?Q?R/2Gjgjcm6TkS2pNfXViCDesXm7/k28Rsw3ZFHMJa7ixzR5TdTm9?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4a4d520-622a-49b1-6857-08da24828e23
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR01MB6329.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 17:07:18.7084
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 78REwfForVMq4WUovvJ9QPlDLL2SP8YBA3rmmQcj+pJZ0n6bVQkhhIaWoXjUzyA8mUYhbCsu1UeGcOANfXs0GgvZ2D7ypPN0kxX0Z38lik2LM0pposKAkyyhhhD0C82h
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR0102MB3554
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 06:37:22PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Apr 22, 2022 at 04:57:52PM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Apr 22, 2022 at 09:43:39PM +0700, Quan Nguyen wrote:
+> > On 22/04/2022 13:20, Greg Kroah-Hartman wrote:
+> > > On Fri, Apr 22, 2022 at 09:46:47AM +0700, Quan Nguyen wrote:
+> > > > This commit adds Ampere's SMpro error monitor driver for monitoring
+> > > > and reporting RAS-related errors as reported by SMpro co-processor
+> > > > found on Ampere's Altra processor family.
+> > > > 
+> > > > Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> > > > ---
+> > > > Changes in v8:
+> > > >    + Update wording for SMPRO_ERRMON on Kconfig file             [Quan]
+> > > >    + Avoid uninitialized variable use               [kernel test robot]
+> > > >    + Switch to use sysfs_emit()                                  [Greg]
+> > > >    + Make sysfs to return single value                           [Greg]
+> > > >    + Change errors_* sysfs to error_*                            [Quan]
+> > > >    + Add overflow_[core|mem|pcie|other]_[ce|ue] sysfs to report
+> > > >    overflow status of each type of HW errors                     [Quan]
+> > > >    + Add some minor refactor                                     [Quan]
+> > > > 
+> > > > Changes in v7:
+> > > >    + Remove regmap_acquire/release_lock(), read_i2c_block_data() [Quan]
+> > > >    + Use regmap_noinc_read() instead of errmon_read_block()      [Quan]
+> > > >    + Validate number of errors before read                       [Quan]
+> > > >    + Fix wrong return type of *_show() function     [kernel test robot]
+> > > >    + Adjust patch order to avoid dependence with smpro-mfd  [Lee Jones]
+> > > >    + Use pointer instead of stack memory                         [Quan]
+> > > > 
+> > > > Changes in v6:
+> > > >    + First introduced in v6 [Quan]
+> > > > 
+> > > >   drivers/misc/Kconfig        |  12 +
+> > > >   drivers/misc/Makefile       |   1 +
+> > > >   drivers/misc/smpro-errmon.c | 477 ++++++++++++++++++++++++++++++++++++
+> > > >   3 files changed, 490 insertions(+)
+> > > >   create mode 100644 drivers/misc/smpro-errmon.c
+> > > > 
+> > > > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> > > > index 41d2bb0ae23a..9fbe6797c440 100644
+> > > > --- a/drivers/misc/Kconfig
+> > > > +++ b/drivers/misc/Kconfig
+> > > > @@ -176,6 +176,18 @@ config SGI_XP
+> > > >   	  this feature will allow for direct communication between SSIs
+> > > >   	  based on a network adapter and DMA messaging.
+> > > > +config SMPRO_ERRMON
+> > > > +	tristate "Ampere Computing SMPro error monitor driver"
+> > > > +	depends on MFD_SMPRO || COMPILE_TEST
+> > > > +	help
+> > > > +	  Say Y here to get support for the SMpro error monitor function
+> > > > +	  provided by Ampere Computing's Altra and Altra Max SoCs. Upon
+> > > > +	  loading, the driver creates sysfs files which can be use to gather
+> > > > +	  multiple HW error data reported via read and write system calls.
+> > > > +
+> > > > +	  To compile this driver as a module, say M here. The driver will be
+> > > > +	  called smpro-errmon.
+> > > > +
+> > > >   config CS5535_MFGPT
+> > > >   	tristate "CS5535/CS5536 Geode Multi-Function General Purpose Timer (MFGPT) support"
+> > > >   	depends on MFD_CS5535
+> > > > diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> > > > index 70e800e9127f..483308a6e113 100644
+> > > > --- a/drivers/misc/Makefile
+> > > > +++ b/drivers/misc/Makefile
+> > > > @@ -23,6 +23,7 @@ obj-$(CONFIG_ENCLOSURE_SERVICES) += enclosure.o
+> > > >   obj-$(CONFIG_KGDB_TESTS)	+= kgdbts.o
+> > > >   obj-$(CONFIG_SGI_XP)		+= sgi-xp/
+> > > >   obj-$(CONFIG_SGI_GRU)		+= sgi-gru/
+> > > > +obj-$(CONFIG_SMPRO_ERRMON)	+= smpro-errmon.o
+> > > >   obj-$(CONFIG_CS5535_MFGPT)	+= cs5535-mfgpt.o
+> > > >   obj-$(CONFIG_GEHC_ACHC)		+= gehc-achc.o
+> > > >   obj-$(CONFIG_HP_ILO)		+= hpilo.o
+> > > > diff --git a/drivers/misc/smpro-errmon.c b/drivers/misc/smpro-errmon.c
+> > > > new file mode 100644
+> > > > index 000000000000..df7d8fc4ff3f
+> > > > --- /dev/null
+> > > > +++ b/drivers/misc/smpro-errmon.c
+> > > > @@ -0,0 +1,477 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0+
+> > > 
+> > > Are you sure you mean "or any later version"?  I have to ask.
+> > > 
+> > 
+> > Thank Greg for the review.
+> > 
+> > Will change all to SPDX-License-Identifier: GPL-2.0-or-later in next
+> > version.
 > 
-> This revisits a series I sent a few years ago:
-> 
-> https://lore.kernel.org/lkml/20191018154052.1276506-1-arnd@arndb.de/
-> 
-> All the other ARMv5 conversions are under way now, with
-> OMAP1 being the only one still not in linux-next yet,
-> and PXA completing the set.
-> 
-> Most of the patches are unchanged from before, furtunately
-> the PXA code is fairly stable. I addressed Robert's comments,
-> pulled in two patches from Dmitry, and added the last a the
-> final four patches to finish off the multiplatform conversion.
-> 
-> I hope someone is left to test these on PXA: if this works,
-> I'd like to merge it for 5.19. A git tree with these is avaialable
-> for testing at
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=pxa-multiplatform-5.18
-> 
+> That is not what I am asking (the SPDX tag format).  I mean, do you
+> really mean "or later" for your license as that is not the license of
+> the kernel overall?  If so, wonderful, but I have to ask that as your
+> legal group needs to be aware of it, sorry.
 
-Unfortunately that crashes for me when trying to boot from ide.
-Bisect points to the last patch of the series.
+Generally speaking we should be sticking with the standard license for projects
+we engage with, in this case "GPL-2.0".
 
-Guenter
+Quan, unless you have heard differently or have a specific reason to include the
+"+", please drop from the next version. If you do feel the "+" is required,
+let's have an internal conversation about that.
 
----
-[    1.403715] 8<--- cut here ---
-[    1.403848] Unable to handle kernel paging request at virtual address feeb000e
-[    1.404097] [feeb000e] *pgd=00000000
-[    1.404400] Internal error: Oops: 805 [#1] PREEMPT ARM
-[    1.404648] Modules linked in:
-[    1.404890] CPU: 0 PID: 22 Comm: pccardd Not tainted 5.18.0-rc3-next-20220422 #1
-[    1.405159] Hardware name: SHARP Borzoi
-[    1.405319] PC is at pcmcia_init_one+0xf8/0x27c
-[    1.405476] LR is at devres_add+0x40/0x6c
-[    1.405611] pc : [<c04bdea0>]    lr : [<c044d808>]    psr: a0000113
-[    1.405846] sp : c48a5d00  ip : c15f4220  fp : 60000113
-[    1.406026] r10: 00000000  r9 : c48b000e  r8 : c48b0000
-[    1.406195] r7 : feeb0000  r6 : feeb000e  r5 : c15ec090  r4 : c15ec020
-[    1.406395] r3 : 00000002  r2 : 00000000  r1 : c15f4200  r0 : feeb000e
-[    1.406615] Flags: NzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-[    1.406847] Control: 00007977  Table: a0004000  DAC: 00000071
-[    1.407042] Register r0 information: 0-page vmalloc region starting at 0xfee00000 allocated at pci_reserve_io+0x0/0x38
-[    1.407453] Register r1 information: slab
-[    1.407721] Register r2 information: NULL pointer
-[    1.407885] Register r3 information: non-paged memory
-[    1.408047] Register r4 information: slab
-[    1.408179] Register r5 information: slab
-[    1.408310] Register r6 information: 0-page vmalloc region starting at 0xfee00000 allocated at pci_reserve_io+0x0/0x38
-[    1.408622] Register r7 information: 0-page vmalloc region starting at 0xfee00000 allocated at pci_reserve_io+0x0/0x38
-[    1.408941] Register r8 information: 0-page vmalloc region starting at 0xc48b0000 allocated at soc_pcmcia_add_one+0xf0/0x370
-[    1.409291] Register r9 information: 0-page vmalloc region starting at 0xc48b0000 allocated at soc_pcmcia_add_one+0xf0/0x370
-[    1.409617] Register r10 information: NULL pointer
-[    1.409768] Register r11 information: non-paged memory
-[    1.409924] Register r12 information: slab
-[    1.410066] Process pccardd (pid: 22, stack limit = 0x(ptrval))
-[    1.410268] Stack: (0xc48a5d00 to 0xc48a6000)
-[    1.410448] 5d00: c15ebb78 00000000 0000001a 00000110 00000000 c0ad702c ff00051a c15ec090
-[    1.410694] 5d20: c0b713ec c0b713ec c12f6048 c0b644fc 00000000 00000000 60000113 c053f6bc
-[    1.410938] 5d40: c16b3bf0 c15efa88 c09d4e48 00000001 00000007 00000200 0000000f 00000000
-[    1.411174] 5d60: 00000000 00000000 c0b71300 c0ad702c c0b644fc 00000000 c15ec090 c0b713ec
-[    1.411410] 5d80: c0b9f980 c04491a8 c15ec090 00000000 60000113 c15ec090 c0b713ec c15ec090
-[    1.411644] 5da0: 00000003 c0449530 c078a988 c0399c90 ffffff08 c0be4d7c c0b713ec c15ec090
-[    1.411882] 5dc0: 00000003 c0b644fc 00000000 00000000 60000113 c04496e0 00000001 c0b713ec
-[    1.412117] 5de0: c48a5e2c c15ec090 c0b644fc c0449aa0 00000000 c48a5e2c c04499fc c0be4d50
-[    1.412352] 5e00: c0b644fc c044702c 00000000 c12f407c c16b3bd4 c0ad702c c15ec090 00000001
-[    1.412587] 5e20: c15ec0d4 c0449030 c15ec090 c15ec090 00000001 c0ad702c c15ec090 c15ec090
-[    1.412827] 5e40: c0b77a9c c0448044 c15ec090 00000000 c12f5030 c04458bc 00000001 c009c720
-[    1.413065] 5e60: c15ec090 c04590e4 c15ec090 00000002 c12f6048 c12f6150 c15ec088 c0ad702c
-[    1.413307] 5e80: c15ec090 c15ec020 c12f6150 c12f6048 c12f6150 c15ec088 c15ec090 c12f6160
-[    1.413551] 5ea0: 60000113 c0540820 00000000 c12f6048 c12f6150 ffffffe4 c12f6178 c12f6900
-[    1.413804] 5ec0: c0bb6828 c05409e8 00000000 00000011 c12f6048 00000000 c12f6150 c0ba35c8
-[    1.414050] 5ee0: c12f6178 c12f6900 c0bb6828 c074c3a8 c48a5f04 c0ad702c c48a5f10 c074c44c
-[    1.414294] 5f00: c098de10 c09acdc0 c12f4fa0 c48a5f1c 000031d0 c0ad702c c12f6048 c12f6048
-[    1.414538] 5f20: 00000000 c12f6150 c0ba35c8 c0540af8 c12f6048 00000000 c12f6150 c053dcd4
-[    1.414791] 5f40: c12f6048 00000000 00000080 c12f6144 c12f6900 c053e704 00000000 c12f6178
-[    1.415037] 5f60: 000030d0 c0ad702c c12f6900 c12f4fe0 c12f21a0 c053e36c c12f6048 c12f6900
-[    1.415282] 5f80: c4809cc0 00000000 00000000 c004d67c c12f4fe0 c004d5a0 00000000 00000000
-[    1.415531] 5fa0: 00000000 00000000 00000000 c0008368 00000000 00000000 00000000 00000000
-[    1.415780] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    1.416025] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
-[    1.416643]  pcmcia_init_one from pcmcia_device_probe+0xe4/0x2a0
-[    1.416882]  pcmcia_device_probe from really_probe+0xc8/0x3b4
-[    1.417070]  really_probe from __driver_probe_device+0x9c/0x214
-[    1.417255]  __driver_probe_device from driver_probe_device+0x38/0xe0
-[    1.417454]  driver_probe_device from __device_attach_driver+0xa4/0x11c
-[    1.417657]  __device_attach_driver from bus_for_each_drv+0x88/0xd8
-[    1.417864]  bus_for_each_drv from __device_attach+0xf4/0x194
-[    1.418047]  __device_attach from bus_probe_device+0x8c/0x94
-[    1.418224]  bus_probe_device from device_add+0x3d0/0x894
-[    1.418395]  device_add from pcmcia_device_add+0x2ec/0x3e0
-[    1.418568]  pcmcia_device_add from pcmcia_card_add+0xd4/0x1a0
-[    1.418756]  pcmcia_card_add from pcmcia_bus_add+0x44/0x4c
-[    1.418930]  pcmcia_bus_add from socket_insert+0x12c/0x150
-[    1.419103]  socket_insert from pccardd+0x398/0x44c
-[    1.419257]  pccardd from kthread+0xdc/0x114
-[    1.419400]  kthread from ret_from_fork+0x14/0x2c
-[    1.419569] Exception stack(0xc48a5fb0 to 0xc48a5ff8)
-[    1.419735] 5fa0:                                     00000000 00000000 00000000 00000000
-[    1.419979] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    1.420222] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    1.420501] Code: 13570000 e1a06000 0a000043 e3a03002 (e5c03000)
-[    1.420874] ---[ end trace 0000000000000000 ]---
+Apologies for missing that in earlier reviews.
 
----
-# bad: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
-# good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
-git bisect start 'HEAD' 'v5.18-rc1'
-# good: [9b03d7f95bd4d97101ecb8ea1e822103b81fdb2d] ARM: pxa: mainstone-wm97xx: use gpio lookup table
-git bisect good 9b03d7f95bd4d97101ecb8ea1e822103b81fdb2d
-# good: [764063eee7620ea9abb940068a7ad0e7f9efa1b6] cpufreq: pxa3: move clk register access to clk driver
-git bisect good 764063eee7620ea9abb940068a7ad0e7f9efa1b6
-# good: [5153474f0a4388b7ddb59add4be73bfb42b2007f] ARM: mmp: remove tavorevb board support
-git bisect good 5153474f0a4388b7ddb59add4be73bfb42b2007f
-# good: [2746f7c78b428c8b01b691a29a972c08101ae343] ARM: PXA: fix multi-cpu build of xsc3
-git bisect good 2746f7c78b428c8b01b691a29a972c08101ae343
-# good: [73d5106e9489464eac84362705e93bcf3b376123] ARM: pxa: remove support for MTD_XIP
-git bisect good 73d5106e9489464eac84362705e93bcf3b376123
-# first bad commit: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
+Thanks,
+
+-- 
+Darren Hart
+Ampere Computing / OS and Kernel

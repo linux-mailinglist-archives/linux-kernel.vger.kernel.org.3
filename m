@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC9850AD3A
+	by mail.lfdr.de (Postfix) with ESMTP id EAB3C50AD3B
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 03:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443069AbiDVBdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 21:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S1443062AbiDVBdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 21:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443059AbiDVBd0 (ORCPT
+        with ESMTP id S236892AbiDVBdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 21:33:26 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8AE4990A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 18:30:34 -0700 (PDT)
+        Thu, 21 Apr 2022 21:33:25 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C03649687
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 18:30:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650591034; x=1682127034;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3k2qXYWOLVFM/z5sIkslOyGvLMSj+q4CmmEvjHeetaQ=;
-  b=R07JI9RYnmUPVWxKbgG4tDnEczfbUpk2qR71phSWBjgIvSX59krjcH7N
-   jqY+ZfyIiXMj0hFKWp4DAKYzRHWEZcDAfgZN+VlgAOa7leW4cURXvGNQ/
-   0PuPjFlZOGJh+NG1VcQb+a44GPCD+QABo6daWj5blWLTrbNfSwjWpoP5K
-   hHe+IMCH6y8bpt0/FG8bn+atedSVBO1RdgWgYqWq04S/nK78GMezEcjPM
-   +tBDCHrdA5dqQS6daUhyFjgL9pTUcA3PEHdOE23GYRFWX6o9osbZvYy46
-   6gf1CSGG5lGRJLtWNQMR8okxcrLWGCoKTa3K0veCJ0vL5wVQ8Yt+seFxn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245109312"
+  t=1650591033; x=1682127033;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oQbcdbZZOUCC2NC/bNLGQRnN+pkXa+YSnk7xuSuLn5c=;
+  b=ebg+ZMOUMnZay/vf6rNLy6Dcn6cYPmoMAo/+lUn0BB3IVo36BUMQAo8U
+   IjETVfJ+XVLca4UkYVEXTJU9d+L0ahRlngfzvqQNVue8Q48ApEJlFpIjF
+   mw9+D4R6UOQ59JCRN+QXia3CWSkJrDiIfQVj9nLt8VmS4q78HOU+3ITBc
+   1URoV3eBBX2zS2erBb83vmyFTlNhIj2wCZwtqA/JUbWDcU4JEiv5OKequ
+   I0ckvqfOP8/Lcxq7R5H8iBFrllEmkAOCzT4g/DsAKNon5PrAQtVVsVdZQ
+   CPaGag/9GcXpRskF18RyAblrYH3+y5ecA8VrsmjMXeTX4f9+TbPaSq3IQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="324982882"
 X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="245109312"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 18:30:34 -0700
+   d="scan'208";a="324982882"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 18:30:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="577583833"
+   d="scan'208";a="615184753"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 21 Apr 2022 18:30:31 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 21 Apr 2022 18:30:31 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nhi7y-00094F-Qq;
+        id 1nhi7y-00094A-N1;
         Fri, 22 Apr 2022 01:30:30 +0000
-Date:   Fri, 22 Apr 2022 09:29:42 +0800
+Date:   Fri, 22 Apr 2022 09:29:44 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     kbuild-all@lists.01.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        daire.mcnamara@microchip.com, lewis.hanly@microchip.com,
-        cyril.jean@microchip.com, Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 3/4] riscv: select vitesse phy driver for polarfire soc
-Message-ID: <202204220928.KoW0NzCu-lkp@intel.com>
-References: <20220421085805.1220195-4-conor.dooley@microchip.com>
+To:     Fangzhi Zuo <Jerry.Zuo@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c:117:18:
+ warning: variable 'channels' set but not used
+Message-ID: <202204220950.PWka9oJf-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421085805.1220195-4-conor.dooley@microchip.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,93 +62,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Hi Fangzhi,
 
-I love your patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.18-rc3 next-20220421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Conor-Dooley/polarfire-soc-kconfig-maintainers-updates/20220421-172138
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b253435746d9a4a701b5f09211b9c14d3370d0da
-config: riscv-randconfig-r005-20220420 (https://download.01.org/0day-ci/archive/20220422/202204220928.KoW0NzCu-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b05a5683eba6e2d40eadd5eeef53c4864149a4fe
+commit: 61452908a79ec936660494fb4b9f2a35ee42e6e0 drm/amd/display: Add DP 2.0 Audio Package Generator
+date:   8 months ago
+config: powerpc64-randconfig-r033-20220420 (https://download.01.org/0day-ci/archive/20220422/202204220950.PWka9oJf-lkp@intel.com/config)
+compiler: powerpc64le-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/dc055eafe9cad74b3b01bed537c6f1496cddabe4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Conor-Dooley/polarfire-soc-kconfig-maintainers-updates/20220421-172138
-        git checkout dc055eafe9cad74b3b01bed537c6f1496cddabe4
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=61452908a79ec936660494fb4b9f2a35ee42e6e0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 61452908a79ec936660494fb4b9f2a35ee42e6e0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   init/main.o: in function `initcall_blacklisted':
-   main.c:(.text+0x4): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
-   init/main.o: in function `set_reset_devices':
-   main.c:(.init.text+0x0): relocation truncated to fit: R_RISCV_HI20 against symbol `reset_devices' defined in .sbss section in init/main.o
-   init/main.o: in function `run_init_process':
-   main.c:(.text.unlikely+0x4): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
-   init/main.o: in function `rest_init':
-   (.ref.text+0x10): relocation truncated to fit: R_RISCV_HI20 against `kernel_init'
-   init/do_mounts.o: in function `rootfs_init_fs_context':
-   do_mounts.c:(.text+0x4): relocation truncated to fit: R_RISCV_HI20 against `.LC1'
-   init/do_mounts.o: in function `.L6':
-   do_mounts.c:(.init.text+0x48): relocation truncated to fit: R_RISCV_HI20 against `root_wait'
-   init/do_mounts_initrd.o: in function `no_initrd':
-   do_mounts_initrd.c:(.init.text+0x0): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
-   init/initramfs.o: in function `wait_for_initramfs':
-   (.text+0x0): relocation truncated to fit: R_RISCV_HI20 against `initramfs_cookie'
-   init/initramfs.o: in function `error':
-   initramfs.c:(.init.text+0x0): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
-   init/calibrate.o: in function `read_current_timer.isra.0':
-   calibrate.c:(.text+0x0): relocation truncated to fit: R_RISCV_HI20 against symbol `clint_time_val' defined in .sbss section in drivers/clocksource/timer-clint.o
-   init/calibrate.o: in function `lpj_setup':
-   calibrate.c:(.init.text+0x12): additional relocation overflows omitted from the output
-   riscv64-linux-ld: drivers/net/phy/vitesse.o: in function `phy_write':
-   vitesse.c:(.text+0x10): undefined reference to `mdiobus_write'
-   riscv64-linux-ld: drivers/net/phy/vitesse.o: in function `vsc73xx_config_init':
-   vitesse.c:(.text+0x3e): undefined reference to `phy_modify'
-   riscv64-linux-ld: vitesse.c:(.text+0x64): undefined reference to `phy_modify'
-   riscv64-linux-ld: drivers/net/phy/vitesse.o: in function `vsc739x_config_init':
-   vitesse.c:(.text+0x8e): undefined reference to `phy_modify'
-   riscv64-linux-ld: vitesse.c:(.text+0xbe): undefined reference to `phy_modify'
-   riscv64-linux-ld: vitesse.c:(.text+0xd2): undefined reference to `phy_modify'
-   riscv64-linux-ld: drivers/net/phy/vitesse.o:vitesse.c:(.text+0xfe): more undefined references to `phy_modify' follow
-   riscv64-linux-ld: drivers/net/phy/vitesse.o: in function `vsc739x_config_init':
-   vitesse.c:(.text+0x19e): undefined reference to `mdiobus_read'
-   riscv64-linux-ld: vitesse.c:(.text+0x1d0): undefined reference to `phy_modify'
-   riscv64-linux-ld: drivers/net/phy/vitesse.o: in function `vsc738x_config_init':
-   vitesse.c:(.text+0x200): undefined reference to `phy_modify'
-   riscv64-linux-ld: vitesse.c:(.text+0x214): undefined reference to `phy_modify'
-   riscv64-linux-ld: vitesse.c:(.text+0x240): undefined reference to `phy_modify'
-   riscv64-linux-ld: vitesse.c:(.text+0x278): undefined reference to `phy_modify'
-   riscv64-linux-ld: drivers/net/phy/vitesse.o:vitesse.c:(.text+0x2f4): more undefined references to `phy_modify' follow
-   riscv64-linux-ld: drivers/net/phy/vitesse.o: in function `vsc738x_config_init':
->> vitesse.c:(.text+0x46a): undefined reference to `phy_error'
-   riscv64-linux-ld: drivers/net/phy/vitesse.o: in function `vsc824x_config_init':
-   vitesse.c:(.text+0x48e): undefined reference to `phy_trigger_machine'
-   riscv64-linux-ld: drivers/net/phy/vitesse.o: in function `vsc8601_config_init':
-   vitesse.c:(.text+0x584): undefined reference to `genphy_setup_forced'
-   riscv64-linux-ld: drivers/net/phy/vitesse.o: in function `vsc82x4_config_aneg':
-   vitesse.c:(.text+0x636): undefined reference to `__genphy_config_aneg'
->> riscv64-linux-ld: vitesse.c:(.text+0x652): undefined reference to `__mdiobus_write'
->> riscv64-linux-ld: vitesse.c:(.text+0x664): undefined reference to `__mdiobus_read'
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c: In function 'apg31_se_audio_setup':
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c:117:18: warning: variable 'channels' set but not used [-Wunused-but-set-variable]
+     117 |         uint32_t channels = 0;
+         |                  ^~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c:116:18: warning: variable 'speakers' set but not used [-Wunused-but-set-variable]
+     116 |         uint32_t speakers = 0;
+         |                  ^~~~~~~~
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for VITESSE_PHY
-   Depends on NETDEVICES && PHYLIB
-   Selected by
-   - SOC_MICROCHIP_POLARFIRE
+
+vim +/channels +117 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c
+
+   108	
+   109	static void apg31_se_audio_setup(
+   110		struct apg *apg,
+   111		unsigned int az_inst,
+   112		struct audio_info *audio_info)
+   113	{
+   114		struct dcn31_apg *apg31 = DCN31_APG_FROM_APG(apg);
+   115	
+ > 116		uint32_t speakers = 0;
+ > 117		uint32_t channels = 0;
+   118	
+   119		ASSERT(audio_info);
+   120		/* This should not happen.it does so we don't get BSOD*/
+   121		if (audio_info == NULL)
+   122			return;
+   123	
+   124		speakers = audio_info->flags.info.ALLSPEAKERS;
+   125		channels = speakers_to_channels(audio_info->flags.speaker_flags).all;
+   126	
+   127		/* DisplayPort only allows for one audio stream with stream ID 0 */
+   128		REG_UPDATE(APG_CONTROL2, APG_DP_AUDIO_STREAM_ID, 0);
+   129	
+   130		/* When running in "pair mode", pairs of audio channels have their own enable
+   131		 * this is for really old audio drivers */
+   132		REG_UPDATE(APG_DBG_GEN_CONTROL, APG_DBG_AUDIO_CHANNEL_ENABLE, 0xF);
+   133		// REG_UPDATE(APG_DBG_GEN_CONTROL, APG_DBG_AUDIO_CHANNEL_ENABLE, channels);
+   134	
+   135		/* Disable forced mem power off */
+   136		REG_UPDATE(APG_MEM_PWR, APG_MEM_PWR_FORCE, 0);
+   137	
+   138		apg31_enable(apg);
+   139	}
+   140	
 
 -- 
 0-DAY CI Kernel Test Service

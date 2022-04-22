@@ -2,251 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D19750C50B
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB0150C518
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiDVXgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
+        id S230181AbiDVXhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiDVXgW (ORCPT
+        with ESMTP id S230122AbiDVXg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:36:22 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2098.outbound.protection.outlook.com [40.107.243.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A379A1759F0;
-        Fri, 22 Apr 2022 16:21:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q3q1reVAaBujqbP/J/FdlrhflvG0FWrVUwtixWUY83nchLHta27yJyJeZGy/xAaXTI4x0hkHTqYE6wQdk0NEcfNf0s7w0BL7Lp4KBsW4prQcjcZwFkSPinDRvBLiASuWW0CgMXPLlsJAH7BdaTv8AFqkPlxt006xSgBQPJVHxJVsj6ATL0ZVZyLMwt+u3J8Gc1270UZCd/VqcV9G1y3Wr1YW7mo/5i1JZ1gQXImzksJgIoIkcneRZtSRMB+p4aYJwmtKNF6wl4oh/GjqbFc2hyzJmf71shpiX07ImhYE2Byc4TuSr9IxHS6UdCTuH4fzc3pIUKb3NUM4CLBmejIIVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aONITpye+IeJr84qGlAJnqM+jRTCuMmdqzmJ+Qi8sLA=;
- b=Jl7ElWUgrYkhwWjlobVW+A5JJ0HA42BaxrxldOb2Kd/9801GRO4yjf9EVQtZY/l37XmMiPO+Avhij67ytK047sVMkTecdl0G5hqInQK+fPuCHX1Ay0q4CPmgJ/QtI2ENcw/5Xh57tcmBbS76OBBsHB7BUB6dNGhTjUHi+/n22wZr9UfPaR7/aJCkwlbqmBjE/A4nG4lXgPJpdrBwBWc06Wx+dtxHWgF3Zj9o4VgEGZ2QPv6j4HIULPXhqaBK0MKcYNhefd5nDMJnGiOc3b5Ft5JHoipNNtGwb9qLp7dYk/Dnnc4o4rTg+3jqcdQvtc8Z7BoMRk+xetgTioxggLHPeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aONITpye+IeJr84qGlAJnqM+jRTCuMmdqzmJ+Qi8sLA=;
- b=AKASfrCiHGPHw3IjRsTICcVEsqKBPPpjzt1YQyQKK1/p81OPyi4IBDHU5pSpUnD700S6jnMNS7Sa1okWoXZh0V441na/m5AgjvLjhO9PNNM5B3JhmgIp8sz097UMN80qwlIl7dn5bWLck7UWKIDFfQqQxBHgLGK7cxhbq0whNyE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- CH0PR01MB7064.prod.exchangelabs.com (2603:10b6:610:10c::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.15; Fri, 22 Apr 2022 23:21:20 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::319b:4612:e6f4:f22c]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::319b:4612:e6f4:f22c%3]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 23:21:19 +0000
-Message-ID: <79357f23-443a-c3c9-f084-6db6dda60e92@os.amperecomputing.com>
-Date:   Sat, 23 Apr 2022 06:21:06 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v8 3/9] misc: smpro-errmon: Add Ampere's SMpro error
- monitor driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thu Nguyen <thu@os.amperecomputing.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20220422024653.2199489-1-quan@os.amperecomputing.com>
- <20220422024653.2199489-4-quan@os.amperecomputing.com>
- <YmJJIb1DAIq5arCw@kroah.com>
- <82a6452a-965b-7fbe-eba2-919f0a6ed73a@os.amperecomputing.com>
- <YmLCcFrrobUJtiLI@kroah.com>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <YmLCcFrrobUJtiLI@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0109.apcprd02.prod.outlook.com
- (2603:1096:4:92::25) To SJ0PR01MB7282.prod.exchangelabs.com
- (2603:10b6:a03:3f2::24)
+        Fri, 22 Apr 2022 19:36:56 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772506FF75
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 16:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650669745; x=1682205745;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JACMD5EWiaOfR7L52fRfPgQQApOCo17lhZOUZruR7fo=;
+  b=E0a2mJnizeRLZzcZ33bxnzwcKg/YYufswaszTApHONw9M/AiyR1HJudt
+   B+WEHV8pqf3jETIl7fa7eXE85+1/kPvFOAonHe4UDo4Axc+/ep2TTK0f+
+   RNAXojd1PqZj6Rdes6sGOSTgkHSxMltVDLMgGoe7yvEA3XI9OdbbYpVRX
+   PBJV59U07rTpMN3KrqAi78WEJz3uhqd3reBiMxDgesYoPcMnQ2tMklBX0
+   zc1geI39cvpTLH7/BAghnQvQ2rhBTcdE2HLYxTteKCFyeNH6nJcPmCqjC
+   3FY7+IvvXzX+WkuNVHgR0Ju3AEG7/lodnRWrSADzaVbvNiUvPN1gO4Wv1
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263660109"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="263660109"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:22:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="703743706"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Apr 2022 16:22:23 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ni2bX-000Aep-7R;
+        Fri, 22 Apr 2022 23:22:23 +0000
+Date:   Sat, 23 Apr 2022 07:22:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 28/44]
+ fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types
+ ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) -
+ offset) *' (aka 'unsigned long *'))
+Message-ID: <202204230710.ewAqNDow-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0c38b247-4c30-4a5f-743c-08da24b6ce01
-X-MS-TrafficTypeDiagnostic: CH0PR01MB7064:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR01MB70649E85B34821A1E23B5AC8F2F79@CH0PR01MB7064.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W3/0k/3KvWxu32wEOXRd0/Z802mwcD4HzDiXfQ1gtIMk61oLW18OPfbQfYxP2Im7mckYH4xy68UJ4uLIYQl9TsiOqrY8dByGRyM3n9qR8bev8XihcQXT97owhzeBmhqDXD8P1psoEyyx9ZFtb7lwStpQpTRwLHu90AdzM4ys2X3D8a9QFs0STQSSdgXwjyHfjYAAhFUI4HXOx+qR3MCDHYEyzjfMMrMEQKgYufGu6iolVKN3/hCC5R+gToyQkl3wp71fyHbNPEqUfVzwB36Jc5K6GgTO3yqJ9qnsGmNVJ0KlmeB03S4p3Rnpeq3uhyLSqJstEnGhTIOA4mai9z9HRo2/2kCqHm3hnAJYc5VtLTPY7X0s8rllC7igG1eHiBAXTgIXOPI+TVqptuOOR91X41nxsYbbC1Ld8MJ71IZ8NX5+XonzY6f8CYmEgVJHVr2D22E2TtlNdcIwk3ivc1bj/jPwdgglWsLVvL1hNZxOSUoeAwasMGRn50Fc+RrKJmepqETmLFgBjNnJE7ya6D2sBMlcr4MZ4DhPOYU/9FXmBH3kS30m+5qB+m6pd0s9s8+07gNXw8zaFeXsfRh7dbL0/AMqCVlLqPgC2JyFFvbJKLNxPCaR3nr+ax96cRWmeyYvp4tnHOt0U5o/L61AnXVY30KuUMywae/RIEoU4a7C26rMDjH3OVH4aVBUKVoClTG/yMX987LtSfazHPZk4i0/jTVregZ84kT9yxWekQtlaxk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(66476007)(66556008)(66946007)(6486002)(4326008)(2906002)(8936002)(7416002)(5660300002)(54906003)(186003)(2616005)(6916009)(26005)(107886003)(8676002)(6666004)(316002)(6506007)(6512007)(53546011)(83380400001)(52116002)(86362001)(31696002)(38100700002)(31686004)(38350700002)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGwvNmpwQlpna2czWWdNOWVndDRJUGxRMlVoRUFsc0FvMjZXNVFqMnJGbEhB?=
- =?utf-8?B?MFFKZEhKZE9PckVPL09TVVYyU25qTUNXVUxxSDZScCtzeXdkSTFrckszWTZV?=
- =?utf-8?B?QmlqZk1SVWg1MVJYbzRnMHd6UlUvNVQ0SHU0dUxUdG1YaVd6SHpQblFaRUZK?=
- =?utf-8?B?VlhldURuSUNPTEVPYmoxRlAxSzRQYjhiMEVkS3dDNjhnYTZvZllScXdubnJ1?=
- =?utf-8?B?clREZFRNaHRZYVRCY01pcFNNWTU2OWsrUEE5ZlV6T3NJNHhXcllTL1ZQNStP?=
- =?utf-8?B?ZHlkM3FuNmFQTjRJTmQ1dVR2V3cwbFlkZytLajltK0RBc1VqY3h4aDlUdGVi?=
- =?utf-8?B?OHZaL3pNZmVZMVJZZDZzMnRVMTF5eDNROW11eUFRQU5vT0JLNlFBUDNjUGVC?=
- =?utf-8?B?eHNYTGJlSGV0bklPNFB3eU9Kb2src21mR1N1YUFDQmdVdG1xM1JsYXZsOWRJ?=
- =?utf-8?B?UzA4Vm5lcE5pM0xnQ0lWbnlrTWZhbFJLNTkrY25wZFVhQUgxcEdKbDVSL3M2?=
- =?utf-8?B?dlhkUDZ4SFBLUHNuVUdYUWt4Zlp2amxMUnRyeC9HUXlHTm5OVWlnVi9ZN2R2?=
- =?utf-8?B?QmQrMkdkRC82QU9PaW14MFNFRVdJT3FERThYTE5WZGs4QmhRbjRjNkE3NUFr?=
- =?utf-8?B?cXdJdDVzZVpUSTJZbDk2aHNmcGduai9zYXUvaTMrM2pPR0phRW9ESVdsT01L?=
- =?utf-8?B?R2hlNVJ4MkZlNzBHZ3cvTmVDbnQwWnVRanNzNkxjZGhtajRRdXkxZzA1cElq?=
- =?utf-8?B?Y2FSWXQ2RndaN05maFhXUSsvNHlEOExJY1hydWk1eXZZOW8zdjlDZVBKZDNW?=
- =?utf-8?B?eXVsTGlhMkFjdnN6elRMMkdTRmVxUnVtcEQ1TEhoSUpTSkVocTA1L3N1RXRI?=
- =?utf-8?B?OVBQNWxWUFFlZmNRYnVKdmo5Y1g2RjMvNjNmRHZmTTdTZEU0QU1hYVpxUEdz?=
- =?utf-8?B?MmRnNVMvYlowV3VWS2VmSC9OUHo4TTgyaGpSU1dyU0NNS0ZSNmhjUDFva0tK?=
- =?utf-8?B?UXNseEx1bVhSMnlCQVVDdkZ1VHF1RFVjdzVCekJSSG84L2xUM1RtNmpqZmF2?=
- =?utf-8?B?Si9yc2hoZ2lWR1V2WU1pcFBLNCtQeFp3aHBqRTR3NGlXSVlpOHc3UTJMWGlw?=
- =?utf-8?B?U2hsVG9BSkl1OXozWlQzdURtU2UyeHpXQXYwNGlyZzZMaUV6K1ZDMjlmTSto?=
- =?utf-8?B?NnBaUllIN2NNUkhXcEhVSVE5N3dGWVJlSVpBVmJPajkzQms0eFhVSWN5YURU?=
- =?utf-8?B?dkZIWjJPWGRiYWtIMTltK0p4c1AvVnp0TjMzODFlTk5Fc0NEa3ZvN3h4dGJ5?=
- =?utf-8?B?Z1dSZ0tKam8wOHRkOU5ka1JLbGRnUkRZQnJ5d09sM1RqSm9meXJMcjM5eVpQ?=
- =?utf-8?B?REFrdHVMczhyUnFmUGlsODlGOWpNZmQ0N1ZUSkFnQXYxL04zN2VEd04vNXIw?=
- =?utf-8?B?M0pHOXVsa29oTkFzL1d0Yk4venBsSHYxTWJMd2xxNURlMFZoeTdhbi9adHBZ?=
- =?utf-8?B?ME9XSXdxWVZmWWlvaUliUFFyMW9oS1BjallEUGwxN0lrdkdEQmEzTWVaN2Nh?=
- =?utf-8?B?N3BRTWpnY3hVOGcwc01TaEhFSExQRTdURHAyMTExY0dmR3lYaVhWUWFHN2R0?=
- =?utf-8?B?MUdVSXhCQ3JCU05BQTUrWUdMNnVFcnRycW1Sa3lDdjhxbWxxQXk1QXVtbHlw?=
- =?utf-8?B?VmFvcXVHSENoSzVZcHFXTlBHbkRkbU1ST0xRVkZyWnNiNG5FYjN0bkFEcGk2?=
- =?utf-8?B?SmZIMGIrQVgxL05EUmxDbDFVZENDRUtwMTVNY09hMVc0eXV3dk1PajJVR1Vi?=
- =?utf-8?B?UWJQYzlxRTBTdnduaXFkUHlpQ0xHT3BSeDBVNDl1aU91dEl1T3NwSnFWVU9M?=
- =?utf-8?B?ckt5YnYrMy9rK0tiaGpoNzVhQ2R1c2NaNi91dDNwK1BMWmthengrSE4rZjdW?=
- =?utf-8?B?TlJEcGtaUjFSQW9CdHRlYVdpaXBaMVRFRmdSdVJ3aXVVVHVZSXFHZVpORGQ2?=
- =?utf-8?B?U2NqQW5iOVVzMEM4Tm5QR1ZydkRFRDVkZXBVSWFYekN1TENJUkFRVUM3ZXp5?=
- =?utf-8?B?QnRWTDg5N0VSY25SeGRhTkR6MHFnbjgwOWNNd3pKU3MxWUN6RUo5TUFLSDZj?=
- =?utf-8?B?czhnelNMT3dWVEdvRS9oQkRLb0tKbHFZbTlwL0gwSitQSUhYK3JvR2gvZGNj?=
- =?utf-8?B?aGJaTmUrak1uU0tOTUE3dFJaVTd1K3M0UXc4ZVptYm9uclh5ZmlLaXN1SXBs?=
- =?utf-8?B?RVZDVnNFdGg0YVYvRUxUbVpKVmZJWHRaSDhkVC8yMFhnVUJQc1VCa0NSei81?=
- =?utf-8?B?K2tzMlJ0RjY2d2Q2clc3WjJCeHRDMUhwM3pUVjlPaW9rcUpEUXl5ZGM5bzFp?=
- =?utf-8?Q?VBfZHTcHBUEduv1f1XygWwGpQtwF8S0gM5VIZ?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c38b247-4c30-4a5f-743c-08da24b6ce01
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 23:21:19.1925
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TxfxtwRBoQl7a8Ahb0r9tJHaRBWKNFjprH/W2QxX3mvQoj91GPoDm+ttbfKNxFwNCSdAtgSEn4mk0H/4daNmD0dwLBpjw08V2g1XMAKICkc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB7064
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   931e50676c6598d0eda1954ead465519ff91874d
+commit: 777536e6af57becf14b8f4f34007ed3e3a95c911 [28/44] netfs: Perform content encryption
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220423/202204230710.ewAqNDow-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/777536e6af57becf14b8f4f34007ed3e3a95c911
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 777536e6af57becf14b8f4f34007ed3e3a95c911
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                           seg = min(len, PAGE_SIZE - offset);
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-On 22/04/2022 21:57, Greg Kroah-Hartman wrote:
-> On Fri, Apr 22, 2022 at 09:43:39PM +0700, Quan Nguyen wrote:
->> On 22/04/2022 13:20, Greg Kroah-Hartman wrote:
->>> On Fri, Apr 22, 2022 at 09:46:47AM +0700, Quan Nguyen wrote:
->>>> This commit adds Ampere's SMpro error monitor driver for monitoring
->>>> and reporting RAS-related errors as reported by SMpro co-processor
->>>> found on Ampere's Altra processor family.
->>>>
->>>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
->>>> ---
->>>> Changes in v8:
->>>>     + Update wording for SMPRO_ERRMON on Kconfig file             [Quan]
->>>>     + Avoid uninitialized variable use               [kernel test robot]
->>>>     + Switch to use sysfs_emit()                                  [Greg]
->>>>     + Make sysfs to return single value                           [Greg]
->>>>     + Change errors_* sysfs to error_*                            [Quan]
->>>>     + Add overflow_[core|mem|pcie|other]_[ce|ue] sysfs to report
->>>>     overflow status of each type of HW errors                     [Quan]
->>>>     + Add some minor refactor                                     [Quan]
->>>>
->>>> Changes in v7:
->>>>     + Remove regmap_acquire/release_lock(), read_i2c_block_data() [Quan]
->>>>     + Use regmap_noinc_read() instead of errmon_read_block()      [Quan]
->>>>     + Validate number of errors before read                       [Quan]
->>>>     + Fix wrong return type of *_show() function     [kernel test robot]
->>>>     + Adjust patch order to avoid dependence with smpro-mfd  [Lee Jones]
->>>>     + Use pointer instead of stack memory                         [Quan]
->>>>
->>>> Changes in v6:
->>>>     + First introduced in v6 [Quan]
->>>>
->>>>    drivers/misc/Kconfig        |  12 +
->>>>    drivers/misc/Makefile       |   1 +
->>>>    drivers/misc/smpro-errmon.c | 477 ++++++++++++++++++++++++++++++++++++
->>>>    3 files changed, 490 insertions(+)
->>>>    create mode 100644 drivers/misc/smpro-errmon.c
->>>>
->>>> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
->>>> index 41d2bb0ae23a..9fbe6797c440 100644
->>>> --- a/drivers/misc/Kconfig
->>>> +++ b/drivers/misc/Kconfig
->>>> @@ -176,6 +176,18 @@ config SGI_XP
->>>>    	  this feature will allow for direct communication between SSIs
->>>>    	  based on a network adapter and DMA messaging.
->>>> +config SMPRO_ERRMON
->>>> +	tristate "Ampere Computing SMPro error monitor driver"
->>>> +	depends on MFD_SMPRO || COMPILE_TEST
->>>> +	help
->>>> +	  Say Y here to get support for the SMpro error monitor function
->>>> +	  provided by Ampere Computing's Altra and Altra Max SoCs. Upon
->>>> +	  loading, the driver creates sysfs files which can be use to gather
->>>> +	  multiple HW error data reported via read and write system calls.
->>>> +
->>>> +	  To compile this driver as a module, say M here. The driver will be
->>>> +	  called smpro-errmon.
->>>> +
->>>>    config CS5535_MFGPT
->>>>    	tristate "CS5535/CS5536 Geode Multi-Function General Purpose Timer (MFGPT) support"
->>>>    	depends on MFD_CS5535
->>>> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
->>>> index 70e800e9127f..483308a6e113 100644
->>>> --- a/drivers/misc/Makefile
->>>> +++ b/drivers/misc/Makefile
->>>> @@ -23,6 +23,7 @@ obj-$(CONFIG_ENCLOSURE_SERVICES) += enclosure.o
->>>>    obj-$(CONFIG_KGDB_TESTS)	+= kgdbts.o
->>>>    obj-$(CONFIG_SGI_XP)		+= sgi-xp/
->>>>    obj-$(CONFIG_SGI_GRU)		+= sgi-gru/
->>>> +obj-$(CONFIG_SMPRO_ERRMON)	+= smpro-errmon.o
->>>>    obj-$(CONFIG_CS5535_MFGPT)	+= cs5535-mfgpt.o
->>>>    obj-$(CONFIG_GEHC_ACHC)		+= gehc-achc.o
->>>>    obj-$(CONFIG_HP_ILO)		+= hpilo.o
->>>> diff --git a/drivers/misc/smpro-errmon.c b/drivers/misc/smpro-errmon.c
->>>> new file mode 100644
->>>> index 000000000000..df7d8fc4ff3f
->>>> --- /dev/null
->>>> +++ b/drivers/misc/smpro-errmon.c
->>>> @@ -0,0 +1,477 @@
->>>> +// SPDX-License-Identifier: GPL-2.0+
->>>
->>> Are you sure you mean "or any later version"?  I have to ask.
->>>
->>
->> Thank Greg for the review.
->>
->> Will change all to SPDX-License-Identifier: GPL-2.0-or-later in next
->> version.
-> 
-> That is not what I am asking (the SPDX tag format).  I mean, do you
-> really mean "or later" for your license as that is not the license of
-> the kernel overall?  If so, wonderful, but I have to ask that as your
-> legal group needs to be aware of it, sorry.
-> 
+vim +76 fs/netfs/crypto.c
 
-Dear Greg,
+    45	
+    46	/*
+    47	 * Populate a scatterlist from folios in an xarray.
+    48	 */
+    49	static int netfs_xarray_to_sglist(struct xarray *xa, loff_t pos, size_t len,
+    50					  struct scatterlist *sg, unsigned int n_sg)
+    51	{
+    52		struct scatterlist *p = sg;
+    53		struct folio *folio = NULL;
+    54		size_t seg, offset, skip = 0;
+    55		loff_t start = pos;
+    56		pgoff_t index = start >> PAGE_SHIFT;
+    57		int j;
+    58	
+    59		XA_STATE(xas, xa, index);
+    60	
+    61		sg_init_table(sg, n_sg);
+    62	
+    63		rcu_read_lock();
+    64	
+    65		xas_for_each(&xas, folio, ULONG_MAX) {
+    66			if (xas_retry(&xas, folio))
+    67				continue;
+    68			if (WARN_ON(xa_is_value(folio)) || WARN_ON(folio_test_hugetlb(folio)))
+    69				break;
+    70			for (j = (folio_index(folio) < index) ? index - folio_index(folio) : 0;
+    71			     j < folio_nr_pages(folio); j++
+    72			     ) {
+    73				struct page *subpage = folio_file_page(folio, j);
+    74	
+    75				offset = (pos + skip) & ~PAGE_MASK;
+  > 76				seg = min(len, PAGE_SIZE - offset);
+    77	
+    78				sg_set_page(p++, subpage, seg, offset);
+    79	
+    80				len -= seg;
+    81				skip += seg;
+    82				if (len == 0)
+    83					break;
+    84			}
+    85			if (len == 0)
+    86				break;
+    87		}
+    88	
+    89		rcu_read_unlock();
+    90		if (len > 0) {
+    91			kdebug("*** Insufficient source (%zx)", len);
+    92			//WARN_ON(len > 0);
+    93			return -EIO;
+    94		}
+    95	
+    96		sg_mark_end(p - 1);
+    97		return p - sg;
+    98	}
+    99	
 
-My sincere thanks for bringing this up. This would need help from our 
-legal team to recheck/review and will make appropriate change in my next 
-version.
-
-- Quan
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

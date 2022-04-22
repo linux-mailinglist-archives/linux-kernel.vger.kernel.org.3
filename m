@@ -2,125 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A0C50BC4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E30650BC50
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379068AbiDVQAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
+        id S1446492AbiDVQAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378047AbiDVQAE (ORCPT
+        with ESMTP id S1388249AbiDVQAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:00:04 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13C15DA6D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:57:09 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id x12so5772709qtp.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=xEXutyfDIovIUK0MPvdB/MiRM9nd/r7hXc5dChLDvms=;
-        b=Gn4gpKM1uWn2BSGUeIfRjGH+gXvKy1IdyihjKNAs3uOpxF+Oaz09uz4+oe0muNGouD
-         GSaXxYguGbpvxQahRCDe5FupWWXRCSTcREmi2t1ZVV8sWPcQ3fXAlLPnPyfxozkj5tBt
-         3SDNRh3iW5kxTzAUnhcsiQjg5Wj0Us1uBLq75/qedEnPEEqkAGhgP5ArmPz5d9pq3ak7
-         zuSD9jsFuzGXIDwZdNx5sIiSaRCVp4RpKAAmodtVBWlanB90yU7WGV9oI7PIfxtFMjmo
-         nuVDTY0zepe4cJzAhFPvtnCYgCrh6ScpYEoZvpBy5wgodlqd57S8sgRkmlkxtRJqH9Rg
-         1HMg==
+        Fri, 22 Apr 2022 12:00:40 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723B15DA63;
+        Fri, 22 Apr 2022 08:57:47 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id b17so6327866qvp.6;
+        Fri, 22 Apr 2022 08:57:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=xEXutyfDIovIUK0MPvdB/MiRM9nd/r7hXc5dChLDvms=;
-        b=um111DghfOJF+3Z6VGJbnvc1DyJie7rEGEd5hcMcYurfWyXLJ9tleJmOqfBH9yId82
-         Qgk3mouNn7Ata22ztvIrSt1/nuigZJToo5+a0yYy6kqdLva78fYlVVE2iH7lvnATp/zn
-         tddWvy6LFgBAiIZ/DWRsOopVLvFE5Q6htomWB/G8SSBc6nqhZ8EiHihvprXSlsP8iU9y
-         1E4i60KVFmVDG9p4+ojLcuGoaodMCyx22T2hKmbD/0g5enRynFVvE6SEZJSut4JWv6cS
-         iGkyMqUfqQnuRzH5TnsdJS1lYFjDngALOXvOf1uGujXa5UIF+qZYtIVb3wJSLd9pFT9e
-         F/KA==
-X-Gm-Message-State: AOAM532/96TMd4xd6dNaFxzsQtihQJ/MXVMlCr6IsQ/LN20krivcl+Tl
-        jZGAp+mdBYv/hGLPaMH3m5ZWw8Kq/guhzZs56KM=
-X-Google-Smtp-Source: ABdhPJxeMV47f+BRLpjd7ybvqieVWuckE/CXNCAWT81BB9HWzS428cwkXoDCAX5tVOXItVGfKyGSaRHW9fTs287BUJ4=
-X-Received: by 2002:ac8:7f0a:0:b0:2f1:f60d:2b39 with SMTP id
- f10-20020ac87f0a000000b002f1f60d2b39mr3654262qtk.470.1650643028762; Fri, 22
- Apr 2022 08:57:08 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xndd22pRCbxHKJgUFMYpySvXlLsTmNU6TAEv5LDON7Y=;
+        b=1tuY6z4SxGSp1pg3P3ZJWCs1u7QqvRSpaeCDfjvAgWo9/HmUuLKCYCz6ufxSwWfnJh
+         zbJuT6XyE3jTnCZFUFGsugcVtSH6kxd0lz1+b8rWlWjkQ/ha01VP0L8GZzP47wENsdNc
+         j78Ucdg+d+eXjOk5sQHJmrzLpLf5vH1PK8Ef3u+L7gnDP1DGwLMgTSdejbO3kMeedpij
+         8efIRMsCBycyOV5fQ/9X2zanaOiaE+iJ8EdKWPqRj8+F6Kl7FrP3Kz8acf3ZJT0Ybq39
+         jxiVLB7mzmO5apBCcH2XxH5IruFgHmdi0Y2PFHeIKeo+k36u4hPssECvx13F5fkQZxfL
+         kzUw==
+X-Gm-Message-State: AOAM531sdXEipjAx9dq0uYGMBV1z+kIRywQUuEnuVW5fuxJSK0MpO9G/
+        r+YT7T36rdcCssijVvVqZl0=
+X-Google-Smtp-Source: ABdhPJz8vekvOIGYSvs4ljIiWGq3glYsC/ZEz2KOr8vJEqLWuuy+8QCTERQpL+9QQabTtDiEH93L8g==
+X-Received: by 2002:a05:6214:23cc:b0:44f:4974:4c1c with SMTP id hr12-20020a05621423cc00b0044f49744c1cmr4022837qvb.116.1650643066441;
+        Fri, 22 Apr 2022 08:57:46 -0700 (PDT)
+Received: from localhost (fwdproxy-ash-020.fbsv.net. [2a03:2880:20ff:14::face:b00c])
+        by smtp.gmail.com with ESMTPSA id f11-20020ac859cb000000b002f3438493a5sm1382061qtf.27.2022.04.22.08.57.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 08:57:46 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     akpm@linux-foundation.org
+Cc:     tj@kernel.org, roman.gushchin@linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        shakeelb@google.com, kernel-team@fb.com, void@manifault.com
+Subject: [PATCH 0/5] Fix bugs in memcontroller cgroup tests
+Date:   Fri, 22 Apr 2022 08:57:24 -0700
+Message-Id: <20220422155728.3055914-1-void@manifault.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a05:622a:15c4:0:0:0:0 with HTTP; Fri, 22 Apr 2022 08:57:08
- -0700 (PDT)
-Reply-To: susannelegitfirm155@gmail.com
-From:   Susanne Klatten <zainabhussaini6771@gmail.com>
-Date:   Fri, 22 Apr 2022 16:57:08 +0100
-Message-ID: <CAGyfEacuXa4D9nKe2MFiYHTo04-ettRDwM6tz72XAJs-Sc3aWA@mail.gmail.com>
-Subject: =?UTF-8?B?UE/Fu1lDWktB?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,FUZZY_CREDIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:835 listed in]
-        [list.dnswl.org]
-        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
-        *      [score: 0.1928]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [zainabhussaini6771[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [susannelegitfirm155[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [zainabhussaini6771[at]gmail.com]
-        *  1.7 FUZZY_CREDIT BODY: Attempt to obfuscate words in spam
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Witam
+tools/testing/selftests/cgroup/test_memcontrol.c contains a set of
+testcases which validate expected behavior of the cgroup memory controller.
+Roman Gushchin recently sent out a patchset that fixed a few issues in the
+test. This patchset continues that effort by fixing a few more issues that
+were causing non-deterministic failures in the suite. With this patchset,
+I'm unable to reproduce any more errors after running the tests in a
+continuous loop for many iterations. Before, I was able to reproduce at
+least one of the errors fixed in this patchset with just one or two runs.
 
-Nazywam si=C4=99 Susanne Klatten i jestem Z Niemiec, mog=C4=99 kontrolowa=
-=C4=87 Twoje
-problemy finansowe bez uciekania si=C4=99 do Bank=C3=B3w w zakresie Pieni=
-=C4=85dze
-Kredytowe. Oferujemy po=C5=BCyczki osobiste i po=C5=BCyczki biznesowe, jest=
-em
-zatwierdzonym i certyfikowanym po=C5=BCyczkodawc=C4=85 z wieloletnim
-do=C5=9Bwiadczeniem w udzielaniu po=C5=BCyczek i udzielamy po=C5=BCyczek z
-zabezpieczeniem i bez zabezpieczenia w zakresie od 2 000,00 =E2=82=AC ($) d=
-o
-maksymalnie 500 000 000,00 =E2=82=AC ze sta=C5=82ym oprocentowaniem 3% w st=
-osunku
-rocznym. Czy potrzebujesz po=C5=BCyczki? Napisz do nas na:
-susannelegitfirm155@gmail.com
+David Vernet (5):
+  cgroups: Refactor children cgroups in memcg tests
+  cgroup: Account for memory_recursiveprot in test_memcg_low()
+  cgroup: Account for memory_localevents in
+    test_memcg_oom_group_leaf_events()
+  cgroup: Removing racy check in test_memcg_sock()
+  cgroup: Fix racy check in alloc_pagecache_max_30M() helper function
 
-  Mo=C5=BCesz r=C3=B3wnie=C5=BC wy=C5=9Bwietli=C4=87 m=C3=B3j link i dowied=
-zie=C4=87 si=C4=99 wi=C4=99cej o mnie.
+ tools/testing/selftests/cgroup/cgroup_util.c  | 12 ++++
+ tools/testing/selftests/cgroup/cgroup_util.h  |  1 +
+ .../selftests/cgroup/test_memcontrol.c        | 69 +++++++++++++------
+ 3 files changed, 61 insertions(+), 21 deletions(-)
 
-  https://en.wikipedia.org/wiki/Susanne_Klatten
-  https://www.forbes.com/profile/susanne-klatten
+-- 
+2.30.2
 
-  E-mail : susannelegitfirm155@gmail.com
-  Podpis,
-  Przewodnicz=C4=85cy Wykonawczy
-  Susanne Klatten

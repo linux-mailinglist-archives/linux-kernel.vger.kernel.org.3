@@ -2,167 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49A450C064
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1132450C055
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiDVTbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 15:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
+        id S229884AbiDVT0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 15:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiDVTbj (ORCPT
+        with ESMTP id S229566AbiDVT0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 15:31:39 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F648265442
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:10:42 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id h83so9592346iof.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ec/PY5VodnHtIzxqjsjWB1b7cgZkCmMj5BqpmccvF5E=;
-        b=gvjf82/mJf1N5xoxK5mfSuqBgpZam7/3aH1gBiDZ+ppLRa8VLollsGMXfs3FoesHSS
-         fRoZ3ZNjcijiEQAl7Eb2vi6gKR4D/O7PA1mm9PjxibbHb8c8IAUtU305p3DOPhW7hDE4
-         qFg4CwiQ4VH21WmseBmhMi7XFR2sx1o1lCi/xVK036lGNsxYQP7H1ltPzM4ynq9tF99/
-         1ycqXz9BYeFCeov8ITsDmBTCE86QkUrWx8takmxWVabsCKhZTp5XEGjOlYjoGgRw84T/
-         k+rvqOe9I0kfqYkMjt/4kPBH+1rtwORaIwEmXTYx4npOlNdeLX+LnHbXW+4evHpPIZpZ
-         yKmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ec/PY5VodnHtIzxqjsjWB1b7cgZkCmMj5BqpmccvF5E=;
-        b=u62TTDB5mSw9B93Ko6xx7nhHQMasIrhU+6TZRGplwbbGrQNSnQO5JCtJgMX6s0hi6R
-         0HXpHZgGVJkfkOyyWjVXnyyowaNr/UA5ZIlOpFuspOADNWmkhQzElGD30470Wb+5mRzd
-         sKTdJucB3tu+gsrVLSk0fMJWphDGBxin7aIBU8iv8dNhmCNTS+NUAZYYF9YZKP94lBNv
-         +aNyyAEw6PfFPWwisJSBCHjQmq5nY8W6CJSAH8a/YHxA/N08ET8amvwhxGQnsnjv2k8P
-         WRz6/AXah2w70x13er3fpsU9GRksIr3c5JwYtV7Hb5TWaS6KM59DXH+umRwnj5Os09k3
-         H3yA==
-X-Gm-Message-State: AOAM5309PU/ZWRuV88smfTWQ/c7D+ozsny6vLGg/PP8+oEJBC534SDyJ
-        8V6deuvEh8bwdnn2Qs0GYODRrQBCBgXBlsX8KGLvgQ==
-X-Google-Smtp-Source: ABdhPJzY6+LXalRhLK+mNipcIkrMJMk1Ri+O+34W2ha8SqVOXaQIYF0gkrmmkqtqRb+XihkVK3TcMfvatdi5G3rXHDs=
-X-Received: by 2002:a02:a384:0:b0:327:baaa:8dc0 with SMTP id
- y4-20020a02a384000000b00327baaa8dc0mr2858326jak.158.1650654624545; Fri, 22
- Apr 2022 12:10:24 -0700 (PDT)
+        Fri, 22 Apr 2022 15:26:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E5B291D43;
+        Fri, 22 Apr 2022 12:20:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96CF961CEB;
+        Fri, 22 Apr 2022 19:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2A8DC385BC;
+        Fri, 22 Apr 2022 19:16:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650654997;
+        bh=usqLrTa+RhNIXODsvc1TquBT71WxqcNK2RxgDri8djo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BcbAj7n7cyrdsYQDBhKMzC/YUP1oi3n0WJLV/Vawg0ETGgRxV3laogMOtLoZsS2S6
+         deAr85yKEmeImhiHAgSHPYRkW4keZh105LIDrm0LR/EY+7ylYYi5+Ag9M9tf4obaqu
+         6qys2kdldoqnru7mzQfJXQU9V+CnbiPr9Tktzh6HF1FiaQ3cdZifzPK+IzTLrZupY3
+         nj76lUfw/prvPD39owSDZAYYqmaY/o4jd1l0MOSMfMfXqhh6ksSgKZQso7EdYWgT82
+         sS83lues1q+E9qW5a3gPFPNwTUorxb9c9MGc25aNl98SvSiYw+tUUBKBn/94bqxJ36
+         XhAvozQCefNHg==
+Received: by mail-wr1-f47.google.com with SMTP id q7so4751997wrm.5;
+        Fri, 22 Apr 2022 12:16:36 -0700 (PDT)
+X-Gm-Message-State: AOAM531y3Mhhr0MFAokHPZ9evsmIFRZ5vjPGpIPLwUldh7tqQdpP0bLv
+        T2dgMunT5PXj2CquFVe+0ENKqNdJTU5JzhwERSI=
+X-Google-Smtp-Source: ABdhPJw6+Yao9x3BaLiJGzKRj3K3UIg0JnN9aGyxH7bzbX5jCygm3ZIZ1bsSqfcHE9peInK43hwx2CakFvcKMsS3Rps=
+X-Received: by 2002:a5d:6983:0:b0:207:a226:df4b with SMTP id
+ g3-20020a5d6983000000b00207a226df4bmr5002354wru.192.1650654994816; Fri, 22
+ Apr 2022 12:16:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <202204212106.9R1ylUB7-lkp@intel.com> <20220421154806.52e1992b@xps13>
- <CAL3wywUBghrRqDgnPTe4g2XK8nkJkw+8H64f-NE6kNAwDC6JYw@mail.gmail.com> <20220422111755.6b26ea9e@xps13>
-In-Reply-To: <20220422111755.6b26ea9e@xps13>
-From:   Jean-Marc Eurin <jmeurin@google.com>
-Date:   Fri, 22 Apr 2022 12:10:13 -0700
-Message-ID: <CAL3wywWoTkd927n7Uuc6KSxqUGcDZmx1+S+3cBEVXD6kdnFPUQ@mail.gmail.com>
-Subject: Re: [mtd:mtd/next 10/11] drivers/mtd/mtdoops.c:244:39: warning:
- format specifies type 'long' but the argument has type 'unsigned int'
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
+In-Reply-To: <20220422170530.GA2338209@roeck-us.net>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 22 Apr 2022 21:16:18 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+Message-ID: <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miquel,
-
-On Fri, Apr 22, 2022 at 2:17 AM Miquel Raynal <miquel.raynal@bootlin.com> w=
-rote:
+On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> Hi Jean-Marc,
->
-> jmeurin@google.com wrote on Thu, 21 Apr 2022 15:22:26 -0700:
->
-> > On Thu, Apr 21, 2022 at 6:48 AM Miquel Raynal <miquel.raynal@bootlin.co=
-m> wrote:
-> > >
-> > > Hi Jean-Marc,
-> > >
-> > > lkp@intel.com wrote on Thu, 21 Apr 2022 21:22:47 +0800:
-> > >
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.g=
-it mtd/next
-> > > > head:   f812679fab605b3d5b853ed24a81dabb222ea23a
-> > > > commit: 0629fcef16d703d384f76cb2c2c3a119a9149a34 [10/11] mtd: mtdoo=
-ps: Create a header structure for the saved mtdoops.
-> > > > config: hexagon-randconfig-r045-20220420 (https://download.01.org/0=
-day-ci/archive/20220421/202204212106.9R1ylUB7-lkp@intel.com/config)
-> > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-projec=
-t bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-> > > > reproduce (this is a W=3D1 build):
-> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/mast=
-er/sbin/make.cross -O ~/bin/make.cross
-> > > >         chmod +x ~/bin/make.cross
-> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux=
-.git/commit/?id=3D0629fcef16d703d384f76cb2c2c3a119a9149a34
-> > > >         git remote add mtd https://git.kernel.org/pub/scm/linux/ker=
-nel/git/mtd/linux.git
-> > > >         git fetch --no-tags mtd mtd/next
-> > > >         git checkout 0629fcef16d703d384f76cb2c2c3a119a9149a34
-> > > >         # save the config file
-> > > >         mkdir build_dir && cp config build_dir/.config
-> > > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/
-> > > >
-> > > > If you fix the issue, kindly add following tag as appropriate
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > >
-> > > > All warnings (new ones prefixed by >>):
-> > > >
-> > > > >> drivers/mtd/mtdoops.c:244:39: warning: format specifies type 'lo=
-ng' but the argument has type 'unsigned int' [-Wformat]
-> > > >                                   page * record_size, retlen, sizeo=
-f(hdr), ret);
-> > > >                                                               ^~~~~=
-~~~~~~
-> > > >    include/linux/printk.h:446:60: note: expanded from macro 'printk=
-'
-> > > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_=
-ARGS__)
-> > > >                                                        ~~~    ^~~~~=
-~~~~~~
-> > > >    include/linux/printk.h:418:19: note: expanded from macro 'printk=
-_index_wrap'
-> > > >                    _p_func(_fmt, ##__VA_ARGS__);                   =
-        \
-> > > >                            ~~~~    ^~~~~~~~~~~
-> > > >    1 warning generated.
-> > >
-> > > I've dropped the series for now. Please have a look at the reports an=
-d
-> > > propose a new version when this is fixed?
+> On Tue, Apr 19, 2022 at 06:37:22PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
 > >
-> > Sorry about that, I had made that change based on this suggestion
-> > https://lore.kernel.org/all/202203310648.it4f2xXD-lkp@intel.com/ :-)
+> > This revisits a series I sent a few years ago:
+> >
+> > https://lore.kernel.org/lkml/20191018154052.1276506-1-arnd@arndb.de/
+> >
+> > All the other ARMv5 conversions are under way now, with
+> > OMAP1 being the only one still not in linux-next yet,
+> > and PXA completing the set.
+> >
+> > Most of the patches are unchanged from before, furtunately
+> > the PXA code is fairly stable. I addressed Robert's comments,
+> > pulled in two patches from Dmitry, and added the last a the
+> > final four patches to finish off the multiplatform conversion.
+> >
+> > I hope someone is left to test these on PXA: if this works,
+> > I'd like to merge it for 5.19. A git tree with these is avaialable
+> > for testing at
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=pxa-multiplatform-5.18
+> >
 >
-> Did you verify with
+> Unfortunately that crashes for me when trying to boot from ide.
+> Bisect points to the last patch of the series.
+
+Thanks a lot for testing and the perfect bug report!
+
+> [    1.403715] 8<--- cut here ---
+> [    1.403848] Unable to handle kernel paging request at virtual address feeb000e
+> [    1.404097] [feeb000e] *pgd=00000000
+
+Ok, this is the PCI I/O space area, which starts at 0xfee00000,
+clearly the way I/O space
+gets mapped changed here. I don't yet see what happened, but it should
+be straightforward
+to find from here.
+
+> [    1.416643]  pcmcia_init_one from pcmcia_device_probe+0xe4/0x2a0
+> [    1.416882]  pcmcia_device_probe from really_probe+0xc8/0x3b4
+> [    1.417070]  really_probe from __driver_probe_device+0x9c/0x214
+> [    1.417255]  __driver_probe_device from driver_probe_device+0x38/0xe0
+> [    1.417454]  driver_probe_device from __device_attach_driver+0xa4/0x11c
+> [    1.417657]  __device_attach_driver from bus_for_each_drv+0x88/0xd8
+> [    1.417864]  bus_for_each_drv from __device_attach+0xf4/0x194
+> [    1.418047]  __device_attach from bus_probe_device+0x8c/0x94
+> [    1.418224]  bus_probe_device from device_add+0x3d0/0x894
+> [    1.418395]  device_add from pcmcia_device_add+0x2ec/0x3e0
+> [    1.418568]  pcmcia_device_add from pcmcia_card_add+0xd4/0x1a0
+> [    1.418756]  pcmcia_card_add from pcmcia_bus_add+0x44/0x4c
+> [    1.418930]  pcmcia_bus_add from socket_insert+0x12c/0x150
+> [    1.419103]  socket_insert from pccardd+0x398/0x44c
+> [    1.419257]  pccardd from kthread+0xdc/0x114
+> [    1.419400]  kthread from ret_from_fork+0x14/0x2c
+> [    1.419569] Exception stack(0xc48a5fb0 to 0xc48a5ff8)
+> [    1.419735] 5fa0:                                     00000000 00000000 00000000 00000000
+> [    1.419979] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> [    1.420222] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> [    1.420501] Code: 13570000 e1a06000 0a000043 e3a03002 (e5c03000)
+> [    1.420874] ---[ end trace 0000000000000000 ]---
 >
-> > > >         # save the config file
-> > > >         mkdir build_dir && cp config build_dir/.config
-> > > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/
->
-> That the errors were actually gone? You seem to suggest that you didn't
-> :)
+> ---
+> # bad: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
+> # good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
+> git bisect start 'HEAD' 'v5.18-rc1'
+> # good: [9b03d7f95bd4d97101ecb8ea1e822103b81fdb2d] ARM: pxa: mainstone-wm97xx: use gpio lookup table
+> git bisect good 9b03d7f95bd4d97101ecb8ea1e822103b81fdb2d
+> # good: [764063eee7620ea9abb940068a7ad0e7f9efa1b6] cpufreq: pxa3: move clk register access to clk driver
+> git bisect good 764063eee7620ea9abb940068a7ad0e7f9efa1b6
+> # good: [5153474f0a4388b7ddb59add4be73bfb42b2007f] ARM: mmp: remove tavorevb board support
+> git bisect good 5153474f0a4388b7ddb59add4be73bfb42b2007f
+> # good: [2746f7c78b428c8b01b691a29a972c08101ae343] ARM: PXA: fix multi-cpu build of xsc3
+> git bisect good 2746f7c78b428c8b01b691a29a972c08101ae343
+> # good: [73d5106e9489464eac84362705e93bcf3b376123] ARM: pxa: remove support for MTD_XIP
+> git bisect good 73d5106e9489464eac84362705e93bcf3b376123
+> # first bad commit: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
 
-I did run it. I believe the issue is because the field is a size_t so
-when building 64 bits like the first bot on v2, the %ld suggestion
-compiled but then it failed the hexagon build (which I'm guessing is
-32 bit).  Using %zu in v4 builds both versions (ARCH=3Dx86_64 and
-hexagon).  I should have double checked the bot suggestion and noticed
-this was a sizeof / size_t field, sorry about that.
+I'll back out this patch for now while investigating further.
 
-Thanks,
+Which machine did you hit this on? Is this on hardware or in qemu?
 
-Jean-Marc
-
-
->
-> Thanks,
-> Miqu=C3=A8l
+       Arnd

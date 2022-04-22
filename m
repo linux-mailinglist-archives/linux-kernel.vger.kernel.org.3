@@ -2,220 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3E050BD32
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4425E50BD39
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449749AbiDVQg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
+        id S1449772AbiDVQip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448919AbiDVQgz (ORCPT
+        with ESMTP id S1392046AbiDVQik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:36:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C515F25A;
-        Fri, 22 Apr 2022 09:34:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B20BB831B1;
-        Fri, 22 Apr 2022 16:33:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C0C6C385A0;
-        Fri, 22 Apr 2022 16:33:56 +0000 (UTC)
-Message-ID: <ca8b1403-ca58-a4b4-d2e2-1c682b5f0adb@xs4all.nl>
-Date:   Fri, 22 Apr 2022 18:33:54 +0200
+        Fri, 22 Apr 2022 12:38:40 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB535EBC9;
+        Fri, 22 Apr 2022 09:35:46 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id c15so10284306ljr.9;
+        Fri, 22 Apr 2022 09:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M6cSf3rWybJaak8I5ckt3kVwPSyC+Ht3yWyW9Q792IM=;
+        b=Sm8c4eAfIv0o+xf2IQZ0xOiTa9eR8RMQ6Y0jLcIPkfwWor0+zgK1lo6zGL5+1zmOjN
+         u2WZSv0zsvOBABGm+SUxMcV7GiPA9e3WokAhnPL5oT97HV1sQwZWd/WLMu+cVYMTyO2r
+         8E6SPzLiXvxZQ4N18DxT6ZKVrnvowato2uy+3oXOMPXdgmIXkfQF61ji72EJLRb+5oX0
+         FTBwJBsbksmwTfF6Uk1sM98K6ehfdc3yC0672vZgSbHhRrl5+LopOZgZSEq2R+uv4BQp
+         67ntIlf0zy8UJYpjIbJqXEp6VyxkMN/H6j8Ig1KpBHevTNCX8gNpZF5LAo7WV3hUhTNv
+         yz8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M6cSf3rWybJaak8I5ckt3kVwPSyC+Ht3yWyW9Q792IM=;
+        b=bWa2f6YL7BNMd+NntnTJzAuaJP9+fUUfvaAhI8VT9CbjJ369/fC/RhIbwRz5Dgossc
+         Kl2L0InAxS+b7l55d8N1d7BvTwzM/VrOA17yjcqP9lp/F0TxYuXfnsFxc0GBc8NDJwnn
+         GHX0QWkt5mZZRXnt0Dl7Au6KA5H8zJhwq0SwyLhoNAmf9AX1JUcIlzaF6n1SPVVmiTrn
+         tHHhvoZ1H7ZWReZGVljeDlE/S6rOyY3tkvSFqcoDsJ/LaCL/2rvJCC74KvWmr3HYfhib
+         SjjAc11I1LzehpUsy4K7W3QAykVRWK+H3jLgN68PsoQsiauQCRxUloUZpqvht78rZC9p
+         I58g==
+X-Gm-Message-State: AOAM531tV3rysBlbj72iov6IImB6YoomHVEWxlpOdQ5VgnD6+XILT6pw
+        sGaQXPfIBraqX8GDJK3swaoxCLCcNPaqHTE1nPXVae7sKr8=
+X-Google-Smtp-Source: ABdhPJzOYUBER/oqKzKvMuhm2RDD85bXcqgWlxmwa2hIva0T/DTuVh6cPegKLtrLDK3gLipky2xaaVWXc7bDf1krAe0=
+X-Received: by 2002:a2e:894e:0:b0:24d:bc0f:2238 with SMTP id
+ b14-20020a2e894e000000b0024dbc0f2238mr3247631ljk.509.1650645344918; Fri, 22
+ Apr 2022 09:35:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 09/24] media: v4l2: Trace calculated p/b0/b1 initial
- reflist
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org
-References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
- <20220405204426.259074-10-nicolas.dufresne@collabora.com>
- <d7451087-45f1-9691-2289-999eb16ca8a0@xs4all.nl>
- <04819e457ee0135e5d0b337dccfaba69b2d46610.camel@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <04819e457ee0135e5d0b337dccfaba69b2d46610.camel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1650575919.git.peilin.ye@bytedance.com> <b606e0355949a3ca8081ee29d9d22f2f30e898bd.1650575919.git.peilin.ye@bytedance.com>
+In-Reply-To: <b606e0355949a3ca8081ee29d9d22f2f30e898bd.1650575919.git.peilin.ye@bytedance.com>
+From:   William Tu <u9012063@gmail.com>
+Date:   Fri, 22 Apr 2022 09:35:08 -0700
+Message-ID: <CALDO+SYfemnqVkQY6kbQ23hgtdcUSimExJQob90rZLd8xvzsXw@mail.gmail.com>
+Subject: Re: [PATCH net 3/3] ip_gre, ip6_gre: Fix race condition on o_seqno in
+ collect_md mode
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        "xeb@mail.ru" <xeb@mail.ru>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 16:58, Nicolas Dufresne wrote:
-> Le vendredi 22 avril 2022 à 09:26 +0200, Hans Verkuil a écrit :
->> On 05/04/2022 22:44, Nicolas Dufresne wrote:
->>> Add debug print statements to print the content of P & B reference
->>> lists, to verify that the ordering of the generated reference lists is
->>> correct. This is especially important for the field decoding mode,
->>> where sorting is more complex.
->>>
->>> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->>> Tested-by: Sebastian Fricke <sebastian.fricke@collabora.com>
->>> Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
->>> ---
->>>  drivers/media/v4l2-core/v4l2-h264.c | 86 +++++++++++++++++++++++++++++
->>>  1 file changed, 86 insertions(+)
->>>
->>> diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
->>> index 38d8dbda0045..bcf9b7774560 100644
->>> --- a/drivers/media/v4l2-core/v4l2-h264.c
->>> +++ b/drivers/media/v4l2-core/v4l2-h264.c
->>> @@ -241,6 +241,87 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
->>>  	return poca < pocb ? -1 : 1;
->>>  }
->>>  
->>> +static char ref_type_to_char (u8 ref_type)
->>
->> Spurious space before (.
->>
->> Odd that checkpatch didn't catch that.
->>
->>> +{
->>> +	switch (ref_type) {
->>> +	case V4L2_H264_FRAME_REF:
->>> +		return 'f';
->>> +	case V4L2_H264_TOP_FIELD_REF:
->>> +		return 't';
->>> +	case V4L2_H264_BOTTOM_FIELD_REF:
->>> +		return 'b';
->>> +	}
->>> +
->>> +	return '?';
->>> +}
->>> +
->>> +static const char *format_ref_list_p(const struct v4l2_h264_reflist_builder *builder,
->>> +				     struct v4l2_h264_reference *reflist,
->>> +				     char *out_str, const int len)
->>> +{
->>> +	int n = 0, i;
->>> +
->>> +	n += snprintf(out_str + n, len - n, "|");
->>> +
->>> +	for (i = 0; i < builder->num_valid; i++) {
->>> +		/* this is pic_num for frame and frame_num (wrapped) for field,
->>> +		 * but for frame pic_num is equal to frame_num (wrapped).
->>> +		 */
->>> +		int frame_num = builder->refs[reflist[i].index].frame_num;
->>> +		bool longterm = builder->refs[reflist[i].index].longterm;
->>> +
->>> +		n += scnprintf(out_str + n, len - n, "%i%c%c|",
->>> +			       frame_num, longterm ? 'l' : 's',
->>> +			       ref_type_to_char (reflist[i].fields));
->>> +	}
->>> +
->>> +	return out_str;
->>> +}
->>> +
->>> +static void print_ref_list_p(const struct v4l2_h264_reflist_builder *builder,
->>> +			     struct v4l2_h264_reference *reflist)
->>> +{
->>> +	char buf[1024];
->>> +
->>> +	pr_debug("ref_pic_list_p (cur_poc %u%c) %s\n",
->>> +		 builder->cur_pic_order_count,
->>> +		 ref_type_to_char(builder->cur_pic_fields),
->>> +		 format_ref_list_p(builder, reflist, buf, sizeof(buf)));
->>> +}
->>> +
->>> +static const char *format_ref_list_b(const struct v4l2_h264_reflist_builder *builder,
->>> +				     struct v4l2_h264_reference *reflist,
->>> +				     char *out_str, const int len)
->>> +{
->>> +	int n = 0, i;
->>> +
->>> +	n += snprintf(out_str + n, len - n, "|");
->>> +
->>> +	for (i = 0; i < builder->num_valid; i++) {
->>> +		int frame_num = builder->refs[reflist[i].index].frame_num;
->>> +		u32 poc = v4l2_h264_get_poc(builder, reflist + i);
->>> +		bool longterm = builder->refs[reflist[i].index].longterm;
->>> +
->>> +		n += scnprintf(out_str + n, len - n, "%i%c%c|",
->>> +			       longterm ? frame_num : poc,
->>> +			       longterm ? 'l' : 's',
->>> +			       ref_type_to_char(reflist[i].fields));
->>> +	}
->>> +
->>> +	return out_str;
->>> +}
->>> +
->>> +static void print_ref_list_b(const struct v4l2_h264_reflist_builder *builder,
->>> +			     struct v4l2_h264_reference *reflist, u8 list_num)
->>> +{
->>> +	char buf[1024];
->>
->> I really don't like placing 1024 bytes on the stack. Can you find another way
->> of doing this? Perhaps using pr_cont or writing each format_ref_list item
->> on a separate line.
-> 
-> Thanks, I was strongly discourage of using pr_cont (which was my first
-> approach). Rationales are well covered on LKLM and in the pr_cont documentation,
-> so I won't say more then its not visually thread safe.
-> 
-> I would like to decline the second proposition, as having the lists spread out
-> on up to 32 lines will make the trace very hard to use. What I may suggest, as I
-> would really prefer keeping this trace useful, is to use an allocation instead.
-> The performance does not matter, and I explicitly call this function inside the
-> pr_debug call so it can be compiled out.
+On Thu, Apr 21, 2022 at 3:09 PM Peilin Ye <yepeilin.cs@gmail.com> wrote:
+>
+> From: Peilin Ye <peilin.ye@bytedance.com>
+>
+> As pointed out by Jakub Kicinski, currently using TUNNEL_SEQ in
+> collect_md mode is racy for [IP6]GRE[TAP] devices.  Consider the
+> following sequence of events:
+>
+> 1. An [IP6]GRE[TAP] device is created in collect_md mode using "ip link
+>    add ... external".  "ip" ignores "[o]seq" if "external" is specified,
+>    so TUNNEL_SEQ is off, and the device is marked as NETIF_F_LLTX (i.e.
+>    it uses lockless TX);
+> 2. Someone sets TUNNEL_SEQ on outgoing skb's, using e.g.
+>    bpf_skb_set_tunnel_key() in an eBPF program attached to this device;
+> 3. gre_fb_xmit() or __gre6_xmit() processes these skb's:
+>
+>         gre_build_header(skb, tun_hlen,
+>                          flags, protocol,
+>                          tunnel_id_to_key32(tun_info->key.tun_id),
+>                          (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++)
+>                                               : 0);   ^^^^^^^^^^^^^^^^^
+>
+> Since we are not using the TX lock (&txq->_xmit_lock), multiple CPUs may
+> try to do this tunnel->o_seqno++ in parallel, which is racy.  Fix it by
+> making o_seqno atomic_t.
+>
+> As mentioned by Eric Dumazet in commit b790e01aee74 ("ip_gre: lockless
+> xmit"), making o_seqno atomic_t increases "chance for packets being out
+> of order at receiver" when NETIF_F_LLTX is on.
+>
+> Maybe a better fix would be:
+>
+> 1. Do not ignore "oseq" in external mode.  Users MUST specify "oseq" if
+>    they want the kernel to allow sequencing of outgoing packets;
+> 2. Reject all outgoing TUNNEL_SEQ packets if the device was not created
+>    with "oseq".
+>
+> Unfortunately, that would break userspace.
+>
+> We could now make [IP6]GRE[TAP] devices always NETIF_F_LLTX, but let us
+> do it in separate patches to keep this fix minimal.
+>
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> Fixes: 77a5196a804e ("gre: add sequence number for collect md mode.")
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+> ---
 
-Allocation is probably best here.
-
-Regards,
-
-	Hans
-
-> 
-> My last resort otherwise would be to use 32 %s formaters, and pass each of the
-> possible 32 entry (or empty string "") manually.
-> 
-> let me know what you believe is acceptable for you,
-> Nicolas
-> 
->>
->> Regards,
->>
->> 	Hans
->>
->>> +
->>> +	pr_debug("ref_pic_list_b%u (cur_poc %u%c) %s",
->>> +		 list_num, builder->cur_pic_order_count,
->>> +		 ref_type_to_char (builder->cur_pic_fields),
->>> +		 format_ref_list_b(builder, reflist, buf, sizeof(buf)));
->>> +}
->>> +
->>>  /**
->>>   * v4l2_h264_build_p_ref_list() - Build the P reference list
->>>   *
->>> @@ -261,6 +342,8 @@ v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
->>>  	       sizeof(builder->unordered_reflist[0]) * builder->num_valid);
->>>  	sort_r(reflist, builder->num_valid, sizeof(*reflist),
->>>  	       v4l2_h264_p_ref_list_cmp, NULL, builder);
->>> +
->>> +	print_ref_list_p(builder, reflist);
->>>  }
->>>  EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
->>>  
->>> @@ -296,6 +379,9 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
->>>  	if (builder->num_valid > 1 &&
->>>  	    !memcmp(b1_reflist, b0_reflist, builder->num_valid))
->>>  		swap(b1_reflist[0], b1_reflist[1]);
->>> +
->>> +	print_ref_list_b(builder, b0_reflist, 0);
->>> +	print_ref_list_b(builder, b1_reflist, 1);
->>>  }
->>>  EXPORT_SYMBOL_GPL(v4l2_h264_build_b_ref_lists);
->>>  
->>
-> 
-
+LGTM
+Acked-by: William Tu <u9012063@gmail.com>

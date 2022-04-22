@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FECD50B1AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E033850B1B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444889AbiDVHfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
+        id S1444891AbiDVHgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444876AbiDVHfV (ORCPT
+        with ESMTP id S1444876AbiDVHgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:35:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95775515BE;
-        Fri, 22 Apr 2022 00:32:28 -0700 (PDT)
+        Fri, 22 Apr 2022 03:36:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5741515BB;
+        Fri, 22 Apr 2022 00:33:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AE5461F5A;
-        Fri, 22 Apr 2022 07:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C86C385A0;
-        Fri, 22 Apr 2022 07:32:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650612747;
-        bh=UB28YGlhAkWEAuV9AeyG9g+eUkzmMf90dg+QB+rqWlA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jqttIBEWlQitOymB/4TM6jgFBEJ1Getb1PJx6UNuGLHWijmeWJs0pYENdEVOINA7X
-         hbjQr61D9B3qKkpsnO9+KufPzlPvAYyoeDGt2zjlMDnNRR/0ZWQnScvef9PglVKka7
-         aioFwBSe3MQLKNypbPiK4Z6wbn3bcFzNXU4Zn5lj8pGEOM5ZhpIyio2C9gGCuzauyd
-         S10H5IXc0K7yWJjwWEOKlzzJTZwncl+IFLUIqnZP63GS6eanxWtUZ2l0sqUFrkBWQ5
-         fl2gNnLhoOfHk4PdQbgCcTxtKY26O+FVKzcoqPq3gKYGmySEWoOFJccGqb/1GUQUz1
-         kMViTExNDBIkw==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djakov@kernel.org
-Subject: [GIT PULL] interconnect fixes for 5.18-rc
-Date:   Fri, 22 Apr 2022 10:32:21 +0300
-Message-Id: <20220422073221.30745-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.29.0
+        by sin.source.kernel.org (Postfix) with ESMTPS id 035EACE279A;
+        Fri, 22 Apr 2022 07:33:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD0CC385A4;
+        Fri, 22 Apr 2022 07:33:10 +0000 (UTC)
+Message-ID: <4f4c3348-4eae-f881-74e4-d39aeebf5356@xs4all.nl>
+Date:   Fri, 22 Apr 2022 09:33:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 12/24] media: rkvdec: Stop overclocking the decoder
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+ <20220405204426.259074-13-nicolas.dufresne@collabora.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220405204426.259074-13-nicolas.dufresne@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,46 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+On 05/04/2022 22:44, Nicolas Dufresne wrote:
+> While this overclock hack seems to work on some implementations
+> (some ChromeBooks, RockPi4) it also causes instability on other
+> implementations (notably LibreComputer Renegade, but there were more
+> reports in the LibreELEC project, where this has been removed). While
+> performance is indeed affected (tested with GStreamer), 4K playback
+> still works as long as you don't operate in lock step and keep at
+> least 1 frame ahead of time in the decode queue.
+> 
+> After discussion with ChromeOS members, it would seem that their
+> implementation indeed used to synchronously decode each frames, so
 
-This pull request contains interconnect driver fixes for an issue that
-has been reported. Please pull into char-misc-linus when possible. The
-patches have been in linux-next for a week.
+frames -> frame
 
-Thanks,
-Georgi
+Regards,
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+	Hans
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> this hack was simply compensating for their code being less
+> efficient. In my opinion, this hack should not have been included
+> upstream.
+> 
+> Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> ---
+>  drivers/staging/media/rkvdec/rkvdec.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+> index c0cf3488f970..2df8cf4883e2 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec.c
+> @@ -1027,12 +1027,6 @@ static int rkvdec_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	/*
+> -	 * Bump ACLK to max. possible freq. (500 MHz) to improve performance
+> -	 * When 4k video playback.
+> -	 */
+> -	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
+> -
+>  	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(rkvdec->regs))
+>  		return PTR_ERR(rkvdec->regs);
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.18-rc4
-
-for you to fetch changes up to 2fb251c265608636fc961b7d38e1a03937e57371:
-
-  interconnect: qcom: sdx55: Drop IP0 interconnects (2022-04-14 09:47:16 +0300)
-
-----------------------------------------------------------------
-interconnect fixes for v5.18
-
-This contains a fix for a reported issue on sc7180 platforms, where
-one of the resources has been incorrectly modelled as both clock and
-interconnect, which is causing a crash when both frameworks try to
-manage it. Fix the same issue also on another platform that appears
-to be affected by the same.
-
-- interconnect: qcom: sc7180: Drop IP0 interconnects
-- interconnect: qcom: sdx55: Drop IP0 interconnects
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Stephen Boyd (2):
-      interconnect: qcom: sc7180: Drop IP0 interconnects
-      interconnect: qcom: sdx55: Drop IP0 interconnects
-
- drivers/interconnect/qcom/sc7180.c | 21 --------
- drivers/interconnect/qcom/sdx55.c  | 21 --------
- 2 files changed, 42 deletions(-)

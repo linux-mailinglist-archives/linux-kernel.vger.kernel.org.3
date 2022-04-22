@@ -2,82 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3316F50B313
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79A950B31C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445582AbiDVIlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 04:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
+        id S233684AbiDVIoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 04:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244977AbiDVIln (ORCPT
+        with ESMTP id S231263AbiDVIog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 04:41:43 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714EE4927A;
-        Fri, 22 Apr 2022 01:38:50 -0700 (PDT)
-X-UUID: 8af194e596604afd859d42c663035670-20220422
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:93736f80-3f0c-4e77-be31-8bd0e0a9baf2,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:8
-X-CID-META: VersionHash:faefae9,CLOUDID:bbff98f0-da02-41b4-b6df-58f4ccd36682,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 8af194e596604afd859d42c663035670-20220422
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 786001484; Fri, 22 Apr 2022 16:38:46 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 22 Apr 2022 16:38:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 22 Apr
- 2022 16:38:44 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Apr 2022 16:38:43 +0800
-Message-ID: <00b39ca86c6548c4313e0ee82829b2354ba9e4ac.camel@mediatek.com>
-Subject: Re: [PATCH v2] PCI: mediatek-gen3: Update entries to distinguish
- MediaTek PCIe controller
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Ryder Lee <ryder.lee@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Fri, 22 Apr 2022 16:38:44 +0800
-In-Reply-To: <20220422070908.14043-1-jianjun.wang@mediatek.com>
-References: <20220422070908.14043-1-jianjun.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 22 Apr 2022 04:44:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3EC52E65;
+        Fri, 22 Apr 2022 01:41:43 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 08:41:40 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650616901;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j6cLxZ4kdjoHceVBuCa9zNiwaAJ9SgeXfp0i0CpsUqc=;
+        b=QJFs0v0fwlkYp0+0MPHFE5lzok5I0aGywAcbKL08LNA7b6SRtKOUINwOy0ipwt/ETEPt/D
+        kUlGkeEf0I0xC305FLH0Yp76zQEbp40beaK5+cfIkZRgX5tzG/D4vZHiz7iP009j4Rwffr
+        qqhTnlOwQIwJDqZp6rrK4LRd63h3tUh/iggBKNy2xXLPD1e8FBUFl9F6JNHdpKtuTxiNzk
+        IAhoyXRxEIbUTBY00KAyYeSZalrsV2mVeOkDtoMdiNwDF+6qGYKmEGxvWQrRHcyRbi+kqY
+        BCFtihesnDKMSPzEX660PeGfhijG5HsUEK9rK0bLbJpauOvRaDpiMJJ4ZtMpiw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650616901;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j6cLxZ4kdjoHceVBuCa9zNiwaAJ9SgeXfp0i0CpsUqc=;
+        b=NWfMiudubAWkljK4kGIJANN1qJ47qcyRivTKmkzys3TlNBQ5z7wU1WuLmjd2G2KWLtcJKb
+        nMakoRAb8dx0f4CQ==
+From:   "tip-bot2 for John Stultz" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: timers/urgent] MAINTAINERS: Update email address for John Stultz
+Cc:     John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220418212016.2669086-1-jstultz@google.com>
+References: <20220418212016.2669086-1-jstultz@google.com>
 MIME-Version: 1.0
+Message-ID: <165061690058.4207.9583814082499524209.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-22 at 15:09 +0800, Jianjun Wang wrote:
-> Update driver entries in pcie-mediatek-gen3.c to distinguish the
-> MediaTek PCIe controllers.
-> 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> 
+The following commit has been merged into the timers/urgent branch of tip:
 
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Commit-ID:     214cab6f8020a9ad4a5e9862a4e68088d5a79f08
+Gitweb:        https://git.kernel.org/tip/214cab6f8020a9ad4a5e9862a4e68088d5a79f08
+Author:        John Stultz <jstultz@google.com>
+AuthorDate:    Mon, 18 Apr 2022 21:20:16 
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Fri, 22 Apr 2022 10:33:16 +02:00
 
+MAINTAINERS: Update email address for John Stultz
+
+I've switched jobs, so update my email address in MAINTAINERS
+
+Signed-off-by: John Stultz <jstultz@google.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
+Link: https://lore.kernel.org/r/20220418212016.2669086-1-jstultz@google.com
+
+---
+ MAINTAINERS | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 40fa195..c2e1b72 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5914,7 +5914,7 @@ R:	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+ R:	Liam Mark <lmark@codeaurora.org>
+ R:	Laura Abbott <labbott@redhat.com>
+ R:	Brian Starkey <Brian.Starkey@arm.com>
+-R:	John Stultz <john.stultz@linaro.org>
++R:	John Stultz <jstultz@google.com>
+ L:	linux-media@vger.kernel.org
+ L:	dri-devel@lists.freedesktop.org
+ L:	linaro-mm-sig@lists.linaro.org (moderated for non-subscribers)
+@@ -6584,7 +6584,7 @@ F:	drivers/gpu/drm/gma500/
+ DRM DRIVERS FOR HISILICON
+ M:	Xinliang Liu <xinliang.liu@linaro.org>
+ M:	Tian Tao  <tiantao6@hisilicon.com>
+-R:	John Stultz <john.stultz@linaro.org>
++R:	John Stultz <jstultz@google.com>
+ R:	Xinwei Kong <kong.kongxinwei@hisilicon.com>
+ R:	Chen Feng <puck.chen@hisilicon.com>
+ L:	dri-devel@lists.freedesktop.org
+@@ -8845,7 +8845,7 @@ F:	Documentation/devicetree/bindings/net/hisilicon*.txt
+ F:	drivers/net/ethernet/hisilicon/
+ 
+ HIKEY960 ONBOARD USB GPIO HUB DRIVER
+-M:	John Stultz <john.stultz@linaro.org>
++M:	John Stultz <jstultz@google.com>
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	drivers/misc/hisi_hikey_usb.c
+@@ -19784,7 +19784,7 @@ F:	drivers/net/wireless/ti/
+ F:	include/linux/wl12xx.h
+ 
+ TIMEKEEPING, CLOCKSOURCE CORE, NTP, ALARMTIMER
+-M:	John Stultz <john.stultz@linaro.org>
++M:	John Stultz <jstultz@google.com>
+ M:	Thomas Gleixner <tglx@linutronix.de>
+ R:	Stephen Boyd <sboyd@kernel.org>
+ L:	linux-kernel@vger.kernel.org

@@ -2,113 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442A250AD3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 03:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1637950AD3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 03:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443085AbiDVBfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 21:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
+        id S1443100AbiDVBfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 21:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443057AbiDVBfH (ORCPT
+        with ESMTP id S1344083AbiDVBfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 21:35:07 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F04849F2C;
-        Thu, 21 Apr 2022 18:32:16 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n18so7550981plg.5;
-        Thu, 21 Apr 2022 18:32:16 -0700 (PDT)
+        Thu, 21 Apr 2022 21:35:19 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3EE49CA5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 18:32:27 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id b6-20020a5b0b46000000b006457d921729so2019023ybr.23
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 18:32:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=tqPDRS4nUWLBZ4JoPctO88qdw7Y1CafvutU8eDymN/U=;
-        b=kFtNcHZTf2FKloMVXOAzRxo+H41+Xtg7jWHH1Xf1l0W9zZJlqMfeJgjHhC9+crPjM6
-         N+t4E36meUhTeGrgL5Y3r4eTI+uCHhJ/Swsu9Nib0nqJOpYzUs9Fik8YeDyDtozYjXxx
-         9+zeSAcM2IM20NqSgPP7SzBQHXf7C8hxCoYrR64aphYUIbo5E/BNCjPVA90OK/qFJGUk
-         oiR8Xw/93AHSf7YTumh3NcrLbMnSU2E5mf/iF/SVHJSjJsdyWr6G/mlF17XvJHCkQf6l
-         P7TlvBKMJkntE8NjnzcQdu5JnCnXwyIGsf1746TFUO1Rf4MJJhodaFZ69B01KpotA0l8
-         HoCg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=eQsf5nicRRkooM+lPXT1i7kU80hx8qfA2QKyrV7j43E=;
+        b=H0TY2pwXZRgytNxh3KspS7rSXdUAuP00gjDwEB+/SKqhgFjUBskIUUXjQbQrNKOGNz
+         phnFArg4RdKRUgLkURBkzIeV2JOr/h+u7nPZ+KL6T5+qd8y3GXWzRh+TWJWcreEtXGYz
+         P/+lqJIKmZxxpWanOz1F1onAfVWxGeCCo2dHh88l3d3q8SVY07u/kJWxyccDWYVrgM+J
+         kNh81ABIVV2VBHOpm7o00Y0kq86ENBu9KaqwLITWH4Ho5b2PoH+cQ0i9ot2ldqZcFai2
+         RVYdyK4whDEPxGP4xXceor9QkTiO998n2P/as90CU3w0cjJvHddlpfYBKxweeMeTaclr
+         63YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
          :content-transfer-encoding;
-        bh=tqPDRS4nUWLBZ4JoPctO88qdw7Y1CafvutU8eDymN/U=;
-        b=CHs6U0ewurQX5vriGWfJwbkVNJ8TcoR1ZQ+1FBfF3dyFO+U2MTVsshCi2eMQ8F0ym3
-         QXPpWi95jphUymHJo0XMqET+GM3zfRkEVlS+SdVyhN0WqmYKuj/gxgnEEKGeEyeEJJ4A
-         eoBPXD0bdONvfpjy3eOgFVPC/D3sTGq1Ujd0slK2cChMV5xxMWIBiJ86ENiedmewTI6p
-         XrvQSUtKT/bjU5QltTjIuMyGfi1QGxI+xREZ4E59+RYIeQ9d5Lu0YmDzTI6zOG1v5/Vh
-         Jeyw/PCHXDg07xLIaao0VTqu8Be8vqBwQRG43jdI2gpYJ6DUTCOAlH6J9w73HhYTjhQn
-         dPYQ==
-X-Gm-Message-State: AOAM531Ed/igIeZkVG51qtYL2aFCEsVZPvJX/vJrHmmfZ/X0j/CwJGGN
-        rCs4ZG6Z4bNErlYQgSWA50g=
-X-Google-Smtp-Source: ABdhPJxFJnOIJNpFTRlL010JQMDVFmMgl+P7c+HrY3I81Q3POTN8/7Xmgyz+jXP4oA+FC3ZSAk1k0Q==
-X-Received: by 2002:a17:902:6b0b:b0:158:f889:edd9 with SMTP id o11-20020a1709026b0b00b00158f889edd9mr1993953plk.122.1650591135627;
-        Thu, 21 Apr 2022 18:32:15 -0700 (PDT)
-Received: from [192.168.1.100] ([159.226.95.33])
-        by smtp.gmail.com with ESMTPSA id r9-20020aa79889000000b0050a6fbc0c6bsm367159pfl.105.2022.04.21.18.32.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 18:32:15 -0700 (PDT)
-Message-ID: <40b90933-a881-3bd8-4533-3ded023a3e95@gmail.com>
-Date:   Fri, 22 Apr 2022 09:32:08 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] clk: imx: scu: Fix pm_runtime_get_sync() error checking
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Abel Vesa <abel.vesa@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220412065719.17735-1-linmq006@gmail.com>
- <20220422012059.52267C385A5@smtp.kernel.org>
-From:   Miaoqian Lin <linmq006@gmail.com>
-In-Reply-To: <20220422012059.52267C385A5@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=eQsf5nicRRkooM+lPXT1i7kU80hx8qfA2QKyrV7j43E=;
+        b=whVjaWYtow9dCvXfolXR0/1XhOwzzCxXR1onV0yqBSdtuRRTxoEiLJQRriYmUr5Mag
+         FwENBP5ZJ3F9dtSlzIRo3XIgPemcvgYlR1otitKVZfaRsC9V+pzQBNsnVAi7kM+657jQ
+         U/8UvgZ4zz2p8LGKrW4rwov3B/D+UKUb0nE5cvkUbR0gy4gAD6hvTj2nVi+10E6EtjUV
+         gkOwNL2DUlSDsDYpa0rOzkuvqOKxKJAkLY7arZNpPA7L9l2/PSJTzhHzvl7rJt0NpvSI
+         uKdumLe8sWG8oy3HndN0N3DO5nNWHXAHC5VyloqE9lyZw2sEXmhDyCM1xjVQYiI/v1sJ
+         /u+A==
+X-Gm-Message-State: AOAM5328s93z+twO1MbQ/zboQKgRe4R/7p2sT14hVbwpCUaEL2Orna0+
+        rh9QxA0QsCvJ9Y4Ae+b0DRdBfczI5w==
+X-Google-Smtp-Source: ABdhPJzAd9VmD7psH97oeNGynxoYxQ224gs9qO/ix+P/PSWQya4fbwYFqBTmyc1V0j9TkylV6BY2XSlLMg==
+X-Received: from tweek-sin.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:2bfd])
+ (user=tweek job=sendgmr) by 2002:a81:d551:0:b0:2f4:e3c9:c0e1 with SMTP id
+ l17-20020a81d551000000b002f4e3c9c0e1mr2458358ywj.125.1650591147043; Thu, 21
+ Apr 2022 18:32:27 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 11:32:15 +1000
+Message-Id: <20220422013215.2301793-1-tweek@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+Subject: [PATCH v2] firmware_loader: use kernel credentials when reading firmware
+From:   "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jeffrey Vander Stoep <jeffv@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Alistair Delva <adelva@google.com>,
+        Adam Shih <adamshih@google.com>, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Device drivers may decide to not load firmware when probed to avoid
+slowing down the boot process should the firmware filesystem not be
+available yet. In this case, the firmware loading request may be done
+when a device file associated with the driver is first accessed. The
+credentials of the userspace process accessing the device file may be
+used to validate access to the firmware files requested by the driver.
+Ensure that the kernel assumes the responsibility of reading the
+firmware.
 
-On 2022/4/22 9:20, Stephen Boyd wrote:
-> Quoting Miaoqian Lin (2022-04-11 23:57:18)
->> If the device is already in a runtime PM enabled state
->> pm_runtime_get_sync() will return 1, so a test for negative
->> value should be used to check for errors.
-> Maybe it should use pm_runtime_resume_and_get() instead?
-Fair enough，I will send patch v2.
->> Fixes: 78edeb080330 ("clk: imx: scu: add runtime pm support")
->> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
->> ---
->>  drivers/clk/imx/clk-scu.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
->> index 083da31dc3ea..18c6190eeffd 100644
->> --- a/drivers/clk/imx/clk-scu.c
->> +++ b/drivers/clk/imx/clk-scu.c
->> @@ -529,7 +529,7 @@ static int imx_clk_scu_probe(struct platform_device *pdev)
->>                 pm_runtime_enable(dev);
->>  
->>                 ret = pm_runtime_get_sync(dev);
->> -               if (ret) {
->> +               if (ret < 0) {
->>                         pm_genpd_remove_device(dev);
->>                         pm_runtime_disable(dev);
->>                         return ret;
->> -- 
->> 2.17.1
->>
+This was observed on Android for a graphic driver loading their firmware
+when the device file (e.g. /dev/mali0) was first opened by userspace
+(i.e. surfaceflinger). The security context of surfaceflinger was used
+to validate the access to the firmware file (e.g.
+/vendor/firmware/mali.bin).
+
+Because previous configurations were relying on the userspace fallback
+mechanism, the security context of the userspace daemon (i.e. ueventd)
+was consistently used to read firmware files. More devices are found to
+use the command line argument firmware_class.path which gives the kernel
+the opportunity to read the firmware directly, hence surfacing this
+misattribution.
+
+Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
+---
+v2: Add comment
+
+ drivers/base/firmware_loader/main.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_lo=
+ader/main.c
+index 94d1789a233e..8f3c2b2cfc61 100644
+--- a/drivers/base/firmware_loader/main.c
++++ b/drivers/base/firmware_loader/main.c
+@@ -735,6 +735,8 @@ _request_firmware(const struct firmware **firmware_p, c=
+onst char *name,
+ 		  size_t offset, u32 opt_flags)
+ {
+ 	struct firmware *fw =3D NULL;
++	struct cred *kern_cred =3D NULL;
++	const struct cred *old_cred;
+ 	bool nondirect =3D false;
+ 	int ret;
+=20
+@@ -751,6 +753,18 @@ _request_firmware(const struct firmware **firmware_p, =
+const char *name,
+ 	if (ret <=3D 0) /* error or already assigned */
+ 		goto out;
+=20
++	/*
++	 * We are about to try to access the firmware file. Because we may have b=
+een
++	 * called by a driver when serving an unrelated request from userland, we=
+ use
++	 * the kernel credentials to read the file.
++	 */
++	kern_cred =3D prepare_kernel_cred(NULL);
++	if (!kern_cred) {
++		ret =3D -ENOMEM;
++		goto out;
++	}
++	old_cred =3D override_creds(kern_cred);
++
+ 	ret =3D fw_get_filesystem_firmware(device, fw->priv, "", NULL);
+=20
+ 	/* Only full reads can support decompression, platform, and sysfs. */
+@@ -776,6 +790,8 @@ _request_firmware(const struct firmware **firmware_p, c=
+onst char *name,
+ 	} else
+ 		ret =3D assign_fw(fw, device);
+=20
++	revert_creds(old_cred);
++
+  out:
+ 	if (ret < 0) {
+ 		fw_abort_batch_reqs(fw);
+--=20
+2.36.0.rc2.479.g8af0fa9b8e-goog
+

@@ -2,85 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BCF50B6F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356BF50B707
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447374AbiDVMNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S1447420AbiDVMNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447380AbiDVMNI (ORCPT
+        with ESMTP id S1447359AbiDVMN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 08:13:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6693F31DC0;
-        Fri, 22 Apr 2022 05:10:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B193ACE294A;
-        Fri, 22 Apr 2022 12:10:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B6C11C385AF;
-        Fri, 22 Apr 2022 12:10:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650629411;
-        bh=APf6jpXDGLxUKrbqLvbwJKYkxkT1guioJa+IJ2L+G9A=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qFf9pDF6O2aKZekydt5IMEiOdRH93m+x7li7xLdVUvBD1AgBjcUF0o3CshJss9e9Q
-         27+UhZ8k1QyxkAqPiCR7/4rLNJJY2uLt35BtPqQlrizSB4uH1xrG3qmyDuVC/M5jm0
-         j3e0Mu4E3D9lFto+s9pO77m22WhBd9cJEPr2TiyJj0aA6HQgw/zZk8LS0CK2cZH7i1
-         6NiHoCwqFNL9D1E79l1n8iIXdYCAFTXZEbLmP1NvPXhXRTjt3QG/6ZCtxZwXLNs/5d
-         d/85uSebmFBfG8TEYKigRqWQgf20a2QyTyakIgCJQy8VETRNgQu9D7suU+XSy3vqPk
-         5wzF/SIu4Cr3A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9983CE8DD61;
-        Fri, 22 Apr 2022 12:10:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 22 Apr 2022 08:13:26 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A6E31DC0;
+        Fri, 22 Apr 2022 05:10:27 -0700 (PDT)
+X-UUID: 1f2a789614b84f91914db5a6dce5a996-20220422
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:1761c73e-7895-44f1-a589-0d3049ca5de7,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:75
+X-CID-INFO: VERSION:1.1.4,REQID:1761c73e-7895-44f1-a589-0d3049ca5de7,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:75
+X-CID-META: VersionHash:faefae9,CLOUDID:4d54c9ef-06b0-4305-bfbf-554bfc9d151a,C
+        OID:90a404c54476,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
+        le:nil,QS:0,BEC:nil
+X-UUID: 1f2a789614b84f91914db5a6dce5a996-20220422
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 187390448; Fri, 22 Apr 2022 20:10:21 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 22 Apr 2022 20:10:20 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 22 Apr
+ 2022 20:10:19 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 22 Apr 2022 20:10:19 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, <nfraprado@collabora.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH 0/2] dt-bindings: watchdog: mediatek: Convert binding to YAML
+Date:   Fri, 22 Apr 2022 20:10:15 +0800
+Message-ID: <20220422121017.23920-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: dsa: Add missing of_node_put() in
- dsa_port_link_register_of
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165062941162.4368.17163300316112678882.git-patchwork-notify@kernel.org>
-Date:   Fri, 22 Apr 2022 12:10:11 +0000
-References: <20220420110413.17828-1-linmq006@gmail.com>
-In-Reply-To: <20220420110413.17828-1-linmq006@gmail.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Based on kernel/git/groeck/linux-staging.git, watchdog-next
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Add align watchdog node name with dtschema PATCH to fix dtbs_check warnings.
 
-On Wed, 20 Apr 2022 19:04:08 +0800 you wrote:
-> The device_node pointer is returned by of_parse_phandle()  with refcount
-> incremented. We should use of_node_put() on it when done.
-> of_node_put() will check for NULL value.
-> 
-> Fixes: a20f997010c4 ("net: dsa: Don't instantiate phylink for CPU/DSA ports unless needed")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> 
-> [...]
+Allen-KH Cheng (2):
+  arm64: dts: mt8516: align watchdog node name with dtschema
+  dt-bindings: watchdog: mediatek: Convert binding to YAML
 
-Here is the summary with links:
-  - net: dsa: Add missing of_node_put() in dsa_port_link_register_of
-    https://git.kernel.org/netdev/net/c/fc06b2867f4c
+ .../devicetree/bindings/watchdog/mtk-wdt.txt  | 42 ----------
+ .../devicetree/bindings/watchdog/mtk-wdt.yaml | 76 +++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8516.dtsi      |  2 +-
+ 3 files changed, 77 insertions(+), 43 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.yaml
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.18.0
 

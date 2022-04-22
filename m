@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CF150B11D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F1250B120
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444624AbiDVHMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
+        id S1444684AbiDVHMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiDVHMO (ORCPT
+        with ESMTP id S1444645AbiDVHM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:12:14 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334E438DA7;
-        Fri, 22 Apr 2022 00:09:20 -0700 (PDT)
-X-UUID: 3cad76fe5ec3463e83bd949fb039c8cc-20220422
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:7ef536aa-c7c2-404c-981f-8fb8c2c424ed,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-12
-X-CID-META: VersionHash:faefae9,CLOUDID:efb1bfef-06b0-4305-bfbf-554bfc9d151a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 3cad76fe5ec3463e83bd949fb039c8cc-20220422
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <jianjun.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1589918534; Fri, 22 Apr 2022 15:09:15 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 22 Apr 2022 15:09:14 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 22 Apr
- 2022 15:09:12 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Apr 2022 15:09:10 +0800
-From:   Jianjun Wang <jianjun.wang@mediatek.com>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2] PCI: mediatek-gen3: Update entries to distinguish MediaTek PCIe controller
-Date:   Fri, 22 Apr 2022 15:09:08 +0800
-Message-ID: <20220422070908.14043-1-jianjun.wang@mediatek.com>
+        Fri, 22 Apr 2022 03:12:27 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B92E50E2D
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:09:35 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id e17so5410276qvj.11
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4PRaKTBX4zvfcCO3PcJSGqznsgOYRUdUYPYGgxvNGJk=;
+        b=FmgD3YMH5ZAMxK3tKRqndWwIOcSRlgtPcYd/RgB7m0Z5OTwJturd4h6xZlFkUE6jPv
+         mJDZjZZtObdX1gM1PGgZWYpO2csnDbG8c30Lp1U0BAZjWLwPBXUv33hAOFFM1lUyvo69
+         3oeZ0wYMpTwD882qFKzoSgdlj2FXo7MH93YR1uNywTX5RdoFMS3FUPO3GKPNsTwuFnlM
+         dbByzkaYdkh1ylxsDPfcSxDpW1pJaWDFt1bgYRzMoZrEHkHGv6fBDNBdXGk5HTxi4mKz
+         n4P6HsPeb50PiMjbQrY5+GhqRUlgkMF7z7/AGMYnGIhq+J6NLGPguV/nkwea06QXxxDF
+         cwoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4PRaKTBX4zvfcCO3PcJSGqznsgOYRUdUYPYGgxvNGJk=;
+        b=UpmdCMXjxuK4FQT9rWrxJKgzAAmctlddDAlBKD3WsJ/lnuJ2ZwhJS6sswMwU5YWkbk
+         W78HpMGiE/A6LJCPztk5b9RDTea5Tgx9E1ykZ16jz6aVLQCLJwYUrLTSv9CZITrO53cO
+         +M94PwTaT+/eSHFqnZ0Q2IsbKeV8mHZhIJe55FZ0Hhg2u1mFVo2wIKnQZgRaJ1w2bSHn
+         9FIj8zbqIi78AUm1CGCmnvjCJGIU5NPK/yBdCo1UpEZ0n2egUiBR2kjRpC7gVqgo//06
+         TFhcl9ZDZPJzw0J55YnN/pkjd2oWRVWhcHk+BOoEDj1S0UsmeWcPtcP42ld9Kq1DGbTJ
+         JjBg==
+X-Gm-Message-State: AOAM532ww/EwolGBTFMye7PCrrnPB717C9xPJnX4vjJNb3oGKrYE5I+F
+        rD1s2PLw88Sjz91bhj/gmEg=
+X-Google-Smtp-Source: ABdhPJwty+79omghdZU2CmjLKE0ZISzktFgDQQWpWvf4Y5KNPRnfdIqNfqjFi5e9qoTNzRPu3AaY9Q==
+X-Received: by 2002:a05:6214:21a5:b0:446:6477:30b9 with SMTP id t5-20020a05621421a500b00446647730b9mr2220318qvc.103.1650611374245;
+        Fri, 22 Apr 2022 00:09:34 -0700 (PDT)
+Received: from localhost.localdomain ([192.159.178.174])
+        by smtp.gmail.com with ESMTPSA id y7-20020a05620a0e0700b00699a30d6d10sm532950qkm.111.2022.04.22.00.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 00:09:33 -0700 (PDT)
+From:   ashamedbit <muralianiruddhan@gmail.com>
+To:     Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Cc:     ashamedbit <muralianiruddhan@gmail.com>
+Subject: [PATCH] Subject: x86/vdso/vdso2c: Memory Leak fix, Fix leak of variable name in vdso2c.c
+Date:   Fri, 22 Apr 2022 03:09:22 -0400
+Message-Id: <20220422070922.14765-1-muralianiruddhan@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update driver entries in pcie-mediatek-gen3.c to distinguish the
-MediaTek PCIe controllers.
+The file vdso2c.c contains a memory leak of variable 'name'.
+This leak was detected by ASAN(AddressSanitizer) on local  builds.
+A tool called AddressWatcher automatically attempts to fix memory
+leaks suggested by ASAN. The fix has been inserted to stop the
+memory leak in the file vdso2c.c.
 
-Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+Signed-off-by: ashamedbit <muralianiruddhan@gmail.com>
 ---
-Changes in v2:
-Remove the changes in Kconfig description and update the commit message.
----
- drivers/pci/controller/pcie-mediatek-gen3.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/x86/entry/vdso/vdso2c.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-index 7705d61fba4c..6745076a02b9 100644
---- a/drivers/pci/controller/pcie-mediatek-gen3.c
-+++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-@@ -1011,21 +1011,21 @@ static const struct dev_pm_ops mtk_pcie_pm_ops = {
- 				      mtk_pcie_resume_noirq)
- };
+diff --git a/arch/x86/entry/vdso/vdso2c.c b/arch/x86/entry/vdso/vdso2c.c
+index edfe9780f6d1..b3decd59c98e 100644
+--- a/arch/x86/entry/vdso/vdso2c.c
++++ b/arch/x86/entry/vdso/vdso2c.c
+@@ -246,6 +246,7 @@ int main(int argc, char **argv)
  
--static const struct of_device_id mtk_pcie_of_match[] = {
-+static const struct of_device_id mtk_pcie_gen3_of_match[] = {
- 	{ .compatible = "mediatek,mt8192-pcie" },
- 	{},
- };
--MODULE_DEVICE_TABLE(of, mtk_pcie_of_match);
-+MODULE_DEVICE_TABLE(of, mtk_pcie_gen3_of_match);
+ 	go(raw_addr, raw_len, stripped_addr, stripped_len, outfile, name);
  
--static struct platform_driver mtk_pcie_driver = {
-+static struct platform_driver mtk_pcie_driver_gen3 = {
- 	.probe = mtk_pcie_probe,
- 	.remove = mtk_pcie_remove,
- 	.driver = {
--		.name = "mtk-pcie",
--		.of_match_table = mtk_pcie_of_match,
-+		.name = "mtk-pcie-gen3",
-+		.of_match_table = mtk_pcie_gen3_of_match,
- 		.pm = &mtk_pcie_pm_ops,
- 	},
- };
- 
--module_platform_driver(mtk_pcie_driver);
-+module_platform_driver(mtk_pcie_driver_gen3);
- MODULE_LICENSE("GPL v2");
++	free(name);
+ 	munmap(raw_addr, raw_len);
+ 	munmap(stripped_addr, stripped_len);
+ 	fclose(outfile);
 -- 
-2.18.0
+2.25.1
 

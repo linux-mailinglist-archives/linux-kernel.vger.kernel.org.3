@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D9050BC4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B557E50BC47
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385032AbiDVQAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
+        id S1382774AbiDVQAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359249AbiDVQAG (ORCPT
+        with ESMTP id S1359635AbiDVQAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:00:06 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2028.outbound.protection.outlook.com [40.92.18.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7611B5DA5D;
-        Fri, 22 Apr 2022 08:57:13 -0700 (PDT)
+        Fri, 22 Apr 2022 12:00:12 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2018.outbound.protection.outlook.com [40.92.18.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1365DA63;
+        Fri, 22 Apr 2022 08:57:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zj6dk/6e8tJTLTuJpUv+v+u9ziUHHkf1quvGEJ0fyNFfWmqOffAVB9ajf1ZKe+xIkgMSZ+8zchuDNJ7Zw0RIYftwWVqj1jpMa3hLtvNwt//J5SLTppPnYXMe+xmbzdeVW73lbia5kVxtYsoWF8hzvVDqleTjd3GFIUbKQLugsumDx7kmRiHW5T/fmwTdTA1D+Q6K+woY14xL72+1i4I9OAr9TU3OyTtfH/tVkxluxM2ii0dhckzM0y1FVFBJT/cIZ0b8ZGsfOHbAbxXjvbDPDG3UtDK7nlApdozxw2uSTyMS2AyqIv+3IN/jbodaNFJz8HyFp87apFw/miE6+uOcmg==
+ b=H1FNmpN9DOyQo0575y/T2TyykMB4Z156FzWVeWwEcex+QpEmrgjduVmPL1obXuWrQF8P3RDC2Ep0X87TU6FgTI5uKWp2WCQJ65MdmKLc7nDjsUfDt9iGSLfFwPZyEmMTv39296y0+IyN1NYkYb9J/7gNGtRU1lFm8aHS1+JVY5ffznCd3PNkE8FkH0GEVVoDrPNA+PVzxJKAIk1FVagNiyeOLLCMKYMX13sm3zAPTF5aBjdwuXYSOtxk9ioSwCHOLU7ZsDzNFLkOTMIqQEnlW55gneNPB/zmddYsYlc85/BBTrglOazlmrfEXpvEluSBY6/cItTzcYBYyYNsr4B03g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bjRNcOCHoT1F5l8EmfV/s3vTk7Ju2Ua83b9CsTNmlmU=;
- b=kb5GW1A2rUzo2qAhn4qLLbJk71aIbVhlBBzWQJ1B6NkDekG8AuIer4M5KGCeyu/Q94XT0Ph4uAnBcIhzmSmQfCa3f5GKQsqUr3mSqrCS/O9/y8GzQFGeUl26wA7gtq692p58I3XJUh3iJjtis3XktwmwjEIxHc4Xqj974TEyRDcJ6fNJmGtA9uqa0CmNjt0L0wXxLZ6wC9nixasF0KNxVMGqrtL+47R6iLLHtsx/MQfdTrTosE4ixHrx017M31UcN+mx2MHH7uQtR1L2+WOC163hXKdTCJzSOtBYhL4ABbUvgxSsjsCOomVR5Xj/+FnVNtZBJZKg4hK2TshpDThtuA==
+ bh=w214JjkWxts/kZdYSYyJbA2zAoSYiPb6tUrTOsI486A=;
+ b=CF1PiUzUNMeQ9+ZqLMBf7/RVzk4t1jibhLnMqVhB2WMpEHsE+tjOcr6kP4vamGc0Hak4dESHnwoGq3pn0pEHnUP89Fo8Td2blgGOs+uFJ07kWCgIZSfCIQl5g9FAEZkwKz8QwgTrxqy3CHGUkEQcYgS4w+3r3nv/7rMudGRW1rVaVvnGVYAcSQsqkbCEu8mUJvaaeM016ugh8QNb8TMWV7Dw07A3uQapOtNEXzZ/HtpBydESlTBSQ5SpWKeVJ+Igqi0Zbk4VyOanNevruc4bfwTkbiXXwXQWDuF82jjBbMNKsNAc2HwrlBszNrnhGDXYPWwHiZor1GyHV9uCSa+Nyw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bjRNcOCHoT1F5l8EmfV/s3vTk7Ju2Ua83b9CsTNmlmU=;
- b=snu5cYif3qakAkrzTT2jNv6HcikDkAbBlNaHuXXLnxTfzsmobcsnG/RyQZU6RDrgl5GXKhuK2HhfDpLrGzhrJ2KjuNy8gT37W0eKqYpp3tD4YPXwPxaY7B1oqn11DG7NaEa/WJiK55YKphxxjU1gDPngcXfKhpr7J/LHISAAX43BsQT1uHKM66wp+D+7yNcY7wI1ZFuCbqAGvpvflscbBpTW5o5RMhl0CDszwa9/Wo1Wnr8OI80O0W2yPZEaQTZ4v9UzjYkdxJD8vS+iwA+Ieh3Da+8yNNR4njm9xhl8FEfl+FOyHPEuXi5oSKIIwuxE4OTpqCVGjmqaa3rynYnd2Q==
+ bh=w214JjkWxts/kZdYSYyJbA2zAoSYiPb6tUrTOsI486A=;
+ b=avIl6xb9ivtcLGSSB2c593ZJpAGneeVYLnxiVtHTcDy2915NSfu6Q6+9hsDVTetrt/0MemLtcSm6sJywl+6Khhz7Dt4TVkNJKN3k/HH4KMCZaNRx/PK55vcrXIUlyahFjobrA3ToDL1MuBVHdX+JHSWa986WYZ5z/ThjC1wxIgIJlTW4nZixhAyKYfKmZTQQuz9NKgnNXUtdaJiHMqqgWKJKxgYK8MdhXDkgg+31tLO2leBRBGUC0A0pNd8fkHxXDAAzBzdW9ZgH/boZPl2JjJep5Pjn9Dq25ngxNaMSTBZcfVOzvSLydO5sxstzRfdW4cJhJEsVEfBYNFn3kHEAZw==
 Received: from BYAPR20MB2472.namprd20.prod.outlook.com (2603:10b6:a03:155::16)
  by CY4PR2001MB0917.namprd20.prod.outlook.com (2603:10b6:903:d6::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
- 2022 15:57:12 +0000
+ 2022 15:57:16 +0000
 Received: from BYAPR20MB2472.namprd20.prod.outlook.com
  ([fe80::3480:160a:eb92:d6e3]) by BYAPR20MB2472.namprd20.prod.outlook.com
  ([fe80::3480:160a:eb92:d6e3%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 15:57:12 +0000
+ 15:57:16 +0000
 From:   icenowy@outlook.com
 To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -46,57 +46,57 @@ To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
 Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>
-Subject: [PATCH 2/4] spi: sun6i: change OF match data to a struct
-Date:   Fri, 22 Apr 2022 23:56:37 +0800
-Message-ID: <BYAPR20MB24722F3BAFB536A8BFEC733ABCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+Subject: [PATCH 3/4] spi: sun6i: add quirk for in-controller clock divider
+Date:   Fri, 22 Apr 2022 23:56:38 +0800
+Message-ID: <BYAPR20MB24728A99C2F7505873A091B5BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220422155639.1071645-1-icenowy@outlook.com>
 References: <20220422155639.1071645-1-icenowy@outlook.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [95mPJRFU1+sKHSIYKr6vgvSKnRYHd7PO]
+X-TMN:  [6on+UoLO1ATpsFxi0pyPJsItMb+i9p/A]
 X-ClientProxiedBy: HK0PR01CA0059.apcprd01.prod.exchangelabs.com
  (2603:1096:203:a6::23) To BYAPR20MB2472.namprd20.prod.outlook.com
  (2603:10b6:a03:155::16)
-X-Microsoft-Original-Message-ID: <20220422155639.1071645-3-icenowy@outlook.com>
+X-Microsoft-Original-Message-ID: <20220422155639.1071645-4-icenowy@outlook.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7b71b5c9-55b0-4f0b-9155-08da2478c36d
+X-MS-Office365-Filtering-Correlation-Id: 27e00b0f-5279-4cf3-da4c-08da2478c62c
 X-MS-TrafficTypeDiagnostic: CY4PR2001MB0917:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: f+xO6qxUrMnV4+69dmTSQbrYxIIUrwFeylMOjZOflTAEyO7q+cGK7ZoSmP1WUWFgZ4TPI27PRGu5qGqZMk3n4wEryjSO+L17PhT7zYYSJnPJziDIDi+ZjUBpdTochUUWm7Ta9kANH7EpTJMVLqhyFHZelF78tuHYyJ+/zSJ+C48kDJ2o+d9SIYsELKVjyJ+/j+D2twYDkM+Imoruwc6WcUQ8SiponibhxINoQDqkr9rbm6rPQkexMRy4rrmU+1LD8wmCuBrGENnUOXWuYptNkYx5CJ/ofDUEOifFtlXRNNI+upliA3hG4HuTHAQ5pTsYqh7tdEi+cD2tto2336Fv64hwvSK3FAsZWH/0c/SZBPofHnxlQztYG4RhNrNVTh40i86fkIgZ0hUdUww9Mo1nygvU8/ygfyRui4Ou3S8nJHvveS+ehFGE0rBMFEK7644O8SqhKguBBtSuK0HhX40fOrs+Fo+EdZtgNa+Yfl5NGmu2yQAG1xJIRQPrBHQDqcbhjp0ScokaKYymwfokmK1/WalLsLkp4ev9Siv6BmyI9loUxy8uUdjQh0KVyk+qrU6OQ+yU16MH2FD5XjynGJoyPw==
+X-Microsoft-Antispam-Message-Info: dPKginjMP6LZfTjk1VtW8Pv4RLWarsXenZrYwgtH0SNDfyjwQptrmY2qopUzZ4W0i0drObBPzNaiSm9BdHYwDMhaArHpxPYSyXnO9qSpPYfYgMgjvzBBGtGWqKunBgGX42/2MyeFXdjYPQ26XWbWKJ3uXan7PXVGEChTr2PVezOJgUZFsG+KXiFt45IhIF1nSAsSp+CnO/ehpRHLm0528FccF+Hj2VAGkriXnChKbrbxoalRERv96Al7rR0fM1+FHK2rFqlH6kf3GWhEziFJwrIa6URe/DTgFRAU/V5b7R97+Boe8bZpq2GUfCaMMQde1r+PZO5cMrDD8mSr2c7U0sOmDAYvB574ZKzgNMXaexO4+6lF5nrLtB+XdHX8QGOjgwpvBXrrw8HGmCAefESrHY8cfN/0Dats/wwA48swne4ijiCQE5apZnsP6ckiqX/nqOo2YfzBCcnGeowhD3+rQiP8ON/bpLyOExM1Y0wVlnqghVzgv0bY0kAuJVmFeDu/rJomqoflMppijHIqA++IJxEmHg4gQGPffiVhhNNfcWxFI23/qkw5N7UTeNtP8YtWDIvpPokrtqDQa29COy5nqw==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ja3LttUEMgKU90YSwAJw9FbEp+kznTCPhcOOhSVkfygP4X0usTyOWU9yl8VF?=
- =?us-ascii?Q?uZDd+luJjDOeCW5HZeS2k7OSSPcaf5TI83qtpRrCBGpfV2/Q0unlSuobXG5n?=
- =?us-ascii?Q?X6lBZ+7dbYUZloskRntW7RSq914m6Ze7E/WEsarQZYSMjTLn7IHZi57EdHH+?=
- =?us-ascii?Q?8yyDn4vKZu4J1YwLfjeqRmHQFlvalbUFWMf8sh3Ww/NlFH3w9AgQyx/gasYE?=
- =?us-ascii?Q?anE8lcV28P/KdmAOjcEgoqO2o95//EYi3GnKm1RUdiavWGfNrrSPyuD1rXuj?=
- =?us-ascii?Q?7AgbbogEHcIjYNLCX3flVHKP77XaUYfKZKG1yUq+Upu6cMq1rDExZyR3QzUy?=
- =?us-ascii?Q?9twmaOzJVs9sp41ECyuz7oaz4fDXW+BZ4G6F0/6bmkZTRcpfwW1nXKZcw8FB?=
- =?us-ascii?Q?NtVPpUm+kp6XcHyU2q+CiYyE5NSvS20RZofEDtsC9YRMyELoj7zyD3ECd1H6?=
- =?us-ascii?Q?a2ko0tFF3yD+gI2UjQd1GoZqsr9SW/sfZMF6xN1Gq6tJ5ZQqOcbUG4HCBBBo?=
- =?us-ascii?Q?3Sdt22fZWcaQUlvv4artu0XdYBtxYg8MT+Mdk1uIx3f5z1TGttou+91q+7we?=
- =?us-ascii?Q?RzY6f42fa/pgnVPNthfW9Axw8FmwkJ8W4vHcHKd7iWNXnmjrRE3QdyrZZN21?=
- =?us-ascii?Q?y6dB1Y8/5LNijSB8qYI0R9rKxat008iHd+hzEEi6DGwkNrDSfseUgWxsntRi?=
- =?us-ascii?Q?xXKZIhfABtPI49KT4/HXGjY8s4/wVjmWaVig+z0QUzRTxYbLT8IcfUojFbjx?=
- =?us-ascii?Q?+CqbZhZ9mOQvt1hy/nwJY053+k8TlESk/CXfD07CpEHlNATyR1+JUHzIrLRx?=
- =?us-ascii?Q?E3WFigp3DpSmKO7UMuTlUfiT9THrkXHVhxS5XTbAG6Jrr6doJIqPBCSB0HwY?=
- =?us-ascii?Q?Uovwrp58IPFWX1NEsM2Di6khCBh3zTspAaxhx8lgluJv3aZrONrNrLIOwfuc?=
- =?us-ascii?Q?Cbj0wcKXp3XYT5UBwIitv1gkz3X8PHmG34zCrxYQmD6CILwLJD2Awpk8fUEZ?=
- =?us-ascii?Q?NVFadpBhWJnxt5w9HxCrvdKZAYH1MPJIyi03tQmIkVpRUqNpABK/MJzdMlLK?=
- =?us-ascii?Q?Pjb4qAWaGNo9DcQ2+qCIftkZgQm3y71MyXS7Onxa/0n7ajjF/3yrLFG5TPBY?=
- =?us-ascii?Q?mMdOZ0hk4cDY/NTBAs5GOnbFFW3SxSiwNh4AGFCrf8Ar5E8BfK5d8YH3nFgs?=
- =?us-ascii?Q?GQdATbtfhU11y8YnOgE2BwNU0g2h0DmgNDf9VGp3kOnWez+SWVfY8V+LI2hj?=
- =?us-ascii?Q?07EbYdh83hjFCDesZB4qT540uGxbBg4A9d+wIJZiCyo7GH9fqKkzCoAobN1I?=
- =?us-ascii?Q?u2ANUbmxLGlbReSdSFMaVKVc2PcWiBdw0t6a0UpEyom3NqzNOGY0W6zdLRFt?=
- =?us-ascii?Q?V+MglMMLSzjvFTHv5kHMyMKeYF1QbKx76s1wuEds0x0uJ6On3JwKXQgE+qDY?=
- =?us-ascii?Q?m8BFqWASl3c=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P+vnShno19Ic9CduPeN6aaWaPDycWAQUGaRx9kLEovgbIyi57Iy91yGVizZC?=
+ =?us-ascii?Q?ShxPzqNr2kS2ZLjkeH2BsA+dYzp3PEjsJcZdiuB0ihul5oKu75Mo2dOJe4Q7?=
+ =?us-ascii?Q?JwIQDTwbEOtFwDuCEbYiR8PSrHa+oZP5XTFWHMy0xRQ8Y7C+DxCWK+yxXxeC?=
+ =?us-ascii?Q?jUqKQxweytzLkzin+EdfxOpZKnrAvJrfR+QiUL2HHyv1pGOfjjHgPg/DVwW9?=
+ =?us-ascii?Q?Lp/xrU4bieQI2LwGwRGVOTR9xDgTON+14Ys/QWf1KzNz2JbipE0WvyjLVois?=
+ =?us-ascii?Q?y27ToqGNfo/cNDQKtZ6DeKk3nYyDi3rC0gp4omhK6UmyPRpEbjN2s2SsGYWu?=
+ =?us-ascii?Q?x3hbHk8Sk7WnLogZzMxgkZES13Q6I3rEMtmVW/nOa+K0Exg7oHJR20jPyigy?=
+ =?us-ascii?Q?fc4uuY4LMtDrRratGBA3cDgdAW976rvGfl5D9/H5PaR5x+9/UT+cqZdJ3ZN9?=
+ =?us-ascii?Q?7aBqPCUVF8eBuQLFhX3Sy3/DjzQVdZx3nsg9Q705StiVbLUJ4psPkOTJMD9q?=
+ =?us-ascii?Q?tPqv30l2zc71oOrJTBW0sd4vu6ltbyKaLThqWW7wo5mqphOZMz8GPSXk/tRE?=
+ =?us-ascii?Q?ZjK3lT8Gv5z75+uldf60ZmHMfsqy6fJpB/Zq65ja7Xos1CshJNL2qs8SdYkb?=
+ =?us-ascii?Q?SMYhVMqXl4/zGIEGHSl8brWXHLUOEbyGd1Dugv+KxhX/929xYZFn6/OBBM2y?=
+ =?us-ascii?Q?6r2U+Xiqzl0QUMtfD0hU9/Eh7418vlEtGfMq6qIasKQAUsqDfLdKVSxV3TnK?=
+ =?us-ascii?Q?S3yrz71wPKEksMTQvPbWrIHhv8jBMuUN+9eYZVoFR0pMG0s4x4n9LLgjTXsY?=
+ =?us-ascii?Q?dKRdp0hyCV+ErKB06plL5LetQMuNuLMV14auzH6P3XTV+NjKJfV8OV460uAB?=
+ =?us-ascii?Q?uagzsr0a1AM3GH1HW2VLRzoW6uAj7WVe+aH1f/qrWyfoKS+G+XhWmE9gyMhx?=
+ =?us-ascii?Q?30VnK4nDHKJxS3yoTHunFsEiZKwXLvxWb1qRyf0RKbZcuyHsSlRawb2YoaVa?=
+ =?us-ascii?Q?QQUsQmpuKjcvuuoElHw6H3BVOt5+dTSfcgvV8DFNrcWeaszpDrdrmXJKHhYI?=
+ =?us-ascii?Q?SK1Hawb28eLA40Ry9eo/IhYzxumbHmV0ZvV44e8Y4Ib2KJfCM4ECQoe0ekYm?=
+ =?us-ascii?Q?olz+tUg6BhWhkAMebLV8vPC50ScNbd/N3gNKpyejFgjRwCsnu7uwj1yO1IvQ?=
+ =?us-ascii?Q?oKZ5LrMGdo9If7YhAETkXuaDoybhA1ACU6RmprzsicvZ18LBPg7ED8XzHTkk?=
+ =?us-ascii?Q?UNBdfoB/hl/8UgPvwvZFOi4d35xbY43JycFRJL6T0aDYe5w8nFsi9cGaM0AU?=
+ =?us-ascii?Q?xQlnUSvEaWCcSWADsn0DIL4xTToEFcTrmnB1o3RQXvVTXfJPjtqV5aIIrWy9?=
+ =?us-ascii?Q?yFFcVfo5kIAiXGpCt9EhYK0Yv8Zkq/MUb+9/aOLFFJnhYwlbPrhF1KR+qY7B?=
+ =?us-ascii?Q?C8cwL3QgqmA=3D?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b71b5c9-55b0-4f0b-9155-08da2478c36d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27e00b0f-5279-4cf3-da4c-08da2478c62c
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR20MB2472.namprd20.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 15:57:12.2259
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 15:57:16.8506
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -114,114 +114,125 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Icenowy Zheng <icenowy@aosc.io>
 
-As we're adding more properties to the OF match data, convert it to a
-struct now.
+Previously SPI controllers in Allwinner SoCs has a clock divider inside.
+However now the clock divider is removed and to set the transfer clock
+rate it's only needed to set the SPI module clock to the target value.
+
+Add a quirk for this kind of SPI controllers.
 
 Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
 ---
- drivers/spi/spi-sun6i.c | 32 ++++++++++++++++++++++----------
- 1 file changed, 22 insertions(+), 10 deletions(-)
+ drivers/spi/spi-sun6i.c | 68 +++++++++++++++++++++++------------------
+ 1 file changed, 38 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-index 23ad052528db..84c525b08ad0 100644
+index 84c525b08ad0..fc81afc3a963 100644
 --- a/drivers/spi/spi-sun6i.c
 +++ b/drivers/spi/spi-sun6i.c
-@@ -85,6 +85,10 @@
- #define SUN6I_TXDATA_REG		0x200
- #define SUN6I_RXDATA_REG		0x300
+@@ -87,6 +87,7 @@
  
-+struct sun6i_spi_cfg {
-+	unsigned long		fifo_depth;
-+};
-+
+ struct sun6i_spi_cfg {
+ 	unsigned long		fifo_depth;
++	bool			has_clk_ctl;
+ };
+ 
  struct sun6i_spi {
- 	struct spi_master	*master;
- 	void __iomem		*base_addr;
-@@ -99,7 +103,7 @@ struct sun6i_spi {
- 	const u8		*tx_buf;
- 	u8			*rx_buf;
- 	int			len;
--	unsigned long		fifo_depth;
-+	const struct sun6i_spi_cfg *cfg;
- };
+@@ -260,7 +261,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
+ 				  struct spi_transfer *tfr)
+ {
+ 	struct sun6i_spi *sspi = spi_master_get_devdata(master);
+-	unsigned int mclk_rate, div, div_cdr1, div_cdr2, timeout;
++	unsigned int div, div_cdr1, div_cdr2, timeout;
+ 	unsigned int start, end, tx_time;
+ 	unsigned int trig_level;
+ 	unsigned int tx_len = 0, rx_len = 0;
+@@ -350,39 +351,44 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
  
- static inline u32 sun6i_spi_read(struct sun6i_spi *sspi, u32 reg)
-@@ -156,7 +160,7 @@ static inline void sun6i_spi_fill_fifo(struct sun6i_spi *sspi)
- 	u8 byte;
+ 	sun6i_spi_write(sspi, SUN6I_TFR_CTL_REG, reg);
  
- 	/* See how much data we can fit */
--	cnt = sspi->fifo_depth - sun6i_spi_get_tx_fifo_count(sspi);
-+	cnt = sspi->cfg->fifo_depth - sun6i_spi_get_tx_fifo_count(sspi);
+-	/* Ensure that we have a parent clock fast enough */
+-	mclk_rate = clk_get_rate(sspi->mclk);
+-	if (mclk_rate < (2 * tfr->speed_hz)) {
+-		clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
+-		mclk_rate = clk_get_rate(sspi->mclk);
+-	}
++	if (sspi->cfg->has_clk_ctl) {
++		unsigned int mclk_rate = clk_get_rate(sspi->mclk);
++		/* Ensure that we have a parent clock fast enough */
++		if (mclk_rate < (2 * tfr->speed_hz)) {
++			clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
++			mclk_rate = clk_get_rate(sspi->mclk);
++		}
  
- 	len = min((int)cnt, sspi->len);
- 
-@@ -289,14 +293,14 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 		 * the hardcoded value used in old generation of Allwinner
- 		 * SPI controller. (See spi-sun4i.c)
- 		 */
--		trig_level = sspi->fifo_depth / 4 * 3;
-+		trig_level = sspi->cfg->fifo_depth / 4 * 3;
+-	/*
+-	 * Setup clock divider.
+-	 *
+-	 * We have two choices there. Either we can use the clock
+-	 * divide rate 1, which is calculated thanks to this formula:
+-	 * SPI_CLK = MOD_CLK / (2 ^ cdr)
+-	 * Or we can use CDR2, which is calculated with the formula:
+-	 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
+-	 * Wether we use the former or the latter is set through the
+-	 * DRS bit.
+-	 *
+-	 * First try CDR2, and if we can't reach the expected
+-	 * frequency, fall back to CDR1.
+-	 */
+-	div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
+-	div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
+-	if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
+-		reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
+-		tfr->effective_speed_hz = mclk_rate / (2 * div_cdr2);
++		/*
++		 * Setup clock divider.
++		 *
++		 * We have two choices there. Either we can use the clock
++		 * divide rate 1, which is calculated thanks to this formula:
++		 * SPI_CLK = MOD_CLK / (2 ^ cdr)
++		 * Or we can use CDR2, which is calculated with the formula:
++		 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
++		 * Wether we use the former or the latter is set through the
++		 * DRS bit.
++		 *
++		 * First try CDR2, and if we can't reach the expected
++		 * frequency, fall back to CDR1.
++		 */
++		div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
++		div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
++		if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
++			reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
++			tfr->effective_speed_hz = mclk_rate / (2 * div_cdr2);
++		} else {
++			div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
++			reg = SUN6I_CLK_CTL_CDR1(div);
++			tfr->effective_speed_hz = mclk_rate / (1 << div);
++		}
++
++		sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
  	} else {
- 		/*
- 		 * Setup FIFO DMA request trigger level
- 		 * We choose 1/2 of the full fifo depth, that value will
- 		 * be used as DMA burst length.
- 		 */
--		trig_level = sspi->fifo_depth / 2;
-+		trig_level = sspi->cfg->fifo_depth / 2;
- 
- 		if (tfr->tx_buf)
- 			reg |= SUN6I_FIFO_CTL_TF_DRQ_EN;
-@@ -410,9 +414,9 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	reg = SUN6I_INT_CTL_TC;
- 
- 	if (!use_dma) {
--		if (rx_len > sspi->fifo_depth)
-+		if (rx_len > sspi->cfg->fifo_depth)
- 			reg |= SUN6I_INT_CTL_RF_RDY;
--		if (tx_len > sspi->fifo_depth)
-+		if (tx_len > sspi->cfg->fifo_depth)
- 			reg |= SUN6I_INT_CTL_TF_ERQ;
+-		div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
+-		reg = SUN6I_CLK_CTL_CDR1(div);
+-		tfr->effective_speed_hz = mclk_rate / (1 << div);
++		clk_set_rate(sspi->mclk, tfr->speed_hz);
  	}
  
-@@ -543,7 +547,7 @@ static bool sun6i_spi_can_dma(struct spi_master *master,
- 	 * the fifo length we can just fill the fifo and wait for a single
- 	 * irq, so don't bother setting up dma
- 	 */
--	return xfer->len > sspi->fifo_depth;
-+	return xfer->len > sspi->cfg->fifo_depth;
- }
+-	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
+ 	/* Finally enable the bus - doing so before might raise SCK to HIGH */
+ 	reg = sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG);
+ 	reg |= SUN6I_GBL_CTL_BUS_ENABLE;
+@@ -702,10 +708,12 @@ static int sun6i_spi_remove(struct platform_device *pdev)
  
- static int sun6i_spi_probe(struct platform_device *pdev)
-@@ -582,7 +586,7 @@ static int sun6i_spi_probe(struct platform_device *pdev)
- 	}
- 
- 	sspi->master = master;
--	sspi->fifo_depth = (unsigned long)of_device_get_match_data(&pdev->dev);
-+	sspi->cfg = of_device_get_match_data(&pdev->dev);
- 
- 	master->max_speed_hz = 100 * 1000 * 1000;
- 	master->min_speed_hz = 3 * 1000;
-@@ -696,9 +700,17 @@ static int sun6i_spi_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct sun6i_spi_cfg sun6i_a31_spi_cfg = {
-+	.fifo_depth	= SUN6I_FIFO_DEPTH,
-+};
-+
-+static const struct sun6i_spi_cfg sun8i_h3_spi_cfg = {
-+	.fifo_depth	= SUN8I_FIFO_DEPTH,
-+};
-+
- static const struct of_device_id sun6i_spi_match[] = {
--	{ .compatible = "allwinner,sun6i-a31-spi", .data = (void *)SUN6I_FIFO_DEPTH },
--	{ .compatible = "allwinner,sun8i-h3-spi",  .data = (void *)SUN8I_FIFO_DEPTH },
-+	{ .compatible = "allwinner,sun6i-a31-spi", .data = &sun6i_a31_spi_cfg },
-+	{ .compatible = "allwinner,sun8i-h3-spi",  .data = &sun8i_h3_spi_cfg },
- 	{}
+ static const struct sun6i_spi_cfg sun6i_a31_spi_cfg = {
+ 	.fifo_depth	= SUN6I_FIFO_DEPTH,
++	.has_clk_ctl	= true,
  };
- MODULE_DEVICE_TABLE(of, sun6i_spi_match);
+ 
+ static const struct sun6i_spi_cfg sun8i_h3_spi_cfg = {
+ 	.fifo_depth	= SUN8I_FIFO_DEPTH,
++	.has_clk_ctl	= true,
+ };
+ 
+ static const struct of_device_id sun6i_spi_match[] = {
 -- 
 2.35.1
 

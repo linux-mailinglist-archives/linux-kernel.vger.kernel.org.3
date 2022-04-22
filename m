@@ -2,262 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCE350ACF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 02:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDC950AD04
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 03:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442988AbiDVAwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 20:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S1442992AbiDVBBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 21:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442982AbiDVAwq (ORCPT
+        with ESMTP id S239067AbiDVBBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 20:52:46 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A563127A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:49:53 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id w19so11545678lfu.11
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Cyff/BYI4BHHE42Yn0eFG23oOJzOlK0YmbtegqLYiEA=;
-        b=e8s2jMFqv2bC+sQVxlpzwEDZh7oycaV9S+2wmssqFmvul0CDY0M5+RlJpkTTP7Z9QR
-         qi9yPXjrrlRQyUgqlQaVvL3akjasMHpEFWtfDD/ePQ8hkfHJdbNSK+y2EjwrrzH/Sitb
-         /ZrMeAG6mxUhL9QmT6M7P1gmlMuuvtG6NFBDY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cyff/BYI4BHHE42Yn0eFG23oOJzOlK0YmbtegqLYiEA=;
-        b=4cGzKy4kh+gC4BiZa8wbmaZW6CSfmmFRg7c8Xis2hFaean4qDZgVDrjKazotHO1HaP
-         XWzjwMdpKQqjR5ZlrcMmXvp4yE+1JP/wv9T27Ev0XhK4pC9dkALUJJmJnDAVQL5aZuxR
-         +NQHXOuMvlBnvsp58cqS6DNkK0O+bgVNRPBRIydZGF57AakRuDj4kqekqeu0P+qais5e
-         VbbB7TsmiTVMmGUXdQrvUc8gtVwWsiHoUMIzkFeaJIrSCqSt5ppBJ4JxRY23Y2mHbYB0
-         6fY/4qUJHCMtGYobm1+F1EAX6iwju577D0iOttiIKOiB7Rr8sHbC+qxxnT3zWS1HCxZ/
-         TyjA==
-X-Gm-Message-State: AOAM533z5qkSamVXA2VDM9dfRyUgkhVMG88TdtDb41wZ8mm3SIkWZYaG
-        akYB8AGFDLptItrwS4L8zJWfpvvD2PyFsf7fXKI=
-X-Google-Smtp-Source: ABdhPJwMvKxR7QruqyvnOnTK5oYvf9JBIU6wwMxmohlEhWlmVWI1E4ouaIworIFG3ypcb3CNuscpwA==
-X-Received: by 2002:a19:2d59:0:b0:46d:40f9:6048 with SMTP id t25-20020a192d59000000b0046d40f96048mr1397093lft.404.1650588591489;
-        Thu, 21 Apr 2022 17:49:51 -0700 (PDT)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id h15-20020a2e9ecf000000b0024b0f17f790sm45785ljk.21.2022.04.21.17.49.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 17:49:50 -0700 (PDT)
-Received: by mail-lj1-f171.google.com with SMTP id f5so7714955ljp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:49:49 -0700 (PDT)
-X-Received: by 2002:a2e:9d46:0:b0:24c:7f1d:73cc with SMTP id
- y6-20020a2e9d46000000b0024c7f1d73ccmr1288388ljj.358.1650588589383; Thu, 21
- Apr 2022 17:49:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220415164413.2727220-1-song@kernel.org> <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
- <YlpPW9SdCbZnLVog@infradead.org> <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
- <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
- <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com> <Yl04LO/PfB3GocvU@kernel.org>
- <Yl4F4w5NY3v0icfx@bombadil.infradead.org> <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
- <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com> <Yl8CicJGHpTrOK8m@kernel.org>
- <CAHk-=wh6um5AFR6TObsYY0v+jUSZxReiZM_5Kh4gAMU8Z8-jVw@mail.gmail.com>
- <1650511496.iys9nxdueb.astroid@bobo.none> <CAHk-=wiQ5=S3m2+xRbm-1H8fuQwWfQxnO7tHhKg8FjegxzdVaQ@mail.gmail.com>
- <1650530694.evuxjgtju7.astroid@bobo.none> <CAHk-=wi_D0o7YLYDpW-m3HgD7HeHR45L7UYxWi2iYdc5n99P3A@mail.gmail.com>
- <1650582120.hf4z0mkw8v.astroid@bobo.none>
-In-Reply-To: <1650582120.hf4z0mkw8v.astroid@bobo.none>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 21 Apr 2022 17:49:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh_7npMESkkeJ0dZC=EDPhn8+iyg528rE_GjnKpsUkT=A@mail.gmail.com>
-Message-ID: <CAHk-=wh_7npMESkkeJ0dZC=EDPhn8+iyg528rE_GjnKpsUkT=A@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "ast@kernel.org" <ast@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "dborkman@redhat.com" <dborkman@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        Kernel Team <Kernel-team@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "song@kernel.org" <song@kernel.org>,
-        Song Liu <songliubraving@fb.com>
+        Thu, 21 Apr 2022 21:01:51 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52B342A14
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:58:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650589139; x=1682125139;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=byVTW7KFR9/stBDOurMKmCqOk4lSwKTtDKA6cpnUbVQ=;
+  b=SC9RsGq8j023+F7AYt3XM3Zoi+4l6oDob3IVBJel6BzJn5emJH0BzkYp
+   B7Jz4OFqob7JBOPpPgSbslJ5jLlLcRF2NpshhhLy1wlz0mGvTgGe/osOh
+   stJet+7m3QhRJnA3PaIk+N91Wpb5rrL7gyZ8MEhc3Tnq1kHNgniINuVnE
+   DHhcOxunAKeN37EDIJMda9GxIvQacYIgd/KV+aE7c6+l6BqR93bA0q/0A
+   7NykahMpiDR4Dxas7VrloZuO5QmWXC4/kH7cB5QX35i7fT2AU4vNDFC5d
+   oKxO+ZbD+Hy5pFnA3OkAwZVo1jKHovrN82PceNk9bk3HpItxHf2/AlF12
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244453749"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="244453749"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 17:58:43 -0700
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="530572438"
+Received: from zhouju8x-mobl.ccr.corp.intel.com ([10.254.212.221])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 17:58:39 -0700
+Message-ID: <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
+Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
+ N_DEMOTION_TARGETS
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Thelen <gthelen@google.com>
+Date:   Fri, 22 Apr 2022 08:58:37 +0800
+In-Reply-To: <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
+References: <20220413092206.73974-1-jvgediya@linux.ibm.com>
+         <6365983a8fbd8c325bb18959c51e9417fd821c91.camel@intel.com>
+         <CAHbLzkpGzEaSDfM=GBzBxw=dZTBy12vgDDhMG+q4dbG+bCgR6A@mail.gmail.com>
+         <CAAPL-u9=-OHuUk=ZkNRDf3Dm_+3cBd2APL5MQpQr3_sVk_voJg@mail.gmail.com>
+         <de1bc3647c8696fd931a37d314ccd60a2c8cc0db.camel@intel.com>
+         <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
+         <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
+         <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
+         <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
+         <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 4:30 PM Nicholas Piggin <npiggin@gmail.com> wrote:
->
-> VM_FLUSH_RESET_PERMS was because bpf uses the arch module allocation
-> code which was not capable of dealing with huge pages in the arch
-> specific direct map manipulation stuff was unable to deal with it.
-> An x86 bug.
+On Thu, 2022-04-21 at 11:26 -0700, Wei Xu wrote:
+> On Thu, Apr 21, 2022 at 12:45 AM ying.huang@intel.com
+> <ying.huang@intel.com> wrote:
+> > 
+> > On Thu, 2022-04-21 at 00:29 -0700, Wei Xu wrote:
+> > > On Thu, Apr 21, 2022 at 12:08 AM ying.huang@intel.com
+> > > <ying.huang@intel.com> wrote:
+> > > > 
+> > > > On Wed, 2022-04-20 at 23:49 -0700, Wei Xu wrote:
+> > > > > On Wed, Apr 20, 2022 at 11:24 PM ying.huang@intel.com
+> > > > > <ying.huang@intel.com> wrote:
+> > > > > > 
+> > > > > > On Wed, 2022-04-20 at 22:41 -0700, Wei Xu wrote:
+> > > > > > > On Wed, Apr 20, 2022 at 8:12 PM Yang Shi <shy828301@gmail.com> wrote:
+> > > > > > > > 
+> > > > > > > > On Thu, Apr 14, 2022 at 12:00 AM ying.huang@intel.com
+> > > > > > > > <ying.huang@intel.com> wrote:
+> > > > > > > > > 
+> > > > > > > > > On Wed, 2022-04-13 at 14:52 +0530, Jagdish Gediya wrote:
+> > > > > > > > > > Current implementation to find the demotion targets works
+> > > > > > > > > > based on node state N_MEMORY, however some systems may have
+> > > > > > > > > > dram only memory numa node which are N_MEMORY but not the
+> > > > > > > > > > right choices as demotion targets.
+> > > > > > > > > > 
+> > > > > > > > > > This patch series introduces the new node state
+> > > > > > > > > > N_DEMOTION_TARGETS, which is used to distinguish the nodes which
+> > > > > > > > > > can be used as demotion targets, node_states[N_DEMOTION_TARGETS]
+> > > > > > > > > > is used to hold the list of nodes which can be used as demotion
+> > > > > > > > > > targets, support is also added to set the demotion target
+> > > > > > > > > > list from user space so that default behavior can be overridden.
+> > > > > > > > > 
+> > > > > > > > > It appears that your proposed user space interface cannot solve all
+> > > > > > > > > problems.  For example, for system as follows,
+> > > > > > > > > 
+> > > > > > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow memory node near
+> > > > > > > > > node 0,
+> > > > > > > > > 
+> > > > > > > > > available: 3 nodes (0-2)
+> > > > > > > > > node 0 cpus: 0 1
+> > > > > > > > > node 0 size: n MB
+> > > > > > > > > node 0 free: n MB
+> > > > > > > > > node 1 cpus:
+> > > > > > > > > node 1 size: n MB
+> > > > > > > > > node 1 free: n MB
+> > > > > > > > > node 2 cpus: 2 3
+> > > > > > > > > node 2 size: n MB
+> > > > > > > > > node 2 free: n MB
+> > > > > > > > > node distances:
+> > > > > > > > > node   0   1   2
+> > > > > > > > >   0:  10  40  20
+> > > > > > > > >   1:  40  10  80
+> > > > > > > > >   2:  20  80  10
+> > > > > > > > > 
+> > > > > > > > > Demotion order 1:
+> > > > > > > > > 
+> > > > > > > > > node    demotion_target
+> > > > > > > > >  0              1
+> > > > > > > > >  1              X
+> > > > > > > > >  2              X
+> > > > > > > > > 
+> > > > > > > > > Demotion order 2:
+> > > > > > > > > 
+> > > > > > > > > node    demotion_target
+> > > > > > > > >  0              1
+> > > > > > > > >  1              X
+> > > > > > > > >  2              1
+> > > > > > > > > 
+> > > > > > > > > The demotion order 1 is preferred if we want to reduce cross-socket
+> > > > > > > > > traffic.  While the demotion order 2 is preferred if we want to take
+> > > > > > > > > full advantage of the slow memory node.  We can take any choice as
+> > > > > > > > > automatic-generated order, while make the other choice possible via user
+> > > > > > > > > space overridden.
+> > > > > > > > > 
+> > > > > > > > > I don't know how to implement this via your proposed user space
+> > > > > > > > > interface.  How about the following user space interface?
+> > > > > > > > > 
+> > > > > > > > > 1. Add a file "demotion_order_override" in
+> > > > > > > > >         /sys/devices/system/node/
+> > > > > > > > > 
+> > > > > > > > > 2. When read, "1" is output if the demotion order of the system has been
+> > > > > > > > > overridden; "0" is output if not.
+> > > > > > > > > 
+> > > > > > > > > 3. When write "1", the demotion order of the system will become the
+> > > > > > > > > overridden mode.  When write "0", the demotion order of the system will
+> > > > > > > > > become the automatic mode and the demotion order will be re-generated.
+> > > > > > > > > 
+> > > > > > > > > 4. Add a file "demotion_targets" for each node in
+> > > > > > > > >         /sys/devices/system/node/nodeX/
+> > > > > > > > > 
+> > > > > > > > > 5. When read, the demotion targets of nodeX will be output.
+> > > > > > > > > 
+> > > > > > > > > 6. When write a node list to the file, the demotion targets of nodeX
+> > > > > > > > > will be set to the written nodes.  And the demotion order of the system
+> > > > > > > > > will become the overridden mode.
+> > > > > > > > 
+> > > > > > > > TBH I don't think having override demotion targets in userspace is
+> > > > > > > > quite useful in real life for now (it might become useful in the
+> > > > > > > > future, I can't tell). Imagine you manage hundred thousands of
+> > > > > > > > machines, which may come from different vendors, have different
+> > > > > > > > generations of hardware, have different versions of firmware, it would
+> > > > > > > > be a nightmare for the users to configure the demotion targets
+> > > > > > > > properly. So it would be great to have the kernel properly configure
+> > > > > > > > it *without* intervening from the users.
+> > > > > > > > 
+> > > > > > > > So we should pick up a proper default policy and stick with that
+> > > > > > > > policy unless it doesn't work well for the most workloads. I do
+> > > > > > > > understand it is hard to make everyone happy. My proposal is having
+> > > > > > > > every node in the fast tier has a demotion target (at least one) if
+> > > > > > > > the slow tier exists sounds like a reasonable default policy. I think
+> > > > > > > > this is also the current implementation.
+> > > > > > > > 
+> > > > > > > 
+> > > > > > > This is reasonable.  I agree that with a decent default policy,
+> > > > > > > 
+> > > > > > 
+> > > > > > I agree that a decent default policy is important.  As that was enhanced
+> > > > > > in [1/5] of this patchset.
+> > > > > > 
+> > > > > > > the
+> > > > > > > overriding of per-node demotion targets can be deferred.  The most
+> > > > > > > important problem here is that we should allow the configurations
+> > > > > > > where memory-only nodes are not used as demotion targets, which this
+> > > > > > > patch set has already addressed.
+> > > > > > 
+> > > > > > Do you mean the user space interface proposed by [3/5] of this patchset?
+> > > > > 
+> > > > > Yes.
+> > > > > 
+> > > > > > IMHO, if we want to add a user space interface, I think that it should
+> > > > > > be powerful enough to address all existing issues and some potential
+> > > > > > future issues, so that it can be stable.  I don't think it's a good idea
+> > > > > > to define a partial user space interface that works only for a specific
+> > > > > > use case and cannot be extended for other use cases.
+> > > > > 
+> > > > > I actually think that they can be viewed as two separate problems: one
+> > > > > is to define which nodes can be used as demotion targets (this patch
+> > > > > set), and the other is how to initialize the per-node demotion path
+> > > > > (node_demotion[]).  We don't have to solve both problems at the same
+> > > > > time.
+> > > > > 
+> > > > > If we decide to go with a per-node demotion path customization
+> > > > > interface to indirectly set N_DEMOTION_TARGETS, I'd prefer that there
+> > > > > is a single global control to turn off all demotion targets (for the
+> > > > > machines that don't use memory-only nodes for demotion).
+> > > > > 
+> > > > 
+> > > > There's one already.  In commit 20b51af15e01 ("mm/migrate: add sysfs
+> > > > interface to enable reclaim migration"), a sysfs interface
+> > > > 
+> > > >         /sys/kernel/mm/numa/demotion_enabled
+> > > > 
+> > > > is added to turn off all demotion targets.
+> > > 
+> > > IIUC, this sysfs interface only turns off demotion-in-reclaim.  It
+> > > will be even cleaner if we have an easy way to clear node_demotion[]
+> > > and N_DEMOTION_TARGETS so that the userspace (post-boot agent, not
+> > > init scripts) can know that the machine doesn't even have memory
+> > > tiering hardware enabled.
+> > > 
+> > 
+> > What is the difference?  Now we have no interface to show demotion
+> > targets of a node.  That is in-kernel only.  What is memory tiering
+> > hardware?  The Optane PMEM?  Some information for it is available via
+> > ACPI HMAT table.
+> > 
+> > Except demotion-in-reclaim, what else do you care about?
+> 
+> There is a difference: one is to indicate the availability of the
+> memory tiering hardware and the other is to indicate whether
+> transparent kernel-driven demotion from the reclaim path is activated.
+> With /sys/devices/system/node/demote_targets or the per-node demotion
+> target interface, the userspace can figure out the memory tiering
+> topology abstracted by the kernel.  It is possible to use
+> application-guided demotion without having to enable reclaim-based
+> demotion in the kernel.  Logically it is also cleaner to me to
+> decouple the tiering node representation from the actual demotion
+> mechanism enablement.
 
-.. and a power one? The only thing really special in  __module_alloc()
-on power is that same VM_FLUSH_RESET_PERMS.
+I am confused here.  It appears that you need a way to expose the
+automatic generated demotion order from kernel to user space interface.
+We can talk about that if you really need it.
 
-Why had you otherwise disabled it there on powerpc too?
+But [2-5/5] of this patchset is to override the automatic generated
+demotion order from user space to kernel interface.
 
-> > And that bug was an issue on power too.
->
-> I missed it, which bug was that?
+Best Regards,
+Huang, Ying
 
-See above. At least it's very strongly implied by how the powerpc
-__module_alloc() function also used
 
-                    VM_FLUSH_RESET_PERMS | VM_NO_HUGE_VMAP,
-
-because there isn't much else going on.
-
-> No I don't notice. More work to support huge allocations for
-> executable mappings, sure. But the arch's implementation explicitly
-> does not support that yet. That doesn't make huge vmalloc broken!
-> Ridiculous. It works fine.
-
-There are several other reports of problems that weren't related to
-permissions (at least not obviously so).
-
-You were pointed at one of them in this thread:
-
-    https://lore.kernel.org/all/14444103-d51b-0fb3-ee63-c3f182f0b546@molgen.mpg.de/
-
-and yes, it also happened on x86-64, but my point this whole time has
-been that x86-64 gets A *LOT* MORE TEST COVERAGE.
-
-See the difference? The fact that it has workedc for you on powerpc
-doesn't mean that it's fine on powerpc.  It only means that powerpc
-gets about one thousandth of the test coverage that x86-64 gets.
-
-> You did just effectively disable it on x86 though.
-
-I disabled it *EVERYWHERE*.
-
-What is so hard to understand about that?
-
-Why are you so convinced this is about x86?
-
-It's not.
-
-> There really aren't all these "issues" you're imagining. They
-> aren't noticable now, on power or s390, because they have
-> non-buggy HAVE_ARCH_HUGE_VMALLOC implementations.
-
-So I really think you've not tested it.
-
-How many of those powerpc or s390 machines do you think test drivers
-that do vmalloc_to_page() and then do something with that 'struct page
-*'?
-
-Seriously. Why are you so convinced that "oh, any vmalloc() can be
-converted to large pages"?
-
-I really think the only reason you think that is because it ran on
-machines that basically have almost no drivers in use, and are all
-very homogenous, and just didn't happen to hit the bugs.
-
-IOW, I think you are probably entirely right that x86 has its own set
-of excitement (the bpf thread has this thing about how x86 does RO
-differently from other architectures), and there are likely x86
-specific bugs *TOO*.
-
-But let's just pick a random driver that uses vmalloc (literally
-random - I just grepped for it and started looking at it):
-
-   drivers/infiniband/hw/qib/qib_file_ops.c
-
-and it unquestionably does absolutely disgusting things, and if
-looking at the code makes you go "nobody should do that", then I won't
-disagree all that much.
-
-But as an example of what it does, it basically does things like this:
-
-        rcd->subctxt_uregbase = vmalloc_user(...);
-
-and then you can mmap it in user space in mmap_kvaddr():
-
-                addr = rcd->subctxt_uregbase;
-                size = PAGE_SIZE * subctxt_cnt;
-        ...
-        vma->vm_pgoff = (unsigned long) addr >> PAGE_SHIFT;
-        vma->vm_ops = &qib_file_vm_ops;
-
-and then the page fault routine is:
-
-    static const struct vm_operations_struct qib_file_vm_ops = {
-            .fault = qib_file_vma_fault,
-    };
-
-and that function qib_file_vma_fault() does things like this:
-
-        page = vmalloc_to_page((void *)(vmf->pgoff << PAGE_SHIFT));
-        if (!page)
-                return VM_FAULT_SIGBUS;
-
-        get_page(page);
-        vmf->page = page;
-
-        return 0;
-
-and let me just claim
-
- (a) I bet you have never EVER tested this kind of insane code on powerpc
-
- (b) do you think this will work great if vmalloc() allocates large pages?
-
-Can you now see what I'm saying?
-
-Can you now admit that the whole "nmake vmalloc() do large pages
-without explicit opt-in" was a HORRIBLE MISTAKE.
-
-> If you're really going to insist on this will you apply this to fix
-> (some of) the performance regressions it introduced?
-
-No.
-
-That patch is disgusting and there is no excuse for applying something
-crap like that.
-
-What I applied was the first in a series of patches that do it sanely.
-That whole "a sane way forward" thing.
-
-See
-
-    https://lore.kernel.org/all/20220415164413.2727220-3-song@kernel.org/
-
-for [PATCH 2/4] in the series for this particular issue.
-
-But I'm not applying anything else than the "disable this mess" before
-we have more discussion and consensus.
-
-And dammit, you had better just admit that this wasn't some x86-only thing.
-
-Powerpc and s390 were BROKEN GARBAGE AND JUST DIDN'T HAVE THE TEST COVERAGE.
-
-Seriously.
-
-And the thing is, your opt-out approach was just POINTLESS. The actual
-cases that are performance-critical are likely in the single digits.
-
-It's probably just that big-hash case and maybe a *couple* of other
-cases (ie the bpf jit really wants to use it).
-
-So opt-in is clearly the correct thing to do.
-
-Do you now understand why I applied that "users must opt-in" patch?
-
-Do you now understand that this is not some "x86" thing?
-
-                Linus

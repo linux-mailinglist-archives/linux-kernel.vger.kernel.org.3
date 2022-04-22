@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB0650BCFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C358250BD01
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388252AbiDVQa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59630 "EHLO
+        id S1444314AbiDVQbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241617AbiDVQa4 (ORCPT
+        with ESMTP id S241617AbiDVQbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:30:56 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C0D5EDC1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:28:02 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id x18so11859269wrc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:28:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9bDWcRZVjx6GPxFzW3UVWhMMo07Zuw7+gtRI+X12kIY=;
-        b=79S0AvECfJoFsHa2OLfcMdtwWILG5UB8TcEvYJkodbNOprYOeNc08ZiU83eUZEhclp
-         Q91DiEx3Ph0IS64JucJtoyZPZxIIONW0WL84gOoog140iSkoygCeU+GGZLsz00NlbUsc
-         XHL5Y/DXa9FD0dbjT5WsKWLnx6S+/cEIfrhBldN2a2JooajesP3/F8EqE4XXv2Temx6r
-         DS9+ndOgLYwsrFFeiInxz5Tcr0hJWQvA8NnU7hWHoPxqlgfpjnfUUOs0TCtj4nLtj1Gc
-         h96d1llH8q53gI1vT9jdKBxuVTm9XNdd1JFIs6zzXWJL9R989Uw8V1/jUr7cYts7k6rS
-         XCsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9bDWcRZVjx6GPxFzW3UVWhMMo07Zuw7+gtRI+X12kIY=;
-        b=uu/xoqMQlKRfLeESN3uA7Mudpq/i0i1k8vC1p3029ZHYK1+uR+hkO37Vg7umjRWohF
-         lBg/zRr8NVIaIv1+Ch6etvvxMF1Xq0jAE4Gl1Udu2GdyFFBwmBCG5z0BtHBGQQFzCnVy
-         YhKdhr+2edaVpsmkfgUdWlRUaVKu8fHlksQ90CScsw6TFzpIkarN7d9HaTP+J8f1ONMk
-         nrT1YWrsbKw9xopPE2tN92JNBrkKfVf5xx2ZTv76eutdjOXIAPdBf+eE1uwvaYIte099
-         CNcG6uU5xym6b74pABNXi8+16ITVlNn2ZqMaryeARYermXswhQ4m3UPcGiJtV/ZCs0id
-         Ip5A==
-X-Gm-Message-State: AOAM533WinaEXlvu91uYTHAWQGIxlTMhVHpN896x+UmWdDjXwzFbPQec
-        n3xKixdr1tJh97mYreHkvUN2NvVBZgG+NuqPQuHX
-X-Google-Smtp-Source: ABdhPJwdlLgCr8/r8VUVhCDVqpoOKgB7ViucHZSYkzmPRtbdWPlYnR3ZpOIh8SIIvGQjH5nxZNxeK5ajA4b8BchK7Jc=
-X-Received: by 2002:a5d:59a5:0:b0:20a:95c8:7820 with SMTP id
- p5-20020a5d59a5000000b0020a95c87820mr4295435wrr.395.1650644880760; Fri, 22
- Apr 2022 09:28:00 -0700 (PDT)
+        Fri, 22 Apr 2022 12:31:09 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F5C5EDD8;
+        Fri, 22 Apr 2022 09:28:16 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id E06CA83C24;
+        Fri, 22 Apr 2022 18:28:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1650644894;
+        bh=INwp8oMerWYi06Suz1qgAIuvZ6S1fWPnARFOxZDAW5U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lXrPzegpTOHhGqTOXMfhlLGnd9fPJA03I8KrBtP9ipktmhdw6M9lRIFiFKJBX/2yW
+         9zANnG9L9YM3apNusdIrEvKspBYODpzSN4gvPo2oqqolmD+617vCW6MBDwaNFrSoIk
+         Rh/LqLtO4a1d0qfC81ilwrL80tPPElbU2GaTsiH4aoR3UgTAZbj8E5gb7RRqTorftj
+         JaNWd3AwCFTtFHcgMmhdNEQxgMYRhfzhOOGT5zG27SjUcxr+1Rbg8ZwhOQQ8lQK3ZU
+         5RCBolRIbUMsJs2NO1Au84vjFHVECt6RHJiZb5cXXP+34gDHOU3bbARXvVZ7Sd+FRS
+         KQM633/QrXYGw==
+Message-ID: <7d365d28-66ac-93d4-72b5-87d0b36ba017@denx.de>
+Date:   Fri, 22 Apr 2022 18:28:13 +0200
 MIME-Version: 1.0
-References: <20220418145945.38797-1-casey@schaufler-ca.com> <20220418145945.38797-26-casey@schaufler-ca.com>
-In-Reply-To: <20220418145945.38797-26-casey@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 22 Apr 2022 12:27:50 -0400
-Message-ID: <CAHC9VhTSdTm+91NtwkuKBi=uY9233kFAzPY=wYpeepcFwanZ=w@mail.gmail.com>
-Subject: Re: [PATCH v35 25/29] Audit: Allow multiple records in an audit_buffer
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/8] dt-bindings: rcc: Add optional external ethernet RX
+ clock properties
+Content-Language: en-US
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>, arnd@arndb.de,
+        robh+dt@kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        soc@kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>, etienne.carriere@st.com
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-2-alexandre.torgue@foss.st.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20220422150952.20587-2-alexandre.torgue@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 11:12 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> Replace the single skb pointer in an audit_buffer with
-> a list of skb pointers. Add the audit_stamp information
-> to the audit_buffer as there's no guarantee that there
-> will be an audit_context containing the stamp associated
-> with the event. At audit_log_end() time create auxiliary
-> records (none are currently defined) as have been added
-> to the list.
->
-> Suggested-by: Paul Moore <paul@paul-moore.com>
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> ---
->  kernel/audit.c | 62 +++++++++++++++++++++++++++++++-------------------
->  1 file changed, 39 insertions(+), 23 deletions(-)
+On 4/22/22 17:09, Alexandre Torgue wrote:
+> From: Marek Vasut <marex@denx.de>
+> 
+> Describe optional external ethernet RX clock in the DT binding
+> to fix dtbs_check warnings like:
+> 
+> arch/arm/boot/dts/stm32mp153c-dhcom-drc02.dt.yaml: rcc@50000000: 'assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks', 'clock-names', 'clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> To: devicetree@vger.kernel.org
+> Acked-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+> index a0ae4867ed27..7a251264582d 100644
+> --- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+> @@ -59,6 +59,14 @@ properties:
+>             - st,stm32mp1-rcc
+>         - const: syscon
+>   
+> +  clocks:
+> +    description:
+> +      Specifies the external RX clock for ethernet MAC.
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: ETH_RX_CLK/ETH_REF_CLK
+> +
+>     reg:
+>       maxItems: 1
+>   
 
-I believe the audit_buffer_aux_new() and audit_buffer_aux_end()
-functions from patch 26/29 belong in this patch, but otherwise it
-looks okay to me.
-
-Acked-by: Paul Moore <paul@paul-moore.com>
-
--- 
-paul-moore.com
+Should this patch be part of this series, maybe this was re-sent by 
+accident ?

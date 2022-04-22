@@ -2,182 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEAE50BBAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1952B50BBB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449439AbiDVP3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        id S1449457AbiDVPa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449433AbiDVP3m (ORCPT
+        with ESMTP id S1449022AbiDVPaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:29:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69E15C85A;
-        Fri, 22 Apr 2022 08:26:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6199161F35;
-        Fri, 22 Apr 2022 15:26:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D4CC385AB;
-        Fri, 22 Apr 2022 15:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650641207;
-        bh=wpcimkpmyXuZWzMsgzk6WTpHEDwsi0hL31+pEsg3qqc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=C3zpGu8MjDMmcc54IAy+8QiCCGeFFQ2Xc7XDe8tj7NphlijuDwXdizBP0uTEgJfwK
-         UHL3tLPnbyyaNTiMoKuOB+33EQ0P5IRNFVqztxGzHQ65Q3zi0GsiUswi0sNDmNLWaM
-         wfwZy0iYxlgUXK0xjg/EwCoyFeEbItlhBqRLDgtdbb+yEnSAp6nXwBz0hVvVYzdgMb
-         gi1l1+2SZCPpZNKlyO+Ybzy5M9yb0tw4iSrfabg4e8ewsGZQwrpQ25kHgJXw77S6ko
-         8KfeEhKz1tCIpheg0l1AciYyE/MAsn3mXAZDQoSrYCUiuBVwDZSZVSXP+7L9dPxhpT
-         w5/XJH4b1Syxg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5E9C35C0460; Fri, 22 Apr 2022 08:26:47 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 08:26:47 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, urezki@gmail.com
-Subject: Re: [PATCH v2] rcu: Dump all rcuc kthreads status for CPUs that not
- report quiescent state
-Message-ID: <20220422152647.GY4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220419053426.2820350-1-qiang1.zhang@intel.com>
+        Fri, 22 Apr 2022 11:30:21 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116325BE59;
+        Fri, 22 Apr 2022 08:27:26 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23MAS3Yl031297;
+        Fri, 22 Apr 2022 17:27:24 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=nZHtT3YPV+o+qn98wXnsCHgW87blnKp+/OLF4y7h31c=;
+ b=mgrQTr+F5KvZLi/8vTsMKxc+XL+H35wBs3L/3i/fZ6Xo9RtRclV1Oytn7iGnzoTG1ZUd
+ P9sO0S5Ut4JUQ4uJ1E09xquIXdvKJKaVbc4EKXi90hko6b7eU+IdiKrXDqp05qPjKfX2
+ iEJY3lPedtWG23GcPjh1tOtwsO8398arhwQ89lypbXfESN2PHUMgfahL7ucKopV3w3m0
+ MYAsBGI6+O/zzdIDl6A5VYkN8h3j7GUgAttubLaPyKfUAQI6RemBdqfAEAr0fpnYTdIH
+ uYlURhUgNT9f+qe2/k8q/HTtW5lyoSAgLQ0yDJ61rlIdhyap6fqnyq74wOPSw5JK2F9U 6Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ffpqe9xmt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Apr 2022 17:27:24 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5F0AB10002A;
+        Fri, 22 Apr 2022 17:27:23 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 576BE233C76;
+        Fri, 22 Apr 2022 17:27:23 +0200 (CEST)
+Received: from [10.201.20.246] (10.75.127.46) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 22 Apr
+ 2022 17:27:22 +0200
+Message-ID: <6ee9254b-9481-be0e-1bb3-4d65b461f791@foss.st.com>
+Date:   Fri, 22 Apr 2022 17:27:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419053426.2820350-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] rpmsg: virtio: fix possible double free in
+ rpmsg_virtio_add_ctrl_dev()
+Content-Language: en-US
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+To:     Hangyu Hua <hbh25y@gmail.com>, <bjorn.andersson@linaro.org>,
+        <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220418101724.42174-1-hbh25y@gmail.com>
+ <64aed5f4-bc6b-b8ea-f599-b2c43e35d9bd@foss.st.com>
+In-Reply-To: <64aed5f4-bc6b-b8ea-f599-b2c43e35d9bd@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-22_04,2022-04-22_01,2022-02-23_01
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 01:34:26PM +0800, Zqiang wrote:
-> If the rcutree.use_softirq is configured, when RCU Stall event
-> happened, dump status of all rcuc kthreads who due to starvation
-> prevented grace period ends on CPUs that not report quiescent
-> state.
 
-Please accept my apologies for the delay, and please let me try
-again.  ;-)
 
-Your earlier patch added at most one line and one stack backtrace to
-the RCU CPU stall warning text, which is OK.  Sort of, anyway.  I was
-relying on the fact that the people who have (rightly) complained about
-RCU CPU stall-warning verbosity never run with !use_softirq.  But it is
-only a matter of time.  Yes, we could argue that they should use faster
-console serial lines, faster management-console hardware, faster networks,
-faster mass storage, and so on, but I would expect them to in turn ask
-us if we were volunteering to pay for all that.
+On 4/22/22 17:16, Arnaud POULIQUEN wrote:
+> Hi Hangyu,
+> 
+> On 4/18/22 12:17, Hangyu Hua wrote:
+>> vch will be free in virtio_rpmsg_release_device() when
+>> rpmsg_ctrldev_register_device() fails. There is no need to call
+>> kfree() again.
+>>
+>> Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
+>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+>> ---
+>>  drivers/rpmsg/virtio_rpmsg_bus.c | 1 -
+>>  1 file changed, 1 deletion(-)
+>>
+>> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+>> index 603233f0686e..3b7b47f785cf 100644
+>> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+>> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+>> @@ -851,7 +851,6 @@ static struct rpmsg_device *rpmsg_virtio_add_ctrl_dev(struct virtio_device *vdev
+>>  
+>>  	err = rpmsg_ctrldev_register_device(rpdev_ctrl);
+>>  	if (err) {
+>> -		kfree(vch);
+>>  		return ERR_PTR(err);
+>>  	}
+>>  
+> 
+> Good catch! I confirmed by testing the error case. There is a double free.
+> 
+> That said this highlight a quite more complex issue as
+> rpmsg_virtio_del_ctrl_dev[1] and rpmsg_ns_register_device(rpdev_ns)error
+> case[2] need also some improvements.
+> 
+> [1]
+> https://elixir.bootlin.com/linux/v5.18-rc3/source/drivers/rpmsg/virtio_rpmsg_bus.c#L861
+> [2]https://elixir.bootlin.com/linux/v5.18-rc3/source/drivers/rpmsg/virtio_rpmsg_bus.c#L974
+> 
+> Please find at the end of my mail a V2 patch that should fix more error
+> cases.
+> As you initiate the fix, do you want to send the V2 or do you prefer
+> that I send the fix?
 
-In contrast, this patch can add one line per stalled CPU on top of the
-existing output.  Which is better than your earlier patch, which could
-add a line plus a stack trace per stalled CPU.  But that can still be
-a lot of added output, and that added output can cause problems.
 
-So, could you please merge this rcuc-stalled information into the
-existing per-CPU line printed by print_cpu_stall_info()?  Right now,
-each such line looks something like this:
+My apologies, I just saw your second patch[1], so what I have to do is to send a new one to fix
+rpmsg_virtio_del_ctrl_dev()
 
-rcu: 0-....: (4 ticks this GP) idle=1e6/1/0x4000000000000002 softirq=12470/12470 fqs=2
+[1]https://patchwork.kernel.org/project/linux-remoteproc/patch/20220418093144.40859-1-hbh25y@gmail.com/
 
-One approach would be to add the number of jiffies that the rcuc
-task was stalled to this line, maybe something like this:
+For this one:
+ Tested-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 
-rcu: 0-....: (4 ticks this GP) idle=1e6/1/0x4000000000000002 softirq=12470/12470 fqs=2 rcuc=15384
+Regards
+Arnaud
 
-Of course, this "rcuc=" string should only ut only if the stall lasted
-for longer than (say) one eighth of the stall timeout.
-
-Any "(false positive?)" needs to remain at the end of the line:
-
-rcu: 0-....: (4 ticks this GP) idle=1e6/1/0x4000000000000002 softirq=12470/12470 fqs=2 rcuc=15384 (false positive?)
-
-Thoughts?
-
-							Thanx, Paul
-
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> 
+> Thanks,
+> Arnaud
+> 
+> Subject: [PATCH V2] rpmsg: virtio: fix possible double free in rpmsg_probe()
+> 
+> the virtio_rpmsg_channel structure will be free in
+> virtio_rpmsg_release_device() when the device_register() fails or
+> when device_unregister is called.
+> There is no need to call kfree() again.
+> 
+> Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
+> 
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 > ---
->  v1->v2:
->  rework rcuc_kthread_dump function
+>  drivers/rpmsg/virtio_rpmsg_bus.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
 > 
->  kernel/rcu/tree_stall.h | 32 ++++++++++++++++++++++++++------
->  1 file changed, 26 insertions(+), 6 deletions(-)
+> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c
+> b/drivers/rpmsg/virtio_rpmsg_bus.c
+> index 3ede25b1f2e4..a65c8be9b11f 100644
+> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> @@ -850,10 +850,8 @@ static struct rpmsg_device
+> *rpmsg_virtio_add_ctrl_dev(struct virtio_device *vdev
+>  	rpdev_ctrl->little_endian = virtio_is_little_endian(vrp->vdev);
 > 
-> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-> index d7956c03edbd..fcf0b2e1a71c 100644
-> --- a/kernel/rcu/tree_stall.h
-> +++ b/kernel/rcu/tree_stall.h
-> @@ -465,11 +465,13 @@ static void print_cpu_stall_info(int cpu)
->  	       falsepositive ? " (false positive?)" : "");
+>  	err = rpmsg_ctrldev_register_device(rpdev_ctrl);
+> -	if (err) {
+> -		kfree(vch);
+> +	if (err)
+>  		return ERR_PTR(err);
+> -	}
+> 
+>  	return rpdev_ctrl;
 >  }
->  
-> -static void rcuc_kthread_dump(struct rcu_data *rdp)
-> +static void __rcuc_kthread_dump(int cpu)
+> @@ -862,7 +860,7 @@ static void rpmsg_virtio_del_ctrl_dev(struct
+> rpmsg_device *rpdev_ctrl)
 >  {
-> -	int cpu;
-> -	unsigned long j;
-> +	struct rcu_data *rdp;
->  	struct task_struct *rcuc;
-> +	unsigned long j;
-> +
-> +	rdp = per_cpu_ptr(&rcu_data, cpu);
->  
->  	rcuc = rdp->rcu_cpu_kthread_task;
->  	if (!rcuc)
-> @@ -488,6 +490,21 @@ static void rcuc_kthread_dump(struct rcu_data *rdp)
->  		dump_cpu_task(cpu);
+>  	if (!rpdev_ctrl)
+>  		return;
+> -	kfree(to_virtio_rpmsg_channel(rpdev_ctrl));
+> +	device_unregister(&rpdev_ctrl->dev);
 >  }
->  
-> +static void rcuc_kthread_dump(void)
-> +{
-> +	int cpu;
-> +	struct rcu_node *rnp;
-> +	unsigned long flags;
-> +
-> +	rcu_for_each_leaf_node(rnp) {
-> +		raw_spin_lock_irqsave_rcu_node(rnp, flags);
-> +		for_each_leaf_node_possible_cpu(rnp, cpu)
-> +			if (rnp->qsmask & leaf_node_cpu_bit(rnp, cpu))
-> +				__rcuc_kthread_dump(cpu);
-> +		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-> +	}
-> +}
-> +
->  /* Complain about starvation of grace-period kthread.  */
->  static void rcu_check_gp_kthread_starvation(void)
->  {
-> @@ -597,6 +614,9 @@ static void print_other_cpu_stall(unsigned long gp_seq, unsigned long gps)
->  	if (ndetected) {
->  		rcu_dump_cpu_stacks();
->  
-> +		if (!use_softirq)
-> +			rcuc_kthread_dump();
-> +
->  		/* Complain about tasks blocking the grace period. */
->  		rcu_for_each_leaf_node(rnp)
->  			rcu_print_detail_task_stall_rnp(rnp);
-> @@ -659,11 +679,11 @@ static void print_cpu_stall(unsigned long gps)
->  	rcu_check_gp_kthread_expired_fqs_timer();
->  	rcu_check_gp_kthread_starvation();
->  
-> -	if (!use_softirq)
-> -		rcuc_kthread_dump(rdp);
-> -
->  	rcu_dump_cpu_stacks();
->  
-> +	if (!use_softirq)
-> +		rcuc_kthread_dump();
-> +
->  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
->  	/* Rewrite if needed in case of slow consoles. */
->  	if (ULONG_CMP_GE(jiffies, READ_ONCE(rcu_state.jiffies_stall)))
-> -- 
-> 2.25.1
 > 
+>  static int rpmsg_probe(struct virtio_device *vdev)
+> @@ -973,7 +971,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> 
+>  		err = rpmsg_ns_register_device(rpdev_ns);
+>  		if (err)
+> -			goto free_vch;
+> +			goto free_ctrldev;
+>  	}
+> 
+>  	/*
+> @@ -997,8 +995,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> 
+>  	return 0;
+> 
+> -free_vch:
+> -	kfree(vch);
+>  free_ctrldev:
+>  	rpmsg_virtio_del_ctrl_dev(rpdev_ctrl);
+>  free_coherent:

@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD1550B577
+	by mail.lfdr.de (Postfix) with ESMTP id 3303C50B576
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446805AbiDVKp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
+        id S1446820AbiDVKqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446804AbiDVKp4 (ORCPT
+        with ESMTP id S1349975AbiDVKqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:45:56 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E4B2619
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:43:03 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23MAEJ1S010784;
-        Fri, 22 Apr 2022 10:42:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=vIeD8Z2V/2oCs6VkOdLN5CH5TWXYC4i53djqXydyCj8=;
- b=stJy4Z0H/OOGlDtzc6iyjZQKpqL/P4Cl5ZFG2yEPKdoOHDYLxJI9++/c7+Y7vj7YFMQ+
- w3gzGu5rnSI8wIu0SWJF4ua9RnlKpFV7/1TsQIifOZoI4Qr7IVH525MOldi9A8Q4TVPf
- oGEUBYuVkZDvp3zCQJAA1OpiPWIbTc3pJXNfA8sL8dl+sM0sr1J1qDRMIiXaQrjjOLrd
- BqIoPu3oU1HVi99lLrfWtLV8Fq6zq8q5LE0bkv+Rz/i9WyMIDchxzFsW3DMgYt3V68Mx
- q7w9DXXruvnNmT4MpZNDrDy1sOTot9l6Gal0W9pfaIcDz4k8PZy4RrAP6bQHw31Wthlc gA== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjswfdprm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 10:42:49 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MAFJEg004256;
-        Fri, 22 Apr 2022 10:42:47 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 3fgu6u5s0f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 10:42:47 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MAgiic38338920
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 Apr 2022 10:42:44 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCB404C040;
-        Fri, 22 Apr 2022 10:42:44 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2EBCE4C046;
-        Fri, 22 Apr 2022 10:42:44 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.24.148])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 22 Apr 2022 10:42:44 +0000 (GMT)
-Date:   Fri, 22 Apr 2022 13:42:42 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     kernel test robot <lkp@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [stable:linux-5.10.y 2705/5321] WARNING: modpost:
- vmlinux.o(.text+0x8cc4): Section mismatch in reference from the function
- __arm_ioremap_pfn_caller() to the function
- .meminit.text:memblock_is_map_memory()
-Message-ID: <YmKGohqgR21F1zpX@linux.ibm.com>
-References: <202204220723.zOZ7gZGT-lkp@intel.com>
+        Fri, 22 Apr 2022 06:46:06 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBF4BF3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:43:13 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id q1so8801096plx.13
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:43:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PwjyuhBBzo6UT5Lred+US79kmO0Pe9efH/HNboc3Hdw=;
+        b=CueUH3OOot8AF32j5BECrYNIAqKpODeznipw7H4iyOuFOjrDkDhWbj1uEln70UZKI9
+         JKq1xltiLvRCtjXFzqKCx/kCfHIEl29/wm4VSfG1Qw/TjgFsS9tC94wG+JmzQ2Pr8KvI
+         i9mjchpi0kgLAZVbLz2T+XWc2Dg+GS2zhrBKBZb3EhwAs7zA8EoTgZ0wOkeSadwwXKGJ
+         Nc4DQlBOaG6KQRTKWHFUyx4yCmm/IQnND79tsm5HjQ+WPIT1YXpLv284sG6VtI/gMWO5
+         qa6muYXNzKT/qbJ236n4hkK5OVHi3/5L1zEllbw58orJ+E4m7I9KJMzc7Au+hjX550c8
+         DdFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PwjyuhBBzo6UT5Lred+US79kmO0Pe9efH/HNboc3Hdw=;
+        b=g8nkX1O6UD8Dfq99ur87WYwG6locIgDq++aqrFbxSQRlS7iqLxnfNcYQ6eHpVy9vzf
+         yfyBii3HUv8Q8KhOfRQEn5IBSA97Y8jznPGbkB7WCjk58ZUjxhwbGR+kfSEGbV4xuXxq
+         Szwg3ZijkP0VdjQE0JsRKLwJEQtXqVJn7b7aUw9B2NSNMS2r2ijDKYL2JXYY18biI6RX
+         8yiAtzabAZALkYU7iRz3jUjnQEtLP1HDW/lV2aWvuYEH7gSTK29wN0DdZ+6mBE3XrU6z
+         y2c9f6O5fTAc+hjD1LbXE2/E9PrMp9fkDvpEjPpIDZnuTCaJ0qDvxEGqhUBweb24Z44r
+         ke1w==
+X-Gm-Message-State: AOAM531Ht+ikF9ZuSgHz/9QZdYX/4ig+sX9tsjBF3lpDrS9tF2s96CQ/
+        1PwgDvDQuc0VIyX55A4K5A==
+X-Google-Smtp-Source: ABdhPJyLHP+6ZZ57Czt7FGumA5gixAyMavZrloHv3BybrstHXNagscnfm+7CneYBaGgb8wd+tDVJCQ==
+X-Received: by 2002:a17:90b:1b01:b0:1d2:ef4a:98e1 with SMTP id nu1-20020a17090b1b0100b001d2ef4a98e1mr4590141pjb.163.1650624193062;
+        Fri, 22 Apr 2022 03:43:13 -0700 (PDT)
+Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id f187-20020a6251c4000000b005058e59604csm2148448pfb.217.2022.04.22.03.43.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 03:43:12 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 18:43:07 +0800
+From:   Pingfan Liu <kernelfans@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 6/9] pm/irq: make for_each_irq_desc() safe of irq_desc
+ release
+Message-ID: <YmKGuwX3o7dETlKl@piliu.users.ipa.redhat.com>
+References: <20220420140521.45361-1-kernelfans@gmail.com>
+ <20220420140521.45361-7-kernelfans@gmail.com>
+ <CAJZ5v0h2SWN-=-5=OsMGm1amMJrYELqM6BC+J=98EAxSUmxMqg@mail.gmail.com>
+ <YmDP93yLJw5gsjtQ@piliu.users.ipa.redhat.com>
+ <CAJZ5v0g9DZax-U4WnVcUCc0zAD0uwZZ7E6wsGXmVCB6MeebWxw@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202204220723.zOZ7gZGT-lkp@intel.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RuD25pj2vcAE6UeM0Lhh0FpchBErkswj
-X-Proofpoint-GUID: RuD25pj2vcAE6UeM0Lhh0FpchBErkswj
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-22_02,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=813 spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
- phishscore=0 suspectscore=0 adultscore=0 clxscore=1011 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204220046
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <CAJZ5v0g9DZax-U4WnVcUCc0zAD0uwZZ7E6wsGXmVCB6MeebWxw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,57 +75,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 07:37:19AM +0800, kernel test robot wrote:
-> Hi Mike,
+On Thu, Apr 21, 2022 at 12:57:28PM +0200, Rafael J. Wysocki wrote:
+> On Thu, Apr 21, 2022 at 5:31 AM Pingfan Liu <kernelfans@gmail.com> wrote:
+> >
+> > On Wed, Apr 20, 2022 at 06:23:48PM +0200, Rafael J. Wysocki wrote:
+> > > On Wed, Apr 20, 2022 at 4:06 PM Pingfan Liu <kernelfans@gmail.com> wrote:
+> > > >
+> > > > The invloved context is no a RCU read section. Furthermore there may be
+> > > > more than one task at this point. Hence it demands a measure to prevent
+> > > > irq_desc from freeing. Use irq_lock_sparse to serve the protection
+> > > > purpose.
+> > >
+> > > Can you please describe an example scenario in which the added locking
+> > > will prevent a failure from occurring?
+> > >
+> >
+> > Sorry to forget mentioning that this is based on the code analysis.
+> >
+> > Suppose the following scenario:
+> > Two threads invloved
+> >   threadA "hibernate" runs suspend_device_irqs()
+> >   threadB "rcu_cpu_kthread" runs rcu_core()->rcu_do_batch(), which releases
+> >   object, let's say irq_desc
+> >
+> > Zoom in:
+> >   threadA                                               threadB
+> >   for_each_irq_desc(irq, desc) {
+> >       get irq_descA which is under freeing
+> >                                                     --->preempted by rcu_core()->rcu_do_batch()  which releases irq_descA
+> >       raw_spin_lock_irqsave(&desc->lock, flags);
+> >       //Oops
+> >
+> > And since in the involved code piece, threadA runs in a preemptible
+> > context, and there may be more than one thread at this stage. So the
+> > preempted can happen.
 > 
-> FYI, the error/warning still remains.
+> Well, I'm still not sure that this can ever trigger in practice, but I
+
+Yes, I also think it hardly happen. I had gone through all
+accesses to irq_desc in kernel, and just want to make anything
+completely obey the rule.
+> guess the locking can be added for extra safety.
 > 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-> head:   1052f9bce62982023737a95b7ff1ad26a5149af6
-> commit: 8dd559d53b3b2de960ca1ec1359f5a9b4a12e181 [2705/5321] arm: ioremap: don't abuse pfn_valid() to check if pfn is in RAM
-> config: arm-hackkit_defconfig (https://download.01.org/0day-ci/archive/20220422/202204220723.zOZ7gZGT-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=8dd559d53b3b2de960ca1ec1359f5a9b4a12e181
->         git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
->         git fetch --no-tags stable linux-5.10.y
->         git checkout 8dd559d53b3b2de960ca1ec1359f5a9b4a12e181
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> Anyway, the above information should go into the changelog IMO.
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+
+OK, I will update it in V2.
+> That said ->
 > 
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> > > > Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+> > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > > To: linux-kernel@vger.kernel.org
+> > > > ---
+> > > >  kernel/irq/pm.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/kernel/irq/pm.c b/kernel/irq/pm.c
+> > > > index ca71123a6130..4b67a4c7de3c 100644
+> > > > --- a/kernel/irq/pm.c
+> > > > +++ b/kernel/irq/pm.c
+> > > > @@ -133,6 +133,7 @@ void suspend_device_irqs(void)
+> > > >         struct irq_desc *desc;
+> > > >         int irq;
+> > > >
+> > > > +       irq_lock_sparse();
+> > > >         for_each_irq_desc(irq, desc) {
+> > > >                 unsigned long flags;
+> > > >                 bool sync;
+> > > > @@ -146,6 +147,7 @@ void suspend_device_irqs(void)
+> > > >                 if (sync)
+> > > >                         synchronize_irq(irq);
 > 
-> >> WARNING: modpost: vmlinux.o(.text+0x8cc4): Section mismatch in reference from the function __arm_ioremap_pfn_caller() to the function .meminit.text:memblock_is_map_memory()
-> The function __arm_ioremap_pfn_caller() references
-> the function __meminit memblock_is_map_memory().
-> This is often because __arm_ioremap_pfn_caller lacks a __meminit
-> annotation or the annotation of memblock_is_map_memory is wrong.
+> -> is it entirely safe to call synchronize_irq() under irq_lock_sparse?
 
-In 5.10 the hackkit defconfig does not select ARCH_KEEP_MEMBLOCK which is
-required for memblock_is_map_memory() to function after boot.
+synchronize_irq - wait for pending IRQ handlers (on other CPUs). It
+only holds irq_desc->lock and has no connections with irq sparse tree or
+bitmap. I can not see any deadlock issue or miss something?
 
-In upstream kernels ARCH_KEEP_MEMBLOCK is always selected by ARM after
-commit 5e545df3292f ("arm: remove CONFIG_ARCH_HAS_HOLES_MEMORYMODEL")
+Thanks for your time.
 
-So the fix would be either to backport 5e545df3292f or unconditionally
-select ARCH_KEEP_MEMBLOCK on ARM in 5.10.
+Regards,
 
-(the same applies to 5.4)
-
-Greg, what is your preference?
- 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
-
--- 
-Sincerely yours,
-Mike.
+	Pingfan
+> 
+> > > >         }
+> > > > +       irq_unlock_sparse();
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(suspend_device_irqs);
+> > > >
+> > > > @@ -186,6 +188,7 @@ static void resume_irqs(bool want_early)
+> > > >         struct irq_desc *desc;
+> > > >         int irq;
+> > > >
+> > > > +       /* The early resume stage is free of irq_desc release */
+> > > >         for_each_irq_desc(irq, desc) {
+> > > >                 unsigned long flags;
+> > > >                 bool is_early = desc->action &&
+> > > > --
+> > > > 2.31.1
+> > > >

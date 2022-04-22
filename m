@@ -2,104 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C24450BA78
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B4E50BA7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448824AbiDVOpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S1448826AbiDVOpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448834AbiDVOp1 (ORCPT
+        with ESMTP id S1448879AbiDVOps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:45:27 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73E15BE6E;
-        Fri, 22 Apr 2022 07:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JfaFBap5XOtEB+YkkJ9E9pvw6jjkwyxBWuZ63OV8jOo=; b=2iW4xAij7Xo+8jKTLoxPTikuIu
-        Fi62Db6A46bHFst2qLDayoFWOb6RX6ajDK/tjDgbw4Pp5AR+9Y7Nc+WmtKOA5T3+cA6Hd1Ba/7NMl
-        /H7JeZ4vNiMnbDct96DTc0XhWrFzeGMii1/9riBIc9DQAeXnDvco+HHPcdDJSXDvg/XPKZtB/77na
-        zmba1NEbnS/W29AXrGd4wjDpw0S6Hh31RRpAHGtnkzgO4KYM3/9N1iN6BLGyxf86UL3iTp9S9EfJ2
-        GynSoMhj1cmlB3tfGWVWw9qnFEUdF2Z0z7EwCyuhCfiJia20VFlM4CvE0TVx8EZ7CI0Rqw+PLuWMl
-        BrrXqijA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhuUS-000s6V-32; Fri, 22 Apr 2022 14:42:32 +0000
-Date:   Fri, 22 Apr 2022 07:42:32 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <song@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com, akpm@linux-foundation.org,
-        rick.p.edgecombe@intel.com, hch@infradead.org,
-        imbrenda@linux.ibm.com
-Subject: Re: [PATCH bpf 0/4] bpf_prog_pack and vmalloc-on-huge-page fixes
-Message-ID: <YmK+2AyIuqaySkHQ@bombadil.infradead.org>
-References: <20220422051813.1989257-1-song@kernel.org>
+        Fri, 22 Apr 2022 10:45:48 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1275BE79
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:42:54 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650638573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5ab1B9xAubV3zZLLUQejgYIXK0dy0QH0QGOT/yEDKvw=;
+        b=a0jKXGBB05Wms0CsvBuwLt0SWse/M2Cfy6qwtqtqn1QZxAXKAaoeifkiJtABRWHlf6geJh
+        KlRBPORdqhDY6DZKejJQxsg70PqSMcXXJwMamN9zuVPewbA3ykr3f0ur0aLXaObfLeua0p
+        69n1YIn9VeZFM0j5AqOA2oca7E8X6Bxk/vuOPyaCaGRWgf3EQUNsg/i34HFxshdS5yGjiZ
+        +S2AU2c/vDIix5rwwwRP+mwPBTQjVONXWZts8ETS7arRbkJ4W/Hk8lO9LQ5zfZJj2waQOj
+        gMCufq8fpm936wCmsvJ2q7BeYx0SGeZEo0LJr5v9WV2qzeGUiJ9LGoJ0QcPwmQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650638573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5ab1B9xAubV3zZLLUQejgYIXK0dy0QH0QGOT/yEDKvw=;
+        b=fZ3WO591Dbl4IIhNV9yo29PTdXOG3vfQqufJ5DX1cdJowXaOalC9ivx2rOgYkKMnQhyxaU
+        GXBCQf2Dp3Sy7+Ag==
+To:     Nico Pache <npache@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?utf-8?Q?An?= =?utf-8?Q?dr=C3=A9?= Almeida 
+        <andrealmeid@collabora.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [RFC 2/3] futex: exit: Print a warning when futex_cleanup fails
+In-Reply-To: <90124b02-76b5-d775-ac7d-a2e9d7677fa1@redhat.com>
+References: <20220421190533.1601879-1-npache@redhat.com>
+ <20220421190533.1601879-3-npache@redhat.com> <87r15qrwdt.ffs@tglx>
+ <90124b02-76b5-d775-ac7d-a2e9d7677fa1@redhat.com>
+Date:   Fri, 22 Apr 2022 16:42:52 +0200
+Message-ID: <87r15p5gcz.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422051813.1989257-1-song@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:18:09PM -0700, Song Liu wrote:
-> NOTE: This set is based on Linus' master branch (d569e86915b7), not
-> bpf/master.
-> 
-> There are various discussion about these changes, check out [1] [2].
-> I guess we can use this thread to discuss which patches should go in 5.18.
-> AFAICT, 1/4 need to with 5.18;
+On Fri, Apr 22 2022 at 10:23, Nico Pache wrote:
+> On 4/21/22 16:53, Thomas Gleixner wrote:
+>> On Thu, Apr 21 2022 at 15:05, Nico Pache wrote:
+>> Robust futexes are best effort as I explained you before and spamming
+>> dmesg won't help anything.
+> It would have helped find the OOM/Robust Futex issue more quickly. It may also
+> help detect breakages in the pthread code (or any other users of robust futex)
+> if someone is doing something incorrectly.
 
-Since huge pages are effectively disabled on v5.18 I can't see why.
+If we follow that line of argumentation then we have to sprinkle printks
+en masse all over the place as there are a gazillion ways to create hard
+to debug issues.
 
-> 2/4 seems safe to go as well;
+Thanks,
 
-My impression on the discussion was that huge pages design was broken
-and evidence for this came up after x86 finally enabled *a small*
-portion use case of it. This revealed how broken huge pages were not
-just for x86 but for other architectures. And so I can't see why we'd
-enable for v5.18 huge pages for the large system hash.
+        tglx
 
-> 3/4 and 4/4
-> may still need more work/discussion.
 
-Happy to review these but if huge pages are disabled I don't see the
-point in a module_alloc_huge() yet.
-
-  Luis
-
-> 
-> Thanks!
-> 
-> [1] https://lore.kernel.org/linux-mm/20220415164413.2727220-1-song@kernel.org/
-> [2] https://lore.kernel.org/linux-mm/20220421072212.608884-1-song@kernel.org/
-> 
-> Song Liu (4):
->   bpf: invalidate unused part of bpf_prog_pack
->   page_alloc: use vmalloc_huge for large system hash
->   module: introduce module_alloc_huge
->   bpf: use module_alloc_huge for bpf_prog_pack
-> 
->  arch/x86/kernel/module.c     | 21 +++++++++++++++++++++
->  arch/x86/net/bpf_jit_comp.c  | 22 ++++++++++++++++++++++
->  include/linux/bpf.h          |  2 ++
->  include/linux/moduleloader.h |  5 +++++
->  kernel/bpf/core.c            | 28 +++++++++++++++++++++-------
->  kernel/module.c              |  8 ++++++++
->  mm/page_alloc.c              |  2 +-
->  7 files changed, 80 insertions(+), 8 deletions(-)
-> 
-> --
-> 2.30.2

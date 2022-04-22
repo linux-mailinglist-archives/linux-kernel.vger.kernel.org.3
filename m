@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C05750BB88
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A50E50BB8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449375AbiDVPUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
+        id S1449386AbiDVPVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449369AbiDVPUN (ORCPT
+        with ESMTP id S1449385AbiDVPUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:20:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B29E5DA1C
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650640636;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ljPEk7R5J71TOPgAVvKcjJgou60F7BhP3VQzvXf9g5M=;
-        b=Fm51J934HbsC2zV5OhetooUZNS0e8AsQ6LQyY2QTy+jTqt0APQZJAA2fYThDGNuqTWeJVo
-        n+CK3/S7uJexu5LwqQANbflP88o6gFPfN9ddGIEW+eyvmI9iRnJMq6g6u2AQSgGgAftxwY
-        zVh+eaixPGF8lYqzoaJ0pvssb6u7G1o=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-oBvGebEzOTiR45sw89DSlg-1; Fri, 22 Apr 2022 11:17:14 -0400
-X-MC-Unique: oBvGebEzOTiR45sw89DSlg-1
-Received: by mail-qv1-f69.google.com with SMTP id u7-20020a0cb407000000b00446687f0b1bso6852471qve.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:17:14 -0700 (PDT)
+        Fri, 22 Apr 2022 11:20:53 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE955DA4F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:17:59 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id s17so11498971plg.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:17:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ugUPrPCeG+4KNh4o4UU3L2XGTAsONRbVSCUPTlkzE7s=;
+        b=a9+lKlXL3U13tWvDJ6tIe5Q55LL14Jf6zP882Dk0M4Bn8LCTX5wKMesGdJR9Kwkv9p
+         Fr7H1cRJiofWgoj74aJUCUiCnHt5riiH/hUtlhavaUdyhjP8DgQ/8JP7VRhIbFuvvqEx
+         hQVg01WfwiThjfFqmOqJkrXQfGHwEySV3DgWt8gu93HrwIDOgoK4zzseRN50ZoULGFw7
+         mJkRVZU9dYxiZPNh46lxZM9MryhlTMGsjBYLPPUXiD6zw4oBlbmIkLlKQyi+FfLRBikq
+         igpMyXwdJ6Qkk5MSDpbaiaYxnqgZwgIhIv3medhzTBWfKRB59oVa33b1Sa/AndcLvZEu
+         3HeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ljPEk7R5J71TOPgAVvKcjJgou60F7BhP3VQzvXf9g5M=;
-        b=fx9MH0Cn+YREBzMIwTNPgLOC+g/8XpPUjpMgsla7iLcuMTUJJXNzKaImlKr+u7r9Z2
-         iQxpIkTDBErYiqR353Kr/PISZ/eSFAtKichwRBqnK4vIE1zvg4XVu/XsNI3s+b65AIqc
-         udJf2520Ehrypw8d/pkXuqr+hOP45OAdAY6bhGHPduRuEzN/Lt/JX3gGEkeoyH/GjY3s
-         5ndhUY4CAKgeNPo95sB9I/gWqG7N/WMm3zv/RHHN83/JWmdfQfqJM2mJFj2TVfXJfOsA
-         JsgLxPDTYr691q6u0qOdro50YdLz+bV2F/Ym2zgEuMz513I8cIKoGcIvavc1yV6SSp14
-         ACAw==
-X-Gm-Message-State: AOAM533s6LrXGo5oRPdByGJKXj376FrDCS+gKjdls7vF2v4d4S7lcP2H
-        7azQG1fNRyAO5tdqZUIiooL4Z3548uc4Vqy7dDvHuLcRJJKDXa2hwjvjLWe6kroDqhxHNROcetB
-        WqmPIkDhjtbJstTC7p0nyaZVu
-X-Received: by 2002:a05:6214:2389:b0:435:ba04:8f18 with SMTP id fw9-20020a056214238900b00435ba048f18mr4107310qvb.4.1650640634101;
-        Fri, 22 Apr 2022 08:17:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyjMrEgs4qWwrfRJ+/YrbFr8Z4BJtENFj05qIosgsYOz+0gq0PHGNWoZHjHiTvQUr8E5s3g/w==
-X-Received: by 2002:a05:6214:2389:b0:435:ba04:8f18 with SMTP id fw9-20020a056214238900b00435ba048f18mr4107289qvb.4.1650640633896;
-        Fri, 22 Apr 2022 08:17:13 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id k189-20020a3788c6000000b0069c10860b10sm1020921qkd.107.2022.04.22.08.17.12
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=ugUPrPCeG+4KNh4o4UU3L2XGTAsONRbVSCUPTlkzE7s=;
+        b=c53HnsfhlRej82vFWR5M4Dciz2kkAps2DZuoWJZdkMO6x9YfonC0ke/cRvEHBxyfwb
+         ZECxLQjXkIRgEOm0/0pAim6JnRNs6HjIbo3RdFINbGHIc0y4jNWfyTTEdlHqdA8NsMO4
+         ixPkP8lghKvLOFR7xpEy/ssZLFxP+BJjQSL8GTTxpdMIP1TLa7aoqBuixY5lZBfLvvBz
+         E5n8bnTzrxxSwWIScstcFfpm0h04dqTycD6uZuyDgw3ocqp1wh2Fl2N0KLQHZj8PqVNn
+         jn/UVii2BjVJXzbSqqVzr9r9nB+yLVj8kvncw+DPBhlSGW0GNOP15DGlzn2+uBHVO85X
+         Dl2Q==
+X-Gm-Message-State: AOAM531JW8VcywuYmX379lNsDCapzRJVBXZ3MLoTfjP1h3cjfrzOWyTb
+        YpZ7F1NUBPagEfKR8rtafEM=
+X-Google-Smtp-Source: ABdhPJzG9sdIxFzivmJ9pmxye4wlB9xJam4o9CQAWzW4qnh2/VLQv+LZp+/fy6dblqPnLGOFLfwkUQ==
+X-Received: by 2002:a17:902:f64e:b0:14d:20db:8478 with SMTP id m14-20020a170902f64e00b0014d20db8478mr5245444plg.158.1650640678527;
+        Fri, 22 Apr 2022 08:17:58 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id o11-20020a62cd0b000000b0050ce8f98136sm2980459pfg.149.2022.04.22.08.17.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 08:17:13 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 08:17:10 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Miroslav Benes <mbenes@suse.cz>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 15/25] objtool: Rework ibt and extricate from stack
- validation
-Message-ID: <20220422151710.kxf2iywniedb4trk@treble>
-References: <cover.1650300597.git.jpoimboe@redhat.com>
- <fd1435e46bb95f81031b8fb1fa360f5f787e4316.1650300597.git.jpoimboe@redhat.com>
- <alpine.LSU.2.21.2204201755580.1205@pobox.suse.cz>
- <20220422105037.GV2731@worktop.programming.kicks-ass.net>
+        Fri, 22 Apr 2022 08:17:58 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] checksyscalls: ignore -Wunused-macros
+Date:   Sat, 23 Apr 2022 00:17:25 +0900
+Message-Id: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220422105037.GV2731@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 12:50:37PM +0200, Peter Zijlstra wrote:
-> On Wed, Apr 20, 2022 at 07:25:16PM +0200, Miroslav Benes wrote:
-> > A nit and it was there even before this patch...
-> > 
-> > > -static struct instruction *
-> > > -validate_ibt_reloc(struct objtool_file *file, struct reloc *reloc)
-> > > -{
-> > > -	struct instruction *dest;
-> > > -	struct section *sec;
-> > > -	unsigned long off;
-> > > -
-> > > -	sec = reloc->sym->sec;
-> > > -	off = reloc->sym->offset;
-> > > -
-> > > -	if ((reloc->sec->base->sh.sh_flags & SHF_EXECINSTR) &&
-> > > -	    (reloc->type == R_X86_64_PC32 || reloc->type == R_X86_64_PLT32))
-> > > -		off += arch_dest_reloc_offset(reloc->addend);
-> > 
-> > here...
-> > 
-> > > +static int validate_ibt_insn(struct objtool_file *file, struct instruction *insn)
-> > > +{
-> > 
-> > ...
-> > > +		off = reloc->sym->offset;
-> > > +		if (reloc->type == R_X86_64_PC32 || reloc->type == R_X86_64_PLT32)
-> > > +			off += arch_dest_reloc_offset(reloc->addend);
-> > > +		else
-> > > +			off += reloc->addend;
-> > 
-> > it looks kind of strange to have arch_dest_reloc_offset() and still 
-> > reference arch-specific relocation types here. On the other hand it seems 
-> > difficult to achieve complete arch-agnostic code, so take it just as a 
-> > note and maybe someone porting objtool to a different architecture will 
-> > split the code, make it all arch-independent and all will be nice and 
-> > shiny.
-> 
-> Something like so perhaps? Seems to build and boot x86_64-defconfig.
+The macros defined in this file are for testing only and are purposely
+not used. When compiled with W=2, both gcc and clang yield some
+-Wunused-macros warnings. Ignore them.
 
-Looks good...
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ scripts/checksyscalls.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
+index 9dbab13329fa..cde15f22ec98 100755
+--- a/scripts/checksyscalls.sh
++++ b/scripts/checksyscalls.sh
+@@ -255,6 +255,7 @@ cat << EOF
+ /* 64-bit ports never needed these, and new 32-bit ports can use statx */
+ #define __IGNORE_fstat64
+ #define __IGNORE_fstatat64
++
+ EOF
+ }
+ 
+@@ -268,4 +269,4 @@ syscall_list() {
+ }
+ 
+ (ignore_list && syscall_list $(dirname $0)/../arch/x86/entry/syscalls/syscall_32.tbl) | \
+-$* -Wno-error -E -x c - > /dev/null
++$* -Wno-error -Wno-unused-macros -E -x c - > /dev/null
 -- 
-Josh
+2.35.1
 

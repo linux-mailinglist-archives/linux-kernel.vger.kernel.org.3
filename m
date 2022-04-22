@@ -2,591 +2,797 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361D450C4D0
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5469E50C4BB
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbiDVXZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
+        id S230053AbiDVXW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiDVXY5 (ORCPT
+        with ESMTP id S229877AbiDVXVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:24:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C9A1F310F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 16:00:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0629B83300
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 23:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D664C385A0;
-        Fri, 22 Apr 2022 23:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650668410;
-        bh=1hOEPpI8cgRF5lLEd0hRrdz++am9bOEonoN37TkAAbI=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=qvtO0QBvf2gPsezSOqygGD6dJE+dthIsm1w7wXkaMBrZs0gs9oD+AxlnXkhLjiqs7
-         gKDkyswYaircah8jWoZUPGNpmL/K7x9N2dNrScFMF1+kMcwdA/R2NfbeZIwUkm0imp
-         8jwV76BGmyO2pEAltatSqWd+fNAGqEGEmmOCqtAYHfmFQURnyUbgnH0TWRK4ZhlBY9
-         bOowUtxJMbPC++4+K1YIWDHFzlk7lybdNmcYJtl4T25gVuaFE1/l5+MuYhzUDe5Kz3
-         7SMXk7iZteBj86eHZhPDALgK+h5aF+9fdP5OFe0Erz5YZw9zSswHiXPk709P/j/0bd
-         iPMjkwdQj7Z2g==
-Date:   Fri, 22 Apr 2022 16:00:09 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Juergen Gross <jgross@suse.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Julien Grall <julien@xen.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH V1 3/6] xen/virtio: Add option to restrict memory access
- under Xen
-In-Reply-To: <1650646263-22047-4-git-send-email-olekstysh@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204221526221.915916@ubuntu-linux-20-04-desktop>
-References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com> <1650646263-22047-4-git-send-email-olekstysh@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Fri, 22 Apr 2022 19:21:52 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CA21E1761
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:58:12 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id a10so10638997oif.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uQcv8R5WAv5HoTvvUjeEvDfJXZHjsXcMqiqsV33wVf0=;
+        b=dXdkBB7iIQxqKmclLWvbeCu3zFOsJOvFBc2K62EJZet1dRhy/A6En7trfdHBj5gNiV
+         3yAQGFgD5BvIkqk4EM4D3ogl7FqU0o120L/HNTe0rIImONcSNsR0o2b4pmlWKtTJc6tu
+         l9AcWobWek1FgFCzyHGYxjMFcDyE1dub2g+UdmABPPsSz51JL/sSSQfXSoY9upRVLjxA
+         CbP9/U9pKOIe8M4MqX8o1qW/KrsXs8RPQbAo630oEi8AgkaYC5eGX3VCecisL5hRdczK
+         kApfutddAYplSuTuDHc5svGtwx7kEaZHu2zqTv9qp6M1lAbuKWw9BDxGRqBjzlY8P3Yh
+         Zsbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uQcv8R5WAv5HoTvvUjeEvDfJXZHjsXcMqiqsV33wVf0=;
+        b=aMJThvyuZziX67X+AjOCgHIlXqKlxKAr7692fv/olWnas68ZzR3t/ZDeknELsJ8fib
+         aB4JmOqFlEdiyxDp2eoqCHPDsrbWL1GUJB81FnpZB3NhpMJxGbGuaqJYjuh8wCbWgcB5
+         W74ps5PTpaXHBhHjpKE3k2bGHLsctIX8A8m88jr6Hh/sCmDD5qTEajkyIBCJMmivFkXG
+         S5r+y9hFSN7M4I+V+KpskqAqfXZ7UfJ8FADB939fDS3vDHQ5Oi/sZF5l/pKFstqZ/gXA
+         kEW9OSwJwmgdurfbYZwPJiwFh8MFMGeZyKwWW5t6Xpg9yBTsymSfJas39QifwlLa4Gj+
+         hU3g==
+X-Gm-Message-State: AOAM533TQU6Z3HesqUvYic2lNQ/4VVusf8CyRps8aaDcJJO3/G1xZsP3
+        KNzPxEDsnhwO5ffcBLSq5wBzvQ==
+X-Google-Smtp-Source: ABdhPJyzF183nwvSUKUbJCpGlFz2LHV4Qz7PjL93mcRAt1jxoLtIA691rmkD3BA/gtXSlcOtM1jEzQ==
+X-Received: by 2002:a05:6808:e8f:b0:2f7:6c1a:c1a with SMTP id k15-20020a0568080e8f00b002f76c1a0c1amr7411532oil.129.1650668291459;
+        Fri, 22 Apr 2022 15:58:11 -0700 (PDT)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id w18-20020a056808141200b00324fa65e89csm579055oiv.43.2022.04.22.15.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 15:58:10 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GCC bindings
+Date:   Fri, 22 Apr 2022 16:00:12 -0700
+Message-Id: <20220422230013.1332993-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1577086982-1650666424=:915916"
-Content-ID: <alpine.DEB.2.22.394.2204221527222.915916@ubuntu-linux-20-04-desktop>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Add binding for the Qualcomm SC8280XP Global Clock controller.
 
---8323329-1577086982-1650666424=:915916
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <alpine.DEB.2.22.394.2204221527223.915916@ubuntu-linux-20-04-desktop>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
 
-On Fri, 22 Apr 2022, Oleksandr Tyshchenko wrote:
-> From: Juergen Gross <jgross@suse.com>
-> 
-> Introduce Xen grant DMA-mapping layer which contains special DMA-mapping
-> routines for providing grant references as DMA addresses to be used by
-> frontends (e.g. virtio) in Xen guests.
-> 
-> In order to support virtio in Xen guests add a config option XEN_VIRTIO
-> enabling the user to specify whether in all Xen guests virtio should
-> be able to access memory via Xen grant mappings only on the host side.
-> 
-> As this also requires providing arch_has_restricted_virtio_memory_access
-> implementation, switch from a pure stub to a real function on Arm
-> and combine with existing implementation for the SEV guests on x86.
-> 
-> Add the needed functionality by providing a special set of DMA ops
-> handling the needed grant operations for the I/O pages.
-> 
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Changes since v1:
+- None
 
-There are a couple of minor things that checkpatch.pl reports, but aside
-from those the patch looks fine to me.
+ .../bindings/clock/qcom,gcc-sc8280xp.yaml     | 199 +++++++
+ include/dt-bindings/clock/qcom,gcc-sc8280xp.h | 496 ++++++++++++++++++
+ 2 files changed, 695 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-sc8280xp.h
 
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
+new file mode 100644
+index 000000000000..44e5f0d0a795
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
+@@ -0,0 +1,199 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,gcc-sc8280xp.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Global Clock & Reset Controller Binding for SC8280xp
++
++maintainers:
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
++
++description: |
++  Qualcomm global clock control module which supports the clocks, resets and
++  power domains on SC8280xp.
++
++  See also:
++  - dt-bindings/clock/qcom,gcc-sc8280xp.h
++
++properties:
++  compatible:
++    const: qcom,gcc-sc8280xp
++
++  clocks:
++    items:
++      - description: XO reference clock
++      - description: Sleep clock
++      - description: UFS memory first RX symbol clock
++      - description: UFS memory second RX symbol clock
++      - description: UFS memory first TX symbol clock
++      - description: UFS card first RX symbol clock
++      - description: UFS card second RX symbol clock
++      - description: UFS card first TX symbol clock
++      - description: Primary USB SuperSpeed pipe clock
++      - description: gcc_usb4_phy_pipegmux_clk_src
++      - description: gcc_usb4_phy_dp_gmux_clk_src
++      - description: gcc_usb4_phy_sys_pipegmux_clk_src
++      - description: usb4_phy_gcc_usb4_pcie_pipe_clk
++      - description: usb4_phy_gcc_usb4rtr_max_pipe_clk
++      - description: Primary USB4 RX0 clock
++      - description: Primary USB4 RX1 clock
++      - description: Secondary USB SuperSpeed pipe clock
++      - description: gcc_usb4_1_phy_pipegmux_clk_src
++      - description: gcc_usb4_1_phy_dp_gmux_clk_src
++      - description: gcc_usb4_1_phy_sys_pipegmux_clk_src
++      - description: usb4_1_phy_gcc_usb4_pcie_pipe_clk
++      - description: usb4_1_phy_gcc_usb4rtr_max_pipe_clk
++      - description: Secondary USB4 RX0 clock
++      - description: Secondary USB4 RX0 clock
++      - description: Multiport USB first SupserSpeed pipe clock
++      - description: Multiport USB second SuperSpeed pipe clock
++      - description: PCIe 2a pipe clock
++      - description: PCIe 2b pipe clock
++      - description: PCIe 3a pipe clock
++      - description: PCIe 3b pipe clock
++      - description: PCIe 4 pipe clock
++      - description: First EMAC controller reference clock
++      - description: Second EMAC controller reference clock
++
++  clock-names:
++    items:
++      - const: bi_tcxo
++      - const: sleep_clk
++      - const: ufs_phy_rx_symbol_0_clk
++      - const: ufs_phy_rx_symbol_1_clk
++      - const: ufs_phy_tx_symbol_0_clk
++      - const: ufs_card_rx_symbol_0_clk
++      - const: ufs_card_rx_symbol_1_clk
++      - const: ufs_card_tx_symbol_0_clk
++      - const: usb3_phy_wrapper_gcc_usb30_pipe_clk
++      - const: gcc_usb4_phy_pipegmux_clk_src
++      - const: gcc_usb4_phy_dp_gmux_clk_src
++      - const: gcc_usb4_phy_sys_pipegmux_clk_src
++      - const: usb4_phy_gcc_usb4_pcie_pipe_clk
++      - const: usb4_phy_gcc_usb4rtr_max_pipe_clk
++      - const: qusb4phy_gcc_usb4_rx0_clk
++      - const: qusb4phy_gcc_usb4_rx1_clk
++      - const: usb3_uni_phy_sec_gcc_usb30_pipe_clk
++      - const: gcc_usb4_1_phy_pipegmux_clk_src
++      - const: gcc_usb4_1_phy_dp_gmux_clk_src
++      - const: gcc_usb4_1_phy_sys_pipegmux_clk_src
++      - const: usb4_1_phy_gcc_usb4_pcie_pipe_clk
++      - const: usb4_1_phy_gcc_usb4rtr_max_pipe_clk
++      - const: qusb4phy_1_gcc_usb4_rx0_clk
++      - const: qusb4phy_1_gcc_usb4_rx1_clk
++      - const: usb3_uni_phy_mp_gcc_usb30_pipe_0_clk
++      - const: usb3_uni_phy_mp_gcc_usb30_pipe_1_clk
++      - const: pcie_2a_pipe_clk
++      - const: pcie_2b_pipe_clk
++      - const: pcie_3a_pipe_clk
++      - const: pcie_3b_pipe_clk
++      - const: pcie_4_pipe_clk
++      - const: rxc0_ref_clk
++      - const: rxc1_ref_clk
++
++  '#clock-cells':
++    const: 1
++
++  '#reset-cells':
++    const: 1
++
++  '#power-domain-cells':
++    const: 1
++
++  reg:
++    maxItems: 1
++
++  protected-clocks:
++    description:
++      Protected clock specifier list as per common clock binding.
++
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - '#clock-cells'
++  - '#reset-cells'
++  - '#power-domain-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,rpmh.h>
++    clock-controller@100000 {
++      compatible = "qcom,gcc-sc8280xp";
++      reg = <0x00100000 0x1f0000>;
++      clocks = <&rpmhcc RPMH_CXO_CLK>,
++               <&sleep_clk>,
++               <&ufs_phy_rx_symbol_0_clk>,
++               <&ufs_phy_rx_symbol_1_clk>,
++               <&ufs_phy_tx_symbol_0_clk>,
++               <&ufs_card_rx_symbol_0_clk>,
++               <&ufs_card_rx_symbol_1_clk>,
++               <&ufs_card_tx_symbol_0_clk>,
++               <&usb_0_ssphy>,
++               <&gcc_usb4_phy_pipegmux_clk_src>,
++               <&gcc_usb4_phy_dp_gmux_clk_src>,
++               <&gcc_usb4_phy_sys_pipegmux_clk_src>,
++               <&usb4_phy_gcc_usb4_pcie_pipe_clk>,
++               <&usb4_phy_gcc_usb4rtr_max_pipe_clk>,
++               <&qusb4phy_gcc_usb4_rx0_clk>,
++               <&qusb4phy_gcc_usb4_rx1_clk>,
++               <&usb_1_ssphy>,
++               <&gcc_usb4_1_phy_pipegmux_clk_src>,
++               <&gcc_usb4_1_phy_dp_gmux_clk_src>,
++               <&gcc_usb4_1_phy_sys_pipegmux_clk_src>,
++               <&usb4_1_phy_gcc_usb4_pcie_pipe_clk>,
++               <&usb4_1_phy_gcc_usb4rtr_max_pipe_clk>,
++               <&qusb4phy_1_gcc_usb4_rx0_clk>,
++               <&qusb4phy_1_gcc_usb4_rx1_clk>,
++               <&usb_2_ssphy>,
++               <&usb_3_ssphy>,
++               <&pcie2a_lane>,
++               <&pcie2b_lane>,
++               <&pcie3a_lane>,
++               <&pcie3b_lane>,
++               <&pcie4_lane>,
++               <&rxc0_ref_clk>,
++               <&rxc1_ref_clk>;
++      clock-names = "bi_tcxo",
++                    "sleep_clk",
++                    "ufs_phy_rx_symbol_0_clk",
++                    "ufs_phy_rx_symbol_1_clk",
++                    "ufs_phy_tx_symbol_0_clk",
++                    "ufs_card_rx_symbol_0_clk",
++                    "ufs_card_rx_symbol_1_clk",
++                    "ufs_card_tx_symbol_0_clk",
++                    "usb3_phy_wrapper_gcc_usb30_pipe_clk",
++                    "gcc_usb4_phy_pipegmux_clk_src",
++                    "gcc_usb4_phy_dp_gmux_clk_src",
++                    "gcc_usb4_phy_sys_pipegmux_clk_src",
++                    "usb4_phy_gcc_usb4_pcie_pipe_clk",
++                    "usb4_phy_gcc_usb4rtr_max_pipe_clk",
++                    "qusb4phy_gcc_usb4_rx0_clk",
++                    "qusb4phy_gcc_usb4_rx1_clk",
++                    "usb3_uni_phy_sec_gcc_usb30_pipe_clk",
++                    "gcc_usb4_1_phy_pipegmux_clk_src",
++                    "gcc_usb4_1_phy_dp_gmux_clk_src",
++                    "gcc_usb4_1_phy_sys_pipegmux_clk_src",
++                    "usb4_1_phy_gcc_usb4_pcie_pipe_clk",
++                    "usb4_1_phy_gcc_usb4rtr_max_pipe_clk",
++                    "qusb4phy_1_gcc_usb4_rx0_clk",
++                    "qusb4phy_1_gcc_usb4_rx1_clk",
++                    "usb3_uni_phy_mp_gcc_usb30_pipe_0_clk",
++                    "usb3_uni_phy_mp_gcc_usb30_pipe_1_clk",
++                    "pcie_2a_pipe_clk",
++                    "pcie_2b_pipe_clk",
++                    "pcie_3a_pipe_clk",
++                    "pcie_3b_pipe_clk",
++                    "pcie_4_pipe_clk",
++                    "rxc0_ref_clk",
++                    "rxc1_ref_clk";
++
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++      #power-domain-cells = <1>;
++    };
++...
+diff --git a/include/dt-bindings/clock/qcom,gcc-sc8280xp.h b/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
+new file mode 100644
+index 000000000000..cb2fb638825c
+--- /dev/null
++++ b/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
+@@ -0,0 +1,496 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2022, Linaro Ltd.
++ */
++
++#ifndef _DT_BINDINGS_CLK_QCOM_GCC_DIREWOLF_H
++#define _DT_BINDINGS_CLK_QCOM_GCC_DIREWOLF_H
++
++/* GCC clocks */
++#define GCC_GPLL0					0
++#define GCC_GPLL0_OUT_EVEN				1
++#define GCC_GPLL2					2
++#define GCC_GPLL4					3
++#define GCC_GPLL7					4
++#define GCC_GPLL8					5
++#define GCC_GPLL9					6
++#define GCC_AGGRE_NOC_PCIE0_TUNNEL_AXI_CLK		7
++#define GCC_AGGRE_NOC_PCIE1_TUNNEL_AXI_CLK		8
++#define GCC_AGGRE_NOC_PCIE_4_AXI_CLK			9
++#define GCC_AGGRE_NOC_PCIE_SOUTH_SF_AXI_CLK		10
++#define GCC_AGGRE_UFS_CARD_AXI_CLK			11
++#define GCC_AGGRE_UFS_PHY_AXI_CLK			12
++#define GCC_AGGRE_USB3_MP_AXI_CLK			13
++#define GCC_AGGRE_USB3_PRIM_AXI_CLK			14
++#define GCC_AGGRE_USB3_SEC_AXI_CLK			15
++#define GCC_AGGRE_USB4_1_AXI_CLK			16
++#define GCC_AGGRE_USB4_AXI_CLK				17
++#define GCC_AGGRE_USB_NOC_AXI_CLK			18
++#define GCC_AGGRE_USB_NOC_NORTH_AXI_CLK			19
++#define GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK			20
++#define GCC_AHB2PHY0_CLK				21
++#define GCC_AHB2PHY2_CLK				22
++#define GCC_BOOT_ROM_AHB_CLK				23
++#define GCC_CAMERA_AHB_CLK				24
++#define GCC_CAMERA_HF_AXI_CLK				25
++#define GCC_CAMERA_SF_AXI_CLK				26
++#define GCC_CAMERA_THROTTLE_NRT_AXI_CLK			27
++#define GCC_CAMERA_THROTTLE_RT_AXI_CLK			28
++#define GCC_CAMERA_THROTTLE_XO_CLK			29
++#define GCC_CAMERA_XO_CLK				30
++#define GCC_CFG_NOC_USB3_MP_AXI_CLK			31
++#define GCC_CFG_NOC_USB3_PRIM_AXI_CLK			32
++#define GCC_CFG_NOC_USB3_SEC_AXI_CLK			33
++#define GCC_CNOC_PCIE0_TUNNEL_CLK			34
++#define GCC_CNOC_PCIE1_TUNNEL_CLK			35
++#define GCC_CNOC_PCIE4_QX_CLK				36
++#define GCC_DDRSS_GPU_AXI_CLK				37
++#define GCC_DDRSS_PCIE_SF_TBU_CLK			38
++#define GCC_DISP1_AHB_CLK				39
++#define GCC_DISP1_HF_AXI_CLK				40
++#define GCC_DISP1_SF_AXI_CLK				41
++#define GCC_DISP1_THROTTLE_NRT_AXI_CLK			42
++#define GCC_DISP1_THROTTLE_RT_AXI_CLK			43
++#define GCC_DISP1_XO_CLK				44
++#define GCC_DISP_AHB_CLK				45
++#define GCC_DISP_HF_AXI_CLK				46
++#define GCC_DISP_SF_AXI_CLK				47
++#define GCC_DISP_THROTTLE_NRT_AXI_CLK			48
++#define GCC_DISP_THROTTLE_RT_AXI_CLK			49
++#define GCC_DISP_XO_CLK					50
++#define GCC_EMAC0_AXI_CLK				51
++#define GCC_EMAC0_PTP_CLK				52
++#define GCC_EMAC0_PTP_CLK_SRC				53
++#define GCC_EMAC0_RGMII_CLK				54
++#define GCC_EMAC0_RGMII_CLK_SRC				55
++#define GCC_EMAC0_SLV_AHB_CLK				56
++#define GCC_EMAC1_AXI_CLK				57
++#define GCC_EMAC1_PTP_CLK				58
++#define GCC_EMAC1_PTP_CLK_SRC				59
++#define GCC_EMAC1_RGMII_CLK				60
++#define GCC_EMAC1_RGMII_CLK_SRC				61
++#define GCC_EMAC1_SLV_AHB_CLK				62
++#define GCC_GP1_CLK					63
++#define GCC_GP1_CLK_SRC					64
++#define GCC_GP2_CLK					65
++#define GCC_GP2_CLK_SRC					66
++#define GCC_GP3_CLK					67
++#define GCC_GP3_CLK_SRC					68
++#define GCC_GP4_CLK					69
++#define GCC_GP4_CLK_SRC					70
++#define GCC_GP5_CLK					71
++#define GCC_GP5_CLK_SRC					72
++#define GCC_GPU_CFG_AHB_CLK				73
++#define GCC_GPU_GPLL0_CLK_SRC				74
++#define GCC_GPU_GPLL0_DIV_CLK_SRC			75
++#define GCC_GPU_IREF_EN					76
++#define GCC_GPU_MEMNOC_GFX_CLK				77
++#define GCC_GPU_SNOC_DVM_GFX_CLK			78
++#define GCC_GPU_TCU_THROTTLE_AHB_CLK			79
++#define GCC_GPU_TCU_THROTTLE_CLK			80
++#define GCC_PCIE0_PHY_RCHNG_CLK				81
++#define GCC_PCIE1_PHY_RCHNG_CLK				82
++#define GCC_PCIE2A_PHY_RCHNG_CLK			83
++#define GCC_PCIE2B_PHY_RCHNG_CLK			84
++#define GCC_PCIE3A_PHY_RCHNG_CLK			85
++#define GCC_PCIE3B_PHY_RCHNG_CLK			86
++#define GCC_PCIE4_PHY_RCHNG_CLK				87
++#define GCC_PCIE_0_AUX_CLK				88
++#define GCC_PCIE_0_AUX_CLK_SRC				89
++#define GCC_PCIE_0_CFG_AHB_CLK				90
++#define GCC_PCIE_0_MSTR_AXI_CLK				91
++#define GCC_PCIE_0_PHY_RCHNG_CLK_SRC			92
++#define GCC_PCIE_0_PIPE_CLK				93
++#define GCC_PCIE_0_SLV_AXI_CLK				94
++#define GCC_PCIE_0_SLV_Q2A_AXI_CLK			95
++#define GCC_PCIE_1_AUX_CLK				96
++#define GCC_PCIE_1_AUX_CLK_SRC				97
++#define GCC_PCIE_1_CFG_AHB_CLK				98
++#define GCC_PCIE_1_MSTR_AXI_CLK				99
++#define GCC_PCIE_1_PHY_RCHNG_CLK_SRC			100
++#define GCC_PCIE_1_PIPE_CLK				101
++#define GCC_PCIE_1_SLV_AXI_CLK				102
++#define GCC_PCIE_1_SLV_Q2A_AXI_CLK			103
++#define GCC_PCIE_2A2B_CLKREF_CLK			104
++#define GCC_PCIE_2A_AUX_CLK				105
++#define GCC_PCIE_2A_AUX_CLK_SRC				106
++#define GCC_PCIE_2A_CFG_AHB_CLK				107
++#define GCC_PCIE_2A_MSTR_AXI_CLK			108
++#define GCC_PCIE_2A_PHY_RCHNG_CLK_SRC			109
++#define GCC_PCIE_2A_PIPE_CLK				110
++#define GCC_PCIE_2A_PIPE_CLK_SRC			111
++#define GCC_PCIE_2A_PIPE_DIV_CLK_SRC			112
++#define GCC_PCIE_2A_PIPEDIV2_CLK			113
++#define GCC_PCIE_2A_SLV_AXI_CLK				114
++#define GCC_PCIE_2A_SLV_Q2A_AXI_CLK			115
++#define GCC_PCIE_2B_AUX_CLK				116
++#define GCC_PCIE_2B_AUX_CLK_SRC				117
++#define GCC_PCIE_2B_CFG_AHB_CLK				118
++#define GCC_PCIE_2B_MSTR_AXI_CLK			119
++#define GCC_PCIE_2B_PHY_RCHNG_CLK_SRC			120
++#define GCC_PCIE_2B_PIPE_CLK				121
++#define GCC_PCIE_2B_PIPE_CLK_SRC			122
++#define GCC_PCIE_2B_PIPE_DIV_CLK_SRC			123
++#define GCC_PCIE_2B_PIPEDIV2_CLK			124
++#define GCC_PCIE_2B_SLV_AXI_CLK				125
++#define GCC_PCIE_2B_SLV_Q2A_AXI_CLK			126
++#define GCC_PCIE_3A3B_CLKREF_CLK			127
++#define GCC_PCIE_3A_AUX_CLK				128
++#define GCC_PCIE_3A_AUX_CLK_SRC				129
++#define GCC_PCIE_3A_CFG_AHB_CLK				130
++#define GCC_PCIE_3A_MSTR_AXI_CLK			131
++#define GCC_PCIE_3A_PHY_RCHNG_CLK_SRC			132
++#define GCC_PCIE_3A_PIPE_CLK				133
++#define GCC_PCIE_3A_PIPE_CLK_SRC			134
++#define GCC_PCIE_3A_PIPE_DIV_CLK_SRC			135
++#define GCC_PCIE_3A_PIPEDIV2_CLK			136
++#define GCC_PCIE_3A_SLV_AXI_CLK				137
++#define GCC_PCIE_3A_SLV_Q2A_AXI_CLK			138
++#define GCC_PCIE_3B_AUX_CLK				139
++#define GCC_PCIE_3B_AUX_CLK_SRC				140
++#define GCC_PCIE_3B_CFG_AHB_CLK				141
++#define GCC_PCIE_3B_MSTR_AXI_CLK			142
++#define GCC_PCIE_3B_PHY_RCHNG_CLK_SRC			143
++#define GCC_PCIE_3B_PIPE_CLK				144
++#define GCC_PCIE_3B_PIPE_CLK_SRC			145
++#define GCC_PCIE_3B_PIPE_DIV_CLK_SRC			146
++#define GCC_PCIE_3B_PIPEDIV2_CLK			147
++#define GCC_PCIE_3B_SLV_AXI_CLK				148
++#define GCC_PCIE_3B_SLV_Q2A_AXI_CLK			149
++#define GCC_PCIE_4_AUX_CLK				150
++#define GCC_PCIE_4_AUX_CLK_SRC				151
++#define GCC_PCIE_4_CFG_AHB_CLK				152
++#define GCC_PCIE_4_CLKREF_CLK				153
++#define GCC_PCIE_4_MSTR_AXI_CLK				154
++#define GCC_PCIE_4_PHY_RCHNG_CLK_SRC			155
++#define GCC_PCIE_4_PIPE_CLK				156
++#define GCC_PCIE_4_PIPE_CLK_SRC				157
++#define GCC_PCIE_4_PIPE_DIV_CLK_SRC			158
++#define GCC_PCIE_4_PIPEDIV2_CLK				159
++#define GCC_PCIE_4_SLV_AXI_CLK				160
++#define GCC_PCIE_4_SLV_Q2A_AXI_CLK			161
++#define GCC_PCIE_RSCC_AHB_CLK				162
++#define GCC_PCIE_RSCC_XO_CLK				163
++#define GCC_PCIE_RSCC_XO_CLK_SRC			164
++#define GCC_PCIE_THROTTLE_CFG_CLK			165
++#define GCC_PDM2_CLK					166
++#define GCC_PDM2_CLK_SRC				167
++#define GCC_PDM_AHB_CLK					168
++#define GCC_PDM_XO4_CLK					169
++#define GCC_QMIP_CAMERA_NRT_AHB_CLK			170
++#define GCC_QMIP_CAMERA_RT_AHB_CLK			171
++#define GCC_QMIP_DISP1_AHB_CLK				172
++#define GCC_QMIP_DISP1_ROT_AHB_CLK			173
++#define GCC_QMIP_DISP_AHB_CLK				174
++#define GCC_QMIP_DISP_ROT_AHB_CLK			175
++#define GCC_QMIP_VIDEO_CVP_AHB_CLK			176
++#define GCC_QMIP_VIDEO_VCODEC_AHB_CLK			177
++#define GCC_QUPV3_WRAP0_CORE_2X_CLK			178
++#define GCC_QUPV3_WRAP0_CORE_CLK			179
++#define GCC_QUPV3_WRAP0_QSPI0_CLK			180
++#define GCC_QUPV3_WRAP0_S0_CLK				181
++#define GCC_QUPV3_WRAP0_S0_CLK_SRC			182
++#define GCC_QUPV3_WRAP0_S1_CLK				183
++#define GCC_QUPV3_WRAP0_S1_CLK_SRC			184
++#define GCC_QUPV3_WRAP0_S2_CLK				185
++#define GCC_QUPV3_WRAP0_S2_CLK_SRC			186
++#define GCC_QUPV3_WRAP0_S3_CLK				187
++#define GCC_QUPV3_WRAP0_S3_CLK_SRC			188
++#define GCC_QUPV3_WRAP0_S4_CLK				189
++#define GCC_QUPV3_WRAP0_S4_CLK_SRC			190
++#define GCC_QUPV3_WRAP0_S4_DIV_CLK_SRC			191
++#define GCC_QUPV3_WRAP0_S5_CLK				192
++#define GCC_QUPV3_WRAP0_S5_CLK_SRC			193
++#define GCC_QUPV3_WRAP0_S6_CLK				194
++#define GCC_QUPV3_WRAP0_S6_CLK_SRC			195
++#define GCC_QUPV3_WRAP0_S7_CLK				196
++#define GCC_QUPV3_WRAP0_S7_CLK_SRC			197
++#define GCC_QUPV3_WRAP1_CORE_2X_CLK			198
++#define GCC_QUPV3_WRAP1_CORE_CLK			199
++#define GCC_QUPV3_WRAP1_QSPI0_CLK			200
++#define GCC_QUPV3_WRAP1_S0_CLK				201
++#define GCC_QUPV3_WRAP1_S0_CLK_SRC			202
++#define GCC_QUPV3_WRAP1_S1_CLK				203
++#define GCC_QUPV3_WRAP1_S1_CLK_SRC			204
++#define GCC_QUPV3_WRAP1_S2_CLK				205
++#define GCC_QUPV3_WRAP1_S2_CLK_SRC			206
++#define GCC_QUPV3_WRAP1_S3_CLK				207
++#define GCC_QUPV3_WRAP1_S3_CLK_SRC			208
++#define GCC_QUPV3_WRAP1_S4_CLK				209
++#define GCC_QUPV3_WRAP1_S4_CLK_SRC			210
++#define GCC_QUPV3_WRAP1_S4_DIV_CLK_SRC			211
++#define GCC_QUPV3_WRAP1_S5_CLK				212
++#define GCC_QUPV3_WRAP1_S5_CLK_SRC			213
++#define GCC_QUPV3_WRAP1_S6_CLK				214
++#define GCC_QUPV3_WRAP1_S6_CLK_SRC			215
++#define GCC_QUPV3_WRAP1_S7_CLK				216
++#define GCC_QUPV3_WRAP1_S7_CLK_SRC			217
++#define GCC_QUPV3_WRAP2_CORE_2X_CLK			218
++#define GCC_QUPV3_WRAP2_CORE_CLK			219
++#define GCC_QUPV3_WRAP2_QSPI0_CLK			220
++#define GCC_QUPV3_WRAP2_S0_CLK				221
++#define GCC_QUPV3_WRAP2_S0_CLK_SRC			222
++#define GCC_QUPV3_WRAP2_S1_CLK				223
++#define GCC_QUPV3_WRAP2_S1_CLK_SRC			224
++#define GCC_QUPV3_WRAP2_S2_CLK				225
++#define GCC_QUPV3_WRAP2_S2_CLK_SRC			226
++#define GCC_QUPV3_WRAP2_S3_CLK				227
++#define GCC_QUPV3_WRAP2_S3_CLK_SRC			228
++#define GCC_QUPV3_WRAP2_S4_CLK				229
++#define GCC_QUPV3_WRAP2_S4_CLK_SRC			230
++#define GCC_QUPV3_WRAP2_S4_DIV_CLK_SRC			231
++#define GCC_QUPV3_WRAP2_S5_CLK				232
++#define GCC_QUPV3_WRAP2_S5_CLK_SRC			233
++#define GCC_QUPV3_WRAP2_S6_CLK				234
++#define GCC_QUPV3_WRAP2_S6_CLK_SRC			235
++#define GCC_QUPV3_WRAP2_S7_CLK				236
++#define GCC_QUPV3_WRAP2_S7_CLK_SRC			237
++#define GCC_QUPV3_WRAP_0_M_AHB_CLK			238
++#define GCC_QUPV3_WRAP_0_S_AHB_CLK			239
++#define GCC_QUPV3_WRAP_1_M_AHB_CLK			240
++#define GCC_QUPV3_WRAP_1_S_AHB_CLK			241
++#define GCC_QUPV3_WRAP_2_M_AHB_CLK			242
++#define GCC_QUPV3_WRAP_2_S_AHB_CLK			243
++#define GCC_SDCC2_AHB_CLK				244
++#define GCC_SDCC2_APPS_CLK				245
++#define GCC_SDCC2_APPS_CLK_SRC				246
++#define GCC_SDCC4_AHB_CLK				247
++#define GCC_SDCC4_APPS_CLK				248
++#define GCC_SDCC4_APPS_CLK_SRC				249
++#define GCC_SYS_NOC_USB_AXI_CLK				250
++#define GCC_UFS_1_CARD_CLKREF_CLK			251
++#define GCC_UFS_CARD_AHB_CLK				252
++#define GCC_UFS_CARD_AXI_CLK				253
++#define GCC_UFS_CARD_AXI_CLK_SRC			254
++#define GCC_UFS_CARD_CLKREF_CLK				255
++#define GCC_UFS_CARD_ICE_CORE_CLK			256
++#define GCC_UFS_CARD_ICE_CORE_CLK_SRC			257
++#define GCC_UFS_CARD_PHY_AUX_CLK			258
++#define GCC_UFS_CARD_PHY_AUX_CLK_SRC			259
++#define GCC_UFS_CARD_RX_SYMBOL_0_CLK			260
++#define GCC_UFS_CARD_RX_SYMBOL_0_CLK_SRC		261
++#define GCC_UFS_CARD_RX_SYMBOL_1_CLK			262
++#define GCC_UFS_CARD_RX_SYMBOL_1_CLK_SRC		263
++#define GCC_UFS_CARD_TX_SYMBOL_0_CLK			264
++#define GCC_UFS_CARD_TX_SYMBOL_0_CLK_SRC		265
++#define GCC_UFS_CARD_UNIPRO_CORE_CLK			266
++#define GCC_UFS_CARD_UNIPRO_CORE_CLK_SRC		267
++#define GCC_UFS_PHY_AHB_CLK				268
++#define GCC_UFS_PHY_AXI_CLK				269
++#define GCC_UFS_PHY_AXI_CLK_SRC				270
++#define GCC_UFS_PHY_ICE_CORE_CLK			271
++#define GCC_UFS_PHY_ICE_CORE_CLK_SRC			272
++#define GCC_UFS_PHY_PHY_AUX_CLK				273
++#define GCC_UFS_PHY_PHY_AUX_CLK_SRC			274
++#define GCC_UFS_PHY_RX_SYMBOL_0_CLK			275
++#define GCC_UFS_PHY_RX_SYMBOL_0_CLK_SRC			276
++#define GCC_UFS_PHY_RX_SYMBOL_1_CLK			277
++#define GCC_UFS_PHY_RX_SYMBOL_1_CLK_SRC			278
++#define GCC_UFS_PHY_TX_SYMBOL_0_CLK			279
++#define GCC_UFS_PHY_TX_SYMBOL_0_CLK_SRC			280
++#define GCC_UFS_PHY_UNIPRO_CORE_CLK			281
++#define GCC_UFS_PHY_UNIPRO_CORE_CLK_SRC			282
++#define GCC_UFS_REF_CLKREF_CLK				283
++#define GCC_USB2_HS0_CLKREF_CLK				284
++#define GCC_USB2_HS1_CLKREF_CLK				285
++#define GCC_USB2_HS2_CLKREF_CLK				286
++#define GCC_USB2_HS3_CLKREF_CLK				287
++#define GCC_USB30_MP_MASTER_CLK				288
++#define GCC_USB30_MP_MASTER_CLK_SRC			289
++#define GCC_USB30_MP_MOCK_UTMI_CLK			290
++#define GCC_USB30_MP_MOCK_UTMI_CLK_SRC			291
++#define GCC_USB30_MP_MOCK_UTMI_POSTDIV_CLK_SRC		292
++#define GCC_USB30_MP_SLEEP_CLK				293
++#define GCC_USB30_PRIM_MASTER_CLK			294
++#define GCC_USB30_PRIM_MASTER_CLK_SRC			295
++#define GCC_USB30_PRIM_MOCK_UTMI_CLK			296
++#define GCC_USB30_PRIM_MOCK_UTMI_CLK_SRC		297
++#define GCC_USB30_PRIM_MOCK_UTMI_POSTDIV_CLK_SRC	298
++#define GCC_USB30_PRIM_SLEEP_CLK			299
++#define GCC_USB30_SEC_MASTER_CLK			300
++#define GCC_USB30_SEC_MASTER_CLK_SRC			301
++#define GCC_USB30_SEC_MOCK_UTMI_CLK			302
++#define GCC_USB30_SEC_MOCK_UTMI_CLK_SRC			303
++#define GCC_USB30_SEC_MOCK_UTMI_POSTDIV_CLK_SRC		304
++#define GCC_USB30_SEC_SLEEP_CLK				305
++#define GCC_USB34_PRIM_PHY_PIPE_CLK_SRC			306
++#define GCC_USB34_SEC_PHY_PIPE_CLK_SRC			307
++#define GCC_USB3_MP0_CLKREF_CLK				308
++#define GCC_USB3_MP1_CLKREF_CLK				309
++#define GCC_USB3_MP_PHY_AUX_CLK				310
++#define GCC_USB3_MP_PHY_AUX_CLK_SRC			311
++#define GCC_USB3_MP_PHY_COM_AUX_CLK			312
++#define GCC_USB3_MP_PHY_PIPE_0_CLK			313
++#define GCC_USB3_MP_PHY_PIPE_0_CLK_SRC			314
++#define GCC_USB3_MP_PHY_PIPE_1_CLK			315
++#define GCC_USB3_MP_PHY_PIPE_1_CLK_SRC			316
++#define GCC_USB3_PRIM_PHY_AUX_CLK			317
++#define GCC_USB3_PRIM_PHY_AUX_CLK_SRC			318
++#define GCC_USB3_PRIM_PHY_COM_AUX_CLK			319
++#define GCC_USB3_PRIM_PHY_PIPE_CLK			320
++#define GCC_USB3_PRIM_PHY_PIPE_CLK_SRC			321
++#define GCC_USB3_SEC_PHY_AUX_CLK			322
++#define GCC_USB3_SEC_PHY_AUX_CLK_SRC			323
++#define GCC_USB3_SEC_PHY_COM_AUX_CLK			324
++#define GCC_USB3_SEC_PHY_PIPE_CLK			325
++#define GCC_USB3_SEC_PHY_PIPE_CLK_SRC			326
++#define GCC_USB4_1_CFG_AHB_CLK				327
++#define GCC_USB4_1_DP_CLK				328
++#define GCC_USB4_1_MASTER_CLK				329
++#define GCC_USB4_1_MASTER_CLK_SRC			330
++#define GCC_USB4_1_PHY_DP_CLK_SRC			331
++#define GCC_USB4_1_PHY_P2RR2P_PIPE_CLK			332
++#define GCC_USB4_1_PHY_P2RR2P_PIPE_CLK_SRC		333
++#define GCC_USB4_1_PHY_PCIE_PIPE_CLK			334
++#define GCC_USB4_1_PHY_PCIE_PIPE_CLK_SRC		335
++#define GCC_USB4_1_PHY_PCIE_PIPE_MUX_CLK_SRC		336
++#define GCC_USB4_1_PHY_PCIE_PIPEGMUX_CLK_SRC		337
++#define GCC_USB4_1_PHY_RX0_CLK				338
++#define GCC_USB4_1_PHY_RX0_CLK_SRC			339
++#define GCC_USB4_1_PHY_RX1_CLK				340
++#define GCC_USB4_1_PHY_RX1_CLK_SRC			341
++#define GCC_USB4_1_PHY_SYS_CLK_SRC			342
++#define GCC_USB4_1_PHY_USB_PIPE_CLK			343
++#define GCC_USB4_1_SB_IF_CLK				344
++#define GCC_USB4_1_SB_IF_CLK_SRC			345
++#define GCC_USB4_1_SYS_CLK				346
++#define GCC_USB4_1_TMU_CLK				347
++#define GCC_USB4_1_TMU_CLK_SRC				348
++#define GCC_USB4_CFG_AHB_CLK				349
++#define GCC_USB4_CLKREF_CLK				350
++#define GCC_USB4_DP_CLK					351
++#define GCC_USB4_EUD_CLKREF_CLK				352
++#define GCC_USB4_MASTER_CLK				353
++#define GCC_USB4_MASTER_CLK_SRC				354
++#define GCC_USB4_PHY_DP_CLK_SRC				355
++#define GCC_USB4_PHY_P2RR2P_PIPE_CLK			356
++#define GCC_USB4_PHY_P2RR2P_PIPE_CLK_SRC		357
++#define GCC_USB4_PHY_PCIE_PIPE_CLK			358
++#define GCC_USB4_PHY_PCIE_PIPE_CLK_SRC			359
++#define GCC_USB4_PHY_PCIE_PIPE_MUX_CLK_SRC		360
++#define GCC_USB4_PHY_PCIE_PIPEGMUX_CLK_SRC		361
++#define GCC_USB4_PHY_RX0_CLK				362
++#define GCC_USB4_PHY_RX0_CLK_SRC			363
++#define GCC_USB4_PHY_RX1_CLK				364
++#define GCC_USB4_PHY_RX1_CLK_SRC			365
++#define GCC_USB4_PHY_SYS_CLK_SRC			366
++#define GCC_USB4_PHY_USB_PIPE_CLK			367
++#define GCC_USB4_SB_IF_CLK				368
++#define GCC_USB4_SB_IF_CLK_SRC				369
++#define GCC_USB4_SYS_CLK				370
++#define GCC_USB4_TMU_CLK				371
++#define GCC_USB4_TMU_CLK_SRC				372
++#define GCC_VIDEO_AHB_CLK				373
++#define GCC_VIDEO_AXI0_CLK				374
++#define GCC_VIDEO_AXI1_CLK				375
++#define GCC_VIDEO_CVP_THROTTLE_CLK			376
++#define GCC_VIDEO_VCODEC_THROTTLE_CLK			377
++#define GCC_VIDEO_XO_CLK				378
++#define GCC_AGGRE_UFS_CARD_AXI_HW_CTL_CLK		379
++#define GCC_AGGRE_UFS_PHY_AXI_HW_CTL_CLK		380
++#define GCC_UFS_CARD_AXI_HW_CTL_CLK			381
++#define GCC_UFS_CARD_ICE_CORE_HW_CTL_CLK		382
++#define GCC_UFS_CARD_PHY_AUX_HW_CTL_CLK			383
++#define GCC_UFS_CARD_UNIPRO_CORE_HW_CTL_CLK		384
++#define GCC_UFS_PHY_AXI_HW_CTL_CLK			385
++#define GCC_UFS_PHY_ICE_CORE_HW_CTL_CLK			386
++#define GCC_UFS_PHY_PHY_AUX_HW_CTL_CLK			387
++#define GCC_UFS_PHY_UNIPRO_CORE_HW_CTL_CLK		388
++
++/* GCC resets */
++#define GCC_EMAC0_BCR					0
++#define GCC_EMAC1_BCR					1
++#define GCC_PCIE_0_LINK_DOWN_BCR			2
++#define GCC_PCIE_0_NOCSR_COM_PHY_BCR			3
++#define GCC_PCIE_0_PHY_BCR				4
++#define GCC_PCIE_0_PHY_NOCSR_COM_PHY_BCR		5
++#define GCC_PCIE_0_TUNNEL_BCR				6
++#define GCC_PCIE_1_LINK_DOWN_BCR			7
++#define GCC_PCIE_1_NOCSR_COM_PHY_BCR			8
++#define GCC_PCIE_1_PHY_BCR				9
++#define GCC_PCIE_1_PHY_NOCSR_COM_PHY_BCR		10
++#define GCC_PCIE_1_TUNNEL_BCR				11
++#define GCC_PCIE_2A_BCR					12
++#define GCC_PCIE_2A_LINK_DOWN_BCR			13
++#define GCC_PCIE_2A_NOCSR_COM_PHY_BCR			14
++#define GCC_PCIE_2A_PHY_BCR				15
++#define GCC_PCIE_2A_PHY_NOCSR_COM_PHY_BCR		16
++#define GCC_PCIE_2B_BCR					17
++#define GCC_PCIE_2B_LINK_DOWN_BCR			18
++#define GCC_PCIE_2B_NOCSR_COM_PHY_BCR			19
++#define GCC_PCIE_2B_PHY_BCR				20
++#define GCC_PCIE_2B_PHY_NOCSR_COM_PHY_BCR		21
++#define GCC_PCIE_3A_BCR					22
++#define GCC_PCIE_3A_LINK_DOWN_BCR			23
++#define GCC_PCIE_3A_NOCSR_COM_PHY_BCR			24
++#define GCC_PCIE_3A_PHY_BCR				25
++#define GCC_PCIE_3A_PHY_NOCSR_COM_PHY_BCR		26
++#define GCC_PCIE_3B_BCR					27
++#define GCC_PCIE_3B_LINK_DOWN_BCR			28
++#define GCC_PCIE_3B_NOCSR_COM_PHY_BCR			29
++#define GCC_PCIE_3B_PHY_BCR				30
++#define GCC_PCIE_3B_PHY_NOCSR_COM_PHY_BCR		31
++#define GCC_PCIE_4_BCR					32
++#define GCC_PCIE_4_LINK_DOWN_BCR			33
++#define GCC_PCIE_4_NOCSR_COM_PHY_BCR			34
++#define GCC_PCIE_4_PHY_BCR				35
++#define GCC_PCIE_4_PHY_NOCSR_COM_PHY_BCR		36
++#define GCC_PCIE_PHY_CFG_AHB_BCR			37
++#define GCC_PCIE_PHY_COM_BCR				38
++#define GCC_PCIE_RSCC_BCR				39
++#define GCC_QUSB2PHY_HS0_MP_BCR				40
++#define GCC_QUSB2PHY_HS1_MP_BCR				41
++#define GCC_QUSB2PHY_HS2_MP_BCR				42
++#define GCC_QUSB2PHY_HS3_MP_BCR				43
++#define GCC_QUSB2PHY_PRIM_BCR				44
++#define GCC_QUSB2PHY_SEC_BCR				45
++#define GCC_SDCC2_BCR					46
++#define GCC_SDCC4_BCR					47
++#define GCC_UFS_CARD_BCR				48
++#define GCC_UFS_PHY_BCR					49
++#define GCC_USB2_PHY_PRIM_BCR				50
++#define GCC_USB2_PHY_SEC_BCR				51
++#define GCC_USB30_MP_BCR				52
++#define GCC_USB30_PRIM_BCR				53
++#define GCC_USB30_SEC_BCR				54
++#define GCC_USB3_DP_PHY_PRIM_BCR			55
++#define GCC_USB3_DP_PHY_SEC_BCR				56
++#define GCC_USB3_PHY_PRIM_BCR				57
++#define GCC_USB3_PHY_SEC_BCR				58
++#define GCC_USB3_UNIPHY_MP0_BCR				59
++#define GCC_USB3_UNIPHY_MP1_BCR				60
++#define GCC_USB3PHY_PHY_PRIM_BCR			61
++#define GCC_USB3PHY_PHY_SEC_BCR				62
++#define GCC_USB3UNIPHY_PHY_MP0_BCR			63
++#define GCC_USB3UNIPHY_PHY_MP1_BCR			64
++#define GCC_USB4_1_BCR					65
++#define GCC_USB4_1_DP_PHY_PRIM_BCR			66
++#define GCC_USB4_1_DPPHY_AUX_BCR			67
++#define GCC_USB4_1_PHY_PRIM_BCR				68
++#define GCC_USB4_BCR					69
++#define GCC_USB4_DP_PHY_PRIM_BCR			70
++#define GCC_USB4_DPPHY_AUX_BCR				71
++#define GCC_USB4_PHY_PRIM_BCR				72
++#define GCC_USB4PHY_1_PHY_PRIM_BCR			73
++#define GCC_USB4PHY_PHY_PRIM_BCR			74
++#define GCC_USB_PHY_CFG_AHB2PHY_BCR			75
++#define GCC_VIDEO_BCR					76
++#define GCC_VIDEO_AXI0_CLK_ARES				77
++#define GCC_VIDEO_AXI1_CLK_ARES				78
++
++/* GCC GDSCs */
++#define PCIE_0_TUNNEL_GDSC				0
++#define PCIE_1_TUNNEL_GDSC				1
++#define PCIE_2A_GDSC					2
++#define PCIE_2B_GDSC					3
++#define PCIE_3A_GDSC					4
++#define PCIE_3B_GDSC					5
++#define PCIE_4_GDSC					6
++#define UFS_CARD_GDSC					7
++#define UFS_PHY_GDSC					8
++#define USB30_MP_GDSC					9
++#define USB30_PRIM_GDSC					10
++#define USB30_SEC_GDSC					11
++
++#endif
+-- 
+2.35.1
 
-> ---
-> Changes RFC -> V1:
->    - squash with almost all changes from commit (except handling "xen,dev-domid"
->      property):
->      "[PATCH 4/6] virtio: Various updates to xen-virtio DMA ops layer"
->    - update commit subject/description and comments in code
->    - leave only single Kconfig option XEN_VIRTIO and remove architectural
->      dependencies
->    - introduce common xen_has_restricted_virtio_memory_access() in xen.h
->      and update arch_has_restricted_virtio_memory_access() for both
->      Arm and x86 to call new helper
->    - use (1ULL << 63) instead of 0x8000000000000000ULL for XEN_GRANT_ADDR_OFF
->    - implement xen_virtio_dma_map(unmap)_sg() using example in swiotlb-xen.c
->    - optimize padding by moving "broken" field in struct xen_virtio_data
->    - remove unneeded per-device spinlock
->    - remove the inclusion of virtio_config.h
->    - remane everything according to the new naming scheme:
->      s/virtio/grant_dma
->    - add new hidden config option XEN_GRANT_DMA_OPS
-> ---
->  arch/arm/xen/enlighten.c    |   8 ++
->  arch/x86/mm/init.c          |  11 ++
->  arch/x86/mm/mem_encrypt.c   |   5 -
->  drivers/xen/Kconfig         |  15 +++
->  drivers/xen/Makefile        |   1 +
->  drivers/xen/grant-dma-ops.c | 317 ++++++++++++++++++++++++++++++++++++++++++++
->  include/xen/xen-ops.h       |   8 ++
->  include/xen/xen.h           |   5 +
->  8 files changed, 365 insertions(+), 5 deletions(-)
->  create mode 100644 drivers/xen/grant-dma-ops.c
-> 
-> diff --git a/arch/arm/xen/enlighten.c b/arch/arm/xen/enlighten.c
-> index ec5b082..49af493 100644
-> --- a/arch/arm/xen/enlighten.c
-> +++ b/arch/arm/xen/enlighten.c
-> @@ -409,6 +409,14 @@ int __init arch_xen_unpopulated_init(struct resource **res)
->  }
->  #endif
->  
-> +#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-> +int arch_has_restricted_virtio_memory_access(void)
-> +{
-> +	return xen_has_restricted_virtio_memory_access();
-> +}
-> +EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-> +#endif
-> +
->  static void __init xen_dt_guest_init(void)
->  {
->  	struct device_node *xen_node;
-> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-> index d8cfce2..fe84a3e 100644
-> --- a/arch/x86/mm/init.c
-> +++ b/arch/x86/mm/init.c
-> @@ -8,6 +8,8 @@
->  #include <linux/kmemleak.h>
->  #include <linux/sched/task.h>
->  
-> +#include <xen/xen.h>
-> +
->  #include <asm/set_memory.h>
->  #include <asm/e820/api.h>
->  #include <asm/init.h>
-> @@ -1065,3 +1067,12 @@ unsigned long max_swapfile_size(void)
->  	return pages;
->  }
->  #endif
-> +
-> +#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-> +int arch_has_restricted_virtio_memory_access(void)
-> +{
-> +	return (xen_has_restricted_virtio_memory_access() ||
-> +			cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT));
-> +}
-> +EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-> +#endif
-> diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-> index 50d2099..dda020f 100644
-> --- a/arch/x86/mm/mem_encrypt.c
-> +++ b/arch/x86/mm/mem_encrypt.c
-> @@ -77,8 +77,3 @@ void __init mem_encrypt_init(void)
->  	print_mem_encrypt_feature_info();
->  }
->  
-> -int arch_has_restricted_virtio_memory_access(void)
-> -{
-> -	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
-> -}
-> -EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-> diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
-> index 120d32f..b95581f 100644
-> --- a/drivers/xen/Kconfig
-> +++ b/drivers/xen/Kconfig
-> @@ -335,4 +335,19 @@ config XEN_UNPOPULATED_ALLOC
->  	  having to balloon out RAM regions in order to obtain physical memory
->  	  space to create such mappings.
->  
-> +config XEN_GRANT_DMA_OPS
-> +	bool
-> +	select DMA_OPS
-> +
-> +config XEN_VIRTIO
-> +	bool "Xen virtio support"
-> +	default n
-> +	depends on VIRTIO
-> +	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-> +	select XEN_GRANT_DMA_OPS
-> +	help
-> +	  Enable virtio support for running as Xen guest. Depending on the
-> +	  guest type this will require special support on the backend side
-> +	  (qemu or kernel, depending on the virtio device types used).
-> +
->  endmenu
-> diff --git a/drivers/xen/Makefile b/drivers/xen/Makefile
-> index 5aae66e..1a23cb0 100644
-> --- a/drivers/xen/Makefile
-> +++ b/drivers/xen/Makefile
-> @@ -39,3 +39,4 @@ xen-gntalloc-y				:= gntalloc.o
->  xen-privcmd-y				:= privcmd.o privcmd-buf.o
->  obj-$(CONFIG_XEN_FRONT_PGDIR_SHBUF)	+= xen-front-pgdir-shbuf.o
->  obj-$(CONFIG_XEN_UNPOPULATED_ALLOC)	+= unpopulated-alloc.o
-> +obj-$(CONFIG_XEN_GRANT_DMA_OPS)		+= grant-dma-ops.o
-> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> new file mode 100644
-> index 00000000..0e69aa8
-> --- /dev/null
-> +++ b/drivers/xen/grant-dma-ops.c
-> @@ -0,0 +1,317 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/******************************************************************************
-> + * Xen grant DMA-mapping layer - contains special DMA-mapping routines
-> + * for providing grant references as DMA addresses to be used by frontends
-> + * (e.g. virtio) in Xen guests
-> + *
-> + * Copyright (c) 2021, Juergen Gross <jgross@suse.com>
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/dma-map-ops.h>
-> +#include <linux/of.h>
-> +#include <linux/pci.h>
-> +#include <linux/pfn.h>
-> +#include <xen/xen.h>
-> +#include <xen/grant_table.h>
-> +
-> +struct xen_grant_dma_data {
-> +	/* The ID of backend domain */
-> +	domid_t dev_domid;
-> +	/* Is device behaving sane? */
-> +	bool broken;
-> +	struct device *dev;
-> +	struct list_head list;
-> +};
-> +
-> +static LIST_HEAD(xen_grant_dma_devices);
-> +static DEFINE_SPINLOCK(xen_grant_dma_lock);
-> +
-> +#define XEN_GRANT_DMA_ADDR_OFF	(1ULL << 63)
-> +
-> +static inline dma_addr_t grant_to_dma(grant_ref_t grant)
-> +{
-> +	return XEN_GRANT_DMA_ADDR_OFF | ((dma_addr_t)grant << PAGE_SHIFT);
-> +}
-> +
-> +static inline grant_ref_t dma_to_grant(dma_addr_t dma)
-> +{
-> +	return (grant_ref_t)((dma & ~XEN_GRANT_DMA_ADDR_OFF) >> PAGE_SHIFT);
-> +}
-> +
-> +static struct xen_grant_dma_data *find_xen_grant_dma_data(struct device *dev)
-> +{
-> +	struct xen_grant_dma_data *data = NULL;
-> +	bool found = false;
-> +
-> +	spin_lock(&xen_grant_dma_lock);
-> +
-> +	list_for_each_entry(data, &xen_grant_dma_devices, list) {
-> +		if (data->dev == dev) {
-> +			found = true;
-> +			break;
-> +		}
-> +	}
-> +
-> +	spin_unlock(&xen_grant_dma_lock);
-> +
-> +	return found ? data : NULL;
-> +}
-> +
-> +/*
-> + * DMA ops for Xen frontends (e.g. virtio).
-> + *
-> + * Used to act as a kind of software IOMMU for Xen guests by using grants as
-> + * DMA addresses.
-> + * Such a DMA address is formed by using the grant reference as a frame
-> + * number and setting the highest address bit (this bit is for the backend
-> + * to be able to distinguish it from e.g. a mmio address).
-> + *
-> + * Note that for now we hard wire dom0 to be the backend domain. In order
-> + * to support any domain as backend we'd need to add a way to communicate
-> + * the domid of this backend, e.g. via Xenstore, via the PCI-device's
-> + * config space or DT/ACPI.
-> + */
-> +static void *xen_grant_dma_alloc(struct device *dev, size_t size,
-> +				 dma_addr_t *dma_handle, gfp_t gfp,
-> +				 unsigned long attrs)
-> +{
-> +	struct xen_grant_dma_data *data;
-> +	unsigned int i, n_pages = PFN_UP(size);
-> +	unsigned long pfn;
-> +	grant_ref_t grant;
-> +	void *ret;
-> +
-> +	data = find_xen_grant_dma_data(dev);
-> +	if (!data)
-> +		return NULL;
-> +
-> +	if (unlikely(data->broken))
-> +		return NULL;
-> +
-> +	ret = alloc_pages_exact(n_pages * PAGE_SIZE, gfp);
-> +	if (!ret)
-> +		return NULL;
-> +
-> +	pfn = virt_to_pfn(ret);
-> +
-> +	if (gnttab_alloc_grant_reference_seq(n_pages, &grant)) {
-> +		free_pages_exact(ret, n_pages * PAGE_SIZE);
-> +		return NULL;
-> +	}
-> +
-> +	for (i = 0; i < n_pages; i++) {
-> +		gnttab_grant_foreign_access_ref(grant + i, data->dev_domid,
-> +				pfn_to_gfn(pfn + i), 0);
-> +	}
-> +
-> +	*dma_handle = grant_to_dma(grant);
-> +
-> +	return ret;
-> +}
-> +
-> +static void xen_grant_dma_free(struct device *dev, size_t size, void *vaddr,
-> +			       dma_addr_t dma_handle, unsigned long attrs)
-> +{
-> +	struct xen_grant_dma_data *data;
-> +	unsigned int i, n_pages = PFN_UP(size);
-> +	grant_ref_t grant;
-> +
-> +	data = find_xen_grant_dma_data(dev);
-> +	if (!data)
-> +		return;
-> +
-> +	if (unlikely(data->broken))
-> +		return;
-> +
-> +	grant = dma_to_grant(dma_handle);
-> +
-> +	for (i = 0; i < n_pages; i++) {
-> +		if (unlikely(!gnttab_end_foreign_access_ref(grant + i))) {
-> +			dev_alert(dev, "Grant still in use by backend domain, disabled for further use\n");
-> +			data->broken = true;
-> +			return;
-> +		}
-> +	}
-> +
-> +	gnttab_free_grant_reference_seq(grant, n_pages);
-> +
-> +	free_pages_exact(vaddr, n_pages * PAGE_SIZE);
-> +}
-> +
-> +static struct page *xen_grant_dma_alloc_pages(struct device *dev, size_t size,
-> +					      dma_addr_t *dma_handle,
-> +					      enum dma_data_direction dir,
-> +					      gfp_t gfp)
-> +{
-> +	WARN_ONCE(1, "xen_grant_dma_alloc_pages size %zu\n", size);
-> +	return NULL;
-> +}
-> +
-> +static void xen_grant_dma_free_pages(struct device *dev, size_t size,
-> +				     struct page *vaddr, dma_addr_t dma_handle,
-> +				     enum dma_data_direction dir)
-> +{
-> +	WARN_ONCE(1, "xen_grant_dma_free_pages size %zu\n", size);
-> +}
-> +
-> +static dma_addr_t xen_grant_dma_map_page(struct device *dev, struct page *page,
-> +					 unsigned long offset, size_t size,
-> +					 enum dma_data_direction dir,
-> +					 unsigned long attrs)
-> +{
-> +	struct xen_grant_dma_data *data;
-> +	unsigned int i, n_pages = PFN_UP(size);
-> +	grant_ref_t grant;
-> +	dma_addr_t dma_handle;
-> +
-> +	BUG_ON(dir == DMA_NONE);
-> +
-> +	data = find_xen_grant_dma_data(dev);
-> +	if (!data)
-> +		return DMA_MAPPING_ERROR;
-> +
-> +	if (unlikely(data->broken))
-> +		return DMA_MAPPING_ERROR;
-> +
-> +	if (gnttab_alloc_grant_reference_seq(n_pages, &grant))
-> +		return DMA_MAPPING_ERROR;
-> +
-> +	for (i = 0; i < n_pages; i++) {
-> +		gnttab_grant_foreign_access_ref(grant + i, data->dev_domid,
-> +				xen_page_to_gfn(page) + i, dir == DMA_TO_DEVICE);
-> +	}
-> +
-> +	dma_handle = grant_to_dma(grant) + offset;
-> +
-> +	return dma_handle;
-> +}
-> +
-> +static void xen_grant_dma_unmap_page(struct device *dev, dma_addr_t dma_handle,
-> +				     size_t size, enum dma_data_direction dir,
-> +				     unsigned long attrs)
-> +{
-> +	struct xen_grant_dma_data *data;
-> +	unsigned int i, n_pages = PFN_UP(size);
-> +	grant_ref_t grant;
-> +
-> +	BUG_ON(dir == DMA_NONE);
-> +
-> +	data = find_xen_grant_dma_data(dev);
-> +	if (!data)
-> +		return;
-> +
-> +	if (unlikely(data->broken))
-> +		return;
-> +
-> +	grant = dma_to_grant(dma_handle);
-> +
-> +	for (i = 0; i < n_pages; i++) {
-> +		if (unlikely(!gnttab_end_foreign_access_ref(grant + i))) {
-> +			dev_alert(dev, "Grant still in use by backend domain, disabled for further use\n");
-> +			data->broken = true;
-> +			return;
-> +		}
-> +	}
-> +
-> +	gnttab_free_grant_reference_seq(grant, n_pages);
-> +}
-> +
-> +static void xen_grant_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
-> +				   int nents, enum dma_data_direction dir,
-> +				   unsigned long attrs)
-> +{
-> +	struct scatterlist *s;
-> +	unsigned int i;
-> +
-> +	BUG_ON(dir == DMA_NONE);
-> +
-> +	for_each_sg(sg, s, nents, i)
-> +		xen_grant_dma_unmap_page(dev, s->dma_address, sg_dma_len(s), dir,
-> +				attrs);
-> +}
-> +
-> +static int xen_grant_dma_map_sg(struct device *dev, struct scatterlist *sg,
-> +				int nents, enum dma_data_direction dir,
-> +				unsigned long attrs)
-> +{
-> +	struct scatterlist *s;
-> +	unsigned int i;
-> +
-> +	BUG_ON(dir == DMA_NONE);
-> +
-> +	for_each_sg(sg, s, nents, i) {
-> +		s->dma_address = xen_grant_dma_map_page(dev, sg_page(s), s->offset,
-> +				s->length, dir, attrs);
-> +		if (s->dma_address == DMA_MAPPING_ERROR)
-> +			goto out;
-> +
-> +		sg_dma_len(s) = s->length;
-> +	}
-> +
-> +	return nents;
-> +
-> +out:
-> +	xen_grant_dma_unmap_sg(dev, sg, i, dir, attrs | DMA_ATTR_SKIP_CPU_SYNC);
-> +	sg_dma_len(sg) = 0;
-> +
-> +	return -EIO;
-> +}
-> +
-> +static int xen_grant_dma_supported(struct device *dev, u64 mask)
-> +{
-> +	return mask == DMA_BIT_MASK(64);
-> +}
-> +
-> +static const struct dma_map_ops xen_grant_dma_ops = {
-> +	.alloc = xen_grant_dma_alloc,
-> +	.free = xen_grant_dma_free,
-> +	.alloc_pages = xen_grant_dma_alloc_pages,
-> +	.free_pages = xen_grant_dma_free_pages,
-> +	.mmap = dma_common_mmap,
-> +	.get_sgtable = dma_common_get_sgtable,
-> +	.map_page = xen_grant_dma_map_page,
-> +	.unmap_page = xen_grant_dma_unmap_page,
-> +	.map_sg = xen_grant_dma_map_sg,
-> +	.unmap_sg = xen_grant_dma_unmap_sg,
-> +	.dma_supported = xen_grant_dma_supported,
-> +};
-> +
-> +void xen_grant_setup_dma_ops(struct device *dev)
-> +{
-> +	struct xen_grant_dma_data *data;
-> +	uint32_t dev_domid;
-> +
-> +	data = find_xen_grant_dma_data(dev);
-> +	if (data) {
-> +		dev_err(dev, "Xen grant DMA data is already created\n");
-> +		return;
-> +	}
-> +
-> +	/* XXX The dom0 is hardcoded as the backend domain for now */
-> +	dev_domid = 0;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data) {
-> +		dev_err(dev, "Сannot allocate Xen grant DMA data\n");
-> +		goto err;
-> +	}
-> +	data->dev_domid = dev_domid;
-> +	data->dev = dev;
-> +
-> +	spin_lock(&xen_grant_dma_lock);
-> +	list_add(&data->list, &xen_grant_dma_devices);
-> +	spin_unlock(&xen_grant_dma_lock);
-> +
-> +	dev->dma_ops = &xen_grant_dma_ops;
-> +
-> +	return;
-> +
-> +err:
-> +	dev_err(dev, "Сannot set up Xen grant DMA ops, retain platform DMA ops\n");
-> +}
-> +EXPORT_SYMBOL_GPL(xen_grant_setup_dma_ops);
-> +
-> +MODULE_DESCRIPTION("Xen grant DMA-mapping layer");
-> +MODULE_AUTHOR("Juergen Gross <jgross@suse.com>");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
-> index a3584a3..4f9fad5 100644
-> --- a/include/xen/xen-ops.h
-> +++ b/include/xen/xen-ops.h
-> @@ -221,4 +221,12 @@ static inline void xen_preemptible_hcall_end(void) { }
->  
->  #endif /* CONFIG_XEN_PV && !CONFIG_PREEMPTION */
->  
-> +#ifdef CONFIG_XEN_GRANT_DMA_OPS
-> +void xen_grant_setup_dma_ops(struct device *dev);
-> +#else
-> +static inline void xen_grant_setup_dma_ops(struct device *dev)
-> +{
-> +}
-> +#endif /* CONFIG_XEN_GRANT_DMA_OPS */
-> +
->  #endif /* INCLUDE_XEN_OPS_H */
-> diff --git a/include/xen/xen.h b/include/xen/xen.h
-> index a99bab8..fe6e6bb 100644
-> --- a/include/xen/xen.h
-> +++ b/include/xen/xen.h
-> @@ -52,6 +52,11 @@ bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
->  extern u64 xen_saved_max_mem_size;
->  #endif
->  
-> +static inline int xen_has_restricted_virtio_memory_access(void)
-> +{
-> +	return IS_ENABLED(CONFIG_XEN_VIRTIO) && xen_domain();
-> +}
-> +
->  #ifdef CONFIG_XEN_UNPOPULATED_ALLOC
->  int xen_alloc_unpopulated_pages(unsigned int nr_pages, struct page **pages);
->  void xen_free_unpopulated_pages(unsigned int nr_pages, struct page **pages);
-> -- 
-> 2.7.4
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
---8323329-1577086982-1650666424=:915916--

@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329D550BD7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91C050BD82
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449833AbiDVQun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
+        id S1449852AbiDVQwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386269AbiDVQul (ORCPT
+        with ESMTP id S1449836AbiDVQvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:50:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B685F265;
-        Fri, 22 Apr 2022 09:47:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81FCB62117;
-        Fri, 22 Apr 2022 16:47:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7928BC385A0;
-        Fri, 22 Apr 2022 16:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650646066;
-        bh=w1qcxjgX+1d8NUij8QnC2gvBWuSGhmDYEIfSULLHp4Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Gezo8m3gEr5nx5XLkdGXI42ucp3Bepkhw4Oxz5QNc1duj2Uz86gVqCOF2l0Z1ICSA
-         k5/AXoBRPP2BT3IpoqC88gbJDQAE68D+rGlnyWWVjL2bMSUQmfMAiCeANXm54M6JMa
-         ctxWozcf59fUm1193SB4kKBF7mi3RK0wS8WD71wSxXIy7coP9BRTJKTJTeMao5IqLY
-         VTadPGYReNmekFi5o6RcNGM7IdM4vsyFFRM7I0J/gskPkRLmCTOyJ9KbfsOmOYMQ9f
-         nJpuI+bMIns67RdQhib9TTWWuuFHyuIlNXXdnjga+w2c2knL+JvRVH/kB2eFEtWVlQ
-         x1r2KzfrI4kaA==
-Date:   Fri, 22 Apr 2022 11:47:44 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        Fri, 22 Apr 2022 12:51:54 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7DE5F265
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:48:59 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id t15so9677673oie.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ukFSZ0c+ZlmfrRD+7vq2cqrIQ4lRoIzajrLlyX5Lu4g=;
+        b=Ko7IVhOybo3oW8GcTV9klMNb4wS2aNSv/IHABXacdZBm3j4YlxTS2QOM/md2P+JrvV
+         ewg3rUtGygI5ryu1EbC/tGsL0N4knwtpTLjshcEpoi/NUxjr4gsUNZjFomkuzd8ZoL5E
+         NN7nCFWZnnqIsSIRlSYwS0XRoajXMtgdQzI+M7u4Th7Ecd4tRFbRoNDtWDGMt5duxNVK
+         xcvD6tPp3n1ENZnD9JkBuSBqbALvyiQlWEakZhSi5gwEdsIh2st1t8gr2E2G0i90qUxR
+         dztWeqcPeFDEp1NPENXcWBFN165vrqWOIYzw5GU4jsRB1q/XhgSjgv9kIShTtLCBENca
+         QkPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ukFSZ0c+ZlmfrRD+7vq2cqrIQ4lRoIzajrLlyX5Lu4g=;
+        b=0WHE8JCze7+zQRdeBA5sTv9QR0ndilPZahRAs8Zpt9phzKzxux4cCRVN0GDEg04lU+
+         scYWXBv/sX0eTnOjH5Vzv+yAKLhh/iUjxAwrjsUS90lMSGhXNa+V8iRS5KL7pfLjXPZ3
+         1col7vDaYaxBXw4k7su+zp51c+XMVmMdfnb9FXzzknrJWBzalevVWpljelgGb2vZKs//
+         po6VOvNslxeIpu6t+zRPj6jzlVhjYs7d2Q+0Ohov5vWtj4TwiPJZx84Wng6+cr8qUdvb
+         CkfeATeV7OVKYyJD8oQ5TpP24f/nyDC/PkU3VngMW94rFBmoTN7owkxHf0ZnR2HPtowg
+         X1nA==
+X-Gm-Message-State: AOAM531T5ztsvcQ3BJUrjCOe01wNW5aFO1DTMtCh8gZ9f9D13wINDySJ
+        9vmhLiyamxtsJfKT0jlaL+4+1Q==
+X-Google-Smtp-Source: ABdhPJzZq1ctYQzQcwS6nlBbCYuC0/Mqp0MY5N3po+2Ix7V/5FCCzS9mfLS1toZrRPv+JdwbyI9pGQ==
+X-Received: by 2002:a05:6808:2189:b0:322:e874:e8f2 with SMTP id be9-20020a056808218900b00322e874e8f2mr2731537oib.289.1650646138946;
+        Fri, 22 Apr 2022 09:48:58 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id s14-20020a0568302a8e00b006054e841915sm910651otu.73.2022.04.22.09.48.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 09:48:58 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 13:48:52 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Christopher Obbard <chris.obbard@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v3 3/8] PCI: rcar-gen2: Add RZ/N1 SOCs support
-Message-ID: <20220422164744.GA1460864@bhelgaas>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Alex Bee <knaerzche@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 1/3] media: dt-bindings: media: rockchip-vdec: Add RK3328
+ compatible
+Message-ID: <YmLcdCridA6AKd51@eze-laptop>
+References: <20220422133803.989256-1-chris.obbard@collabora.com>
+ <20220422133803.989256-2-chris.obbard@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422120850.769480-4-herve.codina@bootlin.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422133803.989256-2-chris.obbard@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 02:08:45PM +0200, Herve Codina wrote:
-> Add Renesas RZ/N1 SOCs family support to the Renesas R-Car
-> gen2 PCI bridge driver.
-> The Renesas RZ/N1 SOCs internal PCI bridge is comptible with
-> the one available in the R-Car Gen2 family.
-> Tested with the RZ/N1D (R9A06G032) SOC.
+On Fri, Apr 22, 2022 at 02:38:01PM +0100, Christopher Obbard wrote:
+> Document the RK3328 compatible for rockchip-vdec.
+> 
+> Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
 
-Nits (only address if you have some other reason to repost this
-series):
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-  - Subject claims this adds "support," which suggests that this adds
-    some piece of new functionality.  But it adds no new
-    functionality, it merely adds a new compatible string.  I would
-    say "Add RZ/N1 SOC compatible string"
-
-  - Add blank lines between paragraphs
-
-  - Rewrap paragraphs to fill 75 characters
-
-  - s/comptible/compatible/
-
-  - s/R-Car gen2/R-Car Gen2/ to write this consistently instead of
-    capitalizing "Gen2" sometimes but not others
-
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 > ---
->  drivers/pci/controller/pci-rcar-gen2.c | 1 +
+>  Documentation/devicetree/bindings/media/rockchip,vdec.yaml | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/pci/controller/pci-rcar-gen2.c b/drivers/pci/controller/pci-rcar-gen2.c
-> index 35804ea394fd..839695791757 100644
-> --- a/drivers/pci/controller/pci-rcar-gen2.c
-> +++ b/drivers/pci/controller/pci-rcar-gen2.c
-> @@ -328,6 +328,7 @@ static const struct of_device_id rcar_pci_of_match[] = {
->  	{ .compatible = "renesas,pci-r8a7791", },
->  	{ .compatible = "renesas,pci-r8a7794", },
->  	{ .compatible = "renesas,pci-rcar-gen2", },
-> +	{ .compatible = "renesas,pci-rzn1", },
->  	{ },
->  };
+> diff --git a/Documentation/devicetree/bindings/media/rockchip,vdec.yaml b/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+> index 089f11d21b25..23f9687d862c 100644
+> --- a/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+> +++ b/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+> @@ -19,6 +19,7 @@ properties:
+>        - const: rockchip,rk3399-vdec
+>        - items:
+>            - const: rockchip,rk3228-vdec
+> +          - const: rockchip,rk3328-vdec
+>            - const: rockchip,rk3399-vdec
 >  
+>    reg:
 > -- 
-> 2.35.1
+> 2.34.1
 > 

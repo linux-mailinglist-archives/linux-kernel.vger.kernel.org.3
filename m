@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F239B50B8D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E3750B8D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243446AbiDVNow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
+        id S1447952AbiDVNpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234180AbiDVNos (ORCPT
+        with ESMTP id S234180AbiDVNpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:44:48 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE9857B22
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:41:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=gbXx4b6Mgu586f0vx1b0zCF4+cN4TmN4X1RYmCd7jxQ=;
-        t=1650634915; x=1651844515; b=GaaYwB42fDVob+cTYuyab6OZQfmWOwfUX2ZKubFIY34p38B
-        ld7criHiSdXeVxBtJYBDV9F9fHhiMV+okzDJ+6QeK2o6jL+lNdOtgr+D4ZJ1IgXm1zo5eZTkBh5db
-        fvrQFeLrmF7mDsvCf93AUJX0LQ/WQNmeX0nqgfhDMQU3+kF82CEtt9unVG9CkDXELAHLCuRImwV4M
-        AYsdKvnOBgKbwFA8jBCMgAVrAov9zXPca/jnXHTefFhjCQw+pRvnnl3ILadt1rFA/OMLuEV+ghVFH
-        KRRaYDuznYLsi5/xkep0pfAsQV+hK+aNHfqb2nOS9Tgj+MHsClQ4z+SQUxbb15Mg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nhtXk-00DXWL-CB;
-        Fri, 22 Apr 2022 15:41:52 +0200
-Message-ID: <2a14c4f64ff3e029a76c85d064146e6c303c96bb.camel@sipsolutions.net>
-Subject: Re: [PATCH] devcoredump : Serialize devcd_del work
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, sboyd@kernel.org, rafael@kernel.org
-Date:   Fri, 22 Apr 2022 15:41:51 +0200
-In-Reply-To: <1650364077-22694-1-git-send-email-quic_mojha@quicinc.com>
-References: <1650364077-22694-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Fri, 22 Apr 2022 09:45:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3279C57146;
+        Fri, 22 Apr 2022 06:42:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1631B82D82;
+        Fri, 22 Apr 2022 13:42:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29452C385A8;
+        Fri, 22 Apr 2022 13:42:09 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 14:42:06 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Peter Collingbourne <pcc@google.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: document the boot requirements for MTE
+Message-ID: <YmKwrs3dJ09ybBJa@arm.com>
+References: <20220404211858.968452-1-pcc@google.com>
+ <Ykv39KMpKXb2Mr6p@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ykv39KMpKXb2Mr6p@sirena.org.uk>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,35 +47,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-19 at 15:57 +0530, Mukesh Ojha wrote:
-> In following scenario(diagram), when one thread X running dev_coredumpm() adds devcd
-> device to the framework which sends uevent notification to userspace
-> and another thread Y reads this uevent and call to devcd_data_write()
-> which eventually try to delete the queued timer that is not initialized/queued yet.
+On Tue, Apr 05, 2022 at 09:04:04AM +0100, Mark Brown wrote:
+> On Mon, Apr 04, 2022 at 02:18:58PM -0700, Peter Collingbourne wrote:
 > 
-> So, debug object reports some warning and in the meantime, timer is initialized
-> and queued from X path. and from Y path, it gets reinitialized again and
-> timer->entry.pprev=NULL and try_to_grab_pending() stucks.
+> > +  For CPUs with the Memory Tagging Extension feature:
+> > +
+> > +  - If EL3 is present:
+> > +
+> > +    - SCR_EL3.ATA (bit 26) must be initialised to 0b1.
+> > +
+> > +  - If the kernel is entered at EL1 and EL2 is present:
+> > +
+> > +    - HCR_EL2.ATA (bit 56) must be initialised to 0b1.
 > 
-> To fix this, introduce mutex to serialize the behaviour.
-> 
->  	cpu0(X)			                      cpu1(Y)
-> 
->     dev_coredump() uevent sent to userspace
->     device_add()  =========================> userspace process Y reads the uevents
->                                              writes to devcd fd which
->                                              results into writes to
-> 
->                                             devcd_data_write()
->                                               mod_delayed_work()
->                                                 try_to_grab_pending()
->                                                   del_timer()
->                                                     debug_assert_init()
->    INIT_DELAYED_WORK
->    schedule_delayed_work
-> 
+> Very nitpicky but this is only required for FEAT_MTE2 and above, plain
+> FEAT_MTE doesn't have these traps.  I don't know that this is a thing
+> that anyone's actually implemented
 
-Wouldn't it be easier to simply schedule this before adding it to sysfs
-and sending the uevent?
+I think that's a valid point. CPUs may implement FEAT_MTE2 but downgrade
+it to FEAT_MTE if the SoC does not provide allocation tag storage. So we
+should make it clear here that only from FEAT_MTE2 we should set those
+bits (ID_AA64PFR1_EL1.MTE >= 2), otherwise they should be 0 or
+hyp/firmware risks the OS triggering random external aborts.
 
-johannes
+> and from v8.7 on it's not permitted but the above isn't strictly true
+> if someone did for some reason have the most basic version.
+
+The wording is tricky: "This feature is mandatory from Armv8.7 when
+FEAT_MTE2 is implemented". So one can still implement FEAT_MTE (or none
+at all).
+
+-- 
+Catalin

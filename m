@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D28350BCBE
+	by mail.lfdr.de (Postfix) with ESMTP id 74A3150BCBF
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379973AbiDVQUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S1379718AbiDVQUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378340AbiDVQUX (ORCPT
+        with ESMTP id S1378994AbiDVQUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:20:23 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B8D5DE60;
-        Fri, 22 Apr 2022 09:17:29 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 17-20020a05600c021100b00393a19f8f98so2631510wmi.4;
-        Fri, 22 Apr 2022 09:17:29 -0700 (PDT)
+        Fri, 22 Apr 2022 12:20:32 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D1F5C861;
+        Fri, 22 Apr 2022 09:17:38 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id k22so11784838wrd.2;
+        Fri, 22 Apr 2022 09:17:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rIncxmhDUFubuTPIbfUUmhnyD3x3kFknV3aR1PwAHSU=;
-        b=quLHBak67ilJ7XMk5cWh59WRxF7B6IHMYoaeosRq419Hmg1wM8lhRiwbfpOVrbNYn0
-         WMiZVqrmL8JCp034/D4u5h7itqTpq0O4jXNIdvsTFMbyOtwHh4lYHysD866BVOkLQ5La
-         17cwTCAS0a+ifbRTJrZnJi2TtYjBCXluT8noIq65EDNP302VMEHrYyaDNy7iPltS3C0h
-         QYNRlQKMAtzMPfFSW+nSUN85N9Kw4j2ZxezhZyV11lMxgWoCm43IPGBT7ItE409Sj4vu
-         aYhAWHrVL7/bzht5d/TY0KaOk4EPEtGuEBwfy6RafkhzBmxZxXLzCcSZMbhMAoTzf81O
-         u6fQ==
+        bh=aqaDmVSTH8kRIVx2Jc7UCmC/D+1NcV2YaY4UF+KoQrE=;
+        b=LBRrPEsh5v4Ua+CSf7zr4C62y//TkfzRqpV3PBZJRBv4CRQdOGCoTEQaKNDTp+sLlk
+         lKwrtnBRF8oP6xhAtavb18l0DVnUYCPeACgbWDZx7ivGRtLyfMq63htBTs8V6XJX9zo7
+         AUwTPdl5h8ZwGIys2HQAsC4um9xLK67DhwofOQGd6/G5h9srgZZ9vF+iSSU0fRt058wc
+         uI9jgBIs8BGFZbWPFwO+C8b/ibDYwKOa4px0WctiWv4BaDqzrhLP1fi8c/FPArFrGC2N
+         PO5BlTdOTweSO33q/9Ajn3Uubn8oS3UaG4Ob1fTdtOp+s9lw6TySzSzis7YMqnpt/YIb
+         PRLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rIncxmhDUFubuTPIbfUUmhnyD3x3kFknV3aR1PwAHSU=;
-        b=GGzAwcTyLWQaN3PM6ThV9gYlgx0GlbgiBbl+pZDmoyZXY+6lXrs53KP7RrVjQEoyCM
-         CAmwVTzSSQFgJcAHALCJSv8xqK17fGElW+duCHqZtWII0LQ2iqvznx+cLf+a+zJb4Non
-         UoxY01iZYfU5X5kvDxd5EWBtpeYb/K1iU0jz4VY0dXEZci7STcDUcWL1PJLbhlSfxrj5
-         yjUaUzDrSQfKx5u2gVjaqoq2a9qeNCpDuDqFEAuRXke9qHF017zUqClVsTgLKonhqkVh
-         tFzZ3rwUxeRsYDsnqHfqlQr0YjtzOxNhCahOEb4Yv17SoqCURhCystGLsS4mWVSnod6o
-         g5Iw==
-X-Gm-Message-State: AOAM533PkkFsOJoHFRshNL3aEV43t/HTzlMOy8akspaUEreoByeMl5hH
-        ZLq1PF2ztQo0rxJ7LTCZ3qdDNgwF7exqCA==
-X-Google-Smtp-Source: ABdhPJy7KeEOprOPRKSsTs4cY5EYO9wXLB8zfkM0gOMvToggZOXNlBAOI4qobW464wC53PUnuMbrgA==
-X-Received: by 2002:a05:600c:350f:b0:392:90d0:6b12 with SMTP id h15-20020a05600c350f00b0039290d06b12mr4851402wmq.180.1650644247720;
-        Fri, 22 Apr 2022 09:17:27 -0700 (PDT)
+        bh=aqaDmVSTH8kRIVx2Jc7UCmC/D+1NcV2YaY4UF+KoQrE=;
+        b=3XJX8DdtSsshOqyqjf5Y0C0Zyj/AzUtjDYY2Bew0d8iCn7FEBvICEDxKvDFPxwgbf6
+         UaysJ0E6ltDCKfxkvpXZMOtcAkkKmIlG+xkc8iWHDp+wkj8Jb/x4xdYKF3J+ZIg7KhKD
+         X2nVv/fdP/jKV2lAg0sCJ7u1ksCWbnVmKXFG0hWiow265UfpGHKnrvhLSd7KVzwBunZy
+         mFBtE2EHNw50dMG/tqiKBQBbj581rRd6j8V++ySbIN/rnNnfzcrTdaO0/ps7uMDZg4TE
+         pkbM8L3vUgJkOuu7YrZrNIVf4DjO8A0NG6x72hlJptN5HGmShR/bKTdyYnEdaTFfdg3w
+         zhTQ==
+X-Gm-Message-State: AOAM532F8ACcty0bemC1atgMP3gZiTs9m5moyPYfgyI+o9cFwDxCfDAr
+        Z2PtFOF110FbnuD/gd8cTQE=
+X-Google-Smtp-Source: ABdhPJy8A+5MLmvgrVf6CaFzLQbY516nLLbku9rWWNatXqiOrdjiHJhHtgZ0ZGYa/KZ/OmNHmanEBg==
+X-Received: by 2002:adf:da49:0:b0:204:1548:2a58 with SMTP id r9-20020adfda49000000b0020415482a58mr4400090wrl.664.1650644257315;
+        Fri, 22 Apr 2022 09:17:37 -0700 (PDT)
 Received: from localhost.localdomain ([94.73.37.128])
-        by smtp.gmail.com with ESMTPSA id 20-20020a05600c22d400b0038c8dbdc1a3sm1927029wmg.38.2022.04.22.09.17.27
+        by smtp.gmail.com with ESMTPSA id 20-20020a05600c22d400b0038c8dbdc1a3sm1927029wmg.38.2022.04.22.09.17.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 09:17:27 -0700 (PDT)
+        Fri, 22 Apr 2022 09:17:37 -0700 (PDT)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     hadess@hadess.net
 Cc:     hdegoede@redhat.com, dmitry.torokhov@gmail.com,
@@ -55,9 +55,9 @@ Cc:     hdegoede@redhat.com, dmitry.torokhov@gmail.com,
         benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH 2/3] HID: logitech-hidpp: Fix double free on managed resource
-Date:   Fri, 22 Apr 2022 18:17:08 +0200
-Message-Id: <20220422161709.30198-2-jose.exposito89@gmail.com>
+Subject: [PATCH 3/3] HID: wacom: Fix double free on managed resource
+Date:   Fri, 22 Apr 2022 18:17:09 +0200
+Message-Id: <20220422161709.30198-3-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220422161709.30198-1-jose.exposito89@gmail.com>
 References: <20220422161709.30198-1-jose.exposito89@gmail.com>
@@ -81,34 +81,45 @@ As described in the documentation for devm_input_allocate_device():
   its driver (or binding fails).
 
 However this driver was explicitly freeing the input device, allocated
-using devm_input_allocate_device() through hidpp_allocate_input().
+using devm_input_allocate_device() through wacom_allocate_input().
 
-Remove the call to input_free_device() to avoid a possible double free
+Remove the calls to input_free_device() to avoid a possible double free
 error.
 
-Fixes: c39e3d5fc9dd3 ("HID: logitech-hidpp: late bind the input device on wireless connection")
+Fixes: d2d13f18aaa51 ("Input: wacom - create a separate input device for pads")
 Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- drivers/hid/hid-logitech-hidpp.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/hid/wacom_sys.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-index 81de88ab2ecc..9c00a781ab57 100644
---- a/drivers/hid/hid-logitech-hidpp.c
-+++ b/drivers/hid/hid-logitech-hidpp.c
-@@ -3957,11 +3957,7 @@ static void hidpp_connect_event(struct hidpp_device *hidpp)
- 	}
- 
- 	hidpp_populate_input(hidpp, input);
--
--	ret = input_register_device(input);
--	if (ret)
--		input_free_device(input);
--
-+	input_register_device(input);
- 	hidpp->delayed_input = input;
- }
- 
+diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
+index 066c567dbaa2..164c0f7cb796 100644
+--- a/drivers/hid/wacom_sys.c
++++ b/drivers/hid/wacom_sys.c
+@@ -2098,7 +2098,6 @@ static int wacom_register_inputs(struct wacom *wacom)
+ 	error = wacom_setup_pen_input_capabilities(pen_input_dev, wacom_wac);
+ 	if (error) {
+ 		/* no pen in use on this interface */
+-		input_free_device(pen_input_dev);
+ 		wacom_wac->pen_input = NULL;
+ 		pen_input_dev = NULL;
+ 	} else {
+@@ -2110,7 +2109,6 @@ static int wacom_register_inputs(struct wacom *wacom)
+ 	error = wacom_setup_touch_input_capabilities(touch_input_dev, wacom_wac);
+ 	if (error) {
+ 		/* no touch in use on this interface */
+-		input_free_device(touch_input_dev);
+ 		wacom_wac->touch_input = NULL;
+ 		touch_input_dev = NULL;
+ 	} else {
+@@ -2122,7 +2120,6 @@ static int wacom_register_inputs(struct wacom *wacom)
+ 	error = wacom_setup_pad_input_capabilities(pad_input_dev, wacom_wac);
+ 	if (error) {
+ 		/* no pad in use on this interface */
+-		input_free_device(pad_input_dev);
+ 		wacom_wac->pad_input = NULL;
+ 		pad_input_dev = NULL;
+ 	} else {
 -- 
 2.25.1
 

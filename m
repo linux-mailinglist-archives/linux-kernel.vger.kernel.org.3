@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8496F50C1C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC8B50C1C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiDVV6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
+        id S231174AbiDVWAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbiDVV5i (ORCPT
+        with ESMTP id S231243AbiDVWAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:57:38 -0400
+        Fri, 22 Apr 2022 18:00:48 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BD852ADE71
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:40:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 864A940E329
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:43:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650660027;
+        s=mimecast20190719; t=1650660224;
         h=from:from:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=He1J3AqXPhXDypeeIvKQfoD2dqdRSISCRDtSvTG+2K0=;
-        b=V7+hKBNuzly+vT8PLT5ViakiH9wEG334vYkTBM+iPTiUcgfzoAk86j7DJ6TU6b9wWuL8/p
-        qvK3cjbW3gpBMowLYqvmSrfp/cAXO7DJW4arb8Lz472pyLXCak2CREc6WtuWXlnvz/PRPr
-        z9IXyesuYNebOjhFCWDZsHMWLSeCaU8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=yAh6HF4oclUNAmoKp6qIJ40bQfDLz8H5HJE2/XLu63Y=;
+        b=dRlMkPFtzS9d20NzskF+9r1O6Lg3KrAlpjNgjmddFWhsdGgLR1i6EuloqbbQAGVmHMPyq4
+        PKqg9CkdVhv8B7+ndlWkbw4NvcqFyowtRwvXxmeipsuUykAHvbIm6e7SEpnAvTOHFUeEPW
+        f6mLBHYUvLkdGmFSD6BweQn8k0ay7uA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-58-22EJVP_aPzKxY3Kx3JUvwQ-1; Fri, 22 Apr 2022 16:01:00 -0400
-X-MC-Unique: 22EJVP_aPzKxY3Kx3JUvwQ-1
+ us-mta-588-DXAZYiwlPZ2gAYH_maiFDQ-1; Fri, 22 Apr 2022 16:01:01 -0400
+X-MC-Unique: DXAZYiwlPZ2gAYH_maiFDQ-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22BE11802A34;
-        Fri, 22 Apr 2022 20:00:54 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0B4463C0FEC9;
+        Fri, 22 Apr 2022 20:00:58 +0000 (UTC)
 Received: from dqiao.bos.com (unknown [10.22.19.111])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B9617C27EB4;
-        Fri, 22 Apr 2022 20:00:53 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A85BDC2811D;
+        Fri, 22 Apr 2022 20:00:57 +0000 (UTC)
 From:   Donghai Qiao <dqiao@redhat.com>
 To:     akpm@linux-foundation.org, sfr@canb.auug.org.au, arnd@arndb.de,
         peterz@infradead.org, heying24@huawei.com,
@@ -45,9 +45,9 @@ To:     akpm@linux-foundation.org, sfr@canb.auug.org.au, arnd@arndb.de,
         rdunlap@infradead.org, tglx@linutronix.de, gor@linux.ibm.com
 Cc:     donghai.w.qiao@gmail.com, linux-kernel@vger.kernel.org,
         Donghai Qiao <dqiao@redhat.com>
-Subject: [PATCH v2 04/11] smp: replace smp_call_function_single() with smp_call()
-Date:   Fri, 22 Apr 2022 16:00:33 -0400
-Message-Id: <20220422200040.93813-5-dqiao@redhat.com>
+Subject: [PATCH v2 06/11] smp: use smp_call_private() fron irq_work.c and core.c
+Date:   Fri, 22 Apr 2022 16:00:35 -0400
+Message-Id: <20220422200040.93813-7-dqiao@redhat.com>
 In-Reply-To: <20220422200040.93813-1-dqiao@redhat.com>
 References: <20220422200040.93813-1-dqiao@redhat.com>
 Reply-To: dqiao@redhat.com
@@ -63,139 +63,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminated the percpu global csd_data and temporarily hook up
-to smp_call().
-
-There is no obvious reason or evidence that the differentiation
-of xcall of single recipient from that of multiple recipients
-can exploit noticeable performance gaining. If something can be
-optimized on this matter, it might be from the interrupt level
-which has been already addressed by arch_send_call_function_single_ipi()
-and arch_send_call_function_ipi_mask(). In fact, both have been
-taken in to account from smp_call_function_many_cond().
-
-So, it is appropriate to make this change as part of the cross
-call interface.
+irq_work.c and core.c should use the cross interface rather than
+using a unpublished internal function __smp_call_single_queue.
 
 Signed-off-by: Donghai Qiao <dqiao@redhat.com>
 ---
 v1 -> v2: removed 'x' from the function names and change XCALL to SMP_CALL from the new macros
 
- kernel/smp.c | 74 ++++++++++++++++++----------------------------------
- 1 file changed, 25 insertions(+), 49 deletions(-)
+ kernel/irq_work.c   | 4 ++--
+ kernel/sched/core.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 22e8f2bd770b..8998b97d5f72 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -399,8 +399,6 @@ static __always_inline void csd_unlock(struct __call_single_data *csd)
- 	smp_store_release(&csd->node.u_flags, 0);
+diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+index f7df715ec28e..0d17c9d03d03 100644
+--- a/kernel/irq_work.c
++++ b/kernel/irq_work.c
+@@ -159,8 +159,8 @@ bool irq_work_queue_on(struct irq_work *work, int cpu)
+ 			if (!irq_work_claim(work))
+ 				goto out;
+ 		}
+-
+-		__smp_call_single_queue(cpu, &work->node.llist);
++		smp_call_private(cpu, (call_single_data_t *)&work->node.llist,
++					SMP_CALL_TYPE_IRQ_WORK);
+ 	} else {
+ 		__irq_work_queue_local(work);
+ 	}
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 51efaabac3e4..4fda3dfb887b 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3780,7 +3780,7 @@ static void __ttwu_queue_wakelist(struct task_struct *p, int cpu, int wake_flags
+ 	p->sched_remote_wakeup = !!(wake_flags & WF_MIGRATED);
+ 
+ 	WRITE_ONCE(rq->ttwu_pending, 1);
+-	__smp_call_single_queue(cpu, &p->wake_entry.llist);
++	smp_call_private(cpu, (call_single_data_t *)&p->wake_entry.llist, SMP_CALL_TYPE_TTWU);
  }
  
--static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
--
- void __smp_call_single_queue(int cpu, struct llist_node *node)
- {
- #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
-@@ -634,6 +632,9 @@ void flush_smp_call_function_from_idle(void)
- }
- 
- /*
-+ * This is a temporarily hook up. This function will be eliminated
-+ * with the last patch in this series.
-+ *
-  * smp_call_function_single - Run a function on a specific CPU
-  * @func: The function to run. This must be fast and non-blocking.
-  * @info: An arbitrary pointer to pass to the function.
-@@ -642,59 +643,21 @@ void flush_smp_call_function_from_idle(void)
-  * Returns 0 on success, else a negative status code.
-  */
- int smp_call_function_single(int cpu, smp_call_func_t func, void *info,
--			     int wait)
-+			int wait)
- {
--	call_single_data_t *csd;
--	call_single_data_t csd_stack = {
--		.node = { .u_flags = CSD_FLAG_LOCK | CSD_TYPE_SYNC, },
--	};
--	int this_cpu;
--	int err;
--
--	/*
--	 * prevent preemption and reschedule on another processor,
--	 * as well as CPU removal
--	 */
--	this_cpu = get_cpu();
--
--	/*
--	 * Can deadlock when called with interrupts disabled.
--	 * We allow cpu's that are not yet online though, as no one else can
--	 * send smp call function interrupt to this cpu and as such deadlocks
--	 * can't happen.
--	 */
--	WARN_ON_ONCE(cpu_online(this_cpu) && irqs_disabled()
--		     && !oops_in_progress);
--
--	/*
--	 * When @wait we can deadlock when we interrupt between llist_add() and
--	 * arch_send_call_function_ipi*(); when !@wait we can deadlock due to
--	 * csd_lock() on because the interrupt context uses the same csd
--	 * storage.
--	 */
--	WARN_ON_ONCE(!in_task());
--
--	csd = &csd_stack;
--	if (!wait) {
--		csd = this_cpu_ptr(&csd_data);
--		csd_lock(csd);
--	}
--
--	csd->func = func;
--	csd->info = info;
--#ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
--	csd->node.src = smp_processor_id();
--	csd->node.dst = cpu;
--#endif
-+	unsigned int flags = 0;
- 
--	err = generic_exec_single(cpu, csd);
-+	if ((unsigned int)cpu >= nr_cpu_ids || !cpu_online(cpu))
-+		return -ENXIO;
- 
- 	if (wait)
--		csd_lock_wait(csd);
-+		flags = SMP_CALL_TYPE_SYNC;
-+	else
-+		flags = SMP_CALL_TYPE_ASYNC;
- 
--	put_cpu();
-+	smp_call(cpu, func, info, flags);
- 
--	return err;
-+	return 0;
- }
- EXPORT_SYMBOL(smp_call_function_single);
- 
-@@ -1159,6 +1122,19 @@ void __smp_call_mask_cond(const struct cpumask *mask,
- 		smp_cond_func_t cond_func,
- 		unsigned int flags)
- {
-+	bool wait = false;
-+
-+	if (flags == SMP_CALL_TYPE_SYNC)
-+		wait = true;
-+
-+	preempt_disable();
-+
-+	/*
-+	 * This is temporarily hook. The function smp_call_function_many_cond()
-+	 * will be inlined here with the last patch in this series.
-+	 */
-+	smp_call_function_many_cond(mask, func, info, wait, cond_func);
-+	preempt_enable();
- }
- 
- /*
+ void wake_up_if_idle(int cpu)
 -- 
 2.27.0
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642BA50AFE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121B550AFF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233391AbiDVGET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:04:19 -0400
+        id S233441AbiDVGE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:04:28 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbiDVGER (ORCPT
+        with ESMTP id S233313AbiDVGES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:04:17 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D517A4F9FE
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:01:19 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id s14so8607018plk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:01:19 -0700 (PDT)
+        Fri, 22 Apr 2022 02:04:18 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173D24FC59
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:01:24 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id c12so8617441plr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:01:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qV9vbQDU/KegsjTpwvOeQzuPHBDHRU9NkTUmfe4BtOM=;
-        b=E60OpJIMR6X62J2F5nuw4yDNTkHOyZ11wmmlaC8a/PdQ0v3AAPFzAH9i1m0KF1SP89
-         0skofww5qoUW+zR4z4qwD+L/8j5AbYclkfQ3R5krfJeHrFOZMg/Dml0zgwxT7bX9ulb0
-         UpBP5ScMBSNmGTr+2uFkqVDLtgYkqujeqUm7mIy96UtD1dsnNbw/zOUhD0SQKyFMkCEy
-         ZIqWVVVOfKeOpgBY89enYHG38qzTkHEMdF5GRIns8aD2OYZBzumySwlFsXEzNUfuDa6D
-         CJdkr3a7LGC340qbJ4/U+N7n+GSy0G1yTRH78bZTVnd/QJvTteuRxzludieLme4ziMu5
-         r72g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Bp+6Mtl+9X8bx0bqhBqFKs5a4ePa+PXv90jlJdkj1lk=;
+        b=UtxoZ1JdqW3fcX9auDfKm8675JgAGikYBukOpzndjrb/5obHXJuS5bajo3sXY8v1h1
+         jdIy74NZnl4V+AALme7MfYZzkEitt4clzC8B/aHb21JiWCLOlJr1MzyFujlbhcolMOB0
+         /f+Y40z4gYEgNUq1xabve/eP3xOjbArMQKNZBgAqpe1U7exem/8jWVnWdr/PhuzIQya8
+         sdSKOx8UN1uFZ+SSbw7OxmJng07BsR9qWbPp43X0d9pm+Zy1O9P2pwpermzw8oT88QjE
+         5CX6sbVq/kvJ8U3nftnAXr207zwiWHZhZE4P88DijAZJ+8WpRGH4Y+OOdbEMYUp7KGKX
+         tlXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qV9vbQDU/KegsjTpwvOeQzuPHBDHRU9NkTUmfe4BtOM=;
-        b=MLNbkIugSzE2iLK3AxXq1L7UASNeq80idoJbe8QrbsNKKnOB7rAGu2gCzK4B1G/Zp9
-         z0AnMlRKTa34Gv+4b9z9hwC1I0EkkFBy98T8H4QwgiOKJwqdOSIrdNw6+ZZtxir1kPgp
-         tj9gJ2RI/4litZE5JakpqkYif3BCRBn5paBNeKhSM+qxwP+sg9NsAg1hzgK+zaAuhz66
-         qVW1sdR+i1aQNYk7CGvEfsH+h8h4m4Nmf0Pcpx6fU4alp6O48ZYlircWZGlV6pRuzJG4
-         qz2oPF040OO1zLVKq9MbUmCj9ad86BwOXcnSZVa+3E1DiEdKR7HO9yOPRrsA3WhlhEaa
-         cfOg==
-X-Gm-Message-State: AOAM533eoKxA/B6Guuwk/jjXqlDnLbeXVNzzZdzNZmatyUUufOksN+lX
-        KT+D3xUvAtvfr+aoF949XgU=
-X-Google-Smtp-Source: ABdhPJxmHc2+7DensBM27RMw0lX++k/HB+Saw3G963hFQN+fDA/0+8ohL5KesEMbM9hgjOMRFEJ1Yg==
-X-Received: by 2002:a17:90a:178e:b0:1d2:e998:85e1 with SMTP id q14-20020a17090a178e00b001d2e99885e1mr14342960pja.234.1650607278946;
-        Thu, 21 Apr 2022 23:01:18 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Bp+6Mtl+9X8bx0bqhBqFKs5a4ePa+PXv90jlJdkj1lk=;
+        b=FIr4K9ZVOf7W2OS3K7VZR0HPfy6R0PkXhTuG3etM0JReEfdAY/7rJyO44Z9pzohzV2
+         WdwXTaSTCLwcTNvxTbL/QXCQQeWkQ2E36ZLIbvPDKgJrEns5zvWbmdzublJgSq6ukeze
+         f1UV21yiQnJhWz2CLMn85ykxe8Svu2KhmBrvvo+MnoNw8vcxpmCYOTP0+70TqNQVKGio
+         5PrOsMy2AvZf+3jALZmZYYff88z+wloOl0Omnyvp7L97fGxnY7gH7++ZSc3i+UwhFbT9
+         HFR1nzrCszP/eUgBHaNsQ7FE1FDR7QbcMggdzUe+e8bZdvTeMt2cWTJiEbeTVBFe4Nqa
+         61Jw==
+X-Gm-Message-State: AOAM530HZNUjUvENzbH+HbGwiY7Cq33q1JYJwd3sYXgndRnavW4cfc3A
+        y4ikaddPq241UpJ/Oro4eTc=
+X-Google-Smtp-Source: ABdhPJyE7r4GoOePw5giA255Y5FX9aOWvsph11ITy41jRBpWLTDZLqaV65pwzE9oS2A13aEn9VlUjw==
+X-Received: by 2002:a17:90a:4e08:b0:1cb:a3ac:938b with SMTP id n8-20020a17090a4e0800b001cba3ac938bmr14264027pjh.112.1650607283621;
+        Thu, 21 Apr 2022 23:01:23 -0700 (PDT)
 Received: from bobo.ozlabs.ibm.com (193-116-116-20.tpgi.com.au. [193.116.116.20])
-        by smtp.gmail.com with ESMTPSA id y16-20020a637d10000000b00381268f2c6fsm998607pgc.4.2022.04.21.23.01.15
+        by smtp.gmail.com with ESMTPSA id y16-20020a637d10000000b00381268f2c6fsm998607pgc.4.2022.04.21.23.01.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 23:01:18 -0700 (PDT)
+        Thu, 21 Apr 2022 23:01:23 -0700 (PDT)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     Paul Menzel <pmenzel@molgen.mpg.de>
 Cc:     Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
@@ -56,10 +56,12 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
         "Torvalds, Linus" <torvalds@linux-foundation.org>,
         akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH 0/2] Request to test fix for "x86/Kconfig: select HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP)"
-Date:   Fri, 22 Apr 2022 16:01:04 +1000
-Message-Id: <20220422060107.781512-1-npiggin@gmail.com>
+Subject: [PATCH 1/2] mm/vmalloc: huge vmalloc backing pages should be split rather than compound
+Date:   Fri, 22 Apr 2022 16:01:05 +1000
+Message-Id: <20220422060107.781512-2-npiggin@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220422060107.781512-1-npiggin@gmail.com>
+References: <20220422060107.781512-1-npiggin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,31 +74,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+Huge vmalloc higher-order backing pages were allocated with __GFP_COMP
+in order to allow the sub-pages to be refcounted by callers such as
+"remap_vmalloc_page [sic]" (remap_vmalloc_range).
 
-If it's not too much trouble would you be able to run your test case
-https://lore.kernel.org/all/14444103-d51b-0fb3-ee63-c3f182f0b546@molgen.mpg.de/
-on upstream tree plus these two patches to see if any errors persist?
+However a similar problem exists for other struct page fields callers
+use, for example fb_deferred_io_fault() takes a vmalloc'ed page and
+not only refcounts it but uses ->lru, ->mapping, ->index. This is not
+compatible with compound sub-pages.
 
-To be clear, you shouldn't see such issues with upstream now, but I
-would like to see if they are solved with this fix when we re-enable
-huge vmalloc for drivers.
+The correct approach is to use split high-order pages for the huge
+vmalloc backing. These allow callers to treat them in exactly the same
+way as individually-allocated order-0 pages.
 
-Thanks,
-Nick
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+ mm/vmalloc.c | 36 +++++++++++++++++++++---------------
+ 1 file changed, 21 insertions(+), 15 deletions(-)
 
-Nicholas Piggin (2):
-  mm/vmalloc: huge vmalloc backing pages should be split rather than
-    compound
-  Revert "vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLOW_HUGE_VMAP"
-
- arch/Kconfig                 |  6 ++--
- arch/powerpc/kernel/module.c |  2 +-
- arch/s390/kvm/pv.c           |  7 ++++-
- include/linux/vmalloc.h      |  4 +--
- mm/vmalloc.c                 | 53 +++++++++++++++++++-----------------
- 5 files changed, 41 insertions(+), 31 deletions(-)
-
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 07da85ae825b..cadfbb5155ea 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -2653,15 +2653,18 @@ static void __vunmap(const void *addr, int deallocate_pages)
+ 	vm_remove_mappings(area, deallocate_pages);
+ 
+ 	if (deallocate_pages) {
+-		unsigned int page_order = vm_area_page_order(area);
+-		int i, step = 1U << page_order;
++		int i;
+ 
+-		for (i = 0; i < area->nr_pages; i += step) {
++		for (i = 0; i < area->nr_pages; i++) {
+ 			struct page *page = area->pages[i];
+ 
+ 			BUG_ON(!page);
+-			mod_memcg_page_state(page, MEMCG_VMALLOC, -step);
+-			__free_pages(page, page_order);
++			mod_memcg_page_state(page, MEMCG_VMALLOC, -1);
++			/*
++			 * High-order allocs for huge vmallocs are split, so
++			 * can be freed as an array of order-0 allocations
++			 */
++			__free_pages(page, 0);
+ 			cond_resched();
+ 		}
+ 		atomic_long_sub(area->nr_pages, &nr_vmalloc_pages);
+@@ -2914,12 +2917,7 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+ 			if (nr != nr_pages_request)
+ 				break;
+ 		}
+-	} else
+-		/*
+-		 * Compound pages required for remap_vmalloc_page if
+-		 * high-order pages.
+-		 */
+-		gfp |= __GFP_COMP;
++	}
+ 
+ 	/* High-order pages or fallback path if "bulk" fails. */
+ 
+@@ -2933,6 +2931,15 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+ 			page = alloc_pages_node(nid, gfp, order);
+ 		if (unlikely(!page))
+ 			break;
++		/*
++		 * Higher order allocations must be able to be treated as
++		 * indepdenent small pages by callers (as they can with
++		 * small-page vmallocs). Some drivers do their own refcounting
++		 * on vmalloc_to_page() pages, some use page->mapping,
++		 * page->lru, etc.
++		 */
++		if (order)
++			split_page(page, order);
+ 
+ 		/*
+ 		 * Careful, we allocate and map page-order pages, but
+@@ -2992,11 +2999,10 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+ 
+ 	atomic_long_add(area->nr_pages, &nr_vmalloc_pages);
+ 	if (gfp_mask & __GFP_ACCOUNT) {
+-		int i, step = 1U << page_order;
++		int i;
+ 
+-		for (i = 0; i < area->nr_pages; i += step)
+-			mod_memcg_page_state(area->pages[i], MEMCG_VMALLOC,
+-					     step);
++		for (i = 0; i < area->nr_pages; i++)
++			mod_memcg_page_state(area->pages[i], MEMCG_VMALLOC, 1);
+ 	}
+ 
+ 	/*
 -- 
 2.35.1
 

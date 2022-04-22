@@ -2,267 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BDC950AD04
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 03:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193AC50AD0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 03:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442992AbiDVBBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 21:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
+        id S1443002AbiDVBHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 21:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239067AbiDVBBv (ORCPT
+        with ESMTP id S239067AbiDVBG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 21:01:51 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52B342A14
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:58:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650589139; x=1682125139;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=byVTW7KFR9/stBDOurMKmCqOk4lSwKTtDKA6cpnUbVQ=;
-  b=SC9RsGq8j023+F7AYt3XM3Zoi+4l6oDob3IVBJel6BzJn5emJH0BzkYp
-   B7Jz4OFqob7JBOPpPgSbslJ5jLlLcRF2NpshhhLy1wlz0mGvTgGe/osOh
-   stJet+7m3QhRJnA3PaIk+N91Wpb5rrL7gyZ8MEhc3Tnq1kHNgniINuVnE
-   DHhcOxunAKeN37EDIJMda9GxIvQacYIgd/KV+aE7c6+l6BqR93bA0q/0A
-   7NykahMpiDR4Dxas7VrloZuO5QmWXC4/kH7cB5QX35i7fT2AU4vNDFC5d
-   oKxO+ZbD+Hy5pFnA3OkAwZVo1jKHovrN82PceNk9bk3HpItxHf2/AlF12
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244453749"
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="244453749"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 17:58:43 -0700
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="530572438"
-Received: from zhouju8x-mobl.ccr.corp.intel.com ([10.254.212.221])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 17:58:39 -0700
-Message-ID: <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Wei Xu <weixugc@google.com>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Thelen <gthelen@google.com>
-Date:   Fri, 22 Apr 2022 08:58:37 +0800
-In-Reply-To: <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
-References: <20220413092206.73974-1-jvgediya@linux.ibm.com>
-         <6365983a8fbd8c325bb18959c51e9417fd821c91.camel@intel.com>
-         <CAHbLzkpGzEaSDfM=GBzBxw=dZTBy12vgDDhMG+q4dbG+bCgR6A@mail.gmail.com>
-         <CAAPL-u9=-OHuUk=ZkNRDf3Dm_+3cBd2APL5MQpQr3_sVk_voJg@mail.gmail.com>
-         <de1bc3647c8696fd931a37d314ccd60a2c8cc0db.camel@intel.com>
-         <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
-         <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
-         <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
-         <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
-         <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
+        Thu, 21 Apr 2022 21:06:57 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D721C483B3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 18:04:05 -0700 (PDT)
+X-UUID: f4f2c7ee9c0648b988c8140a9e814dfb-20220422
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:d3796ba4-d536-49cf-8b2d-761a0bbb9a81,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:2c3c88f0-da02-41b4-b6df-58f4ccd36682,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: f4f2c7ee9c0648b988c8140a9e814dfb-20220422
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 574791216; Fri, 22 Apr 2022 09:04:00 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 22 Apr 2022 09:03:59 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 22 Apr 2022 09:03:59 +0800
+Message-ID: <675df530698d609c8cf6df666017f36533a9663a.camel@mediatek.com>
+Subject: Re: [PATCH v2] drm/mediatek: dpi: Use mt8183 output formats for
+ mt8192
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <kernel@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Fri, 22 Apr 2022 09:03:59 +0800
+In-Reply-To: <91c52b76872e6339cce3bd671f4ae1143251e2c3.camel@mediatek.com>
+References: <20220408013950.674477-1-nfraprado@collabora.com>
+         <91c52b76872e6339cce3bd671f4ae1143251e2c3.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-21 at 11:26 -0700, Wei Xu wrote:
-> On Thu, Apr 21, 2022 at 12:45 AM ying.huang@intel.com
-> <ying.huang@intel.com> wrote:
+Hi,
+
+On Wed, 2022-04-20 at 20:23 +0800, Rex-BC Chen wrote:
+> On Thu, 2022-04-07 at 21:39 -0400, Nícolas F. R. A. Prado wrote:
+> > The configuration for mt8192 was incorrectly using the output
+> > formats
+> > from mt8173. Since the output formats for mt8192 are instead the
+> > same
+> > ones as for mt8183, which require two bus samples per pixel, the
+> > pixelclock and DDR edge setting were misconfigured. This made
+> > external
+> > displays unable to show the image.
 > > 
-> > On Thu, 2022-04-21 at 00:29 -0700, Wei Xu wrote:
-> > > On Thu, Apr 21, 2022 at 12:08 AM ying.huang@intel.com
-> > > <ying.huang@intel.com> wrote:
-> > > > 
-> > > > On Wed, 2022-04-20 at 23:49 -0700, Wei Xu wrote:
-> > > > > On Wed, Apr 20, 2022 at 11:24 PM ying.huang@intel.com
-> > > > > <ying.huang@intel.com> wrote:
-> > > > > > 
-> > > > > > On Wed, 2022-04-20 at 22:41 -0700, Wei Xu wrote:
-> > > > > > > On Wed, Apr 20, 2022 at 8:12 PM Yang Shi <shy828301@gmail.com> wrote:
-> > > > > > > > 
-> > > > > > > > On Thu, Apr 14, 2022 at 12:00 AM ying.huang@intel.com
-> > > > > > > > <ying.huang@intel.com> wrote:
-> > > > > > > > > 
-> > > > > > > > > On Wed, 2022-04-13 at 14:52 +0530, Jagdish Gediya wrote:
-> > > > > > > > > > Current implementation to find the demotion targets works
-> > > > > > > > > > based on node state N_MEMORY, however some systems may have
-> > > > > > > > > > dram only memory numa node which are N_MEMORY but not the
-> > > > > > > > > > right choices as demotion targets.
-> > > > > > > > > > 
-> > > > > > > > > > This patch series introduces the new node state
-> > > > > > > > > > N_DEMOTION_TARGETS, which is used to distinguish the nodes which
-> > > > > > > > > > can be used as demotion targets, node_states[N_DEMOTION_TARGETS]
-> > > > > > > > > > is used to hold the list of nodes which can be used as demotion
-> > > > > > > > > > targets, support is also added to set the demotion target
-> > > > > > > > > > list from user space so that default behavior can be overridden.
-> > > > > > > > > 
-> > > > > > > > > It appears that your proposed user space interface cannot solve all
-> > > > > > > > > problems.  For example, for system as follows,
-> > > > > > > > > 
-> > > > > > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow memory node near
-> > > > > > > > > node 0,
-> > > > > > > > > 
-> > > > > > > > > available: 3 nodes (0-2)
-> > > > > > > > > node 0 cpus: 0 1
-> > > > > > > > > node 0 size: n MB
-> > > > > > > > > node 0 free: n MB
-> > > > > > > > > node 1 cpus:
-> > > > > > > > > node 1 size: n MB
-> > > > > > > > > node 1 free: n MB
-> > > > > > > > > node 2 cpus: 2 3
-> > > > > > > > > node 2 size: n MB
-> > > > > > > > > node 2 free: n MB
-> > > > > > > > > node distances:
-> > > > > > > > > node   0   1   2
-> > > > > > > > >   0:  10  40  20
-> > > > > > > > >   1:  40  10  80
-> > > > > > > > >   2:  20  80  10
-> > > > > > > > > 
-> > > > > > > > > Demotion order 1:
-> > > > > > > > > 
-> > > > > > > > > node    demotion_target
-> > > > > > > > >  0              1
-> > > > > > > > >  1              X
-> > > > > > > > >  2              X
-> > > > > > > > > 
-> > > > > > > > > Demotion order 2:
-> > > > > > > > > 
-> > > > > > > > > node    demotion_target
-> > > > > > > > >  0              1
-> > > > > > > > >  1              X
-> > > > > > > > >  2              1
-> > > > > > > > > 
-> > > > > > > > > The demotion order 1 is preferred if we want to reduce cross-socket
-> > > > > > > > > traffic.  While the demotion order 2 is preferred if we want to take
-> > > > > > > > > full advantage of the slow memory node.  We can take any choice as
-> > > > > > > > > automatic-generated order, while make the other choice possible via user
-> > > > > > > > > space overridden.
-> > > > > > > > > 
-> > > > > > > > > I don't know how to implement this via your proposed user space
-> > > > > > > > > interface.  How about the following user space interface?
-> > > > > > > > > 
-> > > > > > > > > 1. Add a file "demotion_order_override" in
-> > > > > > > > >         /sys/devices/system/node/
-> > > > > > > > > 
-> > > > > > > > > 2. When read, "1" is output if the demotion order of the system has been
-> > > > > > > > > overridden; "0" is output if not.
-> > > > > > > > > 
-> > > > > > > > > 3. When write "1", the demotion order of the system will become the
-> > > > > > > > > overridden mode.  When write "0", the demotion order of the system will
-> > > > > > > > > become the automatic mode and the demotion order will be re-generated.
-> > > > > > > > > 
-> > > > > > > > > 4. Add a file "demotion_targets" for each node in
-> > > > > > > > >         /sys/devices/system/node/nodeX/
-> > > > > > > > > 
-> > > > > > > > > 5. When read, the demotion targets of nodeX will be output.
-> > > > > > > > > 
-> > > > > > > > > 6. When write a node list to the file, the demotion targets of nodeX
-> > > > > > > > > will be set to the written nodes.  And the demotion order of the system
-> > > > > > > > > will become the overridden mode.
-> > > > > > > > 
-> > > > > > > > TBH I don't think having override demotion targets in userspace is
-> > > > > > > > quite useful in real life for now (it might become useful in the
-> > > > > > > > future, I can't tell). Imagine you manage hundred thousands of
-> > > > > > > > machines, which may come from different vendors, have different
-> > > > > > > > generations of hardware, have different versions of firmware, it would
-> > > > > > > > be a nightmare for the users to configure the demotion targets
-> > > > > > > > properly. So it would be great to have the kernel properly configure
-> > > > > > > > it *without* intervening from the users.
-> > > > > > > > 
-> > > > > > > > So we should pick up a proper default policy and stick with that
-> > > > > > > > policy unless it doesn't work well for the most workloads. I do
-> > > > > > > > understand it is hard to make everyone happy. My proposal is having
-> > > > > > > > every node in the fast tier has a demotion target (at least one) if
-> > > > > > > > the slow tier exists sounds like a reasonable default policy. I think
-> > > > > > > > this is also the current implementation.
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > This is reasonable.  I agree that with a decent default policy,
-> > > > > > > 
-> > > > > > 
-> > > > > > I agree that a decent default policy is important.  As that was enhanced
-> > > > > > in [1/5] of this patchset.
-> > > > > > 
-> > > > > > > the
-> > > > > > > overriding of per-node demotion targets can be deferred.  The most
-> > > > > > > important problem here is that we should allow the configurations
-> > > > > > > where memory-only nodes are not used as demotion targets, which this
-> > > > > > > patch set has already addressed.
-> > > > > > 
-> > > > > > Do you mean the user space interface proposed by [3/5] of this patchset?
-> > > > > 
-> > > > > Yes.
-> > > > > 
-> > > > > > IMHO, if we want to add a user space interface, I think that it should
-> > > > > > be powerful enough to address all existing issues and some potential
-> > > > > > future issues, so that it can be stable.  I don't think it's a good idea
-> > > > > > to define a partial user space interface that works only for a specific
-> > > > > > use case and cannot be extended for other use cases.
-> > > > > 
-> > > > > I actually think that they can be viewed as two separate problems: one
-> > > > > is to define which nodes can be used as demotion targets (this patch
-> > > > > set), and the other is how to initialize the per-node demotion path
-> > > > > (node_demotion[]).  We don't have to solve both problems at the same
-> > > > > time.
-> > > > > 
-> > > > > If we decide to go with a per-node demotion path customization
-> > > > > interface to indirectly set N_DEMOTION_TARGETS, I'd prefer that there
-> > > > > is a single global control to turn off all demotion targets (for the
-> > > > > machines that don't use memory-only nodes for demotion).
-> > > > > 
-> > > > 
-> > > > There's one already.  In commit 20b51af15e01 ("mm/migrate: add sysfs
-> > > > interface to enable reclaim migration"), a sysfs interface
-> > > > 
-> > > >         /sys/kernel/mm/numa/demotion_enabled
-> > > > 
-> > > > is added to turn off all demotion targets.
-> > > 
-> > > IIUC, this sysfs interface only turns off demotion-in-reclaim.  It
-> > > will be even cleaner if we have an easy way to clear node_demotion[]
-> > > and N_DEMOTION_TARGETS so that the userspace (post-boot agent, not
-> > > init scripts) can know that the machine doesn't even have memory
-> > > tiering hardware enabled.
-> > > 
+> > Fix the issue by correcting the output format for mt8192 to be the
+> > same
+> > as for mt8183, fixing the usage of external displays for mt8192.
 > > 
-> > What is the difference?  Now we have no interface to show demotion
-> > targets of a node.  That is in-kernel only.  What is memory tiering
-> > hardware?  The Optane PMEM?  Some information for it is available via
-> > ACPI HMAT table.
+> > Fixes: be63f6e8601f ("drm/mediatek: dpi: Add output bus formats to
+> > driver data")
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
 > > 
-> > Except demotion-in-reclaim, what else do you care about?
+> > Changes in v2:
+> > - Added Fixes tag
+> > 
+> >  drivers/gpu/drm/mediatek/mtk_dpi.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > index 4554e2de1430..e61cd67b978f 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > @@ -819,8 +819,8 @@ static const struct mtk_dpi_conf mt8192_conf =
+> > {
+> >  	.cal_factor = mt8183_calculate_factor,
+> >  	.reg_h_fre_con = 0xe0,
+> >  	.max_clock_khz = 150000,
+> > -	.output_fmts = mt8173_output_fmts,
+> > -	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
+> > +	.output_fmts = mt8183_output_fmts,
+> > +	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+> >  };
+> >  
+> >  static int mtk_dpi_probe(struct platform_device *pdev)
 > 
-> There is a difference: one is to indicate the availability of the
-> memory tiering hardware and the other is to indicate whether
-> transparent kernel-driven demotion from the reclaim path is activated.
-> With /sys/devices/system/node/demote_targets or the per-node demotion
-> target interface, the userspace can figure out the memory tiering
-> topology abstracted by the kernel.  It is possible to use
-> application-guided demotion without having to enable reclaim-based
-> demotion in the kernel.  Logically it is also cleaner to me to
-> decouple the tiering node representation from the actual demotion
-> mechanism enablement.
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> 
+> Hello CK,
+> 
+> Gentle ping for this patch.
+> This patch is confirmed by Xinlei and Jitao.
 
-I am confused here.  It appears that you need a way to expose the
-automatic generated demotion order from kernel to user space interface.
-We can talk about that if you really need it.
+Applied to mediatek-drm-next [1].
 
-But [2-5/5] of this patchset is to override the automatic generated
-demotion order from user space to kernel interface.
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/log/?h=mediatek-drm-next
 
-Best Regards,
-Huang, Ying
+Regards,
+CK
 
+> 
+> BRs,
+> Rex
+> 
 

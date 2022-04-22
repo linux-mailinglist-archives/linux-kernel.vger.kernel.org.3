@@ -2,81 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C3050BDBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB5350BDC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352712AbiDVRBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
+        id S240468AbiDVRDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiDVRBB (ORCPT
+        with ESMTP id S229699AbiDVRDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:01:01 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D7260D89
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:58:07 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id s14so12111302plk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:58:07 -0700 (PDT)
+        Fri, 22 Apr 2022 13:03:13 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E400D66CBB;
+        Fri, 22 Apr 2022 10:00:18 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bu29so15396970lfb.0;
+        Fri, 22 Apr 2022 10:00:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nsFsSZ9xU/v0PMYpVq83wyniIq3VfJOQeOaPDdSEOLU=;
-        b=gmu6AGMNw0UpOEQCmqAYanxSJtRw0aGzPIAgdVQsj6Hzg6iRJ6IIHr9suloBpbhg/H
-         eI8fvM3Xm2W8Fva8iE5Z1M8en9AuTJdEIwmfCTlqInVJpfLkmwcko0sQMT0cyiRjtkUv
-         Cx5Zc4UKsgxi/7D1AktfN/Ykm33o7Qt/Y9eG0=
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=b3rzewQaFS9vbFCc+2pNDGoiMD/tDWvRJp+Iv+4ibzQ=;
+        b=OJbSTCCH7f0gs4zpXBpUWTWDyRyojWE1fqnoIgW4mQRGw4iWiu5zhcoOjDsLsxGtd5
+         a0UDxwNx4DAM0J8VMggu0ELLdfZY5Adsz04bAHu0dX5UuVls9GefMeZ6QAiuMd/D40hg
+         yGcjpi+8BS94X0tFPVyxFYNJTPoDlsTbGzZ3ZjEQ2zF/0aEy9YKqykDFNUkM32NirCEJ
+         cwxUrMSxoZp6bOqe3G/mnUiI84xlvyLNWjkS/NcV79WBLYGoSyD/DFZrdDrdmU3aUKoh
+         qJ6tanDoeMpl5BmyAOMECLGf+Hsd+Hktpm59n0YYtevuvXCdxp7gdCQd8vyuVW/dl0BQ
+         U8BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nsFsSZ9xU/v0PMYpVq83wyniIq3VfJOQeOaPDdSEOLU=;
-        b=JADuN0PHtDZUg9SFMdPKdbTOjErXM/8sMtRyAr6DczzHnC3zIa19knhjctwvj4EY73
-         /6CR+TNVS1w9/ifqydRAFxPzdu9dpqTCvJcGyU5wmnBbOSz6Im8OIvQoyn8KGgrnOLXd
-         YhF3rDriw5P990FZMp2ytDR7gbi/knS4NpmZ0eA6AtY/+CHJvTmWiieaJzYY2vJa+ca9
-         9vNzeTMwwWd4EBKK4cnUfStEFtdc7PVu2ZJ4OjyksQ4rieRixqoOmsarWWLAGW/kyOXq
-         /GQf6hiWL08YB35LArIQswbnXaK9z9gM0gy2Jr0AuE/kUmas8zIO0cO1xdPoiQcR78d9
-         6qSA==
-X-Gm-Message-State: AOAM533laT3v48dv2kZchb2M2Bk/aFguB6QoEKRNUC6kHmdN4QCifwGD
-        uNXGbpxIZSiMexMqoPtmNwLX+g==
-X-Google-Smtp-Source: ABdhPJx8Ai6tZ7rW1kUYJ3DGMJkmpGNHbBnH3oDMcjTtP7yTqj8ZF4SQmjQ9j8/CvfFqmenW9pt5ow==
-X-Received: by 2002:a17:90a:193:b0:1d5:a5dd:852 with SMTP id 19-20020a17090a019300b001d5a5dd0852mr6368897pjc.176.1650646686813;
-        Fri, 22 Apr 2022 09:58:06 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:404c:8721:29:87a4])
-        by smtp.gmail.com with UTF8SMTPSA id c18-20020a056a000ad200b004cdccd3da08sm3338421pfl.44.2022.04.22.09.58.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 09:58:06 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 09:58:04 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
-        srinivas.kandagatla@linaro.org, dianders@chromium.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v10 07/12] arm64: dts: qcom: sc7280: herobrine: Add
- max98360a codec node
-Message-ID: <YmLenJYD2dSlvmd+@google.com>
-References: <1650636521-18442-1-git-send-email-quic_srivasam@quicinc.com>
- <1650636521-18442-8-git-send-email-quic_srivasam@quicinc.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=b3rzewQaFS9vbFCc+2pNDGoiMD/tDWvRJp+Iv+4ibzQ=;
+        b=RF8nGwZcTop2efp1+mzsA90qd+OhFpHfZ7CGRTvuyyrOM1xkgmq6TfhUnzt8KVRZzE
+         tZbIj6JN3d/YYTpOI6Kq++cR4nBiR5m+AjZBi5Bg4F3gyVLFNiwLbNUffL+MxY9RFhF8
+         fdwlr4zOFfJIfsrUC0fAFFmfJrdmDKHpUrbPu0L2p7XN+PUKUT3vguFgR7WfLE7VI/6Y
+         +HUPp1q5+Ml67fJ8aPjLumvwyu8iFiGzdCw4FIoCiPRkmyhtWAuqCMWFKr7VcD+WxP1c
+         1AB4Ih8vdGe57zKG+gT5K1fxLDtjmhaMkShYuRoEnTE6IVgJOSvdyTiANGatZPsjzm1y
+         MjYg==
+X-Gm-Message-State: AOAM533n1J1BzjD9O6BbCdGkAKdCCFVWXBCJbG9b3rtYr7Jej60NBvjR
+        kiYNWTyQE4lvGhW/jI46WzUTqnGQNgKZFVEQUYRgOr6BgsM=
+X-Google-Smtp-Source: ABdhPJxqaaRy/JZruhaWvB9UILg3fAIDDSCmfUblFNOvQUJdfNVXCuRtN3Ic+LP0KpNSF3IzrtGHWFG6WUS2GNmA9c8=
+X-Received: by 2002:ac2:4bd0:0:b0:46b:c3ea:ea04 with SMTP id
+ o16-20020ac24bd0000000b0046bc3eaea04mr3572867lfq.537.1650646816871; Fri, 22
+ Apr 2022 10:00:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1650636521-18442-8-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 22 Apr 2022 12:00:06 -0500
+Message-ID: <CAH2r5mtNyRzY2zxrS9Qgoj-NxAEyOEHjrWc1a6bingt61=xWHA@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 07:38:36PM +0530, Srinivasa Rao Mandadapu wrote:
-> Add max98360a codec node for audio use case on all herobrine boards.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Please pull the following changes since commit
+b2d229d4ddb17db541098b83524d901257e93845:
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+  Linux 5.18-rc3 (2022-04-17 13:57:31 -0700)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.18-rc3-smb3-fixes
+
+for you to fetch changes up to f5d0f921ea362636e4a2efb7c38d1ead373a8700:
+
+  cifs: destage any unwritten data to the server before calling
+copychunk_write (2022-04-20 22:54:54 -0500)
+
+----------------------------------------------------------------
+4 fixes to cifs client, 2 for stable
+- fcollapse fix
+- reconnect lock fix
+- DFS oops fix
+- minor cleanup patch
+----------------------------------------------------------------
+Haowen Bai (1):
+      cifs: Use kzalloc instead of kmalloc/memset
+
+Paulo Alcantara (2):
+      cifs: fix NULL ptr dereference in refresh_mounts()
+      cifs: use correct lock type in cifs_reconnect()
+
+Ronnie Sahlberg (1):
+      cifs: destage any unwritten data to the server before calling
+copychunk_write
+
+ fs/cifs/connect.c   | 11 ++++++++++-
+ fs/cifs/dfs_cache.c | 19 ++++++++++++-------
+ fs/cifs/smb2ops.c   |  8 ++++++++
+ fs/cifs/transport.c |  3 +--
+ 4 files changed, 31 insertions(+), 10 deletions(-)
+
+
+-- 
+Thanks,
+
+Steve

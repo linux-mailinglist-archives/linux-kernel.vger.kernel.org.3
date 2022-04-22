@@ -2,158 +2,391 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0029150B1BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D5E50B1D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444921AbiDVHkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
+        id S1444926AbiDVHlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444912AbiDVHj6 (ORCPT
+        with ESMTP id S1444917AbiDVHlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:39:58 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A4C50B02;
-        Fri, 22 Apr 2022 00:37:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 87676CE2799;
-        Fri, 22 Apr 2022 07:37:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 292EDC385A4;
-        Fri, 22 Apr 2022 07:37:01 +0000 (UTC)
-Message-ID: <db5b60ef-2c1b-2004-69a0-ecdb2909734f@xs4all.nl>
-Date:   Fri, 22 Apr 2022 09:36:59 +0200
+        Fri, 22 Apr 2022 03:41:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8655517C5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650613100; x=1682149100;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eijWZD7LJaEboDx12Q6KLW7MA0IObAmM5VxqQPJaGoY=;
+  b=BNoJNXaoMWWT/wKp3Q0Wcm3W/WnXe4b48e9spziofpF12JvqKnU8byEV
+   CK9vqwHoSIT6YhuiBbm1CwVzthoel+6ScjE9yRTDFWhbLSIk0B6YruPNW
+   FsjFdnkL0OxsjCDj/nFrX4CCvSC+IXGPChy/3B1ICnUB5ToTJ3JBjGJUx
+   YN9JVNn+Ipb2OK5qemGen+X2pNzc0HQlTuq2iyUlAU+yS/6CxJvqqAdge
+   HzxWR278lkFdkCtfVEQqBfSZMo6a+3OkVQ6dgqTc6VgSfQaipYdK0lpSa
+   jpl4k1/jL1neOdJTW82JNkRHfk/f0Sh7SbhLj68/gWsED3BtBo20MxcBF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325058467"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="325058467"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 00:38:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="626890028"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Apr 2022 00:38:18 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhnru-0009tq-3E;
+        Fri, 22 Apr 2022 07:38:18 +0000
+Date:   Fri, 22 Apr 2022 15:38:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/fixes 1/4] include/linux/kallsyms.h:108:1: error:
+ expected identifier or '(' before '{' token
+Message-ID: <202204221518.ImffIvWW-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 15/24] media: rkvdec: Move H264 SPS validation in
- rkvdec-h264
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev
-References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
- <20220405204426.259074-16-nicolas.dufresne@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220405204426.259074-16-nicolas.dufresne@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 22:44, Nicolas Dufresne wrote:
-> No function change, this moves H264 specific validation into the H264
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/fixes
+head:   8662f5dbc769bcb2fa646ceaaf6f6878ef569c64
+commit: 6f0f4c96dd360f51da70699617458f21f33f8cbb [1/4] fprobe: Add ftrace_lookup_symbols function
+config: h8300-randconfig-r032-20220421 (https://download.01.org/0day-ci/archive/20220422/202204221518.ImffIvWW-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=6f0f4c96dd360f51da70699617458f21f33f8cbb
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/fixes
+        git checkout 6f0f4c96dd360f51da70699617458f21f33f8cbb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash
 
-function -> functional
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> specific code. This is in preparation of improving this validation and
-> reusing at streamone.
+All errors (new ones prefixed by >>):
 
-streamone? I guess you mean "stream on"? Or perhaps "streaming"?
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/kprobes.h:28,
+                    from include/linux/kgdb.h:19,
+                    from include/linux/fb.h:6,
+                    from include/drm/drm_crtc.h:31,
+                    from include/drm/drm_atomic.h:31,
+                    from drivers/gpu/drm/tidss/tidss_crtc.c:7:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from init/main.c:21:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   init/main.c:769:20: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
+     769 | void __init __weak arch_post_acpi_subsys_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   init/main.c:781:20: warning: no previous prototype for 'mem_encrypt_init' [-Wmissing-prototypes]
+     781 | void __init __weak mem_encrypt_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~
+   init/main.c:783:20: warning: no previous prototype for 'poking_init' [-Wmissing-prototypes]
+     783 | void __init __weak poking_init(void) { }
+         |                    ^~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from init/main.c:21:
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from arch/h8300/kernel/signal.c:32:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   arch/h8300/kernel/signal.c:105:16: warning: no previous prototype for 'sys_rt_sigreturn' [-Wmissing-prototypes]
+     105 | asmlinkage int sys_rt_sigreturn(void)
+         |                ^~~~~~~~~~~~~~~~
+   arch/h8300/kernel/signal.c:280:17: warning: no previous prototype for 'do_notify_resume' [-Wmissing-prototypes]
+     280 | asmlinkage void do_notify_resume(struct pt_regs *regs, u32 thread_info_flags)
+         |                 ^~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from arch/h8300/kernel/signal.c:32:
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/fork.c:55:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   kernel/fork.c:163:13: warning: no previous prototype for 'arch_release_task_struct' [-Wmissing-prototypes]
+     163 | void __weak arch_release_task_struct(struct task_struct *tsk)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/fork.c:853:20: warning: no previous prototype for 'arch_task_cache_init' [-Wmissing-prototypes]
+     853 | void __init __weak arch_task_cache_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   kernel/fork.c:948:12: warning: no previous prototype for 'arch_dup_task_struct' [-Wmissing-prototypes]
+     948 | int __weak arch_dup_task_struct(struct task_struct *dst,
+         |            ^~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/fork.c:55:
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/kprobes.h:28,
+                    from include/linux/kgdb.h:19,
+                    from kernel/panic.c:15:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   kernel/panic.c:577:6: warning: no previous prototype for '__warn' [-Wmissing-prototypes]
+     577 | void __warn(const char *file, int line, void *caller, unsigned taint,
+         |      ^~~~~~
+   kernel/panic.c: In function '__warn':
+   kernel/panic.c:591:17: warning: function '__warn' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+     591 |                 vprintk(args->fmt, args->args);
+         |                 ^~~~~~~
+   kernel/panic.c: At top level:
+   kernel/panic.c:614:6: warning: no previous prototype for 'warn_slowpath_fmt' [-Wmissing-prototypes]
+     614 | void warn_slowpath_fmt(const char *file, int line, unsigned taint,
+         |      ^~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/kprobes.h:28,
+                    from include/linux/kgdb.h:19,
+                    from kernel/panic.c:15:
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/exit.c:42:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   kernel/exit.c:1814:13: warning: no previous prototype for 'abort' [-Wmissing-prototypes]
+    1814 | __weak void abort(void)
+         |             ^~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/exit.c:42:
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/audit.c:44:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   kernel/audit.c:1815:14: warning: no previous prototype for 'audit_serial' [-Wmissing-prototypes]
+    1815 | unsigned int audit_serial(void)
+         |              ^~~~~~~~~~~~
+   kernel/audit.c: In function 'audit_log_vformat':
+   kernel/audit.c:1965:9: warning: function 'audit_log_vformat' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    1965 |         len = vsnprintf(skb_tail_pointer(skb), avail, fmt, args);
+         |         ^~~
+   kernel/audit.c:1974:17: warning: function 'audit_log_vformat' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    1974 |                 len = vsnprintf(skb_tail_pointer(skb), avail, fmt, args2);
+         |                 ^~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/audit.c:44:
+   kernel/audit.c: At top level:
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from mm/nommu.c:35:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   In file included from arch/h8300/include/asm/page.h:5,
+                    from arch/h8300/include/asm/thread_info.h:12,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/h8300/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:7,
+                    from mm/nommu.c:20:
+   mm/nommu.c: In function 'kobjsize':
+   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
+      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
+         |                                                   ^~
+   mm/nommu.c:80:23: note: in expansion of macro 'virt_addr_valid'
+      80 |         if (!objp || !virt_addr_valid(objp))
+         |                       ^~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from mm/nommu.c:35:
+   mm/nommu.c: At top level:
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from mm/page_alloc.c:70:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   In file included from include/linux/bits.h:22,
+                    from include/linux/ratelimit_types.h:5,
+                    from include/linux/printk.h:10,
+                    from include/asm-generic/bug.h:22,
+                    from arch/h8300/include/asm/bug.h:8,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/mm.h:6,
+                    from mm/page_alloc.c:19:
+   mm/page_alloc.c: In function 'free_pages':
+   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
+      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
+         |                                                   ^~
+   include/linux/build_bug.h:30:63: note: in definition of macro 'BUILD_BUG_ON_INVALID'
+      30 | #define BUILD_BUG_ON_INVALID(e) ((void)(sizeof((__force long)(e))))
+         |                                                               ^
+   mm/page_alloc.c:5503:17: note: in expansion of macro 'VM_BUG_ON'
+    5503 |                 VM_BUG_ON(!virt_addr_valid((void *)addr));
+         |                 ^~~~~~~~~
+   mm/page_alloc.c:5503:28: note: in expansion of macro 'virt_addr_valid'
+    5503 |                 VM_BUG_ON(!virt_addr_valid((void *)addr));
+         |                            ^~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from mm/page_alloc.c:70:
+   mm/page_alloc.c: At top level:
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from mm/slab.c:102:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   In file included from arch/h8300/include/asm/page.h:5,
+                    from arch/h8300/include/asm/thread_info.h:12,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/h8300/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from mm/slab.c:90:
+   mm/slab.c: In function 'kfree_debugcheck':
+   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
+      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
+         |                                                   ^~
+   mm/slab.c:2670:14: note: in expansion of macro 'virt_addr_valid'
+    2670 |         if (!virt_addr_valid(objp)) {
+         |              ^~~~~~~~~~~~~~~
+   In file included from mm/slab.c:102:
+   mm/slab.c: At top level:
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from fs/d_path.c:2:
+>> include/linux/kallsyms.h:108:1: error: expected identifier or '(' before '{' token
+     108 | {
+         | ^
+   fs/d_path.c:318:7: warning: no previous prototype for 'simple_dname' [-Wmissing-prototypes]
+     318 | char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
+         |       ^~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from fs/d_path.c:2:
+   include/linux/kallsyms.h:107:19: warning: 'ftrace_lookup_symbols' declared 'static' but never defined [-Wunused-function]
+     107 | static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+..
 
-> 
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> ---
->  drivers/staging/media/rkvdec/rkvdec-h264.c | 23 ++++++++++++++++++++++
->  drivers/staging/media/rkvdec/rkvdec.c      | 23 ++++++----------------
->  drivers/staging/media/rkvdec/rkvdec.h      |  1 +
->  3 files changed, 30 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> index 8d44a884a52e..0dcbcb1bac80 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> @@ -1137,9 +1137,32 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
->  	return 0;
->  }
->  
-> +static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
-> +{
-> +	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
-> +		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
-> +		/*
-> +		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
-> +		 * but it's currently broken in the driver.
-> +		 * Reject them for now, until it's fixed.
-> +		 */
-> +		if (sps->chroma_format_idc > 1)
-> +			/* Only 4:0:0 and 4:2:0 are supported */
-> +			return -EINVAL;
-> +		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
-> +			/* Luma and chroma bit depth mismatch */
-> +			return -EINVAL;
-> +		if (sps->bit_depth_luma_minus8 != 0)
-> +			/* Only 8-bit is supported */
-> +			return -EINVAL;
-> +	}
-> +	return 0;
-> +}
-> +
->  const struct rkvdec_coded_fmt_ops rkvdec_h264_fmt_ops = {
->  	.adjust_fmt = rkvdec_h264_adjust_fmt,
->  	.start = rkvdec_h264_start,
->  	.stop = rkvdec_h264_stop,
->  	.run = rkvdec_h264_run,
-> +	.try_ctrl = rkvdec_h264_try_ctrl,
->  };
-> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-> index 2df8cf4883e2..e3d44d5b35f3 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec.c
-> @@ -29,23 +29,12 @@
->  
->  static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
->  {
-> -	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
-> -		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
-> -		/*
-> -		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
-> -		 * but it's currently broken in the driver.
-> -		 * Reject them for now, until it's fixed.
-> -		 */
-> -		if (sps->chroma_format_idc > 1)
-> -			/* Only 4:0:0 and 4:2:0 are supported */
-> -			return -EINVAL;
-> -		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
-> -			/* Luma and chroma bit depth mismatch */
-> -			return -EINVAL;
-> -		if (sps->bit_depth_luma_minus8 != 0)
-> -			/* Only 8-bit is supported */
-> -			return -EINVAL;
-> -	}
-> +	struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
-> +	const struct rkvdec_coded_fmt_desc *desc = ctx->coded_fmt_desc;
-> +
-> +	if (desc->ops->try_ctrl)
-> +		return desc->ops->try_ctrl(ctx, ctrl);
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
-> index 2f4ea1786b93..9df0fba799a4 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec.h
-> +++ b/drivers/staging/media/rkvdec/rkvdec.h
-> @@ -72,6 +72,7 @@ struct rkvdec_coded_fmt_ops {
->  	void (*done)(struct rkvdec_ctx *ctx, struct vb2_v4l2_buffer *src_buf,
->  		     struct vb2_v4l2_buffer *dst_buf,
->  		     enum vb2_buffer_state result);
-> +	int (*try_ctrl)(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl);
->  };
->  
->  struct rkvdec_coded_fmt_desc {
 
-Regards,
+vim +108 include/linux/kallsyms.h
 
-	Hans
+   106	
+   107	static inline int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+ > 108	{
+   109		return -ERANGE;
+   110	}
+   111	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

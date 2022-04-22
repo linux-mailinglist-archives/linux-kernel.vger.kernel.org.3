@@ -2,268 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965E750BA94
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382D150BA9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448966AbiDVOxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S1448922AbiDVOzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242011AbiDVOx2 (ORCPT
+        with ESMTP id S234257AbiDVOy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:53:28 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B2F5675A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:50:34 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id t15so9303581oie.1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:50:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nGaPIh5SoFzYklaagzQlcJki7oGMS2UI6o+kkUtFny0=;
-        b=d3rf+sztCIbv6v0MPOCAFIQHSbhtPuylG1ty60MjzuHPWL3Q5J6hdAbaocHHgSgpeX
-         FWTOUbAFtzZs7RKtiUIKKhOR78djDJCLNsqH1y3kJ/TazkmBXaJxv+z0muhXpugCfjyW
-         rcEy2xPfafx8bgu95OBiNiuqnpYCb1WSHR93MJnhwN2z5B5+2n74qG2C6DxfFcnT3osx
-         YFJE9zLwCFaNqwNsFWkSBtR33NhiifCpWiU1esccbXksvbmy8hds2ppvFVO9Q+5yoWPT
-         ai9UgVkhBEYlNC1Hqpex5asq6JECoP8wpGT/rEzcOaSD3sJ8j+GDTeU8fPl3KSikPexl
-         1xVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nGaPIh5SoFzYklaagzQlcJki7oGMS2UI6o+kkUtFny0=;
-        b=F3a182kxGTKjFaHSWMjk2IZTwcK/Bh8zekrWlUxym9hkMfwHsbAQyTbK0ncAetdtBc
-         01uU6UK0zgHDwd7JlJIcxa8XaGnTbGQQW6+S4m9KhacOi+24C84m8DG4kb5GtdNDhYO+
-         +YkX/KVOJVzjlRYr15ZZnefk4Gu5QuMK9R/zb0HadoZ7tiiCuyygPSZwHFKX6bj5myzl
-         J3XlMXRf9rl7hwX6oPFVDfur1omCd0FppE7QlO6dkQsnU5H6rkDt2QUl+HIPYPSRrVVo
-         nCmvBZl8w2LVWlOylZJhJ5nHxP8tzOLgp5ZQ6lI8kj/blNY+ApKn7X76BKzkRD9zVivr
-         3Qog==
-X-Gm-Message-State: AOAM531PYNkvy1XBx+Sa+9xMDyLZkrwbsxN+GFAzm9rXVyUZ3b382zB1
-        LrFswNH0Rlo6dvKBRi7zwFKytU3ALhRbr4iMcv1eVg==
-X-Google-Smtp-Source: ABdhPJzJ8r4MR4LzyD8NYZo/A08ev23krsJl8GsgZXYP/MIkEj1VUKf2DlUR7GsoQ2JKDAbUX5teiIQeiBQwJxf2v50=
-X-Received: by 2002:a05:6808:1886:b0:322:f55c:133d with SMTP id
- bi6-20020a056808188600b00322f55c133dmr2388233oib.217.1650639034006; Fri, 22
- Apr 2022 07:50:34 -0700 (PDT)
+        Fri, 22 Apr 2022 10:54:57 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140089.outbound.protection.outlook.com [40.107.14.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232BA5BE73;
+        Fri, 22 Apr 2022 07:52:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ld5cJjSp38MF2IY8yQz1wAw4lLFUl8fK2Js+a+wPtc64Up/Fbm/70zcomHMZTwxX4GvG8If5zm2SfJpHRXbsBRd+U5xlf6KqBYFgSMjMJ/FfQ/FiHHhlMn+X53uzf89JJdO8FiOrLQQwkBGCwMXyooBbA8ZGoXvxEKE76gHJ40cXot+MGJY393WgAPxjX/UEB4TwrONbVLeCH04RS81c+ci+Hh6UejWIaFCxN1IbeUTIKtah/UH40SkPbIi1GnPkPw15OolGwaEyM7hI1QLzTFjriyDfryBZ4skSpFaTYqDGEX3d6JnjMCCkKqbc4PJfaVxx48pA0H2XRzoeK0RxbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z5acmMh8E/k9GIyQ/ip6zzof7eVVQ/fSIPeYsb5C6vY=;
+ b=XeSDMyf6uhd/7BmNNt6nN65G2OJZN0EA8WpZd9fQzn1BUX9QFQM9SVMDhJvCr/3b4AGjWK87MUpEIm+5wVUkTWJJGhOnZ2c+iUxOUJmvIpV9McdLbS4hAmVvICdHln8qS0nq7VnCVgUReXsxROTZgGoZu08LS4DuqAvjHo0zNIwhMbN3sAR/3+ZUmByMW52eqJFPqGjKsFn2FydmCzj2KFFok3ED77aMFoZZLMXNrJz2CRPo6ZiJ/ydDO2d/Nyv61qCOgoRZwiVno/ZYAJaAld4QC+XBsNQe1zungK1wYEVmOzwi8hmiOzZqgVJTaDy/K/xllibNMG1xppvWZYn/ig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z5acmMh8E/k9GIyQ/ip6zzof7eVVQ/fSIPeYsb5C6vY=;
+ b=p9f1rdkIavN/xToq1O8XQpX4PKFNxoWdRp97RQufG7LaZRs72ITTrFxxwW382+T2sZ/S5rmamKIxH8i2x5jILo7KrKJp3hsLBypxqDn3+yyCCSiwIGzLePwJWdtcBrOM5cggGi38nujtJtnAzjSicYmwxZ092WgfX9vDrCRoBtP2BqLvS6DApxH/fV3lgVywNI6VcOa+FxuYOIewuxvYCr0T+qm7A5vuovEukYPYnXvBMi/FmP4kBIE10uN3pwxoa8NSKRUwFs6TfpkOb1YJm7F6a/gZXc60VDRs0AkcxYU4skmU8KHgp7Vq3US60uHjaM6a/J1++/RAYmSm0Sr9Xg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by DB6PR0302MB2792.eurprd03.prod.outlook.com (2603:10a6:4:af::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
+ 2022 14:51:58 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::714d:2b6:a995:51bd]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::714d:2b6:a995:51bd%4]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 14:51:58 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, Michael Walle <michael@walle.cc>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH v2 0/9] nvmem: sfp: binding updates and additions
+Date:   Fri, 22 Apr 2022 10:51:38 -0400
+Message-Id: <20220422145147.2210587-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1PR13CA0065.namprd13.prod.outlook.com
+ (2603:10b6:208:2b8::10) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
-References: <20220421074935.7549-1-etienne.carriere@linaro.org>
- <YmKmFxailmd5AeqF@e120937-lin> <CAN5uoS-kq-UCuPxdrphKd3sMOEQYD7FGMrB-Xo5erXWsxibhxQ@mail.gmail.com>
-In-Reply-To: <CAN5uoS-kq-UCuPxdrphKd3sMOEQYD7FGMrB-Xo5erXWsxibhxQ@mail.gmail.com>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Fri, 22 Apr 2022 16:50:23 +0200
-Message-ID: <CAN5uoS9z4Bo9EXBad70_M6HbrHHXMwMH1X9etpKdK_AS0hF0GQ@mail.gmail.com>
-Subject: Re: [PATCH v2] firmware: arm_scmi: support optee shared memory in
- optee transport
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fb0591c1-b634-4445-587e-08da246fa6c7
+X-MS-TrafficTypeDiagnostic: DB6PR0302MB2792:EE_
+X-Microsoft-Antispam-PRVS: <DB6PR0302MB2792FB911E44CE05EBB5260E96F79@DB6PR0302MB2792.eurprd03.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dcwSF57eNxg3rBWCE1Nh0K9+OruggYDmal9CELw/y3233p3yjuAG8fyRYMHg+IBDkJtwVKPGV/bNR7c2n5hfx5AoH5EkRBGCXkIAeqhszT7yLPB/38N4vzNr8NarxLpwPgzNwmgiw7xCdmPpCLSZY6FJV3uR3otOBXPojpTg0U32pzLCRO4B8CKCB7jZalSWwjKRsootVPLH8tww2AlaM3oiuvWW2K+aP/NlIr3B5E1BnIIBz6iVkByp94bBcspWa1r+wqY3E+Vxo8rQLwoq9U+TatGVmkhCi5o/GdeRhJsc6dzxjEAnvvGqxhO7lRWahQ415xd27dSkojivDw0oU+yk2OjQ9/af8dAZ241nEqmBIBMlDsZwKtg8vz2uZSgWMMEw6eLuKOHgZnyLhqAKb1r5e40etjLMFhRpU02NiRMCjmR+rH8zZ6q4b1u5VwSHlTKlr//fiAhSs8QjKDj5OIRgitjzdRNH8ooJdBofUNZlKaV3nf503Cf4siuSTnADZuX8f5gD19RAfPprw1n5nypAaiMji2LCer4va3a6q2WOEIORVbsYIKLv/JRkTi/zrBMPBulAbPpGQzN8ACZrJ4mv8A4zuoLBFr8xlGvH7ty+GmaAz5TjpmwT+Tb4swLO7Ac0nIomz0/6cG8lGhqrrLvACls0rYZofFF/Shp/BnqCEYxjTSSkkasbG1B0d0w/67u7BdUeHgDwaFNFPXx3w2dsAZqNw2uxhJeir3OdwMZvwRMOngZ25oxNnJst+Im3mIc8ej1qX1ZcEsgGE5kThmVMRjUQ9dam0N/eUDjC9N8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38350700002)(36756003)(966005)(6486002)(508600001)(186003)(38100700002)(52116002)(83380400001)(8676002)(4326008)(66556008)(66946007)(66476007)(6512007)(86362001)(6506007)(316002)(2616005)(8936002)(26005)(1076003)(107886003)(15650500001)(54906003)(44832011)(7416002)(6666004)(5660300002)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0N8XtmvG5brIvCrpT1aS2PsKrbztRyXr+N+33utao4M5uQ5YsLp5O/fYZr2g?=
+ =?us-ascii?Q?v3kEwocSQ3tc1U09flkaGRlczbXn+q22S5fupP/eZ+ChK8JfjRdwOv9KAYHE?=
+ =?us-ascii?Q?OlEr6OPDR9w4vvdcpzvuQ60/dNBQRIkqie5y8imeOxP4le4brYkfQkvtrbQ2?=
+ =?us-ascii?Q?xr3d7wPquaLuQcZrnEInkDp3tmQeG+9JO3BoH9sFx+JjwWLvf048ezR5gVHi?=
+ =?us-ascii?Q?5qbUeoesHi65Soq7MnpDo1pkMHga87FWqMfXlZsaWynxze77u94NYePv56QM?=
+ =?us-ascii?Q?ba8CcSigYoOu8VjRumEhZoAhjFFJtDNinMC0kmYMgSIMnEYLqI1EbciLXjiv?=
+ =?us-ascii?Q?iVGiszvQIS7tgBMctsfogq1hxwZHUoHlZJWJRjKpY4fBDackbw7NNWC1udm3?=
+ =?us-ascii?Q?djFzugvmdm/UYeVuPCtuo6Wbp9yfXTTpxjQ35liDy56CmLecGpL4i7YvK6OS?=
+ =?us-ascii?Q?OD8eftAt/hecwmD7esAkq6jmPc0ol/p07gBzTfMiBDv+3GGPnh2Brwo/8AkB?=
+ =?us-ascii?Q?HmDWPNr+MlyI+ow7ARc+tjFMkWS6/mwUsO8vq6RHKxqq2TVdWltEaptLQdLx?=
+ =?us-ascii?Q?IiN9SxIQ+c+kGMK5VZG76+iqeSI1qkirp2uCtq2xzt/4OfsHnc1Sx4qpS4vP?=
+ =?us-ascii?Q?oFo2KNl64P2559LTSDw10qypYovzCtlVGjC7YUwq4Dv6r8Jf2WNKm+f+01uZ?=
+ =?us-ascii?Q?txfSEL7rP1P9tNYl10guxfzN9lJKZVOe72m5mtF1U27Eb0ngZWjGuAj60AaN?=
+ =?us-ascii?Q?ghq326yZ07mHwmkQQrsmgG+tVVPkxl87NICeu3EzJqda8Vuwy7iH5zC72Bx5?=
+ =?us-ascii?Q?Q7ICep9vPFp5npNusdVQ8tMk3qFn6iLctphQPtO/o3HFrOH2zC9bSPE2+hGJ?=
+ =?us-ascii?Q?RIaL1LKxf8RVtGPUAd/rNuNer0DzrBRI6mFVNCCXmxGcSAwKATFSsAr5k0Et?=
+ =?us-ascii?Q?rREHUeYEIsA7/2yEooUb1W0LGPMgH3jBF1+OWd2i1R47EkEn5OIkWkOR/aY+?=
+ =?us-ascii?Q?52sIdb4e1cHNi3u6lgzO5YU32Rhs8luNvJUh+0T9pQGpE/D2OJ3Bi4wBMRY5?=
+ =?us-ascii?Q?wNoC3eM2DqA1vDybzNYhFzFY1/4L7Mp8E1qPZ8Cp+xGQWsojpCFcz7+hVxHt?=
+ =?us-ascii?Q?cb0mTSDMUxbzzMUe28vSq8Qjo9x8VKwBCrv/K2U7hBr+LxJqoPBRzvv8bl2v?=
+ =?us-ascii?Q?yiuU7+0JF5YwtDl9Saw7pE/KdUiVJgzEM6DuCKPz+DgAJH8GFgWP2oQmIerZ?=
+ =?us-ascii?Q?EB2w/k4UK6l6U5O4L86C8PwBiEAYz+KhVB+hTgd3g9uLRxexP8k2pAZCNDaG?=
+ =?us-ascii?Q?WTPGUxoluqSzFTpiMKNxxZ6axS6tJWJQILQPsWZQR5esr0UI+h4XLYsikdGT?=
+ =?us-ascii?Q?a5QAi+KCbE18naYmjU5LGSeu7xxM+z5JPYBsjPeTeaPYClY8Oh8wP/e6Nq7x?=
+ =?us-ascii?Q?bnQEM5OumDsNqCVQsX7raaXK7+KS1GagPKc9tEWp8UynUtR05uRjk+tSNOzh?=
+ =?us-ascii?Q?0F9mXAZ6Tyz0Iy3fRYerH9x/Zyzb98i5nL//MPtGyDeqDHiljylwBmyhINa7?=
+ =?us-ascii?Q?ydf7ntsCU2r1k/ovdljfc9wvG8hDbuN5yMXyewduPmql/gVdDUBwgP9pXSe2?=
+ =?us-ascii?Q?s2q4ssQgKPW72kHZZn8WH14dpR/yqwy0JmqF0kJVlgtaJusUr+NmYtmU7kTH?=
+ =?us-ascii?Q?ksrjxXHa8SrKCetqRIvjpqciNwb2m6mPjv1vP1XHEVs41OnMmybnqBdzzKSa?=
+ =?us-ascii?Q?3YJLR1Sw0cULjVDl4Y4qrxDqcWRxM30=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb0591c1-b634-4445-587e-08da246fa6c7
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 14:51:58.6273
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: psDzt+jQ+7/ZK+EAFcBjHx1bB0SYmK7rDPGnziFCGmUsshD/z548Pttfr5jPfmKo1EsmNzp5T5bPLrMRWHWgMQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0302MB2792
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 at 16:49, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> Hello Cristian,
->
-> On Fri, 22 Apr 2022 at 14:57, Cristian Marussi <cristian.marussi@arm.com> wrote:
-> >
-> > On Thu, Apr 21, 2022 at 09:49:35AM +0200, Etienne Carriere wrote:
-> > > Adds support for tee shared memory in optee scmi transport. When using
-> > > tee shared memory, scmi optee transport manages SCMI messages using
-> > > msg protocol (from msg.c) in shared memory, whereas smt (from shmem.c)
-> > > protocol is used with static IOMEM shared buffers.
-> > >
-> > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > >
-> >
-> > Hi Etienne,
-> >
-> > the bot complaints on linking failure are due to a missing dependency:
-> >
-> > diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
-> > index 7794bd41eaa0..1e7b7fec97d9 100644
-> > --- a/drivers/firmware/arm_scmi/Kconfig
-> > +++ b/drivers/firmware/arm_scmi/Kconfig
-> > @@ -59,6 +59,7 @@ config ARM_SCMI_TRANSPORT_OPTEE
-> >         depends on OPTEE=y || OPTEE=ARM_SCMI_PROTOCOL
-> >         select ARM_SCMI_HAVE_TRANSPORT
-> >         select ARM_SCMI_HAVE_SHMEM
-> > +       select ARM_SCMI_HAVE_MSG
-> >         default y
-> >         help
-> >           This enables the OP-TEE service based transport for SCMI.
-> >
-> > needed when you compile without any other transport using MSGs.
->
-> Thanks! I could not find why the bot failed to build this. I was
-> focused on looking at the wrong place.
->
-> >
-> > One remark down below.
-> >
-> > >  drivers/firmware/arm_scmi/optee.c | 128 ++++++++++++++++++++++++------
-> > >  1 file changed, 104 insertions(+), 24 deletions(-)
-> > >
-> > > diff --git a/drivers/firmware/arm_scmi/optee.c b/drivers/firmware/arm_scmi/optee.c
-> > > index 8302a2b4aeeb..6676b17d2587 100644
-> > > --- a/drivers/firmware/arm_scmi/optee.c
-> > > +++ b/drivers/firmware/arm_scmi/optee.c
-> > > @@ -64,6 +64,22 @@ enum scmi_optee_pta_cmd {
-> > >        * [in]     value[0].b: Requested capabilities mask (enum pta_scmi_caps)
-> > >        */
-> > >       PTA_SCMI_CMD_GET_CHANNEL = 3,
-> > > +
-> > > +     /*
-> > > +      * PTA_SCMI_CMD_PROCESS_MSG_CHANNEL - Process SCMI message in a MSG
-> > > +      * buffer pointed by memref parameters
-> > > +      *
-> > > +      * [in]     value[0].a: Channel handle
-> > > +      * [in]     memref[1]: Message buffer (MSG and SCMI payload)
-> > > +      * [out]    memref[2]: Response buffer (MSG and SCMI payload)
-> > > +      *
-> > > +      * Shared memories used for SCMI message/response are MSG buffers
-> > > +      * referenced by param[1] and param[2]. MSG transport protocol
-> > > +      * uses a 32bit header to carry SCMI meta-data (protocol ID and
-> > > +      * protocol message ID) followed by the effective SCMI message
-> > > +      * payload.
-> > > +      */
-> > > +     PTA_SCMI_CMD_PROCESS_MSG_CHANNEL = 4,
-> > >  };
-> > >
-> > >  /*
-> > > @@ -72,9 +88,17 @@ enum scmi_optee_pta_cmd {
-> > >   * PTA_SCMI_CAPS_SMT_HEADER
-> > >   * When set, OP-TEE supports command using SMT header protocol (SCMI shmem) in
-> > >   * shared memory buffers to carry SCMI protocol synchronisation information.
-> > > + *
-> > > + * PTA_SCMI_CAPS_MSG_HEADER
-> > > + * When set, OP-TEE supports command using MSG header protocol in an OP-TEE
-> > > + * shared memory to carry SCMI protocol synchronisation information and SCMI
-> > > + * message payload.
-> > >   */
-> > >  #define PTA_SCMI_CAPS_NONE           0
-> > >  #define PTA_SCMI_CAPS_SMT_HEADER     BIT(0)
-> > > +#define PTA_SCMI_CAPS_MSG_HEADER     BIT(1)
-> > > +#define PTA_SCMI_CAPS_MASK           (PTA_SCMI_CAPS_SMT_HEADER | \
-> > > +                                      PTA_SCMI_CAPS_MSG_HEADER)
-> > >
-> > >  /**
-> > >   * struct scmi_optee_channel - Description of an OP-TEE SCMI channel
-> > > @@ -85,7 +109,8 @@ enum scmi_optee_pta_cmd {
-> > >   * @mu: Mutex protection on channel access
-> > >   * @cinfo: SCMI channel information
-> > >   * @shmem: Virtual base address of the shared memory
-> > > - * @tee_shm: Reference to TEE shared memory or NULL if using static shmem
-> > > + * @req: Shared memory protocol handle for SCMI request and synchronous response
-> > > + * @tee_shm: TEE shared memory handle @req or NULL if using IOMEM shmem
-> > >   * @link: Reference in agent's channel list
-> > >   */
-> > >  struct scmi_optee_channel {
-> > > @@ -94,7 +119,10 @@ struct scmi_optee_channel {
-> > >       u32 caps;
-> > >       struct mutex mu;
-> > >       struct scmi_chan_info *cinfo;
-> > > -     struct scmi_shared_mem __iomem *shmem;
-> > > +     union {
-> > > +             struct scmi_shared_mem __iomem *shmem;
-> > > +             struct scmi_msg_payld *msg;
-> > > +     } req;
-> > >       struct tee_shm *tee_shm;
-> > >       struct list_head link;
-> > >  };
-> > > @@ -178,8 +206,8 @@ static int get_capabilities(struct scmi_optee_agent *agent)
-> > >
-> > >       caps = param[0].u.value.a;
-> > >
-> > > -     if (!(caps & PTA_SCMI_CAPS_SMT_HEADER)) {
-> > > -             dev_err(agent->dev, "OP-TEE SCMI PTA doesn't support SMT\n");
-> > > +     if (!(caps & (PTA_SCMI_CAPS_SMT_HEADER | PTA_SCMI_CAPS_MSG_HEADER))) {
-> > > +             dev_err(agent->dev, "OP-TEE SCMI PTA doesn't support SMT and MSG\n");
-> > >               return -EOPNOTSUPP;
-> > >       }
-> > >
-> > > @@ -193,9 +221,14 @@ static int get_channel(struct scmi_optee_channel *channel)
-> > >       struct device *dev = scmi_optee_private->dev;
-> > >       struct tee_ioctl_invoke_arg arg = { };
-> > >       struct tee_param param[1] = { };
-> > > -     unsigned int caps = PTA_SCMI_CAPS_SMT_HEADER;
-> > > +     unsigned int caps = 0;
-> > >       int ret;
-> > >
-> > > +     if (channel->tee_shm)
-> > > +             caps = PTA_SCMI_CAPS_MSG_HEADER;
-> > > +     else
-> > > +             caps = PTA_SCMI_CAPS_SMT_HEADER;
-> > > +
-> > >       arg.func = PTA_SCMI_CMD_GET_CHANNEL;
-> > >       arg.session = channel->tee_session;
-> > >       arg.num_params = 1;
-> > > @@ -249,6 +282,37 @@ static int invoke_process_smt_channel(struct scmi_optee_channel *channel)
-> > >       return 0;
-> > >  }
-> > >
-> >
-> > Looking at the invoke_process_smt_channel() code, I see that it still refers to
-> > ->tee_shm in an if condition when you send a PTA_SCMI_CMD_PROCESS_SMT_CHANNEL_MESSAGE
-> > but that channel->tee_shm is always NULL when calling invoke_process_smt_channel()
-> > since tee_shm is only allocated by non-SMT transport via setup_dynamic_shmem(),
-> > so when this if-branch inside invoke_process_smt_channel() is supposed
-> > to be used ? or is it a leftover ? (or I am missing something :D)
->
-> I caught it right, definitely a leftover. Thanks. I'll clean that.
+This adds several properties to the Layerscape Security Fuse Processor
+(SFP) necessary for writing. Although the Linux driver does not use
+these bindings, I plan to use them in U-Boot [1]. It also adds a new
+compatibles for Trust Architecture (TA) 2.1 devices. In addition, it
+also adds an SFP binding for all TA 2.1 and 3.0 devices.
 
-Typo,
-**You** caught it right :)>
+[1] https://lore.kernel.org/u-boot/7c8e206a-cd40-2a77-6282-7f4bead2b13a@seco.com/T/#m591f8425b6f096ab3d54e6f7bd258e41cfa4c43b
 
-br,
-etienne
+Changes in v2:
+- Mention "regulator" in the description for ta-prog-sfp-supply
+- Convert sfp driver to use regmap
+- Fix various typos in commit messages
 
->
-> Br,
-> Etienne
->
-> >
-> >
-> > > +static int invoke_process_msg_channel(struct scmi_optee_channel *channel, size_t msg_size)
-> > > +{
-> > > +     struct tee_ioctl_invoke_arg arg = {
-> > > +             .func = PTA_SCMI_CMD_PROCESS_MSG_CHANNEL,
-> > > +             .session = channel->tee_session,
-> > > +             .num_params = 3,
-> > > +     };
-> > > +     struct tee_param param[3] = { };
-> > > +     int ret;
-> > > +
-> > > +     param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INPUT;
-> > > +     param[0].u.value.a = channel->channel_id;
-> > > +
-> > > +     param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
-> > > +     param[1].u.memref.shm = channel->tee_shm;
-> > > +     param[1].u.memref.size = msg_size;
-> > > +
-> > > +     param[2].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
-> > > +     param[2].u.memref.shm = channel->tee_shm;
-> > > +     param[2].u.memref.size = SCMI_OPTEE_MAX_MSG_SIZE;
-> > > +
-> > > +     ret = tee_client_invoke_func(scmi_optee_private->tee_ctx, &arg, param);
-> > > +     if (ret < 0 || arg.ret) {
-> > > +             dev_err(scmi_optee_private->dev, "Can't invoke channel %u: %d / %#x\n",
-> > > +                     channel->channel_id, ret, arg.ret);
-> > > +             return -EIO;
-> > > +     }
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> >
-> > Thanks,
-> > Cristian
-> >
+Sean Anderson (9):
+  dt-bindings: nvmem: sfp: Fix typo
+  dt-bindings: nvmem: sfp: Add clock properties
+  dt-bindings: nvmem: sfp: Add TA_PROG_SFP supply
+  dt-bindings: nvmem: sfp: Add compatible binding for TA 2.1 SFPs
+  arm64: dts: ls1028a: Update SFP binding to include clock
+  ARM: dts: layerscape: Add SFP binding for TA 2.1 devices
+  ARM: dts: Add SFP binding for TA 3.0 devices
+  nvmem: sfp: Use regmap
+  nvmem: sfp: Add support for TA 2.1 devices
+
+ .../bindings/nvmem/fsl,layerscape-sfp.yaml    | 30 ++++++++++++++--
+ arch/arm/boot/dts/ls1021a.dtsi                |  7 ++++
+ .../arm64/boot/dts/freescale/fsl-ls1012a.dtsi |  8 +++++
+ .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |  5 ++-
+ .../arm64/boot/dts/freescale/fsl-ls1043a.dtsi |  8 +++++
+ .../arm64/boot/dts/freescale/fsl-ls1046a.dtsi |  8 +++++
+ .../arm64/boot/dts/freescale/fsl-ls1088a.dtsi |  8 +++++
+ .../arm64/boot/dts/freescale/fsl-ls208xa.dtsi |  8 +++++
+ .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi |  8 +++++
+ drivers/nvmem/Kconfig                         |  1 +
+ drivers/nvmem/layerscape-sfp.c                | 36 ++++++++++++++-----
+ 11 files changed, 115 insertions(+), 12 deletions(-)
+
+-- 
+2.35.1.1320.gc452695387.dirty
+

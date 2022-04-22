@@ -2,43 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C55C50B3E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAE750B3E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445967AbiDVJVK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 22 Apr 2022 05:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S1445935AbiDVJV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445974AbiDVJUv (ORCPT
+        with ESMTP id S1445954AbiDVJVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:20:51 -0400
-X-Greylist: delayed 66 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 02:17:12 PDT
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0E1D53B73;
-        Fri, 22 Apr 2022 02:17:12 -0700 (PDT)
-Received: from smtpclient.apple (p4fefc32f.dip0.t-ipconnect.de [79.239.195.47])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 661B5CECD4;
-        Fri, 22 Apr 2022 11:17:11 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH v1] Bluetooth: btusb: Set
- HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for QCA
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <1650012368-13505-1-git-send-email-quic_zijuhu@quicinc.com>
-Date:   Fri, 22 Apr 2022 11:17:11 +0200
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, c-hbandi@codeaurora.org,
-        hemantg@codeaurora.org, rjliao@codeaurora.org,
-        zijuhu@codeaurora.org, tjiang@codeaurora.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <1D02DBF7-9368-43D5-9062-96CC73E22B57@holtmann.org>
-References: <1650012368-13505-1-git-send-email-quic_zijuhu@quicinc.com>
-To:     Zijun Hu <quic_zijuhu@quicinc.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Fri, 22 Apr 2022 05:21:04 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122AC333
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:17:59 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id CE9851BF210;
+        Fri, 22 Apr 2022 09:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650619078;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mggckCRdpCTXoS+dTfsucqDXNXyDRQ8YZv/6KdqwEIg=;
+        b=Kk8Iry75zaOxB17Jq27o7MNFhFlbkbHcrrqiZmQ/SUFEt/TK4mfpuDFelRuZ7zu8o3SzC1
+        ZDtjqR23mMttEFOH7FPmjcRjcO7GJOG4RdG0ULM8O5jkK1cvcoxR05IpdPFvPjhMrqGkxv
+        Qk4UEPBOIOg36422Turvr2z14jOiV86x4kU7T1NRCZMkvMuKWpgv7JEnvm0EVP09nuCrD1
+        dCm8El4vmBYYhhiblNqlCmXcF2I1bf4dVNfugSWmadC2dxX7s7+H+dImdKj7iIJRVXPF9t
+        ZLTj8okONZagu9gR6G4zebAnRiPRrOA8sRE0grdfP/nXZcY0VtLTHHI8X/eAQw==
+Date:   Fri, 22 Apr 2022 11:17:55 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Jean-Marc Eurin <jmeurin@google.com>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:mtd/next 10/11] drivers/mtd/mtdoops.c:244:39: warning:
+ format specifies type 'long' but the argument has type 'unsigned int'
+Message-ID: <20220422111755.6b26ea9e@xps13>
+In-Reply-To: <CAL3wywUBghrRqDgnPTe4g2XK8nkJkw+8H64f-NE6kNAwDC6JYw@mail.gmail.com>
+References: <202204212106.9R1ylUB7-lkp@intel.com>
+        <20220421154806.52e1992b@xps13>
+        <CAL3wywUBghrRqDgnPTe4g2XK8nkJkw+8H64f-NE6kNAwDC6JYw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,36 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zijun,
+Hi Jean-Marc,
 
-> Set HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for QCA controllers since
-> they answer HCI_OP_READ_DEF_ERR_DATA_REPORTING with error code
-> "UNKNOWN HCI COMMAND" as shown below:
-> 
-> [  580.517552] Bluetooth: hci0: unexpected cc 0x0c5a length: 1 < 2
-> [  580.517660] Bluetooth: hci0: Opcode 0x c5a failed: -38
-> 
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-> ---
-> drivers/bluetooth/btusb.c | 2 ++
-> 1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index 06a854a2507e..a33f8705f147 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -3340,6 +3340,8 @@ static int btusb_setup_qca(struct hci_dev *hdev)
-> 	 */
-> 	set_bit(HCI_QUIRK_BROKEN_ENHANCED_SETUP_SYNC_CONN, &hdev->quirks);
-> 
-> +	set_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks);
-> +
-> 	return 0;
-> }
+jmeurin@google.com wrote on Thu, 21 Apr 2022 15:22:26 -0700:
 
-please include the supported commands output from btmon that indicates that this hardware declares support for this command.
+> On Thu, Apr 21, 2022 at 6:48 AM Miquel Raynal <miquel.raynal@bootlin.com>=
+ wrote:
+> >
+> > Hi Jean-Marc,
+> >
+> > lkp@intel.com wrote on Thu, 21 Apr 2022 21:22:47 +0800:
+> > =20
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git=
+ mtd/next
+> > > head:   f812679fab605b3d5b853ed24a81dabb222ea23a
+> > > commit: 0629fcef16d703d384f76cb2c2c3a119a9149a34 [10/11] mtd: mtdoops=
+: Create a header structure for the saved mtdoops.
+> > > config: hexagon-randconfig-r045-20220420 (https://download.01.org/0da=
+y-ci/archive/20220421/202204212106.9R1ylUB7-lkp@intel.com/config)
+> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project =
+bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+> > > reproduce (this is a W=3D1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
+/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.g=
+it/commit/?id=3D0629fcef16d703d384f76cb2c2c3a119a9149a34
+> > >         git remote add mtd https://git.kernel.org/pub/scm/linux/kerne=
+l/git/mtd/linux.git
+> > >         git fetch --no-tags mtd mtd/next
+> > >         git checkout 0629fcef16d703d384f76cb2c2c3a119a9149a34
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
+s W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/
+> > >
+> > > If you fix the issue, kindly add following tag as appropriate
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > >
+> > > All warnings (new ones prefixed by >>):
+> > > =20
+> > > >> drivers/mtd/mtdoops.c:244:39: warning: format specifies type 'long=
+' but the argument has type 'unsigned int' [-Wformat] =20
+> > >                                   page * record_size, retlen, sizeof(=
+hdr), ret);
+> > >                                                               ^~~~~~~=
+~~~~
+> > >    include/linux/printk.h:446:60: note: expanded from macro 'printk'
+> > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_AR=
+GS__)
+> > >                                                        ~~~    ^~~~~~~=
+~~~~
+> > >    include/linux/printk.h:418:19: note: expanded from macro 'printk_i=
+ndex_wrap'
+> > >                    _p_func(_fmt, ##__VA_ARGS__);                     =
+      \
+> > >                            ~~~~    ^~~~~~~~~~~
+> > >    1 warning generated. =20
+> >
+> > I've dropped the series for now. Please have a look at the reports and
+> > propose a new version when this is fixed? =20
+>=20
+> Sorry about that, I had made that change based on this suggestion
+> https://lore.kernel.org/all/202203310648.it4f2xXD-lkp@intel.com/ :-)
 
-Regards
+Did you verify with
 
-Marcel
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
+s W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/
 
+That the errors were actually gone? You seem to suggest that you didn't
+:)
+
+Thanks,
+Miqu=C3=A8l

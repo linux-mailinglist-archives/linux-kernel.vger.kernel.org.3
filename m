@@ -2,97 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8404050B934
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42A450B93F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448233AbiDVN4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
+        id S1448240AbiDVN6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbiDVN4a (ORCPT
+        with ESMTP id S234209AbiDVN6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:56:30 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA0C5A0B1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=N9g5FPfq8uxs/XPuUy8BU7bUC5HJN88qs0ORLOBFKx8=;
-        t=1650635617; x=1651845217; b=EftaVgC3EVc+9U9M3Fuv0Z6+0+nprkXC/8bSKA6Sm4JmNCr
-        KRgUOloyZR13w/WlygYFKELkdG7tU3JlsIe3sdd4SoO5kIEdy/HYU8/+DqgP1Awcn9eIopSiH9oQF
-        /8201u+Sw6jrCdrVYyhnSz/vlplW+fdd9BBgu8eOMcmZP7q9kUkd6aIKAk5DEJ2rKl6BWWnUljz2E
-        VXxCrQT4kfHw0BJ2IqkMZhRARM50LI2ss+fJqgmK+cvB99puPcrrwgarQL8+dV4z174iIJvYaOHI4
-        ekNPQhye5OoYDJfdR9un+/QjbOsD/JJRUG7HZEbupCECxfgDWfq7WwgUqSplLe2g==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nhtj6-00DXll-2O;
-        Fri, 22 Apr 2022 15:53:36 +0200
-Message-ID: <e59d076bc05ed319732ac3e234e423affae1cafe.camel@sipsolutions.net>
-Subject: Re: [PATCH] devcoredump : Serialize devcd_del work
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, sboyd@kernel.org, rafael@kernel.org
-Date:   Fri, 22 Apr 2022 15:53:35 +0200
-In-Reply-To: <2a14c4f64ff3e029a76c85d064146e6c303c96bb.camel@sipsolutions.net>
-References: <1650364077-22694-1-git-send-email-quic_mojha@quicinc.com>
-         <2a14c4f64ff3e029a76c85d064146e6c303c96bb.camel@sipsolutions.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Fri, 22 Apr 2022 09:58:20 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3251B58E7F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:55:26 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n18so11024802plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:55:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bBkJiLuPHjOc9NWEYiRCYWyb3Lk5w/JeF/xlR5gs4hs=;
+        b=wQEwtOESIF1V+T+aeC5OuSC+0X51M61506bJtFDGuveJFUMYM1ri71xvQKAT5XtBtN
+         MfpHng3FshycvKJNhPfUhBHHBIMd+c5/fNK7NDkttTF/ciYM8GqVzTdwZNzeIwMcO2Tp
+         PW+dwCV67FG1/j6GqKJv25GLYOK7UOcPQlG/iBRBRZzlfQEooCHFUJUR7zbq4JQCfgsD
+         10OvrghvQ1FVEIwKY9relISU+/dpnhwYfoQmTrAlWsSd5CY7Ktxyr/Q1tlXR7ntflM3K
+         gK/qbijjC+UurFLSFFTrFqi20ulBg2iPm9vmyO4xigwy2SefqVseJ9LPtdabEIsT8YkH
+         OZaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bBkJiLuPHjOc9NWEYiRCYWyb3Lk5w/JeF/xlR5gs4hs=;
+        b=lvU5NTKwlsC2s9BL0rXztSiLYb7i4bO946RhcKN5A5I3E/lrPcKvGBkIwf+eEoxqtz
+         BbVnry/vJ6R7gW4/WPCPuzdRLoTY88oHYc8pj6Kzq3NZ8wpaesd+K88a5BCIcmy7xrVL
+         r6GduKxBKceTjSlfbdPDL7lXx93c1WV9s5XId0UxAUZw8m8JUolCHKoFhkX5dbbOOlkz
+         snIRtMn9y7JIcjybom2QWA/bsnt1mXaRo+7/k1aXEWNrSHvk1CeLOwj2pUQdhR6SZsFy
+         C0UtzGcGqBMew22M2l4v8qsf3M2R1yqnfSH5nvnQURPQFPb5o1swJ6oP0WYi900I3Iy4
+         AykQ==
+X-Gm-Message-State: AOAM533bXm0DM1nwwcdC6V4apM8cHj4v+juMei8YyVH5SEf7J87U2DJ9
+        HiM5uhkDfuWEwbCMISp8EZidGAIR0gy1pzIs+jDn6Q==
+X-Google-Smtp-Source: ABdhPJx4rl5aJnGHMIo11ZB1vNhuKtvivqC7qTKNYBL0zgo+rxkco0TSEXwd5AXTYQFZdMPenBr3Q00w+wFzFxEs/aY=
+X-Received: by 2002:a17:90b:3e84:b0:1d2:c015:2182 with SMTP id
+ rj4-20020a17090b3e8400b001d2c0152182mr5519714pjb.232.1650635725767; Fri, 22
+ Apr 2022 06:55:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
+References: <20220421131415.1289469-1-robert.foss@linaro.org> <737ba7a0-400e-4fa0-82e8-f27f62d7c870@baylibre.com>
+In-Reply-To: <737ba7a0-400e-4fa0-82e8-f27f62d7c870@baylibre.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Fri, 22 Apr 2022 15:55:14 +0200
+Message-ID: <CAG3jFys67PdAPXJvu8ZR9R6iOuMhYQ1Wi5CZTOSaOabJ3W=SNg@mail.gmail.com>
+Subject: Re: [PATCH v1] drm/bridge: Fix it6505 Kconfig DRM_DP_AUX_BUS dependency
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     andrzej.hajda@intel.com, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, hermes.wu@ite.com.tw,
+        angelogioacchino.delregno@collabora.com, allen.chen@ite.com.tw,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-22 at 15:41 +0200, Johannes Berg wrote:
-> On Tue, 2022-04-19 at 15:57 +0530, Mukesh Ojha wrote:
-> > In following scenario(diagram), when one thread X running dev_coredumpm() adds devcd
-> > device to the framework which sends uevent notification to userspace
-> > and another thread Y reads this uevent and call to devcd_data_write()
-> > which eventually try to delete the queued timer that is not initialized/queued yet.
-> > 
-> > So, debug object reports some warning and in the meantime, timer is initialized
-> > and queued from X path. and from Y path, it gets reinitialized again and
-> > timer->entry.pprev=NULL and try_to_grab_pending() stucks.
-> > 
-> > To fix this, introduce mutex to serialize the behaviour.
-> > 
-> >  	cpu0(X)			                      cpu1(Y)
-> > 
-> >     dev_coredump() uevent sent to userspace
-> >     device_add()  =========================> userspace process Y reads the uevents
-> >                                              writes to devcd fd which
-> >                                              results into writes to
-> > 
-> >                                             devcd_data_write()
-> >                                               mod_delayed_work()
-> >                                                 try_to_grab_pending()
-> >                                                   del_timer()
-> >                                                     debug_assert_init()
-> >    INIT_DELAYED_WORK
-> >    schedule_delayed_work
-> > 
-> 
-> Wouldn't it be easier to simply schedule this before adding it to sysfs
-> and sending the uevent?
-> 
-
-Hm. I think that would solve this problem, but not all of the problems
-here ...
-
-Even with your change, I believe it's still racy wrt. disabled_store(),
-since that flushes the work but devcd_data_write() remains reachable
-(and might in fact be waiting for the mutex after your change), so I
-think we need an additional flag somewhere (in addition to the mutex) to
-serialize all of these things against each other.
-
-johannes
+Applied to drm-misc-next.

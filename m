@@ -2,124 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508A550C138
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5831350C12F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiDVVjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
+        id S230082AbiDVVie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiDVVjn (ORCPT
+        with ESMTP id S230161AbiDVViR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:39:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C934179C3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:46:12 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23MIwSSP017070;
-        Fri, 22 Apr 2022 19:55:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=4X2QURIlgZAv9adJmpQNjH+Rxhc/IoUAl9LWBytqM5A=;
- b=cSsN4Bqg5QdTDSh5z+pM1k1bytAuEMcbVQuYYoPu5OCWQCZcvZoKTcisFl1GZbwDsGeN
- bpLy/NaXp5b5b5kroh3liym+anJCX5hedx3AEArxuU5yox2LensXy2ysXFI+XBUyiHhj
- sY8n1e5XVNheuYeX11hnCK3xDE4IXGLas9qTIX7WiK9XHzI93HdUPzt2zZ1Pm76Y0e1q
- jS+zK/dBOGq9Q2bZ6pKcJnxKHPXezw6xr7WRgHUFYHeyjkXDWMBD+3HaMfC2JqeKfGYA
- Rxhlvp+4axlRQqJ8tPUIaTc4W9YQXgyjNILslmJJLc2U0pUYKzcB712dEqj9HQGNhaza GA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjm2jyxr2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 19:55:49 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23MJogII012415;
-        Fri, 22 Apr 2022 19:55:49 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjm2jyxqn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 19:55:48 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MJiZqd005844;
-        Fri, 22 Apr 2022 19:55:46 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3ffne97td3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 19:55:46 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MJgoKO35127788
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 Apr 2022 19:42:50 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5580711C04A;
-        Fri, 22 Apr 2022 19:55:43 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3E17311C04C;
-        Fri, 22 Apr 2022 19:55:40 +0000 (GMT)
-Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com.com (unknown [9.43.112.230])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 22 Apr 2022 19:55:39 +0000 (GMT)
-From:   Jagdish Gediya <jvgediya@linux.ibm.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org
-Cc:     baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
-        ying.huang@intel.com, aneesh.kumar@linux.ibm.com,
-        shy828301@gmail.com, weixugc@google.com, gthelen@google.com,
-        dan.j.williams@intel.com, Jagdish Gediya <jvgediya@linux.ibm.com>
-Subject: [PATCH v3 4/7] device-dax/kmem: Set node state as N_DEMOTION_TARGETS
-Date:   Sat, 23 Apr 2022 01:25:13 +0530
-Message-Id: <20220422195516.10769-5-jvgediya@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220422195516.10769-1-jvgediya@linux.ibm.com>
-References: <20220422195516.10769-1-jvgediya@linux.ibm.com>
+        Fri, 22 Apr 2022 17:38:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A59DA1DFC6C
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650660201;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q9/6VEJ+gCRw8wx8uLgcrhAfbPHFfqmDtXctaHj+IMQ=;
+        b=PdN9byy8ofqZQikU58R/dH3EHiLny4Vy8YzsyhMMm0lZCPqQihy/i6loyoatalonGfinJz
+        FWYEnPM5DfIJz02Qy7OeAMmtqYiSuaaWdWt7JcPNHZvWU4xZgBqiNsysQ7ICWexRcgygC5
+        X/KoAxNjQioBtyIZrY9z+k+LJ5Mja2w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-152-mJvUr5RhOTyfEJiCHkuI7A-1; Fri, 22 Apr 2022 16:01:01 -0400
+X-MC-Unique: mJvUr5RhOTyfEJiCHkuI7A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1994180418F;
+        Fri, 22 Apr 2022 20:00:56 +0000 (UTC)
+Received: from dqiao.bos.com (unknown [10.22.19.111])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B6279C27DB9;
+        Fri, 22 Apr 2022 20:00:55 +0000 (UTC)
+From:   Donghai Qiao <dqiao@redhat.com>
+To:     akpm@linux-foundation.org, sfr@canb.auug.org.au, arnd@arndb.de,
+        peterz@infradead.org, heying24@huawei.com,
+        andriy.shevchenko@linux.intel.com, axboe@kernel.dk,
+        rdunlap@infradead.org, tglx@linutronix.de, gor@linux.ibm.com
+Cc:     donghai.w.qiao@gmail.com, linux-kernel@vger.kernel.org,
+        Donghai Qiao <dqiao@redhat.com>
+Subject: [PATCH v2 05/11] smp: replace smp_call_function_single_async() with  smp_call_private()
+Date:   Fri, 22 Apr 2022 16:00:34 -0400
+Message-Id: <20220422200040.93813-6-dqiao@redhat.com>
+In-Reply-To: <20220422200040.93813-1-dqiao@redhat.com>
+References: <20220422200040.93813-1-dqiao@redhat.com>
+Reply-To: dqiao@redhat.com
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WYHc5m7ZLWuDYh8gE8WUbhlGSGAIMlTY
-X-Proofpoint-ORIG-GUID: bZ4xj7Y8DyommoyUhUEXDMw8rSd5AuDn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-22_06,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 phishscore=0
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204220083
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set dax-device node as N_DEMOTION_TARGETS so that it
-can be used as demotion target.
+Replaced smp_call_function_single_async() with smp_call_private()
+and also extended smp_call_private() to support one CPU synchronous
+call with preallocated csd structures.
 
-In future, support should be added to distinguish the
-dax-devices which are not preferred as demotion target
-e.g. HBM, for such devices, node shouldn't be set to
-N_DEMOTION_TARGETS.
+Ideally, the new interface smp_call() should be able to do what
+smp_call_function_single_async() does. Because the csd is provided
+and maintained by the callers, it exposes the risk of corrupting
+the call_single_queue[cpu] linked list if the clents menipulate
+their csd inappropriately. On the other hand, there should have no
+noticeable performance advantage to provide preallocated csd for
+cross call kernel consumers. Thus, in the long run, the consumers
+should change to not use this type of preallocated csd.
 
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+Signed-off-by: Donghai Qiao <dqiao@redhat.com>
 ---
- drivers/dax/kmem.c | 2 ++
- 1 file changed, 2 insertions(+)
+v1 -> v2: removed 'x' from the function names and change XCALL to SMP_CALL from the new macros
 
-diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
-index a37622060fff..f42ab9d04bdf 100644
---- a/drivers/dax/kmem.c
-+++ b/drivers/dax/kmem.c
-@@ -147,6 +147,8 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+ include/linux/smp.h |   3 +-
+ kernel/smp.c        | 163 +++++++++++++++++++++-----------------------
+ 2 files changed, 81 insertions(+), 85 deletions(-)
+
+diff --git a/include/linux/smp.h b/include/linux/smp.h
+index bee1e6b5b2fd..0301faf270bf 100644
+--- a/include/linux/smp.h
++++ b/include/linux/smp.h
+@@ -206,7 +206,8 @@ int smp_call_function_single(int cpuid, smp_call_func_t func, void *info,
+ void on_each_cpu_cond_mask(smp_cond_func_t cond_func, smp_call_func_t func,
+ 			   void *info, bool wait, const struct cpumask *mask);
  
- 	dev_set_drvdata(dev, data);
+-int smp_call_function_single_async(int cpu, struct __call_single_data *csd);
++#define	smp_call_function_single_async(cpu, csd) \
++	smp_call_private(cpu, csd, SMP_CALL_TYPE_ASYNC)
  
-+	node_set_state(numa_node, N_DEMOTION_TARGETS);
+ /*
+  * Cpus stopping functions in panic. All have default weak definitions.
+diff --git a/kernel/smp.c b/kernel/smp.c
+index 8998b97d5f72..51715633b4f7 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -429,41 +429,6 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
+ 		send_call_function_single_ipi(cpu);
+ }
+ 
+-/*
+- * Insert a previously allocated call_single_data_t element
+- * for execution on the given CPU. data must already have
+- * ->func, ->info, and ->flags set.
+- */
+-static int generic_exec_single(int cpu, struct __call_single_data *csd)
+-{
+-	if (cpu == smp_processor_id()) {
+-		smp_call_func_t func = csd->func;
+-		void *info = csd->info;
+-		unsigned long flags;
+-
+-		/*
+-		 * We can unlock early even for the synchronous on-stack case,
+-		 * since we're doing this from the same CPU..
+-		 */
+-		csd_lock_record(csd);
+-		csd_unlock(csd);
+-		local_irq_save(flags);
+-		func(info);
+-		csd_lock_record(NULL);
+-		local_irq_restore(flags);
+-		return 0;
+-	}
+-
+-	if ((unsigned)cpu >= nr_cpu_ids || !cpu_online(cpu)) {
+-		csd_unlock(csd);
+-		return -ENXIO;
+-	}
+-
+-	__smp_call_single_queue(cpu, &csd->node.llist);
+-
+-	return 0;
+-}
+-
+ /**
+  * generic_smp_call_function_single_interrupt - Execute SMP IPI callbacks
+  *
+@@ -661,52 +626,6 @@ int smp_call_function_single(int cpu, smp_call_func_t func, void *info,
+ }
+ EXPORT_SYMBOL(smp_call_function_single);
+ 
+-/**
+- * smp_call_function_single_async() - Run an asynchronous function on a
+- * 			         specific CPU.
+- * @cpu: The CPU to run on.
+- * @csd: Pre-allocated and setup data structure
+- *
+- * Like smp_call_function_single(), but the call is asynchonous and
+- * can thus be done from contexts with disabled interrupts.
+- *
+- * The caller passes his own pre-allocated data structure
+- * (ie: embedded in an object) and is responsible for synchronizing it
+- * such that the IPIs performed on the @csd are strictly serialized.
+- *
+- * If the function is called with one csd which has not yet been
+- * processed by previous call to smp_call_function_single_async(), the
+- * function will return immediately with -EBUSY showing that the csd
+- * object is still in progress.
+- *
+- * NOTE: Be careful, there is unfortunately no current debugging facility to
+- * validate the correctness of this serialization.
+- *
+- * Return: %0 on success or negative errno value on error
+- */
+-int smp_call_function_single_async(int cpu, struct __call_single_data *csd)
+-{
+-	int err = 0;
+-
+-	preempt_disable();
+-
+-	if (csd->node.u_flags & CSD_FLAG_LOCK) {
+-		err = -EBUSY;
+-		goto out;
+-	}
+-
+-	csd->node.u_flags = CSD_FLAG_LOCK;
+-	smp_wmb();
+-
+-	err = generic_exec_single(cpu, csd);
+-
+-out:
+-	preempt_enable();
+-
+-	return err;
+-}
+-EXPORT_SYMBOL_GPL(smp_call_function_single_async);
+-
+ /*
+  * smp_call_function_any - Run a function on any of the given cpus
+  * @mask: The mask of cpus it can run on.
+@@ -1251,16 +1170,92 @@ EXPORT_SYMBOL(smp_call_mask_cond);
+  * Because the call is asynchonous with a preallocated csd structure, thus
+  * it can be called from contexts with disabled interrupts.
+  *
+- * Parameters
++ * Ideally this functionality should be part of smp_call_mask_cond().
++ * Because the csd is provided and maintained by the callers, merging this
++ * functionality into smp_call_mask_cond() will result in some extra
++ * complications in it. Before there is better way to facilitate all
++ * kinds of call, let's still handle this case with a separate function.
++ *
++ * The bit CSD_FLAG_LOCK will be set to csd->node.u_flags only if the
++ * call is made as type CSD_TYPE_SYNC or CSD_TYPE_ASYNC.
+  *
++ * Parameters:
+  * cpu:   Must be a positive value less than nr_cpu_id.
+  * csd:   The private csd provided by the caller.
+- *
+  * Others: see smp_call().
++ *
++ * Return: %0 on success or negative errno value on error.
++ *
++ * The following comments are from smp_call_function_single_async():
++ *
++ *    The call is asynchronous and can thus be done from contexts with
++ *    disabled interrupts. If the function is called with one csd which
++ *    has not yet been processed by previous call, the function will
++ *    return immediately with -EBUSY showing that the csd object is
++ *    still in progress.
++ *
++ *    NOTE: Be careful, there is unfortunately no current debugging
++ *    facility to validate the correctness of this serialization.
+  */
+ int smp_call_private(int cpu, call_single_data_t *csd, unsigned int flags)
+ {
+-	return 0;
++	int err = 0;
 +
- 	return 0;
++	if ((unsigned int)cpu >= nr_cpu_ids || !cpu_online(cpu)) {
++		pr_warn("cpu ID must be a positive number < nr_cpu_ids and must be currently online\n");
++		return -EINVAL;
++	}
++
++	if (csd == NULL) {
++		pr_warn("csd must not be NULL\n");
++		return -EINVAL;
++	}
++
++	preempt_disable();
++	if (csd->node.u_flags & CSD_FLAG_LOCK) {
++		err = -EBUSY;
++		goto out;
++	}
++
++	/*
++	 * CSD_FLAG_LOCK is set for CSD_TYPE_SYNC or CSD_TYPE_ASYNC only.
++	 */
++	if ((flags & ~(CSD_TYPE_SYNC | CSD_TYPE_ASYNC)) == 0)
++		csd->node.u_flags = CSD_FLAG_LOCK | flags;
++	else
++		csd->node.u_flags = flags;
++
++	if (cpu == smp_processor_id()) {
++		smp_call_func_t func = csd->func;
++		void *info = csd->info;
++		unsigned long flags;
++
++		/*
++		 * We can unlock early even for the synchronous on-stack case,
++		 * since we're doing this from the same CPU..
++		 */
++		csd_lock_record(csd);
++		csd_unlock(csd);
++		local_irq_save(flags);
++		func(info);
++		csd_lock_record(NULL);
++		local_irq_restore(flags);
++		goto out;
++	}
++
++	/*
++	 * Ensure the flags are visible before the csd
++	 * goes to the queue.
++	 */
++	smp_wmb();
++
++	__smp_call_single_queue(cpu, &csd->node.llist);
++
++	if (flags & CSD_TYPE_SYNC)
++		csd_lock_wait(csd);
++out:
++	preempt_enable();
++	return err;
+ }
+ EXPORT_SYMBOL(smp_call_private);
  
- err_request_mem:
 -- 
-2.35.1
+2.27.0
 

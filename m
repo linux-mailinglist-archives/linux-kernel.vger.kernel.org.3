@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D6350C3FB
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC3350C31C
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232801AbiDVWUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        id S232490AbiDVWTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233929AbiDVWTA (ORCPT
+        with ESMTP id S233839AbiDVWSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:19:00 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6946619F406;
-        Fri, 22 Apr 2022 14:10:54 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e2fa360f6dso9916595fac.2;
-        Fri, 22 Apr 2022 14:10:54 -0700 (PDT)
+        Fri, 22 Apr 2022 18:18:49 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130B6694B7;
+        Fri, 22 Apr 2022 14:10:49 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-e5ca5c580fso9912442fac.3;
+        Fri, 22 Apr 2022 14:10:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=nkpxWseBP/plo2DUBRDP5JN3Nr8hDiVwhBve5yLw9dk=;
-        b=6OECoqeiSGi8hqQDJ9ZQvnV/YW/Hpi2qrDOLGanOjCKINS8zXHR6S+WkNT08gZmLUg
-         BmzWf/6US1PpLIyMoOXMoCfYtnpsKpB0347aP3zUWyuFlt6hQ2+j278jqaaXqqDkXXTK
-         UmC3y3DMyHVJMu22Jr9Zm5vQjyv1D9n4UpfqfuZwOU5RLzQGcxgi6CEPdKokEzR4qhhI
-         cszt+S5UVozKJ2KIpSmJCBUgLlbq3lgVSxrwrrysNNzNLwogNrVMar4imFMqGi5qkxzW
-         TR7xn2wYDX6IE+WhDdkE+MF71iOLV3Q6n8QQnQPhOpa73ZQXsv1dxYhRgWlJ2/zuYlVL
-         cLkA==
-X-Gm-Message-State: AOAM5323Hs656mNy0sCOahEtDWQMtSSdNiZsG/VjmArWemqYmPlhXEUG
-        WFkYtBguW1K+kMXqZHZ6Uw==
-X-Google-Smtp-Source: ABdhPJyoDysv6ZfgdENY7PnCtNJ8UmdbnZxI0xJW/Jg5VPpPUi2roXtYVnAni5zJe8V14oMBYLUHuA==
-X-Received: by 2002:a05:6870:40c3:b0:e6:81ae:a75a with SMTP id l3-20020a05687040c300b000e681aea75amr2774139oal.268.1650661853723;
-        Fri, 22 Apr 2022 14:10:53 -0700 (PDT)
+        bh=Tkutjbl6M6F7ROD9a26bDdNrkbSWhhcwmMr6zx2IOcE=;
+        b=ZirOYALXVp6GpUyspYwVQMB5/ICgiyzdUUCALQdL5D0dC4yyfuofhyDQOOf5gCb3L/
+         hNkS3ERBwQIvcphCUsvMlB3EKZej8bPNbgaDjz9XGJDgJ3qoPm8hx0v4/QdMVrEEH7yU
+         iOpNLhHuOCEbNJlWDJuFdV9xtb07K9qM4sJeeRQbH36bIa2xkCktRzWjLpJTTO2OLLVj
+         GMZIjIftJ2VnInLi7VVe1dNc/uPVd0qyIk6WDzUY18sR6EHihbMkUPitBOTcoiCjfK+b
+         kLlBvY2nZRBaQ9HhuxH0HMa7RANK3O7qSz/2lFP06xTGeDqJc5tN0uH5yJ08+zzVGHza
+         vC5Q==
+X-Gm-Message-State: AOAM530w44R8gm1wa/QEw6zZLxTgVfXf/LXDBWVIvBoKlZa0t/MVTuYC
+        DEyeYTpoeSdVLsL+EDAjJQ==
+X-Google-Smtp-Source: ABdhPJxgDVs7xvcysn1Di8tXdOlKYuPI1U7BFRO4ay+lXkeVtgeYsglZ1My+1O/4c4tx67VSav4XdA==
+X-Received: by 2002:a05:6870:9689:b0:e6:bcf:4b6 with SMTP id o9-20020a056870968900b000e60bcf04b6mr6980687oaq.64.1650661848365;
+        Fri, 22 Apr 2022 14:10:48 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p1-20020a05683003c100b005c927b6e645sm1107076otc.20.2022.04.22.14.10.52
+        by smtp.gmail.com with ESMTPSA id u20-20020a4a9e94000000b003291f6ac4b2sm1238286ook.28.2022.04.22.14.10.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 14:10:53 -0700 (PDT)
-Received: (nullmailer pid 2784284 invoked by uid 1000);
+        Fri, 22 Apr 2022 14:10:47 -0700 (PDT)
+Received: (nullmailer pid 2784281 invoked by uid 1000);
         Fri, 22 Apr 2022 21:10:47 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Ene <sebastianene@google.com>
-Cc:     maz@kernel.org, qperret@google.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        linux-kernel@vger.kernel.org, will@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org
-In-Reply-To: <20220422141949.3456505-2-sebastianene@google.com>
-References: <20220422141949.3456505-1-sebastianene@google.com> <20220422141949.3456505-2-sebastianene@google.com>
-Subject: Re: [PATCH  v2 1/2] dt-bindings: vm-wdt: Add qemu,vm-watchdog compatible
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220422071534.15653-1-tinghan.shen@mediatek.com>
+References: <20220422071534.15653-1-tinghan.shen@mediatek.com>
+Subject: Re: [PATCH v1] dt-bindings: dsp: mediatek: add mt8186 dsp document
 Date:   Fri, 22 Apr 2022 16:10:47 -0500
-Message-Id: <1650661847.247811.2784283.nullmailer@robh.at.kernel.org>
+Message-Id: <1650661847.232289.2784280.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -64,16 +63,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 14:19:49 +0000, Sebastian Ene wrote:
-> The stall detection mechanism allows to configure the expiration
-> duration and the internal counter clock frequency measured in Hz.
-> Add these properties in the schema.
+On Fri, 22 Apr 2022 15:15:34 +0800, Tinghan Shen wrote:
+> This patch adds mt8186 dsp document. The dsp is used for Sound Open
+> Firmware driver node. It includes registers, clocks, memory regions,
+> and mailbox for dsp.
 > 
-> Signed-off-by: Sebastian Ene <sebastianene@google.com>
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 > ---
->  .../devicetree/bindings/misc/vm-wdt.yaml      | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/vm-wdt.yaml
+> 
+> This patch depends on MT8186 clock bindings.
+> https://lore.kernel.org/all/20220409132251.31725-2-chun-jie.chen@mediatek.com/
+> 
+> ---
+>  .../bindings/dsp/mediatek,mt8186-dsp.yaml     | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -82,11 +86,13 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/vm-wdt.yaml: properties:timeout-sec: '$ref' should not be valid under {'const': '$ref'}
-	hint: Standard unit suffix properties don't need a type $ref
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/vm-wdt.yaml: ignoring, error in schema: properties: timeout-sec
-Documentation/devicetree/bindings/misc/vm-wdt.example.dtb:0:0: /example-0/watchdog: failed to match any schema with compatible: ['qemu,vm-watchdog']
+Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.example.dts:22:18: fatal error: dt-bindings/clock/mt8186-clk.h: No such file or directory
+   22 |         #include <dt-bindings/clock/mt8186-clk.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1401: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 

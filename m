@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFD050BED5
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD9350BEE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233678AbiDVRjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
+        id S231132AbiDVRmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234473AbiDVRjA (ORCPT
+        with ESMTP id S231478AbiDVRmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:39:00 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7F6BB918
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:35:57 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id u15so17671657ejf.11
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:35:57 -0700 (PDT)
+        Fri, 22 Apr 2022 13:42:08 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FF7E7F43;
+        Fri, 22 Apr 2022 10:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=gcGu16UtHNcJMaljpwgCxg9/Y7hdibwAAQTqTsz4orY=;
-        b=m59yJ0YM+fTtTMluLJHSPbZqTKw2yrlcB7rn0kAAsirMZ9Feosc0T2CvLTs7UhrlFW
-         ah+n7r8omYlF1P502KsWEICfSiA+2+qdIdX0vcv/zfEavG+v/SjIpnhdAwoSp4jVwCCk
-         DFa28zWCXST+X9xyeuqKsbcAo88ZFLsGfC+BJ4SUbpXRKdaQeiUcjDMn+ZtjwO9treEc
-         mtGTXyDzS6+fkRCTsSj3pvi3aO7Rz3mZV1FJVcNSVJ7LaUUWXmeuFZUGhP/0+tpPV8AG
-         VEwsfOPspe+Qd9eWy1YF4dmuKf+JCIiXrBM4817HsVs2bUR/YuO47NOFG55yXMDt0b5z
-         he+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=gcGu16UtHNcJMaljpwgCxg9/Y7hdibwAAQTqTsz4orY=;
-        b=XSdbTgA9Sfi8DKpAB0zymnTrOTpQ9eg/HAOr8zob5+6VsrTvM5rQpVfeETZOUbU54G
-         0/o0lev+EJUSE7GHubMyefL7FVWs+/343Y33q/x1JQl/Z49ATDyHmL3zprZHEIOwPfJo
-         FsTi3qt9XXiRicm3mHFTL6dTGnBvityUd41f6T6AX9hQvzIcjBkcsG4/Q7j4jUX5qjzG
-         f6mpd3KsxeFcWM6H1Mvmv+/QmU8mDGSrketBAjHo+YvoUwi+cD9J17gG1M+pC2qWpiio
-         /JNbn/2vaXwjSE0M0LCxmu/Ivlsd6HDM7e89PHwVsD5y0vdkmRdFOcQQzFKXkqTiIPzC
-         IrxA==
-X-Gm-Message-State: AOAM532nKZ48sbjOZAArtZh+oLqVRGhmO/ETPJXqIrlG9bG3RwhEgH4i
-        8GUxjpJ/6u+xPotQvp2CT2R3jA==
-X-Google-Smtp-Source: ABdhPJzFbgLTY01c3uCTHOltXeHcVv4qu5BdqenO4C1F1MyF3ijzLpR3KfjJwJ6gjX4Kgph3GoN0pg==
-X-Received: by 2002:a17:906:c14a:b0:6e8:76d0:e0eb with SMTP id dp10-20020a170906c14a00b006e876d0e0ebmr5030477ejc.412.1650648894899;
-        Fri, 22 Apr 2022 10:34:54 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id jr16-20020a170906a99000b006e4c05e8919sm950871ejb.35.2022.04.22.10.34.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 10:34:54 -0700 (PDT)
-Message-ID: <811bf944-a230-ab9b-583a-840e57af8a1e@linaro.org>
-Date:   Fri, 22 Apr 2022 19:34:53 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650649148; x=1682185148;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0fpFqQYd/Wbv3V4oC9q2pZUt7Qc5kv653iWEvAomgFI=;
+  b=ZuOLpuMQZNe3m4hwMlM6YJDxrTrvA4No229fI8Wj6+VtHUtlX/v6LHj6
+   dFK4pXs+qSKOxMFm+LNejCvXgLWodhvYGTVedSCg5bMbh3BnC/S+3Kvct
+   uWGvDElzSfkbn6kJ0K6ucyB7ANX8x79HYBdYMnbR+Y6fmHEZpqwZ3jN0c
+   0=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Apr 2022 10:35:21 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 10:35:20 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 22 Apr 2022 10:35:18 -0700
+Received: from [10.111.175.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 22 Apr
+ 2022 10:35:15 -0700
+Message-ID: <c68e92ea-ee92-6aeb-1d51-5e265052ef43@quicinc.com>
+Date:   Fri, 22 Apr 2022 10:35:13 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V4 01/14] dt-bindings: cpufreq: mediatek: Add MediaTek CCI
- property
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v9 2/4] drm/msm/dp: Support only IRQ_HPD and REPLUG
+ interrupts for eDP
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com
-Cc:     jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
-        hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
- <20220422075239.16437-2-rex-bc.chen@mediatek.com>
- <f2e5a34b-ed02-91a1-bc7b-fecaa95e227e@linaro.org>
-In-Reply-To: <f2e5a34b-ed02-91a1-bc7b-fecaa95e227e@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Doug Anderson <dianders@chromium.org>
+CC:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sean Paul <sean@poorly.run>, Sean Paul <seanpaul@chromium.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>
+References: <1650618666-15342-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1650618666-15342-3-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=WWa8n0MJB8ks7bgrSj1Qop1Z5hvfEAOWtFcmsz38eR_w@mail.gmail.com>
+ <83129bad-44a9-bec7-f931-8067ef1b9d4d@quicinc.com>
+ <CAD=FV=Vu_0vxb_D+8n3qhNZ66nRXBp5vxshChmOM-ToPJxk=aA@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAD=FV=Vu_0vxb_D+8n3qhNZ66nRXBp5vxshChmOM-ToPJxk=aA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,47 +85,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 19:26, Krzysztof Kozlowski wrote:
-> On 22/04/2022 09:52, Rex-BC Chen wrote:
->> MediaTek Cache Coherent Interconnect (CCI) uses software devfreq module
->> for scaling clock frequency and adjust voltage.
->> The phandle could be linked between CPU and MediaTek CCI for some
->> MediaTek SoCs, like MT8183 and MT8186.
->> Therefore, we add this property in cpufreq-mediatek.txt.
+Hi Doug
+
+On 4/22/2022 9:10 AM, Doug Anderson wrote:
+> Hi,
+> 
+> On Fri, Apr 22, 2022 at 9:05 AM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
 >>
->> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
->> ---
->>  .../devicetree/bindings/cpufreq/cpufreq-mediatek.txt         | 5 +++++
->>  1 file changed, 5 insertions(+)
+>> Hi Doug
 >>
->> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
->> index b8233ec91d3d..3387e1e2a2df 100644
->> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
->> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
->> @@ -20,6 +20,11 @@ Optional properties:
->>  	       Vsram to fit SoC specific needs. When absent, the voltage scaling
->>  	       flow is handled by hardware, hence no software "voltage tracking" is
->>  	       needed.
->> +- mediatek,cci:
->> +	MediaTek Cache Coherent Interconnect (CCI) uses the software devfreq module to
->> +	scale the clock frequency and adjust the voltage.
+>> For the lockdep error, the splat looks similar to what kuogee fixed
+>> recently.
+>>
+>> Can you please check if below patch is present in your tree?
+>>
+>> https://patchwork.freedesktop.org/patch/481396/
 > 
-> Devfreq is a SW mechanism, it should not be part of bindings description.
+> Indeed I did have that in my tree already, but the lockdep splat is
+> still there. I think the problem is that we're now calling
+> dp_hpd_plug_handle() directly in dp_bridge_enable()
 > 
->> +	For details, please refer to
->> +	Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> 
-> Since the file does not exist, I have troubles reviewing it. First of
-> all, you already have "mediatek,cci-control" property in DT, so why
-> using different name?
-> 
-> Second, it looks like you want to put devfreq into bindings instead of
-> using proper interconnect bindings.
+> -Doug
 
-Actually judging by the driver this looks like some
-device-boot-time-ordering, so I wonder whether this is a proper way to
-express it.
+Yes, now i understood this particular issue better and not sure how this 
+wasn't caught. Perhaps some difference in the USE flags. Sankeerth didnt 
+have lockdebug and thats why didnt hit this.
 
+I have discussed with kuogee about why this change is needed and why 
+this wasnt being done in get_modes().
 
-Best regards,
-Krzysztof
+It seems like originally, this was done for a quirk in the DP compliance 
+equipment that it did not publish the fail safe mode ( even though some 
+other modes were present ). Typically, any sink (as long as EDID read 
+went through ) adds the 640x480 fail safe mode.
+
+We could have done it in get_modes() even earlier but not sure how it 
+was missed or was there some other reason.
+
+Nonetheless, kuogee will post the change to move this to get_modes() 
+shortly.
+
+Thanks
+
+Abhinav

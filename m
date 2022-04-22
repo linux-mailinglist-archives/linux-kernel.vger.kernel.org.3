@@ -2,116 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBF250B0AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6656C50B0B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444429AbiDVGfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
+        id S1444444AbiDVGg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444424AbiDVGfd (ORCPT
+        with ESMTP id S1444432AbiDVGgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:35:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9C050B34;
-        Thu, 21 Apr 2022 23:32:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0DEF61E83;
-        Fri, 22 Apr 2022 06:32:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3234EC385A0;
-        Fri, 22 Apr 2022 06:32:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650609160;
-        bh=lalQc1VEKRTVWs2GqXvLF+tWm/dV5uDBEwlrHFlqQHI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ld45dnmTVZo0eb4k7APe18gDMPOweSZ2XajmngIReqeR7S1JMRkdLzt9lYf2lvXeG
-         EgSewXuh+9KSDejcyBx8jGdgQffdnaGGLs4/imyRkHZUnKKw3HWNo/tdVhO+YErdUr
-         rsgotDoVqIThJkBvmqV9zwKDZUZEP6/Tgpb+i7zlavB5y3ndhcXUu3OQS/0xb13iE1
-         w91gJ+5Ei7pFdJuWBuNQa1WnLERfMkCmYsPgnDTpdLcU8FeDfq3OMBBmHPOwlTHqKj
-         4WfI7R+4YqJW7atrO9azvzMroJlbv74yeKLR4K/hibSoukh6E75cV3lgAnfR0jyC5z
-         dWNarfE0MMpsg==
-Date:   Thu, 21 Apr 2022 23:32:38 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the random tree with the jc_docs tree
-Message-ID: <YmJMBnBV8wO4aco9@sol.localdomain>
-References: <20220422135927.7fa82fa4@canb.auug.org.au>
+        Fri, 22 Apr 2022 02:36:52 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83FE50B37
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:33:57 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id hmrXnzwe5YnCyhmrXn2WbY; Fri, 22 Apr 2022 08:33:54 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 22 Apr 2022 08:33:54 +0200
+X-ME-IP: 86.243.180.246
+Message-ID: <26efc808-acd7-cff3-82e7-66561314f8ca@wanadoo.fr>
+Date:   Fri, 22 Apr 2022 08:33:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422135927.7fa82fa4@canb.auug.org.au>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] fsi: Fix error handling in fsi_master_register() and its
+ callers
+Content-Language: en-US
+To:     Jeremy Kerr <jk@ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Alistar Popple <alistair@popple.id.au>,
+        Eddie James <eajames@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-fsi@lists.ozlabs.org
+Newsgroups: gmane.linux.kernel,gmane.linux.kernel.janitors
+References: <f37bfdccfcf8a8d1bdcbf668b802df13253ed3fe.1650556911.git.christophe.jaillet@wanadoo.fr>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <f37bfdccfcf8a8d1bdcbf668b802df13253ed3fe.1650556911.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 01:59:27PM +1000, Stephen Rothwell wrote:
-> Hi all,
+Le 21/04/2022 à 18:02, Christophe JAILLET a écrit :
+> fsi_master_register() calls device_register().
+> When device_register() fails, put_device() still needs to be called.
 > 
-> Today's linux-next merge of the random tree got a conflict in:
+> Up to now, there is no put_device() in fsi_master_register().
+> Some callers of fsi_master_register() have it, some have not.
+>   - fsi_master_acf_probe() call put_device() if fsi_master_register() fails
+>   - fsi_master_gpio_probe() call put_device() if fsi_master_register() fails
+>   - fsi_master_aspeed_probe() doesn't
+>   - hub_master_probe() doesn't
 > 
->   Documentation/security/siphash.rst
+> In order to fix it and be consistent with the different callers, add the
+> missing put_device() in the error handling path of fsi_master_register()
+> and remove it from 2 callers that were handling it by themselves.
 > 
-> between commits:
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This patch is speculative and compile tested only.
+> Review with care.
 > 
->   dc701cfc5b26 ("Documentation: siphash: convert danger note to warning for HalfSipHash")
->   561fb3cd5ec2 ("Documentation: siphash: enclose HalfSipHash usage example in the literal block")
+> Another alternative would be to add the put_device() call in
+> fsi_master_aspeed_probe() and hub_master_probe() if it makes more sense.
 > 
-> from the jc_docs tree and commit:
+> Having one or more Fixes tag is a bit hard because of the relations and
+> log history of the 5 files involved in this bug fix.
+> ---
+>   drivers/fsi/fsi-core.c          | 1 +
+>   drivers/fsi/fsi-master-ast-cf.c | 1 -
+>   drivers/fsi/fsi-master-gpio.c   | 1 -
+>   3 files changed, 1 insertion(+), 2 deletions(-)
 > 
->   91afe794c070 ("siphash: update the hsiphash documentation")
-> 
-> from the random tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc Documentation/security/siphash.rst
-> index 06d793e68086,79ac8101406c..000000000000
-> --- a/Documentation/security/siphash.rst
-> +++ b/Documentation/security/siphash.rst
-> @@@ -121,15 -121,23 +121,25 @@@ even scarier, uses an easily brute-forc
->   instead of SipHash's 128-bit key. However, this may appeal to some
->   high-performance `jhash` users.
+> diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
+> index 3a7b78e36701..640692e5400f 100644
+> --- a/drivers/fsi/fsi-core.c
+> +++ b/drivers/fsi/fsi-core.c
+> @@ -1319,6 +1319,7 @@ int fsi_master_register(struct fsi_master *master)
 >   
-> + HalfSipHash support is provided through the "hsiphash" family of functions.
-> + 
->  -**Danger!** Do not ever use the hsiphash functions except for as a hashtable key
->  -function, and only then when you can be absolutely certain that the outputs will
->  -never be transmitted out of the kernel. This is only remotely useful over
->  -`jhash` as a means of mitigating hashtable flooding denial of service attacks.
->  +.. warning::
->  +   Do not ever use HalfSipHash except for as a hashtable key function, and
->  +   only then when you can be absolutely certain that the outputs will never
->  +   be transmitted out of the kernel. This is only remotely useful over
->  +   `jhash` as a means of mitigating hashtable flooding denial of service
->  +   attacks.
+>   	rc = device_register(&master->dev);
+>   	if (rc) {
+> +		put_device(&master->dev);
+>   		ida_simple_remove(&master_ida, master->idx);
+>   		return rc;
+>   	}
+> diff --git a/drivers/fsi/fsi-master-ast-cf.c b/drivers/fsi/fsi-master-ast-cf.c
+> index 24292acdbaf8..dde63d703ea1 100644
+> --- a/drivers/fsi/fsi-master-ast-cf.c
+> +++ b/drivers/fsi/fsi-master-ast-cf.c
+> @@ -1395,7 +1395,6 @@ static int fsi_master_acf_probe(struct platform_device *pdev)
+>   		return 0;
+>   
+>   	device_remove_file(master->dev, &dev_attr_external_mode);
+> -	put_device(&master->master.dev);
+>   	return rc;
+>   
+>    stop_copro:
+> diff --git a/drivers/fsi/fsi-master-gpio.c b/drivers/fsi/fsi-master-gpio.c
+> index 7d5f29b4b595..1ae3c164d7fd 100644
+> --- a/drivers/fsi/fsi-master-gpio.c
+> +++ b/drivers/fsi/fsi-master-gpio.c
+> @@ -856,7 +856,6 @@ static int fsi_master_gpio_probe(struct platform_device *pdev)
+>   	rc = fsi_master_register(&master->master);
+>   	if (rc) {
+>   		device_remove_file(&pdev->dev, &dev_attr_external_mode);
+> -		put_device(&master->master.dev);
+>   		return rc;
+>   	}
+>   	return 0;
 
-That's not exactly the correct resolution, since it dropped the change to the
-text of this paragraph that my patch made ("HalfSipHash" => "the hsiphash
-functions").
+NACK
 
-We should get the updates to this file to go through one tree.  Jason, probably
-you'd want it to be yours?
+After additional reading of the code, it looks good to me as-is.
+Usage in fsi_master_aspeed_probe() and hub_master_probe() seem to have 
+no release function.
 
-- Eric
+CJ

@@ -2,73 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C62E50C0C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 22:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79D350C0C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 22:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiDVUlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 16:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        id S229593AbiDVUpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 16:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiDVUlx (ORCPT
+        with ESMTP id S229517AbiDVUpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 16:41:53 -0400
-Received: from mail-io1-xd48.google.com (mail-io1-xd48.google.com [IPv6:2607:f8b0:4864:20::d48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F55F1F8EF5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:40:05 -0700 (PDT)
-Received: by mail-io1-xd48.google.com with SMTP id u18-20020a5d8712000000b0064c7a7c497aso5974842iom.18
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:40:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=bMZssZ4/5rMn7JFTaYyRiobnst/WdHrTg0VN7pqEdmQ=;
-        b=O861KVCFr4TrMODOAUcWXCQn2HF6Mk2Fth0t9iUDihlog5kRB3u74rl0BJzbdWCkf1
-         Py/FfKREARx92amy0Esx8T0XpYwiKKfPkNK5olcZWzfoPDHFvWqAVmv6S5imIhDqWp7n
-         n2Q3pcyQupBSdhUwIZc24T7oBV3kjVUVyXJkEiJW94eMsNZ4Ll50DjTUua/QOWOGIHUD
-         hXMjIqNg2RnpAgWOkO0wmTGYk/7ddw9oBYjxf8h2ebf48f/6qBQ4T+aDmoS2Ct+PSUvY
-         QMiZ+RTHYLKvueE95Nu23HEckmtzg8YBr5UXN+13uRLzsyWZ7dMwjbzetUToIAnCiD73
-         +/zQ==
-X-Gm-Message-State: AOAM530OdyHGMeYKLGpz2mKP55D4CBr2wmcStfHYR6VIfFJ/6kQCJjeI
-        Zom1xRZlzZaJ/XzmcypXqhK2hlIXHjAyrei5L7Lzdy509SLj
-X-Google-Smtp-Source: ABdhPJzJJl9SIcuNGwTO5H7TFvkYM+As7pFatvBd5/JUgAa7lJHQohxhtSzDJQrAEenqLF5eS/og3Ya09FLcQ411672yYb2SSXei
+        Fri, 22 Apr 2022 16:45:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5DF202B4C;
+        Fri, 22 Apr 2022 12:42:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 849AC61CE4;
+        Fri, 22 Apr 2022 19:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B01C385A4;
+        Fri, 22 Apr 2022 19:39:18 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 15:39:16 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-input@vger.kernel.org, roman.gushchin@linux.dev
+Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
+ heap-allocated strings
+Message-ID: <20220422153916.7ebf20c3@gandalf.local.home>
+In-Reply-To: <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
+References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
+        <20220421234837.3629927-7-kent.overstreet@gmail.com>
+        <20220422042017.GA9946@lst.de>
+        <YmI5yA1LrYrTg8pB@moria.home.lan>
+        <20220422052208.GA10745@lst.de>
+        <YmI/v35IvxhOZpXJ@moria.home.lan>
+        <20220422113736.460058cc@gandalf.local.home>
+        <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:40a3:b0:32a:b968:af2f with SMTP id
- m35-20020a05663840a300b0032ab968af2fmr1673108jam.221.1650656051380; Fri, 22
- Apr 2022 12:34:11 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 12:34:11 -0700
-In-Reply-To: <YmL0L7nhdJTMI9QU@casper.infradead.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000096c5ef05dd434f4c@google.com>
-Subject: Re: [syzbot] kernel BUG in __filemap_get_folio
-From:   syzbot <syzbot+cf4cf13056f85dec2c40@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, dhowells@redhat.com, hughd@google.com,
-        kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        vbabka@suse.cz, william.kucharski@oracle.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 22 Apr 2022 15:30:15 -0400
+Kent Overstreet <kent.overstreet@gmail.com> wrote:
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> > This is how open source programming is suppose to work ;-)  
+> 
+> Is it though? :)
+> 
+> One of the things I've been meaning to talk more about, that
+> came out of a recent Rust discussion, is that we in the kernel community could
+> really do a better job with how we interact with the outside world, particularly
+> with regards to the sharing of code.
+> 
+> The point was made to me when another long standing kernel dev was complaining
+> about Facebook being a large, insular, difficult to work with organization, that
+> likes to pretend it is the center of the universe and not bend to the outside
+> world, while doing the exact same thing with respect to new concerns brought by
+> the Rust community. The irony was illuminating :)
 
-Reported-and-tested-by: syzbot+cf4cf13056f85dec2c40@syzkaller.appspotmail.com
+I do not consider Facebook an open source company. One reason I turned them
+down.
 
-Tested on:
+> 
+> The reason I bring that up is that in this case, printbuf is the more evolved,
+> more widely used implementation, and you're asking me to discard it so the
+> kernel can stick with its more primitive, less widely used implementation.
+> 
+> $ git grep -w seq_buf|wc -l
+> 86
+> 
+> $ git grep -w printbuf|wc -l
+> 366
 
-commit:         91070385 XArray: Disallow sibling entries of nodes
-git tree:       git://git.infradead.org/users/willy/xarray.git main
-kernel config:  https://syzkaller.appspot.com/x/.config?x=78d87160570beee3
-dashboard link: https://syzkaller.appspot.com/bug?extid=cf4cf13056f85dec2c40
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+$ git grep printbuf
+drivers/media/i2c/ccs/ccs-reg-access.c:                 char printbuf[(MAX_WRITE_LEN << 1) +
+drivers/media/i2c/ccs/ccs-reg-access.c:                 bin2hex(printbuf, regdata, msg.len);
+drivers/media/i2c/ccs/ccs-reg-access.c:                         regs->addr + j, printbuf);
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+I don't see it.
+
+And by your notion:
+
+$ git grep trace_seq | wc -l
+1680
+
+Thus we all should be using trace_seq!
+
+> 
+> So, going to have to push back on that one :)
+> 
+> Printbufs aren't new code; everything in them is there because I've found it
+> valuable, which is why I decided to try promoting them to the kernel proper (and
+> more importantly, the idea of a standard way to pretty-print anything).
+> 
+> I'm happy to discuss the merits of the code more, and try to convince you why
+> you'll like them :)
+
+I'd like to know more to why seq_buf is not good for you. And just telling
+me that you never seriously tried to make it work because you were afraid
+of causing tracing regressions without ever asking the tracing maintainer
+is not going to cut it.
+
+-- Steve

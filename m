@@ -2,76 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8083450C820
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 09:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F3450C84B
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 10:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234118AbiDWH7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 03:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
+        id S234152AbiDWIrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 04:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbiDWH7e (ORCPT
+        with ESMTP id S231579AbiDWIrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 03:59:34 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413043B2BC
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 00:56:38 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id v1so8740987ljv.3
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 00:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=mif/hptMttckx/mJ2yjacwOwrfg6csXHsP1C0SeWPl4=;
-        b=Jh3EjOr+fbFSxsWWXzKZ1dLFWdYWIgAT+OvVwnM/YGyDQ7mBB2EepGX50xPrhenMRy
-         1u2x0E0gGW9XabiMiNEXr83wUcsgtzGlaWKoPNL4DichQ32o6WBMLLJm5WsseIYsGBM6
-         bpJDaCTTtsHJGcYtnnYYiY5zbPsAe9vWmAk3/b2eHsr7dOgmStQfhoy132T/YObSkjYC
-         rcqowhNPmMq6tcJiN9k+xWNYvmBBNXVUGzvkel+WVoExNr+k2Vgl9IvU7FAzkQyzrQL4
-         sJq5PQfF02ZAr6M/man+jrRycFRNHpEDaLYAi8IRdb/B4kMJEt1pBYbsZgVDAKSASN1C
-         zIgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=mif/hptMttckx/mJ2yjacwOwrfg6csXHsP1C0SeWPl4=;
-        b=Yv+jMEW5axiuGp9siQh0+ept6ydXbTPGlnTx1gRcOttd/aDIwvYN3IhzPTlUmnxIRz
-         k1NU9OfkjekZ/57N2vS4oQ/JhAO8m9Yfm01pCr/9s4juMDTGVya6vJ27L5jXR4//vRPm
-         qOA6d+cFDyDo8DHXY3qgnyC9qVDkqpvsi7UFmxwcMdaSex501UQhyadHTmPzp3PovH2n
-         ric2+s5MMUKhI1N3N5U3OPPbADCEOtI4iZ8KUHxbcLRq2Br4GeINj1hAvVd/bzyXxOWG
-         mUkMQirdDQ5N93+VUoEvZuGJqqBir30AerM3Ntg2VDFOLzIRfrDyC7epTfN4Iz3kJyfe
-         0RKg==
-X-Gm-Message-State: AOAM531zoA3o9xcaO8viJwWJ+5l8o8S4dB9dwjUSsgJYI24ys/GZewN1
-        mJi1ioE6c/Fh+9QTjBMP74D/AA==
-X-Google-Smtp-Source: ABdhPJzwOxJDiUT+mxVE2gdeqnTfab1zeDWAizki2WmGRG2zg3Ej+gEKUwuqGX9Bc50MTmsxtY5imA==
-X-Received: by 2002:a2e:9182:0:b0:24f:66f:7ca9 with SMTP id f2-20020a2e9182000000b0024f066f7ca9mr615846ljg.397.1650700596565;
-        Sat, 23 Apr 2022 00:56:36 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id m5-20020a194345000000b0046e951e34b3sm525140lfj.24.2022.04.23.00.56.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 00:56:35 -0700 (PDT)
-Message-ID: <6f38e02b-9af3-4dcf-9000-1118a04b13c7@openvz.org>
-Date:   Sat, 23 Apr 2022 10:56:34 +0300
+        Sat, 23 Apr 2022 04:47:11 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05741B9FB5;
+        Sat, 23 Apr 2022 01:44:15 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23MJAqRd055009;
+        Fri, 22 Apr 2022 14:10:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650654652;
+        bh=aWLd/2RyGAql92fiaxn8ur5cJ8eJ5/TK8S5NNMNK8v8=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=vF3iH3vWvOMk66fGAYxvIsaufssvDnx7ldzzamWegfnAGc2WQlyMnc41NyF1Mjldl
+         0zFys75wGMqX6U3Ov/tYVhFX/Fsgc0JzoVF2P/YoWo13hUe5Z6IShgf3mLkzJ1zpnv
+         dTCkbyOtbroMwufITSOfWO1scJ1M33LdWm+LcEuY=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23MJAqQV012376
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 22 Apr 2022 14:10:52 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
+ Apr 2022 14:10:52 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 22 Apr 2022 14:10:52 -0500
+Received: from [128.247.81.242] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23MJAqWX104615;
+        Fri, 22 Apr 2022 14:10:52 -0500
+Message-ID: <2528be71-ca3f-566b-4769-36063c98ee0e@ti.com>
+Date:   Fri, 22 Apr 2022 14:10:52 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH] net: set proper memcg for net_init hooks allocations
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Shakeel Butt <shakeelb@google.com>
-Cc:     kernel@openvz.org, Florian Westphal <fw@strlen.de>,
-        linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-References: <CALvZod7ys1SNrQhbweCoCKVyfN1itE16jhC97TqjWtHDFh1RpQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] dt-bindings: ti,sci: Add ti,ctx-memory-region
+ property
 Content-Language: en-US
-In-Reply-To: <CALvZod7ys1SNrQhbweCoCKVyfN1itE16jhC97TqjWtHDFh1RpQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Andrew Davis <afd@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+References: <20220421203659.27853-1-d-gerlach@ti.com>
+ <20220421203659.27853-2-d-gerlach@ti.com>
+ <ad47db06-7f5c-399f-0ad0-81f720e6f035@ti.com>
+From:   Dave Gerlach <d-gerlach@ti.com>
+In-Reply-To: <ad47db06-7f5c-399f-0ad0-81f720e6f035@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,77 +73,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__register_pernet_operations() executes init hook of registered
-pernet_operation structure in all existing net namespaces.
+Hi,
 
-Typically, these hooks are called by a process associated with
-the specified net namespace, and all __GFP_ACCOUNTING marked
-allocation are accounted for corresponding container/memcg.
+On 4/22/22 14:02, Andrew Davis wrote:
+> On 4/21/22 3:36 PM, Dave Gerlach wrote:
+>> Add documentation for the ti,ctx-memory-region property which is a
+>> phandle to a reserved-memory carveout to be used by the ti_sci driver
+>> storage of low power mode memory context. This is optional for normal
+>> system operation but required to enabled suspend-to-mem usage of Deep
+>> Sleep state.
+>>
+>> Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+>> ---
+>>   .../devicetree/bindings/arm/keystone/ti,sci.yaml         | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
+>> index 34f5f877d444..ec88aa88a2a0 100644
+>> --- a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
+>> @@ -61,6 +61,15 @@ properties:
+>>     mboxes:
+>>       minItems: 2
+>>   
+>> +  ti,ctx-memory-region:
+>> +    description:
+>> +      Phandle to the reserved memory node to be associated with the
+>> +      ti-sci device, to be used for saving low power context. The
+>> +      reserved memory node should be a carveout node, and should
+>> +      be defined as per the bindings in
+>> +      Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +
+> 
+> 
+> Why does this have to be yet another reserved carveout region,
+> should be dynamically allocated.
+> 
 
-However __register_pernet_operations() calls the hooks in the same
-context, and as a result all marked allocations are accounted
-to one memcg for all processed net namespaces.
+This must be a fixed address in order to support other low power modes
+which have not yet been introduced.
 
-This patch adjusts active memcg for each net namespace and helps
-to account memory allocated inside ops_init() into the proper memcg.
+Regards,
+Dave
 
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
-v1: introduced get_mem_cgroup_from_kmem(), which takes the refcount
-    for the found memcg, suggested by Shakeel
----
- include/linux/memcontrol.h | 11 +++++++++++
- net/core/net_namespace.c   |  9 +++++++++
- 2 files changed, 20 insertions(+)
-
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 0abbd685703b..16b157852a8c 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1768,4 +1768,15 @@ static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
- 
- #endif /* CONFIG_MEMCG_KMEM */
- 
-+static inline struct mem_cgroup *get_mem_cgroup_from_kmem(void *p)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	rcu_read_lock();
-+	do {
-+		memcg = mem_cgroup_from_obj(p);
-+	} while (memcg && !css_tryget(&memcg->css));
-+	rcu_read_unlock();
-+	return memcg;
-+}
- #endif /* _LINUX_MEMCONTROL_H */
-diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
-index a5b5bb99c644..56608f56bed6 100644
---- a/net/core/net_namespace.c
-+++ b/net/core/net_namespace.c
-@@ -26,6 +26,7 @@
- #include <net/net_namespace.h>
- #include <net/netns/generic.h>
- 
-+#include <linux/sched/mm.h>
- /*
-  *	Our network namespace constructor/destructor lists
-  */
-@@ -1147,7 +1148,15 @@ static int __register_pernet_operations(struct list_head *list,
- 		 * setup_net() and cleanup_net() are not possible.
- 		 */
- 		for_each_net(net) {
-+			struct mem_cgroup *old, *memcg;
-+
-+			memcg = get_mem_cgroup_from_kmem(net);
-+			if (!memcg)
-+				memcg = root_mem_cgroup;
-+			old = set_active_memcg(memcg);
- 			error = ops_init(ops, net);
-+			set_active_memcg(old);
-+			css_put(&memcg->css);
- 			if (error)
- 				goto out_undo;
- 			list_add_tail(&net->exit_list, &net_exit_list);
--- 
-2.31.1
-
+> Andrew
+> 
+> 
+>>     ti,system-reboot-controller:
+>>       description: Determines If system reboot can be triggered by SoC reboot
+>>       type: boolean

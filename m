@@ -2,59 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07FD50B95A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE12950B95E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448305AbiDVOCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
+        id S1352501AbiDVODn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344513AbiDVOCZ (ORCPT
+        with ESMTP id S1344513AbiDVODk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:02:25 -0400
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA295A14D;
-        Fri, 22 Apr 2022 06:59:29 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1650635966; bh=OPTWL88wx7VdNdMeR/dWu1A51DUlJpqaNYL/YGs6XU4=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=Rbo9vOumJP9KdV5finiGzAkBjNKa7iRrORw6kpRN7GZJVDKj+sDP8c87S3ooJhE8w
-         RmVwoV+40VfncKdNwpM6URe0HikudfpNioWiaVoIAeWelg1UjFDZ3snkX8kd4Ua1fk
-         ZhO9IvMfylt6vU+wjVjf33M2BIv+zqp+rae0xle0=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
-In-Reply-To: <YmKoXbh04ZEs3dSZ@sirena.org.uk>
-Date:   Fri, 22 Apr 2022 15:59:25 +0200
-Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0E735637-EDA8-4A68-8B43-01BCEC41245C@cutebit.org>
-References: <YkXKmxJ0R3qpUoH4@sirena.org.uk>
- <DB0255C3-C9EC-4EFA-A377-C4BB1073D9B3@cutebit.org>
- <YmKPQ6kLCPz+2XTJ@sirena.org.uk>
- <B68302F2-3D77-4065-8A16-A9CC690AE10B@cutebit.org>
- <YmKSgHrbb/7koM36@sirena.org.uk>
- <A1574F30-62D2-467D-A40B-8FD7C6B8BCFA@cutebit.org>
- <YmKeEKa0w2xLM9cL@sirena.org.uk>
- <6F6130F3-381C-4AB7-B618-CDC4C4A37C9B@cutebit.org>
- <YmKjL9bOtOmsFWTs@sirena.org.uk>
- <3CD969AD-7316-4D83-AD92-CC85ED817125@cutebit.org>
- <YmKoXbh04ZEs3dSZ@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 10:03:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FA2A6456
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650636046;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9x3v/ioYU2PkbStJSHQW4pdUX8pdnAHng9fSZRsv8Nk=;
+        b=UZxs1H5tV/yZ1Xp4CBC1mwHrvIqD5gSUMz3rDckfaigN+u54ZXHG94LcvRMLta6NEkwoN2
+        saKkCdEpr0U3rlhTCkAUZw3E3lkd+85GghPH3caNhkbwiA55m4vmAmHkBrE9/DnYKNcq62
+        nfr+bvJQ1Yk9/rbyFJx9nVWN/fIjKXo=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-172-NLdFs66_PqWWR-1_WuM2xQ-1; Fri, 22 Apr 2022 10:00:44 -0400
+X-MC-Unique: NLdFs66_PqWWR-1_WuM2xQ-1
+Received: by mail-oi1-f199.google.com with SMTP id n81-20020aca4054000000b0032276048b14so3576701oia.21
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:00:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9x3v/ioYU2PkbStJSHQW4pdUX8pdnAHng9fSZRsv8Nk=;
+        b=PhXRs9kbj/EGohcFCnwGW1DJ2uPWaQwDmbcBHjqCf4mcrq8oJMzLHcLd1yo3G+wPru
+         WDWRgmfSg7adP5T0yhKdsJn6k4tjeyxzIBU8TBrDCBInODCIhXlIa+Mkj/7hxW7tzWxv
+         MUyeCAPMWVoZGu6xmFPE7EzufJHL0yIFKnEFgqaebFQwvdfBfZgAAqd7Dc8OTm6RF8tQ
+         WXjrnH7gk6ZRUAeR37EjmfTZPs3iQoMPqi8qT1KkoMcWuNLUAOD+RzA3Vx5QOK7+PzGn
+         vUbw9O6pnrD9ffgKIVYDQSi0NW6HWPhRLBANUDldG1HX4v240ZXq9JHyKbSX52C2Rvd6
+         UneQ==
+X-Gm-Message-State: AOAM531aID2v9lhmRrolG+SuRFgg1jTjHWrLD5LMc8VQWzlVih0NslsK
+        WZ2b94Sv9ce0qwTkAeXN0iIRVHfOpCrPkRgsDiuqe+rG306wyy6FvFt1eVaZChoB+Pt01+XuejS
+        +E4mMMTh+p99p+Gw9ihmubdTv
+X-Received: by 2002:a05:6870:6196:b0:e1:e1a2:5c65 with SMTP id a22-20020a056870619600b000e1e1a25c65mr2038381oah.190.1650636043807;
+        Fri, 22 Apr 2022 07:00:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzaAvrG4ahVI6peqDBkgAZ6DW/cDwXzRY7tyv0DEpwTfCyPnW3MVghH/9LDprI3Zcm7alLlHA==
+X-Received: by 2002:a05:6870:6196:b0:e1:e1a2:5c65 with SMTP id a22-20020a056870619600b000e1e1a25c65mr2038370oah.190.1650636043541;
+        Fri, 22 Apr 2022 07:00:43 -0700 (PDT)
+Received: from ?IPV6:2600:1700:5610:6e80::41? ([2600:1700:5610:6e80::41])
+        by smtp.gmail.com with ESMTPSA id y11-20020a4ad64b000000b00333c9ad6eb8sm815835oos.21.2022.04.22.07.00.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 07:00:43 -0700 (PDT)
+Message-ID: <1f0f3254-31bd-5d09-6520-1897b3c5755b@redhat.com>
+Date:   Fri, 22 Apr 2022 10:00:41 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC 1/3] mm: change vma_is_anonymous to vma_is_private_anon
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Hugh Dickins <hughd@google.com>
+References: <20220421190533.1601879-1-npache@redhat.com>
+ <20220421190533.1601879-2-npache@redhat.com>
+ <YmGwYKtz3sFkJlcv@casper.infradead.org>
+From:   Nico Pache <npache@redhat.com>
+In-Reply-To: <YmGwYKtz3sFkJlcv@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,45 +96,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-> On 22. 4. 2022, at 15:06, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Fri, Apr 22, 2022 at 02:53:54PM +0200, Martin Povi=C5=A1er wrote:
->=20
->>> Oh, I see - the speaker actually allows configuration of the slots
->>> independently.  Usually the left/right thing on mono devices only =
-does
->>> something for I2S where the bus clocking enforces that there be both
->>> left and right channels.  Either configuration is fine by me TBH, if =
-you
->>> can do that then you could just keep them mapped to the same channel
->>> then mark the control as disabled since it should have no effect.
->=20
->> Well but is there some established way to mark a control as disabled?
->=20
-> snd_ctl_activate_id().
 
-Ha! Great.
+On 4/21/22 15:28, Matthew Wilcox wrote:
+> On Thu, Apr 21, 2022 at 03:05:31PM -0400, Nico Pache wrote:
+>> The vma_is_anonymous function isn't fully indicative of what it checks.
+>>
+>> Without having full knowledge of the mmap process, one may incorrectly
+>> assume this covers all types of anonymous memory; which is not the case.
+> 
+> Is your complaint that anonymous memory can also be found in file VMAs
+> that were mapped with MAP_PRIVATE?  ie COWed pages?
+I should have been more descriptive in my commit msg about how I came to this
+conclusion.
 
->> Another issue here is that if I disable it I can=E2=80=99t leave the =
-routing
->> control in it=E2=80=99s default value, which is =E2=80=98I2C =
-Offset=E2=80=99 and makes the speaker
->> amp ignore the slot mapping.
->=20
-> Sure, that's fine - if a control genuinely has no effect it's fine to
-> hide it from userspace.  The issue is where it's just that you don't =
-see
-> the use, if the control demonstrably does nothing then that's fine.
+From my understanding of the mmap process, a vma->vm_ops field is only NULL when
+mmapped as !file and !shared:
 
-So I assume I can set the control from the machine driver then disable =
-it.
+	if (file){
+		...
+	} else if (vm_flags & VM_SHARED) { 	//ANON SHARED
+		error = shmem_zero_setup(vma);
+	        if (error)
+        		goto free_vma;
+	} else { 				//ANON PRIVATE
+		vma_set_anonymous(vma);		//set vma->vm_ops= NULL
+	}
 
-Anyway, good, this is what I meant earlier when I said the controls I =
-want
-to hide are 'useless/confusing at best=E2=80=99. I must walk back that =
-they are
-=E2=80=98dangerous at worst=E2=80=99, but I am glad we can hide them =
-anyway. (Not all of
-them of course, ISENSE/VSENSE will not be hidden, neither the routing
-control on systems with single mono speaker.)
+To me this means that the VMA is PRIVATE ANON memory. The vma_is_anonymous
+function returns true when vm_ops == NULL. So my intentions were to more
+accurately describe what we are checking for. I could be wrong though thats why
+I started with an RFC :)
+
+There could be some aspect of COW that I dont fully understand. It is not
+something I've looked into much.
+
+Cheers,
+-- Nico
 

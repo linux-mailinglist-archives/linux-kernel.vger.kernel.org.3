@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7601F50ADF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972BB50ADF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443488AbiDVCrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 22:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S1443498AbiDVCsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 22:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241380AbiDVCrS (ORCPT
+        with ESMTP id S235671AbiDVCsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 22:47:18 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00DC4B42E;
-        Thu, 21 Apr 2022 19:44:26 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VAjn9jI_1650595459;
-Received: from 30.225.24.197(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VAjn9jI_1650595459)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 22 Apr 2022 10:44:22 +0800
-Message-ID: <cb91ef9f-62ab-6bca-2bde-ac1977ec6f37@linux.alibaba.com>
-Date:   Fri, 22 Apr 2022 10:44:19 +0800
+        Thu, 21 Apr 2022 22:48:14 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674642ED41;
+        Thu, 21 Apr 2022 19:45:21 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KkzDM5wpvzCrdw;
+        Fri, 22 Apr 2022 10:40:51 +0800 (CST)
+Received: from [10.67.110.176] (10.67.110.176) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 22 Apr 2022 10:45:18 +0800
+Subject: Re: [PATCH -next] libbpf: Add additional null-pointer checking in
+ make_parent_dir
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        <gongruiqi1@huawei.com>, <wangweiyang2@huawei.com>
+References: <20220421130056.2510372-1-cuigaosheng1@huawei.com>
+ <CAEf4Bza3inoAHsS0w=nKXNgxyFqzPXJVyDHq03Foody6Vgp7=Q@mail.gmail.com>
+From:   cuigaosheng <cuigaosheng1@huawei.com>
+Message-ID: <45fdf83c-7492-1c31-af8d-7b2c9bdaf5a7@huawei.com>
+Date:   Fri, 22 Apr 2022 10:45:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH v9 03/21] cachefiles: unbind cachefiles gracefully in
- on-demand mode
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, willy@infradead.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com,
-        tianzichen@kuaishou.com, fannaihao@baidu.com,
-        zhangjiachen.jaycee@bytedance.com
-References: <20220415123614.54024-4-jefflexu@linux.alibaba.com>
- <20220415123614.54024-1-jefflexu@linux.alibaba.com>
- <1444916.1650549738@warthog.procyon.org.uk>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <1444916.1650549738@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <CAEf4Bza3inoAHsS0w=nKXNgxyFqzPXJVyDHq03Foody6Vgp7=Q@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.176]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,34 +58,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I don't understand why we don't check path for NULL, bpf_link__pin is an external
+interface, It will be called by external functions and provide input parameters,
+for example in samples/bpf/hbm.c:
+> 201 link = bpf_program__attach_cgroup(bpf_prog, cg1); 202 if 
+> (libbpf_get_error(link)) { 203 fprintf(stderr, "ERROR: 
+> bpf_program__attach_cgroup failed\n"); 204 goto err; 205 } 206 207 
+> sprintf(cg_pin_path, "/sys/fs/bpf/hbm%d", cg_id); 208 rc = 
+> bpf_link__pin(link, cg_pin_path); 209 if (rc < 0) { 210 printf("ERROR: 
+> bpf_link__pin failed: %d\n", rc); 211 goto err; 212 }
+if cg_pin_path is NULL, strdup(NULL) will trigger a segmentation fault in
+make_parent_dir, I think we should avoid this and add null-pointer checking
+for path, just like check_path:
+> 7673 static int check_path(const char *path) 7674 { 7675 char *cp, 
+> errmsg[STRERR_BUFSIZE]; 7676 struct statfs st_fs; 7677 char *dname, 
+> *dir; 7678 int err = 0; 7679 7680 if (path == NULL) 7681 return 
+> -EINVAL; 7682 7683 dname = strdup(path); 7684 if (dname == NULL) 7685 
+> return -ENOMEM; 7686 7687 dir = dirname(dname); 7688 if (statfs(dir, 
+> &st_fs)) { 7689 cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg)); 
+> 7690 pr_warn("failed to statfs %s: %s\n", dir, cp); 7691 err = -errno; 
+> 7692 } 7693 free(dname); 7694 7695 if (!err && st_fs.f_type != 
+> BPF_FS_MAGIC) { 7696 pr_warn("specified path %s is not on BPF FS\n", 
+> path); 7697 err = -EINVAL; 7698 } 7699 7700 return err; 7701 }
 
+Thanks.
 
-On 4/21/22 10:02 PM, David Howells wrote:
-> Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
-> 
->> +	struct kref			unbind_pincount;/* refcount to do daemon unbind */
-> 
-> Please use refcount_t or atomic_t, especially as this isn't the refcount for
-> the structure.
-
-Okay, will be done in the next version.
-
-> 
->> -	cachefiles_daemon_unbind(cache);
->> -
->>  	/* clean up the control file interface */
->>  	cache->cachefilesd = NULL;
->>  	file->private_data = NULL;
->>  	cachefiles_open = 0;
-> 
-> Please call cachefiles_daemon_unbind() before the cleanup.
-
-Since the cachefiles_struct struct will be freed once the pincount is
-decreased to 0, "cache->cachefilesd = NULL;" needs to be done before
-decreasing the pincount. BTW, "cachefiles_open = 0;" indeed should be
-done only when pincount has been decreased to 0.
-
-
--- 
-Thanks,
-Jeffle
+在 2022/4/22 0:55, Andrii Nakryiko 写道:
+> On Thu, Apr 21, 2022 at 6:01 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
+>> The make_parent_dir is called without null-pointer checking for path,
+>> such as bpf_link__pin. To ensure there is no null-pointer dereference
+>> in make_parent_dir, so make_parent_dir requires additional null-pointer
+>> checking for path.
+>>
+>> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+>> ---
+>>   tools/lib/bpf/libbpf.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index b53e51884f9e..5786e6184bf5 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+>> @@ -7634,6 +7634,9 @@ static int make_parent_dir(const char *path)
+>>          char *dname, *dir;
+>>          int err = 0;
+>>
+>> +       if (path == NULL)
+>> +               return -EINVAL;
+>> +
+> API contract is that path shouldn't be NULL. Just like we don't check
+> link, obj, prog for NULL in every single API, I don't think we need to
+> do it here, unless I'm missing something?
+>
+>>          dname = strdup(path);
+>>          if (dname == NULL)
+>>                  return -ENOMEM;
+>> --
+>> 2.25.1
+>>
+> .

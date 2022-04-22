@@ -2,252 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4D150B613
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38B250B614
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447072AbiDVLXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 07:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
+        id S1447080AbiDVLZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 07:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446980AbiDVLXv (ORCPT
+        with ESMTP id S1446980AbiDVLZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 07:23:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CE1D5370D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 04:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650626457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NXA1fGNBDrS3qL6VbkEQlKT5m57X+jj9VzGQYmAhbNA=;
-        b=e5iHZcRa03MDsACAMSeAaAQP8cS33eYh376hSJuPXR+XWnONw5/SRz6Wq7PusRlay9nj/v
-        RU5Bq72pD7Xp4DLaZ3Vl4IuR53qIZA4QJIJLtXN3nDh0+T2nlzjfagT6i7dwgKXT7z7P1b
-        P56ql4ONvkpQrDsJMcv3XQXqPpjK55g=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-7-K--GsoDxP3CTu7pt9jeFzQ-1; Fri, 22 Apr 2022 07:20:56 -0400
-X-MC-Unique: K--GsoDxP3CTu7pt9jeFzQ-1
-Received: by mail-wm1-f72.google.com with SMTP id p31-20020a05600c1d9f00b0038ed0964a90so3645683wms.4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 04:20:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NXA1fGNBDrS3qL6VbkEQlKT5m57X+jj9VzGQYmAhbNA=;
-        b=TR71dLz+wdw5i1VW8RdM3Xnl0/5lecaJg/xiWtzA23OLoSUr8cZf6A/W5PPY3qMUzT
-         xHBt5yHvikt98hTJKwCFDS73xxSv1Sq2w6pkZ1ua4PfH4NxS+rS/ZWpAGFvoOUjQjkKb
-         dmF3qr4YwOfPFU5/ovIgM7j1bOmNGRjP5FqYJx5R+SBbq9Bg++5wcinIkHsKaAZsRUHv
-         0RDTNkpOrXBmg1NSt6EqP106dFJmC+Wzoo+2Uei24lbM5EbOSGwKhSD0aHjyYvZjfUyy
-         aBwoUGEZj8SES5OZEysfHICkia/bptgniAMHPCLeyY1S5hrvJD8/zuu9WsYttajekgvO
-         ijBw==
-X-Gm-Message-State: AOAM532OoAD0ZWSSTIBVZtOaaIDq2L4cBLHNTVQ8lSMxgO0ywdZadkS8
-        DkbWOIxreR0BDTWrXQhcbiDLlSGmlnWJig6dCsp6dUn345qiGaPwGcJ+ruW/9/E764ewS50o5YA
-        dCGZU4Y8Df+HxnULBKq91IZw=
-X-Received: by 2002:a1c:3b87:0:b0:38e:ae26:87c3 with SMTP id i129-20020a1c3b87000000b0038eae2687c3mr3746848wma.117.1650626455275;
-        Fri, 22 Apr 2022 04:20:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx8QI4l3w8Xtxl0vltlddGtksedQQtGJiNLmdjW9VR/fQPdNRVH2qF4ty6+72+PvbFzSYt2FA==
-X-Received: by 2002:a1c:3b87:0:b0:38e:ae26:87c3 with SMTP id i129-20020a1c3b87000000b0038eae2687c3mr3746832wma.117.1650626455031;
-        Fri, 22 Apr 2022 04:20:55 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id r184-20020a1c2bc1000000b00392af6f0ab0sm1485145wmr.18.2022.04.22.04.20.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 04:20:54 -0700 (PDT)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     frederic@kernel.org, mtosatti@redhat.com
-Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
-        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [RFC PATCH v2] tick/sched: Ensure quiet_vmstat() is called when the idle tick was stopped too
-Date:   Fri, 22 Apr 2022 12:20:53 +0100
-Message-Id: <20220422112053.3695526-1-atomlin@redhat.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 22 Apr 2022 07:25:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB17541AC;
+        Fri, 22 Apr 2022 04:22:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5E2361F72;
+        Fri, 22 Apr 2022 11:22:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25151C385A0;
+        Fri, 22 Apr 2022 11:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650626535;
+        bh=SVW4zVvibn9z+IjAwyBEd5JkQQkXUtOD1zca6C1BokE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qqInEFY2cO4FTnCH8Gno5qENJk/44n3MG8a3wISfMNbDgBokbaZ7vvr+qaZVsI27K
+         i/VwnIIIbXQceDYv0RAf7WYyxiTpWag2UFtrdfL2mC/attGJ1kr9GGgJxyTL35FDt0
+         SVEs8jdWWJveITVcdjC1Z+BBasxW4ilFyxeyNQGEWMhhl2oarOsIo5ZRE/s7n8WK29
+         E8FRNSTUeDUZ+HPQ7tnDqqlvzH/oG0ZspRVjbDvuzfsktZUAxzVXzMIUzFWa9ks5+Q
+         QkvKB3D94/j5v/Xc8a3s47FqgRn5wUTZWUkSJzw+PhcuThk+V5rwoy4G28IWV7jeTt
+         9sm4LcyOh1m0Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nhrMW-0002mB-2D; Fri, 22 Apr 2022 13:22:08 +0200
+Date:   Fri, 22 Apr 2022 13:22:08 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH RFC 1/5] phy: qcom-qmp: add support for pipe clock muxing
+Message-ID: <YmKP4FXXm6NhQFYK@hovoldconsulting.com>
+References: <20220421102041.17345-1-johan+linaro@kernel.org>
+ <20220421102041.17345-2-johan+linaro@kernel.org>
+ <de4f9514-5132-f208-d43f-4c50afcda203@linaro.org>
+ <YmKBgGHtfDcO1Mkg@hovoldconsulting.com>
+ <CAA8EJpqTzcwAtxk+XtAWdZaKEx2=VduPiVBp+CWj=_C-921YJg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpqTzcwAtxk+XtAWdZaKEx2=VduPiVBp+CWj=_C-921YJg@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frederic and Marcelo,
+[ Again, please trim unnecessary context from your replies. ]
 
-The only change since RFC v1 [1] is an alternative approach to hopefully
-resolve the second scenario [2] without disturbing the workload via an
-interrupt. Any feedback/or testing would be appreciated. Thanks!
+On Fri, Apr 22, 2022 at 01:35:01PM +0300, Dmitry Baryshkov wrote:
+> On Fri, 22 Apr 2022 at 13:20, Johan Hovold <johan@kernel.org> wrote:
+> >
+> > On Thu, Apr 21, 2022 at 02:08:27PM +0300, Dmitry Baryshkov wrote:
+> > > On 21/04/2022 13:20, Johan Hovold wrote:
 
-[1]: https://lore.kernel.org/lkml/20220203214339.1889971-1-atomlin@redhat.com/
-[2]: https://lore.kernel.org/lkml/20220217163205.GA748087@lothringen/
+> > > > +   /* Get optional pipe clock mux and default reference source clock. */
+> > > > +   qphy->pipemux_clk = of_clk_get_by_name(np, "mux");
+> > > > +   if (IS_ERR(qphy->pipemux_clk)) {
+> > > > +           ret = PTR_ERR(qphy->pipemux_clk);
+> > > > +           if (ret == -EPROBE_DEFER)
+> > > > +                   return ret;
+> > > > +
+> > > > +           qphy->pipemux_clk = NULL;
 
+> > > > +   } else {
+> > > > +           qphy->piperef_clk = of_clk_get_by_name(np, "ref");
+> > > > +           if (IS_ERR(qphy->piperef_clk)) {
+> > > > +                   ret = PTR_ERR(qphy->piperef_clk);
+> > > > +                   return dev_err_probe(dev, ret,
+> > > > +                                        "failed to get lane%d piperef_clk\n",
+> > > > +                                        id);
+> > > > +           }
+> > > > +   }
+> > > > +
+> > >
+> > > As a second thought.
+> > > This needs to be more explicit. If the chipset requires the pipe clock
+> > > remuxing, we must fail if the clocks were not provided. So depending on
+> > > the qmp instance/property the driver should either use devm_clk_get()
+> > > (instead of _optional) or skip this block completely.
+> >
+> > No, the kernel is not a DT validator (and we have the YAML bindings for
+> > that now).
+> 
+> It is not about DT validation. It is about passing a correct DT.
 
-In the context of the idle task and an adaptive-tick mode/or a nohz_full
-CPU, quiet_vmstat() can be called: before stopping the idle tick,
-entering an idle state and on exit. In particular, for the latter case,
-when the idle task is required to reschedule, the idle tick can remain
-stopped and the timer expiration time endless i.e., KTIME_MAX. Now,
-indeed before a nohz_full CPU enters an idle state, CPU-specific vmstat
-counters should be processed to ensure the respective values have been
-reset and folded into the zone specific 'vm_stat[]'. That being said, it
-can only occur when: the idle tick was previously stopped, and
-reprogramming of the timer is not required.
+Heh. That's the same thing.
 
-A customer provided some evidence which indicates that the idle tick was
-stopped; albeit, CPU-specific vmstat counters still remained populated.
-Thus one can only assume quiet_vmstat() was not invoked on return to the
-idle loop.
+> The file can come up from the kernel. It can come from the older
+> kernel.  OR it can come from the vendor. Or it even might be being a
+> part of firmware flashed into the device.  So we can not assume that
+> the DT is correct just because the in-kernel DT passes YAML
+> validation.
 
-If I understand correctly, I suspect this divergence might erroneously
-prevent a reclaim attempt by kswapd. If the number of zone specific free
-pages are below their per-cpu drift value then
-zone_page_state_snapshot() is used to compute a more accurate view of
-the aforementioned statistic.  Thus any task blocked on the NUMA node
-specific pfmemalloc_wait queue will be unable to make significant
-progress via direct reclaim unless it is killed after being woken up by
-kswapd (see throttle_direct_reclaim()).
+Again, no. The kernel does not need to implement DT validation and can
+assume that the DT describes the hardware accurately. If the DT says
+there's a mux, the driver can use it. If there's no mux in DT, the
+driver can assume it isn't there.
 
-Consider the following theoretical scenario:
+The only thing that complicates things here is the sc7280 dts which has
+been released in 5.16. We don't care about Qualcomm's kernels and dts.
 
-        1.      CPU Y migrated running task A to CPU X that was
-                in an idle state i.e. waiting for an IRQ - not
-                polling; marked the current task on CPU X to
-                need/or require a reschedule i.e., set
-                TIF_NEED_RESCHED and invoked a reschedule IPI to
-                CPU X (see sched_move_task())
+> So, as I wrote, the whole patchset needs much more care about compatibility.
+> 
+> > > But this will not work with earlier DTS files.
+> >
+> > So this is not a problem (but if we really wanted to have the driver
+> > validate the DT it can be done by updating the compatible strings).
+> 
+> We should not update compatible strings just because the driver
+> changes. Compat strings describe the hardware, not the Linux point of
+> view on it.
 
-        2.      CPU X acknowledged the reschedule IPI from CPU Y;
-                generic idle loop code noticed the
-                TIF_NEED_RESCHED flag against the idle task and
-                attempts to exit of the loop and calls the main
-                scheduler function i.e. __schedule().
+We can, it's a documented practise in case a binding needs to be
+updated in an incompatible way:
 
-                Since the idle tick was previously stopped no
-                scheduling-clock tick would occur.
-                So, no deferred timers would be handled
+	https://www.kernel.org/doc/html/latest/devicetree/bindings/ABI.html
 
-        3.      Post transition to kernel execution Task A
-                running on CPU Y, indirectly released a few pages
-                (e.g. see __free_one_page()); CPU Y's
-                'vm_stat_diff[NR_FREE_PAGES]' was updated and zone
-                specific 'vm_stat[]' update was deferred as per the
-                CPU-specific stat threshold
+But I don't think it'll be needed here.
 
-        4.      Task A does invoke exit(2) and the kernel does
-                remove the task from the run-queue; the idle task
-                was selected to execute next since there are no
-                other runnable tasks assigned to the given CPU
-                (see pick_next_task() and pick_next_task_idle())
-
-        5.      On return to the idle loop since the idle tick
-                was already stopped and can remain so (see [1]
-                below) e.g. no pending soft IRQs, no attempt is
-                made to zero and fold CPU Y's vmstat counters
-                since reprogramming of the scheduling-clock tick
-                is not required/or needed (see [2])
-
-		  ...
-		    do_idle
-		    {
-
-		      __current_set_polling()
-		      tick_nohz_idle_enter()
-
-		      while (!need_resched()) {
-
-			local_irq_disable()
-
-			...
-
-			/* No polling or broadcast event */
-			cpuidle_idle_call()
-			{
-
-			  if (cpuidle_not_available(drv, dev)) {
-			    tick_nohz_idle_stop_tick()
-			      __tick_nohz_idle_stop_tick(this_cpu_ptr(&tick_cpu_sched))
-			      {
-				int cpu = smp_processor_id()
-
-				if (ts->timer_expires_base)
-				  expires = ts->timer_expires
-				else if (can_stop_idle_tick(cpu, ts))
-	      (1) ------->        expires = tick_nohz_next_event(ts, cpu)
-				else
-				  return
-
-				ts->idle_calls++
-
-				if (expires > 0LL) {
-
-				  tick_nohz_stop_tick(ts, cpu)
-				  {
-
-				    if (ts->tick_stopped && (expires == ts->next_tick)) {
-	      (2) ------->            if (tick == KTIME_MAX || ts->next_tick ==
-					hrtimer_get_expires(&ts->sched_timer))
-					return
-				    }
-				    ...
-				  }
-
-So the idea of this patch is to ensure refresh_cpu_vm_stats(false) is
-called (when it is appropriate) on return to the idle loop when the idle
-tick was previously stopped too. Additionally, when the scheduling-tick
-is stopped and a task in kernel-mode, modifies the CPU-specific
-'vm_stat_diff[]' and goes to user-mode for a long time.
-
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- include/linux/tick.h     | 9 ++++++++-
- kernel/time/tick-sched.c | 4 +++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/tick.h b/include/linux/tick.h
-index bfd571f18cfd..7bd25266712c 100644
---- a/include/linux/tick.h
-+++ b/include/linux/tick.h
-@@ -307,8 +307,15 @@ static inline void tick_nohz_task_switch(void)
- 
- static inline void tick_nohz_user_enter_prepare(void)
- {
--	if (tick_nohz_full_cpu(smp_processor_id()))
-+	struct tick_sched *ts;
-+
-+	if (tick_nohz_full_cpu(smp_processor_id())) {
-+		ts = this_cpu_ptr(&tick_cpu_sched);
-+
-+		if (ts->tick_stopped)
-+			quiet_vmstat();
- 		rcu_nocb_flush_deferred_wakeup();
-+	}
- }
- 
- #endif
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index d257721c68b8..56d86d9371b7 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -891,6 +891,9 @@ static void tick_nohz_stop_tick(struct tick_sched *ts, int cpu)
- 		ts->do_timer_last = 0;
- 	}
- 
-+	/* Attempt to fold when the idle tick is stopped or not */
-+	quiet_vmstat();
-+
- 	/* Skip reprogram of event if its not changed */
- 	if (ts->tick_stopped && (expires == ts->next_tick)) {
- 		/* Sanity check: make sure clockevent is actually programmed */
-@@ -912,7 +915,6 @@ static void tick_nohz_stop_tick(struct tick_sched *ts, int cpu)
- 	 */
- 	if (!ts->tick_stopped) {
- 		calc_load_nohz_start();
--		quiet_vmstat();
- 
- 		ts->last_tick = hrtimer_get_expires(&ts->sched_timer);
- 		ts->tick_stopped = 1;
--- 
-2.34.1
-
+Johan

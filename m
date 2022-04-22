@@ -2,117 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356C150B42E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFEF50B437
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446090AbiDVJig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
+        id S1446099AbiDVJj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445907AbiDVJie (ORCPT
+        with ESMTP id S1357468AbiDVJjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:38:34 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C94527EE;
-        Fri, 22 Apr 2022 02:35:41 -0700 (PDT)
+        Fri, 22 Apr 2022 05:39:25 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FB653737;
+        Fri, 22 Apr 2022 02:36:33 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id bv19so15237184ejb.6;
+        Fri, 22 Apr 2022 02:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650620141; x=1682156141;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=a1NKqMAQrpDA9DNNjLiY6Z6HBalYNQgIEUbfmgCyV1o=;
-  b=xsOWsvTUtrzwe1elaGXehg3zl6inUXZ9x3m5R5jLtbVcjdW44AOSfxjo
-   Z+LCG8oXB8gKRc/haGgmYLVByMddgvm+QTDxgAwHk9tyqlIPeMkyoIjTa
-   5BfmXAJnIiD3cE0vNjT0/1+V0FGL8UV4unM/bfzNP4l2wXKAv8nD9+EQO
-   U=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Apr 2022 02:35:41 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 02:35:42 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 22 Apr 2022 02:35:40 -0700
-Received: from [10.216.36.2] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 22 Apr
- 2022 02:35:36 -0700
-Message-ID: <c1dc4ce8-9dd5-d511-f022-5e71dd7c23ba@quicinc.com>
-Date:   Fri, 22 Apr 2022 15:05:31 +0530
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jO/vxDbeCOIwMZpGyPBrJ93fKruvAZdChVh9tS+X+e8=;
+        b=gAg4QfVMOQzg3Wo9SO5pjrLDbi8o6PVWL9VrsfN3oRTrmLA014Mjh/LdgUMNSjRSyB
+         MDfMYemTjD74cjmMrubbhLrQwsTUmlkYmBeaLIIz/jK6WuGlxIUvJirJh7gR6Hb6LrKZ
+         Jz9nRB28sBCSz7tDUJKEMO4E/w0MkFQoH5B9RlEGOhYi/PR8bAfOPduknHPaguvz32iw
+         rrZSwMiUJQOXc9CBwfVcttyi4QKqEGZUG324pKKnfeIsrmJZF+Vn2hnNwEhzICCLFKR+
+         jrv7Bh/UGwSumlQ5M272FIzlT+USYC8GPXPfoTItHzUa1FZY+X8Dg3PAp8nYLxsYpSlW
+         NX8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jO/vxDbeCOIwMZpGyPBrJ93fKruvAZdChVh9tS+X+e8=;
+        b=muHtWZ7tq+zpJRyc94RoyyPh2vMktxXBSc352jUvwGBGTEFSaMdpN0bNaFeac8r8Ji
+         mCxP6pj3PpyWx8/Oyhjd0uyiJyDhUXyyZlxyhbFnMd6ovtvcA7Jlmtj53Op3lxbaywx9
+         jH1GcDA2XOhP9iy+A1mOAAjsQK5UJ0mz6VWBA6OSqZS5g3EH4pnScMJK2kCCaGrN8ZbS
+         OxwhFnw9dKW8urJvX0xTXaSrvnsqY3y+bsSCfE0MECzGp00G71z5+uWoNhxeqkM95ek6
+         D8SIx5lEeGBsvH9DXBFRYSisAYqebyQRSbsVEMBdIKVIKTnz6pe9SUYzNh92NZaBHoQf
+         6TfQ==
+X-Gm-Message-State: AOAM533I0+5VIRxt/LliA3pw+vDRQ0i4QVLuCeBCZPGzzIAVSa0JoxGt
+        TBPYh/p3Ml3jvWEnAf2/x/g=
+X-Google-Smtp-Source: ABdhPJxClEYIuim6d5CYgBJxMfNobumHE1XRkHMdvQqHDjpZ2pZa9HvT6M336UjanJpLS0f2QQCxWQ==
+X-Received: by 2002:a17:906:9b89:b0:6da:ac6b:e785 with SMTP id dd9-20020a1709069b8900b006daac6be785mr3354360ejc.295.1650620191608;
+        Fri, 22 Apr 2022 02:36:31 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id n25-20020a1709062bd900b006e8766b7907sm562323ejg.223.2022.04.22.02.36.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 02:36:30 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, outreachy@lists.linux.dev,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH 1/4] mm/highmem: Fix kernel-doc warnings in highmem*.h
+Date:   Fri, 22 Apr 2022 11:36:28 +0200
+Message-ID: <1819415.CQOukoFCf9@leap>
+In-Reply-To: <YmJmLrS3hPR6gOaw@kernel.org>
+References: <20220421180200.16901-1-fmdefrancesco@gmail.com> <20220421180200.16901-2-fmdefrancesco@gmail.com> <YmJmLrS3hPR6gOaw@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Add ldo_l17b regulator node
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>,
-        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1650550779-8133-1-git-send-email-quic_srivasam@quicinc.com>
- <CAD=FV=VODaTxu+c8cXWyy8Mw1Qm145vwt-UspirE6k-XL-MZdg@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <CAD=FV=VODaTxu+c8cXWyy8Mw1Qm145vwt-UspirE6k-XL-MZdg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your time Doug!!!
+On venerd=C3=AC 22 aprile 2022 10:24:14 CEST Mike Rapoport wrote:
+> On Thu, Apr 21, 2022 at 08:01:57PM +0200, Fabio M. De Francesco wrote:
+> > `scripts/kernel-doc -v -none include/linux/highmem*` reports the=20
+following
+> > warnings:
+> >=20
+> > include/linux/highmem.h:160: warning: expecting prototype for=20
+kunmap_atomic(). Prototype was for nr_free_highpages() instead
+> > include/linux/highmem.h:204: warning: No description found for return=20
+value of 'alloc_zeroed_user_highpage_movable'
+> > include/linux/highmem-internal.h:256: warning: Function parameter or=20
+member '__addr' not described in 'kunmap_atomic'
+> > include/linux/highmem-internal.h:256: warning: Excess function=20
+parameter 'addr' description in 'kunmap_atomic'
+> >=20
+> > Fix these warnings by (1) moving the kernel-doc comments from highmem.h=
+=20
+to
+> > highmem-internal.h (which is the file were the kunmap_atomic() macro is
+> > actually defined), (2) extending and merging it with the comment which=
+=20
+was
+> > already in highmem-internal.h, and (3) using correct parameter names.
+> >=20
+> > Cc: Mike Rapoport <rppt@linux.ibm.com>
+> > Cc: Ira Weiny <ira.weiny@intel.com>
+> > Suggested-by: Matthew Wilcox <willy@infradead.org>
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > ---
+> >  include/linux/highmem-internal.h | 14 +++++++++++---
+> >  include/linux/highmem.h          | 15 +++------------
+> >  2 files changed, 14 insertions(+), 15 deletions(-)
+> >
+> > [...]
+> >
+> > + *
+> > + * Unmap an address previously mapped by kmap_atomic() and re-enables
+>=20
+> Unmap ... and re-enable
+>=20
+> or=20
+>=20
+> Unmaps ... and re-enables
 
-On 4/21/2022 9:50 PM, Doug Anderson wrote:
-> Hi,
->
-> On Thu, Apr 21, 2022 at 7:20 AM Srinivasa Rao Mandadapu
-> <quic_srivasam@quicinc.com> wrote:
->> Add ldo_l17b in pm7325 regulator, which is required for
->> wcd codec vdd buck supply.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 5 +++++
->>   1 file changed, 5 insertions(+)
-> The ${SUBJECT} should probably mention qcard somehow? Right now your
-> patch subject makes it sound like this applies to all sc7280 boards,
-> but this only affects those including the qcard dtsi file.
-Okay. Will update the subject accordingly.
->
->
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
->> index b833ba1..17d0c05 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
->> @@ -113,6 +113,11 @@
->>                          regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->>                  };
->>
->> +               vreg_l17b_1p8: ldo17 {
->> +                       regulator-min-microvolt = <1700000>;
->> +                       regulator-max-microvolt = <1900000>;
-> All the other regulators in this file specify:
->
-> regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->
-> Why doesn't yours?
-Okay. Will add initial mode.
+Sorry, I should have read it twice before submitting :(
+
+This entire series has already been taken by Andrew Morton for "-mm"=20
+immediately after submission. I think that probably the better suited=20
+solution is to send a correction when they show upstream.=20
+
+Do you agree with me or you prefer that I resubmit the whole series as a v2=
+=20
+now?
+
+>=20
+> Other than that
+>=20
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+>=20
+
+I also saw your "Acked-by" tag in patch 2/4. Thanks!
+
+Regards,
+
+=46abio
+
+

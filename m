@@ -2,135 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348D050ADAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDDA50ADB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443242AbiDVCXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 22:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
+        id S1443324AbiDVC0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 22:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbiDVCXa (ORCPT
+        with ESMTP id S1443316AbiDVCZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 22:23:30 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD9149263;
-        Thu, 21 Apr 2022 19:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650594039; x=1682130039;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QY4+iCfT1Wy7jYCT0r02vdmfMy8p/eY4uf/pYw6auo0=;
-  b=HKEz8YOdSu3RZK4fAnYRh7BHINw7nMzZib5wXpmfSBqnA4jBUCObmv2X
-   g4QRYnlHolKlKxzyobwzHQmRdet4RdGDlADyJ2Z+S8pI+IzcQkbG+FmDW
-   YiNh6G24uKLXcC20bqmIEvzVcE7Cbr+mszAVOJD36albcEPNA0zBhab3P
-   7vthFME8sQjpWVccDd4763SMcfoTWCl4X3UhvQ9z71D9AvaYk/U+PxqCb
-   SP0/JSkKDbFYLgPJkG/ZreHkKPS/fNaqf5UU+1QSJAXiXzZBymvz5PLpl
-   qJXTa2XK7ymEQk8v0th2WyrD1PDnuBEeygB3SzT4PZ6YaZlqv8/q11soy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="251868464"
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="251868464"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 19:20:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="562849639"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Apr 2022 19:20:35 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhiuQ-00097C-Jl;
-        Fri, 22 Apr 2022 02:20:34 +0000
-Date:   Fri, 22 Apr 2022 10:20:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yu Zhe <yuzhe@nfschina.com>, mareklindner@neomailbox.ch,
-        sw@simonwunderlich.de, a@unstable.cc, sven@narfation.org,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
-Cc:     kbuild-all@lists.01.org, b.a.t.m.a.n@lists.open-mesh.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, kernel-janitors@vger.kernel.org,
-        Yu Zhe <yuzhe@nfschina.com>
-Subject: Re: [PATCH] batman-adv: remove unnecessary type castings
-Message-ID: <202204221027.ETcMYyKP-lkp@intel.com>
-References: <20220421154829.9775-1-yuzhe@nfschina.com>
+        Thu, 21 Apr 2022 22:25:58 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D96B49698
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 19:23:07 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d15so7739308pll.10
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 19:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/r6xw+gj3ZTku8Ban2Ty+342ukm24iTASQaEDp2KNQM=;
+        b=Ib8b5bLDkA26LrA6dCcYGi19rtQ+3Mrl6DdFt3V0pfQltiTIh6katrX1tWJQA7hCPd
+         41Ga7W4SB7elDpM08p0ULKc3OfwLM6N4aOwQPVAfvEhJnVZiiNDQYp9a+gv/dEQ/GO75
+         C/Y0//i7ekOZj7Xi+eB06n63ANAWPwLyckiVSNQynddV6XvJSIcaiYOEP2mvAmjIZKyu
+         BvnD/t/fseEXFrc45GU4xVEBEun6biSDbiELpy+XpCabvEPJ4OUYK+VQM/XB0NiUytoC
+         Wno6y/lSbCTrO5OY4/A7HcRrEmE8XfnxzYt8dHvQa7pcRY2iAgGWzRo1ydNtrNOaZ8XH
+         1SUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/r6xw+gj3ZTku8Ban2Ty+342ukm24iTASQaEDp2KNQM=;
+        b=nTWCxV4MxdKtVOtnUemdN8urrx7VfQnRrboXmudRLFvg6uKT6peuXrq61KOTtmu4D+
+         4azxpHzfq09QbvFMChrO91PVqWgl6672+oUvFYRzCOR+WBBrddgZCG9pug91dKtaRcwE
+         LDS4MKQh0WzrFGL/cZh+YY9Ac5FO1vXC19TBOksOpDurxy7hePlVCTtiI2HiB3nL9Mdk
+         pIqWhRUwkHLGy5s3be771aDh+EaoEQ1thlGtRykAGFTNETgCoUN+9Gz98kDWw7Eq7Xwx
+         nq08ljMxQ2XBXx4tJDMlgMx5Qmxoq3ss4kR94PVeWGjtQexW0dz6CPKgUD1KKldp9sbC
+         AfFw==
+X-Gm-Message-State: AOAM530YHnFO9l1rfWLIElbwB+AOSgjOyu2GlKduhhxkVgdavb7T4c0M
+        /4Lq1QDkrhtEDErC66Ti4RytUw==
+X-Google-Smtp-Source: ABdhPJx8bN1zOvSNsoELmBDe7+fKr70if1BlvjKWBht+eNDqttt5xN3LauEEFhE86vFppa150f4cBA==
+X-Received: by 2002:a17:902:8214:b0:158:b5c2:1d02 with SMTP id x20-20020a170902821400b00158b5c21d02mr2189234pln.27.1650594186815;
+        Thu, 21 Apr 2022 19:23:06 -0700 (PDT)
+Received: from localhost ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id cp19-20020a056a00349300b0050a890c8c16sm453057pfb.19.2022.04.21.19.23.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 19:23:06 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 10:23:02 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Lu Jialin <lujialin4@huawei.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH -next] mm/memcontrol.c: make cgroup_memory_noswap static
+Message-ID: <YmIRhikdGutx6TeE@FVFYT0MHHV2J.usts.net>
+References: <20220421124736.62180-1-lujialin4@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421154829.9775-1-yuzhe@nfschina.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220421124736.62180-1-lujialin4@huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yu,
+On Thu, Apr 21, 2022 at 08:47:36PM +0800, Lu Jialin wrote:
+> cgroup_memory_noswap is only used in mm/memcontrol.c, therefore just make
+> it static, and remove export in include/linux/memcontrol.h
+> 
+> Signed-off-by: Lu Jialin <lujialin4@huawei.com>
 
-Thank you for the patch! Perhaps something to improve:
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.18-rc3 next-20220421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Zhe/batman-adv-remove-unnecessary-type-castings/20220421-235254
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b253435746d9a4a701b5f09211b9c14d3370d0da
-config: m68k-defconfig (https://download.01.org/0day-ci/archive/20220422/202204221027.ETcMYyKP-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2474b41c585e849d3546e0aba8f3c862735a04ff
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yu-Zhe/batman-adv-remove-unnecessary-type-castings/20220421-235254
-        git checkout 2474b41c585e849d3546e0aba8f3c862735a04ff
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash net/batman-adv/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   net/batman-adv/bridge_loop_avoidance.c: In function 'batadv_choose_claim':
->> net/batman-adv/bridge_loop_avoidance.c:68:42: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-      68 |         struct batadv_bla_claim *claim = data;
-         |                                          ^~~~
-
-
-vim +/const +68 net/batman-adv/bridge_loop_avoidance.c
-
-    53	
-    54	static void batadv_bla_periodic_work(struct work_struct *work);
-    55	static void
-    56	batadv_bla_send_announce(struct batadv_priv *bat_priv,
-    57				 struct batadv_bla_backbone_gw *backbone_gw);
-    58	
-    59	/**
-    60	 * batadv_choose_claim() - choose the right bucket for a claim.
-    61	 * @data: data to hash
-    62	 * @size: size of the hash table
-    63	 *
-    64	 * Return: the hash index of the claim
-    65	 */
-    66	static inline u32 batadv_choose_claim(const void *data, u32 size)
-    67	{
-  > 68		struct batadv_bla_claim *claim = data;
-    69		u32 hash = 0;
-    70	
-    71		hash = jhash(&claim->addr, sizeof(claim->addr), hash);
-    72		hash = jhash(&claim->vid, sizeof(claim->vid), hash);
-    73	
-    74		return hash % size;
-    75	}
-    76	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks.

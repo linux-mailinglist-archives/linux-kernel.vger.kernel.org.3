@@ -2,153 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CA750B10E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49DB50B118
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444650AbiDVHHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S1444661AbiDVHJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444645AbiDVHHR (ORCPT
+        with ESMTP id S229636AbiDVHJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:07:17 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FB45130D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:04:23 -0700 (PDT)
-Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id BAD6C2CB0E3;
-        Fri, 22 Apr 2022 09:04:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1650611061;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wlADY8n35L2Ou7uvyeVSyLqPISR1e/igSs6VXk/afno=;
-        b=2z/g+n7+dT+FurhJHIQnLUTHRWFUTSrGyIyTGcvtHHQJMYsJvn+SC/gkpvBeRX51lAm/L4
-        yysFkL9Q+w1MRei//reAKfjwiV4SlPL+Tdjb2UleIxA1YdhYBc9MYMVRXWo6jvMIm31hnB
-        unP4QlspRwi+PNwj605uXLIZFX10cJQZteWtGZq6Zh8hrBzSLofW0LgCwD4gct6xts7vjz
-        BWtErvfLBtxcrUxhqZCQ6GxUpWPTil3neRuNDqwARyKH4GTVghSBpLJIp/RLDOq3X97jxf
-        NLGZ8bjU9oouRusSoWjz5XSCGq20aSNYf9HgIeIFJ/Y0vv1apjCpAE8+xYHtrQ==
-Message-ID: <b8b62753ad5235e065b4cb0856a7a7c33438dfbb.camel@svanheule.net>
-Subject: Re: [PATCH v1 3/6] gpio: realtek-otto: Support per-cpu interrupts
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Bert Vermeulen <bert@biot.com>, linux-kernel@vger.kernel.org
-Date:   Fri, 22 Apr 2022 09:04:20 +0200
-In-Reply-To: <87h76mahsl.wl-maz@kernel.org>
-References: <cover.1649533972.git.sander@svanheule.net>
-         <8d4e0848f233c2c1b98aa141741c61d95cd3843f.1649533972.git.sander@svanheule.net>
-         <CACRpkdbSdDAKiFAsHBosdVDpBhWW-Keoq+t8GJ5LsyWjOZwp_g@mail.gmail.com>
-         <87h76mahsl.wl-maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Fri, 22 Apr 2022 03:09:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6CA50E31;
+        Fri, 22 Apr 2022 00:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650611219; x=1682147219;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K5K/9LP5qRdw+kAG2wypguFk5flX/j+CqMO4RT/vvxA=;
+  b=kXelw/wzOaRh/LIF0UmBSG/g+2d8r3X74W3/LVmQ9JQ/NLZTcGqtRPwy
+   UuyzXDQoHDlDOAMKQqaHYiVDRjoBbYjjfcfdEmqZAuh9WRZJN2/Xx+lED
+   rcbR8z86KxiQEAZ6qEhh1to9RFsdAG65pcCooF1Jjx/txez7dxiaKoYjA
+   1geoRA7KUyWvIrTYor0ZLWMyjDKruPM+P6GqtHbJaf9ljip2JY4//wF6h
+   ag3AQigB2e/7oCDWXLMRnL9Set9EdqK3f04q140kxZ2iKQLz0PyoZq4rA
+   xdURsFUkndRpJA2IUVpfIsF/BC1NRzTwpL05R0/3pN0icjkoRLkwUgubZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325049925"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="325049925"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 00:06:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="577715736"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Apr 2022 00:06:53 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhnNU-0009M8-Fo;
+        Fri, 22 Apr 2022 07:06:52 +0000
+Date:   Fri, 22 Apr 2022 15:06:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ryan Lee <ryan.lee.analog@gmail.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        ckeepax@opensource.cirrus.com, tanureal@opensource.cirrus.com,
+        cy_huang@richtek.com, pierre-louis.bossart@linux.intel.com,
+        drhodes@opensource.cirrus.com, pbrobinson@gmail.com,
+        hdegoede@redhat.com, lukas.bulwahn@gmail.com, stephan@gerhold.net,
+        arnd@arndb.de, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ryans.lee@analog.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH V2 2/2] ASoC: max98396: add amplifier driver
+Message-ID: <202204221550.phNeKLyn-lkp@intel.com>
+References: <20220421230253.823798-2-ryan.lee.analog@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421230253.823798-2-ryan.lee.analog@gmail.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus, Marc,
+Hi Ryan,
 
-On Thu, 2022-04-21 at 10:48 +0100, Marc Zyngier wrote:
-> On Thu, 21 Apr 2022 00:04:16 +0100,
-> Linus Walleij <linus.walleij@linaro.org> wrote:
-> > 
-> > On Sat, Apr 9, 2022 at 9:56 PM Sander Vanheule <sander@svanheule.net> wrote:
-> > 
-> > > On SoCs with multiple cores, it is possible that the GPIO interrupt
-> > > controller supports assigning specific pins to one or more cores.
-> > > 
-> > > IRQ balancing can be performed on a line-by-line basis if the parent
-> > > interrupt is routed to all available cores, which is the default upon
-> > > initialisation.
-> > > 
-> > > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> > 
-> > That sounds complicated.
-> > 
-> > Sounds like something the IRQ maintainer (Marc Z) should
-> > have a quick look at.
-> 
-> This is pretty odd indeed. There seem to be a direct mapping between
-> the GPIOs and the CPU it interrupts (or at least that's what the code
-> seem to express). However, I don't see a direct relation between the
-> CPUs and the chained interrupt. It isn't even clear if this interrupt
-> itself is per-CPU.
-> 
-> So this begs a few questions:
-> 
-> - is the affinity actually affecting the target CPU? or is it
->   affecting the target mux?
-> 
-> - how is the affinity of the mux interrupt actually enforced?
+Thank you for the patch! Perhaps something to improve:
 
-There are three interrupt controllers at play here:
-   1. MIPS CPU interrupt controller: drivers/irqchip/irq-mips-cpu.c
-      One interrupt controller per VPE, so in this case there are two. Provides
-      per-CPU interrupts.
-   2. SoC interrupt controller: drivers/irqchip/irq-realtek-rtl.c
-      Also one interrupt controller per VPE. I suppose these will also be per-
-      CPU, although this isn't implemented in the driver yet, and I don't think
-      I yet fully understand how should work in the kernel.
-   3. GPIO interrupt controller: drivers/gpio/gpio-realtek-otto.c
-      One interrupt controller for the entire GPIO bank, with optional
-      configurable affinity (this patch) for the different VPEs.
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on v5.18-rc3 next-20220421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-For the RTL839x series of SoCs, this results in the following:
+url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Lee/ASoC-dt-bindings-max98396-add-amplifier-driver/20220422-070610
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: arm-buildonly-randconfig-r003-20220421 (https://download.01.org/0day-ci/archive/20220422/202204221550.phNeKLyn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/1acb9ac9acbd834a2e93c2127be6bdd1716dc6dd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ryan-Lee/ASoC-dt-bindings-max98396-add-amplifier-driver/20220422-070610
+        git checkout 1acb9ac9acbd834a2e93c2127be6bdd1716dc6dd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/
 
-GPIO LINES SOC IRQ MIPS
-+--------+ +-----------+ HW IRQ +--------+
---->| GPIO | | SOC IRQ | LINES | IRQ |
---->| BANK |-----o-->| VPE0 CTRL |=========>| VPE0 |
-. | | | +-----------+ +--------+
-. +--------+ | 
-. |
-| +-----------+ +--------+
-\-->| SOC IRQ | | IRQ |
-| VPE1 CTRL |=========>| VPE1 |
-+-----------+ +--------+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/max98396.c:408:7: warning: variable 'update' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (format != (reg & MAX98396_PCM_MODE_CFG_FORMAT_MASK))
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/max98396.c:411:7: note: uninitialized use occurs here
+                   if (update)
+                       ^~~~~~
+   sound/soc/codecs/max98396.c:408:3: note: remove the 'if' if its condition is always true
+                   if (format != (reg & MAX98396_PCM_MODE_CFG_FORMAT_MASK))
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/max98396.c:349:13: note: initialize the variable 'update' to silence this warning
+           bool update;
+                      ^
+                       = 0
+   1 warning generated.
 
 
-For RTL930x, where GPIO IRQ affinity is configurable:
+vim +408 sound/soc/codecs/max98396.c
 
-GPIO LINES SOC IRQ MIPS
-+--------+ +-----------+ HW IRQ +--------+
---->| GPIO |-------->| SOC IRQ | LINES | IRQ |
---->| BANK | | VPE0 CTRL |=========>| VPE0 |
-. | |-----\ +-----------+ +--------+
-. +--------+ | 
-. |
-| +-----------+ +--------+
-\-->| SOC IRQ | | IRQ |
-| VPE1 CTRL |=========>| VPE1 |
-+-----------+ +--------+
+   339	
+   340	static int max98396_dai_set_fmt(struct snd_soc_dai *codec_dai, unsigned int fmt)
+   341	{
+   342		struct snd_soc_component *component = codec_dai->component;
+   343		struct max98396_priv *max98396 = snd_soc_component_get_drvdata(component);
+   344		unsigned int format;
+   345		unsigned int bclk_pol = 0;
+   346		unsigned int fsync_pol = 0;
+   347		int ret, status;
+   348		int reg;
+   349		bool update;
+   350	
+   351		dev_dbg(component->dev, "%s: fmt 0x%08X\n", __func__, fmt);
+   352	
+   353		switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
+   354		case SND_SOC_DAIFMT_NB_NF:
+   355			break;
+   356		case SND_SOC_DAIFMT_NB_IF:
+   357			fsync_pol = MAX98396_PCM_MODE_CFG_PCM_LRCLKEDGE;
+   358			break;
+   359		case SND_SOC_DAIFMT_IB_NF:
+   360			bclk_pol = MAX98396_PCM_MODE_CFG_PCM_BCLKEDGE;
+   361			break;
+   362		case SND_SOC_DAIFMT_IB_IF:
+   363			bclk_pol = MAX98396_PCM_MODE_CFG_PCM_BCLKEDGE;
+   364			fsync_pol = MAX98396_PCM_MODE_CFG_PCM_LRCLKEDGE;
+   365			break;
+   366	
+   367		default:
+   368			dev_err(component->dev, "DAI invert mode unsupported\n");
+   369			return -EINVAL;
+   370		}
+   371	
+   372		regmap_update_bits(max98396->regmap,
+   373				   MAX98396_R2041_PCM_MODE_CFG,
+   374				   MAX98396_PCM_MODE_CFG_PCM_LRCLKEDGE,
+   375				   fsync_pol);
+   376	
+   377		regmap_update_bits(max98396->regmap,
+   378				   MAX98396_R2042_PCM_CLK_SETUP,
+   379				   MAX98396_PCM_MODE_CFG_PCM_BCLKEDGE,
+   380				   bclk_pol);
+   381	
+   382		/* interface format */
+   383		switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
+   384		case SND_SOC_DAIFMT_I2S:
+   385			format = MAX98396_PCM_FORMAT_I2S;
+   386			break;
+   387		case SND_SOC_DAIFMT_LEFT_J:
+   388			format = MAX98396_PCM_FORMAT_LJ;
+   389			break;
+   390		case SND_SOC_DAIFMT_DSP_A:
+   391			format = MAX98396_PCM_FORMAT_TDM_MODE1;
+   392			break;
+   393		case SND_SOC_DAIFMT_DSP_B:
+   394			format = MAX98396_PCM_FORMAT_TDM_MODE0;
+   395			break;
+   396		default:
+   397			return -EINVAL;
+   398		}
+   399	
+   400		ret = regmap_read(max98396->regmap, MAX98396_R210F_GLOBAL_EN, &status);
+   401		if (ret < 0)
+   402			return -EINVAL;
+   403	
+   404		if (status) {
+   405			ret = regmap_read(max98396->regmap, MAX98396_R2041_PCM_MODE_CFG, &reg);
+   406			if (ret < 0)
+   407				return -EINVAL;
+ > 408			if (format != (reg & MAX98396_PCM_MODE_CFG_FORMAT_MASK))
+   409				update = true;
+   410			/* GLOBAL_EN OFF prior to pcm mode change */
+   411			if (update)
+   412				max98396_global_enable_onoff(max98396->regmap, false);
+   413		}
+   414	
+   415		regmap_update_bits(max98396->regmap,
+   416				   MAX98396_R2041_PCM_MODE_CFG,
+   417				   MAX98396_PCM_MODE_CFG_FORMAT_MASK,
+   418				   format);
+   419	
+   420		if (status && update)
+   421			max98396_global_enable_onoff(max98396->regmap, true);
+   422	
+   423		return 0;
+   424	}
+   425	
 
-The interrupt for the GPIO controller can be muxed to any of the MIPS HW
-interrupts on any (or all) of the VPEs, and these muxes (SoC IRQ controllers)
-can be configured independently per CPU. The SoC IRQ line index is fixed, and
-consistent for both VPEs.
-Only in the second diagram can individual GPIO interrupts be muxed to any of the
-VPEs, but there is still only one IRQ line per VPE for all selected GPIO lines.
-
-I hopes this helps to clarify the situation. We don't have any real
-documentation, so this is basically derived from registers descriptions in SDK
-headers and testing the interrupt behaviour.
-
-Best,
-Sander
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

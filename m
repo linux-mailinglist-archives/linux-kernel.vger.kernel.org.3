@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1F950B821
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDC450B80E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447799AbiDVNRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S1447788AbiDVNQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447805AbiDVNRN (ORCPT
+        with ESMTP id S1447789AbiDVNQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:17:13 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36415580EC
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:14:19 -0700 (PDT)
+        Fri, 22 Apr 2022 09:16:33 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68348580DA
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:13:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650633259; x=1682169259;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7SBMJY2Qo5zlpc9kt8+bESQSdagf2RsT2Ca0UID8SSU=;
-  b=YqJxiqd+p2L4n8U8hbPPxqZ2izeksBHU3BRxbi0TXcYWh80aMsGXN8tz
-   Z9WPS25npO3NzjN9saA3X/HLp6WQdmeLypGRgUxaJB8S0bwy/drZSC8dX
-   4JKXN2ca54q/20i4g/fhpz/3/lTQ+ba8nZIyzxbuYki+RkWHR5UGPczjl
-   TQp0i8g5IMeOuP/YUYhErH5QkXQvc+b8tS7OwtrUfzT1xrK57dZuikKoF
-   ogtRdeteT7tobiaHpmvLnwaz+Cvok/0CYKheJ/eB9nkd/yBdv2MHUMV0C
-   riSqVifkQMWT30ddSaUrD+ivrmcaXlwuIYt4IB/sQ6YIIvrfQoLvj2xgb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="262269295"
+  t=1650633220; x=1682169220;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tC39CcHCCAkxRGoLupvWWCwop7YOMFc9XUJ+TwGQPfg=;
+  b=DRS8dm3s5lCUGTfjsvIVHN0LLnFrFrDnWhnO5RJFDhl9ZFa0i6elxZGv
+   Dsw1XyykM49RhKv30EZ9G+N2cq90Y9EFU3xZBjvCnftN6vK+T+49sVQCD
+   i3p773RGIlRKQdOgVU0cojh/BtCIFCij/rKLSg+67+uE/Ds9oOU9FoIJ0
+   6iEraarXqoTgNnPUlMHxMh8NXHqf2GBbR1JMWHRUgkrCROoaEER7wXnrR
+   LZ4+eYMMZ/VrVsN5zBaBYlrJLhZCPosm/iif4SxNHhhqLug0aBybbQpri
+   tMS/EjDyZuIGPB+aG3NHV6IeKOF+rxjE4GGApRSyV/eXaZlkqynSlguup
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351109961"
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="262269295"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 06:14:18 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="351109961"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 06:13:40 -0700
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="511569890"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Apr 2022 06:14:17 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nht72-000A86-Di;
-        Fri, 22 Apr 2022 13:14:16 +0000
-Date:   Fri, 22 Apr 2022 21:13:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     YunQiang Su <yunqiang.su@cipunited.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/boot/compressed/../../lib/bswapdi.c:5:28: warning: no
- previous prototype for function '__bswapdi2'
-Message-ID: <202204222130.Bc3dL9dC-lkp@intel.com>
+   d="scan'208";a="556374272"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.236]) ([10.254.215.236])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 06:13:37 -0700
+Message-ID: <8440e43b-aa1f-2648-6b64-afc34aa97bc2@linux.intel.com>
+Date:   Fri, 22 Apr 2022 21:13:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Cc:     baolu.lu@linux.intel.com,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/4] iommu/vt-d: Set PGSNP bit in pasid table entry for
+ SVA binding
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+References: <20220421113558.3504874-1-baolu.lu@linux.intel.com>
+ <20220421113558.3504874-3-baolu.lu@linux.intel.com>
+ <BN9PR11MB5276EDDABE40B6A6A67A0F4E8CF79@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276EDDABE40B6A6A67A0F4E8CF79@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,63 +68,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d569e86915b7f2f9795588591c8d5ea0b66481cb
-commit: 31b2f3dc851c65fee288612432c4fc956f1a264e MIPS: enable both vmlinux.gz.itb and vmlinuz for generic
-date:   4 months ago
-config: mips-randconfig-r003-20220422 (https://download.01.org/0day-ci/archive/20220422/202204222130.Bc3dL9dC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=31b2f3dc851c65fee288612432c4fc956f1a264e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 31b2f3dc851c65fee288612432c4fc956f1a264e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+On 2022/4/22 11:05, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Thursday, April 21, 2022 7:36 PM
+>>
+>> This field make the requests snoop processor caches irrespective of
+>> other attributes in the request or other fields in paging structure
+>> entries used to translate the request.
+> 
+> I think you want to first point out the fact that SVA wants snoop
+> cache instead of just talking about the effect of PGSNP.
+> 
+> But thinking more I wonder why PGSNP is ever required. This is
+> similar to DMA API case. x86 is already cache coherent for normal
+> DMA (if not setting PCI no-snoop) and if the driver knows no-snoop
+> is incompatible to SVA API then it should avoid triggering no-snoop
+> traffic for SVA usage. In this case it is pointless for IOMMU driver
+> to enable force-snooping. Even in the future certain platform allows
+> no-snoop usage w/ SVA (I'm not sure how it works) this again should
+> be reflected by additional SVA APIs for driver to explicitly manage.
+> 
+> force-snoop should be enabled only in device assignment case IMHO,
+> orthogonal to whether vSVA is actually used.
+> 
+> Did I misunderstand the motivation here?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No, you didn't.
 
-All warnings (new ones prefixed by >>):
+Let's talk with the arch guys for more details before move this patch
+ahead. Thanks for pointing this out.
 
-   In file included from arch/mips/boot/compressed/bswapdi.c:2:
->> arch/mips/boot/compressed/../../lib/bswapdi.c:5:28: warning: no previous prototype for function '__bswapdi2' [-Wmissing-prototypes]
-   unsigned long long notrace __bswapdi2(unsigned long long u)
-                              ^
-   arch/mips/boot/compressed/../../lib/bswapdi.c:5:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long long notrace __bswapdi2(unsigned long long u)
-   ^
-   static 
-   1 warning generated.
+Best regards,
+baolu
 
-
-vim +/__bswapdi2 +5 arch/mips/boot/compressed/../../lib/bswapdi.c
-
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   4  
-aedcfbe06558a9 Harvey Hunt  2016-05-25  @5  unsigned long long notrace __bswapdi2(unsigned long long u)
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   6  {
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   7  	return (((u) & 0xff00000000000000ull) >> 56) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   8  	       (((u) & 0x00ff000000000000ull) >> 40) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29   9  	       (((u) & 0x0000ff0000000000ull) >> 24) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  10  	       (((u) & 0x000000ff00000000ull) >>  8) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  11  	       (((u) & 0x00000000ff000000ull) <<  8) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  12  	       (((u) & 0x0000000000ff0000ull) << 24) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  13  	       (((u) & 0x000000000000ff00ull) << 40) |
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  14  	       (((u) & 0x00000000000000ffull) << 56);
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  15  }
-1ee3630a3e57f3 Ralf Baechle 2015-09-29  16  
-
-:::::: The code at line 5 was first introduced by commit
-:::::: aedcfbe06558a9f53002e82d5be64c6c94687726 MIPS: lib: Mark intrinsics notrace
-
-:::::: TO: Harvey Hunt <harvey.hunt@imgtec.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+>>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   drivers/iommu/intel/svm.c | 9 ++++++---
+>>   1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+>> index 23a38763c1d1..c720d1be992d 100644
+>> --- a/drivers/iommu/intel/svm.c
+>> +++ b/drivers/iommu/intel/svm.c
+>> @@ -391,9 +391,12 @@ static struct iommu_sva
+>> *intel_svm_bind_mm(struct intel_iommu *iommu,
+>>   	}
+>>
+>>   	/* Setup the pasid table: */
+>> -	sflags = (flags & SVM_FLAG_SUPERVISOR_MODE) ?
+>> -			PASID_FLAG_SUPERVISOR_MODE : 0;
+>> -	sflags |= cpu_feature_enabled(X86_FEATURE_LA57) ?
+>> PASID_FLAG_FL5LP : 0;
+>> +	sflags = PASID_FLAG_PAGE_SNOOP;
+>> +	if (flags & SVM_FLAG_SUPERVISOR_MODE)
+>> +		sflags |= PASID_FLAG_SUPERVISOR_MODE;
+>> +	if (cpu_feature_enabled(X86_FEATURE_LA57))
+>> +		sflags |= PASID_FLAG_FL5LP;
+>> +
+>>   	spin_lock_irqsave(&iommu->lock, iflags);
+>>   	ret = intel_pasid_setup_first_level(iommu, dev, mm->pgd, mm-
+>>> pasid,
+>>   					    FLPT_DEFAULT_DID, sflags);
+>> --
+>> 2.25.1
+> 

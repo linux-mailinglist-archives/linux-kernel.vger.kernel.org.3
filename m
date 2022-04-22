@@ -2,100 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E214850C381
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A3F50C43D
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbiDVW3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S232995AbiDVWdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234059AbiDVW2W (ORCPT
+        with ESMTP id S233126AbiDVWcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:28:22 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D851A5DFB;
-        Fri, 22 Apr 2022 14:22:32 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-e5c42b6e31so9898082fac.12;
-        Fri, 22 Apr 2022 14:22:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0GD2I3shbaNSD6vzQaqySalLolH0HoMXjX9mtXC2rw4=;
-        b=sXr5RL4oeQnDemv7SUBJqZpeW8ycJ21NDj+WVr0AFBejSJWrcqlcIm/LMygCueLhek
-         2bP2SbwCE+sj8YuJTI6fOmbzgFfNSxpUkcATEvRewnC7lHNzBJ5wIMeN2mtzvjDF9jJl
-         juGv2IfNmYDIDG69B+r0Lwc5uSh2GbBV34LPuUcCQoyqO8NVKRB5llp4ClGxUlEsyMVA
-         PGj4FIS4mchsNnTgI/ACo0tqpDqskSNMsfs9Xeso5MsDXbLRpNjlVZEcxEuFtCMJPxux
-         EibMIbGshrzIfeH3LByyH81LbNYwuNQW6dUvkE1ZbBrbYeB9YNg9JON9dnTlPEVOVH0u
-         VRWw==
-X-Gm-Message-State: AOAM532SlAsaYb3sV7TqNNa5mcxuA3auofi02eWOf6CGCIqDOxgpSL7/
-        AVq9AOOlpot4uVZz1ansYq2Zo4ngHg==
-X-Google-Smtp-Source: ABdhPJyCWTYuNLp/3p34tuoYQ+xy+uv7oNPjk1V39wjfw8QoXlE0QZYEd64pt6rvSAhL5vt/xJJkTA==
-X-Received: by 2002:a05:6808:11c3:b0:2f9:62e0:ebe with SMTP id p3-20020a05680811c300b002f962e00ebemr3061171oiv.22.1650655251553;
-        Fri, 22 Apr 2022 12:20:51 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id q203-20020acad9d4000000b002f8ee3f69e2sm1086501oig.52.2022.04.22.12.20.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 12:20:51 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Slawomir Stepien <sst@poczta.fm>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: iio: Fix incorrect compatible strings in examples
-Date:   Fri, 22 Apr 2022 14:20:39 -0500
-Message-Id: <20220422192039.2590548-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 22 Apr 2022 18:32:15 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C777B1E71AA;
+        Fri, 22 Apr 2022 14:25:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1650655261; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gHthjfTv/HM2Ti1svLIYl8G14Pjf02MoaKKk/9XvI/I=;
+        b=RTAablMEtt4DpQgsVxkxPy1v71PS0fgkcF6hasRTRwZYKDuWZdrnerFxE3N69kxv2JD2be
+        4J6L3JGrBFF/EVg0+Drxi6V/NWfSvkZOYe+8oehv5iGuejB9W7pJESBNHUutuTNZ96Nfqr
+        ybU+u/ZMYzHGxmSuTYJLMs03lJWnjcU=
+Date:   Fri, 22 Apr 2022 20:20:49 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 1/3] SPI: Ingenic: Add support for use GPIO as chip
+ select line.
+To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+Cc:     broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, contact@artur-rojek.eu,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Message-Id: <PQ9RAR.93DKCD4H5Q7G1@crapouillou.net>
+In-Reply-To: <1650654583-89933-2-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1650654583-89933-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1650654583-89933-2-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a couple of examples using incorrect compatible strings.
+Hi Zhou,
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/iio/dac/lltc,ltc2632.yaml     | 2 +-
- .../bindings/iio/potentiometer/microchip,mcp4131.yaml           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Le sam., avril 23 2022 at 03:09:41 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
+ Yanjie)=20
+<zhouyanjie@wanyeetech.com> a =C3=A9crit :
+> Add support for using GPIOs as chip select lines on Ingenic SoCs.
+>=20
+> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
+eetech.com>
+> ---
+>=20
+> Notes:
+>     v1->v2:
+>     Use "device_property_read_u32()" instead
+>     "of_property_read_u32()" as Paul Cercueil's suggestion.
+>=20
+>  drivers/spi/spi-ingenic.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-ingenic.c b/drivers/spi/spi-ingenic.c
+> index 03077a7..bb512ca 100644
+> --- a/drivers/spi/spi-ingenic.c
+> +++ b/drivers/spi/spi-ingenic.c
+> @@ -380,7 +380,7 @@ static int spi_ingenic_probe(struct=20
+> platform_device *pdev)
+>  	struct spi_controller *ctlr;
+>  	struct ingenic_spi *priv;
+>  	void __iomem *base;
+> -	int ret;
+> +	int num_cs, ret;
+>=20
+>  	pdata =3D of_device_get_match_data(dev);
+>  	if (!pdata) {
+> @@ -416,6 +416,11 @@ static int spi_ingenic_probe(struct=20
+> platform_device *pdev)
+>  	if (IS_ERR(priv->flen_field))
+>  		return PTR_ERR(priv->flen_field);
+>=20
+> +	if (device_property_read_u32(dev, "num-cs", &num_cs)) {
+> +		dev_warn(dev, "Number of chip select lines not specified.\n");
+> +		num_cs =3D 2;
 
-diff --git a/Documentation/devicetree/bindings/iio/dac/lltc,ltc2632.yaml b/Documentation/devicetree/bindings/iio/dac/lltc,ltc2632.yaml
-index edf804d0aca2..b1eb77335d05 100644
---- a/Documentation/devicetree/bindings/iio/dac/lltc,ltc2632.yaml
-+++ b/Documentation/devicetree/bindings/iio/dac/lltc,ltc2632.yaml
-@@ -68,7 +68,7 @@ examples:
-       #size-cells = <0>;
- 
-       dac@0 {
--        compatible = "lltc,ltc2632";
-+        compatible = "lltc,ltc2632-l12";
-         reg = <0>;    /* CS0 */
-         spi-max-frequency = <1000000>;
-         vref-supply = <&vref>;
-diff --git a/Documentation/devicetree/bindings/iio/potentiometer/microchip,mcp4131.yaml b/Documentation/devicetree/bindings/iio/potentiometer/microchip,mcp4131.yaml
-index 945a2d644ddc..32e92bced81f 100644
---- a/Documentation/devicetree/bindings/iio/potentiometer/microchip,mcp4131.yaml
-+++ b/Documentation/devicetree/bindings/iio/potentiometer/microchip,mcp4131.yaml
-@@ -95,7 +95,7 @@ examples:
-         #size-cells = <0>;
- 
-         potentiometer@0 {
--            compatible = "mcp4131-502";
-+            compatible = "microchip,mcp4131-502";
-             reg = <0>;
-             spi-max-frequency = <500000>;
-         };
--- 
-2.32.0
+The "num-cs" property is not required in the binding, so I don't think=20
+the dev_warn() is warranted. Just silently set num_cs =3D 2.
+
+With this addressed:
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
+> +	}
+> +
+>  	platform_set_drvdata(pdev, ctlr);
+>=20
+>  	ctlr->prepare_transfer_hardware =3D spi_ingenic_prepare_hardware;
+> @@ -429,7 +434,9 @@ static int spi_ingenic_probe(struct=20
+> platform_device *pdev)
+>  	ctlr->bits_per_word_mask =3D pdata->bits_per_word_mask;
+>  	ctlr->min_speed_hz =3D 7200;
+>  	ctlr->max_speed_hz =3D 54000000;
+> -	ctlr->num_chipselect =3D 2;
+> +	ctlr->use_gpio_descriptors =3D true;
+> +	ctlr->max_native_cs =3D 2;
+> +	ctlr->num_chipselect =3D num_cs;
+>  	ctlr->dev.of_node =3D pdev->dev.of_node;
+>=20
+>  	if (spi_ingenic_request_dma(ctlr, dev))
+> --
+> 2.7.4
+>=20
+
 

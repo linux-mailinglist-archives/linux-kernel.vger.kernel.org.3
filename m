@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BD250C35C
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD82250C221
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbiDVW0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
+        id S232059AbiDVWJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbiDVWZu (ORCPT
+        with ESMTP id S232289AbiDVWIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:25:50 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ECC11F96D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:17:40 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23MGXP4U010796;
-        Fri, 22 Apr 2022 19:55:41 GMT
+        Fri, 22 Apr 2022 18:08:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FF62B376D
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:54:14 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23MJb8I3016570;
+        Fri, 22 Apr 2022 19:55:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=lm2njEXu/VlZ5DeJu6voRE/R0+J9++pgff3IHSCKCDM=;
- b=c927QxCgv7cDkZ+YGo6jErhsk+SgqBQKN3DRra+el/MSSZulsjqqrl00WlLBXSB8WR+g
- W8XnLt8S2EEiZzJSuU/tZ8oXu2odLp5g0xRiOmaGrlNYYATtov5uUCB9rQx26u+FF+RK
- 5NXiY4j2pr55yHjFPheNA+gabyYE5yuFTjqnH5WD3rtHow0s066VDkZSPaSWDPNoSeYS
- tVRagGXmbvOrx/y2aPLcBbCZbspkf/eJfdQkk99uBiRWmzp43MCTJ7hRGcsS4Q2SO/ch
- sg+RJLJbi0OrZqNWyIFLeCfoE+fdzcRq2DQTkJ8PxHwrjOZxTpWGfbA6smB5ujIBL7eA 3g== 
+ bh=uY0Z6msCCH9KzE009HO1twr/mIvovXgZnjZLx+NVgAE=;
+ b=nIIZJAv0fvAwuej9k4W2ANK++bg/JdZ26uocRoaEqXvKEPT47GMarA1yUxWOBgAHTf76
+ YM85CYilX4g0bxafOndy2KThIvQhpRqYIoe4Kct5/ex7IATlx5vLTbnw1t0MkALatWcs
+ HuLF2FTQBx3ax6GYl4tMhC1n/KVUortCxt9M4BAiAD2qvIuUkSHbIFhBmafYOQcmjcwr
+ mXt6SWSZWnn0hjn4W8Um+H4u2yIsInywh58alLCso7kMCzuHfwjwH/NNqeLVTDl2Cucm
+ YP2gjXd1U3CHcnl58ejez88GdcWjSxOsiGRrIo19qwwVJ260QY+7k0Sk4+CiQ03vW/Fs Qg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjswfqu9j-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjn0ykhqh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 19:55:40 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23MJr1ZS032250;
-        Fri, 22 Apr 2022 19:55:40 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjswfqu8w-1
+        Fri, 22 Apr 2022 19:55:45 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23MJjAEA015282;
+        Fri, 22 Apr 2022 19:55:44 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjn0ykhq0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 19:55:40 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MJisxq029302;
-        Fri, 22 Apr 2022 19:55:38 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3ffn2hyt11-1
+        Fri, 22 Apr 2022 19:55:44 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MJhTBF027247;
+        Fri, 22 Apr 2022 19:55:42 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ffne8st22-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 19:55:38 +0000
+        Fri, 22 Apr 2022 19:55:42 +0000
 Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MJtZtb49152346
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MJtdkQ40305124
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 Apr 2022 19:55:35 GMT
+        Fri, 22 Apr 2022 19:55:39 GMT
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E157411C052;
-        Fri, 22 Apr 2022 19:55:34 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 3855711C050;
+        Fri, 22 Apr 2022 19:55:39 +0000 (GMT)
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A4CBA11C050;
-        Fri, 22 Apr 2022 19:55:31 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id E883311C052;
+        Fri, 22 Apr 2022 19:55:35 +0000 (GMT)
 Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com.com (unknown [9.43.112.230])
         by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 22 Apr 2022 19:55:31 +0000 (GMT)
+        Fri, 22 Apr 2022 19:55:35 +0000 (GMT)
 From:   Jagdish Gediya <jvgediya@linux.ibm.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         akpm@linux-foundation.org
@@ -65,24 +65,24 @@ Cc:     baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
         ying.huang@intel.com, aneesh.kumar@linux.ibm.com,
         shy828301@gmail.com, weixugc@google.com, gthelen@google.com,
         dan.j.williams@intel.com, Jagdish Gediya <jvgediya@linux.ibm.com>
-Subject: [PATCH v3 2/7] mm: demotion: Add new node state N_DEMOTION_TARGETS
-Date:   Sat, 23 Apr 2022 01:25:11 +0530
-Message-Id: <20220422195516.10769-3-jvgediya@linux.ibm.com>
+Subject: [PATCH v3 3/7] drivers/base/node: Add support to write node_states[] via sysfs
+Date:   Sat, 23 Apr 2022 01:25:12 +0530
+Message-Id: <20220422195516.10769-4-jvgediya@linux.ibm.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220422195516.10769-1-jvgediya@linux.ibm.com>
 References: <20220422195516.10769-1-jvgediya@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aRlckp_abbNY4VUdskj5kbYr-iDtmzuD
-X-Proofpoint-GUID: IKNXG7uKtK-7dawYm7TAlnVKvtqeozOA
+X-Proofpoint-GUID: yOg7QkFiteOgPwyb7WJin5XJOPO6WZ_O
+X-Proofpoint-ORIG-GUID: m18RbXrSxa4x2MrQV8mNB9H0Ke2nlc6w
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-22_06,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=780 spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
- phishscore=0 suspectscore=0 adultscore=0 clxscore=1015 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
+ impostorscore=0 suspectscore=0 mlxscore=0 spamscore=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 adultscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2204220083
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -93,65 +93,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some systems(e.g. PowerVM) have DRAM(fast memory) only NUMA node
-which are N_MEMORY as well as slow memory(persistent memory) only
-NUMA node which are also N_MEMORY. As the current demotion target
-finding algorithm works based on N_MEMORY and best distance, it can
-choose DRAM only NUMA node as demotion target instead of persistent
-memory node on such systems. If DRAM only NUMA node is filled with
-demoted pages then at some point new allocations can start falling
-to persistent memory, so basically cold pages are in fast memory
-(due to demotion) and new pages are in slow memory, this is why
-persistent memory nodes should be utilized for demotion and dram node
-should be avoided for demotion so that they can be used for new
-allocations.
+Current /sys/devices/system/node/* interface doesn't support
+to write node_states[], however write support is needed in case
+users want to set them manually e.g. when user want to override
+default N_DEMOTION_TARGETS found by the kernel.
 
-Add new state N_DEMOTION_TARGETS, node_states[N_DEMOTION_TARGETS]
-then can be used to hold the list of nodes which can be used
-as demotion targets, later patches in the series builds demotion
-targets based on nodes available in node_states[N_DEMOTION_TARGETS].
+Rename existing _NODE_ATTR to _NODE_ATTR_RO and introduce new
+_NODE_ATTR_RW which can be used for node_states[] which can
+be written from sysfs.
 
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+It may be necessary to validate written values and take action
+based on them in a state specific way so a callback 'write' is
+introduced in 'struct node_attr'.
+
+A new function demotion_targets_write() is added to validate
+the input nodes for N_DEMOTION_TARGETS which should be subset
+of N_MEMORY and to build new demotion list based on new nodes.
+
 Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
 ---
- drivers/base/node.c      | 4 ++++
- include/linux/nodemask.h | 1 +
- 2 files changed, 5 insertions(+)
+ drivers/base/node.c | 62 +++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 49 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/base/node.c b/drivers/base/node.c
-index ec8bb24a5a22..6eef22e6413e 100644
+index 6eef22e6413e..e03eedbc421b 100644
 --- a/drivers/base/node.c
 +++ b/drivers/base/node.c
-@@ -1038,6 +1038,9 @@ static struct node_attr node_state_attr[] = {
- 	[N_CPU] = _NODE_ATTR(has_cpu, N_CPU),
- 	[N_GENERIC_INITIATOR] = _NODE_ATTR(has_generic_initiator,
- 					   N_GENERIC_INITIATOR),
-+	[N_DEMOTION_TARGETS] = _NODE_ATTR(demotion_targets,
-+					  N_DEMOTION_TARGETS),
+@@ -20,6 +20,7 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/swap.h>
+ #include <linux/slab.h>
++#include <linux/migrate.h>
+ 
+ static struct bus_type node_subsys = {
+ 	.name = "node",
+@@ -1013,6 +1014,7 @@ void unregister_one_node(int nid)
+ struct node_attr {
+ 	struct device_attribute attr;
+ 	enum node_states state;
++	int (*write)(nodemask_t nodes);
+ };
+ 
+ static ssize_t show_node_state(struct device *dev,
+@@ -1024,23 +1026,57 @@ static ssize_t show_node_state(struct device *dev,
+ 			  nodemask_pr_args(&node_states[na->state]));
+ }
+ 
+-#define _NODE_ATTR(name, state) \
+-	{ __ATTR(name, 0444, show_node_state, NULL), state }
++static ssize_t store_node_state(struct device *s,
++				struct device_attribute *attr,
++				const char *buf, size_t count)
++{
++	nodemask_t nodes;
++	struct node_attr *na = container_of(attr, struct node_attr, attr);
 +
++	if (nodelist_parse(buf, nodes))
++		return -EINVAL;
++
++	if (na->write) {
++		if (na->write(nodes))
++			return -EINVAL;
++	} else {
++		node_states[na->state] = nodes;
++	}
++
++	return count;
++}
++
++static int demotion_targets_write(nodemask_t nodes)
++{
++	if (nodes_subset(nodes, node_states[N_MEMORY])) {
++		node_states[N_DEMOTION_TARGETS] = nodes;
++		set_migration_target_nodes();
++		return 0;
++	}
++
++	return -EINVAL;
++}
++
++#define _NODE_ATTR_RO(name, state) \
++	{ __ATTR(name, 0444, show_node_state, NULL), state, NULL }
++
++#define _NODE_ATTR_RW(name, state, write_fn) \
++	{ __ATTR(name, 0644, show_node_state, store_node_state), state, write_fn }
+ 
+ static struct node_attr node_state_attr[] = {
+-	[N_POSSIBLE] = _NODE_ATTR(possible, N_POSSIBLE),
+-	[N_ONLINE] = _NODE_ATTR(online, N_ONLINE),
+-	[N_NORMAL_MEMORY] = _NODE_ATTR(has_normal_memory, N_NORMAL_MEMORY),
++	[N_POSSIBLE] = _NODE_ATTR_RO(possible, N_POSSIBLE),
++	[N_ONLINE] = _NODE_ATTR_RO(online, N_ONLINE),
++	[N_NORMAL_MEMORY] = _NODE_ATTR_RO(has_normal_memory, N_NORMAL_MEMORY),
+ #ifdef CONFIG_HIGHMEM
+-	[N_HIGH_MEMORY] = _NODE_ATTR(has_high_memory, N_HIGH_MEMORY),
++	[N_HIGH_MEMORY] = _NODE_ATTR_RO(has_high_memory, N_HIGH_MEMORY),
+ #endif
+-	[N_MEMORY] = _NODE_ATTR(has_memory, N_MEMORY),
+-	[N_CPU] = _NODE_ATTR(has_cpu, N_CPU),
+-	[N_GENERIC_INITIATOR] = _NODE_ATTR(has_generic_initiator,
+-					   N_GENERIC_INITIATOR),
+-	[N_DEMOTION_TARGETS] = _NODE_ATTR(demotion_targets,
+-					  N_DEMOTION_TARGETS),
+-
++	[N_MEMORY] = _NODE_ATTR_RO(has_memory, N_MEMORY),
++	[N_CPU] = _NODE_ATTR_RO(has_cpu, N_CPU),
++	[N_GENERIC_INITIATOR] = _NODE_ATTR_RO(has_generic_initiator,
++					      N_GENERIC_INITIATOR),
++	[N_DEMOTION_TARGETS] = _NODE_ATTR_RW(demotion_targets,
++					     N_DEMOTION_TARGETS,
++					     demotion_targets_write),
  };
  
  static struct attribute *node_state_attrs[] = {
-@@ -1050,6 +1053,7 @@ static struct attribute *node_state_attrs[] = {
- 	&node_state_attr[N_MEMORY].attr.attr,
- 	&node_state_attr[N_CPU].attr.attr,
- 	&node_state_attr[N_GENERIC_INITIATOR].attr.attr,
-+	&node_state_attr[N_DEMOTION_TARGETS].attr.attr,
- 	NULL
- };
- 
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index 567c3ddba2c4..17844300fd57 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -400,6 +400,7 @@ enum node_states {
- 	N_MEMORY,		/* The node has memory(regular, high, movable) */
- 	N_CPU,		/* The node has one or more cpus */
- 	N_GENERIC_INITIATOR,	/* The node has one or more Generic Initiators */
-+	N_DEMOTION_TARGETS,	/* Nodes that should be considered as demotion targets */
- 	NR_NODE_STATES
- };
- 
 -- 
 2.35.1
 

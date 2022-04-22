@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929A650C1F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672E750C167
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbiDVV5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
+        id S230307AbiDVVzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiDVV4g (ORCPT
+        with ESMTP id S230230AbiDVVzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:56:36 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5F1401D3C
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:39:09 -0700 (PDT)
+        Fri, 22 Apr 2022 17:55:39 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70761E5F7A
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:38:06 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1650659234;
+        t=1650659237;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SzEsczHFMypgWq69vA44Rvu+DQROb38PPU7Epb/mgEc=;
-        b=RtMUaM7EyQrxGmg8IItP71QZKXZdb8tz/qRajo2wxfWyBj3Xly3AgB2JjoyOFxQlSpBpP/
-        DBiKUD+OXTZEd/XK0/AyW8LApJAJbzEb9b7PnWtstSodGl5lmeXJxcgDNmI6NOk3B2WodO
-        WBJjlEwduMubPNKe+lpp4zXsUQmWtas=
+        bh=nIcEPpdyLCFHehrF6EjwfH/S8rR+FWD7FuLOrsoav4I=;
+        b=LYCD2BdGVPfWh3NvaVHOatAgiYmQELzvA6f2uljVJALCl2Y667IjSVrZTJyc3jlXv2JbvP
+        cWB6Ep+t9wpg1Z0UPJC0GseF1KAS7gyUNhXQzk0cduiOIY/y2Bl9n2FFqLQK/0hur4ikoy
+        0GoBMKQXmj0q7nvZQYfJIFudeUnygSM=
 From:   Roman Gushchin <roman.gushchin@linux.dev>
 To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
 Cc:     Dave Chinner <dchinner@redhat.com>, linux-kernel@vger.kernel.org,
@@ -33,141 +33,122 @@ Cc:     Dave Chinner <dchinner@redhat.com>, linux-kernel@vger.kernel.org,
         Kent Overstreet <kent.overstreet@gmail.com>,
         Hillf Danton <hdanton@sina.com>,
         Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH v2 6/7] docs: document shrinker debugfs
-Date:   Fri, 22 Apr 2022 13:26:43 -0700
-Message-Id: <20220422202644.799732-7-roman.gushchin@linux.dev>
+Subject: [PATCH v2 7/7] tools: add memcg_shrinker.py
+Date:   Fri, 22 Apr 2022 13:26:44 -0700
+Message-Id: <20220422202644.799732-8-roman.gushchin@linux.dev>
 In-Reply-To: <20220422202644.799732-1-roman.gushchin@linux.dev>
 References: <20220422202644.799732-1-roman.gushchin@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a document describing the shrinker debugfs interface.
+Add a simple tool which prints a sorted list of shrinker lists
+in the following format: (number of objects, shrinker name, cgroup).
+
+Example:
+  $ ./memcg_shrinker.py | head -n 10
+    2092     sb-sysfs-26          /sys/fs/cgroup/system.slice
+    1809     sb-sysfs-26          /sys/fs/cgroup/system.slice/systemd-udevd.service
+    1350     sb-btrfs-24          /sys/fs/cgroup/system.slice
+    1016     sb-btrfs-24          /sys/fs/cgroup/system.slice/system-dbus\x2d:1.3\x2dorg.fedoraproject.Setroubleshootd.slice
+    861      sb-btrfs-24          /sys/fs/cgroup/system.slice/system-dbus\x2d:1.3\x2dorg.fedoraproject.SetroubleshootPrivileged.slice
+    672      sb-btrfs-24          /sys/fs/cgroup/system.slice/firewalld.service
+    655      sb-cgroup2-30        /sys/fs/cgroup/init.scope
+    275      sb-sysfs-26          /
+    232      sb-btrfs-24          /
+    221      sb-proc-25           /sys/fs/cgroup/system.slice/systemd-journald.service
 
 Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
 ---
- Documentation/admin-guide/mm/index.rst        |  1 +
- .../admin-guide/mm/shrinker_debugfs.rst       | 90 +++++++++++++++++++
- 2 files changed, 91 insertions(+)
- create mode 100644 Documentation/admin-guide/mm/shrinker_debugfs.rst
+ tools/cgroup/memcg_shrinker.py | 70 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100755 tools/cgroup/memcg_shrinker.py
 
-diff --git a/Documentation/admin-guide/mm/index.rst b/Documentation/admin-guide/mm/index.rst
-index c21b5823f126..1bd11118dfb1 100644
---- a/Documentation/admin-guide/mm/index.rst
-+++ b/Documentation/admin-guide/mm/index.rst
-@@ -36,6 +36,7 @@ the Linux memory management.
-    numa_memory_policy
-    numaperf
-    pagemap
-+   shrinker_debugfs
-    soft-dirty
-    swap_numa
-    transhuge
-diff --git a/Documentation/admin-guide/mm/shrinker_debugfs.rst b/Documentation/admin-guide/mm/shrinker_debugfs.rst
-new file mode 100644
-index 000000000000..c2f3da534b70
+diff --git a/tools/cgroup/memcg_shrinker.py b/tools/cgroup/memcg_shrinker.py
+new file mode 100755
+index 000000000000..9c32bf0247b2
 --- /dev/null
-+++ b/Documentation/admin-guide/mm/shrinker_debugfs.rst
-@@ -0,0 +1,90 @@
-+==========================
-+Shrinker Debugfs Interface
-+==========================
++++ b/tools/cgroup/memcg_shrinker.py
+@@ -0,0 +1,70 @@
++#!/usr/bin/env python3
++#
++# Copyright (C) 2022 Roman Gushchin <roman.gushchin@linux.dev>
++# Copyright (C) 2022 Meta
 +
-+Shrinker debugfs interface provides a visibility into the kernel memory
-+shrinkers subsystem and allows to get statistics and interact with
-+individual shrinkers.
++import os
++import argparse
++import sys
 +
-+For each shrinker registered in the system a directory in <debugfs>/shrinker/
-+is created. The directory is named like "kfree_rcu-0". Each name is composed
-+from the shrinker's name and an unique id.
 +
-+Each shrinker directory contains "count" and "scan" files, which allow
-+to trigger count_objects() and scan_objects() callbacks. For memcg-aware
-+and numa-aware shrinkers count_memcg, scan_memcg, count_node, scan_node,
-+count_memcg_node and scan_memcg_node are additionally provided. They allow
-+to get per-memcg and/or per-node object count and shrink only a specific
-+memcg/node.
++def scan_cgroups(cgroup_root):
++    cgroups = {}
 +
-+Usage examples:
++    for root, subdirs, _ in os.walk(cgroup_root):
++        for cgroup in subdirs:
++            path = os.path.join(root, cgroup)
++            ino = os.stat(path).st_ino
++            cgroups[ino] = path
 +
-+ 1. List registered shrinkers::
-+      $ cd /sys/kernel/debug/shrinker/
-+      $ ls
-+      dqcache-16          sb-cgroup2-30    sb-hugetlbfs-33  sb-proc-41       sb-selinuxfs-22  sb-tmpfs-40    sb-zsmalloc-19
-+      kfree_rcu-0         sb-configfs-23   sb-iomem-12      sb-proc-44       sb-sockfs-8      sb-tmpfs-42    shadow-18
-+      sb-aio-20           sb-dax-11        sb-mqueue-21     sb-proc-45       sb-sysfs-26      sb-tmpfs-43    thp_deferred_split-10
-+      sb-anon_inodefs-15  sb-debugfs-7     sb-nsfs-4        sb-proc-47       sb-tmpfs-1       sb-tmpfs-46    thp_zero-9
-+      sb-bdev-3           sb-devpts-28     sb-pipefs-14     sb-pstore-31     sb-tmpfs-27      sb-tmpfs-49    xfs_buf-37
-+      sb-bpf-32           sb-devtmpfs-5    sb-proc-25       sb-rootfs-2      sb-tmpfs-29      sb-tracefs-13  xfs_inodegc-38
-+      sb-btrfs-24         sb-hugetlbfs-17  sb-proc-39       sb-securityfs-6  sb-tmpfs-35      sb-xfs-36      zspool-34
++    # (memcg ino, path)
++    return cgroups
 +
-+ 2. Get information about a specific shrinker::
-+      $ cd sb-btrfs-24/
-+      $ ls
-+      count  count_memcg  count_memcg_node  count_node  scan  scan_memcg  scan_memcg_node  scan_node
 +
-+ 3. Count objects on the system/root cgroup level::
-+      $ cat count
-+      212
++def scan_shrinkers(shrinker_debugfs):
++    shrinkers = []
 +
-+ 4. Count objects on the system/root cgroup level per numa node (on a 2-node machine)::
-+      $ cat count_node
-+      209 3
++    for root, subdirs, _ in os.walk(shrinker_debugfs):
++        for shrinker in subdirs:
++            count_memcg_path = os.path.join(root, shrinker, "count_memcg")
++            try:
++                with open(count_memcg_path) as f:
++                    for line in f.readlines():
++                        items = line.split(' ')
++                        ino = int(items[0])
++                        shrinkers.append((int(items[1]), shrinker, ino))
++            except FileNotFoundError:
++                count_path = os.path.join(root, shrinker, "count")
++                with open(count_path) as f:
++                    shrinkers.append((int(f.readline()), shrinker, 0))
 +
-+ 5. Count objects for each memcg (output format: cgroup inode, count)::
-+      $ cat count_memcg
-+      1 212
-+      20 96
-+      53 817
-+      2297 2
-+      218 13
-+      581 30
-+      911 124
-+      ...
++    # (count, shrinker, memcg ino)
++    return shrinkers
 +
-+ 6. Same but with a per-node output::
-+      $ cat count_memcg_node
-+      1 209 3
-+      20 96 0
-+      53 810 7
-+      2297 2 0
-+      218 13 0
-+      581 30 0
-+      911 124 0
-+      ...
 +
-+ 7. Scan system/root shrinker::
-+      $ cat count
-+      212
-+      $ echo 100 > scan
-+      $ cat scan
-+      97
-+      $ cat count
-+      115
++def main():
++    cgroups = scan_cgroups("/sys/fs/cgroup/")
++    shrinkers = scan_shrinkers("/sys/kernel/debug/shrinker/")
++    shrinkers = sorted(shrinkers, reverse = True, key = lambda x: x[0])
 +
-+ 8. Scan individual memcg::
-+      $ echo "1868 500" > scan_memcg
-+      $ cat scan_memcg
-+      193
++    for s in shrinkers:
++        count = s[0]
++        name = s[1]
++        ino = s[2]
 +
-+ 9. Scan individual node::
-+      $ echo "1 200" > scan_node
-+      $ cat scan_node
-+      2
++        if count == 0:
++            break
 +
-+ 10. Scan individual memcg and node::
-+     $ echo "1868 0 500" > scan_memcg_node
-+     $ cat scan_memcg_node
-+     435
++        if ino == 0 or ino == 1:
++            cg = "/"
++        else:
++            try:
++                cg = cgroups[ino]
++            except KeyError:
++                cg = "unknown (%d)" % ino
++
++        print("%-8s %-20s %s" % (count, name, cg))
++
++
++if __name__ == '__main__':
++    main()
 -- 
 2.35.1
 

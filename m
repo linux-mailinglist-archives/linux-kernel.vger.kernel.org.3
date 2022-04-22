@@ -2,116 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65CC50BEF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D7950BF03
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233408AbiDVRtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
+        id S229909AbiDVRvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiDVRsx (ORCPT
+        with ESMTP id S233743AbiDVRvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:48:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3FB2B270;
-        Fri, 22 Apr 2022 10:45:18 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 19:43:18 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650649400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=r35IzhDbN3FW/BuR5UEyJUUkP1Dog8UZeCh3xRNziMg=;
-        b=o7hPQh1ekabXuESidnVM7vcbehFyiWRLFfN4L9HXX6h7DshXLvAfWCCeACLXfpeWcjuuYV
-        haAr6oP01wZcB63goOW2UE3Sup5+qV9YHlu+jX4cvh+MCRSTSmasbLP1l9Xl/yFb29Ptnz
-        d7o3gRtW+svZf+m8ehZghlfIgUHnrUNe7RT8dNJIOCiBHVFeYs+RlP6lGAyiBowVsHLh3a
-        ZTuuLhrFFrKTV/hCSs0NQRvJ8gMm0Wzb0qN+U5QTm/J0RRdla7GyS4AGL6pXFm1Fqcx1YN
-        6Zn17Bfx7k8kNlGYiQNKrUTI37Zcv6o0rfp+SaXh0B+AKWoxPDqOrmoEcJdeMA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650649400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=r35IzhDbN3FW/BuR5UEyJUUkP1Dog8UZeCh3xRNziMg=;
-        b=HnnVKkPms88wJwa/dhy+NNgkI7KZgDrhI59dCGrQ+kdQdKtLIaKSlNQxkMaIpL1Coh3TuO
-        8FQ7v37KOyfh30Cg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, ebiederm@xmission.com,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] ptrace-vs-PREEMPT_RT and freezer rewrite
-Message-ID: <YmLpNhXD8+EzF9/D@linutronix.de>
-References: <20220421150248.667412396@infradead.org>
+        Fri, 22 Apr 2022 13:51:07 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BECBD3DA8
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:48:04 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id p21so9361421ioj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JoNEMwEY3MQ8vzFXRDkOZw8gxqmKwXjN5mbJRRwLX0w=;
+        b=KmtWojAdZUhMFV9R/W1BGuLUyM0ML3L24J1FKDtUAX2tw4E7a0kSfWnX/lOUGwh2mW
+         wiY1NmFcHV42qMYBBKYb6FcKZY+5LDVw90xNfuHcpht4tqdhkKCfKCAdXg4MDAbDAbzg
+         6SA71UoNIpdAEUybYLzbbjHLpZZ7OczoFDiQc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JoNEMwEY3MQ8vzFXRDkOZw8gxqmKwXjN5mbJRRwLX0w=;
+        b=CN7NFfWAaXJYVjfXdim5i/dRF5XpCu7pMstggCaBpf3+ZWa9K8sTqIADxMWzKzv6c4
+         AjSwai+Gi0YBoeW5CVErgc5HQiyBu0K4I7IlGlRjnkrvM6Y9pb0ru8y3uf0c7iL08RGv
+         fSHg+b8i1AHzNGTCnlwTKa2O55s9RwOdDsyfjSAAUYGyXG8YXK4no7ZCSQkhNdCyT4af
+         dJtTYe//WUEYadnZhiaDrcb155xWRRCewS6y+3ZX9jXXilURRzJ8yvdcniVD43cOb5q8
+         GQ1+7UjYaiAs6QtfxJd7xpDvwc0O9MwMEL3vDmwwVMsRnWtpuTDZgq94Z5D5b3wMt7GE
+         f+pA==
+X-Gm-Message-State: AOAM533DFSUa79VFh9AD13xb/vIJGh0HKWgCPKUg53G/SJBDng/AsQZs
+        YOnoqcarWFvn4ah6YaLEiYrb1A==
+X-Google-Smtp-Source: ABdhPJxnkm+6tx9Lai6U9bVgmdOgqJw+KJpo/yqc5zRBjvvD2GA3f0oAaDa5qShk2w9tbHPuPhB63g==
+X-Received: by 2002:a05:6602:2c4e:b0:657:4115:d9e4 with SMTP id x14-20020a0566022c4e00b006574115d9e4mr2483769iov.91.1650649555239;
+        Fri, 22 Apr 2022 10:45:55 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id n23-20020a6b8b17000000b00649a2634725sm897407iod.17.2022.04.22.10.45.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 10:45:54 -0700 (PDT)
+Subject: Re: [PATCH V3 0/3] Add unit test module for AMD P-State driver
+To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
+        linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220421074152.599419-1-li.meng@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <41103b29-f711-4c1d-fa9b-46e67fb98d0f@linuxfoundation.org>
+Date:   Fri, 22 Apr 2022 11:45:53 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220421150248.667412396@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220421074152.599419-1-li.meng@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-21 17:02:48 [+0200], Peter Zijlstra wrote:
-> Find here a new posting of the ptrace and freezer patches :-)
+On 4/21/22 1:41 AM, Meng Li wrote:
+> Hi all:
 > 
-> The majority of the changes are in patch 2, which with much feedback from Oleg
-> and Eric has changed lots.
+> AMD P-State unit test(amd_pstate_testmod) is a kernel module for testing
+> the functions of amd-pstate driver.
+> It could import as a module to launch some test tasks.
+> 1) It can help all users to verify their processor support (SBIOS/Firmware
+> or Hardware).
+> 2) Kernel can have a basic function test to avoid the kernel regression
+> during the update.
+> 3) We can introduce more functional or performance tests to align the
+> together, it will benefit power and performance scale optimization.
 > 
-> I'm hoping we're converging on something agreeable.
+> We upstream out AMD P-state driver into Linux kernel and use this unit
+> test module to verify the required conditions and basic functions of
+> amd-pstate before integration test.
+> 
+> We use test module in the kselftest frameworks to implement it.
+> We create amd_pstate_testmod module and tie it into kselftest.
+> 
+> For example: The test case aput_acpi_cpc is used to check whether the
+> _CPC object is exist in SBIOS.
+> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
+> existed at the detected processor, so it is a necessary condition.
+> 
+> At present, it only implements the basic framework and some simple test
+> cases.
+> 
+> TODO : 1) we will add a rst document.
 
-I tested this under RT (had to remove the preempt-disable section in
-ptrace_stop()) with ssdd [0]. It forks a few tasks and then
-PTRACE_SINGLESTEPs them for a few iterations.
+Please include document in this series and describe how the test can be run.
+It is not clear to me how use should go about running this test especially
+since the script depends on a test module which will need to be compiled
+and loaded.
 
-The following failures were reported by that tool:
-| forktest#27/3790: EXITING, ERROR: wait on PTRACE_ATTACH saw a SIGCHLD count of 0, should be 1
-| forktest#225/40029: EXITING, ERROR: wait on PTRACE_SINGLESTEP #22241: no SIGCHLD seen (signal count == 0), signo 5
+I would like to see clear details in the document on the steps involved in
+running the test.
 
-very rarely. Then I managed to figure out that the latter error triggers
-if I compile something large with a RT priority. Sadly it also happens
-with my old ptrace hack (but I just noticed it). It didn't happen with
-without RT (just the 5 patches applied).
-
-I also managed to trigger this backtrace with RT:
-|WARNING: CPU: 1 PID: 3748 at kernel/signal.c:2237 ptrace_stop+0x356/0x370
-|Modules linked in:
-|CPU: 1 PID: 3748 Comm: ssdd Not tainted 5.18.0-rc3-rt1+ #1
-|Hardware name: Intel Corporation S2600CP/S2600CP, BIOS SE5C600.86B.02.03.0003.041920141333 04/19/2014
-|RIP: 0010:ptrace_stop+0x356/0x370
-|RSP: 0000:ffffc9000d277d98 EFLAGS: 00010246
-|RAX: ffff888116d1e100 RBX: ffff888116d1e100 RCX: 0000000000000001
-|RDX: 0000000000000001 RSI: 000000000000002e RDI: ffffffff822bdcc3
-|RBP: ffff888116d1e100 R08: ffff88811ca99870 R09: 0000000000000001
-|R10: ffff88811ca99910 R11: ffff88852ade2680 R12: ffffc9000d277e90
-|R13: 0000000000000004 R14: ffff888116d1ed48 R15: 0000000000000000
-|FS:  00007f0afdad4580(0000) GS:ffff88852aa40000(0000) knlGS:0000000000000000
-|CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-|CR2: 00007f0afdad4508 CR3: 0000000558198006 CR4: 00000000000606e0
-|Call Trace:
-| <TASK>
-| get_signal+0x553/0x870
-| arch_do_signal_or_restart+0x31/0x7b0
-| exit_to_user_mode_prepare+0xe4/0x110
-| irqentry_exit_to_user_mode+0x5/0x20
-| noist_exc_debug+0xe0/0x120
-| asm_exc_debug+0x2b/0x30
-|RSP: 002b:00007fffae964b70 EFLAGS: 00000346
-|RAX: 0000000000000000 RBX: 00000000000000fc RCX: 00007f0afd9c0d35
-|RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000001
-|RBP: 00007fffae964e38 R08: 0000000000000000 R09: 00007fffae962a82
-|R10: 00007f0afdad4850 R11: 0000000000000246 R12: 0000000000000000
-|R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-| </TASK>
-
-which is the WARN_ON_ONCE() in clear_traced_quiesce().
-
-[0] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/tree/src/ssdd/ssdd.c
-
-Sebastian
+> 2) we will add more test cases to improve the depth and coverage of
+> the test.
+> 
+thanks,
+-- Shuah

@@ -2,130 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C385650C1EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135AC50C1B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiDVWGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
+        id S230511AbiDVV5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbiDVWFw (ORCPT
+        with ESMTP id S230422AbiDVV4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:05:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3603EFAD21
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:49:12 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23MGZk40019136;
-        Fri, 22 Apr 2022 20:05:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=g01tJpX+1sUJrShvusZ25PsNMnRVj5xBSlaI7IJ1xUQ=;
- b=mvnxrbbVXpitGlqiGtXYbaR+2eXCb4YE2sBg+edSMz5Sheu1gKJ1p3/fMhGYk5N+R2Ha
- S+DxE751yzK9lBGxTAa7xpc0V7/xro5VuhtAsphPBlw2Mwg20roZvhPccS4uDCs8JPt2
- C44YYSY74g0gKWezeEmBtyzGF4R1hmNVd1NyrSLoy3ZOP55A6htJvZg2P4bTMUGzpa/j
- CICEJAq26SDqgZUcdH+X7IBB7Q1iMFd/kra5fF4Enbpm/gyrhBy7XqLN0YXg04cWoYUj
- A5sornFu+xaJ6UJ1ckZ4vtBeSofeqTQsjRnPaDug0mQ1+7jQlwtp9hDpWGHUJAGzBO3I oQ== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fkvdv8jhr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 20:05:55 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MK1Vda000830;
-        Fri, 22 Apr 2022 20:05:54 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04wdc.us.ibm.com with ESMTP id 3ffneaw6t8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 20:05:54 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MK5sW528049704
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 Apr 2022 20:05:54 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0FF926A05A;
-        Fri, 22 Apr 2022 20:05:54 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB1B86A04D;
-        Fri, 22 Apr 2022 20:05:52 +0000 (GMT)
-Received: from [9.160.2.163] (unknown [9.160.2.163])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 22 Apr 2022 20:05:52 +0000 (GMT)
-Message-ID: <c4613523-de98-b824-175a-89fd66931bd6@linux.ibm.com>
-Date:   Fri, 22 Apr 2022 13:05:51 -0700
+        Fri, 22 Apr 2022 17:56:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7351D2A4CB4;
+        Fri, 22 Apr 2022 13:39:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650659956; x=1682195956;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=itPL4SDhaJNbtUUlmV3x5Gcrnw+9kVzEXPvSZciorvU=;
+  b=I74K3tUGWZeqJjHA0axRe+ueDzJX78bVscWLOHcAiRPdZiM+QLk5DxNJ
+   3fEKdLX6V1/AIrF2FtXb5bX1C6Oxp+nrEML781rix6jDQMYOtJ/T0/1Ib
+   F0e/fyDcclhoKX3aXh6jcfUIYgbRx1BkWwAU4WVte64fV8bcVsXzwbmhs
+   v1l8vh5JFUa619PNZX2kRm4DEnI4GcPKTH71zBphEilGmsu5NhjchRlna
+   ayl7mHPxgJrDWzoVIPxsgPH4tRLTzjwl5N9F+963xkwDwcDLnqDYkIflx
+   TWVe8FgR7xwfubVnWn3zAXqiR5FDdMRjG1EqjDHWF9Efrlib/ROhN+LeI
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244699982"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="244699982"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 13:09:14 -0700
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="578075082"
+Received: from assenmac-mobl.ger.corp.intel.com ([10.251.216.136])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 13:09:10 -0700
+Date:   Fri, 22 Apr 2022 23:09:07 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Gilles Buloz <gilles.buloz@kontron.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v3 3/5] tty: Add lookahead param to receive_buf
+In-Reply-To: <YmK83NfVqEvGg8DW@kroah.com>
+Message-ID: <d496d544-fe59-5fa7-5d21-ab6ad025fa75@linux.intel.com>
+References: <20220411094859.10894-1-ilpo.jarvinen@linux.intel.com> <20220411094859.10894-4-ilpo.jarvinen@linux.intel.com> <YmK83NfVqEvGg8DW@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] powerpc/pci: Remove useless null check before call
- of_node_put()
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <1650509529-27525-1-git-send-email-baihaowen@meizu.com>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-In-Reply-To: <1650509529-27525-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: K0jsygH_2k__2G2zY9heq5s1_kNUdsHt
-X-Proofpoint-ORIG-GUID: K0jsygH_2k__2G2zY9heq5s1_kNUdsHt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-22_06,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 spamscore=0 clxscore=1011
- phishscore=0 impostorscore=0 suspectscore=0 bulkscore=0 mlxscore=0
- mlxlogscore=657 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204220085
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/22 19:52, Haowen Bai wrote:
-> No need to add null check before call of_node_put(), since the
-> implementation of of_node_put() has done it.
-> 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  arch/powerpc/kernel/pci_dn.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/powerpc/kernel/pci_dn.c b/arch/powerpc/kernel/pci_dn.c
-> index 61571ae23953..ba3bbc9bec2d 100644
-> --- a/arch/powerpc/kernel/pci_dn.c
-> +++ b/arch/powerpc/kernel/pci_dn.c
-> @@ -357,8 +357,8 @@ void pci_remove_device_node_info(struct device_node *dn)
-> 
->  	/* Drop the parent pci_dn's ref to our backing dt node */
->  	parent = of_get_parent(dn);
-> -	if (parent)
-> -		of_node_put(parent);
-> +
-> +	of_node_put(parent);
+On Fri, 22 Apr 2022, Greg KH wrote:
 
-This whole block of code looks useless, or suspect. Examining the rest of the
-code for this function this is the only place that parent is referenced. The
-of_get_parent() call returns the parent with its refcount incremented, and then
-we turn around and call of_node_put() which drops that reference we just took.
-The comment doesn't do what it says it does. If we really need to drop a
-previous reference to the parent device node this code block would need to call
-of_node_put() twice on parent to accomplish that.
-
-A closer examination is required to determine if what the comment says we need
-to do is required. If it is then the code as it exists today is leaking that
-reference AFAICS.
-
--Tyrel
-
+> > diff --git a/drivers/accessibility/speakup/spk_ttyio.c b/drivers/accessibility/speakup/spk_ttyio.c
+> > index 08cf8a17754b..b33536eea1d3 100644
+> > --- a/drivers/accessibility/speakup/spk_ttyio.c
+> > +++ b/drivers/accessibility/speakup/spk_ttyio.c
+> > @@ -73,7 +73,7 @@ static void spk_ttyio_ldisc_close(struct tty_struct *tty)
+> >  
+> >  static int spk_ttyio_receive_buf2(struct tty_struct *tty,
+> >  				  const unsigned char *cp,
+> > -				  const char *fp, int count)
+> > +				  const char *fp, int count, unsigned int lookahead_count)
 > 
->  	/*
->  	 * At this point we *might* still have a pci_dev that was
+> Ick, adding yet-another-parameter to a function is a mess as it's hard
+> to know what to do with this and what it means just by looking at when
+> it is called.
+
+To be honest, I didn't like it either but just couldn't find another 
+way... That is, not until now that you pushed.
+
+I think I can add lookahead_count into n_tty_data, then both layers 
+(n_tty and tty_buffer) that depend on it will indepedently keep track of 
+it rather than passing it through the whole callchain.
+
+> >  /* Returns true if c is consumed as flow-control character */
+> > -static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
+> > +static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c,
+> > +					 bool lookahead_done)
+> >  {
+> >  	if (!n_tty_is_char_flow_ctrl(tty, c))
+> >  		return false;
+> >  
+> > +	if (lookahead_done)
+> > +		return true;
+> 
+> Why would this function be called if this option was true?
+
+Agreed, it makes sense to move the check before call (and then I also 
+don't need to reorganize this function anymore).
+
+> the overall idea is good, this implementation isn't quite there yet.
+
+Thanks for taking a look.
+
+
+-- 
+ i.
 

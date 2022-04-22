@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41BA50B42A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B2350B430
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446054AbiDVJgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        id S1446086AbiDVJiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiDVJgn (ORCPT
+        with ESMTP id S1352701AbiDVJiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:36:43 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3689527EE
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:33:48 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id y129so5417447qkb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3xbbjiZS8IMvesATR7m3IJgMWlJJ++cnKlBqL7PtE/I=;
-        b=n7kmRouItCvMnCGn6VeOCe2T+bA1ptgIMVX71sn+XusUp7H0uZbo1pW5riTC2DxdLC
-         bpBYIP8FzAx5VzLIgG8/kY0VbsQe3k7KRW9Gj45OHWpd88Y5GSpvJVwA/bGBNTDl4TTI
-         RmKa5X2mUYqXB78ErZpCCpu7dBtCjBLjivhwCtZJmCTPdFebYhWQEtPu9tZ/7mblW/D2
-         uJeUlst4D6hgXxzaUNpMTcNeikWAP+7BvACNOzQ2nA0OFCjgiwwVVWGi52xVtv2iJhlj
-         XieyXScIBMMdiqgXdIbKN4379kCRd1a+guzeR5HdeRKeomWGmXvQspBkteULPBD9ECl8
-         l8wQ==
+        Fri, 22 Apr 2022 05:38:12 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DD813D18
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:35:19 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id o9-20020a0566022e0900b00654b599b1eeso4981234iow.21
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:35:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3xbbjiZS8IMvesATR7m3IJgMWlJJ++cnKlBqL7PtE/I=;
-        b=VPhSij2kbIg9xq5UsTyx8TcPMUReOKheVmszBWVfe8yJHus65pZSUugfRa4vn9iqfh
-         +YUqDy36fC3Zpy2EoZkVV1/XinC/S4dL3apDpGKWwiUgElTpVHt4Kn1hdbsJOL+249jv
-         GgtDUa1KOaSTajweK3rasLupgUjHz0cgjG1DiyBYJYcyL7qp8jSFpmvWdBt3iQ1w/T/P
-         TDTZOMrFlMYARIMDK0mLLSH0SAKlpnyKdZD2xJJunuG87sz/0xS48xCtDoRIq0EXVh/M
-         KyRppQpY6ZEiAMIU0Ibtg1tbw6c8vsjLjDH0XyqYG3P+n9Niem9IFMG0TOiRQMnObeiW
-         HcAw==
-X-Gm-Message-State: AOAM532++FHYHkpeLtV+HRgpe+uK27zdPFMDnQHWg6qwxf6ScZVY8mGl
-        0dpeKisCUjAc0UmAMbsd5m8=
-X-Google-Smtp-Source: ABdhPJxDccAT2Zd8xDVtpcRKTH5g1sNeZ1fwrl9KbrT1B10LwO0eIjROMwJYlGpRQzF591ZbCsFoAg==
-X-Received: by 2002:a37:9f96:0:b0:69e:abd9:f68b with SMTP id i144-20020a379f96000000b0069eabd9f68bmr1985315qke.773.1650620028121;
-        Fri, 22 Apr 2022 02:33:48 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id c136-20020a379a8e000000b0069e5df9d953sm687610qke.34.2022.04.22.02.33.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 02:33:47 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ran.jianping@zte.com.cn
-To:     nsaenz@kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com, gregkh@linuxfoundation.org,
-        dan.carpenter@oracle.com, dave.stevenson@raspberrypi.com,
-        gascoar@gmail.com, ran.jianping@zte.com.cn,
-        xkernel.wang@foxmail.com, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] staging: vchiq:remove unneeded flush_workqueue
-Date:   Fri, 22 Apr 2022 09:33:40 +0000
-Message-Id: <20220422093340.2781311-1-ran.jianping@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=eJqj+y46Jg4jvSeLYvr2PbyuHx5gaVrCSckNNPhxPV4=;
+        b=2+8XvzwjmrxDpdF3sBR7D+/y5dIKEBSllfpflnSJ9jzAKQ639tqIqrIazxnBNGXQHS
+         VrYAaTcfy7QVIMQ1VwnO1jiGXzZ/G66h0UbpEWtAuFAnRCxTTLgqZ9le6kzibkb28dSt
+         YgFPHw0keq7sbvCO2/VoNEBfpQvijycp+rziOksDNvsqQQWhwLIBj/NxAEu6q9U2oZSW
+         lGBrhPzntFVEbGik/9ntgpnJ9sdNaT2A12nSqGIgyPn6SYxLfVyyh8NjDLytzzWseCQ1
+         lo1oT7LaPgGlXXrVrBHhkz7KhsyiPvyyOGJx3iorWFTvzb7AiRJdY4VsZdsRakvg+1pJ
+         SxvA==
+X-Gm-Message-State: AOAM531K2Yn4PanmChHS9AtgOShGide6XCQseuRYspvd8vfJqVMuumOn
+        teSljx5HOUCp5pzQoklZP40w1rT9vRJMTg9TTAgNIj25fE2X
+X-Google-Smtp-Source: ABdhPJy6ZdJcyIQX7MReO97SecWiSPzDDNnmJYWIpl1AxZBVwUYcFkGe+49W+dV9Akk0Z3SQ396IlGtj1Bzrpn+pWfcB0gU1owFf
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:2405:b0:327:d930:bc9c with SMTP id
+ z5-20020a056638240500b00327d930bc9cmr1678727jat.70.1650620119126; Fri, 22 Apr
+ 2022 02:35:19 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 02:35:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dc142205dd3af12e@google.com>
+Subject: [syzbot] KMSAN: uninit-value in io_fallback_req_func
+From:   syzbot <syzbot+5ca552d10251920ab7e2@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, glider@google.com,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ran jianping <ran.jianping@zte.com.cn>
+Hello,
 
-All work currently pending will be done first by calling destroy_workqueue,
-so there is no need to flush it explicitly.
+syzbot found the following issue on:
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ran jianping <ran.jianping@zte.com.cn>
+HEAD commit:    33d9269ef6e0 Revert "kernel: kmsan: don't instrument stack..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=12a4e62cf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f8f2668b971cd508
+dashboard link: https://syzkaller.appspot.com/bug?extid=5ca552d10251920ab7e2
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11a2e148f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1332bce8f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5ca552d10251920ab7e2@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in io_fallback_req_func+0x218/0x5f7 fs/io_uring.c:1399
+ io_fallback_req_func+0x218/0x5f7 fs/io_uring.c:1399
+ process_one_work+0xdb6/0x1820 kernel/workqueue.c:2307
+ worker_thread+0x10b3/0x21e0 kernel/workqueue.c:2454
+ kthread+0x3c7/0x500 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:737 [inline]
+ kmem_cache_alloc_bulk+0xe98/0x1530 mm/slub.c:3744
+ __io_alloc_req_refill+0x482/0x867 fs/io_uring.c:2072
+ io_alloc_req_refill fs/io_uring.c:2098 [inline]
+ io_submit_sqes+0x7d4/0x1a00 fs/io_uring.c:7441
+ __do_sys_io_uring_enter fs/io_uring.c:10162 [inline]
+ __se_sys_io_uring_enter+0x62f/0x23a0 fs/io_uring.c:10104
+ __x64_sys_io_uring_enter+0x19d/0x200 fs/io_uring.c:10104
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:81
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+CPU: 0 PID: 3552 Comm: kworker/0:4 Not tainted 5.17.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Comput
+
+
 ---
- drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 1 -
- 1 file changed, 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-index 70c9d5544b56..249dd3e30c2f 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-@@ -1841,7 +1841,6 @@ int vchiq_mmal_finalise(struct vchiq_mmal_instance *instance)
- 	mutex_unlock(&instance->vchiq_mutex);
- 
- 	vchiq_shutdown(instance->vchiq_instance);
--	flush_workqueue(instance->bulk_wq);
- 	destroy_workqueue(instance->bulk_wq);
- 
- 	idr_destroy(&instance->context_map);
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

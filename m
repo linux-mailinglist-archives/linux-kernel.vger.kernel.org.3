@@ -2,271 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0F250C2EC
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEAD950C34F
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbiDVXCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
+        id S234252AbiDVXGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234150AbiDVXBo (ORCPT
+        with ESMTP id S234150AbiDVXGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:01:44 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FF1113CA5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:30:25 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e5c42b6e31so10048375fac.12
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:30:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=llCxmLTdaCZHW14cipFv3zKVNDfg4S3k4Clp+5fnjFI=;
-        b=h5DEHQlk+fmuvc0+DZD9NC4Fe0/4QoIQmg5FvCBetRbm49gLG1iDmBKTdFHUn6XSpE
-         OfSVgokMm/O0iAioCNkrA0iUo1CoNtJM/2d4RA6abyhjtj713jxNEiwssjzL/I/3PvSc
-         XZi9PDjbvj2mubCQvkvMFuRHm4CO2ry/q7KT4AHO1rOkSun8blesvUHXZeWfNe9hUh5D
-         Z59EZCa3f1JkopcFSBhwO4k9CJqkGRm3mmP+/0dOduKiPYTJDMVIBtRHmSKgGz4xM1QD
-         UctwP0Ov9asO/GKAoDV+nV9giz54Lc2+C3t2pQeatIEpWNEmipI+ffeNoa9FUdiUh8+1
-         x7lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=llCxmLTdaCZHW14cipFv3zKVNDfg4S3k4Clp+5fnjFI=;
-        b=n6G4zihTsi7oXVcY9JPiwJAaLnkqh+a8O1X8eAtxF5Jil6bv2KV5cUCjG8ol+0Sx9h
-         Ld1MH9ZLJnqhIT/oBmrgahqjCG2XX8fsa9eqpLcKA7+lPFGBNGszTg5vx/Z4jjjgtWI4
-         Sf9zDlaljhO4oil5LRaehY+lIj8st5Lxu5GepTwZlL9HUnlsZ0cE/EvUyUsgAehcLAga
-         g7ZvouS4vPFnanldxAZgWeoJHUhJUMQWzJG9fvbHIEQZ8Y1QRZy+cPaKw+0dg35dIvuD
-         HaTwAu60keX5RlvSGSx+7vSWDTD4wGxRbQwt0WY6bNgsooFIFrDenCeVr1VQmCq5JSXM
-         hpKw==
-X-Gm-Message-State: AOAM533UOXsEkOM6p9T8J1CI4ELtl55W/79EiT+xRMMmu9or7r5BQKRF
-        mqz8YkJ/38WIisfVO1XurGSx7w==
-X-Google-Smtp-Source: ABdhPJz138kHCGoPHhU2qrDzH3POGVzi1U1OMbGNcHB9jQ41j8e0vvGToVhUplDG6/T+BzbPAtV2pQ==
-X-Received: by 2002:a05:6870:f21d:b0:e1:cb99:bd46 with SMTP id t29-20020a056870f21d00b000e1cb99bd46mr2880205oao.140.1650666625046;
-        Fri, 22 Apr 2022 15:30:25 -0700 (PDT)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id a14-20020a544e0e000000b002f9c00dc626sm1218831oiy.28.2022.04.22.15.30.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 15:30:24 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-Subject: [PATCH v3 2/2] drm/msm/dp: Implement oob_hotplug_event()
-Date:   Fri, 22 Apr 2022 15:32:25 -0700
-Message-Id: <20220422223225.1297434-2-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220422223225.1297434-1-bjorn.andersson@linaro.org>
-References: <20220422223225.1297434-1-bjorn.andersson@linaro.org>
+        Fri, 22 Apr 2022 19:06:00 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B742B1971FA
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:35:56 -0700 (PDT)
+X-UUID: cf57d261ad4a403688e2da312284f880-20220423
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:7e0e9f8f-9cbe-4c41-8c2a-c8b00d92214d,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:b822d2ef-06b0-4305-bfbf-554bfc9d151a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: cf57d261ad4a403688e2da312284f880-20220423
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 703574240; Sat, 23 Apr 2022 06:35:52 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 23 Apr 2022 06:35:52 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 23 Apr 2022 06:35:51 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Miles Chen <miles.chen@mediatek.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        <iommu@lists.linux-foundation.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] iommu/mediatek: fix NULL pointer dereference when printing dev_name
+Date:   Sat, 23 Apr 2022 06:35:48 +0800
+Message-ID: <20220422223549.4173-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm DisplayPort driver contains traces of the necessary
-plumbing to hook up USB HPD, in the form of the dp_hpd module and the
-dp_usbpd_cb struct. Use this as basis for implementing the
-oob_hotplug_event() callback, by amending the dp_hpd module with the
-missing logic.
+When larbdev is NULL (in the case I hit, the node is incorrectly set
+iommus = <&iommu NUM>), it will cause device_link_add() fail and
+the kernel crashes when we try to print dev_name(larbdev).
 
-Overall the solution is similar to what's done downstream, but upstream
-all the code to disect the HPD notification lives on the calling side of
-drm_connector_oob_hotplug_event().
+Fix it by adding a NULL pointer check before
+device_link_add/device_link_remove.
 
-drm_connector_oob_hotplug_event() performs the lookup of the
-drm_connector based on fwnode, hence the need to assign the fwnode in
-dp_drm_connector_init().
+It should work for normal correct setting and avoid the crash caused
+by my incorrect setting.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Error log:
+[   18.189042][  T301] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000050
+[   18.190247][  T301] Mem abort info:
+[   18.190255][  T301]   ESR = 0x96000005
+[   18.190263][  T301]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   18.192142][  T301]   SET = 0, FnV = 0
+[   18.192151][  T301]   EA = 0, S1PTW = 0
+[   18.194710][  T301]   FSC = 0x05: level 1 translation fault
+[   18.195424][  T301] Data abort info:
+[   18.195888][  T301]   ISV = 0, ISS = 0x00000005
+[   18.196500][  T301]   CM = 0, WnR = 0
+[   18.196977][  T301] user pgtable: 4k pages, 39-bit VAs, pgdp=0000000104f9e000
+[   18.197889][  T301] [0000000000000050] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000
+[   18.199220][  T301] Internal error: Oops: 96000005 [#1] PREEMPT SMP
+[   18.343152][  T301] Kernel Offset: 0x1444080000 from 0xffffffc008000000
+[   18.343988][  T301] PHYS_OFFSET: 0x40000000
+[   18.344519][  T301] pstate: a0400005 (NzCv daif +PAN -UAO)
+[   18.345213][  T301] pc : mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
+[   18.346050][  T301] lr : mtk_iommu_probe_device+0xd0/0x118 [mtk_iommu]
+[   18.346884][  T301] sp : ffffffc00a5635e0
+[   18.347392][  T301] x29: ffffffc00a5635e0 x28: ffffffd44a46c1d8
+[   18.348156][  T301] x27: ffffff80c39a8000 x26: ffffffd44a80cc38
+[   18.348917][  T301] x25: 0000000000000000 x24: ffffffd44a80cc38
+[   18.349677][  T301] x23: ffffffd44e4da4c6 x22: ffffffd44a80cc38
+[   18.350438][  T301] x21: ffffff80cecd1880 x20: 0000000000000000
+[   18.351198][  T301] x19: ffffff80c439f010 x18: ffffffc00a50d0c0
+[   18.351959][  T301] x17: ffffffffffffffff x16: 0000000000000004
+[   18.352719][  T301] x15: 0000000000000004 x14: ffffffd44eb5d420
+[   18.353480][  T301] x13: 0000000000000ad2 x12: 0000000000000003
+[   18.354241][  T301] x11: 00000000fffffad2 x10: c0000000fffffad2
+[   18.355003][  T301] x9 : a0d288d8d7142d00 x8 : a0d288d8d7142d00
+[   18.355763][  T301] x7 : ffffffd44c2bc640 x6 : 0000000000000000
+[   18.356524][  T301] x5 : 0000000000000080 x4 : 0000000000000001
+[   18.357284][  T301] x3 : 0000000000000000 x2 : 0000000000000005
+[   18.358045][  T301] x1 : 0000000000000000 x0 : 0000000000000000
+[   18.360208][  T301] Hardware name: MT6873 (DT)
+[   18.360771][  T301] Call trace:
+[   18.361168][  T301]  dump_backtrace+0xf8/0x1f0
+[   18.361737][  T301]  dump_stack_lvl+0xa8/0x11c
+[   18.362305][  T301]  dump_stack+0x1c/0x2c
+[   18.362816][  T301]  mrdump_common_die+0x184/0x40c [mrdump]
+[   18.363575][  T301]  ipanic_die+0x24/0x38 [mrdump]
+[   18.364230][  T301]  atomic_notifier_call_chain+0x128/0x2b8
+[   18.364937][  T301]  die+0x16c/0x568
+[   18.365394][  T301]  __do_kernel_fault+0x1e8/0x214
+[   18.365402][  T301]  do_page_fault+0xb8/0x678
+[   18.366934][  T301]  do_translation_fault+0x48/0x64
+[   18.368645][  T301]  do_mem_abort+0x68/0x148
+[   18.368652][  T301]  el1_abort+0x40/0x64
+[   18.368660][  T301]  el1h_64_sync_handler+0x54/0x88
+[   18.368668][  T301]  el1h_64_sync+0x68/0x6c
+[   18.368673][  T301]  mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
+[   18.369840][  T301]  __iommu_probe_device+0x12c/0x358
+[   18.370880][  T301]  iommu_probe_device+0x3c/0x31c
+[   18.372026][  T301]  of_iommu_configure+0x200/0x274
+[   18.373587][  T301]  of_dma_configure_id+0x1b8/0x230
+[   18.375200][  T301]  platform_dma_configure+0x24/0x3c
+[   18.376456][  T301]  really_probe+0x110/0x504
+[   18.376464][  T301]  __driver_probe_device+0xb4/0x188
+[   18.376472][  T301]  driver_probe_device+0x5c/0x2b8
+[   18.376481][  T301]  __driver_attach+0x338/0x42c
+[   18.377992][  T301]  bus_add_driver+0x218/0x4c8
+[   18.379389][  T301]  driver_register+0x84/0x17c
+[   18.380580][  T301]  __platform_driver_register+0x28/0x38
+...
+
+Fixes: 635319a4a744 ("media: iommu/mediatek: Add device_link between the consumer and the larb devices")
+Signed-off-by: Miles Chen <miles.chen@mediatek.com>
 ---
+ drivers/iommu/mtk_iommu.c    | 16 ++++++++++------
+ drivers/iommu/mtk_iommu_v1.c | 16 ++++++++++------
+ 2 files changed, 20 insertions(+), 12 deletions(-)
 
-Changes since v2:
-- Rebased patch
-
- drivers/gpu/drm/msm/dp/dp_display.c |  9 +++++++++
- drivers/gpu/drm/msm/dp/dp_display.h |  3 +++
- drivers/gpu/drm/msm/dp/dp_drm.c     | 11 +++++++++++
- drivers/gpu/drm/msm/dp/dp_hpd.c     | 21 +++++++++++++++++++++
- drivers/gpu/drm/msm/dp/dp_hpd.h     |  5 +++++
- 5 files changed, 49 insertions(+)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index a42732b67349..1019f6d8fd03 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -449,6 +449,14 @@ static int dp_display_usbpd_configure_cb(struct device *dev)
- 	return dp_display_process_hpd_high(dp);
- }
- 
-+void dp_display_oob_hotplug_event(struct msm_dp *dp_display,
-+				  enum drm_connector_hpd_state hpd_state)
-+{
-+	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
-+
-+	dp->usbpd->oob_event(dp->usbpd, hpd_state);
-+}
-+
- static int dp_display_usbpd_disconnect_cb(struct device *dev)
- {
- 	struct dp_display_private *dp = dev_get_dp_display_private(dev);
-@@ -1302,6 +1310,7 @@ static int dp_display_probe(struct platform_device *pdev)
- 	dp->pdev = pdev;
- 	dp->name = "drm_dp";
- 	dp->dp_display.connector_type = desc->connector_type;
-+	dp->dp_display.dev = &pdev->dev;
- 
- 	rc = dp_init_sub_modules(dp);
- 	if (rc) {
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
-index 7af2b186d2d9..16658270df2c 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.h
-+++ b/drivers/gpu/drm/msm/dp/dp_display.h
-@@ -11,6 +11,7 @@
- #include "disp/msm_disp_snapshot.h"
- 
- struct msm_dp {
-+	struct device *dev;
- 	struct drm_device *drm_dev;
- 	struct device *codec_dev;
- 	struct drm_bridge *bridge;
-@@ -40,5 +41,7 @@ bool dp_display_check_video_test(struct msm_dp *dp_display);
- int dp_display_get_test_bpp(struct msm_dp *dp_display);
- void dp_display_signal_audio_start(struct msm_dp *dp_display);
- void dp_display_signal_audio_complete(struct msm_dp *dp_display);
-+void dp_display_oob_hotplug_event(struct msm_dp *dp_display,
-+				  enum drm_connector_hpd_state hpd_state);
- 
- #endif /* _DP_DISPLAY_H_ */
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-index 80f59cf99089..76904b1601b1 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.c
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-@@ -123,6 +123,14 @@ static enum drm_mode_status dp_connector_mode_valid(
- 	return dp_display_validate_mode(dp_disp, mode->clock);
- }
- 
-+static void dp_oob_hotplug_event(struct drm_connector *connector,
-+				 enum drm_connector_hpd_state hpd_state)
-+{
-+	struct msm_dp *dp_disp = to_dp_connector(connector)->dp_display;
-+
-+	dp_display_oob_hotplug_event(dp_disp, hpd_state);
-+}
-+
- static const struct drm_connector_funcs dp_connector_funcs = {
- 	.detect = dp_connector_detect,
- 	.fill_modes = drm_helper_probe_single_connector_modes,
-@@ -130,6 +138,7 @@ static const struct drm_connector_funcs dp_connector_funcs = {
- 	.reset = drm_atomic_helper_connector_reset,
- 	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
- 	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
-+	.oob_hotplug_event = dp_oob_hotplug_event,
- };
- 
- static const struct drm_connector_helper_funcs dp_connector_helper_funcs = {
-@@ -160,6 +169,8 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
- 	if (ret)
- 		return ERR_PTR(ret);
- 
-+	connector->fwnode = fwnode_handle_get(dev_fwnode(dp_display->dev));
-+
- 	drm_connector_helper_add(connector, &dp_connector_helper_funcs);
- 
- 	/*
-diff --git a/drivers/gpu/drm/msm/dp/dp_hpd.c b/drivers/gpu/drm/msm/dp/dp_hpd.c
-index db98a1d431eb..cdb1feea5ebf 100644
---- a/drivers/gpu/drm/msm/dp/dp_hpd.c
-+++ b/drivers/gpu/drm/msm/dp/dp_hpd.c
-@@ -7,6 +7,8 @@
- 
- #include <linux/slab.h>
- #include <linux/device.h>
-+#include <drm/drm_connector.h>
-+#include <drm/drm_print.h>
- 
- #include "dp_hpd.h"
- 
-@@ -45,6 +47,24 @@ int dp_hpd_connect(struct dp_usbpd *dp_usbpd, bool hpd)
- 	return rc;
- }
- 
-+static void dp_hpd_oob_event(struct dp_usbpd *dp_usbpd,
-+			     enum drm_connector_hpd_state hpd_state)
-+{
-+	struct dp_hpd_private *hpd_priv = container_of(dp_usbpd, struct dp_hpd_private, dp_usbpd);
-+
-+	DRM_DEBUG_DP("hpd_state: %d connected: %d\n", hpd_state, dp_usbpd->connected);
-+
-+	if (!dp_usbpd->connected && hpd_state == DRM_CONNECTOR_HPD_HIGH) {
-+		dp_usbpd->connected = true;
-+		hpd_priv->dp_cb->configure(hpd_priv->dev);
-+	} else if (hpd_state == DRM_CONNECTOR_HPD_LOW) {
-+		dp_usbpd->connected = false;
-+		hpd_priv->dp_cb->disconnect(hpd_priv->dev);
-+	} else {
-+		hpd_priv->dp_cb->attention(hpd_priv->dev);
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 6fd75a60abd6..1405502118ca 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -581,10 +581,12 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+ 		}
+ 	}
+ 	larbdev = data->larb_imu[larbid].dev;
+-	link = device_link_add(dev, larbdev,
+-			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
+-	if (!link)
+-		dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
++	if (larbdev) {
++		link = device_link_add(dev, larbdev,
++				       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
++		if (!link)
++			dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
 +	}
-+}
-+
- struct dp_usbpd *dp_hpd_get(struct device *dev, struct dp_usbpd_cb *cb)
- {
- 	struct dp_hpd_private *dp_hpd;
-@@ -62,6 +82,7 @@ struct dp_usbpd *dp_hpd_get(struct device *dev, struct dp_usbpd_cb *cb)
- 	dp_hpd->dp_cb = cb;
- 
- 	dp_hpd->dp_usbpd.connect = dp_hpd_connect;
-+	dp_hpd->dp_usbpd.oob_event = dp_hpd_oob_event;
- 
- 	return &dp_hpd->dp_usbpd;
+ 	return &data->iommu;
  }
-diff --git a/drivers/gpu/drm/msm/dp/dp_hpd.h b/drivers/gpu/drm/msm/dp/dp_hpd.h
-index 8feec5aa5027..4166e5fd3156 100644
---- a/drivers/gpu/drm/msm/dp/dp_hpd.h
-+++ b/drivers/gpu/drm/msm/dp/dp_hpd.h
-@@ -29,7 +29,9 @@ enum plug_orientation {
-  * @hpd_irq: Change in the status since last message
-  * @alt_mode_cfg_done: bool to specify alt mode status
-  * @debug_en: bool to specify debug mode
-+ * @connected: cable currently connected
-  * @connect: simulate disconnect or connect for debug mode
-+ * @oob_event: deliver oob event to the usbpd code
-  */
- struct dp_usbpd {
- 	enum plug_orientation orientation;
-@@ -41,8 +43,11 @@ struct dp_usbpd {
- 	bool hpd_irq;
- 	bool alt_mode_cfg_done;
- 	bool debug_en;
-+	bool connected;
  
- 	int (*connect)(struct dp_usbpd *dp_usbpd, bool hpd);
-+	void (*oob_event)(struct dp_usbpd *dp_usbpd,
-+			  enum drm_connector_hpd_state hpd_state);
- };
+@@ -600,8 +602,10 @@ static void mtk_iommu_release_device(struct device *dev)
  
- /**
+ 	data = dev_iommu_priv_get(dev);
+ 	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
+-	larbdev = data->larb_imu[larbid].dev;
+-	device_link_remove(dev, larbdev);
++	if (larbdev) {
++		larbdev = data->larb_imu[larbid].dev;
++		device_link_remove(dev, larbdev);
++	}
+ 
+ 	iommu_fwspec_free(dev);
+ }
+diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+index ecff800656e6..d46b147afcf0 100644
+--- a/drivers/iommu/mtk_iommu_v1.c
++++ b/drivers/iommu/mtk_iommu_v1.c
+@@ -467,10 +467,12 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+ 	}
+ 
+ 	larbdev = data->larb_imu[larbid].dev;
+-	link = device_link_add(dev, larbdev,
+-			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
+-	if (!link)
+-		dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
++	if (larbdev) {
++		link = device_link_add(dev, larbdev,
++				       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
++		if (!link)
++			dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
++	}
+ 
+ 	return &data->iommu;
+ }
+@@ -501,8 +503,10 @@ static void mtk_iommu_release_device(struct device *dev)
+ 
+ 	data = dev_iommu_priv_get(dev);
+ 	larbid = mt2701_m4u_to_larb(fwspec->ids[0]);
+-	larbdev = data->larb_imu[larbid].dev;
+-	device_link_remove(dev, larbdev);
++	if (larbdev) {
++		larbdev = data->larb_imu[larbid].dev;
++		device_link_remove(dev, larbdev);
++	}
+ 
+ 	iommu_fwspec_free(dev);
+ }
 -- 
-2.35.1
+2.18.0
 

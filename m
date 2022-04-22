@@ -2,101 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38F950BCF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502EC50BCF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449621AbiDVQ3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S1449653AbiDVQ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449068AbiDVQ3a (ORCPT
+        with ESMTP id S1384500AbiDVQ3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:29:30 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF9D5EBCF;
-        Fri, 22 Apr 2022 09:26:32 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id h27so14908076lfj.13;
-        Fri, 22 Apr 2022 09:26:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W3ErJKSyUTgCN7lxhUsHpBZ8kXzxl1Rq4h0+SNf6uoY=;
-        b=Ia0j6KGxWiQ7sqdpSo46uRPYP0MGBWqmGDErUg8qWvJliL+Iao9XN3Co/DGRdNrZ+F
-         dqi7SP6C+gK6MVeonXKINF/p0Ty9rShxMSTxTrH4tJ0Lpb+6QyWzc2NxAl593aN2yZ4u
-         D5w44oaLVC6G7Lo3aJCFWg7IWSxyV5sbF8927WkrQHujA6aLpZOr7ooghtqN/HDvT6Ua
-         Tr/XGmCIfHucgWgjiDviYO+/0dUXSS8JbfeETVCkqR+Vp7pg4vnRX9KTzGNkH211S43I
-         krhswQ4Y2wXJH+8/2ejGZdVBqAaueCumvDkB3uEuTHsqS+ebaNINs9pBgQtYe/RUBXaR
-         VAdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W3ErJKSyUTgCN7lxhUsHpBZ8kXzxl1Rq4h0+SNf6uoY=;
-        b=7t8K3cJKIsi/95j60gwZLtvQm+30lfDjPdQYxh3NOI0dBddWc/gXCwMehDeFvVMnMH
-         z7HoBAy1kj3JM8oilXoiBi9s7tHJpSyOMHkU2nE9QOgIrERcedp18JyYuxbMLx2HsgMV
-         AgZHA40hMdMQNdjfi7r1fYs/IGz6uYNh5PaJuaLN2Y7AfUeVOmtGE8usnARq+n7ugSSY
-         lznDyUTWPGWozqJBM37I7Whv2EvrKQF5hRIiTqR97IN7w7vm3rMxc/isrc5njRf2CTnY
-         oRYtU9+cOeUzXOxdoZTdWpyFaRlGsWGZPyMDOj8eyHHoew3Nd80iqA47LVVuCgy7S99v
-         slfg==
-X-Gm-Message-State: AOAM5302sQFCPExWvRxXBfMTVbpR3d8WZlA5c+67SbQ/x+Qr3omHmaA3
-        uU/q378h5iD1DQYSTfNn7R2slW0X+JRz6PZ1rl8=
-X-Google-Smtp-Source: ABdhPJx5lev57lC8P2TC16HcJcGi6BTAZ/DAoOM7RfmEuXR34RWx9GJGZMhbVLdVgat+bJow2ck/NvNl2R2+Ok08Jhw=
-X-Received: by 2002:a19:7b17:0:b0:46e:cb82:fe24 with SMTP id
- w23-20020a197b17000000b0046ecb82fe24mr3642082lfc.194.1650644790219; Fri, 22
- Apr 2022 09:26:30 -0700 (PDT)
+        Fri, 22 Apr 2022 12:29:31 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355E15EBEF;
+        Fri, 22 Apr 2022 09:26:35 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 0279383D4B;
+        Fri, 22 Apr 2022 18:26:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1650644793;
+        bh=DEvATQUcmAUvQtZt+xl0HhiXkCZH3A3i2rSRnjRahGM=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=jKUSyRNQXt+3uKyhT+4qpG0zhfDqsIKb0MBe+7dwBIJclr3+0t+w6Ln8rjXZrzxCD
+         xsSvW7US62e0SpaA9TMWJPC/safVtElF5FYHE31gz3JgklEPwIW9KFUtR2QQQ0ozQN
+         agRKE947CU4MdHKxst1LEtQIiMauosoyl//jME5tgChBF4S59bKxydkKbWQ1hCTNQI
+         JTdmBiIdnsHz97Xy8ptppSto0l0m1qwnBrJGkJR11U8+PG0tFYrjduXU8kNVhEy1nD
+         XwbQTh5F+jyvWjb+fXvvK5mPi9WgegzMnHLZthTR+AxdlgVquuEcHBvVzeomwheuCb
+         ASx+DqSWM6ORw==
+Message-ID: <c48500cd-50be-1d70-2f2c-02c2dcede1eb@denx.de>
+Date:   Fri, 22 Apr 2022 18:26:32 +0200
 MIME-Version: 1.0
-References: <cover.1650575919.git.peilin.ye@bytedance.com> <950bfd124e4f87bd9e1acbf6303545875c3681fe.1650575919.git.peilin.ye@bytedance.com>
-In-Reply-To: <950bfd124e4f87bd9e1acbf6303545875c3681fe.1650575919.git.peilin.ye@bytedance.com>
-From:   William Tu <u9012063@gmail.com>
-Date:   Fri, 22 Apr 2022 09:25:53 -0700
-Message-ID: <CALDO+SZNeBrupoCigpM9g5TEGAgEi6k8+usXc0O8RqkLmeO99Q@mail.gmail.com>
-Subject: Re: [PATCH net 2/3] ip6_gre: Make o_seqno start from 0 in native mode
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        "xeb@mail.ru" <xeb@mail.ru>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] pinctrl: stm32: improve bank clocks management
+Content-Language: en-US
+To:     Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-gpio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220422143608.226580-1-fabien.dessenne@foss.st.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20220422143608.226580-1-fabien.dessenne@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 3:08 PM Peilin Ye <yepeilin.cs@gmail.com> wrote:
->
-> From: Peilin Ye <peilin.ye@bytedance.com>
->
-> For IP6GRE and IP6GRETAP devices, currently o_seqno starts from 1 in
-> native mode.  According to RFC 2890 2.2., "The first datagram is sent
-> with a sequence number of 0."  Fix it.
->
-> It is worth mentioning that o_seqno already starts from 0 in collect_md
-> mode, see the "if (tunnel->parms.collect_md)" clause in __gre6_xmit(),
-> where tunnel->o_seqno is passed to gre_build_header() before getting
-> incremented.
->
-> Fixes: c12b395a4664 ("gre: Support GRE over IPv6")
-> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+On 4/22/22 16:36, Fabien Dessenne wrote:
+> Instead of enabling/disabling the clock at each IO configuration update,
+> just keep the clock enabled from the probe.
+> This makes things simpler and more efficient (e.g. the time required to
+> toggle an output IO is drastically decreased) without significantly
+> increasing the power consumption.
 
-LGTM
-Acked-by: William Tu <u9012063@gmail.com>
+[...]
+
+>   static struct irq_domain *stm32_pctrl_get_irq_domain(struct device_node *np)
+> @@ -1575,6 +1537,10 @@ int stm32_pctl_probe(struct platform_device *pdev)
+>   			ret = stm32_gpiolib_register_bank(pctl, child);
+>   			if (ret) {
+>   				of_node_put(child);
+> +
+> +				for (i = 0; i < pctl->nbanks; i++)
+> +					clk_disable_unprepare(pctl->banks[i].clk);
+> +
+
+There are clk_bulk_*() functions, maybe you can use those to get rid of 
+these loops ?
+
+The rest looks good to me.

@@ -2,136 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BF950AFD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178FE50AFDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbiDVGAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S233005AbiDVGAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiDVGAX (ORCPT
+        with ESMTP id S233024AbiDVGAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:00:23 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0164F9EE
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:57:25 -0700 (PDT)
-X-UUID: a5f8ab1f86c24250a29536920915568b-20220422
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:d2152398-c1d3-4725-803b-95f4c2d56d51,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-META: VersionHash:faefae9,CLOUDID:e7d992f0-da02-41b4-b6df-58f4ccd36682,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: a5f8ab1f86c24250a29536920915568b-20220422
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 15665764; Fri, 22 Apr 2022 13:57:18 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 22 Apr 2022 13:57:17 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 22 Apr
- 2022 13:57:15 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Apr 2022 13:57:15 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        YC Hung <yc.hung@mediatek.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <sound-open-firmware@alsa-project.org>,
-        <alsa-devel@alsa-project.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v1 4/4] ASoC: SOF: mediatek: Add DSP system PM callback for mt8186
-Date:   Fri, 22 Apr 2022 13:56:59 +0800
-Message-ID: <20220422055659.8738-5-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.15.GIT
-In-Reply-To: <20220422055659.8738-1-tinghan.shen@mediatek.com>
-References: <20220422055659.8738-1-tinghan.shen@mediatek.com>
+        Fri, 22 Apr 2022 02:00:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70B3F4F9DB
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650607059;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EuOWY924gxTJNlh9rIHifQvr1oN3Zp0p8AUdLxJZsOs=;
+        b=cB0JB399vvxB1wlTCuiSRP9tGbAfKwTVaO7F51yFD0eZpvlax73LSN/UiyrnkTJ1MpiYOl
+        PtiVZoTaBiFcS44jPEyXMsG1SNhJgIsa+7sak2d4wteRfBNTwk07G6P5kLzzSnbh44pBco
+        a7qFPkyBc930jEqwQ59NoDbRsFlqvGc=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-471-cPZjbLq5MgKOjpUQPaUuTA-1; Fri, 22 Apr 2022 01:57:37 -0400
+X-MC-Unique: cPZjbLq5MgKOjpUQPaUuTA-1
+Received: by mail-ej1-f69.google.com with SMTP id qw33-20020a1709066a2100b006f001832229so3558975ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:57:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EuOWY924gxTJNlh9rIHifQvr1oN3Zp0p8AUdLxJZsOs=;
+        b=ZQvMp+JmHkqvvhH7YloyVDbeW0QGZvzEW5yusfUnwHO2HdneS6LL+r4Xrv8/ACIP+r
+         4ToAZx1mTRzU8MS4NlXANQl4z6EqAU8cCli8AZ1WBYuJIDJ8ali7ClDDp/QkCPib+cFd
+         SOdxLPDqB69TtgDbY1RCnQ/OPVvHFT0rXL0383tnV5UYNWCCVt9iZy8qj0ajzeAhzMRK
+         /oPG6VN126ICoWCi7QNOw/PjSUqBb+LaxwdPCLWem0Losb1HAJF3OPWJxku6rAW6HhMW
+         hc+d517gyvLotO7JnjIy4cAM/PP4pCiRnQsVNSZcprEEsWCoQ8DxAZgxLHuavY1lj+hD
+         S6OA==
+X-Gm-Message-State: AOAM5305lkRsBgh1UMFGIqmuZSQXJ1e8oPeu+34ZiqL/HvHuJep1Wowo
+        16Ebq8yOET3E7X0ZUYUjBFmaZme1+W2jz+Pk5AxIYvYLWfl+DMuLOmGKE4xkpXDwiHB1bTzScKa
+        jtF4MnWt8W2EL/phYGKtm89C+I1b1WDn8giXPysRs
+X-Received: by 2002:a17:906:58ce:b0:6e7:f925:fc5c with SMTP id e14-20020a17090658ce00b006e7f925fc5cmr2615055ejs.674.1650607056585;
+        Thu, 21 Apr 2022 22:57:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJywAEDh+KGf/9/VrJhgVvL7NJNlmFowauTdIJKoyqqAUv5JPFRL7+h1SQztEmvcttzRuJcr7/pwScKNQ9d4dPU=
+X-Received: by 2002:a17:906:58ce:b0:6e7:f925:fc5c with SMTP id
+ e14-20020a17090658ce00b006e7f925fc5cmr2615046ejs.674.1650607056332; Thu, 21
+ Apr 2022 22:57:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220419014025.218121-1-lulu@redhat.com> <32c1113d-4991-0ab0-5a85-33fe85295b93@redhat.com>
+ <CACLfguUTXD0r3bDYCA3YkYQ8Oe8L0pMU2gaXsemh392WKNjOwA@mail.gmail.com>
+In-Reply-To: <CACLfguUTXD0r3bDYCA3YkYQ8Oe8L0pMU2gaXsemh392WKNjOwA@mail.gmail.com>
+From:   Cindy Lu <lulu@redhat.com>
+Date:   Fri, 22 Apr 2022 13:57:00 +0800
+Message-ID: <CACLfguVubBQ4N6EFZCPC0ksibmso5Yryy0e_oreKMPg==k9f_Q@mail.gmail.com>
+Subject: Re: [PATCH v1] vdpa/vp_vdpa : add vdpa tool support in vp_vdpa
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Michael Tsirkin <mst@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DSP system PM callback for suspend and resume
+On Wed, Apr 20, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
+>
+>
+>
+> On Wed, Apr 20, 2022 at 11:21 AM Jason Wang <jasowang@redhat.com> wrote:
+>>
+>>
+>> =E5=9C=A8 2022/4/19 09:40, Cindy Lu =E5=86=99=E9=81=93:
+>> > this patch is to add the support for vdpa tool in vp_vdpa
+>> > here is the example steps
+>> > modprobe vp_vdpa
+>> > modprobe vhost_vdpa
+>> >
+>> > echo 0000:00:06.0>/sys/bus/pci/drivers/virtio-pci/unbind
+>> > echo 1af4 1041 > /sys/bus/pci/drivers/vp-vdpa/new_id
+>> >
+>> > vdpa dev add name vdpa1 mgmtdev pci/0000:00:06.0
+>> >
+>> > Signed-off-by: Cindy Lu <lulu@redhat.com>
+>> > ---
+>> >   drivers/vdpa/virtio_pci/vp_vdpa.c | 86 ++++++++++++++++++++++++++++-=
+--
+>> >   1 file changed, 78 insertions(+), 8 deletions(-)
+>> >
+>> > diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_p=
+ci/vp_vdpa.c
+>> > index cce101e6a940..d8a1d2f8e9bb 100644
+>> > --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
+>> > +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+>> > @@ -17,6 +17,8 @@
+>> >   #include <linux/virtio_ring.h>
+>> >   #include <linux/virtio_pci.h>
+>> >   #include <linux/virtio_pci_modern.h>
+>> > +#include <uapi/linux/virtio_net.h>
+>> > +#include <uapi/linux/vdpa.h>
+>> >
+>> >   #define VP_VDPA_QUEUE_MAX 256
+>> >   #define VP_VDPA_DRIVER_NAME "vp_vdpa"
+>> > @@ -41,6 +43,18 @@ struct vp_vdpa {
+>> >       int vectors;
+>> >   };
+>> >
+>> > +struct vp_vdpa_mgmtdev {
+>> > +     struct vdpa_mgmt_dev mgtdev;
+>> > +     struct vp_vdpa *vp_vdpa;
+>> > +     struct pci_dev *pdev;
+>> > +};
+>> > +
+>> > +#define VP_VDPA_NET_FEATURES                                         =
+          \
+>> > +     ((1ULL << VIRTIO_F_ANY_LAYOUT) | (1ULL << VIRTIO_F_VERSION_1) | =
+       \
+>> > +      (1ULL << VIRTIO_F_ACCESS_PLATFORM))
+>> > +
+>> > +#define VP_VDPA_NET_VQ_NUM 2
+>>
+>>
+>> Let's not go backwards, e.g we've already support any kind of virtio
+>> device with any kind of features. see the comment in vp_vdpa_probe().
+>>
+>>
+> got it, I will fix this
+>>
+>> > +
+>> >   static struct vp_vdpa *vdpa_to_vp(struct vdpa_device *vdpa)
+>> >   {
+>> >       return container_of(vdpa, struct vp_vdpa, vdpa);
+>> > @@ -454,9 +468,14 @@ static void vp_vdpa_free_irq_vectors(void *data)
+>> >       pci_free_irq_vectors(data);
+>> >   }
+>> >
+>> > -static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_devic=
+e_id *id)
+>> > +static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *=
+name,
+>> > +                        const struct vdpa_dev_set_config *add_config)
+>> >   {
+>> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =3D
+>> > +             container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev);
+>> > +
+>> >       struct virtio_pci_modern_device *mdev;
+>> > +     struct pci_dev *pdev =3D vp_vdpa_mgtdev->pdev;
+>> >       struct device *dev =3D &pdev->dev;
+>> >       struct vp_vdpa *vp_vdpa;
+>> >       int ret, i;
+>> > @@ -465,8 +484,9 @@ static int vp_vdpa_probe(struct pci_dev *pdev, con=
+st struct pci_device_id *id)
+>> >       if (ret)
+>> >               return ret;
+>> >
+>> > -     vp_vdpa =3D vdpa_alloc_device(struct vp_vdpa, vdpa,
+>> > -                                 dev, &vp_vdpa_ops, NULL, false);
+>> > +     vp_vdpa =3D vdpa_alloc_device(struct vp_vdpa, vdpa, dev, &vp_vdp=
+a_ops,
+>> > +                                 name, false);
+>>
+>>
+>> Nit: let's keep the line of vdpa_alloc_device() unchanged to reduce the
+>> changeset.
+>>
+>>
+> will fix this
+>>
+>> > +
+>> >       if (IS_ERR(vp_vdpa)) {
+>> >               dev_err(dev, "vp_vdpa: Failed to allocate vDPA structure=
+\n");
+>> >               return PTR_ERR(vp_vdpa);
+>> > @@ -480,9 +500,10 @@ static int vp_vdpa_probe(struct pci_dev *pdev, co=
+nst struct pci_device_id *id)
+>> >               dev_err(&pdev->dev, "Failed to probe modern PCI device\n=
+");
+>> >               goto err;
+>> >       }
+>> > +     vp_vdpa_mgtdev->vp_vdpa =3D vp_vdpa;
+>> >
+>> >       pci_set_master(pdev);
+>> > -     pci_set_drvdata(pdev, vp_vdpa);
+>> > +     pci_set_drvdata(pdev, vp_vdpa_mgtdev);
+>> >
+>> >       vp_vdpa->vdpa.dma_dev =3D &pdev->dev;
+>> >       vp_vdpa->queues =3D vp_modern_get_num_queues(mdev);
+>> > @@ -516,7 +537,8 @@ static int vp_vdpa_probe(struct pci_dev *pdev, con=
+st struct pci_device_id *id)
+>> >       }
+>> >       vp_vdpa->config_irq =3D VIRTIO_MSI_NO_VECTOR;
+>> >
+>> > -     ret =3D vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues);
+>> > +     vp_vdpa->vdpa.mdev =3D &vp_vdpa_mgtdev->mgtdev;
+>> > +     ret =3D _vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues);
+>> >       if (ret) {
+>> >               dev_err(&pdev->dev, "Failed to register to vdpa bus\n");
+>> >               goto err;
+>> > @@ -529,12 +551,60 @@ static int vp_vdpa_probe(struct pci_dev *pdev, c=
+onst struct pci_device_id *id)
+>> >       return ret;
+>> >   }
+>> >
+>> > -static void vp_vdpa_remove(struct pci_dev *pdev)
+>> > +static void vp_vdpa_dev_del(struct vdpa_mgmt_dev *v_mdev,
+>> > +                         struct vdpa_device *dev)
+>> >   {
+>> > -     struct vp_vdpa *vp_vdpa =3D pci_get_drvdata(pdev);
+>> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =3D
+>> > +             container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev);
+>> > +
+>> > +     struct vp_vdpa *vp_vdpa =3D vp_vdpa_mgtdev->vp_vdpa;
+>> >
+>> >       vp_modern_remove(&vp_vdpa->mdev);
+>> > -     vdpa_unregister_device(&vp_vdpa->vdpa);
+>> > +     _vdpa_unregister_device(&vp_vdpa->vdpa);
+>> > +     vp_vdpa_mgtdev->vp_vdpa =3D NULL;
+>> > +}
+>> > +
+>> > +static const struct vdpa_mgmtdev_ops vp_vdpa_mdev_ops =3D {
+>> > +     .dev_add =3D vp_vdpa_dev_add,
+>> > +     .dev_del =3D vp_vdpa_dev_del,
+>> > +};
+>> > +
+>> > +static struct virtio_device_id vp_vdpa_id_table[] =3D {
+>> > +     { VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID },
+>> > +     { 0 },
+>> > +};
+>>
+>>
+>> Let's not limit the vp_vdpa to net, it can support all other virtio devi=
+ces.
+>>
+>>
+> sure, will fix this
+>>
+>> > +
+>> > +static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_devic=
+e_id *id)
+>> > +{
+>> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev;
+>> > +     struct vdpa_mgmt_dev *mgtdev;
+>> > +     struct device *dev =3D &pdev->dev;
+>> > +     int err;
+>> > +
+>> > +     vp_vdpa_mgtdev =3D kzalloc(sizeof(*vp_vdpa_mgtdev), GFP_KERNEL);
+>> > +     if (!vp_vdpa_mgtdev)
+>> > +             return -ENOMEM;
+>> > +     mgtdev =3D &vp_vdpa_mgtdev->mgtdev;
+>> > +
+>> > +     mgtdev->ops =3D &vp_vdpa_mdev_ops;
+>> > +     mgtdev->device =3D dev;
+>> > +     mgtdev->id_table =3D vp_vdpa_id_table;
+>> > +     vp_vdpa_mgtdev->pdev =3D pdev;
+>> > +
+>> > +     mgtdev->max_supported_vqs =3D VP_VDPA_NET_VQ_NUM;
+>>
+>>
+>> Let's read this from the device instead of using the hard-coded value.
+>>
+>>
+>> > +     mgtdev->supported_features =3D VP_VDPA_NET_FEATURES;
+>>
+>>
+>> Let's read this from the device.
+>>
+> sure will fix this
+HI Jason, I have check the code, maybe we can't read these
+informations from device here,
+because the  virtio_pci_modern_device   was inited in vp_vdpa_dev_add(),
+if we want to read these information in vp_vdpa_probe(). maybe we need
+to change the struct in vp_vdpa. and separate the
+struct virtio_pci_modern_device  from struct vp_vdpa. I'm not sure if
+this is ok to do?
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Reviewed-by: Yaochun Hung <yc.hung@mediatek.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
----
- sound/soc/sof/mediatek/mt8186/mt8186.c | 28 ++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/sound/soc/sof/mediatek/mt8186/mt8186.c b/sound/soc/sof/mediatek/mt8186/mt8186.c
-index a04cea77bd4d..c8faa63497c6 100644
---- a/sound/soc/sof/mediatek/mt8186/mt8186.c
-+++ b/sound/soc/sof/mediatek/mt8186/mt8186.c
-@@ -304,6 +304,30 @@ static int mt8186_dsp_remove(struct snd_sof_dev *sdev)
- 	return 0;
- }
- 
-+static int mt8186_dsp_suspend(struct snd_sof_dev *sdev, u32 target_state)
-+{
-+	sof_hifixdsp_shutdown(sdev);
-+	adsp_sram_power_off(sdev);
-+	adsp_clock_off(sdev);
-+
-+	return 0;
-+}
-+
-+static int mt8186_dsp_resume(struct snd_sof_dev *sdev)
-+{
-+	int ret;
-+
-+	ret = adsp_clock_on(sdev);
-+	if (ret) {
-+		dev_err(sdev->dev, "adsp_clock_on fail!\n");
-+		return ret;
-+	}
-+
-+	adsp_sram_power_on(sdev);
-+
-+	return ret;
-+}
-+
- /* on mt8186 there is 1 to 1 match between type and BAR idx */
- static int mt8186_get_bar_index(struct snd_sof_dev *sdev, u32 type)
- {
-@@ -338,6 +362,10 @@ static struct snd_sof_dsp_ops sof_mt8186_ops = {
- 	/* Firmware ops */
- 	.dsp_arch_ops = &sof_xtensa_arch_ops,
- 
-+	/* PM */
-+	.suspend	= mt8186_dsp_suspend,
-+	.resume		= mt8186_dsp_resume,
-+
- 	/* ALSA HW info flags */
- 	.hw_info =	SNDRV_PCM_INFO_MMAP |
- 			SNDRV_PCM_INFO_MMAP_VALID |
--- 
-2.18.0
+struct vp_vdpa {
+struct vdpa_device vdpa;
+struct virtio_pci_modern_device mdev;
+struct vp_vring *vring;
+struct vdpa_callback config_cb;
+char msix_name[VP_VDPA_NAME_SIZE];
+int config_irq;
+int queues;
+int vectors;
+};
+Thanks
+cindy
+>>
+>>
+>> > +
+>> > +     err =3D vdpa_mgmtdev_register(mgtdev);
+>>
+>>
+>> Do we need to free the vp_vdpa_mgtdev here?
+>>
+> will add the this
+>>
+>> Thanks
+>>
+>>
+>> > +
+>> > +     return err;
+>> > +}
+>> > +
+>> > +static void vp_vdpa_remove(struct pci_dev *pdev)
+>> > +{
+>> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =3D pci_get_drvdata(pdev)=
+;
+>> > +
+>> > +     vdpa_mgmtdev_unregister(&vp_vdpa_mgtdev->mgtdev);
+>> > +     kfree(vp_vdpa_mgtdev);
+>> >   }
+>> >
+>> >   static struct pci_driver vp_vdpa_driver =3D {
+>>
 

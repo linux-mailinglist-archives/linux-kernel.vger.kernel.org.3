@@ -2,171 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AB750B89A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A4A50B8A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448055AbiDVNiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S1448062AbiDVNjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237165AbiDVNiU (ORCPT
+        with ESMTP id S237165AbiDVNjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:38:20 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113B44A93F;
-        Fri, 22 Apr 2022 06:35:27 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23MCmtew008621;
-        Fri, 22 Apr 2022 13:35:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version; s=pp1; bh=Zcc0JtPRzC+pKr8++TBAJL5YNRPeYJc/FYOB64+6btE=;
- b=AmFwLcoI3tVKKINXxOxlp3AnwyUB1m2zkOvxgDvqYJIqHVGa77iRWtgy5IQRbCGtl052
- r/3MTho75Zygv7CEL7isQteaH/2fEQ/zFB1m5c3uGigwL9c8Oh16ytP9CjiN6Az5sN0b
- p8BPi+0Fx9GYhFSsO/7aRAYoqAhhJrGPxEz19s8IjOwYVneM7lPt6sTbUwu1ZswQIpWR
- T1apMP1nIj3AQDhBos5N9ZOtSfiH9XNVbPPVgy3N91PeWVj4qQb7zdN9w7hyeJMM3QQI
- 7iSsXIDM6u8le+rC5g+xam6+3nZMb3LA95IPt70+dJtvQ7f9yttv4KlhqyrQE1ABZSq+ 6g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjyk5j1sa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 13:35:23 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23MDL28n009338;
-        Fri, 22 Apr 2022 13:35:23 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fjyk5j1rf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 13:35:23 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MDMbop007852;
-        Fri, 22 Apr 2022 13:35:20 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ffn2j1fce-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 13:35:20 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MDZHXQ47382996
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 Apr 2022 13:35:17 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7FE7C11C04A;
-        Fri, 22 Apr 2022 13:35:17 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0531911C04C;
-        Fri, 22 Apr 2022 13:35:17 +0000 (GMT)
-Received: from sig-9-145-175-158.de.ibm.com (unknown [9.145.175.158])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 22 Apr 2022 13:35:16 +0000 (GMT)
-Message-ID: <19ea2a8ff04c24708a6504924f7a91c1045308d0.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 1/4] PCI: Clean up pci_scan_slot()
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-s390@vger.kernel.org, linux-pci@vger.kernel.org
-Date:   Fri, 22 Apr 2022 15:35:07 +0200
-In-Reply-To: <20220422132858.1213022-2-schnelle@linux.ibm.com>
-References: <20220422132858.1213022-1-schnelle@linux.ibm.com>
-         <20220422132858.1213022-2-schnelle@linux.ibm.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-+5TQTceV7kwkEleY1vza"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 0WaMBypyLUjSk87yGeJ1ASs6lTTjZ5xt
-X-Proofpoint-GUID: FVqF75_czQd9DiAeaJToju48fGU_wdNy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-22_03,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- phishscore=0 mlxscore=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=907 spamscore=0
- adultscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204220059
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 09:39:15 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5F7546AA;
+        Fri, 22 Apr 2022 06:36:22 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id e189so9024000oia.8;
+        Fri, 22 Apr 2022 06:36:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=mQS+mOe2orSMjiuLFsak+S6Ca0B4tVfq9g6O7NPHWAQ=;
+        b=aMR1K9CzPAxhN8KDw480pW+SHgYNKuUQ8Q5gMouQ3jVNHPmKGs+RQEezSpR+bHp/YK
+         rnJfcmXxrEj+aFcp/md4gT8zssbVe5ws1nbPAbB+o5v0fGpKypN0o8Ue9xT5ImJrXQkt
+         f4YrvFuGBJtUSGpXGSCSuQRjqH9FvqbKnEhF7RTcL8fjMRE4KW0PPKGGGKO7TvxEYDe0
+         PE8/ugG5X57A0iLUmNs1xrHSGXqcTHOndEPaoo+BUMS5D6/Segctcq3eqC1A2Ow0cQ4m
+         VPEIVFPvijPOH0pGmfsdx4BuJzudxYx/Ki8IGWDUcRyCgJPzbNai3R8+3faoFdis4v8P
+         INJA==
+X-Gm-Message-State: AOAM531RVfqcsA7eLJsV86uZFAbxkB1ZL6MWjNqQHVVRDnpCQwviTZMY
+        VVz+MYdPoZuNj8rgonxrDg==
+X-Google-Smtp-Source: ABdhPJybbmyWLxjo+nixlNq8Gcu+L6g7VQW1TV9wDUUa3TsjK9C1tjWSNmly786wjxHUXRr7AyXEZQ==
+X-Received: by 2002:a05:6808:2388:b0:324:f195:bcb5 with SMTP id bp8-20020a056808238800b00324f195bcb5mr616056oib.238.1650634581771;
+        Fri, 22 Apr 2022 06:36:21 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id fu17-20020a0568705d9100b000e2b43e7fbasm628156oab.16.2022.04.22.06.36.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 06:36:21 -0700 (PDT)
+Received: (nullmailer pid 1895586 invoked by uid 1000);
+        Fri, 22 Apr 2022 13:36:20 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>
+In-Reply-To: <20220421175657.1259024-3-sean.anderson@seco.com>
+References: <20220421175657.1259024-1-sean.anderson@seco.com> <20220421175657.1259024-3-sean.anderson@seco.com>
+Subject: Re: [PATCH 2/8] dt-bindings: nvmem: sfp: Add clock properties
+Date:   Fri, 22 Apr 2022 08:36:20 -0500
+Message-Id: <1650634580.180348.1895585.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---=-+5TQTceV7kwkEleY1vza
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, 2022-04-22 at 15:28 +0200, Niklas Schnelle wrote:
-> While determining the next PCI function is factored out of
-> pci_scan_slot() into next_fn() the former still handles the first
-> function as a special case. This duplicates the code from the scan loop.
->=20
-> Furthermore the non ARI branch of next_fn() is generally hard to
-> understand and especially the check for multifunction devices is hidden
-> in the handling of NULL devices for non-contiguous multifunction. It
-> also signals that no further functions need to be scanned by returning
-> 0 via wraparound and this is a valid function number.
->=20
-> Improve upon this by transforming the conditions in next_fn() to be
-> easier to understand.
->=20
-> By changing next_fn() to return -ENODEV instead of 0 when there is no
-> next function we can then handle the initial function inside the loop
-> and deduplicate the shared handling. This also makes it more explicit
-> that only function 0 must exist.
->=20
-> No functional change is intended.
->=20
-> Cc: Jan Kiszka <jan.kiszka@siemens.com>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+On Thu, 21 Apr 2022 13:56:51 -0400, Sean Anderson wrote:
+> To program fuses, it is necessary to set the fuse programming time. This
+> is determined based on the value of the platform clock. Add a clock
+> property.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 > ---
->  drivers/pci/probe.c | 39 ++++++++++++++++++++-------------------
->  1 file changed, 20 insertions(+), 19 deletions(-)
->=20
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 17a969942d37..2000e9858f12 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -2579,8 +2579,7 @@ struct pci_dev *pci_scan_single_device(struct pci_b=
-us *bus, int devfn)
->  }
->  EXPORT_SYMBOL(pci_scan_single_device);
-> =20
-> -static unsigned int next_fn(struct pci_bus *bus, struct pci_dev *dev,
-> -			    unsigned int fn)
-> +static int next_fn(struct pci_bus *bus, struct pci_dev *dev, int fn)
->  {
->  	int pos;
->  	u16 cap =3D 0;
-> @@ -2588,24 +2587,27 @@ static unsigned int next_fn(struct pci_bus *bus, =
-struct pci_dev *dev,
-> =20
->  	if (pci_ari_enabled(bus)) {
->  		if (!dev)
-> -			return 0;
-> +			return -ENODEV;
-> +
->=20
+> 
+>  .../bindings/nvmem/fsl,layerscape-sfp.yaml         | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
 
-Sorry the whitespace damage was of course not intended, fixed locally.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
+
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
 
---=-+5TQTceV7kwkEleY1vza
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+efuse@1e80000: 'clock-names' is a required property
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dtb
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSiikNOrnCUNbxSj4j7H22hwInkVgUCYmKvCwAKCRD7H22hwInk
-VuHsAP4kfYFxmlqA+DTbxpABv2slW9y+gv3ZVfhol3ARhACQTAEA7eHZ1cfNp120
-EPzOHKOZgvgB4WoqBZ3lks5BKp7bhQg=
-=esXt
------END PGP SIGNATURE-----
-
---=-+5TQTceV7kwkEleY1vza--
+efuse@1e80000: 'clocks' is a required property
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dtb
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dtb
 

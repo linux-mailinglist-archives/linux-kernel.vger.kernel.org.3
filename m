@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AF950BAF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 331C250BAF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449063AbiDVPBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
+        id S1449078AbiDVPBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449038AbiDVPAz (ORCPT
+        with ESMTP id S1449081AbiDVPBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:00:55 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7BB5C850
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:58:01 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 07:57:55 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1650639479;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yEZOup7wIqy02BcMRZRLp0SLmo1/PuUKmg3Pv5TLqWU=;
-        b=WHkWfFnH+LeK7AefEWpgMiNUthZIEAVwi34pOhXpZgLAsfbAUshBOSjW44ktWjfgmr9qlb
-        m77QNLA+d3VxusEPkU6lzywI0GM71VIkGFiya+S7NV5AO6qD5qRQHOAUukHg7ZTjLXo80G
-        SCRsdEQctQ2UbwtbKCi5CCF/15liqhE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     Dave Chinner <dchinner@redhat.com>, linux-kernel@vger.kernel.org,
-        Yang Shi <shy828301@gmail.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH v1 0/5] mm: introduce shrinker debugfs interface
-Message-ID: <YmLCc/DiqJs0jFIX@carbon>
-References: <20220422015853.748291-1-roman.gushchin@linux.dev>
+        Fri, 22 Apr 2022 11:01:47 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D315C874
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:58:47 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.94]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1Mtf39-1o2LKa1H6V-00v3tm; Fri, 22 Apr 2022 16:58:23 +0200
+Message-ID: <97917592-6e11-dd82-3f41-893da6b15f6a@i2se.com>
+Date:   Fri, 22 Apr 2022 16:58:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422015853.748291-1-roman.gushchin@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] staging: bcm2835-audio: delete TODO
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adrien Thierry <athierry@redhat.com>
+Cc:     Maxime Ripard <mripard@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220420174401.305964-1-athierry@redhat.com>
+ <YmK+aiaaVLtadGVT@kroah.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <YmK+aiaaVLtadGVT@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:Azmqdv5Lw8395Uj2ssTrSrEqmg++rKEqbcPwvcaegaDqayqaqIs
+ SsGECzmDdFaH6Xlmp/FP5hGO78ro+uhiEqqhHa09IuZBWZyiU7DpEDs9VIHDO2k9CHG4KkU
+ 1SlWrjIG+ip3d15C7jxOqMpAIojNseHgryDbSQA07BOxexjbfk0/QbPbOtXJCmKUOAAwYl4
+ k1dakxRpyu1wsqRWUdiuA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8UNhkHDGgk8=:TXJ6ezpD3AR+ZOTQCLTAeN
+ +9DM0d8RCT8EnSyTgzO0qJxUrQDxGgr4XTKBL+lwznSO8RTgZleuY1AN5AxwDRIefH9X3avph
+ vwm1RbXkTjjdotnZEUEQuSQKxUKxYDcyV+wPSE0Cv2gxwA0JTsJ4mcfCqXb+TmAqC4iEuR/FD
+ m3Ehq5Cg0Oio9tvMjS6gjLE4WZiHaWqE7/JdX/c516cV+9RHJBFGMh9zeJsX8PPF961OgDhu1
+ NOE19kZLtBMfUCjltOtiwvQzXfpqYo5OqI8Pp0HlTBiHTE5ocFM3C00GEL5EHvnKo0ti41xMx
+ pFXslPAzEmjEsTb35cbIB+m0jej/15/IWvAnqVxFiOt5L7FQHO+M2aDLZw1nLTiM15baOD3EP
+ krVReAemM9Jpx0HrGx3MSYHH27gIIBd0aZS1Jf6/DfzkF5rNIo1Gk1dmo0aNVxSpRa07/Y/gV
+ ge27m0ubOBoKP2NWt1402o/7Czjtvt0K3Hgeyazs5kUzMcpbNdPWPTR19vJauvTfRJm+iI2O6
+ uRYkFYHsuD8g9qflhwgOadU1Zix0ePNNEkACXpp27cQcWj8+uwGG5iFDIIjd1Z7wAoLT5pdtX
+ xnoO7W5cBr0OJJIRMFJyS4TuMUyK+icdYv0pCNwbzf2/F/azG7W7xbSLtXz52S0wd9oO7I3Do
+ EjgluwJbEEczFretjD1TMKjO/Xc0/RjPQhOQCU7tif7mAncwoEEFJH2yND4cEfJWwSZJO9P34
+ hMT9MAot0vfAOBmV
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 06:58:48PM -0700, Roman Gushchin wrote:
-> There are 50+ different shrinkers in the kernel, many with their own bells and
-> whistles. Under the memory pressure the kernel applies some pressure on each of
-> them in the order of which they were created/registered in the system. Some
-> of them can contain only few objects, some can be quite large. Some can be
-> effective at reclaiming memory, some not.
-> 
-> The only existing debugging mechanism is a couple of tracepoints in
-> do_shrink_slab(): mm_shrink_slab_start and mm_shrink_slab_end. They aren't
-> covering everything though: shrinkers which report 0 objects will never show up,
-> there is no support for memcg-aware shrinkers. Shrinkers are identified by their
-> scan function, which is not always enough (e.g. hard to guess which super
-> block's shrinker it is having only "super_cache_scan"). They are a passive
-> mechanism: there is no way to call into counting and scanning of an individual
-> shrinker and profile it.
-> 
-> To provide a better visibility and debug options for memory shrinkers
-> this patchset introduces a /sys/kernel/debug/shrinker interface, to some extent
-> similar to /sys/kernel/slab.
-> 
-> For each shrinker registered in the system a directory is created. The directory
-> contains "count" and "scan" files, which allow to trigger count_objects()
-> and scan_objects() callbacks. For memcg-aware and numa-aware shrinkers
-> count_memcg, scan_memcg, count_node, scan_node, count_memcg_node
-> and scan_memcg_node are additionally provided. They allow to get per-memcg
-> and/or per-node object count and shrink only a specific memcg/node.
-> 
-> To make debugging more pleasant, the patchset also names all shrinkers,
-> so that debugfs entries can have more meaningful names.
-> 
-> v1:
->   1) switched to debugfs, suggested by Mike, Andrew, Greg and others
->   2) switched to seq_file API for output, no PAGE_SIZE limit anymore, by Andrew
->   3) switched to down_read_killable(), suggested by Hillf
->   4) dropped stateful filtering and "freed" returning, by Kent
+Hi Greg,
 
->   5) added docs, by Andrew
+Am 22.04.22 um 16:40 schrieb Greg Kroah-Hartman:
+> On Wed, Apr 20, 2022 at 01:44:00PM -0400, Adrien Thierry wrote:
+>> Delete TODO since all tasks were completed:
+>>
+>> 1 - fixed here:
+>> https://lore.kernel.org/all/20220408150359.26661-1-athierry@redhat.com/
+>>
+>> 2 - there are no remaining checkpatch.pl errors or warnings
+>>
+>> Signed-off-by: Adrien Thierry <athierry@redhat.com>
+>> ---
+>>   drivers/staging/vc04_services/bcm2835-audio/TODO | 10 ----------
+>>   1 file changed, 10 deletions(-)
+>>   delete mode 100644 drivers/staging/vc04_services/bcm2835-audio/TODO
+>>
+>> diff --git a/drivers/staging/vc04_services/bcm2835-audio/TODO b/drivers/staging/vc04_services/bcm2835-audio/TODO
+>> deleted file mode 100644
+>> index b85451255db0..000000000000
+>> --- a/drivers/staging/vc04_services/bcm2835-audio/TODO
+>> +++ /dev/null
+>> @@ -1,10 +0,0 @@
+>> -*****************************************************************************
+>> -*                                                                           *
+>> -*                           TODO: BCM2835-AUDIO                             *
+>> -*                                                                           *
+>> -*****************************************************************************
+>> -
+>> -1) Revisit multi-cards options and PCM route mixer control (as per comment
+>> -https://lore.kernel.org/lkml/s5hd0to5598.wl-tiwai@suse.de)
+>> -
+>> -2) Fix the remaining checkpatch.pl errors and warnings.
+>> -- 
+>> 2.35.1
+>>
+>>
+> Great, so now it can be merged to the real part of the kernel?  If not,
+> what's left for that to happen?
 
-Not quite true, gonna add it and also a cgroup tree inspection tool
-and send out v2.
+bcm2835-audio depends on interface/vchiq_arm in a parallel directory. 
+Its TODO list is a little bit longer.
 
-Thanks!
+Best regards
+
+>
+> thanks,
+>
+> greg k-h
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

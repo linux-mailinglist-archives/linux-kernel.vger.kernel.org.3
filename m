@@ -2,145 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F7450BB75
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC8350BB73
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449313AbiDVPQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        id S1449327AbiDVPRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448890AbiDVPQq (ORCPT
+        with ESMTP id S1449322AbiDVPR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:16:46 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441785D674;
-        Fri, 22 Apr 2022 08:13:51 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 036e7665410539f2; Fri, 22 Apr 2022 17:13:49 +0200
-Received: from kreacher.localnet (unknown [213.134.161.204])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 22 Apr 2022 11:17:26 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A145D674;
+        Fri, 22 Apr 2022 08:14:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id F381766BFEB;
-        Fri, 22 Apr 2022 17:13:48 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: [PATCH] ACPI: bus: Avoid non-ACPI device objects in walks over children
-Date:   Fri, 22 Apr 2022 17:13:48 +0200
-Message-ID: <11974495.O9o76ZdvQC@kreacher>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8AC3ACE2C1D;
+        Fri, 22 Apr 2022 15:14:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D57CAC385A0;
+        Fri, 22 Apr 2022 15:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650640469;
+        bh=lBzqskWQ8Rw1H2jBSdnakWav4FYm3BY5XQ2EH7FrPVo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Qery+LaJ7zkwWr9n6NAqPpu4VZP11V0NHDPOoemrooyM9OlJiDapoZmgDd3M9cYp8
+         FUk6rodf3lwhwAKSbJhpxtnG9NO5+q4BInZqvuNdfkf3L88P1TUHECdDve8spWBUha
+         3q7UiCOCZa7brHe35AgRDfbxxwp/29ImcIE4pHEmtf7AR/bisIbxXxgCToNoeb0kvU
+         m12lQSrviU9NGKDHavkg1Oc8Z3lFoTDi++nJkfGk8HvQ1rqJOHXR45yLq/ZLY3x70D
+         OaHKKBVJcmOEAwuLDHwxTd+hCIqKs3BLDJEK5RgmFvp+vmY27F+bwjonVuEIlgDy/D
+         cw5GlpcYc/VlQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nhuzI-0001Gq-FK; Fri, 22 Apr 2022 17:14:24 +0200
+Date:   Fri, 22 Apr 2022 17:14:24 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 5.18-rc4
+Message-ID: <YmLGUMFqVl6NrO3M@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.161.204
-X-CLIENT-HOSTNAME: 213.134.161.204
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrtdeggdekfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrdduiedurddvtdegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiuddrvddtgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhgv
- lhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-When walking the children of an ACPI device, take extra care to avoid
-using to_acpi_device() on the ones that are not ACPI devices, because
-that may lead to out-of-bounds access and memory corruption.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-While at it, make the function passed to acpi_dev_for_each_child()
-take a struct acpi_device pointer argument (instead of a struct device
-one), so it is more straightforward to use.
+are available in the Git repository at:
 
-Fixes: b7dd6298db81 ("ACPI: PM: Introduce acpi_dev_power_up_children_with_adr()")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-BugLink: https://lore.kernel.org/lkml/20220420064725.GB16310@xsang-OptiPlex-9020/
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.18-rc4
 
-The commit being fixed is present in linux-next.
+for you to fetch changes up to e23e50e7acc8d8f16498e9c129db33e6a00e80eb:
 
----
- drivers/acpi/bus.c       |   24 ++++++++++++++++++++++--
- drivers/acpi/device_pm.c |    5 +----
- include/acpi/acpi_bus.h  |    2 +-
- 3 files changed, 24 insertions(+), 7 deletions(-)
+  USB: serial: whiteheat: fix heap overflow in WHITEHEAT_GET_DTR_RTS (2022-04-21 10:08:06 +0200)
 
-Index: linux-pm/drivers/acpi/bus.c
-===================================================================
---- linux-pm.orig/drivers/acpi/bus.c
-+++ linux-pm/drivers/acpi/bus.c
-@@ -1070,10 +1070,30 @@ int acpi_bus_for_each_dev(int (*fn)(stru
- }
- EXPORT_SYMBOL_GPL(acpi_bus_for_each_dev);
- 
-+struct acpi_dev_walk_context {
-+	int (*fn)(struct acpi_device *, void *);
-+	void *data;
-+};
-+
-+static int acpi_dev_for_one_check(struct device *dev, void *context)
-+{
-+	struct acpi_dev_walk_context *adwc = context;
-+
-+	if (dev->bus != &acpi_bus_type)
-+		return 0;
-+
-+	return adwc->fn(to_acpi_device(dev), adwc->data);
-+}
-+
- int acpi_dev_for_each_child(struct acpi_device *adev,
--			    int (*fn)(struct device *, void *), void *data)
-+			    int (*fn)(struct acpi_device *, void *), void *data)
- {
--	return device_for_each_child(&adev->dev, data, fn);
-+	struct acpi_dev_walk_context adwc = {
-+		.fn = fn,
-+		.data = data,
-+	};
-+
-+	return device_for_each_child(&adev->dev, &adwc, acpi_dev_for_one_check);
- }
- 
- /* --------------------------------------------------------------------------
-Index: linux-pm/include/acpi/acpi_bus.h
-===================================================================
---- linux-pm.orig/include/acpi/acpi_bus.h
-+++ linux-pm/include/acpi/acpi_bus.h
-@@ -482,7 +482,7 @@ extern struct bus_type acpi_bus_type;
- 
- int acpi_bus_for_each_dev(int (*fn)(struct device *, void *), void *data);
- int acpi_dev_for_each_child(struct acpi_device *adev,
--			    int (*fn)(struct device *, void *), void *data);
-+			    int (*fn)(struct acpi_device *, void *), void *data);
- 
- /*
-  * Events
-Index: linux-pm/drivers/acpi/device_pm.c
-===================================================================
---- linux-pm.orig/drivers/acpi/device_pm.c
-+++ linux-pm/drivers/acpi/device_pm.c
-@@ -429,11 +429,8 @@ bool acpi_bus_power_manageable(acpi_hand
- }
- EXPORT_SYMBOL(acpi_bus_power_manageable);
- 
--static int acpi_power_up_if_adr_present(struct device *dev, void *not_used)
-+static int acpi_power_up_if_adr_present(struct acpi_device *adev, void *not_used)
- {
--	struct acpi_device *adev;
--
--	adev = to_acpi_device(dev);
- 	if (!(adev->flags.power_manageable && adev->pnp.type.bus_address))
- 		return 0;
- 
+----------------------------------------------------------------
+USB-serial fixes for 5.18-rc4
 
+Here's a fix for a potential overflow issue in the whiteheat driver when
+using the old ARM ABI.
 
+Included are also some new modem device ids.
 
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Bruno Thomsen (1):
+      USB: serial: cp210x: add PIDs for Kamstrup USB Meter Reader
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit 0x1057, 0x1058, 0x1075 compositions
+
+Kees Cook (1):
+      USB: serial: whiteheat: fix heap overflow in WHITEHEAT_GET_DTR_RTS
+
+Slark Xiao (1):
+      USB: serial: option: add support for Cinterion MV32-WA/MV32-WB
+
+ drivers/usb/serial/cp210x.c    |  2 ++
+ drivers/usb/serial/option.c    | 12 ++++++++++++
+ drivers/usb/serial/whiteheat.c |  5 ++---
+ 3 files changed, 16 insertions(+), 3 deletions(-)

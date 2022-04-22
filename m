@@ -2,69 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B3D50B635
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF25950B640
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447104AbiDVLgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 07:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S242181AbiDVLje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 07:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbiDVLgW (ORCPT
+        with ESMTP id S239757AbiDVLjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 07:36:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDD0F14;
-        Fri, 22 Apr 2022 04:33:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC77FB82C2E;
-        Fri, 22 Apr 2022 11:33:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4348C385A4;
-        Fri, 22 Apr 2022 11:33:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650627206;
-        bh=3jfuEAzvI+fireVbhLAA89FI7cLlXG2gLVIt5mnBIg8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N4xc6sPbo+yCUgMVCAfbmL9aaI0wq2uWC3lRyQp75hx9AB4KcChx7EvF3ADbYj3re
-         gjC5jcLuiV0rrYIRHI2hV1QJ9RN7Wef3noIirHog3grPtVx9m2FkUUx9dP+R0qYwNV
-         G6m1sInmZfIGXe5R3kzj6N0QL39ugPMBC63JxbP3xL0Zi5tcYr9i4g5MxxEInSG30o
-         VR5rygxQY/QCxUbIAi/iZxSHWejn0IhHm1atF2cWDlA3JlK077bU5reZv/HUHaFLZM
-         lOp9ohClb795LjV5CoLtPsIFEU/5EVPXXXFzitBgXBLis95T1yA32uKghxdnjcCuGH
-         P1lrjqCWbiDTQ==
-Date:   Fri, 22 Apr 2022 12:33:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@cutebit.org>
-Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
-Message-ID: <YmKSgHrbb/7koM36@sirena.org.uk>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <YkWfziQzprEsWL72@sirena.org.uk>
- <CCE4A06E-6D6F-457D-B3C5-C36209BF38D3@cutebit.org>
- <YkW4MPh8VWc8eSGg@sirena.org.uk>
- <6D199EAB-FE14-4030-96A7-2E0E89D25FAB@cutebit.org>
- <YkXKmxJ0R3qpUoH4@sirena.org.uk>
- <DB0255C3-C9EC-4EFA-A377-C4BB1073D9B3@cutebit.org>
- <YmKPQ6kLCPz+2XTJ@sirena.org.uk>
- <B68302F2-3D77-4065-8A16-A9CC690AE10B@cutebit.org>
+        Fri, 22 Apr 2022 07:39:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5197AD4E
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 04:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650627399;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rfEjtIKSL4He+pHPZ91gOLL5Y9n9DhaWPlm2XzzRFok=;
+        b=ZzUM+QKTJ5WomG47FuJ7beAw/qy4JTyQqsPHlU7RvRfmDWLaogVn0fZ3E3JNXm9VJFgA/4
+        /m8/Jt2x9y93KThjOdUsiXeTeb20C+B/FCqxHd8CPdOKbWfYY0VUrIVOJGNqS5eaZlSnQJ
+        I+wwboVI1RdBf+c6Xr5c56ddE8OfUIY=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-460-6QWFjratOfaLFVp71jX6Cw-1; Fri, 22 Apr 2022 07:36:38 -0400
+X-MC-Unique: 6QWFjratOfaLFVp71jX6Cw-1
+Received: by mail-qk1-f198.google.com with SMTP id bk23-20020a05620a1a1700b0067b32f93b90so5179908qkb.16
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 04:36:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=rfEjtIKSL4He+pHPZ91gOLL5Y9n9DhaWPlm2XzzRFok=;
+        b=H31L3q+eoBR7CUYfvM6395jqRI+r06AZ0sejaDbSRHLxmS08RBZY/eObdufVlWHfda
+         1/Eau0hf9FXtBgNV2SwwZcxKDJDZb0nGUEj42CLEKVIviS/CwFI+X/rwTqYiNRsaxw6I
+         1HdKDpotNuy7ksELnAfzeHNAQ+AvvraU49EtwOix2KABpPKgji4cQ1HNRPDdr1QvFkyX
+         yleOLAAUgbJufQpxS5es208o8ZH9OJD+GTAcbpH48XDTci4pFr5XuAUR5/3iKt5nnffD
+         Dj8ZjL0QCIL+6S2RNwo7F7WZDJEiKooAOgkKJeSz6mu/20X3ngdATeUgtIebbmPS7EZN
+         i1Fg==
+X-Gm-Message-State: AOAM530ibor4o7q41yXZAOapbutOpXqPr8M3rc1vnJFHIOdN7z8ssTc+
+        02umH8kyn+4wtCorLlE6ehz6/g581Br/7z7uHOc8vXBVrvXzEG2yYxnZ0BBCeON+MH6qr1+wRCg
+        pdfuifgxjepROmRYM3+tD7HpD
+X-Received: by 2002:a05:620a:1654:b0:69c:7035:b31f with SMTP id c20-20020a05620a165400b0069c7035b31fmr2297898qko.546.1650627397808;
+        Fri, 22 Apr 2022 04:36:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzGQvyIHXFTiMJN4w9uTECim1QktNe4yTDbMmuBGoP1GUhkjlyryqtd5m7Ebl2PkbUXwitfjA==
+X-Received: by 2002:a05:620a:1654:b0:69c:7035:b31f with SMTP id c20-20020a05620a165400b0069c7035b31fmr2297886qko.546.1650627397596;
+        Fri, 22 Apr 2022 04:36:37 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id h75-20020a379e4e000000b0069db8210ffbsm791750qke.12.2022.04.22.04.36.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 04:36:37 -0700 (PDT)
+Subject: Re: [PATCH] kernel/irq/matrix.c: remove redundant assignment to
+ variable 'end'
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20220422110418.1264778-1-colin.i.king@gmail.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <8016b196-6a39-8808-b1ff-286aacb2c8ca@redhat.com>
+Date:   Fri, 22 Apr 2022 04:36:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HUPCgzDyOfBhsa/5"
-Content-Disposition: inline
-In-Reply-To: <B68302F2-3D77-4065-8A16-A9CC690AE10B@cutebit.org>
-X-Cookie: Whoever dies with the most toys wins.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422110418.1264778-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,51 +84,32 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---HUPCgzDyOfBhsa/5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 4/22/22 4:04 AM, Colin Ian King wrote:
+> Variable end is being initialized with a value that is never read, it
+> is being re-assigned later with the same value. The initialization is
+> redundant and can be removed.
+>
+> Cleans up clang scan build warning:
+> kernel/irq/matrix.c:289:25: warning: Value stored to 'end' during its
+> initialization is never read [deadcode.DeadStores]
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>   kernel/irq/matrix.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/irq/matrix.c b/kernel/irq/matrix.c
+> index bbfb26489aa1..1698e77645ac 100644
+> --- a/kernel/irq/matrix.c
+> +++ b/kernel/irq/matrix.c
+> @@ -286,7 +286,7 @@ void irq_matrix_remove_managed(struct irq_matrix *m, const struct cpumask *msk)
+>   int irq_matrix_alloc_managed(struct irq_matrix *m, const struct cpumask *msk,
+>   			     unsigned int *mapped_cpu)
+>   {
+> -	unsigned int bit, cpu, end = m->alloc_end;
+> +	unsigned int bit, cpu, end;
+Reviewed-by: Tom Rix <trix@redhat.com>
+>   	struct cpumap *cm;
+>   
+>   	if (cpumask_empty(msk))
 
-On Fri, Apr 22, 2022 at 01:28:20PM +0200, Martin Povi=C5=A1er wrote:
-> > On 22. 4. 2022, at 13:19, Mark Brown <broonie@kernel.org> wrote:
-> > On Fri, Apr 22, 2022 at 12:43:30PM +0200, Martin Povi=C5=A1er wrote:
-
-> >> One final thought on the playback routing controls: On systems with >2
-> >> speakers, the codecs need to be assigned slots through set_tdm_slot.
-> >> The macaudio driver RFCed here assigns a single slot to each speaker,
-> >> making the effect of each speaker's routing control this:
-
-=2E..
-
-> > I don't quite grasp the difference between the arrangement you're
-> > proposing and assigning a single slot to each speaker?  Possibly it's
-> > just a reordering of the slots?
-
-> Ah, maybe what=E2=80=99s missing is the fact that the way the speaker amp=
- drivers
-> are written, if they are assigned two slots with a call to set_tdm_slot,
-> the first slot is considered 'left' and the second is 'right'.
-
-> So in the arrangement I am proposing the 'Left', 'Right' and 'LeftRight'
-> values of the routing control have the nominal effect (within the left-ri=
-ght
-> speaker pair), while in the other arrangement it is as I described above.
-
-So previously each speaker would get two slots but now it just gets one?
-
---HUPCgzDyOfBhsa/5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJikn8ACgkQJNaLcl1U
-h9Apfwf9FyqYZwZ2D2ZxnG/lVxGl4cjqMmJe5FgwZCDKQPzM3Y9o4137S0U7kLTz
-QM1Jf+3LJgVkdvJN/Hj3GaJPazdeXB6mMQ5o3p28PEe/ASqNKJCa6Z1UcQ5zdcaZ
-D89JCKjmGPoHjNWiZCSRE6k7kXhtJO5MyXxNCgXAf5bk7352nedgPmg/4PapUL82
-sEV/b496dYNV/EQ6HLGey/73P3cKc6w+urEcUQKaPcFlLWjK1J9ZP+TQuBdSxBNp
-MjkcoQoQSNrw0PJ/rQWd++JkLimYQDwFEkaNeLWmh+K/L3/vCdun88ZtIbdeM3NL
-VwJzyNbDoxmUu+IBEFgYIa+SP/YvUw==
-=k+NI
------END PGP SIGNATURE-----
-
---HUPCgzDyOfBhsa/5--

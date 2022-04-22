@@ -2,118 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA35C50B7E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C992A50B7E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447717AbiDVNJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
+        id S1447723AbiDVNJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233857AbiDVNJh (ORCPT
+        with ESMTP id S233857AbiDVNJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:09:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ACC22B3E;
-        Fri, 22 Apr 2022 06:06:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E18A962067;
-        Fri, 22 Apr 2022 13:06:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99B50C385A4;
-        Fri, 22 Apr 2022 13:06:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650632803;
-        bh=hDIXGys28YU1AgFgBUhJKgfBRTj9j4CvWUnRGcwIekE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GDVYCD4SK6NLWfa+RGm24cWgtClaJixuJEYfnuky3gUNwzOfdD0CGXZO8Eu/sY+j1
-         ZVC92Jrn8r2HESDlKi3bCxMxW5eKidgN/pXmpI2z2xOz1dU5cRx55slt3VyedgM2/A
-         M+AL4OFN4MsUVYb53/Hp55PLCflOuaV4AylLzVKmgZQfWe58+xa8KNcHAGmegzsIOP
-         +IWFHNFUMKBg79uVOZOznzEwT1+8z/vDxqgSAVLq6pAqw561qXm9LJd6gXsB/bFQLr
-         LoZ8cI+qF5MpFp1om5KR9PnEJlffpw1x/NCG43Xz5qsd2L2vEw8IsPmnEDUhWb0pU+
-         LZb3bg00ZPS4w==
-Date:   Fri, 22 Apr 2022 14:06:37 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@cutebit.org>
-Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
-Message-ID: <YmKoXbh04ZEs3dSZ@sirena.org.uk>
-References: <YkXKmxJ0R3qpUoH4@sirena.org.uk>
- <DB0255C3-C9EC-4EFA-A377-C4BB1073D9B3@cutebit.org>
- <YmKPQ6kLCPz+2XTJ@sirena.org.uk>
- <B68302F2-3D77-4065-8A16-A9CC690AE10B@cutebit.org>
- <YmKSgHrbb/7koM36@sirena.org.uk>
- <A1574F30-62D2-467D-A40B-8FD7C6B8BCFA@cutebit.org>
- <YmKeEKa0w2xLM9cL@sirena.org.uk>
- <6F6130F3-381C-4AB7-B618-CDC4C4A37C9B@cutebit.org>
- <YmKjL9bOtOmsFWTs@sirena.org.uk>
- <3CD969AD-7316-4D83-AD92-CC85ED817125@cutebit.org>
+        Fri, 22 Apr 2022 09:09:50 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2855022B3E;
+        Fri, 22 Apr 2022 06:06:56 -0700 (PDT)
+Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MplsZ-1oG6La1fPJ-00qAUg; Fri, 22 Apr 2022 15:06:55 +0200
+Received: by mail-wr1-f41.google.com with SMTP id e2so4712519wrh.7;
+        Fri, 22 Apr 2022 06:06:55 -0700 (PDT)
+X-Gm-Message-State: AOAM530XfFQvbx2grS7QMjTWC0IZS9o/mZWnPupR+YrJ+cEhxnFF5JZw
+        Vptzt2d1qSCJJe52MBR0Oz452vWzV4u/ONGK0DM=
+X-Google-Smtp-Source: ABdhPJzr/sEIyUtXuTAvF8Q8/DssMA5FZLT4Nk4euAN9C8OsZ19szl+6WaUMm+cqYUy3lMIOfLqToKLe+raWpc5CMcM=
+X-Received: by 2002:a5d:49cb:0:b0:20a:cee3:54fc with SMTP id
+ t11-20020a5d49cb000000b0020acee354fcmr122170wrs.12.1650632815075; Fri, 22 Apr
+ 2022 06:06:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h//nqm2TleJK+t0c"
-Content-Disposition: inline
-In-Reply-To: <3CD969AD-7316-4D83-AD92-CC85ED817125@cutebit.org>
-X-Cookie: Whoever dies with the most toys wins.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421192132.109954-1-nick.hawkins@hpe.com> <20220421192132.109954-11-nick.hawkins@hpe.com>
+In-Reply-To: <20220421192132.109954-11-nick.hawkins@hpe.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 22 Apr 2022 15:06:38 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2axNe=w_5PDdSQ8tDZFand_aEQxdgrNMx0uUKYKVmWtw@mail.gmail.com>
+Message-ID: <CAK8P3a2axNe=w_5PDdSQ8tDZFand_aEQxdgrNMx0uUKYKVmWtw@mail.gmail.com>
+Subject: Re: [PATCH v5 10/11] arch: arm: boot: dts: Introduce HPE GXP Device tree
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:CsANPPSjllyrE9eAZiOWvBmqLhqFtY0s4Ecom+7iR/T+cLTWnCc
+ 84+ZUpXrOksW4ByviU9Q/l5o4CVZkGzk2019SJZA0Nn8wIohjntjF9jXU/oT9V8uhkwusag
+ 7RbCBBxKD67Ue/xifCJSDjZMz+YqqClVpnUhidjOlw1tKTVlKjMqHDItwMhmb+Hh1Fze8Py
+ E2+fc2WR5waLBwm2n0jZA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zURduJZs/yU=:GfyYIYmvY3fIdTM/u/tClE
+ N7yBd6UHwgATZDrU9fKBPZW2F2y2pBRvok6dcJwC0+mw0/pRfBHVq/N8yAWysuo0lkex7lBTx
+ TnShPCU8YqW/uBBAlclStge/XbJvExnwQlnuhbNb8dRZVTSUaO0HoMsFzUl/mXWPBAXjPm9tT
+ kXBbQs9BBWo8qkJdxbKVzxCTncXuPgVxfUOA6ZPWm3AQ7pr0ZWlqnZBVvTYUdLKOxDT7HZXzb
+ eL8Yfv0pYNhbvJDfU+Zgsd7erEXPs+2/VUbbp6kLBZuv9Odc6T3vefYJbOfR+FqCmG+7UeJi4
+ 1tbpw/11Z6SPP3mLDiLfk2yGPByz72AtVr5BNmjvQCGv2wcb1eWFDa8p1b/6S0Lrnwo/tsoij
+ u8EhH0y6Uv/NfN9OZ+LwOh+SRL+5WF744Yv7TNiSTPVy9w2wVZKE7l5LXj3w2lKfVYe3RlCea
+ w4NB+yQwJ3TBezAVYSvF8nxcAUQSbEXjdusnnjDlNNuu7YdP0F0YcldAdO+XuNvmxvCYigqlN
+ 2aBM0ei5vKzKJqNlLQdnj+RmGeEZ/B+SBwrSPLJF/Zobq+cnzPq3U+hc2SQ3n6bOYAY1GaM97
+ jk77zIvWKNxANQTWS/vqMgbh522HFDvIxrekdeW2Nbk1GXVGxECp+skoSHmDK1+7ZCeqqXrmr
+ UIQJSeJqgA9iQ985IOsdlumz3sHfs0E5f8bhRviUCs30dZqR1lD1HFc9CS3f1HdO8+W+CC7O9
+ b7feRTcX2XuOx8/1plAn5rsBExWwvJCE5N/lTiLguXEnHuXYsSW9TakXridspQlruqo6XfMs+
+ Y1IE4rJryQfs1iyrRHGBLZgYdPfYtI+j8i20taNzgxtR4YEhPY=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 21, 2022 at 9:21 PM <nick.hawkins@hpe.com> wrote:
 
---h//nqm2TleJK+t0c
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> +       axi {
+> +               compatible = "simple-bus";
+> +               #address-cells = <1>;
+> +               #size-cells = <1>;
+> +               ranges;
+> +               dma-ranges;
+> +
+> +               ahb@c0000000 {
+> +                       compatible = "simple-bus";
+> +                       #address-cells = <1>;
+> +                       #size-cells = <1>;
+> +                       ranges = <0x0 0xc0000000 0x30000000>;
 
-On Fri, Apr 22, 2022 at 02:53:54PM +0200, Martin Povi=C5=A1er wrote:
+I think you should add a "dma-ranges" property in the ahb node as well,
+otherwise this would mean that none of the children are DMA capable,
+when at the minimum the USB controllers require DMA.
 
-> > Oh, I see - the speaker actually allows configuration of the slots
-> > independently.  Usually the left/right thing on mono devices only does
-> > something for I2S where the bus clocking enforces that there be both
-> > left and right channels.  Either configuration is fine by me TBH, if you
-> > can do that then you could just keep them mapped to the same channel
-> > then mark the control as disabled since it should have no effect.
-
-> Well but is there some established way to mark a control as disabled?
-
-snd_ctl_activate_id().
-
-> Another issue here is that if I disable it I can=E2=80=99t leave the rout=
-ing
-> control in it=E2=80=99s default value, which is =E2=80=98I2C Offset=E2=80=
-=99 and makes the speaker
-> amp ignore the slot mapping.
-
-Sure, that's fine - if a control genuinely has no effect it's fine to
-hide it from userspace.  The issue is where it's just that you don't see
-the use, if the control demonstrably does nothing then that's fine.
-
---h//nqm2TleJK+t0c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJiqFwACgkQJNaLcl1U
-h9AV8gf9GwzHMBap1p3cUin8nTIQKJwTl9QCbOmThnWJbuYKWeALxn2lKmviBaj9
-cK6oSVKCxCZlda0aKQSesJ4okIAQLbk1o4567sntkbBp6CuktSmlTOir7R6xVydZ
-IP/+pe8VGfqKFgLN+IHvNPMwOOA22UfsGhAA5M3A7i4B4qApwIVJlQicJ4TwD7y1
-jCZABx6q6DJoq7nclV1aSGvFZOZqGy2YxtAkHBs9vACqznwKchY7Z2lqZC7e0ys4
-Yl571RGhhMUWViVPe1xg65Jg/GOWHnzggLuPEk7M7ZGnriQF5KvEVVLpAaW8Wt0c
-F1qXhhnmhgJzm6oJkzV/zd7+paTaRg==
-=qSEG
------END PGP SIGNATURE-----
-
---h//nqm2TleJK+t0c--
+       Arnd
